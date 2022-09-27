@@ -1,0 +1,17 @@
+.comments-wrap {
+  .comment-item {
+    &:hover {
+      .control-area {
+        display: flex !important;
+      }
+    }
+  }
+  .fmt {
+    display: inline;
+    p {
+      &:last-child {
+        display: inline;
+      }
+    }
+  }
+}

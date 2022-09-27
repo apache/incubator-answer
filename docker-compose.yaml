@@ -1,0 +1,7 @@
+version: "3"
+services:
+  answer:
+    build:
+      context: .
+    image: github.com/segmentfault/answer
+    restart: on-failure

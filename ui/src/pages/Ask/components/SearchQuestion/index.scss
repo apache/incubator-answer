@@ -1,0 +1,13 @@
+.search-question-wrap {
+  .accordion-button {
+    &::after {
+      background-image: var(--bs-accordion-btn-icon);
+    }
+  }
+  .list-group-item {
+    &.active {
+      background-color: #e9ecef;
+      border-color: rgba(0, 0, 0, 0.0625);
+    }
+  }
+}

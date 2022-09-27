@@ -1,0 +1,55 @@
+import useSWR from 'swr';
+import qs from 'qs';
+
+import request from '@answer/utils/request';
+
+import type * as Type from './types';
+
+export const useQuestionList = (params: Type.QueryQuestionsReq) => {
+  const apiUrl = '/answer/api/v1/question/index';
+  const { data, error } = useSWR<Type.ListResult, Error>(
+    [apiUrl, params],
+    request.instance.post,
+  );
+  return {
+    data,
+    isLoading: !data && !error,
+    error,
+  };
+};
+
+export const useHotQuestions = (
+  params: Type.QueryQuestionsReq = {
+    page: 1,
+    page_size: 10,
+    order: 'frequent',
+  },
+) => {
+  const apiUrl = '/answer/api/v1/question/index';
+  const { data, error } = useSWR<Type.ListResult, Error>(
+    [apiUrl, params],
+    request.instance.post,
+  );
+  return {
+    data,
+    isLoading: !data && !error,
+    error,
+  };
+};
+
+export const useSimilarQuestion = (params: {
+  question_id: string;
+  page_size: number;
+}) => {
+  const apiUrl = `/answer/api/v1/question/similar?${qs.stringify(params)}`;
+
+  const { data, error } = useSWR<Type.ListResult, Error>(
+    params.question_id ? apiUrl : null,
+    request.instance.get,
+  );
+  return {
+    data,
+    isLoading: !data && !error,
+    error,
+  };
+};

@@ -1,0 +1,160 @@
+base:
+  success:
+    other: "success"
+  unknown:
+    other: "unknown error"
+  request_format_error:
+    other: "request format is not valid"
+  unauthorized_error:
+    other: "unauthorized"
+  database_error:
+    other: "data server error"
+
+email:
+  other: "email"
+password:
+  other: "password"
+
+email_or_password_wrong_error: &email_or_password_wrong
+  other: "email or password wrong"
+
+error:
+  admin:
+    email_or_password_wrong: *email_or_password_wrong
+  answer:
+    not_found:
+      other: "answer not found"
+  comment:
+    edit_without_permission:
+      other: "comment not allowed to edit"
+    not_found:
+      other: "comment not found"
+  email:
+    duplicate:
+      other: "email already exists"
+    need_to_be_verified:
+      other: "email should be verified"
+    verify_url_expired:
+      other: "email verified url is expired, please resend the email"
+  lang:
+    not_found:
+      other: "language not found"
+  object:
+    captcha_verification_failed:
+      other: "captcha wrong"
+    disallow_follow:
+      other: "You are not allowed to follow"
+    disallow_vote:
+      other: "You are not allowed to vote"
+    disallow_vote_your_self:
+      other: "You can't vote for your own post!"
+    not_found:
+      other: "object not found"
+  question:
+    not_found:
+      other: "question not found"
+  rank:
+    fail_to_meet_the_condition:
+      other: "rank fail to meet the condition"
+  report:
+    handle_failed:
+      other: "report handle failed"
+    not_found:
+      other: "report not found"
+  tag:
+    not_found:
+      other: "tag not found"
+  theme:
+    not_found:
+      other: "theme not found"
+  user:
+    email_or_password_wrong:
+      other: *email_or_password_wrong
+    not_found:
+      other: "user not found"
+    suspended:
+      other: "user is suspended"
+
+
+
+report:
+  spam:
+    name:
+      other: "spam"
+    description:
+      other: "This post is an advertisement,or vandalism.It is not useful or relevant to the current topic."
+  rude:
+    name:
+      other: "rude or abusive"
+    description:
+      other: "A reasonable person would find this content inappropriate for respectful discourse."
+  duplicate:
+    name:
+      other: "a duplicate"
+    description:
+      other: "This question has been asked before and already has an answer."
+  not_answer:
+    name:
+      other: "not an answer"
+    description:
+      other: "This was posted as an answer,but it does not attempt to answer the question. It should possibly be an edit,a comment,another question,or deleted altogether."
+  not_need:
+    name:
+      other: "no longer needed"
+    description:
+      other: "This comment is outdated,conversational or not relevant to this post."
+  other:
+    name:
+      other: "something else"
+    description:
+      other: "This post requires staff attention for another reason not listed above."
+
+question:
+  close:
+    duplicate:
+      name:
+        other: "spam"
+      description:
+        other: "This question has been asked before and already has an answer."
+    guideline:
+      name:
+        other: "a community-specific reason"
+      description:
+        other: "This question doesn't meet a community guideline."
+    multiple:
+      name:
+        other: "needs details or clarity"
+      description:
+        other: "This question currently includes multiple questions in one. It should focus on one problem only."
+    other:
+      name:
+        other: "something else"
+      description:
+        other: "This post requires another reason not listed above."
+
+notification:
+  action:
+    update_question:
+      other: "update question"
+    answer_the_question:
+      other: "answer the question"
+    update_answer:
+      other: "update answer"
+    adopt_answer:
+      other: "adopt answer"
+    comment_question:
+      other: "comment question"
+    comment_answer:
+      other: "comment answer"
+    reply_to_you:
+      other: "reply to you"
+    mention_you:
+      other: "mention you"
+    your_question_is_closed:
+      other: "your question is closed"
+    your_question_was_deleted:
+      other: "your question was deleted"
+    your_answer_was_deleted:
+      other: "your answer was deleted"
+    your_comment_was_deleted:
+      other: "your comment was deleted"

@@ -1,0 +1,199 @@
+.md-editor-wrap {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  overflow: hidden;
+  .toolbar-wrap {
+    border-bottom: 1px solid #ced4da;
+    .toolbar-divider {
+      float: left;
+      width: 1px;
+      height: 15px;
+      background-color: rgba(0, 0, 0, 0.1);
+      margin: 10px 8px;
+    }
+    .toolbar-item-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 24px;
+      width: 24px;
+      margin: 0 2px;
+      line-height: 0;
+      .dropdown-menu {
+        line-height: 1.5;
+      }
+      &.right {
+        float: right;
+      }
+      .dropdown-toggle {
+        &::after {
+          display: none;
+        }
+      }
+    }
+    .toolbar {
+      box-sizing: border-box;
+      outline: none;
+      cursor: pointer;
+      background-color: #fff;
+      height: 100%;
+      width: 100%;
+      border-radius: 0;
+      background-image: url('~@/assets/images/icon-editor-toolbar.png');
+      background-size: 576px 72px;
+      border-radius: 3px;
+
+      &:hover {
+        background-color: #f8f9fa;
+      }
+      &:focus {
+        background-color: #dae0e5;
+      }
+      &.icon-heading {
+        background-position: 0px -144px;
+      }
+      &.icon-bold {
+        background-position: -24px -144px;
+      }
+      &.icon-italic {
+        background-position: -48px -144px;
+      }
+
+      &.icon-code {
+        background-position: -72px -144px;
+      }
+
+      &.icon-link {
+        background-position: -120px -144px;
+      }
+      &.icon-blockquote {
+        background-position: -144px -144px;
+      }
+      &.icon-image {
+        background-position: -168px -144px;
+      }
+      &.icon-video {
+        background-position: -192px -144px;
+      }
+      &.icon-table {
+        background-position: -216px -144px;
+        &.disabled {
+          background-position: -216px -168px !important;
+        }
+      }
+
+      &.icon-formula {
+        background-position: -528px -144px;
+      }
+      &.icon-indent {
+        background-position: -288px -144px;
+      }
+      &.icon-outdent {
+        background-position: -312px -144px;
+      }
+      &.icon-orderedList {
+        background-position: -240px -144px;
+      }
+      &.icon-unorderedList {
+        background-position: -264px -144px;
+      }
+      &.icon-hr {
+        background-position: -336px -144px;
+      }
+      &.icon-help {
+        background-position: -360px -144px;
+      }
+      &.icon-full {
+        background-position: -456px -144px;
+      }
+      &.icon-exit-sync-scroll {
+        background-position: -432px -144px;
+      }
+      &.icon-sync-scroll {
+        background-position: -432px -192px;
+      }
+      &.icon-exit-preview {
+        background-position: -408px -144px;
+      }
+      &.icon-preview {
+        background-position: -408px -192px;
+      }
+      &.icon-exit-full {
+        background-position: -480px -144px;
+      }
+      &.icon-chart {
+        background-position: -552px -144px;
+      }
+    }
+    .popup-wrap {
+      position: absolute;
+      width: 500px;
+      margin-right: auto;
+      border: 1px solid #cacaca;
+      background: #fff;
+      z-index: 9999;
+      visibility: hidden;
+
+      &.heading-add {
+        width: 158px;
+        padding: 8px 0;
+
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          li {
+            padding: 4px 24px;
+            cursor: pointer;
+            &:hover {
+              background-color: #eee;
+            }
+            h2 {
+              font-size: 24px;
+              margin: 0;
+            }
+            h3 {
+              font-size: 20px;
+              margin: 0;
+            }
+            h4 {
+              font-size: 19px;
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+  .content-wrap {
+    height: 270px;
+  }
+
+  .CodeMirror {
+    height: auto;
+    font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+      'Courier New', monospace !important;
+    font-size: 14px;
+    pre.CodeMirror-line,
+    pre.CodeMirror-line-like {
+      padding: 0 16px;
+    }
+    .CodeMirror-lines {
+      padding: 16px 0;
+    }
+    .CodeMirror-placeholder {
+      color: #6c757d;
+    }
+  }
+}
+.preview-wrap {
+  overflow-y: auto;
+  min-height: 20px;
+  padding: 16px;
+  img {
+    max-width: 100%;
+  }
+}

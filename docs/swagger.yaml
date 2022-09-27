@@ -1,0 +1,3639 @@
+definitions:
+  entity.AdminSetAnswerStatusRequest:
+    properties:
+      answer_id:
+        type: string
+      status:
+        type: string
+    type: object
+  handler.RespBody:
+    properties:
+      code:
+        description: http code
+        type: integer
+      data:
+        description: response data
+      msg:
+        description: response message
+        type: string
+      reason:
+        description: reason key
+        type: string
+    type: object
+  pager.PageModel:
+    properties:
+      count:
+        type: integer
+      list: {}
+    type: object
+  schema.ActionRecordResp:
+    properties:
+      captcha_id:
+        type: string
+      captcha_img:
+        type: string
+      verify:
+        type: boolean
+    type: object
+  schema.AddCollectionGroupReq:
+    properties:
+      create_time:
+        type: string
+      default_group:
+        description: mark this group is default, default 1
+        type: integer
+      name:
+        description: the collection group name
+        maxLength: 50
+        type: string
+      update_time:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - create_time
+    - default_group
+    - name
+    - update_time
+    - user_id
+    type: object
+  schema.AddCommentReq:
+    properties:
+      mention_username_list:
+        description: '@ user id list'
+        items:
+          type: string
+        type: array
+      object_id:
+        description: object id
+        type: string
+      original_text:
+        description: original comment content
+        type: string
+      parsed_text:
+        description: parsed comment content
+        type: string
+      reply_comment_id:
+        description: reply comment id
+        type: string
+    required:
+    - object_id
+    - original_text
+    - parsed_text
+    type: object
+  schema.AddNotificationReadReq:
+    properties:
+      is_read:
+        description: 'read status(unread: 1; read 2)'
+        type: integer
+      message_id:
+        description: message id
+        type: integer
+      user_id:
+        description: user id
+        type: integer
+    required:
+    - is_read
+    - message_id
+    - user_id
+    type: object
+  schema.AddReportReq:
+    properties:
+      content:
+        description: report content
+        maxLength: 500
+        type: string
+      object_id:
+        description: object id
+        maxLength: 20
+        type: string
+      report_type:
+        description: report type
+        type: integer
+    required:
+    - object_id
+    - report_type
+    type: object
+  schema.AddUserGroupReq:
+    type: object
+  schema.AdminSetQuestionStatusRequest:
+    properties:
+      question_id:
+        type: string
+      status:
+        type: string
+    type: object
+  schema.AnswerAddReq:
+    properties:
+      content:
+        description: content
+        type: string
+      html:
+        description: 解析后的html
+        type: string
+      question_id:
+        description: question_id
+        type: string
+    type: object
+  schema.AnswerAdoptedReq:
+    properties:
+      answer_id:
+        type: string
+      question_id:
+        description: question_id
+        type: string
+    type: object
+  schema.AnswerList:
+    properties:
+      order:
+        description: 1 Default 2 time
+        type: string
+      page:
+        description: Query number of pages
+        type: integer
+      page_size:
+        description: Search page size
+        type: integer
+      question_id:
+        description: question_id
+        type: string
+    type: object
+  schema.AnswerUpdateReq:
+    properties:
+      content:
+        description: content
+        type: string
+      edit_summary:
+        description: edit_summary
+        type: string
+      html:
+        description: 解析后的html
+        type: string
+      id:
+        description: id
+        type: string
+      question_id:
+        description: question_id
+        type: string
+      title:
+        description: title
+        type: string
+    type: object
+  schema.CloseQuestionReq:
+    properties:
+      close_msg:
+        description: close_type
+        type: string
+      close_type:
+        description: close_type
+        type: integer
+      id:
+        type: string
+    required:
+    - id
+    type: object
+  schema.CollectionSwitchReq:
+    properties:
+      group_id:
+        description: user collection group TagID
+        type: string
+      object_id:
+        description: object TagID
+        type: string
+    required:
+    - group_id
+    - object_id
+    type: object
+  schema.CollectionSwitchResp:
+    properties:
+      object_collection_count:
+        type: string
+      object_id:
+        type: string
+      switch:
+        type: boolean
+    type: object
+  schema.FollowReq:
+    properties:
+      is_cancel:
+        description: is cancel
+        type: boolean
+      object_id:
+        description: object id
+        type: string
+    required:
+    - object_id
+    type: object
+  schema.FollowResp:
+    properties:
+      follows:
+        description: the followers of object
+        type: integer
+      is_followed:
+        description: if user is followed object will be true,otherwise false
+        type: boolean
+    type: object
+  schema.GetCommentPersonalWithPageResp:
+    properties:
+      answer_id:
+        description: answer id
+        type: string
+      comment_id:
+        description: comment id
+        type: string
+      content:
+        description: content
+        type: string
+      created_at:
+        description: create time
+        type: integer
+      object_id:
+        description: object id
+        type: string
+      object_type:
+        description: object type
+        enum:
+        - question
+        - answer
+        - tag
+        - comment
+        type: string
+      question_id:
+        description: question id
+        type: string
+      title:
+        description: title
+        type: string
+    type: object
+  schema.GetCommentResp:
+    properties:
+      comment_id:
+        description: comment id
+        type: string
+      created_at:
+        description: create time
+        type: integer
+      is_vote:
+        description: current user if already vote this comment
+        type: boolean
+      member_actions:
+        description: MemberActions
+        items:
+          $ref: '#/definitions/schema.PermissionMemberAction'
+        type: array
+      object_id:
+        description: object id
+        type: string
+      original_text:
+        description: original comment content
+        type: string
+      parsed_text:
+        description: parsed comment content
+        type: string
+      reply_comment_id:
+        description: reply comment id
+        type: string
+      reply_user_display_name:
+        description: reply user display name
+        type: string
+      reply_user_id:
+        description: reply user id
+        type: string
+      reply_username:
+        description: reply user username
+        type: string
+      user_avatar:
+        description: user avatar
+        type: string
+      user_display_name:
+        description: user display name
+        type: string
+      user_id:
+        description: user id
+        type: string
+      username:
+        description: username
+        type: string
+      vote_count:
+        description: user vote amount
+        type: integer
+    type: object
+  schema.GetFollowingTagsResp:
+    properties:
+      display_name:
+        description: display name
+        type: string
+      main_tag_slug_name:
+        description: if main tag slug name is not empty, this tag is synonymous with
+          the main tag
+        type: string
+      slug_name:
+        description: slug name
+        type: string
+      tag_id:
+        description: tag id
+        type: string
+    type: object
+  schema.GetNotificationReadResp:
+    properties:
+      created_at:
+        description: create time
+        type: string
+      id:
+        description: id
+        type: integer
+      is_read:
+        description: 'read status(unread: 1; read 2)'
+        type: integer
+      message_id:
+        description: message id
+        type: integer
+      updated_at:
+        description: update time
+        type: string
+      user_id:
+        description: user id
+        type: integer
+    type: object
+  schema.GetOtherUserInfoByUsernameResp:
+    properties:
+      answer_count:
+        description: answer count
+        type: integer
+      avatar:
+        description: avatar
+        type: string
+      bio:
+        description: bio markdown
+        type: string
+      bio_html:
+        description: bio html
+        type: string
+      created_at:
+        description: create time
+        type: integer
+      display_name:
+        description: display name
+        type: string
+      follow_count:
+        description: |-
+          email
+          follow count
+        type: integer
+      id:
+        description: user id
+        type: string
+      ip_info:
+        description: ip info
+        type: string
+      is_admin:
+        description: is admin
+        type: boolean
+      last_login_date:
+        description: last login date
+        type: integer
+      location:
+        description: location
+        type: string
+      mobile:
+        description: mobile
+        type: string
+      question_count:
+        description: question count
+        type: integer
+      rank:
+        description: rank
+        type: integer
+      status:
+        type: string
+      status_msg:
+        type: string
+      username:
+        description: username
+        type: string
+      website:
+        description: website
+        type: string
+    type: object
+  schema.GetOtherUserInfoResp:
+    properties:
+      has:
+        type: boolean
+      info:
+        $ref: '#/definitions/schema.GetOtherUserInfoByUsernameResp'
+    type: object
+  schema.GetRankPersonalWithPageResp:
+    properties:
+      answer_id:
+        description: answer id
+        type: string
+      content:
+        description: content
+        type: string
+      created_at:
+        description: create time
+        type: integer
+      object_id:
+        description: object id
+        type: string
+      object_type:
+        description: object type
+        enum:
+        - question
+        - answer
+        - tag
+        - comment
+        type: string
+      question_id:
+        description: question id
+        type: string
+      rank_type:
+        description: rank type
+        type: string
+      reputation:
+        description: reputation
+        type: integer
+      title:
+        description: title
+        type: string
+    type: object
+  schema.GetReportTypeResp:
+    properties:
+      content_type:
+        description: content type
+        type: string
+      description:
+        description: report description
+        type: string
+      have_content:
+        description: is have content
+        type: boolean
+      name:
+        description: report name
+        type: string
+      source:
+        description: report source
+        type: string
+      type:
+        description: report type
+        type: integer
+    type: object
+  schema.GetRevisionResp:
+    properties:
+      content:
+        description: content parsed
+      create_at:
+        type: integer
+      id:
+        description: id
+        type: string
+      object_id:
+        description: object id
+        type: string
+      reason:
+        type: string
+      status:
+        description: 'revision status(normal: 1; delete 2)'
+        type: integer
+      title:
+        description: title
+        type: string
+      use_id:
+        description: user id
+        type: string
+      user_info:
+        $ref: '#/definitions/schema.UserBasicInfo'
+    type: object
+  schema.GetTagPageResp:
+    properties:
+      created_at:
+        description: created time
+        type: integer
+      display_name:
+        description: display_name
+        type: string
+      excerpt:
+        description: excerpt
+        type: string
+      follow_count:
+        description: follower amount
+        type: integer
+      is_follower:
+        description: is follower
+        type: boolean
+      original_text:
+        description: original text
+        type: string
+      parsed_text:
+        description: parsed_text
+        type: string
+      question_count:
+        description: question amount
+        type: integer
+      slug_name:
+        description: slug_name
+        type: string
+      tag_id:
+        description: tag_id
+        type: string
+      updated_at:
+        description: updated time
+        type: integer
+    type: object
+  schema.GetTagResp:
+    properties:
+      created_at:
+        description: created time
+        type: integer
+      display_name:
+        description: display name
+        type: string
+      excerpt:
+        description: excerpt
+        type: string
+      follow_count:
+        description: follower amount
+        type: integer
+      is_follower:
+        description: is follower
+        type: boolean
+      main_tag_slug_name:
+        description: if main tag slug name is not empty, this tag is synonymous with
+          the main tag
+        type: string
+      member_actions:
+        description: MemberActions
+        items:
+          $ref: '#/definitions/schema.PermissionMemberAction'
+        type: array
+      original_text:
+        description: original text
+        type: string
+      parsed_text:
+        description: parsed text
+        type: string
+      question_count:
+        description: question amount
+        type: integer
+      slug_name:
+        description: slug name
+        type: string
+      tag_id:
+        description: tag id
+        type: string
+      updated_at:
+        description: updated time
+        type: integer
+    type: object
+  schema.GetTagSynonymsResp:
+    properties:
+      display_name:
+        description: display name
+        type: string
+      main_tag_slug_name:
+        description: if main tag slug name is not empty, this tag is synonymous with
+          the main tag
+        type: string
+      slug_name:
+        description: slug name
+        type: string
+      tag_id:
+        description: tag id
+        type: string
+    type: object
+  schema.GetUserGroupResp:
+    properties:
+      id:
+        description: user group id
+        type: integer
+    type: object
+  schema.GetUserInfoResp:
+    type: object
+  schema.GetUserPageResp:
+    properties:
+      avatar:
+        description: avatar
+        type: string
+      created_at:
+        description: create time
+        type: integer
+      deleted_at:
+        description: delete time
+        type: integer
+      display_name:
+        description: display name
+        type: string
+      e_mail:
+        description: email
+        type: string
+      rank:
+        description: rank
+        type: integer
+      status:
+        description: user status(normal,suspended,deleted,inactive)
+        type: string
+      suspended_at:
+        description: suspended time
+        type: integer
+      user_id:
+        description: user id
+        type: string
+      username:
+        description: username
+        type: string
+    type: object
+  schema.GetUserResp:
+    properties:
+      access_token:
+        description: access token
+        type: string
+      answer_count:
+        description: answer count
+        type: integer
+      authority_group:
+        description: authority group
+        type: integer
+      avatar:
+        description: avatar
+        type: string
+      bio:
+        description: bio markdown
+        type: string
+      bio_html:
+        description: bio html
+        type: string
+      created_at:
+        description: create time
+        type: integer
+      display_name:
+        description: display name
+        type: string
+      e_mail:
+        description: email
+        type: string
+      follow_count:
+        description: follow count
+        type: integer
+      id:
+        description: user id
+        type: string
+      ip_info:
+        description: ip info
+        type: string
+      is_admin:
+        description: is admin
+        type: boolean
+      last_login_date:
+        description: last login date
+        type: integer
+      location:
+        description: location
+        type: string
+      mail_status:
+        description: mail status(1 pass 2 to be verified)
+        type: integer
+      mobile:
+        description: mobile
+        type: string
+      notice_status:
+        description: notice status(1 on 2off)
+        type: integer
+      question_count:
+        description: question count
+        type: integer
+      rank:
+        description: rank
+        type: integer
+      status:
+        description: user status
+        type: string
+      username:
+        description: username
+        type: string
+      website:
+        description: website
+        type: string
+    type: object
+  schema.GetVoteWithPageResp:
+    properties:
+      answer_id:
+        description: answer id
+        type: string
+      content:
+        description: content
+        type: string
+      created_at:
+        description: create time
+        type: integer
+      object_id:
+        description: object id
+        type: string
+      object_type:
+        description: object type
+        enum:
+        - question
+        - answer
+        - tag
+        - comment
+        type: string
+      question_id:
+        description: question id
+        type: string
+      title:
+        description: title
+        type: string
+      vote_type:
+        description: vote type
+        type: string
+    type: object
+  schema.NotificationClearIDRequest:
+    properties:
+      id:
+        type: string
+    type: object
+  schema.NotificationClearRequest:
+    properties:
+      type:
+        description: inbox achievement
+        type: string
+    type: object
+  schema.PermissionMemberAction:
+    properties:
+      action:
+        type: string
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  schema.QuestionAdd:
+    properties:
+      content:
+        description: content
+        maxLength: 65535
+        minLength: 6
+        type: string
+      html:
+        description: html
+        maxLength: 65535
+        minLength: 6
+        type: string
+      tags:
+        description: tags
+        items:
+          $ref: '#/definitions/schema.TagItem'
+        type: array
+      title:
+        description: question title
+        maxLength: 64
+        minLength: 6
+        type: string
+    required:
+    - content
+    - html
+    - tags
+    - title
+    type: object
+  schema.QuestionSearch:
+    properties:
+      order:
+        description: Search order by
+        type: string
+      page:
+        description: Query number of pages
+        type: integer
+      page_size:
+        description: Search page size
+        type: integer
+      tags:
+        description: Search tag
+        items:
+          type: string
+        type: array
+      username:
+        description: Search username
+        type: string
+    type: object
+  schema.QuestionUpdate:
+    properties:
+      content:
+        description: content
+        maxLength: 65535
+        minLength: 6
+        type: string
+      edit_summary:
+        description: edit summary
+        type: string
+      html:
+        description: html
+        maxLength: 65535
+        minLength: 6
+        type: string
+      id:
+        description: question id
+        type: string
+      tags:
+        description: tags
+        items:
+          $ref: '#/definitions/schema.TagItem'
+        type: array
+      title:
+        description: question title
+        maxLength: 64
+        minLength: 6
+        type: string
+    required:
+    - content
+    - html
+    - id
+    - tags
+    - title
+    type: object
+  schema.RemoveAnswerReq:
+    properties:
+      id:
+        description: answer id
+        type: string
+    required:
+    - id
+    type: object
+  schema.RemoveCommentReq:
+    properties:
+      comment_id:
+        description: comment id
+        type: string
+    required:
+    - comment_id
+    type: object
+  schema.RemoveNotificationReadReq:
+    properties:
+      id:
+        description: id
+        type: integer
+    required:
+    - id
+    type: object
+  schema.RemoveQuestionReq:
+    properties:
+      id:
+        description: question id
+        type: string
+    required:
+    - id
+    type: object
+  schema.RemoveTagReq:
+    properties:
+      tag_id:
+        description: tag_id
+        type: string
+    required:
+    - tag_id
+    type: object
+  schema.RemoveUserGroupReq:
+    properties:
+      id:
+        description: user group id
+        type: integer
+    required:
+    - id
+    type: object
+  schema.ReportHandleReq:
+    properties:
+      flaged_content:
+        type: string
+      flaged_type:
+        type: integer
+      id:
+        type: string
+    required:
+    - flaged_type
+    - id
+    type: object
+  schema.SearchListResp:
+    properties:
+      count:
+        type: integer
+      extra:
+        description: extra fields
+      list:
+        description: search response
+        items:
+          $ref: '#/definitions/schema.SearchResp'
+        type: array
+    type: object
+  schema.SearchObject:
+    properties:
+      accepted:
+        type: boolean
+      answer_count:
+        type: integer
+      created_at:
+        type: integer
+      excerpt:
+        type: string
+      id:
+        type: string
+      tags:
+        description: tags
+        items:
+          $ref: '#/definitions/schema.TagResp'
+        type: array
+      title:
+        type: string
+      user_info:
+        $ref: '#/definitions/schema.UserBasicInfo'
+        description: user info
+      vote_count:
+        type: integer
+    type: object
+  schema.SearchResp:
+    properties:
+      object:
+        $ref: '#/definitions/schema.SearchObject'
+        description: this object
+      object_type:
+        description: object_type
+        type: string
+    type: object
+  schema.SiteGeneralReq:
+    properties:
+      description:
+        maxLength: 2000
+        type: string
+      name:
+        maxLength: 128
+        type: string
+      short_description:
+        maxLength: 255
+        type: string
+    required:
+    - description
+    - name
+    - short_description
+    type: object
+  schema.SiteGeneralResp:
+    properties:
+      description:
+        maxLength: 2000
+        type: string
+      name:
+        maxLength: 128
+        type: string
+      short_description:
+        maxLength: 255
+        type: string
+    required:
+    - description
+    - name
+    - short_description
+    type: object
+  schema.SiteInterfaceReq:
+    properties:
+      language:
+        maxLength: 128
+        type: string
+      logo:
+        maxLength: 256
+        type: string
+      theme:
+        maxLength: 128
+        type: string
+    required:
+    - language
+    - theme
+    type: object
+  schema.SiteInterfaceResp:
+    properties:
+      language:
+        maxLength: 128
+        type: string
+      logo:
+        maxLength: 256
+        type: string
+      theme:
+        maxLength: 128
+        type: string
+    required:
+    - language
+    - theme
+    type: object
+  schema.TagItem:
+    properties:
+      display_name:
+        description: display_name
+        maxLength: 50
+        type: string
+      original_text:
+        description: original text
+        type: string
+      parsed_text:
+        description: parsed text
+        type: string
+      slug_name:
+        description: slug_name
+        maxLength: 50
+        type: string
+    type: object
+  schema.TagResp:
+    properties:
+      display_name:
+        type: string
+      main_tag_slug_name:
+        description: if main tag slug name is not empty, this tag is synonymous with
+          the main tag
+        type: string
+      slug_name:
+        type: string
+    type: object
+  schema.UpdateCollectionGroupReq:
+    properties:
+      create_time:
+        type: string
+      default_group:
+        description: mark this group is default, default 1
+        type: integer
+      id:
+        type: integer
+      name:
+        description: the collection group name
+        maxLength: 50
+        type: string
+      update_time:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - id
+    type: object
+  schema.UpdateCommentReq:
+    properties:
+      comment_id:
+        description: comment id
+        type: string
+      original_text:
+        description: original comment content
+        type: string
+      parsed_text:
+        description: parsed comment content
+        type: string
+    required:
+    - comment_id
+    type: object
+  schema.UpdateFollowTagsReq:
+    properties:
+      slug_name_list:
+        description: tag slug name list
+        items:
+          type: string
+        type: array
+    type: object
+  schema.UpdateInfoRequest:
+    properties:
+      avatar:
+        description: avatar
+        type: string
+      bio:
+        type: string
+      bio_html:
+        type: string
+      display_name:
+        description: display_name
+        type: string
+      location:
+        description: location
+        type: string
+      username:
+        description: name
+        type: string
+      website:
+        description: website
+        type: string
+    type: object
+  schema.UpdateNotificationReadReq:
+    properties:
+      id:
+        description: id
+        type: integer
+      is_read:
+        description: 'read status(unread: 1; read 2)'
+        type: integer
+      message_id:
+        description: message id
+        type: integer
+      user_id:
+        description: user id
+        type: integer
+    required:
+    - id
+    type: object
+  schema.UpdateTagReq:
+    properties:
+      display_name:
+        description: display_name
+        maxLength: 50
+        type: string
+      edit_summary:
+        description: edit summary
+        type: string
+      original_text:
+        description: original text
+        type: string
+      parsed_text:
+        description: parsed text
+        type: string
+      slug_name:
+        description: slug_name
+        maxLength: 50
+        type: string
+      tag_id:
+        description: tag_id
+        type: string
+    required:
+    - tag_id
+    type: object
+  schema.UpdateTagSynonymReq:
+    properties:
+      synonym_tag_list:
+        description: synonym tag list
+        items:
+          $ref: '#/definitions/schema.TagItem'
+        type: array
+      tag_id:
+        description: tag_id
+        type: string
+    required:
+    - synonym_tag_list
+    - tag_id
+    type: object
+  schema.UpdateUserGroupReq:
+    properties:
+      id:
+        description: user group id
+        type: integer
+    required:
+    - id
+    type: object
+  schema.UpdateUserStatusReq:
+    properties:
+      status:
+        description: user status
+        enum:
+        - normal
+        - suspended
+        - deleted
+        - inactive
+        type: string
+      user_id:
+        description: user id
+        type: string
+    required:
+    - status
+    - user_id
+    type: object
+  schema.UserBasicInfo:
+    properties:
+      avatar:
+        description: avatar
+        type: string
+      display_name:
+        description: display_name
+        type: string
+      ip_info:
+        description: ip info
+        type: string
+      location:
+        description: location
+        type: string
+      rank:
+        description: rank
+        type: integer
+      status:
+        description: status
+        type: integer
+      username:
+        description: name
+        type: string
+      website:
+        description: website
+        type: string
+    type: object
+  schema.UserChangeEmailSendCodeReq:
+    properties:
+      e_mail:
+        maxLength: 500
+        type: string
+    required:
+    - e_mail
+    type: object
+  schema.UserChangeEmailVerifyReq:
+    properties:
+      code:
+        maxLength: 500
+        type: string
+    required:
+    - code
+    type: object
+  schema.UserEmailLogin:
+    properties:
+      captcha_code:
+        description: captcha_code
+        type: string
+      captcha_id:
+        description: captcha_id
+        type: string
+      e_mail:
+        description: e_mail
+        type: string
+      pass:
+        description: password
+        type: string
+    type: object
+  schema.UserModifyPassWordRequest:
+    properties:
+      old_pass:
+        description: old password
+        type: string
+      pass:
+        description: password
+        type: string
+    type: object
+  schema.UserNoticeSetRequest:
+    properties:
+      notice_switch:
+        type: boolean
+    type: object
+  schema.UserNoticeSetResp:
+    properties:
+      notice_switch:
+        type: boolean
+    type: object
+  schema.UserRePassWordRequest:
+    properties:
+      code:
+        description: code
+        maxLength: 100
+        type: string
+      pass:
+        description: Password
+        maxLength: 32
+        type: string
+    required:
+    - code
+    - pass
+    type: object
+  schema.UserRegister:
+    properties:
+      e_mail:
+        description: email
+        maxLength: 500
+        type: string
+      name:
+        description: name
+        maxLength: 50
+        type: string
+      pass:
+        description: password
+        maxLength: 32
+        minLength: 8
+        type: string
+    required:
+    - e_mail
+    - name
+    - pass
+    type: object
+  schema.UserRetrievePassWordRequest:
+    properties:
+      captcha_code:
+        description: captcha_code
+        type: string
+      captcha_id:
+        description: captcha_id
+        type: string
+      e_mail:
+        description: e_mail
+        maxLength: 500
+        type: string
+    required:
+    - e_mail
+    type: object
+  schema.VoteReq:
+    properties:
+      is_cancel:
+        description: is cancel
+        type: boolean
+      object_id:
+        description: id
+        type: string
+    required:
+    - object_id
+    type: object
+  schema.VoteResp:
+    properties:
+      down_votes:
+        type: integer
+      up_votes:
+        type: integer
+      vote_status:
+        type: string
+      votes:
+        type: integer
+    type: object
+info:
+  contact: {}
+paths:
+  /answer/admin/api/answer/page:
+    get:
+      consumes:
+      - application/json
+      description: Status:[available,deleted]
+      parameters:
+      - description: page size
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: page_size
+        type: integer
+      - description: user status
+        enum:
+        - available
+        - deleted
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: CmsSearchList
+      tags:
+      - admin
+  /answer/admin/api/answer/status:
+    put:
+      consumes:
+      - application/json
+      description: Status:[available,deleted]
+      parameters:
+      - description: AdminSetAnswerStatusRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/entity.AdminSetAnswerStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: AdminSetAnswerStatus
+      tags:
+      - admin
+  /answer/admin/api/language/options:
+    get:
+      description: Get language options
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: Get language options
+      tags:
+      - Lang
+  /answer/admin/api/question/page:
+    get:
+      consumes:
+      - application/json
+      description: Status:[available,closed,deleted]
+      parameters:
+      - description: page size
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: page_size
+        type: integer
+      - description: user status
+        enum:
+        - available
+        - closed
+        - deleted
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: CmsSearchList
+      tags:
+      - admin
+  /answer/admin/api/question/status:
+    put:
+      consumes:
+      - application/json
+      description: Status:[available,closed,deleted]
+      parameters:
+      - description: AdminSetQuestionStatusRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AdminSetQuestionStatusRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: AdminSetQuestionStatus
+      tags:
+      - admin
+  /answer/admin/api/reasons:
+    get:
+      consumes:
+      - application/json
+      description: get reasons by object type and action
+      parameters:
+      - description: object_type
+        enum:
+        - question
+        - answer
+        - comment
+        - user
+        in: query
+        name: object_type
+        required: true
+        type: string
+      - description: action
+        enum:
+        - status
+        - close
+        - flag
+        - review
+        in: query
+        name: action
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: get reasons by object type and action
+      tags:
+      - reason
+  /answer/admin/api/report/:
+    put:
+      consumes:
+      - application/json
+      description: handle flag
+      parameters:
+      - description: flag
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.ReportHandleReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      - ApiKeyAuth: []
+      summary: handle flag
+      tags:
+      - admin
+  /answer/admin/api/reports/page:
+    get:
+      consumes:
+      - application/json
+      description: list report records
+      parameters:
+      - description: status
+        enum:
+        - pending
+        - completed
+        in: query
+        name: status
+        required: true
+        type: string
+      - description: object_type
+        enum:
+        - all
+        - question
+        - answer
+        - comment
+        in: query
+        name: object_type
+        required: true
+        type: string
+      - description: page size
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      - ApiKeyAuth: []
+      summary: list report page
+      tags:
+      - admin
+  /answer/admin/api/siteinfo/general:
+    get:
+      description: Get siteinfo general
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SiteGeneralResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get siteinfo general
+      tags:
+      - admin
+    put:
+      description: Get siteinfo interface
+      parameters:
+      - description: general
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.SiteGeneralReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: Get siteinfo interface
+      tags:
+      - admin
+  /answer/admin/api/siteinfo/interface:
+    get:
+      description: Get siteinfo interface
+      parameters:
+      - description: general
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AddCommentReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SiteInterfaceResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get siteinfo interface
+      tags:
+      - admin
+    put:
+      description: Get siteinfo interface
+      parameters:
+      - description: general
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.SiteInterfaceReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: Get siteinfo interface
+      tags:
+      - admin
+  /answer/admin/api/theme/options:
+    get:
+      description: Get theme options
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: Get theme options
+      tags:
+      - admin
+  /answer/admin/api/user/status:
+    put:
+      consumes:
+      - application/json
+      description: update user
+      parameters:
+      - description: user
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateUserStatusReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update user
+      tags:
+      - admin
+  /answer/admin/api/users/page:
+    get:
+      description: get user page
+      parameters:
+      - description: page size
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: page_size
+        type: integer
+      - description: username
+        in: query
+        name: username
+        type: string
+      - description: email
+        in: query
+        name: e_mail
+        type: string
+      - description: user status
+        enum:
+        - normal
+        - suspended
+        - deleted
+        - inactive
+        in: query
+        name: status
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      records:
+                        items:
+                          $ref: '#/definitions/schema.GetUserPageResp'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user page
+      tags:
+      - admin
+  /answer/api/v1/answer:
+    delete:
+      consumes:
+      - application/json
+      description: delete answer
+      parameters:
+      - description: answer
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.RemoveAnswerReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: delete answer
+      tags:
+      - api-answer
+    post:
+      consumes:
+      - application/json
+      description: Insert Answer
+      parameters:
+      - description: AnswerAddReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AnswerAddReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Insert Answer
+      tags:
+      - api-answer
+    put:
+      consumes:
+      - application/json
+      description: Update Answer
+      parameters:
+      - description: AnswerUpdateReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AnswerUpdateReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Update Answer
+      tags:
+      - api-answer
+  /answer/api/v1/answer/acceptance:
+    post:
+      consumes:
+      - application/json
+      description: Adopted
+      parameters:
+      - description: AnswerAdoptedReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AnswerAdoptedReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: Adopted
+      tags:
+      - api-answer
+  /answer/api/v1/answer/info:
+    get:
+      consumes:
+      - application/json
+      description: Get Answer
+      parameters:
+      - default: "1"
+        description: Answer TagID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Get Answer
+      tags:
+      - api-answer
+  /answer/api/v1/answer/list:
+    post:
+      consumes:
+      - application/json
+      description: AnswerList <br> <b>order</b> (default or updated)
+      parameters:
+      - description: AnswerList
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AnswerList'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: AnswerList
+      tags:
+      - api-answer
+  /answer/api/v1/collection/switch:
+    post:
+      consumes:
+      - application/json
+      description: add collection
+      parameters:
+      - description: collection
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.CollectionSwitchReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.CollectionSwitchResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: add collection
+      tags:
+      - Collection
+  /answer/api/v1/comment:
+    delete:
+      consumes:
+      - application/json
+      description: remove comment
+      parameters:
+      - description: comment
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.RemoveCommentReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: remove comment
+      tags:
+      - Comment
+    get:
+      description: get comment by id
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.GetCommentResp'
+                        type: array
+                    type: object
+              type: object
+      summary: get comment by id
+      tags:
+      - Comment
+    post:
+      consumes:
+      - application/json
+      description: add comment
+      parameters:
+      - description: comment
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AddCommentReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetCommentResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: add comment
+      tags:
+      - Comment
+    put:
+      consumes:
+      - application/json
+      description: update comment
+      parameters:
+      - description: comment
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateCommentReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update comment
+      tags:
+      - Comment
+  /answer/api/v1/comment/page:
+    get:
+      description: get comment page
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: page_size
+        type: integer
+      - description: object id
+        in: query
+        name: object_id
+        required: true
+        type: string
+      - description: query condition
+        enum:
+        - vote
+        in: query
+        name: query_cond
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.GetCommentResp'
+                        type: array
+                    type: object
+              type: object
+      summary: get comment page
+      tags:
+      - Comment
+  /answer/api/v1/follow:
+    post:
+      consumes:
+      - application/json
+      description: follow object or cancel follow operation
+      parameters:
+      - description: follow
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.FollowReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.FollowResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: follow object or cancel follow operation
+      tags:
+      - Activity
+  /answer/api/v1/follow/tags:
+    put:
+      consumes:
+      - application/json
+      description: update user follow tags
+      parameters:
+      - description: follow
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateFollowTagsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update user follow tags
+      tags:
+      - Activity
+  /answer/api/v1/language/config:
+    get:
+      description: get language config mapping
+      parameters:
+      - description: Accept-Language
+        in: header
+        name: Accept-Language
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: get language config mapping
+      tags:
+      - Lang
+  /answer/api/v1/language/options:
+    get:
+      description: Get language options
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: Get language options
+      tags:
+      - Lang
+  /answer/api/v1/notification/page:
+    get:
+      consumes:
+      - application/json
+      description: GetRedDot
+      parameters:
+      - description: page size
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: page_size
+        type: integer
+      - description: type
+        enum:
+        - inbox
+        - achievement
+        in: query
+        name: type
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: GetRedDot
+      tags:
+      - Notification
+  /answer/api/v1/notification/read/state:
+    put:
+      consumes:
+      - application/json
+      description: ClearUnRead
+      parameters:
+      - description: NotificationClearIDRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.NotificationClearIDRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: ClearUnRead
+      tags:
+      - Notification
+  /answer/api/v1/notification/read/state/all:
+    put:
+      consumes:
+      - application/json
+      description: ClearUnRead
+      parameters:
+      - description: NotificationClearRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.NotificationClearRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: ClearUnRead
+      tags:
+      - Notification
+  /answer/api/v1/notification/status:
+    get:
+      consumes:
+      - application/json
+      description: GetRedDot
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: GetRedDot
+      tags:
+      - Notification
+    put:
+      consumes:
+      - application/json
+      description: DelRedDot
+      parameters:
+      - description: NotificationClearRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.NotificationClearRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: DelRedDot
+      tags:
+      - Notification
+  /answer/api/v1/personal/answer/page:
+    get:
+      consumes:
+      - application/json
+      description: UserAnswerList
+      parameters:
+      - default: string
+        description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: order
+        enum:
+        - newest
+        - score
+        in: query
+        name: order
+        required: true
+        type: string
+      - default: "0"
+        description: page
+        in: query
+        name: page
+        required: true
+        type: string
+      - default: "20"
+        description: pagesize
+        in: query
+        name: pagesize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: UserAnswerList
+      tags:
+      - api-answer
+  /answer/api/v1/personal/collection/page:
+    get:
+      consumes:
+      - application/json
+      description: UserCollectionList
+      parameters:
+      - default: "0"
+        description: page
+        in: query
+        name: page
+        required: true
+        type: string
+      - default: "20"
+        description: pagesize
+        in: query
+        name: pagesize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: UserCollectionList
+      tags:
+      - Collection
+  /answer/api/v1/personal/comment/page:
+    get:
+      description: user personal comment list
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: page_size
+        type: integer
+      - description: username
+        in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.GetCommentPersonalWithPageResp'
+                        type: array
+                    type: object
+              type: object
+      summary: user personal comment list
+      tags:
+      - Comment
+  /answer/api/v1/personal/qa/top:
+    get:
+      consumes:
+      - application/json
+      description: UserTop
+      parameters:
+      - default: string
+        description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: UserTop
+      tags:
+      - api-question
+  /answer/api/v1/personal/rank/page:
+    get:
+      description: user personal rank list
+      parameters:
+      - description: page
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: page_size
+        type: integer
+      - description: username
+        in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.GetRankPersonalWithPageResp'
+                        type: array
+                    type: object
+              type: object
+      summary: user personal rank list
+      tags:
+      - Rank
+  /answer/api/v1/personal/user/info:
+    get:
+      consumes:
+      - application/json
+      description: GetOtherUserInfoByUsername
+      parameters:
+      - description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetOtherUserInfoResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: GetOtherUserInfoByUsername
+      tags:
+      - User
+  /answer/api/v1/personal/vote/page:
+    get:
+      consumes:
+      - application/json
+      description: user's vote
+      parameters:
+      - description: page size
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.GetVoteWithPageResp'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: user's votes
+      tags:
+      - Activity
+  /answer/api/v1/question:
+    delete:
+      consumes:
+      - application/json
+      description: delete question
+      parameters:
+      - description: question
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.RemoveQuestionReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: delete question
+      tags:
+      - api-question
+    post:
+      consumes:
+      - application/json
+      description: add question
+      parameters:
+      - description: question
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.QuestionAdd'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: add question
+      tags:
+      - api-question
+    put:
+      consumes:
+      - application/json
+      description: update question
+      parameters:
+      - description: question
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.QuestionUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update question
+      tags:
+      - api-question
+  /answer/api/v1/question/closemsglist:
+    get:
+      consumes:
+      - application/json
+      description: close question msg list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: close question msg list
+      tags:
+      - api-question
+  /answer/api/v1/question/info:
+    get:
+      consumes:
+      - application/json
+      description: GetQuestion Question
+      parameters:
+      - default: "1"
+        description: Question TagID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: GetQuestion Question
+      tags:
+      - api-question
+  /answer/api/v1/question/page:
+    post:
+      consumes:
+      - application/json
+      description: SearchQuestionList <br>  "order"  Enums(newest, active,frequent,score,unanswered)
+      parameters:
+      - description: QuestionSearch
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.QuestionSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: SearchQuestionList
+      tags:
+      - api-question
+  /answer/api/v1/question/search:
+    post:
+      consumes:
+      - application/json
+      description: SearchQuestionList
+      parameters:
+      - description: QuestionSearch
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.QuestionSearch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: SearchQuestionList
+      tags:
+      - api-question
+  /answer/api/v1/question/similar:
+    get:
+      consumes:
+      - application/json
+      description: add question title like
+      parameters:
+      - default: string
+        description: title
+        in: query
+        name: title
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: add question title like
+      tags:
+      - api-question
+  /answer/api/v1/question/similar/tag:
+    get:
+      consumes:
+      - application/json
+      description: Search Similar Question
+      parameters:
+      - default: ""
+        description: question_id
+        in: query
+        name: question_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Search Similar Question
+      tags:
+      - api-question
+  /answer/api/v1/question/status:
+    put:
+      consumes:
+      - application/json
+      description: Close question
+      parameters:
+      - description: question
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.CloseQuestionReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: Close question
+      tags:
+      - api-question
+  /answer/api/v1/question/tags:
+    get:
+      description: get tag list
+      parameters:
+      - description: tag
+        in: query
+        name: tag
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetTagResp'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get tag list
+      tags:
+      - Tag
+  /answer/api/v1/reasons:
+    get:
+      consumes:
+      - application/json
+      description: get reasons by object type and action
+      parameters:
+      - description: object_type
+        enum:
+        - question
+        - answer
+        - comment
+        - user
+        in: query
+        name: object_type
+        required: true
+        type: string
+      - description: action
+        enum:
+        - status
+        - close
+        - flag
+        - review
+        in: query
+        name: action
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: get reasons by object type and action
+      tags:
+      - reason
+  /answer/api/v1/report:
+    post:
+      consumes:
+      - application/json
+      description: add report <br> source (question, answer, comment, user)
+      parameters:
+      - description: report
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AddReportReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      - ApiKeyAuth: []
+      summary: add report
+      tags:
+      - Report
+  /answer/api/v1/report/type/list:
+    get:
+      description: get report type list
+      parameters:
+      - description: report source
+        enum:
+        - question
+        - answer
+        - comment
+        - user
+        in: query
+        name: source
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetReportTypeResp'
+                  type: array
+              type: object
+      summary: get report type list
+      tags:
+      - Report
+  /answer/api/v1/revisions:
+    get:
+      description: get revision list
+      parameters:
+      - description: object id
+        in: query
+        name: object_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetRevisionResp'
+                  type: array
+              type: object
+      summary: get revision list
+      tags:
+      - Revision
+  /answer/api/v1/search:
+    get:
+      description: search object
+      parameters:
+      - description: query string
+        in: query
+        name: q
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SearchListResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: search object
+      tags:
+      - Search
+  /answer/api/v1/siteinfo:
+    get:
+      description: Get siteinfo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SiteGeneralResp'
+              type: object
+      summary: Get siteinfo
+      tags:
+      - site
+  /answer/api/v1/tag:
+    delete:
+      consumes:
+      - application/json
+      description: delete tag
+      parameters:
+      - description: tag
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.RemoveTagReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: delete tag
+      tags:
+      - Tag
+    get:
+      consumes:
+      - application/json
+      description: get tag one
+      parameters:
+      - description: tag id
+        in: query
+        name: tag_id
+        required: true
+        type: string
+      - description: tag name
+        in: query
+        name: tag_name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetTagResp'
+              type: object
+      summary: get tag one
+      tags:
+      - Tag
+    put:
+      consumes:
+      - application/json
+      description: update tag
+      parameters:
+      - description: tag
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateTagReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: update tag
+      tags:
+      - Tag
+  /answer/api/v1/tag/synonym:
+    put:
+      consumes:
+      - application/json
+      description: update tag
+      parameters:
+      - description: tag
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateTagSynonymReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: update tag
+      tags:
+      - Tag
+  /answer/api/v1/tag/synonyms:
+    get:
+      description: get tag synonyms
+      parameters:
+      - description: tag id
+        in: query
+        name: tag_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetTagSynonymsResp'
+                  type: array
+              type: object
+      summary: get tag synonyms
+      tags:
+      - Tag
+  /answer/api/v1/tags/following:
+    get:
+      description: get following tag list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetFollowingTagsResp'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get following tag list
+      tags:
+      - Tag
+  /answer/api/v1/tags/page:
+    get:
+      description: get tag page
+      parameters:
+      - description: page size
+        in: query
+        name: page
+        type: integer
+      - description: page size
+        in: query
+        name: page_size
+        type: integer
+      - description: slug_name
+        in: query
+        name: slug_name
+        type: string
+      - description: query condition
+        enum:
+        - popular
+        - name
+        - newest
+        in: query
+        name: query_cond
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.GetTagPageResp'
+                        type: array
+                    type: object
+              type: object
+      summary: get tag page
+      tags:
+      - Tag
+  /answer/api/v1/user/action/record:
+    get:
+      description: ActionRecord
+      parameters:
+      - description: action
+        enum:
+        - login
+        - e_mail
+        - find_pass
+        in: query
+        name: action
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.ActionRecordResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: ActionRecord
+      tags:
+      - User
+  /answer/api/v1/user/avatar/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: UserUpdateInfo
+      parameters:
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: UserUpdateInfo
+      tags:
+      - User
+  /answer/api/v1/user/email:
+    put:
+      consumes:
+      - application/json
+      description: user change email verification
+      parameters:
+      - description: UserChangeEmailVerifyReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UserChangeEmailVerifyReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: user change email verification
+      tags:
+      - User
+  /answer/api/v1/user/email/change/code:
+    post:
+      consumes:
+      - application/json
+      description: send email to the user email then change their email
+      parameters:
+      - description: UserChangeEmailSendCodeReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UserChangeEmailSendCodeReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: send email to the user email then change their email
+      tags:
+      - User
+  /answer/api/v1/user/email/verification:
+    post:
+      consumes:
+      - application/json
+      description: UserVerifyEmail
+      parameters:
+      - default: ""
+        description: code
+        in: query
+        name: code
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserResp'
+              type: object
+      summary: UserVerifyEmail
+      tags:
+      - User
+  /answer/api/v1/user/email/verification/send:
+    post:
+      consumes:
+      - application/json
+      description: UserVerifyEmailSend
+      parameters:
+      - default: ""
+        description: captcha_id
+        in: query
+        name: captcha_id
+        type: string
+      - default: ""
+        description: captcha_code
+        in: query
+        name: captcha_code
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: UserVerifyEmailSend
+      tags:
+      - User
+  /answer/api/v1/user/info:
+    get:
+      consumes:
+      - application/json
+      description: GetUserInfoByUserID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: GetUserInfoByUserID
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: UserUpdateInfo
+      parameters:
+      - description: access-token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: UpdateInfoRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateInfoRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: UserUpdateInfo
+      tags:
+      - User
+  /answer/api/v1/user/login/email:
+    post:
+      consumes:
+      - application/json
+      description: UserEmailLogin
+      parameters:
+      - description: UserEmailLogin
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UserEmailLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserResp'
+              type: object
+      summary: UserEmailLogin
+      tags:
+      - User
+  /answer/api/v1/user/logout:
+    get:
+      consumes:
+      - application/json
+      description: user logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: user logout
+      tags:
+      - User
+  /answer/api/v1/user/notice/set:
+    post:
+      consumes:
+      - application/json
+      description: UserNoticeSet
+      parameters:
+      - description: UserNoticeSetRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UserNoticeSetRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.UserNoticeSetResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: UserNoticeSet
+      tags:
+      - User
+  /answer/api/v1/user/password:
+    put:
+      consumes:
+      - application/json
+      description: UserModifyPassWord
+      parameters:
+      - description: UserModifyPassWordRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UserModifyPassWordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: UserModifyPassWord
+      tags:
+      - User
+  /answer/api/v1/user/password/replacement:
+    post:
+      consumes:
+      - application/json
+      description: UseRePassWord
+      parameters:
+      - description: UserRePassWordRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UserRePassWordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: UseRePassWord
+      tags:
+      - User
+  /answer/api/v1/user/password/reset:
+    post:
+      consumes:
+      - application/json
+      description: RetrievePassWord
+      parameters:
+      - description: UserRetrievePassWordRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UserRetrievePassWordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: RetrievePassWord
+      tags:
+      - User
+  /answer/api/v1/user/post/file:
+    post:
+      consumes:
+      - multipart/form-data
+      description: upload user post file
+      parameters:
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: upload user post file
+      tags:
+      - User
+  /answer/api/v1/user/register/email:
+    post:
+      consumes:
+      - application/json
+      description: UserRegisterByEmail
+      parameters:
+      - description: UserRegister
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UserRegister'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserResp'
+              type: object
+      summary: UserRegisterByEmail
+      tags:
+      - User
+  /answer/api/v1/vote/down:
+    post:
+      consumes:
+      - application/json
+      description: add vote
+      parameters:
+      - description: vote
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.VoteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.VoteResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: vote down
+      tags:
+      - Activity
+  /answer/api/v1/vote/up:
+    post:
+      consumes:
+      - application/json
+      description: add vote
+      parameters:
+      - description: vote
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.VoteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.VoteResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: vote up
+      tags:
+      - Activity
+  /personal/question/page:
+    get:
+      consumes:
+      - application/json
+      description: UserList
+      parameters:
+      - default: string
+        description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      - description: order
+        enum:
+        - newest
+        - score
+        in: query
+        name: order
+        required: true
+        type: string
+      - default: "0"
+        description: page
+        in: query
+        name: page
+        required: true
+        type: string
+      - default: "20"
+        description: pagesize
+        in: query
+        name: pagesize
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: UserList
+      tags:
+      - api-question
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

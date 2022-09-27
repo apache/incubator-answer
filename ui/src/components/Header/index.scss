@@ -1,0 +1,17 @@
+#header {
+  .logo {
+    height: 28px;
+    width: auto;
+    max-width: 85px;
+  }
+  .nav-link {
+    color: rgba(255, 255, 255, 0.7);
+    &.active {
+      font-weight: bold;
+      color: #fff;
+    }
+  }
+  .placeholder-search::placeholder {
+    color: rgba(255, 255, 255, 0.75);
+  }
+}

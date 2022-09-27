@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noImplicitAny": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@answer/pages/*": ["src/pages/*"],
+      "@answer/components": ["src/components/index.ts"],
+      "@answer/components/*": ["src/components/*"],
+      "@answer/stores": ["src/stores"],
+      "@answer/stores/*": ["src/stores/*"],
+      "@answer/services/*": ["src/services/*"],
+      "@answer/hooks": ["src/hooks"],
+      "@answer/common": ["src/common"],
+      "@answer/common/*": ["src/common/*"],
+      "@answer/utils": ["src/utils"],
+      "@answer/utils/*": ["src/utils/*"]
+    }
+  },
+  "include": ["src", "node_modules/@testing-library/jest-dom"]
+}

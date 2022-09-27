@@ -1,0 +1,138 @@
+@import './variable.scss';
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap-icons';
+
+.focus {
+  color: $input-focus-color !important;
+  background-color: $input-focus-bg !important;
+  border-color: $input-focus-border-color !important;
+  outline: 0 !important;
+  @if $enable-shadows {
+    @include box-shadow($input-box-shadow, $input-focus-box-shadow);
+  } @else {
+    box-shadow: $input-focus-box-shadow !important;
+  }
+}
+
+html,
+body {
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.btn-link {
+  text-decoration: none;
+}
+
+.fs-14 {
+  font-size: 14px;
+}
+
+.pic-auth-modal {
+  width: 25%;
+}
+
+.no-toggle {
+  &::after {
+    display: none;
+  }
+}
+
+.unread-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  position: absolute;
+  left: 22px;
+  top: 3px;
+  border: 1px solid #fff;
+}
+
+.badge-tag {
+  display: inline-block;
+  font-size: 14px;
+  background: #cfe2ff;
+  padding: 1px 0.5rem 2px;
+  color: #084298;
+  height: 24px;
+}
+
+.divide-line {
+  border-bottom: 1px solid rgba(33, 37, 41, 0.25);
+}
+
+.page-wrap {
+  min-height: calc(100vh - 148px);
+  overflow-y: auto;
+}
+
+.btn-no-border,
+.btn-no-border:hover,
+.btn-no-border:focus,
+.btn-no-border:active:focus {
+  border: none;
+  box-shadow: none;
+}
+
+.pointer:hover {
+  cursor: pointer;
+}
+
+.resize-none {
+  resize: none;
+}
+
+.split-dot {
+  margin-left: 0.25rem !important;
+  margin-right: 0.25rem !important;
+  &:before {
+    content: '\2022';
+    color: #6c757d;
+  }
+}
+
+.text-truncate-1,
+.text-truncate-2,
+.text-truncate-3,
+.text-truncate-4 {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.text-truncate-2 {
+  -webkit-line-clamp: 2;
+}
+.text-truncate-3 {
+  -webkit-line-clamp: 3;
+}
+.text-truncate-4 {
+  -webkit-line-clamp: 4;
+}
+
+.last-p {
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.me-10 {
+  margin-right: 10px;
+}
+
+.warning {
+  background-color: #fff3cd80;
+}
+
+// fix bug for React-Bootstrap Form.Text
+.form-text {
+  display: inline-block;
+}
+
+.object-fit-contain {
+  object-fit: contain;
+}
