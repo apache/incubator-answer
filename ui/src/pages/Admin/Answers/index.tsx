@@ -20,12 +20,9 @@ import {
 } from '@answer/components';
 import { ADMIN_LIST_STATUS } from '@answer/common/constants';
 import { useEditStatusModal } from '@answer/hooks';
+import { useAnswerSearch, changeAnswerStatus } from '@answer/api';
 
 import * as Type from '@/services/types';
-import {
-  useAnswerSearch,
-  changeAnswerStatus,
-} from '@/services/answer-admin.api';
 
 import '../index.scss';
 

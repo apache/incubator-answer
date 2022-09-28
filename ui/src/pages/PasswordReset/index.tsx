@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import type { FormDataType } from '@answer/common/interface';
-import { passRetrieveSet } from '@answer/services/api';
+import { passRetrieveSet } from '@answer/api';
 import { userInfoStore } from '@answer/stores';
 import Storage from '@answer/utils/storage';
 import { getQueryString, isLogin } from '@answer/utils';

@@ -1,7 +1,7 @@
 import { FC, memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { accountActivate } from '@answer/services/api';
+import { accountActivate } from '@answer/api';
 import { userInfoStore } from '@answer/stores';
 import { getQueryString } from '@answer/utils';
 

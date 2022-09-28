@@ -14,7 +14,7 @@ import {
   useQueryRevisions,
   postAnswer,
   useQueryQuestionByTitle,
-} from '@answer/services/api';
+} from '@answer/api';
 import type * as Type from '@answer/services/types';
 
 import SearchQuestion from './components/SearchQuestion';

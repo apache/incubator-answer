@@ -6,12 +6,13 @@ import { useToast } from '@answer/hooks';
 import * as Type from '@answer/services/types';
 import { LangsType } from '@answer/services/types';
 import { FormDataType } from '@answer/common/interface';
-import { languages, uploadAvatar } from '@answer/services/api';
 import {
+  languages,
+  uploadAvatar,
   updateInterfaceSetting,
   useInterfaceSetting,
   useThemeOptions,
-} from '@answer/services/settings-admin.api';
+} from '@answer/api';
 import { interfaceStore } from '@answer/stores';
 import { UploadImg } from '@answer/components';
 

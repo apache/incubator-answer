@@ -7,8 +7,7 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 
 import { Editor, EditorRef, PageTitle } from '@answer/components';
-import { useQueryRevisions } from '@answer/services/api';
-import { useTagInfo, modifyTag } from '@answer/services/tag.api';
+import { useTagInfo, modifyTag, useQueryRevisions } from '@answer/api';
 import { userInfoStore } from '@answer/stores';
 
 interface FormDataItem {

@@ -13,7 +13,7 @@ import {
   deleteComment,
   updateComment,
   postVote,
-} from '@answer/services/api';
+} from '@answer/api';
 import { Modal } from '@answer/components';
 import { usePageUsers, useReportModal } from '@answer/hooks';
 import * as Types from '@answer/services/types';

@@ -12,9 +12,8 @@ import {
   toastStore,
 } from '@answer/stores';
 import { Header, AdminHeader, Footer, Toast } from '@answer/components';
-import { useCheckUserStatus } from '@answer/services/user.api';
+import { useSiteSettings, useCheckUserStatus } from '@answer/api';
 
-import { useSiteSettings } from '@/services/api';
 import Storage from '@/utils/storage';
 
 let isMounted = false;

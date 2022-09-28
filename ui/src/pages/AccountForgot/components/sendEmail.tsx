@@ -2,7 +2,7 @@ import { FC, memo, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { passRetrieve, checkImgCode } from '@answer/services/api';
+import { passRetrieve, checkImgCode } from '@answer/api';
 import type { FormDataType } from '@answer/common/interface';
 import type { ImgCodeRes, PssRetReq } from '@answer/services/types';
 import { PicAuthCodeModal } from '@answer/components/Modal';

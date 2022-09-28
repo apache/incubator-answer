@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
 import zh from 'dayjs/locale/zh-cn';
 
-import { languages } from '@answer/services/api';
+import { languages } from '@answer/api';
 import type { FormDataType } from '@answer/common/interface';
 import type { LangsType } from '@answer/services/types';
 import { useToast } from '@answer/hooks';

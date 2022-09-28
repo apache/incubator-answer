@@ -10,7 +10,7 @@ import {
   Comment,
   FormatTime,
 } from '@answer/components';
-import { acceptanceAnswer } from '@answer/services/api';
+import { acceptanceAnswer } from '@answer/api';
 import { scrollTop } from '@answer/utils';
 
 import { AnswerContent } from '@/services/types';

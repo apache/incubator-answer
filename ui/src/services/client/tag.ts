@@ -2,8 +2,7 @@ import useSWR from 'swr';
 
 import request from '@answer/utils/request';
 import { isLogin } from '@answer/utils';
-
-import type * as Type from './types';
+import type * as Type from '../types';
 
 export const deleteTag = (id) => {
   return request.delete('/answer/api/v1/tag', {

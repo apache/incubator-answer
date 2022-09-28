@@ -3,7 +3,7 @@ import { Button, Form, Modal, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { Modal as AnswerModal } from '@answer/components';
-import { uploadImage } from '@answer/services/api';
+import { uploadImage } from '@answer/api';
 import ToolItem from '../toolItem';
 import { IEditorContext } from '../types';
 

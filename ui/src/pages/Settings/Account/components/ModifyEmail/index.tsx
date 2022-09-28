@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { FormDataType } from '@answer/common/interface';
 import type * as Type from '@answer/services/types';
-import { getUserInfo, changeEmail } from '@answer/services/api';
+import { getUserInfo, changeEmail } from '@answer/api';
 import { useToast } from '@answer/hooks';
 
 const reg = /(?<=.{2}).+(?=@)/gi;

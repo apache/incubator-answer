@@ -1,8 +1,7 @@
 import useSWR from 'swr';
 
 import request from '@answer/utils/request';
-
-import type * as Type from './types';
+import type * as Type from '../types';
 
 export const useGeneralSetting = () => {
   const apiUrl = `/answer/admin/api/siteinfo/general`;

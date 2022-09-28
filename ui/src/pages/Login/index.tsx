@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { FormDataType } from '@answer/common/interface';
-import { login, checkImgCode } from '@answer/services/api';
+import { login, checkImgCode } from '@answer/api';
 import type { LoginReqParams, ImgCodeRes } from '@answer/services/types';
 import { PageTitle, Unactivate } from '@answer/components';
 import { PicAuthCodeModal } from '@answer/components/Modal';

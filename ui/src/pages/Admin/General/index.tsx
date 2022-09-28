@@ -5,12 +5,9 @@ import { useTranslation } from 'react-i18next';
 import type * as Type from '@answer/services/types';
 import { useToast } from '@answer/hooks';
 import { siteInfoStore } from '@answer/stores';
+import { useGeneralSetting, updateGeneralSetting } from '@answer/api';
 
 import { FormDataType } from '@/common/interface';
-import {
-  useGeneralSetting,
-  updateGeneralSetting,
-} from '@/services/settings-admin.api';
 
 import '../index.scss';
 

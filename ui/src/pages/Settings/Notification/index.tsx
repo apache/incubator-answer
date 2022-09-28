@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type { FormDataType } from '@answer/common/interface';
-import { noticeSet, getUserInfo } from '@answer/services/api';
+import { noticeSet, getUserInfo } from '@answer/api';
 import { useToast } from '@answer/hooks';
 
 const Index = () => {

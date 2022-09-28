@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
-import { getUserInfo } from '@answer/services/api';
+import { getUserInfo } from '@answer/api';
 import type { FormDataType } from '@answer/common/interface';
 
 import Nav from './components/Nav';

@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type { FormDataType } from '@answer/common/interface';
-import { modifyPassword } from '@answer/services/api';
+import { modifyPassword } from '@answer/api';
 import { useToast } from '@answer/hooks';
 
 const Index: FC = () => {

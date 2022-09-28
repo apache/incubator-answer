@@ -5,11 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import * as Type from '@answer/services/types';
 import { PageTitle, FollowingTags } from '@answer/components';
+import { useTagInfo, useFollow } from '@answer/api';
 
 import QuestionList from '@/components/Questions';
 import HotQuestions from '@/components/HotQuestions';
-import { useTagInfo } from '@/services/tag.api';
-import { useFollow } from '@/services/activity.api';
 
 const Questions: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });

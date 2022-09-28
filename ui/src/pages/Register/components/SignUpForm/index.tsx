@@ -3,7 +3,7 @@ import { Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { register } from '@answer/services/api';
+import { register } from '@answer/api';
 import type { FormDataType } from '@answer/common/interface';
 import userStore from '@answer/stores/userInfo';
 

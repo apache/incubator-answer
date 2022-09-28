@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import ReactDOM from 'react-dom/client';
 
-import { reportList, postReport, closeQuestion } from '@answer/services/api';
-import { putReport } from '@answer/services/flag-admin.api';
+import { reportList, postReport, closeQuestion, putReport } from '@answer/api';
 import { useToast } from '@answer/hooks';
 import type * as Type from '@answer/services/types';
 

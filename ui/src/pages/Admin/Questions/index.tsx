@@ -20,13 +20,13 @@ import {
 } from '@answer/components';
 import { ADMIN_LIST_STATUS } from '@answer/common/constants';
 import { useEditStatusModal, useReportModal } from '@answer/hooks';
-import { questionDelete } from '@answer/services/api';
-
-import * as Type from '@/services/types';
 import {
   useQuestionSearch,
   changeQuestionStatus,
-} from '@/services/question-admin.api';
+  questionDelete,
+} from '@answer/api';
+
+import * as Type from '@/services/types';
 
 import '../index.scss';
 

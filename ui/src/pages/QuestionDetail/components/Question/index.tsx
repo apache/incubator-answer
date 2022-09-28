@@ -12,7 +12,7 @@ import {
   FormatTime,
 } from '@answer/components';
 import { formatCount } from '@answer/utils';
-import { following } from '@answer/services/api';
+import { following } from '@answer/api';
 
 interface Props {
   data: any;

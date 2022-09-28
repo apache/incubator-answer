@@ -11,7 +11,7 @@ import {
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useQueryTags, following } from '@answer/services/api';
+import { useQueryTags, following } from '@answer/api';
 import { Tag, Pagination, PageTitle } from '@answer/components';
 import { formatCount } from '@answer/utils';
 

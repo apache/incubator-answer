@@ -9,7 +9,7 @@ import {
   usePersonalInfoByName,
   usePersonalTop,
   usePersonalListByTabName,
-} from '@answer/services/personal.api';
+} from '@answer/api';
 
 import {
   UserInfo,

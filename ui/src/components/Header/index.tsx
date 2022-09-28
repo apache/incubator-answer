@@ -14,8 +14,7 @@ import { useSearchParams, NavLink, Link, useNavigate } from 'react-router-dom';
 
 import { Avatar, Icon } from '@answer/components';
 import { userInfoStore, siteInfoStore, interfaceStore } from '@answer/stores';
-import { logout } from '@answer/services/api';
-import { useQueryNotificationRedDot } from '@answer/services/notification.api';
+import { logout, useQueryNotificationRedDot } from '@answer/api';
 import Storage from '@answer/utils/storage';
 
 import './index.scss';

@@ -2,8 +2,7 @@ import useSWR from 'swr';
 import qs from 'qs';
 
 import request from '@answer/utils/request';
-
-import type * as Type from './types';
+import type * as Type from '../types';
 
 export const putReport = (params) => {
   return request.instance.put('/answer/admin/api/report', params);

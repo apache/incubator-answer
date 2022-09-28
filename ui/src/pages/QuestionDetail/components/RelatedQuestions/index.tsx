@@ -3,7 +3,7 @@ import { Card, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useSimilarQuestion } from '@answer/services/question.api';
+import { useSimilarQuestion } from '@answer/api';
 import { Icon } from '@answer/components';
 
 import { userInfoStore } from '@/stores';

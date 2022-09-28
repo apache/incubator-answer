@@ -3,7 +3,7 @@ import { ButtonGroup, Button, Form, Table, Badge } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useQueryUsers } from '@answer/services/question-admin.api';
+import { useQueryUsers } from '@answer/api';
 import {
   Pagination,
   FormatTime,

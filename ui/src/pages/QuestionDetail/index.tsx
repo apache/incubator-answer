@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useParams, useSearchParams } from 'react-router-dom';
 
-import { questionDetail, getAnswers } from '@answer/services/api';
+import { questionDetail, getAnswers } from '@answer/api';
 import { Pagination, PageTitle } from '@answer/components';
 import type {
   AnswerRes,
