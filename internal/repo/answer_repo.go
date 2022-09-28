@@ -132,7 +132,7 @@ func (ar *answerRepo) UpdateAdopted(ctx context.Context, id string, questionId s
 	if err != nil {
 		return err
 	}
-	if id != "" {
+	if id != "0" {
 		data.Adopted = schema.Answer_Adopted_Enable
 		_, err = ar.data.DB.Where("id = ?", id).Cols("adopted").Update(&data)
 		if err != nil {
