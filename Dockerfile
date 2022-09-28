@@ -28,8 +28,7 @@ CMD ls -al ${BUILD_DIR}/web/html
 RUN make clean build && \
 	cp answer /usr/bin/answer && \
     mkdir -p /tmp/cache && chmod 777 /tmp/cache && \
-    mkdir /data && chmod 777 /data && cp configs/config.yaml /data && \
-    mkdir -p /data/upfiles && chmod 777 /data/upfiles && cp -r i18n /data
+    mkdir /data && chmod 777 /data
 
 
 FROM debian:bullseye
@@ -49,5 +48,4 @@ VOLUME /data
 COPY --from=golang-builder /usr/bin/answer /usr/bin/answer
 
 EXPOSE 80
-CMD ["/usr/bin/answer", "init"]
-ENTRYPOINT ["dumb-init", "/usr/bin/answer", "-c", "/data/config.yaml"]
+ENTRYPOINT ["dumb-init", "/usr/bin/answer","init", "&&", "/usr/bin/answer", "-c", "/data/config.yaml"]

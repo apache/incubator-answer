@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/segmentfault/answer/I18n"
 	"github.com/segmentfault/answer/configs"
+	"github.com/segmentfault/answer/i18n"
 	"github.com/segmentfault/answer/pkg/dir"
 )
 
@@ -45,14 +45,14 @@ func InitConfig() {
 		fmt.Println(err.Error())
 		os.Exit(2)
 	}
-	i18nList, err := I18n.I18n.ReadDir(".")
+	i18nList, err := i18n.I18n.ReadDir(".")
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(2)
 	}
 	for _, item := range i18nList {
 		path := fmt.Sprintf("data/i18n/%s", item.Name())
-		content, err := I18n.I18n.ReadFile(item.Name())
+		content, err := i18n.I18n.ReadFile(item.Name())
 		if err != nil {
 			continue
 		}

@@ -1,4 +1,4 @@
-package I18n
+package i18n
 
 import "embed"
 
