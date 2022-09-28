@@ -27,7 +27,9 @@ COPY --from=node-builder /tmp/build ${BUILD_DIR}/web/html
 RUN make clean build && \
 	cp answer /usr/bin/answer && \
     mkdir -p /tmp/cache && chmod 777 /tmp/cache && \
-    mkdir /data && chmod 777 /data
+    mkdir /data && chmod 777 /data && cp configs/config.yaml /data/config.yaml && \
+    mkdir -p /data/upfiles && chmod 777 /data/upfiles && cp -r i18n /data
+
 
 
 FROM debian:bullseye
