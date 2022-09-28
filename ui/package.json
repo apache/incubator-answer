@@ -12,7 +12,7 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
-    "prepare": "husky install",
+    "prepare": "cd .. && husky install",
     "cz": "cz",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
