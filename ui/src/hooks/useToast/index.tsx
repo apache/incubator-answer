@@ -28,8 +28,11 @@ const useToast = () => {
   });
 
   const onClose = () => {
-    //
-    root.unmount();
+    const parent = document.querySelector('.page-wrap');
+    if (parent?.contains(div)) {
+      parent.removeChild(div);
+    }
+
     setShow(false);
   };
 
