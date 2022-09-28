@@ -27,9 +27,10 @@ COPY --from=node-builder /tmp/build ${BUILD_DIR}/web/html
 CMD ls -al ${BUILD_DIR}/web/html
 RUN make clean build && \
 	cp answer /usr/bin/answer && \
-    cp configs/config.yaml /etc/config.yaml && \
     mkdir -p /tmp/cache && chmod 777 /tmp/cache && \
+    mkdir /data && chmod 777 /data && cp configs/config.yaml /data && \
     mkdir -p /data/upfiles && chmod 777 /data/upfiles && cp -r i18n /data
+
 
 FROM debian:bullseye
 
@@ -45,9 +46,8 @@ RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.li
 COPY --from=golang-builder /data /data
 VOLUME /data
 
-COPY --from=golang-builder /etc/config.yaml /etc/answer.yaml
 COPY --from=golang-builder /usr/bin/answer /usr/bin/answer
 
 EXPOSE 80
-
-ENTRYPOINT ["dumb-init", "/usr/bin/answer", "-c", "/etc/answer.yaml"]
+CMD ["/usr/bin/answer", "init"]
+ENTRYPOINT ["dumb-init", "/usr/bin/answer", "-c", "/data/config.yaml"]

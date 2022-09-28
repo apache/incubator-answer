@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/answer/internal/base/conf"
+	"github.com/segmentfault/answer/internal/cli"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/contrib/conf/viper"
 	"github.com/segmentfault/pacman/contrib/log/zap"
@@ -36,6 +37,19 @@ func init() {
 // @name Authorization
 func main() {
 	flag.Parse()
+
+	args := flag.Args()
+
+	if len(args) < 1 {
+		cli.Usage()
+		os.Exit(0)
+		return
+	}
+
+	if args[0] == "init" {
+		cli.InitConfig()
+		return
+	}
 
 	log.SetLogger(zap.NewLogger(
 		log.ParseLevel(logLevel), zap.WithName(Name), zap.WithPath(logPath), zap.WithCallerFullPath()))
