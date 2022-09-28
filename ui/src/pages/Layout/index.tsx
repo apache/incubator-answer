@@ -12,6 +12,7 @@ import {
   toastStore,
 } from '@answer/stores';
 import { Header, AdminHeader, Footer, Toast } from '@answer/components';
+import { useCheckUserStatus } from '@answer/services/user.api';
 
 import { useSiteSettings } from '@/services/api';
 import Storage from '@/utils/storage';
@@ -21,6 +22,8 @@ const Layout: FC = () => {
   const { siteInfo, update: siteStoreUpdate } = siteInfoStore();
   const { update: interfaceStoreUpdate } = interfaceStore();
   const { data: siteSettings } = useSiteSettings();
+  const { data: userStatus } = useCheckUserStatus();
+  const user = Storage.get('userInfo');
   useEffect(() => {
     if (siteSettings) {
       siteStoreUpdate(siteSettings.general);
@@ -36,7 +39,6 @@ const Layout: FC = () => {
   };
   if (!isMounted) {
     isMounted = true;
-    const user = Storage.get('userInfo');
     const lang = Storage.get('LANG');
     if (user) {
       updateUser(user);
@@ -44,6 +46,11 @@ const Layout: FC = () => {
     if (lang) {
       i18n.changeLanguage(lang);
     }
+  }
+
+  if (userStatus?.status && userStatus.status !== user.status) {
+    user.status = userStatus?.status;
+    updateUser(user);
   }
 
   return (

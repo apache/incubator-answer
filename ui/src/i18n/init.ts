@@ -20,7 +20,7 @@ i18next
         translation: zh,
       },
     },
-    debug: process.env.NODE_ENV === 'development',
+    // debug: process.env.NODE_ENV === 'development',
     fallbackLng: process.env.REACT_APP_LANG || 'en_US',
     interpolation: {
       escapeValue: false,
