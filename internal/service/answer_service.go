@@ -424,7 +424,7 @@ func (as *AnswerService) notificationUpdateAnswer(ctx context.Context, questionU
 		Type:           schema.NotificationTypeInbox,
 		ObjectID:       answerID,
 	}
-	msg.ObjectType = constant.QuestionObjectType
+	msg.ObjectType = constant.AnswerObjectType
 	msg.NotificationAction = constant.UpdateAnswer
 	notice_queue.AddNotification(msg)
 }
@@ -436,7 +436,7 @@ func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context, ques
 		Type:           schema.NotificationTypeInbox,
 		ObjectID:       answerID,
 	}
-	msg.ObjectType = constant.QuestionObjectType
+	msg.ObjectType = constant.AnswerObjectType
 	msg.NotificationAction = constant.AnswerTheQuestion
 	notice_queue.AddNotification(msg)
 }
