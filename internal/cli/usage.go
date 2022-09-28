@@ -9,8 +9,8 @@ USAGE
     answer command
 
 COMMANDS
-    init        init answer config
-    -c          config path, eg: -c data/config.yaml
+    init         init answer config, eg:answer init
+    run          config path, eg:answer run -c data/config.yaml
 `
 
 func Usage() {
