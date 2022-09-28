@@ -10,7 +10,7 @@ import {
   Comment,
   FormatTime,
 } from '@answer/components';
-import { adoptAnswer } from '@answer/services/api';
+import { acceptanceAnswer } from '@answer/services/api';
 import { scrollTop } from '@answer/utils';
 
 import { AnswerContent } from '@/services/types';
@@ -36,9 +36,9 @@ const Index: FC<Props> = ({
   });
   const answerRef = useRef<HTMLDivElement>(null);
   const acceptAnswer = () => {
-    adoptAnswer({
-      question_id: data?.adopted === 2 ? '0' : data?.question_id,
-      answer_id: data?.id,
+    acceptanceAnswer({
+      question_id: data.question_id,
+      answer_id: data.adopted === 2 ? '0' : data.id,
     }).then(() => {
       callback?.('');
     });
