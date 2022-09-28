@@ -84,7 +84,7 @@ const TagIntroduction = () => {
 
   let pageTitle = '';
   if (tagInfo) {
-    pageTitle = `${tagInfo.display_name} ${t('tag_wiki', {
+    pageTitle = `'${tagInfo.display_name}' ${t('tag_wiki', {
       keyPrefix: 'page_title',
     })}`;
   }

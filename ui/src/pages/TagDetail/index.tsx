@@ -50,7 +50,7 @@ const Questions: FC = () => {
   }, [tagResp, followResp]);
   let pageTitle = '';
   if (tagInfo) {
-    pageTitle = `${tagInfo.display_name} ${t('questions', {
+    pageTitle = `'${tagInfo.display_name}' ${t('questions', {
       keyPrefix: 'page_title',
     })}`;
   }
