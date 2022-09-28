@@ -45,7 +45,8 @@ const Notifications = () => {
   }, [data]);
   const navigate = useNavigate();
 
-  const handleTypeChange = (val) => {
+  const handleTypeChange = (evt, val) => {
+    evt.preventDefault();
     navigate(`/users/notifications/${val}`);
   };
 
@@ -72,19 +73,24 @@ const Notifications = () => {
             <div className="d-flex justify-content-between mb-3">
               <ButtonGroup size="sm">
                 <Button
+                  as="a"
+                  href="/users/notifications/inbox"
                   variant="outline-secondary"
                   active={type === 'inbox'}
-                  onClick={() => handleTypeChange('inbox')}>
+                  onClick={(evt) => handleTypeChange(evt, 'inbox')}>
                   {t('inbox')}
                 </Button>
                 <Button
+                  as="a"
+                  href="/users/notifications/achievement"
                   variant="outline-secondary"
                   active={type === 'achievement'}
-                  onClick={() => handleTypeChange('achievement')}>
+                  onClick={(evt) => handleTypeChange(evt, 'achievement')}>
                   {t('achievement')}
                 </Button>
               </ButtonGroup>
               <Button
+                size="sm"
                 variant="outline-secondary"
                 onClick={handleUnreadNotification}>
                 {t('all_read')}
