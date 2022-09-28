@@ -1,0 +1,19 @@
+server:
+  http:
+    addr: ""
+data:
+  database:
+    connection: ""
+  cache:
+    file_path: ""
+i18n:
+  bundle_dir: ""
+swaggerui:
+  show: true
+  protocol: http
+  host: 0
+  address: ':'
+service_config:
+  secret_key: ""
+  web_host: ""
+  upload_path: ""

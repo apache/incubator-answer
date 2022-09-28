@@ -191,16 +191,25 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 
 // UpdateAdopted
 func (as *AnswerService) UpdateAdopted(ctx context.Context, req *schema.AnswerAdoptedReq) error {
+	if req.AnswerID == "" {
+		req.AnswerID = "0"
+	}
 	if req.UserID == "" {
 		return nil
 	}
 
-	newAnswerInfo, exist, err := as.answerRepo.GetByID(ctx, req.AnswerID)
-	if err != nil {
-		return err
-	}
-	if !exist {
-		return errors.BadRequest(reason.AnswerNotFound)
+	newAnswerInfo := &entity.Answer{}
+	newAnswerInfoexist := false
+	var err error
+
+	if req.AnswerID != "0" {
+		newAnswerInfo, newAnswerInfoexist, err = as.answerRepo.GetByID(ctx, req.AnswerID)
+		if err != nil {
+			return err
+		}
+		if !newAnswerInfoexist {
+			return errors.BadRequest(reason.AnswerNotFound)
+		}
 	}
 
 	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, req.QuestionID)
@@ -250,12 +259,14 @@ func (as *AnswerService) updateAnswerRank(ctx context.Context, userID string,
 			log.Error(err)
 		}
 	}
-
-	err := as.answerActivityService.AcceptAnswer(
-		ctx, newAnswerInfo.ID, questionInfo.UserID, newAnswerInfo.UserID, newAnswerInfo.UserID == userID)
-	if err != nil {
-		log.Error(err)
+	if newAnswerInfo.ID != "" {
+		err := as.answerActivityService.AcceptAnswer(
+			ctx, newAnswerInfo.ID, questionInfo.UserID, newAnswerInfo.UserID, newAnswerInfo.UserID == userID)
+		if err != nil {
+			log.Error(err)
+		}
 	}
+
 }
 
 func (as *AnswerService) Get(ctx context.Context, answerID, loginUserId string) (*schema.AnswerInfo, *schema.QuestionInfo, bool, error) {
