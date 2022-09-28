@@ -25,6 +25,7 @@
       "@answer/components/*": ["src/components/*"],
       "@answer/stores": ["src/stores"],
       "@answer/stores/*": ["src/stores/*"],
+      "@answer/api": ["src/services/api.ts"],
       "@answer/services/*": ["src/services/*"],
       "@answer/hooks": ["src/hooks"],
       "@answer/common": ["src/common"],

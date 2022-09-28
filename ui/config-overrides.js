@@ -15,7 +15,7 @@ module.exports = {
       '@answer/hooks': path.resolve(__dirname, 'src/hooks'),
       '@answer/utils': path.resolve(__dirname, 'src/utils'),
       '@answer/common': path.resolve(__dirname, 'src/common'),
-      '@answer/services': path.resolve(__dirname, 'src/services'),
+      '@answer/api': path.resolve(__dirname, 'src/services/api'),
     };
 
     return config;
