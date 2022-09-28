@@ -66,7 +66,7 @@ func (rr *reportRepo) GetReportListPage(ctx context.Context, dto schema.GetRepor
 	}
 
 	// order
-	session.OrderBy("created_at desc")
+	session.OrderBy("updated_at desc")
 
 	total, err = pager.Help(dto.Page, dto.PageSize, &reports, cond, session)
 	if err != nil {
