@@ -1877,7 +1877,7 @@ paths:
       tags:
       - api-answer
   /answer/api/v1/answer/list:
-    post:
+    get:
       consumes:
       - application/json
       description: AnswerList <br> <b>order</b> (default or updated)
@@ -3527,6 +3527,28 @@ paths:
                   $ref: '#/definitions/schema.GetUserResp'
               type: object
       summary: UserRegisterByEmail
+      tags:
+      - User
+  /answer/api/v1/user/status:
+    get:
+      consumes:
+      - application/json
+      description: get user status info
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user status info
       tags:
       - User
   /answer/api/v1/vote/down:
