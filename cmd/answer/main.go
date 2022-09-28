@@ -50,6 +50,11 @@ func main() {
 		cli.InitConfig()
 		return
 	}
+	if len(args) >= 3 {
+		if args[0] == "run" && args[1] == "-c" {
+			confFlag = args[2]
+		}
+	}
 
 	log.SetLogger(zap.NewLogger(
 		log.ParseLevel(logLevel), zap.WithName(Name), zap.WithPath(logPath), zap.WithCallerFullPath()))

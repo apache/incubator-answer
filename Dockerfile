@@ -24,7 +24,6 @@ ENV GOPRIVATE git.backyard.segmentfault.com
 COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
 COPY --from=node-builder /tmp/build ${BUILD_DIR}/web/html
-CMD ls -al ${BUILD_DIR}/web/html
 RUN make clean build && \
 	cp answer /usr/bin/answer && \
     mkdir -p /tmp/cache && chmod 777 /tmp/cache && \
@@ -32,7 +31,6 @@ RUN make clean build && \
 
 
 FROM debian:bullseye
-
 ENV TZ "Asia/Shanghai"
 RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
         && sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
@@ -46,6 +44,8 @@ COPY --from=golang-builder /data /data
 VOLUME /data
 
 COPY --from=golang-builder /usr/bin/answer /usr/bin/answer
+COPY /script/entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
 
 EXPOSE 80
-ENTRYPOINT ["dumb-init", "/usr/bin/answer","init", "&&", "/usr/bin/answer", "-c", "/data/config.yaml"]
+ENTRYPOINT ["/entrypoint.sh"]

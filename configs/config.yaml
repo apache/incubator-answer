@@ -9,7 +9,7 @@ data:
 i18n:
   bundle_dir: "/data/i18n"
 swaggerui:
-  show: false
+  show: true
   protocol: http
   host: 127.0.0.1
   address: ':80'
