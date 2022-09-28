@@ -140,7 +140,7 @@ class Request {
         }
 
         toastStore.getState().show({
-          msg: `statusCode: ${status}, ${msg}`,
+          msg: `statusCode: ${status}; ${msg || ''}`,
           variant: 'danger',
         });
         return Promise.reject(false);

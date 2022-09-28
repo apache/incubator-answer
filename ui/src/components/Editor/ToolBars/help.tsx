@@ -14,7 +14,7 @@ const Help = () => {
     window.open('https://commonmark.org/help/');
   };
 
-  return <ToolItem {...item} click={handleClick} />;
+  return <ToolItem {...item} onClick={handleClick} />;
 };
 
 export default memo(Help);

@@ -22,6 +22,7 @@ const Formula: FC<IEditorContext> = ({ editor, wrapText }) => {
     tip: t('formula.text'),
   };
   const [isShow, setShowState] = useState(false);
+  const [isLocked, setLockState] = useState(false);
 
   const handleClick = (type, label) => {
     if (!editor) {
@@ -43,12 +44,29 @@ const Formula: FC<IEditorContext> = ({ editor, wrapText }) => {
     setShowState(false);
   };
   const onAddFormula = () => {
+    if (isLocked) {
+      return;
+    }
     setShowState(!isShow);
   };
 
+  const handleMouseEnter = () => {
+    setLockState(true);
+  };
+
+  const handleMouseLeave = () => {
+    setLockState(false);
+  };
   return (
-    <ToolItem as="dropdown" {...item} isShow={isShow} click={onAddFormula}>
-      <Dropdown.Menu>
+    <ToolItem
+      as="dropdown"
+      {...item}
+      isShow={isShow}
+      onClick={onAddFormula}
+      onBlur={onAddFormula}>
+      <Dropdown.Menu
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}>
         {formulaList.map((formula) => {
           return (
             <Dropdown.Item

@@ -21,7 +21,7 @@ const Outdent: FC<IEditorContext> = ({ editor, replaceLines }) => {
     editor?.focus();
   };
 
-  return <ToolItem {...item} click={handleClick} />;
+  return <ToolItem {...item} onClick={handleClick} />;
 };
 
 export default memo(Outdent);

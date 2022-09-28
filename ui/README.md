@@ -6,7 +6,7 @@ To learn more about the philosophy and goals of the project, visit [Answer](http
 
 ### 📦 Prerequisites
 
-- [Node.js](https://nodejs.org/) `>=14`
+- [Node.js](https://nodejs.org/) `>=16.17`
 - [pnpm](https://pnpm.io/) `>=7`
 
 pnpm is required by building the Answer project. To installing the pnpm tools with below commands:

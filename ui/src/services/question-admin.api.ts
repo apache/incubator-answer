@@ -24,7 +24,7 @@ export const useQueryUsers = (params) => {
 };
 
 export const useQuestionSearch = (params: Type.AdminContentsReq) => {
-  const apiUrl = `/answer/admin/api/question/search?${qs.stringify(params)}`;
+  const apiUrl = `/answer/admin/api/question/page?${qs.stringify(params)}`;
   const { data, error, mutate } = useSWR<Type.ListResult, Error>(
     [apiUrl],
     request.instance.get,
@@ -41,7 +41,7 @@ export const changeQuestionStatus = (
   question_id: string,
   status: Type.AdminQuestionStatus,
 ) => {
-  return request.post('/answer/admin/api/question/status', {
+  return request.put('/answer/admin/api/question/status', {
     question_id,
     status,
   });

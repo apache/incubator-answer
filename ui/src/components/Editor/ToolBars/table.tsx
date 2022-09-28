@@ -72,7 +72,7 @@ const Table: FC<IEditorContext> = ({ editor }) => {
     editor?.focus();
   };
 
-  return <ToolItem {...item} click={handleClick} />;
+  return <ToolItem {...item} onClick={handleClick} />;
 };
 
 export default memo(Table);

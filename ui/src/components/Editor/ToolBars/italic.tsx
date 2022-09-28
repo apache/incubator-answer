@@ -18,7 +18,7 @@ const Italic: FC<IEditorContext> = ({ editor, wrapText }) => {
     editor?.focus();
   };
 
-  return <ToolItem {...item} click={handleClick} />;
+  return <ToolItem {...item} onClick={handleClick} />;
 };
 
 export default memo(Italic);

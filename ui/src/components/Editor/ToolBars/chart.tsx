@@ -103,6 +103,7 @@ const Chart: FC<IEditorContext> = ({ editor }) => {
     tip: `${t('chart.text')}`,
   };
   const [isShow, setShowState] = useState(false);
+  const [isLocked, setLockState] = useState(false);
 
   useEffect(() => {
     if (!editor) {
@@ -122,10 +123,25 @@ const Chart: FC<IEditorContext> = ({ editor }) => {
   const onAddHeader = () => {
     setShowState(!isShow);
   };
+  const handleMouseEnter = () => {
+    if (isLocked) {
+      return;
+    }
+    setLockState(true);
+  };
 
+  const handleMouseLeave = () => {
+    setLockState(false);
+  };
   return (
-    <ToolItem as="dropdown" {...item} click={onAddHeader}>
-      <Dropdown.Menu>
+    <ToolItem
+      as="dropdown"
+      {...item}
+      onClick={onAddHeader}
+      onBlur={onAddHeader}>
+      <Dropdown.Menu
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}>
         {headerList.map((header) => {
           return (
             <Dropdown.Item

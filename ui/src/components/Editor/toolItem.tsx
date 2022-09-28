@@ -5,7 +5,7 @@ import { EditorContext } from './EditorContext';
 
 interface IProps {
   keyMap?: string[];
-  click?: () => void;
+  onClick?: () => void;
   tip?: string;
   className?: string;
   as?: any;
@@ -13,6 +13,7 @@ interface IProps {
   label?: string;
   disable?: boolean;
   isShow?: boolean;
+  onBlur?: () => void;
 }
 const ToolItem: FC<IProps> = (props) => {
   const context = useContext(EditorContext);
@@ -24,10 +25,11 @@ const ToolItem: FC<IProps> = (props) => {
     disable = false,
     isShow,
     keyMap,
-    click,
+    onClick,
     className,
     as,
     children,
+    onBlur,
   } = props;
 
   useEffect(() => {
@@ -38,8 +40,8 @@ const ToolItem: FC<IProps> = (props) => {
     keyMap.forEach((key) => {
       editor.addKeyMap({
         [key]: () => {
-          if (typeof click === 'function') {
-            click();
+          if (typeof onClick === 'function') {
+            onClick();
           }
         },
       });
@@ -56,14 +58,14 @@ const ToolItem: FC<IProps> = (props) => {
         disabled={disable}
         onClick={(e) => {
           e.preventDefault();
-          if (typeof click === 'function') {
-            click();
+          if (typeof onClick === 'function') {
+            onClick();
           }
         }}
         onBlur={(e) => {
           e.preventDefault();
-          if (typeof click === 'function') {
-            click();
+          if (typeof onBlur === 'function') {
+            onBlur();
           }
         }}
       />
@@ -77,7 +79,7 @@ const ToolItem: FC<IProps> = (props) => {
     <div className={`toolbar-item-wrap ${className || ''}`}>
       {as === 'dropdown' ? (
         <Dropdown className="h-100 w-100" show={isShow}>
-          <Dropdown.Toggle as="div" id="tootlbars-toogle" className="h-100">
+          <Dropdown.Toggle as="div" className="h-100">
             {btnRender()}
           </Dropdown.Toggle>
           {children}

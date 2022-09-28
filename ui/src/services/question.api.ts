@@ -6,10 +6,10 @@ import request from '@answer/utils/request';
 import type * as Type from './types';
 
 export const useQuestionList = (params: Type.QueryQuestionsReq) => {
-  const apiUrl = '/answer/api/v1/question/index';
+  const apiUrl = `/answer/api/v1/question/page?${qs.stringify(params)}`;
   const { data, error } = useSWR<Type.ListResult, Error>(
-    [apiUrl, params],
-    request.instance.post,
+    [apiUrl],
+    request.instance.get,
   );
   return {
     data,
@@ -25,10 +25,10 @@ export const useHotQuestions = (
     order: 'frequent',
   },
 ) => {
-  const apiUrl = '/answer/api/v1/question/index';
+  const apiUrl = `/answer/api/v1/question/page?${qs.stringify(params)}`;
   const { data, error } = useSWR<Type.ListResult, Error>(
-    [apiUrl, params],
-    request.instance.post,
+    [apiUrl],
+    request.instance.get,
   );
   return {
     data,
@@ -41,7 +41,7 @@ export const useSimilarQuestion = (params: {
   question_id: string;
   page_size: number;
 }) => {
-  const apiUrl = `/answer/api/v1/question/similar?${qs.stringify(params)}`;
+  const apiUrl = `/answer/api/v1/question/similar/tag?${qs.stringify(params)}`;
 
   const { data, error } = useSWR<Type.ListResult, Error>(
     params.question_id ? apiUrl : null,

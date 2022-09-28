@@ -16,7 +16,7 @@ const Hr: FC<IEditorContext> = ({ editor, appendBlock }) => {
     editor?.focus();
   };
 
-  return <ToolItem {...item} click={handleClick} />;
+  return <ToolItem {...item} onClick={handleClick} />;
 };
 
 export default memo(Hr);

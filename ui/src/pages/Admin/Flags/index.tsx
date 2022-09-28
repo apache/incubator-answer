@@ -25,13 +25,17 @@ const Flags: FC = () => {
   const curType = urlSearchParams.get('type') || flagTypeKeys[0];
   const pageSize = 20;
   const curPage = Number(urlSearchParams.get('page')) || 1;
-  const { data: listData, isLoading } = useFlagSearch({
+  const {
+    data: listData,
+    isLoading,
+    mutate: refreshList,
+  } = useFlagSearch({
     page_size: pageSize,
     page: curPage,
     status: curFilter as Type.FlagStatus,
     object_type: curType as Type.FlagType,
   });
-  const reportModal = useReportModal();
+  const reportModal = useReportModal(refreshList);
 
   const count = listData?.count || 0;
   const onFilterChange = (filter) => {

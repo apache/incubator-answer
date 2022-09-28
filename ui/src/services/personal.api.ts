@@ -6,7 +6,7 @@ import request from '@answer/utils/request';
 import type * as Type from './types';
 
 export const usePersonalInfoByName = (username: string) => {
-  const apiUrl = '/answer/api/v1/user/info/username';
+  const apiUrl = '/answer/api/v1/personal/user/info';
   const { data, error, mutate } = useSWR<Type.UserInfoRes, Error>(
     username ? `${apiUrl}?username=${username}` : null,
     request.instance.get,
@@ -32,7 +32,7 @@ interface ListRes {
 }
 
 export const usePersonalTop = (username: string, tabName: string) => {
-  const apiUrl = '/answer/api/v1/question/user/top?username=';
+  const apiUrl = '/answer/api/v1/personal/qa/top?username=';
   const { data, error } = useSWR<{ answer: any[]; question: any[] }, Error>(
     tabName === 'overview' ? `${apiUrl}${username}` : null,
     request.instance.get,
@@ -47,26 +47,26 @@ export const usePersonalTop = (username: string, tabName: string) => {
 export const usePersonalListByTabName = (params: ListReq, tabName: string) => {
   let apiUrl = '';
   if (tabName === 'answers') {
-    apiUrl = '/answer/api/v1/answer/user';
+    apiUrl = '/answer/api/v1/personal/answer/page';
   }
   if (tabName === 'questions') {
-    apiUrl = '/answer/api/v1/question/user';
+    apiUrl = '/answer/api/v1/personal/question/page';
   }
   if (tabName === 'bookmarks') {
     delete params.order;
-    apiUrl = '/answer/api/v1/collection/user';
+    apiUrl = '/answer/api/v1/personal/collection/page';
   }
   if (tabName === 'comments') {
     delete params.order;
-    apiUrl = '/answer/api/v1/comment/personal/page';
+    apiUrl = '/answer/api/v1/personal/comment/page';
   }
   if (tabName === 'reputation') {
     delete params.order;
-    apiUrl = '/answer/api/v1/rank/personal/page';
+    apiUrl = '/answer/api/v1/personal/rank/page';
   }
   if (tabName === 'votes') {
     delete params.username;
-    apiUrl = '/answer/api/v1/votes/personal';
+    apiUrl = '/answer/api/v1/personal/vote/page';
   }
 
   const queryParams = qs.stringify(params, { skipNulls: true });
@@ -74,6 +74,7 @@ export const usePersonalListByTabName = (params: ListReq, tabName: string) => {
     tabName !== 'overview' ? `${apiUrl}?${queryParams}` : null,
     request.instance.get,
   );
+
   return {
     data: {
       [tabName]: data,

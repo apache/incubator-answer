@@ -12,6 +12,7 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
+    "prepare": "husky install",
     "cz": "cz",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
@@ -103,7 +104,7 @@
   },
   "license": "MIT",
   "engines": {
-    "node": ">=14",
+    "node": ">=16.17",
     "pnpm": ">=7"
   }
 }

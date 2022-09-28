@@ -221,7 +221,7 @@ const Image: FC<IEditorContext> = ({ editor }) => {
     setCurrentTab(tab);
   };
   return (
-    <ToolItem {...item} click={addLink}>
+    <ToolItem {...item} onClick={addLink}>
       <Modal
         show={visible}
         onHide={onHide}
