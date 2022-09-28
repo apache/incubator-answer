@@ -74,7 +74,10 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	cli.InitDB()
+	err = cli.CommandCli.InitDB()
+	if err != nil {
+		panic(err)
+	}
 
 	defer cleanup()
 	if err := app.Run(); err != nil {
@@ -82,7 +85,7 @@ func main() {
 	}
 }
 
-func newApplication(serverConf *conf.Server, server *gin.Engine) *pacman.Application {
+func newApplication(serverConf *conf.Server, server *gin.Engine, cli *cli.Cli) *pacman.Application {
 	return pacman.NewApp(
 		pacman.WithName(Name),
 		pacman.WithVersion(Version),
