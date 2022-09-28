@@ -19,7 +19,7 @@
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "ui/node_modules/cz-conventional-changelog"
     }
   },
   "dependencies": {
@@ -102,9 +102,10 @@
     "typescript": "*",
     "web-vitals": "^2.1.4"
   },
-  "license": "MIT",
+  "packageManager": "pnpm@7.9.5",
   "engines": {
     "node": ">=16.17",
     "pnpm": ">=7"
-  }
+  },
+  "license": "MIT"
 }
