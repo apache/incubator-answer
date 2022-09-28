@@ -13,7 +13,6 @@ import (
 	"github.com/segmentfault/answer/internal/service/revision"
 	usercommon "github.com/segmentfault/answer/internal/service/user_common"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/log"
 )
 
 // RevisionService user service
@@ -125,7 +124,6 @@ func (rs *RevisionService) parseItem(ctx context.Context, item *schema.GetRevisi
 		}
 		questionInfo = rs.questionCommon.ShowFormat(ctx, &question)
 		item.ContentParsed = questionInfo
-		log.Error(item.ContentParsed)
 	case constant.ObjectTypeStrMapping["answer"]:
 		err = json.Unmarshal([]byte(item.Content), &answer)
 		if err != nil {
@@ -156,6 +154,5 @@ func (rs *RevisionService) parseItem(ctx context.Context, item *schema.GetRevisi
 	if err != nil {
 		item.ContentParsed = item.Content
 	}
-
 	item.CreatedAtParsed = item.CreatedAt.Unix()
 }
