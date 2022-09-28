@@ -57,43 +57,40 @@ const Index = () => {
     }
   }, []);
   return (
-    <>
-      <h4 className="mb-3">{t('interface', { keyPrefix: 'settings.nav' })}</h4>
-      <Form noValidate onSubmit={handleSubmit}>
-        <Form.Group controlId="emailSend" className="mb-3">
-          <Form.Label>{t('lang.label')}</Form.Label>
+    <Form noValidate onSubmit={handleSubmit}>
+      <Form.Group controlId="emailSend" className="mb-3">
+        <Form.Label>{t('lang.label')}</Form.Label>
 
-          <Form.Select
-            value={formData.lang.value}
-            isInvalid={formData.lang.isInvalid}
-            onChange={(e) => {
-              setFormData({
-                lang: {
-                  value: e.target.value,
-                  isInvalid: false,
-                  errorMsg: '',
-                },
-              });
-            }}>
-            {langs?.map((item) => {
-              return (
-                <option value={item.value} key={item.value}>
-                  {item.label}
-                </option>
-              );
-            })}
-          </Form.Select>
-          <Form.Text as="div">{t('lang.text')}</Form.Text>
-          <Form.Control.Feedback type="invalid">
-            {formData.lang.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
+        <Form.Select
+          value={formData.lang.value}
+          isInvalid={formData.lang.isInvalid}
+          onChange={(e) => {
+            setFormData({
+              lang: {
+                value: e.target.value,
+                isInvalid: false,
+                errorMsg: '',
+              },
+            });
+          }}>
+          {langs?.map((item) => {
+            return (
+              <option value={item.value} key={item.value}>
+                {item.label}
+              </option>
+            );
+          })}
+        </Form.Select>
+        <Form.Text as="div">{t('lang.text')}</Form.Text>
+        <Form.Control.Feedback type="invalid">
+          {formData.lang.errorMsg}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-        <Button variant="primary" type="submit">
-          {t('save', { keyPrefix: 'btns' })}
-        </Button>
-      </Form>
-    </>
+      <Button variant="primary" type="submit">
+        {t('save', { keyPrefix: 'btns' })}
+      </Button>
+    </Form>
   );
 };
 
