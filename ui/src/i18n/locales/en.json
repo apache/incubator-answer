@@ -10,7 +10,7 @@
     "tags": "Tags",
     "tag_wiki": "tag wiki",
     "edit_tag": "Edit Tag",
-    "ask_a_question": "Ask a Question",
+    "ask_a_question": "Add Question",
     "edit_question": "Edit Question",
     "edit_answer": "Edit Answer",
     "search": "Search",
@@ -113,7 +113,7 @@
             }
           },
           "description": {
-            "label": "Image description(Optional)"
+            "label": "Image description (optional)"
           }
         }
       },
@@ -127,7 +127,7 @@
             }
           },
           "name": {
-            "label": "Url name(Optional)"
+            "label": "Url name (optional)"
           }
         }
       },
@@ -156,7 +156,7 @@
             }
           },
           "name": {
-            "label": "Link name(Optional)"
+            "label": "Link name (optional)"
           }
         }
       },
@@ -293,7 +293,7 @@
     "btn_delete": "Delete",
     "btn_flag": "Flag",
     "btn_save_edits": "Save edits",
-    "btn_cancel": "cancel",
+    "btn_cancel": "Cancel",
     "show_more": "Show more comment",
     "tip_question": "Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.",
     "tip_answer": "Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting."
@@ -348,7 +348,7 @@
     "more": "More"
   },
   "ask": {
-    "title": "Ask a question",
+    "title": "Add question",
     "edit_title": "Edit Question",
     "default_reason": "Edit question",
     "similar_questions": "Similar questions",
