@@ -9,11 +9,10 @@ import {
   clearNotificationRedDot,
   readNotification,
 } from '@answer/services/notification.api';
+import { PageTitle } from '@answer/components';
 
 import Inbox from './components/Inbox';
 import Achievements from './components/Achievements';
-
-import { PageTitle } from '@/components';
 
 const PAGE_SIZE = 10;
 

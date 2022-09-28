@@ -2,17 +2,22 @@ import { ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import classNames from 'classnames';
+import { isEmpty } from 'lodash';
 
-import { FormatTime } from '@answer/components';
+import { FormatTime, Empty } from '@answer/components';
 
 const Inbox = ({ data, handleReadNotification }) => {
   if (!data) {
     return null;
   }
+  if (isEmpty(data)) {
+    return <Empty />;
+  }
   return (
     <ListGroup className="border-top border-bottom" variant="flush">
       {data.map((item) => {
-        const { comment, question, answer } = item.object_info.object_map;
+        const { comment, question, answer } =
+          item?.object_info?.object_map || {};
         let url = '';
         switch (item.object_info.object_type) {
           case 'question':
