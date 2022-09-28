@@ -718,6 +718,14 @@
     "x_answers": "answers",
     "x_questions": "questions"
   },
+  "page_404": {
+    "description": "Unfortunately, this page doesn't exist.",
+    "back_home": "Back to homepage"
+  },
+  "page_50X": {
+    "description": "The server encountered an error and could not complete your request.",
+    "back_home": "Back to homepage"
+  },
   "admin": {
     "admin_header": {
       "title": "Admin"
