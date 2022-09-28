@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
+import { SWRConfig } from 'swr';
+
 import {
   userInfoStore,
   siteInfoStore,
@@ -51,13 +53,18 @@ const Layout: FC = () => {
           <meta name="description" content={siteInfo.description} />
         ) : null}
       </Helmet>
-      <Header />
-      <AdminHeader />
-      <div className="position-relative page-wrap">
-        <Outlet />
-      </div>
-      <Toast msg={toastMsg} variant={variant} onClose={closeToast} />
-      <Footer />
+      <SWRConfig
+        value={{
+          revalidateOnFocus: false,
+        }}>
+        <Header />
+        <AdminHeader />
+        <div className="position-relative page-wrap">
+          <Outlet />
+        </div>
+        <Toast msg={toastMsg} variant={variant} onClose={closeToast} />
+        <Footer />
+      </SWRConfig>
     </>
   );
 };

@@ -46,6 +46,8 @@ const Notifications = () => {
 
   const handleTypeChange = (evt, val) => {
     evt.preventDefault();
+    setPage(1);
+    setNotificationData([]);
     navigate(`/users/notifications/${val}`);
   };
 
