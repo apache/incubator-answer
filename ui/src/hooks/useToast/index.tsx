@@ -28,6 +28,8 @@ const useToast = () => {
   });
 
   const onClose = () => {
+    //
+    root.unmount();
     setShow(false);
   };
 
@@ -66,6 +68,7 @@ const useToast = () => {
       </div>,
     );
   }, [show, data]);
+
   return {
     onShow,
   };
