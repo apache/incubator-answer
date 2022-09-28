@@ -31,6 +31,7 @@ export interface TagInfo {
   created_at?;
   updated_at?;
   main_tag_slug_name?: string;
+  excerpt?;
 }
 export interface QuestionParams {
   title: string;

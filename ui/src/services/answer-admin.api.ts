@@ -6,7 +6,7 @@ import request from '@answer/utils/request';
 import type * as Type from './types';
 
 export const useAnswerSearch = (params: Type.AdminContentsReq) => {
-  const apiUrl = `/answer/admin/api/answer/search?${qs.stringify(params)}`;
+  const apiUrl = `/answer/admin/api/answer/page?${qs.stringify(params)}`;
   const { data, error, mutate } = useSWR<Type.ListResult, Error>(
     [apiUrl],
     request.instance.get,
@@ -23,7 +23,7 @@ export const changeAnswerStatus = (
   answer_id: string,
   status: Type.AdminAnswerStatus,
 ) => {
-  return request.post('/answer/admin/api/answer/status', {
+  return request.put('/answer/admin/api/answer/status', {
     answer_id,
     status,
   });

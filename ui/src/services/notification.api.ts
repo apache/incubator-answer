@@ -7,7 +7,7 @@ import { isLogin } from '@answer/utils';
 import type * as Type from './types';
 
 export const useQueryNotifications = (params) => {
-  const apiUrl = `/answer/api/v1/notification/list?${qs.stringify(params, {
+  const apiUrl = `/answer/api/v1/notification/page?${qs.stringify(params, {
     skipNulls: true,
   })}`;
 
@@ -25,13 +25,13 @@ export const useQueryNotifications = (params) => {
 };
 
 export const readNotification = (id) => {
-  return request.instance.post('/answer/api/v1/notification/read', {
+  return request.instance.put('/answer/api/v1/notification/read/state', {
     id,
   });
 };
 
 export const useQueryNotificationRedDot = () => {
-  const apiUrl = '/answer/api/v1/notification/reddot';
+  const apiUrl = '/answer/api/v1/notification/status';
 
   return useSWR<{ inbox: number; achievement: number }>(
     isLogin() ? apiUrl : null,
@@ -40,13 +40,13 @@ export const useQueryNotificationRedDot = () => {
 };
 
 export const clearNotificationRedDot = (type) => {
-  return request.instance.post('/answer/api/v1/notification/reddot/clear', {
+  return request.instance.put('/answer/api/v1/notification/status', {
     type,
   });
 };
 
 export const clearUnReadNotification = (type) => {
-  return request.instance.post('/answer/api/v1/notification/unread/clear', {
+  return request.instance.put('/answer/api/v1/notification/read/state/all', {
     type,
   });
 };

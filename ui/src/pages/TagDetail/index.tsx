@@ -37,14 +37,12 @@ const Questions: FC = () => {
       if (followResp) {
         info.is_follower = followResp.is_followed;
       }
-      const reg = /<p>(.*?)<\/p>/;
-      const text = info.parsed_text.match(reg);
 
-      console.log(text);
-
-      if (text?.length && text[1]) {
-        info.parsed_text =
-          text[1].length > 256 ? text[1].slice(0, 256) : text[1];
+      if (info.excerpt) {
+        info.excerpt =
+          info.excerpt.length > 256
+            ? [...info.excerpt].slice(0, 256).join('')
+            : info.excerpt;
       }
 
       setTagInfo(info);
@@ -62,7 +60,7 @@ const Questions: FC = () => {
       <Container className="pt-4 mt-2 mb-5">
         <Row className="justify-content-center">
           <Col lg={7}>
-            <div className="tag-box mt-2 mb-5">
+            <div className="tag-box mb-5">
               <h3 className="mb-3">
                 <Link
                   to={`/tags/${tagInfo?.slug_name}`}
@@ -72,11 +70,8 @@ const Questions: FC = () => {
                 </Link>
               </h3>
 
-              <p className="last-p">
-                <div
-                  dangerouslySetInnerHTML={{ __html: tagInfo.parsed_text }}
-                  className="me-1 text-break float-start"
-                />
+              <p className="text-break">
+                {tagInfo.excerpt}
                 <Link to={`/tags/${curTagName}/info`}> [{t('more')}]</Link>
               </p>
 

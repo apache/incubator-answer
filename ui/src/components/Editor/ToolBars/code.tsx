@@ -210,7 +210,7 @@ const Code: FC<IEditorContext> = ({ editor, wrapText }) => {
   const onExited = () => editor?.focus();
 
   return (
-    <ToolItem {...item} click={addCode}>
+    <ToolItem {...item} onClick={addCode}>
       <Modal
         show={visible}
         onHide={onHide}

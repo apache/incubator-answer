@@ -65,7 +65,7 @@ const Link: FC<IEditorContext> = ({ editor }) => {
   const onExited = () => editor?.focus();
 
   return (
-    <ToolItem {...item} click={addLink}>
+    <ToolItem {...item} onClick={addLink}>
       <Modal
         show={visible}
         onHide={onHide}

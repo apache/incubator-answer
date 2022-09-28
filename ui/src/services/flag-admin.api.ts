@@ -1,4 +1,5 @@
 import useSWR from 'swr';
+import qs from 'qs';
 
 import request from '@answer/utils/request';
 
@@ -9,8 +10,8 @@ export const putReport = (params) => {
 };
 
 export const useFlagSearch = (params: Type.AdminFlagsReq) => {
-  const apiUrl = `/answer/admin/api/reports/${params.status}/${params.object_type}?page=${params.page}&page_size=${params.page_size}`;
-  const { data, error } = useSWR<Type.ListResult, Error>(
+  const apiUrl = `/answer/admin/api/reports/page?${qs.stringify(params)}`;
+  const { data, error, mutate } = useSWR<Type.ListResult, Error>(
     [apiUrl],
     request.instance.get,
   );
@@ -18,5 +19,6 @@ export const useFlagSearch = (params: Type.AdminFlagsReq) => {
     data,
     isLoading: !data && !error,
     error,
+    mutate,
   };
 };

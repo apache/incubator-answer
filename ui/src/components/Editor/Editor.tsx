@@ -39,7 +39,8 @@ const Editor = ({
           placeholder: editorPlaceholder,
         });
         cm.on('change', (e) => {
-          eventRef.current?.onChange?.(e.getValue());
+          const newValue = e.getValue();
+          eventRef.current?.onChange?.(newValue);
         });
 
         cm.on('focus', () => {
@@ -89,7 +90,7 @@ const Editor = ({
       return;
     }
     if (editor.getValue() !== value) {
-      editor.setValue(value);
+      // editor.setValue(value);
     }
   }, [editor, value]);
 

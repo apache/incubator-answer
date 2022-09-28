@@ -30,6 +30,7 @@ const Heading: FC<IEditorContext> = (context) => {
     tip: `${t('heading.text')} (Ctrl+H)`,
   };
   const [isShow, setShowState] = useState(false);
+  const [isLocked, setLockState] = useState(false);
 
   const handleClick = (level = 2, label = '大标题') => {
     const { replaceLines } = context;
@@ -42,18 +43,36 @@ const Heading: FC<IEditorContext> = (context) => {
     setShowState(false);
   };
   const onAddHeader = () => {
+    if (isLocked) {
+      return;
+    }
     setShowState(!isShow);
   };
 
+  const handleMouseEnter = () => {
+    setLockState(true);
+  };
+
+  const handleMouseLeave = () => {
+    setLockState(false);
+  };
   return (
-    <ToolItem as="dropdown" {...item} isShow={isShow} click={onAddHeader}>
-      <Dropdown.Menu>
+    <ToolItem
+      as="dropdown"
+      {...item}
+      isShow={isShow}
+      onClick={onAddHeader}
+      onBlur={onAddHeader}>
+      <Dropdown.Menu
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}>
         {headerList.map((header) => {
           return (
             <Dropdown.Item
               key={header.text}
               onClick={(e) => {
                 e.preventDefault();
+                e.stopPropagation();
                 handleClick(header.level, header.label);
               }}
               dangerouslySetInnerHTML={{ __html: header.text }}

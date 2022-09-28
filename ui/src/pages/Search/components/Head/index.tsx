@@ -1,5 +1,5 @@
 import { memo, FC, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -50,17 +50,12 @@ const Index: FC<Props> = ({ data }) => {
       </p>
       {data?.slug_name && (
         <>
-          <p
-            dangerouslySetInnerHTML={{
-              __html: data.parsed_text.replace(
-                /(<\/p>|<\/p>\n)$/,
-                `<a href="/tags/${data.slug_name}/info"> [${t(
-                  'more',
-                )}]</a></p>`,
-              ),
-            }}
-            className="last-p"
-          />
+          {data.excerpt && (
+            <p className="text-break">
+              {data.excerpt}
+              <Link to={`/tags/${data.slug_name}/info`}> [{t('more')}]</Link>
+            </p>
+          )}
 
           <Button variant="outline-primary" onClick={follow}>
             {followed ? t('following') : t('follow')}

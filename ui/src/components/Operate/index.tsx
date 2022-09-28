@@ -22,7 +22,7 @@ interface IProps {
 const Index: FC<IProps> = ({
   type,
   qid,
-  aid,
+  aid = '',
   title,
   isAccepted = false,
   hasAnswer = false,
@@ -39,7 +39,7 @@ const Index: FC<IProps> = ({
   const handleReport = () => {
     reportModal.onShow({
       type,
-      id: qid,
+      id: type === 'answer' ? aid : qid,
       action: 'flag',
     });
   };

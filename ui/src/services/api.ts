@@ -13,7 +13,7 @@ export const uploadImage = (file) => {
 };
 export const useQueryQuestionByTitle = (title) => {
   return useSWR<Record<string, any>>(
-    title ? `/answer/api/v1/question/title/like?title=${title}` : '',
+    title ? `/answer/api/v1/question/similar?title=${title}` : '',
     request.instance.get,
   );
 };
@@ -62,7 +62,7 @@ export const addComment = (params) => {
 };
 
 export const queryTags = (tag: string) => {
-  return request.get(`/answer/api/v1/question/tag/search?tag=${tag}`);
+  return request.get(`/answer/api/v1/question/tags?tag=${tag}`);
 };
 
 export const useQueryAnswerInfo = (id: string) => {
@@ -75,11 +75,11 @@ export const useQueryAnswerInfo = (id: string) => {
 export const modifyQuestion = (
   params: Type.QuestionParams & { id: string },
 ) => {
-  return request.put(`/answer/api/v1/question/modify`, params);
+  return request.put(`/answer/api/v1/question`, params);
 };
 
 export const modifyAnswer = (params: Type.AnswerParams) => {
-  return request.post(`/answer/api/v1/answer/modify`, params);
+  return request.put(`/answer/api/v1/answer`, params);
 };
 
 export const login = (params: Type.LoginReqParams) => {
@@ -102,11 +102,14 @@ export const emailVerify = (code: string) => {
 };
 
 export const emailReSend = (params?: Type.ImgCodeReq) => {
-  return request.get(
-    `/answer/api/v1/user/email/verify/send?${qs.stringify(params, {
+  params = qs.parse(
+    qs.stringify(params, {
       skipNulls: true,
-    })}`,
+    }),
   );
+  return request.post('/answer/api/v1/user/email/verification/send', {
+    ...params,
+  });
 };
 
 /**
@@ -130,15 +133,15 @@ export const uploadAvatar = (params: Type.AvatarUploadReq) => {
 };
 
 export const passRetrieve = (params: Type.PssRetReq) => {
-  return request.post('/answer/api/v1/user/password/retrieve', params);
+  return request.post('/answer/api/v1/user/password/reset', params);
 };
 
 export const passRetrieveSet = (params: { code: string; pass: string }) => {
-  return request.post('/answer/api/v1/user/password/retrieve/set', params);
+  return request.post('/answer/api/v1/user/password/replacement', params);
 };
 
 export const accountActivate = (code: string) => {
-  return request.get(`/answer/api/v1/user/email/verify?code=${code}`);
+  return request.post(`/answer/api/v1/user/email/verification`, { code });
 };
 
 export const checkImgCode = (params: Type.CheckImgReq) => {
@@ -152,7 +155,7 @@ export const noticeSet = (params: Type.NoticeSetReq) => {
 };
 
 export const saveQuestion = (params: Type.QuestionParams) => {
-  return request.post('/answer/api/v1/question/add', params);
+  return request.post('/answer/api/v1/question', params);
 };
 
 export const questionDetail = (id: string) => {
@@ -168,11 +171,12 @@ export const languages = () => {
 };
 
 export const getAnswers = (params: Type.AnswersReq) => {
-  return request.post<Type.AnswerRes>('/answer/api/v1/answer/list', params);
+  const apiUrl = `/answer/api/v1/answer/page?${qs.stringify(params)}`;
+  return request.get<Type.AnswerRes>(apiUrl);
 };
 
 export const postAnswer = (params: Type.PostAnswerReq) => {
-  return request.post('/answer/api/v1/answer/add', params);
+  return request.post('/answer/api/v1/answer', params);
 };
 
 export const bookmark = (params: { group_id: string; object_id: string }) => {
@@ -200,7 +204,7 @@ export const adoptAnswer = (params: {
   answer_id: string;
   question_id: string;
 }) => {
-  return request.post('/answer/api/v1/answer/adopted', params);
+  return request.post('/answer/api/v1/answer/acceptance', params);
 };
 
 export const reportList = ({
@@ -225,11 +229,11 @@ export const postReport = (params: {
 };
 
 export const questionDelete = (params: { id: string }) => {
-  return request.delete('/answer/api/v1/question/remove', params);
+  return request.delete('/answer/api/v1/question', params);
 };
 
 export const answerDelete = (params: { id: string }) => {
-  return request.delete('/answer/api/v1/answer/remove', params);
+  return request.delete('/answer/api/v1/answer', params);
 };
 
 export const closeQuestion = (params: {
@@ -237,11 +241,7 @@ export const closeQuestion = (params: {
   close_msg?: string;
   close_type: number;
 }) => {
-  return request.post('/answer/api/v1/question/close', params);
-};
-
-export const closeReasons = () => {
-  return request.get('/answer/api/v1/question/closemsglist');
+  return request.put('/answer/api/v1/question/status', params);
 };
 
 export const changeEmail = (params: { e_mail: string }) => {
@@ -249,7 +249,7 @@ export const changeEmail = (params: { e_mail: string }) => {
 };
 
 export const changeEmailVerify = (params: { code: string }) => {
-  return request.put('/answer/api/v1/user/email/change', params);
+  return request.put('/answer/api/v1/user/email', params);
 };
 
 export const useSiteSettings = () => {

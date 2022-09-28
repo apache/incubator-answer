@@ -20,7 +20,7 @@ const Achievements = ({ data, handleReadNotification }) => {
             url = `/questions/${item.object_info.object_id}`;
             break;
           case 'answer':
-            url = `/questions/${item.object_info.object_map.question}/${item.object_info.object_id}`;
+            url = `/questions/${item.object_info?.object_map?.question}/${item.object_info.object_id}`;
             break;
           default:
             url = '';

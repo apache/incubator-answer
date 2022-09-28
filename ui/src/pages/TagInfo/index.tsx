@@ -40,23 +40,7 @@ const TagIntroduction = () => {
   const handleSave = () => {
     saveSynonymsTags({
       tag_id: tagInfo?.tag_id,
-      synonym_tag_list: synonymsTags?.map((item) => {
-        if (item.slug_name) {
-          return {
-            tag: item.slug_name,
-            original_text: '',
-            parsed_text: '',
-          };
-        }
-        if (item.tag) {
-          return item;
-        }
-        return {
-          tag: item,
-          original_text: '',
-          parsed_text: '',
-        };
-      }),
+      synonym_tag_list: synonymsTags,
     }).then(() => {
       mutate();
       setEditState(false);
@@ -97,12 +81,7 @@ const TagIntroduction = () => {
       handleDeleteTag();
     }
   };
-  const tags: any = synonymsTags?.map((tag) => {
-    if (tag.slug_name) {
-      return tag.slug_name;
-    }
-    return tag;
-  });
+
   let pageTitle = '';
   if (tagInfo) {
     pageTitle = `${tagInfo.display_name} ${t('tag_wiki', {
@@ -184,7 +163,7 @@ const TagIntroduction = () => {
                       </Tag>
                     </div>
                     <TagSelector
-                      value={tags}
+                      value={synonymsTags}
                       onChange={handleTagsChange}
                       hiddenDescription
                     />
