@@ -113,10 +113,10 @@ type AnswerUpdateReq struct {
 }
 
 type AnswerList struct {
-	QuestionId  string `json:"question_id" `               // question_id
-	Order       string `json:"order" `                     // 1 Default 2 time
-	Page        int    `json:"page" form:"page"`           //Query number of pages
-	PageSize    int    `json:"page_size" form:"page_size"` //Search page size
+	QuestionId  string `json:"question_id" form:"question_id"` // question_id
+	Order       string `json:"order" form:"order"`             // 1 Default 2 time
+	Page        int    `json:"page" form:"page"`               //Query number of pages
+	PageSize    int    `json:"page_size" form:"page_size"`     //Search page size
 	LoginUserID string `json:"-" `
 }
 

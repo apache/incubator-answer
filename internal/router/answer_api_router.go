@@ -100,7 +100,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	//answer
 	r.GET("/answer/info", a.answerController.Get)
-	r.POST("/answer/list", a.answerController.AnswerList)
+	r.GET("/answer/page", a.answerController.AnswerList)
 	r.GET("/personal/answer/page", a.questionController.UserAnswerList)
 
 	//question
