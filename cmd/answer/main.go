@@ -74,6 +74,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	cli.InitDB()
+
 	defer cleanup()
 	if err := app.Run(); err != nil {
 		panic(err)
