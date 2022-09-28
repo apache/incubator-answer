@@ -3,12 +3,13 @@ package questioncommon
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"time"
 
+	"github.com/segmentfault/answer/internal/base/reason"
 	"github.com/segmentfault/answer/internal/service/activity_common"
 	"github.com/segmentfault/answer/internal/service/config"
 	"github.com/segmentfault/answer/internal/service/meta"
+	"github.com/segmentfault/pacman/errors"
 
 	"github.com/segmentfault/answer/internal/entity"
 	"github.com/segmentfault/answer/internal/schema"
@@ -139,7 +140,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionId string, loginUser
 		return showinfo, err
 	}
 	if !has {
-		return showinfo, fmt.Errorf("the question could not be found")
+		return showinfo, errors.BadRequest(reason.QuestionNotFound)
 	}
 	showinfo = qs.ShowFormat(ctx, dbinfo)
 
