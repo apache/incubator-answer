@@ -76,7 +76,12 @@ func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 	if ok {
 		r.Status = statusShow
 	}
+}
 
+// GetUserStatusResp get user status info
+type GetUserStatusResp struct {
+	// user status
+	Status string `json:"status"`
 }
 
 // GetOtherUserInfoByUsernameResp get user response
