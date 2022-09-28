@@ -187,6 +187,7 @@ const QuestionList: FC<Props> = ({ source }) => {
           currentPage={curPage}
           totalSize={count}
           pageSize={pageSize}
+          pathname="/questions"
         />
       </div>
     </div>

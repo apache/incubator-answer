@@ -90,7 +90,7 @@ const Editor = ({
       return;
     }
     if (editor.getValue() !== value) {
-      // editor.setValue(value);
+      editor.setValue(value);
     }
   }, [editor, value]);
 

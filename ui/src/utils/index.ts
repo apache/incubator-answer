@@ -1,4 +1,4 @@
-import { LOGIN_NEED_BACK } from '@answer/common';
+import { LOGIN_NEED_BACK } from '@answer/common/constants';
 
 import Storage from './storage';
 
