@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 
 import { AccordionNav, PageTitle } from '@answer/components';
 
-import { ADMIN_NAV_MENUS } from '@/pages/Admin/admin.constants';
+import { ADMIN_NAV_MENUS } from '@answer/common/constants';
 
 import './index.scss';
 

@@ -18,7 +18,7 @@ import {
   BaseUserCard,
   Empty,
 } from '@answer/components';
-import { ADMIN_LIST_STATUS } from '@answer/common';
+import { ADMIN_LIST_STATUS } from '@answer/common/constants';
 import { useEditStatusModal, useReportModal } from '@answer/hooks';
 import { questionDelete } from '@answer/services/api';
 
