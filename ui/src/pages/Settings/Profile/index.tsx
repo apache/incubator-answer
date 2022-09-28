@@ -146,32 +146,32 @@ const Index: React.FC = () => {
     getProfile();
   }, []);
   return (
-    <>
-      <h4 className="mb-3">{t('profile', { keyPrefix: 'settings.nav' })}</h4>
-      <Form noValidate onSubmit={handleSubmit}>
-        <Form.Group controlId="displayName" className="mb-3">
-          <Form.Label>{t('display_name.label')}</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            value={formData.display_name.value}
-            isInvalid={formData.display_name.isInvalid}
-            onChange={(e) =>
-              handleChange({
-                display_name: {
-                  value: e.target.value,
-                  isInvalid: false,
-                  errorMsg: '',
-                },
-              })
-            }
-          />
-          <Form.Control.Feedback type="invalid">
-            {formData.display_name.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
+    <Form noValidate onSubmit={handleSubmit}>
+      <Form.Group controlId="displayName" className="mb-3">
+        <Form.Label>{t('display_name.label')}</Form.Label>
+        <Form.Control
+          required
+          type="text"
+          value={formData.display_name.value}
+          isInvalid={formData.display_name.isInvalid}
+          onChange={(e) =>
+            handleChange({
+              display_name: {
+                value: e.target.value,
+                isInvalid: false,
+                errorMsg: '',
+              },
+            })
+          }
+        />
+        <Form.Control.Feedback type="invalid">
+          {formData.display_name.errorMsg}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-        <Form.Group className="mb-3 d-flex">
+      <Form.Group className="mb-3">
+        <Form.Label>{t('avatar.label')}</Form.Label>
+        <div className="d-flex align-items-center">
           <Avatar
             size="128px"
             avatar={formData.avatar.value}
@@ -181,7 +181,7 @@ const Index: React.FC = () => {
           <div>
             <UploadImg type="avatar" upload={avatarUpload} />
             <div>
-              <Form.Text as="div" className="text-muted">
+              <Form.Text className="text-muted mt-0">
                 <Trans i18nKey="settings.profile.avatar.text">
                   You can upload your image or
                   <a
@@ -204,83 +204,83 @@ const Index: React.FC = () => {
               </Form.Text>
             </div>
           </div>
-        </Form.Group>
+        </div>
+      </Form.Group>
 
-        <Form.Group controlId="bio" className="mb-3">
-          <Form.Label>{t('bio.label')}</Form.Label>
-          <Form.Control
-            className="font-monospace"
-            required
-            as="textarea"
-            rows={5}
-            value={formData.bio.value}
-            isInvalid={formData.bio.isInvalid}
-            onChange={(e) =>
-              handleChange({
-                bio: {
-                  value: e.target.value,
-                  isInvalid: false,
-                  errorMsg: '',
-                },
-              })
-            }
-          />
-          <Form.Control.Feedback type="invalid">
-            {formData.bio.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
+      <Form.Group controlId="bio" className="mb-3">
+        <Form.Label>{t('bio.label')}</Form.Label>
+        <Form.Control
+          className="font-monospace"
+          required
+          as="textarea"
+          rows={5}
+          value={formData.bio.value}
+          isInvalid={formData.bio.isInvalid}
+          onChange={(e) =>
+            handleChange({
+              bio: {
+                value: e.target.value,
+                isInvalid: false,
+                errorMsg: '',
+              },
+            })
+          }
+        />
+        <Form.Control.Feedback type="invalid">
+          {formData.bio.errorMsg}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-        <Form.Group controlId="website" className="mb-3">
-          <Form.Label>{t('website.label')}</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder={t('website.placeholder')}
-            value={formData.website.value}
-            isInvalid={formData.website.isInvalid}
-            onChange={(e) =>
-              handleChange({
-                website: {
-                  value: e.target.value,
-                  isInvalid: false,
-                  errorMsg: '',
-                },
-              })
-            }
-          />
-          <Form.Control.Feedback type="invalid">
-            {formData.website.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
+      <Form.Group controlId="website" className="mb-3">
+        <Form.Label>{t('website.label')}</Form.Label>
+        <Form.Control
+          required
+          type="text"
+          placeholder={t('website.placeholder')}
+          value={formData.website.value}
+          isInvalid={formData.website.isInvalid}
+          onChange={(e) =>
+            handleChange({
+              website: {
+                value: e.target.value,
+                isInvalid: false,
+                errorMsg: '',
+              },
+            })
+          }
+        />
+        <Form.Control.Feedback type="invalid">
+          {formData.website.errorMsg}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-        <Form.Group controlId="email" className="mb-3">
-          <Form.Label>{t('location.label')}</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            placeholder={t('location.placeholder')}
-            value={formData.location.value}
-            isInvalid={formData.location.isInvalid}
-            onChange={(e) =>
-              handleChange({
-                location: {
-                  value: e.target.value,
-                  isInvalid: false,
-                  errorMsg: '',
-                },
-              })
-            }
-          />
-          <Form.Control.Feedback type="invalid">
-            {formData.location.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
+      <Form.Group controlId="email" className="mb-3">
+        <Form.Label>{t('location.label')}</Form.Label>
+        <Form.Control
+          required
+          type="text"
+          placeholder={t('location.placeholder')}
+          value={formData.location.value}
+          isInvalid={formData.location.isInvalid}
+          onChange={(e) =>
+            handleChange({
+              location: {
+                value: e.target.value,
+                isInvalid: false,
+                errorMsg: '',
+              },
+            })
+          }
+        />
+        <Form.Control.Feedback type="invalid">
+          {formData.location.errorMsg}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-        <Button variant="primary" type="submit">
-          {t('btn_name')}
-        </Button>
-      </Form>
-    </>
+      <Button variant="primary" type="submit">
+        {t('btn_name')}
+      </Button>
+    </Form>
   );
 };
 
