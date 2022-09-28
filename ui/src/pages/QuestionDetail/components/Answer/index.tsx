@@ -13,10 +13,10 @@ import {
 import { acceptanceAnswer } from '@answer/api';
 import { scrollTop } from '@answer/utils';
 
-import { AnswerContent } from '@/services/types';
+import { AnswerItem } from '@/services/types';
 
 interface Props {
-  data: AnswerContent;
+  data: AnswerItem;
   /** router answer id */
   aid?: string;
   /** is author */

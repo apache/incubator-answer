@@ -5,9 +5,9 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { questionDetail, getAnswers } from '@answer/api';
 import { Pagination, PageTitle } from '@answer/components';
 import type {
-  AnswerRes,
+  ListResult,
   QuDetailRes,
-  AnswerContent,
+  AnswerItem,
 } from '@answer/services/types';
 import { userInfoStore } from '@answer/stores';
 import { scrollTop } from '@answer/utils';
@@ -31,7 +31,7 @@ const Index = () => {
   const page = Number(urlSearch.get('page') || 0);
   const order = urlSearch.get('order') || '';
   const [question, setQuestion] = useState<QuDetailRes | null>(null);
-  const [answers, setAnswers] = useState<AnswerRes>({
+  const [answers, setAnswers] = useState<ListResult<AnswerItem>>({
     count: -1,
     list: [],
   });
@@ -82,7 +82,7 @@ const Index = () => {
     requestAnswers();
   };
 
-  const writeAnswerCallback = (obj: AnswerContent) => {
+  const writeAnswerCallback = (obj: AnswerItem) => {
     setAnswers({
       count: answers.count + 1,
       list: [...answers.list, obj],

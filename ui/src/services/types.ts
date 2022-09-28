@@ -1,3 +1,8 @@
+export interface Paging {
+  page: number;
+  page_size?: number;
+}
+
 export type ReportType = 'question' | 'answer' | 'comment' | 'user';
 export type ReportAction = 'close' | 'flag' | 'review';
 export interface ReportParams {
@@ -10,18 +15,19 @@ export interface TagBase {
   slug_name: string;
 }
 
-export interface SynonymsTag {
-  display_name: string;
-  slug_name: string;
-  tag_id: string;
-  tag?: string;
+export interface Tag extends TagBase {
+  main_tag_slug_name?: string;
   original_text?: string;
   parsed_text?: string;
 }
-export interface TagInfo {
+
+export interface SynonymsTag extends Tag {
   tag_id: string;
-  slug_name: string;
-  display_name: string;
+  tag?: string;
+}
+
+export interface TagInfo extends TagBase {
+  tag_id: string;
   original_text: string;
   parsed_text: string;
   follow_count: number;
@@ -40,27 +46,9 @@ export interface QuestionParams {
   tags: Tag[];
 }
 
-export interface Tag {
-  display_name?: string;
-  slug_name: string;
-  main_tag_slug_name?: string;
-  original_text?: string;
-  parsed_text?: string;
-}
-
-export interface Paging {
-  page: number;
-  page_size: number;
-}
-
-export interface RecordResult extends Paging {
-  list: any[];
+export interface ListResult<T = any> {
   count: number;
-}
-
-export interface ListResult {
-  count: number;
-  list: any[];
+  list: T[];
 }
 
 export interface AnswerParams {
@@ -87,6 +75,7 @@ export interface ModifyPassReq {
   pass: string;
 }
 
+/** User  */
 export interface ModifyUserReq {
   display_name: string;
   username?: string;
@@ -98,33 +87,28 @@ export interface ModifyUserReq {
 }
 
 export interface UserInfoBase {
-  username: string;
-  rank: number;
-  display_name: string;
   avatar: string;
+  username: string;
+  display_name: string;
+  rank: number;
   website: string;
   location: string;
   ip_info?: string;
+  /** 'forbidden' | 'normal' | 'delete'
+   */
+  status?: string;
+  /** roles */
+  is_admin?: true;
 }
 
-export interface UserInfoRes {
-  /** input name */
-  avatar: string;
-  id: number;
-  username: string;
-  rank: number;
+export interface UserInfoRes extends UserInfoBase {
   bio: string;
   bio_html: string;
-  location: string;
-  website: string;
   create_time?: string;
-  display_name?: string;
   /** value = 1 active; value = 2 inactivated
    */
   mail_status: number;
   e_mail?: string;
-  /** roles */
-  is_admin?: true;
   [prop: string]: any;
 }
 
@@ -170,7 +154,7 @@ export interface QuDetailRes {
   last_answer_id: string;
   create_time: string;
   update_time: string;
-  user_info: User;
+  user_info: UserInfoBase;
   answered: boolean;
   collected: boolean;
 
@@ -182,34 +166,16 @@ export interface AnswersReq extends Paging {
   question_id: string;
 }
 
-export interface User {
-  username: string;
-  rank: string;
-  display_name: string;
-  avatar: string;
-  website: string;
-  location: string;
-
-  [prop: string]: any;
-}
-
-export interface AnswerContent {
+export interface AnswerItem {
   id: string;
   question_id: string;
   content: string;
   html: string;
   create_time: string;
   update_time: string;
-  user_info: User;
+  user_info: UserInfoBase;
 
   [prop: string]: any;
-}
-
-export interface AnswerRes {
-  count: number;
-  list: AnswerContent[];
-  page?: number;
-  total_page?: number;
 }
 
 export interface PostAnswerReq {
@@ -327,8 +293,6 @@ export interface SearchResItem {
     tags: TagBase[];
   };
 }
-export interface SearchRes {
-  count: number;
+export interface SearchRes extends ListResult<SearchResItem> {
   extra: any;
-  list: SearchResItem[];
 }

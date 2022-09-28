@@ -19,7 +19,7 @@ export const useQueryQuestionByTitle = (title) => {
 };
 
 export const useQueryTags = (params) => {
-  return useSWR<Type.RecordResult>(
+  return useSWR<Type.ListResult>(
     `/answer/api/v1/tags/page?${qs.stringify(params, {
       skipNulls: true,
     })}`,
@@ -39,7 +39,7 @@ export const useQueryComments = (params) => {
     params.query_cond = 'vote';
     params.page = 1;
   }
-  return useSWR<Type.RecordResult>(
+  return useSWR<Type.ListResult>(
     `/answer/api/v1/comment/page?${qs.stringify(params, {
       skipNulls: true,
     })}`,
@@ -172,7 +172,7 @@ export const languages = () => {
 
 export const getAnswers = (params: Type.AnswersReq) => {
   const apiUrl = `/answer/api/v1/answer/page?${qs.stringify(params)}`;
-  return request.get<Type.AnswerRes>(apiUrl);
+  return request.get<Type.ListResult<Type.AnswerItem>>(apiUrl);
 };
 
 export const postAnswer = (params: Type.PostAnswerReq) => {

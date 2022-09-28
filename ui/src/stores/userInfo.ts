@@ -10,7 +10,6 @@ interface UserInfoStore {
 }
 
 const initUser: UserInfoRes = {
-  id: 0,
   username: '',
   avatar: '',
   rank: 0,
@@ -19,6 +18,7 @@ const initUser: UserInfoRes = {
   display_name: '',
   location: '',
   website: '',
+  status: '',
   mail_status: 0,
 };
 
