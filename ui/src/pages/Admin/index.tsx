@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
 import { AccordionNav, PageTitle } from '@answer/components';
-
 import { ADMIN_NAV_MENUS } from '@answer/common/constants';
 
 import './index.scss';
