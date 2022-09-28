@@ -200,8 +200,8 @@ export const following = (params: {
   );
 };
 
-export const adoptAnswer = (params: {
-  answer_id: string;
+export const acceptanceAnswer = (params: {
+  answer_id?: string;
   question_id: string;
 }) => {
   return request.post('/answer/api/v1/answer/acceptance', params);
