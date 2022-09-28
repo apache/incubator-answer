@@ -36,6 +36,9 @@ export const useQueryNotificationRedDot = () => {
   return useSWR<{ inbox: number; achievement: number }>(
     isLogin() ? apiUrl : null,
     request.instance.get,
+    {
+      refreshInterval: 3000,
+    },
   );
 };
 
