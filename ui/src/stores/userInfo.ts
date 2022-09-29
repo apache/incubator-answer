@@ -1,6 +1,6 @@
 import create from 'zustand';
 
-import type { UserInfoRes } from '@answer/services/types';
+import type { UserInfoRes } from '@answer/common/interface';
 import Storage from '@answer/utils/storage';
 
 interface UserInfoStore {
@@ -10,7 +10,6 @@ interface UserInfoStore {
 }
 
 const initUser: UserInfoRes = {
-  id: 0,
   username: '',
   avatar: '',
   rank: 0,
@@ -19,6 +18,7 @@ const initUser: UserInfoRes = {
   display_name: '',
   location: '',
   website: '',
+  status: '',
   mail_status: 0,
 };
 

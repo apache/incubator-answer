@@ -28,6 +28,11 @@ const useToast = () => {
   });
 
   const onClose = () => {
+    const parent = document.querySelector('.page-wrap');
+    if (parent?.contains(div)) {
+      parent.removeChild(div);
+    }
+
     setShow(false);
   };
 
@@ -66,6 +71,7 @@ const useToast = () => {
       </div>,
     );
   }, [show, data]);
+
   return {
     onShow,
   };

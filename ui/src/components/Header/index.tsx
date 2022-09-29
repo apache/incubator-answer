@@ -14,8 +14,7 @@ import { useSearchParams, NavLink, Link, useNavigate } from 'react-router-dom';
 
 import { Avatar, Icon } from '@answer/components';
 import { userInfoStore, siteInfoStore, interfaceStore } from '@answer/stores';
-import { logout } from '@answer/services/api';
-import { useQueryNotificationRedDot } from '@answer/services/notification.api';
+import { logout, useQueryNotificationRedDot } from '@answer/api';
 import Storage from '@answer/utils/storage';
 
 import './index.scss';
@@ -108,8 +107,8 @@ const Header: FC = () => {
                 <Nav.Link
                   as={NavLink}
                   to="/users/notifications/inbox"
-                  className="me-2 position-relative">
-                  <div className="px-2 text-white text-opacity-75">
+                  className="icon-link d-flex align-items-center justify-content-center p-0 me-2 position-relative">
+                  <div className="text-white text-opacity-75">
                     <Icon name="bell-fill" className="fs-5" />
                   </div>
                   {(redDot?.inbox || 0) > 0 && (
@@ -120,8 +119,8 @@ const Header: FC = () => {
                 <Nav.Link
                   as={Link}
                   to="/users/notifications/achievement"
-                  className="me-2 position-relative">
-                  <div className="px-2 text-white text-opacity-75">
+                  className="icon-link d-flex align-items-center justify-content-center p-0 me-2 position-relative">
+                  <div className="text-white text-opacity-75">
                     <Icon name="trophy-fill" className="fs-5" />
                   </div>
                   {(redDot?.achievement || 0) > 0 && (
@@ -135,7 +134,7 @@ const Header: FC = () => {
                     id="dropdown-basic"
                     as="a"
                     className="no-toggle pointer">
-                    <Avatar size="38px" avatar={user?.avatar} />
+                    <Avatar size="36px" avatar={user?.avatar} />
                   </Dropdown.Toggle>
 
                   <Dropdown.Menu>

@@ -15,7 +15,7 @@ module.exports = {
       '@answer/hooks': path.resolve(__dirname, 'src/hooks'),
       '@answer/utils': path.resolve(__dirname, 'src/utils'),
       '@answer/common': path.resolve(__dirname, 'src/common'),
-      '@answer/services': path.resolve(__dirname, 'src/services'),
+      '@answer/api': path.resolve(__dirname, 'src/services/api'),
     };
 
     return config;
@@ -26,8 +26,7 @@ module.exports = {
       const config = configFunction(proxy, allowedHost);
       config.proxy = {
         '/answer': {
-          target: 'http://10.0.20.84:8080',
-          // target: 'http://10.0.10.98:2060',
+          target: 'http://10.0.10.98:2060',
           changeOrigin: true,
           secure: false,
         },

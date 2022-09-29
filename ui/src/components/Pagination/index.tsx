@@ -1,12 +1,13 @@
 import { FC, memo } from 'react';
 import { Pagination } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
 interface Props {
   currentPage: number;
   pageSize: number;
   totalSize: number;
+  pathname?: string;
 }
 
 interface PageItemProps {
@@ -58,9 +59,13 @@ const Index: FC<Props> = ({
   currentPage = 1,
   pageSize = 15,
   totalSize = 0,
+  pathname = '',
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'pagination' });
-
+  const location = useLocation();
+  if (!pathname) {
+    pathname = location.pathname;
+  }
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const totalPage = Math.ceil(totalSize / pageSize);
@@ -73,10 +78,9 @@ const Index: FC<Props> = ({
   }
 
   const handleParams = (pageNum): string => {
-    const basePath = window.location.pathname;
     searchParams.set('page', String(pageNum));
     const searchStr = searchParams.toString();
-    return `${basePath}?${searchStr}`;
+    return `${pathname}?${searchStr}`;
   };
   return (
     <Pagination size="sm" className="d-inline-flex mb-0">

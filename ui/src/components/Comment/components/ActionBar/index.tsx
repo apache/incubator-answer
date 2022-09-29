@@ -24,7 +24,7 @@ const ActionBar = ({
     <div className="d-flex justify-content-between fs-14">
       <div className="d-flex align-items-center">
         <Link to={`/users/${username}`}>{nickName}</Link>
-        <span className="mx-1">·</span>
+        <span className="mx-1 text-secondary">•</span>
         <FormatTime time={createdAt} className="text-secondary me-3" />
         <Button
           variant="link"

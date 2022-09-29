@@ -2,7 +2,7 @@ import { memo, FC } from 'react';
 import { ListGroupItem, Badge } from 'react-bootstrap';
 
 import { Icon, Tag, FormatTime } from '@answer/components';
-import type { SearchResItem } from '@answer/services/types';
+import type { SearchResItem } from '@answer/common/interface';
 import { formatCount } from '@answer/utils';
 
 interface Props {

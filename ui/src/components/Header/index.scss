@@ -10,6 +10,10 @@
       font-weight: bold;
       color: #fff;
     }
+    &.icon-link {
+      width: 46px;
+      height: 38px;
+    }
   }
   .placeholder-search::placeholder {
     color: rgba(255, 255, 255, 0.75);

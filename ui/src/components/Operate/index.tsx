@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Modal } from '@answer/components';
 import { useReportModal, useToast } from '@answer/hooks';
-import { questionDelete, answerDelete } from '@answer/services/api';
+import { questionDelete, answerDelete } from '@answer/api';
 import { isLogin } from '@answer/utils';
 import Share from '../Share';
 

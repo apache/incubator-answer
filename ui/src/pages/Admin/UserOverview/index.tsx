@@ -10,8 +10,8 @@ import {
 } from 'react-bootstrap';
 
 import { AccordionNav } from '@answer/components';
+import { ADMIN_NAV_MENUS } from '@answer/common/constants';
 
-import { ADMIN_NAV_MENUS } from '@/pages/Admin/admin.constants';
 import '../index.scss';
 
 const UserOverview: FC = () => {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { uniqBy } from 'lodash';
 
-import * as Types from '@answer/services/types';
+import * as Types from '@answer/common/interface';
 
 let globalUsers: Types.PageUser[] = [];
 const usePageUsers = () => {

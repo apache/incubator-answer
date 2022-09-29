@@ -2,10 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Button, Col } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { emailReSend, checkImgCode } from '@answer/services/api';
+import { emailReSend, checkImgCode } from '@answer/api';
 import { PicAuthCodeModal } from '@answer/components/Modal';
-import type { ImgCodeRes, ImgCodeReq } from '@answer/services/types';
-import type { FormDataType } from '@answer/common/interface';
+import type {
+  ImgCodeRes,
+  ImgCodeReq,
+  FormDataType,
+} from '@answer/common/interface';
 import { userInfoStore } from '@answer/stores';
 
 interface IProps {

@@ -3,8 +3,8 @@ import { Row, Col, ButtonGroup, Button, ListGroup } from 'react-bootstrap';
 import { NavLink, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useQuestionList } from '@answer/services/question.api';
-import type * as Type from '@answer/services/types';
+import { useQuestionList } from '@answer/api';
+import type * as Type from '@answer/common/interface';
 import { Icon, Tag, Pagination, FormatTime, Empty } from '@answer/components';
 
 const QuestionOrderKeys: Type.QuestionOrderBy[] = [
@@ -187,6 +187,7 @@ const QuestionList: FC<Props> = ({ source }) => {
           currentPage={curPage}
           totalSize={count}
           pageSize={pageSize}
+          pathname="/questions"
         />
       </div>
     </div>
