@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"time"
 
 	"github.com/segmentfault/answer/internal/base/constant"
 	"github.com/segmentfault/answer/internal/base/data"
@@ -92,7 +93,9 @@ func (qr *questionRepo) UpdateCollectionCount(ctx context.Context, questionId st
 }
 
 func (qr *questionRepo) UpdateQuestionStatus(ctx context.Context, question *entity.Question) (err error) {
-	_, err = qr.data.DB.Where("id =?", question.ID).Cols("status").Update(question)
+	now := time.Now()
+	question.UpdatedAt = now
+	_, err = qr.data.DB.Where("id =?", question.ID).Cols("status", "updated_at").Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -238,7 +241,7 @@ func (qr *questionRepo) CmsSearchList(ctx context.Context, search *schema.CmsQue
 	offset := search.Page * search.PageSize
 	session := qr.data.DB.Table("question")
 	session = session.And("status =?", search.Status)
-	session = session.OrderBy("created_at desc")
+	session = session.OrderBy("updated_at desc")
 	session = session.Limit(search.PageSize, offset)
 	count, err = session.FindAndCount(&rows)
 	if err != nil {

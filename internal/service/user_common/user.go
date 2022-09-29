@@ -35,12 +35,12 @@ func NewUserCommon(userRepo UserRepo) *UserCommon {
 }
 
 func (us *UserCommon) GetUserBasicInfoByID(ctx context.Context, ID string) (*schema.UserBasicInfo, bool, error) {
-	dbInfo, has, err := us.userRepo.GetByUserID(ctx, ID)
+	userInfo, exist, err := us.userRepo.GetByUserID(ctx, ID)
 	if err != nil {
-		return nil, has, err
+		return nil, exist, err
 	}
-	info := us.UserBasicInfoFormat(ctx, dbInfo)
-	return info, has, nil
+	info := us.UserBasicInfoFormat(ctx, userInfo)
+	return info, exist, nil
 }
 
 func (us *UserCommon) GetUserBasicInfoByUserName(ctx context.Context, username string) (*schema.UserBasicInfo, bool, error) {
@@ -74,16 +74,20 @@ func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, IDs []string) 
 }
 
 // UserBasicInfoFormat
-func (us *UserCommon) UserBasicInfoFormat(ctx context.Context, dbinfo *entity.User) *schema.UserBasicInfo {
-	info := new(schema.UserBasicInfo)
-	info.UserId = dbinfo.ID
-	info.UserName = dbinfo.Username
-	info.Rank = dbinfo.Rank
-	info.DisplayName = dbinfo.DisplayName
-	info.Avatar = dbinfo.Avatar
-	info.Website = dbinfo.Website
-	info.Location = dbinfo.Location
-	info.IpInfo = dbinfo.IPInfo
-	info.Status = dbinfo.Status
-	return info
+func (us *UserCommon) UserBasicInfoFormat(ctx context.Context, userInfo *entity.User) *schema.UserBasicInfo {
+	userBasicInfo := &schema.UserBasicInfo{}
+	userBasicInfo.ID = userInfo.ID
+	userBasicInfo.Username = userInfo.Username
+	userBasicInfo.Rank = userInfo.Rank
+	userBasicInfo.DisplayName = userInfo.DisplayName
+	userBasicInfo.Avatar = userInfo.Avatar
+	userBasicInfo.Website = userInfo.Website
+	userBasicInfo.Location = userInfo.Location
+	userBasicInfo.IpInfo = userInfo.IPInfo
+	userBasicInfo.Status = schema.UserStatusShow[userInfo.Status]
+	if userBasicInfo.Status == schema.UserDeleted {
+		userBasicInfo.Avatar = ""
+		userBasicInfo.DisplayName = "Anonymous"
+	}
+	return userBasicInfo
 }

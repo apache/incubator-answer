@@ -12,6 +12,7 @@ import (
 	"github.com/segmentfault/answer/internal/base/middleware"
 	"github.com/segmentfault/answer/internal/base/server"
 	"github.com/segmentfault/answer/internal/base/translator"
+	"github.com/segmentfault/answer/internal/cli"
 	"github.com/segmentfault/answer/internal/controller"
 	"github.com/segmentfault/answer/internal/controller_backyard"
 	"github.com/segmentfault/answer/internal/repo"
@@ -101,13 +102,14 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	userController := controller.NewUserController(authService, userService, captchaService, emailService, uploaderService)
 	commentRepo := comment.NewCommentRepo(dataData, uniqueIDRepo)
 	commentCommonRepo := comment.NewCommentCommonRepo(dataData, uniqueIDRepo)
+	userCommon := usercommon.NewUserCommon(userRepo)
 	answerRepo := repo.NewAnswerRepo(dataData, uniqueIDRepo, userRankRepo, activityRepo)
 	questionRepo := repo.NewQuestionRepo(dataData, uniqueIDRepo)
 	tagRepo := tag.NewTagRepo(dataData, uniqueIDRepo)
 	objService := object_info.NewObjService(answerRepo, questionRepo, commentCommonRepo, tagRepo)
 	voteRepo := activity_common.NewVoteRepo(dataData, activityRepo)
-	commentService := comment2.NewCommentService(commentRepo, commentCommonRepo, userRepo, objService, voteRepo)
-	rankService := rank2.NewRankService(userRepo, userRankRepo, objService, configRepo)
+	commentService := comment2.NewCommentService(commentRepo, commentCommonRepo, userCommon, objService, voteRepo)
+	rankService := rank2.NewRankService(userCommon, userRankRepo, objService, configRepo)
 	commentController := controller.NewCommentController(commentService, rankService)
 	reportRepo := report.NewReportRepo(dataData, uniqueIDRepo)
 	reportService := report2.NewReportService(reportRepo, objService)
@@ -127,7 +129,6 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	collectionGroupRepo := collection.NewCollectionGroupRepo(dataData)
 	tagRelRepo := tag.NewTagListRepo(dataData)
 	tagCommonService := tagcommon.NewTagCommonService(tagRepo, tagRelRepo, revisionService)
-	userCommon := usercommon.NewUserCommon(userRepo)
 	collectionCommon := collectioncommon.NewCollectionCommon(collectionRepo)
 	answerCommon := answercommon.NewAnswerCommon(answerRepo)
 	metaRepo := meta.NewMetaRepo(dataData)
@@ -142,10 +143,10 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	questionController := controller.NewQuestionController(questionService, rankService)
 	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo)
 	answerController := controller.NewAnswerController(answerService, rankService)
-	searchRepo := repo.NewSearchRepo(dataData, uniqueIDRepo, userRepo)
-	searchService := service.NewSearchService(searchRepo, tagRepo, userRepo, followRepo)
+	searchRepo := repo.NewSearchRepo(dataData, uniqueIDRepo, userCommon)
+	searchService := service.NewSearchService(searchRepo, tagRepo, userCommon, followRepo)
 	searchController := controller.NewSearchController(searchService)
-	serviceRevisionService := service.NewRevisionService(revisionRepo, userRepo, questionCommon, answerService)
+	serviceRevisionService := service.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService)
 	revisionController := controller.NewRevisionController(serviceRevisionService)
 	rankController := controller.NewRankController(rankService)
 	commonRepo := common.NewCommonRepo(dataData, uniqueIDRepo)
@@ -169,10 +170,11 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	notificationController := controller.NewNotificationController(notificationService)
 	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
-	viewRouter := router.NewViewRouter()
+	uiRouter := router.NewUIRouter()
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)
-	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, viewRouter, authUserMiddleware)
-	application := newApplication(serverConf, ginEngine)
+	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware)
+	cliCli := cli.NewCli(dataData)
+	application := newApplication(serverConf, ginEngine, cliCli)
 	return application, func() {
 		cleanup2()
 		cleanup()

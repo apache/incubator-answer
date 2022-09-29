@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"time"
 
 	"github.com/segmentfault/answer/internal/base/constant"
 	"github.com/segmentfault/answer/internal/base/data"
@@ -77,7 +78,9 @@ func (ar *answerRepo) UpdateAnswer(ctx context.Context, answer *entity.Answer, C
 }
 
 func (ar *answerRepo) UpdateAnswerStatus(ctx context.Context, answer *entity.Answer) (err error) {
-	_, err = ar.data.DB.Where("id =?", answer.ID).Cols("status").Update(answer)
+	now := time.Now()
+	answer.UpdatedAt = now
+	_, err = ar.data.DB.Where("id =?", answer.ID).Cols("status", "updated_at").Update(answer)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -129,7 +132,7 @@ func (ar *answerRepo) UpdateAdopted(ctx context.Context, id string, questionId s
 	if err != nil {
 		return err
 	}
-	if id != "" {
+	if id != "0" {
 		data.Adopted = schema.Answer_Adopted_Enable
 		_, err = ar.data.DB.Where("id = ?", id).Cols("adopted").Update(&data)
 		if err != nil {
@@ -181,7 +184,7 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 		session = session.And("user_id = ?", search.UserID)
 	}
 	if search.Order == entity.Answer_Search_OrderBy_Time {
-		session = session.OrderBy("updated_at desc")
+		session = session.OrderBy("created_at desc")
 	} else if search.Order == entity.Answer_Search_OrderBy_Vote {
 		session = session.OrderBy("vote_count desc")
 	} else {
@@ -191,7 +194,7 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	session = session.And("status = ?", entity.AnswerStatusAvailable)
 
 	session = session.Limit(search.PageSize, offset)
-	count, err = session.OrderBy("updated_at desc").FindAndCount(&rows)
+	count, err = session.FindAndCount(&rows)
 	if err != nil {
 		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -216,7 +219,7 @@ func (ar *answerRepo) CmsSearchList(ctx context.Context, search *entity.CmsAnswe
 	offset := search.Page * search.PageSize
 	session := ar.data.DB.Where("")
 	session = session.And("status =?", search.Status)
-	session = session.OrderBy("created_at desc")
+	session = session.OrderBy("updated_at desc")
 	session = session.Limit(search.PageSize, offset)
 	count, err = session.FindAndCount(&rows)
 	if err != nil {

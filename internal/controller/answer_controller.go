@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/gin-gonic/gin"
@@ -176,23 +175,19 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 // @Produce  json
 // @Param data body schema.AnswerList  true "AnswerList"
 // @Success 200 {string} string ""
-// @Router /answer/api/v1/answer/list [post]
-func (ac *AnswerController) AnswerList(c *gin.Context) {
-	input := new(schema.AnswerList)
-	err := c.BindJSON(input)
-	if err != nil {
-		handler.HandleResponse(c, err, nil)
+// @Router /answer/api/v1/answer/list [get]
+func (ac *AnswerController) AnswerList(ctx *gin.Context) {
+	req := &schema.AnswerList{}
+	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	ctx := context.Background()
-	userId := middleware.GetLoginUserIDFromContext(c)
-	input.LoginUserID = userId
-	list, count, err := ac.answerService.SearchList(ctx, input)
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+	list, count, err := ac.answerService.SearchList(ctx, req)
 	if err != nil {
-		handler.HandleResponse(c, err, nil)
+		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	handler.HandleResponse(c, nil, gin.H{
+	handler.HandleResponse(ctx, nil, gin.H{
 		"list":  list,
 		"count": count,
 	})

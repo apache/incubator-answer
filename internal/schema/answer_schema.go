@@ -1,93 +1,11 @@
 package schema
 
-import (
-	"time"
-)
-
 // RemoveAnswerReq delete answer request
 type RemoveAnswerReq struct {
 	// answer id
-	ID string `validate:"required" comment:"answer id" json:"id"`
+	ID string `validate:"required" json:"id"`
 	// user id
 	UserID string `json:"-"`
-}
-
-// GetAnswerListReq get answer list all request
-type GetAnswerListReq struct {
-	// question id
-	QuestionID int64 `validate:"omitempty" comment:"question id" form:"question_id"`
-	// answer user id
-	UserID int64 `validate:"omitempty" comment:"answer user id" form:"user_id"`
-	// content markdown
-	Content string `validate:"omitempty" comment:"content markdown" form:"content"`
-	// content html
-	Html string `validate:"omitempty" comment:"content html" form:"html"`
-	//  answer status(available: 1; deleted: 10)
-	Status int `validate:"omitempty" comment:" answer status(available: 1; deleted: 10)" form:"status"`
-	// adopted (1 failed 2 adopted)
-	Adopted int `validate:"omitempty" comment:"adopted (1 failed 2 adopted)" form:"adopted"`
-	// comment count
-	CommentCount int `validate:"omitempty" comment:"comment count" form:"comment_count"`
-	// vote count
-	VoteCount int `validate:"omitempty" comment:"vote count" form:"vote_count"`
-	//
-	CreateTime time.Time `validate:"omitempty" comment:"" form:"create_time"`
-	//
-	UpdateTime time.Time `validate:"omitempty" comment:"" form:"update_time"`
-}
-
-// GetAnswerWithPageReq get answer list page request
-type GetAnswerWithPageReq struct {
-	// page
-	Page int `validate:"omitempty,min=1" form:"page"`
-	// page size
-	PageSize int `validate:"omitempty,min=1" form:"page_size"`
-	// question id
-	QuestionID int64 `validate:"omitempty" comment:"question id" form:"question_id"`
-	// answer user id
-	UserID int64 `validate:"omitempty" comment:"answer user id" form:"user_id"`
-	// content markdown
-	Content string `validate:"omitempty" comment:"content markdown" form:"content"`
-	// content html
-	Html string `validate:"omitempty" comment:"content html" form:"html"`
-	//  answer status(available: 1; deleted: 10)
-	Status int `validate:"omitempty" comment:" answer status(available: 1; deleted: 10)" form:"status"`
-	// adopted (1 failed 2 adopted)
-	Adopted int `validate:"omitempty" comment:"adopted (1 failed 2 adopted)" form:"adopted"`
-	// comment count
-	CommentCount int `validate:"omitempty" comment:"comment count" form:"comment_count"`
-	// vote count
-	VoteCount int `validate:"omitempty" comment:"vote count" form:"vote_count"`
-	//
-	CreateTime time.Time `validate:"omitempty" comment:"" form:"create_time"`
-	//
-	UpdateTime time.Time `validate:"omitempty" comment:"" form:"update_time"`
-}
-
-// GetAnswerResp get answer response
-type GetAnswerResp struct {
-	// answer id
-	ID int64 `json:"id"`
-	// question id
-	QuestionID int64 `json:"question_id"`
-	// answer user id
-	UserID int64 `json:"user_id"`
-	// content markdown
-	Content string `json:"content"`
-	// content html
-	Html string `json:"html"`
-	//  answer status(available: 1; deleted: 10)
-	Status int `json:"status"`
-	// adopted (1 failed 2 adopted)
-	Adopted int `json:"adopted"`
-	// comment count
-	CommentCount int `json:"comment_count"`
-	// vote count
-	VoteCount int `json:"vote_count"`
-	//
-	CreateTime time.Time `json:"create_time"`
-	//
-	UpdateTime time.Time `json:"update_time"`
 }
 
 const (
@@ -113,10 +31,10 @@ type AnswerUpdateReq struct {
 }
 
 type AnswerList struct {
-	QuestionId  string `json:"question_id" `               // question_id
-	Order       string `json:"order" `                     // 1 Default 2 time
-	Page        int    `json:"page" form:"page"`           //Query number of pages
-	PageSize    int    `json:"page_size" form:"page_size"` //Search page size
+	QuestionId  string `json:"question_id" form:"question_id"` // question_id
+	Order       string `json:"order" form:"order"`             // 1 Default 2 time
+	Page        int    `json:"page" form:"page"`               //Query number of pages
+	PageSize    int    `json:"page_size" form:"page_size"`     //Search page size
 	LoginUserID string `json:"-" `
 }
 

@@ -10,7 +10,7 @@
 /.vscode/*.log
 /cmd/answer/*.sh
 /cmd/logs
-/configs/*
+/configs/config-dev.yaml
 /go.work*
 /logs
 /ui/build

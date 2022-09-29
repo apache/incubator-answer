@@ -93,16 +93,16 @@ func (nc *NotificationController) ClearIDUnRead(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, gin.H{})
 }
 
-// GetList
-// @Summary GetRedDot
-// @Description GetRedDot
+// GetList get notification list
+// @Summary get notification list
+// @Description get notification list
 // @Tags Notification
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @Param page query int false "page size"
 // @Param page_size query int false "page size"
-// @Param type query string false "type" Enums(inbox,achievement)
+// @Param type query string true "type" Enums(inbox,achievement)
 // @Success 200 {object} handler.RespBody
 // @Router /answer/api/v1/notification/page [get]
 func (nc *NotificationController) GetList(ctx *gin.Context) {
@@ -111,9 +111,6 @@ func (nc *NotificationController) GetList(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	list, count, err := nc.notificationService.GetList(ctx, req)
-	handler.HandleResponse(ctx, err, gin.H{
-		"list":  list,
-		"count": count,
-	})
+	resp, err := nc.notificationService.GetList(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }

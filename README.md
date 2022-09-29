@@ -1,35 +1,38 @@
-# answer
+![logo](docs/img/logo.png)
 
-问答社区主项目代码
+# Answer - Simple Q&A Community
 
-# Dependence
- github.com/segmentfault/pacman
- * config-file `viper` https://github.com/spf13/viper
- * web `gin` https://gin-gonic.com/zh-cn/
- * log `zap` https://github.com/uber-go/zap
- * orm `xorm` https://xorm.io/zh/
- * redis `go-redis` https://github.com/go-redis/redis
+[![LICENSE](https://img.shields.io/badge/License-MIT-green)](https://github.com/segmentfault/answer/blob/master/LICENSE)
+[![Language](https://img.shields.io/badge/Language-Go-blue.svg)](https://golang.org/)
+[![Language](https://img.shields.io/badge/Language-React-blue.svg)](https://reactjs.org/)
 
-# module
- - email github.com/jordan-wright/email
- - session github.com/gin-contrib/sessions
- - Captcha github.com/mojocn/base64Captcha
+## What is Answer?
+This is a minimalist open source Q&A community. Users can post questions and others can answer them.
+![abstract](docs/img/abstract.png)
 
-# Run
-```
-cd cmd
-export GOPRIVATE=git.backyard.segmentfault.com
-go mod tidy
-./dev.sh
+## Why?
+- Help companies build knowledge and Q&A communities better and faster.
+
+## Features
+- Produce knowledge by asking and answering questions.
+- Maintain knowledge by voting and working together.
+
+## Quick start
+### Running with docker-compose
+```bash
+mkdir answer && cd answer
+wget https://github.com/segmentfault/answer/releases/latest/download/docker-compose.yaml
+docker-compose up
 ```
 
-# pprof
+For more information you can see [INSTALL.md](./INSTALL.md)
 
-```
- # Installation dependency
- go get -u github.com/google/pprof
- brew install graphviz
-```
-```
-pprof -http :8082 http://XXX/debug/pprof/profile\?seconds\=10
-```
+## Contributing
+
+Contributions are always welcome!
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for ways to get started.
+
+## License
+
+[MIT](https://github.com/segmentfault/answer/blob/master/LICENSE)

@@ -13,25 +13,24 @@ import (
 	"github.com/segmentfault/answer/internal/service/revision"
 	usercommon "github.com/segmentfault/answer/internal/service/user_common"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/log"
 )
 
 // RevisionService user service
 type RevisionService struct {
 	revisionRepo   revision.RevisionRepo
-	userRepo       usercommon.UserRepo
+	userCommon     *usercommon.UserCommon
 	questionCommon *questioncommon.QuestionCommon
 	answerService  *AnswerService
 }
 
 func NewRevisionService(
 	revisionRepo revision.RevisionRepo,
-	userRepo usercommon.UserRepo,
+	userCommon *usercommon.UserCommon,
 	questionCommon *questioncommon.QuestionCommon,
 	answerService *AnswerService) *RevisionService {
 	return &RevisionService{
 		revisionRepo:   revisionRepo,
-		userRepo:       userRepo,
+		userCommon:     userCommon,
 		questionCommon: questionCommon,
 		answerService:  answerService,
 	}
@@ -70,7 +69,6 @@ func (rs *RevisionService) GetRevisionList(ctx context.Context, req *schema.GetR
 	)
 
 	resp = []schema.GetRevisionResp{}
-
 	_ = copier.Copy(&rev, req)
 
 	revs, err = rs.revisionRepo.GetRevisionList(ctx, &rev)
@@ -80,29 +78,24 @@ func (rs *RevisionService) GetRevisionList(ctx context.Context, req *schema.GetR
 
 	for _, r := range revs {
 		var (
-			userInfo *entity.User
-			uinfo    schema.UserBasicInfo
-			item     schema.GetRevisionResp
-			exists   bool
+			uinfo schema.UserBasicInfo
+			item  schema.GetRevisionResp
 		)
 
 		_ = copier.Copy(&item, r)
 		rs.parseItem(ctx, &item)
 
 		// get user info
-		userInfo, exists, err = rs.userRepo.GetByUserID(ctx, item.UserID)
-		if err != nil {
-			return
+		userInfo, exists, e := rs.userCommon.GetUserBasicInfoByID(ctx, item.UserID)
+		if e != nil {
+			return nil, e
 		}
-
 		if exists {
 			err = copier.Copy(&uinfo, userInfo)
 			item.UserInfo = uinfo
 		}
-
 		resp = append(resp, item)
 	}
-
 	return
 }
 
@@ -125,7 +118,6 @@ func (rs *RevisionService) parseItem(ctx context.Context, item *schema.GetRevisi
 		}
 		questionInfo = rs.questionCommon.ShowFormat(ctx, &question)
 		item.ContentParsed = questionInfo
-		log.Error(item.ContentParsed)
 	case constant.ObjectTypeStrMapping["answer"]:
 		err = json.Unmarshal([]byte(item.Content), &answer)
 		if err != nil {
@@ -156,6 +148,5 @@ func (rs *RevisionService) parseItem(ctx context.Context, item *schema.GetRevisi
 	if err != nil {
 		item.ContentParsed = item.Content
 	}
-
 	item.CreatedAtParsed = item.CreatedAt.Unix()
 }

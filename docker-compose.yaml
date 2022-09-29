@@ -4,4 +4,6 @@ services:
     build:
       context: .
     image: github.com/segmentfault/answer
+    volumes:
+      - ./data:/data
     restart: on-failure

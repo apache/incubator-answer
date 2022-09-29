@@ -4,12 +4,7 @@ LABEL maintainer="mingcheng<mc@sf.com>"
 
 COPY . /answer
 WORKDIR /answer
-
-RUN make install-ui-packages ui
-RUN mv ui/build /tmp
-CMD ls -al /tmp
-RUN du -sh /tmp/build
-
+RUN make install-ui-packages ui && mv ui/build /tmp
 
 FROM golang:1.18 AS golang-builder
 LABEL maintainer="aichy"
@@ -23,16 +18,15 @@ ENV GOPRIVATE git.backyard.segmentfault.com
 # Build
 COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
-COPY --from=node-builder /tmp/build ${BUILD_DIR}/web/html
-CMD ls -al ${BUILD_DIR}/web/html
+COPY --from=node-builder /tmp/build ${BUILD_DIR}/ui/build
 RUN make clean build && \
 	cp answer /usr/bin/answer && \
-    cp configs/config.yaml /etc/config.yaml && \
     mkdir -p /tmp/cache && chmod 777 /tmp/cache && \
-    mkdir -p /data/upfiles && chmod 777 /data/upfiles && cp -r i18n /data
+    mkdir /data && chmod 777 /data && cp configs/config.yaml /data/config.yaml && \
+    mkdir -p /data/upfiles && chmod 777 /data/upfiles && \
+    mkdir -p /data/i18n && chmod 777 /data/i18n && cp -r i18n/*.yaml /data/i18n
 
 FROM debian:bullseye
-
 ENV TZ "Asia/Shanghai"
 RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
         && sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list \
@@ -45,9 +39,9 @@ RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.li
 COPY --from=golang-builder /data /data
 VOLUME /data
 
-COPY --from=golang-builder /etc/config.yaml /etc/answer.yaml
 COPY --from=golang-builder /usr/bin/answer /usr/bin/answer
+COPY /script/entrypoint.sh /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
 
 EXPOSE 80
-
-ENTRYPOINT ["dumb-init", "/usr/bin/answer", "-c", "/etc/answer.yaml"]
+ENTRYPOINT ["/entrypoint.sh"]

@@ -17,7 +17,7 @@ type PageCond struct {
 }
 
 // NewPageModel new page model
-func NewPageModel(page, pageSize int, totalRecords int64, records interface{}) *PageModel {
+func NewPageModel(totalRecords int64, records interface{}) *PageModel {
 	sliceValue := reflect.Indirect(reflect.ValueOf(records))
 	if sliceValue.Kind() != reflect.Slice {
 		panic("not a slice")

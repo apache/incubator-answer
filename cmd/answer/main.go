@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/answer/internal/base/conf"
+	"github.com/segmentfault/answer/internal/cli"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/contrib/conf/viper"
 	"github.com/segmentfault/pacman/contrib/log/zap"
@@ -37,6 +38,24 @@ func init() {
 func main() {
 	flag.Parse()
 
+	args := flag.Args()
+
+	if len(args) < 1 {
+		cli.Usage()
+		os.Exit(0)
+		return
+	}
+
+	if args[0] == "init" {
+		cli.InitConfig()
+		return
+	}
+	if len(args) >= 3 {
+		if args[0] == "run" && args[1] == "-c" {
+			confFlag = args[2]
+		}
+	}
+
 	log.SetLogger(zap.NewLogger(
 		log.ParseLevel(logLevel), zap.WithName(Name), zap.WithPath(logPath), zap.WithCallerFullPath()))
 
@@ -55,13 +74,18 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	err = cli.CommandCli.InitDB()
+	if err != nil {
+		panic(err)
+	}
+
 	defer cleanup()
 	if err := app.Run(); err != nil {
 		panic(err)
 	}
 }
 
-func newApplication(serverConf *conf.Server, server *gin.Engine) *pacman.Application {
+func newApplication(serverConf *conf.Server, server *gin.Engine, cli *cli.Cli) *pacman.Application {
 	return pacman.NewApp(
 		pacman.WithName(Name),
 		pacman.WithVersion(Version),

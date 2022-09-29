@@ -97,5 +97,5 @@ func (us *UserGroupService) GetUserGroupWithPage(ctx context.Context, req *schem
 	resp := &[]schema.GetUserGroupResp{}
 	_ = copier.Copy(resp, userGroups)
 
-	return pager.NewPageModel(page, pageSize, total, resp), nil
+	return pager.NewPageModel(total, resp), nil
 }
