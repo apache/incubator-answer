@@ -408,6 +408,7 @@
   "tag_selector": {
     "add_btn": "Add tag",
     "create_btn": "Create new tag",
+    "search_tag": "Search tag",
     "hint": "Describe what your question is about, at least one tag is required.",
     "no_result": "No tags matched"
   },
