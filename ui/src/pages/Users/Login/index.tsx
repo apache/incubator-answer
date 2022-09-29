@@ -108,13 +108,9 @@ const Index: React.FC = () => {
           setRefresh((pre) => pre + 1);
         }
         if (res.mail_status === 1) {
-          const path = Storage.get('ANSWER_PATH');
+          const path = Storage.get('ANSWER_PATH') || '/';
           Storage.remove('ANSWER_PATH');
-          if (path) {
-            window.location.href = path;
-          } else {
-            window.location.href = '/';
-          }
+          window.location.replace(path);
         }
 
         setModalState(false);

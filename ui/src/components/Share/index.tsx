@@ -50,7 +50,7 @@ const Index: FC<IProps> = ({ type, qid, aid, title }) => {
     });
   };
   useEffect(() => {
-    if (window.navigator?.canShare?.({ text: '111' })) {
+    if (window.navigator?.canShare?.({ text: 'can_share' })) {
       setSystemShareState(true);
     }
   }, []);

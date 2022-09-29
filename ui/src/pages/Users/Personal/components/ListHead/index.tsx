@@ -1,6 +1,6 @@
 import { FC, memo } from 'react';
 import { ButtonGroup, Button } from 'react-bootstrap';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const sortBtns = [
@@ -26,10 +26,11 @@ const Index: FC<Props> = ({
 }) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation('translation', { keyPrefix: 'personal' });
 
   const handleParams = (order): string => {
-    const basePath = window.location.pathname;
+    const basePath = location.pathname;
     searchParams.delete('page');
     searchParams.set('order', order);
     const searchStr = searchParams.toString();

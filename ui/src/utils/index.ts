@@ -34,7 +34,7 @@ function isLogin(needToLogin?: boolean): boolean {
   // login and active
   if (user.username && user.mail_status === 1) {
     if (LOGIN_NEED_BACK.includes(path)) {
-      window.location.href = '/';
+      window.location.replace('/');
     }
     return true;
   }

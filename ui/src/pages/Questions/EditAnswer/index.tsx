@@ -111,7 +111,7 @@ const Ask = () => {
       id: aid,
     };
     modifyAnswer(params).then(() => {
-      window.location.href = `/questions/${qid}/${aid}`;
+      navigate(`/questions/${qid}/${aid}`);
     });
   };
 
