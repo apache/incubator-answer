@@ -76,7 +76,12 @@ func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 	if ok {
 		r.Status = statusShow
 	}
+}
 
+// GetUserStatusResp get user status info
+type GetUserStatusResp struct {
+	// user status
+	Status string `json:"status"`
 }
 
 // GetOtherUserInfoByUsernameResp get user response
@@ -161,7 +166,7 @@ const (
 var UserStatusShow = map[int]string{
 	1:  "normal",
 	9:  "forbidden",
-	10: "delete",
+	10: "deleted",
 }
 var UserStatusShowMsg = map[int]string{
 	1:  "",
@@ -277,15 +282,15 @@ type ActionRecordResp struct {
 }
 
 type UserBasicInfo struct {
-	UserId      string `json:"-" `           // user_id
-	UserName    string `json:"username" `    // name
+	ID          string `json:"-" `           // user_id
+	Username    string `json:"username" `    // name
 	Rank        int    `json:"rank" `        // rank
 	DisplayName string `json:"display_name"` // display_name
 	Avatar      string `json:"avatar" `      // avatar
 	Website     string `json:"website" `     // website
 	Location    string `json:"location" `    // location
 	IpInfo      string `json:"ip_info"`      // ip info
-	Status      int    `json:"status"`       // status
+	Status      string `json:"status"`       // status
 }
 
 type GetOtherUserInfoByUsernameReq struct {

@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/answer/internal/base/constant"
 	"github.com/segmentfault/answer/internal/base/reason"
 	"github.com/segmentfault/answer/internal/base/validator"
 	myErrors "github.com/segmentfault/pacman/errors"
@@ -44,13 +45,15 @@ func HandleResponse(ctx *gin.Context, err error, data interface{}) {
 
 // BindAndCheck bind request and check
 func BindAndCheck(ctx *gin.Context, data interface{}) bool {
+	lang := GetLang(ctx)
+	ctx.Set(constant.AcceptLanguageFlag, lang)
 	if err := ctx.ShouldBind(data); err != nil {
 		log.Errorf("http_handle BindAndCheck fail, %s", err.Error())
 		HandleResponse(ctx, myErrors.New(http.StatusBadRequest, reason.RequestFormatError), nil)
 		return true
 	}
 
-	errField, err := validator.GetValidatorByLang(GetLang(ctx).Abbr()).Check(data)
+	errField, err := validator.GetValidatorByLang(lang.Abbr()).Check(data)
 	if err != nil {
 		HandleResponse(ctx, myErrors.New(http.StatusBadRequest, reason.RequestFormatError).WithMsg(err.Error()), errField)
 		return true

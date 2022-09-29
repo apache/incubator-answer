@@ -1,4 +1,4 @@
-@import './variable.scss';
+@import 'common/variable';
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-icons';
 
@@ -58,6 +58,10 @@ a {
   padding: 1px 0.5rem 2px;
   color: #084298;
   height: 24px;
+}
+
+.badge-tag:hover {
+  background: #9EC5FE;
 }
 
 .divide-line {

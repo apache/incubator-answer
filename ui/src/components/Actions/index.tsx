@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 import { Icon } from '@answer/components';
-import { bookmark, postVote } from '@answer/services/api';
+import { bookmark, postVote } from '@answer/api';
 import { isLogin } from '@answer/utils';
 import { userInfoStore } from '@answer/stores';
 import { useToast } from '@answer/hooks';

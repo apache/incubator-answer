@@ -3,9 +3,16 @@ import { Row, Col, ButtonGroup, Button, ListGroup } from 'react-bootstrap';
 import { NavLink, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useQuestionList } from '@answer/services/question.api';
-import type * as Type from '@answer/services/types';
-import { Icon, Tag, Pagination, FormatTime, Empty } from '@answer/components';
+import { useQuestionList } from '@answer/api';
+import type * as Type from '@answer/common/interface';
+import {
+  Icon,
+  Tag,
+  Pagination,
+  FormatTime,
+  Empty,
+  BaseUserCard,
+} from '@answer/components';
 
 const QuestionOrderKeys: Type.QuestionOrderBy[] = [
   'newest',
@@ -25,12 +32,11 @@ const QuestionLastUpdate = ({ q }) => {
     // question answered
     return (
       <>
-        <a
-          className="p-0"
-          href={`/users/${q.last_answered_user_info.username}`}>
-          {q.last_answered_user_info.display_name}
-        </a>
-        <span className="fw-bold px-1">{q.last_answered_user_info.rank}</span>
+        <BaseUserCard
+          data={q.last_answered_user_info}
+          showAvatar={false}
+          className="me-1"
+        />
         •
         <FormatTime
           time={q.update_time}
@@ -45,10 +51,11 @@ const QuestionLastUpdate = ({ q }) => {
     // question modified
     return (
       <>
-        <a className="p-0" href={`/users/${q.update_user_info.username}`}>
-          {q.update_user_info.display_name}
-        </a>
-        <span className="fw-bold px-1">{q.update_user_info.rank}</span>
+        <BaseUserCard
+          data={q.update_user_info}
+          showAvatar={false}
+          className="me-1"
+        />
         •
         <FormatTime
           time={q.edit_time}
@@ -62,10 +69,7 @@ const QuestionLastUpdate = ({ q }) => {
   // default: asked
   return (
     <>
-      <a className="p-0" href={`/users/${q.user_info.username}`}>
-        {q.user_info.display_name}
-      </a>
-      <strong className="px-1">{q.user_info.rank}</strong>
+      <BaseUserCard data={q.user_info} showAvatar={false} className="me-1" />
       •
       <FormatTime
         time={q.create_time}
@@ -187,6 +191,7 @@ const QuestionList: FC<Props> = ({ source }) => {
           currentPage={curPage}
           totalSize={count}
           pageSize={pageSize}
+          pathname="/questions"
         />
       </div>
     </div>

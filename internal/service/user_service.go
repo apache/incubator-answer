@@ -63,6 +63,25 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	return resp, nil
 }
 
+// GetUserStatus get user info by user id
+func (us *UserService) GetUserStatus(ctx context.Context, userID string) (resp *schema.GetUserStatusResp, err error) {
+	resp = &schema.GetUserStatusResp{}
+	if len(userID) == 0 {
+		return resp, nil
+	}
+	userInfo, exist, err := us.userRepo.GetByUserID(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.BadRequest(reason.UserNotFound)
+	}
+	resp = &schema.GetUserStatusResp{
+		Status: schema.UserStatusShow[userInfo.Status],
+	}
+	return resp, nil
+}
+
 func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username string) (
 	resp *schema.GetOtherUserInfoResp, err error) {
 	userInfo, exist, err := us.userRepo.GetByUsername(ctx, username)

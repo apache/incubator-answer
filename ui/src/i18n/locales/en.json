@@ -10,7 +10,7 @@
     "tags": "Tags",
     "tag_wiki": "tag wiki",
     "edit_tag": "Edit Tag",
-    "ask_a_question": "Ask a Question",
+    "ask_a_question": "Add Question",
     "edit_question": "Edit Question",
     "edit_answer": "Edit Answer",
     "search": "Search",
@@ -34,8 +34,8 @@
   },
   "suspended": {
     "title": "Your Account has been Suspended",
-    "until_time": "Your account was suspended until {{ time }}",
-    "forever": "This user was suspended forever. ",
+    "until_time": "Your account was suspended until {{ time }}.",
+    "forever": "This user was suspended forever.",
     "end": "You don’t meet a community guideline."
   },
   "editor": {
@@ -43,7 +43,7 @@
       "text": "Blockquote"
     },
     "bold": {
-      "text": "Bold"
+      "text": "Strong"
     },
     "chart": {
       "text": "Chart",
@@ -57,18 +57,18 @@
       "pie_chart": "Pie chart"
     },
     "code": {
-      "text": "Code",
-      "add_code": "Add code",
+      "text": "Code Sample",
+      "add_code": "Add code sample",
       "form": {
         "fields": {
           "code": {
-            "label": "Code text",
+            "label": "Code",
             "msg": {
-              "empty": "Code text cannot be empty"
+              "empty": "Code cannot be empty."
             }
           },
           "language": {
-            "label": "Code language",
+            "label": "Language",
             "placeholder": "Automatic detection"
           }
         }
@@ -95,45 +95,45 @@
       "text": "Help"
     },
     "hr": {
-      "text": "Line"
+      "text": "Horizontal Rule"
     },
     "image": {
       "text": "Image",
       "add_image": "Add image",
-      "tab_1": "Upload image",
-      "form1": {
+      "tab_image": "Upload image",
+      "form_image": {
         "fields": {
           "file": {
             "label": "Image file",
             "btn": "Select image",
             "msg": {
-              "empty": "Image file cannot be empty",
-              "only_image": "Only image files are allowed",
-              "max_size": "Image file size cannot exceed 4MB"
+              "empty": "File cannot be empty.",
+              "only_image": "Only image files are allowed.",
+              "max_size": "File size cannot exceed 4MB."
             }
           },
           "description": {
-            "label": "Image description(Optional)"
+            "label": "Description (optional)"
           }
         }
       },
-      "tab_2": "Image URL",
-      "form2": {
+      "tab_url": "Image URL",
+      "form_url": {
         "fields": {
           "url": {
-            "label": "Image url",
+            "label": "Image URL",
             "msg": {
-              "empty": "Image url cannot be empty"
+              "empty": "Image URL cannot be empty."
             }
           },
           "name": {
-            "label": "Url name(Optional)"
+            "label": "Description (optional)"
           }
         }
       },
       "btn_cancel": "Cancel",
       "btn_confirm": "Confirm",
-      "uploading": "uploading"
+      "uploading": "Uploading"
     },
     "indent": {
       "text": "Indent"
@@ -142,21 +142,21 @@
       "text": "Outdent"
     },
     "italic": {
-      "text": "Italic"
+      "text": "Emphasis"
     },
     "link": {
-      "text": "Link",
-      "add_link": "Add link",
+      "text": "Hyperlink",
+      "add_link": "Add hyperlink",
       "form": {
         "fields": {
           "url": {
-            "label": "Link url",
+            "label": "URL",
             "msg": {
-              "empty": "Link url cannot be empty"
+              "empty": "URL cannot be empty."
             }
           },
           "name": {
-            "label": "Link name(Optional)"
+            "label": "Description (optional)"
           }
         }
       },
@@ -164,10 +164,10 @@
       "btn_confirm": "Confirm"
     },
     "ordered_list": {
-      "text": "Ordered list"
+      "text": "Numbered List"
     },
     "unordered_list": {
-      "text": "Unordered list"
+      "text": "Bulleted List"
     },
     "table": {
       "text": "Table",
@@ -180,10 +180,10 @@
     "btn_cancel": "Cancel",
     "btn_submit": "Submit",
     "remark": {
-      "empty": "cannot be empty"
+      "empty": "Cannot be empty."
     },
     "msg": {
-      "empty": "Please select a reason"
+      "empty": "Please select a reason."
     }
   },
   "report_modal": {
@@ -195,10 +195,10 @@
     "btn_cancel": "Cancel",
     "btn_submit": "Submit",
     "remark": {
-      "empty": "cannot be empty"
+      "empty": "Cannot be empty."
     },
     "msg": {
-      "empty": "Please select a reason"
+      "empty": "Please select a reason."
     }
   },
   "tag_modal": {
@@ -206,16 +206,18 @@
     "form": {
       "fields": {
         "display_name": {
-          "label": "Display Name",
+          "label": "Display name",
           "msg": {
-            "empty": "Display name cannot be empty"
+            "empty": "Display name cannot be empty.",
+            "range": "Display name up to 35 characters"
           }
         },
         "slug_name": {
-          "label": "Url slug",
+          "label": "URL slug",
           "description": "Spaces are not allowed, please use '-' instead.",
           "msg": {
-            "empty": "Please enter a name for the tag."
+            "empty": "Please enter a name for the tag.",
+            "range": "URL slug up to 35 characters"
           }
         },
         "description": {
@@ -257,8 +259,8 @@
           "label": "Display name"
         },
         "slug_name": {
-          "label": "Url slug",
-          "info": "Spaces are not allowed, please use \"-\" instead."
+          "label": "URL slug",
+          "info": "Spaces are not allowed, please use '-' instead."
         },
         "description": {
           "label": "Description"
@@ -293,7 +295,7 @@
     "btn_delete": "Delete",
     "btn_flag": "Flag",
     "btn_save_edits": "Save edits",
-    "btn_cancel": "cancel",
+    "btn_cancel": "Cancel",
     "show_more": "Show more comment",
     "tip_question": "Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.",
     "tip_answer": "Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting."
@@ -348,7 +350,7 @@
     "more": "More"
   },
   "ask": {
-    "title": "Ask a question",
+    "title": "Add question",
     "edit_title": "Edit Question",
     "default_reason": "Edit question",
     "similar_questions": "Similar questions",
@@ -361,25 +363,26 @@
           "label": "Title",
           "placeholder": "Be specific and imagine you’re asking a question to another person",
           "msg": {
-            "empty": "Title cannot be empty"
+            "empty": "Title cannot be empty.",
+            "range": "Title up to 150 characters"
           }
         },
         "body": {
           "label": "Body",
           "msg": {
-            "empty": "Body cannot be empty"
+            "empty": "Body cannot be empty."
           }
         },
         "tags": {
           "label": "Tags",
           "msg": {
-            "empty": "Tags cannot be empty"
+            "empty": "Tags cannot be empty."
           }
         },
         "answer": {
           "label": "Answer",
           "msg": {
-            "empty": "Answer cannot be empty"
+            "empty": "Answer cannot be empty."
           }
         }
       }
@@ -408,6 +411,7 @@
   "tag_selector": {
     "add_btn": "Add tag",
     "create_btn": "Create new tag",
+    "search_tag": "Search tag",
     "hint": "Describe what your question is about, at least one tag is required.",
     "no_result": "No tags matched"
   },
@@ -433,7 +437,7 @@
     "title": "Captcha",
     "placeholder": "Type the text above",
     "msg": {
-      "empty": "cannot be empty"
+      "empty": "Cannot be empty."
     }
   },
   "inactive": {
@@ -442,7 +446,7 @@
     "another": "We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.",
     "btn_name": "Resend activation email",
     "msg": {
-      "empty": "cannot be empty"
+      "empty": "Cannot be empty."
     }
   },
   "login": {
@@ -453,19 +457,20 @@
     "name": {
       "label": "Name",
       "msg": {
-        "empty": "Name cannot be empty"
+        "empty": "Name cannot be empty.",
+        "range": "Name up to 30 characters"
       }
     },
     "email": {
       "label": "Email",
       "msg": {
-        "empty": "Email cannot be empty"
+        "empty": "Email cannot be empty."
       }
     },
     "password": {
       "label": "Password",
       "msg": {
-        "empty": "Password cannot be empty",
+        "empty": "Password cannot be empty.",
         "different": "The passwords entered on both sides are inconsistent"
       }
     }
@@ -477,7 +482,7 @@
     "email": {
       "label": "Email",
       "msg": {
-        "empty": "Email cannot be empty"
+        "empty": "Email cannot be empty."
       }
     }
   },
@@ -490,7 +495,7 @@
     "password": {
       "label": "Password",
       "msg": {
-        "empty": "Password cannot be empty",
+        "empty": "Password cannot be empty.",
         "length": "The length needs to be between 8 and 32",
         "different": "The passwords entered on both sides are inconsistent"
       }
@@ -511,7 +516,8 @@
       "btn_name": "Update profile",
       "display_name": {
         "label": "Display name",
-        "msg": "name cannot be empty"
+        "msg": "Display name cannot be empty.",
+        "msg_range": "Display name up to 30 characters"
       },
       "avatar": {
         "label": "Profile image",
@@ -523,7 +529,7 @@
       "website": {
         "label": "Website (optional)",
         "placeholder": "https://example.com",
-        "msg": "website incorrect format"
+        "msg": "Website incorrect format"
       },
       "location": {
         "label": "Location (optional)",
@@ -542,15 +548,15 @@
       "change_email_info": "We've sent an email to that address. Please follow the confirmation instructions.",
       "email": {
         "label": "Email",
-        "msg": "email cannot be empty"
+        "msg": "Email cannot be empty."
       },
       "password_title": "Password",
       "current_pass": {
         "label": "Current Password",
         "msg": {
-          "empty": "cannot be empty",
-          "length": "The length needs to be between 8 and 32",
-          "different": "The two entered passwords do not match"
+          "empty": "Current Password cannot be empty.",
+          "length": "The length needs to be between 8 and 32.",
+          "different": "The two entered passwords do not match."
         }
       },
       "new_pass": {
@@ -595,7 +601,7 @@
       "title": "Your Answer",
       "btn_name": "Post your answer",
       "confirm_info": "you have answered, confirm to continue answer",
-      "empty": "cannot be empty"
+      "empty": "Answer cannot be empty."
     }
   },
   "delete": {
@@ -718,6 +724,14 @@
     "x_answers": "answers",
     "x_questions": "questions"
   },
+  "page_404": {
+    "description": "Unfortunately, this page doesn't exist.",
+    "back_home": "Back to homepage"
+  },
+  "page_50X": {
+    "description": "The server encountered an error and could not complete your request.",
+    "back_home": "Back to homepage"
+  },
   "admin": {
     "admin_header": {
       "title": "Admin"
@@ -822,35 +836,35 @@
       "page_title": "General",
       "name": {
         "label": "Site name",
-        "msg": "Site name cannot be empty",
+        "msg": "Site name cannot be empty.",
         "text": "The name of this site, as used in the title tag."
       },
       "short_description": {
-        "label": "Short site description",
-        "msg": "Short site description cannot be empty",
+        "label": "Short site description (optional)",
+        "msg": "Short site description cannot be empty.",
         "text": "Short description, as used in the title tag on homepage."
       },
       "description": {
-        "label": "Site description",
-        "msg": "Site description cannot be empty",
+        "label": "Site description (optional)",
+        "msg": "Site description cannot be empty.",
         "text": "Describe this site in one sentence, as used in the meta description tag."
       }
     },
     "interface": {
       "page_title": "Interface",
       "logo": {
-        "label": "Logo",
-        "msg": "Site name cannot be empty",
+        "label": "Logo (optional)",
+        "msg": "Site logo cannot be empty.",
         "text": "You can upload your image or <1>reset</1> it to the site title text."
       },
       "theme": {
         "label": "Theme",
-        "msg": "Theme cannot be empty",
+        "msg": "Theme cannot be empty.",
         "text": "Select an existing theme."
       },
       "language": {
         "label": "Interface language",
-        "msg": "Interface language cannot be empty",
+        "msg": "Interface language cannot be empty.",
         "text": "User interface language. It will change when you refresh the page."
       }
     }

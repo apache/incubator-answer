@@ -2,8 +2,9 @@ package report_backyard
 
 import (
 	"context"
-	"github.com/segmentfault/answer/internal/service/config"
 	"strings"
+
+	"github.com/segmentfault/answer/internal/service/config"
 
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/answer/internal/base/pager"
@@ -93,7 +94,7 @@ func (rs *ReportBackyardService) ListReportPage(ctx context.Context, dto schema.
 	}
 
 	rs.parseObject(ctx, &resp)
-	return pager.NewPageModel(dto.Page, dto.PageSize, total, resp), nil
+	return pager.NewPageModel(total, resp), nil
 }
 
 // HandleReported handle the reported object

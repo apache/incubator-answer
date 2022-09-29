@@ -3,8 +3,11 @@ import { Modal, Form, Button, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@answer/components';
-import type { FormValue, FormDataType } from '@answer/common/interface';
-import type { ImgCodeRes } from '@answer/services/types';
+import type {
+  FormValue,
+  FormDataType,
+  ImgCodeRes,
+} from '@answer/common/interface';
 
 interface IProps {
   /** control visible */

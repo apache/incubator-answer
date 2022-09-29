@@ -5,8 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 import { TagSelector, Tag } from '@answer/components';
 import { isLogin } from '@answer/utils';
-
-import { useFollowingTags, followTags } from '@/services/tag.api';
+import { useFollowingTags, followTags } from '@answer/api';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });

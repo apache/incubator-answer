@@ -5,23 +5,35 @@ import { Avatar } from '@answer/components';
 
 interface Props {
   data: any;
+  showAvatar?: boolean;
   avatarSize?: string;
   className?: string;
 }
 
 const Index: FC<Props> = ({
   data,
+  showAvatar = true,
   avatarSize = '20px',
   className = 'fs-14',
 }) => {
   return (
     <div className={`text-secondary ${className}`}>
-      <Link to={`/users/${data?.username}`}>
-        <Avatar avatar={data?.avatar} size={avatarSize} className="me-1" />
-      </Link>
-      <Link to={`/users/${data?.username}`} className="me-1 text-break">
-        {data?.display_name}
-      </Link>
+      {data?.status !== 'deleted' ? (
+        <Link to={`/users/${data?.username}`}>
+          {showAvatar && (
+            <Avatar avatar={data?.avatar} size={avatarSize} className="me-1" />
+          )}
+          <span className="me-1 text-break">{data?.display_name}</span>
+        </Link>
+      ) : (
+        <>
+          {showAvatar && (
+            <Avatar avatar={data?.avatar} size={avatarSize} className="me-1" />
+          )}
+          <span className="me-1 text-break">{data?.display_name}</span>
+        </>
+      )}
+
       <span className="fw-bold">{data?.rank}</span>
     </div>
   );

@@ -12,6 +12,11 @@ GO=$(GO_ENV) $(shell which go)
 build:
 	@$(GO_ENV) $(GO) build $(GO_FLAGS) -o $(BIN) $(DIR_SRC)
 
+generate:
+	go get github.com/google/wire/cmd/wire@latest
+	go generate ./...
+	go mod tidy
+
 test:
 	@$(GO) test ./...
 

@@ -14,7 +14,7 @@ const Link: FC<IEditorContext> = ({ editor }) => {
   };
   const [visible, setVisible] = useState(false);
   const [link, setLink] = useState({
-    value: 'http://',
+    value: 'https://',
     isInvalid: false,
     errorMsg: '',
   });

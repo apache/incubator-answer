@@ -3614,6 +3614,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/user/status": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user status info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "get user status info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetUserResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/vote/down": {
             "post": {
                 "security": [
@@ -4206,6 +4246,10 @@ const docTemplate = `{
                     "description": "reply user id",
                     "type": "string"
                 },
+                "reply_user_status": {
+                    "description": "reply user status",
+                    "type": "string"
+                },
                 "reply_username": {
                     "description": "reply user username",
                     "type": "string"
@@ -4220,6 +4264,10 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "description": "user id",
+                    "type": "string"
+                },
+                "user_status": {
+                    "description": "user status",
                     "type": "string"
                 },
                 "username": {
@@ -5464,7 +5512,7 @@ const docTemplate = `{
                 },
                 "status": {
                     "description": "status",
-                    "type": "integer"
+                    "type": "string"
                 },
                 "username": {
                     "description": "name",

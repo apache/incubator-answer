@@ -35,7 +35,7 @@ const Index: React.FC<IProps> = ({ type, upload }) => {
   };
 
   return (
-    <label className="mb-2 btn btn-outline-secondary btn-sm uploadBtn fs-14">
+    <label className="mb-2 btn btn-outline-secondary uploadBtn">
       {status ? t('upload_img.loading') : t('upload_img.name')}
       <input
         type="file"

@@ -1,12 +1,13 @@
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import { Pagination } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
 interface Props {
   currentPage: number;
   pageSize: number;
   totalSize: number;
+  pathname?: string;
 }
 
 interface PageItemProps {
@@ -46,6 +47,7 @@ const PageItem = ({ page, currentPage, path }: PageItemProps) => {
       href={path}
       onClick={(e) => {
         e.preventDefault();
+        e.stopPropagation();
         navigate(path);
         window.scrollTo(0, 0);
       }}>
@@ -58,9 +60,13 @@ const Index: FC<Props> = ({
   currentPage = 1,
   pageSize = 15,
   totalSize = 0,
+  pathname = '',
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'pagination' });
-
+  const location = useLocation();
+  if (!pathname) {
+    pathname = location.pathname;
+  }
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const totalPage = Math.ceil(totalSize / pageSize);
@@ -73,10 +79,9 @@ const Index: FC<Props> = ({
   }
 
   const handleParams = (pageNum): string => {
-    const basePath = window.location.pathname;
     searchParams.set('page', String(pageNum));
     const searchStr = searchParams.toString();
-    return `${basePath}?${searchStr}`;
+    return `${pathname}?${searchStr}`;
   };
   return (
     <Pagination size="sm" className="d-inline-flex mb-0">
@@ -107,7 +112,7 @@ const Index: FC<Props> = ({
       )}
       {currentPage === 4 && totalPage > 6 && (
         <PageItem
-          key="6"
+          key="page6"
           page={6}
           currentPage={currentPage}
           path={handleParams(6)}
@@ -129,13 +134,13 @@ const Index: FC<Props> = ({
       {currentPage >= 5 && (
         <>
           <PageItem
-            key="prev2"
+            key={realPage - 2}
             page={realPage - 2}
             currentPage={currentPage}
             path={handleParams(realPage - 2)}
           />
           <PageItem
-            key="prev1"
+            key={realPage - 1}
             page={realPage - 1}
             currentPage={currentPage}
             path={handleParams(realPage - 1)}
@@ -190,4 +195,4 @@ const Index: FC<Props> = ({
   );
 };
 
-export default memo(Index);
+export default Index;

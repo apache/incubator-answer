@@ -35,14 +35,14 @@ type SearchService struct {
 func NewSearchService(
 	searchRepo search_common.SearchRepo,
 	tagRepo tagcommon.TagRepo,
-	userRepo usercommon.UserRepo,
+	userCommon *usercommon.UserCommon,
 	followCommon activity_common.FollowRepo,
 ) *SearchService {
 	return &SearchService{
 		searchRepo:           searchRepo,
 		tagSearch:            search.NewTagSearch(searchRepo, tagRepo, followCommon),
 		withinSearch:         search.NewWithinSearch(searchRepo),
-		authorSearch:         search.NewAuthorSearch(searchRepo, userRepo),
+		authorSearch:         search.NewAuthorSearch(searchRepo, userCommon),
 		scoreSearch:          search.NewScoreSearch(searchRepo),
 		answersSearch:        search.NewAnswersSearch(searchRepo),
 		acceptedAnswerSearch: search.NewAcceptedAnswerSearch(searchRepo),

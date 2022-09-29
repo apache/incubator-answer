@@ -43,12 +43,6 @@ type AddCollectionGroupReq struct {
 	UpdateTime time.Time `validate:"required" comment:"" json:"update_time"`
 }
 
-// RemoveCollectionGroupReq delete collection group request
-type RemoveCollectionGroupReq struct {
-	//
-	ID int64 `validate:"required" comment:"" json:"id"`
-}
-
 // UpdateCollectionGroupReq update collection group request
 type UpdateCollectionGroupReq struct {
 	//
@@ -63,38 +57,6 @@ type UpdateCollectionGroupReq struct {
 	CreateTime time.Time `validate:"omitempty" comment:"" json:"create_time"`
 	//
 	UpdateTime time.Time `validate:"omitempty" comment:"" json:"update_time"`
-}
-
-// GetCollectionGroupListReq get collection group list all request
-type GetCollectionGroupListReq struct {
-	//
-	UserID int64 `validate:"omitempty" comment:"" form:"user_id"`
-	// the collection group name
-	Name string `validate:"omitempty,gt=0,lte=50" comment:"the collection group name" form:"name"`
-	// mark this group is default, default 1
-	DefaultGroup int `validate:"omitempty" comment:"mark this group is default, default 1" form:"default_group"`
-	//
-	CreateTime time.Time `validate:"omitempty" comment:"" form:"create_time"`
-	//
-	UpdateTime time.Time `validate:"omitempty" comment:"" form:"update_time"`
-}
-
-// GetCollectionGroupWithPageReq get collection group list page request
-type GetCollectionGroupWithPageReq struct {
-	// page
-	Page int `validate:"omitempty,min=1" form:"page"`
-	// page size
-	PageSize int `validate:"omitempty,min=1" form:"page_size"`
-	//
-	UserID int64 `validate:"omitempty" comment:"" form:"user_id"`
-	// the collection group name
-	Name string `validate:"omitempty,gt=0,lte=50" comment:"the collection group name" form:"name"`
-	// mark this group is default, default 1
-	DefaultGroup int `validate:"omitempty" comment:"mark this group is default, default 1" form:"default_group"`
-	//
-	CreateTime time.Time `validate:"omitempty" comment:"" form:"create_time"`
-	//
-	UpdateTime time.Time `validate:"omitempty" comment:"" form:"update_time"`
 }
 
 // GetCollectionGroupResp get collection group response

@@ -47,7 +47,7 @@ type UserRankRepo interface {
 
 // RankService rank service
 type RankService struct {
-	userRepo          usercommon.UserRepo
+	userCommon        *usercommon.UserCommon
 	configRepo        config.ConfigRepo
 	userRankRepo      UserRankRepo
 	objectInfoService *object_info.ObjService
@@ -55,12 +55,12 @@ type RankService struct {
 
 // NewRankService new rank service
 func NewRankService(
-	userRepo usercommon.UserRepo,
+	userCommon *usercommon.UserCommon,
 	userRankRepo UserRankRepo,
 	objectInfoService *object_info.ObjService,
 	configRepo config.ConfigRepo) *RankService {
 	return &RankService{
-		userRepo:          userRepo,
+		userCommon:        userCommon,
 		configRepo:        configRepo,
 		userRankRepo:      userRankRepo,
 		objectInfoService: objectInfoService,
@@ -74,7 +74,7 @@ func (rs *RankService) CheckRankPermission(ctx context.Context, userID string, a
 	}
 
 	// get the rank of the current user
-	userInfo, exist, err := rs.userRepo.GetByUserID(ctx, userID)
+	userInfo, exist, err := rs.userCommon.GetUserBasicInfoByID(ctx, userID)
 	if err != nil {
 		return false, err
 	}
@@ -101,7 +101,7 @@ func (rs *RankService) CheckRankPermission(ctx context.Context, userID string, a
 func (rs *RankService) GetRankPersonalWithPage(ctx context.Context, req *schema.GetRankPersonalWithPageReq) (
 	pageModel *pager.PageModel, err error) {
 	if len(req.Username) > 0 {
-		userInfo, exist, err := rs.userRepo.GetByUsername(ctx, req.Username)
+		userInfo, exist, err := rs.userCommon.GetUserBasicInfoByUserName(ctx, req.Username)
 		if err != nil {
 			return nil, err
 		}
@@ -140,5 +140,5 @@ func (rs *RankService) GetRankPersonalWithPage(ctx context.Context, req *schema.
 		}
 		resp = append(resp, commentResp)
 	}
-	return pager.NewPageModel(req.Page, req.PageSize, total, resp), nil
+	return pager.NewPageModel(total, resp), nil
 }
