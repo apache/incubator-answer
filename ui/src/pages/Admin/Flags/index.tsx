@@ -23,14 +23,14 @@ const Flags: FC = () => {
   const [urlSearchParams, setUrlSearchParams] = useSearchParams();
   const curFilter = urlSearchParams.get('status') || flagFilterKeys[0];
   const curType = urlSearchParams.get('type') || flagTypeKeys[0];
-  const pageSize = 20;
+  const PAGE_SIZE = 20;
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const {
     data: listData,
     isLoading,
     mutate: refreshList,
   } = useFlagSearch({
-    page_size: pageSize,
+    page_size: PAGE_SIZE,
     page: curPage,
     status: curFilter as Type.FlagStatus,
     object_type: curType as Type.FlagType,
@@ -159,7 +159,7 @@ const Flags: FC = () => {
         <Pagination
           currentPage={curPage}
           totalSize={count}
-          pageSize={pageSize}
+          pageSize={PAGE_SIZE}
         />
       </div>
     </>

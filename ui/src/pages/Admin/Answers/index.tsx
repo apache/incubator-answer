@@ -30,7 +30,7 @@ const answerFilterItems: Type.AdminContentsFilterBy[] = ['normal', 'deleted'];
 const Answers: FC = () => {
   const [urlSearchParams, setUrlSearchParams] = useSearchParams();
   const curFilter = urlSearchParams.get('status') || answerFilterItems[0];
-  const pageSize = 20;
+  const PAGE_SIZE = 20;
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const { t } = useTranslation('translation', { keyPrefix: 'admin.answers' });
 
@@ -39,7 +39,7 @@ const Answers: FC = () => {
     isLoading,
     mutate: refreshList,
   } = useAnswerSearch({
-    page_size: pageSize,
+    page_size: PAGE_SIZE,
     page: curPage,
     status: curFilter as Type.AdminContentsFilterBy,
   });
@@ -189,7 +189,7 @@ const Answers: FC = () => {
         <Pagination
           currentPage={curPage}
           totalSize={count}
-          pageSize={pageSize}
+          pageSize={PAGE_SIZE}
         />
       </div>
     </>

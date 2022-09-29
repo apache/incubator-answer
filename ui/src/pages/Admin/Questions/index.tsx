@@ -35,7 +35,7 @@ const questionFilterItems: Type.AdminContentsFilterBy[] = [
   'deleted',
 ];
 
-const pageSize = 20;
+const PAGE_SIZE = 20;
 const Questions: FC = () => {
   const [urlSearchParams, setUrlSearchParams] = useSearchParams();
   const curFilter = urlSearchParams.get('status') || questionFilterItems[0];
@@ -47,7 +47,7 @@ const Questions: FC = () => {
     isLoading,
     mutate: refreshList,
   } = useQuestionSearch({
-    page_size: pageSize,
+    page_size: PAGE_SIZE,
     page: curPage,
     status: curFilter as Type.AdminContentsFilterBy,
   });
@@ -207,7 +207,7 @@ const Questions: FC = () => {
         <Pagination
           currentPage={curPage}
           totalSize={count}
-          pageSize={pageSize}
+          pageSize={PAGE_SIZE}
         />
       </div>
     </>
