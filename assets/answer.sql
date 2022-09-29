@@ -41,18 +41,18 @@ CREATE TABLE `collection` (
   `user_collection_group_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'user collection group id',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='collection';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='collection';
 
 CREATE TABLE `collection_group` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp() COMMENT 'create time',
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp() COMMENT 'update time',
   `user_id` bigint(20) NOT NULL DEFAULT 0 COMMENT 'user id',
-  `name` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'the collection group name',
+  `name` varchar(50) NOT NULL DEFAULT '' COMMENT 'the collection group name',
   `default_group` int(11) NOT NULL DEFAULT 1 COMMENT 'mark this group is default, default 1',
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='collection group';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4  COMMENT='collection group';
 
 CREATE TABLE `comment` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'comment id',
@@ -73,11 +73,11 @@ CREATE TABLE `comment` (
 
 CREATE TABLE `config` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'config id',
-  `key` varchar(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'the config key',
-  `value` text COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'the config value, custom data structures and types',
+  `key` varchar(32) DEFAULT NULL COMMENT 'the config key',
+  `value` text DEFAULT NULL COMMENT 'the config value, custom data structures and types',
   PRIMARY KEY (`id`),
   UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='config';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4  COMMENT='config';
 
 CREATE TABLE `meta` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'id',
@@ -88,7 +88,7 @@ CREATE TABLE `meta` (
   `value` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT 'value',
   PRIMARY KEY (`id`),
   KEY `object_id` (`object_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='meta';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4  COMMENT='meta';
 
 CREATE TABLE `notification` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'notification id',
