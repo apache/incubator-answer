@@ -6,12 +6,6 @@ import { userInfoStore, toastStore } from '@answer/stores';
 
 import Storage from './storage';
 
-// type Result<T> = {
-//   code: number;
-//   msg: string;
-//   data: T;
-// };
-
 const API = {
   development: '',
   production: '',

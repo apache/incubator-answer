@@ -9,7 +9,7 @@ const Suspended = () => {
   const userInfo = userInfoStore((state) => state.user);
 
   if (userInfo.status !== 'forbidden') {
-    window.location.href = '/';
+    window.location.replace('/');
     return null;
   }
 

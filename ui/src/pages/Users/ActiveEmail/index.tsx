@@ -17,7 +17,7 @@ const Index: FC = () => {
       activateAccount(encodeURIComponent(code)).then((res) => {
         updateUser(res);
         setTimeout(() => {
-          window.location.href = '/users/account-activation/success';
+          window.location.replace('/users/account-activation/success');
         }, 0);
       });
     }

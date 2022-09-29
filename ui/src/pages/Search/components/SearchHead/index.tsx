@@ -1,6 +1,6 @@
 import { FC, memo } from 'react';
 import { ListGroupItem, ButtonGroup, Button } from 'react-bootstrap';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const sortBtns = [
@@ -21,6 +21,7 @@ interface Props {
 }
 const Index: FC<Props> = ({ sort, count = 0 }) => {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const navigate = useNavigate();
 
   const { t } = useTranslation('translation', {
@@ -28,7 +29,7 @@ const Index: FC<Props> = ({ sort, count = 0 }) => {
   });
 
   const handleParams = (order): string => {
-    const basePath = window.location.pathname;
+    const basePath = location.pathname;
     searchParams.delete('page');
     searchParams.set('order', order);
     const searchStr = searchParams.toString();
