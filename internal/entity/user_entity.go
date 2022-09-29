@@ -36,7 +36,7 @@ type User struct {
 	Rank           int       `xorm:"not null default 0 comment('rank') INT(11) rank"`
 	Status         int       `xorm:"not null default 1 comment('user status(available: 1; deleted: 10)') INT(11) status"`
 	AuthorityGroup int       `xorm:"not null default 1 comment('authority group') INT(11) authority_group"`
-	DisplayName    string    `xorm:"not null default '' comment('display name') VARCHAR(50) display_name"`
+	DisplayName    string    `xorm:"not null default '' comment('display name') VARCHAR(30) display_name"`
 	Avatar         string    `xorm:"not null default '' comment('avatar') VARCHAR(255) avatar"`
 	Mobile         string    `xorm:"not null comment('mobile') VARCHAR(20) mobile"`
 	Bio            string    `xorm:"not null comment('bio markdown') TEXT bio"`

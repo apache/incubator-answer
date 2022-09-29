@@ -235,30 +235,8 @@ func (us *UserService) UserModifyPassWord(ctx context.Context, request *schema.U
 
 // UpdateInfo
 func (us *UserService) UpdateInfo(ctx context.Context, request *schema.UpdateInfoRequest) error {
-	// formatName, pass := us.CheckUserName(ctx, request.Username)
-	// if !pass {
-	// 	return fmt.Errorf("username format error")
-	// }
-	// dbuserinfo, has, err := us.userRepo.GetUserInfoByUserID(ctx, request.UserID)
-	// if err != nil {
-	// 	return err
-	// }
-	// if !has {
-	// 	return fmt.Errorf("user does not exist")
-	// }
-	// dbNameUserInfo, has, err := us.userRepo.GetOtherUserInfoByUsername(ctx, formatName)
-	// if err != nil {
-	// 	return err
-	// }
-	// if has {
-	// 	if dbuserinfo.TagID != dbNameUserInfo.TagID {
-	// 		return fmt.Errorf("username already exists")
-	// 	}
-	// }
-
 	userinfo := entity.User{}
 	userinfo.ID = request.UserId
-	//userinfo.Username = formatName
 	userinfo.Avatar = request.Avatar
 	userinfo.DisplayName = request.DisplayName
 	userinfo.Bio = request.Bio
