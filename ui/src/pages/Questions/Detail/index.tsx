@@ -7,6 +7,11 @@ import { Pagination, PageTitle } from '@answer/components';
 import { userInfoStore } from '@answer/stores';
 import { scrollTop } from '@answer/utils';
 import { usePageUsers } from '@answer/hooks';
+import type {
+  ListResult,
+  QuDetailRes,
+  AnswerItem,
+} from '@answer/common/interface';
 
 import {
   Question,
@@ -16,8 +21,6 @@ import {
   WriteAnswer,
   Alert,
 } from './components';
-
-import type { ListResult, QuDetailRes, AnswerItem } from '@/services/types';
 
 import './index.scss';
 

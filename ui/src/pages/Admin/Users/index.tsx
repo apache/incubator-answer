@@ -10,7 +10,7 @@ import {
   BaseUserCard,
   Empty,
 } from '@answer/components';
-import * as Type from '@answer/services/types';
+import * as Type from '@answer/common/interface';
 import { useChangeModal } from '@answer/hooks';
 
 import '../index.scss';

@@ -2,11 +2,9 @@ import React, { FC, FormEvent, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import type * as Type from '@answer/common/interface';
 import { getUserInfo, changeEmail } from '@answer/api';
 import { useToast } from '@answer/hooks';
-
-import type { FormDataType } from '@/common/interface';
-import type * as Type from '@/services/types';
 
 const reg = /(?<=.{2}).+(?=@)/gi;
 
@@ -15,7 +13,7 @@ const Index: FC = () => {
     keyPrefix: 'settings.account',
   });
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState<FormDataType>({
+  const [formData, setFormData] = useState<Type.FormDataType>({
     e_mail: {
       value: '',
       isInvalid: false,
@@ -30,7 +28,7 @@ const Index: FC = () => {
     });
   }, []);
 
-  const handleChange = (params: FormDataType) => {
+  const handleChange = (params: Type.FormDataType) => {
     setFormData({ ...formData, ...params });
   };
 

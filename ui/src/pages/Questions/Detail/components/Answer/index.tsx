@@ -12,8 +12,7 @@ import {
 } from '@answer/components';
 import { acceptanceAnswer } from '@answer/api';
 import { scrollTop } from '@answer/utils';
-
-import { AnswerItem } from '@/services/types';
+import { AnswerItem } from '@answer/common/interface';
 
 interface Props {
   data: AnswerItem;

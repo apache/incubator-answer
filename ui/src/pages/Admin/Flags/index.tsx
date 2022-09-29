@@ -10,7 +10,7 @@ import {
   Pagination,
 } from '@answer/components';
 import { useReportModal } from '@answer/hooks';
-import * as Type from '@answer/services/types';
+import * as Type from '@answer/common/interface';
 import { useFlagSearch } from '@answer/api';
 
 import '../index.scss';

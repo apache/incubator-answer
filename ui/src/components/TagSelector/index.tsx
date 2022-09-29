@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import { Icon } from '@answer/components';
 import { useTagModal } from '@answer/hooks';
 import { queryTags } from '@answer/api';
-import type * as Type from '@answer/services/types';
+import type * as Type from '@answer/common/interface';
 
 import './index.scss';
 

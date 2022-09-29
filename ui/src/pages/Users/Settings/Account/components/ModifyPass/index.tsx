@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { modifyPassword } from '@answer/api';
 import { useToast } from '@answer/hooks';
-
-import type { FormDataType } from '@/common/interface';
+import type { FormDataType } from '@answer/common/interface';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {

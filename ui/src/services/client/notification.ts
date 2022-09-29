@@ -3,7 +3,7 @@ import qs from 'qs';
 
 import request from '@answer/utils/request';
 import { isLogin } from '@answer/utils';
-import type * as Type from '../types';
+import type * as Type from '@answer/common/interface';
 
 export const useQueryNotifications = (params) => {
   const apiUrl = `/answer/api/v1/notification/page?${qs.stringify(params, {

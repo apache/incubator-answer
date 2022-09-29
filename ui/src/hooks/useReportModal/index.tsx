@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom/client';
 
 import { reportList, postReport, closeQuestion, putReport } from '@answer/api';
 import { useToast } from '@answer/hooks';
-import type * as Type from '@answer/services/types';
+import type * as Type from '@answer/common/interface';
 
 interface Params {
   isBackend?: boolean;

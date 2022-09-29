@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { passRetrieveSet } from '@answer/api';
 import { userInfoStore } from '@answer/stores';
 import { getQueryString, isLogin } from '@answer/utils';
+import type { FormDataType } from '@answer/common/interface';
 
 import Storage from '@/utils/storage';
-import type { FormDataType } from '@/common/interface';
 import { PageTitle } from '@/components';
 
 const Index: React.FC = () => {

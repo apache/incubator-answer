@@ -21,8 +21,7 @@ import {
 import { ADMIN_LIST_STATUS } from '@answer/common/constants';
 import { useEditStatusModal } from '@answer/hooks';
 import { useAnswerSearch, changeAnswerStatus } from '@answer/api';
-
-import * as Type from '@/services/types';
+import * as Type from '@answer/common/interface';
 
 import '../index.scss';
 
