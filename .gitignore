@@ -6,6 +6,7 @@
 .DS_Store
 ._*
 /.idea
+/.fleet
 /.vscode/*.log
 /cmd/answer/*.sh
 /cmd/logs
