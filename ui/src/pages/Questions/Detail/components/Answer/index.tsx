@@ -79,7 +79,7 @@ const Index: FC<Props> = ({
           <Button
             disabled={!isAuthor}
             variant="outline-success"
-            className="ms-3 active"
+            className="ms-3 active opacity-100 bg-success text-white"
             onClick={acceptAnswer}>
             <Icon name="check-circle-fill" className="me-2" />
             <span>{t('answers.btn_accepted')}</span>
