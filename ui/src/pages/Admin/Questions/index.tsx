@@ -23,7 +23,7 @@ import { useEditStatusModal, useReportModal } from '@answer/hooks';
 import {
   useQuestionSearch,
   changeQuestionStatus,
-  questionDelete,
+  deleteQuestion,
 } from '@answer/api';
 import * as Type from '@answer/common/interface';
 
@@ -89,7 +89,7 @@ const Questions: FC = () => {
         confirmBtnVariant: 'danger',
         confirmText: t('delete', { keyPrefix: 'btns' }),
         onConfirm: () => {
-          questionDelete({
+          deleteQuestion({
             id,
           }).then(() => {
             refreshList();

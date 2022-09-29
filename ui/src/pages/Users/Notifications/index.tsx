@@ -5,8 +5,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 import {
   useQueryNotifications,
-  clearUnReadNotification,
-  clearNotificationRedDot,
+  clearUnreadNotification,
+  clearNotificationStatus,
   readNotification,
 } from '@answer/api';
 import { PageTitle } from '@answer/components';
@@ -29,7 +29,7 @@ const Notifications = () => {
   });
 
   useEffect(() => {
-    clearNotificationRedDot(type);
+    clearNotificationStatus(type);
   }, []);
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const Notifications = () => {
   };
 
   const handleUnreadNotification = async () => {
-    await clearUnReadNotification(type);
+    await clearUnreadNotification(type);
     mutate();
   };
 

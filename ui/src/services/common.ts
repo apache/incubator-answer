@@ -96,11 +96,11 @@ export const logout = () => {
   return request.get('/answer/api/v1/user/logout');
 };
 
-export const emailVerify = (code: string) => {
+export const verifyEmail = (code: string) => {
   return request.get(`/answer/api/v1/email/verify?code=${code}`);
 };
 
-export const emailReSend = (params?: Type.ImgCodeReq) => {
+export const resendEmail = (params?: Type.ImgCodeReq) => {
   params = qs.parse(
     qs.stringify(params, {
       skipNulls: true,
@@ -119,7 +119,7 @@ export const getUserInfo = () => {
   return request.get<Type.UserInfoRes>('/answer/api/v1/user/info');
 };
 
-export const modifyPassword = (params: Type.ModifyPassReq) => {
+export const modifyPassword = (params: Type.ModifyPasswordReq) => {
   return request.post('/answer/api/v1/user/password/modify', params);
 };
 
@@ -131,15 +131,15 @@ export const uploadAvatar = (params: Type.AvatarUploadReq) => {
   return request.post('/answer/api/v1/user/avatar/upload', params);
 };
 
-export const passRetrieve = (params: Type.PssRetReq) => {
+export const resetPassword = (params: Type.PasswordResetReq) => {
   return request.post('/answer/api/v1/user/password/reset', params);
 };
 
-export const passRetrieveSet = (params: { code: string; pass: string }) => {
+export const replacementPassword = (params: { code: string; pass: string }) => {
   return request.post('/answer/api/v1/user/password/replacement', params);
 };
 
-export const accountActivate = (code: string) => {
+export const activateAccount = (code: string) => {
   return request.post(`/answer/api/v1/user/email/verification`, { code });
 };
 
@@ -149,7 +149,7 @@ export const checkImgCode = (params: Type.CheckImgReq) => {
   );
 };
 
-export const noticeSet = (params: Type.NoticeSetReq) => {
+export const setNotice = (params: Type.SetNoticeReq) => {
   return request.post('/answer/api/v1/user/notice/set', params);
 };
 
@@ -158,7 +158,9 @@ export const saveQuestion = (params: Type.QuestionParams) => {
 };
 
 export const questionDetail = (id: string) => {
-  return request.get<Type.QuDetailRes>(`/answer/api/v1/question/info?id=${id}`);
+  return request.get<Type.QuestionDetailRes>(
+    `/answer/api/v1/question/info?id=${id}`,
+  );
 };
 
 export const langConfig = () => {
@@ -227,11 +229,11 @@ export const postReport = (params: {
   return request.post('/answer/api/v1/report', params);
 };
 
-export const questionDelete = (params: { id: string }) => {
+export const deleteQuestion = (params: { id: string }) => {
   return request.delete('/answer/api/v1/question', params);
 };
 
-export const answerDelete = (params: { id: string }) => {
+export const deleteAnswer = (params: { id: string }) => {
   return request.delete('/answer/api/v1/answer', params);
 };
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Col } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { emailReSend, checkImgCode } from '@answer/api';
+import { resendEmail, checkImgCode } from '@answer/api';
 import { PicAuthCodeModal } from '@answer/components/Modal';
 import type {
   ImgCodeRes,
@@ -53,7 +53,7 @@ const Index: React.FC<IProps> = ({ visible = false }) => {
         captcha_id: imgCode.captcha_id,
       };
     }
-    emailReSend(obj)
+    resendEmail(obj)
       .then(() => {
         setSuccess(true);
         setModalState(false);

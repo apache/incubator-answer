@@ -14,7 +14,7 @@ import { useSearchParams, NavLink, Link, useNavigate } from 'react-router-dom';
 
 import { Avatar, Icon } from '@answer/components';
 import { userInfoStore, siteInfoStore, interfaceStore } from '@answer/stores';
-import { logout, useQueryNotificationRedDot } from '@answer/api';
+import { logout, useQueryNotificationStatus } from '@answer/api';
 import Storage from '@answer/utils/storage';
 
 import './index.scss';
@@ -28,7 +28,7 @@ const Header: FC = () => {
   const [searchStr, setSearch] = useState('');
   const siteInfo = siteInfoStore((state) => state.siteInfo);
   const { interface: interfaceInfo } = interfaceStore();
-  const { data: redDot } = useQueryNotificationRedDot();
+  const { data: redDot } = useQueryNotificationStatus();
   const handleInput = (val) => {
     setSearch(val);
   };

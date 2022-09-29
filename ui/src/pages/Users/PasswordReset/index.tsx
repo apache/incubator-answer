@@ -3,7 +3,7 @@ import { Container, Col, Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { passRetrieveSet } from '@answer/api';
+import { replacementPassword } from '@answer/api';
 import { userInfoStore } from '@answer/stores';
 import { getQueryString, isLogin } from '@answer/utils';
 import type { FormDataType } from '@answer/common/interface';
@@ -98,7 +98,7 @@ const Index: React.FC = () => {
       console.error('code is required');
       return;
     }
-    passRetrieveSet({
+    replacementPassword({
       code: encodeURIComponent(code),
       pass: formData.pass.value,
     })

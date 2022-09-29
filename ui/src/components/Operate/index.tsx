@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Modal } from '@answer/components';
 import { useReportModal, useToast } from '@answer/hooks';
-import { questionDelete, answerDelete } from '@answer/api';
+import { deleteQuestion, deleteAnswer } from '@answer/api';
 import { isLogin } from '@answer/utils';
 import Share from '../Share';
 
@@ -61,7 +61,7 @@ const Index: FC<IProps> = ({
         confirmBtnVariant: 'danger',
         confirmText: t('delete', { keyPrefix: 'btns' }),
         onConfirm: () => {
-          questionDelete({
+          deleteQuestion({
             id: qid,
           }).then(() => {
             toast.onShow({
@@ -82,7 +82,7 @@ const Index: FC<IProps> = ({
         confirmBtnVariant: 'danger',
         confirmText: t('delete', { keyPrefix: 'btns' }),
         onConfirm: () => {
-          answerDelete({
+          deleteAnswer({
             id: aid,
           }).then(() => {
             // refersh page
