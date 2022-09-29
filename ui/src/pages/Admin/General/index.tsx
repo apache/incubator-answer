@@ -36,29 +36,13 @@ const General: FC = () => {
   });
   const checkValidated = (): boolean => {
     let ret = true;
-    const { name, short_description, description } = formData;
+    const { name } = formData;
     if (!name.value) {
       ret = false;
       formData.name = {
         value: '',
         isInvalid: true,
         errorMsg: t('name.msg'),
-      };
-    }
-    if (!short_description.value) {
-      ret = false;
-      formData.short_description = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('short_description.msg'),
-      };
-    }
-    if (!description.value) {
-      ret = false;
-      formData.description = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('description.msg'),
       };
     }
     setFormData({
