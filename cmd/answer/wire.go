@@ -12,6 +12,7 @@ import (
 	"github.com/segmentfault/answer/internal/base/middleware"
 	"github.com/segmentfault/answer/internal/base/server"
 	"github.com/segmentfault/answer/internal/base/translator"
+	"github.com/segmentfault/answer/internal/cli"
 	"github.com/segmentfault/answer/internal/controller"
 	"github.com/segmentfault/answer/internal/controller_backyard"
 	"github.com/segmentfault/answer/internal/repo"
@@ -33,6 +34,7 @@ func initApplication(
 	serviceConf *service_config.ServiceConfig,
 	logConf log.Logger) (*pacman.Application, func(), error) {
 	panic(wire.Build(
+		cli.ProviderSetCli,
 		server.ProviderSetServer,
 		router.ProviderSetRouter,
 		controller.ProviderSetController,
