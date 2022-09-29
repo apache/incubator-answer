@@ -62,10 +62,6 @@ func InitConfig() {
 	os.Exit(0)
 }
 
-func InitDB() {
-
-}
-
 func WriterFile(filePath, content string) error {
 	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {

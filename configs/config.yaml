@@ -3,7 +3,7 @@ server:
     addr: 0.0.0.0:80
 data:
   database:
-    connection: root:root@tcp(127.0.0.1:3306)/answer
+    connection: root:root@tcp(db:3306)/answer
   cache:
     file_path: "/tmp/cache/cache.db"
 i18n:
