@@ -1,4 +1,4 @@
-version: "3"
+version: "1.0.0"
 services:
   answer:
     build:
@@ -7,3 +7,5 @@ services:
     volumes:
       - ./data:/data
     restart: on-failure
+    ports:
+      - 9080:80
