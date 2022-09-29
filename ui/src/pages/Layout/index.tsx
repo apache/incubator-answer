@@ -22,7 +22,6 @@ const Layout: FC = () => {
   const { update: interfaceStoreUpdate } = interfaceStore();
   const { data: siteSettings } = useSiteSettings();
   const { data: userStatus } = useCheckUserStatus();
-  const user = Storage.get('userInfo');
   useEffect(() => {
     if (siteSettings) {
       siteStoreUpdate(siteSettings.general);
@@ -39,6 +38,7 @@ const Layout: FC = () => {
   if (!isMounted) {
     isMounted = true;
     const lang = Storage.get('LANG');
+    const user = Storage.get('userInfo');
     if (user) {
       updateUser(user);
     }
@@ -47,9 +47,12 @@ const Layout: FC = () => {
     }
   }
 
-  if (userStatus?.status && userStatus.status !== user.status) {
-    user.status = userStatus?.status;
-    updateUser(user);
+  if (userStatus?.status) {
+    const user = Storage.get('userInfo');
+    if (userStatus.status !== user.status) {
+      user.status = userStatus?.status;
+      updateUser(user);
+    }
   }
 
   return (
