@@ -1877,7 +1877,7 @@ paths:
       tags:
       - api-answer
   /answer/api/v1/answer/list:
-    post:
+    get:
       consumes:
       - application/json
       description: AnswerList <br> <b>order</b> (default or updated)

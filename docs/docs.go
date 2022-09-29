@@ -884,7 +884,7 @@ const docTemplate = `{
             }
         },
         "/answer/api/v1/answer/list": {
-            "post": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
