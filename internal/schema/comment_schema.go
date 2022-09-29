@@ -109,6 +109,8 @@ type GetCommentResp struct {
 	UserDisplayName string `json:"user_display_name"`
 	// user avatar
 	UserAvatar string `json:"user_avatar"`
+	// user status
+	UserStatus string `json:"user_status"`
 
 	// reply user id
 	ReplyUserID string `json:"reply_user_id"`
@@ -118,6 +120,8 @@ type GetCommentResp struct {
 	ReplyUserDisplayName string `json:"reply_user_display_name"`
 	// reply comment id
 	ReplyCommentID string `json:"reply_comment_id"`
+	// reply user status
+	ReplyUserStatus string `json:"reply_user_status"`
 
 	// MemberActions
 	MemberActions []*PermissionMemberAction `json:"member_actions"`

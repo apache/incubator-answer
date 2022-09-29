@@ -358,7 +358,7 @@ func (ts *TagService) GetTagWithPage(ctx context.Context, req *schema.GetTagWith
 			UpdatedAt:     tag.UpdatedAt.Unix(),
 		})
 	}
-	return pager.NewPageModel(page, pageSize, total, resp), nil
+	return pager.NewPageModel(total, resp), nil
 }
 
 // checkTagIsFollow get tag list page

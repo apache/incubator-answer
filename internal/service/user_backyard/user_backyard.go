@@ -108,17 +108,17 @@ func (us *UserBackyardService) GetUserPage(ctx context.Context, req *schema.GetU
 			Avatar:      u.Avatar,
 		}
 		if u.Status == entity.UserStatusDeleted {
-			t.Status = schema.Deleted
+			t.Status = schema.UserDeleted
 			t.DeletedAt = u.DeletedAt.Unix()
 		} else if u.Status == entity.UserStatusSuspended {
-			t.Status = schema.Suspended
+			t.Status = schema.UserSuspended
 			t.SuspendedAt = u.SuspendedAt.Unix()
 		} else if u.MailStatus == entity.EmailStatusToBeVerified {
-			t.Status = schema.Inactive
+			t.Status = schema.UserInactive
 		} else {
-			t.Status = schema.Normal
+			t.Status = schema.UserNormal
 		}
 		resp = append(resp, t)
 	}
-	return pager.NewPageModel(req.Page, req.PageSize, total, resp), nil
+	return pager.NewPageModel(total, resp), nil
 }
