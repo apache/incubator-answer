@@ -2,10 +2,11 @@ import React, { FC, FormEvent, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type { FormDataType } from '@/common/interface';
-import type * as Type from '@/services/types';
 import { getUserInfo, changeEmail } from '@answer/api';
 import { useToast } from '@answer/hooks';
+
+import type { FormDataType } from '@/common/interface';
+import type * as Type from '@/services/types';
 
 const reg = /(?<=.{2}).+(?=@)/gi;
 

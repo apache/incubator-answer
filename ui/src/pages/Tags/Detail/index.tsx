@@ -3,10 +3,10 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import * as Type from '@/services/types';
 import { PageTitle, FollowingTags } from '@answer/components';
 import { useTagInfo, useFollow } from '@answer/api';
 
+import * as Type from '@/services/types';
 import QuestionList from '@/components/Questions';
 import HotQuestions from '@/components/HotQuestions';
 
