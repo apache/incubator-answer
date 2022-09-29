@@ -12,7 +12,6 @@ import (
 	"github.com/segmentfault/answer/internal/base/middleware"
 	"github.com/segmentfault/answer/internal/base/server"
 	"github.com/segmentfault/answer/internal/base/translator"
-	"github.com/segmentfault/answer/internal/cli"
 	"github.com/segmentfault/answer/internal/controller"
 	"github.com/segmentfault/answer/internal/controller_backyard"
 	"github.com/segmentfault/answer/internal/repo"
@@ -173,8 +172,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	uiRouter := router.NewUIRouter()
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)
 	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware)
-	cliCli := cli.NewCli(dataData)
-	application := newApplication(serverConf, ginEngine, cliCli)
+	application := newApplication(serverConf, ginEngine)
 	return application, func() {
 		cleanup2()
 		cleanup()

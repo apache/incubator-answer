@@ -11,7 +11,7 @@ import (
 )
 
 var SuccessMsg = `
-answer initialized successfully
+answer initialized successfully.
 `
 
 var HasBeenInitializedMsg = `
@@ -60,10 +60,6 @@ func InitConfig() {
 	}
 	fmt.Println(SuccessMsg)
 	os.Exit(0)
-}
-
-func InitDB() {
-
 }
 
 func WriterFile(filePath, content string) error {

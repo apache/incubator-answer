@@ -69,12 +69,12 @@ func main() {
 		panic(err)
 	}
 
-	app, cleanup, err := initApplication(
-		c.Debug, c.Server, c.Data.Database, c.Data.Cache, c.I18n, c.Swaggerui, c.ServiceConfig, log.GetLogger())
+	err = cli.InitDB(c.Data.Database)
 	if err != nil {
 		panic(err)
 	}
-	err = cli.CommandCli.InitDB()
+	app, cleanup, err := initApplication(
+		c.Debug, c.Server, c.Data.Database, c.Data.Cache, c.I18n, c.Swaggerui, c.ServiceConfig, log.GetLogger())
 	if err != nil {
 		panic(err)
 	}
@@ -85,7 +85,7 @@ func main() {
 	}
 }
 
-func newApplication(serverConf *conf.Server, server *gin.Engine, cli *cli.Cli) *pacman.Application {
+func newApplication(serverConf *conf.Server, server *gin.Engine) *pacman.Application {
 	return pacman.NewApp(
 		pacman.WithName(Name),
 		pacman.WithVersion(Version),
