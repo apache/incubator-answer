@@ -13,6 +13,7 @@ const (
 	UserTokenCacheTime         = 7 * 24 * time.Hour
 	AdminTokenCacheKey         = "answer:admin:token:"
 	AdminTokenCacheTime        = 7 * 24 * time.Hour
+	AcceptLanguageFlag         = "Accept-Language"
 )
 
 const (

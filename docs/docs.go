@@ -4246,6 +4246,10 @@ const docTemplate = `{
                     "description": "reply user id",
                     "type": "string"
                 },
+                "reply_user_status": {
+                    "description": "reply user status",
+                    "type": "string"
+                },
                 "reply_username": {
                     "description": "reply user username",
                     "type": "string"
@@ -4260,6 +4264,10 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "description": "user id",
+                    "type": "string"
+                },
+                "user_status": {
+                    "description": "user status",
                     "type": "string"
                 },
                 "username": {
@@ -5504,7 +5512,7 @@ const docTemplate = `{
                 },
                 "status": {
                     "description": "status",
-                    "type": "integer"
+                    "type": "string"
                 },
                 "username": {
                     "description": "name",

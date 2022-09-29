@@ -5,25 +5,24 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/segmentfault/answer/internal/entity"
 	"github.com/segmentfault/answer/internal/schema"
 	"github.com/segmentfault/answer/internal/service/search_common"
 	usercommon "github.com/segmentfault/answer/internal/service/user_common"
 )
 
 type AuthorSearch struct {
-	repo     search_common.SearchRepo
-	userRepo usercommon.UserRepo
-	exp      string
-	w        string
-	page     int
-	size     int
+	repo       search_common.SearchRepo
+	userCommon *usercommon.UserCommon
+	exp        string
+	w          string
+	page       int
+	size       int
 }
 
-func NewAuthorSearch(repo search_common.SearchRepo, userRepo usercommon.UserRepo) *AuthorSearch {
+func NewAuthorSearch(repo search_common.SearchRepo, userCommon *usercommon.UserCommon) *AuthorSearch {
 	return &AuthorSearch{
-		repo:     repo,
-		userRepo: userRepo,
+		repo:       repo,
+		userCommon: userCommon,
 	}
 }
 
@@ -37,9 +36,6 @@ func (s *AuthorSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 		p,
 		me,
 		name string
-		user *entity.User
-		has  bool
-		err  error
 	)
 	exp = ""
 	q = dto.Query
@@ -51,8 +47,7 @@ func (s *AuthorSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 	res := re.FindStringSubmatch(q)
 	if len(res) == 2 {
 		name = res[1]
-		user, has, err = s.userRepo.GetByUsername(nil, name)
-
+		user, has, err := s.userCommon.GetUserBasicInfoByUserName(nil, name)
 		if err == nil && has {
 			exp = user.ID
 			trimLen := len(res[0])

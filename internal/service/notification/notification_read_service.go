@@ -97,5 +97,5 @@ func (ns *NotificationReadService) GetNotificationReadWithPage(ctx context.Conte
 	resp := &[]schema.GetNotificationReadResp{}
 	_ = copier.Copy(resp, notificationReads)
 
-	return pager.NewPageModel(page, pageSize, total, resp), nil
+	return pager.NewPageModel(total, resp), nil
 }

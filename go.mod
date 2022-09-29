@@ -19,17 +19,17 @@ require (
 	github.com/jordan-wright/email v4.0.1-0.20210109023952-943e75fe5223+incompatible
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/segmentfault/pacman v1.0.1
-	github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20220926035018-18f894415e5b
-	github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20220926035018-18f894415e5b
-	github.com/segmentfault/pacman/contrib/i18n v0.0.0-20220926035018-18f894415e5b
-	github.com/segmentfault/pacman/contrib/log/zap v0.0.0-20220926035018-18f894415e5b
-	github.com/segmentfault/pacman/contrib/server/http v0.0.0-20220926035018-18f894415e5b
+	github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20220929065758-260b3093a347
+	github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20220929065758-260b3093a347
+	github.com/segmentfault/pacman/contrib/i18n v0.0.0-20220929065758-260b3093a347
+	github.com/segmentfault/pacman/contrib/log/zap v0.0.0-20220929065758-260b3093a347
+	github.com/segmentfault/pacman/contrib/server/http v0.0.0-20220929065758-260b3093a347
 	github.com/stretchr/testify v1.8.0
 	github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.6
 	golang.org/x/crypto v0.0.0-20220926161630-eccd6366d1be
-	golang.org/x/net v0.0.0-20220926192436-02166a98028e
+	golang.org/x/net v0.0.0-20220927171203-f486391704dc
 	xorm.io/builder v0.3.12
 	xorm.io/core v0.7.3
 	xorm.io/xorm v1.3.2
@@ -76,7 +76,7 @@ require (
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.23.0 // indirect
 	golang.org/x/image v0.0.0-20220902085622-e7cb96979f69 // indirect
-	golang.org/x/sys v0.0.0-20220926163933-8cfa568d3c25 // indirect
+	golang.org/x/sys v0.0.0-20220928140112-f11e5e49a4ec // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.1.12 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect

@@ -193,5 +193,5 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 		resp = append(resp, item)
 	}
 
-	return pager.NewPageModel(req.Page, req.PageSize, total, resp), err
+	return pager.NewPageModel(total, resp), err
 }
