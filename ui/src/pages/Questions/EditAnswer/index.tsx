@@ -17,16 +17,8 @@ import type * as Type from '@answer/common/interface';
 import './index.scss';
 
 interface FormDataItem {
-  answer: {
-    value: string;
-    isInvalid: boolean;
-    errorMsg: string;
-  };
-  description: {
-    value: string;
-    isInvalid: boolean;
-    errorMsg: string;
-  };
+  answer: Type.FormValue<string>;
+  description: Type.FormValue<string>;
 }
 const initFormData = {
   answer: {

@@ -9,28 +9,13 @@ import classNames from 'classnames';
 import { Editor, EditorRef, PageTitle } from '@answer/components';
 import { useTagInfo, modifyTag, useQueryRevisions } from '@answer/api';
 import { userInfoStore } from '@answer/stores';
+import type * as Type from '@answer/common/interface';
 
 interface FormDataItem {
-  displayName: {
-    value: string;
-    isInvalid: boolean;
-    errorMsg: string;
-  };
-  slugName: {
-    value: string;
-    isInvalid: boolean;
-    errorMsg: string;
-  };
-  description: {
-    value: string;
-    isInvalid: boolean;
-    errorMsg: string;
-  };
-  editSummary: {
-    value: string;
-    isInvalid: boolean;
-    errorMsg: string;
-  };
+  displayName: Type.FormValue<string>;
+  slugName: Type.FormValue<string>;
+  description: Type.FormValue<string>;
+  editSummary: Type.FormValue<string>;
 }
 const initFormData = {
   displayName: {
