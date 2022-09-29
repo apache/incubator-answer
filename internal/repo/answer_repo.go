@@ -184,7 +184,7 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 		session = session.And("user_id = ?", search.UserID)
 	}
 	if search.Order == entity.Answer_Search_OrderBy_Time {
-		session = session.OrderBy("updated_at desc")
+		session = session.OrderBy("created_at desc")
 	} else if search.Order == entity.Answer_Search_OrderBy_Vote {
 		session = session.OrderBy("vote_count desc")
 	} else {
@@ -194,7 +194,7 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	session = session.And("status = ?", entity.AnswerStatusAvailable)
 
 	session = session.Limit(search.PageSize, offset)
-	count, err = session.OrderBy("updated_at desc").FindAndCount(&rows)
+	count, err = session.FindAndCount(&rows)
 	if err != nil {
 		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
