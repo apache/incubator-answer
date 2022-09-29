@@ -28,6 +28,7 @@ stages:
   image: golang:1.18
   stage: compile-golang
   script:
+    - make generate
     - make build
   artifacts:
     paths:
