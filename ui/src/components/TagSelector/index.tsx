@@ -102,10 +102,7 @@ const TagSelector: FC<IProps> = ({
     }
 
     queryTags(tag).then((res) => {
-      if (!res) {
-        return;
-      }
-      const tagArray: Type.Tag[] = filterTags(res);
+      const tagArray: Type.Tag[] = filterTags(res || []);
       setTags(tagArray);
     });
   }, [tag]);
