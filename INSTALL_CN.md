@@ -37,7 +37,7 @@ vim /var/data/config.yaml
 # 配置好配置文件后可以再次启动镜像即可启动服务
 $ docker start answer
 ```
-## 二进制安装
+## 使用二进制 安装 Answer
 
  1. 解压压缩包。
  2. 使用命令 cd 进入到刚刚创建的目录。
