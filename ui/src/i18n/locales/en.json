@@ -100,8 +100,8 @@
     "image": {
       "text": "Image",
       "add_image": "Add image",
-      "tab_1": "Upload image",
-      "form1": {
+      "tab_image": "Upload image",
+      "form_image": {
         "fields": {
           "file": {
             "label": "Image file",
@@ -117,8 +117,8 @@
           }
         }
       },
-      "tab_2": "Image URL",
-      "form2": {
+      "tab_url": "Image URL",
+      "form_url": {
         "fields": {
           "url": {
             "label": "Image URL",
@@ -208,14 +208,16 @@
         "display_name": {
           "label": "Display name",
           "msg": {
-            "empty": "Display name cannot be empty."
+            "empty": "Display name cannot be empty.",
+            "range": "Display name up to 35 characters"
           }
         },
         "slug_name": {
           "label": "URL slug",
           "description": "Spaces are not allowed, please use '-' instead.",
           "msg": {
-            "empty": "Please enter a name for the tag."
+            "empty": "Please enter a name for the tag.",
+            "range": "URL slug up to 35 characters"
           }
         },
         "description": {
@@ -361,7 +363,8 @@
           "label": "Title",
           "placeholder": "Be specific and imagine you’re asking a question to another person",
           "msg": {
-            "empty": "Title cannot be empty."
+            "empty": "Title cannot be empty.",
+            "range": "Title up to 150 characters"
           }
         },
         "body": {
@@ -454,7 +457,8 @@
     "name": {
       "label": "Name",
       "msg": {
-        "empty": "Name cannot be empty."
+        "empty": "Name cannot be empty.",
+        "range": "Name up to 30 characters"
       }
     },
     "email": {
@@ -512,7 +516,8 @@
       "btn_name": "Update profile",
       "display_name": {
         "label": "Display name",
-        "msg": "Display name cannot be empty."
+        "msg": "Display name cannot be empty.",
+        "msg_range": "Display name up to 30 characters"
       },
       "avatar": {
         "label": "Profile image",

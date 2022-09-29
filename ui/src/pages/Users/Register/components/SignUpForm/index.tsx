@@ -52,6 +52,13 @@ const Index: React.FC<Props> = ({ callback }) => {
         isInvalid: true,
         errorMsg: t('name.msg.empty'),
       };
+    } else if ([...name.value].length > 30) {
+      bol = false;
+      formData.name = {
+        value: name.value,
+        isInvalid: true,
+        errorMsg: t('name.msg.range'),
+      };
     }
 
     if (!e_mail.value) {
@@ -182,7 +189,7 @@ const Index: React.FC<Props> = ({ callback }) => {
 
       <div className="text-center">
         <Trans i18nKey="login.info_login" ns="translation">
-          DAlready have an account? <Link to="/users/login">Log in</Link>
+          Already have an account? <Link to="/users/login">Log in</Link>
         </Trans>
       </div>
     </Col>

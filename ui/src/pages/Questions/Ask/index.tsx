@@ -124,6 +124,13 @@ const Ask = () => {
         isInvalid: true,
         errorMsg: t('form.fields.title.msg.empty'),
       };
+    } else if ([...title.value].length > 150) {
+      bol = false;
+      formData.title = {
+        value: title.value,
+        isInvalid: true,
+        errorMsg: t('form.fields.title.msg.range'),
+      };
     } else {
       formData.title = {
         value: title.value,
