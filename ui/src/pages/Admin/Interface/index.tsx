@@ -73,16 +73,8 @@ const Interface: FC = () => {
 
   const checkValidated = (): boolean => {
     let ret = true;
-    const { logo, theme, language } = formData;
+    const { theme, language } = formData;
     const formCheckData = { ...formData };
-    if (!logo.value) {
-      ret = false;
-      formCheckData.logo = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('logo.msg'),
-      };
-    }
     if (!theme.value) {
       ret = false;
       formCheckData.theme = {
