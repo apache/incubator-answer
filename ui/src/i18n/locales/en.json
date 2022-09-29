@@ -34,8 +34,8 @@
   },
   "suspended": {
     "title": "Your Account has been Suspended",
-    "until_time": "Your account was suspended until {{ time }}",
-    "forever": "This user was suspended forever. ",
+    "until_time": "Your account was suspended until {{ time }}.",
+    "forever": "This user was suspended forever.",
     "end": "You don’t meet a community guideline."
   },
   "editor": {
@@ -123,17 +123,17 @@
           "url": {
             "label": "Image URL",
             "msg": {
-              "empty": "Image URL cannot be empty"
+              "empty": "Image URL cannot be empty."
             }
           },
           "name": {
-            "label": "Url name (optional)"
+            "label": "Description (optional)"
           }
         }
       },
       "btn_cancel": "Cancel",
       "btn_confirm": "Confirm",
-      "uploading": "uploading"
+      "uploading": "Uploading"
     },
     "indent": {
       "text": "Indent"
@@ -183,7 +183,7 @@
       "empty": "Cannot be empty."
     },
     "msg": {
-      "empty": "Please select a reason"
+      "empty": "Please select a reason."
     }
   },
   "report_modal": {
@@ -198,7 +198,7 @@
       "empty": "Cannot be empty."
     },
     "msg": {
-      "empty": "Please select a reason"
+      "empty": "Please select a reason."
     }
   },
   "tag_modal": {
@@ -208,7 +208,7 @@
         "display_name": {
           "label": "Display name",
           "msg": {
-            "empty": "Display name cannot be empty"
+            "empty": "Display name cannot be empty."
           }
         },
         "slug_name": {
@@ -257,8 +257,8 @@
           "label": "Display name"
         },
         "slug_name": {
-          "label": "Url slug",
-          "info": "Spaces are not allowed, please use \"-\" instead."
+          "label": "URL slug",
+          "info": "Spaces are not allowed, please use '-' instead."
         },
         "description": {
           "label": "Description"
@@ -523,7 +523,7 @@
       "website": {
         "label": "Website (optional)",
         "placeholder": "https://example.com",
-        "msg": "website incorrect format"
+        "msg": "Website incorrect format"
       },
       "location": {
         "label": "Location (optional)",
@@ -549,8 +549,8 @@
         "label": "Current Password",
         "msg": {
           "empty": "Current Password cannot be empty.",
-          "length": "The length needs to be between 8 and 32",
-          "different": "The two entered passwords do not match"
+          "length": "The length needs to be between 8 and 32.",
+          "different": "The two entered passwords do not match."
         }
       },
       "new_pass": {
