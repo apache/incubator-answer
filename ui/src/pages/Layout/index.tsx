@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import { SWRConfig } from 'swr';
 
@@ -56,11 +56,9 @@ const Layout: FC = () => {
   }
 
   return (
-    <>
+    <HelmetProvider>
       <Helmet>
-        {siteInfo ? (
-          <meta name="description" content={siteInfo.description} />
-        ) : null}
+        {siteInfo && <meta name="description" content={siteInfo.description} />}
       </Helmet>
       <SWRConfig
         value={{
@@ -74,7 +72,7 @@ const Layout: FC = () => {
         <Toast msg={toastMsg} variant={variant} onClose={closeToast} />
         <Footer />
       </SWRConfig>
-    </>
+    </HelmetProvider>
   );
 };
 
