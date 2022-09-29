@@ -27,10 +27,6 @@ stages:
 "compile the golang project":
   image: golang:1.18
   stage: compile-golang
-  before_script:
-    - export GOPROXY="https://goproxy.cn"
-    - export GOPRIVATE=git.backyard.segmentfault.com
-    - sh ./script/prebuild.sh
   script:
     - make build
   artifacts:
