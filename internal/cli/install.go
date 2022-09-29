@@ -11,7 +11,7 @@ import (
 )
 
 var SuccessMsg = `
-answer initialized successfully
+answer initialized successfully.
 `
 
 var HasBeenInitializedMsg = `
