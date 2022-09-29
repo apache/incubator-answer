@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { marked } from 'marked';
 import classNames from 'classnames';
 
-import { Icon } from '@answer/components';
 import { useTagModal } from '@answer/hooks';
 import { queryTags } from '@answer/api';
 import type * as Type from '@answer/common/interface';
@@ -160,26 +159,23 @@ const TagSelector: FC<IProps> = ({
             <Button
               key={item.slug_name}
               className={classNames(
-                'me-2 mb-2 text-nowrap',
+                'me-2 mb-2 text-nowrap d-flex align-items-center',
                 index === repeatIndex && 'warning',
               )}
               variant="outline-secondary"
               size="sm">
               {item.slug_name}
 
-              <Button
-                className="btn-no-border"
-                variant="link"
-                onClick={() => handleRemove(item)}>
+              <span className="ms-1" onMouseUp={() => handleRemove(item)}>
                 x
-              </Button>
+              </span>
             </Button>
           );
         })}
         {initialValue?.length < 5 || alwaysShowAddBtn ? (
           <Dropdown onSelect={handleSelect}>
             <Dropdown.Toggle variant="outline-secondary" size="sm">
-              <Icon name="plus" />
+              <span className="me-1">+</span>
               {t('add_btn')}
             </Dropdown.Toggle>
             <Dropdown.Menu>
