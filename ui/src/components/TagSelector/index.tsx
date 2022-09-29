@@ -194,7 +194,7 @@ const TagSelector: FC<IProps> = ({
               {item.slug_name}
 
               <span className="ms-1" onMouseUp={() => handleRemove(item)}>
-                x
+                ×
               </span>
             </Button>
           );
