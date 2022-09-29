@@ -4,12 +4,7 @@ LABEL maintainer="mingcheng<mc@sf.com>"
 
 COPY . /answer
 WORKDIR /answer
-
-RUN make install-ui-packages ui
-RUN mv ui/build /tmp
-CMD ls -al /tmp
-RUN du -sh /tmp/build
-
+RUN make install-ui-packages ui && mv ui/build /tmp
 
 FROM golang:1.18 AS golang-builder
 LABEL maintainer="aichy"
@@ -23,15 +18,13 @@ ENV GOPRIVATE git.backyard.segmentfault.com
 # Build
 COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
-COPY --from=node-builder /tmp/build ${BUILD_DIR}/web/html
+COPY --from=node-builder /tmp/build ${BUILD_DIR}/ui/build
 RUN make clean build && \
 	cp answer /usr/bin/answer && \
     mkdir -p /tmp/cache && chmod 777 /tmp/cache && \
     mkdir /data && chmod 777 /data && cp configs/config.yaml /data/config.yaml && \
     mkdir -p /data/upfiles && chmod 777 /data/upfiles && \
     mkdir -p /data/i18n && chmod 777 /data/i18n && cp -r i18n/*.yaml /data/i18n
-
-
 
 FROM debian:bullseye
 ENV TZ "Asia/Shanghai"
