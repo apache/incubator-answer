@@ -22,25 +22,25 @@ const routeConfig: RouteNode[] = [
       },
       {
         path: 'questions/:qid',
-        page: 'pages/QuestionDetail',
+        page: 'pages/Questions/Detail',
       },
       {
         path: 'questions/:qid/:aid',
-        page: 'pages/QuestionDetail',
+        page: 'pages/Questions/Detail',
       },
       {
         path: 'questions/ask',
-        page: 'pages/Ask',
+        page: 'pages/Questions/Ask',
         rules: ['isLoginAndNormal'],
       },
       {
         path: 'posts/:qid/edit',
-        page: 'pages/Ask',
+        page: 'pages/Questions/Ask',
         rules: ['isLoginAndNormal'],
       },
       {
         path: 'posts/:qid/:aid/edit',
-        page: 'pages/EditAnswer',
+        page: 'pages/Questions/EditAnswer',
       },
       {
         path: '/search',
@@ -53,90 +53,90 @@ const routeConfig: RouteNode[] = [
       },
       {
         path: 'tags/:tagName',
-        page: 'pages/TagDetail',
+        page: 'pages/Tags/Detail',
       },
       {
         path: 'tags/:tagName/info',
-        page: 'pages/TagInfo',
+        page: 'pages/Tags/Info',
       },
       {
         path: 'tags/:tagId/edit',
-        page: 'pages/EditTag',
+        page: 'pages/Tags/Edit',
       },
       // users
       {
         path: 'users/:username',
-        page: 'pages/Personal',
+        page: 'pages/Users/Personal',
       },
       {
         path: 'users/:username/:tabName',
-        page: 'pages/Personal',
+        page: 'pages/Users/Personal',
       },
       {
         path: 'users/settings',
-        page: 'pages/Settings',
+        page: 'pages/Users/Settings',
         children: [
           {
             index: true,
-            page: 'pages/Settings/Profile',
+            page: 'pages/Users/Settings/Profile',
           },
           {
             path: 'profile',
-            page: 'pages/Settings/Profile',
+            page: 'pages/Users/Settings/Profile',
           },
           {
             path: 'notify',
-            page: 'pages/Settings/Notification',
+            page: 'pages/Users/Settings/Notification',
           },
           {
             path: 'account',
-            page: 'pages/Settings/Account',
+            page: 'pages/Users/Settings/Account',
           },
           {
             path: 'interface',
-            page: 'pages/Settings/Interface',
+            page: 'pages/Users/Settings/Interface',
           },
         ],
       },
       {
         path: 'users/notifications/:type',
-        page: 'pages/Notifications',
+        page: 'pages/Users/Notifications',
       },
       {
         path: 'users/login',
-        page: 'pages/Login',
+        page: 'pages/Users/Login',
       },
       {
         path: 'users/register',
-        page: 'pages/Register',
+        page: 'pages/Users/Register',
       },
       {
         path: 'users/account-recovery',
-        page: 'pages/AccountForgot',
+        page: 'pages/Users/AccountForgot',
       },
       {
         path: 'users/password-reset',
-        page: 'pages/PasswordReset',
+        page: 'pages/Users/PasswordReset',
       },
       {
         path: 'users/account-activation',
-        page: 'pages/ActiveEmail',
+        page: 'pages/Users/ActiveEmail',
       },
       {
         path: 'users/account-activation/success',
-        page: 'pages/ActivationResult',
+        page: 'pages/Users/ActivationResult',
       },
       {
         path: '/users/account-activation/failed',
-        page: 'pages/ActivationResult',
+        page: 'pages/Users/ActivationResult',
       },
       {
         path: '/users/confirm-new-email',
-        page: 'pages/ConfirmNewEmail',
+        page: 'pages/Users/ConfirmNewEmail',
       },
       {
         path: '/users/account-suspended',
-        page: 'pages/Suspended',
+        page: 'pages/Users/Suspended',
       },
       // for admin
       {
