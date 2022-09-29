@@ -74,6 +74,13 @@ const Index: React.FC = () => {
         isInvalid: true,
         errorMsg: t('display_name.msg'),
       };
+    } else if ([...display_name.value].length > 30) {
+      bol = false;
+      formData.display_name = {
+        value: display_name.value,
+        isInvalid: true,
+        errorMsg: t('display_name.msg_range'),
+      };
     }
 
     const reg = /^(http|https):\/\//g;
