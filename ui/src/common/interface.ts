@@ -80,7 +80,7 @@ export interface RegisterReqParams extends LoginReqParams {
   name: string;
 }
 
-export interface ModifyPassReq {
+export interface ModifyPasswordReq {
   old_pass: string;
   pass: string;
 }
@@ -137,7 +137,7 @@ export interface ImgCodeRes {
   verify: boolean;
 }
 
-export interface PssRetReq extends ImgCodeReq {
+export interface PasswordResetReq extends ImgCodeReq {
   e_mail: string;
 }
 
@@ -145,11 +145,11 @@ export interface CheckImgReq {
   action: 'login' | 'e_mail' | 'find_pass';
 }
 
-export interface NoticeSetReq {
+export interface SetNoticeReq {
   notice_switch: boolean;
 }
 
-export interface QuDetailRes {
+export interface QuestionDetailRes {
   id: string;
   title: string;
   content: string;

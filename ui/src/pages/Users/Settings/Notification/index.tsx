@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type { FormDataType } from '@answer/common/interface';
-import { noticeSet, getUserInfo } from '@answer/api';
+import { setNotice, getUserInfo } from '@answer/api';
 import { useToast } from '@answer/hooks';
 
 const Index = () => {
@@ -34,7 +34,7 @@ const Index = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    noticeSet({
+    setNotice({
       notice_switch: formData.notice_switch.value,
     }).then(() => {
       toast.onShow({

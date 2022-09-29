@@ -2,10 +2,10 @@ import { FC, memo, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { passRetrieve, checkImgCode } from '@answer/api';
+import { resetPassword, checkImgCode } from '@answer/api';
 import type {
   ImgCodeRes,
-  PssRetReq,
+  PasswordResetReq,
   FormDataType,
 } from '@answer/common/interface';
 
@@ -70,7 +70,7 @@ const Index: FC<IProps> = ({ visible = false, callback }) => {
     if (e) {
       e.preventDefault();
     }
-    const params: PssRetReq = {
+    const params: PasswordResetReq = {
       e_mail: formData.e_mail.value,
     };
     if (imgCode.verify) {
@@ -78,7 +78,7 @@ const Index: FC<IProps> = ({ visible = false, callback }) => {
       params.captcha_id = imgCode.captcha_id;
     }
 
-    passRetrieve(params)
+    resetPassword(params)
       .then(() => {
         callback?.(2, formData.e_mail.value);
         setModalState(false);

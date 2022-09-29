@@ -9,7 +9,7 @@ import { scrollTop } from '@answer/utils';
 import { usePageUsers } from '@answer/hooks';
 import type {
   ListResult,
-  QuDetailRes,
+  QuestionDetailRes,
   AnswerItem,
 } from '@answer/common/interface';
 
@@ -30,7 +30,7 @@ const Index = () => {
 
   const page = Number(urlSearch.get('page') || 0);
   const order = urlSearch.get('order') || '';
-  const [question, setQuestion] = useState<QuDetailRes | null>(null);
+  const [question, setQuestion] = useState<QuestionDetailRes | null>(null);
   const [answers, setAnswers] = useState<ListResult<AnswerItem>>({
     count: -1,
     list: [],
