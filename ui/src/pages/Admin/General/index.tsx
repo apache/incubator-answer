@@ -2,12 +2,10 @@ import React, { FC, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type * as Type from '@answer/services/types';
+import type * as Type from '@answer/common/interface';
 import { useToast } from '@answer/hooks';
 import { siteInfoStore } from '@answer/stores';
 import { useGeneralSetting, updateGeneralSetting } from '@answer/api';
-
-import { FormDataType } from '@/common/interface';
 
 import '../index.scss';
 
@@ -19,7 +17,7 @@ const General: FC = () => {
   const updateSiteInfo = siteInfoStore((state) => state.update);
 
   const { data: setting } = useGeneralSetting();
-  const [formData, setFormData] = useState<FormDataType>({
+  const [formData, setFormData] = useState<Type.FormDataType>({
     name: {
       value: '',
       isInvalid: false,
@@ -101,7 +99,7 @@ const General: FC = () => {
     if (!formData[fieldName]) {
       return;
     }
-    const fieldData: FormDataType = {
+    const fieldData: Type.FormDataType = {
       [fieldName]: {
         value: fieldValue,
         isInvalid: false,

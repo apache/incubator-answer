@@ -7,9 +7,9 @@ import en from 'dayjs/locale/en';
 import zh from 'dayjs/locale/zh-cn';
 
 import { languages } from '@answer/api';
-import type { FormDataType } from '@/common/interface';
-import type { LangsType } from '@/services/types';
+import type { LangsType, FormDataType } from '@answer/common/interface';
 import { useToast } from '@answer/hooks';
+
 import Storage from '@/utils/storage';
 
 const Index = () => {

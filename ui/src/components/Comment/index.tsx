@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { unionBy } from 'lodash';
 import { marked } from 'marked';
 
+import * as Types from '@answer/common/interface';
 import {
   useQueryComments,
   addComment,
@@ -16,7 +17,6 @@ import {
 } from '@answer/api';
 import { Modal } from '@answer/components';
 import { usePageUsers, useReportModal } from '@answer/hooks';
-import * as Types from '@answer/services/types';
 import { matchedUsers, parseUserInfo, isLogin } from '@answer/utils';
 
 import { Form, ActionBar, Reply } from './components';

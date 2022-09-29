@@ -15,7 +15,7 @@ import {
   postAnswer,
   useQueryQuestionByTitle,
 } from '@answer/api';
-import type * as Type from '@/services/types';
+import type * as Type from '@answer/common/interface';
 
 import SearchQuestion from './components/SearchQuestion';
 

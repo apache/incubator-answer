@@ -3,12 +3,12 @@ import { Container, Col, Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import type { FormDataType } from '@/common/interface';
 import { passRetrieveSet } from '@answer/api';
 import { userInfoStore } from '@answer/stores';
-import Storage from '@/utils/storage';
 import { getQueryString, isLogin } from '@answer/utils';
+import type { FormDataType } from '@answer/common/interface';
 
+import Storage from '@/utils/storage';
 import { PageTitle } from '@/components';
 
 const Index: React.FC = () => {

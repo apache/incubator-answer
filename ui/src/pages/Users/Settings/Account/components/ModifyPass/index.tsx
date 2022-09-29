@@ -2,9 +2,9 @@ import React, { FC, FormEvent, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type { FormDataType } from '@/common/interface';
 import { modifyPassword } from '@answer/api';
 import { useToast } from '@answer/hooks';
+import type { FormDataType } from '@answer/common/interface';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {

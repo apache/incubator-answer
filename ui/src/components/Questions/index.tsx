@@ -4,7 +4,7 @@ import { NavLink, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useQuestionList } from '@answer/api';
-import type * as Type from '@answer/services/types';
+import type * as Type from '@answer/common/interface';
 import { Icon, Tag, Pagination, FormatTime, Empty } from '@answer/components';
 
 const QuestionOrderKeys: Type.QuestionOrderBy[] = [

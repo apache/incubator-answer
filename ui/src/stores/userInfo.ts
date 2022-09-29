@@ -1,6 +1,6 @@
 import create from 'zustand';
 
-import type { UserInfoRes } from '@answer/services/types';
+import type { UserInfoRes } from '@answer/common/interface';
 import Storage from '@answer/utils/storage';
 
 interface UserInfoStore {

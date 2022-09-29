@@ -3,8 +3,12 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { passRetrieve, checkImgCode } from '@answer/api';
-import type { FormDataType } from '@/common/interface';
-import type { ImgCodeRes, PssRetReq } from '@/services/types';
+import type {
+  ImgCodeRes,
+  PssRetReq,
+  FormDataType,
+} from '@answer/common/interface';
+
 import { PicAuthCodeModal } from '@/components/Modal';
 
 interface IProps {

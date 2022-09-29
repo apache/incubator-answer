@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { register } from '@answer/api';
-import type { FormDataType } from '@/common/interface';
+import type { FormDataType } from '@answer/common/interface';
+
 import userStore from '@/stores/userInfo';
 
 interface Props {

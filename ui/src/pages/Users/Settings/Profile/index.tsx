@@ -5,7 +5,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { marked } from 'marked';
 
 import { modifyUserInfo, uploadAvatar, getUserInfo } from '@answer/api';
-import type { FormDataType } from '@/common/interface';
+import type { FormDataType } from '@answer/common/interface';
 import { UploadImg, Avatar } from '@answer/components';
 import { userInfoStore } from '@answer/stores';
 import { useToast } from '@answer/hooks';
