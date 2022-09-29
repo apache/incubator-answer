@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, FormatTime, Tag } from '@answer/components';
+import { Icon, FormatTime, Tag, BaseUserCard } from '@answer/components';
 
 interface Props {
   visible: boolean;
@@ -31,15 +31,10 @@ const Index: FC<Props> = ({ visible, tabName, data }) => {
             </h6>
             <div className="d-flex align-items-center fs-14 text-secondary mb-2">
               {tabName === 'bookmarks' && (
-                <div className="d-flex">
-                  <a
-                    href={`/users/${item.user_info?.username}`}
-                    className="me-1">
-                    {item.user_info?.display_name}
-                  </a>
-                  <strong>{item.user_info?.rank}</strong>
+                <>
+                  <BaseUserCard data={item.user_info} showAvatar={false} />
                   <span className="split-dot" />
-                </div>
+                </>
               )}
               <FormatTime
                 time={item.create_time}

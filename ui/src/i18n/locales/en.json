@@ -848,7 +848,7 @@
     "interface": {
       "page_title": "Interface",
       "logo": {
-        "label": "Logo",
+        "label": "Logo (optional)",
         "msg": "Site logo cannot be empty.",
         "text": "You can upload your image or <1>reset</1> it to the site title text."
       },

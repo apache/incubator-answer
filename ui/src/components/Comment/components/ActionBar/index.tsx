@@ -17,15 +17,20 @@ const ActionBar = ({
   onReply,
   onVote,
   onAction,
+  userStatus = '',
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'comment' });
 
   return (
     <div className="d-flex justify-content-between fs-14">
-      <div className="d-flex align-items-center">
-        <Link to={`/users/${username}`}>{nickName}</Link>
-        <span className="mx-1 text-secondary">•</span>
-        <FormatTime time={createdAt} className="text-secondary me-3" />
+      <div className="d-flex align-items-center text-secondary">
+        {userStatus !== 'deleted' ? (
+          <Link to={`/users/${username}`}>{nickName}</Link>
+        ) : (
+          <span>{nickName}</span>
+        )}
+        <span className="mx-1">•</span>
+        <FormatTime time={createdAt} className="me-3" />
         <Button
           variant="link"
           size="sm"

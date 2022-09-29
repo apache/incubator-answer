@@ -37,9 +37,13 @@ const Inbox = ({ data, handleReadNotification }) => {
             key={item.id}
             className={classNames('py-3', !item.is_read && 'warning')}>
             <div>
-              <Link to={`/users/${item.user_info.username}`}>
-                {item.user_info.display_name}
-              </Link>{' '}
+              {item.user_info.status !== 'deleted' ? (
+                <Link to={`/users/${item.user_info.username}`}>
+                  {item.user_info.display_name}{' '}
+                </Link>
+              ) : (
+                <span>{item.user_info.display_name} </span>
+              )}
               {item.notification_action}{' '}
               <Link to={url} onClick={() => handleReadNotification(item.id)}>
                 {item.object_info.title}

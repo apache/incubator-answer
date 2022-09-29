@@ -1,6 +1,7 @@
 import { FC, memo } from 'react';
 import { Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { Avatar, Icon } from '@answer/components';
 import type { UserInfoRes } from '@answer/common/interface';
@@ -16,14 +17,26 @@ const Index: FC<Props> = ({ data }) => {
   }
   return (
     <div className="d-flex mb-4">
-      <a href={`/users/${data.username}`}>
+      {data?.status !== 'deleted' ? (
+        <Link to={`/users/${data.username}`} reloadDocument>
+          <Avatar avatar={data.avatar} size="160px" />
+        </Link>
+      ) : (
         <Avatar avatar={data.avatar} size="160px" />
-      </a>
+      )}
+
       <div className="ms-4">
         <div className="d-flex align-items-center mb-2">
-          <a href={`/users/${data.username}`} className="text-body h3 mb-0">
-            {data.display_name}
-          </a>
+          {data?.status !== 'deleted' ? (
+            <Link
+              to={`/users/${data.username}`}
+              className="text-body h3 mb-0"
+              reloadDocument>
+              {data.display_name}
+            </Link>
+          ) : (
+            <span className="text-body h3 mb-0">{data.display_name}</span>
+          )}
           {data?.is_admin && (
             <div className="ms-2">
               <OverlayTrigger
