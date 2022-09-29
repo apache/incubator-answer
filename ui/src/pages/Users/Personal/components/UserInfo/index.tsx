@@ -3,6 +3,7 @@ import { Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { Avatar, Icon } from '@answer/components';
+
 import type { UserInfoRes } from '@/services/types';
 
 interface Props {

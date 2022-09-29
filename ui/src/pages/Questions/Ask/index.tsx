@@ -15,9 +15,10 @@ import {
   postAnswer,
   useQueryQuestionByTitle,
 } from '@answer/api';
-import type * as Type from '@/services/types';
 
 import SearchQuestion from './components/SearchQuestion';
+
+import type * as Type from '@/services/types';
 
 interface FormDataItem {
   title: {

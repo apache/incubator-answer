@@ -4,10 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
 import { getUserInfo } from '@answer/api';
-import type { FormDataType } from '@/common/interface';
 
 import Nav from './components/Nav';
 
+import type { FormDataType } from '@/common/interface';
 import { PageTitle } from '@/components';
 
 const Index: React.FC = () => {

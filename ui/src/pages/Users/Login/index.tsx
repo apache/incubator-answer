@@ -3,13 +3,14 @@ import { Container, Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import type { FormDataType } from '@/common/interface';
 import { login, checkImgCode } from '@answer/api';
-import type { LoginReqParams, ImgCodeRes } from '@/services/types';
 import { PageTitle, Unactivate } from '@answer/components';
-import { PicAuthCodeModal } from '@/components/Modal';
 import { userInfoStore } from '@answer/stores';
 import { isLogin, getQueryString } from '@answer/utils';
+
+import { PicAuthCodeModal } from '@/components/Modal';
+import type { LoginReqParams, ImgCodeRes } from '@/services/types';
+import type { FormDataType } from '@/common/interface';
 import Storage from '@/utils/storage';
 
 const Index: React.FC = () => {

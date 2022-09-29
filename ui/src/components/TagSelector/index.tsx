@@ -166,7 +166,13 @@ const TagSelector: FC<IProps> = ({
               variant="outline-secondary"
               size="sm">
               {item.slug_name}
-              <Icon name="x" onClick={() => handleRemove(item)} />
+
+              <Button
+                className="btn-no-border"
+                variant="link"
+                onClick={() => handleRemove(item)}>
+                x
+              </Button>
             </Button>
           );
         })}
