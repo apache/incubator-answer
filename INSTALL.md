@@ -1,14 +1,14 @@
 # How to build and install
 
-安装 Answer 之前,您需要先安装基本环境。
- - 数据库
-     - [MySQL](http://dev.mysql.com)：版本 >= 5.7
+Before installing Answer, you need to install the base environment first.
+ - database
+     - [MySQL](http://dev.mysql.com) Version >= 5.7
 
-然后，您可以通过以下几种种方式来安装 Answer：
+You can then install Answer in several ways:
 
- - 采用 Docker 部署
- - 二进制安装
- - 源码安装
+ - Deploy with Docker
+ - binary installation
+ - Source installation
 
 ## Docker for Answer
 Visit Docker Hub or GitHub Container registry to see all available images and tags.
@@ -23,64 +23,64 @@ $ docker pull answer/answer
 # Create local directory for volume.
 $ mkdir -p /var/data
 
-# Use `docker run` for the first time.
+# Run the image first
 $ docker run --name=answer -p 9080:80 -v /var/data:/data answer/answer
 
-# 第一次启动后会在/var/data 目录下生成配置文件
+# After the first startup, a configuration file will be generated in the /var/data directory
 # /var/data/config.yaml
-# 需要修改配置文件中的Mysql 数据库地址
+# Need to modify the Mysql database address in the configuration file
 vim /var/data/config.yaml
 
-# 修改数据库连接 connection: [username]:[password]@tcp([host]:[port])/[DbName]
+# Modify database connection
+# connection: [username]:[password]@tcp([host]:[port])/[DbName]
 ...
 
-# Use `docker start` if you have stopped it.
+# After configuring the configuration file, you can start the mirror again to start the service
 $ docker start answer
+
 ```
 
 ## Binary for Answer
-## 二进制安装
+## Install Answer using binary
 
- 1. 解压压缩包。
- 2. 使用命令 cd 进入到刚刚创建的目录。
- 3. 执行命令 ./answer init。
- 4. Answer 会在当前目录生成./data 目录
- 5. 进入data目录修改config.yaml文件
- 6. 将数据库连接地址修改为你的数据库连接地址
+  1. Unzip the compressed package.
+  2. Use the command cd to enter the directory you just created.
+  3. Execute the command ./answer init.
+  4. Answer will generate a ./data directory in the current directory
+  5. Enter the data directory and modify the config.yaml file
+  6. Modify the database connection address to your database connection address
 
      connection: [username]:[password]@tcp([host]:[port])/[DbName]
- 7. 退出data 目录 执行 ./answer run -c ./data/config.yaml
+  7. Exit the data directory and execute ./answer run -c ./data/config.yaml
 
-## config.yaml 说明
+## config.yaml Description
 
 ```
 server:
   http:
-    addr: 0.0.0.0:80 #项目访问端口号
+    addr: 0.0.0.0:80 #Project access port number
 data:
   database:
-    connection: root:root@tcp(127.0.0.1:3306)/answer #mysql数据库连接地址
+    connection: root:root@tcp(127.0.0.1:3306)/answer #MySQL database connection address
   cache:
-    file_path: "/tmp/cache/cache.db" #缓存文件存放路径
+    file_path: "/tmp/cache/cache.db" #Cache file storage path
 i18n:
-  bundle_dir: "/data/i18n" #国际化文件存放目录
+  bundle_dir: "/data/i18n" #Internationalized file storage directory
 swaggerui:
-  show: true #是否显示swaggerapi文档,地址 /swagger/index.html
-  protocol: http #swagger 协议头
-  host: 127.0.0.1 #可被访问的ip地址或域名
-  address: ':80'  #可被访问的端口号
+  show: true #Whether to display the swaggerapi documentation, address /swagger/index.html
+  protocol: http #swagger protocol header
+  host: 127.0.0.1 #An accessible IP address or domain name
+  address: ':80'  #accessible port number
 service_config:
-  secret_key: "answer" #加密key
-  web_host: "http://127.0.0.1" #页面访问使用域名地址
-  upload_path: "./upfiles" #上传目录
+  secret_key: "answer" #encryption key
+  web_host: "http://127.0.0.1" #Page access using domain name address
+  upload_path: "./upfiles" #upload directory
 
 ```
-
-# TODO
-## 前端安装
-
-## 后端安装
-
-## 编译镜像
-
-## 常见问题
+## Compile the image
+If you have modified the source files and want to repackage the image, you can use the following statement to repackage the image
+```
+docker build -t  answer:v1.0.0 .
+```
+## common problem
+ 1. The project cannot be started, answer the main program startup depends on the configuration file config.yaml, the internationalization translation directory/i18n, the upload file storage directory/upfiles, you need to ensure that the configuration file is loaded when the project starts, answer run -c config.yaml and the correct config.yaml The configuration items that specify the i18n and upfiles directories
