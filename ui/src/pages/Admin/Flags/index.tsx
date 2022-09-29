@@ -97,7 +97,9 @@ const Flags: FC = () => {
           <tr>
             <th>{t('flagged')}</th>
             <th style={{ width: '20%' }}>{t('created')}</th>
-            <th style={{ width: '20%' }}>{t('action')}</th>
+            {curFilter !== 'completed' ? (
+              <th style={{ width: '20%' }}>{t('action')}</th>
+            ) : null}
           </tr>
         </thead>
         <tbody className="align-middle">
@@ -140,11 +142,13 @@ const Flags: FC = () => {
                     )}
                   </Stack>
                 </td>
-                <td>
-                  <Button variant="link" onClick={() => handleReview(li)}>
-                    {t('review')}
-                  </Button>
-                </td>
+                {curFilter !== 'completed' ? (
+                  <td>
+                    <Button variant="link" onClick={() => handleReview(li)}>
+                      {t('review')}
+                    </Button>
+                  </td>
+                ) : null}
               </tr>
             );
           })}
