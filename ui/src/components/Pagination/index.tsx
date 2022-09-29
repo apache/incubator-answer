@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC } from 'react';
 import { Pagination } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
@@ -47,6 +47,7 @@ const PageItem = ({ page, currentPage, path }: PageItemProps) => {
       href={path}
       onClick={(e) => {
         e.preventDefault();
+        e.stopPropagation();
         navigate(path);
         window.scrollTo(0, 0);
       }}>
@@ -111,7 +112,7 @@ const Index: FC<Props> = ({
       )}
       {currentPage === 4 && totalPage > 6 && (
         <PageItem
-          key="6"
+          key="page6"
           page={6}
           currentPage={currentPage}
           path={handleParams(6)}
@@ -133,13 +134,13 @@ const Index: FC<Props> = ({
       {currentPage >= 5 && (
         <>
           <PageItem
-            key="prev2"
+            key={realPage - 2}
             page={realPage - 2}
             currentPage={currentPage}
             path={handleParams(realPage - 2)}
           />
           <PageItem
-            key="prev1"
+            key={realPage - 1}
             page={realPage - 1}
             currentPage={currentPage}
             path={handleParams(realPage - 1)}
@@ -194,4 +195,4 @@ const Index: FC<Props> = ({
   );
 };
 
-export default memo(Index);
+export default Index;

@@ -1,7 +1,7 @@
 import { FC, memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { accountActivate } from '@answer/api';
+import { activateAccount } from '@answer/api';
 import { userInfoStore } from '@answer/stores';
 import { getQueryString } from '@answer/utils';
 
@@ -14,10 +14,10 @@ const Index: FC = () => {
     const code = getQueryString('code');
 
     if (code) {
-      accountActivate(encodeURIComponent(code)).then((res) => {
+      activateAccount(encodeURIComponent(code)).then((res) => {
         updateUser(res);
         setTimeout(() => {
-          window.location.href = '/users/account-activation/success';
+          window.location.replace('/users/account-activation/success');
         }, 0);
       });
     }

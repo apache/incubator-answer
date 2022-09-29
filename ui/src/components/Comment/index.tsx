@@ -269,6 +269,7 @@ const Comment = ({ objectId, mode }) => {
                 voteCount={item.vote_count}
                 isVote={item.is_vote}
                 memberActions={item.member_actions}
+                userStatus={item.user_status}
                 onReply={() => {
                   handleReply(item.comment_id);
                 }}

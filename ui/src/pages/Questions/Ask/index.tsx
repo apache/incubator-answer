@@ -20,49 +20,26 @@ import type * as Type from '@answer/common/interface';
 import SearchQuestion from './components/SearchQuestion';
 
 interface FormDataItem {
-  title: {
-    value: string;
-    isInvalid: boolean;
-    errorMsg: string;
-    focus?: boolean;
-  };
-  tags: {
-    value: Type.Tag[];
-    isInvalid: boolean;
-    errorMsg: string;
-    focus?: boolean;
-  };
-  content: {
-    value: string;
-    isInvalid: boolean;
-    errorMsg: string;
-    focus?: boolean;
-  };
-  answer: {
-    value: string;
-    isInvalid: boolean;
-    errorMsg: string;
-    focus?: boolean;
-  };
+  title: Type.FormValue<string>;
+  tags: Type.FormValue<Type.Tag[]>;
+  content: Type.FormValue<string>;
+  answer: Type.FormValue<string>;
 }
 const initFormData = {
   title: {
     value: '',
     isInvalid: false,
     errorMsg: '',
-    focus: false,
   },
   tags: {
     value: [],
     isInvalid: false,
     errorMsg: '',
-    focus: false,
   },
   content: {
     value: '',
     isInvalid: false,
     errorMsg: '',
-    focus: false,
   },
   answer: {
     value: '',

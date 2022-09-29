@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
 import { questionDetail, getAnswers } from '@answer/api';
 import { Pagination, PageTitle } from '@answer/components';
@@ -9,7 +9,7 @@ import { scrollTop } from '@answer/utils';
 import { usePageUsers } from '@answer/hooks';
 import type {
   ListResult,
-  QuDetailRes,
+  QuestionDetailRes,
   AnswerItem,
 } from '@answer/common/interface';
 
@@ -25,12 +25,13 @@ import {
 import './index.scss';
 
 const Index = () => {
+  const navigate = useNavigate();
   const { qid = '', aid = '' } = useParams();
   const [urlSearch] = useSearchParams();
 
   const page = Number(urlSearch.get('page') || 0);
   const order = urlSearch.get('order') || '';
-  const [question, setQuestion] = useState<QuDetailRes | null>(null);
+  const [question, setQuestion] = useState<QuestionDetailRes | null>(null);
   const [answers, setAnswers] = useState<ListResult<AnswerItem>>({
     count: -1,
     list: [],
@@ -75,7 +76,7 @@ const Index = () => {
   const initPage = (type: string) => {
     if (type === 'delete_question') {
       setTimeout(() => {
-        window.history.back();
+        navigate(-1);
       }, 1000);
       return;
     }

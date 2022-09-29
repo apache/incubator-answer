@@ -29,7 +29,7 @@ export const readNotification = (id) => {
   });
 };
 
-export const useQueryNotificationRedDot = () => {
+export const useQueryNotificationStatus = () => {
   const apiUrl = '/answer/api/v1/notification/status';
 
   return useSWR<{ inbox: number; achievement: number }>(
@@ -41,13 +41,13 @@ export const useQueryNotificationRedDot = () => {
   );
 };
 
-export const clearNotificationRedDot = (type) => {
+export const clearNotificationStatus = (type) => {
   return request.instance.put('/answer/api/v1/notification/status', {
     type,
   });
 };
 
-export const clearUnReadNotification = (type) => {
+export const clearUnreadNotification = (type) => {
   return request.instance.put('/answer/api/v1/notification/read/state/all', {
     type,
   });

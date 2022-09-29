@@ -22,7 +22,7 @@ const Form = ({ userName, onSendReply, onCancel, mode }) => {
           <Mentions pageUsers={pageUsers.getUsers()}>
             <TextArea size="sm" value={value} onChange={handleChange} />
           </Mentions>
-          <div className="text-muted fs-14">{t(`tip_${mode}`)}</div>
+          <div className="form-text">{t(`tip_${mode}`)}</div>
         </div>
         <div className="d-flex flex-column">
           <Button
