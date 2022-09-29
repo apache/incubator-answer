@@ -38,6 +38,9 @@ vim /var/data/config.yaml
 $ docker start answer
 ```
 ## 使用二进制 安装 Answer
+可以使用编译完成的各个平台的二进制文件运行 Answer 项目
+### 用法
+从GitHub 最新版本的tag中下载对应平台的二进制文件压缩包
 
  1. 解压压缩包。
  2. 使用命令 cd 进入到刚刚创建的目录。
@@ -49,7 +52,7 @@ $ docker start answer
      connection: [username]:[password]@tcp([host]:[port])/[DbName]
  7. 退出data 目录 执行 ./answer run -c ./data/config.yaml
 
-## config.yaml 说明
+## 配置文件 config.yaml 参数说明
 
 ```
 server:
