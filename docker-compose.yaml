@@ -2,13 +2,19 @@ version: "3.1"
 services:
   answer:
     image: github.com/segmentfault/answer
+    ports:
+      - '9080:80'
+    restart: on-failure
     volumes:
       - data:/data
-    restart: on-failure
-    ports:
-      - 9080:80
+    depends_on:
+      - db
+    links:
+      - db
   db:
     image: mysql:5.7
+    ports:
+      - '13306:3306'
     restart: on-failure
     environment:
       MYSQL_DATABASE: answer
@@ -19,5 +25,5 @@ services:
       - db:/var/lib/mysql
 
 volumes:
-  answer:
+  data:
   db:
