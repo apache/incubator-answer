@@ -11,7 +11,7 @@ func NewHTTPServer(debug bool,
 	staticRouter *router.StaticRouter,
 	answerRouter *router.AnswerAPIRouter,
 	swaggerRouter *router.SwaggerRouter,
-	viewRouter *router.ViewRouter,
+	viewRouter *router.UIRouter,
 	authUserMiddleware *middleware.AuthUserMiddleware) *gin.Engine {
 
 	if debug {
@@ -22,7 +22,7 @@ func NewHTTPServer(debug bool,
 	r := gin.New()
 	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK") })
 
-	viewRouter.RegisterViewRouter(r)
+	viewRouter.Register(r)
 
 	rootGroup := r.Group("")
 	swaggerRouter.Register(rootGroup)
