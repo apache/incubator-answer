@@ -383,6 +383,16 @@ const Ask = () => {
                         value={formData.answer.value}
                         onChange={handleAnswerChange}
                         ref={editorRef2}
+                        className={classNames(
+                          'form-control p-0',
+                          focusType === 'answer' && 'focus',
+                        )}
+                        onFocus={() => {
+                          setForceType('answer');
+                        }}
+                        onBlur={() => {
+                          setForceType('');
+                        }}
                       />
                       <Form.Control
                         value={formData.answer.value}
