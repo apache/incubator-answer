@@ -82,3 +82,4 @@ service_config:
 docker build -t  answer:v1.0.0 .
 ```
 ## 常见问题
+ 1. 项目无法启动,answer主程序启动依赖配置文件config.yaml 、国际化翻译目录 /i18n 、上传文件存放目录/upfiles 需要确保项目启动时加载了配置文件 answer run -c config.yaml 以及在config.yaml 正确的指定i18n 和 upfiles 目录的配置项
