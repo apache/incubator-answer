@@ -1,11 +1,23 @@
 version: "3.1"
 services:
   answer:
-    build:
-      context: .
     image: github.com/segmentfault/answer
     volumes:
-      - ./data:/data
+      - data:/data
     restart: on-failure
     ports:
       - 9080:80
+  db:
+    image: mysql:5.7
+    restart: on-failure
+    environment:
+      MYSQL_DATABASE: answer
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  answer:
+  db:
