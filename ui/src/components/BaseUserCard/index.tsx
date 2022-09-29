@@ -18,7 +18,7 @@ const Index: FC<Props> = ({
 }) => {
   return (
     <div className={`text-secondary ${className}`}>
-      {data.status !== 'deleted' ? (
+      {data?.status !== 'deleted' ? (
         <Link to={`/users/${data?.username}`}>
           {showAvatar && (
             <Avatar avatar={data?.avatar} size={avatarSize} className="me-1" />
