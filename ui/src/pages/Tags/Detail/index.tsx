@@ -58,7 +58,7 @@ const Questions: FC = () => {
       <PageTitle title={pageTitle} />
       <Container className="pt-4 mt-2 mb-5">
         <Row className="justify-content-center">
-          <Col lg={7}>
+          <Col xxl={7} lg={8} sm={12}>
             <div className="tag-box mb-5">
               <h3 className="mb-3">
                 <Link
@@ -90,7 +90,7 @@ const Questions: FC = () => {
             </div>
             <QuestionList source="tag" />
           </Col>
-          <Col lg={3}>
+          <Col xxl={3} lg={4} sm={12}>
             <FollowingTags />
             <HotQuestions />
           </Col>

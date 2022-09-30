@@ -57,10 +57,10 @@ const Personal: FC = () => {
         {userInfo?.info?.status !== 'normal' && userInfo?.info?.status_msg && (
           <Alert data={userInfo?.info.status_msg} />
         )}
-        <Col lg={7}>
+        <Col xxl={7} lg={8} sm={12}>
           <UserInfo data={userInfo?.info} />
         </Col>
-        <Col lg={3} className="d-flex justify-content-end">
+        <Col xxl={3} lg={4} sm={12} className="d-flex justify-content-end">
           {isSelf && (
             <div>
               <Button
@@ -78,7 +78,7 @@ const Personal: FC = () => {
         <Col lg={10}>
           <NavBar tabName={tabName} slug={username} isSelf={isSelf} />
         </Col>
-        <Col lg={7}>
+        <Col xxl={7} lg={8} sm={12}>
           <Overview
             visible={tabName === 'overview'}
             introduction={userInfo?.info?.bio_html}
@@ -111,7 +111,7 @@ const Personal: FC = () => {
             </div>
           )}
         </Col>
-        <Col lg={3}>
+        <Col xxl={3} lg={4} sm={12}>
           <h5 className="mb-3">Stats</h5>
           {userInfo?.info && (
             <>
