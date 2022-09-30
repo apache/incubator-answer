@@ -199,7 +199,9 @@
     },
     "msg": {
       "empty": "Please select a reason."
-    }
+    },
+    "input_placeholder": "Enter the existing question link",
+    "textarea_placeholder": "Let us know specifically what you are concerned about"
   },
   "tag_modal": {
     "title": "Create New Tag",
@@ -590,6 +592,8 @@
     "edit": "edit",
     "Views": "Views",
     "answered": "answered",
+    "closed_in": "Closed in",
+    "show_exist": "Show existing question.",
     "answers": {
       "title": "Answers",
       "score": "Score",
