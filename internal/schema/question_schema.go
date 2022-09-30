@@ -111,6 +111,7 @@ type Operation struct {
 	Operation_Type        string `json:"operation_type"`
 	Operation_Description string `json:"operation_description"`
 	Operation_Msg         string `json:"operation_msg"`
+	Operation_Time        int64  `json:"operation_time"`
 }
 
 type GetCloseTypeResp struct {
