@@ -164,6 +164,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionId string, loginUser
 					operation.Operation_Type = closeinfo.Name
 					operation.Operation_Description = closeinfo.Description
 					operation.Operation_Msg = closemsg.CloseMsg
+					operation.Operation_Time = metainfo.CreatedAt.Unix()
 					showinfo.Operation = operation
 				}
 
