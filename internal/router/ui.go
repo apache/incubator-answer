@@ -3,15 +3,17 @@ package router
 import (
 	"embed"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/ui"
-	"github.com/segmentfault/pacman/log"
 	"io/fs"
 	"net/http"
 	"os"
+
+	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/answer/ui"
+	"github.com/segmentfault/pacman/log"
 )
 
 const UIIndexFilePath = "build/index.html"
+const UIRootFilePath = "build"
 const UIStaticPath = "build/static"
 
 // UIRouter is an interface that provides ui static file routers
@@ -66,14 +68,28 @@ func (a *UIRouter) Register(r *gin.Engine) {
 
 	// specify the not router for default routes and redirect
 	r.NoRoute(func(c *gin.Context) {
-		index, err := ui.Build.ReadFile(UIIndexFilePath)
+		name := c.Request.URL.Path
+		filePath := ""
+		var file []byte
+		var err error
+		switch name {
+		case "/favicon.ico":
+			c.Header("content-type", "image/vnd.microsoft.icon")
+			filePath = UIRootFilePath + name
+		case "/logo192.png":
+			filePath = UIRootFilePath + name
+		case "/logo512.png":
+			filePath = UIRootFilePath + name
+		default:
+			filePath = UIIndexFilePath
+			c.Header("content-type", "text/html;charset=utf-8")
+		}
+		file, err = ui.Build.ReadFile(filePath)
 		if err != nil {
 			log.Error(err)
 			c.Status(http.StatusNotFound)
 			return
 		}
-
-		c.Header("content-type", "text/html;charset=utf-8")
-		c.String(http.StatusOK, string(index))
+		c.String(http.StatusOK, string(file))
 	})
 }
