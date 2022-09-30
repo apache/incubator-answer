@@ -105,7 +105,7 @@ const Image: FC<IEditorContext> = ({ editor }) => {
     editor.replaceRange(text.join('\n'), startPos, endPos);
   };
 
-  const paste = async (event) => {
+  const paste = async (_, event) => {
     const clipboard = event.clipboardData;
 
     const bool = verifyImageSize(clipboard.files);
