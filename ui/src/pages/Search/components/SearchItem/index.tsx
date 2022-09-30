@@ -10,7 +10,6 @@ interface Props {
 }
 const Index: FC<Props> = ({ data }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
-  console.log('t: ', t);
   if (!data?.object_type) {
     return null;
   }

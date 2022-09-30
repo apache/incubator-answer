@@ -27,11 +27,12 @@ import {
   Table,
   UL,
 } from './ToolBars';
-import { createEditorUtils } from './utils';
+import { createEditorUtils, htmlRender } from './utils';
 import Viewer from './Viewer';
 import { CodeMirrorEditor, IEditorContext } from './types';
 import { EditorContext } from './EditorContext';
 import Editor from './Editor';
+
 import './index.scss';
 
 export interface EditorRef {
@@ -157,4 +158,5 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
     </>
   );
 };
+export { htmlRender };
 export default forwardRef(MDEditor);

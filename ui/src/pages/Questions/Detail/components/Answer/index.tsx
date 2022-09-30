@@ -9,6 +9,7 @@ import {
   Icon,
   Comment,
   FormatTime,
+  htmlRender,
 } from '@answer/components';
 import { acceptanceAnswer } from '@answer/api';
 import { scrollTop } from '@answer/utils';
@@ -44,13 +45,17 @@ const Index: FC<Props> = ({
   };
 
   useEffect(() => {
-    if (aid === data.id && answerRef?.current) {
+    if (!answerRef?.current) {
+      return;
+    }
+    if (aid === data.id) {
       setTimeout(() => {
         const element = answerRef.current;
         scrollTop(element);
       }, 100);
     }
-  }, [data.id, answerRef]);
+    htmlRender(answerRef.current.querySelector('.fmt'));
+  }, [data.id, answerRef.current]);
   if (!data?.id) {
     return null;
   }

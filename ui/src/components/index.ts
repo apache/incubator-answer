@@ -1,5 +1,5 @@
 import Avatar from './Avatar';
-import Editor, { EditorRef } from './Editor';
+import Editor, { EditorRef, htmlRender } from './Editor';
 import Header from './Header';
 import Footer from './Footer';
 import Icon from './Icon';
@@ -52,5 +52,6 @@ export {
   Empty,
   BaseUserCard,
   FollowingTags,
+  htmlRender,
 };
 export type { EditorRef };

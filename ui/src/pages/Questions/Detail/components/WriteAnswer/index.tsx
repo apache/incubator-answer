@@ -62,8 +62,9 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const clickBtn = () => {
     if (data?.answered && !showEditor) {
       Modal.confirm({
-        title: t('tips'),
+        title: t('confirm_title'),
         content: t('confirm_info'),
+        confirmText: t('continue'),
         onConfirm: () => {
           setShowEditor(true);
         },
