@@ -21,6 +21,8 @@ type SearchObject struct {
 	UserInfo *UserBasicInfo `json:"user_info"`
 	// tags
 	Tags []TagResp `json:"tags"`
+	// Status
+	StatusStr string `json:"status"`
 }
 
 type TagResp struct {
