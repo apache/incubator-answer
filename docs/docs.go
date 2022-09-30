@@ -1380,7 +1380,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "GetRedDot",
+                "description": "get notification list",
                 "consumes": [
                     "application/json"
                 ],
@@ -1390,7 +1390,7 @@ const docTemplate = `{
                 "tags": [
                     "Notification"
                 ],
-                "summary": "GetRedDot",
+                "summary": "get notification list",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1412,7 +1412,8 @@ const docTemplate = `{
                         "type": "string",
                         "description": "type",
                         "name": "type",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -3256,7 +3257,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserUpdateInfo",
+                "description": "UserUpdateInfo update user info",
                 "consumes": [
                     "application/json"
                 ],
@@ -3266,7 +3267,7 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "UserUpdateInfo",
+                "summary": "UserUpdateInfo update user info",
                 "parameters": [
                     {
                         "type": "string",
@@ -4922,7 +4923,7 @@ const docTemplate = `{
                 "title": {
                     "description": "question title",
                     "type": "string",
-                    "maxLength": 64,
+                    "maxLength": 150,
                     "minLength": 6
                 }
             }
@@ -4995,7 +4996,7 @@ const docTemplate = `{
                 "title": {
                     "description": "question title",
                     "type": "string",
-                    "maxLength": 64,
+                    "maxLength": 150,
                     "minLength": 6
                 }
             }
@@ -5250,7 +5251,7 @@ const docTemplate = `{
                 "display_name": {
                     "description": "display_name",
                     "type": "string",
-                    "maxLength": 50
+                    "maxLength": 35
                 },
                 "original_text": {
                     "description": "original text",
@@ -5263,7 +5264,7 @@ const docTemplate = `{
                 "slug_name": {
                     "description": "slug_name",
                     "type": "string",
-                    "maxLength": 50
+                    "maxLength": 35
                 }
             }
         },
@@ -5345,32 +5346,39 @@ const docTemplate = `{
         },
         "schema.UpdateInfoRequest": {
             "type": "object",
+            "required": [
+                "display_name"
+            ],
             "properties": {
                 "avatar": {
                     "description": "avatar",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "bio": {
-                    "type": "string"
+                    "description": "bio",
+                    "type": "string",
+                    "maxLength": 4096
                 },
                 "bio_html": {
-                    "type": "string"
+                    "description": "bio",
+                    "type": "string",
+                    "maxLength": 4096
                 },
                 "display_name": {
                     "description": "display_name",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 30
                 },
                 "location": {
                     "description": "location",
-                    "type": "string"
-                },
-                "username": {
-                    "description": "name",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 100
                 },
                 "website": {
                     "description": "website",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 }
             }
         },
@@ -5407,7 +5415,7 @@ const docTemplate = `{
                 "display_name": {
                     "description": "display_name",
                     "type": "string",
-                    "maxLength": 50
+                    "maxLength": 35
                 },
                 "edit_summary": {
                     "description": "edit summary",
@@ -5424,7 +5432,7 @@ const docTemplate = `{
                 "slug_name": {
                     "description": "slug_name",
                     "type": "string",
-                    "maxLength": 50
+                    "maxLength": 35
                 },
                 "tag_id": {
                     "description": "tag_id",

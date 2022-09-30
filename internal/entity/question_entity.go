@@ -16,6 +16,12 @@ var CmsQuestionSearchStatus = map[string]int{
 	"deleted":   QuestionStatusDeleted,
 }
 
+var CmsQuestionSearchStatusIntToString = map[int]string{
+	QuestionStatusAvailable: "available",
+	QuestionStatusclosed:    "closed",
+	QuestionStatusDeleted:   "deleted",
+}
+
 type QuestionTag struct {
 	Question `xorm:"extends"`
 	TagRel   `xorm:"extends"`

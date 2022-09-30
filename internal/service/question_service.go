@@ -273,6 +273,10 @@ func (qs *QuestionService) SearchUserList(ctx context.Context, userName, order s
 	for _, item := range questionlist {
 		info := &schema.UserQuestionInfo{}
 		_ = copier.Copy(info, item)
+		status, ok := entity.CmsQuestionSearchStatusIntToString[item.Status]
+		if ok {
+			info.Status = status
+		}
 		userlist = append(userlist, info)
 	}
 	return userlist, count, nil
@@ -446,6 +450,10 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 		item.AnswerCount = question.AnswerCount
 		item.CollectionCount = question.CollectionCount
 		item.FollowCount = question.FollowCount
+		status, ok := entity.CmsQuestionSearchStatusIntToString[question.Status]
+		if ok {
+			item.Status = status
+		}
 		if question.AcceptedAnswerID != "0" {
 			item.AcceptedAnswer = true
 		}
