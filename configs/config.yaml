@@ -16,4 +16,4 @@ swaggerui:
 service_config:
   secret_key: "answer"
   web_host: "http://127.0.0.1"
-  upload_path: "./upfiles"
+  upload_path: "/data/upfiles"
