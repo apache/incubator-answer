@@ -1,4 +1,4 @@
-import { memo, FC, useState, useEffect } from 'react';
+import { memo, FC, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Row, Col, Button } from 'react-bootstrap';
@@ -10,6 +10,7 @@ import {
   UserCard,
   Comment,
   FormatTime,
+  htmlRender,
 } from '@answer/components';
 import { formatCount } from '@answer/utils';
 import { following } from '@answer/api';
@@ -25,6 +26,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
     keyPrefix: 'question_detail',
   });
   const [followed, setFollowed] = useState(data?.is_followed);
+  const ref = useRef<HTMLDivElement>(null);
 
   const handleFollow = (e) => {
     e.preventDefault();
@@ -41,6 +43,14 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
       setFollowed(data?.is_followed);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    htmlRender(ref.current);
+  }, [ref.current]);
 
   if (!data?.id) {
     return null;
@@ -94,6 +104,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
         })}
       </div>
       <article
+        ref={ref}
         dangerouslySetInnerHTML={{ __html: data?.html }}
         className="fmt text-break text-wrap"
       />
