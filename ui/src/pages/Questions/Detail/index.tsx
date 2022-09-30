@@ -109,7 +109,7 @@ const Index = () => {
       <PageTitle title={question?.title} />
       <Container className="pt-4 mt-2 mb-5">
         <Row className="justify-content-center">
-          <Col lg={7}>
+          <Col xxl={7} lg={8} sm={12}>
             {question?.operation?.operation_type && (
               <Alert data={question.operation} />
             )}
@@ -156,7 +156,7 @@ const Index = () => {
               />
             )}
           </Col>
-          <Col lg={3}>
+          <Col xxl={3} lg={4} sm={12}>
             <RelatedQuestions id={question?.id || ''} />
           </Col>
         </Row>

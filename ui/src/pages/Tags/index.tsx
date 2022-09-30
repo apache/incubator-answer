@@ -53,9 +53,9 @@ const Tags = () => {
       <PageTitle title={t('tags', { keyPrefix: 'page_title' })} />
       <Container className="py-3 my-3">
         <Row className="mb-4 d-flex justify-content-center">
-          <Col lg={10}>
+          <Col xxl={10} sm={12}>
             <h3 className="mb-4">{t('title')}</h3>
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center flex-wrap">
               <Form>
                 <Form.Group controlId="formBasicEmail">
                   <Form.Control
@@ -94,10 +94,16 @@ const Tags = () => {
             </div>
           </Col>
 
-          <Col className="mt-4" lg={10}>
+          <Col className="mt-4" xxl={10} sm={12}>
             <Row>
               {tags?.list?.map((tag) => (
-                <Col key={tag.slug_name} lg={3} md={4} className="mb-4">
+                <Col
+                  key={tag.slug_name}
+                  xs={12}
+                  lg={3}
+                  md={4}
+                  sm={6}
+                  className="mb-4">
                   <Card className="h-100">
                     <Card.Body className="d-flex flex-column align-items-start">
                       <Tag className="mb-3" href={`/tags/${tag.slug_name}`}>

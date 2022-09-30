@@ -26,10 +26,10 @@ const Questions: FC = () => {
       <PageTitle title={pageTitle} suffix={slogan} />
       <Container className="pt-4 mt-2 mb-5">
         <Row className="justify-content-center">
-          <Col lg={7}>
+          <Col xxl={7} lg={8} sm={12}>
             <QuestionList source="questions" />
           </Col>
-          <Col lg={3}>
+          <Col xxl={3} lg={4} sm={12}>
             <FollowingTags />
             <HotQuestions />
           </Col>
