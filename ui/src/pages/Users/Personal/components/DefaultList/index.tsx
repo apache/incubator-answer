@@ -27,6 +27,9 @@ const Index: FC<Props> = ({ visible, tabName, data }) => {
                   tabName === 'questions' ? item.question_id : item.id
                 }`}>
                 {item.title}
+                {tabName === 'questions' && item.status === 'closed'
+                  ? ` [${t('closed', { keyPrefix: 'question' })}]`
+                  : null}
               </a>
             </h6>
             <div className="d-flex align-items-center fs-14 text-secondary mb-2">

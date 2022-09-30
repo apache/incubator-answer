@@ -269,12 +269,12 @@ const Ask = () => {
       <PageTitle title={pageTitle} />
       <Container className="pt-4 mt-2 mb-5">
         <Row className="justify-content-center">
-          <Col sm={12} md={10}>
+          <Col xxl={10} md={12}>
             <h3 className="mb-4">{isEdit ? t('edit_title') : t('title')}</h3>
           </Col>
         </Row>
         <Row className="justify-content-center">
-          <Col sm={12} md={7} className="mb-4 mb-md-0">
+          <Col xxl={7} lg={8} sm={12} className="mb-4 mb-md-0">
             <Form noValidate onSubmit={handleSubmit}>
               {isEdit && (
                 <Form.Group controlId="revision" className="mb-3">
@@ -421,7 +421,7 @@ const Ask = () => {
               )}
             </Form>
           </Col>
-          <Col sm={12} md={3}>
+          <Col xxl={3} lg={4} sm={12}>
             {focusType === 'title' && (
               <Card className="mb-4">
                 <Card.Header>{t('how_to_ask.title')}</Card.Header>

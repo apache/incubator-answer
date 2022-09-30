@@ -123,12 +123,12 @@ const Ask = () => {
       <PageTitle title={t('edit_answer', { keyPrefix: 'page_title' })} />
       <Container className="pt-4 mt-2 mb-5 edit-answer-wrap">
         <Row className="justify-content-center">
-          <Col sm={12} md={10}>
+          <Col xxl={10} md={12}>
             <h3 className="mb-4">{t('title')}</h3>
           </Col>
         </Row>
         <Row className="justify-content-center">
-          <Col sm={12} md={7} className="mb-4 mb-md-0">
+          <Col xxl={7} lg={8} sm={12} className="mb-4 mb-md-0">
             <a href={`/questions/${qid}`} target="_blank" rel="noreferrer">
               <h5 className="mb-3">{data?.question.title}</h5>
             </a>
@@ -216,7 +216,7 @@ const Ask = () => {
               </div>
             </Form>
           </Col>
-          <Col sm={12} md={3}>
+          <Col xxl={3} lg={4} sm={12}>
             <Card className="mb-4">
               <Card.Header>{t('how_to_ask.title')}</Card.Header>
               <Card.Body>

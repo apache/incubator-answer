@@ -1,5 +1,10 @@
-.fmt img {
-  max-width: 100%;
+.fmt {
+  img {
+    max-width: 100%;
+  }
+  p {
+    word-break: break-all;
+  }
 }
 
 .answer-item {

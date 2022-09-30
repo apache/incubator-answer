@@ -69,7 +69,7 @@ const Notifications = () => {
       <PageTitle title={t('notifications', { keyPrefix: 'page_title' })} />
       <Container className="pt-4 mt-2 mb-5">
         <Row className="justify-content-center">
-          <Col xs={12} lg={7}>
+          <Col xxl={7} lg={8} sm={12}>
             <h3 className="mb-4">{t('title')}</h3>
             <div className="d-flex justify-content-between mb-3">
               <ButtonGroup size="sm">
@@ -120,7 +120,7 @@ const Notifications = () => {
               </div>
             )}
           </Col>
-          <Col xs={12} lg={3} />
+          <Col xxl={3} lg={4} sm={12} />
         </Row>
       </Container>
     </>

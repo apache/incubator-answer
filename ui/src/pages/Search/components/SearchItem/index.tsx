@@ -1,5 +1,6 @@
 import { memo, FC } from 'react';
 import { ListGroupItem, Badge } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 import { Icon, Tag, FormatTime, BaseUserCard } from '@answer/components';
 import type { SearchResItem } from '@answer/common/interface';
@@ -8,6 +9,8 @@ interface Props {
   data: SearchResItem;
 }
 const Index: FC<Props> = ({ data }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'question' });
+  console.log('t: ', t);
   if (!data?.object_type) {
     return null;
   }
@@ -24,6 +27,9 @@ const Index: FC<Props> = ({ data }) => {
           className="h5 mb-0 text-body text-break"
           href={`/questions/${data.object.id}`}>
           {data.object.title}
+          {data.object.status === 'closed'
+            ? ` [${t('closed', { keyPrefix: 'question' })}]`
+            : null}
         </a>
       </div>
       <div className="d-flex flex-wrap align-items-center fs-14 text-secondary mb-2">
@@ -51,10 +57,6 @@ const Index: FC<Props> = ({ data }) => {
             )}
             <span>{data.object?.answer_count}</span>
           </div>
-          {/* <div className="d-flex align-items-center">
-            <Icon name="eye-fill fs-6 me-1" />
-            <span> 0</span>
-          </div> */}
         </div>
       </div>
 
