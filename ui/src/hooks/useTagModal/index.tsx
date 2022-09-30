@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom/client';
 const div = document.createElement('div');
 const root = ReactDOM.createRoot(div);
 
+const MAX_LENGTH = 35;
 interface IProps {
   title?: string;
   onConfirm?: (formData: any) => void;
@@ -44,13 +45,41 @@ const useTagModal = (props: IProps = {}) => {
 
   const checkValidated = (): boolean => {
     let bol = true;
-    const { slugName } = formData;
+    const { displayName, slugName } = formData;
+    if (!displayName.value) {
+      bol = false;
+      formData.displayName = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('form.fields.display_name.msg.empty'),
+      };
+    } else if (displayName.value.length > MAX_LENGTH) {
+      bol = false;
+      formData.displayName = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('form.fields.display_name.msg.range'),
+      };
+    } else {
+      formData.displayName = {
+        value: displayName.value,
+        isInvalid: false,
+        errorMsg: '',
+      };
+    }
     if (!slugName.value) {
       bol = false;
       formData.slugName = {
         value: '',
         isInvalid: true,
-        errorMsg: t('form.fields.slugName.msg.empty'),
+        errorMsg: t('form.fields.slug_name.msg.empty'),
+      };
+    } else if (slugName.value.length > MAX_LENGTH) {
+      bol = false;
+      formData.slugName = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('form.fields.slug_name.msg.range'),
       };
     } else {
       formData.slugName = {

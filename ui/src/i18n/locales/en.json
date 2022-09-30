@@ -208,14 +208,16 @@
         "display_name": {
           "label": "Display name",
           "msg": {
-            "empty": "Display name cannot be empty."
+            "empty": "Display name cannot be empty.",
+            "range": "Display name up to 35 characters"
           }
         },
         "slug_name": {
           "label": "URL slug",
           "description": "Spaces are not allowed, please use '-' instead.",
           "msg": {
-            "empty": "Please enter a name for the tag."
+            "empty": "Please enter a name for the tag.",
+            "range": "URL slug up to 35 characters"
           }
         },
         "description": {
