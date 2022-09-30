@@ -1,4 +1,4 @@
-![logo](docs/img/logo.png)
+![logo](docs/img/answer-logo-flat.svg)
 
 # Answer - Simple Q&A Community
 
@@ -10,7 +10,7 @@
 This is a minimalist open source Q&A community. Users can post questions and others can answer them.
 ![abstract](docs/img/abstract.png)
 
-## Why?
+## Why Answer?
 - Help companies build knowledge and Q&A communities better and faster.
 
 ## Features
@@ -20,9 +20,9 @@ This is a minimalist open source Q&A community. Users can post questions and oth
 ## Quick start
 ### Running with docker-compose
 ```bash
-mkdir answer && cd answer
-wget https://github.com/segmentfault/answer/releases/latest/download/docker-compose.yaml
-docker-compose up
+$ mkdir answer && cd answer
+$ wget https://github.com/segmentfault/answer/releases/latest/download/docker-compose.yaml
+$ docker-compose up
 ```
 
 For more information you can see [INSTALL.md](./INSTALL.md)

@@ -1,4 +1,4 @@
-![logo](docs/img/logo.png)
+![logo](docs/img/answer-logo-flat.svg)
 
 # Answer - 极简问答社区
 
