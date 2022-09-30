@@ -139,3 +139,32 @@ a {
 .object-fit-contain {
   object-fit: contain;
 }
+.fmt {
+  width: 100%;
+  img {
+    max-width: 100%;
+  }
+  p {
+    word-break: break-all;
+    > code {
+      background-color: #e9ecef;
+      color: #212529;
+      padding: 2px 4px;
+      border-radius: 0.25rem;
+    }
+  }
+  pre {
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    padding: 1rem;
+  }
+  blockquote {
+    border-left: 0.25rem solid #ced4da;
+    padding: 1rem;
+    color: #6c757d;
+    background-color: #e9ecef;
+    > p:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
