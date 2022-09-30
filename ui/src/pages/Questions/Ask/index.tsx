@@ -63,7 +63,6 @@ const Ask = () => {
   const { qid } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation('translation', { keyPrefix: 'ask' });
-  const { t: t2 } = useTranslation('translation', { keyPrefix: 'dates' });
 
   const isEdit = qid !== undefined;
   const { data: similarQuestions = { list: [] } } = useQueryQuestionByTitle(
@@ -282,7 +281,7 @@ const Ask = () => {
                   <Form.Select onChange={handleSelectedRevision}>
                     {revisions.map(({ reason, create_at }, index) => {
                       const date = dayjs(create_at * 1000).format(
-                        t2('long_date_with_time'),
+                        t('long_date_with_time', { keyPrefix: 'dates' }),
                       );
                       return (
                         <option key={`${create_at}`} value={index}>
@@ -302,12 +301,6 @@ const Ask = () => {
                   onChange={handleTitleChange}
                   placeholder={t('form.fields.title.placeholder')}
                   autoFocus
-                  onFocus={() => {
-                    setForceType('title');
-                  }}
-                  onBlur={() => {
-                    setForceType('');
-                  }}
                 />
 
                 <Form.Control.Feedback type="invalid">
@@ -351,12 +344,6 @@ const Ask = () => {
                 <TagSelector
                   value={formData.tags.value}
                   onChange={handleTagsChange}
-                  onFocus={() => {
-                    setForceType('tags');
-                  }}
-                  onBlur={() => {
-                    setForceType('');
-                  }}
                 />
                 <Form.Control.Feedback type="invalid">
                   {formData.tags.errorMsg}
@@ -422,38 +409,17 @@ const Ask = () => {
             </Form>
           </Col>
           <Col xxl={3} lg={4} sm={12}>
-            {focusType === 'title' && (
-              <Card className="mb-4">
-                <Card.Header>{t('how_to_ask.title')}</Card.Header>
-                <Card.Body>
-                  <Card.Text>{t('how_to_ask.description')}</Card.Text>
-                </Card.Body>
-              </Card>
-            )}
-
-            {focusType === 'content' && (
-              <Card className="mb-4">
-                <Card.Header>{t('how_to_format.title')}</Card.Header>
-                <Card.Body>
-                  <Card.Text>{t('how_to_format.description')}</Card.Text>
-                </Card.Body>
-              </Card>
-            )}
-            {focusType === 'tags' && (
-              <Card>
-                <Card.Header>{t('how_to_tag.title')}</Card.Header>
-                <Card.Body>
-                  <Card.Text>{t('how_to_tag.description')}</Card.Text>
-                  <ul className="mb-0">
-                    {Array.from(
-                      t('how_to_tag.tips', { returnObjects: true }) as string[],
-                    ).map((item) => {
-                      return <li key={item}>{item}</li>;
-                    })}
-                  </ul>
-                </Card.Body>
-              </Card>
-            )}
+            <Card className="mb-4">
+              <Card.Header>
+                {t('title', { keyPrefix: 'how_to_format' })}
+              </Card.Header>
+              <Card.Body
+                className="fmt"
+                dangerouslySetInnerHTML={{
+                  __html: t('description', { keyPrefix: 'how_to_format' }),
+                }}
+              />
+            </Card>
           </Col>
         </Row>
       </Container>
