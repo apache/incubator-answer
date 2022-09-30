@@ -66,14 +66,6 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
         </Link>
       </h1>
       <div className="d-flex align-items-center fs-14 mb-3 text-secondary">
-        <Button
-          variant="link"
-          size="sm"
-          className="p-0 me-3 btn-no-border"
-          onClick={(e) => handleFollow(e)}>
-          {followed ? 'Following' : 'Follow'}
-        </Button>
-
         <FormatTime
           time={data.create_time}
           preFix={t('Asked')}
@@ -86,10 +78,17 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
           className="me-3"
         />
         {data?.view_count > 0 && (
-          <div>
+          <div className="me-3">
             {t('Views')} {formatCount(data.view_count)}
           </div>
         )}
+        <Button
+          variant="link"
+          size="sm"
+          className="p-0 btn-no-border"
+          onClick={(e) => handleFollow(e)}>
+          {followed ? 'Following' : 'Follow'}
+        </Button>
       </div>
       <div className="mb-3">
         {data?.tags?.map((item: any) => {
