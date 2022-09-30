@@ -301,6 +301,7 @@ export interface SearchResItem {
     answer_count: number;
     accepted: boolean;
     tags: TagBase[];
+    status?: string;
   };
 }
 export interface SearchRes extends ListResult<SearchResItem> {
