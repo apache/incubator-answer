@@ -61,13 +61,11 @@ func (cs *CollectionService) CollectionSwitch(ctx context.Context, dto *schema.C
 			return nil, err
 		}
 		if !has {
-
-			defaultGroup, err := cs.collectionGroupRepo.AddCollectionDefaultGroup(ctx, dto.UserID)
+			dbdefaultGroup, err := cs.collectionGroupRepo.AddCollectionDefaultGroup(ctx, dto.UserID)
 			if err != nil {
 				return nil, err
 			}
-			dto.GroupID = defaultGroup.ID
-
+			dto.GroupID = dbdefaultGroup.ID
 		} else {
 			dto.GroupID = defaultGroup.ID
 		}
