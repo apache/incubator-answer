@@ -50,6 +50,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 		"`vote_count`",
 		"`answer_count`",
 		"0 as `accepted`",
+		"`question`.`status` as `status`",
 	).From("`question`")
 	ub = builder.Select(
 		"`answer`.`id` as `id`",
@@ -61,6 +62,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 		"`answer`.`vote_count` as `vote_count`",
 		"0 as `answer_count`",
 		"`adopted` as `accepted`",
+		"`answer`.`status` as `status`",
 	).From("`answer`").
 		LeftJoin("`question`", "`question`.id = `answer`.question_id")
 
@@ -127,6 +129,7 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 		"`vote_count`",
 		"`answer_count`",
 		"0 as `accepted`",
+		"`status`",
 	).From("question")
 
 	for i, word := range words {
@@ -176,6 +179,7 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 		"`answer`.`vote_count` as `vote_count`",
 		"0 as `answer_count`",
 		"`adopted` as `accepted`",
+		"`answer`.`status` as `status`",
 	).From("`answer`").
 		LeftJoin("`question`", "`question`.id = `answer`.question_id")
 
@@ -213,8 +217,9 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) (resp []schema.SearchResp, err error) {
 	for _, r := range res {
 		var (
-			objectKey string
-			uInfo     *schema.UserBasicInfo
+			objectKey,
+			status string
+			uInfo *schema.UserBasicInfo
 
 			tags       []schema.TagResp
 			tagsEntity []entity.Tag
@@ -252,6 +257,22 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 			return
 		}
 		_ = copier.Copy(&tags, tagsEntity)
+		switch objectKey {
+		case "question":
+			for k, v := range entity.CmsQuestionSearchStatus {
+				if v == converter.StringToInt(string(r["status"])) {
+					status = k
+					break
+				}
+			}
+		case "answer":
+			for k, v := range entity.CmsAnswerSearchStatus {
+				if v == converter.StringToInt(string(r["status"])) {
+					status = k
+					break
+				}
+			}
+		}
 
 		object = schema.SearchObject{
 			ID:              string(r["id"]),
@@ -263,6 +284,7 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 			VoteCount:       converter.StringToInt(string(r["vote_count"])),
 			Accepted:        string(r["accepted"]) == "2",
 			AnswerCount:     converter.StringToInt(string(r["answer_count"])),
+			StatusStr:       status,
 		}
 		resp = append(resp, schema.SearchResp{
 			ObjectType: objectKey,
