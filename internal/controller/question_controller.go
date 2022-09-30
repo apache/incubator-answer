@@ -85,7 +85,7 @@ func (qc *QuestionController) GetQuestion(c *gin.Context) {
 	id := c.Query("id")
 	ctx := context.Background()
 	userID := middleware.GetLoginUserIDFromContext(c)
-	info, err := qc.questionService.GetQuestion(ctx, id, userID)
+	info, err := qc.questionService.GetQuestion(ctx, id, userID, true)
 	if err != nil {
 		handler.HandleResponse(c, err, nil)
 		return
