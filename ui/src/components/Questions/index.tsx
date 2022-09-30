@@ -144,6 +144,7 @@ const QuestionList: FC<Props> = ({ source }) => {
               <h5 className="text-wrap text-break">
                 <NavLink to={`/questions/${li.id}`} className="text-body">
                   {li.title}
+                  {li.status === 2 ? ` [${t('closed')}]` : ''}
                 </NavLink>
               </h5>
               <div className="d-flex align-items-center fs-14 text-secondary">

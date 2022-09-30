@@ -689,6 +689,7 @@
     "modified": "modified",
     "answered": "answered",
     "asked": "asked",
+    "closed": "closed",
     "follow_a_tag": "Follow a tag"
   },
   "personal": {

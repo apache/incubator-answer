@@ -27,8 +27,8 @@ corepack prepare pnpm@latest --activate
 clone the repo locally and run following command in your terminal:
 
 ```shell
-$ git clone `answer repo` answer
-$ cd answer
+$ git clone git@github.com:answerdev/answer.git answer
+$ cd answer/ui
 $ pnpm install
 $ pnpm run start
 ```
