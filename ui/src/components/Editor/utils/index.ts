@@ -1,6 +1,6 @@
 import type { Editor, Position } from 'codemirror';
 import type CodeMirror from 'codemirror';
-import 'highlight.js/styles/github.css';
+// import 'highlight.js/styles/github.css';
 import 'katex/dist/katex.min.css';
 
 export function createEditorUtils(
@@ -82,8 +82,11 @@ export function createEditorUtils(
 export function htmlRender(el: HTMLElement | null) {
   if (!el) return;
   import('mermaid').then(({ default: mermaid }) => {
-    el.querySelectorAll('.language-mermaid').forEach((pre, index) => {
-      mermaid.render(`theGraph${index}`, pre.textContent, function (svgCode) {
+    mermaid.initialize({ startOnLoad: false });
+
+    el.querySelectorAll('.language-mermaid').forEach((pre) => {
+      const flag = Date.now();
+      mermaid.render(`theGraph${flag}`, pre.textContent, function (svgCode) {
         const p = document.createElement('p');
         p.className = 'text-center';
         p.innerHTML = svgCode;
@@ -111,9 +114,9 @@ export function htmlRender(el: HTMLElement | null) {
       });
     },
   );
-  import('highlight.js').then(({ default: highlight }) => {
-    el.querySelectorAll('pre code').forEach((code) => {
-      highlight.highlightElement(code as HTMLElement);
-    });
-  });
+  // import('highlight.js').then(({ default: highlight }) => {
+  //   el.querySelectorAll('pre code').forEach((code) => {
+  //     highlight.highlightElement(code as HTMLElement);
+  //   });
+  // });
 }

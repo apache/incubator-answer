@@ -1,4 +1,8 @@
 {
+  "how_to_format": {
+    "title": "How to Format",
+    "description": "<ul><li><p>to make links</p><pre><code>&lt;https: //url.com&gt;<br/><br/>[Title](https: //url.com)</code></pre></li><li><p>put returns between paragraphs</p></li><li><p><em>italic</em> or **<strong>bold</strong>**</p></li><li><p>indent code by 4 spaces</p></li><li><p>quote by placing &gt; at start of line</p></li><li><p>backtick escapes <code>`like _so_`</code></p></li><li><p>create code fences with backticks `</p><pre><code>``` <br/>code here<br/>```</code></pre></li></ul>"
+  },
   "pagination": {
     "prev": "Prev",
     "next": "Next"
@@ -272,11 +276,7 @@
       }
     },
     "btn_save_edits": "Save edits",
-    "btn_cancel": "Cancel",
-    "how_to_format": {
-      "title": "How to Format",
-      "description": "This is some text within a card body."
-    }
+    "btn_cancel": "Cancel"
   },
   "dates": {
     "long_date": "MMM D",
@@ -318,23 +318,7 @@
       }
     },
     "btn_save_edits": "Save edits",
-    "btn_cancel": "Cancel",
-    "how_to_ask": {
-      "title": "How to Ask",
-      "description": "Not sure what to ask? Recurring questions, onboarding procedures, local setups, and FAQs all make for useful questions."
-    },
-    "how_to_format": {
-      "title": "How to Format",
-      "description": "This is some text within a card body."
-    },
-    "how_to_tag": {
-      "title": "How to Tag",
-      "description": "A tag helps ensure that your question will get attention from the right people. Here are tagging tips:",
-      "tips": [
-        "If you’re not sure what tags to use, check out popular tags.",
-        "Tag things in more than one way so people can find them more easily. Add tags for product lines, projects, teams, and the specific technologies or languages used."
-      ]
-    }
+    "btn_cancel": "Cancel"
   },
   "tags": {
     "title": "Tags",
@@ -350,7 +334,7 @@
     "more": "More"
   },
   "ask": {
-    "title": "Add question",
+    "title": "Add Question",
     "edit_title": "Edit Question",
     "default_reason": "Edit question",
     "similar_questions": "Similar questions",
@@ -390,23 +374,7 @@
     "btn_post_question": "Post your question",
     "btn_save_edits": "Save edits",
     "answer_question": "Answer your own question",
-    "post_question&answer": "Post your question and answer",
-    "how_to_ask": {
-      "title": "How to Ask",
-      "description": "Not sure what to ask? Recurring questions, onboarding procedures, local setups, and FAQs all make for useful questions."
-    },
-    "how_to_format": {
-      "title": "How to Format",
-      "description": "This is some text within a card body."
-    },
-    "how_to_tag": {
-      "title": "How to Tag",
-      "description": "A tag helps ensure that your question will get attention from the right people. Here are tagging tips:",
-      "tips": [
-        "If you’re not sure what tags to use, check out popular tags.",
-        "Tag things in more than one way so people can find them more easily. Add tags for product lines, projects, teams, and the specific technologies or languages used."
-      ]
-    }
+    "post_question&answer": "Post your question and answer"
   },
   "tag_selector": {
     "add_btn": "Add tag",
