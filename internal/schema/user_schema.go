@@ -3,7 +3,6 @@ package schema
 import (
 	"encoding/json"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/answer/internal/base/validator"
 	"github.com/segmentfault/answer/internal/entity"
@@ -133,7 +132,6 @@ func (r *GetOtherUserInfoByUsernameResp) GetFromUserEntity(userInfo *entity.User
 	if ok {
 		r.Status = statusShow
 	}
-	spew.Dump(userInfo)
 	if userInfo.MailStatus == entity.EmailStatusToBeVerified {
 		statusMsgShow, ok := UserStatusShowMsg[11]
 		if ok {
@@ -145,8 +143,6 @@ func (r *GetOtherUserInfoByUsernameResp) GetFromUserEntity(userInfo *entity.User
 			r.StatusMsg = statusMsgShow
 		}
 	}
-
-	spew.Dump(r)
 
 }
 
