@@ -59,13 +59,21 @@ const Index: React.FC = () => {
   return (
     <>
       <PageTitle title={t('settings', { keyPrefix: 'page_title' })} />
-      <Container style={{ paddingTop: '1.5rem', paddingBottom: '6rem' }}>
-        <h3 className="mb-4">{t('page_title', { keyPrefix: 'settings' })}</h3>
+      <Container className="mt-4 mb-5 pb-5">
+        <Row className="justify-content-center">
+          <Col xxl={10} md={12}>
+            <h3 className="mb-4">
+              {t('page_title', { keyPrefix: 'settings' })}
+            </h3>
+          </Col>
+        </Row>
+
         <Row>
-          <Col md={2} className="mb-3">
+          <Col xxl={1} />
+          <Col md={3} lg={2} className="mb-3">
             <Nav />
           </Col>
-          <Col md={5}>
+          <Col md={9} lg={6}>
             <Outlet />
           </Col>
         </Row>
