@@ -187,6 +187,7 @@ const useReportModal = (callback?: () => void) => {
                           }
                           value={content.value}
                           isInvalid={content.isInvalid}
+                          placeholder={item.placeholder}
                           onChange={(e) =>
                             setContent({
                               value: e.target.value,
