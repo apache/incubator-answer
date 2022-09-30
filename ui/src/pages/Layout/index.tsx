@@ -1,7 +1,9 @@
 import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+
+import { SWRConfig } from 'swr';
 
 import {
   userInfoStore,
@@ -10,8 +12,8 @@ import {
   toastStore,
 } from '@answer/stores';
 import { Header, AdminHeader, Footer, Toast } from '@answer/components';
+import { useSiteSettings, useCheckUserStatus } from '@answer/api';
 
-import { useSiteSettings } from '@/services/api';
 import Storage from '@/utils/storage';
 
 let isMounted = false;
@@ -19,6 +21,7 @@ const Layout: FC = () => {
   const { siteInfo, update: siteStoreUpdate } = siteInfoStore();
   const { update: interfaceStoreUpdate } = interfaceStore();
   const { data: siteSettings } = useSiteSettings();
+  const { data: userStatus } = useCheckUserStatus();
   useEffect(() => {
     if (siteSettings) {
       siteStoreUpdate(siteSettings.general);
@@ -34,8 +37,8 @@ const Layout: FC = () => {
   };
   if (!isMounted) {
     isMounted = true;
-    const user = Storage.get('userInfo');
     const lang = Storage.get('LANG');
+    const user = Storage.get('userInfo');
     if (user) {
       updateUser(user);
     }
@@ -44,21 +47,32 @@ const Layout: FC = () => {
     }
   }
 
+  if (userStatus?.status) {
+    const user = Storage.get('userInfo');
+    if (userStatus.status !== user.status) {
+      user.status = userStatus?.status;
+      updateUser(user);
+    }
+  }
+
   return (
-    <>
+    <HelmetProvider>
       <Helmet>
-        {siteInfo ? (
-          <meta name="description" content={siteInfo.description} />
-        ) : null}
+        {siteInfo && <meta name="description" content={siteInfo.description} />}
       </Helmet>
-      <Header />
-      <AdminHeader />
-      <div className="position-relative page-wrap">
-        <Outlet />
-      </div>
-      <Toast msg={toastMsg} variant={variant} onClose={closeToast} />
-      <Footer />
-    </>
+      <SWRConfig
+        value={{
+          revalidateOnFocus: false,
+        }}>
+        <Header />
+        <AdminHeader />
+        <div className="position-relative page-wrap">
+          <Outlet />
+        </div>
+        <Toast msg={toastMsg} variant={variant} onClose={closeToast} />
+        <Footer />
+      </SWRConfig>
+    </HelmetProvider>
   );
 };
 

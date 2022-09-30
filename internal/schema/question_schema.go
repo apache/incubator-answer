@@ -22,7 +22,7 @@ type CloseQuestionMeta struct {
 
 type QuestionAdd struct {
 	// question title
-	Title string `validate:"required,gte=6,lte=64" json:"title"`
+	Title string `validate:"required,gte=6,lte=150" json:"title"`
 	// content
 	Content string `validate:"required,gte=6,lte=65535" json:"content"`
 	// html
@@ -37,7 +37,7 @@ type QuestionUpdate struct {
 	// question id
 	ID string `validate:"required" json:"id"`
 	// question title
-	Title string `validate:"required,gte=6,lte=64" json:"title"`
+	Title string `validate:"required,gte=6,lte=150" json:"title"`
 	// content
 	Content string `validate:"required,gte=6,lte=65535" json:"content"`
 	// html
@@ -166,7 +166,7 @@ type CmsQuestionSearch struct {
 	Page      int    `json:"page" form:"page"`           //Query number of pages
 	PageSize  int    `json:"page_size" form:"page_size"` //Search page size
 	Status    int    `json:"-" form:"-"`
-	StatusStr string `json:"status" form:"status"` //Status 1 Available 2 closed 10 Deleted
+	StatusStr string `json:"status" form:"status"` //Status 1 Available 2 closed 10 UserDeleted
 }
 
 type AdminSetQuestionStatusRequest struct {

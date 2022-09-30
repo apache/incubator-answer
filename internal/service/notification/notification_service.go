@@ -5,9 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/segmentfault/answer/internal/base/constant"
 	"github.com/segmentfault/answer/internal/base/data"
+	"github.com/segmentfault/answer/internal/base/pager"
+	"github.com/segmentfault/answer/internal/base/translator"
 	"github.com/segmentfault/answer/internal/schema"
 	notficationcommon "github.com/segmentfault/answer/internal/service/notification_common"
+	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -91,30 +95,33 @@ func (ns *NotificationService) ClearIDUnRead(ctx context.Context, userID string,
 	return nil
 }
 
-func (ns *NotificationService) GetList(ctx context.Context, search *schema.NotificationSearch) ([]*schema.NotificationContent, int64, error) {
-	list := make([]*schema.NotificationContent, 0)
+func (ns *NotificationService) GetList(ctx context.Context, search *schema.NotificationSearch) (
+	pageModel *pager.PageModel, err error) {
+	resp := make([]*schema.NotificationContent, 0)
 	searchType, ok := schema.NotificationType[search.TypeStr]
 	if !ok {
-		return list, 0, nil
+		return pager.NewPageModel(0, resp), nil
 	}
 	search.Type = searchType
-	dblist, count, err := ns.notificationRepo.SearchList(ctx, search)
+	notifications, count, err := ns.notificationRepo.SearchList(ctx, search)
 	if err != nil {
-		return list, count, err
+		return nil, err
 	}
-	for _, dbitem := range dblist {
+	for _, notificationInfo := range notifications {
 		item := &schema.NotificationContent{}
-		err := json.Unmarshal([]byte(dbitem.Content), item)
+		err := json.Unmarshal([]byte(notificationInfo.Content), item)
 		if err != nil {
 			log.Error("NotificationContent Unmarshal Error", err.Error())
 			continue
 		}
-		item.ID = dbitem.ID
-		item.UpdateTime = dbitem.UpdatedAt.Unix()
-		if dbitem.IsRead == schema.NotificationRead {
+		lang, _ := ctx.Value(constant.AcceptLanguageFlag).(i18n.Language)
+		item.NotificationAction = translator.GlobalTrans.Tr(lang, item.NotificationAction)
+		item.ID = notificationInfo.ID
+		item.UpdateTime = notificationInfo.UpdatedAt.Unix()
+		if notificationInfo.IsRead == schema.NotificationRead {
 			item.IsRead = true
 		}
-		list = append(list, item)
+		resp = append(resp, item)
 	}
-	return list, count, nil
+	return pager.NewPageModel(count, resp), nil
 }

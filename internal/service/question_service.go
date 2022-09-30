@@ -265,7 +265,7 @@ func (qs *QuestionService) SearchUserList(ctx context.Context, userName, order s
 	search.Order = order
 	search.Page = page
 	search.PageSize = pageSize
-	search.UserID = userinfo.UserId
+	search.UserID = userinfo.ID
 	questionlist, count, err := qs.SearchList(ctx, search, loginUserID)
 	if err != nil {
 		return userlist, 0, err
@@ -289,7 +289,7 @@ func (qs *QuestionService) SearchUserAnswerList(ctx context.Context, userName, o
 		return userAnswerlist, 0, nil
 	}
 	answersearch := &entity.AnswerSearch{}
-	answersearch.UserID = userinfo.UserId
+	answersearch.UserID = userinfo.ID
 	answersearch.PageSize = pageSize
 	answersearch.Page = page
 	if order == "newest" {
@@ -337,7 +337,7 @@ func (qs *QuestionService) SearchUserCollectionList(ctx context.Context, page, p
 		return list, 0, nil
 	}
 	collectionSearch := &entity.CollectionSearch{}
-	collectionSearch.UserID = userinfo.UserId
+	collectionSearch.UserID = userinfo.ID
 	collectionSearch.Page = page
 	collectionSearch.PageSize = pageSize
 	collectionlist, count, err := qs.collectionCommon.SearchList(ctx, collectionSearch)
@@ -384,13 +384,13 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 	search.Order = "score"
 	search.Page = 0
 	search.PageSize = 5
-	search.UserID = userinfo.UserId
+	search.UserID = userinfo.ID
 	questionlist, _, err := qs.SearchList(ctx, search, loginUserID)
 	if err != nil {
 		return userQuestionlist, userAnswerlist, err
 	}
 	answersearch := &entity.AnswerSearch{}
-	answersearch.UserID = userinfo.UserId
+	answersearch.UserID = userinfo.ID
 	answersearch.PageSize = 5
 	answersearch.Order = entity.Answer_Search_OrderBy_Vote
 	questionIDs := make([]string, 0)
@@ -494,7 +494,7 @@ func (qs *QuestionService) SearchList(ctx context.Context, req *schema.QuestionS
 		if !exist {
 			return list, 0, err
 		}
-		req.UserID = userinfo.UserId
+		req.UserID = userinfo.ID
 	}
 	questionList, count, err := qs.questionRepo.SearchList(ctx, req)
 	if err != nil {

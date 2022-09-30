@@ -3,14 +3,14 @@ import { ButtonGroup, Button, Form, Table, Badge } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useQueryUsers } from '@answer/services/question-admin.api';
+import { useQueryUsers } from '@answer/api';
 import {
   Pagination,
   FormatTime,
   BaseUserCard,
   Empty,
 } from '@answer/components';
-import * as Type from '@answer/services/types';
+import * as Type from '@answer/common/interface';
 import { useChangeModal } from '@answer/hooks';
 
 import '../index.scss';

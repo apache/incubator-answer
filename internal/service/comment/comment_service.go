@@ -32,7 +32,7 @@ type CommentRepo interface {
 type CommentService struct {
 	commentRepo       CommentRepo
 	commentCommonRepo comment_common.CommentCommonRepo
-	userRepo          usercommon.UserRepo
+	userCommon        *usercommon.UserCommon
 	voteCommon        activity_common.VoteRepo
 	objectInfoService *object_info.ObjService
 }
@@ -61,13 +61,13 @@ func (c *CommentQuery) GetOrderBy() string {
 func NewCommentService(
 	commentRepo CommentRepo,
 	commentCommonRepo comment_common.CommentCommonRepo,
-	userRepo usercommon.UserRepo,
+	userCommon *usercommon.UserCommon,
 	objectInfoService *object_info.ObjService,
 	voteCommon activity_common.VoteRepo) *CommentService {
 	return &CommentService{
 		commentRepo:       commentRepo,
 		commentCommonRepo: commentCommonRepo,
-		userRepo:          userRepo,
+		userCommon:        userCommon,
 		voteCommon:        voteCommon,
 		objectInfoService: objectInfoService,
 	}
@@ -124,19 +124,20 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 
 	// get reply user info
 	if len(resp.ReplyUserID) > 0 {
-		replyUser, exist, err := cs.userRepo.GetByUserID(ctx, resp.ReplyUserID)
+		replyUser, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, resp.ReplyUserID)
 		if err != nil {
 			return nil, err
 		}
 		if exist {
 			resp.ReplyUsername = replyUser.Username
 			resp.ReplyUserDisplayName = replyUser.DisplayName
+			resp.ReplyUserStatus = replyUser.Status
 		}
 		cs.notificationCommentReply(ctx, replyUser.ID, objInfo.QuestionID, req.UserID)
 	}
 
 	// get user info
-	userInfo, exist, err := cs.userRepo.GetByUserID(ctx, resp.UserID)
+	userInfo, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, resp.UserID)
 	if err != nil {
 		return nil, err
 	}
@@ -144,6 +145,7 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 		resp.Username = userInfo.Username
 		resp.UserDisplayName = userInfo.DisplayName
 		resp.UserAvatar = userInfo.Avatar
+		resp.UserStatus = userInfo.Status
 	}
 	return resp, nil
 }
@@ -191,7 +193,7 @@ func (cs *CommentService) GetComment(ctx context.Context, req *schema.GetComment
 
 	// get comment user info
 	if len(resp.UserID) > 0 {
-		commentUser, exist, err := cs.userRepo.GetByUserID(ctx, resp.UserID)
+		commentUser, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, resp.UserID)
 		if err != nil {
 			return nil, err
 		}
@@ -199,18 +201,20 @@ func (cs *CommentService) GetComment(ctx context.Context, req *schema.GetComment
 			resp.Username = commentUser.Username
 			resp.UserDisplayName = commentUser.DisplayName
 			resp.UserAvatar = commentUser.Avatar
+			resp.UserStatus = commentUser.Status
 		}
 	}
 
 	// get reply user info
 	if len(resp.ReplyUserID) > 0 {
-		replyUser, exist, err := cs.userRepo.GetByUserID(ctx, resp.ReplyUserID)
+		replyUser, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, resp.ReplyUserID)
 		if err != nil {
 			return nil, err
 		}
 		if exist {
 			resp.ReplyUsername = replyUser.Username
 			resp.ReplyUserDisplayName = replyUser.DisplayName
+			resp.ReplyUserStatus = replyUser.Status
 		}
 	}
 
@@ -249,7 +253,7 @@ func (cs *CommentService) GetCommentWithPage(ctx context.Context, req *schema.Ge
 
 		// get comment user info
 		if len(commentResp.UserID) > 0 {
-			commentUser, exist, err := cs.userRepo.GetByUserID(ctx, commentResp.UserID)
+			commentUser, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, commentResp.UserID)
 			if err != nil {
 				return nil, err
 			}
@@ -257,18 +261,20 @@ func (cs *CommentService) GetCommentWithPage(ctx context.Context, req *schema.Ge
 				commentResp.Username = commentUser.Username
 				commentResp.UserDisplayName = commentUser.DisplayName
 				commentResp.UserAvatar = commentUser.Avatar
+				commentResp.UserStatus = commentUser.Status
 			}
 		}
 
 		// get reply user info
 		if len(commentResp.ReplyUserID) > 0 {
-			replyUser, exist, err := cs.userRepo.GetByUserID(ctx, commentResp.ReplyUserID)
+			replyUser, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, commentResp.ReplyUserID)
 			if err != nil {
 				return nil, err
 			}
 			if exist {
 				commentResp.ReplyUsername = replyUser.Username
 				commentResp.ReplyUserDisplayName = replyUser.DisplayName
+				commentResp.ReplyUserStatus = replyUser.Status
 			}
 		}
 
@@ -278,7 +284,7 @@ func (cs *CommentService) GetCommentWithPage(ctx context.Context, req *schema.Ge
 		commentResp.MemberActions = permission.GetCommentPermission(req.UserID, commentResp.UserID)
 		resp = append(resp, commentResp)
 	}
-	return pager.NewPageModel(req.Page, req.PageSize, total, resp), nil
+	return pager.NewPageModel(total, resp), nil
 }
 
 func (cs *CommentService) checkCommentWhetherOwner(ctx context.Context, userID, commentID string) error {
@@ -305,7 +311,7 @@ func (cs *CommentService) checkIsVote(ctx context.Context, userID, commentID str
 func (cs *CommentService) GetCommentPersonalWithPage(ctx context.Context, req *schema.GetCommentPersonalWithPageReq) (
 	pageModel *pager.PageModel, err error) {
 	if len(req.Username) > 0 {
-		userInfo, exist, err := cs.userRepo.GetByUsername(ctx, req.Username)
+		userInfo, exist, err := cs.userCommon.GetUserBasicInfoByUserName(ctx, req.Username)
 		if err != nil {
 			return nil, err
 		}
@@ -348,7 +354,7 @@ func (cs *CommentService) GetCommentPersonalWithPage(ctx context.Context, req *s
 		}
 		resp = append(resp, commentResp)
 	}
-	return pager.NewPageModel(req.Page, req.PageSize, total, resp), nil
+	return pager.NewPageModel(total, resp), nil
 }
 
 func (cs *CommentService) notificationQuestionComment(ctx context.Context, questionUserID, commentID, commentUserID string) {
@@ -389,7 +395,7 @@ func (cs *CommentService) notificationCommentReply(ctx context.Context, replyUse
 
 func (cs *CommentService) notificationMention(ctx context.Context, mentionUsernameList []string, commentID, commentUserID string) {
 	for _, username := range mentionUsernameList {
-		userInfo, exist, err := cs.userRepo.GetByUsername(ctx, username)
+		userInfo, exist, err := cs.userCommon.GetUserBasicInfoByUserName(ctx, username)
 		if err != nil {
 			log.Error(err)
 			continue

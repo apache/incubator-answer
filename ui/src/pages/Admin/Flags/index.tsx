@@ -10,8 +10,8 @@ import {
   Pagination,
 } from '@answer/components';
 import { useReportModal } from '@answer/hooks';
-import * as Type from '@answer/services/types';
-import { useFlagSearch } from '@answer/services/flag-admin.api';
+import * as Type from '@answer/common/interface';
+import { useFlagSearch } from '@answer/api';
 
 import '../index.scss';
 
@@ -23,14 +23,14 @@ const Flags: FC = () => {
   const [urlSearchParams, setUrlSearchParams] = useSearchParams();
   const curFilter = urlSearchParams.get('status') || flagFilterKeys[0];
   const curType = urlSearchParams.get('type') || flagTypeKeys[0];
-  const pageSize = 20;
+  const PAGE_SIZE = 20;
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const {
     data: listData,
     isLoading,
     mutate: refreshList,
   } = useFlagSearch({
-    page_size: pageSize,
+    page_size: PAGE_SIZE,
     page: curPage,
     status: curFilter as Type.FlagStatus,
     object_type: curType as Type.FlagType,
@@ -97,7 +97,9 @@ const Flags: FC = () => {
           <tr>
             <th>{t('flagged')}</th>
             <th style={{ width: '20%' }}>{t('created')}</th>
-            <th style={{ width: '20%' }}>{t('action')}</th>
+            {curFilter !== 'completed' ? (
+              <th style={{ width: '20%' }}>{t('action')}</th>
+            ) : null}
           </tr>
         </thead>
         <tbody className="align-middle">
@@ -140,11 +142,13 @@ const Flags: FC = () => {
                     )}
                   </Stack>
                 </td>
-                <td>
-                  <Button variant="link" onClick={() => handleReview(li)}>
-                    {t('review')}
-                  </Button>
-                </td>
+                {curFilter !== 'completed' ? (
+                  <td>
+                    <Button variant="link" onClick={() => handleReview(li)}>
+                      {t('review')}
+                    </Button>
+                  </td>
+                ) : null}
               </tr>
             );
           })}
@@ -155,7 +159,7 @@ const Flags: FC = () => {
         <Pagination
           currentPage={curPage}
           totalSize={count}
-          pageSize={pageSize}
+          pageSize={PAGE_SIZE}
         />
       </div>
     </>

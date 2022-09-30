@@ -3,7 +3,7 @@ import { Button, Form, Modal, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { Modal as AnswerModal } from '@answer/components';
-import { uploadImage } from '@answer/services/api';
+import { uploadImage } from '@answer/api';
 import ToolItem from '../toolItem';
 import { IEditorContext } from '../types';
 
@@ -232,10 +232,12 @@ const Image: FC<IEditorContext> = ({ editor }) => {
         </Modal.Header>
         <Modal.Body>
           <Tabs onSelect={handleSelect}>
-            <Tab eventKey="localImage" title={t('image.tab_1')}>
+            <Tab eventKey="localImage" title={t('image.tab_image')}>
               <Form className="mt-3" onSubmit={handleClick}>
                 <Form.Group controlId="editor.imgLink" className="mb-3">
-                  <Form.Label>{t('image.form1.fields.file.label')}</Form.Label>
+                  <Form.Label>
+                    {t('image.form_image.fields.file.label')}
+                  </Form.Label>
                   <Form.Control
                     type="file"
                     onChange={onUpload}
@@ -243,13 +245,13 @@ const Image: FC<IEditorContext> = ({ editor }) => {
                   />
 
                   <Form.Control.Feedback type="invalid">
-                    {t('image.form1.fields.file.msg.empty')}
+                    {t('image.form_image.fields.file.msg.empty')}
                   </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group controlId="editor.imgDescription" className="mb-3">
                   <Form.Label>
-                    {t('image.form1.fields.description.label')}
+                    {t('image.form_image.fields.description.label')}
                   </Form.Label>
                   <Form.Control
                     type="text"
@@ -262,10 +264,12 @@ const Image: FC<IEditorContext> = ({ editor }) => {
                 </Form.Group>
               </Form>
             </Tab>
-            <Tab eventKey="remoteImage" title={t('image.tab_2')}>
+            <Tab eventKey="remoteImage" title={t('image.tab_url')}>
               <Form className="mt-3" onSubmit={handleClick}>
                 <Form.Group controlId="editor.imgUrl" className="mb-3">
-                  <Form.Label>{t('image.form2.fields.url.label')}</Form.Label>
+                  <Form.Label>
+                    {t('image.form_url.fields.url.label')}
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     value={link.value}
@@ -275,12 +279,14 @@ const Image: FC<IEditorContext> = ({ editor }) => {
                     isInvalid={currentTab === 'remoteImage' && link.isInvalid}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {t('image.form2.fields.url.msg.empty')}
+                    {t('image.form_url.fields.url.msg.empty')}
                   </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group controlId="editor.imgName" className="mb-3">
-                  <Form.Label>{t('image.form2.fields.name.label')}</Form.Label>
+                  <Form.Label>
+                    {t('image.form_url.fields.name.label')}
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     value={imageName.value}

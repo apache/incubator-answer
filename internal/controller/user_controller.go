@@ -328,15 +328,15 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
-// UserUpdateInfo godoc
-// @Summary UserUpdateInfo
-// @Description UserUpdateInfo
+// UserUpdateInfo update user info
+// @Summary UserUpdateInfo update user info
+// @Description UserUpdateInfo update user info
 // @Tags User
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @Param Authorization header string true "access-token"
-// @Param data body schema.UpdateInfoRequest  true "UpdateInfoRequest"
+// @Param data body schema.UpdateInfoRequest true "UpdateInfoRequest"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/api/v1/user/info [put]
 func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {

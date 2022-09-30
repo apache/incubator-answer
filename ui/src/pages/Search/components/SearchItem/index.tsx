@@ -1,9 +1,8 @@
 import { memo, FC } from 'react';
 import { ListGroupItem, Badge } from 'react-bootstrap';
 
-import { Icon, Tag, FormatTime } from '@answer/components';
-import type { SearchResItem } from '@answer/services/types';
-import { formatCount } from '@answer/utils';
+import { Icon, Tag, FormatTime, BaseUserCard } from '@answer/components';
+import type { SearchResItem } from '@answer/common/interface';
 
 interface Props {
   data: SearchResItem;
@@ -28,14 +27,8 @@ const Index: FC<Props> = ({ data }) => {
         </a>
       </div>
       <div className="d-flex flex-wrap align-items-center fs-14 text-secondary mb-2">
-        <a href={`/users/${data.object?.user_info?.username}`}>
-          {data.object?.user_info?.display_name}
-        </a>
-        {data.object?.user_info?.rank > 0 && (
-          <span className="fw-bold ms-1">
-            {formatCount(data.object.user_info.rank)}
-          </span>
-        )}
+        <BaseUserCard data={data.object?.user_info} showAvatar={false} />
+
         <span className="split-dot" />
         <FormatTime
           time={data.object?.created_at}

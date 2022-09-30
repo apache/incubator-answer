@@ -9,16 +9,16 @@ type UpdateUserStatusReq struct {
 }
 
 const (
-	Normal    = "normal"
-	Suspended = "suspended"
-	Deleted   = "deleted"
-	Inactive  = "inactive"
+	UserNormal    = "normal"
+	UserSuspended = "suspended"
+	UserDeleted   = "deleted"
+	UserInactive  = "inactive"
 )
 
-func (r *UpdateUserStatusReq) IsNormal() bool    { return r.Status == Normal }
-func (r *UpdateUserStatusReq) IsSuspended() bool { return r.Status == Suspended }
-func (r *UpdateUserStatusReq) IsDeleted() bool   { return r.Status == Deleted }
-func (r *UpdateUserStatusReq) IsInactive() bool  { return r.Status == Inactive }
+func (r *UpdateUserStatusReq) IsNormal() bool    { return r.Status == UserNormal }
+func (r *UpdateUserStatusReq) IsSuspended() bool { return r.Status == UserSuspended }
+func (r *UpdateUserStatusReq) IsDeleted() bool   { return r.Status == UserDeleted }
+func (r *UpdateUserStatusReq) IsInactive() bool  { return r.Status == UserInactive }
 
 // GetUserPageReq get user list page request
 type GetUserPageReq struct {
@@ -34,9 +34,9 @@ type GetUserPageReq struct {
 	Status string `validate:"omitempty,oneof=suspended deleted inactive" form:"status"`
 }
 
-func (r *GetUserPageReq) IsSuspended() bool { return r.Status == Suspended }
-func (r *GetUserPageReq) IsDeleted() bool   { return r.Status == Deleted }
-func (r *GetUserPageReq) IsInactive() bool  { return r.Status == Inactive }
+func (r *GetUserPageReq) IsSuspended() bool { return r.Status == UserSuspended }
+func (r *GetUserPageReq) IsDeleted() bool   { return r.Status == UserDeleted }
+func (r *GetUserPageReq) IsInactive() bool  { return r.Status == UserInactive }
 
 // GetUserPageResp get user response
 type GetUserPageResp struct {

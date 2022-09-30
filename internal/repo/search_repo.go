@@ -22,16 +22,16 @@ import (
 // searchRepo tag repository
 type searchRepo struct {
 	data         *data.Data
-	userRepo     usercommon.UserRepo
+	userCommon   *usercommon.UserCommon
 	uniqueIDRepo unique.UniqueIDRepo
 }
 
 // NewSearchRepo new repository
-func NewSearchRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo, userRepo usercommon.UserRepo) search_common.SearchRepo {
+func NewSearchRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo, userCommon *usercommon.UserCommon) search_common.SearchRepo {
 	return &searchRepo{
 		data:         data,
 		uniqueIDRepo: uniqueIDRepo,
-		userRepo:     userRepo,
+		userCommon:   userCommon,
 	}
 }
 
@@ -219,7 +219,6 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 		var (
 			objectKey,
 			status string
-			uInfo *schema.UserBasicInfo
 
 			tags       []schema.TagResp
 			tagsEntity []entity.Tag
@@ -233,14 +232,10 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 		tp, _ := time.ParseInLocation("2006-01-02 15:04:05", string(r["created_at"]), time.Local)
 
 		// get user info
-		userInfo, exist, e := sr.userRepo.GetByUserID(ctx, string(r["user_id"]))
+		userInfo, _, e := sr.userCommon.GetUserBasicInfoByID(ctx, string(r["user_id"]))
 		if e != nil {
 			err = errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
 			return
-		}
-
-		if exist {
-			uInfo = sr.userBasicInfoFormat(ctx, userInfo)
 		}
 
 		// get tags
@@ -279,7 +274,7 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 			Title:           string(r["title"]),
 			Excerpt:         cutOutParsedText(string(r["original_text"])),
 			CreatedAtParsed: tp.Unix(),
-			UserInfo:        uInfo,
+			UserInfo:        userInfo,
 			Tags:            tags,
 			VoteCount:       converter.StringToInt(string(r["vote_count"])),
 			Accepted:        string(r["accepted"]) == "2",
@@ -297,8 +292,8 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 // userBasicInfoFormat
 func (sr *searchRepo) userBasicInfoFormat(ctx context.Context, dbinfo *entity.User) *schema.UserBasicInfo {
 	return &schema.UserBasicInfo{
-		UserId:      dbinfo.ID,
-		UserName:    dbinfo.Username,
+		ID:          dbinfo.ID,
+		Username:    dbinfo.Username,
 		Rank:        dbinfo.Rank,
 		DisplayName: dbinfo.DisplayName,
 		Avatar:      dbinfo.Avatar,

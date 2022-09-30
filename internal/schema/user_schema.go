@@ -166,7 +166,7 @@ const (
 var UserStatusShow = map[int]string{
 	1:  "normal",
 	9:  "forbidden",
-	10: "delete",
+	10: "deleted",
 }
 var UserStatusShowMsg = map[int]string{
 	1:  "",
@@ -226,14 +226,20 @@ func (u *UserModifyPassWordRequest) Check() (errField *validator.ErrorField, err
 }
 
 type UpdateInfoRequest struct {
-	UserId      string `json:"-" `            // user_id
-	UserName    string `json:"username"`      // name
-	DisplayName string `json:"display_name" ` // display_name
-	Avatar      string `json:"avatar" `       // avatar
-	Bio         string `json:"bio"`
-	BioHtml     string `json:"bio_html"`
-	Website     string `json:"website" ` // website
-	Location    string `json:"location"` // location
+	// display_name
+	DisplayName string `validate:"required,gt=0,lte=30" json:"display_name"`
+	// avatar
+	Avatar string `validate:"omitempty,gt=0,lte=500" json:"avatar"`
+	// bio
+	Bio string `validate:"omitempty,gt=0,lte=4096" json:"bio"`
+	// bio
+	BioHtml string `validate:"omitempty,gt=0,lte=4096" json:"bio_html"`
+	// website
+	Website string `validate:"omitempty,gt=0,lte=500" json:"website"`
+	// location
+	Location string `validate:"omitempty,gt=0,lte=100" json:"location"`
+	// user id
+	UserId string `json:"-" `
 }
 
 type UserRetrievePassWordRequest struct {
@@ -282,15 +288,15 @@ type ActionRecordResp struct {
 }
 
 type UserBasicInfo struct {
-	UserId      string `json:"-" `           // user_id
-	UserName    string `json:"username" `    // name
+	ID          string `json:"-" `           // user_id
+	Username    string `json:"username" `    // name
 	Rank        int    `json:"rank" `        // rank
 	DisplayName string `json:"display_name"` // display_name
 	Avatar      string `json:"avatar" `      // avatar
 	Website     string `json:"website" `     // website
 	Location    string `json:"location" `    // location
 	IpInfo      string `json:"ip_info"`      // ip info
-	Status      int    `json:"status"`       // status
+	Status      string `json:"status"`       // status
 }
 
 type GetOtherUserInfoByUsernameReq struct {

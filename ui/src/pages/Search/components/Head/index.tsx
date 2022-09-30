@@ -3,7 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { following } from '@answer/services/api';
+import { following } from '@answer/api';
 import { isLogin } from '@answer/utils';
 
 interface Props {

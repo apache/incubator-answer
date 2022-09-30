@@ -7,16 +7,16 @@ import classNames from 'classnames';
 import { unionBy } from 'lodash';
 import { marked } from 'marked';
 
+import * as Types from '@answer/common/interface';
 import {
   useQueryComments,
   addComment,
   deleteComment,
   updateComment,
   postVote,
-} from '@answer/services/api';
+} from '@answer/api';
 import { Modal } from '@answer/components';
 import { usePageUsers, useReportModal } from '@answer/hooks';
-import * as Types from '@answer/services/types';
 import { matchedUsers, parseUserInfo, isLogin } from '@answer/utils';
 
 import { Form, ActionBar, Reply } from './components';
@@ -269,6 +269,7 @@ const Comment = ({ objectId, mode }) => {
                 voteCount={item.vote_count}
                 isVote={item.is_vote}
                 memberActions={item.member_actions}
+                userStatus={item.user_status}
                 onReply={() => {
                   handleReply(item.comment_id);
                 }}

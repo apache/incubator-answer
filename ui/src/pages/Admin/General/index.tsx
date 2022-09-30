@@ -2,15 +2,10 @@ import React, { FC, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type * as Type from '@answer/services/types';
+import type * as Type from '@answer/common/interface';
 import { useToast } from '@answer/hooks';
 import { siteInfoStore } from '@answer/stores';
-
-import { FormDataType } from '@/common/interface';
-import {
-  useGeneralSetting,
-  updateGeneralSetting,
-} from '@/services/settings-admin.api';
+import { useGeneralSetting, updateGeneralSetting } from '@answer/api';
 
 import '../index.scss';
 
@@ -22,7 +17,7 @@ const General: FC = () => {
   const updateSiteInfo = siteInfoStore((state) => state.update);
 
   const { data: setting } = useGeneralSetting();
-  const [formData, setFormData] = useState<FormDataType>({
+  const [formData, setFormData] = useState<Type.FormDataType>({
     name: {
       value: '',
       isInvalid: false,
@@ -41,29 +36,13 @@ const General: FC = () => {
   });
   const checkValidated = (): boolean => {
     let ret = true;
-    const { name, short_description, description } = formData;
+    const { name } = formData;
     if (!name.value) {
       ret = false;
       formData.name = {
         value: '',
         isInvalid: true,
         errorMsg: t('name.msg'),
-      };
-    }
-    if (!short_description.value) {
-      ret = false;
-      formData.short_description = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('short_description.msg'),
-      };
-    }
-    if (!description.value) {
-      ret = false;
-      formData.description = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('description.msg'),
       };
     }
     setFormData({
@@ -104,7 +83,7 @@ const General: FC = () => {
     if (!formData[fieldName]) {
       return;
     }
-    const fieldData: FormDataType = {
+    const fieldData: Type.FormDataType = {
       [fieldName]: {
         value: fieldValue,
         isInvalid: false,

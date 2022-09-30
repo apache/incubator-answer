@@ -3,15 +3,18 @@ import { Form, Button, Image, Stack } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useToast } from '@answer/hooks';
-import * as Type from '@answer/services/types';
-import { LangsType } from '@answer/services/types';
-import { FormDataType } from '@answer/common/interface';
-import { languages, uploadAvatar } from '@answer/services/api';
 import {
+  LangsType,
+  FormDataType,
+  AdminSettingsInterface,
+} from '@answer/common/interface';
+import {
+  languages,
+  uploadAvatar,
   updateInterfaceSetting,
   useInterfaceSetting,
   useThemeOptions,
-} from '@answer/services/settings-admin.api';
+} from '@answer/api';
 import { interfaceStore } from '@answer/stores';
 import { UploadImg } from '@answer/components';
 
@@ -72,16 +75,8 @@ const Interface: FC = () => {
 
   const checkValidated = (): boolean => {
     let ret = true;
-    const { logo, theme, language } = formData;
+    const { theme, language } = formData;
     const formCheckData = { ...formData };
-    if (!logo.value) {
-      ret = false;
-      formCheckData.logo = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('logo.msg'),
-      };
-    }
     if (!theme.value) {
       ret = false;
       formCheckData.theme = {
@@ -109,7 +104,7 @@ const Interface: FC = () => {
     if (checkValidated() === false) {
       return;
     }
-    const reqParams: Type.AdminSettingsInterface = {
+    const reqParams: AdminSettingsInterface = {
       logo: formData.logo.value,
       theme: formData.theme.value,
       language: formData.language.value,

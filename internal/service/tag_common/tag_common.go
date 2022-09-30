@@ -16,7 +16,7 @@ type TagRepo interface {
 	AddTagList(ctx context.Context, tagList []*entity.Tag) (err error)
 	GetTagListByIDs(ctx context.Context, ids []string) (tagList []*entity.Tag, err error)
 	GetTagBySlugName(ctx context.Context, slugName string) (tagInfo *entity.Tag, exist bool, err error)
-	GetTagListByName(ctx context.Context, name string) (tagList []*entity.Tag, err error)
+	GetTagListByName(ctx context.Context, name string, limit int) (tagList []*entity.Tag, err error)
 	GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error)
 	RemoveTag(ctx context.Context, tagID string) (err error)
 	UpdateTag(ctx context.Context, tag *entity.Tag) (err error)
