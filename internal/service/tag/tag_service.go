@@ -41,12 +41,11 @@ func NewTagService(
 
 // SearchTagLike get tag list all
 func (ts *TagService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []string, err error) {
-	tags, err := ts.tagRepo.GetTagListByName(ctx, req.Tag)
+	tags, err := ts.tagRepo.GetTagListByName(ctx, req.Tag, 5)
 	if err != nil {
 		return
 	}
 	for _, tag := range tags {
-		//resp = append(resp, tag.DisplayName)
 		resp = append(resp, tag.SlugName)
 	}
 	return resp, nil
