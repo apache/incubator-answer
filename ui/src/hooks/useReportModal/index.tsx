@@ -187,11 +187,7 @@ const useReportModal = (callback?: () => void) => {
                           }
                           value={content.value}
                           isInvalid={content.isInvalid}
-                          placeholder={
-                            item.content_type === 'text'
-                              ? t('input_placeholder')
-                              : t('textarea_placeholder')
-                          }
+                          placeholder={item.placeholder}
                           onChange={(e) =>
                             setContent({
                               value: e.target.value,
