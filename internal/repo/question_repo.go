@@ -66,7 +66,6 @@ func (qr *questionRepo) UpdateQuestion(ctx context.Context, question *entity.Que
 
 func (qr *questionRepo) UpdatePvCount(ctx context.Context, questionId string) (err error) {
 	question := &entity.Question{}
-	qr.data.DB.ShowSQL()
 	_, err = qr.data.DB.Where("id =?", questionId).Incr("view_count", 1).Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
