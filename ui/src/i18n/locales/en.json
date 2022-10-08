@@ -206,7 +206,7 @@
     }
   },
   "tag_modal": {
-    "title": "Create New Tag",
+    "title": "Create new tag",
     "form": {
       "fields": {
         "display_name": {
