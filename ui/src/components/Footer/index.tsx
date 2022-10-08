@@ -5,7 +5,7 @@ const Index = () => {
   return (
     <footer className="bg-light py-3">
       <Container>
-        <p className="text-center mb-2 fs-14">
+        <p className="text-center mb-0 fs-14 text-secondary">
           Built on
           <a href="/"> Answer </a>
           - the open source source software that power knowledge communities.
