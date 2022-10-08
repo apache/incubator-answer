@@ -11,7 +11,7 @@ This is a minimalist open source Q&A community. Users can post questions and oth
 ![abstract](docs/img/abstract.png)
 
 ## Why?
-- Help companies build knowledge and Q&A communities better and faster.
+- Help organizations build knowledge and Q&A communities better and faster.
 
 ## Features
 - Produce knowledge by asking and answering questions.
