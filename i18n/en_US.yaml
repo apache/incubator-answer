@@ -82,7 +82,7 @@ report:
     name:
       other: "spam"
     description:
-      other: "This post is an advertisement,or vandalism.It is not useful or relevant to the current topic."
+      other: "This post is an advertisement, or vandalism. It is not useful or relevant to the current topic."
   rude:
     name:
       other: "rude or abusive"
@@ -97,12 +97,12 @@ report:
     name:
       other: "not an answer"
     description:
-      other: "This was posted as an answer,but it does not attempt to answer the question. It should possibly be an edit,a comment,another question,or deleted altogether."
+      other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether."
   not_need:
     name:
       other: "no longer needed"
     description:
-      other: "This comment is outdated,conversational or not relevant to this post."
+      other: "This comment is outdated, conversational or not relevant to this post."
   other:
     name:
       other: "something else"
@@ -135,26 +135,26 @@ question:
 notification:
   action:
     update_question:
-      other: "update question"
+      other: "updated question"
     answer_the_question:
-      other: "answer the question"
+      other: "answered question"
     update_answer:
-      other: "update answer"
+      other: "updated answer"
     adopt_answer:
-      other: "adopt answer"
+      other: "accepted answer"
     comment_question:
-      other: "comment question"
+      other: "commented question"
     comment_answer:
-      other: "comment answer"
+      other: "commented answer"
     reply_to_you:
-      other: "reply to you"
+      other: "replied to you"
     mention_you:
-      other: "mention you"
+      other: "mentioned you"
     your_question_is_closed:
-      other: "your question is closed"
+      other: "your question has been closed"
     your_question_was_deleted:
-      other: "your question was deleted"
+      other: "your question has been deleted"
     your_answer_was_deleted:
-      other: "your answer was deleted"
+      other: "your answer has been deleted"
     your_comment_was_deleted:
-      other: "your comment was deleted"
+      other: "your comment has been deleted"
