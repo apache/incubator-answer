@@ -14,7 +14,7 @@ const Index: FC<Props> = ({ data }) => {
       <div>
         {data.operation_msg.indexOf('http') > -1 ? (
           <p>
-            {data.operation_description}
+            {data.operation_description}{' '}
             <a href={data.operation_msg} style={{ color: '#055160' }}>
               <strong>{t('question_detail.show_exist')}</strong>
             </a>
