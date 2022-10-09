@@ -24,6 +24,7 @@ import PageTitle from './PageTitle';
 import Empty from './Empty';
 import BaseUserCard from './BaseUserCard';
 import FollowingTags from './FollowingTags';
+import QueryGroup from './QueryGroup';
 
 export {
   Avatar,
@@ -53,5 +54,6 @@ export {
   BaseUserCard,
   FollowingTags,
   htmlRender,
+  QueryGroup,
 };
 export type { EditorRef };

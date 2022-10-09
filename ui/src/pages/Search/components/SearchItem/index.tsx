@@ -60,10 +60,9 @@ const Index: FC<Props> = ({ data }) => {
       </div>
 
       {data.object?.excerpt && (
-        <p
-          className="fs-14 text-truncate-2 mb-2 last-p text-break"
-          dangerouslySetInnerHTML={{ __html: data.object.excerpt }}
-        />
+        <p className="fs-14 text-truncate-2 mb-2 last-p text-break">
+          {data.object.excerpt}
+        </p>
       )}
 
       {data.object?.tags?.map((item) => {
