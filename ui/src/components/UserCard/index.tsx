@@ -19,7 +19,7 @@ const Index: FC<Props> = ({ data, time, preFix }) => {
       ) : (
         <Avatar avatar={data?.avatar} size="40px" className="me-2" />
       )}
-      <div className="fs-14 text-secondary">
+      <div className="fs-14 link-secondary">
         <div>
           {data?.status !== 'deleted' ? (
             <Link to={`/users/${data?.username}`} className="me-1 text-break">

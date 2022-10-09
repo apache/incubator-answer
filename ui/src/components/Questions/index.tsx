@@ -142,7 +142,7 @@ const QuestionList: FC<Props> = ({ source }) => {
           return (
             <ListGroup.Item key={li.id} className="border-bottom py-3 px-0">
               <h5 className="text-wrap text-break">
-                <NavLink to={`/questions/${li.id}`} className="text-body">
+                <NavLink to={`/questions/${li.id}`} className="link-dark">
                   {li.title}
                   {li.status === 2 ? ` [${t('closed')}]` : ''}
                 </NavLink>

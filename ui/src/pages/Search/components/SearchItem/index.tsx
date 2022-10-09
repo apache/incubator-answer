@@ -23,7 +23,7 @@ const Index: FC<Props> = ({ data }) => {
           {data.object_type === 'question' ? 'Q' : 'A'}
         </Badge>
         <a
-          className="h5 mb-0 text-body text-break"
+          className="h5 mb-0 link-dark text-break"
           href={`/questions/${data.object.id}`}>
           {data.object.title}
           {data.object.status === 'closed'
