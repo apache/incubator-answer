@@ -397,6 +397,9 @@
       "placeholder": "Search"
     }
   },
+  "footer": {
+    "build_on": "Build on <1> Answer </1>- the open source source software that power knowledge communities.<br />Made with love. © 2022 Answer."
+  },
   "upload_img": {
     "name": "Change",
     "loading": "loading..."

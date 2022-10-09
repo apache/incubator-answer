@@ -55,5 +55,8 @@
         "different": "两次输入密码不一致"
       }
     }
+  },
+  "footer": {
+    "build_on": "由 <1> Answer </1>构建- 为知识社区提供动力的开源软件.<br />Made with love. © 2022 Answer ."
   }
 }
