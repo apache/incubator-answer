@@ -153,12 +153,17 @@ const QuestionList: FC<Props> = ({ source }) => {
                   <Icon name="hand-thumbs-up-fill" />
                   <em className="fst-normal mx-1">{li.vote_count}</em>
                 </span>
-                <span className="ms-3">
-                  {li.accepted_answer_id >= 1 ? (
-                    <Icon name="check-circle-fill" className="text-success" />
-                  ) : (
-                    <Icon name="chat-square-text-fill" />
-                  )}
+                <span
+                  className={`ms-3 ${
+                    li.accepted_answer_id >= 1 ? 'text-success' : ''
+                  }`}>
+                  <Icon
+                    name={
+                      li.accepted_answer_id >= 1
+                        ? 'check-circle-fill'
+                        : 'chat-square-text-fill'
+                    }
+                  />
                   <em className="fst-normal mx-1">{li.answer_count}</em>
                 </span>
                 <span className="summary-stat ms-3">
