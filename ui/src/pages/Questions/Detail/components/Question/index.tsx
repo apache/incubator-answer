@@ -58,7 +58,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
   return (
     <div>
       <h1 className="fs-3 mb-3 text-wrap text-break">
-        <Link className="text-body" reloadDocument to={`/questions/${data.id}`}>
+        <Link className="link-dark" reloadDocument to={`/questions/${data.id}`}>
           {data.title}
           {data.status === 2
             ? ` [${t('closed', { keyPrefix: 'question' })}]`
