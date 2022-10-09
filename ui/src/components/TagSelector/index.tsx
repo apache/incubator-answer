@@ -198,7 +198,10 @@ const TagSelector: FC<IProps> = ({
         })}
         {initialValue?.length < 5 || alwaysShowAddBtn ? (
           <Dropdown onSelect={handleSelect} onToggle={setVisibleMenu}>
-            <Dropdown.Toggle variant="outline-secondary" size="sm">
+            <Dropdown.Toggle
+              className={classNames(alwaysShowAddBtn ? 'mb-2' : null)}
+              variant="outline-secondary"
+              size="sm">
               <span className="me-1">+</span>
               {t('add_btn')}
             </Dropdown.Toggle>
