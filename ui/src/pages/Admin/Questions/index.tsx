@@ -1,12 +1,5 @@
 import { FC } from 'react';
-import {
-  ButtonGroup,
-  Button,
-  Form,
-  Table,
-  Stack,
-  Badge,
-} from 'react-bootstrap';
+import { Button, Form, Table, Stack, Badge } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -17,6 +10,7 @@ import {
   Modal,
   BaseUserCard,
   Empty,
+  QueryGroup,
 } from '@answer/components';
 import { ADMIN_LIST_STATUS } from '@answer/common/constants';
 import { useEditStatusModal, useReportModal } from '@answer/hooks';
@@ -37,7 +31,7 @@ const questionFilterItems: Type.AdminContentsFilterBy[] = [
 
 const PAGE_SIZE = 20;
 const Questions: FC = () => {
-  const [urlSearchParams, setUrlSearchParams] = useSearchParams();
+  const [urlSearchParams] = useSearchParams();
   const curFilter = urlSearchParams.get('status') || questionFilterItems[0];
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const { t } = useTranslation('translation', { keyPrefix: 'admin.questions' });
@@ -54,15 +48,6 @@ const Questions: FC = () => {
   const count = listData?.count || 0;
 
   const closeModal = useReportModal(refreshList);
-
-  const onFilterChange = (filter) => {
-    if (filter === curFilter) {
-      return;
-    }
-    urlSearchParams.set('page', '1');
-    urlSearchParams.set('status', filter);
-    setUrlSearchParams(urlSearchParams);
-  };
 
   const handleCallback = (id, type) => {
     if (type === 'normal') {
@@ -115,20 +100,13 @@ const Questions: FC = () => {
     <>
       <h3 className="mb-4">{t('page_title')}</h3>
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <ButtonGroup size="sm">
-          {questionFilterItems.map((li) => {
-            return (
-              <Button
-                key={li}
-                size="sm"
-                className="text-capitalize"
-                onClick={() => onFilterChange(li)}
-                variant={curFilter === li ? 'secondary' : 'outline-secondary'}>
-                {t(li)}
-              </Button>
-            );
-          })}
-        </ButtonGroup>
+        <QueryGroup
+          data={questionFilterItems}
+          currentSort={curFilter}
+          sortKey="status"
+          i18nkeyPrefix="admin.questions"
+        />
+
         <Form.Control
           size="sm"
           type="input"
