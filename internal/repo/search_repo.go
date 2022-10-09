@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"github.com/segmentfault/pacman/log"
 	"strings"
 	"time"
 
@@ -35,7 +36,7 @@ func NewSearchRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo, userCommon
 	}
 }
 
-func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID, userID string, votes int, page, size int) (resp []schema.SearchResp, total int64, err error) {
+func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID, userID string, votes int, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
 	var (
 		b  *builder.Builder
 		ub *builder.Builder
@@ -51,6 +52,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 		"`answer_count`",
 		"0 as `accepted`",
 		"`question`.`status` as `status`",
+		"`post_update_time`",
 	).From("`question`")
 	ub = builder.Select(
 		"`answer`.`id` as `id`",
@@ -63,6 +65,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 		"0 as `answer_count`",
 		"`adopted` as `accepted`",
 		"`answer`.`status` as `status`",
+		"`answer`.`created_at` as `post_update_time`",
 	).From("`answer`").
 		LeftJoin("`question`", "`question`.id = `answer`.question_id")
 
@@ -103,7 +106,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 		return
 	}
 
-	res, err := sr.data.DB.OrderBy("created_at DESC").Limit(size, page).Query(b)
+	res, err := sr.data.DB.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page).Query(b)
 
 	tr, err := sr.data.DB.Query(builder.Select("count(*) total").From(b, "c"))
 	if len(tr) != 0 {
@@ -118,7 +121,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 	}
 }
 
-func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limitNoAccepted bool, answers, page, size int) (resp []schema.SearchResp, total int64, err error) {
+func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limitNoAccepted bool, answers, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
 	b := builder.Select(
 		"`id`",
 		"`id` as `question_id`",
@@ -130,6 +133,7 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 		"`answer_count`",
 		"0 as `accepted`",
 		"`status`",
+		"`post_update_time`",
 	).From("question")
 
 	for i, word := range words {
@@ -151,7 +155,7 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 		b.And(builder.Gte{"answer_count": answers})
 	}
 
-	res, err := sr.data.DB.OrderBy("created_at DESC").Limit(size, page).Query(b)
+	res, err := sr.data.DB.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page).Query(b)
 
 	tr, err := sr.data.DB.Query(builder.Select("count(*) total").From(b, "c"))
 	if len(tr) != 0 {
@@ -168,7 +172,7 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 	return
 }
 
-func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAccepted bool, questionID string, page, size int) (resp []schema.SearchResp, total int64, err error) {
+func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAccepted bool, questionID string, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
 	b := builder.Select(
 		"`answer`.`id` as `id`",
 		"`question_id`",
@@ -180,6 +184,7 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 		"0 as `answer_count`",
 		"`adopted` as `accepted`",
 		"`answer`.`status` as `status`",
+		"`answer`.`created_at` as `post_update_time`",
 	).From("`answer`").
 		LeftJoin("`question`", "`question`.id = `answer`.question_id")
 
@@ -199,7 +204,7 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 		b.Where(builder.Eq{"question_id": questionID})
 	}
 
-	res, err := sr.data.DB.OrderBy("created_at DESC").Limit(size, page).Query(b)
+	res, err := sr.data.DB.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page).Query(b)
 
 	tr, err := sr.data.DB.Query(builder.Select("count(*) total").From(b, "c"))
 	total = converter.StringToInt64(string(tr[0]["total"]))
@@ -211,6 +216,21 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	return
+}
+
+func (sr *searchRepo) parseOrder(ctx context.Context, order string) (res string) {
+	switch order {
+	case "newest":
+		res = "created_at desc"
+	case "active":
+		res = "post_update_time desc"
+	case "score":
+		res = "vote_count desc"
+	default:
+		res = "created_at desc"
+	}
+	log.Error(order, "\n", res)
 	return
 }
 

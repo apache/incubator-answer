@@ -9,10 +9,11 @@ import (
 )
 
 type ObjectSearch struct {
-	repo search_common.SearchRepo
-	w    string
-	page int
-	size int
+	repo  search_common.SearchRepo
+	w     string
+	page  int
+	size  int
+	order string
 }
 
 func NewObjectSearch(repo search_common.SearchRepo) *ObjectSearch {
@@ -33,6 +34,7 @@ func (s *ObjectSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 	s.w = w
 	s.page = dto.Page
 	s.size = dto.Size
+	s.order = dto.Order
 	return
 }
 func (s *ObjectSearch) Search(ctx context.Context) (resp []schema.SearchResp, total int64, err error) {
@@ -41,5 +43,5 @@ func (s *ObjectSearch) Search(ctx context.Context) (resp []schema.SearchResp, to
 	if len(words) > 3 {
 		words = words[:4]
 	}
-	return s.repo.SearchContents(ctx, words, "", "", -1, s.page, s.size)
+	return s.repo.SearchContents(ctx, words, "", "", -1, s.page, s.size, s.order)
 }
