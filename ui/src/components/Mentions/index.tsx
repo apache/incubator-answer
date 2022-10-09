@@ -8,7 +8,7 @@ interface IProps {
   pageUsers;
 }
 
-const MAXRECODE = 5;
+const MAX_RECODE = 5;
 
 const Mentions: FC<IProps> = ({ children, pageUsers }) => {
   const menuRef = useRef<HTMLDivElement>(null);
@@ -125,18 +125,18 @@ const Mentions: FC<IProps> = ({ children, pageUsers }) => {
       onKeyDown={handleKeyDown}>
       {children}
       <Dropdown.Menu
-        className={filterData.length > 0 ? 'visabled' : 'hidden'}
+        className={filterData.length > 0 ? 'visible' : 'invisible'}
         ref={menuRef}>
         {filterData
-          .filter((_, index) => index < MAXRECODE)
+          .filter((_, index) => index < MAX_RECODE)
           .map((item, index) => {
             return (
               <Dropdown.Item
                 className={`${cursor === index ? 'bg-gray-200' : ''}`}
                 key={item.displayName}
                 onClick={() => handleClick(item)}>
-                <span className="text-body me-1">{item.displayName}</span>
-                <small className="text-secondary">@{item.userName}</small>
+                <span className="link-dark me-1">{item.displayName}</span>
+                <small className="link-secondary">@{item.userName}</small>
               </Dropdown.Item>
             );
           })}

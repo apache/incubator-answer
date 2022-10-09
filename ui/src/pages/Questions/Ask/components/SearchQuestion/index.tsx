@@ -26,7 +26,7 @@ const SearchQuestion = ({ similarQuestions }) => {
                 <ListGroup.Item
                   action
                   as="a"
-                  className="text-body"
+                  className="link-dark"
                   key={item.id}
                   href={`/questions/${item.id}`}
                   target="_blank">

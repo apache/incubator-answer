@@ -17,7 +17,7 @@ const Index: FC<Props> = ({
   className = 'fs-14',
 }) => {
   return (
-    <div className={`text-secondary ${className}`}>
+    <div className={`link-secondary ${className}`}>
       {data?.status !== 'deleted' ? (
         <Link to={`/users/${data?.username}`}>
           {showAvatar && (
