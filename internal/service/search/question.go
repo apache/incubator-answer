@@ -8,10 +8,11 @@ import (
 )
 
 type QuestionSearch struct {
-	repo search_common.SearchRepo
-	w    string
-	page int
-	size int
+	repo  search_common.SearchRepo
+	w     string
+	page  int
+	size  int
+	order string
 }
 
 func NewQuestionSearch(repo search_common.SearchRepo) *QuestionSearch {
@@ -39,6 +40,7 @@ func (s *QuestionSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 	s.w = strings.TrimSpace(w)
 	s.page = dto.Page
 	s.size = dto.Size
+	s.order = dto.Order
 	return
 }
 
@@ -49,5 +51,5 @@ func (s *QuestionSearch) Search(ctx context.Context) (resp []schema.SearchResp, 
 		words = words[:4]
 	}
 
-	return s.repo.SearchQuestions(ctx, words, false, -1, s.page, s.size)
+	return s.repo.SearchQuestions(ctx, words, false, -1, s.page, s.size, s.order)
 }

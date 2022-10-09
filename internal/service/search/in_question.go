@@ -9,11 +9,12 @@ import (
 )
 
 type InQuestionSearch struct {
-	repo search_common.SearchRepo
-	w    string
-	exp  string
-	page int
-	size int
+	repo  search_common.SearchRepo
+	w     string
+	exp   string
+	page  int
+	size  int
+	order string
 }
 
 func NewInQuestionSearch(repo search_common.SearchRepo) *InQuestionSearch {
@@ -47,6 +48,7 @@ func (s *InQuestionSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 	s.w = strings.TrimSpace(w)
 	s.page = dto.Page
 	s.size = dto.Size
+	s.order = dto.Order
 	return
 }
 func (s *InQuestionSearch) Search(ctx context.Context) (resp []schema.SearchResp, total int64, err error) {
@@ -59,5 +61,5 @@ func (s *InQuestionSearch) Search(ctx context.Context) (resp []schema.SearchResp
 		words = words[:4]
 	}
 
-	return s.repo.SearchAnswers(ctx, words, false, s.exp, s.page, s.size)
+	return s.repo.SearchAnswers(ctx, words, false, s.exp, s.page, s.size, s.order)
 }

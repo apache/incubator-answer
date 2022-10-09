@@ -11,11 +11,12 @@ import (
 )
 
 type AnswersSearch struct {
-	repo search_common.SearchRepo
-	exp  int
-	w    string
-	page int
-	size int
+	repo  search_common.SearchRepo
+	exp   int
+	w     string
+	page  int
+	size  int
+	order string
 }
 
 func NewAnswersSearch(repo search_common.SearchRepo) *AnswersSearch {
@@ -49,6 +50,7 @@ func (s *AnswersSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 	s.w = strings.TrimSpace(w)
 	s.page = dto.Page
 	s.size = dto.Size
+	s.order = dto.Order
 	return
 }
 
@@ -59,5 +61,5 @@ func (s *AnswersSearch) Search(ctx context.Context) (resp []schema.SearchResp, t
 		words = words[:4]
 	}
 
-	return s.repo.SearchQuestions(ctx, words, false, s.exp, s.page, s.size)
+	return s.repo.SearchQuestions(ctx, words, false, s.exp, s.page, s.size, s.order)
 }

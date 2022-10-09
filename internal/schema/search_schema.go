@@ -7,6 +7,7 @@ type SearchDTO struct {
 	UserID string
 	Page   int
 	Size   int
+	Order  string
 }
 
 type SearchObject struct {

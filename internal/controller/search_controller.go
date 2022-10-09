@@ -28,15 +28,17 @@ func NewSearchController(searchService *service.SearchService) *SearchController
 // @Produce json
 // @Security ApiKeyAuth
 // @Param q query string true "query string"
+// @Param order query string true "order" Enums(newest,active,score)
 // @Success 200 {object} handler.RespBody{data=schema.SearchListResp}
 // @Router /answer/api/v1/search [get]
 func (sc *SearchController) Search(ctx *gin.Context) {
 	var (
-		q    string
-		page string
+		q,
+		order,
+		page,
 		size string
-		ok   bool
-		dto  schema.SearchDTO
+		ok  bool
+		dto schema.SearchDTO
 	)
 	q, ok = ctx.GetQuery("q")
 	if len(q) == 0 || !ok {
@@ -51,12 +53,17 @@ func (sc *SearchController) Search(ctx *gin.Context) {
 	if !ok {
 		size = "30"
 	}
+	order, ok = ctx.GetQuery("order")
+	if !ok || (order != "newest" && order != "active" && order != "score") {
+		order = "newest"
+	}
 
 	dto = schema.SearchDTO{
 		Query:  q,
 		Page:   converter.StringToInt(page),
 		Size:   converter.StringToInt(size),
 		UserID: middleware.GetLoginUserIDFromContext(ctx),
+		Order:  order,
 	}
 
 	resp, total, extra, err := sc.searchService.Search(ctx, &dto)
