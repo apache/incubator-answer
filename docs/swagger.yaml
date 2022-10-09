@@ -939,6 +939,9 @@ definitions:
         type: string
       id:
         type: string
+      status:
+        description: Status
+        type: string
       tags:
         description: tags
         items:
@@ -2920,6 +2923,15 @@ paths:
       - description: query string
         in: query
         name: q
+        required: true
+        type: string
+      - description: order
+        enum:
+        - newest
+        - active
+        - score
+        in: query
+        name: order
         required: true
         type: string
       produces:

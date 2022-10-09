@@ -11,11 +11,12 @@ import (
 )
 
 type ScoreSearch struct {
-	repo search_common.SearchRepo
-	exp  int
-	w    string
-	page int
-	size int
+	repo  search_common.SearchRepo
+	exp   int
+	w     string
+	page  int
+	size  int
+	order string
 }
 
 func NewScoreSearch(repo search_common.SearchRepo) *ScoreSearch {
@@ -44,6 +45,7 @@ func (s *ScoreSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 	s.w = w
 	s.page = dto.Page
 	s.size = dto.Size
+	s.order = dto.Order
 	return
 }
 func (s *ScoreSearch) Search(ctx context.Context) (resp []schema.SearchResp, total int64, err error) {
@@ -56,6 +58,6 @@ func (s *ScoreSearch) Search(ctx context.Context) (resp []schema.SearchResp, tot
 		words = words[:4]
 	}
 
-	resp, total, err = s.repo.SearchContents(ctx, words, "", "", s.exp, s.page, s.size)
+	resp, total, err = s.repo.SearchContents(ctx, words, "", "", s.exp, s.page, s.size, s.order)
 	return
 }

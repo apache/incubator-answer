@@ -2589,6 +2589,18 @@ const docTemplate = `{
                         "name": "q",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "enum": [
+                            "newest",
+                            "active",
+                            "score"
+                        ],
+                        "type": "string",
+                        "description": "order",
+                        "name": "order",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -5125,6 +5137,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Status",
                     "type": "string"
                 },
                 "tags": {
