@@ -1,25 +1,18 @@
 import { useState } from 'react';
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  ButtonGroup,
-  Button,
-  Form,
-} from 'react-bootstrap';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useQueryTags, following } from '@answer/api';
-import { Tag, Pagination, PageTitle } from '@answer/components';
+import { Tag, Pagination, PageTitle, QueryGroup } from '@answer/components';
 import { formatCount } from '@answer/utils';
+
+const sortBtns = ['popular', 'name', 'newest'];
 
 const Tags = () => {
   const [urlSearch] = useSearchParams();
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
   const [searchTag, setSearchTag] = useState('');
-  const navigate = useNavigate();
 
   const page = Number(urlSearch.get('page')) || 1;
   const sort = urlSearch.get('sort');
@@ -34,10 +27,6 @@ const Tags = () => {
 
   const handleChange = (e) => {
     setSearchTag(e.target.value);
-  };
-
-  const handleSort = (param) => {
-    navigate(`/tags?sort=${param}`);
   };
 
   const handleFollow = (tag) => {
@@ -67,30 +56,12 @@ const Tags = () => {
                   />
                 </Form.Group>
               </Form>
-              <ButtonGroup size="sm">
-                <Button
-                  variant={
-                    !sort || sort === 'popular'
-                      ? 'secondary'
-                      : 'outline-secondary'
-                  }
-                  onClick={() => handleSort('popular')}>
-                  {t('sort_buttons.popular')}
-                </Button>
-                <Button
-                  variant={sort === 'name' ? 'secondary' : 'outline-secondary'}
-                  onClick={() => handleSort('name')}>
-                  {t('sort_buttons.name')}
-                </Button>
-                <Button
-                  className="text-capitalize"
-                  variant={
-                    sort === 'newest' ? 'secondary' : 'outline-secondary'
-                  }
-                  onClick={() => handleSort('newest')}>
-                  {t('sort_buttons.newest')}
-                </Button>
-              </ButtonGroup>
+              <QueryGroup
+                data={sortBtns}
+                currentSort={sort || 'popular'}
+                sortKey="sort"
+                i18nkeyPrefix="tags.sort_buttons"
+              />
             </div>
           </Col>
 

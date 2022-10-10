@@ -31,13 +31,13 @@ const HotQuestions: FC = () => {
               as={Link}
               to={`/questions/${li.id}`}
               action>
-              <div className="text-body">{li.title}</div>
+              <div className="link-dark">{li.title}</div>
               {li.answer_count > 0 ? (
                 <div
                   className={`d-flex align-items-center fs-14 mt-1 ${
                     li.accepted_answer_id > 0
-                      ? 'text-success'
-                      : 'text-secondary'
+                      ? 'link-success'
+                      : 'link-secondary'
                   }`}>
                   {li.accepted_answer_id >= 1 ? (
                     <Icon name="check-circle-fill" />

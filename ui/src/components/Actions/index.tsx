@@ -107,7 +107,7 @@ const Index: FC<Props> = ({ className, data }) => {
           onClick={() => handleVote('up')}>
           <Icon name="hand-thumbs-up-fill" />
         </Button>
-        <Button variant="outline-secondary text-body" disabled>
+        <Button variant="outline-dark text-body" disabled>
           {votes}
         </Button>
         <Button

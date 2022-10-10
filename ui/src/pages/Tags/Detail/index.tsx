@@ -64,7 +64,7 @@ const Questions: FC = () => {
                 <Link
                   to={`/tags/${tagInfo?.slug_name}`}
                   replace
-                  className="text-body">
+                  className="link-dark">
                   {tagInfo.display_name}
                 </Link>
               </h3>

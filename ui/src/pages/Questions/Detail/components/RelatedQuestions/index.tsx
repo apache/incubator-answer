@@ -33,13 +33,13 @@ const Index: FC<Props> = ({ id }) => {
               key={item.id}
               as={Link}
               to={`/questions/${item.id}`}>
-              <div className="text-body">{item.title}</div>
+              <div className="link-dark">{item.title}</div>
               {item.answer_count > 0 && (
                 <div
                   className={`mt-1 fs-14 me-2 ${
                     item.accepted_answer_id > 0
-                      ? 'text-success'
-                      : 'text-secondary'
+                      ? 'link-success'
+                      : 'link-secondary'
                   }`}>
                   <Icon
                     name={
