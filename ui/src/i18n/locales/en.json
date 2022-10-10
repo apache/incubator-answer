@@ -72,7 +72,7 @@
             }
           },
           "language": {
-            "label": "Language",
+            "label": "Language (optional)",
             "placeholder": "Automatic detection"
           }
         }
