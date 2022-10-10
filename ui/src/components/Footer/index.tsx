@@ -10,7 +10,7 @@ const Index = () => {
           <Trans i18nKey="footer.build_on">
             Built on
             <a href="/"> Answer </a>
-            - the open source source software that power knowledge communities.
+            - the open-source software that power Q&A communities.
             <br />
             Made with love. © 2022 Answer .
           </Trans>
