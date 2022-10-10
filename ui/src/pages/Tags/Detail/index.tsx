@@ -70,7 +70,7 @@ const Questions: FC = () => {
               </h3>
 
               <p className="text-break">
-                {tagInfo.excerpt}
+                {tagInfo.excerpt || t('no_description')}
                 <Link to={`/tags/${curTagName}/info`}> [{t('more')}]</Link>
               </p>
 
