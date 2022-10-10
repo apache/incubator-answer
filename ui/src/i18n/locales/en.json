@@ -221,7 +221,8 @@
           "description": "Spaces are not allowed, please use '-' instead.",
           "msg": {
             "empty": "Please enter a name for the tag.",
-            "range": "URL slug up to 35 characters"
+            "range": "URL slug up to 35 characters",
+            "character": "must use the character set a-z 0-9 + # - ."
           }
         },
         "description": {
