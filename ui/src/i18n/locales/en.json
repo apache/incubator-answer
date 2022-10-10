@@ -557,9 +557,9 @@
   "question_detail": {
     "Asked": "Asked",
     "asked": "asked",
-    "update": "Update",
-    "edit": "edit",
-    "Views": "Views",
+    "update": "Modified",
+    "edit": "edited",
+    "Views": "Viewed",
     "answered": "answered",
     "closed_in": "Closed in",
     "show_exist": "Show existing question.",
