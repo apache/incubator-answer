@@ -2,7 +2,6 @@ package repo
 
 import (
 	"context"
-	"github.com/segmentfault/pacman/log"
 	"strings"
 	"time"
 
@@ -41,7 +40,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 		b  *builder.Builder
 		ub *builder.Builder
 	)
-	b = builder.Select(
+	b = builder.MySQL().Select(
 		"`question`.`id`",
 		"`question`.`id` as `question_id`",
 		"`title`",
@@ -54,7 +53,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 		"`question`.`status` as `status`",
 		"`post_update_time`",
 	).From("`question`")
-	ub = builder.Select(
+	ub = builder.MySQL().Select(
 		"`answer`.`id` as `id`",
 		"`question_id`",
 		"`question`.`title` as `title`",
@@ -106,9 +105,9 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 		return
 	}
 
-	res, err := sr.data.DB.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page).Query(b)
+	res, err := sr.data.DB.Query(builder.MySQL().Select("*").From(b, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page))
 
-	tr, err := sr.data.DB.Query(builder.Select("count(*) total").From(b, "c"))
+	tr, err := sr.data.DB.Query(builder.MySQL().Select("count(*) total").From(b, "c"))
 	if len(tr) != 0 {
 		total = converter.StringToInt64(string(tr[0]["total"]))
 	}
@@ -122,7 +121,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 }
 
 func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limitNoAccepted bool, answers, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
-	b := builder.Select(
+	b := builder.MySQL().Select(
 		"`id`",
 		"`id` as `question_id`",
 		"`title`",
@@ -154,10 +153,10 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 	} else if answers > 0 {
 		b.And(builder.Gte{"answer_count": answers})
 	}
+	res, err := sr.data.DB.Query(b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page))
 
-	res, err := sr.data.DB.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page).Query(b)
+	tr, err := sr.data.DB.Query(builder.MySQL().Select("count(*) total").From(b, "c"))
 
-	tr, err := sr.data.DB.Query(builder.Select("count(*) total").From(b, "c"))
 	if len(tr) != 0 {
 		total = converter.StringToInt64(string(tr[0]["total"]))
 	}
@@ -173,7 +172,7 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 }
 
 func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAccepted bool, questionID string, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
-	b := builder.Select(
+	b := builder.MySQL().Select(
 		"`answer`.`id` as `id`",
 		"`question_id`",
 		"`question`.`title` as `title`",
@@ -204,9 +203,9 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 		b.Where(builder.Eq{"question_id": questionID})
 	}
 
-	res, err := sr.data.DB.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page).Query(b)
+	res, err := sr.data.DB.Query(b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page))
 
-	tr, err := sr.data.DB.Query(builder.Select("count(*) total").From(b, "c"))
+	tr, err := sr.data.DB.Query(builder.MySQL().Select("count(*) total").From(b, "c"))
 	total = converter.StringToInt64(string(tr[0]["total"]))
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -230,7 +229,6 @@ func (sr *searchRepo) parseOrder(ctx context.Context, order string) (res string)
 	default:
 		res = "created_at desc"
 	}
-	log.Error(order, "\n", res)
 	return
 }
 
