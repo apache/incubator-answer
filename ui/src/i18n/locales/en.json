@@ -78,7 +78,7 @@
         }
       },
       "btn_cancel": "Cancel",
-      "btn_confirm": "Confirm"
+      "btn_confirm": "Add"
     },
     "formula": {
       "text": "Formula",
@@ -136,7 +136,7 @@
         }
       },
       "btn_cancel": "Cancel",
-      "btn_confirm": "Confirm",
+      "btn_confirm": "Add",
       "uploading": "Uploading"
     },
     "indent": {
@@ -165,7 +165,7 @@
         }
       },
       "btn_cancel": "Cancel",
-      "btn_confirm": "Confirm"
+      "btn_confirm": "Add"
     },
     "ordered_list": {
       "text": "Numbered List"
