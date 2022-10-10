@@ -414,7 +414,7 @@ const Ask = () => {
                 {t('title', { keyPrefix: 'how_to_format' })}
               </Card.Header>
               <Card.Body
-                className="fmt"
+                className="fmt small"
                 dangerouslySetInnerHTML={{
                   __html: t('description', { keyPrefix: 'how_to_format' }),
                 }}
