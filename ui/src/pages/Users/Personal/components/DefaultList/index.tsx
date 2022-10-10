@@ -19,7 +19,9 @@ const Index: FC<Props> = ({ visible, tabName, data }) => {
     <ListGroup variant="flush">
       {data.map((item) => {
         return (
-          <ListGroupItem className="py-3 px-0" key={item.question_id}>
+          <ListGroupItem
+            className="py-3 px-0"
+            key={tabName === 'questions' ? item.question_id : item.id}>
             <h6 className="mb-2">
               <a
                 className="text-break"

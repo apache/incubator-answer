@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react';
-import { ButtonGroup, Button, Form, Table, Badge } from 'react-bootstrap';
+import { FC, useState } from 'react';
+import { Button, Form, Table, Badge } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -9,6 +9,7 @@ import {
   FormatTime,
   BaseUserCard,
   Empty,
+  QueryGroup,
 } from '@answer/components';
 import * as Type from '@answer/common/interface';
 import { useChangeModal } from '@answer/hooks';
@@ -34,7 +35,7 @@ const Users: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'admin.users' });
   const [userName, setUserName] = useState('');
 
-  const [urlSearchParams, setUrlSearchParams] = useSearchParams();
+  const [urlSearchParams] = useSearchParams();
   const curFilter = urlSearchParams.get('filter') || UserFilterKeys[0];
   const curPage = Number(urlSearchParams.get('page') || '1');
   const {
@@ -51,15 +52,6 @@ const Users: FC = () => {
     callback: refreshUsers,
   });
 
-  const onFilterChange = (filter) => {
-    if (filter === urlSearchParams.get('filter')) {
-      return;
-    }
-    urlSearchParams.set('page', '1');
-    urlSearchParams.set('filter', filter);
-    setUrlSearchParams(urlSearchParams);
-  };
-
   const handleClick = ({ user_id, status }) => {
     changeModal.onShow({
       id: user_id,
@@ -71,20 +63,13 @@ const Users: FC = () => {
     <>
       <h3 className="mb-4">{t('title')}</h3>
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <ButtonGroup size="sm">
-          {UserFilterKeys.map((k) => {
-            return (
-              <Button
-                key={k}
-                size="sm"
-                className="text-capitalize"
-                onClick={() => onFilterChange(k)}
-                variant={curFilter === k ? 'secondary' : 'outline-secondary'}>
-                {t(k)}
-              </Button>
-            );
-          })}
-        </ButtonGroup>
+        <QueryGroup
+          data={UserFilterKeys}
+          currentSort={curFilter}
+          sortKey="filter"
+          i18nkeyPrefix="admin.users"
+        />
+
         <Form.Control
           className="d-none"
           size="sm"

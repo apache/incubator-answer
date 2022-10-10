@@ -30,12 +30,12 @@ const Index: FC<Props> = ({ data }) => {
           {data?.status !== 'deleted' ? (
             <Link
               to={`/users/${data.username}`}
-              className="text-body h3 mb-0"
+              className="link-dark h3 mb-0"
               reloadDocument>
               {data.display_name}
             </Link>
           ) : (
-            <span className="text-body h3 mb-0">{data.display_name}</span>
+            <span className="link-dark h3 mb-0">{data.display_name}</span>
           )}
           {data?.is_admin && (
             <div className="ms-2">
@@ -56,11 +56,6 @@ const Index: FC<Props> = ({ data }) => {
             <strong className="fs-5">{data.rank || 0}</strong>
             <span className="text-secondary"> {t('x_reputation')}</span>
           </div>
-
-          {/* <div className="me-3">
-            <strong className="fs-5">{data?.votes_count || 0}</strong>
-            <span className="text-secondary"> {t('x_votes')}</span>
-          </div> */}
           <div className="me-3">
             <strong className="fs-5">{data.answer_count || 0}</strong>
             <span className="text-secondary"> {t('x_answers')}</span>

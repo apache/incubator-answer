@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Row, Col, ButtonGroup, Button, ListGroup } from 'react-bootstrap';
+import { Row, Col, ListGroup } from 'react-bootstrap';
 import { NavLink, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -12,6 +12,7 @@ import {
   FormatTime,
   Empty,
   BaseUserCard,
+  QueryGroup,
 } from '@answer/components';
 
 const QuestionOrderKeys: Type.QuestionOrderBy[] = [
@@ -83,7 +84,7 @@ const QuestionLastUpdate = ({ q }) => {
 const QuestionList: FC<Props> = ({ source }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
   const { tagName = '' } = useParams();
-  const [urlSearchParams, setUrlSearchParams] = useSearchParams();
+  const [urlSearchParams] = useSearchParams();
   const curOrder = urlSearchParams.get('order') || QuestionOrderKeys[0];
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const pageSize = 20;
@@ -99,15 +100,15 @@ const QuestionList: FC<Props> = ({ source }) => {
   }
   const { data: listData, isLoading } = useQuestionList(reqParams);
   const count = listData?.count || 0;
-  const onOrderChange = (evt, order) => {
-    evt.preventDefault();
-    if (order === curOrder) {
-      return;
-    }
-    urlSearchParams.set('page', '1');
-    urlSearchParams.set('order', order);
-    setUrlSearchParams(urlSearchParams);
-  };
+  // const onOrderChange = (evt, order) => {
+  //   evt.preventDefault();
+  //   if (order === curOrder) {
+  //     return;
+  //   }
+  //   urlSearchParams.set('page', '1');
+  //   urlSearchParams.set('order', order);
+  //   setUrlSearchParams(urlSearchParams);
+  // };
 
   return (
     <div>
@@ -120,21 +121,11 @@ const QuestionList: FC<Props> = ({ source }) => {
           </h5>
         </Col>
         <Col>
-          <ButtonGroup size="sm">
-            {QuestionOrderKeys.map((k) => {
-              return (
-                <Button
-                  as="a"
-                  key={k}
-                  className="text-capitalize"
-                  href={`?page=1&order=${k}`}
-                  onClick={(evt) => onOrderChange(evt, k)}
-                  variant={curOrder === k ? 'secondary' : 'outline-secondary'}>
-                  {t(k)}
-                </Button>
-              );
-            })}
-          </ButtonGroup>
+          <QueryGroup
+            data={QuestionOrderKeys}
+            currentSort={curOrder}
+            i18nkeyPrefix="question"
+          />
         </Col>
       </Row>
       <ListGroup variant="flush" className="border-top border-bottom-0">
@@ -142,7 +133,7 @@ const QuestionList: FC<Props> = ({ source }) => {
           return (
             <ListGroup.Item key={li.id} className="border-bottom py-3 px-0">
               <h5 className="text-wrap text-break">
-                <NavLink to={`/questions/${li.id}`} className="text-body">
+                <NavLink to={`/questions/${li.id}`} className="link-dark">
                   {li.title}
                   {li.status === 2 ? ` [${t('closed')}]` : ''}
                 </NavLink>

@@ -7,7 +7,7 @@ const Index = () => {
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center page-wrap">
       <div
-        className="mb-4  text-secondary"
+        className="mb-4 text-secondary"
         style={{ fontSize: '120px', lineHeight: 1.2 }}>
         (=T^T=)
       </div>

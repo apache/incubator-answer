@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { ButtonGroup, Button, Form, Table, Stack } from 'react-bootstrap';
+import { Button, Form, Table, Stack } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -8,6 +8,7 @@ import {
   BaseUserCard,
   Empty,
   Pagination,
+  QueryGroup,
 } from '@answer/components';
 import { useReportModal } from '@answer/hooks';
 import * as Type from '@answer/common/interface';
@@ -38,14 +39,7 @@ const Flags: FC = () => {
   const reportModal = useReportModal(refreshList);
 
   const count = listData?.count || 0;
-  const onFilterChange = (filter) => {
-    if (filter === curFilter) {
-      return;
-    }
-    urlSearchParams.set('page', '1');
-    urlSearchParams.set('status', filter);
-    setUrlSearchParams(urlSearchParams);
-  };
+
   const onTypeChange = (evt) => {
     urlSearchParams.set('type', evt.target.value);
     setUrlSearchParams(urlSearchParams);
@@ -64,20 +58,13 @@ const Flags: FC = () => {
     <>
       <h3 className="mb-4">{t('title')}</h3>
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <ButtonGroup size="sm">
-          {flagFilterKeys.map((k) => {
-            return (
-              <Button
-                key={k}
-                size="sm"
-                className="text-capitalize"
-                onClick={() => onFilterChange(k)}
-                variant={curFilter === k ? 'secondary' : 'outline-secondary'}>
-                {t(k)}
-              </Button>
-            );
-          })}
-        </ButtonGroup>
+        <QueryGroup
+          data={flagFilterKeys}
+          currentSort={curFilter}
+          sortKey="status"
+          i18nkeyPrefix="admin.flags"
+        />
+
         <Form.Select
           value={curType}
           onChange={onTypeChange}

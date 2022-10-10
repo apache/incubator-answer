@@ -98,7 +98,7 @@ const TagIntroduction = () => {
               <Link
                 to={`/tags/${tagInfo?.slug_name}`}
                 replace
-                className="text-body">
+                className="link-dark">
                 {tagInfo.display_name}
               </Link>
             </h3>
@@ -123,7 +123,7 @@ const TagIntroduction = () => {
                     key={action.name}
                     variant="link"
                     className={classNames(
-                      'text-secondary btn-no-border p-0 fs-14',
+                      'link-secondary btn-no-border p-0 fs-14',
                       index > 0 && 'ms-3',
                     )}
                     onClick={() => onAction(action)}>
