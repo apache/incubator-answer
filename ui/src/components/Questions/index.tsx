@@ -100,15 +100,6 @@ const QuestionList: FC<Props> = ({ source }) => {
   }
   const { data: listData, isLoading } = useQuestionList(reqParams);
   const count = listData?.count || 0;
-  // const onOrderChange = (evt, order) => {
-  //   evt.preventDefault();
-  //   if (order === curOrder) {
-  //     return;
-  //   }
-  //   urlSearchParams.set('page', '1');
-  //   urlSearchParams.set('order', order);
-  //   setUrlSearchParams(urlSearchParams);
-  // };
 
   return (
     <div>
