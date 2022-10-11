@@ -28,7 +28,10 @@ a {
 }
 
 .fs-14 {
-  font-size: 14px;
+  font-size: 0.875rem;
+}
+.fs-12 {
+  font-size: 0.75rem;
 }
 
 .pic-auth-modal {
@@ -141,6 +144,30 @@ a {
 }
 .fmt {
   width: 100%;
+  h1 {
+    @extend .fs-3;
+    margin-top: 2rem;
+  }
+  h2 {
+    @extend .fs-4;
+    margin-top: 2rem;
+  }
+  h3 {
+    @extend .fs-5;
+    margin-top: 2rem;
+  }
+  h4 {
+    @extend .fs-6;
+    margin-top: 2rem;
+  }
+  h5 {
+    @extend .fs-14;
+    margin-top: 2rem;
+  }
+  h6 {
+    @extend .fs-12;
+    margin-top: 2rem;
+  }
   img {
     max-width: 100%;
   }
@@ -163,6 +190,9 @@ a {
     padding: 1rem;
     color: #6c757d;
     background-color: #e9ecef;
+    p {
+      color: $body-color;
+    }
     > p:last-child {
       margin-bottom: 0;
     }
