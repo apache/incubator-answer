@@ -57,14 +57,13 @@ a {
 .badge-tag {
   display: inline-block;
   font-size: 14px;
-  background: #cfe2ff;
+  background: rgba($blue-100, 0.5);
   padding: 1px 0.5rem 2px;
-  color: #084298;
+  color: $blue-700;
   height: 24px;
-}
-
-.badge-tag:hover {
-  background: #9ec5fe;
+  &:hover {
+    background: rgba($blue-100, 1);
+  }
 }
 
 .divide-line {
