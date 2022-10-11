@@ -335,7 +335,7 @@
     "button_following": "Following",
     "tag_label": "questions",
     "search_placeholder": "Filter by tag name",
-    "no_description": "The tag has no description",
+    "no_description": "The tag has no description.",
     "more": "More"
   },
   "ask": {
