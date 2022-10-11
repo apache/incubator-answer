@@ -177,19 +177,18 @@ const TagSelector: FC<IProps> = ({
       onFocus={onFocus}
       onBlur={onBlur}
       onKeyDown={handleKeyDown}>
-      <div className="d-flex flex-wrap">
+      <div className="d-flex flex-wrap mx-n1">
         {initialValue?.map((item, index) => {
           return (
             <Button
               key={item.slug_name}
               className={classNames(
-                'me-2 mb-2 text-nowrap d-flex align-items-center',
+                'm-1 text-nowrap d-flex align-items-center',
                 index === repeatIndex && 'warning',
               )}
               variant="outline-secondary"
               size="sm">
               {item.slug_name}
-
               <span className="ms-1" onMouseUp={() => handleRemove(item)}>
                 ×
               </span>
@@ -199,7 +198,7 @@ const TagSelector: FC<IProps> = ({
         {initialValue?.length < 5 || alwaysShowAddBtn ? (
           <Dropdown onSelect={handleSelect} onToggle={setVisibleMenu}>
             <Dropdown.Toggle
-              className={classNames(alwaysShowAddBtn ? 'mb-2' : null)}
+              className={classNames('m-1')}
               variant="outline-secondary"
               size="sm">
               <span className="me-1">+</span>
