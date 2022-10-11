@@ -1,7 +1,7 @@
 {
   "how_to_format": {
     "title": "How to Format",
-    "description": "<ul><li><p>to make links</p><pre><code>&lt;https: //url.com&gt;<br/><br/>[Title](https: //url.com)</code></pre></li><li><p>put returns between paragraphs</p></li><li><p><em>italic</em> or **<strong>bold</strong>**</p></li><li><p>indent code by 4 spaces</p></li><li><p>quote by placing &gt; at start of line</p></li><li><p>backtick escapes <code>`like _so_`</code></p></li><li><p>create code fences with backticks `</p><pre><code>``` <br/>code here<br/>```</code></pre></li></ul>"
+    "description": "<ul><li><p>to make links</p><pre><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p>put returns between paragraphs</p></li><li><p><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p>indent code by 4 spaces</p></li><li><p>quote by placing &gt; at start of line</p></li><li><p>backtick escapes <code>`like _so_`</code></p></li><li><p>create code fences with backticks `</p><pre><code>``` <br/>code here<br/>```</code></pre></li></ul>"
   },
   "pagination": {
     "prev": "Prev",
@@ -72,13 +72,13 @@
             }
           },
           "language": {
-            "label": "Language",
+            "label": "Language (optional)",
             "placeholder": "Automatic detection"
           }
         }
       },
       "btn_cancel": "Cancel",
-      "btn_confirm": "Confirm"
+      "btn_confirm": "Add"
     },
     "formula": {
       "text": "Formula",
@@ -90,9 +90,12 @@
     "heading": {
       "text": "Heading",
       "options": {
-        "h4": "Heading 2",
-        "h5": "Heading 3",
-        "h6": "Heading 4"
+        "h1": "Heading 1",
+        "h2": "Heading 2",
+        "h3": "Heading 3",
+        "h4": "Heading 4",
+        "h5": "Heading 5",
+        "h6": "Heading 6"
       }
     },
     "help": {
@@ -136,7 +139,7 @@
         }
       },
       "btn_cancel": "Cancel",
-      "btn_confirm": "Confirm",
+      "btn_confirm": "Add",
       "uploading": "Uploading"
     },
     "indent": {
@@ -165,7 +168,7 @@
         }
       },
       "btn_cancel": "Cancel",
-      "btn_confirm": "Confirm"
+      "btn_confirm": "Add"
     },
     "ordered_list": {
       "text": "Numbered List"
@@ -218,10 +221,11 @@
         },
         "slug_name": {
           "label": "URL slug",
-          "description": "Spaces are not allowed, please use '-' instead.",
+          "description": "Must use the character set \"a-z\", \"0-9\", \"+ # - .\"",
           "msg": {
             "empty": "Please enter a name for the tag.",
-            "range": "URL slug up to 35 characters"
+            "range": "URL slug up to 35 characters",
+            "character": "must use the character set a-z 0-9 + # - ."
           }
         },
         "description": {
@@ -264,7 +268,7 @@
         },
         "slug_name": {
           "label": "URL slug",
-          "info": "Spaces are not allowed, please use '-' instead."
+          "info": "Must use the character set \"a-z\", \"0-9\", \"+ # - .\""
         },
         "description": {
           "label": "Description"
@@ -331,6 +335,7 @@
     "button_following": "Following",
     "tag_label": "questions",
     "search_placeholder": "Filter by tag name",
+    "no_description": "The tag has no description",
     "more": "More"
   },
   "ask": {
@@ -398,7 +403,7 @@
     }
   },
   "footer": {
-    "build_on": "Build on <1> Answer </1>- the open source source software that power knowledge communities.<br />Made with love. © 2022 Answer."
+    "build_on": "Build on <1> Answer </1>- the open-source software that power Q&A communities.<br />Made with love. © 2022 Answer."
   },
   "upload_img": {
     "name": "Change",
@@ -557,9 +562,9 @@
   "question_detail": {
     "Asked": "Asked",
     "asked": "asked",
-    "update": "Update",
-    "edit": "edit",
-    "Views": "Views",
+    "update": "Modified",
+    "edit": "edited",
+    "Views": "Viewed",
     "answered": "answered",
     "closed_in": "Closed in",
     "show_exist": "Show existing question.",

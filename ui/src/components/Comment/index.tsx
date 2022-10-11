@@ -239,7 +239,7 @@ const Comment = ({ objectId, mode }) => {
             ) : (
               <div className="d-flex">
                 {item.reply_user_display_name && (
-                  <Link to="###" className="fs-14 me-1">
+                  <Link to="." className="fs-14 me-1 text-nowrap">
                     @{item.reply_user_display_name}
                   </Link>
                 )}

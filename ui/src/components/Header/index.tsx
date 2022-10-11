@@ -46,12 +46,7 @@ const Header: FC = () => {
     }
   }, [q]);
   return (
-    <Navbar
-      bg="primary"
-      variant="dark"
-      expand="lg"
-      className="shadow-sm sticky-top"
-      id="header">
+    <Navbar variant="dark" expand="lg" className="sticky-top" id="header">
       <Container className="d-flex align-items-center">
         <Navbar.Brand href="/">
           {interfaceInfo.logo ? (
@@ -84,7 +79,7 @@ const Header: FC = () => {
             <Form action="/search" className="w-75 px-2">
               <FormControl
                 placeholder={t('header.search.placeholder')}
-                className="bg-transparent text-white placeholder-search"
+                className="text-white placeholder-search"
                 value={searchStr}
                 name="q"
                 onChange={(e) => handleInput(e.target.value)}
