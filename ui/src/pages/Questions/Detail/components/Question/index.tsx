@@ -65,7 +65,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
             : ''}
         </Link>
       </h1>
-      <div className="d-flex align-items-center fs-14 mb-3 text-secondary">
+      <div className="d-flex align-items-center fs-14 mb-2 text-secondary">
         <FormatTime
           time={data.create_time}
           preFix={t('Asked')}
@@ -90,11 +90,11 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
           {followed ? 'Following' : 'Follow'}
         </Button>
       </div>
-      <div className="mb-3">
+      <div className="mb-2 mx-n1">
         {data?.tags?.map((item: any) => {
           return (
             <Tag
-              className="me-1"
+              className="m-1"
               href={`/tags/${item.main_tag_slug_name || item.slug_name}`}
               key={item.slug_name}>
               {item.slug_name}
