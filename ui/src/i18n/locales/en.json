@@ -1,7 +1,7 @@
 {
   "how_to_format": {
     "title": "How to Format",
-    "description": "<ul><li><p>to make links</p><pre><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p>put returns between paragraphs</p></li><li><p><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p>indent code by 4 spaces</p></li><li><p>quote by placing &gt; at start of line</p></li><li><p>backtick escapes <code>`like _so_`</code></p></li><li><p>create code fences with backticks `</p><pre><code>``` <br/>code here<br/>```</code></pre></li></ul>"
+    "description": "<ul class=\"mb-0\"><li><p class=\"mb-2\">to make links</p><pre class=\"mb-2\"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class=\"mb-2\">put returns between paragraphs</p></li><li><p class=\"mb-2\"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class=\"mb-2\">indent code by 4 spaces</p></li><li><p class=\"mb-2\">quote by placing <code>&gt;</code> at start of line</p></li><li><p class=\"mb-2\">backtick escapes <code>`like _this_`</code></p></li><li><p class=\"mb-2\">create code fences with backticks <code>`</code></p><pre class=\"mb-0\"><code>```<br/>code here<br/>```</code></pre></li></ul>"
   },
   "pagination": {
     "prev": "Prev",
@@ -216,16 +216,16 @@
           "label": "Display name",
           "msg": {
             "empty": "Display name cannot be empty.",
-            "range": "Display name up to 35 characters"
+            "range": "Display name up to 35 characters."
           }
         },
         "slug_name": {
           "label": "URL slug",
           "description": "Must use the character set \"a-z\", \"0-9\", \"+ # - .\"",
           "msg": {
-            "empty": "Please enter a name for the tag.",
-            "range": "URL slug up to 35 characters",
-            "character": "must use the character set a-z 0-9 + # - ."
+            "empty": "URL slug cannot be empty.",
+            "range": "URL slug up to 35 characters.",
+            "character": "URL slug contains unallowed character set."
           }
         },
         "description": {
@@ -413,7 +413,7 @@
     "title": "Captcha",
     "placeholder": "Type the text above",
     "msg": {
-      "empty": "Cannot be empty."
+      "empty": "Captcha cannot be empty."
     }
   },
   "inactive": {
@@ -434,7 +434,7 @@
       "label": "Name",
       "msg": {
         "empty": "Name cannot be empty.",
-        "range": "Name up to 30 characters"
+        "range": "Name up to 30 characters."
       }
     },
     "email": {
@@ -757,7 +757,7 @@
       "confirm_content": "Are you sure you want to delete this user? This is permanent!",
       "confirm_btn": "Delete",
       "msg": {
-        "empty": "Please select a reason"
+        "empty": "Please select a reason."
       }
     },
     "status_modal": {
