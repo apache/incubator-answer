@@ -17,7 +17,7 @@ var (
 	// Name is the name of the project
 	Name = "answer"
 	// Version is the version of the project
-	Version = "unknown"
+	Version = "development"
 	// log level
 	logLevel = os.Getenv("LOG_LEVEL")
 	// log path

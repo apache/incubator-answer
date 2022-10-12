@@ -4,12 +4,15 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/segmentfault/pacman/cache"
 	"github.com/segmentfault/pacman/contrib/cache/memory"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/core"
 	"xorm.io/xorm"
 	ormlog "xorm.io/xorm/log"
+	"xorm.io/xorm/schemas"
 )
 
 // Data data
@@ -29,7 +32,10 @@ func NewData(db *xorm.Engine, cache cache.Cache) (*Data, func(), error) {
 
 // NewDB new database instance
 func NewDB(debug bool, dataConf *Database) (*xorm.Engine, error) {
-	engine, err := xorm.NewEngine("mysql", dataConf.Connection)
+	if dataConf.Driver == "" {
+		dataConf.Driver = string(schemas.MYSQL)
+	}
+	engine, err := xorm.NewEngine(dataConf.Driver, dataConf.Connection)
 	if err != nil {
 		return nil, err
 	}
