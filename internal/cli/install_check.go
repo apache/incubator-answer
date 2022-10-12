@@ -5,12 +5,12 @@ import (
 	"github.com/segmentfault/answer/pkg/dir"
 )
 
-func CheckConfigFile() bool {
-	return dir.CheckPathExist(defaultConfigFilePath)
+func CheckConfigFile(configPath string) bool {
+	return dir.CheckPathExist(configPath)
 }
 
 func CheckUploadDir() bool {
-	return dir.CheckPathExist(defaultConfigFilePath)
+	return dir.CheckPathExist(defaultUploadFilePath)
 }
 
 func CheckDB(dataConf *data.Database) bool {
