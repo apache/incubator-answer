@@ -17,7 +17,7 @@ var (
 
 func init() {
 	rootCmd.Version = Version
-	runCmd.Flags().StringVarP(&confFlag, "config", "c", "data/config.yaml", "config path, eg: -c config.yaml")
+	runCmd.Flags().StringVarP(&confFlag, "config", "c", "/data/conf/config.yaml", "config path, eg: -c config.yaml")
 
 	dumpCmd.Flags().StringVarP(&dumpDataPath, "path", "p", "./", "dump data path, eg: -p ./dump/data/")
 
@@ -108,7 +108,7 @@ To run answer, use:
 		Long:  `Check if the current environment meets the startup requirements`,
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("Start checking the required environment...")
-			if cli.CheckConfigFile() {
+			if cli.CheckConfigFile(confFlag) {
 				fmt.Println("config file exists [✔]")
 			} else {
 				fmt.Println("config file not exists [x]")
