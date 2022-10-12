@@ -8,9 +8,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	// confFlag is the config flag.
+	confFlag string
+	// dumpDataPath dump data path
+	dumpDataPath string
+)
+
 func init() {
 	rootCmd.Version = Version
 	runCmd.Flags().StringVarP(&confFlag, "config", "c", "data/config.yaml", "config path, eg: -c config.yaml")
+
+	dumpCmd.Flags().StringVarP(&dumpDataPath, "path", "p", "./", "dump data path, eg: -p ./dump/data/")
 
 	rootCmd.AddCommand(initCmd)
 	rootCmd.AddCommand(checkCmd)
@@ -78,6 +87,16 @@ To run answer, use:
 		Long:  `back up data`,
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("Answer is backing up data")
+			c, err := readConfig()
+			if err != nil {
+				fmt.Println("read config failed: ", err.Error())
+				return
+			}
+			err = cli.DumpAllData(c.Data.Database, dumpDataPath)
+			if err != nil {
+				fmt.Println("dump failed: ", err.Error())
+				return
+			}
 			fmt.Println("Answer backed up the data successfully.")
 		},
 	}
@@ -89,10 +108,30 @@ To run answer, use:
 		Long:  `Check if the current environment meets the startup requirements`,
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("Start checking the required environment...")
-			fmt.Println("config file exists [✔]")
-			fmt.Println("db connection successfully [✔]")
-			fmt.Println("cache directory exists [✔]")
-			fmt.Println("Successful! The current environment meets the startup requirements.")
+			if cli.CheckConfigFile() {
+				fmt.Println("config file exists [✔]")
+			} else {
+				fmt.Println("config file not exists [x]")
+			}
+
+			if cli.CheckUploadDir() {
+				fmt.Println("upload directory exists [✔]")
+			} else {
+				fmt.Println("upload directory not exists [x]")
+			}
+
+			c, err := readConfig()
+			if err != nil {
+				fmt.Println("read config failed: ", err.Error())
+				return
+			}
+
+			if cli.CheckDB(c.Data.Database) {
+				fmt.Println("db connection successfully [✔]")
+			} else {
+				fmt.Println("db connection failed [x]")
+			}
+			fmt.Println("check environment all done")
 		},
 	}
 )

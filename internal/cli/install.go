@@ -16,6 +16,8 @@ import (
 
 const (
 	defaultConfigFilePath = "data/config.yaml"
+	defaultUploadFilePath = "data/upfiles"
+	defaultI18nPath       = "data/i18n"
 )
 
 // InstallAllInitialEnvironment install all initial environment
@@ -38,7 +40,7 @@ func installDataDir() {
 
 func installConfigFile() {
 	fmt.Println("[config-file] try to install...")
-	if dir.CheckPathExist(defaultConfigFilePath) {
+	if CheckConfigFile() {
 		fmt.Println("[config-file] already exists")
 		return
 	}
@@ -51,7 +53,7 @@ func installConfigFile() {
 
 func installUploadDir() {
 	fmt.Println("[upload-dir] try to install...")
-	if _, err := dir.CreatePathIsNotExist("data/upfiles"); err != nil {
+	if _, err := dir.CreatePathIsNotExist(defaultUploadFilePath); err != nil {
 		fmt.Printf("[upload-dir] install fail %s\n", err.Error())
 	} else {
 		fmt.Printf("[upload-dir] install success\n")
@@ -60,7 +62,7 @@ func installUploadDir() {
 
 func installI18nBundle() {
 	fmt.Println("[i18n] try to install i18n bundle...")
-	if _, err := dir.CreatePathIsNotExist("data/i18n"); err != nil {
+	if _, err := dir.CreatePathIsNotExist(defaultI18nPath); err != nil {
 		fmt.Println(err.Error())
 		return
 	}
@@ -72,7 +74,7 @@ func installI18nBundle() {
 	}
 	fmt.Printf("[i18n] find i18n bundle %d\n", len(i18nList))
 	for _, item := range i18nList {
-		path := fmt.Sprintf("data/i18n/%s", item.Name())
+		path := fmt.Sprintf("%s/%s", defaultI18nPath, item.Name())
 		content, err := i18n.I18n.ReadFile(item.Name())
 		if err != nil {
 			continue
@@ -92,7 +94,9 @@ func WriterFile(filePath, content string) error {
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		_ = file.Close()
+	}()
 	writer := bufio.NewWriter(file)
 	if _, err := writer.WriteString(content); err != nil {
 		return err
