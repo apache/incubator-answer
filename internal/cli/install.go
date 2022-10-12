@@ -15,9 +15,9 @@ import (
 )
 
 const (
-	defaultConfigFilePath = "data/config.yaml"
-	defaultUploadFilePath = "data/upfiles"
-	defaultI18nPath       = "data/i18n"
+	defaultConfigFilePath = "/data/conf/config.yaml"
+	defaultUploadFilePath = "/data/upfiles"
+	defaultI18nPath       = "/data/i18n"
 )
 
 // InstallAllInitialEnvironment install all initial environment
