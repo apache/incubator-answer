@@ -2,64 +2,89 @@ package cli
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"os"
 
+	"github.com/segmentfault/answer/assets"
 	"github.com/segmentfault/answer/configs"
 	"github.com/segmentfault/answer/i18n"
+	"github.com/segmentfault/answer/internal/base/data"
+	"github.com/segmentfault/answer/internal/entity"
 	"github.com/segmentfault/answer/pkg/dir"
 )
 
-var SuccessMsg = `
-answer initialized successfully.
-`
+const (
+	defaultConfigFilePath = "data/config.yaml"
+)
 
-var HasBeenInitializedMsg = `
-Has been initialized.
-`
+// InstallAllInitialEnvironment install all initial environment
+func InstallAllInitialEnvironment() {
+	installDataDir()
+	installConfigFile()
+	installUploadDir()
+	installI18nBundle()
+	fmt.Println("install all initial environment done")
+	return
+}
 
-func InitConfig() {
-	exist, err := PathExists("data/config.yaml")
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(2)
+func installDataDir() {
+	if _, err := dir.CreatePathIsNotExist("data"); err != nil {
+		fmt.Printf("[data-dir] install fail %s\n", err.Error())
+	} else {
+		fmt.Printf("[data-dir] install success\n")
 	}
-	if exist {
-		fmt.Println(HasBeenInitializedMsg)
-		os.Exit(0)
+}
+
+func installConfigFile() {
+	fmt.Println("[config-file] try to install...")
+	if dir.CheckPathExist(defaultConfigFilePath) {
+		fmt.Println("[config-file] already exists")
+		return
+	}
+	if err := WriterFile(defaultConfigFilePath, string(configs.Config)); err != nil {
+		fmt.Printf("[config-file] install fail %s\n", err.Error())
+	} else {
+		fmt.Printf("[config-file] install success\n")
+	}
+}
+
+func installUploadDir() {
+	fmt.Println("[upload-dir] try to install...")
+	if _, err := dir.CreatePathIsNotExist("data/upfiles"); err != nil {
+		fmt.Printf("[upload-dir] install fail %s\n", err.Error())
+	} else {
+		fmt.Printf("[upload-dir] install success\n")
+	}
+}
+
+func installI18nBundle() {
+	fmt.Println("[i18n] try to install i18n bundle...")
+	if _, err := dir.CreatePathIsNotExist("data/i18n"); err != nil {
+		fmt.Println(err.Error())
+		return
 	}
 
-	_, err = dir.CreatePathIsNotExist("data")
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(2)
-	}
-	WriterFile("data/config.yaml", string(configs.Config))
-	_, err = dir.CreatePathIsNotExist("data/i18n")
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(2)
-	}
-	_, err = dir.CreatePathIsNotExist("data/upfiles")
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(2)
-	}
 	i18nList, err := i18n.I18n.ReadDir(".")
 	if err != nil {
 		fmt.Println(err.Error())
-		os.Exit(2)
+		return
 	}
+	fmt.Printf("[i18n] find i18n bundle %d\n", len(i18nList))
 	for _, item := range i18nList {
 		path := fmt.Sprintf("data/i18n/%s", item.Name())
 		content, err := i18n.I18n.ReadFile(item.Name())
 		if err != nil {
 			continue
 		}
-		WriterFile(path, string(content))
+		fmt.Printf("[i18n] install %s bundle...\n", item.Name())
+		err = WriterFile(path, string(content))
+		if err != nil {
+			fmt.Printf("[i18n] install %s bundle fail: %s\n", item.Name(), err.Error())
+		} else {
+			fmt.Printf("[i18n] install %s bundle success\n", item.Name())
+		}
 	}
-	fmt.Println(SuccessMsg)
-	os.Exit(0)
 }
 
 func WriterFile(filePath, content string) error {
@@ -68,22 +93,45 @@ func WriterFile(filePath, content string) error {
 		return err
 	}
 	defer file.Close()
-	if err != nil {
+	writer := bufio.NewWriter(file)
+	if _, err := writer.WriteString(content); err != nil {
 		return err
 	}
-	write := bufio.NewWriter(file)
-	write.WriteString(content)
-	write.Flush()
+	if err := writer.Flush(); err != nil {
+		return err
+	}
 	return nil
 }
 
-func PathExists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
+// InitDB init db
+func InitDB(dataConf *data.Database) (err error) {
+	fmt.Println("[database] try to initialize database")
+	db, err := data.NewDB(false, dataConf)
+	if err != nil {
+		return err
 	}
-	if os.IsNotExist(err) {
-		return false, nil
+	// check db connection
+	if err = db.Ping(); err != nil {
+		return err
 	}
-	return false, err
+	fmt.Println("[database] connect success")
+
+	exist, err := db.IsTableExist(&entity.User{})
+	if err != nil {
+		return err
+	}
+	if exist {
+		fmt.Println("[database] already exists")
+		return nil
+	}
+
+	// create table if not exist
+	s := &bytes.Buffer{}
+	s.Write(assets.AnswerSql)
+	_, err = db.Import(s)
+	if err != nil {
+		return err
+	}
+	fmt.Println("[database] execute sql successfully")
+	return nil
 }
