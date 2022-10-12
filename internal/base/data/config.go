@@ -2,6 +2,7 @@ package data
 
 // Database database config
 type Database struct {
+	Driver          string `json:"driver" mapstructure:"driver"`
 	Connection      string `json:"connection" mapstructure:"connection"`
 	ConnMaxLifeTime int    `json:"conn_max_life_time" mapstructure:"conn_max_life_time"`
 	MaxOpenConn     int    `json:"max_open_conn" mapstructure:"max_open_conn"`
