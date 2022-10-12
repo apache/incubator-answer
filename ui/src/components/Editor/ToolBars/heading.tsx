@@ -9,17 +9,32 @@ const Heading: FC<IEditorContext> = (context) => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const headerList = [
     {
-      text: `<h4 class="mb-0">${t('heading.options.h4')}</h4>`,
+      text: `<h1 class="mb-0 h3">${t('heading.options.h1')}</h1>`,
+      level: 1,
+      label: t('heading.options.h1'),
+    },
+    {
+      text: `<h2 class="mb-0 h4">${t('heading.options.h2')}</h2>`,
+      level: 2,
+      label: t('heading.options.h2'),
+    },
+    {
+      text: `<h3 class="mb-0 h5">${t('heading.options.h3')}</h3>`,
+      level: 3,
+      label: t('heading.options.h3'),
+    },
+    {
+      text: `<h4 class="mb-0 h6">${t('heading.options.h4')}</h4>`,
       level: 4,
       label: t('heading.options.h4'),
     },
     {
-      text: `<h5 class="mb-0">${t('heading.options.h5')}</h5>`,
+      text: `<h5 class="mb-0 fs-14">${t('heading.options.h5')}</h5>`,
       level: 5,
       label: t('heading.options.h5'),
     },
     {
-      text: `<h6 class="mb-0">${t('heading.options.h6')}</h6>`,
+      text: `<h6 class="mb-0 fs-12">${t('heading.options.h6')}</h6>`,
       level: 6,
       label: t('heading.options.h6'),
     },
