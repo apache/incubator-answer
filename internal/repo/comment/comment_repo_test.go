@@ -20,7 +20,7 @@ var (
 func init() {
 	s, _ := os.LookupEnv("TESTDATA-DB-CONNECTION")
 	cache, _, _ := data.NewCache(log.Getlog(), &data.CacheConf{})
-	dataSource, _, _ = data.NewData(log.Getlog(), data.NewDB(true, &data.Database{
+	dataSource, _, _ = data.NewData(log.Getlog(), data.≈NewDB(true, &data.Database{
 		Connection: s,
 	}), cache)
 	log = log.Getlog()
