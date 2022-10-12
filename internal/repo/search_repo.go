@@ -105,7 +105,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 		return
 	}
 
-	res, err := sr.data.DB.Query(builder.MySQL().Select("*").From(b, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page))
+	res, err := sr.data.DB.Query(builder.MySQL().Select("*").From(b, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1))
 
 	tr, err := sr.data.DB.Query(builder.MySQL().Select("count(*) total").From(b, "c"))
 	if len(tr) != 0 {
@@ -153,7 +153,7 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 	} else if answers > 0 {
 		b.And(builder.Gte{"answer_count": answers})
 	}
-	res, err := sr.data.DB.Query(b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page))
+	res, err := sr.data.DB.Query(b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1))
 
 	tr, err := sr.data.DB.Query(builder.MySQL().Select("count(*) total").From(b, "c"))
 
@@ -203,7 +203,7 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 		b.Where(builder.Eq{"question_id": questionID})
 	}
 
-	res, err := sr.data.DB.Query(b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page))
+	res, err := sr.data.DB.Query(b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1))
 
 	tr, err := sr.data.DB.Query(builder.MySQL().Select("count(*) total").From(b, "c"))
 	total = converter.StringToInt64(string(tr[0]["total"]))
