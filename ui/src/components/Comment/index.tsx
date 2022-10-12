@@ -112,6 +112,7 @@ const Comment = ({ objectId, mode }) => {
             if (comment.comment_id === item.comment_id) {
               comment.showEdit = false;
               comment.parsed_text = html;
+              comment.original_text = item.value;
             }
             return comment;
           }),
