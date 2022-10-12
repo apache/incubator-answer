@@ -74,7 +74,10 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 		return nil, nil, err
 	}
 	langController := controller.NewLangController(i18nTranslator)
-	engine := data.NewDB(debug, dbConf)
+	engine, err := data.NewDB(debug, dbConf)
+	if err != nil {
+		return nil, nil, err
+	}
 	cache, cleanup, err := data.NewCache(cacheConf)
 	if err != nil {
 		return nil, nil, err

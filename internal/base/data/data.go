@@ -9,6 +9,7 @@ import (
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/core"
 	"xorm.io/xorm"
+	ormlog "xorm.io/xorm/log"
 )
 
 // Data data
@@ -27,18 +28,20 @@ func NewData(db *xorm.Engine, cache cache.Cache) (*Data, func(), error) {
 }
 
 // NewDB new database instance
-func NewDB(debug bool, dataConf *Database) *xorm.Engine {
+func NewDB(debug bool, dataConf *Database) (*xorm.Engine, error) {
 	engine, err := xorm.NewEngine("mysql", dataConf.Connection)
 	if err != nil {
-		panic(err)
-	}
-
-	if err = engine.Ping(); err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	if debug {
 		engine.ShowSQL(true)
+	} else {
+		engine.SetLogLevel(ormlog.LOG_ERR)
+	}
+
+	if err = engine.Ping(); err != nil {
+		return nil, err
 	}
 
 	if dataConf.MaxIdleConn > 0 {
@@ -51,7 +54,7 @@ func NewDB(debug bool, dataConf *Database) *xorm.Engine {
 		engine.SetConnMaxLifetime(time.Duration(dataConf.ConnMaxLifeTime) * time.Second)
 	}
 	engine.SetColumnMapper(core.GonicMapper{})
-	return engine
+	return engine, nil
 }
 
 // NewCache new cache instance
