@@ -57,6 +57,10 @@ func NewSearchService(
 
 func (ss *SearchService) Search(ctx context.Context, dto *schema.SearchDTO) (resp []schema.SearchResp, total int64, extra interface{}, err error) {
 	extra = nil
+	if dto.Page < 1 {
+		dto.Page = 1
+	}
+
 	switch {
 	case ss.tagSearch.Parse(dto):
 		resp, total, err = ss.tagSearch.Search(ctx)
