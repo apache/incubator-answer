@@ -122,7 +122,9 @@ const QuestionList: FC<Props> = ({ source }) => {
       <ListGroup variant="flush" className="border-top border-bottom-0">
         {listData?.list?.map((li) => {
           return (
-            <ListGroup.Item key={li.id} className="border-bottom py-3 px-0">
+            <ListGroup.Item
+              key={li.id}
+              className="border-bottom pt-3 pb-2 px-0">
               <h5 className="text-wrap text-break">
                 <NavLink to={`/questions/${li.id}`} className="link-dark">
                   {li.title}
@@ -153,13 +155,13 @@ const QuestionList: FC<Props> = ({ source }) => {
                   <em className="fst-normal mx-1">{li.view_count}</em>
                 </span>
               </div>
-              <div className="question-tags">
+              <div className="question-tags mx-n1">
                 {Array.isArray(li.tags)
                   ? li.tags.map((tag) => {
                       return (
                         <Tag
                           key={tag.slug_name}
-                          className="me-2 mt-2"
+                          className="m-1"
                           href={`/tags/${
                             tag.main_tag_slug_name || tag.slug_name
                           }`}>
