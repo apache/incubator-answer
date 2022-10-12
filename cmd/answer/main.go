@@ -18,8 +18,6 @@ var (
 	Name = "answer"
 	// Version is the version of the project
 	Version = "unknown"
-	// confFlag is the config flag.
-	confFlag string
 	// log level
 	logLevel = os.Getenv("LOG_LEVEL")
 	// log path
