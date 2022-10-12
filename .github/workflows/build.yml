@@ -35,8 +35,6 @@ jobs:
     - name: Test Build
       run: go build -v ./...
 
-    # 登录到 GitHub Packages 容器仓库
-    # 注意 secrets.GITHUB_TOKEN 不需要手动添加，直接就可以用
     - name: Login to ghcr.io
       uses: docker/login-action@v1
       with:
