@@ -36,6 +36,13 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE }}
+        tags: |
+              type=ref,event=branch
+              type=sha
+              type=sha,prefix={{branch}}-
+              type=sha,format=long
+              type=sha,format=long,prefix={{branch}}-
+              type=raw,value=latest
 
     - name: Build Img
       uses: docker/build-push-action@v3
@@ -44,7 +51,7 @@ jobs:
         file: ./Dockerfile
         builder: ${{ steps.buildx.outputs.name }}
         push: true
-        tags: latest
+        tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
     # - name: build to hub.docker
