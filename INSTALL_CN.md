@@ -52,6 +52,15 @@ $ docker start answer
      connection: [username]:[password]@tcp([host]:[port])/[DbName]
  7. 退出data 目录 执行 ./answer run -c ./data/conf/config.yaml
 
+## 当前支持的命令
+用法: answer [command]
+
+- help: 帮助
+- init: 初始化环境
+- run: 启动
+- check: 环境依赖检查
+- dump: 备份数据
+
 ## 配置文件 config.yaml 参数说明
 
 ```
