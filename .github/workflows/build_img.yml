@@ -9,7 +9,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE: aichy126/answer
+  IMAGE: answerdev/answer
 
 jobs:
   build-and-push:
