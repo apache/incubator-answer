@@ -125,7 +125,7 @@ func (qc *QuestionController) SimilarQuestion(ctx *gin.Context) {
 // @Produce  json
 // @Param data body schema.QuestionSearch  true "QuestionSearch"
 // @Success 200 {string} string ""
-// @Router /answer/api/v1/question/page [post]
+// @Router /answer/api/v1/question/page [get]
 func (qc *QuestionController) Index(ctx *gin.Context) {
 	req := &schema.QuestionSearch{}
 	if handler.BindAndCheck(ctx, req) {
