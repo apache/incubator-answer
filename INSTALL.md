@@ -53,6 +53,15 @@ $ docker start answer
      connection: [username]:[password]@tcp([host]:[port])/[DbName]
   7. Exit the data directory and execute ./answer run -c ./data/conf/config.yaml
 
+## Available Commands
+Usage: answer [command]
+
+- help: Help about any command
+- init: Init answer application
+- run: Run answer application
+- check: Check answer required environment
+- dump: Backup answer data
+
 ## config.yaml Description
 
 ```
