@@ -37,11 +37,6 @@ jobs:
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE }}
         tags: |
-              type=ref,event=branch
-              type=sha
-              type=sha,prefix={{branch}}-
-              type=sha,format=long
-              type=sha,format=long,prefix={{branch}}-
               type=raw,value=latest
 
     - name: Build Img
