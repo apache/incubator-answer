@@ -56,7 +56,7 @@ const useTagModal = (props: IProps = {}) => {
     } else if (displayName.value.length > MAX_LENGTH) {
       bol = false;
       formData.displayName = {
-        value: '',
+        value: displayName.value,
         isInvalid: true,
         errorMsg: t('form.fields.display_name.msg.range'),
       };
@@ -67,6 +67,7 @@ const useTagModal = (props: IProps = {}) => {
         errorMsg: '',
       };
     }
+
     if (!slugName.value) {
       bol = false;
       formData.slugName = {
@@ -77,9 +78,16 @@ const useTagModal = (props: IProps = {}) => {
     } else if (slugName.value.length > MAX_LENGTH) {
       bol = false;
       formData.slugName = {
-        value: '',
+        value: slugName.value,
         isInvalid: true,
         errorMsg: t('form.fields.slug_name.msg.range'),
+      };
+    } else if (/[^a-z0-9+#\-.]/.test(slugName.value)) {
+      bol = false;
+      formData.slugName = {
+        value: slugName.value,
+        isInvalid: true,
+        errorMsg: t('form.fields.slug_name.msg.character'),
       };
     } else {
       formData.slugName = {

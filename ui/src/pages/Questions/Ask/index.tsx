@@ -279,16 +279,20 @@ const Ask = () => {
                 <Form.Group controlId="revision" className="mb-3">
                   <Form.Label>{t('form.fields.revision.label')}</Form.Label>
                   <Form.Select onChange={handleSelectedRevision}>
-                    {revisions.map(({ reason, create_at }, index) => {
-                      const date = dayjs(create_at * 1000).format(
-                        t('long_date_with_time', { keyPrefix: 'dates' }),
-                      );
-                      return (
-                        <option key={`${create_at}`} value={index}>
-                          {`${date} - robin - ${reason || t('default_reason')}`}
-                        </option>
-                      );
-                    })}
+                    {revisions.map(
+                      ({ reason, create_at, user_info }, index) => {
+                        const date = dayjs(create_at * 1000).format(
+                          t('long_date_with_time', { keyPrefix: 'dates' }),
+                        );
+                        return (
+                          <option key={`${create_at}`} value={index}>
+                            {`${date} - ${user_info.display_name} - ${
+                              reason || t('default_reason')
+                            }`}
+                          </option>
+                        );
+                      },
+                    )}
                   </Form.Select>
                 </Form.Group>
               )}
@@ -414,7 +418,7 @@ const Ask = () => {
                 {t('title', { keyPrefix: 'how_to_format' })}
               </Card.Header>
               <Card.Body
-                className="fmt"
+                className="fmt small"
                 dangerouslySetInnerHTML={{
                   __html: t('description', { keyPrefix: 'how_to_format' }),
                 }}

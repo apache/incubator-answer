@@ -156,13 +156,15 @@ const Ask = () => {
               <Form.Group controlId="revision" className="mb-3">
                 <Form.Label>{t('form.fields.revision.label')}</Form.Label>
                 <Form.Select onChange={handleSelectedRevision}>
-                  {revisions.map(({ create_at, reason }, index) => {
+                  {revisions.map(({ create_at, reason, user_info }, index) => {
                     const date = dayjs(create_at * 1000).format(
                       t('long_date_with_time', { keyPrefix: 'dates' }),
                     );
                     return (
                       <option key={`${create_at}`} value={index}>
-                        {`${date} - robin - ${reason || t('default_reason')}`}
+                        {`${date} - ${user_info.display_name} - ${
+                          reason || t('default_reason')
+                        }`}
                       </option>
                     );
                   })}
