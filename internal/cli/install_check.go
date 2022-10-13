@@ -10,7 +10,7 @@ func CheckConfigFile(configPath string) bool {
 }
 
 func CheckUploadDir() bool {
-	return dir.CheckPathExist(defaultUploadFilePath)
+	return dir.CheckPathExist(UploadFilePath)
 }
 
 func CheckDB(dataConf *data.Database) bool {

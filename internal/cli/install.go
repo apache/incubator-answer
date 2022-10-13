@@ -16,13 +16,21 @@ import (
 )
 
 const (
-	defaultConfigFilePath = "/data/conf/"
-	defaultUploadFilePath = "/data/upfiles/"
-	defaultI18nPath       = "/data/i18n/"
+	DefaultConfigFileName = "config.yaml"
+)
+
+var (
+	ConfigFilePath = "/conf/"
+	UploadFilePath = "/upfiles/"
+	I18nPath       = "/i18n/"
 )
 
 // InstallAllInitialEnvironment install all initial environment
-func InstallAllInitialEnvironment() {
+func InstallAllInitialEnvironment(dataDirPath string) {
+	ConfigFilePath = filepath.Join(dataDirPath, ConfigFilePath)
+	UploadFilePath = filepath.Join(dataDirPath, UploadFilePath)
+	I18nPath = filepath.Join(dataDirPath, I18nPath)
+
 	installConfigFile()
 	installUploadDir()
 	installI18nBundle()
@@ -32,21 +40,21 @@ func InstallAllInitialEnvironment() {
 
 func installConfigFile() {
 	fmt.Println("[config-file] try to install...")
-	defaultConfigFile := filepath.Join(defaultConfigFilePath, "config.yaml")
+	defaultConfigFile := filepath.Join(ConfigFilePath, DefaultConfigFileName)
 
 	// if config file already exists do nothing.
 	if CheckConfigFile(defaultConfigFile) {
-		fmt.Println("[config-file] already exists")
+		fmt.Printf("[config-file] %s already exists\n", defaultConfigFile)
 		return
 	}
 
-	if _, err := dir.CreatePathIsNotExist(defaultConfigFilePath); err != nil {
+	if _, err := dir.CreatePathIsNotExist(ConfigFilePath); err != nil {
 		fmt.Printf("[config-file] create directory fail %s\n", err.Error())
 		return
 	}
-	fmt.Printf("[config-file] create directory success\n")
+	fmt.Printf("[config-file] create directory success, config file is %s\n", defaultConfigFile)
 
-	if err := WriterFile(defaultConfigFile, string(configs.Config)); err != nil {
+	if err := writerFile(defaultConfigFile, string(configs.Config)); err != nil {
 		fmt.Printf("[config-file] install fail %s\n", err.Error())
 		return
 	}
@@ -55,16 +63,16 @@ func installConfigFile() {
 
 func installUploadDir() {
 	fmt.Println("[upload-dir] try to install...")
-	if _, err := dir.CreatePathIsNotExist(defaultUploadFilePath); err != nil {
+	if _, err := dir.CreatePathIsNotExist(UploadFilePath); err != nil {
 		fmt.Printf("[upload-dir] install fail %s\n", err.Error())
 	} else {
-		fmt.Printf("[upload-dir] install success\n")
+		fmt.Printf("[upload-dir] install success, upload directory is %s\n", UploadFilePath)
 	}
 }
 
 func installI18nBundle() {
 	fmt.Println("[i18n] try to install i18n bundle...")
-	if _, err := dir.CreatePathIsNotExist(defaultI18nPath); err != nil {
+	if _, err := dir.CreatePathIsNotExist(I18nPath); err != nil {
 		fmt.Println(err.Error())
 		return
 	}
@@ -76,13 +84,13 @@ func installI18nBundle() {
 	}
 	fmt.Printf("[i18n] find i18n bundle %d\n", len(i18nList))
 	for _, item := range i18nList {
-		path := filepath.Join(defaultI18nPath, item.Name())
+		path := filepath.Join(I18nPath, item.Name())
 		content, err := i18n.I18n.ReadFile(item.Name())
 		if err != nil {
 			continue
 		}
 		fmt.Printf("[i18n] install %s bundle...\n", item.Name())
-		err = WriterFile(path, string(content))
+		err = writerFile(path, string(content))
 		if err != nil {
 			fmt.Printf("[i18n] install %s bundle fail: %s\n", item.Name(), err.Error())
 		} else {
@@ -91,7 +99,7 @@ func installI18nBundle() {
 	}
 }
 
-func WriterFile(filePath, content string) error {
+func writerFile(filePath, content string) error {
 	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		return err

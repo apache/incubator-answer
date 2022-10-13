@@ -2,9 +2,11 @@ package main
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/answer/internal/base/conf"
+	"github.com/segmentfault/answer/internal/cli"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/contrib/conf/viper"
 	"github.com/segmentfault/pacman/contrib/log/zap"
@@ -52,8 +54,11 @@ func runApp() {
 }
 
 func readConfig() (c *conf.AllConfig, err error) {
+	if len(configFilePath) == 0 {
+		configFilePath = filepath.Join(cli.ConfigFilePath, cli.DefaultConfigFileName)
+	}
 	c = &conf.AllConfig{}
-	config, err := viper.NewWithPath(confFlag)
+	config, err := viper.NewWithPath(configFilePath)
 	if err != nil {
 		return nil, err
 	}
