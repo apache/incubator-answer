@@ -44,7 +44,7 @@ jobs:
         file: ./Dockerfile
         builder: ${{ steps.buildx.outputs.name }}
         push: true
-        tags: ${{ steps.meta.outputs.tags }}
+        tags: latest
         labels: ${{ steps.meta.outputs.labels }}
 
     # - name: build to hub.docker
