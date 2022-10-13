@@ -23,18 +23,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.18
-
-    - name: Test
-      run: go test -v ./...
-
-    - name: Test Build
-      run: go build -v ./...
-
     - name: Login to ghcr.io
       uses: docker/login-action@v1
       with:
@@ -48,6 +36,8 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE }}
+        tags: |
+              type=raw,value=latest
 
     - name: Build Img
       uses: docker/build-push-action@v3
