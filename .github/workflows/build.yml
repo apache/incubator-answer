@@ -29,8 +29,8 @@ jobs:
       with:
         go-version: 1.18
 
-    - name: Test
-      run: go test -v ./...
+    # - name: Test
+    #   run: go test -v ./...
 
     - name: Test Build
       run: go build -v ./...
