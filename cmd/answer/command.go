@@ -9,15 +9,20 @@ import (
 )
 
 var (
-	// confFlag is the config flag.
-	confFlag string
+	// configFilePath is the config file path
+	configFilePath string
+	// dataDirPath save all answer application data in this directory. like config file, upload file...
+	dataDirPath string
 	// dumpDataPath dump data path
 	dumpDataPath string
 )
 
 func init() {
 	rootCmd.Version = Version
-	runCmd.Flags().StringVarP(&confFlag, "config", "c", "/data/conf/config.yaml", "config path, eg: -c config.yaml")
+
+	initCmd.Flags().StringVarP(&dataDirPath, "data-path", "C", "/data/", "data path, eg: -C ./data/")
+
+	runCmd.Flags().StringVarP(&configFilePath, "config", "c", "", "config path, eg: -c config.yaml")
 
 	dumpCmd.Flags().StringVarP(&dumpDataPath, "path", "p", "./", "dump data path, eg: -p ./dump/data/")
 
@@ -55,7 +60,7 @@ To run answer, use:
 		Short: "init answer application",
 		Long:  `init answer application`,
 		Run: func(cmd *cobra.Command, args []string) {
-			cli.InstallAllInitialEnvironment()
+			cli.InstallAllInitialEnvironment(dataDirPath)
 			c, err := readConfig()
 			if err != nil {
 				fmt.Println("read config failed: ", err.Error())
@@ -108,7 +113,7 @@ To run answer, use:
 		Long:  `Check if the current environment meets the startup requirements`,
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("Start checking the required environment...")
-			if cli.CheckConfigFile(confFlag) {
+			if cli.CheckConfigFile(configFilePath) {
 				fmt.Println("config file exists [✔]")
 			} else {
 				fmt.Println("config file not exists [x]")
