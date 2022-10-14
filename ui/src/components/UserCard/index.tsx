@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 
 import { Avatar, FormatTime } from '@answer/components';
 
+import { formatCount } from '@/utils';
+
 interface Props {
   data: any;
   time: number;
@@ -28,7 +30,9 @@ const Index: FC<Props> = ({ data, time, preFix }) => {
           ) : (
             <span className="me-1 text-break">{data?.display_name}</span>
           )}
-          <span className="fw-bold">{data?.rank}</span>
+          <span className="fw-bold" title="Reputation">
+            {formatCount(data?.rank)}
+          </span>
         </div>
         {time && <FormatTime time={time} preFix={preFix} />}
       </div>
