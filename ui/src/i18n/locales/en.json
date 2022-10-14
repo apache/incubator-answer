@@ -495,6 +495,12 @@
         "msg": "Display name cannot be empty.",
         "msg_range": "Display name up to 30 characters"
       },
+      "username": {
+        "label": "Username",
+        "msg": "Username cannot be empty.",
+        "msg_range": "Username up to 30 characters",
+        "character": "Must use the character set \"a-z\", \"0-9\", \" - . _\""
+      },
       "avatar": {
         "label": "Profile image",
         "text": "You can upload your image or <1>reset</1> it to"
