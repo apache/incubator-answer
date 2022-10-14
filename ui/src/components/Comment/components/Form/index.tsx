@@ -29,7 +29,9 @@ const Form = ({
   const handleChange = (e) => {
     setValue(e.target.value);
   };
-
+  const handleSelected = (val) => {
+    setValue(val);
+  };
   return (
     <div
       className={classNames(
@@ -37,7 +39,7 @@ const Form = ({
         className,
       )}>
       <div>
-        <Mentions pageUsers={pageUsers.getUsers()}>
+        <Mentions pageUsers={pageUsers.getUsers()} onSelected={handleSelected}>
           <TextArea size="sm" value={value} onChange={handleChange} />
         </Mentions>
         <div className="form-text">{t(`tip_${mode}`)}</div>

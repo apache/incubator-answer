@@ -6,11 +6,12 @@ import * as Types from '@answer/common/interface';
 interface IProps {
   children: React.ReactNode;
   pageUsers;
+  onSelected: (val: string) => void;
 }
 
 const MAX_RECODE = 5;
 
-const Mentions: FC<IProps> = ({ children, pageUsers }) => {
+const Mentions: FC<IProps> = ({ children, pageUsers, onSelected }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [val, setValue] = useState('');
@@ -71,23 +72,17 @@ const Mentions: FC<IProps> = ({ children, pageUsers }) => {
     if (!selectionStart) {
       return;
     }
-    const str = value.substring(
-      value.substring(0, selectionStart).lastIndexOf('@'),
-      selectionStart,
-    );
+
     const text = `@${item?.displayName}[${item?.userName}] `;
-    element.value = `${value.substring(
-      0,
-      value.substring(0, selectionStart).lastIndexOf('@'),
-    )}${text}${value.substring(selectionStart)}`;
+    onSelected(
+      `${value.substring(
+        0,
+        value.substring(0, selectionStart).lastIndexOf('@'),
+      )}${text}${value.substring(selectionStart)}`,
+    );
     setUsers([]);
     setValue('');
-    const newSelectionStart = selectionStart + text.length - str.length;
-
-    element.setSelectionRange(newSelectionStart, newSelectionStart);
-    element.focus();
   };
-
   const filterData = val
     ? users.filter(
         (item) =>

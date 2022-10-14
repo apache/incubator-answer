@@ -195,7 +195,7 @@ export interface PostAnswerReq {
 }
 
 export interface PageUser {
-  id;
+  id?;
   displayName;
   userName?;
   avatar_url?;
