@@ -73,7 +73,7 @@ const Mentions: FC<IProps> = ({ children, pageUsers, onSelected }) => {
       return;
     }
 
-    const text = `@${item?.displayName}[${item?.userName}] `;
+    const text = `@${item?.userName}`;
     onSelected(
       `${value.substring(
         0,

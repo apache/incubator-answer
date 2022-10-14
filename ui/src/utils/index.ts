@@ -78,8 +78,8 @@ function scrollTop(element) {
  * @returns Array<{displayName: string, userName: string}>
  */
 function matchedUsers(markdown) {
-  const globalReg = /@(.*?)\[(.*?)\]/gm;
-  const reg = /@(.*?)\[(.*?)\]/;
+  const globalReg = /\B@([\w\\_\\.]+)/g;
+  const reg = /\B@([\w\\_\\.]+)/;
 
   const users = markdown.match(globalReg);
   if (!users) {
@@ -88,8 +88,7 @@ function matchedUsers(markdown) {
   return users.map((user) => {
     const matched = user.match(reg);
     return {
-      displayName: matched[2],
-      userName: matched[2],
+      userName: matched[1],
     };
   });
 }
@@ -100,8 +99,8 @@ function matchedUsers(markdown) {
  * @returns string
  */
 function parseUserInfo(markdown) {
-  const globalReg = /@(.*?)\[(.*?)\]/gm;
-  return markdown.replace(globalReg, '[@$1](/u/$2)');
+  const globalReg = /\B@([\w\\_\\.]+)/g;
+  return markdown.replace(globalReg, '[@$1](/u/$1)');
 }
 
 export {
