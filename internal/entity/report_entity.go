@@ -27,8 +27,8 @@ type Report struct {
 	ObjectType     int       `xorm:"not null default 0 comment('revision type') INT(11) object_type"`
 	ReportType     int       `xorm:"not null default 0 comment('report type') INT(11) report_type"`
 	Content        string    `xorm:"not null comment('report content') TEXT content"`
-	FlagedType     int       `xorm:"not null default 0 comment('flaged type') INT(11) flaged_type"`
-	FlagedContent  string    `xorm:"not null comment('flaged content') TEXT flaged_content"`
+	FlaggedType    int       `xorm:"not null default 0 comment('flaged type') INT(11) flaged_type"`
+	FlaggedContent string    `xorm:"not null comment('flaged content') TEXT flaged_content"`
 	Status         int       `xorm:"not null default 1 comment('status(normal: 1; delete 2)') INT(11) status"`
 }
 
