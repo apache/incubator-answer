@@ -14,8 +14,8 @@
       color: #fff;
     }
     &.icon-link {
-      width: 46px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
     }
   }
   .placeholder-search {
@@ -28,4 +28,40 @@
       color: rgba(255, 255, 255, 0.75);
     }
   }
+
+  .answer-navBar {
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    border: none;
+  }
+  .answer-navBar:focus {
+    box-shadow: none;
+  }
+
+  .lg-none {
+    display: none!important;
+  }
+
+  .hr {
+    color: #fff;
+  }
 }
+
+
+@media (max-width: 992.9px) {
+  #header {
+    .nav-grow {
+      flex-grow: 1!important;
+    }
+
+    .lg-none {
+      display: flex!important;
+    }
+
+    .w-75 {
+      width: 100% !important;
+    }
+  }
+
+}
+

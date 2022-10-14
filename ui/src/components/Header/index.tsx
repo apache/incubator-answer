@@ -7,15 +7,21 @@ import {
   FormControl,
   Button,
   Col,
-  Dropdown,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams, NavLink, Link, useNavigate } from 'react-router-dom';
+import {
+  useSearchParams,
+  NavLink,
+  Link,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
 
-import { Avatar, Icon } from '@answer/components';
 import { userInfoStore, siteInfoStore, interfaceStore } from '@answer/stores';
 import { logout, useQueryNotificationStatus } from '@answer/api';
 import Storage from '@answer/utils/storage';
+
+import NavItems from './components/NavItems';
 
 import './index.scss';
 
@@ -29,6 +35,7 @@ const Header: FC = () => {
   const siteInfo = siteInfoStore((state) => state.siteInfo);
   const { interface: interfaceInfo } = interfaceStore();
   const { data: redDot } = useQueryNotificationStatus();
+  const location = useLocation();
   const handleInput = (val) => {
     setSearch(val);
   };
@@ -45,22 +52,61 @@ const Header: FC = () => {
       handleInput(q);
     }
   }, [q]);
+
+  useEffect(() => {
+    const collapse = document.querySelector('#navBarContent');
+    if (collapse && collapse.classList.contains('show')) {
+      const toogle = document.querySelector('#navBarToggle') as HTMLElement;
+      if (toogle) {
+        toogle?.click();
+      }
+    }
+  }, [location.pathname]);
+
   return (
     <Navbar variant="dark" expand="lg" className="sticky-top" id="header">
       <Container className="d-flex align-items-center">
-        <Navbar.Brand href="/">
-          {interfaceInfo.logo ? (
-            <img
-              className="logo rounded-1 me-0"
-              src={interfaceInfo.logo}
-              alt=""
-            />
-          ) : (
-            <span>{siteInfo.name || 'Answer'}</span>
-          )}
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="navBarContent" />
+        <Navbar.Toggle
+          aria-controls="navBarContent"
+          className="answer-navBar me-2"
+          id="navBarToggle"
+        />
+
+        <div className="left-wrap d-flex justify-content-between align-items-center nav-grow">
+          <Navbar.Brand to="/" as={Link}>
+            {interfaceInfo.logo ? (
+              <img
+                className="logo rounded-1 me-0"
+                src={interfaceInfo.logo}
+                alt=""
+              />
+            ) : (
+              <span>{siteInfo.name || 'Answer'}</span>
+            )}
+          </Navbar.Brand>
+
+          {/* mobile nav */}
+          <div className="d-flex lg-none align-items-center flex-lg-nowrap">
+            {user?.username ? (
+              <NavItems redDot={redDot} userInfo={user} logOut={handleLogout} />
+            ) : (
+              <>
+                <Button
+                  variant="link"
+                  className="me-2 text-white"
+                  href="/users/login">
+                  {t('btns.login')}
+                </Button>
+                <Button variant="light" href="/users/register">
+                  {t('btns.signup')}
+                </Button>
+              </>
+            )}
+          </div>
+        </div>
+
         <Navbar.Collapse id="navBarContent" className="me-auto">
+          <hr className="hr lg-none mb-2" style={{ marginTop: '12px' }} />
           <Col md={4}>
             <Nav>
               <NavLink className="nav-link" to="/questions">
@@ -74,9 +120,10 @@ const Header: FC = () => {
               </NavLink>
             </Nav>
           </Col>
+          <hr className="hr lg-none mt-2" />
 
-          <Col md={4} className="d-none d-sm-flex justify-content-center">
-            <Form action="/search" className="w-75 px-2">
+          <Col lg={4} className="d-flex justify-content-center">
+            <Form action="/search" className="w-75 px-0 px-lg-2">
               <FormControl
                 placeholder={t('header.search.placeholder')}
                 className="text-white placeholder-search"
@@ -87,69 +134,32 @@ const Header: FC = () => {
             </Form>
           </Col>
 
+          <Nav.Item className="lg-none mt-3 pb-1">
+            <Link
+              to="/questions/ask"
+              className="text-capitalize text-nowrap btn btn-light">
+              {t('btns.add_question')}
+            </Link>
+          </Nav.Item>
+          {/* pc nav */}
           <Col
-            md={4}
-            className="d-flex justify-content-start justify-content-sm-end">
+            lg={4}
+            className="d-none d-lg-flex justify-content-start justify-content-sm-end">
             {user?.username ? (
               <Nav className="d-flex align-items-center flex-lg-nowrap">
-                <Nav.Item className="me-2">
+                <Nav.Item className="me-3">
                   <Link
                     to="/questions/ask"
                     className="text-capitalize text-nowrap btn btn-light">
                     {t('btns.add_question')}
                   </Link>
                 </Nav.Item>
-                <Nav.Link
-                  as={NavLink}
-                  to="/users/notifications/inbox"
-                  className="icon-link d-flex align-items-center justify-content-center p-0 me-2 position-relative">
-                  <div className="text-white text-opacity-75">
-                    <Icon name="bell-fill" className="fs-5" />
-                  </div>
-                  {(redDot?.inbox || 0) > 0 && (
-                    <div className="unread-dot bg-danger" />
-                  )}
-                </Nav.Link>
 
-                <Nav.Link
-                  as={Link}
-                  to="/users/notifications/achievement"
-                  className="icon-link d-flex align-items-center justify-content-center p-0 me-2 position-relative">
-                  <div className="text-white text-opacity-75">
-                    <Icon name="trophy-fill" className="fs-5" />
-                  </div>
-                  {(redDot?.achievement || 0) > 0 && (
-                    <div className="unread-dot bg-danger" />
-                  )}
-                </Nav.Link>
-
-                <Dropdown align="end">
-                  <Dropdown.Toggle
-                    variant="success"
-                    id="dropdown-basic"
-                    as="a"
-                    className="no-toggle pointer">
-                    <Avatar size="36px" avatar={user?.avatar} />
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    <Dropdown.Item href={`/users/${user.username}`}>
-                      {t('header.nav.profile')}
-                    </Dropdown.Item>
-                    <Dropdown.Item href="/users/settings/profile">
-                      {t('header.nav.setting')}
-                    </Dropdown.Item>
-                    {user?.is_admin ? (
-                      <Dropdown.Item href="/admin">
-                        {t('header.nav.admin')}
-                      </Dropdown.Item>
-                    ) : null}
-                    <Dropdown.Divider />
-                    <Dropdown.Item onClick={handleLogout}>
-                      {t('header.nav.logout')}
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
-                </Dropdown>
+                <NavItems
+                  redDot={redDot}
+                  userInfo={user}
+                  logOut={handleLogout}
+                />
               </Nav>
             ) : (
               <>
