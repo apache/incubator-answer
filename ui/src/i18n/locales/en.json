@@ -675,7 +675,8 @@
     "answered": "answered",
     "asked": "asked",
     "closed": "closed",
-    "follow_a_tag": "Follow a tag"
+    "follow_a_tag": "Follow a tag",
+    "more": "More"
   },
   "personal": {
     "overview": "Overview",
