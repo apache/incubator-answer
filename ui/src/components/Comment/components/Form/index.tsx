@@ -31,7 +31,11 @@ const Form = ({
   };
 
   return (
-    <div className={classNames('d-flex align-items-start', className)}>
+    <div
+      className={classNames(
+        'd-flex align-items-start flex-column flex-md-row',
+        className,
+      )}>
       <div>
         <Mentions pageUsers={pageUsers.getUsers()}>
           <TextArea size="sm" value={value} onChange={handleChange} />
@@ -39,17 +43,17 @@ const Form = ({
         <div className="form-text">{t(`tip_${mode}`)}</div>
       </div>
       {type === 'edit' ? (
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-row flex-md-column ms-0 ms-md-2 mt-2 mt-md-0">
           <Button
             size="sm"
-            className="text-nowrap ms-2"
+            className="text-nowrap "
             onClick={() => onSendReply(value)}>
             {t('btn_save_edits')}
           </Button>
           <Button
             variant="link"
             size="sm"
-            className="text-nowrap ms-2 btn-no-border"
+            className="text-nowrap btn-no-border ms-2 ms-md-0"
             onClick={onCancel}>
             {t('btn_cancel')}
           </Button>
@@ -57,7 +61,7 @@ const Form = ({
       ) : (
         <Button
           size="sm"
-          className="text-nowrap ms-2"
+          className="text-nowrap ms-0 ms-md-2 mt-2 mt-md-0"
           onClick={() => onSendReply(value)}>
           {t('btn_add_comment')}
         </Button>

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -64,6 +64,29 @@ const ActionBar = ({
           );
         })}
       </div>
+      <Dropdown className="d-block d-md-none">
+        <Dropdown.Toggle
+          as="div"
+          variant="success"
+          className="no-toggle"
+          id="dropdown-comment">
+          <Icon name="three-dots" className="text-secondary" />
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu align="end">
+          {memberActions.map((action) => {
+            return (
+              <Dropdown.Item
+                key={action.name}
+                variant="link"
+                size="sm"
+                onClick={() => onAction(action)}>
+                {action.name}
+              </Dropdown.Item>
+            );
+          })}
+        </Dropdown.Menu>
+      </Dropdown>
     </div>
   );
 };
