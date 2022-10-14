@@ -70,7 +70,8 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 
 	for i, word := range words {
 		if i == 0 {
-			b.Where(builder.Like{"original_text", word})
+			b.Where(builder.Like{"title", word}).
+				Or(builder.Like{"original_text", word})
 			ub.Where(builder.Like{"`answer`.original_text", word})
 		} else {
 			b.Or(builder.Like{"original_text", word})
@@ -137,7 +138,8 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 
 	for i, word := range words {
 		if i == 0 {
-			b.Where(builder.Like{"original_text", word})
+			b.Where(builder.Like{"title", word}).
+				Or(builder.Like{"original_text", word})
 		} else {
 			b.Or(builder.Like{"original_text", word})
 		}

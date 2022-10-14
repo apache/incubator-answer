@@ -2150,7 +2150,7 @@ const docTemplate = `{
             }
         },
         "/answer/api/v1/question/page": {
-            "post": {
+            "get": {
                 "description": "SearchQuestionList \u003cbr\u003e  \"order\"  Enums(newest, active,frequent,score,unanswered)",
                 "consumes": [
                     "application/json"
