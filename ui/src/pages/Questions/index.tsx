@@ -29,7 +29,7 @@ const Questions: FC = () => {
           <Col xxl={7} lg={8} sm={12}>
             <QuestionList source="questions" />
           </Col>
-          <Col xxl={3} lg={4} sm={12}>
+          <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
             <FollowingTags />
             <HotQuestions />
           </Col>
