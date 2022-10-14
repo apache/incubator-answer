@@ -53,7 +53,7 @@ const Form = ({
           <Button
             variant="link"
             size="sm"
-            className="text-nowrap btn-no-border"
+            className="text-nowrap btn-no-border ms-2 ms-md-0"
             onClick={onCancel}>
             {t('btn_cancel')}
           </Button>
