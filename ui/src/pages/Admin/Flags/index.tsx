@@ -118,8 +118,8 @@ const Flags: FC = () => {
                       className="fs-14 text-secondary"
                     />
                     <BaseUserCard data={li.report_user} className="mt-2 mb-2" />
-                    {li.flaged_reason ? (
-                      <small>{li.flaged_content}</small>
+                    {li.flagged_reason ? (
+                      <small>{li.flagged_content}</small>
                     ) : (
                       <small>
                         {li.reason?.name}

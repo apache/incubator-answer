@@ -57,7 +57,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
   }
   return (
     <div>
-      <h1 className="fs-3 mb-3 text-wrap text-break">
+      <h1 className="h3 mb-3 text-wrap text-break">
         <Link className="link-dark" reloadDocument to={`/questions/${data.id}`}>
           {data.title}
           {data.status === 2
@@ -65,7 +65,8 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
             : ''}
         </Link>
       </h1>
-      <div className="d-flex align-items-center fs-14 mb-2 text-secondary">
+
+      <div className="d-flex flex-wrap align-items-center fs-14 mb-3 text-secondary">
         <FormatTime
           time={data.create_time}
           preFix={t('Asked')}
@@ -90,7 +91,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
           {followed ? 'Following' : 'Follow'}
         </Button>
       </div>
-      <div className="mb-2 mx-n1">
+      <div className="m-n1">
         {data?.tags?.map((item: any) => {
           return (
             <Tag
@@ -105,7 +106,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
       <article
         ref={ref}
         dangerouslySetInnerHTML={{ __html: data?.html }}
-        className="fmt text-break text-wrap"
+        className="fmt text-break text-wrap mt-4"
       />
 
       <Actions
@@ -122,7 +123,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
       />
 
       <Row className="mt-4 mb-3">
-        <Col lg={5}>
+        <Col lg={5} className="mb-3 mb-md-0">
           <Operate
             qid={data?.id}
             type="question"
@@ -133,7 +134,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
             callback={initPage}
           />
         </Col>
-        <Col lg={3}>
+        <Col lg={3} className="mb-3 mb-md-0">
           {data.update_user_info?.username !== data.user_info?.username ? (
             <UserCard
               data={data?.user_info}

@@ -90,7 +90,7 @@ const Questions: FC = () => {
             </div>
             <QuestionList source="tag" />
           </Col>
-          <Col xxl={3} lg={4} sm={12}>
+          <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
             <FollowingTags />
             <HotQuestions />
           </Col>
