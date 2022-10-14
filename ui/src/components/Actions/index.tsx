@@ -45,7 +45,7 @@ const Index: FC<Props> = ({ className, data }) => {
         count: data?.collectCount,
       });
     }
-  }, [data]);
+  }, []);
 
   const handleVote = (type: 'up' | 'down') => {
     if (!isLogin(true)) {
