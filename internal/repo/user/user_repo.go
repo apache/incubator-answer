@@ -108,7 +108,7 @@ func (ur *userRepo) UpdateEmail(ctx context.Context, userID, email string) (err 
 // UpdateInfo update user info
 func (ur *userRepo) UpdateInfo(ctx context.Context, userInfo *entity.User) (err error) {
 	_, err = ur.data.DB.Where("id = ?", userInfo.ID).
-		Cols("display_name", "avatar", "bio", "bio_html", "website", "location").Update(userInfo)
+		Cols("username", "display_name", "avatar", "bio", "bio_html", "website", "location").Update(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
