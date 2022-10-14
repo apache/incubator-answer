@@ -116,9 +116,9 @@ const Index = () => {
   return (
     <>
       <PageTitle title={question?.title} />
-      <Container className="pt-4 mt-2 mb-5">
+      <Container className="pt-4 mt-2 mb-5 questionDetailPage">
         <Row className="justify-content-center">
-          <Col xxl={7} lg={8} sm={12}>
+          <Col xxl={7} lg={8} sm={12} className="mb-5 mb-md-0">
             {question?.operation?.operation_type && (
               <Alert data={question.operation} />
             )}
@@ -154,6 +154,7 @@ const Index = () => {
                 />
               </div>
             )}
+
             {!question?.operation?.operation_type && (
               <WriteAnswer
                 visible={answers.count === 0}
