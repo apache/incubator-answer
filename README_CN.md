@@ -14,7 +14,7 @@
 
 ## 截图
 
-![screenshot](docs/img/screenshot.png
+![screenshot](docs/img/screenshot.png)
 
 ## 快速开始
 
