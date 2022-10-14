@@ -219,6 +219,7 @@ const Index: React.FC = () => {
             })
           }
         />
+        <Form.Text as="div">{t('username.caption')}</Form.Text>
         <Form.Control.Feedback type="invalid">
           {formData.username.errorMsg}
         </Form.Control.Feedback>
