@@ -2656,7 +2656,7 @@ paths:
       tags:
       - api-question
   /answer/api/v1/question/page:
-    post:
+    get:
       consumes:
       - application/json
       description: SearchQuestionList <br>  "order"  Enums(newest, active,frequent,score,unanswered)
