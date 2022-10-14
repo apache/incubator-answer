@@ -13,7 +13,7 @@ const Index = () => {
   const [searchParams] = useSearchParams();
   const page = searchParams.get('page') || 1;
   const q = searchParams.get('q') || '';
-  const order = searchParams.get('order') || 'newest';
+  const order = searchParams.get('order') || 'relevance';
 
   const { data, isLoading } = useSearch({
     q,

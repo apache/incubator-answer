@@ -73,7 +73,7 @@ const Header: FC = () => {
         />
 
         <div className="left-wrap d-flex justify-content-between align-items-center nav-grow">
-          <Navbar.Brand to="/" as={Link}>
+          <Navbar.Brand to="/" as={Link} className="lh-1">
             {interfaceInfo.logo ? (
               <img
                 className="logo rounded-1 me-0"

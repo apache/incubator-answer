@@ -9,9 +9,18 @@ function getQueryString(name: string): string {
   return '';
 }
 
+function thousandthDivision(num) {
+  const reg = /\d{1,3}(?=(\d{3})+$)/g;
+  return `${num}`.replace(reg, '$&,');
+}
+
 function formatCount($num: number): string {
   let res = String($num);
-  if ($num >= 1000 && $num < 1000000) {
+  if (!Number.isFinite($num)) {
+    res = '0';
+  } else if ($num < 10000) {
+    res = thousandthDivision($num);
+  } else if ($num < 1000000) {
     res = `${Math.round($num / 100) / 10}k`;
   } else if ($num >= 1000000) {
     res = `${Math.round($num / 100000) / 10}m`;
@@ -97,6 +106,7 @@ function parseUserInfo(markdown) {
 
 export {
   getQueryString,
+  thousandthDivision,
   formatCount,
   isLogin,
   scrollTop,
