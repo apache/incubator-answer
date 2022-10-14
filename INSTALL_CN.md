@@ -27,9 +27,9 @@ $ mkdir -p /var/data
 $ docker run --name=answer -p 9080:80 -v /var/data:/data answer/answer
 
 # 第一次启动后会在/var/data 目录下生成配置文件
-# /var/data/config.yaml
+π# /var/data/conf/config.yaml
 # 需要修改配置文件中的Mysql 数据库地址
-vim /var/data/config.yaml
+vim /var/data/conf/config.yaml
 
 # 修改数据库连接 connection: [username]:[password]@tcp([host]:[port])/[DbName]
 ...
@@ -50,7 +50,16 @@ $ docker start answer
  6. 将数据库连接地址修改为你的数据库连接地址
 
      connection: [username]:[password]@tcp([host]:[port])/[DbName]
- 7. 退出data 目录 执行 ./answer run -c ./data/config.yaml
+ 7. 退出data 目录 执行 ./answer run -c ./data/conf/config.yaml
+
+## 当前支持的命令
+用法: answer [command]
+
+- help: 帮助
+- init: 初始化环境
+- run: 启动
+- check: 环境依赖检查
+- dump: 备份数据
 
 ## 配置文件 config.yaml 参数说明
 

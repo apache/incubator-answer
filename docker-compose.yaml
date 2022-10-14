@@ -10,6 +10,8 @@ services:
         condition: service_healthy
     links:
       - db
+    volumes:
+      - ./answer/data:/data
   db:
     image: mariadb:10.4.7
     ports:
@@ -22,3 +24,5 @@ services:
       test: [ "CMD", "mysqladmin" ,"ping", "-uroot", "-proot"]
       timeout: 20s
       retries: 10
+    volumes:
+      - ./answer/mysql:/var/lib/mysql

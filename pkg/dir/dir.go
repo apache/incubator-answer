@@ -17,3 +17,11 @@ func CreatePathIsNotExist(path string) (bool, error) {
 	}
 	return false, err
 }
+
+func CheckPathExist(path string) bool {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true
+	}
+	return false
+}
