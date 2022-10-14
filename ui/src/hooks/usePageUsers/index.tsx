@@ -14,11 +14,11 @@ const usePageUsers = () => {
     getUsers,
     setUsers: (data: Types.PageUser | Types.PageUser[]) => {
       if (data instanceof Array) {
-        setUsers(uniqBy([...users, ...data], 'name'));
-        globalUsers = uniqBy([...globalUsers, ...data], 'name');
+        setUsers(uniqBy([...users, ...data], 'userName'));
+        globalUsers = uniqBy([...globalUsers, ...data], 'userName');
       } else {
-        setUsers(uniqBy([...users, data], 'name'));
-        globalUsers = uniqBy([...globalUsers, data], 'name');
+        setUsers(uniqBy([...users, data], 'userName'));
+        globalUsers = uniqBy([...globalUsers, data], 'userName');
       }
     },
   };

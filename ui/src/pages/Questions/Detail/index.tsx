@@ -55,7 +55,16 @@ const Index = () => {
       }
 
       res.list.forEach((item) => {
-        setUsers([item.user_info, item?.update_user_info]);
+        setUsers([
+          {
+            displayName: item.user_info.display_name,
+            userName: item.user_info.username,
+          },
+          {
+            displayName: item?.update_user_info?.display_name,
+            userName: item?.update_user_info?.username,
+          },
+        ]);
       });
     }
   };
