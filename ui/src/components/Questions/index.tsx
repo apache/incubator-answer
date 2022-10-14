@@ -32,7 +32,7 @@ const QuestionLastUpdate = ({ q }) => {
   if (q.update_time > q.edit_time) {
     // question answered
     return (
-      <>
+      <div className="d-flex">
         <BaseUserCard
           data={q.last_answered_user_info}
           showAvatar={false}
@@ -44,14 +44,14 @@ const QuestionLastUpdate = ({ q }) => {
           className="text-secondary mx-1"
           preFix={t('answered')}
         />
-      </>
+      </div>
     );
   }
 
   if (q.edit_time > q.update_time) {
     // question modified
     return (
-      <>
+      <div className="d-flex">
         <BaseUserCard
           data={q.update_user_info}
           showAvatar={false}
@@ -63,13 +63,13 @@ const QuestionLastUpdate = ({ q }) => {
           className="text-secondary mx-1"
           preFix={t('modified')}
         />
-      </>
+      </div>
     );
   }
 
   // default: asked
   return (
-    <>
+    <div className="d-flex">
       <BaseUserCard data={q.user_info} showAvatar={false} className="me-1" />
       •
       <FormatTime
@@ -77,7 +77,7 @@ const QuestionLastUpdate = ({ q }) => {
         preFix={t('asked')}
         className="text-secondary mx-1"
       />
-    </>
+    </div>
   );
 };
 
@@ -131,31 +131,33 @@ const QuestionList: FC<Props> = ({ source }) => {
                   {li.status === 2 ? ` [${t('closed')}]` : ''}
                 </NavLink>
               </h5>
-              <div className="d-flex align-items-center fs-14 text-secondary">
+              <div className="d-flex flex-column flex-md-row align-items-md-center fs-14 text-secondary">
                 <QuestionLastUpdate q={li} />
-                <span className="ms-3">
-                  <Icon name="hand-thumbs-up-fill" />
-                  <em className="fst-normal mx-1">{li.vote_count}</em>
-                </span>
-                <span
-                  className={`ms-3 ${
-                    li.accepted_answer_id >= 1 ? 'text-success' : ''
-                  }`}>
-                  <Icon
-                    name={
-                      li.accepted_answer_id >= 1
-                        ? 'check-circle-fill'
-                        : 'chat-square-text-fill'
-                    }
-                  />
-                  <em className="fst-normal mx-1">{li.answer_count}</em>
-                </span>
-                <span className="summary-stat ms-3">
-                  <Icon name="eye-fill" />
-                  <em className="fst-normal mx-1">{li.view_count}</em>
-                </span>
+                <div className="ms-0 ms-md-3 mt-2 mt-md-0">
+                  <span>
+                    <Icon name="hand-thumbs-up-fill" />
+                    <em className="fst-normal mx-1">{li.vote_count}</em>
+                  </span>
+                  <span
+                    className={`ms-3 ${
+                      li.accepted_answer_id >= 1 ? 'text-success' : ''
+                    }`}>
+                    <Icon
+                      name={
+                        li.accepted_answer_id >= 1
+                          ? 'check-circle-fill'
+                          : 'chat-square-text-fill'
+                      }
+                    />
+                    <em className="fst-normal mx-1">{li.answer_count}</em>
+                  </span>
+                  <span className="summary-stat ms-3">
+                    <Icon name="eye-fill" />
+                    <em className="fst-normal mx-1">{li.view_count}</em>
+                  </span>
+                </div>
               </div>
-              <div className="question-tags mx-n1">
+              <div className="question-tags mx-n1 mt-2">
                 {Array.isArray(li.tags)
                   ? li.tags.map((tag) => {
                       return (
