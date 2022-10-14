@@ -57,7 +57,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
   }
   return (
     <div>
-      <h1 className="fs-3 mb-3 text-wrap text-break">
+      <h1 className="h3 mb-3 text-wrap text-break">
         <Link className="link-dark" reloadDocument to={`/questions/${data.id}`}>
           {data.title}
           {data.status === 2
