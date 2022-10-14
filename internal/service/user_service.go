@@ -2,7 +2,9 @@ package service
 
 import (
 	"context"
+	"encoding/hex"
 	"fmt"
+	"math/rand"
 	"regexp"
 	"strings"
 
@@ -17,7 +19,6 @@ import (
 	"github.com/segmentfault/answer/internal/service/service_config"
 	usercommon "github.com/segmentfault/answer/internal/service/user_common"
 	"github.com/segmentfault/answer/pkg/checker"
-	"github.com/segmentfault/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"golang.org/x/crypto/bcrypt"
@@ -233,18 +234,28 @@ func (us *UserService) UserModifyPassWord(ctx context.Context, request *schema.U
 	return nil
 }
 
-// UpdateInfo
-func (us *UserService) UpdateInfo(ctx context.Context, request *schema.UpdateInfoRequest) error {
-	userinfo := entity.User{}
-	userinfo.ID = request.UserId
-	userinfo.Avatar = request.Avatar
-	userinfo.DisplayName = request.DisplayName
-	userinfo.Bio = request.Bio
-	userinfo.BioHtml = request.BioHtml
-	userinfo.Location = request.Location
-	userinfo.Website = request.Website
-	err := us.userRepo.UpdateInfo(ctx, &userinfo)
-	if err != nil {
+// UpdateInfo update user info
+func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoRequest) (err error) {
+	if len(req.Username) > 0 {
+		userInfo, exist, err := us.userRepo.GetByUsername(ctx, req.Username)
+		if err != nil {
+			return err
+		}
+		if exist && userInfo.ID != req.UserId {
+			return errors.BadRequest(reason.UsernameDuplicate)
+		}
+	}
+
+	userInfo := entity.User{}
+	userInfo.ID = req.UserId
+	userInfo.Avatar = req.Avatar
+	userInfo.DisplayName = req.DisplayName
+	userInfo.Bio = req.Bio
+	userInfo.BioHtml = req.BioHtml
+	userInfo.Location = req.Location
+	userInfo.Website = req.Website
+	userInfo.Username = req.Username
+	if err := us.userRepo.UpdateInfo(ctx, &userInfo); err != nil {
 		return err
 	}
 	return nil
@@ -259,7 +270,7 @@ func (us *UserService) UserEmailHas(ctx context.Context, email string) (bool, er
 }
 
 // UserRegisterByEmail user register
-func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo *schema.UserRegister) (
+func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo *schema.UserRegisterReq) (
 	resp *schema.GetUserResp, err error) {
 	_, has, err := us.userRepo.GetByEmail(ctx, registerUserInfo.Email)
 	if err != nil {
@@ -276,7 +287,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	if err != nil {
 		return nil, err
 	}
-	userInfo.Username, err = us.makeUserName(ctx, registerUserInfo.Name)
+	userInfo.Username, err = us.makeUsername(ctx, registerUserInfo.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -408,58 +419,42 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	return resp, nil
 }
 
-// makeUserName
-// Generate a unique Username based on the NickName
-// todo Waiting to be realized
-func (us *UserService) makeUserName(ctx context.Context, userName string) (string, error) {
-	userName = us.formatUserName(ctx, userName)
-	_, has, err := us.userRepo.GetByUsername(ctx, userName)
-	if err != nil {
-		return "", err
-	}
-	//If the user name is duplicated, it is generated recursively from the new one.
-	if has {
-		userName = uid.IDStr()
-		return us.makeUserName(ctx, userName)
-	}
-	return userName, nil
-}
-
-// formatUserName
-// Generate a Username through a nickname
-func (us *UserService) formatUserName(ctx context.Context, Name string) string {
-	formatName, pass := us.CheckUserName(ctx, Name)
-	if !pass {
-		//todo 重新给用户 生成随机 username
-		return uid.IDStr()
-	}
-	return formatName
-}
-
-func (us *UserService) CheckUserName(ctx context.Context, name string) (string, bool) {
-	name = strings.Replace(name, " ", "_", -1)
-	name = strings.ToLower(name)
-	//Chinese processing
-	has := checker.IsChinese(name)
-	if has {
-		str, err := pinyin.New(name).Split("").Mode(pinyin.WithoutTone).Convert()
+// makeUsername
+// Generate a unique Username based on the displayName
+func (us *UserService) makeUsername(ctx context.Context, displayName string) (username string, err error) {
+	// Chinese processing
+	if has := checker.IsChinese(displayName); has {
+		str, err := pinyin.New(displayName).Split("").Mode(pinyin.WithoutTone).Convert()
 		if err != nil {
-			log.Error("pinyin Error", err)
-			return "", false
+			return "", err
 		} else {
-			name = str
+			displayName = str
 		}
 	}
-	//Format filtering
-	re, err := regexp.Compile(`^[a-z0-9._-]{4,20}$`)
-	if err != nil {
-		log.Error("regexp.Compile Error", err, "name", name)
-	}
-	match := re.MatchString(name)
+
+	username = strings.ReplaceAll(displayName, " ", "_")
+	username = strings.ToLower(username)
+	suffix := ""
+
+	re := regexp.MustCompile(`^[a-z0-9._-]{4,30}$`)
+	match := re.MatchString(username)
 	if !match {
-		return "", false
+		return "", errors.BadRequest(reason.UsernameInvalid)
 	}
-	return name, true
+
+	for {
+		_, has, err := us.userRepo.GetByUsername(ctx, username+suffix)
+		if err != nil {
+			return "", err
+		}
+		if !has {
+			break
+		}
+		bytes := make([]byte, 2)
+		_, _ = rand.Read(bytes)
+		suffix = hex.EncodeToString(bytes)
+	}
+	return username + suffix, nil
 }
 
 // verifyPassword

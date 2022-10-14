@@ -2,11 +2,14 @@ package schema
 
 import (
 	"encoding/json"
+	"regexp"
 
 	"github.com/jinzhu/copier"
+	"github.com/segmentfault/answer/internal/base/reason"
 	"github.com/segmentfault/answer/internal/base/validator"
 	"github.com/segmentfault/answer/internal/entity"
 	"github.com/segmentfault/answer/pkg/checker"
+	"github.com/segmentfault/pacman/errors"
 )
 
 // UserVerifyEmailReq user verify email request
@@ -179,10 +182,10 @@ type UserEmailLogin struct {
 	CaptchaCode string `json:"captcha_code" ` // captcha_code
 }
 
-// Register
-type UserRegister struct {
+// UserRegisterReq user register request
+type UserRegisterReq struct {
 	// name
-	Name string `validate:"required,gt=5,lte=50" json:"name"`
+	Name string `validate:"required,gt=4,lte=30" json:"name"`
 	// email
 	Email string `validate:"required,email,gt=0,lte=500" json:"e_mail" `
 	// password
@@ -190,7 +193,7 @@ type UserRegister struct {
 	IP   string `json:"-" `
 }
 
-func (u *UserRegister) Check() (errField *validator.ErrorField, err error) {
+func (u *UserRegisterReq) Check() (errField *validator.ErrorField, err error) {
 	// TODO i18n
 	err = checker.PassWordCheck(8, 32, 0, u.Pass)
 	if err != nil {
@@ -224,6 +227,8 @@ func (u *UserModifyPassWordRequest) Check() (errField *validator.ErrorField, err
 type UpdateInfoRequest struct {
 	// display_name
 	DisplayName string `validate:"required,gt=0,lte=30" json:"display_name"`
+	// username
+	Username string `validate:"omitempty,gt=0,lte=30" json:"username"`
 	// avatar
 	Avatar string `validate:"omitempty,gt=0,lte=500" json:"avatar"`
 	// bio
@@ -236,6 +241,21 @@ type UpdateInfoRequest struct {
 	Location string `validate:"omitempty,gt=0,lte=100" json:"location"`
 	// user id
 	UserId string `json:"-" `
+}
+
+func (u *UpdateInfoRequest) Check() (errField *validator.ErrorField, err error) {
+	if len(u.Username) > 0 {
+		re := regexp.MustCompile(`^[a-z0-9._-]{4,30}$`)
+		match := re.MatchString(u.Username)
+		if !match {
+			err = errors.BadRequest(reason.UsernameInvalid)
+			return &validator.ErrorField{
+				Key:   "username",
+				Value: err.Error(),
+			}, err
+		}
+	}
+	return nil, nil
 }
 
 type UserRetrievePassWordRequest struct {
