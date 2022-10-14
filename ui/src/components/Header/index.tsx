@@ -48,13 +48,9 @@ const Header: FC = () => {
   return (
     <Navbar variant="dark" expand="lg" className="sticky-top" id="header">
       <Container className="d-flex align-items-center">
-        <Navbar.Brand href="/">
+        <Navbar.Brand className="lh-1" href="/">
           {interfaceInfo.logo ? (
-            <img
-              className="logo rounded-1 me-0"
-              src={interfaceInfo.logo}
-              alt=""
-            />
+            <img className="logo" src={interfaceInfo.logo} alt="" />
           ) : (
             <span>{siteInfo.name || 'Answer'}</span>
           )}
