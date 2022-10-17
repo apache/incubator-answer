@@ -55,7 +55,16 @@ const Index = () => {
       }
 
       res.list.forEach((item) => {
-        setUsers([item.user_info, item?.update_user_info]);
+        setUsers([
+          {
+            displayName: item.user_info.display_name,
+            userName: item.user_info.username,
+          },
+          {
+            displayName: item?.update_user_info?.display_name,
+            userName: item?.update_user_info?.username,
+          },
+        ]);
       });
     }
   };
@@ -107,9 +116,9 @@ const Index = () => {
   return (
     <>
       <PageTitle title={question?.title} />
-      <Container className="pt-4 mt-2 mb-5">
+      <Container className="pt-4 mt-2 mb-5 questionDetailPage">
         <Row className="justify-content-center">
-          <Col xxl={7} lg={8} sm={12}>
+          <Col xxl={7} lg={8} sm={12} className="mb-5 mb-md-0">
             {question?.operation?.operation_type && (
               <Alert data={question.operation} />
             )}
@@ -145,6 +154,7 @@ const Index = () => {
                 />
               </div>
             )}
+
             {!question?.operation?.operation_type && (
               <WriteAnswer
                 visible={answers.count === 0}
@@ -156,7 +166,7 @@ const Index = () => {
               />
             )}
           </Col>
-          <Col xxl={3} lg={4} sm={12}>
+          <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
             <RelatedQuestions id={question?.id || ''} />
           </Col>
         </Row>

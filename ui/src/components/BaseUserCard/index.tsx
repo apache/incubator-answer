@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 
 import { Avatar } from '@answer/components';
 
+import { formatCount } from '@/utils';
+
 interface Props {
   data: any;
   showAvatar?: boolean;
@@ -34,7 +36,9 @@ const Index: FC<Props> = ({
         </>
       )}
 
-      <span className="fw-bold">{data?.rank}</span>
+      <span className="fw-bold" title="Reputation">
+        {formatCount(data?.rank)}
+      </span>
     </div>
   );
 };

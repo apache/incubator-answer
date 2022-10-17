@@ -905,14 +905,14 @@ definitions:
     type: object
   schema.ReportHandleReq:
     properties:
-      flaged_content:
+      flagged_content:
         type: string
-      flaged_type:
+      flagged_type:
         type: integer
       id:
         type: string
     required:
-    - flaged_type
+    - flagged_type
     - id
     type: object
   schema.SearchListResp:
@@ -1118,6 +1118,10 @@ definitions:
         description: location
         maxLength: 100
         type: string
+      username:
+        description: username
+        maxLength: 30
+        type: string
       website:
         description: website
         maxLength: 500
@@ -1297,7 +1301,7 @@ definitions:
     - code
     - pass
     type: object
-  schema.UserRegister:
+  schema.UserRegisterReq:
     properties:
       e_mail:
         description: email
@@ -1305,7 +1309,7 @@ definitions:
         type: string
       name:
         description: name
-        maxLength: 50
+        maxLength: 30
         type: string
       pass:
         description: password
@@ -3535,12 +3539,12 @@ paths:
       - application/json
       description: UserRegisterByEmail
       parameters:
-      - description: UserRegister
+      - description: UserRegisterReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.UserRegister'
+          $ref: '#/definitions/schema.UserRegisterReq'
       produces:
       - application/json
       responses:

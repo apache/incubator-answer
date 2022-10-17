@@ -1,18 +1,20 @@
 import { FC, memo } from 'react';
-import { ButtonGroup, Button } from 'react-bootstrap';
+import { ButtonGroup, Button, DropdownButton, Dropdown } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import classNames from 'classnames';
+
 interface Props {
-  data: string[] | Array<{ name: string; sort: string }>;
+  data;
   i18nkeyPrefix: string;
   currentSort: string;
   sortKey?: string;
   className?: string;
 }
-
+const MAX_BUTTON_COUNT = 3;
 const Index: FC<Props> = ({
-  data,
+  data = [],
   currentSort = '',
   sortKey = 'order',
   i18nkeyPrefix = '',
@@ -37,9 +39,13 @@ const Index: FC<Props> = ({
     setUrlSearchParams(str);
   };
 
+  const filteredData = data.filter((_, index) => index > MAX_BUTTON_COUNT - 2);
+  const currentBtn = filteredData.find((btn) => {
+    return (typeof btn === 'string' ? btn : btn.name) === currentSort;
+  });
   return (
     <ButtonGroup size="sm">
-      {data.map((btn) => {
+      {data.map((btn, index) => {
         const key = typeof btn === 'string' ? btn : btn.sort;
         const name = typeof btn === 'string' ? btn : btn.name;
         return (
@@ -48,13 +54,55 @@ const Index: FC<Props> = ({
             key={key}
             variant="outline-secondary"
             active={currentSort === name}
-            className={`text-capitalize ${className}`}
+            className={classNames(
+              'text-capitalize',
+              data.length > MAX_BUTTON_COUNT &&
+                index > MAX_BUTTON_COUNT - 2 &&
+                'd-none d-md-block',
+              className,
+            )}
+            style={
+              data.length > MAX_BUTTON_COUNT && index === data.length - 1
+                ? {
+                    borderTopRightRadius: '0.25rem',
+                    borderBottomRightRadius: '0.25rem',
+                  }
+                : {}
+            }
             href={handleParams(key)}
             onClick={(evt) => handleClick(evt, key)}>
             {t(name)}
           </Button>
         );
       })}
+      {data.length > MAX_BUTTON_COUNT && (
+        <DropdownButton
+          size="sm"
+          variant={currentBtn ? 'secondary' : 'outline-secondary'}
+          className="d-block d-md-none"
+          as={ButtonGroup}
+          title={currentBtn ? t(currentSort) : t('more')}>
+          {filteredData.map((btn) => {
+            const key = typeof btn === 'string' ? btn : btn.sort;
+            const name = typeof btn === 'string' ? btn : btn.name;
+            return (
+              <Dropdown.Item
+                as="a"
+                key={key}
+                active={currentSort === name}
+                className={classNames(
+                  'text-capitalize',
+                  'd-block d-md-none',
+                  className,
+                )}
+                href={handleParams(key)}
+                onClick={(evt) => handleClick(evt, key)}>
+                {t(name)}
+              </Dropdown.Item>
+            );
+          })}
+        </DropdownButton>
+      )}
     </ButtonGroup>
   );
 };

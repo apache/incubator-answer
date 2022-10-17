@@ -74,8 +74,10 @@ error:
       other: "user not found"
     suspended:
       other: "user is suspended"
-
-
+    username_invalid:
+      other: "username is invalid"
+    username_duplicate:
+      other: "username is already in use"
 
 report:
   spam:

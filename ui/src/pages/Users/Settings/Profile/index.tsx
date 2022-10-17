@@ -22,6 +22,11 @@ const Index: React.FC = () => {
       isInvalid: false,
       errorMsg: '',
     },
+    username: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
     avatar: {
       value: '',
       isInvalid: false,
@@ -66,7 +71,7 @@ const Index: React.FC = () => {
 
   const checkValidated = (): boolean => {
     let bol = true;
-    const { display_name, website } = formData;
+    const { display_name, website, username } = formData;
     if (!display_name.value) {
       bol = false;
       formData.display_name = {
@@ -80,6 +85,29 @@ const Index: React.FC = () => {
         value: display_name.value,
         isInvalid: true,
         errorMsg: t('display_name.msg_range'),
+      };
+    }
+
+    if (!username.value) {
+      bol = false;
+      formData.username = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('username.msg'),
+      };
+    } else if ([...username.value].length > 30) {
+      bol = false;
+      formData.username = {
+        value: username.value,
+        isInvalid: true,
+        errorMsg: t('username.msg_range'),
+      };
+    } else if (/[^a-z0-9\-._]/.test(username.value)) {
+      bol = false;
+      formData.username = {
+        value: username.value,
+        isInvalid: true,
+        errorMsg: t('username.character'),
       };
     }
 
@@ -101,12 +129,13 @@ const Index: React.FC = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
     event.stopPropagation();
-    if (checkValidated() === false) {
+    if (!checkValidated()) {
       return;
     }
 
     const params = {
       display_name: formData.display_name.value,
+      username: formData.username.value,
       avatar: formData.avatar.value,
       bio: formData.bio.value,
       website: formData.website.value,
@@ -137,6 +166,7 @@ const Index: React.FC = () => {
   const getProfile = () => {
     getUserInfo().then((res) => {
       formData.display_name.value = res.display_name;
+      formData.username.value = res.username;
       formData.bio.value = res.bio;
       formData.avatar.value = res.avatar;
       formData.location.value = res.location;
@@ -169,6 +199,29 @@ const Index: React.FC = () => {
         />
         <Form.Control.Feedback type="invalid">
           {formData.display_name.errorMsg}
+        </Form.Control.Feedback>
+      </Form.Group>
+
+      <Form.Group controlId="userName" className="mb-3">
+        <Form.Label>{t('username.label')}</Form.Label>
+        <Form.Control
+          required
+          type="text"
+          value={formData.username.value}
+          isInvalid={formData.username.isInvalid}
+          onChange={(e) =>
+            handleChange({
+              username: {
+                value: e.target.value,
+                isInvalid: false,
+                errorMsg: '',
+              },
+            })
+          }
+        />
+        <Form.Text as="div">{t('username.caption')}</Form.Text>
+        <Form.Control.Feedback type="invalid">
+          {formData.username.errorMsg}
         </Form.Control.Feedback>
       </Form.Group>
 

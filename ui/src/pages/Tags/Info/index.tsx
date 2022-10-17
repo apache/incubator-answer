@@ -93,7 +93,7 @@ const TagIntroduction = () => {
       <PageTitle title={pageTitle} />
       <Container className="pt-4 mt-2 mb-5">
         <Row className="justify-content-center">
-          <Col xs={7}>
+          <Col xxl={7} lg={8} sm={12}>
             <h3 className="mb-3">
               <Link
                 to={`/tags/${tagInfo?.slug_name}`}
@@ -133,7 +133,7 @@ const TagIntroduction = () => {
               })}
             </div>
           </Col>
-          <Col xs={3}>
+          <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
             <Card>
               <Card.Header className="d-flex justify-content-between">
                 <span>{t('synonyms.title')}</span>

@@ -11,7 +11,9 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/go-playground/validator/v10/translations/en"
 	"github.com/go-playground/validator/v10/translations/zh"
+	"github.com/segmentfault/answer/internal/base/reason"
 	"github.com/segmentfault/answer/internal/base/translator"
+	myErrors "github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/i18n"
 )
 
@@ -98,7 +100,7 @@ func (m *MyValidator) Check(value interface{}) (errField *ErrorField, err error)
 				Key:   translator.GlobalTrans.Tr(m.Lang, fieldError.Field()),
 				Value: fieldError.Translate(m.Tran),
 			}
-			return errField, errors.New(fieldError.Translate(m.Tran))
+			return errField, myErrors.BadRequest(reason.RequestFormatError).WithMsg(fieldError.Translate(m.Tran))
 		}
 	}
 

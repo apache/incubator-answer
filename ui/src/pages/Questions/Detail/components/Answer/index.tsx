@@ -102,7 +102,7 @@ const Index: FC<Props> = ({
       </div>
 
       <Row className="mt-4 mb-3">
-        <Col>
+        <Col className="mb-3 mb-md-0">
           <Operate
             qid={data.question_id}
             aid={data.id}
@@ -113,7 +113,7 @@ const Index: FC<Props> = ({
             callback={callback}
           />
         </Col>
-        <Col lg={3}>
+        <Col lg={3} className="mb-3 mb-md-0">
           {data.update_user_info?.username !== data.user_info?.username ? (
             <UserCard
               data={data?.update_user_info}

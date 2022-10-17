@@ -3597,12 +3597,12 @@ const docTemplate = `{
                 "summary": "UserRegisterByEmail",
                 "parameters": [
                     {
-                        "description": "UserRegister",
+                        "description": "UserRegisterReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.UserRegister"
+                            "$ref": "#/definitions/schema.UserRegisterReq"
                         }
                     }
                 ],
@@ -5089,14 +5089,14 @@ const docTemplate = `{
         "schema.ReportHandleReq": {
             "type": "object",
             "required": [
-                "flaged_type",
+                "flagged_type",
                 "id"
             ],
             "properties": {
-                "flaged_content": {
+                "flagged_content": {
                     "type": "string"
                 },
-                "flaged_type": {
+                "flagged_type": {
                     "type": "integer"
                 },
                 "id": {
@@ -5392,6 +5392,11 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 100
                 },
+                "username": {
+                    "description": "username",
+                    "type": "string",
+                    "maxLength": 30
+                },
                 "website": {
                     "description": "website",
                     "type": "string",
@@ -5642,7 +5647,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UserRegister": {
+        "schema.UserRegisterReq": {
             "type": "object",
             "required": [
                 "e_mail",
@@ -5658,7 +5663,7 @@ const docTemplate = `{
                 "name": {
                     "description": "name",
                     "type": "string",
-                    "maxLength": 50
+                    "maxLength": 30
                 },
                 "pass": {
                     "description": "password",

@@ -13,7 +13,7 @@ const Index = () => {
   const [searchParams] = useSearchParams();
   const page = searchParams.get('page') || 1;
   const q = searchParams.get('q') || '';
-  const order = searchParams.get('order') || 'newest';
+  const order = searchParams.get('order') || 'relevance';
 
   const { data, isLoading } = useSearch({
     q,
@@ -53,7 +53,7 @@ const Index = () => {
               />
             </div>
           </Col>
-          <Col xxl={3} lg={4} sm={12}>
+          <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
             <Tips />
           </Col>
         </Row>

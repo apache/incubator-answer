@@ -13,28 +13,33 @@ const Form = ({ userName, onSendReply, onCancel, mode }) => {
   const handleChange = (e) => {
     setValue(e.target.value);
   };
+  const handleSelected = (val) => {
+    setValue(val);
+  };
 
   return (
     <div className="mb-2">
       <div className="fs-14 mb-2">Reply to {userName}</div>
-      <div className="d-flex mb-1 align-items-start">
+      <div className="d-flex mb-1 align-items-start flex-column flex-md-row">
         <div>
-          <Mentions pageUsers={pageUsers.getUsers()}>
+          <Mentions
+            pageUsers={pageUsers.getUsers()}
+            onSelected={handleSelected}>
             <TextArea size="sm" value={value} onChange={handleChange} />
           </Mentions>
           <div className="form-text">{t(`tip_${mode}`)}</div>
         </div>
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-row flex-md-column ms-0 ms-md-2 mt-2 mt-md-0">
           <Button
             size="sm"
-            className="text-nowrap ms-2"
+            className="text-nowrap"
             onClick={() => onSendReply(value)}>
             {t('btn_add_comment')}
           </Button>
           <Button
             variant="link"
             size="sm"
-            className="text-nowrap ms-2 btn-no-border"
+            className="text-nowrap btn-no-border ms-2 ms-md-0"
             onClick={onCancel}>
             {t('btn_cancel')}
           </Button>

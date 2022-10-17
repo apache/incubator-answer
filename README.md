@@ -1,24 +1,20 @@
-# Answer - Simple Q&A Community
+<a href="https://answer.dev">
+    <img alt="logo" src="docs/img/answer-logo-flat.svg" height="63px">
+</a>
 
-![logo](docs/img/answer-logo-flat.svg)
+# Answer - Build Q&A community
 
-[![LICENSE](https://img.shields.io/badge/License-MIT-green)](https://github.com/segmentfault/answer/blob/master/LICENSE)
+A minimalist open-source knowledge based community software. You can use it to quickly build your Q&A community for product technical support, user Q&A, fans communication, and more.
+
+To learn more about the project, visit [answer.dev](https://answer.dev).
+
+[![LICENSE](https://img.shields.io/badge/License-Apache-green)](https://github.com/answerdev/answer/blob/main/LICENSE)
 [![Language](https://img.shields.io/badge/Language-Go-blue.svg)](https://golang.org/)
 [![Language](https://img.shields.io/badge/Language-React-blue.svg)](https://reactjs.org/)
 
-## What is Answer?
+## Screenshots
 
-This is a minimalist open source Q&A community. Users can post questions and others can answer them.
-![abstract](docs/img/abstract.png)
-
-## Why?
-
-- Help organizations build knowledge and Q&A communities better and faster.
-
-## Features
-
-- Produce knowledge by asking and answering questions.
-- Maintain knowledge by voting and working together.
+![screenshot](docs/img/screenshot.png)
 
 ## Quick start
 
@@ -40,4 +36,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for ways to get started.
 
 ## License
 
-[MIT](https://github.com/segmentfault/answer/blob/master/LICENSE)
+[Apache](https://github.com/answerdev/answer/blob/main/LICENSE)
