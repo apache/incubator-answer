@@ -22,7 +22,7 @@ func init() {
 
 	initCmd.Flags().StringVarP(&dataDirPath, "data-path", "C", "/data/", "data path, eg: -C ./data/")
 
-	runCmd.Flags().StringVarP(&configFilePath, "config", "c", "", "config path, eg: -c config.yaml")
+	rootCmd.PersistentFlags().StringVarP(&configFilePath, "config", "c", "", "config path, eg: -c config.yaml")
 
 	dumpCmd.Flags().StringVarP(&dumpDataPath, "path", "p", "./", "dump data path, eg: -p ./dump/data/")
 
