@@ -28,7 +28,7 @@ func NewSearchController(searchService *service.SearchService) *SearchController
 // @Produce json
 // @Security ApiKeyAuth
 // @Param q query string true "query string"
-// @Param order query string true "order" Enums(newest,active,score)
+// @Param order query string true "order" Enums(newest,active,score,relevance)
 // @Success 200 {object} handler.RespBody{data=schema.SearchListResp}
 // @Router /answer/api/v1/search [get]
 func (sc *SearchController) Search(ctx *gin.Context) {
@@ -54,7 +54,7 @@ func (sc *SearchController) Search(ctx *gin.Context) {
 		size = "30"
 	}
 	order, ok = ctx.GetQuery("order")
-	if !ok || (order != "newest" && order != "active" && order != "score") {
+	if !ok || (order != "newest" && order != "active" && order != "score" && order != "relevance") {
 		order = "newest"
 	}
 

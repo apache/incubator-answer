@@ -2930,6 +2930,7 @@ paths:
         - newest
         - active
         - score
+        - relevance
         in: query
         name: order
         required: true

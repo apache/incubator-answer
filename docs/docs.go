@@ -2594,7 +2594,8 @@ const docTemplate = `{
                         "enum": [
                             "newest",
                             "active",
-                            "score"
+                            "score",
+                            "relevance"
                         ],
                         "type": "string",
                         "description": "order",
