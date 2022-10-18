@@ -18,7 +18,7 @@ var (
 )
 
 func init() {
-	rootCmd.Version = Version
+	rootCmd.Version = fmt.Sprintf("%s\nrevision: %s\nbuild time: %s", Version, Revision, Time)
 
 	initCmd.Flags().StringVarP(&dataDirPath, "data-path", "C", "/data/", "data path, eg: -C ./data/")
 
