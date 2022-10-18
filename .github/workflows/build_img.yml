@@ -49,12 +49,12 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
-    # - name: build to hub.docker
-    #   run: |
-    #       docker build -t answerdev/answer -f ./Dockerfile .
-    # - name: Login to hub.docker Registry
-    #   run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
-    # - name: Push Image to hub.docker
-    #   run: |
-    #       docker push answerdev/answer
+    - name: build to hub.docker
+      run: |
+          docker build -t answerdev/answer -f ./Dockerfile .
+    - name: Login to hub.docker Registry
+      run: docker login --username=${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
+    - name: Push Image to hub.docker
+      run: |
+          docker push answerdev/answer
 
