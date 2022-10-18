@@ -18,7 +18,7 @@
 
 ```
 # 将镜像从 docker hub 拉到本地
-$ docker pull answer/answer
+$ docker pull answerdev/answer:latest
 
 # 创建一个挂载目录
 $ mkdir -p /var/data
