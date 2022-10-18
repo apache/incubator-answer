@@ -67,7 +67,7 @@ const Users: FC = () => {
           data={UserFilterKeys}
           currentSort={curFilter}
           sortKey="filter"
-          i18nkeyPrefix="admin.users"
+          i18nKeyPrefix="admin.users"
         />
 
         <Form.Control

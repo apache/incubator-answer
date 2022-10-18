@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 interface Props {
   data;
-  i18nkeyPrefix: string;
+  i18nKeyPrefix: string;
   currentSort: string;
   sortKey?: string;
   className?: string;
@@ -17,13 +17,13 @@ const Index: FC<Props> = ({
   data = [],
   currentSort = '',
   sortKey = 'order',
-  i18nkeyPrefix = '',
+  i18nKeyPrefix = '',
   className = '',
 }) => {
   const [searchParams, setUrlSearchParams] = useSearchParams();
 
   const { t } = useTranslation('translation', {
-    keyPrefix: i18nkeyPrefix,
+    keyPrefix: i18nKeyPrefix,
   });
 
   const handleParams = (order): string => {
