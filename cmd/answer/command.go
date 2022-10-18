@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/segmentfault/answer/internal/base/data"
 	"github.com/segmentfault/answer/internal/cli"
+	"github.com/segmentfault/answer/internal/migrations"
 	"github.com/spf13/cobra"
 )
 
@@ -81,7 +83,22 @@ To run answer, use:
 		Short: "upgrade Answer version",
 		Long:  `upgrade Answer version`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("The current app version is 1.0.0, the latest version is 1.0.0, no need to upgrade.")
+			c, err := readConfig()
+			if err != nil {
+				fmt.Println("read config failed: ", err.Error())
+				return
+			}
+			fmt.Println("read config successfully")
+			db, err := data.NewDB(false, c.Data.Database)
+			if err != nil {
+				fmt.Println("new database failed: ", err.Error())
+				return
+			}
+			if err = migrations.Migrate(db); err != nil {
+				fmt.Println("migrate failed: ", err.Error())
+				return
+			}
+			fmt.Println("upgrade done")
 		},
 	}
 
