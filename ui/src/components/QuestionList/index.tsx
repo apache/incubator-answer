@@ -115,7 +115,7 @@ const QuestionList: FC<Props> = ({ source }) => {
           <QueryGroup
             data={QuestionOrderKeys}
             currentSort={curOrder}
-            i18nkeyPrefix="question"
+            i18nKeyPrefix="question"
           />
         </Col>
       </Row>

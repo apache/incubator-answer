@@ -32,7 +32,7 @@ const Index: FC<Props> = ({
         <QueryGroup
           data={sortBtns}
           currentSort={sort}
-          i18nkeyPrefix="personal"
+          i18nKeyPrefix="personal"
         />
       )}
     </div>

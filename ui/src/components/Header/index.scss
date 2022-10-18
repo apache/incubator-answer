@@ -1,4 +1,5 @@
-@import '~bootstrap/scss/bootstrap-utilities';
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
 #header {
   background: linear-gradient(180deg, #0033FF 0%, rgba(0, 51, 255, 0.95) 100%);
   --bs-navbar-padding-y: 0.75rem;

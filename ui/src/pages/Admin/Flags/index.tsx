@@ -62,7 +62,7 @@ const Flags: FC = () => {
           data={flagFilterKeys}
           currentSort={curFilter}
           sortKey="status"
-          i18nkeyPrefix="admin.flags"
+          i18nKeyPrefix="admin.flags"
         />
 
         <Form.Select

@@ -60,7 +60,7 @@ const Tags = () => {
                 data={sortBtns}
                 currentSort={sort || 'popular'}
                 sortKey="sort"
-                i18nkeyPrefix="tags.sort_buttons"
+                i18nKeyPrefix="tags.sort_buttons"
               />
             </div>
           </Col>
