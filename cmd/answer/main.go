@@ -20,6 +20,10 @@ var (
 	Name = "answer"
 	// Version is the version of the project
 	Version = "development"
+	// Revision is the git short commit revision number
+	Revision = ""
+	// Time is the build time of the project
+	Time = ""
 	// log level
 	logLevel = os.Getenv("LOG_LEVEL")
 	// log path
