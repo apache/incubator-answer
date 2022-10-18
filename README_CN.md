@@ -8,7 +8,7 @@
 
 了解更多关于该项目的内容，请访问 [answer.dev](https://answer.dev).
 
-[![LICENSE](https://img.shields.io/badge/License-MIT-green)](https://github.com/segmentfault/answer/blob/master/LICENSE)
+[![LICENSE](https://img.shields.io/badge/License-Apache-green)](https://github.com/answerdev/answer/blob/main/LICENSE)
 [![Language](https://img.shields.io/badge/Language-Go-blue.svg)](https://golang.org/)
 [![Language](https://img.shields.io/badge/Language-React-blue.svg)](https://reactjs.org/)
 
