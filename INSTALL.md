@@ -18,7 +18,7 @@ To keep your data out of Docker container, we do a volume (/var/data -> /data) h
 
 ```
 # Pull image from Docker Hub.
-$ docker pull answer/answer
+$ docker pull answerdev/answer:latest
 
 # Create local directory for volume.
 $ mkdir -p /var/data

@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   answer:
-    image: github.com/segmentfault/answer
+    image: answerdev/answer:latest
     ports:
       - '9080:80'
     restart: on-failure

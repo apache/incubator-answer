@@ -22,7 +22,7 @@
 
 ```bash
 mkdir answer && cd answer
-wget https://github.com/segmentfault/answer/releases/latest/download/docker-compose.yaml
+wget https://github.com/answerdev/answer/blob/main/docker-compose.yaml
 docker-compose up
 ```
 
@@ -36,4 +36,4 @@ docker-compose up
 
 ## License
 
-[MIT](https://github.com/segmentfault/answer/blob/master/LICENSE)
+[Apache](https://github.com/answerdev/answer/blob/main/LICENSE)
