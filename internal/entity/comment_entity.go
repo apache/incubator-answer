@@ -21,7 +21,7 @@ type Comment struct {
 	UserID         string        `xorm:"not null default 0 comment('user id') BIGINT(20) user_id"`
 	ReplyUserID    sql.NullInt64 `xorm:"comment('reply user id') BIGINT(20) reply_user_id"`
 	ReplyCommentID sql.NullInt64 `xorm:"comment('reply comment id') BIGINT(20) reply_comment_id"`
-	ObjectID       string        `xorm:"not null default 0 comment('object id') BIGINT(20) object_id"`
+	ObjectID       string        `xorm:"not null default 0 comment('object id') BIGINT(20) INDEX object_id"`
 	QuestionID     string        `xorm:"not null default 0 comment('question id') BIGINT(20) question_id"`
 	VoteCount      int           `xorm:"not null default 0 comment('user vote amount') INT(11) vote_count"`
 	Status         int           `xorm:"not null default 0 comment('comment status(available: 1; deleted: 10)') TINYINT(4) status"`

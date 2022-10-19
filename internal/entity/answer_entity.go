@@ -19,17 +19,17 @@ var CmsAnswerSearchStatus = map[string]int{
 // Answer answer
 type Answer struct {
 	ID           string    `xorm:"not null pk autoincr comment('answer id') BIGINT(20) id"`
-	CreatedAt    time.Time `xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
-	UpdatedAt    time.Time `xorm:"not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
+	CreatedAt    time.Time `xorm:"created comment('create time') not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
+	UpdatedAt    time.Time `xorm:"not null default CURRENT_TIMESTAMP comment('update time') TIMESTAMP updated_at"`
 	QuestionID   string    `xorm:"not null default 0 comment('question id') BIGINT(20) question_id"`
-	UserID       string    `xorm:"not null default 0 comment('answer user id') BIGINT(20) user_id"`
-	OriginalText string    `xorm:"not null comment('original content') MEDIUMTEXT original_text"`
-	ParsedText   string    `xorm:"not null comment('parsed content') MEDIUMTEXT parsed_text"`
-	Status       int       `xorm:"not null default 1 comment(' answer status(available: 1; deleted: 10)') INT(11) status"`
+	UserID       string    `xorm:"not null default 0 comment('answer user id') BIGINT(20) INDEX user_id"`
+	OriginalText string    `xorm:"not null comment('original text') MEDIUMTEXT original_text"`
+	ParsedText   string    `xorm:"not null comment('parsed text') MEDIUMTEXT parsed_text"`
+	Status       int       `xorm:"not null default 1 comment('answer status(available: 1; deleted: 10)') INT(11) status"`
 	Adopted      int       `xorm:"not null default 1 comment('adopted (1 failed 2 adopted)') INT(11) adopted"`
 	CommentCount int       `xorm:"not null default 0 comment('comment count') INT(11) comment_count"`
 	VoteCount    int       `xorm:"not null default 0 comment('vote count') INT(11) vote_count"`
-	RevisionID   string    `xorm:"not null default 0 BIGINT(20) revision_id"`
+	RevisionID   string    `xorm:"not null default 0 comment('revision id') BIGINT(20) revision_id"`
 }
 
 type AnswerSearch struct {

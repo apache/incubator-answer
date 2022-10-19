@@ -24,8 +24,8 @@ type User struct {
 	UpdatedAt      time.Time `xorm:"updated comment('update time') TIMESTAMP updated_at"`
 	SuspendedAt    time.Time `xorm:"comment('suspended time') TIMESTAMP suspended_at"`
 	DeletedAt      time.Time `xorm:"comment('delete time') TIMESTAMP deleted_at"`
-	LastLoginDate  time.Time `xorm:"comment('last_login_date') TIMESTAMP last_login_date"`
-	Username       string    `xorm:"not null default '' comment('username') VARCHAR(50) username"`
+	LastLoginDate  time.Time `xorm:"comment('last login date') TIMESTAMP last_login_date"`
+	Username       string    `xorm:"not null default '' comment('username') VARCHAR(50) UNIQUE username"`
 	Pass           string    `xorm:"not null default '' comment('password') VARCHAR(255) pass"`
 	EMail          string    `xorm:"not null comment('email') VARCHAR(100) e_mail"`
 	MailStatus     int       `xorm:"not null default 2 comment('mail status(1 pass 2 to be verified)') TINYINT(4) mail_status"`

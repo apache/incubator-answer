@@ -3,6 +3,7 @@ package migrations
 import (
 	"fmt"
 
+	"github.com/segmentfault/answer/internal/base/data"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
 )
@@ -81,7 +82,13 @@ func ExpectedVersion() int64 {
 }
 
 // Migrate database to current version
-func Migrate(engine *xorm.Engine) error {
+func Migrate(dataConf *data.Database) error {
+	engine, err := data.NewDB(false, dataConf)
+	if err != nil {
+		fmt.Println("new database failed: ", err.Error())
+		return err
+	}
+
 	currentDBVersion, err := GetCurrentDBVersion(engine)
 	if err != nil {
 		return err
