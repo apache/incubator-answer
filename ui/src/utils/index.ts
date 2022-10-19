@@ -9,9 +9,18 @@ function getQueryString(name: string): string {
   return '';
 }
 
+function thousandthDivision(num) {
+  const reg = /\d{1,3}(?=(\d{3})+$)/g;
+  return `${num}`.replace(reg, '$&,');
+}
+
 function formatCount($num: number): string {
   let res = String($num);
-  if ($num >= 1000 && $num < 1000000) {
+  if (!Number.isFinite($num)) {
+    res = '0';
+  } else if ($num < 10000) {
+    res = thousandthDivision($num);
+  } else if ($num < 1000000) {
     res = `${Math.round($num / 100) / 10}k`;
   } else if ($num >= 1000000) {
     res = `${Math.round($num / 100000) / 10}m`;
@@ -69,8 +78,8 @@ function scrollTop(element) {
  * @returns Array<{displayName: string, userName: string}>
  */
 function matchedUsers(markdown) {
-  const globalReg = /@(.*?)\[(.*?)\]/gm;
-  const reg = /@(.*?)\[(.*?)\]/;
+  const globalReg = /\B@([\w|]+)/g;
+  const reg = /\B@([\w\\_\\.]+)/;
 
   const users = markdown.match(globalReg);
   if (!users) {
@@ -79,8 +88,7 @@ function matchedUsers(markdown) {
   return users.map((user) => {
     const matched = user.match(reg);
     return {
-      displayName: matched[2],
-      userName: matched[2],
+      userName: matched[1],
     };
   });
 }
@@ -91,12 +99,13 @@ function matchedUsers(markdown) {
  * @returns string
  */
 function parseUserInfo(markdown) {
-  const globalReg = /@(.*?)\[(.*?)\]/gm;
-  return markdown.replace(globalReg, '[@$1](/u/$2)');
+  const globalReg = /\B@([\w\\_\\.\\-]+)/g;
+  return markdown.replace(globalReg, '[@$1](/u/$1)');
 }
 
 export {
   getQueryString,
+  thousandthDivision,
   formatCount,
   isLogin,
   scrollTop,

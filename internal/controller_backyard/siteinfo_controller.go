@@ -56,7 +56,9 @@ func (sc *SiteInfoController) GetInterface(ctx *gin.Context) {
 // @Router /answer/admin/api/siteinfo/general [put]
 func (sc *SiteInfoController) UpdateGeneral(ctx *gin.Context) {
 	req := schema.SiteGeneralReq{}
-	handler.BindAndCheck(ctx, &req)
+	if handler.BindAndCheck(ctx, &req) {
+		return
+	}
 	err := sc.siteInfoService.SaveSiteGeneral(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -72,7 +74,9 @@ func (sc *SiteInfoController) UpdateGeneral(ctx *gin.Context) {
 // @Router /answer/admin/api/siteinfo/interface [put]
 func (sc *SiteInfoController) UpdateInterface(ctx *gin.Context) {
 	req := schema.SiteInterfaceReq{}
-	handler.BindAndCheck(ctx, &req)
+	if handler.BindAndCheck(ctx, &req) {
+		return
+	}
 	err := sc.siteInfoService.SaveSiteInterface(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }

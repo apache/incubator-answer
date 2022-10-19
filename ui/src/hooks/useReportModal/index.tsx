@@ -117,9 +117,8 @@ const useReportModal = (callback?: () => void) => {
     if (params.isBackend && params.action === 'review') {
       putReport({
         action: params.type,
-        // FIXME: typo
-        flaged_content: content.value,
-        flaged_type: reportType.type,
+        flagged_content: content.value,
+        flagged_type: reportType.type,
         id: params.id,
       }).then(() => {
         callback?.();
@@ -187,6 +186,7 @@ const useReportModal = (callback?: () => void) => {
                           }
                           value={content.value}
                           isInvalid={content.isInvalid}
+                          placeholder={item.placeholder}
                           onChange={(e) =>
                             setContent({
                               value: e.target.value,

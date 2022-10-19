@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
@@ -17,6 +18,35 @@ import (
 	"github.com/segmentfault/answer/pkg/obj"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/builder"
+)
+
+var (
+	q_fields = []string{
+		"`question`.`id`",
+		"`question`.`id` as `question_id`",
+		"`title`",
+		"`original_text`",
+		"`question`.`created_at`",
+		"`user_id`",
+		"`vote_count`",
+		"`answer_count`",
+		"0 as `accepted`",
+		"`question`.`status` as `status`",
+		"`post_update_time`",
+	}
+	a_fields = []string{
+		"`answer`.`id` as `id`",
+		"`question_id`",
+		"`question`.`title` as `title`",
+		"`answer`.`original_text` as `original_text`",
+		"`answer`.`created_at`",
+		"`answer`.`user_id` as `user_id`",
+		"`answer`.`vote_count` as `vote_count`",
+		"0 as `answer_count`",
+		"`adopted` as `accepted`",
+		"`answer`.`status` as `status`",
+		"`answer`.`created_at` as `post_update_time`",
+	}
 )
 
 // searchRepo tag repository
@@ -35,42 +65,49 @@ func NewSearchRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo, userCommon
 	}
 }
 
-func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID, userID string, votes int, page, size int) (resp []schema.SearchResp, total int64, err error) {
+// SearchContents search question and answer data
+func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID, userID string, votes int, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
 	var (
-		b  *builder.Builder
-		ub *builder.Builder
+		b     *builder.Builder
+		ub    *builder.Builder
+		qfs   = q_fields
+		afs   = a_fields
+		argsQ = []interface{}{}
+		argsA = []interface{}{}
 	)
-	b = builder.Select(
-		"`question`.`id`",
-		"`question`.`id` as `question_id`",
-		"`title`",
-		"`original_text`",
-		"`question`.`created_at`",
-		"`user_id`",
-		"`vote_count`",
-		"`answer_count`",
-		"0 as `accepted`",
-	).From("`question`")
-	ub = builder.Select(
-		"`answer`.`id` as `id`",
-		"`question_id`",
-		"`question`.`title` as `title`",
-		"`answer`.`original_text` as `original_text`",
-		"`answer`.`created_at`",
-		"`answer`.`user_id` as `user_id`",
-		"`answer`.`vote_count` as `vote_count`",
-		"0 as `answer_count`",
-		"`adopted` as `accepted`",
-	).From("`answer`").
+	if order == "relevance" {
+		qfs, argsQ = addRelevanceField([]string{"title", "original_text"}, words, qfs)
+		afs, argsA = addRelevanceField([]string{"`answer`.`original_text`"}, words, afs)
+	}
+
+	b = builder.MySQL().Select(qfs...).From("`question`")
+	ub = builder.MySQL().Select(afs...).From("`answer`").
 		LeftJoin("`question`", "`question`.id = `answer`.question_id")
+
+	b.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted})
+	ub.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).
+		And(builder.Lt{"`answer`.`status`": entity.AnswerStatusDeleted})
+
+	argsQ = append(argsQ, entity.QuestionStatusDeleted)
+	argsA = append(argsA, entity.QuestionStatusDeleted, entity.AnswerStatusDeleted)
 
 	for i, word := range words {
 		if i == 0 {
-			b.Where(builder.Like{"original_text", word})
+			b.Where(builder.Like{"title", word}).
+				Or(builder.Like{"original_text", word})
+			argsQ = append(argsQ, "%"+word+"%")
+			argsQ = append(argsQ, "%"+word+"%")
+
 			ub.Where(builder.Like{"`answer`.original_text", word})
+			argsA = append(argsA, "%"+word+"%")
 		} else {
-			b.Or(builder.Like{"original_text", word})
+			b.Or(builder.Like{"title", word}).
+				Or(builder.Like{"original_text", word})
+			argsQ = append(argsQ, "%"+word+"%")
+			argsQ = append(argsQ, "%"+word+"%")
+
 			ub.Or(builder.Like{"`answer`.original_text", word})
+			argsA = append(argsA, "%"+word+"%")
 		}
 	}
 
@@ -78,32 +115,58 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 	if tagID != "" {
 		b.Join("INNER", "tag_rel", "question.id = tag_rel.object_id").
 			Where(builder.Eq{"tag_rel.tag_id": tagID})
+		argsQ = append(argsQ, tagID)
 	}
 
 	// check user
 	if userID != "" {
 		b.Where(builder.Eq{"question.user_id": userID})
 		ub.Where(builder.Eq{"answer.user_id": userID})
+		argsQ = append(argsQ, userID)
+		argsA = append(argsA, userID)
 	}
 
 	// check vote
 	if votes == 0 {
 		b.Where(builder.Eq{"question.vote_count": votes})
 		ub.Where(builder.Eq{"answer.vote_count": votes})
+		argsQ = append(argsQ, votes)
+		argsA = append(argsA, votes)
 	} else if votes > 0 {
 		b.Where(builder.Gte{"question.vote_count": votes})
 		ub.Where(builder.Gte{"answer.vote_count": votes})
+		argsQ = append(argsQ, votes)
+		argsA = append(argsA, votes)
 	}
 
 	b = b.Union("all", ub)
-	_, _, err = b.ToSQL()
+
+	querySql, _, err := builder.MySQL().Select("*").From(b, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	if err != nil {
+		return
+	}
+	countSql, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
 	if err != nil {
 		return
 	}
 
-	res, err := sr.data.DB.OrderBy("created_at DESC").Limit(size, page).Query(b)
+	queryArgs := []interface{}{}
+	countArgs := []interface{}{}
 
-	tr, err := sr.data.DB.Query(builder.Select("count(*) total").From(b, "c"))
+	queryArgs = append(queryArgs, querySql)
+	queryArgs = append(queryArgs, argsQ...)
+	queryArgs = append(queryArgs, argsA...)
+
+	countArgs = append(countArgs, countSql)
+	countArgs = append(countArgs, argsQ...)
+	countArgs = append(countArgs, argsA...)
+
+	res, err := sr.data.DB.Query(queryArgs...)
+	if err != nil {
+		return
+	}
+
+	tr, err := sr.data.DB.Query(countArgs...)
 	if len(tr) != 0 {
 		total = converter.StringToInt64(string(tr[0]["total"]))
 	}
@@ -116,41 +179,74 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 	}
 }
 
-func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limitNoAccepted bool, answers, page, size int) (resp []schema.SearchResp, total int64, err error) {
-	b := builder.Select(
-		"`id`",
-		"`id` as `question_id`",
-		"`title`",
-		"`original_text`",
-		"`created_at`",
-		"`user_id`",
-		"`vote_count`",
-		"`answer_count`",
-		"0 as `accepted`",
-	).From("question")
+// SearchQuestions search question data
+func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limitNoAccepted bool, answers, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
+	var (
+		qfs  = q_fields
+		args = []interface{}{}
+	)
+	if order == "relevance" {
+		qfs, args = addRelevanceField([]string{"title", "original_text"}, words, qfs)
+	}
+
+	b := builder.MySQL().Select(qfs...).From("question")
+
+	b.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted})
+	args = append(args, entity.QuestionStatusDeleted)
 
 	for i, word := range words {
 		if i == 0 {
-			b.Where(builder.Like{"original_text", word})
+			b.Where(builder.Like{"title", word}).
+				Or(builder.Like{"original_text", word})
+			args = append(args, "%"+word+"%")
+			args = append(args, "%"+word+"%")
 		} else {
 			b.Or(builder.Like{"original_text", word})
+			args = append(args, "%"+word+"%")
 		}
 	}
 
 	// check need filter has not accepted
 	if limitNoAccepted {
 		b.And(builder.Eq{"accepted_answer_id": 0})
+		args = append(args, 0)
 	}
 
 	if answers == 0 {
 		b.And(builder.Eq{"answer_count": 0})
+		args = append(args, 0)
 	} else if answers > 0 {
 		b.And(builder.Gte{"answer_count": answers})
+		args = append(args, answers)
 	}
 
-	res, err := sr.data.DB.OrderBy("created_at DESC").Limit(size, page).Query(b)
+	queryArgs := []interface{}{}
+	countArgs := []interface{}{}
 
-	tr, err := sr.data.DB.Query(builder.Select("count(*) total").From(b, "c"))
+	querySql, _, err := b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	if err != nil {
+		return
+	}
+	countSql, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
+	if err != nil {
+		return
+	}
+	queryArgs = append(queryArgs, querySql)
+	queryArgs = append(queryArgs, args...)
+
+	countArgs = append(countArgs, countSql)
+	countArgs = append(countArgs, args...)
+
+	res, err := sr.data.DB.Query(queryArgs...)
+	if err != nil {
+		return
+	}
+
+	tr, err := sr.data.DB.Query(countArgs...)
+	if err != nil {
+		return
+	}
+
 	if len(tr) != 0 {
 		total = converter.StringToInt64(string(tr[0]["total"]))
 	}
@@ -165,39 +261,70 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 	return
 }
 
-func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAccepted bool, questionID string, page, size int) (resp []schema.SearchResp, total int64, err error) {
-	b := builder.Select(
-		"`answer`.`id` as `id`",
-		"`question_id`",
-		"`question`.`title` as `title`",
-		"`answer`.`original_text` as `original_text`",
-		"`answer`.`created_at`",
-		"`answer`.`user_id` as `user_id`",
-		"`answer`.`vote_count` as `vote_count`",
-		"0 as `answer_count`",
-		"`adopted` as `accepted`",
-	).From("`answer`").
+// SearchAnswers search answer data
+func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAccepted bool, questionID string, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
+	var (
+		afs  = a_fields
+		args = []interface{}{}
+	)
+	if order == "relevance" {
+		afs, args = addRelevanceField([]string{"`answer`.`original_text`"}, words, afs)
+	}
+
+	b := builder.MySQL().Select(afs...).From("`answer`").
 		LeftJoin("`question`", "`question`.id = `answer`.question_id")
+
+	b.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).
+		And(builder.Lt{"`answer`.`status`": entity.AnswerStatusDeleted})
+	args = append(args, entity.QuestionStatusDeleted, entity.AnswerStatusDeleted)
 
 	for i, word := range words {
 		if i == 0 {
 			b.Where(builder.Like{"`answer`.original_text", word})
+			args = append(args, "%"+word+"%")
 		} else {
 			b.Or(builder.Like{"`answer`.original_text", word})
+			args = append(args, "%"+word+"%")
 		}
 	}
 
 	if limitAccepted {
-		b.Where(builder.Eq{"adopted": 2})
+		b.Where(builder.Eq{"adopted": schema.Answer_Adopted_Enable})
+		args = append(args, schema.Answer_Adopted_Enable)
 	}
 
 	if questionID != "" {
 		b.Where(builder.Eq{"question_id": questionID})
+		args = append(args, questionID)
 	}
 
-	res, err := sr.data.DB.OrderBy("created_at DESC").Limit(size, page).Query(b)
+	queryArgs := []interface{}{}
+	countArgs := []interface{}{}
 
-	tr, err := sr.data.DB.Query(builder.Select("count(*) total").From(b, "c"))
+	querySql, _, err := b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	if err != nil {
+		return
+	}
+	countSql, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
+	if err != nil {
+		return
+	}
+	queryArgs = append(queryArgs, querySql)
+	queryArgs = append(queryArgs, args...)
+
+	countArgs = append(countArgs, countSql)
+	countArgs = append(countArgs, args...)
+
+	res, err := sr.data.DB.Query(queryArgs...)
+	if err != nil {
+		return
+	}
+
+	tr, err := sr.data.DB.Query(countArgs...)
+	if err != nil {
+		return
+	}
+
 	total = converter.StringToInt64(string(tr[0]["total"]))
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -210,10 +337,28 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 	return
 }
 
+func (sr *searchRepo) parseOrder(ctx context.Context, order string) (res string) {
+	switch order {
+	case "newest":
+		res = "created_at desc"
+	case "active":
+		res = "post_update_time desc"
+	case "score":
+		res = "vote_count desc"
+	case "relevance":
+		res = "relevance desc"
+	default:
+		res = "created_at desc"
+	}
+	return
+}
+
 func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) (resp []schema.SearchResp, err error) {
 	for _, r := range res {
 		var (
-			objectKey  string
+			objectKey,
+			status string
+
 			tags       []schema.TagResp
 			tagsEntity []entity.Tag
 			object     schema.SearchObject
@@ -246,6 +391,22 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 			return
 		}
 		_ = copier.Copy(&tags, tagsEntity)
+		switch objectKey {
+		case "question":
+			for k, v := range entity.CmsQuestionSearchStatus {
+				if v == converter.StringToInt(string(r["status"])) {
+					status = k
+					break
+				}
+			}
+		case "answer":
+			for k, v := range entity.CmsAnswerSearchStatus {
+				if v == converter.StringToInt(string(r["status"])) {
+					status = k
+					break
+				}
+			}
+		}
 
 		object = schema.SearchObject{
 			ID:              string(r["id"]),
@@ -257,6 +418,7 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 			VoteCount:       converter.StringToInt(string(r["vote_count"])),
 			Accepted:        string(r["accepted"]) == "2",
 			AnswerCount:     converter.StringToInt(string(r["answer_count"])),
+			StatusStr:       status,
 		}
 		resp = append(resp, schema.SearchResp{
 			ObjectType: objectKey,
@@ -287,4 +449,37 @@ func cutOutParsedText(parsedText string) string {
 		parsedText = parsedText[0:idx]
 	}
 	return parsedText
+}
+
+func addRelevanceField(search_fields, words, fields []string) (res []string, args []interface{}) {
+	var relevanceRes = []string{}
+	args = []interface{}{}
+
+	for _, search_field := range search_fields {
+		var (
+			relevance     = "(LENGTH(" + search_field + ") - LENGTH(%s))"
+			replacement   = "REPLACE(%s, ?, '')"
+			replace_field = search_field
+			replaced      string
+			argsField     = []interface{}{}
+		)
+
+		res = fields
+		for i, word := range words {
+			if i == 0 {
+				argsField = append(argsField, word)
+				replaced = fmt.Sprintf(replacement, replace_field)
+			} else {
+				argsField = append(argsField, word)
+				replaced = fmt.Sprintf(replacement, replaced)
+			}
+		}
+		args = append(args, argsField...)
+
+		relevance = fmt.Sprintf(relevance, replaced)
+		relevanceRes = append(relevanceRes, relevance)
+	}
+
+	res = append(res, "("+strings.Join(relevanceRes, " + ")+") as relevance")
+	return
 }

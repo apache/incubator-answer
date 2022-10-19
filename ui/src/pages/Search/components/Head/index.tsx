@@ -35,17 +35,16 @@ const Index: FC<Props> = ({ data }) => {
     <div className="mb-5">
       <h3 className="mb-3">{t('title')}</h3>
       <p>
-        <div>
-          <span className="me-1 text-secondary">{t('keywords')}</span>
-          {q?.replace(reg, '')}
-        </div>
+        <span className="me-1 text-secondary">{t('keywords')}</span>
+        {q?.replace(reg, '')}
+        <br />
         {options?.length && (
-          <div>
-            <span className="text-secondary">{t('options')} </span>
+          <>
+            <span className="text-secondary">{t('options')}</span>
             {options?.map((item) => {
               return <code key={item}>{item} </code>;
             })}
-          </div>
+          </>
         )}
       </p>
       {data?.slug_name && (

@@ -21,8 +21,6 @@ WORKDIR ${BUILD_DIR}
 COPY --from=node-builder /tmp/build ${BUILD_DIR}/ui/build
 RUN make clean build && \
 	cp answer /usr/bin/answer && \
-    mkdir -p /tmp/cache && chmod 777 /tmp/cache && \
-    mkdir /data && chmod 777 /data && cp configs/config.yaml /data/config.yaml && \
     mkdir -p /data/upfiles && chmod 777 /data/upfiles && \
     mkdir -p /data/i18n && chmod 777 /data/i18n && cp -r i18n/*.yaml /data/i18n
 
@@ -34,7 +32,8 @@ RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.li
         && apt -y update \
         && apt -y upgrade \
         && apt -y install ca-certificates openssl tzdata curl netcat dumb-init \
-        && apt -y autoremove
+        && apt -y autoremove \
+        && mkdir -p /tmp/cache
 
 COPY --from=golang-builder /data /data
 VOLUME /data

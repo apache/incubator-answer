@@ -1,8 +1,11 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
 #header {
+  background: linear-gradient(180deg, #0033FF 0%, rgba(0, 51, 255, 0.95) 100%);
+  --bs-navbar-padding-y: 0.75rem;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15), $box-shadow-sm;
   .logo {
-    height: 28px;
-    width: auto;
-    max-width: 85px;
+    max-height: 1.75rem;
   }
   .nav-link {
     color: rgba(255, 255, 255, 0.7);
@@ -11,11 +14,54 @@
       color: #fff;
     }
     &.icon-link {
-      width: 46px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
     }
   }
-  .placeholder-search::placeholder {
-    color: rgba(255, 255, 255, 0.75);
+  .placeholder-search {
+    background-color: rgba(255, 255, 255, .2);
+    border: 0;
+    &:focus {
+      border: $border-width $border-style $border-color;
+    }
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.75);
+    }
+  }
+
+  .answer-navBar {
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    border: none;
+  }
+  .answer-navBar:focus {
+    box-shadow: none;
+  }
+
+  .lg-none {
+    display: none!important;
+  }
+
+  .hr {
+    color: #fff;
   }
 }
+
+
+@media (max-width: 992.9px) {
+  #header {
+    .nav-grow {
+      flex-grow: 1!important;
+    }
+
+    .lg-none {
+      display: flex!important;
+    }
+
+    .w-75 {
+      width: 100% !important;
+    }
+  }
+
+}
+

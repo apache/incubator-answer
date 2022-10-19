@@ -9,6 +9,7 @@ import {
   Icon,
   Comment,
   FormatTime,
+  htmlRender,
 } from '@answer/components';
 import { acceptanceAnswer } from '@answer/api';
 import { scrollTop } from '@answer/utils';
@@ -44,13 +45,17 @@ const Index: FC<Props> = ({
   };
 
   useEffect(() => {
-    if (aid === data.id && answerRef?.current) {
+    if (!answerRef?.current) {
+      return;
+    }
+    if (aid === data.id) {
       setTimeout(() => {
         const element = answerRef.current;
         scrollTop(element);
       }, 100);
     }
-  }, [data.id, answerRef]);
+    htmlRender(answerRef.current.querySelector('.fmt'));
+  }, [data.id, answerRef.current]);
   if (!data?.id) {
     return null;
   }
@@ -97,7 +102,7 @@ const Index: FC<Props> = ({
       </div>
 
       <Row className="mt-4 mb-3">
-        <Col>
+        <Col className="mb-3 mb-md-0">
           <Operate
             qid={data.question_id}
             aid={data.id}
@@ -108,7 +113,7 @@ const Index: FC<Props> = ({
             callback={callback}
           />
         </Col>
-        <Col lg={3}>
+        <Col lg={3} className="mb-3 mb-md-0">
           {data.update_user_info?.username !== data.user_info?.username ? (
             <UserCard
               data={data?.update_user_info}

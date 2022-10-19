@@ -85,7 +85,7 @@ func (qc *QuestionController) GetQuestion(c *gin.Context) {
 	id := c.Query("id")
 	ctx := context.Background()
 	userID := middleware.GetLoginUserIDFromContext(c)
-	info, err := qc.questionService.GetQuestion(ctx, id, userID)
+	info, err := qc.questionService.GetQuestion(ctx, id, userID, true)
 	if err != nil {
 		handler.HandleResponse(c, err, nil)
 		return
@@ -125,7 +125,7 @@ func (qc *QuestionController) SimilarQuestion(ctx *gin.Context) {
 // @Produce  json
 // @Param data body schema.QuestionSearch  true "QuestionSearch"
 // @Success 200 {string} string ""
-// @Router /answer/api/v1/question/page [post]
+// @Router /answer/api/v1/question/page [get]
 func (qc *QuestionController) Index(ctx *gin.Context) {
 	req := &schema.QuestionSearch{}
 	if handler.BindAndCheck(ctx, req) {

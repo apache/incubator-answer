@@ -3,6 +3,7 @@ server:
     addr: 0.0.0.0:80
 data:
   database:
+    driver: "mysql"
     connection: root:root@tcp(db:3306)/answer
   cache:
     file_path: "/tmp/cache/cache.db"
@@ -15,5 +16,5 @@ swaggerui:
   address: ':80'
 service_config:
   secret_key: "answer"
-  web_host: "http://127.0.0.1"
-  upload_path: "./upfiles"
+  web_host: "http://127.0.0.1:9080"
+  upload_path: "/data/upfiles"

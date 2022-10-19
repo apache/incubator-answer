@@ -7,6 +7,7 @@ type SearchDTO struct {
 	UserID string
 	Page   int
 	Size   int
+	Order  string
 }
 
 type SearchObject struct {
@@ -21,11 +22,13 @@ type SearchObject struct {
 	UserInfo *UserBasicInfo `json:"user_info"`
 	// tags
 	Tags []TagResp `json:"tags"`
+	// Status
+	StatusStr string `json:"status"`
 }
 
 type TagResp struct {
-	SlugName    string `json:"display_name"`
-	DisplayName string `json:"slug_name"`
+	SlugName    string `json:"slug_name"`
+	DisplayName string `json:"display_name"`
 	// if main tag slug name is not empty, this tag is synonymous with the main tag
 	MainTagSlugName string `json:"main_tag_slug_name"`
 }

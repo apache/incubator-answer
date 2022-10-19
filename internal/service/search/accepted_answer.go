@@ -9,10 +9,11 @@ import (
 )
 
 type AcceptedAnswerSearch struct {
-	repo search_common.SearchRepo
-	w    string
-	page int
-	size int
+	repo  search_common.SearchRepo
+	w     string
+	page  int
+	size  int
+	order string
 }
 
 func NewAcceptedAnswerSearch(repo search_common.SearchRepo) *AcceptedAnswerSearch {
@@ -40,6 +41,7 @@ func (s *AcceptedAnswerSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 	s.w = strings.TrimSpace(w)
 	s.page = dto.Page
 	s.size = dto.Size
+	s.order = dto.Order
 	return
 }
 func (s *AcceptedAnswerSearch) Search(ctx context.Context) (resp []schema.SearchResp, total int64, err error) {
@@ -49,5 +51,5 @@ func (s *AcceptedAnswerSearch) Search(ctx context.Context) (resp []schema.Search
 		words = words[:4]
 	}
 
-	return s.repo.SearchAnswers(ctx, words, true, "", s.page, s.size)
+	return s.repo.SearchAnswers(ctx, words, true, "", s.page, s.size, s.order)
 }

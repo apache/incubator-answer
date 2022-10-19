@@ -2,6 +2,7 @@ package report_handle_backyard
 
 import (
 	"context"
+
 	"github.com/segmentfault/answer/internal/service/config"
 
 	"github.com/segmentfault/answer/internal/base/constant"
@@ -46,23 +47,23 @@ func (rh *ReportHandle) HandleObject(ctx context.Context, reported entity.Report
 	}
 	switch objectKey {
 	case "question":
-		switch req.FlagedType {
+		switch req.FlaggedType {
 		case reasonDelete:
 			err = rh.questionCommon.RemoveQuestion(ctx, &schema.RemoveQuestionReq{ID: objectID})
 		case reasonClose:
 			err = rh.questionCommon.CloseQuestion(ctx, &schema.CloseQuestionReq{
 				ID:        objectID,
-				CloseType: req.FlagedType,
-				CloseMsg:  req.FlagedContent,
+				CloseType: req.FlaggedType,
+				CloseMsg:  req.FlaggedContent,
 			})
 		}
 	case "answer":
-		switch req.FlagedType {
+		switch req.FlaggedType {
 		case reasonDelete:
 			err = rh.questionCommon.RemoveAnswer(ctx, objectID)
 		}
 	case "comment":
-		switch req.FlagedType {
+		switch req.FlaggedType {
 		case reasonDelete:
 			err = rh.commentRepo.RemoveComment(ctx, objectID)
 			rh.sendNotification(ctx, reportedUserID, objectID, constant.YourCommentWasDeleted)

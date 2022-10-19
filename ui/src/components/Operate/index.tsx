@@ -123,7 +123,7 @@ const Index: FC<IProps> = ({
             <Link
               key={item.action}
               to={editUrl}
-              className="text-secondary p-0 fs-14 me-3"
+              className="link-secondary p-0 fs-14 me-3"
               style={{ lineHeight: '23px' }}>
               {item.name}
             </Link>
@@ -133,7 +133,7 @@ const Index: FC<IProps> = ({
           <Button
             key={item.action}
             variant="link"
-            className="text-secondary p-0 fs-14 me-3"
+            className="link-secondary p-0 fs-14 me-3"
             onClick={() => handleAction(item.action)}>
             {item.name}
           </Button>

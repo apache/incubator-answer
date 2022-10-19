@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Row, Col, ButtonGroup, Button, ListGroup } from 'react-bootstrap';
+import { Row, Col, ListGroup } from 'react-bootstrap';
 import { NavLink, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -12,6 +12,7 @@ import {
   FormatTime,
   Empty,
   BaseUserCard,
+  QueryGroup,
 } from '@answer/components';
 
 const QuestionOrderKeys: Type.QuestionOrderBy[] = [
@@ -31,7 +32,7 @@ const QuestionLastUpdate = ({ q }) => {
   if (q.update_time > q.edit_time) {
     // question answered
     return (
-      <>
+      <div className="d-flex">
         <BaseUserCard
           data={q.last_answered_user_info}
           showAvatar={false}
@@ -43,14 +44,14 @@ const QuestionLastUpdate = ({ q }) => {
           className="text-secondary mx-1"
           preFix={t('answered')}
         />
-      </>
+      </div>
     );
   }
 
   if (q.edit_time > q.update_time) {
     // question modified
     return (
-      <>
+      <div className="d-flex">
         <BaseUserCard
           data={q.update_user_info}
           showAvatar={false}
@@ -62,13 +63,13 @@ const QuestionLastUpdate = ({ q }) => {
           className="text-secondary mx-1"
           preFix={t('modified')}
         />
-      </>
+      </div>
     );
   }
 
   // default: asked
   return (
-    <>
+    <div className="d-flex">
       <BaseUserCard data={q.user_info} showAvatar={false} className="me-1" />
       •
       <FormatTime
@@ -76,14 +77,14 @@ const QuestionLastUpdate = ({ q }) => {
         preFix={t('asked')}
         className="text-secondary mx-1"
       />
-    </>
+    </div>
   );
 };
 
 const QuestionList: FC<Props> = ({ source }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
   const { tagName = '' } = useParams();
-  const [urlSearchParams, setUrlSearchParams] = useSearchParams();
+  const [urlSearchParams] = useSearchParams();
   const curOrder = urlSearchParams.get('order') || QuestionOrderKeys[0];
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const pageSize = 20;
@@ -99,15 +100,6 @@ const QuestionList: FC<Props> = ({ source }) => {
   }
   const { data: listData, isLoading } = useQuestionList(reqParams);
   const count = listData?.count || 0;
-  const onOrderChange = (evt, order) => {
-    evt.preventDefault();
-    if (order === curOrder) {
-      return;
-    }
-    urlSearchParams.set('page', '1');
-    urlSearchParams.set('order', order);
-    setUrlSearchParams(urlSearchParams);
-  };
 
   return (
     <div>
@@ -120,58 +112,58 @@ const QuestionList: FC<Props> = ({ source }) => {
           </h5>
         </Col>
         <Col>
-          <ButtonGroup size="sm">
-            {QuestionOrderKeys.map((k) => {
-              return (
-                <Button
-                  as="a"
-                  key={k}
-                  className="text-capitalize"
-                  href={`?page=1&order=${k}`}
-                  onClick={(evt) => onOrderChange(evt, k)}
-                  variant={curOrder === k ? 'secondary' : 'outline-secondary'}>
-                  {t(k)}
-                </Button>
-              );
-            })}
-          </ButtonGroup>
+          <QueryGroup
+            data={QuestionOrderKeys}
+            currentSort={curOrder}
+            i18nKeyPrefix="question"
+          />
         </Col>
       </Row>
       <ListGroup variant="flush" className="border-top border-bottom-0">
         {listData?.list?.map((li) => {
           return (
-            <ListGroup.Item key={li.id} className="border-bottom py-3 px-0">
+            <ListGroup.Item
+              key={li.id}
+              className="border-bottom pt-3 pb-2 px-0">
               <h5 className="text-wrap text-break">
-                <NavLink to={`/questions/${li.id}`} className="text-body">
+                <NavLink to={`/questions/${li.id}`} className="link-dark">
                   {li.title}
+                  {li.status === 2 ? ` [${t('closed')}]` : ''}
                 </NavLink>
               </h5>
-              <div className="d-flex align-items-center fs-14 text-secondary">
+              <div className="d-flex flex-column flex-md-row align-items-md-center fs-14 text-secondary">
                 <QuestionLastUpdate q={li} />
-                <span className="ms-3">
-                  <Icon name="hand-thumbs-up-fill" />
-                  <em className="fst-normal mx-1">{li.vote_count}</em>
-                </span>
-                <span className="ms-3">
-                  {li.accepted_answer_id >= 1 ? (
-                    <Icon name="check-circle-fill" className="text-success" />
-                  ) : (
-                    <Icon name="chat-square-text-fill" />
-                  )}
-                  <em className="fst-normal mx-1">{li.answer_count}</em>
-                </span>
-                <span className="summary-stat ms-3">
-                  <Icon name="eye-fill" />
-                  <em className="fst-normal mx-1">{li.view_count}</em>
-                </span>
+                <div className="ms-0 ms-md-3 mt-2 mt-md-0">
+                  <span>
+                    <Icon name="hand-thumbs-up-fill" />
+                    <em className="fst-normal mx-1">{li.vote_count}</em>
+                  </span>
+                  <span
+                    className={`ms-3 ${
+                      li.accepted_answer_id >= 1 ? 'text-success' : ''
+                    }`}>
+                    <Icon
+                      name={
+                        li.accepted_answer_id >= 1
+                          ? 'check-circle-fill'
+                          : 'chat-square-text-fill'
+                      }
+                    />
+                    <em className="fst-normal mx-1">{li.answer_count}</em>
+                  </span>
+                  <span className="summary-stat ms-3">
+                    <Icon name="eye-fill" />
+                    <em className="fst-normal mx-1">{li.view_count}</em>
+                  </span>
+                </div>
               </div>
-              <div className="question-tags">
+              <div className="question-tags mx-n1 mt-2">
                 {Array.isArray(li.tags)
                   ? li.tags.map((tag) => {
                       return (
                         <Tag
                           key={tag.slug_name}
-                          className="me-2 mt-2"
+                          className="m-1"
                           href={`/tags/${
                             tag.main_tag_slug_name || tag.slug_name
                           }`}>

@@ -112,6 +112,7 @@ const Comment = ({ objectId, mode }) => {
             if (comment.comment_id === item.comment_id) {
               comment.showEdit = false;
               comment.parsed_text = html;
+              comment.original_text = item.value;
             }
             return comment;
           }),
@@ -239,7 +240,7 @@ const Comment = ({ objectId, mode }) => {
             ) : (
               <div className="d-flex">
                 {item.reply_user_display_name && (
-                  <Link to="###" className="fs-14 me-1">
+                  <Link to="." className="fs-14 me-1 text-nowrap">
                     @{item.reply_user_display_name}
                   </Link>
                 )}

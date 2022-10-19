@@ -195,7 +195,7 @@ export interface PostAnswerReq {
 }
 
 export interface PageUser {
-  id;
+  id?;
   displayName;
   userName?;
   avatar_url?;
@@ -301,6 +301,7 @@ export interface SearchResItem {
     answer_count: number;
     accepted: boolean;
     tags: TagBase[];
+    status?: string;
   };
 }
 export interface SearchRes extends ListResult<SearchResItem> {

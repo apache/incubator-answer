@@ -55,7 +55,7 @@ func BindAndCheck(ctx *gin.Context, data interface{}) bool {
 
 	errField, err := validator.GetValidatorByLang(lang.Abbr()).Check(data)
 	if err != nil {
-		HandleResponse(ctx, myErrors.New(http.StatusBadRequest, reason.RequestFormatError).WithMsg(err.Error()), errField)
+		HandleResponse(ctx, err, errField)
 		return true
 	}
 	return false

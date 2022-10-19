@@ -149,7 +149,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		log.Error("user IncreaseQuestionCount error", err.Error())
 	}
 
-	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID)
+	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false)
 	return
 }
 
@@ -229,20 +229,23 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return
 	}
 
-	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID)
+	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false)
 	return
 }
 
 // GetQuestion get question one
-func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID string) (resp *schema.QuestionInfo, err error) {
+func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID string, addpv bool) (resp *schema.QuestionInfo, err error) {
 	question, err := qs.questioncommon.Info(ctx, id, loginUserID)
 	if err != nil {
 		return
 	}
-	err = qs.questioncommon.UpdataPv(ctx, id)
-	if err != nil {
-		log.Error("UpdataPv", err)
+	if addpv {
+		err = qs.questioncommon.UpdataPv(ctx, id)
+		if err != nil {
+			log.Error("UpdataPv", err)
+		}
 	}
+
 	question.MemberActions = permission.GetQuestionPermission(loginUserID, question.UserId)
 	return question, nil
 }
@@ -273,6 +276,10 @@ func (qs *QuestionService) SearchUserList(ctx context.Context, userName, order s
 	for _, item := range questionlist {
 		info := &schema.UserQuestionInfo{}
 		_ = copier.Copy(info, item)
+		status, ok := entity.CmsQuestionSearchStatusIntToString[item.Status]
+		if ok {
+			info.Status = status
+		}
 		userlist = append(userlist, info)
 	}
 	return userlist, count, nil
@@ -446,6 +453,10 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 		item.AnswerCount = question.AnswerCount
 		item.CollectionCount = question.CollectionCount
 		item.FollowCount = question.FollowCount
+		status, ok := entity.CmsQuestionSearchStatusIntToString[question.Status]
+		if ok {
+			item.Status = status
+		}
 		if question.AcceptedAnswerID != "0" {
 			item.AcceptedAnswer = true
 		}
@@ -458,7 +469,7 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 // SimilarQuestion
 func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID string, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
 	list := make([]*schema.QuestionInfo, 0)
-	questionInfo, err := qs.GetQuestion(ctx, questionID, loginUserID)
+	questionInfo, err := qs.GetQuestion(ctx, questionID, loginUserID, false)
 	if err != nil {
 		return list, 0, err
 	}

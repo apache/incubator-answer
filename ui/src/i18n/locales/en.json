@@ -1,4 +1,8 @@
 {
+  "how_to_format": {
+    "title": "How to Format",
+    "description": "<ul class=\"mb-0\"><li><p class=\"mb-2\">to make links</p><pre class=\"mb-2\"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class=\"mb-2\">put returns between paragraphs</p></li><li><p class=\"mb-2\"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class=\"mb-2\">indent code by 4 spaces</p></li><li><p class=\"mb-2\">quote by placing <code>&gt;</code> at start of line</p></li><li><p class=\"mb-2\">backtick escapes <code>`like _this_`</code></p></li><li><p class=\"mb-2\">create code fences with backticks <code>`</code></p><pre class=\"mb-0\"><code>```<br/>code here<br/>```</code></pre></li></ul>"
+  },
   "pagination": {
     "prev": "Prev",
     "next": "Next"
@@ -36,7 +40,7 @@
     "title": "Your Account has been Suspended",
     "until_time": "Your account was suspended until {{ time }}.",
     "forever": "This user was suspended forever.",
-    "end": "You don’t meet a community guideline."
+    "end": "You don't meet a community guideline."
   },
   "editor": {
     "blockquote": {
@@ -68,13 +72,13 @@
             }
           },
           "language": {
-            "label": "Language",
+            "label": "Language (optional)",
             "placeholder": "Automatic detection"
           }
         }
       },
       "btn_cancel": "Cancel",
-      "btn_confirm": "Confirm"
+      "btn_confirm": "Add"
     },
     "formula": {
       "text": "Formula",
@@ -86,9 +90,12 @@
     "heading": {
       "text": "Heading",
       "options": {
-        "h4": "Heading 2",
-        "h5": "Heading 3",
-        "h6": "Heading 4"
+        "h1": "Heading 1",
+        "h2": "Heading 2",
+        "h3": "Heading 3",
+        "h4": "Heading 4",
+        "h5": "Heading 5",
+        "h6": "Heading 6"
       }
     },
     "help": {
@@ -132,7 +139,7 @@
         }
       },
       "btn_cancel": "Cancel",
-      "btn_confirm": "Confirm",
+      "btn_confirm": "Add",
       "uploading": "Uploading"
     },
     "indent": {
@@ -161,7 +168,7 @@
         }
       },
       "btn_cancel": "Cancel",
-      "btn_confirm": "Confirm"
+      "btn_confirm": "Add"
     },
     "ordered_list": {
       "text": "Numbered List"
@@ -202,22 +209,23 @@
     }
   },
   "tag_modal": {
-    "title": "Create New Tag",
+    "title": "Create new tag",
     "form": {
       "fields": {
         "display_name": {
           "label": "Display name",
           "msg": {
             "empty": "Display name cannot be empty.",
-            "range": "Display name up to 35 characters"
+            "range": "Display name up to 35 characters."
           }
         },
         "slug_name": {
           "label": "URL slug",
-          "description": "Spaces are not allowed, please use '-' instead.",
+          "description": "Must use the character set \"a-z\", \"0-9\", \"+ # - .\"",
           "msg": {
-            "empty": "Please enter a name for the tag.",
-            "range": "URL slug up to 35 characters"
+            "empty": "URL slug cannot be empty.",
+            "range": "URL slug up to 35 characters.",
+            "character": "URL slug contains unallowed character set."
           }
         },
         "description": {
@@ -260,7 +268,7 @@
         },
         "slug_name": {
           "label": "URL slug",
-          "info": "Spaces are not allowed, please use '-' instead."
+          "info": "Must use the character set \"a-z\", \"0-9\", \"+ # - .\""
         },
         "description": {
           "label": "Description"
@@ -272,11 +280,7 @@
       }
     },
     "btn_save_edits": "Save edits",
-    "btn_cancel": "Cancel",
-    "how_to_format": {
-      "title": "How to Format",
-      "description": "This is some text within a card body."
-    }
+    "btn_cancel": "Cancel"
   },
   "dates": {
     "long_date": "MMM D",
@@ -318,23 +322,7 @@
       }
     },
     "btn_save_edits": "Save edits",
-    "btn_cancel": "Cancel",
-    "how_to_ask": {
-      "title": "How to Ask",
-      "description": "Not sure what to ask? Recurring questions, onboarding procedures, local setups, and FAQs all make for useful questions."
-    },
-    "how_to_format": {
-      "title": "How to Format",
-      "description": "This is some text within a card body."
-    },
-    "how_to_tag": {
-      "title": "How to Tag",
-      "description": "A tag helps ensure that your question will get attention from the right people. Here are tagging tips:",
-      "tips": [
-        "If you’re not sure what tags to use, check out popular tags.",
-        "Tag things in more than one way so people can find them more easily. Add tags for product lines, projects, teams, and the specific technologies or languages used."
-      ]
-    }
+    "btn_cancel": "Cancel"
   },
   "tags": {
     "title": "Tags",
@@ -347,10 +335,11 @@
     "button_following": "Following",
     "tag_label": "questions",
     "search_placeholder": "Filter by tag name",
+    "no_description": "The tag has no description.",
     "more": "More"
   },
   "ask": {
-    "title": "Add question",
+    "title": "Add Question",
     "edit_title": "Edit Question",
     "default_reason": "Edit question",
     "similar_questions": "Similar questions",
@@ -361,7 +350,7 @@
         },
         "title": {
           "label": "Title",
-          "placeholder": "Be specific and imagine you’re asking a question to another person",
+          "placeholder": "Be specific and imagine you're asking a question to another person",
           "msg": {
             "empty": "Title cannot be empty.",
             "range": "Title up to 150 characters"
@@ -390,23 +379,7 @@
     "btn_post_question": "Post your question",
     "btn_save_edits": "Save edits",
     "answer_question": "Answer your own question",
-    "post_question&answer": "Post your question and answer",
-    "how_to_ask": {
-      "title": "How to Ask",
-      "description": "Not sure what to ask? Recurring questions, onboarding procedures, local setups, and FAQs all make for useful questions."
-    },
-    "how_to_format": {
-      "title": "How to Format",
-      "description": "This is some text within a card body."
-    },
-    "how_to_tag": {
-      "title": "How to Tag",
-      "description": "A tag helps ensure that your question will get attention from the right people. Here are tagging tips:",
-      "tips": [
-        "If you’re not sure what tags to use, check out popular tags.",
-        "Tag things in more than one way so people can find them more easily. Add tags for product lines, projects, teams, and the specific technologies or languages used."
-      ]
-    }
+    "post_question&answer": "Post your question and answer"
   },
   "tag_selector": {
     "add_btn": "Add tag",
@@ -429,6 +402,9 @@
       "placeholder": "Search"
     }
   },
+  "footer": {
+    "build_on": "Build on <1> Answer </1>- the open-source software that power Q&A communities.<br />Made with love. © 2022 Answer."
+  },
   "upload_img": {
     "name": "Change",
     "loading": "loading..."
@@ -437,11 +413,11 @@
     "title": "Captcha",
     "placeholder": "Type the text above",
     "msg": {
-      "empty": "Cannot be empty."
+      "empty": "Captcha cannot be empty."
     }
   },
   "inactive": {
-    "first": "You’re almost done! We sent an activation mail to <bold>{{mail}}</bold>. Please follow the instructions in the mail to activate your account.",
+    "first": "You're almost done! We sent an activation mail to <bold>{{mail}}</bold>. Please follow the instructions in the mail to activate your account.",
     "info": "If it doesn't arrive, check your spam folder.",
     "another": "We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.",
     "btn_name": "Resend activation email",
@@ -451,14 +427,14 @@
   },
   "login": {
     "page_title": "Welcome to Answer",
-    "info_sign": "Don’t have an account? <1>Sign up</1>",
+    "info_sign": "Don't have an account? <1>Sign up</1>",
     "info_login": "Already have an account? <1>Log in</1>",
     "forgot_pass": "Forgot password?",
     "name": {
       "label": "Name",
       "msg": {
         "empty": "Name cannot be empty.",
-        "range": "Name up to 30 characters"
+        "range": "Name up to 30 characters."
       }
     },
     "email": {
@@ -478,7 +454,7 @@
   "account_forgot": {
     "page_title": "Forgot Your Password",
     "btn_name": "Send me recovery email",
-    "send_success": "If an account matches <bold>{{mail}}</bold>, you should receive an email with instructions on how to reset your password shortly.",
+    "send_success": "If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.",
     "email": {
       "label": "Email",
       "msg": {
@@ -518,6 +494,13 @@
         "label": "Display name",
         "msg": "Display name cannot be empty.",
         "msg_range": "Display name up to 30 characters"
+      },
+      "username": {
+        "label": "Username",
+        "caption": "People can mention you as \"@username\".",
+        "msg": "Username cannot be empty.",
+        "msg_range": "Username up to 30 characters",
+        "character": "Must use the character set \"a-z\", \"0-9\", \" - . _\""
       },
       "avatar": {
         "label": "Profile image",
@@ -586,10 +569,12 @@
   "question_detail": {
     "Asked": "Asked",
     "asked": "asked",
-    "update": "Update",
-    "edit": "edit",
-    "Views": "Views",
+    "update": "Modified",
+    "edit": "edited",
+    "Views": "Viewed",
     "answered": "answered",
+    "closed_in": "Closed in",
+    "show_exist": "Show existing question.",
     "answers": {
       "title": "Answers",
       "score": "Score",
@@ -600,7 +585,9 @@
     "write_answer": {
       "title": "Your Answer",
       "btn_name": "Post your answer",
-      "confirm_info": "you have answered, confirm to continue answer",
+      "confirm_title": "Continue to answer",
+      "continue": "Continue",
+      "confirm_info": "<p>Are you sure you want to add another answer?</p><p>You could use the edit link to refine and improve your existing answer, instead.</p>",
       "empty": "Answer cannot be empty."
     }
   },
@@ -687,7 +674,9 @@
     "modified": "modified",
     "answered": "answered",
     "asked": "asked",
-    "follow_a_tag": "Follow a tag"
+    "closed": "closed",
+    "follow_a_tag": "Follow a tag",
+    "more": "More"
   },
   "personal": {
     "overview": "Overview",
@@ -749,7 +738,8 @@
     },
     "dashboard": {
       "title": "Dashboard",
-      "welcome": "Welcome to Answer Admin !"
+      "welcome": "Welcome to Answer Admin !",
+      "version": "Version"
     },
     "flags": {
       "title": "Flags",
@@ -776,7 +766,7 @@
       "confirm_content": "Are you sure you want to delete this user? This is permanent!",
       "confirm_btn": "Delete",
       "msg": {
-        "empty": "Please select a reason"
+        "empty": "Please select a reason."
       }
     },
     "status_modal": {
@@ -784,7 +774,7 @@
       "normal_name": "normal",
       "normal_description": "A normal post available to everyone.",
       "closed_name": "closed",
-      "closed_description": "A closed question can’t answer, but still can edit, vote and comment.",
+      "closed_description": "A closed question can't answer, but still can edit, vote and comment.",
       "deleted_name": "deleted",
       "deleted_description": "All reputation gained and lost will be restored.",
       "btn_cancel": "Cancel",

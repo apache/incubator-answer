@@ -57,6 +57,7 @@ type QuestionBaseInfo struct {
 	AnswerCount     int    `json:"answer_count" xorm:"answer_count"`         // 回复总数
 	CollectionCount int    `json:"collection_count" xorm:"collection_count"` // 收藏总数
 	FollowCount     int    `json:"follow_count" xorm:"follow_count"`         // 关注数
+	Status          string `json:"status"`
 	AcceptedAnswer  bool   `json:"accepted_answer"`
 }
 
@@ -110,6 +111,7 @@ type Operation struct {
 	Operation_Type        string `json:"operation_type"`
 	Operation_Description string `json:"operation_description"`
 	Operation_Msg         string `json:"operation_msg"`
+	Operation_Time        int64  `json:"operation_time"`
 }
 
 type GetCloseTypeResp struct {
@@ -150,6 +152,7 @@ type UserQuestionInfo struct {
 	CollectionCount  int           `json:"collection_count"`
 	CreateTime       int           `json:"create_time"`
 	AcceptedAnswerId string        `json:"accepted_answer_id"`
+	Status           string        `json:"status"`
 }
 
 type QuestionSearch struct {

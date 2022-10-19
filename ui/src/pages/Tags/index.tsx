@@ -1,25 +1,18 @@
 import { useState } from 'react';
-import {
-  Container,
-  Row,
-  Col,
-  Card,
-  ButtonGroup,
-  Button,
-  Form,
-} from 'react-bootstrap';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { useQueryTags, following } from '@answer/api';
-import { Tag, Pagination, PageTitle } from '@answer/components';
+import { Tag, Pagination, PageTitle, QueryGroup } from '@answer/components';
 import { formatCount } from '@answer/utils';
+
+const sortBtns = ['popular', 'name', 'newest'];
 
 const Tags = () => {
   const [urlSearch] = useSearchParams();
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
   const [searchTag, setSearchTag] = useState('');
-  const navigate = useNavigate();
 
   const page = Number(urlSearch.get('page')) || 1;
   const sort = urlSearch.get('sort');
@@ -36,10 +29,6 @@ const Tags = () => {
     setSearchTag(e.target.value);
   };
 
-  const handleSort = (param) => {
-    navigate(`/tags?sort=${param}`);
-  };
-
   const handleFollow = (tag) => {
     following({
       object_id: tag.tag_id,
@@ -53,9 +42,9 @@ const Tags = () => {
       <PageTitle title={t('tags', { keyPrefix: 'page_title' })} />
       <Container className="py-3 my-3">
         <Row className="mb-4 d-flex justify-content-center">
-          <Col lg={10}>
+          <Col xxl={10} sm={12}>
             <h3 className="mb-4">{t('title')}</h3>
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="d-flex justify-content-between align-items-center flex-wrap">
               <Form>
                 <Form.Group controlId="formBasicEmail">
                   <Form.Control
@@ -67,37 +56,25 @@ const Tags = () => {
                   />
                 </Form.Group>
               </Form>
-              <ButtonGroup size="sm">
-                <Button
-                  variant={
-                    !sort || sort === 'popular'
-                      ? 'secondary'
-                      : 'outline-secondary'
-                  }
-                  onClick={() => handleSort('popular')}>
-                  {t('sort_buttons.popular')}
-                </Button>
-                <Button
-                  variant={sort === 'name' ? 'secondary' : 'outline-secondary'}
-                  onClick={() => handleSort('name')}>
-                  {t('sort_buttons.name')}
-                </Button>
-                <Button
-                  className="text-capitalize"
-                  variant={
-                    sort === 'newest' ? 'secondary' : 'outline-secondary'
-                  }
-                  onClick={() => handleSort('newest')}>
-                  {t('sort_buttons.newest')}
-                </Button>
-              </ButtonGroup>
+              <QueryGroup
+                data={sortBtns}
+                currentSort={sort || 'popular'}
+                sortKey="sort"
+                i18nKeyPrefix="tags.sort_buttons"
+              />
             </div>
           </Col>
 
-          <Col className="mt-4" lg={10}>
+          <Col className="mt-4" xxl={10} sm={12}>
             <Row>
               {tags?.list?.map((tag) => (
-                <Col key={tag.slug_name} lg={3} md={4} className="mb-4">
+                <Col
+                  key={tag.slug_name}
+                  xs={12}
+                  lg={3}
+                  md={4}
+                  sm={6}
+                  className="mb-4">
                   <Card className="h-100">
                     <Card.Body className="d-flex flex-column align-items-start">
                       <Tag className="mb-3" href={`/tags/${tag.slug_name}`}>

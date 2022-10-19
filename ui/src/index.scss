@@ -14,6 +14,10 @@
   }
 }
 
+:root {
+  overflow-y: scroll;
+}
+
 html,
 body {
   padding: 0;
@@ -28,7 +32,10 @@ a {
 }
 
 .fs-14 {
-  font-size: 14px;
+  font-size: 0.875rem;
+}
+.fs-12 {
+  font-size: 0.75rem;
 }
 
 .pic-auth-modal {
@@ -46,22 +53,21 @@ a {
   height: 18px;
   border-radius: 50%;
   position: absolute;
-  left: 22px;
-  top: 3px;
+  left: 20px;
+  top: 0;
   border: 1px solid #fff;
 }
 
 .badge-tag {
   display: inline-block;
   font-size: 14px;
-  background: #cfe2ff;
+  background: rgba($blue-100, 0.5);
   padding: 1px 0.5rem 2px;
-  color: #084298;
+  color: $blue-700;
   height: 24px;
-}
-
-.badge-tag:hover {
-  background: #9EC5FE;
+  &:hover {
+    background: rgba($blue-100, 1);
+  }
 }
 
 .divide-line {
@@ -70,7 +76,6 @@ a {
 
 .page-wrap {
   min-height: calc(100vh - 148px);
-  overflow-y: auto;
 }
 
 .btn-no-border,
@@ -139,4 +144,60 @@ a {
 
 .object-fit-contain {
   object-fit: contain;
+}
+.fmt {
+  width: 100%;
+  h1 {
+    @extend .fs-3;
+    margin-top: 2rem;
+  }
+  h2 {
+    @extend .fs-4;
+    margin-top: 2rem;
+  }
+  h3 {
+    @extend .fs-5;
+    margin-top: 2rem;
+  }
+  h4 {
+    @extend .fs-6;
+    margin-top: 2rem;
+  }
+  h5 {
+    @extend .fs-14;
+    margin-top: 2rem;
+  }
+  h6 {
+    @extend .fs-12;
+    margin-top: 2rem;
+  }
+  img {
+    max-width: 100%;
+  }
+  p {
+    word-break: break-all;
+    > code {
+      background-color: #e9ecef;
+      color: #212529;
+      padding: 2px 4px;
+      border-radius: 0.25rem;
+    }
+  }
+  pre {
+    background-color: #e9ecef;
+    border-radius: 0.25rem;
+    padding: 1rem;
+  }
+  blockquote {
+    border-left: 0.25rem solid #ced4da;
+    padding: 1rem;
+    color: #6c757d;
+    background-color: #e9ecef;
+    p {
+      color: $body-color;
+    }
+    > p:last-child {
+      margin-bottom: 0;
+    }
+  }
 }

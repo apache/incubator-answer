@@ -93,12 +93,12 @@ const TagIntroduction = () => {
       <PageTitle title={pageTitle} />
       <Container className="pt-4 mt-2 mb-5">
         <Row className="justify-content-center">
-          <Col xs={7}>
+          <Col xxl={7} lg={8} sm={12}>
             <h3 className="mb-3">
               <Link
                 to={`/tags/${tagInfo?.slug_name}`}
                 replace
-                className="text-body">
+                className="link-dark">
                 {tagInfo.display_name}
               </Link>
             </h3>
@@ -123,7 +123,7 @@ const TagIntroduction = () => {
                     key={action.name}
                     variant="link"
                     className={classNames(
-                      'text-secondary btn-no-border p-0 fs-14',
+                      'link-secondary btn-no-border p-0 fs-14',
                       index > 0 && 'ms-3',
                     )}
                     onClick={() => onAction(action)}>
@@ -133,7 +133,7 @@ const TagIntroduction = () => {
               })}
             </div>
           </Col>
-          <Col xs={3}>
+          <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
             <Card>
               <Card.Header className="d-flex justify-content-between">
                 <span>{t('synonyms.title')}</span>

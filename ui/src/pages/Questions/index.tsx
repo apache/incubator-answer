@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { PageTitle, FollowingTags } from '@answer/components';
 
-import QuestionList from '@/components/Questions';
+import QuestionList from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
 import { siteInfoStore } from '@/stores';
 
@@ -26,10 +26,10 @@ const Questions: FC = () => {
       <PageTitle title={pageTitle} suffix={slogan} />
       <Container className="pt-4 mt-2 mb-5">
         <Row className="justify-content-center">
-          <Col lg={7}>
+          <Col xxl={7} lg={8} sm={12}>
             <QuestionList source="questions" />
           </Col>
-          <Col lg={3}>
+          <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
             <FollowingTags />
             <HotQuestions />
           </Col>

@@ -791,7 +791,7 @@ definitions:
         type: array
       title:
         description: question title
-        maxLength: 64
+        maxLength: 150
         minLength: 6
         type: string
     required:
@@ -845,7 +845,7 @@ definitions:
         type: array
       title:
         description: question title
-        maxLength: 64
+        maxLength: 150
         minLength: 6
         type: string
     required:
@@ -905,14 +905,14 @@ definitions:
     type: object
   schema.ReportHandleReq:
     properties:
-      flaged_content:
+      flagged_content:
         type: string
-      flaged_type:
+      flagged_type:
         type: integer
       id:
         type: string
     required:
-    - flaged_type
+    - flagged_type
     - id
     type: object
   schema.SearchListResp:
@@ -938,6 +938,9 @@ definitions:
       excerpt:
         type: string
       id:
+        type: string
+      status:
+        description: Status
         type: string
       tags:
         description: tags
@@ -1027,7 +1030,7 @@ definitions:
     properties:
       display_name:
         description: display_name
-        maxLength: 50
+        maxLength: 35
         type: string
       original_text:
         description: original text
@@ -1037,7 +1040,7 @@ definitions:
         type: string
       slug_name:
         description: slug_name
-        maxLength: 50
+        maxLength: 35
         type: string
     type: object
   schema.TagResp:
@@ -1097,23 +1100,34 @@ definitions:
     properties:
       avatar:
         description: avatar
+        maxLength: 500
         type: string
       bio:
+        description: bio
+        maxLength: 4096
         type: string
       bio_html:
+        description: bio
+        maxLength: 4096
         type: string
       display_name:
         description: display_name
+        maxLength: 30
         type: string
       location:
         description: location
+        maxLength: 100
         type: string
       username:
-        description: name
+        description: username
+        maxLength: 30
         type: string
       website:
         description: website
+        maxLength: 500
         type: string
+    required:
+    - display_name
     type: object
   schema.UpdateNotificationReadReq:
     properties:
@@ -1136,7 +1150,7 @@ definitions:
     properties:
       display_name:
         description: display_name
-        maxLength: 50
+        maxLength: 35
         type: string
       edit_summary:
         description: edit summary
@@ -1149,7 +1163,7 @@ definitions:
         type: string
       slug_name:
         description: slug_name
-        maxLength: 50
+        maxLength: 35
         type: string
       tag_id:
         description: tag_id
@@ -1287,7 +1301,7 @@ definitions:
     - code
     - pass
     type: object
-  schema.UserRegister:
+  schema.UserRegisterReq:
     properties:
       e_mail:
         description: email
@@ -1295,7 +1309,7 @@ definitions:
         type: string
       name:
         description: name
-        maxLength: 50
+        maxLength: 30
         type: string
       pass:
         description: password
@@ -2176,7 +2190,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: GetRedDot
+      description: get notification list
       parameters:
       - description: page size
         in: query
@@ -2192,6 +2206,7 @@ paths:
         - achievement
         in: query
         name: type
+        required: true
         type: string
       produces:
       - application/json
@@ -2202,7 +2217,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: GetRedDot
+      summary: get notification list
       tags:
       - Notification
   /answer/api/v1/notification/read/state:
@@ -2645,7 +2660,7 @@ paths:
       tags:
       - api-question
   /answer/api/v1/question/page:
-    post:
+    get:
       consumes:
       - application/json
       description: SearchQuestionList <br>  "order"  Enums(newest, active,frequent,score,unanswered)
@@ -2912,6 +2927,16 @@ paths:
       - description: query string
         in: query
         name: q
+        required: true
+        type: string
+      - description: order
+        enum:
+        - newest
+        - active
+        - score
+        - relevance
+        in: query
+        name: order
         required: true
         type: string
       produces:
@@ -3318,7 +3343,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: UserUpdateInfo
+      description: UserUpdateInfo update user info
       parameters:
       - description: access-token
         in: header
@@ -3340,7 +3365,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: UserUpdateInfo
+      summary: UserUpdateInfo update user info
       tags:
       - User
   /answer/api/v1/user/login/email:
@@ -3514,12 +3539,12 @@ paths:
       - application/json
       description: UserRegisterByEmail
       parameters:
-      - description: UserRegister
+      - description: UserRegisterReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.UserRegister'
+          $ref: '#/definitions/schema.UserRegisterReq'
       produces:
       - application/json
       responses:

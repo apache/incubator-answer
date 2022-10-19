@@ -1,4 +1,4 @@
-import { memo, FC, useState, useEffect } from 'react';
+import { memo, FC, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Row, Col, Button } from 'react-bootstrap';
@@ -10,6 +10,7 @@ import {
   UserCard,
   Comment,
   FormatTime,
+  htmlRender,
 } from '@answer/components';
 import { formatCount } from '@answer/utils';
 import { following } from '@answer/api';
@@ -25,6 +26,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
     keyPrefix: 'question_detail',
   });
   const [followed, setFollowed] = useState(data?.is_followed);
+  const ref = useRef<HTMLDivElement>(null);
 
   const handleFollow = (e) => {
     e.preventDefault();
@@ -42,25 +44,29 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
     }
   }, [data]);
 
+  useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
+
+    htmlRender(ref.current);
+  }, [ref.current]);
+
   if (!data?.id) {
     return null;
   }
   return (
     <div>
-      <h1 className="fs-3 mb-3 text-wrap text-break">
-        <Link className="text-body" reloadDocument to={`/questions/${data.id}`}>
+      <h1 className="h3 mb-3 text-wrap text-break">
+        <Link className="link-dark" reloadDocument to={`/questions/${data.id}`}>
           {data.title}
+          {data.status === 2
+            ? ` [${t('closed', { keyPrefix: 'question' })}]`
+            : ''}
         </Link>
       </h1>
-      <div className="d-flex align-items-center fs-14 mb-3 text-secondary">
-        <Button
-          variant="link"
-          size="sm"
-          className="p-0 me-3 btn-no-border"
-          onClick={(e) => handleFollow(e)}>
-          {followed ? 'Following' : 'Follow'}
-        </Button>
 
+      <div className="d-flex flex-wrap align-items-center fs-14 mb-3 text-secondary">
         <FormatTime
           time={data.create_time}
           preFix={t('Asked')}
@@ -73,16 +79,23 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
           className="me-3"
         />
         {data?.view_count > 0 && (
-          <div>
+          <div className="me-3">
             {t('Views')} {formatCount(data.view_count)}
           </div>
         )}
+        <Button
+          variant="link"
+          size="sm"
+          className="p-0 btn-no-border"
+          onClick={(e) => handleFollow(e)}>
+          {followed ? 'Following' : 'Follow'}
+        </Button>
       </div>
-      <div className="mb-3">
+      <div className="m-n1">
         {data?.tags?.map((item: any) => {
           return (
             <Tag
-              className="me-1"
+              className="m-1"
               href={`/tags/${item.main_tag_slug_name || item.slug_name}`}
               key={item.slug_name}>
               {item.slug_name}
@@ -91,8 +104,9 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
         })}
       </div>
       <article
+        ref={ref}
         dangerouslySetInnerHTML={{ __html: data?.html }}
-        className="fmt text-break text-wrap"
+        className="fmt text-break text-wrap mt-4"
       />
 
       <Actions
@@ -109,7 +123,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
       />
 
       <Row className="mt-4 mb-3">
-        <Col lg={5}>
+        <Col lg={5} className="mb-3 mb-md-0">
           <Operate
             qid={data?.id}
             type="question"
@@ -120,7 +134,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
             callback={initPage}
           />
         </Col>
-        <Col lg={3}>
+        <Col lg={3} className="mb-3 mb-md-0">
           {data.update_user_info?.username !== data.user_info?.username ? (
             <UserCard
               data={data?.user_info}

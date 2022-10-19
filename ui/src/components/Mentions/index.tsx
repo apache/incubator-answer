@@ -6,11 +6,12 @@ import * as Types from '@answer/common/interface';
 interface IProps {
   children: React.ReactNode;
   pageUsers;
+  onSelected: (val: string) => void;
 }
 
-const MAXRECODE = 5;
+const MAX_RECODE = 5;
 
-const Mentions: FC<IProps> = ({ children, pageUsers }) => {
+const Mentions: FC<IProps> = ({ children, pageUsers, onSelected }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [val, setValue] = useState('');
@@ -71,23 +72,17 @@ const Mentions: FC<IProps> = ({ children, pageUsers }) => {
     if (!selectionStart) {
       return;
     }
-    const str = value.substring(
-      value.substring(0, selectionStart).lastIndexOf('@'),
-      selectionStart,
+
+    const text = `@${item?.userName}`;
+    onSelected(
+      `${value.substring(
+        0,
+        value.substring(0, selectionStart).lastIndexOf('@'),
+      )}${text}${value.substring(selectionStart)}`,
     );
-    const text = `@${item?.displayName}[${item?.userName}] `;
-    element.value = `${value.substring(
-      0,
-      value.substring(0, selectionStart).lastIndexOf('@'),
-    )}${text}${value.substring(selectionStart)}`;
     setUsers([]);
     setValue('');
-    const newSelectionStart = selectionStart + text.length - str.length;
-
-    element.setSelectionRange(newSelectionStart, newSelectionStart);
-    element.focus();
   };
-
   const filterData = val
     ? users.filter(
         (item) =>
@@ -125,18 +120,18 @@ const Mentions: FC<IProps> = ({ children, pageUsers }) => {
       onKeyDown={handleKeyDown}>
       {children}
       <Dropdown.Menu
-        className={filterData.length > 0 ? 'visabled' : 'hidden'}
+        className={filterData.length > 0 ? 'visible' : 'invisible'}
         ref={menuRef}>
         {filterData
-          .filter((_, index) => index < MAXRECODE)
+          .filter((_, index) => index < MAX_RECODE)
           .map((item, index) => {
             return (
               <Dropdown.Item
                 className={`${cursor === index ? 'bg-gray-200' : ''}`}
                 key={item.displayName}
                 onClick={() => handleClick(item)}>
-                <span className="text-body me-1">{item.displayName}</span>
-                <small className="text-secondary">@{item.userName}</small>
+                <span className="link-dark me-1">{item.displayName}</span>
+                <small className="link-secondary">@{item.userName}</small>
               </Dropdown.Item>
             );
           })}

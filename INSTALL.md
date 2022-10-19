@@ -18,7 +18,7 @@ To keep your data out of Docker container, we do a volume (/var/data -> /data) h
 
 ```
 # Pull image from Docker Hub.
-$ docker pull answer/answer
+$ docker pull answerdev/answer:latest
 
 # Create local directory for volume.
 $ mkdir -p /var/data
@@ -27,9 +27,9 @@ $ mkdir -p /var/data
 $ docker run --name=answer -p 9080:80 -v /var/data:/data answer/answer
 
 # After the first startup, a configuration file will be generated in the /var/data directory
-# /var/data/config.yaml
+# /var/data/conf/config.yaml
 # Need to modify the Mysql database address in the configuration file
-vim /var/data/config.yaml
+vim /var/data/conf/config.yaml
 
 # Modify database connection
 # connection: [username]:[password]@tcp([host]:[port])/[DbName]
@@ -51,7 +51,16 @@ $ docker start answer
   6. Modify the database connection address to your database connection address
 
      connection: [username]:[password]@tcp([host]:[port])/[DbName]
-  7. Exit the data directory and execute ./answer run -c ./data/config.yaml
+  7. Exit the data directory and execute ./answer run -c ./data/conf/config.yaml
+
+## Available Commands
+Usage: answer [command]
+
+- help: Help about any command
+- init: Init answer application
+- run: Run answer application
+- check: Check answer required environment
+- dump: Backup answer data
 
 ## config.yaml Description
 

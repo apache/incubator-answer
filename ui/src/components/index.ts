@@ -1,5 +1,5 @@
 import Avatar from './Avatar';
-import Editor, { EditorRef } from './Editor';
+import Editor, { EditorRef, htmlRender } from './Editor';
 import Header from './Header';
 import Footer from './Footer';
 import Icon from './Icon';
@@ -24,6 +24,7 @@ import PageTitle from './PageTitle';
 import Empty from './Empty';
 import BaseUserCard from './BaseUserCard';
 import FollowingTags from './FollowingTags';
+import QueryGroup from './QueryGroup';
 
 export {
   Avatar,
@@ -52,5 +53,7 @@ export {
   Empty,
   BaseUserCard,
   FollowingTags,
+  htmlRender,
+  QueryGroup,
 };
 export type { EditorRef };

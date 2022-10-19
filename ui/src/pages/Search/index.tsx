@@ -13,7 +13,7 @@ const Index = () => {
   const [searchParams] = useSearchParams();
   const page = searchParams.get('page') || 1;
   const q = searchParams.get('q') || '';
-  const order = searchParams.get('order') || 'newest';
+  const order = searchParams.get('order') || 'relevance';
 
   const { data, isLoading } = useSearch({
     q,
@@ -32,7 +32,7 @@ const Index = () => {
       <PageTitle title={pageTitle} />
       <Container className="pt-4 mt-2 mb-5">
         <Row className="justify-content-center">
-          <Col lg={7} className="mb-3">
+          <Col xxl={7} lg={8} sm={12} className="mb-3">
             <Head data={extra} />
 
             <ListGroup variant="flush" className="mb-5">
@@ -53,7 +53,7 @@ const Index = () => {
               />
             </div>
           </Col>
-          <Col lg={3}>
+          <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
             <Tips />
           </Col>
         </Row>

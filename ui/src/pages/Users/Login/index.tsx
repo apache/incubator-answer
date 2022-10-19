@@ -218,14 +218,14 @@ const Index: React.FC = () => {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <div className="d-grid mb-3">
+            <div className="d-grid">
               <Button variant="primary" type="submit" tabIndex={1}>
                 {t('login', { keyPrefix: 'btns' })}
               </Button>
             </div>
           </Form>
 
-          <div className="text-center">
+          <div className="text-center mt-5">
             <Trans i18nKey="login.info_sign" ns="translation">
               Don’t have an account?
               <Link to="/users/register" tabIndex={2}>

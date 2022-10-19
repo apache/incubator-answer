@@ -1,16 +1,9 @@
 import { FC, memo } from 'react';
-import { ButtonGroup, Button } from 'react-bootstrap';
-import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const sortBtns = [
-  {
-    name: 'newest',
-  },
-  {
-    name: 'score',
-  },
-];
+import { QueryGroup } from '@answer/components';
+
+const sortBtns = ['newest', 'score'];
 
 interface Props {
   tabName: string;
@@ -24,24 +17,7 @@ const Index: FC<Props> = ({
   sort,
   count = 0,
 }) => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
-  const location = useLocation();
   const { t } = useTranslation('translation', { keyPrefix: 'personal' });
-
-  const handleParams = (order): string => {
-    const basePath = location.pathname;
-    searchParams.delete('page');
-    searchParams.set('order', order);
-    const searchStr = searchParams.toString();
-    return `${basePath}?${searchStr}`;
-  };
-
-  const handleClick = (e, type) => {
-    e.preventDefault();
-    const str = handleParams(type);
-    navigate(str);
-  };
 
   if (!visible) {
     return null;
@@ -53,20 +29,11 @@ const Index: FC<Props> = ({
         {count} {t(tabName)}
       </h5>
       {(tabName === 'answers' || tabName === 'questions') && (
-        <ButtonGroup size="sm">
-          {sortBtns.map((item) => {
-            return (
-              <Button
-                variant="outline-secondary"
-                active={sort === item.name}
-                href={handleParams(item.name)}
-                key={item.name}
-                onClick={(e) => handleClick(e, item.name)}>
-                {t(item.name)}
-              </Button>
-            );
-          })}
-        </ButtonGroup>
+        <QueryGroup
+          data={sortBtns}
+          currentSort={sort}
+          i18nKeyPrefix="personal"
+        />
       )}
     </div>
   );

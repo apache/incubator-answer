@@ -206,11 +206,11 @@ func (uc *UserController) UserLogout(ctx *gin.Context) {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param data body schema.UserRegister true "UserRegister"
+// @Param data body schema.UserRegisterReq true "UserRegisterReq"
 // @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
 // @Router /answer/api/v1/user/register/email [post]
 func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
-	req := &schema.UserRegister{}
+	req := &schema.UserRegisterReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}

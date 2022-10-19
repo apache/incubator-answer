@@ -1380,7 +1380,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "GetRedDot",
+                "description": "get notification list",
                 "consumes": [
                     "application/json"
                 ],
@@ -1390,7 +1390,7 @@ const docTemplate = `{
                 "tags": [
                     "Notification"
                 ],
-                "summary": "GetRedDot",
+                "summary": "get notification list",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1412,7 +1412,8 @@ const docTemplate = `{
                         "type": "string",
                         "description": "type",
                         "name": "type",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -2149,7 +2150,7 @@ const docTemplate = `{
             }
         },
         "/answer/api/v1/question/page": {
-            "post": {
+            "get": {
                 "description": "SearchQuestionList \u003cbr\u003e  \"order\"  Enums(newest, active,frequent,score,unanswered)",
                 "consumes": [
                     "application/json"
@@ -2586,6 +2587,19 @@ const docTemplate = `{
                         "type": "string",
                         "description": "query string",
                         "name": "q",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "enum": [
+                            "newest",
+                            "active",
+                            "score",
+                            "relevance"
+                        ],
+                        "type": "string",
+                        "description": "order",
+                        "name": "order",
                         "in": "query",
                         "required": true
                     }
@@ -3256,7 +3270,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserUpdateInfo",
+                "description": "UserUpdateInfo update user info",
                 "consumes": [
                     "application/json"
                 ],
@@ -3266,7 +3280,7 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "UserUpdateInfo",
+                "summary": "UserUpdateInfo update user info",
                 "parameters": [
                     {
                         "type": "string",
@@ -3583,12 +3597,12 @@ const docTemplate = `{
                 "summary": "UserRegisterByEmail",
                 "parameters": [
                     {
-                        "description": "UserRegister",
+                        "description": "UserRegisterReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.UserRegister"
+                            "$ref": "#/definitions/schema.UserRegisterReq"
                         }
                     }
                 ],
@@ -4922,7 +4936,7 @@ const docTemplate = `{
                 "title": {
                     "description": "question title",
                     "type": "string",
-                    "maxLength": 64,
+                    "maxLength": 150,
                     "minLength": 6
                 }
             }
@@ -4995,7 +5009,7 @@ const docTemplate = `{
                 "title": {
                     "description": "question title",
                     "type": "string",
-                    "maxLength": 64,
+                    "maxLength": 150,
                     "minLength": 6
                 }
             }
@@ -5075,14 +5089,14 @@ const docTemplate = `{
         "schema.ReportHandleReq": {
             "type": "object",
             "required": [
-                "flaged_type",
+                "flagged_type",
                 "id"
             ],
             "properties": {
-                "flaged_content": {
+                "flagged_content": {
                     "type": "string"
                 },
-                "flaged_type": {
+                "flagged_type": {
                     "type": "integer"
                 },
                 "id": {
@@ -5124,6 +5138,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "status": {
+                    "description": "Status",
                     "type": "string"
                 },
                 "tags": {
@@ -5250,7 +5268,7 @@ const docTemplate = `{
                 "display_name": {
                     "description": "display_name",
                     "type": "string",
-                    "maxLength": 50
+                    "maxLength": 35
                 },
                 "original_text": {
                     "description": "original text",
@@ -5263,7 +5281,7 @@ const docTemplate = `{
                 "slug_name": {
                     "description": "slug_name",
                     "type": "string",
-                    "maxLength": 50
+                    "maxLength": 35
                 }
             }
         },
@@ -5345,32 +5363,44 @@ const docTemplate = `{
         },
         "schema.UpdateInfoRequest": {
             "type": "object",
+            "required": [
+                "display_name"
+            ],
             "properties": {
                 "avatar": {
                     "description": "avatar",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "bio": {
-                    "type": "string"
+                    "description": "bio",
+                    "type": "string",
+                    "maxLength": 4096
                 },
                 "bio_html": {
-                    "type": "string"
+                    "description": "bio",
+                    "type": "string",
+                    "maxLength": 4096
                 },
                 "display_name": {
                     "description": "display_name",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 30
                 },
                 "location": {
                     "description": "location",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 100
                 },
                 "username": {
-                    "description": "name",
-                    "type": "string"
+                    "description": "username",
+                    "type": "string",
+                    "maxLength": 30
                 },
                 "website": {
                     "description": "website",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 }
             }
         },
@@ -5407,7 +5437,7 @@ const docTemplate = `{
                 "display_name": {
                     "description": "display_name",
                     "type": "string",
-                    "maxLength": 50
+                    "maxLength": 35
                 },
                 "edit_summary": {
                     "description": "edit summary",
@@ -5424,7 +5454,7 @@ const docTemplate = `{
                 "slug_name": {
                     "description": "slug_name",
                     "type": "string",
-                    "maxLength": 50
+                    "maxLength": 35
                 },
                 "tag_id": {
                     "description": "tag_id",
@@ -5617,7 +5647,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UserRegister": {
+        "schema.UserRegisterReq": {
             "type": "object",
             "required": [
                 "e_mail",
@@ -5633,7 +5663,7 @@ const docTemplate = `{
                 "name": {
                     "description": "name",
                     "type": "string",
-                    "maxLength": 50
+                    "maxLength": 30
                 },
                 "pass": {
                     "description": "password",

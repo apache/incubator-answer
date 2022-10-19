@@ -66,7 +66,6 @@ func (qr *questionRepo) UpdateQuestion(ctx context.Context, question *entity.Que
 
 func (qr *questionRepo) UpdatePvCount(ctx context.Context, questionId string) (err error) {
 	question := &entity.Question{}
-	qr.data.DB.ShowSQL()
 	_, err = qr.data.DB.Where("id =?", questionId).Incr("view_count", 1).Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -218,7 +217,6 @@ func (qr *questionRepo) SearchList(ctx context.Context, search *schema.QuestionS
 	session = session.Limit(search.PageSize, offset)
 	session = session.Select("question.id,question.user_id,question.title,question.original_text,question.parsed_text,question.status,question.view_count,question.unique_view_count,question.vote_count,question.answer_count,question.collection_count,question.follow_count,question.accepted_answer_id,question.last_answer_id,question.created_at,question.updated_at,question.post_update_time,question.revision_id")
 	count, err = session.FindAndCount(&rows)
-	//spew.Dump("search", err, count, rows)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return rows, count, err

@@ -1,5 +1,6 @@
 import { memo, FC } from 'react';
 import { ListGroupItem, Badge } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 import { Icon, Tag, FormatTime, BaseUserCard } from '@answer/components';
 import type { SearchResItem } from '@answer/common/interface';
@@ -8,6 +9,7 @@ interface Props {
   data: SearchResItem;
 }
 const Index: FC<Props> = ({ data }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'question' });
   if (!data?.object_type) {
     return null;
   }
@@ -21,9 +23,12 @@ const Index: FC<Props> = ({ data }) => {
           {data.object_type === 'question' ? 'Q' : 'A'}
         </Badge>
         <a
-          className="h5 mb-0 text-body text-break"
+          className="h5 mb-0 link-dark text-break"
           href={`/questions/${data.object.id}`}>
           {data.object.title}
+          {data.object.status === 'closed'
+            ? ` [${t('closed', { keyPrefix: 'question' })}]`
+            : null}
         </a>
       </div>
       <div className="d-flex flex-wrap align-items-center fs-14 text-secondary mb-2">
@@ -51,18 +56,13 @@ const Index: FC<Props> = ({ data }) => {
             )}
             <span>{data.object?.answer_count}</span>
           </div>
-          {/* <div className="d-flex align-items-center">
-            <Icon name="eye-fill fs-6 me-1" />
-            <span> 0</span>
-          </div> */}
         </div>
       </div>
 
       {data.object?.excerpt && (
-        <p
-          className="fs-14 text-truncate-2 mb-2 last-p text-break"
-          dangerouslySetInnerHTML={{ __html: data.object.excerpt }}
-        />
+        <p className="fs-14 text-truncate-2 mb-2 last-p text-break">
+          {data.object.excerpt}
+        </p>
       )}
 
       {data.object?.tags?.map((item) => {

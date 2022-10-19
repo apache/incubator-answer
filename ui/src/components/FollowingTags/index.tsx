@@ -68,16 +68,13 @@ const Index: FC = () => {
           {t('edit')}
         </Button>
       </Card.Header>
-      <Card.Body className="pb-2">
+      <Card.Body className="m-n1">
         {followingTags?.length ? (
           <>
             {followingTags.map((item) => {
               const slugName = item?.slug_name;
               return (
-                <Tag
-                  key={slugName}
-                  className="me-2 mb-2"
-                  href={`/tags/${slugName}`}>
+                <Tag key={slugName} className="m-1" href={`/tags/${slugName}`}>
                   {slugName}
                 </Tag>
               );

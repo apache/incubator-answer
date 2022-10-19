@@ -3,6 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { marked } from 'marked';
+import classNames from 'classnames';
 
 import { Editor, Modal } from '@answer/components';
 import { postAnswer } from '@answer/api';
@@ -30,6 +31,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     },
   });
   const [showEditor, setShowEditor] = useState<boolean>(visible);
+  const [focusType, setForceType] = useState('');
 
   const handleSubmit = () => {
     if (!formData.content.value) {
@@ -62,7 +64,9 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const clickBtn = () => {
     if (data?.answered && !showEditor) {
       Modal.confirm({
+        title: t('confirm_title'),
         content: t('confirm_info'),
+        confirmText: t('continue'),
         onConfirm: () => {
           setShowEditor(true);
         },
@@ -90,6 +94,10 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
             className="d-none"
           />
           <Editor
+            className={classNames(
+              'form-control p-0',
+              focusType === 'answer' && 'focus',
+            )}
             value={formData.content.value}
             onChange={(val) => {
               setFormData({
@@ -99,6 +107,12 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
                   errorMsg: '',
                 },
               });
+            }}
+            onFocus={() => {
+              setForceType('answer');
+            }}
+            onBlur={() => {
+              setForceType('');
             }}
           />
 

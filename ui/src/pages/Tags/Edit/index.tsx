@@ -45,7 +45,6 @@ const Ask = () => {
   const { tagId } = useParams();
   const navigate = useNavigate();
   const { t } = useTranslation('translation', { keyPrefix: 'edit_tag' });
-  const { t: t2 } = useTranslation('translation', { keyPrefix: 'dates' });
   const [focusType, setForceType] = useState('');
 
   const { data } = useTagInfo({ id: tagId });
@@ -147,23 +146,25 @@ const Ask = () => {
       <PageTitle title={t('edit_tag', { keyPrefix: 'page_title' })} />
       <Container className="pt-4 mt-2 mb-5 edit-answer-wrap">
         <Row className="justify-content-center">
-          <Col sm={12} md={10}>
+          <Col xxl={10} md={12}>
             <h3 className="mb-4">{t('title')}</h3>
           </Col>
         </Row>
         <Row className="justify-content-center">
-          <Col sm={12} md={7} className="mb-4 mb-md-0">
+          <Col xxl={7} lg={8} sm={12} className="mb-4 mb-md-0">
             <Form noValidate onSubmit={handleSubmit}>
               <Form.Group controlId="revision" className="mb-3">
                 <Form.Label>{t('form.fields.revision.label')}</Form.Label>
                 <Form.Select onChange={handleSelectedRevision}>
-                  {revisions.map(({ create_at, reason }, index) => {
+                  {revisions.map(({ create_at, reason, user_info }, index) => {
                     const date = dayjs(create_at * 1000).format(
-                      t2('long_date_with_time'),
+                      t('long_date_with_time', { keyPrefix: 'dates' }),
                     );
                     return (
                       <option key={`${create_at}`} value={index}>
-                        {`${date} - robin - ${reason || t('default_reason')}`}
+                        {`${date} - ${user_info.display_name} - ${
+                          reason || t('default_reason')
+                        }`}
                       </option>
                     );
                   })}
@@ -248,12 +249,17 @@ const Ask = () => {
               </div>
             </Form>
           </Col>
-          <Col sm={12} md={3}>
-            <Card className="mb-4">
-              <Card.Header>{t('how_to_format.title')}</Card.Header>
-              <Card.Body>
-                <Card.Text>{t('how_to_format.description')}</Card.Text>
-              </Card.Body>
+          <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
+            <Card>
+              <Card.Header>
+                {t('title', { keyPrefix: 'how_to_format' })}
+              </Card.Header>
+              <Card.Body
+                className="fmt"
+                dangerouslySetInnerHTML={{
+                  __html: t('description', { keyPrefix: 'how_to_format' }),
+                }}
+              />
             </Card>
           </Col>
         </Row>

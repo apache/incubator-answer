@@ -180,14 +180,14 @@ const Index: React.FC<Props> = ({ callback }) => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <div className="d-grid mb-3">
+        <div className="d-grid">
           <Button variant="primary" type="submit">
             {t('signup', { keyPrefix: 'btns' })}
           </Button>
         </div>
       </Form>
 
-      <div className="text-center">
+      <div className="text-center mt-5">
         <Trans i18nKey="login.info_login" ns="translation">
           Already have an account? <Link to="/users/login">Log in</Link>
         </Trans>
