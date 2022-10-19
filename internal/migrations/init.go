@@ -26,7 +26,7 @@ var (
 		&entity.TagRel{},
 		&entity.Uniqid{},
 		&entity.User{},
-		&Version{},
+		&entity.Version{},
 	}
 )
 
@@ -38,7 +38,7 @@ func InitDB(dataConf *data.Database) (err error) {
 		return err
 	}
 
-	exist, err := engine.IsTableExist(&Version{})
+	exist, err := engine.IsTableExist(&entity.Version{})
 	if err != nil {
 		return fmt.Errorf("check table exists failed: %s", err)
 	}

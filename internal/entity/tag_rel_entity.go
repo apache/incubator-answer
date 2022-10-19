@@ -9,12 +9,12 @@ const (
 
 // TagRel tag relation
 type TagRel struct {
-	ID        int64     `xorm:"not null pk autoincr comment('tag_list_id') BIGINT(20) id"`
-	CreatedAt time.Time `xorm:"created comment('create time') TIMESTAMP created_at"`
-	UpdatedAt time.Time `xorm:"updated comment('update time') TIMESTAMP updated_at"`
-	ObjectID  string    `xorm:"not null comment('object_id') INDEX UNIQUE(s) BIGINT(20) object_id"`
-	TagID     string    `xorm:"not null comment('tag_id') INDEX UNIQUE(s) BIGINT(20) tag_id"`
-	Status    int       `xorm:"not null default 1 comment('tag_list_status(available: 1; deleted: 10)') INT(11) status"`
+	ID        int64     `xorm:"not null pk autoincr BIGINT(20) id"`
+	CreatedAt time.Time `xorm:"created TIMESTAMP created_at"`
+	UpdatedAt time.Time `xorm:"updated TIMESTAMP updated_at"`
+	ObjectID  string    `xorm:"not null INDEX UNIQUE(s) BIGINT(20) object_id"`
+	TagID     string    `xorm:"not null INDEX UNIQUE(s) BIGINT(20) tag_id"`
+	Status    int       `xorm:"not null default 1 INT(11) status"`
 }
 
 // TableName tag list table name

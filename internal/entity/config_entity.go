@@ -2,9 +2,9 @@ package entity
 
 // Config config
 type Config struct {
-	ID    int    `xorm:"not null pk autoincr comment('config id') INT(11) id"`
-	Key   string `xorm:"comment('the config key') unique VARCHAR(32) key"`
-	Value string `xorm:"comment('the config value, custom data structures and types') TEXT value"`
+	ID    int    `xorm:"not null pk autoincr INT(11) id"`
+	Key   string `xorm:"unique VARCHAR(32) key"`
+	Value string `xorm:"TEXT value"`
 }
 
 // TableName config table name
