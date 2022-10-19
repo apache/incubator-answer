@@ -2,16 +2,12 @@ package cli
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
 
-	"github.com/segmentfault/answer/assets"
 	"github.com/segmentfault/answer/configs"
 	"github.com/segmentfault/answer/i18n"
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/entity"
 	"github.com/segmentfault/answer/pkg/dir"
 )
 
@@ -114,38 +110,5 @@ func writerFile(filePath, content string) error {
 	if err := writer.Flush(); err != nil {
 		return err
 	}
-	return nil
-}
-
-// InitDB init db
-func InitDB(dataConf *data.Database) (err error) {
-	fmt.Println("[database] try to initialize database")
-	db, err := data.NewDB(false, dataConf)
-	if err != nil {
-		return err
-	}
-	// check db connection
-	if err = db.Ping(); err != nil {
-		return err
-	}
-	fmt.Println("[database] connect success")
-
-	exist, err := db.IsTableExist(&entity.User{})
-	if err != nil {
-		return err
-	}
-	if exist {
-		fmt.Println("[database] already exists")
-		return nil
-	}
-
-	// create table if not exist
-	s := &bytes.Buffer{}
-	s.Write(assets.AnswerSql)
-	_, err = db.Import(s)
-	if err != nil {
-		return err
-	}
-	fmt.Println("[database] execute sql successfully")
 	return nil
 }
