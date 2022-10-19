@@ -738,7 +738,8 @@
     },
     "dashboard": {
       "title": "Dashboard",
-      "welcome": "Welcome to Answer Admin !"
+      "welcome": "Welcome to Answer Admin !",
+      "version": "Version"
     },
     "flags": {
       "title": "Flags",

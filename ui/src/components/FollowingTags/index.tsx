@@ -68,7 +68,7 @@ const Index: FC = () => {
           {t('edit')}
         </Button>
       </Card.Header>
-      <Card.Body className="mx-n1">
+      <Card.Body className="m-n1">
         {followingTags?.length ? (
           <>
             {followingTags.map((item) => {
