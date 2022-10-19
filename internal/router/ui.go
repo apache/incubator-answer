@@ -76,9 +76,7 @@ func (a *UIRouter) Register(r *gin.Engine) {
 		case "/favicon.ico":
 			c.Header("content-type", "image/vnd.microsoft.icon")
 			filePath = UIRootFilePath + name
-		case "/logo192.png":
-			filePath = UIRootFilePath + name
-		case "/logo512.png":
+		case "/manifest.json":
 			filePath = UIRootFilePath + name
 		default:
 			filePath = UIIndexFilePath
