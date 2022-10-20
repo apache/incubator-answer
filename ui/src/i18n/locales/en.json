@@ -111,7 +111,7 @@
       "form_image": {
         "fields": {
           "file": {
-            "label": "Image file",
+            "label": "Image File",
             "btn": "Select image",
             "msg": {
               "empty": "File cannot be empty.",
@@ -213,14 +213,14 @@
     "form": {
       "fields": {
         "display_name": {
-          "label": "Display name",
+          "label": "Display Name",
           "msg": {
             "empty": "Display name cannot be empty.",
             "range": "Display name up to 35 characters."
           }
         },
         "slug_name": {
-          "label": "URL slug",
+          "label": "URL Slug",
           "description": "Must use the character set \"a-z\", \"0-9\", \"+ # - .\"",
           "msg": {
             "empty": "URL slug cannot be empty.",
@@ -264,10 +264,10 @@
           "label": "Revision"
         },
         "display_name": {
-          "label": "Display name"
+          "label": "Display Name"
         },
         "slug_name": {
-          "label": "URL slug",
+          "label": "URL Slug",
           "info": "Must use the character set \"a-z\", \"0-9\", \"+ # - .\""
         },
         "description": {
@@ -477,7 +477,7 @@
       }
     },
     "password_confirm": {
-      "label": "Confirm new password"
+      "label": "Confirm New Password"
     }
   },
   "settings": {
@@ -491,7 +491,7 @@
     "profile": {
       "btn_name": "Update profile",
       "display_name": {
-        "label": "Display name",
+        "label": "Display Name",
         "msg": "Display name cannot be empty.",
         "msg_range": "Display name up to 30 characters"
       },
@@ -503,11 +503,11 @@
         "character": "Must use the character set \"a-z\", \"0-9\", \" - . _\""
       },
       "avatar": {
-        "label": "Profile image",
+        "label": "Profile Image",
         "text": "You can upload your image or <1>reset</1> it to"
       },
       "bio": {
-        "label": "About me (optional)"
+        "label": "About Me (optional)"
       },
       "website": {
         "label": "Website (optional)",
@@ -521,7 +521,7 @@
     },
     "notification": {
       "email": {
-        "label": "Email notifications",
+        "label": "Email Notifications",
         "radio": "Answers to your questions, comments, and more"
       }
     },
@@ -546,12 +546,12 @@
         "label": "New Password"
       },
       "pass_confirm": {
-        "label": "Confirm new password"
+        "label": "Confirm New Password"
       }
     },
     "interface": {
       "lang": {
-        "label": "Interface language",
+        "label": "Interface Language",
         "text": "User interface language. It will change when you refresh the page."
       }
     }
@@ -825,17 +825,17 @@
     "general": {
       "page_title": "General",
       "name": {
-        "label": "Site name",
+        "label": "Site Name",
         "msg": "Site name cannot be empty.",
         "text": "The name of this site, as used in the title tag."
       },
       "short_description": {
-        "label": "Short site description (optional)",
+        "label": "Short Site Description (optional)",
         "msg": "Short site description cannot be empty.",
         "text": "Short description, as used in the title tag on homepage."
       },
       "description": {
-        "label": "Site description (optional)",
+        "label": "Site Description (optional)",
         "msg": "Site description cannot be empty.",
         "text": "Describe this site in one sentence, as used in the meta description tag."
       }
@@ -853,7 +853,7 @@
         "text": "Select an existing theme."
       },
       "language": {
-        "label": "Interface language",
+        "label": "Interface Language",
         "msg": "Interface language cannot be empty.",
         "text": "User interface language. It will change when you refresh the page."
       }
