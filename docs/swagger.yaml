@@ -1599,6 +1599,47 @@ paths:
       summary: list report page
       tags:
       - admin
+  /answer/admin/api/setting/smtp:
+    get:
+      description: GetSMTPConfig get smtp config
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SiteInterfaceResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: GetSMTPConfig get smtp config
+      tags:
+      - admin
+    put:
+      description: update smtp config
+      parameters:
+      - description: general
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.SiteInterfaceReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update smtp config
+      tags:
+      - admin
   /answer/admin/api/siteinfo/general:
     get:
       description: Get siteinfo general
