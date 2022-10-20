@@ -43,6 +43,14 @@ func (ar *authRepo) GetUserStatus(ctx context.Context, userID string) (userInfo 
 	return userInfo, nil
 }
 
+func (ar *authRepo) RemoveUserStatus(ctx context.Context, userID string) (err error) {
+	err = ar.data.Cache.Del(ctx, constant.UserStatusChangedCacheKey+userID)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
 func (ar *authRepo) SetUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) (err error) {
 	userInfoCache, err := json.Marshal(userInfo)
 	if err != nil {
