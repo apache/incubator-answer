@@ -5,7 +5,7 @@ BIN=answer
 DIR_SRC=./cmd/answer
 DOCKER_CMD=docker
 
-GO_ENV=CGO_ENABLED=0
+#GO_ENV=CGO_ENABLED=0
 Revision=$(shell git rev-parse --short HEAD)
 GO_FLAGS=-ldflags="-X main.Version=$(VERSION) -X main.Revision=$(Revision) -X 'main.Time=`date`' -extldflags -static"
 GO=$(GO_ENV) $(shell which go)
