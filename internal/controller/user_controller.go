@@ -91,7 +91,8 @@ func (uc *UserController) GetOtherUserInfoByUsername(ctx *gin.Context) {
 // @Router /answer/api/v1/user/status [get]
 func (uc *UserController) GetUserStatus(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
-	resp, err := uc.userService.GetUserStatus(ctx, userID)
+	token := middleware.ExtractToken(ctx)
+	resp, err := uc.userService.GetUserStatus(ctx, userID, token)
 	handler.HandleResponse(ctx, err, resp)
 }
 
