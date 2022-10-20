@@ -65,7 +65,7 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 }
 
 // GetUserStatus get user info by user id
-func (us *UserService) GetUserStatus(ctx context.Context, userID string) (resp *schema.GetUserStatusResp, err error) {
+func (us *UserService) GetUserStatus(ctx context.Context, userID, token string) (resp *schema.GetUserStatusResp, err error) {
 	resp = &schema.GetUserStatusResp{}
 	if len(userID) == 0 {
 		return resp, nil
@@ -76,6 +76,16 @@ func (us *UserService) GetUserStatus(ctx context.Context, userID string) (resp *
 	}
 	if !exist {
 		return nil, errors.BadRequest(reason.UserNotFound)
+	}
+
+	userCacheInfo := &entity.UserCacheInfo{
+		UserID:      userID,
+		UserStatus:  userInfo.Status,
+		EmailStatus: userInfo.MailStatus,
+	}
+	err = us.authService.UpdateUserCacheInfo(ctx, token, userCacheInfo)
+	if err != nil {
+		return nil, err
 	}
 	resp = &schema.GetUserStatusResp{
 		Status: schema.UserStatusShow[userInfo.Status],
