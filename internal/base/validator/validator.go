@@ -15,6 +15,7 @@ import (
 	"github.com/segmentfault/answer/internal/base/translator"
 	myErrors "github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/i18n"
+	"github.com/segmentfault/pacman/log"
 )
 
 // MyValidator my validator
@@ -92,6 +93,7 @@ func (m *MyValidator) Check(value interface{}) (errField *ErrorField, err error)
 	if err != nil {
 		var valErrors validator.ValidationErrors
 		if !errors.As(err, &valErrors) {
+			log.Error(err)
 			return nil, errors.New("validate check exception")
 		}
 
