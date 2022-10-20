@@ -40,7 +40,7 @@
     "title": "Your Account has been Suspended",
     "until_time": "Your account was suspended until {{ time }}.",
     "forever": "This user was suspended forever.",
-    "end": "You don’t meet a community guideline."
+    "end": "You don't meet a community guideline."
   },
   "editor": {
     "blockquote": {
@@ -350,7 +350,7 @@
         },
         "title": {
           "label": "Title",
-          "placeholder": "Be specific and imagine you’re asking a question to another person",
+          "placeholder": "Be specific and imagine you're asking a question to another person",
           "msg": {
             "empty": "Title cannot be empty.",
             "range": "Title up to 150 characters"
@@ -417,7 +417,7 @@
     }
   },
   "inactive": {
-    "first": "You’re almost done! We sent an activation mail to <bold>{{mail}}</bold>. Please follow the instructions in the mail to activate your account.",
+    "first": "You're almost done! We sent an activation mail to <bold>{{mail}}</bold>. Please follow the instructions in the mail to activate your account.",
     "info": "If it doesn't arrive, check your spam folder.",
     "another": "We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.",
     "btn_name": "Resend activation email",
@@ -427,7 +427,7 @@
   },
   "login": {
     "page_title": "Welcome to Answer",
-    "info_sign": "Don’t have an account? <1>Sign up</1>",
+    "info_sign": "Don't have an account? <1>Sign up</1>",
     "info_login": "Already have an account? <1>Log in</1>",
     "forgot_pass": "Forgot password?",
     "name": {
@@ -454,7 +454,7 @@
   "account_forgot": {
     "page_title": "Forgot Your Password",
     "btn_name": "Send me recovery email",
-    "send_success": "If an account matches <bold>{{mail}}</bold>, you should receive an email with instructions on how to reset your password shortly.",
+    "send_success": "If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.",
     "email": {
       "label": "Email",
       "msg": {
@@ -497,7 +497,7 @@
       },
       "username": {
         "label": "Username",
-        "caption": "People can mention you as @username",
+        "caption": "People can mention you as \"@username\".",
         "msg": "Username cannot be empty.",
         "msg_range": "Username up to 30 characters",
         "character": "Must use the character set \"a-z\", \"0-9\", \" - . _\""
@@ -738,7 +738,8 @@
     },
     "dashboard": {
       "title": "Dashboard",
-      "welcome": "Welcome to Answer Admin !"
+      "welcome": "Welcome to Answer Admin !",
+      "version": "Version"
     },
     "flags": {
       "title": "Flags",
@@ -773,7 +774,7 @@
       "normal_name": "normal",
       "normal_description": "A normal post available to everyone.",
       "closed_name": "closed",
-      "closed_description": "A closed question can’t answer, but still can edit, vote and comment.",
+      "closed_description": "A closed question can't answer, but still can edit, vote and comment.",
       "deleted_name": "deleted",
       "deleted_description": "All reputation gained and lost will be restored.",
       "btn_cancel": "Cancel",

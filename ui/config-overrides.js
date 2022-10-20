@@ -2,10 +2,9 @@ const path = require('path');
 
 module.exports = {
   webpack: function (config, env) {
-    if (process.env.NODE_ENV === 'production') {
-      config.output.publicPath = process.env.CDN_PATH;
+    if (env === 'production') {
+      config.output.publicPath = process.env.REACT_APP_PUBLIC_PATH;
     }
-
     config.resolve.alias = {
       ...config.resolve.alias,
       '@': path.resolve(__dirname, 'src'),

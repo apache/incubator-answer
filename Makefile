@@ -32,6 +32,6 @@ install-ui-packages:
 
 ui:
 	@npm config set registry https://repo.huaweicloud.com/repository/npm/
-	@cd ui && pnpm install && pnpm build && cd -
+	@cd ui && echo "REACT_APP_VERSION=$(VERSION)" >> .env && pnpm install && pnpm build && cd -
 
 all: clean build

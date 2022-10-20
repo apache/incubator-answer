@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/Chain-Zhang/pinyin v0.1.3
 	github.com/bwmarrin/snowflake v0.3.0
+	github.com/gin-contrib/gzip v0.0.6
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-playground/locales v0.14.0
 	github.com/go-playground/universal-translator v0.18.0
@@ -39,6 +40,8 @@ require (
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
+	github.com/anargu/gin-brotli v0.0.0-20220116052358-12bf532d5267 // indirect
+	github.com/andybalholm/brotli v1.0.1 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
