@@ -18,8 +18,6 @@ import {
 import { interfaceStore } from '@answer/stores';
 import { UploadImg } from '@answer/components';
 
-import '../index.scss';
-
 const Interface: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.interface',
