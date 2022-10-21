@@ -365,7 +365,6 @@ func (as *AnswerService) SearchList(ctx context.Context, search *schema.AnswerLi
 
 func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.Answer, loginUserId string) ([]*schema.AnswerInfo, error) {
 	list := make([]*schema.AnswerInfo, 0)
-	//todo 依赖其他接口
 	objectIds := make([]string, 0)
 	userIds := make([]string, 0)
 	for _, dbitem := range dblist {

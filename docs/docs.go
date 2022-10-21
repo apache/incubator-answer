@@ -4092,7 +4092,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "html": {
-                    "description": "解析后的html",
+                    "description": "html",
                     "type": "string"
                 },
                 "question_id": {
@@ -4146,7 +4146,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "html": {
-                    "description": "解析后的html",
+                    "description": "html",
                     "type": "string"
                 },
                 "id": {
@@ -4622,14 +4622,17 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "encryption": {
-                    "description": "\"\" SSL TLS",
+                    "description": "\"\" SSL",
                     "type": "string"
                 },
-                "from_email_address": {
+                "from_email": {
                     "type": "string"
                 },
                 "from_name": {
                     "type": "string"
+                },
+                "smtp_authentication": {
+                    "type": "boolean"
                 },
                 "smtp_host": {
                     "type": "string"
@@ -5530,19 +5533,22 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "encryption": {
-                    "description": "\"\" SSL TLS",
+                    "description": "\"\" SSL",
                     "type": "string",
                     "enum": [
                         "SSL"
                     ]
                 },
-                "from_email_address": {
+                "from_email": {
                     "type": "string",
                     "maxLength": 256
                 },
                 "from_name": {
                     "type": "string",
                     "maxLength": 256
+                },
+                "smtp_authentication": {
+                    "type": "boolean"
                 },
                 "smtp_host": {
                     "type": "string",
@@ -5560,6 +5566,9 @@ const docTemplate = `{
                 "smtp_username": {
                     "type": "string",
                     "maxLength": 256
+                },
+                "test_email_recipient": {
+                    "type": "string"
                 }
             }
         },

@@ -3,6 +3,7 @@ package export
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"html/template"
 
 	"github.com/segmentfault/answer/internal/base/reason"
@@ -35,13 +36,14 @@ func NewEmailService(configRepo config.ConfigRepo, emailRepo EmailRepo) *EmailSe
 
 // EmailConfig email config
 type EmailConfig struct {
-	FromEmailAddress string `json:"from_email_address"`
-	FromName         string `json:"from_name"`
-	SMTPHost         string `json:"smtp_host"`
-	SMTPPort         int    `json:"smtp_port"`
-	Encryption       string `json:"encryption"` // "" SSL
-	SMTPUsername     string `json:"smtp_username"`
-	SMTPPassword     string `json:"smtp_password"`
+	FromEmail          string `json:"from_email"`
+	FromName           string `json:"from_name"`
+	SMTPHost           string `json:"smtp_host"`
+	SMTPPort           int    `json:"smtp_port"`
+	Encryption         string `json:"encryption"` // "" SSL
+	SMTPUsername       string `json:"smtp_username"`
+	SMTPPassword       string `json:"smtp_password"`
+	SMTPAuthentication bool   `json:"smtp_authentication"`
 
 	RegisterTitle  string `json:"register_title"`
 	RegisterBody   string `json:"register_body"`
@@ -49,6 +51,8 @@ type EmailConfig struct {
 	PassResetBody  string `json:"pass_reset_body"`
 	ChangeTitle    string `json:"change_title"`
 	ChangeBody     string `json:"change_body"`
+	TestTitle      string `json:"test_title"`
+	TestBody       string `json:"test_body"`
 }
 
 func (e *EmailConfig) IsSSL() bool {
@@ -70,16 +74,21 @@ type ChangeEmailTemplateData struct {
 	ChangeEmailUrl string
 }
 
+type TestTemplateData struct {
+	SiteName string
+}
+
 // Send email send
 func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body, code, codeContent string) {
+	log.Infof("try to send email to %s", toEmailAddr)
 	ec, err := es.GetEmailConfig()
 	if err != nil {
-		log.Error(err)
+		log.Errorf("get email config failed: %s", err)
 		return
 	}
 
 	m := gomail.NewMessage()
-	m.SetHeader("From", ec.FromEmailAddress)
+	m.SetHeader("From", ec.FromEmail)
 	m.SetHeader("To", toEmailAddr)
 	m.SetHeader("Subject", subject)
 	m.SetBody("text/html", body)
@@ -89,12 +98,16 @@ func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body, co
 		d.SSL = true
 	}
 	if err := d.DialAndSend(m); err != nil {
-		log.Error(err)
+		log.Errorf("send email to %s failed: %s", toEmailAddr, err)
+	} else {
+		log.Infof("send email to %s success", toEmailAddr)
 	}
 
-	err = es.emailRepo.SetCode(ctx, code, codeContent)
-	if err != nil {
-		log.Error(err)
+	if len(code) > 0 {
+		err = es.emailRepo.SetCode(ctx, code, codeContent)
+		if err != nil {
+			log.Error(err)
+		}
 	}
 	return
 }
@@ -185,6 +198,35 @@ func (es *EmailService) ChangeEmailTemplate(changeEmailUrl string) (title, body 
 	}
 
 	tmpl, err = template.New("email_change_body").Parse(ec.ChangeBody)
+	err = tmpl.Execute(bodyBuf, templateData)
+	if err != nil {
+		return "", "", err
+	}
+	return titleBuf.String(), bodyBuf.String(), nil
+}
+
+func (es *EmailService) TestTemplate() (title, body string, err error) {
+	ec, err := es.GetEmailConfig()
+	if err != nil {
+		return
+	}
+
+	templateData := TestTemplateData{
+		SiteName: ec.FromName,
+	}
+
+	titleBuf := &bytes.Buffer{}
+	bodyBuf := &bytes.Buffer{}
+
+	tmpl, err := template.New("test_title").Parse(ec.TestTitle)
+	if err != nil {
+		return "", "", fmt.Errorf("email test title template parse error: %s", err)
+	}
+	err = tmpl.Execute(titleBuf, templateData)
+	if err != nil {
+		return "", "", fmt.Errorf("email test body template parse error: %s", err)
+	}
+	tmpl, err = template.New("test_body").Parse(ec.TestBody)
 	err = tmpl.Execute(bodyBuf, templateData)
 	if err != nil {
 		return "", "", err

@@ -16,7 +16,7 @@ const (
 type AnswerAddReq struct {
 	QuestionId string `json:"question_id" ` // question_id
 	Content    string `json:"content" `     // content
-	Html       string `json:"html" `        // 解析后的html
+	Html       string `json:"html" `        // html
 	UserID     string `json:"-" `           // user_id
 }
 
@@ -26,7 +26,7 @@ type AnswerUpdateReq struct {
 	UserID      string `json:"-" `                                // user_id
 	Title       string `json:"title" `                            // title
 	Content     string `json:"content"`                           // content
-	Html        string `json:"html" `                             // 解析后的html
+	Html        string `json:"html" `                             // html
 	EditSummary string `validate:"omitempty" json:"edit_summary"` //edit_summary
 }
 

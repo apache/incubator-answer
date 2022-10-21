@@ -27,22 +27,25 @@ type SiteInfoResp struct {
 
 // UpdateSMTPConfigReq get smtp config request
 type UpdateSMTPConfigReq struct {
-	FromEmailAddress string `validate:"omitempty,gt=0,lte=256" json:"from_email_address"`
-	FromName         string `validate:"omitempty,gt=0,lte=256" json:"from_name"`
-	SMTPHost         string `validate:"omitempty,gt=0,lte=256" json:"smtp_host"`
-	SMTPPort         int    `validate:"omitempty,min=1,max=65535" json:"smtp_port"`
-	Encryption       string `validate:"omitempty,oneof=SSL" json:"encryption"` // "" SSL TLS
-	SMTPUsername     string `validate:"omitempty,gt=0,lte=256" json:"smtp_username"`
-	SMTPPassword     string `validate:"omitempty,gt=0,lte=256" json:"smtp_password"`
+	FromEmail          string `validate:"omitempty,gt=0,lte=256" json:"from_email"`
+	FromName           string `validate:"omitempty,gt=0,lte=256" json:"from_name"`
+	SMTPHost           string `validate:"omitempty,gt=0,lte=256" json:"smtp_host"`
+	SMTPPort           int    `validate:"omitempty,min=1,max=65535" json:"smtp_port"`
+	Encryption         string `validate:"omitempty,oneof=SSL" json:"encryption"` // "" SSL
+	SMTPUsername       string `validate:"omitempty,gt=0,lte=256" json:"smtp_username"`
+	SMTPPassword       string `validate:"omitempty,gt=0,lte=256" json:"smtp_password"`
+	SMTPAuthentication bool   `validate:"omitempty" json:"smtp_authentication"`
+	TestEmailRecipient string `validate:"omitempty,email" json:"test_email_recipient"`
 }
 
 // GetSMTPConfigResp get smtp config response
 type GetSMTPConfigResp struct {
-	FromEmailAddress string `json:"from_email_address"`
-	FromName         string `json:"from_name"`
-	SMTPHost         string `json:"smtp_host"`
-	SMTPPort         int    `json:"smtp_port"`
-	Encryption       string `json:"encryption"` // "" SSL TLS
-	SMTPUsername     string `json:"smtp_username"`
-	SMTPPassword     string `json:"smtp_password"`
+	FromEmail          string `json:"from_email"`
+	FromName           string `json:"from_name"`
+	SMTPHost           string `json:"smtp_host"`
+	SMTPPort           int    `json:"smtp_port"`
+	Encryption         string `json:"encryption"` // "" SSL
+	SMTPUsername       string `json:"smtp_username"`
+	SMTPPassword       string `json:"smtp_password"`
+	SMTPAuthentication bool   `json:"smtp_authentication"`
 }
