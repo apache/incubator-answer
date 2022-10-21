@@ -4,20 +4,24 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/jinzhu/copier"
 	"github.com/segmentfault/answer/internal/base/reason"
 	"github.com/segmentfault/answer/internal/entity"
 	"github.com/segmentfault/answer/internal/schema"
+	"github.com/segmentfault/answer/internal/service/export"
 	"github.com/segmentfault/answer/internal/service/siteinfo_common"
 	"github.com/segmentfault/pacman/errors"
 )
 
 type SiteInfoService struct {
 	siteInfoRepo siteinfo_common.SiteInfoRepo
+	emailService *export.EmailService
 }
 
-func NewSiteInfoService(siteInfoRepo siteinfo_common.SiteInfoRepo) *SiteInfoService {
+func NewSiteInfoService(siteInfoRepo siteinfo_common.SiteInfoRepo, emailService *export.EmailService) *SiteInfoService {
 	return &SiteInfoService{
 		siteInfoRepo: siteInfoRepo,
+		emailService: emailService,
 	}
 }
 
@@ -112,4 +116,23 @@ func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.Site
 
 	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
 	return
+}
+
+// GetSMTPConfig get smtp config
+func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
+	resp *schema.GetSMTPConfigResp, err error) {
+	emailConfig, err := s.emailService.GetEmailConfig()
+	if err != nil {
+		return nil, err
+	}
+	resp = &schema.GetSMTPConfigResp{}
+	_ = copier.Copy(resp, emailConfig)
+	return resp, nil
+}
+
+// UpdateSMTPConfig get smtp config
+func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.UpdateSMTPConfigReq) (err error) {
+	ec := &export.EmailConfig{}
+	_ = copier.Copy(ec, req)
+	return s.emailService.SetEmailConfig(ec)
 }

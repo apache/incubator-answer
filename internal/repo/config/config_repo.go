@@ -120,3 +120,14 @@ func (cr *configRepo) GetConfigById(id int, value any) (err error) {
 	value = json.Unmarshal([]byte(conf.(string)), value)
 	return
 }
+
+func (cr *configRepo) SetConfig(key, value string) (err error) {
+	id := Key2IDMapping[key]
+	_, err = cr.data.DB.ID(id).Update(&entity.Config{Value: value})
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	} else {
+		Key2ValueMapping[key] = value
+	}
+	return
+}

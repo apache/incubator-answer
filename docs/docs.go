@@ -391,6 +391,77 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/setting/smtp": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "GetSMTPConfig get smtp config",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "GetSMTPConfig get smtp config",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetSMTPConfigResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update smtp config",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "update smtp config",
+                "parameters": [
+                    {
+                        "description": "smtp config",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdateSMTPConfigReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/siteinfo/general": {
             "get": {
                 "security": [
@@ -4547,6 +4618,33 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetSMTPConfigResp": {
+            "type": "object",
+            "properties": {
+                "encryption": {
+                    "description": "\"\" SSL TLS",
+                    "type": "string"
+                },
+                "from_email_address": {
+                    "type": "string"
+                },
+                "from_name": {
+                    "type": "string"
+                },
+                "smtp_host": {
+                    "type": "string"
+                },
+                "smtp_password": {
+                    "type": "string"
+                },
+                "smtp_port": {
+                    "type": "integer"
+                },
+                "smtp_username": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.GetTagPageResp": {
             "type": "object",
             "properties": {
@@ -5425,6 +5523,43 @@ const docTemplate = `{
                 "user_id": {
                     "description": "user id",
                     "type": "integer"
+                }
+            }
+        },
+        "schema.UpdateSMTPConfigReq": {
+            "type": "object",
+            "properties": {
+                "encryption": {
+                    "description": "\"\" SSL TLS",
+                    "type": "string",
+                    "enum": [
+                        "SSL"
+                    ]
+                },
+                "from_email_address": {
+                    "type": "string",
+                    "maxLength": 256
+                },
+                "from_name": {
+                    "type": "string",
+                    "maxLength": 256
+                },
+                "smtp_host": {
+                    "type": "string",
+                    "maxLength": 256
+                },
+                "smtp_password": {
+                    "type": "string",
+                    "maxLength": 256
+                },
+                "smtp_port": {
+                    "type": "integer",
+                    "maximum": 65535,
+                    "minimum": 1
+                },
+                "smtp_username": {
+                    "type": "string",
+                    "maxLength": 256
                 }
             }
         },
