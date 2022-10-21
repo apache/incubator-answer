@@ -129,7 +129,7 @@ definitions:
         description: content
         type: string
       html:
-        description: 解析后的html
+        description: html
         type: string
       question_id:
         description: question_id
@@ -167,7 +167,7 @@ definitions:
         description: edit_summary
         type: string
       html:
-        description: 解析后的html
+        description: html
         type: string
       id:
         description: id

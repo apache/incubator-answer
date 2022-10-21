@@ -4092,7 +4092,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "html": {
-                    "description": "解析后的html",
+                    "description": "html",
                     "type": "string"
                 },
                 "question_id": {
@@ -4146,7 +4146,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "html": {
-                    "description": "解析后的html",
+                    "description": "html",
                     "type": "string"
                 },
                 "id": {

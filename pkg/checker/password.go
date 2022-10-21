@@ -14,13 +14,13 @@ const (
 )
 
 /*
- *  minLength: 指定密码的最小长度
- *  maxLength：指定密码的最大长度
- *  minLevel：指定密码最低要求的强度等级
- *  pwd：明文密码
+ *  minLength: Specifies the minimum length of a password
+ *  maxLength：Specifies the maximum length of a password
+ *  minLevel：Specifies the minimum strength level required for passwords
+ *  pwd：Text passwords
  */
 func PassWordCheck(minLength, maxLength, minLevel int, pwd string) error {
-	// 首先校验密码长度是否在范围内
+	// First check whether the password length is within the range
 	if len(pwd) < minLength {
 		return fmt.Errorf("BAD PASSWORD: The password is shorter than %d characters", minLength)
 	}
@@ -28,7 +28,9 @@ func PassWordCheck(minLength, maxLength, minLevel int, pwd string) error {
 		return fmt.Errorf("BAD PASSWORD: The password is logner than %d characters", maxLength)
 	}
 
-	// 初始化密码强度等级为D，利用正则校验密码强度，若匹配成功则强度自增1
+	// The password strength level is initialized to D.
+	// The regular is used to verify the password strength.
+	// If the matching is successful, the password strength increases by 1
 	var level int = levelD
 	patternList := []string{`[0-9]+`, `[a-z]+`, `[A-Z]+`, `[~!@#$%^&*?_-]+`}
 	for _, pattern := range patternList {
@@ -38,7 +40,7 @@ func PassWordCheck(minLength, maxLength, minLevel int, pwd string) error {
 		}
 	}
 
-	// 如果最终密码强度低于要求的最低强度，返回并报错
+	// If the final password strength falls below the required minimum strength, return with an error
 	if level < minLevel {
 		return fmt.Errorf("The password does not satisfy the current policy requirements. ")
 	}
