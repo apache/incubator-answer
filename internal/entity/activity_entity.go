@@ -21,8 +21,8 @@ type Activity struct {
 	HasRank       int       `xorm:"not null default 0 TINYINT(4) has_rank"`
 }
 
-type ActivityRunkSum struct {
-	Rank int `xorm:"not null default 0 comment('rank of current operating user affected') INT(11) rank"`
+type ActivityRankSum struct {
+	Rank int `xorm:"not null default 0 INT(11) rank"`
 }
 
 // TableName activity table name
