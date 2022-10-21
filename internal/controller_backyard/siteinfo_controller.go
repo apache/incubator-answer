@@ -87,7 +87,7 @@ func (sc *SiteInfoController) UpdateInterface(ctx *gin.Context) {
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json
-// @Success 200 {object} handler.RespBody{data=schema.SiteInterfaceResp}
+// @Success 200 {object} handler.RespBody{data=schema.GetSMTPConfigResp}
 // @Router /answer/admin/api/setting/smtp [get]
 func (sc *SiteInfoController) GetSMTPConfig(ctx *gin.Context) {
 	resp, err := sc.siteInfoService.GetSMTPConfig(ctx)
@@ -100,7 +100,7 @@ func (sc *SiteInfoController) GetSMTPConfig(ctx *gin.Context) {
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json
-// @Param data body schema.SiteInterfaceReq true "general"
+// @Param data body schema.UpdateSMTPConfigReq true "smtp config"
 // @Success 200 {object} handler.RespBody{}
 // @Router /answer/admin/api/setting/smtp [put]
 func (sc *SiteInfoController) UpdateSMTPConfig(ctx *gin.Context) {

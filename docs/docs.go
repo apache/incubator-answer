@@ -418,7 +418,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.SiteInterfaceResp"
+                                            "$ref": "#/definitions/schema.GetSMTPConfigResp"
                                         }
                                     }
                                 }
@@ -443,12 +443,12 @@ const docTemplate = `{
                 "summary": "update smtp config",
                 "parameters": [
                     {
-                        "description": "general",
+                        "description": "smtp config",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.SiteInterfaceReq"
+                            "$ref": "#/definitions/schema.UpdateSMTPConfigReq"
                         }
                     }
                 ],
@@ -4618,6 +4618,33 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetSMTPConfigResp": {
+            "type": "object",
+            "properties": {
+                "encryption": {
+                    "description": "\"\" SSL TLS",
+                    "type": "string"
+                },
+                "from_email_address": {
+                    "type": "string"
+                },
+                "from_name": {
+                    "type": "string"
+                },
+                "smtp_host": {
+                    "type": "string"
+                },
+                "smtp_password": {
+                    "type": "string"
+                },
+                "smtp_port": {
+                    "type": "integer"
+                },
+                "smtp_username": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.GetTagPageResp": {
             "type": "object",
             "properties": {
@@ -5496,6 +5523,43 @@ const docTemplate = `{
                 "user_id": {
                     "description": "user id",
                     "type": "integer"
+                }
+            }
+        },
+        "schema.UpdateSMTPConfigReq": {
+            "type": "object",
+            "properties": {
+                "encryption": {
+                    "description": "\"\" SSL TLS",
+                    "type": "string",
+                    "enum": [
+                        "SSL"
+                    ]
+                },
+                "from_email_address": {
+                    "type": "string",
+                    "maxLength": 256
+                },
+                "from_name": {
+                    "type": "string",
+                    "maxLength": 256
+                },
+                "smtp_host": {
+                    "type": "string",
+                    "maxLength": 256
+                },
+                "smtp_password": {
+                    "type": "string",
+                    "maxLength": 256
+                },
+                "smtp_port": {
+                    "type": "integer",
+                    "maximum": 65535,
+                    "minimum": 1
+                },
+                "smtp_username": {
+                    "type": "string",
+                    "maxLength": 256
                 }
             }
         },
