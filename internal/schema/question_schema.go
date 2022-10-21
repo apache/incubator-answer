@@ -52,27 +52,27 @@ type QuestionUpdate struct {
 
 type QuestionBaseInfo struct {
 	ID              string `json:"id" `
-	Title           string `json:"title" xorm:"title"`                       // 标题
-	ViewCount       int    `json:"view_count" xorm:"view_count"`             // view_count
-	AnswerCount     int    `json:"answer_count" xorm:"answer_count"`         // 回复总数
-	CollectionCount int    `json:"collection_count" xorm:"collection_count"` // 收藏总数
-	FollowCount     int    `json:"follow_count" xorm:"follow_count"`         // 关注数
+	Title           string `json:"title" xorm:"title"`                       // title
+	ViewCount       int    `json:"view_count" xorm:"view_count"`             // view count
+	AnswerCount     int    `json:"answer_count" xorm:"answer_count"`         // answer count
+	CollectionCount int    `json:"collection_count" xorm:"collection_count"` // collection count
+	FollowCount     int    `json:"follow_count" xorm:"follow_count"`         // follow count
 	Status          string `json:"status"`
 	AcceptedAnswer  bool   `json:"accepted_answer"`
 }
 
 type QuestionInfo struct {
 	ID                   string         `json:"id" `
-	Title                string         `json:"title" xorm:"title"`                         // 标题
-	Content              string         `json:"content" xorm:"content"`                     // 内容
-	Html                 string         `json:"html" xorm:"html"`                           // 解析后的html
+	Title                string         `json:"title" xorm:"title"`                         // title
+	Content              string         `json:"content" xorm:"content"`                     // content
+	Html                 string         `json:"html" xorm:"html"`                           // html
 	Tags                 []*TagResp     `json:"tags" `                                      // tags
 	ViewCount            int            `json:"view_count" xorm:"view_count"`               // view_count
 	UniqueViewCount      int            `json:"unique_view_count" xorm:"unique_view_count"` // unique_view_count
 	VoteCount            int            `json:"vote_count" xorm:"vote_count"`               // vote_count
-	AnswerCount          int            `json:"answer_count" xorm:"answer_count"`           // 回复总数
-	CollectionCount      int            `json:"collection_count" xorm:"collection_count"`   // 收藏总数
-	FollowCount          int            `json:"follow_count" xorm:"follow_count"`           // 关注数
+	AnswerCount          int            `json:"answer_count" xorm:"answer_count"`           // answer count
+	CollectionCount      int            `json:"collection_count" xorm:"collection_count"`   // collection count
+	FollowCount          int            `json:"follow_count" xorm:"follow_count"`           // follow count
 	AcceptedAnswerId     string         `json:"accepted_answer_id" `                        // accepted_answer_id
 	LastAnswerId         string         `json:"last_answer_id" `                            // last_answer_id
 	CreateTime           int64          `json:"create_time" `                               // create_time
