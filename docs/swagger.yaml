@@ -513,12 +513,14 @@ definitions:
   schema.GetSMTPConfigResp:
     properties:
       encryption:
-        description: '"" SSL TLS'
+        description: '"" SSL'
         type: string
-      from_email_address:
+      from_email:
         type: string
       from_name:
         type: string
+      smtp_authentication:
+        type: boolean
       smtp_host:
         type: string
       smtp_password:
@@ -1167,16 +1169,18 @@ definitions:
   schema.UpdateSMTPConfigReq:
     properties:
       encryption:
-        description: '"" SSL TLS'
+        description: '"" SSL'
         enum:
         - SSL
         type: string
-      from_email_address:
+      from_email:
         maxLength: 256
         type: string
       from_name:
         maxLength: 256
         type: string
+      smtp_authentication:
+        type: boolean
       smtp_host:
         maxLength: 256
         type: string
@@ -1189,6 +1193,8 @@ definitions:
         type: integer
       smtp_username:
         maxLength: 256
+        type: string
+      test_email_recipient:
         type: string
     type: object
   schema.UpdateTagReq:
