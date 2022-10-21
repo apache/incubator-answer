@@ -275,7 +275,6 @@ const Smtp: FC = () => {
             isInvalid={formData.smtp_username.isInvalid}
             onChange={(evt) => onFieldChange('smtp_username', evt.target.value)}
           />
-          <Form.Text as="div">{t('smtp_username.text')}</Form.Text>
           <Form.Control.Feedback type="invalid">
             {formData.smtp_username.errorMsg}
           </Form.Control.Feedback>
@@ -289,7 +288,6 @@ const Smtp: FC = () => {
             isInvalid={formData.smtp_password.isInvalid}
             onChange={(evt) => onFieldChange('smtp_password', evt.target.value)}
           />
-          <Form.Text as="div">{t('smtp_password.text')}</Form.Text>
           <Form.Control.Feedback type="invalid">
             {formData.smtp_password.errorMsg}
           </Form.Control.Feedback>
