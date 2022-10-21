@@ -44,7 +44,7 @@ func (cr *collectionRepo) AddCollection(ctx context.Context, collection *entity.
 func (cr *collectionRepo) RemoveCollection(ctx context.Context, id string) (err error) {
 	_, err = cr.data.DB.Where("id =?", id).Delete(&entity.Collection{})
 	if err != nil {
-		errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return nil
 }

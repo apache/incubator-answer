@@ -89,5 +89,5 @@ func (ss *SearchService) Search(ctx context.Context, dto *schema.SearchDTO) (res
 		ss.objectSearch.Parse(dto)
 		resp, total, err = ss.objectSearch.Search(ctx)
 	}
-	return resp, total, extra, nil
+	return resp, total, extra, err
 }
