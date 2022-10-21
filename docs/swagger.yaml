@@ -510,6 +510,24 @@ definitions:
       user_info:
         $ref: '#/definitions/schema.UserBasicInfo'
     type: object
+  schema.GetSMTPConfigResp:
+    properties:
+      encryption:
+        description: '"" SSL TLS'
+        type: string
+      from_email_address:
+        type: string
+      from_name:
+        type: string
+      smtp_host:
+        type: string
+      smtp_password:
+        type: string
+      smtp_port:
+        type: integer
+      smtp_username:
+        type: string
+    type: object
   schema.GetTagPageResp:
     properties:
       created_at:
@@ -1146,6 +1164,33 @@ definitions:
     required:
     - id
     type: object
+  schema.UpdateSMTPConfigReq:
+    properties:
+      encryption:
+        description: '"" SSL TLS'
+        enum:
+        - SSL
+        type: string
+      from_email_address:
+        maxLength: 256
+        type: string
+      from_name:
+        maxLength: 256
+        type: string
+      smtp_host:
+        maxLength: 256
+        type: string
+      smtp_password:
+        maxLength: 256
+        type: string
+      smtp_port:
+        maximum: 65535
+        minimum: 1
+        type: integer
+      smtp_username:
+        maxLength: 256
+        type: string
+    type: object
   schema.UpdateTagReq:
     properties:
       display_name:
@@ -1612,7 +1657,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.SiteInterfaceResp'
+                  $ref: '#/definitions/schema.GetSMTPConfigResp'
               type: object
       security:
       - ApiKeyAuth: []
@@ -1622,12 +1667,12 @@ paths:
     put:
       description: update smtp config
       parameters:
-      - description: general
+      - description: smtp config
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.SiteInterfaceReq'
+          $ref: '#/definitions/schema.UpdateSMTPConfigReq'
       produces:
       - application/json
       responses:
