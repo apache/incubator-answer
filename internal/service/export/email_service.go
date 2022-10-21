@@ -198,6 +198,9 @@ func (es *EmailService) ChangeEmailTemplate(changeEmailUrl string) (title, body 
 	}
 
 	tmpl, err = template.New("email_change_body").Parse(ec.ChangeBody)
+	if err != nil {
+		return "", "", err
+	}
 	err = tmpl.Execute(bodyBuf, templateData)
 	if err != nil {
 		return "", "", err

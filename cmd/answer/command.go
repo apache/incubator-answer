@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/segmentfault/answer/internal/base/data"
 	"github.com/segmentfault/answer/internal/cli"
 	"github.com/segmentfault/answer/internal/migrations"
 	"github.com/spf13/cobra"
@@ -69,7 +68,7 @@ To run answer, use:
 				return
 			}
 			fmt.Println("read config successfully")
-			if err := cli.InitDB(c.Data.Database); err != nil {
+			if err := migrations.InitDB(c.Data.Database); err != nil {
 				fmt.Println("init database error: ", err.Error())
 				return
 			}
@@ -88,13 +87,7 @@ To run answer, use:
 				fmt.Println("read config failed: ", err.Error())
 				return
 			}
-			fmt.Println("read config successfully")
-			db, err := data.NewDB(false, c.Data.Database)
-			if err != nil {
-				fmt.Println("new database failed: ", err.Error())
-				return
-			}
-			if err = migrations.Migrate(db); err != nil {
+			if err = migrations.Migrate(c.Data.Database); err != nil {
 				fmt.Println("migrate failed: ", err.Error())
 				return
 			}
