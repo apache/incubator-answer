@@ -52,3 +52,21 @@ export const updateInterfaceSetting = (params: Type.AdminSettingsInterface) => {
   const apiUrl = `/answer/admin/api/siteinfo/interface`;
   return request.put(apiUrl, params);
 };
+
+export const useSmtpSetting = () => {
+  const apiUrl = `/answer/admin/api/setting/smtp`;
+  const { data, error } = useSWR<Type.AdminSettingsSmtp, Error>(
+    [apiUrl],
+    request.instance.get,
+  );
+  return {
+    data,
+    isLoading: !data && !error,
+    error,
+  };
+};
+
+export const updateSmtpSetting = (params: Type.AdminSettingsSmtp) => {
+  const apiUrl = `/answer/admin/api/setting/smtp`;
+  return request.put(apiUrl, params);
+};
