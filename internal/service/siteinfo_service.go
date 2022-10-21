@@ -132,7 +132,22 @@ func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
 
 // UpdateSMTPConfig get smtp config
 func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.UpdateSMTPConfigReq) (err error) {
-	ec := &export.EmailConfig{}
-	_ = copier.Copy(ec, req)
-	return s.emailService.SetEmailConfig(ec)
+	oldEmailConfig, err := s.emailService.GetEmailConfig()
+	if err != nil {
+		return err
+	}
+	_ = copier.Copy(oldEmailConfig, req)
+
+	err = s.emailService.SetEmailConfig(oldEmailConfig)
+	if err != nil {
+		return err
+	}
+	if len(req.TestEmailRecipient) > 0 {
+		title, body, err := s.emailService.TestTemplate()
+		if err != nil {
+			return err
+		}
+		go s.emailService.Send(ctx, req.TestEmailRecipient, title, body, "", "")
+	}
+	return
 }
