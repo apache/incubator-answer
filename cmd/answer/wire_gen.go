@@ -163,7 +163,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reasonController := controller.NewReasonController(reasonService)
 	themeController := controller_backyard.NewThemeController()
 	siteInfoRepo := repo.NewSiteInfo(dataData)
-	siteInfoService := service.NewSiteInfoService(siteInfoRepo)
+	siteInfoService := service.NewSiteInfoService(siteInfoRepo, emailService)
 	siteInfoController := controller_backyard.NewSiteInfoController(siteInfoService)
 	siteinfoController := controller.NewSiteinfoController(siteInfoService)
 	notificationRepo := notification.NewNotificationRepo(dataData)
