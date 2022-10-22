@@ -35,7 +35,6 @@ var (
 // @name Authorization
 func main() {
 	Execute()
-	return
 }
 
 func runApp() {

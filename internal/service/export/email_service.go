@@ -109,7 +109,6 @@ func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body, co
 			log.Error(err)
 		}
 	}
-	return
 }
 
 // VerifyUrlExpired email send
@@ -142,6 +141,9 @@ func (es *EmailService) RegisterTemplate(registerUrl string) (title, body string
 	}
 
 	tmpl, err = template.New("register_body").Parse(ec.RegisterBody)
+	if err != nil {
+		return "", "", err
+	}
 	err = tmpl.Execute(bodyBuf, templateData)
 	if err != nil {
 		return "", "", err
@@ -169,6 +171,9 @@ func (es *EmailService) PassResetTemplate(passResetUrl string) (title, body stri
 	}
 
 	tmpl, err = template.New("pass_reset_body").Parse(ec.PassResetBody)
+	if err != nil {
+		return "", "", err
+	}
 	err = tmpl.Execute(bodyBuf, templateData)
 	if err != nil {
 		return "", "", err

@@ -2,13 +2,14 @@ package search
 
 import (
 	"context"
+	"regexp"
+	"strings"
+
 	"github.com/segmentfault/answer/internal/entity"
 	"github.com/segmentfault/answer/internal/schema"
 	"github.com/segmentfault/answer/internal/service/activity_common"
 	"github.com/segmentfault/answer/internal/service/search_common"
 	tagcommon "github.com/segmentfault/answer/internal/service/tag_common"
-	"regexp"
-	"strings"
 )
 
 type TagSearch struct {
@@ -64,7 +65,7 @@ func (ts *TagSearch) Search(ctx context.Context) (resp []schema.SearchResp, tota
 		tag              *entity.Tag
 		exists, followed bool
 	)
-	tag, exists, err = ts.tagRepo.GetTagBySlugName(nil, ts.exp)
+	tag, exists, err = ts.tagRepo.GetTagBySlugName(ctx, ts.exp)
 	if err != nil {
 		return
 	}
