@@ -21,7 +21,7 @@ type CollectionRepo interface {
 	SearchList(ctx context.Context, search *entity.CollectionSearch) ([]*entity.Collection, int64, error)
 }
 
-// CollectionService user service
+// CollectionCommon user service
 type CollectionCommon struct {
 	collectionRepo CollectionRepo
 }

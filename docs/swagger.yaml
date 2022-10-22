@@ -35,28 +35,6 @@ definitions:
       verify:
         type: boolean
     type: object
-  schema.AddCollectionGroupReq:
-    properties:
-      create_time:
-        type: string
-      default_group:
-        description: mark this group is default, default 1
-        type: integer
-      name:
-        description: the collection group name
-        maxLength: 50
-        type: string
-      update_time:
-        type: string
-      user_id:
-        type: integer
-    required:
-    - create_time
-    - default_group
-    - name
-    - update_time
-    - user_id
-    type: object
   schema.AddCommentReq:
     properties:
       mention_username_list:
@@ -81,22 +59,6 @@ definitions:
     - original_text
     - parsed_text
     type: object
-  schema.AddNotificationReadReq:
-    properties:
-      is_read:
-        description: 'read status(unread: 1; read 2)'
-        type: integer
-      message_id:
-        description: message id
-        type: integer
-      user_id:
-        description: user id
-        type: integer
-    required:
-    - is_read
-    - message_id
-    - user_id
-    type: object
   schema.AddReportReq:
     properties:
       content:
@@ -113,8 +75,6 @@ definitions:
     required:
     - object_id
     - report_type
-    type: object
-  schema.AddUserGroupReq:
     type: object
   schema.AdminSetQuestionStatusRequest:
     properties:
@@ -339,27 +299,6 @@ definitions:
       tag_id:
         description: tag id
         type: string
-    type: object
-  schema.GetNotificationReadResp:
-    properties:
-      created_at:
-        description: create time
-        type: string
-      id:
-        description: id
-        type: integer
-      is_read:
-        description: 'read status(unread: 1; read 2)'
-        type: integer
-      message_id:
-        description: message id
-        type: integer
-      updated_at:
-        description: update time
-        type: string
-      user_id:
-        description: user id
-        type: integer
     type: object
   schema.GetOtherUserInfoByUsernameResp:
     properties:
@@ -627,14 +566,6 @@ definitions:
         description: tag id
         type: string
     type: object
-  schema.GetUserGroupResp:
-    properties:
-      id:
-        description: user group id
-        type: integer
-    type: object
-  schema.GetUserInfoResp:
-    type: object
   schema.GetUserPageResp:
     properties:
       avatar:
@@ -891,14 +822,6 @@ definitions:
     required:
     - comment_id
     type: object
-  schema.RemoveNotificationReadReq:
-    properties:
-      id:
-        description: id
-        type: integer
-    required:
-    - id
-    type: object
   schema.RemoveQuestionReq:
     properties:
       id:
@@ -914,14 +837,6 @@ definitions:
         type: string
     required:
     - tag_id
-    type: object
-  schema.RemoveUserGroupReq:
-    properties:
-      id:
-        description: user group id
-        type: integer
-    required:
-    - id
     type: object
   schema.ReportHandleReq:
     properties:
@@ -1074,26 +989,6 @@ definitions:
       slug_name:
         type: string
     type: object
-  schema.UpdateCollectionGroupReq:
-    properties:
-      create_time:
-        type: string
-      default_group:
-        description: mark this group is default, default 1
-        type: integer
-      id:
-        type: integer
-      name:
-        description: the collection group name
-        maxLength: 50
-        type: string
-      update_time:
-        type: string
-      user_id:
-        type: integer
-    required:
-    - id
-    type: object
   schema.UpdateCommentReq:
     properties:
       comment_id:
@@ -1148,23 +1043,6 @@ definitions:
         type: string
     required:
     - display_name
-    type: object
-  schema.UpdateNotificationReadReq:
-    properties:
-      id:
-        description: id
-        type: integer
-      is_read:
-        description: 'read status(unread: 1; read 2)'
-        type: integer
-      message_id:
-        description: message id
-        type: integer
-      user_id:
-        description: user id
-        type: integer
-    required:
-    - id
     type: object
   schema.UpdateSMTPConfigReq:
     properties:
@@ -1235,14 +1113,6 @@ definitions:
     required:
     - synonym_tag_list
     - tag_id
-    type: object
-  schema.UpdateUserGroupReq:
-    properties:
-      id:
-        description: user group id
-        type: integer
-    required:
-    - id
     type: object
   schema.UpdateUserStatusReq:
     properties:

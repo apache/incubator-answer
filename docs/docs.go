@@ -3962,36 +3962,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.AddCollectionGroupReq": {
-            "type": "object",
-            "required": [
-                "create_time",
-                "default_group",
-                "name",
-                "update_time",
-                "user_id"
-            ],
-            "properties": {
-                "create_time": {
-                    "type": "string"
-                },
-                "default_group": {
-                    "description": "mark this group is default, default 1",
-                    "type": "integer"
-                },
-                "name": {
-                    "description": "the collection group name",
-                    "type": "string",
-                    "maxLength": 50
-                },
-                "update_time": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "schema.AddCommentReq": {
             "type": "object",
             "required": [
@@ -4025,28 +3995,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.AddNotificationReadReq": {
-            "type": "object",
-            "required": [
-                "is_read",
-                "message_id",
-                "user_id"
-            ],
-            "properties": {
-                "is_read": {
-                    "description": "read status(unread: 1; read 2)",
-                    "type": "integer"
-                },
-                "message_id": {
-                    "description": "message id",
-                    "type": "integer"
-                },
-                "user_id": {
-                    "description": "user id",
-                    "type": "integer"
-                }
-            }
-        },
         "schema.AddReportReq": {
             "type": "object",
             "required": [
@@ -4069,9 +4017,6 @@ const docTemplate = `{
                     "type": "integer"
                 }
             }
-        },
-        "schema.AddUserGroupReq": {
-            "type": "object"
         },
         "schema.AdminSetQuestionStatusRequest": {
             "type": "object",
@@ -4383,35 +4328,6 @@ const docTemplate = `{
                 "tag_id": {
                     "description": "tag id",
                     "type": "string"
-                }
-            }
-        },
-        "schema.GetNotificationReadResp": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "description": "create time",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "id",
-                    "type": "integer"
-                },
-                "is_read": {
-                    "description": "read status(unread: 1; read 2)",
-                    "type": "integer"
-                },
-                "message_id": {
-                    "description": "message id",
-                    "type": "integer"
-                },
-                "updated_at": {
-                    "description": "update time",
-                    "type": "string"
-                },
-                "user_id": {
-                    "description": "user id",
-                    "type": "integer"
                 }
             }
         },
@@ -4778,18 +4694,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.GetUserGroupResp": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "description": "user group id",
-                    "type": "integer"
-                }
-            }
-        },
-        "schema.GetUserInfoResp": {
-            "type": "object"
-        },
         "schema.GetUserPageResp": {
             "type": "object",
             "properties": {
@@ -5139,18 +5043,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.RemoveNotificationReadReq": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "id": {
-                    "description": "id",
-                    "type": "integer"
-                }
-            }
-        },
         "schema.RemoveQuestionReq": {
             "type": "object",
             "required": [
@@ -5172,18 +5064,6 @@ const docTemplate = `{
                 "tag_id": {
                     "description": "tag_id",
                     "type": "string"
-                }
-            }
-        },
-        "schema.RemoveUserGroupReq": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "id": {
-                    "description": "user group id",
-                    "type": "integer"
                 }
             }
         },
@@ -5401,35 +5281,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UpdateCollectionGroupReq": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "create_time": {
-                    "type": "string"
-                },
-                "default_group": {
-                    "description": "mark this group is default, default 1",
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "description": "the collection group name",
-                    "type": "string",
-                    "maxLength": 50
-                },
-                "update_time": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "schema.UpdateCommentReq": {
             "type": "object",
             "required": [
@@ -5502,30 +5353,6 @@ const docTemplate = `{
                     "description": "website",
                     "type": "string",
                     "maxLength": 500
-                }
-            }
-        },
-        "schema.UpdateNotificationReadReq": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "id": {
-                    "description": "id",
-                    "type": "integer"
-                },
-                "is_read": {
-                    "description": "read status(unread: 1; read 2)",
-                    "type": "integer"
-                },
-                "message_id": {
-                    "description": "message id",
-                    "type": "integer"
-                },
-                "user_id": {
-                    "description": "user id",
-                    "type": "integer"
                 }
             }
         },
@@ -5623,18 +5450,6 @@ const docTemplate = `{
                 "tag_id": {
                     "description": "tag_id",
                     "type": "string"
-                }
-            }
-        },
-        "schema.UpdateUserGroupReq": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "id": {
-                    "description": "user group id",
-                    "type": "integer"
                 }
             }
         },

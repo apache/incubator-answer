@@ -195,7 +195,7 @@ type UserRegisterReq struct {
 
 func (u *UserRegisterReq) Check() (errField *validator.ErrorField, err error) {
 	// TODO i18n
-	err = checker.PassWordCheck(8, 32, 0, u.Pass)
+	err = checker.CheckPassword(8, 32, 0, u.Pass)
 	if err != nil {
 		return &validator.ErrorField{
 			Key:   "pass",
@@ -214,7 +214,7 @@ type UserModifyPassWordRequest struct {
 
 func (u *UserModifyPassWordRequest) Check() (errField *validator.ErrorField, err error) {
 	// TODO i18n
-	err = checker.PassWordCheck(8, 32, 0, u.Pass)
+	err = checker.CheckPassword(8, 32, 0, u.Pass)
 	if err != nil {
 		return &validator.ErrorField{
 			Key:   "pass",
@@ -272,7 +272,7 @@ type UserRePassWordRequest struct {
 
 func (u *UserRePassWordRequest) Check() (errField *validator.ErrorField, err error) {
 	// TODO i18n
-	err = checker.PassWordCheck(8, 32, 0, u.Pass)
+	err = checker.CheckPassword(8, 32, 0, u.Pass)
 	if err != nil {
 		return &validator.ErrorField{
 			Key:   "pass",
