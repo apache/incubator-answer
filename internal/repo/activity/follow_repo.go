@@ -99,7 +99,7 @@ func (ar *FollowRepo) Follow(ctx context.Context, objectId, userId string) error
 }
 
 func (ar *FollowRepo) FollowCancel(ctx context.Context, objectId, userId string) error {
-	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(nil, objectId, "follow")
+	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(ctx, objectId, "follow")
 	if err != nil {
 		return err
 	}
@@ -138,6 +138,9 @@ func (ar *FollowRepo) FollowCancel(ctx context.Context, objectId, userId string)
 
 func (ar *FollowRepo) updateFollows(ctx context.Context, session *xorm.Session, objectId string, follows int) error {
 	objectType, err := obj.GetObjectTypeStrByObjectID(objectId)
+	if err != nil {
+		return err
+	}
 	switch objectType {
 	case "question":
 		_, err = session.Where("id = ?", objectId).Incr("follow_count", follows).Update(&entity.Question{})
