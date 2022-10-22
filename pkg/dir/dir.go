@@ -2,6 +2,7 @@ package dir
 
 import "os"
 
+// CreatePathIsNotExist create path is not exists
 func CreatePathIsNotExist(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -18,6 +19,7 @@ func CreatePathIsNotExist(path string) (bool, error) {
 	return false, err
 }
 
+// CheckPathExist path if exist
 func CheckPathExist(path string) bool {
 	_, err := os.Stat(path)
 	if err == nil {

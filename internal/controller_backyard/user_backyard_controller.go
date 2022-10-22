@@ -3,10 +3,8 @@ package controller_backyard
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/answer/internal/base/handler"
-	"github.com/segmentfault/answer/internal/base/reason"
 	"github.com/segmentfault/answer/internal/schema"
 	"github.com/segmentfault/answer/internal/service/user_backyard"
-	"github.com/segmentfault/pacman/errors"
 )
 
 // UserBackyardController user controller
@@ -37,27 +35,6 @@ func (uc *UserBackyardController) UpdateUserStatus(ctx *gin.Context) {
 
 	err := uc.userService.UpdateUserStatus(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
-}
-
-// GetUserInfo get user one
-// @Summary get user one
-// @Description get user one
-// @Security ApiKeyAuth
-// @Tags admin
-// @Accept json
-// @Produce json
-// @Param id path int true "userid"
-// @Success 200 {object} handler.RespBody{data=schema.GetUserInfoResp}
-// Router /user/{id} [get]
-func (uc *UserBackyardController) GetUserInfo(ctx *gin.Context) {
-	userID := ctx.Query("user_id")
-	if len(userID) == 0 {
-		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
-		return
-	}
-
-	resp, err := uc.userService.GetUserInfo(ctx, userID)
-	handler.HandleResponse(ctx, err, resp)
 }
 
 // GetUserPage get user page
