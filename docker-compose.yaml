@@ -11,7 +11,7 @@ services:
     links:
       - db
     volumes:
-      - ./answer/data:/data
+      - ./answer-data/data:/data
   db:
     image: mariadb:10.4.7
     ports:
@@ -26,4 +26,4 @@ services:
       retries: 10
     command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--skip-character-set-client-handshake']
     volumes:
-      - ./answer/mysql:/var/lib/mysql
+      - ./answer-data/mysql:/var/lib/mysql
