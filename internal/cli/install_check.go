@@ -6,11 +6,11 @@ import (
 )
 
 func CheckConfigFile(configPath string) bool {
-	return dir.CheckPathExist(configPath)
+	return dir.CheckFileExist(configPath)
 }
 
 func CheckUploadDir() bool {
-	return dir.CheckPathExist(UploadFilePath)
+	return dir.CheckDirExist(UploadFilePath)
 }
 
 func CheckDB(dataConf *data.Database) bool {
