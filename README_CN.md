@@ -1,5 +1,5 @@
 <a href="https://answer.dev">
-    <img alt="logo" src="docs/img/answer-logo-flat.svg" height="63px">
+    <img alt="logo" src="docs/img/logo.svg" height="99px">
 </a>
 
 # Answer - 构建问答社区
