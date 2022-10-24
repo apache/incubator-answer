@@ -2,7 +2,7 @@ package reason_common
 
 import (
 	"context"
-	"github.com/segmentfault/answer/internal/schema"
+	"github.com/answerdev/answer/internal/schema"
 )
 
 type ReasonRepo interface {

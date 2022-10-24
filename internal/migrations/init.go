@@ -3,8 +3,8 @@ package migrations
 import (
 	"fmt"
 
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/entity"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/entity"
 	"xorm.io/xorm"
 )
 

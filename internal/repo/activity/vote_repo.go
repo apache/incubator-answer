@@ -2,25 +2,25 @@ package activity
 
 import (
 	"context"
-	"github.com/segmentfault/answer/pkg/converter"
+	"github.com/answerdev/answer/pkg/converter"
 	"strings"
 
-	"github.com/segmentfault/answer/internal/base/pager"
-	"github.com/segmentfault/answer/internal/service/config"
-	"github.com/segmentfault/answer/internal/service/notice_queue"
-	"github.com/segmentfault/answer/internal/service/rank"
-	"github.com/segmentfault/answer/pkg/obj"
+	"github.com/answerdev/answer/internal/base/pager"
+	"github.com/answerdev/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/service/notice_queue"
+	"github.com/answerdev/answer/internal/service/rank"
+	"github.com/answerdev/answer/pkg/obj"
 
 	"xorm.io/builder"
 
-	"github.com/segmentfault/answer/internal/service/activity_common"
-	"github.com/segmentfault/answer/internal/service/unique"
+	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/unique"
 
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/xorm"
 )

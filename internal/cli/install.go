@@ -6,9 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/segmentfault/answer/configs"
-	"github.com/segmentfault/answer/i18n"
-	"github.com/segmentfault/answer/pkg/dir"
+	"github.com/answerdev/answer/configs"
+	"github.com/answerdev/answer/i18n"
+	"github.com/answerdev/answer/pkg/dir"
 )
 
 const (

@@ -2,8 +2,8 @@ package reason
 
 import (
 	"context"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/reason_common"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/reason_common"
 )
 
 type ReasonService struct {

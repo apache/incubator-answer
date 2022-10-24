@@ -3,8 +3,8 @@ package search
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/search_common"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/search_common"
 )
 
 type WithinSearch struct {

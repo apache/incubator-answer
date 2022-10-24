@@ -3,8 +3,8 @@ package schema
 import (
 	"strings"
 
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/base/validator"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/segmentfault/pacman/errors"
 )
 

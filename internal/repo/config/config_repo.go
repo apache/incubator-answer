@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/segmentfault/answer/internal/service/config"
-	"github.com/segmentfault/answer/pkg/converter"
+	"github.com/answerdev/answer/internal/service/config"
+	"github.com/answerdev/answer/pkg/converter"
 
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/segmentfault/pacman/errors"
 )
 

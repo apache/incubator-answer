@@ -2,7 +2,7 @@ package siteinfo_common
 
 import (
 	"context"
-	"github.com/segmentfault/answer/internal/entity"
+	"github.com/answerdev/answer/internal/entity"
 )
 
 type SiteInfoRepo interface {
