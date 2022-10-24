@@ -4,12 +4,12 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/export"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/export"
-	"github.com/segmentfault/answer/internal/service/siteinfo_common"
 	"github.com/segmentfault/pacman/errors"
 )
 

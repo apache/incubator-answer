@@ -1,8 +1,8 @@
 package cli
 
 import (
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/pkg/dir"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/pkg/dir"
 )
 
 func CheckConfigFile(configPath string) bool {

@@ -3,13 +3,13 @@ package collection
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/base/constant"
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/pager"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	collectioncommon "github.com/segmentfault/answer/internal/service/collection_common"
-	"github.com/segmentfault/answer/internal/service/unique"
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/pager"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
+	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
 )
 

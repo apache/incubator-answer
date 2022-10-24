@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/config"
-	"github.com/segmentfault/answer/internal/service/reason_common"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/service/reason_common"
 	"github.com/segmentfault/pacman/log"
 )
 

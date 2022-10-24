@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/segmentfault/answer/internal/base/constant"
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/service/auth"
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/segmentfault/pacman/errors"
 )
 

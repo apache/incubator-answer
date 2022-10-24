@@ -1,4 +1,4 @@
-module github.com/segmentfault/answer
+module github.com/answerdev/answer
 
 go 1.18
 

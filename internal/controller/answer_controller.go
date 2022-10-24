@@ -3,14 +3,14 @@ package controller
 import (
 	"fmt"
 
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/middleware"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/handler"
-	"github.com/segmentfault/answer/internal/base/middleware"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service"
-	"github.com/segmentfault/answer/internal/service/rank"
 	"github.com/segmentfault/pacman/errors"
 )
 

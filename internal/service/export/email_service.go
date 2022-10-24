@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"html/template"
 
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/service/config"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"golang.org/x/net/context"

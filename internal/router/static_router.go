@@ -1,8 +1,8 @@
 package router
 
 import (
+	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/service/service_config"
 )
 
 // StaticRouter static api router

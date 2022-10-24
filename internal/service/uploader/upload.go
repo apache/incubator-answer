@@ -6,11 +6,11 @@ import (
 	"path"
 	"path/filepath"
 
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/service/service_config"
+	"github.com/answerdev/answer/pkg/dir"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/service/service_config"
-	"github.com/segmentfault/answer/pkg/dir"
-	"github.com/segmentfault/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 )
 
