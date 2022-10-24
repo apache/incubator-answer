@@ -48,15 +48,14 @@ vim /var/data/conf/config.yaml
 
 # After configuring the configuration file, you can start the mirror again to start the service
 $ docker start answer
-
 ```
 
 ## Binary for Answer
 ## Install Answer using binary
 
-  1. Unzip the compressed package.
-  2. Use the command cd to enter the directory you just created.
-  3. Execute the command ./answer init.
+  1. Unzip the compressed package
+  2. Use the command cd to enter the directory you just created
+  3. Execute the command ./answer init
   4. Answer will generate a ./data directory in the current directory
   5. Enter the data directory and modify the config.yaml file
   6. Modify the database connection address to your database connection address
@@ -95,8 +94,8 @@ service_config:
   secret_key: "answer" #encryption key
   web_host: "http://127.0.0.1" #Page access using domain name address
   upload_path: "./upfiles" #upload directory
-
 ```
+
 ## Compile the image
 If you have modified the source files and want to repackage the image, you can use the following statement to repackage the image
 ```
