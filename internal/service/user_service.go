@@ -166,7 +166,7 @@ func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRet
 	}
 	code := uuid.NewString()
 	verifyEmailUrl := fmt.Sprintf("%s/users/password-reset?code=%s", us.serviceConfig.WebHost, code)
-	title, body, err := us.emailService.PassResetTemplate(verifyEmailUrl)
+	title, body, err := us.emailService.PassResetTemplate(ctx, verifyEmailUrl)
 	if err != nil {
 		return "", err
 	}
@@ -316,7 +316,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	}
 	code := uuid.NewString()
 	verifyEmailUrl := fmt.Sprintf("%s/users/account-activation?code=%s", us.serviceConfig.WebHost, code)
-	title, body, err := us.emailService.RegisterTemplate(verifyEmailUrl)
+	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailUrl)
 	if err != nil {
 		return nil, err
 	}
@@ -359,7 +359,7 @@ func (us *UserService) UserVerifyEmailSend(ctx context.Context, userID string) e
 	}
 	code := uuid.NewString()
 	verifyEmailUrl := fmt.Sprintf("%s/users/account-activation?code=%s", us.serviceConfig.WebHost, code)
-	title, body, err := us.emailService.RegisterTemplate(verifyEmailUrl)
+	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailUrl)
 	if err != nil {
 		return err
 	}
@@ -509,7 +509,7 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 	}
 	code := uuid.NewString()
 	verifyEmailUrl := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.serviceConfig.WebHost, code)
-	title, body, err := us.emailService.ChangeEmailTemplate(verifyEmailUrl)
+	title, body, err := us.emailService.ChangeEmailTemplate(ctx, verifyEmailUrl)
 	if err != nil {
 		return err
 	}
