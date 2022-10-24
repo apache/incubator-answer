@@ -22,7 +22,7 @@ To learn more about the project, visit [answer.dev](https://answer.dev).
 
 ```bash
 mkdir answer && cd answer
-wget https://github.com/answerdev/answer/blob/main/docker-compose.yaml
+wget https://raw.githubusercontent.com/answerdev/answer/main/docker-compose.yaml
 docker-compose up
 ```
 
