@@ -1,5 +1,5 @@
 <a href="https://answer.dev">
-    <img alt="logo" src="docs/img/answer-logo-flat.svg" style="height: 63px; background: #fff; padding: 16px; border-radius: 6px">
+    <img alt="logo" src="docs/img/logo.svg" height="99px">
 </a>
 
 # Answer - Build Q&A community
