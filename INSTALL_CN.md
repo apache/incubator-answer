@@ -10,6 +10,17 @@
  - 二进制安装
  - 源码安装
 
+## 使用 Docker-compose 安装 Answer
+```bash
+$ mkdir answer && cd answer
+$ wget https://raw.githubusercontent.com/answerdev/answer/main/docker-compose.yaml
+$ docker-compose up
+```
+
+启动完成后使用浏览器访问 [http://127.0.0.1:9080/](http://127.0.0.1:9080/).
+
+你可以使用默认的用户名：( **`admin@admin.com`** ) 和密码：( **`admin`** ) 进行登录.
+
 ## 使用Docker 安装 Answer
 可以从 Docker Hub 或者 GitHub Container registry 下载最新的tags 镜像
 

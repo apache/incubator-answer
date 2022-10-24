@@ -10,6 +10,17 @@ You can then install Answer in several ways:
  - binary installation
  - Source installation
 
+## Docker-compose for Answer
+```bash
+$ mkdir answer && cd answer
+$ wget https://raw.githubusercontent.com/answerdev/answer/main/docker-compose.yaml
+$ docker-compose up
+```
+
+browser open URL [http://127.0.0.1:9080/](http://127.0.0.1:9080/).
+
+You can log in with the default administrator username( **`admin@admin.com`** ) and password( **`admin`** ).
+
 ## Docker for Answer
 Visit Docker Hub or GitHub Container registry to see all available images and tags.
 
