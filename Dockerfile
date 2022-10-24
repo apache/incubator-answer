@@ -14,7 +14,6 @@ ENV GOROOT /usr/local/go
 ENV PACKAGE github.com/segmentfault/answer
 ENV GOPROXY https://goproxy.cn,direct
 ENV BUILD_DIR ${GOPATH}/src/${PACKAGE}
-ENV GOPRIVATE git.backyard.segmentfault.com
 # Build
 COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
