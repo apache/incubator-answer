@@ -50,6 +50,14 @@ error:
       other: "You can't vote for your own post!"
     not_found:
       other: "object not found"
+    verification_failed:
+      other: "verification failed"
+    email_or_password_incorrect:
+      other: "email or password incorrect"
+    old_password_verification_failed:
+      other: "the old password verification failed"
+    new_password_same_as_previous_setting:
+      other: "The new password is the same as the previous setting"
   question:
     not_found:
       other: "question not found"
