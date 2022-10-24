@@ -26,11 +26,11 @@ type UploaderService struct {
 
 // NewUploaderService new upload service
 func NewUploaderService(serviceConfig *service_config.ServiceConfig) *UploaderService {
-	_, err := dir.CreatePathIsNotExist(filepath.Join(serviceConfig.UploadPath, avatarSubPath))
+	err := dir.CreateDirIfNotExist(filepath.Join(serviceConfig.UploadPath, avatarSubPath))
 	if err != nil {
 		panic(err)
 	}
-	_, err = dir.CreatePathIsNotExist(filepath.Join(serviceConfig.UploadPath, postSubPath))
+	err = dir.CreateDirIfNotExist(filepath.Join(serviceConfig.UploadPath, postSubPath))
 	if err != nil {
 		panic(err)
 	}
