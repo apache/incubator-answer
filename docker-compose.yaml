@@ -11,7 +11,7 @@ services:
     links:
       - db
     volumes:
-      - ./answer/data:/data
+      - ./answer-data/data:/data
   db:
     image: mariadb:10.4.7
     ports:
@@ -25,4 +25,4 @@ services:
       timeout: 20s
       retries: 10
     volumes:
-      - ./answer/mysql:/var/lib/mysql
+      - ./answer-data/mysql:/var/lib/mysql
