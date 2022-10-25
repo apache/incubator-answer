@@ -44,7 +44,7 @@ func installConfigFile() {
 		return
 	}
 
-	if _, err := dir.CreatePathIsNotExist(ConfigFilePath); err != nil {
+	if err := dir.CreateDirIfNotExist(ConfigFilePath); err != nil {
 		fmt.Printf("[config-file] create directory fail %s\n", err.Error())
 		return
 	}
@@ -59,7 +59,7 @@ func installConfigFile() {
 
 func installUploadDir() {
 	fmt.Println("[upload-dir] try to install...")
-	if _, err := dir.CreatePathIsNotExist(UploadFilePath); err != nil {
+	if err := dir.CreateDirIfNotExist(UploadFilePath); err != nil {
 		fmt.Printf("[upload-dir] install fail %s\n", err.Error())
 	} else {
 		fmt.Printf("[upload-dir] install success, upload directory is %s\n", UploadFilePath)
@@ -68,7 +68,7 @@ func installUploadDir() {
 
 func installI18nBundle() {
 	fmt.Println("[i18n] try to install i18n bundle...")
-	if _, err := dir.CreatePathIsNotExist(I18nPath); err != nil {
+	if err := dir.CreateDirIfNotExist(I18nPath); err != nil {
 		fmt.Println(err.Error())
 		return
 	}
