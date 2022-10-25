@@ -6,7 +6,6 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/pacman/log"
 )
 
 // SearchController tag controller
@@ -36,7 +35,6 @@ func (sc *SearchController) Search(ctx *gin.Context) {
 		return
 	}
 	dto.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	log.Error(dto)
 
 	resp, total, extra, err := sc.searchService.Search(ctx, &dto)
 
