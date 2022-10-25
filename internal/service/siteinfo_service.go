@@ -143,7 +143,7 @@ func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.Upda
 		return err
 	}
 	if len(req.TestEmailRecipient) > 0 {
-		title, body, err := s.emailService.TestTemplate()
+		title, body, err := s.emailService.TestTemplate(ctx)
 		if err != nil {
 			return err
 		}
