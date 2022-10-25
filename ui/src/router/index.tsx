@@ -5,7 +5,7 @@ import Layout from '@answer/pages/Layout';
 import routeConfig from '@/router/route-config';
 
 import RouteRules from '@/router/route-rules';
-import { RouteNode } from './types';
+import { RouteNode } from '@/router/types';
 
 const routes: RouteObject[] = [];
 

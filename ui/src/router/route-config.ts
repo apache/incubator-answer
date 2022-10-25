@@ -1,4 +1,4 @@
-import { RouteNode } from './types';
+import { RouteNode } from '@/router/types';
 
 const routeConfig: RouteNode[] = [
   {
