@@ -9,16 +9,16 @@ import (
 	"strings"
 
 	"github.com/Chain-Zhang/pinyin"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/activity"
+	"github.com/answerdev/answer/internal/service/auth"
+	"github.com/answerdev/answer/internal/service/export"
+	"github.com/answerdev/answer/internal/service/service_config"
+	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/checker"
 	"github.com/google/uuid"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/activity"
-	"github.com/segmentfault/answer/internal/service/auth"
-	"github.com/segmentfault/answer/internal/service/export"
-	"github.com/segmentfault/answer/internal/service/service_config"
-	usercommon "github.com/segmentfault/answer/internal/service/user_common"
-	"github.com/segmentfault/answer/pkg/checker"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"golang.org/x/crypto/bcrypt"
@@ -65,7 +65,7 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 }
 
 // GetUserStatus get user info by user id
-func (us *UserService) GetUserStatus(ctx context.Context, userID string) (resp *schema.GetUserStatusResp, err error) {
+func (us *UserService) GetUserStatus(ctx context.Context, userID, token string) (resp *schema.GetUserStatusResp, err error) {
 	resp = &schema.GetUserStatusResp{}
 	if len(userID) == 0 {
 		return resp, nil
@@ -76,6 +76,16 @@ func (us *UserService) GetUserStatus(ctx context.Context, userID string) (resp *
 	}
 	if !exist {
 		return nil, errors.BadRequest(reason.UserNotFound)
+	}
+
+	userCacheInfo := &entity.UserCacheInfo{
+		UserID:      userID,
+		UserStatus:  userInfo.Status,
+		EmailStatus: userInfo.MailStatus,
+	}
+	err = us.authService.UpdateUserCacheInfo(ctx, token, userCacheInfo)
+	if err != nil {
+		return nil, err
 	}
 	resp = &schema.GetUserStatusResp{
 		Status: schema.UserStatusShow[userInfo.Status],

@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"regexp"
 
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/pkg/checker"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/base/validator"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/pkg/checker"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -195,7 +195,7 @@ type UserRegisterReq struct {
 
 func (u *UserRegisterReq) Check() (errField *validator.ErrorField, err error) {
 	// TODO i18n
-	err = checker.PassWordCheck(8, 32, 0, u.Pass)
+	err = checker.CheckPassword(8, 32, 0, u.Pass)
 	if err != nil {
 		return &validator.ErrorField{
 			Key:   "pass",
@@ -214,7 +214,7 @@ type UserModifyPassWordRequest struct {
 
 func (u *UserModifyPassWordRequest) Check() (errField *validator.ErrorField, err error) {
 	// TODO i18n
-	err = checker.PassWordCheck(8, 32, 0, u.Pass)
+	err = checker.CheckPassword(8, 32, 0, u.Pass)
 	if err != nil {
 		return &validator.ErrorField{
 			Key:   "pass",
@@ -272,7 +272,7 @@ type UserRePassWordRequest struct {
 
 func (u *UserRePassWordRequest) Check() (errField *validator.ErrorField, err error) {
 	// TODO i18n
-	err = checker.PassWordCheck(8, 32, 0, u.Pass)
+	err = checker.CheckPassword(8, 32, 0, u.Pass)
 	if err != nil {
 		return &validator.ErrorField{
 			Key:   "pass",
@@ -351,4 +351,9 @@ type UserChangeEmailVerifyReq struct {
 type UserVerifyEmailSendReq struct {
 	CaptchaID   string `validate:"omitempty,gt=0,lte=500" json:"captcha_id"`
 	CaptchaCode string `validate:"omitempty,gt=0,lte=500" json:"captcha_code"`
+}
+
+type UserVerifyEmailErrorResponse struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
 }

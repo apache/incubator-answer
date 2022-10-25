@@ -2,17 +2,13 @@ package cli
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
 	"os"
 	"path/filepath"
 
-	"github.com/segmentfault/answer/assets"
-	"github.com/segmentfault/answer/configs"
-	"github.com/segmentfault/answer/i18n"
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/pkg/dir"
+	"github.com/answerdev/answer/configs"
+	"github.com/answerdev/answer/i18n"
+	"github.com/answerdev/answer/pkg/dir"
 )
 
 const (
@@ -48,7 +44,7 @@ func installConfigFile() {
 		return
 	}
 
-	if _, err := dir.CreatePathIsNotExist(ConfigFilePath); err != nil {
+	if err := dir.CreateDirIfNotExist(ConfigFilePath); err != nil {
 		fmt.Printf("[config-file] create directory fail %s\n", err.Error())
 		return
 	}
@@ -63,7 +59,7 @@ func installConfigFile() {
 
 func installUploadDir() {
 	fmt.Println("[upload-dir] try to install...")
-	if _, err := dir.CreatePathIsNotExist(UploadFilePath); err != nil {
+	if err := dir.CreateDirIfNotExist(UploadFilePath); err != nil {
 		fmt.Printf("[upload-dir] install fail %s\n", err.Error())
 	} else {
 		fmt.Printf("[upload-dir] install success, upload directory is %s\n", UploadFilePath)
@@ -72,7 +68,7 @@ func installUploadDir() {
 
 func installI18nBundle() {
 	fmt.Println("[i18n] try to install i18n bundle...")
-	if _, err := dir.CreatePathIsNotExist(I18nPath); err != nil {
+	if err := dir.CreateDirIfNotExist(I18nPath); err != nil {
 		fmt.Println(err.Error())
 		return
 	}
@@ -114,38 +110,5 @@ func writerFile(filePath, content string) error {
 	if err := writer.Flush(); err != nil {
 		return err
 	}
-	return nil
-}
-
-// InitDB init db
-func InitDB(dataConf *data.Database) (err error) {
-	fmt.Println("[database] try to initialize database")
-	db, err := data.NewDB(false, dataConf)
-	if err != nil {
-		return err
-	}
-	// check db connection
-	if err = db.Ping(); err != nil {
-		return err
-	}
-	fmt.Println("[database] connect success")
-
-	exist, err := db.IsTableExist(&entity.User{})
-	if err != nil {
-		return err
-	}
-	if exist {
-		fmt.Println("[database] already exists")
-		return nil
-	}
-
-	// create table if not exist
-	s := &bytes.Buffer{}
-	s.Write(assets.AnswerSql)
-	_, err = db.Import(s)
-	if err != nil {
-		return err
-	}
-	fmt.Println("[database] execute sql successfully")
 	return nil
 }

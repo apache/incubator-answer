@@ -1,8 +1,8 @@
 package handler
 
 import (
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/constant"
 	"github.com/segmentfault/pacman/i18n"
 )
 

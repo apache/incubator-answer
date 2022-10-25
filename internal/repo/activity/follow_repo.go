@@ -3,16 +3,16 @@ package activity
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/service/activity_common"
-	"github.com/segmentfault/answer/internal/service/follow"
-	"github.com/segmentfault/answer/pkg/obj"
+	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/follow"
+	"github.com/answerdev/answer/pkg/obj"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/builder"
 
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/service/unique"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/xorm"
 )
@@ -38,7 +38,7 @@ func NewFollowRepo(
 }
 
 func (ar *FollowRepo) Follow(ctx context.Context, objectId, userId string) error {
-	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(nil, objectId, "follow")
+	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(ctx, objectId, "follow")
 	if err != nil {
 		return err
 	}
@@ -99,7 +99,7 @@ func (ar *FollowRepo) Follow(ctx context.Context, objectId, userId string) error
 }
 
 func (ar *FollowRepo) FollowCancel(ctx context.Context, objectId, userId string) error {
-	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(nil, objectId, "follow")
+	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(ctx, objectId, "follow")
 	if err != nil {
 		return err
 	}
@@ -138,6 +138,9 @@ func (ar *FollowRepo) FollowCancel(ctx context.Context, objectId, userId string)
 
 func (ar *FollowRepo) updateFollows(ctx context.Context, session *xorm.Session, objectId string, follows int) error {
 	objectType, err := obj.GetObjectTypeStrByObjectID(objectId)
+	if err != nil {
+		return err
+	}
 	switch objectType {
 	case "question":
 		_, err = session.Where("id = ?", objectId).Incr("follow_count", follows).Update(&entity.Question{})

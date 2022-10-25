@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/segmentfault/answer/internal/base/constant"
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/service/auth"
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -41,6 +41,14 @@ func (ar *authRepo) GetUserStatus(ctx context.Context, userID string) (userInfo 
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return userInfo, nil
+}
+
+func (ar *authRepo) RemoveUserStatus(ctx context.Context, userID string) (err error) {
+	err = ar.data.Cache.Del(ctx, constant.UserStatusChangedCacheKey+userID)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
 }
 
 func (ar *authRepo) SetUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) (err error) {

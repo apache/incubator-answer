@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/segmentfault/answer/internal/cli"
+	"github.com/answerdev/answer/internal/cli"
+	"github.com/answerdev/answer/internal/migrations"
 	"github.com/spf13/cobra"
 )
 
@@ -18,11 +19,11 @@ var (
 )
 
 func init() {
-	rootCmd.Version = Version
+	rootCmd.Version = fmt.Sprintf("%s\nrevision: %s\nbuild time: %s", Version, Revision, Time)
 
 	initCmd.Flags().StringVarP(&dataDirPath, "data-path", "C", "/data/", "data path, eg: -C ./data/")
 
-	runCmd.Flags().StringVarP(&configFilePath, "config", "c", "", "config path, eg: -c config.yaml")
+	rootCmd.PersistentFlags().StringVarP(&configFilePath, "config", "c", "", "config path, eg: -c config.yaml")
 
 	dumpCmd.Flags().StringVarP(&dumpDataPath, "path", "p", "./", "dump data path, eg: -p ./dump/data/")
 
@@ -67,7 +68,7 @@ To run answer, use:
 				return
 			}
 			fmt.Println("read config successfully")
-			if err := cli.InitDB(c.Data.Database); err != nil {
+			if err := migrations.InitDB(c.Data.Database); err != nil {
 				fmt.Println("init database error: ", err.Error())
 				return
 			}
@@ -81,7 +82,16 @@ To run answer, use:
 		Short: "upgrade Answer version",
 		Long:  `upgrade Answer version`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("The current app version is 1.0.0, the latest version is 1.0.0, no need to upgrade.")
+			c, err := readConfig()
+			if err != nil {
+				fmt.Println("read config failed: ", err.Error())
+				return
+			}
+			if err = migrations.Migrate(c.Data.Database); err != nil {
+				fmt.Println("migrate failed: ", err.Error())
+				return
+			}
+			fmt.Println("upgrade done")
 		},
 	}
 

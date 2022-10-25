@@ -4,10 +4,10 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/constant"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/base/validator"
 	myErrors "github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )

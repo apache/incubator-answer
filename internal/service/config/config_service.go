@@ -8,6 +8,7 @@ type ConfigRepo interface {
 	GetArrayString(key string) ([]string, error)
 	GetConfigType(key string) (int, error)
 	GetConfigById(id int, value any) (err error)
+	SetConfig(key, value string) (err error)
 }
 
 // ConfigService user service

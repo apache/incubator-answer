@@ -34,7 +34,7 @@ const Index: FC<Props> = ({ count = 0, order = 'default' }) => {
       <QueryGroup
         data={sortBtns}
         currentSort={order === 'updated' ? 'newest' : 'score'}
-        i18nkeyPrefix="question_detail.answers"
+        i18nKeyPrefix="question_detail.answers"
       />
     </div>
   );

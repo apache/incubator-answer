@@ -5,16 +5,17 @@ import (
 	"path"
 	"strings"
 
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/middleware"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/action"
+	"github.com/answerdev/answer/internal/service/auth"
+	"github.com/answerdev/answer/internal/service/export"
+	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/handler"
-	"github.com/segmentfault/answer/internal/base/middleware"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service"
-	"github.com/segmentfault/answer/internal/service/action"
-	"github.com/segmentfault/answer/internal/service/auth"
-	"github.com/segmentfault/answer/internal/service/export"
-	"github.com/segmentfault/answer/internal/service/uploader"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -91,7 +92,8 @@ func (uc *UserController) GetOtherUserInfoByUsername(ctx *gin.Context) {
 // @Router /answer/api/v1/user/status [get]
 func (uc *UserController) GetUserStatus(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
-	resp, err := uc.userService.GetUserStatus(ctx, userID)
+	token := middleware.ExtractToken(ctx)
+	resp, err := uc.userService.GetUserStatus(ctx, userID, token)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -112,20 +114,24 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 
 	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecord_Type_Login, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), gin.H{
-			"key":   "captcha_code",
-			"value": "verification failed",
-		})
+		resp := schema.UserVerifyEmailErrorResponse{
+			Key:   "captcha_code",
+			Value: "error.object.verification_failed",
+		}
+		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
 		return
 	}
 
 	resp, err := uc.userService.EmailLogin(ctx, req)
 	if err != nil {
 		_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecord_Type_Login, ctx.ClientIP())
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), gin.H{
-			"key":   "e_mail",
-			"value": "Email or password incorrect",
-		})
+		resp := schema.UserVerifyEmailErrorResponse{
+			Key:   "e_mail",
+			Value: "error.object.email_or_password_incorrect",
+		}
+		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
 		return
 	}
 	uc.actionService.ActionRecordDel(ctx, schema.ActionRecord_Type_Login, ctx.ClientIP())
@@ -148,10 +154,12 @@ func (uc *UserController) RetrievePassWord(ctx *gin.Context) {
 	}
 	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecord_Type_Find_Pass, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), gin.H{
-			"key":   "captcha_code",
-			"value": "verification failed",
-		})
+		resp := schema.UserVerifyEmailErrorResponse{
+			Key:   "captcha_code",
+			Value: "error.object.verification_failed",
+		}
+		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
 		return
 	}
 	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecord_Type_Find_Pass, ctx.ClientIP())
@@ -277,10 +285,13 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP(),
 		req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
-		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), gin.H{
-			"key":   "captcha_code",
-			"value": "verification failed",
-		})
+		resp := schema.UserVerifyEmailErrorResponse{
+			Key:   "captcha_code",
+			Value: "error.object.verification_failed",
+		}
+		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
+
 		return
 	}
 	uc.actionService.ActionRecordAdd(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP())
@@ -311,17 +322,22 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 		return
 	}
 	if !oldPassVerification {
-		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), gin.H{
-			"key":   "old_pass",
-			"value": "the old password verification failed",
-		})
+		resp := schema.UserVerifyEmailErrorResponse{
+			Key:   "captcha_code",
+			Value: "error.object.old_password_verification_failed",
+		}
+		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
 		return
 	}
 	if req.OldPass == req.Pass {
-		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), gin.H{
-			"key":   "pass",
-			"value": "The new password is the same as the previous setting",
-		})
+
+		resp := schema.UserVerifyEmailErrorResponse{
+			Key:   "captcha_code",
+			Value: "error.object.new_password_same_as_previous_setting",
+		}
+		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
 		return
 	}
 	err = uc.userService.UserModifyPassWord(ctx, req)

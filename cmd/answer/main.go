@@ -4,9 +4,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/answerdev/answer/internal/base/conf"
+	"github.com/answerdev/answer/internal/cli"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/conf"
-	"github.com/segmentfault/answer/internal/cli"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/contrib/conf/viper"
 	"github.com/segmentfault/pacman/contrib/log/zap"
@@ -20,6 +20,10 @@ var (
 	Name = "answer"
 	// Version is the version of the project
 	Version = "development"
+	// Revision is the git short commit revision number
+	Revision = ""
+	// Time is the build time of the project
+	Time = ""
 	// log level
 	logLevel = os.Getenv("LOG_LEVEL")
 	// log path
@@ -31,7 +35,6 @@ var (
 // @name Authorization
 func main() {
 	Execute()
-	return
 }
 
 func runApp() {

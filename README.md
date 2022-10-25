@@ -1,10 +1,10 @@
 <a href="https://answer.dev">
-    <img alt="logo" src="docs/img/answer-logo-flat.svg" height="63px">
+    <img alt="logo" src="docs/img/logo.svg" height="99px">
 </a>
 
 # Answer - Build Q&A community
 
-A minimalist open-source knowledge based community software. You can use it to quickly build your Q&A community for product technical support, user Q&A, fans communication, and more.
+An open-source knowledge based community software. You can use it to quickly build your Q&A community for product technical support, customer support, user communication, and more.
 
 To learn more about the project, visit [answer.dev](https://answer.dev).
 
@@ -22,7 +22,7 @@ To learn more about the project, visit [answer.dev](https://answer.dev).
 
 ```bash
 mkdir answer && cd answer
-wget https://github.com/segmentfault/answer/releases/latest/download/docker-compose.yaml
+wget https://raw.githubusercontent.com/answerdev/answer/main/docker-compose.yaml
 docker-compose up
 ```
 

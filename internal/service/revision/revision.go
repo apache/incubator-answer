@@ -2,7 +2,7 @@ package revision
 
 import (
 	"context"
-	"github.com/segmentfault/answer/internal/entity"
+	"github.com/answerdev/answer/internal/entity"
 	"xorm.io/xorm"
 )
 

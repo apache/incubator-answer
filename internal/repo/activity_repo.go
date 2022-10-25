@@ -4,16 +4,16 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/service/activity_common"
-	"github.com/segmentfault/answer/pkg/obj"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/pkg/obj"
 	"xorm.io/builder"
 	"xorm.io/xorm"
 
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/service/config"
-	"github.com/segmentfault/answer/internal/service/unique"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -75,7 +75,7 @@ func (ar *ActivityRepo) GetActivity(ctx context.Context, session *xorm.Session,
 }
 
 func (ar *ActivityRepo) GetUserIDObjectIDActivitySum(ctx context.Context, userID, objectID string) (int, error) {
-	sum := &entity.ActivityRunkSum{}
+	sum := &entity.ActivityRankSum{}
 	_, err := ar.data.DB.Table(entity.Activity{}.TableName()).
 		Select("sum(rank) as rank").
 		Where("user_id =?", userID).

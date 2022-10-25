@@ -6,11 +6,11 @@ import (
 	"path"
 	"path/filepath"
 
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/service/service_config"
+	"github.com/answerdev/answer/pkg/dir"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/service/service_config"
-	"github.com/segmentfault/answer/pkg/dir"
-	"github.com/segmentfault/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -26,11 +26,11 @@ type UploaderService struct {
 
 // NewUploaderService new upload service
 func NewUploaderService(serviceConfig *service_config.ServiceConfig) *UploaderService {
-	_, err := dir.CreatePathIsNotExist(filepath.Join(serviceConfig.UploadPath, avatarSubPath))
+	err := dir.CreateDirIfNotExist(filepath.Join(serviceConfig.UploadPath, avatarSubPath))
 	if err != nil {
 		panic(err)
 	}
-	_, err = dir.CreatePathIsNotExist(filepath.Join(serviceConfig.UploadPath, postSubPath))
+	err = dir.CreateDirIfNotExist(filepath.Join(serviceConfig.UploadPath, postSubPath))
 	if err != nil {
 		panic(err)
 	}

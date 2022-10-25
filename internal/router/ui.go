@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/ui"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -76,9 +76,7 @@ func (a *UIRouter) Register(r *gin.Engine) {
 		case "/favicon.ico":
 			c.Header("content-type", "image/vnd.microsoft.icon")
 			filePath = UIRootFilePath + name
-		case "/logo192.png":
-			filePath = UIRootFilePath + name
-		case "/logo512.png":
+		case "/manifest.json":
 			filePath = UIRootFilePath + name
 		default:
 			filePath = UIIndexFilePath

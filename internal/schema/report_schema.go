@@ -3,7 +3,7 @@ package schema
 import (
 	"time"
 
-	"github.com/segmentfault/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/constant"
 )
 
 // AddReportReq add report request

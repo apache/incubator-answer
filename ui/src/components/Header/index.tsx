@@ -56,9 +56,9 @@ const Header: FC = () => {
   useEffect(() => {
     const collapse = document.querySelector('#navBarContent');
     if (collapse && collapse.classList.contains('show')) {
-      const toogle = document.querySelector('#navBarToggle') as HTMLElement;
-      if (toogle) {
-        toogle?.click();
+      const toggle = document.querySelector('#navBarToggle') as HTMLElement;
+      if (toggle) {
+        toggle?.click();
       }
     }
   }, [location.pathname]);

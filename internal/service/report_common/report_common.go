@@ -2,8 +2,8 @@ package report_common
 
 import (
 	"context"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
 )
 
 // ReportRepo report repository

@@ -3,15 +3,15 @@ package report_handle_backyard
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/service/config"
 
-	"github.com/segmentfault/answer/internal/base/constant"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/comment"
-	"github.com/segmentfault/answer/internal/service/notice_queue"
-	questioncommon "github.com/segmentfault/answer/internal/service/question_common"
-	"github.com/segmentfault/answer/pkg/obj"
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/comment"
+	"github.com/answerdev/answer/internal/service/notice_queue"
+	questioncommon "github.com/answerdev/answer/internal/service/question_common"
+	"github.com/answerdev/answer/pkg/obj"
 )
 
 type ReportHandle struct {

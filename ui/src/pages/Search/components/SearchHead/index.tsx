@@ -22,7 +22,7 @@ const Index: FC<Props> = ({ sort, count = 0 }) => {
         data={sortBtns}
         currentSort={sort}
         sortKey="order"
-        i18nkeyPrefix="search.sort_btns"
+        i18nKeyPrefix="search.sort_btns"
       />
     </ListGroupItem>
   );

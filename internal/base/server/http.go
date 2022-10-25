@@ -1,9 +1,10 @@
 package server
 
 import (
+	brotli "github.com/anargu/gin-brotli"
+	"github.com/answerdev/answer/internal/base/middleware"
+	"github.com/answerdev/answer/internal/router"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/middleware"
-	"github.com/segmentfault/answer/internal/router"
 )
 
 // NewHTTPServer new http server.
@@ -20,6 +21,7 @@ func NewHTTPServer(debug bool,
 		gin.SetMode(gin.ReleaseMode)
 	}
 	r := gin.New()
+	r.Use(brotli.Brotli(brotli.DefaultCompression))
 	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK") })
 
 	viewRouter.Register(r)

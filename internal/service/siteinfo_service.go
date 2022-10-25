@@ -4,20 +4,24 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/export"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 )
 
 type SiteInfoService struct {
 	siteInfoRepo siteinfo_common.SiteInfoRepo
+	emailService *export.EmailService
 }
 
-func NewSiteInfoService(siteInfoRepo siteinfo_common.SiteInfoRepo) *SiteInfoService {
+func NewSiteInfoService(siteInfoRepo siteinfo_common.SiteInfoRepo, emailService *export.EmailService) *SiteInfoService {
 	return &SiteInfoService{
 		siteInfoRepo: siteInfoRepo,
+		emailService: emailService,
 	}
 }
 
@@ -111,5 +115,39 @@ func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.Site
 	}
 
 	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
+	return
+}
+
+// GetSMTPConfig get smtp config
+func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
+	resp *schema.GetSMTPConfigResp, err error) {
+	emailConfig, err := s.emailService.GetEmailConfig()
+	if err != nil {
+		return nil, err
+	}
+	resp = &schema.GetSMTPConfigResp{}
+	_ = copier.Copy(resp, emailConfig)
+	return resp, nil
+}
+
+// UpdateSMTPConfig get smtp config
+func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.UpdateSMTPConfigReq) (err error) {
+	oldEmailConfig, err := s.emailService.GetEmailConfig()
+	if err != nil {
+		return err
+	}
+	_ = copier.Copy(oldEmailConfig, req)
+
+	err = s.emailService.SetEmailConfig(oldEmailConfig)
+	if err != nil {
+		return err
+	}
+	if len(req.TestEmailRecipient) > 0 {
+		title, body, err := s.emailService.TestTemplate()
+		if err != nil {
+			return err
+		}
+		go s.emailService.Send(ctx, req.TestEmailRecipient, title, body, "", "")
+	}
 	return
 }

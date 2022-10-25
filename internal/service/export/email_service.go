@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
-	"net/smtp"
 
-	"github.com/jordan-wright/email"
-	"github.com/segmentfault/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/service/config"
+	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"golang.org/x/net/context"
+	"gopkg.in/gomail.v2"
 )
 
 // EmailService kit service
@@ -35,18 +36,27 @@ func NewEmailService(configRepo config.ConfigRepo, emailRepo EmailRepo) *EmailSe
 
 // EmailConfig email config
 type EmailConfig struct {
-	EmailWebName        string `json:"email_web_name"`
-	EmailFrom           string `json:"email_from"`
-	EmailFromPass       string `json:"email_from_pass"`
-	EmailFromHostname   string `json:"email_from_hostname"`
-	EmailFromSMTP       string `json:"email_from_smtp"`
-	EmailFromName       string `json:"email_from_name"`
-	EmailRegisterTitle  string `json:"email_register_title"`
-	EmailRegisterBody   string `json:"email_register_body"`
-	EmailPassResetTitle string `json:"email_pass_reset_title"`
-	EmailPassResetBody  string `json:"email_pass_reset_body"`
-	EmailChangeTitle    string `json:"email_change_title"`
-	EmailChangeBody     string `json:"email_change_body"`
+	FromEmail          string `json:"from_email"`
+	FromName           string `json:"from_name"`
+	SMTPHost           string `json:"smtp_host"`
+	SMTPPort           int    `json:"smtp_port"`
+	Encryption         string `json:"encryption"` // "" SSL
+	SMTPUsername       string `json:"smtp_username"`
+	SMTPPassword       string `json:"smtp_password"`
+	SMTPAuthentication bool   `json:"smtp_authentication"`
+
+	RegisterTitle  string `json:"register_title"`
+	RegisterBody   string `json:"register_body"`
+	PassResetTitle string `json:"pass_reset_title"`
+	PassResetBody  string `json:"pass_reset_body"`
+	ChangeTitle    string `json:"change_title"`
+	ChangeBody     string `json:"change_body"`
+	TestTitle      string `json:"test_title"`
+	TestBody       string `json:"test_body"`
+}
+
+func (e *EmailConfig) IsSSL() bool {
+	return e.Encryption == "SSL"
 }
 
 type RegisterTemplateData struct {
@@ -64,30 +74,41 @@ type ChangeEmailTemplateData struct {
 	ChangeEmailUrl string
 }
 
-// Send email send
-func (es *EmailService) Send(ctx context.Context, emailAddr, title, body, code, content string) {
-	emailClient := email.NewEmail()
+type TestTemplateData struct {
+	SiteName string
+}
 
-	ec, err := es.getEmailConfig()
+// Send email send
+func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body, code, codeContent string) {
+	log.Infof("try to send email to %s", toEmailAddr)
+	ec, err := es.GetEmailConfig()
 	if err != nil {
-		log.Error(err)
+		log.Errorf("get email config failed: %s", err)
 		return
 	}
 
-	emailClient.From = fmt.Sprintf("%s <%s>", ec.EmailFromName, ec.EmailFrom)
-	emailClient.To = []string{emailAddr}
-	emailClient.Subject = title
-	emailClient.HTML = []byte(body)
-	err = emailClient.Send(ec.EmailFromSMTP, smtp.PlainAuth("", ec.EmailFrom, ec.EmailFromPass, ec.EmailFromHostname))
-	if err != nil {
-		log.Error(err)
+	m := gomail.NewMessage()
+	m.SetHeader("From", ec.FromEmail)
+	m.SetHeader("To", toEmailAddr)
+	m.SetHeader("Subject", subject)
+	m.SetBody("text/html", body)
+
+	d := gomail.NewDialer(ec.SMTPHost, ec.SMTPPort, ec.SMTPUsername, ec.SMTPPassword)
+	if ec.IsSSL() {
+		d.SSL = true
+	}
+	if err := d.DialAndSend(m); err != nil {
+		log.Errorf("send email to %s failed: %s", toEmailAddr, err)
+	} else {
+		log.Infof("send email to %s success", toEmailAddr)
 	}
 
-	err = es.emailRepo.SetCode(ctx, code, content)
-	if err != nil {
-		log.Error(err)
+	if len(code) > 0 {
+		err = es.emailRepo.SetCode(ctx, code, codeContent)
+		if err != nil {
+			log.Error(err)
+		}
 	}
-	return
 }
 
 // VerifyUrlExpired email send
@@ -100,13 +121,15 @@ func (es *EmailService) VerifyUrlExpired(ctx context.Context, code string) (cont
 }
 
 func (es *EmailService) RegisterTemplate(registerUrl string) (title, body string, err error) {
-	ec, err := es.getEmailConfig()
+	ec, err := es.GetEmailConfig()
 	if err != nil {
 		return
 	}
 
-	templateData := RegisterTemplateData{ec.EmailWebName, registerUrl}
-	tmpl, err := template.New("register_title").Parse(ec.EmailRegisterTitle)
+	templateData := RegisterTemplateData{
+		SiteName: ec.FromName, RegisterUrl: registerUrl,
+	}
+	tmpl, err := template.New("register_title").Parse(ec.RegisterTitle)
 	if err != nil {
 		return "", "", err
 	}
@@ -117,7 +140,10 @@ func (es *EmailService) RegisterTemplate(registerUrl string) (title, body string
 		return "", "", err
 	}
 
-	tmpl, err = template.New("register_body").Parse(ec.EmailRegisterBody)
+	tmpl, err = template.New("register_body").Parse(ec.RegisterBody)
+	if err != nil {
+		return "", "", err
+	}
 	err = tmpl.Execute(bodyBuf, templateData)
 	if err != nil {
 		return "", "", err
@@ -127,13 +153,13 @@ func (es *EmailService) RegisterTemplate(registerUrl string) (title, body string
 }
 
 func (es *EmailService) PassResetTemplate(passResetUrl string) (title, body string, err error) {
-	ec, err := es.getEmailConfig()
+	ec, err := es.GetEmailConfig()
 	if err != nil {
 		return
 	}
 
-	templateData := PassResetTemplateData{ec.EmailWebName, passResetUrl}
-	tmpl, err := template.New("pass_reset_title").Parse(ec.EmailPassResetTitle)
+	templateData := PassResetTemplateData{SiteName: ec.FromName, PassResetUrl: passResetUrl}
+	tmpl, err := template.New("pass_reset_title").Parse(ec.PassResetTitle)
 	if err != nil {
 		return "", "", err
 	}
@@ -144,7 +170,10 @@ func (es *EmailService) PassResetTemplate(passResetUrl string) (title, body stri
 		return "", "", err
 	}
 
-	tmpl, err = template.New("pass_reset_body").Parse(ec.EmailPassResetBody)
+	tmpl, err = template.New("pass_reset_body").Parse(ec.PassResetBody)
+	if err != nil {
+		return "", "", err
+	}
 	err = tmpl.Execute(bodyBuf, templateData)
 	if err != nil {
 		return "", "", err
@@ -153,16 +182,16 @@ func (es *EmailService) PassResetTemplate(passResetUrl string) (title, body stri
 }
 
 func (es *EmailService) ChangeEmailTemplate(changeEmailUrl string) (title, body string, err error) {
-	ec, err := es.getEmailConfig()
+	ec, err := es.GetEmailConfig()
 	if err != nil {
 		return
 	}
 
 	templateData := ChangeEmailTemplateData{
-		SiteName:       ec.EmailWebName,
+		SiteName:       ec.FromName,
 		ChangeEmailUrl: changeEmailUrl,
 	}
-	tmpl, err := template.New("email_change_title").Parse(ec.EmailChangeTitle)
+	tmpl, err := template.New("email_change_title").Parse(ec.ChangeTitle)
 	if err != nil {
 		return "", "", err
 	}
@@ -173,7 +202,10 @@ func (es *EmailService) ChangeEmailTemplate(changeEmailUrl string) (title, body 
 		return "", "", err
 	}
 
-	tmpl, err = template.New("email_change_body").Parse(ec.EmailChangeBody)
+	tmpl, err = template.New("email_change_body").Parse(ec.ChangeBody)
+	if err != nil {
+		return "", "", err
+	}
 	err = tmpl.Execute(bodyBuf, templateData)
 	if err != nil {
 		return "", "", err
@@ -181,7 +213,36 @@ func (es *EmailService) ChangeEmailTemplate(changeEmailUrl string) (title, body 
 	return titleBuf.String(), bodyBuf.String(), nil
 }
 
-func (es *EmailService) getEmailConfig() (ec *EmailConfig, err error) {
+func (es *EmailService) TestTemplate() (title, body string, err error) {
+	ec, err := es.GetEmailConfig()
+	if err != nil {
+		return
+	}
+
+	templateData := TestTemplateData{
+		SiteName: ec.FromName,
+	}
+
+	titleBuf := &bytes.Buffer{}
+	bodyBuf := &bytes.Buffer{}
+
+	tmpl, err := template.New("test_title").Parse(ec.TestTitle)
+	if err != nil {
+		return "", "", fmt.Errorf("email test title template parse error: %s", err)
+	}
+	err = tmpl.Execute(titleBuf, templateData)
+	if err != nil {
+		return "", "", fmt.Errorf("email test body template parse error: %s", err)
+	}
+	tmpl, err = template.New("test_body").Parse(ec.TestBody)
+	err = tmpl.Execute(bodyBuf, templateData)
+	if err != nil {
+		return "", "", err
+	}
+	return titleBuf.String(), bodyBuf.String(), nil
+}
+
+func (es *EmailService) GetEmailConfig() (ec *EmailConfig, err error) {
 	emailConf, err := es.configRepo.GetString("email.config")
 	if err != nil {
 		return nil, err
@@ -189,7 +250,13 @@ func (es *EmailService) getEmailConfig() (ec *EmailConfig, err error) {
 	ec = &EmailConfig{}
 	err = json.Unmarshal([]byte(emailConf), ec)
 	if err != nil {
-		return nil, err
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return ec, nil
+}
+
+// SetEmailConfig set email config
+func (es *EmailService) SetEmailConfig(ec *EmailConfig) (err error) {
+	data, _ := json.Marshal(ec)
+	return es.configRepo.SetConfig("email.config", string(data))
 }

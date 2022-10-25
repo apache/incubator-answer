@@ -1,8 +1,12 @@
-name: Build Docker Image
+name: Build GitHub Image
 
 on:
   push:
     branches: [ "main" ]
+    tags:
+      - 2.*
+      - 1.*
+      - 0.*
   pull_request:
     branches: [ "main" ]
 
@@ -38,6 +42,7 @@ jobs:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE }}
         tags: |
               type=raw,value=latest
+
 
     - name: Build Img
       uses: docker/build-push-action@v3

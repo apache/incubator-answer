@@ -1,5 +1,5 @@
 <a href="https://answer.dev">
-    <img alt="logo" src="docs/img/answer-logo-flat.svg" height="63px">
+    <img alt="logo" src="docs/img/logo.svg" height="99px">
 </a>
 
 # Answer - 构建问答社区
@@ -8,7 +8,7 @@
 
 了解更多关于该项目的内容，请访问 [answer.dev](https://answer.dev).
 
-[![LICENSE](https://img.shields.io/badge/License-MIT-green)](https://github.com/segmentfault/answer/blob/master/LICENSE)
+[![LICENSE](https://img.shields.io/badge/License-Apache-green)](https://github.com/answerdev/answer/blob/main/LICENSE)
 [![Language](https://img.shields.io/badge/Language-Go-blue.svg)](https://golang.org/)
 [![Language](https://img.shields.io/badge/Language-React-blue.svg)](https://reactjs.org/)
 
@@ -22,7 +22,7 @@
 
 ```bash
 mkdir answer && cd answer
-wget https://github.com/segmentfault/answer/releases/latest/download/docker-compose.yaml
+wget https://raw.githubusercontent.com/answerdev/answer/main/docker-compose.yaml
 docker-compose up
 ```
 
@@ -36,4 +36,4 @@ docker-compose up
 
 ## License
 
-[MIT](https://github.com/segmentfault/answer/blob/master/LICENSE)
+[Apache](https://github.com/answerdev/answer/blob/main/LICENSE)

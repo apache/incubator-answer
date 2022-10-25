@@ -5,18 +5,18 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/service/activity_common"
-	"github.com/segmentfault/answer/internal/service/config"
-	"github.com/segmentfault/answer/internal/service/meta"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/service/meta"
 	"github.com/segmentfault/pacman/errors"
 
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	answercommon "github.com/segmentfault/answer/internal/service/answer_common"
-	collectioncommon "github.com/segmentfault/answer/internal/service/collection_common"
-	tagcommon "github.com/segmentfault/answer/internal/service/tag_common"
-	usercommon "github.com/segmentfault/answer/internal/service/user_common"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	answercommon "github.com/answerdev/answer/internal/service/answer_common"
+	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
+	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
+	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/segmentfault/pacman/log"
 )
 

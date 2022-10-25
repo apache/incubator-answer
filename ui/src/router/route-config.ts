@@ -179,6 +179,10 @@ const routeConfig: RouteNode[] = [
             path: 'users/:user_id',
             page: 'pages/Admin/UserOverview',
           },
+          {
+            path: 'smtp',
+            page: 'pages/Admin/Smtp',
+          },
         ],
       },
       {

@@ -391,6 +391,77 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/setting/smtp": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "GetSMTPConfig get smtp config",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "GetSMTPConfig get smtp config",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetSMTPConfigResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update smtp config",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "update smtp config",
+                "parameters": [
+                    {
+                        "description": "smtp config",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdateSMTPConfigReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/siteinfo/general": {
             "get": {
                 "security": [
@@ -3891,36 +3962,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.AddCollectionGroupReq": {
-            "type": "object",
-            "required": [
-                "create_time",
-                "default_group",
-                "name",
-                "update_time",
-                "user_id"
-            ],
-            "properties": {
-                "create_time": {
-                    "type": "string"
-                },
-                "default_group": {
-                    "description": "mark this group is default, default 1",
-                    "type": "integer"
-                },
-                "name": {
-                    "description": "the collection group name",
-                    "type": "string",
-                    "maxLength": 50
-                },
-                "update_time": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "schema.AddCommentReq": {
             "type": "object",
             "required": [
@@ -3954,28 +3995,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.AddNotificationReadReq": {
-            "type": "object",
-            "required": [
-                "is_read",
-                "message_id",
-                "user_id"
-            ],
-            "properties": {
-                "is_read": {
-                    "description": "read status(unread: 1; read 2)",
-                    "type": "integer"
-                },
-                "message_id": {
-                    "description": "message id",
-                    "type": "integer"
-                },
-                "user_id": {
-                    "description": "user id",
-                    "type": "integer"
-                }
-            }
-        },
         "schema.AddReportReq": {
             "type": "object",
             "required": [
@@ -3999,9 +4018,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.AddUserGroupReq": {
-            "type": "object"
-        },
         "schema.AdminSetQuestionStatusRequest": {
             "type": "object",
             "properties": {
@@ -4021,7 +4037,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "html": {
-                    "description": "解析后的html",
+                    "description": "html",
                     "type": "string"
                 },
                 "question_id": {
@@ -4075,7 +4091,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "html": {
-                    "description": "解析后的html",
+                    "description": "html",
                     "type": "string"
                 },
                 "id": {
@@ -4315,35 +4331,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.GetNotificationReadResp": {
-            "type": "object",
-            "properties": {
-                "created_at": {
-                    "description": "create time",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "id",
-                    "type": "integer"
-                },
-                "is_read": {
-                    "description": "read status(unread: 1; read 2)",
-                    "type": "integer"
-                },
-                "message_id": {
-                    "description": "message id",
-                    "type": "integer"
-                },
-                "updated_at": {
-                    "description": "update time",
-                    "type": "string"
-                },
-                "user_id": {
-                    "description": "user id",
-                    "type": "integer"
-                }
-            }
-        },
         "schema.GetOtherUserInfoByUsernameResp": {
             "type": "object",
             "properties": {
@@ -4547,6 +4534,36 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetSMTPConfigResp": {
+            "type": "object",
+            "properties": {
+                "encryption": {
+                    "description": "\"\" SSL",
+                    "type": "string"
+                },
+                "from_email": {
+                    "type": "string"
+                },
+                "from_name": {
+                    "type": "string"
+                },
+                "smtp_authentication": {
+                    "type": "boolean"
+                },
+                "smtp_host": {
+                    "type": "string"
+                },
+                "smtp_password": {
+                    "type": "string"
+                },
+                "smtp_port": {
+                    "type": "integer"
+                },
+                "smtp_username": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.GetTagPageResp": {
             "type": "object",
             "properties": {
@@ -4676,18 +4693,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "schema.GetUserGroupResp": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "description": "user group id",
-                    "type": "integer"
-                }
-            }
-        },
-        "schema.GetUserInfoResp": {
-            "type": "object"
         },
         "schema.GetUserPageResp": {
             "type": "object",
@@ -5038,18 +5043,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.RemoveNotificationReadReq": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "id": {
-                    "description": "id",
-                    "type": "integer"
-                }
-            }
-        },
         "schema.RemoveQuestionReq": {
             "type": "object",
             "required": [
@@ -5071,18 +5064,6 @@ const docTemplate = `{
                 "tag_id": {
                     "description": "tag_id",
                     "type": "string"
-                }
-            }
-        },
-        "schema.RemoveUserGroupReq": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "id": {
-                    "description": "user group id",
-                    "type": "integer"
                 }
             }
         },
@@ -5300,35 +5281,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UpdateCollectionGroupReq": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "create_time": {
-                    "type": "string"
-                },
-                "default_group": {
-                    "description": "mark this group is default, default 1",
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "description": "the collection group name",
-                    "type": "string",
-                    "maxLength": 50
-                },
-                "update_time": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "schema.UpdateCommentReq": {
             "type": "object",
             "required": [
@@ -5404,27 +5356,46 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UpdateNotificationReadReq": {
+        "schema.UpdateSMTPConfigReq": {
             "type": "object",
-            "required": [
-                "id"
-            ],
             "properties": {
-                "id": {
-                    "description": "id",
-                    "type": "integer"
+                "encryption": {
+                    "description": "\"\" SSL",
+                    "type": "string",
+                    "enum": [
+                        "SSL"
+                    ]
                 },
-                "is_read": {
-                    "description": "read status(unread: 1; read 2)",
-                    "type": "integer"
+                "from_email": {
+                    "type": "string",
+                    "maxLength": 256
                 },
-                "message_id": {
-                    "description": "message id",
-                    "type": "integer"
+                "from_name": {
+                    "type": "string",
+                    "maxLength": 256
                 },
-                "user_id": {
-                    "description": "user id",
-                    "type": "integer"
+                "smtp_authentication": {
+                    "type": "boolean"
+                },
+                "smtp_host": {
+                    "type": "string",
+                    "maxLength": 256
+                },
+                "smtp_password": {
+                    "type": "string",
+                    "maxLength": 256
+                },
+                "smtp_port": {
+                    "type": "integer",
+                    "maximum": 65535,
+                    "minimum": 1
+                },
+                "smtp_username": {
+                    "type": "string",
+                    "maxLength": 256
+                },
+                "test_email_recipient": {
+                    "type": "string"
                 }
             }
         },
@@ -5479,18 +5450,6 @@ const docTemplate = `{
                 "tag_id": {
                     "description": "tag_id",
                     "type": "string"
-                }
-            }
-        },
-        "schema.UpdateUserGroupReq": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "id": {
-                    "description": "user group id",
-                    "type": "integer"
                 }
             }
         },

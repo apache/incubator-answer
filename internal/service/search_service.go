@@ -3,12 +3,12 @@ package service
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/activity_common"
-	"github.com/segmentfault/answer/internal/service/search"
-	"github.com/segmentfault/answer/internal/service/search_common"
-	tagcommon "github.com/segmentfault/answer/internal/service/tag_common"
-	usercommon "github.com/segmentfault/answer/internal/service/user_common"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/search"
+	"github.com/answerdev/answer/internal/service/search_common"
+	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
+	usercommon "github.com/answerdev/answer/internal/service/user_common"
 )
 
 type Search interface {
@@ -89,5 +89,5 @@ func (ss *SearchService) Search(ctx context.Context, dto *schema.SearchDTO) (res
 		ss.objectSearch.Parse(dto)
 		resp, total, err = ss.objectSearch.Search(ctx)
 	}
-	return resp, total, extra, nil
+	return resp, total, extra, err
 }

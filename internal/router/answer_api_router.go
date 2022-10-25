@@ -1,9 +1,9 @@
 package router
 
 import (
+	"github.com/answerdev/answer/internal/controller"
+	"github.com/answerdev/answer/internal/controller_backyard"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/controller"
-	"github.com/segmentfault/answer/internal/controller_backyard"
 )
 
 type AnswerAPIRouter struct {
@@ -223,4 +223,6 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	r.GET("/siteinfo/interface", a.siteInfoController.GetInterface)
 	r.PUT("/siteinfo/general", a.siteInfoController.UpdateGeneral)
 	r.PUT("/siteinfo/interface", a.siteInfoController.UpdateInterface)
+	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
+	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
 }

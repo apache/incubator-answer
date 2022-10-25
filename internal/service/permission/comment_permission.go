@@ -1,6 +1,6 @@
 package permission
 
-import "github.com/segmentfault/answer/internal/schema"
+import "github.com/answerdev/answer/internal/schema"
 
 // TODO: There is currently no permission management
 func GetCommentPermission(userID string, commentCreatorUserID string) (

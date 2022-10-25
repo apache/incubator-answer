@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/segmentfault/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/data"
 	"xorm.io/xorm/schemas"
 )
 

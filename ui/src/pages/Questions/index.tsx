@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { PageTitle, FollowingTags } from '@answer/components';
 
-import QuestionList from '@/components/Questions';
+import QuestionList from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
 import { siteInfoStore } from '@/stores';
 

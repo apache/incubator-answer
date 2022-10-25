@@ -5,9 +5,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/search_common"
-	usercommon "github.com/segmentfault/answer/internal/service/user_common"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/search_common"
+	usercommon "github.com/answerdev/answer/internal/service/user_common"
 )
 
 type AuthorSearch struct {

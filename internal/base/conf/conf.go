@@ -1,11 +1,11 @@
 package conf
 
 import (
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/server"
-	"github.com/segmentfault/answer/internal/base/translator"
-	"github.com/segmentfault/answer/internal/router"
-	"github.com/segmentfault/answer/internal/service/service_config"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/server"
+	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/router"
+	"github.com/answerdev/answer/internal/service/service_config"
 )
 
 // AllConfig all config
