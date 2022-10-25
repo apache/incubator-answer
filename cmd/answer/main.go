@@ -4,9 +4,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/answerdev/answer/internal/base/conf"
+	"github.com/answerdev/answer/internal/cli"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/conf"
-	"github.com/segmentfault/answer/internal/cli"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/contrib/conf/viper"
 	"github.com/segmentfault/pacman/contrib/log/zap"

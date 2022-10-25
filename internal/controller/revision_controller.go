@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/handler"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service"
 	"github.com/segmentfault/pacman/errors"
 )
 

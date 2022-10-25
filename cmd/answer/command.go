@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/segmentfault/answer/internal/cli"
-	"github.com/segmentfault/answer/internal/migrations"
+	"github.com/answerdev/answer/internal/cli"
+	"github.com/answerdev/answer/internal/migrations"
 	"github.com/spf13/cobra"
 )
 

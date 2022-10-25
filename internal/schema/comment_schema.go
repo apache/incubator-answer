@@ -1,8 +1,8 @@
 package schema
 
 import (
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/answer/internal/entity"
 )
 
 // AddCommentReq add comment request

@@ -3,8 +3,8 @@ package auth
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/pkg/token"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/pkg/token"
 	"github.com/segmentfault/pacman/log"
 )
 

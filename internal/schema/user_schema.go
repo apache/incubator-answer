@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"regexp"
 
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/pkg/checker"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/base/validator"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/pkg/checker"
 	"github.com/segmentfault/pacman/errors"
 )
 

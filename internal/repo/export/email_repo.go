@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/service/export"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/service/export"
 	"github.com/segmentfault/pacman/errors"
 )
 

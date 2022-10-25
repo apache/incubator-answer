@@ -3,12 +3,12 @@ package revision_common
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/service/revision"
-	usercommon "github.com/segmentfault/answer/internal/service/user_common"
+	"github.com/answerdev/answer/internal/service/revision"
+	usercommon "github.com/answerdev/answer/internal/service/user_common"
 
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
 )
 
 // RevisionService user service

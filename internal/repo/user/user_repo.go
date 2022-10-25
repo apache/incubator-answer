@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/service/config"
-	usercommon "github.com/segmentfault/answer/internal/service/user_common"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/service/config"
+	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/segmentfault/pacman/errors"
 )
 

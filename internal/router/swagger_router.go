@@ -3,8 +3,8 @@ package router
 import (
 	"fmt"
 
+	"github.com/answerdev/answer/docs"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/docs"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )

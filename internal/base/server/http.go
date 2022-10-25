@@ -2,9 +2,9 @@ package server
 
 import (
 	brotli "github.com/anargu/gin-brotli"
+	"github.com/answerdev/answer/internal/base/middleware"
+	"github.com/answerdev/answer/internal/router"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/middleware"
-	"github.com/segmentfault/answer/internal/router"
 )
 
 // NewHTTPServer new http server.

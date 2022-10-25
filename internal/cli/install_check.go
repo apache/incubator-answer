@@ -1,16 +1,16 @@
 package cli
 
 import (
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/pkg/dir"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/pkg/dir"
 )
 
 func CheckConfigFile(configPath string) bool {
-	return dir.CheckPathExist(configPath)
+	return dir.CheckFileExist(configPath)
 }
 
 func CheckUploadDir() bool {
-	return dir.CheckPathExist(UploadFilePath)
+	return dir.CheckDirExist(UploadFilePath)
 }
 
 func CheckDB(dataConf *data.Database) bool {
