@@ -1,8 +1,9 @@
 import React, { Suspense, lazy } from 'react';
 import { RouteObject, createBrowserRouter } from 'react-router-dom';
 
-import routeConfig, { RouteNode } from '@/router/route-config';
+import routeConfig from '@/router/route-config';
 import RouteRules from '@/router/route-rules';
+import { RouteNode } from './types';
 
 const routes: RouteObject[] = [];
 
