@@ -8,6 +8,7 @@ import (
 	"github.com/segmentfault/answer/internal/schema"
 	"github.com/segmentfault/answer/internal/service/config"
 	"github.com/segmentfault/answer/internal/service/reason_common"
+	"github.com/segmentfault/pacman/log"
 )
 
 type reasonRepo struct {
@@ -40,15 +41,18 @@ func (rr *reasonRepo) ListReasons(ctx context.Context, req schema.ReasonReq) (re
 
 		cfgValue, err = rr.configRepo.GetString(reasonKey)
 		if err != nil {
+			log.Error(err)
 			continue
 		}
 
 		err = json.Unmarshal([]byte(cfgValue), &reason)
 		if err != nil {
+			log.Error(err)
 			continue
 		}
 		reasonType, err = rr.configRepo.GetConfigType(reasonKey)
 		if err != nil {
+			log.Error(err)
 			continue
 		}
 

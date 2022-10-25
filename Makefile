@@ -5,7 +5,7 @@ BIN=answer
 DIR_SRC=./cmd/answer
 DOCKER_CMD=docker
 
-GO_ENV=CGO_ENABLED=0
+#GO_ENV=CGO_ENABLED=0
 Revision=$(shell git rev-parse --short HEAD)
 GO_FLAGS=-ldflags="-X main.Version=$(VERSION) -X main.Revision=$(Revision) -X 'main.Time=`date`' -extldflags -static"
 GO=$(GO_ENV) $(shell which go)
@@ -32,6 +32,6 @@ install-ui-packages:
 
 ui:
 	@npm config set registry https://repo.huaweicloud.com/repository/npm/
-	@cd ui && pnpm install && pnpm build && cd -
+	@cd ui && echo "REACT_APP_VERSION=$(VERSION)" >> .env && pnpm install && pnpm build && cd -
 
 all: clean build

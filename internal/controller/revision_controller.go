@@ -19,26 +19,6 @@ func NewRevisionController(revisionListService *service.RevisionService) *Revisi
 	return &RevisionController{revisionListService: revisionListService}
 }
 
-// GetRevision get revision one
-// @Summary get revision one
-// @Description get revision one
-// @Tags Revision
-// @Accept json
-// @Produce json
-// @Param id path int true "revisionid"
-// @Success 200 {object} handler.RespBody{data=schema.GetRevisionResp}
-// Router /revision/{id} [get]
-func (rc *RevisionController) GetRevision(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if id == "0" {
-		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
-		return
-	}
-
-	resp, err := rc.revisionListService.GetRevision(ctx, id)
-	handler.HandleResponse(ctx, err, resp)
-}
-
 // GetRevisionList godoc
 // @Summary get revision list
 // @Description get revision list

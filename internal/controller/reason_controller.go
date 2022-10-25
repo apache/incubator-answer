@@ -35,8 +35,5 @@ func (rc *ReasonController) Reasons(ctx *gin.Context) {
 		return
 	}
 	reasons, err := rc.reasonService.GetReasons(ctx, *req)
-	if err != nil {
-		err = nil
-	}
 	handler.HandleResponse(ctx, err, reasons)
 }

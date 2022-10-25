@@ -80,3 +80,34 @@ func (sc *SiteInfoController) UpdateInterface(ctx *gin.Context) {
 	err := sc.siteInfoService.SaveSiteInterface(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
+
+// GetSMTPConfig get smtp config
+// @Summary GetSMTPConfig get smtp config
+// @Description GetSMTPConfig get smtp config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.GetSMTPConfigResp}
+// @Router /answer/admin/api/setting/smtp [get]
+func (sc *SiteInfoController) GetSMTPConfig(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSMTPConfig(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// UpdateSMTPConfig update smtp config
+// @Summary update smtp config
+// @Description update smtp config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.UpdateSMTPConfigReq true "smtp config"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/setting/smtp [put]
+func (sc *SiteInfoController) UpdateSMTPConfig(ctx *gin.Context) {
+	req := &schema.UpdateSMTPConfigReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	err := sc.siteInfoService.UpdateSMTPConfig(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}

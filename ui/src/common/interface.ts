@@ -264,10 +264,23 @@ export interface AdminSettingsInterface {
   theme: string;
 }
 
+export interface AdminSettingsSmtp {
+  encryption: string;
+  from_email: string;
+  from_name: string;
+  smtp_authentication: boolean;
+  smtp_host: string;
+  smtp_password: string;
+  smtp_port: number;
+  smtp_username: string;
+  test_email_recipient?: string;
+}
+
 export interface SiteSettings {
   general: AdminSettingsGeneral;
   interface: AdminSettingsInterface;
 }
+
 /**
  * @description interface for Activity
  */

@@ -1,6 +1,6 @@
 package entity
 
-// UserCacheInfo 用户缓存信息
+// UserCacheInfo User Cache Information
 type UserCacheInfo struct {
 	UserID      string `json:"user_id"`
 	UserStatus  int    `json:"user_status"`

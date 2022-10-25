@@ -44,13 +44,13 @@ func NewAnswerRepo(
 func (ar *answerRepo) AddAnswer(ctx context.Context, answer *entity.Answer) (err error) {
 	ID, err := ar.uniqueIDRepo.GenUniqueIDStr(ctx, answer.TableName())
 	if err != nil {
-		errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	answer.ID = ID
 	_, err = ar.data.DB.Insert(answer)
 
 	if err != nil {
-		errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return nil
 }

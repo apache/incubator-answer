@@ -75,7 +75,7 @@ func (ar *ActivityRepo) GetActivity(ctx context.Context, session *xorm.Session,
 }
 
 func (ar *ActivityRepo) GetUserIDObjectIDActivitySum(ctx context.Context, userID, objectID string) (int, error) {
-	sum := &entity.ActivityRunkSum{}
+	sum := &entity.ActivityRankSum{}
 	_, err := ar.data.DB.Table(entity.Activity{}.TableName()).
 		Select("sum(rank) as rank").
 		Where("user_id =?", userID).

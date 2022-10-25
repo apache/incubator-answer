@@ -40,12 +40,12 @@ func (cr *collectionGroupRepo) AddCollectionDefaultGroup(ctx context.Context, us
 		DefaultGroup: schema.CG_DEFAULT,
 		UserID:       userID,
 	}
-
 	_, err = cr.data.DB.Insert(defaultGroup)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return
 	}
+	collectionGroup = defaultGroup
 	return
 }
 

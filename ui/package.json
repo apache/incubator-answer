@@ -2,7 +2,7 @@
   "name": "answer-static",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "/",
   "scripts": {
     "start": "react-app-rewired start",
     "build:dev": "env-cmd -f .env.development react-app-rewired build",

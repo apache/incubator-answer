@@ -3,6 +3,8 @@ package migrations
 import (
 	"fmt"
 
+	"github.com/segmentfault/answer/internal/base/data"
+	"github.com/segmentfault/answer/internal/entity"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
 )
@@ -35,17 +37,6 @@ func NewMigration(desc string, fn func(*xorm.Engine) error) Migration {
 	return &migration{description: desc, migrate: fn}
 }
 
-// Version version
-type Version struct {
-	ID            int   `xorm:"not null pk autoincr comment('id') INT(11) id"`
-	VersionNumber int64 `xorm:"not null default 0 comment('version_number') INT(11) version_number"`
-}
-
-// TableName config table name
-func (Version) TableName() string {
-	return "version"
-}
-
 // Use noopMigration when there is a migration that has been no-oped
 var noopMigration = func(_ *xorm.Engine) error { return nil }
 
@@ -56,17 +47,17 @@ var migrations = []Migration{
 
 // GetCurrentDBVersion returns the current db version
 func GetCurrentDBVersion(engine *xorm.Engine) (int64, error) {
-	if err := engine.Sync(new(Version)); err != nil {
+	if err := engine.Sync(new(entity.Version)); err != nil {
 		return -1, fmt.Errorf("sync version failed: %v", err)
 	}
 
-	currentVersion := &Version{ID: 1}
+	currentVersion := &entity.Version{ID: 1}
 	has, err := engine.Get(currentVersion)
 	if err != nil {
 		return -1, fmt.Errorf("get first version failed: %v", err)
 	}
 	if !has {
-		_, err := engine.InsertOne(&Version{ID: 1, VersionNumber: 0})
+		_, err := engine.InsertOne(&entity.Version{ID: 1, VersionNumber: 0})
 		if err != nil {
 			return -1, fmt.Errorf("insert first version failed: %v", err)
 		}
@@ -81,7 +72,13 @@ func ExpectedVersion() int64 {
 }
 
 // Migrate database to current version
-func Migrate(engine *xorm.Engine) error {
+func Migrate(dataConf *data.Database) error {
+	engine, err := data.NewDB(false, dataConf)
+	if err != nil {
+		fmt.Println("new database failed: ", err.Error())
+		return err
+	}
+
 	currentDBVersion, err := GetCurrentDBVersion(engine)
 	if err != nil {
 		return err
@@ -98,7 +95,7 @@ func Migrate(engine *xorm.Engine) error {
 			return err
 		}
 		log.Infof("[migrate] migrate to db version %d success", currentDBVersion+1)
-		if _, err := engine.Update(&Version{ID: 1, VersionNumber: currentDBVersion + 1}); err != nil {
+		if _, err := engine.Update(&entity.Version{ID: 1, VersionNumber: currentDBVersion + 1}); err != nil {
 			log.Errorf("[migrate] migrate to db version %d, update failed: %s", currentDBVersion+1, err.Error())
 			return err
 		}
