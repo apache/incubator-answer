@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"mime"
 
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
@@ -93,7 +94,8 @@ func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body, co
 	}
 
 	m := gomail.NewMessage()
-	m.SetHeader("From", ec.FromEmail)
+	fromName := mime.QEncoding.Encode("utf-8", ec.FromName)
+	m.SetHeader("From", fmt.Sprintf("%s <%s>", fromName, ec.FromEmail))
 	m.SetHeader("To", toEmailAddr)
 	m.SetHeader("Subject", subject)
 	m.SetBody("text/html", body)
