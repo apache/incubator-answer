@@ -185,7 +185,7 @@ func (qr *questionRepo) SearchList(ctx context.Context, search *schema.QuestionS
 	session := qr.data.DB.Table("question")
 
 	if len(search.TagIDs) > 0 {
-		session = session.Join("RIGHT", "tag_rel", "question.id = tag_rel.object_id")
+		session = session.Join("LEFT", "tag_rel", "question.id = tag_rel.object_id")
 		session = session.And("tag_rel.tag_id =?", search.TagIDs[0])
 		//session = session.In("tag_rel.tag_id ", search.TagIDs)
 		session = session.And("tag_rel.status =?", entity.TagRelStatusAvailable)
