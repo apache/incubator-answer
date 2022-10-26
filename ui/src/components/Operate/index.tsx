@@ -125,7 +125,7 @@ const Index: FC<IProps> = ({
               to={editUrl}
               className="link-secondary p-0 fs-14 me-3"
               style={{ lineHeight: '23px' }}>
-              {item.name}
+              {t(`btn_${item.action}`)}
             </Link>
           );
         }
@@ -135,7 +135,7 @@ const Index: FC<IProps> = ({
             variant="link"
             className="link-secondary p-0 fs-14 me-3"
             onClick={() => handleAction(item.action)}>
-            {item.name}
+            {t(`btn_${item.action}`)}
           </Button>
         );
       })}

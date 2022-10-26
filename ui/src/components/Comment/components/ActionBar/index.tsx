@@ -59,7 +59,7 @@ const ActionBar = ({
                 index > 0 && 'ms-3',
               )}
               onClick={() => onAction(action)}>
-              {action.name}
+              {t(`btn_${action.action}`)}
             </Button>
           );
         })}
@@ -81,7 +81,7 @@ const ActionBar = ({
                 variant="link"
                 size="sm"
                 onClick={() => onAction(action)}>
-                {action.name}
+                {t(`btn_${action.action}`)}
               </Dropdown.Item>
             );
           })}

@@ -116,7 +116,7 @@ const Personal: FC = () => {
           )}
         </Col>
         <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
-          <h5 className="mb-3">Stats</h5>
+          <h5 className="mb-3">{t('stats')}</h5>
           {userInfo?.info && (
             <>
               <div className="text-secondary">
