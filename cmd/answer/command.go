@@ -27,11 +27,9 @@ func init() {
 
 	dumpCmd.Flags().StringVarP(&dumpDataPath, "path", "p", "./", "dump data path, eg: -p ./dump/data/")
 
-	rootCmd.AddCommand(initCmd)
-	rootCmd.AddCommand(checkCmd)
-	rootCmd.AddCommand(runCmd)
-	rootCmd.AddCommand(dumpCmd)
-	rootCmd.AddCommand(upgradeCmd)
+	for _, cmd := range []*cobra.Command{initCmd, checkCmd, runCmd, dumpCmd, upgradeCmd} {
+		rootCmd.AddCommand(cmd)
+	}
 }
 
 var (
