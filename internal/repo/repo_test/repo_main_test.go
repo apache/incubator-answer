@@ -11,7 +11,9 @@ import (
 	"github.com/answerdev/answer/internal/migrations"
 	"github.com/ory/dockertest/v3"
 	"github.com/ory/dockertest/v3/docker"
+	"github.com/segmentfault/pacman/cache"
 	"github.com/segmentfault/pacman/log"
+	"xorm.io/xorm"
 	"xorm.io/xorm/schemas"
 )
 
@@ -57,7 +59,7 @@ func TestMain(t *testing.M) {
 			tearDown()
 		}
 	}()
-	if err := initTestDB(dbSetting); err != nil {
+	if err := initTestDataSource(dbSetting); err != nil {
 		panic(err)
 	}
 	log.Info("init test database successfully")
@@ -76,17 +78,29 @@ type TestDBSetting struct {
 	Connection   string
 }
 
-func initTestDB(dbSetting TestDBSetting) error {
+func initTestDataSource(dbSetting TestDBSetting) error {
 	connection, imageCleanUp, err := initDatabaseImage(dbSetting)
 	if err != nil {
 		return err
 	}
 	dbSetting.Connection = connection
-	ds, dbCleanUp, err := initDatabase(dbSetting)
+
+	dbEngine, err := initDatabase(dbSetting)
 	if err != nil {
 		return err
 	}
-	dataSource = ds
+
+	newCache, err := initCache()
+	if err != nil {
+		return err
+	}
+
+	newData, dbCleanUp, err := data.NewData(dbEngine, newCache)
+	if err != nil {
+		return err
+	}
+	dataSource = newData
+
 	tearDown = func() {
 		dbCleanUp()
 		log.Info("cleanup test database successfully")
@@ -101,7 +115,10 @@ func initDatabaseImage(dbSetting TestDBSetting) (connection string, cleanup func
 	if dbSetting.Driver == string(schemas.SQLITE) {
 		return dbSetting.Connection, func() {
 			log.Info("remove database", dbSetting.Connection)
-			_ = os.Remove(dbSetting.Connection)
+			err = os.Remove(dbSetting.Connection)
+			if err != nil {
+				log.Error(err)
+			}
 		}, nil
 	}
 	pool, err := dockertest.NewPool("")
@@ -136,20 +153,20 @@ func initDatabaseImage(dbSetting TestDBSetting) (connection string, cleanup func
 	return connection, func() { _ = pool.Purge(resource) }, nil
 }
 
-func initDatabase(dbSetting TestDBSetting) (dataSource *data.Data, cleanup func(), err error) {
+func initDatabase(dbSetting TestDBSetting) (dbEngine *xorm.Engine, err error) {
 	dataConf := &data.Database{Driver: dbSetting.Driver, Connection: dbSetting.Connection}
-	db, err := data.NewDB(true, dataConf)
+	dbEngine, err = data.NewDB(true, dataConf)
 	if err != nil {
-		return nil, nil, fmt.Errorf("connection to database failed: %s", err)
+		return nil, fmt.Errorf("connection to database failed: %s", err)
 	}
 	err = migrations.InitDB(dataConf)
 	if err != nil {
-		return nil, nil, fmt.Errorf("migrations init database failed: %s", err)
+		return nil, fmt.Errorf("migrations init database failed: %s", err)
 	}
+	return dbEngine, nil
+}
 
-	dataSource, dbCleanUp, err := data.NewData(db, nil)
-	if err != nil {
-		return nil, nil, fmt.Errorf("new data failed: %s", err)
-	}
-	return dataSource, dbCleanUp, nil
+func initCache() (newCache cache.Cache, err error) {
+	newCache, _, err = data.NewCache(&data.CacheConf{})
+	return newCache, err
 }
