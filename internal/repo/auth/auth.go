@@ -17,6 +17,7 @@ type authRepo struct {
 	data *data.Data
 }
 
+// GetUserCacheInfo get user cache info
 func (ar *authRepo) GetUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error) {
 	userInfoCache, err := ar.data.Cache.GetString(ctx, constant.UserTokenCacheKey+accessToken)
 	if err != nil {
@@ -30,6 +31,7 @@ func (ar *authRepo) GetUserCacheInfo(ctx context.Context, accessToken string) (u
 	return userInfo, nil
 }
 
+// GetUserStatus get user status
 func (ar *authRepo) GetUserStatus(ctx context.Context, userID string) (userInfo *entity.UserCacheInfo, err error) {
 	userInfoCache, err := ar.data.Cache.GetString(ctx, constant.UserStatusChangedCacheKey+userID)
 	if err != nil {
@@ -43,6 +45,7 @@ func (ar *authRepo) GetUserStatus(ctx context.Context, userID string) (userInfo 
 	return userInfo, nil
 }
 
+// RemoveUserStatus remove user status
 func (ar *authRepo) RemoveUserStatus(ctx context.Context, userID string) (err error) {
 	err = ar.data.Cache.Del(ctx, constant.UserStatusChangedCacheKey+userID)
 	if err != nil {
@@ -51,6 +54,7 @@ func (ar *authRepo) RemoveUserStatus(ctx context.Context, userID string) (err er
 	return nil
 }
 
+// SetUserCacheInfo set user cache info
 func (ar *authRepo) SetUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) (err error) {
 	userInfoCache, err := json.Marshal(userInfo)
 	if err != nil {
@@ -64,16 +68,17 @@ func (ar *authRepo) SetUserCacheInfo(ctx context.Context, accessToken string, us
 	return nil
 }
 
+// RemoveUserCacheInfo remove user cache info
 func (ar *authRepo) RemoveUserCacheInfo(ctx context.Context, accessToken string) (err error) {
 	err = ar.data.Cache.Del(ctx, constant.UserTokenCacheKey+accessToken)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return err
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return nil
 }
 
-func (ar *authRepo) GetCmsUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error) {
+// GetBackyardUserCacheInfo get backyard user cache info
+func (ar *authRepo) GetBackyardUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error) {
 	userInfoCache, err := ar.data.Cache.GetString(ctx, constant.AdminTokenCacheKey+accessToken)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -87,7 +92,8 @@ func (ar *authRepo) GetCmsUserCacheInfo(ctx context.Context, accessToken string)
 	return userInfo, nil
 }
 
-func (ar *authRepo) SetCmsUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) (err error) {
+// SetBackyardUserCacheInfo set backyard user cache info
+func (ar *authRepo) SetBackyardUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) (err error) {
 	userInfoCache, err := json.Marshal(userInfo)
 	if err != nil {
 		return err
@@ -96,25 +102,22 @@ func (ar *authRepo) SetCmsUserCacheInfo(ctx context.Context, accessToken string,
 	err = ar.data.Cache.SetString(ctx, constant.AdminTokenCacheKey+accessToken, string(userInfoCache),
 		constant.AdminTokenCacheTime)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return err
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return nil
 }
 
-func (ar *authRepo) RemoveCmsUserCacheInfo(ctx context.Context, accessToken string) (err error) {
+// RemoveBackyardUserCacheInfo remove backyard user cache info
+func (ar *authRepo) RemoveBackyardUserCacheInfo(ctx context.Context, accessToken string) (err error) {
 	err = ar.data.Cache.Del(ctx, constant.AdminTokenCacheKey+accessToken)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return err
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return nil
 }
 
 // NewAuthRepo new repository
-func NewAuthRepo(
-	data *data.Data,
-) auth.AuthRepo {
+func NewAuthRepo(data *data.Data) auth.AuthRepo {
 	return &authRepo{
 		data: data,
 	}

@@ -15,9 +15,9 @@ type AuthRepo interface {
 	RemoveUserCacheInfo(ctx context.Context, accessToken string) (err error)
 	GetUserStatus(ctx context.Context, userID string) (userInfo *entity.UserCacheInfo, err error)
 	RemoveUserStatus(ctx context.Context, userID string) (err error)
-	GetCmsUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error)
-	SetCmsUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) error
-	RemoveCmsUserCacheInfo(ctx context.Context, accessToken string) (err error)
+	GetBackyardUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error)
+	SetBackyardUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) error
+	RemoveBackyardUserCacheInfo(ctx context.Context, accessToken string) (err error)
 }
 
 // AuthService kit service
@@ -75,14 +75,14 @@ func (as *AuthService) RemoveUserCacheInfo(ctx context.Context, accessToken stri
 //cms
 
 func (as *AuthService) GetCmsUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error) {
-	return as.authRepo.GetCmsUserCacheInfo(ctx, accessToken)
+	return as.authRepo.GetBackyardUserCacheInfo(ctx, accessToken)
 }
 
 func (as *AuthService) SetCmsUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) (err error) {
-	err = as.authRepo.SetCmsUserCacheInfo(ctx, accessToken, userInfo)
+	err = as.authRepo.SetBackyardUserCacheInfo(ctx, accessToken, userInfo)
 	return err
 }
 
 func (as *AuthService) RemoveCmsUserCacheInfo(ctx context.Context, accessToken string) (err error) {
-	return as.authRepo.RemoveCmsUserCacheInfo(ctx, accessToken)
+	return as.authRepo.RemoveBackyardUserCacheInfo(ctx, accessToken)
 }
