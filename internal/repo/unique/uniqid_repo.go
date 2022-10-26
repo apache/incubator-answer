@@ -3,7 +3,6 @@ package unique
 import (
 	"context"
 	"fmt"
-	"strconv"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
@@ -23,20 +22,6 @@ func NewUniqueIDRepo(data *data.Data) unique.UniqueIDRepo {
 	return &uniqueIDRepo{
 		data: data,
 	}
-}
-
-// GenUniqueID generate unique id
-// 1 + 00x(objectType) + 000000000000x(id)
-func (ur *uniqueIDRepo) GenUniqueID(ctx context.Context, key string) (uniqueID int64, err error) {
-	idStr, err := ur.GenUniqueIDStr(ctx, key)
-	if err != nil {
-		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	uniqueID, err = strconv.ParseInt(idStr, 10, 64)
-	if err != nil {
-		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	return uniqueID, nil
 }
 
 // GenUniqueIDStr generate unique id string
