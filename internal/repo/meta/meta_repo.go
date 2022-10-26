@@ -65,7 +65,7 @@ func (mr *metaRepo) GetMetaByObjectIdAndKey(ctx context.Context, objectID, key s
 // GetMetaList get meta list all
 func (mr *metaRepo) GetMetaList(ctx context.Context, meta *entity.Meta) (metaList []*entity.Meta, err error) {
 	metaList = make([]*entity.Meta, 0)
-	err = mr.data.DB.Find(metaList, meta)
+	err = mr.data.DB.Find(&metaList, meta)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
