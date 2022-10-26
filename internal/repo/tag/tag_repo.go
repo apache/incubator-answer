@@ -2,7 +2,6 @@ package tag
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/pager"
@@ -34,12 +33,11 @@ func NewTagRepo(
 // AddTagList add tag
 func (tr *tagRepo) AddTagList(ctx context.Context, tagList []*entity.Tag) (err error) {
 	for _, item := range tagList {
-		ID, err := tr.uniqueIDRepo.GenUniqueID(ctx, item.TableName())
+		item.ID, err = tr.uniqueIDRepo.GenUniqueIDStr(ctx, item.TableName())
 		if err != nil {
 			return err
 		}
 		item.RevisionID = "0"
-		item.ID = fmt.Sprintf("%d", ID)
 	}
 	_, err = tr.data.DB.Insert(tagList)
 	if err != nil {

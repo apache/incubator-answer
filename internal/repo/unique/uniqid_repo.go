@@ -40,6 +40,7 @@ func (ur *uniqueIDRepo) GenUniqueID(ctx context.Context, key string) (uniqueID i
 }
 
 // GenUniqueIDStr generate unique id string
+// 1 + 00x(objectType) + 000000000000x(id)
 func (ur *uniqueIDRepo) GenUniqueIDStr(ctx context.Context, key string) (uniqueID string, err error) {
 	objectType := constant.ObjectTypeStrMapping[key]
 	bean := &entity.Uniqid{UniqidType: objectType}
