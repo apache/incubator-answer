@@ -45,8 +45,8 @@ var (
 	}
 	// after all test down will execute tearDown function to clean-up
 	tearDown func()
-	// dataSource used for repo testing
-	dataSource *data.Data
+	// testDataSource used for repo testing
+	testDataSource *data.Data
 )
 
 func TestMain(t *testing.M) {
@@ -99,7 +99,7 @@ func initTestDataSource(dbSetting TestDBSetting) error {
 	if err != nil {
 		return err
 	}
-	dataSource = newData
+	testDataSource = newData
 
 	tearDown = func() {
 		dbCleanUp()

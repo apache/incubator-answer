@@ -25,8 +25,8 @@ func buildCommentEntity() *entity.Comment {
 }
 
 func Test_commentRepo_AddComment(t *testing.T) {
-	uniqueIDRepo := unique.NewUniqueIDRepo(dataSource)
-	commentRepo := comment.NewCommentRepo(dataSource, uniqueIDRepo)
+	uniqueIDRepo := unique.NewUniqueIDRepo(testDataSource)
+	commentRepo := comment.NewCommentRepo(testDataSource, uniqueIDRepo)
 	testCommentEntity := buildCommentEntity()
 	err := commentRepo.AddComment(context.TODO(), testCommentEntity)
 	assert.NoError(t, err)
@@ -37,8 +37,8 @@ func Test_commentRepo_AddComment(t *testing.T) {
 }
 
 func Test_commentRepo_GetCommentPage(t *testing.T) {
-	uniqueIDRepo := unique.NewUniqueIDRepo(dataSource)
-	commentRepo := comment.NewCommentRepo(dataSource, uniqueIDRepo)
+	uniqueIDRepo := unique.NewUniqueIDRepo(testDataSource)
+	commentRepo := comment.NewCommentRepo(testDataSource, uniqueIDRepo)
 	testCommentEntity := buildCommentEntity()
 	err := commentRepo.AddComment(context.TODO(), testCommentEntity)
 	assert.NoError(t, err)
@@ -59,9 +59,9 @@ func Test_commentRepo_GetCommentPage(t *testing.T) {
 }
 
 func Test_commentRepo_UpdateComment(t *testing.T) {
-	uniqueIDRepo := unique.NewUniqueIDRepo(dataSource)
-	commentRepo := comment.NewCommentRepo(dataSource, uniqueIDRepo)
-	commonCommentRepo := comment.NewCommentCommonRepo(dataSource, uniqueIDRepo)
+	uniqueIDRepo := unique.NewUniqueIDRepo(testDataSource)
+	commentRepo := comment.NewCommentRepo(testDataSource, uniqueIDRepo)
+	commonCommentRepo := comment.NewCommentCommonRepo(testDataSource, uniqueIDRepo)
 	testCommentEntity := buildCommentEntity()
 	err := commentRepo.AddComment(context.TODO(), testCommentEntity)
 	assert.NoError(t, err)

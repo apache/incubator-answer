@@ -13,6 +13,7 @@ type AuthRepo interface {
 	GetUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error)
 	SetUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) error
 	RemoveUserCacheInfo(ctx context.Context, accessToken string) (err error)
+	SetUserStatus(ctx context.Context, userID string, userInfo *entity.UserCacheInfo) (err error)
 	GetUserStatus(ctx context.Context, userID string) (userInfo *entity.UserCacheInfo, err error)
 	RemoveUserStatus(ctx context.Context, userID string) (err error)
 	GetBackyardUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error)

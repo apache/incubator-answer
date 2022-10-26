@@ -9,7 +9,7 @@ import (
 )
 
 func Test_emailRepo_VerifyCode(t *testing.T) {
-	emailRepo := export.NewEmailRepo(dataSource)
+	emailRepo := export.NewEmailRepo(testDataSource)
 	code, content := "1111", "test"
 	err := emailRepo.SetCode(context.TODO(), code, content)
 	assert.NoError(t, err)
