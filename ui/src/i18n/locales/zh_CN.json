@@ -396,7 +396,7 @@
       "profile": "用户主页",
       "setting": "账号设置",
       "logout": "退出登录",
-      "admin": "Admin"
+      "admin": "后台管理"
     },
     "search": {
       "placeholder": "搜索"
@@ -406,14 +406,14 @@
     "build_on": "Build on <1> Answer </1>- the open-source software that power Q&A communities.<br />Made with love. © 2022 Answer."
   },
   "upload_img": {
-    "name": "Change",
-    "loading": "loading..."
+    "name": "更改图片",
+    "loading": "加载中..."
   },
   "pic_auth_code": {
-    "title": "Captcha",
-    "placeholder": "Type the text above",
+    "title": "验证码",
+    "placeholder": "输入图片中的文字",
     "msg": {
-      "empty": "Captcha cannot be empty."
+      "empty": "不能为空"
     }
   },
   "inactive": {
@@ -575,8 +575,8 @@
     "Follow": "关注此问题",
     "Following": "已关注",
     "answered": "回答于",
-    "closed_in": "Closed in",
-    "show_exist": "Show existing question.",
+    "closed_in": "关闭于",
+    "show_exist": "查看相关问题。",
     "answers": {
       "title": "个回答",
       "score": "评分",
@@ -644,7 +644,7 @@
   "share": {
     "name": "分享",
     "copy": "复制链接",
-    "via": "Share post via...",
+    "via": "分享在...",
     "copied": "已复制",
     "facebook": "分享到 Facebook",
     "twitter": "分享到 Twitter"
@@ -654,12 +654,12 @@
     "title": "发生错误..."
   },
   "account_result": {
-    "page_title": "Welcome to Answer",
-    "success": "Your new account is confirmed; you will be redirected to the home page.",
-    "link": "Continue to homepage",
-    "invalid": "Sorry, this account confirmation link is no longer valid. Perhaps your account is already active?",
-    "confirm_new_email": "Your email has been updated.",
-    "confirm_new_email_invalid": "Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?"
+    "page_title": "欢迎来到 Answer",
+    "success": "你的账号已通过验证，即将返回首页。",
+    "link": "返回首页",
+    "invalid": "抱歉，此验证链接已失效。也许是你的账号已经通过验证了？",
+    "confirm_new_email": "你的电子邮箱已更新",
+    "confirm_new_email_invalid": "抱歉，此验证链接已失效。也许是你的邮箱已经成功更改了？"
   },
   "question": {
     "following_tags": "已关注的标签",
@@ -693,7 +693,7 @@
     "bookmarks": "收藏",
     "reputation": "声望",
     "comments": "评论",
-    "votes": "投票",
+    "votes": "得票",
     "newest": "最新",
     "score": "评分",
     "edit_profile": "编辑我的资料",
@@ -706,7 +706,7 @@
     "top_answers": "热门回答",
     "top_questions": "热门问题",
     "stats": "状态",
-    "list_empty": "No posts found.<br />Perhaps you'd like to select a different tab?",
+    "list_empty": "没有找到相关的内容。<br />试试看其他标签？",
     "accepted": "已采纳",
     "answered": "回答于",
     "asked": "提问于",
@@ -715,7 +715,7 @@
     "mod_short": "管理员",
     "mod_long": "管理员",
     "x_reputation": "声望",
-    "x_votes": "votes received",
+    "x_votes": "得票",
     "x_answers": "个回答",
     "x_questions": "个问题"
   },
@@ -724,7 +724,7 @@
     "back_home": "回到主页"
   },
   "page_50X": {
-    "description": "The server encountered an error and could not complete your request.",
+    "description": "服务器遇到了一个错误，无法完成你的请求。",
     "back_home": "回到主页"
   },
   "admin": {
@@ -732,7 +732,7 @@
       "title": "后台管理"
     },
     "nav_menus": {
-      "dashboard": "Dashboard",
+      "dashboard": "后台管理",
       "contents": "内容管理",
       "questions": "问题",
       "answers": "回答",
@@ -744,7 +744,7 @@
       "smtp": "SMTP"
     },
     "dashboard": {
-      "title": "Dashboard",
+      "title": "后台管理",
       "welcome": "欢迎来到 Answer 后台管理！",
       "version": "版本"
     },
@@ -811,7 +811,7 @@
       "closed": "已关闭",
       "deleted": "已删除",
       "post": "标题",
-      "votes": "投票",
+      "votes": "得票数",
       "answers": "回答数",
       "created": "创建于",
       "status": "状态",
@@ -823,7 +823,7 @@
       "normal": "正常",
       "deleted": "已删除",
       "post": "标题",
-      "votes": "投票",
+      "votes": "得票数",
       "created": "创建于",
       "status": "状态",
       "action": "操作",
