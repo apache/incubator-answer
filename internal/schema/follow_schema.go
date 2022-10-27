@@ -3,9 +3,9 @@ package schema
 // FollowReq follow object request
 type FollowReq struct {
 	// object id
-	ObjectID string `validate:"required"form:"object_id" json:"object_id"`
+	ObjectID string `validate:"required" form:"object_id" json:"object_id"`
 	// is cancel
-	IsCancel bool `validate:"omitempty"form:"is_cancel" json:"is_cancel"`
+	IsCancel bool `validate:"omitempty" form:"is_cancel" json:"is_cancel"`
 }
 
 // FollowResp response object's follows and current user follow status

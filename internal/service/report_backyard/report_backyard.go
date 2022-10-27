@@ -4,20 +4,20 @@ import (
 	"context"
 	"strings"
 
-	"github.com/segmentfault/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/service/config"
 
+	"github.com/answerdev/answer/internal/base/pager"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/repo/common"
+	"github.com/answerdev/answer/internal/schema"
+	answercommon "github.com/answerdev/answer/internal/service/answer_common"
+	"github.com/answerdev/answer/internal/service/comment_common"
+	questioncommon "github.com/answerdev/answer/internal/service/question_common"
+	"github.com/answerdev/answer/internal/service/report_common"
+	"github.com/answerdev/answer/internal/service/report_handle_backyard"
+	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/answer/internal/base/pager"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/repo/common"
-	"github.com/segmentfault/answer/internal/schema"
-	answercommon "github.com/segmentfault/answer/internal/service/answer_common"
-	"github.com/segmentfault/answer/internal/service/comment_common"
-	questioncommon "github.com/segmentfault/answer/internal/service/question_common"
-	"github.com/segmentfault/answer/internal/service/report_common"
-	"github.com/segmentfault/answer/internal/service/report_handle_backyard"
-	usercommon "github.com/segmentfault/answer/internal/service/user_common"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -62,10 +62,10 @@ func (rs *ReportBackyardService) ListReportPage(ctx context.Context, dto schema.
 		flags []entity.Report
 		total int64
 
-		flagedUserIds,
+		flaggedUserIds,
 		userIds []string
 
-		flagedUsers,
+		flaggedUsers,
 		users map[string]*schema.UserBasicInfo
 	)
 
@@ -78,18 +78,18 @@ func (rs *ReportBackyardService) ListReportPage(ctx context.Context, dto schema.
 
 	_ = copier.Copy(&resp, flags)
 	for _, r := range resp {
-		flagedUserIds = append(flagedUserIds, r.ReportedUserID)
+		flaggedUserIds = append(flaggedUserIds, r.ReportedUserID)
 		userIds = append(userIds, r.UserID)
 		r.Format()
 	}
 
-	// flaged users
-	flagedUsers, err = rs.commonUser.BatchUserBasicInfoByID(ctx, flagedUserIds)
+	// flagged users
+	flaggedUsers, err = rs.commonUser.BatchUserBasicInfoByID(ctx, flaggedUserIds)
 
 	// flag users
 	users, err = rs.commonUser.BatchUserBasicInfoByID(ctx, userIds)
 	for _, r := range resp {
-		r.ReportedUser = flagedUsers[r.ReportedUserID]
+		r.ReportedUser = flaggedUsers[r.ReportedUserID]
 		r.ReportUser = users[r.UserID]
 	}
 
@@ -102,9 +102,9 @@ func (rs *ReportBackyardService) HandleReported(ctx context.Context, req schema.
 	var (
 		reported   = entity.Report{}
 		handleData = entity.Report{
-			FlagedContent: req.FlagedContent,
-			FlagedType:    req.FlagedType,
-			Status:        entity.ReportStatusCompleted,
+			FlaggedContent: req.FlaggedContent,
+			FlaggedType:    req.FlaggedType,
+			Status:         entity.ReportStatusCompleted,
 		}
 		exist = false
 	)
@@ -203,11 +203,11 @@ func (rs *ReportBackyardService) parseObject(ctx context.Context, resp *[]*schem
 			}
 			err = rs.configRepo.GetConfigById(r.ReportType, r.Reason)
 		}
-		if r.FlagedType > 0 {
-			r.FlagedReason = &schema.ReasonItem{
-				ReasonType: r.FlagedType,
+		if r.FlaggedType > 0 {
+			r.FlaggedReason = &schema.ReasonItem{
+				ReasonType: r.FlaggedType,
 			}
-			_ = rs.configRepo.GetConfigById(r.FlagedType, r.FlagedReason)
+			_ = rs.configRepo.GetConfigById(r.FlaggedType, r.FlaggedReason)
 		}
 
 		res[i] = r

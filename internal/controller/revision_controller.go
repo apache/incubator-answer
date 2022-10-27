@@ -1,11 +1,11 @@
 package controller
 
 import (
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/handler"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -17,26 +17,6 @@ type RevisionController struct {
 // NewRevisionController new controller
 func NewRevisionController(revisionListService *service.RevisionService) *RevisionController {
 	return &RevisionController{revisionListService: revisionListService}
-}
-
-// GetRevision get revision one
-// @Summary get revision one
-// @Description get revision one
-// @Tags Revision
-// @Accept json
-// @Produce json
-// @Param id path int true "revisionid"
-// @Success 200 {object} handler.RespBody{data=schema.GetRevisionResp}
-// Router /revision/{id} [get]
-func (rc *RevisionController) GetRevision(ctx *gin.Context) {
-	id := ctx.Param("id")
-	if id == "0" {
-		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
-		return
-	}
-
-	resp, err := rc.revisionListService.GetRevision(ctx, id)
-	handler.HandleResponse(ctx, err, resp)
 }
 
 // GetRevisionList godoc

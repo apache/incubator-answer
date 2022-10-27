@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	collectioncommon "github.com/segmentfault/answer/internal/service/collection_common"
-	questioncommon "github.com/segmentfault/answer/internal/service/question_common"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
+	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -61,13 +61,11 @@ func (cs *CollectionService) CollectionSwitch(ctx context.Context, dto *schema.C
 			return nil, err
 		}
 		if !has {
-
-			defaultGroup, err := cs.collectionGroupRepo.AddCollectionDefaultGroup(ctx, dto.UserID)
+			dbdefaultGroup, err := cs.collectionGroupRepo.AddCollectionDefaultGroup(ctx, dto.UserID)
 			if err != nil {
 				return nil, err
 			}
-			dto.GroupID = defaultGroup.ID
-
+			dto.GroupID = dbdefaultGroup.ID
 		} else {
 			dto.GroupID = defaultGroup.ID
 		}

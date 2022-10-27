@@ -1,8 +1,9 @@
 package schema
 
 import (
-	"github.com/segmentfault/answer/internal/base/constant"
 	"time"
+
+	"github.com/answerdev/answer/internal/base/constant"
 )
 
 // AddReportReq add report request
@@ -41,9 +42,9 @@ type GetReportTypeResp struct {
 
 // ReportHandleReq request handle request
 type ReportHandleReq struct {
-	ID            string `validate:"required" comment:"report id" form:"id" json:"id"`
-	FlagedType    int    `validate:"required" comment:"flaged type" form:"flaged_type" json:"flaged_type"`
-	FlagedContent string `validate:"omitempty" comment:"flaged content" form:"flaged_content" json:"flaged_content"`
+	ID             string `validate:"required" comment:"report id" form:"id" json:"id"`
+	FlaggedType    int    `validate:"required" comment:"flagged type" form:"flagged_type" json:"flagged_type"`
+	FlaggedContent string `validate:"omitempty" comment:"flagged content" form:"flagged_content" json:"flagged_content"`
 }
 
 // GetReportListPageDTO report list data transfer object
@@ -60,9 +61,9 @@ type GetReportListPageResp struct {
 	ReportedUser *UserBasicInfo `json:"reported_user"`
 	ReportUser   *UserBasicInfo `json:"report_user"`
 
-	Content       string `json:"content"`
-	FlagedContent string `json:"flaged_content"`
-	OType         string `json:"object_type"`
+	Content        string `json:"content"`
+	FlaggedContent string `json:"flagged_content"`
+	OType          string `json:"object_type"`
 
 	ObjectID   string `json:"-"`
 	QuestionID string `json:"question_id"`
@@ -79,15 +80,15 @@ type GetReportListPageResp struct {
 	UpdatedAt       time.Time `json:"_"`
 	UpdatedAtParsed int64     `json:"updated_at"`
 
-	Reason       *ReasonItem `json:"reason"`
-	FlagedReason *ReasonItem `json:"flaged_reason"`
+	Reason        *ReasonItem `json:"reason"`
+	FlaggedReason *ReasonItem `json:"flagged_reason"`
 
 	UserID         string `json:"-"`
 	ReportedUserID string `json:"-"`
 	Status         int    `json:"-"`
 	ObjectType     int    `json:"-"`
 	ReportType     int    `json:"-"`
-	FlagedType     int    `json:"-"`
+	FlaggedType    int    `json:"-"`
 }
 
 // Format format result

@@ -5,21 +5,21 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/activity"
+	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
+	"github.com/answerdev/answer/internal/service/meta"
+	"github.com/answerdev/answer/internal/service/notice_queue"
+	"github.com/answerdev/answer/internal/service/permission"
+	questioncommon "github.com/answerdev/answer/internal/service/question_common"
+	"github.com/answerdev/answer/internal/service/revision_common"
+	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
+	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/answer/internal/base/constant"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/base/translator"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/activity"
-	collectioncommon "github.com/segmentfault/answer/internal/service/collection_common"
-	"github.com/segmentfault/answer/internal/service/meta"
-	"github.com/segmentfault/answer/internal/service/notice_queue"
-	"github.com/segmentfault/answer/internal/service/permission"
-	questioncommon "github.com/segmentfault/answer/internal/service/question_common"
-	"github.com/segmentfault/answer/internal/service/revision_common"
-	tagcommon "github.com/segmentfault/answer/internal/service/tag_common"
-	usercommon "github.com/segmentfault/answer/internal/service/user_common"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
@@ -149,7 +149,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		log.Error("user IncreaseQuestionCount error", err.Error())
 	}
 
-	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID)
+	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false)
 	return
 }
 
@@ -229,20 +229,23 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return
 	}
 
-	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID)
+	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false)
 	return
 }
 
 // GetQuestion get question one
-func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID string) (resp *schema.QuestionInfo, err error) {
+func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID string, addpv bool) (resp *schema.QuestionInfo, err error) {
 	question, err := qs.questioncommon.Info(ctx, id, loginUserID)
 	if err != nil {
 		return
 	}
-	err = qs.questioncommon.UpdataPv(ctx, id)
-	if err != nil {
-		log.Error("UpdataPv", err)
+	if addpv {
+		err = qs.questioncommon.UpdataPv(ctx, id)
+		if err != nil {
+			log.Error("UpdataPv", err)
+		}
 	}
+
 	question.MemberActions = permission.GetQuestionPermission(loginUserID, question.UserId)
 	return question, nil
 }
@@ -273,6 +276,10 @@ func (qs *QuestionService) SearchUserList(ctx context.Context, userName, order s
 	for _, item := range questionlist {
 		info := &schema.UserQuestionInfo{}
 		_ = copier.Copy(info, item)
+		status, ok := entity.CmsQuestionSearchStatusIntToString[item.Status]
+		if ok {
+			info.Status = status
+		}
 		userlist = append(userlist, info)
 	}
 	return userlist, count, nil
@@ -446,6 +453,10 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 		item.AnswerCount = question.AnswerCount
 		item.CollectionCount = question.CollectionCount
 		item.FollowCount = question.FollowCount
+		status, ok := entity.CmsQuestionSearchStatusIntToString[question.Status]
+		if ok {
+			item.Status = status
+		}
 		if question.AcceptedAnswerID != "0" {
 			item.AcceptedAnswer = true
 		}
@@ -458,7 +469,7 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 // SimilarQuestion
 func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID string, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
 	list := make([]*schema.QuestionInfo, 0)
-	questionInfo, err := qs.GetQuestion(ctx, questionID, loginUserID)
+	questionInfo, err := qs.GetQuestion(ctx, questionID, loginUserID, false)
 	if err != nil {
 		return list, 0, err
 	}
@@ -470,20 +481,23 @@ func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID strin
 	search.Order = "frequent"
 	search.Page = 0
 	search.PageSize = 6
-	search.Tags = tagNames
+	if len(tagNames) > 0 {
+		search.Tag = tagNames[0]
+	}
 	return qs.SearchList(ctx, search, loginUserID)
 }
 
 // SearchList
 func (qs *QuestionService) SearchList(ctx context.Context, req *schema.QuestionSearch, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
-	if len(req.Tags) > 0 {
-		taginfo, err := qs.tagCommon.GetTagListByNames(ctx, req.Tags)
+	if len(req.Tag) > 0 {
+		taginfo, has, err := qs.tagCommon.GetTagListByName(ctx, req.Tag)
 		if err != nil {
 			log.Error("tagCommon.GetTagListByNames error", err)
 		}
-		for _, tag := range taginfo {
-			req.TagIDs = append(req.TagIDs, tag.ID)
+		if has {
+			req.TagIDs = append(req.TagIDs, taginfo.ID)
 		}
+
 	}
 	list := make([]*schema.QuestionInfo, 0)
 	if req.UserName != "" {

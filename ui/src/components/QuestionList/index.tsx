@@ -92,11 +92,11 @@ const QuestionList: FC<Props> = ({ source }) => {
     page_size: pageSize,
     page: curPage,
     order: curOrder as Type.QuestionOrderBy,
-    tags: [tagName],
+    tag: tagName,
   };
 
   if (source === 'questions') {
-    delete reqParams.tags;
+    delete reqParams.tag;
   }
   const { data: listData, isLoading } = useQuestionList(reqParams);
   const count = listData?.count || 0;

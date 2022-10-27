@@ -4,16 +4,16 @@ import (
 	"context"
 	"time"
 
-	"github.com/segmentfault/answer/internal/base/constant"
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/pager"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/activity_common"
-	answercommon "github.com/segmentfault/answer/internal/service/answer_common"
-	"github.com/segmentfault/answer/internal/service/rank"
-	"github.com/segmentfault/answer/internal/service/unique"
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/pager"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/activity_common"
+	answercommon "github.com/answerdev/answer/internal/service/answer_common"
+	"github.com/answerdev/answer/internal/service/rank"
+	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -44,13 +44,13 @@ func NewAnswerRepo(
 func (ar *answerRepo) AddAnswer(ctx context.Context, answer *entity.Answer) (err error) {
 	ID, err := ar.uniqueIDRepo.GenUniqueIDStr(ctx, answer.TableName())
 	if err != nil {
-		errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	answer.ID = ID
 	_, err = ar.data.DB.Insert(answer)
 
 	if err != nil {
-		errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return nil
 }

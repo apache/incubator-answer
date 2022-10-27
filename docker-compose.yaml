@@ -1,9 +1,29 @@
-version: "3"
+version: "3.9"
 services:
   answer:
-    build:
-      context: .
-    image: github.com/segmentfault/answer
-    volumes:
-      - ./data:/data
+    image: answerdev/answer:latest
+    ports:
+      - '9080:80'
     restart: on-failure
+    depends_on:
+      db:
+        condition: service_healthy
+    links:
+      - db
+    volumes:
+      - ./answer-data/data:/data
+  db:
+    image: mariadb:10.4.7
+    ports:
+      - '13306:3306'
+    restart: on-failure
+    environment:
+      MYSQL_DATABASE: answer
+      MYSQL_ROOT_PASSWORD: root
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-uroot", "-proot"]
+      timeout: 20s
+      retries: 10
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--skip-character-set-client-handshake']
+    volumes:
+      - ./answer-data/mysql:/var/lib/mysql

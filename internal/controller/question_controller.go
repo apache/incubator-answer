@@ -3,15 +3,15 @@ package controller
 import (
 	"context"
 
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/middleware"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/rank"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/handler"
-	"github.com/segmentfault/answer/internal/base/middleware"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service"
-	"github.com/segmentfault/answer/internal/service/rank"
-	"github.com/segmentfault/answer/pkg/converter"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -85,7 +85,7 @@ func (qc *QuestionController) GetQuestion(c *gin.Context) {
 	id := c.Query("id")
 	ctx := context.Background()
 	userID := middleware.GetLoginUserIDFromContext(c)
-	info, err := qc.questionService.GetQuestion(ctx, id, userID)
+	info, err := qc.questionService.GetQuestion(ctx, id, userID, true)
 	if err != nil {
 		handler.HandleResponse(c, err, nil)
 		return
@@ -125,7 +125,7 @@ func (qc *QuestionController) SimilarQuestion(ctx *gin.Context) {
 // @Produce  json
 // @Param data body schema.QuestionSearch  true "QuestionSearch"
 // @Success 200 {string} string ""
-// @Router /answer/api/v1/question/page [post]
+// @Router /answer/api/v1/question/page [get]
 func (qc *QuestionController) Index(ctx *gin.Context) {
 	req := &schema.QuestionSearch{}
 	if handler.BindAndCheck(ctx, req) {

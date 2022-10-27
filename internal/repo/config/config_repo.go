@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/segmentfault/answer/internal/service/config"
-	"github.com/segmentfault/answer/pkg/converter"
+	"github.com/answerdev/answer/internal/service/config"
+	"github.com/answerdev/answer/pkg/converter"
 
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -118,5 +118,16 @@ func (cr *configRepo) GetConfigById(id int, value any) (err error) {
 
 	conf, err = cr.Get(key)
 	value = json.Unmarshal([]byte(conf.(string)), value)
+	return
+}
+
+func (cr *configRepo) SetConfig(key, value string) (err error) {
+	id := Key2IDMapping[key]
+	_, err = cr.data.DB.ID(id).Update(&entity.Config{Value: value})
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	} else {
+		Key2ValueMapping[key] = value
+	}
 	return
 }

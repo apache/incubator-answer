@@ -4,14 +4,14 @@ import (
 	"context"
 	"time"
 
-	"github.com/segmentfault/answer/internal/base/constant"
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/pager"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	questioncommon "github.com/segmentfault/answer/internal/service/question_common"
-	"github.com/segmentfault/answer/internal/service/unique"
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/pager"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	questioncommon "github.com/answerdev/answer/internal/service/question_common"
+	"github.com/answerdev/answer/internal/service/unique"
 
 	"github.com/segmentfault/pacman/errors"
 )
@@ -66,7 +66,6 @@ func (qr *questionRepo) UpdateQuestion(ctx context.Context, question *entity.Que
 
 func (qr *questionRepo) UpdatePvCount(ctx context.Context, questionId string) (err error) {
 	question := &entity.Question{}
-	qr.data.DB.ShowSQL()
 	_, err = qr.data.DB.Where("id =?", questionId).Incr("view_count", 1).Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -186,7 +185,7 @@ func (qr *questionRepo) SearchList(ctx context.Context, search *schema.QuestionS
 	session := qr.data.DB.Table("question")
 
 	if len(search.TagIDs) > 0 {
-		session = session.Join("RIGHT", "tag_rel", "question.id = tag_rel.object_id")
+		session = session.Join("LEFT", "tag_rel", "question.id = tag_rel.object_id")
 		session = session.And("tag_rel.tag_id =?", search.TagIDs[0])
 		//session = session.In("tag_rel.tag_id ", search.TagIDs)
 		session = session.And("tag_rel.status =?", entity.TagRelStatusAvailable)
@@ -218,7 +217,6 @@ func (qr *questionRepo) SearchList(ctx context.Context, search *schema.QuestionS
 	session = session.Limit(search.PageSize, offset)
 	session = session.Select("question.id,question.user_id,question.title,question.original_text,question.parsed_text,question.status,question.view_count,question.unique_view_count,question.vote_count,question.answer_count,question.collection_count,question.follow_count,question.accepted_answer_id,question.last_answer_id,question.created_at,question.updated_at,question.post_update_time,question.revision_id")
 	count, err = session.FindAndCount(&rows)
-	//spew.Dump("search", err, count, rows)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return rows, count, err
