@@ -4961,12 +4961,9 @@ const docTemplate = `{
                     "description": "Search page size",
                     "type": "integer"
                 },
-                "tags": {
-                    "description": "Search tag",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "tag": {
+                    "description": "Tags     []string ` + "`" + `json:\"tags\" form:\"tags\"` + "`" + `           //Search tag",
+                    "type": "string"
                 },
                 "username": {
                     "description": "Search username",

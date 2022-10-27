@@ -762,11 +762,10 @@ definitions:
       page_size:
         description: Search page size
         type: integer
-      tags:
-        description: Search tag
-        items:
-          type: string
-        type: array
+      tag:
+        description: Tags     []string `json:"tags" form:"tags"`           //Search
+          tag
+        type: string
       username:
         description: Search username
         type: string
