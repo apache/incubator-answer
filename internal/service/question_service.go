@@ -481,20 +481,23 @@ func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID strin
 	search.Order = "frequent"
 	search.Page = 0
 	search.PageSize = 6
-	search.Tags = tagNames
+	if len(tagNames) > 0 {
+		search.Tag = tagNames[0]
+	}
 	return qs.SearchList(ctx, search, loginUserID)
 }
 
 // SearchList
 func (qs *QuestionService) SearchList(ctx context.Context, req *schema.QuestionSearch, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
-	if len(req.Tags) > 0 {
-		taginfo, err := qs.tagCommon.GetTagListByNames(ctx, req.Tags)
+	if len(req.Tag) > 0 {
+		taginfo, has, err := qs.tagCommon.GetTagListByName(ctx, req.Tag)
 		if err != nil {
 			log.Error("tagCommon.GetTagListByNames error", err)
 		}
-		for _, tag := range taginfo {
-			req.TagIDs = append(req.TagIDs, tag.ID)
+		if has {
+			req.TagIDs = append(req.TagIDs, taginfo.ID)
 		}
+
 	}
 	list := make([]*schema.QuestionInfo, 0)
 	if req.UserName != "" {

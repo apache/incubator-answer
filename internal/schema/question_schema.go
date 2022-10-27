@@ -156,12 +156,13 @@ type UserQuestionInfo struct {
 }
 
 type QuestionSearch struct {
-	Page     int      `json:"page" form:"page"`           //Query number of pages
-	PageSize int      `json:"page_size" form:"page_size"` //Search page size
-	Order    string   `json:"order" form:"order"`         //Search order by
-	Tags     []string `json:"tags" form:"tags"`           //Search tag
-	TagIDs   []string `json:"-" form:"-"`                 //Search tag
-	UserName string   `json:"username" form:"username"`   //Search username
+	Page     int    `json:"page" form:"page"`           //Query number of pages
+	PageSize int    `json:"page_size" form:"page_size"` //Search page size
+	Order    string `json:"order" form:"order"`         //Search order by
+	//Tags     []string `json:"tags" form:"tags"`           //Search tag
+	Tag      string   `json:"tag" form:"tag"`           //Search tag
+	TagIDs   []string `json:"-" form:"-"`               //Search tag
+	UserName string   `json:"username" form:"username"` //Search username
 	UserID   string   `json:"-" form:"-"`
 }
 
