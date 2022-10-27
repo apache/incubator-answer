@@ -156,7 +156,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionId string, loginUser
 				log.Error("json.Unmarshal CloseQuestionMeta error", err.Error())
 			} else {
 				closeinfo := &schema.GetReportTypeResp{}
-				err = qs.configRepo.GetConfigById(closemsg.CloseType, closeinfo)
+				err = qs.configRepo.GetJsonConfigByIDAndSetToObject(closemsg.CloseType, closeinfo)
 				if err != nil {
 					log.Error("json.Unmarshal QuestionCloseJson error", err.Error())
 				} else {
