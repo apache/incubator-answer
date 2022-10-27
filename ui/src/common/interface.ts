@@ -218,7 +218,7 @@ export type QuestionOrderBy =
 
 export interface QueryQuestionsReq extends Paging {
   order: QuestionOrderBy;
-  tags?: string[];
+  tag?: string;
 }
 
 export type AdminQuestionStatus = 'available' | 'closed' | 'deleted';
