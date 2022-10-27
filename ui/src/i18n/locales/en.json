@@ -250,7 +250,7 @@
     "synonyms_text": "The following tags will be remapped to",
     "delete": {
       "title": "Delete this tag",
-      "content": "<p>We do not allowed deleting tag with posts.</p><p>Please remove the python tag from the posts first.</p>",
+      "content": "<p>We do not allowed deleting tag with posts.</p><p>Please remove this tag from the posts first.</p>",
       "content2": "Are you sure you wish to delete?",
       "close": "Close"
     }
@@ -572,6 +572,8 @@
     "update": "Modified",
     "edit": "edited",
     "Views": "Viewed",
+    "Follow": "Follow",
+    "Following": "Following",
     "answered": "answered",
     "closed_in": "Closed in",
     "show_exist": "Show existing question.",
