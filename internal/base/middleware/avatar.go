@@ -3,13 +3,13 @@ package middleware
 import (
 	"fmt"
 	"io/ioutil"
+	"net/url"
 	"path/filepath"
 	"strings"
 
 	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/answerdev/answer/pkg/converter"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 )
 
@@ -35,11 +35,16 @@ func (am *AvatarMiddleware) AvatarThumb() gin.HandlerFunc {
 		hstr := ctx.Query("height")
 		w := converter.StringToInt(wstr)
 		h := converter.StringToInt(hstr)
-		url := ctx.Request.RequestURI
-		if strings.Contains(url, "/uploads/avatar/") {
-			_, fileName := filepath.Split(url)
+		u := ctx.Request.RequestURI
+		if strings.Contains(u, "/uploads/avatar/") {
+			uUrl, err := url.Parse(u)
+			if err != nil {
+				ctx.Next()
+				return
+			}
+			_, urlfileName := filepath.Split(uUrl.Path)
 			uploadPath := am.serviceConfig.UploadPath
-			filePath := fmt.Sprintf("%s/avatar/%s", uploadPath, fileName)
+			filePath := fmt.Sprintf("%s/avatar/%s", uploadPath, urlfileName)
 			if w == 0 && h == 0 {
 				avatarfile, err := ioutil.ReadFile(filePath)
 				if err != nil {
@@ -50,8 +55,7 @@ func (am *AvatarMiddleware) AvatarThumb() gin.HandlerFunc {
 				ctx.Abort()
 				return
 			} else {
-				spew.Dump(w, h, fileName)
-				avatarfile, err := am.uploaderService.AvatarThumbFile(ctx, uploadPath, fileName, w, h)
+				avatarfile, err := am.uploaderService.AvatarThumbFile(ctx, uploadPath, urlfileName, w, h)
 				if err != nil {
 					ctx.Next()
 					return
