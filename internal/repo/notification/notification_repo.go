@@ -4,12 +4,12 @@ import (
 	"context"
 	"time"
 
-	"github.com/segmentfault/answer/internal/base/constant"
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	notficationcommon "github.com/segmentfault/answer/internal/service/notification_common"
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	notficationcommon "github.com/answerdev/answer/internal/service/notification_common"
 	"github.com/segmentfault/pacman/errors"
 )
 

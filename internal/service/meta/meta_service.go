@@ -3,8 +3,8 @@ package meta
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/segmentfault/pacman/errors"
 )
 

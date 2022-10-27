@@ -3,9 +3,9 @@ package controller
 import (
 	"encoding/json"
 
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/schema"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/handler"
-	"github.com/segmentfault/answer/internal/schema"
 	"github.com/segmentfault/pacman/i18n"
 )
 

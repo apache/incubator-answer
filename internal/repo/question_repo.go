@@ -4,14 +4,14 @@ import (
 	"context"
 	"time"
 
-	"github.com/segmentfault/answer/internal/base/constant"
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/pager"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	questioncommon "github.com/segmentfault/answer/internal/service/question_common"
-	"github.com/segmentfault/answer/internal/service/unique"
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/pager"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	questioncommon "github.com/answerdev/answer/internal/service/question_common"
+	"github.com/answerdev/answer/internal/service/unique"
 
 	"github.com/segmentfault/pacman/errors"
 )
@@ -185,7 +185,7 @@ func (qr *questionRepo) SearchList(ctx context.Context, search *schema.QuestionS
 	session := qr.data.DB.Table("question")
 
 	if len(search.TagIDs) > 0 {
-		session = session.Join("RIGHT", "tag_rel", "question.id = tag_rel.object_id")
+		session = session.Join("LEFT", "tag_rel", "question.id = tag_rel.object_id")
 		session = session.And("tag_rel.tag_id =?", search.TagIDs[0])
 		//session = session.In("tag_rel.tag_id ", search.TagIDs)
 		session = session.And("tag_rel.status =?", entity.TagRelStatusAvailable)

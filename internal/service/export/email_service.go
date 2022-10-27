@@ -5,9 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"mime"
 
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"golang.org/x/net/context"
@@ -16,8 +20,9 @@ import (
 
 // EmailService kit service
 type EmailService struct {
-	configRepo config.ConfigRepo
-	emailRepo  EmailRepo
+	configRepo   config.ConfigRepo
+	emailRepo    EmailRepo
+	siteInfoRepo siteinfo_common.SiteInfoRepo
 }
 
 // EmailRepo email repository
@@ -27,10 +32,11 @@ type EmailRepo interface {
 }
 
 // NewEmailService email service
-func NewEmailService(configRepo config.ConfigRepo, emailRepo EmailRepo) *EmailService {
+func NewEmailService(configRepo config.ConfigRepo, emailRepo EmailRepo, siteInfoRepo siteinfo_common.SiteInfoRepo) *EmailService {
 	return &EmailService{
-		configRepo: configRepo,
-		emailRepo:  emailRepo,
+		configRepo:   configRepo,
+		emailRepo:    emailRepo,
+		siteInfoRepo: siteInfoRepo,
 	}
 }
 
@@ -88,7 +94,8 @@ func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body, co
 	}
 
 	m := gomail.NewMessage()
-	m.SetHeader("From", ec.FromEmail)
+	fromName := mime.QEncoding.Encode("utf-8", ec.FromName)
+	m.SetHeader("From", fmt.Sprintf("%s <%s>", fromName, ec.FromEmail))
 	m.SetHeader("To", toEmailAddr)
 	m.SetHeader("Subject", subject)
 	m.SetBody("text/html", body)
@@ -120,14 +127,35 @@ func (es *EmailService) VerifyUrlExpired(ctx context.Context, code string) (cont
 	return content
 }
 
-func (es *EmailService) RegisterTemplate(registerUrl string) (title, body string, err error) {
+func (es *EmailService) GetSiteGeneral(ctx context.Context) (resp schema.SiteGeneralResp, err error) {
+	var (
+		siteType = "general"
+		siteInfo *entity.SiteInfo
+		exist    bool
+	)
+	resp = schema.SiteGeneralResp{}
+
+	siteInfo, exist, err = es.siteInfoRepo.GetByType(ctx, siteType)
+	if !exist {
+		return
+	}
+
+	_ = json.Unmarshal([]byte(siteInfo.Content), &resp)
+	return
+}
+
+func (es *EmailService) RegisterTemplate(ctx context.Context, registerUrl string) (title, body string, err error) {
 	ec, err := es.GetEmailConfig()
+	if err != nil {
+		return
+	}
+	siteinfo, err := es.GetSiteGeneral(ctx)
 	if err != nil {
 		return
 	}
 
 	templateData := RegisterTemplateData{
-		SiteName: ec.FromName, RegisterUrl: registerUrl,
+		SiteName: siteinfo.Name, RegisterUrl: registerUrl,
 	}
 	tmpl, err := template.New("register_title").Parse(ec.RegisterTitle)
 	if err != nil {
@@ -152,13 +180,18 @@ func (es *EmailService) RegisterTemplate(registerUrl string) (title, body string
 	return titleBuf.String(), bodyBuf.String(), nil
 }
 
-func (es *EmailService) PassResetTemplate(passResetUrl string) (title, body string, err error) {
+func (es *EmailService) PassResetTemplate(ctx context.Context, passResetUrl string) (title, body string, err error) {
 	ec, err := es.GetEmailConfig()
 	if err != nil {
 		return
 	}
 
-	templateData := PassResetTemplateData{SiteName: ec.FromName, PassResetUrl: passResetUrl}
+	siteinfo, err := es.GetSiteGeneral(ctx)
+	if err != nil {
+		return
+	}
+
+	templateData := PassResetTemplateData{SiteName: siteinfo.Name, PassResetUrl: passResetUrl}
 	tmpl, err := template.New("pass_reset_title").Parse(ec.PassResetTitle)
 	if err != nil {
 		return "", "", err
@@ -181,14 +214,18 @@ func (es *EmailService) PassResetTemplate(passResetUrl string) (title, body stri
 	return titleBuf.String(), bodyBuf.String(), nil
 }
 
-func (es *EmailService) ChangeEmailTemplate(changeEmailUrl string) (title, body string, err error) {
+func (es *EmailService) ChangeEmailTemplate(ctx context.Context, changeEmailUrl string) (title, body string, err error) {
 	ec, err := es.GetEmailConfig()
 	if err != nil {
 		return
 	}
 
+	siteinfo, err := es.GetSiteGeneral(ctx)
+	if err != nil {
+		return
+	}
 	templateData := ChangeEmailTemplateData{
-		SiteName:       ec.FromName,
+		SiteName:       siteinfo.Name,
 		ChangeEmailUrl: changeEmailUrl,
 	}
 	tmpl, err := template.New("email_change_title").Parse(ec.ChangeTitle)
@@ -213,14 +250,19 @@ func (es *EmailService) ChangeEmailTemplate(changeEmailUrl string) (title, body 
 	return titleBuf.String(), bodyBuf.String(), nil
 }
 
-func (es *EmailService) TestTemplate() (title, body string, err error) {
+func (es *EmailService) TestTemplate(ctx context.Context) (title, body string, err error) {
 	ec, err := es.GetEmailConfig()
 	if err != nil {
 		return
 	}
 
+	siteinfo, err := es.GetSiteGeneral(ctx)
+	if err != nil {
+		return
+	}
+
 	templateData := TestTemplateData{
-		SiteName: ec.FromName,
+		SiteName: siteinfo.Name,
 	}
 
 	titleBuf := &bytes.Buffer{}

@@ -3,15 +3,16 @@ package activity
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/base/constant"
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/activity"
-	"github.com/segmentfault/answer/internal/service/activity_common"
-	"github.com/segmentfault/answer/internal/service/notice_queue"
-	"github.com/segmentfault/answer/internal/service/rank"
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/activity"
+	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/notice_queue"
+	"github.com/answerdev/answer/internal/service/rank"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
@@ -140,8 +141,10 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 		}
 		if action == acceptAction {
 			addActivity.UserID = questionUserID
+			addActivity.TriggerUserID = converter.StringToInt64(answerUserID)
 		} else {
 			addActivity.UserID = answerUserID
+			addActivity.TriggerUserID = converter.StringToInt64(answerUserID)
 		}
 		if isSelf {
 			addActivity.Rank = 0
@@ -193,7 +196,7 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 		}
 		if act.UserID == questionUserID {
 			msg.TriggerUserID = answerUserID
-			msg.ObjectType = constant.QuestionObjectType
+			msg.ObjectType = constant.AnswerObjectType
 		} else {
 			msg.TriggerUserID = questionUserID
 			msg.ObjectType = constant.AnswerObjectType

@@ -1,9 +1,9 @@
 package router
 
 import (
+	"github.com/answerdev/answer/internal/controller"
+	"github.com/answerdev/answer/internal/controller_backyard"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/controller"
-	"github.com/segmentfault/answer/internal/controller_backyard"
 )
 
 type AnswerAPIRouter struct {

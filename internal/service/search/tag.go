@@ -5,11 +5,11 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/activity_common"
-	"github.com/segmentfault/answer/internal/service/search_common"
-	tagcommon "github.com/segmentfault/answer/internal/service/tag_common"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/search_common"
+	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 )
 
 type TagSearch struct {

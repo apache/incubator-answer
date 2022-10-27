@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/segmentfault/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/i18n"
 )

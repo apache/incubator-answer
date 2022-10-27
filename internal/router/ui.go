@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/ui"
 	"github.com/segmentfault/pacman/log"
 )
 

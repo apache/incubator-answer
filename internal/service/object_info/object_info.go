@@ -3,14 +3,14 @@ package object_info
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/base/constant"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/schema"
-	answercommon "github.com/segmentfault/answer/internal/service/answer_common"
-	"github.com/segmentfault/answer/internal/service/comment_common"
-	questioncommon "github.com/segmentfault/answer/internal/service/question_common"
-	tagcommon "github.com/segmentfault/answer/internal/service/tag_common"
-	"github.com/segmentfault/answer/pkg/obj"
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/schema"
+	answercommon "github.com/answerdev/answer/internal/service/answer_common"
+	"github.com/answerdev/answer/internal/service/comment_common"
+	questioncommon "github.com/answerdev/answer/internal/service/question_common"
+	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
+	"github.com/answerdev/answer/pkg/obj"
 	"github.com/segmentfault/pacman/errors"
 )
 

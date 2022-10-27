@@ -4,12 +4,12 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/export"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/export"
-	"github.com/segmentfault/answer/internal/service/siteinfo_common"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -143,7 +143,7 @@ func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.Upda
 		return err
 	}
 	if len(req.TestEmailRecipient) > 0 {
-		title, body, err := s.emailService.TestTemplate()
+		title, body, err := s.emailService.TestTemplate(ctx)
 		if err != nil {
 			return err
 		}
