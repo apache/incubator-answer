@@ -174,7 +174,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter()
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)
-	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware)
+	avatarMiddleware := middleware.NewAvatarMiddleware(serviceConf)
+	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware)
 	application := newApplication(serverConf, ginEngine)
 	return application, func() {
 		cleanup2()

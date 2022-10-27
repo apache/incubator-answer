@@ -376,7 +376,9 @@ func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 // @Router /answer/api/v1/user/avatar/upload [post]
 func (uc *UserController) UploadUserAvatar(ctx *gin.Context) {
 	// max size
-	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 10*1024*1024)
+	var filesMax int64 = 5 << 20
+	var valuesMax int64 = 5
+	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, filesMax+valuesMax)
 	_, header, err := ctx.Request.FormFile("file")
 	if err != nil {
 		log.Error(err.Error())
