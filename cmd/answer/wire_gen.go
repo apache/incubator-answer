@@ -132,7 +132,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	followController := controller.NewFollowController(followService)
 	collectionRepo := collection.NewCollectionRepo(dataData, uniqueIDRepo)
 	collectionGroupRepo := collection.NewCollectionGroupRepo(dataData)
-	tagRelRepo := tag.NewTagListRepo(dataData)
+	tagRelRepo := tag.NewTagRelRepo(dataData)
 	tagCommonService := tagcommon.NewTagCommonService(tagRepo, tagRelRepo, revisionService)
 	collectionCommon := collectioncommon.NewCollectionCommon(collectionRepo)
 	answerCommon := answercommon.NewAnswerCommon(answerRepo)

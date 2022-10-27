@@ -53,7 +53,7 @@ var ProviderSetRepo = wire.NewSet(
 	activity.NewQuestionActivityRepo,
 	activity.NewUserActiveActivityRepo,
 	tag.NewTagRepo,
-	tag.NewTagListRepo,
+	tag.NewTagRelRepo,
 	collection.NewCollectionRepo,
 	collection.NewCollectionGroupRepo,
 	auth.NewAuthRepo,

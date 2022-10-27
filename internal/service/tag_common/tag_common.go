@@ -30,7 +30,6 @@ type TagRepo interface {
 type TagRelRepo interface {
 	AddTagRelList(ctx context.Context, tagList []*entity.TagRel) (err error)
 	RemoveTagRelListByIDs(ctx context.Context, ids []int64) (err error)
-	RemoveTagRelListByObjectID(ctx context.Context, objectId string) (err error)
 	EnableTagRelByIDs(ctx context.Context, ids []int64) (err error)
 	GetObjectTagRelWithoutStatus(ctx context.Context, objectId, tagID string) (tagRel *entity.TagRel, exist bool, err error)
 	GetObjectTagRelList(ctx context.Context, objectId string) (tagListList []*entity.TagRel, err error)
