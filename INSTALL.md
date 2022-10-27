@@ -35,7 +35,7 @@ $ docker pull answerdev/answer:latest
 $ mkdir -p /var/data
 
 # Run the image first
-$ docker run --name=answer -p 9080:80 -v /var/data:/data answer/answer
+$ docker run --name=answer -p 9080:80 -v /var/data:/data answerdev/answer
 
 # After the first startup, a configuration file will be generated in the /var/data directory
 # /var/data/conf/config.yaml
