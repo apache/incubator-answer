@@ -17,6 +17,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/reason"
 	"github.com/answerdev/answer/internal/repo/report"
 	"github.com/answerdev/answer/internal/repo/revision"
+	"github.com/answerdev/answer/internal/repo/site_info"
 	"github.com/answerdev/answer/internal/repo/tag"
 	"github.com/answerdev/answer/internal/repo/unique"
 	"github.com/answerdev/answer/internal/repo/user"
@@ -58,6 +59,6 @@ var ProviderSetRepo = wire.NewSet(
 	meta.NewMetaRepo,
 	export.NewEmailRepo,
 	reason.NewReasonRepo,
-	NewSiteInfo,
+	site_info.NewSiteInfo,
 	notification.NewNotificationRepo,
 )
