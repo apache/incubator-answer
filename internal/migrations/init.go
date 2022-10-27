@@ -77,6 +77,7 @@ func initAdminUser(engine *xorm.Engine) error {
 		MailStatus:   1,
 		NoticeStatus: 1,
 		Status:       1,
+		Rank:         1,
 		DisplayName:  "admin",
 		IsAdmin:      true,
 	})
