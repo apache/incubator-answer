@@ -20,7 +20,7 @@
   }
   .placeholder-search {
     background-color: rgba(255, 255, 255, .2);
-    border: $border-width $border-style transparent;
+    border: $border-width $border-style rgba(255, 255, 255, .2);
     &:focus {
       border: $border-width $border-style $border-color;
     }
