@@ -5,6 +5,12 @@ data:
   database:
     driver: "mysql"
     connection: root:root@tcp(db:3306)/answer
+    # the maximum number of open connections to the database, default is 0 (unlimited)
+    max_open_conn: 100
+    # the max idle connections on pool, default is 2
+    max_idle_conn: 10
+    # the maximum amount of time a connection may be reused, unit is second
+    conn_max_life_time: 3600
   cache:
     file_path: "/tmp/cache/cache.db"
 i18n:
