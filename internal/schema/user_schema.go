@@ -150,16 +150,12 @@ func (r *GetOtherUserInfoByUsernameResp) GetFromUserEntity(userInfo *entity.User
 }
 
 const (
-	Mail_State_Pass   = 1
-	Mail_State_Verifi = 2
+	NoticeStatusOn  = 1
+	NoticeStatusOff = 2
 
-	Notice_Status_On  = 1
-	Notice_Status_Off = 2
-
-	//ActionRecord ReportType
-	ActionRecord_Type_Login     = "login"
-	ActionRecord_Type_Email     = "e_mail"
-	ActionRecord_Type_Find_Pass = "find_pass"
+	ActionRecordTypeLogin    = "login"
+	ActionRecordTypeEmail    = "e_mail"
+	ActionRecordTypeFindPass = "find_pass"
 )
 
 var UserStatusShow = map[int]string{
