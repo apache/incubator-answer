@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"regexp"
@@ -255,10 +256,13 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 			return errors.BadRequest(reason.UsernameDuplicate)
 		}
 	}
-
+	Avatar, err := json.Marshal(req.Avatar)
+	if err != nil {
+		return err
+	}
 	userInfo := entity.User{}
 	userInfo.ID = req.UserId
-	userInfo.Avatar = req.Avatar
+	userInfo.Avatar = string(Avatar)
 	userInfo.DisplayName = req.DisplayName
 	userInfo.Bio = req.Bio
 	userInfo.BioHtml = req.BioHtml

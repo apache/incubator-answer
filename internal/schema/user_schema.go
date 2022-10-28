@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 // UserVerifyEmailReq user verify email request
@@ -72,11 +73,32 @@ type GetUserResp struct {
 
 func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 	_ = copier.Copy(r, userInfo)
+	r.Avatar = r.AvatarInfo(userInfo.Avatar)
 	r.CreatedAt = userInfo.CreatedAt.Unix()
 	r.LastLoginDate = userInfo.LastLoginDate.Unix()
 	statusShow, ok := UserStatusShow[userInfo.Status]
 	if ok {
 		r.Status = statusShow
+	}
+}
+
+func (us *GetUserResp) AvatarInfo(AvatarJson string) string {
+	if AvatarJson == "" {
+		return ""
+	}
+	AvatarInfo := &AvatarInfo{}
+	err := json.Unmarshal([]byte(AvatarJson), AvatarInfo)
+	if err != nil {
+		log.Error("AvatarInfo json.Unmarshal Error", err)
+		return ""
+	}
+	switch AvatarInfo.Type {
+	case "gravatar":
+		return AvatarInfo.Gravatar
+	case "custom":
+		return AvatarInfo.Custom
+	default:
+		return ""
 	}
 }
 
@@ -230,7 +252,7 @@ type UpdateInfoRequest struct {
 	// username
 	Username string `validate:"omitempty,gt=0,lte=30" json:"username"`
 	// avatar
-	Avatar string `validate:"omitempty,gt=0,lte=500" json:"avatar"`
+	Avatar AvatarInfo `json:"avatar"`
 	// bio
 	Bio string `validate:"omitempty,gt=0,lte=4096" json:"bio"`
 	// bio
@@ -241,6 +263,12 @@ type UpdateInfoRequest struct {
 	Location string `validate:"omitempty,gt=0,lte=100" json:"location"`
 	// user id
 	UserId string `json:"-" `
+}
+
+type AvatarInfo struct {
+	Type     string `validate:"omitempty,gt=0,lte=100"  json:"type"`
+	Gravatar string `validate:"omitempty,gt=0,lte=200"  json:"gravatar"`
+	Custom   string `validate:"omitempty,gt=0,lte=200"  json:"custom"`
 }
 
 func (u *UpdateInfoRequest) Check() (errField *validator.ErrorField, err error) {
