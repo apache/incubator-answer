@@ -323,7 +323,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	}
 	if !oldPassVerification {
 		resp := schema.UserVerifyEmailErrorResponse{
-			Key:   "captcha_code",
+			Key:   "old_pass",
 			Value: "error.object.old_password_verification_failed",
 		}
 		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
@@ -333,7 +333,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	if req.OldPass == req.Pass {
 
 		resp := schema.UserVerifyEmailErrorResponse{
-			Key:   "captcha_code",
+			Key:   "pass",
 			Value: "error.object.new_password_same_as_previous_setting",
 		}
 		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
