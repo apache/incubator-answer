@@ -82,12 +82,12 @@ func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 	}
 }
 
-func (us *GetUserResp) AvatarInfo(AvatarJson string) string {
-	if AvatarJson == "" {
+func (us *GetUserResp) AvatarInfo(avatarJson string) string {
+	if avatarJson == "" {
 		return ""
 	}
 	AvatarInfo := &AvatarInfo{}
-	err := json.Unmarshal([]byte(AvatarJson), AvatarInfo)
+	err := json.Unmarshal([]byte(avatarJson), AvatarInfo)
 	if err != nil {
 		log.Error("AvatarInfo json.Unmarshal Error", err)
 		return ""

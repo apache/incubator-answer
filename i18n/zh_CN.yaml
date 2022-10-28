@@ -86,6 +86,8 @@ error:
       other: "用户名无效"
     username_duplicate:
       other: "用户名已被使用"
+    set_avatar:
+      other: "头像设置错误"
 
 report:
   spam:

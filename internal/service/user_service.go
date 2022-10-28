@@ -258,6 +258,7 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 	}
 	Avatar, err := json.Marshal(req.Avatar)
 	if err != nil {
+		err = errors.BadRequest(reason.UserSetAvatar).WithError(err).WithStack()
 		return err
 	}
 	userInfo := entity.User{}
@@ -548,7 +549,7 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 	}
 	err = us.userRepo.UpdateEmail(ctx, data.UserID, data.Email)
 	if err != nil {
-		return err
+		return errors.BadRequest(reason.UserNotFound)
 	}
 	return nil
 }
