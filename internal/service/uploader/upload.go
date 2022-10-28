@@ -89,7 +89,7 @@ func (us *UploaderService) AvatarThumbFile(ctx *gin.Context, uploadPath, fileNam
 	if !ok {
 		return avatarfile, fmt.Errorf("img extension not exist")
 	}
-	err = imaging.Encode(&buf, new_image, formatExts[fileSuffix])
+	err = imaging.Encode(&buf, new_image, FormatExts[fileSuffix])
 
 	if err != nil {
 		return avatarfile, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
