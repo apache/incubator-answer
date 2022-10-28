@@ -4108,6 +4108,23 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.AvatarInfo": {
+            "type": "object",
+            "properties": {
+                "custom": {
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "gravatar": {
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "type": {
+                    "type": "string",
+                    "maxLength": 100
+                }
+            }
+        },
         "schema.CloseQuestionReq": {
             "type": "object",
             "required": [
@@ -5318,8 +5335,7 @@ const docTemplate = `{
             "properties": {
                 "avatar": {
                     "description": "avatar",
-                    "type": "string",
-                    "maxLength": 500
+                    "$ref": "#/definitions/schema.AvatarInfo"
                 },
                 "bio": {
                     "description": "bio",

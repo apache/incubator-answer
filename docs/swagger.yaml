@@ -139,6 +139,18 @@ definitions:
         description: title
         type: string
     type: object
+  schema.AvatarInfo:
+    properties:
+      custom:
+        maxLength: 200
+        type: string
+      gravatar:
+        maxLength: 200
+        type: string
+      type:
+        maxLength: 100
+        type: string
+    type: object
   schema.CloseQuestionReq:
     properties:
       close_msg:
@@ -1013,9 +1025,8 @@ definitions:
   schema.UpdateInfoRequest:
     properties:
       avatar:
+        $ref: '#/definitions/schema.AvatarInfo'
         description: avatar
-        maxLength: 500
-        type: string
       bio:
         description: bio
         maxLength: 4096
