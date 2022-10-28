@@ -551,5 +551,9 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 	if err != nil {
 		return errors.BadRequest(reason.UserNotFound)
 	}
+	err = us.userRepo.UpdateEmailStatus(ctx, data.UserID, entity.EmailStatusAvailable)
+	if err != nil {
+		return err
+	}
 	return nil
 }
