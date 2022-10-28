@@ -480,6 +480,12 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	// If the user is not logged in, the api cannot be used.
+	// If the user email is not verified, that also can use this api to modify the email.
+	if len(req.UserID) == 0 {
+		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+		return
+	}
 
 	err := uc.userService.UserChangeEmailSendCode(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
