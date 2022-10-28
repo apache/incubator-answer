@@ -480,7 +480,25 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	// If the user is not logged in, the api cannot be used.
+	// If the user email is not verified, that also can use this api to modify the email.
 
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		resp := schema.UserVerifyEmailErrorResponse{
+			Key:   "captcha_code",
+			Value: "error.object.verification_failed",
+		}
+		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
+		return
+	}
+
+	if len(req.UserID) == 0 {
+		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+		return
+	}
+	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP())
 	err := uc.userService.UserChangeEmailSendCode(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -508,5 +526,6 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 	}
 
 	err := uc.userService.UserChangeEmailVerify(ctx, req.Content)
+	uc.actionService.ActionRecordDel(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, nil)
 }
