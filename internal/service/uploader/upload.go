@@ -57,57 +57,55 @@ func (us *UploaderService) AvatarThumbFile(ctx *gin.Context, uploadPath, fileNam
 	thumbFileName := fmt.Sprintf("%d_%d@%s", w, h, fileName)
 	thumbfilePath := fmt.Sprintf("%s/%s/%s", uploadPath, avatarThumbSubPath, thumbFileName)
 	avatarfile, err = ioutil.ReadFile(thumbfilePath)
-	if err != nil {
-		filePath := fmt.Sprintf("%s/avatar/%s", uploadPath, fileName)
-		avatarfile, err = ioutil.ReadFile(filePath)
-		if err != nil {
-			return avatarfile, err
-		}
-		reader := bytes.NewReader(avatarfile)
-		img, err := imaging.Decode(reader)
-		if err != nil {
-			return avatarfile, err
-		}
-		new_image := imaging.Fill(img, w, h, imaging.Center, imaging.Linear)
-		var buf bytes.Buffer
-		fileSuffix := path.Ext(fileName)
-		formatExts := map[string]imaging.Format{
-			".jpg":  imaging.JPEG,
-			".jpeg": imaging.JPEG,
-			".png":  imaging.PNG,
-			".gif":  imaging.GIF,
-			".tif":  imaging.TIFF,
-			".tiff": imaging.TIFF,
-			".bmp":  imaging.BMP,
-		}
-		_, ok := formatExts[fileSuffix]
-
-		if !ok {
-			return avatarfile, fmt.Errorf("img extension not exist")
-		}
-		err = imaging.Encode(&buf, new_image, formatExts[fileSuffix])
-
-		if err != nil {
-			return avatarfile, err
-		}
-		thumbReader := bytes.NewReader(buf.Bytes())
-		dir.CreateDirIfNotExist(path.Join(us.serviceConfig.UploadPath, avatarThumbSubPath))
-		avatarFilePath := path.Join(avatarThumbSubPath, thumbFileName)
-		savefilePath := path.Join(us.serviceConfig.UploadPath, avatarFilePath)
-		out, err := os.Create(savefilePath)
-		if err != nil {
-			return avatarfile, err
-		}
-		defer out.Close()
-		_, err = io.Copy(out, thumbReader)
-		if err != nil {
-			return avatarfile, err
-		}
-		return buf.Bytes(), nil
+	if err == nil {
+		return avatarfile, nil
 	}
-	// thumb file exist
-	return avatarfile, nil
+	filePath := fmt.Sprintf("%s/avatar/%s", uploadPath, fileName)
+	avatarfile, err = ioutil.ReadFile(filePath)
+	if err != nil {
+		return avatarfile, err
+	}
+	reader := bytes.NewReader(avatarfile)
+	img, err := imaging.Decode(reader)
+	if err != nil {
+		return avatarfile, err
+	}
+	new_image := imaging.Fill(img, w, h, imaging.Center, imaging.Linear)
+	var buf bytes.Buffer
+	fileSuffix := path.Ext(fileName)
+	formatExts := map[string]imaging.Format{
+		".jpg":  imaging.JPEG,
+		".jpeg": imaging.JPEG,
+		".png":  imaging.PNG,
+		".gif":  imaging.GIF,
+		".tif":  imaging.TIFF,
+		".tiff": imaging.TIFF,
+		".bmp":  imaging.BMP,
+	}
+	_, ok := formatExts[fileSuffix]
 
+	if !ok {
+		return avatarfile, fmt.Errorf("img extension not exist")
+	}
+	err = imaging.Encode(&buf, new_image, formatExts[fileSuffix])
+
+	if err != nil {
+		return avatarfile, err
+	}
+	thumbReader := bytes.NewReader(buf.Bytes())
+	dir.CreateDirIfNotExist(path.Join(us.serviceConfig.UploadPath, avatarThumbSubPath))
+	avatarFilePath := path.Join(avatarThumbSubPath, thumbFileName)
+	savefilePath := path.Join(us.serviceConfig.UploadPath, avatarFilePath)
+	out, err := os.Create(savefilePath)
+	if err != nil {
+		return avatarfile, err
+	}
+	defer out.Close()
+	_, err = io.Copy(out, thumbReader)
+	if err != nil {
+		return avatarfile, err
+	}
+	return buf.Bytes(), nil
 }
 
 func (us *UploaderService) UploadPostFile(ctx *gin.Context, file *multipart.FileHeader, fileExt string) (
