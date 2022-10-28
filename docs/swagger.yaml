@@ -1241,6 +1241,12 @@ definitions:
     type: object
   schema.UserChangeEmailSendCodeReq:
     properties:
+      captcha_code:
+        maxLength: 500
+        type: string
+      captcha_id:
+        maxLength: 500
+        type: string
       e_mail:
         maxLength: 500
         type: string
@@ -3365,7 +3371,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: GetUserInfoByUserID
+      description: get user info, if user no login response http code is 200, but
+        user info is null
       produces:
       - application/json
       responses:
