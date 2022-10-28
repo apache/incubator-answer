@@ -30,13 +30,12 @@ func NewAvatarMiddleware(serviceConfig *service_config.ServiceConfig,
 
 func (am *AvatarMiddleware) AvatarThumb() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		//?width=100&height=100
-		wstr := ctx.Query("width")
-		hstr := ctx.Query("height")
-		w := converter.StringToInt(wstr)
-		h := converter.StringToInt(hstr)
 		u := ctx.Request.RequestURI
 		if strings.Contains(u, "/uploads/avatar/") {
+			wstr := ctx.Query("width")
+			hstr := ctx.Query("height")
+			w := converter.StringToInt(wstr)
+			h := converter.StringToInt(hstr)
 			uUrl, err := url.Parse(u)
 			if err != nil {
 				ctx.Next()
@@ -45,25 +44,19 @@ func (am *AvatarMiddleware) AvatarThumb() gin.HandlerFunc {
 			_, urlfileName := filepath.Split(uUrl.Path)
 			uploadPath := am.serviceConfig.UploadPath
 			filePath := fmt.Sprintf("%s/avatar/%s", uploadPath, urlfileName)
+			var avatarfile []byte
 			if w == 0 && h == 0 {
-				avatarfile, err := ioutil.ReadFile(filePath)
-				if err != nil {
-					ctx.Next()
-					return
-				}
-				ctx.Writer.WriteString(string(avatarfile))
-				ctx.Abort()
-				return
+				avatarfile, err = ioutil.ReadFile(filePath)
 			} else {
-				avatarfile, err := am.uploaderService.AvatarThumbFile(ctx, uploadPath, urlfileName, w, h)
-				if err != nil {
-					ctx.Next()
-					return
-				}
-				ctx.Writer.WriteString(string(avatarfile))
-				ctx.Abort()
+				avatarfile, err = am.uploaderService.AvatarThumbFile(ctx, uploadPath, urlfileName, w, h)
+			}
+			if err != nil {
+				ctx.Next()
 				return
 			}
+			ctx.Writer.WriteString(string(avatarfile))
+			ctx.Abort()
+			return
 
 		}
 		ctx.Next()
