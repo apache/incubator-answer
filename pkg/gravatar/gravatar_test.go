@@ -44,15 +44,15 @@ func TestResize(t *testing.T) {
 				originalAvatarURL: "https://www.gravatar.com/avatar/b2be4e4438f08a5e885be8de5f41fdd7",
 				sizePixel:         128,
 			},
-			wantResizedAvatarURL: "https://www.gravatar.com/avatar/b2be4e4438f08a5e885be8de5f41fdd7?p=128",
+			wantResizedAvatarURL: "https://www.gravatar.com/avatar/b2be4e4438f08a5e885be8de5f41fdd7?s=128",
 		},
 		{
 			name: "already resized url",
 			args: args{
-				originalAvatarURL: "https://www.gravatar.com/avatar/b2be4e4438f08a5e885be8de5f41fdd7?p=128",
+				originalAvatarURL: "https://www.gravatar.com/avatar/b2be4e4438f08a5e885be8de5f41fdd7?s=128",
 				sizePixel:         64,
 			},
-			wantResizedAvatarURL: "https://www.gravatar.com/avatar/b2be4e4438f08a5e885be8de5f41fdd7?p=64",
+			wantResizedAvatarURL: "https://www.gravatar.com/avatar/b2be4e4438f08a5e885be8de5f41fdd7?s=64",
 		},
 		{
 			name: "empty url",

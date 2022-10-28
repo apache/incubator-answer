@@ -28,7 +28,7 @@ func Resize(originalAvatarURL string, sizePixel int) (resizedAvatarURL string) {
 		return originalAvatarURL
 	}
 	query := originalURL.Query()
-	query.Set("p", fmt.Sprintf("%d", sizePixel))
+	query.Set("s", fmt.Sprintf("%d", sizePixel))
 	originalURL.RawQuery = query.Encode()
 	return originalURL.String()
 }
