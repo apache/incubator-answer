@@ -95,12 +95,12 @@ func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
 	if ok {
 		r.Status = statusShow
 	}
-	AvatarInfo := &AvatarInfo{}
-	err := json.Unmarshal([]byte(userInfo.Avatar), AvatarInfo)
+	avatarInfo := &AvatarInfo{}
+	err := json.Unmarshal([]byte(userInfo.Avatar), avatarInfo)
 	if err != nil {
 		log.Error("AvatarInfo json.Unmarshal Error", err)
 	}
-	r.Avatar = AvatarInfo
+	r.Avatar = avatarInfo
 }
 
 func (us *GetUserResp) AvatarInfo(avatarJson string) string {

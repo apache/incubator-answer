@@ -3303,7 +3303,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "GetUserInfoByUserID",
+                "description": "get user info, if user no login response http code is 200, but user info is null",
                 "consumes": [
                     "application/json"
                 ],
@@ -5628,6 +5628,14 @@ const docTemplate = `{
                 "e_mail"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "captcha_id": {
+                    "type": "string",
+                    "maxLength": 500
+                },
                 "e_mail": {
                     "type": "string",
                     "maxLength": 500

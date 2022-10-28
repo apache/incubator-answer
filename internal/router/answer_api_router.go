@@ -87,6 +87,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/comment", a.commentController.GetComment)
 
 	// user
+	r.GET("/user/info", a.userController.GetUserInfoByUserID)
 	r.GET("/user/status", a.userController.GetUserStatus)
 	r.GET("/user/action/record", a.userController.ActionRecord)
 	r.POST("/user/login/email", a.userController.UserEmailLogin)
@@ -174,7 +175,6 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.DELETE("/answer", a.answerController.RemoveAnswer)
 
 	// user
-	r.GET("/user/info", a.userController.GetUserInfoByUserID)
 	r.PUT("/user/password", a.userController.UserModifyPassWord)
 	r.PUT("/user/info", a.userController.UserUpdateInfo)
 	r.POST("/user/avatar/upload", a.userController.UploadUserAvatar)

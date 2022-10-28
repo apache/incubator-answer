@@ -45,9 +45,9 @@ func NewUserController(
 	}
 }
 
-// GetUserInfoByUserID godoc
+// GetUserInfoByUserID get user info, if user no login response http code is 200, but user info is null
 // @Summary GetUserInfoByUserID
-// @Description GetUserInfoByUserID
+// @Description get user info, if user no login response http code is 200, but user info is null
 // @Tags User
 // @Accept json
 // @Produce json
@@ -57,6 +57,13 @@ func NewUserController(
 func (uc *UserController) GetUserInfoByUserID(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	token := middleware.ExtractToken(ctx)
+
+	// if user is no login return null in data
+	if len(token) == 0 || len(userID) == 0 {
+		handler.HandleResponse(ctx, nil, nil)
+		return
+	}
+
 	resp, err := uc.userService.GetUserInfoByUserID(ctx, token, userID)
 	handler.HandleResponse(ctx, err, resp)
 }
