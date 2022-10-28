@@ -62,9 +62,12 @@ var FormatExts = map[string]imaging.Format{
 	".bmp":  imaging.BMP,
 }
 
-func (us *UploaderService) AvatarThumbFile(ctx *gin.Context, uploadPath, fileName string, w, h int) (
+func (us *UploaderService) AvatarThumbFile(ctx *gin.Context, uploadPath, fileName string, size int) (
 	avatarfile []byte, err error) {
-	thumbFileName := fmt.Sprintf("%d_%d@%s", w, h, fileName)
+	if size > 1024 {
+		size = 1024
+	}
+	thumbFileName := fmt.Sprintf("%d_%d@%s", size, size, fileName)
 	thumbfilePath := fmt.Sprintf("%s/%s/%s", uploadPath, avatarThumbSubPath, thumbFileName)
 	avatarfile, err = ioutil.ReadFile(thumbfilePath)
 	if err == nil {
@@ -80,7 +83,7 @@ func (us *UploaderService) AvatarThumbFile(ctx *gin.Context, uploadPath, fileNam
 	if err != nil {
 		return avatarfile, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
-	new_image := imaging.Fill(img, w, h, imaging.Center, imaging.Linear)
+	new_image := imaging.Fill(img, size, size, imaging.Center, imaging.Linear)
 	var buf bytes.Buffer
 	fileSuffix := path.Ext(fileName)
 
