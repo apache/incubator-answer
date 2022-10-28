@@ -6,6 +6,7 @@ require (
 	github.com/Chain-Zhang/pinyin v0.1.3
 	github.com/anargu/gin-brotli v0.0.0-20220116052358-12bf532d5267
 	github.com/bwmarrin/snowflake v0.3.0
+	github.com/disintegration/imaging v1.6.2
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-playground/locales v0.14.0
 	github.com/go-playground/universal-translator v0.18.0
