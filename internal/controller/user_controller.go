@@ -52,7 +52,7 @@ func NewUserController(
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Success 200 {object} handler.RespBody{data=schema.GetUserToSetShowResp}
 // @Router /answer/api/v1/user/info [get]
 func (uc *UserController) GetUserInfoByUserID(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
