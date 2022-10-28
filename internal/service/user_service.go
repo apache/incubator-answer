@@ -51,7 +51,7 @@ func NewUserService(userRepo usercommon.UserRepo,
 }
 
 // GetUserInfoByUserID get user info by user id
-func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID string) (resp *schema.GetUserResp, err error) {
+func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID string) (resp *schema.GetUserToSetShowResp, err error) {
 	userInfo, exist, err := us.userRepo.GetByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	if !exist {
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
-	resp = &schema.GetUserResp{}
+	resp = &schema.GetUserToSetShowResp{}
 	resp.GetFromUserEntity(userInfo)
 	resp.AccessToken = token
 	return resp, nil
