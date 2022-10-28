@@ -82,6 +82,27 @@ func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 	}
 }
 
+type GetUserToSetShowResp struct {
+	*GetUserResp
+	Avatar *AvatarInfo `json:"avatar"`
+}
+
+func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
+	_ = copier.Copy(r, userInfo)
+	r.CreatedAt = userInfo.CreatedAt.Unix()
+	r.LastLoginDate = userInfo.LastLoginDate.Unix()
+	statusShow, ok := UserStatusShow[userInfo.Status]
+	if ok {
+		r.Status = statusShow
+	}
+	AvatarInfo := &AvatarInfo{}
+	err := json.Unmarshal([]byte(userInfo.Avatar), AvatarInfo)
+	if err != nil {
+		log.Error("AvatarInfo json.Unmarshal Error", err)
+	}
+	r.Avatar = AvatarInfo
+}
+
 func (us *GetUserResp) AvatarInfo(avatarJson string) string {
 	if avatarJson == "" {
 		return ""

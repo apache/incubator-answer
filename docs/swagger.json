@@ -3314,7 +3314,7 @@
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.GetUserResp"
+                                            "$ref": "#/definitions/schema.GetUserToSetShowResp"
                                         }
                                     }
                                 }
@@ -4762,6 +4762,102 @@
                 "avatar": {
                     "description": "avatar",
                     "type": "string"
+                },
+                "bio": {
+                    "description": "bio markdown",
+                    "type": "string"
+                },
+                "bio_html": {
+                    "description": "bio html",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "create time",
+                    "type": "integer"
+                },
+                "display_name": {
+                    "description": "display name",
+                    "type": "string"
+                },
+                "e_mail": {
+                    "description": "email",
+                    "type": "string"
+                },
+                "follow_count": {
+                    "description": "follow count",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "user id",
+                    "type": "string"
+                },
+                "ip_info": {
+                    "description": "ip info",
+                    "type": "string"
+                },
+                "is_admin": {
+                    "description": "is admin",
+                    "type": "boolean"
+                },
+                "last_login_date": {
+                    "description": "last login date",
+                    "type": "integer"
+                },
+                "location": {
+                    "description": "location",
+                    "type": "string"
+                },
+                "mail_status": {
+                    "description": "mail status(1 pass 2 to be verified)",
+                    "type": "integer"
+                },
+                "mobile": {
+                    "description": "mobile",
+                    "type": "string"
+                },
+                "notice_status": {
+                    "description": "notice status(1 on 2off)",
+                    "type": "integer"
+                },
+                "question_count": {
+                    "description": "question count",
+                    "type": "integer"
+                },
+                "rank": {
+                    "description": "rank",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "user status",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "username",
+                    "type": "string"
+                },
+                "website": {
+                    "description": "website",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetUserToSetShowResp": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "description": "access token",
+                    "type": "string"
+                },
+                "answer_count": {
+                    "description": "answer count",
+                    "type": "integer"
+                },
+                "authority_group": {
+                    "description": "authority group",
+                    "type": "integer"
+                },
+                "avatar": {
+                    "$ref": "#/definitions/schema.AvatarInfo"
                 },
                 "bio": {
                     "description": "bio markdown",
