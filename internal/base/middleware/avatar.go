@@ -32,10 +32,8 @@ func (am *AvatarMiddleware) AvatarThumb() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		u := ctx.Request.RequestURI
 		if strings.Contains(u, "/uploads/avatar/") {
-			wstr := ctx.Query("width")
-			hstr := ctx.Query("height")
-			w := converter.StringToInt(wstr)
-			h := converter.StringToInt(hstr)
+			sizeStr := ctx.Query("s")
+			size := converter.StringToInt(sizeStr)
 			uUrl, err := url.Parse(u)
 			if err != nil {
 				ctx.Next()
@@ -45,10 +43,10 @@ func (am *AvatarMiddleware) AvatarThumb() gin.HandlerFunc {
 			uploadPath := am.serviceConfig.UploadPath
 			filePath := fmt.Sprintf("%s/avatar/%s", uploadPath, urlfileName)
 			var avatarfile []byte
-			if w == 0 && h == 0 {
+			if size == 0 {
 				avatarfile, err = ioutil.ReadFile(filePath)
 			} else {
-				avatarfile, err = am.uploaderService.AvatarThumbFile(ctx, uploadPath, urlfileName, w, h)
+				avatarfile, err = am.uploaderService.AvatarThumbFile(ctx, uploadPath, urlfileName, size)
 			}
 			if err != nil {
 				ctx.Next()
