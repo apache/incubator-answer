@@ -86,6 +86,8 @@ error:
       other: "Username is invalid."
     username_duplicate:
       other: "Username is already in use."
+    set_avatar:
+      other: "Avatar set failed."
 
 report:
   spam:

@@ -76,11 +76,13 @@ func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, IDs []string) 
 // UserBasicInfoFormat
 func (us *UserCommon) UserBasicInfoFormat(ctx context.Context, userInfo *entity.User) *schema.UserBasicInfo {
 	userBasicInfo := &schema.UserBasicInfo{}
+	uinfo := &schema.GetUserResp{}
+	uinfo.AvatarInfo(userInfo.Avatar)
 	userBasicInfo.ID = userInfo.ID
 	userBasicInfo.Username = userInfo.Username
 	userBasicInfo.Rank = userInfo.Rank
 	userBasicInfo.DisplayName = userInfo.DisplayName
-	userBasicInfo.Avatar = userInfo.Avatar
+	userBasicInfo.Avatar = uinfo.Avatar
 	userBasicInfo.Website = userInfo.Website
 	userBasicInfo.Location = userInfo.Location
 	userBasicInfo.IpInfo = userInfo.IPInfo

@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"regexp"
@@ -255,10 +256,14 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 			return errors.BadRequest(reason.UsernameDuplicate)
 		}
 	}
-
+	Avatar, err := json.Marshal(req.Avatar)
+	if err != nil {
+		err = errors.BadRequest(reason.UserSetAvatar).WithError(err).WithStack()
+		return err
+	}
 	userInfo := entity.User{}
 	userInfo.ID = req.UserId
-	userInfo.Avatar = req.Avatar
+	userInfo.Avatar = string(Avatar)
 	userInfo.DisplayName = req.DisplayName
 	userInfo.Bio = req.Bio
 	userInfo.BioHtml = req.BioHtml
@@ -544,7 +549,7 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 	}
 	err = us.userRepo.UpdateEmail(ctx, data.UserID, data.Email)
 	if err != nil {
-		return err
+		return errors.BadRequest(reason.UserNotFound)
 	}
 	return nil
 }
