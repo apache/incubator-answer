@@ -5,6 +5,7 @@ import Backend from 'i18next-http-backend';
 
 import en from './locales/en.json';
 import zh from './locales/zh_CN.json';
+import vi from './locales/vi.json';
 
 i18next
   // load translation using http
@@ -18,6 +19,9 @@ i18next
       },
       zh_CN: {
         translation: zh,
+      },
+      vi_VN: {
+        translation: vi,
       },
     },
     // debug: process.env.NODE_ENV === 'development',

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
 import zh from 'dayjs/locale/zh-cn';
+import vi from 'dayjs/locale/vi';
 
 import { languages } from '@answer/api';
 import type { LangsType, FormDataType } from '@answer/common/interface';
@@ -34,8 +35,18 @@ const Index = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
+    let lang = en;
+
+    if (formData.lang.value === 'zh_CN') {
+      lang = zh;
+    }
+
+    if (formData.label.value === 'vi_VN') {
+      lang = vi;
+    }
+
     Storage.set('LANG', formData.lang.value);
-    dayjs.locale(formData.lang.value === 'en_US' ? en : zh);
+    dayjs.locale(lang);
     i18n.changeLanguage(formData.lang.value);
     toast.onShow({
       msg: t('update', { keyPrefix: 'toast' }),

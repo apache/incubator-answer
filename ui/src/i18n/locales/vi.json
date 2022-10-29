@@ -27,7 +27,7 @@
     "account_activation": "Kích Hoạt Tài Khoản",
     "confirm_email": "Xác Nhận Email",
     "account_suspended": "Tài Khoản Đã Bị Khóa",
-    "admin": "Quản Trị Viên"
+    "admin": "Quản Trị"
   },
   "notifications": {
     "title": "Thông báo",
@@ -114,7 +114,7 @@
             "label": "Tập tin ảnh",
             "btn": "Chọn ảnh",
             "msg": {
-              "empty": "File không thể bỏ trống.",
+              "empty": "File không được bỏ trống.",
               "only_image": "Chỉ chấp nhận file ảnh.",
               "max_size": "Kích thức ảnh tối đa 4MB."
             }
@@ -130,7 +130,7 @@
           "url": {
             "label": "URL Hình ảnh",
             "msg": {
-              "empty": "URL Ảnh không thể bỏ trống."
+              "empty": "URL Ảnh không được bỏ trống."
             }
           },
           "name": {
@@ -159,7 +159,7 @@
           "url": {
             "label": "URL",
             "msg": {
-              "empty": "URL không thể bỏ trống."
+              "empty": "URL không được bỏ trống."
             }
           },
           "name": {
@@ -187,7 +187,7 @@
     "btn_cancel": "Hủy",
     "btn_submit": "Gửi",
     "remark": {
-      "empty": "Không thể bỏ trống."
+      "empty": "không được bỏ trống."
     },
     "msg": {
       "empty": "Vui lòng chọn một lý do."
@@ -202,7 +202,7 @@
     "btn_cancel": "Hủy",
     "btn_submit": "Gửi",
     "remark": {
-      "empty": "Không thể bỏ trống."
+      "empty": "không được bỏ trống."
     },
     "msg": {
       "empty": "Vui lòng chọn một lý do."
@@ -215,7 +215,7 @@
         "display_name": {
           "label": "Tên hiển thị",
           "msg": {
-            "empty": "Tên hiển thị không thể bỏ trống.",
+            "empty": "Tên hiển thị không được bỏ trống.",
             "range": "Tên hiển thị dài tối đa 35 ký tự."
           }
         },
@@ -223,7 +223,7 @@
           "label": "URL Slug",
           "description": "Các ký tự phải nằm trong tập \"a-z\", \"0-9\", \"+ # - .\"",
           "msg": {
-            "empty": "URL slug không thể bỏ trống.",
+            "empty": "URL slug không được bỏ trống.",
             "range": "URL slug dài tối đa 35 ký tự.",
             "character": "URL slug có chứa ký tự không được phép."
           }
@@ -274,7 +274,7 @@
           "label": "Mô tả"
         },
         "edit_summary": {
-          "label": "Chỉnh sửa tóm tắc",
+          "label": "Tóm tắt chỉnh sửa",
           "placeholder": "Giải thích ngắn gọn các thay đổi của bạn (sửa chính tả, sửa ngữ pháp, định dạng được cải thiện)"
         }
       }
@@ -306,289 +306,289 @@
   },
   "edit_answer": {
     "title": "Chỉnh sửa câu trả lời",
-    "default_reason": "Edit answer",
+    "default_reason": "Chỉnh sửa câu trả lời",
     "form": {
       "fields": {
         "revision": {
-          "label": "Revision"
+          "label": "Phiên bản"
         },
         "answer": {
-          "label": "Answer"
+          "label": "Câu trả lời"
         },
         "edit_summary": {
-          "label": "Edit Summary",
-          "placeholder": "Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)"
+          "label": "Tóm tắt chỉnh sửa",
+          "placeholder": "Giải thích ngắn gọn các thay đổi của bạn (sửa chính tả, sửa ngữ pháp, định dạng được cải thiện)"
         }
       }
     },
-    "btn_save_edits": "Save edits",
-    "btn_cancel": "Cancel"
+    "btn_save_edits": "Lưu thay đổi",
+    "btn_cancel": "Hủy"
   },
   "tags": {
-    "title": "Tags",
+    "title": "Thẻ",
     "sort_buttons": {
-      "popular": "Popular",
-      "name": "Name",
-      "newest": "newest"
+      "popular": "Phổ biến",
+      "name": "Tên",
+      "newest": "mới nhất"
     },
-    "button_follow": "Follow",
-    "button_following": "Following",
-    "tag_label": "questions",
-    "search_placeholder": "Filter by tag name",
-    "no_description": "The tag has no description.",
-    "more": "More"
+    "button_follow": "Theo dõi",
+    "button_following": "Đang theo dõi",
+    "tag_label": "câu hỏi",
+    "search_placeholder": "Lọc bời tên thẻ",
+    "no_description": "Thẻ này không có mô tả.",
+    "more": "Thêm"
   },
   "ask": {
-    "title": "Add Question",
-    "edit_title": "Edit Question",
-    "default_reason": "Edit question",
-    "similar_questions": "Similar questions",
+    "title": "Thêm câu hỏi",
+    "edit_title": "Chỉnh sửa câu hỏi",
+    "default_reason": "Chỉnh sửa câu hỏi",
+    "similar_questions": "Câu hỏi tương tự",
     "form": {
       "fields": {
         "revision": {
-          "label": "Revision"
+          "label": "Phiên bản"
         },
         "title": {
-          "label": "Title",
-          "placeholder": "Be specific and imagine you're asking a question to another person",
+          "label": "Tiêu đề",
+          "placeholder": "Hãy cụ thể và tưởng tượng bạn đang đặt một câu hỏi cho một người khác",
           "msg": {
-            "empty": "Title cannot be empty.",
-            "range": "Title up to 150 characters"
+            "empty": "Tiêu đề không được bỏ trống.",
+            "range": "Tiêu đề dài tối đa 150 ký tự"
           }
         },
         "body": {
-          "label": "Body",
+          "label": "Nội dung",
           "msg": {
-            "empty": "Body cannot be empty."
+            "empty": "Nội dung không được bỏ trống."
           }
         },
         "tags": {
-          "label": "Tags",
+          "label": "Thẻ",
           "msg": {
-            "empty": "Tags cannot be empty."
+            "empty": "Thẻ không được bỏ trống."
           }
         },
         "answer": {
-          "label": "Answer",
+          "label": "Câu trả lời",
           "msg": {
-            "empty": "Answer cannot be empty."
+            "empty": "Câu trả lời không được bỏ trống."
           }
         }
       }
     },
-    "btn_post_question": "Post your question",
-    "btn_save_edits": "Save edits",
-    "answer_question": "Answer your own question",
-    "post_question&answer": "Post your question and answer"
+    "btn_post_question": "Đăng câu hỏi của bạn",
+    "btn_save_edits": "Lưu thay đổi",
+    "answer_question": "Trả lời câu hỏi của bạn",
+    "post_question&answer": "Đăng câu hỏi và câu trả lời của bạn"
   },
   "tag_selector": {
-    "add_btn": "Add tag",
-    "create_btn": "Create new tag",
-    "search_tag": "Search tag",
-    "hint": "Describe what your question is about, at least one tag is required.",
-    "no_result": "No tags matched"
+    "add_btn": "Thêm thẻ",
+    "create_btn": "Tạo thêm thẻ mới",
+    "search_tag": "Tìm kiếm thẻ",
+    "hint": "Mô tả câu hỏi của bạn về vấn đề gì, cần có ít nhất một thẻ.",
+    "no_result": "Không có thẻ nào khớp"
   },
   "header": {
     "nav": {
-      "question": "Questions",
-      "tag": "Tags",
-      "user": "Users",
-      "profile": "Profile",
-      "setting": "Settings",
-      "logout": "Log out",
-      "admin": "Admin"
+      "question": "Câu hỏi",
+      "tag": "Thẻ",
+      "user": "Người dùng",
+      "profile": "Hồ sơ",
+      "setting": "Cài đặt",
+      "logout": "Đăng xuất",
+      "admin": "Quản trị"
     },
     "search": {
-      "placeholder": "Search"
+      "placeholder": "Tìm kiếm"
     }
   },
   "footer": {
     "build_on": "Build on <1> Answer </1>- the open-source software that power Q&A communities.<br />Made with love. © 2022 Answer."
   },
   "upload_img": {
-    "name": "Change",
-    "loading": "loading..."
+    "name": "Thay đổi",
+    "loading": "đang tải..."
   },
   "pic_auth_code": {
     "title": "Captcha",
-    "placeholder": "Type the text above",
+    "placeholder": "Nhập đoạn chữ trên",
     "msg": {
-      "empty": "Captcha cannot be empty."
+      "empty": "Captcha không được trống."
     }
   },
   "inactive": {
-    "first": "You're almost done! We sent an activation mail to <bold>{{mail}}</bold>. Please follow the instructions in the mail to activate your account.",
-    "info": "If it doesn't arrive, check your spam folder.",
-    "another": "We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.",
-    "btn_name": "Resend activation email",
+    "first": "Gần xong rồi! Chúng tôi đã gửi một email xác nhận đến <bold>{{mail}}</bold>. Vui lòng check mail để kích hoạt tài khoản.",
+    "info": "Nếu không thấy nó, bạn có thể kiểm tra trong thư mục spam.",
+    "another": "Chúng tôi đã gửi cho bạn một email xác nhận khác đến <bold>{{mail}}</bold>. Có thể mất vài phút để nó đến nơi; hãy chắc chắn để kiểm tra thư mục thư rác của bạn.",
+    "btn_name": "Gửi lại email xác nhận",
     "msg": {
-      "empty": "Cannot be empty."
+      "empty": "Không thể bỏ trống."
     }
   },
   "login": {
-    "page_title": "Welcome to Answer",
-    "info_sign": "Don't have an account? <1>Sign up</1>",
-    "info_login": "Already have an account? <1>Log in</1>",
-    "forgot_pass": "Forgot password?",
+    "page_title": "Chào mừng tới Answer",
+    "info_sign": "Không có tài khoản? <1>Đăng ký</1>",
+    "info_login": "Đã có tài khoản? <1>Đăng nhập</1>",
+    "forgot_pass": "Quên mật khẩu?",
     "name": {
-      "label": "Name",
+      "label": "Tên",
       "msg": {
-        "empty": "Name cannot be empty.",
-        "range": "Name up to 30 characters."
+        "empty": "Tên không được trống.",
+        "range": "Tên dài tối đa 30 ký tự."
       }
     },
     "email": {
       "label": "Email",
       "msg": {
-        "empty": "Email cannot be empty."
+        "empty": "Email không được trống."
       }
     },
     "password": {
-      "label": "Password",
+      "label": "Mật khẩu",
       "msg": {
-        "empty": "Password cannot be empty.",
-        "different": "The passwords entered on both sides are inconsistent"
+        "empty": "Mật khẩu không được trống.",
+        "different": "Mật khẩu được nhập ở cả hai bên không khớp"
       }
     }
   },
   "account_forgot": {
-    "page_title": "Forgot Your Password",
-    "btn_name": "Send me recovery email",
-    "send_success": "If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.",
+    "page_title": "Quên mật khẩu của bạn",
+    "btn_name": "Gửi tôi email khôi phục",
+    "send_success": "Nếu tài khoản của bạn khớp với <strong>{{mail}}</strong>, bạn sẽ sớm nhận được một email hướng dẫn cách khôi phục tài khoản.",
     "email": {
       "label": "Email",
       "msg": {
-        "empty": "Email cannot be empty."
+        "empty": "Email không được trống."
       }
     }
   },
   "password_reset": {
-    "page_title": "Password Reset",
-    "btn_name": "Reset my password",
-    "reset_success": "You successfully changed your password; you will be redirected to the log in page.",
-    "link_invalid": "Sorry, this password reset link is no longer valid. Perhaps your password is already reset?",
-    "to_login": "Continue to log in page",
+    "page_title": "Đặt lại mật khẩu",
+    "btn_name": "Đặt lại mật khẩu của tôi",
+    "reset_success": "Bạn đã thay đổi thành công mật khẩu; bạn sẽ được chuyển hướng tới trang đăng nhập.",
+    "link_invalid": "Xin lỗi, liên kết khôi phục mật khẩu này đã hết hạn. Có lẽ mật khẩu của bạn đã được đặt lại?",
+    "to_login": "Tiếp tục đến trang đăng nhập",
     "password": {
-      "label": "Password",
+      "label": "Mật khẩu",
       "msg": {
-        "empty": "Password cannot be empty.",
-        "length": "The length needs to be between 8 and 32",
-        "different": "The passwords entered on both sides are inconsistent"
+        "empty": "Mật khẩu không được bỏ trống.",
+        "length": "Độ dài mật khẩu nên nằm trong 8 đến 32 ký tự",
+        "different": "Mật khẩu được nhập ở cả hai bên không khớp"
       }
     },
     "password_confirm": {
-      "label": "Confirm New Password"
+      "label": "Xác nhận mật khẩu mới"
     }
   },
   "settings": {
-    "page_title": "Settings",
+    "page_title": "Cài đặt",
     "nav": {
-      "profile": "Profile",
-      "notification": "Notifications",
-      "account": "Account",
-      "interface": "Interface"
+      "profile": "Hồ sơ",
+      "notification": "Thông báo",
+      "account": "Tài khoản",
+      "interface": "Giao diện"
     },
     "profile": {
-      "btn_name": "Update profile",
+      "btn_name": "Cập nhật hồ sơ",
       "display_name": {
-        "label": "Display Name",
-        "msg": "Display name cannot be empty.",
-        "msg_range": "Display name up to 30 characters"
+        "label": "Tên hiển thị",
+        "msg": "Tên hiển thị không được trống.",
+        "msg_range": "Tên hiển thị dài tối đa 30 ký tự"
       },
       "username": {
-        "label": "Username",
-        "caption": "People can mention you as \"@username\".",
-        "msg": "Username cannot be empty.",
-        "msg_range": "Username up to 30 characters",
-        "character": "Must use the character set \"a-z\", \"0-9\", \" - . _\""
+        "label": "Tên người dùng",
+        "caption": "Mọi người có thể nhắc đến bạn như \"@username\".",
+        "msg": "Tên người dùng không được trống.",
+        "msg_range": "Tên người dùng dài tối đa 30 ký tự",
+        "character": "Các ký tự sử dụng phải nằm trong tập \"a-z\", \"0-9\", \" - . _\""
       },
       "avatar": {
-        "label": "Profile Image",
-        "text": "You can upload your image or <1>reset</1> it to"
+        "label": "Ảnh hồ sơ",
+        "text": "Bạn có thể tải lên hoặc <1>đặt lại</1> nó"
       },
       "bio": {
-        "label": "About Me (optional)"
+        "label": "Về tôi (tùy chọn)"
       },
       "website": {
-        "label": "Website (optional)",
+        "label": "Website (tùy chọn)",
         "placeholder": "https://example.com",
-        "msg": "Website incorrect format"
+        "msg": "Website không đúng định dạng"
       },
       "location": {
-        "label": "Location (optional)",
-        "placeholder": "City, Country"
+        "label": "Vị trí (tùy chọn)",
+        "placeholder": "Thành phố, Quốc gia"
       }
     },
     "notification": {
       "email": {
-        "label": "Email Notifications",
-        "radio": "Answers to your questions, comments, and more"
+        "label": "Email thông báo",
+        "radio": "Trả lời câu hỏi, gắn thẻ, bình luận và nhiều hơn thế nữa"
       }
     },
     "account": {
-      "change_email_btn": "Change email",
-      "change_pass_btn": "Change password",
+      "change_email_btn": "Thay đổi email",
+      "change_pass_btn": "Đổi mật khẩu",
       "change_email_info": "We've sent an email to that address. Please follow the confirmation instructions.",
       "email": {
         "label": "Email",
-        "msg": "Email cannot be empty."
+        "msg": "Email không được trống."
       },
-      "password_title": "Password",
+      "password_title": "Mật khẩu",
       "current_pass": {
-        "label": "Current Password",
+        "label": "Mật khẩu hiện tại",
         "msg": {
-          "empty": "Current Password cannot be empty.",
-          "length": "The length needs to be between 8 and 32.",
-          "different": "The two entered passwords do not match."
+          "empty": "Mật khẩu hiện tại không được trống.",
+          "length": "Độ dài mật khẩu phải trong khoảng 8 đến 32 ký tự.",
+          "different": "Mật khẩu được nhập ở cả hai bên không khớp"
         }
       },
       "new_pass": {
-        "label": "New Password"
+        "label": "Mật khẩu mới"
       },
       "pass_confirm": {
-        "label": "Confirm New Password"
+        "label": "Xác nhận mật khẩu mới"
       }
     },
     "interface": {
       "lang": {
-        "label": "Interface Language",
-        "text": "User interface language. It will change when you refresh the page."
+        "label": "Ngôn ngữ hiển thị",
+        "text": "Ngôn ngữ hiển thị của người dùng. Nó sẽ thay đổi khi bạn tải lại trang."
       }
     }
   },
   "toast": {
-    "update": "update success",
-    "update_password": "Password changed successfully.",
-    "flag_success": "Thanks for flagging."
+    "update": "cập nhật thành công",
+    "update_password": "Thay đổi mật khẩu thành công.",
+    "flag_success": "Cảm ơn bạn đã phản hồi."
   },
   "related_question": {
-    "title": "Related Questions",
-    "btn": "Add question",
-    "answers": "answers"
+    "title": "Câu hỏi tương tự",
+    "btn": "Thêm câu hỏi",
+    "answers": "câu trả lời"
   },
   "question_detail": {
-    "Asked": "Asked",
-    "asked": "asked",
-    "update": "Modified",
-    "edit": "edited",
-    "Views": "Viewed",
-    "Follow": "Follow",
-    "Following": "Following",
-    "answered": "answered",
-    "closed_in": "Closed in",
-    "show_exist": "Show existing question.",
+    "Asked": "Đã trả lời",
+    "asked": "đã trả lời",
+    "update": "Đã cập nhật",
+    "edit": "đã chỉnh sửa",
+    "Views": "Đã xem",
+    "Follow": "Theo dõi",
+    "Following": "Đang theo dõi",
+    "answered": "đã trả lời",
+    "closed_in": "Đã đóng",
+    "show_exist": "Hiển thị các câu hỏi đã tồn tại.",
     "answers": {
-      "title": "Answers",
-      "score": "Score",
-      "newest": "Newest",
-      "btn_accept": "Accept",
-      "btn_accepted": "Accepted"
+      "title": "Câu trả lời",
+      "score": "Điểm",
+      "newest": "Mới nhất",
+      "btn_accept": "Chấp nhận",
+      "btn_accepted": "Đã chấp nhận"
     },
     "write_answer": {
-      "title": "Your Answer",
-      "btn_name": "Post your answer",
-      "confirm_title": "Continue to answer",
-      "continue": "Continue",
+      "title": "Câu trả lời của bạn",
+      "btn_name": "Đăng câu trả lời của bạn",
+      "confirm_title": "Tiếp tục trả lời",
+      "continue": "Tiếp tục",
       "confirm_info": "<p>Are you sure you want to add another answer?</p><p>You could use the edit link to refine and improve your existing answer, instead.</p>",
       "empty": "Answer cannot be empty."
     }
