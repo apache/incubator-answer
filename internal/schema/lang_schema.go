@@ -15,4 +15,8 @@ var GetLangOptions = []*GetLangOption{
 		Label: "中文(CN)",
 		Value: "zh_CN",
 	},
+	{
+		Label: "Tiếng Việt",
+		Value: "vi_VN",
+	},
 }

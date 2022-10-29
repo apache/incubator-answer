@@ -1,0 +1,170 @@
+base:
+  success:
+    other: "thành công"
+  unknown:
+    other: "lỗi không xác định"
+  request_format_error:
+    other: "định dạng yêu cầu không hợp lệ"
+  unauthorized_error:
+    other: "chưa xác thực"
+  database_error:
+    other: "lỗi dữ liệu máy chủ"
+
+email:
+  other: "email"
+password:
+  other: "mật khẩu"
+
+email_or_password_wrong_error: &email_or_password_wrong
+  other: "email hoặc mật khẩu không đúng"
+
+error:
+  admin:
+    email_or_password_wrong: *email_or_password_wrong
+  answer:
+    not_found:
+      other: "không tìm thấy câu trả lời"
+  comment:
+    edit_without_permission:
+      other: "bình luận này không thể chỉnh sửa"
+    not_found:
+      other: "không tìm thấy bình luận"
+  email:
+    duplicate:
+      other: "email đã tồn tại"
+    need_to_be_verified:
+      other: "email phải được xác thực"
+    verify_url_expired:
+      other: "liên kết xác thực bằng email đã hết hạn, vui lòng gửi lại email"
+  lang:
+    not_found:
+      other: "không tìm thấy ngôn ngữ"
+  object:
+    captcha_verification_failed:
+      other: "captcha không đúng"
+    disallow_follow:
+      other: "Bạn không được phép theo dõi"
+    disallow_vote:
+      other: "Bạn không được phép bình chọn"
+    disallow_vote_your_self:
+      other: "Bạn không thể bình chọn bài viết của mình!"
+    not_found:
+      other: "không tìm thấy đối tượng"
+    verification_failed:
+      other: "xác thực thất bại"
+    email_or_password_incorrect:
+      other: "email hoặc mật khẩu không đúng"
+    old_password_verification_failed:
+      other: "xác minh mật khẩu cũ thất bại"
+    new_password_same_as_previous_setting:
+      other: "Bạn đã sử dụng mật khẩu này trước đây"
+  question:
+    not_found:
+      other: "không tìm thấy câu hỏi"
+  rank:
+    fail_to_meet_the_condition:
+      other: "xếp hạng không đáp ứng điều kiện"
+  report:
+    handle_failed:
+      other: "xử lý báo cáo thất bại"
+    not_found:
+      other: "không tìm thấy báo cáo"
+  tag:
+    not_found:
+      other: "không tìm thấy thẻ"
+  theme:
+    not_found:
+      other: "không tìm thấy chủ đề"
+  user:
+    email_or_password_wrong:
+      other: *email_or_password_wrong
+    not_found:
+      other: "không tìm thấy người dùng"
+    suspended:
+      other: "người dùng đã bị khóa"
+    username_invalid:
+      other: "tên người dùng không hợp lệ"
+    username_duplicate:
+      other: "tên người dùng đã được sử dụng"
+
+report:
+  spam:
+    name:
+      other: "spam"
+    description:
+      other: "Bài viết này là một bài quảng cáo, hoặc phá hoại. Nó không liên quan tới chủ đề hiện tại."
+  rude:
+    name:
+      other: "thô lỗ hoặc lạm dụng"
+    description:
+      other: "Một người bình thường sẽ thấy nội dung này không phù hợp."
+  duplicate:
+    name:
+      other: "lặp lại"
+    description:
+      other: "Câu hỏi này đã được hỏi trước đây và đã có câu trả lời."
+  not_answer:
+    name:
+      other: "không có câu trả lời"
+    description:
+      other: "Đây đã được đăng như một câu trả lời, nhưng nó không cố gắng trả lời câu hỏi. Nó cần được chỉnh sửa, một bình luận, một câu hỏi khác hoặc sẽ bị xóa hoàn toàn."
+  not_need:
+    name:
+      other: "không cần nữa"
+    description:
+      other: "Nhận xét này đã lỗi thời, mang tính chất trò chuyện hoặc không liên quan đến bài đăng này."
+  other:
+    name:
+      other: "khác"
+    description:
+      other: "Bài đăng này yêu cầu sự chú ý của nhân viên vì một lý do khác không được liệt kê ở trên."
+
+question:
+  close:
+    duplicate:
+      name:
+        other: "spam"
+      description:
+        other: "Câu hỏi này đã được hỏi trước đây và đã có câu trả lời."
+    guideline:
+      name:
+        other: "một lý do cụ thể cho cộng đồng"
+      description:
+        other: "Câu hỏi này không tuân thủ nguyên tắc cộng đồng."
+    multiple:
+      name:
+        other: "cần chi tiết hoặc rõ ràng"
+      description:
+        other: "Câu hỏi này bao gồm khá nhiều câu hỏi trong một câu. Nó chỉ nên được tập trung vào một vấn đề."
+    other:
+      name:
+        other: "khác"
+      description:
+        other: "Bài đăng này có một lý do khác ngoài những lý do trên."
+
+notification:
+  action:
+    update_question:
+      other: "cập nhật câu hỏi"
+    answer_the_question:
+      other: "đã trả lời"
+    update_answer:
+      other: "cập nhật câu trả lời"
+    adopt_answer:
+      other: "chấp nhận câu trả lời"
+    comment_question:
+      other: "đã bình luận"
+    comment_answer:
+      other: "đã bình luận"
+    reply_to_you:
+      other: "đã trả lời bạn"
+    mention_you:
+      other: "đã nhắc đến bạn"
+    your_question_is_closed:
+      other: "câu hỏi của bạn đã được đóng"
+    your_question_was_deleted:
+      other: "câu hỏi của bạn đã bị xóa"
+    your_answer_was_deleted:
+      other: "câu trả lời của bạn đã bị xóa"
+    your_comment_was_deleted:
+      other: "bình luận của bạn đã bị xóa"
