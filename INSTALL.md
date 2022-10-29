@@ -27,7 +27,7 @@ Visit Docker Hub or GitHub Container registry to see all available images and ta
 ### Usage
 To keep your data out of Docker container, we do a volume (/var/data -> /data) here, and you can change it based on your situation.
 
-```
+```bash
 # Pull image from Docker Hub.
 $ docker pull answerdev/answer:latest
 
@@ -74,7 +74,7 @@ Usage: answer [command]
 
 ## config.yaml Description
 
-```
+```yaml
 server:
   http:
     addr: 0.0.0.0:80 #Project access port number
