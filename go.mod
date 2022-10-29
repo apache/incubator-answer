@@ -18,7 +18,7 @@ require (
 	github.com/jinzhu/copier v0.3.5
 	github.com/jinzhu/now v1.1.5
 	github.com/lib/pq v1.10.2
-	github.com/mattn/go-sqlite3 v2.0.3+incompatible
+	github.com/mattn/go-sqlite3 v1.14.15
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/segmentfault/pacman v1.0.1
 	github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20220929065758-260b3093a347
