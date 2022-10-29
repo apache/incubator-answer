@@ -17,17 +17,22 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import { userInfoStore, siteInfoStore, interfaceStore } from '@answer/stores';
-import { logout, useQueryNotificationStatus } from '@answer/api';
-import Storage from '@answer/utils/storage';
+import {
+  loggedUserInfoStore,
+  siteInfoStore,
+  interfaceStore,
+} from '@answer/stores';
 
 import NavItems from './components/NavItems';
+
+import { logout, useQueryNotificationStatus } from '@/services';
+import { RouteAlias } from '@/router/alias';
 
 import './index.scss';
 
 const Header: FC = () => {
   const navigate = useNavigate();
-  const { user, clear } = userInfoStore();
+  const { user, clear } = loggedUserInfoStore();
   const { t } = useTranslation();
   const [urlSearch] = useSearchParams();
   const q = urlSearch.get('q');
@@ -42,9 +47,8 @@ const Header: FC = () => {
 
   const handleLogout = async () => {
     await logout();
-    Storage.remove('token');
     clear();
-    navigate('/');
+    navigate(RouteAlias.home);
   };
 
   useEffect(() => {

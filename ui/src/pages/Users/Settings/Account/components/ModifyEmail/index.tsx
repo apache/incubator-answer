@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type * as Type from '@answer/common/interface';
-import { getUserInfo, changeEmail } from '@answer/api';
+import { getLoggedUserInfo, changeEmail } from '@/services';
 import { useToast } from '@answer/hooks';
 
 const reg = /(?<=.{2}).+(?=@)/gi;
@@ -23,7 +23,7 @@ const Index: FC = () => {
   const [userInfo, setUserInfo] = useState<Type.UserInfoRes>();
   const toast = useToast();
   useEffect(() => {
-    getUserInfo().then((resp) => {
+    getLoggedUserInfo().then((resp) => {
       setUserInfo(resp);
     });
   }, []);

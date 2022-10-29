@@ -11,7 +11,7 @@ import {
   FormatTime,
   htmlRender,
 } from '@answer/components';
-import { acceptanceAnswer } from '@answer/api';
+import { acceptanceAnswer } from '@/services';
 import { scrollTop } from '@answer/utils';
 import { AnswerItem } from '@answer/common/interface';
 

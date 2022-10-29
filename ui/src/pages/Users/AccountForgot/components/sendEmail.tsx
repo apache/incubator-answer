@@ -2,7 +2,7 @@ import { FC, memo, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { resetPassword, checkImgCode } from '@answer/api';
+import { resetPassword, checkImgCode } from '@/services';
 import type {
   ImgCodeRes,
   PasswordResetReq,

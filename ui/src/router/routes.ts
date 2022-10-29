@@ -1,14 +1,18 @@
 import { RouteObject } from 'react-router-dom';
 
+import RouteGuarder from '@/router/guarder';
+
 export interface RouteNode extends RouteObject {
   page: string;
   children?: RouteNode[];
-  rules?: string[];
+  guard?: Function;
 }
-const routeConfig: RouteNode[] = [
+
+const routes: RouteNode[] = [
   {
     path: '/',
     page: 'pages/Layout',
+    guard: RouteGuarder.base,
     children: [
       // question and answer
       {
@@ -31,12 +35,12 @@ const routeConfig: RouteNode[] = [
       {
         path: 'questions/ask',
         page: 'pages/Questions/Ask',
-        rules: ['isLoginAndNormal'],
+        guard: RouteGuarder.loggedAndNormal,
       },
       {
         path: 'posts/:qid/edit',
         page: 'pages/Questions/Ask',
-        rules: ['isLoginAndNormal'],
+        guard: RouteGuarder.loggedAndNormal,
       },
       {
         path: 'posts/:qid/:aid/edit',
@@ -105,18 +109,22 @@ const routeConfig: RouteNode[] = [
       {
         path: 'users/login',
         page: 'pages/Users/Login',
+        guard: RouteGuarder.notLoggedOrInactive,
       },
       {
         path: 'users/register',
         page: 'pages/Users/Register',
+        guard: RouteGuarder.notLogged,
       },
       {
         path: 'users/account-recovery',
         page: 'pages/Users/AccountForgot',
+        guard: RouteGuarder.loggedAndNormal,
       },
       {
         path: 'users/password-reset',
         page: 'pages/Users/PasswordReset',
+        guard: RouteGuarder.loggedAndNormal,
       },
       {
         path: 'users/account-activation',
@@ -142,6 +150,7 @@ const routeConfig: RouteNode[] = [
       {
         path: 'admin',
         page: 'pages/Admin',
+        guard: RouteGuarder.adminLogged,
         children: [
           {
             index: true,
@@ -192,4 +201,4 @@ const routeConfig: RouteNode[] = [
     ],
   },
 ];
-export default routeConfig;
+export default routes;

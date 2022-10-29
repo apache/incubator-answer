@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { changeEmailVerify } from '@answer/api';
+import { changeEmailVerify } from '@/services';
 
 import { PageTitle } from '@/components';
 

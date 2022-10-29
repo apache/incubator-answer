@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Container, Col } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { isLogin } from '@answer/utils';
-
 import SendEmail from './components/sendEmail';
 
+import { tryNormalLogged } from '@/utils/guards';
 import { PageTitle } from '@/components';
 
 const Index: React.FC = () => {
@@ -19,7 +18,7 @@ const Index: React.FC = () => {
   };
 
   useEffect(() => {
-    isLogin();
+    tryNormalLogged();
   }, []);
 
   return (

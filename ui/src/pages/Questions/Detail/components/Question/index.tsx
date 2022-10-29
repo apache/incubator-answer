@@ -13,7 +13,7 @@ import {
   htmlRender,
 } from '@answer/components';
 import { formatCount } from '@answer/utils';
-import { following } from '@answer/api';
+import { following } from '@/services';
 
 interface Props {
   data: any;

@@ -7,8 +7,8 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 
 import { Editor, EditorRef, PageTitle } from '@answer/components';
-import { useTagInfo, modifyTag, useQueryRevisions } from '@answer/api';
-import { userInfoStore } from '@answer/stores';
+import { useTagInfo, modifyTag, useQueryRevisions } from '@/services';
+import { loggedUserInfoStore } from '@answer/stores';
 import type * as Type from '@answer/common/interface';
 
 interface FormDataItem {
@@ -40,7 +40,7 @@ const initFormData = {
   },
 };
 const Ask = () => {
-  const { is_admin = false } = userInfoStore((state) => state.user);
+  const { is_admin = false } = loggedUserInfoStore((state) => state.user);
 
   const { tagId } = useParams();
   const navigate = useNavigate();

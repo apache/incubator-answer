@@ -9,6 +9,9 @@ import type {
   ImgCodeRes,
 } from '@answer/common/interface';
 
+import { CAPTCHA_CODE_STORAGE_KEY } from '@/common/constants';
+import Storage from '@/utils/storage';
+
 interface IProps {
   /** control visible */
   visible: boolean;
@@ -55,7 +58,7 @@ const Index: React.FC<IProps> = ({
                 placeholder={t('placeholder')}
                 isInvalid={captcha.isInvalid}
                 onChange={(e) => {
-                  localStorage.setItem('captchaCode', e.target.value);
+                  Storage.set(CAPTCHA_CODE_STORAGE_KEY, e.target.value);
                   handleCaptcha({
                     captcha_code: {
                       value: e.target.value,

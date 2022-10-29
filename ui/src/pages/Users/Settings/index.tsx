@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
-import { getUserInfo } from '@answer/api';
+import { getLoggedUserInfo } from '@/services';
 import type { FormDataType } from '@answer/common/interface';
 
 import Nav from './components/Nav';
@@ -43,7 +43,7 @@ const Index: React.FC = () => {
     },
   });
   const getProfile = () => {
-    getUserInfo().then((res) => {
+    getLoggedUserInfo().then((res) => {
       formData.display_name.value = res.display_name;
       formData.bio.value = res.bio;
       formData.avatar.value = res.avatar;

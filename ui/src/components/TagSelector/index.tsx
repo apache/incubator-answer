@@ -6,7 +6,7 @@ import { marked } from 'marked';
 import classNames from 'classnames';
 
 import { useTagModal } from '@answer/hooks';
-import { queryTags } from '@answer/api';
+import { queryTags } from '@/services';
 import type * as Type from '@answer/common/interface';
 
 import './index.scss';

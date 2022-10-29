@@ -6,7 +6,7 @@ import { marked } from 'marked';
 import classNames from 'classnames';
 
 import { Editor, Modal } from '@answer/components';
-import { postAnswer } from '@answer/api';
+import { postAnswer } from '@/services';
 import { FormDataType } from '@answer/common/interface';
 
 interface Props {

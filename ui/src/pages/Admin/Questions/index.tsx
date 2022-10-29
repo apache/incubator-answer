@@ -18,7 +18,7 @@ import {
   useQuestionSearch,
   changeQuestionStatus,
   deleteQuestion,
-} from '@answer/api';
+} from '@/services';
 import * as Type from '@answer/common/interface';
 
 import '../index.scss';

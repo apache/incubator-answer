@@ -2,7 +2,7 @@ import React, { FC, FormEvent, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { modifyPassword } from '@answer/api';
+import { modifyPassword } from '@/services';
 import { useToast } from '@answer/hooks';
 import type { FormDataType } from '@answer/common/interface';
 

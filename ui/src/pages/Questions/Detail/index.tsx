@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
-import { questionDetail, getAnswers } from '@answer/api';
+import { questionDetail, getAnswers } from '@/services';
 import { Pagination, PageTitle } from '@answer/components';
-import { userInfoStore } from '@answer/stores';
+import { loggedUserInfoStore } from '@answer/stores';
 import { scrollTop } from '@answer/utils';
 import { usePageUsers } from '@answer/hooks';
 import type {
@@ -37,7 +37,7 @@ const Index = () => {
     list: [],
   });
   const { setUsers } = usePageUsers();
-  const userInfo = userInfoStore((state) => state.user);
+  const userInfo = loggedUserInfoStore((state) => state.user);
   const isAuthor = userInfo?.username === question?.user_info?.username;
   const requestAnswers = async () => {
     const res = await getAnswers({

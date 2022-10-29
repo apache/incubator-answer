@@ -6,10 +6,11 @@ import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
 import zh from 'dayjs/locale/zh-cn';
 
-import { languages } from '@answer/api';
+import { languages } from '@/services';
 import type { LangsType, FormDataType } from '@answer/common/interface';
 import { useToast } from '@answer/hooks';
 
+import { DEFAULT_LANG, CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
 import Storage from '@/utils/storage';
 
 const Index = () => {
@@ -34,8 +35,8 @@ const Index = () => {
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
 
-    Storage.set('LANG', formData.lang.value);
-    dayjs.locale(formData.lang.value === 'en_US' ? en : zh);
+    Storage.set(CURRENT_LANG_STORAGE_KEY, formData.lang.value);
+    dayjs.locale(formData.lang.value === DEFAULT_LANG ? en : zh);
     i18n.changeLanguage(formData.lang.value);
     toast.onShow({
       msg: t('update', { keyPrefix: 'toast' }),
@@ -45,7 +46,7 @@ const Index = () => {
 
   useEffect(() => {
     getLangs();
-    const lang = Storage.get('LANG');
+    const lang = Storage.get(CURRENT_LANG_STORAGE_KEY);
     if (lang) {
       setFormData({
         lang: {
@@ -60,7 +61,6 @@ const Index = () => {
     <Form noValidate onSubmit={handleSubmit}>
       <Form.Group controlId="emailSend" className="mb-3">
         <Form.Label>{t('lang.label')}</Form.Label>
-
         <Form.Select
           value={formData.lang.value}
           isInvalid={formData.lang.isInvalid}

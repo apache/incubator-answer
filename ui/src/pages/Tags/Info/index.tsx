@@ -17,7 +17,7 @@ import {
   useQuerySynonymsTags,
   saveSynonymsTags,
   deleteTag,
-} from '@answer/api';
+} from '@/services';
 
 const TagIntroduction = () => {
   const [isEdit, setEditState] = useState(false);

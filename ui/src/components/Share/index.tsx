@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { FacebookShareButton, TwitterShareButton } from 'next-share';
 import copy from 'copy-to-clipboard';
 
-import { userInfoStore } from '@answer/stores';
+import { loggedUserInfoStore } from '@answer/stores';
 
 interface IProps {
   type: 'answer' | 'question';
@@ -15,7 +15,7 @@ interface IProps {
 }
 
 const Index: FC<IProps> = ({ type, qid, aid, title }) => {
-  const user = userInfoStore((state) => state.user);
+  const user = loggedUserInfoStore((state) => state.user);
   const [show, setShow] = useState(false);
   const [showTip, setShowTip] = useState(false);
   const [canSystemShare, setSystemShareState] = useState(false);

@@ -4,10 +4,10 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { marked } from 'marked';
 
-import { modifyUserInfo, uploadAvatar, getUserInfo } from '@answer/api';
+import { modifyUserInfo, uploadAvatar, getLoggedUserInfo } from '@/services';
 import type { FormDataType } from '@answer/common/interface';
 import { UploadImg, Avatar } from '@answer/components';
-import { userInfoStore } from '@answer/stores';
+import { loggedUserInfoStore } from '@answer/stores';
 import { useToast } from '@answer/hooks';
 
 const Index: React.FC = () => {
@@ -15,7 +15,7 @@ const Index: React.FC = () => {
     keyPrefix: 'settings.profile',
   });
   const toast = useToast();
-  const { user, update } = userInfoStore();
+  const { user, update } = loggedUserInfoStore();
   const [formData, setFormData] = useState<FormDataType>({
     display_name: {
       value: '',
@@ -164,7 +164,7 @@ const Index: React.FC = () => {
   };
 
   const getProfile = () => {
-    getUserInfo().then((res) => {
+    getLoggedUserInfo().then((res) => {
       formData.display_name.value = res.display_name;
       formData.username.value = res.username;
       formData.bio.value = res.bio;

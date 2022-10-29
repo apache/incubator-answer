@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
 import { Pagination, PageTitle } from '@answer/components';
-import { useSearch } from '@answer/api';
+import { useSearch } from '@/services';
 
 import { Head, SearchHead, SearchItem, Tips, Empty } from './components';
 

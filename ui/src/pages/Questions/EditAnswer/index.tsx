@@ -11,7 +11,7 @@ import {
   useQueryAnswerInfo,
   modifyAnswer,
   useQueryRevisions,
-} from '@answer/api';
+} from '@/services';
 import type * as Type from '@answer/common/interface';
 
 import './index.scss';

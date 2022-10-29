@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type { FormDataType } from '@answer/common/interface';
-import { setNotice, getUserInfo } from '@answer/api';
+import { setNotice, getLoggedUserInfo } from '@/services';
 import { useToast } from '@answer/hooks';
 
 const Index = () => {
@@ -20,7 +20,7 @@ const Index = () => {
   });
 
   const getProfile = () => {
-    getUserInfo().then((res) => {
+    getLoggedUserInfo().then((res) => {
       setFormData({
         notice_switch: {
           value: res.notice_status === 1,

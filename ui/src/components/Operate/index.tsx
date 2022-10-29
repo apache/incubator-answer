@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Modal } from '@answer/components';
 import { useReportModal, useToast } from '@answer/hooks';
-import { deleteQuestion, deleteAnswer } from '@answer/api';
-import { isLogin } from '@answer/utils';
 import Share from '../Share';
+
+import { deleteQuestion, deleteAnswer } from '@/services';
+import { tryNormalLogged } from '@/utils/guards';
 
 interface IProps {
   type: 'answer' | 'question';
@@ -98,7 +99,7 @@ const Index: FC<IProps> = ({
   };
 
   const handleAction = (action) => {
-    if (!isLogin(true)) {
+    if (!tryNormalLogged(true)) {
       return;
     }
     if (action === 'delete') {

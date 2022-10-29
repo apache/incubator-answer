@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 
-import { userInfoStore } from '@answer/stores';
+import { loggedUserInfoStore } from '@answer/stores';
 
 import { PageTitle } from '@/components';
 
 const Suspended = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'suspended' });
-  const userInfo = userInfoStore((state) => state.user);
+  const userInfo = loggedUserInfoStore((state) => state.user);
 
   if (userInfo.status !== 'forbidden') {
     window.location.replace('/');

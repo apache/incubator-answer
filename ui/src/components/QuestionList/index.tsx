@@ -3,7 +3,7 @@ import { Row, Col, ListGroup } from 'react-bootstrap';
 import { NavLink, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useQuestionList } from '@answer/api';
+import { useQuestionList } from '@/services';
 import type * as Type from '@answer/common/interface';
 import {
   Icon,

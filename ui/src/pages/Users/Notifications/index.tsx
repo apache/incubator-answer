@@ -8,7 +8,7 @@ import {
   clearUnreadNotification,
   clearNotificationStatus,
   readNotification,
-} from '@answer/api';
+} from '@/services';
 import { PageTitle } from '@answer/components';
 
 import Inbox from './components/Inbox';

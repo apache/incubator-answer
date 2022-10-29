@@ -3,8 +3,8 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { following } from '@answer/api';
-import { isLogin } from '@answer/utils';
+import { following } from '@/services';
+import { tryNormalLogged } from '@/utils/guards';
 
 interface Props {
   data;
@@ -20,7 +20,7 @@ const Index: FC<Props> = ({ data }) => {
   const [followed, setFollowed] = useState(data?.is_follower);
 
   const follow = () => {
-    if (!isLogin(true)) {
+    if (!tryNormalLogged(true)) {
       return;
     }
     following({

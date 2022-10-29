@@ -14,7 +14,7 @@ import {
   updateInterfaceSetting,
   useInterfaceSetting,
   useThemeOptions,
-} from '@answer/api';
+} from '@/services';
 import { interfaceStore } from '@answer/stores';
 import { UploadImg } from '@answer/components';
 

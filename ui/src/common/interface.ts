@@ -108,7 +108,7 @@ export interface UserInfoBase {
    */
   status?: string;
   /** roles */
-  is_admin?: true;
+  is_admin?: boolean;
 }
 
 export interface UserInfoRes extends UserInfoBase {

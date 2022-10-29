@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import { TagSelector, Tag } from '@answer/components';
-import { isLogin } from '@answer/utils';
-import { useFollowingTags, followTags } from '@answer/api';
+
+import { tryNormalLogged } from '@/utils/guards';
+import { useFollowingTags, followTags } from '@/services';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
@@ -32,7 +33,7 @@ const Index: FC = () => {
     });
   };
 
-  if (!isLogin()) {
+  if (!tryNormalLogged()) {
     return null;
   }
 

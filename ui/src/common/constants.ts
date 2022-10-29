@@ -1,9 +1,9 @@
-export const LOGIN_NEED_BACK = [
-  '/users/login',
-  '/users/register',
-  '/users/account-recovery',
-  '/users/password-reset',
-];
+export const DEFAULT_LANG = 'en_US';
+export const CURRENT_LANG_STORAGE_KEY = '_a_lang__';
+export const LOGGED_USER_STORAGE_KEY = '_a_lui_';
+export const LOGGED_TOKEN_STORAGE_KEY = '_a_ltk_';
+export const REDIRECT_PATH_STORAGE_KEY = '_a_rp_';
+export const CAPTCHA_CODE_STORAGE_KEY = '_a_captcha_';
 
 export const ADMIN_LIST_STATUS = {
   // normal;

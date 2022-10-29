@@ -3,6 +3,11 @@ import create from 'zustand';
 import type { UserInfoRes } from '@answer/common/interface';
 import Storage from '@answer/utils/storage';
 
+import {
+  LOGGED_USER_STORAGE_KEY,
+  LOGGED_TOKEN_STORAGE_KEY,
+} from '@/common/constants';
+
 interface UserInfoStore {
   user: UserInfoRes;
   update: (params: UserInfoRes) => void;
@@ -19,23 +24,23 @@ const initUser: UserInfoRes = {
   location: '',
   website: '',
   status: '',
-  mail_status: 0,
+  mail_status: 1,
 };
 
-const userInfoStore = create<UserInfoStore>((set) => ({
+const loggedUserInfoStore = create<UserInfoStore>((set) => ({
   user: initUser,
   update: (params) =>
     set(() => {
-      Storage.set('token', params.access_token);
-      Storage.set('userInfo', params);
+      Storage.set(LOGGED_TOKEN_STORAGE_KEY, params.access_token);
+      Storage.set(LOGGED_USER_STORAGE_KEY, params);
       return { user: params };
     }),
   clear: () =>
     set(() => {
-      // Storage.remove('token');
-      Storage.remove('userInfo');
+      Storage.remove(LOGGED_TOKEN_STORAGE_KEY);
+      Storage.remove(LOGGED_USER_STORAGE_KEY);
       return { user: initUser };
     }),
 }));
 
-export default userInfoStore;
+export default loggedUserInfoStore;

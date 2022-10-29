@@ -115,7 +115,7 @@ export const resendEmail = (params?: Type.ImgCodeReq) => {
  * @description get login userinfo
  * @returns {UserInfo}
  */
-export const getUserInfo = () => {
+export const getLoggedUserInfo = () => {
   return request.get<Type.UserInfoRes>('/answer/api/v1/user/info');
 };
 
