@@ -89,9 +89,10 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 
 // CloseMsgList list close question condition
 func (qs *QuestionService) CloseMsgList(ctx context.Context, lang i18n.Language) (
-	resp []*schema.GetCloseTypeResp, err error) {
+	resp []*schema.GetCloseTypeResp, err error,
+) {
 	resp = make([]*schema.GetCloseTypeResp, 0)
-	err = json.Unmarshal([]byte(constant.QuestionCloseJson), &resp)
+	err = json.Unmarshal([]byte(constant.QuestionCloseJSON), &resp)
 	if err != nil {
 		return nil, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
@@ -143,7 +144,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		return
 	}
 
-	//user add question count
+	// user add question count
 	err = qs.userCommon.UpdateQuestionCount(ctx, question.UserID, 1)
 	if err != nil {
 		log.Error("user IncreaseQuestionCount error", err.Error())
@@ -168,7 +169,7 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		return err
 	}
 
-	//user add question count
+	// user add question count
 	err = qs.userCommon.UpdateQuestionCount(ctx, questionInfo.UserID, -1)
 	if err != nil {
 		log.Error("user IncreaseQuestionCount error", err.Error())
@@ -300,9 +301,9 @@ func (qs *QuestionService) SearchUserAnswerList(ctx context.Context, userName, o
 	answersearch.PageSize = pageSize
 	answersearch.Page = page
 	if order == "newest" {
-		answersearch.Order = entity.Answer_Search_OrderBy_Time
+		answersearch.Order = entity.AnswerSearchOrderByTime
 	} else {
-		answersearch.Order = entity.Answer_Search_OrderBy_Default
+		answersearch.Order = entity.AnswerSearchOrderByDefault
 	}
 	questionIDs := make([]string, 0)
 	answerList, count, err := qs.questioncommon.AnswerCommon.Search(ctx, answersearch)
@@ -399,7 +400,7 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 	answersearch := &entity.AnswerSearch{}
 	answersearch.UserID = userinfo.ID
 	answersearch.PageSize = 5
-	answersearch.Order = entity.Answer_Search_OrderBy_Vote
+	answersearch.Order = entity.AnswerSearchOrderByVote
 	questionIDs := make([]string, 0)
 	answerList, _, err := qs.questioncommon.AnswerCommon.Search(ctx, answersearch)
 	if err != nil {

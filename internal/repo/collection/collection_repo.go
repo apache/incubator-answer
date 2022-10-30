@@ -105,7 +105,6 @@ func (cr *collectionRepo) CountByObjectID(ctx context.Context, objectId string) 
 
 // GetCollectionPage get collection page
 func (cr *collectionRepo) GetCollectionPage(ctx context.Context, page, pageSize int, collection *entity.Collection) (collectionList []*entity.Collection, total int64, err error) {
-
 	collectionList = make([]*entity.Collection, 0)
 
 	session := cr.data.DB.NewSession()
@@ -148,7 +147,7 @@ func (cr *collectionRepo) SearchList(ctx context.Context, search *entity.Collect
 		search.Page = 0
 	}
 	if search.PageSize == 0 {
-		search.PageSize = constant.Default_PageSize
+		search.PageSize = constant.DefaultPageSize
 	}
 	offset := search.Page * search.PageSize
 	session := cr.data.DB.Where("")

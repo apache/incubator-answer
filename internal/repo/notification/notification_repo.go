@@ -102,7 +102,7 @@ func (nr *notificationRepo) SearchList(ctx context.Context, search *schema.Notif
 		search.Page = 0
 	}
 	if search.PageSize == 0 {
-		search.PageSize = constant.Default_PageSize
+		search.PageSize = constant.DefaultPageSize
 	}
 	offset := search.Page * search.PageSize
 	session := nr.data.DB.Where("")

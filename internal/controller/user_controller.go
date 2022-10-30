@@ -35,7 +35,8 @@ func NewUserController(
 	userService *service.UserService,
 	actionService *action.CaptchaService,
 	emailService *export.EmailService,
-	uploaderService *uploader.UploaderService) *UserController {
+	uploaderService *uploader.UploaderService,
+) *UserController {
 	return &UserController{
 		authService:     authService,
 		userService:     userService,
@@ -184,7 +185,7 @@ func (uc *UserController) UseRePassWord(ctx *gin.Context) {
 
 	req.Content = uc.emailService.VerifyUrlExpired(ctx, req.Code)
 	if len(req.Content) == 0 {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyUrlExpired),
+		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyURLExpired),
 			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeUrlExpired})
 		return
 	}
@@ -245,7 +246,7 @@ func (uc *UserController) UserVerifyEmail(ctx *gin.Context) {
 
 	req.Content = uc.emailService.VerifyUrlExpired(ctx, req.Code)
 	if len(req.Content) == 0 {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyUrlExpired),
+		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyURLExpired),
 			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeUrlExpired})
 		return
 	}
@@ -500,7 +501,7 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 	}
 	req.Content = uc.emailService.VerifyUrlExpired(ctx, req.Code)
 	if len(req.Content) == 0 {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyUrlExpired),
+		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyURLExpired),
 			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeUrlExpired})
 		return
 	}
