@@ -128,13 +128,13 @@ func (ar *answerRepo) UpdateAdopted(ctx context.Context, id string, questionID s
 	var data entity.Answer
 	data.ID = id
 
-	data.Adopted = schema.Answer_Adopted_Failed
+	data.Adopted = schema.AnswerAdoptedFailed
 	_, err := ar.data.DB.Where("question_id =?", questionID).Cols("adopted").Update(&data)
 	if err != nil {
 		return err
 	}
 	if id != "0" {
-		data.Adopted = schema.Answer_Adopted_Enable
+		data.Adopted = schema.AnswerAdoptedEnable
 		_, err = ar.data.DB.Where("id = ?", id).Cols("adopted").Update(&data)
 		if err != nil {
 			return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

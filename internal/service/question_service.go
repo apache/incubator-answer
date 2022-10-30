@@ -223,8 +223,8 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		Title:    "",
 		Log:      req.EditSummary,
 	}
-	InfoJson, _ := json.Marshal(question)
-	revisionDTO.Content = string(InfoJson)
+	InfoJSON, _ := json.Marshal(question)
+	revisionDTO.Content = string(InfoJSON)
 	err = qs.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return
@@ -320,16 +320,16 @@ func (qs *QuestionService) SearchUserAnswerList(ctx context.Context, userName, o
 		return userAnswerlist, count, err
 	}
 	for _, item := range answerlist {
-		_, ok := questionMaps[item.QuestionId]
+		_, ok := questionMaps[item.QuestionID]
 		if ok {
-			item.QuestionInfo = questionMaps[item.QuestionId]
+			item.QuestionInfo = questionMaps[item.QuestionID]
 		}
 	}
 	for _, item := range answerlist {
 		info := &schema.UserAnswerInfo{}
 		_ = copier.Copy(info, item)
 		info.AnswerID = item.ID
-		info.QuestionID = item.QuestionId
+		info.QuestionID = item.QuestionID
 		userAnswerlist = append(userAnswerlist, info)
 	}
 	return userAnswerlist, count, nil
@@ -416,9 +416,9 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 		return userQuestionlist, userAnswerlist, err
 	}
 	for _, item := range answerlist {
-		_, ok := questionMaps[item.QuestionId]
+		_, ok := questionMaps[item.QuestionID]
 		if ok {
-			item.QuestionInfo = questionMaps[item.QuestionId]
+			item.QuestionInfo = questionMaps[item.QuestionID]
 		}
 	}
 
@@ -432,7 +432,7 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 		info := &schema.UserAnswerInfo{}
 		_ = copier.Copy(info, item)
 		info.AnswerID = item.ID
-		info.QuestionID = item.QuestionId
+		info.QuestionID = item.QuestionID
 		userAnswerlist = append(userAnswerlist, info)
 	}
 

@@ -9,44 +9,44 @@ type RemoveAnswerReq struct {
 }
 
 const (
-	Answer_Adopted_Failed = 1
-	Answer_Adopted_Enable = 2
+	AnswerAdoptedFailed = 1
+	AnswerAdoptedEnable = 2
 )
 
 type AnswerAddReq struct {
-	QuestionId string `json:"question_id" ` // question_id
+	QuestionID string `json:"question_id" ` // question_id
 	Content    string `json:"content" `     // content
-	Html       string `json:"html" `        // html
+	HTML       string `json:"html" `        // html
 	UserID     string `json:"-" `           // user_id
 }
 
 type AnswerUpdateReq struct {
 	ID          string `json:"id"`                                // id
-	QuestionId  string `json:"question_id" `                      // question_id
+	QuestionID  string `json:"question_id" `                      // question_id
 	UserID      string `json:"-" `                                // user_id
 	Title       string `json:"title" `                            // title
 	Content     string `json:"content"`                           // content
-	Html        string `json:"html" `                             // html
-	EditSummary string `validate:"omitempty" json:"edit_summary"` //edit_summary
+	HTML        string `json:"html" `                             // html
+	EditSummary string `validate:"omitempty" json:"edit_summary"` // edit_summary
 }
 
 type AnswerList struct {
-	QuestionId  string `json:"question_id" form:"question_id"` // question_id
+	QuestionID  string `json:"question_id" form:"question_id"` // question_id
 	Order       string `json:"order" form:"order"`             // 1 Default 2 time
-	Page        int    `json:"page" form:"page"`               //Query number of pages
-	PageSize    int    `json:"page_size" form:"page_size"`     //Search page size
+	Page        int    `json:"page" form:"page"`               // Query number of pages
+	PageSize    int    `json:"page_size" form:"page_size"`     // Search page size
 	LoginUserID string `json:"-" `
 }
 
 type AnswerInfo struct {
 	ID             string         `json:"id" xorm:"id"`                   // id
-	QuestionId     string         `json:"question_id" xorm:"question_id"` // question_id
+	QuestionID     string         `json:"question_id" xorm:"question_id"` // question_id
 	Content        string         `json:"content" xorm:"content"`         // content
-	Html           string         `json:"html" xorm:"html"`               // html
+	HTML           string         `json:"html" xorm:"html"`               // html
 	CreateTime     int64          `json:"create_time" xorm:"created"`     // create_time
 	UpdateTime     int64          `json:"update_time" xorm:"updated"`     // update_time
 	Adopted        int            `json:"adopted"`                        // 1 Failed 2 Adopted
-	UserId         string         `json:"-" `
+	UserID         string         `json:"-" `
 	UserInfo       *UserBasicInfo `json:"user_info,omitempty"`
 	UpdateUserInfo *UserBasicInfo `json:"update_user_info,omitempty"`
 	Collected      bool           `json:"collected"`

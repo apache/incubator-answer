@@ -23,7 +23,6 @@ func NewCollectionService(
 	collectionRepo collectioncommon.CollectionRepo,
 	collectionGroupRepo CollectionGroupRepo,
 	questionCommon *questioncommon.QuestionCommon,
-
 ) *CollectionService {
 	return &CollectionService{
 		collectionRepo:      collectionRepo,
@@ -31,6 +30,7 @@ func NewCollectionService(
 		questionCommon:      questionCommon,
 	}
 }
+
 func (cs *CollectionService) CollectionSwitch(ctx context.Context, dto *schema.CollectionSwitchDTO) (resp *schema.CollectionSwitchResp, err error) {
 	resp = &schema.CollectionSwitchResp{}
 	dbData, has, err := cs.collectionRepo.GetOneByObjectIDAndUser(ctx, dto.UserID, dto.ObjectID)
@@ -46,7 +46,8 @@ func (cs *CollectionService) CollectionSwitch(ctx context.Context, dto *schema.C
 		if err != nil {
 			log.Error("UpdateCollectionCount", err.Error())
 		}
-		count, err := cs.objectCollectionCount(ctx, dto.ObjectID)
+		var count int64
+		count, err = cs.objectCollectionCount(ctx, dto.ObjectID)
 		if err != nil {
 			return resp, err
 		}

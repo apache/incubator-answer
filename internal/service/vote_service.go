@@ -162,7 +162,8 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 	)
 
 	for _, typeKey := range typeKeys {
-		t, err := vs.configRepo.GetConfigType(typeKey)
+		var t int
+		t, err = vs.configRepo.GetConfigType(typeKey)
 		if err != nil {
 			continue
 		}
@@ -175,7 +176,8 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 	}
 
 	for _, voteInfo := range voteList {
-		objInfo, err := vs.objectService.GetInfo(ctx, voteInfo.ObjectID)
+		var objInfo *schema.SimpleObjectInfo
+		objInfo, err = vs.objectService.GetInfo(ctx, voteInfo.ObjectID)
 		if err != nil {
 			log.Error(err)
 		}

@@ -56,14 +56,14 @@ func (as *AnswerCommon) Search(ctx context.Context, search *entity.AnswerSearch)
 func (as *AnswerCommon) ShowFormat(ctx context.Context, data *entity.Answer) *schema.AnswerInfo {
 	info := schema.AnswerInfo{}
 	info.ID = data.ID
-	info.QuestionId = data.QuestionID
+	info.QuestionID = data.QuestionID
 	info.Content = data.OriginalText
-	info.Html = data.ParsedText
+	info.HTML = data.ParsedText
 	info.Adopted = data.Adopted
 	info.VoteCount = data.VoteCount
 	info.CreateTime = data.CreatedAt.Unix()
 	info.UpdateTime = data.UpdatedAt.Unix()
-	info.UserId = data.UserID
+	info.UserID = data.UserID
 	return &info
 }
 

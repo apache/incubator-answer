@@ -69,7 +69,8 @@ func (cr *commentRepo) UpdateComment(ctx context.Context, comment *entity.Commen
 
 // GetComment get comment one
 func (cr *commentRepo) GetComment(ctx context.Context, commentID string) (
-	comment *entity.Comment, exist bool, err error) {
+	comment *entity.Comment, exist bool, err error,
+) {
 	comment = &entity.Comment{}
 	exist, err = cr.data.DB.ID(commentID).Get(comment)
 	if err != nil {
@@ -80,7 +81,8 @@ func (cr *commentRepo) GetComment(ctx context.Context, commentID string) (
 
 // GetCommentPage get comment page
 func (cr *commentRepo) GetCommentPage(ctx context.Context, commentQuery *comment.CommentQuery) (
-	commentList []*entity.Comment, total int64, err error) {
+	commentList []*entity.Comment, total int64, err error,
+) {
 	commentList = make([]*entity.Comment, 0)
 
 	session := cr.data.DB.NewSession()

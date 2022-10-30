@@ -285,8 +285,8 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 	}
 
 	if limitAccepted {
-		b.Where(builder.Eq{"adopted": schema.Answer_Adopted_Enable})
-		args = append(args, schema.Answer_Adopted_Enable)
+		b.Where(builder.Eq{"adopted": schema.AnswerAdoptedEnable})
+		args = append(args, schema.AnswerAdoptedEnable)
 	}
 
 	if questionID != "" {

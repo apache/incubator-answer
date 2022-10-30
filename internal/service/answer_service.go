@@ -74,7 +74,7 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, id string) (err error
 		return nil
 	}
 
-	//user add question count
+	// user add question count
 	err = as.questionCommon.UpdateAnswerCount(ctx, answerInfo.QuestionID, -1)
 	if err != nil {
 		log.Error("IncreaseAnswerCount error", err.Error())
@@ -97,7 +97,7 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, id string) (err error
 }
 
 func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (string, error) {
-	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, req.QuestionId)
+	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, req.QuestionID)
 	if err != nil {
 		return "", err
 	}
@@ -108,24 +108,24 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	insertData := new(entity.Answer)
 	insertData.UserID = req.UserID
 	insertData.OriginalText = req.Content
-	insertData.ParsedText = req.Html
-	insertData.Adopted = schema.Answer_Adopted_Failed
-	insertData.QuestionID = req.QuestionId
+	insertData.ParsedText = req.HTML
+	insertData.Adopted = schema.AnswerAdoptedFailed
+	insertData.QuestionID = req.QuestionID
 	insertData.RevisionID = "0"
 	insertData.Status = entity.AnswerStatusAvailable
 	insertData.UpdatedAt = now
 	if err := as.answerRepo.AddAnswer(ctx, insertData); err != nil {
 		return "", err
 	}
-	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionId, 1)
+	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionID, 1)
 	if err != nil {
 		log.Error("IncreaseAnswerCount error", err.Error())
 	}
-	err = as.questionCommon.UpdateLastAnswer(ctx, req.QuestionId, insertData.ID)
+	err = as.questionCommon.UpdateLastAnswer(ctx, req.QuestionID, insertData.ID)
 	if err != nil {
 		log.Error("UpdateLastAnswer error", err.Error())
 	}
-	err = as.questionCommon.UpdataPostTime(ctx, req.QuestionId)
+	err = as.questionCommon.UpdataPostTime(ctx, req.QuestionID)
 	if err != nil {
 		return insertData.ID, err
 	}
@@ -151,7 +151,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 }
 
 func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq) (string, error) {
-	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, req.QuestionId)
+	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, req.QuestionID)
 	if err != nil {
 		return "", err
 	}
@@ -161,15 +161,15 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	now := time.Now()
 	insertData := new(entity.Answer)
 	insertData.ID = req.ID
-	insertData.QuestionID = req.QuestionId
+	insertData.QuestionID = req.QuestionID
 	insertData.UserID = req.UserID
 	insertData.OriginalText = req.Content
-	insertData.ParsedText = req.Html
+	insertData.ParsedText = req.HTML
 	insertData.UpdatedAt = now
 	if err := as.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"}); err != nil {
 		return "", err
 	}
-	err = as.questionCommon.UpdataPostTime(ctx, req.QuestionId)
+	err = as.questionCommon.UpdataPostTime(ctx, req.QuestionID)
 	if err != nil {
 		return insertData.ID, err
 	}
@@ -249,8 +249,8 @@ func (as *AnswerService) UpdateAdopted(ctx context.Context, req *schema.AnswerAd
 }
 
 func (as *AnswerService) updateAnswerRank(ctx context.Context, userID string,
-	questionInfo *entity.Question, newAnswerInfo *entity.Answer, oldAnswerInfo *entity.Answer) {
-
+	questionInfo *entity.Question, newAnswerInfo *entity.Answer, oldAnswerInfo *entity.Answer,
+) {
 	// if this question is already been answered, should cancel old answer rank
 	if oldAnswerInfo != nil {
 		err := as.answerActivityService.CancelAcceptAnswer(
@@ -266,7 +266,6 @@ func (as *AnswerService) updateAnswerRank(ctx context.Context, userID string,
 			log.Error(err)
 		}
 	}
-
 }
 
 func (as *AnswerService) Get(ctx context.Context, answerID, loginUserId string) (*schema.AnswerInfo, *schema.QuestionInfo, bool, error) {
@@ -275,12 +274,12 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserId string) 
 		return nil, nil, has, err
 	}
 	info := as.ShowFormat(ctx, answerInfo)
-	//todo questionFunc
+	// todo questionFunc
 	questionInfo, err := as.questionCommon.Info(ctx, answerInfo.QuestionID, loginUserId)
 	if err != nil {
 		return nil, nil, has, err
 	}
-	//todo UserFunc
+	// todo UserFunc
 	userinfo, has, err := as.userCommon.GetUserBasicInfoByID(ctx, answerInfo.UserID)
 	if err != nil {
 		return nil, nil, has, err
@@ -348,7 +347,7 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, answerID stri
 func (as *AnswerService) SearchList(ctx context.Context, search *schema.AnswerList) ([]*schema.AnswerInfo, int64, error) {
 	list := make([]*schema.AnswerInfo, 0)
 	dbSearch := entity.AnswerSearch{}
-	dbSearch.QuestionID = search.QuestionId
+	dbSearch.QuestionID = search.QuestionID
 	dbSearch.Page = search.Page
 	dbSearch.PageSize = search.PageSize
 	dbSearch.Order = search.Order
@@ -373,7 +372,7 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.
 		objectIds = append(objectIds, dbitem.ID)
 		userIds = append(userIds, dbitem.UserID)
 		if loginUserId != "" {
-			//item.VoteStatus = as.activityFunc.GetVoteStatus(ctx, item.TagID, loginUserId)
+			// item.VoteStatus = as.activityFunc.GetVoteStatus(ctx, item.TagID, loginUserId)
 			item.VoteStatus = as.voteRepo.GetVoteStatus(ctx, item.ID, loginUserId)
 		}
 	}
@@ -382,10 +381,10 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.
 		return list, err
 	}
 	for _, item := range list {
-		_, ok := userInfoMap[item.UserId]
+		_, ok := userInfoMap[item.UserID]
 		if ok {
-			item.UserInfo = userInfoMap[item.UserId]
-			item.UpdateUserInfo = userInfoMap[item.UserId]
+			item.UserInfo = userInfoMap[item.UserID]
+			item.UpdateUserInfo = userInfoMap[item.UserID]
 		}
 	}
 
@@ -406,7 +405,7 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.
 	}
 
 	for _, item := range list {
-		item.MemberActions = permission.GetAnswerPermission(loginUserId, item.UserId)
+		item.MemberActions = permission.GetAnswerPermission(loginUserId, item.UserID)
 	}
 
 	return list, nil
