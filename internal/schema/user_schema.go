@@ -55,7 +55,7 @@ type GetUserResp struct {
 	// bio markdown
 	Bio string `json:"bio"`
 	// bio html
-	BioHtml string `json:"bio_html"`
+	BioHTML string `json:"bio_html"`
 	// website
 	Website string `json:"website"`
 	// location
@@ -114,7 +114,7 @@ type GetOtherUserInfoByUsernameResp struct {
 	// bio markdown
 	Bio string `json:"bio"`
 	// bio html
-	BioHtml string `json:"bio_html"`
+	BioHTML string `json:"bio_html"`
 	// website
 	Website string `json:"website"`
 	// location
@@ -146,7 +146,6 @@ func (r *GetOtherUserInfoByUsernameResp) GetFromUserEntity(userInfo *entity.User
 			r.StatusMsg = statusMsgShow
 		}
 	}
-
 }
 
 const (
@@ -156,7 +155,7 @@ const (
 	Notice_Status_On  = 1
 	Notice_Status_Off = 2
 
-	//ActionRecord ReportType
+	// ActionRecord ReportType
 	ActionRecord_Type_Login     = "login"
 	ActionRecord_Type_Email     = "e_mail"
 	ActionRecord_Type_Find_Pass = "find_pass"
@@ -167,6 +166,7 @@ var UserStatusShow = map[int]string{
 	9:  "forbidden",
 	10: "deleted",
 }
+
 var UserStatusShowMsg = map[int]string{
 	1:  "",
 	9:  "<strong>This user was suspended forever.</strong> This user doesn’t meet a community guideline.",

@@ -124,7 +124,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		return
 	}
 	objectTagData := schema.TagChange{}
-	objectTagData.ObjectId = question.ID
+	objectTagData.ObjectID = question.ID
 	objectTagData.Tags = req.Tags
 	objectTagData.UserID = req.UserID
 	err = qs.ChangeTag(ctx, &objectTagData)
@@ -137,8 +137,8 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		ObjectID: question.ID,
 		Title:    "",
 	}
-	InfoJson, _ := json.Marshal(question)
-	revisionDTO.Content = string(InfoJson)
+	InfoJSON, _ := json.Marshal(question)
+	revisionDTO.Content = string(InfoJSON)
 	err = qs.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return
@@ -209,7 +209,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return
 	}
 	objectTagData := schema.TagChange{}
-	objectTagData.ObjectId = question.ID
+	objectTagData.ObjectID = question.ID
 	objectTagData.Tags = req.Tags
 	objectTagData.UserID = req.UserID
 	err = qs.ChangeTag(ctx, &objectTagData)
@@ -627,13 +627,13 @@ func (qs *QuestionService) CmsSearchAnswerList(ctx context.Context, search *enti
 		return answerlist, count, err
 	}
 	for _, item := range answerlist {
-		_, ok := questionMaps[item.QuestionId]
+		_, ok := questionMaps[item.QuestionID]
 		if ok {
-			item.QuestionInfo.Title = questionMaps[item.QuestionId].Title
+			item.QuestionInfo.Title = questionMaps[item.QuestionID].Title
 		}
-		_, ok = userInfoMap[item.UserId]
+		_, ok = userInfoMap[item.UserID]
 		if ok {
-			item.UserInfo = userInfoMap[item.UserId]
+			item.UserInfo = userInfoMap[item.UserID]
 		}
 	}
 	return answerlist, count, nil

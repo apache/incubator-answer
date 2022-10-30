@@ -57,12 +57,17 @@ func (cs *CollectionService) CollectionSwitch(ctx context.Context, dto *schema.C
 	}
 
 	if dto.GroupID == "" || dto.GroupID == "0" {
-		defaultGroup, has, err := cs.collectionGroupRepo.GetDefaultID(ctx, dto.UserID)
+		var (
+			defaultGroup *entity.CollectionGroup
+			has          bool
+		)
+		defaultGroup, has, err = cs.collectionGroupRepo.GetDefaultID(ctx, dto.UserID)
 		if err != nil {
 			return nil, err
 		}
 		if !has {
-			dbdefaultGroup, err := cs.collectionGroupRepo.AddCollectionDefaultGroup(ctx, dto.UserID)
+			var dbdefaultGroup *entity.CollectionGroup
+			dbdefaultGroup, err = cs.collectionGroupRepo.AddCollectionDefaultGroup(ctx, dto.UserID)
 			if err != nil {
 				return nil, err
 			}
@@ -94,8 +99,8 @@ func (cs *CollectionService) CollectionSwitch(ctx context.Context, dto *schema.C
 	return
 }
 
-func (cs *CollectionService) objectCollectionCount(ctx context.Context, objectId string) (int64, error) {
-	count, err := cs.collectionRepo.CountByObjectID(ctx, objectId)
+func (cs *CollectionService) objectCollectionCount(ctx context.Context, objectID string) (int64, error) {
+	count, err := cs.collectionRepo.CountByObjectID(ctx, objectID)
 	return count, err
 }
 

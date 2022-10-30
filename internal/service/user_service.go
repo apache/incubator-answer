@@ -360,8 +360,8 @@ func (us *UserService) UserVerifyEmailSend(ctx context.Context, userID string) e
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailUrl := fmt.Sprintf("%s/users/account-activation?code=%s", us.serviceConfig.WebHost, code)
-	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailUrl)
+	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.serviceConfig.WebHost, code)
+	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return err
 	}
@@ -369,10 +369,10 @@ func (us *UserService) UserVerifyEmailSend(ctx context.Context, userID string) e
 	return nil
 }
 
-func (us *UserService) UserNoticeSet(ctx context.Context, userId string, noticeSwitch bool) (
+func (us *UserService) UserNoticeSet(ctx context.Context, userID string, noticeSwitch bool) (
 	resp *schema.UserNoticeSetResp, err error,
 ) {
-	userInfo, has, err := us.userRepo.GetByUserID(ctx, userId)
+	userInfo, has, err := us.userRepo.GetByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -474,10 +474,7 @@ func (us *UserService) makeUsername(ctx context.Context, displayName string) (us
 // Compare whether the password is correct
 func (us *UserService) verifyPassword(ctx context.Context, LoginPass, UserPass string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(UserPass), []byte(LoginPass))
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 // encryptPassword
@@ -511,12 +508,12 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 		UserID: req.UserID,
 	}
 	code := uuid.NewString()
-	verifyEmailUrl := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.serviceConfig.WebHost, code)
-	title, body, err := us.emailService.ChangeEmailTemplate(ctx, verifyEmailUrl)
+	verifyEmailURL := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.serviceConfig.WebHost, code)
+	title, body, err := us.emailService.ChangeEmailTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return err
 	}
-	log.Infof("send email confirmation %s", verifyEmailUrl)
+	log.Infof("send email confirmation %s", verifyEmailURL)
 
 	go us.emailService.Send(context.Background(), req.Email, title, body, code, data.ToJSONString())
 	return nil

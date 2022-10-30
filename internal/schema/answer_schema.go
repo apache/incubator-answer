@@ -60,12 +60,12 @@ type AnswerInfo struct {
 
 type AdminAnswerInfo struct {
 	ID           string         `json:"id"`
-	QuestionId   string         `json:"question_id"`
+	QuestionID   string         `json:"question_id"`
 	Description  string         `json:"description"`
 	CreateTime   int64          `json:"create_time"`
 	UpdateTime   int64          `json:"update_time"`
 	Adopted      int            `json:"adopted"`
-	UserId       string         `json:"-" `
+	UserID       string         `json:"-" `
 	UserInfo     *UserBasicInfo `json:"user_info"`
 	VoteCount    int            `json:"vote_count"`
 	QuestionInfo struct {

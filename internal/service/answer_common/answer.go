@@ -14,9 +14,9 @@ type AnswerRepo interface {
 	GetAnswer(ctx context.Context, id string) (answer *entity.Answer, exist bool, err error)
 	GetAnswerList(ctx context.Context, answer *entity.Answer) (answerList []*entity.Answer, err error)
 	GetAnswerPage(ctx context.Context, page, pageSize int, answer *entity.Answer) (answerList []*entity.Answer, total int64, err error)
-	UpdateAdopted(ctx context.Context, id string, questionId string) error
+	UpdateAdopted(ctx context.Context, id string, questionID string) error
 	GetByID(ctx context.Context, id string) (*entity.Answer, bool, error)
-	GetByUserIdQuestionId(ctx context.Context, userId string, questionId string) (*entity.Answer, bool, error)
+	GetByUserIdQuestionId(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error)
 	SearchList(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error)
 	CmsSearchList(ctx context.Context, search *entity.CmsAnswerSearch) ([]*entity.Answer, int64, error)
 	UpdateAnswerStatus(ctx context.Context, answer *entity.Answer) (err error)
@@ -33,8 +33,8 @@ func NewAnswerCommon(answerRepo AnswerRepo) *AnswerCommon {
 	}
 }
 
-func (as *AnswerCommon) SearchAnswered(ctx context.Context, userId, questionId string) (bool, error) {
-	_, has, err := as.answerRepo.GetByUserIdQuestionId(ctx, userId, questionId)
+func (as *AnswerCommon) SearchAnswered(ctx context.Context, userID, questionID string) (bool, error) {
+	_, has, err := as.answerRepo.GetByUserIdQuestionId(ctx, userID, questionID)
 	if err != nil {
 		return has, err
 	}
@@ -70,12 +70,12 @@ func (as *AnswerCommon) ShowFormat(ctx context.Context, data *entity.Answer) *sc
 func (as *AnswerCommon) AdminShowFormat(ctx context.Context, data *entity.Answer) *schema.AdminAnswerInfo {
 	info := schema.AdminAnswerInfo{}
 	info.ID = data.ID
-	info.QuestionId = data.QuestionID
+	info.QuestionID = data.QuestionID
 	info.Description = data.ParsedText
 	info.Adopted = data.Adopted
 	info.VoteCount = data.VoteCount
 	info.CreateTime = data.CreatedAt.Unix()
 	info.UpdateTime = data.UpdatedAt.Unix()
-	info.UserId = data.UserID
+	info.UserID = data.UserID
 	return &info
 }

@@ -114,7 +114,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	insertData.RevisionID = "0"
 	insertData.Status = entity.AnswerStatusAvailable
 	insertData.UpdatedAt = now
-	if err := as.answerRepo.AddAnswer(ctx, insertData); err != nil {
+	if err = as.answerRepo.AddAnswer(ctx, insertData); err != nil {
 		return "", err
 	}
 	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionID, 1)
@@ -140,8 +140,8 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 		ObjectID: insertData.ID,
 		Title:    "",
 	}
-	InfoJson, _ := json.Marshal(insertData)
-	revisionDTO.Content = string(InfoJson)
+	InfoJSON, _ := json.Marshal(insertData)
+	revisionDTO.Content = string(InfoJSON)
 	err = as.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return insertData.ID, err
@@ -179,8 +179,8 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		Title:    "",
 		Log:      req.EditSummary,
 	}
-	InfoJson, _ := json.Marshal(insertData)
-	revisionDTO.Content = string(InfoJson)
+	InfoJSON, _ := json.Marshal(insertData)
+	revisionDTO.Content = string(InfoJSON)
 	err = as.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return insertData.ID, err
@@ -228,7 +228,7 @@ func (as *AnswerService) UpdateAdopted(ctx context.Context, req *schema.AnswerAd
 
 	var oldAnswerInfo *entity.Answer
 	if len(questionInfo.AcceptedAnswerID) > 0 && questionInfo.AcceptedAnswerID != "0" {
-		oldAnswerInfo, exist, err = as.answerRepo.GetByID(ctx, questionInfo.AcceptedAnswerID)
+		oldAnswerInfo, _, err = as.answerRepo.GetByID(ctx, questionInfo.AcceptedAnswerID)
 		if err != nil {
 			return err
 		}
@@ -268,14 +268,14 @@ func (as *AnswerService) updateAnswerRank(ctx context.Context, userID string,
 	}
 }
 
-func (as *AnswerService) Get(ctx context.Context, answerID, loginUserId string) (*schema.AnswerInfo, *schema.QuestionInfo, bool, error) {
+func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) (*schema.AnswerInfo, *schema.QuestionInfo, bool, error) {
 	answerInfo, has, err := as.answerRepo.GetByID(ctx, answerID)
 	if err != nil {
 		return nil, nil, has, err
 	}
 	info := as.ShowFormat(ctx, answerInfo)
 	// todo questionFunc
-	questionInfo, err := as.questionCommon.Info(ctx, answerInfo.QuestionID, loginUserId)
+	questionInfo, err := as.questionCommon.Info(ctx, answerInfo.QuestionID, loginUserID)
 	if err != nil {
 		return nil, nil, has, err
 	}
@@ -289,13 +289,13 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserId string) 
 		info.UpdateUserInfo = userinfo
 	}
 
-	if loginUserId == "" {
+	if loginUserID == "" {
 		return info, questionInfo, has, nil
 	}
 
-	info.VoteStatus = as.voteRepo.GetVoteStatus(ctx, answerID, loginUserId)
+	info.VoteStatus = as.voteRepo.GetVoteStatus(ctx, answerID, loginUserID)
 
-	CollectedMap, err := as.collectionCommon.SearchObjectCollected(ctx, loginUserId, []string{answerInfo.ID})
+	CollectedMap, err := as.collectionCommon.SearchObjectCollected(ctx, loginUserID, []string{answerInfo.ID})
 	if err != nil {
 		log.Error("CollectionFunc.SearchObjectCollected error", err)
 	}
