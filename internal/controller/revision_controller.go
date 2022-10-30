@@ -20,13 +20,13 @@ func NewRevisionController(revisionListService *service.RevisionService) *Revisi
 }
 
 // GetRevisionList godoc
-// @Summary get revision list
+// @Summary     get revision list
 // @Description get revision list
-// @Tags Revision
-// @Produce json
-// @Param object_id query string true "object id"
-// @Success 200 {object} handler.RespBody{data=[]schema.GetRevisionResp}
-// @Router /answer/api/v1/revisions [get]
+// @Tags        Revision
+// @Produce     json
+// @Param       object_id query    string true "object id"
+// @Success     200       {object} handler.RespBody{data=[]schema.GetRevisionResp}
+// @Router      /answer/api/v1/revisions [get]
 func (rc *RevisionController) GetRevisionList(ctx *gin.Context) {
 	objectID := ctx.Query("object_id")
 	if objectID == "0" || objectID == "" {

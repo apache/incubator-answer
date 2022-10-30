@@ -31,8 +31,8 @@ var (
 )
 
 // @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
+// @in                         header
+// @name                       Authorization
 func main() {
 	Execute()
 }

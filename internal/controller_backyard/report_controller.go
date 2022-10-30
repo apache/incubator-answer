@@ -19,19 +19,19 @@ func NewReportController(reportService *report_backyard.ReportBackyardService) *
 }
 
 // ListReportPage godoc
-// @Summary list report page
+// @Summary     list report page
 // @Description list report records
-// @Security ApiKeyAuth
-// @Tags admin
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param status query string true "status" Enums(pending, completed)
-// @Param object_type query string true "object_type" Enums(all, question,answer,comment)
-// @Param page query int false "page size"
-// @Param page_size query int false "page size"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/admin/api/reports/page [get]
+// @Security    ApiKeyAuth
+// @Tags        admin
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       status      query    string true  "status"      Enums(pending, completed)
+// @Param       object_type query    string true  "object_type" Enums(all, question,answer,comment)
+// @Param       page        query    int    false "page size"
+// @Param       page_size   query    int    false "page size"
+// @Success     200         {object} handler.RespBody
+// @Router      /answer/admin/api/reports/page [get]
 func (rc *ReportController) ListReportPage(ctx *gin.Context) {
 	var (
 		objectType = ctx.Query("object_type")
@@ -56,16 +56,16 @@ func (rc *ReportController) ListReportPage(ctx *gin.Context) {
 }
 
 // Handle godoc
-// @Summary handle flag
+// @Summary     handle flag
 // @Description handle flag
-// @Security ApiKeyAuth
-// @Tags admin
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.ReportHandleReq true "flag"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/admin/api/report/ [put]
+// @Security    ApiKeyAuth
+// @Tags        admin
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.ReportHandleReq true "flag"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/admin/api/report/ [put]
 func (rc *ReportController) Handle(ctx *gin.Context) {
 	req := schema.ReportHandleReq{}
 	if handler.BindAndCheck(ctx, &req) {

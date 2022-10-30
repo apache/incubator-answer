@@ -18,15 +18,15 @@ func NewUserBackyardController(userService *user_backyard.UserBackyardService) *
 }
 
 // UpdateUserStatus update user
-// @Summary update user
+// @Summary     update user
 // @Description update user
-// @Security ApiKeyAuth
-// @Tags admin
-// @Accept json
-// @Produce json
-// @Param data body schema.UpdateUserStatusReq true "user"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/admin/api/user/status [put]
+// @Security    ApiKeyAuth
+// @Tags        admin
+// @Accept      json
+// @Produce     json
+// @Param       data body     schema.UpdateUserStatusReq true "user"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/admin/api/user/status [put]
 func (uc *UserBackyardController) UpdateUserStatus(ctx *gin.Context) {
 	req := &schema.UpdateUserStatusReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -38,18 +38,18 @@ func (uc *UserBackyardController) UpdateUserStatus(ctx *gin.Context) {
 }
 
 // GetUserPage get user page
-// @Summary get user page
+// @Summary     get user page
 // @Description get user page
-// @Security ApiKeyAuth
-// @Tags admin
-// @Produce json
-// @Param page query int false "page size"
-// @Param page_size query int false "page size"
-// @Param username query string false "username"
-// @Param e_mail query string false "email"
-// @Param status query string false "user status" Enums(normal, suspended, deleted, inactive)
-// @Success 200 {object} handler.RespBody{data=pager.PageModel{records=[]schema.GetUserPageResp}}
-// @Router /answer/admin/api/users/page [get]
+// @Security    ApiKeyAuth
+// @Tags        admin
+// @Produce     json
+// @Param       page      query    int    false "page size"
+// @Param       page_size query    int    false "page size"
+// @Param       username  query    string false "username"
+// @Param       e_mail    query    string false "email"
+// @Param       status    query    string false "user status" Enums(normal, suspended, deleted, inactive)
+// @Success     200       {object} handler.RespBody{data=pager.PageModel{records=[]schema.GetUserPageResp}}
+// @Router      /answer/admin/api/users/page [get]
 func (uc *UserBackyardController) GetUserPage(ctx *gin.Context) {
 	req := &schema.GetUserPageReq{}
 	if handler.BindAndCheck(ctx, req) {

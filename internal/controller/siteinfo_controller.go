@@ -19,12 +19,12 @@ func NewSiteinfoController(siteInfoService *service.SiteInfoService) *SiteinfoCo
 }
 
 // GetInfo godoc
-// @Summary Get siteinfo
+// @Summary     Get siteinfo
 // @Description Get siteinfo
-// @Tags site
-// @Produce json
-// @Success 200 {object} handler.RespBody{data=schema.SiteGeneralResp}
-// @Router /answer/api/v1/siteinfo [get]
+// @Tags        site
+// @Produce     json
+// @Success     200 {object} handler.RespBody{data=schema.SiteGeneralResp}
+// @Router      /answer/api/v1/siteinfo [get]
 func (sc *SiteinfoController) GetInfo(ctx *gin.Context) {
 	var (
 		resp    = &schema.SiteInfoResp{}

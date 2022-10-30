@@ -46,14 +46,14 @@ func NewUserController(
 }
 
 // GetUserInfoByUserID godoc
-// @Summary GetUserInfoByUserID
+// @Summary     GetUserInfoByUserID
 // @Description GetUserInfoByUserID
-// @Tags User
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
-// @Router /answer/api/v1/user/info [get]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Success     200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Router      /answer/api/v1/user/info [get]
 func (uc *UserController) GetUserInfoByUserID(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	token := middleware.ExtractToken(ctx)
@@ -62,15 +62,15 @@ func (uc *UserController) GetUserInfoByUserID(ctx *gin.Context) {
 }
 
 // GetOtherUserInfoByUsername godoc
-// @Summary GetOtherUserInfoByUsername
+// @Summary     GetOtherUserInfoByUsername
 // @Description GetOtherUserInfoByUsername
-// @Tags User
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param username query string true "username"
-// @Success 200 {object} handler.RespBody{data=schema.GetOtherUserInfoResp}
-// @Router /answer/api/v1/personal/user/info [get]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       username query    string true "username"
+// @Success     200      {object} handler.RespBody{data=schema.GetOtherUserInfoResp}
+// @Router      /answer/api/v1/personal/user/info [get]
 func (uc *UserController) GetOtherUserInfoByUsername(ctx *gin.Context) {
 	req := &schema.GetOtherUserInfoByUsernameReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -82,14 +82,14 @@ func (uc *UserController) GetOtherUserInfoByUsername(ctx *gin.Context) {
 }
 
 // GetUserStatus get user status info
-// @Summary get user status info
+// @Summary     get user status info
 // @Description get user status info
-// @Tags User
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
-// @Router /answer/api/v1/user/status [get]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Success     200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Router      /answer/api/v1/user/status [get]
 func (uc *UserController) GetUserStatus(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	token := middleware.ExtractToken(ctx)
@@ -98,14 +98,14 @@ func (uc *UserController) GetUserStatus(ctx *gin.Context) {
 }
 
 // UserEmailLogin godoc
-// @Summary UserEmailLogin
+// @Summary     UserEmailLogin
 // @Description UserEmailLogin
-// @Tags User
-// @Accept json
-// @Produce json
-// @Param data body schema.UserEmailLogin true "UserEmailLogin"
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
-// @Router /answer/api/v1/user/login/email [post]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Param       data body     schema.UserEmailLogin true "UserEmailLogin"
+// @Success     200  {object} handler.RespBody{data=schema.GetUserResp}
+// @Router      /answer/api/v1/user/login/email [post]
 func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 	req := &schema.UserEmailLogin{}
 	if handler.BindAndCheck(ctx, req) {
@@ -139,14 +139,14 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 }
 
 // RetrievePassWord godoc
-// @Summary RetrievePassWord
+// @Summary     RetrievePassWord
 // @Description RetrievePassWord
-// @Tags User
-// @Accept  json
-// @Produce  json
-// @Param data body schema.UserRetrievePassWordRequest  true "UserRetrievePassWordRequest"
-// @Success 200 {string} string ""
-// @Router /answer/api/v1/user/password/reset [post]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Param       data body     schema.UserRetrievePassWordRequest true "UserRetrievePassWordRequest"
+// @Success     200  {string} string                             ""
+// @Router      /answer/api/v1/user/password/reset [post]
 func (uc *UserController) RetrievePassWord(ctx *gin.Context) {
 	req := &schema.UserRetrievePassWordRequest{}
 	if handler.BindAndCheck(ctx, req) {
@@ -168,14 +168,14 @@ func (uc *UserController) RetrievePassWord(ctx *gin.Context) {
 }
 
 // UseRePassWord godoc
-// @Summary UseRePassWord
+// @Summary     UseRePassWord
 // @Description UseRePassWord
-// @Tags User
-// @Accept  json
-// @Produce  json
-// @Param data body schema.UserRePassWordRequest  true "UserRePassWordRequest"
-// @Success 200 {string} string ""
-// @Router /answer/api/v1/user/password/replacement [post]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Param       data body     schema.UserRePassWordRequest true "UserRePassWordRequest"
+// @Success     200  {object} handler.RespBody{data=schema.GetUserResp}
+// @Router      /answer/api/v1/user/password/replacement [post]
 func (uc *UserController) UseRePassWord(ctx *gin.Context) {
 	req := &schema.UserRePassWordRequest{}
 	if handler.BindAndCheck(ctx, req) {
@@ -195,13 +195,13 @@ func (uc *UserController) UseRePassWord(ctx *gin.Context) {
 }
 
 // UserLogout user logout
-// @Summary user logout
+// @Summary     user logout
 // @Description user logout
-// @Tags User
-// @Accept json
-// @Produce json
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/user/logout [get]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Success     200 {object} handler.RespBody{}
+// @Router      /answer/api/v1/user/logout [get]
 func (uc *UserController) UserLogout(ctx *gin.Context) {
 	accessToken := middleware.ExtractToken(ctx)
 	_ = uc.authService.RemoveUserCacheInfo(ctx, accessToken)
@@ -209,14 +209,14 @@ func (uc *UserController) UserLogout(ctx *gin.Context) {
 }
 
 // UserRegisterByEmail godoc
-// @Summary UserRegisterByEmail
+// @Summary     UserRegisterByEmail
 // @Description UserRegisterByEmail
-// @Tags User
-// @Accept json
-// @Produce json
-// @Param data body schema.UserRegisterReq true "UserRegisterReq"
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
-// @Router /answer/api/v1/user/register/email [post]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Param       data body     schema.UserRegisterReq true "UserRegisterReq"
+// @Success     200  {object} handler.RespBody{data=schema.GetUserResp}
+// @Router      /answer/api/v1/user/register/email [post]
 func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 	req := &schema.UserRegisterReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -229,14 +229,14 @@ func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 }
 
 // UserVerifyEmail godoc
-// @Summary UserVerifyEmail
+// @Summary     UserVerifyEmail
 // @Description UserVerifyEmail
-// @Tags User
-// @Accept json
-// @Produce json
-// @Param code query string true "code" default()
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
-// @Router /answer/api/v1/user/email/verification [post]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Param       code query    string true "code" default()
+// @Success     200  {object} handler.RespBody{data=schema.GetUserResp}
+// @Router      /answer/api/v1/user/email/verification [post]
 func (uc *UserController) UserVerifyEmail(ctx *gin.Context) {
 	req := &schema.UserVerifyEmailReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -261,16 +261,16 @@ func (uc *UserController) UserVerifyEmail(ctx *gin.Context) {
 }
 
 // UserVerifyEmailSend godoc
-// @Summary UserVerifyEmailSend
+// @Summary     UserVerifyEmailSend
 // @Description UserVerifyEmailSend
-// @Tags User
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param captcha_id query string false "captcha_id"  default()
-// @Param captcha_code query string false "captcha_code"  default()
-// @Success 200 {string} string ""
-// @Router /answer/api/v1/user/email/verification/send [post]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       captcha_id   query    string false "captcha_id"   default()
+// @Param       captcha_code query    string false "captcha_code" default()
+// @Success     200          {object} handler.RespBody{}
+// @Router      /answer/api/v1/user/email/verification/send [post]
 func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 	req := &schema.UserVerifyEmailSendReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -300,15 +300,15 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 }
 
 // UserModifyPassWord godoc
-// @Summary UserModifyPassWord
+// @Summary     UserModifyPassWord
 // @Description UserModifyPassWord
-// @Tags User
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.UserModifyPassWordRequest  true "UserModifyPassWordRequest"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/user/password [put]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.UserModifyPassWordRequest true "UserModifyPassWordRequest"
+// @Success     200  {object} handler.RespBody{}
+// @Router      /answer/api/v1/user/password [put]
 func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	req := &schema.UserModifyPassWordRequest{}
 	if handler.BindAndCheck(ctx, req) {
@@ -345,16 +345,16 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 }
 
 // UserUpdateInfo update user info
-// @Summary UserUpdateInfo update user info
+// @Summary     UserUpdateInfo update user info
 // @Description UserUpdateInfo update user info
-// @Tags User
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param Authorization header string true "access-token"
-// @Param data body schema.UpdateInfoRequest true "UpdateInfoRequest"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/user/info [put]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       Authorization header   string                   true "access-token"
+// @Param       data          body     schema.UpdateInfoRequest true "UpdateInfoRequest"
+// @Success     200           {object} handler.RespBody{}
+// @Router      /answer/api/v1/user/info [put]
 func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 	req := &schema.UpdateInfoRequest{}
 	if handler.BindAndCheck(ctx, req) {
@@ -366,14 +366,14 @@ func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 }
 
 // UploadUserAvatar godoc
-// @Summary UserUpdateInfo
+// @Summary     UserUpdateInfo
 // @Description UserUpdateInfo
-// @Tags User
-// @Accept multipart/form-data
-// @Security ApiKeyAuth
-// @Param file formData file true "file"
-// @Success 200 {object} handler.RespBody{data=string}
-// @Router /answer/api/v1/user/avatar/upload [post]
+// @Tags        User
+// @Accept      multipart/form-data
+// @Security    ApiKeyAuth
+// @Param       file formData file true "file"
+// @Success     200  {object} handler.RespBody{data=string}
+// @Router      /answer/api/v1/user/avatar/upload [post]
 func (uc *UserController) UploadUserAvatar(ctx *gin.Context) {
 	// max size
 	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 10*1024*1024)
@@ -395,14 +395,14 @@ func (uc *UserController) UploadUserAvatar(ctx *gin.Context) {
 }
 
 // UploadUserPostFile godoc
-// @Summary upload user post file
+// @Summary     upload user post file
 // @Description upload user post file
-// @Tags User
-// @Accept multipart/form-data
-// @Security ApiKeyAuth
-// @Param file formData file true "file"
-// @Success 200 {object} handler.RespBody{data=string}
-// @Router /answer/api/v1/user/post/file [post]
+// @Tags        User
+// @Accept      multipart/form-data
+// @Security    ApiKeyAuth
+// @Param       file formData file true "file"
+// @Success     200  {object} handler.RespBody{data=string}
+// @Router      /answer/api/v1/user/post/file [post]
 func (uc *UserController) UploadUserPostFile(ctx *gin.Context) {
 	// max size
 	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 10*1024*1024)
@@ -424,13 +424,13 @@ func (uc *UserController) UploadUserPostFile(ctx *gin.Context) {
 }
 
 // ActionRecord godoc
-// @Summary ActionRecord
+// @Summary     ActionRecord
 // @Description ActionRecord
-// @Tags User
-// @Param action query string true "action" Enums(login, e_mail, find_pass)
-// @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody{data=schema.ActionRecordResp}
-// @Router /answer/api/v1/user/action/record [get]
+// @Tags        User
+// @Param       action query string true "action" Enums(login, e_mail, find_pass)
+// @Security    ApiKeyAuth
+// @Success     200 {object} handler.RespBody{data=schema.ActionRecordResp}
+// @Router      /answer/api/v1/user/action/record [get]
 func (uc *UserController) ActionRecord(ctx *gin.Context) {
 	req := &schema.ActionRecordReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -443,15 +443,15 @@ func (uc *UserController) ActionRecord(ctx *gin.Context) {
 }
 
 // UserNoticeSet godoc
-// @Summary UserNoticeSet
+// @Summary     UserNoticeSet
 // @Description UserNoticeSet
-// @Tags User
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.UserNoticeSetRequest true "UserNoticeSetRequest"
-// @Success 200 {object} handler.RespBody{data=schema.UserNoticeSetResp}
-// @Router /answer/api/v1/user/notice/set [post]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.UserNoticeSetRequest true "UserNoticeSetRequest"
+// @Success     200  {object} handler.RespBody{data=schema.UserNoticeSetResp}
+// @Router      /answer/api/v1/user/notice/set [post]
 func (uc *UserController) UserNoticeSet(ctx *gin.Context) {
 	req := &schema.UserNoticeSetRequest{}
 	if handler.BindAndCheck(ctx, req) {
@@ -464,14 +464,14 @@ func (uc *UserController) UserNoticeSet(ctx *gin.Context) {
 }
 
 // UserChangeEmailSendCode send email to the user email then change their email
-// @Summary send email to the user email then change their email
+// @Summary     send email to the user email then change their email
 // @Description send email to the user email then change their email
-// @Tags User
-// @Accept json
-// @Produce json
-// @Param data body schema.UserChangeEmailSendCodeReq true "UserChangeEmailSendCodeReq"
-// @Success 200 {object} handler.RespBody{}
-// @Router /answer/api/v1/user/email/change/code [post]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Param       data body     schema.UserChangeEmailSendCodeReq true "UserChangeEmailSendCodeReq"
+// @Success     200  {object} handler.RespBody{}
+// @Router      /answer/api/v1/user/email/change/code [post]
 func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 	req := &schema.UserChangeEmailSendCodeReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -484,15 +484,15 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 }
 
 // UserChangeEmailVerify user change email verification
-// @Summary user change email verification
+// @Summary     user change email verification
 // @Description user change email verification
-// @Tags User
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.UserChangeEmailVerifyReq true "UserChangeEmailVerifyReq"
-// @Success 200 {object} handler.RespBody{}
-// @Router /answer/api/v1/user/email [put]
+// @Tags        User
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.UserChangeEmailVerifyReq true "UserChangeEmailVerifyReq"
+// @Success     200  {object} handler.RespBody{}
+// @Router      /answer/api/v1/user/email [put]
 func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 	req := &schema.UserChangeEmailVerifyReq{}
 	if handler.BindAndCheck(ctx, req) {

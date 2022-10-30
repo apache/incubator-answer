@@ -20,15 +20,15 @@ func NewFollowController(followService *follow.FollowService) *FollowController 
 }
 
 // Follow godoc
-// @Summary follow object or cancel follow operation
+// @Summary     follow object or cancel follow operation
 // @Description follow object or cancel follow operation
-// @Tags Activity
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.FollowReq true "follow"
-// @Success 200 {object} handler.RespBody{data=schema.FollowResp}
-// @Router /answer/api/v1/follow [post]
+// @Tags        Activity
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.FollowReq true "follow"
+// @Success     200  {object} handler.RespBody{data=schema.FollowResp}
+// @Router      /answer/api/v1/follow [post]
 func (fc *FollowController) Follow(ctx *gin.Context) {
 	req := &schema.FollowReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -48,15 +48,15 @@ func (fc *FollowController) Follow(ctx *gin.Context) {
 }
 
 // UpdateFollowTags update user follow tags
-// @Summary update user follow tags
+// @Summary     update user follow tags
 // @Description update user follow tags
-// @Tags Activity
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.UpdateFollowTagsReq true "follow"
-// @Success 200 {object} handler.RespBody{}
-// @Router /answer/api/v1/follow/tags [put]
+// @Tags        Activity
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.UpdateFollowTagsReq true "follow"
+// @Success     200  {object} handler.RespBody{}
+// @Router      /answer/api/v1/follow/tags [put]
 func (fc *FollowController) UpdateFollowTags(ctx *gin.Context) {
 	req := &schema.UpdateFollowTagsReq{}
 	if handler.BindAndCheck(ctx, req) {

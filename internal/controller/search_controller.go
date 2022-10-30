@@ -19,15 +19,15 @@ func NewSearchController(searchService *service.SearchService) *SearchController
 }
 
 // Search godoc
-// @Summary search object
+// @Summary     search object
 // @Description search object
-// @Tags Search
-// @Produce json
-// @Security ApiKeyAuth
-// @Param q query string true "query string"
-// @Param order query string true "order" Enums(newest,active,score,relevance)
-// @Success 200 {object} handler.RespBody{data=schema.SearchListResp}
-// @Router /answer/api/v1/search [get]
+// @Tags        Search
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       q     query    string true "query string"
+// @Param       order query    string true "order" Enums(newest,active,score,relevance)
+// @Success     200   {object} handler.RespBody{data=schema.SearchListResp}
+// @Router      /answer/api/v1/search [get]
 func (sc *SearchController) Search(ctx *gin.Context) {
 	dto := schema.SearchDTO{}
 

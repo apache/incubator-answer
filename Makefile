@@ -1,4 +1,4 @@
-.PHONY: build clean ui
+.PHONY: build clean ui swag
 
 VERSION=0.0.1
 BIN=answer
@@ -14,7 +14,7 @@ build:
 	@$(GO_ENV) $(GO) build $(GO_FLAGS) -o $(BIN) $(DIR_SRC)
 
 generate:
-	go get github.com/google/wire/cmd/wire@latest
+	go install github.com/google/wire/cmd/wire@latest
 	go generate ./...
 	go mod tidy
 
@@ -35,3 +35,8 @@ ui:
 	@cd ui && echo "REACT_APP_VERSION=$(VERSION)" >> .env && pnpm install && pnpm build && cd -
 
 all: clean build
+
+swag:
+	go install github.com/swaggo/swag/cmd/swag@latest
+	swag fmt
+	swag init --generalInfo=./cmd/answer/main.go --parseInternal --propertyStrategy=snakecase

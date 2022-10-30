@@ -23,16 +23,16 @@ func NewReportController(reportService *report.ReportService, rankService *rank.
 }
 
 // AddReport add report
-// @Summary add report
+// @Summary     add report
 // @Description add report <br> source (question, answer, comment, user)
-// @Security ApiKeyAuth
-// @Tags Report
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.AddReportReq true "report"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/report [post]
+// @Security    ApiKeyAuth
+// @Tags        Report
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.AddReportReq true "report"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/report [post]
 func (rc *ReportController) AddReport(ctx *gin.Context) {
 	req := &schema.AddReportReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -50,13 +50,13 @@ func (rc *ReportController) AddReport(ctx *gin.Context) {
 }
 
 // GetReportTypeList get report type list
-// @Summary get report type list
+// @Summary     get report type list
 // @Description get report type list
-// @Tags Report
-// @Produce json
-// @Param source query string true "report source" Enums(question, answer, comment, user)
-// @Success 200 {object} handler.RespBody{data=[]schema.GetReportTypeResp}
-// @Router /answer/api/v1/report/type/list [get]
+// @Tags        Report
+// @Produce     json
+// @Param       source query    string true "report source" Enums(question, answer, comment, user)
+// @Success     200    {object} handler.RespBody{data=[]schema.GetReportTypeResp}
+// @Router      /answer/api/v1/report/type/list [get]
 func (rc *ReportController) GetReportTypeList(ctx *gin.Context) {
 	req := &schema.GetReportListReq{}
 	if handler.BindAndCheck(ctx, req) {

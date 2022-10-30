@@ -25,15 +25,15 @@ func NewCommentController(
 }
 
 // AddComment add comment
-// @Summary add comment
+// @Summary     add comment
 // @Description add comment
-// @Tags Comment
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.AddCommentReq true "comment"
-// @Success 200 {object} handler.RespBody{data=schema.GetCommentResp}
-// @Router /answer/api/v1/comment [post]
+// @Tags        Comment
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.AddCommentReq true "comment"
+// @Success     200  {object} handler.RespBody{data=schema.GetCommentResp}
+// @Router      /answer/api/v1/comment [post]
 func (cc *CommentController) AddComment(ctx *gin.Context) {
 	req := &schema.AddCommentReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -51,15 +51,15 @@ func (cc *CommentController) AddComment(ctx *gin.Context) {
 }
 
 // RemoveComment remove comment
-// @Summary remove comment
+// @Summary     remove comment
 // @Description remove comment
-// @Tags Comment
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.RemoveCommentReq true "comment"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/comment [delete]
+// @Tags        Comment
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.RemoveCommentReq true "comment"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/comment [delete]
 func (cc *CommentController) RemoveComment(ctx *gin.Context) {
 	req := &schema.RemoveCommentReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -77,15 +77,15 @@ func (cc *CommentController) RemoveComment(ctx *gin.Context) {
 }
 
 // UpdateComment update comment
-// @Summary update comment
+// @Summary     update comment
 // @Description update comment
-// @Tags Comment
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.UpdateCommentReq true "comment"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/comment [put]
+// @Tags        Comment
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.UpdateCommentReq true "comment"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/comment [put]
 func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 	req := &schema.UpdateCommentReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -103,16 +103,16 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 }
 
 // GetCommentWithPage get comment page
-// @Summary get comment page
+// @Summary     get comment page
 // @Description get comment page
-// @Tags Comment
-// @Produce json
-// @Param page query int false "page"
-// @Param page_size query int false "page size"
-// @Param object_id query string true "object id"
-// @Param query_cond query string false "query condition" Enums(vote)
-// @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetCommentResp}}
-// @Router /answer/api/v1/comment/page [get]
+// @Tags        Comment
+// @Produce     json
+// @Param       page       query    int    false "page"
+// @Param       page_size  query    int    false "page size"
+// @Param       object_id  query    string true  "object id"
+// @Param       query_cond query    string false "query condition" Enums(vote)
+// @Success     200        {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetCommentResp}}
+// @Router      /answer/api/v1/comment/page [get]
 func (cc *CommentController) GetCommentWithPage(ctx *gin.Context) {
 	req := &schema.GetCommentWithPageReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -126,15 +126,15 @@ func (cc *CommentController) GetCommentWithPage(ctx *gin.Context) {
 }
 
 // GetCommentPersonalWithPage user personal comment list
-// @Summary user personal comment list
+// @Summary     user personal comment list
 // @Description user personal comment list
-// @Tags Comment
-// @Produce json
-// @Param page query int false "page"
-// @Param page_size query int false "page size"
-// @Param username query string false "username"
-// @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetCommentPersonalWithPageResp}}
-// @Router /answer/api/v1/personal/comment/page [get]
+// @Tags        Comment
+// @Produce     json
+// @Param       page      query    int    false "page"
+// @Param       page_size query    int    false "page size"
+// @Param       username  query    string false "username"
+// @Success     200       {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetCommentPersonalWithPageResp}}
+// @Router      /answer/api/v1/personal/comment/page [get]
 func (cc *CommentController) GetCommentPersonalWithPage(ctx *gin.Context) {
 	req := &schema.GetCommentPersonalWithPageReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -148,13 +148,13 @@ func (cc *CommentController) GetCommentPersonalWithPage(ctx *gin.Context) {
 }
 
 // GetComment godoc
-// @Summary get comment by id
+// @Summary     get comment by id
 // @Description get comment by id
-// @Tags Comment
-// @Produce json
-// @Param id query string true "id"
-// @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetCommentResp}}
-// @Router /answer/api/v1/comment [get]
+// @Tags        Comment
+// @Produce     json
+// @Param       id  query    string true "id"
+// @Success     200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetCommentResp}}
+// @Router      /answer/api/v1/comment [get]
 func (cc *CommentController) GetComment(ctx *gin.Context) {
 	req := &schema.GetCommentReq{}
 	if handler.BindAndCheck(ctx, req) {

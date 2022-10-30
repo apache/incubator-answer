@@ -19,41 +19,41 @@ func NewSiteInfoController(siteInfoService *service.SiteInfoService) *SiteInfoCo
 }
 
 // GetGeneral godoc
-// @Summary Get siteinfo general
+// @Summary     Get siteinfo general
 // @Description Get siteinfo general
-// @Security ApiKeyAuth
-// @Tags admin
-// @Produce json
-// @Success 200 {object} handler.RespBody{data=schema.SiteGeneralResp}
-// @Router /answer/admin/api/siteinfo/general [get]
+// @Security    ApiKeyAuth
+// @Tags        admin
+// @Produce     json
+// @Success     200 {object} handler.RespBody{data=schema.SiteGeneralResp}
+// @Router      /answer/admin/api/siteinfo/general [get]
 func (sc *SiteInfoController) GetGeneral(ctx *gin.Context) {
 	resp, err := sc.siteInfoService.GetSiteGeneral(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
 
 // GetInterface godoc
-// @Summary Get siteinfo interface
+// @Summary     Get siteinfo interface
 // @Description Get siteinfo interface
-// @Security ApiKeyAuth
-// @Tags admin
-// @Produce json
-// @Success 200 {object} handler.RespBody{data=schema.SiteInterfaceResp}
-// @Router /answer/admin/api/siteinfo/interface [get]
-// @Param data body schema.AddCommentReq true "general"
+// @Security    ApiKeyAuth
+// @Tags        admin
+// @Produce     json
+// @Success     200 {object} handler.RespBody{data=schema.SiteInterfaceResp}
+// @Router      /answer/admin/api/siteinfo/interface [get]
+// @Param       data body schema.AddCommentReq true "general"
 func (sc *SiteInfoController) GetInterface(ctx *gin.Context) {
 	resp, err := sc.siteInfoService.GetSiteInterface(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
 
 // UpdateGeneral godoc
-// @Summary Get siteinfo interface
+// @Summary     Get siteinfo interface
 // @Description Get siteinfo interface
-// @Security ApiKeyAuth
-// @Tags admin
-// @Produce json
-// @Param data body schema.SiteGeneralReq true "general"
-// @Success 200 {object} handler.RespBody{}
-// @Router /answer/admin/api/siteinfo/general [put]
+// @Security    ApiKeyAuth
+// @Tags        admin
+// @Produce     json
+// @Param       data body     schema.SiteGeneralReq true "general"
+// @Success     200  {object} handler.RespBody{}
+// @Router      /answer/admin/api/siteinfo/general [put]
 func (sc *SiteInfoController) UpdateGeneral(ctx *gin.Context) {
 	req := schema.SiteGeneralReq{}
 	if handler.BindAndCheck(ctx, &req) {
@@ -64,14 +64,14 @@ func (sc *SiteInfoController) UpdateGeneral(ctx *gin.Context) {
 }
 
 // UpdateInterface godoc
-// @Summary Get siteinfo interface
+// @Summary     Get siteinfo interface
 // @Description Get siteinfo interface
-// @Security ApiKeyAuth
-// @Tags admin
-// @Produce json
-// @Param data body schema.SiteInterfaceReq true "general"
-// @Success 200 {object} handler.RespBody{}
-// @Router /answer/admin/api/siteinfo/interface [put]
+// @Security    ApiKeyAuth
+// @Tags        admin
+// @Produce     json
+// @Param       data body     schema.SiteInterfaceReq true "general"
+// @Success     200  {object} handler.RespBody{}
+// @Router      /answer/admin/api/siteinfo/interface [put]
 func (sc *SiteInfoController) UpdateInterface(ctx *gin.Context) {
 	req := schema.SiteInterfaceReq{}
 	if handler.BindAndCheck(ctx, &req) {
@@ -82,27 +82,27 @@ func (sc *SiteInfoController) UpdateInterface(ctx *gin.Context) {
 }
 
 // GetSMTPConfig get smtp config
-// @Summary GetSMTPConfig get smtp config
+// @Summary     GetSMTPConfig get smtp config
 // @Description GetSMTPConfig get smtp config
-// @Security ApiKeyAuth
-// @Tags admin
-// @Produce json
-// @Success 200 {object} handler.RespBody{data=schema.GetSMTPConfigResp}
-// @Router /answer/admin/api/setting/smtp [get]
+// @Security    ApiKeyAuth
+// @Tags        admin
+// @Produce     json
+// @Success     200 {object} handler.RespBody{data=schema.GetSMTPConfigResp}
+// @Router      /answer/admin/api/setting/smtp [get]
 func (sc *SiteInfoController) GetSMTPConfig(ctx *gin.Context) {
 	resp, err := sc.siteInfoService.GetSMTPConfig(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
 
 // UpdateSMTPConfig update smtp config
-// @Summary update smtp config
+// @Summary     update smtp config
 // @Description update smtp config
-// @Security ApiKeyAuth
-// @Tags admin
-// @Produce json
-// @Param data body schema.UpdateSMTPConfigReq true "smtp config"
-// @Success 200 {object} handler.RespBody{}
-// @Router /answer/admin/api/setting/smtp [put]
+// @Security    ApiKeyAuth
+// @Tags        admin
+// @Produce     json
+// @Param       data body     schema.UpdateSMTPConfigReq true "smtp config"
+// @Success     200  {object} handler.RespBody{}
+// @Router      /answer/admin/api/setting/smtp [put]
 func (sc *SiteInfoController) UpdateSMTPConfig(ctx *gin.Context) {
 	req := &schema.UpdateSMTPConfigReq{}
 	if handler.BindAndCheck(ctx, req) {

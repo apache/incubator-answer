@@ -20,15 +20,15 @@ func NewVoteController(voteService *service.VoteService) *VoteController {
 }
 
 // VoteUp godoc
-// @Summary vote up
+// @Summary     vote up
 // @Description add vote
-// @Tags Activity
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.VoteReq true "vote"
-// @Success 200 {object} handler.RespBody{data=schema.VoteResp}
-// @Router /answer/api/v1/vote/up [post]
+// @Tags        Activity
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.VoteReq true "vote"
+// @Success     200  {object} handler.RespBody{data=schema.VoteResp}
+// @Router      /answer/api/v1/vote/up [post]
 func (vc *VoteController) VoteUp(ctx *gin.Context) {
 	req := &schema.VoteReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -46,15 +46,15 @@ func (vc *VoteController) VoteUp(ctx *gin.Context) {
 }
 
 // VoteDown godoc
-// @Summary vote down
+// @Summary     vote down
 // @Description add vote
-// @Tags Activity
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.VoteReq true "vote"
-// @Success 200 {object} handler.RespBody{data=schema.VoteResp}
-// @Router /answer/api/v1/vote/down [post]
+// @Tags        Activity
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.VoteReq true "vote"
+// @Success     200  {object} handler.RespBody{data=schema.VoteResp}
+// @Router      /answer/api/v1/vote/down [post]
 func (vc *VoteController) VoteDown(ctx *gin.Context) {
 	req := &schema.VoteReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -73,16 +73,16 @@ func (vc *VoteController) VoteDown(ctx *gin.Context) {
 }
 
 // UserVotes godoc
-// @Summary user's votes
+// @Summary     user's votes
 // @Description user's vote
-// @Tags Activity
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param page query int false "page size"
-// @Param page_size query int false "page size"
-// @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetVoteWithPageResp}}
-// @Router /answer/api/v1/personal/vote/page [get]
+// @Tags        Activity
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       page      query    int false "page size"
+// @Param       page_size query    int false "page size"
+// @Success     200       {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetVoteWithPageResp}}
+// @Router      /answer/api/v1/personal/vote/page [get]
 func (vc *VoteController) UserVotes(ctx *gin.Context) {
 	req := schema.GetVoteWithPageReq{}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)

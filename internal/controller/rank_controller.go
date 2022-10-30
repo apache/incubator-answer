@@ -20,15 +20,15 @@ func NewRankController(
 }
 
 // GetRankPersonalWithPage user personal rank list
-// @Summary user personal rank list
+// @Summary     user personal rank list
 // @Description user personal rank list
-// @Tags Rank
-// @Produce json
-// @Param page query int false "page"
-// @Param page_size query int false "page size"
-// @Param username query string false "username"
-// @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetRankPersonalWithPageResp}}
-// @Router /answer/api/v1/personal/rank/page [get]
+// @Tags        Rank
+// @Produce     json
+// @Param       page      query    int    false "page"
+// @Param       page_size query    int    false "page size"
+// @Param       username  query    string false "username"
+// @Success     200       {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetRankPersonalWithPageResp}}
+// @Router      /answer/api/v1/personal/rank/page [get]
 func (cc *RankController) GetRankPersonalWithPage(ctx *gin.Context) {
 	req := &schema.GetRankPersonalWithPageReq{}
 	if handler.BindAndCheck(ctx, req) {

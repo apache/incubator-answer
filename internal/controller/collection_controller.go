@@ -23,15 +23,15 @@ func NewCollectionController(collectionService *service.CollectionService) *Coll
 }
 
 // CollectionSwitch add collection
-// @Summary add collection
+// @Summary     add collection
 // @Description add collection
-// @Tags Collection
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.CollectionSwitchReq true "collection"
-// @Success 200 {object} handler.RespBody{data=schema.CollectionSwitchResp}
-// @Router /answer/api/v1/collection/switch [post]
+// @Tags        Collection
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.CollectionSwitchReq true "collection"
+// @Success     200  {object} handler.RespBody{data=schema.CollectionSwitchResp}
+// @Router      /answer/api/v1/collection/switch [post]
 func (cc *CollectionController) CollectionSwitch(ctx *gin.Context) {
 	req := &schema.CollectionSwitchReq{}
 	if handler.BindAndCheck(ctx, req) {

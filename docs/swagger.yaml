@@ -714,6 +714,17 @@ definitions:
         description: inbox achievement
         type: string
     type: object
+  schema.Operation:
+    properties:
+      operation_description:
+        type: string
+      operation_msg:
+        type: string
+      operation_time:
+        type: integer
+      operation_type:
+        type: string
+    type: object
   schema.PermissionMemberAction:
     properties:
       action:
@@ -750,6 +761,79 @@ definitions:
     - html
     - tags
     - title
+    type: object
+  schema.QuestionInfo:
+    properties:
+      accepted_answer_id:
+        description: accepted_answer_id
+        type: string
+      answer_count:
+        description: answer count
+        type: integer
+      answered:
+        type: boolean
+      collected:
+        type: boolean
+      collection_count:
+        description: collection count
+        type: integer
+      content:
+        description: content
+        type: string
+      create_time:
+        description: create_time
+        type: integer
+      edit_time:
+        type: integer
+      follow_count:
+        description: follow count
+        type: integer
+      html:
+        description: html
+        type: string
+      id:
+        type: string
+      is_followed:
+        type: boolean
+      last_answer_id:
+        description: last_answer_id
+        type: string
+      last_answered_user_info:
+        $ref: '#/definitions/schema.UserBasicInfo'
+      member_actions:
+        description: MemberActions
+        items:
+          $ref: '#/definitions/schema.PermissionMemberAction'
+        type: array
+      operation:
+        $ref: '#/definitions/schema.Operation'
+      status:
+        type: integer
+      tags:
+        description: tags
+        items:
+          $ref: '#/definitions/schema.TagResp'
+        type: array
+      title:
+        description: title
+        type: string
+      unique_view_count:
+        description: unique_view_count
+        type: integer
+      update_time:
+        type: integer
+      update_user_info:
+        $ref: '#/definitions/schema.UserBasicInfo'
+      user_info:
+        $ref: '#/definitions/schema.UserBasicInfo'
+      view_count:
+        description: view_count
+        type: integer
+      vote_count:
+        description: vote_count
+        type: integer
+      vote_status:
+        type: string
     type: object
   schema.QuestionSearch:
     properties:
@@ -805,6 +889,19 @@ definitions:
     - id
     - tags
     - title
+    type: object
+  schema.ReasonItem:
+    properties:
+      content_type:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+      placeholder:
+        type: string
+      reason_type:
+        type: integer
     type: object
   schema.RemoveAnswerReq:
     properties:
@@ -1309,7 +1406,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.RespBody'
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       security:
       - ApiKeyAuth: []
       summary: CmsSearchList
@@ -1333,7 +1436,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.RespBody'
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       security:
       - ApiKeyAuth: []
       summary: AdminSetAnswerStatus
@@ -1382,7 +1491,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.RespBody'
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       security:
       - ApiKeyAuth: []
       summary: CmsSearchList
@@ -1406,7 +1521,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.RespBody'
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       security:
       - ApiKeyAuth: []
       summary: AdminSetQuestionStatus
@@ -1444,7 +1565,14 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.RespBody'
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.ReasonItem'
+                  type: array
+              type: object
       security:
       - ApiKeyAuth: []
       summary: get reasons by object type and action
@@ -1783,7 +1911,13 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       security:
       - ApiKeyAuth: []
       summary: Insert Answer
@@ -1806,7 +1940,13 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       security:
       - ApiKeyAuth: []
       summary: Update Answer
@@ -1830,7 +1970,7 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
       summary: Adopted
@@ -1854,7 +1994,13 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       summary: Get Answer
       tags:
       - api-answer
@@ -1876,7 +2022,13 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       security:
       - ApiKeyAuth: []
       summary: AnswerList
@@ -2308,7 +2460,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.RespBody'
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       security:
       - ApiKeyAuth: []
       summary: UserAnswerList
@@ -2338,7 +2496,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.RespBody'
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       security:
       - ApiKeyAuth: []
       summary: UserCollectionList
@@ -2615,7 +2779,12 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.QuestionInfo'
+              type: object
       security:
       - ApiKeyAuth: []
       summary: GetQuestion Question
@@ -2639,7 +2808,13 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       summary: SearchQuestionList
       tags:
       - api-question
@@ -2661,7 +2836,13 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       summary: SearchQuestionList
       tags:
       - api-question
@@ -2707,7 +2888,13 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       summary: Search Similar Question
       tags:
       - api-question
@@ -2794,7 +2981,14 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.RespBody'
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.ReasonItem'
+                  type: array
+              type: object
       security:
       - ApiKeyAuth: []
       summary: get reasons by object type and action
@@ -3274,7 +3468,7 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
       summary: UserVerifyEmailSend
@@ -3443,7 +3637,12 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserResp'
+              type: object
       summary: UseRePassWord
       tags:
       - User
@@ -3640,7 +3839,13 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/handler.RespBody'
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+              type: object
       security:
       - ApiKeyAuth: []
       summary: UserList

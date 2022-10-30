@@ -23,14 +23,14 @@ func NewTagController(tagService *tag.TagService, rankService *rank.RankService)
 }
 
 // SearchTagLike get tag list
-// @Summary get tag list
+// @Summary     get tag list
 // @Description get tag list
-// @Tags Tag
-// @Produce json
-// @Security ApiKeyAuth
-// @Param tag query string false "tag"
-// @Success 200 {object} handler.RespBody{data=[]schema.GetTagResp}
-// @Router /answer/api/v1/question/tags [get]
+// @Tags        Tag
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       tag query    string false "tag"
+// @Success     200 {object} handler.RespBody{data=[]schema.GetTagResp}
+// @Router      /answer/api/v1/question/tags [get]
 func (tc *TagController) SearchTagLike(ctx *gin.Context) {
 	req := &schema.SearchTagLikeReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -42,14 +42,14 @@ func (tc *TagController) SearchTagLike(ctx *gin.Context) {
 }
 
 // RemoveTag delete tag
-// @Summary delete tag
+// @Summary     delete tag
 // @Description delete tag
-// @Tags Tag
-// @Accept json
-// @Produce json
-// @Param data body schema.RemoveTagReq true "tag"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/tag [delete]
+// @Tags        Tag
+// @Accept      json
+// @Produce     json
+// @Param       data body     schema.RemoveTagReq true "tag"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/tag [delete]
 func (tc *TagController) RemoveTag(ctx *gin.Context) {
 	req := &schema.RemoveTagReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -67,14 +67,14 @@ func (tc *TagController) RemoveTag(ctx *gin.Context) {
 }
 
 // UpdateTag update tag
-// @Summary update tag
+// @Summary     update tag
 // @Description update tag
-// @Tags Tag
-// @Accept json
-// @Produce json
-// @Param data body schema.UpdateTagReq true "tag"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/tag [put]
+// @Tags        Tag
+// @Accept      json
+// @Produce     json
+// @Param       data body     schema.UpdateTagReq true "tag"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/tag [put]
 func (tc *TagController) UpdateTag(ctx *gin.Context) {
 	req := &schema.UpdateTagReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -92,15 +92,15 @@ func (tc *TagController) UpdateTag(ctx *gin.Context) {
 }
 
 // GetTagInfo get tag one
-// @Summary get tag one
+// @Summary     get tag one
 // @Description get tag one
-// @Tags Tag
-// @Accept json
-// @Produce json
-// @Param tag_id query string true "tag id"
-// @Param tag_name query string true "tag name"
-// @Success 200 {object} handler.RespBody{data=schema.GetTagResp}
-// @Router /answer/api/v1/tag [get]
+// @Tags        Tag
+// @Accept      json
+// @Produce     json
+// @Param       tag_id   query    string true "tag id"
+// @Param       tag_name query    string true "tag name"
+// @Success     200      {object} handler.RespBody{data=schema.GetTagResp}
+// @Router      /answer/api/v1/tag [get]
 func (tc *TagController) GetTagInfo(ctx *gin.Context) {
 	req := &schema.GetTagInfoReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -114,16 +114,16 @@ func (tc *TagController) GetTagInfo(ctx *gin.Context) {
 }
 
 // GetTagWithPage get tag page
-// @Summary get tag page
+// @Summary     get tag page
 // @Description get tag page
-// @Tags Tag
-// @Produce json
-// @Param page query int false "page size"
-// @Param page_size query int false "page size"
-// @Param slug_name query string false "slug_name"
-// @Param query_cond query string false "query condition" Enums(popular, name, newest)
-// @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetTagPageResp}}
-// @Router /answer/api/v1/tags/page [get]
+// @Tags        Tag
+// @Produce     json
+// @Param       page       query    int    false "page size"
+// @Param       page_size  query    int    false "page size"
+// @Param       slug_name  query    string false "slug_name"
+// @Param       query_cond query    string false "query condition" Enums(popular, name, newest)
+// @Success     200        {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetTagPageResp}}
+// @Router      /answer/api/v1/tags/page [get]
 func (tc *TagController) GetTagWithPage(ctx *gin.Context) {
 	req := &schema.GetTagWithPageReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -137,13 +137,13 @@ func (tc *TagController) GetTagWithPage(ctx *gin.Context) {
 }
 
 // GetFollowingTags get following tag list
-// @Summary get following tag list
+// @Summary     get following tag list
 // @Description get following tag list
-// @Security ApiKeyAuth
-// @Tags Tag
-// @Produce json
-// @Success 200 {object} handler.RespBody{data=[]schema.GetFollowingTagsResp}
-// @Router /answer/api/v1/tags/following [get]
+// @Security    ApiKeyAuth
+// @Tags        Tag
+// @Produce     json
+// @Success     200 {object} handler.RespBody{data=[]schema.GetFollowingTagsResp}
+// @Router      /answer/api/v1/tags/following [get]
 func (tc *TagController) GetFollowingTags(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	resp, err := tc.tagService.GetFollowingTags(ctx, userID)
@@ -151,13 +151,13 @@ func (tc *TagController) GetFollowingTags(ctx *gin.Context) {
 }
 
 // GetTagSynonyms get tag synonyms
-// @Summary get tag synonyms
+// @Summary     get tag synonyms
 // @Description get tag synonyms
-// @Tags Tag
-// @Produce json
-// @Param tag_id query int true "tag id"
-// @Success 200 {object} handler.RespBody{data=[]schema.GetTagSynonymsResp}
-// @Router /answer/api/v1/tag/synonyms [get]
+// @Tags        Tag
+// @Produce     json
+// @Param       tag_id query    int true "tag id"
+// @Success     200    {object} handler.RespBody{data=[]schema.GetTagSynonymsResp}
+// @Router      /answer/api/v1/tag/synonyms [get]
 func (tc *TagController) GetTagSynonyms(ctx *gin.Context) {
 	req := &schema.GetTagSynonymsReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -169,14 +169,14 @@ func (tc *TagController) GetTagSynonyms(ctx *gin.Context) {
 }
 
 // UpdateTagSynonym update tag
-// @Summary update tag
+// @Summary     update tag
 // @Description update tag
-// @Tags Tag
-// @Accept json
-// @Produce json
-// @Param data body schema.UpdateTagSynonymReq true "tag"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/tag/synonym [put]
+// @Tags        Tag
+// @Accept      json
+// @Produce     json
+// @Param       data body     schema.UpdateTagSynonymReq true "tag"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/tag/synonym [put]
 func (tc *TagController) UpdateTagSynonym(ctx *gin.Context) {
 	req := &schema.UpdateTagSynonymReq{}
 	if handler.BindAndCheck(ctx, req) {

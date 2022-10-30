@@ -27,15 +27,15 @@ func NewQuestionController(questionService *service.QuestionService, rankService
 }
 
 // RemoveQuestion delete question
-// @Summary delete question
+// @Summary     delete question
 // @Description delete question
-// @Tags api-question
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.RemoveQuestionReq true "question"
-// @Success 200 {object} handler.RespBody
-// @Router  /answer/api/v1/question [delete]
+// @Tags        api-question
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.RemoveQuestionReq true "question"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/question [delete]
 func (qc *QuestionController) RemoveQuestion(ctx *gin.Context) {
 	req := &schema.RemoveQuestionReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -52,15 +52,15 @@ func (qc *QuestionController) RemoveQuestion(ctx *gin.Context) {
 }
 
 // CloseQuestion Close question
-// @Summary Close question
+// @Summary     Close question
 // @Description Close question
-// @Tags api-question
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.CloseQuestionReq true "question"
-// @Success 200 {object} handler.RespBody
-// @Router  /answer/api/v1/question/status [put]
+// @Tags        api-question
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.CloseQuestionReq true "question"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/question/status [put]
 func (qc *QuestionController) CloseQuestion(ctx *gin.Context) {
 	req := &schema.CloseQuestionReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -72,15 +72,15 @@ func (qc *QuestionController) CloseQuestion(ctx *gin.Context) {
 }
 
 // GetQuestion godoc
-// @Summary GetQuestion Question
+// @Summary     GetQuestion Question
 // @Description GetQuestion Question
-// @Tags api-question
-// @Security ApiKeyAuth
-// @Accept  json
-// @Produce  json
-// @Param id query string true "Question TagID"  default(1)
-// @Success 200 {string} string ""
-// @Router /answer/api/v1/question/info [get]
+// @Tags        api-question
+// @Security    ApiKeyAuth
+// @Accept      json
+// @Produce     json
+// @Param       id  query    string true "Question TagID" default(1)
+// @Success     200 {object} handler.RespBody{data=schema.QuestionInfo}
+// @Router      /answer/api/v1/question/info [get]
 func (qc *QuestionController) GetQuestion(c *gin.Context) {
 	id := c.Query("id")
 	ctx := context.Background()
@@ -94,14 +94,14 @@ func (qc *QuestionController) GetQuestion(c *gin.Context) {
 }
 
 // SimilarQuestion godoc
-// @Summary Search Similar Question
+// @Summary     Search Similar Question
 // @Description Search Similar Question
-// @Tags api-question
-// @Accept  json
-// @Produce  json
-// @Param question_id query string true "question_id"  default()
-// @Success 200 {string} string ""
-// @Router /answer/api/v1/question/similar/tag [get]
+// @Tags        api-question
+// @Accept      json
+// @Produce     json
+// @Param       question_id query    string true "question_id" default()
+// @Success     200         {object} handler.RespBody{data=map[string]interface{}}
+// @Router      /answer/api/v1/question/similar/tag [get]
 func (qc *QuestionController) SimilarQuestion(ctx *gin.Context) {
 	questionID := ctx.Query("question_id")
 	userID := middleware.GetLoginUserIDFromContext(ctx)
@@ -118,14 +118,14 @@ func (qc *QuestionController) SimilarQuestion(ctx *gin.Context) {
 }
 
 // Index godoc
-// @Summary SearchQuestionList
+// @Summary     SearchQuestionList
 // @Description SearchQuestionList <br>  "order"  Enums(newest, active,frequent,score,unanswered)
-// @Tags api-question
-// @Accept  json
-// @Produce  json
-// @Param data body schema.QuestionSearch  true "QuestionSearch"
-// @Success 200 {string} string ""
-// @Router /answer/api/v1/question/page [get]
+// @Tags        api-question
+// @Accept      json
+// @Produce     json
+// @Param       data body     schema.QuestionSearch true "QuestionSearch"
+// @Success     200  {object} handler.RespBody{data=map[string]interface{}}
+// @Router      /answer/api/v1/question/page [get]
 func (qc *QuestionController) Index(ctx *gin.Context) {
 	req := &schema.QuestionSearch{}
 	if handler.BindAndCheck(ctx, req) {
@@ -144,14 +144,14 @@ func (qc *QuestionController) Index(ctx *gin.Context) {
 }
 
 // SearchList godoc
-// @Summary SearchQuestionList
+// @Summary     SearchQuestionList
 // @Description SearchQuestionList
-// @Tags api-question
-// @Accept  json
-// @Produce  json
-// @Param data body schema.QuestionSearch  true "QuestionSearch"
-// @Router  /answer/api/v1/question/search [post]
-// @Success 200 {string} string ""
+// @Tags        api-question
+// @Accept      json
+// @Produce     json
+// @Param       data body schema.QuestionSearch true "QuestionSearch"
+// @Router      /answer/api/v1/question/search [post]
+// @Success     200 {object} handler.RespBody{data=map[string]interface{}}
 func (qc *QuestionController) SearchList(c *gin.Context) {
 	Request := new(schema.QuestionSearch)
 	err := c.BindJSON(Request)
@@ -173,15 +173,15 @@ func (qc *QuestionController) SearchList(c *gin.Context) {
 }
 
 // AddQuestion add question
-// @Summary add question
+// @Summary     add question
 // @Description add question
-// @Tags api-question
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.QuestionAdd true "question"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/question [post]
+// @Tags        api-question
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.QuestionAdd true "question"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/question [post]
 func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	req := &schema.QuestionAdd{}
 	if handler.BindAndCheck(ctx, req) {
@@ -199,15 +199,15 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 }
 
 // UpdateQuestion update question
-// @Summary update question
+// @Summary     update question
 // @Description update question
-// @Tags api-question
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.QuestionUpdate true "question"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/question [put]
+// @Tags        api-question
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.QuestionUpdate true "question"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/question [put]
 func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	req := &schema.QuestionUpdate{}
 	if handler.BindAndCheck(ctx, req) {
@@ -225,29 +225,29 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 }
 
 // CloseMsgList close question msg list
-// @Summary close question msg list
+// @Summary     close question msg list
 // @Description close question msg list
-// @Tags api-question
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/question/closemsglist [get]
+// @Tags        api-question
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Success     200 {object} handler.RespBody
+// @Router      /answer/api/v1/question/closemsglist [get]
 func (qc *QuestionController) CloseMsgList(ctx *gin.Context) {
 	resp, err := qc.questionService.CloseMsgList(ctx, handler.GetLang(ctx))
 	handler.HandleResponse(ctx, err, resp)
 }
 
 // SearchByTitleLike add question title like
-// @Summary add question title like
+// @Summary     add question title like
 // @Description add question title like
-// @Tags api-question
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param title query string true "title"  default(string)
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/question/similar [get]
+// @Tags        api-question
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       title query    string true "title" default(string)
+// @Success     200   {object} handler.RespBody
+// @Router      /answer/api/v1/question/similar [get]
 func (qc *QuestionController) SearchByTitleLike(ctx *gin.Context) {
 	title := ctx.Query("title")
 	userID := middleware.GetLoginUserIDFromContext(ctx)
@@ -256,15 +256,15 @@ func (qc *QuestionController) SearchByTitleLike(ctx *gin.Context) {
 }
 
 // UserTop godoc
-// @Summary UserTop
+// @Summary     UserTop
 // @Description UserTop
-// @Tags api-question
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param username query string true "username"  default(string)
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/personal/qa/top [get]
+// @Tags        api-question
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       username query    string true "username" default(string)
+// @Success     200      {object} handler.RespBody
+// @Router      /answer/api/v1/personal/qa/top [get]
 func (qc *QuestionController) UserTop(ctx *gin.Context) {
 	userName := ctx.Query("username")
 	userID := middleware.GetLoginUserIDFromContext(ctx)
@@ -276,18 +276,18 @@ func (qc *QuestionController) UserTop(ctx *gin.Context) {
 }
 
 // UserList godoc
-// @Summary UserList
+// @Summary     UserList
 // @Description UserList
-// @Tags api-question
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param username query string true "username"  default(string)
-// @Param order query string true "order"  Enums(newest,score)
-// @Param page query string true "page"  default(0)
-// @Param pagesize query string true "pagesize"  default(20)
-// @Success 200 {object} handler.RespBody
-// @Router /personal/question/page [get]
+// @Tags        api-question
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       username query    string true "username" default(string)
+// @Param       order    query    string true "order"    Enums(newest,score)
+// @Param       page     query    string true "page"     default(0)
+// @Param       pagesize query    string true "pagesize" default(20)
+// @Success     200      {object} handler.RespBody{data=map[string]interface{}}
+// @Router      /personal/question/page [get]
 func (qc *QuestionController) UserList(ctx *gin.Context) {
 	userName := ctx.Query("username")
 	order := ctx.Query("order")
@@ -304,18 +304,18 @@ func (qc *QuestionController) UserList(ctx *gin.Context) {
 }
 
 // UserAnswerList godoc
-// @Summary UserAnswerList
+// @Summary     UserAnswerList
 // @Description UserAnswerList
-// @Tags api-answer
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param username query string true "username"  default(string)
-// @Param order query string true "order"  Enums(newest,score)
-// @Param page query string true "page"  default(0)
-// @Param pagesize query string true "pagesize"  default(20)
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/personal/answer/page [get]
+// @Tags        api-answer
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       username query    string true "username" default(string)
+// @Param       order    query    string true "order"    Enums(newest,score)
+// @Param       page     query    string true "page"     default(0)
+// @Param       pagesize query    string true "pagesize" default(20)
+// @Success     200      {object} handler.RespBody{data=map[string]interface{}}
+// @Router      /answer/api/v1/personal/answer/page [get]
 func (qc *QuestionController) UserAnswerList(ctx *gin.Context) {
 	userName := ctx.Query("username")
 	order := ctx.Query("order")
@@ -332,16 +332,16 @@ func (qc *QuestionController) UserAnswerList(ctx *gin.Context) {
 }
 
 // UserCollectionList godoc
-// @Summary UserCollectionList
+// @Summary     UserCollectionList
 // @Description UserCollectionList
-// @Tags Collection
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param page query string true "page"  default(0)
-// @Param pagesize query string true "pagesize"  default(20)
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/personal/collection/page [get]
+// @Tags        Collection
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       page     query    string true "page"     default(0)
+// @Param       pagesize query    string true "pagesize" default(20)
+// @Success     200      {object} handler.RespBody{data=map[string]interface{}}
+// @Router      /answer/api/v1/personal/collection/page [get]
 func (qc *QuestionController) UserCollectionList(ctx *gin.Context) {
 	pageStr := ctx.Query("page")
 	pageSizeStr := ctx.Query("pagesize")
@@ -356,17 +356,17 @@ func (qc *QuestionController) UserCollectionList(ctx *gin.Context) {
 }
 
 // CmsSearchList godoc
-// @Summary CmsSearchList
+// @Summary     CmsSearchList
 // @Description Status:[available,closed,deleted]
-// @Tags admin
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param page query int false "page size"
-// @Param page_size query int false "page size"
-// @Param status query string false "user status" Enums(available, closed, deleted)
-// @Success 200 {object} handler.RespBody
-// @Router /answer/admin/api/question/page [get]
+// @Tags        admin
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       page      query    int    false "page size"
+// @Param       page_size query    int    false "page size"
+// @Param       status    query    string false "user status" Enums(available, closed, deleted)
+// @Success     200       {object} handler.RespBody{data=map[string]interface{}}
+// @Router      /answer/admin/api/question/page [get]
 func (qc *QuestionController) CmsSearchList(ctx *gin.Context) {
 	req := &schema.CmsQuestionSearch{}
 	if handler.BindAndCheck(ctx, req) {
@@ -381,17 +381,17 @@ func (qc *QuestionController) CmsSearchList(ctx *gin.Context) {
 }
 
 // CmsSearchAnswerList godoc
-// @Summary CmsSearchList
+// @Summary     CmsSearchList
 // @Description Status:[available,deleted]
-// @Tags admin
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param page query int false "page size"
-// @Param page_size query int false "page size"
-// @Param status query string false "user status" Enums(available,deleted)
-// @Success 200 {object} handler.RespBody
-// @Router /answer/admin/api/answer/page [get]
+// @Tags        admin
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       page      query    int    false "page size"
+// @Param       page_size query    int    false "page size"
+// @Param       status    query    string false "user status" Enums(available,deleted)
+// @Success     200       {object} handler.RespBody{data=map[string]interface{}}
+// @Router      /answer/admin/api/answer/page [get]
 func (qc *QuestionController) CmsSearchAnswerList(ctx *gin.Context) {
 	req := &entity.CmsAnswerSearch{}
 	if handler.BindAndCheck(ctx, req) {
@@ -406,15 +406,15 @@ func (qc *QuestionController) CmsSearchAnswerList(ctx *gin.Context) {
 }
 
 // AdminSetQuestionStatus godoc
-// @Summary AdminSetQuestionStatus
+// @Summary     AdminSetQuestionStatus
 // @Description Status:[available,closed,deleted]
-// @Tags admin
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.AdminSetQuestionStatusRequest true "AdminSetQuestionStatusRequest"
-// @Router /answer/admin/api/question/status [put]
-// @Success 200 {object} handler.RespBody
+// @Tags        admin
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body schema.AdminSetQuestionStatusRequest true "AdminSetQuestionStatusRequest"
+// @Router      /answer/admin/api/question/status [put]
+// @Success     200 {object} handler.RespBody{data=map[string]interface{}}
 func (qc *QuestionController) AdminSetQuestionStatus(ctx *gin.Context) {
 	req := &schema.AdminSetQuestionStatusRequest{}
 	if handler.BindAndCheck(ctx, req) {

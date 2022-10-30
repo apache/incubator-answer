@@ -19,14 +19,14 @@ func NewNotificationController(notificationService *notification.NotificationSer
 }
 
 // GetRedDot
-// @Summary GetRedDot
+// @Summary     GetRedDot
 // @Description GetRedDot
-// @Tags Notification
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/notification/status [get]
+// @Tags        Notification
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Success     200 {object} handler.RespBody
+// @Router      /answer/api/v1/notification/status [get]
 func (nc *NotificationController) GetRedDot(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	RedDot, err := nc.notificationService.GetRedDot(ctx, userID)
@@ -34,15 +34,15 @@ func (nc *NotificationController) GetRedDot(ctx *gin.Context) {
 }
 
 // ClearRedDot
-// @Summary DelRedDot
+// @Summary     DelRedDot
 // @Description DelRedDot
-// @Tags Notification
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.NotificationClearRequest true "NotificationClearRequest"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/notification/status [put]
+// @Tags        Notification
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.NotificationClearRequest true "NotificationClearRequest"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/notification/status [put]
 func (nc *NotificationController) ClearRedDot(ctx *gin.Context) {
 	req := &schema.NotificationClearRequest{}
 	if handler.BindAndCheck(ctx, req) {
@@ -54,15 +54,15 @@ func (nc *NotificationController) ClearRedDot(ctx *gin.Context) {
 }
 
 // ClearUnRead
-// @Summary ClearUnRead
+// @Summary     ClearUnRead
 // @Description ClearUnRead
-// @Tags Notification
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.NotificationClearRequest true "NotificationClearRequest"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/notification/read/state/all [put]
+// @Tags        Notification
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.NotificationClearRequest true "NotificationClearRequest"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/notification/read/state/all [put]
 func (nc *NotificationController) ClearUnRead(ctx *gin.Context) {
 	req := &schema.NotificationClearRequest{}
 	if handler.BindAndCheck(ctx, req) {
@@ -74,15 +74,15 @@ func (nc *NotificationController) ClearUnRead(ctx *gin.Context) {
 }
 
 // ClearIDUnRead
-// @Summary ClearUnRead
+// @Summary     ClearUnRead
 // @Description ClearUnRead
-// @Tags Notification
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param data body schema.NotificationClearIDRequest true "NotificationClearIDRequest"
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/notification/read/state [put]
+// @Tags        Notification
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       data body     schema.NotificationClearIDRequest true "NotificationClearIDRequest"
+// @Success     200  {object} handler.RespBody
+// @Router      /answer/api/v1/notification/read/state [put]
 func (nc *NotificationController) ClearIDUnRead(ctx *gin.Context) {
 	req := &schema.NotificationClearIDRequest{}
 	if handler.BindAndCheck(ctx, req) {
@@ -94,17 +94,17 @@ func (nc *NotificationController) ClearIDUnRead(ctx *gin.Context) {
 }
 
 // GetList get notification list
-// @Summary get notification list
+// @Summary     get notification list
 // @Description get notification list
-// @Tags Notification
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Param page query int false "page size"
-// @Param page_size query int false "page size"
-// @Param type query string true "type" Enums(inbox,achievement)
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/notification/page [get]
+// @Tags        Notification
+// @Accept      json
+// @Produce     json
+// @Security    ApiKeyAuth
+// @Param       page      query    int    false "page size"
+// @Param       page_size query    int    false "page size"
+// @Param       type      query    string true  "type" Enums(inbox,achievement)
+// @Success     200       {object} handler.RespBody
+// @Router      /answer/api/v1/notification/page [get]
 func (nc *NotificationController) GetList(ctx *gin.Context) {
 	req := &schema.NotificationSearch{}
 	if handler.BindAndCheck(ctx, req) {
