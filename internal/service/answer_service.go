@@ -166,7 +166,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	insertData.OriginalText = req.Content
 	insertData.ParsedText = req.HTML
 	insertData.UpdatedAt = now
-	if err := as.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"}); err != nil {
+	if err = as.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"}); err != nil {
 		return "", err
 	}
 	err = as.questionCommon.UpdataPostTime(ctx, req.QuestionID)
@@ -362,7 +362,7 @@ func (as *AnswerService) SearchList(ctx context.Context, search *schema.AnswerLi
 	return AnswerList, count, nil
 }
 
-func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.Answer, loginUserId string) ([]*schema.AnswerInfo, error) {
+func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.Answer, loginUserID string) ([]*schema.AnswerInfo, error) {
 	list := make([]*schema.AnswerInfo, 0)
 	objectIds := make([]string, 0)
 	userIds := make([]string, 0)
@@ -371,9 +371,9 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.
 		list = append(list, item)
 		objectIds = append(objectIds, dbitem.ID)
 		userIds = append(userIds, dbitem.UserID)
-		if loginUserId != "" {
+		if loginUserID != "" {
 			// item.VoteStatus = as.activityFunc.GetVoteStatus(ctx, item.TagID, loginUserId)
-			item.VoteStatus = as.voteRepo.GetVoteStatus(ctx, item.ID, loginUserId)
+			item.VoteStatus = as.voteRepo.GetVoteStatus(ctx, item.ID, loginUserID)
 		}
 	}
 	userInfoMap, err := as.userCommon.BatchUserBasicInfoByID(ctx, userIds)
@@ -388,11 +388,11 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.
 		}
 	}
 
-	if loginUserId == "" {
+	if loginUserID == "" {
 		return list, nil
 	}
 
-	CollectedMap, err := as.collectionCommon.SearchObjectCollected(ctx, loginUserId, objectIds)
+	CollectedMap, err := as.collectionCommon.SearchObjectCollected(ctx, loginUserID, objectIds)
 	if err != nil {
 		log.Error("CollectionFunc.SearchObjectCollected error", err)
 	}
@@ -405,7 +405,7 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.
 	}
 
 	for _, item := range list {
-		item.MemberActions = permission.GetAnswerPermission(loginUserId, item.UserID)
+		item.MemberActions = permission.GetAnswerPermission(loginUserID, item.UserID)
 	}
 
 	return list, nil

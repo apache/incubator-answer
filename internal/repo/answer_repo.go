@@ -153,7 +153,7 @@ func (ar *answerRepo) GetByID(ctx context.Context, id string) (*entity.Answer, b
 	return &resp, has, nil
 }
 
-func (ar *answerRepo) GetByUserIdQuestionId(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error) {
+func (ar *answerRepo) GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error) {
 	var resp entity.Answer
 	has, err := ar.data.DB.Where("question_id =? and  user_id = ?", questionID, userID).Get(&resp)
 	if err != nil {

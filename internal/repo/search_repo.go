@@ -430,7 +430,7 @@ func (sr *searchRepo) userBasicInfoFormat(ctx context.Context, dbinfo *entity.Us
 		Avatar:      dbinfo.Avatar,
 		Website:     dbinfo.Website,
 		Location:    dbinfo.Location,
-		IpInfo:      dbinfo.IPInfo,
+		IPInfo:      dbinfo.IPInfo,
 	}
 }
 

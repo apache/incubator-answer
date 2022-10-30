@@ -111,7 +111,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	question.UserID = req.UserID
 	question.Title = req.Title
 	question.OriginalText = req.Content
-	question.ParsedText = req.Html
+	question.ParsedText = req.HTML
 	question.AcceptedAnswerID = "0"
 	question.LastAnswerID = "0"
 	question.PostUpdateTime = now
@@ -191,7 +191,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	question.UserID = req.UserID
 	question.Title = req.Title
 	question.OriginalText = req.Content
-	question.ParsedText = req.Html
+	question.ParsedText = req.HTML
 	question.ID = req.ID
 	question.UpdatedAt = now
 	dbinfo, has, err := qs.questionRepo.GetQuestion(ctx, question.ID)
@@ -247,7 +247,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID stri
 		}
 	}
 
-	question.MemberActions = permission.GetQuestionPermission(loginUserID, question.UserId)
+	question.MemberActions = permission.GetQuestionPermission(loginUserID, question.UserID)
 	return question, nil
 }
 
@@ -367,7 +367,7 @@ func (qs *QuestionService) SearchUserCollectionList(ctx context.Context, page, p
 			questionMaps[id].LastAnsweredUserInfo = nil
 			questionMaps[id].UpdateUserInfo = nil
 			questionMaps[id].Content = ""
-			questionMaps[id].Html = ""
+			questionMaps[id].HTML = ""
 			list = append(list, questionMaps[id])
 		}
 	}

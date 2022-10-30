@@ -205,7 +205,7 @@ func (us *UserService) UseRePassWord(ctx context.Context, req *schema.UserRePass
 }
 
 func (us *UserService) UserModifyPassWordVerification(ctx context.Context, request *schema.UserModifyPassWordRequest) (bool, error) {
-	userInfo, has, err := us.userRepo.GetByUserID(ctx, request.UserId)
+	userInfo, has, err := us.userRepo.GetByUserID(ctx, request.UserID)
 	if err != nil {
 		return false, err
 	}
@@ -226,7 +226,7 @@ func (us *UserService) UserModifyPassWord(ctx context.Context, request *schema.U
 	if err != nil {
 		return err
 	}
-	userInfo, has, err := us.userRepo.GetByUserID(ctx, request.UserId)
+	userInfo, has, err := us.userRepo.GetByUserID(ctx, request.UserID)
 	if err != nil {
 		return err
 	}
@@ -252,17 +252,17 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 		if err != nil {
 			return err
 		}
-		if exist && userInfo.ID != req.UserId {
+		if exist && userInfo.ID != req.UserID {
 			return errors.BadRequest(reason.UsernameDuplicate)
 		}
 	}
 
 	userInfo := entity.User{}
-	userInfo.ID = req.UserId
+	userInfo.ID = req.UserID
 	userInfo.Avatar = req.Avatar
 	userInfo.DisplayName = req.DisplayName
 	userInfo.Bio = req.Bio
-	userInfo.BioHTML = req.BioHtml
+	userInfo.BioHTML = req.BioHTML
 	userInfo.Location = req.Location
 	userInfo.Website = req.Website
 	userInfo.Username = req.Username
@@ -380,9 +380,9 @@ func (us *UserService) UserNoticeSet(ctx context.Context, userID string, noticeS
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 	if noticeSwitch {
-		userInfo.NoticeStatus = schema.Notice_Status_On
+		userInfo.NoticeStatus = schema.NoticeStatusOn
 	} else {
-		userInfo.NoticeStatus = schema.Notice_Status_Off
+		userInfo.NoticeStatus = schema.NoticeStatusOff
 	}
 	err = us.userRepo.UpdateNoticeStatus(ctx, userInfo.ID, userInfo.NoticeStatus)
 	return &schema.UserNoticeSetResp{NoticeSwitch: noticeSwitch}, err

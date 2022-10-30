@@ -16,7 +16,7 @@ type AnswerRepo interface {
 	GetAnswerPage(ctx context.Context, page, pageSize int, answer *entity.Answer) (answerList []*entity.Answer, total int64, err error)
 	UpdateAdopted(ctx context.Context, id string, questionID string) error
 	GetByID(ctx context.Context, id string) (*entity.Answer, bool, error)
-	GetByUserIdQuestionId(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error)
+	GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error)
 	SearchList(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error)
 	CmsSearchList(ctx context.Context, search *entity.CmsAnswerSearch) ([]*entity.Answer, int64, error)
 	UpdateAnswerStatus(ctx context.Context, answer *entity.Answer) (err error)
@@ -34,7 +34,7 @@ func NewAnswerCommon(answerRepo AnswerRepo) *AnswerCommon {
 }
 
 func (as *AnswerCommon) SearchAnswered(ctx context.Context, userID, questionID string) (bool, error) {
-	_, has, err := as.answerRepo.GetByUserIdQuestionId(ctx, userID, questionID)
+	_, has, err := as.answerRepo.GetByUserIDQuestionID(ctx, userID, questionID)
 	if err != nil {
 		return has, err
 	}

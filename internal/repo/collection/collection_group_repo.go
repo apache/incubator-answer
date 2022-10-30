@@ -37,7 +37,7 @@ func (cr *collectionGroupRepo) AddCollectionGroup(ctx context.Context, collectio
 func (cr *collectionGroupRepo) AddCollectionDefaultGroup(ctx context.Context, userID string) (collectionGroup *entity.CollectionGroup, err error) {
 	defaultGroup := &entity.CollectionGroup{
 		Name:         "default",
-		DefaultGroup: schema.CG_DEFAULT,
+		DefaultGroup: schema.CGDefault,
 		UserID:       userID,
 	}
 	_, err = cr.data.DB.Insert(defaultGroup)
@@ -87,7 +87,7 @@ func (cr *collectionGroupRepo) GetCollectionGroupPage(ctx context.Context, page,
 
 func (cr *collectionGroupRepo) GetDefaultID(ctx context.Context, userID string) (collectionGroup *entity.CollectionGroup, has bool, err error) {
 	collectionGroup = &entity.CollectionGroup{}
-	has, err = cr.data.DB.Where("user_id =? and  default_group = ?", userID, schema.CG_DEFAULT).Get(collectionGroup)
+	has, err = cr.data.DB.Where("user_id =? and  default_group = ?", userID, schema.CGDefault).Get(collectionGroup)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return

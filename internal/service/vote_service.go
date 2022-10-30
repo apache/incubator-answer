@@ -67,7 +67,7 @@ func (as *VoteService) VoteUp(ctx context.Context, dto *schema.VoteDTO) (voteRes
 
 	var objectUserID string
 
-	objectUserID, err = as.GetObjectUserId(ctx, dto.ObjectID)
+	objectUserID, err = as.GetObjectUserID(ctx, dto.ObjectID)
 	if err != nil {
 		return
 	}
@@ -91,7 +91,7 @@ func (as *VoteService) VoteDown(ctx context.Context, dto *schema.VoteDTO) (voteR
 
 	var objectUserID string
 
-	objectUserID, err = as.GetObjectUserId(ctx, dto.ObjectID)
+	objectUserID, err = as.GetObjectUserID(ctx, dto.ObjectID)
 	if err != nil {
 		return
 	}
@@ -109,7 +109,7 @@ func (as *VoteService) VoteDown(ctx context.Context, dto *schema.VoteDTO) (voteR
 	}
 }
 
-func (vs *VoteService) GetObjectUserId(ctx context.Context, objectID string) (userID string, err error) {
+func (vs *VoteService) GetObjectUserID(ctx context.Context, objectID string) (userID string, err error) {
 	var objectKey string
 	objectKey, err = obj.GetObjectTypeStrByObjectID(objectID)
 

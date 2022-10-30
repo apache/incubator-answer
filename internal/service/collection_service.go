@@ -114,12 +114,16 @@ func (cs *CollectionService) add(ctx context.Context, collection *entity.Collect
 	}
 
 	if collection.UserCollectionGroupID == "" || collection.UserCollectionGroupID == "0" {
-		defaultGroup, has, err := cs.collectionGroupRepo.GetDefaultID(ctx, collection.UserID)
+		var (
+			defaultGroup *entity.CollectionGroup
+			has          bool
+		)
+		defaultGroup, has, err = cs.collectionGroupRepo.GetDefaultID(ctx, collection.UserID)
 		if err != nil {
 			return err
 		}
 		if !has {
-			defaultGroup, err := cs.collectionGroupRepo.AddCollectionDefaultGroup(ctx, collection.UserID)
+			defaultGroup, err = cs.collectionGroupRepo.AddCollectionDefaultGroup(ctx, collection.UserID)
 			if err != nil {
 				return err
 			}
