@@ -95,6 +95,9 @@ func (ar *FollowRepo) GetFollowUserIDs(ctx context.Context, objectID string) (us
 func (ar *FollowRepo) GetFollowIDs(ctx context.Context, userID, objectKey string) (followIDs []string, err error) {
 	followIDs = make([]string, 0)
 	activityType, err := ar.activityRepo.GetActivityTypeByObjKey(ctx, objectKey, "follow")
+	if err != nil {
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
 	session := ar.data.DB.Select("object_id")
 	session.Table(entity.Activity{}.TableName())
 	session.Where("user_id = ? AND activity_type = ?", userID, activityType)
@@ -108,7 +111,7 @@ func (ar *FollowRepo) GetFollowIDs(ctx context.Context, userID, objectKey string
 
 // IsFollowed check user if follow object or not
 func (ar *FollowRepo) IsFollowed(userId, objectId string) (bool, error) {
-	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(nil, objectId, "follow")
+	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(context.TODO(), objectId, "follow")
 	if err != nil {
 		return false, err
 	}
