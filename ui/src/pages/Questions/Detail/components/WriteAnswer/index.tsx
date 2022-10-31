@@ -6,8 +6,9 @@ import { marked } from 'marked';
 import classNames from 'classnames';
 
 import { Editor, Modal } from '@answer/components';
-import { postAnswer } from '@/services';
 import { FormDataType } from '@answer/common/interface';
+
+import { postAnswer } from '@/services';
 
 interface Props {
   visible?: boolean;

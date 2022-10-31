@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
 import { Pagination, PageTitle } from '@answer/components';
-import { useSearch } from '@/services';
 
 import { Head, SearchHead, SearchItem, Tips, Empty } from './components';
+
+import { useSearch } from '@/services';
 
 const Index = () => {
   const { t } = useTranslation('translation');

@@ -3,9 +3,9 @@ import { Card, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useSimilarQuestion } from '@/services';
 import { Icon } from '@answer/components';
 
+import { useSimilarQuestion } from '@/services';
 import { loggedUserInfoStore } from '@/stores';
 
 interface Props {

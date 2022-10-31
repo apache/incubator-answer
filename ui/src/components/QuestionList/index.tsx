@@ -3,7 +3,6 @@ import { Row, Col, ListGroup } from 'react-bootstrap';
 import { NavLink, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useQuestionList } from '@/services';
 import type * as Type from '@answer/common/interface';
 import {
   Icon,
@@ -14,6 +13,8 @@ import {
   BaseUserCard,
   QueryGroup,
 } from '@answer/components';
+
+import { useQuestionList } from '@/services';
 
 const QuestionOrderKeys: Type.QuestionOrderBy[] = [
   'newest',

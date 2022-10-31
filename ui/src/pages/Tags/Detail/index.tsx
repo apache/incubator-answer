@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import * as Type from '@answer/common/interface';
 import { PageTitle, FollowingTags } from '@answer/components';
-import { useTagInfo, useFollow } from '@/services';
 
+import { useTagInfo, useFollow } from '@/services';
 import QuestionList from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
 

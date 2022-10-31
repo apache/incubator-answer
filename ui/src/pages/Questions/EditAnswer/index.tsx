@@ -7,12 +7,13 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 
 import { Editor, EditorRef, Icon, PageTitle } from '@answer/components';
+import type * as Type from '@answer/common/interface';
+
 import {
   useQueryAnswerInfo,
   modifyAnswer,
   useQueryRevisions,
 } from '@/services';
-import type * as Type from '@answer/common/interface';
 
 import './index.scss';
 

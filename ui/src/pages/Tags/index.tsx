@@ -3,9 +3,10 @@ import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useQueryTags, following } from '@/services';
 import { Tag, Pagination, PageTitle, QueryGroup } from '@answer/components';
 import { formatCount } from '@answer/utils';
+
+import { useQueryTags, following } from '@/services';
 
 const sortBtns = ['popular', 'name', 'newest'];
 

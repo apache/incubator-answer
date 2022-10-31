@@ -7,6 +7,10 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 
 import { Editor, EditorRef, TagSelector, PageTitle } from '@answer/components';
+import type * as Type from '@answer/common/interface';
+
+import SearchQuestion from './components/SearchQuestion';
+
 import {
   saveQuestion,
   questionDetail,
@@ -15,9 +19,6 @@ import {
   postAnswer,
   useQueryQuestionByTitle,
 } from '@/services';
-import type * as Type from '@answer/common/interface';
-
-import SearchQuestion from './components/SearchQuestion';
 
 interface FormDataItem {
   title: Type.FormValue<string>;

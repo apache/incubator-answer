@@ -7,9 +7,10 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 
 import { Editor, EditorRef, PageTitle } from '@answer/components';
-import { useTagInfo, modifyTag, useQueryRevisions } from '@/services';
 import { loggedUserInfoStore } from '@answer/stores';
 import type * as Type from '@answer/common/interface';
+
+import { useTagInfo, modifyTag, useQueryRevisions } from '@/services';
 
 interface FormDataItem {
   displayName: Type.FormValue<string>;

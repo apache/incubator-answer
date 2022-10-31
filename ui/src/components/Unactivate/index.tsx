@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Button, Col } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { resendEmail, checkImgCode } from '@/services';
 import { PicAuthCodeModal } from '@answer/components/Modal';
 import type {
   ImgCodeRes,
@@ -11,6 +10,7 @@ import type {
 } from '@answer/common/interface';
 import { loggedUserInfoStore } from '@answer/stores';
 
+import { resendEmail, checkImgCode } from '@/services';
 import { CAPTCHA_CODE_STORAGE_KEY } from '@/common/constants';
 import Storage from '@/utils/storage';
 

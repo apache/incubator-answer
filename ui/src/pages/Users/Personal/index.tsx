@@ -5,11 +5,6 @@ import { useParams, useSearchParams } from 'react-router-dom';
 
 import { Pagination, FormatTime, PageTitle, Empty } from '@answer/components';
 import { loggedUserInfoStore } from '@answer/stores';
-import {
-  usePersonalInfoByName,
-  usePersonalTop,
-  usePersonalListByTabName,
-} from '@/services';
 
 import {
   UserInfo,
@@ -23,6 +18,12 @@ import {
   Answers,
   Votes,
 } from './components';
+
+import {
+  usePersonalInfoByName,
+  usePersonalTop,
+  usePersonalListByTabName,
+} from '@/services';
 
 const Personal: FC = () => {
   const { tabName = 'overview', username = '' } = useParams();

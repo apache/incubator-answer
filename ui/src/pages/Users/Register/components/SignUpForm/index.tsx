@@ -3,9 +3,9 @@ import { Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { register } from '@/services';
 import type { FormDataType } from '@answer/common/interface';
 
+import { register } from '@/services';
 import userStore from '@/stores/userInfo';
 
 interface Props {

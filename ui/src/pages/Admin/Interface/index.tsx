@@ -8,6 +8,9 @@ import {
   FormDataType,
   AdminSettingsInterface,
 } from '@answer/common/interface';
+import { interfaceStore } from '@answer/stores';
+import { UploadImg } from '@answer/components';
+
 import {
   languages,
   uploadAvatar,
@@ -15,8 +18,6 @@ import {
   useInterfaceSetting,
   useThemeOptions,
 } from '@/services';
-import { interfaceStore } from '@answer/stores';
-import { UploadImg } from '@answer/components';
 
 import '../index.scss';
 

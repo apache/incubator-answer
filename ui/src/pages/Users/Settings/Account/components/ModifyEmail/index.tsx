@@ -3,8 +3,9 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type * as Type from '@answer/common/interface';
-import { getLoggedUserInfo, changeEmail } from '@/services';
 import { useToast } from '@answer/hooks';
+
+import { getLoggedUserInfo, changeEmail } from '@/services';
 
 const reg = /(?<=.{2}).+(?=@)/gi;
 

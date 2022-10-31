@@ -11,9 +11,10 @@ import {
   FormatTime,
   htmlRender,
 } from '@answer/components';
-import { acceptanceAnswer } from '@/services';
 import { scrollTop } from '@answer/utils';
 import { AnswerItem } from '@answer/common/interface';
+
+import { acceptanceAnswer } from '@/services';
 
 interface Props {
   data: AnswerItem;

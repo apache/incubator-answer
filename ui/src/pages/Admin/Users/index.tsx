@@ -3,7 +3,6 @@ import { Button, Form, Table, Badge } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useQueryUsers } from '@/services';
 import {
   Pagination,
   FormatTime,
@@ -13,6 +12,8 @@ import {
 } from '@answer/components';
 import * as Type from '@answer/common/interface';
 import { useChangeModal } from '@answer/hooks';
+
+import { useQueryUsers } from '@/services';
 
 import '../index.scss';
 

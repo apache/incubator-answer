@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import ReactDOM from 'react-dom/client';
 
-import { changeUserStatus } from '@/services';
 import { Modal as AnswerModal } from '@answer/components';
+
+import { changeUserStatus } from '@/services';
 
 const div = document.createElement('div');
 const root = ReactDOM.createRoot(div);

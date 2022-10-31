@@ -7,8 +7,8 @@ import { SWRConfig } from 'swr';
 
 import { siteInfoStore, interfaceStore, toastStore } from '@answer/stores';
 import { Header, AdminHeader, Footer, Toast } from '@answer/components';
-import { useSiteSettings } from '@/services';
 
+import { useSiteSettings } from '@/services';
 import Storage from '@/utils/storage';
 import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
 

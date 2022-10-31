@@ -4,11 +4,12 @@ import { Trans, useTranslation } from 'react-i18next';
 
 import { marked } from 'marked';
 
-import { modifyUserInfo, uploadAvatar, getLoggedUserInfo } from '@/services';
 import type { FormDataType } from '@answer/common/interface';
 import { UploadImg, Avatar } from '@answer/components';
 import { loggedUserInfoStore } from '@answer/stores';
 import { useToast } from '@answer/hooks';
+
+import { modifyUserInfo, uploadAvatar, getLoggedUserInfo } from '@/services';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', {

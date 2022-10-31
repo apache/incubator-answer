@@ -4,7 +4,6 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { changeEmailVerify } from '@/services';
-
 import { PageTitle } from '@/components';
 
 const Index: FC = () => {

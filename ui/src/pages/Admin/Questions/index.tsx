@@ -14,12 +14,13 @@ import {
 } from '@answer/components';
 import { ADMIN_LIST_STATUS } from '@answer/common/constants';
 import { useEditStatusModal, useReportModal } from '@answer/hooks';
+import * as Type from '@answer/common/interface';
+
 import {
   useQuestionSearch,
   changeQuestionStatus,
   deleteQuestion,
 } from '@/services';
-import * as Type from '@answer/common/interface';
 
 import '../index.scss';
 

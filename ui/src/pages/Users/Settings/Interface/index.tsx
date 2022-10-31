@@ -6,10 +6,10 @@ import dayjs from 'dayjs';
 import en from 'dayjs/locale/en';
 import zh from 'dayjs/locale/zh-cn';
 
-import { languages } from '@/services';
 import type { LangsType, FormDataType } from '@answer/common/interface';
 import { useToast } from '@answer/hooks';
 
+import { languages } from '@/services';
 import { DEFAULT_LANG, CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
 import Storage from '@/utils/storage';
 

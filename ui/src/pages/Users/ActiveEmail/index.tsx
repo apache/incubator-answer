@@ -1,10 +1,10 @@
 import { FC, memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { activateAccount } from '@/services';
 import { loggedUserInfoStore } from '@answer/stores';
 import { getQueryString } from '@answer/utils';
 
+import { activateAccount } from '@/services';
 import { PageTitle } from '@/components';
 
 const Index: FC = () => {

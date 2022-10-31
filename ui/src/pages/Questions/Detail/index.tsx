@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
-import { questionDetail, getAnswers } from '@/services';
 import { Pagination, PageTitle } from '@answer/components';
 import { loggedUserInfoStore } from '@answer/stores';
 import { scrollTop } from '@answer/utils';
@@ -21,6 +20,8 @@ import {
   WriteAnswer,
   Alert,
 } from './components';
+
+import { questionDetail, getAnswers } from '@/services';
 
 import './index.scss';
 
