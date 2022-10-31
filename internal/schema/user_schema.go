@@ -73,7 +73,7 @@ type GetUserResp struct {
 
 func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 	_ = copier.Copy(r, userInfo)
-	r.Avatar = r.AvatarInfo(userInfo.Avatar)
+	r.Avatar = FormatAvatarInfo(userInfo.Avatar)
 	r.CreatedAt = userInfo.CreatedAt.Unix()
 	r.LastLoginDate = userInfo.LastLoginDate.Unix()
 	statusShow, ok := UserStatusShow[userInfo.Status]
@@ -103,7 +103,7 @@ func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
 	r.Avatar = avatarInfo
 }
 
-func (us *GetUserResp) AvatarInfo(avatarJson string) string {
+func FormatAvatarInfo(avatarJson string) string {
 	if avatarJson == "" {
 		return ""
 	}
@@ -172,6 +172,9 @@ type GetOtherUserInfoByUsernameResp struct {
 
 func (r *GetOtherUserInfoByUsernameResp) GetFromUserEntity(userInfo *entity.User) {
 	_ = copier.Copy(r, userInfo)
+	Avatar := FormatAvatarInfo(userInfo.Avatar)
+	r.Avatar = Avatar
+
 	r.CreatedAt = userInfo.CreatedAt.Unix()
 	r.LastLoginDate = userInfo.LastLoginDate.Unix()
 	statusShow, ok := UserStatusShow[userInfo.Status]
