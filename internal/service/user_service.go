@@ -519,9 +519,9 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 		title, body, err = us.emailService.RegisterTemplate(ctx, verifyEmailUrl)
 	} else {
 		title, body, err = us.emailService.ChangeEmailTemplate(ctx, verifyEmailUrl)
-		if err != nil {
-			return err
-		}
+	}
+	if err != nil {
+		return err
 	}
 	log.Infof("send email confirmation %s", verifyEmailUrl)
 
