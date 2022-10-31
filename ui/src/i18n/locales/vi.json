@@ -1,0 +1,914 @@
+{
+  "how_to_format": {
+    "title": "Làm thế nào để định dạng",
+    "description": "<ul class=\"mb-0\"><li><p class=\"mb-2\">để tạo liên kết</p><pre class=\"mb-2\"><code>&lt;https://url.com&gt;<br/><br/>[Tiêu đề](https://url.com)</code></pre></li><li><p class=\"mb-2\">dùng kiểu chữ</p></li><li><p class=\"mb-2\"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class=\"mb-2\">thục lề code bởi 4 dấu cách</p></li><li><p class=\"mb-2\">quote bởi dấu <code>&gt;</code> đầu dòng</p></li><li><p class=\"mb-2\">backtick escapes <code>`giống _như này_`</code></p></li><li><p class=\"mb-2\">tạo code bằng <code>`</code></p><pre class=\"mb-0\"><code>```<br/>code ở đây<br/>```</code></pre></li></ul>"
+  },
+  "pagination": {
+    "prev": "Trước đó",
+    "next": "Sau"
+  },
+  "page_title": {
+    "question": "Câu Hỏi",
+    "questions": "Các Câu Hỏi",
+    "tag": "Thẻ",
+    "tags": "Các Thẻ",
+    "tag_wiki": "tag wiki",
+    "edit_tag": "Chỉnh Sửa Thẻ",
+    "ask_a_question": "Thêm Câu Hỏi",
+    "edit_question": "Chỉnh Sửa Câu Hỏi",
+    "edit_answer": "Chỉnh Sửa Câu Trả Lời",
+    "search": "Tìm Kiếm",
+    "posts_containing": "Bài Viết Có Chứa",
+    "settings": "Cài Đặt",
+    "notifications": "Thông Báo",
+    "login": "Đăng Nhập",
+    "sign_up": "Đăng Ký",
+    "account_recovery": "Khôi Phục Tài Khoản",
+    "account_activation": "Kích Hoạt Tài Khoản",
+    "confirm_email": "Xác Nhận Email",
+    "account_suspended": "Tài Khoản Đã Bị Khóa",
+    "admin": "Quản Trị"
+  },
+  "notifications": {
+    "title": "Thông báo",
+    "inbox": "Hộp thư",
+    "achievement": "Thành tựu",
+    "all_read": "Đánh dấu tất cả đã đọc",
+    "show_more": "Hiển thị thêm"
+  },
+  "suspended": {
+    "title": "Tài khoản của bạn đã Bị Khóa",
+    "until_time": "Tài khoản của bạn đã bị khóa lúc {{ time }}.",
+    "forever": "Người dùng này đã bị khóa mãi mãi.",
+    "end": "Bạn đã không tuân thủ nguyên tắc cộng đồng."
+  },
+  "editor": {
+    "blockquote": {
+      "text": "Blockquote"
+    },
+    "bold": {
+      "text": "Strong"
+    },
+    "chart": {
+      "text": "Sơ đồ",
+      "flow_chart": "Lưu đồ",
+      "sequence_diagram": "Sơ đồ tuần tự",
+      "class_diagram": "Sơ đồ lớp",
+      "state_diagram": "Sơ đồ trạng thái",
+      "entity_relationship_diagram": "Sơ đồ quan hệ",
+      "user_defined_diagram": "Sơ đồ do người dùng định nghĩa",
+      "gantt_chart": "Biểu đồ Gantt",
+      "pie_chart": "Biểu đồ tròn"
+    },
+    "code": {
+      "text": "Code mẫu",
+      "add_code": "Thêm code mẫu",
+      "form": {
+        "fields": {
+          "code": {
+            "label": "Code",
+            "msg": {
+              "empty": "Code không được bỏ trống."
+            }
+          },
+          "language": {
+            "label": "Ngôn ngữ (có thể bỏ trống)",
+            "placeholder": "Tự động phát hiện"
+          }
+        }
+      },
+      "btn_cancel": "Hủy",
+      "btn_confirm": "Thêm"
+    },
+    "formula": {
+      "text": "Công thức",
+      "options": {
+        "inline": "Công thức trên một dòng",
+        "block": "Khối công thức"
+      }
+    },
+    "heading": {
+      "text": "Heading",
+      "options": {
+        "h1": "Heading 1",
+        "h2": "Heading 2",
+        "h3": "Heading 3",
+        "h4": "Heading 4",
+        "h5": "Heading 5",
+        "h6": "Heading 6"
+      }
+    },
+    "help": {
+      "text": "Trợ giúp"
+    },
+    "hr": {
+      "text": "Thước ngang"
+    },
+    "image": {
+      "text": "Ảnh",
+      "add_image": "Thêm hình ảnh",
+      "tab_image": "Tải ảnh lên",
+      "form_image": {
+        "fields": {
+          "file": {
+            "label": "Tập tin ảnh",
+            "btn": "Chọn ảnh",
+            "msg": {
+              "empty": "File không được bỏ trống.",
+              "only_image": "Chỉ chấp nhận file ảnh.",
+              "max_size": "Kích thức ảnh tối đa 4MB."
+            }
+          },
+          "description": {
+            "label": "Mô tả (tùy chọn)"
+          }
+        }
+      },
+      "tab_url": "URL Hình ảnh",
+      "form_url": {
+        "fields": {
+          "url": {
+            "label": "URL Hình ảnh",
+            "msg": {
+              "empty": "URL Ảnh không được bỏ trống."
+            }
+          },
+          "name": {
+            "label": "Mô tả (tùy chọn)"
+          }
+        }
+      },
+      "btn_cancel": "Hủy",
+      "btn_confirm": "Thêm",
+      "uploading": "Đang tải lên"
+    },
+    "indent": {
+      "text": "Thụt lề"
+    },
+    "outdent": {
+      "text": "Outdent"
+    },
+    "italic": {
+      "text": "Nghiêng"
+    },
+    "link": {
+      "text": "Siêu liên kết",
+      "add_link": "Thêm siêu liên kết",
+      "form": {
+        "fields": {
+          "url": {
+            "label": "URL",
+            "msg": {
+              "empty": "URL không được bỏ trống."
+            }
+          },
+          "name": {
+            "label": "Mô tả (tùy chọn)"
+          }
+        }
+      },
+      "btn_cancel": "Hủy",
+      "btn_confirm": "Thêm"
+    },
+    "ordered_list": {
+      "text": "Danh sách đánh số"
+    },
+    "unordered_list": {
+      "text": "Danh sách kiểu ký hiệu"
+    },
+    "table": {
+      "text": "Bảng",
+      "heading": "Heading",
+      "cell": "Ô"
+    }
+  },
+  "close_modal": {
+    "title": "Tôi đang đóng bài viết này vì...",
+    "btn_cancel": "Hủy",
+    "btn_submit": "Gửi",
+    "remark": {
+      "empty": "không được bỏ trống."
+    },
+    "msg": {
+      "empty": "Vui lòng chọn một lý do."
+    }
+  },
+  "report_modal": {
+    "flag_title": "Tôi đang gắn cờ để báo cáo bài viết này là vì...",
+    "close_title": "Tôi đang đóng bài viết này vì...",
+    "review_question_title": "Xem câu hỏi",
+    "review_answer_title": "Xem câu trả lời",
+    "review_comment_title": "Xem bình luận",
+    "btn_cancel": "Hủy",
+    "btn_submit": "Gửi",
+    "remark": {
+      "empty": "không được bỏ trống."
+    },
+    "msg": {
+      "empty": "Vui lòng chọn một lý do."
+    }
+  },
+  "tag_modal": {
+    "title": "Tạo thẻ mới",
+    "form": {
+      "fields": {
+        "display_name": {
+          "label": "Tên hiển thị",
+          "msg": {
+            "empty": "Tên hiển thị không được bỏ trống.",
+            "range": "Tên hiển thị dài tối đa 35 ký tự."
+          }
+        },
+        "slug_name": {
+          "label": "URL Slug",
+          "description": "Các ký tự phải nằm trong tập \"a-z\", \"0-9\", \"+ # - .\"",
+          "msg": {
+            "empty": "URL slug không được bỏ trống.",
+            "range": "URL slug dài tối đa 35 ký tự.",
+            "character": "URL slug có chứa ký tự không được phép."
+          }
+        },
+        "description": {
+          "label": "Mô tả (tùy chọn)"
+        }
+      }
+    },
+    "btn_cancel": "Hủy",
+    "btn_submit": "Gửi"
+  },
+  "tag_info": {
+    "created_at": "Đã tạo",
+    "edited_at": "Đã chỉnh sửa",
+    "synonyms": {
+      "title": "Từ đồng nghĩa",
+      "text": "Các thẻ sau sẽ được ánh xạ lại thành",
+      "empty": "Không tìm thấy từ đồng nghĩa.",
+      "btn_add": "Thêm một từ đồng nghĩa",
+      "btn_edit": "Sửa",
+      "btn_save": "Lưu"
+    },
+    "synonyms_text": "Các thẻ sau sẽ được ánh xạ lại thành",
+    "delete": {
+      "title": "Xóa thẻ này",
+      "content": "<p>Chúng tôi không cho phép xóa các thẻ đã được sử dụng bởi bài đăng.</p><p>Vui lòng xóa các thẻ đó khỏi bài đăng trước tiên.</p>",
+      "content2": "Bạn có chắc là mình muốn xóa?",
+      "close": "Đóng"
+    }
+  },
+  "edit_tag": {
+    "title": "Chỉnh sửa thẻ",
+    "default_reason": "Chỉnh sửa thẻ",
+    "form": {
+      "fields": {
+        "revision": {
+          "label": "Phiên bản"
+        },
+        "display_name": {
+          "label": "Tên hiển thị"
+        },
+        "slug_name": {
+          "label": "URL Slug",
+          "info": "Các ký tự phải nằm trong tập \"a-z\", \"0-9\", \"+ # - .\""
+        },
+        "description": {
+          "label": "Mô tả"
+        },
+        "edit_summary": {
+          "label": "Tóm tắt chỉnh sửa",
+          "placeholder": "Giải thích ngắn gọn các thay đổi của bạn (sửa chính tả, sửa ngữ pháp, định dạng được cải thiện)"
+        }
+      }
+    },
+    "btn_save_edits": "Lưu thay đổi",
+    "btn_cancel": "Hủy"
+  },
+  "dates": {
+    "long_date": "D MMM",
+    "long_date_with_year": "D MMM, YYYY",
+    "long_date_with_time": "HH:mm [at] D MMM, YYYY",
+    "now": "bây giờ",
+    "x_seconds_ago": "{{count}} giây trước",
+    "x_minutes_ago": "{{count}} phút trước",
+    "x_hours_ago": "{{count}} giờ trước"
+  },
+  "comment": {
+    "btn_add_comment": "Thêm bình luận",
+    "reply_to": "Trả lời",
+    "btn_reply": "Trả lời",
+    "btn_edit": "Chỉnh sửa",
+    "btn_delete": "Xóa",
+    "btn_flag": "Cờ",
+    "btn_save_edits": "Lưu thay đổi",
+    "btn_cancel": "Hủy",
+    "show_more": "Hiển thị nhiều bình luận hơn",
+    "tip_question": "Sử dụng nhận xét để hỏi thêm thông tin hoặc đề xuất cải tiến. Tránh trả lời câu hỏi trong phần bình luận.",
+    "tip_answer": "Sử dụng nhận xét để trả lời người dùng khác hoặc thông báo cho họ về những thay đổi. Nếu bạn đang thêm thông tin mới, hãy chỉnh sửa bài đăng của bạn thay vì bình luận."
+  },
+  "edit_answer": {
+    "title": "Chỉnh sửa câu trả lời",
+    "default_reason": "Chỉnh sửa câu trả lời",
+    "form": {
+      "fields": {
+        "revision": {
+          "label": "Phiên bản"
+        },
+        "answer": {
+          "label": "Câu trả lời"
+        },
+        "edit_summary": {
+          "label": "Tóm tắt chỉnh sửa",
+          "placeholder": "Giải thích ngắn gọn các thay đổi của bạn (sửa chính tả, sửa ngữ pháp, định dạng được cải thiện)"
+        }
+      }
+    },
+    "btn_save_edits": "Lưu thay đổi",
+    "btn_cancel": "Hủy"
+  },
+  "tags": {
+    "title": "Thẻ",
+    "sort_buttons": {
+      "popular": "Phổ biến",
+      "name": "Tên",
+      "newest": "mới nhất"
+    },
+    "button_follow": "Theo dõi",
+    "button_following": "Đang theo dõi",
+    "tag_label": "câu hỏi",
+    "search_placeholder": "Lọc bời tên thẻ",
+    "no_description": "Thẻ này không có mô tả.",
+    "more": "Thêm"
+  },
+  "ask": {
+    "title": "Thêm câu hỏi",
+    "edit_title": "Chỉnh sửa câu hỏi",
+    "default_reason": "Chỉnh sửa câu hỏi",
+    "similar_questions": "Câu hỏi tương tự",
+    "form": {
+      "fields": {
+        "revision": {
+          "label": "Phiên bản"
+        },
+        "title": {
+          "label": "Tiêu đề",
+          "placeholder": "Hãy cụ thể và tưởng tượng bạn đang đặt một câu hỏi cho một người khác",
+          "msg": {
+            "empty": "Tiêu đề không được bỏ trống.",
+            "range": "Tiêu đề dài tối đa 150 ký tự"
+          }
+        },
+        "body": {
+          "label": "Nội dung",
+          "msg": {
+            "empty": "Nội dung không được bỏ trống."
+          }
+        },
+        "tags": {
+          "label": "Thẻ",
+          "msg": {
+            "empty": "Thẻ không được bỏ trống."
+          }
+        },
+        "answer": {
+          "label": "Câu trả lời",
+          "msg": {
+            "empty": "Câu trả lời không được bỏ trống."
+          }
+        }
+      }
+    },
+    "btn_post_question": "Đăng câu hỏi của bạn",
+    "btn_save_edits": "Lưu thay đổi",
+    "answer_question": "Trả lời câu hỏi của bạn",
+    "post_question&answer": "Đăng câu hỏi và câu trả lời của bạn"
+  },
+  "tag_selector": {
+    "add_btn": "Thêm thẻ",
+    "create_btn": "Tạo thêm thẻ mới",
+    "search_tag": "Tìm kiếm thẻ",
+    "hint": "Mô tả câu hỏi của bạn về vấn đề gì, cần có ít nhất một thẻ.",
+    "no_result": "Không có thẻ nào khớp"
+  },
+  "header": {
+    "nav": {
+      "question": "Câu hỏi",
+      "tag": "Thẻ",
+      "user": "Người dùng",
+      "profile": "Hồ sơ",
+      "setting": "Cài đặt",
+      "logout": "Đăng xuất",
+      "admin": "Quản trị"
+    },
+    "search": {
+      "placeholder": "Tìm kiếm"
+    }
+  },
+  "footer": {
+    "build_on": "Build on <1> Answer </1>- the open-source software that power Q&A communities.<br />Made with love. © 2022 Answer."
+  },
+  "upload_img": {
+    "name": "Thay đổi",
+    "loading": "đang tải..."
+  },
+  "pic_auth_code": {
+    "title": "Captcha",
+    "placeholder": "Nhập đoạn chữ trên",
+    "msg": {
+      "empty": "Captcha không được trống."
+    }
+  },
+  "inactive": {
+    "first": "Gần xong rồi! Chúng tôi đã gửi một email xác nhận đến <bold>{{mail}}</bold>. Vui lòng check mail để kích hoạt tài khoản.",
+    "info": "Nếu không thấy nó, bạn có thể kiểm tra trong thư mục spam.",
+    "another": "Chúng tôi đã gửi cho bạn một email xác nhận khác đến <bold>{{mail}}</bold>. Có thể mất vài phút để nó đến nơi; hãy chắc chắn để kiểm tra thư mục thư rác của bạn.",
+    "btn_name": "Gửi lại email xác nhận",
+    "msg": {
+      "empty": "Không thể bỏ trống."
+    }
+  },
+  "login": {
+    "page_title": "Chào mừng tới Answer",
+    "info_sign": "Không có tài khoản? <1>Đăng ký</1>",
+    "info_login": "Đã có tài khoản? <1>Đăng nhập</1>",
+    "forgot_pass": "Quên mật khẩu?",
+    "name": {
+      "label": "Tên",
+      "msg": {
+        "empty": "Tên không được trống.",
+        "range": "Tên dài tối đa 30 ký tự."
+      }
+    },
+    "email": {
+      "label": "Email",
+      "msg": {
+        "empty": "Email không được trống."
+      }
+    },
+    "password": {
+      "label": "Mật khẩu",
+      "msg": {
+        "empty": "Mật khẩu không được trống.",
+        "different": "Mật khẩu được nhập ở cả hai bên không khớp"
+      }
+    }
+  },
+  "account_forgot": {
+    "page_title": "Quên mật khẩu của bạn",
+    "btn_name": "Gửi tôi email khôi phục",
+    "send_success": "Nếu tài khoản của bạn khớp với <strong>{{mail}}</strong>, bạn sẽ sớm nhận được một email hướng dẫn cách khôi phục tài khoản.",
+    "email": {
+      "label": "Email",
+      "msg": {
+        "empty": "Email không được trống."
+      }
+    }
+  },
+  "password_reset": {
+    "page_title": "Đặt lại mật khẩu",
+    "btn_name": "Đặt lại mật khẩu của tôi",
+    "reset_success": "Bạn đã thay đổi thành công mật khẩu; bạn sẽ được chuyển hướng tới trang đăng nhập.",
+    "link_invalid": "Xin lỗi, liên kết khôi phục mật khẩu này đã hết hạn. Có lẽ mật khẩu của bạn đã được đặt lại?",
+    "to_login": "Tiếp tục đến trang đăng nhập",
+    "password": {
+      "label": "Mật khẩu",
+      "msg": {
+        "empty": "Mật khẩu không được bỏ trống.",
+        "length": "Độ dài mật khẩu nên nằm trong 8 đến 32 ký tự",
+        "different": "Mật khẩu được nhập ở cả hai bên không khớp"
+      }
+    },
+    "password_confirm": {
+      "label": "Xác nhận mật khẩu mới"
+    }
+  },
+  "settings": {
+    "page_title": "Cài đặt",
+    "nav": {
+      "profile": "Hồ sơ",
+      "notification": "Thông báo",
+      "account": "Tài khoản",
+      "interface": "Giao diện"
+    },
+    "profile": {
+      "btn_name": "Cập nhật hồ sơ",
+      "display_name": {
+        "label": "Tên hiển thị",
+        "msg": "Tên hiển thị không được trống.",
+        "msg_range": "Tên hiển thị dài tối đa 30 ký tự"
+      },
+      "username": {
+        "label": "Tên người dùng",
+        "caption": "Mọi người có thể nhắc đến bạn như \"@username\".",
+        "msg": "Tên người dùng không được trống.",
+        "msg_range": "Tên người dùng dài tối đa 30 ký tự",
+        "character": "Các ký tự sử dụng phải nằm trong tập \"a-z\", \"0-9\", \" - . _\""
+      },
+      "avatar": {
+        "label": "Ảnh hồ sơ",
+        "text": "Bạn có thể tải lên hoặc <1>đặt lại</1> nó"
+      },
+      "bio": {
+        "label": "Về tôi (tùy chọn)"
+      },
+      "website": {
+        "label": "Website (tùy chọn)",
+        "placeholder": "https://example.com",
+        "msg": "Website không đúng định dạng"
+      },
+      "location": {
+        "label": "Vị trí (tùy chọn)",
+        "placeholder": "Thành phố, Quốc gia"
+      }
+    },
+    "notification": {
+      "email": {
+        "label": "Email thông báo",
+        "radio": "Trả lời câu hỏi, gắn thẻ, bình luận và nhiều hơn thế nữa"
+      }
+    },
+    "account": {
+      "change_email_btn": "Thay đổi email",
+      "change_pass_btn": "Đổi mật khẩu",
+      "change_email_info": "We've sent an email to that address. Please follow the confirmation instructions.",
+      "email": {
+        "label": "Email",
+        "msg": "Email không được trống."
+      },
+      "password_title": "Mật khẩu",
+      "current_pass": {
+        "label": "Mật khẩu hiện tại",
+        "msg": {
+          "empty": "Mật khẩu hiện tại không được trống.",
+          "length": "Độ dài mật khẩu phải trong khoảng 8 đến 32 ký tự.",
+          "different": "Mật khẩu được nhập ở cả hai bên không khớp"
+        }
+      },
+      "new_pass": {
+        "label": "Mật khẩu mới"
+      },
+      "pass_confirm": {
+        "label": "Xác nhận mật khẩu mới"
+      }
+    },
+    "interface": {
+      "lang": {
+        "label": "Ngôn ngữ hiển thị",
+        "text": "Ngôn ngữ hiển thị của người dùng. Nó sẽ thay đổi khi bạn tải lại trang."
+      }
+    }
+  },
+  "toast": {
+    "update": "cập nhật thành công",
+    "update_password": "Thay đổi mật khẩu thành công.",
+    "flag_success": "Cảm ơn bạn đã phản hồi."
+  },
+  "related_question": {
+    "title": "Câu hỏi tương tự",
+    "btn": "Thêm câu hỏi",
+    "answers": "câu trả lời"
+  },
+  "question_detail": {
+    "Asked": "Đã trả lời",
+    "asked": "đã trả lời",
+    "update": "Đã cập nhật",
+    "edit": "đã chỉnh sửa",
+    "Views": "Đã xem",
+    "Follow": "Theo dõi",
+    "Following": "Đang theo dõi",
+    "answered": "đã trả lời",
+    "closed_in": "Đã đóng",
+    "show_exist": "Hiển thị các câu hỏi đã tồn tại.",
+    "answers": {
+      "title": "Câu trả lời",
+      "score": "Điểm",
+      "newest": "Mới nhất",
+      "btn_accept": "Chấp nhận",
+      "btn_accepted": "Đã chấp nhận"
+    },
+    "write_answer": {
+      "title": "Câu trả lời của bạn",
+      "btn_name": "Đăng câu trả lời của bạn",
+      "confirm_title": "Tiếp tục trả lời",
+      "continue": "Tiếp tục",
+      "confirm_info": "<p>Bạn có chắc chắn muốn thêm một câu trả lời khác không?</p><p>Thay vào đó, bạn có thể sử dụng liên kết chỉnh sửa để tinh chỉnh và cải thiện câu trả lời hiện có của mình.</p>",
+      "empty": "Câu trả lời không được bỏ trống."
+    }
+  },
+  "delete": {
+    "title": "Xóa bài viết này",
+    "question": "Chúng tôi không khuyến khích việc <strong>xóa bài viết đã có câu trả lời</strong> vì làm như vậy sẽ tước đi kiến thức của các độc giả trong tương lai.</p><p>Việc lặp lại các hành động xóa các câu hỏi đã có câu trả lời có thể dẫn đến việc tài khoản của bạn bị khóa hoặc bị cấm đặt câu hỏi. Bạn vẫn muốn xóa chứ?",
+    "answer_accepted": "<p>Chúng tôi không khuyến khích việc <strong>xóa bài viết đã có câu trả lời</strong> vì làm như vậy sẽ tước đi kiến thức của các độc giả trong tương lai. </p> Việc lặp lại các hành động xóa các câu hỏi đã có câu trả lời có thể dẫn đến việc tài khoản của bạn bị khóa hoặc bị cấm đặt câu hỏi. Bạn vẫn muốn xóa chứ?",
+    "other": "Bạn chắc chắn muốn xóa?",
+    "tip_question_deleted": "Bài viết này đã được xóa",
+    "tip_answer_deleted": "Câu trả lời này đã được xóa"
+  },
+  "btns": {
+    "confirm": "Xác nhận",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "login": "Đăng nhập",
+    "signup": "Đăng ký",
+    "logout": "Đăng xuất",
+    "verify": "Xác thực",
+    "add_question": "Thêm câu hỏi"
+  },
+  "search": {
+    "title": "Kết Quả Tìm Kiếm",
+    "keywords": "Từ khóa",
+    "options": "Tùy chọn",
+    "follow": "Theo dõi",
+    "following": "Đang theo dõi",
+    "counts": "{{count}} Kết Quả",
+    "more": "Nhiều hơn",
+    "sort_btns": {
+      "relevance": "Có liên quan",
+      "newest": "Mới nhất",
+      "active": "Hoạt động",
+      "score": "Điểm"
+    },
+    "tips": {
+      "title": "Mẹo Tìm Kiếm Nâng Cao",
+      "tag": "<1>[thẻ]</1> tìm kiếm với tên thẻ",
+      "user": "<1>user:tên người dùng</1> tìm kiếm với tác giả",
+      "answer": "<1>answers:0</1> câu hỏi chưa có câu trả lời",
+      "score": "<1>score:3</1> những bài viết có điểm từ 3 trở lên",
+      "question": "<1>is:câu hỏi</1> tìm kiếm câu hỏi",
+      "is_answer": "<1>is:câu trả lời</1> tìm kiếm câu trả lời"
+    },
+    "empty": "Chúng tôi không tìm thấy bất kỳ thứ gì. <br /> Hãy thử một từ khóa khác hoặc ngắn hơn."
+  },
+  "share": {
+    "name": "Chia sẻ",
+    "copy": "Sao chép liên kết",
+    "via": "Chia sẻ bài viết với...",
+    "copied": "Đã sao chép",
+    "facebook": "Chia sẻ lên Facebook",
+    "twitter": "Chia sẻ lên Twitter"
+  },
+  "cannot_vote_for_self": "Bạn không thể tự bình chọn cho bài viết của mình",
+  "modal_confirm": {
+    "title": "Lỗi..."
+  },
+  "account_result": {
+    "page_title": "Chào mừng đến với Answer",
+    "success": "Tài khoản mới của bạn đã được xác thực; bạn sẽ được chuyển hướng đến trang chủ.",
+    "link": "Tiếp tục đến trang chủ",
+    "invalid": "Xin lỗi, liên kết xác thực không hợp lệ. Có thể tài khoản của bạn đã được kích hoạt?",
+    "confirm_new_email": "Email của bạn đã được cập nhật.",
+    "confirm_new_email_invalid": "Xin lỗi, liên kết xác thực này không còn hợp lệ. Có thể email của bạn đã bị thay đổi?"
+  },
+  "question": {
+    "following_tags": "Các thẻ đang theo dõi",
+    "edit": "Chỉnh sửa",
+    "save": "Lưu",
+    "follow_tag_tip": "Theo dõi các thẻ để sắp xếp danh sách câu hỏi của bạn.",
+    "hot_questions": "Câu hỏi nổi bật",
+    "all_questions": "Tất cả câu hỏi",
+    "x_questions": "{{ count }} câu hỏi",
+    "x_answers": "{{ count }} câu trả lời",
+    "questions": "Câu hỏi",
+    "answers": "Câu trả lời",
+    "newest": "Mới nhất",
+    "active": "Kích hoạt",
+    "frequent": "Thường xuyên",
+    "score": "Điểm",
+    "unanswered": "Chưa có câu trả lời",
+    "modified": "đã chỉnh sửa",
+    "answered": "đã trả lời",
+    "asked": "đã hỏi",
+    "closed": "đã đóng",
+    "follow_a_tag": "Theo dõi một thẻ",
+    "more": "Nhiều hơn"
+  },
+  "personal": {
+    "overview": "Tổng quan",
+    "answers": "Câu trả lời",
+    "answer": "câu trả lời",
+    "questions": "Câu hỏi",
+    "question": "câu hỏi",
+    "bookmarks": "Dấu trang",
+    "reputation": "Danh tiếng",
+    "comments": "Bình luận",
+    "votes": "Bình chọn",
+    "newest": "Mới nhất",
+    "score": "Điểm",
+    "edit_profile": "Chỉnh sửa hồ sơ",
+    "visited_x_days": "Đã tham gia {{ count }} ngày",
+    "viewed": "Đã xem",
+    "joined": "Đã tham gia",
+    "last_login": "Đã xem",
+    "about_me": "Về tôi",
+    "about_me_empty": "// Xin chào, Thế Giới !",
+    "top_answers": "Top Câu trả lời",
+    "top_questions": "Top Câu hỏi",
+    "stats": "Thống kê",
+    "list_empty": "Không tìm thấy bài viết.<br />Có lẽ bạn muốn chọn một tab khác?",
+    "accepted": "Đã chấp nhận",
+    "answered": "đã trả lời",
+    "asked": "đã hỏi",
+    "upvote": "upvote",
+    "downvote": "downvote",
+    "mod_short": "Mod",
+    "mod_long": "Người điều hành",
+    "x_reputation": "danh tiếng",
+    "x_votes": "lượt bình chọn",
+    "x_answers": "câu trả lời",
+    "x_questions": "câu hỏi"
+  },
+  "page_404": {
+    "description": "Rất tiếc, trang này không tồn tại.",
+    "back_home": "Quay về trang chủ"
+  },
+  "page_50X": {
+    "description": "Máy chủ gặp lỗi và không thể hoàn thành yêu cầu của bạn.",
+    "back_home": "Quay về trang chủ"
+  },
+  "admin": {
+    "admin_header": {
+      "title": "Quản trị"
+    },
+    "nav_menus": {
+      "dashboard": "Bảng điều khiển",
+      "contents": "Nội dung",
+      "questions": "Câu hỏi",
+      "answers": "Câu trả lời",
+      "users": "Người dùng",
+      "flags": "Cờ",
+      "settings": "Cài đặt",
+      "general": "Chung",
+      "interface": "Giao diện",
+      "smtp": "SMTP"
+    },
+    "dashboard": {
+      "title": "Bảng điều khiển",
+      "welcome": "Chào mừng đến Answer Admin !",
+      "version": "Phiên bản"
+    },
+    "flags": {
+      "title": "Cờ",
+      "pending": "Chưa giải quyết",
+      "completed": "Đã hoàn thành",
+      "flagged": "Đã gắn cờ",
+      "created": "Đã tạo",
+      "action": "Hành động",
+      "review": "Kiểm tra lại"
+    },
+    "change_modal": {
+      "title": "Thay đổi trạng thái người dùng thành...",
+      "btn_cancel": "Hủy",
+      "btn_submit": "Xác nhận",
+      "normal_name": "bình thường",
+      "normal_description": "Một người dùng bình thường có thể hỏi và trả lời các câu hỏi.",
+      "suspended_name": "chặn",
+      "suspended_description": "Người dùng bị chặn không thể đăng nhập.",
+      "deleted_name": "đã xóa",
+      "deleted_description": "Xóa hồ sơ, liên kết xác thực.",
+      "inactive_name": "chưa kích hoạt",
+      "inactive_description": "Người dùng chưa kích hoạt phải xác thực lại email của họ.",
+      "confirm_title": "Xóa người dùng này",
+      "confirm_content": "Bạn có muốn xóa người dùng này? Điều này là vĩnh viễn!",
+      "confirm_btn": "Xóa",
+      "msg": {
+        "empty": "Vui lòng chọn một lý do."
+      }
+    },
+    "status_modal": {
+      "title": "Thay đổi trạng thái {{ type }} thành...",
+      "normal_name": "bình thường",
+      "normal_description": "Một bài đăng bình thường có sẵn cho tất cả mọi người.",
+      "closed_name": "đã đóng",
+      "closed_description": "Một câu hỏi đóng không thể trả lời, nhưng vẫn có thể chỉnh sửa, bỏ phiếu và nhận xét.",
+      "deleted_name": "đã xóa",
+      "deleted_description": "Tất cả danh tiếng đạt được và bị mất sẽ được phục hồi.",
+      "btn_cancel": "Hủy",
+      "btn_submit": "Xác nhận",
+      "btn_next": "Tiếp tục"
+    },
+    "users": {
+      "title": "Người dùng",
+      "name": "Tên",
+      "email": "Email",
+      "reputation": "Danh tiếng",
+      "created_at": "Thời gian tạo",
+      "delete_at": "Thời gian xóa",
+      "suspend_at": "Thời gian bị chặn",
+      "status": "Trạng thái",
+      "action": "Hành động",
+      "change": "Thay đổi",
+      "all": "Tất cả",
+      "inactive": "Chưa kích hoạt",
+      "suspended": "Đã bị chặn",
+      "deleted": "Đã xóa",
+      "normal": "Bình thường"
+    },
+    "questions": {
+      "page_title": "Câu hỏi",
+      "normal": "Bình thường",
+      "closed": "Đã đóng",
+      "deleted": "Đã xóa",
+      "post": "Bài đăng",
+      "votes": "Bình chọn",
+      "answers": "Câu trả lời",
+      "created": "Đã tạo",
+      "status": "Trạng thái",
+      "action": "Hành động",
+      "change": "Thay đổi"
+    },
+    "answers": {
+      "page_title": "Câu trả lời",
+      "normal": "Bình thường",
+      "deleted": "Đã xóa",
+      "post": "Bài đăng",
+      "votes": "Bình chọn",
+      "created": "Đã tạo",
+      "status": "Trạng thái",
+      "action": "Hành động",
+      "change": "Thay đổi"
+    },
+    "general": {
+      "page_title": "Chung",
+      "name": {
+        "label": "Tên trang",
+        "msg": "Tên trang không được bỏ trống.",
+        "text": "Tên của trang web này, được sử dụng trong thẻ tiêu đề."
+      },
+      "short_description": {
+        "label": "Mô tả ngắn (tùy chọn)",
+        "msg": "Mô tả ngắn không được trống.",
+        "text": "Mô tả ngắn gọn, được sử dụng trong thẻ tiêu đề trên trang chủ."
+      },
+      "description": {
+        "label": "Mô tả trang (tùy chọn)",
+        "msg": "Mô tả trang không được trống.",
+        "text": "Mô tả trang web này trong một câu, được sử dụng trong thẻ mô tả meta."
+      }
+    },
+    "interface": {
+      "page_title": "Giao diện",
+      "logo": {
+        "label": "Logo (tùy chọn)",
+        "msg": "Logo trang không được trống.",
+        "text": "Bạn có thể tải ảnh lên hoặc <1>đặt lại</1> tiêu đề trang."
+      },
+      "theme": {
+        "label": "Chủ đề",
+        "msg": "Chủ đề không được trống.",
+        "text": "Chọn một chủ đề có sẵn."
+      },
+      "language": {
+        "label": "Ngôn ngữ",
+        "msg": "Ngôn ngữ không được trống.",
+        "text": "Đã thay đổi ngôn ngữ. Nó sẽ có hiệu lực khi bạn tải lại trang."
+      }
+    },
+    "smtp": {
+      "page_title": "SMTP",
+      "from_email": {
+        "label": "Từ",
+        "msg": "Email người gửi không được trống.",
+        "text": "Địa chỉ email của người gửi."
+      },
+      "from_name": {
+        "label": "Tên người gửi",
+        "msg": "Tên người gửi không được bỏ trống.",
+        "text": "Tên của người gửi."
+      },
+      "smtp_host": {
+        "label": "Máy chủ SMTP",
+        "msg": "Máy chủ SMTP không thể bỏ trống.",
+        "text": "Máy chủ email của bạn."
+      },
+      "encryption": {
+        "label": "Mã hóa",
+        "msg": "Mã hóa không được trống.",
+        "text": "Đối với hầu hết các máy chủ, SSL là tùy chọn được khuyến nghị.",
+        "ssl": "SSL",
+        "none": "Không"
+      },
+      "smtp_port": {
+        "label": "Cổng SMTP",
+        "msg": "Cổng SMTP phải nằm trong dãy số 1 ~ 65535.",
+        "text": "Cổng máy chủ email của bạn."
+      },
+      "smtp_username": {
+        "label": "Tên đăng nhập SMTP",
+        "msg": "Tên đăng nhập SMTP không được bỏ trống."
+      },
+      "smtp_password": {
+        "label": "Mật khẩu SMTP",
+        "msg": "Mật khẩu SMTP không được bỏ trống."
+      },
+      "test_email_recipient": {
+        "label": "Kiểm tra người nhận email",
+        "text": "Cung cấp địa chỉ email sẽ nhận được gửi thử nghiệm.",
+        "msg": "Người nhận email kiểm tra không hợp lệ"
+      },
+      "smtp_authentication": {
+        "label": "Xác thực SMTP",
+        "msg": "Xác thực SMTP không được bỏ trống.",
+        "yes": "Đồng ý",
+        "no": "Không"
+      }
+    }
+  }
+}
