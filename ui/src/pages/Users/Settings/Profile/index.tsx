@@ -312,8 +312,8 @@ const Index: React.FC = () => {
               <Avatar
                 size="128px"
                 avatar={formData.avatar.gravatar}
-                searchStr={`s=128&d=identicon&t=${
-                  new Date().valueOf() + count
+                searchStr={`s=128&d=identicon${
+                  count > 0 ? `&t=${new Date().valueOf()}` : ''
                 }`}
                 className="me-3 rounded"
               />

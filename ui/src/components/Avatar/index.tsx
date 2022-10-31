@@ -18,8 +18,10 @@ const Index: FC<IProps> = ({ avatar, size, className, searchStr = '' }) => {
     if (avatar.length > 1) {
       url = `${avatar}?${searchStr}`;
     }
-  } else if (avatar?.type !== 'default') {
-    url = `${avatar[avatar.type]}?${searchStr}`;
+  } else if (avatar?.type === 'gravatar') {
+    url = `${avatar.gravatar}?${searchStr}&d=identicon`;
+  } else if (avatar?.type === 'custom') {
+    url = `${avatar.custom}?${searchStr}`;
   }
 
   return (
