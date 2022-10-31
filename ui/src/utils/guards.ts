@@ -94,21 +94,21 @@ export const isNotLogged = () => {
 };
 
 export const isLoggedAndInactive = () => {
-  const ret: GuardResult = { ok: false, redirect: undefined };
+  const ret: GuardResult = { ok: true, redirect: undefined };
   const userStat = deriveUserStat();
-  if (!userStat.isActivated) {
-    ret.ok = true;
-    ret.redirect = RouteAlias.activation;
+  if (userStat.isActivated) {
+    ret.ok = false;
+    ret.redirect = RouteAlias.home;
   }
   return ret;
 };
 
 export const isLoggedAndSuspended = () => {
-  const ret: GuardResult = { ok: false, redirect: undefined };
+  const ret: GuardResult = { ok: true, redirect: undefined };
   const userStat = deriveUserStat();
-  if (userStat.isSuspended) {
-    ret.redirect = RouteAlias.suspended;
-    ret.ok = true;
+  if (!userStat.isSuspended) {
+    ret.ok = false;
+    ret.redirect = RouteAlias.home;
   }
   return ret;
 };
@@ -120,7 +120,7 @@ export const isLoggedAndNormal = () => {
     ret.ok = true;
   } else if (!userStat.isActivated) {
     ret.redirect = RouteAlias.activation;
-  } else if (!userStat.isSuspended) {
+  } else if (userStat.isSuspended) {
     ret.redirect = RouteAlias.suspended;
   } else if (!userStat.isLogged) {
     ret.redirect = RouteAlias.login;
@@ -139,12 +139,26 @@ export const isNotLoggedOrNormal = () => {
   return ret;
 };
 
+export const isNotLoggedOrNotSuspend = () => {
+  const ret: GuardResult = { ok: true, redirect: undefined };
+  const userStat = deriveUserStat();
+  const gr = isLoggedAndNormal();
+  if (!gr.ok && userStat.isSuspended) {
+    ret.ok = false;
+    ret.redirect = gr.redirect;
+  }
+  return ret;
+};
+
 export const isNotLoggedOrInactive = () => {
   const ret: GuardResult = { ok: true, redirect: undefined };
   const userStat = deriveUserStat();
-  if (userStat.isLogged || userStat.isActivated) {
+  if (userStat.isActivated) {
     ret.ok = false;
     ret.redirect = RouteAlias.home;
+  } else if (userStat.isSuspended) {
+    ret.ok = false;
+    ret.redirect = RouteAlias.suspended;
   }
   return ret;
 };

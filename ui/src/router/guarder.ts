@@ -7,17 +7,12 @@ import {
   isLoggedAndInactive,
   isLoggedAndSuspended,
   isNotLoggedOrInactive,
+  isNotLoggedOrNotSuspend,
 } from '@/utils/guards';
 
 const RouteGuarder = {
   base: async () => {
-    return isNotLoggedOrNormal();
-  },
-  notLogged: async () => {
-    return isNotLogged();
-  },
-  notLoggedOrInactive: async () => {
-    return isNotLoggedOrInactive();
+    return isNotLoggedOrNotSuspend();
   },
   loggedAndNormal: async () => {
     await pullLoggedUser(true);
@@ -32,6 +27,15 @@ const RouteGuarder = {
   adminLogged: async () => {
     await pullLoggedUser(true);
     return isAdminLogged();
+  },
+  notLogged: async () => {
+    return isNotLogged();
+  },
+  notLoggedOrNormal: async () => {
+    return isNotLoggedOrNormal();
+  },
+  notLoggedOrInactive: async () => {
+    return isNotLoggedOrInactive();
   },
 };
 
