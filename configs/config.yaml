@@ -13,7 +13,7 @@ swaggerui:
   show: true
   protocol: http
   host: 127.0.0.1
-  address: ':80'
+  address: ":80"
 service_config:
   secret_key: "answer"
   web_host: "http://127.0.0.1:9080"

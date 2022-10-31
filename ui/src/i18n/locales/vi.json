@@ -589,325 +589,325 @@
       "btn_name": "Đăng câu trả lời của bạn",
       "confirm_title": "Tiếp tục trả lời",
       "continue": "Tiếp tục",
-      "confirm_info": "<p>Are you sure you want to add another answer?</p><p>You could use the edit link to refine and improve your existing answer, instead.</p>",
-      "empty": "Answer cannot be empty."
+      "confirm_info": "<p>Bạn có chắc chắn muốn thêm một câu trả lời khác không?</p><p>Thay vào đó, bạn có thể sử dụng liên kết chỉnh sửa để tinh chỉnh và cải thiện câu trả lời hiện có của mình.</p>",
+      "empty": "Câu trả lời không được bỏ trống."
     }
   },
   "delete": {
-    "title": "Delete this post",
-    "question": "We do not recommend <strong>deleting questions with answers</strong> because doing so deprives future readers of this knowledge.</p><p>Repeated deletion of answered questions can result in your account being blocked from asking. Are you sure you wish to delete?",
-    "answer_accepted": "<p>We do not recommend <strong>deleting accepted answer</strong> because doing so deprives future readers of this knowledge. </p> Repeated deletion of accepted answers can result in your account being blocked from answering. Are you sure you wish to delete?",
-    "other": "Are you sure you wish to delete?",
-    "tip_question_deleted": "This post has been deleted",
-    "tip_answer_deleted": "This answer has been deleted"
+    "title": "Xóa bài viết này",
+    "question": "Chúng tôi không khuyến khích việc <strong>xóa bài viết đã có câu trả lời</strong> vì làm như vậy sẽ tước đi kiến thức của các độc giả trong tương lai.</p><p>Việc lặp lại các hành động xóa các câu hỏi đã có câu trả lời có thể dẫn đến việc tài khoản của bạn bị khóa hoặc bị cấm đặt câu hỏi. Bạn vẫn muốn xóa chứ?",
+    "answer_accepted": "<p>Chúng tôi không khuyến khích việc <strong>xóa bài viết đã có câu trả lời</strong> vì làm như vậy sẽ tước đi kiến thức của các độc giả trong tương lai. </p> Việc lặp lại các hành động xóa các câu hỏi đã có câu trả lời có thể dẫn đến việc tài khoản của bạn bị khóa hoặc bị cấm đặt câu hỏi. Bạn vẫn muốn xóa chứ?",
+    "other": "Bạn chắc chắn muốn xóa?",
+    "tip_question_deleted": "Bài viết này đã được xóa",
+    "tip_answer_deleted": "Câu trả lời này đã được xóa"
   },
   "btns": {
-    "confirm": "Confirm",
-    "cancel": "Cancel",
-    "save": "Save",
-    "delete": "Delete",
-    "login": "Log in",
-    "signup": "Sign up",
-    "logout": "Log out",
-    "verify": "Verify",
-    "add_question": "Add question"
+    "confirm": "Xác nhận",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "login": "Đăng nhập",
+    "signup": "Đăng ký",
+    "logout": "Đăng xuất",
+    "verify": "Xác thực",
+    "add_question": "Thêm câu hỏi"
   },
   "search": {
-    "title": "Search Results",
-    "keywords": "Keywords",
-    "options": "Options",
-    "follow": "Follow",
-    "following": "Following",
-    "counts": "{{count}} Results",
-    "more": "More",
+    "title": "Kết Quả Tìm Kiếm",
+    "keywords": "Từ khóa",
+    "options": "Tùy chọn",
+    "follow": "Theo dõi",
+    "following": "Đang theo dõi",
+    "counts": "{{count}} Kết Quả",
+    "more": "Nhiều hơn",
     "sort_btns": {
-      "relevance": "Relevance",
-      "newest": "Newest",
-      "active": "Active",
-      "score": "Score"
+      "relevance": "Có liên quan",
+      "newest": "Mới nhất",
+      "active": "Hoạt động",
+      "score": "Điểm"
     },
     "tips": {
-      "title": "Advanced Search Tips",
-      "tag": "<1>[tag]</1> search withing a tag",
-      "user": "<1>user:username</1> search by author",
-      "answer": "<1>answers:0</1> unanswered questions",
-      "score": "<1>score:3</1> posts with a 3+ score",
-      "question": "<1>is:question</1> search questions",
-      "is_answer": "<1>is:answer</1> search answers"
+      "title": "Mẹo Tìm Kiếm Nâng Cao",
+      "tag": "<1>[thẻ]</1> tìm kiếm với tên thẻ",
+      "user": "<1>user:tên người dùng</1> tìm kiếm với tác giả",
+      "answer": "<1>answers:0</1> câu hỏi chưa có câu trả lời",
+      "score": "<1>score:3</1> những bài viết có điểm từ 3 trở lên",
+      "question": "<1>is:câu hỏi</1> tìm kiếm câu hỏi",
+      "is_answer": "<1>is:câu trả lời</1> tìm kiếm câu trả lời"
     },
-    "empty": "We couldn't find anything. <br /> Try different or less specific keywords."
+    "empty": "Chúng tôi không tìm thấy bất kỳ thứ gì. <br /> Hãy thử một từ khóa khác hoặc ngắn hơn."
   },
   "share": {
-    "name": "Share",
-    "copy": "Copy link",
-    "via": "Share post via...",
-    "copied": "Copied",
-    "facebook": "Share to Facebook",
-    "twitter": "Share to Twitter"
+    "name": "Chia sẻ",
+    "copy": "Sao chép liên kết",
+    "via": "Chia sẻ bài viết với...",
+    "copied": "Đã sao chép",
+    "facebook": "Chia sẻ lên Facebook",
+    "twitter": "Chia sẻ lên Twitter"
   },
-  "cannot_vote_for_self": "You can't vote for your own post",
+  "cannot_vote_for_self": "Bạn không thể tự bình chọn cho bài viết của mình",
   "modal_confirm": {
-    "title": "Error..."
+    "title": "Lỗi..."
   },
   "account_result": {
-    "page_title": "Welcome to Answer",
-    "success": "Your new account is confirmed; you will be redirected to the home page.",
-    "link": "Continue to homepage",
-    "invalid": "Sorry, this account confirmation link is no longer valid. Perhaps your account is already active?",
-    "confirm_new_email": "Your email has been updated.",
-    "confirm_new_email_invalid": "Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?"
+    "page_title": "Chào mừng đến với Answer",
+    "success": "Tài khoản mới của bạn đã được xác thực; bạn sẽ được chuyển hướng đến trang chủ.",
+    "link": "Tiếp tục đến trang chủ",
+    "invalid": "Xin lỗi, liên kết xác thực không hợp lệ. Có thể tài khoản của bạn đã được kích hoạt?",
+    "confirm_new_email": "Email của bạn đã được cập nhật.",
+    "confirm_new_email_invalid": "Xin lỗi, liên kết xác thực này không còn hợp lệ. Có thể email của bạn đã bị thay đổi?"
   },
   "question": {
-    "following_tags": "Following Tags",
-    "edit": "Edit",
-    "save": "Save",
-    "follow_tag_tip": "Follow tags to curate your list of questions.",
-    "hot_questions": "Hot Questions",
-    "all_questions": "All Questions",
-    "x_questions": "{{ count }} Questions",
-    "x_answers": "{{ count }} answers",
-    "questions": "Questions",
-    "answers": "Answers",
-    "newest": "Newest",
-    "active": "Active",
-    "frequent": "Frequent",
-    "score": "Score",
-    "unanswered": "Unanswered",
-    "modified": "modified",
-    "answered": "answered",
-    "asked": "asked",
-    "closed": "closed",
-    "follow_a_tag": "Follow a tag",
-    "more": "More"
+    "following_tags": "Các thẻ đang theo dõi",
+    "edit": "Chỉnh sửa",
+    "save": "Lưu",
+    "follow_tag_tip": "Theo dõi các thẻ để sắp xếp danh sách câu hỏi của bạn.",
+    "hot_questions": "Câu hỏi nổi bật",
+    "all_questions": "Tất cả câu hỏi",
+    "x_questions": "{{ count }} câu hỏi",
+    "x_answers": "{{ count }} câu trả lời",
+    "questions": "Câu hỏi",
+    "answers": "Câu trả lời",
+    "newest": "Mới nhất",
+    "active": "Kích hoạt",
+    "frequent": "Thường xuyên",
+    "score": "Điểm",
+    "unanswered": "Chưa có câu trả lời",
+    "modified": "đã chỉnh sửa",
+    "answered": "đã trả lời",
+    "asked": "đã hỏi",
+    "closed": "đã đóng",
+    "follow_a_tag": "Theo dõi một thẻ",
+    "more": "Nhiều hơn"
   },
   "personal": {
-    "overview": "Overview",
-    "answers": "Answers",
-    "answer": "answer",
-    "questions": "Questions",
-    "question": "question",
-    "bookmarks": "Bookmarks",
-    "reputation": "Reputation",
-    "comments": "Comments",
-    "votes": "Votes",
-    "newest": "Newest",
-    "score": "Score",
-    "edit_profile": "Edit Profile",
-    "visited_x_days": "Visited {{ count }} days",
-    "viewed": "Viewed",
-    "joined": "Joined",
-    "last_login": "Seen",
-    "about_me": "About Me",
-    "about_me_empty": "// Hello, World !",
-    "top_answers": "Top Answers",
-    "top_questions": "Top Questions",
-    "stats": "Stats",
-    "list_empty": "No posts found.<br />Perhaps you'd like to select a different tab?",
-    "accepted": "Accepted",
-    "answered": "answered",
-    "asked": "asked",
+    "overview": "Tổng quan",
+    "answers": "Câu trả lời",
+    "answer": "câu trả lời",
+    "questions": "Câu hỏi",
+    "question": "câu hỏi",
+    "bookmarks": "Dấu trang",
+    "reputation": "Danh tiếng",
+    "comments": "Bình luận",
+    "votes": "Bình chọn",
+    "newest": "Mới nhất",
+    "score": "Điểm",
+    "edit_profile": "Chỉnh sửa hồ sơ",
+    "visited_x_days": "Đã tham gia {{ count }} ngày",
+    "viewed": "Đã xem",
+    "joined": "Đã tham gia",
+    "last_login": "Đã xem",
+    "about_me": "Về tôi",
+    "about_me_empty": "// Xin chào, Thế Giới !",
+    "top_answers": "Top Câu trả lời",
+    "top_questions": "Top Câu hỏi",
+    "stats": "Thống kê",
+    "list_empty": "Không tìm thấy bài viết.<br />Có lẽ bạn muốn chọn một tab khác?",
+    "accepted": "Đã chấp nhận",
+    "answered": "đã trả lời",
+    "asked": "đã hỏi",
     "upvote": "upvote",
     "downvote": "downvote",
     "mod_short": "Mod",
-    "mod_long": "Moderators",
-    "x_reputation": "reputation",
-    "x_votes": "votes received",
-    "x_answers": "answers",
-    "x_questions": "questions"
+    "mod_long": "Người điều hành",
+    "x_reputation": "danh tiếng",
+    "x_votes": "lượt bình chọn",
+    "x_answers": "câu trả lời",
+    "x_questions": "câu hỏi"
   },
   "page_404": {
-    "description": "Unfortunately, this page doesn't exist.",
-    "back_home": "Back to homepage"
+    "description": "Rất tiếc, trang này không tồn tại.",
+    "back_home": "Quay về trang chủ"
   },
   "page_50X": {
-    "description": "The server encountered an error and could not complete your request.",
-    "back_home": "Back to homepage"
+    "description": "Máy chủ gặp lỗi và không thể hoàn thành yêu cầu của bạn.",
+    "back_home": "Quay về trang chủ"
   },
   "admin": {
     "admin_header": {
-      "title": "Admin"
+      "title": "Quản trị"
     },
     "nav_menus": {
-      "dashboard": "Dashboard",
-      "contents": "Contents",
-      "questions": "Questions",
-      "answers": "Answers",
-      "users": "Users",
-      "flags": "Flags",
-      "settings": "Settings",
-      "general": "General",
-      "interface": "Interface",
+      "dashboard": "Bảng điều khiển",
+      "contents": "Nội dung",
+      "questions": "Câu hỏi",
+      "answers": "Câu trả lời",
+      "users": "Người dùng",
+      "flags": "Cờ",
+      "settings": "Cài đặt",
+      "general": "Chung",
+      "interface": "Giao diện",
       "smtp": "SMTP"
     },
     "dashboard": {
-      "title": "Dashboard",
-      "welcome": "Welcome to Answer Admin !",
-      "version": "Version"
+      "title": "Bảng điều khiển",
+      "welcome": "Chào mừng đến Answer Admin !",
+      "version": "Phiên bản"
     },
     "flags": {
-      "title": "Flags",
-      "pending": "Pending",
-      "completed": "Completed",
-      "flagged": "Flagged",
-      "created": "Created",
-      "action": "Action",
-      "review": "Review"
+      "title": "Cờ",
+      "pending": "Chưa giải quyết",
+      "completed": "Đã hoàn thành",
+      "flagged": "Đã gắn cờ",
+      "created": "Đã tạo",
+      "action": "Hành động",
+      "review": "Kiểm tra lại"
     },
     "change_modal": {
-      "title": "Change user status to...",
-      "btn_cancel": "Cancel",
-      "btn_submit": "Submit",
-      "normal_name": "normal",
-      "normal_description": "A normal user can ask and answer questions.",
-      "suspended_name": "suspended",
-      "suspended_description": "A suspended user can't log in.",
-      "deleted_name": "deleted",
-      "deleted_description": "Delete profile, authentication associations.",
-      "inactive_name": "inactive",
-      "inactive_description": "An inactive user must re-validate their email.",
-      "confirm_title": "Delete this user",
-      "confirm_content": "Are you sure you want to delete this user? This is permanent!",
-      "confirm_btn": "Delete",
+      "title": "Thay đổi trạng thái người dùng thành...",
+      "btn_cancel": "Hủy",
+      "btn_submit": "Xác nhận",
+      "normal_name": "bình thường",
+      "normal_description": "Một người dùng bình thường có thể hỏi và trả lời các câu hỏi.",
+      "suspended_name": "chặn",
+      "suspended_description": "Người dùng bị chặn không thể đăng nhập.",
+      "deleted_name": "đã xóa",
+      "deleted_description": "Xóa hồ sơ, liên kết xác thực.",
+      "inactive_name": "chưa kích hoạt",
+      "inactive_description": "Người dùng chưa kích hoạt phải xác thực lại email của họ.",
+      "confirm_title": "Xóa người dùng này",
+      "confirm_content": "Bạn có muốn xóa người dùng này? Điều này là vĩnh viễn!",
+      "confirm_btn": "Xóa",
       "msg": {
-        "empty": "Please select a reason."
+        "empty": "Vui lòng chọn một lý do."
       }
     },
     "status_modal": {
-      "title": "Change {{ type }} status to...",
-      "normal_name": "normal",
-      "normal_description": "A normal post available to everyone.",
-      "closed_name": "closed",
-      "closed_description": "A closed question can't answer, but still can edit, vote and comment.",
-      "deleted_name": "deleted",
-      "deleted_description": "All reputation gained and lost will be restored.",
-      "btn_cancel": "Cancel",
-      "btn_submit": "Submit",
-      "btn_next": "Next"
+      "title": "Thay đổi trạng thái {{ type }} thành...",
+      "normal_name": "bình thường",
+      "normal_description": "Một bài đăng bình thường có sẵn cho tất cả mọi người.",
+      "closed_name": "đã đóng",
+      "closed_description": "Một câu hỏi đóng không thể trả lời, nhưng vẫn có thể chỉnh sửa, bỏ phiếu và nhận xét.",
+      "deleted_name": "đã xóa",
+      "deleted_description": "Tất cả danh tiếng đạt được và bị mất sẽ được phục hồi.",
+      "btn_cancel": "Hủy",
+      "btn_submit": "Xác nhận",
+      "btn_next": "Tiếp tục"
     },
     "users": {
-      "title": "Users",
-      "name": "Name",
+      "title": "Người dùng",
+      "name": "Tên",
       "email": "Email",
-      "reputation": "Reputation",
-      "created_at": "Created Time",
-      "delete_at": "Deleted Time",
-      "suspend_at": "Suspended Time",
-      "status": "Status",
-      "action": "Action",
-      "change": "Change",
-      "all": "All",
-      "inactive": "Inactive",
-      "suspended": "Suspended",
-      "deleted": "Deleted",
-      "normal": "Normal"
+      "reputation": "Danh tiếng",
+      "created_at": "Thời gian tạo",
+      "delete_at": "Thời gian xóa",
+      "suspend_at": "Thời gian bị chặn",
+      "status": "Trạng thái",
+      "action": "Hành động",
+      "change": "Thay đổi",
+      "all": "Tất cả",
+      "inactive": "Chưa kích hoạt",
+      "suspended": "Đã bị chặn",
+      "deleted": "Đã xóa",
+      "normal": "Bình thường"
     },
     "questions": {
-      "page_title": "Questions",
-      "normal": "Normal",
-      "closed": "Closed",
-      "deleted": "Deleted",
-      "post": "Post",
-      "votes": "Votes",
-      "answers": "Answers",
-      "created": "Created",
-      "status": "Status",
-      "action": "Action",
-      "change": "Change"
+      "page_title": "Câu hỏi",
+      "normal": "Bình thường",
+      "closed": "Đã đóng",
+      "deleted": "Đã xóa",
+      "post": "Bài đăng",
+      "votes": "Bình chọn",
+      "answers": "Câu trả lời",
+      "created": "Đã tạo",
+      "status": "Trạng thái",
+      "action": "Hành động",
+      "change": "Thay đổi"
     },
     "answers": {
-      "page_title": "Answers",
-      "normal": "Normal",
-      "deleted": "Deleted",
-      "post": "Post",
-      "votes": "Votes",
-      "created": "Created",
-      "status": "Status",
-      "action": "Action",
-      "change": "Change"
+      "page_title": "Câu trả lời",
+      "normal": "Bình thường",
+      "deleted": "Đã xóa",
+      "post": "Bài đăng",
+      "votes": "Bình chọn",
+      "created": "Đã tạo",
+      "status": "Trạng thái",
+      "action": "Hành động",
+      "change": "Thay đổi"
     },
     "general": {
-      "page_title": "General",
+      "page_title": "Chung",
       "name": {
-        "label": "Site Name",
-        "msg": "Site name cannot be empty.",
-        "text": "The name of this site, as used in the title tag."
+        "label": "Tên trang",
+        "msg": "Tên trang không được bỏ trống.",
+        "text": "Tên của trang web này, được sử dụng trong thẻ tiêu đề."
       },
       "short_description": {
-        "label": "Short Site Description (optional)",
-        "msg": "Short site description cannot be empty.",
-        "text": "Short description, as used in the title tag on homepage."
+        "label": "Mô tả ngắn (tùy chọn)",
+        "msg": "Mô tả ngắn không được trống.",
+        "text": "Mô tả ngắn gọn, được sử dụng trong thẻ tiêu đề trên trang chủ."
       },
       "description": {
-        "label": "Site Description (optional)",
-        "msg": "Site description cannot be empty.",
-        "text": "Describe this site in one sentence, as used in the meta description tag."
+        "label": "Mô tả trang (tùy chọn)",
+        "msg": "Mô tả trang không được trống.",
+        "text": "Mô tả trang web này trong một câu, được sử dụng trong thẻ mô tả meta."
       }
     },
     "interface": {
-      "page_title": "Interface",
+      "page_title": "Giao diện",
       "logo": {
-        "label": "Logo (optional)",
-        "msg": "Site logo cannot be empty.",
-        "text": "You can upload your image or <1>reset</1> it to the site title text."
+        "label": "Logo (tùy chọn)",
+        "msg": "Logo trang không được trống.",
+        "text": "Bạn có thể tải ảnh lên hoặc <1>đặt lại</1> tiêu đề trang."
       },
       "theme": {
-        "label": "Theme",
-        "msg": "Theme cannot be empty.",
-        "text": "Select an existing theme."
+        "label": "Chủ đề",
+        "msg": "Chủ đề không được trống.",
+        "text": "Chọn một chủ đề có sẵn."
       },
       "language": {
-        "label": "Interface Language",
-        "msg": "Interface language cannot be empty.",
-        "text": "User interface language. It will change when you refresh the page."
+        "label": "Ngôn ngữ",
+        "msg": "Ngôn ngữ không được trống.",
+        "text": "Đã thay đổi ngôn ngữ. Nó sẽ có hiệu lực khi bạn tải lại trang."
       }
     },
     "smtp": {
       "page_title": "SMTP",
       "from_email": {
-        "label": "From Email",
-        "msg": "From email cannot be empty.",
-        "text": "The email address which emails are sent from."
+        "label": "Từ",
+        "msg": "Email người gửi không được trống.",
+        "text": "Địa chỉ email của người gửi."
       },
       "from_name": {
-        "label": "From Name",
-        "msg": "From name cannot be empty.",
-        "text": "The name which emails are sent from."
+        "label": "Tên người gửi",
+        "msg": "Tên người gửi không được bỏ trống.",
+        "text": "Tên của người gửi."
       },
       "smtp_host": {
-        "label": "SMTP Host",
-        "msg": "SMTP host cannot be empty.",
-        "text": "Your mail server."
+        "label": "Máy chủ SMTP",
+        "msg": "Máy chủ SMTP không thể bỏ trống.",
+        "text": "Máy chủ email của bạn."
       },
       "encryption": {
-        "label": "Encryption",
-        "msg": "Encryption cannot be empty.",
-        "text": "For most servers SSL is the recommended option.",
+        "label": "Mã hóa",
+        "msg": "Mã hóa không được trống.",
+        "text": "Đối với hầu hết các máy chủ, SSL là tùy chọn được khuyến nghị.",
         "ssl": "SSL",
-        "none": "None"
+        "none": "Không"
       },
       "smtp_port": {
-        "label": "SMTP Port",
-        "msg": "SMTP port must be number 1 ~ 65535.",
-        "text": "The port to your mail server."
+        "label": "Cổng SMTP",
+        "msg": "Cổng SMTP phải nằm trong dãy số 1 ~ 65535.",
+        "text": "Cổng máy chủ email của bạn."
       },
       "smtp_username": {
-        "label": "SMTP Username",
-        "msg": "SMTP username cannot be empty."
+        "label": "Tên đăng nhập SMTP",
+        "msg": "Tên đăng nhập SMTP không được bỏ trống."
       },
       "smtp_password": {
-        "label": "SMTP Password",
-        "msg": "SMTP password cannot be empty."
+        "label": "Mật khẩu SMTP",
+        "msg": "Mật khẩu SMTP không được bỏ trống."
       },
       "test_email_recipient": {
-        "label": "Test Email Recipients",
-        "text": "Provide email address that will receive test sends.",
-        "msg": "Test email recipients is invalid"
+        "label": "Kiểm tra người nhận email",
+        "text": "Cung cấp địa chỉ email sẽ nhận được gửi thử nghiệm.",
+        "msg": "Người nhận email kiểm tra không hợp lệ"
       },
       "smtp_authentication": {
-        "label": "SMTP Authentication",
-        "msg": "SMTP authentication cannot be empty.",
-        "yes": "Yes",
-        "no": "No"
+        "label": "Xác thực SMTP",
+        "msg": "Xác thực SMTP không được bỏ trống.",
+        "yes": "Đồng ý",
+        "no": "Không"
       }
     }
   }
