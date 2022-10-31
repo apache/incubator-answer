@@ -1,6 +1,8 @@
 package data
 
 import (
+	"github.com/answerdev/answer/pkg/dir"
+	"path"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -71,6 +73,13 @@ func NewCache(c *CacheConf) (cache.Cache, func(), error) {
 		log.Infof("try to load cache file from %s", c.FilePath)
 		if err := memory.Load(memCache, c.FilePath); err != nil {
 			log.Warn(err)
+		}
+		baseDir := path.Dir(c.FilePath)
+		if !dir.CheckDirExist(baseDir) {
+			err := dir.CreateDirIfNotExist(baseDir)
+			if err != nil {
+				log.Warn(err)
+			}
 		}
 		go func() {
 			ticker := time.Tick(time.Minute)
