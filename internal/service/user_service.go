@@ -492,7 +492,7 @@ func (us *UserService) encryptPassword(ctx context.Context, Pass string) (string
 
 // UserChangeEmailSendCode user change email verification
 func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.UserChangeEmailSendCodeReq) error {
-	_, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
+	userInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
 	if err != nil {
 		return err
 	}
@@ -513,8 +513,13 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 		UserID: req.UserID,
 	}
 	code := uuid.NewString()
+	var title, body string
 	verifyEmailUrl := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.serviceConfig.WebHost, code)
-	title, body, err := us.emailService.ChangeEmailTemplate(ctx, verifyEmailUrl)
+	if userInfo.MailStatus == entity.EmailStatusToBeVerified {
+		title, body, err = us.emailService.RegisterTemplate(ctx, verifyEmailUrl)
+	} else {
+		title, body, err = us.emailService.ChangeEmailTemplate(ctx, verifyEmailUrl)
+	}
 	if err != nil {
 		return err
 	}
