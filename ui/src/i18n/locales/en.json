@@ -732,6 +732,66 @@
     "x_answers": "answers",
     "x_questions": "questions"
   },
+  "install": {
+    "title": "Answer",
+    "next": "Next",
+    "done": "Done",
+    "choose_lang": {
+      "label": "Please choose a language"
+    },
+    "database_engine": {
+      "label": "Database Engine"
+    },
+    "username": {
+      "label": "Username",
+      "placeholder": "root"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "root"
+    },
+    "database_host": {
+      "label": "Database Host",
+      "placeholder": "db:3306"
+    },
+    "database_name": {
+      "label": "Database Name",
+      "placeholder": "answer"
+    },
+    "table_prefix": {
+      "label": "Table Prefix (optional)",
+      "placeholder": "answer_"
+    },
+    "config_yaml": {
+      "title": "Create config.yaml",
+      "label": "The config.yaml file created.",
+      "description": "You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.",
+      "info": "After you’ve done that, click “Next” button."
+    },
+    "site_information": "Site Information",
+    "admin_account": "Admin Account",
+    "site_name": {
+      "label": "Site Name"
+    },
+    "contact_email": {
+      "label": "Contact Email",
+      "text": "Email address of key contact responsible for this site."
+    },
+    "admin_name": {
+      "label": "Name"
+    },
+    "admin_password": {
+      "label": "Password",
+      "text": "You will need this password to log in. Please store it in a secure location."
+    },
+    "admin_email": {
+      "label": "Email",
+      "text": "You will need this email to log in."
+    },
+    "ready_title": "Your Answer is Ready!",
+    "ready_description": "If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.",
+    "good_luck": "Have fun, and good luck!"
+  },
   "page_404": {
     "description": "Unfortunately, this page doesn't exist.",
     "back_home": "Back to homepage"

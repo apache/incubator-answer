@@ -211,5 +211,9 @@ const routes: RouteNode[] = [
       },
     ],
   },
+  {
+    path: 'install',
+    page: 'pages/Install',
+  },
 ];
 export default routes;
