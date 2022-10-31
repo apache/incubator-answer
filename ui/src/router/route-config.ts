@@ -115,6 +115,10 @@ const routeConfig: RouteNode[] = [
         page: 'pages/Users/AccountForgot',
       },
       {
+        path: 'users/change-email',
+        page: 'pages/Users/ChangeEmail',
+      },
+      {
         path: 'users/password-reset',
         page: 'pages/Users/PasswordReset',
       },
