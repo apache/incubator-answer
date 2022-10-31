@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import type * as Type from '@answer/common/interface';
 import { useToast } from '@answer/hooks';
-import { useSmtpSetting, updateSmtpSetting } from '@answer/api';
 
+import { useSmtpSetting, updateSmtpSetting } from '@/services';
 import pattern from '@/common/pattern';
 
 const Smtp: FC = () => {
