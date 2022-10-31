@@ -1,81 +1,93 @@
 base:
   success:
-    other: "success"
+    other: "Success."
   unknown:
-    other: "unknown error"
+    other: "Unknown error."
   request_format_error:
-    other: "request format is not valid"
+    other: "Request format is not valid."
   unauthorized_error:
-    other: "unauthorized"
+    other: "Unauthorized."
   database_error:
-    other: "data server error"
+    other: "Data server error."
 
 email:
-  other: "email"
+  other: "Email"
 password:
-  other: "password"
+  other: "Password"
 
 email_or_password_wrong_error: &email_or_password_wrong
-  other: "email or password wrong"
+  other: "Email and password do not match."
 
 error:
   admin:
     email_or_password_wrong: *email_or_password_wrong
   answer:
     not_found:
-      other: "answer not found"
+      other: "Answer do not found."
   comment:
     edit_without_permission:
-      other: "comment not allowed to edit"
+      other: "Comment are not allowed to edit."
     not_found:
-      other: "comment not found"
+      other: "Comment not found."
   email:
     duplicate:
-      other: "email already exists"
+      other: "Email already exists."
     need_to_be_verified:
-      other: "email should be verified"
+      other: "Email should be verified."
     verify_url_expired:
-      other: "email verified url is expired, please resend the email"
+      other: "Email verified URL has expired, please resend the email."
   lang:
     not_found:
-      other: "language not found"
+      other: "Language file not found."
   object:
     captcha_verification_failed:
-      other: "captcha wrong"
+      other: "Captcha wrong."
     disallow_follow:
-      other: "You are not allowed to follow"
+      other: "You are not allowed to follow."
     disallow_vote:
-      other: "You are not allowed to vote"
+      other: "You are not allowed to vote."
     disallow_vote_your_self:
-      other: "You can't vote for your own post!"
+      other: "You can't vote for your own post."
     not_found:
-      other: "object not found"
+      other: "Object not found."
+    verification_failed:
+      other: "Verification failed."
+    email_or_password_incorrect:
+      other: "Email and password do not match."
+    old_password_verification_failed:
+      other: "The old password verification failed"
+    new_password_same_as_previous_setting:
+      other: "The new password is the same as the previous one."
   question:
     not_found:
-      other: "question not found"
+      other: "Question not found."
   rank:
     fail_to_meet_the_condition:
-      other: "rank fail to meet the condition"
+      other: "Rank fail to meet the condition."
   report:
     handle_failed:
-      other: "report handle failed"
+      other: "Report handle failed."
     not_found:
-      other: "report not found"
+      other: "Report not found."
   tag:
     not_found:
-      other: "tag not found"
+      other: "Tag not found."
   theme:
     not_found:
-      other: "theme not found"
+      other: "Theme not found."
   user:
     email_or_password_wrong:
       other: *email_or_password_wrong
     not_found:
-      other: "user not found"
+      other: "User not found."
     suspended:
-      other: "user is suspended"
-
-
+      other: "User has been suspended."
+    username_invalid:
+      other: "Username is invalid."
+    username_duplicate:
+      other: "Username is already in use."
+    set_avatar:
+      other: "Avatar set failed."
 
 report:
   spam:
@@ -151,10 +163,10 @@ notification:
     mention_you:
       other: "mentioned you"
     your_question_is_closed:
-      other: "your question has been closed"
+      other: "Your question has been closed"
     your_question_was_deleted:
-      other: "your question has been deleted"
+      other: "Your question has been deleted"
     your_answer_was_deleted:
-      other: "your answer has been deleted"
+      other: "Your answer has been deleted"
     your_comment_was_deleted:
-      other: "your comment has been deleted"
+      other: "Your comment has been deleted"

@@ -4,90 +4,111 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 
-	"github.com/segmentfault/answer/configs"
-	"github.com/segmentfault/answer/i18n"
-	"github.com/segmentfault/answer/pkg/dir"
+	"github.com/answerdev/answer/configs"
+	"github.com/answerdev/answer/i18n"
+	"github.com/answerdev/answer/pkg/dir"
 )
 
-var SuccessMsg = `
-answer initialized successfully
-`
+const (
+	DefaultConfigFileName = "config.yaml"
+)
 
-var HasBeenInitializedMsg = `
-Has been initialized.
-`
+var (
+	ConfigFilePath = "/conf/"
+	UploadFilePath = "/upfiles/"
+	I18nPath       = "/i18n/"
+)
 
-func InitConfig() {
-	exist, err := PathExists("data/config.yaml")
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(2)
-	}
-	if exist {
-		fmt.Println(HasBeenInitializedMsg)
-		os.Exit(0)
+// InstallAllInitialEnvironment install all initial environment
+func InstallAllInitialEnvironment(dataDirPath string) {
+	ConfigFilePath = filepath.Join(dataDirPath, ConfigFilePath)
+	UploadFilePath = filepath.Join(dataDirPath, UploadFilePath)
+	I18nPath = filepath.Join(dataDirPath, I18nPath)
+
+	installConfigFile()
+	installUploadDir()
+	installI18nBundle()
+	fmt.Println("install all initial environment done")
+	return
+}
+
+func installConfigFile() {
+	fmt.Println("[config-file] try to install...")
+	defaultConfigFile := filepath.Join(ConfigFilePath, DefaultConfigFileName)
+
+	// if config file already exists do nothing.
+	if CheckConfigFile(defaultConfigFile) {
+		fmt.Printf("[config-file] %s already exists\n", defaultConfigFile)
+		return
 	}
 
-	_, err = dir.CreatePathIsNotExist("data")
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(2)
+	if err := dir.CreateDirIfNotExist(ConfigFilePath); err != nil {
+		fmt.Printf("[config-file] create directory fail %s\n", err.Error())
+		return
 	}
-	WriterFile("data/config.yaml", string(configs.Config))
-	_, err = dir.CreatePathIsNotExist("data/i18n")
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(2)
+	fmt.Printf("[config-file] create directory success, config file is %s\n", defaultConfigFile)
+
+	if err := writerFile(defaultConfigFile, string(configs.Config)); err != nil {
+		fmt.Printf("[config-file] install fail %s\n", err.Error())
+		return
 	}
-	_, err = dir.CreatePathIsNotExist("data/upfiles")
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(2)
+	fmt.Printf("[config-file] install success\n")
+}
+
+func installUploadDir() {
+	fmt.Println("[upload-dir] try to install...")
+	if err := dir.CreateDirIfNotExist(UploadFilePath); err != nil {
+		fmt.Printf("[upload-dir] install fail %s\n", err.Error())
+	} else {
+		fmt.Printf("[upload-dir] install success, upload directory is %s\n", UploadFilePath)
 	}
+}
+
+func installI18nBundle() {
+	fmt.Println("[i18n] try to install i18n bundle...")
+	if err := dir.CreateDirIfNotExist(I18nPath); err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
 	i18nList, err := i18n.I18n.ReadDir(".")
 	if err != nil {
 		fmt.Println(err.Error())
-		os.Exit(2)
+		return
 	}
+	fmt.Printf("[i18n] find i18n bundle %d\n", len(i18nList))
 	for _, item := range i18nList {
-		path := fmt.Sprintf("data/i18n/%s", item.Name())
+		path := filepath.Join(I18nPath, item.Name())
 		content, err := i18n.I18n.ReadFile(item.Name())
 		if err != nil {
 			continue
 		}
-		WriterFile(path, string(content))
+		fmt.Printf("[i18n] install %s bundle...\n", item.Name())
+		err = writerFile(path, string(content))
+		if err != nil {
+			fmt.Printf("[i18n] install %s bundle fail: %s\n", item.Name(), err.Error())
+		} else {
+			fmt.Printf("[i18n] install %s bundle success\n", item.Name())
+		}
 	}
-	fmt.Println(SuccessMsg)
-	os.Exit(0)
 }
 
-func InitDB() {
-
-}
-
-func WriterFile(filePath, content string) error {
+func writerFile(filePath, content string) error {
 	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
-	if err != nil {
+	defer func() {
+		_ = file.Close()
+	}()
+	writer := bufio.NewWriter(file)
+	if _, err := writer.WriteString(content); err != nil {
 		return err
 	}
-	write := bufio.NewWriter(file)
-	write.WriteString(content)
-	write.Flush()
+	if err := writer.Flush(); err != nil {
+		return err
+	}
 	return nil
-}
-
-func PathExists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
-	}
-	if os.IsNotExist(err) {
-		return false, nil
-	}
-	return false, err
 }

@@ -2,16 +2,17 @@ package search
 
 import (
 	"context"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/search_common"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/search_common"
 	"strings"
 )
 
 type AnswerSearch struct {
-	repo search_common.SearchRepo
-	w    string
-	page int
-	size int
+	repo  search_common.SearchRepo
+	w     string
+	page  int
+	size  int
+	order string
 }
 
 func NewAnswerSearch(repo search_common.SearchRepo) *AnswerSearch {
@@ -39,6 +40,7 @@ func (s *AnswerSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 	s.w = strings.TrimSpace(w)
 	s.page = dto.Page
 	s.size = dto.Size
+	s.order = dto.Order
 	return
 }
 func (s *AnswerSearch) Search(ctx context.Context) (resp []schema.SearchResp, total int64, err error) {
@@ -48,5 +50,5 @@ func (s *AnswerSearch) Search(ctx context.Context) (resp []schema.SearchResp, to
 		words = words[:4]
 	}
 
-	return s.repo.SearchAnswers(ctx, words, false, "", s.page, s.size)
+	return s.repo.SearchAnswers(ctx, words, false, "", s.page, s.size, s.order)
 }

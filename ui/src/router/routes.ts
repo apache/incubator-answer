@@ -122,6 +122,10 @@ const routes: RouteNode[] = [
         guard: RouteGuarder.loggedAndNormal,
       },
       {
+        path: 'users/change-email',
+        page: 'pages/Users/ChangeEmail',
+      },
+      {
         path: 'users/password-reset',
         page: 'pages/Users/PasswordReset',
         guard: RouteGuarder.loggedAndNormal,
@@ -190,6 +194,10 @@ const routes: RouteNode[] = [
           {
             path: 'users/:user_id',
             page: 'pages/Admin/UserOverview',
+          },
+          {
+            path: 'smtp',
+            page: 'pages/Admin/Smtp',
           },
         ],
       },

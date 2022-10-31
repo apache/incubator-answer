@@ -3,15 +3,14 @@ package middleware
 import (
 	"strings"
 
-	"github.com/davecgh/go-spew/spew"
-	"github.com/segmentfault/answer/internal/schema"
+	"github.com/answerdev/answer/internal/schema"
 
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/service/auth"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/handler"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/service/auth"
-	"github.com/segmentfault/answer/pkg/converter"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -39,20 +38,13 @@ func (am *AuthUserMiddleware) Auth() gin.HandlerFunc {
 			ctx.Next()
 			return
 		}
-		if token == "888" {
-			userInfo := &entity.UserCacheInfo{}
-			userInfo.UserID = "2"
-			spew.Dump("开发环境 Auth", userInfo)
+		userInfo, err := am.authService.GetUserCacheInfo(ctx, token)
+		if err != nil {
+			ctx.Next()
+			return
+		}
+		if userInfo != nil {
 			ctx.Set(ctxUuidKey, userInfo)
-		} else {
-			userInfo, err := am.authService.GetUserCacheInfo(ctx, token)
-			if err != nil {
-				ctx.Next()
-				return
-			}
-			if userInfo != nil {
-				ctx.Set(ctxUuidKey, userInfo)
-			}
 		}
 		ctx.Next()
 	}
@@ -67,38 +59,30 @@ func (am *AuthUserMiddleware) MustAuth() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
-		if token == "888" {
-			userInfo := &entity.UserCacheInfo{}
-			userInfo.UserID = "2"
-			spew.Dump("开发环境 MustAuth", userInfo)
-			ctx.Set(ctxUuidKey, userInfo)
-		} else {
-			userInfo, err := am.authService.GetUserCacheInfo(ctx, token)
-			spew.Dump(userInfo, err)
-			if err != nil || userInfo == nil {
-				handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
-				ctx.Abort()
-				return
-			}
-			if userInfo.EmailStatus != entity.EmailStatusAvailable {
-				handler.HandleResponse(ctx, errors.Forbidden(reason.EmailNeedToBeVerified),
-					&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeInactive})
-				ctx.Abort()
-				return
-			}
-			if userInfo.UserStatus == entity.UserStatusSuspended {
-				handler.HandleResponse(ctx, errors.Forbidden(reason.UserSuspended),
-					&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeUserSuspended})
-				ctx.Abort()
-				return
-			}
-			if userInfo.UserStatus == entity.UserStatusDeleted {
-				handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
-				ctx.Abort()
-				return
-			}
-			ctx.Set(ctxUuidKey, userInfo)
+		userInfo, err := am.authService.GetUserCacheInfo(ctx, token)
+		if err != nil || userInfo == nil {
+			handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+			ctx.Abort()
+			return
 		}
+		if userInfo.EmailStatus != entity.EmailStatusAvailable {
+			handler.HandleResponse(ctx, errors.Forbidden(reason.EmailNeedToBeVerified),
+				&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeInactive})
+			ctx.Abort()
+			return
+		}
+		if userInfo.UserStatus == entity.UserStatusSuspended {
+			handler.HandleResponse(ctx, errors.Forbidden(reason.UserSuspended),
+				&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeUserSuspended})
+			ctx.Abort()
+			return
+		}
+		if userInfo.UserStatus == entity.UserStatusDeleted {
+			handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+			ctx.Abort()
+			return
+		}
+		ctx.Set(ctxUuidKey, userInfo)
 		ctx.Next()
 	}
 }
@@ -111,26 +95,19 @@ func (am *AuthUserMiddleware) CmsAuth() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
-		if token == "888" {
-			userInfo := &entity.UserCacheInfo{}
-			userInfo.UserID = "2"
-			spew.Dump("开发环境 CmsAuth", userInfo)
-			ctx.Set(ctxUuidKey, userInfo)
-		} else {
-			userInfo, err := am.authService.GetCmsUserCacheInfo(ctx, token)
-			if err != nil {
+		userInfo, err := am.authService.GetCmsUserCacheInfo(ctx, token)
+		if err != nil {
+			handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+			ctx.Abort()
+			return
+		}
+		if userInfo != nil {
+			if userInfo.UserStatus == entity.UserStatusDeleted {
 				handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
 				ctx.Abort()
 				return
 			}
-			if userInfo != nil {
-				if userInfo.UserStatus == entity.UserStatusDeleted {
-					handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
-					ctx.Abort()
-					return
-				}
-				ctx.Set(ctxUuidKey, userInfo)
-			}
+			ctx.Set(ctxUuidKey, userInfo)
 		}
 		ctx.Next()
 	}

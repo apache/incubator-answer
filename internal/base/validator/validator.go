@@ -4,6 +4,8 @@ import (
 	"errors"
 	"reflect"
 
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/go-playground/locales"
 	english "github.com/go-playground/locales/en"
 	zhongwen "github.com/go-playground/locales/zh"
@@ -11,8 +13,9 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/go-playground/validator/v10/translations/en"
 	"github.com/go-playground/validator/v10/translations/zh"
-	"github.com/segmentfault/answer/internal/base/translator"
+	myErrors "github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/i18n"
+	"github.com/segmentfault/pacman/log"
 )
 
 // MyValidator my validator
@@ -90,6 +93,7 @@ func (m *MyValidator) Check(value interface{}) (errField *ErrorField, err error)
 	if err != nil {
 		var valErrors validator.ValidationErrors
 		if !errors.As(err, &valErrors) {
+			log.Error(err)
 			return nil, errors.New("validate check exception")
 		}
 
@@ -98,7 +102,7 @@ func (m *MyValidator) Check(value interface{}) (errField *ErrorField, err error)
 				Key:   translator.GlobalTrans.Tr(m.Lang, fieldError.Field()),
 				Value: fieldError.Translate(m.Tran),
 			}
-			return errField, errors.New(fieldError.Translate(m.Tran))
+			return errField, myErrors.BadRequest(reason.RequestFormatError).WithMsg(fieldError.Translate(m.Tran))
 		}
 	}
 

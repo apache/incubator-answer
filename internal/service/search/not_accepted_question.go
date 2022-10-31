@@ -4,15 +4,16 @@ import (
 	"context"
 	"strings"
 
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/search_common"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/search_common"
 )
 
 type NotAcceptedQuestion struct {
-	repo search_common.SearchRepo
-	w    string
-	page int
-	size int
+	repo  search_common.SearchRepo
+	w     string
+	page  int
+	size  int
+	order string
 }
 
 func NewNotAcceptedQuestion(repo search_common.SearchRepo) *NotAcceptedQuestion {
@@ -40,6 +41,7 @@ func (s *NotAcceptedQuestion) Parse(dto *schema.SearchDTO) (ok bool) {
 	s.w = strings.TrimSpace(w)
 	s.page = dto.Page
 	s.size = dto.Size
+	s.order = dto.Order
 	return
 }
 func (s *NotAcceptedQuestion) Search(ctx context.Context) (resp []schema.SearchResp, total int64, err error) {
@@ -52,5 +54,5 @@ func (s *NotAcceptedQuestion) Search(ctx context.Context) (resp []schema.SearchR
 		words = words[:4]
 	}
 
-	return s.repo.SearchQuestions(ctx, words, true, -1, s.page, s.size)
+	return s.repo.SearchQuestions(ctx, words, true, -1, s.page, s.size, s.order)
 }

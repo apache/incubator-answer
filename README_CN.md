@@ -1,27 +1,28 @@
-![logo](docs/img/logo.png)
+<a href="https://answer.dev">
+    <img alt="logo" src="docs/img/logo.svg" height="99px">
+</a>
 
-# Answer - 极简问答社区
+# Answer - 构建问答社区
 
-[![LICENSE](https://img.shields.io/badge/License-MIT-green)](https://github.com/segmentfault/answer/blob/master/LICENSE)
+一款极简的、问答形式的知识社区开源软件，用来快速构建产品你的产品问答支持社区、用户问答社区、粉丝社区等。
+
+了解更多关于该项目的内容，请访问 [answer.dev](https://answer.dev).
+
+[![LICENSE](https://img.shields.io/badge/License-Apache-green)](https://github.com/answerdev/answer/blob/main/LICENSE)
 [![Language](https://img.shields.io/badge/Language-Go-blue.svg)](https://golang.org/)
 [![Language](https://img.shields.io/badge/Language-React-blue.svg)](https://reactjs.org/)
 
-## 什么是 Answer?
-这是一个极简的开源问答社区。用户可以发布问题，其他人可以回答。
-![abstract](docs/img/abstract.png)
+## 截图
 
-## 目标
-- 帮助企业更好更快构建知识问答社区
-
-## 产品功能
-- 通过提问、回答方式生产知识
-- 通过投票、共同协作方式维护知识
+![screenshot](docs/img/screenshot.png)
 
 ## 快速开始
+
 ### 使用 docker-compose 快速搭建
+
 ```bash
 mkdir answer && cd answer
-wget https://github.com/segmentfault/answer/releases/latest/download/docker-compose.yaml
+wget https://raw.githubusercontent.com/answerdev/answer/main/docker-compose.yaml
 docker-compose up
 ```
 
@@ -31,8 +32,8 @@ docker-compose up
 
 我们随时欢迎你的贡献!
 
-参考 [CONTRIBUTING.md](CONTRIBUTING.md) 其中的贡献指南
+参考 [CONTRIBUTING.md](CONTRIBUTING.md) 开始贡献。
 
 ## License
 
-[MIT](https://github.com/segmentfault/answer/blob/master/LICENSE)
+[Apache](https://github.com/answerdev/answer/blob/main/LICENSE)

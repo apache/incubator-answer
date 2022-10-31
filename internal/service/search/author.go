@@ -5,9 +5,9 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/search_common"
-	usercommon "github.com/segmentfault/answer/internal/service/user_common"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/search_common"
+	usercommon "github.com/answerdev/answer/internal/service/user_common"
 )
 
 type AuthorSearch struct {
@@ -17,6 +17,7 @@ type AuthorSearch struct {
 	w          string
 	page       int
 	size       int
+	order      string
 }
 
 func NewAuthorSearch(repo search_common.SearchRepo, userCommon *usercommon.UserCommon) *AuthorSearch {
@@ -65,6 +66,7 @@ func (s *AuthorSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 	s.w = w
 	s.page = dto.Page
 	s.size = dto.Size
+	s.order = dto.Order
 	return
 }
 
@@ -82,7 +84,7 @@ func (s *AuthorSearch) Search(ctx context.Context) (resp []schema.SearchResp, to
 		words = words[:4]
 	}
 
-	resp, total, err = s.repo.SearchContents(ctx, words, "", s.exp, -1, s.page, s.size)
+	resp, total, err = s.repo.SearchContents(ctx, words, "", s.exp, -1, s.page, s.size, s.order)
 
 	return
 }

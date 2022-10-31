@@ -3,15 +3,16 @@ package search
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/search_common"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/search_common"
 )
 
 type WithinSearch struct {
-	repo search_common.SearchRepo
-	w    string
-	page int
-	size int
+	repo  search_common.SearchRepo
+	w     string
+	page  int
+	size  int
+	order string
 }
 
 func NewWithinSearch(repo search_common.SearchRepo) *WithinSearch {
@@ -49,9 +50,10 @@ func (s *WithinSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 	s.w = string(w)
 	s.page = dto.Page
 	s.size = dto.Size
+	s.order = dto.Order
 	return
 }
 
 func (s *WithinSearch) Search(ctx context.Context) (resp []schema.SearchResp, total int64, err error) {
-	return s.repo.SearchContents(ctx, []string{s.w}, "", "", -1, s.page, s.size)
+	return s.repo.SearchContents(ctx, []string{s.w}, "", "", -1, s.page, s.size, s.order)
 }

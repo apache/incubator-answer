@@ -35,28 +35,6 @@ definitions:
       verify:
         type: boolean
     type: object
-  schema.AddCollectionGroupReq:
-    properties:
-      create_time:
-        type: string
-      default_group:
-        description: mark this group is default, default 1
-        type: integer
-      name:
-        description: the collection group name
-        maxLength: 50
-        type: string
-      update_time:
-        type: string
-      user_id:
-        type: integer
-    required:
-    - create_time
-    - default_group
-    - name
-    - update_time
-    - user_id
-    type: object
   schema.AddCommentReq:
     properties:
       mention_username_list:
@@ -81,22 +59,6 @@ definitions:
     - original_text
     - parsed_text
     type: object
-  schema.AddNotificationReadReq:
-    properties:
-      is_read:
-        description: 'read status(unread: 1; read 2)'
-        type: integer
-      message_id:
-        description: message id
-        type: integer
-      user_id:
-        description: user id
-        type: integer
-    required:
-    - is_read
-    - message_id
-    - user_id
-    type: object
   schema.AddReportReq:
     properties:
       content:
@@ -114,8 +76,6 @@ definitions:
     - object_id
     - report_type
     type: object
-  schema.AddUserGroupReq:
-    type: object
   schema.AdminSetQuestionStatusRequest:
     properties:
       question_id:
@@ -129,7 +89,7 @@ definitions:
         description: content
         type: string
       html:
-        description: 解析后的html
+        description: html
         type: string
       question_id:
         description: question_id
@@ -167,7 +127,7 @@ definitions:
         description: edit_summary
         type: string
       html:
-        description: 解析后的html
+        description: html
         type: string
       id:
         description: id
@@ -177,6 +137,18 @@ definitions:
         type: string
       title:
         description: title
+        type: string
+    type: object
+  schema.AvatarInfo:
+    properties:
+      custom:
+        maxLength: 200
+        type: string
+      gravatar:
+        maxLength: 200
+        type: string
+      type:
+        maxLength: 100
         type: string
     type: object
   schema.CloseQuestionReq:
@@ -340,27 +312,6 @@ definitions:
         description: tag id
         type: string
     type: object
-  schema.GetNotificationReadResp:
-    properties:
-      created_at:
-        description: create time
-        type: string
-      id:
-        description: id
-        type: integer
-      is_read:
-        description: 'read status(unread: 1; read 2)'
-        type: integer
-      message_id:
-        description: message id
-        type: integer
-      updated_at:
-        description: update time
-        type: string
-      user_id:
-        description: user id
-        type: integer
-    type: object
   schema.GetOtherUserInfoByUsernameResp:
     properties:
       answer_count:
@@ -510,6 +461,26 @@ definitions:
       user_info:
         $ref: '#/definitions/schema.UserBasicInfo'
     type: object
+  schema.GetSMTPConfigResp:
+    properties:
+      encryption:
+        description: '"" SSL'
+        type: string
+      from_email:
+        type: string
+      from_name:
+        type: string
+      smtp_authentication:
+        type: boolean
+      smtp_host:
+        type: string
+      smtp_password:
+        type: string
+      smtp_port:
+        type: integer
+      smtp_username:
+        type: string
+    type: object
   schema.GetTagPageResp:
     properties:
       created_at:
@@ -607,14 +578,6 @@ definitions:
         description: tag id
         type: string
     type: object
-  schema.GetUserGroupResp:
-    properties:
-      id:
-        description: user group id
-        type: integer
-    type: object
-  schema.GetUserInfoResp:
-    type: object
   schema.GetUserPageResp:
     properties:
       avatar:
@@ -662,6 +625,77 @@ definitions:
       avatar:
         description: avatar
         type: string
+      bio:
+        description: bio markdown
+        type: string
+      bio_html:
+        description: bio html
+        type: string
+      created_at:
+        description: create time
+        type: integer
+      display_name:
+        description: display name
+        type: string
+      e_mail:
+        description: email
+        type: string
+      follow_count:
+        description: follow count
+        type: integer
+      id:
+        description: user id
+        type: string
+      ip_info:
+        description: ip info
+        type: string
+      is_admin:
+        description: is admin
+        type: boolean
+      last_login_date:
+        description: last login date
+        type: integer
+      location:
+        description: location
+        type: string
+      mail_status:
+        description: mail status(1 pass 2 to be verified)
+        type: integer
+      mobile:
+        description: mobile
+        type: string
+      notice_status:
+        description: notice status(1 on 2off)
+        type: integer
+      question_count:
+        description: question count
+        type: integer
+      rank:
+        description: rank
+        type: integer
+      status:
+        description: user status
+        type: string
+      username:
+        description: username
+        type: string
+      website:
+        description: website
+        type: string
+    type: object
+  schema.GetUserToSetShowResp:
+    properties:
+      access_token:
+        description: access token
+        type: string
+      answer_count:
+        description: answer count
+        type: integer
+      authority_group:
+        description: authority group
+        type: integer
+      avatar:
+        $ref: '#/definitions/schema.AvatarInfo'
       bio:
         description: bio markdown
         type: string
@@ -791,7 +825,7 @@ definitions:
         type: array
       title:
         description: question title
-        maxLength: 64
+        maxLength: 150
         minLength: 6
         type: string
     required:
@@ -811,11 +845,10 @@ definitions:
       page_size:
         description: Search page size
         type: integer
-      tags:
-        description: Search tag
-        items:
-          type: string
-        type: array
+      tag:
+        description: Tags     []string `json:"tags" form:"tags"`           //Search
+          tag
+        type: string
       username:
         description: Search username
         type: string
@@ -845,7 +878,7 @@ definitions:
         type: array
       title:
         description: question title
-        maxLength: 64
+        maxLength: 150
         minLength: 6
         type: string
     required:
@@ -871,14 +904,6 @@ definitions:
     required:
     - comment_id
     type: object
-  schema.RemoveNotificationReadReq:
-    properties:
-      id:
-        description: id
-        type: integer
-    required:
-    - id
-    type: object
   schema.RemoveQuestionReq:
     properties:
       id:
@@ -895,24 +920,16 @@ definitions:
     required:
     - tag_id
     type: object
-  schema.RemoveUserGroupReq:
-    properties:
-      id:
-        description: user group id
-        type: integer
-    required:
-    - id
-    type: object
   schema.ReportHandleReq:
     properties:
-      flaged_content:
+      flagged_content:
         type: string
-      flaged_type:
+      flagged_type:
         type: integer
       id:
         type: string
     required:
-    - flaged_type
+    - flagged_type
     - id
     type: object
   schema.SearchListResp:
@@ -938,6 +955,9 @@ definitions:
       excerpt:
         type: string
       id:
+        type: string
+      status:
+        description: Status
         type: string
       tags:
         description: tags
@@ -1027,7 +1047,7 @@ definitions:
     properties:
       display_name:
         description: display_name
-        maxLength: 50
+        maxLength: 35
         type: string
       original_text:
         description: original text
@@ -1037,7 +1057,7 @@ definitions:
         type: string
       slug_name:
         description: slug_name
-        maxLength: 50
+        maxLength: 35
         type: string
     type: object
   schema.TagResp:
@@ -1050,26 +1070,6 @@ definitions:
         type: string
       slug_name:
         type: string
-    type: object
-  schema.UpdateCollectionGroupReq:
-    properties:
-      create_time:
-        type: string
-      default_group:
-        description: mark this group is default, default 1
-        type: integer
-      id:
-        type: integer
-      name:
-        description: the collection group name
-        maxLength: 50
-        type: string
-      update_time:
-        type: string
-      user_id:
-        type: integer
-    required:
-    - id
     type: object
   schema.UpdateCommentReq:
     properties:
@@ -1096,47 +1096,71 @@ definitions:
   schema.UpdateInfoRequest:
     properties:
       avatar:
+        $ref: '#/definitions/schema.AvatarInfo'
         description: avatar
-        type: string
       bio:
+        description: bio
+        maxLength: 4096
         type: string
       bio_html:
+        description: bio
+        maxLength: 4096
         type: string
       display_name:
         description: display_name
+        maxLength: 30
         type: string
       location:
         description: location
+        maxLength: 100
         type: string
       username:
-        description: name
+        description: username
+        maxLength: 30
         type: string
       website:
         description: website
+        maxLength: 500
         type: string
-    type: object
-  schema.UpdateNotificationReadReq:
-    properties:
-      id:
-        description: id
-        type: integer
-      is_read:
-        description: 'read status(unread: 1; read 2)'
-        type: integer
-      message_id:
-        description: message id
-        type: integer
-      user_id:
-        description: user id
-        type: integer
     required:
-    - id
+    - display_name
+    type: object
+  schema.UpdateSMTPConfigReq:
+    properties:
+      encryption:
+        description: '"" SSL'
+        enum:
+        - SSL
+        type: string
+      from_email:
+        maxLength: 256
+        type: string
+      from_name:
+        maxLength: 256
+        type: string
+      smtp_authentication:
+        type: boolean
+      smtp_host:
+        maxLength: 256
+        type: string
+      smtp_password:
+        maxLength: 256
+        type: string
+      smtp_port:
+        maximum: 65535
+        minimum: 1
+        type: integer
+      smtp_username:
+        maxLength: 256
+        type: string
+      test_email_recipient:
+        type: string
     type: object
   schema.UpdateTagReq:
     properties:
       display_name:
         description: display_name
-        maxLength: 50
+        maxLength: 35
         type: string
       edit_summary:
         description: edit summary
@@ -1149,7 +1173,7 @@ definitions:
         type: string
       slug_name:
         description: slug_name
-        maxLength: 50
+        maxLength: 35
         type: string
       tag_id:
         description: tag_id
@@ -1170,14 +1194,6 @@ definitions:
     required:
     - synonym_tag_list
     - tag_id
-    type: object
-  schema.UpdateUserGroupReq:
-    properties:
-      id:
-        description: user group id
-        type: integer
-    required:
-    - id
     type: object
   schema.UpdateUserStatusReq:
     properties:
@@ -1225,6 +1241,12 @@ definitions:
     type: object
   schema.UserChangeEmailSendCodeReq:
     properties:
+      captcha_code:
+        maxLength: 500
+        type: string
+      captcha_id:
+        maxLength: 500
+        type: string
       e_mail:
         maxLength: 500
         type: string
@@ -1287,7 +1309,7 @@ definitions:
     - code
     - pass
     type: object
-  schema.UserRegister:
+  schema.UserRegisterReq:
     properties:
       e_mail:
         description: email
@@ -1295,7 +1317,7 @@ definitions:
         type: string
       name:
         description: name
-        maxLength: 50
+        maxLength: 30
         type: string
       pass:
         description: password
@@ -1583,6 +1605,47 @@ paths:
       - ApiKeyAuth: []
       - ApiKeyAuth: []
       summary: list report page
+      tags:
+      - admin
+  /answer/admin/api/setting/smtp:
+    get:
+      description: GetSMTPConfig get smtp config
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetSMTPConfigResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: GetSMTPConfig get smtp config
+      tags:
+      - admin
+    put:
+      description: update smtp config
+      parameters:
+      - description: smtp config
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateSMTPConfigReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update smtp config
       tags:
       - admin
   /answer/admin/api/siteinfo/general:
@@ -2176,7 +2239,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: GetRedDot
+      description: get notification list
       parameters:
       - description: page size
         in: query
@@ -2192,6 +2255,7 @@ paths:
         - achievement
         in: query
         name: type
+        required: true
         type: string
       produces:
       - application/json
@@ -2202,7 +2266,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: GetRedDot
+      summary: get notification list
       tags:
       - Notification
   /answer/api/v1/notification/read/state:
@@ -2645,7 +2709,7 @@ paths:
       tags:
       - api-question
   /answer/api/v1/question/page:
-    post:
+    get:
       consumes:
       - application/json
       description: SearchQuestionList <br>  "order"  Enums(newest, active,frequent,score,unanswered)
@@ -2912,6 +2976,16 @@ paths:
       - description: query string
         in: query
         name: q
+        required: true
+        type: string
+      - description: order
+        enum:
+        - newest
+        - active
+        - score
+        - relevance
+        in: query
+        name: order
         required: true
         type: string
       produces:
@@ -3297,7 +3371,8 @@ paths:
     get:
       consumes:
       - application/json
-      description: GetUserInfoByUserID
+      description: get user info, if user no login response http code is 200, but
+        user info is null
       produces:
       - application/json
       responses:
@@ -3308,7 +3383,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.GetUserResp'
+                  $ref: '#/definitions/schema.GetUserToSetShowResp'
               type: object
       security:
       - ApiKeyAuth: []
@@ -3318,7 +3393,7 @@ paths:
     put:
       consumes:
       - application/json
-      description: UserUpdateInfo
+      description: UserUpdateInfo update user info
       parameters:
       - description: access-token
         in: header
@@ -3340,7 +3415,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: UserUpdateInfo
+      summary: UserUpdateInfo update user info
       tags:
       - User
   /answer/api/v1/user/login/email:
@@ -3514,12 +3589,12 @@ paths:
       - application/json
       description: UserRegisterByEmail
       parameters:
-      - description: UserRegister
+      - description: UserRegisterReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.UserRegister'
+          $ref: '#/definitions/schema.UserRegisterReq'
       produces:
       - application/json
       responses:

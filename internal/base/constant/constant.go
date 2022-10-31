@@ -3,10 +3,7 @@ package constant
 import "time"
 
 const (
-	Default_PageSize           = 20        //Default number of pages
-	Key_UserID                 = "_UserID" //session userid
-	LoginUserID                = "login_user_id"
-	LoginUserVerify            = "login_user_verify"
+	Default_PageSize           = 20 //Default number of pages
 	UserStatusChangedCacheKey  = "answer:user:status:"
 	UserStatusChangedCacheTime = 7 * 24 * time.Hour
 	UserTokenCacheKey          = "answer:user:token:"

@@ -2,13 +2,14 @@ package search
 
 import (
 	"context"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/activity_common"
-	"github.com/segmentfault/answer/internal/service/search_common"
-	tagcommon "github.com/segmentfault/answer/internal/service/tag_common"
 	"regexp"
 	"strings"
+
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/search_common"
+	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 )
 
 type TagSearch struct {
@@ -21,6 +22,7 @@ type TagSearch struct {
 	w            string
 	userID       string
 	Extra        schema.GetTagPageResp
+	order        string
 }
 
 func NewTagSearch(repo search_common.SearchRepo, tagRepo tagcommon.TagRepo, followCommon activity_common.FollowRepo) *TagSearch {
@@ -53,6 +55,7 @@ func (ts *TagSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 	ts.page = dto.Page
 	ts.size = dto.Size
 	ts.userID = dto.UserID
+	ts.order = dto.Order
 	return ok
 }
 
@@ -62,7 +65,7 @@ func (ts *TagSearch) Search(ctx context.Context) (resp []schema.SearchResp, tota
 		tag              *entity.Tag
 		exists, followed bool
 	)
-	tag, exists, err = ts.tagRepo.GetTagBySlugName(nil, ts.exp)
+	tag, exists, err = ts.tagRepo.GetTagBySlugName(ctx, ts.exp)
 	if err != nil {
 		return
 	}
@@ -90,7 +93,7 @@ func (ts *TagSearch) Search(ctx context.Context) (resp []schema.SearchResp, tota
 		words = words[:4]
 	}
 
-	resp, total, err = ts.repo.SearchContents(ctx, words, tag.ID, "", -1, ts.page, ts.size)
+	resp, total, err = ts.repo.SearchContents(ctx, words, tag.ID, "", -1, ts.page, ts.size, ts.order)
 
 	return
 }

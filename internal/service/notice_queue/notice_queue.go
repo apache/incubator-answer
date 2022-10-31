@@ -1,7 +1,7 @@
 package notice_queue
 
 import (
-	"github.com/segmentfault/answer/internal/schema"
+	"github.com/answerdev/answer/internal/schema"
 )
 
 var (

@@ -3,12 +3,12 @@ package collection
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/pager"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/pager"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -40,12 +40,12 @@ func (cr *collectionGroupRepo) AddCollectionDefaultGroup(ctx context.Context, us
 		DefaultGroup: schema.CG_DEFAULT,
 		UserID:       userID,
 	}
-
 	_, err = cr.data.DB.Insert(defaultGroup)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return
 	}
+	collectionGroup = defaultGroup
 	return
 }
 

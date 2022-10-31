@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/segmentfault/answer/internal/base/data"
-	"github.com/segmentfault/answer/internal/base/pager"
-	"github.com/segmentfault/answer/internal/base/reason"
-	"github.com/segmentfault/answer/internal/entity"
-	tagcommon "github.com/segmentfault/answer/internal/service/tag_common"
-	"github.com/segmentfault/answer/internal/service/unique"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/pager"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
+	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/builder"
 )
@@ -73,10 +73,11 @@ func (tr *tagRepo) GetTagBySlugName(ctx context.Context, slugName string) (tagIn
 }
 
 // GetTagListByName get tag list all like name
-func (tr *tagRepo) GetTagListByName(ctx context.Context, name string) (tagList []*entity.Tag, err error) {
+func (tr *tagRepo) GetTagListByName(ctx context.Context, name string, limit int) (tagList []*entity.Tag, err error) {
 	tagList = make([]*entity.Tag, 0)
-	session := tr.data.DB.Where(builder.Like{"slug_name", name})
+	session := tr.data.DB.Where("slug_name LIKE ?", name+"%")
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	session.Limit(limit).Asc("slug_name")
 	err = session.Find(&tagList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

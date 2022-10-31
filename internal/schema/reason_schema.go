@@ -5,6 +5,7 @@ type ReasonItem struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 	ContentType string `json:"content_type"`
+	Placeholder string `json:"placeholder"`
 }
 
 type ReasonReq struct {

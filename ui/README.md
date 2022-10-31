@@ -2,7 +2,7 @@
 
 `Answer` is a modern Q&A community application ✨
 
-To learn more about the philosophy and goals of the project, visit [Answer](https://answer.dev.segmentfault.com).
+To learn more about the philosophy and goals of the project, visit [Answer](https://answer.dev).
 
 ### 📦 Prerequisites
 
@@ -53,7 +53,7 @@ when cloning repo, and run `pnpm install` to init dependencies. you can use proj
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | last 2 versions                                                                                                                                                                                          | last 2 versions                                                                                                                                                                                                  | last 2 versions                                                                                                                                                                                              | last 2 versions                                                                                                                                                                                              |
 
-## Build with
+## 🧱 Build with
 
 - [React.js](https://reactjs.org/) - Our front end is a React.js app.
 - [Bootstrap](https://getbootstrap.com/) - UI library.

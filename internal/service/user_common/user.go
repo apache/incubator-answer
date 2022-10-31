@@ -3,8 +3,8 @@ package usercommon
 import (
 	"context"
 
-	"github.com/segmentfault/answer/internal/entity"
-	"github.com/segmentfault/answer/internal/schema"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
 )
 
 type UserRepo interface {
@@ -76,11 +76,12 @@ func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, IDs []string) 
 // UserBasicInfoFormat
 func (us *UserCommon) UserBasicInfoFormat(ctx context.Context, userInfo *entity.User) *schema.UserBasicInfo {
 	userBasicInfo := &schema.UserBasicInfo{}
+	Avatar := schema.FormatAvatarInfo(userInfo.Avatar)
 	userBasicInfo.ID = userInfo.ID
 	userBasicInfo.Username = userInfo.Username
 	userBasicInfo.Rank = userInfo.Rank
 	userBasicInfo.DisplayName = userInfo.DisplayName
-	userBasicInfo.Avatar = userInfo.Avatar
+	userBasicInfo.Avatar = Avatar
 	userBasicInfo.Website = userInfo.Website
 	userBasicInfo.Location = userInfo.Location
 	userBasicInfo.IpInfo = userInfo.IPInfo

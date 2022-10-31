@@ -19,10 +19,10 @@ const Index: FC<Props> = ({ data }) => {
     <div className="d-flex mb-4">
       {data?.status !== 'deleted' ? (
         <Link to={`/users/${data.username}`} reloadDocument>
-          <Avatar avatar={data.avatar} size="160px" />
+          <Avatar avatar={data.avatar} size="160px" searchStr="s=128" />
         </Link>
       ) : (
-        <Avatar avatar={data.avatar} size="160px" />
+        <Avatar avatar={data.avatar} size="160px" searchStr="s=128" />
       )}
 
       <div className="ms-4">

@@ -2,16 +2,17 @@ package search
 
 import (
 	"context"
-	"github.com/segmentfault/answer/internal/schema"
-	"github.com/segmentfault/answer/internal/service/search_common"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/search_common"
 	"regexp"
 	"strings"
 )
 
 type ViewsSearch struct {
-	repo search_common.SearchRepo
-	exp  string
-	q    string
+	repo  search_common.SearchRepo
+	exp   string
+	q     string
+	order string
 }
 
 func NewViewsSearch(repo search_common.SearchRepo) *ViewsSearch {
@@ -38,6 +39,7 @@ func (s *ViewsSearch) Parse(dto *schema.SearchDTO) (ok bool) {
 	q = strings.TrimSpace(q)
 	s.exp = exp
 	s.q = q
+	s.order = dto.Order
 	return
 }
 func (s *ViewsSearch) Search(ctx context.Context) (resp []schema.SearchResp, total int64, err error) {

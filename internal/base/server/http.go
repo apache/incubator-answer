@@ -1,9 +1,10 @@
 package server
 
 import (
+	brotli "github.com/anargu/gin-brotli"
+	"github.com/answerdev/answer/internal/base/middleware"
+	"github.com/answerdev/answer/internal/router"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/answer/internal/base/middleware"
-	"github.com/segmentfault/answer/internal/router"
 )
 
 // NewHTTPServer new http server.
@@ -12,7 +13,9 @@ func NewHTTPServer(debug bool,
 	answerRouter *router.AnswerAPIRouter,
 	swaggerRouter *router.SwaggerRouter,
 	viewRouter *router.UIRouter,
-	authUserMiddleware *middleware.AuthUserMiddleware) *gin.Engine {
+	authUserMiddleware *middleware.AuthUserMiddleware,
+	avatarMiddleware *middleware.AvatarMiddleware,
+) *gin.Engine {
 
 	if debug {
 		gin.SetMode(gin.DebugMode)
@@ -20,13 +23,16 @@ func NewHTTPServer(debug bool,
 		gin.SetMode(gin.ReleaseMode)
 	}
 	r := gin.New()
+	r.Use(brotli.Brotli(brotli.DefaultCompression))
 	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK") })
 
 	viewRouter.Register(r)
 
 	rootGroup := r.Group("")
 	swaggerRouter.Register(rootGroup)
-	staticRouter.RegisterStaticRouter(rootGroup)
+	static := r.Group("")
+	static.Use(avatarMiddleware.AvatarThumb())
+	staticRouter.RegisterStaticRouter(static)
 
 	// register api that no need to login
 	unAuthV1 := r.Group("/answer/api/v1")

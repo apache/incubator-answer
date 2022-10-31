@@ -19,8 +19,6 @@ import {
   useThemeOptions,
 } from '@/services';
 
-import '../index.scss';
-
 const Interface: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.interface',

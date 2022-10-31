@@ -22,7 +22,7 @@ type CloseQuestionMeta struct {
 
 type QuestionAdd struct {
 	// question title
-	Title string `validate:"required,gte=6,lte=64" json:"title"`
+	Title string `validate:"required,gte=6,lte=150" json:"title"`
 	// content
 	Content string `validate:"required,gte=6,lte=65535" json:"content"`
 	// html
@@ -37,7 +37,7 @@ type QuestionUpdate struct {
 	// question id
 	ID string `validate:"required" json:"id"`
 	// question title
-	Title string `validate:"required,gte=6,lte=64" json:"title"`
+	Title string `validate:"required,gte=6,lte=150" json:"title"`
 	// content
 	Content string `validate:"required,gte=6,lte=65535" json:"content"`
 	// html
@@ -52,26 +52,27 @@ type QuestionUpdate struct {
 
 type QuestionBaseInfo struct {
 	ID              string `json:"id" `
-	Title           string `json:"title" xorm:"title"`                       // 标题
-	ViewCount       int    `json:"view_count" xorm:"view_count"`             // view_count
-	AnswerCount     int    `json:"answer_count" xorm:"answer_count"`         // 回复总数
-	CollectionCount int    `json:"collection_count" xorm:"collection_count"` // 收藏总数
-	FollowCount     int    `json:"follow_count" xorm:"follow_count"`         // 关注数
+	Title           string `json:"title" xorm:"title"`                       // title
+	ViewCount       int    `json:"view_count" xorm:"view_count"`             // view count
+	AnswerCount     int    `json:"answer_count" xorm:"answer_count"`         // answer count
+	CollectionCount int    `json:"collection_count" xorm:"collection_count"` // collection count
+	FollowCount     int    `json:"follow_count" xorm:"follow_count"`         // follow count
+	Status          string `json:"status"`
 	AcceptedAnswer  bool   `json:"accepted_answer"`
 }
 
 type QuestionInfo struct {
 	ID                   string         `json:"id" `
-	Title                string         `json:"title" xorm:"title"`                         // 标题
-	Content              string         `json:"content" xorm:"content"`                     // 内容
-	Html                 string         `json:"html" xorm:"html"`                           // 解析后的html
+	Title                string         `json:"title" xorm:"title"`                         // title
+	Content              string         `json:"content" xorm:"content"`                     // content
+	Html                 string         `json:"html" xorm:"html"`                           // html
 	Tags                 []*TagResp     `json:"tags" `                                      // tags
 	ViewCount            int            `json:"view_count" xorm:"view_count"`               // view_count
 	UniqueViewCount      int            `json:"unique_view_count" xorm:"unique_view_count"` // unique_view_count
 	VoteCount            int            `json:"vote_count" xorm:"vote_count"`               // vote_count
-	AnswerCount          int            `json:"answer_count" xorm:"answer_count"`           // 回复总数
-	CollectionCount      int            `json:"collection_count" xorm:"collection_count"`   // 收藏总数
-	FollowCount          int            `json:"follow_count" xorm:"follow_count"`           // 关注数
+	AnswerCount          int            `json:"answer_count" xorm:"answer_count"`           // answer count
+	CollectionCount      int            `json:"collection_count" xorm:"collection_count"`   // collection count
+	FollowCount          int            `json:"follow_count" xorm:"follow_count"`           // follow count
 	AcceptedAnswerId     string         `json:"accepted_answer_id" `                        // accepted_answer_id
 	LastAnswerId         string         `json:"last_answer_id" `                            // last_answer_id
 	CreateTime           int64          `json:"create_time" `                               // create_time
@@ -110,6 +111,7 @@ type Operation struct {
 	Operation_Type        string `json:"operation_type"`
 	Operation_Description string `json:"operation_description"`
 	Operation_Msg         string `json:"operation_msg"`
+	Operation_Time        int64  `json:"operation_time"`
 }
 
 type GetCloseTypeResp struct {
@@ -150,15 +152,17 @@ type UserQuestionInfo struct {
 	CollectionCount  int           `json:"collection_count"`
 	CreateTime       int           `json:"create_time"`
 	AcceptedAnswerId string        `json:"accepted_answer_id"`
+	Status           string        `json:"status"`
 }
 
 type QuestionSearch struct {
-	Page     int      `json:"page" form:"page"`           //Query number of pages
-	PageSize int      `json:"page_size" form:"page_size"` //Search page size
-	Order    string   `json:"order" form:"order"`         //Search order by
-	Tags     []string `json:"tags" form:"tags"`           //Search tag
-	TagIDs   []string `json:"-" form:"-"`                 //Search tag
-	UserName string   `json:"username" form:"username"`   //Search username
+	Page     int    `json:"page" form:"page"`           //Query number of pages
+	PageSize int    `json:"page_size" form:"page_size"` //Search page size
+	Order    string `json:"order" form:"order"`         //Search order by
+	//Tags     []string `json:"tags" form:"tags"`           //Search tag
+	Tag      string   `json:"tag" form:"tag"`           //Search tag
+	TagIDs   []string `json:"-" form:"-"`               //Search tag
+	UserName string   `json:"username" form:"username"` //Search username
 	UserID   string   `json:"-" form:"-"`
 }
 
