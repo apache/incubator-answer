@@ -18,12 +18,10 @@ To learn more about the project, visit [answer.dev](https://answer.dev).
 
 ## Quick start
 
-### Running with docker-compose
+### Running with docker
 
 ```bash
-mkdir answer && cd answer
-wget https://raw.githubusercontent.com/answerdev/answer/main/docker-compose.yaml
-docker-compose up
+docker run -d -p 9080:80 -v $PWD/answer-data/data:/data --name answer answerdev/answer:latest
 ```
 
 For more information you can see [INSTALL.md](./INSTALL.md)

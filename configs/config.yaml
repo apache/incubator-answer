@@ -3,8 +3,8 @@ server:
     addr: 0.0.0.0:80
 data:
   database:
-    driver: "mysql"
-    connection: root:root@tcp(db:3306)/answer
+    driver: "sqlite3"
+    connection: "/data/sqlite3/answer.db"
   cache:
     file_path: "/data/cache/cache.db"
 i18n:
