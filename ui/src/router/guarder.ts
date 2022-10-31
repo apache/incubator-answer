@@ -2,7 +2,6 @@ import {
   pullLoggedUser,
   isLoggedAndNormal,
   isAdminLogged,
-  isLogged,
   isNotLogged,
   isNotLoggedOrNormal,
   isLoggedAndInactive,
@@ -13,9 +12,6 @@ import {
 const RouteGuarder = {
   base: async () => {
     return isNotLoggedOrNormal();
-  },
-  logged: async () => {
-    return isLogged();
   },
   notLogged: async () => {
     return isNotLogged();

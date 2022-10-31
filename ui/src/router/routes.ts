@@ -126,9 +126,11 @@ const routes: RouteNode[] = [
         page: 'pages/Users/PasswordReset',
         guard: RouteGuarder.loggedAndNormal,
       },
+      // TODO: guard '/account-activation/*', '/users/confirm-new-email'
       {
         path: 'users/account-activation',
         page: 'pages/Users/ActiveEmail',
+        guard: RouteGuarder.loggedAndInactive,
       },
       {
         path: 'users/account-activation/success',
@@ -145,6 +147,7 @@ const routes: RouteNode[] = [
       {
         path: '/users/account-suspended',
         page: 'pages/Users/Suspended',
+        guard: RouteGuarder.loggedAndSuspended,
       },
       // for admin
       {
