@@ -256,6 +256,7 @@ const Index: React.FC = () => {
           <Form.Check
             inline
             type="radio"
+            id="gravatar"
             label={t('avatar.gravatar')}
             className="mb-0"
             checked={formData.avatar.type === 'gravatar'}
@@ -275,6 +276,7 @@ const Index: React.FC = () => {
             inline
             type="radio"
             label={t('avatar.custom')}
+            id="custom"
             className="mb-0"
             checked={formData.avatar.type === 'custom'}
             onChange={() =>
@@ -291,6 +293,7 @@ const Index: React.FC = () => {
           <Form.Check
             inline
             type="radio"
+            id="default"
             label={t('avatar.default')}
             className="mb-0"
             checked={formData.avatar.type === 'default'}
