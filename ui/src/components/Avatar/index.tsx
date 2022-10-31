@@ -7,6 +7,7 @@ import DefaultAvatar from '@/assets/images/default-avatar.svg';
 interface IProps {
   /** avatar url */
   avatar: string | { type: string; gravatar: string; custom: string };
+  /** size 48 96 128 256 */
   size: string;
   searchStr?: string;
   className?: string;
