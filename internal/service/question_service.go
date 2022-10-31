@@ -137,8 +137,8 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		ObjectID: question.ID,
 		Title:    "",
 	}
-	InfoJSON, _ := json.Marshal(question)
-	revisionDTO.Content = string(InfoJSON)
+	infoJSON, _ := json.Marshal(question)
+	revisionDTO.Content = string(infoJSON)
 	err = qs.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return
@@ -223,8 +223,8 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		Title:    "",
 		Log:      req.EditSummary,
 	}
-	InfoJSON, _ := json.Marshal(question)
-	revisionDTO.Content = string(InfoJSON)
+	infoJSON, _ := json.Marshal(question)
+	revisionDTO.Content = string(infoJSON)
 	err = qs.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return

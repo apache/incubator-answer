@@ -140,8 +140,8 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 		ObjectID: insertData.ID,
 		Title:    "",
 	}
-	InfoJSON, _ := json.Marshal(insertData)
-	revisionDTO.Content = string(InfoJSON)
+	infoJSON, _ := json.Marshal(insertData)
+	revisionDTO.Content = string(infoJSON)
 	err = as.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return insertData.ID, err
@@ -179,8 +179,8 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		Title:    "",
 		Log:      req.EditSummary,
 	}
-	InfoJSON, _ := json.Marshal(insertData)
-	revisionDTO.Content = string(InfoJSON)
+	infoJSON, _ := json.Marshal(insertData)
+	revisionDTO.Content = string(infoJSON)
 	err = as.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return insertData.ID, err
