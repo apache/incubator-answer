@@ -1394,6 +1394,10 @@ paths:
         in: query
         name: query
         type: string
+      - description: question id
+        in: query
+        name: question_id
+        type: string
       produces:
       - application/json
       responses:

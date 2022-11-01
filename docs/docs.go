@@ -62,6 +62,12 @@ const docTemplate = `{
                         "description": "answer id or question title",
                         "name": "query",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "question id",
+                        "name": "question_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
