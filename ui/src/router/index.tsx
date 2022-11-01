@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { RouteObject, createBrowserRouter, redirect } from 'react-router-dom';
 
 import Layout from '@/pages/Layout';
+import ErrorBoundary from '@/pages/50X';
 import baseRoutes, { RouteNode } from '@/router/routes';
 import { floppyNavigation } from '@/utils';
 
@@ -11,6 +12,7 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteObject[]) => {
   routeNodes.forEach((rn) => {
     if (rn.path === '/') {
       rn.element = <Layout />;
+      rn.errorElement = <ErrorBoundary />;
     } else {
       /**
        * cannot use a fully dynamic import statement
