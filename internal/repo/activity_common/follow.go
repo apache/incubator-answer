@@ -94,7 +94,10 @@ func (ar *FollowRepo) GetFollowUserIDs(ctx context.Context, objectID string) (us
 // GetFollowIDs get all follow id list
 func (ar *FollowRepo) GetFollowIDs(ctx context.Context, userID, objectKey string) (followIDs []string, err error) {
 	followIDs = make([]string, 0)
-	activityType, _ := ar.activityRepo.GetActivityTypeByObjKey(ctx, objectKey, "follow")
+	activityType, err := ar.activityRepo.GetActivityTypeByObjKey(ctx, objectKey, "follow")
+	if err != nil {
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
 	session := ar.data.DB.Select("object_id")
 	session.Table(entity.Activity{}.TableName())
 	session.Where("user_id = ? AND activity_type = ?", userID, activityType)
