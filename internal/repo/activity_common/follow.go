@@ -33,27 +33,27 @@ func NewFollowRepo(
 }
 
 // GetFollowAmount get object id's follows
-func (ar *FollowRepo) GetFollowAmount(ctx context.Context, objectId string) (follows int, err error) {
-	objectType, err := obj.GetObjectTypeStrByObjectID(objectId)
+func (ar *FollowRepo) GetFollowAmount(ctx context.Context, objectID string) (follows int, err error) {
+	objectType, err := obj.GetObjectTypeStrByObjectID(objectID)
 	if err != nil {
 		return 0, err
 	}
 	switch objectType {
 	case "question":
 		model := &entity.Question{}
-		_, err = ar.data.DB.Where("id = ?", objectId).Cols("`follow_count`").Get(model)
+		_, err = ar.data.DB.Where("id = ?", objectID).Cols("`follow_count`").Get(model)
 		if err == nil {
 			follows = int(model.FollowCount)
 		}
 	case "user":
 		model := &entity.User{}
-		_, err = ar.data.DB.Where("id = ?", objectId).Cols("`follow_count`").Get(model)
+		_, err = ar.data.DB.Where("id = ?", objectID).Cols("`follow_count`").Get(model)
 		if err == nil {
 			follows = int(model.FollowCount)
 		}
 	case "tag":
 		model := &entity.Tag{}
-		_, err = ar.data.DB.Where("id = ?", objectId).Cols("`follow_count`").Get(model)
+		_, err = ar.data.DB.Where("id = ?", objectID).Cols("`follow_count`").Get(model)
 		if err == nil {
 			follows = int(model.FollowCount)
 		}
@@ -110,14 +110,14 @@ func (ar *FollowRepo) GetFollowIDs(ctx context.Context, userID, objectKey string
 }
 
 // IsFollowed check user if follow object or not
-func (ar *FollowRepo) IsFollowed(userId, objectId string) (bool, error) {
-	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(context.TODO(), objectId, "follow")
+func (ar *FollowRepo) IsFollowed(userID, objectID string) (bool, error) {
+	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(context.TODO(), objectID, "follow")
 	if err != nil {
 		return false, err
 	}
 
 	at := &entity.Activity{}
-	has, err := ar.data.DB.Where("user_id = ? AND object_id = ? AND activity_type = ?", userId, objectId, activityType).Get(at)
+	has, err := ar.data.DB.Where("user_id = ? AND object_id = ? AND activity_type = ?", userID, objectID, activityType).Get(at)
 	if err != nil {
 		return false, err
 	}

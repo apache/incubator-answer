@@ -34,7 +34,8 @@ func NewTagRepo(
 // AddTagList add tag
 func (tr *tagRepo) AddTagList(ctx context.Context, tagList []*entity.Tag) (err error) {
 	for _, item := range tagList {
-		ID, err := tr.uniqueIDRepo.GenUniqueID(ctx, item.TableName())
+		var ID int64
+		ID, err = tr.uniqueIDRepo.GenUniqueID(ctx, item.TableName())
 		if err != nil {
 			return err
 		}
@@ -128,7 +129,8 @@ func (tr *tagRepo) UpdateTagQuestionCount(ctx context.Context, tagID string, que
 
 // UpdateTagSynonym update synonym tag
 func (tr *tagRepo) UpdateTagSynonym(ctx context.Context, tagSlugNameList []string, mainTagID int64,
-	mainTagSlugName string) (err error) {
+	mainTagSlugName string,
+) (err error) {
 	bean := &entity.Tag{MainTagID: mainTagID, MainTagSlugName: mainTagSlugName}
 	session := tr.data.DB.In("slug_name", tagSlugNameList).MustCols("main_tag_id", "main_tag_slug_name")
 	_, err = session.Update(bean)
@@ -140,7 +142,8 @@ func (tr *tagRepo) UpdateTagSynonym(ctx context.Context, tagSlugNameList []strin
 
 // GetTagByID get tag one
 func (tr *tagRepo) GetTagByID(ctx context.Context, tagID string) (
-	tag *entity.Tag, exist bool, err error) {
+	tag *entity.Tag, exist bool, err error,
+) {
 	tag = &entity.Tag{}
 	session := tr.data.DB.Where(builder.Eq{"id": tagID})
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
@@ -164,7 +167,8 @@ func (tr *tagRepo) GetTagList(ctx context.Context, tag *entity.Tag) (tagList []*
 
 // GetTagPage get tag page
 func (tr *tagRepo) GetTagPage(ctx context.Context, page, pageSize int, tag *entity.Tag, queryCond string) (
-	tagList []*entity.Tag, total int64, err error) {
+	tagList []*entity.Tag, total int64, err error,
+) {
 	tagList = make([]*entity.Tag, 0)
 	session := tr.data.DB.NewSession()
 

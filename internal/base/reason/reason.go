@@ -27,7 +27,7 @@ const (
 	UsernameInvalid              = "error.user.username_invalid"
 	UsernameDuplicate            = "error.user.username_duplicate"
 	EmailDuplicate               = "error.email.duplicate"
-	EmailVerifyUrlExpired        = "error.email.verify_url_expired"
+	EmailVerifyURLExpired        = "error.email.verify_url_expired"
 	EmailNeedToBeVerified        = "error.email.need_to_be_verified"
 	UserSuspended                = "error.user.suspended"
 	ObjectNotFound               = "error.object.not_found"

@@ -22,7 +22,7 @@ func NewVoteRepo(data *data.Data, activityRepo activity_common.ActivityRepo) act
 	}
 }
 
-func (vr *VoteRepo) GetVoteStatus(ctx context.Context, objectId, userId string) (status string) {
+func (vr *VoteRepo) GetVoteStatus(ctx context.Context, objectID, userID string) (status string) {
 	for _, action := range []string{"vote_up", "vote_down"} {
 		at := &entity.Activity{}
 		activityType, _, _, err := vr.activityRepo.GetActivityTypeByObjID(ctx, objectId, action)

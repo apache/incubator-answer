@@ -67,7 +67,7 @@ import (
 // Injectors from wire.go:
 
 // initApplication init application.
-func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database, cacheConf *data.CacheConf, i18nConf *translator.I18n, swaggerConf *router.SwaggerConfig, serviceConf *service_config.ServiceConfig, logConf log.Logger) (*pacman.Application, func(), error) {
+func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database, cacheConf *data.CacheConf, i18nConf *translator.I18n, swaggerConf *router.SwaggerConfig, serviceConf *service_config.ServiceConfig, _ log.Logger) (*pacman.Application, func(), error) {
 	staticRouter := router.NewStaticRouter(serviceConf)
 	i18nTranslator, err := translator.NewTranslator(i18nConf)
 	if err != nil {

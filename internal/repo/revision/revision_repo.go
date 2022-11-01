@@ -81,7 +81,8 @@ func (rr *revisionRepo) UpdateObjectRevisionId(ctx context.Context, revision *en
 
 // GetRevision get revision one
 func (rr *revisionRepo) GetRevision(ctx context.Context, id string) (
-	revision *entity.Revision, exist bool, err error) {
+	revision *entity.Revision, exist bool, err error,
+) {
 	revision = &entity.Revision{}
 	exist, err = rr.data.DB.ID(id).Get(revision)
 	if err != nil {
@@ -92,7 +93,8 @@ func (rr *revisionRepo) GetRevision(ctx context.Context, id string) (
 
 // GetLastRevisionByObjectID get object's last revision by object TagID
 func (rr *revisionRepo) GetLastRevisionByObjectID(ctx context.Context, objectID string) (
-	revision *entity.Revision, exist bool, err error) {
+	revision *entity.Revision, exist bool, err error,
+) {
 	revision = &entity.Revision{}
 	exist, err = rr.data.DB.Where("object_id = ?", objectID).OrderBy("create_time DESC").Get(revision)
 	if err != nil {
