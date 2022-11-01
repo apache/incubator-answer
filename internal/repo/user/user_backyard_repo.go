@@ -33,7 +33,8 @@ func NewUserBackyardRepo(data *data.Data) user_backyard.UserBackyardRepo {
 
 // UpdateUserStatus update user status
 func (ur *userBackyardRepo) UpdateUserStatus(ctx context.Context, userID string, userStatus, mailStatus int,
-	email string) (err error) {
+	email string,
+) (err error) {
 	cond := &entity.User{Status: userStatus, MailStatus: mailStatus, EMail: email}
 	switch userStatus {
 	case entity.UserStatusSuspended:
@@ -75,11 +76,12 @@ func (ur *userBackyardRepo) GetUserInfo(ctx context.Context, userID string) (use
 func (ur *userBackyardRepo) GetUserPage(ctx context.Context, page, pageSize int, user *entity.User, query string) (users []*entity.User, total int64, err error) {
 	users = make([]*entity.User, 0)
 	session := ur.data.DB.NewSession()
-	if user.Status == entity.UserStatusDeleted {
+	switch user.Status {
+	case entity.UserStatusDeleted:
 		session.Desc("deleted_at")
-	} else if user.Status == entity.UserStatusSuspended {
+	case entity.UserStatusSuspended:
 		session.Desc("suspended_at")
-	} else {
+	default:
 		session.Desc("created_at")
 	}
 
