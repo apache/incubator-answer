@@ -95,9 +95,9 @@ func (ur *userBackyardRepo) GetUserPage(ctx context.Context, page, pageSize int,
 				id       = ""
 			)
 
-			if strings.Contains(query, "id:") {
+			if strings.Contains(query, "user:") {
 				idSearch = true
-				id = strings.TrimSpace(strings.TrimPrefix(query, "id:"))
+				id = strings.TrimSpace(strings.TrimPrefix(query, "user:"))
 				for _, r := range id {
 					if !unicode.IsDigit(r) {
 						idSearch = false
