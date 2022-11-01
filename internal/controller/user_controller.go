@@ -491,7 +491,7 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 	// If the user is not logged in, the api cannot be used.
 	// If the user email is not verified, that also can use this api to modify the email.
 
-	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
 		resp := schema.UserVerifyEmailErrorResponse{
 			Key:   "captcha_code",
@@ -506,7 +506,7 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
 		return
 	}
-	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP())
+	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	err := uc.userService.UserChangeEmailSendCode(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -534,6 +534,6 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 	}
 
 	err := uc.userService.UserChangeEmailVerify(ctx, req.Content)
-	uc.actionService.ActionRecordDel(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP())
+	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, nil)
 }

@@ -516,9 +516,9 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 	var title, body string
 	verifyEmailURL := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.serviceConfig.WebHost, code)
 	if userInfo.MailStatus == entity.EmailStatusToBeVerified {
-		title, body, err = us.emailService.RegisterTemplate(ctx, verifyEmailUrl)
+		title, body, err = us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	} else {
-		title, body, err = us.emailService.ChangeEmailTemplate(ctx, verifyEmailUrl)
+		title, body, err = us.emailService.ChangeEmailTemplate(ctx, verifyEmailURL)
 	}
 	if err != nil {
 		return err
