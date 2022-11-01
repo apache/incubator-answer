@@ -28,7 +28,10 @@
     "confirm_email": "Confirm Email",
     "account_suspended": "Account Suspended",
     "admin": "Admin",
-    "change_email": "Modify Email"
+    "change_email": "Modify Email",
+    "install": "Answer Installation",
+    "upgrade": "Answer Upgrade",
+    "maintenance": "Webite Maintenance"
   },
   "notifications": {
     "title": "Notifications",
@@ -790,7 +793,20 @@
     },
     "ready_title": "Your Answer is Ready!",
     "ready_description": "If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.",
-    "good_luck": "Have fun, and good luck!"
+    "good_luck": "Have fun, and good luck!",
+    "warning": "Warning",
+    "warning_description": "The file <1>config.yaml</1> already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <2>installing now</2>.",
+    "installed": "Already installed",
+    "installed_description": "You appear to have already installed. To reinstall please clear your old database tables first."
+  },
+  "upgrade": {
+    "title": "Answer",
+    "update_btn": "Update data",
+    "update_title": "Data update required",
+    "update_description": "<1>Answer has been updated! Before you continue, we have to update your data to the newest version.</1><1>The update process may take a little while, so please be patient.</1>",
+    "done_title": "No update required",
+    "done_btn": "Done",
+    "done_desscription": "Your Answer data is already up-to-date."
   },
   "page_404": {
     "description": "Unfortunately, this page doesn't exist.",
@@ -799,6 +815,9 @@
   "page_50X": {
     "description": "The server encountered an error and could not complete your request.",
     "back_home": "Back to homepage"
+  },
+  "page_maintenance": {
+    "description": "We are under maintenance, we’ll be back soon."
   },
   "admin": {
     "admin_header": {
