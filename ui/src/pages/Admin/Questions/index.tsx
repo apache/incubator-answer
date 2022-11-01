@@ -32,9 +32,10 @@ const questionFilterItems: Type.AdminContentsFilterBy[] = [
 
 const PAGE_SIZE = 20;
 const Questions: FC = () => {
-  const [urlSearchParams] = useSearchParams();
+  const [urlSearchParams, setUrlSearchParams] = useSearchParams();
   const curFilter = urlSearchParams.get('status') || questionFilterItems[0];
   const curPage = Number(urlSearchParams.get('page')) || 1;
+  const curQuery = urlSearchParams.get('query') || '';
   const { t } = useTranslation('translation', { keyPrefix: 'admin.questions' });
 
   const {
@@ -45,6 +46,7 @@ const Questions: FC = () => {
     page_size: PAGE_SIZE,
     page: curPage,
     status: curFilter as Type.AdminContentsFilterBy,
+    query: curQuery,
   });
   const count = listData?.count || 0;
 
@@ -97,6 +99,11 @@ const Questions: FC = () => {
     });
   };
 
+  const handleFilter = (e) => {
+    urlSearchParams.set('query', e.target.value);
+    urlSearchParams.delete('page');
+    setUrlSearchParams(urlSearchParams);
+  };
   return (
     <>
       <h3 className="mb-4">{t('page_title')}</h3>
@@ -109,10 +116,11 @@ const Questions: FC = () => {
         />
 
         <Form.Control
+          value={curQuery}
           size="sm"
           type="input"
-          placeholder="Filter by title"
-          className="d-none"
+          placeholder={t('filter.placeholder')}
+          onChange={handleFilter}
           style={{ width: '12.25rem' }}
         />
       </div>
