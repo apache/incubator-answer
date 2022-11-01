@@ -42,6 +42,9 @@ func (as *AnswerCommon) SearchAnswered(ctx context.Context, userId, questionId s
 }
 
 func (as *AnswerCommon) CmsSearchList(ctx context.Context, search *entity.CmsAnswerSearch) ([]*entity.Answer, int64, error) {
+	if search.Status == 0 {
+		search.Status = 1
+	}
 	return as.answerRepo.CmsSearchList(ctx, search)
 }
 

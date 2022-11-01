@@ -2,7 +2,10 @@ package repo
 
 import (
 	"context"
+	"strings"
 	"time"
+	"unicode"
+	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
@@ -225,8 +228,16 @@ func (qr *questionRepo) SearchList(ctx context.Context, search *schema.QuestionS
 }
 
 func (qr *questionRepo) CmsSearchList(ctx context.Context, search *schema.CmsQuestionSearch) ([]*entity.Question, int64, error) {
-	var count int64
-	var err error
+	var (
+		count   int64
+		err     error
+		session = qr.data.DB.Table("question")
+	)
+
+	session.Where(builder.Eq{
+		"status": search.Status,
+	})
+
 	rows := make([]*entity.Question, 0)
 	if search.Page > 0 {
 		search.Page = search.Page - 1
@@ -236,11 +247,40 @@ func (qr *questionRepo) CmsSearchList(ctx context.Context, search *schema.CmsQue
 	if search.PageSize == 0 {
 		search.PageSize = constant.Default_PageSize
 	}
+
+	// search by question title like or question id
+	if len(search.Query) > 0 {
+		// check id search
+		var (
+			idSearch = false
+			id       = ""
+		)
+		if strings.Contains(search.Query, "id:") {
+			idSearch = true
+			id = strings.TrimSpace(strings.TrimPrefix(search.Query, "id:"))
+			for _, r := range id {
+				if !unicode.IsDigit(r) {
+					idSearch = false
+					break
+				}
+			}
+		}
+
+		if idSearch {
+			session.And(builder.Eq{
+				"id": id,
+			})
+		} else {
+			session.And(builder.Like{
+				"title", search.Query,
+			})
+		}
+	}
+
 	offset := search.Page * search.PageSize
-	session := qr.data.DB.Table("question")
-	session = session.And("status =?", search.Status)
-	session = session.OrderBy("updated_at desc")
-	session = session.Limit(search.PageSize, offset)
+
+	session.OrderBy("updated_at desc").
+		Limit(search.PageSize, offset)
 	count, err = session.FindAndCount(&rows)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
