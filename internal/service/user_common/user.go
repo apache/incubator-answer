@@ -84,7 +84,7 @@ func (us *UserCommon) UserBasicInfoFormat(ctx context.Context, userInfo *entity.
 	userBasicInfo.Avatar = Avatar
 	userBasicInfo.Website = userInfo.Website
 	userBasicInfo.Location = userInfo.Location
-	userBasicInfo.IpInfo = userInfo.IPInfo
+	userBasicInfo.IPInfo = userInfo.IPInfo
 	userBasicInfo.Status = schema.UserStatusShow[userInfo.Status]
 	if userBasicInfo.Status == schema.UserDeleted {
 		userBasicInfo.Avatar = ""

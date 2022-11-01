@@ -66,7 +66,7 @@ func (qc *QuestionController) CloseQuestion(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	req.UserId = middleware.GetLoginUserIDFromContext(ctx)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	err := qc.questionService.CloseQuestion(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -114,7 +114,6 @@ func (qc *QuestionController) SimilarQuestion(ctx *gin.Context) {
 		"list":  list,
 		"count": count,
 	})
-
 }
 
 // Index godoc

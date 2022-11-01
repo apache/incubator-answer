@@ -34,26 +34,28 @@ func NewUserRankRepo(data *data.Data, configRepo config.ConfigRepo) rank.UserRan
 // session is need provider, it means this action must be success or failure
 // if outer action is failed then this action is need rollback
 func (ur *UserRankRepo) TriggerUserRank(ctx context.Context,
-	session *xorm.Session, userId string, deltaRank int, activityType int) (isReachStandard bool, err error) {
+	session *xorm.Session, userID string, deltaRank int, activityType int,
+) (isReachStandard bool, err error) {
 	if deltaRank == 0 {
 		return false, nil
 	}
 
 	if deltaRank < 0 {
 		// if user rank is lower than 1 after this action, then user rank will be set to 1 only.
-		isReachMin, err := ur.checkUserMinRank(ctx, session, userId, activityType)
+		var isReachMin bool
+		isReachMin, err = ur.checkUserMinRank(ctx, session, userID, activityType)
 		if err != nil {
 			return false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		}
 		if isReachMin {
-			_, err = session.Where(builder.Eq{"id": userId}).Update(&entity.User{Rank: 1})
+			_, err = session.Where(builder.Eq{"id": userID}).Update(&entity.User{Rank: 1})
 			if err != nil {
 				return false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 			}
 			return false, nil
 		}
 	} else {
-		isReachStandard, err = ur.checkUserTodayRank(ctx, session, userId, activityType)
+		isReachStandard, err = ur.checkUserTodayRank(ctx, session, userID, activityType)
 		if err != nil {
 			return false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		}
@@ -61,7 +63,7 @@ func (ur *UserRankRepo) TriggerUserRank(ctx context.Context,
 			return isReachStandard, nil
 		}
 	}
-	_, err = session.Where(builder.Eq{"id": userId}).Incr("`rank`", deltaRank).Update(&entity.User{})
+	_, err = session.Where(builder.Eq{"id": userID}).Incr("`rank`", deltaRank).Update(&entity.User{})
 	if err != nil {
 		return false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -69,7 +71,8 @@ func (ur *UserRankRepo) TriggerUserRank(ctx context.Context,
 }
 
 func (ur *UserRankRepo) checkUserMinRank(ctx context.Context, session *xorm.Session, userID string, deltaRank int) (
-	isReachStandard bool, err error) {
+	isReachStandard bool, err error,
+) {
 	bean := &entity.User{ID: userID}
 	_, err = session.Select("rank").Get(bean)
 	if err != nil {
@@ -83,11 +86,13 @@ func (ur *UserRankRepo) checkUserMinRank(ctx context.Context, session *xorm.Sess
 }
 
 func (ur *UserRankRepo) checkUserTodayRank(ctx context.Context,
-	session *xorm.Session, userID string, activityType int) (isReachStandard bool, err error) {
+	session *xorm.Session, userID string, activityType int,
+) (isReachStandard bool, err error) {
 	// exclude daily rank
-	exclude, err := ur.configRepo.GetArrayString("daily_rank_limit.exclude")
+	exclude, _ := ur.configRepo.GetArrayString("daily_rank_limit.exclude")
 	for _, item := range exclude {
-		excludeActivityType, err := ur.configRepo.GetInt(item)
+		var excludeActivityType int
+		excludeActivityType, err = ur.configRepo.GetInt(item)
 		if err != nil {
 			return false, err
 		}
@@ -123,14 +128,15 @@ func (ur *UserRankRepo) checkUserTodayRank(ctx context.Context,
 	return true, nil
 }
 
-func (ur *UserRankRepo) UserRankPage(ctx context.Context, userId string, page, pageSize int) (
-	rankPage []*entity.Activity, total int64, err error) {
+func (ur *UserRankRepo) UserRankPage(ctx context.Context, userID string, page, pageSize int) (
+	rankPage []*entity.Activity, total int64, err error,
+) {
 	rankPage = make([]*entity.Activity, 0)
 
 	session := ur.data.DB.Where(builder.Eq{"has_rank": 1}.And(builder.Eq{"cancelled": 0}))
 	session.Desc("created_at")
 
-	cond := &entity.Activity{UserID: userId}
+	cond := &entity.Activity{UserID: userID}
 	total, err = pager.Help(page, pageSize, &rankPage, cond, session)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
