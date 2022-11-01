@@ -96,10 +96,8 @@ func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
 		r.Status = statusShow
 	}
 	avatarInfo := &AvatarInfo{}
-	err := json.Unmarshal([]byte(userInfo.Avatar), avatarInfo)
-	if err != nil {
-		log.Error("AvatarInfo json.Unmarshal Error", err)
-	}
+	_ = json.Unmarshal([]byte(userInfo.Avatar), avatarInfo)
+	// if json.Unmarshal Error avatarInfo.Type is Empty
 	r.Avatar = avatarInfo
 }
 
