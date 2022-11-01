@@ -5,14 +5,12 @@ import (
 	"encoding/json"
 
 	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/revision"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/pacman/errors"
 )
 
 // RevisionService user service
@@ -34,31 +32,6 @@ func NewRevisionService(
 		questionCommon: questionCommon,
 		answerService:  answerService,
 	}
-}
-
-// GetRevision get revision one
-func (rs *RevisionService) GetRevision(ctx context.Context, id string) (resp schema.GetRevisionResp, err error) {
-	var (
-		rev    *entity.Revision
-		exists bool
-	)
-
-	resp = schema.GetRevisionResp{}
-
-	rev, exists, err = rs.revisionRepo.GetRevision(ctx, id)
-	if err != nil {
-		return
-	}
-
-	if !exists {
-		err = errors.BadRequest(reason.ObjectNotFound)
-		return
-	}
-
-	_ = copier.Copy(&resp, rev)
-	rs.parseItem(ctx, &resp)
-
-	return
 }
 
 // GetRevisionList get revision list all

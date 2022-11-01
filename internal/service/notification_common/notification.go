@@ -22,7 +22,7 @@ import (
 
 type NotificationRepo interface {
 	AddNotification(ctx context.Context, notification *entity.Notification) (err error)
-	SearchList(ctx context.Context, search *schema.NotificationSearch) ([]*entity.Notification, int64, error)
+	GetNotificationPage(ctx context.Context, search *schema.NotificationSearch) ([]*entity.Notification, int64, error)
 	ClearUnRead(ctx context.Context, userID string, notificationType int) (err error)
 	ClearIDUnRead(ctx context.Context, userID string, id string) (err error)
 	GetByUserIdObjectIdTypeId(ctx context.Context, userID, objectID string, notificationType int) (*entity.Notification, bool, error)

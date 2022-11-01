@@ -177,8 +177,8 @@ func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRet
 	return code, nil
 }
 
-// UseRePassWord
-func (us *UserService) UseRePassWord(ctx context.Context, req *schema.UserRePassWordRequest) (resp *schema.GetUserResp, err error) {
+// UseRePassword
+func (us *UserService) UseRePassword(ctx context.Context, req *schema.UserRePassWordRequest) (resp *schema.GetUserResp, err error) {
 	data := &schema.EmailCodeContent{}
 	err = data.FromJSONString(req.Content)
 	if err != nil {
@@ -196,8 +196,7 @@ func (us *UserService) UseRePassWord(ctx context.Context, req *schema.UserRePass
 	if err != nil {
 		return nil, err
 	}
-	userInfo.Pass = enpass
-	err = us.userRepo.UpdatePass(ctx, userInfo)
+	err = us.userRepo.UpdatePass(ctx, userInfo.ID, enpass)
 	if err != nil {
 		return nil, err
 	}
@@ -221,8 +220,8 @@ func (us *UserService) UserModifyPassWordVerification(ctx context.Context, reque
 	return true, nil
 }
 
-// UserModifyPassWord
-func (us *UserService) UserModifyPassWord(ctx context.Context, request *schema.UserModifyPassWordRequest) error {
+// UserModifyPassword user modify password
+func (us *UserService) UserModifyPassword(ctx context.Context, request *schema.UserModifyPassWordRequest) error {
 	enpass, err := us.encryptPassword(ctx, request.Pass)
 	if err != nil {
 		return err
@@ -238,8 +237,7 @@ func (us *UserService) UserModifyPassWord(ctx context.Context, request *schema.U
 	if !isPass {
 		return fmt.Errorf("the old password verification failed")
 	}
-	userInfo.Pass = enpass
-	err = us.userRepo.UpdatePass(ctx, userInfo)
+	err = us.userRepo.UpdatePass(ctx, userInfo.ID, enpass)
 	if err != nil {
 		return err
 	}

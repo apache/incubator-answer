@@ -1,4 +1,4 @@
-package repo
+package search_common
 
 import (
 	"context"
@@ -67,6 +67,9 @@ func NewSearchRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo, userCommon
 
 // SearchContents search question and answer data
 func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID, userID string, votes int, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
+	if words = filterWords(words); len(words) == 0 {
+		return
+	}
 	var (
 		b     *builder.Builder
 		ub    *builder.Builder
@@ -181,6 +184,9 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 
 // SearchQuestions search question data
 func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limitNoAccepted bool, answers, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
+	if words = filterWords(words); len(words) == 0 {
+		return
+	}
 	var (
 		qfs  = qFields
 		args = []interface{}{}
@@ -259,6 +265,9 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 
 // SearchAnswers search answer data
 func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAccepted bool, questionID string, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
+	if words = filterWords(words); len(words) == 0 {
+		return
+	}
 	var (
 		afs  = aFields
 		args = []interface{}{}
@@ -473,5 +482,14 @@ func addRelevanceField(searchFields, words, fields []string) (res []string, args
 	}
 
 	res = append(res, "("+strings.Join(relevanceRes, " + ")+") as relevance")
+	return
+}
+
+func filterWords(words []string) (res []string) {
+	for _, word := range words {
+		if strings.TrimSpace(word) != "" {
+			res = append(res, word)
+		}
+	}
 	return
 }

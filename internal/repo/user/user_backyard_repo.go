@@ -9,11 +9,11 @@ import (
 	"unicode"
 	"xorm.io/builder"
 
-	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/user_backyard"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -21,13 +21,15 @@ import (
 
 // userBackyardRepo user repository
 type userBackyardRepo struct {
-	data *data.Data
+	data     *data.Data
+	authRepo auth.AuthRepo
 }
 
 // NewUserBackyardRepo new repository
-func NewUserBackyardRepo(data *data.Data) user_backyard.UserBackyardRepo {
+func NewUserBackyardRepo(data *data.Data, authRepo auth.AuthRepo) user_backyard.UserBackyardRepo {
 	return &userBackyardRepo{
-		data: data,
+		data:     data,
+		authRepo: authRepo,
 	}
 }
 
@@ -54,8 +56,7 @@ func (ur *userBackyardRepo) UpdateUserStatus(ctx context.Context, userID string,
 	}
 	t, _ := json.Marshal(userCacheInfo)
 	log.Infof("user change status: %s", string(t))
-	err = ur.data.Cache.SetString(ctx, constant.UserStatusChangedCacheKey+userID, string(t),
-		constant.UserStatusChangedCacheTime)
+	err = ur.authRepo.SetUserStatus(ctx, userID, userCacheInfo)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -94,9 +95,9 @@ func (ur *userBackyardRepo) GetUserPage(ctx context.Context, page, pageSize int,
 				id       = ""
 			)
 
-			if strings.Contains(query, "id:") {
+			if strings.Contains(query, "user:") {
 				idSearch = true
-				id = strings.TrimSpace(strings.TrimPrefix(query, "id:"))
+				id = strings.TrimSpace(strings.TrimPrefix(query, "user:"))
 				for _, r := range id {
 					if !unicode.IsDigit(r) {
 						idSearch = false

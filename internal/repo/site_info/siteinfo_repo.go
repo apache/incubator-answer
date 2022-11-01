@@ -1,4 +1,4 @@
-package repo
+package site_info
 
 import (
 	"context"

@@ -22,7 +22,7 @@
 ### 使用 docker 快速搭建
 
 ```bash
-docker run -d -p 9080:80 -v $PWD/answer-data/data:/data --name answer answerdev/answer:latest
+docker run -d -p 9080:80 -v $PWD/answer-data:/data --name answer answerdev/answer:latest
 ```
 
 其他安装配置细节请参考 [INSTALL.md](./INSTALL.md)

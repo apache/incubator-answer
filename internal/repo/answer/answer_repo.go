@@ -1,4 +1,4 @@
-package repo
+package answer
 
 import (
 	"context"
@@ -234,9 +234,9 @@ func (ar *answerRepo) CmsSearchList(ctx context.Context, search *entity.CmsAnswe
 			id       = ""
 		)
 
-		if strings.Contains(search.Query, "id:") {
+		if strings.Contains(search.Query, "answer:") {
 			idSearch = true
-			id = strings.TrimSpace(strings.TrimPrefix(search.Query, "id:"))
+			id = strings.TrimSpace(strings.TrimPrefix(search.Query, "answer:"))
 			for _, r := range id {
 				if !unicode.IsDigit(r) {
 					idSearch = false
