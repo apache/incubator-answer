@@ -35,7 +35,8 @@ func NewUserController(
 	userService *service.UserService,
 	actionService *action.CaptchaService,
 	emailService *export.EmailService,
-	uploaderService *uploader.UploaderService) *UserController {
+	uploaderService *uploader.UploaderService,
+) *UserController {
 	return &UserController{
 		authService:     authService,
 		userService:     userService,
@@ -45,18 +46,25 @@ func NewUserController(
 	}
 }
 
-// GetUserInfoByUserID godoc
+// GetUserInfoByUserID get user info, if user no login response http code is 200, but user info is null
 // @Summary GetUserInfoByUserID
-// @Description GetUserInfoByUserID
+// @Description get user info, if user no login response http code is 200, but user info is null
 // @Tags User
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Success 200 {object} handler.RespBody{data=schema.GetUserToSetShowResp}
 // @Router /answer/api/v1/user/info [get]
 func (uc *UserController) GetUserInfoByUserID(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	token := middleware.ExtractToken(ctx)
+
+	// if user is no login return null in data
+	if len(token) == 0 || len(userID) == 0 {
+		handler.HandleResponse(ctx, nil, nil)
+		return
+	}
+
 	resp, err := uc.userService.GetUserInfoByUserID(ctx, token, userID)
 	handler.HandleResponse(ctx, err, resp)
 }
@@ -184,8 +192,8 @@ func (uc *UserController) UseRePassWord(ctx *gin.Context) {
 
 	req.Content = uc.emailService.VerifyUrlExpired(ctx, req.Code)
 	if len(req.Content) == 0 {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyUrlExpired),
-			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeUrlExpired})
+		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyURLExpired),
+			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeURLExpired})
 		return
 	}
 
@@ -245,8 +253,8 @@ func (uc *UserController) UserVerifyEmail(ctx *gin.Context) {
 
 	req.Content = uc.emailService.VerifyUrlExpired(ctx, req.Code)
 	if len(req.Content) == 0 {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyUrlExpired),
-			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeUrlExpired})
+		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyURLExpired),
+			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeURLExpired})
 		return
 	}
 
@@ -314,7 +322,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	req.UserId = middleware.GetLoginUserIDFromContext(ctx)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	oldPassVerification, err := uc.userService.UserModifyPassWordVerification(ctx, req)
 	if err != nil {
@@ -323,7 +331,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	}
 	if !oldPassVerification {
 		resp := schema.UserVerifyEmailErrorResponse{
-			Key:   "captcha_code",
+			Key:   "old_pass",
 			Value: "error.object.old_password_verification_failed",
 		}
 		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
@@ -333,7 +341,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	if req.OldPass == req.Pass {
 
 		resp := schema.UserVerifyEmailErrorResponse{
-			Key:   "captcha_code",
+			Key:   "pass",
 			Value: "error.object.new_password_same_as_previous_setting",
 		}
 		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
@@ -360,7 +368,7 @@ func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	req.UserId = middleware.GetLoginUserIDFromContext(ctx)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	err := uc.userService.UpdateInfo(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -376,7 +384,9 @@ func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 // @Router /answer/api/v1/user/avatar/upload [post]
 func (uc *UserController) UploadUserAvatar(ctx *gin.Context) {
 	// max size
-	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 10*1024*1024)
+	var filesMax int64 = 5 << 20
+	var valuesMax int64 = 5
+	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, filesMax+valuesMax)
 	_, header, err := ctx.Request.FormFile("file")
 	if err != nil {
 		log.Error(err.Error())
@@ -436,7 +446,7 @@ func (uc *UserController) ActionRecord(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	req.Ip = ctx.ClientIP()
+	req.IP = ctx.ClientIP()
 
 	resp, err := uc.actionService.ActionRecord(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
@@ -458,8 +468,8 @@ func (uc *UserController) UserNoticeSet(ctx *gin.Context) {
 		return
 	}
 
-	req.UserId = middleware.GetLoginUserIDFromContext(ctx)
-	resp, err := uc.userService.UserNoticeSet(ctx, req.UserId, req.NoticeSwitch)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	resp, err := uc.userService.UserNoticeSet(ctx, req.UserID, req.NoticeSwitch)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -478,7 +488,25 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	// If the user is not logged in, the api cannot be used.
+	// If the user email is not verified, that also can use this api to modify the email.
 
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		resp := schema.UserVerifyEmailErrorResponse{
+			Key:   "captcha_code",
+			Value: "error.object.verification_failed",
+		}
+		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
+		return
+	}
+
+	if len(req.UserID) == 0 {
+		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+		return
+	}
+	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	err := uc.userService.UserChangeEmailSendCode(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -500,11 +528,12 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 	}
 	req.Content = uc.emailService.VerifyUrlExpired(ctx, req.Code)
 	if len(req.Content) == 0 {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyUrlExpired),
-			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeUrlExpired})
+		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyURLExpired),
+			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeURLExpired})
 		return
 	}
 
 	err := uc.userService.UserChangeEmailVerify(ctx, req.Content)
+	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, nil)
 }

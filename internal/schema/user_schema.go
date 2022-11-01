@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 // UserVerifyEmailReq user verify email request
@@ -55,7 +56,7 @@ type GetUserResp struct {
 	// bio markdown
 	Bio string `json:"bio"`
 	// bio html
-	BioHtml string `json:"bio_html"`
+	BioHTML string `json:"bio_html"`
 	// website
 	Website string `json:"website"`
 	// location
@@ -72,11 +73,53 @@ type GetUserResp struct {
 
 func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 	_ = copier.Copy(r, userInfo)
+	r.Avatar = FormatAvatarInfo(userInfo.Avatar)
 	r.CreatedAt = userInfo.CreatedAt.Unix()
 	r.LastLoginDate = userInfo.LastLoginDate.Unix()
 	statusShow, ok := UserStatusShow[userInfo.Status]
 	if ok {
 		r.Status = statusShow
+	}
+}
+
+type GetUserToSetShowResp struct {
+	*GetUserResp
+	Avatar *AvatarInfo `json:"avatar"`
+}
+
+func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
+	_ = copier.Copy(r, userInfo)
+	r.CreatedAt = userInfo.CreatedAt.Unix()
+	r.LastLoginDate = userInfo.LastLoginDate.Unix()
+	statusShow, ok := UserStatusShow[userInfo.Status]
+	if ok {
+		r.Status = statusShow
+	}
+	avatarInfo := &AvatarInfo{}
+	err := json.Unmarshal([]byte(userInfo.Avatar), avatarInfo)
+	if err != nil {
+		log.Error("AvatarInfo json.Unmarshal Error", err)
+	}
+	r.Avatar = avatarInfo
+}
+
+func FormatAvatarInfo(avatarJson string) string {
+	if avatarJson == "" {
+		return ""
+	}
+	AvatarInfo := &AvatarInfo{}
+	err := json.Unmarshal([]byte(avatarJson), AvatarInfo)
+	if err != nil {
+		log.Error("AvatarInfo json.Unmarshal Error", err)
+		return ""
+	}
+	switch AvatarInfo.Type {
+	case "gravatar":
+		return AvatarInfo.Gravatar
+	case "custom":
+		return AvatarInfo.Custom
+	default:
+		return ""
 	}
 }
 
@@ -114,7 +157,7 @@ type GetOtherUserInfoByUsernameResp struct {
 	// bio markdown
 	Bio string `json:"bio"`
 	// bio html
-	BioHtml string `json:"bio_html"`
+	BioHTML string `json:"bio_html"`
 	// website
 	Website string `json:"website"`
 	// location
@@ -129,6 +172,9 @@ type GetOtherUserInfoByUsernameResp struct {
 
 func (r *GetOtherUserInfoByUsernameResp) GetFromUserEntity(userInfo *entity.User) {
 	_ = copier.Copy(r, userInfo)
+	Avatar := FormatAvatarInfo(userInfo.Avatar)
+	r.Avatar = Avatar
+
 	r.CreatedAt = userInfo.CreatedAt.Unix()
 	r.LastLoginDate = userInfo.LastLoginDate.Unix()
 	statusShow, ok := UserStatusShow[userInfo.Status]
@@ -146,12 +192,11 @@ func (r *GetOtherUserInfoByUsernameResp) GetFromUserEntity(userInfo *entity.User
 			r.StatusMsg = statusMsgShow
 		}
 	}
-
 }
 
 const (
-	NoticeStatusOn  = 1
-	NoticeStatusOff = 2
+	MailStatePass   = 1
+	MailStateVerifi = 2
 
 	ActionRecordTypeLogin    = "login"
 	ActionRecordTypeEmail    = "e_mail"
@@ -163,6 +208,7 @@ var UserStatusShow = map[int]string{
 	9:  "forbidden",
 	10: "deleted",
 }
+
 var UserStatusShowMsg = map[int]string{
 	1:  "",
 	9:  "<strong>This user was suspended forever.</strong> This user doesn’t meet a community guideline.",
@@ -203,7 +249,7 @@ func (u *UserRegisterReq) Check() (errField *validator.ErrorField, err error) {
 
 // UserModifyPassWordRequest
 type UserModifyPassWordRequest struct {
-	UserId  string `json:"-" `        // user_id
+	UserID  string `json:"-" `        // user_id
 	OldPass string `json:"old_pass" ` // old password
 	Pass    string `json:"pass" `     // password
 }
@@ -226,17 +272,23 @@ type UpdateInfoRequest struct {
 	// username
 	Username string `validate:"omitempty,gt=0,lte=30" json:"username"`
 	// avatar
-	Avatar string `validate:"omitempty,gt=0,lte=500" json:"avatar"`
+	Avatar AvatarInfo `json:"avatar"`
 	// bio
 	Bio string `validate:"omitempty,gt=0,lte=4096" json:"bio"`
 	// bio
-	BioHtml string `validate:"omitempty,gt=0,lte=4096" json:"bio_html"`
+	BioHTML string `validate:"omitempty,gt=0,lte=4096" json:"bio_html"`
 	// website
 	Website string `validate:"omitempty,gt=0,lte=500" json:"website"`
 	// location
 	Location string `validate:"omitempty,gt=0,lte=100" json:"location"`
 	// user id
-	UserId string `json:"-" `
+	UserID string `json:"-" `
+}
+
+type AvatarInfo struct {
+	Type     string `validate:"omitempty,gt=0,lte=100"  json:"type"`
+	Gravatar string `validate:"omitempty,gt=0,lte=200"  json:"gravatar"`
+	Custom   string `validate:"omitempty,gt=0,lte=200"  json:"custom"`
 }
 
 func (u *UpdateInfoRequest) Check() (errField *validator.ErrorField, err error) {
@@ -279,7 +331,7 @@ func (u *UserRePassWordRequest) Check() (errField *validator.ErrorField, err err
 }
 
 type UserNoticeSetRequest struct {
-	UserId       string `json:"-" ` // user_id
+	UserID       string `json:"-" ` // user_id
 	NoticeSwitch bool   `json:"notice_switch" `
 }
 
@@ -290,7 +342,7 @@ type UserNoticeSetResp struct {
 type ActionRecordReq struct {
 	// action
 	Action string `validate:"required,oneof=login e_mail find_pass" form:"action"`
-	Ip     string `json:"-"`
+	IP     string `json:"-"`
 }
 
 type ActionRecordResp struct {
@@ -307,7 +359,7 @@ type UserBasicInfo struct {
 	Avatar      string `json:"avatar" `      // avatar
 	Website     string `json:"website" `     // website
 	Location    string `json:"location" `    // location
-	IpInfo      string `json:"ip_info"`      // ip info
+	IPInfo      string `json:"ip_info"`      // ip info
 	Status      string `json:"status"`       // status
 }
 
@@ -321,6 +373,7 @@ type GetOtherUserInfoResp struct {
 }
 
 type UserChangeEmailSendCodeReq struct {
+	UserVerifyEmailSendReq
 	Email  string `validate:"required,email,gt=0,lte=500" json:"e_mail"`
 	UserID string `json:"-"`
 }

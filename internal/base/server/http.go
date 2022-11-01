@@ -13,7 +13,9 @@ func NewHTTPServer(debug bool,
 	answerRouter *router.AnswerAPIRouter,
 	swaggerRouter *router.SwaggerRouter,
 	viewRouter *router.UIRouter,
-	authUserMiddleware *middleware.AuthUserMiddleware) *gin.Engine {
+	authUserMiddleware *middleware.AuthUserMiddleware,
+	avatarMiddleware *middleware.AvatarMiddleware,
+) *gin.Engine {
 
 	if debug {
 		gin.SetMode(gin.DebugMode)
@@ -28,7 +30,9 @@ func NewHTTPServer(debug bool,
 
 	rootGroup := r.Group("")
 	swaggerRouter.Register(rootGroup)
-	staticRouter.RegisterStaticRouter(rootGroup)
+	static := r.Group("")
+	static.Use(avatarMiddleware.AvatarThumb())
+	staticRouter.RegisterStaticRouter(static)
 
 	// register api that no need to login
 	unAuthV1 := r.Group("/answer/api/v1")

@@ -89,9 +89,10 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 
 // CloseMsgList list close question condition
 func (qs *QuestionService) CloseMsgList(ctx context.Context, lang i18n.Language) (
-	resp []*schema.GetCloseTypeResp, err error) {
+	resp []*schema.GetCloseTypeResp, err error,
+) {
 	resp = make([]*schema.GetCloseTypeResp, 0)
-	err = json.Unmarshal([]byte(constant.QuestionCloseJson), &resp)
+	err = json.Unmarshal([]byte(constant.QuestionCloseJSON), &resp)
 	if err != nil {
 		return nil, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
@@ -110,7 +111,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	question.UserID = req.UserID
 	question.Title = req.Title
 	question.OriginalText = req.Content
-	question.ParsedText = req.Html
+	question.ParsedText = req.HTML
 	question.AcceptedAnswerID = "0"
 	question.LastAnswerID = "0"
 	question.PostUpdateTime = now
@@ -123,7 +124,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		return
 	}
 	objectTagData := schema.TagChange{}
-	objectTagData.ObjectId = question.ID
+	objectTagData.ObjectID = question.ID
 	objectTagData.Tags = req.Tags
 	objectTagData.UserID = req.UserID
 	err = qs.ChangeTag(ctx, &objectTagData)
@@ -136,14 +137,14 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		ObjectID: question.ID,
 		Title:    "",
 	}
-	InfoJson, _ := json.Marshal(question)
-	revisionDTO.Content = string(InfoJson)
+	infoJSON, _ := json.Marshal(question)
+	revisionDTO.Content = string(infoJSON)
 	err = qs.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return
 	}
 
-	//user add question count
+	// user add question count
 	err = qs.userCommon.UpdateQuestionCount(ctx, question.UserID, 1)
 	if err != nil {
 		log.Error("user IncreaseQuestionCount error", err.Error())
@@ -168,7 +169,7 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		return err
 	}
 
-	//user add question count
+	// user add question count
 	err = qs.userCommon.UpdateQuestionCount(ctx, questionInfo.UserID, -1)
 	if err != nil {
 		log.Error("user IncreaseQuestionCount error", err.Error())
@@ -190,7 +191,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	question.UserID = req.UserID
 	question.Title = req.Title
 	question.OriginalText = req.Content
-	question.ParsedText = req.Html
+	question.ParsedText = req.HTML
 	question.ID = req.ID
 	question.UpdatedAt = now
 	dbinfo, has, err := qs.questionRepo.GetQuestion(ctx, question.ID)
@@ -208,7 +209,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return
 	}
 	objectTagData := schema.TagChange{}
-	objectTagData.ObjectId = question.ID
+	objectTagData.ObjectID = question.ID
 	objectTagData.Tags = req.Tags
 	objectTagData.UserID = req.UserID
 	err = qs.ChangeTag(ctx, &objectTagData)
@@ -222,8 +223,8 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		Title:    "",
 		Log:      req.EditSummary,
 	}
-	InfoJson, _ := json.Marshal(question)
-	revisionDTO.Content = string(InfoJson)
+	infoJSON, _ := json.Marshal(question)
+	revisionDTO.Content = string(infoJSON)
 	err = qs.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return
@@ -246,7 +247,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID stri
 		}
 	}
 
-	question.MemberActions = permission.GetQuestionPermission(loginUserID, question.UserId)
+	question.MemberActions = permission.GetQuestionPermission(loginUserID, question.UserID)
 	return question, nil
 }
 
@@ -300,9 +301,9 @@ func (qs *QuestionService) SearchUserAnswerList(ctx context.Context, userName, o
 	answersearch.PageSize = pageSize
 	answersearch.Page = page
 	if order == "newest" {
-		answersearch.Order = entity.Answer_Search_OrderBy_Time
+		answersearch.Order = entity.AnswerSearchOrderByTime
 	} else {
-		answersearch.Order = entity.Answer_Search_OrderBy_Default
+		answersearch.Order = entity.AnswerSearchOrderByDefault
 	}
 	questionIDs := make([]string, 0)
 	answerList, count, err := qs.questioncommon.AnswerCommon.Search(ctx, answersearch)
@@ -319,16 +320,16 @@ func (qs *QuestionService) SearchUserAnswerList(ctx context.Context, userName, o
 		return userAnswerlist, count, err
 	}
 	for _, item := range answerlist {
-		_, ok := questionMaps[item.QuestionId]
+		_, ok := questionMaps[item.QuestionID]
 		if ok {
-			item.QuestionInfo = questionMaps[item.QuestionId]
+			item.QuestionInfo = questionMaps[item.QuestionID]
 		}
 	}
 	for _, item := range answerlist {
 		info := &schema.UserAnswerInfo{}
 		_ = copier.Copy(info, item)
 		info.AnswerID = item.ID
-		info.QuestionID = item.QuestionId
+		info.QuestionID = item.QuestionID
 		userAnswerlist = append(userAnswerlist, info)
 	}
 	return userAnswerlist, count, nil
@@ -366,7 +367,7 @@ func (qs *QuestionService) SearchUserCollectionList(ctx context.Context, page, p
 			questionMaps[id].LastAnsweredUserInfo = nil
 			questionMaps[id].UpdateUserInfo = nil
 			questionMaps[id].Content = ""
-			questionMaps[id].Html = ""
+			questionMaps[id].HTML = ""
 			list = append(list, questionMaps[id])
 		}
 	}
@@ -399,7 +400,7 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 	answersearch := &entity.AnswerSearch{}
 	answersearch.UserID = userinfo.ID
 	answersearch.PageSize = 5
-	answersearch.Order = entity.Answer_Search_OrderBy_Vote
+	answersearch.Order = entity.AnswerSearchOrderByVote
 	questionIDs := make([]string, 0)
 	answerList, _, err := qs.questioncommon.AnswerCommon.Search(ctx, answersearch)
 	if err != nil {
@@ -415,9 +416,9 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 		return userQuestionlist, userAnswerlist, err
 	}
 	for _, item := range answerlist {
-		_, ok := questionMaps[item.QuestionId]
+		_, ok := questionMaps[item.QuestionID]
 		if ok {
-			item.QuestionInfo = questionMaps[item.QuestionId]
+			item.QuestionInfo = questionMaps[item.QuestionID]
 		}
 	}
 
@@ -431,7 +432,7 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 		info := &schema.UserAnswerInfo{}
 		_ = copier.Copy(info, item)
 		info.AnswerID = item.ID
-		info.QuestionID = item.QuestionId
+		info.QuestionID = item.QuestionID
 		userAnswerlist = append(userAnswerlist, info)
 	}
 
@@ -481,20 +482,23 @@ func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID strin
 	search.Order = "frequent"
 	search.Page = 0
 	search.PageSize = 6
-	search.Tags = tagNames
+	if len(tagNames) > 0 {
+		search.Tag = tagNames[0]
+	}
 	return qs.SearchList(ctx, search, loginUserID)
 }
 
 // SearchList
 func (qs *QuestionService) SearchList(ctx context.Context, req *schema.QuestionSearch, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
-	if len(req.Tags) > 0 {
-		taginfo, err := qs.tagCommon.GetTagListByNames(ctx, req.Tags)
+	if len(req.Tag) > 0 {
+		taginfo, has, err := qs.tagCommon.GetTagListByName(ctx, req.Tag)
 		if err != nil {
 			log.Error("tagCommon.GetTagListByNames error", err)
 		}
-		for _, tag := range taginfo {
-			req.TagIDs = append(req.TagIDs, tag.ID)
+		if has {
+			req.TagIDs = append(req.TagIDs, taginfo.ID)
 		}
+
 	}
 	list := make([]*schema.QuestionInfo, 0)
 	if req.UserName != "" {
@@ -626,13 +630,13 @@ func (qs *QuestionService) CmsSearchAnswerList(ctx context.Context, search *enti
 		return answerlist, count, err
 	}
 	for _, item := range answerlist {
-		_, ok := questionMaps[item.QuestionId]
+		_, ok := questionMaps[item.QuestionID]
 		if ok {
-			item.QuestionInfo.Title = questionMaps[item.QuestionId].Title
+			item.QuestionInfo.Title = questionMaps[item.QuestionID].Title
 		}
-		_, ok = userInfoMap[item.UserId]
+		_, ok = userInfoMap[item.UserID]
 		if ok {
-			item.UserInfo = userInfoMap[item.UserId]
+			item.UserInfo = userInfoMap[item.UserID]
 		}
 	}
 	return answerlist, count, nil

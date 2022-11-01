@@ -17,7 +17,7 @@ import (
 type UserBackyardRepo interface {
 	UpdateUserStatus(ctx context.Context, userID string, userStatus, mailStatus int, email string) (err error)
 	GetUserInfo(ctx context.Context, userID string) (user *entity.User, exist bool, err error)
-	GetUserPage(ctx context.Context, page, pageSize int, user *entity.User) (users []*entity.User, total int64, err error)
+	GetUserPage(ctx context.Context, page, pageSize int, user *entity.User, query string) (users []*entity.User, total int64, err error)
 }
 
 // UserBackyardService user service
@@ -91,13 +91,14 @@ func (us *UserBackyardService) GetUserPage(ctx context.Context, req *schema.GetU
 		user.Status = entity.UserStatusDeleted
 	}
 
-	users, total, err := us.userRepo.GetUserPage(ctx, req.Page, req.PageSize, user)
+	users, total, err := us.userRepo.GetUserPage(ctx, req.Page, req.PageSize, user, req.Query)
 	if err != nil {
 		return
 	}
 
 	resp := make([]*schema.GetUserPageResp, 0)
 	for _, u := range users {
+		avatar := schema.FormatAvatarInfo(u.Avatar)
 		t := &schema.GetUserPageResp{
 			UserID:      u.ID,
 			CreatedAt:   u.CreatedAt.Unix(),
@@ -105,7 +106,7 @@ func (us *UserBackyardService) GetUserPage(ctx context.Context, req *schema.GetU
 			EMail:       u.EMail,
 			Rank:        u.Rank,
 			DisplayName: u.DisplayName,
-			Avatar:      u.Avatar,
+			Avatar:      avatar,
 		}
 		if u.Status == entity.UserStatusDeleted {
 			t.Status = schema.UserDeleted

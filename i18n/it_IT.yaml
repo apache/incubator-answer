@@ -1,0 +1,170 @@
+base:
+  success:
+    other: "Successo"
+  unknown:
+    other: "Errore sconosciuto"
+  request_format_error:
+    other: "Il formato della richiesta non è valido"
+  unauthorized_error:
+    other: "Non autorizzato"
+  database_error:
+    other: "Errore server dati"
+
+email:
+  other: "email"
+password:
+  other: "password"
+
+email_or_password_wrong_error: &email_or_password_wrong
+  other: "Email o password errati"
+
+error:
+  admin:
+    email_or_password_wrong: *email_or_password_wrong
+  answer:
+    not_found:
+      other: "Risposta non trovata"
+  comment:
+    edit_without_permission:
+      other: "Non si hanno di privilegi sufficienti per modificare il commento"
+    not_found:
+      other: "Commento non trovato"
+  email:
+    duplicate:
+      other: "email già esistente"
+    need_to_be_verified:
+      other: "email deve essere verificata"
+    verify_url_expired:
+      other: "l'url di verifica email è scaduto, si prega di reinviare la email"
+  lang:
+    not_found:
+      other: "lingua non trovata"
+  object:
+    captcha_verification_failed:
+      other: "captcha errato"
+    disallow_follow:
+      other: "Non sei autorizzato a seguire"
+    disallow_vote:
+      other: "non sei autorizzato a votare"
+    disallow_vote_your_self:
+      other: "Non puoi votare un tuo post!"
+    not_found:
+      other: "oggetto non trovato"
+    verification_failed:
+      other: "verifica fallita"
+    email_or_password_incorrect:
+      other: "email o password incorretti"
+    old_password_verification_failed:
+      other: "la verifica della vecchia password è fallita"
+    new_password_same_as_previous_setting:
+      other: "La nuova password è identica alla precedente"
+  question:
+    not_found:
+      other: "domanda non trovata"
+  rank:
+    fail_to_meet_the_condition:
+      other: "Condizioni non valide per il grado"
+  report:
+    handle_failed:
+      other: "Gestione del report fallita"
+    not_found:
+      other: "Report non trovato"
+  tag:
+    not_found:
+      other: "Etichetta non trovata"
+  theme:
+    not_found:
+      other: "tema non trovato"
+  user:
+    email_or_password_wrong:
+      other: *email_or_password_wrong
+    not_found:
+      other: "utente non trovato"
+    suspended:
+      other: "utente sospeso"
+    username_invalid:
+      other: "utente non valido"
+    username_duplicate:
+      other: "utente già in uso"
+
+report:
+  spam:
+    name:
+      other: "spam"
+    description:
+      other: "Questo articolo è una pubblicità o vandalismo. Non è utile o rilevante all'argomento corrente"
+  rude:
+    name:
+      other: "scortese o violento"
+    description:
+      other: "Una persona ragionevole trova questo contenuto inappropriato a un discorso rispettoso"
+  duplicate:
+    name:
+      other: "duplicato"
+    description:
+      other: "Questa domanda è già stata posta e ha già una risposta."
+  not_answer:
+    name:
+      other: "non è una risposta"
+    description:
+      other: "Questo è stato postato come una risposta, ma non sta cercando di rispondere alla domanda. Dovrebbe essere una modifica, un commento, un'altra domanda o cancellato del tutto."
+  not_need:
+    name:
+      other: "non più necessario"
+    description:
+      other: "Questo commento è datato, conversazionale o non rilevante a questo articolo."
+  other:
+    name:
+      other: "altro"
+    description:
+      other: "Questo articolo richiede una supervisione dello staff per altre ragioni non listate sopra."
+
+question:
+  close:
+    duplicate:
+      name:
+        other: "spam"
+      description:
+        other: "Questa domanda è già stata chiesta o ha già una risposta."
+    guideline:
+      name:
+        other: "motivo legato alla community"
+      description:
+        other: "Questa domanda non soddisfa le linee guida della comunità."
+    multiple:
+      name:
+        other: "richiede maggiori dettagli o chiarezza"
+      description:
+        other: "Questa domanda attualmente contiene più domande. Deve concentrarsi solamente su un unico problema."
+    other:
+      name:
+        other: "altro"
+      description:
+        other: "Questo articolo richiede un'altro motivo non listato sopra."
+
+notification:
+  action:
+    update_question:
+      other: "domanda aggiornata"
+    answer_the_question:
+      other: "domanda risposta"
+    update_answer:
+      other: "risposta aggiornata"
+    adopt_answer:
+      other: "risposta accettata"
+    comment_question:
+      other: "domanda commentata"
+    comment_answer:
+      other: "risposta commentata"
+    reply_to_you:
+      other: "hai ricevuto risposta"
+    mention_you:
+      other: "sei stato menzionato"
+    your_question_is_closed:
+      other: "la tua domanda è stata chiusa"
+    your_question_was_deleted:
+      other: "la tua domanda è stata rimossa"
+    your_answer_was_deleted:
+      other: "la tua risposta è stata rimossa"
+    your_comment_was_deleted:
+      other: "il tuo commento è stato rimosso"

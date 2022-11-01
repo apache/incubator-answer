@@ -2,7 +2,10 @@ package question
 
 import (
 	"context"
+	"strings"
 	"time"
+	"unicode"
+	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
@@ -64,27 +67,27 @@ func (qr *questionRepo) UpdateQuestion(ctx context.Context, question *entity.Que
 	return
 }
 
-func (qr *questionRepo) UpdatePvCount(ctx context.Context, questionId string) (err error) {
+func (qr *questionRepo) UpdatePvCount(ctx context.Context, questionID string) (err error) {
 	question := &entity.Question{}
-	_, err = qr.data.DB.Where("id =?", questionId).Incr("view_count", 1).Update(question)
+	_, err = qr.data.DB.Where("id =?", questionID).Incr("view_count", 1).Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return nil
 }
 
-func (qr *questionRepo) UpdateAnswerCount(ctx context.Context, questionId string, num int) (err error) {
+func (qr *questionRepo) UpdateAnswerCount(ctx context.Context, questionID string, num int) (err error) {
 	question := &entity.Question{}
-	_, err = qr.data.DB.Where("id =?", questionId).Incr("answer_count", num).Update(question)
+	_, err = qr.data.DB.Where("id =?", questionID).Incr("answer_count", num).Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return nil
 }
 
-func (qr *questionRepo) UpdateCollectionCount(ctx context.Context, questionId string, num int) (err error) {
+func (qr *questionRepo) UpdateCollectionCount(ctx context.Context, questionID string, num int) (err error) {
 	question := &entity.Question{}
-	_, err = qr.data.DB.Where("id =?", questionId).Incr("collection_count", num).Update(question)
+	_, err = qr.data.DB.Where("id =?", questionID).Incr("collection_count", num).Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -119,7 +122,8 @@ func (qr *questionRepo) UpdateLastAnswer(ctx context.Context, question *entity.Q
 
 // GetQuestion get question one
 func (qr *questionRepo) GetQuestion(ctx context.Context, id string) (
-	question *entity.Question, exist bool, err error) {
+	question *entity.Question, exist bool, err error,
+) {
 	question = &entity.Question{}
 	question.ID = id
 	exist, err = qr.data.DB.Where("id = ?", id).Get(question)
@@ -179,15 +183,15 @@ func (qr *questionRepo) SearchList(ctx context.Context, search *schema.QuestionS
 		search.Page = 0
 	}
 	if search.PageSize == 0 {
-		search.PageSize = constant.Default_PageSize
+		search.PageSize = constant.DefaultPageSize
 	}
 	offset := search.Page * search.PageSize
 	session := qr.data.DB.Table("question")
 
 	if len(search.TagIDs) > 0 {
-		session = session.Join("RIGHT", "tag_rel", "question.id = tag_rel.object_id")
+		session = session.Join("LEFT", "tag_rel", "question.id = tag_rel.object_id")
 		session = session.And("tag_rel.tag_id =?", search.TagIDs[0])
-		//session = session.In("tag_rel.tag_id ", search.TagIDs)
+		// session = session.In("tag_rel.tag_id ", search.TagIDs)
 		session = session.And("tag_rel.status =?", entity.TagRelStatusAvailable)
 	}
 
@@ -199,8 +203,8 @@ func (qr *questionRepo) SearchList(ctx context.Context, search *schema.QuestionS
 	// if search.Status > 0 {
 	// 	session = session.And("question.status = ?", search.Status)
 	// }
-	//switch
-	//newest, active,frequent,score,unanswered
+	// switch
+	// newest, active,frequent,score,unanswered
 	switch search.Order {
 	case "newest":
 		session = session.OrderBy("question.created_at desc")
@@ -225,8 +229,16 @@ func (qr *questionRepo) SearchList(ctx context.Context, search *schema.QuestionS
 }
 
 func (qr *questionRepo) CmsSearchList(ctx context.Context, search *schema.CmsQuestionSearch) ([]*entity.Question, int64, error) {
-	var count int64
-	var err error
+	var (
+		count   int64
+		err     error
+		session = qr.data.DB.Table("question")
+	)
+
+	session.Where(builder.Eq{
+		"status": search.Status,
+	})
+
 	rows := make([]*entity.Question, 0)
 	if search.Page > 0 {
 		search.Page = search.Page - 1
@@ -234,13 +246,42 @@ func (qr *questionRepo) CmsSearchList(ctx context.Context, search *schema.CmsQue
 		search.Page = 0
 	}
 	if search.PageSize == 0 {
-		search.PageSize = constant.Default_PageSize
+		search.PageSize = constant.DefaultPageSize
 	}
+
+	// search by question title like or question id
+	if len(search.Query) > 0 {
+		// check id search
+		var (
+			idSearch = false
+			id       = ""
+		)
+		if strings.Contains(search.Query, "id:") {
+			idSearch = true
+			id = strings.TrimSpace(strings.TrimPrefix(search.Query, "id:"))
+			for _, r := range id {
+				if !unicode.IsDigit(r) {
+					idSearch = false
+					break
+				}
+			}
+		}
+
+		if idSearch {
+			session.And(builder.Eq{
+				"id": id,
+			})
+		} else {
+			session.And(builder.Like{
+				"title", search.Query,
+			})
+		}
+	}
+
 	offset := search.Page * search.PageSize
-	session := qr.data.DB.Table("question")
-	session = session.And("status =?", search.Status)
-	session = session.OrderBy("updated_at desc")
-	session = session.Limit(search.PageSize, offset)
+
+	session.OrderBy("updated_at desc").
+		Limit(search.PageSize, offset)
 	count, err = session.FindAndCount(&rows)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

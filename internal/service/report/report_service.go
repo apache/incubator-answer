@@ -24,7 +24,8 @@ type ReportService struct {
 
 // NewReportService new report service
 func NewReportService(reportRepo report_common.ReportRepo,
-	objectInfoService *object_info.ObjService) *ReportService {
+	objectInfoService *object_info.ObjService,
+) *ReportService {
 	return &ReportService{
 		reportRepo:        reportRepo,
 		objectInfoService: objectInfoService,
@@ -58,15 +59,16 @@ func (rs *ReportService) AddReport(ctx context.Context, req *schema.AddReportReq
 
 // GetReportTypeList get report list all
 func (rs *ReportService) GetReportTypeList(ctx context.Context, lang i18n.Language, req *schema.GetReportListReq) (
-	resp []*schema.GetReportTypeResp, err error) {
+	resp []*schema.GetReportTypeResp, err error,
+) {
 	resp = make([]*schema.GetReportTypeResp, 0)
 	switch req.Source {
 	case constant.QuestionObjectType:
-		err = json.Unmarshal([]byte(constant.QuestionReportJson), &resp)
+		err = json.Unmarshal([]byte(constant.QuestionReportJSON), &resp)
 	case constant.AnswerObjectType:
-		err = json.Unmarshal([]byte(constant.AnswerReportJson), &resp)
+		err = json.Unmarshal([]byte(constant.AnswerReportJSON), &resp)
 	case constant.CommentObjectType:
-		err = json.Unmarshal([]byte(constant.CommentReportJson), &resp)
+		err = json.Unmarshal([]byte(constant.CommentReportJSON), &resp)
 	}
 	if err != nil {
 		err = errors.BadRequest(reason.UnknownError)

@@ -27,7 +27,7 @@ func (sr *siteInfoRepo) SaveByType(ctx context.Context, siteType string, data *e
 		old   = &entity.SiteInfo{}
 		exist bool
 	)
-	exist, err = sr.data.DB.Where(builder.Eq{"type": siteType}).Get(old)
+	exist, _ = sr.data.DB.Where(builder.Eq{"type": siteType}).Get(old)
 	if exist {
 		_, err = sr.data.DB.ID(old.ID).Update(data)
 		if err != nil {

@@ -66,7 +66,7 @@ func (qc *QuestionController) CloseQuestion(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	req.UserId = middleware.GetLoginUserIDFromContext(ctx)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	err := qc.questionService.CloseQuestion(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -114,7 +114,6 @@ func (qc *QuestionController) SimilarQuestion(ctx *gin.Context) {
 		"list":  list,
 		"count": count,
 	})
-
 }
 
 // Index godoc
@@ -365,6 +364,7 @@ func (qc *QuestionController) UserCollectionList(ctx *gin.Context) {
 // @Param page query int false "page size"
 // @Param page_size query int false "page size"
 // @Param status query string false "user status" Enums(available, closed, deleted)
+// @Param query query string false "question id or title"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/question/page [get]
 func (qc *QuestionController) CmsSearchList(ctx *gin.Context) {
@@ -390,6 +390,7 @@ func (qc *QuestionController) CmsSearchList(ctx *gin.Context) {
 // @Param page query int false "page size"
 // @Param page_size query int false "page size"
 // @Param status query string false "user status" Enums(available,deleted)
+// @Param query query string false "answer id or question title"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/answer/page [get]
 func (qc *QuestionController) CmsSearchAnswerList(ctx *gin.Context) {

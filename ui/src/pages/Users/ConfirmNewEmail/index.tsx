@@ -3,7 +3,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { changeEmailVerify } from '@answer/api';
+import { changeEmailVerify, getUserInfo } from '@answer/api';
+import { userInfoStore } from '@answer/stores';
 
 import { PageTitle } from '@/components';
 
@@ -12,6 +13,8 @@ const Index: FC = () => {
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState('loading');
 
+  const updateUser = userInfoStore((state) => state.update);
+
   useEffect(() => {
     const code = searchParams.get('code');
     if (code) {
@@ -19,6 +22,10 @@ const Index: FC = () => {
       changeEmailVerify({ code })
         .then(() => {
           setStep('success');
+          getUserInfo().then((res) => {
+            // update user info
+            updateUser(res);
+          });
         })
         .catch(() => {
           setStep('invalid');

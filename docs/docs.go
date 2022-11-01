@@ -56,6 +56,12 @@ const docTemplate = `{
                         "description": "user status",
                         "name": "status",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "answer id or question title",
+                        "name": "query",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -172,6 +178,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "user status",
                         "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "question id or title",
+                        "name": "query",
                         "in": "query"
                     }
                 ],
@@ -709,19 +721,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "username",
-                        "name": "username",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "email",
-                        "name": "e_mail",
+                        "description": "search query: email, username or id:[id]",
+                        "name": "query",
                         "in": "query"
                     },
                     {
                         "enum": [
-                            "normal",
                             "suspended",
                             "deleted",
                             "inactive"
@@ -3303,7 +3308,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "GetUserInfoByUserID",
+                "description": "get user info, if user no login response http code is 200, but user info is null",
                 "consumes": [
                     "application/json"
                 ],
@@ -3326,7 +3331,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.GetUserResp"
+                                            "$ref": "#/definitions/schema.GetUserToSetShowResp"
                                         }
                                     }
                                 }
@@ -4108,6 +4113,23 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.AvatarInfo": {
+            "type": "object",
+            "properties": {
+                "custom": {
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "gravatar": {
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "type": {
+                    "type": "string",
+                    "maxLength": 100
+                }
+            }
+        },
         "schema.CloseQuestionReq": {
             "type": "object",
             "required": [
@@ -4836,6 +4858,102 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetUserToSetShowResp": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "description": "access token",
+                    "type": "string"
+                },
+                "answer_count": {
+                    "description": "answer count",
+                    "type": "integer"
+                },
+                "authority_group": {
+                    "description": "authority group",
+                    "type": "integer"
+                },
+                "avatar": {
+                    "$ref": "#/definitions/schema.AvatarInfo"
+                },
+                "bio": {
+                    "description": "bio markdown",
+                    "type": "string"
+                },
+                "bio_html": {
+                    "description": "bio html",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "create time",
+                    "type": "integer"
+                },
+                "display_name": {
+                    "description": "display name",
+                    "type": "string"
+                },
+                "e_mail": {
+                    "description": "email",
+                    "type": "string"
+                },
+                "follow_count": {
+                    "description": "follow count",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "user id",
+                    "type": "string"
+                },
+                "ip_info": {
+                    "description": "ip info",
+                    "type": "string"
+                },
+                "is_admin": {
+                    "description": "is admin",
+                    "type": "boolean"
+                },
+                "last_login_date": {
+                    "description": "last login date",
+                    "type": "integer"
+                },
+                "location": {
+                    "description": "location",
+                    "type": "string"
+                },
+                "mail_status": {
+                    "description": "mail status(1 pass 2 to be verified)",
+                    "type": "integer"
+                },
+                "mobile": {
+                    "description": "mobile",
+                    "type": "string"
+                },
+                "notice_status": {
+                    "description": "notice status(1 on 2off)",
+                    "type": "integer"
+                },
+                "question_count": {
+                    "description": "question count",
+                    "type": "integer"
+                },
+                "rank": {
+                    "description": "rank",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "user status",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "username",
+                    "type": "string"
+                },
+                "website": {
+                    "description": "website",
+                    "type": "string"
+                }
+            }
+        },
         "schema.GetVoteWithPageResp": {
             "type": "object",
             "properties": {
@@ -4961,12 +5079,9 @@ const docTemplate = `{
                     "description": "Search page size",
                     "type": "integer"
                 },
-                "tags": {
-                    "description": "Search tag",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "tag": {
+                    "description": "Tags     []string ` + "`" + `json:\"tags\" form:\"tags\"` + "`" + `           // Search tag",
+                    "type": "string"
                 },
                 "username": {
                     "description": "Search username",
@@ -5321,8 +5436,7 @@ const docTemplate = `{
             "properties": {
                 "avatar": {
                     "description": "avatar",
-                    "type": "string",
-                    "maxLength": 500
+                    "$ref": "#/definitions/schema.AvatarInfo"
                 },
                 "bio": {
                     "description": "bio",
@@ -5519,6 +5633,14 @@ const docTemplate = `{
                 "e_mail"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "captcha_id": {
+                    "type": "string",
+                    "maxLength": 500
+                },
                 "e_mail": {
                     "type": "string",
                     "maxLength": 500

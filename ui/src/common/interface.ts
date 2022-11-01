@@ -2,6 +2,7 @@ export interface FormValue<T = any> {
   value: T;
   isInvalid: boolean;
   errorMsg: string;
+  [prop: string]: any;
 }
 
 export interface FormDataType {
@@ -89,7 +90,7 @@ export interface ModifyPasswordReq {
 export interface ModifyUserReq {
   display_name: string;
   username?: string;
-  avatar: string;
+  avatar: any;
   bio: string;
   bio_html?: string;
   location: string;
@@ -97,7 +98,7 @@ export interface ModifyUserReq {
 }
 
 export interface UserInfoBase {
-  avatar: string;
+  avatar: any;
   username: string;
   display_name: string;
   rank: number;
@@ -218,7 +219,7 @@ export type QuestionOrderBy =
 
 export interface QueryQuestionsReq extends Paging {
   order: QuestionOrderBy;
-  tags?: string[];
+  tag?: string;
 }
 
 export type AdminQuestionStatus = 'available' | 'closed' | 'deleted';

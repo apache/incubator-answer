@@ -26,10 +26,8 @@ type GetUserPageReq struct {
 	Page int `validate:"omitempty,min=1" form:"page"`
 	// page size
 	PageSize int `validate:"omitempty,min=1" form:"page_size"`
-	// username
-	Username string `validate:"omitempty,gt=0,lte=50" form:"username"`
 	// email
-	EMail string `validate:"omitempty,gt=0,lte=100" form:"e_mail"`
+	Query string `validate:"omitempty,gt=0,lte=100" form:"query"`
 	// user status
 	Status string `validate:"omitempty,oneof=suspended deleted inactive" form:"status"`
 }

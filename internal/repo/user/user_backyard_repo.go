@@ -3,7 +3,11 @@ package user
 import (
 	"context"
 	"encoding/json"
+	"net/mail"
+	"strings"
 	"time"
+	"unicode"
+	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/pager"
@@ -31,7 +35,8 @@ func NewUserBackyardRepo(data *data.Data, authRepo auth.AuthRepo) user_backyard.
 
 // UpdateUserStatus update user status
 func (ur *userBackyardRepo) UpdateUserStatus(ctx context.Context, userID string, userStatus, mailStatus int,
-	email string) (err error) {
+	email string,
+) (err error) {
 	cond := &entity.User{Status: userStatus, MailStatus: mailStatus, EMail: email}
 	switch userStatus {
 	case entity.UserStatusSuspended:
@@ -69,16 +74,51 @@ func (ur *userBackyardRepo) GetUserInfo(ctx context.Context, userID string) (use
 }
 
 // GetUserPage get user page
-func (ur *userBackyardRepo) GetUserPage(ctx context.Context, page, pageSize int, user *entity.User) (users []*entity.User, total int64, err error) {
+func (ur *userBackyardRepo) GetUserPage(ctx context.Context, page, pageSize int, user *entity.User, query string) (users []*entity.User, total int64, err error) {
 	users = make([]*entity.User, 0)
 	session := ur.data.DB.NewSession()
-	if user.Status == entity.UserStatusDeleted {
+	switch user.Status {
+	case entity.UserStatusDeleted:
 		session.Desc("deleted_at")
-	} else if user.Status == entity.UserStatusSuspended {
+	case entity.UserStatusSuspended:
 		session.Desc("suspended_at")
-	} else {
+	default:
 		session.Desc("created_at")
 	}
+
+	if len(query) > 0 {
+		if email, e := mail.ParseAddress(query); e == nil {
+			session.And(builder.Eq{"e_mail": email.Address})
+		} else {
+			var (
+				idSearch = false
+				id       = ""
+			)
+
+			if strings.Contains(query, "id:") {
+				idSearch = true
+				id = strings.TrimSpace(strings.TrimPrefix(query, "id:"))
+				for _, r := range id {
+					if !unicode.IsDigit(r) {
+						idSearch = false
+						break
+					}
+				}
+			}
+
+			if idSearch {
+				session.And(builder.Eq{
+					"id": id,
+				})
+			} else {
+				session.And(builder.Or(
+					builder.Like{"username", query},
+					builder.Like{"display_name", query},
+				))
+			}
+		}
+	}
+
 	total, err = pager.Help(page, pageSize, &users, user, session)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
