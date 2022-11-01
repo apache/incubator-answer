@@ -74,9 +74,9 @@ func (cr *collectionRepo) GetCollectionList(ctx context.Context, collection *ent
 }
 
 // GetOneByObjectIDAndUser get one by object TagID and user
-func (cr *collectionRepo) GetOneByObjectIDAndUser(ctx context.Context, userId string, objectId string) (collection *entity.Collection, exist bool, err error) {
+func (cr *collectionRepo) GetOneByObjectIDAndUser(ctx context.Context, userID string, objectID string) (collection *entity.Collection, exist bool, err error) {
 	collection = &entity.Collection{}
-	exist, err = cr.data.DB.Where("user_id = ? and object_id = ?", userId, objectId).Get(collection)
+	exist, err = cr.data.DB.Where("user_id = ? and object_id = ?", userID, objectID).Get(collection)
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -84,9 +84,9 @@ func (cr *collectionRepo) GetOneByObjectIDAndUser(ctx context.Context, userId st
 }
 
 // SearchByObjectIDsAndUser search by object IDs and user
-func (cr *collectionRepo) SearchByObjectIDsAndUser(ctx context.Context, userId string, objectIds []string) ([]*entity.Collection, error) {
+func (cr *collectionRepo) SearchByObjectIDsAndUser(ctx context.Context, userID string, objectIDs []string) ([]*entity.Collection, error) {
 	collectionList := make([]*entity.Collection, 0)
-	err := cr.data.DB.Where("user_id = ?", userId).In("object_id", objectIds).Find(&collectionList)
+	err := cr.data.DB.Where("user_id = ?", userID).In("object_id", objectIDs).Find(&collectionList)
 	if err != nil {
 		return collectionList, err
 	}
@@ -94,9 +94,9 @@ func (cr *collectionRepo) SearchByObjectIDsAndUser(ctx context.Context, userId s
 }
 
 // CountByObjectID count by object TagID
-func (cr *collectionRepo) CountByObjectID(ctx context.Context, objectId string) (total int64, err error) {
+func (cr *collectionRepo) CountByObjectID(ctx context.Context, objectID string) (total int64, err error) {
 	collection := &entity.Collection{}
-	total, err = cr.data.DB.Where("object_id = ?", objectId).Count(collection)
+	total, err = cr.data.DB.Where("object_id = ?", objectID).Count(collection)
 	if err != nil {
 		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -105,7 +105,6 @@ func (cr *collectionRepo) CountByObjectID(ctx context.Context, objectId string) 
 
 // GetCollectionPage get collection page
 func (cr *collectionRepo) GetCollectionPage(ctx context.Context, page, pageSize int, collection *entity.Collection) (collectionList []*entity.Collection, total int64, err error) {
-
 	collectionList = make([]*entity.Collection, 0)
 
 	session := cr.data.DB.NewSession()
@@ -124,9 +123,9 @@ func (cr *collectionRepo) GetCollectionPage(ctx context.Context, page, pageSize 
 }
 
 // SearchObjectCollected check object is collected or not
-func (cr *collectionRepo) SearchObjectCollected(ctx context.Context, userId string, objectIds []string) (map[string]bool, error) {
+func (cr *collectionRepo) SearchObjectCollected(ctx context.Context, userID string, objectIds []string) (map[string]bool, error) {
 	collectedMap := make(map[string]bool)
-	list, err := cr.SearchByObjectIDsAndUser(ctx, userId, objectIds)
+	list, err := cr.SearchByObjectIDsAndUser(ctx, userID, objectIds)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return collectedMap, err
@@ -148,7 +147,7 @@ func (cr *collectionRepo) SearchList(ctx context.Context, search *entity.Collect
 		search.Page = 0
 	}
 	if search.PageSize == 0 {
-		search.PageSize = constant.Default_PageSize
+		search.PageSize = constant.DefaultPageSize
 	}
 	offset := search.Page * search.PageSize
 	session := cr.data.DB.Where("")

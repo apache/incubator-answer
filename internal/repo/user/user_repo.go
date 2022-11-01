@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/data"
@@ -86,13 +85,10 @@ func (ur *userRepo) UpdateNoticeStatus(ctx context.Context, userID string, notic
 	return nil
 }
 
-func (ur *userRepo) UpdatePass(ctx context.Context, Data *entity.User) error {
-	if Data.ID == "" {
-		return fmt.Errorf("input error")
-	}
-	_, err := ur.data.DB.Where("id = ?", Data.ID).Cols("pass").Update(Data)
+func (ur *userRepo) UpdatePass(ctx context.Context, userID, pass string) error {
+	_, err := ur.data.DB.Where("id = ?", userID).Cols("pass").Update(&entity.User{Pass: pass})
 	if err != nil {
-		return err
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return nil
 }

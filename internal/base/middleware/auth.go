@@ -14,9 +14,7 @@ import (
 	"github.com/segmentfault/pacman/errors"
 )
 
-var (
-	ctxUuidKey = "ctxUuidKey"
-)
+var ctxUUIDKey = "ctxUuidKey"
 
 // AuthUserMiddleware auth user middleware
 type AuthUserMiddleware struct {
@@ -44,7 +42,7 @@ func (am *AuthUserMiddleware) Auth() gin.HandlerFunc {
 			return
 		}
 		if userInfo != nil {
-			ctx.Set(ctxUuidKey, userInfo)
+			ctx.Set(ctxUUIDKey, userInfo)
 		}
 		ctx.Next()
 	}
@@ -82,7 +80,7 @@ func (am *AuthUserMiddleware) MustAuth() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
-		ctx.Set(ctxUuidKey, userInfo)
+		ctx.Set(ctxUUIDKey, userInfo)
 		ctx.Next()
 	}
 }
@@ -107,7 +105,7 @@ func (am *AuthUserMiddleware) CmsAuth() gin.HandlerFunc {
 				ctx.Abort()
 				return
 			}
-			ctx.Set(ctxUuidKey, userInfo)
+			ctx.Set(ctxUUIDKey, userInfo)
 		}
 		ctx.Next()
 	}
@@ -115,7 +113,7 @@ func (am *AuthUserMiddleware) CmsAuth() gin.HandlerFunc {
 
 // GetLoginUserIDFromContext get user id from context
 func GetLoginUserIDFromContext(ctx *gin.Context) (userID string) {
-	userInfo, exist := ctx.Get(ctxUuidKey)
+	userInfo, exist := ctx.Get(ctxUUIDKey)
 	if !exist {
 		return ""
 	}
@@ -128,7 +126,7 @@ func GetLoginUserIDFromContext(ctx *gin.Context) (userID string) {
 
 // GetUserInfoFromContext get user info from context
 func GetUserInfoFromContext(ctx *gin.Context) (u *entity.UserCacheInfo) {
-	userInfo, exist := ctx.Get(ctxUuidKey)
+	userInfo, exist := ctx.Get(ctxUUIDKey)
 	if !exist {
 		return nil
 	}

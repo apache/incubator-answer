@@ -11,6 +11,7 @@
 [![LICENSE](https://img.shields.io/badge/License-Apache-green)](https://github.com/answerdev/answer/blob/main/LICENSE)
 [![Language](https://img.shields.io/badge/Language-Go-blue.svg)](https://golang.org/)
 [![Language](https://img.shields.io/badge/Language-React-blue.svg)](https://reactjs.org/)
+[![Go Report Card](https://goreportcard.com/badge/github.com/answerdev/answer)](https://goreportcard.com/report/github.com/answerdev/answer)
 
 ## 截图
 
@@ -34,4 +35,4 @@ docker run -d -p 9080:80 -v $PWD/answer-data/data:/data --name answer answerdev/
 
 ## License
 
-[Apache](https://github.com/answerdev/answer/blob/main/LICENSE)
+[Apache License 2.0](https://github.com/answerdev/answer/blob/main/LICENSE)

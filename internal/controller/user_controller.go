@@ -35,7 +35,8 @@ func NewUserController(
 	userService *service.UserService,
 	actionService *action.CaptchaService,
 	emailService *export.EmailService,
-	uploaderService *uploader.UploaderService) *UserController {
+	uploaderService *uploader.UploaderService,
+) *UserController {
 	return &UserController{
 		authService:     authService,
 		userService:     userService,
@@ -119,7 +120,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 		return
 	}
 
-	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecord_Type_Login, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
 		resp := schema.UserVerifyEmailErrorResponse{
 			Key:   "captcha_code",
@@ -132,7 +133,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 
 	resp, err := uc.userService.EmailLogin(ctx, req)
 	if err != nil {
-		_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecord_Type_Login, ctx.ClientIP())
+		_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
 		resp := schema.UserVerifyEmailErrorResponse{
 			Key:   "e_mail",
 			Value: "error.object.email_or_password_incorrect",
@@ -141,7 +142,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
 		return
 	}
-	uc.actionService.ActionRecordDel(ctx, schema.ActionRecord_Type_Login, ctx.ClientIP())
+	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
 	handler.HandleResponse(ctx, nil, resp)
 }
 
@@ -159,7 +160,7 @@ func (uc *UserController) RetrievePassWord(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecord_Type_Find_Pass, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
 		resp := schema.UserVerifyEmailErrorResponse{
 			Key:   "captcha_code",
@@ -169,7 +170,7 @@ func (uc *UserController) RetrievePassWord(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
 		return
 	}
-	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecord_Type_Find_Pass, ctx.ClientIP())
+	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP())
 	code, err := uc.userService.RetrievePassWord(ctx, req)
 	handler.HandleResponse(ctx, err, code)
 }
@@ -191,13 +192,13 @@ func (uc *UserController) UseRePassWord(ctx *gin.Context) {
 
 	req.Content = uc.emailService.VerifyUrlExpired(ctx, req.Code)
 	if len(req.Content) == 0 {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyUrlExpired),
-			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeUrlExpired})
+		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyURLExpired),
+			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeURLExpired})
 		return
 	}
 
-	resp, err := uc.userService.UseRePassWord(ctx, req)
-	uc.actionService.ActionRecordDel(ctx, schema.ActionRecord_Type_Find_Pass, ctx.ClientIP())
+	resp, err := uc.userService.UseRePassword(ctx, req)
+	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -252,8 +253,8 @@ func (uc *UserController) UserVerifyEmail(ctx *gin.Context) {
 
 	req.Content = uc.emailService.VerifyUrlExpired(ctx, req.Code)
 	if len(req.Content) == 0 {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyUrlExpired),
-			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeUrlExpired})
+		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyURLExpired),
+			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeURLExpired})
 		return
 	}
 
@@ -263,7 +264,7 @@ func (uc *UserController) UserVerifyEmail(ctx *gin.Context) {
 		return
 	}
 
-	uc.actionService.ActionRecordDel(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP())
+	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -289,7 +290,7 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 		return
 	}
 
-	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP(),
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP(),
 		req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
 		resp := schema.UserVerifyEmailErrorResponse{
@@ -301,7 +302,7 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 
 		return
 	}
-	uc.actionService.ActionRecordAdd(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP())
+	uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	err := uc.userService.UserVerifyEmailSend(ctx, userInfo.UserID)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -321,7 +322,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	req.UserId = middleware.GetLoginUserIDFromContext(ctx)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	oldPassVerification, err := uc.userService.UserModifyPassWordVerification(ctx, req)
 	if err != nil {
@@ -347,7 +348,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
 		return
 	}
-	err = uc.userService.UserModifyPassWord(ctx, req)
+	err = uc.userService.UserModifyPassword(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -367,7 +368,7 @@ func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	req.UserId = middleware.GetLoginUserIDFromContext(ctx)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	err := uc.userService.UpdateInfo(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -445,7 +446,7 @@ func (uc *UserController) ActionRecord(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	req.Ip = ctx.ClientIP()
+	req.IP = ctx.ClientIP()
 
 	resp, err := uc.actionService.ActionRecord(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
@@ -467,8 +468,8 @@ func (uc *UserController) UserNoticeSet(ctx *gin.Context) {
 		return
 	}
 
-	req.UserId = middleware.GetLoginUserIDFromContext(ctx)
-	resp, err := uc.userService.UserNoticeSet(ctx, req.UserId, req.NoticeSwitch)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	resp, err := uc.userService.UserNoticeSet(ctx, req.UserID, req.NoticeSwitch)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -490,7 +491,7 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 	// If the user is not logged in, the api cannot be used.
 	// If the user email is not verified, that also can use this api to modify the email.
 
-	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
 		resp := schema.UserVerifyEmailErrorResponse{
 			Key:   "captcha_code",
@@ -505,7 +506,7 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
 		return
 	}
-	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP())
+	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	err := uc.userService.UserChangeEmailSendCode(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -527,12 +528,12 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 	}
 	req.Content = uc.emailService.VerifyUrlExpired(ctx, req.Code)
 	if len(req.Content) == 0 {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyUrlExpired),
-			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeUrlExpired})
+		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyURLExpired),
+			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeURLExpired})
 		return
 	}
 
 	err := uc.userService.UserChangeEmailVerify(ctx, req.Content)
-	uc.actionService.ActionRecordDel(ctx, schema.ActionRecord_Type_Email, ctx.ClientIP())
+	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, nil)
 }
