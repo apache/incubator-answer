@@ -846,7 +846,7 @@ definitions:
         description: Search page size
         type: integer
       tag:
-        description: Tags     []string `json:"tags" form:"tags"`           //Search
+        description: Tags     []string `json:"tags" form:"tags"`           // Search
           tag
         type: string
       username:

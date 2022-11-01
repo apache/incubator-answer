@@ -5080,7 +5080,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "tag": {
-                    "description": "Tags     []string ` + "`" + `json:\"tags\" form:\"tags\"` + "`" + `           //Search tag",
+                    "description": "Tags     []string ` + "`" + `json:\"tags\" form:\"tags\"` + "`" + `           // Search tag",
                     "type": "string"
                 },
                 "username": {
