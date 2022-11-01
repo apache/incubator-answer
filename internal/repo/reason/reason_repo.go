@@ -21,9 +21,9 @@ func NewReasonRepo(configRepo config.ConfigRepo) reason_common.ReasonRepo {
 	}
 }
 
-func (rr *reasonRepo) ListReasons(ctx context.Context, req schema.ReasonReq) (resp []schema.ReasonItem, err error) {
+func (rr *reasonRepo) ListReasons(ctx context.Context, objectType, action string) (resp []schema.ReasonItem, err error) {
 	var (
-		reasonAction = fmt.Sprintf("%s.%s.reasons", req.ObjectType, req.Action)
+		reasonAction = fmt.Sprintf("%s.%s.reasons", objectType, action)
 		reasonKeys   []string
 		cfgValue     string
 	)

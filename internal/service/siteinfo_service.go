@@ -64,7 +64,7 @@ func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGe
 		siteType = "general"
 		content  []byte
 	)
-	content, err = json.Marshal(req)
+	content, _ = json.Marshal(req)
 
 	data := entity.SiteInfo{
 		Type:    siteType,
@@ -107,7 +107,7 @@ func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.Site
 		return
 	}
 
-	content, err = json.Marshal(req)
+	content, _ = json.Marshal(req)
 
 	data := entity.SiteInfo{
 		Type:    siteType,
@@ -120,7 +120,8 @@ func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.Site
 
 // GetSMTPConfig get smtp config
 func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
-	resp *schema.GetSMTPConfigResp, err error) {
+	resp *schema.GetSMTPConfigResp, err error,
+) {
 	emailConfig, err := s.emailService.GetEmailConfig()
 	if err != nil {
 		return nil, err
@@ -143,7 +144,7 @@ func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.Upda
 		return err
 	}
 	if len(req.TestEmailRecipient) > 0 {
-		title, body, err := s.emailService.TestTemplate()
+		title, body, err := s.emailService.TestTemplate(ctx)
 		if err != nil {
 			return err
 		}

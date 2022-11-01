@@ -95,15 +95,15 @@ func (ns *NotificationService) ClearIDUnRead(ctx context.Context, userID string,
 	return nil
 }
 
-func (ns *NotificationService) GetList(ctx context.Context, search *schema.NotificationSearch) (
+func (ns *NotificationService) GetNotificationPage(ctx context.Context, searchCond *schema.NotificationSearch) (
 	pageModel *pager.PageModel, err error) {
 	resp := make([]*schema.NotificationContent, 0)
-	searchType, ok := schema.NotificationType[search.TypeStr]
+	searchType, ok := schema.NotificationType[searchCond.TypeStr]
 	if !ok {
 		return pager.NewPageModel(0, resp), nil
 	}
-	search.Type = searchType
-	notifications, count, err := ns.notificationRepo.SearchList(ctx, search)
+	searchCond.Type = searchType
+	notifications, total, err := ns.notificationRepo.GetNotificationPage(ctx, searchCond)
 	if err != nil {
 		return nil, err
 	}
@@ -123,5 +123,5 @@ func (ns *NotificationService) GetList(ctx context.Context, search *schema.Notif
 		}
 		resp = append(resp, item)
 	}
-	return pager.NewPageModel(count, resp), nil
+	return pager.NewPageModel(total, resp), nil
 }

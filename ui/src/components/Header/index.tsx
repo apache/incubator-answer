@@ -72,8 +72,8 @@ const Header: FC = () => {
           id="navBarToggle"
         />
 
-        <div className="left-wrap d-flex justify-content-between align-items-center nav-grow">
-          <Navbar.Brand to="/" as={Link} className="lh-1">
+        <div className="d-flex justify-content-between align-items-center nav-grow flex-nowrap">
+          <Navbar.Brand to="/" as={Link} className="lh-1 me-0 me-sm-3">
             {interfaceInfo.logo ? (
               <img
                 className="logo rounded-1 me-0"

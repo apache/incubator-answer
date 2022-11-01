@@ -7,4 +7,5 @@ import (
 // ProviderSetMiddleware is providers.
 var ProviderSetMiddleware = wire.NewSet(
 	NewAuthUserMiddleware,
+	NewAvatarMiddleware,
 )

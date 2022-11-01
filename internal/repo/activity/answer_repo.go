@@ -12,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/notice_queue"
 	"github.com/answerdev/answer/internal/service/rank"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
@@ -43,7 +44,6 @@ func NewAnswerActivityRepo(
 	userRankRepo rank.UserRankRepo,
 ) activity.AnswerActivityRepo {
 	return &AnswerActivityRepo{
-
 		data:         data,
 		activityRepo: activityRepo,
 		userRankRepo: userRankRepo,
@@ -124,7 +124,8 @@ func (ar *AnswerActivityRepo) DeleteQuestion(ctx context.Context, questionID str
 
 // AcceptAnswer accept other answer
 func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
-	answerObjID, questionUserID, answerUserID string, isSelf bool) (err error) {
+	answerObjID, questionUserID, answerUserID string, isSelf bool,
+) (err error) {
 	addActivityList := make([]*entity.Activity, 0)
 	for _, action := range acceptActionList {
 		// get accept answer need add rank amount
@@ -140,8 +141,10 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 		}
 		if action == acceptAction {
 			addActivity.UserID = questionUserID
+			addActivity.TriggerUserID = converter.StringToInt64(answerUserID)
 		} else {
 			addActivity.UserID = answerUserID
+			addActivity.TriggerUserID = converter.StringToInt64(answerUserID)
 		}
 		if isSelf {
 			addActivity.Rank = 0
@@ -170,7 +173,7 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 			}
 
 			if exists {
-				if _, e := session.Where("id = ?", existsActivity.ID).Cols("`cancelled`").
+				if _, e = session.Where("id = ?", existsActivity.ID).Cols("`cancelled`").
 					Update(&entity.Activity{Cancelled: entity.ActivityAvailable}); e != nil {
 					return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
 				}
@@ -193,7 +196,7 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 		}
 		if act.UserID == questionUserID {
 			msg.TriggerUserID = answerUserID
-			msg.ObjectType = constant.QuestionObjectType
+			msg.ObjectType = constant.AnswerObjectType
 		} else {
 			msg.TriggerUserID = questionUserID
 			msg.ObjectType = constant.AnswerObjectType
@@ -219,7 +222,8 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 
 // CancelAcceptAnswer accept other answer
 func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
-	answerObjID, questionUserID, answerUserID string) (err error) {
+	answerObjID, questionUserID, answerUserID string,
+) (err error) {
 	addActivityList := make([]*entity.Activity, 0)
 	for _, action := range acceptActionList {
 		// get accept answer need add rank amount

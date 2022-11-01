@@ -7,7 +7,7 @@ type ConfigRepo interface {
 	GetInt(key string) (int, error)
 	GetArrayString(key string) ([]string, error)
 	GetConfigType(key string) (int, error)
-	GetConfigById(id int, value any) (err error)
+	GetJsonConfigByIDAndSetToObject(id int, value any) (err error)
 	SetConfig(key, value string) (err error)
 }
 

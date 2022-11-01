@@ -9,7 +9,7 @@ import (
 	"github.com/go-playground/locales"
 	english "github.com/go-playground/locales/en"
 	zhongwen "github.com/go-playground/locales/zh"
-	"github.com/go-playground/universal-translator"
+	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	"github.com/go-playground/validator/v10/translations/en"
 	"github.com/go-playground/validator/v10/translations/zh"
@@ -31,10 +31,8 @@ type ErrorField struct {
 	Value string `json:"value"`
 }
 
-var (
-	// GlobalValidatorMapping is a mapping from validator to translator used
-	GlobalValidatorMapping = make(map[string]*MyValidator, 0)
-)
+// GlobalValidatorMapping is a mapping from validator to translator used
+var GlobalValidatorMapping = make(map[string]*MyValidator, 0)
 
 func init() {
 	zhTran, zhVal := getTran(zhongwen.New(), i18n.LanguageChinese.Abbr()), createDefaultValidator(i18n.LanguageChinese)

@@ -1,8 +1,11 @@
-package repo
+package answer
 
 import (
 	"context"
+	"strings"
 	"time"
+	"unicode"
+	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
@@ -89,7 +92,8 @@ func (ar *answerRepo) UpdateAnswerStatus(ctx context.Context, answer *entity.Ans
 
 // GetAnswer get answer one
 func (ar *answerRepo) GetAnswer(ctx context.Context, id string) (
-	answer *entity.Answer, exist bool, err error) {
+	answer *entity.Answer, exist bool, err error,
+) {
 	answer = &entity.Answer{}
 	exist, err = ar.data.DB.ID(id).Get(answer)
 	if err != nil {
@@ -120,20 +124,20 @@ func (ar *answerRepo) GetAnswerPage(ctx context.Context, page, pageSize int, ans
 
 // UpdateAdopted
 // If no answer is selected, the answer id can be 0
-func (ar *answerRepo) UpdateAdopted(ctx context.Context, id string, questionId string) error {
-	if questionId == "" {
+func (ar *answerRepo) UpdateAdopted(ctx context.Context, id string, questionID string) error {
+	if questionID == "" {
 		return nil
 	}
 	var data entity.Answer
 	data.ID = id
 
-	data.Adopted = schema.Answer_Adopted_Failed
-	_, err := ar.data.DB.Where("question_id =?", questionId).Cols("adopted").Update(&data)
+	data.Adopted = schema.AnswerAdoptedFailed
+	_, err := ar.data.DB.Where("question_id =?", questionID).Cols("adopted").Update(&data)
 	if err != nil {
 		return err
 	}
 	if id != "0" {
-		data.Adopted = schema.Answer_Adopted_Enable
+		data.Adopted = schema.AnswerAdoptedEnable
 		_, err = ar.data.DB.Where("id = ?", id).Cols("adopted").Update(&data)
 		if err != nil {
 			return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -152,9 +156,9 @@ func (ar *answerRepo) GetByID(ctx context.Context, id string) (*entity.Answer, b
 	return &resp, has, nil
 }
 
-func (ar *answerRepo) GetByUserIdQuestionId(ctx context.Context, userId string, questionId string) (*entity.Answer, bool, error) {
+func (ar *answerRepo) GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error) {
 	var resp entity.Answer
-	has, err := ar.data.DB.Where("question_id =? and  user_id = ?", questionId, userId).Get(&resp)
+	has, err := ar.data.DB.Where("question_id =? and  user_id = ?", questionID, userID).Get(&resp)
 	if err != nil {
 		return &resp, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -172,7 +176,7 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 		search.Page = 0
 	}
 	if search.PageSize == 0 {
-		search.PageSize = constant.Default_PageSize
+		search.PageSize = constant.DefaultPageSize
 	}
 	offset := search.Page * search.PageSize
 	session := ar.data.DB.Where("")
@@ -183,14 +187,14 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	if len(search.UserID) > 0 {
 		session = session.And("user_id = ?", search.UserID)
 	}
-	if search.Order == entity.Answer_Search_OrderBy_Time {
+	switch search.Order {
+	case entity.AnswerSearchOrderByTime:
 		session = session.OrderBy("created_at desc")
-	} else if search.Order == entity.Answer_Search_OrderBy_Vote {
+	case entity.AnswerSearchOrderByVote:
 		session = session.OrderBy("vote_count desc")
-	} else {
+	default:
 		session = session.OrderBy("adopted desc,vote_count desc")
 	}
-
 	session = session.And("status = ?", entity.AnswerStatusAvailable)
 
 	session = session.Limit(search.PageSize, offset)
@@ -202,11 +206,16 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 }
 
 func (ar *answerRepo) CmsSearchList(ctx context.Context, search *entity.CmsAnswerSearch) ([]*entity.Answer, int64, error) {
-	var count int64
-	var err error
-	if search.Status == 0 {
-		search.Status = 1
-	}
+	var (
+		count   int64
+		err     error
+		session = ar.data.DB.Table([]string{entity.Answer{}.TableName(), "a"}).Select("a.*")
+	)
+
+	session.Where(builder.Eq{
+		"a.status": search.Status,
+	})
+
 	rows := make([]*entity.Answer, 0)
 	if search.Page > 0 {
 		search.Page = search.Page - 1
@@ -214,13 +223,44 @@ func (ar *answerRepo) CmsSearchList(ctx context.Context, search *entity.CmsAnswe
 		search.Page = 0
 	}
 	if search.PageSize == 0 {
-		search.PageSize = constant.Default_PageSize
+		search.PageSize = constant.DefaultPageSize
 	}
+
+	// search by question title like or answer id
+	if len(search.Query) > 0 {
+		// check id search
+		var (
+			idSearch = false
+			id       = ""
+		)
+
+		if strings.Contains(search.Query, "id:") {
+			idSearch = true
+			id = strings.TrimSpace(strings.TrimPrefix(search.Query, "id:"))
+			for _, r := range id {
+				if !unicode.IsDigit(r) {
+					idSearch = false
+					break
+				}
+			}
+		}
+
+		if idSearch {
+			session.And(builder.Eq{
+				"id": id,
+			})
+		} else {
+			session.Join("LEFT", []string{entity.Question{}.TableName(), "q"}, "q.id = a.question_id")
+			session.And(builder.Like{
+				"q.title", search.Query,
+			})
+		}
+	}
+
 	offset := search.Page * search.PageSize
-	session := ar.data.DB.Where("")
-	session = session.And("status =?", search.Status)
-	session = session.OrderBy("updated_at desc")
-	session = session.Limit(search.PageSize, offset)
+	session.
+		OrderBy("a.updated_at desc").
+		Limit(search.PageSize, offset)
 	count, err = session.FindAndCount(&rows)
 	if err != nil {
 		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
