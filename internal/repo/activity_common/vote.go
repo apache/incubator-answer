@@ -25,11 +25,11 @@ func NewVoteRepo(data *data.Data, activityRepo activity_common.ActivityRepo) act
 func (vr *VoteRepo) GetVoteStatus(ctx context.Context, objectID, userID string) (status string) {
 	for _, action := range []string{"vote_up", "vote_down"} {
 		at := &entity.Activity{}
-		activityType, _, _, err := vr.activityRepo.GetActivityTypeByObjID(ctx, objectId, action)
+		activityType, _, _, err := vr.activityRepo.GetActivityTypeByObjID(ctx, objectID, action)
 		if err != nil {
 			return ""
 		}
-		has, err := vr.data.DB.Where("object_id =? AND cancelled=0 AND activity_type=? AND user_id=?", objectId, activityType, userId).Get(at)
+		has, err := vr.data.DB.Where("object_id =? AND cancelled=0 AND activity_type=? AND user_id=?", objectID, activityType, userID).Get(at)
 		if err != nil {
 			return ""
 		}
