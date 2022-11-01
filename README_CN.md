@@ -18,12 +18,10 @@
 
 ## 快速开始
 
-### 使用 docker-compose 快速搭建
+### 使用 docker 快速搭建
 
 ```bash
-mkdir answer && cd answer
-wget https://raw.githubusercontent.com/answerdev/answer/main/docker-compose.yaml
-docker-compose up
+docker run -d -p 9080:80 -v $PWD/answer-data/data:/data --name answer answerdev/answer:latest
 ```
 
 其他安装配置细节请参考 [INSTALL.md](./INSTALL.md)

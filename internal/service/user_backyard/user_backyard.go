@@ -98,6 +98,7 @@ func (us *UserBackyardService) GetUserPage(ctx context.Context, req *schema.GetU
 
 	resp := make([]*schema.GetUserPageResp, 0)
 	for _, u := range users {
+		avatar := schema.FormatAvatarInfo(u.Avatar)
 		t := &schema.GetUserPageResp{
 			UserID:      u.ID,
 			CreatedAt:   u.CreatedAt.Unix(),
@@ -105,7 +106,7 @@ func (us *UserBackyardService) GetUserPage(ctx context.Context, req *schema.GetU
 			EMail:       u.EMail,
 			Rank:        u.Rank,
 			DisplayName: u.DisplayName,
-			Avatar:      u.Avatar,
+			Avatar:      avatar,
 		}
 		if u.Status == entity.UserStatusDeleted {
 			t.Status = schema.UserDeleted
