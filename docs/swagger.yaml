@@ -1390,6 +1390,10 @@ paths:
         in: query
         name: status
         type: string
+      - description: answer id or question title
+        in: query
+        name: query
+        type: string
       produces:
       - application/json
       responses:
@@ -1462,6 +1466,10 @@ paths:
         - deleted
         in: query
         name: status
+        type: string
+      - description: question id or title
+        in: query
+        name: query
         type: string
       produces:
       - application/json
@@ -1788,17 +1796,12 @@ paths:
         in: query
         name: page_size
         type: integer
-      - description: username
+      - description: 'search query: email, username or id:[id]'
         in: query
-        name: username
-        type: string
-      - description: email
-        in: query
-        name: e_mail
+        name: query
         type: string
       - description: user status
         enum:
-        - normal
         - suspended
         - deleted
         - inactive

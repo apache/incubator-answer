@@ -88,7 +88,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
           size="sm"
           className="p-0 btn-no-border"
           onClick={(e) => handleFollow(e)}>
-          {followed ? 'Following' : 'Follow'}
+          {t(followed ? 'Following' : 'Follow')}
         </Button>
       </div>
       <div className="m-n1">

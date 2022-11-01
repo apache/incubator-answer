@@ -21,7 +21,7 @@ import (
 )
 
 var (
-	q_fields = []string{
+	qFields = []string{
 		"`question`.`id`",
 		"`question`.`id` as `question_id`",
 		"`title`",
@@ -34,7 +34,7 @@ var (
 		"`question`.`status` as `status`",
 		"`post_update_time`",
 	}
-	a_fields = []string{
+	aFields = []string{
 		"`answer`.`id` as `id`",
 		"`question_id`",
 		"`question`.`title` as `title`",
@@ -70,8 +70,8 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 	var (
 		b     *builder.Builder
 		ub    *builder.Builder
-		qfs   = q_fields
-		afs   = a_fields
+		qfs   = qFields
+		afs   = aFields
 		argsQ = []interface{}{}
 		argsA = []interface{}{}
 	)
@@ -141,11 +141,11 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 
 	b = b.Union("all", ub)
 
-	querySql, _, err := builder.MySQL().Select("*").From(b, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	querySQL, _, err := builder.MySQL().Select("*").From(b, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
 	if err != nil {
 		return
 	}
-	countSql, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
+	countSQL, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
 	if err != nil {
 		return
 	}
@@ -153,11 +153,11 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 	queryArgs := []interface{}{}
 	countArgs := []interface{}{}
 
-	queryArgs = append(queryArgs, querySql)
+	queryArgs = append(queryArgs, querySQL)
 	queryArgs = append(queryArgs, argsQ...)
 	queryArgs = append(queryArgs, argsA...)
 
-	countArgs = append(countArgs, countSql)
+	countArgs = append(countArgs, countSQL)
 	countArgs = append(countArgs, argsQ...)
 	countArgs = append(countArgs, argsA...)
 
@@ -182,7 +182,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 // SearchQuestions search question data
 func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limitNoAccepted bool, answers, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
 	var (
-		qfs  = q_fields
+		qfs  = qFields
 		args = []interface{}{}
 	)
 	if order == "relevance" {
@@ -223,18 +223,18 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 	queryArgs := []interface{}{}
 	countArgs := []interface{}{}
 
-	querySql, _, err := b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	querySQL, _, err := b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
 	if err != nil {
 		return
 	}
-	countSql, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
+	countSQL, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
 	if err != nil {
 		return
 	}
-	queryArgs = append(queryArgs, querySql)
+	queryArgs = append(queryArgs, querySQL)
 	queryArgs = append(queryArgs, args...)
 
-	countArgs = append(countArgs, countSql)
+	countArgs = append(countArgs, countSQL)
 	countArgs = append(countArgs, args...)
 
 	res, err := sr.data.DB.Query(queryArgs...)
@@ -250,10 +250,6 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 	if len(tr) != 0 {
 		total = converter.StringToInt64(string(tr[0]["total"]))
 	}
-	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return
-	}
 	resp, err = sr.parseResult(ctx, res)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -264,7 +260,7 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 // SearchAnswers search answer data
 func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAccepted bool, questionID string, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
 	var (
-		afs  = a_fields
+		afs  = aFields
 		args = []interface{}{}
 	)
 	if order == "relevance" {
@@ -289,8 +285,8 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 	}
 
 	if limitAccepted {
-		b.Where(builder.Eq{"adopted": schema.Answer_Adopted_Enable})
-		args = append(args, schema.Answer_Adopted_Enable)
+		b.Where(builder.Eq{"adopted": schema.AnswerAdoptedEnable})
+		args = append(args, schema.AnswerAdoptedEnable)
 	}
 
 	if questionID != "" {
@@ -301,18 +297,18 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 	queryArgs := []interface{}{}
 	countArgs := []interface{}{}
 
-	querySql, _, err := b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	querySQL, _, err := b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
 	if err != nil {
 		return
 	}
-	countSql, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
+	countSQL, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
 	if err != nil {
 		return
 	}
-	queryArgs = append(queryArgs, querySql)
+	queryArgs = append(queryArgs, querySQL)
 	queryArgs = append(queryArgs, args...)
 
-	countArgs = append(countArgs, countSql)
+	countArgs = append(countArgs, countSQL)
 	countArgs = append(countArgs, args...)
 
 	res, err := sr.data.DB.Query(queryArgs...)
@@ -326,10 +322,6 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 	}
 
 	total = converter.StringToInt64(string(tr[0]["total"]))
-	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return
-	}
 	resp, err = sr.parseResult(ctx, res)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -438,7 +430,7 @@ func (sr *searchRepo) userBasicInfoFormat(ctx context.Context, dbinfo *entity.Us
 		Avatar:      dbinfo.Avatar,
 		Website:     dbinfo.Website,
 		Location:    dbinfo.Location,
-		IpInfo:      dbinfo.IPInfo,
+		IPInfo:      dbinfo.IPInfo,
 	}
 }
 
@@ -451,24 +443,24 @@ func cutOutParsedText(parsedText string) string {
 	return parsedText
 }
 
-func addRelevanceField(search_fields, words, fields []string) (res []string, args []interface{}) {
-	var relevanceRes = []string{}
+func addRelevanceField(searchFields, words, fields []string) (res []string, args []interface{}) {
+	relevanceRes := []string{}
 	args = []interface{}{}
 
-	for _, search_field := range search_fields {
+	for _, searchField := range searchFields {
 		var (
-			relevance     = "(LENGTH(" + search_field + ") - LENGTH(%s))"
-			replacement   = "REPLACE(%s, ?, '')"
-			replace_field = search_field
-			replaced      string
-			argsField     = []interface{}{}
+			relevance    = "(LENGTH(" + searchField + ") - LENGTH(%s))"
+			replacement  = "REPLACE(%s, ?, '')"
+			replaceField = searchField
+			replaced     string
+			argsField    = []interface{}{}
 		)
 
 		res = fields
 		for i, word := range words {
 			if i == 0 {
 				argsField = append(argsField, word)
-				replaced = fmt.Sprintf(replacement, replace_field)
+				replaced = fmt.Sprintf(replacement, replaceField)
 			} else {
 				argsField = append(argsField, word)
 				replaced = fmt.Sprintf(replacement, replaced)

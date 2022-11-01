@@ -31,7 +31,6 @@ func InstallAllInitialEnvironment(dataDirPath string) {
 	installUploadDir()
 	installI18nBundle()
 	fmt.Println("install all initial environment done")
-	return
 }
 
 func installConfigFile() {
@@ -96,7 +95,7 @@ func installI18nBundle() {
 }
 
 func writerFile(filePath, content string) error {
-	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0666)
+	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0o666)
 	if err != nil {
 		return err
 	}

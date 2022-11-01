@@ -44,7 +44,6 @@ func NewAnswerActivityRepo(
 	userRankRepo rank.UserRankRepo,
 ) activity.AnswerActivityRepo {
 	return &AnswerActivityRepo{
-
 		data:         data,
 		activityRepo: activityRepo,
 		userRankRepo: userRankRepo,
@@ -125,7 +124,8 @@ func (ar *AnswerActivityRepo) DeleteQuestion(ctx context.Context, questionID str
 
 // AcceptAnswer accept other answer
 func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
-	answerObjID, questionUserID, answerUserID string, isSelf bool) (err error) {
+	answerObjID, questionUserID, answerUserID string, isSelf bool,
+) (err error) {
 	addActivityList := make([]*entity.Activity, 0)
 	for _, action := range acceptActionList {
 		// get accept answer need add rank amount
@@ -173,7 +173,7 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 			}
 
 			if exists {
-				if _, e := session.Where("id = ?", existsActivity.ID).Cols("`cancelled`").
+				if _, e = session.Where("id = ?", existsActivity.ID).Cols("`cancelled`").
 					Update(&entity.Activity{Cancelled: entity.ActivityAvailable}); e != nil {
 					return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
 				}
@@ -222,7 +222,8 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 
 // CancelAcceptAnswer accept other answer
 func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
-	answerObjID, questionUserID, answerUserID string) (err error) {
+	answerObjID, questionUserID, answerUserID string,
+) (err error) {
 	addActivityList := make([]*entity.Activity, 0)
 	for _, action := range acceptActionList {
 		// get accept answer need add rank amount

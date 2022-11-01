@@ -27,7 +27,8 @@
     "account_activation": "Account Activation",
     "confirm_email": "Confirm Email",
     "account_suspended": "Account Suspended",
-    "admin": "Admin"
+    "admin": "Admin",
+    "change_email": "Modify Email"
   },
   "notifications": {
     "title": "Notifications",
@@ -250,7 +251,7 @@
     "synonyms_text": "The following tags will be remapped to",
     "delete": {
       "title": "Delete this tag",
-      "content": "<p>We do not allowed deleting tag with posts.</p><p>Please remove the python tag from the posts first.</p>",
+      "content": "<p>We do not allowed deleting tag with posts.</p><p>Please remove this tag from the posts first.</p>",
       "content2": "Are you sure you wish to delete?",
       "close": "Close"
     }
@@ -403,7 +404,7 @@
     }
   },
   "footer": {
-    "build_on": "Build on <1> Answer </1>- the open-source software that power Q&A communities.<br />Made with love. © 2022 Answer."
+    "build_on": "Built on <1> Answer </1>- the open-source software that power Q&A communities<br />Made with love © 2022 Answer"
   },
   "upload_img": {
     "name": "Change",
@@ -421,6 +422,7 @@
     "info": "If it doesn't arrive, check your spam folder.",
     "another": "We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.",
     "btn_name": "Resend activation email",
+    "change_btn_name": "Change email",
     "msg": {
       "empty": "Cannot be empty."
     }
@@ -457,6 +459,18 @@
     "send_success": "If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.",
     "email": {
       "label": "Email",
+      "msg": {
+        "empty": "Email cannot be empty."
+      }
+    }
+  },
+  "change_email": {
+    "page_title": "Welcome to Answer",
+    "btn_cancel": "Cancel",
+    "btn_update": "Update email address",
+    "send_success": "If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.",
+    "email": {
+      "label": "New Email",
       "msg": {
         "empty": "Email cannot be empty."
       }
@@ -504,7 +518,12 @@
       },
       "avatar": {
         "label": "Profile Image",
-        "text": "You can upload your image or <1>reset</1> it to"
+        "gravatar": "Gravatar",
+        "gravatar_text": "You can change image on <1>gravatar.com</1>",
+        "custom": "Custom",
+        "btn_refresh": "Refresh",
+        "custom_text": "You can upload your image.",
+        "default": "Default"
       },
       "bio": {
         "label": "About Me (optional)"
@@ -572,6 +591,8 @@
     "update": "Modified",
     "edit": "edited",
     "Views": "Viewed",
+    "Follow": "Follow",
+    "Following": "Following",
     "answered": "answered",
     "closed_in": "Closed in",
     "show_exist": "Show existing question.",
