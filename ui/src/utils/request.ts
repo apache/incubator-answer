@@ -132,11 +132,12 @@ class Request {
             return Promise.reject(false);
           }
         }
-
-        toastStore.getState().show({
-          msg: `statusCode: ${status}; ${respMsg || ''}`,
-          variant: 'danger',
-        });
+        if (respMsg) {
+          toastStore.getState().show({
+            msg: `statusCode: ${status}; ${respMsg || ''}`,
+            variant: 'danger',
+          });
+        }
         return Promise.reject(false);
       },
     );
