@@ -2,7 +2,10 @@ package repo
 
 import (
 	"context"
+	"strings"
 	"time"
+	"unicode"
+	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
@@ -202,11 +205,16 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 }
 
 func (ar *answerRepo) CmsSearchList(ctx context.Context, search *entity.CmsAnswerSearch) ([]*entity.Answer, int64, error) {
-	var count int64
-	var err error
-	if search.Status == 0 {
-		search.Status = 1
-	}
+	var (
+		count   int64
+		err     error
+		session = ar.data.DB.Table([]string{entity.Answer{}.TableName(), "a"}).Select("a.*")
+	)
+
+	session.Where(builder.Eq{
+		"a.status": search.Status,
+	})
+
 	rows := make([]*entity.Answer, 0)
 	if search.Page > 0 {
 		search.Page = search.Page - 1
@@ -216,11 +224,42 @@ func (ar *answerRepo) CmsSearchList(ctx context.Context, search *entity.CmsAnswe
 	if search.PageSize == 0 {
 		search.PageSize = constant.Default_PageSize
 	}
+
+	// search by question title like or answer id
+	if len(search.Query) > 0 {
+		// check id search
+		var (
+			idSearch = false
+			id       = ""
+		)
+
+		if strings.Contains(search.Query, "id:") {
+			idSearch = true
+			id = strings.TrimSpace(strings.TrimPrefix(search.Query, "id:"))
+			for _, r := range id {
+				if !unicode.IsDigit(r) {
+					idSearch = false
+					break
+				}
+			}
+		}
+
+		if idSearch {
+			session.And(builder.Eq{
+				"id": id,
+			})
+		} else {
+			session.Join("LEFT", []string{entity.Question{}.TableName(), "q"}, "q.id = a.question_id")
+			session.And(builder.Like{
+				"q.title", search.Query,
+			})
+		}
+	}
+
 	offset := search.Page * search.PageSize
-	session := ar.data.DB.Where("")
-	session = session.And("status =?", search.Status)
-	session = session.OrderBy("updated_at desc")
-	session = session.Limit(search.PageSize, offset)
+	session.
+		OrderBy("a.updated_at desc").
+		Limit(search.PageSize, offset)
 	count, err = session.FindAndCount(&rows)
 	if err != nil {
 		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

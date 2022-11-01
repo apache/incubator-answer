@@ -56,6 +56,12 @@ const docTemplate = `{
                         "description": "user status",
                         "name": "status",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "answer id or question title",
+                        "name": "query",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -172,6 +178,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "user status",
                         "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "question id or title",
+                        "name": "query",
                         "in": "query"
                     }
                 ],
@@ -709,19 +721,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "username",
-                        "name": "username",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "email",
-                        "name": "e_mail",
+                        "description": "search query: email, username or id:[id]",
+                        "name": "query",
                         "in": "query"
                     },
                     {
                         "enum": [
-                            "normal",
                             "suspended",
                             "deleted",
                             "inactive"

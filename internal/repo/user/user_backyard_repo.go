@@ -3,7 +3,11 @@ package user
 import (
 	"context"
 	"encoding/json"
+	"net/mail"
+	"strings"
 	"time"
+	"unicode"
+	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
@@ -68,7 +72,7 @@ func (ur *userBackyardRepo) GetUserInfo(ctx context.Context, userID string) (use
 }
 
 // GetUserPage get user page
-func (ur *userBackyardRepo) GetUserPage(ctx context.Context, page, pageSize int, user *entity.User) (users []*entity.User, total int64, err error) {
+func (ur *userBackyardRepo) GetUserPage(ctx context.Context, page, pageSize int, user *entity.User, query string) (users []*entity.User, total int64, err error) {
 	users = make([]*entity.User, 0)
 	session := ur.data.DB.NewSession()
 	if user.Status == entity.UserStatusDeleted {
@@ -78,6 +82,40 @@ func (ur *userBackyardRepo) GetUserPage(ctx context.Context, page, pageSize int,
 	} else {
 		session.Desc("created_at")
 	}
+
+	if len(query) > 0 {
+		if email, e := mail.ParseAddress(query); e == nil {
+			session.And(builder.Eq{"e_mail": email.Address})
+		} else {
+			var (
+				idSearch = false
+				id       = ""
+			)
+
+			if strings.Contains(query, "id:") {
+				idSearch = true
+				id = strings.TrimSpace(strings.TrimPrefix(query, "id:"))
+				for _, r := range id {
+					if !unicode.IsDigit(r) {
+						idSearch = false
+						break
+					}
+				}
+			}
+
+			if idSearch {
+				session.And(builder.Eq{
+					"id": id,
+				})
+			} else {
+				session.And(builder.Or(
+					builder.Like{"username", query},
+					builder.Like{"display_name", query},
+				))
+			}
+		}
+	}
+
 	total, err = pager.Help(page, pageSize, &users, user, session)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

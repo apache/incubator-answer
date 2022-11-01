@@ -170,7 +170,8 @@ type CmsQuestionSearch struct {
 	Page      int    `json:"page" form:"page"`           //Query number of pages
 	PageSize  int    `json:"page_size" form:"page_size"` //Search page size
 	Status    int    `json:"-" form:"-"`
-	StatusStr string `json:"status" form:"status"` //Status 1 Available 2 closed 10 UserDeleted
+	StatusStr string `json:"status" form:"status"`                                  //Status 1 Available 2 closed 10 UserDeleted
+	Query     string `validate:"omitempty,gt=0,lte=100" json:"query" form:"query" ` //Query string
 }
 
 type AdminSetQuestionStatusRequest struct {
