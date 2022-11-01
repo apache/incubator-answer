@@ -32,7 +32,7 @@ func (tr *tagRelRepo) AddTagRelList(ctx context.Context, tagList []*entity.TagRe
 }
 
 // RemoveTagRelListByObjectID delete tag list
-func (tr *tagListRepo) RemoveTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
+func (tr *tagRelRepo) RemoveTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
 	_, err = tr.data.DB.Where("object_id = ?", objectID).Update(&entity.TagRel{Status: entity.TagRelStatusDeleted})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

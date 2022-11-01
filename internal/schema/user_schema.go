@@ -198,6 +198,9 @@ const (
 	MailStatePass   = 1
 	MailStateVerifi = 2
 
+	NoticeStatusOn  = 1
+	NoticeStatusOff = 2
+
 	ActionRecordTypeLogin    = "login"
 	ActionRecordTypeEmail    = "e_mail"
 	ActionRecordTypeFindPass = "find_pass"
