@@ -10,20 +10,20 @@ import (
 	"github.com/segmentfault/pacman/errors"
 )
 
-// tagListRepo tagList repository
-type tagListRepo struct {
+// tagRelRepo tag rel repository
+type tagRelRepo struct {
 	data *data.Data
 }
 
-// NewTagListRepo new repository
-func NewTagListRepo(data *data.Data) tagcommon.TagRelRepo {
-	return &tagListRepo{
+// NewTagRelRepo new repository
+func NewTagRelRepo(data *data.Data) tagcommon.TagRelRepo {
+	return &tagRelRepo{
 		data: data,
 	}
 }
 
 // AddTagRelList add tag list
-func (tr *tagListRepo) AddTagRelList(ctx context.Context, tagList []*entity.TagRel) (err error) {
+func (tr *tagRelRepo) AddTagRelList(ctx context.Context, tagList []*entity.TagRel) (err error) {
 	_, err = tr.data.DB.Insert(tagList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -32,7 +32,7 @@ func (tr *tagListRepo) AddTagRelList(ctx context.Context, tagList []*entity.TagR
 }
 
 // RemoveTagRelListByObjectID delete tag list
-func (tr *tagListRepo) RemoveTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
+func (tr *tagRelRepo) RemoveTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
 	_, err = tr.data.DB.Where("object_id = ?", objectID).Update(&entity.TagRel{Status: entity.TagRelStatusDeleted})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -41,7 +41,7 @@ func (tr *tagListRepo) RemoveTagRelListByObjectID(ctx context.Context, objectID 
 }
 
 // RemoveTagRelListByIDs delete tag list
-func (tr *tagListRepo) RemoveTagRelListByIDs(ctx context.Context, ids []int64) (err error) {
+func (tr *tagRelRepo) RemoveTagRelListByIDs(ctx context.Context, ids []int64) (err error) {
 	_, err = tr.data.DB.In("id", ids).Update(&entity.TagRel{Status: entity.TagRelStatusDeleted})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -50,7 +50,7 @@ func (tr *tagListRepo) RemoveTagRelListByIDs(ctx context.Context, ids []int64) (
 }
 
 // GetObjectTagRelWithoutStatus get object tag relation no matter status
-func (tr *tagListRepo) GetObjectTagRelWithoutStatus(ctx context.Context, objectID, tagID string) (
+func (tr *tagRelRepo) GetObjectTagRelWithoutStatus(ctx context.Context, objectID, tagID string) (
 	tagRel *entity.TagRel, exist bool, err error,
 ) {
 	tagRel = &entity.TagRel{}
@@ -63,7 +63,7 @@ func (tr *tagListRepo) GetObjectTagRelWithoutStatus(ctx context.Context, objectI
 }
 
 // EnableTagRelByIDs update tag status to available
-func (tr *tagListRepo) EnableTagRelByIDs(ctx context.Context, ids []int64) (err error) {
+func (tr *tagRelRepo) EnableTagRelByIDs(ctx context.Context, ids []int64) (err error) {
 	_, err = tr.data.DB.In("id", ids).Update(&entity.TagRel{Status: entity.TagRelStatusAvailable})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -72,7 +72,7 @@ func (tr *tagListRepo) EnableTagRelByIDs(ctx context.Context, ids []int64) (err 
 }
 
 // GetObjectTagRelList get object tag relation list all
-func (tr *tagListRepo) GetObjectTagRelList(ctx context.Context, objectID string) (tagListList []*entity.TagRel, err error) {
+func (tr *tagRelRepo) GetObjectTagRelList(ctx context.Context, objectID string) (tagListList []*entity.TagRel, err error) {
 	tagListList = make([]*entity.TagRel, 0)
 	session := tr.data.DB.Where("object_id = ?", objectID)
 	session.Where("status = ?", entity.TagRelStatusAvailable)
@@ -84,7 +84,7 @@ func (tr *tagListRepo) GetObjectTagRelList(ctx context.Context, objectID string)
 }
 
 // BatchGetObjectTagRelList get object tag relation list all
-func (tr *tagListRepo) BatchGetObjectTagRelList(ctx context.Context, objectIds []string) (tagListList []*entity.TagRel, err error) {
+func (tr *tagRelRepo) BatchGetObjectTagRelList(ctx context.Context, objectIds []string) (tagListList []*entity.TagRel, err error) {
 	tagListList = make([]*entity.TagRel, 0)
 	session := tr.data.DB.In("object_id", objectIds)
 	session.Where("status = ?", entity.TagRelStatusAvailable)
@@ -96,7 +96,7 @@ func (tr *tagListRepo) BatchGetObjectTagRelList(ctx context.Context, objectIds [
 }
 
 // CountTagRelByTagID count tag relation
-func (tr *tagListRepo) CountTagRelByTagID(ctx context.Context, tagID string) (count int64, err error) {
+func (tr *tagRelRepo) CountTagRelByTagID(ctx context.Context, tagID string) (count int64, err error) {
 	count, err = tr.data.DB.Count(&entity.TagRel{TagID: tagID, Status: entity.AnswerStatusAvailable})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

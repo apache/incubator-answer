@@ -1,4 +1,4 @@
-package repo
+package search_common
 
 import (
 	"context"

@@ -15,7 +15,7 @@ type UserRepo interface {
 	UpdateEmailStatus(ctx context.Context, userID string, emailStatus int) error
 	UpdateNoticeStatus(ctx context.Context, userID string, noticeStatus int) error
 	UpdateEmail(ctx context.Context, userID, email string) error
-	UpdatePass(ctx context.Context, Data *entity.User) error
+	UpdatePass(ctx context.Context, userID, pass string) error
 	UpdateInfo(ctx context.Context, userInfo *entity.User) (err error)
 	GetByUserID(ctx context.Context, userID string) (userInfo *entity.User, exist bool, err error)
 	BatchGetByID(ctx context.Context, ids []string) ([]*entity.User, error)

@@ -201,7 +201,6 @@ const (
 	NoticeStatusOn  = 1
 	NoticeStatusOff = 2
 
-	// ActionRecord ReportType
 	ActionRecordTypeLogin    = "login"
 	ActionRecordTypeEmail    = "e_mail"
 	ActionRecordTypeFindPass = "find_pass"

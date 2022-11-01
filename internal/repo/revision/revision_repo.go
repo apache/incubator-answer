@@ -96,7 +96,7 @@ func (rr *revisionRepo) GetLastRevisionByObjectID(ctx context.Context, objectID 
 	revision *entity.Revision, exist bool, err error,
 ) {
 	revision = &entity.Revision{}
-	exist, err = rr.data.DB.Where("object_id = ?", objectID).OrderBy("create_time DESC").Get(revision)
+	exist, err = rr.data.DB.Where("object_id = ?", objectID).OrderBy("created_at DESC").Get(revision)
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

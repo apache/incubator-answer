@@ -201,13 +201,13 @@ func (rs *ReportBackyardService) parseObject(ctx context.Context, resp *[]*schem
 			r.Reason = &schema.ReasonItem{
 				ReasonType: r.ReportType,
 			}
-			err = rs.configRepo.GetConfigById(r.ReportType, r.Reason)
+			err = rs.configRepo.GetJsonConfigByIDAndSetToObject(r.ReportType, r.Reason)
 		}
 		if r.FlaggedType > 0 {
 			r.FlaggedReason = &schema.ReasonItem{
 				ReasonType: r.FlaggedType,
 			}
-			_ = rs.configRepo.GetConfigById(r.FlaggedType, r.FlaggedReason)
+			_ = rs.configRepo.GetJsonConfigByIDAndSetToObject(r.FlaggedType, r.FlaggedReason)
 		}
 
 		res[i] = r

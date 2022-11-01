@@ -197,7 +197,7 @@ func (uc *UserController) UseRePassWord(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := uc.userService.UseRePassWord(ctx, req)
+	resp, err := uc.userService.UseRePassword(ctx, req)
 	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, resp)
 }
@@ -348,7 +348,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
 		return
 	}
-	err = uc.userService.UserModifyPassWord(ctx, req)
+	err = uc.userService.UserModifyPassword(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
