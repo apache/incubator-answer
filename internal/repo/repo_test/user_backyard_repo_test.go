@@ -20,7 +20,7 @@ func Test_userBackyardRepo_GetUserInfo(t *testing.T) {
 
 func Test_userBackyardRepo_GetUserPage(t *testing.T) {
 	userBackyardRepo := user.NewUserBackyardRepo(testDataSource, auth.NewAuthRepo(testDataSource))
-	got, total, err := userBackyardRepo.GetUserPage(context.TODO(), 1, 1, &entity.User{Username: "admin"})
+	got, total, err := userBackyardRepo.GetUserPage(context.TODO(), 1, 1, &entity.User{Username: "admin"}, "")
 	assert.NoError(t, err)
 	assert.Equal(t, int64(1), total)
 	assert.Equal(t, "1", got[0].ID)
