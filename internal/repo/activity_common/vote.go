@@ -4,8 +4,10 @@ import (
 	"context"
 
 	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/segmentfault/pacman/errors"
 )
 
 // VoteRepo activity repository
@@ -38,4 +40,13 @@ func (vr *VoteRepo) GetVoteStatus(ctx context.Context, objectID, userID string) 
 		}
 	}
 	return ""
+}
+
+func (vr *VoteRepo) GetVoteCount(ctx context.Context, activityTypes []int) (count int64, err error) {
+	list := make([]*entity.Activity, 0)
+	count, err = vr.data.DB.Where("cancelled =0").In("activity_type", activityTypes).FindAndCount(&list)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
 }

@@ -44,6 +44,7 @@ import (
 	auth2 "github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/collection_common"
 	comment2 "github.com/answerdev/answer/internal/service/comment"
+	"github.com/answerdev/answer/internal/service/dashboard"
 	export2 "github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/follow"
 	meta2 "github.com/answerdev/answer/internal/service/meta"
@@ -148,7 +149,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, revisionService, metaService, collectionCommon, answerActivityService)
 	questionController := controller.NewQuestionController(questionService, rankService)
 	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo)
-	answerController := controller.NewAnswerController(answerService, rankService)
+	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configRepo)
+	answerController := controller.NewAnswerController(answerService, rankService, dashboardService)
 	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon)
 	searchService := service.NewSearchService(searchRepo, tagRepo, userCommon, followRepo)
 	searchController := controller.NewSearchController(searchService)

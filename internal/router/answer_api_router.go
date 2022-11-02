@@ -86,6 +86,9 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/personal/comment/page", a.commentController.GetCommentPersonalWithPage)
 	r.GET("/comment", a.commentController.GetComment)
 
+	//test
+	r.GET("/test", a.answerController.Dashboard)
+
 	// user
 	r.GET("/user/info", a.userController.GetUserInfoByUserID)
 	r.GET("/user/status", a.userController.GetUserStatus)
