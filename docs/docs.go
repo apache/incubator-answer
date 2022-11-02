@@ -509,14 +509,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo general",
+                "description": "get site general information",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo general",
+                "summary": "get site general information",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -544,14 +544,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo interface",
+                "description": "update site general information",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo interface",
+                "summary": "update site general information",
                 "parameters": [
                     {
                         "description": "general",
@@ -580,14 +580,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo interface",
+                "description": "get site interface",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo interface",
+                "summary": "get site interface",
                 "parameters": [
                     {
                         "description": "general",
@@ -626,14 +626,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo interface",
+                "description": "update site info interface",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo interface",
+                "summary": "update site info interface",
                 "parameters": [
                     {
                         "description": "general",
@@ -5348,7 +5348,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "language",
-                "theme"
+                "theme",
+                "time_zone"
             ],
             "properties": {
                 "language": {
@@ -5360,6 +5361,10 @@ const docTemplate = `{
                     "maxLength": 256
                 },
                 "theme": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "time_zone": {
                     "type": "string",
                     "maxLength": 128
                 }
@@ -5369,7 +5374,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "language",
-                "theme"
+                "theme",
+                "time_zone"
             ],
             "properties": {
                 "language": {
@@ -5381,6 +5387,10 @@ const docTemplate = `{
                     "maxLength": 256
                 },
                 "theme": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "time_zone": {
                     "type": "string",
                     "maxLength": 128
                 }

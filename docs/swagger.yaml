@@ -1024,9 +1024,13 @@ definitions:
       theme:
         maxLength: 128
         type: string
+      time_zone:
+        maxLength: 128
+        type: string
     required:
     - language
     - theme
+    - time_zone
     type: object
   schema.SiteInterfaceResp:
     properties:
@@ -1039,9 +1043,13 @@ definitions:
       theme:
         maxLength: 128
         type: string
+      time_zone:
+        maxLength: 128
+        type: string
     required:
     - language
     - theme
+    - time_zone
     type: object
   schema.TagItem:
     properties:
@@ -1675,7 +1683,7 @@ paths:
       - admin
   /answer/admin/api/siteinfo/general:
     get:
-      description: Get siteinfo general
+      description: get site general information
       produces:
       - application/json
       responses:
@@ -1690,11 +1698,11 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo general
+      summary: get site general information
       tags:
       - admin
     put:
-      description: Get siteinfo interface
+      description: update site general information
       parameters:
       - description: general
         in: body
@@ -1711,12 +1719,12 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo interface
+      summary: update site general information
       tags:
       - admin
   /answer/admin/api/siteinfo/interface:
     get:
-      description: Get siteinfo interface
+      description: get site interface
       parameters:
       - description: general
         in: body
@@ -1738,11 +1746,11 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo interface
+      summary: get site interface
       tags:
       - admin
     put:
-      description: Get siteinfo interface
+      description: update site info interface
       parameters:
       - description: general
         in: body
@@ -1759,7 +1767,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo interface
+      summary: update site info interface
       tags:
       - admin
   /answer/admin/api/theme/options:
