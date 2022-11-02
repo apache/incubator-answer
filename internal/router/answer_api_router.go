@@ -79,7 +79,7 @@ func NewAnswerAPIRouter(
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// i18n
 	r.GET("/language/config", a.langController.GetLangMapping)
-	r.GET("/language/options", a.langController.GetLangOptions)
+	r.GET("/language/options", a.langController.GetUserLangOptions)
 
 	// comment
 	r.GET("/comment/page", a.commentController.GetCommentWithPage)
@@ -177,6 +177,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	// user
 	r.PUT("/user/password", a.userController.UserModifyPassWord)
 	r.PUT("/user/info", a.userController.UserUpdateInfo)
+	r.PUT("/user/interface", a.userController.UserUpdateInterface)
 	r.POST("/user/avatar/upload", a.userController.UploadUserAvatar)
 	r.POST("/user/post/file", a.userController.UploadUserPostFile)
 	r.POST("/user/notice/set", a.userController.UserNoticeSet)
@@ -213,7 +214,7 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	r.GET("/reasons", a.reasonController.Reasons)
 
 	// language
-	r.GET("/language/options", a.langController.GetLangOptions)
+	r.GET("/language/options", a.langController.GetAdminLangOptions)
 
 	// theme
 	r.GET("/theme/options", a.themeController.GetThemeOptions)

@@ -76,7 +76,6 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	if err != nil {
 		return nil, nil, err
 	}
-	langController := controller.NewLangController(i18nTranslator)
 	engine, err := data.NewDB(debug, dbConf)
 	if err != nil {
 		return nil, nil, err
@@ -90,17 +89,19 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 		cleanup()
 		return nil, nil, err
 	}
+	siteInfoRepo := site_info.NewSiteInfo(dataData)
+	configRepo := config.NewConfigRepo(dataData)
+	emailRepo := export.NewEmailRepo(dataData)
+	emailService := export2.NewEmailService(configRepo, emailRepo, siteInfoRepo)
+	siteInfoService := service.NewSiteInfoService(siteInfoRepo, emailService)
+	langController := controller.NewLangController(i18nTranslator, siteInfoService)
 	authRepo := auth.NewAuthRepo(dataData)
 	authService := auth2.NewAuthService(authRepo)
-	configRepo := config.NewConfigRepo(dataData)
 	userRepo := user.NewUserRepo(dataData, configRepo)
 	uniqueIDRepo := unique.NewUniqueIDRepo(dataData)
 	activityRepo := activity_common.NewActivityRepo(dataData, uniqueIDRepo, configRepo)
 	userRankRepo := rank.NewUserRankRepo(dataData, configRepo)
 	userActiveActivityRepo := activity.NewUserActiveActivityRepo(dataData, activityRepo, userRankRepo, configRepo)
-	emailRepo := export.NewEmailRepo(dataData)
-	siteInfoRepo := site_info.NewSiteInfo(dataData)
-	emailService := export2.NewEmailService(configRepo, emailRepo, siteInfoRepo)
 	userService := service.NewUserService(userRepo, userActiveActivityRepo, emailService, authService, serviceConf)
 	captchaRepo := captcha.NewCaptchaRepo(dataData)
 	captchaService := action.NewCaptchaService(captchaRepo)
@@ -166,7 +167,6 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reasonService := reason2.NewReasonService(reasonRepo)
 	reasonController := controller.NewReasonController(reasonService)
 	themeController := controller_backyard.NewThemeController()
-	siteInfoService := service.NewSiteInfoService(siteInfoRepo, emailService)
 	siteInfoController := controller_backyard.NewSiteInfoController(siteInfoService)
 	siteinfoController := controller.NewSiteinfoController(siteInfoService)
 	notificationRepo := notification.NewNotificationRepo(dataData)
