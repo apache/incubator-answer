@@ -97,8 +97,9 @@ func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	dashboardInfo.UserCount = userCount
 	dashboardInfo.ReportCount = reportCount
 
-	dashboardInfo.UploadingFiles = "Allowed"
-	dashboardInfo.SMTP = "Enabled"
+	dashboardInfo.UploadingFiles = true
+	dashboardInfo.SMTP = true
+	dashboardInfo.HTTPS = true
 	dashboardInfo.OccupyingStorageSpace = "1MB"
 	dashboardInfo.AppStartTime = "102"
 	return dashboardInfo, nil
