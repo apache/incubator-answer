@@ -293,7 +293,9 @@
     "now": "now",
     "x_seconds_ago": "{{count}}s ago",
     "x_minutes_ago": "{{count}}m ago",
-    "x_hours_ago": "{{count}}h ago"
+    "x_hours_ago": "{{count}}h ago",
+    "hour": "hour",
+    "day": "day"
   },
   "comment": {
     "btn_add_comment": "Add comment",
@@ -866,7 +868,13 @@
       "config": "Config",
       "update_to": "Update to",
       "latest": "Latest",
-      "check_failed": "Check failed"
+      "check_failed": "Check failed",
+      "yes": "Yes",
+      "no": "No",
+      "not_allowed": "Not allowed",
+      "allowed": "Allowed",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
     },
     "flags": {
       "title": "Flags",
