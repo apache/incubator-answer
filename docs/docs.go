@@ -566,17 +566,6 @@ const docTemplate = `{
                     "admin"
                 ],
                 "summary": "get site interface",
-                "parameters": [
-                    {
-                        "description": "general",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schema.AddCommentReq"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
