@@ -28,6 +28,7 @@ const Answers: FC = () => {
   const PAGE_SIZE = 20;
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const curQuery = urlSearchParams.get('query') || '';
+  const questionId = urlSearchParams.get('questionId') || '';
   const { t } = useTranslation('translation', { keyPrefix: 'admin.answers' });
 
   const {
@@ -39,6 +40,7 @@ const Answers: FC = () => {
     page: curPage,
     status: curFilter as Type.AdminContentsFilterBy,
     query: curQuery,
+    question_id: questionId,
   });
   const count = listData?.count || 0;
 
@@ -105,12 +107,12 @@ const Answers: FC = () => {
           style={{ width: '12.25rem' }}
         />
       </div>
-      <Table>
+      <Table responsive>
         <thead>
           <tr>
-            <th style={{ width: '45%' }}>{t('post')}</th>
+            <th>{t('post')}</th>
             <th>{t('votes')}</th>
-            <th style={{ width: '20%' }}>{t('created')}</th>
+            <th>{t('created')}</th>
             <th>{t('status')}</th>
             {curFilter !== 'deleted' && <th>{t('action')}</th>}
           </tr>
@@ -141,6 +143,7 @@ const Answers: FC = () => {
                         __html: li.description,
                       }}
                       className="last-p text-truncate-2 fs-14"
+                      style={{ maxWidth: '30rem' }}
                     />
                   </Stack>
                 </td>
