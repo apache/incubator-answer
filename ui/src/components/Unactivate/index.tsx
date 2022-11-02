@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Col } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { resendEmail, checkImgCode } from '@answer/api';
 import { PicAuthCodeModal } from '@answer/components/Modal';
@@ -120,6 +121,9 @@ const Index: React.FC<IProps> = ({ visible = false }) => {
           <Button variant="link" onClick={onSentEmail}>
             {t('btn_name')}
           </Button>
+          <Link to="/users/change-email" replace className="btn btn-link ms-2">
+            {t('change_btn_name')}
+          </Link>
         </>
       )}
 

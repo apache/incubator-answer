@@ -43,7 +43,7 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
           id="dropdown-basic"
           as="a"
           className="no-toggle pointer">
-          <Avatar size="36px" avatar={userInfo?.avatar} />
+          <Avatar size="36px" avatar={userInfo?.avatar} searchStr="s=96" />
         </Dropdown.Toggle>
 
         <Dropdown.Menu>

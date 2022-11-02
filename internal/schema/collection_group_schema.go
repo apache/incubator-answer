@@ -3,8 +3,8 @@ package schema
 import "time"
 
 const (
-	CG_DEFAULT = 1
-	CG_DIY     = 2
+	CGDefault = 1
+	CGDIY     = 2
 )
 
 // CollectionSwitchReq switch collection request

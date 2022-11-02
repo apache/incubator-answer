@@ -87,6 +87,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/comment", a.commentController.GetComment)
 
 	// user
+	r.GET("/user/info", a.userController.GetUserInfoByUserID)
 	r.GET("/user/status", a.userController.GetUserStatus)
 	r.GET("/user/action/record", a.userController.ActionRecord)
 	r.POST("/user/login/email", a.userController.UserEmailLogin)
@@ -98,6 +99,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.POST("/user/email/verification/send", a.userController.UserVerifyEmailSend)
 	r.GET("/user/logout", a.userController.UserLogout)
 	r.PUT("/user/email", a.userController.UserChangeEmailVerify)
+	r.POST("/user/email/change/code", a.userController.UserChangeEmailSendCode)
 
 	//answer
 	r.GET("/answer/info", a.answerController.Get)
@@ -173,13 +175,11 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.DELETE("/answer", a.answerController.RemoveAnswer)
 
 	// user
-	r.GET("/user/info", a.userController.GetUserInfoByUserID)
 	r.PUT("/user/password", a.userController.UserModifyPassWord)
 	r.PUT("/user/info", a.userController.UserUpdateInfo)
 	r.POST("/user/avatar/upload", a.userController.UploadUserAvatar)
 	r.POST("/user/post/file", a.userController.UploadUserPostFile)
 	r.POST("/user/notice/set", a.userController.UserNoticeSet)
-	r.POST("/user/email/change/code", a.userController.UserChangeEmailSendCode)
 
 	// vote
 	r.GET("/personal/vote/page", a.voteController.UserVotes)

@@ -4,7 +4,7 @@
 
 # Answer - Build Q&A community
 
-An open-source knowledge based community software. You can use it to quickly build your Q&A community for product technical support, customer support, user communication, and more.
+An open-source knowledge-based community software. You can use it to quickly build your Q&A community for product technical support, customer support, user communication, and more.
 
 To learn more about the project, visit [answer.dev](https://answer.dev).
 
@@ -19,15 +19,13 @@ To learn more about the project, visit [answer.dev](https://answer.dev).
 
 ## Quick start
 
-### Running with docker-compose
+### Running with docker
 
 ```bash
-mkdir answer && cd answer
-wget https://raw.githubusercontent.com/answerdev/answer/main/docker-compose.yaml
-docker-compose up
+docker run -d -p 9080:80 -v $PWD/answer-data:/data --name answer answerdev/answer:latest
 ```
 
-For more information you can see [INSTALL.md](./INSTALL.md)
+For more information, see [INSTALL.md](./INSTALL.md)
 
 ## Contributing
 

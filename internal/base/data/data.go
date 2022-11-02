@@ -1,10 +1,13 @@
 package data
 
 import (
+	"path/filepath"
 	"time"
 
+	"github.com/answerdev/answer/pkg/dir"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
+	_ "github.com/mattn/go-sqlite3"
 	"github.com/segmentfault/pacman/cache"
 	"github.com/segmentfault/pacman/contrib/cache/memory"
 	"github.com/segmentfault/pacman/log"
@@ -33,6 +36,13 @@ func NewData(db *xorm.Engine, cache cache.Cache) (*Data, func(), error) {
 func NewDB(debug bool, dataConf *Database) (*xorm.Engine, error) {
 	if dataConf.Driver == "" {
 		dataConf.Driver = string(schemas.MYSQL)
+	}
+	if dataConf.Driver == string(schemas.SQLITE) {
+		dbFileDir := filepath.Dir(dataConf.Connection)
+		log.Debugf("try to create database directory %s", dbFileDir)
+		if err := dir.CreateDirIfNotExist(dbFileDir); err != nil {
+			log.Errorf("create database dir failed: %s", err)
+		}
 	}
 	engine, err := xorm.NewEngine(dataConf.Driver, dataConf.Connection)
 	if err != nil {
@@ -68,6 +78,12 @@ func NewCache(c *CacheConf) (cache.Cache, func(), error) {
 	memCache := memory.NewCache()
 
 	if len(c.FilePath) > 0 {
+		cacheFileDir := filepath.Dir(c.FilePath)
+		log.Debugf("try to create cache directory %s", cacheFileDir)
+		err := dir.CreateDirIfNotExist(cacheFileDir)
+		if err != nil {
+			log.Errorf("create cache dir failed: %s", err)
+		}
 		log.Infof("try to load cache file from %s", c.FilePath)
 		if err := memory.Load(memCache, c.FilePath); err != nil {
 			log.Warn(err)

@@ -3,9 +3,9 @@ package entity
 import "time"
 
 const (
-	Answer_Search_OrderBy_Default = "default"
-	Answer_Search_OrderBy_Time    = "updated"
-	Answer_Search_OrderBy_Vote    = "vote"
+	AnswerSearchOrderByDefault = "default"
+	AnswerSearchOrderByTime    = "updated"
+	AnswerSearchOrderByVote    = "vote"
 
 	AnswerStatusAvailable = 1
 	AnswerStatusDeleted   = 10
@@ -35,15 +35,17 @@ type Answer struct {
 type AnswerSearch struct {
 	Answer
 	Order    string `json:"order_by" `                  // default or updated
-	Page     int    `json:"page" form:"page"`           //Query number of pages
-	PageSize int    `json:"page_size" form:"page_size"` //Search page size
+	Page     int    `json:"page" form:"page"`           // Query number of pages
+	PageSize int    `json:"page_size" form:"page_size"` // Search page size
 }
 
 type CmsAnswerSearch struct {
-	Page      int    `json:"page" form:"page"`           //Query number of pages
-	PageSize  int    `json:"page_size" form:"page_size"` //Search page size
-	Status    int    `json:"-" form:"-"`
-	StatusStr string `json:"status" form:"status"` //Status 1 Available 2 closed 10 Deleted
+	Page       int    `json:"page" form:"page"`           // Query number of pages
+	PageSize   int    `json:"page_size" form:"page_size"` // Search page size
+	Status     int    `json:"-" form:"-"`
+	StatusStr  string `json:"status" form:"status"`                                             // Status 1 Available 2 closed 10 Deleted
+	Query      string `validate:"omitempty,gt=0,lte=100" json:"query" form:"query" `            //Query string
+	QuestionID string `validate:"omitempty,gt=0,lte=24" json:"question_id" form:"question_id" ` //Query string
 }
 
 type AdminSetAnswerStatusRequest struct {
