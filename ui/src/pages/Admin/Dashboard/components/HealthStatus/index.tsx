@@ -3,7 +3,7 @@ import { Card, Row, Col, Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import type * as Type from '@answer/common/interface';
+import type * as Type from '@/common/interface';
 
 interface IProps {
   data: Type.AdminDashboard['info'];

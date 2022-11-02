@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type * as Type from '@answer/common/interface';
+import type * as Type from '@/common/interface';
 
 interface IProps {
   data: Type.AdminDashboard['info'];
