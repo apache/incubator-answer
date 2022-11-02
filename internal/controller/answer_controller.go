@@ -11,7 +11,6 @@ import (
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/dashboard"
 	"github.com/answerdev/answer/internal/service/rank"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -245,13 +244,4 @@ func (ac *AnswerController) AdminSetAnswerStatus(ctx *gin.Context) {
 	}
 	err := ac.answerService.AdminSetAnswerStatus(ctx, req.AnswerID, req.StatusStr)
 	handler.HandleResponse(ctx, err, gin.H{})
-}
-
-// dashboardService
-func (ac *AnswerController) Dashboard(ctx *gin.Context) {
-	err := ac.dashboardService.Statistical(ctx)
-	spew.Dump(err)
-	handler.HandleResponse(ctx, err, gin.H{
-		"ping": "pong",
-	})
 }

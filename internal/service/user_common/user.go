@@ -21,6 +21,7 @@ type UserRepo interface {
 	BatchGetByID(ctx context.Context, ids []string) ([]*entity.User, error)
 	GetByUsername(ctx context.Context, username string) (userInfo *entity.User, exist bool, err error)
 	GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error)
+	GetUserCount(ctx context.Context) (count int64, err error)
 }
 
 // UserCommon user service

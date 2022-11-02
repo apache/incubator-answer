@@ -27,6 +27,7 @@ type AnswerAPIRouter struct {
 	siteInfoController       *controller_backyard.SiteInfoController
 	siteinfoController       *controller.SiteinfoController
 	notificationController   *controller.NotificationController
+	dashboardController      *controller.DashboardController
 }
 
 func NewAnswerAPIRouter(
@@ -50,6 +51,7 @@ func NewAnswerAPIRouter(
 	siteInfoController *controller_backyard.SiteInfoController,
 	siteinfoController *controller.SiteinfoController,
 	notificationController *controller.NotificationController,
+	dashboardController *controller.DashboardController,
 
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
@@ -73,6 +75,7 @@ func NewAnswerAPIRouter(
 		siteInfoController:       siteInfoController,
 		notificationController:   notificationController,
 		siteinfoController:       siteinfoController,
+		dashboardController:      dashboardController,
 	}
 }
 
@@ -85,9 +88,6 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/comment/page", a.commentController.GetCommentWithPage)
 	r.GET("/personal/comment/page", a.commentController.GetCommentPersonalWithPage)
 	r.GET("/comment", a.commentController.GetComment)
-
-	//test
-	r.GET("/test", a.answerController.Dashboard)
 
 	// user
 	r.GET("/user/info", a.userController.GetUserInfoByUserID)
@@ -228,4 +228,7 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/siteinfo/interface", a.siteInfoController.UpdateInterface)
 	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
 	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
+
+	//dashboard
+	r.GET("/dashboard", a.dashboardController.DashboardInfo)
 }

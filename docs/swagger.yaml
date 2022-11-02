@@ -1430,6 +1430,23 @@ paths:
       summary: AdminSetAnswerStatus
       tags:
       - admin
+  /answer/admin/api/dashboard:
+    get:
+      consumes:
+      - application/json
+      description: DashboardInfo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: DashboardInfo
+      tags:
+      - admin
   /answer/admin/api/language/options:
     get:
       description: Get language options
