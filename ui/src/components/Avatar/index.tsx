@@ -21,9 +21,9 @@ const Index: FC<IProps> = ({ avatar, size, className, searchStr = '' }) => {
         avatar?.includes('gravatar') ? '&d=identicon' : ''
       }`;
     }
-  } else if (avatar?.type === 'gravatar') {
+  } else if (avatar?.type === 'gravatar' && avatar.gravatar) {
     url = `${avatar.gravatar}?${searchStr}&d=identicon`;
-  } else if (avatar?.type === 'custom') {
+  } else if (avatar?.type === 'custom' && avatar.custom) {
     url = `${avatar.custom}?${searchStr}`;
   }
 
