@@ -4,7 +4,9 @@ import qs from 'qs';
 import request from '@/utils/request';
 import type * as Type from '@/common/interface';
 
-export const useAnswerSearch = (params: Type.AdminContentsReq) => {
+export const useAnswerSearch = (
+  params: Type.AdminContentsReq & { question_id?: string },
+) => {
   const apiUrl = `/answer/admin/api/answer/page?${qs.stringify(params)}`;
   const { data, error, mutate } = useSWR<Type.ListResult, Error>(
     [apiUrl],
