@@ -323,3 +323,21 @@ export interface SearchResItem {
 export interface SearchRes extends ListResult<SearchResItem> {
   extra: any;
 }
+
+export interface AdminDashboard {
+  info: {
+    question_count: number;
+    answer_count: number;
+    comment_count: number;
+    vote_count: number;
+    user_count: number;
+    report_count: number;
+    uploading_files: boolean;
+    smtp: boolean;
+    time_zone: string;
+    occupying_storage_space: string;
+    app_start_time: number;
+    app_version: string;
+    https: boolean;
+  };
+}
