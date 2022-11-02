@@ -652,6 +652,9 @@ definitions:
       is_admin:
         description: is admin
         type: boolean
+      language:
+        description: language
+        type: string
       last_login_date:
         description: last login date
         type: integer
@@ -723,6 +726,9 @@ definitions:
       is_admin:
         description: is admin
         type: boolean
+      language:
+        description: language
+        type: string
       last_login_date:
         description: last login date
         type: integer
@@ -1203,6 +1209,15 @@ definitions:
     - synonym_tag_list
     - tag_id
     type: object
+  schema.UpdateUserInterfaceRequest:
+    properties:
+      language:
+        description: language
+        maxLength: 100
+        type: string
+    required:
+    - language
+    type: object
   schema.UpdateUserStatusReq:
     properties:
       status:
@@ -1452,8 +1467,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
       summary: Get language options
       tags:
       - Lang
@@ -2245,8 +2258,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
       summary: Get language options
       tags:
       - Lang
@@ -3431,6 +3442,35 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: UserUpdateInfo update user info
+      tags:
+      - User
+  /answer/api/v1/user/interface:
+    put:
+      consumes:
+      - application/json
+      description: UserUpdateInterface update user interface config
+      parameters:
+      - description: access-token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: UpdateInfoRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateUserInterfaceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: UserUpdateInterface update user interface config
       tags:
       - User
   /answer/api/v1/user/login/email:

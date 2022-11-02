@@ -62,6 +62,8 @@ type GetUserResp struct {
 	Location string `json:"location"`
 	// ip info
 	IPInfo string `json:"ip_info"`
+	// language
+	Language string `json:"language"`
 	// access token
 	AccessToken string `json:"access_token"`
 	// is admin
@@ -303,6 +305,14 @@ func (u *UpdateInfoRequest) Check() (errField *validator.ErrorField, err error) 
 		}
 	}
 	return nil, nil
+}
+
+// UpdateUserInterfaceRequest update user interface request
+type UpdateUserInterfaceRequest struct {
+	// language
+	Language string `validate:"required,gt=1,lte=100" json:"language"`
+	// user id
+	UserId string `json:"-" `
 }
 
 type UserRetrievePassWordRequest struct {

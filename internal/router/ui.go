@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/answerdev/answer/i18n"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
@@ -52,6 +53,7 @@ func (a *UIRouter) Register(r *gin.Engine) {
 
 			r.LoadHTMLGlob(staticPath + "/*.html")
 			r.Static("/static", staticPath+"/static")
+			r.StaticFS("/i18n/", http.FS(i18n.I18n))
 			r.NoRoute(func(c *gin.Context) {
 				c.HTML(http.StatusOK, "index.html", gin.H{})
 			})

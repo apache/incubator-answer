@@ -373,6 +373,27 @@ func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
+// UserUpdateInterface update user interface config
+// @Summary UserUpdateInterface update user interface config
+// @Description UserUpdateInterface update user interface config
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "access-token"
+// @Param data body schema.UpdateUserInterfaceRequest true "UpdateInfoRequest"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/user/interface [put]
+func (uc *UserController) UserUpdateInterface(ctx *gin.Context) {
+	req := &schema.UpdateUserInterfaceRequest{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.UserId = middleware.GetLoginUserIDFromContext(ctx)
+	err := uc.userService.UserUpdateInterface(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
 // UploadUserAvatar godoc
 // @Summary UserUpdateInfo
 // @Description UserUpdateInfo
