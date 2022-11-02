@@ -838,7 +838,30 @@
     "dashboard": {
       "title": "Dashboard",
       "welcome": "Welcome to Answer Admin !",
-      "version": "Version"
+      "site_statistics": "Site Statistics",
+      "questions": "Questions:",
+      "answers": "Answers:",
+      "comments": "Comments:",
+      "votes": "Votes:",
+      "active_users": "Active users:",
+      "flags": "Flags:",
+      "site_health_status": "Site Health Status",
+      "version": "Version:",
+      "https": "HTTPS:",
+      "uploading_files": "Uploading files:",
+      "smtp": "SMTP:",
+      "timezone": "Timezone:",
+      "system_info": "System Info",
+      "storage_used": "Storage used:",
+      "uptime": "Uptime:",
+      "answer_links": "Answer Links",
+      "documents": "Documents",
+      "feedback": "Feedback",
+      "review": "Review",
+      "config": "Config",
+      "update_to": "Update to",
+      "latest": "Latest",
+      "check_failed": "Check failed"
     },
     "flags": {
       "title": "Flags",
@@ -895,7 +918,10 @@
       "inactive": "Inactive",
       "suspended": "Suspended",
       "deleted": "Deleted",
-      "normal": "Normal"
+      "normal": "Normal",
+      "filter": {
+        "placeholder": "Filter by name, user:id"
+      }
     },
     "questions": {
       "page_title": "Questions",
@@ -908,7 +934,10 @@
       "created": "Created",
       "status": "Status",
       "action": "Action",
-      "change": "Change"
+      "change": "Change",
+      "filter": {
+        "placeholder": "Filter by title, question:id"
+      }
     },
     "answers": {
       "page_title": "Answers",
@@ -919,7 +948,10 @@
       "created": "Created",
       "status": "Status",
       "action": "Action",
-      "change": "Change"
+      "change": "Change",
+      "filter": {
+        "placeholder": "Filter by title, answer:id"
+      }
     },
     "general": {
       "page_title": "General",
@@ -955,6 +987,11 @@
         "label": "Interface Language",
         "msg": "Interface language cannot be empty.",
         "text": "User interface language. It will change when you refresh the page."
+      },
+      "timezone": {
+        "label": "Timezone",
+        "msg": "Timezone cannot be empty.",
+        "text": "Choose a UTC (Coordinated Universal Time) time offset."
       }
     },
     "smtp": {

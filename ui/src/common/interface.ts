@@ -228,6 +228,7 @@ export type AdminContentsFilterBy = 'normal' | 'closed' | 'deleted';
 
 export interface AdminContentsReq extends Paging {
   status: AdminContentsFilterBy;
+  query?: string;
 }
 
 /**
@@ -263,6 +264,7 @@ export interface AdminSettingsInterface {
   logo: string;
   language: string;
   theme: string;
+  time_zone: string;
 }
 
 export interface AdminSettingsSmtp {

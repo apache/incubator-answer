@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Button, Form, Table, Badge } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -34,11 +34,11 @@ const bgMap = {
 const PAGE_SIZE = 10;
 const Users: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'admin.users' });
-  const [userName, setUserName] = useState('');
 
-  const [urlSearchParams] = useSearchParams();
+  const [urlSearchParams, setUrlSearchParams] = useSearchParams();
   const curFilter = urlSearchParams.get('filter') || UserFilterKeys[0];
   const curPage = Number(urlSearchParams.get('page') || '1');
+  const curQuery = urlSearchParams.get('query') || '';
   const {
     data,
     isLoading,
@@ -46,7 +46,7 @@ const Users: FC = () => {
   } = useQueryUsers({
     page: curPage,
     page_size: PAGE_SIZE,
-    ...(userName ? { username: userName } : {}),
+    query: curQuery,
     ...(curFilter === 'all' ? {} : { status: curFilter }),
   });
   const changeModal = useChangeModal({
@@ -60,6 +60,11 @@ const Users: FC = () => {
     });
   };
 
+  const handleFilter = (e) => {
+    urlSearchParams.set('query', e.target.value);
+    urlSearchParams.delete('page');
+    setUrlSearchParams(urlSearchParams);
+  };
   return (
     <>
       <h3 className="mb-4">{t('title')}</h3>
@@ -72,11 +77,10 @@ const Users: FC = () => {
         />
 
         <Form.Control
-          className="d-none"
           size="sm"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          placeholder="Filter by name"
+          value={curQuery}
+          onChange={handleFilter}
+          placeholder={t('filter.placeholder')}
           style={{ width: '12.25rem' }}
         />
       </div>

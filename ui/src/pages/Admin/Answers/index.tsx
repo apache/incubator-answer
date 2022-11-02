@@ -23,10 +23,12 @@ import '../index.scss';
 const answerFilterItems: Type.AdminContentsFilterBy[] = ['normal', 'deleted'];
 
 const Answers: FC = () => {
-  const [urlSearchParams] = useSearchParams();
+  const [urlSearchParams, setUrlSearchParams] = useSearchParams();
   const curFilter = urlSearchParams.get('status') || answerFilterItems[0];
   const PAGE_SIZE = 20;
   const curPage = Number(urlSearchParams.get('page')) || 1;
+  const curQuery = urlSearchParams.get('query') || '';
+  const questionId = urlSearchParams.get('questionId') || '';
   const { t } = useTranslation('translation', { keyPrefix: 'admin.answers' });
 
   const {
@@ -37,6 +39,8 @@ const Answers: FC = () => {
     page_size: PAGE_SIZE,
     page: curPage,
     status: curFilter as Type.AdminContentsFilterBy,
+    query: curQuery,
+    question_id: questionId,
   });
   const count = listData?.count || 0;
 
@@ -78,6 +82,11 @@ const Answers: FC = () => {
     });
   };
 
+  const handleFilter = (e) => {
+    urlSearchParams.set('query', e.target.value);
+    urlSearchParams.delete('page');
+    setUrlSearchParams(urlSearchParams);
+  };
   return (
     <>
       <h3 className="mb-4">{t('page_title')}</h3>
@@ -90,19 +99,20 @@ const Answers: FC = () => {
         />
 
         <Form.Control
+          value={curQuery}
+          onChange={handleFilter}
           size="sm"
           type="input"
-          placeholder="Filter by title"
-          className="d-none"
+          placeholder={t('filter.placeholder')}
           style={{ width: '12.25rem' }}
         />
       </div>
-      <Table>
+      <Table responsive>
         <thead>
           <tr>
-            <th style={{ width: '45%' }}>{t('post')}</th>
+            <th>{t('post')}</th>
             <th>{t('votes')}</th>
-            <th style={{ width: '20%' }}>{t('created')}</th>
+            <th>{t('created')}</th>
             <th>{t('status')}</th>
             {curFilter !== 'deleted' && <th>{t('action')}</th>}
           </tr>
@@ -133,6 +143,7 @@ const Answers: FC = () => {
                         __html: li.description,
                       }}
                       className="last-p text-truncate-2 fs-14"
+                      style={{ maxWidth: '30rem' }}
                     />
                   </Stack>
                 </td>
