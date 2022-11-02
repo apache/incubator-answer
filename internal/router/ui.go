@@ -7,9 +7,8 @@ import (
 	"net/http"
 	"os"
 
-
-	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/i18n"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
@@ -116,6 +115,10 @@ func (a *UIRouter) Register(r *gin.Engine) {
 	// @Success 200 {object} handler.RespBody{}
 	// @Router /install [put]
 	r.PUT("/install", func(c *gin.Context) {
+		handler.HandleResponse(c, nil, gin.H{})
+	})
+
+	r.PUT("/install/siteconfig", func(c *gin.Context) {
 		handler.HandleResponse(c, nil, gin.H{})
 	})
 
