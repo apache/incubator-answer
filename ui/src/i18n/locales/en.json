@@ -523,7 +523,8 @@
         "custom": "Custom",
         "btn_refresh": "Refresh",
         "custom_text": "You can upload your image.",
-        "default": "Default"
+        "default": "Default",
+        "msg": "Please upload an avatar"
       },
       "bio": {
         "label": "About Me (optional)"
