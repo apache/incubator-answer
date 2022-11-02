@@ -6,13 +6,13 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { Editor, EditorRef, Icon, PageTitle } from '@answer/components';
+import { Editor, EditorRef, Icon, PageTitle } from '@/components';
+import type * as Type from '@/common/interface';
 import {
   useQueryAnswerInfo,
   modifyAnswer,
   useQueryRevisions,
-} from '@answer/api';
-import type * as Type from '@answer/common/interface';
+} from '@/services';
 
 import './index.scss';
 

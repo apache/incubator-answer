@@ -5,7 +5,7 @@ import { useNavigate, useMatch } from 'react-router-dom';
 
 import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 
-import { Icon } from '@answer/components';
+import { Icon } from '@/components';
 
 function MenuNode({ menu, callback, activeKey, isLeaf = false }) {
   const { t } = useTranslation('translation', { keyPrefix: 'admin.nav_menus' });

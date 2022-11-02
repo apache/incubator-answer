@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { marked } from 'marked';
 import classNames from 'classnames';
 
-import { Editor, Modal } from '@answer/components';
-import { postAnswer } from '@answer/api';
-import { FormDataType } from '@answer/common/interface';
+import { Editor, Modal } from '@/components';
+import { FormDataType } from '@/common/interface';
+import { postAnswer } from '@/services';
 
 interface Props {
   visible?: boolean;

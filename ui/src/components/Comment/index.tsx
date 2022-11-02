@@ -7,17 +7,18 @@ import classNames from 'classnames';
 import { unionBy } from 'lodash';
 import { marked } from 'marked';
 
-import * as Types from '@answer/common/interface';
+import * as Types from '@/common/interface';
+import { Modal } from '@/components';
+import { usePageUsers, useReportModal } from '@/hooks';
+import { matchedUsers, parseUserInfo } from '@/utils';
+import { tryNormalLogged } from '@/utils/guard';
 import {
   useQueryComments,
   addComment,
   deleteComment,
   updateComment,
   postVote,
-} from '@answer/api';
-import { Modal } from '@answer/components';
-import { usePageUsers, useReportModal } from '@answer/hooks';
-import { matchedUsers, parseUserInfo, isLogin } from '@answer/utils';
+} from '@/services';
 
 import { Form, ActionBar, Reply } from './components';
 
@@ -163,7 +164,7 @@ const Comment = ({ objectId, mode }) => {
   };
 
   const handleVote = (id, is_cancel) => {
-    if (!isLogin(true)) {
+    if (!tryNormalLogged(true)) {
       return;
     }
 
@@ -189,7 +190,7 @@ const Comment = ({ objectId, mode }) => {
   };
 
   const handleAction = ({ action }, item) => {
-    if (!isLogin(true)) {
+    if (!tryNormalLogged(true)) {
       return;
     }
     if (action === 'report') {

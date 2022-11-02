@@ -50,6 +50,10 @@
 
 @media (max-width: 992.9px) {
   #header {
+    .logo {
+      max-width: 93px;
+      max-height: auto;
+    }
     .nav-grow {
       flex-grow: 1!important;
     }

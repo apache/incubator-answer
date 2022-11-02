@@ -3,8 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useMatch } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { PageTitle, FollowingTags } from '@answer/components';
-
+import { PageTitle, FollowingTags } from '@/components';
 import QuestionList from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
 import { siteInfoStore } from '@/stores';

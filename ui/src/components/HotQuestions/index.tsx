@@ -3,8 +3,8 @@ import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useHotQuestions } from '@answer/api';
-import { Icon } from '@answer/components';
+import { Icon } from '@/components';
+import { useHotQuestions } from '@/services';
 
 const HotQuestions: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });

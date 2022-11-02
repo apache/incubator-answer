@@ -1,8 +1,8 @@
 import useSWR from 'swr';
 import qs from 'qs';
 
-import request from '@answer/utils/request';
-import type * as Type from '@answer/common/interface';
+import request from '@/utils/request';
+import type * as Type from '@/common/interface';
 
 export const usePersonalInfoByName = (username: string) => {
   const apiUrl = '/answer/api/v1/personal/user/info';

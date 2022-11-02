@@ -1,9 +1,9 @@
 import useSWR from 'swr';
 import qs from 'qs';
 
-import request from '@answer/utils/request';
-import { isLogin } from '@answer/utils';
-import type * as Type from '@answer/common/interface';
+import request from '@/utils/request';
+import type * as Type from '@/common/interface';
+import { tryNormalLogged } from '@/utils/guard';
 
 export const useQueryNotifications = (params) => {
   const apiUrl = `/answer/api/v1/notification/page?${qs.stringify(params, {
@@ -33,7 +33,7 @@ export const useQueryNotificationStatus = () => {
   const apiUrl = '/answer/api/v1/notification/status';
 
   return useSWR<{ inbox: number; achievement: number }>(
-    isLogin() ? apiUrl : null,
+    tryNormalLogged() ? apiUrl : null,
     request.instance.get,
     {
       refreshInterval: 3000,
