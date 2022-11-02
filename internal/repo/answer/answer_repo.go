@@ -257,6 +257,13 @@ func (ar *answerRepo) CmsSearchList(ctx context.Context, search *entity.CmsAnswe
 		}
 	}
 
+	// check search by question id
+	if len(search.QuestionID) > 0 {
+		session.And(builder.Eq{
+			"question_id": search.QuestionID,
+		})
+	}
+
 	offset := search.Page * search.PageSize
 	session.
 		OrderBy("a.updated_at desc").
