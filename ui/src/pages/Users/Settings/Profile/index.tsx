@@ -120,6 +120,17 @@ const Index: React.FC = () => {
       };
     }
 
+    if (formData.avatar.type === 'custom' && !formData.avatar.custom) {
+      bol = false;
+      formData.avatar = {
+        ...formData.avatar,
+        custom: '',
+        value: '',
+        isInvalid: true,
+        errorMsg: t('avatar.msg'),
+      };
+    }
+
     const reg = /^(http|https):\/\//g;
     if (website.value && !website.value.match(reg)) {
       bol = false;
@@ -368,6 +379,13 @@ const Index: React.FC = () => {
             <Avatar size="128px" avatar="" className="me-3 rounded" />
           )}
         </div>
+        <Form.Control
+          isInvalid={formData.avatar.isInvalid}
+          className="d-none"
+        />
+        <Form.Control.Feedback type="invalid">
+          {formData.avatar.errorMsg}
+        </Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group controlId="bio" className="mb-3">

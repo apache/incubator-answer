@@ -10,7 +10,6 @@ import (
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/log"
 )
 
 // UserVerifyEmailReq user verify email request
@@ -108,7 +107,6 @@ func FormatAvatarInfo(avatarJson string) string {
 	AvatarInfo := &AvatarInfo{}
 	err := json.Unmarshal([]byte(avatarJson), AvatarInfo)
 	if err != nil {
-		log.Error("AvatarInfo json.Unmarshal Error", err)
 		return ""
 	}
 	switch AvatarInfo.Type {

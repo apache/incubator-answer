@@ -391,6 +391,7 @@ func (qc *QuestionController) CmsSearchList(ctx *gin.Context) {
 // @Param page_size query int false "page size"
 // @Param status query string false "user status" Enums(available,deleted)
 // @Param query query string false "answer id or question title"
+// @Param question_id query string false "question id"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/answer/page [get]
 func (qc *QuestionController) CmsSearchAnswerList(ctx *gin.Context) {
