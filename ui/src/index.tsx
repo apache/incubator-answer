@@ -2,9 +2,9 @@ import React from 'react';
 
 import ReactDOM from 'react-dom/client';
 
-import App from './App';
+import { Guard } from '@/utils';
 
-import { pullLoggedUser } from '@/utils/guards';
+import App from './App';
 
 import './i18n/init';
 import './index.scss';
@@ -17,7 +17,7 @@ async function bootstrapApp() {
   /**
    * NOTICE: must pre init logged user info for router
    */
-  await pullLoggedUser();
+  await Guard.pullLoggedUser();
   root.render(
     <React.StrictMode>
       <App />

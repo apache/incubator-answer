@@ -2,9 +2,8 @@ import React, { useState, FormEvent, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type { FormDataType } from '@answer/common/interface';
-import { useToast } from '@answer/hooks';
-
+import type { FormDataType } from '@/common/interface';
+import { useToast } from '@/hooks';
 import { setNotice, getLoggedUserInfo } from '@/services';
 
 const Index = () => {

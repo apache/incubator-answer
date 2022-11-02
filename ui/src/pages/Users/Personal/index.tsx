@@ -3,8 +3,13 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 
-import { Pagination, FormatTime, PageTitle, Empty } from '@answer/components';
-import { loggedUserInfoStore } from '@answer/stores';
+import { Pagination, FormatTime, PageTitle, Empty } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
+import {
+  usePersonalInfoByName,
+  usePersonalTop,
+  usePersonalListByTabName,
+} from '@/services';
 
 import {
   UserInfo,
@@ -18,12 +23,6 @@ import {
   Answers,
   Votes,
 } from './components';
-
-import {
-  usePersonalInfoByName,
-  usePersonalTop,
-  usePersonalListByTabName,
-} from '@/services';
 
 const Personal: FC = () => {
   const { tabName = 'overview', username = '' } = useParams();

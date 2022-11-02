@@ -3,8 +3,7 @@ import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Icon } from '@answer/components';
-
+import { Icon } from '@/components';
 import { useHotQuestions } from '@/services';
 
 const HotQuestions: FC = () => {

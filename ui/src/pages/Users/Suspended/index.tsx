@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
-import { loggedUserInfoStore } from '@answer/stores';
-
+import { loggedUserInfoStore } from '@/stores';
 import { PageTitle } from '@/components';
 
 const Suspended = () => {

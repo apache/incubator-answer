@@ -7,13 +7,11 @@ import type {
   LoginReqParams,
   ImgCodeRes,
   FormDataType,
-} from '@answer/common/interface';
-import { PageTitle, Unactivate } from '@answer/components';
-import { loggedUserInfoStore } from '@answer/stores';
-import { getQueryString } from '@answer/utils';
-
+} from '@/common/interface';
+import { PageTitle, Unactivate } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
+import { getQueryString, Guard, floppyNavigation } from '@/utils';
 import { login, checkImgCode } from '@/services';
-import { deriveUserStat, tryNormalLogged } from '@/utils/guards';
 import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
 import { RouteAlias } from '@/router/alias';
 import { PicAuthCodeModal } from '@/components/Modal';
@@ -106,8 +104,8 @@ const Index: React.FC = () => {
     login(params)
       .then((res) => {
         updateUser(res);
-        const userStat = deriveUserStat();
-        if (!userStat.isActivated) {
+        const userStat = Guard.deriveLoginState();
+        if (userStat.isNotActivated) {
           // inactive
           setStep(2);
           setRefresh((pre) => pre + 1);
@@ -115,7 +113,9 @@ const Index: React.FC = () => {
           const path =
             Storage.get(REDIRECT_PATH_STORAGE_KEY) || RouteAlias.home;
           Storage.remove(REDIRECT_PATH_STORAGE_KEY);
-          navigate(path, { replace: true });
+          floppyNavigation.navigate(path, () => {
+            navigate(path, { replace: true });
+          });
         }
 
         setModalState(false);
@@ -159,7 +159,7 @@ const Index: React.FC = () => {
     if ((storeUser.id && storeUser.mail_status === 2) || isInactive) {
       setStep(2);
     } else {
-      tryNormalLogged();
+      Guard.tryNormalLogged();
     }
   }, []);
 

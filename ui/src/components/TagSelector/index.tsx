@@ -5,9 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { marked } from 'marked';
 import classNames from 'classnames';
 
-import { useTagModal } from '@answer/hooks';
-import type * as Type from '@answer/common/interface';
-
+import { useTagModal } from '@/hooks';
+import type * as Type from '@/common/interface';
 import { queryTags } from '@/services';
 
 import './index.scss';

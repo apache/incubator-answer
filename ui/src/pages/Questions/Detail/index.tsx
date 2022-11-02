@@ -2,15 +2,16 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
-import { Pagination, PageTitle } from '@answer/components';
-import { loggedUserInfoStore } from '@answer/stores';
-import { scrollTop } from '@answer/utils';
-import { usePageUsers } from '@answer/hooks';
+import { Pagination, PageTitle } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
+import { scrollTop } from '@/utils';
+import { usePageUsers } from '@/hooks';
 import type {
   ListResult,
   QuestionDetailRes,
   AnswerItem,
-} from '@answer/common/interface';
+} from '@/common/interface';
+import { questionDetail, getAnswers } from '@/services';
 
 import {
   Question,
@@ -20,8 +21,6 @@ import {
   WriteAnswer,
   Alert,
 } from './components';
-
-import { questionDetail, getAnswers } from '@/services';
 
 import './index.scss';
 

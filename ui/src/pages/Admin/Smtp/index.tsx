@@ -2,9 +2,8 @@ import React, { FC, useEffect, useState } from 'react';
 import { Form, Button, Stack } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type * as Type from '@answer/common/interface';
-import { useToast } from '@answer/hooks';
-
+import type * as Type from '@/common/interface';
+import { useToast } from '@/hooks';
 import { useSmtpSetting, updateSmtpSetting } from '@/services';
 import pattern from '@/common/pattern';
 

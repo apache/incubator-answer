@@ -1,8 +1,7 @@
 import create from 'zustand';
 
-import type { UserInfoRes } from '@answer/common/interface';
-import Storage from '@answer/utils/storage';
-
+import type { UserInfoRes } from '@/common/interface';
+import Storage from '@/utils/storage';
 import {
   LOGGED_USER_STORAGE_KEY,
   LOGGED_TOKEN_STORAGE_KEY,
@@ -15,6 +14,7 @@ interface UserInfoStore {
 }
 
 const initUser: UserInfoRes = {
+  access_token: '',
   username: '',
   avatar: '',
   rank: 0,

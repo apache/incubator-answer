@@ -17,16 +17,11 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import {
-  loggedUserInfoStore,
-  siteInfoStore,
-  interfaceStore,
-} from '@answer/stores';
-
-import NavItems from './components/NavItems';
-
+import { loggedUserInfoStore, siteInfoStore, interfaceStore } from '@/stores';
 import { logout, useQueryNotificationStatus } from '@/services';
 import { RouteAlias } from '@/router/alias';
+
+import NavItems from './components/NavItems';
 
 import './index.scss';
 

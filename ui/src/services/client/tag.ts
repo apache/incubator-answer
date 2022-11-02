@@ -1,9 +1,8 @@
 import useSWR from 'swr';
 
-import request from '@answer/utils/request';
-import type * as Type from '@answer/common/interface';
-
-import { tryNormalLogged } from '@/utils/guards';
+import request from '@/utils/request';
+import type * as Type from '@/common/interface';
+import { tryNormalLogged } from '@/utils/guard';
 
 export const deleteTag = (id) => {
   return request.delete('/answer/api/v1/tag', {

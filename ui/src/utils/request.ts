@@ -1,18 +1,17 @@
 import axios, { AxiosResponse } from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 
-import { Modal } from '@answer/components';
-import { loggedUserInfoStore, toastStore } from '@answer/stores';
-
-import Storage from './storage';
-import { floppyNavigation } from './floppyNavigation';
-
+import { Modal } from '@/components';
+import { loggedUserInfoStore, toastStore } from '@/stores';
 import {
   LOGGED_TOKEN_STORAGE_KEY,
   CURRENT_LANG_STORAGE_KEY,
   DEFAULT_LANG,
 } from '@/common/constants';
 import { RouteAlias } from '@/router/alias';
+
+import Storage from './storage';
+import { floppyNavigation } from './floppyNavigation';
 
 const API = {
   development: '',

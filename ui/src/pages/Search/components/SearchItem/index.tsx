@@ -2,8 +2,8 @@ import { memo, FC } from 'react';
 import { ListGroupItem, Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, Tag, FormatTime, BaseUserCard } from '@answer/components';
-import type { SearchResItem } from '@answer/common/interface';
+import { Icon, Tag, FormatTime, BaseUserCard } from '@/components';
+import type { SearchResItem } from '@/common/interface';
 
 interface Props {
   data: SearchResItem;

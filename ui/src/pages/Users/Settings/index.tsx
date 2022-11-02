@@ -3,12 +3,11 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
-import type { FormDataType } from '@answer/common/interface';
-
-import Nav from './components/Nav';
-
+import type { FormDataType } from '@/common/interface';
 import { getLoggedUserInfo } from '@/services';
 import { PageTitle } from '@/components';
+
+import Nav from './components/Nav';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', {

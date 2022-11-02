@@ -4,11 +4,10 @@ import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
-import { Icon } from '@answer/components';
-import { loggedUserInfoStore } from '@answer/stores';
-import { useToast } from '@answer/hooks';
-
-import { tryNormalLogged } from '@/utils/guards';
+import { Icon } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
+import { useToast } from '@/hooks';
+import { tryNormalLogged } from '@/utils/guard';
 import { bookmark, postVote } from '@/services';
 
 interface Props {

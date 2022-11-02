@@ -9,10 +9,9 @@ import {
   BaseUserCard,
   Empty,
   QueryGroup,
-} from '@answer/components';
-import * as Type from '@answer/common/interface';
-import { useChangeModal } from '@answer/hooks';
-
+} from '@/components';
+import * as Type from '@/common/interface';
+import { useChangeModal } from '@/hooks';
 import { useQueryUsers } from '@/services';
 
 import '../index.scss';

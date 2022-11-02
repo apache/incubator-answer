@@ -28,18 +28,19 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteObject[]) => {
     }
     root.push(rn);
     if (rn.guard) {
-      const { guard } = rn;
-      const loaderRef = rn.loader;
+      const refLoader = rn.loader;
+      const refGuard = rn.guard;
       rn.loader = async (args) => {
-        const gr = await guard(args);
+        const gr = await refGuard();
         if (gr?.redirect && floppyNavigation.differentCurrent(gr.redirect)) {
           return redirect(gr.redirect);
         }
-        let ret;
-        if (typeof loaderRef === 'function') {
-          ret = await loaderRef(args);
+
+        let lr;
+        if (typeof refLoader === 'function') {
+          lr = await refLoader(args);
         }
-        return ret;
+        return lr;
       };
     }
     const children = Array.isArray(rn.children) ? rn.children : null;

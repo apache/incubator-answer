@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, FormatTime, Tag, BaseUserCard } from '@answer/components';
+import { Icon, FormatTime, Tag, BaseUserCard } from '@/components';
 
 interface Props {
   visible: boolean;

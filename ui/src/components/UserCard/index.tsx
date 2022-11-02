@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 
 import classnames from 'classnames';
 
-import { Avatar, FormatTime } from '@answer/components';
-
+import { Avatar, FormatTime } from '@/components';
 import { formatCount } from '@/utils';
 
 interface Props {
