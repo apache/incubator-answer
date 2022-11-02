@@ -10,6 +10,7 @@ import {
 } from '@answer/common/interface';
 import { interfaceStore } from '@answer/stores';
 import { UploadImg } from '@answer/components';
+import { TIMEZONES, DEFAULT_TIMEZONE } from '@answer/common/constants';
 
 import {
   languages,
@@ -28,6 +29,7 @@ const Interface: FC = () => {
   const Toast = useToast();
   const [langs, setLangs] = useState<LangsType[]>();
   const { data: setting } = useInterfaceSetting();
+
   const [formData, setFormData] = useState<FormDataType>({
     logo: {
       value: setting?.logo || '',
@@ -41,6 +43,11 @@ const Interface: FC = () => {
     },
     language: {
       value: setting?.language || '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+    time_zone: {
+      value: setting?.time_zone || DEFAULT_TIMEZONE,
       isInvalid: false,
       errorMsg: '',
     },
@@ -107,6 +114,7 @@ const Interface: FC = () => {
       logo: formData.logo.value,
       theme: formData.theme.value,
       language: formData.language.value,
+      time_zone: formData.time_zone.value,
     };
 
     updateInterfaceSetting(reqParams)
@@ -159,12 +167,14 @@ const Interface: FC = () => {
       Object.keys(setting).forEach((k) => {
         formMeta[k] = { ...formData[k], value: setting[k] };
       });
-      setFormData(formMeta);
+      setFormData({ ...formData, ...formMeta });
     }
   }, [setting]);
   useEffect(() => {
     getLangs();
   }, []);
+
+  console.log('formData', formData);
   return (
     <>
       <h3 className="mb-4">{t('page_title')}</h3>
@@ -250,7 +260,27 @@ const Interface: FC = () => {
             {formData.language.errorMsg}
           </Form.Control.Feedback>
         </Form.Group>
-
+        <Form.Group controlId="time-zone" className="mb-3">
+          <Form.Label>{t('time_zone.label')}</Form.Label>
+          <Form.Select
+            value={formData.time_zone.value}
+            isInvalid={formData.time_zone.isInvalid}
+            onChange={(evt) => {
+              onChange('time_zone', evt.target.value);
+            }}>
+            {TIMEZONES?.map((item) => {
+              return (
+                <option value={item.value} key={item.value}>
+                  {item.label}
+                </option>
+              );
+            })}
+          </Form.Select>
+          <Form.Text as="div">{t('time_zone.text')}</Form.Text>
+          <Form.Control.Feedback type="invalid">
+            {formData.time_zone.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
         <Button variant="primary" type="submit">
           {t('save', { keyPrefix: 'btns' })}
         </Button>
