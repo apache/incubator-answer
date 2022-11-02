@@ -36,7 +36,7 @@ func NewCaptchaService(captchaRepo CaptchaRepo) *CaptchaService {
 // ActionRecord action record
 func (cs *CaptchaService) ActionRecord(ctx context.Context, req *schema.ActionRecordReq) (resp *schema.ActionRecordResp, err error) {
 	resp = &schema.ActionRecordResp{}
-	num, err := cs.captchaRepo.GetActionType(ctx, req.Ip, req.Action)
+	num, err := cs.captchaRepo.GetActionType(ctx, req.IP, req.Action)
 	if err != nil {
 		num = 0
 	}
@@ -51,7 +51,8 @@ func (cs *CaptchaService) ActionRecord(ctx context.Context, req *schema.ActionRe
 // ActionRecordVerifyCaptcha
 // Verify that you need to enter a CAPTCHA, and that the CAPTCHA is correct
 func (cs *CaptchaService) ActionRecordVerifyCaptcha(
-	ctx context.Context, actionType string, ip string, id string, VerifyValue string) bool {
+	ctx context.Context, actionType string, ip string, id string, VerifyValue string,
+) bool {
 	num, cahceErr := cs.captchaRepo.GetActionType(ctx, ip, actionType)
 	if cahceErr != nil {
 		return true

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/answerdev/answer/internal/base/server"
 	"github.com/answerdev/answer/internal/cli"
 	"github.com/answerdev/answer/internal/migrations"
 	"github.com/spf13/cobra"
@@ -48,7 +49,7 @@ To run answer, use:
 		Use:   "run",
 		Short: "Run the application",
 		Long:  `Run the application`,
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, _ []string) {
 			runApp()
 		},
 	}
@@ -58,7 +59,9 @@ To run answer, use:
 		Use:   "init",
 		Short: "init answer application",
 		Long:  `init answer application`,
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, _ []string) {
+			installwebapi := server.NewInstallHTTPServer()
+			installwebapi.Run(":8088")
 			cli.InstallAllInitialEnvironment(dataDirPath)
 			c, err := readConfig()
 			if err != nil {
@@ -79,7 +82,7 @@ To run answer, use:
 		Use:   "upgrade",
 		Short: "upgrade Answer version",
 		Long:  `upgrade Answer version`,
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, _ []string) {
 			c, err := readConfig()
 			if err != nil {
 				fmt.Println("read config failed: ", err.Error())
@@ -98,7 +101,7 @@ To run answer, use:
 		Use:   "dump",
 		Short: "back up data",
 		Long:  `back up data`,
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, _ []string) {
 			fmt.Println("Answer is backing up data")
 			c, err := readConfig()
 			if err != nil {
@@ -119,7 +122,7 @@ To run answer, use:
 		Use:   "check",
 		Short: "checking the required environment",
 		Long:  `Check if the current environment meets the startup requirements`,
-		Run: func(cmd *cobra.Command, args []string) {
+		Run: func(_ *cobra.Command, _ []string) {
 			fmt.Println("Start checking the required environment...")
 			if cli.CheckConfigFile(configFilePath) {
 				fmt.Println("config file exists [✔]")

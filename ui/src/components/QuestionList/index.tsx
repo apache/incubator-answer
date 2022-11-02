@@ -41,7 +41,7 @@ const QuestionLastUpdate = ({ q }) => {
         •
         <FormatTime
           time={q.update_time}
-          className="text-secondary mx-1"
+          className="text-secondary ms-1"
           preFix={t('answered')}
         />
       </div>
@@ -60,7 +60,7 @@ const QuestionLastUpdate = ({ q }) => {
         •
         <FormatTime
           time={q.edit_time}
-          className="text-secondary mx-1"
+          className="text-secondary ms-1"
           preFix={t('modified')}
         />
       </div>
@@ -75,7 +75,7 @@ const QuestionLastUpdate = ({ q }) => {
       <FormatTime
         time={q.create_time}
         preFix={t('asked')}
-        className="text-secondary mx-1"
+        className="text-secondary ms-1"
       />
     </div>
   );
@@ -136,7 +136,7 @@ const QuestionList: FC<Props> = ({ source }) => {
                 <div className="ms-0 ms-md-3 mt-2 mt-md-0">
                   <span>
                     <Icon name="hand-thumbs-up-fill" />
-                    <em className="fst-normal mx-1">{li.vote_count}</em>
+                    <em className="fst-normal ms-1">{li.vote_count}</em>
                   </span>
                   <span
                     className={`ms-3 ${
@@ -149,11 +149,11 @@ const QuestionList: FC<Props> = ({ source }) => {
                           : 'chat-square-text-fill'
                       }
                     />
-                    <em className="fst-normal mx-1">{li.answer_count}</em>
+                    <em className="fst-normal ms-1">{li.answer_count}</em>
                   </span>
                   <span className="summary-stat ms-3">
                     <Icon name="eye-fill" />
-                    <em className="fst-normal mx-1">{li.view_count}</em>
+                    <em className="fst-normal ms-1">{li.view_count}</em>
                   </span>
                 </div>
               </div>

@@ -1,0 +1,6 @@
+# all support language
+language_options:
+  - label: "简体中文(CN)"
+    value: "zh_CN"
+  - label: "English(US)"
+    value: "en_US"

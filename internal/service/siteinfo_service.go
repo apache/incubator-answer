@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/export"
@@ -64,7 +65,7 @@ func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGe
 		siteType = "general"
 		content  []byte
 	)
-	content, err = json.Marshal(req)
+	content, _ = json.Marshal(req)
 
 	data := entity.SiteInfo{
 		Type:    siteType,
@@ -77,10 +78,9 @@ func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGe
 
 func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.SiteInterfaceReq) (err error) {
 	var (
-		siteType = "interface"
-		themeExist,
-		langExist bool
-		content []byte
+		siteType   = "interface"
+		themeExist bool
+		content    []byte
 	)
 
 	// check theme
@@ -96,18 +96,12 @@ func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.Site
 	}
 
 	// check language
-	for _, lang := range schema.GetLangOptions {
-		if lang.Value == req.Language {
-			langExist = true
-			break
-		}
-	}
-	if !langExist {
+	if !translator.CheckLanguageIsValid(req.Language) {
 		err = errors.BadRequest(reason.LangNotFound)
 		return
 	}
 
-	content, err = json.Marshal(req)
+	content, _ = json.Marshal(req)
 
 	data := entity.SiteInfo{
 		Type:    siteType,
@@ -120,7 +114,8 @@ func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.Site
 
 // GetSMTPConfig get smtp config
 func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
-	resp *schema.GetSMTPConfigResp, err error) {
+	resp *schema.GetSMTPConfigResp, err error,
+) {
 	emailConfig, err := s.emailService.GetEmailConfig()
 	if err != nil {
 		return nil, err

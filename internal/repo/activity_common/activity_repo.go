@@ -1,4 +1,4 @@
-package repo
+package activity_common
 
 import (
 	"context"
@@ -37,14 +37,14 @@ func NewActivityRepo(
 	}
 }
 
-func (ar *ActivityRepo) GetActivityTypeByObjID(ctx context.Context, objectId string, action string) (activityType, rank, hasRank int, err error) {
-	objectKey, err := obj.GetObjectTypeStrByObjectID(objectId)
+func (ar *ActivityRepo) GetActivityTypeByObjID(ctx context.Context, objectID string, action string) (activityType, rank, hasRank int, err error) {
+	objectKey, err := obj.GetObjectTypeStrByObjectID(objectID)
 	if err != nil {
 		return
 	}
 
 	confKey := fmt.Sprintf("%s.%s", objectKey, action)
-	activityType, err = ar.configRepo.GetConfigType(confKey)
+	activityType, _ = ar.configRepo.GetConfigType(confKey)
 
 	rank, err = ar.configRepo.GetInt(confKey)
 	hasRank = 0
@@ -64,7 +64,8 @@ func (ar *ActivityRepo) GetActivityTypeByObjKey(ctx context.Context, objectKey, 
 }
 
 func (ar *ActivityRepo) GetActivity(ctx context.Context, session *xorm.Session,
-	objectID, userID string, activityType int) (existsActivity *entity.Activity, exist bool, err error) {
+	objectID, userID string, activityType int,
+) (existsActivity *entity.Activity, exist bool, err error) {
 	existsActivity = &entity.Activity{}
 	exist, err = session.
 		Where(builder.Eq{"object_id": objectID}).

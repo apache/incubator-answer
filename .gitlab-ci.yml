@@ -38,9 +38,7 @@ stages:
   stage: push
   extends: .docker-build-push
   only:
-    - dev
-    - master
-    - main
+    - test
   variables:
     DockerNamespace: sf_app
     DockerImage: answer
@@ -52,7 +50,7 @@ stages:
   stage: deploy-dev
   extends: .deploy-helm
   only:
-    - main
+    - test
   variables:
     LoadBalancerIP: 10.0.10.98
     KubernetesCluster: dev

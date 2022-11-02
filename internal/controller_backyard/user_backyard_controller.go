@@ -45,9 +45,8 @@ func (uc *UserBackyardController) UpdateUserStatus(ctx *gin.Context) {
 // @Produce json
 // @Param page query int false "page size"
 // @Param page_size query int false "page size"
-// @Param username query string false "username"
-// @Param e_mail query string false "email"
-// @Param status query string false "user status" Enums(normal, suspended, deleted, inactive)
+// @Param query query string false "search query: email, username or id:[id]"
+// @Param status query string false "user status" Enums(suspended, deleted, inactive)
 // @Success 200 {object} handler.RespBody{data=pager.PageModel{records=[]schema.GetUserPageResp}}
 // @Router /answer/admin/api/users/page [get]
 func (uc *UserBackyardController) GetUserPage(ctx *gin.Context) {
