@@ -1,8 +1,7 @@
 import { memo, FC } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Avatar } from '@answer/components';
-
+import { Avatar } from '@/components';
 import { formatCount } from '@/utils';
 
 interface Props {

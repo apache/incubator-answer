@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
-import { TextArea, Mentions } from '@answer/components';
-import { usePageUsers } from '@answer/hooks';
+import { TextArea, Mentions } from '@/components';
+import { usePageUsers } from '@/hooks';
 
 const Form = ({
   className = '',

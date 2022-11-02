@@ -6,8 +6,7 @@ import type {
   ImgCodeRes,
   PasswordResetReq,
   FormDataType,
-} from '@answer/common/interface';
-
+} from '@/common/interface';
 import { resetPassword, checkImgCode } from '@/services';
 import { PicAuthCodeModal } from '@/components/Modal';
 

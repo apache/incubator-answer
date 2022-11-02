@@ -1,10 +1,9 @@
 import useSWR from 'swr';
 import qs from 'qs';
 
-import request from '@answer/utils/request';
-import type * as Type from '@answer/common/interface';
-
-import { tryNormalLogged } from '@/utils/guards';
+import request from '@/utils/request';
+import type * as Type from '@/common/interface';
+import { tryNormalLogged } from '@/utils/guard';
 
 export const useQueryNotifications = (params) => {
   const apiUrl = `/answer/api/v1/notification/page?${qs.stringify(params, {

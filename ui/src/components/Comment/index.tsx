@@ -7,14 +7,11 @@ import classNames from 'classnames';
 import { unionBy } from 'lodash';
 import { marked } from 'marked';
 
-import * as Types from '@answer/common/interface';
-import { Modal } from '@answer/components';
-import { usePageUsers, useReportModal } from '@answer/hooks';
-import { matchedUsers, parseUserInfo } from '@answer/utils';
-
-import { Form, ActionBar, Reply } from './components';
-
-import { tryNormalLogged } from '@/utils/guards';
+import * as Types from '@/common/interface';
+import { Modal } from '@/components';
+import { usePageUsers, useReportModal } from '@/hooks';
+import { matchedUsers, parseUserInfo } from '@/utils';
+import { tryNormalLogged } from '@/utils/guard';
 import {
   useQueryComments,
   addComment,
@@ -22,6 +19,8 @@ import {
   updateComment,
   postVote,
 } from '@/services';
+
+import { Form, ActionBar, Reply } from './components';
 
 import './index.scss';
 

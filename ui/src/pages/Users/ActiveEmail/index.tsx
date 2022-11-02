@@ -1,9 +1,8 @@
 import { FC, memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { loggedUserInfoStore } from '@answer/stores';
-import { getQueryString } from '@answer/utils';
-
+import { loggedUserInfoStore } from '@/stores';
+import { getQueryString } from '@/utils';
 import { activateAccount } from '@/services';
 import { PageTitle } from '@/components';
 

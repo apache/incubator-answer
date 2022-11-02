@@ -3,14 +3,9 @@ import { Button, Col } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { PicAuthCodeModal } from '@answer/components/Modal';
-import type {
-  ImgCodeRes,
-  ImgCodeReq,
-  FormDataType,
-} from '@answer/common/interface';
-import { loggedUserInfoStore } from '@answer/stores';
-
+import { PicAuthCodeModal } from '@/components/Modal';
+import type { ImgCodeRes, ImgCodeReq, FormDataType } from '@/common/interface';
+import { loggedUserInfoStore } from '@/stores';
 import { resendEmail, checkImgCode } from '@/services';
 import { CAPTCHA_CODE_STORAGE_KEY } from '@/common/constants';
 import Storage from '@/utils/storage';

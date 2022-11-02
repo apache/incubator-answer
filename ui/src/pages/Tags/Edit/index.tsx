@@ -6,10 +6,9 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { Editor, EditorRef, PageTitle } from '@answer/components';
-import { loggedUserInfoStore } from '@answer/stores';
-import type * as Type from '@answer/common/interface';
-
+import { Editor, EditorRef, PageTitle } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
+import type * as Type from '@/common/interface';
 import { useTagInfo, modifyTag, useQueryRevisions } from '@/services';
 
 interface FormDataItem {

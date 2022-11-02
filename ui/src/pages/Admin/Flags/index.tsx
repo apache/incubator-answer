@@ -9,10 +9,9 @@ import {
   Empty,
   Pagination,
   QueryGroup,
-} from '@answer/components';
-import { useReportModal } from '@answer/hooks';
-import * as Type from '@answer/common/interface';
-
+} from '@/components';
+import { useReportModal } from '@/hooks';
+import * as Type from '@/common/interface';
 import { useFlagSearch } from '@/services';
 
 import '../index.scss';

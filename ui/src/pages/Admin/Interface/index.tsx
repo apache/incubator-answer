@@ -2,15 +2,14 @@ import React, { FC, FormEvent, useEffect, useState } from 'react';
 import { Form, Button, Image, Stack } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { useToast } from '@answer/hooks';
+import { useToast } from '@/hooks';
 import {
   LangsType,
   FormDataType,
   AdminSettingsInterface,
-} from '@answer/common/interface';
-import { interfaceStore } from '@answer/stores';
-import { UploadImg } from '@answer/components';
-
+} from '@/common/interface';
+import { interfaceStore } from '@/stores';
+import { UploadImg } from '@/components';
 import {
   languages,
   uploadAvatar,

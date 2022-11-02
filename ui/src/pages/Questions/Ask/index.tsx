@@ -6,11 +6,8 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { Editor, EditorRef, TagSelector, PageTitle } from '@answer/components';
-import type * as Type from '@answer/common/interface';
-
-import SearchQuestion from './components/SearchQuestion';
-
+import { Editor, EditorRef, TagSelector, PageTitle } from '@/components';
+import type * as Type from '@/common/interface';
 import {
   saveQuestion,
   questionDetail,
@@ -19,6 +16,8 @@ import {
   postAnswer,
   useQueryQuestionByTitle,
 } from '@/services';
+
+import SearchQuestion from './components/SearchQuestion';
 
 interface FormDataItem {
   title: Type.FormValue<string>;

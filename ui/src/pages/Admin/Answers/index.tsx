@@ -11,11 +11,10 @@ import {
   BaseUserCard,
   Empty,
   QueryGroup,
-} from '@answer/components';
-import { ADMIN_LIST_STATUS } from '@answer/common/constants';
-import { useEditStatusModal } from '@answer/hooks';
-import * as Type from '@answer/common/interface';
-
+} from '@/components';
+import { ADMIN_LIST_STATUS } from '@/common/constants';
+import { useEditStatusModal } from '@/hooks';
+import * as Type from '@/common/interface';
 import { useAnswerSearch, changeAnswerStatus } from '@/services';
 
 import '../index.scss';

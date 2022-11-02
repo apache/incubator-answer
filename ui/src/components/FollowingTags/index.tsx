@@ -3,9 +3,8 @@ import { Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
-import { TagSelector, Tag } from '@answer/components';
-
-import { tryNormalLogged } from '@/utils/guards';
+import { TagSelector, Tag } from '@/components';
+import { tryNormalLogged } from '@/utils/guard';
 import { useFollowingTags, followTags } from '@/services';
 
 const Index: FC = () => {

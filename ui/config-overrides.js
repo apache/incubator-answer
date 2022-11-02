@@ -8,13 +8,6 @@ module.exports = {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@': path.resolve(__dirname, 'src'),
-      '@answer/pages': path.resolve(__dirname, 'src/pages'),
-      '@answer/components': path.resolve(__dirname, 'src/components'),
-      '@answer/stores': path.resolve(__dirname, 'src/stores'),
-      '@answer/hooks': path.resolve(__dirname, 'src/hooks'),
-      '@answer/utils': path.resolve(__dirname, 'src/utils'),
-      '@answer/common': path.resolve(__dirname, 'src/common'),
-      '@answer/api': path.resolve(__dirname, 'src/services/api'),
     };
 
     return config;

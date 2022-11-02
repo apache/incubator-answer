@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { FacebookShareButton, TwitterShareButton } from 'next-share';
 import copy from 'copy-to-clipboard';
 
-import { loggedUserInfoStore } from '@answer/stores';
+import { loggedUserInfoStore } from '@/stores';
 
 interface IProps {
   type: 'answer' | 'question';

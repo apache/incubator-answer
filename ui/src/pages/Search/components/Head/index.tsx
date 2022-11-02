@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { following } from '@/services';
-import { tryNormalLogged } from '@/utils/guards';
+import { tryNormalLogged } from '@/utils/guard';
 
 interface Props {
   data;

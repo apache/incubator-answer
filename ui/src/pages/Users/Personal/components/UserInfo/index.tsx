@@ -3,8 +3,8 @@ import { Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { Avatar, Icon } from '@answer/components';
-import type { UserInfoRes } from '@answer/common/interface';
+import { Avatar, Icon } from '@/components';
+import type { UserInfoRes } from '@/common/interface';
 
 interface Props {
   data: UserInfoRes;

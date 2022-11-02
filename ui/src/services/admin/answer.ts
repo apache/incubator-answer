@@ -1,8 +1,8 @@
 import useSWR from 'swr';
 import qs from 'qs';
 
-import request from '@answer/utils/request';
-import type * as Type from '@answer/common/interface';
+import request from '@/utils/request';
+import type * as Type from '@/common/interface';
 
 export const useAnswerSearch = (params: Type.AdminContentsReq) => {
   const apiUrl = `/answer/admin/api/answer/page?${qs.stringify(params)}`;

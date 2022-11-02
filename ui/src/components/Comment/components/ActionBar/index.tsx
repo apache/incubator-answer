@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import classNames from 'classnames';
 
-import { Icon, FormatTime } from '@answer/components';
+import { Icon, FormatTime } from '@/components';
 
 const ActionBar = ({
   nickName,

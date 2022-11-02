@@ -3,17 +3,16 @@ import { Container, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 
-import { PageTitle } from '@answer/components';
-
-import Inbox from './components/Inbox';
-import Achievements from './components/Achievements';
-
+import { PageTitle } from '@/components';
 import {
   useQueryNotifications,
   clearUnreadNotification,
   clearNotificationStatus,
   readNotification,
 } from '@/services';
+
+import Inbox from './components/Inbox';
+import Achievements from './components/Achievements';
 
 const PAGE_SIZE = 10;
 

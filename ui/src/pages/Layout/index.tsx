@@ -5,9 +5,8 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import { SWRConfig } from 'swr';
 
-import { siteInfoStore, interfaceStore, toastStore } from '@answer/stores';
-import { Header, AdminHeader, Footer, Toast } from '@answer/components';
-
+import { siteInfoStore, interfaceStore, toastStore } from '@/stores';
+import { Header, AdminHeader, Footer, Toast } from '@/components';
 import { useSiteSettings } from '@/services';
 import Storage from '@/utils/storage';
 import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';

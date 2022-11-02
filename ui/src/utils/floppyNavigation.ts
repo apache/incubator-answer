@@ -25,7 +25,8 @@ const navigate = (pathname: string, callback: Function) => {
 const navigateToLogin = () => {
   const { pathname } = window.location;
   if (pathname !== RouteAlias.login && pathname !== RouteAlias.register) {
-    const redirectUrl = window.location.href;
+    const loc = window.location;
+    const redirectUrl = loc.href.replace(loc.origin, '');
     Storage.set(REDIRECT_PATH_STORAGE_KEY, redirectUrl);
   }
   navigate(RouteAlias.login, () => {

@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { PageTitle, Unactivate } from '@answer/components';
+import { PageTitle, Unactivate } from '@/components';
+import { tryNormalLogged } from '@/utils/guard';
 
 import SignUpForm from './components/SignUpForm';
-
-import { tryNormalLogged } from '@/utils/guards';
 
 const Index: React.FC = () => {
   const [showForm, setShowForm] = useState(true);

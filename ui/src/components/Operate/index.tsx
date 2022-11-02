@@ -3,12 +3,11 @@ import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from '@answer/components';
-import { useReportModal, useToast } from '@answer/hooks';
+import { Modal } from '@/components';
+import { useReportModal, useToast } from '@/hooks';
 import Share from '../Share';
-
 import { deleteQuestion, deleteAnswer } from '@/services';
-import { tryNormalLogged } from '@/utils/guards';
+import { tryNormalLogged } from '@/utils/guard';
 
 interface IProps {
   type: 'answer' | 'question';

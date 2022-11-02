@@ -11,11 +11,10 @@ import {
   BaseUserCard,
   Empty,
   QueryGroup,
-} from '@answer/components';
-import { ADMIN_LIST_STATUS } from '@answer/common/constants';
-import { useEditStatusModal, useReportModal } from '@answer/hooks';
-import * as Type from '@answer/common/interface';
-
+} from '@/components';
+import { ADMIN_LIST_STATUS } from '@/common/constants';
+import { useEditStatusModal, useReportModal } from '@/hooks';
+import * as Type from '@/common/interface';
 import {
   useQuestionSearch,
   changeQuestionStatus,

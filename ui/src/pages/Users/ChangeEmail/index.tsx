@@ -2,9 +2,9 @@ import { FC, memo } from 'react';
 import { Container, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import SendEmail from './components/sendEmail';
-
 import { PageTitle } from '@/components';
+
+import SendEmail from './components/sendEmail';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'change_email' });

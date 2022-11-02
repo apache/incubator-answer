@@ -7,9 +7,8 @@ import type {
   ImgCodeRes,
   PasswordResetReq,
   FormDataType,
-} from '@answer/common/interface';
-import { loggedUserInfoStore } from '@answer/stores';
-
+} from '@/common/interface';
+import { loggedUserInfoStore } from '@/stores';
 import { changeEmail, checkImgCode } from '@/services';
 import { PicAuthCodeModal } from '@/components/Modal';
 
