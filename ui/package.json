@@ -49,7 +49,7 @@
     "react-dom": "^18.2.0",
     "react-helmet-async": "^1.3.0",
     "react-i18next": "^11.18.3",
-    "react-router-dom": "^6.4.0",
+    "react-router-dom": "^6.4.3",
     "swr": "^1.3.0",
     "zustand": "^4.1.1"
   },
