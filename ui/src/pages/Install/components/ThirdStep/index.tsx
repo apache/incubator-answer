@@ -6,9 +6,10 @@ import Progress from '../Progress';
 
 interface Props {
   visible: boolean;
+  nextCallback: () => void;
 }
 
-const Index: FC<Props> = ({ visible }) => {
+const Index: FC<Props> = ({ visible, nextCallback }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'install' });
 
   if (!visible) return null;
@@ -30,7 +31,7 @@ const Index: FC<Props> = ({ visible }) => {
       <div className="mb-3">{t('config_yaml.info')}</div>
       <div className="d-flex align-items-center justify-content-between">
         <Progress step={3} />
-        <Button>{t('next')}</Button>
+        <Button onClick={nextCallback}>{t('next')}</Button>
       </div>
     </div>
   );

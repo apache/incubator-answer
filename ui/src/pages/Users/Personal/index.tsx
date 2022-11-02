@@ -64,9 +64,9 @@ const Personal: FC = () => {
           xxl={3}
           lg={4}
           sm={12}
-          className="d-flex justify-content-end mt-5 mt-lg-0">
+          className="d-flex justify-content-start justify-content-md-end">
           {isSelf && (
-            <div>
+            <div className="mb-3">
               <Button
                 variant="outline-secondary"
                 href="/users/settings/profile"
@@ -79,7 +79,7 @@ const Personal: FC = () => {
       </Row>
 
       <Row className="justify-content-center">
-        <Col lg={10}>
+        <Col lg={12}>
           <NavBar tabName={tabName} slug={username} isSelf={isSelf} />
         </Col>
         <Col xxl={7} lg={8} sm={12}>

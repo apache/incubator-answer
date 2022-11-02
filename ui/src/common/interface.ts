@@ -264,7 +264,7 @@ export interface AdminSettingsInterface {
   logo: string;
   language: string;
   theme: string;
-  time_zone: string;
+  time_zone?: string;
 }
 
 export interface AdminSettingsSmtp {

@@ -16,7 +16,7 @@ const Index: FC<Props> = ({ data }) => {
     return null;
   }
   return (
-    <div className="d-flex mb-4">
+    <div className="d-flex flex-column flex-md-row mb-4">
       {data?.status !== 'deleted' ? (
         <Link to={`/users/${data.username}`} reloadDocument>
           <Avatar avatar={data.avatar} size="160px" searchStr="s=128" />
@@ -25,7 +25,7 @@ const Index: FC<Props> = ({ data }) => {
         <Avatar avatar={data.avatar} size="160px" searchStr="s=128" />
       )}
 
-      <div className="ms-4">
+      <div className="ms-0 ms-md-4 mt-4 mt-md-0">
         <div className="d-flex align-items-center mb-2">
           {data?.status !== 'deleted' ? (
             <Link
@@ -51,7 +51,7 @@ const Index: FC<Props> = ({ data }) => {
         </div>
         <div className="text-secondary mb-4">@{data.username}</div>
 
-        <div className="d-flex mb-3">
+        <div className="d-flex flex-wrap mb-3">
           <div className="me-3">
             <strong className="fs-5">{data.rank || 0}</strong>
             <span className="text-secondary"> {t('x_reputation')}</span>

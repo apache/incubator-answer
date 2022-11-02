@@ -18,7 +18,7 @@ const Index: FC<Props> = ({ visible, data }) => {
         return (
           <ListGroupItem className="d-flex py-3 px-0" key={item.object_id}>
             <div
-              className="me-3 text-end text-secondary"
+              className="me-3 text-end text-secondary flex-shrink-0"
               style={{ width: '80px' }}>
               {item.vote_type}
             </div>

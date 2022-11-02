@@ -739,31 +739,36 @@
     "title": "Answer",
     "next": "Next",
     "done": "Done",
-    "choose_lang": {
+    "lang": {
       "label": "Please choose a language"
     },
-    "database_engine": {
+    "db_type": {
       "label": "Database Engine"
     },
-    "username": {
+    "db_username": {
       "label": "Username",
-      "placeholder": "root"
+      "placeholder": "root",
+      "msg": "Username cannot be empty."
     },
-    "password": {
+    "db_password": {
       "label": "Password",
-      "placeholder": "root"
+      "placeholder": "root",
+      "msg": "Password cannot be empty."
     },
-    "database_host": {
+    "db_host": {
       "label": "Database Host",
-      "placeholder": "db:3306"
+      "placeholder": "db:3306",
+      "msg": "Database Host cannot be empty."
     },
-    "database_name": {
+    "db_name": {
       "label": "Database Name",
-      "placeholder": "answer"
+      "placeholder": "answer",
+      "msg": "Database Name cannot be empty."
     },
-    "table_prefix": {
-      "label": "Table Prefix (optional)",
-      "placeholder": "answer_"
+    "db_file": {
+      "label": "Database File",
+      "placeholder": "/data/answer.db",
+      "msg": "Database File cannot be empty."
     },
     "config_yaml": {
       "title": "Create config.yaml",

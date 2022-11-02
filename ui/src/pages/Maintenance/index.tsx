@@ -8,15 +8,19 @@ const Index = () => {
     keyPrefix: 'page_maintenance',
   });
   return (
-    <Container className="d-flex flex-column justify-content-center align-items-center page-wrap2">
-      <PageTitle title={t('maintenance', { keyPrefix: 'page_title' })} />
-      <div
-        className="mb-4 text-secondary"
-        style={{ fontSize: '120px', lineHeight: 1.2 }}>
-        (=‘_‘=)
-      </div>
-      <div className="text-center mb-4">{t('description')}</div>
-    </Container>
+    <div className="page-wrap2">
+      <Container
+        className="d-flex flex-column justify-content-center align-items-center"
+        style={{ minHeight: '100vh' }}>
+        <PageTitle title={t('maintenance', { keyPrefix: 'page_title' })} />
+        <div
+          className="mb-4 text-secondary"
+          style={{ fontSize: '120px', lineHeight: 1.2 }}>
+          (=‘_‘=)
+        </div>
+        <div className="text-center mb-4">{t('description')}</div>
+      </Container>
+    </div>
   );
 };
 
