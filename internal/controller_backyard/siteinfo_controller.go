@@ -39,7 +39,6 @@ func (sc *SiteInfoController) GetGeneral(ctx *gin.Context) {
 // @Produce json
 // @Success 200 {object} handler.RespBody{data=schema.SiteInterfaceResp}
 // @Router /answer/admin/api/siteinfo/interface [get]
-// @Param data body schema.AddCommentReq true "general"
 func (sc *SiteInfoController) GetInterface(ctx *gin.Context) {
 	resp, err := sc.siteInfoService.GetSiteInterface(ctx)
 	handler.HandleResponse(ctx, err, resp)

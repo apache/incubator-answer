@@ -1725,13 +1725,6 @@ paths:
   /answer/admin/api/siteinfo/interface:
     get:
       description: get site interface
-      parameters:
-      - description: general
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/schema.AddCommentReq'
       produces:
       - application/json
       responses:
