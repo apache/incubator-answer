@@ -2,13 +2,8 @@ import { FC, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type {
-  LangsType,
-  FormValue,
-  FormDataType,
-} from '@answer/common/interface';
+import type { LangsType, FormValue, FormDataType } from '@/common/interface';
 import Progress from '../Progress';
-
 import { languages } from '@/services';
 
 interface Props {
