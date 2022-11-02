@@ -119,13 +119,36 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/admin/api/language/options": {
+        "/answer/admin/api/dashboard": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
+                "description": "DashboardInfo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "DashboardInfo",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/admin/api/language/options": {
+            "get": {
                 "description": "Get language options",
                 "produces": [
                     "application/json"
@@ -487,14 +510,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo general",
+                "description": "get site general information",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo general",
+                "summary": "get site general information",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -522,14 +545,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo interface",
+                "description": "update site general information",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo interface",
+                "summary": "update site general information",
                 "parameters": [
                     {
                         "description": "general",
@@ -558,25 +581,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo interface",
+                "description": "get site interface",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo interface",
-                "parameters": [
-                    {
-                        "description": "general",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schema.AddCommentReq"
-                        }
-                    }
-                ],
+                "summary": "get site interface",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -604,14 +616,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo interface",
+                "description": "update site info interface",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo interface",
+                "summary": "update site info interface",
                 "parameters": [
                     {
                         "description": "general",
@@ -1432,11 +1444,6 @@ const docTemplate = `{
         },
         "/answer/api/v1/language/options": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Get language options",
                 "produces": [
                     "application/json"
@@ -3391,6 +3398,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/user/interface": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "UserUpdateInterface update user interface config",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "UserUpdateInterface update user interface config",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "access-token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "UpdateInfoRequest",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdateUserInterfaceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/user/login/email": {
             "post": {
                 "description": "UserEmailLogin",
@@ -4822,6 +4875,10 @@ const docTemplate = `{
                     "description": "is admin",
                     "type": "boolean"
                 },
+                "language": {
+                    "description": "language",
+                    "type": "string"
+                },
                 "last_login_date": {
                     "description": "last login date",
                     "type": "integer"
@@ -4917,6 +4974,10 @@ const docTemplate = `{
                 "is_admin": {
                     "description": "is admin",
                     "type": "boolean"
+                },
+                "language": {
+                    "description": "language",
+                    "type": "string"
                 },
                 "last_login_date": {
                     "description": "last login date",
@@ -5326,7 +5387,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "language",
-                "theme"
+                "theme",
+                "time_zone"
             ],
             "properties": {
                 "language": {
@@ -5338,6 +5400,10 @@ const docTemplate = `{
                     "maxLength": 256
                 },
                 "theme": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "time_zone": {
                     "type": "string",
                     "maxLength": 128
                 }
@@ -5347,7 +5413,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "language",
-                "theme"
+                "theme",
+                "time_zone"
             ],
             "properties": {
                 "language": {
@@ -5359,6 +5426,10 @@ const docTemplate = `{
                     "maxLength": 256
                 },
                 "theme": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "time_zone": {
                     "type": "string",
                     "maxLength": 128
                 }
@@ -5570,6 +5641,19 @@ const docTemplate = `{
                 "tag_id": {
                     "description": "tag_id",
                     "type": "string"
+                }
+            }
+        },
+        "schema.UpdateUserInterfaceRequest": {
+            "type": "object",
+            "required": [
+                "language"
+            ],
+            "properties": {
+                "language": {
+                    "description": "language",
+                    "type": "string",
+                    "maxLength": 100
                 }
             }
         },

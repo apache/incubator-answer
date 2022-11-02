@@ -9,6 +9,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/dashboard"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
@@ -16,13 +17,21 @@ import (
 
 // AnswerController answer controller
 type AnswerController struct {
-	answerService *service.AnswerService
-	rankService   *rank.RankService
+	answerService    *service.AnswerService
+	rankService      *rank.RankService
+	dashboardService *dashboard.DashboardService
 }
 
 // NewAnswerController new controller
-func NewAnswerController(answerService *service.AnswerService, rankService *rank.RankService) *AnswerController {
-	return &AnswerController{answerService: answerService, rankService: rankService}
+func NewAnswerController(answerService *service.AnswerService,
+	rankService *rank.RankService,
+	dashboardService *dashboard.DashboardService,
+) *AnswerController {
+	return &AnswerController{
+		answerService:    answerService,
+		rankService:      rankService,
+		dashboardService: dashboardService,
+	}
 }
 
 // RemoveAnswer delete answer

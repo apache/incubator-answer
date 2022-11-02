@@ -12,6 +12,7 @@ import (
 // CommentCommonRepo comment repository
 type CommentCommonRepo interface {
 	GetComment(ctx context.Context, commentID string) (comment *entity.Comment, exist bool, err error)
+	GetCommentCount(ctx context.Context) (count int64, err error)
 }
 
 // CommentCommonService user service

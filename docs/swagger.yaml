@@ -652,6 +652,9 @@ definitions:
       is_admin:
         description: is admin
         type: boolean
+      language:
+        description: language
+        type: string
       last_login_date:
         description: last login date
         type: integer
@@ -723,6 +726,9 @@ definitions:
       is_admin:
         description: is admin
         type: boolean
+      language:
+        description: language
+        type: string
       last_login_date:
         description: last login date
         type: integer
@@ -1024,9 +1030,13 @@ definitions:
       theme:
         maxLength: 128
         type: string
+      time_zone:
+        maxLength: 128
+        type: string
     required:
     - language
     - theme
+    - time_zone
     type: object
   schema.SiteInterfaceResp:
     properties:
@@ -1039,9 +1049,13 @@ definitions:
       theme:
         maxLength: 128
         type: string
+      time_zone:
+        maxLength: 128
+        type: string
     required:
     - language
     - theme
+    - time_zone
     type: object
   schema.TagItem:
     properties:
@@ -1194,6 +1208,15 @@ definitions:
     required:
     - synonym_tag_list
     - tag_id
+    type: object
+  schema.UpdateUserInterfaceRequest:
+    properties:
+      language:
+        description: language
+        maxLength: 100
+        type: string
+    required:
+    - language
     type: object
   schema.UpdateUserStatusReq:
     properties:
@@ -1434,6 +1457,23 @@ paths:
       summary: AdminSetAnswerStatus
       tags:
       - admin
+  /answer/admin/api/dashboard:
+    get:
+      consumes:
+      - application/json
+      description: DashboardInfo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: DashboardInfo
+      tags:
+      - admin
   /answer/admin/api/language/options:
     get:
       description: Get language options
@@ -1444,8 +1484,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
       summary: Get language options
       tags:
       - Lang
@@ -1662,7 +1700,7 @@ paths:
       - admin
   /answer/admin/api/siteinfo/general:
     get:
-      description: Get siteinfo general
+      description: get site general information
       produces:
       - application/json
       responses:
@@ -1677,11 +1715,11 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo general
+      summary: get site general information
       tags:
       - admin
     put:
-      description: Get siteinfo interface
+      description: update site general information
       parameters:
       - description: general
         in: body
@@ -1698,19 +1736,12 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo interface
+      summary: update site general information
       tags:
       - admin
   /answer/admin/api/siteinfo/interface:
     get:
-      description: Get siteinfo interface
-      parameters:
-      - description: general
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/schema.AddCommentReq'
+      description: get site interface
       produces:
       - application/json
       responses:
@@ -1725,11 +1756,11 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo interface
+      summary: get site interface
       tags:
       - admin
     put:
-      description: Get siteinfo interface
+      description: update site info interface
       parameters:
       - description: general
         in: body
@@ -1746,7 +1777,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo interface
+      summary: update site info interface
       tags:
       - admin
   /answer/admin/api/theme/options:
@@ -2237,8 +2268,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
       summary: Get language options
       tags:
       - Lang
@@ -3423,6 +3452,35 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: UserUpdateInfo update user info
+      tags:
+      - User
+  /answer/api/v1/user/interface:
+    put:
+      consumes:
+      - application/json
+      description: UserUpdateInterface update user interface config
+      parameters:
+      - description: access-token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: UpdateInfoRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateUserInterfaceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: UserUpdateInterface update user interface config
       tags:
       - User
   /answer/api/v1/user/login/email:

@@ -44,6 +44,7 @@ import (
 	auth2 "github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/collection_common"
 	comment2 "github.com/answerdev/answer/internal/service/comment"
+	"github.com/answerdev/answer/internal/service/dashboard"
 	export2 "github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/follow"
 	meta2 "github.com/answerdev/answer/internal/service/meta"
@@ -76,7 +77,6 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	if err != nil {
 		return nil, nil, err
 	}
-	langController := controller.NewLangController(i18nTranslator)
 	engine, err := data.NewDB(debug, dbConf)
 	if err != nil {
 		return nil, nil, err
@@ -90,17 +90,19 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 		cleanup()
 		return nil, nil, err
 	}
+	siteInfoRepo := site_info.NewSiteInfo(dataData)
+	configRepo := config.NewConfigRepo(dataData)
+	emailRepo := export.NewEmailRepo(dataData)
+	emailService := export2.NewEmailService(configRepo, emailRepo, siteInfoRepo)
+	siteInfoService := service.NewSiteInfoService(siteInfoRepo, emailService)
+	langController := controller.NewLangController(i18nTranslator, siteInfoService)
 	authRepo := auth.NewAuthRepo(dataData)
 	authService := auth2.NewAuthService(authRepo)
-	configRepo := config.NewConfigRepo(dataData)
 	userRepo := user.NewUserRepo(dataData, configRepo)
 	uniqueIDRepo := unique.NewUniqueIDRepo(dataData)
 	activityRepo := activity_common.NewActivityRepo(dataData, uniqueIDRepo, configRepo)
 	userRankRepo := rank.NewUserRankRepo(dataData, configRepo)
 	userActiveActivityRepo := activity.NewUserActiveActivityRepo(dataData, activityRepo, userRankRepo, configRepo)
-	emailRepo := export.NewEmailRepo(dataData)
-	siteInfoRepo := site_info.NewSiteInfo(dataData)
-	emailService := export2.NewEmailService(configRepo, emailRepo, siteInfoRepo)
 	userService := service.NewUserService(userRepo, userActiveActivityRepo, emailService, authService, serviceConf)
 	captchaRepo := captcha.NewCaptchaRepo(dataData)
 	captchaService := action.NewCaptchaService(captchaRepo)
@@ -148,7 +150,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, revisionService, metaService, collectionCommon, answerActivityService)
 	questionController := controller.NewQuestionController(questionService, rankService)
 	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo)
-	answerController := controller.NewAnswerController(answerService, rankService)
+	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configRepo)
+	answerController := controller.NewAnswerController(answerService, rankService, dashboardService)
 	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon)
 	searchService := service.NewSearchService(searchRepo, tagRepo, userCommon, followRepo)
 	searchController := controller.NewSearchController(searchService)
@@ -166,14 +169,14 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reasonService := reason2.NewReasonService(reasonRepo)
 	reasonController := controller.NewReasonController(reasonService)
 	themeController := controller_backyard.NewThemeController()
-	siteInfoService := service.NewSiteInfoService(siteInfoRepo, emailService)
 	siteInfoController := controller_backyard.NewSiteInfoController(siteInfoService)
 	siteinfoController := controller.NewSiteinfoController(siteInfoService)
 	notificationRepo := notification.NewNotificationRepo(dataData)
 	notificationCommon := notificationcommon.NewNotificationCommon(dataData, notificationRepo, userCommon, activityRepo, followRepo, objService)
 	notificationService := notification2.NewNotificationService(dataData, notificationRepo, notificationCommon)
 	notificationController := controller.NewNotificationController(notificationService)
-	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController)
+	dashboardController := controller.NewDashboardController(dashboardService)
+	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter()
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)
