@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Button, Form, Table, Stack, Badge } from 'react-bootstrap';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -156,12 +156,11 @@ const Questions: FC = () => {
                 </td>
                 <td>{li.vote_count}</td>
                 <td>
-                  <a
-                    href={`/questions/${li.id}`}
-                    target="_blank"
+                  <Link
+                    to={`/admin/answers?questionId=${li.id}`}
                     rel="noreferrer">
                     {li.answer_count}
-                  </a>
+                  </Link>
                 </td>
                 <td>
                   <Stack>
