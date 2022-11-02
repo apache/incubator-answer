@@ -1,10 +1,5 @@
-import { RouteObject } from 'react-router-dom';
+import { RouteNode } from '@/router/types';
 
-export interface RouteNode extends RouteObject {
-  page: string;
-  children?: RouteNode[];
-  rules?: string[];
-}
 const routeConfig: RouteNode[] = [
   {
     path: '/',
