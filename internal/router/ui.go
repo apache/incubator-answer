@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
@@ -65,6 +66,55 @@ func (a *UIRouter) Register(r *gin.Engine) {
 	r.StaticFS("/static", http.FS(&_resource{
 		fs: ui.Build,
 	}))
+
+	// Install godoc
+	// @Summary Install
+	// @Description Install
+	// @Tags Install
+	// @Accept json
+	// @Produce json
+	// @Success 200 {object} handler.RespBody{}
+	// @Router /install [get]
+	r.GET("/install", func(c *gin.Context) {
+		filePath := ""
+		var file []byte
+		var err error
+		filePath = "build/index.html"
+		c.Header("content-type", "text/html;charset=utf-8")
+		file, err = ui.Build.ReadFile(filePath)
+		if err != nil {
+			log.Error(err)
+			c.Status(http.StatusNotFound)
+			return
+		}
+		c.String(http.StatusOK, string(file))
+	})
+
+	// Install godoc
+	// @Summary Install
+	// @Description Install
+	// @Tags Install
+	// @Accept json
+	// @Produce json
+	// @Param data body schema.FollowReq true "follow"
+	// @Success 200 {object} handler.RespBody{}
+	// @Router /install/db/check [put]
+	r.PUT("/install/db/check", func(c *gin.Context) {
+		handler.HandleResponse(c, nil, gin.H{})
+	})
+
+	// Install godoc
+	// @Summary Install
+	// @Description Install
+	// @Tags Install
+	// @Accept json
+	// @Produce json
+	// @Param data body schema.FollowReq true "follow"
+	// @Success 200 {object} handler.RespBody{}
+	// @Router /install [put]
+	r.PUT("/install", func(c *gin.Context) {
+		handler.HandleResponse(c, nil, gin.H{})
+	})
 
 	// specify the not router for default routes and redirect
 	r.NoRoute(func(c *gin.Context) {
