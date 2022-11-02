@@ -157,3 +157,12 @@ func (ur *userRepo) GetByEmail(ctx context.Context, email string) (userInfo *ent
 	}
 	return
 }
+
+func (vr *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
+	list := make([]*entity.User, 0)
+	count, err = vr.data.DB.Where("mail_status =?", entity.EmailStatusAvailable).And("status =?", entity.UserStatusAvailable).FindAndCount(&list)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}

@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
+
 	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -158,6 +159,16 @@ func (qr *questionRepo) GetQuestionList(ctx context.Context, question *entity.Qu
 	err = qr.data.DB.Find(questionList, question)
 	if err != nil {
 		return questionList, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err error) {
+	questionList := make([]*entity.Question, 0)
+
+	count, err = qr.data.DB.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusclosed}).FindAndCount(&questionList)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
 }
