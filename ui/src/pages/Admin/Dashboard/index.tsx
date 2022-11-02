@@ -2,14 +2,14 @@ import { FC } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import { useDashBoard } from '@/services';
+
 import {
   AnswerLinks,
   HealthStatus,
   Statistics,
   SystemInfo,
 } from './components';
-
-import { useDashBoard } from '@/services';
 
 const Dashboard: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'admin.dashboard' });
