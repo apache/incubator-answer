@@ -37,5 +37,23 @@ func NewInstallHTTPServer() *gin.Engine {
 		fs: ui.Build,
 	}))
 
+	installApi := r.Group("")
+	installApi.GET("/install", Install)
+
 	return r
+}
+
+func Install(c *gin.Context) {
+	filePath := ""
+	var file []byte
+	var err error
+	filePath = "build/index.html"
+	c.Header("content-type", "text/html;charset=utf-8")
+	file, err = ui.Build.ReadFile(filePath)
+	if err != nil {
+		log.Error(err)
+		c.Status(http.StatusNotFound)
+		return
+	}
+	c.String(http.StatusOK, string(file))
 }
