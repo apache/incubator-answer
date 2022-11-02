@@ -8,11 +8,9 @@ import {
   FormDataType,
   AdminSettingsInterface,
 } from '@/common/interface';
-
 import { interfaceStore } from '@/stores';
 import { UploadImg } from '@/components';
 import { TIMEZONES, DEFAULT_TIMEZONE } from '@/common/constants';
-
 import {
   languages,
   uploadAvatar,
