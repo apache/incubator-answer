@@ -4,6 +4,7 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
+	"math/rand"
 	"net/http"
 	"os"
 
@@ -93,11 +94,29 @@ func (a *UIRouter) Register(r *gin.Engine) {
 	})
 
 	r.POST("/installation/db/check", func(c *gin.Context) {
-		handler.HandleResponse(c, nil, gin.H{})
+		num := rand.Intn(10)
+		if num > 5 {
+			err := fmt.Errorf("connection error")
+			handler.HandleResponse(c, err, gin.H{})
+		} else {
+			handler.HandleResponse(c, nil, gin.H{
+				"connection_success": true,
+			})
+		}
 	})
 
 	r.POST("/installation/config-file/check", func(c *gin.Context) {
-		handler.HandleResponse(c, nil, gin.H{})
+		num := rand.Intn(10)
+		if num > 5 {
+			handler.HandleResponse(c, nil, gin.H{
+				"exist": true,
+			})
+		} else {
+			handler.HandleResponse(c, nil, gin.H{
+				"exist": false,
+			})
+		}
+
 	})
 
 	r.POST("/installation/init", func(c *gin.Context) {
