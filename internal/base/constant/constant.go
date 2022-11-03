@@ -47,3 +47,8 @@ var (
 		8: ReportObjectType,
 	}
 )
+
+const (
+	SiteTypeGeneral   = "general"
+	SiteTypeInterface = "interface"
+)

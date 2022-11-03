@@ -131,7 +131,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
 
 	//siteinfo
-	r.GET("/siteinfo", a.siteinfoController.GetInfo)
+	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
