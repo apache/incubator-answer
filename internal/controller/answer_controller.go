@@ -62,9 +62,9 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 // @Success 200 {string} string ""
 func (ac *AnswerController) Get(ctx *gin.Context) {
 	id := ctx.Query("id")
-	userId := middleware.GetLoginUserIDFromContext(ctx)
+	userID := middleware.GetLoginUserIDFromContext(ctx)
 
-	info, questionInfo, has, err := ac.answerService.Get(ctx, id, userId)
+	info, questionInfo, has, err := ac.answerService.Get(ctx, id, userID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, gin.H{})
 		return
@@ -101,18 +101,18 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 		return
 	}
 
-	answerId, err := ac.answerService.Insert(ctx, req)
+	answerID, err := ac.answerService.Insert(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	info, questionInfo, has, err := ac.answerService.Get(ctx, answerId, req.UserID)
+	info, questionInfo, has, err := ac.answerService.Get(ctx, answerID, req.UserID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
 	if !has {
-		//todo !has
+		// todo !has
 		handler.HandleResponse(ctx, nil, nil)
 		return
 	}
@@ -120,7 +120,6 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 		"info":     info,
 		"question": questionInfo,
 	})
-
 }
 
 // Update godoc
@@ -156,7 +155,7 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 		return
 	}
 	if !has {
-		//todo !has
+		// todo !has
 		handler.HandleResponse(ctx, nil, nil)
 		return
 	}

@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
@@ -29,8 +29,7 @@ func NewNotificationRepo(data *data.Data) notficationcommon.NotificationRepo {
 func (nr *notificationRepo) AddNotification(ctx context.Context, notification *entity.Notification) (err error) {
 	_, err = nr.data.DB.Insert(notification)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
 }
@@ -40,8 +39,7 @@ func (nr *notificationRepo) UpdateNotificationContent(ctx context.Context, notif
 	notification.UpdatedAt = now
 	_, err = nr.data.DB.Where("id =?", notification.ID).Cols("content", "updated_at").Update(notification)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
 }
@@ -51,8 +49,7 @@ func (nr *notificationRepo) ClearUnRead(ctx context.Context, userID string, noti
 	info.IsRead = schema.NotificationRead
 	_, err = nr.data.DB.Where("user_id =?", userID).And("type =?", notificationType).Cols("is_read").Update(info)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
 }
@@ -62,8 +59,7 @@ func (nr *notificationRepo) ClearIDUnRead(ctx context.Context, userID string, id
 	info.IsRead = schema.NotificationRead
 	_, err = nr.data.DB.Where("user_id =?", userID).And("id =?", id).Cols("is_read").Update(info)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
 }
@@ -88,32 +84,22 @@ func (nr *notificationRepo) GetByUserIdObjectIdTypeId(ctx context.Context, userI
 	return info, exist, nil
 }
 
-func (nr *notificationRepo) SearchList(ctx context.Context, search *schema.NotificationSearch) ([]*entity.Notification, int64, error) {
-	var count int64
-	var err error
+func (nr *notificationRepo) GetNotificationPage(ctx context.Context, searchCond *schema.NotificationSearch) (
+	notificationList []*entity.Notification, total int64, err error) {
+	notificationList = make([]*entity.Notification, 0)
+	if searchCond.UserID == "" {
+		return notificationList, 0, nil
+	}
 
-	rows := make([]*entity.Notification, 0)
-	if search.UserID == "" {
-		return rows, 0, nil
+	session := nr.data.DB.NewSession()
+	session = session.Desc("updated_at")
+	cond := &entity.Notification{
+		UserID: searchCond.UserID,
+		Type:   searchCond.Type,
 	}
-	if search.Page > 0 {
-		search.Page = search.Page - 1
-	} else {
-		search.Page = 0
-	}
-	if search.PageSize == 0 {
-		search.PageSize = constant.Default_PageSize
-	}
-	offset := search.Page * search.PageSize
-	session := nr.data.DB.Where("")
-	session = session.And("user_id = ?", search.UserID)
-	session = session.And("type = ?", search.Type)
-	session = session.OrderBy("updated_at desc")
-	session = session.Limit(search.PageSize, offset)
-	count, err = session.FindAndCount(&rows)
+	total, err = pager.Help(searchCond.Page, searchCond.PageSize, &notificationList, cond, session)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return rows, count, err
 	}
-	return rows, count, nil
+	return
 }

@@ -30,7 +30,7 @@ func CheckPassword(minLength, maxLength, minLevel int, pwd string) error {
 	// The password strength level is initialized to D.
 	// The regular is used to verify the password strength.
 	// If the matching is successful, the password strength increases by 1
-	var level int = levelD
+	level := levelD
 	patternList := []string{`[0-9]+`, `[a-z]+`, `[A-Z]+`, `[~!@#$%^&*?_-]+`}
 	for _, pattern := range patternList {
 		match, _ := regexp.MatchString(pattern, pwd)
@@ -41,7 +41,7 @@ func CheckPassword(minLength, maxLength, minLevel int, pwd string) error {
 
 	// If the final password strength falls below the required minimum strength, return with an error
 	if level < minLevel {
-		return fmt.Errorf("The password does not satisfy the current policy requirements. ")
+		return fmt.Errorf("the password does not satisfy the current policy requirements")
 	}
 	return nil
 }

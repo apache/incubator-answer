@@ -2,7 +2,7 @@ package schema
 
 const (
 	ForbiddenReasonTypeInactive      = "inactive"
-	ForbiddenReasonTypeUrlExpired    = "url_expired"
+	ForbiddenReasonTypeURLExpired    = "url_expired"
 	ForbiddenReasonTypeUserSuspended = "suspended"
 )
 

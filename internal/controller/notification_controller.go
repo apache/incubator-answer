@@ -111,6 +111,6 @@ func (nc *NotificationController) GetList(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	resp, err := nc.notificationService.GetList(ctx, req)
+	resp, err := nc.notificationService.GetNotificationPage(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }

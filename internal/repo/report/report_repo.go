@@ -86,7 +86,8 @@ func (ar *reportRepo) GetByID(ctx context.Context, id string) (report entity.Rep
 func (ar *reportRepo) UpdateByID(
 	ctx context.Context,
 	id string,
-	handleData entity.Report) (err error) {
+	handleData entity.Report,
+) (err error) {
 	_, err = ar.data.DB.ID(id).Update(&handleData)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

@@ -107,6 +107,7 @@ const Users: FC = () => {
                     data={user}
                     className="fs-6"
                     avatarSize="24px"
+                    avatarSearchStr="s=48"
                   />
                 </td>
                 <td>{user.rank}</td>

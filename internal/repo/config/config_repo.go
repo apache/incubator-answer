@@ -65,10 +65,14 @@ func (cr *configRepo) Get(key string) (interface{}, error) {
 // key string
 func (cr *configRepo) GetString(key string) (string, error) {
 	value, err := cr.Get(key)
-	if value != nil {
-		return value.(string), err
+	if err != nil {
+		return "", err
 	}
-	return "", err
+	str, ok := value.(string)
+	if !ok {
+		return "", errors.InternalServer(reason.DatabaseError).WithMsg(fmt.Sprintf("config value is wrong type: %v", key))
+	}
+	return str, nil
 }
 
 // GetInt method for getting the config value to int64
@@ -77,9 +81,8 @@ func (cr *configRepo) GetInt(key string) (int, error) {
 	value, err := cr.GetString(key)
 	if err != nil {
 		return 0, err
-	} else {
-		return converter.StringToInt(value), nil
 	}
+	return converter.StringToInt(value), nil
 }
 
 // GetArrayString method for getting the config value to string array
@@ -96,31 +99,35 @@ func (cr *configRepo) GetArrayString(key string) ([]string, error) {
 // GetConfigType method for getting the config type
 func (cr *configRepo) GetConfigType(key string) (int, error) {
 	value, ok := Key2IDMapping[key]
-	if ok {
-		return value, nil
-	} else {
+	if !ok {
 		return 0, errors.InternalServer(reason.DatabaseError).WithMsg(fmt.Sprintf("no such config type: %v", key))
 	}
+	return value, nil
 }
 
-// GetConfigById get config key from config id
-func (cr *configRepo) GetConfigById(id int, value any) (err error) {
-	var (
-		ok   = true
-		key  string
-		conf interface{}
-	)
-	key, ok = ID2KeyMapping[id]
+// GetJsonConfigByIDAndSetToObject get config key from config id
+func (cr *configRepo) GetJsonConfigByIDAndSetToObject(id int, object any) (err error) {
+	key, ok := ID2KeyMapping[id]
 	if !ok {
-		err = errors.InternalServer(reason.DatabaseError).WithMsg(fmt.Sprintf("no such config id: %v", id))
-		return
+		return errors.InternalServer(reason.DatabaseError).WithMsg(fmt.Sprintf("no such config id: %v", id))
 	}
 
-	conf, err = cr.Get(key)
-	value = json.Unmarshal([]byte(conf.(string)), value)
+	conf, err := cr.Get(key)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err)
+	}
+	str, ok := conf.(string)
+	if !ok {
+		return errors.InternalServer(reason.DatabaseError).WithMsg(fmt.Sprintf("no such config id: %v", id))
+	}
+	err = json.Unmarshal([]byte(str), object)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithMsg(fmt.Sprintf("no such config id: %v", id))
+	}
 	return
 }
 
+// SetConfig set config
 func (cr *configRepo) SetConfig(key, value string) (err error) {
 	id := Key2IDMapping[key]
 	_, err = cr.data.DB.ID(id).Update(&entity.Config{Value: value})
