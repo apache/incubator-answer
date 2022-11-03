@@ -62,12 +62,6 @@ const docTemplate = `{
                         "description": "answer id or question title",
                         "name": "query",
                         "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "question id",
-                        "name": "question_id",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -149,6 +143,11 @@ const docTemplate = `{
         },
         "/answer/admin/api/language/options": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get language options",
                 "produces": [
                     "application/json"
@@ -1444,6 +1443,11 @@ const docTemplate = `{
         },
         "/answer/api/v1/language/options": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get language options",
                 "produces": [
                     "application/json"
@@ -3398,52 +3402,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/user/interface": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "UserUpdateInterface update user interface config",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "UserUpdateInterface update user interface config",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "access-token",
-                        "name": "Authorization",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "description": "UpdateInfoRequest",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schema.UpdateUserInterfaceRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
-                        }
-                    }
-                }
-            }
-        },
         "/answer/api/v1/user/login/email": {
             "post": {
                 "description": "UserEmailLogin",
@@ -4875,10 +4833,6 @@ const docTemplate = `{
                     "description": "is admin",
                     "type": "boolean"
                 },
-                "language": {
-                    "description": "language",
-                    "type": "string"
-                },
                 "last_login_date": {
                     "description": "last login date",
                     "type": "integer"
@@ -4974,10 +4928,6 @@ const docTemplate = `{
                 "is_admin": {
                     "description": "is admin",
                     "type": "boolean"
-                },
-                "language": {
-                    "description": "language",
-                    "type": "string"
                 },
                 "last_login_date": {
                     "description": "last login date",
@@ -5641,19 +5591,6 @@ const docTemplate = `{
                 "tag_id": {
                     "description": "tag_id",
                     "type": "string"
-                }
-            }
-        },
-        "schema.UpdateUserInterfaceRequest": {
-            "type": "object",
-            "required": [
-                "language"
-            ],
-            "properties": {
-                "language": {
-                    "description": "language",
-                    "type": "string",
-                    "maxLength": 100
                 }
             }
         },
