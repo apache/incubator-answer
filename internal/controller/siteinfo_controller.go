@@ -3,16 +3,16 @@ package controller
 import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/gin-gonic/gin"
 )
 
 type SiteinfoController struct {
-	siteInfoService *service.SiteInfoService
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewSiteinfoController new siteinfo controller.
-func NewSiteinfoController(siteInfoService *service.SiteInfoService) *SiteinfoController {
+func NewSiteinfoController(siteInfoService *siteinfo_common.SiteInfoCommonService) *SiteinfoController {
 	return &SiteinfoController{
 		siteInfoService: siteInfoService,
 	}

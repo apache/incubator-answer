@@ -10,17 +10,19 @@ import (
 	"github.com/answerdev/answer/internal/service/config"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/report_common"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 )
 
 type DashboardService struct {
-	questionRepo questioncommon.QuestionRepo
-	answerRepo   answercommon.AnswerRepo
-	commentRepo  comment_common.CommentCommonRepo
-	voteRepo     activity_common.VoteRepo
-	userRepo     usercommon.UserRepo
-	reportRepo   report_common.ReportRepo
-	configRepo   config.ConfigRepo
+	questionRepo    questioncommon.QuestionRepo
+	answerRepo      answercommon.AnswerRepo
+	commentRepo     comment_common.CommentCommonRepo
+	voteRepo        activity_common.VoteRepo
+	userRepo        usercommon.UserRepo
+	reportRepo      report_common.ReportRepo
+	configRepo      config.ConfigRepo
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 func NewDashboardService(
@@ -31,16 +33,17 @@ func NewDashboardService(
 	userRepo usercommon.UserRepo,
 	reportRepo report_common.ReportRepo,
 	configRepo config.ConfigRepo,
-
+	siteInfoService *siteinfo_common.SiteInfoCommonService,
 ) *DashboardService {
 	return &DashboardService{
-		questionRepo: questionRepo,
-		answerRepo:   answerRepo,
-		commentRepo:  commentRepo,
-		voteRepo:     voteRepo,
-		userRepo:     userRepo,
-		reportRepo:   reportRepo,
-		configRepo:   configRepo,
+		questionRepo:    questionRepo,
+		answerRepo:      answerRepo,
+		commentRepo:     commentRepo,
+		voteRepo:        voteRepo,
+		userRepo:        userRepo,
+		reportRepo:      reportRepo,
+		configRepo:      configRepo,
+		siteInfoService: siteInfoService,
 	}
 }
 
@@ -90,6 +93,12 @@ func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	if err != nil {
 		return dashboardInfo, err
 	}
+
+	siteInfoInterface, err := ds.siteInfoService.GetSiteInterface(ctx)
+	if err != nil {
+		return dashboardInfo, err
+	}
+
 	dashboardInfo.QuestionCount = questionCount
 	dashboardInfo.AnswerCount = answerCount
 	dashboardInfo.CommentCount = commentCount
@@ -102,5 +111,6 @@ func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	dashboardInfo.HTTPS = true
 	dashboardInfo.OccupyingStorageSpace = "1MB"
 	dashboardInfo.AppStartTime = "102"
+	dashboardInfo.TimeZone = siteInfoInterface.TimeZone
 	return dashboardInfo, nil
 }
