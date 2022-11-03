@@ -64,7 +64,7 @@ func (u *LangController) GetUserLangOptions(ctx *gin.Context) {
 	options := translator.LanguageOptions
 	if len(siteInterfaceResp.Language) > 0 {
 		defaultOption := []*translator.LangOption{
-			{Label: "Default", Value: siteInterfaceResp.Language},
+			{Label: translator.DefaultLangOption, Value: siteInterfaceResp.Language},
 		}
 		options = append(defaultOption, options...)
 	}
