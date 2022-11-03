@@ -21,8 +21,13 @@ type LangOption struct {
 	Value string `json:"value"`
 }
 
-// LanguageOptions language
-var LanguageOptions []*LangOption
+// DefaultLangOption default language option. If user config the language is default, the language option is admin choose.
+const DefaultLangOption = "Default"
+
+var (
+	// LanguageOptions language
+	LanguageOptions []*LangOption
+)
 
 // NewTranslator new a translator
 func NewTranslator(c *I18n) (tr i18n.Translator, err error) {
@@ -49,6 +54,9 @@ func NewTranslator(c *I18n) (tr i18n.Translator, err error) {
 
 // CheckLanguageIsValid check user input language is valid
 func CheckLanguageIsValid(lang string) bool {
+	if lang == DefaultLangOption {
+		return true
+	}
 	for _, option := range LanguageOptions {
 		if option.Value == lang {
 			return true
