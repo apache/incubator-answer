@@ -6,6 +6,7 @@ import (
 	"io/fs"
 	"net/http"
 
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
@@ -39,6 +40,22 @@ func NewInstallHTTPServer() *gin.Engine {
 
 	installApi := r.Group("")
 	installApi.GET("/install", Install)
+
+	installApi.POST("/installation/db/check", func(c *gin.Context) {
+		handler.HandleResponse(c, nil, gin.H{})
+	})
+
+	installApi.POST("/installation/config-file/check", func(c *gin.Context) {
+		handler.HandleResponse(c, nil, gin.H{})
+	})
+
+	installApi.POST("/installation/init", func(c *gin.Context) {
+		handler.HandleResponse(c, nil, gin.H{})
+	})
+
+	installApi.POST("/installation/base-info", func(c *gin.Context) {
+		handler.HandleResponse(c, nil, gin.H{})
+	})
 
 	return r
 }

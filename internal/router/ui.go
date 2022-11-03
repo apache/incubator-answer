@@ -92,33 +92,19 @@ func (a *UIRouter) Register(r *gin.Engine) {
 		c.String(http.StatusOK, string(file))
 	})
 
-	// Install godoc
-	// @Summary Install
-	// @Description Install
-	// @Tags Install
-	// @Accept json
-	// @Produce json
-	// @Param data body schema.FollowReq true "follow"
-	// @Success 200 {object} handler.RespBody{}
-	// @Router /install/db/check [put]
-	r.PUT("/install/db/check", func(c *gin.Context) {
+	r.POST("/installation/db/check", func(c *gin.Context) {
 		handler.HandleResponse(c, nil, gin.H{})
 	})
 
-	// Install godoc
-	// @Summary Install
-	// @Description Install
-	// @Tags Install
-	// @Accept json
-	// @Produce json
-	// @Param data body schema.FollowReq true "follow"
-	// @Success 200 {object} handler.RespBody{}
-	// @Router /install [put]
-	r.PUT("/install", func(c *gin.Context) {
+	r.POST("/installation/config-file/check", func(c *gin.Context) {
 		handler.HandleResponse(c, nil, gin.H{})
 	})
 
-	r.PUT("/install/siteconfig", func(c *gin.Context) {
+	r.POST("/installation/init", func(c *gin.Context) {
+		handler.HandleResponse(c, nil, gin.H{})
+	})
+
+	r.POST("/installation/base-info", func(c *gin.Context) {
 		handler.HandleResponse(c, nil, gin.H{})
 	})
 
