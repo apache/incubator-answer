@@ -258,6 +258,8 @@ export interface AdminSettingsGeneral {
   name: string;
   short_description: string;
   description: string;
+  site_url: string;
+  contact_email: string;
 }
 
 export interface AdminSettingsInterface {
