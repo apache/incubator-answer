@@ -68,15 +68,6 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	resp = &schema.GetUserToSetShowResp{}
 	resp.GetFromUserEntity(userInfo)
 	resp.AccessToken = token
-
-	// if user choose the default language, Use the language configured by the administrator.
-	if resp.Language == translator.DefaultLangOption {
-		siteInterface, err := us.siteInfoService.GetSiteInterface(ctx)
-		if err != nil {
-			return nil, err
-		}
-		resp.Language = siteInterface.Language
-	}
 	return resp, nil
 }
 

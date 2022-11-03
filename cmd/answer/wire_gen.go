@@ -152,7 +152,6 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, revisionService, metaService, collectionCommon, answerActivityService)
 	questionController := controller.NewQuestionController(questionService, rankService)
 	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo)
-	siteInfoCommonService := siteinfo_common.NewSiteInfoCommonService(siteInfoRepo)
 	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configRepo, siteInfoCommonService)
 	answerController := controller.NewAnswerController(answerService, rankService, dashboardService)
 	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon)
