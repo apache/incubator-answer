@@ -1,11 +1,15 @@
 package conf
 
 import (
+	"path/filepath"
+
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/server"
 	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/cli"
 	"github.com/answerdev/answer/internal/router"
 	"github.com/answerdev/answer/internal/service/service_config"
+	"github.com/segmentfault/pacman/contrib/conf/viper"
 )
 
 // AllConfig all config
@@ -27,4 +31,20 @@ type Server struct {
 type Data struct {
 	Database *data.Database  `json:"database" mapstructure:"database"`
 	Cache    *data.CacheConf `json:"cache" mapstructure:"cache"`
+}
+
+// ReadConfig read config
+func ReadConfig(configFilePath string) (c *AllConfig, err error) {
+	if len(configFilePath) == 0 {
+		configFilePath = filepath.Join(cli.ConfigFilePath, cli.DefaultConfigFileName)
+	}
+	c = &AllConfig{}
+	config, err := viper.NewWithPath(configFilePath)
+	if err != nil {
+		return nil, err
+	}
+	if err = config.Parse(&c); err != nil {
+		return nil, err
+	}
+	return c, nil
 }

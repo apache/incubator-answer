@@ -38,4 +38,7 @@ const (
 	LangNotFound                 = "error.lang.not_found"
 	ReportHandleFailed           = "error.report.handle_failed"
 	ReportNotFound               = "error.report.not_found"
+	ReadConfigFailed             = "error.config.read_config_failed"
+	DatabaseConnectionFailed     = "error.database.connection_failed"
+	InstallConfigFailed          = "error.install.create_config_failed"
 )

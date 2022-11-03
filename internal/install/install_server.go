@@ -1,4 +1,4 @@
-package server
+package install
 
 import (
 	"embed"
@@ -6,7 +6,6 @@ import (
 	"io/fs"
 	"net/http"
 
-	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
@@ -25,42 +24,31 @@ func (r *_resource) Open(name string) (fs.File, error) {
 	return r.fs.Open(name)
 }
 
-// NewHTTPServer new http server.
+// NewInstallHTTPServer new install http server.
 func NewInstallHTTPServer() *gin.Engine {
 	r := gin.New()
 	gin.SetMode(gin.DebugMode)
-
-	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK??") })
-
-	// gin.SetMode(gin.ReleaseMode)
-
+	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK") })
 	r.StaticFS("/static", http.FS(&_resource{
 		fs: ui.Build,
 	}))
 
 	installApi := r.Group("")
-	installApi.GET("/install", Install)
+	installApi.GET("/install", WebPage)
 
-	installApi.POST("/installation/db/check", func(c *gin.Context) {
-		handler.HandleResponse(c, nil, gin.H{})
-	})
+	installApi.GET("/installation/language/options", LangOptions)
 
-	installApi.POST("/installation/config-file/check", func(c *gin.Context) {
-		handler.HandleResponse(c, nil, gin.H{})
-	})
+	installApi.POST("/installation/db/check", CheckDatabase)
 
-	installApi.POST("/installation/init", func(c *gin.Context) {
-		handler.HandleResponse(c, nil, gin.H{})
-	})
+	installApi.POST("/installation/config-file/check", CheckConfigFile)
 
-	installApi.POST("/installation/base-info", func(c *gin.Context) {
-		handler.HandleResponse(c, nil, gin.H{})
-	})
+	installApi.POST("/installation/init", InitEnvironment)
 
+	installApi.POST("/installation/base-info", InitBaseInfo)
 	return r
 }
 
-func Install(c *gin.Context) {
+func WebPage(c *gin.Context) {
 	filePath := ""
 	var file []byte
 	var err error

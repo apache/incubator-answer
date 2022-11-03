@@ -27,33 +27,35 @@ func InstallAllInitialEnvironment(dataDirPath string) {
 	UploadFilePath = filepath.Join(dataDirPath, UploadFilePath)
 	I18nPath = filepath.Join(dataDirPath, I18nPath)
 
-	installConfigFile()
 	installUploadDir()
 	installI18nBundle()
 	fmt.Println("install all initial environment done")
 }
 
-func installConfigFile() {
-	fmt.Println("[config-file] try to install...")
-	defaultConfigFile := filepath.Join(ConfigFilePath, DefaultConfigFileName)
+func InstallConfigFile(configFilePath string) error {
+	if len(configFilePath) == 0 {
+		configFilePath = filepath.Join(ConfigFilePath, DefaultConfigFileName)
+	}
+	fmt.Println("[config-file] try to create at ", configFilePath)
 
 	// if config file already exists do nothing.
-	if CheckConfigFile(defaultConfigFile) {
-		fmt.Printf("[config-file] %s already exists\n", defaultConfigFile)
-		return
+	if CheckConfigFile(configFilePath) {
+		fmt.Printf("[config-file] %s already exists\n", configFilePath)
+		return nil
 	}
 
 	if err := dir.CreateDirIfNotExist(ConfigFilePath); err != nil {
 		fmt.Printf("[config-file] create directory fail %s\n", err.Error())
-		return
+		return fmt.Errorf("create directory fail %s", err.Error())
 	}
-	fmt.Printf("[config-file] create directory success, config file is %s\n", defaultConfigFile)
+	fmt.Printf("[config-file] create directory success, config file is %s\n", configFilePath)
 
-	if err := writerFile(defaultConfigFile, string(configs.Config)); err != nil {
+	if err := writerFile(configFilePath, string(configs.Config)); err != nil {
 		fmt.Printf("[config-file] install fail %s\n", err.Error())
-		return
+		return fmt.Errorf("write file failed %s", err)
 	}
 	fmt.Printf("[config-file] install success\n")
+	return nil
 }
 
 func installUploadDir() {
