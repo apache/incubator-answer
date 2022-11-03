@@ -58,6 +58,8 @@ import (
 	"github.com/answerdev/answer/internal/service/report_handle_backyard"
 	"github.com/answerdev/answer/internal/service/revision_common"
 	"github.com/answerdev/answer/internal/service/service_config"
+	"github.com/answerdev/answer/internal/service/siteinfo"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tag2 "github.com/answerdev/answer/internal/service/tag"
 	"github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/internal/service/uploader"
@@ -90,19 +92,19 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 		return nil, nil, err
 	}
 	siteInfoRepo := site_info.NewSiteInfo(dataData)
-	configRepo := config.NewConfigRepo(dataData)
-	emailRepo := export.NewEmailRepo(dataData)
-	emailService := export2.NewEmailService(configRepo, emailRepo, siteInfoRepo)
-	siteInfoService := service.NewSiteInfoService(siteInfoRepo, emailService)
-	langController := controller.NewLangController(i18nTranslator, siteInfoService)
+	siteInfoCommonService := siteinfo_common.NewSiteInfoCommonService(siteInfoRepo)
+	langController := controller.NewLangController(i18nTranslator, siteInfoCommonService)
 	authRepo := auth.NewAuthRepo(dataData)
 	authService := auth2.NewAuthService(authRepo)
+	configRepo := config.NewConfigRepo(dataData)
 	userRepo := user.NewUserRepo(dataData, configRepo)
 	uniqueIDRepo := unique.NewUniqueIDRepo(dataData)
 	activityRepo := activity_common.NewActivityRepo(dataData, uniqueIDRepo, configRepo)
 	userRankRepo := rank.NewUserRankRepo(dataData, configRepo)
 	userActiveActivityRepo := activity.NewUserActiveActivityRepo(dataData, activityRepo, userRankRepo, configRepo)
-	userService := service.NewUserService(userRepo, userActiveActivityRepo, emailService, authService, serviceConf)
+	emailRepo := export.NewEmailRepo(dataData)
+	emailService := export2.NewEmailService(configRepo, emailRepo, siteInfoRepo)
+	userService := service.NewUserService(userRepo, userActiveActivityRepo, emailService, authService, serviceConf, siteInfoCommonService)
 	captchaRepo := captcha.NewCaptchaRepo(dataData)
 	captchaService := action.NewCaptchaService(captchaRepo)
 	uploaderService := uploader.NewUploaderService(serviceConf)
@@ -167,8 +169,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reasonService := reason2.NewReasonService(reasonRepo)
 	reasonController := controller.NewReasonController(reasonService)
 	themeController := controller_backyard.NewThemeController()
+	siteInfoService := siteinfo.NewSiteInfoService(siteInfoRepo, emailService)
 	siteInfoController := controller_backyard.NewSiteInfoController(siteInfoService)
-	siteinfoController := controller.NewSiteinfoController(siteInfoService)
+	siteinfoController := controller.NewSiteinfoController(siteInfoCommonService)
 	notificationRepo := notification.NewNotificationRepo(dataData)
 	notificationCommon := notificationcommon.NewNotificationCommon(dataData, notificationRepo, userCommon, activityRepo, followRepo, objService)
 	notificationService := notification2.NewNotificationService(dataData, notificationRepo, notificationCommon)
