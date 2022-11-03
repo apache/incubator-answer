@@ -5,18 +5,18 @@ import (
 
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/translator"
-	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/siteinfo"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/i18n"
 )
 
 type LangController struct {
 	translator      i18n.Translator
-	siteInfoService *service.SiteInfoService
+	siteInfoService *siteinfo.SiteInfoService
 }
 
 // NewLangController new language controller.
-func NewLangController(tr i18n.Translator, siteInfoService *service.SiteInfoService) *LangController {
+func NewLangController(tr i18n.Translator, siteInfoService *siteinfo.SiteInfoService) *LangController {
 	return &LangController{translator: tr, siteInfoService: siteInfoService}
 }
 
