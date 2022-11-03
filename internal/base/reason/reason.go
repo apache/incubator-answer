@@ -38,4 +38,5 @@ const (
 	LangNotFound                 = "error.lang.not_found"
 	ReportHandleFailed           = "error.report.handle_failed"
 	ReportNotFound               = "error.report.not_found"
+	SiteInfoNotFound             = "error.site_info.not_found"
 )

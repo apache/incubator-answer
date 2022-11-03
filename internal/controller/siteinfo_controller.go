@@ -18,30 +18,21 @@ func NewSiteinfoController(siteInfoService *service.SiteInfoService) *SiteinfoCo
 	}
 }
 
-// GetInfo godoc
-// @Summary Get siteinfo
-// @Description Get siteinfo
+// GetSiteInfo get site info
+// @Summary get site info
+// @Description get site info
 // @Tags site
 // @Produce json
 // @Success 200 {object} handler.RespBody{data=schema.SiteGeneralResp}
 // @Router /answer/api/v1/siteinfo [get]
-func (sc *SiteinfoController) GetInfo(ctx *gin.Context) {
-	var (
-		resp    = &schema.SiteInfoResp{}
-		general schema.SiteGeneralResp
-		face    schema.SiteInterfaceResp
-		err     error
-	)
-
-	general, err = sc.siteInfoService.GetSiteGeneral(ctx)
-	resp.General = &general
+func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
+	var err error
+	resp := &schema.SiteInfoResp{}
+	resp.General, err = sc.siteInfoService.GetSiteGeneral(ctx)
 	if err != nil {
 		handler.HandleResponse(ctx, err, resp)
 		return
 	}
-
-	face, err = sc.siteInfoService.GetSiteInterface(ctx)
-	resp.Face = &face
-
+	resp.Face, err = sc.siteInfoService.GetSiteInterface(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
