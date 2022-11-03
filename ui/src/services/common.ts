@@ -1,8 +1,8 @@
 import qs from 'qs';
 import useSWR from 'swr';
 
-import request from '@answer/utils/request';
-import type * as Type from '@answer/common/interface';
+import request from '@/utils/request';
+import type * as Type from '@/common/interface';
 
 export const uploadImage = (file) => {
   const form = new FormData();
@@ -115,7 +115,7 @@ export const resendEmail = (params?: Type.ImgCodeReq) => {
  * @description get login userinfo
  * @returns {UserInfo}
  */
-export const getUserInfo = () => {
+export const getLoggedUserInfo = () => {
   return request.get<Type.UserInfoRes>('/answer/api/v1/user/info');
 };
 

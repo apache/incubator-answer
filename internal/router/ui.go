@@ -4,12 +4,15 @@ import (
 	"embed"
 	"fmt"
 	"io/fs"
+	"math/rand"
 	"net/http"
 	"os"
 
 	"github.com/answerdev/answer/i18n"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -67,6 +70,63 @@ func (a *UIRouter) Register(r *gin.Engine) {
 	r.StaticFS("/static", http.FS(&_resource{
 		fs: ui.Build,
 	}))
+
+	// Install godoc
+	// @Summary Install
+	// @Description Install
+	// @Tags Install
+	// @Accept json
+	// @Produce json
+	// @Success 200 {object} handler.RespBody{}
+	// @Router /install [get]
+	r.GET("/install", func(c *gin.Context) {
+		filePath := ""
+		var file []byte
+		var err error
+		filePath = "build/index.html"
+		c.Header("content-type", "text/html;charset=utf-8")
+		file, err = ui.Build.ReadFile(filePath)
+		if err != nil {
+			log.Error(err)
+			c.Status(http.StatusNotFound)
+			return
+		}
+		c.String(http.StatusOK, string(file))
+	})
+
+	r.POST("/installation/db/check", func(c *gin.Context) {
+		num := rand.Intn(10)
+		if num > 5 {
+			err := errors.BadRequest("connection error")
+			handler.HandleResponse(c, err, gin.H{})
+		} else {
+			handler.HandleResponse(c, nil, gin.H{
+				"connection_success": true,
+			})
+		}
+	})
+
+	r.POST("/installation/config-file/check", func(c *gin.Context) {
+		num := rand.Intn(10)
+		if num > 5 {
+			handler.HandleResponse(c, nil, gin.H{
+				"exist": true,
+			})
+		} else {
+			handler.HandleResponse(c, nil, gin.H{
+				"exist": false,
+			})
+		}
+
+	})
+
+	r.POST("/installation/init", func(c *gin.Context) {
+		handler.HandleResponse(c, nil, gin.H{})
+	})
+
+	r.POST("/installation/base-info", func(c *gin.Context) {
+		handler.HandleResponse(c, nil, gin.H{})
+	})
 
 	// specify the not router for default routes and redirect
 	r.NoRoute(func(c *gin.Context) {

@@ -18,9 +18,9 @@ func NewSiteInfoController(siteInfoService *siteinfo.SiteInfoService) *SiteInfoC
 	}
 }
 
-// GetGeneral godoc
-// @Summary Get siteinfo general
-// @Description Get siteinfo general
+// GetGeneral get site general information
+// @Summary get site general information
+// @Description get site general information
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json
@@ -31,9 +31,9 @@ func (sc *SiteInfoController) GetGeneral(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
-// GetInterface godoc
-// @Summary Get siteinfo interface
-// @Description Get siteinfo interface
+// GetInterface get site interface
+// @Summary get site interface
+// @Description get site interface
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json
@@ -44,9 +44,9 @@ func (sc *SiteInfoController) GetInterface(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
-// UpdateGeneral godoc
-// @Summary Get siteinfo interface
-// @Description Get siteinfo interface
+// UpdateGeneral update site general information
+// @Summary update site general information
+// @Description update site general information
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json
@@ -62,9 +62,9 @@ func (sc *SiteInfoController) UpdateGeneral(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
-// UpdateInterface godoc
-// @Summary Get siteinfo interface
-// @Description Get siteinfo interface
+// UpdateInterface update site interface
+// @Summary update site info interface
+// @Description update site info interface
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json

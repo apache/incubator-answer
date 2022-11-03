@@ -8,6 +8,7 @@ import (
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
 	"github.com/answerdev/answer/internal/service/comment"
 	"github.com/answerdev/answer/internal/service/comment_common"
+	"github.com/answerdev/answer/internal/service/dashboard"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/follow"
 	"github.com/answerdev/answer/internal/service/meta"
@@ -68,4 +69,5 @@ var ProviderSetService = wire.NewSet(
 	notficationcommon.NewNotificationCommon,
 	notification.NewNotificationService,
 	activity.NewAnswerActivityService,
+	dashboard.NewDashboardService,
 )

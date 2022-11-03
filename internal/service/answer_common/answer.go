@@ -20,6 +20,7 @@ type AnswerRepo interface {
 	SearchList(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error)
 	CmsSearchList(ctx context.Context, search *entity.CmsAnswerSearch) ([]*entity.Answer, int64, error)
 	UpdateAnswerStatus(ctx context.Context, answer *entity.Answer) (err error)
+	GetAnswerCount(ctx context.Context) (count int64, err error)
 }
 
 // AnswerCommon user service

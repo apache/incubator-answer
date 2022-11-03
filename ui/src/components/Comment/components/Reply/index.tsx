@@ -2,8 +2,8 @@ import { useState, memo } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { TextArea, Mentions } from '@answer/components';
-import { usePageUsers } from '@answer/hooks';
+import { TextArea, Mentions } from '@/components';
+import { usePageUsers } from '@/hooks';
 
 const Form = ({ userName, onSendReply, onCancel, mode }) => {
   const [value, setValue] = useState('');

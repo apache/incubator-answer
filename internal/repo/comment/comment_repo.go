@@ -79,6 +79,15 @@ func (cr *commentRepo) GetComment(ctx context.Context, commentID string) (
 	return
 }
 
+func (cr *commentRepo) GetCommentCount(ctx context.Context) (count int64, err error) {
+	list := make([]*entity.Comment, 0)
+	count, err = cr.data.DB.Where("status = ?", entity.CommentStatusAvailable).FindAndCount(&list)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // GetCommentPage get comment page
 func (cr *commentRepo) GetCommentPage(ctx context.Context, commentQuery *comment.CommentQuery) (
 	commentList []*entity.Comment, total int64, err error,

@@ -1,7 +1,7 @@
 import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
-import { FormatTime } from '@answer/components';
+import { FormatTime } from '@/components';
 
 interface Props {
   visible: boolean;
@@ -18,7 +18,7 @@ const Index: FC<Props> = ({ visible, data }) => {
         return (
           <ListGroupItem className="d-flex py-3 px-0" key={item.object_id}>
             <div
-              className="me-3 text-end text-secondary"
+              className="me-3 text-end text-secondary flex-shrink-0"
               style={{ width: '80px' }}>
               {item.vote_type}
             </div>
