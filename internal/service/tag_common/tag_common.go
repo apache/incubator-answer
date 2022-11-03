@@ -30,7 +30,6 @@ type TagRepo interface {
 type TagRelRepo interface {
 	AddTagRelList(ctx context.Context, tagList []*entity.TagRel) (err error)
 	RemoveTagRelListByIDs(ctx context.Context, ids []int64) (err error)
-	RemoveTagRelListByObjectID(ctx context.Context, objectId string) (err error)
 	EnableTagRelByIDs(ctx context.Context, ids []int64) (err error)
 	GetObjectTagRelWithoutStatus(ctx context.Context, objectId, tagID string) (tagRel *entity.TagRel, exist bool, err error)
 	GetObjectTagRelList(ctx context.Context, objectId string) (tagListList []*entity.TagRel, err error)
@@ -47,7 +46,8 @@ type TagCommonService struct {
 
 // NewTagCommonService new tag service
 func NewTagCommonService(tagRepo TagRepo, tagRelRepo TagRelRepo,
-	revisionService *revision_common.RevisionService) *TagCommonService {
+	revisionService *revision_common.RevisionService,
+) *TagCommonService {
 	return &TagCommonService{
 		tagRepo:         tagRepo,
 		tagRelRepo:      tagRelRepo,
@@ -97,20 +97,20 @@ func (ts *TagCommonService) GetObjectTag(ctx context.Context, objectId string) (
 
 // BatchGetObjectTag batch get object tag
 func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []string) (map[string][]*schema.TagResp, error) {
-	objectIdTagMap := make(map[string][]*schema.TagResp)
+	objectIDTagMap := make(map[string][]*schema.TagResp)
 	tagIDList := make([]string, 0)
 	tagsInfoMap := make(map[string]*entity.Tag)
 
 	tagList, err := ts.tagRelRepo.BatchGetObjectTagRelList(ctx, objectIds)
 	if err != nil {
-		return objectIdTagMap, err
+		return objectIDTagMap, err
 	}
 	for _, tag := range tagList {
 		tagIDList = append(tagIDList, tag.TagID)
 	}
 	tagsInfoList, err := ts.tagRepo.GetTagListByIDs(ctx, tagIDList)
 	if err != nil {
-		return objectIdTagMap, err
+		return objectIDTagMap, err
 	}
 	for _, item := range tagsInfoList {
 		tagsInfoMap[item.ID] = item
@@ -124,10 +124,10 @@ func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []s
 				DisplayName:     tagInfo.DisplayName,
 				MainTagSlugName: tagInfo.MainTagSlugName,
 			}
-			objectIdTagMap[item.ObjectID] = append(objectIdTagMap[item.ObjectID], t)
+			objectIDTagMap[item.ObjectID] = append(objectIDTagMap[item.ObjectID], t)
 		}
 	}
-	return objectIdTagMap, nil
+	return objectIDTagMap, nil
 }
 
 // ObjectChangeTag change object tag list
@@ -191,7 +191,7 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 		}
 	}
 
-	err = ts.CreateOrUpdateTagRelList(ctx, objectTagData.ObjectId, thisObjTagIDList)
+	err = ts.CreateOrUpdateTagRelList(ctx, objectTagData.ObjectID, thisObjTagIDList)
 	if err != nil {
 		return err
 	}

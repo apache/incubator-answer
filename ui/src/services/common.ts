@@ -120,7 +120,7 @@ export const getLoggedUserInfo = () => {
 };
 
 export const modifyPassword = (params: Type.ModifyPasswordReq) => {
-  return request.post('/answer/api/v1/user/password/modify', params);
+  return request.put('/answer/api/v1/user/password', params);
 };
 
 export const modifyUserInfo = (params: Type.ModifyUserReq) => {

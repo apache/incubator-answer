@@ -40,11 +40,12 @@ type User struct {
 	Avatar         string    `xorm:"not null default '' VARCHAR(255) avatar"`
 	Mobile         string    `xorm:"not null VARCHAR(20) mobile"`
 	Bio            string    `xorm:"not null TEXT bio"`
-	BioHtml        string    `xorm:"not null TEXT bio_html"`
+	BioHTML        string    `xorm:"not null TEXT bio_html"`
 	Website        string    `xorm:"not null default '' VARCHAR(255) website"`
 	Location       string    `xorm:"not null default '' VARCHAR(100) location"`
 	IPInfo         string    `xorm:"not null default '' VARCHAR(255) ip_info"`
 	IsAdmin        bool      `xorm:"not null default false BOOL is_admin"`
+	Language       string    `xorm:"not null default '' VARCHAR(100) language"`
 }
 
 // TableName user table name
@@ -54,6 +55,6 @@ func (User) TableName() string {
 
 type UserSearch struct {
 	User
-	Page     int `json:"page" form:"page"`           //Query number of pages
-	PageSize int `json:"page_size" form:"page_size"` //Search page size
+	Page     int `json:"page" form:"page"`           // Query number of pages
+	PageSize int `json:"page_size" form:"page_size"` // Search page size
 }

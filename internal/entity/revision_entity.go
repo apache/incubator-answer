@@ -13,7 +13,8 @@ type Revision struct {
 	Title      string    `xorm:"not null default '' VARCHAR(255) title"`
 	Content    string    `xorm:"not null TEXT content"`
 	Log        string    `xorm:"VARCHAR(255) log"`
-	Status     int       `xorm:"not null default 1 INT(11) status"`
+	// Status todo: this field is not used, will be removed in the future
+	Status int `xorm:"not null default 1 INT(11) status"`
 }
 
 // TableName revision table name

@@ -1,3 +1,5 @@
+import i18next from 'i18next';
+
 function getQueryString(name: string): string {
   const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
   const r = window.location.search.substr(1).match(reg);
@@ -70,6 +72,19 @@ function parseUserInfo(markdown) {
   return markdown.replace(globalReg, '[@$1](/u/$1)');
 }
 
+function formatUptime(value) {
+  const t = i18next.t.bind(i18next);
+  const second = parseInt(value, 10);
+
+  if (second > 60 * 60 && second < 60 * 60 * 24) {
+    return `${Math.floor(second / 3600)} ${t('dates.hour')}`;
+  }
+  if (second > 60 * 60 * 24) {
+    return `${Math.floor(second / 3600 / 24)} ${t('dates.day')}`;
+  }
+
+  return `< 1 ${t('dates.hour')}`;
+}
 export {
   getQueryString,
   thousandthDivision,
@@ -77,4 +92,5 @@ export {
   scrollTop,
   matchedUsers,
   parseUserInfo,
+  formatUptime,
 };

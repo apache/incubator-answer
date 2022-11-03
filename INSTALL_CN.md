@@ -35,7 +35,7 @@ $ docker pull answerdev/answer:latest
 $ mkdir -p /var/data
 
 # 先运行一遍镜像
-$ docker run --name=answer -p 9080:80 -v /var/data:/data answer/answer
+$ docker run --name=answer -p 9080:80 -v /var/data:/data answerdev/answer
 
 # 第一次启动后会在/var/data 目录下生成配置文件
 # /var/data/conf/config.yaml

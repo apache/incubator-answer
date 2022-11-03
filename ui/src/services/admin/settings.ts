@@ -70,3 +70,16 @@ export const updateSmtpSetting = (params: Type.AdminSettingsSmtp) => {
   const apiUrl = `/answer/admin/api/setting/smtp`;
   return request.put(apiUrl, params);
 };
+
+export const useDashBoard = () => {
+  const apiUrl = `/answer/admin/api/dashboard`;
+  const { data, error } = useSWR<Type.AdminDashboard, Error>(
+    [apiUrl],
+    request.instance.get,
+  );
+  return {
+    data,
+    isLoading: !data && !error,
+    error,
+  };
+};

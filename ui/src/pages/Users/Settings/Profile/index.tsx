@@ -120,6 +120,17 @@ const Index: React.FC = () => {
       };
     }
 
+    if (formData.avatar.type === 'custom' && !formData.avatar.custom) {
+      bol = false;
+      formData.avatar = {
+        ...formData.avatar,
+        custom: '',
+        value: '',
+        isInvalid: true,
+        errorMsg: t('avatar.msg'),
+      };
+    }
+
     const reg = /^(http|https):\/\//g;
     if (website.value && !website.value.match(reg)) {
       bol = false;
@@ -256,6 +267,7 @@ const Index: React.FC = () => {
           <Form.Check
             inline
             type="radio"
+            id="gravatar"
             label={t('avatar.gravatar')}
             className="mb-0"
             checked={formData.avatar.type === 'gravatar'}
@@ -275,6 +287,7 @@ const Index: React.FC = () => {
             inline
             type="radio"
             label={t('avatar.custom')}
+            id="custom"
             className="mb-0"
             checked={formData.avatar.type === 'custom'}
             onChange={() =>
@@ -291,6 +304,7 @@ const Index: React.FC = () => {
           <Form.Check
             inline
             type="radio"
+            id="default"
             label={t('avatar.default')}
             className="mb-0"
             checked={formData.avatar.type === 'default'}
@@ -312,8 +326,8 @@ const Index: React.FC = () => {
               <Avatar
                 size="128px"
                 avatar={formData.avatar.gravatar}
-                searchStr={`s=128&d=identicon&t=${
-                  new Date().valueOf() + count
+                searchStr={`s=256&d=identicon${
+                  count > 0 ? `&t=${new Date().valueOf()}` : ''
                 }`}
                 className="me-3 rounded"
               />
@@ -345,7 +359,7 @@ const Index: React.FC = () => {
             <>
               <Avatar
                 size="128px"
-                searchStr="s=128"
+                searchStr="s=256"
                 avatar={formData.avatar.custom}
                 className="me-3 rounded"
               />
@@ -365,6 +379,13 @@ const Index: React.FC = () => {
             <Avatar size="128px" avatar="" className="me-3 rounded" />
           )}
         </div>
+        <Form.Control
+          isInvalid={formData.avatar.isInvalid}
+          className="d-none"
+        />
+        <Form.Control.Feedback type="invalid">
+          {formData.avatar.errorMsg}
+        </Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group controlId="bio" className="mb-3">

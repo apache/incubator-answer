@@ -23,7 +23,6 @@ func NewCollectionService(
 	collectionRepo collectioncommon.CollectionRepo,
 	collectionGroupRepo CollectionGroupRepo,
 	questionCommon *questioncommon.QuestionCommon,
-
 ) *CollectionService {
 	return &CollectionService{
 		collectionRepo:      collectionRepo,
@@ -31,6 +30,7 @@ func NewCollectionService(
 		questionCommon:      questionCommon,
 	}
 }
+
 func (cs *CollectionService) CollectionSwitch(ctx context.Context, dto *schema.CollectionSwitchDTO) (resp *schema.CollectionSwitchResp, err error) {
 	resp = &schema.CollectionSwitchResp{}
 	dbData, has, err := cs.collectionRepo.GetOneByObjectIDAndUser(ctx, dto.UserID, dto.ObjectID)
@@ -46,7 +46,8 @@ func (cs *CollectionService) CollectionSwitch(ctx context.Context, dto *schema.C
 		if err != nil {
 			log.Error("UpdateCollectionCount", err.Error())
 		}
-		count, err := cs.objectCollectionCount(ctx, dto.ObjectID)
+		var count int64
+		count, err = cs.objectCollectionCount(ctx, dto.ObjectID)
 		if err != nil {
 			return resp, err
 		}
@@ -56,12 +57,17 @@ func (cs *CollectionService) CollectionSwitch(ctx context.Context, dto *schema.C
 	}
 
 	if dto.GroupID == "" || dto.GroupID == "0" {
-		defaultGroup, has, err := cs.collectionGroupRepo.GetDefaultID(ctx, dto.UserID)
+		var (
+			defaultGroup *entity.CollectionGroup
+			has          bool
+		)
+		defaultGroup, has, err = cs.collectionGroupRepo.GetDefaultID(ctx, dto.UserID)
 		if err != nil {
 			return nil, err
 		}
 		if !has {
-			dbdefaultGroup, err := cs.collectionGroupRepo.AddCollectionDefaultGroup(ctx, dto.UserID)
+			var dbdefaultGroup *entity.CollectionGroup
+			dbdefaultGroup, err = cs.collectionGroupRepo.AddCollectionDefaultGroup(ctx, dto.UserID)
 			if err != nil {
 				return nil, err
 			}
@@ -93,8 +99,8 @@ func (cs *CollectionService) CollectionSwitch(ctx context.Context, dto *schema.C
 	return
 }
 
-func (cs *CollectionService) objectCollectionCount(ctx context.Context, objectId string) (int64, error) {
-	count, err := cs.collectionRepo.CountByObjectID(ctx, objectId)
+func (cs *CollectionService) objectCollectionCount(ctx context.Context, objectID string) (int64, error) {
+	count, err := cs.collectionRepo.CountByObjectID(ctx, objectID)
 	return count, err
 }
 
@@ -108,12 +114,16 @@ func (cs *CollectionService) add(ctx context.Context, collection *entity.Collect
 	}
 
 	if collection.UserCollectionGroupID == "" || collection.UserCollectionGroupID == "0" {
-		defaultGroup, has, err := cs.collectionGroupRepo.GetDefaultID(ctx, collection.UserID)
+		var (
+			defaultGroup *entity.CollectionGroup
+			has          bool
+		)
+		defaultGroup, has, err = cs.collectionGroupRepo.GetDefaultID(ctx, collection.UserID)
 		if err != nil {
 			return err
 		}
 		if !has {
-			defaultGroup, err := cs.collectionGroupRepo.AddCollectionDefaultGroup(ctx, collection.UserID)
+			defaultGroup, err = cs.collectionGroupRepo.AddCollectionDefaultGroup(ctx, collection.UserID)
 			if err != nil {
 				return err
 			}

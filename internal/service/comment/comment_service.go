@@ -24,6 +24,7 @@ type CommentRepo interface {
 	AddComment(ctx context.Context, comment *entity.Comment) (err error)
 	RemoveComment(ctx context.Context, commentID string) (err error)
 	UpdateComment(ctx context.Context, comment *entity.Comment) (err error)
+	GetComment(ctx context.Context, commentID string) (comment *entity.Comment, exist bool, err error)
 	GetCommentPage(ctx context.Context, commentQuery *CommentQuery) (
 		comments []*entity.Comment, total int64, err error)
 }

@@ -22,7 +22,7 @@ const Index: FC<Props> = ({ data, time, preFix, className = '' }) => {
             avatar={data?.avatar}
             size="40px"
             className="me-2 d-none d-md-block"
-            searchStr="s=48"
+            searchStr="s=96"
           />
 
           <Avatar
@@ -37,7 +37,7 @@ const Index: FC<Props> = ({ data, time, preFix, className = '' }) => {
           avatar={data?.avatar}
           size="40px"
           className="me-2"
-          searchStr="s=48"
+          searchStr="s=96"
         />
       )}
       <div className="fs-14 text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
