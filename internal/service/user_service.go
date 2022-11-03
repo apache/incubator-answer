@@ -11,6 +11,7 @@ import (
 
 	"github.com/Chain-Zhang/pinyin"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
@@ -281,6 +282,18 @@ func (us *UserService) UserEmailHas(ctx context.Context, email string) (bool, er
 		return false, err
 	}
 	return has, nil
+}
+
+// UserUpdateInterface update user interface
+func (us *UserService) UserUpdateInterface(ctx context.Context, req *schema.UpdateUserInterfaceRequest) (err error) {
+	if !translator.CheckLanguageIsValid(req.Language) {
+		return errors.BadRequest(reason.LangNotFound)
+	}
+	err = us.userRepo.UpdateLanguage(ctx, req.UserId, req.Language)
+	if err != nil {
+		return
+	}
+	return nil
 }
 
 // UserRegisterByEmail user register

@@ -3,6 +3,8 @@ import { initReactI18next } from 'react-i18next';
 import i18next from 'i18next';
 import Backend from 'i18next-http-backend';
 
+import { DEFAULT_LANG } from '@/common/constants';
+
 import en from './locales/en.json';
 import zh from './locales/zh_CN.json';
 
@@ -21,7 +23,7 @@ i18next
       },
     },
     // debug: process.env.NODE_ENV === 'development',
-    fallbackLng: process.env.REACT_APP_LANG || 'en_US',
+    fallbackLng: process.env.REACT_APP_LANG || DEFAULT_LANG,
     interpolation: {
       escapeValue: false,
     },

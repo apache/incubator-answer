@@ -59,6 +59,8 @@ To run answer, use:
 		Short: "init answer application",
 		Long:  `init answer application`,
 		Run: func(_ *cobra.Command, _ []string) {
+			// installwebapi := server.NewInstallHTTPServer()
+			// installwebapi.Run(":8088")
 			cli.InstallAllInitialEnvironment(dataDirPath)
 			c, err := readConfig()
 			if err != nil {

@@ -3,13 +3,12 @@ const Storage = {
     const value = localStorage.getItem(key);
     if (value) {
       try {
-        const v = JSON.parse(value);
-        return v;
+        return JSON.parse(value);
       } catch {
         return value;
       }
     }
-    return false;
+    return undefined;
   },
   set: (key: string, value: any): void => {
     if (typeof value === 'string') {

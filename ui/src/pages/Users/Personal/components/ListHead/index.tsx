@@ -1,7 +1,7 @@
 import { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { QueryGroup } from '@answer/components';
+import { QueryGroup } from '@/components';
 
 const sortBtns = ['newest', 'score'];
 

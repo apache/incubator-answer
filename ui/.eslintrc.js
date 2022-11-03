@@ -64,7 +64,7 @@ module.exports = {
             position: 'before',
           },
           {
-            pattern: '@answer/**',
+            pattern: '@/**',
             group: 'internal',
           },
           {

@@ -5,18 +5,18 @@ import { Trans, useTranslation } from 'react-i18next';
 import { marked } from 'marked';
 import MD5 from 'md5';
 
-import { modifyUserInfo, uploadAvatar, getUserInfo } from '@answer/api';
-import type { FormDataType } from '@answer/common/interface';
-import { UploadImg, Avatar } from '@answer/components';
-import { userInfoStore } from '@answer/stores';
-import { useToast } from '@answer/hooks';
+import type { FormDataType } from '@/common/interface';
+import { UploadImg, Avatar } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
+import { useToast } from '@/hooks';
+import { modifyUserInfo, uploadAvatar, getLoggedUserInfo } from '@/services';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings.profile',
   });
   const toast = useToast();
-  const { user, update } = userInfoStore();
+  const { user, update } = loggedUserInfoStore();
   const [mailHash, setMailHash] = useState('');
   const [count, setCount] = useState(0);
 
@@ -120,6 +120,17 @@ const Index: React.FC = () => {
       };
     }
 
+    if (formData.avatar.type === 'custom' && !formData.avatar.custom) {
+      bol = false;
+      formData.avatar = {
+        ...formData.avatar,
+        custom: '',
+        value: '',
+        isInvalid: true,
+        errorMsg: t('avatar.msg'),
+      };
+    }
+
     const reg = /^(http|https):\/\//g;
     if (website.value && !website.value.match(reg)) {
       bol = false;
@@ -177,7 +188,7 @@ const Index: React.FC = () => {
   };
 
   const getProfile = () => {
-    getUserInfo().then((res) => {
+    getLoggedUserInfo().then((res) => {
       formData.display_name.value = res.display_name;
       formData.username.value = res.username;
       formData.bio.value = res.bio;
@@ -368,6 +379,13 @@ const Index: React.FC = () => {
             <Avatar size="128px" avatar="" className="me-3 rounded" />
           )}
         </div>
+        <Form.Control
+          isInvalid={formData.avatar.isInvalid}
+          className="d-none"
+        />
+        <Form.Control.Feedback type="invalid">
+          {formData.avatar.errorMsg}
+        </Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group controlId="bio" className="mb-3">

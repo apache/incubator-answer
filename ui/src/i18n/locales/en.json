@@ -28,7 +28,10 @@
     "confirm_email": "Confirm Email",
     "account_suspended": "Account Suspended",
     "admin": "Admin",
-    "change_email": "Modify Email"
+    "change_email": "Modify Email",
+    "install": "Answer Installation",
+    "upgrade": "Answer Upgrade",
+    "maintenance": "Webite Maintenance"
   },
   "notifications": {
     "title": "Notifications",
@@ -290,7 +293,9 @@
     "now": "now",
     "x_seconds_ago": "{{count}}s ago",
     "x_minutes_ago": "{{count}}m ago",
-    "x_hours_ago": "{{count}}h ago"
+    "x_hours_ago": "{{count}}h ago",
+    "hour": "hour",
+    "day": "day"
   },
   "comment": {
     "btn_add_comment": "Add comment",
@@ -523,7 +528,8 @@
         "custom": "Custom",
         "btn_refresh": "Refresh",
         "custom_text": "You can upload your image.",
-        "default": "Default"
+        "default": "Default",
+        "msg": "Please upload an avatar"
       },
       "bio": {
         "label": "About Me (optional)"
@@ -734,6 +740,84 @@
     "x_answers": "answers",
     "x_questions": "questions"
   },
+  "install": {
+    "title": "Answer",
+    "next": "Next",
+    "done": "Done",
+    "lang": {
+      "label": "Please choose a language"
+    },
+    "db_type": {
+      "label": "Database Engine"
+    },
+    "db_username": {
+      "label": "Username",
+      "placeholder": "root",
+      "msg": "Username cannot be empty."
+    },
+    "db_password": {
+      "label": "Password",
+      "placeholder": "root",
+      "msg": "Password cannot be empty."
+    },
+    "db_host": {
+      "label": "Database Host",
+      "placeholder": "db:3306",
+      "msg": "Database Host cannot be empty."
+    },
+    "db_name": {
+      "label": "Database Name",
+      "placeholder": "answer",
+      "msg": "Database Name cannot be empty."
+    },
+    "db_file": {
+      "label": "Database File",
+      "placeholder": "/data/answer.db",
+      "msg": "Database File cannot be empty."
+    },
+    "config_yaml": {
+      "title": "Create config.yaml",
+      "label": "The config.yaml file created.",
+      "description": "You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.",
+      "info": "After you’ve done that, click “Next” button."
+    },
+    "site_information": "Site Information",
+    "admin_account": "Admin Account",
+    "site_name": {
+      "label": "Site Name"
+    },
+    "contact_email": {
+      "label": "Contact Email",
+      "text": "Email address of key contact responsible for this site."
+    },
+    "admin_name": {
+      "label": "Name"
+    },
+    "admin_password": {
+      "label": "Password",
+      "text": "You will need this password to log in. Please store it in a secure location."
+    },
+    "admin_email": {
+      "label": "Email",
+      "text": "You will need this email to log in."
+    },
+    "ready_title": "Your Answer is Ready!",
+    "ready_description": "If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.",
+    "good_luck": "Have fun, and good luck!",
+    "warning": "Warning",
+    "warning_description": "The file <1>config.yaml</1> already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <2>installing now</2>.",
+    "installed": "Already installed",
+    "installed_description": "You appear to have already installed. To reinstall please clear your old database tables first."
+  },
+  "upgrade": {
+    "title": "Answer",
+    "update_btn": "Update data",
+    "update_title": "Data update required",
+    "update_description": "<1>Answer has been updated! Before you continue, we have to update your data to the newest version.</1><1>The update process may take a little while, so please be patient.</1>",
+    "done_title": "No update required",
+    "done_btn": "Done",
+    "done_desscription": "Your Answer data is already up-to-date."
+  },
   "page_404": {
     "description": "Unfortunately, this page doesn't exist.",
     "back_home": "Back to homepage"
@@ -741,6 +825,9 @@
   "page_50X": {
     "description": "The server encountered an error and could not complete your request.",
     "back_home": "Back to homepage"
+  },
+  "page_maintenance": {
+    "description": "We are under maintenance, we’ll be back soon."
   },
   "admin": {
     "admin_header": {
@@ -761,7 +848,36 @@
     "dashboard": {
       "title": "Dashboard",
       "welcome": "Welcome to Answer Admin !",
-      "version": "Version"
+      "site_statistics": "Site Statistics",
+      "questions": "Questions:",
+      "answers": "Answers:",
+      "comments": "Comments:",
+      "votes": "Votes:",
+      "active_users": "Active users:",
+      "flags": "Flags:",
+      "site_health_status": "Site Health Status",
+      "version": "Version:",
+      "https": "HTTPS:",
+      "uploading_files": "Uploading files:",
+      "smtp": "SMTP:",
+      "timezone": "Timezone:",
+      "system_info": "System Info",
+      "storage_used": "Storage used:",
+      "uptime": "Uptime:",
+      "answer_links": "Answer Links",
+      "documents": "Documents",
+      "feedback": "Feedback",
+      "review": "Review",
+      "config": "Config",
+      "update_to": "Update to",
+      "latest": "Latest",
+      "check_failed": "Check failed",
+      "yes": "Yes",
+      "no": "No",
+      "not_allowed": "Not allowed",
+      "allowed": "Allowed",
+      "enabled": "Enabled",
+      "disabled": "Disabled"
     },
     "flags": {
       "title": "Flags",
@@ -818,7 +934,10 @@
       "inactive": "Inactive",
       "suspended": "Suspended",
       "deleted": "Deleted",
-      "normal": "Normal"
+      "normal": "Normal",
+      "filter": {
+        "placeholder": "Filter by name, user:id"
+      }
     },
     "questions": {
       "page_title": "Questions",
@@ -831,7 +950,10 @@
       "created": "Created",
       "status": "Status",
       "action": "Action",
-      "change": "Change"
+      "change": "Change",
+      "filter": {
+        "placeholder": "Filter by title, question:id"
+      }
     },
     "answers": {
       "page_title": "Answers",
@@ -842,7 +964,10 @@
       "created": "Created",
       "status": "Status",
       "action": "Action",
-      "change": "Change"
+      "change": "Change",
+      "filter": {
+        "placeholder": "Filter by title, answer:id"
+      }
     },
     "general": {
       "page_title": "General",
@@ -878,6 +1003,11 @@
         "label": "Interface Language",
         "msg": "Interface language cannot be empty.",
         "text": "User interface language. It will change when you refresh the page."
+      },
+      "timezone": {
+        "label": "Timezone",
+        "msg": "Timezone cannot be empty.",
+        "text": "Choose a UTC (Coordinated Universal Time) time offset."
       }
     },
     "smtp": {

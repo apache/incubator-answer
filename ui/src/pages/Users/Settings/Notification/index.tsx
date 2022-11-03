@@ -2,9 +2,9 @@ import React, { useState, FormEvent, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type { FormDataType } from '@answer/common/interface';
-import { setNotice, getUserInfo } from '@answer/api';
-import { useToast } from '@answer/hooks';
+import type { FormDataType } from '@/common/interface';
+import { useToast } from '@/hooks';
+import { setNotice, getLoggedUserInfo } from '@/services';
 
 const Index = () => {
   const toast = useToast();
@@ -20,7 +20,7 @@ const Index = () => {
   });
 
   const getProfile = () => {
-    getUserInfo().then((res) => {
+    getLoggedUserInfo().then((res) => {
       setFormData({
         notice_switch: {
           value: res.notice_status === 1,

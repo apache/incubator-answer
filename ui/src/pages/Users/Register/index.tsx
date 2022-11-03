@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { PageTitle, Unactivate } from '@answer/components';
-import { isLogin } from '@answer/utils';
+import { PageTitle, Unactivate } from '@/components';
+import { tryNormalLogged } from '@/utils/guard';
 
 import SignUpForm from './components/SignUpForm';
 
@@ -16,7 +16,7 @@ const Index: React.FC = () => {
   };
 
   useEffect(() => {
-    isLogin();
+    tryNormalLogged();
   }, []);
 
   return (

@@ -3,13 +3,13 @@ import { Container, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 
+import { PageTitle } from '@/components';
 import {
   useQueryNotifications,
   clearUnreadNotification,
   clearNotificationStatus,
   readNotification,
-} from '@answer/api';
-import { PageTitle } from '@answer/components';
+} from '@/services';
 
 import Inbox from './components/Inbox';
 import Achievements from './components/Achievements';
@@ -46,6 +46,9 @@ const Notifications = () => {
 
   const handleTypeChange = (evt, val) => {
     evt.preventDefault();
+    if (type === val) {
+      return;
+    }
     setPage(1);
     setNotificationData([]);
     navigate(`/users/notifications/${val}`);
