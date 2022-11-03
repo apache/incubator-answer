@@ -3,16 +3,16 @@ package controller_backyard
 import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/siteinfo"
 	"github.com/gin-gonic/gin"
 )
 
 type SiteInfoController struct {
-	siteInfoService *service.SiteInfoService
+	siteInfoService *siteinfo.SiteInfoService
 }
 
 // NewSiteInfoController new siteinfo controller.
-func NewSiteInfoController(siteInfoService *service.SiteInfoService) *SiteInfoController {
+func NewSiteInfoController(siteInfoService *siteinfo.SiteInfoService) *SiteInfoController {
 	return &SiteInfoController{
 		siteInfoService: siteInfoService,
 	}
