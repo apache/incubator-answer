@@ -266,3 +266,7 @@ export const useSiteSettings = () => {
     error,
   };
 };
+
+export const upgradSystem = () => {
+  return request.post('/answer/api/v1/upgradation');
+};
