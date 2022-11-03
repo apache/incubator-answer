@@ -12,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -96,7 +97,7 @@ func (a *UIRouter) Register(r *gin.Engine) {
 	r.POST("/installation/db/check", func(c *gin.Context) {
 		num := rand.Intn(10)
 		if num > 5 {
-			err := fmt.Errorf("connection error")
+			err := errors.BadRequest("connection error")
 			handler.HandleResponse(c, err, gin.H{})
 		} else {
 			handler.HandleResponse(c, nil, gin.H{
