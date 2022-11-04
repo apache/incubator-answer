@@ -163,14 +163,6 @@ export const questionDetail = (id: string) => {
   );
 };
 
-export const langConfig = () => {
-  return request.get('/answer/api/v1/language/config');
-};
-
-export const languages = () => {
-  return request.get<Type.LangsType[]>('/answer/api/v1/language/options');
-};
-
 export const getAnswers = (params: Type.AnswersReq) => {
   const apiUrl = `/answer/api/v1/answer/page?${qs.stringify(params)}`;
   return request.get<Type.ListResult<Type.AnswerItem>>(apiUrl);
@@ -253,16 +245,6 @@ export const changeEmailVerify = (params: { code: string }) => {
   return request.put('/answer/api/v1/user/email', params);
 };
 
-export const useSiteSettings = () => {
-  const apiUrl = `/answer/api/v1/siteinfo`;
-  const { data, error } = useSWR<Type.SiteSettings, Error>(
-    [apiUrl],
-    request.instance.get,
-  );
-
-  return {
-    data,
-    isLoading: !data && !error,
-    error,
-  };
+export const getAppSettings = () => {
+  return request.get<Type.SiteSettings>('/answer/api/v1/siteinfo');
 };

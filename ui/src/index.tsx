@@ -2,11 +2,10 @@ import React from 'react';
 
 import ReactDOM from 'react-dom/client';
 
-import { Guard } from '@/utils';
+import { guard } from '@/utils';
 
 import App from './App';
 
-import './i18n/init';
 import './index.scss';
 
 const root = ReactDOM.createRoot(
@@ -14,10 +13,7 @@ const root = ReactDOM.createRoot(
 );
 
 async function bootstrapApp() {
-  /**
-   * NOTICE: must pre init logged user info for router
-   */
-  await Guard.pullLoggedUser();
+  await guard.setupApp();
   root.render(
     <React.StrictMode>
       <App />

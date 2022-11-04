@@ -1,6 +1,6 @@
 import { RouteObject } from 'react-router-dom';
 
-import { Guard } from '@/utils';
+import { guard } from '@/utils';
 import type { TGuardResult } from '@/utils/guard';
 
 export interface RouteNode extends RouteObject {
@@ -21,7 +21,7 @@ const routes: RouteNode[] = [
     path: '/',
     page: 'pages/Layout',
     guard: async () => {
-      return Guard.notForbidden();
+      return guard.notForbidden();
     },
     children: [
       // question and answer
@@ -46,14 +46,14 @@ const routes: RouteNode[] = [
         path: 'questions/ask',
         page: 'pages/Questions/Ask',
         guard: async () => {
-          return Guard.activated();
+          return guard.activated();
         },
       },
       {
         path: 'posts/:qid/edit',
         page: 'pages/Questions/Ask',
         guard: async () => {
-          return Guard.activated();
+          return guard.activated();
         },
       },
       {
@@ -81,7 +81,7 @@ const routes: RouteNode[] = [
         path: 'tags/:tagId/edit',
         page: 'pages/Tags/Edit',
         guard: async () => {
-          return Guard.activated();
+          return guard.activated();
         },
       },
       // users
@@ -97,7 +97,7 @@ const routes: RouteNode[] = [
         path: 'users/settings',
         page: 'pages/Users/Settings',
         guard: async () => {
-          return Guard.logged();
+          return guard.logged();
         },
         children: [
           {
@@ -130,25 +130,25 @@ const routes: RouteNode[] = [
         path: 'users/login',
         page: 'pages/Users/Login',
         guard: async () => {
-          const notLogged = Guard.notLogged();
+          const notLogged = guard.notLogged();
           if (notLogged.ok) {
             return notLogged;
           }
-          return Guard.notActivated();
+          return guard.notActivated();
         },
       },
       {
         path: 'users/register',
         page: 'pages/Users/Register',
         guard: async () => {
-          return Guard.notLogged();
+          return guard.notLogged();
         },
       },
       {
         path: 'users/account-recovery',
         page: 'pages/Users/AccountForgot',
         guard: async () => {
-          return Guard.activated();
+          return guard.activated();
         },
       },
       {
@@ -160,32 +160,32 @@ const routes: RouteNode[] = [
         path: 'users/password-reset',
         page: 'pages/Users/PasswordReset',
         guard: async () => {
-          return Guard.activated();
+          return guard.activated();
         },
       },
       {
         path: 'users/account-activation',
         page: 'pages/Users/ActiveEmail',
         guard: async () => {
-          const notActivated = Guard.notActivated();
+          const notActivated = guard.notActivated();
           if (notActivated.ok) {
             return notActivated;
           }
-          return Guard.notLogged();
+          return guard.notLogged();
         },
       },
       {
         path: 'users/account-activation/success',
         page: 'pages/Users/ActivationResult',
         guard: async () => {
-          return Guard.activated();
+          return guard.activated();
         },
       },
       {
         path: '/users/account-activation/failed',
         page: 'pages/Users/ActivationResult',
         guard: async () => {
-          return Guard.notActivated();
+          return guard.notActivated();
         },
       },
       {
@@ -197,7 +197,7 @@ const routes: RouteNode[] = [
         path: '/users/account-suspended',
         page: 'pages/Users/Suspended',
         guard: async () => {
-          return Guard.forbidden();
+          return guard.forbidden();
         },
       },
       // for admin
@@ -205,8 +205,8 @@ const routes: RouteNode[] = [
         path: 'admin',
         page: 'pages/Admin',
         guard: async () => {
-          await Guard.pullLoggedUser(true);
-          return Guard.admin();
+          await guard.pullLoggedUser(true);
+          return guard.admin();
         },
         children: [
           {

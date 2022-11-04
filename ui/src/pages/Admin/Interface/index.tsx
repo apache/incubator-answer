@@ -12,7 +12,7 @@ import { interfaceStore } from '@/stores';
 import { UploadImg } from '@/components';
 import { TIMEZONES, DEFAULT_TIMEZONE } from '@/common/constants';
 import {
-  languages,
+  getLanguageOptions,
   uploadAvatar,
   updateInterfaceSetting,
   useInterfaceSetting,
@@ -52,7 +52,7 @@ const Interface: FC = () => {
     },
   });
   const getLangs = async () => {
-    const res: LangsType[] = await languages();
+    const res: LangsType[] = await getLanguageOptions();
     setLangs(res);
     if (!formData.language.value) {
       // set default theme value

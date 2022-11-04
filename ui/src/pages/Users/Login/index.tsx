@@ -10,7 +10,7 @@ import type {
 } from '@/common/interface';
 import { PageTitle, Unactivate } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
-import { getQueryString, Guard, floppyNavigation } from '@/utils';
+import { getQueryString, guard, floppyNavigation } from '@/utils';
 import { login, checkImgCode } from '@/services';
 import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
 import { RouteAlias } from '@/router/alias';
@@ -104,7 +104,7 @@ const Index: React.FC = () => {
     login(params)
       .then((res) => {
         updateUser(res);
-        const userStat = Guard.deriveLoginState();
+        const userStat = guard.deriveLoginState();
         if (userStat.isNotActivated) {
           // inactive
           setStep(2);
@@ -159,7 +159,7 @@ const Index: React.FC = () => {
     if ((storeUser.id && storeUser.mail_status === 2) || isInactive) {
       setStep(2);
     } else {
-      Guard.tryNormalLogged();
+      guard.tryNormalLogged();
     }
   }, []);
 

@@ -2,49 +2,54 @@ import React, { useEffect, useState, FormEvent } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import dayjs from 'dayjs';
-import en from 'dayjs/locale/en';
-import zh from 'dayjs/locale/zh-cn';
-
 import type { LangsType, FormDataType } from '@/common/interface';
 import { useToast } from '@/hooks';
-import { languages } from '@/services';
-import { DEFAULT_LANG, CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
+import { getLanguageOptions, updateUserInterface } from '@/services';
+import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
 import Storage from '@/utils/storage';
+import { localize } from '@/utils';
+import { loggedUserInfoStore } from '@/stores';
 
 const Index = () => {
-  const { t, i18n } = useTranslation('translation', {
+  const { t } = useTranslation('translation', {
     keyPrefix: 'settings.interface',
   });
+  const loggedUserInfo = loggedUserInfoStore.getState().user;
   const toast = useToast();
   const [langs, setLangs] = useState<LangsType[]>();
   const [formData, setFormData] = useState<FormDataType>({
     lang: {
-      value: true,
+      // FIXME: userinfo? or  userInfo.language
+      value: loggedUserInfo,
       isInvalid: false,
       errorMsg: '',
     },
   });
 
   const getLangs = async () => {
-    const res: LangsType[] = await languages();
+    const res: LangsType[] = await getLanguageOptions();
     setLangs(res);
   };
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-
-    Storage.set(CURRENT_LANG_STORAGE_KEY, formData.lang.value);
-    dayjs.locale(formData.lang.value === DEFAULT_LANG ? en : zh);
-    i18n.changeLanguage(formData.lang.value);
-    toast.onShow({
-      msg: t('update', { keyPrefix: 'toast' }),
-      variant: 'success',
+    const lang = formData.lang.value;
+    updateUserInterface(lang).then(() => {
+      loggedUserInfoStore.getState().update({
+        ...loggedUserInfo,
+        language: lang,
+      });
+      localize.setupAppLanguage();
+      toast.onShow({
+        msg: t('update', { keyPrefix: 'toast' }),
+        variant: 'success',
+      });
     });
   };
 
   useEffect(() => {
     getLangs();
+    // TODO: get default lang by interface api
     const lang = Storage.get(CURRENT_LANG_STORAGE_KEY);
     if (lang) {
       setFormData({
@@ -74,7 +79,7 @@ const Index = () => {
           }}>
           {langs?.map((item) => {
             return (
-              <option value={item.value} key={item.value}>
+              <option value={item.value} key={item.label}>
                 {item.label}
               </option>
             );
