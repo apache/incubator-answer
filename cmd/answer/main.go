@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/answerdev/answer/internal/base/conf"
+	"github.com/answerdev/answer/internal/cli"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/contrib/log/zap"
@@ -38,7 +39,7 @@ func runApp() {
 	log.SetLogger(zap.NewLogger(
 		log.ParseLevel(logLevel), zap.WithName("answer"), zap.WithPath(logPath), zap.WithCallerFullPath()))
 
-	c, err := conf.ReadConfig(configFilePath)
+	c, err := conf.ReadConfig(cli.GetConfigFilePath())
 	if err != nil {
 		panic(err)
 	}

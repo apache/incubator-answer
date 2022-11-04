@@ -117,7 +117,7 @@ func InitEnvironment(ctx *gin.Context) {
 	}
 	c.Data.Database.Driver = req.DbType
 	c.Data.Database.Connection = req.GetConnection()
-	c.Data.Cache.FilePath = filepath.Join(cli.CachePath, cli.DefaultCacheFileName)
+	c.Data.Cache.FilePath = filepath.Join(cli.CacheDir, cli.DefaultCacheFileName)
 	c.I18n.BundleDir = cli.I18nPath
 	c.ServiceConfig.UploadPath = cli.UploadFilePath
 

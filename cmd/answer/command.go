@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"path/filepath"
 
 	"github.com/answerdev/answer/internal/base/conf"
 	"github.com/answerdev/answer/internal/cli"
@@ -13,8 +12,6 @@ import (
 )
 
 var (
-	// configFilePath is the config file path
-	configFilePath string
 	// dataDirPath save all answer application data in this directory. like config file, upload file...
 	dataDirPath string
 	// dumpDataPath dump data path
@@ -24,9 +21,7 @@ var (
 func init() {
 	rootCmd.Version = fmt.Sprintf("%s\nrevision: %s\nbuild time: %s", Version, Revision, Time)
 
-	initCmd.Flags().StringVarP(&dataDirPath, "data-path", "C", "/data/", "data path, eg: -C ./data/")
-
-	rootCmd.PersistentFlags().StringVarP(&configFilePath, "config", "c", "", "config path, eg: -c config.yaml")
+	rootCmd.PersistentFlags().StringVarP(&dataDirPath, "data-path", "C", "/data/", "data path, eg: -C ./data/")
 
 	dumpCmd.Flags().StringVarP(&dumpDataPath, "path", "p", "./", "dump data path, eg: -p ./dump/data/")
 
@@ -52,6 +47,8 @@ To run answer, use:
 		Short: "Run the application",
 		Long:  `Run the application`,
 		Run: func(_ *cobra.Command, _ []string) {
+			cli.FormatAllPath(dataDirPath)
+			fmt.Println("config file path: ", cli.GetConfigFilePath())
 			fmt.Println("Answer is string..........................")
 			runApp()
 		},
@@ -65,15 +62,11 @@ To run answer, use:
 		Run: func(_ *cobra.Command, _ []string) {
 			// check config file and database. if config file exists and database is already created, init done
 			cli.InstallAllInitialEnvironment(dataDirPath)
-			// set default config file path
-			if len(configFilePath) == 0 {
-				configFilePath = filepath.Join(cli.ConfigFilePath, cli.DefaultConfigFileName)
-			}
 
-			configFileExist := cli.CheckConfigFile(configFilePath)
+			configFileExist := cli.CheckConfigFile(cli.GetConfigFilePath())
 			if configFileExist {
 				fmt.Println("config file exists, try to read the config...")
-				c, err := conf.ReadConfig(configFilePath)
+				c, err := conf.ReadConfig(cli.GetConfigFilePath())
 				if err != nil {
 					fmt.Println("read config failed: ", err.Error())
 					return
@@ -87,7 +80,7 @@ To run answer, use:
 			}
 
 			// start installation server to install
-			install.Run(configFilePath)
+			install.Run(cli.GetConfigFilePath())
 		},
 	}
 
@@ -97,7 +90,8 @@ To run answer, use:
 		Short: "upgrade Answer version",
 		Long:  `upgrade Answer version`,
 		Run: func(_ *cobra.Command, _ []string) {
-			c, err := conf.ReadConfig(configFilePath)
+			cli.FormatAllPath(dataDirPath)
+			c, err := conf.ReadConfig(cli.GetConfigFilePath())
 			if err != nil {
 				fmt.Println("read config failed: ", err.Error())
 				return
@@ -117,7 +111,8 @@ To run answer, use:
 		Long:  `back up data`,
 		Run: func(_ *cobra.Command, _ []string) {
 			fmt.Println("Answer is backing up data")
-			c, err := conf.ReadConfig(configFilePath)
+			cli.FormatAllPath(dataDirPath)
+			c, err := conf.ReadConfig(cli.GetConfigFilePath())
 			if err != nil {
 				fmt.Println("read config failed: ", err.Error())
 				return
@@ -137,8 +132,9 @@ To run answer, use:
 		Short: "checking the required environment",
 		Long:  `Check if the current environment meets the startup requirements`,
 		Run: func(_ *cobra.Command, _ []string) {
+			cli.FormatAllPath(dataDirPath)
 			fmt.Println("Start checking the required environment...")
-			if cli.CheckConfigFile(configFilePath) {
+			if cli.CheckConfigFile(cli.GetConfigFilePath()) {
 				fmt.Println("config file exists [✔]")
 			} else {
 				fmt.Println("config file not exists [x]")
@@ -150,7 +146,7 @@ To run answer, use:
 				fmt.Println("upload directory not exists [x]")
 			}
 
-			c, err := conf.ReadConfig(configFilePath)
+			c, err := conf.ReadConfig(cli.GetConfigFilePath())
 			if err != nil {
 				fmt.Println("read config failed: ", err.Error())
 				return

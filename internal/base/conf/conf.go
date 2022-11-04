@@ -39,7 +39,7 @@ type Data struct {
 // ReadConfig read config
 func ReadConfig(configFilePath string) (c *AllConfig, err error) {
 	if len(configFilePath) == 0 {
-		configFilePath = filepath.Join(cli.ConfigFilePath, cli.DefaultConfigFileName)
+		configFilePath = filepath.Join(cli.ConfigFileDir, cli.DefaultConfigFileName)
 	}
 	c = &AllConfig{}
 	config, err := viper.NewWithPath(configFilePath)
