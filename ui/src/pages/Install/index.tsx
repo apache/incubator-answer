@@ -156,7 +156,9 @@ const Index: FC = () => {
 
   const submitSiteConfig = () => {
     const params = {
+      lang: formData.lang.value,
       site_name: formData.site_name.value,
+      site_url: formData.site_url.value,
       contact_email: formData.contact_email.value,
       admin_name: formData.admin_name.value,
       admin_password: formData.admin_password.value,
