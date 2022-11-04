@@ -10,6 +10,7 @@ import (
 
 	"github.com/answerdev/answer/i18n"
 	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
@@ -92,6 +93,10 @@ func (a *UIRouter) Register(r *gin.Engine) {
 			return
 		}
 		c.String(http.StatusOK, string(file))
+	})
+
+	r.GET("/installation/language/options", func(c *gin.Context) {
+		handler.HandleResponse(c, nil, translator.LanguageOptions)
 	})
 
 	r.POST("/installation/db/check", func(c *gin.Context) {

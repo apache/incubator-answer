@@ -1,10 +1,12 @@
 package migrations
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/entity"
+	"golang.org/x/crypto/bcrypt"
 	"xorm.io/xorm"
 )
 
@@ -55,11 +57,6 @@ func InitDB(dataConf *data.Database) (err error) {
 		return fmt.Errorf("init admin user failed: %s", err)
 	}
 
-	err = initSiteInfo(engine)
-	if err != nil {
-		return fmt.Errorf("init site info failed: %s", err)
-	}
-
 	err = initConfigTable(engine)
 	if err != nil {
 		return fmt.Errorf("init config table: %s", err)
@@ -82,12 +79,79 @@ func initAdminUser(engine *xorm.Engine) error {
 	return err
 }
 
-func initSiteInfo(engine *xorm.Engine) error {
+func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail string) error {
+	interfaceData := map[string]string{
+		"logo":     "",
+		"theme":    "black",
+		"language": language,
+	}
+	interfaceDataBytes, _ := json.Marshal(interfaceData)
 	_, err := engine.InsertOne(&entity.SiteInfo{
 		Type:    "interface",
-		Content: `{"logo":"","theme":"black","language":"en_US"}`,
+		Content: string(interfaceDataBytes),
 		Status:  1,
 	})
+	if err != nil {
+		return err
+	}
+
+	generalData := map[string]string{
+		"name":          siteName,
+		"site_url":      siteURL,
+		"contact_email": contactEmail,
+	}
+	generalDataBytes, _ := json.Marshal(generalData)
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "general",
+		Content: string(generalDataBytes),
+		Status:  1,
+	})
+	return err
+}
+
+func updateAdminInfo(engine *xorm.Engine, adminName, adminPassword, adminEmail string) error {
+	generateFromPassword, err := bcrypt.GenerateFromPassword([]byte(adminPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return fmt.Errorf("")
+	}
+	adminPassword = string(generateFromPassword)
+
+	// update admin info
+	_, err = engine.ID("1").Update(&entity.User{
+		Username:    adminName,
+		Pass:        adminPassword,
+		EMail:       adminEmail,
+		DisplayName: adminName,
+	})
+	if err != nil {
+		return fmt.Errorf("update admin user info failed: %s", err)
+	}
+	return nil
+}
+
+// UpdateInstallInfo update some init data about the admin interface and admin password
+func UpdateInstallInfo(dataConf *data.Database, language string,
+	siteName string,
+	siteURL string,
+	contactEmail string,
+	adminName string,
+	adminPassword string,
+	adminEmail string) error {
+
+	engine, err := data.NewDB(false, dataConf)
+	if err != nil {
+		return fmt.Errorf("database connection error: %s", err)
+	}
+
+	err = updateAdminInfo(engine, adminName, adminPassword, adminEmail)
+	if err != nil {
+		return fmt.Errorf("update admin info failed: %s", err)
+	}
+
+	err = initSiteInfo(engine, language, siteName, siteURL, contactEmail)
+	if err != nil {
+		return fmt.Errorf("init site info failed: %s", err)
+	}
 	return err
 }
 

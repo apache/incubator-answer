@@ -3,8 +3,11 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
+	"github.com/answerdev/answer/internal/base/conf"
 	"github.com/answerdev/answer/internal/cli"
+	"github.com/answerdev/answer/internal/install"
 	"github.com/answerdev/answer/internal/migrations"
 	"github.com/spf13/cobra"
 )
@@ -49,6 +52,7 @@ To run answer, use:
 		Short: "Run the application",
 		Long:  `Run the application`,
 		Run: func(_ *cobra.Command, _ []string) {
+			fmt.Println("Answer is string..........................")
 			runApp()
 		},
 	}
@@ -59,20 +63,31 @@ To run answer, use:
 		Short: "init answer application",
 		Long:  `init answer application`,
 		Run: func(_ *cobra.Command, _ []string) {
-			// installwebapi := server.NewInstallHTTPServer()
-			// installwebapi.Run(":8088")
+			// check config file and database. if config file exists and database is already created, init done
 			cli.InstallAllInitialEnvironment(dataDirPath)
-			c, err := readConfig()
-			if err != nil {
-				fmt.Println("read config failed: ", err.Error())
-				return
+			// set default config file path
+			if len(configFilePath) == 0 {
+				configFilePath = filepath.Join(cli.ConfigFilePath, cli.DefaultConfigFileName)
 			}
-			fmt.Println("read config successfully")
-			if err := migrations.InitDB(c.Data.Database); err != nil {
-				fmt.Println("init database error: ", err.Error())
-				return
+
+			configFileExist := cli.CheckConfigFile(configFilePath)
+			if configFileExist {
+				fmt.Println("config file exists, try to read the config...")
+				c, err := conf.ReadConfig(configFilePath)
+				if err != nil {
+					fmt.Println("read config failed: ", err.Error())
+					return
+				}
+
+				fmt.Println("config file read successfully, try to connect database...")
+				if cli.CheckDB(c.Data.Database, true) {
+					fmt.Println("connect to database successfully and table already exists, do nothing.")
+					return
+				}
 			}
-			fmt.Println("init database successfully")
+
+			// start installation server to install
+			install.Run(configFilePath)
 		},
 	}
 
@@ -82,7 +97,7 @@ To run answer, use:
 		Short: "upgrade Answer version",
 		Long:  `upgrade Answer version`,
 		Run: func(_ *cobra.Command, _ []string) {
-			c, err := readConfig()
+			c, err := conf.ReadConfig(configFilePath)
 			if err != nil {
 				fmt.Println("read config failed: ", err.Error())
 				return
@@ -102,7 +117,7 @@ To run answer, use:
 		Long:  `back up data`,
 		Run: func(_ *cobra.Command, _ []string) {
 			fmt.Println("Answer is backing up data")
-			c, err := readConfig()
+			c, err := conf.ReadConfig(configFilePath)
 			if err != nil {
 				fmt.Println("read config failed: ", err.Error())
 				return
@@ -135,13 +150,13 @@ To run answer, use:
 				fmt.Println("upload directory not exists [x]")
 			}
 
-			c, err := readConfig()
+			c, err := conf.ReadConfig(configFilePath)
 			if err != nil {
 				fmt.Println("read config failed: ", err.Error())
 				return
 			}
 
-			if cli.CheckDB(c.Data.Database) {
+			if cli.CheckDB(c.Data.Database, false) {
 				fmt.Println("db connection successfully [✔]")
 			} else {
 				fmt.Println("db connection failed [x]")
