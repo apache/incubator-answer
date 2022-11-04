@@ -37,10 +37,10 @@ const Index: FC<Props> = ({ time, preFix, className }) => {
       between < 3600 * 24 * 366 &&
       dayjs.unix(from).format('YYYY') === dayjs.unix(now).format('YYYY')
     ) {
-      return dayjs.unix(from).format(t('dates.long_date'));
+      return dayjs.unix(from).tz().format(t('dates.long_date'));
     }
 
-    return dayjs.unix(from).format(t('dates.long_date_with_year'));
+    return dayjs.unix(from).tz().format(t('dates.long_date_with_year'));
   };
 
   if (!time) {
@@ -50,8 +50,8 @@ const Index: FC<Props> = ({ time, preFix, className }) => {
   return (
     <time
       className={classNames('', className)}
-      dateTime={dayjs.unix(time).toISOString()}
-      title={dayjs.unix(time).format(t('dates.long_date_with_time'))}>
+      dateTime={dayjs.unix(time).tz().toISOString()}
+      title={dayjs.unix(time).tz().format(t('dates.long_date_with_time'))}>
       {preFix ? `${preFix} ` : ''}
       {formatTime(time)}
     </time>
