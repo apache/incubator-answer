@@ -283,7 +283,7 @@
     "btn_cancel": "取消"
   },
   "dates": {
-    "long_date": "YYYY年MM月",
+    "long_date": "MM月DD日",
     "long_date_with_year": "YYYY年MM月DD日",
     "long_date_with_time": "YYYY年MM月DD日 HH:mm",
     "now": "刚刚",
