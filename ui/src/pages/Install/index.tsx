@@ -99,7 +99,7 @@ const Index: FC = () => {
   });
 
   const handleChange = (params: FormDataType) => {
-    console.log(params);
+    // console.log(params);
     setFormData({ ...formData, ...params });
   };
 
