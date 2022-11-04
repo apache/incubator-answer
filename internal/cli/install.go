@@ -16,19 +16,27 @@ const (
 )
 
 var (
-	ConfigFilePath = "/conf/"
+	ConfigFileDir  = "/conf/"
 	UploadFilePath = "/upfiles/"
 	I18nPath       = "/i18n/"
-	CachePath      = "/cache/"
+	CacheDir       = "/cache/"
 )
+
+// GetConfigFilePath get config file path
+func GetConfigFilePath() string {
+	return filepath.Join(ConfigFileDir, DefaultConfigFileName)
+}
+
+func FormatAllPath(dataDirPath string) {
+	ConfigFileDir = filepath.Join(dataDirPath, ConfigFileDir)
+	UploadFilePath = filepath.Join(dataDirPath, UploadFilePath)
+	I18nPath = filepath.Join(dataDirPath, I18nPath)
+	CacheDir = filepath.Join(dataDirPath, CacheDir)
+}
 
 // InstallAllInitialEnvironment install all initial environment
 func InstallAllInitialEnvironment(dataDirPath string) {
-	ConfigFilePath = filepath.Join(dataDirPath, ConfigFilePath)
-	UploadFilePath = filepath.Join(dataDirPath, UploadFilePath)
-	I18nPath = filepath.Join(dataDirPath, I18nPath)
-	CachePath = filepath.Join(dataDirPath, CachePath)
-
+	FormatAllPath(dataDirPath)
 	installUploadDir()
 	installI18nBundle()
 	fmt.Println("install all initial environment done")
@@ -36,7 +44,7 @@ func InstallAllInitialEnvironment(dataDirPath string) {
 
 func InstallConfigFile(configFilePath string) error {
 	if len(configFilePath) == 0 {
-		configFilePath = filepath.Join(ConfigFilePath, DefaultConfigFileName)
+		configFilePath = filepath.Join(ConfigFileDir, DefaultConfigFileName)
 	}
 	fmt.Println("[config-file] try to create at ", configFilePath)
 
@@ -46,7 +54,7 @@ func InstallConfigFile(configFilePath string) error {
 		return nil
 	}
 
-	if err := dir.CreateDirIfNotExist(ConfigFilePath); err != nil {
+	if err := dir.CreateDirIfNotExist(ConfigFileDir); err != nil {
 		fmt.Printf("[config-file] create directory fail %s\n", err.Error())
 		return fmt.Errorf("create directory fail %s", err.Error())
 	}
