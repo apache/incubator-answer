@@ -10,6 +10,8 @@ import {
   installBaseInfo,
   checkConfigFileExists,
 } from '@/services';
+import { Storage } from '@/utils';
+import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
 
 import {
   FirstStep,
@@ -170,13 +172,20 @@ const Index: FC = () => {
   };
 
   const handleStep = () => {
+    if (step === 1) {
+      Storage.set(CURRENT_LANG_STORAGE_KEY, formData.lang.value);
+      handleNext();
+    }
     if (step === 2) {
       submitDatabaseForm();
-    } else if (step === 3) {
+    }
+    if (step === 3) {
       checkInstall();
-    } else if (step === 4) {
+    }
+    if (step === 4) {
       submitSiteConfig();
-    } else {
+    }
+    if (step > 4) {
       handleNext();
     }
   };
