@@ -248,7 +248,3 @@ export const changeEmailVerify = (params: { code: string }) => {
 export const getAppSettings = () => {
   return request.get<Type.SiteSettings>('/answer/api/v1/siteinfo');
 };
-
-export const upgradSystem = () => {
-  return request.post('/answer/api/v1/upgradation');
-};

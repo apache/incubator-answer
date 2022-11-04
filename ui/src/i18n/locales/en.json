@@ -830,15 +830,6 @@
     "installed": "Already installed",
     "installed_description": "You appear to have already installed. To reinstall please clear your old database tables first."
   },
-  "upgrade": {
-    "title": "Answer",
-    "update_btn": "Update data",
-    "update_title": "Data update required",
-    "update_description": "<1>Answer has been updated! Before you continue, we have to update your data to the newest version.</1><1>The update process may take a little while, so please be patient.</1>",
-    "done_title": "No update required",
-    "done_btn": "Done",
-    "done_desscription": "Your Answer data is already up-to-date."
-  },
   "page_404": {
     "description": "Unfortunately, this page doesn't exist.",
     "back_home": "Back to homepage"

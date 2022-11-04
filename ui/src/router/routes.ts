@@ -269,9 +269,5 @@ const routes: RouteNode[] = [
     path: '/maintenance',
     page: 'pages/Maintenance',
   },
-  {
-    path: '/upgrade',
-    page: 'pages/Upgrade',
-  },
 ];
 export default routes;
