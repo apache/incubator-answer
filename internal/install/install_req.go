@@ -15,7 +15,7 @@ type CheckConfigFileResp struct {
 
 // CheckDatabaseReq check database
 type CheckDatabaseReq struct {
-	DbType     string `json:"db_type"`
+	DbType     string `validate:"required,oneof=postgres sqlite3 mysql" json:"db_type"`
 	DbUsername string `json:"db_username"`
 	DbPassword string `json:"db_password"`
 	DbHost     string `json:"db_host"`
@@ -71,11 +71,11 @@ type InitEnvironmentResp struct {
 
 // InitBaseInfoReq init base info request
 type InitBaseInfoReq struct {
-	Language      string `json:"language"`
-	SiteName      string `json:"site_name"`
-	SiteURL       string `json:"site_url"`
-	ContactEmail  string `json:"contact_email"`
-	AdminName     string `json:"admin_name"`
-	AdminPassword string `json:"admin_password"`
-	AdminEmail    string `json:"admin_email"`
+	Language      string `validate:"required,gt=0,lte=30" json:"lang"`
+	SiteName      string `validate:"required,gt=0,lte=30" json:"site_name"`
+	SiteURL       string `validate:"required,gt=0,lte=512" json:"site_url"`
+	ContactEmail  string `validate:"required,email,gt=0,lte=500" json:"contact_email"`
+	AdminName     string `validate:"required,gt=4,lte=30" json:"admin_name"`
+	AdminPassword string `validate:"required,gte=8,lte=32" json:"admin_password"`
+	AdminEmail    string `validate:"required,email,gt=0,lte=500" json:"admin_email"`
 }

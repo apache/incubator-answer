@@ -2,6 +2,7 @@ package install
 
 import (
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/answerdev/answer/configs"
@@ -116,6 +117,9 @@ func InitEnvironment(ctx *gin.Context) {
 	}
 	c.Data.Database.Driver = req.DbType
 	c.Data.Database.Connection = req.GetConnection()
+	c.Data.Cache.FilePath = filepath.Join(cli.CachePath, cli.DefaultCacheFileName)
+	c.I18n.BundleDir = cli.I18nPath
+	c.ServiceConfig.UploadPath = cli.UploadFilePath
 
 	if err := conf.RewriteConfig(confPath, c); err != nil {
 		log.Errorf("rewrite config failed %s", err)

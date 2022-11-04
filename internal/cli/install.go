@@ -12,12 +12,14 @@ import (
 
 const (
 	DefaultConfigFileName = "config.yaml"
+	DefaultCacheFileName  = "cache.db"
 )
 
 var (
 	ConfigFilePath = "/conf/"
 	UploadFilePath = "/upfiles/"
 	I18nPath       = "/i18n/"
+	CachePath      = "/cache/"
 )
 
 // InstallAllInitialEnvironment install all initial environment
@@ -25,6 +27,7 @@ func InstallAllInitialEnvironment(dataDirPath string) {
 	ConfigFilePath = filepath.Join(dataDirPath, ConfigFilePath)
 	UploadFilePath = filepath.Join(dataDirPath, UploadFilePath)
 	I18nPath = filepath.Join(dataDirPath, I18nPath)
+	CachePath = filepath.Join(dataDirPath, CachePath)
 
 	installUploadDir()
 	installI18nBundle()

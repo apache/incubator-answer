@@ -1,6 +1,7 @@
 package migrations
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/answerdev/answer/internal/base/data"
@@ -79,19 +80,31 @@ func initAdminUser(engine *xorm.Engine) error {
 }
 
 func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail string) error {
+	interfaceData := map[string]string{
+		"logo":     "",
+		"theme":    "black",
+		"language": language,
+	}
+	interfaceDataBytes, _ := json.Marshal(interfaceData)
 	_, err := engine.InsertOne(&entity.SiteInfo{
 		Type:    "interface",
-		Content: fmt.Sprintf(`{"logo":"","theme":"black","language":%s}`, language),
+		Content: string(interfaceDataBytes),
 		Status:  1,
 	})
 	if err != nil {
 		return err
 	}
+
+	generalData := map[string]string{
+		"name":          siteName,
+		"site_url":      siteURL,
+		"contact_email": contactEmail,
+	}
+	generalDataBytes, _ := json.Marshal(generalData)
 	_, err = engine.InsertOne(&entity.SiteInfo{
-		Type: "general",
-		Content: fmt.Sprintf(`{"name":"%s","site_url":"%s","contact_email":"%s"}`,
-			siteName, siteURL, contactEmail),
-		Status: 1,
+		Type:    "general",
+		Content: string(generalDataBytes),
+		Status:  1,
 	})
 	return err
 }
@@ -108,7 +121,7 @@ func updateAdminInfo(engine *xorm.Engine, adminName, adminPassword, adminEmail s
 		Username:    adminName,
 		Pass:        adminPassword,
 		EMail:       adminEmail,
-		DisplayName: "admin",
+		DisplayName: adminName,
 	})
 	if err != nil {
 		return fmt.Errorf("update admin user info failed: %s", err)
