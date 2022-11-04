@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { Editor, EditorRef, TagSelector, PageTitle } from '@answer/components';
+import { Editor, EditorRef, TagSelector, PageTitle } from '@/components';
+import type * as Type from '@/common/interface';
 import {
   saveQuestion,
   questionDetail,
@@ -14,8 +15,7 @@ import {
   useQueryRevisions,
   postAnswer,
   useQueryQuestionByTitle,
-} from '@answer/api';
-import type * as Type from '@answer/common/interface';
+} from '@/services';
 
 import SearchQuestion from './components/SearchQuestion';
 

@@ -7,8 +7,9 @@ type DashboardInfo struct {
 	VoteCount             int64  `json:"vote_count"`
 	UserCount             int64  `json:"user_count"`
 	ReportCount           int64  `json:"report_count"`
-	UploadingFiles        string `json:"uploading_files"` //Allowed or Not allowed
-	SMTP                  string `json:"smtp"`            //Enabled or Disabled
+	UploadingFiles        bool   `json:"uploading_files"`
+	SMTP                  bool   `json:"smtp"`
+	HTTPS                 bool   `json:"https"`
 	TimeZone              string `json:"time_zone"`
 	OccupyingStorageSpace string `json:"occupying_storage_space"`
 	AppStartTime          string `json:"app_start_time"`

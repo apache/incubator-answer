@@ -41,4 +41,5 @@ const (
 	ReadConfigFailed             = "error.config.read_config_failed"
 	DatabaseConnectionFailed     = "error.database.connection_failed"
 	InstallConfigFailed          = "error.install.create_config_failed"
+	SiteInfoNotFound             = "error.site_info.not_found"
 )

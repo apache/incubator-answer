@@ -2,10 +2,10 @@ import React, { FC, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type * as Type from '@answer/common/interface';
-import { useToast } from '@answer/hooks';
-import { siteInfoStore } from '@answer/stores';
-import { useGeneralSetting, updateGeneralSetting } from '@answer/api';
+import type * as Type from '@/common/interface';
+import { useToast } from '@/hooks';
+import { siteInfoStore } from '@/stores';
+import { useGeneralSetting, updateGeneralSetting } from '@/services';
 
 import '../index.scss';
 
@@ -23,6 +23,11 @@ const General: FC = () => {
       isInvalid: false,
       errorMsg: '',
     },
+    site_url: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
     short_description: {
       value: '',
       isInvalid: false,
@@ -33,16 +38,37 @@ const General: FC = () => {
       isInvalid: false,
       errorMsg: '',
     },
+    contact_email: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
   });
   const checkValidated = (): boolean => {
     let ret = true;
-    const { name } = formData;
+    const { name, site_url, contact_email } = formData;
     if (!name.value) {
       ret = false;
       formData.name = {
         value: '',
         isInvalid: true,
         errorMsg: t('name.msg'),
+      };
+    }
+    if (!site_url.value) {
+      ret = false;
+      formData.site_url = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('site_url.msg'),
+      };
+    }
+    if (!contact_email.value) {
+      ret = false;
+      formData.contact_email = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('contact_email.msg'),
       };
     }
     setFormData({
@@ -61,6 +87,8 @@ const General: FC = () => {
       name: formData.name.value,
       description: formData.description.value,
       short_description: formData.short_description.value,
+      site_url: formData.site_url.value,
+      contact_email: formData.contact_email.value,
     };
 
     updateGeneralSetting(reqParams)
@@ -100,7 +128,7 @@ const General: FC = () => {
     Object.keys(setting).forEach((k) => {
       formMeta[k] = { ...formData[k], value: setting[k] };
     });
-    setFormData(formMeta);
+    setFormData({ ...formData, ...formMeta });
   }, [setting]);
   return (
     <>
@@ -118,6 +146,20 @@ const General: FC = () => {
           <Form.Text as="div">{t('name.text')}</Form.Text>
           <Form.Control.Feedback type="invalid">
             {formData.name.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group controlId="siteUrl" className="mb-3">
+          <Form.Label>{t('site_url.label')}</Form.Label>
+          <Form.Control
+            required
+            type="text"
+            value={formData.site_url.value}
+            isInvalid={formData.site_url.isInvalid}
+            onChange={(evt) => onFieldChange('site_url', evt.target.value)}
+          />
+          <Form.Text as="div">{t('site_url.text')}</Form.Text>
+          <Form.Control.Feedback type="invalid">
+            {formData.site_url.errorMsg}
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group controlId="shortDescription" className="mb-3">
@@ -148,6 +190,20 @@ const General: FC = () => {
           <Form.Text as="div">{t('description.text')}</Form.Text>
           <Form.Control.Feedback type="invalid">
             {formData.description.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
+        <Form.Group controlId="contact_email" className="mb-3">
+          <Form.Label>{t('contact_email.label')}</Form.Label>
+          <Form.Control
+            required
+            type="text"
+            value={formData.contact_email.value}
+            isInvalid={formData.contact_email.isInvalid}
+            onChange={(evt) => onFieldChange('contact_email', evt.target.value)}
+          />
+          <Form.Text as="div">{t('contact_email.text')}</Form.Text>
+          <Form.Control.Feedback type="invalid">
+            {formData.contact_email.errorMsg}
           </Form.Control.Feedback>
         </Form.Group>
 

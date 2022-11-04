@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { Accordion, ListGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Icon } from '@answer/components';
+import { Icon } from '@/components';
 
 import './index.scss';
 

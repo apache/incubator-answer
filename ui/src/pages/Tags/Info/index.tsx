@@ -5,19 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
-import {
-  Tag,
-  TagSelector,
-  FormatTime,
-  Modal,
-  PageTitle,
-} from '@answer/components';
+import { Tag, TagSelector, FormatTime, Modal, PageTitle } from '@/components';
 import {
   useTagInfo,
   useQuerySynonymsTags,
   saveSynonymsTags,
   deleteTag,
-} from '@answer/api';
+} from '@/services';
 
 const TagIntroduction = () => {
   const [isEdit, setEditState] = useState(false);

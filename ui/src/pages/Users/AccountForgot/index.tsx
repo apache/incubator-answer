@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Container, Col } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { isLogin } from '@answer/utils';
+import { tryNormalLogged } from '@/utils/guard';
+import { PageTitle } from '@/components';
 
 import SendEmail from './components/sendEmail';
-
-import { PageTitle } from '@/components';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'account_forgot' });
@@ -19,7 +18,7 @@ const Index: React.FC = () => {
   };
 
   useEffect(() => {
-    isLogin();
+    tryNormalLogged();
   }, []);
 
   return (

@@ -1,26 +1,28 @@
 import React, { FormEvent, useState, useEffect } from 'react';
 import { Container, Form, Button, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { login, checkImgCode } from '@answer/api';
 import type {
   LoginReqParams,
   ImgCodeRes,
   FormDataType,
-} from '@answer/common/interface';
-import { PageTitle, Unactivate } from '@answer/components';
-import { userInfoStore } from '@answer/stores';
-import { isLogin, getQueryString } from '@answer/utils';
-
+} from '@/common/interface';
+import { PageTitle, Unactivate } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
+import { getQueryString, Guard, floppyNavigation } from '@/utils';
+import { login, checkImgCode } from '@/services';
+import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
+import { RouteAlias } from '@/router/alias';
 import { PicAuthCodeModal } from '@/components/Modal';
 import Storage from '@/utils/storage';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
+  const navigate = useNavigate();
   const [refresh, setRefresh] = useState(0);
-  const updateUser = userInfoStore((state) => state.update);
-  const storeUser = userInfoStore((state) => state.user);
+  const updateUser = loggedUserInfoStore((state) => state.update);
+  const storeUser = loggedUserInfoStore((state) => state.user);
   const [formData, setFormData] = useState<FormDataType>({
     e_mail: {
       value: '',
@@ -102,15 +104,18 @@ const Index: React.FC = () => {
     login(params)
       .then((res) => {
         updateUser(res);
-        if (res.mail_status === 2) {
+        const userStat = Guard.deriveLoginState();
+        if (userStat.isNotActivated) {
           // inactive
           setStep(2);
           setRefresh((pre) => pre + 1);
-        }
-        if (res.mail_status === 1) {
-          const path = Storage.get('ANSWER_PATH') || '/';
-          Storage.remove('ANSWER_PATH');
-          window.location.replace(path);
+        } else {
+          const path =
+            Storage.get(REDIRECT_PATH_STORAGE_KEY) || RouteAlias.home;
+          Storage.remove(REDIRECT_PATH_STORAGE_KEY);
+          floppyNavigation.navigate(path, () => {
+            navigate(path, { replace: true });
+          });
         }
 
         setModalState(false);
@@ -154,7 +159,7 @@ const Index: React.FC = () => {
     if ((storeUser.id && storeUser.mail_status === 2) || isInactive) {
       setStep(2);
     } else {
-      isLogin();
+      Guard.tryNormalLogged();
     }
   }, []);
 

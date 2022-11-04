@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, FC } from 'react';
 import { Dropdown } from 'react-bootstrap';
 
-import * as Types from '@answer/common/interface';
+import * as Types from '@/common/interface';
 
 interface IProps {
   children: React.ReactNode;

@@ -18,6 +18,7 @@ import (
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/service_config"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/google/uuid"
@@ -30,11 +31,12 @@ import (
 
 // UserService user service
 type UserService struct {
-	userRepo      usercommon.UserRepo
-	userActivity  activity.UserActiveActivityRepo
-	serviceConfig *service_config.ServiceConfig
-	emailService  *export.EmailService
-	authService   *auth.AuthService
+	userRepo        usercommon.UserRepo
+	userActivity    activity.UserActiveActivityRepo
+	serviceConfig   *service_config.ServiceConfig
+	emailService    *export.EmailService
+	authService     *auth.AuthService
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 func NewUserService(userRepo usercommon.UserRepo,
@@ -42,13 +44,15 @@ func NewUserService(userRepo usercommon.UserRepo,
 	emailService *export.EmailService,
 	authService *auth.AuthService,
 	serviceConfig *service_config.ServiceConfig,
+	siteInfoService *siteinfo_common.SiteInfoCommonService,
 ) *UserService {
 	return &UserService{
-		userRepo:      userRepo,
-		userActivity:  userActivity,
-		emailService:  emailService,
-		serviceConfig: serviceConfig,
-		authService:   authService,
+		userRepo:        userRepo,
+		userActivity:    userActivity,
+		emailService:    emailService,
+		serviceConfig:   serviceConfig,
+		authService:     authService,
+		siteInfoService: siteInfoService,
 	}
 }
 

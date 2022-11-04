@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { isEmpty } from 'lodash';
 
-import { FormatTime, Empty } from '@answer/components';
+import { FormatTime, Empty } from '@/components';
 
 const Inbox = ({ data, handleReadNotification }) => {
   if (!data) {
