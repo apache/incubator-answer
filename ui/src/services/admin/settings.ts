@@ -83,3 +83,8 @@ export const useDashBoard = () => {
     error,
   };
 };
+
+export const getAdminLanguageOptions = () => {
+  const apiUrl = `/answer/admin/api/language/options`;
+  return request.get<Type.LangsType[]>(apiUrl);
+};

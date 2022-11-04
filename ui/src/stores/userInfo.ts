@@ -25,17 +25,21 @@ const initUser: UserInfoRes = {
   website: '',
   status: '',
   mail_status: 1,
-  language: '',
+  language: 'Default',
 };
 
 const loggedUserInfoStore = create<UserInfoStore>((set) => ({
   user: initUser,
-  update: (params) =>
+  update: (params) => {
+    if (!params.language) {
+      params.language = 'Default';
+    }
     set(() => {
       Storage.set(LOGGED_TOKEN_STORAGE_KEY, params.access_token);
       Storage.set(LOGGED_USER_STORAGE_KEY, params);
       return { user: params };
-    }),
+    });
+  },
   clear: () =>
     set(() => {
       Storage.remove(LOGGED_TOKEN_STORAGE_KEY);

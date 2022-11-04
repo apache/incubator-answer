@@ -1,6 +1,7 @@
 import create from 'zustand';
 
 import { AdminSettingsInterface } from '@/common/interface';
+import { DEFAULT_LANG } from '@/common/constants';
 
 interface InterfaceType {
   interface: AdminSettingsInterface;
@@ -11,7 +12,7 @@ const interfaceSetting = create<InterfaceType>((set) => ({
   interface: {
     logo: '',
     theme: '',
-    language: '',
+    language: DEFAULT_LANG,
     time_zone: '',
   },
   update: (params) =>

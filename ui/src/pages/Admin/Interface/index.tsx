@@ -12,18 +12,19 @@ import { interfaceStore } from '@/stores';
 import { UploadImg } from '@/components';
 import { TIMEZONES, DEFAULT_TIMEZONE } from '@/common/constants';
 import {
-  getLanguageOptions,
+  getAdminLanguageOptions,
   uploadAvatar,
   updateInterfaceSetting,
   useInterfaceSetting,
   useThemeOptions,
 } from '@/services';
+import { setupAppLanguage } from '@/utils/localize';
 
 const Interface: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.interface',
   });
-  const { update: interfaceStoreUpdate } = interfaceStore();
+  const storeInterface = interfaceStore.getState().interface;
   const { data: themes } = useThemeOptions();
   const Toast = useToast();
   const [langs, setLangs] = useState<LangsType[]>();
@@ -31,17 +32,17 @@ const Interface: FC = () => {
 
   const [formData, setFormData] = useState<FormDataType>({
     logo: {
-      value: setting?.logo || '',
+      value: setting?.logo || storeInterface.logo,
       isInvalid: false,
       errorMsg: '',
     },
     theme: {
-      value: setting?.theme || '',
+      value: setting?.theme || storeInterface.theme,
       isInvalid: false,
       errorMsg: '',
     },
     language: {
-      value: setting?.language || '',
+      value: setting?.language || storeInterface.language,
       isInvalid: false,
       errorMsg: '',
     },
@@ -52,19 +53,8 @@ const Interface: FC = () => {
     },
   });
   const getLangs = async () => {
-    const res: LangsType[] = await getLanguageOptions();
+    const res: LangsType[] = await getAdminLanguageOptions();
     setLangs(res);
-    if (!formData.language.value) {
-      // set default theme value
-      setFormData({
-        ...formData,
-        language: {
-          value: res[0].value,
-          isInvalid: false,
-          errorMsg: '',
-        },
-      });
-    }
   };
   // set default theme value
   if (!formData.theme.value && Array.isArray(themes) && themes.length) {
@@ -122,7 +112,8 @@ const Interface: FC = () => {
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
-        interfaceStoreUpdate(reqParams);
+        interfaceStore.getState().update(reqParams);
+        setupAppLanguage();
       })
       .catch((err) => {
         if (err.isError && err.key) {
@@ -172,8 +163,6 @@ const Interface: FC = () => {
   useEffect(() => {
     getLangs();
   }, []);
-
-  console.log('formData', formData);
   return (
     <>
       <h3 className="mb-4">{t('page_title')}</h3>
