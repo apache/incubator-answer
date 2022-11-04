@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { LangsType, FormValue, FormDataType } from '@/common/interface';
 import Progress from '../Progress';
-import { getInstallLangOptions } from '@/services';
+import { getLanguageOptions } from '@/services';
 
 interface Props {
   data: FormValue;
@@ -18,7 +18,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
   const [langs, setLangs] = useState<LangsType[]>();
 
   const getLangs = async () => {
-    const res: LangsType[] = await getInstallLangOptions();
+    const res: LangsType[] = await getLanguageOptions();
     setLangs(res);
     changeCallback({
       lang: {
