@@ -1,6 +1,9 @@
 package install
 
 import (
+	"os"
+	"time"
+
 	"github.com/answerdev/answer/configs"
 	"github.com/answerdev/answer/internal/base/conf"
 	"github.com/answerdev/answer/internal/base/data"
@@ -14,11 +17,6 @@ import (
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
-
-// 1、校验配置文件 post installation/config-file/check
-//2、校验数据库 post installation/db/check
-//3、创建配置文件和数据库 post installation/init
-//4、配置网站基本信息和超级管理员信息 post installation/base-info
 
 // LangOptions get installation language options
 // @Summary get installation language options
@@ -63,6 +61,7 @@ func CheckConfigFile(ctx *gin.Context) {
 // @Tags installation
 // @Accept json
 // @Produce json
+// @Param data body install.CheckDatabaseReq  true "CheckDatabaseReq"
 // @Success 200 {object} handler.RespBody{data=install.CheckConfigFileResp{}}
 // @Router /installation/db/check [post]
 func CheckDatabase(ctx *gin.Context) {
@@ -76,7 +75,7 @@ func CheckDatabase(ctx *gin.Context) {
 		Driver:     req.DbType,
 		Connection: req.GetConnection(),
 	}
-	resp.ConnectionSuccess = cli.CheckDB(dataConf, true)
+	resp.ConnectionSuccess = cli.CheckDB(dataConf, false)
 	if !resp.ConnectionSuccess {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.DatabaseConnectionFailed), schema.ErrTypeAlert)
 		return
@@ -90,6 +89,7 @@ func CheckDatabase(ctx *gin.Context) {
 // @Tags installation
 // @Accept json
 // @Produce json
+// @Param data body install.CheckDatabaseReq  true "CheckDatabaseReq"
 // @Success 200 {object} handler.RespBody{data=install.CheckConfigFileResp{}}
 // @Router /installation/init [post]
 func InitEnvironment(ctx *gin.Context) {
@@ -137,6 +137,7 @@ func InitEnvironment(ctx *gin.Context) {
 // @Tags installation
 // @Accept json
 // @Produce json
+// @Param data body install.InitBaseInfoReq  true "InitBaseInfoReq"
 // @Success 200 {object} handler.RespBody{data=install.CheckConfigFileResp{}}
 // @Router /installation/base-info [post]
 func InitBaseInfo(ctx *gin.Context) {
@@ -145,8 +146,31 @@ func InitBaseInfo(ctx *gin.Context) {
 		return
 	}
 
-	// 修改配置文件
-	// 修改管理员和对应信息
+	c, err := conf.ReadConfig(confPath)
+	if err != nil {
+		log.Errorf("read config failed %s", err)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.ReadConfigFailed), nil)
+		return
+	}
+	c.ServiceConfig.WebHost = req.SiteURL
+	if err := conf.RewriteConfig(confPath, c); err != nil {
+		log.Errorf("rewrite config failed %s", err)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.ReadConfigFailed), nil)
+		return
+	}
+
+	err = migrations.UpdateInstallInfo(c.Data.Database, req.Language, req.SiteName, req.SiteURL, req.ContactEmail,
+		req.AdminName, req.AdminPassword, req.AdminEmail)
+	if err != nil {
+		log.Error(err)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.InstallConfigFailed), nil)
+		return
+	}
+
 	handler.HandleResponse(ctx, nil, nil)
+	go func() {
+		time.Sleep(1 * time.Second)
+		os.Exit(0)
+	}()
 	return
 }
