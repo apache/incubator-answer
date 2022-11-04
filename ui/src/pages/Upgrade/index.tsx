@@ -1,17 +1,20 @@
 import { useState } from 'react';
-import { Container, Row, Col, Card, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Button, Spinner } from 'react-bootstrap';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { PageTitle } from '@/components';
+import { upgradSystem } from '@/services';
 
 const Index = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'upgrade',
   });
-  const [step, setStep] = useState(1);
+  const [step] = useState(1);
+  const [loading, setLoading] = useState(false);
 
-  const handleUpdate = () => {
-    setStep(2);
+  const handleUpdate = async () => {
+    await upgradSystem();
+    setLoading(true);
   };
   return (
     <div className="page-wrap2">
@@ -29,9 +32,22 @@ const Index = () => {
                       i18nKey="upgrade.update_description"
                       components={{ 1: <p /> }}
                     />
-                    <Button className="float-end" onClick={handleUpdate}>
-                      {t('update_btn')}
-                    </Button>
+                    {loading ? (
+                      <Button variant="primary" disabled className="float-end">
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                        <span> {t('update_btn')}</span>
+                      </Button>
+                    ) : (
+                      <Button className="float-end" onClick={handleUpdate}>
+                        {t('update_btn')}
+                      </Button>
+                    )}
                   </>
                 )}
 
@@ -39,7 +55,9 @@ const Index = () => {
                   <>
                     <h5>{t('done_title')}</h5>
                     <p>{t('done_desscription')}</p>
-                    <Button className="float-end">{t('done_btn')}</Button>
+                    <Button className="float-end" href="/">
+                      {t('done_btn')}
+                    </Button>
                   </>
                 )}
               </Card.Body>

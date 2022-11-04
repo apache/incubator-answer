@@ -18,6 +18,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
     let bol = true;
     const {
       site_name,
+      site_url,
       contact_email,
       admin_name,
       admin_password,
@@ -33,12 +34,40 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
       };
     }
 
+    if (!site_url.value) {
+      bol = false;
+      data.site_url = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('site_name.msg.empty'),
+      };
+    }
+    const reg = /^(http|https):\/\//g;
+    if (site_url.value && !site_url.value.match(reg)) {
+      bol = false;
+      data.site_url = {
+        value: site_url.value,
+        isInvalid: true,
+        errorMsg: t('site_url.msg.incorrect'),
+      };
+    }
+
     if (!contact_email.value) {
       bol = false;
       data.contact_email = {
         value: '',
         isInvalid: true,
-        errorMsg: t('contact_email.msg'),
+        errorMsg: t('contact_email.msg.empty'),
+      };
+    }
+
+    const mailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+    if (contact_email.value && !contact_email.value.match(mailReg)) {
+      bol = false;
+      data.contact_email = {
+        value: contact_email.value,
+        isInvalid: true,
+        errorMsg: t('contact_email.msg.incorrect'),
       };
     }
 
@@ -65,7 +94,16 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
       data.admin_email = {
         value: '',
         isInvalid: true,
-        errorMsg: t('admin_email.msg'),
+        errorMsg: t('admin_email.msg.empty'),
+      };
+    }
+
+    if (admin_email.value && !admin_email.value.match(mailReg)) {
+      bol = false;
+      data.admin_email = {
+        value: '',
+        isInvalid: true,
+        errorMsg: t('admin_email.msg.incorrect'),
       };
     }
 
@@ -106,6 +144,27 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
         />
         <Form.Control.Feedback type="invalid">
           {data.site_name.errorMsg}
+        </Form.Control.Feedback>
+      </Form.Group>
+      <Form.Group controlId="site_url" className="mb-3">
+        <Form.Label>{t('site_url.label')}</Form.Label>
+        <Form.Control
+          required
+          value={data.site_url.value}
+          isInvalid={data.site_url.isInvalid}
+          onChange={(e) => {
+            changeCallback({
+              site_url: {
+                value: e.target.value,
+                isInvalid: false,
+                errorMsg: '',
+              },
+            });
+          }}
+        />
+        <Form.Text>{t('site_url.text')}</Form.Text>
+        <Form.Control.Feedback type="invalid">
+          {data.site_url.errorMsg}
         </Form.Control.Feedback>
       </Form.Group>
       <Form.Group controlId="contact_email" className="mb-3">

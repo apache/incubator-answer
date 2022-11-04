@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Card, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import type * as Type from '@/common/interface';
 
@@ -38,9 +39,9 @@ const Statistics: FC<IProps> = ({ data }) => {
           <Col xs={6}>
             <span className="text-secondary me-1">{t('flags')}</span>
             <strong>{data.report_count}</strong>
-            <a href="###" className="ms-2">
+            <Link to="/admin/flags" className="ms-2">
               {t('review')}
-            </a>
+            </Link>
           </Col>
         </Row>
       </Card.Body>

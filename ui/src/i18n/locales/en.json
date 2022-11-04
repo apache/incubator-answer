@@ -744,6 +744,7 @@
     "title": "Answer",
     "next": "Next",
     "done": "Done",
+    "config_yaml_error": "Can’t create the config.yaml file.",
     "lang": {
       "label": "Please choose a language"
     },
@@ -784,22 +785,42 @@
     "site_information": "Site Information",
     "admin_account": "Admin Account",
     "site_name": {
-      "label": "Site Name"
+      "label": "Site Name",
+      "msg": "Site Name cannot be empty."
+    },
+    "site_url": {
+      "label": "Site URL",
+      "text": "The address of your site.",
+      "msg": {
+        "empty": "Site URL cannot be empty.",
+        "incorrect": "Site URL incorrect format."
+      }
     },
     "contact_email": {
       "label": "Contact Email",
-      "text": "Email address of key contact responsible for this site."
+      "text": "Email address of key contact responsible for this site.",
+      "msg": {
+        "empty":  "Contact Email cannot be empty.",
+        "incorrect": "Contact Email incorrect format."
+      }
+
     },
     "admin_name": {
-      "label": "Name"
+      "label": "Name",
+      "msg": "Name cannot be empty."
     },
     "admin_password": {
       "label": "Password",
-      "text": "You will need this password to log in. Please store it in a secure location."
+      "text": "You will need this password to log in. Please store it in a secure location.",
+      "msg": "Password cannot be empty."
     },
     "admin_email": {
       "label": "Email",
-      "text": "You will need this email to log in."
+      "text": "You will need this email to log in.",
+      "msg": {
+        "empty":  "Email cannot be empty.",
+        "incorrect": "Email incorrect format."
+      }
     },
     "ready_title": "Your Answer is Ready!",
     "ready_description": "If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.",
@@ -976,6 +997,11 @@
         "msg": "Site name cannot be empty.",
         "text": "The name of this site, as used in the title tag."
       },
+      "site_url": {
+        "label": "Site URL",
+        "msg": "Site url cannot be empty.",
+        "text": "The address of your site."
+      },
       "short_description": {
         "label": "Short Site Description (optional)",
         "msg": "Short site description cannot be empty.",
@@ -985,6 +1011,11 @@
         "label": "Site Description (optional)",
         "msg": "Site description cannot be empty.",
         "text": "Describe this site in one sentence, as used in the meta description tag."
+      },
+      "contact_email": {
+        "label": "Contact Email",
+        "msg": "Contact email cannot be empty.",
+        "text": "Email address of key contact responsible for this site."
       }
     },
     "interface": {
@@ -1004,7 +1035,7 @@
         "msg": "Interface language cannot be empty.",
         "text": "User interface language. It will change when you refresh the page."
       },
-      "timezone": {
+      "time_zone": {
         "label": "Timezone",
         "msg": "Timezone cannot be empty.",
         "text": "Choose a UTC (Coordinated Universal Time) time offset."

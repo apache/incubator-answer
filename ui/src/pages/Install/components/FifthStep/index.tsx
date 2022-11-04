@@ -6,8 +6,9 @@ import Progress from '../Progress';
 
 interface Props {
   visible: boolean;
+  siteUrl: string;
 }
-const Index: FC<Props> = ({ visible }) => {
+const Index: FC<Props> = ({ visible, siteUrl = '' }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'install' });
 
   if (!visible) return null;
@@ -17,14 +18,15 @@ const Index: FC<Props> = ({ visible }) => {
       <p>
         <Trans i18nKey="install.ready_description">
           If you ever feel like changing more settings, visit
-          <a href="/">admin section</a>; find it in the site menu.
+          <a href={`${siteUrl}/users/login`}>admin section</a>; find it in the
+          site menu.
         </Trans>
       </p>
       <p>{t('good_luck')}</p>
 
       <div className="d-flex align-items-center justify-content-between">
         <Progress step={5} />
-        <Button>{t('done')}</Button>
+        <Button href={siteUrl}>{t('done')}</Button>
       </div>
     </div>
   );

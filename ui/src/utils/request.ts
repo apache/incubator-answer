@@ -73,7 +73,14 @@ class Request {
               });
             }
 
-            if (data.type === 'modal') {
+            if (data.err_type === 'alert') {
+              return Promise.reject({
+                msg,
+                ...data,
+              });
+            }
+
+            if (data.err_type === 'modal') {
               // modal error message
               Modal.confirm({
                 content: msg,
