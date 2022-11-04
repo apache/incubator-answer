@@ -35,7 +35,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
     const { db_type, db_username, db_password, db_host, db_name, db_file } =
       data;
 
-    if (db_type.value !== 'sqllite3') {
+    if (db_type.value !== 'sqlite3') {
       if (!db_username.value) {
         bol = false;
         data.db_username = {
