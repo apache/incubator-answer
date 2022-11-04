@@ -98,8 +98,7 @@ func InitEnvironment(ctx *gin.Context) {
 		return
 	}
 
-	err := cli.InstallConfigFile(confPath)
-	if err != nil {
+	if err := cli.InstallConfigFile(confPath); err != nil {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.InstallConfigFailed), &InitEnvironmentResp{
 			Success:            false,
 			CreateConfigFailed: true,
@@ -112,8 +111,15 @@ func InitEnvironment(ctx *gin.Context) {
 	c, err := conf.ReadConfig(confPath)
 	if err != nil {
 		log.Errorf("read config failed %s", err)
-		err = errors.BadRequest(reason.ReadConfigFailed)
-		handler.HandleResponse(ctx, err, nil)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.ReadConfigFailed), nil)
+		return
+	}
+	c.Data.Database.Driver = req.DbType
+	c.Data.Database.Connection = req.GetConnection()
+
+	if err := conf.RewriteConfig(confPath, c); err != nil {
+		log.Errorf("rewrite config failed %s", err)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.ReadConfigFailed), nil)
 		return
 	}
 

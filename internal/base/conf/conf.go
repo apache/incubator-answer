@@ -9,7 +9,9 @@ import (
 	"github.com/answerdev/answer/internal/cli"
 	"github.com/answerdev/answer/internal/router"
 	"github.com/answerdev/answer/internal/service/service_config"
+	"github.com/answerdev/answer/pkg/writer"
 	"github.com/segmentfault/pacman/contrib/conf/viper"
+	"sigs.k8s.io/yaml"
 )
 
 // AllConfig all config
@@ -47,4 +49,13 @@ func ReadConfig(configFilePath string) (c *AllConfig, err error) {
 		return nil, err
 	}
 	return c, nil
+}
+
+// RewriteConfig rewrite config file path
+func RewriteConfig(configFilePath string, allConfig *AllConfig) error {
+	content, err := yaml.Marshal(allConfig)
+	if err != nil {
+		return err
+	}
+	return writer.ReplaceFile(configFilePath, string(content))
 }

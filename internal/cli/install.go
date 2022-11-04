@@ -1,14 +1,13 @@
 package cli
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 	"path/filepath"
 
 	"github.com/answerdev/answer/configs"
 	"github.com/answerdev/answer/i18n"
 	"github.com/answerdev/answer/pkg/dir"
+	"github.com/answerdev/answer/pkg/writer"
 )
 
 const (
@@ -50,7 +49,7 @@ func InstallConfigFile(configFilePath string) error {
 	}
 	fmt.Printf("[config-file] create directory success, config file is %s\n", configFilePath)
 
-	if err := writerFile(configFilePath, string(configs.Config)); err != nil {
+	if err := writer.WriteFile(configFilePath, string(configs.Config)); err != nil {
 		fmt.Printf("[config-file] install fail %s\n", err.Error())
 		return fmt.Errorf("write file failed %s", err)
 	}
@@ -87,29 +86,11 @@ func installI18nBundle() {
 			continue
 		}
 		fmt.Printf("[i18n] install %s bundle...\n", item.Name())
-		err = writerFile(path, string(content))
+		err = writer.WriteFile(path, string(content))
 		if err != nil {
 			fmt.Printf("[i18n] install %s bundle fail: %s\n", item.Name(), err.Error())
 		} else {
 			fmt.Printf("[i18n] install %s bundle success\n", item.Name())
 		}
 	}
-}
-
-func writerFile(filePath, content string) error {
-	file, err := os.OpenFile(filePath, os.O_WRONLY|os.O_CREATE, 0o666)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		_ = file.Close()
-	}()
-	writer := bufio.NewWriter(file)
-	if _, err := writer.WriteString(content); err != nil {
-		return err
-	}
-	if err := writer.Flush(); err != nil {
-		return err
-	}
-	return nil
 }
