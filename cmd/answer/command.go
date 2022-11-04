@@ -52,6 +52,7 @@ To run answer, use:
 		Short: "Run the application",
 		Long:  `Run the application`,
 		Run: func(_ *cobra.Command, _ []string) {
+			fmt.Println("Answer is string..........................")
 			runApp()
 		},
 	}
