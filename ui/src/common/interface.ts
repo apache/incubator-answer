@@ -116,9 +116,12 @@ export interface UserInfoRes extends UserInfoBase {
   bio: string;
   bio_html: string;
   create_time?: string;
-  /** value = 1 active; value = 2 inactivated
+  /**
+   * value = 1 active;
+   * value = 2 inactivated
    */
   mail_status: number;
+  language: string;
   e_mail?: string;
   [prop: string]: any;
 }

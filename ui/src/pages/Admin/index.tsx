@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
-import { AccordionNav, PageTitle } from '@/components';
+import { AccordionNav, AdminHeader, PageTitle } from '@/components';
 import { ADMIN_NAV_MENUS } from '@/common/constants';
 
 import './index.scss';
@@ -13,6 +13,7 @@ const Dashboard: FC = () => {
   return (
     <>
       <PageTitle title={t('admin')} />
+      <AdminHeader />
       <Container className="admin-container">
         <Row>
           <Col lg={2}>

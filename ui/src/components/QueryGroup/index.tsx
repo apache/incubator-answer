@@ -1,6 +1,6 @@
 import { FC, memo } from 'react';
 import { ButtonGroup, Button, DropdownButton, Dropdown } from 'react-bootstrap';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
@@ -11,6 +11,7 @@ interface Props {
   currentSort: string;
   sortKey?: string;
   className?: string;
+  pathname?: string;
 }
 const MAX_BUTTON_COUNT = 3;
 const Index: FC<Props> = ({
@@ -19,8 +20,10 @@ const Index: FC<Props> = ({
   sortKey = 'order',
   i18nKeyPrefix = '',
   className = '',
+  pathname = '',
 }) => {
   const [searchParams, setUrlSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   const { t } = useTranslation('translation', {
     keyPrefix: i18nKeyPrefix,
@@ -36,7 +39,11 @@ const Index: FC<Props> = ({
   const handleClick = (e, type) => {
     e.preventDefault();
     const str = handleParams(type);
-    setUrlSearchParams(str);
+    if (pathname) {
+      navigate(`${pathname}${str}`);
+    } else {
+      setUrlSearchParams(str);
+    }
   };
 
   const filteredData = data.filter((_, index) => index > MAX_BUTTON_COUNT - 2);
@@ -69,7 +76,9 @@ const Index: FC<Props> = ({
                   }
                 : {}
             }
-            href={handleParams(key)}
+            href={
+              pathname ? `${pathname}${handleParams(key)}` : handleParams(key)
+            }
             onClick={(evt) => handleClick(evt, key)}>
             {t(name)}
           </Button>
@@ -95,7 +104,11 @@ const Index: FC<Props> = ({
                   'd-block d-md-none',
                   className,
                 )}
-                href={handleParams(key)}
+                href={
+                  pathname
+                    ? `${pathname}${handleParams(key)}`
+                    : handleParams(key)
+                }
                 onClick={(evt) => handleClick(evt, key)}>
                 {t(name)}
               </Dropdown.Item>

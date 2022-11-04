@@ -3,8 +3,15 @@ import { Container, Row, Col, Card, Alert } from 'react-bootstrap';
 import { useTranslation, Trans } from 'react-i18next';
 
 import type { FormDataType } from '@/common/interface';
-import { Storage } from '@/utils';
 import { PageTitle } from '@/components';
+import {
+  dbCheck,
+  installInit,
+  installBaseInfo,
+  checkConfigFileExists,
+} from '@/services';
+import { Storage } from '@/utils';
+import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
 
 import {
   FirstStep,
@@ -17,7 +24,11 @@ import {
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'install' });
   const [step, setStep] = useState(1);
-  const [showError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [errorData, setErrorData] = useState<{ [propName: string]: any }>({
+    msg: '',
+  });
+  const [tableExist, setTableExist] = useState(false);
 
   const [formData, setFormData] = useState<FormDataType>({
     lang: {
@@ -26,7 +37,7 @@ const Index: FC = () => {
       errorMsg: '',
     },
     db_type: {
-      value: '',
+      value: 'mysql',
       isInvalid: false,
       errorMsg: '',
     },
@@ -55,8 +66,12 @@ const Index: FC = () => {
       isInvalid: false,
       errorMsg: '',
     },
-
     site_name: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+    site_url: {
       value: '',
       isInvalid: false,
       errorMsg: '',
@@ -84,36 +99,128 @@ const Index: FC = () => {
   });
 
   const handleChange = (params: FormDataType) => {
-    console.log(params);
+    // console.log(params);
     setFormData({ ...formData, ...params });
   };
 
-  const handleStep = () => {
+  const handleErr = (data) => {
+    window.scrollTo(0, 0);
+    setErrorData(data);
+  };
+
+  const handleNext = async () => {
+    setErrorData({
+      msg: '',
+    });
     setStep((pre) => pre + 1);
   };
 
-  // const handleSubmit = () => {
-  //   const params = {
-  //     lang: formData.lang.value,
-  //     db_type: formData.db_type.value,
-  //     db_username: formData.db_username.value,
-  //     db_password: formData.db_password.value,
-  //     db_host: formData.db_host.value,
-  //     db_name: formData.db_name.value,
-  //     db_file: formData.db_file.value,
-  //     site_name: formData.site_name.value,
-  //     contact_email: formData.contact_email.value,
-  //     admin_name: formData.admin_name.value,
-  //     admin_password: formData.admin_password.value,
-  //     admin_email: formData.admin_email.value,
-  //   };
+  const submitDatabaseForm = () => {
+    const params = {
+      lang: formData.lang.value,
+      db_type: formData.db_type.value,
+      db_username: formData.db_username.value,
+      db_password: formData.db_password.value,
+      db_host: formData.db_host.value,
+      db_name: formData.db_name.value,
+      db_file: formData.db_file.value,
+    };
+    dbCheck(params)
+      .then(() => {
+        handleNext();
+      })
+      .catch((err) => {
+        console.log(err);
+        handleErr(err);
+      });
+  };
 
-  //   console.log(params);
-  // };
+  const checkInstall = () => {
+    const params = {
+      lang: formData.lang.value,
+      db_type: formData.db_type.value,
+      db_username: formData.db_username.value,
+      db_password: formData.db_password.value,
+      db_host: formData.db_host.value,
+      db_name: formData.db_name.value,
+      db_file: formData.db_file.value,
+    };
+    installInit(params)
+      .then(() => {
+        handleNext();
+      })
+      .catch((err) => {
+        handleErr(err);
+      });
+  };
+
+  const submitSiteConfig = () => {
+    const params = {
+      lang: formData.lang.value,
+      site_name: formData.site_name.value,
+      site_url: formData.site_url.value,
+      contact_email: formData.contact_email.value,
+      admin_name: formData.admin_name.value,
+      admin_password: formData.admin_password.value,
+      admin_email: formData.admin_email.value,
+    };
+    installBaseInfo(params)
+      .then(() => {
+        handleNext();
+      })
+      .catch((err) => {
+        handleErr(err);
+      });
+  };
+
+  const handleStep = () => {
+    if (step === 1) {
+      Storage.set(CURRENT_LANG_STORAGE_KEY, formData.lang.value);
+      handleNext();
+    }
+    if (step === 2) {
+      submitDatabaseForm();
+    }
+    if (step === 3) {
+      checkInstall();
+    }
+    if (step === 4) {
+      submitSiteConfig();
+    }
+    if (step > 4) {
+      handleNext();
+    }
+  };
+
+  const handleInstallNow = (e) => {
+    e.preventDefault();
+    if (tableExist) {
+      setStep(7);
+    } else {
+      setStep(4);
+    }
+  };
+
+  const configYmlCheck = () => {
+    checkConfigFileExists()
+      .then((res) => {
+        setTableExist(res?.db_table_exist);
+        if (res && res.config_file_exist) {
+          setStep(5);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   useEffect(() => {
-    console.log('step===', Storage.get('INSTALL_STEP'));
+    configYmlCheck();
   }, []);
+
+  if (loading) {
+    return <div />;
+  }
 
   return (
     <div className="page-wrap2">
@@ -124,7 +231,9 @@ const Index: FC = () => {
             <h2 className="mb-4 text-center">{t('title')}</h2>
             <Card>
               <Card.Body>
-                {showError && <Alert variant="danger"> show error msg </Alert>}
+                {errorData?.msg && (
+                  <Alert variant="danger">{errorData?.msg}</Alert>
+                )}
 
                 <FirstStep
                   visible={step === 1}
@@ -140,7 +249,11 @@ const Index: FC = () => {
                   nextCallback={handleStep}
                 />
 
-                <ThirdStep visible={step === 3} nextCallback={handleStep} />
+                <ThirdStep
+                  visible={step === 3}
+                  nextCallback={handleStep}
+                  errorMsg={errorData}
+                />
 
                 <FourthStep
                   visible={step === 4}
@@ -149,7 +262,7 @@ const Index: FC = () => {
                   nextCallback={handleStep}
                 />
 
-                <Fifth visible={step === 5} />
+                <Fifth visible={step === 5} siteUrl={formData.site_url.value} />
                 {step === 6 && (
                   <div>
                     <h5>{t('warning')}</h5>
@@ -158,7 +271,10 @@ const Index: FC = () => {
                         The file <code>config.yaml</code> already exists. If you
                         need to reset any of the configuration items in this
                         file, please delete it first. You may try{' '}
-                        <a href="/">installing now</a>.
+                        <a href="###" onClick={(e) => handleInstallNow(e)}>
+                          installing now
+                        </a>
+                        .
                       </Trans>
                     </p>
                   </div>

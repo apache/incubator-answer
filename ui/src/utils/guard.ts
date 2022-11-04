@@ -1,8 +1,9 @@
-import { getLoggedUserInfo } from '@/services';
-import { loggedUserInfoStore } from '@/stores';
+import { getLoggedUserInfo, getAppSettings } from '@/services';
+import { loggedUserInfoStore, siteInfoStore, interfaceStore } from '@/stores';
 import { RouteAlias } from '@/router/alias';
 import Storage from '@/utils/storage';
 import { LOGGED_USER_STORAGE_KEY } from '@/common/constants';
+import { setupAppLanguage, setupAppTimeZone } from '@/utils/localize';
 
 import { floppyNavigation } from './floppyNavigation';
 
@@ -179,4 +180,24 @@ export const tryNormalLogged = (autoLogin: boolean = false) => {
   }
 
   return false;
+};
+
+export const initAppSettingsStore = async () => {
+  const appSettings = await getAppSettings();
+  if (appSettings) {
+    siteInfoStore.getState().update(appSettings.general);
+    interfaceStore.getState().update(appSettings.interface);
+  }
+};
+
+export const setupApp = async () => {
+  /**
+   * WARN:
+   * 1. must pre init logged user info for router guard
+   * 2. must pre init app settings for app render
+   */
+  // TODO: optimize `initAppSettingsStore` by server render
+  await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
+  setupAppLanguage();
+  setupAppTimeZone();
 };

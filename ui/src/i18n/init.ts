@@ -28,7 +28,8 @@ i18next
       escapeValue: false,
     },
     react: {
-      transSupportBasicHtmlNodes: true, // allow <br/> and simple html elements in translations
+      transSupportBasicHtmlNodes: true,
+      // allow <br/> and simple html elements in translations
       transKeepBasicHtmlNodesFor: ['br', 'strong', 'i'],
     },
     // backend: {

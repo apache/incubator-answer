@@ -115,6 +115,7 @@ const QuestionList: FC<Props> = ({ source }) => {
           <QueryGroup
             data={QuestionOrderKeys}
             currentSort={curOrder}
+            pathname={source === 'questions' ? '/questions' : ''}
             i18nKeyPrefix="question"
           />
         </Col>

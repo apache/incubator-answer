@@ -744,6 +744,7 @@
     "title": "Answer",
     "next": "Next",
     "done": "Done",
+    "config_yaml_error": "Can’t create the config.yaml file.",
     "lang": {
       "label": "Please choose a language"
     },
@@ -784,22 +785,41 @@
     "site_information": "Site Information",
     "admin_account": "Admin Account",
     "site_name": {
-      "label": "Site Name"
+      "label": "Site Name",
+      "msg": "Site Name cannot be empty."
+    },
+    "site_url": {
+      "label": "Site URL",
+      "text": "The address of your site.",
+      "msg": {
+        "empty": "Site URL cannot be empty.",
+        "incorrect": "Site URL incorrect format."
+      }
     },
     "contact_email": {
       "label": "Contact Email",
-      "text": "Email address of key contact responsible for this site."
+      "text": "Email address of key contact responsible for this site.",
+      "msg": {
+        "empty": "Contact Email cannot be empty.",
+        "incorrect": "Contact Email incorrect format."
+      }
     },
     "admin_name": {
-      "label": "Name"
+      "label": "Name",
+      "msg": "Name cannot be empty."
     },
     "admin_password": {
       "label": "Password",
-      "text": "You will need this password to log in. Please store it in a secure location."
+      "text": "You will need this password to log in. Please store it in a secure location.",
+      "msg": "Password cannot be empty."
     },
     "admin_email": {
       "label": "Email",
-      "text": "You will need this email to log in."
+      "text": "You will need this email to log in.",
+      "msg": {
+        "empty": "Email cannot be empty.",
+        "incorrect": "Email incorrect format."
+      }
     },
     "ready_title": "Your Answer is Ready!",
     "ready_description": "If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.",
@@ -808,15 +828,6 @@
     "warning_description": "The file <1>config.yaml</1> already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <2>installing now</2>.",
     "installed": "Already installed",
     "installed_description": "You appear to have already installed. To reinstall please clear your old database tables first."
-  },
-  "upgrade": {
-    "title": "Answer",
-    "update_btn": "Update data",
-    "update_title": "Data update required",
-    "update_description": "<1>Answer has been updated! Before you continue, we have to update your data to the newest version.</1><1>The update process may take a little while, so please be patient.</1>",
-    "done_title": "No update required",
-    "done_btn": "Done",
-    "done_desscription": "Your Answer data is already up-to-date."
   },
   "page_404": {
     "description": "Unfortunately, this page doesn't exist.",
@@ -1017,7 +1028,7 @@
       "time_zone": {
         "label": "Timezone",
         "msg": "Timezone cannot be empty.",
-        "text": "Choose a UTC (Coordinated Universal Time) time offset."
+        "text": "Choose a city in the same timezone as you."
       }
     },
     "smtp": {

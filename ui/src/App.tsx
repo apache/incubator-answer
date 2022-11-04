@@ -1,5 +1,6 @@
 import { RouterProvider } from 'react-router-dom';
 
+import './i18n/init';
 import { routes, createBrowserRouter } from '@/router';
 
 function App() {
