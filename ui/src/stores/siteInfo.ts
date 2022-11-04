@@ -12,6 +12,8 @@ const siteInfo = create<SiteInfoType>((set) => ({
     name: '',
     description: '',
     short_description: '',
+    site_url: '',
+    contact_email: '',
   },
   update: (params) =>
     set(() => {
