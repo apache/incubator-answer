@@ -134,7 +134,16 @@ const Index: FC = () => {
   };
 
   const checkInstall = () => {
-    installInit()
+    const params = {
+      lang: formData.lang.value,
+      db_type: formData.db_type.value,
+      db_username: formData.db_username.value,
+      db_password: formData.db_password.value,
+      db_host: formData.db_host.value,
+      db_name: formData.db_name.value,
+      db_file: formData.db_file.value,
+    };
+    installInit(params)
       .then(() => {
         handleNext();
       })
