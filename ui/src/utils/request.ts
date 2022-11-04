@@ -3,12 +3,9 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 
 import { Modal } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
-import {
-  LOGGED_TOKEN_STORAGE_KEY,
-  CURRENT_LANG_STORAGE_KEY,
-  DEFAULT_LANG,
-} from '@/common/constants';
+import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
 import { RouteAlias } from '@/router/alias';
+import { getCurrentLang } from '@/utils/localize';
 
 import Storage from './storage';
 import { floppyNavigation } from './floppyNavigation';
@@ -35,8 +32,7 @@ class Request {
     this.instance.interceptors.request.use(
       (requestConfig: AxiosRequestConfig) => {
         const token = Storage.get(LOGGED_TOKEN_STORAGE_KEY) || '';
-        // default lang en_US
-        const lang = Storage.get(CURRENT_LANG_STORAGE_KEY) || DEFAULT_LANG;
+        const lang = getCurrentLang();
         requestConfig.headers = {
           Authorization: token,
           'Accept-Language': lang,

@@ -5,8 +5,6 @@ import { useTranslation } from 'react-i18next';
 import type { LangsType, FormDataType } from '@/common/interface';
 import { useToast } from '@/hooks';
 import { getLanguageOptions, updateUserInterface } from '@/services';
-import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
-import Storage from '@/utils/storage';
 import { localize } from '@/utils';
 import { loggedUserInfoStore } from '@/stores';
 
@@ -19,8 +17,7 @@ const Index = () => {
   const [langs, setLangs] = useState<LangsType[]>();
   const [formData, setFormData] = useState<FormDataType>({
     lang: {
-      // FIXME: userinfo? or  userInfo.language
-      value: loggedUserInfo,
+      value: loggedUserInfo.language,
       isInvalid: false,
       errorMsg: '',
     },
@@ -49,17 +46,6 @@ const Index = () => {
 
   useEffect(() => {
     getLangs();
-    // TODO: get default lang by interface api
-    const lang = Storage.get(CURRENT_LANG_STORAGE_KEY);
-    if (lang) {
-      setFormData({
-        lang: {
-          value: lang,
-          isInvalid: false,
-          errorMsg: '',
-        },
-      });
-    }
   }, []);
   return (
     <Form noValidate onSubmit={handleSubmit}>
