@@ -18,12 +18,12 @@ module.exports = {
       const config = configFunction(proxy, allowedHost);
       config.proxy = {
         '/answer': {
-          target: 'http://10.0.20.88:8080',
+          target: 'http://10.0.10.98:2060',
           changeOrigin: true,
           secure: false,
         },
         '/installation': {
-          target: 'http://10.0.20.88:8080',
+          target: 'http://10.0.10.98:2060',
           changeOrigin: true,
           secure: false,
         },
