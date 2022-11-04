@@ -5,7 +5,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { SWRConfig } from 'swr';
 
 import { siteInfoStore, toastStore } from '@/stores';
-import { Header, AdminHeader, Footer, Toast } from '@/components';
+import { Header, Footer, Toast } from '@/components';
 
 const Layout: FC = () => {
   const { msg: toastMsg, variant, clear: toastClear } = toastStore();
@@ -24,8 +24,6 @@ const Layout: FC = () => {
           revalidateOnFocus: false,
         }}>
         <Header />
-        {/* TODO: move admin header to  Admin/Index */}
-        <AdminHeader />
         <div className="position-relative page-wrap">
           <Outlet />
         </div>
