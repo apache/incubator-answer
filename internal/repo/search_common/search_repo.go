@@ -142,13 +142,22 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 		argsA = append(argsA, votes)
 	}
 
-	b = b.Union("all", ub)
-
-	querySQL, _, err := builder.MySQL().Select("*").From(b, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	//b = b.Union("all", ub)
+	ubSQL, _, err := ub.ToSQL()
 	if err != nil {
 		return
 	}
-	countSQL, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
+	bSQL, _, err := b.ToSQL()
+	if err != nil {
+		return
+	}
+	sql := fmt.Sprintf("(%s UNION ALL %s)", ubSQL, bSQL)
+
+	querySQL, _, err := builder.MySQL().Select("*").From(sql, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	if err != nil {
+		return
+	}
+	countSQL, _, err := builder.MySQL().Select("count(*) total").From(sql, "c").ToSQL()
 	if err != nil {
 		return
 	}
