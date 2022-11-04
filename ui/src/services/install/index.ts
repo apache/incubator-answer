@@ -8,8 +8,8 @@ export const dbCheck = (params) => {
   return request.post('/installation/db/check', params);
 };
 
-export const installInit = () => {
-  return request.post('/installation/init');
+export const installInit = (params) => {
+  return request.post('/installation/init', params);
 };
 
 export const installBaseInfo = (params) => {
