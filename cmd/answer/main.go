@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 
 	"github.com/answerdev/answer/internal/base/conf"
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/cli"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman"
@@ -40,7 +41,6 @@ func main() {
 func runApp() {
 	log.SetLogger(zap.NewLogger(
 		log.ParseLevel(logLevel), zap.WithName("answer"), zap.WithPath(logPath), zap.WithCallerFullPath()))
-
 	c, err := readConfig()
 	if err != nil {
 		panic(err)
@@ -50,6 +50,8 @@ func runApp() {
 	if err != nil {
 		panic(err)
 	}
+	constant.Version = Version
+
 	defer cleanup()
 	if err := app.Run(); err != nil {
 		panic(err)
