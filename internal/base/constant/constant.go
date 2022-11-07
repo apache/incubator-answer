@@ -27,6 +27,8 @@ const (
 // object TagID AnswerList
 // key equal database's table name
 var (
+	Version string = ""
+
 	ObjectTypeStrMapping = map[string]int{
 		QuestionObjectType:   1,
 		AnswerObjectType:     2,

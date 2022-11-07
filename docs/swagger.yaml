@@ -3028,7 +3028,7 @@ paths:
       - Search
   /answer/api/v1/siteinfo:
     get:
-      description: Get siteinfo
+      description: get site info
       produces:
       - application/json
       responses:
@@ -3041,7 +3041,7 @@ paths:
                 data:
                   $ref: '#/definitions/schema.SiteGeneralResp'
               type: object
-      summary: Get siteinfo
+      summary: get site info
       tags:
       - site
   /answer/api/v1/tag:

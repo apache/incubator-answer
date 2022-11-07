@@ -2721,14 +2721,14 @@ const docTemplate = `{
         },
         "/answer/api/v1/siteinfo": {
             "get": {
-                "description": "Get siteinfo",
+                "description": "get site info",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "site"
                 ],
-                "summary": "Get siteinfo",
+                "summary": "get site info",
                 "responses": {
                     "200": {
                         "description": "OK",

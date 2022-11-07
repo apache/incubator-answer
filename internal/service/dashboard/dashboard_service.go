@@ -2,7 +2,11 @@ package dashboard
 
 import (
 	"context"
+	"encoding/json"
+	"io/ioutil"
+	"net/http"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity_common"
 	answercommon "github.com/answerdev/answer/internal/service/answer_common"
@@ -12,6 +16,7 @@ import (
 	"github.com/answerdev/answer/internal/service/report_common"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/segmentfault/pacman/log"
 )
 
 type DashboardService struct {
@@ -112,5 +117,32 @@ func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	dashboardInfo.OccupyingStorageSpace = "1MB"
 	dashboardInfo.AppStartTime = "102"
 	dashboardInfo.TimeZone = siteInfoInterface.TimeZone
+	dashboardInfo.VersionInfo.Version = constant.Version
+	dashboardInfo.VersionInfo.RemoteVersion = ds.RemoteVersion(ctx)
 	return dashboardInfo, nil
+}
+
+func (ds *DashboardService) RemoteVersion(ctx context.Context) string {
+	url := "https://answer.dev/getlatest"
+	req, _ := http.NewRequest("GET", url, nil)
+	req.Header.Set("User-Agent", "Answer/"+constant.Version)
+	resp, err := (&http.Client{}).Do(req)
+	if err != nil {
+		log.Error("http.Client error", err)
+		return ""
+	}
+	defer resp.Body.Close()
+
+	respByte, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		log.Error("http.Client error", err)
+		return ""
+	}
+	remoteVersion := &schema.RemoteVersion{}
+	err = json.Unmarshal(respByte, remoteVersion)
+	if err != nil {
+		log.Error("json.Unmarshal error", err)
+		return ""
+	}
+	return remoteVersion.Release.Version
 }
