@@ -18,6 +18,7 @@ const Dashboard: FC = () => {
   if (!data) {
     return null;
   }
+
   return (
     <>
       <h3 className="text-capitalize">{t('title')}</h3>
