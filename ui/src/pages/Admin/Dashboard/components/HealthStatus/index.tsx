@@ -11,7 +11,8 @@ interface IProps {
 
 const HealthStatus: FC<IProps> = ({ data }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'admin.dashboard' });
-
+  const { version, remote_version } = data.version_info || {};
+  const isLatest = version === remote_version;
   return (
     <Card className="mb-4">
       <Card.Body>
@@ -19,10 +20,22 @@ const HealthStatus: FC<IProps> = ({ data }) => {
         <Row>
           <Col xs={6} className="mb-1 d-flex align-items-center">
             <span className="text-secondary me-1">{t('version')}</span>
-            <strong>90</strong>
-            <Badge pill bg="warning" text="dark" className="ms-1">
-              {t('update_to')} {data.app_version}
-            </Badge>
+            <strong>{version}</strong>
+            {isLatest && (
+              <Badge pill bg="success" className="ms-1">
+                {t('latest')}
+              </Badge>
+            )}
+            {!isLatest && remote_version && (
+              <Badge pill bg="warning" text="dark" className="ms-1">
+                {t('update_to')} {remote_version}
+              </Badge>
+            )}
+            {!isLatest && !remote_version && (
+              <Badge pill bg="danger" className="ms-1">
+                {t('check_failed')}
+              </Badge>
+            )}
           </Col>
           <Col xs={6} className="mb-1">
             <span className="text-secondary me-1">{t('https')}</span>
