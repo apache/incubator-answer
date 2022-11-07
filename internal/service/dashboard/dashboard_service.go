@@ -7,15 +7,18 @@ import (
 	"net/http"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity_common"
 	answercommon "github.com/answerdev/answer/internal/service/answer_common"
 	"github.com/answerdev/answer/internal/service/comment_common"
 	"github.com/answerdev/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/service/export"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/report_common"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -112,7 +115,13 @@ func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	dashboardInfo.ReportCount = reportCount
 
 	dashboardInfo.UploadingFiles = true
-	dashboardInfo.SMTP = true
+	emailconfig, err := ds.GetEmailConfig()
+	if err != nil {
+		return dashboardInfo, err
+	}
+	if emailconfig.SMTPHost != "" {
+		dashboardInfo.SMTP = true
+	}
 	dashboardInfo.HTTPS = true
 	dashboardInfo.OccupyingStorageSpace = "1MB"
 	dashboardInfo.AppStartTime = "102"
@@ -145,4 +154,17 @@ func (ds *DashboardService) RemoteVersion(ctx context.Context) string {
 		return ""
 	}
 	return remoteVersion.Release.Version
+}
+
+func (ds *DashboardService) GetEmailConfig() (ec *export.EmailConfig, err error) {
+	emailConf, err := ds.configRepo.GetString("email.config")
+	if err != nil {
+		return nil, err
+	}
+	ec = &export.EmailConfig{}
+	err = json.Unmarshal([]byte(emailConf), ec)
+	if err != nil {
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return ec, nil
 }
