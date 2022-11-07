@@ -190,6 +190,15 @@ export const initAppSettingsStore = async () => {
   }
 };
 
+export const shouldInitAppFetchData = () => {
+  const { pathname } = window.location;
+  if (pathname === '/install') {
+    return false;
+  }
+
+  return true;
+};
+
 export const setupApp = async () => {
   /**
    * WARN:
@@ -197,7 +206,10 @@ export const setupApp = async () => {
    * 2. must pre init app settings for app render
    */
   // TODO: optimize `initAppSettingsStore` by server render
-  await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
-  setupAppLanguage();
-  setupAppTimeZone();
+
+  if (shouldInitAppFetchData()) {
+    await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
+    setupAppLanguage();
+    setupAppTimeZone();
+  }
 };
