@@ -342,7 +342,10 @@ export interface AdminDashboard {
     time_zone: string;
     occupying_storage_space: string;
     app_start_time: number;
-    app_version: string;
     https: boolean;
+    version_info: {
+      remote_version: string;
+      version: string;
+    };
   };
 }
