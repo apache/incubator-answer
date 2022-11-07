@@ -206,7 +206,7 @@ const Index: FC = () => {
       .then((res) => {
         setTableExist(res?.db_table_exist);
         if (res && res.config_file_exist) {
-          setStep(5);
+          setStep(6);
         }
       })
       .finally(() => {
