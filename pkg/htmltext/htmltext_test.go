@@ -35,17 +35,17 @@ func TestFetchExcerpt(t *testing.T) {
 	)
 
 	// test english string
-	expected = "hello"
+	expected = "hello..."
 	text = FetchExcerpt("<p>hello world</p>", "...", 5)
 	assert.Equal(t, expected, text)
 
 	// test mixed string
-	expected = "hello你好"
+	expected = "hello你好..."
 	text = FetchExcerpt("<p>hello你好world</p>", "...", 7)
 	assert.Equal(t, expected, text)
 
 	// test mixed string with emoticon
-	expected = "hello你好😂"
+	expected = "hello你好😂..."
 	text = FetchExcerpt("<p>hello你好😂world</p>", "...", 8)
 	assert.Equal(t, expected, text)
 }

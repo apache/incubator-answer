@@ -39,6 +39,6 @@ func ClearText(html string) (text string) {
 func FetchExcerpt(html, trimMarker string, limit int) (text string) {
 	text = ClearText(html)
 	runeText := []rune(text)
-	text = string(runeText[0:limit])
+	text = string(runeText[0:limit]) + trimMarker
 	return
 }
