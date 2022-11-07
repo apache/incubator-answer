@@ -824,8 +824,9 @@
     "ready_title": "Your Answer is Ready!",
     "ready_description": "If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.",
     "good_luck": "Have fun, and good luck!",
-    "warning": "Warning",
-    "warning_description": "The file <1>config.yaml</1> already exists. If you need to reset any of the configuration items in this file, please delete it first. You may try <2>installing now</2>.",
+    "warn_title": "Warning",
+    "warn_description": "The file <1>config.yaml</1> already exists. If you need to reset any of the configuration items in this file, please delete it first.",
+    "install_now": "You may try <1>installing now</1>.",
     "installed": "Already installed",
     "installed_description": "You appear to have already installed. To reinstall please clear your old database tables first."
   },

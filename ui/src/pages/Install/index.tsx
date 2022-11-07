@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { FC, useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Alert } from 'react-bootstrap';
 import { useTranslation, Trans } from 'react-i18next';
@@ -265,16 +266,12 @@ const Index: FC = () => {
                 <Fifth visible={step === 5} siteUrl={formData.site_url.value} />
                 {step === 6 && (
                   <div>
-                    <h5>{t('warning')}</h5>
+                    <h5>{t('warn_title')}</h5>
                     <p>
-                      <Trans i18nKey="install.warning_description">
-                        The file <code>config.yaml</code> already exists. If you
-                        need to reset any of the configuration items in this
-                        file, please delete it first. You may try{' '}
-                        <a href="###" onClick={(e) => handleInstallNow(e)}>
-                          installing now
-                        </a>
-                        .
+                      <Trans i18nKey="install.warn_description" components={{ 1: <code />}} />
+                      {' '}
+                      <Trans i18nKey="install.install_now">
+                        You may try <a href="###" onClick={e => handleInstallNow(e)}>installing now</a>.
                       </Trans>
                     </p>
                   </div>
