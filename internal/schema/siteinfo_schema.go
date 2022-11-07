@@ -14,7 +14,7 @@ type SiteInterfaceReq struct {
 	Logo     string `validate:"omitempty,gt=0,lte=256" form:"logo" json:"logo"`
 	Theme    string `validate:"required,gt=1,lte=128" form:"theme" json:"theme"`
 	Language string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
-	TimeZone string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
+	TimeZone string `validate:"required,gt=1,lte=128,timezone" form:"time_zone" json:"time_zone"`
 }
 
 // SiteGeneralResp site general response
