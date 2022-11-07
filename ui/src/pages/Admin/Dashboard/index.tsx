@@ -37,12 +37,6 @@ const Dashboard: FC = () => {
           <AnswerLinks />
         </Col>
       </Row>
-      {process.env.REACT_APP_VERSION && (
-        <p className="mt-4">
-          {`${t('version')} `}
-          {process.env.REACT_APP_VERSION}
-        </p>
-      )}
     </>
   );
 };
