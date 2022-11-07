@@ -262,7 +262,7 @@ const routes: RouteNode[] = [
     ],
   },
   {
-    path: 'install',
+    path: '/install',
     page: 'pages/Install',
   },
   {
