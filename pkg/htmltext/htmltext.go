@@ -8,6 +8,11 @@ import (
 
 // ClearText clear HTML, get the clear text
 func ClearText(html string) (text string) {
+	if len(html) == 0 {
+		text = html
+		return
+	}
+
 	var (
 		re        *regexp.Regexp
 		codeReg   = `(?ism)<(pre)>.*<\/pre>`
@@ -37,8 +42,19 @@ func ClearText(html string) (text string) {
 
 // FetchExcerpt return the excerpt from the HTML string
 func FetchExcerpt(html, trimMarker string, limit int) (text string) {
+	if len(html) == 0 {
+		text = html
+		return
+	}
+
 	text = ClearText(html)
 	runeText := []rune(text)
-	text = string(runeText[0:limit]) + trimMarker
+	if len(runeText) <= limit {
+		text = string(runeText)
+	} else {
+		text = string(runeText[0:limit])
+	}
+
+	text += trimMarker
 	return
 }
