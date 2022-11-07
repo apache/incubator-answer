@@ -79,7 +79,7 @@ const Personal: FC = () => {
       </Row>
 
       <Row className="justify-content-center">
-        <Col lg={12}>
+        <Col xxl={10}>
           <NavBar tabName={tabName} slug={username} isSelf={isSelf} />
         </Col>
         <Col xxl={7} lg={8} sm={12}>
