@@ -18,7 +18,7 @@ const PageTitle: FC<IProp> = ({ title = '', suffix = '' }) => {
   if (!suffix) {
     suffix = `${siteInfo.name}`;
   }
-  title = title ? `${title} - ${suffix}` : suffix;
+  title = title ? `${title}${suffix ? ` - ${suffix}` : ''}` : suffix;
   return <>{setPageTitle(title)}</>;
 };
 

@@ -173,17 +173,17 @@ notification:
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: 如何设定文本格式
-    description: >-
-      <ul class="mb-0"><li><p class="mb-2">添加链接：</p><pre
-      class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p
-      class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者
-      **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用 4
-      个空格缩进代码</p></li><li><p
-      class="mb-2">在行首添加<code>&gt;</code>表示引用</p></li><li><p class="mb-2">反引号进行转义
-      <code>`像 _这样_`</code></p></li><li><p
-      class="mb-2">使用<code>```</code>创建代码块</p><pre class="mb-0"><code>```<br/>//
-      这是代码<br/>```</code></pre></li></ul>
+  title: 如何设定文本格式
+  description: >-
+    <ul class="mb-0"><li><p class="mb-2">添加链接：</p><pre
+    class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p
+    class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者
+    **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用 4
+    个空格缩进代码</p></li><li><p
+    class="mb-2">在行首添加<code>&gt;</code>表示引用</p></li><li><p class="mb-2">反引号进行转义
+    <code>`像 _这样_`</code></p></li><li><p
+    class="mb-2">使用<code>```</code>创建代码块</p><pre class="mb-0"><code>```<br/>//
+    这是代码<br/>```</code></pre></li></ul>
   pagination:
     prev: 上一页
     next: 下一页
@@ -396,7 +396,7 @@ ui:
     btn_save_edits: 保存更改
     btn_cancel: 取消
   dates:
-    long_date: YYYY年MM月
+    long_date: MM月DD日
     long_date_with_year: YYYY年MM月DD日
     long_date_with_time: 'YYYY年MM月DD日 HH:mm'
     now: 刚刚
@@ -917,3 +917,4 @@ ui:
         msg: 不能为空
         'yes': 是
         'no': 否
+

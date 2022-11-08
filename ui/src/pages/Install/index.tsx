@@ -43,22 +43,22 @@ const Index: FC = () => {
       errorMsg: '',
     },
     db_username: {
-      value: '',
+      value: 'root',
       isInvalid: false,
       errorMsg: '',
     },
     db_password: {
-      value: '',
+      value: 'root',
       isInvalid: false,
       errorMsg: '',
     },
     db_host: {
-      value: '',
+      value: 'db:3306',
       isInvalid: false,
       errorMsg: '',
     },
     db_name: {
-      value: '',
+      value: 'answer',
       isInvalid: false,
       errorMsg: '',
     },
