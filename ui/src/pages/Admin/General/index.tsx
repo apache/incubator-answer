@@ -62,13 +62,32 @@ const General: FC = () => {
         isInvalid: true,
         errorMsg: t('site_url.msg'),
       };
+    } else if (!/^(https?):\/\/([\w.]+\/?)\S*$/.test(site_url.value)) {
+      ret = false;
+      formData.site_url = {
+        value: formData.site_url.value,
+        isInvalid: true,
+        errorMsg: t('site_url.validate'),
+      };
     }
+
     if (!contact_email.value) {
       ret = false;
       formData.contact_email = {
         value: '',
         isInvalid: true,
         errorMsg: t('contact_email.msg'),
+      };
+    } else if (
+      !/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(
+        contact_email.value,
+      )
+    ) {
+      ret = false;
+      formData.contact_email = {
+        value: formData.contact_email.value,
+        isInvalid: true,
+        errorMsg: t('contact_email.validate'),
       };
     }
     setFormData({

@@ -18,6 +18,7 @@ const Dashboard: FC = () => {
   if (!data) {
     return null;
   }
+
   return (
     <>
       <h3 className="text-capitalize">{t('title')}</h3>
@@ -36,12 +37,6 @@ const Dashboard: FC = () => {
           <AnswerLinks />
         </Col>
       </Row>
-      {process.env.REACT_APP_VERSION && (
-        <p className="mt-4">
-          {`${t('version')} `}
-          {process.env.REACT_APP_VERSION}
-        </p>
-      )}
     </>
   );
 };

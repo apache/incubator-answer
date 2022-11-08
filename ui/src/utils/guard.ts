@@ -154,9 +154,9 @@ export const admin = () => {
 
 /**
  * try user was logged and all state ok
- * @param autoLogin
+ * @param canNavigate // if true, will navigate to login page if not logged
  */
-export const tryNormalLogged = (autoLogin: boolean = false) => {
+export const tryNormalLogged = (canNavigate: boolean = false) => {
   const us = deriveLoginState();
 
   if (us.isNormal) {
@@ -164,7 +164,7 @@ export const tryNormalLogged = (autoLogin: boolean = false) => {
   }
   // must assert logged state first and return
   if (!us.isLogged) {
-    if (autoLogin) {
+    if (canNavigate) {
       floppyNavigation.navigateToLogin();
     }
     return false;
@@ -182,12 +182,31 @@ export const tryNormalLogged = (autoLogin: boolean = false) => {
   return false;
 };
 
+export const tryLoggedAndActicevated = () => {
+  const gr: TGuardResult = { ok: true };
+  const us = deriveLoginState();
+  console.log('tryLogged', us);
+  if (!us.isLogged || !us.isActivated) {
+    gr.ok = false;
+  }
+  return gr;
+};
+
 export const initAppSettingsStore = async () => {
   const appSettings = await getAppSettings();
   if (appSettings) {
     siteInfoStore.getState().update(appSettings.general);
     interfaceStore.getState().update(appSettings.interface);
   }
+};
+
+export const shouldInitAppFetchData = () => {
+  const { pathname } = window.location;
+  if (pathname === '/install') {
+    return false;
+  }
+
+  return true;
 };
 
 export const setupApp = async () => {
@@ -197,7 +216,10 @@ export const setupApp = async () => {
    * 2. must pre init app settings for app render
    */
   // TODO: optimize `initAppSettingsStore` by server render
-  await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
-  setupAppLanguage();
-  setupAppTimeZone();
+
+  if (shouldInitAppFetchData()) {
+    await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
+    setupAppLanguage();
+    setupAppTimeZone();
+  }
 };

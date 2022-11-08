@@ -1,5 +1,7 @@
 import dayjs from 'dayjs';
 import i18next from 'i18next';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
 
 import { interfaceStore, loggedUserInfoStore } from '@/stores';
 import {
@@ -63,6 +65,8 @@ const addI18nResource = async (langName) => {
   }
 };
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
 const localeDayjs = (langName) => {
   langName = langName.replace('_', '-').toLowerCase();
   dayjs.locale(langName);
@@ -91,5 +95,8 @@ export const setupAppLanguage = async () => {
 };
 
 export const setupAppTimeZone = () => {
-  //  FIXME
+  const adminInterface = interfaceStore.getState().interface;
+  if (adminInterface.time_zone) {
+    dayjs.tz.setDefault(adminInterface.time_zone);
+  }
 };

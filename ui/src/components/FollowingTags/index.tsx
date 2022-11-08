@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import { TagSelector, Tag } from '@/components';
-import { tryNormalLogged } from '@/utils/guard';
+import { tryLoggedAndActicevated } from '@/utils/guard';
 import { useFollowingTags, followTags } from '@/services';
 
 const Index: FC = () => {
@@ -32,7 +32,7 @@ const Index: FC = () => {
     });
   };
 
-  if (!tryNormalLogged()) {
+  if (!tryLoggedAndActicevated().ok) {
     return null;
   }
 

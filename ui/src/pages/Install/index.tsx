@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { FC, useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Alert } from 'react-bootstrap';
 import { useTranslation, Trans } from 'react-i18next';
@@ -99,7 +100,7 @@ const Index: FC = () => {
   });
 
   const handleChange = (params: FormDataType) => {
-    console.log(params);
+    // console.log(params);
     setFormData({ ...formData, ...params });
   };
 
@@ -156,7 +157,9 @@ const Index: FC = () => {
 
   const submitSiteConfig = () => {
     const params = {
+      lang: formData.lang.value,
       site_name: formData.site_name.value,
+      site_url: formData.site_url.value,
       contact_email: formData.contact_email.value,
       admin_name: formData.admin_name.value,
       admin_password: formData.admin_password.value,
@@ -195,7 +198,7 @@ const Index: FC = () => {
     if (tableExist) {
       setStep(7);
     } else {
-      setStep(4);
+      setStep(2);
     }
   };
 
@@ -204,7 +207,7 @@ const Index: FC = () => {
       .then((res) => {
         setTableExist(res?.db_table_exist);
         if (res && res.config_file_exist) {
-          setStep(5);
+          setStep(6);
         }
       })
       .finally(() => {
@@ -263,16 +266,12 @@ const Index: FC = () => {
                 <Fifth visible={step === 5} siteUrl={formData.site_url.value} />
                 {step === 6 && (
                   <div>
-                    <h5>{t('warning')}</h5>
+                    <h5>{t('warn_title')}</h5>
                     <p>
-                      <Trans i18nKey="install.warning_description">
-                        The file <code>config.yaml</code> already exists. If you
-                        need to reset any of the configuration items in this
-                        file, please delete it first. You may try{' '}
-                        <a href="###" onClick={(e) => handleInstallNow(e)}>
-                          installing now
-                        </a>
-                        .
+                      <Trans i18nKey="install.warn_description" components={{ 1: <code />}} />
+                      {' '}
+                      <Trans i18nKey="install.install_now">
+                        You may try <a href="###" onClick={e => handleInstallNow(e)}>installing now</a>.
                       </Trans>
                     </p>
                   </div>

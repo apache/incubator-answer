@@ -154,7 +154,9 @@ const routes: RouteNode[] = [
       {
         path: 'users/change-email',
         page: 'pages/Users/ChangeEmail',
-        // TODO: guard this (change email when user not activated) ?
+        guard: async () => {
+          return guard.notLogged();
+        },
       },
       {
         path: 'users/password-reset',
@@ -262,16 +264,12 @@ const routes: RouteNode[] = [
     ],
   },
   {
-    path: 'install',
+    path: '/install',
     page: 'pages/Install',
   },
   {
     path: '/maintenance',
     page: 'pages/Maintenance',
-  },
-  {
-    path: '/upgrade',
-    page: 'pages/Upgrade',
   },
 ];
 export default routes;

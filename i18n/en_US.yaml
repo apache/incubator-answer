@@ -173,17 +173,17 @@ notification:
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: How to Format
-    description: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre
-      class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
-      class="mb-2">put returns between paragraphs</p></li><li><p
-      class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p
-      class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by
-      placing <code>&gt;</code> at start of line</p></li><li><p
-      class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p
-      class="mb-2">create code fences with backticks <code>`</code></p><pre
-      class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+  title: How to Format
+  description: >-
+    <ul class="mb-0"><li><p class="mb-2">to make links</p><pre
+    class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
+    class="mb-2">put returns between paragraphs</p></li><li><p
+    class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p
+    class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by
+    placing <code>&gt;</code> at start of line</p></li><li><p
+    class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p
+    class="mb-2">create code fences with backticks <code>`</code></p><pre
+    class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Prev
     next: Next
@@ -816,7 +816,7 @@ ui:
     done: Done
     config_yaml_error: Can’t create the config.yaml file.
     lang:
-      label: Please choose a language
+      label: Please Choose a Language
     db_type:
       label: Database Engine
     db_username:
@@ -883,26 +883,15 @@ ui:
       If you ever feel like changing more settings, visit <1>admin section</1>;
       find it in the site menu.
     good_luck: 'Have fun, and good luck!'
-    warning: Warning
-    warning_description: >-
+    warn_title: Warning
+    warn_description: >-
       The file <1>config.yaml</1> already exists. If you need to reset any of the
-      configuration items in this file, please delete it first. You may try
-      <2>installing now</2>.
+      configuration items in this file, please delete it first.
+    install_now: You may try <1>installing now</1>.
     installed: Already installed
     installed_description: >-
       You appear to have already installed. To reinstall please clear your old
       database tables first.
-  upgrade:
-    title: Answer
-    update_btn: Update data
-    update_title: Data update required
-    update_description: >-
-      <1>Answer has been updated! Before you continue, we have to update your data
-      to the newest version.</1><1>The update process may take a little while, so
-      please be patient.</1>
-    done_title: No update required
-    done_btn: Done
-    done_desscription: Your Answer data is already up-to-date.
   page_404:
     description: 'Unfortunately, this page doesn''t exist.'
     back_home: Back to homepage
@@ -927,7 +916,7 @@ ui:
       smtp: SMTP
     dashboard:
       title: Dashboard
-      welcome: Welcome to Answer Admin !
+      welcome: Welcome to Answer Admin!
       site_statistics: Site Statistics
       questions: 'Questions:'
       answers: 'Answers:'
@@ -1047,6 +1036,7 @@ ui:
       site_url:
         label: Site URL
         msg: Site url cannot be empty.
+        validate: Please enter a valid URL.
         text: The address of your site.
       short_description:
         label: Short Site Description (optional)
@@ -1059,6 +1049,7 @@ ui:
       contact_email:
         label: Contact Email
         msg: Contact email cannot be empty.
+        validate: Contact email is not valid.
         text: Email address of key contact responsible for this site.
     interface:
       page_title: Interface
@@ -1077,7 +1068,7 @@ ui:
       time_zone:
         label: Timezone
         msg: Timezone cannot be empty.
-        text: Choose a UTC (Coordinated Universal Time) time offset.
+        text: Choose a city in the same timezone as you.
     smtp:
       page_title: SMTP
       from_email:

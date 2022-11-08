@@ -17,7 +17,11 @@ import {
   useInterfaceSetting,
   useThemeOptions,
 } from '@/services';
-import { setupAppLanguage, loadLanguageOptions } from '@/utils/localize';
+import {
+  setupAppLanguage,
+  loadLanguageOptions,
+  setupAppTimeZone,
+} from '@/utils/localize';
 
 const Interface: FC = () => {
   const { t } = useTranslation('translation', {
@@ -113,6 +117,7 @@ const Interface: FC = () => {
         });
         interfaceStore.getState().update(reqParams);
         setupAppLanguage();
+        setupAppTimeZone();
       })
       .catch((err) => {
         if (err.isError && err.key) {
@@ -257,9 +262,15 @@ const Interface: FC = () => {
             }}>
             {TIMEZONES?.map((item) => {
               return (
-                <option value={item.value} key={item.value}>
-                  {item.label}
-                </option>
+                <optgroup label={item.label} key={item.label}>
+                  {item.options.map((option) => {
+                    return (
+                      <option value={option.value} key={option.value}>
+                        {option.label}
+                      </option>
+                    );
+                  })}
+                </optgroup>
               );
             })}
           </Form.Select>
