@@ -1,4 +1,4 @@
-import React, { FormEvent, useState, useEffect } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Container, Col, Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +7,6 @@ import { loggedUserInfoStore } from '@/stores';
 import { getQueryString } from '@/utils';
 import type { FormDataType } from '@/common/interface';
 import { replacementPassword } from '@/services';
-import { tryNormalLogged } from '@/utils/guard';
 import { PageTitle } from '@/components';
 
 const Index: React.FC = () => {
@@ -115,9 +114,6 @@ const Index: React.FC = () => {
       });
   };
 
-  useEffect(() => {
-    tryNormalLogged();
-  }, []);
   return (
     <>
       <PageTitle title={t('account_recovery', { keyPrefix: 'page_title' })} />
