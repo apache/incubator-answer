@@ -3,8 +3,10 @@ package dashboard
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -124,7 +126,8 @@ func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	}
 	dashboardInfo.HTTPS = true
 	dashboardInfo.OccupyingStorageSpace = "1MB"
-	dashboardInfo.AppStartTime = "102"
+	startTime := time.Now().Unix() - schema.AppStartTime.Unix()
+	dashboardInfo.AppStartTime = fmt.Sprintf("%d", startTime)
 	dashboardInfo.TimeZone = siteInfoInterface.TimeZone
 	dashboardInfo.VersionInfo.Version = constant.Version
 	dashboardInfo.VersionInfo.RemoteVersion = ds.RemoteVersion(ctx)
