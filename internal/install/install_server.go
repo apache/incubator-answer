@@ -26,8 +26,8 @@ func (r *_resource) Open(name string) (fs.File, error) {
 
 // NewInstallHTTPServer new install http server.
 func NewInstallHTTPServer() *gin.Engine {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
-	gin.SetMode(gin.DebugMode)
 	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK") })
 	r.StaticFS("/static", http.FS(&_resource{
 		fs: ui.Build,
