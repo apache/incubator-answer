@@ -4,9 +4,8 @@ import i18next from 'i18next';
 import Backend from 'i18next-http-backend';
 
 import { DEFAULT_LANG } from '@/common/constants';
-
-import en from './locales/en.json';
-import zh from './locales/zh_CN.json';
+import en_US from '@/i18n/locales/en_US.yaml';
+import zh_CN from '@/i18n/locales/zh_CN.yaml';
 
 i18next
   // load translation using http
@@ -16,10 +15,10 @@ i18next
   .init({
     resources: {
       en_US: {
-        translation: en,
+        translation: en_US.ui,
       },
       zh_CN: {
-        translation: zh,
+        translation: zh_CN.ui,
       },
     },
     // debug: process.env.NODE_ENV === 'development',

@@ -12,13 +12,12 @@ import { interfaceStore } from '@/stores';
 import { UploadImg } from '@/components';
 import { TIMEZONES, DEFAULT_TIMEZONE } from '@/common/constants';
 import {
-  getAdminLanguageOptions,
   uploadAvatar,
   updateInterfaceSetting,
   useInterfaceSetting,
   useThemeOptions,
 } from '@/services';
-import { setupAppLanguage } from '@/utils/localize';
+import { setupAppLanguage, loadLanguageOptions } from '@/utils/localize';
 
 const Interface: FC = () => {
   const { t } = useTranslation('translation', {
@@ -53,7 +52,7 @@ const Interface: FC = () => {
     },
   });
   const getLangs = async () => {
-    const res: LangsType[] = await getAdminLanguageOptions();
+    const res: LangsType[] = await loadLanguageOptions(true);
     setLangs(res);
   };
   // set default theme value

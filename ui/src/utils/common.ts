@@ -85,6 +85,7 @@ function formatUptime(value) {
 
   return `< 1 ${t('dates.hour')}`;
 }
+
 export {
   getQueryString,
   thousandthDivision,

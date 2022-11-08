@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import type { LangsType, FormDataType } from '@/common/interface';
 import { useToast } from '@/hooks';
-import { getLanguageOptions, updateUserInterface } from '@/services';
+import { updateUserInterface } from '@/services';
 import { localize } from '@/utils';
 import { loggedUserInfoStore } from '@/stores';
 
@@ -24,7 +24,7 @@ const Index = () => {
   });
 
   const getLangs = async () => {
-    const res: LangsType[] = await getLanguageOptions();
+    const res: LangsType[] = await localize.loadLanguageOptions();
     setLangs(res);
   };
 
