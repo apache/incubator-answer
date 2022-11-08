@@ -46,10 +46,7 @@ const autoSync = () => {
 const resolvePresetLocales = () => {
   PRESET_LANG.forEach((lng) => {
     const sp = path.resolve(SRC_PATH, `${lng}.yaml`);
-    const tp = path.resolve(DEST_PATH, `${lng}.yaml`);
-    if (fs.existsSync(tp) === false) {
-      copyLocaleFile(sp);
-    }
+    copyLocaleFile(sp);
   });
 };
 
