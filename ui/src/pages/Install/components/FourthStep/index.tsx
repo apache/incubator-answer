@@ -171,6 +171,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
         <Form.Label>{t('contact_email.label')}</Form.Label>
         <Form.Control
           required
+          type="email"
           value={data.contact_email.value}
           isInvalid={data.contact_email.isInvalid}
           onChange={(e) => {
@@ -215,6 +216,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
         <Form.Label>{t('admin_password.label')}</Form.Label>
         <Form.Control
           required
+          type="password"
           value={data.admin_password.value}
           isInvalid={data.admin_password.isInvalid}
           onChange={(e) => {
