@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Container, Col } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { tryNormalLogged } from '@/utils/guard';
 import { PageTitle } from '@/components';
 
 import SendEmail from './components/sendEmail';
@@ -16,10 +15,6 @@ const Index: React.FC = () => {
     setStep(param);
     setEmail(mail);
   };
-
-  useEffect(() => {
-    tryNormalLogged();
-  }, []);
 
   return (
     <>

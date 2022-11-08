@@ -158,8 +158,6 @@ const Index: React.FC = () => {
 
     if ((storeUser.id && storeUser.mail_status === 2) || isInactive) {
       setStep(2);
-    } else {
-      guard.tryNormalLogged();
     }
   }, []);
 
