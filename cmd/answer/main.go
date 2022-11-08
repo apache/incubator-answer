@@ -3,10 +3,12 @@ package main
 import (
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/answerdev/answer/internal/base/conf"
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/cli"
+	"github.com/answerdev/answer/internal/schema"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/contrib/conf/viper"
@@ -51,6 +53,7 @@ func runApp() {
 		panic(err)
 	}
 	constant.Version = Version
+	schema.AppStartTime = time.Now()
 
 	defer cleanup()
 	if err := app.Run(); err != nil {
