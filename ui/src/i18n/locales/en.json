@@ -859,7 +859,7 @@
     },
     "dashboard": {
       "title": "Dashboard",
-      "welcome": "Welcome to Answer Admin !",
+      "welcome": "Welcome to Answer Admin!",
       "site_statistics": "Site Statistics",
       "questions": "Questions:",
       "answers": "Answers:",
