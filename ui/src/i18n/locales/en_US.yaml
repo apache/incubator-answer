@@ -724,6 +724,7 @@ ui:
       newest: Newest
       active: Active
       score: Score
+      more: More
     tips:
       title: Advanced Search Tips
       tag: '<1>[tag]</1> search withing a tag'
