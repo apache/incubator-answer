@@ -1,9 +1,8 @@
 package htmltext
 
 import (
-	"testing"
-
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 func TestClearText(t *testing.T) {

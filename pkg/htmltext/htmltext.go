@@ -1,10 +1,9 @@
 package htmltext
 
 import (
+	"github.com/grokify/html-strip-tags-go"
 	"regexp"
 	"strings"
-
-	"github.com/grokify/html-strip-tags-go"
 )
 
 // ClearText clear HTML, get the clear text
