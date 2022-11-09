@@ -299,6 +299,8 @@ github.com/gorilla/context v1.1.1/go.mod h1:kBGZzfjB9CEq2AlWe17Uuf7NDRt0dE0s8S51
 github.com/gorilla/mux v1.6.2/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
 github.com/gorilla/mux v1.7.3/go.mod h1:1lud6UwP+6orDFRuTfBEV8e9/aOM/c4fVVCaMa2zaAs=
 github.com/gorilla/websocket v0.0.0-20170926233335-4201258b820c/go.mod h1:E7qHFY5m1UJ88s3WnNqhKjPHQ0heANvMoAMk2YaljkQ=
+github.com/grokify/html-strip-tags-go v0.0.1 h1:0fThFwLbW7P/kOiTBs03FsJSV9RM2M/Q/MOnCQxKMo0=
+github.com/grokify/html-strip-tags-go v0.0.1/go.mod h1:2Su6romC5/1VXOQMaWL2yb618ARB8iVo6/DR99A6d78=
 github.com/grpc-ecosystem/go-grpc-middleware v1.0.1-0.20190118093823-f849b5445de4/go.mod h1:FiyG127CGDf3tlThmgyCl78X/SZQqEOJBCDaAfeWzPs=
 github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0/go.mod h1:8NvIoxWQoOIhqOTXgfV/d3M/q6VIi02HzZEHgUlZvzk=
 github.com/grpc-ecosystem/grpc-gateway v1.9.5/go.mod h1:vNeuVxBJEsws4ogUvrchl83t/GYV9WGTSLVdBhOQFDY=
@@ -594,8 +596,6 @@ github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20221018072427-a15dd1
 github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20221018072427-a15dd1434e05/go.mod h1:rmf1TCwz67dyM+AmTwSd1BxTo2AOYHj262lP93bOZbs=
 github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20221018072427-a15dd1434e05 h1:BlqTgc3/MYKG6vMI2MI+6o+7P4Gy5PXlawu185wPXAk=
 github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20221018072427-a15dd1434e05/go.mod h1:prPjFam7MyZ5b3S9dcDOt2tMPz6kf7C9c243s9zSwPY=
-github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221018072427-a15dd1434e05 h1:gFCY9KUxhYg+/MXNcDYl4ILK+R1SG78FtaSR3JqZNYY=
-github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221018072427-a15dd1434e05/go.mod h1:5Afm+OQdau/HQqSOp/ALlSUp0vZsMMMbv//kJhxuoi8=
 github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221109042453-26158da67632 h1:so07u8RWXZQ0gz30KXJ9MKtQ5zjgcDlQ/UwFZrwm5b0=
 github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221109042453-26158da67632/go.mod h1:5Afm+OQdau/HQqSOp/ALlSUp0vZsMMMbv//kJhxuoi8=
 github.com/segmentfault/pacman/contrib/log/zap v0.0.0-20221018072427-a15dd1434e05 h1:jcGZU2juv0L3eFEkuZYV14ESLUlWfGMWnP0mjOfrSZc=
