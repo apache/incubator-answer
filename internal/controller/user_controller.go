@@ -89,22 +89,6 @@ func (uc *UserController) GetOtherUserInfoByUsername(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
-// GetUserStatus get user status info
-// @Summary get user status info
-// @Description get user status info
-// @Tags User
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
-// @Router /answer/api/v1/user/status [get]
-func (uc *UserController) GetUserStatus(ctx *gin.Context) {
-	userID := middleware.GetLoginUserIDFromContext(ctx)
-	token := middleware.ExtractToken(ctx)
-	resp, err := uc.userService.GetUserStatus(ctx, userID, token)
-	handler.HandleResponse(ctx, err, resp)
-}
-
 // UserEmailLogin godoc
 // @Summary UserEmailLogin
 // @Description UserEmailLogin
