@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity_common"
@@ -33,6 +34,7 @@ type DashboardService struct {
 	reportRepo      report_common.ReportRepo
 	configRepo      config.ConfigRepo
 	siteInfoService *siteinfo_common.SiteInfoCommonService
+	data            *data.Data
 }
 
 func NewDashboardService(
@@ -44,6 +46,7 @@ func NewDashboardService(
 	reportRepo report_common.ReportRepo,
 	configRepo config.ConfigRepo,
 	siteInfoService *siteinfo_common.SiteInfoCommonService,
+	data *data.Data,
 ) *DashboardService {
 	return &DashboardService{
 		questionRepo:    questionRepo,
@@ -54,7 +57,38 @@ func NewDashboardService(
 		reportRepo:      reportRepo,
 		configRepo:      configRepo,
 		siteInfoService: siteInfoService,
+		data:            data,
 	}
+}
+
+func (ds *DashboardService) StatisticalByCache(ctx context.Context) (*schema.DashboardInfo, error) {
+	ds.SetCache(ctx)
+	dashboardInfo := &schema.DashboardInfo{}
+	infoStr, err := ds.data.Cache.GetString(ctx, schema.DashBoardCachekey)
+	if err != nil {
+		return dashboardInfo, err
+	}
+	err = json.Unmarshal([]byte(infoStr), dashboardInfo)
+	if err != nil {
+		return dashboardInfo, err
+	}
+	return dashboardInfo, nil
+}
+
+func (ds *DashboardService) SetCache(ctx context.Context) error {
+	info, err := ds.Statistical(ctx)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+	infoStr, err := json.Marshal(info)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+	err = ds.data.Cache.SetString(ctx, schema.DashBoardCachekey, string(infoStr), schema.DashBoardCacheTime)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+	return nil
 }
 
 // Statistical
