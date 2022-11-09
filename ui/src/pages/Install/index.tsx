@@ -116,26 +116,6 @@ const Index: FC = () => {
     setStep((pre) => pre + 1);
   };
 
-  const submitDatabaseForm = () => {
-    const params = {
-      lang: formData.lang.value,
-      db_type: formData.db_type.value,
-      db_username: formData.db_username.value,
-      db_password: formData.db_password.value,
-      db_host: formData.db_host.value,
-      db_name: formData.db_name.value,
-      db_file: formData.db_file.value,
-    };
-    dbCheck(params)
-      .then(() => {
-        handleNext();
-      })
-      .catch((err) => {
-        console.log(err);
-        handleErr(err);
-      });
-  };
-
   const checkInstall = () => {
     const params = {
       lang: formData.lang.value,
@@ -151,6 +131,27 @@ const Index: FC = () => {
         handleNext();
       })
       .catch((err) => {
+        handleErr(err);
+      });
+  };
+
+  const submitDatabaseForm = () => {
+    const params = {
+      lang: formData.lang.value,
+      db_type: formData.db_type.value,
+      db_username: formData.db_username.value,
+      db_password: formData.db_password.value,
+      db_host: formData.db_host.value,
+      db_name: formData.db_name.value,
+      db_file: formData.db_file.value,
+    };
+    dbCheck(params)
+      .then(() => {
+        // handleNext();
+        checkInstall();
+      })
+      .catch((err) => {
+        console.log(err);
         handleErr(err);
       });
   };
@@ -183,7 +184,11 @@ const Index: FC = () => {
       submitDatabaseForm();
     }
     if (step === 3) {
-      checkInstall();
+      if (errorData.msg) {
+        checkInstall();
+      } else {
+        handleNext();
+      }
     }
     if (step === 4) {
       submitSiteConfig();
