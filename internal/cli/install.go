@@ -17,7 +17,7 @@ const (
 
 var (
 	ConfigFilePath = "/conf/"
-	UploadFilePath = "/upfiles/"
+	UploadFilePath = "/uploads/"
 	I18nPath       = "/i18n/"
 )
 

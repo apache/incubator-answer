@@ -91,7 +91,7 @@ swaggerui:
 service_config:
   secret_key: "answer" #encryption key
   web_host: "http://127.0.0.1" #Page access using domain name address
-  upload_path: "./upfiles" #upload directory
+  upload_path: "./uploads" #upload directory
 ```
 
 ## Compile the image
@@ -100,4 +100,4 @@ If you have modified the source files and want to repackage the image, you can u
 docker build -t  answer:v1.0.0 .
 ```
 ## common problem
- 1. The project cannot be started: the main program startup depends on proper configuraiton of the configuration file, `config.yaml`, as well as the internationalization translation directory (`i18n`), and the upload file storage directory (`upfiles`). Ensure that the configuration file is loaded when the project starts, such as when using `answer run -c config.yaml` and that the `config.yaml` correctly specifies the i18n and upfiles directories.
+ 1. The project cannot be started: the main program startup depends on proper configuraiton of the configuration file, `config.yaml`, as well as the internationalization translation directory (`i18n`), and the upload file storage directory (`uploads`). Ensure that the configuration file is loaded when the project starts, such as when using `answer run -c config.yaml` and that the `config.yaml` correctly specifies the i18n and uploads directories.
