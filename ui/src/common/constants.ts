@@ -1,5 +1,6 @@
 export const DEFAULT_LANG = 'en_US';
 export const CURRENT_LANG_STORAGE_KEY = '_a_lang_';
+export const LANG_RESOURCE_STORAGE_KEY = '_a_lang_r_';
 export const LOGGED_USER_STORAGE_KEY = '_a_lui_';
 export const LOGGED_TOKEN_STORAGE_KEY = '_a_ltk_';
 export const REDIRECT_PATH_STORAGE_KEY = '_a_rp_';

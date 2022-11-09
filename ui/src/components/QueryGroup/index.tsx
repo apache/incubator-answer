@@ -12,6 +12,7 @@ interface Props {
   sortKey?: string;
   className?: string;
   pathname?: string;
+  wrapClassName?: string;
 }
 const MAX_BUTTON_COUNT = 3;
 const Index: FC<Props> = ({
@@ -21,6 +22,7 @@ const Index: FC<Props> = ({
   i18nKeyPrefix = '',
   className = '',
   pathname = '',
+  wrapClassName = '',
 }) => {
   const [searchParams, setUrlSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -51,7 +53,7 @@ const Index: FC<Props> = ({
     return (typeof btn === 'string' ? btn : btn.name) === currentSort;
   });
   return (
-    <ButtonGroup size="sm">
+    <ButtonGroup size="sm" className={wrapClassName}>
       {data.map((btn, index) => {
         const key = typeof btn === 'string' ? btn : btn.sort;
         const name = typeof btn === 'string' ? btn : btn.name;
@@ -62,7 +64,7 @@ const Index: FC<Props> = ({
             variant="outline-secondary"
             active={currentSort === name}
             className={classNames(
-              'text-capitalize',
+              'text-capitalize fit-content',
               data.length > MAX_BUTTON_COUNT &&
                 index > MAX_BUTTON_COUNT - 2 &&
                 'd-none d-md-block',

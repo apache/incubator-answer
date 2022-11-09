@@ -23,5 +23,5 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "node_modules/@testing-library/jest-dom"]
+  "include": ["src", "node_modules/@testing-library/jest-dom", "scripts"]
 }

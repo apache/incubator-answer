@@ -89,15 +89,6 @@ error:
     set_avatar:
       other: "Avatar set failed."
 
-  config:
-    read_config_failed:
-      other: "Read config failed"
-  database:
-    connection_failed:
-      other: "Database connection failed"
-  install:
-    create_config_failed:
-      other: "Can’t create the config.yaml file."
 report:
   spam:
     name:

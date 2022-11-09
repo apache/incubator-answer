@@ -1,9 +1,7 @@
-// import useSWR from 'swr';
-
 import request from '@/utils/request';
 import type * as Type from '@/common/interface';
 
-export const loadLang = () => {
+export const getLanguageConfig = () => {
   return request.get('/answer/api/v1/language/config');
 };
 

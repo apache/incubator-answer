@@ -148,8 +148,6 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
             <Form.Label>{t('db_password.label')}</Form.Label>
             <Form.Control
               required
-              type="password"
-              placeholder={t('db_password.placeholder')}
               value={data.db_password.value}
               isInvalid={data.db_password.isInvalid}
               onChange={(e) => {
