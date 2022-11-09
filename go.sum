@@ -596,6 +596,8 @@ github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20221018072427-a15dd143
 github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20221018072427-a15dd1434e05/go.mod h1:prPjFam7MyZ5b3S9dcDOt2tMPz6kf7C9c243s9zSwPY=
 github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221018072427-a15dd1434e05 h1:gFCY9KUxhYg+/MXNcDYl4ILK+R1SG78FtaSR3JqZNYY=
 github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221018072427-a15dd1434e05/go.mod h1:5Afm+OQdau/HQqSOp/ALlSUp0vZsMMMbv//kJhxuoi8=
+github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221109042453-26158da67632 h1:so07u8RWXZQ0gz30KXJ9MKtQ5zjgcDlQ/UwFZrwm5b0=
+github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221109042453-26158da67632/go.mod h1:5Afm+OQdau/HQqSOp/ALlSUp0vZsMMMbv//kJhxuoi8=
 github.com/segmentfault/pacman/contrib/log/zap v0.0.0-20221018072427-a15dd1434e05 h1:jcGZU2juv0L3eFEkuZYV14ESLUlWfGMWnP0mjOfrSZc=
 github.com/segmentfault/pacman/contrib/log/zap v0.0.0-20221018072427-a15dd1434e05/go.mod h1:L4GqtXLoR73obTYqUQIzfkm8NG8pvZafxFb6KZFSSHk=
 github.com/segmentfault/pacman/contrib/server/http v0.0.0-20221018072427-a15dd1434e05 h1:91is1nKNbfTOl8CvMYiFgg4c5Vmol+5mVmMV/jDXD+A=
