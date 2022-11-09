@@ -155,7 +155,7 @@ const routes: RouteNode[] = [
         path: 'users/change-email',
         page: 'pages/Users/ChangeEmail',
         guard: async () => {
-          return guard.notLogged();
+          return guard.notActivated();
         },
       },
       {
