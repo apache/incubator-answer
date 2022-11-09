@@ -3,6 +3,7 @@ package search_common
 import (
 	"context"
 	"fmt"
+	"github.com/answerdev/answer/pkg/htmltext"
 	"strings"
 	"time"
 
@@ -25,7 +26,7 @@ var (
 		"`question`.`id`",
 		"`question`.`id` as `question_id`",
 		"`title`",
-		"`original_text`",
+		"`parsed_text`",
 		"`question`.`created_at`",
 		"`user_id`",
 		"`vote_count`",
@@ -38,7 +39,7 @@ var (
 		"`answer`.`id` as `id`",
 		"`question_id`",
 		"`question`.`title` as `title`",
-		"`answer`.`original_text` as `original_text`",
+		"`answer`.`parsed_text` as `parsed_text`",
 		"`answer`.`created_at`",
 		"`answer`.`user_id` as `user_id`",
 		"`answer`.`vote_count` as `vote_count`",
@@ -142,13 +143,22 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 		argsA = append(argsA, votes)
 	}
 
-	b = b.Union("all", ub)
-
-	querySQL, _, err := builder.MySQL().Select("*").From(b, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	//b = b.Union("all", ub)
+	ubSQL, _, err := ub.ToSQL()
 	if err != nil {
 		return
 	}
-	countSQL, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
+	bSQL, _, err := b.ToSQL()
+	if err != nil {
+		return
+	}
+	sql := fmt.Sprintf("(%s UNION ALL %s)", ubSQL, bSQL)
+
+	querySQL, _, err := builder.MySQL().Select("*").From(sql, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	if err != nil {
+		return
+	}
+	countSQL, _, err := builder.MySQL().Select("count(*) total").From(sql, "c").ToSQL()
 	if err != nil {
 		return
 	}
@@ -412,7 +422,7 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 		object = schema.SearchObject{
 			ID:              string(r["id"]),
 			Title:           string(r["title"]),
-			Excerpt:         cutOutParsedText(string(r["original_text"])),
+			Excerpt:         htmltext.FetchExcerpt(string(r["parsed_text"]), "...", 240),
 			CreatedAtParsed: tp.Unix(),
 			UserInfo:        userInfo,
 			Tags:            tags,
@@ -441,15 +451,6 @@ func (sr *searchRepo) userBasicInfoFormat(ctx context.Context, dbinfo *entity.Us
 		Location:    dbinfo.Location,
 		IPInfo:      dbinfo.IPInfo,
 	}
-}
-
-func cutOutParsedText(parsedText string) string {
-	parsedText = strings.TrimSpace(parsedText)
-	idx := strings.Index(parsedText, "\n")
-	if idx >= 0 {
-		parsedText = parsedText[0:idx]
-	}
-	return parsedText
 }
 
 func addRelevanceField(searchFields, words, fields []string) (res []string, args []interface{}) {
