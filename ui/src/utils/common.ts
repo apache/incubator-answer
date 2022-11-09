@@ -1,12 +1,5 @@
 import i18next from 'i18next';
 
-function getQueryString(name: string): string {
-  const reg = new RegExp(`(^|&)${name}=([^&]*)(&|$)`);
-  const r = window.location.search.substr(1).match(reg);
-  if (r != null) return unescape(r[2]);
-  return '';
-}
-
 function thousandthDivision(num) {
   const reg = /\d{1,3}(?=(\d{3})+$)/g;
   return `${num}`.replace(reg, '$&,');
@@ -87,7 +80,6 @@ function formatUptime(value) {
 }
 
 export {
-  getQueryString,
   thousandthDivision,
   formatCount,
   scrollTop,
