@@ -144,7 +144,7 @@ func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRet
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailURL := fmt.Sprintf("%s/users/password-reset?code=%s", us.serviceConfig.WebHost, code)
+	verifyEmailURL := fmt.Sprintf("%s/users/password-reset?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.PassResetTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return "", err
@@ -308,7 +308,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.serviceConfig.WebHost, code)
+	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return nil, err
@@ -351,7 +351,7 @@ func (us *UserService) UserVerifyEmailSend(ctx context.Context, userID string) e
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.serviceConfig.WebHost, code)
+	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return err
@@ -500,7 +500,7 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 	}
 	code := uuid.NewString()
 	var title, body string
-	verifyEmailURL := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.serviceConfig.WebHost, code)
+	verifyEmailURL := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.getSiteUrl(ctx), code)
 	if userInfo.MailStatus == entity.EmailStatusToBeVerified {
 		title, body, err = us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	} else {
@@ -547,4 +547,14 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 		return err
 	}
 	return nil
+}
+
+// getSiteUrl get site url
+func (us *UserService) getSiteUrl(ctx context.Context) string {
+	siteGeneral, err := us.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		log.Errorf("get site general failed: %s", err)
+		return ""
+	}
+	return siteGeneral.SiteUrl
 }

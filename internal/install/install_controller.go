@@ -156,12 +156,6 @@ func InitBaseInfo(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.ReadConfigFailed), nil)
 		return
 	}
-	c.ServiceConfig.WebHost = req.SiteURL
-	if err := conf.RewriteConfig(confPath, c); err != nil {
-		log.Errorf("rewrite config failed %s", err)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.ReadConfigFailed), nil)
-		return
-	}
 
 	err = migrations.UpdateInstallInfo(c.Data.Database, req.Language, req.SiteName, req.SiteURL, req.ContactEmail,
 		req.AdminName, req.AdminPassword, req.AdminEmail)
