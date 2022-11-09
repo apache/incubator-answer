@@ -126,12 +126,14 @@ const Questions: FC = () => {
       <Table>
         <thead>
           <tr>
-            <th style={{ width: '40%' }}>{t('post')}</th>
-            <th>{t('votes')}</th>
-            <th>{t('answers')}</th>
+            <th>{t('post')}</th>
+            <th style={{ width: '8%' }}>{t('votes')}</th>
+            <th style={{ width: '8%' }}>{t('answers')}</th>
             <th style={{ width: '20%' }}>{t('created')}</th>
-            <th>{t('status')}</th>
-            {curFilter !== 'deleted' && <th>{t('action')}</th>}
+            <th style={{ width: '9%' }}>{t('status')}</th>
+            {curFilter !== 'deleted' && (
+              <th style={{ width: '10%' }}>{t('action')}</th>
+            )}
           </tr>
         </thead>
         <tbody className="align-middle">
@@ -177,7 +179,10 @@ const Questions: FC = () => {
                 </td>
                 {curFilter !== 'deleted' && (
                   <td>
-                    <Button variant="link" onClick={() => handleChange(li.id)}>
+                    <Button
+                      variant="link"
+                      className="p-0 btn-no-border"
+                      onClick={() => handleChange(li.id)}>
                       {t('change')}
                     </Button>
                   </td>
