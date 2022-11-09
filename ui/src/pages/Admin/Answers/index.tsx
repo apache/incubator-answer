@@ -110,10 +110,12 @@ const Answers: FC = () => {
         <thead>
           <tr>
             <th>{t('post')}</th>
-            <th>{t('votes')}</th>
-            <th>{t('created')}</th>
-            <th>{t('status')}</th>
-            {curFilter !== 'deleted' && <th>{t('action')}</th>}
+            <th style={{ width: '11%' }}>{t('votes')}</th>
+            <th style={{ width: '14%' }}>{t('created')}</th>
+            <th style={{ width: '11%' }}>{t('status')}</th>
+            {curFilter !== 'deleted' && (
+              <th style={{ width: '11%' }}>{t('action')}</th>
+            )}
           </tr>
         </thead>
         <tbody className="align-middle">
@@ -164,7 +166,10 @@ const Answers: FC = () => {
                 </td>
                 {curFilter !== 'deleted' && (
                   <td>
-                    <Button variant="link" onClick={() => handleChange(li.id)}>
+                    <Button
+                      variant="link"
+                      className="p-0 btn-no-border"
+                      onClick={() => handleChange(li.id)}>
                       {t('change')}
                     </Button>
                   </td>
