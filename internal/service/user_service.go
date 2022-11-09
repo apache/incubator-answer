@@ -477,21 +477,26 @@ func (us *UserService) encryptPassword(ctx context.Context, Pass string) (string
 }
 
 // UserChangeEmailSendCode user change email verification
-func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.UserChangeEmailSendCodeReq) error {
+func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.UserChangeEmailSendCodeReq) (
+	resp *schema.UserVerifyEmailErrorResponse, err error) {
 	userInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if !exist {
-		return errors.BadRequest(reason.UserNotFound)
+		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 
 	_, exist, err = us.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if exist {
-		return errors.BadRequest(reason.EmailDuplicate)
+		resp = &schema.UserVerifyEmailErrorResponse{
+			Key:   "e_mail",
+			Value: reason.EmailDuplicate,
+		}
+		return resp, errors.BadRequest(reason.EmailDuplicate)
 	}
 
 	data := &schema.EmailCodeContent{
@@ -507,12 +512,12 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 		title, body, err = us.emailService.ChangeEmailTemplate(ctx, verifyEmailURL)
 	}
 	if err != nil {
-		return err
+		return nil, err
 	}
 	log.Infof("send email confirmation %s", verifyEmailURL)
 
 	go us.emailService.Send(context.Background(), req.Email, title, body, code, data.ToJSONString())
-	return nil
+	return nil, nil
 }
 
 // UserChangeEmailVerify user change email verify code
