@@ -12,6 +12,7 @@ import (
 
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/service/service_config"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/pkg/dir"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/disintegration/imaging"
@@ -27,7 +28,8 @@ const (
 
 // UploaderService user service
 type UploaderService struct {
-	serviceConfig *service_config.ServiceConfig
+	serviceConfig   *service_config.ServiceConfig
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewUploaderService new upload service
@@ -122,10 +124,14 @@ func (us *UploaderService) UploadPostFile(ctx *gin.Context, file *multipart.File
 
 func (us *UploaderService) uploadFile(ctx *gin.Context, file *multipart.FileHeader, fileSubPath string) (
 	url string, err error) {
+	siteGeneral, err := us.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		return "", err
+	}
 	filePath := path.Join(us.serviceConfig.UploadPath, fileSubPath)
 	if err := ctx.SaveUploadedFile(file, filePath); err != nil {
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
-	url = fmt.Sprintf("%s/uploads/%s", us.serviceConfig.WebHost, fileSubPath)
+	url = fmt.Sprintf("%s/uploads/%s", siteGeneral.SiteUrl, fileSubPath)
 	return url, nil
 }

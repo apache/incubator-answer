@@ -71,35 +71,6 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	return resp, nil
 }
 
-// GetUserStatus get user info by user id
-func (us *UserService) GetUserStatus(ctx context.Context, userID, token string) (resp *schema.GetUserStatusResp, err error) {
-	resp = &schema.GetUserStatusResp{}
-	if len(userID) == 0 {
-		return resp, nil
-	}
-	userInfo, exist, err := us.userRepo.GetByUserID(ctx, userID)
-	if err != nil {
-		return nil, err
-	}
-	if !exist {
-		return nil, errors.BadRequest(reason.UserNotFound)
-	}
-
-	userCacheInfo := &entity.UserCacheInfo{
-		UserID:      userID,
-		UserStatus:  userInfo.Status,
-		EmailStatus: userInfo.MailStatus,
-	}
-	err = us.authService.UpdateUserCacheInfo(ctx, token, userCacheInfo)
-	if err != nil {
-		return nil, err
-	}
-	resp = &schema.GetUserStatusResp{
-		Status: schema.UserStatusShow[userInfo.Status],
-	}
-	return resp, nil
-}
-
 func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username string) (
 	resp *schema.GetOtherUserInfoResp, err error,
 ) {
@@ -173,7 +144,7 @@ func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRet
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailURL := fmt.Sprintf("%s/users/password-reset?code=%s", us.serviceConfig.WebHost, code)
+	verifyEmailURL := fmt.Sprintf("%s/users/password-reset?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.PassResetTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return "", err
@@ -337,7 +308,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.serviceConfig.WebHost, code)
+	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return nil, err
@@ -380,7 +351,7 @@ func (us *UserService) UserVerifyEmailSend(ctx context.Context, userID string) e
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.serviceConfig.WebHost, code)
+	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return err
@@ -506,21 +477,26 @@ func (us *UserService) encryptPassword(ctx context.Context, Pass string) (string
 }
 
 // UserChangeEmailSendCode user change email verification
-func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.UserChangeEmailSendCodeReq) error {
+func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.UserChangeEmailSendCodeReq) (
+	resp *schema.UserVerifyEmailErrorResponse, err error) {
 	userInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if !exist {
-		return errors.BadRequest(reason.UserNotFound)
+		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 
 	_, exist, err = us.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if exist {
-		return errors.BadRequest(reason.EmailDuplicate)
+		resp = &schema.UserVerifyEmailErrorResponse{
+			Key:   "e_mail",
+			Value: reason.EmailDuplicate,
+		}
+		return resp, errors.BadRequest(reason.EmailDuplicate)
 	}
 
 	data := &schema.EmailCodeContent{
@@ -529,19 +505,19 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 	}
 	code := uuid.NewString()
 	var title, body string
-	verifyEmailURL := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.serviceConfig.WebHost, code)
+	verifyEmailURL := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.getSiteUrl(ctx), code)
 	if userInfo.MailStatus == entity.EmailStatusToBeVerified {
 		title, body, err = us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	} else {
 		title, body, err = us.emailService.ChangeEmailTemplate(ctx, verifyEmailURL)
 	}
 	if err != nil {
-		return err
+		return nil, err
 	}
 	log.Infof("send email confirmation %s", verifyEmailURL)
 
 	go us.emailService.Send(context.Background(), req.Email, title, body, code, data.ToJSONString())
-	return nil
+	return nil, nil
 }
 
 // UserChangeEmailVerify user change email verify code
@@ -576,4 +552,14 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 		return err
 	}
 	return nil
+}
+
+// getSiteUrl get site url
+func (us *UserService) getSiteUrl(ctx context.Context) string {
+	siteGeneral, err := us.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		log.Errorf("get site general failed: %s", err)
+		return ""
+	}
+	return siteGeneral.SiteUrl
 }

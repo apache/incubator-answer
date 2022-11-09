@@ -1,6 +1,7 @@
 package install
 
 import (
+	"fmt"
 	"os"
 
 	"github.com/answerdev/answer/internal/base/translator"
@@ -24,6 +25,7 @@ func Run(configPath string) {
 	if len(port) == 0 {
 		port = "80"
 	}
+	fmt.Printf("[SUCCESS] answer installation service will run at: http://localhost:%s/install/ \n", port)
 	if err = installServer.Run(":" + port); err != nil {
 		panic(err)
 	}

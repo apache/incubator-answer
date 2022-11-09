@@ -126,12 +126,6 @@ func InitEnvironment(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.ReadConfigFailed), nil)
 		return
 	}
-
-	if err := migrations.InitDB(c.Data.Database); err != nil {
-		log.Error("init database error: ", err.Error())
-		handler.HandleResponse(ctx, errors.BadRequest(reason.DatabaseConnectionFailed), schema.ErrTypeAlert)
-		return
-	}
 	handler.HandleResponse(ctx, nil, nil)
 }
 
@@ -156,10 +150,10 @@ func InitBaseInfo(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.ReadConfigFailed), nil)
 		return
 	}
-	c.ServiceConfig.WebHost = req.SiteURL
-	if err := conf.RewriteConfig(confPath, c); err != nil {
-		log.Errorf("rewrite config failed %s", err)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.ReadConfigFailed), nil)
+
+	if err := migrations.InitDB(c.Data.Database); err != nil {
+		log.Error("init database error: ", err.Error())
+		handler.HandleResponse(ctx, errors.BadRequest(reason.DatabaseConnectionFailed), schema.ErrTypeAlert)
 		return
 	}
 
