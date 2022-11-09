@@ -108,7 +108,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	userService := service.NewUserService(userRepo, userActiveActivityRepo, emailService, authService, serviceConf, siteInfoCommonService)
 	captchaRepo := captcha.NewCaptchaRepo(dataData)
 	captchaService := action.NewCaptchaService(captchaRepo)
-	uploaderService := uploader.NewUploaderService(serviceConf)
+	uploaderService := uploader.NewUploaderService(serviceConf, siteInfoCommonService)
 	userController := controller.NewUserController(authService, userService, captchaService, emailService, uploaderService)
 	commentRepo := comment.NewCommentRepo(dataData, uniqueIDRepo)
 	commentCommonRepo := comment.NewCommentCommonRepo(dataData, uniqueIDRepo)
