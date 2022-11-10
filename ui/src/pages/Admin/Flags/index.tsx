@@ -13,6 +13,7 @@ import {
 import { useReportModal } from '@/hooks';
 import * as Type from '@/common/interface';
 import { useFlagSearch } from '@/services';
+import { escapeRemove } from '@/utils';
 
 import '../index.scss';
 
@@ -107,7 +108,7 @@ const Flags: FC = () => {
                       {li.title}
                     </a>
                     <small className="text-break text-wrap word">
-                      {li.excerpt}
+                      {escapeRemove(li.excerpt)}
                     </small>
                   </Stack>
                 </td>

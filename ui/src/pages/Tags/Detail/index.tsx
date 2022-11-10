@@ -8,6 +8,7 @@ import { PageTitle, FollowingTags } from '@/components';
 import { useTagInfo, useFollow } from '@/services';
 import QuestionList from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
+import { escapeRemove } from '@/utils';
 
 const Questions: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
@@ -69,7 +70,7 @@ const Questions: FC = () => {
               </h3>
 
               <p className="text-break">
-                {tagInfo.excerpt || t('no_description')}
+                {escapeRemove(tagInfo.excerpt) || t('no_description')}
                 <Link to={`/tags/${curTagName}/info`}> [{t('more')}]</Link>
               </p>
 
