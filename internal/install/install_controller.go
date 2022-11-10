@@ -143,6 +143,7 @@ func InitBaseInfo(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.FormatSiteUrl()
 
 	c, err := conf.ReadConfig(confPath)
 	if err != nil {

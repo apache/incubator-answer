@@ -1,5 +1,10 @@
 package schema
 
+import (
+	"fmt"
+	"net/url"
+)
+
 // SiteGeneralReq site general request
 type SiteGeneralReq struct {
 	Name             string `validate:"required,gt=1,lte=128" form:"name" json:"name"`
@@ -7,6 +12,14 @@ type SiteGeneralReq struct {
 	Description      string `validate:"required,gt=3,lte=2000" form:"description" json:"description"`
 	SiteUrl          string `validate:"required,gt=1,lte=512,url" form:"site_url" json:"site_url"`
 	ContactEmail     string `validate:"required,gt=1,lte=512,email" form:"contact_email" json:"contact_email"`
+}
+
+func (r *SiteGeneralReq) FormatSiteUrl() {
+	parsedUrl, err := url.Parse(r.SiteUrl)
+	if err != nil {
+		return
+	}
+	r.SiteUrl = fmt.Sprintf("%s://%s", parsedUrl.Scheme, parsedUrl.Host)
 }
 
 // SiteInterfaceReq site interface request

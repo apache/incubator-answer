@@ -78,6 +78,9 @@ func (a *UIRouter) Register(r *gin.Engine) {
 			filePath = UIRootFilePath + name
 		case "/manifest.json":
 			filePath = UIRootFilePath + name
+		case "/install":
+			c.Redirect(http.StatusFound, "/")
+			return
 		default:
 			filePath = UIIndexFilePath
 			c.Header("content-type", "text/html;charset=utf-8")
