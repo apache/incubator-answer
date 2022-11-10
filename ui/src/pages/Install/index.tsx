@@ -63,7 +63,7 @@ const Index: FC = () => {
       errorMsg: '',
     },
     db_file: {
-      value: '',
+      value: '/data/answer.db',
       isInvalid: false,
       errorMsg: '',
     },
@@ -203,7 +203,7 @@ const Index: FC = () => {
     if (tableExist) {
       setStep(7);
     } else {
-      setStep(2);
+      setStep(4);
     }
   };
 
