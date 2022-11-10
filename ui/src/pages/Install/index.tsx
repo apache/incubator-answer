@@ -76,7 +76,7 @@ const Index: FC = () => {
       errorMsg: '',
     },
     site_url: {
-      value: '',
+      value: window.location.origin,
       isInvalid: false,
       errorMsg: '',
     },
@@ -104,6 +104,9 @@ const Index: FC = () => {
 
   const handleChange = (params: FormDataType) => {
     // console.log(params);
+    setErrorData({
+      msg: '',
+    });
     setFormData({ ...formData, ...params });
   };
 
@@ -150,11 +153,9 @@ const Index: FC = () => {
     };
     dbCheck(params)
       .then(() => {
-        // handleNext();
         checkInstall();
       })
       .catch((err) => {
-        console.log(err);
         handleErr(err);
       });
   };
@@ -174,7 +175,13 @@ const Index: FC = () => {
         handleNext();
       })
       .catch((err) => {
-        handleErr(err);
+        if (err.isError && err.key) {
+          formData[err.key].isInvalid = true;
+          formData[err.key].errorMsg = err.value;
+          setFormData({ ...formData });
+        } else {
+          handleErr(err);
+        }
       });
   };
 

@@ -101,7 +101,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
     if (admin_email.value && !admin_email.value.match(mailReg)) {
       bol = false;
       data.admin_email = {
-        value: '',
+        value: admin_email.value,
         isInvalid: true,
         errorMsg: t('admin_email.msg.incorrect'),
       };

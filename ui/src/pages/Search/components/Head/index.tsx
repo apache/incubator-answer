@@ -41,7 +41,7 @@ const Index: FC<Props> = ({ data }) => {
         <br />
         {options?.length && (
           <>
-            <span className="text-secondary">{t('options')}</span>
+            <span className="text-secondary">{t('options')} </span>
             {options?.map((item) => {
               return <code key={item}>{item} </code>;
             })}
