@@ -25,6 +25,7 @@ import Empty from './Empty';
 import BaseUserCard from './BaseUserCard';
 import FollowingTags from './FollowingTags';
 import QueryGroup from './QueryGroup';
+import SchemaForm, { JSONSchema, UISchema, initFormData } from './SchemaForm';
 
 export {
   Avatar,
@@ -55,5 +56,7 @@ export {
   FollowingTags,
   htmlRender,
   QueryGroup,
+  SchemaForm,
+  initFormData,
 };
-export type { EditorRef };
+export type { EditorRef, JSONSchema, UISchema };
