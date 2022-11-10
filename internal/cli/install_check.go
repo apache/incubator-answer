@@ -1,6 +1,8 @@
 package cli
 
 import (
+	"fmt"
+
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/pkg/dir"
@@ -19,9 +21,11 @@ func CheckUploadDir() bool {
 func CheckDB(dataConf *data.Database, mustInstalled bool) bool {
 	db, err := data.NewDB(false, dataConf)
 	if err != nil {
+		fmt.Printf("connection database failed: %s\n", err)
 		return false
 	}
 	if err = db.Ping(); err != nil {
+		fmt.Printf("connection ping database failed: %s\n", err)
 		return false
 	}
 	if !mustInstalled {
@@ -30,9 +34,11 @@ func CheckDB(dataConf *data.Database, mustInstalled bool) bool {
 
 	exist, err := db.IsTableExist(&entity.Version{})
 	if err != nil {
+		fmt.Printf("check table exist failed: %s\n", err)
 		return false
 	}
 	if !exist {
+		fmt.Printf("check table not exist\n")
 		return false
 	}
 	return true

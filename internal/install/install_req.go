@@ -35,7 +35,7 @@ func (r *CheckDatabaseReq) GetConnection() string {
 	}
 	if r.DbType == string(schemas.POSTGRES) {
 		host, port := parsePgSQLHostPort(r.DbHost)
-		return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s",
+		return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 			host, port, r.DbUsername, r.DbPassword, r.DbName)
 	}
 	return ""
