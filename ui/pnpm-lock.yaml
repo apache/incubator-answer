@@ -26,7 +26,6 @@ specifiers:
   axios: ^0.27.2
   bootstrap: ^5.2.0
   bootstrap-icons: ^1.9.1
-  chokidar: ^3.5.3
   classnames: ^2.3.1
   codemirror: 5.65.0
   commitizen: ^4.2.5
@@ -133,7 +132,6 @@ devDependencies:
   '@types/react-helmet': 6.1.5
   '@typescript-eslint/eslint-plugin': 5.38.0_wsb62dxj2oqwgas4kadjymcmry
   '@typescript-eslint/parser': 5.38.0_irgkl5vooow2ydyo6aokmferha
-  chokidar: 3.5.3
   commitizen: 4.2.5
   conventional-changelog-cli: 2.2.2
   customize-cra: 1.0.0

@@ -20,8 +20,9 @@
     "jsx": "react-jsx",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@i18n/*": ["../i18n/*"]
     }
   },
-  "include": ["src", "node_modules/@testing-library/jest-dom", "scripts"]
+  "include": ["src", "node_modules/@testing-library/jest-dom" ]
 }
