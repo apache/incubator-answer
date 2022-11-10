@@ -17,8 +17,8 @@ func TestClearText(t *testing.T) {
 	assert.Equal(t, expected, clearedText)
 
 	// test link clear text
-	expected = "hello[link]"
-	clearedText = ClearText("<p>hello<a href=\"http://example.com/\">example.com</a></p>")
+	expected = "hello [example.com]"
+	clearedText = ClearText("<p>hello <a href=\"http://example.com/\">example.com</a></p>")
 	assert.Equal(t, expected, clearedText)
 	clearedText = ClearText("<p>hello<a href=\"https://example.com/\">example.com</a></p>")
 	assert.Equal(t, expected, clearedText)

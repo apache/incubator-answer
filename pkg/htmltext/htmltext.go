@@ -17,8 +17,8 @@ func ClearText(html string) (text string) {
 		re        *regexp.Regexp
 		codeReg   = `(?ism)<(pre)>.*<\/pre>`
 		codeRepl  = "{code...}"
-		linkReg   = `(?ism)<a.*?[^<]>.*?<\/a>`
-		linkRepl  = "[link]"
+		linkReg   = `(?ism)<a.*?[^<]>(.*)?<\/a>`
+		linkRepl  = " [$1] "
 		spaceReg  = ` +`
 		spaceRepl = " "
 	)
