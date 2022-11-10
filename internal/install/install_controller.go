@@ -104,7 +104,7 @@ func InitEnvironment(ctx *gin.Context) {
 
 	// check config file if exist
 	if cli.CheckConfigFile(confPath) {
-		log.Debugf("config file already exists")
+		log.Debug("config file already exists")
 		handler.HandleResponse(ctx, nil, nil)
 		return
 	}
