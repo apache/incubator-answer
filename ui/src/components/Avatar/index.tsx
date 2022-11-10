@@ -17,11 +17,13 @@ const Index: FC<IProps> = ({ avatar, size, className, searchStr = '' }) => {
   let url = '';
   if (typeof avatar === 'string') {
     if (avatar.length > 1) {
-      url = `${avatar}?${searchStr}`;
+      url = `${avatar}?${searchStr}${
+        avatar?.includes('gravatar') ? '&d=identicon' : ''
+      }`;
     }
-  } else if (avatar?.type === 'gravatar') {
+  } else if (avatar?.type === 'gravatar' && avatar.gravatar) {
     url = `${avatar.gravatar}?${searchStr}&d=identicon`;
-  } else if (avatar?.type === 'custom') {
+  } else if (avatar?.type === 'custom' && avatar.custom) {
     url = `${avatar.custom}?${searchStr}`;
   }
 

@@ -256,9 +256,9 @@ func (qr *questionRepo) CmsSearchList(ctx context.Context, search *schema.CmsQue
 			idSearch = false
 			id       = ""
 		)
-		if strings.Contains(search.Query, "id:") {
+		if strings.Contains(search.Query, "question:") {
 			idSearch = true
-			id = strings.TrimSpace(strings.TrimPrefix(search.Query, "id:"))
+			id = strings.TrimSpace(strings.TrimPrefix(search.Query, "question:"))
 			for _, r := range id {
 				if !unicode.IsDigit(r) {
 					idSearch = false

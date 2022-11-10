@@ -404,7 +404,7 @@
     }
   },
   "footer": {
-    "build_on": "Built on <1> Answer </1>- the open-source software that power Q&A communities<br />Made with love © 2022 Answer"
+    "build_on": "Built on <1> Answer </1>- the open-source software that powers Q&A communities<br />Made with love © 2022 Answer"
   },
   "upload_img": {
     "name": "Change",
@@ -523,7 +523,8 @@
         "custom": "Custom",
         "btn_refresh": "Refresh",
         "custom_text": "You can upload your image.",
-        "default": "Default"
+        "default": "Default",
+        "msg": "Please upload an avatar"
       },
       "bio": {
         "label": "About Me (optional)"
