@@ -203,7 +203,7 @@ const Index: FC = () => {
     if (tableExist) {
       setStep(7);
     } else {
-      setStep(2);
+      setStep(4);
     }
   };
 
