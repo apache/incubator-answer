@@ -29,7 +29,10 @@ const Index: FC = () => {
   const [errorData, setErrorData] = useState<{ [propName: string]: any }>({
     msg: '',
   });
-  const [tableExist, setTableExist] = useState(false);
+  const [checkData, setCheckData] = useState({
+    db_table_exist: false,
+    db_connection_success: false,
+  });
 
   const [formData, setFormData] = useState<FormDataType>({
     lang: {
@@ -200,17 +203,24 @@ const Index: FC = () => {
 
   const handleInstallNow = (e) => {
     e.preventDefault();
-    if (tableExist) {
-      setStep(7);
+    if (checkData.db_connection_success) {
+      if (checkData.db_table_exist) {
+        setStep(8);
+      } else {
+        setStep(4);
+      }
     } else {
-      setStep(4);
+      setStep(7);
     }
   };
 
   const configYmlCheck = () => {
     checkConfigFileExists()
       .then((res) => {
-        setTableExist(res?.db_table_exist);
+        setCheckData({
+          db_table_exist: res.data.db_table_exist,
+          db_connection_success: res.data.db_connection_success,
+        });
         if (res && res.config_file_exist) {
           setStep(6);
         }
@@ -283,6 +293,15 @@ const Index: FC = () => {
                 )}
 
                 {step === 7 && (
+                  <div>
+                    <h5>{t('db_failed')}</h5>
+                    <p>
+                      <Trans i18nKey="install.db_failed_description" components={{ 1: <code />}} />
+                    </p>
+                  </div>
+                )}
+
+                {step === 8  && (
                   <div>
                     <h5>{t('installed')}</h5>
                     <p>{t('installed_description')}</p>

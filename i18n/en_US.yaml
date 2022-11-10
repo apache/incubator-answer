@@ -893,6 +893,10 @@ ui:
     installed_description: >-
       You appear to have already installed. To reinstall please clear your old
       database tables first.
+    db_failed: Database connection failed
+    db_failed_description: >-
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+
   page_404:
     description: 'Unfortunately, this page doesn''t exist.'
     back_home: Back to homepage
