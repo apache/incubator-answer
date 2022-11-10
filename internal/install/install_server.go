@@ -35,16 +35,16 @@ func NewInstallHTTPServer() *gin.Engine {
 
 	installApi := r.Group("")
 	installApi.GET("/install", WebPage)
-
+	installApi.GET("/50x", WebPage)
 	installApi.GET("/installation/language/options", LangOptions)
-
 	installApi.POST("/installation/db/check", CheckDatabase)
-
 	installApi.POST("/installation/config-file/check", CheckConfigFile)
-
 	installApi.POST("/installation/init", InitEnvironment)
-
 	installApi.POST("/installation/base-info", InitBaseInfo)
+
+	r.NoRoute(func(ctx *gin.Context) {
+		ctx.Redirect(http.StatusFound, "/50x")
+	})
 	return r
 }
 
