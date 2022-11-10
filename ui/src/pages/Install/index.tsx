@@ -63,7 +63,7 @@ const Index: FC = () => {
       errorMsg: '',
     },
     db_file: {
-      value: '',
+      value: '/data/answer.db',
       isInvalid: false,
       errorMsg: '',
     },
