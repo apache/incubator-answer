@@ -364,7 +364,11 @@ const Index: React.FC = () => {
                 className="me-3 rounded"
               />
               <div>
-                <UploadImg type="avatar" upload={avatarUpload} />
+                <UploadImg
+                  type="avatar"
+                  upload={avatarUpload}
+                  className="mb-2"
+                />
                 <div>
                   <Form.Text className="text-muted mt-0">
                     <Trans i18nKey="settings.profile.avatar.text">

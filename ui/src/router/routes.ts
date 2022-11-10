@@ -251,6 +251,10 @@ const routes: RouteNode[] = [
             path: 'smtp',
             page: 'pages/Admin/Smtp',
           },
+          {
+            path: 'branding',
+            page: 'pages/Admin/Branding',
+          },
         ],
       },
       {

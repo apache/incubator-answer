@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useEffect, useState } from 'react';
+import { FC, FormEvent, useEffect, useState } from 'react';
 import { Form, Button, Image, Stack } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
@@ -187,7 +187,7 @@ const Interface: FC = () => {
               ) : null}
             </div>
             <div className="d-inline-flex">
-              <UploadImg type="logo" upload={imgUpload} />
+              <UploadImg type="logo" upload={imgUpload} className="mb-2" />
             </div>
           </Stack>
           <Form.Text as="div" className="text-muted">

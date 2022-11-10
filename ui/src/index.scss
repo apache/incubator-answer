@@ -2,6 +2,10 @@
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-icons';
 
+.bg-gray-300 {
+  background-color: $gray-300;
+}
+
 .focus {
   color: $input-focus-color !important;
   background-color: $input-focus-bg !important;
@@ -143,6 +147,7 @@ a {
 
 .fit-content {
   height: fit-content;
+  width: fit-content;
   flex: none;
 }
 
@@ -209,4 +214,9 @@ a {
       margin-bottom: 0;
     }
   }
+}
+
+.upload-img-wrap {
+  flex-grow: 1;
+  height: 128px;
 }

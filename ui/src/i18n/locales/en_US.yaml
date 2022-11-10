@@ -915,6 +915,7 @@ ui:
       general: General
       interface: Interface
       smtp: SMTP
+      branding: Branding
     dashboard:
       title: Dashboard
       welcome: Welcome to Answer Admin!
@@ -1109,3 +1110,5 @@ ui:
         msg: SMTP authentication cannot be empty.
         'yes': 'Yes'
         'no': 'No'
+    branding:
+      page_title: Branding

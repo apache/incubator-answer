@@ -54,7 +54,12 @@ export const ADMIN_NAV_MENUS = [
   },
   {
     name: 'settings',
-    child: [{ name: 'general' }, { name: 'interface' }, { name: 'smtp' }],
+    child: [
+      { name: 'general' },
+      { name: 'interface' },
+      { name: 'branding' },
+      { name: 'smtp' },
+    ],
   },
 ];
 

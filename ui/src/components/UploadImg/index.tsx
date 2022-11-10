@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 interface IProps {
   type: string;
+  className?: string;
+  children?: React.ReactNode;
   upload: (data: FormData) => Promise<any>;
 }
 
-const Index: React.FC<IProps> = ({ type, upload }) => {
+const Index: React.FC<IProps> = ({ type, upload, children, className }) => {
   const { t } = useTranslation();
   const [status, setStatus] = useState(false);
 
@@ -35,8 +37,8 @@ const Index: React.FC<IProps> = ({ type, upload }) => {
   };
 
   return (
-    <label className="mb-2 btn btn-outline-secondary uploadBtn">
-      {status ? t('upload_img.loading') : t('upload_img.name')}
+    <label className={`btn btn-outline-secondary uploadBtn ${className}`}>
+      {children || (status ? t('upload_img.loading') : t('upload_img.name'))}
       <input
         type="file"
         className="d-none"

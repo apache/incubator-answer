@@ -25,6 +25,7 @@ import Empty from './Empty';
 import BaseUserCard from './BaseUserCard';
 import FollowingTags from './FollowingTags';
 import QueryGroup from './QueryGroup';
+import BrandUpload from './BrandUpload';
 
 export {
   Avatar,
@@ -55,5 +56,6 @@ export {
   FollowingTags,
   htmlRender,
   QueryGroup,
+  BrandUpload,
 };
 export type { EditorRef };
