@@ -86,20 +86,22 @@ const Users: FC = () => {
       <Table>
         <thead>
           <tr>
-            <th style={{ width: '30%' }}>{t('name')}</th>
-            <th>{t('reputation')}</th>
+            <th>{t('name')}</th>
+            <th style={{ width: '12%' }}>{t('reputation')}</th>
             <th style={{ width: '20%' }}>{t('email')}</th>
-            <th className="text-nowrap" style={{ width: '20%' }}>
+            <th className="text-nowrap" style={{ width: '15%' }}>
               {t('created_at')}
             </th>
             {(curFilter === 'deleted' || curFilter === 'suspended') && (
-              <th className="text-nowrap" style={{ width: '15%' }}>
+              <th className="text-nowrap" style={{ width: '10%' }}>
                 {curFilter === 'deleted' ? t('delete_at') : t('suspend_at')}
               </th>
             )}
 
-            <th>{t('status')}</th>
-            {curFilter !== 'deleted' ? <th>{t('action')}</th> : null}
+            <th style={{ width: '10%' }}>{t('status')}</th>
+            {curFilter !== 'deleted' ? (
+              <th style={{ width: '10%' }}>{t('action')}</th>
+            ) : null}
           </tr>
         </thead>
         <tbody className="align-middle">
@@ -136,7 +138,7 @@ const Users: FC = () => {
                   <td>
                     {user.status !== 'deleted' && (
                       <Button
-                        className="px-2"
+                        className="p-0 btn-no-border"
                         variant="link"
                         onClick={() => handleClick(user)}>
                         {t('change')}

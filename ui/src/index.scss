@@ -141,6 +141,11 @@ a {
   background-color: #fff3cd80;
 }
 
+.fit-content {
+  height: fit-content;
+  flex: none;
+}
+
 // fix bug for React-Bootstrap Form.Text
 .form-text {
   display: inline-block;
