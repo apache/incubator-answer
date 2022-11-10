@@ -220,7 +220,7 @@ ui:
     show_more: Show more
   suspended:
     title: Your Account has been Suspended
-    until_time: 'Your account was suspended until {{ time }}.'
+    until_time: "Your account was suspended until {{ time }}."
     forever: This user was suspended forever.
     end: You don't meet a community guideline.
   editor:
@@ -405,12 +405,12 @@ ui:
     btn_cancel: Cancel
   dates:
     long_date: MMM D
-    long_date_with_year: 'MMM D, YYYY'
-    long_date_with_time: 'MMM D, YYYY [at] HH:mm'
+    long_date_with_year: "MMM D, YYYY"
+    long_date_with_time: "MMM D, YYYY [at] HH:mm"
     now: now
-    x_seconds_ago: '{{count}}s ago'
-    x_minutes_ago: '{{count}}m ago'
-    x_hours_ago: '{{count}}h ago'
+    x_seconds_ago: "{{count}}s ago"
+    x_minutes_ago: "{{count}}m ago"
+    x_hours_ago: "{{count}}h ago"
     hour: hour
     day: day
   comment:
@@ -492,7 +492,7 @@ ui:
     add_btn: Add tag
     create_btn: Create new tag
     search_tag: Search tag
-    hint: 'Describe what your question is about, at least one tag is required.'
+    hint: "Describe what your question is about, at least one tag is required."
     no_result: No tags matched
   header:
     nav:
@@ -521,7 +521,7 @@ ui:
     first: >-
       You're almost done! We sent an activation mail to <bold>{{mail}}</bold>.
       Please follow the instructions in the mail to activate your account.
-    info: 'If it doesn''t arrive, check your spam folder.'
+    info: "If it doesn't arrive, check your spam folder."
     another: >-
       We sent another activation email to you at <bold>{{mail}}</bold>. It might
       take a few minutes for it to arrive; be sure to check your spam folder.
@@ -619,15 +619,15 @@ ui:
         label: About Me (optional)
       website:
         label: Website (optional)
-        placeholder: 'https://example.com'
+        placeholder: "https://example.com"
         msg: Website incorrect format
       location:
         label: Location (optional)
-        placeholder: 'City, Country'
+        placeholder: "City, Country"
     notification:
       email:
         label: Email Notifications
-        radio: 'Answers to your questions, comments, and more'
+        radio: "Answers to your questions, comments, and more"
     account:
       change_email_btn: Change email
       change_pass_btn: Change password
@@ -717,7 +717,7 @@ ui:
     options: Options
     follow: Follow
     following: Following
-    counts: '{{count}} Results'
+    counts: "{{count}} Results"
     more: More
     sort_btns:
       relevance: Relevance
@@ -726,12 +726,12 @@ ui:
       score: Score
     tips:
       title: Advanced Search Tips
-      tag: '<1>[tag]</1> search withing a tag'
-      user: '<1>user:username</1> search by author'
-      answer: '<1>answers:0</1> unanswered questions'
-      score: '<1>score:3</1> posts with a 3+ score'
-      question: '<1>is:question</1> search questions'
-      is_answer: '<1>is:answer</1> search answers'
+      tag: "<1>[tag]</1> search withing a tag"
+      user: "<1>user:username</1> search by author"
+      answer: "<1>answers:0</1> unanswered questions"
+      score: "<1>score:3</1> posts with a 3+ score"
+      question: "<1>is:question</1> search questions"
+      is_answer: "<1>is:answer</1> search answers"
     empty: We couldn't find anything. <br /> Try different or less specific keywords.
   share:
     name: Share
@@ -761,8 +761,8 @@ ui:
     follow_tag_tip: Follow tags to curate your list of questions.
     hot_questions: Hot Questions
     all_questions: All Questions
-    x_questions: '{{ count }} Questions'
-    x_answers: '{{ count }} answers'
+    x_questions: "{{ count }} Questions"
+    x_answers: "{{ count }} answers"
     questions: Questions
     answers: Answers
     newest: Newest
@@ -789,12 +789,12 @@ ui:
     newest: Newest
     score: Score
     edit_profile: Edit Profile
-    visited_x_days: 'Visited {{ count }} days'
+    visited_x_days: "Visited {{ count }} days"
     viewed: Viewed
     joined: Joined
     last_login: Seen
     about_me: About Me
-    about_me_empty: '// Hello, World !'
+    about_me_empty: "// Hello, World !"
     top_answers: Top Answers
     top_questions: Top Questions
     stats: Stats
@@ -829,7 +829,7 @@ ui:
       msg: Password cannot be empty.
     db_host:
       label: Database Host
-      placeholder: 'db:3306'
+      placeholder: "db:3306"
       msg: Database Host cannot be empty.
     db_name:
       label: Database Name
@@ -845,7 +845,7 @@ ui:
       description: >-
         You can create the <1>config.yaml</1> file manually in the
         <1>/var/wwww/xxx/</1> directory and paste the following text into it.
-      info: 'After you’ve done that, click “Next” button.'
+      info: "After you’ve done that, click “Next” button."
     site_information: Site Information
     admin_account: Admin Account
     site_name:
@@ -882,7 +882,7 @@ ui:
     ready_description: >-
       If you ever feel like changing more settings, visit <1>admin section</1>;
       find it in the site menu.
-    good_luck: 'Have fun, and good luck!'
+    good_luck: "Have fun, and good luck!"
     warn_title: Warning
     warn_description: >-
       The file <1>config.yaml</1> already exists. If you need to reset any of the
@@ -893,13 +893,13 @@ ui:
       You appear to have already installed. To reinstall please clear your old
       database tables first.
   page_404:
-    description: 'Unfortunately, this page doesn''t exist.'
+    description: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage
   page_50X:
     description: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
-    description: 'We are under maintenance, we’ll be back soon.'
+    description: "We are under maintenance, we’ll be back soon."
   admin:
     admin_header:
       title: Admin
@@ -918,21 +918,21 @@ ui:
       title: Dashboard
       welcome: Welcome to Answer Admin!
       site_statistics: Site Statistics
-      questions: 'Questions:'
-      answers: 'Answers:'
-      comments: 'Comments:'
-      votes: 'Votes:'
-      active_users: 'Active users:'
-      flags: 'Flags:'
+      questions: "Questions:"
+      answers: "Answers:"
+      comments: "Comments:"
+      votes: "Votes:"
+      active_users: "Active users:"
+      flags: "Flags:"
       site_health_status: Site Health Status
-      version: 'Version:'
-      https: 'HTTPS:'
-      uploading_files: 'Uploading files:'
-      smtp: 'SMTP:'
-      timezone: 'Timezone:'
+      version: "Version:"
+      https: "HTTPS:"
+      uploading_files: "Uploading files:"
+      smtp: "SMTP:"
+      timezone: "Timezone:"
       system_info: System Info
-      storage_used: 'Storage used:'
-      uptime: 'Uptime:'
+      storage_used: "Storage used:"
+      uptime: "Uptime:"
       answer_links: Answer Links
       documents: Documents
       feedback: Feedback
@@ -941,8 +941,8 @@ ui:
       update_to: Update to
       latest: Latest
       check_failed: Check failed
-      'yes': 'Yes'
-      'no': 'No'
+      "yes": "Yes"
+      "no": "No"
       not_allowed: Not allowed
       allowed: Allowed
       enabled: Enabled
@@ -964,7 +964,7 @@ ui:
       suspended_name: suspended
       suspended_description: A suspended user can't log in.
       deleted_name: deleted
-      deleted_description: 'Delete profile, authentication associations.'
+      deleted_description: "Delete profile, authentication associations."
       inactive_name: inactive
       inactive_description: An inactive user must re-validate their email.
       confirm_title: Delete this user
@@ -973,11 +973,11 @@ ui:
       msg:
         empty: Please select a reason.
     status_modal:
-      title: 'Change {{ type }} status to...'
+      title: "Change {{ type }} status to..."
       normal_name: normal
       normal_description: A normal post available to everyone.
       closed_name: closed
-      closed_description: 'A closed question can''t answer, but still can edit, vote and comment.'
+      closed_description: "A closed question can't answer, but still can edit, vote and comment."
       deleted_name: deleted
       deleted_description: All reputation gained and lost will be restored.
       btn_cancel: Cancel
@@ -1000,7 +1000,7 @@ ui:
       deleted: Deleted
       normal: Normal
       filter:
-        placeholder: 'Filter by name, user:id'
+        placeholder: "Filter by name, user:id"
     questions:
       page_title: Questions
       normal: Normal
@@ -1014,7 +1014,7 @@ ui:
       action: Action
       change: Change
       filter:
-        placeholder: 'Filter by title, question:id'
+        placeholder: "Filter by title, question:id"
     answers:
       page_title: Answers
       normal: Normal
@@ -1026,13 +1026,13 @@ ui:
       action: Action
       change: Change
       filter:
-        placeholder: 'Filter by title, answer:id'
+        placeholder: "Filter by title, answer:id"
     general:
       page_title: General
       name:
         label: Site Name
         msg: Site name cannot be empty.
-        text: 'The name of this site, as used in the title tag.'
+        text: "The name of this site, as used in the title tag."
       site_url:
         label: Site URL
         msg: Site url cannot be empty.
@@ -1041,11 +1041,11 @@ ui:
       short_description:
         label: Short Site Description (optional)
         msg: Short site description cannot be empty.
-        text: 'Short description, as used in the title tag on homepage.'
+        text: "Short description, as used in the title tag on homepage."
       description:
         label: Site Description (optional)
         msg: Site description cannot be empty.
-        text: 'Describe this site in one sentence, as used in the meta description tag.'
+        text: "Describe this site in one sentence, as used in the meta description tag."
       contact_email:
         label: Contact Email
         msg: Contact email cannot be empty.
@@ -1106,5 +1106,9 @@ ui:
       smtp_authentication:
         label: SMTP Authentication
         msg: SMTP authentication cannot be empty.
-        'yes': 'Yes'
-        'no': 'No'
+        "yes": "Yes"
+        "no": "No"
+  form:
+    empty: cannot be empty
+    invalid: is invalid
+    btn_submit: Save
