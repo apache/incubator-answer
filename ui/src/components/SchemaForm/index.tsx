@@ -2,6 +2,8 @@ import { FC } from 'react';
 import { Form, Button, Stack } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import BrandUpload from '../BrandUpload';
+import TimeZonePicker from '../TimeZonePicker';
 import type * as Type from '@/common/interface';
 
 export interface JSONSchema {
@@ -27,6 +29,8 @@ export interface UISchema {
       | 'checkbox'
       | 'radio'
       | 'select'
+      | 'upload'
+      | 'timezone'
       | 'switch';
     'ui:options'?: {
       rows?: number;
@@ -49,6 +53,8 @@ export interface UISchema {
       empty?: string;
       invalid?: string;
       validator?: (value) => boolean;
+      textRender?: () => React.ReactElement;
+      imageType?: 'avatar' | 'logo';
     };
   };
 }
@@ -61,6 +67,14 @@ interface IProps {
   onSubmit: (e: React.FormEvent) => void;
 }
 
+/**
+ * json schema form
+ * @param schema json schema
+ * @param uiSchema ui schema
+ * @param formData form data
+ * @param onChange change event
+ * @param onSubmit submit event
+ */
 const SchemaForm: FC<IProps> = ({
   schema,
   uiSchema = {},
@@ -81,6 +95,7 @@ const SchemaForm: FC<IProps> = ({
       onChange(data);
     }
   };
+
   const requiredValidator = () => {
     const required = schema.required || [];
     const errors: string[] = [];
@@ -91,6 +106,7 @@ const SchemaForm: FC<IProps> = ({
     });
     return errors;
   };
+
   const syncValidator = () => {
     const errors: string[] = [];
     keys.forEach((key) => {
@@ -104,6 +120,7 @@ const SchemaForm: FC<IProps> = ({
     });
     return errors;
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const errors = requiredValidator();
@@ -149,6 +166,14 @@ const SchemaForm: FC<IProps> = ({
     }
     onSubmit(e);
   };
+
+  const handleUploadChange = (name: string, value: string) => {
+    const data = { ...formData, [name]: { ...formData[name], value } };
+    if (onChange instanceof Function) {
+      onChange(data);
+    }
+  };
+
   return (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {
@@ -217,6 +242,32 @@ const SchemaForm: FC<IProps> = ({
                 feedback={formData[key]?.errorMsg}
                 feedbackType="invalid"
                 isInvalid={formData[key].isInvalid}
+              />
+              <Form.Text className="text-muted">{description}</Form.Text>
+            </Form.Group>
+          );
+        }
+        if (widget === 'timezone') {
+          return (
+            <Form.Group key={title} className="mb-3" controlId={key}>
+              <Form.Label>{title}</Form.Label>
+              <TimeZonePicker
+                value={formData[key]?.value}
+                onChange={handleInputChange}
+              />
+              <Form.Text className="text-muted">{description}</Form.Text>
+            </Form.Group>
+          );
+        }
+
+        if (widget === 'upload') {
+          return (
+            <Form.Group key={title} className="mb-3" controlId={key}>
+              <Form.Label>{title}</Form.Label>
+              <BrandUpload
+                type={options.imageType || 'avatar'}
+                value={formData[key]?.value}
+                onChange={(value) => handleUploadChange(key, value)}
               />
               <Form.Text className="text-muted">{description}</Form.Text>
             </Form.Group>
