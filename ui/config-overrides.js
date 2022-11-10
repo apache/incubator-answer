@@ -4,7 +4,6 @@ const i18nLocaleTool = require('./scripts/i18n-locale-tool');
 module.exports = {
   webpack: function (config, env) {
     if (env === 'production') {
-      config.output.publicPath = process.env.REACT_APP_PUBLIC_PATH;
       i18nLocaleTool.resolvePresetLocales();
     }
 
@@ -33,12 +32,12 @@ module.exports = {
       const config = configFunction(proxy, allowedHost);
       config.proxy = {
         '/answer': {
-          target: 'http://10.0.10.98:2060',
+          target: process.env.REACT_APP_API_URL,
           changeOrigin: true,
           secure: false,
         },
         '/installation': {
-          target: 'http://10.0.10.98:2060',
+          target: process.env.REACT_APP_API_URL,
           changeOrigin: true,
           secure: false,
         },

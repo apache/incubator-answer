@@ -5,11 +5,7 @@
   "homepage": "/",
   "scripts": {
     "start": "react-app-rewired start",
-    "build:dev": "env-cmd -f .env.development react-app-rewired build",
-    "build:test": "env-cmd -f .env.test react-app-rewired build",
-    "build:prod": "env-cmd -f .env.production react-app-rewired build",
-    "build": "env-cmd -f .env react-app-rewired build",
-    "test": "react-app-rewired test",
+    "build": "react-app-rewired build",
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
     "prepare": "cd .. && husky install",
     "cz": "cz",

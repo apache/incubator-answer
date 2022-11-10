@@ -10,16 +10,8 @@ import { getCurrentLang } from '@/utils/localize';
 import Storage from './storage';
 import { floppyNavigation } from './floppyNavigation';
 
-const API = {
-  development: '',
-  production: '',
-  test: '',
-};
-
-const baseApiUrl = process.env.REACT_APP_API_URL || API[process.env.NODE_ENV];
-
 const baseConfig = {
-  baseUrl: baseApiUrl,
+  baseUrl: process.env.REACT_APP_API_URL || '',
   timeout: 10000,
   withCredentials: true,
 };
