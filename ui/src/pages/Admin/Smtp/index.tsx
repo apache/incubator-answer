@@ -15,8 +15,7 @@ const Smtp: FC = () => {
   const Toast = useToast();
   const { data: setting } = useSmtpSetting();
   const schema: JSONSchema = {
-    title: t('title'),
-    description: t('description'),
+    title: t('page_title'),
     properties: {
       from_email: {
         type: 'string',

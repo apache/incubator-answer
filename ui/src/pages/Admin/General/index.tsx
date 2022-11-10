@@ -18,8 +18,7 @@ const General: FC = () => {
 
   const { data: setting } = useGeneralSetting();
   const schema: JSONSchema = {
-    title: t('title'),
-    description: t('description'),
+    title: t('page_title'),
     required: ['name', 'site_url', 'contact_email'],
     properties: {
       name: {

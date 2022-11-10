@@ -1,5 +1,6 @@
-import { FC, FormEvent, useEffect, useState } from 'react';
-import { Form, Button, Image, Stack } from 'react-bootstrap';
+/* eslint-disable react/no-unstable-nested-components */
+import React, { FC, FormEvent, useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { useToast } from '@/hooks';
@@ -9,10 +10,9 @@ import {
   AdminSettingsInterface,
 } from '@/common/interface';
 import { interfaceStore } from '@/stores';
-import { UploadImg } from '@/components';
-import { TIMEZONES, DEFAULT_TIMEZONE } from '@/common/constants';
+import { JSONSchema, SchemaForm, UISchema } from '@/components';
+import { DEFAULT_TIMEZONE } from '@/common/constants';
 import {
-  uploadAvatar,
   updateInterfaceSetting,
   useInterfaceSetting,
   useThemeOptions,
@@ -32,6 +32,36 @@ const Interface: FC = () => {
   const Toast = useToast();
   const [langs, setLangs] = useState<LangsType[]>();
   const { data: setting } = useInterfaceSetting();
+
+  const schema: JSONSchema = {
+    title: t('page_title'),
+    properties: {
+      logo: {
+        type: 'string',
+        title: t('logo.label'),
+        description: t('logo.text'),
+      },
+      theme: {
+        type: 'string',
+        title: t('theme.label'),
+        description: t('theme.text'),
+        enum: themes?.map((theme) => theme.value) || [],
+        enumNames: themes?.map((theme) => theme.label) || [],
+      },
+      language: {
+        type: 'string',
+        title: t('language.label'),
+        description: t('language.text'),
+        enum: langs?.map((lang) => lang.value),
+        enumNames: langs?.map((lang) => lang.label),
+      },
+      time_zone: {
+        type: 'string',
+        title: t('time_zone.label'),
+        description: t('time_zone.text'),
+      },
+    },
+  };
 
   const [formData, setFormData] = useState<FormDataType>({
     logo: {
@@ -55,6 +85,54 @@ const Interface: FC = () => {
       errorMsg: '',
     },
   });
+
+  const onChange = (fieldName, fieldValue) => {
+    if (!formData[fieldName]) {
+      return;
+    }
+    const fieldData: FormDataType = {
+      [fieldName]: {
+        value: fieldValue,
+        isInvalid: false,
+        errorMsg: '',
+      },
+    };
+    setFormData({ ...formData, ...fieldData });
+  };
+  const uiSchema: UISchema = {
+    logo: {
+      'ui:widget': 'upload',
+      'ui:options': {
+        textRender: () => {
+          return (
+            <Trans i18nKey="admin.interface.logo.text">
+              You can upload your image or
+              <Button
+                variant="link"
+                size="sm"
+                className="p-0 mx-1"
+                onClick={(evt) => {
+                  evt.preventDefault();
+                  onChange('logo', '');
+                }}>
+                reset it
+              </Button>
+              to the site title text.
+            </Trans>
+          );
+        },
+      },
+    },
+    theme: {
+      'ui:widget': 'select',
+    },
+    language: {
+      'ui:widget': 'select',
+    },
+    time_zone: {
+      'ui:widget': 'timezone',
+    },
+  };
   const getLangs = async () => {
     const res: LangsType[] = await loadLanguageOptions(true);
     setLangs(res);
@@ -127,34 +205,22 @@ const Interface: FC = () => {
         setFormData({ ...formData });
       });
   };
-  const imgUpload = (file: any) => {
-    return new Promise((resolve) => {
-      uploadAvatar(file).then((res) => {
-        setFormData({
-          ...formData,
-          logo: {
-            value: res,
-            isInvalid: false,
-            errorMsg: '',
-          },
-        });
-        resolve(true);
-      });
-    });
-  };
-  const onChange = (fieldName, fieldValue) => {
-    if (!formData[fieldName]) {
-      return;
-    }
-    const fieldData: FormDataType = {
-      [fieldName]: {
-        value: fieldValue,
-        isInvalid: false,
-        errorMsg: '',
-      },
-    };
-    setFormData({ ...formData, ...fieldData });
-  };
+  // const imgUpload = (file: any) => {
+  //   return new Promise((resolve) => {
+  //     uploadAvatar(file).then((res) => {
+  //       setFormData({
+  //         ...formData,
+  //         logo: {
+  //           value: res,
+  //           isInvalid: false,
+  //           errorMsg: '',
+  //         },
+  //       });
+  //       resolve(true);
+  //     });
+  //   });
+  // };
+
   useEffect(() => {
     if (setting) {
       const formMeta = {};
@@ -167,10 +233,21 @@ const Interface: FC = () => {
   useEffect(() => {
     getLangs();
   }, []);
+
+  const handleOnChange = (data) => {
+    setFormData(data);
+  };
   return (
     <>
       <h3 className="mb-4">{t('page_title')}</h3>
-      <Form noValidate onSubmit={onSubmit}>
+      <SchemaForm
+        schema={schema}
+        uiSchema={uiSchema}
+        formData={formData}
+        onSubmit={onSubmit}
+        onChange={handleOnChange}
+      />
+      {/* <Form noValidate onSubmit={onSubmit}>
         <Form.Group controlId="logo" className="mb-3">
           <Form.Label>{t('logo.label')}</Form.Label>
           <Stack gap={2}>
@@ -282,7 +359,7 @@ const Interface: FC = () => {
         <Button variant="primary" type="submit">
           {t('save', { keyPrefix: 'btns' })}
         </Button>
-      </Form>
+      </Form> */}
     </>
   );
 };
