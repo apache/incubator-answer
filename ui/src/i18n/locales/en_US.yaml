@@ -1112,8 +1112,6 @@ ui:
         'no': 'No'
     branding:
       page_title: Branding
-        "yes": "Yes"
-        "no": "No"
   form:
     empty: cannot be empty
     invalid: is invalid
