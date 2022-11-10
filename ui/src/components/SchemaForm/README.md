@@ -2,7 +2,7 @@
 
 ## Introduction
 
-SchemaForm is a component that can be used to render a form based on a JSON schema.
+SchemaForm is a component that can be used to render a form based on a [JSON schema](https://json-schema.org/understanding-json-schema/index.html).
 
 ## Usage
 
@@ -64,10 +64,16 @@ const Form = () => {
 
 ## Props
 
-| Property | Description                              | Type                         | Default |
-| -------- | ---------------------------------------- | ---------------------------- | ------- |
-| schema   | JSON schema                              | [JSONSchema]()               | -       |
-| uiSchema | UI schema                                | [UISchema]()                 | -       |
-| formData | Form data                                | [FormData]()                 | -       |
-| onChange | Callback function when form data changes | (data: [FormData]()) => void | -       |
-| onSubmit | Callback function when form is submitted | (data: [FormData]()) => void | -       |
+| Property | Description                              | Type                                      | Default |
+| -------- | ---------------------------------------- | ----------------------------------------- | ------- |
+| schema   | JSON schema                              | [JSONSchema](index.tsx#L9)                | -       |
+| uiSchema | UI schema                                | [UISchema](index.tsx#L24)                 | -       |
+| formData | Form data                                | [FormData](index.tsx#L66)                 | -       |
+| onChange | Callback function when form data changes | (data: [FormData](index.tsx#L66)) => void | -       |
+| onSubmit | Callback function when form is submitted | (data: React.FormEvent) => void           | -       |
+
+## reference
+
+- [json schema](https://json-schema.org/understanding-json-schema/index.html)
+- [react-jsonschema-form](http://rjsf-team.github.io/react-jsonschema-form/)
+- [vue-json-schema-form](https://github.com/lljj-x/vue-json-schema-form/)
