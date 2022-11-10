@@ -203,14 +203,10 @@ const Index: FC = () => {
 
   const handleInstallNow = (e) => {
     e.preventDefault();
-    if (checkData.db_connection_success) {
-      if (checkData.db_table_exist) {
-        setStep(8);
-      } else {
-        setStep(4);
-      }
+    if (checkData.db_table_exist) {
+      setStep(8);
     } else {
-      setStep(7);
+      setStep(4);
     }
   };
 
@@ -218,11 +214,15 @@ const Index: FC = () => {
     checkConfigFileExists()
       .then((res) => {
         setCheckData({
-          db_table_exist: res.data.db_table_exist,
-          db_connection_success: res.data.db_connection_success,
+          db_table_exist: res.db_table_exist,
+          db_connection_success: res.db_connection_success,
         });
         if (res && res.config_file_exist) {
-          setStep(6);
+          if (res.db_connection_success) {
+            setStep(6)
+          } else {
+            setStep(7);
+          }
         }
       })
       .finally(() => {
