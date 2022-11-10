@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, Tag, FormatTime, BaseUserCard } from '@/components';
 import type { SearchResItem } from '@/common/interface';
+import { escapeRemove } from '@/utils';
 
 interface Props {
   data: SearchResItem;
@@ -61,7 +62,7 @@ const Index: FC<Props> = ({ data }) => {
 
       {data.object?.excerpt && (
         <p className="fs-14 text-truncate-2 mb-2 last-p text-break">
-          {data.object.excerpt}
+          {escapeRemove(data.object.excerpt)}
         </p>
       )}
 

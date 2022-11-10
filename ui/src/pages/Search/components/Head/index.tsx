@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { following } from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
+import { escapeRemove } from '@/utils';
 
 interface Props {
   data;
@@ -51,7 +52,7 @@ const Index: FC<Props> = ({ data }) => {
         <>
           {data.excerpt && (
             <p className="text-break">
-              {data.excerpt}
+              {escapeRemove(data.excerpt)}
               <Link to={`/tags/${data.slug_name}/info`}> [{t('more')}]</Link>
             </p>
           )}
