@@ -10,8 +10,9 @@ import (
 
 // CheckConfigFileResp check config file if exist or not response
 type CheckConfigFileResp struct {
-	ConfigFileExist bool `json:"config_file_exist"`
-	DbTableExist    bool `json:"db_table_exist"`
+	ConfigFileExist     bool `json:"config_file_exist"`
+	DBConnectionSuccess bool `json:"db_connection_success"`
+	DbTableExist        bool `json:"db_table_exist"`
 }
 
 // CheckDatabaseReq check database
@@ -35,7 +36,7 @@ func (r *CheckDatabaseReq) GetConnection() string {
 	}
 	if r.DbType == string(schemas.POSTGRES) {
 		host, port := parsePgSQLHostPort(r.DbHost)
-		return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s",
+		return fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 			host, port, r.DbUsername, r.DbPassword, r.DbName)
 	}
 	return ""
