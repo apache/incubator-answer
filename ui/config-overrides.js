@@ -1,49 +1,51 @@
-const path = require('path');
-const i18nLocaleTool = require('./scripts/i18n-locale-tool');
+const {
+  addWebpackModuleRule,
+  addWebpackAlias
+} = require("customize-cra");
+
+const path = require("path");
+const i18nPath = path.resolve(__dirname, "../i18n");
 
 module.exports = {
-  webpack: function (config, env) {
-    if (env === 'production') {
+  webpack: function(config, env) {
+    if (env === "production") {
       config.output.publicPath = process.env.REACT_APP_PUBLIC_PATH;
-      i18nLocaleTool.resolvePresetLocales();
     }
 
-    for (let _rule of config.module.rules) {
-      if (_rule.oneOf) {
-        _rule.oneOf.unshift({
-          test: /\.ya?ml$/,
-          use: 'yaml-loader'
-        });
-        break;
-      }
-    }
+    addWebpackAlias({
+      ["@"]: path.resolve(__dirname, "src"),
+      "@i18n": i18nPath
+    })(config);
 
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': path.resolve(__dirname, 'src'),
-    };
+    addWebpackModuleRule({
+      test: /\.ya?ml$/,
+      use: "yaml-loader"
+    })(config);
+
+    // add i18n dir to ModuleScopePlugin allowedPaths
+    const moduleScopePlugin = config.resolve.plugins.find(_ => _.constructor.name === "ModuleScopePlugin");
+    if (moduleScopePlugin) {
+      moduleScopePlugin.allowedPaths.push(i18nPath);
+    }
 
     return config;
   },
-
-  devServer: function (configFunction) {
-    i18nLocaleTool.autoSync();
-
-    return function (proxy, allowedHost) {
+  devServer: function(configFunction) {
+    return function(proxy, allowedHost) {
       const config = configFunction(proxy, allowedHost);
       config.proxy = {
-        '/answer': {
-          target: 'http://10.0.10.98:2060',
+        "/answer": {
+          target: "http://10.0.10.98:2060",
           changeOrigin: true,
-          secure: false,
+          secure: false
         },
-        '/installation': {
-          target: 'http://10.0.10.98:2060',
+        "/installation": {
+          target: "http://10.0.10.98:2060",
           changeOrigin: true,
-          secure: false,
-        },
+          secure: false
+        }
       };
       return config;
     };
-  },
+  }
 };
