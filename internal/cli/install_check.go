@@ -16,9 +16,8 @@ func CheckUploadDir() bool {
 	return dir.CheckDirExist(UploadFilePath)
 }
 
-// CheckDB check database whether the connection is normal
-// if mustInstalled is true, will check table if already exists
-func CheckDB(dataConf *data.Database, mustInstalled bool) bool {
+// CheckDBConnection check database whether the connection is normal
+func CheckDBConnection(dataConf *data.Database) bool {
 	db, err := data.NewDB(false, dataConf)
 	if err != nil {
 		fmt.Printf("connection database failed: %s\n", err)
@@ -28,8 +27,20 @@ func CheckDB(dataConf *data.Database, mustInstalled bool) bool {
 		fmt.Printf("connection ping database failed: %s\n", err)
 		return false
 	}
-	if !mustInstalled {
-		return true
+
+	return true
+}
+
+// CheckDBTableExist check database whether the table is already exists
+func CheckDBTableExist(dataConf *data.Database) bool {
+	db, err := data.NewDB(false, dataConf)
+	if err != nil {
+		fmt.Printf("connection database failed: %s\n", err)
+		return false
+	}
+	if err = db.Ping(); err != nil {
+		fmt.Printf("connection ping database failed: %s\n", err)
+		return false
 	}
 
 	exist, err := db.IsTableExist(&entity.Version{})

@@ -52,7 +52,10 @@ func CheckConfigFile(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	resp.DbTableExist = cli.CheckDB(allConfig.Data.Database, true)
+	resp.DBConnectionSuccess = cli.CheckDBConnection(allConfig.Data.Database)
+	if resp.DBConnectionSuccess {
+		resp.DbTableExist = cli.CheckDBTableExist(allConfig.Data.Database)
+	}
 	handler.HandleResponse(ctx, nil, resp)
 }
 
@@ -76,7 +79,7 @@ func CheckDatabase(ctx *gin.Context) {
 		Driver:     req.DbType,
 		Connection: req.GetConnection(),
 	}
-	resp.ConnectionSuccess = cli.CheckDB(dataConf, false)
+	resp.ConnectionSuccess = cli.CheckDBConnection(dataConf)
 	if !resp.ConnectionSuccess {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.DatabaseConnectionFailed), schema.ErrTypeAlert)
 		return
@@ -96,6 +99,13 @@ func CheckDatabase(ctx *gin.Context) {
 func InitEnvironment(ctx *gin.Context) {
 	req := &CheckDatabaseReq{}
 	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	// check config file if exist
+	if cli.CheckConfigFile(confPath) {
+		log.Debugf("config file already exists")
+		handler.HandleResponse(ctx, nil, nil)
 		return
 	}
 
@@ -149,6 +159,12 @@ func InitBaseInfo(ctx *gin.Context) {
 	if err != nil {
 		log.Errorf("read config failed %s", err)
 		handler.HandleResponse(ctx, errors.BadRequest(reason.ReadConfigFailed), nil)
+		return
+	}
+
+	if cli.CheckDBTableExist(c.Data.Database) {
+		log.Warnf("database is already initialized")
+		handler.HandleResponse(ctx, nil, nil)
 		return
 	}
 

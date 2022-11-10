@@ -73,7 +73,7 @@ To run answer, use:
 				}
 
 				fmt.Println("config file read successfully, try to connect database...")
-				if cli.CheckDB(c.Data.Database, true) {
+				if cli.CheckDBTableExist(c.Data.Database) {
 					fmt.Println("connect to database successfully and table already exists, do nothing.")
 					return
 				}
@@ -152,7 +152,7 @@ To run answer, use:
 				return
 			}
 
-			if cli.CheckDB(c.Data.Database, false) {
+			if cli.CheckDBConnection(c.Data.Database) {
 				fmt.Println("db connection successfully [✔]")
 			} else {
 				fmt.Println("db connection failed [x]")

@@ -10,8 +10,9 @@ import (
 
 // CheckConfigFileResp check config file if exist or not response
 type CheckConfigFileResp struct {
-	ConfigFileExist bool `json:"config_file_exist"`
-	DbTableExist    bool `json:"db_table_exist"`
+	ConfigFileExist     bool `json:"config_file_exist"`
+	DBConnectionSuccess bool `json:"db_connection_success"`
+	DbTableExist        bool `json:"db_table_exist"`
 }
 
 // CheckDatabaseReq check database
