@@ -57,6 +57,7 @@ func (s *SiteInfoService) GetSiteInterface(ctx context.Context) (resp *schema.Si
 }
 
 func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGeneralReq) (err error) {
+	req.FormatSiteUrl()
 	var (
 		siteType = "general"
 		content  []byte

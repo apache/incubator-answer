@@ -2,6 +2,7 @@ package install
 
 import (
 	"fmt"
+	"net/url"
 	"strings"
 
 	"xorm.io/xorm/schemas"
@@ -73,9 +74,17 @@ type InitEnvironmentResp struct {
 type InitBaseInfoReq struct {
 	Language      string `validate:"required,gt=0,lte=30" json:"lang"`
 	SiteName      string `validate:"required,gt=0,lte=30" json:"site_name"`
-	SiteURL       string `validate:"required,gt=0,lte=512" json:"site_url"`
+	SiteURL       string `validate:"required,gt=0,lte=512,url" json:"site_url"`
 	ContactEmail  string `validate:"required,email,gt=0,lte=500" json:"contact_email"`
 	AdminName     string `validate:"required,gt=4,lte=30" json:"admin_name"`
 	AdminPassword string `validate:"required,gte=8,lte=32" json:"admin_password"`
 	AdminEmail    string `validate:"required,email,gt=0,lte=500" json:"admin_email"`
+}
+
+func (r *InitBaseInfoReq) FormatSiteUrl() {
+	parsedUrl, err := url.Parse(r.SiteURL)
+	if err != nil {
+		return
+	}
+	r.SiteURL = fmt.Sprintf("%s://%s", parsedUrl.Scheme, parsedUrl.Host)
 }
