@@ -24,7 +24,7 @@ import {
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'install' });
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(true);
   const [errorData, setErrorData] = useState<{ [propName: string]: any }>({
     msg: '',
@@ -225,11 +225,11 @@ const Index: FC = () => {
           db_connection_success: res.db_connection_success,
         });
         if (res && res.config_file_exist) {
-          // if (res.db_connection_success) {
-          //   setStep(6)
-          // } else {
-          //   setStep(7);
-          // }
+          if (res.db_connection_success) {
+            setStep(6)
+          } else {
+            setStep(7);
+          }
         }
       })
       .finally(() => {
