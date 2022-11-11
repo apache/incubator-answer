@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -19,6 +21,7 @@ import (
 	"github.com/answerdev/answer/internal/service/export"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/report_common"
+	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/segmentfault/pacman/errors"
@@ -34,7 +37,9 @@ type DashboardService struct {
 	reportRepo      report_common.ReportRepo
 	configRepo      config.ConfigRepo
 	siteInfoService *siteinfo_common.SiteInfoCommonService
-	data            *data.Data
+	serviceConfig   *service_config.ServiceConfig
+
+	data *data.Data
 }
 
 func NewDashboardService(
@@ -46,6 +51,8 @@ func NewDashboardService(
 	reportRepo report_common.ReportRepo,
 	configRepo config.ConfigRepo,
 	siteInfoService *siteinfo_common.SiteInfoCommonService,
+	serviceConfig *service_config.ServiceConfig,
+
 	data *data.Data,
 ) *DashboardService {
 	return &DashboardService{
@@ -57,7 +64,9 @@ func NewDashboardService(
 		reportRepo:      reportRepo,
 		configRepo:      configRepo,
 		siteInfoService: siteInfoService,
-		data:            data,
+		serviceConfig:   serviceConfig,
+
+		data: data,
 	}
 }
 
@@ -159,7 +168,12 @@ func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 		dashboardInfo.SMTP = true
 	}
 	dashboardInfo.HTTPS = true
-	dashboardInfo.OccupyingStorageSpace = "1MB"
+	dirSize, err := ds.DirSize(ds.serviceConfig.UploadPath)
+	if err != nil {
+		return dashboardInfo, err
+	}
+	size := ds.formatFileSize(dirSize)
+	dashboardInfo.OccupyingStorageSpace = size
 	startTime := time.Now().Unix() - schema.AppStartTime.Unix()
 	dashboardInfo.AppStartTime = fmt.Sprintf("%d", startTime)
 	dashboardInfo.TimeZone = siteInfoInterface.TimeZone
@@ -204,4 +218,33 @@ func (ds *DashboardService) GetEmailConfig() (ec *export.EmailConfig, err error)
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return ec, nil
+}
+
+func (ds *DashboardService) DirSize(path string) (int64, error) {
+	var size int64
+	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
+		if !info.IsDir() {
+			size += info.Size()
+		}
+		return err
+	})
+	return size, err
+}
+
+func (ds *DashboardService) formatFileSize(fileSize int64) (size string) {
+	if fileSize < 1024 {
+		//return strconv.FormatInt(fileSize, 10) + "B"
+		return fmt.Sprintf("%.2f B", float64(fileSize)/float64(1))
+	} else if fileSize < (1024 * 1024) {
+		return fmt.Sprintf("%.2f KB", float64(fileSize)/float64(1024))
+	} else if fileSize < (1024 * 1024 * 1024) {
+		return fmt.Sprintf("%.2f MB", float64(fileSize)/float64(1024*1024))
+	} else if fileSize < (1024 * 1024 * 1024 * 1024) {
+		return fmt.Sprintf("%.2f GB", float64(fileSize)/float64(1024*1024*1024))
+	} else if fileSize < (1024 * 1024 * 1024 * 1024 * 1024) {
+		return fmt.Sprintf("%.2f TB", float64(fileSize)/float64(1024*1024*1024*1024))
+	} else { //if fileSize < (1024 * 1024 * 1024 * 1024 * 1024 * 1024)
+		return fmt.Sprintf("%.2f EB", float64(fileSize)/float64(1024*1024*1024*1024*1024))
+	}
+
 }
