@@ -24,7 +24,7 @@ import (
 // @Description get installation language options
 // @Tags Lang
 // @Produce json
-// @Success 200 {object} handler.RespBody{data=[]*translator.LangOption}
+// @Success 200 {object} handler.RespBody{data=[]translator.LangOption}
 // @Router /installation/language/options [get]
 func LangOptions(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, translator.LanguageOptions)
@@ -94,7 +94,7 @@ func CheckDatabase(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body install.CheckDatabaseReq  true "CheckDatabaseReq"
-// @Success 200 {object} handler.RespBody{data=install.CheckConfigFileResp{}}
+// @Success 200 {object} handler.RespBody{}
 // @Router /installation/init [post]
 func InitEnvironment(ctx *gin.Context) {
 	req := &CheckDatabaseReq{}
@@ -146,7 +146,7 @@ func InitEnvironment(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body install.InitBaseInfoReq  true "InitBaseInfoReq"
-// @Success 200 {object} handler.RespBody{data=install.CheckConfigFileResp{}}
+// @Success 200 {object} handler.RespBody{}
 // @Router /installation/base-info [post]
 func InitBaseInfo(ctx *gin.Context) {
 	req := &InitBaseInfoReq{}

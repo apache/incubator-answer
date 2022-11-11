@@ -62,6 +62,12 @@ const docTemplate = `{
                         "description": "answer id or question title",
                         "name": "query",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "question id",
+                        "name": "question_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -143,11 +149,6 @@ const docTemplate = `{
         },
         "/answer/admin/api/language/options": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Get language options",
                 "produces": [
                     "application/json"
@@ -1443,11 +1444,6 @@ const docTemplate = `{
         },
         "/answer/api/v1/language/options": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Get language options",
                 "produces": [
                     "application/json"
@@ -3402,6 +3398,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/user/interface": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "UserUpdateInterface update user interface config",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "UserUpdateInterface update user interface config",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "access-token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "UpdateInfoRequest",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdateUserInterfaceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/user/login/email": {
             "post": {
                 "description": "UserEmailLogin",
@@ -3721,46 +3763,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/user/status": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "get user status info",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "get user status info",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/handler.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/schema.GetUserResp"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/answer/api/v1/vote/down": {
             "post": {
                 "security": [
@@ -3854,6 +3856,190 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/schema.VoteResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/installation/base-info": {
+            "post": {
+                "description": "init base info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "installation"
+                ],
+                "summary": "init base info",
+                "parameters": [
+                    {
+                        "description": "InitBaseInfoReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/install.InitBaseInfoReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/installation/config-file/check": {
+            "post": {
+                "description": "check config file if exist when installation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "installation"
+                ],
+                "summary": "check config file if exist when installation",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/install.CheckConfigFileResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/installation/db/check": {
+            "post": {
+                "description": "check database if exist when installation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "installation"
+                ],
+                "summary": "check database if exist when installation",
+                "parameters": [
+                    {
+                        "description": "CheckDatabaseReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/install.CheckDatabaseReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/install.CheckConfigFileResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/installation/init": {
+            "post": {
+                "description": "init environment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "installation"
+                ],
+                "summary": "init environment",
+                "parameters": [
+                    {
+                        "description": "CheckDatabaseReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/install.CheckDatabaseReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/installation/language/options": {
+            "get": {
+                "description": "get installation language options",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lang"
+                ],
+                "summary": "get installation language options",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/translator.LangOption"
+                                            }
                                         }
                                     }
                                 }
@@ -3958,6 +4144,94 @@ const docTemplate = `{
                 "reason": {
                     "description": "reason key",
                     "type": "string"
+                }
+            }
+        },
+        "install.CheckConfigFileResp": {
+            "type": "object",
+            "properties": {
+                "config_file_exist": {
+                    "type": "boolean"
+                },
+                "db_connection_success": {
+                    "type": "boolean"
+                },
+                "db_table_exist": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "install.CheckDatabaseReq": {
+            "type": "object",
+            "required": [
+                "db_type"
+            ],
+            "properties": {
+                "db_file": {
+                    "type": "string"
+                },
+                "db_host": {
+                    "type": "string"
+                },
+                "db_name": {
+                    "type": "string"
+                },
+                "db_password": {
+                    "type": "string"
+                },
+                "db_type": {
+                    "type": "string",
+                    "enum": [
+                        "postgres",
+                        "sqlite3",
+                        "mysql"
+                    ]
+                },
+                "db_username": {
+                    "type": "string"
+                }
+            }
+        },
+        "install.InitBaseInfoReq": {
+            "type": "object",
+            "required": [
+                "contact_email",
+                "email",
+                "lang",
+                "name",
+                "password",
+                "site_name",
+                "site_url"
+            ],
+            "properties": {
+                "contact_email": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "lang": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 8
+                },
+                "site_name": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "site_url": {
+                    "type": "string",
+                    "maxLength": 512
                 }
             }
         },
@@ -4833,6 +5107,10 @@ const docTemplate = `{
                     "description": "is admin",
                     "type": "boolean"
                 },
+                "language": {
+                    "description": "language",
+                    "type": "string"
+                },
                 "last_login_date": {
                     "description": "last login date",
                     "type": "integer"
@@ -4928,6 +5206,10 @@ const docTemplate = `{
                 "is_admin": {
                     "description": "is admin",
                     "type": "boolean"
+                },
+                "language": {
+                    "description": "language",
+                    "type": "string"
                 },
                 "last_login_date": {
                     "description": "last login date",
@@ -5614,6 +5896,19 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.UpdateUserInterfaceRequest": {
+            "type": "object",
+            "required": [
+                "language"
+            ],
+            "properties": {
+                "language": {
+                    "description": "language",
+                    "type": "string",
+                    "maxLength": 100
+                }
+            }
+        },
         "schema.UpdateUserStatusReq": {
             "type": "object",
             "required": [
@@ -5852,6 +6147,17 @@ const docTemplate = `{
                 },
                 "votes": {
                     "type": "integer"
+                }
+            }
+        },
+        "translator.LangOption": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
                 }
             }
         }
