@@ -255,6 +255,14 @@ const routes: RouteNode[] = [
             path: 'branding',
             page: 'pages/Admin/Branding',
           },
+          {
+            path: 'legal',
+            page: 'pages/Admin/Legal',
+          },
+          {
+            path: 'write',
+            page: 'pages/Admin/Write',
+          },
         ],
       },
       {

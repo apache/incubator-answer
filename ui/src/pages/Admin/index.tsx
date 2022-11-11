@@ -8,7 +8,14 @@ import { ADMIN_NAV_MENUS } from '@/common/constants';
 
 import './index.scss';
 
-const formPaths = ['general', 'smtp', 'interface', 'branding'];
+const formPaths = [
+  'general',
+  'smtp',
+  'interface',
+  'branding',
+  'legal',
+  'write',
+];
 
 const Dashboard: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });

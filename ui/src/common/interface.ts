@@ -289,6 +289,16 @@ export interface SiteSettings {
   interface: AdminSettingsInterface;
 }
 
+export interface AdminSettingsLegal {
+  terms_of_service: string;
+  privacy_policy: string;
+}
+
+export interface AdminSettingsWrite {
+  recommend_tags: string;
+  required_tags: string;
+}
+
 /**
  * @description interface for Activity
  */

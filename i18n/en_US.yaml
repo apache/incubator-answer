@@ -916,6 +916,7 @@ ui:
       interface: Interface
       smtp: SMTP
       branding: Branding
+      legal: Legal
     dashboard:
       title: Dashboard
       welcome: Welcome to Answer Admin!
@@ -1108,10 +1109,20 @@ ui:
       smtp_authentication:
         label: SMTP Authentication
         msg: SMTP authentication cannot be empty.
-        'yes': 'Yes'
-        'no': 'No'
+        "yes": "Yes"
+        "no": "No"
     branding:
       page_title: Branding
+    legal:
+      page_title: Legal
+      terms_of_service:
+        label: Terms of Service
+        msg: Terms of service cannot be empty.
+        text: "You can add terms of service content here. If you already have a document hosted elsewhere, provide the full URL here."
+      privacy_policy:
+        label: Privacy Policy
+        msg: Privacy policy cannot be empty.
+        text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
   form:
     empty: cannot be empty
     invalid: is invalid

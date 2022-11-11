@@ -916,6 +916,8 @@ ui:
       interface: Interface
       smtp: SMTP
       branding: Branding
+      legal: Legal
+      write: Write
     dashboard:
       title: Dashboard
       welcome: Welcome to Answer Admin!
@@ -1108,22 +1110,29 @@ ui:
       smtp_authentication:
         label: SMTP Authentication
         msg: SMTP authentication cannot be empty.
-        'yes': 'Yes'
-        'no': 'No'
+        "yes": "Yes"
+        "no": "No"
     branding:
       page_title: Branding
-      logo:
-        label: Logo
-        text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
-      mobile_logo:
-        label: Mobile Logo (optional)
-        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the “logo” setting will be used.
-      square_icon:
-        label: Square Icon
-        text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
-      favicon:
-        label: Favicon (optional)
-        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, “square icon” will be used.
+    legal:
+      page_title: Legal
+      terms_of_service:
+        label: Terms of Service
+        msg: Terms of service cannot be empty.
+        text: "You can add terms of service content here. If you already have a document hosted elsewhere, provide the full URL here."
+      privacy_policy:
+        label: Privacy Policy
+        msg: Privacy policy cannot be empty.
+        text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
+    write:
+      page_title: Write
+      recommend_tags:
+        label: Recommend Tags
+        msg: Recommend tags cannot be empty.
+        text: "Please input tag slug above, one tag per line."
+      required_tags:
+        label: Required Tags
+        text: "Every new question must have at least one recommend tag"
   form:
     empty: cannot be empty
     invalid: is invalid
