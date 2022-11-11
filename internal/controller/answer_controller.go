@@ -47,7 +47,7 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 		return
 	}
 
-	err := ac.answerService.RemoveAnswer(ctx, req.ID)
+	err := ac.answerService.RemoveAnswer(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

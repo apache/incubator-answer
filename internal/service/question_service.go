@@ -163,6 +163,17 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	if !has {
 		return nil
 	}
+	if questionInfo.UserID != req.UserID {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+
+	if questionInfo.AcceptedAnswerID != "" {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	if questionInfo.AnswerCount > 0 {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+
 	questionInfo.Status = entity.QuestionStatusDeleted
 	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
 	if err != nil {
