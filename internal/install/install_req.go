@@ -77,9 +77,9 @@ type InitBaseInfoReq struct {
 	SiteName      string `validate:"required,gt=0,lte=30" json:"site_name"`
 	SiteURL       string `validate:"required,gt=0,lte=512,url" json:"site_url"`
 	ContactEmail  string `validate:"required,email,gt=0,lte=500" json:"contact_email"`
-	AdminName     string `validate:"required,gt=4,lte=30" json:"admin_name"`
-	AdminPassword string `validate:"required,gte=8,lte=32" json:"admin_password"`
-	AdminEmail    string `validate:"required,email,gt=0,lte=500" json:"admin_email"`
+	AdminName     string `validate:"required,gt=4,lte=30" json:"name"`
+	AdminPassword string `validate:"required,gte=8,lte=32" json:"password"`
+	AdminEmail    string `validate:"required,email,gt=0,lte=500" json:"email"`
 }
 
 func (r *InitBaseInfoReq) FormatSiteUrl() {
