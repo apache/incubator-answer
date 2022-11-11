@@ -6,9 +6,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity_common"
@@ -18,8 +20,10 @@ import (
 	"github.com/answerdev/answer/internal/service/export"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/report_common"
+	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/dir"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -33,6 +37,9 @@ type DashboardService struct {
 	reportRepo      report_common.ReportRepo
 	configRepo      config.ConfigRepo
 	siteInfoService *siteinfo_common.SiteInfoCommonService
+	serviceConfig   *service_config.ServiceConfig
+
+	data *data.Data
 }
 
 func NewDashboardService(
@@ -44,6 +51,9 @@ func NewDashboardService(
 	reportRepo report_common.ReportRepo,
 	configRepo config.ConfigRepo,
 	siteInfoService *siteinfo_common.SiteInfoCommonService,
+	serviceConfig *service_config.ServiceConfig,
+
+	data *data.Data,
 ) *DashboardService {
 	return &DashboardService{
 		questionRepo:    questionRepo,
@@ -54,7 +64,45 @@ func NewDashboardService(
 		reportRepo:      reportRepo,
 		configRepo:      configRepo,
 		siteInfoService: siteInfoService,
+		serviceConfig:   serviceConfig,
+
+		data: data,
 	}
+}
+
+func (ds *DashboardService) StatisticalByCache(ctx context.Context) (*schema.DashboardInfo, error) {
+	dashboardInfo := &schema.DashboardInfo{}
+	infoStr, err := ds.data.Cache.GetString(ctx, schema.DashBoardCachekey)
+	if err != nil {
+		info, statisticalErr := ds.Statistical(ctx)
+		if statisticalErr != nil {
+			return dashboardInfo, err
+		}
+		setCacheErr := ds.SetCache(ctx, info)
+		if setCacheErr != nil {
+			log.Error("ds.SetCache", setCacheErr)
+		}
+		return info, err
+	}
+	err = json.Unmarshal([]byte(infoStr), dashboardInfo)
+	if err != nil {
+		return dashboardInfo, err
+	}
+	startTime := time.Now().Unix() - schema.AppStartTime.Unix()
+	dashboardInfo.AppStartTime = fmt.Sprintf("%d", startTime)
+	return dashboardInfo, nil
+}
+
+func (ds *DashboardService) SetCache(ctx context.Context, info *schema.DashboardInfo) error {
+	infoStr, err := json.Marshal(info)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+	err = ds.data.Cache.SetString(ctx, schema.DashBoardCachekey, string(infoStr), schema.DashBoardCacheTime)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+	return nil
 }
 
 // Statistical
@@ -124,8 +172,24 @@ func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	if emailconfig.SMTPHost != "" {
 		dashboardInfo.SMTP = true
 	}
-	dashboardInfo.HTTPS = true
-	dashboardInfo.OccupyingStorageSpace = "1MB"
+	siteGeneral, err := ds.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		return dashboardInfo, err
+	}
+	siteUrl, err := url.Parse(siteGeneral.SiteUrl)
+	if err != nil {
+		return dashboardInfo, err
+	}
+	if siteUrl.Scheme == "https" {
+		dashboardInfo.HTTPS = true
+	}
+
+	dirSize, err := dir.DirSize(ds.serviceConfig.UploadPath)
+	if err != nil {
+		return dashboardInfo, err
+	}
+	size := dir.FormatFileSize(dirSize)
+	dashboardInfo.OccupyingStorageSpace = size
 	startTime := time.Now().Unix() - schema.AppStartTime.Unix()
 	dashboardInfo.AppStartTime = fmt.Sprintf("%d", startTime)
 	dashboardInfo.TimeZone = siteInfoInterface.TimeZone

@@ -4,6 +4,11 @@ import "time"
 
 var AppStartTime time.Time
 
+const (
+	DashBoardCachekey  = "answer@dashboard"
+	DashBoardCacheTime = 60 * time.Minute
+)
+
 type DashboardInfo struct {
 	QuestionCount         int64                `json:"question_count"`
 	AnswerCount           int64                `json:"answer_count"`

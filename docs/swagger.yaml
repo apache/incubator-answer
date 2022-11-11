@@ -983,6 +983,9 @@ definitions:
     type: object
   schema.SiteGeneralReq:
     properties:
+      contact_email:
+        maxLength: 512
+        type: string
       description:
         maxLength: 2000
         type: string
@@ -992,13 +995,21 @@ definitions:
       short_description:
         maxLength: 255
         type: string
+      site_url:
+        maxLength: 512
+        type: string
     required:
+    - contact_email
     - description
     - name
     - short_description
+    - site_url
     type: object
   schema.SiteGeneralResp:
     properties:
+      contact_email:
+        maxLength: 512
+        type: string
       description:
         maxLength: 2000
         type: string
@@ -1008,10 +1019,15 @@ definitions:
       short_description:
         maxLength: 255
         type: string
+      site_url:
+        maxLength: 512
+        type: string
     required:
+    - contact_email
     - description
     - name
     - short_description
+    - site_url
     type: object
   schema.SiteInterfaceReq:
     properties:
