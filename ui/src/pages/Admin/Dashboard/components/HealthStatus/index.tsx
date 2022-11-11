@@ -49,10 +49,13 @@ const HealthStatus: FC<IProps> = ({ data }) => {
           </Col>
           <Col xs={6}>
             <span className="text-secondary me-1">{t('smtp')}</span>
-            <strong>{data.smtp ? t('enabled') : t('disabled')}</strong>
-            <Link to="/admin/smtp" className="ms-2">
-              {t('config')}
-            </Link>
+            {data.smtp ? (
+              <strong>{t('enabled')}</strong>
+            ) : (
+              <Link to="/admin/smtp" className="ms-2">
+                {t('config')}
+              </Link>
+            )}
           </Col>
           <Col xs={6}>
             <span className="text-secondary me-1">{t('timezone')}</span>

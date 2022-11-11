@@ -38,10 +38,11 @@ const Statistics: FC<IProps> = ({ data }) => {
           </Col>
           <Col xs={6}>
             <span className="text-secondary me-1">{t('flags')}</span>
-            <strong>{data.report_count}</strong>
-            <Link to="/admin/flags" className="ms-2">
-              {t('review')}
-            </Link>
+            <strong>
+              <Link to="/admin/flags" className="ms-2">
+                {data.report_count}
+              </Link>
+            </strong>
           </Col>
         </Row>
       </Card.Body>
