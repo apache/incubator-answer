@@ -38,7 +38,8 @@ jobs:
               # branch event
               type=ref,enable=true,priority=600,prefix=,suffix=,event=branch
               # tag event
-              type=ref,enable=true,priority=600,prefix=,suffix=,event=tag
+              #type=ref,enable=true,priority=600,prefix=,suffix=,event=tag
+              type=semver,pattern={{version}}
 
 
 
