@@ -62,12 +62,6 @@ const docTemplate = `{
                         "description": "answer id or question title",
                         "name": "query",
                         "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "question id",
-                        "name": "question_id",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -109,6 +103,34 @@ const docTemplate = `{
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/admin/api/dashboard": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "DashboardInfo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "DashboardInfo",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -487,14 +509,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo general",
+                "description": "get site general information",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo general",
+                "summary": "get site general information",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -522,14 +544,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo interface",
+                "description": "update site general information",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo interface",
+                "summary": "update site general information",
                 "parameters": [
                     {
                         "description": "general",
@@ -558,25 +580,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo interface",
+                "description": "get site interface",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo interface",
-                "parameters": [
-                    {
-                        "description": "general",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schema.AddCommentReq"
-                        }
-                    }
-                ],
+                "summary": "get site interface",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -604,14 +615,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo interface",
+                "description": "update site info interface",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo interface",
+                "summary": "update site info interface",
                 "parameters": [
                     {
                         "description": "general",
@@ -2710,14 +2721,14 @@ const docTemplate = `{
         },
         "/answer/api/v1/siteinfo": {
             "get": {
-                "description": "Get siteinfo",
+                "description": "get site info",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "site"
                 ],
-                "summary": "Get siteinfo",
+                "summary": "get site info",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -5281,11 +5292,17 @@ const docTemplate = `{
         "schema.SiteGeneralReq": {
             "type": "object",
             "required": [
+                "contact_email",
                 "description",
                 "name",
-                "short_description"
+                "short_description",
+                "site_url"
             ],
             "properties": {
+                "contact_email": {
+                    "type": "string",
+                    "maxLength": 512
+                },
                 "description": {
                     "type": "string",
                     "maxLength": 2000
@@ -5297,17 +5314,27 @@ const docTemplate = `{
                 "short_description": {
                     "type": "string",
                     "maxLength": 255
+                },
+                "site_url": {
+                    "type": "string",
+                    "maxLength": 512
                 }
             }
         },
         "schema.SiteGeneralResp": {
             "type": "object",
             "required": [
+                "contact_email",
                 "description",
                 "name",
-                "short_description"
+                "short_description",
+                "site_url"
             ],
             "properties": {
+                "contact_email": {
+                    "type": "string",
+                    "maxLength": 512
+                },
                 "description": {
                     "type": "string",
                     "maxLength": 2000
@@ -5319,6 +5346,10 @@ const docTemplate = `{
                 "short_description": {
                     "type": "string",
                     "maxLength": 255
+                },
+                "site_url": {
+                    "type": "string",
+                    "maxLength": 512
                 }
             }
         },
@@ -5326,7 +5357,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "language",
-                "theme"
+                "theme",
+                "time_zone"
             ],
             "properties": {
                 "language": {
@@ -5338,6 +5370,10 @@ const docTemplate = `{
                     "maxLength": 256
                 },
                 "theme": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "time_zone": {
                     "type": "string",
                     "maxLength": 128
                 }
@@ -5347,7 +5383,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "language",
-                "theme"
+                "theme",
+                "time_zone"
             ],
             "properties": {
                 "language": {
@@ -5359,6 +5396,10 @@ const docTemplate = `{
                     "maxLength": 256
                 },
                 "theme": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "time_zone": {
                     "type": "string",
                     "maxLength": 128
                 }

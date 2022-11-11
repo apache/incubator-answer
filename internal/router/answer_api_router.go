@@ -27,6 +27,7 @@ type AnswerAPIRouter struct {
 	siteInfoController       *controller_backyard.SiteInfoController
 	siteinfoController       *controller.SiteinfoController
 	notificationController   *controller.NotificationController
+	dashboardController      *controller.DashboardController
 }
 
 func NewAnswerAPIRouter(
@@ -50,6 +51,7 @@ func NewAnswerAPIRouter(
 	siteInfoController *controller_backyard.SiteInfoController,
 	siteinfoController *controller.SiteinfoController,
 	notificationController *controller.NotificationController,
+	dashboardController *controller.DashboardController,
 
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
@@ -73,13 +75,14 @@ func NewAnswerAPIRouter(
 		siteInfoController:       siteInfoController,
 		notificationController:   notificationController,
 		siteinfoController:       siteinfoController,
+		dashboardController:      dashboardController,
 	}
 }
 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// i18n
 	r.GET("/language/config", a.langController.GetLangMapping)
-	r.GET("/language/options", a.langController.GetLangOptions)
+	r.GET("/language/options", a.langController.GetUserLangOptions)
 
 	// comment
 	r.GET("/comment/page", a.commentController.GetCommentWithPage)
@@ -88,7 +91,6 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// user
 	r.GET("/user/info", a.userController.GetUserInfoByUserID)
-	r.GET("/user/status", a.userController.GetUserStatus)
 	r.GET("/user/action/record", a.userController.ActionRecord)
 	r.POST("/user/login/email", a.userController.UserEmailLogin)
 	r.POST("/user/register/email", a.userController.UserRegisterByEmail)
@@ -131,7 +133,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
 
 	//siteinfo
-	r.GET("/siteinfo", a.siteinfoController.GetInfo)
+	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
@@ -177,6 +179,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	// user
 	r.PUT("/user/password", a.userController.UserModifyPassWord)
 	r.PUT("/user/info", a.userController.UserUpdateInfo)
+	r.PUT("/user/interface", a.userController.UserUpdateInterface)
 	r.POST("/user/avatar/upload", a.userController.UploadUserAvatar)
 	r.POST("/user/post/file", a.userController.UploadUserPostFile)
 	r.POST("/user/notice/set", a.userController.UserNoticeSet)
@@ -213,7 +216,7 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	r.GET("/reasons", a.reasonController.Reasons)
 
 	// language
-	r.GET("/language/options", a.langController.GetLangOptions)
+	r.GET("/language/options", a.langController.GetAdminLangOptions)
 
 	// theme
 	r.GET("/theme/options", a.themeController.GetThemeOptions)
@@ -225,4 +228,7 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/siteinfo/interface", a.siteInfoController.UpdateInterface)
 	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
 	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
+
+	//dashboard
+	r.GET("/dashboard", a.dashboardController.DashboardInfo)
 }

@@ -2,62 +2,62 @@ import React, { FC, FormEvent, useEffect, useState } from 'react';
 import { Form, Button, Image, Stack } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { useToast } from '@answer/hooks';
+import { useToast } from '@/hooks';
 import {
   LangsType,
   FormDataType,
   AdminSettingsInterface,
-} from '@answer/common/interface';
+} from '@/common/interface';
+import { interfaceStore } from '@/stores';
+import { UploadImg } from '@/components';
+import { TIMEZONES, DEFAULT_TIMEZONE } from '@/common/constants';
 import {
-  languages,
   uploadAvatar,
   updateInterfaceSetting,
   useInterfaceSetting,
   useThemeOptions,
-} from '@answer/api';
-import { interfaceStore } from '@answer/stores';
-import { UploadImg } from '@answer/components';
+} from '@/services';
+import {
+  setupAppLanguage,
+  loadLanguageOptions,
+  setupAppTimeZone,
+} from '@/utils/localize';
 
 const Interface: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.interface',
   });
-  const { update: interfaceStoreUpdate } = interfaceStore();
+  const storeInterface = interfaceStore.getState().interface;
   const { data: themes } = useThemeOptions();
   const Toast = useToast();
   const [langs, setLangs] = useState<LangsType[]>();
   const { data: setting } = useInterfaceSetting();
+
   const [formData, setFormData] = useState<FormDataType>({
     logo: {
-      value: setting?.logo || '',
+      value: setting?.logo || storeInterface.logo,
       isInvalid: false,
       errorMsg: '',
     },
     theme: {
-      value: setting?.theme || '',
+      value: setting?.theme || storeInterface.theme,
       isInvalid: false,
       errorMsg: '',
     },
     language: {
-      value: setting?.language || '',
+      value: setting?.language || storeInterface.language,
+      isInvalid: false,
+      errorMsg: '',
+    },
+    time_zone: {
+      value: setting?.time_zone || DEFAULT_TIMEZONE,
       isInvalid: false,
       errorMsg: '',
     },
   });
   const getLangs = async () => {
-    const res: LangsType[] = await languages();
+    const res: LangsType[] = await loadLanguageOptions(true);
     setLangs(res);
-    if (!formData.language.value) {
-      // set default theme value
-      setFormData({
-        ...formData,
-        language: {
-          value: res[0].value,
-          isInvalid: false,
-          errorMsg: '',
-        },
-      });
-    }
   };
   // set default theme value
   if (!formData.theme.value && Array.isArray(themes) && themes.length) {
@@ -106,6 +106,7 @@ const Interface: FC = () => {
       logo: formData.logo.value,
       theme: formData.theme.value,
       language: formData.language.value,
+      time_zone: formData.time_zone.value,
     };
 
     updateInterfaceSetting(reqParams)
@@ -114,7 +115,9 @@ const Interface: FC = () => {
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
-        interfaceStoreUpdate(reqParams);
+        interfaceStore.getState().update(reqParams);
+        setupAppLanguage();
+        setupAppTimeZone();
       })
       .catch((err) => {
         if (err.isError && err.key) {
@@ -158,7 +161,7 @@ const Interface: FC = () => {
       Object.keys(setting).forEach((k) => {
         formMeta[k] = { ...formData[k], value: setting[k] };
       });
-      setFormData(formMeta);
+      setFormData({ ...formData, ...formMeta });
     }
   }, [setting]);
   useEffect(() => {
@@ -249,7 +252,33 @@ const Interface: FC = () => {
             {formData.language.errorMsg}
           </Form.Control.Feedback>
         </Form.Group>
-
+        <Form.Group controlId="time-zone" className="mb-3">
+          <Form.Label>{t('time_zone.label')}</Form.Label>
+          <Form.Select
+            value={formData.time_zone.value}
+            isInvalid={formData.time_zone.isInvalid}
+            onChange={(evt) => {
+              onChange('time_zone', evt.target.value);
+            }}>
+            {TIMEZONES?.map((item) => {
+              return (
+                <optgroup label={item.label} key={item.label}>
+                  {item.options.map((option) => {
+                    return (
+                      <option value={option.value} key={option.value}>
+                        {option.label}
+                      </option>
+                    );
+                  })}
+                </optgroup>
+              );
+            })}
+          </Form.Select>
+          <Form.Text as="div">{t('time_zone.text')}</Form.Text>
+          <Form.Control.Feedback type="invalid">
+            {formData.time_zone.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
         <Button variant="primary" type="submit">
           {t('save', { keyPrefix: 'btns' })}
         </Button>

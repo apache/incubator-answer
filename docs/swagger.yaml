@@ -983,6 +983,9 @@ definitions:
     type: object
   schema.SiteGeneralReq:
     properties:
+      contact_email:
+        maxLength: 512
+        type: string
       description:
         maxLength: 2000
         type: string
@@ -992,13 +995,21 @@ definitions:
       short_description:
         maxLength: 255
         type: string
+      site_url:
+        maxLength: 512
+        type: string
     required:
+    - contact_email
     - description
     - name
     - short_description
+    - site_url
     type: object
   schema.SiteGeneralResp:
     properties:
+      contact_email:
+        maxLength: 512
+        type: string
       description:
         maxLength: 2000
         type: string
@@ -1008,10 +1019,15 @@ definitions:
       short_description:
         maxLength: 255
         type: string
+      site_url:
+        maxLength: 512
+        type: string
     required:
+    - contact_email
     - description
     - name
     - short_description
+    - site_url
     type: object
   schema.SiteInterfaceReq:
     properties:
@@ -1024,9 +1040,13 @@ definitions:
       theme:
         maxLength: 128
         type: string
+      time_zone:
+        maxLength: 128
+        type: string
     required:
     - language
     - theme
+    - time_zone
     type: object
   schema.SiteInterfaceResp:
     properties:
@@ -1039,9 +1059,13 @@ definitions:
       theme:
         maxLength: 128
         type: string
+      time_zone:
+        maxLength: 128
+        type: string
     required:
     - language
     - theme
+    - time_zone
     type: object
   schema.TagItem:
     properties:
@@ -1394,10 +1418,6 @@ paths:
         in: query
         name: query
         type: string
-      - description: question id
-        in: query
-        name: question_id
-        type: string
       produces:
       - application/json
       responses:
@@ -1432,6 +1452,23 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: AdminSetAnswerStatus
+      tags:
+      - admin
+  /answer/admin/api/dashboard:
+    get:
+      consumes:
+      - application/json
+      description: DashboardInfo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: DashboardInfo
       tags:
       - admin
   /answer/admin/api/language/options:
@@ -1662,7 +1699,7 @@ paths:
       - admin
   /answer/admin/api/siteinfo/general:
     get:
-      description: Get siteinfo general
+      description: get site general information
       produces:
       - application/json
       responses:
@@ -1677,11 +1714,11 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo general
+      summary: get site general information
       tags:
       - admin
     put:
-      description: Get siteinfo interface
+      description: update site general information
       parameters:
       - description: general
         in: body
@@ -1698,19 +1735,12 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo interface
+      summary: update site general information
       tags:
       - admin
   /answer/admin/api/siteinfo/interface:
     get:
-      description: Get siteinfo interface
-      parameters:
-      - description: general
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/schema.AddCommentReq'
+      description: get site interface
       produces:
       - application/json
       responses:
@@ -1725,11 +1755,11 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo interface
+      summary: get site interface
       tags:
       - admin
     put:
-      description: Get siteinfo interface
+      description: update site info interface
       parameters:
       - description: general
         in: body
@@ -1746,7 +1776,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo interface
+      summary: update site info interface
       tags:
       - admin
   /answer/admin/api/theme/options:
@@ -3014,7 +3044,7 @@ paths:
       - Search
   /answer/api/v1/siteinfo:
     get:
-      description: Get siteinfo
+      description: get site info
       produces:
       - application/json
       responses:
@@ -3027,7 +3057,7 @@ paths:
                 data:
                   $ref: '#/definitions/schema.SiteGeneralResp'
               type: object
-      summary: Get siteinfo
+      summary: get site info
       tags:
       - site
   /answer/api/v1/tag:

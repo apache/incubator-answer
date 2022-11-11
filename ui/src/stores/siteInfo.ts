@@ -1,14 +1,10 @@
 import create from 'zustand';
 
-interface updateParams {
-  name: string;
-  description: string;
-  short_description: string;
-}
+import { AdminSettingsGeneral } from '@/common/interface';
 
 interface SiteInfoType {
-  siteInfo: updateParams;
-  update: (params: updateParams) => void;
+  siteInfo: AdminSettingsGeneral;
+  update: (params: AdminSettingsGeneral) => void;
 }
 
 const siteInfo = create<SiteInfoType>((set) => ({
@@ -16,6 +12,8 @@ const siteInfo = create<SiteInfoType>((set) => ({
     name: '',
     description: '',
     short_description: '',
+    site_url: '',
+    contact_email: '',
   },
   update: (params) =>
     set(() => {

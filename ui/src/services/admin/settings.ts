@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 
-import request from '@answer/utils/request';
-import type * as Type from '@answer/common/interface';
+import request from '@/utils/request';
+import type * as Type from '@/common/interface';
 
 export const useGeneralSetting = () => {
   const apiUrl = `/answer/admin/api/siteinfo/general`;
@@ -69,4 +69,22 @@ export const useSmtpSetting = () => {
 export const updateSmtpSetting = (params: Type.AdminSettingsSmtp) => {
   const apiUrl = `/answer/admin/api/setting/smtp`;
   return request.put(apiUrl, params);
+};
+
+export const useDashBoard = () => {
+  const apiUrl = `/answer/admin/api/dashboard`;
+  const { data, error } = useSWR<Type.AdminDashboard, Error>(
+    [apiUrl],
+    request.instance.get,
+  );
+  return {
+    data,
+    isLoading: !data && !error,
+    error,
+  };
+};
+
+export const getAdminLanguageOptions = () => {
+  const apiUrl = `/answer/admin/api/language/options`;
+  return request.get<Type.LangsType[]>(apiUrl);
 };

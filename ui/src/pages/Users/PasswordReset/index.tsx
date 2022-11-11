@@ -1,21 +1,19 @@
-import React, { FormEvent, useState, useEffect } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Container, Col, Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { replacementPassword } from '@answer/api';
-import { userInfoStore } from '@answer/stores';
-import { getQueryString, isLogin } from '@answer/utils';
-import type { FormDataType } from '@answer/common/interface';
-
-import Storage from '@/utils/storage';
+import { loggedUserInfoStore } from '@/stores';
+import { getQueryString } from '@/utils';
+import type { FormDataType } from '@/common/interface';
+import { replacementPassword } from '@/services';
 import { PageTitle } from '@/components';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'password_reset' });
 
   const [step, setStep] = useState(1);
-  const clearUser = userInfoStore((state) => state.clear);
+  const clearUser = loggedUserInfoStore((state) => state.clear);
   const [formData, setFormData] = useState<FormDataType>({
     pass: {
       value: '',
@@ -105,7 +103,6 @@ const Index: React.FC = () => {
       .then(() => {
         // clear login information then to login page
         clearUser();
-        Storage.remove('token');
         setStep(2);
       })
       .catch((err) => {
@@ -117,9 +114,6 @@ const Index: React.FC = () => {
       });
   };
 
-  useEffect(() => {
-    isLogin();
-  }, []);
   return (
     <>
       <PageTitle title={t('account_recovery', { keyPrefix: 'page_title' })} />
