@@ -170,7 +170,7 @@ func InitBaseInfo(ctx *gin.Context) {
 
 	if err := migrations.InitDB(c.Data.Database); err != nil {
 		log.Error("init database error: ", err.Error())
-		handler.HandleResponse(ctx, errors.BadRequest(reason.DatabaseConnectionFailed), schema.ErrTypeAlert)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.InstallCreateTableFailed), schema.ErrTypeAlert)
 		return
 	}
 

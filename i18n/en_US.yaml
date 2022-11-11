@@ -97,6 +97,8 @@ backend:
     database:
       connection_failed:
         other: "Database connection failed"
+      create_table_failed:
+        other: "Create table failed"
     install:
       create_config_failed:
         other: "Can’t create the config.yaml file."

@@ -32,13 +32,12 @@ var (
 // @in header
 // @name Authorization
 func main() {
+	log.SetLogger(zap.NewLogger(
+		log.ParseLevel(logLevel), zap.WithName("answer"), zap.WithPath(logPath), zap.WithCallerFullPath()))
 	Execute()
 }
 
 func runApp() {
-	log.SetLogger(zap.NewLogger(
-		log.ParseLevel(logLevel), zap.WithName("answer"), zap.WithPath(logPath), zap.WithCallerFullPath()))
-
 	c, err := conf.ReadConfig(cli.GetConfigFilePath())
 	if err != nil {
 		panic(err)
