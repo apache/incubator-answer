@@ -1,103 +1,69 @@
-# How to build and install
+# Answer installation guide
+## Environment Preparation
+- Memory >= 512M
+- If using MySQL version >= 5.7
 
-Before installing Answer, you need to install the base environment first.
- - database
-     - [MySQL](http://dev.mysql.com) Version >= 5.7
-
-You can then install Answer in several ways:
-
- - [Deploy with Docker](#Docker-compose-for-Answer)
- - [Binary installation](#Install-Answer-using-binary)
- - [Source installation](#Compile-the-image)
-
-## Docker-compose for Answer
+## Installing with docker
+### Step 1: Start the project with the docker command
 ```bash
-$ mkdir answer && cd answer
-$ wget https://raw.githubusercontent.com/answerdev/answer/main/docker-compose.yaml
-$ docker-compose up
+docker run -d -p 9080:80 -v answer-data:/data --name answer answerdev/answer:latest
 ```
 
-In browser, open URL [http://127.0.0.1:9080/](http://127.0.0.1:9080/).
+### Step 2: Visit the installation url
+[http://127.0.0.1:9080/install](http://127.0.0.1:9080/install)
 
-You can log in with the default administrator username (**`admin@admin.com`**) and password (**`admin`**).
+After selecting the language click next to select the appropriate database, if you just want to experience it currently, it is recommended to select sqlite as the database directly, as shown below
 
-## Docker for Answer
-Visit [Docker Hub](https://hub.docker.com/r/answerdev/answer) or GitHub Container registry to see all available images and tags.
+![install-database](docs/img/install-database.png)
 
-### Usage
-To persist data beyond the life of a Docker container, use a volume (/var/data -> /data). You can modify this based on your situation.
+Then click next to create the configuration file, click next to enter the basic website information and administrator information, as shown below
 
-```
-# Pull image from Docker Hub.
-$ docker pull answerdev/answer:latest
+![install- site-info](docs/img/install-site-info.png)
 
-# Create local directory for volume.
-$ mkdir -p /var/data
+Click Next to complete the installation
 
-# Run the image first
-$ docker run --name=answer -p 9080:80 -v /var/data:/data answerdev/answer
+### Step 3: After installation, visit the project path to start using
+[http://127.0.0.1:9080/](http://127.0.0.1:9080/)
 
-# After successful first startup, a configuration file will be generated in the /var/data directory
-# /var/data/conf/config.yaml
-# Need to modify the Mysql database address in the configuration file
-vim /var/data/conf/config.yaml
+Login with the administrator username and password you just created.
 
-# Modify database connection
-# connection: [username]:[password]@tcp([host]:[port])/[DbName]
-...
-
-# After configuring the configuration file, you can start the container again to start the service
-$ docker start answer
+## Installing with docker-compose
+### Step 1: Start the project with the docker-compose command
+```bash
+mkdir answer && cd answer
+wget https://raw.githubusercontent.com/answerdev/answer/main/docker-compose.yaml
+docker-compose up
 ```
 
-## Install Answer using binary
+### Step 2: Visit the installation url
+[http://127.0.0.1:9080/install](http://127.0.0.1:9080/install)
 
-  1. Unzip the compressed package
-  2. Use the command `cd` to enter the directory you just created
-  3. Execute the command `./answer init`
-  4. Answer will generate a `./data` directory in the current directory
-  5. Enter the `data` directory and modify the `config.yaml` file
-  6. Modify the database connection identify your database connection information
-     `connection: [username]:[password]@tcp([host]:[port])/[DbName]`
-  7. Use `cd ..` to return the directory from step 2, and execute `./answer run -c ./data/conf/config.yaml`
+The exact configuration is the same as for docker use
 
-## Available Commands
-Usage: `answer [command]`
+### Step 3: After installation, visit home page
+[http://127.0.0.1:9080/](http://127.0.0.1:9080/)
 
-- `help`: Help about any command
-- `init`: Init answer application
-- `run`: Run answer application
-- `check`: Check answer required environment
-- `dump`: Backup answer data
+## Install with binary
+### Step 1: Download the binaries
+[https://github.com/answerdev/answer/releases](https://github.com/answerdev/answer/releases)
+Download the version you need for your current system
 
-## config.yaml Description
-Here is a sample/default config.yaml file, as would be created from `answer init`.
-```
-server:
-  http:
-    addr: 0.0.0.0:80 #Project access port number
-data:
-  database:
-    connection: root:root@tcp(127.0.0.1:3306)/answer #MySQL database connection address
-  cache:
-    file_path: "/tmp/cache/cache.db" #Cache file storage path
-i18n:
-  bundle_dir: "/data/i18n" #Internationalized file storage directory
-swaggerui:
-  show: true #Whether to display the swaggerapi documentation, address /swagger/index.html
-  protocol: http #swagger protocol header
-  host: 127.0.0.1 #An accessible IP address or domain name
-  address: ':80'  #accessible port number
-service_config:
-  secret_key: "answer" #encryption key
-  web_host: "http://127.0.0.1" #Page access using domain name address
-  upload_path: "./uploads" #upload directory
+### Step 2: Install using command line
+> The following command -C specifies the data directory required for answer, you can modify it as you see fit
+
+```bash
+. /answer init -C . /answer-data/
 ```
 
-## Compile the image
-If you have modified the source files and want to repackage the image, you can use the following to repackage the image
+Then visit: [http://127.0.0.1:9080/install](http://127.0.0.1:9080/install) to install, the configuration is the same as using docker installation
+
+### Step 3: Start with command line
+After the installation is complete, the program will exit, so use the command to start the project formally
+```bash
+. /answer run -C . /answer-data/
 ```
-docker build -t  answer:v1.0.0 .
-```
-## common problem
- 1. The project cannot be started: the main program startup depends on proper configuraiton of the configuration file, `config.yaml`, as well as the internationalization translation directory (`i18n`), and the upload file storage directory (`uploads`). Ensure that the configuration file is loaded when the project starts, such as when using `answer run -c config.yaml` and that the `config.yaml` correctly specifies the i18n and uploads directories.
+
+After normal startup you can access [http://127.0.0.1:9080/](http://127.0.0.1:9080/) to log in using the administrator username password specified during installation
+
+## Installation FAQ
+- Having trouble reinstalling using docker? The default command we give is to use `answer-data` to name the volume, so if you don't need the original data again, please delete it voluntarily `docker volume rm answer-data`
