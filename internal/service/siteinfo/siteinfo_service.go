@@ -1,10 +1,12 @@
-package service
+package siteinfo
 
 import (
 	"context"
 	"encoding/json"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/export"
@@ -25,41 +27,37 @@ func NewSiteInfoService(siteInfoRepo siteinfo_common.SiteInfoRepo, emailService 
 	}
 }
 
-func (s *SiteInfoService) GetSiteGeneral(ctx context.Context) (resp schema.SiteGeneralResp, err error) {
-	var (
-		siteType = "general"
-		siteInfo *entity.SiteInfo
-		exist    bool
-	)
-	resp = schema.SiteGeneralResp{}
-
-	siteInfo, exist, err = s.siteInfoRepo.GetByType(ctx, siteType)
+// GetSiteGeneral get site info general
+func (s *SiteInfoService) GetSiteGeneral(ctx context.Context) (resp *schema.SiteGeneralResp, err error) {
+	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeGeneral)
+	if err != nil {
+		return nil, err
+	}
 	if !exist {
-		return
+		return nil, errors.BadRequest(reason.SiteInfoNotFound)
 	}
 
-	_ = json.Unmarshal([]byte(siteInfo.Content), &resp)
-	return
+	resp = &schema.SiteGeneralResp{}
+	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+	return resp, nil
 }
 
-func (s *SiteInfoService) GetSiteInterface(ctx context.Context) (resp schema.SiteInterfaceResp, err error) {
-	var (
-		siteType = "interface"
-		siteInfo *entity.SiteInfo
-		exist    bool
-	)
-	resp = schema.SiteInterfaceResp{}
-
-	siteInfo, exist, err = s.siteInfoRepo.GetByType(ctx, siteType)
-	if !exist {
-		return
+// GetSiteInterface get site info interface
+func (s *SiteInfoService) GetSiteInterface(ctx context.Context) (resp *schema.SiteInterfaceResp, err error) {
+	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeInterface)
+	if err != nil {
+		return nil, err
 	}
-
-	_ = json.Unmarshal([]byte(siteInfo.Content), &resp)
-	return
+	if !exist {
+		return nil, errors.BadRequest(reason.SiteInfoNotFound)
+	}
+	resp = &schema.SiteInterfaceResp{}
+	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+	return resp, nil
 }
 
 func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGeneralReq) (err error) {
+	req.FormatSiteUrl()
 	var (
 		siteType = "general"
 		content  []byte
@@ -77,10 +75,9 @@ func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGe
 
 func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.SiteInterfaceReq) (err error) {
 	var (
-		siteType = "interface"
-		themeExist,
-		langExist bool
-		content []byte
+		siteType   = "interface"
+		themeExist bool
+		content    []byte
 	)
 
 	// check theme
@@ -96,13 +93,7 @@ func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.Site
 	}
 
 	// check language
-	for _, lang := range schema.GetLangOptions {
-		if lang.Value == req.Language {
-			langExist = true
-			break
-		}
-	}
-	if !langExist {
+	if !translator.CheckLanguageIsValid(req.Language) {
 		err = errors.BadRequest(reason.LangNotFound)
 		return
 	}

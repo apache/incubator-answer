@@ -3,13 +3,13 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams } from 'react-router-dom';
 
-import { Pagination, FormatTime, PageTitle, Empty } from '@answer/components';
-import { userInfoStore } from '@answer/stores';
+import { Pagination, FormatTime, PageTitle, Empty } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
 import {
   usePersonalInfoByName,
   usePersonalTop,
   usePersonalListByTabName,
-} from '@answer/api';
+} from '@/services';
 
 import {
   UserInfo,
@@ -30,7 +30,7 @@ const Personal: FC = () => {
   const page = searchParams.get('page') || 1;
   const order = searchParams.get('order') || 'newest';
   const { t } = useTranslation('translation', { keyPrefix: 'personal' });
-  const sessionUser = userInfoStore((state) => state.user);
+  const sessionUser = loggedUserInfoStore((state) => state.user);
   const isSelf = sessionUser?.username === username;
 
   const { data: userInfo } = usePersonalInfoByName(username);
@@ -64,9 +64,9 @@ const Personal: FC = () => {
           xxl={3}
           lg={4}
           sm={12}
-          className="d-flex justify-content-end mt-5 mt-lg-0">
+          className="d-flex justify-content-start justify-content-md-end">
           {isSelf && (
-            <div>
+            <div className="mb-3">
               <Button
                 variant="outline-secondary"
                 href="/users/settings/profile"
@@ -79,7 +79,7 @@ const Personal: FC = () => {
       </Row>
 
       <Row className="justify-content-center">
-        <Col lg={10}>
+        <Col xxl={10}>
           <NavBar tabName={tabName} slug={username} isSelf={isSelf} />
         </Col>
         <Col xxl={7} lg={8} sm={12}>

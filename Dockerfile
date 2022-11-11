@@ -1,4 +1,4 @@
-FROM node:16 AS node-builder
+FROM amd64/node AS node-builder
 
 LABEL maintainer="mingcheng<mc@sf.com>"
 
@@ -29,7 +29,7 @@ RUN apk --no-cache add build-base git \
     && make clean build \
     && cp answer /usr/bin/answer
 
-RUN mkdir -p /data/upfiles && chmod 777 /data/upfiles \
+RUN mkdir -p /data/uploads && chmod 777 /data/uploads \
     && mkdir -p /data/i18n && cp -r i18n/*.yaml /data/i18n
 
 # stage3 copy the binary and resource files into fresh container

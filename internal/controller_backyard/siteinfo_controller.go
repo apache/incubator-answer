@@ -3,24 +3,24 @@ package controller_backyard
 import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/siteinfo"
 	"github.com/gin-gonic/gin"
 )
 
 type SiteInfoController struct {
-	siteInfoService *service.SiteInfoService
+	siteInfoService *siteinfo.SiteInfoService
 }
 
 // NewSiteInfoController new siteinfo controller.
-func NewSiteInfoController(siteInfoService *service.SiteInfoService) *SiteInfoController {
+func NewSiteInfoController(siteInfoService *siteinfo.SiteInfoService) *SiteInfoController {
 	return &SiteInfoController{
 		siteInfoService: siteInfoService,
 	}
 }
 
-// GetGeneral godoc
-// @Summary Get siteinfo general
-// @Description Get siteinfo general
+// GetGeneral get site general information
+// @Summary get site general information
+// @Description get site general information
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json
@@ -31,23 +31,22 @@ func (sc *SiteInfoController) GetGeneral(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
-// GetInterface godoc
-// @Summary Get siteinfo interface
-// @Description Get siteinfo interface
+// GetInterface get site interface
+// @Summary get site interface
+// @Description get site interface
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json
 // @Success 200 {object} handler.RespBody{data=schema.SiteInterfaceResp}
 // @Router /answer/admin/api/siteinfo/interface [get]
-// @Param data body schema.AddCommentReq true "general"
 func (sc *SiteInfoController) GetInterface(ctx *gin.Context) {
 	resp, err := sc.siteInfoService.GetSiteInterface(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
 
-// UpdateGeneral godoc
-// @Summary Get siteinfo interface
-// @Description Get siteinfo interface
+// UpdateGeneral update site general information
+// @Summary update site general information
+// @Description update site general information
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json
@@ -63,9 +62,9 @@ func (sc *SiteInfoController) UpdateGeneral(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
-// UpdateInterface godoc
-// @Summary Get siteinfo interface
-// @Description Get siteinfo interface
+// UpdateInterface update site interface
+// @Summary update site info interface
+// @Description update site info interface
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json

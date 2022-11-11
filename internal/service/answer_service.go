@@ -65,13 +65,19 @@ func NewAnswerService(
 }
 
 // RemoveAnswer delete answer
-func (as *AnswerService) RemoveAnswer(ctx context.Context, id string) (err error) {
-	answerInfo, exist, err := as.answerRepo.GetByID(ctx, id)
+func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAnswerReq) (err error) {
+	answerInfo, exist, err := as.answerRepo.GetByID(ctx, req.ID)
 	if err != nil {
 		return err
 	}
 	if !exist {
 		return nil
+	}
+	if answerInfo.UserID != req.UserID {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	if answerInfo.Adopted == schema.AnswerAdoptedEnable {
+		return errors.BadRequest(reason.UnauthorizedError)
 	}
 
 	// user add question count
@@ -85,7 +91,7 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, id string) (err error
 		log.Error("user IncreaseAnswerCount error", err.Error())
 	}
 
-	err = as.answerRepo.RemoveAnswer(ctx, id)
+	err = as.answerRepo.RemoveAnswer(ctx, req.ID)
 	if err != nil {
 		return err
 	}

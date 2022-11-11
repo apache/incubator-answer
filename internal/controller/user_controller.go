@@ -89,22 +89,6 @@ func (uc *UserController) GetOtherUserInfoByUsername(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
-// GetUserStatus get user status info
-// @Summary get user status info
-// @Description get user status info
-// @Tags User
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
-// @Router /answer/api/v1/user/status [get]
-func (uc *UserController) GetUserStatus(ctx *gin.Context) {
-	userID := middleware.GetLoginUserIDFromContext(ctx)
-	token := middleware.ExtractToken(ctx)
-	resp, err := uc.userService.GetUserStatus(ctx, userID, token)
-	handler.HandleResponse(ctx, err, resp)
-}
-
 // UserEmailLogin godoc
 // @Summary UserEmailLogin
 // @Description UserEmailLogin
@@ -373,6 +357,27 @@ func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
+// UserUpdateInterface update user interface config
+// @Summary UserUpdateInterface update user interface config
+// @Description UserUpdateInterface update user interface config
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param Authorization header string true "access-token"
+// @Param data body schema.UpdateUserInterfaceRequest true "UpdateInfoRequest"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/user/interface [put]
+func (uc *UserController) UserUpdateInterface(ctx *gin.Context) {
+	req := &schema.UpdateUserInterfaceRequest{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.UserId = middleware.GetLoginUserIDFromContext(ctx)
+	err := uc.userService.UserUpdateInterface(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
 // UploadUserAvatar godoc
 // @Summary UserUpdateInfo
 // @Description UserUpdateInfo
@@ -490,6 +495,10 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	// If the user is not logged in, the api cannot be used.
 	// If the user email is not verified, that also can use this api to modify the email.
+	if len(req.UserID) == 0 {
+		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+		return
+	}
 
 	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
@@ -501,13 +510,15 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
 		return
 	}
-
-	if len(req.UserID) == 0 {
-		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
+	resp, err := uc.userService.UserChangeEmailSendCode(ctx, req)
+	if err != nil {
+		if resp != nil {
+			resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
+		}
+		handler.HandleResponse(ctx, err, resp)
 		return
 	}
-	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
-	err := uc.userService.UserChangeEmailSendCode(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

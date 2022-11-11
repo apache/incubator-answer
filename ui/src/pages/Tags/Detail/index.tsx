@@ -3,12 +3,12 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import * as Type from '@answer/common/interface';
-import { PageTitle, FollowingTags } from '@answer/components';
-import { useTagInfo, useFollow } from '@answer/api';
-
+import * as Type from '@/common/interface';
+import { PageTitle, FollowingTags } from '@/components';
+import { useTagInfo, useFollow } from '@/services';
 import QuestionList from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
+import { escapeRemove } from '@/utils';
 
 const Questions: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
@@ -70,7 +70,7 @@ const Questions: FC = () => {
               </h3>
 
               <p className="text-break">
-                {tagInfo.excerpt || t('no_description')}
+                {escapeRemove(tagInfo.excerpt) || t('no_description')}
                 <Link to={`/tags/${curTagName}/info`}> [{t('more')}]</Link>
               </p>
 

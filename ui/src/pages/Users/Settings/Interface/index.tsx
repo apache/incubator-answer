@@ -2,76 +2,55 @@ import React, { useEffect, useState, FormEvent } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import dayjs from 'dayjs';
-import en from 'dayjs/locale/en';
-import zh from 'dayjs/locale/zh-cn';
-import vi from 'dayjs/locale/vi';
-
-import { languages } from '@answer/api';
-import type { LangsType, FormDataType } from '@answer/common/interface';
-import { useToast } from '@answer/hooks';
-
-import Storage from '@/utils/storage';
+import type { LangsType, FormDataType } from '@/common/interface';
+import { useToast } from '@/hooks';
+import { updateUserInterface } from '@/services';
+import { localize } from '@/utils';
+import { loggedUserInfoStore } from '@/stores';
 
 const Index = () => {
-  const { t, i18n } = useTranslation('translation', {
+  const { t } = useTranslation('translation', {
     keyPrefix: 'settings.interface',
   });
+  const loggedUserInfo = loggedUserInfoStore.getState().user;
   const toast = useToast();
   const [langs, setLangs] = useState<LangsType[]>();
   const [formData, setFormData] = useState<FormDataType>({
     lang: {
-      value: true,
+      value: loggedUserInfo.language,
       isInvalid: false,
       errorMsg: '',
     },
   });
 
   const getLangs = async () => {
-    const res: LangsType[] = await languages();
+    const res: LangsType[] = await localize.loadLanguageOptions();
     setLangs(res);
   };
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
-
-    let lang = en;
-
-    if (formData.lang.value === 'zh_CN') {
-      lang = zh;
-    }
-
-    if (formData.label.value === 'vi_VN') {
-      lang = vi;
-    }
-
-    Storage.set('LANG', formData.lang.value);
-    dayjs.locale(lang);
-    i18n.changeLanguage(formData.lang.value);
-    toast.onShow({
-      msg: t('update', { keyPrefix: 'toast' }),
-      variant: 'success',
+    const lang = formData.lang.value;
+    updateUserInterface(lang).then(() => {
+      loggedUserInfoStore.getState().update({
+        ...loggedUserInfo,
+        language: lang,
+      });
+      localize.setupAppLanguage();
+      toast.onShow({
+        msg: t('update', { keyPrefix: 'toast' }),
+        variant: 'success',
+      });
     });
   };
 
   useEffect(() => {
     getLangs();
-    const lang = Storage.get('LANG');
-    if (lang) {
-      setFormData({
-        lang: {
-          value: lang,
-          isInvalid: false,
-          errorMsg: '',
-        },
-      });
-    }
   }, []);
   return (
     <Form noValidate onSubmit={handleSubmit}>
       <Form.Group controlId="emailSend" className="mb-3">
         <Form.Label>{t('lang.label')}</Form.Label>
-
         <Form.Select
           value={formData.lang.value}
           isInvalid={formData.lang.isInvalid}
@@ -86,7 +65,7 @@ const Index = () => {
           }}>
           {langs?.map((item) => {
             return (
-              <option value={item.value} key={item.value}>
+              <option value={item.value} key={item.label}>
                 {item.label}
               </option>
             );

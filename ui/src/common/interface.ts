@@ -109,16 +109,19 @@ export interface UserInfoBase {
    */
   status?: string;
   /** roles */
-  is_admin?: true;
+  is_admin?: boolean;
 }
 
 export interface UserInfoRes extends UserInfoBase {
   bio: string;
   bio_html: string;
   create_time?: string;
-  /** value = 1 active; value = 2 inactivated
+  /**
+   * value = 1 active;
+   * value = 2 inactivated
    */
   mail_status: number;
+  language: string;
   e_mail?: string;
   [prop: string]: any;
 }
@@ -228,6 +231,7 @@ export type AdminContentsFilterBy = 'normal' | 'closed' | 'deleted';
 
 export interface AdminContentsReq extends Paging {
   status: AdminContentsFilterBy;
+  query?: string;
 }
 
 /**
@@ -257,12 +261,15 @@ export interface AdminSettingsGeneral {
   name: string;
   short_description: string;
   description: string;
+  site_url: string;
+  contact_email: string;
 }
 
 export interface AdminSettingsInterface {
   logo: string;
   language: string;
   theme: string;
+  time_zone?: string;
 }
 
 export interface AdminSettingsSmtp {
@@ -320,4 +327,25 @@ export interface SearchResItem {
 }
 export interface SearchRes extends ListResult<SearchResItem> {
   extra: any;
+}
+
+export interface AdminDashboard {
+  info: {
+    question_count: number;
+    answer_count: number;
+    comment_count: number;
+    vote_count: number;
+    user_count: number;
+    report_count: number;
+    uploading_files: boolean;
+    smtp: boolean;
+    time_zone: string;
+    occupying_storage_space: string;
+    app_start_time: number;
+    https: boolean;
+    version_info: {
+      remote_version: string;
+      version: string;
+    };
+  };
 }

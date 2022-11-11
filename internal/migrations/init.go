@@ -1,10 +1,12 @@
 package migrations
 
 import (
+	"encoding/json"
 	"fmt"
 
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/entity"
+	"golang.org/x/crypto/bcrypt"
 	"xorm.io/xorm"
 )
 
@@ -55,11 +57,6 @@ func InitDB(dataConf *data.Database) (err error) {
 		return fmt.Errorf("init admin user failed: %s", err)
 	}
 
-	err = initSiteInfo(engine)
-	if err != nil {
-		return fmt.Errorf("init site info failed: %s", err)
-	}
-
 	err = initConfigTable(engine)
 	if err != nil {
 		return fmt.Errorf("init config table: %s", err)
@@ -82,12 +79,79 @@ func initAdminUser(engine *xorm.Engine) error {
 	return err
 }
 
-func initSiteInfo(engine *xorm.Engine) error {
+func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail string) error {
+	interfaceData := map[string]string{
+		"logo":     "",
+		"theme":    "black",
+		"language": language,
+	}
+	interfaceDataBytes, _ := json.Marshal(interfaceData)
 	_, err := engine.InsertOne(&entity.SiteInfo{
 		Type:    "interface",
-		Content: `{"logo":"","theme":"black","language":"en_US"}`,
+		Content: string(interfaceDataBytes),
 		Status:  1,
 	})
+	if err != nil {
+		return err
+	}
+
+	generalData := map[string]string{
+		"name":          siteName,
+		"site_url":      siteURL,
+		"contact_email": contactEmail,
+	}
+	generalDataBytes, _ := json.Marshal(generalData)
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "general",
+		Content: string(generalDataBytes),
+		Status:  1,
+	})
+	return err
+}
+
+func updateAdminInfo(engine *xorm.Engine, adminName, adminPassword, adminEmail string) error {
+	generateFromPassword, err := bcrypt.GenerateFromPassword([]byte(adminPassword), bcrypt.DefaultCost)
+	if err != nil {
+		return fmt.Errorf("")
+	}
+	adminPassword = string(generateFromPassword)
+
+	// update admin info
+	_, err = engine.ID("1").Update(&entity.User{
+		Username:    adminName,
+		Pass:        adminPassword,
+		EMail:       adminEmail,
+		DisplayName: adminName,
+	})
+	if err != nil {
+		return fmt.Errorf("update admin user info failed: %s", err)
+	}
+	return nil
+}
+
+// UpdateInstallInfo update some init data about the admin interface and admin password
+func UpdateInstallInfo(dataConf *data.Database, language string,
+	siteName string,
+	siteURL string,
+	contactEmail string,
+	adminName string,
+	adminPassword string,
+	adminEmail string) error {
+
+	engine, err := data.NewDB(false, dataConf)
+	if err != nil {
+		return fmt.Errorf("database connection error: %s", err)
+	}
+
+	err = updateAdminInfo(engine, adminName, adminPassword, adminEmail)
+	if err != nil {
+		return fmt.Errorf("update admin info failed: %s", err)
+	}
+
+	err = initSiteInfo(engine, language, siteName, siteURL, contactEmail)
+	if err != nil {
+		return fmt.Errorf("init site info failed: %s", err)
+	}
 	return err
 }
 
@@ -125,7 +189,7 @@ func initConfigTable(engine *xorm.Engine) error {
 		{ID: 30, Key: "answer.vote_up", Value: `0`},
 		{ID: 31, Key: "answer.vote_up_cancel", Value: `0`},
 		{ID: 32, Key: "question.follow", Value: `0`},
-		{ID: 33, Key: "email.config", Value: `{"from_name":"answer","from_email":"answer@answer.com","smtp_host":"smtp.answer.org","smtp_port":465,"smtp_password":"answer","smtp_username":"answer@answer.com","smtp_authentication":true,"encryption":"","register_title":"[{{.SiteName}}] Confirm your new account","register_body":"Welcome to {{.SiteName}}<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n","pass_reset_title":"[{{.SiteName }}] Password reset","pass_reset_body":"Somebody asked to reset your password on [{{.SiteName}}].<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n","change_title":"[{{.SiteName}}] Confirm your new email address","change_body":"Confirm your new email address for {{.SiteName}}  by clicking on the following link:<br><br>\n\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n","test_title":"[{{.SiteName}}] Test Email","test_body":"This is a test email."}`},
+		{ID: 33, Key: "email.config", Value: `{"from_name":"","from_email":"","smtp_host":"","smtp_port":465,"smtp_password":"","smtp_username":"","smtp_authentication":true,"encryption":"","register_title":"[{{.SiteName}}] Confirm your new account","register_body":"Welcome to {{.SiteName}}<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n","pass_reset_title":"[{{.SiteName }}] Password reset","pass_reset_body":"Somebody asked to reset your password on [{{.SiteName}}].<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n","change_title":"[{{.SiteName}}] Confirm your new email address","change_body":"Confirm your new email address for {{.SiteName}}  by clicking on the following link:<br><br>\n\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n","test_title":"[{{.SiteName}}] Test Email","test_body":"This is a test email."}`},
 		{ID: 35, Key: "tag.follow", Value: `0`},
 		{ID: 36, Key: "rank.question.add", Value: `0`},
 		{ID: 37, Key: "rank.question.edit", Value: `0`},

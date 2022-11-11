@@ -1,18 +1,18 @@
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Button, Form, Table, Badge } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useQueryUsers } from '@answer/api';
 import {
   Pagination,
   FormatTime,
   BaseUserCard,
   Empty,
   QueryGroup,
-} from '@answer/components';
-import * as Type from '@answer/common/interface';
-import { useChangeModal } from '@answer/hooks';
+} from '@/components';
+import * as Type from '@/common/interface';
+import { useChangeModal } from '@/hooks';
+import { useQueryUsers } from '@/services';
 
 import '../index.scss';
 
@@ -33,11 +33,11 @@ const bgMap = {
 const PAGE_SIZE = 10;
 const Users: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'admin.users' });
-  const [userName, setUserName] = useState('');
 
-  const [urlSearchParams] = useSearchParams();
+  const [urlSearchParams, setUrlSearchParams] = useSearchParams();
   const curFilter = urlSearchParams.get('filter') || UserFilterKeys[0];
   const curPage = Number(urlSearchParams.get('page') || '1');
+  const curQuery = urlSearchParams.get('query') || '';
   const {
     data,
     isLoading,
@@ -45,7 +45,7 @@ const Users: FC = () => {
   } = useQueryUsers({
     page: curPage,
     page_size: PAGE_SIZE,
-    ...(userName ? { username: userName } : {}),
+    query: curQuery,
     ...(curFilter === 'all' ? {} : { status: curFilter }),
   });
   const changeModal = useChangeModal({
@@ -59,6 +59,11 @@ const Users: FC = () => {
     });
   };
 
+  const handleFilter = (e) => {
+    urlSearchParams.set('query', e.target.value);
+    urlSearchParams.delete('page');
+    setUrlSearchParams(urlSearchParams);
+  };
   return (
     <>
       <h3 className="mb-4">{t('title')}</h3>
@@ -71,31 +76,32 @@ const Users: FC = () => {
         />
 
         <Form.Control
-          className="d-none"
           size="sm"
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          placeholder="Filter by name"
+          value={curQuery}
+          onChange={handleFilter}
+          placeholder={t('filter.placeholder')}
           style={{ width: '12.25rem' }}
         />
       </div>
       <Table>
         <thead>
           <tr>
-            <th style={{ width: '30%' }}>{t('name')}</th>
-            <th>{t('reputation')}</th>
+            <th>{t('name')}</th>
+            <th style={{ width: '12%' }}>{t('reputation')}</th>
             <th style={{ width: '20%' }}>{t('email')}</th>
-            <th className="text-nowrap" style={{ width: '20%' }}>
+            <th className="text-nowrap" style={{ width: '15%' }}>
               {t('created_at')}
             </th>
             {(curFilter === 'deleted' || curFilter === 'suspended') && (
-              <th className="text-nowrap" style={{ width: '15%' }}>
+              <th className="text-nowrap" style={{ width: '10%' }}>
                 {curFilter === 'deleted' ? t('delete_at') : t('suspend_at')}
               </th>
             )}
 
-            <th>{t('status')}</th>
-            {curFilter !== 'deleted' ? <th>{t('action')}</th> : null}
+            <th style={{ width: '10%' }}>{t('status')}</th>
+            {curFilter !== 'deleted' ? (
+              <th style={{ width: '10%' }}>{t('action')}</th>
+            ) : null}
           </tr>
         </thead>
         <tbody className="align-middle">
@@ -132,7 +138,7 @@ const Users: FC = () => {
                   <td>
                     {user.status !== 'deleted' && (
                       <Button
-                        className="px-2"
+                        className="p-0 btn-no-border"
                         variant="link"
                         onClick={() => handleClick(user)}>
                         {t('change')}

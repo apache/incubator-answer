@@ -3,11 +3,11 @@ import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Modal } from '@answer/components';
-import { useReportModal, useToast } from '@answer/hooks';
-import { deleteQuestion, deleteAnswer } from '@answer/api';
-import { isLogin } from '@answer/utils';
+import { Modal } from '@/components';
+import { useReportModal, useToast } from '@/hooks';
 import Share from '../Share';
+import { deleteQuestion, deleteAnswer } from '@/services';
+import { tryNormalLogged } from '@/utils/guard';
 
 interface IProps {
   type: 'answer' | 'question';
@@ -98,7 +98,7 @@ const Index: FC<IProps> = ({
   };
 
   const handleAction = (action) => {
-    if (!isLogin(true)) {
+    if (!tryNormalLogged(true)) {
       return;
     }
     if (action === 'delete') {

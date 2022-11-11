@@ -29,12 +29,14 @@ const Index: FC<Props> = ({ data }) => {
         <div className="fs-14">
           {t('question_detail.closed_in')}{' '}
           <time
-            dateTime={dayjs.unix(data.operation_time).toISOString()}
+            dateTime={dayjs.unix(data.operation_time).tz().toISOString()}
             title={dayjs
               .unix(data.operation_time)
+              .tz()
               .format(t('dates.long_date_with_time'))}>
             {dayjs
               .unix(data.operation_time)
+              .tz()
               .format(t('dates.long_date_with_year'))}
           </time>
           .

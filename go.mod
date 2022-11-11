@@ -15,6 +15,7 @@ require (
 	github.com/goccy/go-json v0.9.11
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
+	github.com/grokify/html-strip-tags-go v0.0.1
 	github.com/jinzhu/copier v0.3.5
 	github.com/jinzhu/now v1.1.5
 	github.com/lib/pq v1.10.7
@@ -24,7 +25,7 @@ require (
 	github.com/segmentfault/pacman v1.0.1
 	github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20221018072427-a15dd1434e05
 	github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20221018072427-a15dd1434e05
-	github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221018072427-a15dd1434e05
+	github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221109042453-26158da67632
 	github.com/segmentfault/pacman/contrib/log/zap v0.0.0-20221018072427-a15dd1434e05
 	github.com/segmentfault/pacman/contrib/server/http v0.0.0-20221018072427-a15dd1434e05
 	github.com/spf13/cobra v1.6.1
@@ -35,6 +36,7 @@ require (
 	golang.org/x/crypto v0.1.0
 	golang.org/x/net v0.1.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
+	gopkg.in/yaml.v3 v3.0.1
 	xorm.io/builder v0.3.12
 	xorm.io/core v0.7.3
 	xorm.io/xorm v1.3.2
@@ -110,6 +112,5 @@ require (
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )

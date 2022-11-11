@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import { ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { QueryGroup } from '@answer/components';
+import { QueryGroup } from '@/components';
 
 const sortBtns = ['relevance', 'newest', 'active', 'score'];
 

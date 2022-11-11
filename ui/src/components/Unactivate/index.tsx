@@ -3,14 +3,12 @@ import { Button, Col } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { resendEmail, checkImgCode } from '@answer/api';
-import { PicAuthCodeModal } from '@answer/components/Modal';
-import type {
-  ImgCodeRes,
-  ImgCodeReq,
-  FormDataType,
-} from '@answer/common/interface';
-import { userInfoStore } from '@answer/stores';
+import { PicAuthCodeModal } from '@/components/Modal';
+import type { ImgCodeRes, ImgCodeReq, FormDataType } from '@/common/interface';
+import { loggedUserInfoStore } from '@/stores';
+import { resendEmail, checkImgCode } from '@/services';
+import { CAPTCHA_CODE_STORAGE_KEY } from '@/common/constants';
+import Storage from '@/utils/storage';
 
 interface IProps {
   visible: boolean;
@@ -20,7 +18,7 @@ const Index: React.FC<IProps> = ({ visible = false }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'inactive' });
   const [isSuccess, setSuccess] = useState(false);
   const [showModal, setModalState] = useState(false);
-  const { e_mail } = userInfoStore((state) => state.user);
+  const { e_mail } = loggedUserInfoStore((state) => state.user);
   const [formData, setFormData] = useState<FormDataType>({
     captcha_code: {
       value: '',
@@ -48,7 +46,7 @@ const Index: React.FC<IProps> = ({ visible = false }) => {
     }
     let obj: ImgCodeReq = {};
     if (imgCode.verify) {
-      const code = localStorage.getItem('captchaCode') || '';
+      const code = Storage.get(CAPTCHA_CODE_STORAGE_KEY) || '';
       obj = {
         captcha_code: code,
         captcha_id: imgCode.captcha_id,

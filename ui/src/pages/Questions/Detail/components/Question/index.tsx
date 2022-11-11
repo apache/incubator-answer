@@ -11,9 +11,9 @@ import {
   Comment,
   FormatTime,
   htmlRender,
-} from '@answer/components';
-import { formatCount } from '@answer/utils';
-import { following } from '@answer/api';
+} from '@/components';
+import { formatCount } from '@/utils';
+import { following } from '@/services';
 
 interface Props {
   data: any;

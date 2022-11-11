@@ -3,7 +3,7 @@ import { Nav, Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink } from 'react-router-dom';
 
-import { Avatar, Icon } from '@answer/components';
+import { Avatar, Icon } from '@/components';
 
 interface Props {
   redDot;
