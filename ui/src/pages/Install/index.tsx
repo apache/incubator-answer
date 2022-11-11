@@ -36,7 +36,7 @@ const Index: FC = () => {
 
   const [formData, setFormData] = useState<FormDataType>({
     lang: {
-      value: '',
+      value: 'en_US',
       isInvalid: false,
       errorMsg: '',
     },
@@ -85,17 +85,17 @@ const Index: FC = () => {
       isInvalid: false,
       errorMsg: '',
     },
-    admin_name: {
+    name: {
       value: '',
       isInvalid: false,
       errorMsg: '',
     },
-    admin_password: {
+    password: {
       value: '',
       isInvalid: false,
       errorMsg: '',
     },
-    admin_email: {
+    email: {
       value: '',
       isInvalid: false,
       errorMsg: '',
@@ -166,9 +166,9 @@ const Index: FC = () => {
       site_name: formData.site_name.value,
       site_url: formData.site_url.value,
       contact_email: formData.contact_email.value,
-      admin_name: formData.admin_name.value,
-      admin_password: formData.admin_password.value,
-      admin_email: formData.admin_email.value,
+      name: formData.name.value,
+      password: formData.password.value,
+      email: formData.email.value,
     };
     installBaseInfo(params)
       .then(() => {
@@ -246,9 +246,9 @@ const Index: FC = () => {
   }
 
   return (
-    <div className="page-wrap2">
+    <div className="page-wrap2 py-5">
       <PageTitle title={t('install', { keyPrefix: 'page_title' })} />
-      <Container style={{ paddingTop: '74px' }}>
+      <Container className='py-3'>
         <Row className="justify-content-center">
           <Col lg={6}>
             <h2 className="mb-4 text-center">{t('title')}</h2>
