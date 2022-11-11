@@ -274,17 +274,38 @@ const SchemaForm: FC<IProps> = ({
           );
         }
 
-        const as = widget === 'textarea' ? 'textarea' : 'input';
+        if (widget === 'textarea') {
+          return (
+            <Form.Group controlId={key} key={key} className="mb-3">
+              <Form.Label>{title}</Form.Label>
+              <Form.Control
+                as="textarea"
+                name={key}
+                placeholder={options?.placeholder || ''}
+                type={options?.type || 'text'}
+                value={formData[key]?.value}
+                onChange={handleInputChange}
+                isInvalid={formData[key].isInvalid}
+                rows={options?.rows || 3}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formData[key]?.errorMsg}
+              </Form.Control.Feedback>
+
+              <Form.Text className="text-muted">{description}</Form.Text>
+            </Form.Group>
+          );
+        }
         return (
           <Form.Group controlId={key} key={key} className="mb-3">
             <Form.Label>{title}</Form.Label>
             <Form.Control
-              as={as}
               name={key}
               placeholder={options?.placeholder || ''}
               type={options?.type || 'text'}
               value={formData[key]?.value}
               onChange={handleInputChange}
+              style={options?.type === 'color' ? { width: '6rem' } : {}}
               isInvalid={formData[key].isInvalid}
             />
             <Form.Control.Feedback type="invalid">
