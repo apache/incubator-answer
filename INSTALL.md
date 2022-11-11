@@ -9,16 +9,16 @@
 docker run -d -p 9080:80 -v answer-data:/data --name answer answerdev/answer:latest
 ```
 
-### Step 2: Access the installation path for project installation
+### Step 2: Visit the installation url
 [http://127.0.0.1:9080/install](http://127.0.0.1:9080/install)
 
 After selecting the language click next to select the appropriate database, if you just want to experience it currently, it is recommended to select sqlite as the database directly, as shown below
 
-! [install-database](docs/img/install-database.png)
+![install-database](docs/img/install-database.png)
 
 Then click next to create the configuration file, click next to enter the basic website information and administrator information, as shown below
 
-! [install- site-info](docs/img/install- site-info.png)
+![install- site-info](docs/img/install-site-info.png)
 
 Click Next to complete the installation
 
@@ -35,12 +35,12 @@ wget https://raw.githubusercontent.com/answerdev/answer/main/docker-compose.yaml
 docker-compose up
 ```
 
-### Step 2: Access the installation path for project installation
+### Step 2: Visit the installation url
 [http://127.0.0.1:9080/install](http://127.0.0.1:9080/install)
 
 The exact configuration is the same as for docker use
 
-### Step 3: After installation, access the project path to start using
+### Step 3: After installation, visit home page
 [http://127.0.0.1:9080/](http://127.0.0.1:9080/)
 
 ## Install with binary
