@@ -54,7 +54,7 @@ export interface UISchema {
       invalid?: string;
       validator?: (value) => boolean;
       textRender?: () => React.ReactElement;
-      imageType?: 'avatar' | 'logo';
+      imageType?: 'avatar' | 'logo' | 'mobile_logo' | 'square_icon' | 'favicon';
     };
   };
 }

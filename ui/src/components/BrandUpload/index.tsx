@@ -5,7 +5,7 @@ import { Icon, UploadImg } from '@/components';
 import { uploadAvatar } from '@/services';
 
 interface Props {
-  type: 'logo' | 'avatar';
+  type: 'logo' | 'avatar' | 'mobile_logo' | 'square_icon' | 'favicon';
   value: string;
   onChange: (value: string) => void;
 }
