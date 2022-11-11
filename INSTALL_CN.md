@@ -1,4 +1,7 @@
 # Answer 安装指引
+## 环境准备
+- 内存 >= 512M
+- 如果使用 MySQL 版本 >= 5.7
 
 ## 使用 docker 安装
 ### 步骤 1: 使用 docker 命令启动项目
@@ -50,31 +53,16 @@ docker-compose up
 ```bash
 ./answer init -C ./answer-data/
 ```
-server:
-  http:
-    addr: 0.0.0.0:80 #项目访问端口号
-data:
-  database:
-    connection: root:root@tcp(127.0.0.1:3306)/answer #mysql数据库连接地址
-  cache:
-    file_path: "/tmp/cache/cache.db" #缓存文件存放路径
-i18n:
-  bundle_dir: "/data/i18n" #国际化文件存放目录
-swaggerui:
-  show: true #是否显示swaggerapi文档，地址 /swagger/index.html
-  protocol: http #swagger 协议头
-  host: 127.0.0.1 #可被访问的ip地址或域名
-  address: ':80'  #可被访问的端口号
-service_config:
-  secret_key: "answer" #加密key
-  web_host: "http://127.0.0.1" #页面访问使用域名地址
-  upload_path: "./upfiles" #上传目录
+
+然后访问：[http://127.0.0.1:9080/install](http://127.0.0.1:9080/install) 进行安装，具体配置与使用 docker 安装相同
+
+### 步骤 3: 使用命令行启动
+安装完成之后程序会退出，请使用命令正式启动项目
+```bash
+./answer run -C ./answer-data/
 ```
 
-## 编译镜像
-如果修改了源文件并且要重新打包镜像可以使用以下语句重新打包镜像
-```
-docker build -t  answer:v1.0.0 .
-```
-## 常见问题
- 1. 项目无法启动，answer 主程序启动依赖配置文件 config.yaml 、国际化翻译目录 /i18n 、上传文件存放目录 /upfiles，需要确保项目启动时加载了配置文件 answer run -c config.yaml 以及在 config.yaml 正确的指定 i18n 和 upfiles 目录的配置项
+正常启动后可以访问 [http://127.0.0.1:9080/](http://127.0.0.1:9080/) 使用安装时指定的管理员用户名密码进行登录
+
+## 安装常见问题
+- 使用 docker 重新安装遇到问题？默认我们给出的命令是使用 `answer-data` 命名卷，所以如果重新不需要原来的数据，请主动进行删除 `docker volume rm answer-data`
