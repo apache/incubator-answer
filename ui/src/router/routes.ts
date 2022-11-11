@@ -263,6 +263,10 @@ const routes: RouteNode[] = [
             path: 'write',
             page: 'pages/Admin/Write',
           },
+          {
+            path: 'labels',
+            page: 'pages/Admin/Labels',
+          },
         ],
       },
       {

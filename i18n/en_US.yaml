@@ -917,6 +917,7 @@ ui:
       smtp: SMTP
       branding: Branding
       legal: Legal
+      labels: Labels
     dashboard:
       title: Dashboard
       welcome: Welcome to Answer Admin!
@@ -1123,6 +1124,26 @@ ui:
         label: Privacy Policy
         msg: Privacy policy cannot be empty.
         text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
+    labels:
+      title: Labels
+      new_label: New Label
+      name: Name
+      color: color
+      description: Description
+      action: Action
+      form:
+        title: Create New Label
+        back: Back
+        display_name:
+          label: Display Name
+        url_slug:
+          label: URL Slug
+          text: Must use the character set “a-z”, “0-9”, “+ # - .”
+        description:
+          label: Description (optional)
+        color:
+          label: Color
+
   form:
     empty: cannot be empty
     invalid: is invalid
