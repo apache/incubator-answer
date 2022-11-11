@@ -5342,11 +5342,17 @@ const docTemplate = `{
         "schema.SiteGeneralReq": {
             "type": "object",
             "required": [
+                "contact_email",
                 "description",
                 "name",
-                "short_description"
+                "short_description",
+                "site_url"
             ],
             "properties": {
+                "contact_email": {
+                    "type": "string",
+                    "maxLength": 512
+                },
                 "description": {
                     "type": "string",
                     "maxLength": 2000
@@ -5358,17 +5364,27 @@ const docTemplate = `{
                 "short_description": {
                     "type": "string",
                     "maxLength": 255
+                },
+                "site_url": {
+                    "type": "string",
+                    "maxLength": 512
                 }
             }
         },
         "schema.SiteGeneralResp": {
             "type": "object",
             "required": [
+                "contact_email",
                 "description",
                 "name",
-                "short_description"
+                "short_description",
+                "site_url"
             ],
             "properties": {
+                "contact_email": {
+                    "type": "string",
+                    "maxLength": 512
+                },
                 "description": {
                     "type": "string",
                     "maxLength": 2000
@@ -5380,6 +5396,10 @@ const docTemplate = `{
                 "short_description": {
                     "type": "string",
                     "maxLength": 255
+                },
+                "site_url": {
+                    "type": "string",
+                    "maxLength": 512
                 }
             }
         },

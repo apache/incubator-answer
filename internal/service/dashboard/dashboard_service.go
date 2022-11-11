@@ -6,8 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
-	"path/filepath"
+	"net/url"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -24,6 +23,7 @@ import (
 	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/dir"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -71,24 +71,29 @@ func NewDashboardService(
 }
 
 func (ds *DashboardService) StatisticalByCache(ctx context.Context) (*schema.DashboardInfo, error) {
-	ds.SetCache(ctx)
 	dashboardInfo := &schema.DashboardInfo{}
 	infoStr, err := ds.data.Cache.GetString(ctx, schema.DashBoardCachekey)
 	if err != nil {
-		return dashboardInfo, err
+		info, statisticalErr := ds.Statistical(ctx)
+		if statisticalErr != nil {
+			return dashboardInfo, err
+		}
+		setCacheErr := ds.SetCache(ctx, info)
+		if setCacheErr != nil {
+			log.Error("ds.SetCache", setCacheErr)
+		}
+		return info, err
 	}
 	err = json.Unmarshal([]byte(infoStr), dashboardInfo)
 	if err != nil {
 		return dashboardInfo, err
 	}
+	startTime := time.Now().Unix() - schema.AppStartTime.Unix()
+	dashboardInfo.AppStartTime = fmt.Sprintf("%d", startTime)
 	return dashboardInfo, nil
 }
 
-func (ds *DashboardService) SetCache(ctx context.Context) error {
-	info, err := ds.Statistical(ctx)
-	if err != nil {
-		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
-	}
+func (ds *DashboardService) SetCache(ctx context.Context, info *schema.DashboardInfo) error {
 	infoStr, err := json.Marshal(info)
 	if err != nil {
 		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
@@ -167,12 +172,23 @@ func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	if emailconfig.SMTPHost != "" {
 		dashboardInfo.SMTP = true
 	}
-	dashboardInfo.HTTPS = true
-	dirSize, err := ds.DirSize(ds.serviceConfig.UploadPath)
+	siteGeneral, err := ds.siteInfoService.GetSiteGeneral(ctx)
 	if err != nil {
 		return dashboardInfo, err
 	}
-	size := ds.formatFileSize(dirSize)
+	siteUrl, err := url.Parse(siteGeneral.SiteUrl)
+	if err != nil {
+		return dashboardInfo, err
+	}
+	if siteUrl.Scheme == "https" {
+		dashboardInfo.HTTPS = true
+	}
+
+	dirSize, err := dir.DirSize(ds.serviceConfig.UploadPath)
+	if err != nil {
+		return dashboardInfo, err
+	}
+	size := dir.FormatFileSize(dirSize)
 	dashboardInfo.OccupyingStorageSpace = size
 	startTime := time.Now().Unix() - schema.AppStartTime.Unix()
 	dashboardInfo.AppStartTime = fmt.Sprintf("%d", startTime)
@@ -218,33 +234,4 @@ func (ds *DashboardService) GetEmailConfig() (ec *export.EmailConfig, err error)
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return ec, nil
-}
-
-func (ds *DashboardService) DirSize(path string) (int64, error) {
-	var size int64
-	err := filepath.Walk(path, func(_ string, info os.FileInfo, err error) error {
-		if !info.IsDir() {
-			size += info.Size()
-		}
-		return err
-	})
-	return size, err
-}
-
-func (ds *DashboardService) formatFileSize(fileSize int64) (size string) {
-	if fileSize < 1024 {
-		//return strconv.FormatInt(fileSize, 10) + "B"
-		return fmt.Sprintf("%.2f B", float64(fileSize)/float64(1))
-	} else if fileSize < (1024 * 1024) {
-		return fmt.Sprintf("%.2f KB", float64(fileSize)/float64(1024))
-	} else if fileSize < (1024 * 1024 * 1024) {
-		return fmt.Sprintf("%.2f MB", float64(fileSize)/float64(1024*1024))
-	} else if fileSize < (1024 * 1024 * 1024 * 1024) {
-		return fmt.Sprintf("%.2f GB", float64(fileSize)/float64(1024*1024*1024))
-	} else if fileSize < (1024 * 1024 * 1024 * 1024 * 1024) {
-		return fmt.Sprintf("%.2f TB", float64(fileSize)/float64(1024*1024*1024*1024))
-	} else { //if fileSize < (1024 * 1024 * 1024 * 1024 * 1024 * 1024)
-		return fmt.Sprintf("%.2f EB", float64(fileSize)/float64(1024*1024*1024*1024*1024))
-	}
-
 }
