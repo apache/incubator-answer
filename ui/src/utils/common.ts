@@ -94,6 +94,61 @@ function escapeRemove(str) {
     return arrEntities[t];
   });
 }
+function mixColor(color_1, color_2, weight) {
+  function d2h(d) {
+    return d.toString(16);
+  }
+  function h2d(h) {
+    return parseInt(h, 16);
+  }
+
+  weight = typeof weight !== 'undefined' ? weight : 50;
+  let color = '#';
+
+  for (let i = 0; i <= 5; i += 2) {
+    const v1 = h2d(color_1.substr(i, 2));
+    const v2 = h2d(color_2.substr(i, 2));
+    let val = d2h(Math.floor(v2 + (v1 - v2) * (weight / 100.0)));
+
+    while (val.length < 2) {
+      val = `0${val}`;
+    }
+
+    color += val;
+  }
+
+  return color;
+}
+
+function colorRgb(sColor) {
+  sColor = sColor.toLowerCase();
+  const reg = /^#([0-9a-fA-f]{3}|[0-9a-fA-f]{6})$/;
+  if (sColor && reg.test(sColor)) {
+    if (sColor.length === 4) {
+      let sColorNew = '#';
+      for (let i = 1; i < 4; i += 1) {
+        sColorNew += sColor.slice(i, i + 1).concat(sColor.slice(i, i + 1));
+      }
+      sColor = sColorNew;
+    }
+    const sColorChange: number[] = [];
+    for (let i = 1; i < 7; i += 2) {
+      sColorChange.push(parseInt(`0x${sColor.slice(i, i + 2)}`, 16));
+    }
+    return sColorChange.join(',');
+  }
+  return sColor;
+}
+
+function labelStyle(color, hover) {
+  const textColor = mixColor('000000', color.replace('#', ''), 40);
+  const backgroundColor = mixColor('ffffff', color.replace('#', ''), 80);
+  const rgbBackgroundColor = colorRgb(backgroundColor);
+  return {
+    color: textColor,
+    backgroundColor: `rgba(${colorRgb(rgbBackgroundColor)},${hover ? 1 : 0.5})`,
+  };
+}
 
 export {
   thousandthDivision,
@@ -103,4 +158,7 @@ export {
   parseUserInfo,
   formatUptime,
   escapeRemove,
+  mixColor,
+  colorRgb,
+  labelStyle,
 };

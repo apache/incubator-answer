@@ -27,6 +27,7 @@ import FollowingTags from './FollowingTags';
 import QueryGroup from './QueryGroup';
 import BrandUpload from './BrandUpload';
 import SchemaForm, { JSONSchema, UISchema, initFormData } from './SchemaForm';
+import Labels from './LabelsCard';
 
 export {
   Avatar,
@@ -60,5 +61,6 @@ export {
   BrandUpload,
   SchemaForm,
   initFormData,
+  Labels,
 };
 export type { EditorRef, JSONSchema, UISchema };
