@@ -28,6 +28,7 @@ type AnswerAPIRouter struct {
 	siteinfoController       *controller.SiteinfoController
 	notificationController   *controller.NotificationController
 	dashboardController      *controller.DashboardController
+	uploadController         *controller.UploadController
 }
 
 func NewAnswerAPIRouter(
@@ -52,7 +53,7 @@ func NewAnswerAPIRouter(
 	siteinfoController *controller.SiteinfoController,
 	notificationController *controller.NotificationController,
 	dashboardController *controller.DashboardController,
-
+	uploadController *controller.UploadController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:           langController,
@@ -76,6 +77,7 @@ func NewAnswerAPIRouter(
 		notificationController:   notificationController,
 		siteinfoController:       siteinfoController,
 		dashboardController:      dashboardController,
+		uploadController:         uploadController,
 	}
 }
 
@@ -180,8 +182,6 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/user/password", a.userController.UserModifyPassWord)
 	r.PUT("/user/info", a.userController.UserUpdateInfo)
 	r.PUT("/user/interface", a.userController.UserUpdateInterface)
-	r.POST("/user/avatar/upload", a.userController.UploadUserAvatar)
-	r.POST("/user/post/file", a.userController.UploadUserPostFile)
 	r.POST("/user/notice/set", a.userController.UserNoticeSet)
 
 	// vote
@@ -196,6 +196,9 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/notification/page", a.notificationController.GetList)
 	r.PUT("/notification/read/state/all", a.notificationController.ClearUnRead)
 	r.PUT("/notification/read/state", a.notificationController.ClearIDUnRead)
+
+	// upload file
+	r.POST("/file", a.uploadController.UploadFile)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
@@ -224,8 +227,14 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	// siteinfo
 	r.GET("/siteinfo/general", a.siteInfoController.GetGeneral)
 	r.GET("/siteinfo/interface", a.siteInfoController.GetInterface)
+	r.GET("/siteinfo/branding", a.siteInfoController.GetSiteBranding)
+	r.GET("/siteinfo/write", a.siteInfoController.GetSiteWrite)
+	r.GET("/siteinfo/legal", a.siteInfoController.GetSiteLegal)
 	r.PUT("/siteinfo/general", a.siteInfoController.UpdateGeneral)
 	r.PUT("/siteinfo/interface", a.siteInfoController.UpdateInterface)
+	r.PUT("/siteinfo/branding", a.siteInfoController.UpdateBranding)
+	r.PUT("/siteinfo/write", a.siteInfoController.UpdateSiteWrite)
+	r.PUT("/siteinfo/legal", a.siteInfoController.UpdateSiteLegal)
 	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
 	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
 

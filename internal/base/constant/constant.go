@@ -53,4 +53,7 @@ var (
 const (
 	SiteTypeGeneral   = "general"
 	SiteTypeInterface = "interface"
+	SiteTypeBranding  = "branding"
+	SiteTypeWrite     = "write"
+	SiteTypeLegal     = "legal"
 )

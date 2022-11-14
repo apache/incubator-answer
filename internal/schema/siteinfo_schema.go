@@ -24,10 +24,28 @@ func (r *SiteGeneralReq) FormatSiteUrl() {
 
 // SiteInterfaceReq site interface request
 type SiteInterfaceReq struct {
-	Logo     string `validate:"omitempty,gt=0,lte=256" form:"logo" json:"logo"`
 	Theme    string `validate:"required,gt=1,lte=128" form:"theme" json:"theme"`
 	Language string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
 	TimeZone string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
+}
+
+// SiteBrandingReq site branding request
+type SiteBrandingReq struct {
+	Logo       string `validate:"required,gt=0,lte=512" form:"logo" json:"logo"`
+	MobileLogo string `validate:"omitempty,gt=0,lte=512" form:"mobile_logo" json:"mobile_logo"`
+	SquareIcon string `validate:"required,gt=0,lte=512" form:"square_icon" json:"square_icon"`
+	Favicon    string `validate:"omitempty,gt=0,lte=512" form:"favicon" json:"favicon"`
+}
+
+// SiteWriteReq site write request
+type SiteWriteReq struct {
+	RequiredTag bool `validate:"required" form:"required_tag" json:"required_tag"`
+}
+
+// SiteLegalReq site branding request
+type SiteLegalReq struct {
+	TermsOfService string `validate:"omitempty" form:"terms_of_service" json:"terms_of_service,omitempty"`
+	PrivacyPolicy  string `validate:"omitempty" form:"privacy_policy" json:"privacy_policy,omitempty"`
 }
 
 // SiteGeneralResp site general response
@@ -36,9 +54,20 @@ type SiteGeneralResp SiteGeneralReq
 // SiteInterfaceResp site interface response
 type SiteInterfaceResp SiteInterfaceReq
 
+// SiteBrandingResp site branding response
+type SiteBrandingResp SiteBrandingReq
+
+// SiteWriteResp site write response
+type SiteWriteResp SiteWriteReq
+
+// SiteLegalResp site write response
+type SiteLegalResp SiteLegalReq
+
+// SiteInfoResp get site info response
 type SiteInfoResp struct {
-	General *SiteGeneralResp   `json:"general"`
-	Face    *SiteInterfaceResp `json:"interface"`
+	General   *SiteGeneralResp   `json:"general"`
+	Interface *SiteInterfaceResp `json:"interface"`
+	Branding  *SiteBrandingResp  `json:"branding"`
 }
 
 // UpdateSMTPConfigReq get smtp config request

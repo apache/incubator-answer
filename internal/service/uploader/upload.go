@@ -4,12 +4,14 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
+	"net/http"
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
@@ -24,6 +26,25 @@ const (
 	avatarSubPath      = "avatar"
 	avatarThumbSubPath = "avatar_thumb"
 	postSubPath        = "post"
+	brandingSubPath    = "branding"
+)
+
+var (
+	subPathList = []string{
+		avatarSubPath,
+		avatarThumbSubPath,
+		postSubPath,
+		brandingSubPath,
+	}
+	FormatExts = map[string]imaging.Format{
+		".jpg":  imaging.JPEG,
+		".jpeg": imaging.JPEG,
+		".png":  imaging.PNG,
+		".gif":  imaging.GIF,
+		".tif":  imaging.TIFF,
+		".tiff": imaging.TIFF,
+		".bmp":  imaging.BMP,
+	}
 )
 
 // UploaderService user service
@@ -35,13 +56,11 @@ type UploaderService struct {
 // NewUploaderService new upload service
 func NewUploaderService(serviceConfig *service_config.ServiceConfig,
 	siteInfoService *siteinfo_common.SiteInfoCommonService) *UploaderService {
-	err := dir.CreateDirIfNotExist(filepath.Join(serviceConfig.UploadPath, avatarSubPath))
-	if err != nil {
-		panic(err)
-	}
-	err = dir.CreateDirIfNotExist(filepath.Join(serviceConfig.UploadPath, postSubPath))
-	if err != nil {
-		panic(err)
+	for _, subPath := range subPathList {
+		err := dir.CreateDirIfNotExist(filepath.Join(serviceConfig.UploadPath, subPath))
+		if err != nil {
+			panic(err)
+		}
 	}
 	return &UploaderService{
 		serviceConfig:   serviceConfig,
@@ -49,21 +68,24 @@ func NewUploaderService(serviceConfig *service_config.ServiceConfig,
 	}
 }
 
-func (us *UploaderService) UploadAvatarFile(ctx *gin.Context, file *multipart.FileHeader, fileExt string) (
-	url string, err error) {
+// UploadAvatarFile upload avatar file
+func (us *UploaderService) UploadAvatarFile(ctx *gin.Context) (url string, err error) {
+	// max size
+	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 5*1024*1024)
+	_, file, err := ctx.Request.FormFile("file")
+	if err != nil {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
+		return
+	}
+	fileExt := strings.ToLower(path.Ext(file.Filename))
+	if _, ok := FormatExts[fileExt]; !ok {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
+		return
+	}
+
 	newFilename := fmt.Sprintf("%s%s", uid.IDStr12(), fileExt)
 	avatarFilePath := path.Join(avatarSubPath, newFilename)
 	return us.uploadFile(ctx, file, avatarFilePath)
-}
-
-var FormatExts = map[string]imaging.Format{
-	".jpg":  imaging.JPEG,
-	".jpeg": imaging.JPEG,
-	".png":  imaging.PNG,
-	".gif":  imaging.GIF,
-	".tif":  imaging.TIFF,
-	".tiff": imaging.TIFF,
-	".bmp":  imaging.BMP,
 }
 
 func (us *UploaderService) AvatarThumbFile(ctx *gin.Context, uploadPath, fileName string, size int) (
@@ -73,12 +95,12 @@ func (us *UploaderService) AvatarThumbFile(ctx *gin.Context, uploadPath, fileNam
 	}
 	thumbFileName := fmt.Sprintf("%d_%d@%s", size, size, fileName)
 	thumbfilePath := fmt.Sprintf("%s/%s/%s", uploadPath, avatarThumbSubPath, thumbFileName)
-	avatarfile, err = ioutil.ReadFile(thumbfilePath)
+	avatarfile, err = os.ReadFile(thumbfilePath)
 	if err == nil {
 		return avatarfile, nil
 	}
 	filePath := fmt.Sprintf("%s/avatar/%s", uploadPath, fileName)
-	avatarfile, err = ioutil.ReadFile(filePath)
+	avatarfile, err = os.ReadFile(filePath)
 	if err != nil {
 		return avatarfile, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
@@ -117,10 +139,43 @@ func (us *UploaderService) AvatarThumbFile(ctx *gin.Context, uploadPath, fileNam
 	return buf.Bytes(), nil
 }
 
-func (us *UploaderService) UploadPostFile(ctx *gin.Context, file *multipart.FileHeader, fileExt string) (
+func (us *UploaderService) UploadPostFile(ctx *gin.Context) (
 	url string, err error) {
+	// max size
+	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 10*1024*1024)
+	_, file, err := ctx.Request.FormFile("file")
+	if err != nil {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
+		return
+	}
+	fileExt := strings.ToLower(path.Ext(file.Filename))
+	if _, ok := FormatExts[fileExt]; !ok {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
+		return
+	}
+
 	newFilename := fmt.Sprintf("%s%s", uid.IDStr12(), fileExt)
 	avatarFilePath := path.Join(postSubPath, newFilename)
+	return us.uploadFile(ctx, file, avatarFilePath)
+}
+
+func (us *UploaderService) UploadBrandingFile(ctx *gin.Context) (
+	url string, err error) {
+	// max size
+	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 10*1024*1024)
+	_, file, err := ctx.Request.FormFile("file")
+	if err != nil {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
+		return
+	}
+	fileExt := strings.ToLower(path.Ext(file.Filename))
+	if _, ok := FormatExts[fileExt]; !ok {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
+		return
+	}
+
+	newFilename := fmt.Sprintf("%s%s", uid.IDStr12(), fileExt)
+	avatarFilePath := path.Join(brandingSubPath, newFilename)
 	return us.uploadFile(ctx, file, avatarFilePath)
 }
 
