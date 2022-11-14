@@ -65,9 +65,22 @@ func (sc *SiteInfoController) GetSiteBranding(ctx *gin.Context) {
 // @Tags admin
 // @Produce json
 // @Success 200 {object} handler.RespBody{data=schema.SiteWriteResp}
-// @Router /answer/admin/api/siteinfo/branding [get]
+// @Router /answer/admin/api/siteinfo/write [get]
 func (sc *SiteInfoController) GetSiteWrite(ctx *gin.Context) {
 	resp, err := sc.siteInfoService.GetSiteWrite(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetSiteLegal Set the legal information for the site
+// @Summary Set the legal information for the site
+// @Description Set the legal information for the site
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteLegalResp}
+// @Router /answer/admin/api/siteinfo/legal [get]
+func (sc *SiteInfoController) GetSiteLegal(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteLegal(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -140,6 +153,24 @@ func (sc *SiteInfoController) UpdateSiteWrite(ctx *gin.Context) {
 		return
 	}
 	err := sc.siteInfoService.SaveSiteWrite(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// UpdateSiteLegal update site legal info
+// @Summary update site legal info
+// @Description update site legal info
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.SiteLegalReq true "write info"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/siteinfo/legal [put]
+func (sc *SiteInfoController) UpdateSiteLegal(ctx *gin.Context) {
+	req := &schema.SiteLegalReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	err := sc.siteInfoService.SaveSiteLegal(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

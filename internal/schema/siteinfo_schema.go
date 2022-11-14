@@ -42,6 +42,12 @@ type SiteWriteReq struct {
 	RequiredTag bool `validate:"required" form:"required_tag" json:"required_tag"`
 }
 
+// SiteLegalReq site branding request
+type SiteLegalReq struct {
+	TermsOfService string `validate:"omitempty" form:"terms_of_service" json:"terms_of_service,omitempty"`
+	PrivacyPolicy  string `validate:"omitempty" form:"privacy_policy" json:"privacy_policy,omitempty"`
+}
+
 // SiteGeneralResp site general response
 type SiteGeneralResp SiteGeneralReq
 
@@ -53,6 +59,9 @@ type SiteBrandingResp SiteBrandingReq
 
 // SiteWriteResp site write response
 type SiteWriteResp SiteWriteReq
+
+// SiteLegalResp site write response
+type SiteLegalResp SiteLegalReq
 
 // SiteInfoResp get site info response
 type SiteInfoResp struct {

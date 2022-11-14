@@ -503,6 +503,77 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/siteinfo/branding": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get site interface",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "get site interface",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.SiteBrandingResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update site info branding",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "update site info branding",
+                "parameters": [
+                    {
+                        "description": "branding info",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.SiteBrandingReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/siteinfo/general": {
             "get": {
                 "security": [
@@ -632,6 +703,148 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/schema.SiteInterfaceReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/admin/api/siteinfo/legal": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Set the legal information for the site",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "Set the legal information for the site",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.SiteLegalResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update site legal info",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "update site legal info",
+                "parameters": [
+                    {
+                        "description": "write info",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.SiteLegalReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/admin/api/siteinfo/write": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get site interface",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "get site interface",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.SiteWriteResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update site write info",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "update site write info",
+                "parameters": [
+                    {
+                        "description": "write info",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.SiteWriteReq"
                         }
                     }
                 ],
@@ -1314,6 +1527,64 @@ const docTemplate = `{
                                                     }
                                                 }
                                             ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/file": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "upload file",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "tags": [
+                    "Upload"
+                ],
+                "summary": "upload file",
+                "parameters": [
+                    {
+                        "enum": [
+                            "post",
+                            "avatar",
+                            "branding"
+                        ],
+                        "type": "string",
+                        "description": "identify the source of the file upload",
+                        "name": "source",
+                        "in": "formData",
+                        "required": true
+                    },
+                    {
+                        "type": "file",
+                        "description": "file",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
                                         }
                                     }
                                 }
@@ -3106,52 +3377,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/user/avatar/upload": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "UserUpdateInfo",
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "UserUpdateInfo",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "file",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/handler.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/answer/api/v1/user/email": {
             "put": {
                 "security": [
@@ -3666,52 +3891,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/answer/api/v1/user/post/file": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "upload user post file",
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "upload user post file",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "file",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/handler.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
                         }
                     }
                 }
@@ -5571,6 +5750,56 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.SiteBrandingReq": {
+            "type": "object",
+            "required": [
+                "logo",
+                "square_icon"
+            ],
+            "properties": {
+                "favicon": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "logo": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "mobile_logo": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "square_icon": {
+                    "type": "string",
+                    "maxLength": 512
+                }
+            }
+        },
+        "schema.SiteBrandingResp": {
+            "type": "object",
+            "required": [
+                "logo",
+                "square_icon"
+            ],
+            "properties": {
+                "favicon": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "logo": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "mobile_logo": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "square_icon": {
+                    "type": "string",
+                    "maxLength": 512
+                }
+            }
+        },
         "schema.SiteGeneralReq": {
             "type": "object",
             "required": [
@@ -5647,10 +5876,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 128
                 },
-                "logo": {
-                    "type": "string",
-                    "maxLength": 256
-                },
                 "theme": {
                     "type": "string",
                     "maxLength": 128
@@ -5673,10 +5898,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 128
                 },
-                "logo": {
-                    "type": "string",
-                    "maxLength": 256
-                },
                 "theme": {
                     "type": "string",
                     "maxLength": 128
@@ -5684,6 +5905,50 @@ const docTemplate = `{
                 "time_zone": {
                     "type": "string",
                     "maxLength": 128
+                }
+            }
+        },
+        "schema.SiteLegalReq": {
+            "type": "object",
+            "properties": {
+                "privacy_policy": {
+                    "type": "string"
+                },
+                "terms_of_service": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.SiteLegalResp": {
+            "type": "object",
+            "properties": {
+                "privacy_policy": {
+                    "type": "string"
+                },
+                "terms_of_service": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.SiteWriteReq": {
+            "type": "object",
+            "required": [
+                "required_tag"
+            ],
+            "properties": {
+                "required_tag": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "schema.SiteWriteResp": {
+            "type": "object",
+            "required": [
+                "required_tag"
+            ],
+            "properties": {
+                "required_tag": {
+                    "type": "boolean"
                 }
             }
         },

@@ -84,6 +84,20 @@ func (s *SiteInfoService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWr
 	return resp, nil
 }
 
+// GetSiteLegal get site legal info
+func (s *SiteInfoService) GetSiteLegal(ctx context.Context) (resp *schema.SiteLegalResp, err error) {
+	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeLegal)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.BadRequest(reason.SiteInfoNotFound)
+	}
+	resp = &schema.SiteLegalResp{}
+	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+	return resp, nil
+}
+
 func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGeneralReq) (err error) {
 	req.FormatSiteUrl()
 	var (
@@ -157,6 +171,17 @@ func (s *SiteInfoService) SaveSiteWrite(ctx context.Context, req *schema.SiteWri
 		Status:  1,
 	}
 	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeWrite, data)
+}
+
+// SaveSiteLegal save site legal configuration
+func (s *SiteInfoService) SaveSiteLegal(ctx context.Context, req *schema.SiteLegalReq) (err error) {
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeLegal,
+		Content: string(content),
+		Status:  1,
+	}
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeLegal, data)
 }
 
 // GetSMTPConfig get smtp config

@@ -55,4 +55,5 @@ const (
 	SiteTypeInterface = "interface"
 	SiteTypeBranding  = "branding"
 	SiteTypeWrite     = "write"
+	SiteTypeLegal     = "legal"
 )
