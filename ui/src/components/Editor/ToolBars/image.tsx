@@ -61,7 +61,7 @@ const Image: FC<IEditorContext> = ({ editor }) => {
     files: FileList,
   ): Promise<{ url: string; name: string }[]> => {
     const promises = Array.from(files).map(async (file) => {
-      const url = await uploadImage(file);
+      const url = await uploadImage({ file, type: 'post' });
 
       return {
         name: file.name,
@@ -209,7 +209,7 @@ const Image: FC<IEditorContext> = ({ editor }) => {
       return;
     }
 
-    uploadImage(e.target.files[0]).then((url) => {
+    uploadImage({ file: e.target.files[0], type: 'post' }).then((url) => {
       setLink({ ...link, value: url });
     });
   };

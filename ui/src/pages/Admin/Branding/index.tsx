@@ -3,7 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 import { JSONSchema, SchemaForm, UISchema } from '@/components';
 import { FormDataType } from '@/common/interface';
+import { brandSetting } from '@/services';
 
+const uploadType = 'branding';
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.branding',
@@ -80,25 +82,25 @@ const Index: FC = () => {
     logo: {
       'ui:widget': 'upload',
       'ui:options': {
-        imageType: 'logo',
+        imageType: uploadType,
       },
     },
     mobile_logo: {
       'ui:widget': 'upload',
       'ui:options': {
-        imageType: 'mobile_logo',
+        imageType: uploadType,
       },
     },
     square_icon: {
       'ui:widget': 'upload',
       'ui:options': {
-        imageType: 'square_icon',
+        imageType: uploadType,
       },
     },
     favicon: {
       'ui:widget': 'upload',
       'ui:options': {
-        imageType: 'favicon',
+        imageType: uploadType,
       },
     },
   };
@@ -108,7 +110,15 @@ const Index: FC = () => {
   };
 
   const onSubmit = () => {
-    // undo
+    const params = {
+      logo: formData.logo.value,
+      mobile_logo: formData.mobile_logo.value,
+      square_icon: formData.square_icon.value,
+      favicon: formData.favicon.value,
+    };
+    brandSetting(params).then((res) => {
+      console.log(res);
+    });
   };
 
   return (

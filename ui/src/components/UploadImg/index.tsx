@@ -1,14 +1,22 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { uploadImage } from '@/services';
+import * as Type from '@/common/interface';
+
 interface IProps {
-  type: string;
+  type: Type.UploadType;
   className?: string;
   children?: React.ReactNode;
-  upload: (data: FormData) => Promise<any>;
+  uploadCallback: (img: string) => void;
 }
 
-const Index: React.FC<IProps> = ({ type, upload, children, className }) => {
+const Index: React.FC<IProps> = ({
+  type,
+  uploadCallback,
+  children,
+  className,
+}) => {
   const { t } = useTranslation();
   const [status, setStatus] = useState(false);
 
@@ -26,13 +34,13 @@ const Index: React.FC<IProps> = ({ type, upload, children, className }) => {
       //   return;
       // }
       setStatus(true);
-      const data = new FormData();
-
-      data.append('file', e.target.files[0]);
-      // do
-      upload(data).finally(() => {
-        setStatus(false);
-      });
+      uploadImage({ file: e.target.files[0], type })
+        .then((res) => {
+          uploadCallback(res);
+        })
+        .finally(() => {
+          setStatus(false);
+        });
     }
   };
 
@@ -44,7 +52,6 @@ const Index: React.FC<IProps> = ({ type, upload, children, className }) => {
         className="d-none"
         accept="image/jpeg,image/jpg,image/png,image/webp"
         onChange={onChange}
-        id={type}
       />
     </label>
   );
