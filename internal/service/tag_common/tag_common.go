@@ -17,7 +17,7 @@ type TagRepo interface {
 	AddTagList(ctx context.Context, tagList []*entity.Tag) (err error)
 	GetTagListByIDs(ctx context.Context, ids []string) (tagList []*entity.Tag, err error)
 	GetTagBySlugName(ctx context.Context, slugName string) (tagInfo *entity.Tag, exist bool, err error)
-	GetTagListByName(ctx context.Context, name string, limit int) (tagList []*entity.Tag, err error)
+	GetTagListByName(ctx context.Context, name string, limit int, hasReserved bool) (tagList []*entity.Tag, err error)
 	GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error)
 	RemoveTag(ctx context.Context, tagID string) (err error)
 	UpdateTag(ctx context.Context, tag *entity.Tag) (err error)
@@ -26,6 +26,8 @@ type TagRepo interface {
 	GetTagByID(ctx context.Context, tagID string) (tag *entity.Tag, exist bool, err error)
 	GetTagList(ctx context.Context, tag *entity.Tag) (tagList []*entity.Tag, err error)
 	GetTagPage(ctx context.Context, page, pageSize int, tag *entity.Tag, queryCond string) (tagList []*entity.Tag, total int64, err error)
+	GetRecommendTagList(ctx context.Context) (tagList []*entity.Tag, err error)
+	GetReservedTagList(ctx context.Context) (tagList []*entity.Tag, err error)
 }
 
 type TagRelRepo interface {
@@ -59,14 +61,35 @@ func NewTagCommonService(tagRepo TagRepo, tagRelRepo TagRelRepo,
 	}
 }
 
-func (ts *TagCommonService) GetSiteWriteTag(ctx context.Context) (tags []string, err error) {
-	return []string{}, nil
+func (ts *TagCommonService) GetSiteWriteRecommendTag(ctx context.Context) (tags []string, err error) {
+	tags = make([]string, 0)
+	list, err := ts.tagRepo.GetRecommendTagList(ctx)
+	for _, item := range list {
+		tags = append(tags, item.SlugName)
+	}
+	return tags, nil
 }
 
-func (ts *TagCommonService) SetSiteWriteTag(ctx context.Context, tags []string, required bool) (err error) {
+func (ts *TagCommonService) SetSiteWriteRecommendTag(ctx context.Context, tags []string, required bool) (err error) {
 
 	return nil
 }
+
+func (ts *TagCommonService) GetSiteWriteReservedTag(ctx context.Context) (tags []string, err error) {
+	tags = make([]string, 0)
+	list, err := ts.tagRepo.GetReservedTagList(ctx)
+	for _, item := range list {
+		tags = append(tags, item.SlugName)
+	}
+	return tags, nil
+}
+
+func (ts *TagCommonService) SetSiteWriteReservedTag(ctx context.Context, tags []string, required bool) (err error) {
+
+	return nil
+}
+
+//
 
 // GetTagListByName
 func (ts *TagCommonService) GetTagListByName(ctx context.Context, tagName string) (tagInfo *entity.Tag, exist bool, err error) {

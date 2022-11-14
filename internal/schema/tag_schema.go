@@ -11,7 +11,8 @@ import (
 // SearchTagLikeReq get tag list all request
 type SearchTagLikeReq struct {
 	// tag
-	Tag string `validate:"omitempty" form:"tag"`
+	Tag     string `validate:"omitempty" form:"tag"`
+	IsAdmin bool   `json:"-"`
 }
 
 // GetTagInfoReq get tag info request
@@ -222,4 +223,5 @@ type GetFollowingTagsResp struct {
 type SearchTagLikeResp struct {
 	SlugName  string `json:"slug_name"`
 	Recommend bool   `json:"recommend"`
+	Reserved  bool   `json:"reserved"`
 }

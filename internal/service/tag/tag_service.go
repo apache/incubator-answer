@@ -45,7 +45,7 @@ func NewTagService(
 
 // SearchTagLike get tag list all
 func (ts *TagService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []schema.SearchTagLikeResp, err error) {
-	tags, err := ts.tagRepo.GetTagListByName(ctx, req.Tag, 5)
+	tags, err := ts.tagRepo.GetTagListByName(ctx, req.Tag, 5, req.IsAdmin)
 	if err != nil {
 		return
 	}
@@ -53,6 +53,7 @@ func (ts *TagService) SearchTagLike(ctx context.Context, req *schema.SearchTagLi
 		item := schema.SearchTagLikeResp{}
 		item.SlugName = tag.SlugName
 		item.Recommend = tag.Recommend
+		item.Reserved = tag.Reserved
 		resp = append(resp, item)
 	}
 	return resp, nil

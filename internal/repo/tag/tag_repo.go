@@ -71,7 +71,7 @@ func (tr *tagRepo) GetTagBySlugName(ctx context.Context, slugName string) (tagIn
 }
 
 // GetTagListByName get tag list all like name
-func (tr *tagRepo) GetTagListByName(ctx context.Context, name string, limit int) (tagList []*entity.Tag, err error) {
+func (tr *tagRepo) GetTagListByName(ctx context.Context, name string, limit int, hasReserved bool) (tagList []*entity.Tag, err error) {
 	tagList = make([]*entity.Tag, 0)
 	cond := &entity.Tag{}
 	session := tr.data.DB.Where("")
@@ -82,7 +82,42 @@ func (tr *tagRepo) GetTagListByName(ctx context.Context, name string, limit int)
 	}
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	session.Limit(limit).Asc("slug_name")
+	if !hasReserved {
+		cond.Recommend = false
+		session.UseBool("recommend", "reserved")
+	} else {
+		session.UseBool("recommend")
+	}
+	err = session.Find(&tagList, cond)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (tr *tagRepo) GetRecommendTagList(ctx context.Context) (tagList []*entity.Tag, err error) {
+	tagList = make([]*entity.Tag, 0)
+	cond := &entity.Tag{}
+	session := tr.data.DB.Where("")
+	cond.Recommend = true
+	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	session.Asc("slug_name")
 	session.UseBool("recommend")
+	err = session.Find(&tagList, cond)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (tr *tagRepo) GetReservedTagList(ctx context.Context) (tagList []*entity.Tag, err error) {
+	tagList = make([]*entity.Tag, 0)
+	cond := &entity.Tag{}
+	session := tr.data.DB.Where("")
+	cond.Reserved = true
+	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	session.Asc("slug_name")
+	session.UseBool("reserved")
 	err = session.Find(&tagList, cond)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
