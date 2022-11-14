@@ -3,7 +3,9 @@ package tag
 import (
 	"context"
 	"encoding/json"
+
 	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/pkg/htmltext"
 
 	"github.com/answerdev/answer/internal/base/pager"
@@ -24,17 +26,20 @@ type TagService struct {
 	tagRepo         tagcommon.TagRepo
 	revisionService *revision_common.RevisionService
 	followCommon    activity_common.FollowRepo
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewTagService new tag service
 func NewTagService(
 	tagRepo tagcommon.TagRepo,
 	revisionService *revision_common.RevisionService,
-	followCommon activity_common.FollowRepo) *TagService {
+	followCommon activity_common.FollowRepo,
+	siteInfoService *siteinfo_common.SiteInfoCommonService) *TagService {
 	return &TagService{
 		tagRepo:         tagRepo,
 		revisionService: revisionService,
 		followCommon:    followCommon,
+		siteInfoService: siteInfoService,
 	}
 }
 
