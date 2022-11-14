@@ -6,6 +6,7 @@ import type * as Type from '@/common/interface';
 import { useToast } from '@/hooks';
 import { siteInfoStore } from '@/stores';
 import { useGeneralSetting, updateGeneralSetting } from '@/services';
+import Pattern from '@/common/pattern';
 
 import '../index.scss';
 
@@ -53,7 +54,20 @@ const General: FC = () => {
       'ui:options': {
         invalid: t('site_url.validate'),
         validator: (value) => {
-          if (!/^(https?):\/\/([\w.]+\/?)\S*$/.test(value)) {
+          let url: URL | undefined;
+          try {
+            url = new URL(value);
+          } catch (ex) {
+            // eslint-disable-next-line no-empty
+          }
+          // only can input url with root pathname
+          if (
+            !url ||
+            /^https?:$/.test(url.protocol) === false ||
+            url.pathname !== '/' ||
+            !url.search ||
+            !url.hash
+          ) {
             return false;
           }
           return true;
@@ -64,9 +78,7 @@ const General: FC = () => {
       'ui:options': {
         invalid: t('contact_email.validate'),
         validator: (value) => {
-          if (
-            !/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(value)
-          ) {
+          if (Pattern.email.test(value)) {
             return false;
           }
           return true;
