@@ -8,7 +8,7 @@ SchemaForm is a component that can be used to render a form based on a [JSON sch
 
 ### Basic Usage
 
-```jsx
+```tsx
 import React from 'react';
 import { SchemaForm, initFormData, JSONSchema, UISchema } from '@/components';
 
@@ -26,7 +26,7 @@ const schema: JSONSchema = {
     sex:{
       type: 'boolean',
       title: 'sex',
-      enum: [1, 2]
+      enum: [1, 2],
       enumNames: ['male', 'female'],
     }
   },
