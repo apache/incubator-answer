@@ -73,10 +73,17 @@ func (tr *tagRepo) GetTagBySlugName(ctx context.Context, slugName string) (tagIn
 // GetTagListByName get tag list all like name
 func (tr *tagRepo) GetTagListByName(ctx context.Context, name string, limit int) (tagList []*entity.Tag, err error) {
 	tagList = make([]*entity.Tag, 0)
-	session := tr.data.DB.Where("slug_name LIKE ?", name+"%")
+	cond := &entity.Tag{}
+	session := tr.data.DB.Where("")
+	if name != "" {
+		session.Where("slug_name LIKE ?", name+"%")
+	} else {
+		cond.Recommend = true
+	}
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	session.Limit(limit).Asc("slug_name")
-	err = session.Find(&tagList)
+	session.UseBool("recommend")
+	err = session.Find(&tagList, cond)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

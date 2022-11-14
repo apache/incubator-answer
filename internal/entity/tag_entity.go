@@ -21,6 +21,7 @@ type Tag struct {
 	FollowCount     int       `xorm:"not null default 0 INT(11) follow_count"`
 	QuestionCount   int       `xorm:"not null default 0 INT(11) question_count"`
 	Status          int       `xorm:"not null default 1 INT(11) status"`
+	Recommend       bool      `xorm:"not null default false BOOL recommend"`
 	RevisionID      string    `xorm:"not null default 0 BIGINT(20) revision_id"`
 }
 

@@ -503,6 +503,77 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/siteinfo/branding": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get site interface",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "get site interface",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.SiteWriteResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update site info branding",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "update site info branding",
+                "parameters": [
+                    {
+                        "description": "branding info",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.SiteBrandingReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/siteinfo/general": {
             "get": {
                 "security": [
@@ -632,6 +703,42 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/schema.SiteInterfaceReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/admin/api/siteinfo/write": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update site write info",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "update site write info",
+                "parameters": [
+                    {
+                        "description": "write info",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.SiteWriteReq"
                         }
                     }
                 ],
@@ -5571,6 +5678,56 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.SiteBrandingReq": {
+            "type": "object",
+            "required": [
+                "logo",
+                "square_icon"
+            ],
+            "properties": {
+                "favicon": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "logo": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "mobile_logo": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "square_icon": {
+                    "type": "string",
+                    "maxLength": 512
+                }
+            }
+        },
+        "schema.SiteBrandingResp": {
+            "type": "object",
+            "required": [
+                "logo",
+                "square_icon"
+            ],
+            "properties": {
+                "favicon": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "logo": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "mobile_logo": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "square_icon": {
+                    "type": "string",
+                    "maxLength": 512
+                }
+            }
+        },
         "schema.SiteGeneralReq": {
             "type": "object",
             "required": [
@@ -5647,10 +5804,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 128
                 },
-                "logo": {
-                    "type": "string",
-                    "maxLength": 256
-                },
                 "theme": {
                     "type": "string",
                     "maxLength": 128
@@ -5673,10 +5826,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 128
                 },
-                "logo": {
-                    "type": "string",
-                    "maxLength": 256
-                },
                 "theme": {
                     "type": "string",
                     "maxLength": 128
@@ -5684,6 +5833,28 @@ const docTemplate = `{
                 "time_zone": {
                     "type": "string",
                     "maxLength": 128
+                }
+            }
+        },
+        "schema.SiteWriteReq": {
+            "type": "object",
+            "required": [
+                "required_tag"
+            ],
+            "properties": {
+                "required_tag": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "schema.SiteWriteResp": {
+            "type": "object",
+            "required": [
+                "required_tag"
+            ],
+            "properties": {
+                "required_tag": {
+                    "type": "boolean"
                 }
             }
         },

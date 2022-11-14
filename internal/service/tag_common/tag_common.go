@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
@@ -42,17 +43,29 @@ type TagCommonService struct {
 	revisionService *revision_common.RevisionService
 	tagRepo         TagRepo
 	tagRelRepo      TagRelRepo
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewTagCommonService new tag service
 func NewTagCommonService(tagRepo TagRepo, tagRelRepo TagRelRepo,
 	revisionService *revision_common.RevisionService,
+	siteInfoService *siteinfo_common.SiteInfoCommonService,
 ) *TagCommonService {
 	return &TagCommonService{
 		tagRepo:         tagRepo,
 		tagRelRepo:      tagRelRepo,
 		revisionService: revisionService,
+		siteInfoService: siteInfoService,
 	}
+}
+
+func (ts *TagCommonService) GetSiteWriteTag(ctx context.Context) (tags []string, err error) {
+	return []string{}, nil
+}
+
+func (ts *TagCommonService) SetSiteWriteTag(ctx context.Context, tags []string, required bool) (err error) {
+
+	return nil
 }
 
 // GetTagListByName
