@@ -62,3 +62,17 @@ func (s *SiteInfoCommonService) GetSiteBranding(ctx context.Context) (resp *sche
 	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 	return resp, nil
 }
+
+// GetSiteWrite get site info write
+func (s *SiteInfoCommonService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWriteResp, err error) {
+	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeWrite)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.BadRequest(reason.SiteInfoNotFound)
+	}
+	resp = &schema.SiteWriteResp{}
+	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+	return resp, nil
+}
