@@ -43,4 +43,5 @@ const (
 	InstallCreateTableFailed     = "error.database.create_table_failed"
 	InstallConfigFailed          = "error.install.create_config_failed"
 	SiteInfoNotFound             = "error.site_info.not_found"
+	RecommendTagNotExist         = "error.tag.recommend_tag_not_found"
 )

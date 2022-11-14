@@ -105,6 +105,16 @@ func (qs *QuestionService) CloseMsgList(ctx context.Context, lang i18n.Language)
 
 // AddQuestion add question
 func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd) (questionInfo *schema.QuestionInfo, err error) {
+	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
+	if err != nil {
+		return
+	}
+	if !recommendExist {
+		err = fmt.Errorf("recommend is not exist")
+		err = errors.BadRequest(reason.RecommendTagNotExist).WithError(err).WithStack()
+		return
+	}
+
 	questionInfo = &schema.QuestionInfo{}
 	question := &entity.Question{}
 	now := time.Now()

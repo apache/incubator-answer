@@ -81,6 +81,23 @@ func (ts *TagCommonService) GetTagListByNames(ctx context.Context, tagNames []st
 	return ts.tagRepo.GetTagListByNames(ctx, tagNames)
 }
 
+func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.TagItem) (bool, error) {
+	tagNames := make([]string, 0)
+	for _, item := range tags {
+		tagNames = append(tagNames, item.SlugName)
+	}
+	list, err := ts.GetTagListByNames(ctx, tagNames)
+	if err != nil {
+		return false, err
+	}
+	for _, item := range list {
+		if item.Recommend {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
 //
 
 // GetObjectTag get object tag
