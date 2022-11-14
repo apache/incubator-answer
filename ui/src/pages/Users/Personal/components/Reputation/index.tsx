@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { FormatTime } from '@answer/components';
+import { FormatTime } from '@/components';
 
 interface Props {
   visible: boolean;

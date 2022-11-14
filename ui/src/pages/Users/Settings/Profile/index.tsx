@@ -3,19 +3,23 @@ import { Form, Button } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { marked } from 'marked';
+import MD5 from 'md5';
 
-import { modifyUserInfo, uploadAvatar, getUserInfo } from '@answer/api';
-import type { FormDataType } from '@answer/common/interface';
-import { UploadImg, Avatar } from '@answer/components';
-import { userInfoStore } from '@answer/stores';
-import { useToast } from '@answer/hooks';
+import type { FormDataType } from '@/common/interface';
+import { UploadImg, Avatar } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
+import { useToast } from '@/hooks';
+import { modifyUserInfo, uploadAvatar, getLoggedUserInfo } from '@/services';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings.profile',
   });
   const toast = useToast();
-  const { user, update } = userInfoStore();
+  const { user, update } = loggedUserInfoStore();
+  const [mailHash, setMailHash] = useState('');
+  const [count, setCount] = useState(0);
+
   const [formData, setFormData] = useState<FormDataType>({
     display_name: {
       value: '',
@@ -28,6 +32,9 @@ const Index: React.FC = () => {
       errorMsg: '',
     },
     avatar: {
+      type: 'default',
+      gravatar: '',
+      custom: '',
       value: '',
       isInvalid: false,
       errorMsg: '',
@@ -59,7 +66,9 @@ const Index: React.FC = () => {
         setFormData({
           ...formData,
           avatar: {
-            value: res,
+            ...formData.avatar,
+            type: 'custom',
+            custom: res,
             isInvalid: false,
             errorMsg: '',
           },
@@ -111,6 +120,17 @@ const Index: React.FC = () => {
       };
     }
 
+    if (formData.avatar.type === 'custom' && !formData.avatar.custom) {
+      bol = false;
+      formData.avatar = {
+        ...formData.avatar,
+        custom: '',
+        value: '',
+        isInvalid: true,
+        errorMsg: t('avatar.msg'),
+      };
+    }
+
     const reg = /^(http|https):\/\//g;
     if (website.value && !website.value.match(reg)) {
       bol = false;
@@ -136,7 +156,11 @@ const Index: React.FC = () => {
     const params = {
       display_name: formData.display_name.value,
       username: formData.username.value,
-      avatar: formData.avatar.value,
+      avatar: {
+        type: formData.avatar.type,
+        gravatar: formData.avatar.gravatar,
+        custom: formData.avatar.custom,
+      },
       bio: formData.bio.value,
       website: formData.website.value,
       location: formData.location.value,
@@ -164,15 +188,27 @@ const Index: React.FC = () => {
   };
 
   const getProfile = () => {
-    getUserInfo().then((res) => {
+    getLoggedUserInfo().then((res) => {
       formData.display_name.value = res.display_name;
       formData.username.value = res.username;
       formData.bio.value = res.bio;
-      formData.avatar.value = res.avatar;
+      formData.avatar.type = res.avatar.type || 'default';
+      formData.avatar.gravatar = res.avatar.gravatar;
+      formData.avatar.custom = res.avatar.custom;
       formData.location.value = res.location;
       formData.website.value = res.website;
       setFormData({ ...formData });
+      if (res.e_mail) {
+        const str = res.e_mail.toLowerCase().trim();
+        const hash = MD5(str);
+        console.log(str, hash, mailHash);
+        setMailHash(hash);
+      }
     });
+  };
+
+  const refreshGravatar = () => {
+    setCount((pre) => pre + 1);
   };
 
   useEffect(() => {
@@ -227,40 +263,129 @@ const Index: React.FC = () => {
 
       <Form.Group className="mb-3">
         <Form.Label>{t('avatar.label')}</Form.Label>
-        <div className="d-flex align-items-center">
-          <Avatar
-            size="128px"
-            avatar={formData.avatar.value}
-            className="me-3 rounded"
+        <div className="mb-2">
+          <Form.Check
+            inline
+            type="radio"
+            id="gravatar"
+            label={t('avatar.gravatar')}
+            className="mb-0"
+            checked={formData.avatar.type === 'gravatar'}
+            onChange={() =>
+              handleChange({
+                avatar: {
+                  ...formData.avatar,
+                  type: 'gravatar',
+                  gravatar: `https://www.gravatar.com/avatar/${mailHash}`,
+                  isInvalid: false,
+                  errorMsg: '',
+                },
+              })
+            }
           />
-
-          <div>
-            <UploadImg type="avatar" upload={avatarUpload} />
-            <div>
-              <Form.Text className="text-muted mt-0">
-                <Trans i18nKey="settings.profile.avatar.text">
-                  You can upload your image or
-                  <a
-                    href="@/pages/Users/Settings/Profile/index##"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleChange({
-                        avatar: {
-                          value: '',
-                          isInvalid: false,
-                          errorMsg: '',
-                        },
-                      });
-                    }}>
-                    reset
-                  </a>
-                  it to
-                </Trans>
-                <a href="https://gravatar.com"> gravatar.com</a>
-              </Form.Text>
-            </div>
-          </div>
+          <Form.Check
+            inline
+            type="radio"
+            label={t('avatar.custom')}
+            id="custom"
+            className="mb-0"
+            checked={formData.avatar.type === 'custom'}
+            onChange={() =>
+              handleChange({
+                avatar: {
+                  ...formData.avatar,
+                  type: 'custom',
+                  isInvalid: false,
+                  errorMsg: '',
+                },
+              })
+            }
+          />
+          <Form.Check
+            inline
+            type="radio"
+            id="default"
+            label={t('avatar.default')}
+            className="mb-0"
+            checked={formData.avatar.type === 'default'}
+            onChange={() =>
+              handleChange({
+                avatar: {
+                  ...formData.avatar,
+                  type: 'default',
+                  isInvalid: false,
+                  errorMsg: '',
+                },
+              })
+            }
+          />
         </div>
+        <div className="d-flex align-items-center">
+          {formData.avatar.type === 'gravatar' && (
+            <>
+              <Avatar
+                size="128px"
+                avatar={formData.avatar.gravatar}
+                searchStr={`s=256&d=identicon${
+                  count > 0 ? `&t=${new Date().valueOf()}` : ''
+                }`}
+                className="me-3 rounded"
+              />
+              <div>
+                <Button
+                  variant="outline-secondary"
+                  className="mb-2"
+                  onClick={refreshGravatar}>
+                  {t('avatar.btn_refresh')}
+                </Button>
+                <div>
+                  <Form.Text className="text-muted mt-0">
+                    <Trans i18nKey="settings.profile.gravatar_text">
+                      You can change your image on{' '}
+                      <a
+                        href="https://gravatar.com"
+                        target="_blank"
+                        rel="noreferrer">
+                        gravatar.com
+                      </a>
+                    </Trans>
+                  </Form.Text>
+                </div>
+              </div>
+            </>
+          )}
+
+          {formData.avatar.type === 'custom' && (
+            <>
+              <Avatar
+                size="128px"
+                searchStr="s=256"
+                avatar={formData.avatar.custom}
+                className="me-3 rounded"
+              />
+              <div>
+                <UploadImg type="avatar" upload={avatarUpload} />
+                <div>
+                  <Form.Text className="text-muted mt-0">
+                    <Trans i18nKey="settings.profile.avatar.text">
+                      You can upload your image.
+                    </Trans>
+                  </Form.Text>
+                </div>
+              </div>
+            </>
+          )}
+          {formData.avatar.type === 'default' && (
+            <Avatar size="128px" avatar="" className="me-3 rounded" />
+          )}
+        </div>
+        <Form.Control
+          isInvalid={formData.avatar.isInvalid}
+          className="d-none"
+        />
+        <Form.Control.Feedback type="invalid">
+          {formData.avatar.errorMsg}
+        </Form.Control.Feedback>
       </Form.Group>
 
       <Form.Group controlId="bio" className="mb-3">

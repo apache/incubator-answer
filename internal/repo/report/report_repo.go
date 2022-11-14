@@ -86,10 +86,20 @@ func (ar *reportRepo) GetByID(ctx context.Context, id string) (report entity.Rep
 func (ar *reportRepo) UpdateByID(
 	ctx context.Context,
 	id string,
-	handleData entity.Report) (err error) {
+	handleData entity.Report,
+) (err error) {
 	_, err = ar.data.DB.ID(id).Update(&handleData)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (vr *reportRepo) GetReportCount(ctx context.Context) (count int64, err error) {
+	list := make([]*entity.Report, 0)
+	count, err = vr.data.DB.Where("status =?", entity.ReportStatusPending).FindAndCount(&list)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
 }

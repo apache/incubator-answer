@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"regexp"
@@ -10,12 +11,14 @@ import (
 
 	"github.com/Chain-Zhang/pinyin"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/service_config"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/google/uuid"
@@ -28,29 +31,33 @@ import (
 
 // UserService user service
 type UserService struct {
-	userRepo      usercommon.UserRepo
-	userActivity  activity.UserActiveActivityRepo
-	serviceConfig *service_config.ServiceConfig
-	emailService  *export.EmailService
-	authService   *auth.AuthService
+	userRepo        usercommon.UserRepo
+	userActivity    activity.UserActiveActivityRepo
+	serviceConfig   *service_config.ServiceConfig
+	emailService    *export.EmailService
+	authService     *auth.AuthService
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 func NewUserService(userRepo usercommon.UserRepo,
 	userActivity activity.UserActiveActivityRepo,
 	emailService *export.EmailService,
 	authService *auth.AuthService,
-	serviceConfig *service_config.ServiceConfig) *UserService {
+	serviceConfig *service_config.ServiceConfig,
+	siteInfoService *siteinfo_common.SiteInfoCommonService,
+) *UserService {
 	return &UserService{
-		userRepo:      userRepo,
-		userActivity:  userActivity,
-		emailService:  emailService,
-		serviceConfig: serviceConfig,
-		authService:   authService,
+		userRepo:        userRepo,
+		userActivity:    userActivity,
+		emailService:    emailService,
+		serviceConfig:   serviceConfig,
+		authService:     authService,
+		siteInfoService: siteInfoService,
 	}
 }
 
 // GetUserInfoByUserID get user info by user id
-func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID string) (resp *schema.GetUserResp, err error) {
+func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID string) (resp *schema.GetUserToSetShowResp, err error) {
 	userInfo, exist, err := us.userRepo.GetByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -58,43 +65,15 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	if !exist {
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
-	resp = &schema.GetUserResp{}
+	resp = &schema.GetUserToSetShowResp{}
 	resp.GetFromUserEntity(userInfo)
 	resp.AccessToken = token
 	return resp, nil
 }
 
-// GetUserStatus get user info by user id
-func (us *UserService) GetUserStatus(ctx context.Context, userID, token string) (resp *schema.GetUserStatusResp, err error) {
-	resp = &schema.GetUserStatusResp{}
-	if len(userID) == 0 {
-		return resp, nil
-	}
-	userInfo, exist, err := us.userRepo.GetByUserID(ctx, userID)
-	if err != nil {
-		return nil, err
-	}
-	if !exist {
-		return nil, errors.BadRequest(reason.UserNotFound)
-	}
-
-	userCacheInfo := &entity.UserCacheInfo{
-		UserID:      userID,
-		UserStatus:  userInfo.Status,
-		EmailStatus: userInfo.MailStatus,
-	}
-	err = us.authService.UpdateUserCacheInfo(ctx, token, userCacheInfo)
-	if err != nil {
-		return nil, err
-	}
-	resp = &schema.GetUserStatusResp{
-		Status: schema.UserStatusShow[userInfo.Status],
-	}
-	return resp, nil
-}
-
 func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username string) (
-	resp *schema.GetOtherUserInfoResp, err error) {
+	resp *schema.GetOtherUserInfoResp, err error,
+) {
 	userInfo, exist, err := us.userRepo.GetByUsername(ctx, username)
 	if err != nil {
 		return nil, err
@@ -165,8 +144,8 @@ func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRet
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailUrl := fmt.Sprintf("%s/users/password-reset?code=%s", us.serviceConfig.WebHost, code)
-	title, body, err := us.emailService.PassResetTemplate(ctx, verifyEmailUrl)
+	verifyEmailURL := fmt.Sprintf("%s/users/password-reset?code=%s", us.getSiteUrl(ctx), code)
+	title, body, err := us.emailService.PassResetTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return "", err
 	}
@@ -174,12 +153,12 @@ func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRet
 	return code, nil
 }
 
-// UseRePassWord
-func (us *UserService) UseRePassWord(ctx context.Context, req *schema.UserRePassWordRequest) (resp *schema.GetUserResp, err error) {
+// UseRePassword
+func (us *UserService) UseRePassword(ctx context.Context, req *schema.UserRePassWordRequest) (resp *schema.GetUserResp, err error) {
 	data := &schema.EmailCodeContent{}
 	err = data.FromJSONString(req.Content)
 	if err != nil {
-		return nil, errors.BadRequest(reason.EmailVerifyUrlExpired)
+		return nil, errors.BadRequest(reason.EmailVerifyURLExpired)
 	}
 
 	userInfo, exist, err := us.userRepo.GetByEmail(ctx, data.Email)
@@ -193,8 +172,7 @@ func (us *UserService) UseRePassWord(ctx context.Context, req *schema.UserRePass
 	if err != nil {
 		return nil, err
 	}
-	userInfo.Pass = enpass
-	err = us.userRepo.UpdatePass(ctx, userInfo)
+	err = us.userRepo.UpdatePass(ctx, userInfo.ID, enpass)
 	if err != nil {
 		return nil, err
 	}
@@ -203,8 +181,7 @@ func (us *UserService) UseRePassWord(ctx context.Context, req *schema.UserRePass
 }
 
 func (us *UserService) UserModifyPassWordVerification(ctx context.Context, request *schema.UserModifyPassWordRequest) (bool, error) {
-
-	userInfo, has, err := us.userRepo.GetByUserID(ctx, request.UserId)
+	userInfo, has, err := us.userRepo.GetByUserID(ctx, request.UserID)
 	if err != nil {
 		return false, err
 	}
@@ -219,13 +196,13 @@ func (us *UserService) UserModifyPassWordVerification(ctx context.Context, reque
 	return true, nil
 }
 
-// UserModifyPassWord
-func (us *UserService) UserModifyPassWord(ctx context.Context, request *schema.UserModifyPassWordRequest) error {
+// UserModifyPassword user modify password
+func (us *UserService) UserModifyPassword(ctx context.Context, request *schema.UserModifyPassWordRequest) error {
 	enpass, err := us.encryptPassword(ctx, request.Pass)
 	if err != nil {
 		return err
 	}
-	userInfo, has, err := us.userRepo.GetByUserID(ctx, request.UserId)
+	userInfo, has, err := us.userRepo.GetByUserID(ctx, request.UserID)
 	if err != nil {
 		return err
 	}
@@ -236,8 +213,7 @@ func (us *UserService) UserModifyPassWord(ctx context.Context, request *schema.U
 	if !isPass {
 		return fmt.Errorf("the old password verification failed")
 	}
-	userInfo.Pass = enpass
-	err = us.userRepo.UpdatePass(ctx, userInfo)
+	err = us.userRepo.UpdatePass(ctx, userInfo.ID, enpass)
 	if err != nil {
 		return err
 	}
@@ -251,17 +227,21 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 		if err != nil {
 			return err
 		}
-		if exist && userInfo.ID != req.UserId {
+		if exist && userInfo.ID != req.UserID {
 			return errors.BadRequest(reason.UsernameDuplicate)
 		}
 	}
-
+	avatar, err := json.Marshal(req.Avatar)
+	if err != nil {
+		err = errors.BadRequest(reason.UserSetAvatar).WithError(err).WithStack()
+		return err
+	}
 	userInfo := entity.User{}
-	userInfo.ID = req.UserId
-	userInfo.Avatar = req.Avatar
+	userInfo.ID = req.UserID
+	userInfo.Avatar = string(avatar)
 	userInfo.DisplayName = req.DisplayName
 	userInfo.Bio = req.Bio
-	userInfo.BioHtml = req.BioHtml
+	userInfo.BioHTML = req.BioHTML
 	userInfo.Location = req.Location
 	userInfo.Website = req.Website
 	userInfo.Username = req.Username
@@ -279,9 +259,22 @@ func (us *UserService) UserEmailHas(ctx context.Context, email string) (bool, er
 	return has, nil
 }
 
+// UserUpdateInterface update user interface
+func (us *UserService) UserUpdateInterface(ctx context.Context, req *schema.UpdateUserInterfaceRequest) (err error) {
+	if !translator.CheckLanguageIsValid(req.Language) {
+		return errors.BadRequest(reason.LangNotFound)
+	}
+	err = us.userRepo.UpdateLanguage(ctx, req.UserId, req.Language)
+	if err != nil {
+		return
+	}
+	return nil
+}
+
 // UserRegisterByEmail user register
 func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo *schema.UserRegisterReq) (
-	resp *schema.GetUserResp, err error) {
+	resp *schema.GetUserResp, err error,
+) {
 	_, has, err := us.userRepo.GetByEmail(ctx, registerUserInfo.Email)
 	if err != nil {
 		return nil, err
@@ -315,8 +308,8 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailUrl := fmt.Sprintf("%s/users/account-activation?code=%s", us.serviceConfig.WebHost, code)
-	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailUrl)
+	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.getSiteUrl(ctx), code)
+	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return nil, err
 	}
@@ -358,8 +351,8 @@ func (us *UserService) UserVerifyEmailSend(ctx context.Context, userID string) e
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailUrl := fmt.Sprintf("%s/users/account-activation?code=%s", us.serviceConfig.WebHost, code)
-	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailUrl)
+	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.getSiteUrl(ctx), code)
+	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return err
 	}
@@ -367,9 +360,10 @@ func (us *UserService) UserVerifyEmailSend(ctx context.Context, userID string) e
 	return nil
 }
 
-func (us *UserService) UserNoticeSet(ctx context.Context, userId string, noticeSwitch bool) (
-	resp *schema.UserNoticeSetResp, err error) {
-	userInfo, has, err := us.userRepo.GetByUserID(ctx, userId)
+func (us *UserService) UserNoticeSet(ctx context.Context, userID string, noticeSwitch bool) (
+	resp *schema.UserNoticeSetResp, err error,
+) {
+	userInfo, has, err := us.userRepo.GetByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -377,9 +371,9 @@ func (us *UserService) UserNoticeSet(ctx context.Context, userId string, noticeS
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 	if noticeSwitch {
-		userInfo.NoticeStatus = schema.Notice_Status_On
+		userInfo.NoticeStatus = schema.NoticeStatusOn
 	} else {
-		userInfo.NoticeStatus = schema.Notice_Status_Off
+		userInfo.NoticeStatus = schema.NoticeStatusOff
 	}
 	err = us.userRepo.UpdateNoticeStatus(ctx, userInfo.ID, userInfo.NoticeStatus)
 	return &schema.UserNoticeSetResp{NoticeSwitch: noticeSwitch}, err
@@ -389,7 +383,7 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	data := &schema.EmailCodeContent{}
 	err = data.FromJSONString(req.Content)
 	if err != nil {
-		return nil, errors.BadRequest(reason.EmailVerifyUrlExpired)
+		return nil, errors.BadRequest(reason.EmailVerifyURLExpired)
 	}
 
 	userInfo, has, err := us.userRepo.GetByEmail(ctx, data.Email)
@@ -471,36 +465,38 @@ func (us *UserService) makeUsername(ctx context.Context, displayName string) (us
 // Compare whether the password is correct
 func (us *UserService) verifyPassword(ctx context.Context, LoginPass, UserPass string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(UserPass), []byte(LoginPass))
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 // encryptPassword
 // The password does irreversible encryption.
 func (us *UserService) encryptPassword(ctx context.Context, Pass string) (string, error) {
 	hashPwd, err := bcrypt.GenerateFromPassword([]byte(Pass), bcrypt.DefaultCost)
-	//This encrypted string can be saved to the database and can be used as password matching verification
+	// This encrypted string can be saved to the database and can be used as password matching verification
 	return string(hashPwd), err
 }
 
 // UserChangeEmailSendCode user change email verification
-func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.UserChangeEmailSendCodeReq) error {
-	_, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
+func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.UserChangeEmailSendCodeReq) (
+	resp *schema.UserVerifyEmailErrorResponse, err error) {
+	userInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if !exist {
-		return errors.BadRequest(reason.UserNotFound)
+		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 
 	_, exist, err = us.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if exist {
-		return errors.BadRequest(reason.EmailDuplicate)
+		resp = &schema.UserVerifyEmailErrorResponse{
+			Key:   "e_mail",
+			Value: reason.EmailDuplicate,
+		}
+		return resp, errors.BadRequest(reason.EmailDuplicate)
 	}
 
 	data := &schema.EmailCodeContent{
@@ -508,15 +504,20 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 		UserID: req.UserID,
 	}
 	code := uuid.NewString()
-	verifyEmailUrl := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.serviceConfig.WebHost, code)
-	title, body, err := us.emailService.ChangeEmailTemplate(ctx, verifyEmailUrl)
-	if err != nil {
-		return err
+	var title, body string
+	verifyEmailURL := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.getSiteUrl(ctx), code)
+	if userInfo.MailStatus == entity.EmailStatusToBeVerified {
+		title, body, err = us.emailService.RegisterTemplate(ctx, verifyEmailURL)
+	} else {
+		title, body, err = us.emailService.ChangeEmailTemplate(ctx, verifyEmailURL)
 	}
-	log.Infof("send email confirmation %s", verifyEmailUrl)
+	if err != nil {
+		return nil, err
+	}
+	log.Infof("send email confirmation %s", verifyEmailURL)
 
 	go us.emailService.Send(context.Background(), req.Email, title, body, code, data.ToJSONString())
-	return nil
+	return nil, nil
 }
 
 // UserChangeEmailVerify user change email verify code
@@ -524,7 +525,7 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 	data := &schema.EmailCodeContent{}
 	err = data.FromJSONString(content)
 	if err != nil {
-		return errors.BadRequest(reason.EmailVerifyUrlExpired)
+		return errors.BadRequest(reason.EmailVerifyURLExpired)
 	}
 
 	_, exist, err := us.userRepo.GetByEmail(ctx, data.Email)
@@ -544,7 +545,21 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 	}
 	err = us.userRepo.UpdateEmail(ctx, data.UserID, data.Email)
 	if err != nil {
+		return errors.BadRequest(reason.UserNotFound)
+	}
+	err = us.userRepo.UpdateEmailStatus(ctx, data.UserID, entity.EmailStatusAvailable)
+	if err != nil {
 		return err
 	}
 	return nil
+}
+
+// getSiteUrl get site url
+func (us *UserService) getSiteUrl(ctx context.Context) string {
+	siteGeneral, err := us.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		log.Errorf("get site general failed: %s", err)
+		return ""
+	}
+	return siteGeneral.SiteUrl
 }

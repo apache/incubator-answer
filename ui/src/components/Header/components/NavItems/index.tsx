@@ -3,7 +3,7 @@ import { Nav, Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink } from 'react-router-dom';
 
-import { Avatar, Icon } from '@answer/components';
+import { Avatar, Icon } from '@/components';
 
 interface Props {
   redDot;
@@ -43,7 +43,7 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
           id="dropdown-basic"
           as="a"
           className="no-toggle pointer">
-          <Avatar size="36px" avatar={userInfo?.avatar} />
+          <Avatar size="36px" avatar={userInfo?.avatar} searchStr="s=96" />
         </Dropdown.Toggle>
 
         <Dropdown.Menu>

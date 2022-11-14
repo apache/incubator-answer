@@ -1,8 +1,8 @@
 import qs from 'qs';
 import useSWR from 'swr';
 
-import request from '@answer/utils/request';
-import type * as Type from '@answer/common/interface';
+import request from '@/utils/request';
+import type * as Type from '@/common/interface';
 
 export const uploadImage = (file) => {
   const form = new FormData();
@@ -115,12 +115,12 @@ export const resendEmail = (params?: Type.ImgCodeReq) => {
  * @description get login userinfo
  * @returns {UserInfo}
  */
-export const getUserInfo = () => {
+export const getLoggedUserInfo = () => {
   return request.get<Type.UserInfoRes>('/answer/api/v1/user/info');
 };
 
 export const modifyPassword = (params: Type.ModifyPasswordReq) => {
-  return request.post('/answer/api/v1/user/password/modify', params);
+  return request.put('/answer/api/v1/user/password', params);
 };
 
 export const modifyUserInfo = (params: Type.ModifyUserReq) => {
@@ -161,14 +161,6 @@ export const questionDetail = (id: string) => {
   return request.get<Type.QuestionDetailRes>(
     `/answer/api/v1/question/info?id=${id}`,
   );
-};
-
-export const langConfig = () => {
-  return request.get('/answer/api/v1/language/config');
-};
-
-export const languages = () => {
-  return request.get<Type.LangsType[]>('/answer/api/v1/language/options');
 };
 
 export const getAnswers = (params: Type.AnswersReq) => {
@@ -253,16 +245,6 @@ export const changeEmailVerify = (params: { code: string }) => {
   return request.put('/answer/api/v1/user/email', params);
 };
 
-export const useSiteSettings = () => {
-  const apiUrl = `/answer/api/v1/siteinfo`;
-  const { data, error } = useSWR<Type.SiteSettings, Error>(
-    [apiUrl],
-    request.instance.get,
-  );
-
-  return {
-    data,
-    isLoading: !data && !error,
-    error,
-  };
+export const getAppSettings = () => {
+  return request.get<Type.SiteSettings>('/answer/api/v1/siteinfo');
 };

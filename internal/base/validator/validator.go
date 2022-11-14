@@ -3,13 +3,14 @@ package validator
 import (
 	"errors"
 	"reflect"
+	"strings"
 
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/go-playground/locales"
 	english "github.com/go-playground/locales/en"
 	zhongwen "github.com/go-playground/locales/zh"
-	"github.com/go-playground/universal-translator"
+	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	"github.com/go-playground/validator/v10/translations/en"
 	"github.com/go-playground/validator/v10/translations/zh"
@@ -31,10 +32,8 @@ type ErrorField struct {
 	Value string `json:"value"`
 }
 
-var (
-	// GlobalValidatorMapping is a mapping from validator to translator used
-	GlobalValidatorMapping = make(map[string]*MyValidator, 0)
-)
+// GlobalValidatorMapping is a mapping from validator to translator used
+var GlobalValidatorMapping = make(map[string]*MyValidator, 0)
 
 func init() {
 	zhTran, zhVal := getTran(zhongwen.New(), i18n.LanguageChinese.Abbr()), createDefaultValidator(i18n.LanguageChinese)
@@ -99,8 +98,18 @@ func (m *MyValidator) Check(value interface{}) (errField *ErrorField, err error)
 
 		for _, fieldError := range valErrors {
 			errField = &ErrorField{
-				Key:   translator.GlobalTrans.Tr(m.Lang, fieldError.Field()),
+				Key:   fieldError.Field(),
 				Value: fieldError.Translate(m.Tran),
+			}
+
+			// get original tag name from value for set err field key.
+			structNamespace := fieldError.StructNamespace()
+			_, fieldName, found := strings.Cut(structNamespace, ".")
+			if found {
+				originalTag := getObjectTagByFieldName(value, fieldName)
+				if len(originalTag) > 0 {
+					errField.Key = originalTag
+				}
 			}
 			return errField, myErrors.BadRequest(reason.RequestFormatError).WithMsg(fieldError.Translate(m.Tran))
 		}
@@ -118,4 +127,25 @@ func (m *MyValidator) Check(value interface{}) (errField *ErrorField, err error)
 // Checker .
 type Checker interface {
 	Check() (errField *ErrorField, err error)
+}
+
+func getObjectTagByFieldName(obj interface{}, fieldName string) (tag string) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Error(err)
+		}
+	}()
+
+	objT := reflect.TypeOf(obj)
+	objT = objT.Elem()
+
+	structField, exists := objT.FieldByName(fieldName)
+	if !exists {
+		return ""
+	}
+	tag = structField.Tag.Get("json")
+	if len(tag) == 0 {
+		return structField.Tag.Get("form")
+	}
+	return tag
 }

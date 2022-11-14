@@ -107,7 +107,7 @@ func (tr *GetTagPageResp) GetExcerpt() {
 }
 
 type TagChange struct {
-	ObjectId string     `json:"object_id"` // object_id
+	ObjectID string     `json:"object_id"` // object_id
 	Tags     []*TagItem `json:"tags"`      // tags name
 	// user id
 	UserID string `json:"-"`

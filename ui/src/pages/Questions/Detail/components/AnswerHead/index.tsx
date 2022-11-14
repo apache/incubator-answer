@@ -1,7 +1,7 @@
 import { memo, FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { QueryGroup } from '@answer/components';
+import { QueryGroup } from '@/components';
 
 interface Props {
   count: number;

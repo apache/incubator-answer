@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
-import { Icon } from '@answer/components';
-import { bookmark, postVote } from '@answer/api';
-import { isLogin } from '@answer/utils';
-import { userInfoStore } from '@answer/stores';
-import { useToast } from '@answer/hooks';
+import { Icon } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
+import { useToast } from '@/hooks';
+import { tryNormalLogged } from '@/utils/guard';
+import { bookmark, postVote } from '@/services';
 
 interface Props {
   className?: string;
@@ -32,7 +32,7 @@ const Index: FC<Props> = ({ className, data }) => {
     state: data?.collected,
     count: data?.collectCount,
   });
-  const { username = '' } = userInfoStore((state) => state.user);
+  const { username = '' } = loggedUserInfoStore((state) => state.user);
   const toast = useToast();
   const { t } = useTranslation();
   useEffect(() => {
@@ -48,7 +48,7 @@ const Index: FC<Props> = ({ className, data }) => {
   }, []);
 
   const handleVote = (type: 'up' | 'down') => {
-    if (!isLogin(true)) {
+    if (!tryNormalLogged(true)) {
       return;
     }
 
@@ -84,7 +84,7 @@ const Index: FC<Props> = ({ className, data }) => {
   };
 
   const handleBookmark = () => {
-    if (!isLogin(true)) {
+    if (!tryNormalLogged(true)) {
       return;
     }
     bookmark({

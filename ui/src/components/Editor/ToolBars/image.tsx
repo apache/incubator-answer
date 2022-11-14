@@ -2,10 +2,10 @@ import { FC, useEffect, useState, memo } from 'react';
 import { Button, Form, Modal, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Modal as AnswerModal } from '@answer/components';
-import { uploadImage } from '@answer/api';
+import { Modal as AnswerModal } from '@/components';
 import ToolItem from '../toolItem';
 import { IEditorContext } from '../types';
+import { uploadImage } from '@/services';
 
 const Image: FC<IEditorContext> = ({ editor }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });

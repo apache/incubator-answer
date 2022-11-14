@@ -2,12 +2,10 @@ import React from 'react';
 import { Modal, Form, Button, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Icon } from '@answer/components';
-import type {
-  FormValue,
-  FormDataType,
-  ImgCodeRes,
-} from '@answer/common/interface';
+import { Icon } from '@/components';
+import type { FormValue, FormDataType, ImgCodeRes } from '@/common/interface';
+import { CAPTCHA_CODE_STORAGE_KEY } from '@/common/constants';
+import Storage from '@/utils/storage';
 
 interface IProps {
   /** control visible */
@@ -55,7 +53,7 @@ const Index: React.FC<IProps> = ({
                 placeholder={t('placeholder')}
                 isInvalid={captcha.isInvalid}
                 onChange={(e) => {
-                  localStorage.setItem('captchaCode', e.target.value);
+                  Storage.set(CAPTCHA_CODE_STORAGE_KEY, e.target.value);
                   handleCaptcha({
                     captcha_code: {
                       value: e.target.value,

@@ -1,17 +1,33 @@
 package schema
 
+import (
+	"fmt"
+	"net/url"
+)
+
 // SiteGeneralReq site general request
 type SiteGeneralReq struct {
-	Name             string `validate:"required,gt=1,lte=128" comment:"site name" form:"name" json:"name"`
-	ShortDescription string `validate:"required,gt=3,lte=255" comment:"short site description" form:"short_description" json:"short_description"`
-	Description      string `validate:"required,gt=3,lte=2000" comment:"site description" form:"description" json:"description"`
+	Name             string `validate:"required,gt=1,lte=128" form:"name" json:"name"`
+	ShortDescription string `validate:"required,gt=3,lte=255" form:"short_description" json:"short_description"`
+	Description      string `validate:"required,gt=3,lte=2000" form:"description" json:"description"`
+	SiteUrl          string `validate:"required,gt=1,lte=512,url" form:"site_url" json:"site_url"`
+	ContactEmail     string `validate:"required,gt=1,lte=512,email" form:"contact_email" json:"contact_email"`
+}
+
+func (r *SiteGeneralReq) FormatSiteUrl() {
+	parsedUrl, err := url.Parse(r.SiteUrl)
+	if err != nil {
+		return
+	}
+	r.SiteUrl = fmt.Sprintf("%s://%s", parsedUrl.Scheme, parsedUrl.Host)
 }
 
 // SiteInterfaceReq site interface request
 type SiteInterfaceReq struct {
-	Logo     string `validate:"omitempty,gt=0,lte=256" comment:"logo" form:"logo" json:"logo"`
-	Theme    string `validate:"required,gt=1,lte=128" comment:"theme" form:"theme" json:"theme"`
-	Language string `validate:"required,gt=1,lte=128" comment:"interface language" form:"language" json:"language"`
+	Logo     string `validate:"omitempty,gt=0,lte=256" form:"logo" json:"logo"`
+	Theme    string `validate:"required,gt=1,lte=128" form:"theme" json:"theme"`
+	Language string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
+	TimeZone string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
 }
 
 // SiteGeneralResp site general response

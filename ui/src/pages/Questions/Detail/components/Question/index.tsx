@@ -11,9 +11,9 @@ import {
   Comment,
   FormatTime,
   htmlRender,
-} from '@answer/components';
-import { formatCount } from '@answer/utils';
-import { following } from '@answer/api';
+} from '@/components';
+import { formatCount } from '@/utils';
+import { following } from '@/services';
 
 interface Props {
   data: any;
@@ -88,7 +88,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
           size="sm"
           className="p-0 btn-no-border"
           onClick={(e) => handleFollow(e)}>
-          {followed ? 'Following' : 'Follow'}
+          {t(followed ? 'Following' : 'Follow')}
         </Button>
       </div>
       <div className="m-n1">

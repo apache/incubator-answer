@@ -15,12 +15,14 @@ type UserRepo interface {
 	UpdateEmailStatus(ctx context.Context, userID string, emailStatus int) error
 	UpdateNoticeStatus(ctx context.Context, userID string, noticeStatus int) error
 	UpdateEmail(ctx context.Context, userID, email string) error
-	UpdatePass(ctx context.Context, Data *entity.User) error
+	UpdateLanguage(ctx context.Context, userID, language string) error
+	UpdatePass(ctx context.Context, userID, pass string) error
 	UpdateInfo(ctx context.Context, userInfo *entity.User) (err error)
 	GetByUserID(ctx context.Context, userID string) (userInfo *entity.User, exist bool, err error)
 	BatchGetByID(ctx context.Context, ids []string) ([]*entity.User, error)
 	GetByUsername(ctx context.Context, username string) (userInfo *entity.User, exist bool, err error)
 	GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error)
+	GetUserCount(ctx context.Context) (count int64, err error)
 }
 
 // UserCommon user service
@@ -76,14 +78,15 @@ func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, IDs []string) 
 // UserBasicInfoFormat
 func (us *UserCommon) UserBasicInfoFormat(ctx context.Context, userInfo *entity.User) *schema.UserBasicInfo {
 	userBasicInfo := &schema.UserBasicInfo{}
+	Avatar := schema.FormatAvatarInfo(userInfo.Avatar)
 	userBasicInfo.ID = userInfo.ID
 	userBasicInfo.Username = userInfo.Username
 	userBasicInfo.Rank = userInfo.Rank
 	userBasicInfo.DisplayName = userInfo.DisplayName
-	userBasicInfo.Avatar = userInfo.Avatar
+	userBasicInfo.Avatar = Avatar
 	userBasicInfo.Website = userInfo.Website
 	userBasicInfo.Location = userInfo.Location
-	userBasicInfo.IpInfo = userInfo.IPInfo
+	userBasicInfo.IPInfo = userInfo.IPInfo
 	userBasicInfo.Status = schema.UserStatusShow[userInfo.Status]
 	if userBasicInfo.Status == schema.UserDeleted {
 		userBasicInfo.Avatar = ""

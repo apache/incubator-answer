@@ -17,9 +17,9 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import { userInfoStore, siteInfoStore, interfaceStore } from '@answer/stores';
-import { logout, useQueryNotificationStatus } from '@answer/api';
-import Storage from '@answer/utils/storage';
+import { loggedUserInfoStore, siteInfoStore, interfaceStore } from '@/stores';
+import { logout, useQueryNotificationStatus } from '@/services';
+import { RouteAlias } from '@/router/alias';
 
 import NavItems from './components/NavItems';
 
@@ -27,7 +27,7 @@ import './index.scss';
 
 const Header: FC = () => {
   const navigate = useNavigate();
-  const { user, clear } = userInfoStore();
+  const { user, clear } = loggedUserInfoStore();
   const { t } = useTranslation();
   const [urlSearch] = useSearchParams();
   const q = urlSearch.get('q');
@@ -42,9 +42,8 @@ const Header: FC = () => {
 
   const handleLogout = async () => {
     await logout();
-    Storage.remove('token');
     clear();
-    navigate('/');
+    navigate(RouteAlias.home);
   };
 
   useEffect(() => {
@@ -72,8 +71,8 @@ const Header: FC = () => {
           id="navBarToggle"
         />
 
-        <div className="left-wrap d-flex justify-content-between align-items-center nav-grow">
-          <Navbar.Brand to="/" as={Link} className="lh-1">
+        <div className="d-flex justify-content-between align-items-center nav-grow flex-nowrap">
+          <Navbar.Brand to="/" as={Link} className="lh-1 me-0 me-sm-3">
             {interfaceInfo.logo ? (
               <img
                 className="logo rounded-1 me-0"

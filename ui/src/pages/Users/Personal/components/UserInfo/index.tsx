@@ -3,8 +3,8 @@ import { Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { Avatar, Icon } from '@answer/components';
-import type { UserInfoRes } from '@answer/common/interface';
+import { Avatar, Icon } from '@/components';
+import type { UserInfoRes } from '@/common/interface';
 
 interface Props {
   data: UserInfoRes;
@@ -16,16 +16,16 @@ const Index: FC<Props> = ({ data }) => {
     return null;
   }
   return (
-    <div className="d-flex mb-4">
+    <div className="d-flex flex-column flex-md-row mb-4">
       {data?.status !== 'deleted' ? (
         <Link to={`/users/${data.username}`} reloadDocument>
-          <Avatar avatar={data.avatar} size="160px" />
+          <Avatar avatar={data.avatar} size="160px" searchStr="s=256" />
         </Link>
       ) : (
-        <Avatar avatar={data.avatar} size="160px" />
+        <Avatar avatar={data.avatar} size="160px" searchStr="s=256" />
       )}
 
-      <div className="ms-4">
+      <div className="ms-0 ms-md-4 mt-4 mt-md-0">
         <div className="d-flex align-items-center mb-2">
           {data?.status !== 'deleted' ? (
             <Link
@@ -51,7 +51,7 @@ const Index: FC<Props> = ({ data }) => {
         </div>
         <div className="text-secondary mb-4">@{data.username}</div>
 
-        <div className="d-flex mb-3">
+        <div className="d-flex flex-wrap mb-3">
           <div className="me-3">
             <strong className="fs-5">{data.rank || 0}</strong>
             <span className="text-secondary"> {t('x_reputation')}</span>

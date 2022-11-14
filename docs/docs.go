@@ -56,6 +56,18 @@ const docTemplate = `{
                         "description": "user status",
                         "name": "status",
                         "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "answer id or question title",
+                        "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "question id",
+                        "name": "question_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -107,13 +119,36 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/admin/api/language/options": {
+        "/answer/admin/api/dashboard": {
             "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
+                "description": "DashboardInfo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "DashboardInfo",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/admin/api/language/options": {
+            "get": {
                 "description": "Get language options",
                 "produces": [
                     "application/json"
@@ -172,6 +207,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "user status",
                         "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "question id or title",
+                        "name": "query",
                         "in": "query"
                     }
                 ],
@@ -469,14 +510,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo general",
+                "description": "get site general information",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo general",
+                "summary": "get site general information",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -504,14 +545,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo interface",
+                "description": "update site general information",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo interface",
+                "summary": "update site general information",
                 "parameters": [
                     {
                         "description": "general",
@@ -540,25 +581,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo interface",
+                "description": "get site interface",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo interface",
-                "parameters": [
-                    {
-                        "description": "general",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schema.AddCommentReq"
-                        }
-                    }
-                ],
+                "summary": "get site interface",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -586,14 +616,14 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Get siteinfo interface",
+                "description": "update site info interface",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "admin"
                 ],
-                "summary": "Get siteinfo interface",
+                "summary": "update site info interface",
                 "parameters": [
                     {
                         "description": "general",
@@ -709,19 +739,12 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "username",
-                        "name": "username",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "email",
-                        "name": "e_mail",
+                        "description": "search query: email, username or id:[id]",
+                        "name": "query",
                         "in": "query"
                     },
                     {
                         "enum": [
-                            "normal",
                             "suspended",
                             "deleted",
                             "inactive"
@@ -1421,11 +1444,6 @@ const docTemplate = `{
         },
         "/answer/api/v1/language/options": {
             "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "Get language options",
                 "produces": [
                     "application/json"
@@ -2699,14 +2717,14 @@ const docTemplate = `{
         },
         "/answer/api/v1/siteinfo": {
             "get": {
-                "description": "Get siteinfo",
+                "description": "get site info",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "site"
                 ],
-                "summary": "Get siteinfo",
+                "summary": "get site info",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -3303,7 +3321,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "GetUserInfoByUserID",
+                "description": "get user info, if user no login response http code is 200, but user info is null",
                 "consumes": [
                     "application/json"
                 ],
@@ -3326,7 +3344,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.GetUserResp"
+                                            "$ref": "#/definitions/schema.GetUserToSetShowResp"
                                         }
                                     }
                                 }
@@ -3367,6 +3385,52 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/schema.UpdateInfoRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/user/interface": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "UserUpdateInterface update user interface config",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "UserUpdateInterface update user interface config",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "access-token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "UpdateInfoRequest",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdateUserInterfaceRequest"
                         }
                     }
                 ],
@@ -3699,46 +3763,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/user/status": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "get user status info",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "get user status info",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/handler.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/schema.GetUserResp"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/answer/api/v1/vote/down": {
             "post": {
                 "security": [
@@ -3832,6 +3856,190 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/schema.VoteResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/installation/base-info": {
+            "post": {
+                "description": "init base info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "installation"
+                ],
+                "summary": "init base info",
+                "parameters": [
+                    {
+                        "description": "InitBaseInfoReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/install.InitBaseInfoReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/installation/config-file/check": {
+            "post": {
+                "description": "check config file if exist when installation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "installation"
+                ],
+                "summary": "check config file if exist when installation",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/install.CheckConfigFileResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/installation/db/check": {
+            "post": {
+                "description": "check database if exist when installation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "installation"
+                ],
+                "summary": "check database if exist when installation",
+                "parameters": [
+                    {
+                        "description": "CheckDatabaseReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/install.CheckDatabaseReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/install.CheckConfigFileResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/installation/init": {
+            "post": {
+                "description": "init environment",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "installation"
+                ],
+                "summary": "init environment",
+                "parameters": [
+                    {
+                        "description": "CheckDatabaseReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/install.CheckDatabaseReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/installation/language/options": {
+            "get": {
+                "description": "get installation language options",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Lang"
+                ],
+                "summary": "get installation language options",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/translator.LangOption"
+                                            }
                                         }
                                     }
                                 }
@@ -3936,6 +4144,94 @@ const docTemplate = `{
                 "reason": {
                     "description": "reason key",
                     "type": "string"
+                }
+            }
+        },
+        "install.CheckConfigFileResp": {
+            "type": "object",
+            "properties": {
+                "config_file_exist": {
+                    "type": "boolean"
+                },
+                "db_connection_success": {
+                    "type": "boolean"
+                },
+                "db_table_exist": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "install.CheckDatabaseReq": {
+            "type": "object",
+            "required": [
+                "db_type"
+            ],
+            "properties": {
+                "db_file": {
+                    "type": "string"
+                },
+                "db_host": {
+                    "type": "string"
+                },
+                "db_name": {
+                    "type": "string"
+                },
+                "db_password": {
+                    "type": "string"
+                },
+                "db_type": {
+                    "type": "string",
+                    "enum": [
+                        "postgres",
+                        "sqlite3",
+                        "mysql"
+                    ]
+                },
+                "db_username": {
+                    "type": "string"
+                }
+            }
+        },
+        "install.InitBaseInfoReq": {
+            "type": "object",
+            "required": [
+                "contact_email",
+                "email",
+                "lang",
+                "name",
+                "password",
+                "site_name",
+                "site_url"
+            ],
+            "properties": {
+                "contact_email": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "lang": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "name": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "password": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 8
+                },
+                "site_name": {
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "site_url": {
+                    "type": "string",
+                    "maxLength": 512
                 }
             }
         },
@@ -4105,6 +4401,23 @@ const docTemplate = `{
                 "title": {
                     "description": "title",
                     "type": "string"
+                }
+            }
+        },
+        "schema.AvatarInfo": {
+            "type": "object",
+            "properties": {
+                "custom": {
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "gravatar": {
+                    "type": "string",
+                    "maxLength": 200
+                },
+                "type": {
+                    "type": "string",
+                    "maxLength": 100
                 }
             }
         },
@@ -4794,6 +5107,110 @@ const docTemplate = `{
                     "description": "is admin",
                     "type": "boolean"
                 },
+                "language": {
+                    "description": "language",
+                    "type": "string"
+                },
+                "last_login_date": {
+                    "description": "last login date",
+                    "type": "integer"
+                },
+                "location": {
+                    "description": "location",
+                    "type": "string"
+                },
+                "mail_status": {
+                    "description": "mail status(1 pass 2 to be verified)",
+                    "type": "integer"
+                },
+                "mobile": {
+                    "description": "mobile",
+                    "type": "string"
+                },
+                "notice_status": {
+                    "description": "notice status(1 on 2off)",
+                    "type": "integer"
+                },
+                "question_count": {
+                    "description": "question count",
+                    "type": "integer"
+                },
+                "rank": {
+                    "description": "rank",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "user status",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "username",
+                    "type": "string"
+                },
+                "website": {
+                    "description": "website",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetUserToSetShowResp": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "description": "access token",
+                    "type": "string"
+                },
+                "answer_count": {
+                    "description": "answer count",
+                    "type": "integer"
+                },
+                "authority_group": {
+                    "description": "authority group",
+                    "type": "integer"
+                },
+                "avatar": {
+                    "$ref": "#/definitions/schema.AvatarInfo"
+                },
+                "bio": {
+                    "description": "bio markdown",
+                    "type": "string"
+                },
+                "bio_html": {
+                    "description": "bio html",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "create time",
+                    "type": "integer"
+                },
+                "display_name": {
+                    "description": "display name",
+                    "type": "string"
+                },
+                "e_mail": {
+                    "description": "email",
+                    "type": "string"
+                },
+                "follow_count": {
+                    "description": "follow count",
+                    "type": "integer"
+                },
+                "id": {
+                    "description": "user id",
+                    "type": "string"
+                },
+                "ip_info": {
+                    "description": "ip info",
+                    "type": "string"
+                },
+                "is_admin": {
+                    "description": "is admin",
+                    "type": "boolean"
+                },
+                "language": {
+                    "description": "language",
+                    "type": "string"
+                },
                 "last_login_date": {
                     "description": "last login date",
                     "type": "integer"
@@ -4961,12 +5378,9 @@ const docTemplate = `{
                     "description": "Search page size",
                     "type": "integer"
                 },
-                "tags": {
-                    "description": "Search tag",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                "tag": {
+                    "description": "Tags     []string ` + "`" + `json:\"tags\" form:\"tags\"` + "`" + `           // Search tag",
+                    "type": "string"
                 },
                 "username": {
                     "description": "Search username",
@@ -5160,11 +5574,17 @@ const docTemplate = `{
         "schema.SiteGeneralReq": {
             "type": "object",
             "required": [
+                "contact_email",
                 "description",
                 "name",
-                "short_description"
+                "short_description",
+                "site_url"
             ],
             "properties": {
+                "contact_email": {
+                    "type": "string",
+                    "maxLength": 512
+                },
                 "description": {
                     "type": "string",
                     "maxLength": 2000
@@ -5176,17 +5596,27 @@ const docTemplate = `{
                 "short_description": {
                     "type": "string",
                     "maxLength": 255
+                },
+                "site_url": {
+                    "type": "string",
+                    "maxLength": 512
                 }
             }
         },
         "schema.SiteGeneralResp": {
             "type": "object",
             "required": [
+                "contact_email",
                 "description",
                 "name",
-                "short_description"
+                "short_description",
+                "site_url"
             ],
             "properties": {
+                "contact_email": {
+                    "type": "string",
+                    "maxLength": 512
+                },
                 "description": {
                     "type": "string",
                     "maxLength": 2000
@@ -5198,6 +5628,10 @@ const docTemplate = `{
                 "short_description": {
                     "type": "string",
                     "maxLength": 255
+                },
+                "site_url": {
+                    "type": "string",
+                    "maxLength": 512
                 }
             }
         },
@@ -5205,7 +5639,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "language",
-                "theme"
+                "theme",
+                "time_zone"
             ],
             "properties": {
                 "language": {
@@ -5217,6 +5652,10 @@ const docTemplate = `{
                     "maxLength": 256
                 },
                 "theme": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "time_zone": {
                     "type": "string",
                     "maxLength": 128
                 }
@@ -5226,7 +5665,8 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "language",
-                "theme"
+                "theme",
+                "time_zone"
             ],
             "properties": {
                 "language": {
@@ -5238,6 +5678,10 @@ const docTemplate = `{
                     "maxLength": 256
                 },
                 "theme": {
+                    "type": "string",
+                    "maxLength": 128
+                },
+                "time_zone": {
                     "type": "string",
                     "maxLength": 128
                 }
@@ -5321,8 +5765,7 @@ const docTemplate = `{
             "properties": {
                 "avatar": {
                     "description": "avatar",
-                    "type": "string",
-                    "maxLength": 500
+                    "$ref": "#/definitions/schema.AvatarInfo"
                 },
                 "bio": {
                     "description": "bio",
@@ -5453,6 +5896,19 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.UpdateUserInterfaceRequest": {
+            "type": "object",
+            "required": [
+                "language"
+            ],
+            "properties": {
+                "language": {
+                    "description": "language",
+                    "type": "string",
+                    "maxLength": 100
+                }
+            }
+        },
         "schema.UpdateUserStatusReq": {
             "type": "object",
             "required": [
@@ -5519,6 +5975,14 @@ const docTemplate = `{
                 "e_mail"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "captcha_id": {
+                    "type": "string",
+                    "maxLength": 500
+                },
                 "e_mail": {
                     "type": "string",
                     "maxLength": 500
@@ -5683,6 +6147,17 @@ const docTemplate = `{
                 },
                 "votes": {
                     "type": "integer"
+                }
+            }
+        },
+        "translator.LangOption": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
                 }
             }
         }

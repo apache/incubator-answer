@@ -3,14 +3,16 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { changeEmailVerify } from '@answer/api';
-
+import { loggedUserInfoStore } from '@/stores';
+import { changeEmailVerify, getLoggedUserInfo } from '@/services';
 import { PageTitle } from '@/components';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'account_result' });
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState('loading');
+
+  const updateUser = loggedUserInfoStore((state) => state.update);
 
   useEffect(() => {
     const code = searchParams.get('code');
@@ -19,6 +21,10 @@ const Index: FC = () => {
       changeEmailVerify({ code })
         .then(() => {
           setStep('success');
+          getLoggedUserInfo().then((res) => {
+            // update user info
+            updateUser(res);
+          });
         })
         .catch(() => {
           setStep('invalid');

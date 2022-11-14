@@ -20,7 +20,7 @@
   }
   .placeholder-search {
     background-color: rgba(255, 255, 255, .2);
-    border: 0;
+    border: $border-width $border-style rgba(255, 255, 255, .2);
     &:focus {
       border: $border-width $border-style $border-color;
     }
@@ -50,6 +50,10 @@
 
 @media (max-width: 992.9px) {
   #header {
+    .logo {
+      max-width: 93px;
+      max-height: auto;
+    }
     .nav-grow {
       flex-grow: 1!important;
     }
@@ -64,4 +68,14 @@
   }
 
 }
+
+@media (max-width: 576px) {
+  #header {
+    .logo {
+      max-width: 93px;
+      max-height: auto;
+    }
+  }
+}
+
 

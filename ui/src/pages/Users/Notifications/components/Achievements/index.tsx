@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { isEmpty } from 'lodash';
 
-import { Empty } from '@answer/components';
+import { Empty } from '@/components';
 
 import './index.scss';
 

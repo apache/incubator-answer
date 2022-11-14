@@ -3,8 +3,9 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { following } from '@answer/api';
-import { isLogin } from '@answer/utils';
+import { following } from '@/services';
+import { tryNormalLogged } from '@/utils/guard';
+import { escapeRemove } from '@/utils';
 
 interface Props {
   data;
@@ -20,7 +21,7 @@ const Index: FC<Props> = ({ data }) => {
   const [followed, setFollowed] = useState(data?.is_follower);
 
   const follow = () => {
-    if (!isLogin(true)) {
+    if (!tryNormalLogged(true)) {
       return;
     }
     following({
@@ -40,7 +41,7 @@ const Index: FC<Props> = ({ data }) => {
         <br />
         {options?.length && (
           <>
-            <span className="text-secondary">{t('options')}</span>
+            <span className="text-secondary">{t('options')} </span>
             {options?.map((item) => {
               return <code key={item}>{item} </code>;
             })}
@@ -51,7 +52,7 @@ const Index: FC<Props> = ({ data }) => {
         <>
           {data.excerpt && (
             <p className="text-break">
-              {data.excerpt}
+              {escapeRemove(data.excerpt)}
               <Link to={`/tags/${data.slug_name}/info`}> [{t('more')}]</Link>
             </p>
           )}

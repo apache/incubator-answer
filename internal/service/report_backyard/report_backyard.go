@@ -2,9 +2,8 @@ package report_backyard
 
 import (
 	"context"
-	"strings"
-
 	"github.com/answerdev/answer/internal/service/config"
+	"github.com/answerdev/answer/pkg/htmltext"
 
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -180,20 +179,20 @@ func (rs *ReportBackyardService) parseObject(ctx context.Context, resp *[]*schem
 		case "question":
 			r.QuestionID = questionId
 			r.Title = question.Title
-			r.Excerpt = rs.cutOutTagParsedText(question.OriginalText)
+			r.Excerpt = htmltext.FetchExcerpt(question.ParsedText, "...", 240)
 
 		case "answer":
 			r.QuestionID = questionId
 			r.AnswerID = answerId
 			r.Title = question.Title
-			r.Excerpt = rs.cutOutTagParsedText(answer.OriginalText)
+			r.Excerpt = htmltext.FetchExcerpt(answer.ParsedText, "...", 240)
 
 		case "comment":
 			r.QuestionID = questionId
 			r.AnswerID = answerId
 			r.CommentID = commentId
 			r.Title = question.Title
-			r.Excerpt = rs.cutOutTagParsedText(cmt.OriginalText)
+			r.Excerpt = htmltext.FetchExcerpt(cmt.ParsedText, "...", 240)
 		}
 
 		// parse reason
@@ -201,25 +200,16 @@ func (rs *ReportBackyardService) parseObject(ctx context.Context, resp *[]*schem
 			r.Reason = &schema.ReasonItem{
 				ReasonType: r.ReportType,
 			}
-			err = rs.configRepo.GetConfigById(r.ReportType, r.Reason)
+			err = rs.configRepo.GetJsonConfigByIDAndSetToObject(r.ReportType, r.Reason)
 		}
 		if r.FlaggedType > 0 {
 			r.FlaggedReason = &schema.ReasonItem{
 				ReasonType: r.FlaggedType,
 			}
-			_ = rs.configRepo.GetConfigById(r.FlaggedType, r.FlaggedReason)
+			_ = rs.configRepo.GetJsonConfigByIDAndSetToObject(r.FlaggedType, r.FlaggedReason)
 		}
 
 		res[i] = r
 	}
 	resp = &res
-}
-
-func (rs *ReportBackyardService) cutOutTagParsedText(parsedText string) string {
-	parsedText = strings.TrimSpace(parsedText)
-	idx := strings.Index(parsedText, "\n")
-	if idx >= 0 {
-		parsedText = parsedText[0:idx]
-	}
-	return parsedText
 }

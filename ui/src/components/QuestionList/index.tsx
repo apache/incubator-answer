@@ -1,10 +1,9 @@
 import { FC } from 'react';
-import { Row, Col, ListGroup } from 'react-bootstrap';
+import { ListGroup } from 'react-bootstrap';
 import { NavLink, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useQuestionList } from '@answer/api';
-import type * as Type from '@answer/common/interface';
+import type * as Type from '@/common/interface';
 import {
   Icon,
   Tag,
@@ -13,7 +12,8 @@ import {
   Empty,
   BaseUserCard,
   QueryGroup,
-} from '@answer/components';
+} from '@/components';
+import { useQuestionList } from '@/services';
 
 const QuestionOrderKeys: Type.QuestionOrderBy[] = [
   'newest',
@@ -41,7 +41,7 @@ const QuestionLastUpdate = ({ q }) => {
         •
         <FormatTime
           time={q.update_time}
-          className="text-secondary mx-1"
+          className="text-secondary ms-1"
           preFix={t('answered')}
         />
       </div>
@@ -60,7 +60,7 @@ const QuestionLastUpdate = ({ q }) => {
         •
         <FormatTime
           time={q.edit_time}
-          className="text-secondary mx-1"
+          className="text-secondary ms-1"
           preFix={t('modified')}
         />
       </div>
@@ -75,7 +75,7 @@ const QuestionLastUpdate = ({ q }) => {
       <FormatTime
         time={q.create_time}
         preFix={t('asked')}
-        className="text-secondary mx-1"
+        className="text-secondary ms-1"
       />
     </div>
   );
@@ -92,33 +92,30 @@ const QuestionList: FC<Props> = ({ source }) => {
     page_size: pageSize,
     page: curPage,
     order: curOrder as Type.QuestionOrderBy,
-    tags: [tagName],
+    tag: tagName,
   };
 
   if (source === 'questions') {
-    delete reqParams.tags;
+    delete reqParams.tag;
   }
   const { data: listData, isLoading } = useQuestionList(reqParams);
   const count = listData?.count || 0;
 
   return (
     <div>
-      <Row className="mb-3">
-        <Col className="d-flex align-items-center">
-          <h5 className="fs-5 text-nowrap mb-3 mb-md-0">
-            {source === 'questions'
-              ? t('all_questions')
-              : t('x_questions', { count })}
-          </h5>
-        </Col>
-        <Col>
-          <QueryGroup
-            data={QuestionOrderKeys}
-            currentSort={curOrder}
-            i18nKeyPrefix="question"
-          />
-        </Col>
-      </Row>
+      <div className="mb-3 d-flex flex-wrap justify-content-between">
+        <h5 className="fs-5 text-nowrap mb-3 mb-md-0">
+          {source === 'questions'
+            ? t('all_questions')
+            : t('x_questions', { count })}
+        </h5>
+        <QueryGroup
+          data={QuestionOrderKeys}
+          currentSort={curOrder}
+          pathname={source === 'questions' ? '/questions' : ''}
+          i18nKeyPrefix="question"
+        />
+      </div>
       <ListGroup variant="flush" className="border-top border-bottom-0">
         {listData?.list?.map((li) => {
           return (
@@ -136,7 +133,7 @@ const QuestionList: FC<Props> = ({ source }) => {
                 <div className="ms-0 ms-md-3 mt-2 mt-md-0">
                   <span>
                     <Icon name="hand-thumbs-up-fill" />
-                    <em className="fst-normal mx-1">{li.vote_count}</em>
+                    <em className="fst-normal ms-1">{li.vote_count}</em>
                   </span>
                   <span
                     className={`ms-3 ${
@@ -149,11 +146,11 @@ const QuestionList: FC<Props> = ({ source }) => {
                           : 'chat-square-text-fill'
                       }
                     />
-                    <em className="fst-normal mx-1">{li.answer_count}</em>
+                    <em className="fst-normal ms-1">{li.answer_count}</em>
                   </span>
                   <span className="summary-stat ms-3">
                     <Icon name="eye-fill" />
-                    <em className="fst-normal mx-1">{li.view_count}</em>
+                    <em className="fst-normal ms-1">{li.view_count}</em>
                   </span>
                 </div>
               </div>

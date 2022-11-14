@@ -10,10 +10,10 @@ import {
   Comment,
   FormatTime,
   htmlRender,
-} from '@answer/components';
-import { acceptanceAnswer } from '@answer/api';
-import { scrollTop } from '@answer/utils';
-import { AnswerItem } from '@answer/common/interface';
+} from '@/components';
+import { scrollTop } from '@/utils';
+import { AnswerItem } from '@/common/interface';
+import { acceptanceAnswer } from '@/services';
 
 interface Props {
   data: AnswerItem;

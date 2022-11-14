@@ -14,9 +14,9 @@ import (
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/controller"
 	"github.com/answerdev/answer/internal/controller_backyard"
-	"github.com/answerdev/answer/internal/repo"
 	"github.com/answerdev/answer/internal/repo/activity"
 	"github.com/answerdev/answer/internal/repo/activity_common"
+	"github.com/answerdev/answer/internal/repo/answer"
 	"github.com/answerdev/answer/internal/repo/auth"
 	"github.com/answerdev/answer/internal/repo/captcha"
 	"github.com/answerdev/answer/internal/repo/collection"
@@ -26,10 +26,13 @@ import (
 	"github.com/answerdev/answer/internal/repo/export"
 	"github.com/answerdev/answer/internal/repo/meta"
 	"github.com/answerdev/answer/internal/repo/notification"
+	"github.com/answerdev/answer/internal/repo/question"
 	"github.com/answerdev/answer/internal/repo/rank"
 	"github.com/answerdev/answer/internal/repo/reason"
 	"github.com/answerdev/answer/internal/repo/report"
 	"github.com/answerdev/answer/internal/repo/revision"
+	"github.com/answerdev/answer/internal/repo/search_common"
+	"github.com/answerdev/answer/internal/repo/site_info"
 	"github.com/answerdev/answer/internal/repo/tag"
 	"github.com/answerdev/answer/internal/repo/unique"
 	"github.com/answerdev/answer/internal/repo/user"
@@ -41,6 +44,7 @@ import (
 	auth2 "github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/collection_common"
 	comment2 "github.com/answerdev/answer/internal/service/comment"
+	"github.com/answerdev/answer/internal/service/dashboard"
 	export2 "github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/follow"
 	meta2 "github.com/answerdev/answer/internal/service/meta"
@@ -55,6 +59,8 @@ import (
 	"github.com/answerdev/answer/internal/service/report_handle_backyard"
 	"github.com/answerdev/answer/internal/service/revision_common"
 	"github.com/answerdev/answer/internal/service/service_config"
+	"github.com/answerdev/answer/internal/service/siteinfo"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tag2 "github.com/answerdev/answer/internal/service/tag"
 	"github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/internal/service/uploader"
@@ -73,7 +79,6 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	if err != nil {
 		return nil, nil, err
 	}
-	langController := controller.NewLangController(i18nTranslator)
 	engine, err := data.NewDB(debug, dbConf)
 	if err != nil {
 		return nil, nil, err
@@ -87,27 +92,29 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 		cleanup()
 		return nil, nil, err
 	}
+	siteInfoRepo := site_info.NewSiteInfo(dataData)
+	siteInfoCommonService := siteinfo_common.NewSiteInfoCommonService(siteInfoRepo)
+	langController := controller.NewLangController(i18nTranslator, siteInfoCommonService)
 	authRepo := auth.NewAuthRepo(dataData)
 	authService := auth2.NewAuthService(authRepo)
 	configRepo := config.NewConfigRepo(dataData)
 	userRepo := user.NewUserRepo(dataData, configRepo)
 	uniqueIDRepo := unique.NewUniqueIDRepo(dataData)
-	activityRepo := repo.NewActivityRepo(dataData, uniqueIDRepo, configRepo)
+	activityRepo := activity_common.NewActivityRepo(dataData, uniqueIDRepo, configRepo)
 	userRankRepo := rank.NewUserRankRepo(dataData, configRepo)
 	userActiveActivityRepo := activity.NewUserActiveActivityRepo(dataData, activityRepo, userRankRepo, configRepo)
 	emailRepo := export.NewEmailRepo(dataData)
-	siteInfoRepo := repo.NewSiteInfo(dataData)
 	emailService := export2.NewEmailService(configRepo, emailRepo, siteInfoRepo)
-	userService := service.NewUserService(userRepo, userActiveActivityRepo, emailService, authService, serviceConf)
+	userService := service.NewUserService(userRepo, userActiveActivityRepo, emailService, authService, serviceConf, siteInfoCommonService)
 	captchaRepo := captcha.NewCaptchaRepo(dataData)
 	captchaService := action.NewCaptchaService(captchaRepo)
-	uploaderService := uploader.NewUploaderService(serviceConf)
+	uploaderService := uploader.NewUploaderService(serviceConf, siteInfoCommonService)
 	userController := controller.NewUserController(authService, userService, captchaService, emailService, uploaderService)
 	commentRepo := comment.NewCommentRepo(dataData, uniqueIDRepo)
 	commentCommonRepo := comment.NewCommentCommonRepo(dataData, uniqueIDRepo)
 	userCommon := usercommon.NewUserCommon(userRepo)
-	answerRepo := repo.NewAnswerRepo(dataData, uniqueIDRepo, userRankRepo, activityRepo)
-	questionRepo := repo.NewQuestionRepo(dataData, uniqueIDRepo)
+	answerRepo := answer.NewAnswerRepo(dataData, uniqueIDRepo, userRankRepo, activityRepo)
+	questionRepo := question.NewQuestionRepo(dataData, uniqueIDRepo)
 	tagRepo := tag.NewTagRepo(dataData, uniqueIDRepo)
 	objService := object_info.NewObjService(answerRepo, questionRepo, commentCommonRepo, tagRepo)
 	voteRepo := activity_common.NewVoteRepo(dataData, activityRepo)
@@ -130,7 +137,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	followController := controller.NewFollowController(followService)
 	collectionRepo := collection.NewCollectionRepo(dataData, uniqueIDRepo)
 	collectionGroupRepo := collection.NewCollectionGroupRepo(dataData)
-	tagRelRepo := tag.NewTagListRepo(dataData)
+	tagRelRepo := tag.NewTagRelRepo(dataData)
 	tagCommonService := tagcommon.NewTagCommonService(tagRepo, tagRelRepo, revisionService)
 	collectionCommon := collectioncommon.NewCollectionCommon(collectionRepo)
 	answerCommon := answercommon.NewAnswerCommon(answerRepo)
@@ -145,8 +152,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, revisionService, metaService, collectionCommon, answerActivityService)
 	questionController := controller.NewQuestionController(questionService, rankService)
 	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo)
-	answerController := controller.NewAnswerController(answerService, rankService)
-	searchRepo := repo.NewSearchRepo(dataData, uniqueIDRepo, userCommon)
+	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configRepo, siteInfoCommonService, serviceConf, dataData)
+	answerController := controller.NewAnswerController(answerService, rankService, dashboardService)
+	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon)
 	searchService := service.NewSearchService(searchRepo, tagRepo, userCommon, followRepo)
 	searchController := controller.NewSearchController(searchService)
 	serviceRevisionService := service.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService)
@@ -156,25 +164,27 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reportHandle := report_handle_backyard.NewReportHandle(questionCommon, commentRepo, configRepo)
 	reportBackyardService := report_backyard.NewReportBackyardService(reportRepo, userCommon, commonRepo, answerRepo, questionRepo, commentCommonRepo, reportHandle, configRepo)
 	controller_backyardReportController := controller_backyard.NewReportController(reportBackyardService)
-	userBackyardRepo := user.NewUserBackyardRepo(dataData)
+	userBackyardRepo := user.NewUserBackyardRepo(dataData, authRepo)
 	userBackyardService := user_backyard.NewUserBackyardService(userBackyardRepo)
 	userBackyardController := controller_backyard.NewUserBackyardController(userBackyardService)
 	reasonRepo := reason.NewReasonRepo(configRepo)
 	reasonService := reason2.NewReasonService(reasonRepo)
 	reasonController := controller.NewReasonController(reasonService)
 	themeController := controller_backyard.NewThemeController()
-	siteInfoService := service.NewSiteInfoService(siteInfoRepo, emailService)
+	siteInfoService := siteinfo.NewSiteInfoService(siteInfoRepo, emailService)
 	siteInfoController := controller_backyard.NewSiteInfoController(siteInfoService)
-	siteinfoController := controller.NewSiteinfoController(siteInfoService)
+	siteinfoController := controller.NewSiteinfoController(siteInfoCommonService)
 	notificationRepo := notification.NewNotificationRepo(dataData)
 	notificationCommon := notificationcommon.NewNotificationCommon(dataData, notificationRepo, userCommon, activityRepo, followRepo, objService)
 	notificationService := notification2.NewNotificationService(dataData, notificationRepo, notificationCommon)
 	notificationController := controller.NewNotificationController(notificationService)
-	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController)
+	dashboardController := controller.NewDashboardController(dashboardService)
+	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter()
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)
-	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware)
+	avatarMiddleware := middleware.NewAvatarMiddleware(serviceConf, uploaderService)
+	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware)
 	application := newApplication(serverConf, ginEngine)
 	return application, func() {
 		cleanup2()

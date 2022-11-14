@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/answerdev/answer/internal/base/data"
-	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/meta"
@@ -65,17 +64,7 @@ func (mr *metaRepo) GetMetaByObjectIdAndKey(ctx context.Context, objectID, key s
 // GetMetaList get meta list all
 func (mr *metaRepo) GetMetaList(ctx context.Context, meta *entity.Meta) (metaList []*entity.Meta, err error) {
 	metaList = make([]*entity.Meta, 0)
-	err = mr.data.DB.Find(metaList, meta)
-	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	return
-}
-
-// GetMetaPage get meta page
-func (mr *metaRepo) GetMetaPage(ctx context.Context, page, pageSize int, meta *entity.Meta) (metaList []*entity.Meta, total int64, err error) {
-	metaList = make([]*entity.Meta, 0)
-	total, err = pager.Help(page, pageSize, metaList, meta, mr.data.DB.NewSession())
+	err = mr.data.DB.Find(&metaList, meta)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

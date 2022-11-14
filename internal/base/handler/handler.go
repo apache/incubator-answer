@@ -40,7 +40,6 @@ func HandleResponse(ctx *gin.Context, err error, data interface{}) {
 		respBody.Data = data
 	}
 	ctx.JSON(myErr.Code, respBody)
-	return
 }
 
 // BindAndCheck bind request and check
