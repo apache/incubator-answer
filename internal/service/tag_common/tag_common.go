@@ -103,6 +103,7 @@ func (ts *TagCommonService) GetObjectTag(ctx context.Context, objectId string) (
 			SlugName:        tagInfo.SlugName,
 			DisplayName:     tagInfo.DisplayName,
 			MainTagSlugName: tagInfo.MainTagSlugName,
+			Recommend:       tagInfo.Recommend,
 		})
 	}
 	return objTags, nil

@@ -5891,6 +5891,9 @@ const docTemplate = `{
                     "description": "if main tag slug name is not empty, this tag is synonymous with the main tag",
                     "type": "string"
                 },
+                "recommend": {
+                    "type": "boolean"
+                },
                 "slug_name": {
                     "type": "string"
                 }
