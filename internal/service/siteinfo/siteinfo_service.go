@@ -56,6 +56,34 @@ func (s *SiteInfoService) GetSiteInterface(ctx context.Context) (resp *schema.Si
 	return resp, nil
 }
 
+// GetSiteBranding get site info branding
+func (s *SiteInfoService) GetSiteBranding(ctx context.Context) (resp *schema.SiteBrandingReq, err error) {
+	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeBranding)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.BadRequest(reason.SiteInfoNotFound)
+	}
+	resp = &schema.SiteBrandingReq{}
+	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+	return resp, nil
+}
+
+// GetSiteWrite get site info write
+func (s *SiteInfoService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWriteReq, err error) {
+	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeWrite)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.BadRequest(reason.SiteInfoNotFound)
+	}
+	resp = &schema.SiteWriteReq{}
+	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+	return resp, nil
+}
+
 func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGeneralReq) (err error) {
 	req.FormatSiteUrl()
 	var (
@@ -118,6 +146,17 @@ func (s *SiteInfoService) SaveSiteBranding(ctx context.Context, req *schema.Site
 		Status:  1,
 	}
 	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeBranding, data)
+}
+
+// SaveSiteWrite save site configuration about write
+func (s *SiteInfoService) SaveSiteWrite(ctx context.Context, req *schema.SiteWriteReq) (err error) {
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeWrite,
+		Content: string(content),
+		Status:  1,
+	}
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeWrite, data)
 }
 
 // GetSMTPConfig get smtp config

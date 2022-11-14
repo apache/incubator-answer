@@ -45,7 +45,7 @@ func (sc *SiteInfoController) GetInterface(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
-// GetBranding get site interface
+// GetSiteBranding get site interface
 // @Summary get site interface
 // @Description get site interface
 // @Security ApiKeyAuth
@@ -53,8 +53,21 @@ func (sc *SiteInfoController) GetInterface(ctx *gin.Context) {
 // @Produce json
 // @Success 200 {object} handler.RespBody{data=schema.SiteBrandingResp}
 // @Router /answer/admin/api/siteinfo/branding [get]
-func (sc *SiteInfoController) GetBranding(ctx *gin.Context) {
-	resp, err := sc.siteInfoService.GetSiteInterface(ctx)
+func (sc *SiteInfoController) GetSiteBranding(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteBranding(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetSiteWrite get site interface
+// @Summary get site interface
+// @Description get site interface
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteWriteResp}
+// @Router /answer/admin/api/siteinfo/branding [get]
+func (sc *SiteInfoController) GetSiteWrite(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteWrite(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -100,7 +113,7 @@ func (sc *SiteInfoController) UpdateInterface(ctx *gin.Context) {
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json
-// @Param data body schema.SiteInterfaceReq true "branding info"
+// @Param data body schema.SiteBrandingReq true "branding info"
 // @Success 200 {object} handler.RespBody{}
 // @Router /answer/admin/api/siteinfo/branding [put]
 func (sc *SiteInfoController) UpdateBranding(ctx *gin.Context) {
@@ -109,6 +122,24 @@ func (sc *SiteInfoController) UpdateBranding(ctx *gin.Context) {
 		return
 	}
 	err := sc.siteInfoService.SaveSiteBranding(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// UpdateSiteWrite update site write info
+// @Summary update site write info
+// @Description update site write info
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.SiteWriteReq true "write info"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/siteinfo/write [put]
+func (sc *SiteInfoController) UpdateSiteWrite(ctx *gin.Context) {
+	req := &schema.SiteWriteReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	err := sc.siteInfoService.SaveSiteWrite(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

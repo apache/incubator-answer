@@ -37,6 +37,11 @@ type SiteBrandingReq struct {
 	Favicon    string `validate:"omitempty,gt=0,lte=512" form:"favicon" json:"favicon"`
 }
 
+// SiteWriteReq site write request
+type SiteWriteReq struct {
+	RequiredTag bool `validate:"required" form:"required_tag" json:"required_tag"`
+}
+
 // SiteGeneralResp site general response
 type SiteGeneralResp SiteGeneralReq
 
@@ -45,6 +50,9 @@ type SiteInterfaceResp SiteInterfaceReq
 
 // SiteBrandingResp site branding response
 type SiteBrandingResp SiteBrandingReq
+
+// SiteWriteResp site write response
+type SiteWriteResp SiteWriteReq
 
 // SiteInfoResp get site info response
 type SiteInfoResp struct {
