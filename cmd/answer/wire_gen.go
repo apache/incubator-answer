@@ -57,6 +57,7 @@ import (
 	"github.com/answerdev/answer/internal/service/report_backyard"
 	"github.com/answerdev/answer/internal/service/report_handle_backyard"
 	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/internal/service/search_parser"
 	"github.com/answerdev/answer/internal/service/service_config"
 	tag2 "github.com/answerdev/answer/internal/service/tag"
 	"github.com/answerdev/answer/internal/service/tag_common"
@@ -149,8 +150,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	questionController := controller.NewQuestionController(questionService, rankService)
 	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo)
 	answerController := controller.NewAnswerController(answerService, rankService)
+	searchParser := search_parser.NewSearchParser(tagRepo, userCommon)
 	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon)
-	searchService := service.NewSearchService(searchRepo, tagRepo, userCommon, followRepo)
+	searchService := service.NewSearchService(searchParser, searchRepo)
 	searchController := controller.NewSearchController(searchService)
 	serviceRevisionService := service.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService)
 	revisionController := controller.NewRevisionController(serviceRevisionService)
