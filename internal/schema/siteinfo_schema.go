@@ -30,15 +30,27 @@ type SiteInterfaceReq struct {
 	TimeZone string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
 }
 
+// SiteBrandingReq site branding request
+type SiteBrandingReq struct {
+	MobileLogo string `validate:"omitempty,gt=0,lte=512" form:"mobile_logo" json:"mobile_logo"`
+	SquareIcon string `validate:"required,gt=0,lte=512" form:"square_icon" json:"square_icon"`
+	Favicon    string `validate:"omitempty,gt=0,lte=512" form:"favicon" json:"favicon"`
+}
+
 // SiteGeneralResp site general response
 type SiteGeneralResp SiteGeneralReq
 
 // SiteInterfaceResp site interface response
 type SiteInterfaceResp SiteInterfaceReq
 
+// SiteBrandingResp site branding response
+type SiteBrandingResp SiteBrandingReq
+
+// SiteInfoResp get site info response
 type SiteInfoResp struct {
-	General *SiteGeneralResp   `json:"general"`
-	Face    *SiteInterfaceResp `json:"interface"`
+	General   *SiteGeneralResp   `json:"general"`
+	Interface *SiteInterfaceResp `json:"interface"`
+	Branding  *SiteBrandingResp  `json:"branding"`
 }
 
 // UpdateSMTPConfigReq get smtp config request

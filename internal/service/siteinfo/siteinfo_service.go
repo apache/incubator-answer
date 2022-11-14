@@ -109,6 +109,17 @@ func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.Site
 	return
 }
 
+// SaveSiteBranding save site branding information
+func (s *SiteInfoService) SaveSiteBranding(ctx context.Context, req *schema.SiteBrandingReq) (err error) {
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeBranding,
+		Content: string(content),
+		Status:  1,
+	}
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeBranding, data)
+}
+
 // GetSMTPConfig get smtp config
 func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
 	resp *schema.GetSMTPConfigResp, err error,

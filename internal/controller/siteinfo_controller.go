@@ -5,6 +5,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/pacman/log"
 )
 
 type SiteinfoController struct {
@@ -30,9 +31,16 @@ func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
 	resp := &schema.SiteInfoResp{}
 	resp.General, err = sc.siteInfoService.GetSiteGeneral(ctx)
 	if err != nil {
-		handler.HandleResponse(ctx, err, resp)
-		return
+		log.Error(err)
 	}
-	resp.Face, err = sc.siteInfoService.GetSiteInterface(ctx)
-	handler.HandleResponse(ctx, err, resp)
+	resp.Interface, err = sc.siteInfoService.GetSiteInterface(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+
+	resp.Branding, err = sc.siteInfoService.GetSiteBranding(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+	handler.HandleResponse(ctx, nil, resp)
 }

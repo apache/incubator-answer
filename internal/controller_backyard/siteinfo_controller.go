@@ -7,11 +7,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// SiteInfoController site info controller
 type SiteInfoController struct {
 	siteInfoService *siteinfo.SiteInfoService
 }
 
-// NewSiteInfoController new siteinfo controller.
+// NewSiteInfoController new site info controller
 func NewSiteInfoController(siteInfoService *siteinfo.SiteInfoService) *SiteInfoController {
 	return &SiteInfoController{
 		siteInfoService: siteInfoService,
@@ -40,6 +41,19 @@ func (sc *SiteInfoController) GetGeneral(ctx *gin.Context) {
 // @Success 200 {object} handler.RespBody{data=schema.SiteInterfaceResp}
 // @Router /answer/admin/api/siteinfo/interface [get]
 func (sc *SiteInfoController) GetInterface(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteInterface(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetBranding get site interface
+// @Summary get site interface
+// @Description get site interface
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteBrandingResp}
+// @Router /answer/admin/api/siteinfo/branding [get]
+func (sc *SiteInfoController) GetBranding(ctx *gin.Context) {
 	resp, err := sc.siteInfoService.GetSiteInterface(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
@@ -77,6 +91,24 @@ func (sc *SiteInfoController) UpdateInterface(ctx *gin.Context) {
 		return
 	}
 	err := sc.siteInfoService.SaveSiteInterface(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// UpdateBranding update site branding
+// @Summary update site info branding
+// @Description update site info branding
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.SiteInterfaceReq true "branding info"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/siteinfo/branding [put]
+func (sc *SiteInfoController) UpdateBranding(ctx *gin.Context) {
+	req := &schema.SiteBrandingReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	err := sc.siteInfoService.SaveSiteBranding(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

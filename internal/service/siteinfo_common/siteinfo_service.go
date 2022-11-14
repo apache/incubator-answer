@@ -48,3 +48,17 @@ func (s *SiteInfoCommonService) GetSiteInterface(ctx context.Context) (resp *sch
 	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 	return resp, nil
 }
+
+// GetSiteBranding get site info branding
+func (s *SiteInfoCommonService) GetSiteBranding(ctx context.Context) (resp *schema.SiteBrandingResp, err error) {
+	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeBranding)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.BadRequest(reason.SiteInfoNotFound)
+	}
+	resp = &schema.SiteBrandingResp{}
+	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+	return resp, nil
+}
