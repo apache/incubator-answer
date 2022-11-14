@@ -41,11 +41,9 @@ you can also manually visit it.
 when cloning repo, and run `pnpm install` to init dependencies. you can use project commands below:
 
 - `pnpm run start` run Answer web locally.
-- `pnpm run build:dev` build code for environment `dev`
-- `pnpm run build:test` build code for environment `test`
-- `pnpm run build:prod` build code for environment `prod`
+- `pnpm run build` build Answer for production
 - `pnpm run lint` lint and fix the code style
-- `pnpm run cz` run `git commit` by `commitizen`
+
 
 ## 🖥 Environment Support
 

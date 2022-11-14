@@ -48,6 +48,9 @@ class Request {
         return data;
       },
       (error) => {
+        if (error.isAxiosError) {
+          return Promise.reject(false);
+        }
         const { status, data: respData, msg: respMsg } = error.response;
         const { data, msg = '' } = respData;
         if (status === 400) {

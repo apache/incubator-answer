@@ -27,5 +27,3 @@ yarn.lock
 package-lock.json
 .eslintcache
 /.vscode/
-
-.env.development.local
