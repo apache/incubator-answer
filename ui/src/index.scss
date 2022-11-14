@@ -74,6 +74,15 @@ a {
   }
 }
 
+.badge-tag-required {
+  background: rgba($gray-400, 0.5);
+  color: $gray-700;
+  &:hover {
+    color: $gray-700;
+    background: rgba($gray-400, 1);
+  }
+}
+
 .divide-line {
   border-bottom: 1px solid rgba(33, 37, 41, 0.25);
 }
