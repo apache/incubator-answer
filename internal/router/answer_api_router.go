@@ -224,8 +224,10 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	// siteinfo
 	r.GET("/siteinfo/general", a.siteInfoController.GetGeneral)
 	r.GET("/siteinfo/interface", a.siteInfoController.GetInterface)
+	r.GET("/siteinfo/branding", a.siteInfoController.GetBranding)
 	r.PUT("/siteinfo/general", a.siteInfoController.UpdateGeneral)
 	r.PUT("/siteinfo/interface", a.siteInfoController.UpdateInterface)
+	r.PUT("/siteinfo/branding", a.siteInfoController.UpdateBranding)
 	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
 	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
 
