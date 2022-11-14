@@ -79,6 +79,22 @@ function formatUptime(value) {
   return `< 1 ${t('dates.hour')}`;
 }
 
+function escapeRemove(str) {
+  if (!str || typeof str !== 'string') return str;
+  const arrEntities = {
+    lt: '<',
+    gt: '>',
+    nbsp: ' ',
+    amp: '&',
+    quot: '"',
+    '#39': "'",
+  };
+
+  return str.replace(/&(lt|gt|nbsp|amp|quot|#39);/gi, function (all, t) {
+    return arrEntities[t];
+  });
+}
+
 export {
   thousandthDivision,
   formatCount,
@@ -86,4 +102,5 @@ export {
   matchedUsers,
   parseUserInfo,
   formatUptime,
+  escapeRemove,
 };

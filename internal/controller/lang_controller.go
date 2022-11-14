@@ -5,18 +5,18 @@ import (
 
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/translator"
-	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/i18n"
 )
 
 type LangController struct {
 	translator      i18n.Translator
-	siteInfoService *service.SiteInfoService
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewLangController new language controller.
-func NewLangController(tr i18n.Translator, siteInfoService *service.SiteInfoService) *LangController {
+func NewLangController(tr i18n.Translator, siteInfoService *siteinfo_common.SiteInfoCommonService) *LangController {
 	return &LangController{translator: tr, siteInfoService: siteInfoService}
 }
 
@@ -64,7 +64,7 @@ func (u *LangController) GetUserLangOptions(ctx *gin.Context) {
 	options := translator.LanguageOptions
 	if len(siteInterfaceResp.Language) > 0 {
 		defaultOption := []*translator.LangOption{
-			{Label: "Default", Value: siteInterfaceResp.Language},
+			{Label: translator.DefaultLangOption, Value: translator.DefaultLangOption},
 		}
 		options = append(defaultOption, options...)
 	}

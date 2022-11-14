@@ -16,6 +16,7 @@ import { ADMIN_LIST_STATUS } from '@/common/constants';
 import { useEditStatusModal } from '@/hooks';
 import * as Type from '@/common/interface';
 import { useAnswerSearch, changeAnswerStatus } from '@/services';
+import { escapeRemove } from '@/utils';
 
 import '../index.scss';
 
@@ -140,12 +141,10 @@ const Answers: FC = () => {
                       )}
                     </Stack>
                     <div
-                      dangerouslySetInnerHTML={{
-                        __html: li.description,
-                      }}
-                      className="last-p text-truncate-2 fs-14"
-                      style={{ maxWidth: '30rem' }}
-                    />
+                      className="text-truncate-2 fs-14"
+                      style={{ maxWidth: '30rem' }}>
+                      {escapeRemove(li.description)}
+                    </div>
                   </Stack>
                 </td>
                 <td>{li.vote_count}</td>

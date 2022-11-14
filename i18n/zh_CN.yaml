@@ -1,189 +1,190 @@
-base:
-  success:
-    other: "成功"
-  unknown:
-    other: "未知错误"
-  request_format_error:
-    other: "请求格式错误"
-  unauthorized_error:
-    other: "未登录"
-  database_error:
-    other: "数据服务异常"
+backend:
+  base:
+    success:
+      other: "成功"
+    unknown:
+      other: "未知错误"
+    request_format_error:
+      other: "请求格式错误"
+    unauthorized_error:
+      other: "未登录"
+    database_error:
+      other: "数据服务异常"
 
-email:
-  other: "邮箱"
-password:
-  other: "密码"
-
-email_or_password_wrong_error: &email_or_password_wrong
-  other: "邮箱或密码错误"
-
-error:
-  admin:
-    email_or_password_wrong: *email_or_password_wrong
-  answer:
-    not_found:
-      other: "答案未找到"
-  comment:
-    edit_without_permission:
-      other: "不允许编辑评论"
-    not_found:
-      other: "评论未找到"
   email:
-    duplicate:
-      other: "邮箱已经存在"
-    need_to_be_verified:
-      other: "邮箱需要验证"
-    verify_url_expired:
-      other: "邮箱验证的网址已过期，请重新发送邮件"
-  lang:
-    not_found:
-      other: "语言未找到"
-  object:
-    captcha_verification_failed:
-      other: "验证码错误"
-    disallow_follow:
-      other: "你不能关注"
-    disallow_vote:
-      other: "你不能投票"
-    disallow_vote_your_self:
-      other: "你不能为自己的帖子投票！"
-    not_found:
-      other: "对象未找到"
-    verification_failed:
-      other: "验证失败"
-    email_or_password_incorrect:
-      other: "邮箱或密码不正确"
-    old_password_verification_failed:
-      other: "旧密码验证失败"
-    new_password_same_as_previous_setting:
-      other: "新密码与之前的设置相同"
-  question:
-    not_found:
-      other: "问题未找到"
-  rank:
-    fail_to_meet_the_condition:
-      other: "级别不符合条件"
+    other: "邮箱"
+  password:
+    other: "密码"
+
+  email_or_password_wrong_error: &email_or_password_wrong
+    other: "邮箱或密码错误"
+
+  error:
+    admin:
+      email_or_password_wrong: *email_or_password_wrong
+    answer:
+      not_found:
+        other: "答案未找到"
+    comment:
+      edit_without_permission:
+        other: "不允许编辑评论"
+      not_found:
+        other: "评论未找到"
+    email:
+      duplicate:
+        other: "邮箱已经存在"
+      need_to_be_verified:
+        other: "邮箱需要验证"
+      verify_url_expired:
+        other: "邮箱验证的网址已过期，请重新发送邮件"
+    lang:
+      not_found:
+        other: "语言未找到"
+    object:
+      captcha_verification_failed:
+        other: "验证码错误"
+      disallow_follow:
+        other: "你不能关注"
+      disallow_vote:
+        other: "你不能投票"
+      disallow_vote_your_self:
+        other: "你不能为自己的帖子投票！"
+      not_found:
+        other: "对象未找到"
+      verification_failed:
+        other: "验证失败"
+      email_or_password_incorrect:
+        other: "邮箱或密码不正确"
+      old_password_verification_failed:
+        other: "旧密码验证失败"
+      new_password_same_as_previous_setting:
+        other: "新密码与之前的设置相同"
+    question:
+      not_found:
+        other: "问题未找到"
+    rank:
+      fail_to_meet_the_condition:
+        other: "级别不符合条件"
+    report:
+      handle_failed:
+        other: "报告处理失败"
+      not_found:
+        other: "报告未找到"
+    tag:
+      not_found:
+        other: "标签未找到"
+    theme:
+      not_found:
+        other: "主题未找到"
+    user:
+      email_or_password_wrong:
+        other: *email_or_password_wrong
+      not_found:
+        other: "用户未找到"
+      suspended:
+        other: "用户已被暂停"
+      username_invalid:
+        other: "用户名无效"
+      username_duplicate:
+        other: "用户名已被使用"
+      set_avatar:
+        other: "头像设置错误"
+
   report:
-    handle_failed:
-      other: "报告处理失败"
-    not_found:
-      other: "报告未找到"
-  tag:
-    not_found:
-      other: "标签未找到"
-  theme:
-    not_found:
-      other: "主题未找到"
-  user:
-    email_or_password_wrong:
-      other: *email_or_password_wrong
-    not_found:
-      other: "用户未找到"
-    suspended:
-      other: "用户已被暂停"
-    username_invalid:
-      other: "用户名无效"
-    username_duplicate:
-      other: "用户名已被使用"
-    set_avatar:
-      other: "头像设置错误"
-
-report:
-  spam:
-    name:
-      other: "垃圾信息"
-    description:
-      other: "此帖子是一个广告贴，或是破坏性行为。它对当前的主题无用，也不相关。"
-  rude:
-    name:
-      other: "粗鲁或辱骂的"
-    description:
-      other: "有理智的人都会发现此内容不适合进行尊重的讨论。"
-  duplicate:
-    name:
-      other: "重复信息"
-    description:
-      other: "此问题以前就有人问过，而且已经有了答案。"
-  not_answer:
-    name:
-      other: "不是答案"
-    description:
-      other: "此帖子是作为一个答案发布的，但它并没有试图回答这个问题。总之，它可能应该是个编辑，评论，另一个问题或者被删除。"
-  not_need:
-    name:
-      other: "不再需要"
-    description:
-      other: "此条评论是过时的，对话性的或与本帖无关。"
-  other:
-    name:
-      other: "其他原因"
-    description:
-      other: "此帖子需要工作人员关注，因为是上述所列以外的其他理由。"
-
-question:
-  close:
-    duplicate:
+    spam:
       name:
         other: "垃圾信息"
       description:
+        other: "此帖子是一个广告贴，或是破坏性行为。它对当前的主题无用，也不相关。"
+    rude:
+      name:
+        other: "粗鲁或辱骂的"
+      description:
+        other: "有理智的人都会发现此内容不适合进行尊重的讨论。"
+    duplicate:
+      name:
+        other: "重复信息"
+      description:
         other: "此问题以前就有人问过，而且已经有了答案。"
-    guideline:
+    not_answer:
       name:
-        other: "社区特定原因"
+        other: "不是答案"
       description:
-        other: "此问题不符合社区准则。"
-    multiple:
+        other: "此帖子是作为一个答案发布的，但它并没有试图回答这个问题。总之，它可能应该是个编辑，评论，另一个问题或者被删除。"
+    not_need:
       name:
-        other: "需要细节或澄清"
+        other: "不再需要"
       description:
-        other: "此问题目前涵盖多个问题。它应该只集中在一个问题上。"
+        other: "此条评论是过时的，对话性的或与本帖无关。"
     other:
       name:
         other: "其他原因"
       description:
-        other: "此帖子需要上述所列以外的其他理由。"
+        other: "此帖子需要工作人员关注，因为是上述所列以外的其他理由。"
 
-notification:
-  action:
-    update_question:
-      other: "更新了问题"
-    answer_the_question:
-      other: "回答了问题"
-    update_answer:
-      other: "更新了答案"
-    adopt_answer:
-      other: "接受了答案"
-    comment_question:
-      other: "评论了问题"
-    comment_answer:
-      other: "评论了答案"
-    reply_to_you:
-      other: "回复了你"
-    mention_you:
-      other: "提到了你"
-    your_question_is_closed:
-      other: "你的问题已被关闭"
-    your_question_was_deleted:
-      other: "你的问题已被删除"
-    your_answer_was_deleted:
-      other: "你的答案已被删除"
-    your_comment_was_deleted:
-      other: "你的评论已被删除"
+  question:
+    close:
+      duplicate:
+        name:
+          other: "垃圾信息"
+        description:
+          other: "此问题以前就有人问过，而且已经有了答案。"
+      guideline:
+        name:
+          other: "社区特定原因"
+        description:
+          other: "此问题不符合社区准则。"
+      multiple:
+        name:
+          other: "需要细节或澄清"
+        description:
+          other: "此问题目前涵盖多个问题。它应该只集中在一个问题上。"
+      other:
+        name:
+          other: "其他原因"
+        description:
+          other: "此帖子需要上述所列以外的其他理由。"
+
+  notification:
+    action:
+      update_question:
+        other: "更新了问题"
+      answer_the_question:
+        other: "回答了问题"
+      update_answer:
+        other: "更新了答案"
+      adopt_answer:
+        other: "接受了答案"
+      comment_question:
+        other: "评论了问题"
+      comment_answer:
+        other: "评论了答案"
+      reply_to_you:
+        other: "回复了你"
+      mention_you:
+        other: "提到了你"
+      your_question_is_closed:
+        other: "你的问题已被关闭"
+      your_question_was_deleted:
+        other: "你的问题已被删除"
+      your_answer_was_deleted:
+        other: "你的答案已被删除"
+      your_comment_was_deleted:
+        other: "你的评论已被删除"
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-  title: 如何设定文本格式
-  description: >-
-    <ul class="mb-0"><li><p class="mb-2">添加链接：</p><pre
-    class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p
-    class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者
-    **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用 4
-    个空格缩进代码</p></li><li><p
-    class="mb-2">在行首添加<code>&gt;</code>表示引用</p></li><li><p class="mb-2">反引号进行转义
-    <code>`像 _这样_`</code></p></li><li><p
-    class="mb-2">使用<code>```</code>创建代码块</p><pre class="mb-0"><code>```<br/>//
-    这是代码<br/>```</code></pre></li></ul>
+    title: 如何设定文本格式
+    description: >-
+      <ul class="mb-0"><li><p class="mb-2">添加链接：</p><pre
+      class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p
+      class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者
+      **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用 4
+      个空格缩进代码</p></li><li><p
+      class="mb-2">在行首添加<code>&gt;</code>表示引用</p></li><li><p class="mb-2">反引号进行转义
+      <code>`像 _这样_`</code></p></li><li><p
+      class="mb-2">使用<code>```</code>创建代码块</p><pre class="mb-0"><code>```<br/>//
+      这是代码<br/>```</code></pre></li></ul>
   pagination:
     prev: 上一页
     next: 下一页

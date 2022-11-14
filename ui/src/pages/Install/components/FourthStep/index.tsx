@@ -16,14 +16,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
 
   const checkValidated = (): boolean => {
     let bol = true;
-    const {
-      site_name,
-      site_url,
-      contact_email,
-      admin_name,
-      admin_password,
-      admin_email,
-    } = data;
+    const { site_name, site_url, contact_email, name, password, email } = data;
 
     if (!site_name.value) {
       bol = false;
@@ -71,37 +64,37 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
       };
     }
 
-    if (!admin_name.value) {
+    if (!name.value) {
       bol = false;
-      data.admin_name = {
+      data.name = {
         value: '',
         isInvalid: true,
         errorMsg: t('admin_name.msg'),
       };
     }
 
-    if (!admin_password.value) {
+    if (!password.value) {
       bol = false;
-      data.admin_password = {
+      data.password = {
         value: '',
         isInvalid: true,
         errorMsg: t('admin_password.msg'),
       };
     }
 
-    if (!admin_email.value) {
+    if (!email.value) {
       bol = false;
-      data.admin_email = {
+      data.email = {
         value: '',
         isInvalid: true,
         errorMsg: t('admin_email.msg.empty'),
       };
     }
 
-    if (admin_email.value && !admin_email.value.match(mailReg)) {
+    if (email.value && !email.value.match(mailReg)) {
       bol = false;
-      data.admin_email = {
-        value: '',
+      data.email = {
+        value: email.value,
         isInvalid: true,
         errorMsg: t('admin_email.msg.incorrect'),
       };
@@ -132,6 +125,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
           required
           value={data.site_name.value}
           isInvalid={data.site_name.isInvalid}
+          maxLength={30}
           onChange={(e) => {
             changeCallback({
               site_name: {
@@ -152,6 +146,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
           required
           value={data.site_url.value}
           isInvalid={data.site_url.isInvalid}
+          maxLength={512}
           onChange={(e) => {
             changeCallback({
               site_url: {
@@ -191,15 +186,16 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
       </Form.Group>
 
       <h5>{t('admin_account')}</h5>
-      <Form.Group controlId="admin_name" className="mb-3">
+      <Form.Group controlId="name" className="mb-3">
         <Form.Label>{t('admin_name.label')}</Form.Label>
         <Form.Control
           required
-          value={data.admin_name.value}
-          isInvalid={data.admin_name.isInvalid}
+          value={data.name.value}
+          isInvalid={data.name.isInvalid}
+          maxLength={30}
           onChange={(e) => {
             changeCallback({
-              admin_name: {
+              name: {
                 value: e.target.value,
                 isInvalid: false,
                 errorMsg: '',
@@ -208,20 +204,21 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
           }}
         />
         <Form.Control.Feedback type="invalid">
-          {data.admin_name.errorMsg}
+          {data.name.errorMsg}
         </Form.Control.Feedback>
       </Form.Group>
 
-      <Form.Group controlId="admin_password" className="mb-3">
+      <Form.Group controlId="password" className="mb-3">
         <Form.Label>{t('admin_password.label')}</Form.Label>
         <Form.Control
           required
           type="password"
-          value={data.admin_password.value}
-          isInvalid={data.admin_password.isInvalid}
+          maxLength={32}
+          value={data.password.value}
+          isInvalid={data.password.isInvalid}
           onChange={(e) => {
             changeCallback({
-              admin_password: {
+              password: {
                 value: e.target.value,
                 isInvalid: false,
                 errorMsg: '',
@@ -231,19 +228,19 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
         />
         <Form.Text>{t('admin_password.text')}</Form.Text>
         <Form.Control.Feedback type="invalid">
-          {data.admin_password.errorMsg}
+          {data.password.errorMsg}
         </Form.Control.Feedback>
       </Form.Group>
 
-      <Form.Group controlId="admin_email" className="mb-3">
+      <Form.Group controlId="email" className="mb-3">
         <Form.Label>{t('admin_email.label')}</Form.Label>
         <Form.Control
           required
-          value={data.admin_email.value}
-          isInvalid={data.admin_email.isInvalid}
+          value={data.email.value}
+          isInvalid={data.email.isInvalid}
           onChange={(e) => {
             changeCallback({
-              admin_email: {
+              email: {
                 value: e.target.value,
                 isInvalid: false,
                 errorMsg: '',
@@ -253,7 +250,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
         />
         <Form.Text>{t('admin_email.text')}</Form.Text>
         <Form.Control.Feedback type="invalid">
-          {data.admin_email.errorMsg}
+          {data.email.errorMsg}
         </Form.Control.Feedback>
       </Form.Group>
 

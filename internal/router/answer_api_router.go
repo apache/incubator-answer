@@ -91,7 +91,6 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// user
 	r.GET("/user/info", a.userController.GetUserInfoByUserID)
-	r.GET("/user/status", a.userController.GetUserStatus)
 	r.GET("/user/action/record", a.userController.ActionRecord)
 	r.POST("/user/login/email", a.userController.UserEmailLogin)
 	r.POST("/user/register/email", a.userController.UserRegisterByEmail)
@@ -134,7 +133,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
 
 	//siteinfo
-	r.GET("/siteinfo", a.siteinfoController.GetInfo)
+	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {

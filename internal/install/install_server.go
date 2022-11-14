@@ -1,4 +1,4 @@
-package server
+package install
 
 import (
 	"embed"
@@ -24,26 +24,31 @@ func (r *_resource) Open(name string) (fs.File, error) {
 	return r.fs.Open(name)
 }
 
-// NewHTTPServer new http server.
+// NewInstallHTTPServer new install http server.
 func NewInstallHTTPServer() *gin.Engine {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
-	gin.SetMode(gin.DebugMode)
-
-	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK??") })
-
-	// gin.SetMode(gin.ReleaseMode)
-
+	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK") })
 	r.StaticFS("/static", http.FS(&_resource{
 		fs: ui.Build,
 	}))
 
 	installApi := r.Group("")
-	installApi.GET("/install", Install)
+	installApi.GET("/install", WebPage)
+	installApi.GET("/50x", WebPage)
+	installApi.GET("/installation/language/options", LangOptions)
+	installApi.POST("/installation/db/check", CheckDatabase)
+	installApi.POST("/installation/config-file/check", CheckConfigFile)
+	installApi.POST("/installation/init", InitEnvironment)
+	installApi.POST("/installation/base-info", InitBaseInfo)
 
+	r.NoRoute(func(ctx *gin.Context) {
+		ctx.Redirect(http.StatusFound, "/50x")
+	})
 	return r
 }
 
-func Install(c *gin.Context) {
+func WebPage(c *gin.Context) {
 	filePath := ""
 	var file []byte
 	var err error

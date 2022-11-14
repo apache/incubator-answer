@@ -1,189 +1,202 @@
-base:
-  success:
-    other: "Success."
-  unknown:
-    other: "Unknown error."
-  request_format_error:
-    other: "Request format is not valid."
-  unauthorized_error:
-    other: "Unauthorized."
-  database_error:
-    other: "Data server error."
+# The following fields are used for back-end
+backend:
+  base:
+    success:
+      other: "Success."
+    unknown:
+      other: "Unknown error."
+    request_format_error:
+      other: "Request format is not valid."
+    unauthorized_error:
+      other: "Unauthorized."
+    database_error:
+      other: "Data server error."
 
-email:
-  other: "Email"
-password:
-  other: "Password"
-
-email_or_password_wrong_error: &email_or_password_wrong
-  other: "Email and password do not match."
-
-error:
-  admin:
-    email_or_password_wrong: *email_or_password_wrong
-  answer:
-    not_found:
-      other: "Answer do not found."
-  comment:
-    edit_without_permission:
-      other: "Comment are not allowed to edit."
-    not_found:
-      other: "Comment not found."
   email:
-    duplicate:
-      other: "Email already exists."
-    need_to_be_verified:
-      other: "Email should be verified."
-    verify_url_expired:
-      other: "Email verified URL has expired, please resend the email."
-  lang:
-    not_found:
-      other: "Language file not found."
-  object:
-    captcha_verification_failed:
-      other: "Captcha wrong."
-    disallow_follow:
-      other: "You are not allowed to follow."
-    disallow_vote:
-      other: "You are not allowed to vote."
-    disallow_vote_your_self:
-      other: "You can't vote for your own post."
-    not_found:
-      other: "Object not found."
-    verification_failed:
-      other: "Verification failed."
-    email_or_password_incorrect:
-      other: "Email and password do not match."
-    old_password_verification_failed:
-      other: "The old password verification failed"
-    new_password_same_as_previous_setting:
-      other: "The new password is the same as the previous one."
-  question:
-    not_found:
-      other: "Question not found."
-  rank:
-    fail_to_meet_the_condition:
-      other: "Rank fail to meet the condition."
+    other: "Email"
+  password:
+    other: "Password"
+
+  email_or_password_wrong_error: &email_or_password_wrong
+    other: "Email and password do not match."
+
+  error:
+    admin:
+      email_or_password_wrong: *email_or_password_wrong
+    answer:
+      not_found:
+        other: "Answer do not found."
+    comment:
+      edit_without_permission:
+        other: "Comment are not allowed to edit."
+      not_found:
+        other: "Comment not found."
+    email:
+      duplicate:
+        other: "Email already exists."
+      need_to_be_verified:
+        other: "Email should be verified."
+      verify_url_expired:
+        other: "Email verified URL has expired, please resend the email."
+    lang:
+      not_found:
+        other: "Language file not found."
+    object:
+      captcha_verification_failed:
+        other: "Captcha wrong."
+      disallow_follow:
+        other: "You are not allowed to follow."
+      disallow_vote:
+        other: "You are not allowed to vote."
+      disallow_vote_your_self:
+        other: "You can't vote for your own post."
+      not_found:
+        other: "Object not found."
+      verification_failed:
+        other: "Verification failed."
+      email_or_password_incorrect:
+        other: "Email and password do not match."
+      old_password_verification_failed:
+        other: "The old password verification failed"
+      new_password_same_as_previous_setting:
+        other: "The new password is the same as the previous one."
+    question:
+      not_found:
+        other: "Question not found."
+    rank:
+      fail_to_meet_the_condition:
+        other: "Rank fail to meet the condition."
+    report:
+      handle_failed:
+        other: "Report handle failed."
+      not_found:
+        other: "Report not found."
+    tag:
+      not_found:
+        other: "Tag not found."
+    theme:
+      not_found:
+        other: "Theme not found."
+    user:
+      email_or_password_wrong:
+        other: *email_or_password_wrong
+      not_found:
+        other: "User not found."
+      suspended:
+        other: "User has been suspended."
+      username_invalid:
+        other: "Username is invalid."
+      username_duplicate:
+        other: "Username is already in use."
+      set_avatar:
+        other: "Avatar set failed."
+
+    config:
+      read_config_failed:
+        other: "Read config failed"
+    database:
+      connection_failed:
+        other: "Database connection failed"
+      create_table_failed:
+        other: "Create table failed"
+    install:
+      create_config_failed:
+        other: "Can’t create the config.yaml file."
   report:
-    handle_failed:
-      other: "Report handle failed."
-    not_found:
-      other: "Report not found."
-  tag:
-    not_found:
-      other: "Tag not found."
-  theme:
-    not_found:
-      other: "Theme not found."
-  user:
-    email_or_password_wrong:
-      other: *email_or_password_wrong
-    not_found:
-      other: "User not found."
-    suspended:
-      other: "User has been suspended."
-    username_invalid:
-      other: "Username is invalid."
-    username_duplicate:
-      other: "Username is already in use."
-    set_avatar:
-      other: "Avatar set failed."
-
-report:
-  spam:
-    name:
-      other: "spam"
-    description:
-      other: "This post is an advertisement, or vandalism. It is not useful or relevant to the current topic."
-  rude:
-    name:
-      other: "rude or abusive"
-    description:
-      other: "A reasonable person would find this content inappropriate for respectful discourse."
-  duplicate:
-    name:
-      other: "a duplicate"
-    description:
-      other: "This question has been asked before and already has an answer."
-  not_answer:
-    name:
-      other: "not an answer"
-    description:
-      other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether."
-  not_need:
-    name:
-      other: "no longer needed"
-    description:
-      other: "This comment is outdated, conversational or not relevant to this post."
-  other:
-    name:
-      other: "something else"
-    description:
-      other: "This post requires staff attention for another reason not listed above."
-
-question:
-  close:
-    duplicate:
+    spam:
       name:
         other: "spam"
       description:
+        other: "This post is an advertisement, or vandalism. It is not useful or relevant to the current topic."
+    rude:
+      name:
+        other: "rude or abusive"
+      description:
+        other: "A reasonable person would find this content inappropriate for respectful discourse."
+    duplicate:
+      name:
+        other: "a duplicate"
+      description:
         other: "This question has been asked before and already has an answer."
-    guideline:
+    not_answer:
       name:
-        other: "a community-specific reason"
+        other: "not an answer"
       description:
-        other: "This question doesn't meet a community guideline."
-    multiple:
+        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether."
+    not_need:
       name:
-        other: "needs details or clarity"
+        other: "no longer needed"
       description:
-        other: "This question currently includes multiple questions in one. It should focus on one problem only."
+        other: "This comment is outdated, conversational or not relevant to this post."
     other:
       name:
         other: "something else"
       description:
-        other: "This post requires another reason not listed above."
+        other: "This post requires staff attention for another reason not listed above."
 
-notification:
-  action:
-    update_question:
-      other: "updated question"
-    answer_the_question:
-      other: "answered question"
-    update_answer:
-      other: "updated answer"
-    adopt_answer:
-      other: "accepted answer"
-    comment_question:
-      other: "commented question"
-    comment_answer:
-      other: "commented answer"
-    reply_to_you:
-      other: "replied to you"
-    mention_you:
-      other: "mentioned you"
-    your_question_is_closed:
-      other: "Your question has been closed"
-    your_question_was_deleted:
-      other: "Your question has been deleted"
-    your_answer_was_deleted:
-      other: "Your answer has been deleted"
-    your_comment_was_deleted:
-      other: "Your comment has been deleted"
+  question:
+    close:
+      duplicate:
+        name:
+          other: "spam"
+        description:
+          other: "This question has been asked before and already has an answer."
+      guideline:
+        name:
+          other: "a community-specific reason"
+        description:
+          other: "This question doesn't meet a community guideline."
+      multiple:
+        name:
+          other: "needs details or clarity"
+        description:
+          other: "This question currently includes multiple questions in one. It should focus on one problem only."
+      other:
+        name:
+          other: "something else"
+        description:
+          other: "This post requires another reason not listed above."
+
+  notification:
+    action:
+      update_question:
+        other: "updated question"
+      answer_the_question:
+        other: "answered question"
+      update_answer:
+        other: "updated answer"
+      adopt_answer:
+        other: "accepted answer"
+      comment_question:
+        other: "commented question"
+      comment_answer:
+        other: "commented answer"
+      reply_to_you:
+        other: "replied to you"
+      mention_you:
+        other: "mentioned you"
+      your_question_is_closed:
+        other: "Your question has been closed"
+      your_question_was_deleted:
+        other: "Your question has been deleted"
+      your_answer_was_deleted:
+        other: "Your answer has been deleted"
+      your_comment_was_deleted:
+        other: "Your comment has been deleted"
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-  title: How to Format
-  description: >-
-    <ul class="mb-0"><li><p class="mb-2">to make links</p><pre
-    class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
-    class="mb-2">put returns between paragraphs</p></li><li><p
-    class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p
-    class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by
-    placing <code>&gt;</code> at start of line</p></li><li><p
-    class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p
-    class="mb-2">create code fences with backticks <code>`</code></p><pre
-    class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+    title: How to Format
+    description: >-
+      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre
+      class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
+      class="mb-2">put returns between paragraphs</p></li><li><p
+      class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p
+      class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by
+      placing <code>&gt;</code> at start of line</p></li><li><p
+      class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p
+      class="mb-2">create code fences with backticks <code>`</code></p><pre
+      class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Prev
     next: Next
@@ -211,7 +224,7 @@ ui:
     change_email: Modify Email
     install: Answer Installation
     upgrade: Answer Upgrade
-    maintenance: Webite Maintenance
+    maintenance: Website Maintenance
   notifications:
     title: Notifications
     inbox: Inbox
@@ -893,6 +906,10 @@ ui:
     installed_description: >-
       You appear to have already installed. To reinstall please clear your old
       database tables first.
+    db_failed: Database connection failed
+    db_failed_description: >-
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+
   page_404:
     description: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage

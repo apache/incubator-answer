@@ -7,8 +7,9 @@
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
+    "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "prepare": "cd .. && husky install",
-    "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
+    "preinstall": "node ./scripts/preinstall.js"
   },
   "dependencies": {
     "axios": "^0.27.2",
@@ -53,7 +54,6 @@
     "@types/react-helmet": "^6.1.5",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.33.0",
-    "chokidar": "^3.5.3",
     "customize-cra": "^1.0.0",
     "eslint": "^8.0.1",
     "eslint-config-airbnb": "^19.0.4",

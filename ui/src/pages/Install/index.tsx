@@ -29,11 +29,14 @@ const Index: FC = () => {
   const [errorData, setErrorData] = useState<{ [propName: string]: any }>({
     msg: '',
   });
-  const [tableExist, setTableExist] = useState(false);
+  const [checkData, setCheckData] = useState({
+    db_table_exist: false,
+    db_connection_success: false,
+  });
 
   const [formData, setFormData] = useState<FormDataType>({
     lang: {
-      value: '',
+      value: 'en_US',
       isInvalid: false,
       errorMsg: '',
     },
@@ -73,7 +76,7 @@ const Index: FC = () => {
       errorMsg: '',
     },
     site_url: {
-      value: '',
+      value: window.location.origin,
       isInvalid: false,
       errorMsg: '',
     },
@@ -82,17 +85,17 @@ const Index: FC = () => {
       isInvalid: false,
       errorMsg: '',
     },
-    admin_name: {
+    name: {
       value: '',
       isInvalid: false,
       errorMsg: '',
     },
-    admin_password: {
+    password: {
       value: '',
       isInvalid: false,
       errorMsg: '',
     },
-    admin_email: {
+    email: {
       value: '',
       isInvalid: false,
       errorMsg: '',
@@ -101,6 +104,9 @@ const Index: FC = () => {
 
   const handleChange = (params: FormDataType) => {
     // console.log(params);
+    setErrorData({
+      msg: '',
+    });
     setFormData({ ...formData, ...params });
   };
 
@@ -147,11 +153,9 @@ const Index: FC = () => {
     };
     dbCheck(params)
       .then(() => {
-        // handleNext();
         checkInstall();
       })
       .catch((err) => {
-        console.log(err);
         handleErr(err);
       });
   };
@@ -162,16 +166,22 @@ const Index: FC = () => {
       site_name: formData.site_name.value,
       site_url: formData.site_url.value,
       contact_email: formData.contact_email.value,
-      admin_name: formData.admin_name.value,
-      admin_password: formData.admin_password.value,
-      admin_email: formData.admin_email.value,
+      name: formData.name.value,
+      password: formData.password.value,
+      email: formData.email.value,
     };
     installBaseInfo(params)
       .then(() => {
         handleNext();
       })
       .catch((err) => {
-        handleErr(err);
+        if (err.isError && err.key) {
+          formData[err.key].isInvalid = true;
+          formData[err.key].errorMsg = err.value;
+          setFormData({ ...formData });
+        } else {
+          handleErr(err);
+        }
       });
   };
 
@@ -200,8 +210,8 @@ const Index: FC = () => {
 
   const handleInstallNow = (e) => {
     e.preventDefault();
-    if (tableExist) {
-      setStep(7);
+    if (checkData.db_table_exist) {
+      setStep(8);
     } else {
       setStep(4);
     }
@@ -210,9 +220,16 @@ const Index: FC = () => {
   const configYmlCheck = () => {
     checkConfigFileExists()
       .then((res) => {
-        setTableExist(res?.db_table_exist);
+        setCheckData({
+          db_table_exist: res.db_table_exist,
+          db_connection_success: res.db_connection_success,
+        });
         if (res && res.config_file_exist) {
-          setStep(6);
+          if (res.db_connection_success) {
+            setStep(6)
+          } else {
+            setStep(7);
+          }
         }
       })
       .finally(() => {
@@ -229,9 +246,9 @@ const Index: FC = () => {
   }
 
   return (
-    <div className="page-wrap2">
+    <div className="page-wrap2 py-5">
       <PageTitle title={t('install', { keyPrefix: 'page_title' })} />
-      <Container style={{ paddingTop: '74px' }}>
+      <Container className='py-3'>
         <Row className="justify-content-center">
           <Col lg={6}>
             <h2 className="mb-4 text-center">{t('title')}</h2>
@@ -283,6 +300,15 @@ const Index: FC = () => {
                 )}
 
                 {step === 7 && (
+                  <div>
+                    <h5>{t('db_failed')}</h5>
+                    <p>
+                      <Trans i18nKey="install.db_failed_description" components={{ 1: <code />}} />
+                    </p>
+                  </div>
+                )}
+
+                {step === 8  && (
                   <div>
                     <h5>{t('installed')}</h5>
                     <p>{t('installed_description')}</p>

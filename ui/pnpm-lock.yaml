@@ -20,7 +20,6 @@ specifiers:
   axios: ^0.27.2
   bootstrap: ^5.2.0
   bootstrap-icons: ^1.9.1
-  chokidar: ^3.5.3
   classnames: ^2.3.1
   codemirror: 5.65.0
   copy-to-clipboard: ^3.3.2
@@ -107,7 +106,6 @@ devDependencies:
   '@types/react-helmet': 6.1.5
   '@typescript-eslint/eslint-plugin': 5.38.0_wsb62dxj2oqwgas4kadjymcmry
   '@typescript-eslint/parser': 5.38.0_irgkl5vooow2ydyo6aokmferha
-  chokidar: 3.5.3
   customize-cra: 1.0.0
   eslint: 8.23.1
   eslint-config-airbnb: 19.0.4_4zstfqq5uopk5xuvotejlnl36y
