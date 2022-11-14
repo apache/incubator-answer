@@ -70,8 +70,11 @@ func (ts *TagCommonService) GetSiteWriteRecommendTag(ctx context.Context) (tags 
 	return tags, nil
 }
 
-func (ts *TagCommonService) SetSiteWriteRecommendTag(ctx context.Context, tags []string, required bool) (err error) {
-
+func (ts *TagCommonService) SetSiteWriteRecommendTag(ctx context.Context, tags []string, required bool, userID string) (err error) {
+	err = ts.UpdateTag(ctx, tags, userID)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -84,8 +87,11 @@ func (ts *TagCommonService) GetSiteWriteReservedTag(ctx context.Context) (tags [
 	return tags, nil
 }
 
-func (ts *TagCommonService) SetSiteWriteReservedTag(ctx context.Context, tags []string, required bool) (err error) {
-
+func (ts *TagCommonService) SetSiteWriteReservedTag(ctx context.Context, tags []string, userID string) (err error) {
+	err = ts.UpdateTag(ctx, tags, userID)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -182,6 +188,69 @@ func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []s
 		}
 	}
 	return objectIDTagMap, nil
+}
+
+func (ts *TagCommonService) UpdateTag(ctx context.Context, tags []string, userID string) (err error) {
+	if len(tags) == 0 {
+		return nil
+	}
+
+	thisTagNameList := make([]string, 0)
+	thisTagIDList := make([]string, 0)
+	for _, t := range tags {
+		t = strings.ToLower(t)
+		thisTagNameList = append(thisTagNameList, t)
+	}
+
+	// find tags name
+	tagListInDb, err := ts.tagRepo.GetTagListByNames(ctx, thisTagNameList)
+	if err != nil {
+		return err
+	}
+
+	tagInDbMapping := make(map[string]*entity.Tag)
+	for _, tag := range tagListInDb {
+		tagInDbMapping[tag.SlugName] = tag
+		thisTagIDList = append(thisTagIDList, tag.ID)
+	}
+
+	addTagList := make([]*entity.Tag, 0)
+	for _, tag := range tags {
+		_, ok := tagInDbMapping[tag]
+		if ok {
+			continue
+		}
+		item := &entity.Tag{}
+		item.SlugName = tag
+		item.DisplayName = tag
+		item.OriginalText = ""
+		item.ParsedText = ""
+		item.Status = entity.TagStatusAvailable
+		addTagList = append(addTagList, item)
+	}
+
+	if len(addTagList) > 0 {
+		err = ts.tagRepo.AddTagList(ctx, addTagList)
+		if err != nil {
+			return err
+		}
+		for _, tag := range addTagList {
+			thisTagIDList = append(thisTagIDList, tag.ID)
+			revisionDTO := &schema.AddRevisionDTO{
+				UserID:   userID,
+				ObjectID: tag.ID,
+				Title:    tag.SlugName,
+			}
+			tagInfoJson, _ := json.Marshal(tag)
+			revisionDTO.Content = string(tagInfoJson)
+			err = ts.revisionService.AddRevision(ctx, revisionDTO, true)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }
 
 // ObjectChangeTag change object tag list
