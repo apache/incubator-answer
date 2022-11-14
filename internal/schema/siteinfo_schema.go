@@ -24,7 +24,6 @@ func (r *SiteGeneralReq) FormatSiteUrl() {
 
 // SiteInterfaceReq site interface request
 type SiteInterfaceReq struct {
-	Logo     string `validate:"omitempty,gt=0,lte=256" form:"logo" json:"logo"`
 	Theme    string `validate:"required,gt=1,lte=128" form:"theme" json:"theme"`
 	Language string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
 	TimeZone string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
@@ -32,6 +31,7 @@ type SiteInterfaceReq struct {
 
 // SiteBrandingReq site branding request
 type SiteBrandingReq struct {
+	Logo       string `validate:"required,gt=0,lte=512" form:"logo" json:"logo"`
 	MobileLogo string `validate:"omitempty,gt=0,lte=512" form:"mobile_logo" json:"mobile_logo"`
 	SquareIcon string `validate:"required,gt=0,lte=512" form:"square_icon" json:"square_icon"`
 	Favicon    string `validate:"omitempty,gt=0,lte=512" form:"favicon" json:"favicon"`
