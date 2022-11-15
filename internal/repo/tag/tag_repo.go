@@ -71,12 +71,54 @@ func (tr *tagRepo) GetTagBySlugName(ctx context.Context, slugName string) (tagIn
 }
 
 // GetTagListByName get tag list all like name
-func (tr *tagRepo) GetTagListByName(ctx context.Context, name string, limit int) (tagList []*entity.Tag, err error) {
+func (tr *tagRepo) GetTagListByName(ctx context.Context, name string, limit int, hasReserved bool) (tagList []*entity.Tag, err error) {
 	tagList = make([]*entity.Tag, 0)
-	session := tr.data.DB.Where("slug_name LIKE ?", name+"%")
+	cond := &entity.Tag{}
+	session := tr.data.DB.Where("")
+	if name != "" {
+		session.Where("slug_name LIKE ?", name+"%")
+	} else {
+		cond.Recommend = true
+	}
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	session.Limit(limit).Asc("slug_name")
-	err = session.Find(&tagList)
+	if !hasReserved {
+		cond.Recommend = false
+		session.UseBool("recommend", "reserved")
+	} else {
+		session.UseBool("recommend")
+	}
+	err = session.Find(&tagList, cond)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (tr *tagRepo) GetRecommendTagList(ctx context.Context) (tagList []*entity.Tag, err error) {
+	tagList = make([]*entity.Tag, 0)
+	cond := &entity.Tag{}
+	session := tr.data.DB.Where("")
+	cond.Recommend = true
+	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	session.Asc("slug_name")
+	session.UseBool("recommend")
+	err = session.Find(&tagList, cond)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (tr *tagRepo) GetReservedTagList(ctx context.Context) (tagList []*entity.Tag, err error) {
+	tagList = make([]*entity.Tag, 0)
+	cond := &entity.Tag{}
+	session := tr.data.DB.Where("")
+	cond.Reserved = true
+	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	session.Asc("slug_name")
+	session.UseBool("reserved")
+	err = session.Find(&tagList, cond)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -130,6 +172,24 @@ func (tr *tagRepo) UpdateTagSynonym(ctx context.Context, tagSlugNameList []strin
 ) (err error) {
 	bean := &entity.Tag{MainTagID: mainTagID, MainTagSlugName: mainTagSlugName}
 	session := tr.data.DB.In("slug_name", tagSlugNameList).MustCols("main_tag_id", "main_tag_slug_name")
+	_, err = session.Update(bean)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (tr *tagRepo) UpdateTagsAttribute(ctx context.Context, tags []string, attribute string, value bool) (err error) {
+	bean := &entity.Tag{}
+	switch attribute {
+	case "recommend":
+		bean.Recommend = value
+	case "reserved":
+		bean.Reserved = value
+	default:
+		return
+	}
+	session := tr.data.DB.In("slug_name", tags).Cols(attribute).UseBool(attribute)
 	_, err = session.Update(bean)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

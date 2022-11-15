@@ -3,9 +3,10 @@ package tag
 import (
 	"context"
 	"encoding/json"
-	"strings"
 
 	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/pkg/htmltext"
 
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -25,28 +26,35 @@ type TagService struct {
 	tagRepo         tagcommon.TagRepo
 	revisionService *revision_common.RevisionService
 	followCommon    activity_common.FollowRepo
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewTagService new tag service
 func NewTagService(
 	tagRepo tagcommon.TagRepo,
 	revisionService *revision_common.RevisionService,
-	followCommon activity_common.FollowRepo) *TagService {
+	followCommon activity_common.FollowRepo,
+	siteInfoService *siteinfo_common.SiteInfoCommonService) *TagService {
 	return &TagService{
 		tagRepo:         tagRepo,
 		revisionService: revisionService,
 		followCommon:    followCommon,
+		siteInfoService: siteInfoService,
 	}
 }
 
 // SearchTagLike get tag list all
-func (ts *TagService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []string, err error) {
-	tags, err := ts.tagRepo.GetTagListByName(ctx, req.Tag, 5)
+func (ts *TagService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []schema.SearchTagLikeResp, err error) {
+	tags, err := ts.tagRepo.GetTagListByName(ctx, req.Tag, 5, req.IsAdmin)
 	if err != nil {
 		return
 	}
 	for _, tag := range tags {
-		resp = append(resp, tag.SlugName)
+		item := schema.SearchTagLikeResp{}
+		item.SlugName = tag.SlugName
+		item.Recommend = tag.Recommend
+		item.Reserved = tag.Reserved
+		resp = append(resp, item)
 	}
 	return resp, nil
 }
@@ -344,12 +352,13 @@ func (ts *TagService) GetTagWithPage(ctx context.Context, req *schema.GetTagWith
 
 	resp := make([]*schema.GetTagPageResp, 0)
 	for _, tag := range tags {
+		excerpt := htmltext.FetchExcerpt(tag.ParsedText, "...", 240)
 		resp = append(resp, &schema.GetTagPageResp{
 			TagID:         tag.ID,
 			SlugName:      tag.SlugName,
 			DisplayName:   tag.DisplayName,
-			OriginalText:  cutOutTagParsedText(tag.OriginalText),
-			ParsedText:    cutOutTagParsedText(tag.ParsedText),
+			OriginalText:  excerpt,
+			ParsedText:    excerpt,
 			FollowCount:   tag.FollowCount,
 			QuestionCount: tag.QuestionCount,
 			IsFollower:    ts.checkTagIsFollow(ctx, req.UserID, tag.ID),
@@ -370,13 +379,4 @@ func (ts *TagService) checkTagIsFollow(ctx context.Context, userID, tagID string
 		log.Error(err)
 	}
 	return followed
-}
-
-func cutOutTagParsedText(parsedText string) string {
-	parsedText = strings.TrimSpace(parsedText)
-	idx := strings.Index(parsedText, "\n")
-	if idx >= 0 {
-		parsedText = parsedText[0:idx]
-	}
-	return parsedText
 }

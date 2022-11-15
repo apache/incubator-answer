@@ -5,6 +5,7 @@ import (
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/pkg/htmltext"
 )
 
 type AnswerRepo interface {
@@ -20,6 +21,7 @@ type AnswerRepo interface {
 	SearchList(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error)
 	CmsSearchList(ctx context.Context, search *entity.CmsAnswerSearch) ([]*entity.Answer, int64, error)
 	UpdateAnswerStatus(ctx context.Context, answer *entity.Answer) (err error)
+	GetAnswerCount(ctx context.Context) (count int64, err error)
 }
 
 // AnswerCommon user service
@@ -74,11 +76,11 @@ func (as *AnswerCommon) AdminShowFormat(ctx context.Context, data *entity.Answer
 	info := schema.AdminAnswerInfo{}
 	info.ID = data.ID
 	info.QuestionID = data.QuestionID
-	info.Description = data.ParsedText
 	info.Adopted = data.Adopted
 	info.VoteCount = data.VoteCount
 	info.CreateTime = data.CreatedAt.Unix()
 	info.UpdateTime = data.UpdatedAt.Unix()
 	info.UserID = data.UserID
+	info.Description = htmltext.FetchExcerpt(data.ParsedText, "...", 240)
 	return &info
 }

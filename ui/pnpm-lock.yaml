@@ -77,6 +77,7 @@ specifiers:
   tsconfig-paths-webpack-plugin: ^4.0.0
   typescript: '*'
   web-vitals: ^2.1.4
+  yaml-loader: ^0.8.0
   zustand: ^4.1.1
 
 dependencies:
@@ -159,6 +160,7 @@ devDependencies:
   tsconfig-paths-webpack-plugin: 4.0.0
   typescript: 4.8.3
   web-vitals: 2.1.4
+  yaml-loader: 0.8.0
 
 packages:
 
@@ -7040,6 +7042,10 @@ packages:
       filelist: 1.0.4
       minimatch: 3.1.2
 
+  /javascript-stringify/2.1.0:
+    resolution: {integrity: sha512-JVAfqNPTvNq3sB/VHQJAFxN/sPgKnsKrCwyRt15zwNCdrMMJDdcEOdubuy+DuJYYdm0ox1J4uzEuYKkN+9yhVg==}
+    dev: true
+
   /jest-changed-files/27.5.1:
     resolution: {integrity: sha512-buBLMiByfWGCoMsLLzGUUSpAmIAGnbR2KJoMN10ziLhOLvP4e0SlypHnAel8iqQXTrcbmfEY9sSqae5sgUsTvw==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
@@ -11681,6 +11687,15 @@ packages:
 
   /yallist/4.0.0:
     resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
+
+  /yaml-loader/0.8.0:
+    resolution: {integrity: sha512-LjeKnTzVBKWiQBeE2L9ssl6WprqaUIxCSNs5tle8PaDydgu3wVFXTbMfsvF2MSErpy9TDVa092n4q6adYwJaWg==}
+    engines: {node: '>= 12.13'}
+    dependencies:
+      javascript-stringify: 2.1.0
+      loader-utils: 2.0.2
+      yaml: 2.1.1
+    dev: true
 
   /yaml/1.10.2:
     resolution: {integrity: sha512-r3vXyErRCYJ7wg28yvBY5VSoAF8ZvlcW9/BwUzEtUsjvX/DKs24dIkuwjtuprwJJHsbyUbLApepYTR1BN4uHrg==}

@@ -38,4 +38,11 @@ const (
 	LangNotFound                 = "error.lang.not_found"
 	ReportHandleFailed           = "error.report.handle_failed"
 	ReportNotFound               = "error.report.not_found"
+	ReadConfigFailed             = "error.config.read_config_failed"
+	DatabaseConnectionFailed     = "error.database.connection_failed"
+	InstallCreateTableFailed     = "error.database.create_table_failed"
+	InstallConfigFailed          = "error.install.create_config_failed"
+	SiteInfoNotFound             = "error.site_info.not_found"
+	UploadFileSourceUnsupported  = "error.upload.source_unsupported"
+	RecommendTagNotExist         = "error.tag.recommend_tag_not_found"
 )

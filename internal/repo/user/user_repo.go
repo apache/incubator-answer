@@ -101,6 +101,14 @@ func (ur *userRepo) UpdateEmail(ctx context.Context, userID, email string) (err 
 	return
 }
 
+func (ur *userRepo) UpdateLanguage(ctx context.Context, userID, language string) (err error) {
+	_, err = ur.data.DB.Where("id = ?", userID).Update(&entity.User{Language: language})
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // UpdateInfo update user info
 func (ur *userRepo) UpdateInfo(ctx context.Context, userInfo *entity.User) (err error) {
 	_, err = ur.data.DB.Where("id = ?", userInfo.ID).
@@ -146,6 +154,15 @@ func (ur *userRepo) GetByEmail(ctx context.Context, email string) (userInfo *ent
 	exist, err = ur.data.DB.Where("e_mail = ?", email).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (vr *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
+	list := make([]*entity.User, 0)
+	count, err = vr.data.DB.Where("mail_status =?", entity.EmailStatusAvailable).And("status =?", entity.UserStatusAvailable).FindAndCount(&list)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
 }

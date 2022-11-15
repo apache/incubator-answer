@@ -3,14 +3,13 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { changeEmail, checkImgCode } from '@answer/api';
 import type {
   ImgCodeRes,
   PasswordResetReq,
   FormDataType,
-} from '@answer/common/interface';
-import { userInfoStore } from '@answer/stores';
-
+} from '@/common/interface';
+import { loggedUserInfoStore } from '@/stores';
+import { changeEmail, checkImgCode } from '@/services';
 import { PicAuthCodeModal } from '@/components/Modal';
 
 const Index: FC = () => {
@@ -34,7 +33,7 @@ const Index: FC = () => {
   });
   const [showModal, setModalState] = useState(false);
   const navigate = useNavigate();
-  const { user: userInfo, update: updateUser } = userInfoStore();
+  const { user: userInfo, update: updateUser } = loggedUserInfoStore();
 
   const getImgCode = () => {
     checkImgCode({

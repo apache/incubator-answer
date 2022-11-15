@@ -21,19 +21,8 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["src/*"],
-      "@answer/pages/*": ["src/pages/*"],
-      "@answer/components": ["src/components/index.ts"],
-      "@answer/components/*": ["src/components/*"],
-      "@answer/stores": ["src/stores"],
-      "@answer/stores/*": ["src/stores/*"],
-      "@answer/api": ["src/services/api.ts"],
-      "@answer/services/*": ["src/services/*"],
-      "@answer/hooks": ["src/hooks"],
-      "@answer/common": ["src/common"],
-      "@answer/common/*": ["src/common/*"],
-      "@answer/utils": ["src/utils"],
-      "@answer/utils/*": ["src/utils/*"]
+      "@i18n/*": ["../i18n/*"]
     }
   },
-  "include": ["src", "node_modules/@testing-library/jest-dom"]
+  "include": ["src", "node_modules/@testing-library/jest-dom" ]
 }

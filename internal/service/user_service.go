@@ -11,12 +11,14 @@ import (
 
 	"github.com/Chain-Zhang/pinyin"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/service_config"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/google/uuid"
@@ -29,11 +31,12 @@ import (
 
 // UserService user service
 type UserService struct {
-	userRepo      usercommon.UserRepo
-	userActivity  activity.UserActiveActivityRepo
-	serviceConfig *service_config.ServiceConfig
-	emailService  *export.EmailService
-	authService   *auth.AuthService
+	userRepo        usercommon.UserRepo
+	userActivity    activity.UserActiveActivityRepo
+	serviceConfig   *service_config.ServiceConfig
+	emailService    *export.EmailService
+	authService     *auth.AuthService
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 func NewUserService(userRepo usercommon.UserRepo,
@@ -41,13 +44,15 @@ func NewUserService(userRepo usercommon.UserRepo,
 	emailService *export.EmailService,
 	authService *auth.AuthService,
 	serviceConfig *service_config.ServiceConfig,
+	siteInfoService *siteinfo_common.SiteInfoCommonService,
 ) *UserService {
 	return &UserService{
-		userRepo:      userRepo,
-		userActivity:  userActivity,
-		emailService:  emailService,
-		serviceConfig: serviceConfig,
-		authService:   authService,
+		userRepo:        userRepo,
+		userActivity:    userActivity,
+		emailService:    emailService,
+		serviceConfig:   serviceConfig,
+		authService:     authService,
+		siteInfoService: siteInfoService,
 	}
 }
 
@@ -63,35 +68,6 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	resp = &schema.GetUserToSetShowResp{}
 	resp.GetFromUserEntity(userInfo)
 	resp.AccessToken = token
-	return resp, nil
-}
-
-// GetUserStatus get user info by user id
-func (us *UserService) GetUserStatus(ctx context.Context, userID, token string) (resp *schema.GetUserStatusResp, err error) {
-	resp = &schema.GetUserStatusResp{}
-	if len(userID) == 0 {
-		return resp, nil
-	}
-	userInfo, exist, err := us.userRepo.GetByUserID(ctx, userID)
-	if err != nil {
-		return nil, err
-	}
-	if !exist {
-		return nil, errors.BadRequest(reason.UserNotFound)
-	}
-
-	userCacheInfo := &entity.UserCacheInfo{
-		UserID:      userID,
-		UserStatus:  userInfo.Status,
-		EmailStatus: userInfo.MailStatus,
-	}
-	err = us.authService.UpdateUserCacheInfo(ctx, token, userCacheInfo)
-	if err != nil {
-		return nil, err
-	}
-	resp = &schema.GetUserStatusResp{
-		Status: schema.UserStatusShow[userInfo.Status],
-	}
 	return resp, nil
 }
 
@@ -136,6 +112,7 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
+		IsAdmin:     userInfo.IsAdmin,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
@@ -168,7 +145,7 @@ func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRet
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailURL := fmt.Sprintf("%s/users/password-reset?code=%s", us.serviceConfig.WebHost, code)
+	verifyEmailURL := fmt.Sprintf("%s/users/password-reset?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.PassResetTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return "", err
@@ -283,6 +260,18 @@ func (us *UserService) UserEmailHas(ctx context.Context, email string) (bool, er
 	return has, nil
 }
 
+// UserUpdateInterface update user interface
+func (us *UserService) UserUpdateInterface(ctx context.Context, req *schema.UpdateUserInterfaceRequest) (err error) {
+	if !translator.CheckLanguageIsValid(req.Language) {
+		return errors.BadRequest(reason.LangNotFound)
+	}
+	err = us.userRepo.UpdateLanguage(ctx, req.UserId, req.Language)
+	if err != nil {
+		return
+	}
+	return nil
+}
+
 // UserRegisterByEmail user register
 func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo *schema.UserRegisterReq) (
 	resp *schema.GetUserResp, err error,
@@ -320,7 +309,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.serviceConfig.WebHost, code)
+	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return nil, err
@@ -334,6 +323,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
+		IsAdmin:     userInfo.IsAdmin,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
@@ -363,7 +353,7 @@ func (us *UserService) UserVerifyEmailSend(ctx context.Context, userID string) e
 		UserID: userInfo.ID,
 	}
 	code := uuid.NewString()
-	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.serviceConfig.WebHost, code)
+	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
 		return err
@@ -420,6 +410,7 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
+		IsAdmin:     userInfo.IsAdmin,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
@@ -489,21 +480,26 @@ func (us *UserService) encryptPassword(ctx context.Context, Pass string) (string
 }
 
 // UserChangeEmailSendCode user change email verification
-func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.UserChangeEmailSendCodeReq) error {
+func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.UserChangeEmailSendCodeReq) (
+	resp *schema.UserVerifyEmailErrorResponse, err error) {
 	userInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if !exist {
-		return errors.BadRequest(reason.UserNotFound)
+		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 
 	_, exist, err = us.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if exist {
-		return errors.BadRequest(reason.EmailDuplicate)
+		resp = &schema.UserVerifyEmailErrorResponse{
+			Key:   "e_mail",
+			Value: reason.EmailDuplicate,
+		}
+		return resp, errors.BadRequest(reason.EmailDuplicate)
 	}
 
 	data := &schema.EmailCodeContent{
@@ -512,19 +508,19 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 	}
 	code := uuid.NewString()
 	var title, body string
-	verifyEmailURL := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.serviceConfig.WebHost, code)
+	verifyEmailURL := fmt.Sprintf("%s/users/confirm-new-email?code=%s", us.getSiteUrl(ctx), code)
 	if userInfo.MailStatus == entity.EmailStatusToBeVerified {
 		title, body, err = us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	} else {
 		title, body, err = us.emailService.ChangeEmailTemplate(ctx, verifyEmailURL)
 	}
 	if err != nil {
-		return err
+		return nil, err
 	}
 	log.Infof("send email confirmation %s", verifyEmailURL)
 
 	go us.emailService.Send(context.Background(), req.Email, title, body, code, data.ToJSONString())
-	return nil
+	return nil, nil
 }
 
 // UserChangeEmailVerify user change email verify code
@@ -559,4 +555,14 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 		return err
 	}
 	return nil
+}
+
+// getSiteUrl get site url
+func (us *UserService) getSiteUrl(ctx context.Context) string {
+	siteGeneral, err := us.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		log.Errorf("get site general failed: %s", err)
+		return ""
+	}
+	return siteGeneral.SiteUrl
 }

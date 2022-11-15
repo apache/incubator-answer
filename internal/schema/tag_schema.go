@@ -11,7 +11,8 @@ import (
 // SearchTagLikeReq get tag list all request
 type SearchTagLikeReq struct {
 	// tag
-	Tag string `validate:"required,gt=0,lte=35" form:"tag"`
+	Tag     string `validate:"omitempty" form:"tag"`
+	IsAdmin bool   `json:"-"`
 }
 
 // GetTagInfoReq get tag info request
@@ -217,4 +218,10 @@ type GetFollowingTagsResp struct {
 	DisplayName string `json:"display_name"`
 	// if main tag slug name is not empty, this tag is synonymous with the main tag
 	MainTagSlugName string `json:"main_tag_slug_name"`
+}
+
+type SearchTagLikeResp struct {
+	SlugName  string `json:"slug_name"`
+	Recommend bool   `json:"recommend"`
+	Reserved  bool   `json:"reserved"`
 }

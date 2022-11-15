@@ -8,6 +8,7 @@ import (
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
 	"github.com/answerdev/answer/internal/service/comment"
 	"github.com/answerdev/answer/internal/service/comment_common"
+	"github.com/answerdev/answer/internal/service/dashboard"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/follow"
 	"github.com/answerdev/answer/internal/service/meta"
@@ -21,6 +22,8 @@ import (
 	"github.com/answerdev/answer/internal/service/report_backyard"
 	"github.com/answerdev/answer/internal/service/report_handle_backyard"
 	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/internal/service/siteinfo"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/internal/service/search_parser"
 	"github.com/answerdev/answer/internal/service/tag"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
@@ -63,8 +66,10 @@ var ProviderSetService = wire.NewSet(
 	report_backyard.NewReportBackyardService,
 	user_backyard.NewUserBackyardService,
 	reason.NewReasonService,
-	NewSiteInfoService,
+	siteinfo_common.NewSiteInfoCommonService,
+	siteinfo.NewSiteInfoService,
 	notficationcommon.NewNotificationCommon,
 	notification.NewNotificationService,
 	activity.NewAnswerActivityService,
+	dashboard.NewDashboardService,
 )

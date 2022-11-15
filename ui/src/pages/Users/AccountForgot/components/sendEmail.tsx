@@ -2,13 +2,12 @@ import { FC, memo, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { resetPassword, checkImgCode } from '@answer/api';
 import type {
   ImgCodeRes,
   PasswordResetReq,
   FormDataType,
-} from '@answer/common/interface';
-
+} from '@/common/interface';
+import { resetPassword, checkImgCode } from '@/services';
 import { PicAuthCodeModal } from '@/components/Modal';
 
 interface IProps {

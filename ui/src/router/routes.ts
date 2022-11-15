@@ -1,14 +1,28 @@
 import { RouteObject } from 'react-router-dom';
 
+import { guard } from '@/utils';
+import type { TGuardResult } from '@/utils/guard';
+
 export interface RouteNode extends RouteObject {
   page: string;
   children?: RouteNode[];
-  rules?: string[];
+  /**
+   * a method to auto guard route before route enter
+   * if the `ok` field in guard returned `TGuardResult` is true,
+   * it means the guard passed then enter the route.
+   * if guard returned the `TGuardResult` has `redirect` field,
+   * then auto redirect route to the `redirect` target.
+   */
+  guard?: () => Promise<TGuardResult>;
 }
-const routeConfig: RouteNode[] = [
+
+const routes: RouteNode[] = [
   {
     path: '/',
     page: 'pages/Layout',
+    guard: async () => {
+      return guard.notForbidden();
+    },
     children: [
       // question and answer
       {
@@ -31,12 +45,16 @@ const routeConfig: RouteNode[] = [
       {
         path: 'questions/ask',
         page: 'pages/Questions/Ask',
-        rules: ['isLoginAndNormal'],
+        guard: async () => {
+          return guard.activated();
+        },
       },
       {
         path: 'posts/:qid/edit',
         page: 'pages/Questions/Ask',
-        rules: ['isLoginAndNormal'],
+        guard: async () => {
+          return guard.activated();
+        },
       },
       {
         path: 'posts/:qid/:aid/edit',
@@ -62,6 +80,9 @@ const routeConfig: RouteNode[] = [
       {
         path: 'tags/:tagId/edit',
         page: 'pages/Tags/Edit',
+        guard: async () => {
+          return guard.activated();
+        },
       },
       // users
       {
@@ -75,6 +96,9 @@ const routeConfig: RouteNode[] = [
       {
         path: 'users/settings',
         page: 'pages/Users/Settings',
+        guard: async () => {
+          return guard.logged();
+        },
         children: [
           {
             index: true,
@@ -105,47 +129,87 @@ const routeConfig: RouteNode[] = [
       {
         path: 'users/login',
         page: 'pages/Users/Login',
+        guard: async () => {
+          const notLogged = guard.notLogged();
+          if (notLogged.ok) {
+            return notLogged;
+          }
+          return guard.notActivated();
+        },
       },
       {
         path: 'users/register',
         page: 'pages/Users/Register',
+        guard: async () => {
+          return guard.notLogged();
+        },
       },
       {
         path: 'users/account-recovery',
         page: 'pages/Users/AccountForgot',
+        guard: async () => {
+          return guard.activated();
+        },
       },
       {
         path: 'users/change-email',
         page: 'pages/Users/ChangeEmail',
+        guard: async () => {
+          return guard.notActivated();
+        },
       },
       {
         path: 'users/password-reset',
         page: 'pages/Users/PasswordReset',
+        guard: async () => {
+          return guard.activated();
+        },
       },
       {
         path: 'users/account-activation',
         page: 'pages/Users/ActiveEmail',
+        guard: async () => {
+          const notActivated = guard.notActivated();
+          if (notActivated.ok) {
+            return notActivated;
+          }
+          return guard.notLogged();
+        },
       },
       {
         path: 'users/account-activation/success',
         page: 'pages/Users/ActivationResult',
+        guard: async () => {
+          return guard.activated();
+        },
       },
       {
         path: '/users/account-activation/failed',
         page: 'pages/Users/ActivationResult',
+        guard: async () => {
+          return guard.notActivated();
+        },
       },
       {
         path: '/users/confirm-new-email',
         page: 'pages/Users/ConfirmNewEmail',
+        //  TODO: guard this
       },
       {
         path: '/users/account-suspended',
         page: 'pages/Users/Suspended',
+        guard: async () => {
+          return guard.forbidden();
+        },
       },
       // for admin
       {
         path: 'admin',
         page: 'pages/Admin',
+        guard: async () => {
+          await guard.pullLoggedUser(true);
+          return guard.admin();
+        },
         children: [
           {
             index: true,
@@ -199,5 +263,13 @@ const routeConfig: RouteNode[] = [
       },
     ],
   },
+  {
+    path: '/install',
+    page: 'pages/Install',
+  },
+  {
+    path: '/maintenance',
+    page: 'pages/Maintenance',
+  },
 ];
-export default routeConfig;
+export default routes;

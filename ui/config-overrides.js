@@ -1,36 +1,51 @@
-const path = require('path');
+const {
+  addWebpackModuleRule,
+  addWebpackAlias
+} = require("customize-cra");
+
+const path = require("path");
+const i18nPath = path.resolve(__dirname, "../i18n");
 
 module.exports = {
-  webpack: function (config, env) {
-    if (env === 'production') {
+  webpack: function(config, env) {
+    if (env === "production") {
       config.output.publicPath = process.env.REACT_APP_PUBLIC_PATH;
     }
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      '@': path.resolve(__dirname, 'src'),
-      '@answer/pages': path.resolve(__dirname, 'src/pages'),
-      '@answer/components': path.resolve(__dirname, 'src/components'),
-      '@answer/stores': path.resolve(__dirname, 'src/stores'),
-      '@answer/hooks': path.resolve(__dirname, 'src/hooks'),
-      '@answer/utils': path.resolve(__dirname, 'src/utils'),
-      '@answer/common': path.resolve(__dirname, 'src/common'),
-      '@answer/api': path.resolve(__dirname, 'src/services/api'),
-    };
+
+    addWebpackAlias({
+      ["@"]: path.resolve(__dirname, "src"),
+      "@i18n": i18nPath
+    })(config);
+
+    addWebpackModuleRule({
+      test: /\.ya?ml$/,
+      use: "yaml-loader"
+    })(config);
+
+    // add i18n dir to ModuleScopePlugin allowedPaths
+    const moduleScopePlugin = config.resolve.plugins.find(_ => _.constructor.name === "ModuleScopePlugin");
+    if (moduleScopePlugin) {
+      moduleScopePlugin.allowedPaths.push(i18nPath);
+    }
 
     return config;
   },
-
-  devServer: function (configFunction) {
-    return function (proxy, allowedHost) {
+  devServer: function(configFunction) {
+    return function(proxy, allowedHost) {
       const config = configFunction(proxy, allowedHost);
       config.proxy = {
-        '/answer': {
-          target: 'http://10.0.10.98:2060',
+        "/answer": {
+          target: "http://10.0.10.98:2060",
           changeOrigin: true,
-          secure: false,
+          secure: false
         },
+        "/installation": {
+          target: "http://10.0.10.98:2060",
+          changeOrigin: true,
+          secure: false
+        }
       };
       return config;
     };
-  },
+  }
 };

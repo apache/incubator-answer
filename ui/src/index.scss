@@ -75,7 +75,11 @@ a {
 }
 
 .page-wrap {
-  min-height: calc(100vh - 148px);
+  min-height: calc(100vh - 138px);
+}
+.page-wrap2 {
+  background-color: #f5f5f5;
+  min-height: 100vh;
 }
 
 .btn-no-border,
@@ -135,6 +139,11 @@ a {
 
 .warning {
   background-color: #fff3cd80;
+}
+
+.fit-content {
+  height: fit-content;
+  flex: none;
 }
 
 // fix bug for React-Bootstrap Form.Text

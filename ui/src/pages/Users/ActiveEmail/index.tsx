@@ -1,15 +1,14 @@
 import { FC, memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { activateAccount } from '@answer/api';
-import { userInfoStore } from '@answer/stores';
-import { getQueryString } from '@answer/utils';
-
+import { loggedUserInfoStore } from '@/stores';
+import { getQueryString } from '@/utils';
+import { activateAccount } from '@/services';
 import { PageTitle } from '@/components';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
-  const updateUser = userInfoStore((state) => state.update);
+  const updateUser = loggedUserInfoStore((state) => state.update);
   useEffect(() => {
     const code = getQueryString('code');
 

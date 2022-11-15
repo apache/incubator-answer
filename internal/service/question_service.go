@@ -105,6 +105,16 @@ func (qs *QuestionService) CloseMsgList(ctx context.Context, lang i18n.Language)
 
 // AddQuestion add question
 func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd) (questionInfo *schema.QuestionInfo, err error) {
+	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
+	if err != nil {
+		return
+	}
+	if !recommendExist {
+		err = fmt.Errorf("recommend is not exist")
+		err = errors.BadRequest(reason.RecommendTagNotExist).WithError(err).WithStack()
+		return
+	}
+
 	questionInfo = &schema.QuestionInfo{}
 	question := &entity.Question{}
 	now := time.Now()
@@ -163,6 +173,17 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	if !has {
 		return nil
 	}
+	if questionInfo.UserID != req.UserID {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+
+	if questionInfo.AcceptedAnswerID != "" {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	if questionInfo.AnswerCount > 0 {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+
 	questionInfo.Status = entity.QuestionStatusDeleted
 	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
 	if err != nil {

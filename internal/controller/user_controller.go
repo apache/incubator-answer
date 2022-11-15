@@ -1,10 +1,6 @@
 package controller
 
 import (
-	"net/http"
-	"path"
-	"strings"
-
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -17,7 +13,6 @@ import (
 	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/log"
 )
 
 // UserController user controller
@@ -86,22 +81,6 @@ func (uc *UserController) GetOtherUserInfoByUsername(ctx *gin.Context) {
 	}
 
 	resp, err := uc.userService.GetOtherUserInfoByUsername(ctx, req.Username)
-	handler.HandleResponse(ctx, err, resp)
-}
-
-// GetUserStatus get user status info
-// @Summary get user status info
-// @Description get user status info
-// @Tags User
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
-// @Router /answer/api/v1/user/status [get]
-func (uc *UserController) GetUserStatus(ctx *gin.Context) {
-	userID := middleware.GetLoginUserIDFromContext(ctx)
-	token := middleware.ExtractToken(ctx)
-	resp, err := uc.userService.GetUserStatus(ctx, userID, token)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -373,64 +352,25 @@ func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
-// UploadUserAvatar godoc
-// @Summary UserUpdateInfo
-// @Description UserUpdateInfo
+// UserUpdateInterface update user interface config
+// @Summary UserUpdateInterface update user interface config
+// @Description UserUpdateInterface update user interface config
 // @Tags User
-// @Accept multipart/form-data
+// @Accept json
+// @Produce json
 // @Security ApiKeyAuth
-// @Param file formData file true "file"
-// @Success 200 {object} handler.RespBody{data=string}
-// @Router /answer/api/v1/user/avatar/upload [post]
-func (uc *UserController) UploadUserAvatar(ctx *gin.Context) {
-	// max size
-	var filesMax int64 = 5 << 20
-	var valuesMax int64 = 5
-	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, filesMax+valuesMax)
-	_, header, err := ctx.Request.FormFile("file")
-	if err != nil {
-		log.Error(err.Error())
-		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
+// @Param Authorization header string true "access-token"
+// @Param data body schema.UpdateUserInterfaceRequest true "UpdateInfoRequest"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/user/interface [put]
+func (uc *UserController) UserUpdateInterface(ctx *gin.Context) {
+	req := &schema.UpdateUserInterfaceRequest{}
+	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	fileExt := strings.ToLower(path.Ext(header.Filename))
-	if fileExt != ".jpg" && fileExt != ".png" && fileExt != ".jpeg" {
-		log.Errorf("upload file format is not supported: %s", fileExt)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
-		return
-	}
-
-	url, err := uc.uploaderService.UploadAvatarFile(ctx, header, fileExt)
-	handler.HandleResponse(ctx, err, url)
-}
-
-// UploadUserPostFile godoc
-// @Summary upload user post file
-// @Description upload user post file
-// @Tags User
-// @Accept multipart/form-data
-// @Security ApiKeyAuth
-// @Param file formData file true "file"
-// @Success 200 {object} handler.RespBody{data=string}
-// @Router /answer/api/v1/user/post/file [post]
-func (uc *UserController) UploadUserPostFile(ctx *gin.Context) {
-	// max size
-	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 10*1024*1024)
-	_, header, err := ctx.Request.FormFile("file")
-	if err != nil {
-		log.Error(err.Error())
-		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
-		return
-	}
-	fileExt := strings.ToLower(path.Ext(header.Filename))
-	if fileExt != ".jpg" && fileExt != ".png" && fileExt != ".jpeg" {
-		log.Errorf("upload file format is not supported: %s", fileExt)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
-		return
-	}
-
-	url, err := uc.uploaderService.UploadPostFile(ctx, header, fileExt)
-	handler.HandleResponse(ctx, err, url)
+	req.UserId = middleware.GetLoginUserIDFromContext(ctx)
+	err := uc.userService.UserUpdateInterface(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
 }
 
 // ActionRecord godoc
@@ -490,6 +430,10 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	// If the user is not logged in, the api cannot be used.
 	// If the user email is not verified, that also can use this api to modify the email.
+	if len(req.UserID) == 0 {
+		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+		return
+	}
 
 	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
@@ -501,13 +445,15 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
 		return
 	}
-
-	if len(req.UserID) == 0 {
-		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
+	resp, err := uc.userService.UserChangeEmailSendCode(ctx, req)
+	if err != nil {
+		if resp != nil {
+			resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
+		}
+		handler.HandleResponse(ctx, err, resp)
 		return
 	}
-	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
-	err := uc.userService.UserChangeEmailSendCode(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

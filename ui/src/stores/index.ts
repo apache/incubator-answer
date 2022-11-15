@@ -1,12 +1,12 @@
 import toastStore from './toast';
-import userInfoStore from './userInfo';
+import loggedUserInfoStore from './userInfo';
 import globalStore from './global';
 import siteInfoStore from './siteInfo';
 import interfaceStore from './interface';
 
 export {
   toastStore,
-  userInfoStore,
+  loggedUserInfoStore,
   globalStore,
   siteInfoStore,
   interfaceStore,

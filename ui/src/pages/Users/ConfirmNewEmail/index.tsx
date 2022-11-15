@@ -3,9 +3,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { changeEmailVerify, getUserInfo } from '@answer/api';
-import { userInfoStore } from '@answer/stores';
-
+import { loggedUserInfoStore } from '@/stores';
+import { changeEmailVerify, getLoggedUserInfo } from '@/services';
 import { PageTitle } from '@/components';
 
 const Index: FC = () => {
@@ -13,7 +12,7 @@ const Index: FC = () => {
   const [searchParams] = useSearchParams();
   const [step, setStep] = useState('loading');
 
-  const updateUser = userInfoStore((state) => state.update);
+  const updateUser = loggedUserInfoStore((state) => state.update);
 
   useEffect(() => {
     const code = searchParams.get('code');
@@ -22,7 +21,7 @@ const Index: FC = () => {
       changeEmailVerify({ code })
         .then(() => {
           setStep('success');
-          getUserInfo().then((res) => {
+          getLoggedUserInfo().then((res) => {
             // update user info
             updateUser(res);
           });

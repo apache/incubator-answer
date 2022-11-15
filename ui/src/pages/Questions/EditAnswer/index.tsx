@@ -6,13 +6,13 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { Editor, EditorRef, Icon, PageTitle } from '@answer/components';
+import { Editor, EditorRef, Icon, PageTitle } from '@/components';
+import type * as Type from '@/common/interface';
 import {
   useQueryAnswerInfo,
   modifyAnswer,
   useQueryRevisions,
-} from '@answer/api';
-import type * as Type from '@answer/common/interface';
+} from '@/services';
 
 import './index.scss';
 
@@ -152,9 +152,9 @@ const Ask = () => {
                 <Form.Label>{t('form.fields.revision.label')}</Form.Label>
                 <Form.Select onChange={handleSelectedRevision}>
                   {revisions.map(({ create_at, reason, user_info }, index) => {
-                    const date = dayjs(create_at * 1000).format(
-                      t('long_date_with_time', { keyPrefix: 'dates' }),
-                    );
+                    const date = dayjs(create_at * 1000)
+                      .tz()
+                      .format(t('long_date_with_time', { keyPrefix: 'dates' }));
                     return (
                       <option key={`${create_at}`} value={index}>
                         {`${date} - ${user_info.display_name} - ${

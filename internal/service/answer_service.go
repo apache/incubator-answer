@@ -65,13 +65,35 @@ func NewAnswerService(
 }
 
 // RemoveAnswer delete answer
-func (as *AnswerService) RemoveAnswer(ctx context.Context, id string) (err error) {
-	answerInfo, exist, err := as.answerRepo.GetByID(ctx, id)
+func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAnswerReq) (err error) {
+	answerInfo, exist, err := as.answerRepo.GetByID(ctx, req.ID)
 	if err != nil {
 		return err
 	}
 	if !exist {
 		return nil
+	}
+	if answerInfo.UserID != req.UserID {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	if answerInfo.VoteCount > 0 {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	if answerInfo.Adopted == schema.AnswerAdoptedEnable {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
+	if err != nil {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	if !exist {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	if questionInfo.AnswerCount > 1 {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	if questionInfo.AcceptedAnswerID != "" {
+		return errors.BadRequest(reason.UnauthorizedError)
 	}
 
 	// user add question count
@@ -85,7 +107,7 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, id string) (err error
 		log.Error("user IncreaseAnswerCount error", err.Error())
 	}
 
-	err = as.answerRepo.RemoveAnswer(ctx, id)
+	err = as.answerRepo.RemoveAnswer(ctx, req.ID)
 	if err != nil {
 		return err
 	}

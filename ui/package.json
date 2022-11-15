@@ -10,7 +10,6 @@
     "build:prod": "env-cmd -f .env.production react-app-rewired build",
     "build": "env-cmd -f .env react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
     "prepare": "cd .. && husky install",
     "cz": "cz",
@@ -102,7 +101,8 @@
     "sass": "^1.54.4",
     "tsconfig-paths-webpack-plugin": "^4.0.0",
     "typescript": "*",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yaml-loader": "^0.8.0"
   },
   "packageManager": "pnpm@7.9.5",
   "engines": {
