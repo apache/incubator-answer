@@ -85,7 +85,16 @@ const SchemaForm: FC<IProps> = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'form',
   });
-  const { properties } = schema;
+
+  const { required = [], properties } = schema;
+
+  // check required field
+  const excludes = required.filter((key) => !properties[key]);
+
+  if (excludes.length > 0) {
+    console.error(t('not_found_props', { key: excludes.join(', ') }));
+  }
+
   const keys = Object.keys(properties);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +106,6 @@ const SchemaForm: FC<IProps> = ({
   };
 
   const requiredValidator = () => {
-    const required = schema.required || [];
     const errors: string[] = [];
     required.forEach((key) => {
       if (!formData[key] || !formData[key].value) {
@@ -160,7 +168,7 @@ const SchemaForm: FC<IProps> = ({
           isInvalid: true,
           errorMsg:
             uiSchema[cur]?.['ui:options']?.empty ||
-            `${schema.properties[cur].title} ${t('empty')}`,
+            `${schema.properties[cur]?.title} ${t('empty')}`,
         };
         return acc;
       }, formData);
