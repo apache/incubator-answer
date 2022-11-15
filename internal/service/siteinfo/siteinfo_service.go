@@ -11,19 +11,25 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 )
 
 type SiteInfoService struct {
-	siteInfoRepo siteinfo_common.SiteInfoRepo
-	emailService *export.EmailService
+	siteInfoRepo     siteinfo_common.SiteInfoRepo
+	emailService     *export.EmailService
+	tagCommonService *tagcommon.TagCommonService
 }
 
-func NewSiteInfoService(siteInfoRepo siteinfo_common.SiteInfoRepo, emailService *export.EmailService) *SiteInfoService {
+func NewSiteInfoService(
+	siteInfoRepo siteinfo_common.SiteInfoRepo,
+	emailService *export.EmailService,
+	tagCommonService *tagcommon.TagCommonService) *SiteInfoService {
 	return &SiteInfoService{
-		siteInfoRepo: siteInfoRepo,
-		emailService: emailService,
+		siteInfoRepo:     siteInfoRepo,
+		emailService:     emailService,
+		tagCommonService: tagCommonService,
 	}
 }
 
@@ -71,7 +77,7 @@ func (s *SiteInfoService) GetSiteBranding(ctx context.Context) (resp *schema.Sit
 }
 
 // GetSiteWrite get site info write
-func (s *SiteInfoService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWriteReq, err error) {
+func (s *SiteInfoService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWriteResp, err error) {
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeWrite)
 	if err != nil {
 		return nil, err
@@ -79,8 +85,17 @@ func (s *SiteInfoService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWr
 	if !exist {
 		return nil, errors.BadRequest(reason.SiteInfoNotFound)
 	}
-	resp = &schema.SiteWriteReq{}
+	resp = &schema.SiteWriteResp{}
 	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+
+	resp.RecommendTags, err = s.tagCommonService.GetSiteWriteRecommendTag(ctx)
+	if err != nil {
+		return nil, err
+	}
+	resp.ReservedTags, err = s.tagCommonService.GetSiteWriteReservedTag(ctx)
+	if err != nil {
+		return nil, err
+	}
 	return resp, nil
 }
 
@@ -150,6 +165,16 @@ func (s *SiteInfoService) SaveSiteBranding(ctx context.Context, req *schema.Site
 
 // SaveSiteWrite save site configuration about write
 func (s *SiteInfoService) SaveSiteWrite(ctx context.Context, req *schema.SiteWriteReq) (err error) {
+	err = s.tagCommonService.SetSiteWriteRecommendTag(ctx, req.RecommendTags, req.RequiredTag, req.UserID)
+	if err != nil {
+		return err
+	}
+
+	err = s.tagCommonService.SetSiteWriteReservedTag(ctx, req.ReservedTags, req.UserID)
+	if err != nil {
+		return err
+	}
+
 	content, _ := json.Marshal(req)
 	data := &entity.SiteInfo{
 		Type:    constant.SiteTypeWrite,
