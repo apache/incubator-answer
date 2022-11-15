@@ -51,8 +51,7 @@ export interface UISchema {
         | 'url'
         | 'week';
       empty?: string;
-      invalid?: string;
-      validator?: (value) => boolean;
+      validator?: (value) => Promise<string | true | void> | true | string;
       textRender?: () => React.ReactElement;
       imageType?: Type.UploadType;
       acceptType?: string;
@@ -109,21 +108,50 @@ const SchemaForm: FC<IProps> = ({
   };
 
   const syncValidator = () => {
-    const errors: string[] = [];
+    const errors: Array<{ key: string; msg: string }> = [];
+    const promises: Array<{
+      key: string;
+      promise;
+    }> = [];
     keys.forEach((key) => {
       const { validator } = uiSchema[key]?.['ui:options'] || {};
       if (validator instanceof Function) {
         const value = formData[key]?.value;
-        if (!validator(value)) {
-          errors.push(key);
-        }
+        promises.push({
+          key,
+          promise: validator(value),
+        });
       }
     });
-    return errors;
+    return Promise.allSettled(promises.map((item) => item.promise)).then(
+      (results) => {
+        results.forEach((result, index) => {
+          const { key } = promises[index];
+          if (result.status === 'rejected') {
+            errors.push({
+              key,
+              msg: result.reason.message,
+            });
+          }
+
+          if (result.status === 'fulfilled') {
+            const msg = result.value;
+            if (typeof msg === 'string') {
+              errors.push({
+                key,
+                msg,
+              });
+            }
+          }
+        });
+        return errors;
+      },
+    );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     const errors = requiredValidator();
     if (errors.length > 0) {
       formData = errors.reduce((acc, cur) => {
@@ -131,30 +159,29 @@ const SchemaForm: FC<IProps> = ({
           ...formData[cur],
           isInvalid: true,
           errorMsg:
-            uiSchema[cur]['ui:options']?.empty ||
-            `${schema.properties[cur].title} ${t('form.empty')}`,
+            uiSchema[cur]?.['ui:options']?.empty ||
+            `${schema.properties[cur].title} ${t('empty')}`,
         };
         return acc;
       }, formData);
       if (onChange instanceof Function) {
-        onChange(formData);
+        onChange({ ...formData });
       }
       return;
     }
-    const syncErrors = syncValidator();
+    const syncErrors = await syncValidator();
     if (syncErrors.length > 0) {
       formData = syncErrors.reduce((acc, cur) => {
-        acc[cur] = {
-          ...formData[cur],
+        acc[cur.key] = {
+          ...formData[cur.key],
           isInvalid: true,
           errorMsg:
-            uiSchema[cur]['ui:options']?.invalid ||
-            `${schema.properties[cur].title} ${t('form.invalid')}`,
+            cur.msg || `${schema.properties[cur.key].title} ${t('invalid')}`,
         };
         return acc;
       }, formData);
       if (onChange instanceof Function) {
-        onChange(formData);
+        onChange({ ...formData });
       }
       return;
     }

@@ -81,10 +81,9 @@ const Smtp: FC = () => {
     },
     smtp_port: {
       'ui:options': {
-        invalid: t('smtp_port.msg'),
         validator: (value) => {
           if (!/^[1-9][0-9]*$/.test(value) || Number(value) > 65535) {
-            return false;
+            return t('smtp_port.msg');
           }
           return true;
         },
@@ -92,10 +91,9 @@ const Smtp: FC = () => {
     },
     test_email_recipient: {
       'ui:options': {
-        invalid: t('test_email_recipient.msg'),
         validator: (value) => {
           if (value && !pattern.email.test(value)) {
-            return false;
+            return t('test_email_recipient.msg');
           }
           return true;
         },
