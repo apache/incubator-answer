@@ -57,5 +57,9 @@ func (uc *UploadController) UploadFile(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.UploadFileSourceUnsupported), nil)
 		return
 	}
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
 	handler.HandleResponse(ctx, err, url)
 }
