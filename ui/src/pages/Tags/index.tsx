@@ -77,9 +77,8 @@ const Tags = () => {
                   className="mb-4">
                   <Card className="h-100">
                     <Card.Body className="d-flex flex-column align-items-start">
-                      <Tag className="mb-3" href={`/tags/${tag.slug_name}`}>
-                        {tag.slug_name}
-                      </Tag>
+                      <Tag className="mb-3" data={tag} />
+
                       <p className="fs-14 flex-fill text-break text-wrap text-truncate-4">
                         {tag.original_text}
                       </p>

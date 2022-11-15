@@ -9,7 +9,7 @@ import type { FormDataType } from '@/common/interface';
 import { UploadImg, Avatar } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
 import { useToast } from '@/hooks';
-import { modifyUserInfo, uploadAvatar, getLoggedUserInfo } from '@/services';
+import { modifyUserInfo, getLoggedUserInfo } from '@/services';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', {
@@ -60,21 +60,16 @@ const Index: React.FC = () => {
     setFormData({ ...formData, ...params });
   };
 
-  const avatarUpload = (file: any) => {
-    return new Promise((resolve) => {
-      uploadAvatar(file).then((res) => {
-        setFormData({
-          ...formData,
-          avatar: {
-            ...formData.avatar,
-            type: 'custom',
-            custom: res,
-            isInvalid: false,
-            errorMsg: '',
-          },
-        });
-        resolve(true);
-      });
+  const avatarUpload = (path: string) => {
+    setFormData({
+      ...formData,
+      avatar: {
+        ...formData.avatar,
+        type: 'custom',
+        custom: path,
+        isInvalid: false,
+        errorMsg: '',
+      },
     });
   };
 
@@ -366,7 +361,7 @@ const Index: React.FC = () => {
               <div>
                 <UploadImg
                   type="avatar"
-                  upload={avatarUpload}
+                  uploadCallback={avatarUpload}
                   className="mb-2"
                 />
                 <div>

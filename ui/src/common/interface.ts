@@ -126,7 +126,8 @@ export interface UserInfoRes extends UserInfoBase {
   [prop: string]: any;
 }
 
-export interface AvatarUploadReq {
+export type UploadType = 'post' | 'avatar' | 'branding';
+export interface UploadReq {
   file: FormData;
 }
 
@@ -296,7 +297,7 @@ export interface AdminSettingsLegal {
 
 export interface AdminSettingsWrite {
   recommend_tags: string;
-  required_tags: string;
+  required_tag: string;
 }
 
 /**
@@ -358,4 +359,11 @@ export interface AdminDashboard {
       version: string;
     };
   };
+}
+
+export interface BrandReqParams {
+  logo: string;
+  square_icon: string;
+  mobile_logo?: string;
+  favicon?: string;
 }

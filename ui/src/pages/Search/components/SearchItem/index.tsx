@@ -67,11 +67,7 @@ const Index: FC<Props> = ({ data }) => {
       )}
 
       {data.object?.tags?.map((item) => {
-        return (
-          <Tag href={`/tags/${item.slug_name}`} className="me-1">
-            {item.slug_name}
-          </Tag>
-        );
+        return <Tag key={item.slug_name} className="me-1" data={item} />;
       })}
     </ListGroupItem>
   );

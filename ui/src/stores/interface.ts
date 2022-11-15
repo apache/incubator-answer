@@ -6,6 +6,7 @@ import { DEFAULT_LANG } from '@/common/constants';
 interface InterfaceType {
   interface: AdminSettingsInterface;
   update: (params: AdminSettingsInterface) => void;
+  updateLogo: (logo: string) => void;
 }
 
 const interfaceSetting = create<InterfaceType>((set) => ({
@@ -19,6 +20,15 @@ const interfaceSetting = create<InterfaceType>((set) => ({
     set(() => {
       return {
         interface: params,
+      };
+    }),
+  updateLogo: (logo) =>
+    set((state) => {
+      return {
+        interface: {
+          ...state.interface,
+          logo,
+        },
       };
     }),
 }));

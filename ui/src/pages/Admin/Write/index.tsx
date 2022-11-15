@@ -26,10 +26,15 @@ const Legal: FC = () => {
         title: t('recommend_tags.label'),
         description: t('recommend_tags.text'),
       },
-      required_tags: {
+      required_tag: {
         type: 'boolean',
-        title: t('required_tags.label'),
-        description: t('required_tags.text'),
+        title: t('required_tag.label'),
+        description: t('required_tag.text'),
+      },
+      reserved_tags: {
+        type: 'string',
+        title: t('reserved_tags.label'),
+        description: t('reserved_tags.text'),
       },
     },
   };
@@ -40,8 +45,14 @@ const Legal: FC = () => {
         rows: 5,
       },
     },
-    required_tags: {
+    required_tag: {
       'ui:widget': 'switch',
+    },
+    reserved_tags: {
+      'ui:widget': 'textarea',
+      'ui:options': {
+        rows: 5,
+      },
     },
   };
   const [formData, setFormData] = useState(initFormData(schema));
@@ -52,7 +63,7 @@ const Legal: FC = () => {
 
     const reqParams: Type.AdminSettingsWrite = {
       recommend_tags: formData.recommend_tags.value,
-      required_tags: formData.required_tags.value,
+      required_tag: formData.required_tag.value,
     };
 
     console.log(reqParams);

@@ -1,17 +1,23 @@
-import { FC, memo, useState } from 'react';
+import { FC, memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { JSONSchema, SchemaForm, UISchema } from '@/components';
 import { FormDataType } from '@/common/interface';
+import { brandSetting, getBrandSetting } from '@/services';
+import { interfaceStore } from '@/stores';
+import { useToast } from '@/hooks';
 
+const uploadType = 'branding';
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.branding',
   });
+  const { interface: storeInterface, updateLogo } = interfaceStore();
+  const Toast = useToast();
 
   const [formData, setFormData] = useState<FormDataType>({
     logo: {
-      value: '',
+      value: storeInterface.logo,
       isInvalid: false,
       errorMsg: '',
     },
@@ -31,24 +37,6 @@ const Index: FC = () => {
       errorMsg: '',
     },
   });
-
-  // const onChange = (fieldName, fieldValue) => {
-  //   if (!formData[fieldName]) {
-  //     return;
-  //   }
-  //   const fieldData: FormDataType = {
-  //     [fieldName]: {
-  //       value: fieldValue,
-  //       isInvalid: false,
-  //       errorMsg: '',
-  //     },
-  //   };
-  //   setFormData({ ...formData, ...fieldData });
-  // };
-
-  // const [img, setImg] = useState(
-  //   'https://image-static.segmentfault.com/405/057/4050570037-636c7b0609a49',
-  // );
 
   const schema: JSONSchema = {
     title: t('page_title'),
@@ -80,25 +68,25 @@ const Index: FC = () => {
     logo: {
       'ui:widget': 'upload',
       'ui:options': {
-        imageType: 'logo',
+        imageType: uploadType,
       },
     },
     mobile_logo: {
       'ui:widget': 'upload',
       'ui:options': {
-        imageType: 'mobile_logo',
+        imageType: uploadType,
       },
     },
     square_icon: {
       'ui:widget': 'upload',
       'ui:options': {
-        imageType: 'square_icon',
+        imageType: uploadType,
       },
     },
     favicon: {
       'ui:widget': 'upload',
       'ui:options': {
-        imageType: 'favicon',
+        imageType: uploadType,
       },
     },
   };
@@ -108,8 +96,45 @@ const Index: FC = () => {
   };
 
   const onSubmit = () => {
-    // undo
+    const params = {
+      logo: formData.logo.value,
+      mobile_logo: formData.mobile_logo.value,
+      square_icon: formData.square_icon.value,
+      favicon: formData.favicon.value,
+    };
+    brandSetting(params)
+      .then((res) => {
+        console.log(res);
+        updateLogo(formData.logo.value);
+        Toast.onShow({
+          msg: t('update', { keyPrefix: 'toast' }),
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        if (err.key) {
+          formData[err.key].isInvalid = true;
+          formData[err.key].errorMsg = err.value;
+          setFormData({ ...formData });
+        }
+      });
   };
+
+  const getBrandData = async () => {
+    const res = await getBrandSetting();
+    if (res) {
+      formData.logo.value = res.logo;
+      formData.mobile_logo.value = res.mobile_logo;
+      formData.square_icon.value = res.square_icon;
+      formData.favicon.value = res.favicon;
+      setFormData({ ...formData });
+    }
+  };
+
+  useEffect(() => {
+    getBrandData();
+  }, []);
 
   return (
     <div>

@@ -2,22 +2,17 @@ import { FC } from 'react';
 import { ButtonGroup, Button } from 'react-bootstrap';
 
 import { Icon, UploadImg } from '@/components';
-import { uploadAvatar } from '@/services';
+import { UploadType } from '@/common/interface';
 
 interface Props {
-  type: 'logo' | 'avatar' | 'mobile_logo' | 'square_icon' | 'favicon';
+  type: UploadType;
   value: string;
   onChange: (value: string) => void;
 }
 
-const Index: FC<Props> = ({ type = 'logo', value, onChange }) => {
-  const onUpload = (file: any) => {
-    return new Promise((resolve) => {
-      uploadAvatar(file).then((res) => {
-        onChange(res);
-        resolve(true);
-      });
-    });
+const Index: FC<Props> = ({ type = 'post', value, onChange }) => {
+  const onUpload = (imgPath: string) => {
+    onChange(imgPath);
   };
 
   const onRemove = () => {
@@ -29,7 +24,7 @@ const Index: FC<Props> = ({ type = 'logo', value, onChange }) => {
         <img src={value} alt="" height={100} />
       </div>
       <ButtonGroup vertical className="fit-content">
-        <UploadImg type={type} upload={onUpload} className="mb-0">
+        <UploadImg type={type} uploadCallback={onUpload} className="mb-0">
           <Icon name="cloud-upload" />
         </UploadImg>
 

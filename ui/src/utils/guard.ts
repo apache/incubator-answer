@@ -182,9 +182,10 @@ export const tryNormalLogged = (canNavigate: boolean = false) => {
   return false;
 };
 
-export const tryLoggedAndActicevated = () => {
+export const tryLoggedAndActivated = () => {
   const gr: TGuardResult = { ok: true };
   const us = deriveLoginState();
+
   if (!us.isLogged || !us.isActivated) {
     gr.ok = false;
   }
