@@ -225,6 +225,9 @@ const SchemaForm: FC<IProps> = ({
                   );
                 })}
               </Stack>
+              <Form.Control.Feedback type="invalid">
+                {formData[key]?.errorMsg}
+              </Form.Control.Feedback>
               <Form.Text className="text-muted">{description}</Form.Text>
             </Form.Group>
           );
@@ -243,6 +246,9 @@ const SchemaForm: FC<IProps> = ({
                 feedbackType="invalid"
                 isInvalid={formData[key].isInvalid}
               />
+              <Form.Control.Feedback type="invalid">
+                {formData[key]?.errorMsg}
+              </Form.Control.Feedback>
               <Form.Text className="text-muted">{description}</Form.Text>
             </Form.Group>
           );
@@ -255,6 +261,14 @@ const SchemaForm: FC<IProps> = ({
                 value={formData[key]?.value}
                 onChange={handleInputChange}
               />
+              <Form.Control
+                name={key}
+                className="d-none"
+                isInvalid={formData[key].isInvalid}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formData[key]?.errorMsg}
+              </Form.Control.Feedback>
               <Form.Text className="text-muted">{description}</Form.Text>
             </Form.Group>
           );
@@ -269,6 +283,14 @@ const SchemaForm: FC<IProps> = ({
                 value={formData[key]?.value}
                 onChange={(value) => handleUploadChange(key, value)}
               />
+              <Form.Control
+                name={key}
+                className="d-none"
+                isInvalid={formData[key].isInvalid}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formData[key]?.errorMsg}
+              </Form.Control.Feedback>
               <Form.Text className="text-muted">{description}</Form.Text>
             </Form.Group>
           );
