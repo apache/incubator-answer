@@ -3018,6 +3018,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/siteinfo/legal": {
+            "get": {
+                "description": "get site legal info",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "site"
+                ],
+                "summary": "get site legal info",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.SiteGeneralResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/tag": {
             "get": {
                 "description": "get tag one",
@@ -5911,10 +5943,16 @@ const docTemplate = `{
         "schema.SiteLegalReq": {
             "type": "object",
             "properties": {
-                "privacy_policy": {
+                "privacy_policy_original_text": {
                     "type": "string"
                 },
-                "terms_of_service": {
+                "privacy_policy_parsed_text": {
+                    "type": "string"
+                },
+                "terms_of_service_original_text": {
+                    "type": "string"
+                },
+                "terms_of_service_parsed_text": {
                     "type": "string"
                 }
             }
@@ -5922,10 +5960,16 @@ const docTemplate = `{
         "schema.SiteLegalResp": {
             "type": "object",
             "properties": {
-                "privacy_policy": {
+                "privacy_policy_original_text": {
                     "type": "string"
                 },
-                "terms_of_service": {
+                "privacy_policy_parsed_text": {
+                    "type": "string"
+                },
+                "terms_of_service_original_text": {
+                    "type": "string"
+                },
+                "terms_of_service_parsed_text": {
                     "type": "string"
                 }
             }

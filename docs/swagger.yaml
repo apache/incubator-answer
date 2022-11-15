@@ -1168,16 +1168,24 @@ definitions:
     type: object
   schema.SiteLegalReq:
     properties:
-      privacy_policy:
+      privacy_policy_original_text:
         type: string
-      terms_of_service:
+      privacy_policy_parsed_text:
+        type: string
+      terms_of_service_original_text:
+        type: string
+      terms_of_service_parsed_text:
         type: string
     type: object
   schema.SiteLegalResp:
     properties:
-      privacy_policy:
+      privacy_policy_original_text:
         type: string
-      terms_of_service:
+      privacy_policy_parsed_text:
+        type: string
+      terms_of_service_original_text:
+        type: string
+      terms_of_service_parsed_text:
         type: string
     type: object
   schema.SiteWriteReq:
@@ -3377,6 +3385,24 @@ paths:
                   $ref: '#/definitions/schema.SiteGeneralResp'
               type: object
       summary: get site info
+      tags:
+      - site
+  /answer/api/v1/siteinfo/legal:
+    get:
+      description: get site legal info
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SiteGeneralResp'
+              type: object
+      summary: get site legal info
       tags:
       - site
   /answer/api/v1/tag:
