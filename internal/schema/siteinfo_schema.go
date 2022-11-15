@@ -39,7 +39,10 @@ type SiteBrandingReq struct {
 
 // SiteWriteReq site write request
 type SiteWriteReq struct {
-	RequiredTag bool `validate:"required" form:"required_tag" json:"required_tag"`
+	RequiredTag   bool     `validate:"required" form:"required_tag" json:"required_tag"`
+	RecommendTags []string `validate:"omitempty,dive,gt=0,lte=65536" form:"recommend_tags" json:"recommend_tags"`
+	ReservedTags  []string `validate:"omitempty,dive,gt=0,lte=65536" form:"reserved_tags" json:"reserved_tags"`
+	UserID        string   `json:"-"`
 }
 
 // SiteLegalReq site branding request

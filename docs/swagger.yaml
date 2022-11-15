@@ -1182,15 +1182,31 @@ definitions:
     type: object
   schema.SiteWriteReq:
     properties:
+      recommend_tags:
+        items:
+          type: string
+        type: array
       required_tag:
         type: boolean
+      reserved_tags:
+        items:
+          type: string
+        type: array
     required:
     - required_tag
     type: object
   schema.SiteWriteResp:
     properties:
+      recommend_tags:
+        items:
+          type: string
+        type: array
       required_tag:
         type: boolean
+      reserved_tags:
+        items:
+          type: string
+        type: array
     required:
     - required_tag
     type: object

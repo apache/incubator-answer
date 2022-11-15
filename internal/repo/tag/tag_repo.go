@@ -100,7 +100,7 @@ func (tr *tagRepo) GetRecommendTagList(ctx context.Context) (tagList []*entity.T
 	cond := &entity.Tag{}
 	session := tr.data.DB.Where("")
 	cond.Recommend = true
-	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	// session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	session.Asc("slug_name")
 	session.UseBool("recommend")
 	err = session.Find(&tagList, cond)
@@ -115,7 +115,7 @@ func (tr *tagRepo) GetReservedTagList(ctx context.Context) (tagList []*entity.Ta
 	cond := &entity.Tag{}
 	session := tr.data.DB.Where("")
 	cond.Reserved = true
-	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	// session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	session.Asc("slug_name")
 	session.UseBool("reserved")
 	err = session.Find(&tagList, cond)
@@ -129,7 +129,7 @@ func (tr *tagRepo) GetReservedTagList(ctx context.Context) (tagList []*entity.Ta
 func (tr *tagRepo) GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error) {
 	tagList = make([]*entity.Tag, 0)
 	session := tr.data.DB.In("slug_name", names)
-	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	// session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	err = session.Find(&tagList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

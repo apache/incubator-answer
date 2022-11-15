@@ -3,13 +3,15 @@ package tagcommon
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 
-	"github.com/answerdev/answer/internal/service/revision_common"
-	"github.com/answerdev/answer/internal/service/siteinfo_common"
-
+	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -244,6 +246,7 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, tags []string, userID
 	}
 
 	addTagList := make([]*entity.Tag, 0)
+	addTagMsgList := make([]string, 0)
 	for _, tag := range tags {
 		_, ok := tagInDbMapping[tag]
 		if ok {
@@ -256,27 +259,32 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, tags []string, userID
 		item.ParsedText = ""
 		item.Status = entity.TagStatusAvailable
 		addTagList = append(addTagList, item)
+		addTagMsgList = append(addTagMsgList, tag)
 	}
 
 	if len(addTagList) > 0 {
-		err = ts.tagRepo.AddTagList(ctx, addTagList)
-		if err != nil {
-			return err
-		}
-		for _, tag := range addTagList {
-			thisTagIDList = append(thisTagIDList, tag.ID)
-			revisionDTO := &schema.AddRevisionDTO{
-				UserID:   userID,
-				ObjectID: tag.ID,
-				Title:    tag.SlugName,
-			}
-			tagInfoJson, _ := json.Marshal(tag)
-			revisionDTO.Content = string(tagInfoJson)
-			err = ts.revisionService.AddRevision(ctx, revisionDTO, true)
-			if err != nil {
-				return err
-			}
-		}
+		err = errors.BadRequest(reason.TagNotFound).WithMsg(fmt.Sprintf("tag [%s] does not exist",
+			strings.Join(addTagMsgList, ",")))
+		return err
+		// todo if need add
+		// err = ts.tagRepo.AddTagList(ctx, addTagList)
+		// if err != nil {
+		// 	return err
+		// }
+		// for _, tag := range addTagList {
+		// 	thisTagIDList = append(thisTagIDList, tag.ID)
+		// 	revisionDTO := &schema.AddRevisionDTO{
+		// 		UserID:   userID,
+		// 		ObjectID: tag.ID,
+		// 		Title:    tag.SlugName,
+		// 	}
+		// 	tagInfoJson, _ := json.Marshal(tag)
+		// 	revisionDTO.Content = string(tagInfoJson)
+		// 	err = ts.revisionService.AddRevision(ctx, revisionDTO, true)
+		// 	if err != nil {
+		// 		return err
+		// 	}
+		// }
 	}
 
 	return nil
