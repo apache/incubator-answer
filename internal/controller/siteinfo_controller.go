@@ -44,3 +44,31 @@ func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
 	}
 	handler.HandleResponse(ctx, nil, resp)
 }
+
+// GetSiteLegalInfo get site legal info
+// @Summary get site legal info
+// @Description get site legal info
+// @Tags site
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteGeneralResp}
+// @Router /answer/api/v1/siteinfo/legal [get]
+func (sc *SiteinfoController) GetSiteLegalInfo(ctx *gin.Context) {
+	req := &schema.GetSiteLegalInfoReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	siteLegal, err := sc.siteInfoService.GetSiteLegal(ctx)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	resp := &schema.GetSiteLegalInfoResp{}
+	if req.IsTOS() {
+		resp.TermsOfServiceOriginalText = siteLegal.TermsOfServiceOriginalText
+		resp.TermsOfServiceParsedText = siteLegal.TermsOfServiceParsedText
+	} else if req.IsPrivacy() {
+		resp.PrivacyPolicyOriginalText = siteLegal.PrivacyPolicyOriginalText
+		resp.PrivacyPolicyParsedText = siteLegal.PrivacyPolicyParsedText
+	}
+	handler.HandleResponse(ctx, nil, resp)
+}

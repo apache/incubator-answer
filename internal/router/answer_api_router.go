@@ -136,6 +136,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	//siteinfo
 	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
+	r.GET("/siteinfo/legal", a.siteinfoController.GetSiteLegalInfo)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
