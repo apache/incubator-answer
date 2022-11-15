@@ -15,11 +15,7 @@ import {
 import { ADMIN_LIST_STATUS } from '@/common/constants';
 import { useEditStatusModal, useReportModal } from '@/hooks';
 import * as Type from '@/common/interface';
-import {
-  useQuestionSearch,
-  changeQuestionStatus,
-  deleteQuestion,
-} from '@/services';
+import { useQuestionSearch, changeQuestionStatus } from '@/services';
 
 import '../index.scss';
 
@@ -76,9 +72,7 @@ const Questions: FC = () => {
         confirmBtnVariant: 'danger',
         confirmText: t('delete', { keyPrefix: 'btns' }),
         onConfirm: () => {
-          deleteQuestion({
-            id,
-          }).then(() => {
+          changeQuestionStatus(id, 'deleted').then(() => {
             refreshList();
           });
         },
