@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Modal, Form, Button, FormCheck } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -73,56 +73,57 @@ const useEditStatusModal = ({
     setDefaultType(params.type);
     setShow(true);
   };
-
-  root.render(
-    <Modal show={show} onHide={onClose}>
-      <Modal.Header closeButton>
-        <Modal.Title as="h5">{t('title', { type: editType })}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          {list.map((item) => {
-            if (editType === 'answer' && item.type === 'closed') {
-              return null;
-            }
-            return (
-              <div key={item?.type}>
-                <Form.Group controlId={item.type} className="mb-3">
-                  <FormCheck>
-                    <FormCheck.Input
-                      id={item.type}
-                      type="radio"
-                      checked={changeType === item.type}
-                      onChange={() => handleRadio(item)}
-                      isInvalid={isInvalid}
-                    />
-                    <FormCheck.Label htmlFor={item.type}>
-                      <span className="fw-bold">{item.name}</span>
-                      <br />
-                      <span className="fs-14 text-secondary">
-                        {item.description}
-                      </span>
-                    </FormCheck.Label>
-                    <Form.Control.Feedback type="invalid">
-                      {t('msg.empty')}
-                    </Form.Control.Feedback>
-                  </FormCheck>
-                </Form.Group>
-              </div>
-            );
-          })}
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="link" onClick={() => onClose()}>
-          {t('btn_cancel')}
-        </Button>
-        <Button variant="primary" onClick={handleSubmit}>
-          {changeType !== 'normal' ? t('btn_next') : t('btn_submit')}
-        </Button>
-      </Modal.Footer>
-    </Modal>,
-  );
+  useLayoutEffect(() => {
+    root.render(
+      <Modal show={show} onHide={onClose}>
+        <Modal.Header closeButton>
+          <Modal.Title as="h5">{t('title', { type: editType })}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            {list.map((item) => {
+              if (editType === 'answer' && item.type === 'closed') {
+                return null;
+              }
+              return (
+                <div key={item?.type}>
+                  <Form.Group controlId={item.type} className="mb-3">
+                    <FormCheck>
+                      <FormCheck.Input
+                        id={item.type}
+                        type="radio"
+                        checked={changeType === item.type}
+                        onChange={() => handleRadio(item)}
+                        isInvalid={isInvalid}
+                      />
+                      <FormCheck.Label htmlFor={item.type}>
+                        <span className="fw-bold">{item.name}</span>
+                        <br />
+                        <span className="fs-14 text-secondary">
+                          {item.description}
+                        </span>
+                      </FormCheck.Label>
+                      <Form.Control.Feedback type="invalid">
+                        {t('msg.empty')}
+                      </Form.Control.Feedback>
+                    </FormCheck>
+                  </Form.Group>
+                </div>
+              );
+            })}
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="link" onClick={() => onClose()}>
+            {t('btn_cancel')}
+          </Button>
+          <Button variant="primary" onClick={handleSubmit}>
+            {changeType !== 'normal' ? t('btn_next') : t('btn_submit')}
+          </Button>
+        </Modal.Footer>
+      </Modal>,
+    );
+  });
 
   return {
     onClose,
