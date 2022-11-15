@@ -263,9 +263,8 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, tags []string, userID
 	}
 
 	if len(addTagList) > 0 {
-		err = fmt.Errorf("add a tag  does not exist")
-		TagMsgList := strings.Replace(strings.Trim(fmt.Sprint(addTagMsgList), "[]"), " ", ",", -1)
-		errors.BadRequest(reason.TagNotFound).WithMsg(TagMsgList)
+		err = errors.BadRequest(reason.TagNotFound).WithMsg(fmt.Sprintf("tag [%s] does not exist",
+			strings.Join(addTagMsgList, ",")))
 		return err
 		// todo if need add
 		// err = ts.tagRepo.AddTagList(ctx, addTagList)
