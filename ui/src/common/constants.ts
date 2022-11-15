@@ -43,7 +43,7 @@ export const ADMIN_NAV_MENUS = [
   },
   {
     name: 'contents',
-    child: [{ name: 'questions' }, { name: 'answers' }, { name: 'labels' }],
+    child: [{ name: 'questions' }, { name: 'answers' }],
   },
   {
     name: 'users',

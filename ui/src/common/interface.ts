@@ -297,7 +297,7 @@ export interface AdminSettingsLegal {
 
 export interface AdminSettingsWrite {
   recommend_tags: string;
-  required_tags: string;
+  required_tag: string;
 }
 
 /**

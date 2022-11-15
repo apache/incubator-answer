@@ -934,7 +934,7 @@ ui:
       smtp: SMTP
       branding: Branding
       legal: Legal
-      labels: Labels
+      write: Write
     dashboard:
       title: Dashboard
       welcome: Welcome to Answer Admin!
@@ -1135,32 +1135,21 @@ ui:
       page_title: Legal
       terms_of_service:
         label: Terms of Service
-        msg: Terms of service cannot be empty.
         text: "You can add terms of service content here. If you already have a document hosted elsewhere, provide the full URL here."
       privacy_policy:
         label: Privacy Policy
-        msg: Privacy policy cannot be empty.
         text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
-    labels:
-      title: Labels
-      new_label: New Label
-      name: Name
-      color: color
-      description: Description
-      action: Action
-      form:
-        title: Create New Label
-        back: Back
-        display_name:
-          label: Display Name
-        url_slug:
-          label: URL Slug
-          text: Must use the character set “a-z”, “0-9”, “+ # - .”
-        description:
-          label: Description (optional)
-        color:
-          label: Color
-
+    write:
+      page_title: Write
+      recommend_tags:
+        label: Recommend Tags
+        text: "Please input tag slug above, one tag per line."
+      required_tag:
+        label: Required Tag
+        text: "Every new question must have at least one recommend tag"
+      reserved_tags:
+        label: Reserved Tags
+        text: "Reserved tags can only be added to a post by moderator."
   form:
     empty: cannot be empty
     invalid: is invalid
