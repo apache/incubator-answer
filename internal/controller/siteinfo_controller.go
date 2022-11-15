@@ -49,8 +49,9 @@ func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
 // @Summary get site legal info
 // @Description get site legal info
 // @Tags site
+// @Param info_type query string true "legal information type" Enums(tos, privacy)
 // @Produce json
-// @Success 200 {object} handler.RespBody{data=schema.SiteGeneralResp}
+// @Success 200 {object} handler.RespBody{data=schema.GetSiteLegalInfoResp}
 // @Router /answer/api/v1/siteinfo/legal [get]
 func (sc *SiteinfoController) GetSiteLegalInfo(ctx *gin.Context) {
 	req := &schema.GetSiteLegalInfoReq{}
