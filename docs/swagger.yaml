@@ -1168,15 +1168,31 @@ definitions:
     type: object
   schema.SiteWriteReq:
     properties:
+      recommend_tags:
+        items:
+          type: string
+        type: array
       required_tag:
         type: boolean
+      reserved_tags:
+        items:
+          type: string
+        type: array
     required:
     - required_tag
     type: object
   schema.SiteWriteResp:
     properties:
+      recommend_tags:
+        items:
+          type: string
+        type: array
       required_tag:
         type: boolean
+      reserved_tags:
+        items:
+          type: string
+        type: array
     required:
     - required_tag
     type: object
@@ -1843,7 +1859,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.SiteWriteResp'
+                  $ref: '#/definitions/schema.SiteBrandingResp'
               type: object
       security:
       - ApiKeyAuth: []
@@ -1954,6 +1970,25 @@ paths:
       tags:
       - admin
   /answer/admin/api/siteinfo/write:
+    get:
+      description: get site interface
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SiteWriteResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get site interface
+      tags:
+      - admin
     put:
       description: update site write info
       parameters:

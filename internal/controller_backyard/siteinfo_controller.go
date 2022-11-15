@@ -66,7 +66,7 @@ func (sc *SiteInfoController) GetSiteBranding(ctx *gin.Context) {
 // @Tags admin
 // @Produce json
 // @Success 200 {object} handler.RespBody{data=schema.SiteWriteResp}
-// @Router /answer/admin/api/siteinfo/branding [get]
+// @Router /answer/admin/api/siteinfo/write [get]
 func (sc *SiteInfoController) GetSiteWrite(ctx *gin.Context) {
 	resp, err := sc.siteInfoService.GetSiteWrite(ctx)
 	handler.HandleResponse(ctx, err, resp)
