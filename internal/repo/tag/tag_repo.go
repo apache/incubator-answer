@@ -179,6 +179,24 @@ func (tr *tagRepo) UpdateTagSynonym(ctx context.Context, tagSlugNameList []strin
 	return
 }
 
+func (tr *tagRepo) UpdateTagsAttribute(ctx context.Context, tags []string, attribute string, value bool) (err error) {
+	bean := &entity.Tag{}
+	switch attribute {
+	case "recommend":
+		bean.Recommend = value
+	case "reserved":
+		bean.Reserved = value
+	default:
+		return
+	}
+	session := tr.data.DB.In("slug_name", tags).Cols(attribute).UseBool(attribute)
+	_, err = session.Update(bean)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // GetTagByID get tag one
 func (tr *tagRepo) GetTagByID(ctx context.Context, tagID string) (
 	tag *entity.Tag, exist bool, err error,

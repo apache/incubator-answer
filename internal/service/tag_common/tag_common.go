@@ -28,6 +28,7 @@ type TagRepo interface {
 	GetTagPage(ctx context.Context, page, pageSize int, tag *entity.Tag, queryCond string) (tagList []*entity.Tag, total int64, err error)
 	GetRecommendTagList(ctx context.Context) (tagList []*entity.Tag, err error)
 	GetReservedTagList(ctx context.Context) (tagList []*entity.Tag, err error)
+	UpdateTagsAttribute(ctx context.Context, tags []string, attribute string, value bool) (err error)
 }
 
 type TagRelRepo interface {
@@ -75,6 +76,10 @@ func (ts *TagCommonService) SetSiteWriteRecommendTag(ctx context.Context, tags [
 	if err != nil {
 		return err
 	}
+	err = ts.SetTagsAttribute(ctx, tags, "recommend", true)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -92,10 +97,34 @@ func (ts *TagCommonService) SetSiteWriteReservedTag(ctx context.Context, tags []
 	if err != nil {
 		return err
 	}
+	err = ts.SetTagsAttribute(ctx, tags, "reserved", true)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
-//
+// SetTagsAttribute
+func (ts *TagCommonService) SetTagsAttribute(ctx context.Context, tags []string, attribute string, value bool) (err error) {
+	var tagslist []string
+	switch attribute {
+	case "recommend":
+		tagslist, err = ts.GetSiteWriteRecommendTag(ctx)
+	case "reserved":
+		tagslist, err = ts.GetSiteWriteReservedTag(ctx)
+	default:
+		return
+	}
+	err = ts.tagRepo.UpdateTagsAttribute(ctx, tagslist, attribute, false)
+	if err != nil {
+		return err
+	}
+	err = ts.tagRepo.UpdateTagsAttribute(ctx, tags, attribute, value)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
 // GetTagListByName
 func (ts *TagCommonService) GetTagListByName(ctx context.Context, tagName string) (tagInfo *entity.Tag, exist bool, err error) {
