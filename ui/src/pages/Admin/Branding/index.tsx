@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { JSONSchema, SchemaForm, UISchema } from '@/components';
 import { FormDataType } from '@/common/interface';
 import { brandSetting, getBrandSetting } from '@/services';
-import { interfaceStore } from '@/stores';
+import { brandingStore } from '@/stores';
 import { useToast } from '@/hooks';
 
 const uploadType = 'branding';
@@ -12,12 +12,12 @@ const Index: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.branding',
   });
-  const { interface: storeInterface, updateLogo } = interfaceStore();
+  const { branding: brandingInfo, update } = brandingStore();
   const Toast = useToast();
 
   const [formData, setFormData] = useState<FormDataType>({
     logo: {
-      value: storeInterface.logo,
+      value: brandingInfo.logo,
       isInvalid: false,
       errorMsg: '',
     },
@@ -86,6 +86,7 @@ const Index: FC = () => {
     favicon: {
       'ui:widget': 'upload',
       'ui:options': {
+        acceptType: ',image/x-icon,image/vnd.microsoft.icon',
         imageType: uploadType,
       },
     },
@@ -105,7 +106,7 @@ const Index: FC = () => {
     brandSetting(params)
       .then((res) => {
         console.log(res);
-        updateLogo(formData.logo.value);
+        update(params);
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',

@@ -8,6 +8,7 @@ interface IProps {
   type: Type.UploadType;
   className?: string;
   children?: React.ReactNode;
+  acceptType?: string;
   uploadCallback: (img: string) => void;
 }
 
@@ -15,12 +16,14 @@ const Index: React.FC<IProps> = ({
   type,
   uploadCallback,
   children,
+  acceptType = '',
   className,
 }) => {
   const { t } = useTranslation();
   const [status, setStatus] = useState(false);
 
   const onChange = (e: any) => {
+    console.log('uploading', e);
     if (status) {
       return;
     }
@@ -34,6 +37,7 @@ const Index: React.FC<IProps> = ({
       //   return;
       // }
       setStatus(true);
+      console.log('uploading', e.target.files);
       uploadImage({ file: e.target.files[0], type })
         .then((res) => {
           uploadCallback(res);
@@ -50,7 +54,7 @@ const Index: React.FC<IProps> = ({
       <input
         type="file"
         className="d-none"
-        accept="image/jpeg,image/jpg,image/png,image/webp"
+        accept={`image/jpeg,image/jpg,image/png,image/webp${acceptType}`}
         onChange={onChange}
       />
     </label>

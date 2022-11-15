@@ -55,6 +55,7 @@ export interface UISchema {
       validator?: (value) => boolean;
       textRender?: () => React.ReactElement;
       imageType?: Type.UploadType;
+      acceptType?: string;
     };
   };
 }
@@ -280,6 +281,7 @@ const SchemaForm: FC<IProps> = ({
               <Form.Label>{title}</Form.Label>
               <BrandUpload
                 type={options.imageType || 'avatar'}
+                acceptType={options.acceptType || ''}
                 value={formData[key]?.value}
                 onChange={(value) => handleUploadChange(key, value)}
               />

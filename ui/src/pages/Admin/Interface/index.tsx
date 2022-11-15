@@ -1,7 +1,5 @@
-/* eslint-disable react/no-unstable-nested-components */
-import React, { FC, FormEvent, useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
-import { Trans, useTranslation } from 'react-i18next';
+import { FC, FormEvent, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { useToast } from '@/hooks';
 import {
@@ -36,11 +34,6 @@ const Interface: FC = () => {
   const schema: JSONSchema = {
     title: t('page_title'),
     properties: {
-      logo: {
-        type: 'string',
-        title: t('logo.label'),
-        description: t('logo.text'),
-      },
       theme: {
         type: 'string',
         title: t('theme.label'),
@@ -64,11 +57,6 @@ const Interface: FC = () => {
   };
 
   const [formData, setFormData] = useState<FormDataType>({
-    logo: {
-      value: setting?.logo || storeInterface.logo,
-      isInvalid: false,
-      errorMsg: '',
-    },
     theme: {
       value: setting?.theme || storeInterface.theme,
       isInvalid: false,
@@ -86,43 +74,20 @@ const Interface: FC = () => {
     },
   });
 
-  const onChange = (fieldName, fieldValue) => {
-    if (!formData[fieldName]) {
-      return;
-    }
-    const fieldData: FormDataType = {
-      [fieldName]: {
-        value: fieldValue,
-        isInvalid: false,
-        errorMsg: '',
-      },
-    };
-    setFormData({ ...formData, ...fieldData });
-  };
+  // const onChange = (fieldName, fieldValue) => {
+  //   if (!formData[fieldName]) {
+  //     return;
+  //   }
+  //   const fieldData: FormDataType = {
+  //     [fieldName]: {
+  //       value: fieldValue,
+  //       isInvalid: false,
+  //       errorMsg: '',
+  //     },
+  //   };
+  //   setFormData({ ...formData, ...fieldData });
+  // };
   const uiSchema: UISchema = {
-    logo: {
-      'ui:widget': 'upload',
-      'ui:options': {
-        textRender: () => {
-          return (
-            <Trans i18nKey="admin.interface.logo.text">
-              You can upload your image or
-              <Button
-                variant="link"
-                size="sm"
-                className="p-0 mx-1"
-                onClick={(evt) => {
-                  evt.preventDefault();
-                  onChange('logo', '');
-                }}>
-                reset it
-              </Button>
-              to the site title text.
-            </Trans>
-          );
-        },
-      },
-    },
     theme: {
       'ui:widget': 'select',
     },
@@ -181,7 +146,6 @@ const Interface: FC = () => {
       return;
     }
     const reqParams: AdminSettingsInterface = {
-      logo: formData.logo.value,
       theme: formData.theme.value,
       language: formData.language.value,
       time_zone: formData.time_zone.value,
@@ -189,13 +153,13 @@ const Interface: FC = () => {
 
     updateInterfaceSetting(reqParams)
       .then(() => {
+        interfaceStore.getState().update(reqParams);
+        setupAppLanguage();
+        setupAppTimeZone();
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
-        interfaceStore.getState().update(reqParams);
-        setupAppLanguage();
-        setupAppTimeZone();
       })
       .catch((err) => {
         if (err.isError && err.key) {
