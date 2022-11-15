@@ -89,6 +89,10 @@ export const getAdminLanguageOptions = () => {
   return request.get<Type.LangsType[]>(apiUrl);
 };
 
+export const getBrandSetting = () => {
+  return request.get('/answer/admin/api/siteinfo/branding');
+};
+
 export const brandSetting = (params: Type.BrandReqParams) => {
   return request.put('/answer/admin/api/siteinfo/branding', params);
 };
