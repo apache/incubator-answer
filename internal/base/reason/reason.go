@@ -44,4 +44,5 @@ const (
 	InstallConfigFailed          = "error.install.create_config_failed"
 	SiteInfoNotFound             = "error.site_info.not_found"
 	UploadFileSourceUnsupported  = "error.upload.source_unsupported"
+	RecommendTagNotExist         = "error.tag.recommend_tag_not_found"
 )

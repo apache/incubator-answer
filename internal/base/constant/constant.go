@@ -57,3 +57,4 @@ const (
 	SiteTypeWrite     = "write"
 	SiteTypeLegal     = "legal"
 )
+

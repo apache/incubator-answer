@@ -74,6 +74,8 @@ backend:
     tag:
       not_found:
         other: "Tag not found."
+      recommend_tag_not_found:
+        other: "Recommend Tag is not exist."
     theme:
       not_found:
         other: "Theme not found."

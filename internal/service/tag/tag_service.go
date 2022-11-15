@@ -3,7 +3,9 @@ package tag
 import (
 	"context"
 	"encoding/json"
+
 	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/pkg/htmltext"
 
 	"github.com/answerdev/answer/internal/base/pager"
@@ -24,28 +26,35 @@ type TagService struct {
 	tagRepo         tagcommon.TagRepo
 	revisionService *revision_common.RevisionService
 	followCommon    activity_common.FollowRepo
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewTagService new tag service
 func NewTagService(
 	tagRepo tagcommon.TagRepo,
 	revisionService *revision_common.RevisionService,
-	followCommon activity_common.FollowRepo) *TagService {
+	followCommon activity_common.FollowRepo,
+	siteInfoService *siteinfo_common.SiteInfoCommonService) *TagService {
 	return &TagService{
 		tagRepo:         tagRepo,
 		revisionService: revisionService,
 		followCommon:    followCommon,
+		siteInfoService: siteInfoService,
 	}
 }
 
 // SearchTagLike get tag list all
-func (ts *TagService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []string, err error) {
-	tags, err := ts.tagRepo.GetTagListByName(ctx, req.Tag, 5)
+func (ts *TagService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []schema.SearchTagLikeResp, err error) {
+	tags, err := ts.tagRepo.GetTagListByName(ctx, req.Tag, 5, req.IsAdmin)
 	if err != nil {
 		return
 	}
 	for _, tag := range tags {
-		resp = append(resp, tag.SlugName)
+		item := schema.SearchTagLikeResp{}
+		item.SlugName = tag.SlugName
+		item.Recommend = tag.Recommend
+		item.Reserved = tag.Reserved
+		resp = append(resp, item)
 	}
 	return resp, nil
 }
