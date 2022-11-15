@@ -83,7 +83,7 @@ func (tr *tagRepo) GetTagListByName(ctx context.Context, name string, limit int,
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	session.Limit(limit).Asc("slug_name")
 	if !hasReserved {
-		cond.Recommend = false
+		cond.Reserved = false
 		session.UseBool("recommend", "reserved")
 	} else {
 		session.UseBool("recommend")
