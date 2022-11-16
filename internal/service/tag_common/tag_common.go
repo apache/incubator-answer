@@ -215,6 +215,8 @@ func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []s
 				SlugName:        tagInfo.SlugName,
 				DisplayName:     tagInfo.DisplayName,
 				MainTagSlugName: tagInfo.MainTagSlugName,
+				Recommend:       tagInfo.Recommend,
+				Reserved:        tagInfo.Reserved,
 			}
 			objectIDTagMap[item.ObjectID] = append(objectIDTagMap[item.ObjectID], t)
 		}
