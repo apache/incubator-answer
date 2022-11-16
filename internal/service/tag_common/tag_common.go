@@ -143,6 +143,13 @@ func (ts *TagCommonService) GetTagListByNames(ctx context.Context, tagNames []st
 }
 
 func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.TagItem) (bool, error) {
+	taginfo, err := ts.siteInfoService.GetSiteWrite(ctx)
+	if err != nil {
+		return false, err
+	}
+	if !taginfo.RequiredTag {
+		return true, nil
+	}
 	tagNames := make([]string, 0)
 	for _, item := range tags {
 		tagNames = append(tagNames, item.SlugName)
