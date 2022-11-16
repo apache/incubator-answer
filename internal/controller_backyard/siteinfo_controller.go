@@ -155,8 +155,8 @@ func (sc *SiteInfoController) UpdateSiteWrite(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	err := sc.siteInfoService.SaveSiteWrite(ctx, req)
-	handler.HandleResponse(ctx, err, nil)
+	resp, err := sc.siteInfoService.SaveSiteWrite(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
 // UpdateSiteLegal update site legal info

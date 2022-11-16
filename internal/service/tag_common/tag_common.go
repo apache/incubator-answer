@@ -73,16 +73,16 @@ func (ts *TagCommonService) GetSiteWriteRecommendTag(ctx context.Context) (tags 
 	return tags, nil
 }
 
-func (ts *TagCommonService) SetSiteWriteRecommendTag(ctx context.Context, tags []string, required bool, userID string) (err error) {
+func (ts *TagCommonService) SetSiteWriteRecommendTag(ctx context.Context, tags []string, required bool, userID string) (msg string, err error) {
 	err = ts.UpdateTag(ctx, tags, userID)
 	if err != nil {
-		return err
+		return err.Error(), err
 	}
 	err = ts.SetTagsAttribute(ctx, tags, "recommend", true)
 	if err != nil {
-		return err
+		return "", err
 	}
-	return nil
+	return "", nil
 }
 
 func (ts *TagCommonService) GetSiteWriteReservedTag(ctx context.Context) (tags []string, err error) {
@@ -94,16 +94,16 @@ func (ts *TagCommonService) GetSiteWriteReservedTag(ctx context.Context) (tags [
 	return tags, nil
 }
 
-func (ts *TagCommonService) SetSiteWriteReservedTag(ctx context.Context, tags []string, userID string) (err error) {
+func (ts *TagCommonService) SetSiteWriteReservedTag(ctx context.Context, tags []string, userID string) (msg string, err error) {
 	err = ts.UpdateTag(ctx, tags, userID)
 	if err != nil {
-		return err
+		return err.Error(), err
 	}
 	err = ts.SetTagsAttribute(ctx, tags, "reserved", true)
 	if err != nil {
-		return err
+		return "", err
 	}
-	return nil
+	return "", nil
 }
 
 // SetTagsAttribute
@@ -215,6 +215,8 @@ func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []s
 				SlugName:        tagInfo.SlugName,
 				DisplayName:     tagInfo.DisplayName,
 				MainTagSlugName: tagInfo.MainTagSlugName,
+				Recommend:       tagInfo.Recommend,
+				Reserved:        tagInfo.Reserved,
 			}
 			objectIDTagMap[item.ObjectID] = append(objectIDTagMap[item.ObjectID], t)
 		}

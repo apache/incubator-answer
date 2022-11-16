@@ -51,7 +51,7 @@ func (tr *tagRepo) GetTagListByIDs(ctx context.Context, ids []string) (tagList [
 	tagList = make([]*entity.Tag, 0)
 	session := tr.data.DB.In("id", ids)
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
-	err = session.Find(&tagList)
+	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -88,7 +88,7 @@ func (tr *tagRepo) GetTagListByName(ctx context.Context, name string, limit int,
 	} else {
 		session.UseBool("recommend")
 	}
-	err = session.Find(&tagList, cond)
+	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList, cond)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -130,7 +130,7 @@ func (tr *tagRepo) GetTagListByNames(ctx context.Context, names []string) (tagLi
 	tagList = make([]*entity.Tag, 0)
 	session := tr.data.DB.In("slug_name", names)
 	// session.Where(builder.Eq{"status": entity.TagStatusAvailable})
-	err = session.Find(&tagList)
+	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

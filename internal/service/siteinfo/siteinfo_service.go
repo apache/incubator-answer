@@ -7,6 +7,7 @@ import (
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/export"
@@ -177,15 +178,27 @@ func (s *SiteInfoService) SaveSiteBranding(ctx context.Context, req *schema.Site
 }
 
 // SaveSiteWrite save site configuration about write
-func (s *SiteInfoService) SaveSiteWrite(ctx context.Context, req *schema.SiteWriteReq) (err error) {
-	err = s.tagCommonService.SetSiteWriteRecommendTag(ctx, req.RecommendTags, req.RequiredTag, req.UserID)
+func (s *SiteInfoService) SaveSiteWrite(ctx context.Context, req *schema.SiteWriteReq) (resp interface{}, err error) {
+	errData, err := s.tagCommonService.SetSiteWriteRecommendTag(ctx, req.RecommendTags, req.RequiredTag, req.UserID)
 	if err != nil {
-		return err
+		if len(errData) > 0 {
+			resp = &validator.ErrorField{
+				Key:   "recommend_tags",
+				Value: errData,
+			}
+		}
+		return resp, err
 	}
 
-	err = s.tagCommonService.SetSiteWriteReservedTag(ctx, req.ReservedTags, req.UserID)
+	errData, err = s.tagCommonService.SetSiteWriteReservedTag(ctx, req.ReservedTags, req.UserID)
 	if err != nil {
-		return err
+		if len(errData) > 0 {
+			resp = &validator.ErrorField{
+				Key:   "reserved_tags",
+				Value: errData,
+			}
+		}
+		return resp, err
 	}
 
 	content, _ := json.Marshal(req)
@@ -194,7 +207,7 @@ func (s *SiteInfoService) SaveSiteWrite(ctx context.Context, req *schema.SiteWri
 		Content: string(content),
 		Status:  1,
 	}
-	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeWrite, data)
+	return nil, s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeWrite, data)
 }
 
 // SaveSiteLegal save site legal configuration
