@@ -1194,8 +1194,6 @@ definitions:
         items:
           type: string
         type: array
-    required:
-    - required_tag
     type: object
   schema.SiteWriteResp:
     properties:
@@ -1209,8 +1207,6 @@ definitions:
         items:
           type: string
         type: array
-    required:
-    - required_tag
     type: object
   schema.TagItem:
     properties:

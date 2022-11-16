@@ -5897,9 +5897,6 @@ const docTemplate = `{
         },
         "schema.SiteWriteReq": {
             "type": "object",
-            "required": [
-                "required_tag"
-            ],
             "properties": {
                 "recommend_tags": {
                     "type": "array",
@@ -5920,9 +5917,6 @@ const docTemplate = `{
         },
         "schema.SiteWriteResp": {
             "type": "object",
-            "required": [
-                "required_tag"
-            ],
             "properties": {
                 "recommend_tags": {
                     "type": "array",

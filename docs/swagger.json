@@ -5885,9 +5885,6 @@
         },
         "schema.SiteWriteReq": {
             "type": "object",
-            "required": [
-                "required_tag"
-            ],
             "properties": {
                 "recommend_tags": {
                     "type": "array",
@@ -5908,9 +5905,6 @@
         },
         "schema.SiteWriteResp": {
             "type": "object",
-            "required": [
-                "required_tag"
-            ],
             "properties": {
                 "recommend_tags": {
                     "type": "array",
