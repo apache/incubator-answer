@@ -244,6 +244,10 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, tags []string, userID
 
 	tagInDbMapping := make(map[string]*entity.Tag)
 	for _, tag := range tagListInDb {
+		if tag.MainTagID != 0 {
+			err = errors.BadRequest(reason.TagNotContainSynonym).WithMsg(fmt.Sprintf("tag name:%s", tag.SlugName))
+			return err
+		}
 		tagInDbMapping[tag.SlugName] = tag
 		thisTagIDList = append(thisTagIDList, tag.ID)
 	}
