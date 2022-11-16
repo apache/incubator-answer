@@ -17,7 +17,7 @@ const formPaths = [
   'write',
 ];
 
-const Dashboard: FC = () => {
+const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
   const { pathname } = useLocation();
   return (
@@ -27,7 +27,7 @@ const Dashboard: FC = () => {
       <Container className="admin-container">
         <Row>
           <Col lg={2}>
-            <AccordionNav menus={ADMIN_NAV_MENUS} />
+            <AccordionNav menus={ADMIN_NAV_MENUS} path="/admin/" />
           </Col>
           <Col lg={formPaths.find((v) => pathname.includes(v)) ? 6 : 10}>
             <Outlet />
@@ -38,4 +38,4 @@ const Dashboard: FC = () => {
   );
 };
 
-export default Dashboard;
+export default Index;

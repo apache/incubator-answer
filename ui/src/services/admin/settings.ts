@@ -71,19 +71,6 @@ export const updateSmtpSetting = (params: Type.AdminSettingsSmtp) => {
   return request.put(apiUrl, params);
 };
 
-export const useDashBoard = () => {
-  const apiUrl = `/answer/admin/api/dashboard`;
-  const { data, error } = useSWR<Type.AdminDashboard, Error>(
-    [apiUrl],
-    request.instance.get,
-  );
-  return {
-    data,
-    isLoading: !data && !error,
-    error,
-  };
-};
-
 export const getAdminLanguageOptions = () => {
   const apiUrl = `/answer/admin/api/language/options`;
   return request.get<Type.LangsType[]>(apiUrl);
@@ -95,4 +82,14 @@ export const getBrandSetting = () => {
 
 export const brandSetting = (params: Type.BrandReqParams) => {
   return request.put('/answer/admin/api/siteinfo/branding', params);
+};
+
+export const getLegalSetting = () => {
+  return request.get<Type.AdminSettingsLegal>(
+    '/answer/admin/api/siteinfo/legal',
+  );
+};
+
+export const putLegalSetting = (params: Type.AdminSettingsLegal) => {
+  return request.put('/answer/admin/api/siteinfo/legal', params);
 };

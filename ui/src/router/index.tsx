@@ -10,7 +10,7 @@ const routes: RouteObject[] = [];
 
 const routeWrapper = (routeNodes: RouteNode[], root: RouteObject[]) => {
   routeNodes.forEach((rn) => {
-    if (rn.path === '/') {
+    if (rn.page === 'pages/Layout') {
       rn.element = <Layout />;
       rn.errorElement = <ErrorBoundary />;
     } else {
@@ -31,7 +31,7 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteObject[]) => {
       const refLoader = rn.loader;
       const refGuard = rn.guard;
       rn.loader = async (args) => {
-        const gr = await refGuard();
+        const gr = await refGuard(args);
         if (gr?.redirect && floppyNavigation.differentCurrent(gr.redirect)) {
           return redirect(gr.redirect);
         }
