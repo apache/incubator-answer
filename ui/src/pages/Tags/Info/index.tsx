@@ -159,6 +159,8 @@ const TagIntroduction = () => {
                           slug_name: tagName || '',
                           main_tag_slug_name: '',
                           display_name: '',
+                          recommend: false,
+                          reserved: false,
                         }}
                       />
                     </div>

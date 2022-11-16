@@ -90,7 +90,21 @@ const SchemaForm: FC<IProps> = ({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const data = { ...formData, [name]: { ...formData[name], value } };
+    const data = {
+      ...formData,
+      [name]: { ...formData[name], value, isInvalid: false },
+    };
+    if (onChange instanceof Function) {
+      onChange(data);
+    }
+  };
+
+  const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    const data = {
+      ...formData,
+      [name]: { ...formData[name], value: checked, isInvalid: false },
+    };
     if (onChange instanceof Function) {
       onChange(data);
     }
@@ -155,6 +169,7 @@ const SchemaForm: FC<IProps> = ({
     const errors = requiredValidator();
     if (errors.length > 0) {
       formData = errors.reduce((acc, cur) => {
+        console.log('schema.properties[cur]', cur);
         acc[cur] = {
           ...formData[cur],
           isInvalid: true,
@@ -262,17 +277,21 @@ const SchemaForm: FC<IProps> = ({
         }
 
         if (widget === 'switch') {
+          console.log(formData[key]?.value, 'switch=====');
           return (
             <Form.Group key={title} className="mb-3" controlId={key}>
               <Form.Label>{title}</Form.Label>
               <Form.Check
                 required
                 id={title}
+                name={key}
                 type="switch"
                 label={title}
+                checked={formData[key]?.value}
                 feedback={formData[key]?.errorMsg}
                 feedbackType="invalid"
                 isInvalid={formData[key].isInvalid}
+                onChange={handleSwitchChange}
               />
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}

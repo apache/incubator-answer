@@ -24,6 +24,8 @@ export interface ReportParams {
 export interface TagBase {
   display_name: string;
   slug_name: string;
+  recommend: boolean;
+  reserved: boolean;
 }
 
 export interface Tag extends TagBase {
@@ -303,8 +305,9 @@ export interface AdminSettingsLegal {
 }
 
 export interface AdminSettingsWrite {
-  recommend_tags: string;
+  recommend_tags: string[];
   required_tag: string;
+  reserved_tags: string[];
 }
 
 /**

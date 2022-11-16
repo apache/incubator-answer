@@ -49,7 +49,7 @@ class Request {
       },
       (error) => {
         const { status, data: respData, msg: respMsg } = error.response || {};
-        const { data, msg = '' } = respData;
+        const { data = {}, msg = '' } = respData || {};
         if (status === 400) {
           // show error message
           if (data instanceof Object && data.err_type) {
