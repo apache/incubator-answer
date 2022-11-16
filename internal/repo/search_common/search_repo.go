@@ -3,9 +3,10 @@ package search_common
 import (
 	"context"
 	"fmt"
-	"github.com/answerdev/answer/pkg/htmltext"
 	"strings"
 	"time"
+
+	"github.com/answerdev/answer/pkg/htmltext"
 
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -390,11 +391,12 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 
 		// get tags
 		err = sr.data.DB.
-			Select("`display_name`,`slug_name`,`main_tag_slug_name`").
+			Select("`display_name`,`slug_name`,`main_tag_slug_name`,`recommend`,`reserved`").
 			Table("tag").
 			Join("INNER", "tag_rel", "tag.id = tag_rel.tag_id").
 			Where(builder.Eq{"tag_rel.object_id": r["question_id"]}).
 			And(builder.Eq{"tag_rel.status": entity.TagRelStatusAvailable}).
+			UseBool("recommend", "reserved").
 			Find(&tagsEntity)
 
 		if err != nil {
