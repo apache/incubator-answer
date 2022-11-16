@@ -3,6 +3,7 @@ import loggedUserInfoStore from './userInfo';
 import globalStore from './global';
 import siteInfoStore from './siteInfo';
 import interfaceStore from './interface';
+import brandingStore from './branding';
 
 export {
   toastStore,
@@ -10,4 +11,5 @@ export {
   globalStore,
   siteInfoStore,
   interfaceStore,
+  brandingStore,
 };

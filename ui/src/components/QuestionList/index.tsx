@@ -158,14 +158,7 @@ const QuestionList: FC<Props> = ({ source }) => {
                 {Array.isArray(li.tags)
                   ? li.tags.map((tag) => {
                       return (
-                        <Tag
-                          key={tag.slug_name}
-                          className="m-1"
-                          href={`/tags/${
-                            tag.main_tag_slug_name || tag.slug_name
-                          }`}>
-                          {tag.slug_name}
-                        </Tag>
+                        <Tag key={tag.slug_name} className="m-1" data={tag} />
                       );
                     })
                   : null}

@@ -123,7 +123,7 @@ const Ask = () => {
         isInvalid: true,
         errorMsg: t('form.fields.title.msg.empty'),
       };
-    } else if ([...title.value].length > 150) {
+    } else if (Array.from(title.value).length > 150) {
       bol = false;
       formData.title = {
         value: title.value,

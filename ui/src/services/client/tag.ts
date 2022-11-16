@@ -2,7 +2,7 @@ import useSWR from 'swr';
 
 import request from '@/utils/request';
 import type * as Type from '@/common/interface';
-import { tryLoggedAndActicevated } from '@/utils/guard';
+import { tryLoggedAndActivated } from '@/utils/guard';
 
 export const deleteTag = (id) => {
   return request.delete('/answer/api/v1/tag', {
@@ -24,7 +24,7 @@ export const saveSynonymsTags = (params) => {
 
 export const useFollowingTags = () => {
   let apiUrl = '';
-  if (tryLoggedAndActicevated().ok) {
+  if (tryLoggedAndActivated().ok) {
     apiUrl = '/answer/api/v1/tags/following';
   }
   const { data, error, mutate } = useSWR<any[]>(apiUrl, request.instance.get);

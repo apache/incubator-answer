@@ -5,3 +5,4 @@ export * from './question';
 export * from './search';
 export * from './tag';
 export * from './settings';
+export * from './legal';

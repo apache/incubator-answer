@@ -1,17 +1,16 @@
 import React, { FormEvent, useState } from 'react';
 import { Container, Col, Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { loggedUserInfoStore } from '@/stores';
-import { getQueryString } from '@/utils';
 import type { FormDataType } from '@/common/interface';
 import { replacementPassword } from '@/services';
 import { PageTitle } from '@/components';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'password_reset' });
-
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
   const clearUser = loggedUserInfoStore((state) => state.clear);
   const [formData, setFormData] = useState<FormDataType>({
@@ -91,7 +90,7 @@ const Index: React.FC = () => {
     if (checkValidated() === false) {
       return;
     }
-    const code = getQueryString('code');
+    const code = searchParams.get('code');
     if (!code) {
       console.error('code is required');
       return;

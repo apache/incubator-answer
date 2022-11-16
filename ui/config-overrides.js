@@ -8,12 +8,8 @@ const i18nPath = path.resolve(__dirname, "../i18n");
 
 module.exports = {
   webpack: function(config, env) {
-    if (env === "production") {
-      config.output.publicPath = process.env.REACT_APP_PUBLIC_PATH;
-    }
-
     addWebpackAlias({
-      ["@"]: path.resolve(__dirname, "src"),
+      "@": path.resolve(__dirname, "src"),
       "@i18n": i18nPath
     })(config);
 
@@ -34,16 +30,16 @@ module.exports = {
     return function(proxy, allowedHost) {
       const config = configFunction(proxy, allowedHost);
       config.proxy = {
-        "/answer": {
-          target: "http://10.0.10.98:2060",
+        '/answer': {
+          target: process.env.REACT_APP_API_URL,
           changeOrigin: true,
-          secure: false
+          secure: false,
         },
-        "/installation": {
-          target: "http://10.0.10.98:2060",
+        '/installation': {
+          target: process.env.REACT_APP_API_URL,
           changeOrigin: true,
-          secure: false
-        }
+          secure: false,
+        },
       };
       return config;
     };

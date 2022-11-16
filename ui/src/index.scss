@@ -2,6 +2,10 @@
 @import '~bootstrap/scss/bootstrap';
 @import '~bootstrap-icons';
 
+.bg-gray-300 {
+  background-color: $gray-300;
+}
+
 .focus {
   color: $input-focus-color !important;
   background-color: $input-focus-bg !important;
@@ -65,8 +69,29 @@ a {
   padding: 1px 0.5rem 2px;
   color: $blue-700;
   height: 24px;
+  border: 1px solid rgba($blue-100, 0.5);
   &:hover {
     background: rgba($blue-100, 1);
+  }
+}
+
+.badge-tag-required {
+  background: rgba($gray-200, 0.5);
+  color: $gray-700;
+  border: 1px solid $gray-400;
+  &:hover {
+    color: $gray-700;
+    background: rgba($gray-400, 1);
+  }
+}
+
+.badge-tag-reserved {
+  background: rgba($orange-100, 0.5);
+  color: $orange-700;
+  border: 1px solid $orange-400;
+  &:hover {
+    color: $orange-700;
+    background: rgba($orange-400, 1);
   }
 }
 
@@ -143,6 +168,7 @@ a {
 
 .fit-content {
   height: fit-content;
+  width: fit-content;
   flex: none;
 }
 
@@ -209,4 +235,17 @@ a {
       margin-bottom: 0;
     }
   }
+}
+
+.upload-img-wrap {
+  flex-grow: 1;
+  height: 128px;
+}
+.badge-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  padding: 1px 0.5rem 2px;
+  height: 24px;
 }

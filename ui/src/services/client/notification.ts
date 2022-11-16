@@ -3,7 +3,7 @@ import qs from 'qs';
 
 import request from '@/utils/request';
 import type * as Type from '@/common/interface';
-import { tryLoggedAndActicevated } from '@/utils/guard';
+import { tryLoggedAndActivated } from '@/utils/guard';
 
 export const useQueryNotifications = (params) => {
   const apiUrl = `/answer/api/v1/notification/page?${qs.stringify(params, {
@@ -33,7 +33,7 @@ export const useQueryNotificationStatus = () => {
   const apiUrl = '/answer/api/v1/notification/status';
 
   return useSWR<{ inbox: number; achievement: number }>(
-    tryLoggedAndActicevated().ok ? apiUrl : null,
+    tryLoggedAndActivated().ok ? apiUrl : null,
     request.instance.get,
     {
       refreshInterval: 3000,
