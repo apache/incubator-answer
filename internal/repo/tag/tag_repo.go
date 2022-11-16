@@ -128,7 +128,7 @@ func (tr *tagRepo) GetReservedTagList(ctx context.Context) (tagList []*entity.Ta
 // GetTagListByNames get tag list all like name
 func (tr *tagRepo) GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error) {
 	tagList = make([]*entity.Tag, 0)
-	session := tr.data.DB.In("slug_name", names)
+	session := tr.data.DB.In("slug_name", names).UseBool("recommend", "reserved")
 	// session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList)
 	if err != nil {

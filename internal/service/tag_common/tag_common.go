@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/answerdev/answer/internal/base/reason"
@@ -220,6 +221,14 @@ func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []s
 			}
 			objectIDTagMap[item.ObjectID] = append(objectIDTagMap[item.ObjectID], t)
 		}
+	}
+	for _, taglist := range objectIDTagMap {
+		sort.SliceStable(taglist, func(i, j int) bool {
+			return taglist[i].Reserved
+		})
+		sort.SliceStable(taglist, func(i, j int) bool {
+			return taglist[i].Recommend
+		})
 	}
 	return objectIDTagMap, nil
 }
