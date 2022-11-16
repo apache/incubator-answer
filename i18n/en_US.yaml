@@ -1131,6 +1131,20 @@ ui:
         "no": "No"
     branding:
       page_title: Branding
+      logo:
+        label: Logo
+        msg: Logo cannot be empty.
+        text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
+      mobile_logo:
+        label: Mobile Logo (optional)
+        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the “logo” setting will be used.
+      square_icon:
+        label: Square Icon
+        msg: Square icon cannot be empty.
+        text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
+      favicon:
+        label: Favicon (optional)
+        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, “square icon” will be used.
     legal:
       page_title: Legal
       terms_of_service:
