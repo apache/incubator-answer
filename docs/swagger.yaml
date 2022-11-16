@@ -368,6 +368,10 @@ definitions:
         description: if main tag slug name is not empty, this tag is synonymous with
           the main tag
         type: string
+      recommend:
+        type: boolean
+      reserved:
+        type: boolean
       slug_name:
         description: slug name
         type: string
@@ -570,6 +574,10 @@ definitions:
       question_count:
         description: question amount
         type: integer
+      recommend:
+        type: boolean
+      reserved:
+        type: boolean
       slug_name:
         description: slug_name
         type: string
@@ -615,6 +623,10 @@ definitions:
       question_count:
         description: question amount
         type: integer
+      recommend:
+        type: boolean
+      reserved:
+        type: boolean
       slug_name:
         description: slug name
         type: string
@@ -634,6 +646,10 @@ definitions:
         description: if main tag slug name is not empty, this tag is synonymous with
           the main tag
         type: string
+      recommend:
+        type: boolean
+      reserved:
+        type: boolean
       slug_name:
         description: slug name
         type: string
@@ -1222,6 +1238,8 @@ definitions:
           the main tag
         type: string
       recommend:
+        type: boolean
+      reserved:
         type: boolean
       slug_name:
         type: string

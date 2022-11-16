@@ -4776,6 +4776,12 @@ const docTemplate = `{
                     "description": "if main tag slug name is not empty, this tag is synonymous with the main tag",
                     "type": "string"
                 },
+                "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
+                    "type": "boolean"
+                },
                 "slug_name": {
                     "description": "slug name",
                     "type": "string"
@@ -5054,6 +5060,12 @@ const docTemplate = `{
                     "description": "question amount",
                     "type": "integer"
                 },
+                "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
+                    "type": "boolean"
+                },
                 "slug_name": {
                     "description": "slug_name",
                     "type": "string"
@@ -5114,6 +5126,12 @@ const docTemplate = `{
                     "description": "question amount",
                     "type": "integer"
                 },
+                "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
+                    "type": "boolean"
+                },
                 "slug_name": {
                     "description": "slug name",
                     "type": "string"
@@ -5138,6 +5156,12 @@ const docTemplate = `{
                 "main_tag_slug_name": {
                     "description": "if main tag slug name is not empty, this tag is synonymous with the main tag",
                     "type": "string"
+                },
+                "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
+                    "type": "boolean"
                 },
                 "slug_name": {
                     "description": "slug name",
@@ -5951,6 +5975,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
                     "type": "boolean"
                 },
                 "slug_name": {

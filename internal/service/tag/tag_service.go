@@ -157,6 +157,8 @@ func (ts *TagService) GetTagInfo(ctx context.Context, req *schema.GetTagInfoReq)
 	resp.ParsedText = tagInfo.ParsedText
 	resp.FollowCount = tagInfo.FollowCount
 	resp.QuestionCount = tagInfo.QuestionCount
+	resp.Recommend = tagInfo.Recommend
+	resp.Reserved = tagInfo.Reserved
 	resp.IsFollower = ts.checkTagIsFollow(ctx, req.UserID, tagInfo.ID)
 	resp.MemberActions = permission.GetTagPermission(req.UserID, req.UserID)
 	resp.GetExcerpt()
@@ -183,6 +185,8 @@ func (ts *TagService) GetFollowingTags(ctx context.Context, userID string) (
 			TagID:       t.ID,
 			SlugName:    t.SlugName,
 			DisplayName: t.DisplayName,
+			Recommend:   t.Recommend,
+			Reserved:    t.Reserved,
 		}
 		if t.MainTagID > 0 {
 			mainTag, exist, err := ts.tagRepo.GetTagByID(ctx, converter.IntToString(t.MainTagID))
@@ -239,6 +243,8 @@ func (ts *TagService) GetTagSynonyms(ctx context.Context, req *schema.GetTagSyno
 			SlugName:        t.SlugName,
 			DisplayName:     t.DisplayName,
 			MainTagSlugName: mainTagSlugName,
+			Recommend:       t.Recommend,
+			Reserved:        t.Reserved,
 		})
 	}
 	return
@@ -364,6 +370,8 @@ func (ts *TagService) GetTagWithPage(ctx context.Context, req *schema.GetTagWith
 			IsFollower:    ts.checkTagIsFollow(ctx, req.UserID, tag.ID),
 			CreatedAt:     tag.CreatedAt.Unix(),
 			UpdatedAt:     tag.UpdatedAt.Unix(),
+			Recommend:     tag.Recommend,
+			Reserved:      tag.Reserved,
 		})
 	}
 	return pager.NewPageModel(total, resp), nil

@@ -82,6 +82,8 @@ func (ts *TagSearch) Search(ctx context.Context) (resp []schema.SearchResp, tota
 		ParsedText:    tag.ParsedText,
 		QuestionCount: tag.QuestionCount,
 		IsFollower:    followed,
+		Recommend:     tag.Recommend,
+		Reserved:      tag.Reserved,
 	}
 	ts.Extra.GetExcerpt()
 
