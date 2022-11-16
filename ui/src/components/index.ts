@@ -18,7 +18,6 @@ import TextArea from './TextArea';
 import Mentions from './Mentions';
 import FormatTime from './FormatTime';
 import Toast from './Toast';
-import AdminHeader from './AdminHeader';
 import AccordionNav from './AccordionNav';
 import PageTitle from './PageTitle';
 import Empty from './Empty';
@@ -50,7 +49,6 @@ export {
   Mentions,
   FormatTime,
   Toast,
-  AdminHeader,
   AccordionNav,
   PageTitle,
   Empty,
