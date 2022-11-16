@@ -43,7 +43,7 @@ export const ADMIN_NAV_MENUS = [
   },
   {
     name: 'contents',
-    child: [{ name: 'questions' }, { name: 'answers' }],
+    children: [{ name: 'questions' }, { name: 'answers' }],
   },
   {
     name: 'users',
@@ -54,7 +54,7 @@ export const ADMIN_NAV_MENUS = [
   },
   {
     name: 'settings',
-    child: [
+    children: [
       { name: 'general' },
       { name: 'interface' },
       { name: 'branding' },
@@ -64,6 +64,8 @@ export const ADMIN_NAV_MENUS = [
     ],
   },
 ];
+
+export const ADMIN_LEGAL_MENUS = [{ name: 'tos' }, { name: 'privacy' }];
 
 export const TIMEZONES = [
   {

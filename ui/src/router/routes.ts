@@ -1,4 +1,4 @@
-import { RouteObject } from 'react-router-dom';
+import { LoaderFunctionArgs, RouteObject } from 'react-router-dom';
 
 import { guard } from '@/utils';
 import type { TGuardResult } from '@/utils/guard';
@@ -13,7 +13,7 @@ export interface RouteNode extends RouteObject {
    * if guard returned the `TGuardResult` has `redirect` field,
    * then auto redirect route to the `redirect` target.
    */
-  guard?: () => Promise<TGuardResult>;
+  guard?: (args: LoaderFunctionArgs) => Promise<TGuardResult>;
 }
 
 const routes: RouteNode[] = [
@@ -31,7 +31,6 @@ const routes: RouteNode[] = [
       },
       {
         path: 'questions',
-        index: true,
         page: 'pages/Questions',
       },
       {
@@ -272,6 +271,25 @@ const routes: RouteNode[] = [
       {
         path: '50x',
         page: 'pages/50X',
+      },
+    ],
+  },
+  {
+    path: '/',
+    page: 'pages/Layout',
+    children: [
+      {
+        page: 'pages/Legal',
+        children: [
+          {
+            path: 'tos',
+            page: 'pages/Legal/Tos',
+          },
+          {
+            path: 'privacy',
+            page: 'pages/Legal/Privacy',
+          },
+        ],
       },
     ],
   },

@@ -546,6 +546,7 @@ ui:
     page_title: Welcome to Answer
     info_sign: Don't have an account? <1>Sign up</1>
     info_login: Already have an account? <1>Log in</1>
+    agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
     forgot_pass: Forgot password?
     name:
       label: Name
@@ -918,23 +919,25 @@ ui:
     back_home: Back to homepage
   page_maintenance:
     description: "We are under maintenance, we’ll be back soon."
+  nav_menus:
+    dashboard: Dashboard
+    contents: Contents
+    questions: Questions
+    answers: Answers
+    users: Users
+    flags: Flags
+    settings: Settings
+    general: General
+    interface: Interface
+    smtp: SMTP
+    branding: Branding
+    legal: Legal
+    write: Write
+    tos: Terms of Service
+    privacy: Privacy
   admin:
     admin_header:
       title: Admin
-    nav_menus:
-      dashboard: Dashboard
-      contents: Contents
-      questions: Questions
-      answers: Answers
-      users: Users
-      flags: Flags
-      settings: Settings
-      general: General
-      interface: Interface
-      smtp: SMTP
-      branding: Branding
-      legal: Legal
-      write: Write
     dashboard:
       title: Dashboard
       welcome: Welcome to Answer Admin!
@@ -1168,3 +1171,4 @@ ui:
     empty: cannot be empty
     invalid: is invalid
     btn_submit: Save
+    not_found_props: "Required property {{ key }} not found."

@@ -30,7 +30,7 @@ clone the repo locally and run following command in your terminal:
 $ git clone git@github.com:answerdev/answer.git answer
 $ cd answer/ui
 $ pnpm install
-$ pnpm run start
+$ pnpm start
 ```
 
 now, your browser should already open automatically, and autoload `http://localhost:3000`.

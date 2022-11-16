@@ -300,8 +300,10 @@ export interface AdmingSettingBranding {
 }
 
 export interface AdminSettingsLegal {
-  terms_of_service: string;
-  privacy_policy: string;
+  privacy_policy_original_text?: string;
+  privacy_policy_parsed_text?: string;
+  terms_of_service_original_text?: string;
+  terms_of_service_parsed_text?: string;
 }
 
 export interface AdminSettingsWrite {
