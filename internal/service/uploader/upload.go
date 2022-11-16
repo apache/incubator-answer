@@ -170,7 +170,7 @@ func (us *UploaderService) UploadBrandingFile(ctx *gin.Context) (
 	}
 	fileExt := strings.ToLower(path.Ext(file.Filename))
 	_, ok := FormatExts[fileExt]
-	if !ok && fileExt != ".icon" {
+	if !ok && fileExt != ".ico" {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
 		return
 	}
