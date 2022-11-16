@@ -759,20 +759,20 @@ ui:
   page_50X:
     description: 服务器遇到了一个错误，无法完成你的请求。
     back_home: 回到主页
+  nav_menus:
+    dashboard: 后台管理
+    contents: 内容管理
+    questions: 问题
+    answers: 回答
+    users: 用户管理
+    flags: 举报管理
+    settings: 站点设置
+    general: 一般
+    interface: 界面
+    smtp: SMTP
   admin:
     admin_header:
       title: 后台管理
-    nav_menus:
-      dashboard: 后台管理
-      contents: 内容管理
-      questions: 问题
-      answers: 回答
-      users: 用户管理
-      flags: 举报管理
-      settings: 站点设置
-      general: 一般
-      interface: 界面
-      smtp: SMTP
     dashboard:
       title: 后台管理
       welcome: 欢迎来到 Answer 后台管理！
