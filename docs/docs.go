@@ -3028,6 +3028,19 @@ const docTemplate = `{
                     "site"
                 ],
                 "summary": "get site legal info",
+                "parameters": [
+                    {
+                        "enum": [
+                            "tos",
+                            "privacy"
+                        ],
+                        "type": "string",
+                        "description": "legal information type",
+                        "name": "info_type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -3040,7 +3053,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.SiteGeneralResp"
+                                            "$ref": "#/definitions/schema.GetSiteLegalInfoResp"
                                         }
                                     }
                                 }
@@ -5094,6 +5107,23 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetSiteLegalInfoResp": {
+            "type": "object",
+            "properties": {
+                "privacy_policy_original_text": {
+                    "type": "string"
+                },
+                "privacy_policy_parsed_text": {
+                    "type": "string"
+                },
+                "terms_of_service_original_text": {
+                    "type": "string"
+                },
+                "terms_of_service_parsed_text": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.GetTagPageResp": {
             "type": "object",
             "properties": {
@@ -6000,9 +6030,6 @@ const docTemplate = `{
         },
         "schema.SiteWriteReq": {
             "type": "object",
-            "required": [
-                "required_tag"
-            ],
             "properties": {
                 "recommend_tags": {
                     "type": "array",
@@ -6023,9 +6050,6 @@ const docTemplate = `{
         },
         "schema.SiteWriteResp": {
             "type": "object",
-            "required": [
-                "required_tag"
-            ],
             "properties": {
                 "recommend_tags": {
                     "type": "array",
