@@ -1,5 +1,10 @@
 import { getLoggedUserInfo, getAppSettings } from '@/services';
-import { loggedUserInfoStore, siteInfoStore, interfaceStore } from '@/stores';
+import {
+  loggedUserInfoStore,
+  siteInfoStore,
+  interfaceStore,
+  brandingStore,
+} from '@/stores';
 import { RouteAlias } from '@/router/alias';
 import Storage from '@/utils/storage';
 import { LOGGED_USER_STORAGE_KEY } from '@/common/constants';
@@ -197,6 +202,7 @@ export const initAppSettingsStore = async () => {
   if (appSettings) {
     siteInfoStore.getState().update(appSettings.general);
     interfaceStore.getState().update(appSettings.interface);
+    brandingStore.getState().update(appSettings.branding);
   }
 };
 

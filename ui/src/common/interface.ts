@@ -267,7 +267,6 @@ export interface AdminSettingsGeneral {
 }
 
 export interface AdminSettingsInterface {
-  logo: string;
   language: string;
   theme: string;
   time_zone?: string;
@@ -286,8 +285,16 @@ export interface AdminSettingsSmtp {
 }
 
 export interface SiteSettings {
+  branding: AdmingSettingBranding;
   general: AdminSettingsGeneral;
   interface: AdminSettingsInterface;
+}
+
+export interface AdmingSettingBranding {
+  logo: string;
+  square_icon: string;
+  mobile_logo?: string;
+  favicon?: string;
 }
 
 export interface AdminSettingsLegal {
@@ -361,11 +368,4 @@ export interface AdminDashboard {
       version: string;
     };
   };
-}
-
-export interface BrandReqParams {
-  logo: string;
-  square_icon: string;
-  mobile_logo?: string;
-  favicon?: string;
 }

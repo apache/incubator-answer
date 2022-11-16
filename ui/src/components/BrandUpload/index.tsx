@@ -8,9 +8,10 @@ interface Props {
   type: UploadType;
   value: string;
   onChange: (value: string) => void;
+  acceptType?: string;
 }
 
-const Index: FC<Props> = ({ type = 'post', value, onChange }) => {
+const Index: FC<Props> = ({ type = 'post', value, onChange, acceptType }) => {
   const onUpload = (imgPath: string) => {
     onChange(imgPath);
   };
@@ -24,7 +25,11 @@ const Index: FC<Props> = ({ type = 'post', value, onChange }) => {
         <img src={value} alt="" height={100} />
       </div>
       <ButtonGroup vertical className="fit-content">
-        <UploadImg type={type} uploadCallback={onUpload} className="mb-0">
+        <UploadImg
+          type={type}
+          uploadCallback={onUpload}
+          className="mb-0"
+          acceptType={acceptType}>
           <Icon name="cloud-upload" />
         </UploadImg>
 

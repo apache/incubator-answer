@@ -85,6 +85,7 @@ export const getCurrentLang = () => {
 
 export const setupAppLanguage = async () => {
   const lang = getCurrentLang();
+  console.log(lang);
   if (!i18next.getDataByLanguage(lang)) {
     await addI18nResource(lang);
   }

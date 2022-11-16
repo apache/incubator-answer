@@ -52,34 +52,32 @@ const General: FC = () => {
   const uiSchema: UISchema = {
     site_url: {
       'ui:options': {
-        invalid: t('site_url.validate'),
         validator: (value) => {
           let url: URL | undefined;
           try {
             url = new URL(value);
           } catch (ex) {
-            // eslint-disable-next-line no-empty
+            return t('site_url.validate');
           }
-          // only can input url with root pathname
           if (
             !url ||
             /^https?:$/.test(url.protocol) === false ||
             url.pathname !== '/' ||
-            !url.search ||
-            !url.hash
+            url.search !== '' ||
+            url.hash !== ''
           ) {
-            return false;
+            return t('site_url.validate');
           }
+
           return true;
         },
       },
     },
     contact_email: {
       'ui:options': {
-        invalid: t('contact_email.validate'),
         validator: (value) => {
-          if (Pattern.email.test(value)) {
-            return false;
+          if (!Pattern.email.test(value)) {
+            return t('contact_email.validate');
           }
           return true;
         },
@@ -91,7 +89,6 @@ const General: FC = () => {
   const onSubmit = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-
     const reqParams: Type.AdminSettingsGeneral = {
       name: formData.name.value,
       description: formData.description.value,
