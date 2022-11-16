@@ -76,7 +76,7 @@ const Header: FC = () => {
             {brandingInfo.logo ? (
               <>
                 <img
-                  className="d-none d-lg-block log rounded-1 me-0"
+                  className="d-none d-lg-block logo rounded-1 me-0"
                   src={brandingInfo.logo}
                   alt=""
                 />
