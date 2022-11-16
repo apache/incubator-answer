@@ -1,16 +1,29 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { uploadImage } from '@/services';
+import * as Type from '@/common/interface';
+
 interface IProps {
-  type: string;
-  upload: (data: FormData) => Promise<any>;
+  type: Type.UploadType;
+  className?: string;
+  children?: React.ReactNode;
+  acceptType?: string;
+  uploadCallback: (img: string) => void;
 }
 
-const Index: React.FC<IProps> = ({ type, upload }) => {
+const Index: React.FC<IProps> = ({
+  type,
+  uploadCallback,
+  children,
+  acceptType = '',
+  className,
+}) => {
   const { t } = useTranslation();
   const [status, setStatus] = useState(false);
 
   const onChange = (e: any) => {
+    console.log('uploading', e);
     if (status) {
       return;
     }
@@ -24,25 +37,25 @@ const Index: React.FC<IProps> = ({ type, upload }) => {
       //   return;
       // }
       setStatus(true);
-      const data = new FormData();
-
-      data.append('file', e.target.files[0]);
-      // do
-      upload(data).finally(() => {
-        setStatus(false);
-      });
+      console.log('uploading', e.target.files);
+      uploadImage({ file: e.target.files[0], type })
+        .then((res) => {
+          uploadCallback(res);
+        })
+        .finally(() => {
+          setStatus(false);
+        });
     }
   };
 
   return (
-    <label className="mb-2 btn btn-outline-secondary uploadBtn">
-      {status ? t('upload_img.loading') : t('upload_img.name')}
+    <label className={`btn btn-outline-secondary uploadBtn ${className}`}>
+      {children || (status ? t('upload_img.loading') : t('upload_img.name'))}
       <input
         type="file"
         className="d-none"
-        accept="image/jpeg,image/jpg,image/png,image/webp"
+        accept={`image/jpeg,image/jpg,image/png,image/webp${acceptType}`}
         onChange={onChange}
-        id={type}
       />
     </label>
   );

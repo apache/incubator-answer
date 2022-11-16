@@ -1,16 +1,17 @@
 import { FC, memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
 import { loggedUserInfoStore } from '@/stores';
-import { getQueryString } from '@/utils';
 import { activateAccount } from '@/services';
 import { PageTitle } from '@/components';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
+  const [searchParams] = useSearchParams();
   const updateUser = loggedUserInfoStore((state) => state.update);
   useEffect(() => {
-    const code = getQueryString('code');
+    const code = searchParams.get('code');
 
     if (code) {
       activateAccount(encodeURIComponent(code)).then((res) => {

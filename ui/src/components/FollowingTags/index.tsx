@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import { TagSelector, Tag } from '@/components';
-import { tryLoggedAndActicevated } from '@/utils/guard';
+import { tryLoggedAndActivated } from '@/utils/guard';
 import { useFollowingTags, followTags } from '@/services';
 
 const Index: FC = () => {
@@ -32,7 +32,7 @@ const Index: FC = () => {
     });
   };
 
-  if (!tryLoggedAndActicevated().ok) {
+  if (!tryLoggedAndActivated().ok) {
     return null;
   }
 
@@ -73,11 +73,7 @@ const Index: FC = () => {
           <>
             {followingTags.map((item) => {
               const slugName = item?.slug_name;
-              return (
-                <Tag key={slugName} className="m-1" href={`/tags/${slugName}`}>
-                  {slugName}
-                </Tag>
-              );
+              return <Tag key={slugName} className="m-1" data={item} />;
             })}
           </>
         ) : (

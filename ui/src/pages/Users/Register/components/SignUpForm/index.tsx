@@ -1,10 +1,10 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, MouseEvent, useState } from 'react';
 import { Form, Button, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type { FormDataType } from '@/common/interface';
-import { register } from '@/services';
+import { register, useLegalTos, useLegalPrivacy } from '@/services';
 import userStore from '@/stores/userInfo';
 
 interface Props {
@@ -81,6 +81,26 @@ const Index: React.FC<Props> = ({ callback }) => {
       ...formData,
     });
     return bol;
+  };
+  const { data: tos } = useLegalTos();
+  const { data: privacy } = useLegalPrivacy();
+  const argumentClick = (evt: MouseEvent, type: 'tos' | 'privacy') => {
+    evt.stopPropagation();
+    const contentText =
+      type === 'tos'
+        ? tos?.terms_of_service_original_text
+        : privacy?.privacy_policy_original_text;
+    let matchUrl: URL | undefined;
+    try {
+      if (contentText) {
+        matchUrl = new URL(contentText);
+      }
+      // eslint-disable-next-line no-empty
+    } catch (ex) {}
+    if (matchUrl) {
+      evt.preventDefault();
+      window.open(matchUrl.toString());
+    }
   };
 
   const handleSubmit = async (event: FormEvent) => {
@@ -185,7 +205,29 @@ const Index: React.FC<Props> = ({ callback }) => {
           </Button>
         </div>
       </Form>
-
+      <div className="text-center fs-14 mt-3">
+        <Trans i18nKey="login.agreements" ns="translation">
+          By registering, you agree to the
+          <Link
+            to="/privacy"
+            onClick={(evt) => {
+              argumentClick(evt, 'privacy');
+            }}
+            target="_blank">
+            privacy policy
+          </Link>
+          and
+          <Link
+            to="/tos"
+            onClick={(evt) => {
+              argumentClick(evt, 'tos');
+            }}
+            target="_blank">
+            terms of service
+          </Link>
+          .
+        </Trans>
+      </div>
       <div className="text-center mt-5">
         <Trans i18nKey="login.info_login" ns="translation">
           Already have an account? <Link to="/users/login">Log in</Link>
