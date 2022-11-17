@@ -7,27 +7,42 @@ import (
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 	"xorm.io/builder"
 )
 
 // tagRepo tag repository
 type tagRepo struct {
-	data         *data.Data
-	uniqueIDRepo unique.UniqueIDRepo
+	data            *data.Data
+	uniqueIDRepo    unique.UniqueIDRepo
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewTagRepo new repository
 func NewTagRepo(
 	data *data.Data,
 	uniqueIDRepo unique.UniqueIDRepo,
+	siteInfoService *siteinfo_common.SiteInfoCommonService,
+
 ) tagcommon.TagRepo {
 	return &tagRepo{
-		data:         data,
-		uniqueIDRepo: uniqueIDRepo,
+		data:            data,
+		uniqueIDRepo:    uniqueIDRepo,
+		siteInfoService: siteInfoService,
 	}
+}
+
+func (tr *tagRepo) tagRecommendStatus(ctx context.Context) bool {
+	tagconfig, err := tr.siteInfoService.GetSiteWrite(ctx)
+	if err != nil {
+		log.Error("siteInfoService.GetSiteWrite error", err)
+		return false
+	}
+	return tagconfig.RequiredTag
 }
 
 // AddTagList add tag
@@ -55,6 +70,11 @@ func (tr *tagRepo) GetTagListByIDs(ctx context.Context, ids []string) (tagList [
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
+	}
 	return
 }
 
@@ -67,6 +87,11 @@ func (tr *tagRepo) GetTagBySlugName(ctx context.Context, slugName string) (tagIn
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+
+	if !tr.tagRecommendStatus(ctx) {
+		tagInfo.Recommend = false
+	}
+
 	return
 }
 
@@ -92,6 +117,11 @@ func (tr *tagRepo) GetTagListByName(ctx context.Context, name string, limit int,
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
+	}
 	return
 }
 
@@ -106,6 +136,11 @@ func (tr *tagRepo) GetRecommendTagList(ctx context.Context) (tagList []*entity.T
 	err = session.Find(&tagList, cond)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
 	}
 	return
 }
@@ -122,6 +157,11 @@ func (tr *tagRepo) GetReservedTagList(ctx context.Context) (tagList []*entity.Ta
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
+	}
 	return
 }
 
@@ -133,6 +173,11 @@ func (tr *tagRepo) GetTagListByNames(ctx context.Context, names []string) (tagLi
 	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
 	}
 	return
 }
@@ -208,6 +253,9 @@ func (tr *tagRepo) GetTagByID(ctx context.Context, tagID string) (
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	if !tr.tagRecommendStatus(ctx) {
+		tag.Recommend = false
+	}
 	return
 }
 
@@ -218,6 +266,11 @@ func (tr *tagRepo) GetTagList(ctx context.Context, tag *entity.Tag) (tagList []*
 	err = session.Find(&tagList, tag)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
 	}
 	return
 }
@@ -248,6 +301,11 @@ func (tr *tagRepo) GetTagPage(ctx context.Context, page, pageSize int, tag *enti
 	total, err = pager.Help(page, pageSize, &tagList, tag, session)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
 	}
 	return
 }
