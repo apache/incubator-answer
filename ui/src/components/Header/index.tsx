@@ -82,8 +82,8 @@ const Header: FC = () => {
                 />
 
                 <img
-                  className="logo d-block d-lg-none rounded-1 me-0"
-                  src={brandingInfo.mobile_logo || brandingInfo.mobile_logo}
+                  className="lg-none logo rounded-1 me-0"
+                  src={brandingInfo.mobile_logo || brandingInfo.logo}
                   alt=""
                 />
               </>
