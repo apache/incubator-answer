@@ -14,7 +14,7 @@ const (
 )
 
 const (
-	EmailOrPasswordWrong         = "error.user.email_or_password_wrong"
+	EmailOrPasswordWrong         = "error.object.email_or_password_incorrect"
 	CommentNotFound              = "error.comment.not_found"
 	QuestionNotFound             = "error.question.not_found"
 	AnswerNotFound               = "error.answer.not_found"

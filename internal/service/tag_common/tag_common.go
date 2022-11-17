@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/revision_common"
@@ -74,17 +75,51 @@ func (ts *TagCommonService) GetSiteWriteRecommendTag(ctx context.Context) (tags 
 	return tags, nil
 }
 
-func (ts *TagCommonService) SetSiteWriteRecommendTag(ctx context.Context, tags []string, required bool, userID string) (msg string, err error) {
-	err = ts.UpdateTag(ctx, tags, userID)
-	if err != nil {
-		return err.Error(), err
+func (ts *TagCommonService) SetSiteWriteTag(ctx context.Context, recommendTags, reservedTags []string, userID string) (
+	errFields []*validator.FormErrorField, err error) {
+	recommendErr := ts.CheckTag(ctx, recommendTags, userID)
+	reservedErr := ts.CheckTag(ctx, reservedTags, userID)
+	if recommendErr != nil {
+		errFields = append(errFields, &validator.FormErrorField{
+			ErrorField: "recommend_tags",
+			ErrorMsg:   recommendErr.Error(),
+		})
+		err = recommendErr
 	}
-	err = ts.SetTagsAttribute(ctx, tags, "recommend", true)
-	if err != nil {
-		return "", err
+	if reservedErr != nil {
+		errFields = append(errFields, &validator.FormErrorField{
+			ErrorField: "reserved_tags",
+			ErrorMsg:   reservedErr.Error(),
+		})
+		err = reservedErr
 	}
-	return "", nil
+	if len(errFields) > 0 {
+		return errFields, err
+	}
+
+	err = ts.SetTagsAttribute(ctx, recommendTags, "recommend")
+	if err != nil {
+		return nil, err
+	}
+	err = ts.SetTagsAttribute(ctx, reservedTags, "reserved")
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
 }
+
+// func (ts *TagCommonService) SetSiteWriteRecommendTag(ctx context.Context, tags []string, userID string) (msg string, err error) {
+// 	err = ts.UpdateTag(ctx, tags, userID)
+// 	if err != nil {
+// 		return err.Error(), err
+// 	}
+// 	err = ts.SetTagsAttribute(ctx, tags, "recommend")
+// 	if err != nil {
+// 		return "", err
+// 	}
+
+// 	return "", nil
+// }
 
 func (ts *TagCommonService) GetSiteWriteReservedTag(ctx context.Context) (tags []string, err error) {
 	tags = make([]string, 0)
@@ -95,20 +130,20 @@ func (ts *TagCommonService) GetSiteWriteReservedTag(ctx context.Context) (tags [
 	return tags, nil
 }
 
-func (ts *TagCommonService) SetSiteWriteReservedTag(ctx context.Context, tags []string, userID string) (msg string, err error) {
-	err = ts.UpdateTag(ctx, tags, userID)
-	if err != nil {
-		return err.Error(), err
-	}
-	err = ts.SetTagsAttribute(ctx, tags, "reserved", true)
-	if err != nil {
-		return "", err
-	}
-	return "", nil
-}
+// func (ts *TagCommonService) SetSiteWriteReservedTag(ctx context.Context, tags []string, userID string) (msg string, err error) {
+// 	err = ts.UpdateTag(ctx, tags, userID)
+// 	if err != nil {
+// 		return err.Error(), err
+// 	}
+// 	err = ts.SetTagsAttribute(ctx, tags, "reserved")
+// 	if err != nil {
+// 		return "", err
+// 	}
+// 	return "", nil
+// }
 
 // SetTagsAttribute
-func (ts *TagCommonService) SetTagsAttribute(ctx context.Context, tags []string, attribute string, value bool) (err error) {
+func (ts *TagCommonService) SetTagsAttribute(ctx context.Context, tags []string, attribute string) (err error) {
 	var tagslist []string
 	switch attribute {
 	case "recommend":
@@ -122,7 +157,7 @@ func (ts *TagCommonService) SetTagsAttribute(ctx context.Context, tags []string,
 	if err != nil {
 		return err
 	}
-	err = ts.tagRepo.UpdateTagsAttribute(ctx, tags, attribute, value)
+	err = ts.tagRepo.UpdateTagsAttribute(ctx, tags, attribute, true)
 	if err != nil {
 		return err
 	}
@@ -240,7 +275,7 @@ func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []s
 	return objectIDTagMap, nil
 }
 
-func (ts *TagCommonService) UpdateTag(ctx context.Context, tags []string, userID string) (err error) {
+func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID string) (err error) {
 	if len(tags) == 0 {
 		return nil
 	}
