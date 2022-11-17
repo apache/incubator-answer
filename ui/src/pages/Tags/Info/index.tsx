@@ -154,7 +154,6 @@ const TagIntroduction = () => {
                       {t('synonyms.text')}{' '}
                       <Tag
                         className="me-2 mb-2"
-                        href="#"
                         data={{
                           slug_name: tagName || '',
                           main_tag_slug_name: '',
