@@ -22,17 +22,36 @@ const HealthStatus: FC<IProps> = ({ data }) => {
             <span className="text-secondary me-1">{t('version')}</span>
             <strong>{version}</strong>
             {isLatest && (
-              <Badge pill bg="success" className="ms-1">
+              <Badge
+                pill
+                bg="success"
+                className="ms-1"
+                as="a"
+                target="_blank"
+                href="https://github.com/answerdev/answer/releases">
                 {t('latest')}
               </Badge>
             )}
             {!isLatest && remote_version && (
-              <Badge pill bg="warning" text="dark" className="ms-1">
+              <Badge
+                pill
+                bg="warning"
+                text="dark"
+                className="ms-1"
+                as="a"
+                target="_blank"
+                href="https://github.com/answerdev/answer/releases">
                 {t('update_to')} {remote_version}
               </Badge>
             )}
             {!isLatest && !remote_version && (
-              <Badge pill bg="danger" className="ms-1">
+              <Badge
+                pill
+                bg="danger"
+                className="ms-1"
+                as="a"
+                target="_blank"
+                href="https://github.com/answerdev/answer/releases">
                 {t('check_failed')}
               </Badge>
             )}
