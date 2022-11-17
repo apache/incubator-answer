@@ -10,6 +10,7 @@ type SearchDTO struct {
 
 type SearchObject struct {
 	ID              string `json:"id"`
+	QuestionID      string `json:"question_id"`
 	Title           string `json:"title"`
 	Excerpt         string `json:"excerpt"`
 	CreatedAtParsed int64  `json:"created_at"`

@@ -5800,6 +5800,9 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "question_id": {
+                    "type": "string"
+                },
                 "status": {
                     "description": "Status",
                     "type": "string"
