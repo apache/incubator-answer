@@ -416,6 +416,10 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	if err != nil {
 		return nil, err
 	}
+	// User verified email will update user email status. So user status cache should be updated.
+	if err = us.authService.SetUserStatus(ctx, userCacheInfo); err != nil {
+		return nil, err
+	}
 	resp.IsAdmin = userInfo.IsAdmin
 	if resp.IsAdmin {
 		err = us.authService.SetCmsUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
