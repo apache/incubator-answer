@@ -10,7 +10,7 @@ import type {
 } from '@/common/interface';
 import { PageTitle, Unactivate } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
-import { guard, floppyNavigation } from '@/utils';
+import { guard, floppyNavigation, handleFormError } from '@/utils';
 import { login, checkImgCode } from '@/services';
 import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
 import { RouteAlias } from '@/router/alias';
@@ -122,14 +122,22 @@ const Index: React.FC = () => {
         setModalState(false);
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
-          if (err.key.indexOf('captcha') < 0) {
+        // if (err.isError && err.key) {
+        //   formData[err.key].isInvalid = true;
+        //   formData[err.key].errorMsg = err.value;
+        //   if (err.key.indexOf('captcha') < 0) {
+        //     setModalState(false);
+        //   }
+        // }
+        if (err.isError) {
+          console.log('err===', err);
+          const data = handleFormError(err, formData);
+          console.log('err===', data);
+          if (err.list.filter((v) => v.error_field.indexOf('captcha') < 0)) {
             setModalState(false);
           }
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
         setRefresh((pre) => pre + 1);
       });
   };

@@ -20,6 +20,7 @@ import {
   loadLanguageOptions,
   setupAppTimeZone,
 } from '@/utils/localize';
+import { handleFormError } from '@/utils';
 
 const Interface: FC = () => {
   const { t } = useTranslation('translation', {
@@ -162,11 +163,10 @@ const Interface: FC = () => {
         });
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
   // const imgUpload = (file: any) => {

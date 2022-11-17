@@ -7,6 +7,7 @@ import { useToast } from '@/hooks';
 import { siteInfoStore } from '@/stores';
 import { useGeneralSetting, updateGeneralSetting } from '@/services';
 import Pattern from '@/common/pattern';
+import { handleFormError } from '@/utils';
 
 import '../index.scss';
 
@@ -106,11 +107,10 @@ const General: FC = () => {
         updateSiteInfo(reqParams);
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
 
