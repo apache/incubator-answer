@@ -4,12 +4,13 @@ import useSWR from 'swr';
 import request from '@/utils/request';
 import type * as Type from '@/common/interface';
 
-export const uploadImage = (file) => {
+export const uploadImage = (params: { file: File; type: Type.UploadType }) => {
   const form = new FormData();
-
-  form.append('file', file);
-  return request.post('/answer/api/v1/user/post/file', form);
+  form.append('source', String(params.type));
+  form.append('file', params.file);
+  return request.post('/answer/api/v1/file', form);
 };
+
 export const useQueryQuestionByTitle = (title) => {
   return useSWR<Record<string, any>>(
     title ? `/answer/api/v1/question/similar?title=${title}` : '',
@@ -125,10 +126,6 @@ export const modifyPassword = (params: Type.ModifyPasswordReq) => {
 
 export const modifyUserInfo = (params: Type.ModifyUserReq) => {
   return request.put('/answer/api/v1/user/info', params);
-};
-
-export const uploadAvatar = (params: Type.AvatarUploadReq) => {
-  return request.post('/answer/api/v1/user/avatar/upload', params);
 };
 
 export const resetPassword = (params: Type.PasswordResetReq) => {

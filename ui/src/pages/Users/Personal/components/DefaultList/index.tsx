@@ -73,14 +73,7 @@ const Index: FC<Props> = ({ visible, tabName, data }) => {
             </div>
             <div>
               {item.tags?.map((tag) => {
-                return (
-                  <Tag
-                    href={`/t/${tag.main_tag_slug_name || tag.slug_name}`}
-                    className="me-1"
-                    key={tag.slug_name}>
-                    {tag.slug_name}
-                  </Tag>
-                );
+                return <Tag className="me-1" key={tag.slug_name} data={tag} />;
               })}
             </div>
           </ListGroupItem>

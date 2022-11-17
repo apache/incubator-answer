@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
-import { Pagination, PageTitle } from '@/components';
+import { Pagination, PageTitle, Labels } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
 import { scrollTop } from '@/utils';
 import { usePageUsers } from '@/hooks';
@@ -167,6 +167,7 @@ const Index = () => {
             )}
           </Col>
           <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
+            <Labels className="mb-4" />
             <RelatedQuestions id={question?.id || ''} />
           </Col>
         </Row>

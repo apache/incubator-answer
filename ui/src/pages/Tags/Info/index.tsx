@@ -152,9 +152,17 @@ const TagIntroduction = () => {
                   <>
                     <div className="mb-3">
                       {t('synonyms.text')}{' '}
-                      <Tag className="me-2 mb-2" href="#">
-                        {tagName}
-                      </Tag>
+                      <Tag
+                        className="me-2 mb-2"
+                        href="#"
+                        data={{
+                          slug_name: tagName || '',
+                          main_tag_slug_name: '',
+                          display_name: '',
+                          recommend: false,
+                          reserved: false,
+                        }}
+                      />
                     </div>
                     <TagSelector
                       value={synonymsTags}
@@ -170,9 +178,8 @@ const TagIntroduction = () => {
                         <Tag
                           key={item.tag_id}
                           className="me-2 mb-2"
-                          href={`/tags/${item.slug_name}`}>
-                          {item.slug_name}
-                        </Tag>
+                          data={item}
+                        />
                       );
                     })
                   ) : (

@@ -8,7 +8,7 @@ import { useAccordionButton } from 'react-bootstrap/AccordionButton';
 import { Icon } from '@/components';
 
 function MenuNode({ menu, callback, activeKey, isLeaf = false }) {
-  const { t } = useTranslation('translation', { keyPrefix: 'admin.nav_menus' });
+  const { t } = useTranslation('translation', { keyPrefix: 'nav_menus' });
   const accordionClick = useAccordionButton(menu.name);
   const menuOnClick = (evt) => {
     evt.preventDefault();
@@ -44,30 +44,45 @@ function MenuNode({ menu, callback, activeKey, isLeaf = false }) {
 
 interface AccordionProps {
   menus: any[];
+  path?: string;
 }
-const AccordionNav: FC<AccordionProps> = ({ menus }) => {
+const AccordionNav: FC<AccordionProps> = ({ menus, path = '/' }) => {
   const navigate = useNavigate();
-  let activeKey = menus[0].name;
-  const pathMatch = useMatch('/admin/*');
+  const pathMatch = useMatch(`${path}*`);
+  if (!menus.length) {
+    return null;
+  }
+  // auto set menu fields
+  menus.forEach((m) => {
+    if (!Array.isArray(m.children)) {
+      m.children = [];
+    }
+    m.children.forEach((sm) => {
+      if (!Array.isArray(sm.children)) {
+        sm.children = [];
+      }
+    });
+  });
   const splat = pathMatch && pathMatch.params['*'];
+  let activeKey = menus[0].name;
   if (splat) {
     activeKey = splat;
   }
   const menuClick = (clickedMenu) => {
     const menuKey = clickedMenu.name;
-    if (Array.isArray(clickedMenu.child) && clickedMenu.child.length) {
+    if (clickedMenu.children.length) {
       return;
     }
     if (activeKey !== menuKey) {
-      const routePath = `/admin/${menuKey}`;
+      const routePath = `${path}${menuKey}`;
       navigate(routePath);
     }
   };
 
   let defaultOpenKey;
   menus.forEach((li) => {
-    if (Array.isArray(li.child) && li.child.length) {
-      const matchedChild = li.child.find((el) => {
+    if (li.children.length) {
+      const matchedChild = li.children.find((el) => {
         return el.name === activeKey;
       });
       if (matchedChild) {
@@ -83,10 +98,10 @@ const AccordionNav: FC<AccordionProps> = ({ menus }) => {
           return (
             <React.Fragment key={li.name}>
               <MenuNode menu={li} callback={menuClick} activeKey={activeKey} />
-              {Array.isArray(li.child) ? (
+              {li.children.length ? (
                 <Accordion.Collapse eventKey={li.name} className="ms-4">
                   <Stack direction="vertical" gap={1}>
-                    {li.child?.map((leaf) => {
+                    {li.children.map((leaf) => {
                       return (
                         <MenuNode
                           menu={leaf}

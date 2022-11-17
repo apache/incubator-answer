@@ -7,7 +7,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "downlevelIteration": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
@@ -24,5 +23,5 @@
       "@i18n/*": ["../i18n/*"]
     }
   },
-  "include": ["src", "node_modules/@testing-library/jest-dom" ]
+  "include": ["src", "node_modules/@testing-library/jest-dom", "scripts" ]
 }

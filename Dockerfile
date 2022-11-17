@@ -1,4 +1,4 @@
-FROM node:16 AS node-builder
+FROM amd64/node AS node-builder
 
 LABEL maintainer="mingcheng<mc@sf.com>"
 
