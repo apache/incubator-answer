@@ -450,6 +450,7 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 
 		object = schema.SearchObject{
 			ID:              string(r["id"]),
+			QuestionID:      string(r["question_id"]),
 			Title:           string(r["title"]),
 			Excerpt:         htmltext.FetchExcerpt(string(r["parsed_text"]), "...", 240),
 			CreatedAtParsed: tp.Unix(),
