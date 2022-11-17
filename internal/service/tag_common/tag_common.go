@@ -205,7 +205,11 @@ func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.T
 
 // GetObjectTag get object tag
 func (ts *TagCommonService) GetObjectTag(ctx context.Context, objectId string) (objTags []*schema.TagResp, err error) {
-	objTags = make([]*schema.TagResp, 0)
+	tagsInfoList, err := ts.GetObjectEntityTag(ctx, objectId)
+	return ts.TagFormat(ctx, tagsInfoList)
+}
+
+func (ts *TagCommonService) GetObjectEntityTag(ctx context.Context, objectId string) (objTags []*entity.Tag, err error) {
 	tagIDList := make([]string, 0)
 	tagList, err := ts.tagRelRepo.GetObjectTagRelList(ctx, objectId)
 	if err != nil {
@@ -214,11 +218,17 @@ func (ts *TagCommonService) GetObjectTag(ctx context.Context, objectId string) (
 	for _, tag := range tagList {
 		tagIDList = append(tagIDList, tag.TagID)
 	}
-	tagsInfoList, err := ts.tagRepo.GetTagListByIDs(ctx, tagIDList)
+	objTags, err = ts.tagRepo.GetTagListByIDs(ctx, tagIDList)
 	if err != nil {
 		return nil, err
 	}
-	for _, tagInfo := range tagsInfoList {
+
+	return objTags, nil
+}
+
+func (ts *TagCommonService) TagFormat(ctx context.Context, tags []*entity.Tag) (objTags []*schema.TagResp, err error) {
+	objTags = make([]*schema.TagResp, 0)
+	for _, tagInfo := range tags {
 		objTags = append(objTags, &schema.TagResp{
 			SlugName:        tagInfo.SlugName,
 			DisplayName:     tagInfo.DisplayName,
@@ -281,7 +291,6 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 	}
 
 	thisTagNameList := make([]string, 0)
-	thisTagIDList := make([]string, 0)
 	for _, t := range tags {
 		t = strings.ToLower(t)
 		thisTagNameList = append(thisTagNameList, t)
@@ -294,13 +303,17 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 	}
 
 	tagInDbMapping := make(map[string]*entity.Tag)
+	checktags := make([]string, 0)
+
 	for _, tag := range tagListInDb {
 		if tag.MainTagID != 0 {
-			err = errors.BadRequest(reason.TagNotContainSynonym).WithMsg(fmt.Sprintf("tag name:%s", tag.SlugName))
-			return err
+			checktags = append(checktags, fmt.Sprintf("\"%s\"", tag.SlugName))
 		}
 		tagInDbMapping[tag.SlugName] = tag
-		thisTagIDList = append(thisTagIDList, tag.ID)
+	}
+	if len(checktags) > 0 {
+		err = errors.BadRequest(reason.TagNotContainSynonym).WithMsg(fmt.Sprintf("Should not contain synonym tags %s", strings.Join(checktags, ",")))
+		return err
 	}
 
 	addTagList := make([]*entity.Tag, 0)
@@ -324,28 +337,33 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 		err = errors.BadRequest(reason.TagNotFound).WithMsg(fmt.Sprintf("tag [%s] does not exist",
 			strings.Join(addTagMsgList, ",")))
 		return err
-		// todo if need add
-		// err = ts.tagRepo.AddTagList(ctx, addTagList)
-		// if err != nil {
-		// 	return err
-		// }
-		// for _, tag := range addTagList {
-		// 	thisTagIDList = append(thisTagIDList, tag.ID)
-		// 	revisionDTO := &schema.AddRevisionDTO{
-		// 		UserID:   userID,
-		// 		ObjectID: tag.ID,
-		// 		Title:    tag.SlugName,
-		// 	}
-		// 	tagInfoJson, _ := json.Marshal(tag)
-		// 	revisionDTO.Content = string(tagInfoJson)
-		// 	err = ts.revisionService.AddRevision(ctx, revisionDTO, true)
-		// 	if err != nil {
-		// 		return err
-		// 	}
-		// }
+
 	}
 
 	return nil
+}
+
+func (ts *TagCommonService) ObjectCheckChangeTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
+	reservedTagsMap := make(map[string]bool)
+	needTagsMap := make([]string, 0)
+	for _, tag := range objectTagData {
+		if tag.Reserved {
+			reservedTagsMap[tag.SlugName] = true
+		}
+	}
+	for _, tag := range oldobjectTagData {
+		if tag.Reserved {
+			_, ok := reservedTagsMap[tag.SlugName]
+			if !ok {
+				needTagsMap = append(needTagsMap, tag.SlugName)
+			}
+		}
+	}
+	if len(needTagsMap) > 0 {
+		return false, needTagsMap
+	}
+
+	return true, []string{}
 }
 
 // ObjectChangeTag change object tag list

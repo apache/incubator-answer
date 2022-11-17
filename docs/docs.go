@@ -6393,6 +6393,10 @@ const docTemplate = `{
         },
         "schema.UserEmailLogin": {
             "type": "object",
+            "required": [
+                "e_mail",
+                "pass"
+            ],
             "properties": {
                 "captcha_code": {
                     "description": "captcha_code",
@@ -6404,11 +6408,14 @@ const docTemplate = `{
                 },
                 "e_mail": {
                     "description": "e_mail",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "pass": {
                     "description": "password",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 8
                 }
             }
         },

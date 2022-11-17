@@ -1484,10 +1484,16 @@ definitions:
         type: string
       e_mail:
         description: e_mail
+        maxLength: 500
         type: string
       pass:
         description: password
+        maxLength: 32
+        minLength: 8
         type: string
+    required:
+    - e_mail
+    - pass
     type: object
   schema.UserModifyPassWordRequest:
     properties:
