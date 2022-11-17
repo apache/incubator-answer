@@ -120,10 +120,10 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 		_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
 		resp := schema.UserVerifyEmailErrorResponse{
 			Key:   "e_mail",
-			Value: "error.object.email_or_password_incorrect",
+			Value: reason.EmailOrPasswordWrong,
 		}
 		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.EmailOrPasswordWrong), resp)
 		return
 	}
 	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
