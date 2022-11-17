@@ -25,7 +25,7 @@ type GetTagInfoReq struct {
 	UserID string `json:"-"`
 }
 
-func (r *GetTagInfoReq) Check() (errField *validator.ErrorField, err error) {
+func (r *GetTagInfoReq) Check() (errFields []*validator.FormErrorField, err error) {
 	if len(r.ID) == 0 && len(r.Name) == 0 {
 		return nil, errors.BadRequest(reason.RequestFormatError)
 	}
@@ -155,9 +155,9 @@ type UpdateTagReq struct {
 	UserID string `json:"-"`
 }
 
-func (r *UpdateTagReq) Check() (errField *validator.ErrorField, err error) {
+func (r *UpdateTagReq) Check() (errFields []*validator.FormErrorField, err error) {
 	if len(r.EditSummary) == 0 {
-		r.EditSummary = "tag.edit.summary" // to i18n
+		r.EditSummary = "tag.edit.summary" // to do i18n
 	}
 	return nil, nil
 }

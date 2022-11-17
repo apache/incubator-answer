@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/revision_common"
@@ -74,21 +75,37 @@ func (ts *TagCommonService) GetSiteWriteRecommendTag(ctx context.Context) (tags 
 	return tags, nil
 }
 
-func (ts *TagCommonService) SetSiteWriteTag(ctx context.Context, recommendtags, reservedtags []string, required bool, userID string) (msg string, err error) {
-	recommenderr := ts.CheckTag(ctx, recommendtags, userID)
-	reservederr := ts.CheckTag(ctx, reservedtags, userID)
-	if recommenderr != nil || reservederr != nil {
-		return "", nil
+func (ts *TagCommonService) SetSiteWriteTag(ctx context.Context, recommendTags, reservedTags []string, userID string) (
+	errFields []*validator.FormErrorField, err error) {
+	recommendErr := ts.CheckTag(ctx, recommendTags, userID)
+	reservedErr := ts.CheckTag(ctx, reservedTags, userID)
+	if recommendErr != nil {
+		errFields = append(errFields, &validator.FormErrorField{
+			ErrorField: "recommend_tags",
+			ErrorMsg:   recommendErr.Error(),
+		})
+		err = recommendErr
 	}
-	err = ts.SetTagsAttribute(ctx, recommendtags, "recommend")
+	if reservedErr != nil {
+		errFields = append(errFields, &validator.FormErrorField{
+			ErrorField: "reserved_tags",
+			ErrorMsg:   reservedErr.Error(),
+		})
+		err = reservedErr
+	}
+	if len(errFields) > 0 {
+		return errFields, err
+	}
+
+	err = ts.SetTagsAttribute(ctx, recommendTags, "recommend")
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	err = ts.SetTagsAttribute(ctx, reservedtags, "reserved")
+	err = ts.SetTagsAttribute(ctx, reservedTags, "reserved")
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return "", nil
+	return nil, nil
 }
 
 // func (ts *TagCommonService) SetSiteWriteRecommendTag(ctx context.Context, tags []string, userID string) (msg string, err error) {
