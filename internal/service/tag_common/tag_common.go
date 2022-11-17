@@ -291,7 +291,6 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 	}
 
 	thisTagNameList := make([]string, 0)
-	thisTagIDList := make([]string, 0)
 	for _, t := range tags {
 		t = strings.ToLower(t)
 		thisTagNameList = append(thisTagNameList, t)
@@ -304,13 +303,17 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 	}
 
 	tagInDbMapping := make(map[string]*entity.Tag)
+	checktags := make([]string, 0)
+
 	for _, tag := range tagListInDb {
 		if tag.MainTagID != 0 {
-			err = errors.BadRequest(reason.TagNotContainSynonym).WithMsg(fmt.Sprintf("tag name:%s", tag.SlugName))
-			return err
+			checktags = append(checktags, fmt.Sprintf("\"%s\"", tag.SlugName))
 		}
 		tagInDbMapping[tag.SlugName] = tag
-		thisTagIDList = append(thisTagIDList, tag.ID)
+	}
+	if len(checktags) > 0 {
+		err = errors.BadRequest(reason.TagNotContainSynonym).WithMsg(fmt.Sprintf("Should not contain synonym tags %s", strings.Join(checktags, ",")))
+		return err
 	}
 
 	addTagList := make([]*entity.Tag, 0)
@@ -334,25 +337,7 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 		err = errors.BadRequest(reason.TagNotFound).WithMsg(fmt.Sprintf("tag [%s] does not exist",
 			strings.Join(addTagMsgList, ",")))
 		return err
-		// todo if need add
-		// err = ts.tagRepo.AddTagList(ctx, addTagList)
-		// if err != nil {
-		// 	return err
-		// }
-		// for _, tag := range addTagList {
-		// 	thisTagIDList = append(thisTagIDList, tag.ID)
-		// 	revisionDTO := &schema.AddRevisionDTO{
-		// 		UserID:   userID,
-		// 		ObjectID: tag.ID,
-		// 		Title:    tag.SlugName,
-		// 	}
-		// 	tagInfoJson, _ := json.Marshal(tag)
-		// 	revisionDTO.Content = string(tagInfoJson)
-		// 	err = ts.revisionService.AddRevision(ctx, revisionDTO, true)
-		// 	if err != nil {
-		// 		return err
-		// 	}
-		// }
+
 	}
 
 	return nil
