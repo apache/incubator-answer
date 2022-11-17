@@ -115,7 +115,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	userCommon := usercommon.NewUserCommon(userRepo)
 	answerRepo := answer.NewAnswerRepo(dataData, uniqueIDRepo, userRankRepo, activityRepo)
 	questionRepo := question.NewQuestionRepo(dataData, uniqueIDRepo)
-	tagRepo := tag.NewTagRepo(dataData, uniqueIDRepo)
+	tagRepo := tag.NewTagRepo(dataData, uniqueIDRepo, siteInfoCommonService)
 	objService := object_info.NewObjService(answerRepo, questionRepo, commentCommonRepo, tagRepo)
 	voteRepo := activity_common.NewVoteRepo(dataData, activityRepo)
 	commentService := comment2.NewCommentService(commentRepo, commentCommonRepo, userCommon, objService, voteRepo)
