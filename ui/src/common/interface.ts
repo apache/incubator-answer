@@ -334,6 +334,7 @@ export interface SearchResItem {
   object_type: string;
   object: {
     id: string;
+    question_id?: string;
     title: string;
     excerpt: string;
     created_at: number;
