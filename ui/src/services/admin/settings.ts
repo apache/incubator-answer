@@ -84,6 +84,14 @@ export const brandSetting = (params: Type.AdmingSettingBranding) => {
   return request.put('/answer/admin/api/siteinfo/branding', params);
 };
 
+export const getRequireAndReservedTag = () => {
+  return request.get('/answer/admin/api/siteinfo/write');
+};
+
+export const postRequireAndReservedTag = (params) => {
+  return request.put('/answer/admin/api/siteinfo/write', params);
+};
+
 export const getLegalSetting = () => {
   return request.get<Type.AdminSettingsLegal>(
     '/answer/admin/api/siteinfo/legal',

@@ -167,13 +167,13 @@ const routes: RouteNode[] = [
       {
         path: 'users/account-activation',
         page: 'pages/Users/ActiveEmail',
-        guard: async () => {
-          const notActivated = guard.notActivated();
-          if (notActivated.ok) {
-            return notActivated;
-          }
-          return guard.notLogged();
-        },
+        // guard: async () => {
+        //   const notActivated = guard.notActivated();
+        //   if (notActivated.ok) {
+        //     return notActivated;
+        //   }
+        //   return guard.notLogged();
+        // },
       },
       {
         path: 'users/account-activation/success',

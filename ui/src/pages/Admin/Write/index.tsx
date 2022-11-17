@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next';
 
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import type * as Type from '@/common/interface';
-// import { useToast } from '@/hooks';
-// import { siteInfoStore } from '@/stores';
-import { useGeneralSetting } from '@/services';
+import { useToast } from '@/hooks';
+import {
+  getRequireAndReservedTag,
+  postRequireAndReservedTag,
+} from '@/services';
 
 import '../index.scss';
 
@@ -13,13 +15,11 @@ const Legal: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.write',
   });
-  // const Toast = useToast();
+  const Toast = useToast();
   // const updateSiteInfo = siteInfoStore((state) => state.update);
 
-  const { data: setting } = useGeneralSetting();
   const schema: JSONSchema = {
     title: t('page_title'),
-    required: ['terms_of_service', 'privacy_policy'],
     properties: {
       recommend_tags: {
         type: 'string',
@@ -62,38 +62,40 @@ const Legal: FC = () => {
     evt.stopPropagation();
 
     const reqParams: Type.AdminSettingsWrite = {
-      recommend_tags: formData.recommend_tags.value,
+      recommend_tags: formData.recommend_tags.value.trim().split('\n'),
       required_tag: formData.required_tag.value,
+      reserved_tags: formData.reserved_tags.value.trim().split('\n'),
     };
 
     console.log(reqParams);
-    // updateGeneralSetting(reqParams)
-    //   .then(() => {
-    //     Toast.onShow({
-    //       msg: t('update', { keyPrefix: 'toast' }),
-    //       variant: 'success',
-    //     });
-    //     updateSiteInfo(reqParams);
-    //   })
-    //   .catch((err) => {
-    //     if (err.isError && err.key) {
-    //       formData[err.key].isInvalid = true;
-    //       formData[err.key].errorMsg = err.value;
-    //     }
-    //     setFormData({ ...formData });
-    //   });
+    postRequireAndReservedTag(reqParams)
+      .then(() => {
+        Toast.onShow({
+          msg: t('update', { keyPrefix: 'toast' }),
+          variant: 'success',
+        });
+      })
+      .catch((err) => {
+        if (err.isError && err.key) {
+          formData[err.key].isInvalid = true;
+          formData[err.key].errorMsg = err.value;
+        }
+        setFormData({ ...formData });
+      });
+  };
+
+  const initData = () => {
+    getRequireAndReservedTag().then((res) => {
+      formData.recommend_tags.value = res.recommend_tags.join('\n');
+      formData.required_tag.value = res.required_tag;
+      formData.reserved_tags.value = res.reserved_tags.join('\n');
+      setFormData({ ...formData });
+    });
   };
 
   useEffect(() => {
-    if (!setting) {
-      return;
-    }
-    const formMeta = {};
-    Object.keys(setting).forEach((k) => {
-      formMeta[k] = { ...formData[k], value: setting[k] };
-    });
-    setFormData({ ...formData, ...formMeta });
-  }, [setting]);
+    initData();
+  }, []);
 
   const handleOnChange = (data) => {
     setFormData(data);
