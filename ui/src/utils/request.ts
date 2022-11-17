@@ -103,7 +103,6 @@ class Request {
           return Promise.reject(false);
         }
         if (status === 403) {
-          debugger;
           // Permission interception
           if (data?.type === 'url_expired') {
             // url expired
