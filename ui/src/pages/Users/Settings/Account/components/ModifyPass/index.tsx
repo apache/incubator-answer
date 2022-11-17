@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useToast } from '@/hooks';
 import type { FormDataType } from '@/common/interface';
 import { modifyPassword } from '@/services';
+import { handleFormError } from '@/utils';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -118,11 +119,10 @@ const Index: FC = () => {
         handleFormState();
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
 

@@ -8,6 +8,7 @@ import {
   getRequireAndReservedTag,
   postRequireAndReservedTag,
 } from '@/services';
+import { handleFormError } from '@/utils';
 
 import '../index.scss';
 
@@ -76,11 +77,10 @@ const Legal: FC = () => {
         });
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
 

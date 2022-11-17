@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { marked } from 'marked';
@@ -7,6 +7,7 @@ import type * as Type from '@/common/interface';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
 import { getLegalSetting, putLegalSetting } from '@/services';
+import { handleFormError } from '@/utils';
 import '../index.scss';
 
 const Legal: FC = () => {
@@ -68,11 +69,10 @@ const Legal: FC = () => {
         });
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
 

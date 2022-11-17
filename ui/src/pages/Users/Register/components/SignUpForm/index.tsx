@@ -6,6 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import type { FormDataType } from '@/common/interface';
 import { register, useLegalTos, useLegalPrivacy } from '@/services';
 import userStore from '@/stores/userInfo';
+import { handleFormError } from '@/utils';
 
 interface Props {
   callback: () => void;
@@ -119,11 +120,10 @@ const Index: React.FC<Props> = ({ callback }) => {
         callback();
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
 

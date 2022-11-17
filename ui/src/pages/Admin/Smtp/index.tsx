@@ -7,6 +7,7 @@ import { useSmtpSetting, updateSmtpSetting } from '@/services';
 import pattern from '@/common/pattern';
 import { SchemaForm, JSONSchema, UISchema } from '@/components';
 import { initFormData } from '../../../components/SchemaForm/index';
+import { handleFormError } from '@/utils';
 
 const Smtp: FC = () => {
   const { t } = useTranslation('translation', {
@@ -128,11 +129,10 @@ const Smtp: FC = () => {
         });
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
 
