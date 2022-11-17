@@ -417,8 +417,3 @@ type UserVerifyEmailSendReq struct {
 	CaptchaID   string `validate:"omitempty,gt=0,lte=500" json:"captcha_id"`
 	CaptchaCode string `validate:"omitempty,gt=0,lte=500" json:"captcha_code"`
 }
-
-type UserVerifyEmailErrorResponse struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
-}
