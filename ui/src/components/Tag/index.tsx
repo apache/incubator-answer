@@ -11,8 +11,10 @@ interface IProps {
 }
 
 const Index: FC<IProps> = ({ className = '', href, data }) => {
-  href =
-    href || `/tags/${data.main_tag_slug_name || data.slug_name}`.toLowerCase();
+  href ||= `/tags/${encodeURIComponent(
+    data.main_tag_slug_name || data.slug_name,
+  )}`.toLowerCase();
+
   return (
     <a
       href={href}

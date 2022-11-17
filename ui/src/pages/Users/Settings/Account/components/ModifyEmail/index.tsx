@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import type * as Type from '@/common/interface';
 import { useToast } from '@/hooks';
 import { getLoggedUserInfo, changeEmail } from '@/services';
+import { handleFormError } from '@/utils';
 
 const reg = /(?<=.{2}).+(?=@)/gi;
 
@@ -74,11 +75,10 @@ const Index: FC = () => {
         });
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData.e_mail.isInvalid = true;
-          formData.e_mail.errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
 
