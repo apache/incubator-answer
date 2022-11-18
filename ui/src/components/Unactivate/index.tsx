@@ -60,7 +60,7 @@ const Index: React.FC<IProps> = ({ visible = false }) => {
       })
       .catch((err) => {
         if (err.isError) {
-          const data = handleFormError(err.list, formData);
+          const data = handleFormError(err, formData);
           setFormData({ ...data });
         }
       })

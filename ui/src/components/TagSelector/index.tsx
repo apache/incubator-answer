@@ -19,6 +19,7 @@ interface IProps {
   onBlur?: () => void;
   hiddenDescription?: boolean;
   hiddenCreateBtn?: boolean;
+  showRequiredTagText?: boolean;
   alwaysShowAddBtn?: boolean;
 }
 
@@ -32,6 +33,7 @@ const TagSelector: FC<IProps> = ({
   hiddenDescription = false,
   hiddenCreateBtn = false,
   alwaysShowAddBtn = false,
+  showRequiredTagText = false,
 }) => {
   const [initialValue, setInitialValue] = useState<Type.Tag[]>([...value]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -224,14 +226,16 @@ const TagSelector: FC<IProps> = ({
                   </Form>
                 </Dropdown.Header>
               )}
-              {tags && tags.filter((v) => v.recommend)?.length > 0 && (
-                <Dropdown.Item
-                  disabled
-                  style={{ fontWeight: 500 }}
-                  className="text-secondary">
-                  Required tag (at least one)
-                </Dropdown.Item>
-              )}
+              {showRequiredTagText &&
+                tags &&
+                tags.filter((v) => v.recommend)?.length > 0 && (
+                  <Dropdown.Item
+                    disabled
+                    style={{ fontWeight: 500 }}
+                    className="text-secondary">
+                    {t('tag_required_text')}
+                  </Dropdown.Item>
+                )}
 
               {tags?.map((item, index) => {
                 return (
