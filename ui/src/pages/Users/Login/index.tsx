@@ -130,9 +130,7 @@ const Index: React.FC = () => {
         //   }
         // }
         if (err.isError) {
-          console.log('err===', err);
           const data = handleFormError(err, formData);
-          console.log('err===', data);
           if (err.list.filter((v) => v.error_field.indexOf('captcha') < 0)) {
             setModalState(false);
           }
