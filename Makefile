@@ -26,7 +26,7 @@ generate:
 	go mod tidy
 
 test:
-	@$(GO) test ./...
+	@$(GO) test ./internal/repo/repo_test
 
 # clean all build result
 clean:
