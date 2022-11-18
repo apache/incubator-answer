@@ -8,10 +8,11 @@
 
 了解更多关于该项目的内容，请访问 [answer.dev](https://answer.dev).
 
-[![LICENSE](https://img.shields.io/badge/License-Apache-green)](https://github.com/answerdev/answer/blob/main/LICENSE)
-[![Language](https://img.shields.io/badge/Language-Go-blue.svg)](https://golang.org/)
-[![Language](https://img.shields.io/badge/Language-React-blue.svg)](https://reactjs.org/)
+[![LICENSE](https://img.shields.io/github/license/answerdev/answer)](https://github.com/answerdev/answer/blob/main/LICENSE)
+[![Language](https://img.shields.io/badge/language-go-blue.svg)](https://golang.org/)
+[![Language](https://img.shields.io/badge/language-react-blue.svg)](https://reactjs.org/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/answerdev/answer)](https://goreportcard.com/report/github.com/answerdev/answer)
+[![Discord](https://img.shields.io/badge/discord-chat-5865f2?logo=discord)](https://discord.gg/Jm7Y4cbUej)
 
 ## 截图
 
