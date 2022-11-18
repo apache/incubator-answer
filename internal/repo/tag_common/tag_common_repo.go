@@ -1,0 +1,261 @@
+package tag_common
+
+import (
+	"context"
+
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/pager"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
+	"github.com/answerdev/answer/internal/service/unique"
+	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
+	"xorm.io/builder"
+)
+
+// tagCommonRepo tag repository
+type tagCommonRepo struct {
+	data            *data.Data
+	uniqueIDRepo    unique.UniqueIDRepo
+	siteInfoService *siteinfo_common.SiteInfoCommonService
+}
+
+// NewTagCommonRepo new repository
+func NewTagCommonRepo(
+	data *data.Data,
+	uniqueIDRepo unique.UniqueIDRepo,
+	siteInfoService *siteinfo_common.SiteInfoCommonService,
+) tagcommon.TagCommonRepo {
+	return &tagCommonRepo{
+		data:            data,
+		uniqueIDRepo:    uniqueIDRepo,
+		siteInfoService: siteInfoService,
+	}
+}
+
+func (tr *tagCommonRepo) tagRecommendStatus(ctx context.Context) bool {
+	tagconfig, err := tr.siteInfoService.GetSiteWrite(ctx)
+	if err != nil {
+		log.Error("siteInfoService.GetSiteWrite error", err)
+		return false
+	}
+	return tagconfig.RequiredTag
+}
+
+// GetTagListByIDs get tag list all
+func (tr *tagCommonRepo) GetTagListByIDs(ctx context.Context, ids []string) (tagList []*entity.Tag, err error) {
+	tagList = make([]*entity.Tag, 0)
+	session := tr.data.DB.In("id", ids)
+	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
+	}
+	return
+}
+
+// GetTagBySlugName get tag by slug name
+func (tr *tagCommonRepo) GetTagBySlugName(ctx context.Context, slugName string) (tagInfo *entity.Tag, exist bool, err error) {
+	tagInfo = &entity.Tag{}
+	session := tr.data.DB.Where("slug_name = ?", slugName)
+	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	exist, err = session.Get(tagInfo)
+	if err != nil {
+		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+
+	if !tr.tagRecommendStatus(ctx) {
+		tagInfo.Recommend = false
+	}
+	return
+}
+
+// GetTagListByName get tag list all like name
+func (tr *tagCommonRepo) GetTagListByName(ctx context.Context, name string, limit int, hasReserved bool) (tagList []*entity.Tag, err error) {
+	tagList = make([]*entity.Tag, 0)
+	cond := &entity.Tag{}
+	session := tr.data.DB.Where("")
+	if name != "" {
+		session.Where("slug_name LIKE ?", name+"%")
+	} else {
+		cond.Recommend = true
+	}
+	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	session.Limit(limit).Asc("slug_name")
+	if !hasReserved {
+		cond.Reserved = false
+		session.UseBool("recommend", "reserved")
+	} else {
+		session.UseBool("recommend")
+	}
+	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList, cond)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
+	}
+	return
+}
+
+func (tr *tagCommonRepo) GetRecommendTagList(ctx context.Context) (tagList []*entity.Tag, err error) {
+	tagList = make([]*entity.Tag, 0)
+	cond := &entity.Tag{}
+	session := tr.data.DB.Where("")
+	cond.Recommend = true
+	// session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	session.Asc("slug_name")
+	session.UseBool("recommend")
+	err = session.Find(&tagList, cond)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
+	}
+	return
+}
+
+func (tr *tagCommonRepo) GetReservedTagList(ctx context.Context) (tagList []*entity.Tag, err error) {
+	tagList = make([]*entity.Tag, 0)
+	cond := &entity.Tag{}
+	session := tr.data.DB.Where("")
+	cond.Reserved = true
+	// session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	session.Asc("slug_name")
+	session.UseBool("reserved")
+	err = session.Find(&tagList, cond)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
+	}
+	return
+}
+
+// GetTagListByNames get tag list all like name
+func (tr *tagCommonRepo) GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error) {
+	tagList = make([]*entity.Tag, 0)
+	session := tr.data.DB.In("slug_name", names).UseBool("recommend", "reserved")
+	// session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
+	}
+	return
+}
+
+// GetTagByID get tag one
+func (tr *tagCommonRepo) GetTagByID(ctx context.Context, tagID string) (
+	tag *entity.Tag, exist bool, err error,
+) {
+	tag = &entity.Tag{}
+	session := tr.data.DB.Where(builder.Eq{"id": tagID})
+	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	exist, err = session.Get(tag)
+	if err != nil {
+		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !tr.tagRecommendStatus(ctx) {
+		tag.Recommend = false
+	}
+	return
+}
+
+// GetTagPage get tag page
+func (tr *tagCommonRepo) GetTagPage(ctx context.Context, page, pageSize int, tag *entity.Tag, queryCond string) (
+	tagList []*entity.Tag, total int64, err error,
+) {
+	tagList = make([]*entity.Tag, 0)
+	session := tr.data.DB.NewSession()
+
+	if len(tag.SlugName) > 0 {
+		session.Where(builder.Or(builder.Like{"slug_name", tag.SlugName}, builder.Like{"display_name", tag.SlugName}))
+		tag.SlugName = ""
+	}
+	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	session.Where("main_tag_id = 0") // if this tag is synonym, exclude it
+
+	switch queryCond {
+	case "popular":
+		session.Desc("question_count")
+	case "name":
+		session.Asc("slug_name")
+	case "newest":
+		session.Desc("created_at")
+	}
+
+	total, err = pager.Help(page, pageSize, &tagList, tag, session)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !tr.tagRecommendStatus(ctx) {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
+	}
+	return
+}
+
+// AddTagList add tag
+func (tr *tagCommonRepo) AddTagList(ctx context.Context, tagList []*entity.Tag) (err error) {
+	for _, item := range tagList {
+		item.ID, err = tr.uniqueIDRepo.GenUniqueIDStr(ctx, item.TableName())
+		if err != nil {
+			return err
+		}
+		item.RevisionID = "0"
+	}
+	_, err = tr.data.DB.Insert(tagList)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+// UpdateTagQuestionCount update tag question count
+func (tr *tagCommonRepo) UpdateTagQuestionCount(ctx context.Context, tagID string, questionCount int) (err error) {
+	cond := &entity.Tag{QuestionCount: questionCount}
+	_, err = tr.data.DB.Where(builder.Eq{"id": tagID}).MustCols("question_count").Update(cond)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (tr *tagCommonRepo) UpdateTagsAttribute(ctx context.Context, tags []string, attribute string, value bool) (err error) {
+	bean := &entity.Tag{}
+	switch attribute {
+	case "recommend":
+		bean.Recommend = value
+	case "reserved":
+		bean.Reserved = value
+	default:
+		return
+	}
+	session := tr.data.DB.In("slug_name", tags).Cols(attribute).UseBool(attribute)
+	_, err = session.Update(bean)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}

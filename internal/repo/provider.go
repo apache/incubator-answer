@@ -22,6 +22,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/search_common"
 	"github.com/answerdev/answer/internal/repo/site_info"
 	"github.com/answerdev/answer/internal/repo/tag"
+	"github.com/answerdev/answer/internal/repo/tag_common"
 	"github.com/answerdev/answer/internal/repo/unique"
 	"github.com/answerdev/answer/internal/repo/user"
 	"github.com/google/wire"
@@ -53,6 +54,7 @@ var ProviderSetRepo = wire.NewSet(
 	activity.NewQuestionActivityRepo,
 	activity.NewUserActiveActivityRepo,
 	tag.NewTagRepo,
+	tag_common.NewTagCommonRepo,
 	tag.NewTagRelRepo,
 	collection.NewCollectionRepo,
 	collection.NewCollectionGroupRepo,

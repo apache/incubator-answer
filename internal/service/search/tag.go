@@ -14,7 +14,7 @@ import (
 
 type TagSearch struct {
 	repo         search_common.SearchRepo
-	tagRepo      tagcommon.TagRepo
+	tagRepo      tagcommon.TagCommonRepo
 	followCommon activity_common.FollowRepo
 	page         int
 	size         int
@@ -25,7 +25,7 @@ type TagSearch struct {
 	order        string
 }
 
-func NewTagSearch(repo search_common.SearchRepo, tagRepo tagcommon.TagRepo, followCommon activity_common.FollowRepo) *TagSearch {
+func NewTagSearch(repo search_common.SearchRepo, tagRepo tagcommon.TagCommonRepo, followCommon activity_common.FollowRepo) *TagSearch {
 	return &TagSearch{
 		repo:         repo,
 		tagRepo:      tagRepo,

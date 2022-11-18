@@ -1,4 +1,4 @@
-package tagcommon
+package tag_common
 
 import (
 	"context"
@@ -17,22 +17,18 @@ import (
 	"github.com/segmentfault/pacman/log"
 )
 
-type TagRepo interface {
+type TagCommonRepo interface {
 	AddTagList(ctx context.Context, tagList []*entity.Tag) (err error)
 	GetTagListByIDs(ctx context.Context, ids []string) (tagList []*entity.Tag, err error)
 	GetTagBySlugName(ctx context.Context, slugName string) (tagInfo *entity.Tag, exist bool, err error)
 	GetTagListByName(ctx context.Context, name string, limit int, hasReserved bool) (tagList []*entity.Tag, err error)
 	GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error)
-	RemoveTag(ctx context.Context, tagID string) (err error)
-	UpdateTag(ctx context.Context, tag *entity.Tag) (err error)
-	UpdateTagQuestionCount(ctx context.Context, tagID string, questionCount int) (err error)
-	UpdateTagSynonym(ctx context.Context, tagSlugNameList []string, mainTagID int64, mainTagSlugName string) (err error)
 	GetTagByID(ctx context.Context, tagID string) (tag *entity.Tag, exist bool, err error)
-	GetTagList(ctx context.Context, tag *entity.Tag) (tagList []*entity.Tag, err error)
 	GetTagPage(ctx context.Context, page, pageSize int, tag *entity.Tag, queryCond string) (tagList []*entity.Tag, total int64, err error)
 	GetRecommendTagList(ctx context.Context) (tagList []*entity.Tag, err error)
 	GetReservedTagList(ctx context.Context) (tagList []*entity.Tag, err error)
 	UpdateTagsAttribute(ctx context.Context, tags []string, attribute string, value bool) (err error)
+	UpdateTagQuestionCount(ctx context.Context, tagID string, questionCount int) (err error)
 }
 
 type TagRelRepo interface {
@@ -48,27 +44,43 @@ type TagRelRepo interface {
 // TagCommonService user service
 type TagCommonService struct {
 	revisionService *revision_common.RevisionService
-	tagRepo         TagRepo
+	tagCommonRepo   TagCommonRepo
 	tagRelRepo      TagRelRepo
 	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewTagCommonService new tag service
-func NewTagCommonService(tagRepo TagRepo, tagRelRepo TagRelRepo,
+func NewTagCommonService(tagCommonRepo TagCommonRepo, tagRelRepo TagRelRepo,
 	revisionService *revision_common.RevisionService,
 	siteInfoService *siteinfo_common.SiteInfoCommonService,
 ) *TagCommonService {
 	return &TagCommonService{
-		tagRepo:         tagRepo,
+		tagCommonRepo:   tagCommonRepo,
 		tagRelRepo:      tagRelRepo,
 		revisionService: revisionService,
 		siteInfoService: siteInfoService,
 	}
 }
 
+// SearchTagLike get tag list all
+func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []schema.SearchTagLikeResp, err error) {
+	tags, err := ts.tagCommonRepo.GetTagListByName(ctx, req.Tag, 5, req.IsAdmin)
+	if err != nil {
+		return
+	}
+	for _, tag := range tags {
+		item := schema.SearchTagLikeResp{}
+		item.SlugName = tag.SlugName
+		item.Recommend = tag.Recommend
+		item.Reserved = tag.Reserved
+		resp = append(resp, item)
+	}
+	return resp, nil
+}
+
 func (ts *TagCommonService) GetSiteWriteRecommendTag(ctx context.Context) (tags []string, err error) {
 	tags = make([]string, 0)
-	list, err := ts.tagRepo.GetRecommendTagList(ctx)
+	list, err := ts.tagCommonRepo.GetRecommendTagList(ctx)
 	for _, item := range list {
 		tags = append(tags, item.SlugName)
 	}
@@ -108,39 +120,14 @@ func (ts *TagCommonService) SetSiteWriteTag(ctx context.Context, recommendTags, 
 	return nil, nil
 }
 
-// func (ts *TagCommonService) SetSiteWriteRecommendTag(ctx context.Context, tags []string, userID string) (msg string, err error) {
-// 	err = ts.UpdateTag(ctx, tags, userID)
-// 	if err != nil {
-// 		return err.Error(), err
-// 	}
-// 	err = ts.SetTagsAttribute(ctx, tags, "recommend")
-// 	if err != nil {
-// 		return "", err
-// 	}
-
-// 	return "", nil
-// }
-
 func (ts *TagCommonService) GetSiteWriteReservedTag(ctx context.Context) (tags []string, err error) {
 	tags = make([]string, 0)
-	list, err := ts.tagRepo.GetReservedTagList(ctx)
+	list, err := ts.tagCommonRepo.GetReservedTagList(ctx)
 	for _, item := range list {
 		tags = append(tags, item.SlugName)
 	}
 	return tags, nil
 }
-
-// func (ts *TagCommonService) SetSiteWriteReservedTag(ctx context.Context, tags []string, userID string) (msg string, err error) {
-// 	err = ts.UpdateTag(ctx, tags, userID)
-// 	if err != nil {
-// 		return err.Error(), err
-// 	}
-// 	err = ts.SetTagsAttribute(ctx, tags, "reserved")
-// 	if err != nil {
-// 		return "", err
-// 	}
-// 	return "", nil
-// }
 
 // SetTagsAttribute
 func (ts *TagCommonService) SetTagsAttribute(ctx context.Context, tags []string, attribute string) (err error) {
@@ -153,11 +140,11 @@ func (ts *TagCommonService) SetTagsAttribute(ctx context.Context, tags []string,
 	default:
 		return
 	}
-	err = ts.tagRepo.UpdateTagsAttribute(ctx, tagslist, attribute, false)
+	err = ts.tagCommonRepo.UpdateTagsAttribute(ctx, tagslist, attribute, false)
 	if err != nil {
 		return err
 	}
-	err = ts.tagRepo.UpdateTagsAttribute(ctx, tags, attribute, true)
+	err = ts.tagCommonRepo.UpdateTagsAttribute(ctx, tags, attribute, true)
 	if err != nil {
 		return err
 	}
@@ -167,14 +154,14 @@ func (ts *TagCommonService) SetTagsAttribute(ctx context.Context, tags []string,
 // GetTagListByName
 func (ts *TagCommonService) GetTagListByName(ctx context.Context, tagName string) (tagInfo *entity.Tag, exist bool, err error) {
 	tagName = strings.ToLower(tagName)
-	return ts.tagRepo.GetTagBySlugName(ctx, tagName)
+	return ts.tagCommonRepo.GetTagBySlugName(ctx, tagName)
 }
 
 func (ts *TagCommonService) GetTagListByNames(ctx context.Context, tagNames []string) ([]*entity.Tag, error) {
 	for k, tagname := range tagNames {
 		tagNames[k] = strings.ToLower(tagname)
 	}
-	return ts.tagRepo.GetTagListByNames(ctx, tagNames)
+	return ts.tagCommonRepo.GetTagListByNames(ctx, tagNames)
 }
 
 func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.TagItem) (bool, error) {
@@ -201,8 +188,6 @@ func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.T
 	return false, nil
 }
 
-//
-
 // GetObjectTag get object tag
 func (ts *TagCommonService) GetObjectTag(ctx context.Context, objectId string) (objTags []*schema.TagResp, err error) {
 	tagsInfoList, err := ts.GetObjectEntityTag(ctx, objectId)
@@ -218,7 +203,7 @@ func (ts *TagCommonService) GetObjectEntityTag(ctx context.Context, objectId str
 	for _, tag := range tagList {
 		tagIDList = append(tagIDList, tag.TagID)
 	}
-	objTags, err = ts.tagRepo.GetTagListByIDs(ctx, tagIDList)
+	objTags, err = ts.tagCommonRepo.GetTagListByIDs(ctx, tagIDList)
 	if err != nil {
 		return nil, err
 	}
@@ -253,7 +238,7 @@ func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []s
 	for _, tag := range tagList {
 		tagIDList = append(tagIDList, tag.TagID)
 	}
-	tagsInfoList, err := ts.tagRepo.GetTagListByIDs(ctx, tagIDList)
+	tagsInfoList, err := ts.tagCommonRepo.GetTagListByIDs(ctx, tagIDList)
 	if err != nil {
 		return objectIDTagMap, err
 	}
@@ -297,7 +282,7 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 	}
 
 	// find tags name
-	tagListInDb, err := ts.tagRepo.GetTagListByNames(ctx, thisTagNameList)
+	tagListInDb, err := ts.tagCommonRepo.GetTagListByNames(ctx, thisTagNameList)
 	if err != nil {
 		return err
 	}
@@ -380,7 +365,7 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 	}
 
 	// find tags name
-	tagListInDb, err := ts.tagRepo.GetTagListByNames(ctx, thisObjTagNameList)
+	tagListInDb, err := ts.tagCommonRepo.GetTagListByNames(ctx, thisObjTagNameList)
 	if err != nil {
 		return err
 	}
@@ -407,7 +392,7 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 	}
 
 	if len(addTagList) > 0 {
-		err = ts.tagRepo.AddTagList(ctx, addTagList)
+		err = ts.tagCommonRepo.AddTagList(ctx, addTagList)
 		if err != nil {
 			return err
 		}
@@ -441,7 +426,7 @@ func (ts *TagCommonService) RefreshTagQuestionCount(ctx context.Context, tagIDs 
 		if err != nil {
 			return err
 		}
-		err = ts.tagRepo.UpdateTagQuestionCount(ctx, tagID, int(count))
+		err = ts.tagCommonRepo.UpdateTagQuestionCount(ctx, tagID, int(count))
 		if err != nil {
 			return err
 		}
