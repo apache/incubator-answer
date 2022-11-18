@@ -348,6 +348,7 @@ const Ask = () => {
                 <TagSelector
                   value={formData.tags.value}
                   onChange={handleTagsChange}
+                  showRequiredTagText
                 />
                 <Form.Control.Feedback type="invalid">
                   {formData.tags.errorMsg}
