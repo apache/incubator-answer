@@ -43,7 +43,7 @@ const Legal: FC = () => {
     recommend_tags: {
       'ui:widget': 'textarea',
       'ui:options': {
-        rows: 5,
+        rows: 10,
       },
     },
     required_tag: {
@@ -52,7 +52,7 @@ const Legal: FC = () => {
     reserved_tags: {
       'ui:widget': 'textarea',
       'ui:options': {
-        rows: 5,
+        rows: 10,
       },
     },
   };

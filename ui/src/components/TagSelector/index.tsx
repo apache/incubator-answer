@@ -229,12 +229,7 @@ const TagSelector: FC<IProps> = ({
               {showRequiredTagText &&
                 tags &&
                 tags.filter((v) => v.recommend)?.length > 0 && (
-                  <Dropdown.Item
-                    disabled
-                    style={{ fontWeight: 500 }}
-                    className="text-secondary">
-                    {t('tag_required_text')}
-                  </Dropdown.Item>
+                  <h6 className="dropdown-header">{t('tag_required_text')}</h6>
                 )}
 
               {tags?.map((item, index) => {
