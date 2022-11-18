@@ -239,7 +239,7 @@ const Comment = ({ objectId, mode }) => {
                 onCancel={() => handleCancel(item.comment_id)}
               />
             ) : (
-              <div className="d-flex">
+              <div className="d-block">
                 {item.reply_user_display_name && (
                   <Link to="." className="fs-14 me-1 text-nowrap">
                     @{item.reply_user_display_name}
