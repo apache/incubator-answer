@@ -19,7 +19,7 @@ specifiers:
   '@typescript-eslint/parser': ^5.33.0
   axios: ^0.27.2
   bootstrap: ^5.2.0
-  bootstrap-icons: ^1.9.1
+  bootstrap-icons: 1.10.2
   classnames: ^2.3.1
   codemirror: 5.65.0
   copy-to-clipboard: ^3.3.2
@@ -67,7 +67,7 @@ specifiers:
 dependencies:
   axios: 0.27.2
   bootstrap: 5.2.1_@popperjs+core@2.11.6
-  bootstrap-icons: 1.9.1
+  bootstrap-icons: 1.10.2
   classnames: 2.3.2
   codemirror: 5.65.0
   copy-to-clipboard: 3.3.2
@@ -1480,7 +1480,7 @@ packages:
       cosmiconfig-typescript-loader: 4.1.0_3owiowz3ujipd4k6pbqn3n7oui
       lodash: 4.17.21
       resolve-from: 5.0.0
-      ts-node: 10.9.1_ck2axrxkiif44rdbzjywaqjysa
+      ts-node: 10.9.1_ao52im6kiihokc7tdj7weudhra
       typescript: 4.8.3
     transitivePeerDependencies:
       - '@swc/core'
@@ -3415,8 +3415,8 @@ packages:
   /boolbase/1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
 
-  /bootstrap-icons/1.9.1:
-    resolution: {integrity: sha512-d4ZkO30MIkAhQ2nNRJqKXJVEQorALGbLWTuRxyCTJF96lRIV6imcgMehWGJUiJMJhglN0o2tqLIeDnMdiQEE9g==}
+  /bootstrap-icons/1.10.2:
+    resolution: {integrity: sha512-PTPYadRn1AMGr+QTSxe4ZCc+Wzv9DGZxbi3lNse/dajqV31n2/wl/7NX78ZpkvFgRNmH4ogdIQPQmxAfhEV6nA==}
     dev: false
 
   /bootstrap/5.2.1_@popperjs+core@2.11.6:
@@ -3821,7 +3821,7 @@ packages:
     dependencies:
       '@types/node': 14.18.29
       cosmiconfig: 7.0.1
-      ts-node: 10.9.1_ck2axrxkiif44rdbzjywaqjysa
+      ts-node: 10.9.1_ao52im6kiihokc7tdj7weudhra
       typescript: 4.8.3
     dev: true
 
@@ -10185,37 +10185,6 @@ packages:
       typescript: 4.8.3
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
-
-  /ts-node/10.9.1_ck2axrxkiif44rdbzjywaqjysa:
-    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
-    hasBin: true
-    peerDependencies:
-      '@swc/core': '>=1.2.50'
-      '@swc/wasm': '>=1.2.50'
-      '@types/node': '*'
-      typescript: '>=2.7'
-    peerDependenciesMeta:
-      '@swc/core':
-        optional: true
-      '@swc/wasm':
-        optional: true
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.9
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.3
-      '@types/node': 14.18.29
-      acorn: 8.8.0
-      acorn-walk: 8.2.0
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.2
-      make-error: 1.3.6
-      typescript: 4.8.3
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    dev: true
 
   /tsconfig-paths/3.14.1:
     resolution: {integrity: sha512-fxDhWnFSLt3VuTwtvJt5fpwxBHg5AdKWMsgcPOOIilyjymcYVZoCQF8fvFRezCNfblEXmi+PcM1eYHeOAgXCOQ==}

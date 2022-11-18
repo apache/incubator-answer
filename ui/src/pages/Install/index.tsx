@@ -245,7 +245,7 @@ const Index: FC = () => {
   }
 
   return (
-    <div className="page-wrap2 py-5">
+    <div className="bg-f5 py-5 flex-grow-1">
       <PageTitle title={t('install', { keyPrefix: 'page_title' })} />
       <Container className='py-3'>
         <Row className="justify-content-center">

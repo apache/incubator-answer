@@ -8,7 +8,7 @@ const Index = () => {
     keyPrefix: 'page_maintenance',
   });
   return (
-    <div className="page-wrap2">
+    <div className="bg-f5">
       <Container
         className="d-flex flex-column justify-content-center align-items-center"
         style={{ minHeight: '100vh' }}>
