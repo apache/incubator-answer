@@ -4,7 +4,7 @@
 
 # Answer - 构建问答社区
 
-一款极简的、问答形式的知识社区开源软件，用来快速构建产品你的产品问答支持社区、用户问答社区、粉丝社区等。
+一款问答形式的知识社区开源软件，用来快速构建产品你的产品技术社区、客户支持社区、用户社区等。
 
 了解更多关于该项目的内容，请访问 [answer.dev](https://answer.dev).
 
@@ -12,7 +12,7 @@
 [![Language](https://img.shields.io/badge/language-go-blue.svg)](https://golang.org/)
 [![Language](https://img.shields.io/badge/language-react-blue.svg)](https://reactjs.org/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/answerdev/answer)](https://goreportcard.com/report/github.com/answerdev/answer)
-[![Discord](https://img.shields.io/badge/discord-chat-5865f2?logo=discord)](https://discord.gg/Jm7Y4cbUej)
+[![Discord](https://img.shields.io/badge/discord-chat-5865f2?logo=discord&logoColor=f5f5f5)](https://discord.gg/Jm7Y4cbUej)
 
 ## 截图
 
