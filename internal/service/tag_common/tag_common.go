@@ -68,6 +68,7 @@ func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.Searc
 	if err != nil {
 		return
 	}
+	ts.tagsFormatRecommendAndReserved(ctx, tags)
 	for _, tag := range tags {
 		item := schema.SearchTagLikeResp{}
 		item.SlugName = tag.SlugName
@@ -151,17 +152,16 @@ func (ts *TagCommonService) SetTagsAttribute(ctx context.Context, tags []string,
 	return nil
 }
 
-// GetTagListByName
-func (ts *TagCommonService) GetTagListByName(ctx context.Context, tagName string) (tagInfo *entity.Tag, exist bool, err error) {
-	tagName = strings.ToLower(tagName)
-	return ts.tagCommonRepo.GetTagBySlugName(ctx, tagName)
-}
-
 func (ts *TagCommonService) GetTagListByNames(ctx context.Context, tagNames []string) ([]*entity.Tag, error) {
 	for k, tagname := range tagNames {
 		tagNames[k] = strings.ToLower(tagname)
 	}
-	return ts.tagCommonRepo.GetTagListByNames(ctx, tagNames)
+	tagList, err := ts.tagCommonRepo.GetTagListByNames(ctx, tagNames)
+	if err != nil {
+		return nil, err
+	}
+	ts.tagsFormatRecommendAndReserved(ctx, tagList)
+	return tagList, nil
 }
 
 func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.TagItem) (bool, error) {
@@ -194,6 +194,52 @@ func (ts *TagCommonService) GetObjectTag(ctx context.Context, objectId string) (
 	return ts.TagFormat(ctx, tagsInfoList)
 }
 
+// AddTagList get object tag
+func (ts *TagCommonService) AddTagList(ctx context.Context, tagList []*entity.Tag) (err error) {
+	return ts.tagCommonRepo.AddTagList(ctx, tagList)
+}
+
+// GetTagByID get object tag
+func (ts *TagCommonService) GetTagByID(ctx context.Context, tagID string) (tag *entity.Tag, exist bool, err error) {
+	tag, exist, err = ts.tagCommonRepo.GetTagByID(ctx, tagID)
+	if !exist {
+		return
+	}
+	ts.tagFormatRecommendAndReserved(ctx, tag)
+	return
+}
+
+// GetTagBySlugName get object tag
+func (ts *TagCommonService) GetTagBySlugName(ctx context.Context, slugName string) (tag *entity.Tag, exist bool, err error) {
+	tag, exist, err = ts.tagCommonRepo.GetTagBySlugName(ctx, slugName)
+	if !exist {
+		return
+	}
+	ts.tagFormatRecommendAndReserved(ctx, tag)
+	return
+}
+
+// GetTagListByIDs get object tag
+func (ts *TagCommonService) GetTagListByIDs(ctx context.Context, ids []string) (tagList []*entity.Tag, err error) {
+	tagList, err = ts.tagCommonRepo.GetTagListByIDs(ctx, ids)
+	if err != nil {
+		return nil, err
+	}
+	ts.tagsFormatRecommendAndReserved(ctx, tagList)
+	return
+}
+
+// GetTagPage get object tag
+func (ts *TagCommonService) GetTagPage(ctx context.Context, page, pageSize int, tag *entity.Tag, queryCond string) (
+	tagList []*entity.Tag, total int64, err error) {
+	tagList, total, err = ts.tagCommonRepo.GetTagPage(ctx, page, pageSize, tag, queryCond)
+	if err != nil {
+		return nil, 0, err
+	}
+	ts.tagsFormatRecommendAndReserved(ctx, tagList)
+	return
+}
+
 func (ts *TagCommonService) GetObjectEntityTag(ctx context.Context, objectId string) (objTags []*entity.Tag, err error) {
 	tagIDList := make([]string, 0)
 	tagList, err := ts.tagRelRepo.GetObjectTagRelList(ctx, objectId)
@@ -203,11 +249,10 @@ func (ts *TagCommonService) GetObjectEntityTag(ctx context.Context, objectId str
 	for _, tag := range tagList {
 		tagIDList = append(tagIDList, tag.TagID)
 	}
-	objTags, err = ts.tagCommonRepo.GetTagListByIDs(ctx, tagIDList)
+	objTags, err = ts.GetTagListByIDs(ctx, tagIDList)
 	if err != nil {
 		return nil, err
 	}
-
 	return objTags, nil
 }
 
@@ -225,6 +270,30 @@ func (ts *TagCommonService) TagFormat(ctx context.Context, tags []*entity.Tag) (
 	return objTags, nil
 }
 
+func (ts *TagCommonService) tagsFormatRecommendAndReserved(ctx context.Context, tagList []*entity.Tag) {
+	tagConfig, err := ts.siteInfoService.GetSiteWrite(ctx)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	if !tagConfig.RequiredTag {
+		for _, tag := range tagList {
+			tag.Recommend = false
+		}
+	}
+}
+
+func (ts *TagCommonService) tagFormatRecommendAndReserved(ctx context.Context, tag *entity.Tag) {
+	tagConfig, err := ts.siteInfoService.GetSiteWrite(ctx)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	if !tagConfig.RequiredTag {
+		tag.Recommend = false
+	}
+}
+
 // BatchGetObjectTag batch get object tag
 func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []string) (map[string][]*schema.TagResp, error) {
 	objectIDTagMap := make(map[string][]*schema.TagResp)
@@ -238,7 +307,7 @@ func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []s
 	for _, tag := range tagList {
 		tagIDList = append(tagIDList, tag.TagID)
 	}
-	tagsInfoList, err := ts.tagCommonRepo.GetTagListByIDs(ctx, tagIDList)
+	tagsInfoList, err := ts.GetTagListByIDs(ctx, tagIDList)
 	if err != nil {
 		return objectIDTagMap, err
 	}
@@ -275,14 +344,8 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 		return nil
 	}
 
-	thisTagNameList := make([]string, 0)
-	for _, t := range tags {
-		t = strings.ToLower(t)
-		thisTagNameList = append(thisTagNameList, t)
-	}
-
 	// find tags name
-	tagListInDb, err := ts.tagCommonRepo.GetTagListByNames(ctx, thisTagNameList)
+	tagListInDb, err := ts.GetTagListByNames(ctx, tags)
 	if err != nil {
 		return err
 	}

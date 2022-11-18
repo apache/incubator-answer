@@ -6,7 +6,6 @@ import (
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/internal/service/tag"
 	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
@@ -15,21 +14,18 @@ import (
 
 // tagRepo tag repository
 type tagRepo struct {
-	data            *data.Data
-	uniqueIDRepo    unique.UniqueIDRepo
-	siteInfoService *siteinfo_common.SiteInfoCommonService
+	data         *data.Data
+	uniqueIDRepo unique.UniqueIDRepo
 }
 
 // NewTagRepo new repository
 func NewTagRepo(
 	data *data.Data,
 	uniqueIDRepo unique.UniqueIDRepo,
-	siteInfoService *siteinfo_common.SiteInfoCommonService,
 ) tag.TagRepo {
 	return &tagRepo{
-		data:            data,
-		uniqueIDRepo:    uniqueIDRepo,
-		siteInfoService: siteInfoService,
+		data:         data,
+		uniqueIDRepo: uniqueIDRepo,
 	}
 }
 
