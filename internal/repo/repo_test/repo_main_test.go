@@ -52,7 +52,8 @@ var (
 func TestMain(t *testing.M) {
 	dbSetting, ok := dbSettingMapping[os.Getenv("TEST_DB_DRIVER")]
 	if !ok {
-		dbSetting = dbSettingMapping[string(schemas.MYSQL)]
+		// Use sqlite3 to test.
+		dbSetting = dbSettingMapping[string(schemas.SQLITE)]
 	}
 	defer func() {
 		if tearDown != nil {
