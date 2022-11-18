@@ -7,7 +7,7 @@ import (
 	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/search"
 	"github.com/answerdev/answer/internal/service/search_common"
-	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
+	"github.com/answerdev/answer/internal/service/tag_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 )
 
@@ -34,13 +34,13 @@ type SearchService struct {
 
 func NewSearchService(
 	searchRepo search_common.SearchRepo,
-	tagRepo tagcommon.TagCommonRepo,
+	tagCommonService *tag_common.TagCommonService,
 	userCommon *usercommon.UserCommon,
 	followCommon activity_common.FollowRepo,
 ) *SearchService {
 	return &SearchService{
 		searchRepo:           searchRepo,
-		tagSearch:            search.NewTagSearch(searchRepo, tagRepo, followCommon),
+		tagSearch:            search.NewTagSearch(searchRepo, tagCommonService, followCommon),
 		withinSearch:         search.NewWithinSearch(searchRepo),
 		authorSearch:         search.NewAuthorSearch(searchRepo, userCommon),
 		scoreSearch:          search.NewScoreSearch(searchRepo),

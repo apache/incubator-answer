@@ -7,41 +7,27 @@ import (
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/log"
 	"xorm.io/builder"
 )
 
 // tagCommonRepo tag repository
 type tagCommonRepo struct {
-	data            *data.Data
-	uniqueIDRepo    unique.UniqueIDRepo
-	siteInfoService *siteinfo_common.SiteInfoCommonService
+	data         *data.Data
+	uniqueIDRepo unique.UniqueIDRepo
 }
 
 // NewTagCommonRepo new repository
 func NewTagCommonRepo(
 	data *data.Data,
 	uniqueIDRepo unique.UniqueIDRepo,
-	siteInfoService *siteinfo_common.SiteInfoCommonService,
 ) tagcommon.TagCommonRepo {
 	return &tagCommonRepo{
-		data:            data,
-		uniqueIDRepo:    uniqueIDRepo,
-		siteInfoService: siteInfoService,
+		data:         data,
+		uniqueIDRepo: uniqueIDRepo,
 	}
-}
-
-func (tr *tagCommonRepo) tagRecommendStatus(ctx context.Context) bool {
-	tagconfig, err := tr.siteInfoService.GetSiteWrite(ctx)
-	if err != nil {
-		log.Error("siteInfoService.GetSiteWrite error", err)
-		return false
-	}
-	return tagconfig.RequiredTag
 }
 
 // GetTagListByIDs get tag list all
@@ -52,11 +38,6 @@ func (tr *tagCommonRepo) GetTagListByIDs(ctx context.Context, ids []string) (tag
 	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if !tr.tagRecommendStatus(ctx) {
-		for _, tag := range tagList {
-			tag.Recommend = false
-		}
 	}
 	return
 }
@@ -69,10 +50,6 @@ func (tr *tagCommonRepo) GetTagBySlugName(ctx context.Context, slugName string) 
 	exist, err = session.Get(tagInfo)
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-
-	if !tr.tagRecommendStatus(ctx) {
-		tagInfo.Recommend = false
 	}
 	return
 }
@@ -99,11 +76,6 @@ func (tr *tagCommonRepo) GetTagListByName(ctx context.Context, name string, limi
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	if !tr.tagRecommendStatus(ctx) {
-		for _, tag := range tagList {
-			tag.Recommend = false
-		}
-	}
 	return
 }
 
@@ -118,11 +90,6 @@ func (tr *tagCommonRepo) GetRecommendTagList(ctx context.Context) (tagList []*en
 	err = session.Find(&tagList, cond)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if !tr.tagRecommendStatus(ctx) {
-		for _, tag := range tagList {
-			tag.Recommend = false
-		}
 	}
 	return
 }
@@ -139,11 +106,6 @@ func (tr *tagCommonRepo) GetReservedTagList(ctx context.Context) (tagList []*ent
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	if !tr.tagRecommendStatus(ctx) {
-		for _, tag := range tagList {
-			tag.Recommend = false
-		}
-	}
 	return
 }
 
@@ -155,11 +117,6 @@ func (tr *tagCommonRepo) GetTagListByNames(ctx context.Context, names []string) 
 	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if !tr.tagRecommendStatus(ctx) {
-		for _, tag := range tagList {
-			tag.Recommend = false
-		}
 	}
 	return
 }
@@ -174,9 +131,6 @@ func (tr *tagCommonRepo) GetTagByID(ctx context.Context, tagID string) (
 	exist, err = session.Get(tag)
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if !tr.tagRecommendStatus(ctx) {
-		tag.Recommend = false
 	}
 	return
 }
@@ -207,11 +161,6 @@ func (tr *tagCommonRepo) GetTagPage(ctx context.Context, page, pageSize int, tag
 	total, err = pager.Help(page, pageSize, &tagList, tag, session)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if !tr.tagRecommendStatus(ctx) {
-		for _, tag := range tagList {
-			tag.Recommend = false
-		}
 	}
 	return
 }

@@ -539,14 +539,13 @@ func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID strin
 // SearchList
 func (qs *QuestionService) SearchList(ctx context.Context, req *schema.QuestionSearch, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
 	if len(req.Tag) > 0 {
-		taginfo, has, err := qs.tagCommon.GetTagListByName(ctx, req.Tag)
+		tagInfo, has, err := qs.tagCommon.GetTagBySlugName(ctx, strings.ToLower(req.Tag))
 		if err != nil {
 			log.Error("tagCommon.GetTagListByNames error", err)
 		}
 		if has {
-			req.TagIDs = append(req.TagIDs, taginfo.ID)
+			req.TagIDs = append(req.TagIDs, tagInfo.ID)
 		}
-
 	}
 	list := make([]*schema.QuestionInfo, 0)
 	if req.UserName != "" {
