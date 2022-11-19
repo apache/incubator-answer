@@ -59,6 +59,7 @@ import (
 	"github.com/answerdev/answer/internal/service/report_backyard"
 	"github.com/answerdev/answer/internal/service/report_handle_backyard"
 	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/internal/service/search_parser"
 	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
@@ -156,8 +157,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo)
 	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configRepo, siteInfoCommonService, serviceConf, dataData)
 	answerController := controller.NewAnswerController(answerService, rankService, dashboardService)
+	searchParser := search_parser.NewSearchParser(tagCommonService, userCommon)
 	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon)
-	searchService := service.NewSearchService(searchRepo, tagCommonService, userCommon, followRepo)
+	searchService := service.NewSearchService(searchParser, searchRepo)
 	searchController := controller.NewSearchController(searchService)
 	serviceRevisionService := service.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService)
 	revisionController := controller.NewRevisionController(serviceRevisionService)
@@ -181,7 +183,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	notificationService := notification2.NewNotificationService(dataData, notificationRepo, notificationCommon)
 	notificationController := controller.NewNotificationController(notificationService)
 	dashboardController := controller.NewDashboardController(dashboardService)
-	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController)
+	uploadController := controller.NewUploadController(uploaderService)
+	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter()
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)
