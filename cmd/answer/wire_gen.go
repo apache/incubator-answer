@@ -135,7 +135,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	tagCommonService := tag_common2.NewTagCommonService(tagCommonRepo, tagRelRepo, revisionService, siteInfoCommonService)
 	followRepo := activity_common.NewFollowRepo(dataData, uniqueIDRepo, activityRepo)
 	tagService := tag2.NewTagService(tagRepo, tagCommonService, revisionService, followRepo, siteInfoCommonService)
-	tagController := controller.NewTagController(tagService, rankService)
+	tagController := controller.NewTagController(tagService, tagCommonService, rankService)
 	followFollowRepo := activity.NewFollowRepo(dataData, uniqueIDRepo, activityRepo)
 	followService := follow.NewFollowService(followFollowRepo, followRepo, tagCommonRepo)
 	followController := controller.NewFollowController(followService)
