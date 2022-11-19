@@ -196,7 +196,6 @@ const Index: React.FC = () => {
       if (res.e_mail) {
         const str = res.e_mail.toLowerCase().trim();
         const hash = MD5(str);
-        console.log(str, hash, mailHash);
         setMailHash(hash);
       }
     });

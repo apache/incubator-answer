@@ -3,6 +3,8 @@ import { Card, Row, Col, Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
+import { gt, gte } from 'semver';
+
 import type * as Type from '@/common/interface';
 
 interface IProps {
@@ -12,7 +14,12 @@ interface IProps {
 const HealthStatus: FC<IProps> = ({ data }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'admin.dashboard' });
   const { version, remote_version } = data.version_info || {};
-  const isLatest = version === remote_version;
+  let isLatest = false;
+  let hasNewerVersion = false;
+  if (version && remote_version) {
+    isLatest = gte(version, remote_version);
+    hasNewerVersion = gt(remote_version, version);
+  }
   return (
     <Card className="mb-4">
       <Card.Body>
@@ -32,7 +39,7 @@ const HealthStatus: FC<IProps> = ({ data }) => {
                 {t('latest')}
               </Badge>
             )}
-            {!isLatest && remote_version && (
+            {!isLatest && hasNewerVersion && (
               <Badge
                 pill
                 bg="warning"

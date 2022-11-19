@@ -1,20 +1,27 @@
 import { FC } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
-import { Outlet } from 'react-router-dom';
-
-import { AccordionNav } from '@/components';
-import { ADMIN_LEGAL_MENUS } from '@/common/constants';
-
-import './index.scss';
+import { Container, Row, Col, Nav } from 'react-bootstrap';
+import { Outlet, NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const Index: FC = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'nav_menus' });
   return (
-    <Container className="sub-container">
-      <Row>
-        <Col lg={2}>
-          <AccordionNav menus={ADMIN_LEGAL_MENUS} />
+    <Container className="pt-4 mt-2 mb-5">
+      <Row className="justify-content-center">
+        <Col xxl={12} sm={10} xs={10}>
+          <Nav
+            className="mb-4 flex-nowrap"
+            variant="pills"
+            style={{ overflow: 'auto' }}>
+            <NavLink to="/tos" key="tos" className="nav-link">
+              {t('tos')}
+            </NavLink>
+            <NavLink to="/privacy" key="privacy" className="nav-link">
+              {t('privacy')}
+            </NavLink>
+          </Nav>
         </Col>
-        <Col lg={6}>
+        <Col xxl={12} sm={10} xs={10}>
           <Outlet />
         </Col>
       </Row>
