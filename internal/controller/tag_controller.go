@@ -20,8 +20,12 @@ type TagController struct {
 }
 
 // NewTagController new controller
-func NewTagController(tagService *tag.TagService, rankService *rank.RankService) *TagController {
-	return &TagController{tagService: tagService, rankService: rankService}
+func NewTagController(
+	tagService *tag.TagService,
+	tagCommonService *tag_common.TagCommonService,
+	rankService *rank.RankService,
+) *TagController {
+	return &TagController{tagService: tagService, tagCommonService: tagCommonService, rankService: rankService}
 }
 
 // SearchTagLike get tag list

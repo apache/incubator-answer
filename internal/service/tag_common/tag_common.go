@@ -271,6 +271,9 @@ func (ts *TagCommonService) TagFormat(ctx context.Context, tags []*entity.Tag) (
 }
 
 func (ts *TagCommonService) tagsFormatRecommendAndReserved(ctx context.Context, tagList []*entity.Tag) {
+	if len(tagList) == 0 {
+		return
+	}
 	tagConfig, err := ts.siteInfoService.GetSiteWrite(ctx)
 	if err != nil {
 		log.Error(err)
@@ -284,6 +287,9 @@ func (ts *TagCommonService) tagsFormatRecommendAndReserved(ctx context.Context, 
 }
 
 func (ts *TagCommonService) tagFormatRecommendAndReserved(ctx context.Context, tag *entity.Tag) {
+	if tag == nil {
+		return
+	}
 	tagConfig, err := ts.siteInfoService.GetSiteWrite(ctx)
 	if err != nil {
 		log.Error(err)
