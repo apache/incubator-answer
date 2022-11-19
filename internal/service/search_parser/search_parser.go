@@ -2,23 +2,24 @@ package search_parser
 
 import (
 	"context"
-	"github.com/answerdev/answer/internal/schema"
-	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
-	usercommon "github.com/answerdev/answer/internal/service/user_common"
-	"github.com/answerdev/answer/pkg/converter"
 	"regexp"
 	"strings"
+
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/tag_common"
+	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/converter"
 )
 
 type SearchParser struct {
-	tagRepo    tagcommon.TagRepo
-	userCommon *usercommon.UserCommon
+	tagCommonService *tag_common.TagCommonService
+	userCommon       *usercommon.UserCommon
 }
 
-func NewSearchParser(tagRepo tagcommon.TagRepo, userCommon *usercommon.UserCommon) *SearchParser {
+func NewSearchParser(tagCommonService *tag_common.TagCommonService, userCommon *usercommon.UserCommon) *SearchParser {
 	return &SearchParser{
-		tagRepo:    tagRepo,
-		userCommon: userCommon,
+		tagCommonService: tagCommonService,
+		userCommon:       userCommon,
 	}
 }
 
@@ -161,7 +162,7 @@ func (sp *SearchParser) parseTags(query *string) (tags []string) {
 	}
 	tags = make([]string, len(res))
 	for i, item := range res {
-		tag, exists, err := sp.tagRepo.GetTagBySlugName(context.TODO(), item[1])
+		tag, exists, err := sp.tagCommonService.GetTagBySlugName(context.TODO(), item[1])
 		if err != nil || !exists {
 			continue
 		}
