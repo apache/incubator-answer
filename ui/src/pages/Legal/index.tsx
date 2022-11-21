@@ -8,7 +8,7 @@ const Index: FC = () => {
   return (
     <Container className="pt-4 mt-2 mb-5">
       <Row className="justify-content-center">
-        <Col xxl={12} sm={10} xs={10}>
+        <Col xxl={10}>
           <Nav
             className="mb-4 flex-nowrap"
             variant="pills"
@@ -21,7 +21,7 @@ const Index: FC = () => {
             </NavLink>
           </Nav>
         </Col>
-        <Col xxl={12} sm={10} xs={10}>
+        <Col xxl={10}>
           <Outlet />
         </Col>
       </Row>
