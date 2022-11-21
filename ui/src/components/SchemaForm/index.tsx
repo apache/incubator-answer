@@ -109,6 +109,17 @@ const SchemaForm: FC<IProps> = ({
     }
   };
 
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    const data = {
+      ...formData,
+      [name]: { ...formData[name], value, isInvalid: false },
+    };
+    if (onChange instanceof Function) {
+      onChange(data);
+    }
+  };
+
   const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
     const data = {
@@ -238,6 +249,9 @@ const SchemaForm: FC<IProps> = ({
               <Form.Label>{title}</Form.Label>
               <Form.Select
                 aria-label={description}
+                name={key}
+                value={formData[key]?.value}
+                onChange={handleSelectChange}
                 isInvalid={formData[key].isInvalid}>
                 {properties[key].enum?.map((item, index) => {
                   return (
@@ -314,7 +328,8 @@ const SchemaForm: FC<IProps> = ({
               <Form.Label>{title}</Form.Label>
               <TimeZonePicker
                 value={formData[key]?.value}
-                onChange={handleInputChange}
+                name={key}
+                onChange={handleSelectChange}
               />
               <Form.Control
                 name={key}
