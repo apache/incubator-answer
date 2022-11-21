@@ -23,7 +23,7 @@ func (s *SiteInfoCommonService) GetSiteGeneral(ctx context.Context) (resp *schem
 	resp = &schema.SiteGeneralResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeGeneral)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	if !exist {
 		return resp, nil
@@ -37,7 +37,7 @@ func (s *SiteInfoCommonService) GetSiteInterface(ctx context.Context) (resp *sch
 	resp = &schema.SiteInterfaceResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeInterface)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	if !exist {
 		return resp, nil
@@ -51,7 +51,7 @@ func (s *SiteInfoCommonService) GetSiteBranding(ctx context.Context) (resp *sche
 	resp = &schema.SiteBrandingResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeBranding)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	if !exist {
 		return resp, nil
@@ -65,7 +65,7 @@ func (s *SiteInfoCommonService) GetSiteWrite(ctx context.Context) (resp *schema.
 	resp = &schema.SiteWriteResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeWrite)
 	if err != nil {
-		return nil, err
+		return resp, err
 	}
 	if !exist {
 		return resp, nil

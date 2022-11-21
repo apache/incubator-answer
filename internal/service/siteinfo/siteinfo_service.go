@@ -14,6 +14,7 @@ import (
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 type SiteInfoService struct {
@@ -38,7 +39,8 @@ func (s *SiteInfoService) GetSiteGeneral(ctx context.Context) (resp *schema.Site
 	resp = &schema.SiteGeneralResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeGeneral)
 	if err != nil {
-		return nil, err
+		log.Error(err)
+		return resp, nil
 	}
 	if !exist {
 		return resp, nil
@@ -52,7 +54,8 @@ func (s *SiteInfoService) GetSiteInterface(ctx context.Context) (resp *schema.Si
 	resp = &schema.SiteInterfaceResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeInterface)
 	if err != nil {
-		return nil, err
+		log.Error(err)
+		return resp, nil
 	}
 	if !exist {
 		return resp, nil
@@ -66,7 +69,8 @@ func (s *SiteInfoService) GetSiteBranding(ctx context.Context) (resp *schema.Sit
 	resp = &schema.SiteBrandingReq{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeBranding)
 	if err != nil {
-		return nil, err
+		log.Error(err)
+		return resp, nil
 	}
 	if !exist {
 		return resp, nil
@@ -76,11 +80,12 @@ func (s *SiteInfoService) GetSiteBranding(ctx context.Context) (resp *schema.Sit
 }
 
 // GetSiteWrite get site info write
-func (s *SiteInfoService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWriteReq, err error) {
-	resp = &schema.SiteWriteReq{}
+func (s *SiteInfoService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWriteResp, err error) {
+	resp = &schema.SiteWriteResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeWrite)
 	if err != nil {
-		return nil, err
+		log.Error(err)
+		return resp, nil
 	}
 	if !exist {
 		return resp, nil
