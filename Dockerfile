@@ -26,7 +26,7 @@ COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
 COPY --from=node-builder /tmp/build ${BUILD_DIR}/ui/build
 RUN apk --no-cache add build-base git \
-    && make clean test build \
+    && make clean build \
     && cp answer /usr/bin/answer
 
 RUN mkdir -p /data/uploads && chmod 777 /data/uploads \
