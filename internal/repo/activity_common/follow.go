@@ -124,7 +124,7 @@ func (ar *FollowRepo) IsFollowed(userID, objectID string) (bool, error) {
 	if !has {
 		return false, nil
 	}
-	if at.Cancelled == 1 {
+	if at.Cancelled == entity.ActivityCancelled {
 		return false, nil
 	} else {
 		return true, nil

@@ -12,6 +12,7 @@ type Activity struct {
 	ID            string    `xorm:"not null pk autoincr BIGINT(20) id"`
 	CreatedAt     time.Time `xorm:"created TIMESTAMP created_at"`
 	UpdatedAt     time.Time `xorm:"updated TIMESTAMP updated_at"`
+	CancelledAt   time.Time `xorm:"TIMESTAMP cancelled_at"`
 	UserID        string    `xorm:"not null index BIGINT(20) user_id"`
 	TriggerUserID int64     `xorm:"not null default 0 index BIGINT(20) trigger_user_id"`
 	ObjectID      string    `xorm:"not null default 0 index BIGINT(20) object_id"`
