@@ -14,6 +14,7 @@ import (
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 type SiteInfoService struct {
@@ -35,57 +36,60 @@ func NewSiteInfoService(
 
 // GetSiteGeneral get site info general
 func (s *SiteInfoService) GetSiteGeneral(ctx context.Context) (resp *schema.SiteGeneralResp, err error) {
+	resp = &schema.SiteGeneralResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeGeneral)
 	if err != nil {
-		return nil, err
+		log.Error(err)
+		return resp, nil
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.SiteInfoNotFound)
+		return resp, nil
 	}
-
-	resp = &schema.SiteGeneralResp{}
 	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 	return resp, nil
 }
 
 // GetSiteInterface get site info interface
 func (s *SiteInfoService) GetSiteInterface(ctx context.Context) (resp *schema.SiteInterfaceResp, err error) {
+	resp = &schema.SiteInterfaceResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeInterface)
 	if err != nil {
-		return nil, err
+		log.Error(err)
+		return resp, nil
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.SiteInfoNotFound)
+		return resp, nil
 	}
-	resp = &schema.SiteInterfaceResp{}
 	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 	return resp, nil
 }
 
 // GetSiteBranding get site info branding
 func (s *SiteInfoService) GetSiteBranding(ctx context.Context) (resp *schema.SiteBrandingReq, err error) {
+	resp = &schema.SiteBrandingReq{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeBranding)
 	if err != nil {
-		return nil, err
+		log.Error(err)
+		return resp, nil
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.SiteInfoNotFound)
+		return resp, nil
 	}
-	resp = &schema.SiteBrandingReq{}
 	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 	return resp, nil
 }
 
 // GetSiteWrite get site info write
 func (s *SiteInfoService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWriteResp, err error) {
+	resp = &schema.SiteWriteResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeWrite)
 	if err != nil {
-		return nil, err
+		log.Error(err)
+		return resp, nil
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.SiteInfoNotFound)
+		return resp, nil
 	}
-	resp = &schema.SiteWriteResp{}
 	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 
 	resp.RecommendTags, err = s.tagCommonService.GetSiteWriteRecommendTag(ctx)
