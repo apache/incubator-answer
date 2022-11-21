@@ -116,7 +116,6 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		return
 	}
 
-	questionInfo = &schema.QuestionInfo{}
 	question := &entity.Question{}
 	now := time.Now()
 	question.UserID = req.UserID
@@ -146,9 +145,13 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	revisionDTO := &schema.AddRevisionDTO{
 		UserID:   question.UserID,
 		ObjectID: question.ID,
-		Title:    "",
+		Title:    question.Title,
 	}
-	infoJSON, _ := json.Marshal(question)
+	questionWithTagsRevision, err := qs.changeQuestionToRevision(ctx, question)
+	if err != nil {
+		return nil, err
+	}
+	infoJSON, _ := json.Marshal(questionWithTagsRevision)
 	revisionDTO.Content = string(infoJSON)
 	err = qs.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
@@ -264,7 +267,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	revisionDTO := &schema.AddRevisionDTO{
 		UserID:   question.UserID,
 		ObjectID: question.ID,
-		Title:    "",
+		Title:    question.Title,
 		Log:      req.EditSummary,
 	}
 	infoJSON, _ := json.Marshal(question)
@@ -687,4 +690,21 @@ func (qs *QuestionService) CmsSearchAnswerList(ctx context.Context, search *enti
 		}
 	}
 	return answerlist, count, nil
+}
+
+func (qs *QuestionService) changeQuestionToRevision(ctx context.Context, questionInfo *entity.Question) (
+	questionRevision *entity.QuestionWithTagsRevision, err error) {
+	questionRevision = &entity.QuestionWithTagsRevision{}
+	questionRevision.Question = *questionInfo
+
+	tags, err := qs.tagCommon.GetObjectEntityTag(ctx, questionInfo.ID)
+	if err != nil {
+		return nil, err
+	}
+	for _, tag := range tags {
+		item := &entity.TagSimpleInfoForRevision{}
+		_ = copier.Copy(item, tag)
+		questionRevision.Tags = append(questionRevision.Tags, item)
+	}
+	return questionRevision, nil
 }
