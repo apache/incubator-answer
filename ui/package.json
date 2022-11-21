@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.2.0",
     "@fullhuman/postcss-purgecss": "^4.1.3",
     "@testing-library/dom": "^8.17.1",
     "@testing-library/jest-dom": "^4.2.4",
