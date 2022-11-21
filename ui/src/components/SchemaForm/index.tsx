@@ -14,6 +14,7 @@ export interface JSONSchema {
     [key: string]: {
       type: 'string' | 'boolean';
       title: string;
+      label?: string;
       description?: string;
       enum?: Array<string | boolean>;
       enumNames?: string[];
@@ -228,7 +229,7 @@ const SchemaForm: FC<IProps> = ({
   return (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {
-        const { title, description } = properties[key];
+        const { title, description, label } = properties[key];
         const { 'ui:widget': widget = 'input', 'ui:options': options = {} } =
           uiSchema[key] || {};
         if (widget === 'select') {
@@ -285,7 +286,6 @@ const SchemaForm: FC<IProps> = ({
         }
 
         if (widget === 'switch') {
-          console.log(formData[key]?.value, 'switch=====');
           return (
             <Form.Group key={title} className="mb-3" controlId={key}>
               <Form.Label>{title}</Form.Label>
@@ -294,7 +294,7 @@ const SchemaForm: FC<IProps> = ({
                 id={title}
                 name={key}
                 type="switch"
-                label={title}
+                label={label}
                 checked={formData[key]?.value}
                 feedback={formData[key]?.errorMsg}
                 feedbackType="invalid"

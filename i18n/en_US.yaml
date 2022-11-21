@@ -1163,6 +1163,7 @@ ui:
         label: Recommend Tags
         text: "Please input tag slug above, one tag per line."
       required_tag:
+        title: Required Tag
         label: Set recommend tag as required
         text: "Every new question must have at least one recommend tag."
       reserved_tags:
