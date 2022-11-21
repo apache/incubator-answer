@@ -250,7 +250,7 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text>{description}</Form.Text>
             </Form.Group>
           );
         }
@@ -280,7 +280,7 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text>{description}</Form.Text>
             </Form.Group>
           );
         }
@@ -304,7 +304,7 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text>{description}</Form.Text>
             </Form.Group>
           );
         }
@@ -324,7 +324,7 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text>{description}</Form.Text>
             </Form.Group>
           );
         }
@@ -347,7 +347,7 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text>{description}</Form.Text>
             </Form.Group>
           );
         }
@@ -370,7 +370,7 @@ const SchemaForm: FC<IProps> = ({
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
 
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text>{description}</Form.Text>
             </Form.Group>
           );
         }
@@ -390,7 +390,7 @@ const SchemaForm: FC<IProps> = ({
               {formData[key]?.errorMsg}
             </Form.Control.Feedback>
 
-            <Form.Text className="text-muted">{description}</Form.Text>
+            <Form.Text>{description}</Form.Text>
           </Form.Group>
         );
       })}
