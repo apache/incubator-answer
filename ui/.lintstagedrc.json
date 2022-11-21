@@ -1,14 +1,5 @@
 {
-  "*.{js,jsx,ts,tsx}": [
-    "cd ui && eslint --cache --fix",
-    "git add"
-  ],
-  "*.{js,jsx,scss,md,json}": [
-    "cd ui && prettier --write",
-    "git add"
-  ],
-  "*.ts?(x)": [
-    "cd ui && prettier --parser=typescript --write",
-    "git add"
-  ]
+  "*.{js,jsx,ts,tsx}": ["eslint --cache --fix", "git add"],
+  "*.{js,jsx,scss,md,json}": ["prettier --write", "git add"],
+  "*.ts?(x)": ["prettier --parser=typescript --write", "git add"]
 }
