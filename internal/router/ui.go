@@ -68,24 +68,23 @@ func (a *UIRouter) Register(r *gin.Engine) {
 
 	// specify the not router for default routes and redirect
 	r.NoRoute(func(c *gin.Context) {
-		name := c.Request.URL.Path
+		urlPath := c.Request.URL.Path
 		filePath := ""
-		var file []byte
-		var err error
-		switch name {
+		switch urlPath {
 		case "/favicon.ico":
 			c.Header("content-type", "image/vnd.microsoft.icon")
-			filePath = UIRootFilePath + name
+			filePath = UIRootFilePath + urlPath
 		case "/manifest.json":
-			filePath = UIRootFilePath + name
+			filePath = UIRootFilePath + urlPath
 		case "/install":
+			// if answer is running by run command user can not access install page.
 			c.Redirect(http.StatusFound, "/")
 			return
 		default:
 			filePath = UIIndexFilePath
 			c.Header("content-type", "text/html;charset=utf-8")
 		}
-		file, err = ui.Build.ReadFile(filePath)
+		file, err := ui.Build.ReadFile(filePath)
 		if err != nil {
 			log.Error(err)
 			c.Status(http.StatusNotFound)

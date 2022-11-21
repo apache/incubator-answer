@@ -24,6 +24,8 @@ export interface ReportParams {
 export interface TagBase {
   display_name: string;
   slug_name: string;
+  recommend: boolean;
+  reserved: boolean;
 }
 
 export interface Tag extends TagBase {
@@ -126,7 +128,8 @@ export interface UserInfoRes extends UserInfoBase {
   [prop: string]: any;
 }
 
-export interface AvatarUploadReq {
+export type UploadType = 'post' | 'avatar' | 'branding';
+export interface UploadReq {
   file: FormData;
 }
 
@@ -266,7 +269,6 @@ export interface AdminSettingsGeneral {
 }
 
 export interface AdminSettingsInterface {
-  logo: string;
   language: string;
   theme: string;
   time_zone?: string;
@@ -285,8 +287,29 @@ export interface AdminSettingsSmtp {
 }
 
 export interface SiteSettings {
+  branding: AdmingSettingBranding;
   general: AdminSettingsGeneral;
   interface: AdminSettingsInterface;
+}
+
+export interface AdmingSettingBranding {
+  logo: string;
+  square_icon: string;
+  mobile_logo?: string;
+  favicon?: string;
+}
+
+export interface AdminSettingsLegal {
+  privacy_policy_original_text?: string;
+  privacy_policy_parsed_text?: string;
+  terms_of_service_original_text?: string;
+  terms_of_service_parsed_text?: string;
+}
+
+export interface AdminSettingsWrite {
+  recommend_tags: string[];
+  required_tag: string;
+  reserved_tags: string[];
 }
 
 /**
@@ -314,6 +337,7 @@ export interface SearchResItem {
   object_type: string;
   object: {
     id: string;
+    question_id?: string;
     title: string;
     excerpt: string;
     created_at: number;

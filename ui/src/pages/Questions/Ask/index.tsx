@@ -16,6 +16,7 @@ import {
   postAnswer,
   useQueryQuestionByTitle,
 } from '@/services';
+import { handleFormError } from '@/utils';
 
 import SearchQuestion from './components/SearchQuestion';
 
@@ -123,7 +124,7 @@ const Ask = () => {
         isInvalid: true,
         errorMsg: t('form.fields.title.msg.empty'),
       };
-    } else if ([...title.value].length > 150) {
+    } else if (Array.from(title.value).length > 150) {
       bol = false;
       formData.title = {
         value: title.value,
@@ -209,19 +210,17 @@ const Ask = () => {
           navigate(`/questions/${qid}`);
         })
         .catch((err) => {
-          if (err.isError && err.key) {
-            formData[err.key].isInvalid = true;
-            formData[err.key].errorMsg = err.value;
+          if (err.isError) {
+            const data = handleFormError(err, formData);
+            setFormData({ ...data });
           }
-          setFormData({ ...formData });
         });
     } else {
       const res = await saveQuestion(params).catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
 
       const id = res?.id;
@@ -236,11 +235,10 @@ const Ask = () => {
               navigate(`/questions/${id}`);
             })
             .catch((err) => {
-              if (err.isError && err.key) {
-                formData[err.key].isInvalid = true;
-                formData[err.key].errorMsg = err.value;
+              if (err.isError) {
+                const data = handleFormError(err, formData);
+                setFormData({ ...data });
               }
-              setFormData({ ...formData });
             });
         } else {
           navigate(`/questions/${id}`);
@@ -350,6 +348,7 @@ const Ask = () => {
                 <TagSelector
                   value={formData.tags.value}
                   onChange={handleTagsChange}
+                  showRequiredTagText
                 />
                 <Form.Control.Feedback type="invalid">
                   {formData.tags.errorMsg}

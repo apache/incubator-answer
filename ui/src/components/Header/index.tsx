@@ -17,7 +17,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import { loggedUserInfoStore, siteInfoStore, interfaceStore } from '@/stores';
+import { loggedUserInfoStore, siteInfoStore, brandingStore } from '@/stores';
 import { logout, useQueryNotificationStatus } from '@/services';
 import { RouteAlias } from '@/router/alias';
 
@@ -33,7 +33,7 @@ const Header: FC = () => {
   const q = urlSearch.get('q');
   const [searchStr, setSearch] = useState('');
   const siteInfo = siteInfoStore((state) => state.siteInfo);
-  const { interface: interfaceInfo } = interfaceStore();
+  const brandingInfo = brandingStore((state) => state.branding);
   const { data: redDot } = useQueryNotificationStatus();
   const location = useLocation();
   const handleInput = (val) => {
@@ -73,12 +73,20 @@ const Header: FC = () => {
 
         <div className="d-flex justify-content-between align-items-center nav-grow flex-nowrap">
           <Navbar.Brand to="/" as={Link} className="lh-1 me-0 me-sm-3">
-            {interfaceInfo.logo ? (
-              <img
-                className="logo rounded-1 me-0"
-                src={interfaceInfo.logo}
-                alt=""
-              />
+            {brandingInfo.logo ? (
+              <>
+                <img
+                  className="d-none d-lg-block logo rounded-1 me-0"
+                  src={brandingInfo.logo}
+                  alt=""
+                />
+
+                <img
+                  className="lg-none logo rounded-1 me-0"
+                  src={brandingInfo.mobile_logo || brandingInfo.logo}
+                  alt=""
+                />
+              </>
             ) : (
               <span>{siteInfo.name || 'Answer'}</span>
             )}

@@ -11,47 +11,107 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 type SiteInfoService struct {
-	siteInfoRepo siteinfo_common.SiteInfoRepo
-	emailService *export.EmailService
+	siteInfoRepo     siteinfo_common.SiteInfoRepo
+	emailService     *export.EmailService
+	tagCommonService *tagcommon.TagCommonService
 }
 
-func NewSiteInfoService(siteInfoRepo siteinfo_common.SiteInfoRepo, emailService *export.EmailService) *SiteInfoService {
+func NewSiteInfoService(
+	siteInfoRepo siteinfo_common.SiteInfoRepo,
+	emailService *export.EmailService,
+	tagCommonService *tagcommon.TagCommonService) *SiteInfoService {
 	return &SiteInfoService{
-		siteInfoRepo: siteInfoRepo,
-		emailService: emailService,
+		siteInfoRepo:     siteInfoRepo,
+		emailService:     emailService,
+		tagCommonService: tagCommonService,
 	}
 }
 
 // GetSiteGeneral get site info general
 func (s *SiteInfoService) GetSiteGeneral(ctx context.Context) (resp *schema.SiteGeneralResp, err error) {
+	resp = &schema.SiteGeneralResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeGeneral)
 	if err != nil {
-		return nil, err
+		log.Error(err)
+		return resp, nil
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.SiteInfoNotFound)
+		return resp, nil
 	}
-
-	resp = &schema.SiteGeneralResp{}
 	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 	return resp, nil
 }
 
 // GetSiteInterface get site info interface
 func (s *SiteInfoService) GetSiteInterface(ctx context.Context) (resp *schema.SiteInterfaceResp, err error) {
+	resp = &schema.SiteInterfaceResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeInterface)
+	if err != nil {
+		log.Error(err)
+		return resp, nil
+	}
+	if !exist {
+		return resp, nil
+	}
+	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+	return resp, nil
+}
+
+// GetSiteBranding get site info branding
+func (s *SiteInfoService) GetSiteBranding(ctx context.Context) (resp *schema.SiteBrandingReq, err error) {
+	resp = &schema.SiteBrandingReq{}
+	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeBranding)
+	if err != nil {
+		log.Error(err)
+		return resp, nil
+	}
+	if !exist {
+		return resp, nil
+	}
+	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+	return resp, nil
+}
+
+// GetSiteWrite get site info write
+func (s *SiteInfoService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWriteResp, err error) {
+	resp = &schema.SiteWriteResp{}
+	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeWrite)
+	if err != nil {
+		log.Error(err)
+		return resp, nil
+	}
+	if exist {
+		_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+	}
+
+	resp.RecommendTags, err = s.tagCommonService.GetSiteWriteRecommendTag(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+	resp.ReservedTags, err = s.tagCommonService.GetSiteWriteReservedTag(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+	return resp, nil
+}
+
+// GetSiteLegal get site legal info
+func (s *SiteInfoService) GetSiteLegal(ctx context.Context) (resp *schema.SiteLegalResp, err error) {
+	resp = &schema.SiteLegalResp{}
+	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeLegal)
 	if err != nil {
 		return nil, err
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.SiteInfoNotFound)
+		return resp, nil
 	}
-	resp = &schema.SiteInterfaceResp{}
 	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 	return resp, nil
 }
@@ -107,6 +167,44 @@ func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.Site
 
 	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
 	return
+}
+
+// SaveSiteBranding save site branding information
+func (s *SiteInfoService) SaveSiteBranding(ctx context.Context, req *schema.SiteBrandingReq) (err error) {
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeBranding,
+		Content: string(content),
+		Status:  1,
+	}
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeBranding, data)
+}
+
+// SaveSiteWrite save site configuration about write
+func (s *SiteInfoService) SaveSiteWrite(ctx context.Context, req *schema.SiteWriteReq) (resp interface{}, err error) {
+	errData, err := s.tagCommonService.SetSiteWriteTag(ctx, req.RecommendTags, req.ReservedTags, req.UserID)
+	if err != nil {
+		return errData, err
+	}
+
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeWrite,
+		Content: string(content),
+		Status:  1,
+	}
+	return nil, s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeWrite, data)
+}
+
+// SaveSiteLegal save site legal configuration
+func (s *SiteInfoService) SaveSiteLegal(ctx context.Context, req *schema.SiteLegalReq) (err error) {
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeLegal,
+		Content: string(content),
+		Status:  1,
+	}
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeLegal, data)
 }
 
 // GetSMTPConfig get smtp config

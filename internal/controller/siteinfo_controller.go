@@ -5,6 +5,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/pacman/log"
 )
 
 type SiteinfoController struct {
@@ -30,9 +31,45 @@ func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
 	resp := &schema.SiteInfoResp{}
 	resp.General, err = sc.siteInfoService.GetSiteGeneral(ctx)
 	if err != nil {
-		handler.HandleResponse(ctx, err, resp)
+		log.Error(err)
+	}
+	resp.Interface, err = sc.siteInfoService.GetSiteInterface(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+
+	resp.Branding, err = sc.siteInfoService.GetSiteBranding(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+	handler.HandleResponse(ctx, nil, resp)
+}
+
+// GetSiteLegalInfo get site legal info
+// @Summary get site legal info
+// @Description get site legal info
+// @Tags site
+// @Param info_type query string true "legal information type" Enums(tos, privacy)
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.GetSiteLegalInfoResp}
+// @Router /answer/api/v1/siteinfo/legal [get]
+func (sc *SiteinfoController) GetSiteLegalInfo(ctx *gin.Context) {
+	req := &schema.GetSiteLegalInfoReq{}
+	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	resp.Face, err = sc.siteInfoService.GetSiteInterface(ctx)
-	handler.HandleResponse(ctx, err, resp)
+	siteLegal, err := sc.siteInfoService.GetSiteLegal(ctx)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	resp := &schema.GetSiteLegalInfoResp{}
+	if req.IsTOS() {
+		resp.TermsOfServiceOriginalText = siteLegal.TermsOfServiceOriginalText
+		resp.TermsOfServiceParsedText = siteLegal.TermsOfServiceParsedText
+	} else if req.IsPrivacy() {
+		resp.PrivacyPolicyOriginalText = siteLegal.PrivacyPolicyOriginalText
+		resp.PrivacyPolicyParsedText = siteLegal.PrivacyPolicyParsedText
+	}
+	handler.HandleResponse(ctx, nil, resp)
 }

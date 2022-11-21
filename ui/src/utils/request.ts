@@ -10,16 +10,8 @@ import { getCurrentLang } from '@/utils/localize';
 import Storage from './storage';
 import { floppyNavigation } from './floppyNavigation';
 
-const API = {
-  development: '',
-  production: '',
-  test: '',
-};
-
-const baseApiUrl = process.env.REACT_APP_API_URL || API[process.env.NODE_ENV];
-
 const baseConfig = {
-  baseUrl: baseApiUrl,
+  baseUrl: process.env.REACT_APP_API_URL || '',
   timeout: 10000,
   withCredentials: true,
 };
@@ -56,8 +48,8 @@ class Request {
         return data;
       },
       (error) => {
-        const { status, data: respData, msg: respMsg } = error.response;
-        const { data, msg = '' } = respData;
+        const { status, data: respData, msg: respMsg } = error.response || {};
+        const { data = {}, msg = '' } = respData || {};
         if (status === 400) {
           // show error message
           if (data instanceof Object && data.err_type) {
@@ -86,13 +78,9 @@ class Request {
             return Promise.reject(false);
           }
 
-          if (
-            data instanceof Object &&
-            Object.keys(data).length > 0 &&
-            data.key
-          ) {
+          if (data instanceof Array && data.length > 0) {
             // handle form error
-            return Promise.reject({ ...data, isError: true });
+            return Promise.reject({ isError: true, list: data });
           }
 
           if (!data || Object.keys(data).length <= 0) {

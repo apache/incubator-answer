@@ -14,6 +14,10 @@ const Index: FC<Props> = ({ data }) => {
   if (!data?.object_type) {
     return null;
   }
+  let itemUrl = `/questions/${data.object.id}`;
+  if (data.object_type === 'answer') {
+    itemUrl = `/questions/${data.object.question_id}/${data.object.id}`;
+  }
   return (
     <ListGroupItem className="py-3 px-0">
       <div className="mb-2 clearfix">
@@ -23,9 +27,7 @@ const Index: FC<Props> = ({ data }) => {
           style={{ marginTop: '2px' }}>
           {data.object_type === 'question' ? 'Q' : 'A'}
         </Badge>
-        <a
-          className="h5 mb-0 link-dark text-break"
-          href={`/questions/${data.object.id}`}>
+        <a className="h5 mb-0 link-dark text-break" href={itemUrl}>
           {data.object.title}
           {data.object.status === 'closed'
             ? ` [${t('closed', { keyPrefix: 'question' })}]`
@@ -67,11 +69,7 @@ const Index: FC<Props> = ({ data }) => {
       )}
 
       {data.object?.tags?.map((item) => {
-        return (
-          <Tag href={`/tags/${item.slug_name}`} className="me-1">
-            {item.slug_name}
-          </Tag>
-        );
+        return <Tag key={item.slug_name} className="me-1" data={item} />;
       })}
     </ListGroupItem>
   );

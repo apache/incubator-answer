@@ -30,7 +30,7 @@ clone the repo locally and run following command in your terminal:
 $ git clone git@github.com:answerdev/answer.git answer
 $ cd answer/ui
 $ pnpm install
-$ pnpm run start
+$ pnpm start
 ```
 
 now, your browser should already open automatically, and autoload `http://localhost:3000`.
@@ -41,11 +41,9 @@ you can also manually visit it.
 when cloning repo, and run `pnpm install` to init dependencies. you can use project commands below:
 
 - `pnpm run start` run Answer web locally.
-- `pnpm run build:dev` build code for environment `dev`
-- `pnpm run build:test` build code for environment `test`
-- `pnpm run build:prod` build code for environment `prod`
+- `pnpm run build` build Answer for production
 - `pnpm run lint` lint and fix the code style
-- `pnpm run cz` run `git commit` by `commitizen`
+
 
 ## 🖥 Environment Support
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { FC, useState, useEffect } from 'react';
 import { Dropdown, FormControl, Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +19,7 @@ interface IProps {
   onBlur?: () => void;
   hiddenDescription?: boolean;
   hiddenCreateBtn?: boolean;
+  showRequiredTagText?: boolean;
   alwaysShowAddBtn?: boolean;
 }
 
@@ -31,6 +33,7 @@ const TagSelector: FC<IProps> = ({
   hiddenDescription = false,
   hiddenCreateBtn = false,
   alwaysShowAddBtn = false,
+  showRequiredTagText = false,
 }) => {
   const [initialValue, setInitialValue] = useState<Type.Tag[]>([...value]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -95,17 +98,16 @@ const TagSelector: FC<IProps> = ({
     }
   }, [value]);
 
-  useEffect(() => {
-    if (!tag) {
-      setTags(null);
-      return;
-    }
-
-    queryTags(tag).then((res) => {
+  const fetchTags = (str) => {
+    queryTags(str).then((res) => {
       const tagArray: Type.Tag[] = filterTags(res || []);
       setTags(tagArray);
     });
-  }, [tag]);
+  };
+
+  useEffect(() => {
+    fetchTags(tag);
+  }, [visibleMenu]);
 
   const handleClick = (val: Type.Tag) => {
     const findIndex = initialValue.findIndex(
@@ -143,7 +145,9 @@ const TagSelector: FC<IProps> = ({
   };
 
   const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTag(e.currentTarget.value.replace(';', ''));
+    const searchStr = e.currentTarget.value.replace(';', '');
+    setTag(searchStr);
+    fetchTags(searchStr);
   };
 
   const handleSelect = (eventKey) => {
@@ -186,7 +190,9 @@ const TagSelector: FC<IProps> = ({
                 'm-1 text-nowrap d-flex align-items-center',
                 index === repeatIndex && 'warning',
               )}
-              variant="outline-secondary"
+              variant={`outline-${
+                item.reserved ? 'danger' : item.recommend ? 'dark' : 'secondary'
+              }`}
               size="sm">
               {item.slug_name}
               <span className="ms-1" onMouseUp={() => handleRemove(item)}>
@@ -220,6 +226,11 @@ const TagSelector: FC<IProps> = ({
                   </Form>
                 </Dropdown.Header>
               )}
+              {showRequiredTagText &&
+                tags &&
+                tags.filter((v) => v.recommend)?.length > 0 && (
+                  <h6 className="dropdown-header">{t('tag_required_text')}</h6>
+                )}
 
               {tags?.map((item, index) => {
                 return (

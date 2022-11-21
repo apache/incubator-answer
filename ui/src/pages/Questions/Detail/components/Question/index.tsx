@@ -93,14 +93,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
       </div>
       <div className="m-n1">
         {data?.tags?.map((item: any) => {
-          return (
-            <Tag
-              className="m-1"
-              href={`/tags/${item.main_tag_slug_name || item.slug_name}`}
-              key={item.slug_name}>
-              {item.slug_name}
-            </Tag>
-          );
+          return <Tag className="m-1" key={item.slug_name} data={item} />;
         })}
       </div>
       <article

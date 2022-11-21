@@ -43,6 +43,7 @@ func (as *AuthService) GetUserCacheInfo(ctx context.Context, accessToken string)
 		log.Infof("user status updated: %+v", cacheInfo)
 		userCacheInfo.UserStatus = cacheInfo.UserStatus
 		userCacheInfo.EmailStatus = cacheInfo.EmailStatus
+		userCacheInfo.IsAdmin = cacheInfo.IsAdmin
 		// update current user cache info
 		err := as.authRepo.SetUserCacheInfo(ctx, accessToken, userCacheInfo)
 		if err != nil {
@@ -56,6 +57,10 @@ func (as *AuthService) SetUserCacheInfo(ctx context.Context, userInfo *entity.Us
 	accessToken = token.GenerateToken()
 	err = as.authRepo.SetUserCacheInfo(ctx, accessToken, userInfo)
 	return accessToken, err
+}
+
+func (as *AuthService) SetUserStatus(ctx context.Context, userInfo *entity.UserCacheInfo) (err error) {
+	return as.authRepo.SetUserStatus(ctx, userInfo.UserID, userInfo)
 }
 
 func (as *AuthService) UpdateUserCacheInfo(ctx context.Context, token string, userInfo *entity.UserCacheInfo) (err error) {

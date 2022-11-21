@@ -1,6 +1,6 @@
 import React, { FormEvent, useState, useEffect } from 'react';
 import { Container, Form, Button, Col } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
 import type {
@@ -10,7 +10,7 @@ import type {
 } from '@/common/interface';
 import { PageTitle, Unactivate } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
-import { getQueryString, guard, floppyNavigation } from '@/utils';
+import { guard, floppyNavigation, handleFormError } from '@/utils';
 import { login, checkImgCode } from '@/services';
 import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
 import { RouteAlias } from '@/router/alias';
@@ -20,6 +20,7 @@ import Storage from '@/utils/storage';
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [refresh, setRefresh] = useState(0);
   const updateUser = loggedUserInfoStore((state) => state.update);
   const storeUser = loggedUserInfoStore((state) => state.user);
@@ -121,14 +122,20 @@ const Index: React.FC = () => {
         setModalState(false);
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
-          if (err.key.indexOf('captcha') < 0) {
+        // if (err.isError && err.key) {
+        //   formData[err.key].isInvalid = true;
+        //   formData[err.key].errorMsg = err.value;
+        //   if (err.key.indexOf('captcha') < 0) {
+        //     setModalState(false);
+        //   }
+        // }
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          if (err.list.filter((v) => v.error_field.indexOf('captcha') < 0)) {
             setModalState(false);
           }
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
         setRefresh((pre) => pre + 1);
       });
   };
@@ -154,7 +161,7 @@ const Index: React.FC = () => {
   }, [refresh]);
 
   useEffect(() => {
-    const isInactive = getQueryString('status');
+    const isInactive = searchParams.get('status');
 
     if ((storeUser.id && storeUser.mail_status === 2) || isInactive) {
       setStep(2);

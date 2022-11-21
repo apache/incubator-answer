@@ -1,6 +1,6 @@
 .PHONY: build clean ui
 
-VERSION=0.3.0
+VERSION=0.4.0
 BIN=answer
 DIR_SRC=./cmd/answer
 DOCKER_CMD=docker
@@ -26,11 +26,10 @@ generate:
 	go mod tidy
 
 test:
-	@$(GO) test ./...
+	@$(GO) test ./internal/repo/repo_test
 
 # clean all build result
 clean:
-
 	@$(GO) clean ./...
 	@rm -f $(BIN)
 

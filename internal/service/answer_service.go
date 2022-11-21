@@ -76,7 +76,23 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 	if answerInfo.UserID != req.UserID {
 		return errors.BadRequest(reason.UnauthorizedError)
 	}
+	if answerInfo.VoteCount > 0 {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
 	if answerInfo.Adopted == schema.AnswerAdoptedEnable {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
+	if err != nil {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	if !exist {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	if questionInfo.AnswerCount > 1 {
+		return errors.BadRequest(reason.UnauthorizedError)
+	}
+	if questionInfo.AcceptedAnswerID != "" {
 		return errors.BadRequest(reason.UnauthorizedError)
 	}
 
