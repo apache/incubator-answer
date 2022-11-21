@@ -63,6 +63,14 @@ func (ar *ActivityRepo) GetActivityTypeByObjKey(ctx context.Context, objectKey, 
 	return
 }
 
+func (ar *ActivityRepo) GetActivityTypeByConfigKey(ctx context.Context, configKey string) (activityType int, err error) {
+	activityType, err = ar.configRepo.GetConfigType(configKey)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 func (ar *ActivityRepo) GetActivity(ctx context.Context, session *xorm.Session,
 	objectID, userID string, activityType int,
 ) (existsActivity *entity.Activity, exist bool, err error) {
@@ -88,4 +96,13 @@ func (ar *ActivityRepo) GetUserIDObjectIDActivitySum(ctx context.Context, userID
 		return 0, err
 	}
 	return sum.Rank, nil
+}
+
+// AddActivity add activity
+func (ar *ActivityRepo) AddActivity(ctx context.Context, activity *entity.Activity) (err error) {
+	_, err = ar.data.DB.Insert(activity)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
 }
