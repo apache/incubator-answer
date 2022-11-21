@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/service/activity_quque"
+	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
 )
@@ -34,6 +34,7 @@ func NewActivityCommon(
 	return activity
 }
 
+// HandleActivity handle activity message
 func (ac *ActivityCommon) HandleActivity() {
 	go func() {
 		defer func() {
@@ -42,7 +43,7 @@ func (ac *ActivityCommon) HandleActivity() {
 			}
 		}()
 
-		for msg := range activity_quque.ActivityQueue {
+		for msg := range activity_queue.ActivityQueue {
 			log.Debugf("received activity %+v", msg)
 
 			activityType, err := ac.activityRepo.GetActivityTypeByConfigKey(context.Background(), string(msg.ActivityTypeKey))

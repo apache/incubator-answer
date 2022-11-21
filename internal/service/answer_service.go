@@ -9,6 +9,7 @@ import (
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/service/activity"
 	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/notice_queue"
 	"github.com/answerdev/answer/internal/service/revision_common"
 
@@ -169,6 +170,17 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 		return insertData.ID, err
 	}
 	as.notificationAnswerTheQuestion(ctx, questionInfo.UserID, insertData.ID, req.UserID)
+
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:          insertData.UserID,
+		ObjectID:        insertData.ID,
+		ActivityTypeKey: constant.ActAnswerAnswered,
+	})
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:          insertData.UserID,
+		ObjectID:        insertData.ID,
+		ActivityTypeKey: constant.ActQuestionAnswered,
+	})
 	return insertData.ID, nil
 }
 

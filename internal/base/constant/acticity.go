@@ -20,40 +20,40 @@ package constant
 type ActivityTypeKey string
 
 const (
-	ActivityQuestionAsked     ActivityTypeKey = "question.asked"
-	ActivityQuestionClosed    ActivityTypeKey = "question.closed"
-	ActivityQuestionReopened  ActivityTypeKey = "question.reopened"
-	ActivityQuestionAnswered  ActivityTypeKey = "question.answered"
-	ActivityQuestionCommented ActivityTypeKey = "question.commented"
-	ActivityQuestionAccept    ActivityTypeKey = "question.accept"
-	ActivityQuestionUpvote    ActivityTypeKey = "question.upvote"
-	ActivityQuestionDownvote  ActivityTypeKey = "question.downvote"
-	ActivityQuestionEdit      ActivityTypeKey = "question.edit"
-	ActivityQuestionRollback  ActivityTypeKey = "question.rollback"
-	ActivityQuestionDeleted   ActivityTypeKey = "question.deleted"
-	ActivityQuestionUndeleted ActivityTypeKey = "question.undeleted"
+	ActQuestionAsked     ActivityTypeKey = "question.asked"
+	ActQuestionClosed    ActivityTypeKey = "question.closed"
+	ActQuestionReopened  ActivityTypeKey = "question.reopened"
+	ActQuestionAnswered  ActivityTypeKey = "question.answered"
+	ActQuestionCommented ActivityTypeKey = "question.commented"
+	ActQuestionAccept    ActivityTypeKey = "question.accept"
+	ActQuestionUpvote    ActivityTypeKey = "question.upvote"
+	ActQuestionDownvote  ActivityTypeKey = "question.downvote"
+	ActQuestionEdit      ActivityTypeKey = "question.edit"
+	ActQuestionRollback  ActivityTypeKey = "question.rollback"
+	ActQuestionDeleted   ActivityTypeKey = "question.deleted"
+	ActQuestionUndeleted ActivityTypeKey = "question.undeleted"
 )
 
 // answer activity
 
 const (
-	ActivityAnswerAnswered  ActivityTypeKey = "answer.answered"
-	ActivityAnswerCommented ActivityTypeKey = "answer.commented"
-	ActivityAnswerAccept    ActivityTypeKey = "answer.accept"
-	ActivityAnswerUpvote    ActivityTypeKey = "answer.upvote"
-	ActivityAnswerDownvote  ActivityTypeKey = "answer.downvote"
-	ActivityAnswerEdit      ActivityTypeKey = "answer.edit"
-	ActivityAnswerRollback  ActivityTypeKey = "answer.rollback"
-	ActivityAnswerDeleted   ActivityTypeKey = "answer.deleted"
-	ActivityAnswerUndeleted ActivityTypeKey = "answer.undeleted"
+	ActAnswerAnswered  ActivityTypeKey = "answer.answered"
+	ActAnswerCommented ActivityTypeKey = "answer.commented"
+	ActAnswerAccept    ActivityTypeKey = "answer.accept"
+	ActAnswerUpvote    ActivityTypeKey = "answer.upvote"
+	ActAnswerDownvote  ActivityTypeKey = "answer.downvote"
+	ActAnswerEdit      ActivityTypeKey = "answer.edit"
+	ActAnswerRollback  ActivityTypeKey = "answer.rollback"
+	ActAnswerDeleted   ActivityTypeKey = "answer.deleted"
+	ActAnswerUndeleted ActivityTypeKey = "answer.undeleted"
 )
 
 // tag activity
 
 const (
-	ActivityTagCreated   ActivityTypeKey = "tag.created"
-	ActivityTagEdit      ActivityTypeKey = "tag.edit"
-	ActivityTagRollback  ActivityTypeKey = "tag.rollback"
-	ActivityTagDeleted   ActivityTypeKey = "tag.deleted"
-	ActivityTagUndeleted ActivityTypeKey = "tag.undeleted"
+	ActTagCreated   ActivityTypeKey = "tag.created"
+	ActTagEdit      ActivityTypeKey = "tag.edit"
+	ActTagRollback  ActivityTypeKey = "tag.rollback"
+	ActTagDeleted   ActivityTypeKey = "tag.deleted"
+	ActTagUndeleted ActivityTypeKey = "tag.undeleted"
 )

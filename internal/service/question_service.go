@@ -12,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
+	"github.com/answerdev/answer/internal/service/activity_queue"
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
 	"github.com/answerdev/answer/internal/service/meta"
 	"github.com/answerdev/answer/internal/service/notice_queue"
@@ -85,6 +86,12 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 	if err != nil {
 		return err
 	}
+
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:          req.UserID,
+		ObjectID:        questionInfo.ID,
+		ActivityTypeKey: constant.ActQuestionClosed,
+	})
 	return nil
 }
 
@@ -163,6 +170,12 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	if err != nil {
 		log.Error("user IncreaseQuestionCount error", err.Error())
 	}
+
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:          question.UserID,
+		ObjectID:        question.ID,
+		ActivityTypeKey: constant.ActQuestionAsked,
+	})
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false)
 	return
@@ -276,6 +289,11 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	if err != nil {
 		return
 	}
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:          req.UserID,
+		ObjectID:        question.ID,
+		ActivityTypeKey: constant.ActQuestionEdit,
+	})
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false)
 	return

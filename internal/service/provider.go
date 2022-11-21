@@ -74,4 +74,5 @@ var ProviderSetService = wire.NewSet(
 	activity.NewAnswerActivityService,
 	dashboard.NewDashboardService,
 	activity_common.NewActivityCommon,
+	activity.NewActivityService,
 )

@@ -1,4 +1,4 @@
-package activity_quque
+package activity_queue
 
 import (
 	"github.com/answerdev/answer/internal/schema"

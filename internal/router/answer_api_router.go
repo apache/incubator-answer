@@ -29,6 +29,7 @@ type AnswerAPIRouter struct {
 	notificationController   *controller.NotificationController
 	dashboardController      *controller.DashboardController
 	uploadController         *controller.UploadController
+	activityController       *controller.ActivityController
 }
 
 func NewAnswerAPIRouter(
@@ -54,6 +55,7 @@ func NewAnswerAPIRouter(
 	notificationController *controller.NotificationController,
 	dashboardController *controller.DashboardController,
 	uploadController *controller.UploadController,
+	activityController *controller.ActivityController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:           langController,
@@ -78,6 +80,7 @@ func NewAnswerAPIRouter(
 		siteinfoController:       siteinfoController,
 		dashboardController:      dashboardController,
 		uploadController:         uploadController,
+		activityController:       activityController,
 	}
 }
 

@@ -41,6 +41,7 @@ import (
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/action"
 	activity2 "github.com/answerdev/answer/internal/service/activity"
+	activity_common2 "github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/answer_common"
 	auth2 "github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/collection_common"
@@ -184,7 +185,10 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	notificationController := controller.NewNotificationController(notificationService)
 	dashboardController := controller.NewDashboardController(dashboardService)
 	uploadController := controller.NewUploadController(uploaderService)
-	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController)
+	activityCommon := activity_common2.NewActivityCommon(activityRepo)
+	activityService := activity2.NewActivityService()
+	activityController := controller.NewActivityController(activityCommon, activityService)
+	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController, activityController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter()
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)
