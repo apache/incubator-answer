@@ -19,6 +19,7 @@
     "codemirror": "5.65.0",
     "copy-to-clipboard": "^3.3.2",
     "dayjs": "^1.11.5",
+    "diff": "^5.1.0",
     "i18next": "^21.9.0",
     "katex": "^0.16.2",
     "lodash": "^4.17.21",

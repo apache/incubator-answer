@@ -25,6 +25,7 @@ specifiers:
   copy-to-clipboard: ^3.3.2
   customize-cra: ^1.0.0
   dayjs: ^1.11.5
+  diff: ^5.1.0
   eslint: ^8.0.1
   eslint-config-airbnb: ^19.0.4
   eslint-config-airbnb-typescript: ^17.0.0
@@ -72,6 +73,7 @@ dependencies:
   codemirror: 5.65.0
   copy-to-clipboard: 3.3.2
   dayjs: 1.11.5
+  diff: 5.1.0
   i18next: 21.9.2
   katex: 0.16.2
   lodash: 4.17.21
@@ -4741,6 +4743,11 @@ packages:
   /diff/4.0.2:
     resolution: {integrity: sha512-58lmxKSA4BNyLz+HHMUzlOEpg09FV+ev6ZMe3vJihgdxzgcwZ8VoEEPmALCZG9LmqfVoNMMKpttIYTVG6uDY7A==}
     engines: {node: '>=0.3.1'}
+
+  /diff/5.1.0:
+    resolution: {integrity: sha512-D+mk+qE8VC/PAUrlAU34N+VfXev0ghe5ywmpqrawphmVZc1bEfn56uo9qpyGp1p4xpzOHkSW4ztBd6L7Xx4ACw==}
+    engines: {node: '>=0.3.1'}
+    dev: false
 
   /dir-glob/3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}

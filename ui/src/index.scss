@@ -253,3 +253,18 @@ a {
   padding: 1px 0.5rem 2px;
   height: 24px;
 }
+
+.review-text-delete {
+  color: #842029;
+  background-color: #F8D7DA;
+  text-decoration: line-through;
+  .review-text-add {
+    text-decoration: none;
+  }
+}
+
+.review-text-add {
+  color: #0F5132;
+  background-color: #D1E7DD;
+  text-decoration: none !important;
+}

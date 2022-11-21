@@ -201,6 +201,10 @@ const routes: RouteNode[] = [
           return guard.forbidden();
         },
       },
+      {
+        path: '/revision',
+        page: 'pages/Revision',
+      },
       // for admin
       {
         path: 'admin',
