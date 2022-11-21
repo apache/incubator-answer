@@ -82,6 +82,9 @@ func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.Searc
 func (ts *TagCommonService) GetSiteWriteRecommendTag(ctx context.Context) (tags []string, err error) {
 	tags = make([]string, 0)
 	list, err := ts.tagCommonRepo.GetRecommendTagList(ctx)
+	if err != nil {
+		return tags, err
+	}
 	for _, item := range list {
 		tags = append(tags, item.SlugName)
 	}
@@ -124,6 +127,9 @@ func (ts *TagCommonService) SetSiteWriteTag(ctx context.Context, recommendTags, 
 func (ts *TagCommonService) GetSiteWriteReservedTag(ctx context.Context) (tags []string, err error) {
 	tags = make([]string, 0)
 	list, err := ts.tagCommonRepo.GetReservedTagList(ctx)
+	if err != nil {
+		return tags, err
+	}
 	for _, item := range list {
 		tags = append(tags, item.SlugName)
 	}

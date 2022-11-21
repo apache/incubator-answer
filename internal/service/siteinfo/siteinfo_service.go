@@ -87,18 +87,17 @@ func (s *SiteInfoService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWr
 		log.Error(err)
 		return resp, nil
 	}
-	if !exist {
-		return resp, nil
+	if exist {
+		_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 	}
-	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 
 	resp.RecommendTags, err = s.tagCommonService.GetSiteWriteRecommendTag(ctx)
 	if err != nil {
-		return nil, err
+		log.Error(err)
 	}
 	resp.ReservedTags, err = s.tagCommonService.GetSiteWriteReservedTag(ctx)
 	if err != nil {
-		return nil, err
+		log.Error(err)
 	}
 	return resp, nil
 }
