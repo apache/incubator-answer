@@ -188,7 +188,7 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		if questionInfo.AcceptedAnswerID != "0" {
 			return errors.BadRequest(reason.QuestionCannotDeleted)
 		}
-		if questionInfo.AnswerCount > 0 {
+		if questionInfo.AnswerCount > 1 {
 			return errors.BadRequest(reason.QuestionCannotDeleted)
 		}
 
