@@ -403,7 +403,7 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 	return nil
 }
 
-func (ts *TagCommonService) ObjectCheckChangeTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
+func (ts *TagCommonService) CheckChangeReservedTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
 	reservedTagsMap := make(map[string]bool)
 	needTagsMap := make([]string, 0)
 	for _, tag := range objectTagData {
