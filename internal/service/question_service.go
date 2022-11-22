@@ -258,8 +258,13 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return
 	}
 	if !recommendExist {
-		err = errors.BadRequest(reason.RecommendTagEnter).WithError(err).WithStack()
-		return
+		errorlist := make([]*validator.FormErrorField, 0)
+		errorlist = append(errorlist, &validator.FormErrorField{
+			ErrorField: "tags",
+			ErrorMsg:   reason.RecommendTagEnter,
+		})
+		err = errors.BadRequest(reason.RecommendTagEnter)
+		return errorlist, err
 	}
 
 	//CheckChangeTag
