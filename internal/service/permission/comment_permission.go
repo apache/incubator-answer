@@ -1,9 +1,13 @@
 package permission
 
-import "github.com/answerdev/answer/internal/schema"
+import (
+	"context"
+
+	"github.com/answerdev/answer/internal/schema"
+)
 
 // TODO: There is currently no permission management
-func GetCommentPermission(userID string, commentCreatorUserID string) (
+func GetCommentPermission(ctx context.Context, userID string, commentCreatorUserID string) (
 	actions []*schema.PermissionMemberAction) {
 	actions = make([]*schema.PermissionMemberAction, 0)
 	if len(userID) > 0 {
@@ -31,7 +35,7 @@ func GetCommentPermission(userID string, commentCreatorUserID string) (
 	return actions
 }
 
-func GetTagPermission(userID string, tagCreatorUserID string) (
+func GetTagPermission(ctx context.Context, userID string, tagCreatorUserID string) (
 	actions []*schema.PermissionMemberAction) {
 	if userID != tagCreatorUserID {
 		return []*schema.PermissionMemberAction{}
@@ -50,18 +54,20 @@ func GetTagPermission(userID string, tagCreatorUserID string) (
 	}
 }
 
-func GetAnswerPermission(userID string, answerAuthID string) (
+func GetAnswerPermission(ctx context.Context, userID string, answerAuthID string, isAdmin bool) (
 	actions []*schema.PermissionMemberAction) {
 	actions = make([]*schema.PermissionMemberAction, 0)
-	if len(userID) > 0 {
-		actions = append(actions, &schema.PermissionMemberAction{
-			Action: "report",
-			Name:   "Flag",
-			Type:   "reason",
-		})
-	}
-	if userID != answerAuthID {
-		return actions
+	if !isAdmin {
+		if len(userID) > 0 {
+			actions = append(actions, &schema.PermissionMemberAction{
+				Action: "report",
+				Name:   "Flag",
+				Type:   "reason",
+			})
+		}
+		if userID != answerAuthID {
+			return actions
+		}
 	}
 	actions = append(actions, []*schema.PermissionMemberAction{
 		{
@@ -78,18 +84,19 @@ func GetAnswerPermission(userID string, answerAuthID string) (
 	return actions
 }
 
-func GetQuestionPermission(userID string, questionAuthID string) (
-	actions []*schema.PermissionMemberAction) {
+func GetQuestionPermission(ctx context.Context, userID string, questionAuthID string, isAdmin bool) (actions []*schema.PermissionMemberAction) {
 	actions = make([]*schema.PermissionMemberAction, 0)
-	if len(userID) > 0 {
-		actions = append(actions, &schema.PermissionMemberAction{
-			Action: "report",
-			Name:   "Flag",
-			Type:   "reason",
-		})
-	}
-	if userID != questionAuthID {
-		return actions
+	if !isAdmin {
+		if len(userID) > 0 {
+			actions = append(actions, &schema.PermissionMemberAction{
+				Action: "report",
+				Name:   "Flag",
+				Type:   "reason",
+			})
+		}
+		if userID != questionAuthID {
+			return actions
+		}
 	}
 	actions = append(actions, []*schema.PermissionMemberAction{
 		{

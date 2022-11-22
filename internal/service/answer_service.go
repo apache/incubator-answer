@@ -392,14 +392,14 @@ func (as *AnswerService) SearchList(ctx context.Context, search *schema.AnswerLi
 	if err != nil {
 		return list, count, err
 	}
-	AnswerList, err := as.SearchFormatInfo(ctx, dblist, search.LoginUserID)
+	AnswerList, err := as.SearchFormatInfo(ctx, dblist, search.LoginUserID, search.IsAdmin)
 	if err != nil {
 		return AnswerList, count, err
 	}
 	return AnswerList, count, nil
 }
 
-func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.Answer, loginUserID string) ([]*schema.AnswerInfo, error) {
+func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.Answer, loginUserID string, isAdmin bool) ([]*schema.AnswerInfo, error) {
 	list := make([]*schema.AnswerInfo, 0)
 	objectIds := make([]string, 0)
 	userIds := make([]string, 0)
@@ -442,7 +442,7 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.
 	}
 
 	for _, item := range list {
-		item.MemberActions = permission.GetAnswerPermission(loginUserID, item.UserID)
+		item.MemberActions = permission.GetAnswerPermission(ctx, loginUserID, item.UserID, isAdmin)
 	}
 
 	return list, nil
