@@ -167,11 +167,25 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		return errors.BadRequest(reason.QuestionCannotDeleted)
 	}
 
-	if questionInfo.AcceptedAnswerID != "" {
+	if questionInfo.AcceptedAnswerID != "0" {
 		return errors.BadRequest(reason.QuestionCannotDeleted)
 	}
 	if questionInfo.AnswerCount > 0 {
 		return errors.BadRequest(reason.QuestionCannotDeleted)
+	}
+
+	if questionInfo.AnswerCount == 1 {
+		answersearch := &entity.AnswerSearch{}
+		answersearch.QuestionID = req.ID
+		answerList, _, err := qs.questioncommon.AnswerCommon.Search(ctx, answersearch)
+		if err != nil {
+			return err
+		}
+		for _, answer := range answerList {
+			if answer.VoteCount > 0 {
+				return errors.BadRequest(reason.QuestionCannotDeleted)
+			}
+		}
 	}
 
 	questionInfo.Status = entity.QuestionStatusDeleted
