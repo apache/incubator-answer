@@ -151,9 +151,10 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 	}
 
 	activity_queue.AddActivity(&schema.ActivityMsg{
-		UserID:          comment.UserID,
-		ObjectID:        comment.ID,
-		ActivityTypeKey: constant.ActQuestionCommented,
+		UserID:           comment.UserID,
+		ObjectID:         comment.ID,
+		OriginalObjectID: req.ObjectID,
+		ActivityTypeKey:  constant.ActQuestionCommented,
 	})
 	return resp, nil
 }

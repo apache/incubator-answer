@@ -5,6 +5,7 @@ import (
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/activity_queue"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
 )
@@ -48,15 +49,19 @@ func (ac *ActivityCommon) HandleActivity() {
 
 			activityType, err := ac.activityRepo.GetActivityTypeByConfigKey(context.Background(), string(msg.ActivityTypeKey))
 			if err != nil {
-				log.Errorf("error getting activity type %s, activity type is %s", err, activityType)
+				log.Errorf("error getting activity type %s, activity type is %d", err, activityType)
 			}
 
 			act := &entity.Activity{
-				UserID:        msg.UserID,
-				TriggerUserID: msg.TriggerUserID,
-				ObjectID:      msg.ObjectID,
-				ActivityType:  activityType,
-				Cancelled:     entity.ActivityAvailable,
+				UserID:           msg.UserID,
+				TriggerUserID:    msg.TriggerUserID,
+				ObjectID:         msg.ObjectID,
+				OriginalObjectID: msg.OriginalObjectID,
+				ActivityType:     activityType,
+				Cancelled:        entity.ActivityAvailable,
+			}
+			if len(msg.RevisionID) > 0 {
+				act.RevisionID = converter.StringToInt64(msg.RevisionID)
 			}
 			if err := ac.activityRepo.AddActivity(context.TODO(), act); err != nil {
 				log.Error(err)

@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/revision_common"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/internal/service/tag_common"
@@ -105,10 +107,17 @@ func (ts *TagService) UpdateTag(ctx context.Context, req *schema.UpdateTagReq) (
 	}
 	tagInfoJson, _ := json.Marshal(tagInfo)
 	revisionDTO.Content = string(tagInfoJson)
-	err = ts.revisionService.AddRevision(ctx, revisionDTO, true)
+	revisionID, err := ts.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return err
 	}
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           req.UserID,
+		ObjectID:         tag.ID,
+		OriginalObjectID: tag.ID,
+		ActivityTypeKey:  constant.ActTagEdit,
+		RevisionID:       revisionID,
+	})
 	return
 }
 
@@ -299,10 +308,17 @@ func (ts *TagService) UpdateTagSynonym(ctx context.Context, req *schema.UpdateTa
 			}
 			tagInfoJson, _ := json.Marshal(tag)
 			revisionDTO.Content = string(tagInfoJson)
-			err = ts.revisionService.AddRevision(ctx, revisionDTO, true)
+			revisionID, err := ts.revisionService.AddRevision(ctx, revisionDTO, true)
 			if err != nil {
 				return err
 			}
+			activity_queue.AddActivity(&schema.ActivityMsg{
+				UserID:           req.UserID,
+				ObjectID:         tag.ID,
+				OriginalObjectID: tag.ID,
+				ActivityTypeKey:  constant.ActTagCreated,
+				RevisionID:       revisionID,
+			})
 		}
 	}
 

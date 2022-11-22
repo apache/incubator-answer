@@ -73,12 +73,13 @@ func (ar *FollowRepo) Follow(ctx context.Context, objectID, userID string) error
 		} else {
 			// update existing activity with new user id and u object id
 			_, err = session.Insert(&entity.Activity{
-				UserID:       userID,
-				ObjectID:     objectID,
-				ActivityType: activityType,
-				Cancelled:    entity.ActivityAvailable,
-				Rank:         0,
-				HasRank:      0,
+				UserID:           userID,
+				ObjectID:         objectID,
+				OriginalObjectID: objectID,
+				ActivityType:     activityType,
+				Cancelled:        entity.ActivityAvailable,
+				Rank:             0,
+				HasRank:          0,
 			})
 		}
 

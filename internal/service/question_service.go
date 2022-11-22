@@ -72,7 +72,7 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 	if !has {
 		return nil
 	}
-	questionInfo.Status = entity.QuestionStatusclosed
+	questionInfo.Status = entity.QuestionStatusClosed
 	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
 	if err != nil {
 		return err
@@ -88,9 +88,11 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 	}
 
 	activity_queue.AddActivity(&schema.ActivityMsg{
-		UserID:          req.UserID,
-		ObjectID:        questionInfo.ID,
-		ActivityTypeKey: constant.ActQuestionClosed,
+		UserID:           req.UserID,
+		ObjectID:         questionInfo.ID,
+		OriginalObjectID: questionInfo.ID,
+		ActivityTypeKey:  constant.ActQuestionClosed,
+		RevisionID:       questionInfo.RevisionID,
 	})
 	return nil
 }
@@ -160,7 +162,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	}
 	infoJSON, _ := json.Marshal(questionWithTagsRevision)
 	revisionDTO.Content = string(infoJSON)
-	err = qs.revisionService.AddRevision(ctx, revisionDTO, true)
+	revisionID, err := qs.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return
 	}
@@ -172,9 +174,11 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	}
 
 	activity_queue.AddActivity(&schema.ActivityMsg{
-		UserID:          question.UserID,
-		ObjectID:        question.ID,
-		ActivityTypeKey: constant.ActQuestionAsked,
+		UserID:           question.UserID,
+		ObjectID:         question.ID,
+		OriginalObjectID: question.ID,
+		ActivityTypeKey:  constant.ActQuestionAsked,
+		RevisionID:       revisionID,
 	})
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false)
@@ -217,7 +221,13 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	if err != nil {
 		log.Errorf("user DeleteQuestion rank rollback error %s", err.Error())
 	}
-
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           questionInfo.UserID,
+		ObjectID:         questionInfo.ID,
+		OriginalObjectID: questionInfo.ID,
+		ActivityTypeKey:  constant.ActQuestionDeleted,
+		RevisionID:       questionInfo.RevisionID,
+	})
 	return nil
 }
 
@@ -285,14 +295,16 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	}
 	infoJSON, _ := json.Marshal(question)
 	revisionDTO.Content = string(infoJSON)
-	err = qs.revisionService.AddRevision(ctx, revisionDTO, true)
+	revisionID, err := qs.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return
 	}
 	activity_queue.AddActivity(&schema.ActivityMsg{
-		UserID:          req.UserID,
-		ObjectID:        question.ID,
-		ActivityTypeKey: constant.ActQuestionEdit,
+		UserID:           req.UserID,
+		ObjectID:         question.ID,
+		ActivityTypeKey:  constant.ActQuestionEdit,
+		RevisionID:       revisionID,
+		OriginalObjectID: question.ID,
 	})
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false)
@@ -602,8 +614,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 	if !exist {
 		return errors.BadRequest(reason.QuestionNotFound)
 	}
-	questionInfo.Status = setStatus
-	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
+	err = qs.questionRepo.UpdateQuestionStatus(ctx, &entity.Question{ID: questionInfo.ID, Status: setStatus})
 	if err != nil {
 		return err
 	}
@@ -613,6 +624,24 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 		if err != nil {
 			log.Errorf("admin delete question then rank rollback error %s", err.Error())
 		}
+	}
+	if setStatus == entity.QuestionStatusAvailable && questionInfo.Status == entity.QuestionStatusClosed {
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           questionInfo.UserID,
+			ObjectID:         questionInfo.ID,
+			OriginalObjectID: questionInfo.ID,
+			ActivityTypeKey:  constant.ActQuestionDeleted,
+			RevisionID:       questionInfo.RevisionID,
+		})
+	}
+	if setStatus == entity.QuestionStatusClosed && questionInfo.Status != entity.QuestionStatusClosed {
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           questionInfo.UserID,
+			ObjectID:         questionInfo.ID,
+			OriginalObjectID: questionInfo.ID,
+			ActivityTypeKey:  constant.ActQuestionClosed,
+			RevisionID:       questionInfo.RevisionID,
+		})
 	}
 	msg := &schema.NotificationMsg{}
 	msg.ObjectID = questionInfo.ID

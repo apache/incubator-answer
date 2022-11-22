@@ -6,19 +6,19 @@ import (
 
 const (
 	QuestionStatusAvailable = 1
-	QuestionStatusclosed    = 2
+	QuestionStatusClosed    = 2
 	QuestionStatusDeleted   = 10
 )
 
 var CmsQuestionSearchStatus = map[string]int{
 	"available": QuestionStatusAvailable,
-	"closed":    QuestionStatusclosed,
+	"closed":    QuestionStatusClosed,
 	"deleted":   QuestionStatusDeleted,
 }
 
 var CmsQuestionSearchStatusIntToString = map[int]string{
 	QuestionStatusAvailable: "available",
-	QuestionStatusclosed:    "closed",
+	QuestionStatusClosed:    "closed",
 	QuestionStatusDeleted:   "deleted",
 }
 

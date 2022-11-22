@@ -7,10 +7,12 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/revision_common"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/segmentfault/pacman/errors"
@@ -480,10 +482,17 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 			}
 			tagInfoJson, _ := json.Marshal(tag)
 			revisionDTO.Content = string(tagInfoJson)
-			err = ts.revisionService.AddRevision(ctx, revisionDTO, true)
+			revisionID, err := ts.revisionService.AddRevision(ctx, revisionDTO, true)
 			if err != nil {
 				return err
 			}
+			activity_queue.AddActivity(&schema.ActivityMsg{
+				UserID:           objectTagData.UserID,
+				ObjectID:         tag.ID,
+				OriginalObjectID: tag.ID,
+				ActivityTypeKey:  constant.ActTagCreated,
+				RevisionID:       revisionID,
+			})
 		}
 	}
 

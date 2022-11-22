@@ -106,13 +106,14 @@ func (vr *VoteRepo) vote(ctx context.Context, objectID string, userID, objectUse
 			}
 
 			insertActivity = entity.Activity{
-				ObjectID:      objectID,
-				UserID:        activityUserID,
-				TriggerUserID: converter.StringToInt64(triggerUserID),
-				ActivityType:  activityType,
-				Rank:          deltaRank,
-				HasRank:       hasRank,
-				Cancelled:     entity.ActivityAvailable,
+				ObjectID:         objectID,
+				OriginalObjectID: objectID,
+				UserID:           activityUserID,
+				TriggerUserID:    converter.StringToInt64(triggerUserID),
+				ActivityType:     activityType,
+				Rank:             deltaRank,
+				HasRank:          hasRank,
+				Cancelled:        entity.ActivityAvailable,
 			}
 
 			// trigger user rank and send notification
@@ -206,7 +207,7 @@ func (vr *VoteRepo) voteCancel(ctx context.Context, objectID string, userID, obj
 				return
 			}
 
-			if _, err = session.Where("id = ?", existsActivity.ID).Cols("`cancelled`").
+			if _, err = session.Where("id = ?", existsActivity.ID).Cols("cancelled", "cancelled_at").
 				Update(&entity.Activity{
 					Cancelled:   entity.ActivityCancelled,
 					CancelledAt: time.Now(),

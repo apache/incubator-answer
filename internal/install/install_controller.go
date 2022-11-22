@@ -163,7 +163,7 @@ func InitBaseInfo(ctx *gin.Context) {
 	}
 
 	if cli.CheckDBTableExist(c.Data.Database) {
-		log.Warnf("database is already initialized")
+		log.Warn("database is already initialized")
 		handler.HandleResponse(ctx, nil, nil)
 		return
 	}

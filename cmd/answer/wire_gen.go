@@ -46,6 +46,7 @@ import (
 	auth2 "github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/collection_common"
 	comment2 "github.com/answerdev/answer/internal/service/comment"
+	"github.com/answerdev/answer/internal/service/comment_common"
 	"github.com/answerdev/answer/internal/service/dashboard"
 	export2 "github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/follow"
@@ -186,7 +187,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	dashboardController := controller.NewDashboardController(dashboardService)
 	uploadController := controller.NewUploadController(uploaderService)
 	activityCommon := activity_common2.NewActivityCommon(activityRepo)
-	activityService := activity2.NewActivityService()
+	activityActivityRepo := activity.NewActivityRepo(dataData)
+	commentCommonService := comment_common.NewCommentCommonService(commentCommonRepo)
+	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, activityCommon, tagCommonService, objService, commentCommonService)
 	activityController := controller.NewActivityController(activityCommon, activityService)
 	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController, activityController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)

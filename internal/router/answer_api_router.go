@@ -203,6 +203,9 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// upload file
 	r.POST("/file", a.uploadController.UploadFile)
+
+	// activity
+	r.GET("/activity/timeline", a.activityController.GetObjectTimeline)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
