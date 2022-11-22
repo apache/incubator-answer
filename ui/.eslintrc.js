@@ -23,8 +23,9 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: ['./tsconfig.json'],
   },
-  plugins: ['react', '@typescript-eslint'],
+  plugins: ['react', '@typescript-eslint', 'prettier'],
   rules: {
+    'prettier/prettier': 'error',
     'no-unused-vars': 'off',
     'no-console': 'off',
     'import/prefer-default-export': 'off',
