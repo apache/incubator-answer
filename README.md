@@ -12,7 +12,7 @@ To learn more about the project, visit [answer.dev](https://answer.dev).
 [![Language](https://img.shields.io/badge/language-go-blue.svg)](https://golang.org/)
 [![Language](https://img.shields.io/badge/language-react-blue.svg)](https://reactjs.org/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/answerdev/answer)](https://goreportcard.com/report/github.com/answerdev/answer)
-[![Discord](https://img.shields.io/badge/discord-chat-5865f2?logo=discord&logoColor=f5f5f5)](https://discord.gg/Jm7Y4cbUej)
+[![Discord](https://img.shields.io/badge/discord-chat-5865f2?logo=discord&logoColor=f5f5f5)](https://discord.gg/a6PZZbfnFx)
 
 ## Screenshots
 
