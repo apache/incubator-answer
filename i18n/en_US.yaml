@@ -12,6 +12,7 @@ backend:
     database_error:
       other: "Data server error."
 
+<<<<<<<<< Temporary merge branch 1
   email:
     other: "Email"
   password:
@@ -20,86 +21,86 @@ backend:
   email_or_password_wrong_error: &email_or_password_wrong
     other: "Email and password do not match."
 
-  error:
-    admin:
-      email_or_password_wrong: *email_or_password_wrong
-    answer:
-      not_found:
-        other: "Answer do not found."
-      cannot_deleted:
-        other: "Unable to delete answer."
-    comment:
-      edit_without_permission:
-        other: "Comment are not allowed to edit."
-      not_found:
-        other: "Comment not found."
-    email:
-      duplicate:
-        other: "Email already exists."
-      need_to_be_verified:
-        other: "Email should be verified."
-      verify_url_expired:
-        other: "Email verified URL has expired, please resend the email."
-    lang:
-      not_found:
-        other: "Language file not found."
-    object:
-      captcha_verification_failed:
-        other: "Captcha wrong."
-      disallow_follow:
-        other: "You are not allowed to follow."
-      disallow_vote:
-        other: "You are not allowed to vote."
-      disallow_vote_your_self:
-        other: "You can't vote for your own post."
-      not_found:
-        other: "Object not found."
-      verification_failed:
-        other: "Verification failed."
-      email_or_password_incorrect:
-        other: "Email and password do not match."
-      old_password_verification_failed:
-        other: "The old password verification failed"
-      new_password_same_as_previous_setting:
-        other: "The new password is the same as the previous one."
-    question:
-      not_found:
-        other: "Question not found."
-      cannot_deleted:
-        other: "Unable to delete problem."
-    rank:
-      fail_to_meet_the_condition:
-        other: "Rank fail to meet the condition."
-    report:
-      handle_failed:
-        other: "Report handle failed."
-      not_found:
-        other: "Report not found."
-    tag:
-      not_found:
-        other: "Tag not found."
-      recommend_tag_not_found:
-        other: "Recommend Tag is not exist."
-      recommend_tag_enter:
-        other: "Please enter at least one required tag."
-      not_contain_synonym_tags:
+error:
+  admin:
+    email_or_password_wrong: *email_or_password_wrong
+  answer:
+    not_found:
+      other: "Answer do not found."
+    cannot_deleted:
+      other: "No permission to delete."
+  comment:
+    edit_without_permission:
+      other: "Comment are not allowed to edit."
+    not_found:
+      other: "Comment not found."
+  email:
+    duplicate:
+      other: "Email already exists."
+    need_to_be_verified:
+      other: "Email should be verified."
+    verify_url_expired:
+      other: "Email verified URL has expired, please resend the email."
+  lang:
+    not_found:
+      other: "Language file not found."
+  object:
+    captcha_verification_failed:
+      other: "Captcha wrong."
+    disallow_follow:
+      other: "You are not allowed to follow."
+    disallow_vote:
+      other: "You are not allowed to vote."
+    disallow_vote_your_self:
+      other: "You can't vote for your own post."
+    not_found:
+      other: "Object not found."
+    verification_failed:
+      other: "Verification failed."
+    email_or_password_incorrect:
+      other: "Email and password do not match."
+    old_password_verification_failed:
+      other: "The old password verification failed"
+    new_password_same_as_previous_setting:
+      other: "The new password is the same as the previous one."
+  question:
+    not_found:
+      other: "Question not found."
+    cannot_deleted:
+      other: "No permission to delete."
+  rank:
+    fail_to_meet_the_condition:
+      other: "Rank fail to meet the condition."
+  report:
+    handle_failed:
+      other: "Report handle failed."
+    not_found:
+      other: "Report not found."
+  tag:
+    not_found:
+      other: "Tag not found."
+    recommend_tag_not_found:
+      other: "Recommend Tag is not exist."
+    recommend_tag_enter:
+      other: "Please enter at least one required tag."
+    not_contain_synonym_tags:
         other: "Should not contain synonym tags."
-    theme:
-      not_found:
-        other: "Theme not found."
-    user:
-      email_or_password_wrong:
-        other: *email_or_password_wrong
-      not_found:
-        other: "User not found."
-      suspended:
-        other: "User has been suspended."
-      username_invalid:
-        other: "Username is invalid."
-      username_duplicate:
-        other: "Username is already in use."
-      set_avatar:
-        other: "Avatar set failed."
+  theme:
+    not_found:
+      other: "Theme not found."
+  user:
+    email_or_password_wrong:
+      other: *email_or_password_wrong
+    not_found:
+      other: "User not found."
+    suspended:
+      other: "User has been suspended."
+    username_invalid:
+      other: "Username is invalid."
+    username_duplicate:
+      other: "Username is already in use."
+    set_avatar:
+      other: "Avatar set failed."
 
       config:
         read_config_failed:

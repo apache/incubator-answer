@@ -3,8 +3,9 @@ package schema
 // RemoveQuestionReq delete question request
 type RemoveQuestionReq struct {
 	// question id
-	ID     string `validate:"required" comment:"question id" json:"id"`
-	UserID string `json:"-" ` // user_id
+	ID      string `validate:"required" comment:"question id" json:"id"`
+	UserID  string `json:"-" ` // user_id
+	IsAdmin bool   `json:"-"`
 }
 
 type CloseQuestionReq struct {
@@ -169,7 +170,7 @@ type CmsQuestionSearch struct {
 	Page      int    `json:"page" form:"page"`           // Query number of pages
 	PageSize  int    `json:"page_size" form:"page_size"` // Search page size
 	Status    int    `json:"-" form:"-"`
-	StatusStr string `json:"status" form:"status"` // Status 1 Available 2 closed 10 UserDeleted
+	StatusStr string `json:"status" form:"status"`                                  // Status 1 Available 2 closed 10 UserDeleted
 	Query     string `validate:"omitempty,gt=0,lte=100" json:"query" form:"query" ` //Query string
 }
 
