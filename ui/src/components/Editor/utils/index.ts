@@ -1,6 +1,5 @@
 import type { Editor, Position } from 'codemirror';
 import type CodeMirror from 'codemirror';
-// import 'highlight.js/styles/github.css';
 import 'katex/dist/katex.min.css';
 
 export function createEditorUtils(
@@ -114,9 +113,4 @@ export function htmlRender(el: HTMLElement | null) {
       });
     },
   );
-  // import('highlight.js').then(({ default: highlight }) => {
-  //   el.querySelectorAll('pre code').forEach((code) => {
-  //     highlight.highlightElement(code as HTMLElement);
-  //   });
-  // });
 }

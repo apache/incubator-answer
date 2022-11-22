@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 
-import request from '@answer/utils/request';
-import type * as Type from '@answer/common/interface';
+import request from '@/utils/request';
+import type * as Type from '@/common/interface';
 
 export const useGeneralSetting = () => {
   const apiUrl = `/answer/admin/api/siteinfo/general`;
@@ -69,4 +69,35 @@ export const useSmtpSetting = () => {
 export const updateSmtpSetting = (params: Type.AdminSettingsSmtp) => {
   const apiUrl = `/answer/admin/api/setting/smtp`;
   return request.put(apiUrl, params);
+};
+
+export const getAdminLanguageOptions = () => {
+  const apiUrl = `/answer/admin/api/language/options`;
+  return request.get<Type.LangsType[]>(apiUrl);
+};
+
+export const getBrandSetting = () => {
+  return request.get('/answer/admin/api/siteinfo/branding');
+};
+
+export const brandSetting = (params: Type.AdmingSettingBranding) => {
+  return request.put('/answer/admin/api/siteinfo/branding', params);
+};
+
+export const getRequireAndReservedTag = () => {
+  return request.get('/answer/admin/api/siteinfo/write');
+};
+
+export const postRequireAndReservedTag = (params) => {
+  return request.put('/answer/admin/api/siteinfo/write', params);
+};
+
+export const getLegalSetting = () => {
+  return request.get<Type.AdminSettingsLegal>(
+    '/answer/admin/api/siteinfo/legal',
+  );
+};
+
+export const putLegalSetting = (params: Type.AdminSettingsLegal) => {
+  return request.put('/answer/admin/api/siteinfo/legal', params);
 };

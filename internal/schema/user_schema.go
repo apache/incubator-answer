@@ -62,6 +62,8 @@ type GetUserResp struct {
 	Location string `json:"location"`
 	// ip info
 	IPInfo string `json:"ip_info"`
+	// language
+	Language string `json:"language"`
 	// access token
 	AccessToken string `json:"access_token"`
 	// is admin
@@ -217,10 +219,10 @@ var UserStatusShowMsg = map[int]string{
 
 // EmailLogin
 type UserEmailLogin struct {
-	Email       string `json:"e_mail" `       // e_mail
-	Pass        string `json:"pass" `         // password
-	CaptchaID   string `json:"captcha_id" `   // captcha_id
-	CaptchaCode string `json:"captcha_code" ` // captcha_code
+	Email       string `validate:"required,email,gt=0,lte=500" json:"e_mail"` // e_mail
+	Pass        string `validate:"required,gte=8,lte=32" json:"pass"`         // password
+	CaptchaID   string `json:"captcha_id"`                                    // captcha_id
+	CaptchaCode string `json:"captcha_code"`                                  // captcha_code
 }
 
 // UserRegisterReq user register request
@@ -234,14 +236,16 @@ type UserRegisterReq struct {
 	IP   string `json:"-" `
 }
 
-func (u *UserRegisterReq) Check() (errField *validator.ErrorField, err error) {
+func (u *UserRegisterReq) Check() (errFields []*validator.FormErrorField, err error) {
 	// TODO i18n
 	err = checker.CheckPassword(8, 32, 0, u.Pass)
 	if err != nil {
-		return &validator.ErrorField{
-			Key:   "pass",
-			Value: err.Error(),
-		}, err
+		errField := &validator.FormErrorField{
+			ErrorField: "pass",
+			ErrorMsg:   err.Error(),
+		}
+		errFields = append(errFields, errField)
+		return errFields, err
 	}
 	return nil, nil
 }
@@ -253,14 +257,16 @@ type UserModifyPassWordRequest struct {
 	Pass    string `json:"pass" `     // password
 }
 
-func (u *UserModifyPassWordRequest) Check() (errField *validator.ErrorField, err error) {
+func (u *UserModifyPassWordRequest) Check() (errFields []*validator.FormErrorField, err error) {
 	// TODO i18n
 	err = checker.CheckPassword(8, 32, 0, u.Pass)
 	if err != nil {
-		return &validator.ErrorField{
-			Key:   "pass",
-			Value: err.Error(),
-		}, err
+		errField := &validator.FormErrorField{
+			ErrorField: "pass",
+			ErrorMsg:   err.Error(),
+		}
+		errFields = append(errFields, errField)
+		return errFields, err
 	}
 	return nil, nil
 }
@@ -290,19 +296,28 @@ type AvatarInfo struct {
 	Custom   string `validate:"omitempty,gt=0,lte=200"  json:"custom"`
 }
 
-func (u *UpdateInfoRequest) Check() (errField *validator.ErrorField, err error) {
+func (u *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {
 	if len(u.Username) > 0 {
 		re := regexp.MustCompile(`^[a-z0-9._-]{4,30}$`)
 		match := re.MatchString(u.Username)
 		if !match {
-			err = errors.BadRequest(reason.UsernameInvalid)
-			return &validator.ErrorField{
-				Key:   "username",
-				Value: err.Error(),
-			}, err
+			errField := &validator.FormErrorField{
+				ErrorField: "username",
+				ErrorMsg:   err.Error(),
+			}
+			errFields = append(errFields, errField)
+			return errFields, errors.BadRequest(reason.UsernameInvalid)
 		}
 	}
 	return nil, nil
+}
+
+// UpdateUserInterfaceRequest update user interface request
+type UpdateUserInterfaceRequest struct {
+	// language
+	Language string `validate:"required,gt=1,lte=100" json:"language"`
+	// user id
+	UserId string `json:"-" `
 }
 
 type UserRetrievePassWordRequest struct {
@@ -317,14 +332,16 @@ type UserRePassWordRequest struct {
 	Content string `json:"-"`
 }
 
-func (u *UserRePassWordRequest) Check() (errField *validator.ErrorField, err error) {
+func (u *UserRePassWordRequest) Check() (errFields []*validator.FormErrorField, err error) {
 	// TODO i18n
 	err = checker.CheckPassword(8, 32, 0, u.Pass)
 	if err != nil {
-		return &validator.ErrorField{
-			Key:   "pass",
-			Value: err.Error(),
-		}, err
+		errField := &validator.FormErrorField{
+			ErrorField: "pass",
+			ErrorMsg:   err.Error(),
+		}
+		errFields = append(errFields, errField)
+		return errFields, err
 	}
 	return nil, nil
 }
@@ -399,9 +416,4 @@ type UserChangeEmailVerifyReq struct {
 type UserVerifyEmailSendReq struct {
 	CaptchaID   string `validate:"omitempty,gt=0,lte=500" json:"captcha_id"`
 	CaptchaCode string `validate:"omitempty,gt=0,lte=500" json:"captcha_code"`
-}
-
-type UserVerifyEmailErrorResponse struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
 }

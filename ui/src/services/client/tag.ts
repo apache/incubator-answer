@@ -1,8 +1,8 @@
 import useSWR from 'swr';
 
-import request from '@answer/utils/request';
-import { isLogin } from '@answer/utils';
-import type * as Type from '@answer/common/interface';
+import request from '@/utils/request';
+import type * as Type from '@/common/interface';
+import { tryLoggedAndActivated } from '@/utils/guard';
 
 export const deleteTag = (id) => {
   return request.delete('/answer/api/v1/tag', {
@@ -24,7 +24,7 @@ export const saveSynonymsTags = (params) => {
 
 export const useFollowingTags = () => {
   let apiUrl = '';
-  if (isLogin()) {
+  if (tryLoggedAndActivated().ok) {
     apiUrl = '/answer/api/v1/tags/following';
   }
   const { data, error, mutate } = useSWR<any[]>(apiUrl, request.instance.get);
@@ -41,6 +41,7 @@ export const useTagInfo = ({ id = '', name = '' }) => {
   if (id) {
     apiUrl = `/answer/api/v1/tag/?id=${id}`;
   } else if (name) {
+    name = encodeURIComponent(name);
     apiUrl = `/answer/api/v1/tag/?name=${name}`;
   }
   const { data, error } = useSWR<Type.TagInfo>(apiUrl, request.instance.get);

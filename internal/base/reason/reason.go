@@ -14,7 +14,7 @@ const (
 )
 
 const (
-	EmailOrPasswordWrong         = "error.user.email_or_password_wrong"
+	EmailOrPasswordWrong         = "error.object.email_or_password_incorrect"
 	CommentNotFound              = "error.comment.not_found"
 	QuestionNotFound             = "error.question.not_found"
 	QuestionCannotDeleted        = "error.question.cannot_deleted"
@@ -25,6 +25,8 @@ const (
 	DisallowFollow               = "error.object.disallow_follow"
 	DisallowVoteYourSelf         = "error.object.disallow_vote_your_self"
 	CaptchaVerificationFailed    = "error.object.captcha_verification_failed"
+	OldPasswordVerificationFailed    = "error.object.old_password_verification_failed"
+	NewPasswordSameAsPreviousSetting = "error.object.new_password_same_as_previous_setting"
 	UserNotFound                 = "error.user.not_found"
 	UsernameInvalid              = "error.user.username_invalid"
 	UsernameDuplicate            = "error.user.username_duplicate"
@@ -35,9 +37,17 @@ const (
 	UserSuspended                = "error.user.suspended"
 	ObjectNotFound               = "error.object.not_found"
 	TagNotFound                  = "error.tag.not_found"
+	TagNotContainSynonym         = "error.tag.not_contain_synonym_tags"
 	RankFailToMeetTheCondition   = "error.rank.fail_to_meet_the_condition"
 	ThemeNotFound                = "error.theme.not_found"
 	LangNotFound                 = "error.lang.not_found"
 	ReportHandleFailed           = "error.report.handle_failed"
 	ReportNotFound               = "error.report.not_found"
+	ReadConfigFailed             = "error.config.read_config_failed"
+	DatabaseConnectionFailed     = "error.database.connection_failed"
+	InstallCreateTableFailed     = "error.database.create_table_failed"
+	InstallConfigFailed          = "error.install.create_config_failed"
+	SiteInfoNotFound             = "error.site_info.not_found"
+	UploadFileSourceUnsupported  = "error.upload.source_unsupported"
+	RecommendTagNotExist         = "error.tag.recommend_tag_not_found"
 )

@@ -2,9 +2,10 @@ import React, { FC, FormEvent, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type * as Type from '@answer/common/interface';
-import { getUserInfo, changeEmail } from '@answer/api';
-import { useToast } from '@answer/hooks';
+import type * as Type from '@/common/interface';
+import { useToast } from '@/hooks';
+import { getLoggedUserInfo, changeEmail } from '@/services';
+import { handleFormError } from '@/utils';
 
 const reg = /(?<=.{2}).+(?=@)/gi;
 
@@ -23,7 +24,7 @@ const Index: FC = () => {
   const [userInfo, setUserInfo] = useState<Type.UserInfoRes>();
   const toast = useToast();
   useEffect(() => {
-    getUserInfo().then((resp) => {
+    getLoggedUserInfo().then((resp) => {
       setUserInfo(resp);
     });
   }, []);
@@ -74,11 +75,10 @@ const Index: FC = () => {
         });
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData.e_mail.isInvalid = true;
-          formData.e_mail.errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
 

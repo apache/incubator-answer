@@ -1,17 +1,77 @@
 package schema
 
+import (
+	"fmt"
+	"net/url"
+)
+
 // SiteGeneralReq site general request
 type SiteGeneralReq struct {
-	Name             string `validate:"required,gt=1,lte=128" comment:"site name" form:"name" json:"name"`
-	ShortDescription string `validate:"required,gt=3,lte=255" comment:"short site description" form:"short_description" json:"short_description"`
-	Description      string `validate:"required,gt=3,lte=2000" comment:"site description" form:"description" json:"description"`
+	Name             string `validate:"required,gt=1,lte=128" form:"name" json:"name"`
+	ShortDescription string `validate:"required,gt=3,lte=255" form:"short_description" json:"short_description"`
+	Description      string `validate:"required,gt=3,lte=2000" form:"description" json:"description"`
+	SiteUrl          string `validate:"required,gt=1,lte=512,url" form:"site_url" json:"site_url"`
+	ContactEmail     string `validate:"required,gt=1,lte=512,email" form:"contact_email" json:"contact_email"`
+}
+
+func (r *SiteGeneralReq) FormatSiteUrl() {
+	parsedUrl, err := url.Parse(r.SiteUrl)
+	if err != nil {
+		return
+	}
+	r.SiteUrl = fmt.Sprintf("%s://%s", parsedUrl.Scheme, parsedUrl.Host)
 }
 
 // SiteInterfaceReq site interface request
 type SiteInterfaceReq struct {
-	Logo     string `validate:"omitempty,gt=0,lte=256" comment:"logo" form:"logo" json:"logo"`
-	Theme    string `validate:"required,gt=1,lte=128" comment:"theme" form:"theme" json:"theme"`
-	Language string `validate:"required,gt=1,lte=128" comment:"interface language" form:"language" json:"language"`
+	Theme    string `validate:"required,gt=1,lte=128" form:"theme" json:"theme"`
+	Language string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
+	TimeZone string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
+}
+
+// SiteBrandingReq site branding request
+type SiteBrandingReq struct {
+	Logo       string `validate:"required,gt=0,lte=512" form:"logo" json:"logo"`
+	MobileLogo string `validate:"omitempty,gt=0,lte=512" form:"mobile_logo" json:"mobile_logo"`
+	SquareIcon string `validate:"required,gt=0,lte=512" form:"square_icon" json:"square_icon"`
+	Favicon    string `validate:"omitempty,gt=0,lte=512" form:"favicon" json:"favicon"`
+}
+
+// SiteWriteReq site write request
+type SiteWriteReq struct {
+	RequiredTag   bool     `validate:"omitempty" form:"required_tag" json:"required_tag"`
+	RecommendTags []string `validate:"omitempty" form:"recommend_tags" json:"recommend_tags"`
+	ReservedTags  []string `validate:"omitempty" form:"reserved_tags" json:"reserved_tags"`
+	UserID        string   `json:"-"`
+}
+
+// SiteLegalReq site branding request
+type SiteLegalReq struct {
+	TermsOfServiceOriginalText string `json:"terms_of_service_original_text"`
+	TermsOfServiceParsedText   string `json:"terms_of_service_parsed_text"`
+	PrivacyPolicyOriginalText  string `json:"privacy_policy_original_text"`
+	PrivacyPolicyParsedText    string `json:"privacy_policy_parsed_text"`
+}
+
+// GetSiteLegalInfoReq site site legal request
+type GetSiteLegalInfoReq struct {
+	InfoType string `validate:"required,oneof=tos privacy" form:"info_type"`
+}
+
+func (r *GetSiteLegalInfoReq) IsTOS() bool {
+	return r.InfoType == "tos"
+}
+
+func (r *GetSiteLegalInfoReq) IsPrivacy() bool {
+	return r.InfoType == "privacy"
+}
+
+// GetSiteLegalInfoResp get site legal info response
+type GetSiteLegalInfoResp struct {
+	TermsOfServiceOriginalText string `json:"terms_of_service_original_text,omitempty"`
+	TermsOfServiceParsedText   string `json:"terms_of_service_parsed_text,omitempty"`
+	PrivacyPolicyOriginalText  string `json:"privacy_policy_original_text,omitempty"`
+	PrivacyPolicyParsedText    string `json:"privacy_policy_parsed_text,omitempty"`
 }
 
 // SiteGeneralResp site general response
@@ -20,9 +80,20 @@ type SiteGeneralResp SiteGeneralReq
 // SiteInterfaceResp site interface response
 type SiteInterfaceResp SiteInterfaceReq
 
+// SiteBrandingResp site branding response
+type SiteBrandingResp SiteBrandingReq
+
+// SiteWriteResp site write response
+type SiteWriteResp SiteWriteReq
+
+// SiteLegalResp site write response
+type SiteLegalResp SiteLegalReq
+
+// SiteInfoResp get site info response
 type SiteInfoResp struct {
-	General *SiteGeneralResp   `json:"general"`
-	Face    *SiteInterfaceResp `json:"interface"`
+	General   *SiteGeneralResp   `json:"general"`
+	Interface *SiteInterfaceResp `json:"interface"`
+	Branding  *SiteBrandingResp  `json:"branding"`
 }
 
 // UpdateSMTPConfigReq get smtp config request

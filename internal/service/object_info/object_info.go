@@ -19,7 +19,7 @@ type ObjService struct {
 	answerRepo   answercommon.AnswerRepo
 	questionRepo questioncommon.QuestionRepo
 	commentRepo  comment_common.CommentCommonRepo
-	tagRepo      tagcommon.TagRepo
+	tagRepo      tagcommon.TagCommonRepo
 }
 
 // NewObjService new object service
@@ -27,7 +27,7 @@ func NewObjService(
 	answerRepo answercommon.AnswerRepo,
 	questionRepo questioncommon.QuestionRepo,
 	commentRepo comment_common.CommentCommonRepo,
-	tagRepo tagcommon.TagRepo) *ObjService {
+	tagRepo tagcommon.TagCommonRepo) *ObjService {
 	return &ObjService{
 		answerRepo:   answerRepo,
 		questionRepo: questionRepo,

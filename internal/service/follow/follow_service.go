@@ -15,7 +15,7 @@ type FollowRepo interface {
 }
 
 type FollowService struct {
-	tagRepo          tagcommon.TagRepo
+	tagRepo          tagcommon.TagCommonRepo
 	followRepo       FollowRepo
 	followCommonRepo activity_common.FollowRepo
 }
@@ -23,7 +23,7 @@ type FollowService struct {
 func NewFollowService(
 	followRepo FollowRepo,
 	followCommonRepo activity_common.FollowRepo,
-	tagRepo tagcommon.TagRepo,
+	tagRepo tagcommon.TagCommonRepo,
 ) *FollowService {
 	return &FollowService{
 		followRepo:       followRepo,

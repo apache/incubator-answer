@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, FormatTime, Tag } from '@answer/components';
+import { Icon, FormatTime, Tag } from '@/components';
 
 interface Props {
   visible: boolean;
@@ -46,14 +46,7 @@ const Index: FC<Props> = ({ visible, data }) => {
             </div>
             <div>
               {item.question_info?.tags?.map((tag) => {
-                return (
-                  <Tag
-                    href={`/t/${tag.main_tag_slug_name || tag.slug_name}`}
-                    key={tag.slug_name}
-                    className="me-1">
-                    {tag.slug_name}
-                  </Tag>
-                );
+                return <Tag key={tag.slug_name} className="me-1" data={tag} />;
               })}
             </div>
           </ListGroupItem>

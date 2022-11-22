@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { Modal, Form, Button, FormCheck } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import ReactDOM from 'react-dom/client';
 
-import { changeUserStatus } from '@answer/api';
-import { Modal as AnswerModal } from '@answer/components';
+import { Modal as AnswerModal } from '@/components';
+import { changeUserStatus } from '@/services';
 
 const div = document.createElement('div');
 const root = ReactDOM.createRoot(div);
@@ -141,69 +141,70 @@ const useChangeModal = ({ callback }: Props) => {
     setDefaultType(params.type);
     setShow(true);
   };
+  useLayoutEffect(() => {
+    root.render(
+      <Modal show={show} onHide={onClose}>
+        <Modal.Header closeButton>
+          <Modal.Title as="h5">{t('title')}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            {list.map((item) => {
+              if (
+                defaultType === 'inactive' &&
+                (item.type === 'suspended' || item.type === 'deleted')
+              ) {
+                return null;
+              }
 
-  root.render(
-    <Modal show={show} onHide={onClose}>
-      <Modal.Header closeButton>
-        <Modal.Title as="h5">{t('title')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Form>
-          {list.map((item) => {
-            if (
-              defaultType === 'inactive' &&
-              (item.type === 'suspended' || item.type === 'deleted')
-            ) {
-              return null;
-            }
-
-            if (defaultType === 'suspended' && item.type === 'inactive') {
-              return null;
-            }
-            return (
-              <div key={item?.type}>
-                <Form.Group
-                  controlId={item.type}
-                  className={`${
-                    item.have_content && changeType === item.type
-                      ? 'mb-2'
-                      : 'mb-3'
-                  }`}>
-                  <FormCheck>
-                    <FormCheck.Input
-                      id={item.type}
-                      type="radio"
-                      checked={changeType.type === item.type}
-                      onChange={() => handleRadio(item)}
-                      isInvalid={isInvalid}
-                    />
-                    <FormCheck.Label htmlFor={item.type}>
-                      <span className="fw-bold">{item?.name}</span>
-                      <br />
-                      <span className="text-secondary">
-                        {item?.description}
-                      </span>
-                    </FormCheck.Label>
-                    <Form.Control.Feedback type="invalid">
-                      {t('msg.empty')}
-                    </Form.Control.Feedback>
-                  </FormCheck>
-                </Form.Group>
-              </div>
-            );
-          })}
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="link" onClick={() => onClose()}>
-          {t('btn_cancel')}
-        </Button>
-        <Button variant="primary" onClick={handleSubmit}>
-          {t('btn_submit')}
-        </Button>
-      </Modal.Footer>
-    </Modal>,
-  );
+              if (defaultType === 'suspended' && item.type === 'inactive') {
+                return null;
+              }
+              return (
+                <div key={item?.type}>
+                  <Form.Group
+                    controlId={item.type}
+                    className={`${
+                      item.have_content && changeType === item.type
+                        ? 'mb-2'
+                        : 'mb-3'
+                    }`}>
+                    <FormCheck>
+                      <FormCheck.Input
+                        id={item.type}
+                        type="radio"
+                        checked={changeType.type === item.type}
+                        onChange={() => handleRadio(item)}
+                        isInvalid={isInvalid}
+                      />
+                      <FormCheck.Label htmlFor={item.type}>
+                        <span className="fw-bold">{item?.name}</span>
+                        <br />
+                        <span className="text-secondary">
+                          {item?.description}
+                        </span>
+                      </FormCheck.Label>
+                      <Form.Control.Feedback type="invalid">
+                        {t('msg.empty')}
+                      </Form.Control.Feedback>
+                    </FormCheck>
+                  </Form.Group>
+                </div>
+              );
+            })}
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="link" onClick={() => onClose()}>
+            {t('btn_cancel')}
+          </Button>
+          <Button variant="primary" onClick={handleSubmit}>
+            {t('btn_submit')}
+          </Button>
+        </Modal.Footer>
+      </Modal>,
+    );
+  });
 
   return {
     onClose,

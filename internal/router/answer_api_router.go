@@ -27,6 +27,8 @@ type AnswerAPIRouter struct {
 	siteInfoController       *controller_backyard.SiteInfoController
 	siteinfoController       *controller.SiteinfoController
 	notificationController   *controller.NotificationController
+	dashboardController      *controller.DashboardController
+	uploadController         *controller.UploadController
 }
 
 func NewAnswerAPIRouter(
@@ -50,7 +52,8 @@ func NewAnswerAPIRouter(
 	siteInfoController *controller_backyard.SiteInfoController,
 	siteinfoController *controller.SiteinfoController,
 	notificationController *controller.NotificationController,
-
+	dashboardController *controller.DashboardController,
+	uploadController *controller.UploadController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:           langController,
@@ -73,13 +76,15 @@ func NewAnswerAPIRouter(
 		siteInfoController:       siteInfoController,
 		notificationController:   notificationController,
 		siteinfoController:       siteinfoController,
+		dashboardController:      dashboardController,
+		uploadController:         uploadController,
 	}
 }
 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// i18n
 	r.GET("/language/config", a.langController.GetLangMapping)
-	r.GET("/language/options", a.langController.GetLangOptions)
+	r.GET("/language/options", a.langController.GetUserLangOptions)
 
 	// comment
 	r.GET("/comment/page", a.commentController.GetCommentWithPage)
@@ -88,7 +93,6 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// user
 	r.GET("/user/info", a.userController.GetUserInfoByUserID)
-	r.GET("/user/status", a.userController.GetUserStatus)
 	r.GET("/user/action/record", a.userController.ActionRecord)
 	r.POST("/user/login/email", a.userController.UserEmailLogin)
 	r.POST("/user/register/email", a.userController.UserRegisterByEmail)
@@ -131,7 +135,8 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
 
 	//siteinfo
-	r.GET("/siteinfo", a.siteinfoController.GetInfo)
+	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
+	r.GET("/siteinfo/legal", a.siteinfoController.GetSiteLegalInfo)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
@@ -177,8 +182,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	// user
 	r.PUT("/user/password", a.userController.UserModifyPassWord)
 	r.PUT("/user/info", a.userController.UserUpdateInfo)
-	r.POST("/user/avatar/upload", a.userController.UploadUserAvatar)
-	r.POST("/user/post/file", a.userController.UploadUserPostFile)
+	r.PUT("/user/interface", a.userController.UserUpdateInterface)
 	r.POST("/user/notice/set", a.userController.UserNoticeSet)
 
 	// vote
@@ -193,6 +197,9 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/notification/page", a.notificationController.GetList)
 	r.PUT("/notification/read/state/all", a.notificationController.ClearUnRead)
 	r.PUT("/notification/read/state", a.notificationController.ClearIDUnRead)
+
+	// upload file
+	r.POST("/file", a.uploadController.UploadFile)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
@@ -213,7 +220,7 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	r.GET("/reasons", a.reasonController.Reasons)
 
 	// language
-	r.GET("/language/options", a.langController.GetLangOptions)
+	r.GET("/language/options", a.langController.GetAdminLangOptions)
 
 	// theme
 	r.GET("/theme/options", a.themeController.GetThemeOptions)
@@ -221,8 +228,17 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	// siteinfo
 	r.GET("/siteinfo/general", a.siteInfoController.GetGeneral)
 	r.GET("/siteinfo/interface", a.siteInfoController.GetInterface)
+	r.GET("/siteinfo/branding", a.siteInfoController.GetSiteBranding)
+	r.GET("/siteinfo/write", a.siteInfoController.GetSiteWrite)
+	r.GET("/siteinfo/legal", a.siteInfoController.GetSiteLegal)
 	r.PUT("/siteinfo/general", a.siteInfoController.UpdateGeneral)
 	r.PUT("/siteinfo/interface", a.siteInfoController.UpdateInterface)
+	r.PUT("/siteinfo/branding", a.siteInfoController.UpdateBranding)
+	r.PUT("/siteinfo/write", a.siteInfoController.UpdateSiteWrite)
+	r.PUT("/siteinfo/legal", a.siteInfoController.UpdateSiteLegal)
 	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
 	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
+
+	//dashboard
+	r.GET("/dashboard", a.dashboardController.DashboardInfo)
 }

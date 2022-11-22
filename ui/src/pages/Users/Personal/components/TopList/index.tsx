@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Icon } from '@answer/components';
+import { Icon } from '@/components';
 
 interface Props {
   data: any[];

@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, FormatTime, Tag, BaseUserCard } from '@answer/components';
+import { Icon, FormatTime, Tag, BaseUserCard } from '@/components';
 
 interface Props {
   visible: boolean;
@@ -34,7 +34,7 @@ const Index: FC<Props> = ({ visible, tabName, data }) => {
                   : null}
               </a>
             </h6>
-            <div className="d-flex align-items-center fs-14 text-secondary mb-2">
+            <div className="d-flex flex-wrap align-items-center fs-14 text-secondary mb-2">
               {tabName === 'bookmarks' && (
                 <>
                   <BaseUserCard data={item.user_info} showAvatar={false} />
@@ -73,14 +73,7 @@ const Index: FC<Props> = ({ visible, tabName, data }) => {
             </div>
             <div>
               {item.tags?.map((tag) => {
-                return (
-                  <Tag
-                    href={`/t/${tag.main_tag_slug_name || tag.slug_name}`}
-                    className="me-1"
-                    key={tag.slug_name}>
-                    {tag.slug_name}
-                  </Tag>
-                );
+                return <Tag className="me-1" key={tag.slug_name} data={tag} />;
               })}
             </div>
           </ListGroupItem>

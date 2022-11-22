@@ -2,14 +2,14 @@ import { FC, memo, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { resetPassword, checkImgCode } from '@answer/api';
 import type {
   ImgCodeRes,
   PasswordResetReq,
   FormDataType,
-} from '@answer/common/interface';
-
+} from '@/common/interface';
+import { resetPassword, checkImgCode } from '@/services';
 import { PicAuthCodeModal } from '@/components/Modal';
+import { handleFormError } from '@/utils';
 
 interface IProps {
   visible: boolean;
@@ -84,14 +84,21 @@ const Index: FC<IProps> = ({ visible = false, callback }) => {
         setModalState(false);
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
-          if (err.key.indexOf('captcha') < 0) {
+        // if (err.isError && err.key) {
+        //   formData[err.key].isInvalid = true;
+        //   formData[err.key].errorMsg = err.value;
+        //   if (err.key.indexOf('captcha') < 0) {
+        //     setModalState(false);
+        //   }
+        // }
+
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          if (err.list.filter((v) => v.error_field.indexOf('captcha') < 0)) {
             setModalState(false);
           }
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       })
       .finally(() => {
         getImgCode();

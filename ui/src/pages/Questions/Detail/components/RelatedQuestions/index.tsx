@@ -3,16 +3,15 @@ import { Card, ListGroup } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { useSimilarQuestion } from '@answer/api';
-import { Icon } from '@answer/components';
-
-import { userInfoStore } from '@/stores';
+import { Icon } from '@/components';
+import { useSimilarQuestion } from '@/services';
+import { loggedUserInfoStore } from '@/stores';
 
 interface Props {
   id: string;
 }
 const Index: FC<Props> = ({ id }) => {
-  const { user } = userInfoStore();
+  const { user } = loggedUserInfoStore();
   const { t } = useTranslation('translation', {
     keyPrefix: 'related_question',
   });

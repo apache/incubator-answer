@@ -27,6 +27,8 @@ const (
 // object TagID AnswerList
 // key equal database's table name
 var (
+	Version string = ""
+
 	ObjectTypeStrMapping = map[string]int{
 		QuestionObjectType:   1,
 		AnswerObjectType:     2,
@@ -47,3 +49,12 @@ var (
 		8: ReportObjectType,
 	}
 )
+
+const (
+	SiteTypeGeneral   = "general"
+	SiteTypeInterface = "interface"
+	SiteTypeBranding  = "branding"
+	SiteTypeWrite     = "write"
+	SiteTypeLegal     = "legal"
+)
+

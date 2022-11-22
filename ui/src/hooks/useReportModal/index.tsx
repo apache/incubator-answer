@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import ReactDOM from 'react-dom/client';
 
-import { reportList, postReport, closeQuestion, putReport } from '@answer/api';
-import { useToast } from '@answer/hooks';
-import type * as Type from '@answer/common/interface';
+import { useToast } from '@/hooks';
+import type * as Type from '@/common/interface';
+import { reportList, postReport, closeQuestion, putReport } from '@/services';
 
 interface Params {
   isBackend?: boolean;

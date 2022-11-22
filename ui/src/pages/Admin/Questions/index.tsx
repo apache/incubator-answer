@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Button, Form, Table, Stack, Badge } from 'react-bootstrap';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -11,15 +11,11 @@ import {
   BaseUserCard,
   Empty,
   QueryGroup,
-} from '@answer/components';
-import { ADMIN_LIST_STATUS } from '@answer/common/constants';
-import { useEditStatusModal, useReportModal } from '@answer/hooks';
-import {
-  useQuestionSearch,
-  changeQuestionStatus,
-  deleteQuestion,
-} from '@answer/api';
-import * as Type from '@answer/common/interface';
+} from '@/components';
+import { ADMIN_LIST_STATUS } from '@/common/constants';
+import { useEditStatusModal, useReportModal } from '@/hooks';
+import * as Type from '@/common/interface';
+import { useQuestionSearch, changeQuestionStatus } from '@/services';
 
 import '../index.scss';
 
@@ -31,9 +27,10 @@ const questionFilterItems: Type.AdminContentsFilterBy[] = [
 
 const PAGE_SIZE = 20;
 const Questions: FC = () => {
-  const [urlSearchParams] = useSearchParams();
+  const [urlSearchParams, setUrlSearchParams] = useSearchParams();
   const curFilter = urlSearchParams.get('status') || questionFilterItems[0];
   const curPage = Number(urlSearchParams.get('page')) || 1;
+  const curQuery = urlSearchParams.get('query') || '';
   const { t } = useTranslation('translation', { keyPrefix: 'admin.questions' });
 
   const {
@@ -44,6 +41,7 @@ const Questions: FC = () => {
     page_size: PAGE_SIZE,
     page: curPage,
     status: curFilter as Type.AdminContentsFilterBy,
+    query: curQuery,
   });
   const count = listData?.count || 0;
 
@@ -74,9 +72,7 @@ const Questions: FC = () => {
         confirmBtnVariant: 'danger',
         confirmText: t('delete', { keyPrefix: 'btns' }),
         onConfirm: () => {
-          deleteQuestion({
-            id,
-          }).then(() => {
+          changeQuestionStatus(id, 'deleted').then(() => {
             refreshList();
           });
         },
@@ -96,6 +92,11 @@ const Questions: FC = () => {
     });
   };
 
+  const handleFilter = (e) => {
+    urlSearchParams.set('query', e.target.value);
+    urlSearchParams.delete('page');
+    setUrlSearchParams(urlSearchParams);
+  };
   return (
     <>
       <h3 className="mb-4">{t('page_title')}</h3>
@@ -108,22 +109,25 @@ const Questions: FC = () => {
         />
 
         <Form.Control
+          value={curQuery}
           size="sm"
           type="input"
-          placeholder="Filter by title"
-          className="d-none"
+          placeholder={t('filter.placeholder')}
+          onChange={handleFilter}
           style={{ width: '12.25rem' }}
         />
       </div>
       <Table>
         <thead>
           <tr>
-            <th style={{ width: '40%' }}>{t('post')}</th>
-            <th>{t('votes')}</th>
-            <th>{t('answers')}</th>
+            <th>{t('post')}</th>
+            <th style={{ width: '8%' }}>{t('votes')}</th>
+            <th style={{ width: '8%' }}>{t('answers')}</th>
             <th style={{ width: '20%' }}>{t('created')}</th>
-            <th>{t('status')}</th>
-            {curFilter !== 'deleted' && <th>{t('action')}</th>}
+            <th style={{ width: '9%' }}>{t('status')}</th>
+            {curFilter !== 'deleted' && (
+              <th style={{ width: '10%' }}>{t('action')}</th>
+            )}
           </tr>
         </thead>
         <tbody className="align-middle">
@@ -147,12 +151,11 @@ const Questions: FC = () => {
                 </td>
                 <td>{li.vote_count}</td>
                 <td>
-                  <a
-                    href={`/questions/${li.id}`}
-                    target="_blank"
+                  <Link
+                    to={`/admin/answers?questionId=${li.id}`}
                     rel="noreferrer">
                     {li.answer_count}
-                  </a>
+                  </Link>
                 </td>
                 <td>
                   <Stack>
@@ -170,7 +173,10 @@ const Questions: FC = () => {
                 </td>
                 {curFilter !== 'deleted' && (
                   <td>
-                    <Button variant="link" onClick={() => handleChange(li.id)}>
+                    <Button
+                      variant="link"
+                      className="p-0 btn-no-border"
+                      onClick={() => handleChange(li.id)}>
                       {t('change')}
                     </Button>
                   </td>

@@ -1,7 +1,7 @@
 import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
-import { FormatTime } from '@answer/components';
+import { FormatTime } from '@/components';
 
 interface Props {
   visible: boolean;

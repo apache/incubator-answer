@@ -5,18 +5,19 @@ import { Trans, useTranslation } from 'react-i18next';
 import { marked } from 'marked';
 import MD5 from 'md5';
 
-import { modifyUserInfo, uploadAvatar, getUserInfo } from '@answer/api';
-import type { FormDataType } from '@answer/common/interface';
-import { UploadImg, Avatar } from '@answer/components';
-import { userInfoStore } from '@answer/stores';
-import { useToast } from '@answer/hooks';
+import type { FormDataType } from '@/common/interface';
+import { UploadImg, Avatar } from '@/components';
+import { loggedUserInfoStore } from '@/stores';
+import { useToast } from '@/hooks';
+import { modifyUserInfo, getLoggedUserInfo } from '@/services';
+import { handleFormError } from '@/utils';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings.profile',
   });
   const toast = useToast();
-  const { user, update } = userInfoStore();
+  const { user, update } = loggedUserInfoStore();
   const [mailHash, setMailHash] = useState('');
   const [count, setCount] = useState(0);
 
@@ -60,21 +61,16 @@ const Index: React.FC = () => {
     setFormData({ ...formData, ...params });
   };
 
-  const avatarUpload = (file: any) => {
-    return new Promise((resolve) => {
-      uploadAvatar(file).then((res) => {
-        setFormData({
-          ...formData,
-          avatar: {
-            ...formData.avatar,
-            type: 'custom',
-            custom: res,
-            isInvalid: false,
-            errorMsg: '',
-          },
-        });
-        resolve(true);
-      });
+  const avatarUpload = (path: string) => {
+    setFormData({
+      ...formData,
+      avatar: {
+        ...formData.avatar,
+        type: 'custom',
+        custom: path,
+        isInvalid: false,
+        errorMsg: '',
+      },
     });
   };
 
@@ -179,16 +175,15 @@ const Index: React.FC = () => {
         });
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
 
   const getProfile = () => {
-    getUserInfo().then((res) => {
+    getLoggedUserInfo().then((res) => {
       formData.display_name.value = res.display_name;
       formData.username.value = res.username;
       formData.bio.value = res.bio;
@@ -201,7 +196,6 @@ const Index: React.FC = () => {
       if (res.e_mail) {
         const str = res.e_mail.toLowerCase().trim();
         const hash = MD5(str);
-        console.log(str, hash, mailHash);
         setMailHash(hash);
       }
     });
@@ -364,7 +358,11 @@ const Index: React.FC = () => {
                 className="me-3 rounded"
               />
               <div>
-                <UploadImg type="avatar" upload={avatarUpload} />
+                <UploadImg
+                  type="avatar"
+                  uploadCallback={avatarUpload}
+                  className="mb-2"
+                />
                 <div>
                   <Form.Text className="text-muted mt-0">
                     <Trans i18nKey="settings.profile.avatar.text">

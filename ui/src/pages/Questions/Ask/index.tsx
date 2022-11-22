@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { Editor, EditorRef, TagSelector, PageTitle } from '@answer/components';
+import { Editor, EditorRef, TagSelector, PageTitle } from '@/components';
+import type * as Type from '@/common/interface';
 import {
   saveQuestion,
   questionDetail,
@@ -14,8 +15,8 @@ import {
   useQueryRevisions,
   postAnswer,
   useQueryQuestionByTitle,
-} from '@answer/api';
-import type * as Type from '@answer/common/interface';
+} from '@/services';
+import { handleFormError } from '@/utils';
 
 import SearchQuestion from './components/SearchQuestion';
 
@@ -123,7 +124,7 @@ const Ask = () => {
         isInvalid: true,
         errorMsg: t('form.fields.title.msg.empty'),
       };
-    } else if ([...title.value].length > 150) {
+    } else if (Array.from(title.value).length > 150) {
       bol = false;
       formData.title = {
         value: title.value,
@@ -209,19 +210,17 @@ const Ask = () => {
           navigate(`/questions/${qid}`);
         })
         .catch((err) => {
-          if (err.isError && err.key) {
-            formData[err.key].isInvalid = true;
-            formData[err.key].errorMsg = err.value;
+          if (err.isError) {
+            const data = handleFormError(err, formData);
+            setFormData({ ...data });
           }
-          setFormData({ ...formData });
         });
     } else {
       const res = await saveQuestion(params).catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
 
       const id = res?.id;
@@ -236,11 +235,10 @@ const Ask = () => {
               navigate(`/questions/${id}`);
             })
             .catch((err) => {
-              if (err.isError && err.key) {
-                formData[err.key].isInvalid = true;
-                formData[err.key].errorMsg = err.value;
+              if (err.isError) {
+                const data = handleFormError(err, formData);
+                setFormData({ ...data });
               }
-              setFormData({ ...formData });
             });
         } else {
           navigate(`/questions/${id}`);
@@ -281,9 +279,11 @@ const Ask = () => {
                   <Form.Select onChange={handleSelectedRevision}>
                     {revisions.map(
                       ({ reason, create_at, user_info }, index) => {
-                        const date = dayjs(create_at * 1000).format(
-                          t('long_date_with_time', { keyPrefix: 'dates' }),
-                        );
+                        const date = dayjs(create_at * 1000)
+                          .tz()
+                          .format(
+                            t('long_date_with_time', { keyPrefix: 'dates' }),
+                          );
                         return (
                           <option key={`${create_at}`} value={index}>
                             {`${date} - ${user_info.display_name} - ${
@@ -348,6 +348,7 @@ const Ask = () => {
                 <TagSelector
                   value={formData.tags.value}
                   onChange={handleTagsChange}
+                  showRequiredTagText
                 />
                 <Form.Control.Feedback type="invalid">
                   {formData.tags.errorMsg}

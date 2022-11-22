@@ -1,21 +1,17 @@
 import axios, { AxiosResponse } from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 
-import { Modal } from '@answer/components';
-import { userInfoStore, toastStore } from '@answer/stores';
+import { Modal } from '@/components';
+import { loggedUserInfoStore, toastStore } from '@/stores';
+import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
+import { RouteAlias } from '@/router/alias';
+import { getCurrentLang } from '@/utils/localize';
 
 import Storage from './storage';
-
-const API = {
-  development: '',
-  production: '',
-  test: '',
-};
-
-const baseApiUrl = process.env.REACT_APP_API_URL || API[process.env.NODE_ENV];
+import { floppyNavigation } from './floppyNavigation';
 
 const baseConfig = {
-  baseUrl: baseApiUrl,
+  baseUrl: process.env.REACT_APP_API_URL || '',
   timeout: 10000,
   withCredentials: true,
 };
@@ -25,12 +21,10 @@ class Request {
 
   constructor(config: AxiosRequestConfig) {
     this.instance = axios.create(config);
-
     this.instance.interceptors.request.use(
       (requestConfig: AxiosRequestConfig) => {
-        const token = Storage.get('token') || '';
-        // default lang en_US
-        const lang = Storage.get('LANG') || 'en_US';
+        const token = Storage.get(LOGGED_TOKEN_STORAGE_KEY) || '';
+        const lang = getCurrentLang();
         requestConfig.headers = {
           Authorization: token,
           'Accept-Language': lang,
@@ -54,89 +48,86 @@ class Request {
         return data;
       },
       (error) => {
-        const { status, data, msg } = error.response;
-        const { data: realData, msg: realMsg = '' } = data;
+        const { status, data: respData, msg: respMsg } = error.response || {};
+        const { data = {}, msg = '' } = respData || {};
         if (status === 400) {
           // show error message
-          if (realData instanceof Object && realData.err_type) {
-            if (realData.err_type === 'toast') {
+          if (data instanceof Object && data.err_type) {
+            if (data.err_type === 'toast') {
               // toast error message
               toastStore.getState().show({
-                msg: realMsg,
+                msg,
                 variant: 'danger',
               });
             }
 
-            if (realData.type === 'modal') {
+            if (data.err_type === 'alert') {
+              return Promise.reject({
+                msg,
+                ...data,
+              });
+            }
+
+            if (data.err_type === 'modal') {
               // modal error message
               Modal.confirm({
-                content: realMsg,
+                content: msg,
               });
             }
 
             return Promise.reject(false);
           }
 
-          if (
-            realData instanceof Object &&
-            Object.keys(realData).length > 0 &&
-            realData.key
-          ) {
+          if (data instanceof Array && data.length > 0) {
             // handle form error
-            return Promise.reject({ ...realData, isError: true });
+            return Promise.reject({ isError: true, list: data });
           }
 
-          if (!realData || Object.keys(realData).length <= 0) {
+          if (!data || Object.keys(data).length <= 0) {
             // default error msg will show modal
             Modal.confirm({
-              content: realMsg,
+              content: msg,
             });
             return Promise.reject(false);
           }
         }
-
+        // 401: Re-login required
         if (status === 401) {
-          // clear userinfo;
-          Storage.remove('token');
-          userInfoStore.getState().clear();
-          // need login
-          const { pathname } = window.location;
-          if (pathname !== '/users/login' && pathname !== '/users/register') {
-            Storage.set('ANSWER_PATH', window.location.pathname);
-          }
-          window.location.href = '/users/login';
-
+          // clear userinfo
+          loggedUserInfoStore.getState().clear();
+          floppyNavigation.navigateToLogin();
           return Promise.reject(false);
         }
-
         if (status === 403) {
           // Permission interception
-
-          if (realData?.type === 'inactive') {
-            // inactivated
-            window.location.href = '/users/login?status=inactive';
-            return Promise.reject(false);
-          }
-
-          if (realData?.type === 'url_expired') {
+          if (data?.type === 'url_expired') {
             // url expired
-            window.location.href = '/users/account-activation/failed';
+            floppyNavigation.navigate(RouteAlias.activationFailed, () => {
+              window.location.replace(RouteAlias.activationFailed);
+            });
+            return Promise.reject(false);
+          }
+          if (data?.type === 'inactive') {
+            // inactivated
+            floppyNavigation.navigate(RouteAlias.activation, () => {
+              window.location.href = RouteAlias.activation;
+            });
             return Promise.reject(false);
           }
 
-          if (realData?.type === 'suspended') {
-            if (window.location.pathname !== '/users/account-suspended') {
-              window.location.href = '/users/account-suspended';
-            }
-
+          if (data?.type === 'suspended') {
+            floppyNavigation.navigate(RouteAlias.suspended, () => {
+              window.location.replace(RouteAlias.suspended);
+            });
             return Promise.reject(false);
           }
         }
-
-        toastStore.getState().show({
-          msg: `statusCode: ${status}; ${msg || ''}`,
-          variant: 'danger',
-        });
+        if (respMsg) {
+          toastStore.getState().show({
+            msg: `statusCode: ${status}; ${respMsg || ''}`,
+            variant: 'danger',
+          });
+        }
         return Promise.reject(false);
       },
     );
@@ -177,7 +168,5 @@ class Request {
     });
   }
 }
-
-// export const Request;
 
 export default new Request(baseConfig);

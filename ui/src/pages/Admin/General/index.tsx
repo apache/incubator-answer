@@ -1,11 +1,13 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type * as Type from '@answer/common/interface';
-import { useToast } from '@answer/hooks';
-import { siteInfoStore } from '@answer/stores';
-import { useGeneralSetting, updateGeneralSetting } from '@answer/api';
+import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
+import type * as Type from '@/common/interface';
+import { useToast } from '@/hooks';
+import { siteInfoStore } from '@/stores';
+import { useGeneralSetting, updateGeneralSetting } from '@/services';
+import Pattern from '@/common/pattern';
+import { handleFormError } from '@/utils';
 
 import '../index.scss';
 
@@ -17,50 +19,83 @@ const General: FC = () => {
   const updateSiteInfo = siteInfoStore((state) => state.update);
 
   const { data: setting } = useGeneralSetting();
-  const [formData, setFormData] = useState<Type.FormDataType>({
-    name: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
+  const schema: JSONSchema = {
+    title: t('page_title'),
+    required: ['name', 'site_url', 'contact_email'],
+    properties: {
+      name: {
+        type: 'string',
+        title: t('name.label'),
+        description: t('name.text'),
+      },
+      site_url: {
+        type: 'string',
+        title: t('site_url.label'),
+        description: t('site_url.text'),
+      },
+      short_description: {
+        type: 'string',
+        title: t('short_description.label'),
+        description: t('short_description.text'),
+      },
+      description: {
+        type: 'string',
+        title: t('description.label'),
+        description: t('description.text'),
+      },
+      contact_email: {
+        type: 'string',
+        title: t('contact_email.label'),
+        description: t('contact_email.text'),
+      },
     },
-    short_description: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
-    description: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
-  });
-  const checkValidated = (): boolean => {
-    let ret = true;
-    const { name } = formData;
-    if (!name.value) {
-      ret = false;
-      formData.name = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('name.msg'),
-      };
-    }
-    setFormData({
-      ...formData,
-    });
-    return ret;
   };
+  const uiSchema: UISchema = {
+    site_url: {
+      'ui:options': {
+        validator: (value) => {
+          let url: URL | undefined;
+          try {
+            url = new URL(value);
+          } catch (ex) {
+            return t('site_url.validate');
+          }
+          if (
+            !url ||
+            /^https?:$/.test(url.protocol) === false ||
+            url.pathname !== '/' ||
+            url.search !== '' ||
+            url.hash !== ''
+          ) {
+            return t('site_url.validate');
+          }
+
+          return true;
+        },
+      },
+    },
+    contact_email: {
+      'ui:options': {
+        validator: (value) => {
+          if (!Pattern.email.test(value)) {
+            return t('contact_email.validate');
+          }
+          return true;
+        },
+      },
+    },
+  };
+  const [formData, setFormData] = useState(initFormData(schema));
 
   const onSubmit = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-    if (checkValidated() === false) {
-      return;
-    }
     const reqParams: Type.AdminSettingsGeneral = {
       name: formData.name.value,
       description: formData.description.value,
       short_description: formData.short_description.value,
+      site_url: formData.site_url.value,
+      contact_email: formData.contact_email.value,
     };
 
     updateGeneralSetting(reqParams)
@@ -72,26 +107,13 @@ const General: FC = () => {
         updateSiteInfo(reqParams);
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
-  const onFieldChange = (fieldName, fieldValue) => {
-    if (!formData[fieldName]) {
-      return;
-    }
-    const fieldData: Type.FormDataType = {
-      [fieldName]: {
-        value: fieldValue,
-        isInvalid: false,
-        errorMsg: '',
-      },
-    };
-    setFormData({ ...formData, ...fieldData });
-  };
+
   useEffect(() => {
     if (!setting) {
       return;
@@ -100,61 +122,23 @@ const General: FC = () => {
     Object.keys(setting).forEach((k) => {
       formMeta[k] = { ...formData[k], value: setting[k] };
     });
-    setFormData(formMeta);
+    setFormData({ ...formData, ...formMeta });
   }, [setting]);
+
+  const handleOnChange = (data) => {
+    setFormData(data);
+  };
+
   return (
     <>
       <h3 className="mb-4">{t('page_title')}</h3>
-      <Form noValidate onSubmit={onSubmit}>
-        <Form.Group controlId="siteName" className="mb-3">
-          <Form.Label>{t('name.label')}</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            value={formData.name.value}
-            isInvalid={formData.name.isInvalid}
-            onChange={(evt) => onFieldChange('name', evt.target.value)}
-          />
-          <Form.Text as="div">{t('name.text')}</Form.Text>
-          <Form.Control.Feedback type="invalid">
-            {formData.name.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group controlId="shortDescription" className="mb-3">
-          <Form.Label>{t('short_description.label')}</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            value={formData.short_description.value}
-            isInvalid={formData.short_description.isInvalid}
-            onChange={(evt) =>
-              onFieldChange('short_description', evt.target.value)
-            }
-          />
-          <Form.Text as="div">{t('short_description.text')}</Form.Text>
-          <Form.Control.Feedback type="invalid">
-            {formData.short_description.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group controlId="description" className="mb-3">
-          <Form.Label>{t('description.label')}</Form.Label>
-          <Form.Control
-            required
-            type="text"
-            value={formData.description.value}
-            isInvalid={formData.description.isInvalid}
-            onChange={(evt) => onFieldChange('description', evt.target.value)}
-          />
-          <Form.Text as="div">{t('description.text')}</Form.Text>
-          <Form.Control.Feedback type="invalid">
-            {formData.description.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
-          {t('save', { keyPrefix: 'btns' })}
-        </Button>
-      </Form>
+      <SchemaForm
+        schema={schema}
+        formData={formData}
+        onSubmit={onSubmit}
+        uiSchema={uiSchema}
+        onChange={handleOnChange}
+      />
     </>
   );
 };

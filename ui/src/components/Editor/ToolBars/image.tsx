@@ -2,10 +2,10 @@ import { FC, useEffect, useState, memo } from 'react';
 import { Button, Form, Modal, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Modal as AnswerModal } from '@answer/components';
-import { uploadImage } from '@answer/api';
+import { Modal as AnswerModal } from '@/components';
 import ToolItem from '../toolItem';
 import { IEditorContext } from '../types';
+import { uploadImage } from '@/services';
 
 const Image: FC<IEditorContext> = ({ editor }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
@@ -61,7 +61,7 @@ const Image: FC<IEditorContext> = ({ editor }) => {
     files: FileList,
   ): Promise<{ url: string; name: string }[]> => {
     const promises = Array.from(files).map(async (file) => {
-      const url = await uploadImage(file);
+      const url = await uploadImage({ file, type: 'post' });
 
       return {
         name: file.name,
@@ -209,7 +209,7 @@ const Image: FC<IEditorContext> = ({ editor }) => {
       return;
     }
 
-    uploadImage(e.target.files[0]).then((url) => {
+    uploadImage({ file: e.target.files[0], type: 'post' }).then((url) => {
       setLink({ ...link, value: url });
     });
   };

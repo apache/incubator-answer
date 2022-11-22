@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { PageTitle, Unactivate } from '@answer/components';
-import { isLogin } from '@answer/utils';
+import { PageTitle, Unactivate } from '@/components';
 
 import SignUpForm from './components/SignUpForm';
 
@@ -14,10 +13,6 @@ const Index: React.FC = () => {
   const onStep = () => {
     setShowForm((bol) => !bol);
   };
-
-  useEffect(() => {
-    isLogin();
-  }, []);
 
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>

@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 	"unicode"
+
 	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -102,6 +103,16 @@ func (ar *answerRepo) GetAnswer(ctx context.Context, id string) (
 	return
 }
 
+// GetQuestionCount
+func (ar *answerRepo) GetAnswerCount(ctx context.Context) (count int64, err error) {
+	list := make([]*entity.Answer, 0)
+	count, err = ar.data.DB.Where("status = ?", entity.AnswerStatusAvailable).FindAndCount(&list)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // GetAnswerList get answer list all
 func (ar *answerRepo) GetAnswerList(ctx context.Context, answer *entity.Answer) (answerList []*entity.Answer, err error) {
 	answerList = make([]*entity.Answer, 0)
@@ -193,7 +204,7 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	case entity.AnswerSearchOrderByVote:
 		session = session.OrderBy("vote_count desc")
 	default:
-		session = session.OrderBy("adopted desc,vote_count desc")
+		session = session.OrderBy("adopted desc,vote_count desc,created_at asc")
 	}
 	session = session.And("status = ?", entity.AnswerStatusAvailable)
 

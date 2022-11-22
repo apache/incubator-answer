@@ -81,7 +81,7 @@ func Test_notificationRepo_GetNotificationPage(t *testing.T) {
 	err := notificationRepo.AddNotification(context.TODO(), ent)
 	assert.NoError(t, err)
 
-	notificationPage, total, err := notificationRepo.GetNotificationPage(context.TODO(), &schema.NotificationSearch{UserID: userID})
+	notificationPage, total, err := notificationRepo.GetNotificationPage(context.TODO(), &schema.NotificationSearch{UserID: ent.UserID})
 	assert.NoError(t, err)
 	assert.True(t, total > 0)
 	assert.Equal(t, notificationPage[0].UserID, ent.UserID)

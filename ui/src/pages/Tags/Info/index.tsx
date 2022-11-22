@@ -5,19 +5,13 @@ import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
-import {
-  Tag,
-  TagSelector,
-  FormatTime,
-  Modal,
-  PageTitle,
-} from '@answer/components';
+import { Tag, TagSelector, FormatTime, Modal, PageTitle } from '@/components';
 import {
   useTagInfo,
   useQuerySynonymsTags,
   saveSynonymsTags,
   deleteTag,
-} from '@answer/api';
+} from '@/services';
 
 const TagIntroduction = () => {
   const [isEdit, setEditState] = useState(false);
@@ -158,9 +152,16 @@ const TagIntroduction = () => {
                   <>
                     <div className="mb-3">
                       {t('synonyms.text')}{' '}
-                      <Tag className="me-2 mb-2" href="#">
-                        {tagName}
-                      </Tag>
+                      <Tag
+                        className="me-2 mb-2"
+                        data={{
+                          slug_name: tagName || '',
+                          main_tag_slug_name: '',
+                          display_name: '',
+                          recommend: false,
+                          reserved: false,
+                        }}
+                      />
                     </div>
                     <TagSelector
                       value={synonymsTags}
@@ -176,9 +177,8 @@ const TagIntroduction = () => {
                         <Tag
                           key={item.tag_id}
                           className="me-2 mb-2"
-                          href={`/tags/${item.slug_name}`}>
-                          {item.slug_name}
-                        </Tag>
+                          data={item}
+                        />
                       );
                     })
                   ) : (

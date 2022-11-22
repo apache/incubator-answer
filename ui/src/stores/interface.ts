@@ -1,21 +1,18 @@
 import create from 'zustand';
 
-interface updateParams {
-  logo: string;
-  theme: string;
-  language: string;
-}
+import { AdminSettingsInterface } from '@/common/interface';
+import { DEFAULT_LANG } from '@/common/constants';
 
 interface InterfaceType {
-  interface: updateParams;
-  update: (params: updateParams) => void;
+  interface: AdminSettingsInterface;
+  update: (params: AdminSettingsInterface) => void;
 }
 
 const interfaceSetting = create<InterfaceType>((set) => ({
   interface: {
-    logo: '',
     theme: '',
-    language: '',
+    language: DEFAULT_LANG,
+    time_zone: '',
   },
   update: (params) =>
     set(() => {

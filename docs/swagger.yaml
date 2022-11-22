@@ -20,6 +20,69 @@ definitions:
         description: reason key
         type: string
     type: object
+  install.CheckConfigFileResp:
+    properties:
+      config_file_exist:
+        type: boolean
+      db_connection_success:
+        type: boolean
+      db_table_exist:
+        type: boolean
+    type: object
+  install.CheckDatabaseReq:
+    properties:
+      db_file:
+        type: string
+      db_host:
+        type: string
+      db_name:
+        type: string
+      db_password:
+        type: string
+      db_type:
+        enum:
+        - postgres
+        - sqlite3
+        - mysql
+        type: string
+      db_username:
+        type: string
+    required:
+    - db_type
+    type: object
+  install.InitBaseInfoReq:
+    properties:
+      contact_email:
+        maxLength: 500
+        type: string
+      email:
+        maxLength: 500
+        type: string
+      lang:
+        maxLength: 30
+        type: string
+      name:
+        maxLength: 30
+        type: string
+      password:
+        maxLength: 32
+        minLength: 8
+        type: string
+      site_name:
+        maxLength: 30
+        type: string
+      site_url:
+        maxLength: 512
+        type: string
+    required:
+    - contact_email
+    - email
+    - lang
+    - name
+    - password
+    - site_name
+    - site_url
+    type: object
   pager.PageModel:
     properties:
       count:
@@ -305,6 +368,10 @@ definitions:
         description: if main tag slug name is not empty, this tag is synonymous with
           the main tag
         type: string
+      recommend:
+        type: boolean
+      reserved:
+        type: boolean
       slug_name:
         description: slug name
         type: string
@@ -481,6 +548,17 @@ definitions:
       smtp_username:
         type: string
     type: object
+  schema.GetSiteLegalInfoResp:
+    properties:
+      privacy_policy_original_text:
+        type: string
+      privacy_policy_parsed_text:
+        type: string
+      terms_of_service_original_text:
+        type: string
+      terms_of_service_parsed_text:
+        type: string
+    type: object
   schema.GetTagPageResp:
     properties:
       created_at:
@@ -507,6 +585,10 @@ definitions:
       question_count:
         description: question amount
         type: integer
+      recommend:
+        type: boolean
+      reserved:
+        type: boolean
       slug_name:
         description: slug_name
         type: string
@@ -552,6 +634,10 @@ definitions:
       question_count:
         description: question amount
         type: integer
+      recommend:
+        type: boolean
+      reserved:
+        type: boolean
       slug_name:
         description: slug name
         type: string
@@ -652,6 +738,9 @@ definitions:
       is_admin:
         description: is admin
         type: boolean
+      language:
+        description: language
+        type: string
       last_login_date:
         description: last login date
         type: integer
@@ -723,6 +812,9 @@ definitions:
       is_admin:
         description: is admin
         type: boolean
+      language:
+        description: language
+        type: string
       last_login_date:
         description: last login date
         type: integer
@@ -956,6 +1048,8 @@ definitions:
         type: string
       id:
         type: string
+      question_id:
+        type: string
       status:
         description: Status
         type: string
@@ -981,8 +1075,47 @@ definitions:
         description: object_type
         type: string
     type: object
+  schema.SiteBrandingReq:
+    properties:
+      favicon:
+        maxLength: 512
+        type: string
+      logo:
+        maxLength: 512
+        type: string
+      mobile_logo:
+        maxLength: 512
+        type: string
+      square_icon:
+        maxLength: 512
+        type: string
+    required:
+    - logo
+    - square_icon
+    type: object
+  schema.SiteBrandingResp:
+    properties:
+      favicon:
+        maxLength: 512
+        type: string
+      logo:
+        maxLength: 512
+        type: string
+      mobile_logo:
+        maxLength: 512
+        type: string
+      square_icon:
+        maxLength: 512
+        type: string
+    required:
+    - logo
+    - square_icon
+    type: object
   schema.SiteGeneralReq:
     properties:
+      contact_email:
+        maxLength: 512
+        type: string
       description:
         maxLength: 2000
         type: string
@@ -992,13 +1125,21 @@ definitions:
       short_description:
         maxLength: 255
         type: string
+      site_url:
+        maxLength: 512
+        type: string
     required:
+    - contact_email
     - description
     - name
     - short_description
+    - site_url
     type: object
   schema.SiteGeneralResp:
     properties:
+      contact_email:
+        maxLength: 512
+        type: string
       description:
         maxLength: 2000
         type: string
@@ -1008,40 +1149,95 @@ definitions:
       short_description:
         maxLength: 255
         type: string
+      site_url:
+        maxLength: 512
+        type: string
     required:
+    - contact_email
     - description
     - name
     - short_description
+    - site_url
     type: object
   schema.SiteInterfaceReq:
     properties:
       language:
         maxLength: 128
         type: string
-      logo:
-        maxLength: 256
-        type: string
       theme:
+        maxLength: 128
+        type: string
+      time_zone:
         maxLength: 128
         type: string
     required:
     - language
     - theme
+    - time_zone
     type: object
   schema.SiteInterfaceResp:
     properties:
       language:
         maxLength: 128
         type: string
-      logo:
-        maxLength: 256
-        type: string
       theme:
+        maxLength: 128
+        type: string
+      time_zone:
         maxLength: 128
         type: string
     required:
     - language
     - theme
+    - time_zone
+    type: object
+  schema.SiteLegalReq:
+    properties:
+      privacy_policy_original_text:
+        type: string
+      privacy_policy_parsed_text:
+        type: string
+      terms_of_service_original_text:
+        type: string
+      terms_of_service_parsed_text:
+        type: string
+    type: object
+  schema.SiteLegalResp:
+    properties:
+      privacy_policy_original_text:
+        type: string
+      privacy_policy_parsed_text:
+        type: string
+      terms_of_service_original_text:
+        type: string
+      terms_of_service_parsed_text:
+        type: string
+    type: object
+  schema.SiteWriteReq:
+    properties:
+      recommend_tags:
+        items:
+          type: string
+        type: array
+      required_tag:
+        type: boolean
+      reserved_tags:
+        items:
+          type: string
+        type: array
+    type: object
+  schema.SiteWriteResp:
+    properties:
+      recommend_tags:
+        items:
+          type: string
+        type: array
+      required_tag:
+        type: boolean
+      reserved_tags:
+        items:
+          type: string
+        type: array
     type: object
   schema.TagItem:
     properties:
@@ -1068,6 +1264,10 @@ definitions:
         description: if main tag slug name is not empty, this tag is synonymous with
           the main tag
         type: string
+      recommend:
+        type: boolean
+      reserved:
+        type: boolean
       slug_name:
         type: string
     type: object
@@ -1195,6 +1395,15 @@ definitions:
     - synonym_tag_list
     - tag_id
     type: object
+  schema.UpdateUserInterfaceRequest:
+    properties:
+      language:
+        description: language
+        maxLength: 100
+        type: string
+    required:
+    - language
+    type: object
   schema.UpdateUserStatusReq:
     properties:
       status:
@@ -1271,10 +1480,16 @@ definitions:
         type: string
       e_mail:
         description: e_mail
+        maxLength: 500
         type: string
       pass:
         description: password
+        maxLength: 32
+        minLength: 8
         type: string
+    required:
+    - e_mail
+    - pass
     type: object
   schema.UserModifyPassWordRequest:
     properties:
@@ -1366,6 +1581,13 @@ definitions:
       votes:
         type: integer
     type: object
+  translator.LangOption:
+    properties:
+      label:
+        type: string
+      value:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -1434,6 +1656,23 @@ paths:
       summary: AdminSetAnswerStatus
       tags:
       - admin
+  /answer/admin/api/dashboard:
+    get:
+      consumes:
+      - application/json
+      description: DashboardInfo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: DashboardInfo
+      tags:
+      - admin
   /answer/admin/api/language/options:
     get:
       description: Get language options
@@ -1444,8 +1683,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
       summary: Get language options
       tags:
       - Lang
@@ -1660,9 +1897,50 @@ paths:
       summary: update smtp config
       tags:
       - admin
+  /answer/admin/api/siteinfo/branding:
+    get:
+      description: get site interface
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SiteBrandingResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get site interface
+      tags:
+      - admin
+    put:
+      description: update site info branding
+      parameters:
+      - description: branding info
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.SiteBrandingReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update site info branding
+      tags:
+      - admin
   /answer/admin/api/siteinfo/general:
     get:
-      description: Get siteinfo general
+      description: get site general information
       produces:
       - application/json
       responses:
@@ -1677,11 +1955,11 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo general
+      summary: get site general information
       tags:
       - admin
     put:
-      description: Get siteinfo interface
+      description: update site general information
       parameters:
       - description: general
         in: body
@@ -1698,19 +1976,12 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo interface
+      summary: update site general information
       tags:
       - admin
   /answer/admin/api/siteinfo/interface:
     get:
-      description: Get siteinfo interface
-      parameters:
-      - description: general
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/schema.AddCommentReq'
+      description: get site interface
       produces:
       - application/json
       responses:
@@ -1725,11 +1996,11 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo interface
+      summary: get site interface
       tags:
       - admin
     put:
-      description: Get siteinfo interface
+      description: update site info interface
       parameters:
       - description: general
         in: body
@@ -1746,7 +2017,89 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: Get siteinfo interface
+      summary: update site info interface
+      tags:
+      - admin
+  /answer/admin/api/siteinfo/legal:
+    get:
+      description: Set the legal information for the site
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SiteLegalResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Set the legal information for the site
+      tags:
+      - admin
+    put:
+      description: update site legal info
+      parameters:
+      - description: write info
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.SiteLegalReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update site legal info
+      tags:
+      - admin
+  /answer/admin/api/siteinfo/write:
+    get:
+      description: get site interface
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SiteWriteResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get site interface
+      tags:
+      - admin
+    put:
+      description: update site write info
+      parameters:
+      - description: write info
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.SiteWriteReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update site write info
       tags:
       - admin
   /answer/admin/api/theme/options:
@@ -2155,6 +2508,41 @@ paths:
       summary: get comment page
       tags:
       - Comment
+  /answer/api/v1/file:
+    post:
+      consumes:
+      - multipart/form-data
+      description: upload file
+      parameters:
+      - description: identify the source of the file upload
+        enum:
+        - post
+        - avatar
+        - branding
+        in: formData
+        name: source
+        required: true
+        type: string
+      - description: file
+        in: formData
+        name: file
+        required: true
+        type: file
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: upload file
+      tags:
+      - Upload
   /answer/api/v1/follow:
     post:
       consumes:
@@ -2237,8 +2625,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
       summary: Get language options
       tags:
       - Lang
@@ -3014,7 +3400,7 @@ paths:
       - Search
   /answer/api/v1/siteinfo:
     get:
-      description: Get siteinfo
+      description: get site info
       produces:
       - application/json
       responses:
@@ -3027,7 +3413,34 @@ paths:
                 data:
                   $ref: '#/definitions/schema.SiteGeneralResp'
               type: object
-      summary: Get siteinfo
+      summary: get site info
+      tags:
+      - site
+  /answer/api/v1/siteinfo/legal:
+    get:
+      description: get site legal info
+      parameters:
+      - description: legal information type
+        enum:
+        - tos
+        - privacy
+        in: query
+        name: info_type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetSiteLegalInfoResp'
+              type: object
+      summary: get site legal info
       tags:
       - site
   /answer/api/v1/tag:
@@ -3247,32 +3660,6 @@ paths:
       summary: ActionRecord
       tags:
       - User
-  /answer/api/v1/user/avatar/upload:
-    post:
-      consumes:
-      - multipart/form-data
-      description: UserUpdateInfo
-      parameters:
-      - description: file
-        in: formData
-        name: file
-        required: true
-        type: file
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/handler.RespBody'
-            - properties:
-                data:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: UserUpdateInfo
-      tags:
-      - User
   /answer/api/v1/user/email:
     put:
       consumes:
@@ -3425,6 +3812,35 @@ paths:
       summary: UserUpdateInfo update user info
       tags:
       - User
+  /answer/api/v1/user/interface:
+    put:
+      consumes:
+      - application/json
+      description: UserUpdateInterface update user interface config
+      parameters:
+      - description: access-token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: UpdateInfoRequest
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateUserInterfaceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: UserUpdateInterface update user interface config
+      tags:
+      - User
   /answer/api/v1/user/login/email:
     post:
       consumes:
@@ -3564,32 +3980,6 @@ paths:
       summary: RetrievePassWord
       tags:
       - User
-  /answer/api/v1/user/post/file:
-    post:
-      consumes:
-      - multipart/form-data
-      description: upload user post file
-      parameters:
-      - description: file
-        in: formData
-        name: file
-        required: true
-        type: file
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/handler.RespBody'
-            - properties:
-                data:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: upload user post file
-      tags:
-      - User
   /answer/api/v1/user/register/email:
     post:
       consumes:
@@ -3615,28 +4005,6 @@ paths:
                   $ref: '#/definitions/schema.GetUserResp'
               type: object
       summary: UserRegisterByEmail
-      tags:
-      - User
-  /answer/api/v1/user/status:
-    get:
-      consumes:
-      - application/json
-      description: get user status info
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/handler.RespBody'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.GetUserResp'
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: get user status info
       tags:
       - User
   /answer/api/v1/vote/down:
@@ -3697,6 +4065,117 @@ paths:
       summary: vote up
       tags:
       - Activity
+  /installation/base-info:
+    post:
+      consumes:
+      - application/json
+      description: init base info
+      parameters:
+      - description: InitBaseInfoReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/install.InitBaseInfoReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: init base info
+      tags:
+      - installation
+  /installation/config-file/check:
+    post:
+      consumes:
+      - application/json
+      description: check config file if exist when installation
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/install.CheckConfigFileResp'
+              type: object
+      summary: check config file if exist when installation
+      tags:
+      - installation
+  /installation/db/check:
+    post:
+      consumes:
+      - application/json
+      description: check database if exist when installation
+      parameters:
+      - description: CheckDatabaseReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/install.CheckDatabaseReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/install.CheckConfigFileResp'
+              type: object
+      summary: check database if exist when installation
+      tags:
+      - installation
+  /installation/init:
+    post:
+      consumes:
+      - application/json
+      description: init environment
+      parameters:
+      - description: CheckDatabaseReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/install.CheckDatabaseReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: init environment
+      tags:
+      - installation
+  /installation/language/options:
+    get:
+      description: get installation language options
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/translator.LangOption'
+                  type: array
+              type: object
+      summary: get installation language options
+      tags:
+      - Lang
   /personal/question/page:
     get:
       consumes:
