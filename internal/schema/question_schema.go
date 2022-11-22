@@ -13,6 +13,7 @@ type CloseQuestionReq struct {
 	UserID    string `json:"-" `          // user_id
 	CloseType int    `json:"close_type" ` // close_type
 	CloseMsg  string `json:"close_msg" `  // close_type
+	IsAdmin   bool   `json:"-"`
 }
 
 type CloseQuestionMeta struct {
@@ -47,7 +48,8 @@ type QuestionUpdate struct {
 	// edit summary
 	EditSummary string `validate:"omitempty" json:"edit_summary"`
 	// user id
-	UserID string `json:"-"`
+	UserID  string `json:"-"`
+	IsAdmin bool   `json:"-"`
 }
 
 type QuestionBaseInfo struct {

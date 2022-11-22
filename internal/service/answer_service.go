@@ -73,27 +73,29 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 	if !exist {
 		return nil
 	}
-	if answerInfo.UserID != req.UserID {
-		return errors.BadRequest(reason.AnswerCannotDeleted)
-	}
-	if answerInfo.VoteCount > 0 {
-		return errors.BadRequest(reason.AnswerCannotDeleted)
-	}
-	if answerInfo.Adopted == schema.AnswerAdoptedEnable {
-		return errors.BadRequest(reason.AnswerCannotDeleted)
-	}
-	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
-	if err != nil {
-		return errors.BadRequest(reason.AnswerCannotDeleted)
-	}
-	if !exist {
-		return errors.BadRequest(reason.AnswerCannotDeleted)
-	}
-	if questionInfo.AnswerCount > 1 {
-		return errors.BadRequest(reason.AnswerCannotDeleted)
-	}
-	if questionInfo.AcceptedAnswerID != "" {
-		return errors.BadRequest(reason.AnswerCannotDeleted)
+	if !req.IsAdmin {
+		if answerInfo.UserID != req.UserID {
+			return errors.BadRequest(reason.AnswerCannotDeleted)
+		}
+		if answerInfo.VoteCount > 0 {
+			return errors.BadRequest(reason.AnswerCannotDeleted)
+		}
+		if answerInfo.Adopted == schema.AnswerAdoptedEnable {
+			return errors.BadRequest(reason.AnswerCannotDeleted)
+		}
+		questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
+		if err != nil {
+			return errors.BadRequest(reason.AnswerCannotDeleted)
+		}
+		if !exist {
+			return errors.BadRequest(reason.AnswerCannotDeleted)
+		}
+		if questionInfo.AnswerCount > 1 {
+			return errors.BadRequest(reason.AnswerCannotDeleted)
+		}
+		if questionInfo.AcceptedAnswerID != "" {
+			return errors.BadRequest(reason.AnswerCannotDeleted)
+		}
 	}
 
 	// user add question count
@@ -180,6 +182,19 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	if !exist {
 		return "", errors.BadRequest(reason.QuestionNotFound)
 	}
+	if !req.IsAdmin {
+		answerInfo, exist, err := as.answerRepo.GetByID(ctx, req.ID)
+		if err != nil {
+			return "", err
+		}
+		if !exist {
+			return "", nil
+		}
+		if answerInfo.UserID != req.UserID {
+			return "", errors.BadRequest(reason.AnswerCannotUpdate)
+		}
+	}
+
 	now := time.Now()
 	insertData := new(entity.Answer)
 	insertData.ID = req.ID

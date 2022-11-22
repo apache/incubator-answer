@@ -69,6 +69,8 @@ func (qc *QuestionController) CloseQuestion(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	userinfo := middleware.GetUserInfoFromContext(ctx)
+	req.IsAdmin = userinfo.IsAdmin
 	err := qc.questionService.CloseQuestion(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -215,7 +217,8 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-
+	userinfo := middleware.GetUserInfoFromContext(ctx)
+	req.IsAdmin = userinfo.IsAdmin
 	if can, err := qc.rankService.CheckRankPermission(ctx, req.UserID, rank.QuestionEditRank); err != nil || !can {
 		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return

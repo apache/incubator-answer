@@ -71,6 +71,12 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 	if !has {
 		return nil
 	}
+
+	if !req.IsAdmin {
+		if questionInfo.UserID != req.UserID {
+			return errors.BadRequest(reason.QuestionCannotClose)
+		}
+	}
 	questionInfo.Status = entity.QuestionStatusclosed
 	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
 	if err != nil {
@@ -239,8 +245,11 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	if !has {
 		return
 	}
-	if dbinfo.UserID != req.UserID {
-		return
+	if !req.IsAdmin {
+		if dbinfo.UserID != req.UserID {
+			return questionInfo, errors.BadRequest(reason.QuestionCannotUpdate)
+		}
+
 	}
 
 	//CheckChangeTag
