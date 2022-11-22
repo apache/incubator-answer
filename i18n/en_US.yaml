@@ -517,6 +517,7 @@ ui:
       setting: Settings
       logout: Log out
       admin: Admin
+      review: Review
     search:
       placeholder: Search
   footer:
@@ -726,6 +727,9 @@ ui:
     logout: Log out
     verify: Verify
     add_question: Add question
+    approve: Approve
+    reject: Reject
+    skip: Skip
   search:
     title: Search Results
     keywords: Keywords
@@ -1173,3 +1177,11 @@ ui:
     invalid: is invalid
     btn_submit: Save
     not_found_props: "Required property {{ key }} not found."
+  page_review:
+    review: Reivew
+    proposed: proposed
+    question_edit: Question edit
+    answer_edit: Answer edit
+    tag_edit: Tag edit
+    edit_summary: Edit summary
+    empty: No review tasks left.
