@@ -83,7 +83,7 @@ const routes: RouteNode[] = [
           return guard.activated();
         },
       },
-      // users
+      // for users
       {
         path: 'users/:username',
         page: 'pages/Users/Personal',
@@ -202,8 +202,11 @@ const routes: RouteNode[] = [
         },
       },
       {
-        path: '/revision',
-        page: 'pages/Revision',
+        path: '/history',
+        page: 'pages/Timeline',
+        guard: async () => {
+          return guard.logged();
+        },
       },
       // for admin
       {
@@ -267,6 +270,11 @@ const routes: RouteNode[] = [
             page: 'pages/Admin/Write',
           },
         ],
+      },
+      // for review
+      {
+        path: 'review',
+        page: 'pages/Review',
       },
       {
         path: '*',

@@ -557,3 +557,10 @@ export const TIMEZONES = [
   },
 ];
 export const DEFAULT_TIMEZONE = 'UTC+0';
+
+export const TIMELINE_NORMAL_ACTIVITY_TYPE = [
+  'undeleted',
+  'deleted',
+  'downvote',
+  'upvote',
+];

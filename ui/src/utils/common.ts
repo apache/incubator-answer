@@ -166,6 +166,16 @@ function handleFormError(
 }
 
 function diffText(newText: string, oldText: string): string {
+  if (!newText) {
+    return '';
+  }
+
+  if (!oldText) {
+    return newText
+      ?.replace(/\n/gi, '<br>')
+      ?.replace(/<iframe/gi, '&lt;iframe')
+      ?.replace(/<input/gi, '&lt;input');
+  }
   const diff = Diff.diffChars(newText, oldText);
   const result = diff.map((part) => {
     if (part.added) {
@@ -176,9 +186,9 @@ function diffText(newText: string, oldText: string): string {
     }
     return part.value;
   });
+
   return result
     .join('')
-    ?.replace(/\n/gi, '<br>')
     ?.replace(/<iframe/gi, '&lt;iframe')
     ?.replace(/<input/gi, '&lt;input');
 }

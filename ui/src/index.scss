@@ -256,7 +256,7 @@ a {
 
 .review-text-delete {
   color: #842029;
-  background-color: #F8D7DA;
+  background-color: #f8d7da;
   text-decoration: line-through;
   .review-text-add {
     text-decoration: none;
@@ -264,7 +264,22 @@ a {
 }
 
 .review-text-add {
-  color: #0F5132;
-  background-color: #D1E7DD;
+  color: #0f5132;
+  background-color: #d1e7dd;
   text-decoration: none !important;
+}
+
+.rotate-90-deg {
+  display: inline-block;
+  transform: rotate(90deg);
+  transition: transform 0.2s;
+}
+.rotate-0-deg {
+  display: inline-block;
+  transform: rotate(0deg);
+  transition: transform 0.2s;
+}
+
+.pre-line {
+  white-space: pre-line;
 }
