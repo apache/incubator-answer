@@ -28,8 +28,8 @@ backend:
         other: "Answer do not found."
       cannot_deleted:
         other: "No permission to delete."
-      cannot_update:
-        other: "No permission to update."
+    cannot_update:
+      other: "No permission to update."
     comment:
       edit_without_permission:
         other: "Comment are not allowed to edit."
@@ -84,6 +84,12 @@ backend:
     tag:
       not_found:
         other: "Tag not found."
+      recommend_tag_not_found:
+        other: "Recommend Tag is not exist."
+      recommend_tag_enter:
+        other: "Please enter at least one required tag."
+      not_contain_synonym_tags:
+        other: "Should not contain synonym tags."
     theme:
       not_found:
         other: "Theme not found."
@@ -100,7 +106,6 @@ backend:
         other: "Username is already in use."
       set_avatar:
         other: "Avatar set failed."
-
       config:
         read_config_failed:
           other: "Read config failed"
