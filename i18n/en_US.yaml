@@ -24,6 +24,8 @@ error:
   answer:
     not_found:
       other: "Answer do not found."
+    cannot_deleted:
+      other: "Unable to delete answer."
   comment:
     edit_without_permission:
       other: "Comment are not allowed to edit."
@@ -61,6 +63,8 @@ error:
   question:
     not_found:
       other: "Question not found."
+    cannot_deleted:
+      other: "Unable to delete problem."
   rank:
     fail_to_meet_the_condition:
       other: "Rank fail to meet the condition."
