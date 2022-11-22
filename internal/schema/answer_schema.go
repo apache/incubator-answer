@@ -38,6 +38,7 @@ type AnswerList struct {
 	Page        int    `json:"page" form:"page"`               // Query number of pages
 	PageSize    int    `json:"page_size" form:"page_size"`     // Search page size
 	LoginUserID string `json:"-" `
+	IsAdmin     bool   `json:"-"`
 }
 
 type AnswerInfo struct {

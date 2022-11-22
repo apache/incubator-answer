@@ -167,7 +167,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		log.Error("user IncreaseQuestionCount error", err.Error())
 	}
 
-	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false)
+	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false, false)
 	return
 }
 
@@ -299,12 +299,12 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return
 	}
 
-	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false)
+	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false, false)
 	return
 }
 
 // GetQuestion get question one
-func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID string, addpv bool) (resp *schema.QuestionInfo, err error) {
+func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID string, addpv bool, isAdmin bool) (resp *schema.QuestionInfo, err error) {
 	question, err := qs.questioncommon.Info(ctx, id, loginUserID)
 	if err != nil {
 		return
@@ -316,7 +316,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID stri
 		}
 	}
 
-	question.MemberActions = permission.GetQuestionPermission(loginUserID, question.UserID)
+	question.MemberActions = permission.GetQuestionPermission(ctx, loginUserID, question.UserID, isAdmin)
 	return question, nil
 }
 
@@ -543,7 +543,7 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 // SimilarQuestion
 func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID string, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
 	list := make([]*schema.QuestionInfo, 0)
-	questionInfo, err := qs.GetQuestion(ctx, questionID, loginUserID, false)
+	questionInfo, err := qs.GetQuestion(ctx, questionID, loginUserID, false, false)
 	if err != nil {
 		return list, 0, err
 	}

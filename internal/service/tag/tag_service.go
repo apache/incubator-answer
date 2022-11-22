@@ -154,7 +154,7 @@ func (ts *TagService) GetTagInfo(ctx context.Context, req *schema.GetTagInfoReq)
 	resp.Recommend = tagInfo.Recommend
 	resp.Reserved = tagInfo.Reserved
 	resp.IsFollower = ts.checkTagIsFollow(ctx, req.UserID, tagInfo.ID)
-	resp.MemberActions = permission.GetTagPermission(req.UserID, req.UserID)
+	resp.MemberActions = permission.GetTagPermission(ctx, req.UserID, req.UserID)
 	resp.GetExcerpt()
 	return resp, nil
 }

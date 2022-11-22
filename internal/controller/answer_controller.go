@@ -193,6 +193,8 @@ func (ac *AnswerController) AnswerList(ctx *gin.Context) {
 		return
 	}
 	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+	userinfo := middleware.GetUserInfoFromContext(ctx)
+	req.IsAdmin = userinfo.IsAdmin
 	list, count, err := ac.answerService.SearchList(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
