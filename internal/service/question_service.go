@@ -227,6 +227,15 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return
 	}
 
+	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
+	if err != nil {
+		return
+	}
+	if !recommendExist {
+		err = errors.BadRequest(reason.RecommendTagEnter).WithError(err).WithStack()
+		return
+	}
+
 	//CheckChangeTag
 	oldTags, err := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
 	if err != nil {
@@ -240,9 +249,10 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	if err != nil {
 		return
 	}
-	CheckTag, CheckTaglist := qs.CheckChangeTag(ctx, oldTags, Tags)
+
+	CheckTag, CheckTaglist := qs.CheckChangeReservedTag(ctx, oldTags, Tags)
 	if !CheckTag {
-		err = errors.BadRequest(reason.UnauthorizedError).WithMsg(fmt.Sprintf("tag [%s] cannot be modified",
+		err = errors.BadRequest(reason.RequestFormatError).WithMsg(fmt.Sprintf("The reserved tag \"%s\" must be present.",
 			strings.Join(CheckTaglist, ",")))
 		return
 	}
@@ -299,8 +309,8 @@ func (qs *QuestionService) ChangeTag(ctx context.Context, objectTagData *schema.
 	return qs.tagCommon.ObjectChangeTag(ctx, objectTagData)
 }
 
-func (qs *QuestionService) CheckChangeTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
-	return qs.tagCommon.ObjectCheckChangeTag(ctx, oldobjectTagData, objectTagData)
+func (qs *QuestionService) CheckChangeReservedTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
+	return qs.tagCommon.CheckChangeReservedTag(ctx, oldobjectTagData, objectTagData)
 }
 
 func (qs *QuestionService) SearchUserList(ctx context.Context, userName, order string, page, pageSize int, loginUserID string) ([]*schema.UserQuestionInfo, int64, error) {

@@ -78,6 +78,12 @@ backend:
     tag:
       not_found:
         other: "Tag not found."
+      recommend_tag_not_found:
+        other: "Recommend Tag is not exist."
+      recommend_tag_enter:
+        other: "Please enter at least one required tag."
+      not_contain_synonym_tags:
+        other: "Should not contain synonym tags."
     theme:
       not_found:
         other: "Theme not found."
