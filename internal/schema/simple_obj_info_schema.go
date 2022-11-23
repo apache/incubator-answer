@@ -12,3 +12,11 @@ type SimpleObjectInfo struct {
 	Title         string `json:"title"`
 	Content       string `json:"content"`
 }
+
+type UnreviewedRevisionInfoInfo struct {
+	ObjectID string     `json:"object_id"`
+	Title    string     `json:"title"`
+	Content  string     `json:"content"`
+	Html     string     `json:"html"`
+	Tags     []*TagResp `json:"tags"`
+}

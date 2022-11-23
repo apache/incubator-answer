@@ -386,3 +386,17 @@ func (qs *QuestionCommon) ShowFormat(ctx context.Context, data *entity.Question)
 	info.Tags = make([]*schema.TagResp, 0)
 	return &info
 }
+func (qs *QuestionCommon) ShowFormatWithTag(ctx context.Context, data *entity.QuestionWithTagsRevision) *schema.QuestionInfo {
+	info := qs.ShowFormat(ctx, &data.Question)
+	Tags := make([]*schema.TagResp, 0)
+	for _, tag := range data.Tags {
+		item := &schema.TagResp{}
+		item.SlugName = tag.SlugName
+		item.DisplayName = tag.DisplayName
+		item.Recommend = tag.Recommend
+		item.Reserved = tag.Reserved
+		Tags = append(Tags, item)
+	}
+	info.Tags = Tags
+	return info
+}

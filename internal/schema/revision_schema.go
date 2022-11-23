@@ -31,7 +31,9 @@ type RevisionSearch struct {
 }
 
 type GetUnreviewedRevisionResp struct {
-	Type string `json:"type"`
+	Type           string                      `json:"type"`
+	Info           *UnreviewedRevisionInfoInfo `json:"info"`
+	UnreviewedInfo *GetRevisionResp            `json:"unreviewed_info"`
 }
 
 // GetRevisionResp get revision response
