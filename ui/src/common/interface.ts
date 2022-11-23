@@ -399,6 +399,7 @@ export interface TimelineObject {
   object_type: string;
   question_id: string;
   answer_id: string;
+  main_tag_slug_name?: string;
 }
 
 export interface TimelineRes {

@@ -34,7 +34,10 @@ const Index: FC = () => {
   }
 
   if (timelineData?.object_info.object_type === 'tag') {
-    linkUrl = `/tags/${timelineData?.object_info.title}`;
+    linkUrl = `/tags/${
+      timelineData?.object_info.main_tag_slug_name ||
+      timelineData?.object_info.title
+    }`;
   }
 
   const revisionList =
