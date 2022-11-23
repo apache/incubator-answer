@@ -219,7 +219,7 @@ func (as *ActivityService) getOneObjectDetail(ctx context.Context, revisionID st
 			log.Errorf("revision parsing error %s", err)
 			return resp, nil
 		}
-		resp.Title = data.SlugName
+		resp.Title = data.DisplayName
 		resp.OriginalText = data.OriginalText
 		resp.SlugName = data.SlugName
 		resp.MainTagSlugName = data.MainTagSlugName

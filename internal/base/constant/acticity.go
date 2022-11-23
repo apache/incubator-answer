@@ -1,13 +1,10 @@
 package constant
 
-// question activity
-
 type ActivityTypeKey string
 
 const (
 	ActEdited    = "edited"
 	ActClosed    = "closed"
-	ActAccepted  = "accepted"
 	ActVotedDown = "voted_down"
 	ActVotedUp   = "voted_up"
 	ActVoteDown  = "vote_down"
