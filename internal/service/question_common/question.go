@@ -330,7 +330,6 @@ func (qs *QuestionCommon) CloseQuestion(ctx context.Context, req *schema.CloseQu
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionClosed,
-		RevisionID:       questionInfo.RevisionID,
 	})
 	return nil
 }

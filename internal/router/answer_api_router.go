@@ -206,6 +206,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// activity
 	r.GET("/activity/timeline", a.activityController.GetObjectTimeline)
+	r.GET("/activity/timeline/detail", a.activityController.GetObjectTimelineDetail)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {

@@ -7,7 +7,7 @@ import (
 )
 
 func addActivityTimeline(x *xorm.Engine) error {
-	type Reversion struct {
+	type Revision struct {
 		ReviewUserID int64 `xorm:"not null default 0 BIGINT(20) review_user_id"`
 	}
 	type Activity struct {
@@ -15,5 +15,5 @@ func addActivityTimeline(x *xorm.Engine) error {
 		RevisionID       int64     `xorm:"not null default 0 BIGINT(20) revision_id"`
 		OriginalObjectID string    `xorm:"not null default 0 BIGINT(20) original_object_id"`
 	}
-	return x.Sync(new(Activity), new(Reversion))
+	return x.Sync(new(Activity), new(Revision))
 }

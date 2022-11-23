@@ -2,6 +2,7 @@ package activity
 
 import (
 	"context"
+	"encoding/json"
 	"strings"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -11,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/comment_common"
 	"github.com/answerdev/answer/internal/service/object_info"
+	"github.com/answerdev/answer/internal/service/revision_common"
 	"github.com/answerdev/answer/internal/service/tag_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/converter"
@@ -30,6 +32,7 @@ type ActivityService struct {
 	tagCommonService      *tag_common.TagCommonService
 	objectInfoService     *object_info.ObjService
 	commentCommonService  *comment_common.CommentCommonService
+	revisionService       *revision_common.RevisionService
 }
 
 // NewActivityService new activity service
@@ -40,6 +43,7 @@ func NewActivityService(
 	tagCommonService *tag_common.TagCommonService,
 	objectInfoService *object_info.ObjService,
 	commentCommonService *comment_common.CommentCommonService,
+	revisionService *revision_common.RevisionService,
 ) *ActivityService {
 	return &ActivityService{
 		objectInfoService:     objectInfoService,
@@ -48,6 +52,7 @@ func NewActivityService(
 		activityCommonService: activityCommonService,
 		tagCommonService:      tagCommonService,
 		commentCommonService:  commentCommonService,
+		revisionService:       revisionService,
 	}
 }
 
@@ -59,7 +64,7 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 		Timeline:   make([]*schema.ActObjectTimeline, 0),
 	}
 
-	objInfo, err := as.objectInfoService.GetInfo(ctx, req.ObjectId)
+	objInfo, err := as.objectInfoService.GetInfo(ctx, req.ObjectID)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +73,7 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 	resp.ObjectInfo.QuestionID = objInfo.QuestionID
 	resp.ObjectInfo.AnswerID = objInfo.AnswerID
 
-	activityList, err := as.activityRepo.GetObjectAllActivity(ctx, req.ObjectId, req.ShowVote)
+	activityList, err := as.activityRepo.GetObjectAllActivity(ctx, req.ObjectID, req.ShowVote)
 	if err != nil {
 		return nil, err
 	}
@@ -116,6 +121,69 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 		resp.Timeline = append(resp.Timeline, item)
 	}
 	return
+}
+
+// GetObjectTimelineDetail get object timeline
+func (as *ActivityService) GetObjectTimelineDetail(ctx context.Context, req *schema.GetObjectTimelineDetailReq) (
+	resp *schema.GetObjectTimelineDetailResp, err error) {
+	resp = &schema.GetObjectTimelineDetailResp{}
+	resp.OldRevision, err = as.getOneObjectDetail(ctx, req.OldRevisionID)
+	if err != nil {
+		return nil, err
+	}
+	resp.NewRevision, err = as.getOneObjectDetail(ctx, req.NewRevisionID)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// GetObjectTimelineDetail get object detail
+func (as *ActivityService) getOneObjectDetail(ctx context.Context, revisionID string) (
+	resp *schema.ObjectTimelineDetail, err error) {
+	resp = &schema.ObjectTimelineDetail{Tags: make([]string, 0)}
+
+	revision, err := as.revisionService.GetRevision(ctx, revisionID)
+	if err != nil {
+		return nil, err
+	}
+	objInfo, err := as.objectInfoService.GetInfo(ctx, revision.ObjectID)
+	if err != nil {
+		return nil, err
+	}
+
+	switch objInfo.ObjectType {
+	case constant.QuestionObjectType:
+		data := &entity.QuestionWithTagsRevision{}
+		if err = json.Unmarshal([]byte(revision.Content), data); err != nil {
+			log.Errorf("revision parsing error %s", err)
+			return resp, nil
+		}
+		for _, tag := range data.Tags {
+			resp.Tags = append(resp.Tags, tag.SlugName)
+		}
+		resp.Title = data.Title
+		resp.OriginalText = data.OriginalText
+	case constant.AnswerObjectType:
+		data := &entity.Answer{}
+		if err = json.Unmarshal([]byte(revision.Content), data); err != nil {
+			log.Errorf("revision parsing error %s", err)
+			return resp, nil
+		}
+		resp.Title = objInfo.Title // answer show question title
+		resp.OriginalText = data.OriginalText
+	case constant.TagObjectType:
+		data := &entity.Tag{}
+		if err = json.Unmarshal([]byte(revision.Content), data); err != nil {
+			log.Errorf("revision parsing error %s", err)
+			return resp, nil
+		}
+		resp.Title = data.SlugName
+		resp.OriginalText = data.OriginalText
+	default:
+		log.Errorf("unknown object type %s", objInfo.ObjectType)
+	}
+	return resp, nil
 }
 
 func formatActivity(activityType string) (isHidden bool, formattedActivityType string) {

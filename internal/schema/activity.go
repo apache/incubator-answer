@@ -14,11 +14,9 @@ type ActivityMsg struct {
 
 // GetObjectTimelineReq get object timeline request
 type GetObjectTimelineReq struct {
-	ObjectId    string `validate:"omitempty,gt=0,lte=100" form:"object_id"`
-	TagSlugName string `validate:"omitempty,gt=0,lte=35" form:"slug_name"`
-	ObjectType  string `validate:"required,oneof=question answer tag" form:"object_type"`
-	ShowVote    bool   `validate:"omitempty" form:"show_vote"`
-	UserID      string `json:"-"`
+	ObjectID string `validate:"omitempty,gt=0,lte=100" form:"object_id"`
+	ShowVote bool   `validate:"omitempty" form:"show_vote"`
+	UserID   string `json:"-"`
 }
 
 // GetObjectTimelineResp get object timeline response
@@ -48,4 +46,24 @@ type ActObjectInfo struct {
 	ObjectType string `json:"object_type"`
 	QuestionID string `json:"question_id"`
 	AnswerID   string `json:"answer_id"`
+}
+
+// GetObjectTimelineDetailReq get object timeline detail request
+type GetObjectTimelineDetailReq struct {
+	NewRevisionID string `validate:"required,gt=0,lte=100" form:"new_revision_id"`
+	OldRevisionID string `validate:"required,gt=0,lte=100" form:"old_revision_id"`
+	UserID        string `json:"-"`
+}
+
+// GetObjectTimelineDetailResp get object timeline detail response
+type GetObjectTimelineDetailResp struct {
+	NewRevision *ObjectTimelineDetail `json:"new_revision"`
+	OldRevision *ObjectTimelineDetail `json:"old_revision"`
+}
+
+// ObjectTimelineDetail object timeline detail
+type ObjectTimelineDetail struct {
+	Title        string   `json:"title"`
+	Tags         []string `json:"tags"`
+	OriginalText string   `json:"original_text"`
 }

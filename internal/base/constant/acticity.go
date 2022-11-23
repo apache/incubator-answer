@@ -13,7 +13,7 @@ const (
 	ActQuestionAccept    ActivityTypeKey = "question.accept"
 	ActQuestionUpvote    ActivityTypeKey = "question.upvote"
 	ActQuestionDownvote  ActivityTypeKey = "question.downvote"
-	ActQuestionEdit      ActivityTypeKey = "question.edit"
+	ActQuestionEdited    ActivityTypeKey = "question.edited"
 	ActQuestionRollback  ActivityTypeKey = "question.rollback"
 	ActQuestionDeleted   ActivityTypeKey = "question.deleted"
 	ActQuestionUndeleted ActivityTypeKey = "question.undeleted"
@@ -27,7 +27,7 @@ const (
 	ActAnswerAccept    ActivityTypeKey = "answer.accept"
 	ActAnswerUpvote    ActivityTypeKey = "answer.upvote"
 	ActAnswerDownvote  ActivityTypeKey = "answer.downvote"
-	ActAnswerEdit      ActivityTypeKey = "answer.edit"
+	ActAnswerEdited    ActivityTypeKey = "answer.edited"
 	ActAnswerRollback  ActivityTypeKey = "answer.rollback"
 	ActAnswerDeleted   ActivityTypeKey = "answer.deleted"
 	ActAnswerUndeleted ActivityTypeKey = "answer.undeleted"
@@ -37,7 +37,7 @@ const (
 
 const (
 	ActTagCreated   ActivityTypeKey = "tag.created"
-	ActTagEdit      ActivityTypeKey = "tag.edit"
+	ActTagEdited    ActivityTypeKey = "tag.edited"
 	ActTagRollback  ActivityTypeKey = "tag.rollback"
 	ActTagDeleted   ActivityTypeKey = "tag.deleted"
 	ActTagUndeleted ActivityTypeKey = "tag.undeleted"

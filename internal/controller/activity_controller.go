@@ -43,3 +43,23 @@ func (ac *ActivityController) GetObjectTimeline(ctx *gin.Context) {
 	resp, err := ac.activityService.GetObjectTimeline(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
+
+// GetObjectTimelineDetail get object timeline detail
+// @Summary get object timeline detail
+// @Description get object timeline detail
+// @Tags Comment
+// @Produce json
+// @Param revision_id query string true "revision id"
+// @Success 200 {object} handler.RespBody{data=schema.GetObjectTimelineResp}
+// @Router /answer/api/v1/activity/timeline/detail [get]
+func (ac *ActivityController) GetObjectTimelineDetail(ctx *gin.Context) {
+	req := &schema.GetObjectTimelineDetailReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	resp, err := ac.activityService.GetObjectTimelineDetail(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
+}
