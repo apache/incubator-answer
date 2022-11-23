@@ -73,7 +73,13 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 	if !has {
 		return nil
 	}
-	questionInfo.Status = entity.QuestionStatusClosed
+
+	if !req.IsAdmin {
+		if questionInfo.UserID != req.UserID {
+			return errors.BadRequest(reason.QuestionCannotClose)
+		}
+	}
+	questionInfo.Status = entity.QuestionStatusclosed
 	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
 	if err != nil {
 		return err
@@ -182,7 +188,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		RevisionID:       revisionID,
 	})
 
-	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false)
+	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false, false)
 	return
 }
 
@@ -195,15 +201,31 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	if !has {
 		return nil
 	}
-	if questionInfo.UserID != req.UserID {
-		return errors.BadRequest(reason.UnauthorizedError)
-	}
+	if !req.IsAdmin {
+		if questionInfo.UserID != req.UserID {
+			return errors.BadRequest(reason.QuestionCannotDeleted)
+		}
 
-	if questionInfo.AcceptedAnswerID != "" {
-		return errors.BadRequest(reason.UnauthorizedError)
-	}
-	if questionInfo.AnswerCount > 0 {
-		return errors.BadRequest(reason.UnauthorizedError)
+		if questionInfo.AcceptedAnswerID != "0" {
+			return errors.BadRequest(reason.QuestionCannotDeleted)
+		}
+		if questionInfo.AnswerCount > 1 {
+			return errors.BadRequest(reason.QuestionCannotDeleted)
+		}
+
+		if questionInfo.AnswerCount == 1 {
+			answersearch := &entity.AnswerSearch{}
+			answersearch.QuestionID = req.ID
+			answerList, _, err := qs.questioncommon.AnswerCommon.Search(ctx, answersearch)
+			if err != nil {
+				return err
+			}
+			for _, answer := range answerList {
+				if answer.VoteCount > 0 {
+					return errors.BadRequest(reason.QuestionCannotDeleted)
+				}
+			}
+		}
 	}
 
 	questionInfo.Status = entity.QuestionStatusDeleted
@@ -250,8 +272,11 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	if !has {
 		return
 	}
-	if dbinfo.UserID != req.UserID {
-		return
+	if !req.IsAdmin {
+		if dbinfo.UserID != req.UserID {
+			return questionInfo, errors.BadRequest(reason.QuestionCannotUpdate)
+		}
+
 	}
 
 	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
@@ -329,12 +354,12 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		OriginalObjectID: question.ID,
 	})
 
-	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false)
+	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false, false)
 	return
 }
 
 // GetQuestion get question one
-func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID string, addpv bool) (resp *schema.QuestionInfo, err error) {
+func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID string, addpv bool, isAdmin bool) (resp *schema.QuestionInfo, err error) {
 	question, err := qs.questioncommon.Info(ctx, id, loginUserID)
 	if err != nil {
 		return
@@ -346,7 +371,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID stri
 		}
 	}
 
-	question.MemberActions = permission.GetQuestionPermission(loginUserID, question.UserID)
+	question.MemberActions = permission.GetQuestionPermission(ctx, loginUserID, question.UserID, isAdmin)
 	return question, nil
 }
 
@@ -573,7 +598,7 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 // SimilarQuestion
 func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID string, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
 	list := make([]*schema.QuestionInfo, 0)
-	questionInfo, err := qs.GetQuestion(ctx, questionID, loginUserID, false)
+	questionInfo, err := qs.GetQuestion(ctx, questionID, loginUserID, false, false)
 	if err != nil {
 		return list, 0, err
 	}
