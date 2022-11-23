@@ -28,8 +28,8 @@ backend:
         other: "Answer do not found."
       cannot_deleted:
         other: "No permission to delete."
-    cannot_update:
-      other: "No permission to update."
+      cannot_update:
+        other: "No permission to update."
     comment:
       edit_without_permission:
         other: "Comment are not allowed to edit."
