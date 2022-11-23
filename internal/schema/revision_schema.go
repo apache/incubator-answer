@@ -16,6 +16,8 @@ type AddRevisionDTO struct {
 	Content string
 	// log
 	Log string
+	// status
+	Status int
 }
 
 // GetRevisionListReq get revision list all request

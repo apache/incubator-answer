@@ -1068,6 +1068,47 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/activity/timeline/detail": {
+            "get": {
+                "description": "get object timeline detail",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "get object timeline detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "revision id",
+                        "name": "revision_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetObjectTimelineResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/answer": {
             "put": {
                 "security": [

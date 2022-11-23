@@ -2273,6 +2273,30 @@ paths:
       summary: get object timeline
       tags:
       - Comment
+  /answer/api/v1/activity/timeline/detail:
+    get:
+      description: get object timeline detail
+      parameters:
+      - description: revision id
+        in: query
+        name: revision_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetObjectTimelineResp'
+              type: object
+      summary: get object timeline detail
+      tags:
+      - Comment
   /answer/api/v1/answer:
     delete:
       consumes:

@@ -162,7 +162,17 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		ObjectID: question.ID,
 		Title:    question.Title,
 	}
-	questionWithTagsRevision, err := qs.changeQuestionToRevision(ctx, question)
+
+	tagNameList := make([]string, 0)
+	for _, tag := range req.Tags {
+		tagNameList = append(tagNameList, tag.SlugName)
+	}
+	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
+	if tagerr != nil {
+		return questionInfo, tagerr
+	}
+
+	questionWithTagsRevision, err := qs.changeQuestionToRevision(ctx, question, Tags)
 	if err != nil {
 		return nil, err
 	}
@@ -270,23 +280,21 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	if !has {
 		return
 	}
+
+	tagNameList := make([]string, 0)
+	for _, tag := range req.Tags {
+		tagNameList = append(tagNameList, tag.SlugName)
+	}
+	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
+	if tagerr != nil {
+		return questionInfo, tagerr
+	}
+
 	// If it's not admin
 	if !req.IsAdmin {
-		if dbinfo.UserID != req.UserID {
-			return questionInfo, errors.BadRequest(reason.QuestionCannotUpdate)
-		}
-
 		//CheckChangeTag
 		oldTags, tagerr := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
-		if err != nil {
-			return questionInfo, tagerr
-		}
-		tagNameList := make([]string, 0)
-		for _, tag := range req.Tags {
-			tagNameList = append(tagNameList, tag.SlugName)
-		}
-		Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
-		if err != nil {
+		if tagerr != nil {
 			return questionInfo, tagerr
 		}
 
@@ -318,19 +326,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return errorlist, err
 	}
 
-	//update question to db
-	err = qs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at"})
-	if err != nil {
-		return
-	}
-	objectTagData := schema.TagChange{}
-	objectTagData.ObjectID = question.ID
-	objectTagData.Tags = req.Tags
-	objectTagData.UserID = req.UserID
-	err = qs.ChangeTag(ctx, &objectTagData)
-	if err != nil {
-		return
-	}
+	//Administrators and themselves do not need to be audited
 
 	revisionDTO := &schema.AddRevisionDTO{
 		UserID:   question.UserID,
@@ -338,7 +334,29 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		Title:    question.Title,
 		Log:      req.EditSummary,
 	}
-	questionWithTagsRevision, err := qs.changeQuestionToRevision(ctx, question)
+
+	// It's not you or the administrator that needs to be reviewed
+	if dbinfo.UserID != req.UserID && !req.IsAdmin {
+		revisionDTO.Status = entity.RevisionUnreviewedStatus
+	} else {
+		//Direct modification
+		revisionDTO.Status = entity.RevisionReviewPassStatus
+		//update question to db
+		saveerr := qs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at"})
+		if saveerr != nil {
+			return questionInfo, saveerr
+		}
+		objectTagData := schema.TagChange{}
+		objectTagData.ObjectID = question.ID
+		objectTagData.Tags = req.Tags
+		objectTagData.UserID = req.UserID
+		tagerr := qs.ChangeTag(ctx, &objectTagData)
+		if err != nil {
+			return questionInfo, tagerr
+		}
+	}
+
+	questionWithTagsRevision, err := qs.changeQuestionToRevision(ctx, question, Tags)
 	if err != nil {
 		return nil, err
 	}
@@ -786,15 +804,11 @@ func (qs *QuestionService) CmsSearchAnswerList(ctx context.Context, search *enti
 	return answerlist, count, nil
 }
 
-func (qs *QuestionService) changeQuestionToRevision(ctx context.Context, questionInfo *entity.Question) (
+func (qs *QuestionService) changeQuestionToRevision(ctx context.Context, questionInfo *entity.Question, tags []*entity.Tag) (
 	questionRevision *entity.QuestionWithTagsRevision, err error) {
 	questionRevision = &entity.QuestionWithTagsRevision{}
 	questionRevision.Question = *questionInfo
 
-	tags, err := qs.tagCommon.GetObjectEntityTag(ctx, questionInfo.ID)
-	if err != nil {
-		return nil, err
-	}
 	for _, tag := range tags {
 		item := &entity.TagSimpleInfoForRevision{}
 		_ = copier.Copy(item, tag)
