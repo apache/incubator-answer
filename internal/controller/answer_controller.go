@@ -241,6 +241,9 @@ func (ac *AnswerController) AdminSetAnswerStatus(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
 	err := ac.answerService.AdminSetAnswerStatus(ctx, req)
 	handler.HandleResponse(ctx, err, gin.H{})
 }
