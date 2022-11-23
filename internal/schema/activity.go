@@ -17,6 +17,7 @@ type GetObjectTimelineReq struct {
 	ObjectID string `validate:"omitempty,gt=0,lte=100" form:"object_id"`
 	ShowVote bool   `validate:"omitempty" form:"show_vote"`
 	UserID   string `json:"-"`
+	IsAdmin  bool   `json:"-"`
 }
 
 // GetObjectTimelineResp get object timeline response
@@ -42,10 +43,11 @@ type ActObjectTimeline struct {
 
 // ActObjectInfo act object info
 type ActObjectInfo struct {
-	Title      string `json:"title"`
-	ObjectType string `json:"object_type"`
-	QuestionID string `json:"question_id"`
-	AnswerID   string `json:"answer_id"`
+	ObjectType      string `json:"object_type"`
+	Title           string `json:"title"`
+	QuestionID      string `json:"question_id"`
+	AnswerID        string `json:"answer_id"`
+	MainTagSlugName string `json:"main_tag_slug_name"`
 }
 
 // GetObjectTimelineDetailReq get object timeline detail request
@@ -63,9 +65,11 @@ type GetObjectTimelineDetailResp struct {
 
 // ObjectTimelineDetail object timeline detail
 type ObjectTimelineDetail struct {
-	Title        string               `json:"title"`
-	Tags         []*ObjectTimelineTag `json:"tags"`
-	OriginalText string               `json:"original_text"`
+	Title           string               `json:"title"`
+	Tags            []*ObjectTimelineTag `json:"tags"`
+	OriginalText    string               `json:"original_text"`
+	SlugName        string               `json:"slug_name"`
+	MainTagSlugName string               `json:"main_tag_slug_name"`
 }
 
 // ObjectTimelineTag object timeline tags

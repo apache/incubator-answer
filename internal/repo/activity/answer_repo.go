@@ -144,9 +144,11 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 		if action == acceptAction {
 			addActivity.UserID = questionUserID
 			addActivity.TriggerUserID = converter.StringToInt64(answerUserID)
+			addActivity.OriginalObjectID = questionObjID // if activity is 'accept' means this question is accept the answer.
 		} else {
 			addActivity.UserID = answerUserID
 			addActivity.TriggerUserID = converter.StringToInt64(answerUserID)
+			addActivity.OriginalObjectID = answerObjID // if activity is 'accepted' means this answer was accepted.
 		}
 		if isSelf {
 			addActivity.Rank = 0
@@ -234,16 +236,17 @@ func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
 			return errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
 		}
 		addActivity := &entity.Activity{
-			ObjectID:         answerObjID,
-			OriginalObjectID: questionObjID,
-			ActivityType:     activityType,
-			Rank:             -deltaRank,
-			HasRank:          hasRank,
+			ObjectID:     answerObjID,
+			ActivityType: activityType,
+			Rank:         -deltaRank,
+			HasRank:      hasRank,
 		}
 		if action == acceptAction {
 			addActivity.UserID = questionUserID
+			addActivity.OriginalObjectID = questionObjID
 		} else {
 			addActivity.UserID = answerUserID
+			addActivity.OriginalObjectID = answerObjID
 		}
 		addActivityList = append(addActivityList, addActivity)
 	}

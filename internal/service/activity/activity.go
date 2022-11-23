@@ -17,6 +17,7 @@ import (
 	"github.com/answerdev/answer/internal/service/tag_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/converter"
+	"github.com/answerdev/answer/pkg/obj"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -73,6 +74,14 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 		return nil, err
 	}
 	resp.ObjectInfo.Title = objInfo.Title
+	if objInfo.ObjectType == constant.TagObjectType {
+		tag, exist, _ := as.tagCommonService.GetTagByID(ctx, objInfo.TagID)
+		if exist {
+			resp.ObjectInfo.Title = tag.SlugName
+			resp.ObjectInfo.MainTagSlugName = tag.MainTagSlugName
+		}
+	}
+
 	resp.ObjectInfo.ObjectType = objInfo.ObjectType
 	resp.ObjectInfo.QuestionID = objInfo.QuestionID
 	resp.ObjectInfo.AnswerID = objInfo.AnswerID
@@ -89,13 +98,14 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 			Cancelled:  act.Cancelled == entity.ActivityCancelled,
 			ObjectID:   act.ObjectID,
 		}
+		item.ObjectType, _ = obj.GetObjectTypeStrByObjectID(act.ObjectID)
 		if item.Cancelled {
 			item.CancelledAt = act.CancelledAt.Unix()
 		}
 
 		// database save activity type is number, change to activity type string is like "question.asked".
 		// so we need to cut the front part of '.'
-		item.ObjectType, item.ActivityType, _ = strings.Cut(config.ID2KeyMapping[act.ActivityType], ".")
+		_, item.ActivityType, _ = strings.Cut(config.ID2KeyMapping[act.ActivityType], ".")
 
 		isHidden, formattedActivityType := formatActivity(item.ActivityType)
 		if isHidden {
@@ -103,14 +113,20 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 		}
 		item.ActivityType = formattedActivityType
 
-		// get user info
-		userBasicInfo, exist, err := as.userCommon.GetUserBasicInfoByID(ctx, act.UserID)
-		if err != nil {
-			return nil, err
-		}
-		if exist {
-			item.Username = userBasicInfo.Username
-			item.UserDisplayName = userBasicInfo.DisplayName
+		// if activity is down vote, only admin can see who does it.
+		if item.ActivityType == constant.ActDownVote && !req.IsAdmin {
+			item.Username = "N/A"
+			item.UserDisplayName = "N/A"
+		} else {
+			// get user info
+			userBasicInfo, exist, err := as.userCommon.GetUserBasicInfoByID(ctx, act.UserID)
+			if err != nil {
+				return nil, err
+			}
+			if exist {
+				item.Username = userBasicInfo.Username
+				item.UserDisplayName = userBasicInfo.DisplayName
+			}
 		}
 
 		if item.ObjectType == constant.CommentObjectType {
@@ -156,8 +172,14 @@ func (as *ActivityService) getOneObjectDetail(ctx context.Context, revisionID st
 	resp *schema.ObjectTimelineDetail, err error) {
 	resp = &schema.ObjectTimelineDetail{Tags: make([]*schema.ObjectTimelineTag, 0)}
 
+	// if request revision is 0, return null object detail.
+	if revisionID == "0" {
+		return nil, nil
+	}
+
 	revision, err := as.revisionService.GetRevision(ctx, revisionID)
 	if err != nil {
+		log.Warn(err)
 		return nil, nil
 	}
 	objInfo, err := as.objectInfoService.GetInfo(ctx, revision.ObjectID)
@@ -199,6 +221,8 @@ func (as *ActivityService) getOneObjectDetail(ctx context.Context, revisionID st
 		}
 		resp.Title = data.SlugName
 		resp.OriginalText = data.OriginalText
+		resp.SlugName = data.SlugName
+		resp.MainTagSlugName = data.MainTagSlugName
 	default:
 		log.Errorf("unknown object type %s", objInfo.ObjectType)
 	}
@@ -206,14 +230,15 @@ func (as *ActivityService) getOneObjectDetail(ctx context.Context, revisionID st
 }
 
 func formatActivity(activityType string) (isHidden bool, formattedActivityType string) {
-	if activityType == "voted_up" || activityType == "voted_down" || activityType == "accepted" {
+	if activityType == constant.ActVotedUp ||
+		activityType == constant.ActVotedDown {
 		return true, ""
 	}
-	if activityType == "vote_up" {
-		return false, "upvote"
+	if activityType == constant.ActVoteUp {
+		return false, constant.ActUpVote
 	}
-	if activityType == "vote_down" {
-		return false, "downvote"
+	if activityType == constant.ActVoteDown {
+		return false, constant.ActDownVote
 	}
 	return false, activityType
 }
