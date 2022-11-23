@@ -10,6 +10,7 @@ import (
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/revision"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/jinzhu/copier"
 )
 
@@ -32,6 +33,19 @@ func NewRevisionService(
 		questionCommon: questionCommon,
 		answerService:  answerService,
 	}
+}
+
+// SearchUnreviewedList get unreviewed list
+func (rs *RevisionService) GetUnreviewedRevisionList(ctx context.Context, req *schema.RevisionSearch) (resp []schema.GetRevisionResp, count int64, err error) {
+	resp = []schema.GetRevisionResp{}
+	search := &entity.RevisionSearch{}
+	_ = copier.Copy(search, req)
+	list, count, err := rs.revisionRepo.SearchUnreviewedList(ctx, search)
+	for _, item := range list {
+		spew.Dump(item)
+	}
+
+	return
 }
 
 // GetRevisionList get revision list all

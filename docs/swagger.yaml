@@ -3494,6 +3494,32 @@ paths:
       summary: get revision list
       tags:
       - Revision
+  /answer/api/v1/revisions/unreviewed:
+    get:
+      description: get unreviewed revision list
+      parameters:
+      - description: page id
+        in: query
+        name: page
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetRevisionResp'
+                  type: array
+              type: object
+      summary: get unreviewed revision list
+      tags:
+      - Revision
   /answer/api/v1/search:
     get:
       description: search object

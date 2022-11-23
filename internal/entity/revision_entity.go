@@ -26,6 +26,10 @@ type Revision struct {
 	ReviewUserID int64     `xorm:"not null default 0 BIGINT(20) review_user_id"`
 }
 
+type RevisionSearch struct {
+	Page int `json:"page" form:"page"` // Query number of pages
+}
+
 // TableName revision table name
 func (Revision) TableName() string {
 	return "revision"
