@@ -2,9 +2,11 @@ package controller
 
 import (
 	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
@@ -13,11 +15,18 @@ import (
 // RevisionController revision controller
 type RevisionController struct {
 	revisionListService *service.RevisionService
+	rankService         *rank.RankService
 }
 
 // NewRevisionController new controller
-func NewRevisionController(revisionListService *service.RevisionService) *RevisionController {
-	return &RevisionController{revisionListService: revisionListService}
+func NewRevisionController(
+	revisionListService *service.RevisionService,
+	rankService *rank.RankService,
+) *RevisionController {
+	return &RevisionController{
+		revisionListService: revisionListService,
+		rankService:         rankService,
+	}
 }
 
 // GetRevisionList godoc
@@ -57,6 +66,15 @@ func (rc *RevisionController) GetUnreviewedRevisionList(ctx *gin.Context) {
 	req := &schema.RevisionSearch{
 		Page: page,
 	}
+	userinfo := middleware.GetUserInfoFromContext(ctx)
+	if !userinfo.IsAdmin {
+		userID := middleware.GetLoginUserIDFromContext(ctx)
+		if can, err := rc.rankService.CheckRankPermission(ctx, userID, rank.QuestionEditRank); err != nil || !can {
+			handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+			return
+		}
+	}
+
 	resp, count, err := rc.revisionListService.GetUnreviewedRevisionList(ctx, req)
 	handler.HandleResponse(ctx, err, gin.H{
 		"list":  resp,
