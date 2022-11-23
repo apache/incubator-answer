@@ -1005,6 +1005,69 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/activity/timeline": {
+            "get": {
+                "description": "get object timeline",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "get object timeline",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "object id",
+                        "name": "object_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "tag slug name",
+                        "name": "tag_slug_name",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "question",
+                            "answer",
+                            "tag"
+                        ],
+                        "type": "string",
+                        "description": "object type",
+                        "name": "object_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "is show vote",
+                        "name": "show_vote",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetObjectTimelineResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/answer": {
             "put": {
                 "security": [
@@ -4468,6 +4531,61 @@ const docTemplate = `{
                 "list": {}
             }
         },
+        "schema.ActObjectInfo": {
+            "type": "object",
+            "properties": {
+                "answer_id": {
+                    "type": "string"
+                },
+                "object_type": {
+                    "type": "string"
+                },
+                "question_id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.ActObjectTimeline": {
+            "type": "object",
+            "properties": {
+                "activity_id": {
+                    "type": "string"
+                },
+                "activity_type": {
+                    "type": "string"
+                },
+                "cancelled": {
+                    "type": "boolean"
+                },
+                "cancelled_at": {
+                    "type": "integer"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "integer"
+                },
+                "object_id": {
+                    "type": "string"
+                },
+                "object_type": {
+                    "type": "string"
+                },
+                "revision_id": {
+                    "type": "string"
+                },
+                "user_display_name": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.ActionRecordResp": {
             "type": "object",
             "properties": {
@@ -4871,6 +4989,20 @@ const docTemplate = `{
                 "tag_id": {
                     "description": "tag id",
                     "type": "string"
+                }
+            }
+        },
+        "schema.GetObjectTimelineResp": {
+            "type": "object",
+            "properties": {
+                "object_info": {
+                    "$ref": "#/definitions/schema.ActObjectInfo"
+                },
+                "timeline": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.ActObjectTimeline"
+                    }
                 }
             }
         },

@@ -29,7 +29,7 @@ func NewActivityController(
 // @Param object_id query string false "object id"
 // @Param tag_slug_name query string false "tag slug name"
 // @Param object_type query string false "object type" Enums(question, answer, tag)
-// @Param show_vote bool false "is show vote"
+// @Param show_vote query boolean false "is show vote"
 // @Success 200 {object} handler.RespBody{data=schema.GetObjectTimelineResp}
 // @Router /answer/api/v1/activity/timeline [get]
 func (ac *ActivityController) GetObjectTimeline(ctx *gin.Context) {

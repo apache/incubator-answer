@@ -79,7 +79,7 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 			return errors.BadRequest(reason.QuestionCannotClose)
 		}
 	}
-	questionInfo.Status = entity.QuestionStatusclosed
+	questionInfo.Status = entity.QuestionStatusClosed
 	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
 	if err != nil {
 		return err
