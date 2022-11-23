@@ -3,8 +3,10 @@ package revision_common
 import (
 	"context"
 
+	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/service/revision"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/segmentfault/pacman/errors"
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
@@ -29,12 +31,26 @@ func NewRevisionService(revisionRepo revision.RevisionRepo, userRepo usercommon.
 // autoUpdateRevisionID bool : if autoUpdateRevisionID is true , the object.revision_id will be updated,
 // if not need auto update object.revision_id, it must be false.
 // example: user can edit the object, but need audit, the revision_id will be updated when admin approved
-func (rs *RevisionService) AddRevision(ctx context.Context, req *schema.AddRevisionDTO, autoUpdateRevisionID bool) (err error) {
+func (rs *RevisionService) AddRevision(ctx context.Context, req *schema.AddRevisionDTO, autoUpdateRevisionID bool) (
+	revisionID string, err error) {
 	rev := &entity.Revision{}
 	_ = copier.Copy(rev, req)
 	err = rs.revisionRepo.AddRevision(ctx, rev, autoUpdateRevisionID)
 	if err != nil {
-		return err
+		return "", err
 	}
-	return nil
+	return rev.ID, nil
+}
+
+// GetRevision get revision
+func (rs *RevisionService) GetRevision(ctx context.Context, revisionID string) (
+	revision *entity.Revision, err error) {
+	revisionInfo, exist, err := rs.revisionRepo.GetRevisionByID(ctx, revisionID)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.BadRequest(reason.ObjectNotFound)
+	}
+	return revisionInfo, nil
 }

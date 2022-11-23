@@ -13,6 +13,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
+	"github.com/answerdev/answer/internal/service/activity_queue"
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
 	"github.com/answerdev/answer/internal/service/meta"
 	"github.com/answerdev/answer/internal/service/notice_queue"
@@ -78,7 +79,7 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 			return errors.BadRequest(reason.QuestionCannotClose)
 		}
 	}
-	questionInfo.Status = entity.QuestionStatusclosed
+	questionInfo.Status = entity.QuestionStatusClosed
 	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
 	if err != nil {
 		return err
@@ -92,6 +93,13 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 	if err != nil {
 		return err
 	}
+
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           req.UserID,
+		ObjectID:         questionInfo.ID,
+		OriginalObjectID: questionInfo.ID,
+		ActivityTypeKey:  constant.ActQuestionClosed,
+	})
 	return nil
 }
 
@@ -123,7 +131,6 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		return
 	}
 
-	questionInfo = &schema.QuestionInfo{}
 	question := &entity.Question{}
 	now := time.Now()
 	question.UserID = req.UserID
@@ -153,11 +160,25 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	revisionDTO := &schema.AddRevisionDTO{
 		UserID:   question.UserID,
 		ObjectID: question.ID,
-		Title:    "",
+		Title:    question.Title,
 	}
-	infoJSON, _ := json.Marshal(question)
+
+	tagNameList := make([]string, 0)
+	for _, tag := range req.Tags {
+		tagNameList = append(tagNameList, tag.SlugName)
+	}
+	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
+	if tagerr != nil {
+		return questionInfo, tagerr
+	}
+
+	questionWithTagsRevision, err := qs.changeQuestionToRevision(ctx, question, Tags)
+	if err != nil {
+		return nil, err
+	}
+	infoJSON, _ := json.Marshal(questionWithTagsRevision)
 	revisionDTO.Content = string(infoJSON)
-	err = qs.revisionService.AddRevision(ctx, revisionDTO, true)
+	revisionID, err := qs.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return
 	}
@@ -167,6 +188,14 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	if err != nil {
 		log.Error("user IncreaseQuestionCount error", err.Error())
 	}
+
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           question.UserID,
+		ObjectID:         question.ID,
+		OriginalObjectID: question.ID,
+		ActivityTypeKey:  constant.ActQuestionAsked,
+		RevisionID:       revisionID,
+	})
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false, false)
 	return
@@ -189,7 +218,7 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		if questionInfo.AcceptedAnswerID != "0" {
 			return errors.BadRequest(reason.QuestionCannotDeleted)
 		}
-		if questionInfo.AnswerCount > 0 {
+		if questionInfo.AnswerCount > 1 {
 			return errors.BadRequest(reason.QuestionCannotDeleted)
 		}
 
@@ -224,7 +253,12 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	if err != nil {
 		log.Errorf("user DeleteQuestion rank rollback error %s", err.Error())
 	}
-
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           questionInfo.UserID,
+		ObjectID:         questionInfo.ID,
+		OriginalObjectID: questionInfo.ID,
+		ActivityTypeKey:  constant.ActQuestionDeleted,
+	})
 	return nil
 }
 
@@ -246,13 +280,38 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	if !has {
 		return
 	}
-	if !req.IsAdmin {
-		if dbinfo.UserID != req.UserID {
-			return questionInfo, errors.BadRequest(reason.QuestionCannotUpdate)
-		}
 
+	tagNameList := make([]string, 0)
+	for _, tag := range req.Tags {
+		tagNameList = append(tagNameList, tag.SlugName)
+	}
+	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
+	if tagerr != nil {
+		return questionInfo, tagerr
 	}
 
+	// If it's not admin
+	if !req.IsAdmin {
+		//CheckChangeTag
+		oldTags, tagerr := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
+		if tagerr != nil {
+			return questionInfo, tagerr
+		}
+
+		CheckTag, CheckTaglist := qs.CheckChangeReservedTag(ctx, oldTags, Tags)
+		if !CheckTag {
+			errMsg := fmt.Sprintf(`The reserved tag %s must be present.`,
+				strings.Join(CheckTaglist, ","))
+			errorlist := make([]*validator.FormErrorField, 0)
+			errorlist = append(errorlist, &validator.FormErrorField{
+				ErrorField: "tags",
+				ErrorMsg:   errMsg,
+			})
+			err = errors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
+			return errorlist, err
+		}
+	}
+	// Check whether mandatory labels are selected
 	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
 	if err != nil {
 		return
@@ -267,59 +326,53 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return errorlist, err
 	}
 
-	//CheckChangeTag
-	oldTags, err := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
-	if err != nil {
-		return
-	}
-	tagNameList := make([]string, 0)
-	for _, tag := range req.Tags {
-		tagNameList = append(tagNameList, tag.SlugName)
-	}
-	Tags, err := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
-	if err != nil {
-		return
-	}
-
-	CheckTag, CheckTaglist := qs.CheckChangeReservedTag(ctx, oldTags, Tags)
-	if !CheckTag {
-		errMsg := fmt.Sprintf(`The reserved tag %s must be present.`,
-			strings.Join(CheckTaglist, ","))
-		errorlist := make([]*validator.FormErrorField, 0)
-		errorlist = append(errorlist, &validator.FormErrorField{
-			ErrorField: "tags",
-			ErrorMsg:   errMsg,
-		})
-		err = errors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
-		return errorlist, err
-	}
-
-	//update question to db
-	err = qs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at"})
-	if err != nil {
-		return
-	}
-	objectTagData := schema.TagChange{}
-	objectTagData.ObjectID = question.ID
-	objectTagData.Tags = req.Tags
-	objectTagData.UserID = req.UserID
-	err = qs.ChangeTag(ctx, &objectTagData)
-	if err != nil {
-		return
-	}
+	//Administrators and themselves do not need to be audited
 
 	revisionDTO := &schema.AddRevisionDTO{
 		UserID:   question.UserID,
 		ObjectID: question.ID,
-		Title:    "",
+		Title:    question.Title,
 		Log:      req.EditSummary,
 	}
-	infoJSON, _ := json.Marshal(question)
+
+	// It's not you or the administrator that needs to be reviewed
+	if dbinfo.UserID != req.UserID && !req.IsAdmin {
+		revisionDTO.Status = entity.RevisionUnreviewedStatus
+	} else {
+		//Direct modification
+		revisionDTO.Status = entity.RevisionReviewPassStatus
+		//update question to db
+		saveerr := qs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at"})
+		if saveerr != nil {
+			return questionInfo, saveerr
+		}
+		objectTagData := schema.TagChange{}
+		objectTagData.ObjectID = question.ID
+		objectTagData.Tags = req.Tags
+		objectTagData.UserID = req.UserID
+		tagerr := qs.ChangeTag(ctx, &objectTagData)
+		if err != nil {
+			return questionInfo, tagerr
+		}
+	}
+
+	questionWithTagsRevision, err := qs.changeQuestionToRevision(ctx, question, Tags)
+	if err != nil {
+		return nil, err
+	}
+	infoJSON, _ := json.Marshal(questionWithTagsRevision)
 	revisionDTO.Content = string(infoJSON)
-	err = qs.revisionService.AddRevision(ctx, revisionDTO, true)
+	revisionID, err := qs.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return
 	}
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           req.UserID,
+		ObjectID:         question.ID,
+		ActivityTypeKey:  constant.ActQuestionEdited,
+		RevisionID:       revisionID,
+		OriginalObjectID: question.ID,
+	})
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false, false)
 	return
@@ -628,8 +681,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 	if !exist {
 		return errors.BadRequest(reason.QuestionNotFound)
 	}
-	questionInfo.Status = setStatus
-	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
+	err = qs.questionRepo.UpdateQuestionStatus(ctx, &entity.Question{ID: questionInfo.ID, Status: setStatus})
 	if err != nil {
 		return err
 	}
@@ -639,6 +691,22 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 		if err != nil {
 			log.Errorf("admin delete question then rank rollback error %s", err.Error())
 		}
+	}
+	if setStatus == entity.QuestionStatusAvailable && questionInfo.Status == entity.QuestionStatusClosed {
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           questionInfo.UserID,
+			ObjectID:         questionInfo.ID,
+			OriginalObjectID: questionInfo.ID,
+			ActivityTypeKey:  constant.ActQuestionDeleted,
+		})
+	}
+	if setStatus == entity.QuestionStatusClosed && questionInfo.Status != entity.QuestionStatusClosed {
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           questionInfo.UserID,
+			ObjectID:         questionInfo.ID,
+			OriginalObjectID: questionInfo.ID,
+			ActivityTypeKey:  constant.ActQuestionClosed,
+		})
 	}
 	msg := &schema.NotificationMsg{}
 	msg.ObjectID = questionInfo.ID
@@ -734,4 +802,17 @@ func (qs *QuestionService) CmsSearchAnswerList(ctx context.Context, search *enti
 		}
 	}
 	return answerlist, count, nil
+}
+
+func (qs *QuestionService) changeQuestionToRevision(ctx context.Context, questionInfo *entity.Question, tags []*entity.Tag) (
+	questionRevision *entity.QuestionWithTagsRevision, err error) {
+	questionRevision = &entity.QuestionWithTagsRevision{}
+	questionRevision.Question = *questionInfo
+
+	for _, tag := range tags {
+		item := &entity.TagSimpleInfoForRevision{}
+		_ = copier.Copy(item, tag)
+		questionRevision.Tags = append(questionRevision.Tags, item)
+	}
+	return questionRevision, nil
 }

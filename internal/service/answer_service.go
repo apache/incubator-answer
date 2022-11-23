@@ -9,6 +9,7 @@ import (
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/service/activity"
 	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/notice_queue"
 	"github.com/answerdev/answer/internal/service/revision_common"
 
@@ -166,11 +167,25 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	}
 	infoJSON, _ := json.Marshal(insertData)
 	revisionDTO.Content = string(infoJSON)
-	err = as.revisionService.AddRevision(ctx, revisionDTO, true)
+	revisionID, err := as.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return insertData.ID, err
 	}
 	as.notificationAnswerTheQuestion(ctx, questionInfo.UserID, insertData.ID, req.UserID)
+
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           insertData.UserID,
+		ObjectID:         insertData.ID,
+		OriginalObjectID: insertData.ID,
+		ActivityTypeKey:  constant.ActAnswerAnswered,
+		RevisionID:       revisionID,
+	})
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           insertData.UserID,
+		ObjectID:         insertData.ID,
+		OriginalObjectID: questionInfo.ID,
+		ActivityTypeKey:  constant.ActQuestionAnswered,
+	})
 	return insertData.ID, nil
 }
 
@@ -218,11 +233,19 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	}
 	infoJSON, _ := json.Marshal(insertData)
 	revisionDTO.Content = string(infoJSON)
-	err = as.revisionService.AddRevision(ctx, revisionDTO, true)
+	revisionID, err := as.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return insertData.ID, err
 	}
 	as.notificationUpdateAnswer(ctx, questionInfo.UserID, insertData.ID, req.UserID)
+
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           insertData.UserID,
+		ObjectID:         insertData.ID,
+		OriginalObjectID: insertData.ID,
+		ActivityTypeKey:  constant.ActAnswerEdited,
+		RevisionID:       revisionID,
+	})
 	return insertData.ID, nil
 }
 
@@ -291,14 +314,14 @@ func (as *AnswerService) updateAnswerRank(ctx context.Context, userID string,
 	// if this question is already been answered, should cancel old answer rank
 	if oldAnswerInfo != nil {
 		err := as.answerActivityService.CancelAcceptAnswer(
-			ctx, questionInfo.AcceptedAnswerID, questionInfo.UserID, oldAnswerInfo.UserID)
+			ctx, questionInfo.AcceptedAnswerID, questionInfo.ID, questionInfo.UserID, oldAnswerInfo.UserID)
 		if err != nil {
 			log.Error(err)
 		}
 	}
 	if newAnswerInfo.ID != "" {
 		err := as.answerActivityService.AcceptAnswer(
-			ctx, newAnswerInfo.ID, questionInfo.UserID, newAnswerInfo.UserID, newAnswerInfo.UserID == userID)
+			ctx, newAnswerInfo.ID, questionInfo.ID, questionInfo.UserID, newAnswerInfo.UserID, newAnswerInfo.UserID == userID)
 		if err != nil {
 			log.Error(err)
 		}
@@ -363,7 +386,7 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, answerID stri
 	}
 
 	if setStatus == entity.AnswerStatusDeleted {
-		err = as.answerActivityService.DeleteQuestion(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
+		err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
 		if err != nil {
 			log.Errorf("admin delete question then rank rollback error %s", err.Error())
 		}

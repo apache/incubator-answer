@@ -89,6 +89,42 @@ definitions:
         type: integer
       list: {}
     type: object
+  schema.ActObjectInfo:
+    properties:
+      answer_id:
+        type: string
+      object_type:
+        type: string
+      question_id:
+        type: string
+      title:
+        type: string
+    type: object
+  schema.ActObjectTimeline:
+    properties:
+      activity_id:
+        type: string
+      activity_type:
+        type: string
+      cancelled:
+        type: boolean
+      cancelled_at:
+        type: integer
+      comment:
+        type: string
+      created_at:
+        type: integer
+      object_id:
+        type: string
+      object_type:
+        type: string
+      revision_id:
+        type: string
+      user_display_name:
+        type: string
+      username:
+        type: string
+    type: object
   schema.ActionRecordResp:
     properties:
       captcha_id:
@@ -378,6 +414,15 @@ definitions:
       tag_id:
         description: tag id
         type: string
+    type: object
+  schema.GetObjectTimelineResp:
+    properties:
+      object_info:
+        $ref: '#/definitions/schema.ActObjectInfo'
+      timeline:
+        items:
+          $ref: '#/definitions/schema.ActObjectTimeline'
+        type: array
     type: object
   schema.GetOtherUserInfoByUsernameResp:
     properties:
@@ -2189,6 +2234,69 @@ paths:
       summary: get user page
       tags:
       - admin
+  /answer/api/v1/activity/timeline:
+    get:
+      description: get object timeline
+      parameters:
+      - description: object id
+        in: query
+        name: object_id
+        type: string
+      - description: tag slug name
+        in: query
+        name: tag_slug_name
+        type: string
+      - description: object type
+        enum:
+        - question
+        - answer
+        - tag
+        in: query
+        name: object_type
+        type: string
+      - description: is show vote
+        in: query
+        name: show_vote
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetObjectTimelineResp'
+              type: object
+      summary: get object timeline
+      tags:
+      - Comment
+  /answer/api/v1/activity/timeline/detail:
+    get:
+      description: get object timeline detail
+      parameters:
+      - description: revision id
+        in: query
+        name: revision_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetObjectTimelineResp'
+              type: object
+      summary: get object timeline detail
+      tags:
+      - Comment
   /answer/api/v1/answer:
     delete:
       consumes:

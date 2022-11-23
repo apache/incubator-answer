@@ -43,7 +43,7 @@ func (qc *QuestionController) RemoveQuestion(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	if can, err := qc.rankService.CheckRankPermission(ctx, req.UserID, rank.QuestionDeleteRank); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return
 	}
 	userinfo := middleware.GetUserInfoFromContext(ctx)

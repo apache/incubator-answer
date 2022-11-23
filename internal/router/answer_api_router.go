@@ -29,6 +29,7 @@ type AnswerAPIRouter struct {
 	notificationController   *controller.NotificationController
 	dashboardController      *controller.DashboardController
 	uploadController         *controller.UploadController
+	activityController       *controller.ActivityController
 }
 
 func NewAnswerAPIRouter(
@@ -54,6 +55,7 @@ func NewAnswerAPIRouter(
 	notificationController *controller.NotificationController,
 	dashboardController *controller.DashboardController,
 	uploadController *controller.UploadController,
+	activityController *controller.ActivityController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:           langController,
@@ -78,6 +80,7 @@ func NewAnswerAPIRouter(
 		siteinfoController:       siteinfoController,
 		dashboardController:      dashboardController,
 		uploadController:         uploadController,
+		activityController:       activityController,
 	}
 }
 
@@ -200,6 +203,10 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// upload file
 	r.POST("/file", a.uploadController.UploadFile)
+
+	// activity
+	r.GET("/activity/timeline", a.activityController.GetObjectTimeline)
+	r.GET("/activity/timeline/detail", a.activityController.GetObjectTimelineDetail)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {

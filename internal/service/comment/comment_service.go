@@ -9,6 +9,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/comment_common"
 	"github.com/answerdev/answer/internal/service/notice_queue"
 	object_info "github.com/answerdev/answer/internal/service/object_info"
@@ -148,6 +149,13 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 		resp.UserAvatar = userInfo.Avatar
 		resp.UserStatus = userInfo.Status
 	}
+
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           comment.UserID,
+		ObjectID:         comment.ID,
+		OriginalObjectID: req.ObjectID,
+		ActivityTypeKey:  constant.ActQuestionCommented,
+	})
 	return resp, nil
 }
 

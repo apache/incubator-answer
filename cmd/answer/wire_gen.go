@@ -41,10 +41,12 @@ import (
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/action"
 	activity2 "github.com/answerdev/answer/internal/service/activity"
+	activity_common2 "github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/answer_common"
 	auth2 "github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/collection_common"
 	comment2 "github.com/answerdev/answer/internal/service/comment"
+	"github.com/answerdev/answer/internal/service/comment_common"
 	"github.com/answerdev/answer/internal/service/dashboard"
 	export2 "github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/follow"
@@ -184,7 +186,12 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	notificationController := controller.NewNotificationController(notificationService)
 	dashboardController := controller.NewDashboardController(dashboardService)
 	uploadController := controller.NewUploadController(uploaderService)
-	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController)
+	activityCommon := activity_common2.NewActivityCommon(activityRepo)
+	activityActivityRepo := activity.NewActivityRepo(dataData)
+	commentCommonService := comment_common.NewCommentCommonService(commentCommonRepo)
+	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, activityCommon, tagCommonService, objService, commentCommonService, revisionService)
+	activityController := controller.NewActivityController(activityCommon, activityService)
+	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController, activityController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter()
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)

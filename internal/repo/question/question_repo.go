@@ -166,7 +166,7 @@ func (qr *questionRepo) GetQuestionList(ctx context.Context, question *entity.Qu
 func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err error) {
 	questionList := make([]*entity.Question, 0)
 
-	count, err = qr.data.DB.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusclosed}).FindAndCount(&questionList)
+	count, err = qr.data.DB.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).FindAndCount(&questionList)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -210,7 +210,7 @@ func (qr *questionRepo) SearchList(ctx context.Context, search *schema.QuestionS
 		session = session.And("question.user_id = ?", search.UserID)
 	}
 
-	session = session.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusclosed})
+	session = session.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed})
 	// if search.Status > 0 {
 	// 	session = session.And("question.status = ?", search.Status)
 	// }

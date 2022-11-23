@@ -2,6 +2,7 @@ package activity
 
 import (
 	"context"
+	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
@@ -96,8 +97,8 @@ func (ar *AnswerActivityRepo) DeleteQuestion(ctx context.Context, questionID str
 				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
 			}
 
-			if _, e := session.Where("id = ?", act.ID).Cols("`cancelled`").
-				Update(&entity.Activity{Cancelled: entity.ActivityCancelled}); e != nil {
+			if _, e := session.Where("id = ?", act.ID).Cols("cancelled", "cancelled_at").
+				Update(&entity.Activity{Cancelled: entity.ActivityCancelled, CancelledAt: time.Now()}); e != nil {
 				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
 			}
 		}
@@ -124,7 +125,7 @@ func (ar *AnswerActivityRepo) DeleteQuestion(ctx context.Context, questionID str
 
 // AcceptAnswer accept other answer
 func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
-	answerObjID, questionUserID, answerUserID string, isSelf bool,
+	answerObjID, questionObjID, questionUserID, answerUserID string, isSelf bool,
 ) (err error) {
 	addActivityList := make([]*entity.Activity, 0)
 	for _, action := range acceptActionList {
@@ -134,10 +135,11 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 			return errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
 		}
 		addActivity := &entity.Activity{
-			ObjectID:     answerObjID,
-			ActivityType: activityType,
-			Rank:         deltaRank,
-			HasRank:      hasRank,
+			ObjectID:         answerObjID,
+			OriginalObjectID: questionObjID,
+			ActivityType:     activityType,
+			Rank:             deltaRank,
+			HasRank:          hasRank,
 		}
 		if action == acceptAction {
 			addActivity.UserID = questionUserID
@@ -222,7 +224,7 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 
 // CancelAcceptAnswer accept other answer
 func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
-	answerObjID, questionUserID, answerUserID string,
+	answerObjID, questionObjID, questionUserID, answerUserID string,
 ) (err error) {
 	addActivityList := make([]*entity.Activity, 0)
 	for _, action := range acceptActionList {
@@ -232,10 +234,11 @@ func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
 			return errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
 		}
 		addActivity := &entity.Activity{
-			ObjectID:     answerObjID,
-			ActivityType: activityType,
-			Rank:         -deltaRank,
-			HasRank:      hasRank,
+			ObjectID:         answerObjID,
+			OriginalObjectID: questionObjID,
+			ActivityType:     activityType,
+			Rank:             -deltaRank,
+			HasRank:          hasRank,
 		}
 		if action == acceptAction {
 			addActivity.UserID = questionUserID
@@ -265,8 +268,8 @@ func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
 				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
 			}
 
-			if _, e := session.Where("id = ?", existsActivity.ID).Cols("`cancelled`").
-				Update(&entity.Activity{Cancelled: entity.ActivityCancelled}); e != nil {
+			if _, e := session.Where("id = ?", existsActivity.ID).Cols("cancelled", "cancelled_at").
+				Update(&entity.Activity{Cancelled: entity.ActivityCancelled, CancelledAt: time.Now()}); e != nil {
 				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
 			}
 		}
@@ -326,8 +329,8 @@ func (ar *AnswerActivityRepo) DeleteAnswer(ctx context.Context, answerID string)
 				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
 			}
 
-			if _, e := session.Where("id = ?", act.ID).Cols("`cancelled`").
-				Update(&entity.Activity{Cancelled: entity.ActivityCancelled}); e != nil {
+			if _, e := session.Where("id = ?", act.ID).Cols("cancelled", "cancelled_at").
+				Update(&entity.Activity{Cancelled: entity.ActivityCancelled, CancelledAt: time.Now()}); e != nil {
 				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
 			}
 		}
