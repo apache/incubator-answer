@@ -121,7 +121,7 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 
 	resp = &schema.GetCommentResp{}
 	resp.SetFromComment(comment)
-	resp.MemberActions = permission.GetCommentPermission(req.UserID, resp.UserID)
+	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID)
 
 	// get reply user info
 	if len(resp.ReplyUserID) > 0 {
@@ -222,7 +222,7 @@ func (cs *CommentService) GetComment(ctx context.Context, req *schema.GetComment
 	// check if current user vote this comment
 	resp.IsVote = cs.checkIsVote(ctx, req.UserID, resp.CommentID)
 
-	resp.MemberActions = permission.GetCommentPermission(req.UserID, resp.UserID)
+	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID)
 	return resp, nil
 }
 
@@ -282,7 +282,7 @@ func (cs *CommentService) GetCommentWithPage(ctx context.Context, req *schema.Ge
 		// check if current user vote this comment
 		commentResp.IsVote = cs.checkIsVote(ctx, req.UserID, commentResp.CommentID)
 
-		commentResp.MemberActions = permission.GetCommentPermission(req.UserID, commentResp.UserID)
+		commentResp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, commentResp.UserID)
 		resp = append(resp, commentResp)
 	}
 	return pager.NewPageModel(total, resp), nil

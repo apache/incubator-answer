@@ -26,6 +26,10 @@ backend:
     answer:
       not_found:
         other: "Answer do not found."
+      cannot_deleted:
+        other: "No permission to delete."
+      cannot_update:
+        other: "No permission to update."
     comment:
       edit_without_permission:
         other: "Comment are not allowed to edit."
@@ -63,6 +67,12 @@ backend:
     question:
       not_found:
         other: "Question not found."
+      cannot_deleted:
+        other: "No permission to delete."
+      cannot_close:
+        other: "No permission to close."
+      cannot_update:
+        other: "No permission to update."
     rank:
       fail_to_meet_the_condition:
         other: "Rank fail to meet the condition."
@@ -76,6 +86,8 @@ backend:
         other: "Tag not found."
       recommend_tag_not_found:
         other: "Recommend Tag is not exist."
+      recommend_tag_enter:
+        other: "Please enter at least one required tag."
       not_contain_synonym_tags:
         other: "Should not contain synonym tags."
     theme:
@@ -94,18 +106,17 @@ backend:
         other: "Username is already in use."
       set_avatar:
         other: "Avatar set failed."
-
-    config:
-      read_config_failed:
-        other: "Read config failed"
-    database:
-      connection_failed:
-        other: "Database connection failed"
-      create_table_failed:
-        other: "Create table failed"
-    install:
-      create_config_failed:
-        other: "Can’t create the config.yaml file."
+      config:
+        read_config_failed:
+          other: "Read config failed"
+      database:
+        connection_failed:
+          other: "Database connection failed"
+        create_table_failed:
+          other: "Create table failed"
+      install:
+        create_config_failed:
+          other: "Can’t create the config.yaml file."
   report:
     spam:
       name:
