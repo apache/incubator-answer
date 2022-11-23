@@ -39,6 +39,7 @@ type ActObjectTimeline struct {
 	ObjectType      string `json:"object_type"`
 	Cancelled       bool   `json:"cancelled"`
 	CancelledAt     int64  `json:"cancelled_at"`
+	UserID          string `json:"-"`
 }
 
 // ActObjectInfo act object info

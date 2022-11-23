@@ -69,22 +69,10 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 		Timeline:   make([]*schema.ActObjectTimeline, 0),
 	}
 
-	objInfo, err := as.objectInfoService.GetInfo(ctx, req.ObjectID)
+	resp.ObjectInfo, err = as.getTimelineMainObjInfo(ctx, req.ObjectID)
 	if err != nil {
 		return nil, err
 	}
-	resp.ObjectInfo.Title = objInfo.Title
-	if objInfo.ObjectType == constant.TagObjectType {
-		tag, exist, _ := as.tagCommonService.GetTagByID(ctx, objInfo.TagID)
-		if exist {
-			resp.ObjectInfo.Title = tag.SlugName
-			resp.ObjectInfo.MainTagSlugName = tag.MainTagSlugName
-		}
-	}
-
-	resp.ObjectInfo.ObjectType = objInfo.ObjectType
-	resp.ObjectInfo.QuestionID = objInfo.QuestionID
-	resp.ObjectInfo.AnswerID = objInfo.AnswerID
 
 	activityList, err := as.activityRepo.GetObjectAllActivity(ctx, req.ObjectID, req.ShowVote)
 	if err != nil {
@@ -106,56 +94,111 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 		// database save activity type is number, change to activity type string is like "question.asked".
 		// so we need to cut the front part of '.'
 		_, item.ActivityType, _ = strings.Cut(config.ID2KeyMapping[act.ActivityType], ".")
-
-		isHidden, formattedActivityType := formatActivity(item.ActivityType)
-		if isHidden {
+		// format activity type string to show
+		if isHidden, formattedActivityType := formatActivity(item.ActivityType); isHidden {
 			continue
+		} else {
+			item.ActivityType = formattedActivityType
 		}
-		item.ActivityType = formattedActivityType
 
 		// if activity is down vote, only admin can see who does it.
 		if item.ActivityType == constant.ActDownVote && !req.IsAdmin {
 			item.Username = "N/A"
 			item.UserDisplayName = "N/A"
 		} else {
-			// get user info
-			userBasicInfo, exist, err := as.userCommon.GetUserBasicInfoByID(ctx, act.UserID)
-			if err != nil {
-				return nil, err
-			}
-			if exist {
-				item.Username = userBasicInfo.Username
-				item.UserDisplayName = userBasicInfo.DisplayName
-			}
+			item.UserID = act.UserID
 		}
 
-		if item.ObjectType == constant.CommentObjectType {
-			comment, err := as.commentCommonService.GetComment(ctx, item.ObjectID)
-			if err != nil {
-				log.Error(err)
-			} else {
-				item.Comment = comment.ParsedText
-			}
-		} else if item.ActivityType == constant.ActEdited {
-			revision, err := as.revisionService.GetRevision(ctx, item.RevisionID)
-			if err != nil {
-				log.Error(err)
-			}
-			item.Comment = revision.Log
-		} else if item.ActivityType == constant.ActClosed {
-			metaInfo, err := as.metaService.GetMetaByObjectIdAndKey(ctx, item.ObjectID, entity.QuestionCloseReasonKey)
-			if err != nil {
-				log.Error(err)
-			} else {
-				closeMsg := &schema.CloseQuestionMeta{}
-				if err := json.Unmarshal([]byte(metaInfo.Value), closeMsg); err != nil {
-					item.Comment = closeMsg.CloseMsg
-				}
-			}
-		}
+		item.Comment = as.getTimelineActivityComment(ctx, item.ObjectID, item.ObjectType, item.ActivityType, item.RevisionID)
 		resp.Timeline = append(resp.Timeline, item)
 	}
+	as.formatTimelineUserInfo(ctx, resp.Timeline)
 	return
+}
+
+func (as *ActivityService) getTimelineMainObjInfo(ctx context.Context, objectID string) (
+	resp *schema.ActObjectInfo, err error) {
+	resp = &schema.ActObjectInfo{}
+	objInfo, err := as.objectInfoService.GetInfo(ctx, objectID)
+	if err != nil {
+		return nil, err
+	}
+	resp.Title = objInfo.Title
+	if objInfo.ObjectType == constant.TagObjectType {
+		tag, exist, _ := as.tagCommonService.GetTagByID(ctx, objInfo.TagID)
+		if exist {
+			resp.Title = tag.SlugName
+			resp.MainTagSlugName = tag.MainTagSlugName
+		}
+	}
+	resp.ObjectType = objInfo.ObjectType
+	resp.QuestionID = objInfo.QuestionID
+	resp.AnswerID = objInfo.AnswerID
+	return resp, nil
+}
+
+func (as *ActivityService) getTimelineActivityComment(ctx context.Context, objectID, objectType,
+	activityType, revisionID string) (comment string) {
+	if objectType == constant.CommentObjectType {
+		commentInfo, err := as.commentCommonService.GetComment(ctx, objectID)
+		if err != nil {
+			log.Error(err)
+		} else {
+			return commentInfo.ParsedText
+		}
+		return
+	}
+
+	if activityType == constant.ActEdited {
+		revision, err := as.revisionService.GetRevision(ctx, revisionID)
+		if err != nil {
+			log.Error(err)
+		} else {
+			return revision.Log
+		}
+		return
+	}
+	if activityType == constant.ActClosed {
+		// only question can be closed
+		metaInfo, err := as.metaService.GetMetaByObjectIdAndKey(ctx, objectID, entity.QuestionCloseReasonKey)
+		if err != nil {
+			log.Error(err)
+		} else {
+			closeMsg := &schema.CloseQuestionMeta{}
+			if err := json.Unmarshal([]byte(metaInfo.Value), closeMsg); err != nil {
+				return closeMsg.CloseMsg
+			}
+		}
+	}
+	return ""
+}
+
+func (as *ActivityService) formatTimelineUserInfo(ctx context.Context, timeline []*schema.ActObjectTimeline) {
+	userExist := make(map[string]bool)
+	userIDs := make([]string, 0)
+	for _, info := range timeline {
+		if len(info.UserID) == 0 || userExist[info.UserID] {
+			continue
+		}
+		userIDs = append(userIDs, info.UserID)
+	}
+	if len(userIDs) == 0 {
+		return
+	}
+	userInfoMapping, err := as.userCommon.BatchUserBasicInfoByID(ctx, userIDs)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	for _, info := range timeline {
+		if len(info.UserID) == 0 {
+			continue
+		}
+		if userInfo, ok := userInfoMapping[info.UserID]; ok {
+			info.Username = userInfo.Username
+			info.UserDisplayName = userInfo.DisplayName
+		}
+	}
 }
 
 // GetObjectTimelineDetail get object timeline
