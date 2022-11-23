@@ -270,13 +270,40 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	if !has {
 		return
 	}
+	// If it's not admin
 	if !req.IsAdmin {
 		if dbinfo.UserID != req.UserID {
 			return questionInfo, errors.BadRequest(reason.QuestionCannotUpdate)
 		}
 
-	}
+		//CheckChangeTag
+		oldTags, tagerr := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
+		if err != nil {
+			return questionInfo, tagerr
+		}
+		tagNameList := make([]string, 0)
+		for _, tag := range req.Tags {
+			tagNameList = append(tagNameList, tag.SlugName)
+		}
+		Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
+		if err != nil {
+			return questionInfo, tagerr
+		}
 
+		CheckTag, CheckTaglist := qs.CheckChangeReservedTag(ctx, oldTags, Tags)
+		if !CheckTag {
+			errMsg := fmt.Sprintf(`The reserved tag %s must be present.`,
+				strings.Join(CheckTaglist, ","))
+			errorlist := make([]*validator.FormErrorField, 0)
+			errorlist = append(errorlist, &validator.FormErrorField{
+				ErrorField: "tags",
+				ErrorMsg:   errMsg,
+			})
+			err = errors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
+			return errorlist, err
+		}
+	}
+	// Check whether mandatory labels are selected
 	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
 	if err != nil {
 		return
@@ -288,33 +315,6 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 			ErrorMsg:   reason.RecommendTagEnter,
 		})
 		err = errors.BadRequest(reason.RecommendTagEnter)
-		return errorlist, err
-	}
-
-	//CheckChangeTag
-	oldTags, err := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
-	if err != nil {
-		return
-	}
-	tagNameList := make([]string, 0)
-	for _, tag := range req.Tags {
-		tagNameList = append(tagNameList, tag.SlugName)
-	}
-	Tags, err := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
-	if err != nil {
-		return
-	}
-
-	CheckTag, CheckTaglist := qs.CheckChangeReservedTag(ctx, oldTags, Tags)
-	if !CheckTag {
-		errMsg := fmt.Sprintf(`The reserved tag %s must be present.`,
-			strings.Join(CheckTaglist, ","))
-		errorlist := make([]*validator.FormErrorField, 0)
-		errorlist = append(errorlist, &validator.FormErrorField{
-			ErrorField: "tags",
-			ErrorMsg:   errMsg,
-		})
-		err = errors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
 		return errorlist, err
 	}
 
