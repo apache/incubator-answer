@@ -9,6 +9,7 @@ import (
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
@@ -232,7 +233,7 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 }
 
 // UpdateQuestion update question
-func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.QuestionUpdate) (questionInfo *schema.QuestionInfo, err error) {
+func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.QuestionUpdate) (questionInfo any, err error) {
 	questionInfo = &schema.QuestionInfo{}
 	now := time.Now()
 	question := &entity.Question{}
@@ -253,6 +254,20 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return
 	}
 
+	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
+	if err != nil {
+		return
+	}
+	if !recommendExist {
+		errorlist := make([]*validator.FormErrorField, 0)
+		errorlist = append(errorlist, &validator.FormErrorField{
+			ErrorField: "tags",
+			ErrorMsg:   reason.RecommendTagEnter,
+		})
+		err = errors.BadRequest(reason.RecommendTagEnter)
+		return errorlist, err
+	}
+
 	//CheckChangeTag
 	oldTags, err := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
 	if err != nil {
@@ -266,11 +281,18 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	if err != nil {
 		return
 	}
-	CheckTag, CheckTaglist := qs.CheckChangeTag(ctx, oldTags, Tags)
+
+	CheckTag, CheckTaglist := qs.CheckChangeReservedTag(ctx, oldTags, Tags)
 	if !CheckTag {
-		err = errors.BadRequest(reason.UnauthorizedError).WithMsg(fmt.Sprintf("tag [%s] cannot be modified",
-			strings.Join(CheckTaglist, ",")))
-		return
+		errMsg := fmt.Sprintf(`The reserved tag %s must be present.`,
+			strings.Join(CheckTaglist, ","))
+		errorlist := make([]*validator.FormErrorField, 0)
+		errorlist = append(errorlist, &validator.FormErrorField{
+			ErrorField: "tags",
+			ErrorMsg:   errMsg,
+		})
+		err = errors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
+		return errorlist, err
 	}
 
 	//update question to db
@@ -332,8 +354,8 @@ func (qs *QuestionService) ChangeTag(ctx context.Context, objectTagData *schema.
 	return qs.tagCommon.ObjectChangeTag(ctx, objectTagData)
 }
 
-func (qs *QuestionService) CheckChangeTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
-	return qs.tagCommon.ObjectCheckChangeTag(ctx, oldobjectTagData, objectTagData)
+func (qs *QuestionService) CheckChangeReservedTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
+	return qs.tagCommon.CheckChangeReservedTag(ctx, oldobjectTagData, objectTagData)
 }
 
 func (qs *QuestionService) SearchUserList(ctx context.Context, userName, order string, page, pageSize int, loginUserID string) ([]*schema.UserQuestionInfo, int64, error) {
