@@ -30,6 +30,10 @@ type RevisionSearch struct {
 	Page int `json:"page" form:"page"` // Query number of pages
 }
 
+type GetUnreviewedRevisionResp struct {
+	Type string `json:"type"`
+}
+
 // GetRevisionResp get revision response
 type GetRevisionResp struct {
 	// id

@@ -7,6 +7,7 @@ import (
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/object_info"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/revision"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
@@ -16,33 +17,46 @@ import (
 
 // RevisionService user service
 type RevisionService struct {
-	revisionRepo   revision.RevisionRepo
-	userCommon     *usercommon.UserCommon
-	questionCommon *questioncommon.QuestionCommon
-	answerService  *AnswerService
+	revisionRepo      revision.RevisionRepo
+	userCommon        *usercommon.UserCommon
+	questionCommon    *questioncommon.QuestionCommon
+	answerService     *AnswerService
+	objectInfoService *object_info.ObjService
 }
 
 func NewRevisionService(
 	revisionRepo revision.RevisionRepo,
 	userCommon *usercommon.UserCommon,
 	questionCommon *questioncommon.QuestionCommon,
-	answerService *AnswerService) *RevisionService {
+	answerService *AnswerService,
+	objectInfoService *object_info.ObjService,
+) *RevisionService {
 	return &RevisionService{
-		revisionRepo:   revisionRepo,
-		userCommon:     userCommon,
-		questionCommon: questionCommon,
-		answerService:  answerService,
+		revisionRepo:      revisionRepo,
+		userCommon:        userCommon,
+		questionCommon:    questionCommon,
+		answerService:     answerService,
+		objectInfoService: objectInfoService,
 	}
 }
 
 // SearchUnreviewedList get unreviewed list
-func (rs *RevisionService) GetUnreviewedRevisionList(ctx context.Context, req *schema.RevisionSearch) (resp []schema.GetRevisionResp, count int64, err error) {
-	resp = []schema.GetRevisionResp{}
+func (rs *RevisionService) GetUnreviewedRevisionList(ctx context.Context, req *schema.RevisionSearch) (resp []*schema.GetUnreviewedRevisionResp, count int64, err error) {
+	resp = []*schema.GetUnreviewedRevisionResp{}
 	search := &entity.RevisionSearch{}
 	_ = copier.Copy(search, req)
 	list, count, err := rs.revisionRepo.SearchUnreviewedList(ctx, search)
-	for _, item := range list {
-		spew.Dump(item)
+	for _, revision := range list {
+		spew.Dump(revision)
+		item := &schema.GetUnreviewedRevisionResp{}
+		_, ok := constant.ObjectTypeNumberMapping[revision.ObjectType]
+		if !ok {
+			continue
+		}
+		item.Type = constant.ObjectTypeNumberMapping[revision.ObjectType]
+		info, err := rs.objectInfoService.GetInfo(ctx, revision.ObjectID)
+		spew.Dump(info, err)
+		resp = append(resp, item)
 	}
 
 	return
