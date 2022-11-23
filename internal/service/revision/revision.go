@@ -15,4 +15,5 @@ type RevisionRepo interface {
 	GetRevisionList(ctx context.Context, revision *entity.Revision) (revisionList []entity.Revision, err error)
 	UpdateObjectRevisionId(ctx context.Context, revision *entity.Revision, session *xorm.Session) (err error)
 	ExistUnreviewedByObjectID(ctx context.Context, objectID string) (revision *entity.Revision, exist bool, err error)
+	SearchUnreviewedList(ctx context.Context, search *entity.RevisionSearch) ([]*entity.Revision, int64, error)
 }

@@ -149,3 +149,25 @@ func (rr *revisionRepo) allowRecord(objectType int) (ok bool) {
 		return false
 	}
 }
+
+func (rr *revisionRepo) SearchUnreviewedList(ctx context.Context, search *entity.RevisionSearch) ([]*entity.Revision, int64, error) {
+	var count int64
+	var err error
+	rows := make([]*entity.Revision, 0)
+	if search.Page > 0 {
+		search.Page = search.Page - 1
+	} else {
+		search.Page = 0
+	}
+	PageSize := 1
+	offset := search.Page * PageSize
+	session := rr.data.DB.Where("")
+	session = session.And("status = ?", entity.RevisionUnreviewedStatus)
+	session = session.OrderBy("created_at desc")
+	session = session.Limit(PageSize, offset)
+	count, err = session.FindAndCount(&rows)
+	if err != nil {
+		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return rows, count, nil
+}

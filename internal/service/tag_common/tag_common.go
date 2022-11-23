@@ -70,7 +70,7 @@ func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.Searc
 	if err != nil {
 		return
 	}
-	ts.tagsFormatRecommendAndReserved(ctx, tags)
+	ts.TagsFormatRecommendAndReserved(ctx, tags)
 	for _, tag := range tags {
 		item := schema.SearchTagLikeResp{}
 		item.SlugName = tag.SlugName
@@ -168,7 +168,7 @@ func (ts *TagCommonService) GetTagListByNames(ctx context.Context, tagNames []st
 	if err != nil {
 		return nil, err
 	}
-	ts.tagsFormatRecommendAndReserved(ctx, tagList)
+	ts.TagsFormatRecommendAndReserved(ctx, tagList)
 	return tagList, nil
 }
 
@@ -233,7 +233,7 @@ func (ts *TagCommonService) GetTagListByIDs(ctx context.Context, ids []string) (
 	if err != nil {
 		return nil, err
 	}
-	ts.tagsFormatRecommendAndReserved(ctx, tagList)
+	ts.TagsFormatRecommendAndReserved(ctx, tagList)
 	return
 }
 
@@ -244,7 +244,7 @@ func (ts *TagCommonService) GetTagPage(ctx context.Context, page, pageSize int, 
 	if err != nil {
 		return nil, 0, err
 	}
-	ts.tagsFormatRecommendAndReserved(ctx, tagList)
+	ts.TagsFormatRecommendAndReserved(ctx, tagList)
 	return
 }
 
@@ -278,7 +278,7 @@ func (ts *TagCommonService) TagFormat(ctx context.Context, tags []*entity.Tag) (
 	return objTags, nil
 }
 
-func (ts *TagCommonService) tagsFormatRecommendAndReserved(ctx context.Context, tagList []*entity.Tag) {
+func (ts *TagCommonService) TagsFormatRecommendAndReserved(ctx context.Context, tagList []*entity.Tag) {
 	if len(tagList) == 0 {
 		return
 	}

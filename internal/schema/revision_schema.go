@@ -26,6 +26,16 @@ type GetRevisionListReq struct {
 	ObjectID string `validate:"required" comment:"object_id" form:"object_id"`
 }
 
+type RevisionSearch struct {
+	Page int `json:"page" form:"page"` // Query number of pages
+}
+
+type GetUnreviewedRevisionResp struct {
+	Type           string                      `json:"type"`
+	Info           *UnreviewedRevisionInfoInfo `json:"info"`
+	UnreviewedInfo *GetRevisionResp            `json:"unreviewed_info"`
+}
+
 // GetRevisionResp get revision response
 type GetRevisionResp struct {
 	// id

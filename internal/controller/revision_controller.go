@@ -5,6 +5,7 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -40,4 +41,25 @@ func (rc *RevisionController) GetRevisionList(ctx *gin.Context) {
 
 	resp, err := rc.revisionListService.GetRevisionList(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetUnreviewedRevisionList godoc
+// @Summary get unreviewed revision list
+// @Description get unreviewed revision list
+// @Tags Revision
+// @Produce json
+// @Param page query string true "page id"
+// @Success 200 {object} handler.RespBody{data=[]schema.GetRevisionResp}
+// @Router /answer/api/v1/revisions/unreviewed [get]
+func (rc *RevisionController) GetUnreviewedRevisionList(ctx *gin.Context) {
+	pageStr := ctx.Query("page")
+	page := converter.StringToInt(pageStr)
+	req := &schema.RevisionSearch{
+		Page: page,
+	}
+	resp, count, err := rc.revisionListService.GetUnreviewedRevisionList(ctx, req)
+	handler.HandleResponse(ctx, err, gin.H{
+		"list":  resp,
+		"count": count,
+	})
 }

@@ -123,6 +123,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	//revision
 	r.GET("/revisions", a.revisionController.GetRevisionList)
+	r.GET("/revisions/unreviewed", a.revisionController.GetUnreviewedRevisionList)
 
 	// tag
 	r.GET("/tags/page", a.tagController.GetTagWithPage)
