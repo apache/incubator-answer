@@ -262,9 +262,28 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	return nil
 }
 
+func (qs *QuestionService) CheckCanUpdateQuestion(ctx context.Context, req *schema.CheckCanQuestionUpdate) (exist bool, err error) {
+	_, existUnreviewed, err := qs.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
+	if err != nil {
+		return false, err
+	}
+	return existUnreviewed, nil
+}
+
 // UpdateQuestion update question
 func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.QuestionUpdate) (questionInfo any, err error) {
+
 	questionInfo = &schema.QuestionInfo{}
+
+	_, existUnreviewed, err := qs.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
+	if err != nil {
+		return
+	}
+	if existUnreviewed {
+		err = errors.BadRequest(reason.QuestionCannotUpdate)
+		return
+	}
+
 	now := time.Now()
 	question := &entity.Question{}
 	question.UserID = req.UserID

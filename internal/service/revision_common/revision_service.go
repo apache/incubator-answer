@@ -54,3 +54,9 @@ func (rs *RevisionService) GetRevision(ctx context.Context, revisionID string) (
 	}
 	return revisionInfo, nil
 }
+
+// ExistUnreviewedByObjectID
+func (rs *RevisionService) ExistUnreviewedByObjectID(ctx context.Context, objectID string) (revision *entity.Revision, exist bool, err error) {
+	revision, exist, err = rs.revisionRepo.ExistUnreviewedByObjectID(ctx, objectID)
+	return revision, exist, err
+}

@@ -229,6 +229,34 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
+// CheckCanUpdateQuestion check can update question
+// @Summary check can update question
+// @Description check can update question
+// @Tags api-question
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param id query string true "id"  default(string)
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/question/edit/check [get]
+func (qc *QuestionController) CheckCanUpdateQuestion(ctx *gin.Context) {
+	id := ctx.Query("id")
+	req := &schema.CheckCanQuestionUpdate{}
+	req.ID = id
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	userinfo := middleware.GetUserInfoFromContext(ctx)
+	req.IsAdmin = userinfo.IsAdmin
+	if can, err := qc.rankService.CheckRankPermission(ctx, req.UserID, rank.QuestionEditRank); err != nil || !can {
+		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+		return
+	}
+
+	resp, err := qc.questionService.CheckCanUpdateQuestion(ctx, req)
+	handler.HandleResponse(ctx, err, gin.H{
+		"unreviewed": resp,
+	})
+}
+
 // CloseMsgList close question msg list
 // @Summary close question msg list
 // @Description close question msg list

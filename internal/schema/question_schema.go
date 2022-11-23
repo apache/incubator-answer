@@ -34,6 +34,14 @@ type QuestionAdd struct {
 	UserID string `json:"-"`
 }
 
+type CheckCanQuestionUpdate struct {
+	// question id
+	ID string `validate:"required" json:"id"`
+	// user id
+	UserID  string `json:"-"`
+	IsAdmin bool   `json:"-"`
+}
+
 type QuestionUpdate struct {
 	// question id
 	ID string `validate:"required" json:"id"`
