@@ -376,10 +376,8 @@ export interface AdminDashboard {
 }
 
 export interface TimelineReq {
-  object_type: string;
   show_vote: boolean;
-  object_id?: string;
-  tag_slug_name?: string;
+  object_id: string;
 }
 
 export interface TimelineItem {

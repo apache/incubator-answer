@@ -6,113 +6,43 @@ import { useTranslation } from 'react-i18next';
 import { Icon, BaseUserCard, DiffContent, FormatTime } from '@/components';
 import { TIMELINE_NORMAL_ACTIVITY_TYPE } from '@/common/constants';
 import * as Type from '@/common/interface';
-
-const data1 = {
-  title: '不是管理员，提一个问题看看能不能编辑resserved tag?',
-  tags: [
-    {
-      display_name: 'bug',
-      slug_name: 'bug',
-      recommend: true,
-      reserved: false,
-    },
-    {
-      display_name: '黄马甲',
-      slug_name: '黄马甲',
-      recommend: false,
-      reserved: true,
-    },
-    {
-      display_name: 'go',
-      slug_name: 'go',
-      recommend: false,
-      reserved: false,
-    },
-  ],
-  content: `# 前言
-  手写 Promise 是面试的时候大家都逃避的送命题，在学些了解后发现通过实现源码更能将新一代的异步方案理解的通透，知其然知其所以然的运用。
-
-  如果直接将源码贴到此处势必不能有更大的收获，下面就按实现版本来看做简要分析。
-
-  ## 回顾 Promise
-  Promise 是 CommonJS 提出来的这一种规范，有多个版本，在 ES6 当中已经纳入规范，原生支持 Promise 对象，非 ES6 环境可以用类似 Bluebird、Q 这类库来支持。
-
-  Promise 可以将回调变成链式调用写法，流程更加清晰，代码更加优雅，还可以批量处理异步任务。
-
-  简单归纳下 Promise：三个状态、两个过程、一个方法，快速记忆方法：3-2-1
-
-  三个状态：pending、fulfilled、rejected
-
-  两个过程：
-
-  * pending → fulfilled（resolve）
-  * pending → rejected（reject）
-  一个方法：then
-
-  当然还有其他概念，如 catch、 Promise.all/race/allSettled。`,
-};
-
-const data2 = {
-  title: '提一个问题看看能不能编辑 resserved tag?',
-  tags: [
-    {
-      display_name: 'discussion',
-      slug_name: 'discussion',
-      recommend: true,
-      reserved: false,
-    },
-    {
-      display_name: '黄马甲',
-      slug_name: '黄马甲',
-      recommend: false,
-      reserved: true,
-    },
-    {
-      display_name: 'go',
-      slug_name: 'go',
-      recommend: false,
-      reserved: false,
-    },
-  ],
-  content: `# 前言
-  手写 Promise 是面试的时候大家都逃避的送命题，在学些了解后发现通过实现源码更能将新一代的异步方案理解的通透，知用。
-
-  ## 增加的titlte
-
-  如果直接将源码贴到此处势必不能有更大的收获。
-
-  ## 回顾 Promise
-  Promise 是 CommonJS 规范，并且有多个版本，在 ES6 当中已经纳入规范，原生支持 Promise 对象，非 ES6 环境可以用类似 Bluebird、Q 这类库来支持。
-
-  Promise 可以将回调变成链式调用写法，流程更加清晰，代码更加优雅，还可以批量处理异步任务。
-
-  简单归纳下 Promise：三个状态、两个过程、一个方法，快速记忆方法：3-2-1
-
-  两个过程：
-
-  * pending → fulfilled（resolve）
-  * pending → rejected（reject）
-  一个方法：then
-  `,
-};
+import { getTimelineDetail } from '@/services';
 
 interface Props {
   data: Type.TimelineItem;
   objectInfo: Type.TimelineObject;
-  source: 'question' | 'answer' | 'tag';
   isAdmin: boolean;
+  revisionList: Type.TimelineItem[];
 }
-const Index: FC<Props> = ({
-  data,
-  isAdmin,
-  source = 'question',
-  objectInfo,
-}) => {
+const Index: FC<Props> = ({ data, isAdmin, objectInfo, revisionList }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'timeline' });
   const [isOpen, setIsOpen] = useState(false);
-  const handleItemClick = () => {
+  const [detailData, setDetailData] = useState({
+    new_revision: {},
+    old_revision: {},
+  });
+
+  const handleItemClick = async (id) => {
+    if (!isOpen) {
+      const revisionItem = revisionList?.find((v) => v.revision_id === id);
+      let oldId;
+      if (revisionList?.length > 0 && revisionItem) {
+        const idIndex = revisionList.indexOf(revisionItem) || 0;
+        if (idIndex === revisionList.length - 1) {
+          oldId = 0;
+        } else {
+          oldId = revisionList[idIndex + 1].revision_id;
+        }
+      }
+      const res = await getTimelineDetail({
+        new_revision_id: id,
+        old_revision_id: oldId,
+      });
+      setDetailData(res);
+    }
     setIsOpen(!isOpen);
   };
+
   return (
     <>
       <tr>
@@ -126,9 +56,10 @@ const Index: FC<Props> = ({
             data.activity_type === 'edited' ||
             data.activity_type === 'asked' ||
             data.activity_type === 'created' ||
-            (source === 'answer' && data.activity_type === 'answered')) && (
+            (objectInfo.object_type === 'answer' &&
+              data.activity_type === 'answered')) && (
             <Button
-              onClick={handleItemClick}
+              onClick={() => handleItemClick(data.revision_id)}
               variant="link"
               className="text-body p-0 btn-no-border">
               <Icon
@@ -139,24 +70,25 @@ const Index: FC<Props> = ({
             </Button>
           )}
           {data.activity_type === 'accept' && (
-            <Link to={`/question/${objectInfo.question_id}`}>
+            <Link to={`/questions/${objectInfo.question_id}`}>
               {t(data.activity_type)}
             </Link>
           )}
 
-          {source === 'question' && data.activity_type === 'answered' && (
-            <Link
-              to={`/question/${objectInfo.question_id}/${objectInfo.answer_id}`}>
-              {t(data.activity_type)}
-            </Link>
-          )}
+          {data.object_type === 'question' &&
+            data.activity_type === 'answered' && (
+              <Link
+                to={`/questions/${objectInfo.question_id}/${data.object_id}`}>
+                {t(data.activity_type)}
+              </Link>
+            )}
 
           {data.activity_type === 'commented' && (
             <Link
               to={
-                data.object_type === 'answer'
-                  ? `/question/${objectInfo.question_id}/${objectInfo.answer_id}?commentId=${data.object_id}`
-                  : `/question/${objectInfo.question_id}?commentId=${data.object_id}`
+                objectInfo.object_type === 'answer'
+                  ? `/questions/${objectInfo.question_id}/${objectInfo.answer_id}?commentId=${data.object_id}`
+                  : `/questions/${objectInfo.question_id}?commentId=${data.object_id}`
               }>
               {t(data.activity_type)}
             </Link>
@@ -167,7 +99,7 @@ const Index: FC<Props> = ({
           )}
 
           {data.cancelled && (
-            <div className="text-danger"> {t('cancelled')}</div>
+            <div className="text-danger">{t('cancelled')}</div>
           )}
         </td>
         <td>
@@ -192,7 +124,11 @@ const Index: FC<Props> = ({
         <td colSpan={5} className="p-0 py-5">
           <Row className="justify-content-center">
             <Col xxl={8}>
-              <DiffContent currentData={data1} prevData={data2} />
+              <DiffContent
+                objectType={objectInfo.object_type}
+                newData={detailData?.new_revision}
+                oldData={detailData?.old_revision}
+              />
             </Col>
           </Row>
         </td>

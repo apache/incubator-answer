@@ -176,7 +176,7 @@ function diffText(newText: string, oldText: string): string {
       ?.replace(/<iframe/gi, '&lt;iframe')
       ?.replace(/<input/gi, '&lt;input');
   }
-  const diff = Diff.diffChars(newText, oldText);
+  const diff = Diff.diffChars(oldText, newText);
   const result = diff.map((part) => {
     if (part.added) {
       return `<span class="review-text-add">${part.value}</span>`;

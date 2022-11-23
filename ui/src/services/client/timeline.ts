@@ -17,3 +17,14 @@ export const useTimelineData = (params: Type.TimelineReq) => {
     mutate,
   };
 };
+
+export const getTimelineDetail = (params: {
+  new_revision_id: string;
+  old_revision_id: string;
+}) => {
+  return request.get(
+    `/answer/api/v1/activity/timeline/detail?${qs.stringify(params, {
+      skipNulls: true,
+    })}`,
+  );
+};

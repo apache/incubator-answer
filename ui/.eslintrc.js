@@ -51,6 +51,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
     'react/jsx-props-no-spreading': 'off',
     '@typescript-eslint/default-param-last': 'off',
+    'no-nested-ternary': 'off',
     'import/order': [
       'error',
       {

@@ -1,113 +1,70 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { Container, Row, Col, Form, Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { loggedUserInfoStore } from '@/stores';
 import { useTimelineData } from '@/services';
+import { PageTitle } from '@/components';
 
 import HistoryItem from './components/Item';
 
-// const list = [
-//   {
-//     activity_id: 1,
-//     revision_id: 1,
-//     created_at: 1669084579,
-//     activity_type: 'deleted',
-//     username: 'John Doe',
-//     user_display_name: 'John Doe',
-//     comment: '啊撒旦法师打发房管局挥洒过短发合计干哈就撒刚发几哈',
-//     object_id: '1',
-//     object_type: 'question',
-//     cancelled: false,
-//     cancelled_at: null,
-//   },
-//   {
-//     activity_id: 2,
-//     revision_id: 2,
-//     created_at: 1669084579,
-//     activity_type: 'undeleted',
-//     username: 'John Doe2',
-//     user_display_name: 'John Doe2',
-//     comment: '啊撒旦法师打发房管局挥洒过短发合计干哈就撒刚发几哈',
-//     object_id: '2',
-//     object_type: 'question',
-//     cancelled: false,
-//     cancelled_at: null,
-//   },
-//   {
-//     activity_id: 3,
-//     revision_id: 3,
-//     created_at: 1669084579,
-//     activity_type: 'downvote',
-//     username: 'johndoe3',
-//     user_display_name: 'John Doe3',
-//     comment: '啊撒旦法师打发房管局挥洒过短发合计干哈就撒刚发几哈',
-//     object_id: '3',
-//     object_type: 'question',
-//     cancelled: true,
-//     cancelled_at: 1637021579,
-//   },
-//   {
-//     activity_id: 4,
-//     revision_id: 4,
-//     created_at: 1669084579,
-//     activity_type: 'rollback',
-//     username: 'johndoe4',
-//     user_display_name: 'John Doe4',
-//     comment: '啊撒旦法师打发房管局挥洒过短发合计干哈就撒刚发几哈',
-//     object_id: '4',
-//     object_type: 'question',
-//     cancelled: false,
-//     cancelled_at: null,
-//   },
-//   {
-//     activity_id: 5,
-//     revision_id: 5,
-//     created_at: 1669084579,
-//     activity_type: 'edited',
-//     username: 'johndoe4',
-//     user_display_name: 'John Doe4',
-//     object_id: '5',
-//     object_type: 'question',
-//     comment: '啊撒旦法师打发房管局挥洒过短发合计干哈就撒刚发几哈',
-//     cancelled: false,
-//     cancelled_at: null,
-//   },
-// ];
-
-// const object_info = {
-//   title: '问题标题，当回答时也是问题标题，当为 tag 时是 slug_name',
-//   object_type: 'question', // question/answer/tag
-//   question_id: 'xxxxxxxxxxxxxxxxxxx',
-//   answer_id: 'xxxxxxxxxxxxxxxx',
-// };
-
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'timeline' });
+  const { qid = '', aid = '', tid = '' } = useParams();
   const { is_admin } = loggedUserInfoStore((state) => state.user);
+  const [showVotes, setShowVotes] = useState(false);
 
   const { data: timelineData } = useTimelineData({
-    object_id: '10010000000000001',
-    object_type: 'question',
-    show_vote: false,
+    object_id: tid || aid || qid,
+    show_vote: showVotes,
   });
 
-  console.log('timelineData=', timelineData);
+  const handleSwitch = (bol: boolean) => {
+    setShowVotes(bol);
+  };
+
+  let linkUrl = '';
+  if (timelineData?.object_info.object_type === 'question') {
+    linkUrl = `/questions/${timelineData?.object_info.question_id}`;
+  }
+
+  if (timelineData?.object_info.object_type === 'answer') {
+    linkUrl = `/questions/${timelineData?.object_info.question_id}/${timelineData?.object_info.answer_id}`;
+  }
+
+  if (timelineData?.object_info.object_type === 'tag') {
+    linkUrl = `/tags/${timelineData?.object_info.title}`;
+  }
+
+  const revisionList =
+    timelineData?.timeline?.filter((item) => item.revision_id > 0) || [];
 
   return (
     <Container className="py-3">
+      <PageTitle
+        title={
+          timelineData?.object_info.object_type === 'tag'
+            ? `Timeline for tag ${timelineData?.object_info.title}`
+            : `Timeline for ${timelineData?.object_info.title}`
+        }
+      />
       <Row className="py-3 justify-content-center">
         <Col xxl={10}>
           <h5 className="mb-4">
-            {t('title')} <Link to="/">{timelineData?.object_info?.title}</Link>
+            {t('title')}{' '}
+            <Link to={linkUrl}>{timelineData?.object_info?.title}</Link>
           </h5>
-          <Form.Check
-            className="mb-4"
-            type="switch"
-            id="custom-switch"
-            label={t('show_votes')}
-          />
+          {timelineData?.object_info.object_type !== 'tag' && (
+            <Form.Check
+              className="mb-4"
+              type="switch"
+              id="custom-switch"
+              label={t('show_votes')}
+              checked={showVotes}
+              onChange={(e) => handleSwitch(e.target.checked)}
+            />
+          )}
           <Table hover>
             <thead>
               <tr>
@@ -123,9 +80,9 @@ const Index: FC = () => {
                   <HistoryItem
                     data={item}
                     objectInfo={timelineData?.object_info}
-                    key={item.revision_id}
+                    key={item.activity_id}
                     isAdmin={is_admin}
-                    source="question"
+                    revisionList={revisionList}
                   />
                 );
               })}

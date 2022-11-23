@@ -563,4 +563,6 @@ export const TIMELINE_NORMAL_ACTIVITY_TYPE = [
   'deleted',
   'downvote',
   'upvote',
+  'reopened',
+  'closed',
 ];

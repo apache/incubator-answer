@@ -202,7 +202,21 @@ const routes: RouteNode[] = [
         },
       },
       {
-        path: '/history',
+        path: '/posts/:qid/timeline',
+        page: 'pages/Timeline',
+        guard: async () => {
+          return guard.logged();
+        },
+      },
+      {
+        path: '/posts/:qid/:aid/timeline',
+        page: 'pages/Timeline',
+        guard: async () => {
+          return guard.logged();
+        },
+      },
+      {
+        path: '/tags/:tid/timeline',
         page: 'pages/Timeline',
         guard: async () => {
           return guard.logged();

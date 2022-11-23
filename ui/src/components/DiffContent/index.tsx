@@ -4,28 +4,27 @@ import { Tag } from '@/components';
 import { diffText } from '@/utils';
 
 interface Props {
-  currentData: Record<string, any>;
-  prevData?: Record<string, any>;
+  objectType: string;
+  newData: Record<string, any>;
+  oldData?: Record<string, any>;
   className?: string;
 }
 
-const Index: FC<Props> = ({ currentData, prevData, className = '' }) => {
-  if (!currentData?.content) return null;
+const Index: FC<Props> = ({ objectType, newData, oldData, className = '' }) => {
+  if (!newData?.original_text) return null;
 
-  let tag;
-  if (prevData?.tags) {
-    const addTags = currentData.tags.filter(
-      (c) => !prevData?.tags?.find((p) => p.slug_name === c.slug_name),
+  let tag = newData.tags;
+  if (objectType === 'question' && oldData?.tags) {
+    const addTags = newData.tags.filter(
+      (c) => !oldData?.tags?.find((p) => p.slug_name === c.slug_name),
     );
 
-    let deleteTags = prevData?.tags
-      .filter(
-        (c) => !currentData?.tags.find((p) => p.slug_name === c.slug_name),
-      )
+    let deleteTags = oldData?.tags
+      .filter((c) => !newData?.tags.find((p) => p.slug_name === c.slug_name))
       .map((v) => ({ ...v, state: 'delete' }));
 
     deleteTags = deleteTags?.map((v) => {
-      const index = prevData?.tags?.findIndex(
+      const index = oldData?.tags?.findIndex(
         (c) => c.slug_name === v.slug_name,
       );
       return {
@@ -34,7 +33,7 @@ const Index: FC<Props> = ({ currentData, prevData, className = '' }) => {
       };
     });
 
-    tag = currentData.tags.map((item) => {
+    tag = newData.tags.map((item) => {
       const find = addTags.find((c) => c.slug_name === item.slug_name);
       if (find) {
         return {
@@ -52,27 +51,43 @@ const Index: FC<Props> = ({ currentData, prevData, className = '' }) => {
 
   return (
     <div className={className}>
-      <h5
-        dangerouslySetInnerHTML={{
-          __html: diffText(currentData.title, prevData?.title),
-        }}
-        className="mb-3"
-      />
-      <div className="mb-4">
-        {tag.map((item) => {
-          return (
-            <Tag
-              key={item.slug_name}
-              className="me-1"
-              data={item}
-              textClassName={`d-inline-block review-text-${item.state}`}
-            />
-          );
-        })}
-      </div>
+      {objectType !== 'answer' && (
+        <h5
+          dangerouslySetInnerHTML={{
+            __html: diffText(newData.title, oldData?.title),
+          }}
+          className="mb-3"
+        />
+      )}
+      {objectType === 'question' && (
+        <div className="mb-4">
+          {tag.map((item) => {
+            return (
+              <Tag
+                key={item.slug_name}
+                className="me-1"
+                data={item}
+                textClassName={`d-inline-block review-text-${item.state}`}
+              />
+            );
+          })}
+        </div>
+      )}
+      {objectType === 'tag' && (
+        <div className="mb-4">
+          {`/tags/${
+            newData?.main_tag_slug_name
+              ? diffText(
+                  newData.main_tag_slug_name,
+                  oldData?.main_tag_slug_name,
+                )
+              : diffText(newData.slug_name, oldData?.slug_name)
+          }`}
+        </div>
+      )}
       <div
         dangerouslySetInnerHTML={{
-          __html: diffText(currentData.content, prevData?.content),
+          __html: diffText(newData.original_text, oldData?.original_text),
         }}
         className="pre-line"
       />

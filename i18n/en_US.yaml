@@ -380,6 +380,7 @@ ui:
   tag_info:
     created_at: Created
     edited_at: Edited
+    history: History
     synonyms:
       title: Synonyms
       text: The following tags will be remapped to
