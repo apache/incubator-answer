@@ -63,7 +63,16 @@ type GetObjectTimelineDetailResp struct {
 
 // ObjectTimelineDetail object timeline detail
 type ObjectTimelineDetail struct {
-	Title        string   `json:"title"`
-	Tags         []string `json:"tags"`
-	OriginalText string   `json:"original_text"`
+	Title        string               `json:"title"`
+	Tags         []*ObjectTimelineTag `json:"tags"`
+	OriginalText string               `json:"original_text"`
+}
+
+// ObjectTimelineTag object timeline tags
+type ObjectTimelineTag struct {
+	SlugName        string `json:"slug_name"`
+	DisplayName     string `json:"display_name"`
+	MainTagSlugName string `json:"main_tag_slug_name"`
+	Recommend       bool   `json:"recommend"`
+	Reserved        bool   `json:"reserved"`
 }

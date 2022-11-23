@@ -5,6 +5,11 @@ package constant
 type ActivityTypeKey string
 
 const (
+	ActEdited = "edited"
+	ActClosed = "closed"
+)
+
+const (
 	ActQuestionAsked     ActivityTypeKey = "question.asked"
 	ActQuestionClosed    ActivityTypeKey = "question.closed"
 	ActQuestionReopened  ActivityTypeKey = "question.reopened"
@@ -19,8 +24,6 @@ const (
 	ActQuestionUndeleted ActivityTypeKey = "question.undeleted"
 )
 
-// answer activity
-
 const (
 	ActAnswerAnswered  ActivityTypeKey = "answer.answered"
 	ActAnswerCommented ActivityTypeKey = "answer.commented"
@@ -32,8 +35,6 @@ const (
 	ActAnswerDeleted   ActivityTypeKey = "answer.deleted"
 	ActAnswerUndeleted ActivityTypeKey = "answer.undeleted"
 )
-
-// tag activity
 
 const (
 	ActTagCreated   ActivityTypeKey = "tag.created"

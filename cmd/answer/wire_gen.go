@@ -189,7 +189,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	activityCommon := activity_common2.NewActivityCommon(activityRepo)
 	activityActivityRepo := activity.NewActivityRepo(dataData)
 	commentCommonService := comment_common.NewCommentCommonService(commentCommonRepo)
-	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, activityCommon, tagCommonService, objService, commentCommonService, revisionService)
+	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, activityCommon, tagCommonService, objService, commentCommonService, revisionService, metaService)
 	activityController := controller.NewActivityController(activityCommon, activityService)
 	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController, activityController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)

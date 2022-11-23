@@ -27,7 +27,8 @@ func NewActivityRepo(
 func (ar *activityRepo) GetObjectAllActivity(ctx context.Context, objectID string, showVote bool) (
 	activityList []*entity.Activity, err error) {
 	activityList = make([]*entity.Activity, 0)
-	err = ar.data.DB.Find(&activityList, &entity.Activity{OriginalObjectID: objectID})
+	session := ar.data.DB.Desc("created_at") // TODO: if showVote is false do not show vote activity
+	err = session.Find(&activityList, &entity.Activity{OriginalObjectID: objectID})
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

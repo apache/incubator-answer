@@ -11,6 +11,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/comment_common"
+	"github.com/answerdev/answer/internal/service/meta"
 	"github.com/answerdev/answer/internal/service/object_info"
 	"github.com/answerdev/answer/internal/service/revision_common"
 	"github.com/answerdev/answer/internal/service/tag_common"
@@ -33,6 +34,7 @@ type ActivityService struct {
 	objectInfoService     *object_info.ObjService
 	commentCommonService  *comment_common.CommentCommonService
 	revisionService       *revision_common.RevisionService
+	metaService           *meta.MetaService
 }
 
 // NewActivityService new activity service
@@ -44,6 +46,7 @@ func NewActivityService(
 	objectInfoService *object_info.ObjService,
 	commentCommonService *comment_common.CommentCommonService,
 	revisionService *revision_common.RevisionService,
+	metaService *meta.MetaService,
 ) *ActivityService {
 	return &ActivityService{
 		objectInfoService:     objectInfoService,
@@ -53,6 +56,7 @@ func NewActivityService(
 		tagCommonService:      tagCommonService,
 		commentCommonService:  commentCommonService,
 		revisionService:       revisionService,
+		metaService:           metaService,
 	}
 }
 
@@ -116,8 +120,23 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 			} else {
 				item.Comment = comment.ParsedText
 			}
+		} else if item.ActivityType == constant.ActEdited {
+			revision, err := as.revisionService.GetRevision(ctx, item.RevisionID)
+			if err != nil {
+				log.Error(err)
+			}
+			item.Comment = revision.Log
+		} else if item.ActivityType == constant.ActClosed {
+			metaInfo, err := as.metaService.GetMetaByObjectIdAndKey(ctx, item.ObjectID, entity.QuestionCloseReasonKey)
+			if err != nil {
+				log.Error(err)
+			} else {
+				closeMsg := &schema.CloseQuestionMeta{}
+				if err := json.Unmarshal([]byte(metaInfo.Value), closeMsg); err != nil {
+					item.Comment = closeMsg.CloseMsg
+				}
+			}
 		}
-
 		resp.Timeline = append(resp.Timeline, item)
 	}
 	return
@@ -127,25 +146,19 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 func (as *ActivityService) GetObjectTimelineDetail(ctx context.Context, req *schema.GetObjectTimelineDetailReq) (
 	resp *schema.GetObjectTimelineDetailResp, err error) {
 	resp = &schema.GetObjectTimelineDetailResp{}
-	resp.OldRevision, err = as.getOneObjectDetail(ctx, req.OldRevisionID)
-	if err != nil {
-		return nil, err
-	}
-	resp.NewRevision, err = as.getOneObjectDetail(ctx, req.NewRevisionID)
-	if err != nil {
-		return nil, err
-	}
+	resp.OldRevision, _ = as.getOneObjectDetail(ctx, req.OldRevisionID)
+	resp.NewRevision, _ = as.getOneObjectDetail(ctx, req.NewRevisionID)
 	return resp, nil
 }
 
 // GetObjectTimelineDetail get object detail
 func (as *ActivityService) getOneObjectDetail(ctx context.Context, revisionID string) (
 	resp *schema.ObjectTimelineDetail, err error) {
-	resp = &schema.ObjectTimelineDetail{Tags: make([]string, 0)}
+	resp = &schema.ObjectTimelineDetail{Tags: make([]*schema.ObjectTimelineTag, 0)}
 
 	revision, err := as.revisionService.GetRevision(ctx, revisionID)
 	if err != nil {
-		return nil, err
+		return nil, nil
 	}
 	objInfo, err := as.objectInfoService.GetInfo(ctx, revision.ObjectID)
 	if err != nil {
@@ -160,7 +173,13 @@ func (as *ActivityService) getOneObjectDetail(ctx context.Context, revisionID st
 			return resp, nil
 		}
 		for _, tag := range data.Tags {
-			resp.Tags = append(resp.Tags, tag.SlugName)
+			resp.Tags = append(resp.Tags, &schema.ObjectTimelineTag{
+				SlugName:        tag.SlugName,
+				DisplayName:     tag.DisplayName,
+				MainTagSlugName: tag.MainTagSlugName,
+				Recommend:       tag.Recommend,
+				Reserved:        tag.Reserved,
+			})
 		}
 		resp.Title = data.Title
 		resp.OriginalText = data.OriginalText
