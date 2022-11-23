@@ -172,6 +172,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	// question
 	r.POST("/question", a.questionController.AddQuestion)
 	r.PUT("/question", a.questionController.UpdateQuestion)
+	r.GET("/question/edit/check", a.questionController.CheckCanUpdateQuestion)
 	r.DELETE("/question", a.questionController.RemoveQuestion)
 	r.PUT("/question/status", a.questionController.CloseQuestion)
 	r.GET("/question/similar", a.questionController.SearchByTitleLike)

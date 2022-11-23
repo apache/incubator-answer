@@ -3185,6 +3185,30 @@ paths:
       summary: close question msg list
       tags:
       - api-question
+  /answer/api/v1/question/edit/check:
+    get:
+      consumes:
+      - application/json
+      description: check can update question
+      parameters:
+      - default: string
+        description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: check can update question
+      tags:
+      - api-question
   /answer/api/v1/question/info:
     get:
       consumes:
