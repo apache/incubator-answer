@@ -497,6 +497,11 @@ ui:
           label: Answer
           msg:
             empty: Answer cannot be empty.
+        edit_summary:
+          label: Edit Summary
+          placeholder: >-
+            Briefly explain your changes (corrected spelling, fixed grammar,
+            improved formatting)
     btn_post_question: Post your question
     btn_save_edits: Save edits
     answer_question: Answer your own question
