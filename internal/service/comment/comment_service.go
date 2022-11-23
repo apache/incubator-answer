@@ -150,12 +150,19 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 		resp.UserStatus = userInfo.Status
 	}
 
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	activityMsg := &schema.ActivityMsg{
 		UserID:           comment.UserID,
 		ObjectID:         comment.ID,
 		OriginalObjectID: req.ObjectID,
 		ActivityTypeKey:  constant.ActQuestionCommented,
-	})
+	}
+	switch objInfo.ObjectType {
+	case constant.QuestionObjectType:
+		activityMsg.ActivityTypeKey = constant.ActQuestionCommented
+	case constant.AnswerObjectType:
+		activityMsg.ActivityTypeKey = constant.ActAnswerCommented
+	}
+	activity_queue.AddActivity(activityMsg)
 	return resp, nil
 }
 

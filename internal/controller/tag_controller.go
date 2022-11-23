@@ -69,7 +69,7 @@ func (tc *TagController) RemoveTag(ctx *gin.Context) {
 		return
 	}
 
-	err := tc.tagService.RemoveTag(ctx, req.TagID)
+	err := tc.tagService.RemoveTag(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

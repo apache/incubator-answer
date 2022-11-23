@@ -7,19 +7,18 @@ import (
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/service/activity"
-	"github.com/answerdev/answer/internal/service/activity_common"
-	"github.com/answerdev/answer/internal/service/activity_queue"
-	"github.com/answerdev/answer/internal/service/notice_queue"
-	"github.com/answerdev/answer/internal/service/revision_common"
-
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/activity"
+	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/activity_queue"
 	answercommon "github.com/answerdev/answer/internal/service/answer_common"
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
+	"github.com/answerdev/answer/internal/service/notice_queue"
 	"github.com/answerdev/answer/internal/service/permission"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
+	"github.com/answerdev/answer/internal/service/revision_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -116,6 +115,12 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 	if err != nil {
 		log.Errorf("delete answer activity change failed: %s", err.Error())
 	}
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           req.UserID,
+		ObjectID:         answerInfo.ID,
+		OriginalObjectID: answerInfo.ID,
+		ActivityTypeKey:  constant.ActAnswerDeleted,
+	})
 	return
 }
 
@@ -352,12 +357,12 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) 
 	return info, questionInfo, has, nil
 }
 
-func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, answerID string, setStatusStr string) error {
-	setStatus, ok := entity.CmsAnswerSearchStatus[setStatusStr]
+func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.AdminSetAnswerStatusRequest) error {
+	setStatus, ok := entity.CmsAnswerSearchStatus[req.StatusStr]
 	if !ok {
 		return fmt.Errorf("question status does not exist")
 	}
-	answerInfo, exist, err := as.answerRepo.GetAnswer(ctx, answerID)
+	answerInfo, exist, err := as.answerRepo.GetAnswer(ctx, req.AnswerID)
 	if err != nil {
 		return err
 	}
@@ -374,6 +379,13 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, answerID stri
 		err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
 		if err != nil {
 			log.Errorf("admin delete question then rank rollback error %s", err.Error())
+		} else {
+			activity_queue.AddActivity(&schema.ActivityMsg{
+				UserID:           req.UserID,
+				ObjectID:         answerInfo.ID,
+				OriginalObjectID: answerInfo.ID,
+				ActivityTypeKey:  constant.ActAnswerDeleted,
+			})
 		}
 	}
 

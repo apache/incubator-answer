@@ -74,7 +74,13 @@ type AdminAnswerInfo struct {
 }
 
 type AnswerAdoptedReq struct {
-	QuestionID string `json:"question_id" ` // question_id
-	AnswerID   string `json:"answer_id" `
+	QuestionID string `json:"question_id"`
+	AnswerID   string `json:"answer_id"`
 	UserID     string `json:"-" `
+}
+
+type AdminSetAnswerStatusRequest struct {
+	StatusStr string `json:"status"`
+	AnswerID  string `json:"answer_id"`
+	UserID    string `json:"-" `
 }
