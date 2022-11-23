@@ -99,7 +99,6 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionClosed,
-		RevisionID:       questionInfo.RevisionID,
 	})
 	return nil
 }
@@ -249,7 +248,6 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionDeleted,
-		RevisionID:       questionInfo.RevisionID,
 	})
 	return nil
 }
@@ -340,7 +338,11 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		Title:    question.Title,
 		Log:      req.EditSummary,
 	}
-	infoJSON, _ := json.Marshal(question)
+	questionWithTagsRevision, err := qs.changeQuestionToRevision(ctx, question)
+	if err != nil {
+		return nil, err
+	}
+	infoJSON, _ := json.Marshal(questionWithTagsRevision)
 	revisionDTO.Content = string(infoJSON)
 	revisionID, err := qs.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
@@ -349,7 +351,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	activity_queue.AddActivity(&schema.ActivityMsg{
 		UserID:           req.UserID,
 		ObjectID:         question.ID,
-		ActivityTypeKey:  constant.ActQuestionEdit,
+		ActivityTypeKey:  constant.ActQuestionEdited,
 		RevisionID:       revisionID,
 		OriginalObjectID: question.ID,
 	})
@@ -678,7 +680,6 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 			ObjectID:         questionInfo.ID,
 			OriginalObjectID: questionInfo.ID,
 			ActivityTypeKey:  constant.ActQuestionDeleted,
-			RevisionID:       questionInfo.RevisionID,
 		})
 	}
 	if setStatus == entity.QuestionStatusClosed && questionInfo.Status != entity.QuestionStatusClosed {
@@ -687,7 +688,6 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 			ObjectID:         questionInfo.ID,
 			OriginalObjectID: questionInfo.ID,
 			ActivityTypeKey:  constant.ActQuestionClosed,
-			RevisionID:       questionInfo.RevisionID,
 		})
 	}
 	msg := &schema.NotificationMsg{}

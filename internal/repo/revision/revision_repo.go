@@ -91,6 +91,17 @@ func (rr *revisionRepo) GetRevision(ctx context.Context, id string) (
 	return
 }
 
+// GetRevisionByID get object's last revision by object TagID
+func (rr *revisionRepo) GetRevisionByID(ctx context.Context, revisionID string) (
+	revision *entity.Revision, exist bool, err error) {
+	revision = &entity.Revision{}
+	exist, err = rr.data.DB.Where("id = ?", revisionID).Get(revision)
+	if err != nil {
+		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // GetLastRevisionByObjectID get object's last revision by object TagID
 func (rr *revisionRepo) GetLastRevisionByObjectID(ctx context.Context, objectID string) (
 	revision *entity.Revision, exist bool, err error,

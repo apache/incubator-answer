@@ -115,7 +115,7 @@ func (ts *TagService) UpdateTag(ctx context.Context, req *schema.UpdateTagReq) (
 		UserID:           req.UserID,
 		ObjectID:         tag.ID,
 		OriginalObjectID: tag.ID,
-		ActivityTypeKey:  constant.ActTagEdit,
+		ActivityTypeKey:  constant.ActTagEdited,
 		RevisionID:       revisionID,
 	})
 	return

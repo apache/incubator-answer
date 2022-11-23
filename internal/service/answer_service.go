@@ -185,7 +185,6 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 		ObjectID:         insertData.ID,
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionAnswered,
-		RevisionID:       revisionID,
 	})
 	return insertData.ID, nil
 }
@@ -244,7 +243,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		UserID:           insertData.UserID,
 		ObjectID:         insertData.ID,
 		OriginalObjectID: insertData.ID,
-		ActivityTypeKey:  constant.ActAnswerEdit,
+		ActivityTypeKey:  constant.ActAnswerEdited,
 		RevisionID:       revisionID,
 	})
 	return insertData.ID, nil
