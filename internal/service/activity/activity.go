@@ -165,7 +165,7 @@ func (as *ActivityService) getTimelineActivityComment(ctx context.Context, objec
 			log.Error(err)
 		} else {
 			closeMsg := &schema.CloseQuestionMeta{}
-			if err := json.Unmarshal([]byte(metaInfo.Value), closeMsg); err != nil {
+			if err := json.Unmarshal([]byte(metaInfo.Value), closeMsg); err == nil {
 				return closeMsg.CloseMsg
 			}
 		}
@@ -274,7 +274,8 @@ func (as *ActivityService) getOneObjectDetail(ctx context.Context, revisionID st
 
 func formatActivity(activityType string) (isHidden bool, formattedActivityType string) {
 	if activityType == constant.ActVotedUp ||
-		activityType == constant.ActVotedDown {
+		activityType == constant.ActVotedDown ||
+		activityType == constant.ActFollow {
 		return true, ""
 	}
 	if activityType == constant.ActVoteUp {
@@ -282,6 +283,9 @@ func formatActivity(activityType string) (isHidden bool, formattedActivityType s
 	}
 	if activityType == constant.ActVoteDown {
 		return false, constant.ActDownVote
+	}
+	if activityType == constant.ActAccepted {
+		return false, constant.ActAccept
 	}
 	return false, activityType
 }

@@ -11,6 +11,9 @@ const (
 	ActVoteUp    = "vote_up"
 	ActUpVote    = "upvote"
 	ActDownVote  = "downvote"
+	ActFollow    = "follow"
+	ActAccepted  = "accepted"
+	ActAccept    = "accept"
 )
 
 const (
