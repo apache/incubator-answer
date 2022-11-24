@@ -89,7 +89,7 @@ const Index: FC<Props> = ({ objectType, newData, oldData, className = '' }) => {
         dangerouslySetInnerHTML={{
           __html: diffText(newData.original_text, oldData?.original_text),
         }}
-        className="pre-line"
+        className="pre-line text-break font-monospace"
       />
     </div>
   );
