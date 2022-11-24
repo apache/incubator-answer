@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 	"path/filepath"
 
 	"github.com/answerdev/answer/configs"
@@ -95,6 +96,12 @@ func installI18nBundle() {
 		content, err := i18n.I18n.ReadFile(item.Name())
 		if err != nil {
 			continue
+		}
+		if dir.CheckFileExist(path) {
+			fmt.Printf("[i18n] install %s file exist, try to replace it\n", item.Name())
+			if err = os.Remove(path); err != nil {
+				fmt.Println(err)
+			}
 		}
 		fmt.Printf("[i18n] install %s bundle...\n", item.Name())
 		err = writer.WriteFile(path, string(content))
