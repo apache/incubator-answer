@@ -8,7 +8,7 @@ import (
 	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/revision_common"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
-	"github.com/answerdev/answer/internal/service/tag_common"
+	tagcommonser "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/pkg/htmltext"
 
 	"github.com/answerdev/answer/internal/base/pager"
@@ -23,17 +23,10 @@ import (
 	"github.com/segmentfault/pacman/log"
 )
 
-type TagRepo interface {
-	RemoveTag(ctx context.Context, tagID string) (err error)
-	UpdateTag(ctx context.Context, tag *entity.Tag) (err error)
-	UpdateTagSynonym(ctx context.Context, tagSlugNameList []string, mainTagID int64, mainTagSlugName string) (err error)
-	GetTagList(ctx context.Context, tag *entity.Tag) (tagList []*entity.Tag, err error)
-}
-
 // TagService user service
 type TagService struct {
-	tagRepo          TagRepo
-	tagCommonService *tag_common.TagCommonService
+	tagRepo          tagcommonser.TagRepo
+	tagCommonService *tagcommonser.TagCommonService
 	revisionService  *revision_common.RevisionService
 	followCommon     activity_common.FollowRepo
 	siteInfoService  *siteinfo_common.SiteInfoCommonService
@@ -41,8 +34,8 @@ type TagService struct {
 
 // NewTagService new tag service
 func NewTagService(
-	tagRepo TagRepo,
-	tagCommonService *tag_common.TagCommonService,
+	tagRepo tagcommonser.TagRepo,
+	tagCommonService *tagcommonser.TagCommonService,
 	revisionService *revision_common.RevisionService,
 	followCommon activity_common.FollowRepo,
 	siteInfoService *siteinfo_common.SiteInfoCommonService) *TagService {
@@ -68,66 +61,7 @@ func (ts *TagService) RemoveTag(ctx context.Context, tagID string) (err error) {
 
 // UpdateTag update tag
 func (ts *TagService) UpdateTag(ctx context.Context, req *schema.UpdateTagReq) (err error) {
-	_, existUnreviewed, err := ts.revisionService.ExistUnreviewedByObjectID(ctx, req.TagID)
-	if err != nil {
-		return err
-	}
-	if existUnreviewed {
-		err = errors.BadRequest(reason.AnswerCannotUpdate)
-		return err
-	}
-
-	tag := &entity.Tag{}
-	_ = copier.Copy(tag, req)
-	tag.ID = req.TagID
-	err = ts.tagRepo.UpdateTag(ctx, tag)
-	if err != nil {
-		return err
-	}
-
-	tagInfo, exist, err := ts.tagCommonService.GetTagByID(ctx, req.TagID)
-	if err != nil {
-		return err
-	}
-	if !exist {
-		return errors.BadRequest(reason.TagNotFound)
-	}
-	if tagInfo.MainTagID == 0 && len(req.SlugName) > 0 {
-		log.Debugf("tag %s update slug_name", tagInfo.SlugName)
-		tagList, err := ts.tagRepo.GetTagList(ctx, &entity.Tag{MainTagID: converter.StringToInt64(tagInfo.ID)})
-		if err != nil {
-			return err
-		}
-		updateTagSlugNames := make([]string, 0)
-		for _, tag := range tagList {
-			updateTagSlugNames = append(updateTagSlugNames, tag.SlugName)
-		}
-		err = ts.tagRepo.UpdateTagSynonym(ctx, updateTagSlugNames, converter.StringToInt64(tagInfo.ID), tagInfo.MainTagSlugName)
-		if err != nil {
-			return err
-		}
-	}
-
-	revisionDTO := &schema.AddRevisionDTO{
-		UserID:   req.UserID,
-		ObjectID: tag.ID,
-		Title:    tag.SlugName,
-		Log:      req.EditSummary,
-	}
-	tagInfoJson, _ := json.Marshal(tagInfo)
-	revisionDTO.Content = string(tagInfoJson)
-	revisionID, err := ts.revisionService.AddRevision(ctx, revisionDTO, true)
-	if err != nil {
-		return err
-	}
-	activity_queue.AddActivity(&schema.ActivityMsg{
-		UserID:           req.UserID,
-		ObjectID:         tag.ID,
-		OriginalObjectID: tag.ID,
-		ActivityTypeKey:  constant.ActTagEdited,
-		RevisionID:       revisionID,
-	})
-	return
+	return ts.tagCommonService.UpdateTag(ctx, req)
 }
 
 // GetTagInfo get tag one

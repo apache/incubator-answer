@@ -15,12 +15,14 @@ import (
 	"github.com/answerdev/answer/internal/service/object_info"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/revision"
-	"github.com/answerdev/answer/internal/service/tag"
+	"github.com/answerdev/answer/internal/service/tag_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/obj"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 // RevisionService user service
@@ -32,7 +34,7 @@ type RevisionService struct {
 	objectInfoService *object_info.ObjService
 	questionRepo      questioncommon.QuestionRepo
 	answerRepo        answercommon.AnswerRepo
-	tagRepo           tag.TagRepo
+	tagRepo           tag_common.TagRepo
 	tagCommon         *tagcommon.TagCommonService
 }
 
@@ -44,7 +46,7 @@ func NewRevisionService(
 	objectInfoService *object_info.ObjService,
 	questionRepo questioncommon.QuestionRepo,
 	answerRepo answercommon.AnswerRepo,
-	tagRepo tag.TagRepo,
+	tagRepo tag_common.TagRepo,
 	tagCommon *tagcommon.TagCommonService,
 
 ) *RevisionService {
@@ -168,14 +170,48 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 			if ok {
 				tag := &entity.Tag{}
 				tag.ID = taginfo.TagID
+				tag.DisplayName = taginfo.DisplayName
+				tag.SlugName = taginfo.SlugName
 				tag.OriginalText = taginfo.OriginalText
 				tag.ParsedText = taginfo.ParsedText
 				saveerr := rs.tagRepo.UpdateTag(ctx, tag)
 				if saveerr != nil {
 					return saveerr
 				}
+
+				tagInfo, exist, err := rs.tagCommon.GetTagByID(ctx, taginfo.TagID)
+				if err != nil {
+					return err
+				}
+				if !exist {
+					return errors.BadRequest(reason.TagNotFound)
+				}
+				if tagInfo.MainTagID == 0 && len(tagInfo.SlugName) > 0 {
+					log.Debugf("tag %s update slug_name", tagInfo.SlugName)
+					tagList, err := rs.tagRepo.GetTagList(ctx, &entity.Tag{MainTagID: converter.StringToInt64(tagInfo.ID)})
+					if err != nil {
+						return err
+					}
+					updateTagSlugNames := make([]string, 0)
+					for _, tag := range tagList {
+						updateTagSlugNames = append(updateTagSlugNames, tag.SlugName)
+					}
+					err = rs.tagRepo.UpdateTagSynonym(ctx, updateTagSlugNames, converter.StringToInt64(tagInfo.ID), tagInfo.MainTagSlugName)
+					if err != nil {
+						return err
+					}
+				}
+
+				activity_queue.AddActivity(&schema.ActivityMsg{
+					UserID:           revisioninfo.UserID,
+					ObjectID:         taginfo.TagID,
+					OriginalObjectID: taginfo.TagID,
+					ActivityTypeKey:  constant.ActTagEdited,
+					RevisionID:       revisioninfo.ID,
+				})
 			}
 		}
+
 		err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewPassStatus)
 		return
 	}
