@@ -3,7 +3,6 @@ package rank
 import (
 	"context"
 
-	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
@@ -18,29 +17,32 @@ import (
 )
 
 const (
-	QuestionAddRank            = "rank.question.add"
-	QuestionEditRank           = "rank.question.edit"
-	QuestionDeleteRank         = "rank.question.delete"
-	QuestionVoteUpRank         = "rank.question.vote_up"
-	QuestionVoteDownRank       = "rank.question.vote_down"
-	AnswerAddRank              = "rank.answer.add"
-	AnswerEditRank             = "rank.answer.edit"
-	AnswerDeleteRank           = "rank.answer.delete"
-	AnswerAcceptRank           = "rank.answer.accept"
-	AnswerVoteUpRank           = "rank.answer.vote_up"
-	AnswerVoteDownRank         = "rank.answer.vote_down"
-	CommentAddRank             = "rank.comment.add"
-	CommentEditRank            = "rank.comment.edit"
-	CommentDeleteRank          = "rank.comment.delete"
-	ReportAddRank              = "rank.report.add"
-	TagAddRank                 = "rank.tag.add"
-	TagEditRank                = "rank.tag.edit"
-	TagDeleteRank              = "rank.tag.delete"
-	TagSynonymRank             = "rank.tag.synonym"
-	LinkUrlLimitRank           = "rank.link.url_limit"
-	VoteDetailRank             = "rank.vote.detail"
-	RevisionAuditRank          = "rank.revision.audit"
-	UnreviewedRevisionListRank = "rank.revision.unreviewed_list"
+	QuestionAddRank               = "rank.question.add"
+	QuestionEditRank              = "rank.question.edit"
+	QuestionEditWithoutReviewRank = "rank.question.edit_without_review"
+	QuestionDeleteRank            = "rank.question.delete"
+	QuestionVoteUpRank            = "rank.question.vote_up"
+	QuestionVoteDownRank          = "rank.question.vote_down"
+	AnswerAddRank                 = "rank.answer.add"
+	AnswerEditRank                = "rank.answer.edit"
+	AnswerEditWithoutReviewRank   = "rank.answer.edit_without_review"
+	AnswerDeleteRank              = "rank.answer.delete"
+	AnswerAcceptRank              = "rank.answer.accept"
+	AnswerVoteUpRank              = "rank.answer.vote_up"
+	AnswerVoteDownRank            = "rank.answer.vote_down"
+	CommentAddRank                = "rank.comment.add"
+	CommentEditRank               = "rank.comment.edit"
+	CommentDeleteRank             = "rank.comment.delete"
+	ReportAddRank                 = "rank.report.add"
+	TagAddRank                    = "rank.tag.add"
+	TagEditRank                   = "rank.tag.edit"
+	TagEditWithoutReviewRank      = "rank.tag.edit_without_review"
+	TagDeleteRank                 = "rank.tag.delete"
+	TagSynonymRank                = "rank.tag.synonym"
+	LinkUrlLimitRank              = "rank.link.url_limit"
+	VoteDetailRank                = "rank.vote.detail"
+	RevisionAuditRank             = "rank.revision.audit"
+	UnreviewedRevisionListRank    = "rank.revision.unreviewed_list"
 )
 
 type UserRankRepo interface {
@@ -70,8 +72,8 @@ func NewRankService(
 	}
 }
 
-// CheckRankPermission check whether the user reputation meets the permission
-func (rs *RankService) CheckRankPermission(ctx context.Context, userID string, action string, objectID string) (
+// CheckOperationPermission verify that the user has operation
+func (rs *RankService) CheckOperationPermission(ctx context.Context, userID string, action string, objectID string) (
 	can bool, err error) {
 	if len(userID) == 0 {
 		return false, nil
@@ -93,24 +95,74 @@ func (rs *RankService) CheckRankPermission(ctx context.Context, userID string, a
 	if len(objectID) > 0 {
 		objectInfo, err := rs.objectInfoService.GetInfo(ctx, objectID)
 		if err != nil {
-			return false, err
+			log.Error(err)
 		}
 		// if the user is this object creator, the user can operate this object.
-		// but if this object is tag, only users who have reached the rank level can operate.
-		if objectInfo.ObjectCreatorUserID == userID && objectInfo.ObjectType != constant.TagObjectType {
+		if objectInfo != nil &&
+			objectInfo.ObjectCreatorUserID == userID {
 			return true, nil
 		}
 	}
 
+	return rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, action)
+}
+
+// CheckOperationPermissions verify that the user has operation
+func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID string, actions []string, objectID string) (
+	can []bool, err error) {
+	can = make([]bool, len(actions))
+	if len(userID) == 0 {
+		return can, nil
+	}
+
+	// get the rank of the current user
+	userInfo, exist, err := rs.userCommon.GetUserBasicInfoByID(ctx, userID)
+	if err != nil {
+		return can, err
+	}
+	if !exist {
+		return can, nil
+	}
+
+	objectOwner := false
+	if len(objectID) > 0 {
+		objectInfo, err := rs.objectInfoService.GetInfo(ctx, objectID)
+		if err != nil {
+			log.Error(err)
+		}
+		// if the user is this object creator, the user can operate this object.
+		if objectInfo != nil &&
+			objectInfo.ObjectCreatorUserID == userID {
+			objectOwner = true
+		}
+	}
+
+	for idx, action := range actions {
+		if userInfo.IsAdmin || objectOwner {
+			can[idx] = true
+			continue
+		}
+		meetRank, err := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, action)
+		if err != nil {
+			log.Error(err)
+		}
+		can[idx] = meetRank
+	}
+	return can, nil
+}
+
+// CheckRankPermission verify that the user meets the prestige criteria
+func (rs *RankService) checkUserRank(ctx context.Context, userID string, userRank int, action string) (
+	can bool, err error) {
 	// get the amount of rank required for the current operation
 	requireRank, err := rs.configRepo.GetInt(action)
 	if err != nil {
 		return false, err
 	}
-	currentUserRank := userInfo.Rank
+	currentUserRank := userRank
 	if currentUserRank < requireRank {
 		log.Debugf("user %s want to do action %s, but rank %d < %d",
-			userInfo.DisplayName, action, currentUserRank, requireRank)
+			userID, action, currentUserRank, requireRank)
 		return false, nil
 	}
 	return true, nil

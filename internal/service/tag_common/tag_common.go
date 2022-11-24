@@ -627,9 +627,7 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, req *schema.UpdateTag
 		Log:      req.EditSummary,
 	}
 
-	if !req.IsAdmin {
-		revisionDTO.Status = entity.RevisionUnreviewedStatus
-	} else {
+	if req.IsAdmin || req.NoNeedReview {
 		canUpdate = true
 		err = ts.tagRepo.UpdateTag(ctx, tagInfo)
 		if err != nil {
@@ -651,6 +649,8 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, req *schema.UpdateTag
 			}
 		}
 		revisionDTO.Status = entity.RevisionReviewPassStatus
+	} else {
+		revisionDTO.Status = entity.RevisionUnreviewedStatus
 	}
 
 	tagInfoJson, _ := json.Marshal(tagInfo)

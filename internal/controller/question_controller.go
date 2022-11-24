@@ -43,12 +43,17 @@ func (qc *QuestionController) RemoveQuestion(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	if can, err := qc.rankService.CheckRankPermission(ctx, req.UserID, rank.QuestionDeleteRank, req.ID); err != nil || !can {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, rank.QuestionDeleteRank, req.ID)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
-	err := qc.questionService.RemoveQuestion(ctx, req)
+	err = qc.questionService.RemoveQuestion(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -190,8 +195,13 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	if can, err := qc.rankService.CheckRankPermission(ctx, req.UserID, rank.QuestionAddRank, ""); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, rank.QuestionAddRank, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
@@ -216,10 +226,19 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	if can, err := qc.rankService.CheckRankPermission(ctx, req.UserID, rank.QuestionEditRank, req.ID); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		rank.QuestionEditRank,
+		rank.QuestionEditWithoutReviewRank,
+	}, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
 		return
 	}
+	if !canList[0] {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+	req.NoNeedReview = canList[1]
 
 	resp, err := qc.questionService.UpdateQuestion(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
@@ -242,8 +261,13 @@ func (qc *QuestionController) CheckCanUpdateQuestion(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	if can, err := qc.rankService.CheckRankPermission(ctx, req.UserID, rank.QuestionEditRank, req.ID); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, rank.QuestionEditRank, req.ID)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 

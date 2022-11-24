@@ -195,6 +195,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 }
 
 func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq) (string, error) {
+	//req.NoNeedReview //true 不需要审核
 	var canUpdate bool
 	_, existUnreviewed, err := as.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
 	if err != nil {
@@ -237,10 +238,13 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		Log:      req.EditSummary,
 	}
 
-	if answerInfo.UserID != req.UserID && !req.IsAdmin {
+	if req.NoNeedReview || req.IsAdmin || answerInfo.UserID == req.UserID {
+		canUpdate = true
+	}
+
+	if !canUpdate {
 		revisionDTO.Status = entity.RevisionUnreviewedStatus
 	} else {
-		canUpdate = true
 		if err = as.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"}); err != nil {
 			return "", err
 		}

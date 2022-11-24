@@ -51,12 +51,17 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	if can, err := ac.rankService.CheckRankPermission(ctx, req.UserID, rank.AnswerDeleteRank, req.ID); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, rank.AnswerDeleteRank, req.ID)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
-	err := ac.answerService.RemoveAnswer(ctx, req)
+	err = ac.answerService.RemoveAnswer(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -105,8 +110,13 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	if can, err := ac.rankService.CheckRankPermission(ctx, req.UserID, rank.AnswerAddRank, ""); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, rank.AnswerAddRank, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
@@ -149,12 +159,21 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 
-	if can, err := ac.rankService.CheckRankPermission(ctx, req.UserID, rank.AnswerEditRank, req.ID); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		rank.AnswerEditRank,
+		rank.AnswerEditWithoutReviewRank,
+	}, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
 		return
 	}
+	if !canList[0] {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+	req.NoNeedReview = canList[1]
 
-	_, err := ac.answerService.Update(ctx, req)
+	_, err = ac.answerService.Update(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -220,12 +239,17 @@ func (ac *AnswerController) Adopted(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := ac.rankService.CheckRankPermission(ctx, req.UserID, rank.AnswerAcceptRank, req.QuestionID); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, rank.AnswerAcceptRank, req.QuestionID)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
-	err := ac.answerService.UpdateAdopted(ctx, req)
+	err = ac.answerService.UpdateAdopted(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
