@@ -90,6 +90,8 @@ backend:
         other: "Please enter at least one required tag."
       not_contain_synonym_tags:
         other: "Should not contain synonym tags."
+      cannot_update:
+        other: "No permission to update."
     theme:
       not_found:
         other: "Theme not found."

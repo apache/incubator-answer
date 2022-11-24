@@ -41,7 +41,7 @@ func (cc *CommentController) AddComment(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := cc.rankService.CheckRankPermission(ctx, req.UserID, rank.CommentAddRank); err != nil || !can {
+	if can, err := cc.rankService.CheckRankPermission(ctx, req.UserID, rank.CommentAddRank, ""); err != nil || !can {
 		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return
 	}
@@ -67,7 +67,7 @@ func (cc *CommentController) RemoveComment(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := cc.rankService.CheckRankPermission(ctx, req.UserID, rank.CommentDeleteRank); err != nil || !can {
+	if can, err := cc.rankService.CheckRankPermission(ctx, req.UserID, rank.CommentDeleteRank, req.CommentID); err != nil || !can {
 		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return
 	}
@@ -93,7 +93,7 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := cc.rankService.CheckRankPermission(ctx, req.UserID, rank.CommentEditRank); err != nil || !can {
+	if can, err := cc.rankService.CheckRankPermission(ctx, req.UserID, rank.CommentEditRank, req.UserID); err != nil || !can {
 		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return
 	}

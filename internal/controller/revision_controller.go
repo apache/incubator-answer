@@ -70,7 +70,7 @@ func (rc *RevisionController) GetUnreviewedRevisionList(ctx *gin.Context) {
 	userinfo := middleware.GetUserInfoFromContext(ctx)
 	if !userinfo.IsAdmin {
 		userID := middleware.GetLoginUserIDFromContext(ctx)
-		if can, err := rc.rankService.CheckRankPermission(ctx, userID, rank.UnreviewedRevisionListRank); err != nil || !can {
+		if can, err := rc.rankService.CheckRankPermission(ctx, userID, rank.UnreviewedRevisionListRank, ""); err != nil || !can {
 			handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 			return
 		}
@@ -100,7 +100,7 @@ func (rc *RevisionController) RevisionAudit(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	userinfo := middleware.GetUserInfoFromContext(ctx)
 	if !userinfo.IsAdmin {
-		if can, err := rc.rankService.CheckRankPermission(ctx, req.UserID, rank.RevisionAuditRank); err != nil || !can {
+		if can, err := rc.rankService.CheckRankPermission(ctx, req.UserID, rank.RevisionAuditRank, ""); err != nil || !can {
 			handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 			return
 		}

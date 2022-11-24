@@ -112,9 +112,9 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 	}
 
 	if objInfo.ObjectType == constant.QuestionObjectType {
-		cs.notificationQuestionComment(ctx, objInfo.ObjectCreator, comment.ID, req.UserID)
+		cs.notificationQuestionComment(ctx, objInfo.ObjectCreatorUserID, comment.ID, req.UserID)
 	} else if objInfo.ObjectType == constant.AnswerObjectType {
-		cs.notificationAnswerComment(ctx, objInfo.ObjectCreator, comment.ID, req.UserID)
+		cs.notificationAnswerComment(ctx, objInfo.ObjectCreatorUserID, comment.ID, req.UserID)
 	}
 	if len(req.MentionUsernameList) > 0 {
 		cs.notificationMention(ctx, req.MentionUsernameList, comment.ID, req.UserID)

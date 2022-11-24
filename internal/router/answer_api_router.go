@@ -147,6 +147,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	//revisions
 	r.GET("/revisions/unreviewed", a.revisionController.GetUnreviewedRevisionList)
 	r.PUT("/revisions/audit", a.revisionController.RevisionAudit)
+	r.GET("/revisions/edit/check", a.questionController.CheckCanUpdateQuestion)
 
 	// comment
 	r.POST("/comment", a.commentController.AddComment)
@@ -177,7 +178,6 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	// question
 	r.POST("/question", a.questionController.AddQuestion)
 	r.PUT("/question", a.questionController.UpdateQuestion)
-	r.GET("/question/edit/check", a.questionController.CheckCanUpdateQuestion)
 	r.DELETE("/question", a.questionController.RemoveQuestion)
 	r.PUT("/question/status", a.questionController.CloseQuestion)
 	r.GET("/question/similar", a.questionController.SearchByTitleLike)

@@ -262,14 +262,6 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	return nil
 }
 
-func (qs *QuestionService) CheckCanUpdateQuestion(ctx context.Context, req *schema.CheckCanQuestionUpdate) (exist bool, err error) {
-	_, existUnreviewed, err := qs.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
-	if err != nil {
-		return false, err
-	}
-	return existUnreviewed, nil
-}
-
 // UpdateQuestion update question
 func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.QuestionUpdate) (questionInfo any, err error) {
 	var canUpdateQuestion bool
@@ -842,4 +834,13 @@ func (qs *QuestionService) changeQuestionToRevision(ctx context.Context, questio
 		questionRevision.Tags = append(questionRevision.Tags, item)
 	}
 	return questionRevision, nil
+}
+
+// CheckCanUpdate can check question answer
+func (qs *QuestionService) CheckCanUpdate(ctx context.Context, req *schema.CheckCanQuestionUpdate) (exist bool, err error) {
+	_, existUnreviewed, err := qs.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
+	if err != nil {
+		return false, err
+	}
+	return existUnreviewed, nil
 }

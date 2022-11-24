@@ -3,6 +3,7 @@ package rank
 import (
 	"context"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
@@ -70,7 +71,8 @@ func NewRankService(
 }
 
 // CheckRankPermission check whether the user reputation meets the permission
-func (rs *RankService) CheckRankPermission(ctx context.Context, userID string, action string) (can bool, err error) {
+func (rs *RankService) CheckRankPermission(ctx context.Context, userID string, action string, objectID string) (
+	can bool, err error) {
 	if len(userID) == 0 {
 		return false, nil
 	}
@@ -83,14 +85,29 @@ func (rs *RankService) CheckRankPermission(ctx context.Context, userID string, a
 	if !exist {
 		return false, nil
 	}
-	currentUserRank := userInfo.Rank
+	// administrator have all permissions
+	if userInfo.IsAdmin {
+		return true, nil
+	}
+
+	if len(objectID) > 0 {
+		objectInfo, err := rs.objectInfoService.GetInfo(ctx, objectID)
+		if err != nil {
+			return false, err
+		}
+		// if the user is this object creator, the user can operate this object.
+		// but if this object is tag, only users who have reached the rank level can operate.
+		if objectInfo.ObjectCreatorUserID == userID && objectInfo.ObjectType != constant.TagObjectType {
+			return true, nil
+		}
+	}
 
 	// get the amount of rank required for the current operation
 	requireRank, err := rs.configRepo.GetInt(action)
 	if err != nil {
 		return false, err
 	}
-
+	currentUserRank := userInfo.Rank
 	if currentUserRank < requireRank {
 		log.Debugf("user %s want to do action %s, but rank %d < %d",
 			userInfo.DisplayName, action, currentUserRank, requireRank)
