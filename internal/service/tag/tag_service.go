@@ -68,6 +68,15 @@ func (ts *TagService) RemoveTag(ctx context.Context, tagID string) (err error) {
 
 // UpdateTag update tag
 func (ts *TagService) UpdateTag(ctx context.Context, req *schema.UpdateTagReq) (err error) {
+	_, existUnreviewed, err := ts.revisionService.ExistUnreviewedByObjectID(ctx, req.TagID)
+	if err != nil {
+		return err
+	}
+	if existUnreviewed {
+		err = errors.BadRequest(reason.AnswerCannotUpdate)
+		return err
+	}
+
 	tag := &entity.Tag{}
 	_ = copier.Copy(tag, req)
 	tag.ID = req.TagID

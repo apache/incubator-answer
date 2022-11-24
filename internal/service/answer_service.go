@@ -190,6 +190,16 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 }
 
 func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq) (string, error) {
+	var canUpdate bool
+	_, existUnreviewed, err := as.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
+	if err != nil {
+		return "", err
+	}
+	if existUnreviewed {
+		err = errors.BadRequest(reason.AnswerCannotUpdate)
+		return "", err
+	}
+
 	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, req.QuestionID)
 	if err != nil {
 		return "", err
@@ -197,17 +207,13 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	if !exist {
 		return "", errors.BadRequest(reason.QuestionNotFound)
 	}
-	if !req.IsAdmin {
-		answerInfo, exist, err := as.answerRepo.GetByID(ctx, req.ID)
-		if err != nil {
-			return "", err
-		}
-		if !exist {
-			return "", nil
-		}
-		if answerInfo.UserID != req.UserID {
-			return "", errors.BadRequest(reason.AnswerCannotUpdate)
-		}
+
+	answerInfo, exist, err := as.answerRepo.GetByID(ctx, req.ID)
+	if err != nil {
+		return "", err
+	}
+	if !exist {
+		return "", nil
 	}
 
 	now := time.Now()
@@ -218,34 +224,45 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	insertData.OriginalText = req.Content
 	insertData.ParsedText = req.HTML
 	insertData.UpdatedAt = now
-	if err = as.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"}); err != nil {
-		return "", err
-	}
-	err = as.questionCommon.UpdataPostTime(ctx, req.QuestionID)
-	if err != nil {
-		return insertData.ID, err
-	}
+
 	revisionDTO := &schema.AddRevisionDTO{
 		UserID:   req.UserID,
 		ObjectID: req.ID,
 		Title:    "",
 		Log:      req.EditSummary,
 	}
+
+	if answerInfo.UserID != req.UserID && !req.IsAdmin {
+		revisionDTO.Status = entity.RevisionUnreviewedStatus
+	} else {
+		canUpdate = true
+		if err = as.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"}); err != nil {
+			return "", err
+		}
+		err = as.questionCommon.UpdataPostTime(ctx, req.QuestionID)
+		if err != nil {
+			return insertData.ID, err
+		}
+		as.notificationUpdateAnswer(ctx, questionInfo.UserID, insertData.ID, req.UserID)
+		revisionDTO.Status = entity.RevisionReviewPassStatus
+	}
+
 	infoJSON, _ := json.Marshal(insertData)
 	revisionDTO.Content = string(infoJSON)
 	revisionID, err := as.revisionService.AddRevision(ctx, revisionDTO, true)
 	if err != nil {
 		return insertData.ID, err
 	}
-	as.notificationUpdateAnswer(ctx, questionInfo.UserID, insertData.ID, req.UserID)
+	if canUpdate {
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           insertData.UserID,
+			ObjectID:         insertData.ID,
+			OriginalObjectID: insertData.ID,
+			ActivityTypeKey:  constant.ActAnswerEdited,
+			RevisionID:       revisionID,
+		})
+	}
 
-	activity_queue.AddActivity(&schema.ActivityMsg{
-		UserID:           insertData.UserID,
-		ObjectID:         insertData.ID,
-		OriginalObjectID: insertData.ID,
-		ActivityTypeKey:  constant.ActAnswerEdited,
-		RevisionID:       revisionID,
-	})
 	return insertData.ID, nil
 }
 

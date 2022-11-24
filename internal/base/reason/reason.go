@@ -41,6 +41,7 @@ const (
 	ObjectNotFound                   = "error.object.not_found"
 	TagNotFound                      = "error.tag.not_found"
 	TagNotContainSynonym             = "error.tag.not_contain_synonym_tags"
+	TagCannotUpdate                  = "error.tag.cannot_update"
 	RankFailToMeetTheCondition       = "error.rank.fail_to_meet_the_condition"
 	ThemeNotFound                    = "error.theme.not_found"
 	LangNotFound                     = "error.lang.not_found"

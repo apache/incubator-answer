@@ -6,10 +6,12 @@ import (
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity_queue"
 	answercommon "github.com/answerdev/answer/internal/service/answer_common"
+	"github.com/answerdev/answer/internal/service/notice_queue"
 	"github.com/answerdev/answer/internal/service/object_info"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/revision"
@@ -18,6 +20,7 @@ import (
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/obj"
 	"github.com/jinzhu/copier"
+	"github.com/segmentfault/pacman/errors"
 )
 
 // RevisionService user service
@@ -126,9 +129,38 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 				insertData.OriginalText = answerinfo.Content
 				insertData.ParsedText = answerinfo.HTML
 				insertData.UpdatedAt = now
-				if saveerr := rs.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"}); err != nil {
+				saveerr := rs.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"})
+				if saveerr != nil {
 					return saveerr
 				}
+				saveerr = rs.questionCommon.UpdataPostTime(ctx, answerinfo.QuestionID)
+				if saveerr != nil {
+					return saveerr
+				}
+				questionInfo, exist, err := rs.questionRepo.GetQuestion(ctx, answerinfo.QuestionID)
+				if err != nil {
+					return err
+				}
+				if !exist {
+					return errors.BadRequest(reason.QuestionNotFound)
+				}
+				msg := &schema.NotificationMsg{
+					TriggerUserID:  revisioninfo.UserID,
+					ReceiverUserID: questionInfo.UserID,
+					Type:           schema.NotificationTypeInbox,
+					ObjectID:       answerinfo.ID,
+				}
+				msg.ObjectType = constant.AnswerObjectType
+				msg.NotificationAction = constant.UpdateAnswer
+				notice_queue.AddNotification(msg)
+
+				activity_queue.AddActivity(&schema.ActivityMsg{
+					UserID:           revisioninfo.UserID,
+					ObjectID:         insertData.ID,
+					OriginalObjectID: insertData.ID,
+					ActivityTypeKey:  constant.ActAnswerEdited,
+					RevisionID:       revisioninfo.ID,
+				})
 			}
 
 		case constant.TagObjectType:
