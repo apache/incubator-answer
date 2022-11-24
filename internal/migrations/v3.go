@@ -30,9 +30,17 @@ func addActivityTimeline(x *xorm.Engine) error {
 		{ID: 105, Key: "tag.deleted", Value: `0`},
 		{ID: 106, Key: "tag.undeleted", Value: `0`},
 	}
-	_, err := x.Insert(defaultConfigTable)
-	if err != nil {
-		return err
+	for _, c := range defaultConfigTable {
+		exist, err := x.Get(&entity.Config{ID: c.ID, Key: c.Key})
+		if err != nil {
+			return err
+		}
+		if exist {
+			continue
+		}
+		if _, err := x.Insert(&entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
+			return err
+		}
 	}
 
 	type Revision struct {
