@@ -12,8 +12,11 @@ import {
   saveSynonymsTags,
   deleteTag,
 } from '@/services';
+import { loggedUserInfoStore } from '@/stores';
 
 const TagIntroduction = () => {
+  const userInfo = loggedUserInfoStore((state) => state.user);
+  const isLogged = Boolean(userInfo?.access_token);
   const [isEdit, setEditState] = useState(false);
   const { tagName } = useParams();
   const { data: tagInfo } = useTagInfo({ name: tagName });
@@ -125,6 +128,13 @@ const TagIntroduction = () => {
                   </Button>
                 );
               })}
+              {isLogged && (
+                <Link
+                  to={`/tags/${tagInfo?.tag_id}/timeline`}
+                  className="link-secondary btn-no-border p-0 fs-14 ms-3">
+                  {t('history')}
+                </Link>
+              )}
             </div>
           </Col>
           <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">

@@ -395,6 +395,7 @@ ui:
   tag_info:
     created_at: Created
     edited_at: Edited
+    history: History
     synonyms:
       title: Synonyms
       text: The following tags will be remapped to
@@ -512,6 +513,11 @@ ui:
           label: Answer
           msg:
             empty: Answer cannot be empty.
+        edit_summary:
+          label: Edit Summary
+          placeholder: >-
+            Briefly explain your changes (corrected spelling, fixed grammar,
+            improved formatting)
     btn_post_question: Post your question
     btn_save_edits: Save edits
     answer_question: Answer your own question
@@ -532,6 +538,7 @@ ui:
       setting: Settings
       logout: Log out
       admin: Admin
+      review: Review
     search:
       placeholder: Search
   footer:
@@ -741,6 +748,9 @@ ui:
     logout: Log out
     verify: Verify
     add_question: Add question
+    approve: Approve
+    reject: Reject
+    skip: Skip
   search:
     title: Search Results
     keywords: Keywords
@@ -1189,3 +1199,29 @@ ui:
     invalid: is invalid
     btn_submit: Save
     not_found_props: "Required property {{ key }} not found."
+  page_review:
+    review: Reivew
+    proposed: proposed
+    question_edit: Question edit
+    answer_edit: Answer edit
+    tag_edit: Tag edit
+    edit_summary: Edit summary
+    empty: No review tasks left.
+  timeline:
+    undeleted: undeleted
+    deleted: deleted
+    downvote: downvote
+    upvote: upvote
+    accept: accept
+    cancelled: cancelled
+    commented: commented
+    rollback: rollback
+    edited: edited
+    answered: answered
+    asked: asked
+    closed: closed
+    reopened: reopened
+    created: created
+    title: "History for"
+    show_votes: "Show votes"
+    n_or_a: N/A
