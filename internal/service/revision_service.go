@@ -93,7 +93,7 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 		case constant.AnswerObjectType:
 			saveErr = rs.revisionAuditAnswer(ctx, revisionitem)
 		case constant.TagObjectType:
-			saveErr = rs.revisionAuditAnswer(ctx, revisionitem)
+			saveErr = rs.revisionAuditTag(ctx, revisionitem)
 		}
 		if saveErr != nil {
 			return saveErr
