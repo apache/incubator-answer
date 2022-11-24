@@ -117,7 +117,9 @@ const Index: FC<Props> = ({ data, isAdmin, objectInfo, revisionList }) => {
             />
           )}
         </td>
-        <td>{data.comment}</td>
+        <td>
+          <div dangerouslySetInnerHTML={{ __html: data.comment }} />
+        </td>
       </tr>
       <tr className={isOpen ? '' : 'd-none'}>
         {/* <td /> */}
