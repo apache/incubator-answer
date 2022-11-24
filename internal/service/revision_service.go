@@ -54,6 +54,11 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 		err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewRejectStatus)
 		return
 	}
+	if req.Operation == schema.RevisionAuditApprove {
+		// revisioninfo.Status = entity.RevisionReviewRejectStatus
+		// err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewRejectStatus)
+		return
+	}
 
 	return nil
 }
