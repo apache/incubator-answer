@@ -39,6 +39,9 @@ func (ac *ActivityController) GetObjectTimeline(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	if userInfo := middleware.GetUserInfoFromContext(ctx); userInfo != nil {
+		req.IsAdmin = userInfo.IsAdmin
+	}
 
 	resp, err := ac.activityService.GetObjectTimeline(ctx, req)
 	handler.HandleResponse(ctx, err, resp)

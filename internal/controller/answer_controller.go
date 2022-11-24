@@ -6,7 +6,6 @@ import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
-	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/dashboard"
@@ -243,10 +242,13 @@ func (ac *AnswerController) Adopted(ctx *gin.Context) {
 // @Router /answer/admin/api/answer/status [put]
 // @Success 200 {object} handler.RespBody
 func (ac *AnswerController) AdminSetAnswerStatus(ctx *gin.Context) {
-	req := &entity.AdminSetAnswerStatusRequest{}
+	req := &schema.AdminSetAnswerStatusRequest{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	err := ac.answerService.AdminSetAnswerStatus(ctx, req.AnswerID, req.StatusStr)
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	err := ac.answerService.AdminSetAnswerStatus(ctx, req)
 	handler.HandleResponse(ctx, err, gin.H{})
 }
