@@ -22,14 +22,15 @@ type AnswerAddReq struct {
 }
 
 type AnswerUpdateReq struct {
-	ID          string `json:"id"`                                // id
-	QuestionID  string `json:"question_id" `                      // question_id
-	UserID      string `json:"-" `                                // user_id
-	Title       string `json:"title" `                            // title
-	Content     string `json:"content"`                           // content
-	HTML        string `json:"html" `                             // html
-	EditSummary string `validate:"omitempty" json:"edit_summary"` // edit_summary
-	IsAdmin     bool   `json:"-"`
+	ID           string `json:"id"`                                // id
+	QuestionID   string `json:"question_id" `                      // question_id
+	UserID       string `json:"-" `                                // user_id
+	Title        string `json:"title" `                            // title
+	Content      string `json:"content"`                           // content
+	HTML         string `json:"html" `                             // html
+	EditSummary  string `validate:"omitempty" json:"edit_summary"` // edit_summary
+	IsAdmin      bool   `json:"-"`
+	NoNeedReview bool   `json:"-"`
 }
 
 type AnswerList struct {

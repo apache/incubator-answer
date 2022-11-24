@@ -41,8 +41,13 @@ func (cc *CommentController) AddComment(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := cc.rankService.CheckRankPermission(ctx, req.UserID, rank.CommentAddRank, ""); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := cc.rankService.CheckOperationPermission(ctx, req.UserID, rank.CommentAddRank, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
@@ -67,12 +72,17 @@ func (cc *CommentController) RemoveComment(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := cc.rankService.CheckRankPermission(ctx, req.UserID, rank.CommentDeleteRank, req.CommentID); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := cc.rankService.CheckOperationPermission(ctx, req.UserID, rank.CommentDeleteRank, req.CommentID)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
-	err := cc.commentService.RemoveComment(ctx, req)
+	err = cc.commentService.RemoveComment(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -93,12 +103,17 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := cc.rankService.CheckRankPermission(ctx, req.UserID, rank.CommentEditRank, req.UserID); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := cc.rankService.CheckOperationPermission(ctx, req.UserID, rank.CommentEditRank, req.UserID)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
-	err := cc.commentService.UpdateComment(ctx, req)
+	err = cc.commentService.UpdateComment(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

@@ -56,8 +56,9 @@ type QuestionUpdate struct {
 	// edit summary
 	EditSummary string `validate:"omitempty" json:"edit_summary"`
 	// user id
-	UserID  string `json:"-"`
-	IsAdmin bool   `json:"-"`
+	UserID       string `json:"-"`
+	IsAdmin      bool   `json:"-"`
+	NoNeedReview bool   `json:"-"`
 }
 
 type QuestionBaseInfo struct {

@@ -38,7 +38,8 @@ type RevisionAuditReq struct {
 }
 
 type RevisionSearch struct {
-	Page int `json:"page" form:"page"` // Query number of pages
+	Page   int    `json:"page" form:"page"` // Query number of pages
+	UserID string `json:"-"`
 }
 
 type GetUnreviewedRevisionResp struct {

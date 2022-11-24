@@ -7,7 +7,6 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/rank"
-	"github.com/answerdev/answer/pkg/converter"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -62,18 +61,21 @@ func (rc *RevisionController) GetRevisionList(ctx *gin.Context) {
 // @Success 200 {object} handler.RespBody{data=[]schema.GetRevisionResp}
 // @Router /answer/api/v1/revisions/unreviewed [get]
 func (rc *RevisionController) GetUnreviewedRevisionList(ctx *gin.Context) {
-	pageStr := ctx.Query("page")
-	page := converter.StringToInt(pageStr)
-	req := &schema.RevisionSearch{
-		Page: page,
+	req := &schema.RevisionSearch{}
+	if handler.BindAndCheck(ctx, req) {
+		return
 	}
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	if !userinfo.IsAdmin {
-		userID := middleware.GetLoginUserIDFromContext(ctx)
-		if can, err := rc.rankService.CheckRankPermission(ctx, userID, rank.UnreviewedRevisionListRank, ""); err != nil || !can {
-			handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
-			return
-		}
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	can, err := rc.rankService.CheckOperationPermission(ctx, req.UserID, rank.UnreviewedRevisionListRank, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
 	}
 
 	resp, count, err := rc.revisionListService.GetUnreviewedRevisionList(ctx, req)
@@ -98,14 +100,16 @@ func (rc *RevisionController) RevisionAudit(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	if !userinfo.IsAdmin {
-		if can, err := rc.rankService.CheckRankPermission(ctx, req.UserID, rank.RevisionAuditRank, ""); err != nil || !can {
-			handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
-			return
-		}
+	can, err := rc.rankService.CheckOperationPermission(ctx, req.UserID, rank.RevisionAuditRank, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
 	}
 
-	err := rc.revisionListService.RevisionAudit(ctx, req)
+	err = rc.revisionListService.RevisionAudit(ctx, req)
 	handler.HandleResponse(ctx, err, gin.H{})
 }
