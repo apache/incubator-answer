@@ -42,12 +42,11 @@ func (qc *QuestionController) RemoveQuestion(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 	if can, err := qc.rankService.CheckRankPermission(ctx, req.UserID, rank.QuestionDeleteRank); err != nil || !can {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return
 	}
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	req.IsAdmin = userinfo.IsAdmin
 
 	err := qc.questionService.RemoveQuestion(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
@@ -69,8 +68,7 @@ func (qc *QuestionController) CloseQuestion(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	req.IsAdmin = userinfo.IsAdmin
+	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 	err := qc.questionService.CloseQuestion(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -85,17 +83,16 @@ func (qc *QuestionController) CloseQuestion(ctx *gin.Context) {
 // @Param id query string true "Question TagID"  default(1)
 // @Success 200 {string} string ""
 // @Router /answer/api/v1/question/info [get]
-func (qc *QuestionController) GetQuestion(c *gin.Context) {
-	id := c.Query("id")
-	ctx := context.Background()
-	userID := middleware.GetLoginUserIDFromContext(c)
-	userinfo := middleware.GetUserInfoFromContext(c)
-	info, err := qc.questionService.GetQuestion(ctx, id, userID, true, userinfo.IsAdmin)
+func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
+	id := ctx.Query("id")
+	userID := middleware.GetLoginUserIDFromContext(ctx)
+	isAdmin := middleware.GetIsAdminFromContext(ctx)
+	info, err := qc.questionService.GetQuestion(ctx, id, userID, true, isAdmin)
 	if err != nil {
-		handler.HandleResponse(c, err, nil)
+		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	handler.HandleResponse(c, nil, info)
+	handler.HandleResponse(ctx, nil, info)
 }
 
 // SimilarQuestion godoc
@@ -218,8 +215,7 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	req.IsAdmin = userinfo.IsAdmin
+	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 	if can, err := qc.rankService.CheckRankPermission(ctx, req.UserID, rank.QuestionEditRank); err != nil || !can {
 		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return
@@ -244,8 +240,7 @@ func (qc *QuestionController) CheckCanUpdateQuestion(ctx *gin.Context) {
 	req := &schema.CheckCanQuestionUpdate{}
 	req.ID = id
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	req.IsAdmin = userinfo.IsAdmin
+	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 	if can, err := qc.rankService.CheckRankPermission(ctx, req.UserID, rank.QuestionEditRank); err != nil || !can {
 		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return
