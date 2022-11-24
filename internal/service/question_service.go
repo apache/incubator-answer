@@ -710,13 +710,19 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 		if err != nil {
 			log.Errorf("admin delete question then rank rollback error %s", err.Error())
 		}
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           questionInfo.UserID,
+			ObjectID:         questionInfo.ID,
+			OriginalObjectID: questionInfo.ID,
+			ActivityTypeKey:  constant.ActQuestionDeleted,
+		})
 	}
 	if setStatus == entity.QuestionStatusAvailable && questionInfo.Status == entity.QuestionStatusClosed {
 		activity_queue.AddActivity(&schema.ActivityMsg{
 			UserID:           questionInfo.UserID,
 			ObjectID:         questionInfo.ID,
 			OriginalObjectID: questionInfo.ID,
-			ActivityTypeKey:  constant.ActQuestionDeleted,
+			ActivityTypeKey:  constant.ActQuestionReopened,
 		})
 	}
 	if setStatus == entity.QuestionStatusClosed && questionInfo.Status != entity.QuestionStatusClosed {

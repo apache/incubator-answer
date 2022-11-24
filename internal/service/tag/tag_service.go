@@ -56,13 +56,17 @@ func NewTagService(
 }
 
 // RemoveTag delete tag
-func (ts *TagService) RemoveTag(ctx context.Context, tagID string) (err error) {
-	// TODO permission
-
-	err = ts.tagRepo.RemoveTag(ctx, tagID)
+func (ts *TagService) RemoveTag(ctx context.Context, req *schema.RemoveTagReq) (err error) {
+	err = ts.tagRepo.RemoveTag(ctx, req.TagID)
 	if err != nil {
 		return err
 	}
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           req.UserID,
+		ObjectID:         req.TagID,
+		OriginalObjectID: req.TagID,
+		ActivityTypeKey:  constant.ActTagDeleted,
+	})
 	return nil
 }
 

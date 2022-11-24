@@ -1,8 +1,20 @@
 package constant
 
-// question activity
-
 type ActivityTypeKey string
+
+const (
+	ActEdited    = "edited"
+	ActClosed    = "closed"
+	ActVotedDown = "voted_down"
+	ActVotedUp   = "voted_up"
+	ActVoteDown  = "vote_down"
+	ActVoteUp    = "vote_up"
+	ActUpVote    = "upvote"
+	ActDownVote  = "downvote"
+	ActFollow    = "follow"
+	ActAccepted  = "accepted"
+	ActAccept    = "accept"
+)
 
 const (
 	ActQuestionAsked     ActivityTypeKey = "question.asked"
@@ -12,28 +24,24 @@ const (
 	ActQuestionCommented ActivityTypeKey = "question.commented"
 	ActQuestionAccept    ActivityTypeKey = "question.accept"
 	ActQuestionUpvote    ActivityTypeKey = "question.upvote"
-	ActQuestionDownvote  ActivityTypeKey = "question.downvote"
+	ActQuestionDownVote  ActivityTypeKey = "question.downvote"
 	ActQuestionEdited    ActivityTypeKey = "question.edited"
 	ActQuestionRollback  ActivityTypeKey = "question.rollback"
 	ActQuestionDeleted   ActivityTypeKey = "question.deleted"
 	ActQuestionUndeleted ActivityTypeKey = "question.undeleted"
 )
 
-// answer activity
-
 const (
 	ActAnswerAnswered  ActivityTypeKey = "answer.answered"
 	ActAnswerCommented ActivityTypeKey = "answer.commented"
 	ActAnswerAccept    ActivityTypeKey = "answer.accept"
 	ActAnswerUpvote    ActivityTypeKey = "answer.upvote"
-	ActAnswerDownvote  ActivityTypeKey = "answer.downvote"
+	ActAnswerDownVote  ActivityTypeKey = "answer.downvote"
 	ActAnswerEdited    ActivityTypeKey = "answer.edited"
 	ActAnswerRollback  ActivityTypeKey = "answer.rollback"
 	ActAnswerDeleted   ActivityTypeKey = "answer.deleted"
 	ActAnswerUndeleted ActivityTypeKey = "answer.undeleted"
 )
-
-// tag activity
 
 const (
 	ActTagCreated   ActivityTypeKey = "tag.created"

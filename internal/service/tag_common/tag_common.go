@@ -25,7 +25,7 @@ type TagCommonRepo interface {
 	GetTagBySlugName(ctx context.Context, slugName string) (tagInfo *entity.Tag, exist bool, err error)
 	GetTagListByName(ctx context.Context, name string, limit int, hasReserved bool) (tagList []*entity.Tag, err error)
 	GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error)
-	GetTagByID(ctx context.Context, tagID string) (tag *entity.Tag, exist bool, err error)
+	GetTagByID(ctx context.Context, tagID string, includeDeleted bool) (tag *entity.Tag, exist bool, err error)
 	GetTagPage(ctx context.Context, page, pageSize int, tag *entity.Tag, queryCond string) (tagList []*entity.Tag, total int64, err error)
 	GetRecommendTagList(ctx context.Context) (tagList []*entity.Tag, err error)
 	GetReservedTagList(ctx context.Context) (tagList []*entity.Tag, err error)
@@ -209,7 +209,7 @@ func (ts *TagCommonService) AddTagList(ctx context.Context, tagList []*entity.Ta
 
 // GetTagByID get object tag
 func (ts *TagCommonService) GetTagByID(ctx context.Context, tagID string) (tag *entity.Tag, exist bool, err error) {
-	tag, exist, err = ts.tagCommonRepo.GetTagByID(ctx, tagID)
+	tag, exist, err = ts.tagCommonRepo.GetTagByID(ctx, tagID, false)
 	if !exist {
 		return
 	}

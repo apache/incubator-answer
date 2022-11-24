@@ -124,6 +124,7 @@ export interface UserInfoRes extends UserInfoBase {
    */
   mail_status: number;
   language: string;
+  is_admin: boolean;
   e_mail?: string;
   [prop: string]: any;
 }
@@ -372,4 +373,36 @@ export interface AdminDashboard {
       version: string;
     };
   };
+}
+
+export interface TimelineReq {
+  show_vote: boolean;
+  object_id: string;
+}
+
+export interface TimelineItem {
+  activity_id: number;
+  revision_id: number;
+  created_at: number;
+  activity_type: string;
+  username: string;
+  user_display_name: string;
+  comment: string;
+  object_id: string;
+  object_type: string;
+  cancelled: boolean;
+  cancelled_at: any;
+}
+
+export interface TimelineObject {
+  title: string;
+  object_type: string;
+  question_id: string;
+  answer_id: string;
+  main_tag_slug_name?: string;
+}
+
+export interface TimelineRes {
+  object_info: TimelineObject;
+  timeline: TimelineItem[];
 }

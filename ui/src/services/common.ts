@@ -73,7 +73,7 @@ export const useQueryAnswerInfo = (id: string) => {
 };
 
 export const modifyQuestion = (
-  params: Type.QuestionParams & { id: string },
+  params: Type.QuestionParams & { id: string; edit_summary: string },
 ) => {
   return request.put(`/answer/api/v1/question`, params);
 };

@@ -8,9 +8,15 @@ interface IProps {
   data: Tag;
   href?: string;
   className?: string;
+  textClassName?: string;
 }
 
-const Index: FC<IProps> = ({ className = '', href, data }) => {
+const Index: FC<IProps> = ({
+  data,
+  href,
+  className = '',
+  textClassName = '',
+}) => {
   href ||= `/tags/${encodeURIComponent(
     data.main_tag_slug_name || data.slug_name,
   )}`.toLowerCase();
@@ -24,7 +30,7 @@ const Index: FC<IProps> = ({ className = '', href, data }) => {
         data.recommend && 'badge-tag-required',
         className,
       )}>
-      {data.slug_name}
+      <span className={textClassName}>{data.slug_name}</span>
     </a>
   );
 };

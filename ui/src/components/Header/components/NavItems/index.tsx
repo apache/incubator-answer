@@ -56,6 +56,12 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
           {userInfo?.is_admin ? (
             <Dropdown.Item href="/admin">{t('header.nav.admin')}</Dropdown.Item>
           ) : null}
+          {/* TODO: use review permission */}
+          {userInfo?.is_admin ? (
+            <Dropdown.Item href="/review">
+              {t('header.nav.review')}
+            </Dropdown.Item>
+          ) : null}
           <Dropdown.Divider />
           <Dropdown.Item onClick={logOut}>
             {t('header.nav.logout')}
