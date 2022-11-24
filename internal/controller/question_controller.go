@@ -228,7 +228,7 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 // CheckCanUpdateQuestion check can update question
 // @Summary check can update question
 // @Description check can update question
-// @Tags api-question
+// @Tags Revision
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
