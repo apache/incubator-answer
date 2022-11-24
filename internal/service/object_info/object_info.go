@@ -113,7 +113,7 @@ func (os *ObjService) GetInfo(ctx context.Context, objectID string) (objInfo *sc
 			}
 		}
 	case constant.TagObjectType:
-		tagInfo, exist, err := os.tagRepo.GetTagByID(ctx, objectID)
+		tagInfo, exist, err := os.tagRepo.GetTagByID(ctx, objectID, true)
 		if err != nil {
 			return nil, err
 		}
