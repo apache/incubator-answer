@@ -36,7 +36,7 @@ type QuestionAdd struct {
 
 type CheckCanQuestionUpdate struct {
 	// question id
-	ID string `validate:"required" json:"id"`
+	ID string `validate:"required" form:"id"`
 	// user id
 	UserID  string `json:"-"`
 	IsAdmin bool   `json:"-"`
