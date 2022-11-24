@@ -1069,6 +1069,18 @@ definitions:
     - flagged_type
     - id
     type: object
+  schema.RevisionAuditReq:
+    properties:
+      id:
+        description: object id
+        type: string
+      operation:
+        description: approve or reject
+        type: string
+    required:
+    - id
+    - operation
+    type: object
   schema.SearchListResp:
     properties:
       count:
@@ -3494,6 +3506,28 @@ paths:
       summary: get revision list
       tags:
       - Revision
+  /answer/api/v1/revisions/audit:
+    put:
+      description: revision audit operation:approve or reject
+      parameters:
+      - description: audit
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.RevisionAuditReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: revision audit
+      tags:
+      - Revision
   /answer/api/v1/revisions/unreviewed:
     get:
       description: get unreviewed revision list
@@ -3517,6 +3551,8 @@ paths:
                     $ref: '#/definitions/schema.GetRevisionResp'
                   type: array
               type: object
+      security:
+      - ApiKeyAuth: []
       summary: get unreviewed revision list
       tags:
       - Revision

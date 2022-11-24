@@ -164,7 +164,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	searchService := service.NewSearchService(searchParser, searchRepo)
 	searchController := controller.NewSearchController(searchService)
 	serviceRevisionService := service.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService, objService)
-	revisionController := controller.NewRevisionController(serviceRevisionService)
+	revisionController := controller.NewRevisionController(serviceRevisionService, rankService)
 	rankController := controller.NewRankController(rankService)
 	commonRepo := common.NewCommonRepo(dataData, uniqueIDRepo)
 	reportHandle := report_handle_backyard.NewReportHandle(questionCommon, commentRepo, configRepo)

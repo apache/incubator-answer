@@ -26,6 +26,17 @@ type GetRevisionListReq struct {
 	ObjectID string `validate:"required" comment:"object_id" form:"object_id"`
 }
 
+const RevisionAuditApprove = "approve"
+const RevisionAuditReject = "reject"
+
+type RevisionAuditReq struct {
+	// object id
+	ID        string `validate:"required" comment:"id" form:"id"`
+	Operation string `validate:"required" comment:"operation" form:"operation"` //approve or reject
+	UserID    string `json:"-" `                                                // user_id
+	// IsAdmin   bool   `json:"-"`
+}
+
 type RevisionSearch struct {
 	Page int `json:"page" form:"page"` // Query number of pages
 }

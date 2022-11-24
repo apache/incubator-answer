@@ -3057,8 +3057,49 @@
                 }
             }
         },
+        "/answer/api/v1/revisions/audit": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "revision audit operation:approve or reject",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Revision"
+                ],
+                "summary": "revision audit",
+                "parameters": [
+                    {
+                        "description": "audit",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.RevisionAuditReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/revisions/unreviewed": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "get unreviewed revision list",
                 "produces": [
                     "application/json"
@@ -5997,6 +6038,23 @@
                     "type": "integer"
                 },
                 "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.RevisionAuditReq": {
+            "type": "object",
+            "required": [
+                "id",
+                "operation"
+            ],
+            "properties": {
+                "id": {
+                    "description": "object id",
+                    "type": "string"
+                },
+                "operation": {
+                    "description": "approve or reject",
                     "type": "string"
                 }
             }
