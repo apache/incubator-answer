@@ -62,6 +62,7 @@ func NewRevisionService(
 		tagCommon:         tagCommon,
 	}
 }
+
 func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.RevisionAuditReq) (err error) {
 	revisioninfo, exist, err := rs.revisionRepo.GetRevisionByID(ctx, req.ID)
 	if err != nil {
@@ -85,137 +86,153 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 		revisionitem := &schema.GetRevisionResp{}
 		_ = copier.Copy(revisionitem, revisioninfo)
 		rs.parseItem(ctx, revisionitem)
+		var saveErr error
 		switch objectType {
 		case constant.QuestionObjectType:
-			questioninfo, ok := revisionitem.ContentParsed.(*schema.QuestionInfo)
-			if ok {
-				now := time.Now()
-				question := &entity.Question{}
-				question.ID = questioninfo.ID
-				question.Title = questioninfo.Title
-				question.OriginalText = questioninfo.Content
-				question.ParsedText = questioninfo.HTML
-				question.UpdatedAt = now
-				saveerr := rs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at"})
-				if saveerr != nil {
-					return saveerr
-				}
-				objectTagTags := make([]*schema.TagItem, 0)
-				for _, tag := range questioninfo.Tags {
-					item := &schema.TagItem{}
-					item.SlugName = tag.SlugName
-					objectTagTags = append(objectTagTags, item)
-				}
-				objectTagData := schema.TagChange{}
-				objectTagData.ObjectID = question.ID
-				objectTagData.Tags = objectTagTags
-				saveerr = rs.tagCommon.ObjectChangeTag(ctx, &objectTagData)
-				if saveerr != nil {
-					return saveerr
-				}
-				activity_queue.AddActivity(&schema.ActivityMsg{
-					UserID:           revisioninfo.UserID,
-					ObjectID:         revisioninfo.ObjectID,
-					ActivityTypeKey:  constant.ActQuestionEdited,
-					RevisionID:       revisioninfo.ID,
-					OriginalObjectID: revisioninfo.ObjectID,
-				})
-			}
-			//
+			saveErr = rs.revisionAuditQuestion(ctx, revisionitem)
 		case constant.AnswerObjectType:
-			answerinfo, ok := revisionitem.ContentParsed.(*schema.AnswerInfo)
-			if ok {
-				now := time.Now()
-				insertData := new(entity.Answer)
-				insertData.ID = answerinfo.ID
-				insertData.OriginalText = answerinfo.Content
-				insertData.ParsedText = answerinfo.HTML
-				insertData.UpdatedAt = now
-				saveerr := rs.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"})
-				if saveerr != nil {
-					return saveerr
-				}
-				saveerr = rs.questionCommon.UpdataPostTime(ctx, answerinfo.QuestionID)
-				if saveerr != nil {
-					return saveerr
-				}
-				questionInfo, exist, err := rs.questionRepo.GetQuestion(ctx, answerinfo.QuestionID)
-				if err != nil {
-					return err
-				}
-				if !exist {
-					return errors.BadRequest(reason.QuestionNotFound)
-				}
-				msg := &schema.NotificationMsg{
-					TriggerUserID:  revisioninfo.UserID,
-					ReceiverUserID: questionInfo.UserID,
-					Type:           schema.NotificationTypeInbox,
-					ObjectID:       answerinfo.ID,
-				}
-				msg.ObjectType = constant.AnswerObjectType
-				msg.NotificationAction = constant.UpdateAnswer
-				notice_queue.AddNotification(msg)
-
-				activity_queue.AddActivity(&schema.ActivityMsg{
-					UserID:           revisioninfo.UserID,
-					ObjectID:         insertData.ID,
-					OriginalObjectID: insertData.ID,
-					ActivityTypeKey:  constant.ActAnswerEdited,
-					RevisionID:       revisioninfo.ID,
-				})
-			}
-
+			saveErr = rs.revisionAuditAnswer(ctx, revisionitem)
 		case constant.TagObjectType:
-			taginfo, ok := revisionitem.ContentParsed.(*schema.GetTagResp)
-			if ok {
-				tag := &entity.Tag{}
-				tag.ID = taginfo.TagID
-				tag.DisplayName = taginfo.DisplayName
-				tag.SlugName = taginfo.SlugName
-				tag.OriginalText = taginfo.OriginalText
-				tag.ParsedText = taginfo.ParsedText
-				saveerr := rs.tagRepo.UpdateTag(ctx, tag)
-				if saveerr != nil {
-					return saveerr
-				}
-
-				tagInfo, exist, err := rs.tagCommon.GetTagByID(ctx, taginfo.TagID)
-				if err != nil {
-					return err
-				}
-				if !exist {
-					return errors.BadRequest(reason.TagNotFound)
-				}
-				if tagInfo.MainTagID == 0 && len(tagInfo.SlugName) > 0 {
-					log.Debugf("tag %s update slug_name", tagInfo.SlugName)
-					tagList, err := rs.tagRepo.GetTagList(ctx, &entity.Tag{MainTagID: converter.StringToInt64(tagInfo.ID)})
-					if err != nil {
-						return err
-					}
-					updateTagSlugNames := make([]string, 0)
-					for _, tag := range tagList {
-						updateTagSlugNames = append(updateTagSlugNames, tag.SlugName)
-					}
-					err = rs.tagRepo.UpdateTagSynonym(ctx, updateTagSlugNames, converter.StringToInt64(tagInfo.ID), tagInfo.MainTagSlugName)
-					if err != nil {
-						return err
-					}
-				}
-
-				activity_queue.AddActivity(&schema.ActivityMsg{
-					UserID:           revisioninfo.UserID,
-					ObjectID:         taginfo.TagID,
-					OriginalObjectID: taginfo.TagID,
-					ActivityTypeKey:  constant.ActTagEdited,
-					RevisionID:       revisioninfo.ID,
-				})
-			}
+			saveErr = rs.revisionAuditTag(ctx, revisionitem)
 		}
-
+		if saveErr != nil {
+			return saveErr
+		}
 		err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewPassStatus)
 		return
 	}
 
+	return nil
+}
+
+func (rs *RevisionService) revisionAuditQuestion(ctx context.Context, revisionitem *schema.GetRevisionResp) (err error) {
+	questioninfo, ok := revisionitem.ContentParsed.(*schema.QuestionInfo)
+	if ok {
+		now := time.Now()
+		question := &entity.Question{}
+		question.ID = questioninfo.ID
+		question.Title = questioninfo.Title
+		question.OriginalText = questioninfo.Content
+		question.ParsedText = questioninfo.HTML
+		question.UpdatedAt = now
+		saveerr := rs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at"})
+		if saveerr != nil {
+			return saveerr
+		}
+		objectTagTags := make([]*schema.TagItem, 0)
+		for _, tag := range questioninfo.Tags {
+			item := &schema.TagItem{}
+			item.SlugName = tag.SlugName
+			objectTagTags = append(objectTagTags, item)
+		}
+		objectTagData := schema.TagChange{}
+		objectTagData.ObjectID = question.ID
+		objectTagData.Tags = objectTagTags
+		saveerr = rs.tagCommon.ObjectChangeTag(ctx, &objectTagData)
+		if saveerr != nil {
+			return saveerr
+		}
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           revisionitem.UserID,
+			ObjectID:         revisionitem.ObjectID,
+			ActivityTypeKey:  constant.ActQuestionEdited,
+			RevisionID:       revisionitem.ID,
+			OriginalObjectID: revisionitem.ObjectID,
+		})
+	}
+	return nil
+}
+
+func (rs *RevisionService) revisionAuditAnswer(ctx context.Context, revisionitem *schema.GetRevisionResp) (err error) {
+	answerinfo, ok := revisionitem.ContentParsed.(*schema.AnswerInfo)
+	if ok {
+		now := time.Now()
+		insertData := new(entity.Answer)
+		insertData.ID = answerinfo.ID
+		insertData.OriginalText = answerinfo.Content
+		insertData.ParsedText = answerinfo.HTML
+		insertData.UpdatedAt = now
+		saveerr := rs.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"})
+		if saveerr != nil {
+			return saveerr
+		}
+		saveerr = rs.questionCommon.UpdataPostTime(ctx, answerinfo.QuestionID)
+		if saveerr != nil {
+			return saveerr
+		}
+		questionInfo, exist, err := rs.questionRepo.GetQuestion(ctx, answerinfo.QuestionID)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return errors.BadRequest(reason.QuestionNotFound)
+		}
+		msg := &schema.NotificationMsg{
+			TriggerUserID:  revisionitem.UserID,
+			ReceiverUserID: questionInfo.UserID,
+			Type:           schema.NotificationTypeInbox,
+			ObjectID:       answerinfo.ID,
+		}
+		msg.ObjectType = constant.AnswerObjectType
+		msg.NotificationAction = constant.UpdateAnswer
+		notice_queue.AddNotification(msg)
+
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           revisionitem.UserID,
+			ObjectID:         insertData.ID,
+			OriginalObjectID: insertData.ID,
+			ActivityTypeKey:  constant.ActAnswerEdited,
+			RevisionID:       revisionitem.ID,
+		})
+	}
+	return nil
+}
+
+func (rs *RevisionService) revisionAuditTag(ctx context.Context, revisionitem *schema.GetRevisionResp) (err error) {
+	taginfo, ok := revisionitem.ContentParsed.(*schema.GetTagResp)
+	if ok {
+		tag := &entity.Tag{}
+		tag.ID = taginfo.TagID
+		tag.DisplayName = taginfo.DisplayName
+		tag.SlugName = taginfo.SlugName
+		tag.OriginalText = taginfo.OriginalText
+		tag.ParsedText = taginfo.ParsedText
+		saveerr := rs.tagRepo.UpdateTag(ctx, tag)
+		if saveerr != nil {
+			return saveerr
+		}
+
+		tagInfo, exist, err := rs.tagCommon.GetTagByID(ctx, taginfo.TagID)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return errors.BadRequest(reason.TagNotFound)
+		}
+		if tagInfo.MainTagID == 0 && len(tagInfo.SlugName) > 0 {
+			log.Debugf("tag %s update slug_name", tagInfo.SlugName)
+			tagList, err := rs.tagRepo.GetTagList(ctx, &entity.Tag{MainTagID: converter.StringToInt64(tagInfo.ID)})
+			if err != nil {
+				return err
+			}
+			updateTagSlugNames := make([]string, 0)
+			for _, tag := range tagList {
+				updateTagSlugNames = append(updateTagSlugNames, tag.SlugName)
+			}
+			err = rs.tagRepo.UpdateTagSynonym(ctx, updateTagSlugNames, converter.StringToInt64(tagInfo.ID), tagInfo.MainTagSlugName)
+			if err != nil {
+				return err
+			}
+		}
+
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           revisionitem.UserID,
+			ObjectID:         taginfo.TagID,
+			OriginalObjectID: taginfo.TagID,
+			ActivityTypeKey:  constant.ActTagEdited,
+			RevisionID:       revisionitem.ID,
+		})
+	}
 	return nil
 }
 
