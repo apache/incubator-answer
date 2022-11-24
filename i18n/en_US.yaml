@@ -1215,3 +1215,4 @@ ui:
     type: Type
     by: By
     comment: Comment
+    no_data: "We couldn't find anything."

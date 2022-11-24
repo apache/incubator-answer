@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { loggedUserInfoStore } from '@/stores';
 import { useTimelineData } from '@/services';
-import { PageTitle } from '@/components';
+import { PageTitle, Empty } from '@/components';
 
 import HistoryItem from './components/Item';
 
@@ -15,7 +15,7 @@ const Index: FC = () => {
   const { is_admin } = loggedUserInfoStore((state) => state.user);
   const [showVotes, setShowVotes] = useState(false);
 
-  const { data: timelineData } = useTimelineData({
+  const { data: timelineData, isLoading } = useTimelineData({
     object_id: tid || aid || qid,
     show_vote: showVotes,
   });
@@ -91,6 +91,9 @@ const Index: FC = () => {
               })}
             </tbody>
           </Table>
+          {!isLoading && Number(timelineData?.timeline?.length) <= 0 && (
+            <Empty>{t('no_data')}</Empty>
+          )}
         </Col>
       </Row>
     </Container>
