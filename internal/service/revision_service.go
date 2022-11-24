@@ -86,7 +86,7 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 			if ok {
 				now := time.Now()
 				question := &entity.Question{}
-				question.ID = req.ID
+				question.ID = questioninfo.ID
 				question.Title = questioninfo.Title
 				question.OriginalText = questioninfo.Content
 				question.ParsedText = questioninfo.HTML
@@ -122,7 +122,7 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 			if ok {
 				now := time.Now()
 				insertData := new(entity.Answer)
-				insertData.ID = req.ID
+				insertData.ID = answerinfo.ID
 				insertData.OriginalText = answerinfo.Content
 				insertData.ParsedText = answerinfo.HTML
 				insertData.UpdatedAt = now
