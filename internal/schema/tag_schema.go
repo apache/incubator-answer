@@ -152,7 +152,8 @@ type UpdateTagReq struct {
 	// edit summary
 	EditSummary string `validate:"omitempty" json:"edit_summary"`
 	// user id
-	UserID string `json:"-"`
+	UserID  string `json:"-"`
+	IsAdmin bool   `json:"-"`
 }
 
 func (r *UpdateTagReq) Check() (errFields []*validator.FormErrorField, err error) {
