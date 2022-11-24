@@ -3,14 +3,20 @@ package service
 import (
 	"context"
 	"encoding/json"
+	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/activity_queue"
+	answercommon "github.com/answerdev/answer/internal/service/answer_common"
 	"github.com/answerdev/answer/internal/service/object_info"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/revision"
+	"github.com/answerdev/answer/internal/service/tag"
+	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/obj"
 	"github.com/jinzhu/copier"
 )
 
@@ -21,6 +27,10 @@ type RevisionService struct {
 	questionCommon    *questioncommon.QuestionCommon
 	answerService     *AnswerService
 	objectInfoService *object_info.ObjService
+	questionRepo      questioncommon.QuestionRepo
+	answerRepo        answercommon.AnswerRepo
+	tagRepo           tag.TagRepo
+	tagCommon         *tagcommon.TagCommonService
 }
 
 func NewRevisionService(
@@ -29,6 +39,11 @@ func NewRevisionService(
 	questionCommon *questioncommon.QuestionCommon,
 	answerService *AnswerService,
 	objectInfoService *object_info.ObjService,
+	questionRepo questioncommon.QuestionRepo,
+	answerRepo answercommon.AnswerRepo,
+	tagRepo tag.TagRepo,
+	tagCommon *tagcommon.TagCommonService,
+
 ) *RevisionService {
 	return &RevisionService{
 		revisionRepo:      revisionRepo,
@@ -36,6 +51,10 @@ func NewRevisionService(
 		questionCommon:    questionCommon,
 		answerService:     answerService,
 		objectInfoService: objectInfoService,
+		questionRepo:      questionRepo,
+		answerRepo:        answerRepo,
+		tagRepo:           tagRepo,
+		tagCommon:         tagCommon,
 	}
 }
 func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.RevisionAuditReq) (err error) {
@@ -50,13 +69,82 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 		return
 	}
 	if req.Operation == schema.RevisionAuditReject {
-		revisioninfo.Status = entity.RevisionReviewRejectStatus
 		err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewRejectStatus)
 		return
 	}
 	if req.Operation == schema.RevisionAuditApprove {
-		// revisioninfo.Status = entity.RevisionReviewRejectStatus
-		// err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewRejectStatus)
+		objectType, objectTypeerr := obj.GetObjectTypeStrByObjectID(revisioninfo.ObjectID)
+		if objectTypeerr != nil {
+			return objectTypeerr
+		}
+		revisionitem := &schema.GetRevisionResp{}
+		_ = copier.Copy(revisionitem, revisioninfo)
+		rs.parseItem(ctx, revisionitem)
+		switch objectType {
+		case constant.QuestionObjectType:
+			questioninfo, ok := revisionitem.ContentParsed.(*schema.QuestionInfo)
+			if ok {
+				now := time.Now()
+				question := &entity.Question{}
+				question.ID = req.ID
+				question.Title = questioninfo.Title
+				question.OriginalText = questioninfo.Content
+				question.ParsedText = questioninfo.HTML
+				question.UpdatedAt = now
+				saveerr := rs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at"})
+				if saveerr != nil {
+					return saveerr
+				}
+				objectTagTags := make([]*schema.TagItem, 0)
+				for _, tag := range questioninfo.Tags {
+					item := &schema.TagItem{}
+					item.SlugName = tag.SlugName
+					objectTagTags = append(objectTagTags, item)
+				}
+				objectTagData := schema.TagChange{}
+				objectTagData.ObjectID = question.ID
+				objectTagData.Tags = objectTagTags
+				saveerr = rs.tagCommon.ObjectChangeTag(ctx, &objectTagData)
+				if saveerr != nil {
+					return saveerr
+				}
+				activity_queue.AddActivity(&schema.ActivityMsg{
+					UserID:           revisioninfo.UserID,
+					ObjectID:         revisioninfo.ObjectID,
+					ActivityTypeKey:  constant.ActQuestionEdited,
+					RevisionID:       revisioninfo.ID,
+					OriginalObjectID: revisioninfo.ObjectID,
+				})
+			}
+			//
+		case constant.AnswerObjectType:
+			answerinfo, ok := revisionitem.ContentParsed.(*schema.AnswerInfo)
+			if ok {
+				now := time.Now()
+				insertData := new(entity.Answer)
+				insertData.ID = req.ID
+				insertData.OriginalText = answerinfo.Content
+				insertData.ParsedText = answerinfo.HTML
+				insertData.UpdatedAt = now
+				if saveerr := rs.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"}); err != nil {
+					return saveerr
+				}
+			}
+
+		case constant.TagObjectType:
+			taginfo, ok := revisionitem.ContentParsed.(*schema.GetTagResp)
+			if ok {
+				tag := &entity.Tag{}
+				tag.ID = taginfo.TagID
+				tag.OriginalText = taginfo.OriginalText
+				tag.ParsedText = taginfo.ParsedText
+				saveerr := rs.tagRepo.UpdateTag(ctx, tag)
+				if saveerr != nil {
+					return saveerr
+				}
+			}
+		}
+		err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewPassStatus)
 		return
 	}
 

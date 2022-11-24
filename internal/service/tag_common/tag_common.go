@@ -52,7 +52,9 @@ type TagCommonService struct {
 }
 
 // NewTagCommonService new tag service
-func NewTagCommonService(tagCommonRepo TagCommonRepo, tagRelRepo TagRelRepo,
+func NewTagCommonService(
+	tagCommonRepo TagCommonRepo,
+	tagRelRepo TagRelRepo,
 	revisionService *revision_common.RevisionService,
 	siteInfoService *siteinfo_common.SiteInfoCommonService,
 ) *TagCommonService {
