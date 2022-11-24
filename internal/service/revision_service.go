@@ -38,6 +38,25 @@ func NewRevisionService(
 		objectInfoService: objectInfoService,
 	}
 }
+func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.RevisionAuditReq) (err error) {
+	revisioninfo, exist, err := rs.revisionRepo.GetRevisionByID(ctx, req.ID)
+	if err != nil {
+		return
+	}
+	if !exist {
+		return
+	}
+	if revisioninfo.Status != entity.RevisionUnreviewedStatus {
+		return
+	}
+	if req.Operation == schema.RevisionAuditReject {
+		revisioninfo.Status = entity.RevisionReviewRejectStatus
+		err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewRejectStatus)
+		return
+	}
+
+	return nil
+}
 
 // SearchUnreviewedList get unreviewed list
 func (rs *RevisionService) GetUnreviewedRevisionList(ctx context.Context, req *schema.RevisionSearch) (resp []*schema.GetUnreviewedRevisionResp, count int64, err error) {

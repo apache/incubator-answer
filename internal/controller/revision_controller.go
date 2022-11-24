@@ -57,6 +57,7 @@ func (rc *RevisionController) GetRevisionList(ctx *gin.Context) {
 // @Description get unreviewed revision list
 // @Tags Revision
 // @Produce json
+// @Security ApiKeyAuth
 // @Param page query string true "page id"
 // @Success 200 {object} handler.RespBody{data=[]schema.GetRevisionResp}
 // @Router /answer/api/v1/revisions/unreviewed [get]
@@ -69,7 +70,7 @@ func (rc *RevisionController) GetUnreviewedRevisionList(ctx *gin.Context) {
 	userinfo := middleware.GetUserInfoFromContext(ctx)
 	if !userinfo.IsAdmin {
 		userID := middleware.GetLoginUserIDFromContext(ctx)
-		if can, err := rc.rankService.CheckRankPermission(ctx, userID, rank.QuestionEditRank); err != nil || !can {
+		if can, err := rc.rankService.CheckRankPermission(ctx, userID, rank.UnreviewedRevisionListRank); err != nil || !can {
 			handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 			return
 		}
@@ -80,4 +81,31 @@ func (rc *RevisionController) GetUnreviewedRevisionList(ctx *gin.Context) {
 		"list":  resp,
 		"count": count,
 	})
+}
+
+// RevisionAudit godoc
+// @Summary revision audit
+// @Description revision audit operation:approve or reject
+// @Tags Revision
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.RevisionAuditReq true "audit"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/api/v1/revisions/audit [put]
+func (rc *RevisionController) RevisionAudit(ctx *gin.Context) {
+	req := &schema.RevisionAuditReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	userinfo := middleware.GetUserInfoFromContext(ctx)
+	if !userinfo.IsAdmin {
+		if can, err := rc.rankService.CheckRankPermission(ctx, req.UserID, rank.RevisionAuditRank); err != nil || !can {
+			handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+			return
+		}
+	}
+
+	err := rc.revisionListService.RevisionAudit(ctx, req)
+	handler.HandleResponse(ctx, err, gin.H{})
 }
