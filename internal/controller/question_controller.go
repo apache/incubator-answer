@@ -241,12 +241,14 @@ func (qc *QuestionController) CheckCanUpdateQuestion(ctx *gin.Context) {
 	req.ID = id
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	if can, err := qc.rankService.CheckRankPermission(ctx, req.UserID, rank.QuestionEditRank); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
-		return
+	if !req.IsAdmin {
+		if can, err := qc.rankService.CheckRankPermission(ctx, req.UserID, rank.QuestionEditRank); err != nil || !can {
+			handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+			return
+		}
 	}
 
-	resp, err := qc.questionService.CheckCanUpdateQuestion(ctx, req)
+	resp, err := qc.questionService.CheckCanUpdate(ctx, req)
 	handler.HandleResponse(ctx, err, gin.H{
 		"unreviewed": resp,
 	})
