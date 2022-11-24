@@ -75,7 +75,7 @@ const Index: FC<Props> = ({ data, isAdmin, objectInfo, revisionList }) => {
             </Link>
           )}
 
-          {data.object_type === 'question' &&
+          {objectInfo.object_type === 'question' &&
             data.activity_type === 'answered' && (
               <Link
                 to={`/questions/${objectInfo.question_id}/${data.object_id}`}>
