@@ -48,8 +48,8 @@ const Index: FC = () => {
       <PageTitle
         title={
           timelineData?.object_info.object_type === 'tag'
-            ? `Timeline for tag ${timelineData?.object_info.title}`
-            : `Timeline for ${timelineData?.object_info.title}`
+            ? `${t('title_for_tag')} ${timelineData?.object_info.title}`
+            : `${t('title_for')} ${timelineData?.object_info.title}`
         }
       />
       <Row className="py-3 justify-content-center">
@@ -71,10 +71,10 @@ const Index: FC = () => {
           <Table hover>
             <thead>
               <tr>
-                <th style={{ width: '20%' }}>Datetime</th>
-                <th style={{ width: '15%' }}>Type</th>
-                <th style={{ width: '19%' }}>By</th>
-                <th>Comment</th>
+                <th style={{ width: '20%' }}>{t('datetime')}</th>
+                <th style={{ width: '15%' }}>{t('type')}</th>
+                <th style={{ width: '19%' }}>{t('by')}</th>
+                <th>{t('comment')}</th>
               </tr>
             </thead>
             <tbody>

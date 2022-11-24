@@ -1209,3 +1209,9 @@ ui:
     title: "History for"
     show_votes: "Show votes"
     n_or_a: N/A
+    title_for: "Timeline for"
+    title_for_tag: "Title for tag"
+    datetime: Datetime
+    type: Type
+    by: By
+    comment: Comment
