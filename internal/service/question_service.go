@@ -264,7 +264,7 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 
 // UpdateQuestion update question
 func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.QuestionUpdate) (questionInfo any, err error) {
-	var canUpdateQuestion bool
+	var canUpdate bool
 	questionInfo = &schema.QuestionInfo{}
 
 	_, existUnreviewed, err := qs.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
@@ -345,11 +345,15 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		Title:    question.Title,
 		Log:      req.EditSummary,
 	}
+
+	if req.NoNeedReview || req.IsAdmin || dbinfo.UserID == req.UserID {
+		canUpdate = true
+	}
+
 	// It's not you or the administrator that needs to be reviewed
-	if dbinfo.UserID != req.UserID && !req.IsAdmin {
+	if !canUpdate {
 		revisionDTO.Status = entity.RevisionUnreviewedStatus
 	} else {
-		canUpdateQuestion = true
 		//Direct modification
 		revisionDTO.Status = entity.RevisionReviewPassStatus
 		//update question to db
@@ -377,7 +381,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	if err != nil {
 		return
 	}
-	if canUpdateQuestion {
+	if canUpdate {
 		activity_queue.AddActivity(&schema.ActivityMsg{
 			UserID:           req.UserID,
 			ObjectID:         question.ID,
