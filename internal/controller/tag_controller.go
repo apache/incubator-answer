@@ -63,7 +63,7 @@ func (tc *TagController) RemoveTag(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := tc.rankService.CheckRankPermission(ctx, req.UserID, rank.TagDeleteRank); err != nil || !can {
+	if can, err := tc.rankService.CheckRankPermission(ctx, req.UserID, rank.TagDeleteRank, ""); err != nil || !can {
 		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return
 	}
@@ -88,7 +88,7 @@ func (tc *TagController) UpdateTag(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := tc.rankService.CheckRankPermission(ctx, req.UserID, rank.TagEditRank); err != nil || !can {
+	if can, err := tc.rankService.CheckRankPermission(ctx, req.UserID, rank.TagEditRank, ""); err != nil || !can {
 		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return
 	}
@@ -190,7 +190,7 @@ func (tc *TagController) UpdateTagSynonym(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := tc.rankService.CheckRankPermission(ctx, req.UserID, rank.TagSynonymRank); err != nil || !can {
+	if can, err := tc.rankService.CheckRankPermission(ctx, req.UserID, rank.TagSynonymRank, ""); err != nil || !can {
 		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return
 	}

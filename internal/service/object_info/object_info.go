@@ -131,12 +131,12 @@ func (os *ObjService) GetInfo(ctx context.Context, objectID string) (objInfo *sc
 			break
 		}
 		objInfo = &schema.SimpleObjectInfo{
-			ObjectID:      questionInfo.ID,
-			ObjectCreator: questionInfo.UserID,
-			QuestionID:    questionInfo.ID,
-			ObjectType:    objectType,
-			Title:         questionInfo.Title,
-			Content:       questionInfo.ParsedText, // todo trim
+			ObjectID:            questionInfo.ID,
+			ObjectCreatorUserID: questionInfo.UserID,
+			QuestionID:          questionInfo.ID,
+			ObjectType:          objectType,
+			Title:               questionInfo.Title,
+			Content:             questionInfo.ParsedText, // todo trim
 		}
 	case constant.AnswerObjectType:
 		answerInfo, exist, err := os.answerRepo.GetAnswer(ctx, objectID)
@@ -151,13 +151,13 @@ func (os *ObjService) GetInfo(ctx context.Context, objectID string) (objInfo *sc
 			return nil, err
 		}
 		objInfo = &schema.SimpleObjectInfo{
-			ObjectID:      answerInfo.ID,
-			ObjectCreator: answerInfo.UserID,
-			QuestionID:    answerInfo.QuestionID,
-			AnswerID:      answerInfo.ID,
-			ObjectType:    objectType,
-			Title:         questionInfo.Title,    // this should be question title
-			Content:       answerInfo.ParsedText, // todo trim
+			ObjectID:            answerInfo.ID,
+			ObjectCreatorUserID: answerInfo.UserID,
+			QuestionID:          answerInfo.QuestionID,
+			AnswerID:            answerInfo.ID,
+			ObjectType:          objectType,
+			Title:               questionInfo.Title,    // this should be question title
+			Content:             answerInfo.ParsedText, // todo trim
 		}
 	case constant.CommentObjectType:
 		commentInfo, exist, err := os.commentRepo.GetComment(ctx, objectID)
@@ -168,11 +168,11 @@ func (os *ObjService) GetInfo(ctx context.Context, objectID string) (objInfo *sc
 			break
 		}
 		objInfo = &schema.SimpleObjectInfo{
-			ObjectID:      commentInfo.ID,
-			ObjectCreator: commentInfo.UserID,
-			ObjectType:    objectType,
-			Content:       commentInfo.ParsedText, // todo trim
-			CommentID:     commentInfo.ID,
+			ObjectID:            commentInfo.ID,
+			ObjectCreatorUserID: commentInfo.UserID,
+			ObjectType:          objectType,
+			Content:             commentInfo.ParsedText, // todo trim
+			CommentID:           commentInfo.ID,
 		}
 		if len(commentInfo.QuestionID) > 0 {
 			questionInfo, exist, err := os.questionRepo.GetQuestion(ctx, commentInfo.QuestionID)

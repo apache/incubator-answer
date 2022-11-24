@@ -40,7 +40,7 @@ func (rc *ReportController) AddReport(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := rc.rankService.CheckRankPermission(ctx, req.UserID, rank.ReportAddRank); err != nil || !can {
+	if can, err := rc.rankService.CheckRankPermission(ctx, req.UserID, rank.ReportAddRank, ""); err != nil || !can {
 		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return
 	}
