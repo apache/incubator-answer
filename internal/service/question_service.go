@@ -272,7 +272,7 @@ func (qs *QuestionService) CheckCanUpdateQuestion(ctx context.Context, req *sche
 
 // UpdateQuestion update question
 func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.QuestionUpdate) (questionInfo any, err error) {
-
+	var canUpdateQuestion bool
 	questionInfo = &schema.QuestionInfo{}
 
 	_, existUnreviewed, err := qs.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
@@ -353,11 +353,11 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		Title:    question.Title,
 		Log:      req.EditSummary,
 	}
-
 	// It's not you or the administrator that needs to be reviewed
 	if dbinfo.UserID != req.UserID && !req.IsAdmin {
 		revisionDTO.Status = entity.RevisionUnreviewedStatus
 	} else {
+		canUpdateQuestion = true
 		//Direct modification
 		revisionDTO.Status = entity.RevisionReviewPassStatus
 		//update question to db
@@ -385,13 +385,15 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	if err != nil {
 		return
 	}
-	activity_queue.AddActivity(&schema.ActivityMsg{
-		UserID:           req.UserID,
-		ObjectID:         question.ID,
-		ActivityTypeKey:  constant.ActQuestionEdited,
-		RevisionID:       revisionID,
-		OriginalObjectID: question.ID,
-	})
+	if canUpdateQuestion {
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           req.UserID,
+			ObjectID:         question.ID,
+			ActivityTypeKey:  constant.ActQuestionEdited,
+			RevisionID:       revisionID,
+			OriginalObjectID: question.ID,
+		})
+	}
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false, false)
 	return
