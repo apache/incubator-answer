@@ -234,7 +234,7 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 // @Security ApiKeyAuth
 // @Param id query string true "id"  default(string)
 // @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/question/edit/check [get]
+// @Router /answer/api/v1/revisions/edit/check [get]
 func (qc *QuestionController) CheckCanUpdateQuestion(ctx *gin.Context) {
 	req := &schema.CheckCanQuestionUpdate{}
 	if handler.BindAndCheck(ctx, req) {
