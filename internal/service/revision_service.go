@@ -89,11 +89,23 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 		var saveErr error
 		switch objectType {
 		case constant.QuestionObjectType:
-			saveErr = rs.revisionAuditQuestion(ctx, revisionitem)
+			if !req.CanReviewQuestion {
+				saveErr = errors.BadRequest(reason.RevisionNoPermission)
+			} else {
+				saveErr = rs.revisionAuditQuestion(ctx, revisionitem)
+			}
 		case constant.AnswerObjectType:
-			saveErr = rs.revisionAuditAnswer(ctx, revisionitem)
+			if !req.CanReviewAnswer {
+				saveErr = errors.BadRequest(reason.RevisionNoPermission)
+			} else {
+				saveErr = rs.revisionAuditAnswer(ctx, revisionitem)
+			}
 		case constant.TagObjectType:
-			saveErr = rs.revisionAuditTag(ctx, revisionitem)
+			if !req.CanReviewTag {
+				saveErr = errors.BadRequest(reason.RevisionNoPermission)
+			} else {
+				saveErr = rs.revisionAuditTag(ctx, revisionitem)
+			}
 		}
 		if saveErr != nil {
 			return saveErr

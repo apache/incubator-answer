@@ -98,6 +98,8 @@ backend:
     revision:
       review_underway:
         other: "Revision review underway."
+      no_permission:
+        other: "No permission to Revision."
     user:
       email_or_password_wrong:
         other: *email_or_password_wrong
