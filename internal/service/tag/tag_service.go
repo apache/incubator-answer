@@ -233,6 +233,7 @@ func (ts *TagService) UpdateTagSynonym(ctx context.Context, req *schema.UpdateTa
 		item.OriginalText = tag.OriginalText
 		item.ParsedText = tag.ParsedText
 		item.Status = entity.TagStatusAvailable
+		item.UserID = req.UserID
 		needAddTagList = append(needAddTagList, item)
 	}
 

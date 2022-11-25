@@ -404,6 +404,7 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 		item.OriginalText = ""
 		item.ParsedText = ""
 		item.Status = entity.TagStatusAvailable
+		item.UserID = userID
 		addTagList = append(addTagList, item)
 		addTagMsgList = append(addTagMsgList, tag)
 	}
@@ -478,6 +479,7 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 		item.OriginalText = tag.OriginalText
 		item.ParsedText = tag.ParsedText
 		item.Status = entity.TagStatusAvailable
+		item.UserID = objectTagData.UserID
 		addTagList = append(addTagList, item)
 	}
 
