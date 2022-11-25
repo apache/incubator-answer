@@ -205,8 +205,6 @@ func (rs *RevisionService) revisionAuditTag(ctx context.Context, revisionitem *s
 	if ok {
 		tag := &entity.Tag{}
 		tag.ID = taginfo.TagID
-		tag.DisplayName = taginfo.DisplayName
-		tag.SlugName = taginfo.SlugName
 		tag.OriginalText = taginfo.OriginalText
 		tag.ParsedText = taginfo.ParsedText
 		saveerr := rs.tagRepo.UpdateTag(ctx, tag)

@@ -1314,12 +1314,12 @@ const docTemplate = `{
                 "summary": "AnswerList",
                 "parameters": [
                     {
-                        "description": "AnswerList",
+                        "description": "AnswerListReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.AnswerList"
+                            "$ref": "#/definitions/schema.AnswerListReq"
                         }
                     }
                 ],
@@ -4860,7 +4860,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.AnswerList": {
+        "schema.AnswerListReq": {
             "type": "object",
             "properties": {
                 "order": {
