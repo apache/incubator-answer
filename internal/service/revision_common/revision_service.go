@@ -27,6 +27,14 @@ func NewRevisionService(revisionRepo revision.RevisionRepo, userRepo usercommon.
 	}
 }
 
+func (rs *RevisionService) GetUnreviewedRevisionCount(ctx context.Context, req *schema.RevisionSearch) (count int64, err error) {
+	search := &entity.RevisionSearch{}
+	search.Page = 1
+	_ = copier.Copy(search, req)
+	_, count, err = rs.revisionRepo.SearchUnreviewedList(ctx, search)
+	return count, err
+}
+
 // AddRevision add revision
 //
 // autoUpdateRevisionID bool : if autoUpdateRevisionID is true , the object.revision_id will be updated,
