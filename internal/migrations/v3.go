@@ -29,7 +29,7 @@ func addActivityTimeline(x *xorm.Engine) error {
 		{ID: 45, Key: "rank.answer.vote_up", Value: `15`},
 		{ID: 46, Key: "rank.answer.vote_down", Value: `125`},
 		{ID: 47, Key: "rank.comment.add", Value: `1`},
-		{ID: 48, Key: "rank.comment.edit", Value: `1`},
+		{ID: 48, Key: "rank.comment.edit", Value: `-1`},
 		{ID: 49, Key: "rank.comment.delete", Value: `-1`},
 		{ID: 50, Key: "rank.report.add", Value: `1`},
 		{ID: 51, Key: "rank.tag.add", Value: `1`},
