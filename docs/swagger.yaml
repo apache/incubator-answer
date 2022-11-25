@@ -202,7 +202,7 @@ definitions:
         description: question_id
         type: string
     type: object
-  schema.AnswerList:
+  schema.AnswerListReq:
     properties:
       order:
         description: 1 Default 2 time
@@ -2431,12 +2431,12 @@ paths:
       - application/json
       description: AnswerList <br> <b>order</b> (default or updated)
       parameters:
-      - description: AnswerList
+      - description: AnswerListReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.AnswerList'
+          $ref: '#/definitions/schema.AnswerListReq'
       produces:
       - application/json
       responses:
