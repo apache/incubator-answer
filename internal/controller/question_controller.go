@@ -93,7 +93,6 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	req := &schema.QuestionPermission{}
 	canList, err := qc.rankService.CheckOperationPermissions(ctx, userID, []string{
-		rank.QuestionAddRank,
 		rank.QuestionEditRank,
 		rank.QuestionDeleteRank,
 	}, id)
@@ -101,14 +100,9 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	req.CanAdd = canList[0]
-	req.CanEdit = canList[1]
-	req.CanDelete = canList[2]
+	req.CanEdit = canList[0]
+	req.CanDelete = canList[1]
 	req.CanClose = middleware.GetIsAdminFromContext(ctx)
-	if !req.CanAdd {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
-		return
-	}
 
 	info, err := qc.questionService.GetQuestionAndAddPV(ctx, id, userID, req)
 	if err != nil {
@@ -253,7 +247,6 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.QuestionAddRank,
 		rank.QuestionEditRank,
 		rank.QuestionDeleteRank,
 		rank.QuestionEditWithoutReviewRank,
@@ -262,15 +255,10 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	req.CanAdd = canList[0]
-	req.CanEdit = canList[1]
-	req.CanDelete = canList[2]
-	req.NoNeedReview = canList[3]
+	req.CanEdit = canList[0]
+	req.CanDelete = canList[1]
+	req.NoNeedReview = canList[2]
 	req.CanClose = middleware.GetIsAdminFromContext(ctx)
-	if !req.CanAdd {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
-		return
-	}
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 	if !req.CanEdit {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)

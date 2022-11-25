@@ -28,7 +28,7 @@ func NewUserRepo(data *data.Data, configRepo config.ConfigRepo) usercommon.UserR
 
 // AddUser add user
 func (ur *userRepo) AddUser(ctx context.Context, user *entity.User) (err error) {
-	_, err = ur.data.DB.Insert(user)
+	_, err = ur.data.DB.UseBool("is_admin").Insert(user)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -122,7 +122,7 @@ func (ur *userRepo) UpdateInfo(ctx context.Context, userInfo *entity.User) (err 
 // GetByUserID get user info by user id
 func (ur *userRepo) GetByUserID(ctx context.Context, userID string) (userInfo *entity.User, exist bool, err error) {
 	userInfo = &entity.User{}
-	exist, err = ur.data.DB.Where("id = ?", userID).Get(userInfo)
+	exist, err = ur.data.DB.Where("id = ?", userID).UseBool("is_admin").Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -131,7 +131,7 @@ func (ur *userRepo) GetByUserID(ctx context.Context, userID string) (userInfo *e
 
 func (ur *userRepo) BatchGetByID(ctx context.Context, ids []string) ([]*entity.User, error) {
 	list := make([]*entity.User, 0)
-	err := ur.data.DB.In("id", ids).Find(&list)
+	err := ur.data.DB.In("id", ids).UseBool("is_admin").Find(&list)
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -141,7 +141,7 @@ func (ur *userRepo) BatchGetByID(ctx context.Context, ids []string) ([]*entity.U
 // GetByUsername get user by username
 func (ur *userRepo) GetByUsername(ctx context.Context, username string) (userInfo *entity.User, exist bool, err error) {
 	userInfo = &entity.User{}
-	exist, err = ur.data.DB.Where("username = ?", username).Get(userInfo)
+	exist, err = ur.data.DB.Where("username = ?", username).UseBool("is_admin").Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -151,7 +151,7 @@ func (ur *userRepo) GetByUsername(ctx context.Context, username string) (userInf
 // GetByEmail get user by email
 func (ur *userRepo) GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error) {
 	userInfo = &entity.User{}
-	exist, err = ur.data.DB.Where("e_mail = ?", email).Get(userInfo)
+	exist, err = ur.data.DB.Where("e_mail = ?", email).UseBool("is_admin").Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
