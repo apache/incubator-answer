@@ -176,7 +176,20 @@ func (rr *revisionRepo) SearchUnreviewedList(ctx context.Context, search *entity
 	}
 	PageSize := 1
 	offset := search.Page * PageSize
+	objectType := make([]int, 0)
+	if search.CanReviewAnswer {
+		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.AnswerObjectType])
+	}
+	if search.CanReviewQuestion {
+		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.QuestionObjectType])
+	}
+	if search.CanReviewTag {
+		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.TagObjectType])
+	}
+
 	session := rr.data.DB.Where("")
+	session = session.And("status = ?", entity.RevisionUnreviewedStatus)
+	session = session.In("object_type", objectType)
 	session = session.And("status = ?", entity.RevisionUnreviewedStatus)
 	session = session.OrderBy("created_at desc")
 	session = session.Limit(PageSize, offset)

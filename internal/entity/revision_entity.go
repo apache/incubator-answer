@@ -27,7 +27,10 @@ type Revision struct {
 }
 
 type RevisionSearch struct {
-	Page int `json:"page" form:"page"` // Query number of pages
+	Page              int  `json:"page" form:"page"` // Query number of pages
+	CanReviewQuestion bool `json:"-"`
+	CanReviewAnswer   bool `json:"-"`
+	CanReviewTag      bool `json:"-"`
 }
 
 // TableName revision table name
