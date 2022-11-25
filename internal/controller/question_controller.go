@@ -255,9 +255,12 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	req.CanEdit = canList[0]
-	req.CanDelete = canList[1]
+	questionPermission := &schema.QuestionPermission{}
+	questionPermission.CanEdit = canList[0]
+	questionPermission.CanDelete = canList[1]
 	req.NoNeedReview = canList[2]
+	req.QuestionPermission = questionPermission
+
 	req.CanClose = middleware.GetIsAdminFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 	if !req.CanEdit {
