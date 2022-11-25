@@ -270,6 +270,18 @@ func (rs *RevisionService) GetUnreviewedRevisionList(ctx context.Context, req *s
 		_ = copier.Copy(revisionitem, revision)
 		rs.parseItem(ctx, revisionitem)
 		item.UnreviewedInfo = revisionitem
+
+		// get user info
+		userInfo, exists, e := rs.userCommon.GetUserBasicInfoByID(ctx, revisionitem.UserID)
+		if e != nil {
+			return resp, 0, e
+		}
+		if exists {
+			var uinfo schema.UserBasicInfo
+			err = copier.Copy(&uinfo, userInfo)
+			item.UnreviewedInfo.UserInfo = uinfo
+		}
+
 		resp = append(resp, item)
 	}
 	return
