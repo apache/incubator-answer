@@ -4,13 +4,26 @@ import { Tag } from '@/components';
 import { diffText } from '@/utils';
 
 interface Props {
-  objectType: string;
+  objectType: string | 'question' | 'answer' | 'tag';
   newData: Record<string, any>;
   oldData?: Record<string, any>;
   className?: string;
+  opts?: Partial<{
+    showTitle: boolean;
+    showTagUrlSlug: boolean;
+  }>;
 }
 
-const Index: FC<Props> = ({ objectType, newData, oldData, className = '' }) => {
+const Index: FC<Props> = ({
+  objectType,
+  newData,
+  oldData,
+  className = '',
+  opts = {
+    showTitle: true,
+    showTagUrlSlug: true,
+  },
+}) => {
   if (!newData?.original_text) return null;
 
   let tag = newData.tags;
@@ -51,7 +64,7 @@ const Index: FC<Props> = ({ objectType, newData, oldData, className = '' }) => {
 
   return (
     <div className={className}>
-      {objectType !== 'answer' && (
+      {objectType !== 'answer' && opts?.showTitle && (
         <h5
           dangerouslySetInnerHTML={{
             __html: diffText(newData.title, oldData?.title),
@@ -73,7 +86,7 @@ const Index: FC<Props> = ({ objectType, newData, oldData, className = '' }) => {
           })}
         </div>
       )}
-      {objectType === 'tag' && (
+      {objectType === 'tag' && opts?.showTagUrlSlug && (
         <div className="mb-4">
           {`/tags/${
             newData?.main_tag_slug_name

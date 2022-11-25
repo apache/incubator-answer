@@ -3,6 +3,7 @@ import React, { memo, FC } from 'react';
 import classNames from 'classnames';
 
 import { Tag } from '@/common/interface';
+import { pathFactory } from '@/router/pathFactory';
 
 interface IProps {
   data: Tag;
@@ -17,9 +18,7 @@ const Index: FC<IProps> = ({
   className = '',
   textClassName = '',
 }) => {
-  href ||= `/tags/${encodeURIComponent(
-    data.main_tag_slug_name || data.slug_name,
-  )}`.toLowerCase();
+  href ||= pathFactory.tagLanding(data);
 
   return (
     <a

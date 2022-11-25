@@ -1213,6 +1213,9 @@ ui:
     answer_edit: Answer edit
     tag_edit: Tag edit
     edit_summary: Edit summary
+    edit_question: Edit question
+    edit_answer: Edit answer
+    edit_tag: Edit tag
     empty: No review tasks left.
   timeline:
     undeleted: undeleted

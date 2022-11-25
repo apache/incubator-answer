@@ -182,7 +182,6 @@ const routes: RouteNode[] = [
       {
         path: '/users/confirm-new-email',
         page: 'pages/Users/ConfirmNewEmail',
-        //  TODO: guard this
       },
       {
         path: '/users/account-suspended',

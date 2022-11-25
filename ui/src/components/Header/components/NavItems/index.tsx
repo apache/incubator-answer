@@ -3,10 +3,11 @@ import { Nav, Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, NavLink } from 'react-router-dom';
 
+import type * as Type from '@/common/interface';
 import { Avatar, Icon } from '@/components';
 
 interface Props {
-  redDot;
+  redDot: Type.NotificationStatus | undefined;
   userInfo;
   logOut: () => void;
 }
@@ -56,10 +57,14 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
           {userInfo?.is_admin ? (
             <Dropdown.Item href="/admin">{t('header.nav.admin')}</Dropdown.Item>
           ) : null}
-          {/* TODO: use review permission */}
-          {userInfo?.is_admin ? (
-            <Dropdown.Item href="/review">
+          {redDot?.can_revision ? (
+            <Dropdown.Item href="/review" className="position-relative">
               {t('header.nav.review')}
+              {redDot?.revision > 0 && (
+                <span className="position-absolute top-50 translate-middle-y end-0 me-3 p-2 bg-danger border border-light rounded-circle">
+                  <span className="visually-hidden">New Review</span>
+                </span>
+              )}
             </Dropdown.Item>
           ) : null}
           <Dropdown.Divider />
