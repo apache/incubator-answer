@@ -38,6 +38,7 @@ func GetCommentPermission(ctx context.Context, userID string, creatorUserID stri
 // GetTagPermission get tag permission
 func GetTagPermission(ctx context.Context, canEdit, canDelete bool) (
 	actions []*schema.PermissionMemberAction) {
+	actions = make([]*schema.PermissionMemberAction, 0)
 	if canEdit {
 		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "edit",
