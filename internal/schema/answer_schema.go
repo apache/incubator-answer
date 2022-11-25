@@ -31,6 +31,8 @@ type AnswerUpdateReq struct {
 	EditSummary  string `validate:"omitempty" json:"edit_summary"` // edit_summary
 	IsAdmin      bool   `json:"-"`
 	NoNeedReview bool   `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
 }
 
 type AnswerListReq struct {

@@ -98,7 +98,7 @@ func (rs *RankService) CheckOperationPermission(ctx context.Context, userID stri
 	if len(objectID) > 0 {
 		objectInfo, err := rs.objectInfoService.GetInfo(ctx, objectID)
 		if err != nil {
-			log.Error(err)
+			return can, err
 		}
 		// if the user is this object creator, the user can operate this object.
 		if objectInfo != nil &&
@@ -131,7 +131,7 @@ func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID str
 	if len(objectID) > 0 {
 		objectInfo, err := rs.objectInfoService.GetInfo(ctx, objectID)
 		if err != nil {
-			log.Error(err)
+			return can, err
 		}
 		// if the user is this object creator, the user can operate this object.
 		if objectInfo != nil &&
