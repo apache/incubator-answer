@@ -95,5 +95,8 @@ func addActivityTimeline(x *xorm.Engine) error {
 		RevisionID       int64     `xorm:"not null default 0 BIGINT(20) revision_id"`
 		OriginalObjectID string    `xorm:"not null default 0 BIGINT(20) original_object_id"`
 	}
-	return x.Sync(new(Activity), new(Revision))
+	type Tag struct {
+		UserID string `xorm:"not null default 0 BIGINT(20) user_id"`
+	}
+	return x.Sync(new(Activity), new(Revision), new(Tag))
 }
