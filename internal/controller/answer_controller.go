@@ -202,16 +202,28 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept  json
 // @Produce  json
-// @Param data body schema.AnswerList  true "AnswerList"
+// @Param data body schema.AnswerListReq  true "AnswerListReq"
 // @Success 200 {string} string ""
 // @Router /answer/api/v1/answer/list [get]
 func (ac *AnswerController) AnswerList(ctx *gin.Context) {
-	req := &schema.AnswerList{}
+	req := &schema.AnswerListReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
+
+	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		rank.AnswerEditRank,
+		rank.AnswerDeleteRank,
+	}, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	req.CanEdit = canList[0]
+	req.CanDelete = canList[1]
+
 	list, count, err := ac.answerService.SearchList(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)

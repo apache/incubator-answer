@@ -425,39 +425,39 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, answerID stri
 	return nil
 }
 
-func (as *AnswerService) SearchList(ctx context.Context, search *schema.AnswerList) ([]*schema.AnswerInfo, int64, error) {
+func (as *AnswerService) SearchList(ctx context.Context, req *schema.AnswerListReq) ([]*schema.AnswerInfo, int64, error) {
 	list := make([]*schema.AnswerInfo, 0)
 	dbSearch := entity.AnswerSearch{}
-	dbSearch.QuestionID = search.QuestionID
-	dbSearch.Page = search.Page
-	dbSearch.PageSize = search.PageSize
-	dbSearch.Order = search.Order
-	dblist, count, err := as.answerRepo.SearchList(ctx, &dbSearch)
+	dbSearch.QuestionID = req.QuestionID
+	dbSearch.Page = req.Page
+	dbSearch.PageSize = req.PageSize
+	dbSearch.Order = req.Order
+	answerOriginalList, count, err := as.answerRepo.SearchList(ctx, &dbSearch)
 	if err != nil {
 		return list, count, err
 	}
-	AnswerList, err := as.SearchFormatInfo(ctx, dblist, search.LoginUserID, search.IsAdmin)
+	answerList, err := as.SearchFormatInfo(ctx, answerOriginalList, req)
 	if err != nil {
-		return AnswerList, count, err
+		return answerList, count, err
 	}
-	return AnswerList, count, nil
+	return answerList, count, nil
 }
 
-func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.Answer, loginUserID string, isAdmin bool) ([]*schema.AnswerInfo, error) {
+func (as *AnswerService) SearchFormatInfo(ctx context.Context, answers []*entity.Answer, req *schema.AnswerListReq) (
+	[]*schema.AnswerInfo, error) {
 	list := make([]*schema.AnswerInfo, 0)
-	objectIds := make([]string, 0)
-	userIds := make([]string, 0)
-	for _, dbitem := range dblist {
-		item := as.ShowFormat(ctx, dbitem)
+	objectIDs := make([]string, 0)
+	userIDs := make([]string, 0)
+	for _, info := range answers {
+		item := as.ShowFormat(ctx, info)
 		list = append(list, item)
-		objectIds = append(objectIds, dbitem.ID)
-		userIds = append(userIds, dbitem.UserID)
-		if loginUserID != "" {
-			// item.VoteStatus = as.activityFunc.GetVoteStatus(ctx, item.TagID, loginUserId)
-			item.VoteStatus = as.voteRepo.GetVoteStatus(ctx, item.ID, loginUserID)
+		objectIDs = append(objectIDs, info.ID)
+		userIDs = append(userIDs, info.UserID)
+		if req.UserID != "" {
+			item.VoteStatus = as.voteRepo.GetVoteStatus(ctx, item.ID, req.UserID)
 		}
 	}
-	userInfoMap, err := as.userCommon.BatchUserBasicInfoByID(ctx, userIds)
+	userInfoMap, err := as.userCommon.BatchUserBasicInfoByID(ctx, userIDs)
 	if err != nil {
 		return list, err
 	}
@@ -469,26 +469,25 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, dblist []*entity.
 		}
 	}
 
-	if loginUserID == "" {
+	if req.UserID == "" {
 		return list, nil
 	}
 
-	CollectedMap, err := as.collectionCommon.SearchObjectCollected(ctx, loginUserID, objectIds)
+	searchObjectCollected, err := as.collectionCommon.SearchObjectCollected(ctx, req.UserID, objectIDs)
 	if err != nil {
-		log.Error("CollectionFunc.SearchObjectCollected error", err)
+		return nil, err
 	}
 
 	for _, item := range list {
-		_, ok := CollectedMap[item.ID]
+		_, ok := searchObjectCollected[item.ID]
 		if ok {
 			item.Collected = true
 		}
 	}
 
 	for _, item := range list {
-		item.MemberActions = permission.GetAnswerPermission(ctx, loginUserID, item.UserID, isAdmin)
+		item.MemberActions = permission.GetAnswerPermission(ctx, req.UserID, item.UserID, req.CanEdit, req.CanDelete)
 	}
-
 	return list, nil
 }
 

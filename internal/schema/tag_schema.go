@@ -23,6 +23,10 @@ type GetTagInfoReq struct {
 	Name string `validate:"omitempty,gt=0,lte=35" form:"name"`
 	// user id
 	UserID string `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
+	// whether user can delete it
+	CanDelete bool `json:"-"`
 }
 
 func (r *GetTagInfoReq) Check() (errFields []*validator.FormErrorField, err error) {

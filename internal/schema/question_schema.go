@@ -32,6 +32,18 @@ type QuestionAdd struct {
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// user id
 	UserID string `json:"-"`
+	*QuestionPermission
+}
+
+type QuestionPermission struct {
+	// whether user can add it
+	CanAdd bool `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
+	// whether user can delete it
+	CanDelete bool `json:"-"`
+	// whether user can close it
+	CanClose bool `json:"-"`
 }
 
 type CheckCanQuestionUpdate struct {
@@ -59,6 +71,7 @@ type QuestionUpdate struct {
 	UserID       string `json:"-"`
 	IsAdmin      bool   `json:"-"`
 	NoNeedReview bool   `json:"-"`
+	*QuestionPermission
 }
 
 type QuestionBaseInfo struct {

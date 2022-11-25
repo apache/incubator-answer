@@ -128,6 +128,16 @@ func (tc *TagController) GetTagInfo(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	canList, err := tc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		rank.TagEditRank,
+		rank.TagDeleteRank,
+	}, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	req.CanEdit = canList[0]
+	req.CanDelete = canList[1]
 
 	resp, err := tc.tagService.GetTagInfo(ctx, req)
 	handler.HandleResponse(ctx, err, resp)

@@ -12,7 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/comment_common"
 	"github.com/answerdev/answer/internal/service/notice_queue"
-	object_info "github.com/answerdev/answer/internal/service/object_info"
+	"github.com/answerdev/answer/internal/service/object_info"
 	"github.com/answerdev/answer/internal/service/permission"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/jinzhu/copier"
@@ -122,7 +122,7 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 
 	resp = &schema.GetCommentResp{}
 	resp.SetFromComment(comment)
-	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID)
+	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID, req.CanEdit, req.CanDelete)
 
 	// get reply user info
 	if len(resp.ReplyUserID) > 0 {
@@ -230,7 +230,7 @@ func (cs *CommentService) GetComment(ctx context.Context, req *schema.GetComment
 	// check if current user vote this comment
 	resp.IsVote = cs.checkIsVote(ctx, req.UserID, resp.CommentID)
 
-	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID)
+	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID, req.CanEdit, req.CanDelete)
 	return resp, nil
 }
 
@@ -290,7 +290,7 @@ func (cs *CommentService) GetCommentWithPage(ctx context.Context, req *schema.Ge
 		// check if current user vote this comment
 		commentResp.IsVote = cs.checkIsVote(ctx, req.UserID, commentResp.CommentID)
 
-		commentResp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, commentResp.UserID)
+		commentResp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, commentResp.UserID, req.CanEdit, req.CanDelete)
 		resp = append(resp, commentResp)
 	}
 	return pager.NewPageModel(total, resp), nil
