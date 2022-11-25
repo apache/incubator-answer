@@ -89,11 +89,23 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 		var saveErr error
 		switch objectType {
 		case constant.QuestionObjectType:
-			saveErr = rs.revisionAuditQuestion(ctx, revisionitem)
+			if !req.CanReviewQuestion {
+				saveErr = errors.BadRequest(reason.RevisionNoPermission)
+			} else {
+				saveErr = rs.revisionAuditQuestion(ctx, revisionitem)
+			}
 		case constant.AnswerObjectType:
-			saveErr = rs.revisionAuditAnswer(ctx, revisionitem)
+			if !req.CanReviewAnswer {
+				saveErr = errors.BadRequest(reason.RevisionNoPermission)
+			} else {
+				saveErr = rs.revisionAuditAnswer(ctx, revisionitem)
+			}
 		case constant.TagObjectType:
-			saveErr = rs.revisionAuditTag(ctx, revisionitem)
+			if !req.CanReviewTag {
+				saveErr = errors.BadRequest(reason.RevisionNoPermission)
+			} else {
+				saveErr = rs.revisionAuditTag(ctx, revisionitem)
+			}
 		}
 		if saveErr != nil {
 			return saveErr
@@ -258,6 +270,18 @@ func (rs *RevisionService) GetUnreviewedRevisionList(ctx context.Context, req *s
 		_ = copier.Copy(revisionitem, revision)
 		rs.parseItem(ctx, revisionitem)
 		item.UnreviewedInfo = revisionitem
+
+		// get user info
+		userInfo, exists, e := rs.userCommon.GetUserBasicInfoByID(ctx, revisionitem.UserID)
+		if e != nil {
+			return resp, 0, e
+		}
+		if exists {
+			var uinfo schema.UserBasicInfo
+			err = copier.Copy(&uinfo, userInfo)
+			item.UnreviewedInfo.UserInfo = uinfo
+		}
+
 		resp = append(resp, item)
 	}
 	return
