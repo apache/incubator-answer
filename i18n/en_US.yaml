@@ -95,6 +95,9 @@ backend:
     theme:
       not_found:
         other: "Theme not found."
+    revision:
+      review_underway:
+        other: "Revision review underway."
     user:
       email_or_password_wrong:
         other: *email_or_password_wrong

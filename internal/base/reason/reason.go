@@ -55,4 +55,5 @@ const (
 	UploadFileSourceUnsupported      = "error.upload.source_unsupported"
 	RecommendTagNotExist             = "error.tag.recommend_tag_not_found"
 	RecommendTagEnter                = "error.tag.recommend_tag_enter"
+	RevisionReviewUnderway           = "error.revision.review_underway"
 )

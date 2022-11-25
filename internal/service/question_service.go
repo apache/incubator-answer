@@ -840,5 +840,9 @@ func (qs *QuestionService) CheckCanUpdate(ctx context.Context, req *schema.Check
 	if err != nil {
 		return false, err
 	}
+	if existUnreviewed {
+		err = errors.BadRequest(reason.RevisionReviewUnderway)
+		return existUnreviewed, err
+	}
 	return existUnreviewed, nil
 }
