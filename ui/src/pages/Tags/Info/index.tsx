@@ -11,7 +11,9 @@ import {
   useQuerySynonymsTags,
   saveSynonymsTags,
   deleteTag,
+  editCheck,
 } from '@/services';
+import { pathFactory } from '@/router/pathFactory';
 import { loggedUserInfoStore } from '@/stores';
 
 const TagIntroduction = () => {
@@ -27,7 +29,9 @@ const TagIntroduction = () => {
     return null;
   }
   if (tagInfo.main_tag_slug_name) {
-    navigate(`/tags/${tagInfo.main_tag_slug_name}/info`, { replace: true });
+    navigate(pathFactory.tagInfo(tagInfo.main_tag_slug_name), {
+      replace: true,
+    });
     return null;
   }
   const handleEdit = () => {
@@ -51,7 +55,9 @@ const TagIntroduction = () => {
   };
 
   const handleEditTag = () => {
-    navigate(`/tags/${tagInfo?.tag_id}/edit`);
+    editCheck(tagInfo?.tag_id).then(() => {
+      navigate(pathFactory.tagEdit(tagInfo?.tag_id));
+    });
   };
   const handleDeleteTag = () => {
     if (synonymsTags && synonymsTags.length > 0) {
@@ -93,7 +99,7 @@ const TagIntroduction = () => {
           <Col xxl={7} lg={8} sm={12}>
             <h3 className="mb-3">
               <Link
-                to={`/tags/${tagInfo?.slug_name}`}
+                to={pathFactory.tagLanding(tagInfo)}
                 replace
                 className="link-dark">
                 {tagInfo.display_name}
