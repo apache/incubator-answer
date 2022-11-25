@@ -162,10 +162,9 @@ func (rs *RankService) checkUserRank(ctx context.Context, userID string, userRan
 	if err != nil {
 		return false, err
 	}
-	currentUserRank := userRank
-	if currentUserRank < requireRank {
+	if userRank < requireRank || requireRank < 0 {
 		log.Debugf("user %s want to do action %s, but rank %d < %d",
-			userID, action, currentUserRank, requireRank)
+			userID, action, userRank, requireRank)
 		return false, nil
 	}
 	return true, nil
