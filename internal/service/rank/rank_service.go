@@ -33,6 +33,8 @@ const (
 	CommentAddRank                = "rank.comment.add"
 	CommentEditRank               = "rank.comment.edit"
 	CommentDeleteRank             = "rank.comment.delete"
+	CommentVoteUpRank             = "rank.comment.vote_up"
+	CommentVoteDownRank           = "rank.comment.vote_down"
 	ReportAddRank                 = "rank.report.add"
 	TagAddRank                    = "rank.tag.add"
 	TagEditRank                   = "rank.tag.edit"
@@ -41,8 +43,9 @@ const (
 	TagSynonymRank                = "rank.tag.synonym"
 	LinkUrlLimitRank              = "rank.link.url_limit"
 	VoteDetailRank                = "rank.vote.detail"
-	RevisionAuditRank             = "rank.revision.audit"
-	UnreviewedRevisionListRank    = "rank.revision.unreviewed_list"
+	AnswerAuditRank               = "rank.answer.audit"
+	QuestionAuditRank             = "rank.question.audit"
+	TagAuditRank                  = "rank.tag.audit"
 )
 
 type UserRankRepo interface {

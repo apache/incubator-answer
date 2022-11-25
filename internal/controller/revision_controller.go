@@ -67,16 +67,18 @@ func (rc *RevisionController) GetUnreviewedRevisionList(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-
-	can, err := rc.rankService.CheckOperationPermission(ctx, req.UserID, rank.UnreviewedRevisionListRank, "")
+	canList, err := rc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		rank.QuestionAuditRank,
+		rank.AnswerAuditRank,
+		rank.TagAuditRank,
+	}, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	if !can {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
-		return
-	}
+	req.CanReviewQuestion = canList[0]
+	req.CanReviewAnswer = canList[1]
+	req.CanReviewTag = canList[2]
 
 	resp, count, err := rc.revisionListService.GetUnreviewedRevisionList(ctx, req)
 	handler.HandleResponse(ctx, err, gin.H{
@@ -100,15 +102,18 @@ func (rc *RevisionController) RevisionAudit(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	can, err := rc.rankService.CheckOperationPermission(ctx, req.UserID, rank.RevisionAuditRank, "")
+	canList, err := rc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		rank.QuestionAuditRank,
+		rank.AnswerAuditRank,
+		rank.TagAuditRank,
+	}, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	if !can {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
-		return
-	}
+	req.CanReviewQuestion = canList[0]
+	req.CanReviewAnswer = canList[1]
+	req.CanReviewTag = canList[2]
 
 	err = rc.revisionListService.RevisionAudit(ctx, req)
 	handler.HandleResponse(ctx, err, gin.H{})
