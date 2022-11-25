@@ -158,7 +158,6 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		rank.AnswerEditRank,
@@ -168,11 +167,12 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	if !canList[0] {
+	req.CanEdit = canList[0]
+	req.NoNeedReview = canList[1]
+	if !req.CanEdit {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
-	req.NoNeedReview = canList[1]
 
 	_, err = ac.answerService.Update(ctx, req)
 	if err != nil {
@@ -211,7 +211,6 @@ func (ac *AnswerController) AnswerList(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		rank.AnswerEditRank,
