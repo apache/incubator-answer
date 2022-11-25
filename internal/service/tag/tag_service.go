@@ -299,6 +299,7 @@ func (ts *TagService) UpdateTagSynonym(ctx context.Context, req *schema.UpdateTa
 func (ts *TagService) GetTagWithPage(ctx context.Context, req *schema.GetTagWithPageReq) (pageModel *pager.PageModel, err error) {
 	tag := &entity.Tag{}
 	_ = copier.Copy(tag, req)
+	tag.UserID = ""
 
 	page := req.Page
 	pageSize := req.PageSize
