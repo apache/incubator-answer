@@ -31,15 +31,20 @@ const RevisionAuditReject = "reject"
 
 type RevisionAuditReq struct {
 	// object id
-	ID        string `validate:"required" comment:"id" form:"id"`
-	Operation string `validate:"required" comment:"operation" form:"operation"` //approve or reject
-	UserID    string `json:"-" `                                                // user_id
-	// IsAdmin   bool   `json:"-"`
+	ID                string `validate:"required" comment:"id" form:"id"`
+	Operation         string `validate:"required" comment:"operation" form:"operation"` //approve or reject
+	UserID            string `json:"-"`
+	CanReviewQuestion bool   `json:"-"`
+	CanReviewAnswer   bool   `json:"-"`
+	CanReviewTag      bool   `json:"-"`
 }
 
 type RevisionSearch struct {
-	Page   int    `json:"page" form:"page"` // Query number of pages
-	UserID string `json:"-"`
+	Page              int    `json:"page" form:"page"` // Query number of pages
+	CanReviewQuestion bool   `json:"-"`
+	CanReviewAnswer   bool   `json:"-"`
+	CanReviewTag      bool   `json:"-"`
+	UserID            string `json:"-"`
 }
 
 type GetUnreviewedRevisionResp struct {
