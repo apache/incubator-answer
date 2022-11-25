@@ -110,7 +110,7 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	can, err := cc.rankService.CheckOperationPermission(ctx, req.UserID, rank.CommentEditRank, req.UserID)
+	can, err := cc.rankService.CheckOperationPermission(ctx, req.UserID, rank.CommentEditRank, req.CommentID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
