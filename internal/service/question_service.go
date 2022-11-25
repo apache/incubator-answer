@@ -197,7 +197,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		RevisionID:       revisionID,
 	})
 
-	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false, false)
+	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, req.QuestionPermission)
 	return
 }
 
@@ -391,25 +391,31 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		})
 	}
 
-	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, false, false)
+	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, req.QuestionPermission)
 	return
 }
 
 // GetQuestion get question one
-func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID string, addpv bool, isAdmin bool) (resp *schema.QuestionInfo, err error) {
-	question, err := qs.questioncommon.Info(ctx, id, loginUserID)
+func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID string,
+	per *schema.QuestionPermission) (resp *schema.QuestionInfo, err error) {
+	question, err := qs.questioncommon.Info(ctx, questionID, userID)
 	if err != nil {
 		return
 	}
-	if addpv {
-		err = qs.questioncommon.UpdataPv(ctx, id)
-		if err != nil {
-			log.Error("UpdataPv", err)
-		}
-	}
-
-	question.MemberActions = permission.GetQuestionPermission(ctx, loginUserID, question.UserID, isAdmin)
+	question.MemberActions = permission.GetQuestionPermission(ctx, userID, question.UserID,
+		per.CanEdit, per.CanDelete, per.CanClose)
 	return question, nil
+}
+
+// GetQuestionAndAddPV get question one
+func (qs *QuestionService) GetQuestionAndAddPV(ctx context.Context, questionID, loginUserID string,
+	per *schema.QuestionPermission) (
+	resp *schema.QuestionInfo, err error) {
+	err = qs.questioncommon.UpdataPv(ctx, questionID)
+	if err != nil {
+		log.Error(err)
+	}
+	return qs.GetQuestion(ctx, questionID, loginUserID, per)
 }
 
 func (qs *QuestionService) ChangeTag(ctx context.Context, objectTagData *schema.TagChange) error {
@@ -635,12 +641,12 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 // SimilarQuestion
 func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID string, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
 	list := make([]*schema.QuestionInfo, 0)
-	questionInfo, err := qs.GetQuestion(ctx, questionID, loginUserID, false, false)
+	question, err := qs.questioncommon.Info(ctx, questionID, loginUserID)
 	if err != nil {
-		return list, 0, err
+		return list, 0, nil
 	}
-	tagNames := make([]string, 0, len(questionInfo.Tags))
-	for _, tag := range questionInfo.Tags {
+	tagNames := make([]string, 0, len(question.Tags))
+	for _, tag := range question.Tags {
 		tagNames = append(tagNames, tag.SlugName)
 	}
 	search := &schema.QuestionSearch{}
