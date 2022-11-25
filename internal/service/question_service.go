@@ -397,7 +397,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 
 // GetQuestion get question one
 func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID string,
-	per *schema.QuestionPermission) (resp *schema.QuestionInfo, err error) {
+	per schema.QuestionPermission) (resp *schema.QuestionInfo, err error) {
 	question, err := qs.questioncommon.Info(ctx, questionID, userID)
 	if err != nil {
 		return
@@ -409,7 +409,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 
 // GetQuestionAndAddPV get question one
 func (qs *QuestionService) GetQuestionAndAddPV(ctx context.Context, questionID, loginUserID string,
-	per *schema.QuestionPermission) (
+	per schema.QuestionPermission) (
 	resp *schema.QuestionInfo, err error) {
 	err = qs.questioncommon.UpdataPv(ctx, questionID)
 	if err != nil {
