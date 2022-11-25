@@ -91,7 +91,7 @@ func (qc *QuestionController) CloseQuestion(ctx *gin.Context) {
 func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	id := ctx.Query("id")
 	userID := middleware.GetLoginUserIDFromContext(ctx)
-	req := &schema.QuestionPermission{}
+	req := schema.QuestionPermission{}
 	canList, err := qc.rankService.CheckOperationPermissions(ctx, userID, []string{
 		rank.QuestionEditRank,
 		rank.QuestionDeleteRank,
@@ -255,11 +255,9 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	questionPermission := &schema.QuestionPermission{}
-	questionPermission.CanEdit = canList[0]
-	questionPermission.CanDelete = canList[1]
+	req.CanEdit = canList[0]
+	req.CanDelete = canList[1]
 	req.NoNeedReview = canList[2]
-	req.QuestionPermission = questionPermission
 
 	req.CanClose = middleware.GetIsAdminFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
