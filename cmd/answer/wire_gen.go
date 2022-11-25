@@ -135,7 +135,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reportController := controller.NewReportController(reportService, rankService)
 	serviceVoteRepo := activity.NewVoteRepo(dataData, uniqueIDRepo, configRepo, activityRepo, userRankRepo, voteRepo)
 	voteService := service.NewVoteService(serviceVoteRepo, uniqueIDRepo, configRepo, questionRepo, answerRepo, commentCommonRepo, objService)
-	voteController := controller.NewVoteController(voteService)
+	voteController := controller.NewVoteController(voteService, rankService)
 	followRepo := activity_common.NewFollowRepo(dataData, uniqueIDRepo, activityRepo)
 	tagService := tag2.NewTagService(tagRepo, tagCommonService, revisionService, followRepo, siteInfoCommonService)
 	tagController := controller.NewTagController(tagService, tagCommonService, rankService)
