@@ -120,3 +120,14 @@ type GetSMTPConfigResp struct {
 	SMTPPassword       string `json:"smtp_password"`
 	SMTPAuthentication bool   `json:"smtp_authentication"`
 }
+
+// GetManifestJsonResp get manifest json response
+type GetManifestJsonResp struct {
+	ShortName       string            `json:"short_name"`
+	Name            string            `json:"name"`
+	Icons           map[string]string `json:"icons"`
+	StartUrl        string            `json:"start_url"`
+	Display         string            `json:"display"`
+	ThemeColor      string            `json:"theme_color"`
+	BackgroundColor string            `json:"background_color"`
+}

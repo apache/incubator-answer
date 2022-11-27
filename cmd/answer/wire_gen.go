@@ -193,7 +193,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	activityController := controller.NewActivityController(activityCommon, activityService)
 	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController, activityController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
-	uiRouter := router.NewUIRouter()
+	uiRouter := router.NewUIRouter(siteinfoController)
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)
 	avatarMiddleware := middleware.NewAvatarMiddleware(serviceConf, uploaderService)
 	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware)

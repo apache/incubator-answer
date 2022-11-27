@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"net/http"
+
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
@@ -72,4 +74,28 @@ func (sc *SiteinfoController) GetSiteLegalInfo(ctx *gin.Context) {
 		resp.PrivacyPolicyParsedText = siteLegal.PrivacyPolicyParsedText
 	}
 	handler.HandleResponse(ctx, nil, resp)
+}
+
+// GetManifestJson get manifest.json
+func (sc *SiteinfoController) GetManifestJson(ctx *gin.Context) {
+	resp := &schema.GetManifestJsonResp{
+		ShortName: "Answer",
+		Name:      "Answer.dev",
+		Icons: map[string]string{
+			"src":   "favicon.ico",
+			"sizes": "64x64 32x32 24x24 16x16",
+			"type":  "image/x-icon",
+		},
+		StartUrl:        ".",
+		Display:         "standalone",
+		ThemeColor:      "#000000",
+		BackgroundColor: "#ffffff",
+	}
+	branding, err := sc.siteInfoService.GetSiteBranding(ctx)
+	if err != nil {
+		log.Error(err)
+	} else if len(branding.Favicon) > 0 {
+		resp.Icons["scr"] = branding.Favicon
+	}
+	ctx.JSON(http.StatusOK, resp)
 }
