@@ -20,5 +20,6 @@
 Thumbs*.db
 tmp
 vendor/
+.husky
 /answer-data/
 /answer

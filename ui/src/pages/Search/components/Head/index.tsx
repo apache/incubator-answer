@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { following } from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
 import { escapeRemove } from '@/utils';
-import { pathFactory } from '@/router/pathFactory';
 
 interface Props {
   data;
@@ -54,9 +53,7 @@ const Index: FC<Props> = ({ data }) => {
           {data.excerpt && (
             <p className="text-break">
               {escapeRemove(data.excerpt)}
-              <Link className="ms-1" to={pathFactory.tagInfo(data.slug_name)}>
-                [{t('more')}]
-              </Link>
+              <Link to={`/tags/${data.slug_name}/info`}> [{t('more')}]</Link>
             </p>
           )}
 

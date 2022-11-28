@@ -11,14 +11,9 @@ import {
   useQuerySynonymsTags,
   saveSynonymsTags,
   deleteTag,
-  editCheck,
 } from '@/services';
-import { pathFactory } from '@/router/pathFactory';
-import { loggedUserInfoStore } from '@/stores';
 
 const TagIntroduction = () => {
-  const userInfo = loggedUserInfoStore((state) => state.user);
-  const isLogged = Boolean(userInfo?.access_token);
   const [isEdit, setEditState] = useState(false);
   const { tagName } = useParams();
   const { data: tagInfo } = useTagInfo({ name: tagName });
@@ -29,9 +24,7 @@ const TagIntroduction = () => {
     return null;
   }
   if (tagInfo.main_tag_slug_name) {
-    navigate(pathFactory.tagInfo(tagInfo.main_tag_slug_name), {
-      replace: true,
-    });
+    navigate(`/tags/${tagInfo.main_tag_slug_name}/info`, { replace: true });
     return null;
   }
   const handleEdit = () => {
@@ -55,9 +48,7 @@ const TagIntroduction = () => {
   };
 
   const handleEditTag = () => {
-    editCheck(tagInfo?.tag_id).then(() => {
-      navigate(pathFactory.tagEdit(tagInfo?.tag_id));
-    });
+    navigate(`/tags/${tagInfo?.tag_id}/edit`);
   };
   const handleDeleteTag = () => {
     if (synonymsTags && synonymsTags.length > 0) {
@@ -99,7 +90,7 @@ const TagIntroduction = () => {
           <Col xxl={7} lg={8} sm={12}>
             <h3 className="mb-3">
               <Link
-                to={pathFactory.tagLanding(tagInfo)}
+                to={`/tags/${tagInfo?.slug_name}`}
                 replace
                 className="link-dark">
                 {tagInfo.display_name}
@@ -134,13 +125,6 @@ const TagIntroduction = () => {
                   </Button>
                 );
               })}
-              {isLogged && (
-                <Link
-                  to={`/tags/${tagInfo?.tag_id}/timeline`}
-                  className="link-secondary btn-no-border p-0 fs-14 ms-3">
-                  {t('history')}
-                </Link>
-              )}
             </div>
           </Col>
           <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">

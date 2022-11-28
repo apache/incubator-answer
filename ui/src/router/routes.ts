@@ -83,7 +83,7 @@ const routes: RouteNode[] = [
           return guard.activated();
         },
       },
-      // for users
+      // users
       {
         path: 'users/:username',
         page: 'pages/Users/Personal',
@@ -153,6 +153,9 @@ const routes: RouteNode[] = [
       {
         path: 'users/change-email',
         page: 'pages/Users/ChangeEmail',
+        guard: async () => {
+          return guard.notActivated();
+        },
       },
       {
         path: 'users/password-reset',
@@ -179,33 +182,13 @@ const routes: RouteNode[] = [
       {
         path: '/users/confirm-new-email',
         page: 'pages/Users/ConfirmNewEmail',
+        //  TODO: guard this
       },
       {
         path: '/users/account-suspended',
         page: 'pages/Users/Suspended',
         guard: async () => {
           return guard.forbidden();
-        },
-      },
-      {
-        path: '/posts/:qid/timeline',
-        page: 'pages/Timeline',
-        guard: async () => {
-          return guard.logged();
-        },
-      },
-      {
-        path: '/posts/:qid/:aid/timeline',
-        page: 'pages/Timeline',
-        guard: async () => {
-          return guard.logged();
-        },
-      },
-      {
-        path: '/tags/:tid/timeline',
-        page: 'pages/Timeline',
-        guard: async () => {
-          return guard.logged();
         },
       },
       // for admin
@@ -270,11 +253,6 @@ const routes: RouteNode[] = [
             page: 'pages/Admin/Write',
           },
         ],
-      },
-      // for review
-      {
-        path: 'review',
-        page: 'pages/Review',
       },
       {
         path: '*',

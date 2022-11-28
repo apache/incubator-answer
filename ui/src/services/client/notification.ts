@@ -32,7 +32,7 @@ export const readNotification = (id) => {
 export const useQueryNotificationStatus = () => {
   const apiUrl = '/answer/api/v1/notification/status';
 
-  return useSWR<Type.NotificationStatus>(
+  return useSWR<{ inbox: number; achievement: number }>(
     tryLoggedAndActivated().ok ? apiUrl : null,
     request.instance.get,
     {

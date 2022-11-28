@@ -25,38 +25,31 @@ interface FormDataItem {
   tags: Type.FormValue<Type.Tag[]>;
   content: Type.FormValue<string>;
   answer: Type.FormValue<string>;
-  edit_summary: Type.FormValue<string>;
 }
+const initFormData = {
+  title: {
+    value: '',
+    isInvalid: false,
+    errorMsg: '',
+  },
+  tags: {
+    value: [],
+    isInvalid: false,
+    errorMsg: '',
+  },
+  content: {
+    value: '',
+    isInvalid: false,
+    errorMsg: '',
+  },
+  answer: {
+    value: '',
+    isInvalid: false,
+    errorMsg: '',
+  },
+};
 
 const Ask = () => {
-  const initFormData = {
-    title: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
-    tags: {
-      value: [],
-      isInvalid: false,
-      errorMsg: '',
-    },
-    content: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
-    answer: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
-    edit_summary: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
-  };
-  const { t } = useTranslation('translation', { keyPrefix: 'ask' });
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [checked, setCheckState] = useState(false);
   const [focusType, setForceType] = useState('');
@@ -70,6 +63,7 @@ const Ask = () => {
 
   const { qid } = useParams();
   const navigate = useNavigate();
+  const { t } = useTranslation('translation', { keyPrefix: 'ask' });
 
   const isEdit = qid !== undefined;
   const { data: similarQuestions = { list: [] } } = useQueryQuestionByTitle(
@@ -118,15 +112,6 @@ const Ask = () => {
     setFormData({
       ...formData,
       answer: { ...formData.answer, value },
-    });
-
-  const handleSummaryChange = (evt: React.ChangeEvent<HTMLInputElement>) =>
-    setFormData({
-      ...formData,
-      edit_summary: {
-        ...formData.edit_summary,
-        value: evt.currentTarget.value,
-      },
     });
 
   const checkValidated = (): boolean => {
@@ -220,11 +205,7 @@ const Ask = () => {
       tags: formData.tags.value,
     };
     if (isEdit) {
-      modifyQuestion({
-        ...params,
-        id: qid,
-        edit_summary: formData.edit_summary.value,
-      })
+      modifyQuestion({ ...params, id: qid })
         .then(() => {
           navigate(`/questions/${qid}`);
         })
@@ -373,21 +354,6 @@ const Ask = () => {
                   {formData.tags.errorMsg}
                 </Form.Control.Feedback>
               </Form.Group>
-              {isEdit && (
-                <Form.Group controlId="edit_summary" className="my-3">
-                  <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>
-                  <Form.Control
-                    type="text"
-                    defaultValue={formData.edit_summary.value}
-                    isInvalid={formData.edit_summary.isInvalid}
-                    placeholder={t('form.fields.edit_summary.placeholder')}
-                    onChange={handleSummaryChange}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {formData.edit_summary.errorMsg}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              )}
               {!checked && (
                 <div className="mt-3">
                   <Button type="submit" className="me-2">
