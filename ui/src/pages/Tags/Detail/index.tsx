@@ -9,6 +9,7 @@ import { useTagInfo, useFollow } from '@/services';
 import QuestionList from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
 import { escapeRemove } from '@/utils';
+import { pathFactory } from '@/router/pathFactory';
 
 const Questions: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
@@ -30,7 +31,7 @@ const Questions: FC = () => {
     if (tagResp) {
       const info = { ...tagResp };
       if (info.main_tag_slug_name) {
-        navigate(`/tags/${info.main_tag_slug_name}`, { replace: true });
+        navigate(pathFactory.tagLanding(info), { replace: true });
         return;
       }
       if (followResp) {
@@ -62,7 +63,7 @@ const Questions: FC = () => {
             <div className="tag-box mb-5">
               <h3 className="mb-3">
                 <Link
-                  to={`/tags/${tagInfo?.slug_name}`}
+                  to={pathFactory.tagLanding(tagInfo)}
                   replace
                   className="link-dark">
                   {tagInfo.display_name}
@@ -71,9 +72,7 @@ const Questions: FC = () => {
 
               <p className="text-break">
                 {escapeRemove(tagInfo.excerpt) || t('no_description')}
-                <Link
-                  to={`/tags/${encodeURIComponent(curTagName)}/info`}
-                  className="ms-1">
+                <Link to={pathFactory.tagInfo(curTagName)} className="ms-1">
                   [{t('more')}]
                 </Link>
               </p>
