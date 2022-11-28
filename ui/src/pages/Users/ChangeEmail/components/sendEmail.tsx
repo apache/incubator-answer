@@ -85,17 +85,9 @@ const Index: FC = () => {
         setModalState(false);
       })
       .catch((err) => {
-        // if (err.isError && err.key) {
-        //   formData[err.key].isInvalid = true;
-        //   formData[err.key].errorMsg = err.value;
-        //   if (err.key.indexOf('captcha') < 0) {
-        //     setModalState(false);
-        //   }
-        // }
-        // setFormData({ ...formData });
         if (err.isError) {
           const data = handleFormError(err, formData);
-          if (err.list.filter((v) => v.error_field.indexOf('captcha') < 0)) {
+          if (!err.list.find((v) => v.error_field.indexOf('captcha') >= 0)) {
             setModalState(false);
           }
           setFormData({ ...data });
