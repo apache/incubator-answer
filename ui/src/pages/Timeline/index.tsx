@@ -18,11 +18,11 @@ const Index: FC = () => {
   const [isLoading, setLoading] = useState(false);
   const [timelineData, setTimelineData] = useState<Type.TimelineRes>();
 
-  const getPageData = () => {
+  const getPageData = (bol: boolean) => {
     setLoading(true);
     getTimelineData({
       object_id: tid || aid || qid,
-      show_vote: showVotes,
+      show_vote: bol,
     })
       .then((res) => {
         setTimelineData(res);
@@ -34,11 +34,11 @@ const Index: FC = () => {
 
   const handleSwitch = (bol: boolean) => {
     setShowVotes(bol);
-    getPageData();
+    getPageData(bol);
   };
 
   useEffect(() => {
-    getPageData();
+    getPageData(false);
   }, []);
 
   let linkUrl = '';
