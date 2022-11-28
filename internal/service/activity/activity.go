@@ -72,6 +72,16 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 	resp.ObjectInfo.ObjectType = objInfo.ObjectType
 	resp.ObjectInfo.QuestionID = objInfo.QuestionID
 	resp.ObjectInfo.AnswerID = objInfo.AnswerID
+	if len(objInfo.ObjectCreatorUserID) > 0 {
+		// get object creator user info
+		userBasicInfo, exist, err := as.userCommon.GetUserBasicInfoByID(ctx, objInfo.ObjectCreatorUserID)
+		if err != nil {
+			return nil, err
+		}
+		if exist {
+			resp.ObjectInfo.Username = userBasicInfo.Username
+		}
+	}
 
 	activityList, err := as.activityRepo.GetObjectAllActivity(ctx, req.ObjectID, req.ShowVote)
 	if err != nil {

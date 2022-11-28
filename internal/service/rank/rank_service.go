@@ -3,6 +3,7 @@ package rank
 import (
 	"context"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
@@ -75,7 +76,7 @@ func NewRankService(
 	}
 }
 
-// CheckOperationPermission verify that the user has operation
+// CheckOperationPermission verify that the user has permission
 func (rs *RankService) CheckOperationPermission(ctx context.Context, userID string, action string, objectID string) (
 	can bool, err error) {
 	if len(userID) == 0 {
@@ -110,7 +111,7 @@ func (rs *RankService) CheckOperationPermission(ctx context.Context, userID stri
 	return rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, action)
 }
 
-// CheckOperationPermissions verify that the user has operation
+// CheckOperationPermissions verify that the user has permission
 func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID string, actions []string, objectID string) (
 	can []bool, err error) {
 	can = make([]bool, len(actions))
@@ -152,6 +153,55 @@ func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID str
 		can[idx] = meetRank
 	}
 	return can, nil
+}
+
+// CheckVotePermission verify that the user has vote permission
+func (rs *RankService) CheckVotePermission(ctx context.Context, userID, objectID string, voteUp bool) (
+	can bool, err error) {
+	if len(userID) == 0 || len(objectID) == 0 {
+		return false, nil
+	}
+
+	// get the rank of the current user
+	userInfo, exist, err := rs.userCommon.GetUserBasicInfoByID(ctx, userID)
+	if err != nil {
+		return can, err
+	}
+	if !exist {
+		return can, nil
+	}
+
+	objectInfo, err := rs.objectInfoService.GetInfo(ctx, objectID)
+	if err != nil {
+		return can, err
+	}
+
+	action := ""
+	switch objectInfo.ObjectType {
+	case constant.QuestionObjectType:
+		if voteUp {
+			action = QuestionVoteUpRank
+		} else {
+			action = QuestionVoteDownRank
+		}
+	case constant.AnswerObjectType:
+		if voteUp {
+			action = AnswerVoteUpRank
+		} else {
+			action = AnswerVoteDownRank
+		}
+	case constant.CommentObjectType:
+		if voteUp {
+			action = CommentVoteUpRank
+		} else {
+			action = CommentVoteDownRank
+		}
+	}
+	meetRank, err := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, action)
+	if err != nil {
+		log.Error(err)
+	}
+	return meetRank, nil
 }
 
 // CheckRankPermission verify that the user meets the prestige criteria
