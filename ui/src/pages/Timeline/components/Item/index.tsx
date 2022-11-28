@@ -70,7 +70,8 @@ const Index: FC<Props> = ({ data, isAdmin, objectInfo, revisionList }) => {
             </Button>
           )}
           {data.activity_type === 'accept' && (
-            <Link to={`/questions/${objectInfo.question_id}`}>
+            <Link
+              to={`/questions/${objectInfo.question_id}/${data?.object_id}`}>
               {t(data.activity_type)}
             </Link>
           )}

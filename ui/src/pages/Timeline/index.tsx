@@ -1,11 +1,12 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Table } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { loggedUserInfoStore } from '@/stores';
-import { useTimelineData } from '@/services';
+import { getTimelineData } from '@/services';
 import { PageTitle, Empty } from '@/components';
+import * as Type from '@/common/interface';
 
 import HistoryItem from './components/Item';
 
@@ -14,23 +15,45 @@ const Index: FC = () => {
   const { qid = '', aid = '', tid = '' } = useParams();
   const { is_admin } = loggedUserInfoStore((state) => state.user);
   const [showVotes, setShowVotes] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const [timelineData, setTimelineData] = useState<Type.TimelineRes>();
 
-  const { data: timelineData, isLoading } = useTimelineData({
-    object_id: tid || aid || qid,
-    show_vote: showVotes,
-  });
+  const getPageData = () => {
+    setLoading(true);
+    getTimelineData({
+      object_id: tid || aid || qid,
+      show_vote: showVotes,
+    })
+      .then((res) => {
+        setTimelineData(res);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const handleSwitch = (bol: boolean) => {
     setShowVotes(bol);
+    getPageData();
   };
 
+  useEffect(() => {
+    getPageData();
+  }, []);
+
   let linkUrl = '';
+  let pageTitle = '';
   if (timelineData?.object_info.object_type === 'question') {
     linkUrl = `/questions/${timelineData?.object_info.question_id}`;
+    pageTitle = `${t('title_for_question')} ${timelineData?.object_info.title}`;
   }
 
   if (timelineData?.object_info.object_type === 'answer') {
     linkUrl = `/questions/${timelineData?.object_info.question_id}/${timelineData?.object_info.answer_id}`;
+    pageTitle = `${t('title_for_answer', {
+      title: timelineData?.object_info.title,
+      author: timelineData?.object_info.username,
+    })}`;
   }
 
   if (timelineData?.object_info.object_type === 'tag') {
@@ -38,6 +61,7 @@ const Index: FC = () => {
       timelineData?.object_info.main_tag_slug_name ||
       timelineData?.object_info.title
     }`;
+    pageTitle = `${t('title_for_tag')} ${timelineData?.object_info.title}`;
   }
 
   const revisionList =
@@ -45,13 +69,7 @@ const Index: FC = () => {
 
   return (
     <Container className="py-3">
-      <PageTitle
-        title={
-          timelineData?.object_info.object_type === 'tag'
-            ? `${t('title_for_tag')} ${timelineData?.object_info.title}`
-            : `${t('title_for')} ${timelineData?.object_info.title}`
-        }
-      />
+      <PageTitle title={pageTitle} />
       <Row className="py-3 justify-content-center">
         <Col xxl={10}>
           <h5 className="mb-4">

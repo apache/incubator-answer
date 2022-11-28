@@ -1212,7 +1212,8 @@ ui:
     title: "History for"
     show_votes: "Show votes"
     n_or_a: N/A
-    title_for: "Timeline for"
+    title_for_question: "Timeline for"
+    title_for_answer: "Timeline for answers to {{ title }} by {{ author }}"
     title_for_tag: "Title for tag"
     datetime: Datetime
     type: Type
