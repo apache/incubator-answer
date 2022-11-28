@@ -11,11 +11,13 @@ interface Props {
   showReputation?: boolean;
   avatarSearchStr?: string;
   className?: string;
+  avatarClass?: string;
 }
 
 const Index: FC<Props> = ({
   data,
   showAvatar = true,
+  avatarClass = '',
   avatarSize = '20px',
   className = 'fs-14',
   avatarSearchStr = 's=48',
@@ -29,7 +31,7 @@ const Index: FC<Props> = ({
             <Avatar
               avatar={data?.avatar}
               size={avatarSize}
-              className="me-1"
+              className={`me-1 ${avatarClass}`}
               searchStr={avatarSearchStr}
             />
           )}
@@ -41,7 +43,7 @@ const Index: FC<Props> = ({
             <Avatar
               avatar={data?.avatar}
               size={avatarSize}
-              className="me-1"
+              className={`me-1 ${avatarClass}`}
               searchStr={avatarSearchStr}
             />
           )}

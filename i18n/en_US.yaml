@@ -1018,6 +1018,19 @@ ui:
       btn_cancel: Cancel
       btn_submit: Submit
       btn_next: Next
+    user_role_modal:
+      title: Change user role to...
+      btn_cancel: Cancel
+      btn_submit: Submit
+      user:
+        name: User
+        description: Default with no special access.
+      admin:
+        name: Admin
+        description: Have the full power to access the site.
+      moderator:
+        name: Moderator
+        description: Has access to all posts except admin settings.
     users:
       title: Users
       name: Name
@@ -1027,15 +1040,21 @@ ui:
       delete_at: Deleted Time
       suspend_at: Suspended Time
       status: Status
+      role: Role
       action: Action
       change: Change
       all: All
+      staff: Staff
       inactive: Inactive
       suspended: Suspended
       deleted: Deleted
       normal: Normal
       filter:
         placeholder: "Filter by name, user:id"
+      set_new_password: Set new password
+      change_status: Change status
+      change_role: Change role
+      show_logs: Show logs
     questions:
       page_title: Questions
       normal: Normal

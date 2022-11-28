@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Button, Form, Table, Badge } from 'react-bootstrap';
+import { Form, Table, Badge, Dropdown } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -9,15 +9,17 @@ import {
   BaseUserCard,
   Empty,
   QueryGroup,
+  Icon,
 } from '@/components';
 import * as Type from '@/common/interface';
-import { useChangeModal } from '@/hooks';
+import { useChangeModal, useChangeUserRoleModal } from '@/hooks';
 import { useQueryUsers } from '@/services';
 
 import '../index.scss';
 
 const UserFilterKeys: Type.UserFilterBy[] = [
   'all',
+  'staff',
   'inactive',
   'suspended',
   'deleted',
@@ -52,10 +54,21 @@ const Users: FC = () => {
     callback: refreshUsers,
   });
 
+  const changeUserRoleModal = useChangeUserRoleModal({
+    callback: refreshUsers,
+  });
+
   const handleClick = ({ user_id, status }) => {
     changeModal.onShow({
       id: user_id,
       type: status,
+    });
+  };
+
+  const handleClickRole = ({ user_id, role }) => {
+    changeUserRoleModal.onShow({
+      id: user_id,
+      role,
     });
   };
 
@@ -87,20 +100,23 @@ const Users: FC = () => {
         <thead>
           <tr>
             <th>{t('name')}</th>
-            <th style={{ width: '12%' }}>{t('reputation')}</th>
+            {/* <th style={{ width: '12%' }}>{t('reputation')}</th> */}
             <th style={{ width: '20%' }}>{t('email')}</th>
             <th className="text-nowrap" style={{ width: '15%' }}>
               {t('created_at')}
             </th>
             {(curFilter === 'deleted' || curFilter === 'suspended') && (
-              <th className="text-nowrap" style={{ width: '10%' }}>
+              <th className="text-nowrap" style={{ width: '15%' }}>
                 {curFilter === 'deleted' ? t('delete_at') : t('suspend_at')}
               </th>
             )}
 
-            <th style={{ width: '10%' }}>{t('status')}</th>
+            <th style={{ width: '12%' }}>{t('status')}</th>
+            <th style={{ width: '12%' }}>{t('role')}</th>
             {curFilter !== 'deleted' ? (
-              <th style={{ width: '10%' }}>{t('action')}</th>
+              <th style={{ width: '8%' }} className="text-end">
+                {t('action')}
+              </th>
             ) : null}
           </tr>
         </thead>
@@ -112,11 +128,13 @@ const Users: FC = () => {
                   <BaseUserCard
                     data={user}
                     className="fs-6"
-                    avatarSize="24px"
+                    avatarSize="32px"
                     avatarSearchStr="s=48"
+                    avatarClass="me-2"
+                    showReputation={false}
                   />
                 </td>
-                <td>{user.rank}</td>
+                {/* <td>{user.rank}</td> */}
                 <td className="text-break">{user.e_mail}</td>
                 <td>
                   <FormatTime time={user.created_at} />
@@ -134,16 +152,40 @@ const Users: FC = () => {
                 <td>
                   <Badge bg={bgMap[user.status]}>{t(user.status)}</Badge>
                 </td>
+                <td>
+                  <Badge bg="light" className="text-body">
+                    Admin
+                  </Badge>
+                </td>
                 {curFilter !== 'deleted' ? (
-                  <td>
-                    {user.status !== 'deleted' && (
+                  <td className="text-end">
+                    <Dropdown>
+                      <Dropdown.Toggle
+                        variant="link"
+                        className="no-toggle link-secondary">
+                        <Icon name="three-dots-vertical" />
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        <Dropdown.Item>{t('set_new_password')}</Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleClick(user)}>
+                          {t('change_status')}
+                        </Dropdown.Item>
+                        <Dropdown.Item onClick={() => handleClickRole(user)}>
+                          {t('change_role')}
+                        </Dropdown.Item>
+                        <Dropdown.Divider />
+                        <Dropdown.Item>{t('show_logs')}</Dropdown.Item>
+                      </Dropdown.Menu>
+                    </Dropdown>
+
+                    {/* {user.status !== 'deleted' && (
                       <Button
                         className="p-0 btn-no-border"
                         variant="link"
                         onClick={() => handleClick(user)}>
                         {t('change')}
                       </Button>
-                    )}
+                    )} */}
                   </td>
                 ) : null}
               </tr>

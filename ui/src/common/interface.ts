@@ -246,7 +246,12 @@ export type AdminAnswerStatus = 'available' | 'deleted';
 /**
  * @description interface for Users
  */
-export type UserFilterBy = 'all' | 'inactive' | 'suspended' | 'deleted';
+export type UserFilterBy =
+  | 'all'
+  | 'staff'
+  | 'inactive'
+  | 'suspended'
+  | 'deleted';
 
 /**
  * @description interface for Flags
