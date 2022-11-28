@@ -76,7 +76,6 @@ const Index: FC = () => {
       params.captcha_code = formData.captcha_code.value;
       params.captcha_id = imgCode.captcha_id;
     }
-
     changeEmail(params)
       .then(() => {
         userInfo.e_mail = formData.e_mail.value;
@@ -101,7 +100,6 @@ const Index: FC = () => {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     event.stopPropagation();
-
     if (!checkValidated()) {
       return;
     }
