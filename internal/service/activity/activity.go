@@ -134,6 +134,16 @@ func (as *ActivityService) getTimelineMainObjInfo(ctx context.Context, objectID 
 	resp.ObjectType = objInfo.ObjectType
 	resp.QuestionID = objInfo.QuestionID
 	resp.AnswerID = objInfo.AnswerID
+	if len(objInfo.ObjectCreatorUserID) > 0 {
+		// get object creator user info
+		userBasicInfo, exist, err := as.userCommon.GetUserBasicInfoByID(ctx, objInfo.ObjectCreatorUserID)
+		if err != nil {
+			return nil, err
+		}
+		if exist {
+			resp.Username = userBasicInfo.Username
+		}
+	}
 	return resp, nil
 }
 
