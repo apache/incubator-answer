@@ -27,35 +27,35 @@ interface FormDataItem {
   answer: Type.FormValue<string>;
   edit_summary: Type.FormValue<string>;
 }
-const initFormData = {
-  title: {
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  },
-  tags: {
-    value: [],
-    isInvalid: false,
-    errorMsg: '',
-  },
-  content: {
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  },
-  answer: {
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  },
-  edit_summary: {
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  },
-};
 
 const Ask = () => {
+  const initFormData = {
+    title: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+    tags: {
+      value: [],
+      isInvalid: false,
+      errorMsg: '',
+    },
+    content: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+    answer: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+    edit_summary: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+  };
   const { t } = useTranslation('translation', { keyPrefix: 'ask' });
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [checked, setCheckState] = useState(false);
