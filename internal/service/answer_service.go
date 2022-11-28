@@ -222,6 +222,11 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		return "", nil
 	}
 
+	//If the content is the same, ignore it
+	if answerInfo.OriginalText == req.Content {
+		return "", nil
+	}
+
 	now := time.Now()
 	insertData := new(entity.Answer)
 	insertData.ID = req.ID
