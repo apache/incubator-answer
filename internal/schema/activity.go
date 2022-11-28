@@ -46,6 +46,7 @@ type ActObjectInfo struct {
 	ObjectType string `json:"object_type"`
 	QuestionID string `json:"question_id"`
 	AnswerID   string `json:"answer_id"`
+	Username   string `json:"username"`
 }
 
 // GetObjectTimelineDetailReq get object timeline detail request
