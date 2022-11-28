@@ -10,19 +10,10 @@ interface Props {
   data: any;
   time: number;
   preFix: string;
-  isLogged: boolean;
-  timelinePath: string;
   className?: string;
 }
 
-const Index: FC<Props> = ({
-  data,
-  time,
-  preFix,
-  isLogged,
-  timelinePath,
-  className = '',
-}) => {
+const Index: FC<Props> = ({ data, time, preFix, className = '' }) => {
   return (
     <div className={classnames('d-flex', className)}>
       {data?.status !== 'deleted' ? (
@@ -71,18 +62,7 @@ const Index: FC<Props> = ({
             {formatCount(data?.rank)}
           </span>
         </div>
-        {time &&
-          (isLogged ? (
-            <Link to={timelinePath}>
-              <FormatTime
-                time={time}
-                preFix={preFix}
-                className="link-secondary"
-              />
-            </Link>
-          ) : (
-            <FormatTime time={time} preFix={preFix} />
-          ))}
+        {time && <FormatTime time={time} preFix={preFix} />}
       </div>
     </div>
   );

@@ -23,9 +23,8 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: ['./tsconfig.json'],
   },
-  plugins: ['react', '@typescript-eslint', 'prettier'],
+  plugins: ['react', '@typescript-eslint'],
   rules: {
-    'prettier/prettier': 'error',
     'no-unused-vars': 'off',
     'no-console': 'off',
     'import/prefer-default-export': 'off',
@@ -51,7 +50,6 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
     'react/jsx-props-no-spreading': 'off',
     '@typescript-eslint/default-param-last': 'off',
-    'no-nested-ternary': 'off',
     'import/order': [
       'error',
       {

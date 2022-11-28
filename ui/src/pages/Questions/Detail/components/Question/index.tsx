@@ -18,11 +18,10 @@ import { following } from '@/services';
 interface Props {
   data: any;
   hasAnswer: boolean;
-  isLogged: boolean;
   initPage: (type: string) => void;
 }
 
-const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
+const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'question_detail',
   });
@@ -134,17 +133,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
               data={data?.user_info}
               time={data.edit_time}
               preFix={t('edit')}
-              isLogged={isLogged}
-              timelinePath={`/posts/${data.id}/timeline`}
             />
-          ) : isLogged ? (
-            <Link to={`/posts/${data.id}/timeline`}>
-              <FormatTime
-                time={data.edit_time}
-                preFix={t('edit')}
-                className="link-secondary fs-14"
-              />
-            </Link>
           ) : (
             <FormatTime
               time={data.edit_time}
@@ -158,8 +147,6 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
             data={data?.user_info}
             time={data.create_time}
             preFix={t('asked')}
-            isLogged={isLogged}
-            timelinePath={`/posts/${data.id}/timeline`}
           />
         </Col>
       </Row>

@@ -39,7 +39,6 @@ const Index = () => {
   const { setUsers } = usePageUsers();
   const userInfo = loggedUserInfoStore((state) => state.user);
   const isAuthor = userInfo?.username === question?.user_info?.username;
-  const isLogged = Boolean(userInfo?.access_token);
   const requestAnswers = async () => {
     const res = await getAnswers({
       order: order === 'updated' ? order : 'default',
@@ -127,7 +126,6 @@ const Index = () => {
               data={question}
               initPage={initPage}
               hasAnswer={answers.count > 0}
-              isLogged={isLogged}
             />
             {answers.count > 0 && (
               <>
@@ -141,7 +139,6 @@ const Index = () => {
                       questionTitle={question?.title || ''}
                       isAuthor={isAuthor}
                       callback={initPage}
-                      isLogged={isLogged}
                     />
                   );
                 })}

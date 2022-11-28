@@ -1,7 +1,5 @@
 import i18next from 'i18next';
 
-const Diff = require('diff');
-
 function thousandthDivision(num) {
   const reg = /\d{1,3}(?=(\d{3})+$)/g;
   return `${num}`.replace(reg, '$&,');
@@ -165,34 +163,6 @@ function handleFormError(
   return data;
 }
 
-function diffText(newText: string, oldText: string): string {
-  if (!newText) {
-    return '';
-  }
-
-  if (!oldText) {
-    return newText
-      ?.replace(/\n/gi, '<br>')
-      ?.replace(/<iframe/gi, '&lt;iframe')
-      ?.replace(/<input/gi, '&lt;input');
-  }
-  const diff = Diff.diffChars(oldText, newText);
-  const result = diff.map((part) => {
-    if (part.added) {
-      return `<span class="review-text-add">${part.value}</span>`;
-    }
-    if (part.removed) {
-      return `<span class="review-text-delete">${part.value}</span>`;
-    }
-    return part.value;
-  });
-
-  return result
-    .join('')
-    ?.replace(/<iframe/gi, '&lt;iframe')
-    ?.replace(/<input/gi, '&lt;input');
-}
-
 export {
   thousandthDivision,
   formatCount,
@@ -205,5 +175,4 @@ export {
   colorRgb,
   labelStyle,
   handleFormError,
-  diffText,
 };
