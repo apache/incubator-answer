@@ -86,7 +86,7 @@ const Index: FC = () => {
       .catch((err) => {
         if (err.isError) {
           const data = handleFormError(err, formData);
-          if (err.list.filter((v) => v.error_field.indexOf('captcha') < 0)) {
+          if (!err.list.find((v) => v.error_field.indexOf('captcha') >= 0)) {
             setModalState(false);
           }
           setFormData({ ...data });
