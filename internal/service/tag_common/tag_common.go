@@ -419,6 +419,30 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 	return nil
 }
 
+// CheckTagsIsChange
+func (ts *TagCommonService) CheckTagsIsChange(ctx context.Context, tagNameList, oldtagNameList []string) bool {
+	check := make(map[string]bool)
+	if len(tagNameList) != len(oldtagNameList) {
+		return true
+	}
+	for _, item := range tagNameList {
+		check[item] = false
+	}
+	for _, item := range oldtagNameList {
+		_, ok := check[item]
+		if !ok {
+			return true
+		}
+		check[item] = true
+	}
+	for _, value := range check {
+		if value == false {
+			return true
+		}
+	}
+	return false
+}
+
 func (ts *TagCommonService) CheckChangeReservedTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
 	reservedTagsMap := make(map[string]bool)
 	needTagsMap := make([]string, 0)
@@ -615,6 +639,10 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, req *schema.UpdateTag
 	}
 	if !exist {
 		return errors.BadRequest(reason.TagNotFound)
+	}
+	//If the content is the same, ignore it
+	if tagInfo.OriginalText == req.OriginalText {
+		return nil
 	}
 
 	tagInfo.SlugName = req.SlugName

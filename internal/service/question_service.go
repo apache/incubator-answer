@@ -120,7 +120,7 @@ func (qs *QuestionService) CloseMsgList(ctx context.Context, lang i18n.Language)
 }
 
 // AddQuestion add question
-func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd) (questionInfo *schema.QuestionInfo, err error) {
+func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd) (questionInfo any, err error) {
 	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
 	if err != nil {
 		return
@@ -129,6 +129,16 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		err = fmt.Errorf("recommend is not exist")
 		err = errors.BadRequest(reason.RecommendTagNotExist).WithError(err).WithStack()
 		return
+	}
+
+	if !recommendExist {
+		errorlist := make([]*validator.FormErrorField, 0)
+		errorlist = append(errorlist, &validator.FormErrorField{
+			ErrorField: "tags",
+			ErrorMsg:   reason.RecommendTagEnter,
+		})
+		err = errors.BadRequest(reason.RecommendTagEnter)
+		return errorlist, err
 	}
 
 	question := &entity.Question{}
@@ -143,7 +153,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	question.Status = entity.QuestionStatusAvailable
 	question.RevisionID = "0"
 	question.CreatedAt = now
-	question.UpdatedAt = now
+	// question.UpdatedAt = now
 	err = qs.questionRepo.AddQuestion(ctx, question)
 	if err != nil {
 		return
@@ -270,6 +280,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	_, existUnreviewed, err := qs.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
 	if err != nil {
 		return
+
 	}
 	if existUnreviewed {
 		err = errors.BadRequest(reason.QuestionCannotUpdate)
@@ -292,10 +303,27 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return
 	}
 
+	oldTags, tagerr := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
+	if tagerr != nil {
+		return questionInfo, tagerr
+	}
+
 	tagNameList := make([]string, 0)
+	oldtagNameList := make([]string, 0)
 	for _, tag := range req.Tags {
 		tagNameList = append(tagNameList, tag.SlugName)
 	}
+	for _, tag := range oldTags {
+		oldtagNameList = append(oldtagNameList, tag.SlugName)
+	}
+
+	isChange := qs.tagCommon.CheckTagsIsChange(ctx, tagNameList, oldtagNameList)
+
+	//If the content is the same, ignore it
+	if dbinfo.Title == req.Title && dbinfo.OriginalText == req.Content && !isChange {
+		return
+	}
+
 	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
 	if tagerr != nil {
 		return questionInfo, tagerr
@@ -304,14 +332,10 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	// If it's not admin
 	if !req.IsAdmin {
 		//CheckChangeTag
-		oldTags, tagerr := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
-		if tagerr != nil {
-			return questionInfo, tagerr
-		}
 
 		CheckTag, CheckTaglist := qs.CheckChangeReservedTag(ctx, oldTags, Tags)
 		if !CheckTag {
-			errMsg := fmt.Sprintf(`The reserved tag %s must be present.`,
+			errMsg := fmt.Sprintf(`The reserved tag "%s" must be present.`,
 				strings.Join(CheckTaglist, ","))
 			errorlist := make([]*validator.FormErrorField, 0)
 			errorlist = append(errorlist, &validator.FormErrorField{
