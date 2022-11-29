@@ -1,9 +1,14 @@
 package server
 
 import (
+	"html/template"
+	"io/fs"
+	"os"
+
 	brotli "github.com/anargu/gin-brotli"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/router"
+	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 )
 
@@ -31,7 +36,6 @@ func NewHTTPServer(debug bool,
 
 	rootGroup := r.Group("")
 	swaggerRouter.Register(rootGroup)
-	templateRouter.RegisterTemplateRouter(rootGroup)
 	static := r.Group("")
 	static.Use(avatarMiddleware.AvatarThumb())
 	staticRouter.RegisterStaticRouter(static)
@@ -50,5 +54,15 @@ func NewHTTPServer(debug bool,
 	cmsauthV1.Use(authUserMiddleware.CmsAuth())
 	answerRouter.RegisterAnswerCmsAPIRouter(cmsauthV1)
 
+	dev := os.Getenv("DEVCODE")
+	if dev != "" {
+		r.LoadHTMLGlob("../../ui/template/*")
+	} else {
+		html, _ := fs.Sub(ui.Template, "template")
+		htmlTemplate := template.Must(template.New("").ParseFS(html, "*.html"))
+		r.SetHTMLTemplate(htmlTemplate)
+	}
+
+	templateRouter.RegisterTemplateRouter(rootGroup)
 	return r
 }

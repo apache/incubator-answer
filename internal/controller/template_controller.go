@@ -41,7 +41,7 @@ func GetStyle() (script, css string) {
 
 // Index question list
 func (tc *TemplateController) Index(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
+	ctx.HTML(http.StatusOK, "question.html", gin.H{
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
 	})
@@ -51,7 +51,7 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	id := ctx.Param("id")
 	answerid := ctx.Param("answerid")
-	ctx.JSON(http.StatusOK, gin.H{
+	ctx.HTML(http.StatusOK, "question-detail.html", gin.H{
 		"id":         id,
 		"answerid":   answerid,
 		"scriptPath": tc.scriptPath,
@@ -61,7 +61,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 
 // TagList tags list
 func (tc *TemplateController) TagList(ctx *gin.Context) {
-	ctx.JSON(http.StatusOK, gin.H{
+	ctx.HTML(http.StatusOK, "tags.html", gin.H{
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
 	})
@@ -70,7 +70,7 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 // TagInfo taginfo
 func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	tag := ctx.Param("tag")
-	ctx.JSON(http.StatusOK, gin.H{
+	ctx.HTML(http.StatusOK, "tag-detail.html", gin.H{
 		"tag":        tag,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
@@ -80,7 +80,7 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 // UserInfo user info
 func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 	username := ctx.Param("username")
-	ctx.JSON(http.StatusOK, gin.H{
+	ctx.HTML(http.StatusOK, "homepage.html", gin.H{
 		"username":   username,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,

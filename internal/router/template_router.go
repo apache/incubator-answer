@@ -19,6 +19,7 @@ func NewTemplateRouter(
 
 // TemplateRouter template router
 func (a *TemplateRouter) RegisterTemplateRouter(r *gin.RouterGroup) {
+
 	r.GET("/", a.templateController.Index)
 	r.GET("/index", a.templateController.Index)
 	r.GET("/questions", a.templateController.Index)
