@@ -1,11 +1,88 @@
 package controller
 
+import (
+	"net/http"
+	"regexp"
+
+	"github.com/answerdev/answer/ui"
+	"github.com/gin-gonic/gin"
+)
+
 type TemplateController struct {
+	scriptPath string
+	cssPath    string
 }
 
 // NewTemplateController new controller
 func NewTemplateController() *TemplateController {
-	return &TemplateController{}
+	script, css := GetStyle()
+	return &TemplateController{
+		scriptPath: script,
+		cssPath:    css,
+	}
+}
+func GetStyle() (script, css string) {
+	file, err := ui.Build.ReadFile("build/index.html")
+	if err != nil {
+		return
+	}
+	scriptRegexp := regexp.MustCompile(`<script defer="defer" src="(.*)"></script>`)
+	scriptData := scriptRegexp.FindStringSubmatch(string(file))
+	cssRegexp := regexp.MustCompile(`<link href="(.*)" rel="stylesheet">`)
+	cssListData := cssRegexp.FindStringSubmatch(string(file))
+	if len(scriptData) == 2 {
+		script = scriptData[1]
+	}
+	if len(cssListData) == 2 {
+		css = cssListData[1]
+	}
+	return
 }
 
-// func (tc *TemplateController) SearchTagLike(ctx *gin.Context) {
+// Index question list
+func (tc *TemplateController) Index(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"scriptPath": tc.scriptPath,
+		"cssPath":    tc.cssPath,
+	})
+}
+
+// QuestionInfo question and answers info
+func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
+	id := ctx.Param("id")
+	answerid := ctx.Param("answerid")
+	ctx.JSON(http.StatusOK, gin.H{
+		"id":         id,
+		"answerid":   answerid,
+		"scriptPath": tc.scriptPath,
+		"cssPath":    tc.cssPath,
+	})
+}
+
+// TagList tags list
+func (tc *TemplateController) TagList(ctx *gin.Context) {
+	ctx.JSON(http.StatusOK, gin.H{
+		"scriptPath": tc.scriptPath,
+		"cssPath":    tc.cssPath,
+	})
+}
+
+// TagInfo taginfo
+func (tc *TemplateController) TagInfo(ctx *gin.Context) {
+	tag := ctx.Param("tag")
+	ctx.JSON(http.StatusOK, gin.H{
+		"tag":        tag,
+		"scriptPath": tc.scriptPath,
+		"cssPath":    tc.cssPath,
+	})
+}
+
+// UserInfo user info
+func (tc *TemplateController) UserInfo(ctx *gin.Context) {
+	username := ctx.Param("username")
+	ctx.JSON(http.StatusOK, gin.H{
+		"username":   username,
+		"scriptPath": tc.scriptPath,
+		"cssPath":    tc.cssPath,
+	})
+}

@@ -15,6 +15,7 @@ func NewHTTPServer(debug bool,
 	viewRouter *router.UIRouter,
 	authUserMiddleware *middleware.AuthUserMiddleware,
 	avatarMiddleware *middleware.AvatarMiddleware,
+	templateRouter *router.TemplateRouter,
 ) *gin.Engine {
 
 	if debug {
@@ -30,6 +31,7 @@ func NewHTTPServer(debug bool,
 
 	rootGroup := r.Group("")
 	swaggerRouter.Register(rootGroup)
+	templateRouter.RegisterTemplateRouter(rootGroup)
 	static := r.Group("")
 	static.Use(avatarMiddleware.AvatarThumb())
 	staticRouter.RegisterStaticRouter(static)
