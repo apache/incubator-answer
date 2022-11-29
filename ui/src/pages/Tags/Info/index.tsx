@@ -137,7 +137,10 @@ const TagIntroduction = () => {
               {isLogged && (
                 <Link
                   to={`/tags/${tagInfo?.tag_id}/timeline`}
-                  className="link-secondary btn-no-border p-0 fs-14 ms-3">
+                  className={classNames(
+                    'link-secondary btn-no-border p-0 fs-14',
+                    tagInfo?.member_actions?.length > 0 && 'ms-3',
+                  )}>
                   {t('history')}
                 </Link>
               )}
