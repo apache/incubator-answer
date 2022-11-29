@@ -80,6 +80,7 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 		}
 		if exist {
 			resp.ObjectInfo.Username = userBasicInfo.Username
+			resp.ObjectInfo.DisplayName = userBasicInfo.DisplayName
 		}
 	}
 
