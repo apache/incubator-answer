@@ -55,8 +55,8 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
 		return
 	}
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	req.IsAdmin = userinfo.IsAdmin
+	IsAdmin := middleware.GetIsAdminFromContext(ctx)
+	req.IsAdmin = IsAdmin
 	err := ac.answerService.RemoveAnswer(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -148,8 +148,8 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	req.IsAdmin = userinfo.IsAdmin
+	IsAdmin := middleware.GetIsAdminFromContext(ctx)
+	req.IsAdmin = IsAdmin
 
 	if can, err := ac.rankService.CheckRankPermission(ctx, req.UserID, rank.AnswerEditRank); err != nil || !can {
 		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
