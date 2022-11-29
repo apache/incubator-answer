@@ -287,9 +287,9 @@ export interface AdminSettingsSmtp {
   from_name: string;
   smtp_authentication: boolean;
   smtp_host: string;
-  smtp_password: string;
+  smtp_password?: string;
   smtp_port: number;
-  smtp_username: string;
+  smtp_username?: string;
   test_email_recipient?: string;
 }
 

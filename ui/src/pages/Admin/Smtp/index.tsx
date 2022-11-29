@@ -37,8 +37,8 @@ const Smtp: FC = () => {
         type: 'boolean',
         title: t('encryption.label'),
         description: t('encryption.text'),
-        enum: ['SSL', ''],
-        enumNames: ['SSL', ''],
+        enum: ['SSL', 'None'],
+        enumNames: ['SSL', 'None'],
       },
       smtp_port: {
         type: 'string',
@@ -54,12 +54,10 @@ const Smtp: FC = () => {
       smtp_username: {
         type: 'string',
         title: t('smtp_username.label'),
-        description: t('smtp_username.text'),
       },
       smtp_password: {
         type: 'string',
         title: t('smtp_password.label'),
-        description: t('smtp_password.text'),
       },
       test_email_recipient: {
         type: 'string',
@@ -70,15 +68,35 @@ const Smtp: FC = () => {
   };
   const uiSchema: UISchema = {
     encryption: {
-      'ui:widget': 'radio',
+      'ui:widget': 'select',
+    },
+    smtp_username: {
+      'ui:options': {
+        validator: (value: string, formData) => {
+          if (formData.smtp_authentication.value) {
+            if (!value) {
+              return t('smtp_username.msg');
+            }
+          }
+          return true;
+        },
+      },
     },
     smtp_password: {
       'ui:options': {
         type: 'password',
+        validator: (value: string, formData) => {
+          if (formData.smtp_authentication.value) {
+            if (!value) {
+              return t('smtp_password.msg');
+            }
+          }
+          return true;
+        },
       },
     },
     smtp_authentication: {
-      'ui:widget': 'radio',
+      'ui:widget': 'switch',
     },
     smtp_port: {
       'ui:options': {
@@ -116,8 +134,12 @@ const Smtp: FC = () => {
       encryption: formData.encryption.value,
       smtp_port: Number(formData.smtp_port.value),
       smtp_authentication: formData.smtp_authentication.value,
-      smtp_username: formData.smtp_username.value,
-      smtp_password: formData.smtp_password.value,
+      ...(formData.smtp_authentication.value
+        ? { smtp_username: formData.smtp_username.value }
+        : {}),
+      ...(formData.smtp_authentication.value
+        ? { smtp_password: formData.smtp_password.value }
+        : {}),
       test_email_recipient: formData.test_email_recipient.value,
     };
 
@@ -150,6 +172,22 @@ const Smtp: FC = () => {
     });
     setFormData(formState);
   }, [setting]);
+
+  useEffect(() => {
+    if (formData.smtp_authentication.value) {
+      setFormData({
+        ...formData,
+        smtp_username: { ...formData.smtp_username, hidden: false },
+        smtp_password: { ...formData.smtp_password, hidden: false },
+      });
+    } else {
+      setFormData({
+        ...formData,
+        smtp_username: { ...formData.smtp_username, hidden: true },
+        smtp_password: { ...formData.smtp_password, hidden: true },
+      });
+    }
+  }, [formData.smtp_authentication]);
 
   const handleOnChange = (data) => {
     setFormData(data);

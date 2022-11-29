@@ -2,6 +2,8 @@ import { FC } from 'react';
 import { Form, Button, Stack } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import classnames from 'classnames';
+
 import BrandUpload from '../BrandUpload';
 import TimeZonePicker from '../TimeZonePicker';
 import type * as Type from '@/common/interface';
@@ -51,7 +53,10 @@ export interface UISchema {
         | 'url'
         | 'week';
       empty?: string;
-      validator?: (value) => Promise<string | true | void> | true | string;
+      validator?: (
+        value,
+        formData?,
+      ) => Promise<string | true | void> | true | string;
       textRender?: () => React.ReactElement;
       imageType?: Type.UploadType;
       acceptType?: string;
@@ -141,7 +146,7 @@ const SchemaForm: FC<IProps> = ({
         const value = formData[key]?.value;
         promises.push({
           key,
-          promise: validator(value),
+          promise: validator(value, formData),
         });
       }
     });
@@ -251,7 +256,10 @@ const SchemaForm: FC<IProps> = ({
           uiSchema[key] || {};
         if (widget === 'select') {
           return (
-            <Form.Group key={title} controlId={key} className="mb-3">
+            <Form.Group
+              key={title}
+              controlId={key}
+              className={classnames('mb-3', formData[key].hidden && 'd-none')}>
               <Form.Label>{title}</Form.Label>
               <Form.Select
                 aria-label={description}
@@ -267,13 +275,18 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              {description && (
+                <Form.Text className="text-muted">{description}</Form.Text>
+              )}
             </Form.Group>
           );
         }
         if (widget === 'checkbox' || widget === 'radio') {
           return (
-            <Form.Group key={title} className="mb-3" controlId={key}>
+            <Form.Group
+              key={title}
+              className={classnames('mb-3', formData[key].hidden && 'd-none')}
+              controlId={key}>
               <Form.Label>{title}</Form.Label>
               <Stack direction="horizontal">
                 {properties[key].enum?.map((item, index) => {
@@ -298,15 +311,19 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              {description && (
+                <Form.Text className="text-muted">{description}</Form.Text>
+              )}
             </Form.Group>
           );
         }
 
         if (widget === 'switch') {
-          console.log(formData[key]?.value, 'switch=====');
           return (
-            <Form.Group key={title} className="mb-3" controlId={key}>
+            <Form.Group
+              key={title}
+              className={classnames('mb-3', formData[key].hidden && 'd-none')}
+              controlId={key}>
               <Form.Label>{title}</Form.Label>
               <Form.Check
                 required
@@ -323,13 +340,18 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              {description && (
+                <Form.Text className="text-muted">{description}</Form.Text>
+              )}
             </Form.Group>
           );
         }
         if (widget === 'timezone') {
           return (
-            <Form.Group key={title} className="mb-3" controlId={key}>
+            <Form.Group
+              key={title}
+              className={classnames('mb-3', formData[key].hidden && 'd-none')}
+              controlId={key}>
               <Form.Label>{title}</Form.Label>
               <TimeZonePicker
                 value={formData[key]?.value}
@@ -343,14 +365,19 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              {description && (
+                <Form.Text className="text-muted">{description}</Form.Text>
+              )}
             </Form.Group>
           );
         }
 
         if (widget === 'upload') {
           return (
-            <Form.Group key={title} className="mb-3" controlId={key}>
+            <Form.Group
+              key={title}
+              className={classnames('mb-3', formData[key].hidden && 'd-none')}
+              controlId={key}>
               <Form.Label>{title}</Form.Label>
               <BrandUpload
                 type={options.imageType || 'avatar'}
@@ -366,14 +393,19 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              {description && (
+                <Form.Text className="text-muted">{description}</Form.Text>
+              )}
             </Form.Group>
           );
         }
 
         if (widget === 'textarea') {
           return (
-            <Form.Group controlId={key} key={key} className="mb-3">
+            <Form.Group
+              controlId={key}
+              key={key}
+              className={classnames('mb-3', formData[key].hidden && 'd-none')}>
               <Form.Label>{title}</Form.Label>
               <Form.Control
                 as="textarea"
@@ -389,12 +421,17 @@ const SchemaForm: FC<IProps> = ({
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
 
-              <Form.Text className="text-muted">{description}</Form.Text>
+              {description && (
+                <Form.Text className="text-muted">{description}</Form.Text>
+              )}
             </Form.Group>
           );
         }
         return (
-          <Form.Group controlId={key} key={key} className="mb-3">
+          <Form.Group
+            controlId={key}
+            key={key}
+            className={classnames('mb-3', formData[key].hidden && 'd-none')}>
             <Form.Label>{title}</Form.Label>
             <Form.Control
               name={key}
@@ -409,7 +446,9 @@ const SchemaForm: FC<IProps> = ({
               {formData[key]?.errorMsg}
             </Form.Control.Feedback>
 
-            <Form.Text className="text-muted">{description}</Form.Text>
+            {description && (
+              <Form.Text className="text-muted">{description}</Form.Text>
+            )}
           </Form.Group>
         );
       })}
