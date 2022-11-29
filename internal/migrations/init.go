@@ -28,6 +28,10 @@ var tables = []interface{}{
 	&entity.Uniqid{},
 	&entity.User{},
 	&entity.Version{},
+	&entity.Role{},
+	&entity.RolePowerRel{},
+	&entity.Power{},
+	&entity.UserRoleRel{},
 }
 
 // InitDB init db

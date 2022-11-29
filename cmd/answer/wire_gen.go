@@ -31,6 +31,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/reason"
 	"github.com/answerdev/answer/internal/repo/report"
 	"github.com/answerdev/answer/internal/repo/revision"
+	"github.com/answerdev/answer/internal/repo/role"
 	"github.com/answerdev/answer/internal/repo/search_common"
 	"github.com/answerdev/answer/internal/repo/site_info"
 	"github.com/answerdev/answer/internal/repo/tag"
@@ -59,6 +60,7 @@ import (
 	"github.com/answerdev/answer/internal/service/report_backyard"
 	"github.com/answerdev/answer/internal/service/report_handle_backyard"
 	"github.com/answerdev/answer/internal/service/revision_common"
+	role2 "github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/internal/service/search_parser"
 	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo"
@@ -169,7 +171,11 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reportBackyardService := report_backyard.NewReportBackyardService(reportRepo, userCommon, commonRepo, answerRepo, questionRepo, commentCommonRepo, reportHandle, configRepo)
 	controller_backyardReportController := controller_backyard.NewReportController(reportBackyardService)
 	userBackyardRepo := user.NewUserBackyardRepo(dataData, authRepo)
-	userBackyardService := user_backyard.NewUserBackyardService(userBackyardRepo)
+	userRoleRelRepo := role.NewUserRoleRelRepo(dataData)
+	roleRepo := role.NewRoleRepo(dataData)
+	roleService := role2.NewRoleService(roleRepo)
+	userRoleRelService := role2.NewUserRoleRelService(userRoleRelRepo, roleService)
+	userBackyardService := user_backyard.NewUserBackyardService(userBackyardRepo, userRoleRelService)
 	userBackyardController := controller_backyard.NewUserBackyardController(userBackyardService)
 	reasonRepo := reason.NewReasonRepo(configRepo)
 	reasonService := reason2.NewReasonService(reasonRepo)
@@ -184,7 +190,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	notificationController := controller.NewNotificationController(notificationService)
 	dashboardController := controller.NewDashboardController(dashboardService)
 	uploadController := controller.NewUploadController(uploaderService)
-	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController)
+	roleController := controller_backyard.NewRoleController(roleService)
+	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController, roleController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter()
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)

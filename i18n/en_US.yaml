@@ -12,6 +12,22 @@ backend:
     database_error:
       other: "Data server error."
 
+  role:
+    name:
+      user:
+        other: "User"
+      admin:
+        other: "Admin"
+      Moderator:
+        other: "Moderator"
+    description:
+      user:
+        other: "Default with no special access."
+      admin:
+        other: "Have the full power to access the site."
+      Moderator:
+        other: "Has access to all posts except admin settings."
+
   email:
     other: "Email"
   password:

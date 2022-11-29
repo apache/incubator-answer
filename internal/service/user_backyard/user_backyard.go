@@ -3,31 +3,43 @@ package user_backyard
 import (
 	"context"
 	"fmt"
+	"net/mail"
+	"strings"
 	"time"
+	"unicode"
 
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/role"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 // UserBackyardRepo user repository
 type UserBackyardRepo interface {
 	UpdateUserStatus(ctx context.Context, userID string, userStatus, mailStatus int, email string) (err error)
 	GetUserInfo(ctx context.Context, userID string) (user *entity.User, exist bool, err error)
-	GetUserPage(ctx context.Context, page, pageSize int, user *entity.User, query string) (users []*entity.User, total int64, err error)
+	GetUserPage(ctx context.Context, page, pageSize int, user *entity.User,
+		usernameOrDisplayName string, isStaff bool) (users []*entity.User, total int64, err error)
 }
 
 // UserBackyardService user service
 type UserBackyardService struct {
-	userRepo UserBackyardRepo
+	userRepo           UserBackyardRepo
+	userRoleRelService *role.UserRoleRelService
 }
 
-func NewUserBackyardService(userRepo UserBackyardRepo) *UserBackyardService {
+// NewUserBackyardService new user backyard service
+func NewUserBackyardService(
+	userRepo UserBackyardRepo,
+	userRoleRelService *role.UserRoleRelService,
+) *UserBackyardService {
 	return &UserBackyardService{
-		userRepo: userRepo,
+		userRepo:           userRepo,
+		userRoleRelService: userRoleRelService,
 	}
 }
 
@@ -62,6 +74,16 @@ func (us *UserBackyardService) UpdateUserStatus(ctx context.Context, req *schema
 	return us.userRepo.UpdateUserStatus(ctx, userInfo.ID, userInfo.Status, userInfo.MailStatus, userInfo.EMail)
 }
 
+// UpdateUserRole update user role
+func (us *UserBackyardService) UpdateUserRole(ctx context.Context, req *schema.UpdateUserRoleReq) (err error) {
+	// Users cannot modify their roles
+	if req.UserID == req.LoginUserID {
+		// TODO update user role error
+		return errors.BadRequest(reason.UnknownError)
+	}
+	return us.userRoleRelService.SaveUserRole(ctx, req.UserID, req.RoleID)
+}
+
 // GetUserInfo get user one
 func (us *UserBackyardService) GetUserInfo(ctx context.Context, userID string) (resp *schema.GetUserInfoResp, err error) {
 	user, exist, err := us.userRepo.GetUserInfo(ctx, userID)
@@ -91,7 +113,29 @@ func (us *UserBackyardService) GetUserPage(ctx context.Context, req *schema.GetU
 		user.Status = entity.UserStatusDeleted
 	}
 
-	users, total, err := us.userRepo.GetUserPage(ctx, req.Page, req.PageSize, user, req.Query)
+	if len(req.Query) > 0 {
+		if email, e := mail.ParseAddress(req.Query); e == nil {
+			user.EMail = email.Address
+			req.Query = ""
+		} else if strings.HasPrefix(req.Query, "user:") {
+			id := strings.TrimSpace(strings.TrimPrefix(req.Query, "user:"))
+			idSearch := true
+			for _, r := range id {
+				if !unicode.IsDigit(r) {
+					idSearch = false
+					break
+				}
+			}
+			if idSearch {
+				user.ID = id
+				req.Query = ""
+			} else {
+				req.Query = id
+			}
+		}
+	}
+
+	users, total, err := us.userRepo.GetUserPage(ctx, req.Page, req.PageSize, user, req.Query, req.Staff)
 	if err != nil {
 		return
 	}
@@ -121,5 +165,28 @@ func (us *UserBackyardService) GetUserPage(ctx context.Context, req *schema.GetU
 		}
 		resp = append(resp, t)
 	}
+	us.setUserRoleInfo(ctx, resp)
 	return pager.NewPageModel(total, resp), nil
+}
+
+func (us *UserBackyardService) setUserRoleInfo(ctx context.Context, resp []*schema.GetUserPageResp) {
+	var userIDs []string
+	for _, u := range resp {
+		userIDs = append(userIDs, u.UserID)
+	}
+
+	userRoleMapping, err := us.userRoleRelService.GetUserRoleMapping(ctx, userIDs)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+
+	for _, u := range resp {
+		r := userRoleMapping[u.UserID]
+		if r == nil {
+			continue
+		}
+		u.RoleID = r.ID
+		u.RoleName = r.Name
+	}
 }

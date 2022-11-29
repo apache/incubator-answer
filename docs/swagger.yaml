@@ -528,6 +528,15 @@ definitions:
       user_info:
         $ref: '#/definitions/schema.UserBasicInfo'
     type: object
+  schema.GetRoleResp:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   schema.GetSMTPConfigResp:
     properties:
       encryption:
@@ -684,6 +693,12 @@ definitions:
       rank:
         description: rank
         type: integer
+      role_id:
+        description: role id
+        type: integer
+      role_name:
+        description: role name
+        type: string
       status:
         description: user status(normal,suspended,deleted,inactive)
         type: string
@@ -1404,6 +1419,18 @@ definitions:
     required:
     - language
     type: object
+  schema.UpdateUserRoleReq:
+    properties:
+      role_id:
+        description: role id
+        type: integer
+      user_id:
+        description: user id
+        type: string
+    required:
+    - role_id
+    - user_id
+    type: object
   schema.UpdateUserStatusReq:
     properties:
       status:
@@ -1856,6 +1883,26 @@ paths:
       summary: list report page
       tags:
       - admin
+  /answer/admin/api/roles:
+    get:
+      description: get role list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetRoleResp'
+                  type: array
+              type: object
+      summary: get role list
+      tags:
+      - admin
   /answer/admin/api/setting/smtp:
     get:
       description: GetSMTPConfig get smtp config
@@ -2117,6 +2164,30 @@ paths:
       summary: Get theme options
       tags:
       - admin
+  /answer/admin/api/user/role:
+    put:
+      consumes:
+      - application/json
+      description: update user role
+      parameters:
+      - description: user
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateUserRoleReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update user role
+      tags:
+      - admin
   /answer/admin/api/user/status:
     put:
       consumes:
@@ -2157,6 +2228,10 @@ paths:
         in: query
         name: query
         type: string
+      - description: staff user
+        in: query
+        name: staff
+        type: boolean
       - description: user status
         enum:
         - suspended

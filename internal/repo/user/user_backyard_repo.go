@@ -3,10 +3,7 @@ package user
 import (
 	"context"
 	"encoding/json"
-	"net/mail"
-	"strings"
 	"time"
-	"unicode"
 
 	"xorm.io/builder"
 
@@ -75,49 +72,27 @@ func (ur *userBackyardRepo) GetUserInfo(ctx context.Context, userID string) (use
 }
 
 // GetUserPage get user page
-func (ur *userBackyardRepo) GetUserPage(ctx context.Context, page, pageSize int, user *entity.User, query string) (users []*entity.User, total int64, err error) {
+func (ur *userBackyardRepo) GetUserPage(ctx context.Context, page, pageSize int, user *entity.User,
+	usernameOrDisplayName string, isStaff bool) (users []*entity.User, total int64, err error) {
 	users = make([]*entity.User, 0)
 	session := ur.data.DB.NewSession()
 	switch user.Status {
 	case entity.UserStatusDeleted:
-		session.Desc("deleted_at")
+		session.Desc("user.deleted_at")
 	case entity.UserStatusSuspended:
-		session.Desc("suspended_at")
+		session.Desc("user.suspended_at")
 	default:
-		session.Desc("created_at")
+		session.Desc("user.created_at")
 	}
 
-	if len(query) > 0 {
-		if email, e := mail.ParseAddress(query); e == nil {
-			session.And(builder.Eq{"e_mail": email.Address})
-		} else {
-			var (
-				idSearch = false
-				id       = ""
-			)
-
-			if strings.Contains(query, "user:") {
-				idSearch = true
-				id = strings.TrimSpace(strings.TrimPrefix(query, "user:"))
-				for _, r := range id {
-					if !unicode.IsDigit(r) {
-						idSearch = false
-						break
-					}
-				}
-			}
-
-			if idSearch {
-				session.And(builder.Eq{
-					"id": id,
-				})
-			} else {
-				session.And(builder.Or(
-					builder.Like{"username", query},
-					builder.Like{"display_name", query},
-				))
-			}
-		}
+	if len(usernameOrDisplayName) > 0 {
+		session.And(builder.Or(
+			builder.Like{"user.username", usernameOrDisplayName},
+			builder.Like{"user.display_name", usernameOrDisplayName},
+		))
+	}
+	if isStaff {
+		session.Join("INNER", "user_role_rel", "user.id = user_role_rel.user_id AND user_role_rel.role_id > 1")
 	}
 
 	total, err = pager.Help(page, pageSize, &users, user, session)

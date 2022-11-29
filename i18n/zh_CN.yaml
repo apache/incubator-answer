@@ -11,6 +11,22 @@ backend:
     database_error:
       other: "数据服务异常"
 
+  role:
+    name:
+      user:
+        other: "用户"
+      admin:
+        other: "管理员"
+      moderator:
+        other: "版主"
+    description:
+      user:
+        other: "默认没有特殊访问权限。"
+      admin:
+        other: "拥有进入网站的全部权限。"
+      moderator:
+        other: "有权访问所有的帖子，无法进入管理员设置页面。"
+
   email:
     other: "邮箱"
   password:

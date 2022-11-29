@@ -29,6 +29,7 @@ type AnswerAPIRouter struct {
 	notificationController   *controller.NotificationController
 	dashboardController      *controller.DashboardController
 	uploadController         *controller.UploadController
+	roleController           *controller_backyard.RoleController
 }
 
 func NewAnswerAPIRouter(
@@ -54,6 +55,7 @@ func NewAnswerAPIRouter(
 	notificationController *controller.NotificationController,
 	dashboardController *controller.DashboardController,
 	uploadController *controller.UploadController,
+	roleController *controller_backyard.RoleController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:           langController,
@@ -78,6 +80,7 @@ func NewAnswerAPIRouter(
 		siteinfoController:       siteinfoController,
 		dashboardController:      dashboardController,
 		uploadController:         uploadController,
+		roleController:           roleController,
 	}
 }
 
@@ -215,6 +218,7 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	// user
 	r.GET("/users/page", a.backyardUserController.GetUserPage)
 	r.PUT("/user/status", a.backyardUserController.UpdateUserStatus)
+	r.PUT("/user/role", a.backyardUserController.UpdateUserRole)
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)
@@ -239,6 +243,9 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
 	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
 
-	//dashboard
+	// dashboard
 	r.GET("/dashboard", a.dashboardController.DashboardInfo)
+
+	// roles
+	r.GET("/roles", a.roleController.GetRoleList)
 }

@@ -2,6 +2,7 @@ package controller_backyard
 
 import (
 	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/user_backyard"
 	"github.com/gin-gonic/gin"
@@ -37,6 +38,28 @@ func (uc *UserBackyardController) UpdateUserStatus(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
+// UpdateUserRole update user role
+// @Summary update user role
+// @Description update user role
+// @Security ApiKeyAuth
+// @Tags admin
+// @Accept json
+// @Produce json
+// @Param data body schema.UpdateUserRoleReq true "user"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/admin/api/user/role [put]
+func (uc *UserBackyardController) UpdateUserRole(ctx *gin.Context) {
+	req := &schema.UpdateUserRoleReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	err := uc.userService.UpdateUserRole(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
 // GetUserPage get user page
 // @Summary get user page
 // @Description get user page
@@ -46,6 +69,7 @@ func (uc *UserBackyardController) UpdateUserStatus(ctx *gin.Context) {
 // @Param page query int false "page size"
 // @Param page_size query int false "page size"
 // @Param query query string false "search query: email, username or id:[id]"
+// @Param staff query bool false "staff user"
 // @Param status query string false "user status" Enums(suspended, deleted, inactive)
 // @Success 200 {object} handler.RespBody{data=pager.PageModel{records=[]schema.GetUserPageResp}}
 // @Router /answer/admin/api/users/page [get]

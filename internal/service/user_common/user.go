@@ -5,6 +5,7 @@ import (
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/role"
 )
 
 type UserRepo interface {
@@ -27,7 +28,8 @@ type UserRepo interface {
 
 // UserCommon user service
 type UserCommon struct {
-	userRepo UserRepo
+	userRepo    UserRepo
+	roleService *role.RoleService
 }
 
 func NewUserCommon(userRepo UserRepo) *UserCommon {
