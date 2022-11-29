@@ -126,12 +126,6 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		return
 	}
 	if !recommendExist {
-		err = fmt.Errorf("recommend is not exist")
-		err = errors.BadRequest(reason.RecommendTagNotExist).WithError(err).WithStack()
-		return
-	}
-
-	if !recommendExist {
 		errorlist := make([]*validator.FormErrorField, 0)
 		errorlist = append(errorlist, &validator.FormErrorField{
 			ErrorField: "tags",
