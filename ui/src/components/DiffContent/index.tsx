@@ -87,7 +87,7 @@ const Index: FC<Props> = ({
         </div>
       )}
       {objectType === 'tag' && opts?.showTagUrlSlug && (
-        <div className="mb-4">
+        <div className="mb-4 fs-14 font-monospace">
           {`/tags/${
             newData?.main_tag_slug_name
               ? diffText(

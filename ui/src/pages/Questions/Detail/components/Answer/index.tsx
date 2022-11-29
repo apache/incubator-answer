@@ -1,7 +1,7 @@
 import { memo, FC, useEffect, useRef } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import {
   Actions,
@@ -37,6 +37,7 @@ const Index: FC<Props> = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'question_detail',
   });
+  const [searchParams] = useSearchParams();
   const answerRef = useRef<HTMLDivElement>(null);
   const acceptAnswer = () => {
     acceptanceAnswer({
@@ -152,7 +153,11 @@ const Index: FC<Props> = ({
         </Col>
       </Row>
 
-      <Comment objectId={data.id} mode="answer" />
+      <Comment
+        objectId={data.id}
+        mode="answer"
+        commentId={searchParams.get('commentId')}
+      />
     </div>
   );
 };

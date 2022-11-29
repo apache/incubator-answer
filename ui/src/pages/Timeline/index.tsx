@@ -52,7 +52,7 @@ const Index: FC = () => {
     linkUrl = `/questions/${timelineData?.object_info.question_id}/${timelineData?.object_info.answer_id}`;
     pageTitle = `${t('title_for_answer', {
       title: timelineData?.object_info.title,
-      author: timelineData?.object_info.username,
+      author: timelineData?.object_info.display_name,
     })}`;
   }
 

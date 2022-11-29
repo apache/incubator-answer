@@ -24,7 +24,7 @@ import { Form, ActionBar, Reply } from './components';
 
 import './index.scss';
 
-const Comment = ({ objectId, mode }) => {
+const Comment = ({ objectId, mode, commentId }) => {
   const pageUsers = usePageUsers();
   const [pageIndex, setPageIndex] = useState(0);
   const [comments, setComments] = useState<any>([]);
@@ -32,6 +32,7 @@ const Comment = ({ objectId, mode }) => {
   const pageSize = pageIndex === 0 ? 3 : 15;
   const { data, mutate } = useQueryComments({
     object_id: objectId,
+    comment_id: commentId,
     page: pageIndex,
     page_size: pageSize,
   });

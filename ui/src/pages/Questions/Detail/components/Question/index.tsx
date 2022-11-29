@@ -1,5 +1,5 @@
 import { memo, FC, useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Row, Col, Button } from 'react-bootstrap';
 
@@ -26,6 +26,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'question_detail',
   });
+  const [searchParams] = useSearchParams();
   const [followed, setFollowed] = useState(data?.is_followed);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -164,7 +165,11 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
         </Col>
       </Row>
 
-      <Comment objectId={data?.id} mode="question" />
+      <Comment
+        objectId={data?.id}
+        mode="question"
+        commentId={searchParams.get('commentId')}
+      />
     </div>
   );
 };
