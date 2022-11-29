@@ -42,8 +42,7 @@ func (tc *TagController) SearchTagLike(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	req.IsAdmin = userinfo.IsAdmin
+	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 	resp, err := tc.tagCommonService.SearchTagLike(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
