@@ -1,5 +1,7 @@
 import { FC, memo } from 'react';
 
+import clssnames from 'classnames';
+
 import { Tag } from '@/components';
 import { diffText } from '@/utils';
 
@@ -74,7 +76,7 @@ const Index: FC<Props> = ({
       )}
       {objectType === 'question' && (
         <div className="mb-4">
-          {tag.map((item) => {
+          {tag?.map((item) => {
             return (
               <Tag
                 key={item.slug_name}
@@ -87,7 +89,11 @@ const Index: FC<Props> = ({
         </div>
       )}
       {objectType === 'tag' && opts?.showTagUrlSlug && (
-        <div className="mb-4 fs-14 font-monospace">
+        <div
+          className={clssnames(
+            'fs-14 font-monospace',
+            newData.original_text && 'mb-4',
+          )}>
           {`/tags/${
             newData?.main_tag_slug_name
               ? diffText(
