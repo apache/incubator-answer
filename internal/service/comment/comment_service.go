@@ -255,7 +255,7 @@ func (cs *CommentService) GetCommentWithPage(ctx context.Context, req *schema.Ge
 	}
 	resp := make([]*schema.GetCommentResp, 0)
 	for _, comment := range commentList {
-		commentResp, err := cs.convertCommentEntity2Resp(ctx, req.UserID, comment)
+		commentResp, err := cs.convertCommentEntity2Resp(ctx, req, comment)
 		if err != nil {
 			return nil, err
 		}
@@ -276,8 +276,8 @@ func (cs *CommentService) GetCommentWithPage(ctx context.Context, req *schema.Ge
 			if err != nil {
 				return nil, err
 			}
-			if exist {
-				commentResp, err := cs.convertCommentEntity2Resp(ctx, req.UserID, comment)
+			if exist && comment.ObjectID == req.ObjectID {
+				commentResp, err := cs.convertCommentEntity2Resp(ctx, req, comment)
 				if err != nil {
 					return nil, err
 				}
@@ -288,8 +288,8 @@ func (cs *CommentService) GetCommentWithPage(ctx context.Context, req *schema.Ge
 	return pager.NewPageModel(total, resp), nil
 }
 
-func (cs *CommentService) convertCommentEntity2Resp(ctx context.Context, userID string, comment *entity.Comment) (
-	commentResp *schema.GetCommentResp, err error) {
+func (cs *CommentService) convertCommentEntity2Resp(ctx context.Context, req *schema.GetCommentWithPageReq,
+	comment *entity.Comment) (commentResp *schema.GetCommentResp, err error) {
 	commentResp = &schema.GetCommentResp{
 		CommentID:      comment.ID,
 		CreatedAt:      comment.CreatedAt.Unix(),
@@ -330,9 +330,10 @@ func (cs *CommentService) convertCommentEntity2Resp(ctx context.Context, userID 
 	}
 
 	// check if current user vote this comment
-	commentResp.IsVote = cs.checkIsVote(ctx, userID, commentResp.CommentID)
+	commentResp.IsVote = cs.checkIsVote(ctx, req.UserID, commentResp.CommentID)
 
-	commentResp.MemberActions = permission.GetCommentPermission(userID, commentResp.UserID)
+	commentResp.MemberActions = permission.GetCommentPermission(ctx,
+		req.UserID, commentResp.UserID, req.CanEdit, req.CanDelete)
 	return commentResp, nil
 }
 
