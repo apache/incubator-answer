@@ -9,6 +9,7 @@ import { loggedUserInfoStore } from '@/stores';
 import { resendEmail, checkImgCode } from '@/services';
 import { CAPTCHA_CODE_STORAGE_KEY } from '@/common/constants';
 import Storage from '@/utils/storage';
+import { handleFormError } from '@/utils';
 
 interface IProps {
   visible: boolean;
@@ -58,11 +59,10 @@ const Index: React.FC<IProps> = ({ visible = false }) => {
         setModalState(false);
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       })
       .finally(() => {
         getImgCode();

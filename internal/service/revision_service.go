@@ -113,6 +113,8 @@ func (rs *RevisionService) parseItem(ctx context.Context, item *schema.GetRevisi
 			ParsedText:    tag.ParsedText,
 			FollowCount:   tag.FollowCount,
 			QuestionCount: tag.QuestionCount,
+			Recommend:     tag.Recommend,
+			Reserved:      tag.Reserved,
 		}
 		tagInfo.GetExcerpt()
 		item.ContentParsed = tagInfo

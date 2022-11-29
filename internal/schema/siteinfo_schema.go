@@ -39,13 +39,39 @@ type SiteBrandingReq struct {
 
 // SiteWriteReq site write request
 type SiteWriteReq struct {
-	RequiredTag bool `validate:"required" form:"required_tag" json:"required_tag"`
+	RequiredTag   bool     `validate:"omitempty" form:"required_tag" json:"required_tag"`
+	RecommendTags []string `validate:"omitempty" form:"recommend_tags" json:"recommend_tags"`
+	ReservedTags  []string `validate:"omitempty" form:"reserved_tags" json:"reserved_tags"`
+	UserID        string   `json:"-"`
 }
 
 // SiteLegalReq site branding request
 type SiteLegalReq struct {
-	TermsOfService string `validate:"omitempty" form:"terms_of_service" json:"terms_of_service,omitempty"`
-	PrivacyPolicy  string `validate:"omitempty" form:"privacy_policy" json:"privacy_policy,omitempty"`
+	TermsOfServiceOriginalText string `json:"terms_of_service_original_text"`
+	TermsOfServiceParsedText   string `json:"terms_of_service_parsed_text"`
+	PrivacyPolicyOriginalText  string `json:"privacy_policy_original_text"`
+	PrivacyPolicyParsedText    string `json:"privacy_policy_parsed_text"`
+}
+
+// GetSiteLegalInfoReq site site legal request
+type GetSiteLegalInfoReq struct {
+	InfoType string `validate:"required,oneof=tos privacy" form:"info_type"`
+}
+
+func (r *GetSiteLegalInfoReq) IsTOS() bool {
+	return r.InfoType == "tos"
+}
+
+func (r *GetSiteLegalInfoReq) IsPrivacy() bool {
+	return r.InfoType == "privacy"
+}
+
+// GetSiteLegalInfoResp get site legal info response
+type GetSiteLegalInfoResp struct {
+	TermsOfServiceOriginalText string `json:"terms_of_service_original_text,omitempty"`
+	TermsOfServiceParsedText   string `json:"terms_of_service_parsed_text,omitempty"`
+	PrivacyPolicyOriginalText  string `json:"privacy_policy_original_text,omitempty"`
+	PrivacyPolicyParsedText    string `json:"privacy_policy_parsed_text,omitempty"`
 }
 
 // SiteGeneralResp site general response

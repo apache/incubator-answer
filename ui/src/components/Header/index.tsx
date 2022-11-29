@@ -74,11 +74,19 @@ const Header: FC = () => {
         <div className="d-flex justify-content-between align-items-center nav-grow flex-nowrap">
           <Navbar.Brand to="/" as={Link} className="lh-1 me-0 me-sm-3">
             {brandingInfo.logo ? (
-              <img
-                className="logo rounded-1 me-0"
-                src={brandingInfo.logo}
-                alt=""
-              />
+              <>
+                <img
+                  className="d-none d-lg-block logo rounded-1 me-0"
+                  src={brandingInfo.logo}
+                  alt=""
+                />
+
+                <img
+                  className="lg-none logo rounded-1 me-0"
+                  src={brandingInfo.mobile_logo || brandingInfo.logo}
+                  alt=""
+                />
+              </>
             ) : (
               <span>{siteInfo.name || 'Answer'}</span>
             )}

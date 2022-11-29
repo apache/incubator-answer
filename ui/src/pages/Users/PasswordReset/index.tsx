@@ -7,6 +7,7 @@ import { loggedUserInfoStore } from '@/stores';
 import type { FormDataType } from '@/common/interface';
 import { replacementPassword } from '@/services';
 import { PageTitle } from '@/components';
+import { handleFormError } from '@/utils';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'password_reset' });
@@ -105,11 +106,10 @@ const Index: React.FC = () => {
         setStep(2);
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
 

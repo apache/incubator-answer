@@ -25,7 +25,7 @@ type GetTagInfoReq struct {
 	UserID string `json:"-"`
 }
 
-func (r *GetTagInfoReq) Check() (errField *validator.ErrorField, err error) {
+func (r *GetTagInfoReq) Check() (errFields []*validator.FormErrorField, err error) {
 	if len(r.ID) == 0 && len(r.Name) == 0 {
 		return nil, errors.BadRequest(reason.RequestFormatError)
 	}
@@ -61,6 +61,8 @@ type GetTagResp struct {
 	MemberActions []*PermissionMemberAction `json:"member_actions"`
 	// if main tag slug name is not empty, this tag is synonymous with the main tag
 	MainTagSlugName string `json:"main_tag_slug_name"`
+	Recommend       bool   `json:"recommend"`
+	Reserved        bool   `json:"reserved"`
 }
 
 func (tr *GetTagResp) GetExcerpt() {
@@ -96,6 +98,8 @@ type GetTagPageResp struct {
 	CreatedAt int64 `json:"created_at"`
 	// updated time
 	UpdatedAt int64 `json:"updated_at"`
+	Recommend bool  `json:"recommend"`
+	Reserved  bool  `json:"reserved"`
 }
 
 func (tr *GetTagPageResp) GetExcerpt() {
@@ -151,9 +155,9 @@ type UpdateTagReq struct {
 	UserID string `json:"-"`
 }
 
-func (r *UpdateTagReq) Check() (errField *validator.ErrorField, err error) {
+func (r *UpdateTagReq) Check() (errFields []*validator.FormErrorField, err error) {
 	if len(r.EditSummary) == 0 {
-		r.EditSummary = "tag.edit.summary" // to i18n
+		r.EditSummary = "tag.edit.summary" // to do i18n
 	}
 	return nil, nil
 }
@@ -218,6 +222,8 @@ type GetFollowingTagsResp struct {
 	DisplayName string `json:"display_name"`
 	// if main tag slug name is not empty, this tag is synonymous with the main tag
 	MainTagSlugName string `json:"main_tag_slug_name"`
+	Recommend       bool   `json:"recommend"`
+	Reserved        bool   `json:"reserved"`
 }
 
 type SearchTagLikeResp struct {

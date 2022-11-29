@@ -2,6 +2,7 @@ package controller_backyard
 
 import (
 	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/siteinfo"
 	"github.com/gin-gonic/gin"
@@ -152,8 +153,10 @@ func (sc *SiteInfoController) UpdateSiteWrite(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	err := sc.siteInfoService.SaveSiteWrite(ctx, req)
-	handler.HandleResponse(ctx, err, nil)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	resp, err := sc.siteInfoService.SaveSiteWrite(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
 // UpdateSiteLegal update site legal info

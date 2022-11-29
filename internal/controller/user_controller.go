@@ -5,6 +5,7 @@ import (
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/action"
@@ -101,24 +102,22 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 
 	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
-		resp := schema.UserVerifyEmailErrorResponse{
-			Key:   "captcha_code",
-			Value: "error.object.verification_failed",
-		}
-		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
 	}
 
 	resp, err := uc.userService.EmailLogin(ctx, req)
 	if err != nil {
 		_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
-		resp := schema.UserVerifyEmailErrorResponse{
-			Key:   "e_mail",
-			Value: "error.object.email_or_password_incorrect",
-		}
-		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "e_mail",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.EmailOrPasswordWrong),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.EmailOrPasswordWrong), errFields)
 		return
 	}
 	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
@@ -141,12 +140,11 @@ func (uc *UserController) RetrievePassWord(ctx *gin.Context) {
 	}
 	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
-		resp := schema.UserVerifyEmailErrorResponse{
-			Key:   "captcha_code",
-			Value: "error.object.verification_failed",
-		}
-		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
 	}
 	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP())
@@ -272,12 +270,11 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP(),
 		req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
-		resp := schema.UserVerifyEmailErrorResponse{
-			Key:   "captcha_code",
-			Value: "error.object.verification_failed",
-		}
-		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 
 		return
 	}
@@ -309,22 +306,19 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 		return
 	}
 	if !oldPassVerification {
-		resp := schema.UserVerifyEmailErrorResponse{
-			Key:   "old_pass",
-			Value: "error.object.old_password_verification_failed",
-		}
-		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "old_pass",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.OldPasswordVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.OldPasswordVerificationFailed), errFields)
 		return
 	}
 	if req.OldPass == req.Pass {
-
-		resp := schema.UserVerifyEmailErrorResponse{
-			Key:   "pass",
-			Value: "error.object.new_password_same_as_previous_setting",
-		}
-		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "pass",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.NewPasswordSameAsPreviousSetting),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.NewPasswordSameAsPreviousSetting), errFields)
 		return
 	}
 	err = uc.userService.UserModifyPassword(ctx, req)
@@ -437,19 +431,18 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 
 	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
-		resp := schema.UserVerifyEmailErrorResponse{
-			Key:   "captcha_code",
-			Value: "error.object.verification_failed",
-		}
-		resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), resp)
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
 	}
 	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	resp, err := uc.userService.UserChangeEmailSendCode(ctx, req)
 	if err != nil {
 		if resp != nil {
-			resp.Value = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.Value)
+			resp.ErrorMsg = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.ErrorMsg)
 		}
 		handler.HandleResponse(ctx, err, resp)
 		return

@@ -78,13 +78,9 @@ class Request {
             return Promise.reject(false);
           }
 
-          if (
-            data instanceof Object &&
-            Object.keys(data).length > 0 &&
-            data.key
-          ) {
+          if (data instanceof Array && data.length > 0) {
             // handle form error
-            return Promise.reject({ ...data, isError: true });
+            return Promise.reject({ isError: true, list: data });
           }
 
           if (!data || Object.keys(data).length <= 0) {

@@ -7,19 +7,25 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/internal/service/tag"
+	"github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )
 
 // TagController tag controller
 type TagController struct {
-	tagService  *tag.TagService
-	rankService *rank.RankService
+	tagService       *tag.TagService
+	tagCommonService *tag_common.TagCommonService
+	rankService      *rank.RankService
 }
 
 // NewTagController new controller
-func NewTagController(tagService *tag.TagService, rankService *rank.RankService) *TagController {
-	return &TagController{tagService: tagService, rankService: rankService}
+func NewTagController(
+	tagService *tag.TagService,
+	tagCommonService *tag_common.TagCommonService,
+	rankService *rank.RankService,
+) *TagController {
+	return &TagController{tagService: tagService, tagCommonService: tagCommonService, rankService: rankService}
 }
 
 // SearchTagLike get tag list
@@ -38,7 +44,7 @@ func (tc *TagController) SearchTagLike(ctx *gin.Context) {
 	}
 	userinfo := middleware.GetUserInfoFromContext(ctx)
 	req.IsAdmin = userinfo.IsAdmin
-	resp, err := tc.tagService.SearchTagLike(ctx, req)
+	resp, err := tc.tagCommonService.SearchTagLike(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
 

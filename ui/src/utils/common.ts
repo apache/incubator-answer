@@ -150,6 +150,19 @@ function labelStyle(color, hover) {
   };
 }
 
+function handleFormError(
+  error: { list: Array<{ error_field: string; error_msg: string }> },
+  data: any,
+) {
+  if (error.list?.length > 0) {
+    error.list.forEach((item) => {
+      data[item.error_field].isInvalid = true;
+      data[item.error_field].errorMsg = item.error_msg;
+    });
+  }
+  return data;
+}
+
 export {
   thousandthDivision,
   formatCount,
@@ -161,4 +174,5 @@ export {
   mixColor,
   colorRgb,
   labelStyle,
+  handleFormError,
 };

@@ -20,6 +20,7 @@ import {
   loadLanguageOptions,
   setupAppTimeZone,
 } from '@/utils/localize';
+import { handleFormError } from '@/utils';
 
 const Interface: FC = () => {
   const { t } = useTranslation('translation', {
@@ -74,19 +75,6 @@ const Interface: FC = () => {
     },
   });
 
-  // const onChange = (fieldName, fieldValue) => {
-  //   if (!formData[fieldName]) {
-  //     return;
-  //   }
-  //   const fieldData: FormDataType = {
-  //     [fieldName]: {
-  //       value: fieldValue,
-  //       isInvalid: false,
-  //       errorMsg: '',
-  //     },
-  //   };
-  //   setFormData({ ...formData, ...fieldData });
-  // };
   const uiSchema: UISchema = {
     theme: {
       'ui:widget': 'select',
@@ -162,11 +150,10 @@ const Interface: FC = () => {
         });
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
-        setFormData({ ...formData });
       });
   };
   // const imgUpload = (file: any) => {
@@ -211,119 +198,6 @@ const Interface: FC = () => {
         onSubmit={onSubmit}
         onChange={handleOnChange}
       />
-      {/* <Form noValidate onSubmit={onSubmit}>
-        <Form.Group controlId="logo" className="mb-3">
-          <Form.Label>{t('logo.label')}</Form.Label>
-          <Stack gap={2}>
-            <div
-              className="bg-light overflow-hidden"
-              style={{ width: '288px', height: '96px' }}>
-              {formData.logo.value ? (
-                <Image
-                  width="288"
-                  height="96"
-                  className="object-fit-contain"
-                  src={formData.logo.value}
-                />
-              ) : null}
-            </div>
-            <div className="d-inline-flex">
-              <UploadImg type="logo" upload={imgUpload} className="mb-2" />
-            </div>
-          </Stack>
-          <Form.Text as="div" className="text-muted">
-            <Trans i18nKey="admin.interface.logo.text">
-              You can upload your image or
-              <Button
-                variant="link"
-                size="sm"
-                className="p-0 mx-1"
-                onClick={(evt) => {
-                  evt.preventDefault();
-                  onChange('logo', '');
-                }}>
-                reset it
-              </Button>
-              to the site title text.
-            </Trans>
-          </Form.Text>
-          <Form.Control.Feedback type="invalid">
-            {formData.logo.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group controlId="theme" className="mb-3">
-          <Form.Label>{t('theme.label')}</Form.Label>
-          <Form.Select
-            value={formData.theme.value}
-            isInvalid={formData.theme.isInvalid}
-            onChange={(evt) => {
-              onChange('theme', evt.target.value);
-            }}>
-            {themes?.map((item) => {
-              return (
-                <option value={item.value} key={item.value}>
-                  {item.label}
-                </option>
-              );
-            })}
-          </Form.Select>
-          <Form.Text as="div">{t('theme.text')}</Form.Text>
-          <Form.Control.Feedback type="invalid">
-            {formData.theme.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group controlId="language" className="mb-3">
-          <Form.Label>{t('language.label')}</Form.Label>
-          <Form.Select
-            value={formData.language.value}
-            isInvalid={formData.language.isInvalid}
-            onChange={(evt) => {
-              onChange('language', evt.target.value);
-            }}>
-            {langs?.map((item) => {
-              return (
-                <option value={item.value} key={item.value}>
-                  {item.label}
-                </option>
-              );
-            })}
-          </Form.Select>
-          <Form.Text as="div">{t('language.text')}</Form.Text>
-          <Form.Control.Feedback type="invalid">
-            {formData.language.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group controlId="time-zone" className="mb-3">
-          <Form.Label>{t('time_zone.label')}</Form.Label>
-          <Form.Select
-            value={formData.time_zone.value}
-            isInvalid={formData.time_zone.isInvalid}
-            onChange={(evt) => {
-              onChange('time_zone', evt.target.value);
-            }}>
-            {TIMEZONES?.map((item) => {
-              return (
-                <optgroup label={item.label} key={item.label}>
-                  {item.options.map((option) => {
-                    return (
-                      <option value={option.value} key={option.value}>
-                        {option.label}
-                      </option>
-                    );
-                  })}
-                </optgroup>
-              );
-            })}
-          </Form.Select>
-          <Form.Text as="div">{t('time_zone.text')}</Form.Text>
-          <Form.Control.Feedback type="invalid">
-            {formData.time_zone.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          {t('save', { keyPrefix: 'btns' })}
-        </Button>
-      </Form> */}
     </>
   );
 };

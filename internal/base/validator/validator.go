@@ -26,10 +26,10 @@ type MyValidator struct {
 	Lang     i18n.Language
 }
 
-// ErrorField error field
-type ErrorField struct {
-	Key   string `json:"key"`
-	Value string `json:"value"`
+// FormErrorField indicates the current form error content. which field is error and error message.
+type FormErrorField struct {
+	ErrorField string `json:"error_field"`
+	ErrorMsg   string `json:"error_msg"`
 }
 
 // GlobalValidatorMapping is a mapping from validator to translator used
@@ -87,7 +87,7 @@ func GetValidatorByLang(la string) *MyValidator {
 }
 
 // Check /
-func (m *MyValidator) Check(value interface{}) (errField *ErrorField, err error) {
+func (m *MyValidator) Check(value interface{}) (errFields []*FormErrorField, err error) {
 	err = m.Validate.Struct(value)
 	if err != nil {
 		var valErrors validator.ValidationErrors
@@ -97,9 +97,9 @@ func (m *MyValidator) Check(value interface{}) (errField *ErrorField, err error)
 		}
 
 		for _, fieldError := range valErrors {
-			errField = &ErrorField{
-				Key:   fieldError.Field(),
-				Value: fieldError.Translate(m.Tran),
+			errField := &FormErrorField{
+				ErrorField: fieldError.Field(),
+				ErrorMsg:   fieldError.Translate(m.Tran),
 			}
 
 			// get original tag name from value for set err field key.
@@ -108,17 +108,24 @@ func (m *MyValidator) Check(value interface{}) (errField *ErrorField, err error)
 			if found {
 				originalTag := getObjectTagByFieldName(value, fieldName)
 				if len(originalTag) > 0 {
-					errField.Key = originalTag
+					errField.ErrorField = originalTag
 				}
 			}
-			return errField, myErrors.BadRequest(reason.RequestFormatError).WithMsg(fieldError.Translate(m.Tran))
+			errFields = append(errFields, errField)
+		}
+		if len(errFields) > 0 {
+			errMsg := ""
+			if len(errFields) == 1 {
+				errMsg = errFields[0].ErrorMsg
+			}
+			return errFields, myErrors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
 		}
 	}
 
 	if v, ok := value.(Checker); ok {
-		errField, err = v.Check()
+		errFields, err = v.Check()
 		if err != nil {
-			return errField, err
+			return errFields, err
 		}
 	}
 	return nil, nil
@@ -126,7 +133,7 @@ func (m *MyValidator) Check(value interface{}) (errField *ErrorField, err error)
 
 // Checker .
 type Checker interface {
-	Check() (errField *ErrorField, err error)
+	Check() (errField []*FormErrorField, err error)
 }
 
 func getObjectTagByFieldName(obj interface{}, fieldName string) (tag string) {

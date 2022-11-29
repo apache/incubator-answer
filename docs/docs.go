@@ -3018,6 +3018,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/siteinfo/legal": {
+            "get": {
+                "description": "get site legal info",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "site"
+                ],
+                "summary": "get site legal info",
+                "parameters": [
+                    {
+                        "enum": [
+                            "tos",
+                            "privacy"
+                        ],
+                        "type": "string",
+                        "description": "legal information type",
+                        "name": "info_type",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetSiteLegalInfoResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/tag": {
             "get": {
                 "description": "get tag one",
@@ -4813,6 +4858,12 @@ const docTemplate = `{
                     "description": "if main tag slug name is not empty, this tag is synonymous with the main tag",
                     "type": "string"
                 },
+                "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
+                    "type": "boolean"
+                },
                 "slug_name": {
                     "description": "slug name",
                     "type": "string"
@@ -5056,6 +5107,23 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetSiteLegalInfoResp": {
+            "type": "object",
+            "properties": {
+                "privacy_policy_original_text": {
+                    "type": "string"
+                },
+                "privacy_policy_parsed_text": {
+                    "type": "string"
+                },
+                "terms_of_service_original_text": {
+                    "type": "string"
+                },
+                "terms_of_service_parsed_text": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.GetTagPageResp": {
             "type": "object",
             "properties": {
@@ -5090,6 +5158,12 @@ const docTemplate = `{
                 "question_count": {
                     "description": "question amount",
                     "type": "integer"
+                },
+                "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
+                    "type": "boolean"
                 },
                 "slug_name": {
                     "description": "slug_name",
@@ -5150,6 +5224,12 @@ const docTemplate = `{
                 "question_count": {
                     "description": "question amount",
                     "type": "integer"
+                },
+                "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
+                    "type": "boolean"
                 },
                 "slug_name": {
                     "description": "slug name",
@@ -5914,10 +5994,16 @@ const docTemplate = `{
         "schema.SiteLegalReq": {
             "type": "object",
             "properties": {
-                "privacy_policy": {
+                "privacy_policy_original_text": {
                     "type": "string"
                 },
-                "terms_of_service": {
+                "privacy_policy_parsed_text": {
+                    "type": "string"
+                },
+                "terms_of_service_original_text": {
+                    "type": "string"
+                },
+                "terms_of_service_parsed_text": {
                     "type": "string"
                 }
             }
@@ -5925,33 +6011,57 @@ const docTemplate = `{
         "schema.SiteLegalResp": {
             "type": "object",
             "properties": {
-                "privacy_policy": {
+                "privacy_policy_original_text": {
                     "type": "string"
                 },
-                "terms_of_service": {
+                "privacy_policy_parsed_text": {
+                    "type": "string"
+                },
+                "terms_of_service_original_text": {
+                    "type": "string"
+                },
+                "terms_of_service_parsed_text": {
                     "type": "string"
                 }
             }
         },
         "schema.SiteWriteReq": {
             "type": "object",
-            "required": [
-                "required_tag"
-            ],
             "properties": {
+                "recommend_tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "required_tag": {
                     "type": "boolean"
+                },
+                "reserved_tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
         "schema.SiteWriteResp": {
             "type": "object",
-            "required": [
-                "required_tag"
-            ],
             "properties": {
+                "recommend_tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "required_tag": {
                     "type": "boolean"
+                },
+                "reserved_tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -5989,6 +6099,9 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "recommend": {
+                    "type": "boolean"
+                },
+                "reserved": {
                     "type": "boolean"
                 },
                 "slug_name": {
@@ -6274,6 +6387,10 @@ const docTemplate = `{
         },
         "schema.UserEmailLogin": {
             "type": "object",
+            "required": [
+                "e_mail",
+                "pass"
+            ],
             "properties": {
                 "captcha_code": {
                     "description": "captcha_code",
@@ -6285,11 +6402,14 @@ const docTemplate = `{
                 },
                 "e_mail": {
                     "description": "e_mail",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 500
                 },
                 "pass": {
                     "description": "password",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 8
                 }
             }
         },

@@ -6,6 +6,7 @@ import { FormDataType } from '@/common/interface';
 import { brandSetting, getBrandSetting } from '@/services';
 import { brandingStore } from '@/stores';
 import { useToast } from '@/hooks';
+import { handleFormError } from '@/utils';
 
 const uploadType = 'branding';
 const Index: FC = () => {
@@ -113,11 +114,9 @@ const Index: FC = () => {
         });
       })
       .catch((err) => {
-        console.log(err);
-        if (err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
-          setFormData({ ...formData });
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         }
       });
   };

@@ -14,7 +14,7 @@ const Questions: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
   const navigate = useNavigate();
   const routeParams = useParams();
-  const curTagName = routeParams.tagName;
+  const curTagName = routeParams.tagName || '';
   const [tagInfo, setTagInfo] = useState<any>({});
   const [tagFollow, setTagFollow] = useState<Type.FollowParams>();
   const { data: tagResp } = useTagInfo({ name: curTagName });
@@ -71,7 +71,11 @@ const Questions: FC = () => {
 
               <p className="text-break">
                 {escapeRemove(tagInfo.excerpt) || t('no_description')}
-                <Link to={`/tags/${curTagName}/info`}> [{t('more')}]</Link>
+                <Link
+                  to={`/tags/${encodeURIComponent(curTagName)}/info`}
+                  className="ms-1">
+                  [{t('more')}]
+                </Link>
               </p>
 
               <div className="box-ft">

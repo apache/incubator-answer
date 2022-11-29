@@ -66,32 +66,31 @@ a {
   display: inline-block;
   font-size: 14px;
   background: rgba($blue-100, 0.5);
-  padding: 1px 0.5rem 2px;
+  padding: 0px 7px 1px;
   color: $blue-700;
-  height: 24px;
-  border: 1px solid rgba($blue-100, 0.5);
+  border: 1px solid transparent;
   &:hover {
-    background: rgba($blue-100, 1);
+    background: $blue-100;
   }
 }
 
 .badge-tag-required {
-  background: rgba($gray-200, 0.5);
+  background: $gray-200;
   color: $gray-700;
   border: 1px solid $gray-400;
   &:hover {
     color: $gray-700;
-    background: rgba($gray-400, 1);
+    background: $gray-300;
   }
 }
 
 .badge-tag-reserved {
   background: rgba($orange-100, 0.5);
   color: $orange-700;
-  border: 1px solid $orange-400;
+  border: 1px solid $orange-100;
   &:hover {
     color: $orange-700;
-    background: rgba($orange-400, 1);
+    background: rgba($orange-100, 1);
   }
 }
 
@@ -99,12 +98,17 @@ a {
   border-bottom: 1px solid rgba(33, 37, 41, 0.25);
 }
 
-.page-wrap {
-  min-height: calc(100vh - 138px);
-}
-.page-wrap2 {
-  background-color: #f5f5f5;
+#root {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+#root > footer {
+  margin-top: auto !important;
+}
+
+.bg-f5 {
+  background-color: #f5f5f5;
 }
 
 .btn-no-border,

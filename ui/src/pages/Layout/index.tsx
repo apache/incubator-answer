@@ -10,7 +10,8 @@ import { Header, Footer, Toast } from '@/components';
 const Layout: FC = () => {
   const { msg: toastMsg, variant, clear: toastClear } = toastStore();
   const { siteInfo } = siteInfoStore.getState();
-  const { favicon } = brandingStore((state) => state.branding);
+  const { favicon, square_icon } = brandingStore((state) => state.branding);
+
   const closeToast = () => {
     toastClear();
   };
@@ -18,7 +19,14 @@ const Layout: FC = () => {
   return (
     <HelmetProvider>
       <Helmet>
-        <link rel="icon" href={favicon || '/favicon.ico'} />
+        <link
+          rel="icon"
+          type="image/png"
+          href={favicon || square_icon || '/favicon.ico'}
+        />
+        <link rel="icon" type="image/png" sizes="192x192" href={square_icon} />
+        <link rel="apple-touch-icon" type="image/png" href={square_icon} />
+
         {siteInfo && <meta name="description" content={siteInfo.description} />}
       </Helmet>
       <SWRConfig

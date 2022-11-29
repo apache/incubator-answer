@@ -368,6 +368,10 @@ definitions:
         description: if main tag slug name is not empty, this tag is synonymous with
           the main tag
         type: string
+      recommend:
+        type: boolean
+      reserved:
+        type: boolean
       slug_name:
         description: slug name
         type: string
@@ -544,6 +548,17 @@ definitions:
       smtp_username:
         type: string
     type: object
+  schema.GetSiteLegalInfoResp:
+    properties:
+      privacy_policy_original_text:
+        type: string
+      privacy_policy_parsed_text:
+        type: string
+      terms_of_service_original_text:
+        type: string
+      terms_of_service_parsed_text:
+        type: string
+    type: object
   schema.GetTagPageResp:
     properties:
       created_at:
@@ -570,6 +585,10 @@ definitions:
       question_count:
         description: question amount
         type: integer
+      recommend:
+        type: boolean
+      reserved:
+        type: boolean
       slug_name:
         description: slug_name
         type: string
@@ -615,6 +634,10 @@ definitions:
       question_count:
         description: question amount
         type: integer
+      recommend:
+        type: boolean
+      reserved:
+        type: boolean
       slug_name:
         description: slug name
         type: string
@@ -1170,31 +1193,51 @@ definitions:
     type: object
   schema.SiteLegalReq:
     properties:
-      privacy_policy:
+      privacy_policy_original_text:
         type: string
-      terms_of_service:
+      privacy_policy_parsed_text:
+        type: string
+      terms_of_service_original_text:
+        type: string
+      terms_of_service_parsed_text:
         type: string
     type: object
   schema.SiteLegalResp:
     properties:
-      privacy_policy:
+      privacy_policy_original_text:
         type: string
-      terms_of_service:
+      privacy_policy_parsed_text:
+        type: string
+      terms_of_service_original_text:
+        type: string
+      terms_of_service_parsed_text:
         type: string
     type: object
   schema.SiteWriteReq:
     properties:
+      recommend_tags:
+        items:
+          type: string
+        type: array
       required_tag:
         type: boolean
-    required:
-    - required_tag
+      reserved_tags:
+        items:
+          type: string
+        type: array
     type: object
   schema.SiteWriteResp:
     properties:
+      recommend_tags:
+        items:
+          type: string
+        type: array
       required_tag:
         type: boolean
-    required:
-    - required_tag
+      reserved_tags:
+        items:
+          type: string
+        type: array
     type: object
   schema.TagItem:
     properties:
@@ -1222,6 +1265,8 @@ definitions:
           the main tag
         type: string
       recommend:
+        type: boolean
+      reserved:
         type: boolean
       slug_name:
         type: string
@@ -1435,10 +1480,16 @@ definitions:
         type: string
       e_mail:
         description: e_mail
+        maxLength: 500
         type: string
       pass:
         description: password
+        maxLength: 32
+        minLength: 8
         type: string
+    required:
+    - e_mail
+    - pass
     type: object
   schema.UserModifyPassWordRequest:
     properties:
@@ -3363,6 +3414,33 @@ paths:
                   $ref: '#/definitions/schema.SiteGeneralResp'
               type: object
       summary: get site info
+      tags:
+      - site
+  /answer/api/v1/siteinfo/legal:
+    get:
+      description: get site legal info
+      parameters:
+      - description: legal information type
+        enum:
+        - tos
+        - privacy
+        in: query
+        name: info_type
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetSiteLegalInfoResp'
+              type: object
+      summary: get site legal info
       tags:
       - site
   /answer/api/v1/tag:

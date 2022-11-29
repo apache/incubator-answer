@@ -34,6 +34,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/search_common"
 	"github.com/answerdev/answer/internal/repo/site_info"
 	"github.com/answerdev/answer/internal/repo/tag"
+	"github.com/answerdev/answer/internal/repo/tag_common"
 	"github.com/answerdev/answer/internal/repo/unique"
 	"github.com/answerdev/answer/internal/repo/user"
 	"github.com/answerdev/answer/internal/router"
@@ -63,7 +64,7 @@ import (
 	"github.com/answerdev/answer/internal/service/siteinfo"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tag2 "github.com/answerdev/answer/internal/service/tag"
-	"github.com/answerdev/answer/internal/service/tag_common"
+	tag_common2 "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/answerdev/answer/internal/service/user_backyard"
 	"github.com/answerdev/answer/internal/service/user_common"
@@ -116,8 +117,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	userCommon := usercommon.NewUserCommon(userRepo)
 	answerRepo := answer.NewAnswerRepo(dataData, uniqueIDRepo, userRankRepo, activityRepo)
 	questionRepo := question.NewQuestionRepo(dataData, uniqueIDRepo)
-	tagRepo := tag.NewTagRepo(dataData, uniqueIDRepo)
-	objService := object_info.NewObjService(answerRepo, questionRepo, commentCommonRepo, tagRepo)
+	tagCommonRepo := tag_common.NewTagCommonRepo(dataData, uniqueIDRepo)
+	objService := object_info.NewObjService(answerRepo, questionRepo, commentCommonRepo, tagCommonRepo)
 	voteRepo := activity_common.NewVoteRepo(dataData, activityRepo)
 	commentService := comment2.NewCommentService(commentRepo, commentCommonRepo, userCommon, objService, voteRepo)
 	rankService := rank2.NewRankService(userCommon, userRankRepo, objService, configRepo)
@@ -128,18 +129,19 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	serviceVoteRepo := activity.NewVoteRepo(dataData, uniqueIDRepo, configRepo, activityRepo, userRankRepo, voteRepo)
 	voteService := service.NewVoteService(serviceVoteRepo, uniqueIDRepo, configRepo, questionRepo, answerRepo, commentCommonRepo, objService)
 	voteController := controller.NewVoteController(voteService)
+	tagRepo := tag.NewTagRepo(dataData, uniqueIDRepo)
+	tagRelRepo := tag.NewTagRelRepo(dataData)
 	revisionRepo := revision.NewRevisionRepo(dataData, uniqueIDRepo)
 	revisionService := revision_common.NewRevisionService(revisionRepo, userRepo)
+	tagCommonService := tag_common2.NewTagCommonService(tagCommonRepo, tagRelRepo, revisionService, siteInfoCommonService)
 	followRepo := activity_common.NewFollowRepo(dataData, uniqueIDRepo, activityRepo)
-	tagService := tag2.NewTagService(tagRepo, revisionService, followRepo, siteInfoCommonService)
-	tagController := controller.NewTagController(tagService, rankService)
+	tagService := tag2.NewTagService(tagRepo, tagCommonService, revisionService, followRepo, siteInfoCommonService)
+	tagController := controller.NewTagController(tagService, tagCommonService, rankService)
 	followFollowRepo := activity.NewFollowRepo(dataData, uniqueIDRepo, activityRepo)
-	followService := follow.NewFollowService(followFollowRepo, followRepo, tagRepo)
+	followService := follow.NewFollowService(followFollowRepo, followRepo, tagCommonRepo)
 	followController := controller.NewFollowController(followService)
 	collectionRepo := collection.NewCollectionRepo(dataData, uniqueIDRepo)
 	collectionGroupRepo := collection.NewCollectionGroupRepo(dataData)
-	tagRelRepo := tag.NewTagRelRepo(dataData)
-	tagCommonService := tagcommon.NewTagCommonService(tagRepo, tagRelRepo, revisionService, siteInfoCommonService)
 	collectionCommon := collectioncommon.NewCollectionCommon(collectionRepo)
 	answerCommon := answercommon.NewAnswerCommon(answerRepo)
 	metaRepo := meta.NewMetaRepo(dataData)
@@ -155,7 +157,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo)
 	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configRepo, siteInfoCommonService, serviceConf, dataData)
 	answerController := controller.NewAnswerController(answerService, rankService, dashboardService)
-	searchParser := search_parser.NewSearchParser(tagRepo, userCommon)
+	searchParser := search_parser.NewSearchParser(tagCommonService, userCommon)
 	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon)
 	searchService := service.NewSearchService(searchParser, searchRepo)
 	searchController := controller.NewSearchController(searchService)
@@ -173,7 +175,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reasonService := reason2.NewReasonService(reasonRepo)
 	reasonController := controller.NewReasonController(reasonService)
 	themeController := controller_backyard.NewThemeController()
-	siteInfoService := siteinfo.NewSiteInfoService(siteInfoRepo, emailService)
+	siteInfoService := siteinfo.NewSiteInfoService(siteInfoRepo, emailService, tagCommonService)
 	siteInfoController := controller_backyard.NewSiteInfoController(siteInfoService)
 	siteinfoController := controller.NewSiteinfoController(siteInfoCommonService)
 	notificationRepo := notification.NewNotificationRepo(dataData)

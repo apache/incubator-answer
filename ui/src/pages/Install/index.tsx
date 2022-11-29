@@ -11,7 +11,7 @@ import {
   installBaseInfo,
   checkConfigFileExists,
 } from '@/services';
-import { Storage } from '@/utils';
+import { Storage, handleFormError } from '@/utils';
 import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
 
 import {
@@ -175,10 +175,9 @@ const Index: FC = () => {
         handleNext();
       })
       .catch((err) => {
-        if (err.isError && err.key) {
-          formData[err.key].isInvalid = true;
-          formData[err.key].errorMsg = err.value;
-          setFormData({ ...formData });
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
         } else {
           handleErr(err);
         }
@@ -246,7 +245,7 @@ const Index: FC = () => {
   }
 
   return (
-    <div className="page-wrap2 py-5">
+    <div className="bg-f5 py-5 flex-grow-1">
       <PageTitle title={t('install', { keyPrefix: 'page_title' })} />
       <Container className='py-3'>
         <Row className="justify-content-center">

@@ -14,6 +14,7 @@ export interface JSONSchema {
     [key: string]: {
       type: 'string' | 'boolean';
       title: string;
+      label?: string;
       description?: string;
       enum?: Array<string | boolean>;
       enumNames?: string[];
@@ -98,6 +99,17 @@ const SchemaForm: FC<IProps> = ({
   const keys = Object.keys(properties);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const data = {
+      ...formData,
+      [name]: { ...formData[name], value, isInvalid: false },
+    };
+    if (onChange instanceof Function) {
+      onChange(data);
+    }
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     const data = {
       ...formData,
@@ -228,7 +240,7 @@ const SchemaForm: FC<IProps> = ({
   return (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {
-        const { title, description } = properties[key];
+        const { title, description, label } = properties[key];
         const { 'ui:widget': widget = 'input', 'ui:options': options = {} } =
           uiSchema[key] || {};
         if (widget === 'select') {
@@ -237,6 +249,9 @@ const SchemaForm: FC<IProps> = ({
               <Form.Label>{title}</Form.Label>
               <Form.Select
                 aria-label={description}
+                name={key}
+                value={formData[key]?.value}
+                onChange={handleSelectChange}
                 isInvalid={formData[key].isInvalid}>
                 {properties[key].enum?.map((item, index) => {
                   return (
@@ -249,7 +264,7 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text>{description}</Form.Text>
             </Form.Group>
           );
         }
@@ -279,13 +294,12 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text>{description}</Form.Text>
             </Form.Group>
           );
         }
 
         if (widget === 'switch') {
-          console.log(formData[key]?.value, 'switch=====');
           return (
             <Form.Group key={title} className="mb-3" controlId={key}>
               <Form.Label>{title}</Form.Label>
@@ -294,7 +308,7 @@ const SchemaForm: FC<IProps> = ({
                 id={title}
                 name={key}
                 type="switch"
-                label={title}
+                label={label}
                 checked={formData[key]?.value}
                 feedback={formData[key]?.errorMsg}
                 feedbackType="invalid"
@@ -304,7 +318,7 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text>{description}</Form.Text>
             </Form.Group>
           );
         }
@@ -314,7 +328,8 @@ const SchemaForm: FC<IProps> = ({
               <Form.Label>{title}</Form.Label>
               <TimeZonePicker
                 value={formData[key]?.value}
-                onChange={handleInputChange}
+                name={key}
+                onChange={handleSelectChange}
               />
               <Form.Control
                 name={key}
@@ -324,7 +339,7 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text>{description}</Form.Text>
             </Form.Group>
           );
         }
@@ -347,7 +362,7 @@ const SchemaForm: FC<IProps> = ({
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text>{description}</Form.Text>
             </Form.Group>
           );
         }
@@ -370,7 +385,7 @@ const SchemaForm: FC<IProps> = ({
                 {formData[key]?.errorMsg}
               </Form.Control.Feedback>
 
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text>{description}</Form.Text>
             </Form.Group>
           );
         }
@@ -390,7 +405,7 @@ const SchemaForm: FC<IProps> = ({
               {formData[key]?.errorMsg}
             </Form.Control.Feedback>
 
-            <Form.Text className="text-muted">{description}</Form.Text>
+            <Form.Text>{description}</Form.Text>
           </Form.Group>
         );
       })}
