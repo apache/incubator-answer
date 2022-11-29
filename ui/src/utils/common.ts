@@ -170,7 +170,7 @@ function diffText(newText: string, oldText: string): string {
     return '';
   }
 
-  if (!oldText) {
+  if (typeof oldText !== 'string') {
     return newText
       ?.replace(/\n/gi, '<br>')
       ?.replace(/<iframe/gi, '&lt;iframe')
