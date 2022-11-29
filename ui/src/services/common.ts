@@ -40,7 +40,7 @@ export const useQueryComments = (params) => {
     params.page = 1;
   } else {
     // only first page need commentId
-    delete params.commentId;
+    delete params.comment_id;
   }
   return useSWR<Type.ListResult>(
     `/answer/api/v1/comment/page?${qs.stringify(params, {

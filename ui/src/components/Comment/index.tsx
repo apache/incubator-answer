@@ -32,7 +32,7 @@ const Comment = ({ objectId, mode, commentId }) => {
   const pageSize = pageIndex === 0 ? 3 : 15;
   const { data, mutate } = useQueryComments({
     object_id: objectId,
-    commentId,
+    comment_id: commentId,
     page: pageIndex,
     page_size: pageSize,
   });
