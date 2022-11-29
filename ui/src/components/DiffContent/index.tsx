@@ -76,7 +76,7 @@ const Index: FC<Props> = ({
       )}
       {objectType === 'question' && (
         <div className="mb-4">
-          {tag.map((item) => {
+          {tag?.map((item) => {
             return (
               <Tag
                 key={item.slug_name}
