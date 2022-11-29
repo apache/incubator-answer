@@ -31,7 +31,7 @@ type QuestionTag struct {
 type Question struct {
 	ID               string    `xorm:"not null pk BIGINT(20) id"`
 	CreatedAt        time.Time `xorm:"not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
-	UpdatedAt        time.Time `xorm:"not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
+	UpdatedAt        time.Time `xorm:"updated_at TIMESTAMP"`
 	UserID           string    `xorm:"not null default 0 BIGINT(20) INDEX user_id"`
 	Title            string    `xorm:"not null default '' VARCHAR(150) title"`
 	OriginalText     string    `xorm:"not null MEDIUMTEXT original_text"`
@@ -45,7 +45,7 @@ type Question struct {
 	FollowCount      int       `xorm:"not null default 0 INT(11) follow_count"`
 	AcceptedAnswerID string    `xorm:"not null default 0 BIGINT(20) accepted_answer_id"`
 	LastAnswerID     string    `xorm:"not null default 0 BIGINT(20) last_answer_id"`
-	PostUpdateTime   time.Time `xorm:"default CURRENT_TIMESTAMP TIMESTAMP post_update_time"`
+	PostUpdateTime   time.Time `xorm:"post_update_time TIMESTAMP"`
 	RevisionID       string    `xorm:"not null default 0 BIGINT(20) revision_id"`
 }
 

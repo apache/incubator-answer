@@ -99,6 +99,8 @@ definitions:
         type: string
       title:
         type: string
+      username:
+        type: string
     type: object
   schema.ActObjectTimeline:
     properties:

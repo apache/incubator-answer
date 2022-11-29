@@ -4709,6 +4709,9 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },
