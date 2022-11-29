@@ -142,6 +142,7 @@ func (as *ActivityService) getTimelineMainObjInfo(ctx context.Context, objectID 
 		}
 		if exist {
 			resp.Username = userBasicInfo.Username
+			resp.DisplayName = userBasicInfo.DisplayName
 		}
 	}
 	return resp, nil
