@@ -61,7 +61,7 @@ const Index: FC = () => {
       timelineData?.object_info.main_tag_slug_name ||
       timelineData?.object_info.title
     }`;
-    pageTitle = `${t('title_for_tag')} ${timelineData?.object_info.title}`;
+    pageTitle = `${t('title_for_tag')} '${timelineData?.object_info.title}'`;
   }
 
   const revisionList =
