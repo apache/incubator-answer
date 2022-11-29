@@ -75,6 +75,8 @@ type GetCommentWithPageReq struct {
 	PageSize int `validate:"omitempty,min=1" form:"page_size"`
 	// object id
 	ObjectID string `validate:"required" form:"object_id"`
+	// comment id
+	CommentID string `validate:"omitempty" form:"comment_id"`
 	// query condition
 	QueryCond string `validate:"omitempty,oneof=vote" form:"query_cond"`
 	// user id

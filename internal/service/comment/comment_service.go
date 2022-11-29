@@ -255,52 +255,85 @@ func (cs *CommentService) GetCommentWithPage(ctx context.Context, req *schema.Ge
 	}
 	resp := make([]*schema.GetCommentResp, 0)
 	for _, comment := range commentList {
-		commentResp := &schema.GetCommentResp{
-			CommentID:      comment.ID,
-			CreatedAt:      comment.CreatedAt.Unix(),
-			UserID:         comment.UserID,
-			ReplyUserID:    comment.GetReplyUserID(),
-			ReplyCommentID: comment.GetReplyCommentID(),
-			ObjectID:       comment.ObjectID,
-			VoteCount:      comment.VoteCount,
-			OriginalText:   comment.OriginalText,
-			ParsedText:     comment.ParsedText,
+		commentResp, err := cs.convertCommentEntity2Resp(ctx, req.UserID, comment)
+		if err != nil {
+			return nil, err
 		}
-
-		// get comment user info
-		if len(commentResp.UserID) > 0 {
-			commentUser, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, commentResp.UserID)
-			if err != nil {
-				return nil, err
-			}
-			if exist {
-				commentResp.Username = commentUser.Username
-				commentResp.UserDisplayName = commentUser.DisplayName
-				commentResp.UserAvatar = commentUser.Avatar
-				commentResp.UserStatus = commentUser.Status
-			}
-		}
-
-		// get reply user info
-		if len(commentResp.ReplyUserID) > 0 {
-			replyUser, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, commentResp.ReplyUserID)
-			if err != nil {
-				return nil, err
-			}
-			if exist {
-				commentResp.ReplyUsername = replyUser.Username
-				commentResp.ReplyUserDisplayName = replyUser.DisplayName
-				commentResp.ReplyUserStatus = replyUser.Status
-			}
-		}
-
-		// check if current user vote this comment
-		commentResp.IsVote = cs.checkIsVote(ctx, req.UserID, commentResp.CommentID)
-
-		commentResp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, commentResp.UserID, req.CanEdit, req.CanDelete)
 		resp = append(resp, commentResp)
 	}
+
+	// if user request the specific comment, add it if not exist.
+	if len(req.CommentID) > 0 {
+		commentExist := false
+		for _, t := range resp {
+			if t.CommentID == req.CommentID {
+				commentExist = true
+				break
+			}
+		}
+		if !commentExist {
+			comment, exist, err := cs.commentCommonRepo.GetComment(ctx, req.CommentID)
+			if err != nil {
+				return nil, err
+			}
+			if exist {
+				commentResp, err := cs.convertCommentEntity2Resp(ctx, req.UserID, comment)
+				if err != nil {
+					return nil, err
+				}
+				resp = append(resp, commentResp)
+			}
+		}
+	}
 	return pager.NewPageModel(total, resp), nil
+}
+
+func (cs *CommentService) convertCommentEntity2Resp(ctx context.Context, userID string, comment *entity.Comment) (
+	commentResp *schema.GetCommentResp, err error) {
+	commentResp = &schema.GetCommentResp{
+		CommentID:      comment.ID,
+		CreatedAt:      comment.CreatedAt.Unix(),
+		UserID:         comment.UserID,
+		ReplyUserID:    comment.GetReplyUserID(),
+		ReplyCommentID: comment.GetReplyCommentID(),
+		ObjectID:       comment.ObjectID,
+		VoteCount:      comment.VoteCount,
+		OriginalText:   comment.OriginalText,
+		ParsedText:     comment.ParsedText,
+	}
+
+	// get comment user info
+	if len(commentResp.UserID) > 0 {
+		commentUser, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, commentResp.UserID)
+		if err != nil {
+			return nil, err
+		}
+		if exist {
+			commentResp.Username = commentUser.Username
+			commentResp.UserDisplayName = commentUser.DisplayName
+			commentResp.UserAvatar = commentUser.Avatar
+			commentResp.UserStatus = commentUser.Status
+		}
+	}
+
+	// get reply user info
+	if len(commentResp.ReplyUserID) > 0 {
+		replyUser, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, commentResp.ReplyUserID)
+		if err != nil {
+			return nil, err
+		}
+		if exist {
+			commentResp.ReplyUsername = replyUser.Username
+			commentResp.ReplyUserDisplayName = replyUser.DisplayName
+			commentResp.ReplyUserStatus = replyUser.Status
+		}
+	}
+
+	// check if current user vote this comment
+	commentResp.IsVote = cs.checkIsVote(ctx, userID, commentResp.CommentID)
+
+	commentResp.MemberActions = permission.GetCommentPermission(userID, commentResp.UserID)
+	return commentResp, nil
 }
 
 func (cs *CommentService) checkCommentWhetherOwner(ctx context.Context, userID, commentID string) error {
