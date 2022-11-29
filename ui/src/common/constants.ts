@@ -10,29 +10,29 @@ export const CAPTCHA_CODE_STORAGE_KEY = '_a_captcha_';
 export const ADMIN_LIST_STATUS = {
   // normal;
   1: {
-    variant: 'success',
+    variant: 'text-bg-success',
     name: 'normal',
   },
   // closed;
   2: {
-    variant: 'warning',
+    variant: 'text-bg-warning',
     name: 'closed',
   },
   // deleted
   10: {
-    variant: 'danger',
+    variant: 'text-bg-danger',
     name: 'deleted',
   },
   normal: {
-    variant: 'success',
+    variant: 'text-bg-success',
     name: 'normal',
   },
   closed: {
-    variant: 'warning',
+    variant: 'text-bg-warning',
     name: 'closed',
   },
   deleted: {
-    variant: 'danger',
+    variant: 'text-bg-danger',
     name: 'deleted',
   },
 };

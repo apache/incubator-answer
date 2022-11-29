@@ -1,13 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import {
-  Container,
-  Row,
-  Col,
-  Alert,
-  Badge,
-  Stack,
-  Button,
-} from 'react-bootstrap';
+import { Container, Row, Col, Alert, Stack, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -120,9 +112,7 @@ const Index: FC = () => {
             <Col lg={{ span: 7, offset: 1 }}>
               <Alert variant="secondary">
                 <Stack className="align-items-start">
-                  <Badge bg="secondary" className="mb-2">
-                    {editBadge}
-                  </Badge>
+                  <span className="badge text-bg-secondary">{editBadge}</span>
                   <Link to={itemLink} target="_blank">
                     {itemTitle}
                   </Link>
