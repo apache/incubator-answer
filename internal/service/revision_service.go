@@ -127,7 +127,8 @@ func (rs *RevisionService) revisionAuditQuestion(ctx context.Context, revisionit
 		question.OriginalText = questioninfo.Content
 		question.ParsedText = questioninfo.HTML
 		question.UpdatedAt = now
-		saveerr := rs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at"})
+		question.PostUpdateTime = now
+		saveerr := rs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at", "post_update_time"})
 		if saveerr != nil {
 			return saveerr
 		}

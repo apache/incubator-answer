@@ -295,6 +295,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	question.ParsedText = req.HTML
 	question.ID = req.ID
 	question.UpdatedAt = now
+	question.PostUpdateTime = now
 	dbinfo, has, err := qs.questionRepo.GetQuestion(ctx, question.ID)
 	if err != nil {
 		return
@@ -381,7 +382,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		//Direct modification
 		revisionDTO.Status = entity.RevisionReviewPassStatus
 		//update question to db
-		saveerr := qs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at"})
+		saveerr := qs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at", "post_update_time"})
 		if saveerr != nil {
 			return questionInfo, saveerr
 		}
