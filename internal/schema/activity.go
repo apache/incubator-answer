@@ -42,11 +42,12 @@ type ActObjectTimeline struct {
 
 // ActObjectInfo act object info
 type ActObjectInfo struct {
-	Title      string `json:"title"`
-	ObjectType string `json:"object_type"`
-	QuestionID string `json:"question_id"`
-	AnswerID   string `json:"answer_id"`
-	Username   string `json:"username"`
+	Title       string `json:"title"`
+	ObjectType  string `json:"object_type"`
+	QuestionID  string `json:"question_id"`
+	AnswerID    string `json:"answer_id"`
+	Username    string `json:"username"`
+	DisplayName string `json:"display_name"`
 }
 
 // GetObjectTimelineDetailReq get object timeline detail request
