@@ -237,6 +237,24 @@ const SchemaForm: FC<IProps> = ({
     }
   };
 
+  const handleCheckboxChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    const { name } = e.target;
+    const data = {
+      ...formData,
+      [name]: {
+        ...formData[name],
+        value: schema.properties[name]?.enum?.[index],
+        isInvalid: false,
+      },
+    };
+    if (onChange instanceof Function) {
+      onChange(data);
+    }
+  };
+
   return (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {
@@ -280,13 +298,14 @@ const SchemaForm: FC<IProps> = ({
                       inline
                       required
                       type={widget}
-                      name={title}
+                      name={key}
                       id={String(item)}
                       label={properties[key].enumNames?.[index]}
                       checked={formData[key]?.value === item}
                       feedback={formData[key]?.errorMsg}
                       feedbackType="invalid"
                       isInvalid={formData[key].isInvalid}
+                      onChange={(e) => handleCheckboxChange(e, index)}
                     />
                   );
                 })}

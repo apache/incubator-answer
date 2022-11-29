@@ -37,7 +37,7 @@ const Smtp: FC = () => {
         type: 'boolean',
         title: t('encryption.label'),
         description: t('encryption.text'),
-        enum: [true, false],
+        enum: ['SSL', ''],
         enumNames: ['SSL', ''],
       },
       smtp_port: {

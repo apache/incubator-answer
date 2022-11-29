@@ -24,7 +24,7 @@ const Index: FC<Props> = ({
     showTagUrlSlug: true,
   },
 }) => {
-  if (!newData?.original_text) return null;
+  if (!newData) return null;
 
   let tag = newData.tags;
   if (objectType === 'question' && oldData?.tags) {
