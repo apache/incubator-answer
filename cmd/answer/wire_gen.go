@@ -13,6 +13,7 @@ import (
 	"github.com/answerdev/answer/internal/base/server"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/controller"
+	"github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/controller_backyard"
 	"github.com/answerdev/answer/internal/repo/activity"
 	"github.com/answerdev/answer/internal/repo/activity_common"
@@ -190,7 +191,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)
 	avatarMiddleware := middleware.NewAvatarMiddleware(serviceConf, uploaderService)
 	templateController := controller.NewTemplateController()
-	templateRouter := router.NewTemplateRouter(templateController)
+	templateRenderController := templaterender.NewTemplateRenderController(questionService)
+	templateRouter := router.NewTemplateRouter(templateController, templateRenderController)
 	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter)
 	application := newApplication(serverConf, ginEngine)
 	return application, func() {
