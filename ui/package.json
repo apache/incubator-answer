@@ -53,7 +53,6 @@
     "@types/qs": "^6.9.7",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
-    "@types/react-helmet": "^6.1.5",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.33.0",
     "customize-cra": "^1.0.0",
