@@ -12,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/base/server"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/controller"
+	"github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/controller_backyard"
 	"github.com/answerdev/answer/internal/repo"
 	"github.com/answerdev/answer/internal/router"
@@ -37,6 +38,7 @@ func initApplication(
 		router.ProviderSetRouter,
 		controller.ProviderSetController,
 		controller_backyard.ProviderSetController,
+		templaterender.ProviderSetTemplateRenderController,
 		service.ProviderSetService,
 		repo.ProviderSetRepo,
 		translator.ProviderSet,
