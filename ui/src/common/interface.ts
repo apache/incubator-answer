@@ -406,7 +406,7 @@ export interface TimelineObject {
   question_id: string;
   answer_id: string;
   main_tag_slug_name?: string;
-  username?: string;
+  display_name?: string;
 }
 
 export interface TimelineRes {

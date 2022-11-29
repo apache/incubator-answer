@@ -48,7 +48,7 @@ class Request {
         return data;
       },
       (error) => {
-        const { status, data: respData, msg: respMsg } = error.response || {};
+        const { status, data: respData } = error.response || {};
         const { data = {}, msg = '' } = respData || {};
         if (status === 400) {
           // show error message
@@ -121,12 +121,19 @@ class Request {
             });
             return Promise.reject(false);
           }
+
+          if (msg) {
+            toastStore.getState().show({
+              msg,
+              variant: 'danger',
+            });
+          }
+          return Promise.reject(false);
         }
-        if (respMsg) {
-          toastStore.getState().show({
-            msg: `statusCode: ${status}; ${respMsg || ''}`,
-            variant: 'danger',
-          });
+        if (status >= 500) {
+          console.error(
+            `Request failed with status code ${status}, ${msg || ''}`,
+          );
         }
         return Promise.reject(false);
       },
