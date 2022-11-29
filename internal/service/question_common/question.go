@@ -380,7 +380,13 @@ func (qs *QuestionCommon) ShowFormat(ctx context.Context, data *entity.Question)
 	info.CreateTime = data.CreatedAt.Unix()
 	info.UpdateTime = data.UpdatedAt.Unix()
 	info.PostUpdateTime = data.PostUpdateTime.Unix()
+	if data.PostUpdateTime.Unix() < 1 {
+		info.PostUpdateTime = 0
+	}
 	info.QuestionUpdateTime = data.UpdatedAt.Unix()
+	if data.UpdatedAt.Unix() < 1 {
+		info.QuestionUpdateTime = 0
+	}
 	info.Status = data.Status
 	info.UserID = data.UserID
 	info.Tags = make([]*schema.TagResp, 0)

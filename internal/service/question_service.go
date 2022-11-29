@@ -149,11 +149,11 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	question.ParsedText = req.HTML
 	question.AcceptedAnswerID = "0"
 	question.LastAnswerID = "0"
-	question.PostUpdateTime = now
+	//question.PostUpdateTime = nil
 	question.Status = entity.QuestionStatusAvailable
 	question.RevisionID = "0"
 	question.CreatedAt = now
-	// question.UpdatedAt = now
+	//question.UpdatedAt = nil
 	err = qs.questionRepo.AddQuestion(ctx, question)
 	if err != nil {
 		return
