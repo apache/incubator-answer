@@ -38,6 +38,9 @@ export const useQueryComments = (params) => {
   if (params.page === 0) {
     params.query_cond = 'vote';
     params.page = 1;
+  } else {
+    // only first page need commentId
+    delete params.commentId;
   }
   return useSWR<Type.ListResult>(
     `/answer/api/v1/comment/page?${qs.stringify(params, {
