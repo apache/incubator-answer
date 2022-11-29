@@ -124,6 +124,15 @@ func GetLoginUserIDFromContext(ctx *gin.Context) (userID string) {
 	return u.UserID
 }
 
+// GetIsAdminFromContext get user is admin from context
+func GetIsAdminFromContext(ctx *gin.Context) (isAdmin bool) {
+	userInfo := GetUserInfoFromContext(ctx)
+	if userInfo == nil {
+		return false
+	}
+	return userInfo.IsAdmin
+}
+
 // GetUserInfoFromContext get user info from context
 func GetUserInfoFromContext(ctx *gin.Context) (u *entity.UserCacheInfo) {
 	userInfo, exist := ctx.Get(ctxUUIDKey)
