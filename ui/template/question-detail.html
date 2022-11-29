@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link href="https://answer.dev.segmentfault.com/static/css/main.d4180d41.css" rel="stylesheet" />
+</head>
+
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+        <nav id="header" class="sticky-top navbar navbar-expand-lg navbar-dark">
+            <div class="d-flex align-items-center container">
+                <button aria-controls="navBarContent" id="navBarToggle" type="button" aria-label="Toggle navigation"
+                    class="answer-navBar me-2 navbar-toggler collapsed">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="d-flex justify-content-between align-items-center nav-grow flex-nowrap">
+                    <a class="lh-1 me-0 me-sm-3 navbar-brand" href="/"><img
+                            class="d-none d-lg-block logo rounded-1 me-0"
+                            src="https://answer.dev.segmentfault.com/uploads/branding/4Gud8KXBXA9.png" alt="" /><img
+                            class="lg-none logo rounded-1 me-0"
+                            src="https://answer.dev.segmentfault.com/uploads/branding/4GxqyBKy6hu.png" alt="" /></a>
+                </div>
+                <div class="me-auto navbar-collapse collapse" id="navBarContent">
+                    <hr class="hr lg-none mb-2" style="margin-top: 12px" />
+                    <div class="col-md-4">
+                        <div class="navbar-nav">
+                            <a class="nav-link" href="/questions">Questions</a><a class="nav-link" href="/tags">Tags</a>
+                        </div>
+                    </div>
+                    <hr class="hr lg-none mt-2" />
+
+                </div>
+            </div>
+        </nav>
+        <div class="position-relative page-wrap">
+            <div class="pt-4 mt-2 mb-5 questionDetailPage container">
+                <div class="justify-content-center row">
+                    <div class="mb-5 mb-md-0 col-xxl-7 col-lg-8 col-sm-12">
+                        <div>
+                            <h1 class="h3 mb-3 text-wrap text-break">
+                                <a class="link-dark" href="/questions/10010000000000887">how to make links and how to
+                                    make errors ?</a>
+                            </h1>
+                            <div class="d-flex flex-wrap align-items-center fs-14 mb-3 text-secondary">
+                                <time class="me-3" datetime="2022-11-24T02:04:31.000Z"
+                                    title="Nov 24, 2022 at 10:04">Asked Nov 24</time><time class="me-3"
+                                    datetime="2022-11-28T09:48:16.000Z" title="Nov 28, 2022 at 17:48">Modified 23h
+                                    ago</time>
+                                <div class="me-3">Viewed 68</div>
+                                <button type="button" class="p-0 btn-no-border btn btn-link btn-sm">
+                                    Follow
+                                </button>
+                            </div>
+                            <div class="m-n1">
+                                <a href="/tags/support" class="badge-tag rounded-1 badge-tag-required m-1"><span
+                                        class="">support</span></a><a href="/tags/bug"
+                                    class="badge-tag rounded-1 badge-tag-required m-1"><span class="">bug</span></a><a
+                                    href="/tags/featured" class="badge-tag rounded-1 badge-tag-reserved m-1"><span
+                                        class="">featured</span></a><a href="/tags/javascript"
+                                    class="badge-tag rounded-1 m-1"><span class="">javascript</span></a><a
+                                    href="/tags/go" class="badge-tag rounded-1 m-1"><span class="">go</span></a>
+                            </div>
+                            <article class="fmt text-break text-wrap mt-4">
+                                <p>如下面的例子</p>
+                                <pre><code class="language-typescript">const getStrLength = (target: string | number): number =&gt; {
+  if (typeof target === "string") {
+    return target.length; // 这里的`target`被识别为`string`，不用写`(target as string)`
+  } else {
+    return target.toString().length;
+  }
+};
+</code></pre>
+                                <p>
+                                    那要是不能用<code>typeof</code>进行识别的类型，如何写这个<code>if</code>可以在后续内容中省略断言呢？
+                                </p>
+                                <pre><code class="language-typescript">function getSomething(target: Event): number | string {
+  if (??? MouseEvnet ???) { // 这里怎么写可以省略下面的`(target as MouseEvent)`
+    console.log(target.clientX);
+    console.log(target.clientX);
+    console.log(target.clientX);
+    .... // 多行代码总不能每次都写`(target as MouseEvent)`吧
+    return target.clientX;
+  } else if (??? KeyboardEvent ???) {
+    return target.key;
+  } else {
+    ...
+  }
+}
+</code></pre>
+                            </article>
+                            <div class="mt-4">
+                                <div role="group" class="btn-group">
+                                    <button type="button" class="btn btn-outline-secondary">
+                                        <i class="br bi-hand-thumbs-up-fill"></i></button><button type="button"
+                                        disabled="" class="btn btn-outline-dark text-body">
+                                        0</button><button type="button" class="btn btn-outline-secondary">
+                                        <i class="br bi-hand-thumbs-down-fill"></i>
+                                    </button>
+                                </div>
+                                <button type="button" class="btn btn-outline-secondary ms-3">
+                                    <i class="br bi-bookmark-fill"></i><span style="padding-left: 10px">0</span>
+                                </button>
+                            </div>
+                            <div class="mt-4 mb-3 row">
+                                <div class="mb-3 mb-md-0 col-lg-5">
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown">
+                                            <a class="no-toggle fs-14 link-secondary pointer me-3 dropdown-toggle"
+                                                id="dropdown-share" aria-expanded="false"
+                                                style="line-height: 23px">Share</a>
+                                        </div>
+                                        <button type="button" class="link-secondary p-0 fs-14 me-3 btn btn-link">
+                                            Flag</button><a class="link-secondary p-0 fs-14 me-3"
+                                            href="/posts/10010000000000887/edit"
+                                            style="line-height: 23px">Edit</a><button type="button"
+                                            class="link-secondary p-0 fs-14 me-3 btn btn-link">
+                                            Close</button><button type="button"
+                                            class="link-secondary p-0 fs-14 me-3 btn btn-link">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="mb-3 mb-md-0 col-lg-3">
+                                    <a href="/posts/10010000000000887/timeline"><time class="link-secondary fs-14"
+                                            datetime="2022-11-24T03:02:51.000Z" title="Nov 24, 2022 at 11:02">edited Nov
+                                            24</time></a>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="d-flex">
+                                        <a href="/users/bmckfbksayryy"><img
+                                                src="https://answer.dev.segmentfault.com/uploads/avatar/4GmbdScSotb.jpg?s=96"
+                                                width="40px" height="40px" class="rounded me-2 d-none d-md-block"
+                                                alt="" /><img
+                                                src="https://answer.dev.segmentfault.com/uploads/avatar/4GmbdScSotb.jpg?s=48"
+                                                width="24px" height="24px" class="rounded me-2 d-block d-md-none"
+                                                alt="" /></a>
+                                        <div
+                                            class="fs-14 text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
+                                            <div class="me-1 me-md-0">
+                                                <a class="me-1 text-break" href="/users/bmckfbksayryy">shuai</a><span
+                                                    class="fw-bold" title="Reputation">150</span>
+                                            </div>
+                                            <a href="/posts/10010000000000887/timeline"><time class="link-secondary"
+                                                    datetime="2022-11-24T02:04:31.000Z"
+                                                    title="Nov 24, 2022 at 10:04">asked Nov 24</time></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comments-wrap">
+                                <div class="border-bottom py-2 comment-item border-top">
+                                    <div class="d-block">
+                                        <div class="fmt fs-14">
+                                            <p>this is a good question</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between fs-14">
+                                        <div class="d-flex align-items-center link-secondary">
+                                            <a href="/users/bmckfbksayryy">shuai</a><span class="mx-1">•</span><time
+                                                class="me-3" datetime="2022-11-24T02:04:49.000Z"
+                                                title="Nov 24, 2022 at 10:04">Nov 24</time><button type="button"
+                                                class="me-3 btn-no-border p-0 link-secondary btn btn-link btn-sm">
+                                                <i class="br bi-hand-thumbs-up-fill"></i></button><button type="button"
+                                                class="link-secondary m-0 p-0 btn-no-border btn btn-link btn-sm">
+                                                Reply
+                                            </button>
+                                        </div>
+                                        <div class="align-items-center control-area d-none">
+                                            <button type="button"
+                                                class="link-secondary btn-no-border m-0 p-0 btn btn-link btn-sm">
+                                                Flag</button><button type="button"
+                                                class="link-secondary btn-no-border m-0 p-0 ms-3 btn btn-link btn-sm">
+                                                Edit</button><button type="button"
+                                                class="link-secondary btn-no-border m-0 p-0 ms-3 btn btn-link btn-sm">
+                                                Delete
+                                            </button>
+                                        </div>
+                                        <div class="d-block d-md-none dropdown">
+                                            <div class="no-toggle dropdown-toggle" id="dropdown-comment"
+                                                aria-expanded="false" variant="success">
+                                                <i class="br bi-three-dots text-secondary"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="border-bottom py-2 comment-item">
+                                    <div class="d-block">
+                                        <div class="fmt fs-14">
+                                            <p>
+                                                this is a something about ts? you can looak at ...
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between fs-14">
+                                        <div class="d-flex align-items-center link-secondary">
+                                            <a href="/users/bmsoofmnxqryy">11122@qq.com</a><span
+                                                class="mx-1">•</span><time class="me-3"
+                                                datetime="2022-11-24T03:06:13.000Z" title="Nov 24, 2022 at 11:06">Nov
+                                                24</time><button type="button"
+                                                class="me-3 btn-no-border p-0 link-secondary btn btn-link btn-sm">
+                                                <i class="br bi-hand-thumbs-up-fill"></i></button><button type="button"
+                                                class="link-secondary m-0 p-0 btn-no-border btn btn-link btn-sm">
+                                                Reply
+                                            </button>
+                                        </div>
+                                        <div class="align-items-center control-area d-none">
+                                            <button type="button"
+                                                class="link-secondary btn-no-border m-0 p-0 btn btn-link btn-sm">
+                                                Flag</button><button type="button"
+                                                class="link-secondary btn-no-border m-0 p-0 ms-3 btn btn-link btn-sm">
+                                                Edit</button><button type="button"
+                                                class="link-secondary btn-no-border m-0 p-0 ms-3 btn btn-link btn-sm">
+                                                Delete
+                                            </button>
+                                        </div>
+                                        <div class="d-block d-md-none dropdown">
+                                            <div class="no-toggle dropdown-toggle" id="dropdown-comment"
+                                                aria-expanded="false" variant="success">
+                                                <i class="br bi-three-dots text-secondary"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <button type="button" class="p-0 fs-14 btn-no-border btn btn-link">
+                                        Add comment
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-5 mb-3" id="answerHeader">
+                            <h5 class="mb-0">3 Answers</h5>
+
+                        </div>
+                        <div id="10020000000000930" class="answer-item py-4">
+                            <article class="fmt">
+                                <ol>
+                                    <li>/questions/10010000000000887</li>
+                                    <li>
+                                        /questions/10010000000000887/questions/10010000000000887
+                                    </li>
+                                    <li>/questions/10010000000000887</li>
+                                    <li>/questions/10010000000000887</li>
+                                </ol>
+                            </article>
+                            <div class="d-flex align-items-center mt-4">
+                                <div class="">
+                                    <div role="group" class="btn-group">
+                                        <button type="button" class="btn btn-outline-secondary">
+                                            <i class="br bi-hand-thumbs-up-fill"></i></button><button type="button"
+                                            disabled="" class="btn btn-outline-dark text-body">
+                                            1</button><button type="button" class="btn btn-outline-secondary">
+                                            <i class="br bi-hand-thumbs-down-fill"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <button type="button" disabled=""
+                                    class="ms-3 active opacity-100 bg-success text-white btn btn-outline-success">
+                                    <i class="br bi-check-circle-fill me-2"></i><span>Accepted</span>
+                                </button>
+                            </div>
+                            <div class="mt-4 mb-3 row">
+                                <div class="mb-3 mb-md-0 col">
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown">
+                                            <a class="no-toggle fs-14 link-secondary pointer me-3 dropdown-toggle"
+                                                id="dropdown-share" aria-expanded="false"
+                                                style="line-height: 23px">Share</a>
+                                        </div>
+                                        <button type="button" class="link-secondary p-0 fs-14 me-3 btn btn-link">
+                                            Flag</button><a class="link-secondary p-0 fs-14 me-3"
+                                            href="/posts/10010000000000887/10020000000000930/edit"
+                                            style="line-height: 23px">Edit</a><button type="button"
+                                            class="link-secondary p-0 fs-14 me-3 btn btn-link">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="mb-3 mb-md-0 col-lg-3">
+                                    <a href="/posts/10010000000000887/10020000000000930/timeline"><time
+                                            class="link-secondary fs-14" datetime="2022-11-28T09:48:16.000Z"
+                                            title="Nov 28, 2022 at 17:48">edited 23h ago</time></a>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="d-flex">
+                                        <a href="/users/bmxtgtpksxayy"><img
+                                                src="/static/media/default-avatar.ac1be9284e893e315871fa5e571cabaf.svg"
+                                                width="40px" height="40px" class="rounded me-2 d-none d-md-block"
+                                                alt="" /><img
+                                                src="/static/media/default-avatar.ac1be9284e893e315871fa5e571cabaf.svg"
+                                                width="24px" height="24px" class="rounded me-2 d-block d-md-none"
+                                                alt="" /></a>
+                                        <div
+                                            class="fs-14 text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
+                                            <div class="me-1 me-md-0">
+                                                <a class="me-1 text-break" href="/users/bmxtgtpksxayy">342564</a><span
+                                                    class="fw-bold" title="Reputation">34</span>
+                                            </div>
+                                            <a href="/posts/10010000000000887/10020000000000930/timeline"><time
+                                                    class="link-secondary" datetime="2022-11-28T09:48:16.000Z"
+                                                    title="Nov 28, 2022 at 17:48">answered 23h ago</time></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comments-wrap">
+                                <div class="mt-2">
+                                    <button type="button" class="p-0 fs-14 btn-no-border btn btn-link">
+                                        Add comment
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="10020000000000889" class="answer-item py-4">
+                            <article class="fmt">
+                                <p>you can do this TypeScript 是 Microsoft 公司注册商标。</p>
+                                <p>
+                                    <code>TypeScript</code> 具有类型系统，且是
+                                    <code>JavaScript</code> 的超集。
+                                    它可以编译成普通的JavaScript代码。
+                                    <code>TypeScript</code>
+                                    支持任意浏览器，任意环境,并且是开源的。
+                                </p>
+                                <p>
+                                    <code>TypeScript</code>
+                                    目前还在积极的开发完善之中，不断地会有新的特性加入进来。
+                                    因此本手册也会紧随官方的每个commit，不断地更新新的章节以及修改措词不妥之处。
+                                </p>
+                            </article>
+                            <div class="d-flex align-items-center mt-4">
+                                <div class="">
+                                    <div role="group" class="btn-group">
+                                        <button type="button" class="btn btn-outline-secondary">
+                                            <i class="br bi-hand-thumbs-up-fill"></i></button><button type="button"
+                                            disabled="" class="btn btn-outline-dark text-body">
+                                            0</button><button type="button" class="btn btn-outline-secondary">
+                                            <i class="br bi-hand-thumbs-down-fill"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 mb-3 row">
+                                <div class="mb-3 mb-md-0 col">
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown">
+                                            <a class="no-toggle fs-14 link-secondary pointer me-3 dropdown-toggle"
+                                                id="dropdown-share" aria-expanded="false"
+                                                style="line-height: 23px">Share</a>
+                                        </div>
+                                        <button type="button" class="link-secondary p-0 fs-14 me-3 btn btn-link">
+                                            Flag</button><a class="link-secondary p-0 fs-14 me-3"
+                                            href="/posts/10010000000000887/10020000000000889/edit"
+                                            style="line-height: 23px">Edit</a><button type="button"
+                                            class="link-secondary p-0 fs-14 me-3 btn btn-link">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="mb-3 mb-md-0 col-lg-3">
+                                    <a href="/posts/10010000000000887/10020000000000889/timeline"><time
+                                            class="link-secondary fs-14" datetime="2022-11-24T02:05:15.000Z"
+                                            title="Nov 24, 2022 at 10:05">edited Nov 24</time></a>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="d-flex">
+                                        <a href="/users/bmckfbksayryy"><img
+                                                src="https://answer.dev.segmentfault.com/uploads/avatar/4GmbdScSotb.jpg?s=96"
+                                                width="40px" height="40px" class="rounded me-2 d-none d-md-block"
+                                                alt="" /><img
+                                                src="https://answer.dev.segmentfault.com/uploads/avatar/4GmbdScSotb.jpg?s=48"
+                                                width="24px" height="24px" class="rounded me-2 d-block d-md-none"
+                                                alt="" /></a>
+                                        <div
+                                            class="fs-14 text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
+                                            <div class="me-1 me-md-0">
+                                                <a class="me-1 text-break" href="/users/bmckfbksayryy">shuai</a><span
+                                                    class="fw-bold" title="Reputation">150</span>
+                                            </div>
+                                            <a href="/posts/10010000000000887/10020000000000889/timeline"><time
+                                                    class="link-secondary" datetime="2022-11-24T02:05:15.000Z"
+                                                    title="Nov 24, 2022 at 10:05">answered Nov 24</time></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="comments-wrap">
+                                <div class="border-bottom py-2 comment-item border-top">
+                                    <div class="d-block">
+                                        <div class="fmt fs-14">
+                                            <p>oh my god, good done boy!</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between fs-14">
+                                        <div class="d-flex align-items-center link-secondary">
+                                            <a href="/users/bmsoofmnxqryy">11122@qq.com</a><span
+                                                class="mx-1">•</span><time class="me-3"
+                                                datetime="2022-11-24T03:05:26.000Z" title="Nov 24, 2022 at 11:05">Nov
+                                                24</time><button type="button"
+                                                class="me-3 btn-no-border p-0 link-secondary btn btn-link btn-sm">
+                                                <i class="br bi-hand-thumbs-up-fill"></i></button><button type="button"
+                                                class="link-secondary m-0 p-0 btn-no-border btn btn-link btn-sm">
+                                                Reply
+                                            </button>
+                                        </div>
+                                        <div class="align-items-center control-area d-none">
+                                            <button type="button"
+                                                class="link-secondary btn-no-border m-0 p-0 btn btn-link btn-sm">
+                                                Flag</button><button type="button"
+                                                class="link-secondary btn-no-border m-0 p-0 ms-3 btn btn-link btn-sm">
+                                                Edit</button><button type="button"
+                                                class="link-secondary btn-no-border m-0 p-0 ms-3 btn btn-link btn-sm">
+                                                Delete
+                                            </button>
+                                        </div>
+                                        <div class="d-block d-md-none dropdown">
+                                            <div class="no-toggle dropdown-toggle" id="dropdown-comment"
+                                                aria-expanded="false" variant="success">
+                                                <i class="br bi-three-dots text-secondary"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-2">
+                                    <button type="button" class="p-0 fs-14 btn-no-border btn btn-link">
+                                        Add comment
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="10020000000000906" class="answer-item py-4">
+                            <article class="fmt">
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                                    do eiusmod tempor incididunt ut labore et dolore magna
+                                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                    Duis aute irure dolor in reprehenderit in voluptate velit
+                                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                                    occaecat cupidatat non proident, sunt in culpa qui officia
+                                    deserunt mollit anim id est laborum.
+                                </p>
+                                <p>
+                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                                    do eiusmod tempor incididunt ut labore et dolore magna
+                                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                    Duis aute irure dolor in reprehenderit in voluptate velit
+                                    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
+                                    occaecat cupidatat non proident, sunt in culpa qui officia
+                                    deserunt mollit anim id est laborum.
+                                </p>
+                            </article>
+                            <div class="d-flex align-items-center mt-4">
+                                <div class="">
+                                    <div role="group" class="btn-group">
+                                        <button type="button" class="btn btn-outline-secondary">
+                                            <i class="br bi-hand-thumbs-up-fill"></i></button><button type="button"
+                                            disabled="" class="btn btn-outline-dark text-body">
+                                            0</button><button type="button" class="btn btn-outline-secondary">
+                                            <i class="br bi-hand-thumbs-down-fill"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 mb-3 row">
+                                <div class="mb-3 mb-md-0 col">
+                                    <div class="d-flex align-items-center">
+                                        <div class="dropdown">
+                                            <a class="no-toggle fs-14 link-secondary pointer me-3 dropdown-toggle"
+                                                id="dropdown-share" aria-expanded="false"
+                                                style="line-height: 23px">Share</a>
+                                        </div>
+                                        <button type="button" class="link-secondary p-0 fs-14 me-3 btn btn-link">
+                                            Flag</button><a class="link-secondary p-0 fs-14 me-3"
+                                            href="/posts/10010000000000887/10020000000000906/edit"
+                                            style="line-height: 23px">Edit</a><button type="button"
+                                            class="link-secondary p-0 fs-14 me-3 btn btn-link">
+                                            Delete
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="mb-3 mb-md-0 col-lg-3">
+                                    <a href="/posts/10010000000000887/10020000000000906/timeline"><time
+                                            class="link-secondary fs-14" datetime="2022-11-24T03:17:06.000Z"
+                                            title="Nov 24, 2022 at 11:17">edited Nov 24</time></a>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="d-flex">
+                                        <a href="/users/bmckfbksayryy"><img
+                                                src="https://answer.dev.segmentfault.com/uploads/avatar/4GmbdScSotb.jpg?s=96"
+                                                width="40px" height="40px" class="rounded me-2 d-none d-md-block"
+                                                alt="" /><img
+                                                src="https://answer.dev.segmentfault.com/uploads/avatar/4GmbdScSotb.jpg?s=48"
+                                                width="24px" height="24px" class="rounded me-2 d-block d-md-none"
+                                                alt="" /></a>
+                                        <div
+                                            class="fs-14 text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
+                                            <div class="me-1 me-md-0">
+                                                <a class="me-1 text-break" href="/users/bmckfbksayryy">shuai</a><span
+                                                    class="fw-bold" title="Reputation">150</span>
+                                            </div>
+                                            <a href="/posts/10010000000000887/10020000000000906/timeline"><time
+                                                    class="link-secondary" datetime="2022-11-24T03:17:06.000Z"
+                                                    title="Nov 24, 2022 at 11:17">answered Nov 24</time></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="mt-5 mt-lg-0 col-xxl-3 col-lg-4 col-sm-12">
+
+                    </div>
+                </div>
+            </div>
+            <div style="
+            position: fixed;
+            top: 90px;
+            left: 0px;
+            right: 0px;
+            margin: auto;
+            z-index: 5;
+          ">
+                <div class="d-flex justify-content-center"></div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center" style="
+          position: fixed;
+          top: 90px;
+          left: 0px;
+          right: 0px;
+          margin: auto;
+          z-index: 5;
+        "></div>
+        <footer class="bg-light py-3">
+            <div class="container">
+                <p class="text-center mb-0 fs-14 text-secondary">
+                    Built on <a href="https://answer.dev/" target="_blank"> Answer </a>-
+                    the open-source software that power Q&amp;A communities<br />Made
+                    with love © 2022 Answer
+                </p>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>
