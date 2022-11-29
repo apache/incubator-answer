@@ -27,10 +27,10 @@ func (a *TemplateRouter) RegisterTemplateRouter(r *gin.RouterGroup) {
 	r.GET("/", a.templateController.Index)
 	r.GET("/index", a.templateController.Index)
 
-	r.GET("/questions", a.templateRenderController.Index)
-	r.GET("/questions/:id/", a.templateRenderController.QuestionDetail)
-	r.GET("/questions/:id/:title/", a.templateRenderController.QuestionDetail)
-	r.GET("/questions/:id/:title/:answerid", a.templateRenderController.AnswerDetail)
+	r.GET("/questions", a.templateController.Index)
+	r.GET("/questions/:id/", a.templateController.QuestionInfo)
+	r.GET("/questions/:id/:title/", a.templateController.QuestionInfo)
+	r.GET("/questions/:id/:title/:answerid", a.templateController.QuestionInfo)
 
 	r.GET("/tags", a.templateController.TagList)
 	r.GET("/tags/:tag", a.templateController.TagInfo)
