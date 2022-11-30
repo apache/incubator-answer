@@ -79,6 +79,9 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+
+	var page = req.Page
+
 	data, count, err := tc.templateRenderController.Index(ctx, req)
 	if err != nil {
 		tc.Page404(ctx)
@@ -89,7 +92,7 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
 		"data":       data,
-		"page":       templaterender.Paginator(req.Page, req.PageSize, count),
+		"page":       templaterender.Paginator(page, req.PageSize, count),
 	})
 }
 
