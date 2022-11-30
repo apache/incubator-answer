@@ -4,15 +4,15 @@
                     <div class="col-xxl-7 col-lg-8 col-sm-12">
                         <div class="tag-box mb-5">
                             <h3 class="mb-3">
-                                <a class="link-dark" href="/tags/apple">Apple</a>
+                                <a class="link-dark" href="/tags/{{$.tag.SlugName}}">{{$.tag.SlugName}}</a>
                             </h3>
                             <p class="text-break">
-                                对外只有3001一个端口，群集内有负载策略会分发给不同实例1111
+                               {{templateHTML $.tag.ParsedText}}
                             </p>
                         </div>
                         <div>
                             <div class="mb-3 d-flex flex-wrap justify-content-between">
-                                <h5 class="fs-5 text-nowrap mb-3 mb-md-0">3 Questions</h5>
+                                <h5 class="fs-5 text-nowrap mb-3 mb-md-0">{{.tag.QuestionCount}} Questions</h5>
                             </div>
                             <div class="border-top border-bottom-0 list-group list-group-flush">
                                 <div class="border-bottom pt-3 pb-2 px-0 list-group-item">

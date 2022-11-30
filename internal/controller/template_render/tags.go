@@ -10,3 +10,8 @@ func (q *TemplateRenderController) TagList(ctx context.Context, req *schema.GetT
 	resp, err = q.tagService.GetTagWithPage(ctx, req)
 	return resp, err
 }
+
+func (q *TemplateRenderController) TagInfo(ctx context.Context, req *schema.GetTagInfoReq) (resp *schema.GetTagResp, err error) {
+	resp, err = q.tagService.GetTagInfo(ctx, req)
+	return resp, err
+}

@@ -9,7 +9,6 @@ import (
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/ui"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 )
 
@@ -84,7 +83,6 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 		return
 	}
 	page := templaterender.Paginator(req.Page, req.PageSize, data.Count)
-	spew.Dump(page)
 	ctx.HTML(http.StatusOK, "tags.html", gin.H{
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
@@ -96,8 +94,20 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 // TagInfo taginfo
 func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	tag := ctx.Param("tag")
+
+	req := &schema.GetTagInfoReq{}
+	req.Name = tag
+	taginifo, err := tc.templateRenderController.TagInfo(ctx, req)
+	if err != nil {
+		ctx.HTML(http.StatusOK, "404.html", gin.H{
+			"scriptPath": tc.scriptPath,
+			"cssPath":    tc.cssPath,
+			"err":        err.Error(),
+		})
+		return
+	}
 	ctx.HTML(http.StatusOK, "tag-detail.html", gin.H{
-		"tag":        tag,
+		"tag":        taginifo,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
 	})

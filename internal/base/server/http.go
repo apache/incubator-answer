@@ -54,6 +54,12 @@ func NewHTTPServer(debug bool,
 	cmsauthV1.Use(authUserMiddleware.CmsAuth())
 	answerRouter.RegisterAnswerCmsAPIRouter(cmsauthV1)
 
+	r.SetFuncMap(template.FuncMap{
+		"templateHTML": func(data string) template.HTML {
+			return template.HTML(data)
+		},
+	})
+
 	dev := os.Getenv("DEVCODE")
 	if dev != "" {
 		r.LoadHTMLGlob("../../ui/template/*")

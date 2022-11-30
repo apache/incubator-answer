@@ -25,7 +25,10 @@
                                         <strong class="fs-5">{{.userinfo.Info.QuestionCount}}</strong><span class="text-secondary"> questions</span>
                                     </div>
                                 </div>
+                                {{if .userinfo.Info.Website }}
                                 <div class="d-flex align-items-center"><i class="br bi-house-door-fill me-2"></i><a class="link-secondary" href="{{.userinfo.Info.Website}}">{{.userinfo.Info.Website}}</a></div>
+                                {{else}}
+                                {{end}}
                                 <div class="d-flex text-secondary"></div>
                             </div>
                         </div>
@@ -39,7 +42,11 @@
                     <div class="col-xxl-7 col-lg-8 col-sm-12">
                         <div>
                             <h5 class="mb-3">About Me</h5>
-                            <div class="text-center py-5 mb-4">{{.bio}}</div>
+                            {{if .bio }}
+                            <div class="text-center mb-4">{{.bio}}</div>
+                            {{else}}
+                            <div class="text-center py-5 mb-4">// Hello, World !</div>
+                            {{end}}
                         </div>
                     </div>
                     <div class="mt-5 mt-lg-0 col-xxl-3 col-lg-4 col-sm-12">
