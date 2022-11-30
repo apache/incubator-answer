@@ -3,7 +3,9 @@ package templaterender
 import (
 	"math"
 
+	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/tag"
 	"github.com/google/wire"
 )
 
@@ -15,16 +17,19 @@ var ProviderSetTemplateRenderController = wire.NewSet(
 type TemplateRenderController struct {
 	questionService *service.QuestionService
 	userService     *service.UserService
+	tagService      *tag.TagService
 }
 
 func NewTemplateRenderController(
 	questionService *service.QuestionService,
 	userService *service.UserService,
+	tagService *tag.TagService,
 
 ) *TemplateRenderController {
 	return &TemplateRenderController{
 		questionService: questionService,
 		userService:     userService,
+		tagService:      tagService,
 	}
 }
 
@@ -33,7 +38,10 @@ func NewTemplateRenderController(
 // prepage : Number per page
 // nums : Total
 // Returns the contents of the page in the format of 1, 2, 3, 4, and 5. If the contents are less than 5 pages, the page number is returned
-func Paginator(page, prepage int, nums int64) map[string]interface{} {
+func Paginator(page, prepage int, nums int64) *schema.Paginator {
+	if prepage == 0 {
+		prepage = 10
+	}
 
 	var firstpage int //Previous page address
 	var lastpage int  //Address on the last page
@@ -72,11 +80,11 @@ func Paginator(page, prepage int, nums int64) map[string]interface{} {
 		firstpage = int(math.Max(float64(1), float64(page-1)))
 		lastpage = page + 1
 	}
-	paginatorMap := make(map[string]interface{})
-	paginatorMap["pages"] = pages
-	paginatorMap["totalpages"] = totalpages
-	paginatorMap["firstpage"] = firstpage
-	paginatorMap["lastpage"] = lastpage
-	paginatorMap["currpage"] = page
-	return paginatorMap
+	paginator := &schema.Paginator{}
+	paginator.Pages = pages
+	paginator.Totalpages = totalpages
+	paginator.Firstpage = firstpage
+	paginator.Lastpage = lastpage
+	paginator.Currpage = page
+	return paginator
 }

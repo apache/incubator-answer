@@ -1,0 +1,33 @@
+{{define "page"}}
+<ul class="d-inline-flex mb-0 pagination pagination-sm">
+  {{$currpage := .page.Currpage}}
+  {{$totalpages := .page.Totalpages}}
+  {{$firstpage := .page.Firstpage}}
+  {{$lastpage := .page.Lastpage}}
+  {{ if ne $currpage 1 }}
+  <li class="page-item">
+    <a class="page-link" href="?page={{$firstpage}}"><span aria-hidden="true">Prev</span><span
+        class="visually-hidden">Prev</span></a>
+  </li>
+  {{ end }}
+  {{ range $value := .page.Pages }}
+  {{ if eq $currpage $value }}
+  <li class="page-item active">
+    <span class="page-link" href="?page={{$value}}">{{$value}}
+      <span class="visually-hidden">(current)</span>
+    </span>
+  </li>
+  {{ else }}
+  <li class="page-item">
+    <a class="page-link" href="?page={{$value}}">{{$value}}</a>
+  </li>
+  {{ end }}
+  {{ end }}
+  {{ if lt $currpage $totalpages }}
+  <li class="page-item">
+    <a class="page-link" href="?page={{$lastpage}}"><span aria-hidden="true">Next</span><span
+        class="visually-hidden">Next</span></a>
+  </li>
+  {{ end }}
+</ul>
+{{end}}

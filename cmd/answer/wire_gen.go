@@ -190,7 +190,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	uiRouter := router.NewUIRouter()
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)
 	avatarMiddleware := middleware.NewAvatarMiddleware(serviceConf, uploaderService)
-	templateRenderController := templaterender.NewTemplateRenderController(questionService, userService)
+	templateRenderController := templaterender.NewTemplateRenderController(questionService, userService, tagService)
 	templateController := controller.NewTemplateController(templateRenderController)
 	templateRouter := router.NewTemplateRouter(templateController, templateRenderController)
 	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter)

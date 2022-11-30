@@ -5,9 +5,11 @@ import (
 	"net/http"
 	"regexp"
 
+	"github.com/answerdev/answer/internal/base/handler"
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/ui"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 )
 
@@ -68,9 +70,26 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 
 // TagList tags list
 func (tc *TemplateController) TagList(ctx *gin.Context) {
+	req := &schema.GetTagWithPageReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	data, err := tc.templateRenderController.TagList(ctx, req)
+	if err != nil {
+		ctx.HTML(http.StatusOK, "404.html", gin.H{
+			"scriptPath": tc.scriptPath,
+			"cssPath":    tc.cssPath,
+			"err":        err.Error(),
+		})
+		return
+	}
+	page := templaterender.Paginator(req.Page, req.PageSize, data.Count)
+	spew.Dump(page)
 	ctx.HTML(http.StatusOK, "tags.html", gin.H{
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
+		"page":       page,
+		"data":       data,
 	})
 }
 
