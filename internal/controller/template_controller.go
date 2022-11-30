@@ -4,21 +4,28 @@ import (
 	"net/http"
 	"regexp"
 
+	"github.com/answerdev/answer/internal/base/handler"
+	templaterender "github.com/answerdev/answer/internal/controller/template_render"
+	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 )
 
 type TemplateController struct {
-	scriptPath string
-	cssPath    string
+	scriptPath               string
+	cssPath                  string
+	templateRenderController *templaterender.TemplateRenderController
 }
 
 // NewTemplateController new controller
-func NewTemplateController() *TemplateController {
+func NewTemplateController(
+	templateRenderController *templaterender.TemplateRenderController,
+) *TemplateController {
 	script, css := GetStyle()
 	return &TemplateController{
-		scriptPath: script,
-		cssPath:    css,
+		scriptPath:               script,
+		cssPath:                  css,
+		templateRenderController: templateRenderController,
 	}
 }
 func GetStyle() (script, css string) {
@@ -79,6 +86,12 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 
 // UserInfo user info
 func (tc *TemplateController) UserInfo(ctx *gin.Context) {
+	req := &schema.GetOtherUserInfoByUsernameReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	tc.templateRenderController.UserInfo(ctx, req)
+
 	username := ctx.Param("username")
 	ctx.HTML(http.StatusOK, "homepage.html", gin.H{
 		"username":   username,

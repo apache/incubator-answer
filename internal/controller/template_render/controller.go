@@ -12,12 +12,16 @@ var ProviderSetTemplateRenderController = wire.NewSet(
 
 type TemplateRenderController struct {
 	questionService *service.QuestionService
+	userService     *service.UserService
 }
 
 func NewTemplateRenderController(
 	questionService *service.QuestionService,
+	userService *service.UserService,
+
 ) *TemplateRenderController {
 	return &TemplateRenderController{
 		questionService: questionService,
+		userService:     userService,
 	}
 }
