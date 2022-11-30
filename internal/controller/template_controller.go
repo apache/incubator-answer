@@ -81,7 +81,6 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
-
 	ctx.HTML(http.StatusOK, "question.html", gin.H{
 		"siteinfo":   tc.SiteInfo(ctx),
 		"scriptPath": tc.scriptPath,
