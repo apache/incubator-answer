@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"regexp"
+	"time"
 
 	"github.com/answerdev/answer/internal/base/handler"
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
@@ -51,9 +53,9 @@ func GetStyle() (script, css string) {
 	}
 	return
 }
-func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.SiteInfoResp {
+func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.TemplateSiteInfoResp {
 	var err error
-	resp := &schema.SiteInfoResp{}
+	resp := &schema.TemplateSiteInfoResp{}
 	resp.General, err = tc.siteInfoService.GetSiteGeneral(ctx)
 	if err != nil {
 		log.Error(err)
@@ -67,6 +69,7 @@ func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.SiteInfoResp {
 	if err != nil {
 		log.Error(err)
 	}
+	resp.Year = fmt.Sprintf("%d", time.Now().Year())
 	return resp
 }
 
@@ -102,6 +105,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		"answerid":   answerid,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
+		"siteinfo":   tc.SiteInfo(ctx),
 	})
 }
 
@@ -117,6 +121,7 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 			"scriptPath": tc.scriptPath,
 			"cssPath":    tc.cssPath,
 			"err":        err.Error(),
+			"siteinfo":   tc.SiteInfo(ctx),
 		})
 		return
 	}
@@ -126,6 +131,7 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 		"cssPath":    tc.cssPath,
 		"page":       page,
 		"data":       data,
+		"siteinfo":   tc.SiteInfo(ctx),
 	})
 }
 
@@ -141,6 +147,7 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 			"scriptPath": tc.scriptPath,
 			"cssPath":    tc.cssPath,
 			"err":        err.Error(),
+			"siteinfo":   tc.SiteInfo(ctx),
 		})
 		return
 	}
@@ -148,6 +155,7 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 		"tag":        taginifo,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
+		"siteinfo":   tc.SiteInfo(ctx),
 	})
 }
 
@@ -157,8 +165,18 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 	req := &schema.GetOtherUserInfoByUsernameReq{}
 	req.Username = username
 	userinfo, err := tc.templateRenderController.UserInfo(ctx, req)
+	if !userinfo.Has {
+		ctx.HTML(http.StatusNotFound, "404.html", gin.H{
+			"siteinfo":   tc.SiteInfo(ctx),
+			"scriptPath": tc.scriptPath,
+			"cssPath":    tc.cssPath,
+			"err":        "",
+		})
+		return
+	}
 	if err != nil {
 		ctx.HTML(http.StatusNotFound, "404.html", gin.H{
+			"siteinfo":   tc.SiteInfo(ctx),
 			"scriptPath": tc.scriptPath,
 			"cssPath":    tc.cssPath,
 			"err":        err.Error(),
@@ -166,6 +184,7 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 		return
 	}
 	ctx.HTML(http.StatusOK, "homepage.html", gin.H{
+		"siteinfo":   tc.SiteInfo(ctx),
 		"userinfo":   userinfo,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
@@ -175,6 +194,7 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 
 func (tc *TemplateController) Page404(ctx *gin.Context) {
 	ctx.HTML(http.StatusNotFound, "404.html", gin.H{
+		"siteinfo":   tc.SiteInfo(ctx),
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
 	})

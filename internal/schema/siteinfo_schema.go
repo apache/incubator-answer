@@ -95,6 +95,12 @@ type SiteInfoResp struct {
 	Interface *SiteInterfaceResp `json:"interface"`
 	Branding  *SiteBrandingResp  `json:"branding"`
 }
+type TemplateSiteInfoResp struct {
+	General   *SiteGeneralResp   `json:"general"`
+	Interface *SiteInterfaceResp `json:"interface"`
+	Branding  *SiteBrandingResp  `json:"branding"`
+	Year      string
+}
 
 // UpdateSMTPConfigReq get smtp config request
 type UpdateSMTPConfigReq struct {
