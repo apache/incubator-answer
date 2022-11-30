@@ -165,6 +165,15 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 	req := &schema.GetOtherUserInfoByUsernameReq{}
 	req.Username = username
 	userinfo, err := tc.templateRenderController.UserInfo(ctx, req)
+	if !userinfo.Has {
+		ctx.HTML(http.StatusNotFound, "404.html", gin.H{
+			"siteinfo":   tc.SiteInfo(ctx),
+			"scriptPath": tc.scriptPath,
+			"cssPath":    tc.cssPath,
+			"err":        "",
+		})
+		return
+	}
 	if err != nil {
 		ctx.HTML(http.StatusNotFound, "404.html", gin.H{
 			"siteinfo":   tc.SiteInfo(ctx),
