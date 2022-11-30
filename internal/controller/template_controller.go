@@ -8,25 +8,30 @@ import (
 	"github.com/answerdev/answer/internal/base/handler"
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/pacman/log"
 )
 
 type TemplateController struct {
 	scriptPath               string
 	cssPath                  string
 	templateRenderController *templaterender.TemplateRenderController
+	siteInfoService          *siteinfo_common.SiteInfoCommonService
 }
 
 // NewTemplateController new controller
 func NewTemplateController(
 	templateRenderController *templaterender.TemplateRenderController,
+	siteInfoService *siteinfo_common.SiteInfoCommonService,
 ) *TemplateController {
 	script, css := GetStyle()
 	return &TemplateController{
 		scriptPath:               script,
 		cssPath:                  css,
 		templateRenderController: templateRenderController,
+		siteInfoService:          siteInfoService,
 	}
 }
 func GetStyle() (script, css string) {
@@ -46,10 +51,29 @@ func GetStyle() (script, css string) {
 	}
 	return
 }
+func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.SiteInfoResp {
+	var err error
+	resp := &schema.SiteInfoResp{}
+	resp.General, err = tc.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+	resp.Interface, err = tc.siteInfoService.GetSiteInterface(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+
+	resp.Branding, err = tc.siteInfoService.GetSiteBranding(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+	return resp
+}
 
 // Index question list
 func (tc *TemplateController) Index(ctx *gin.Context) {
 	ctx.HTML(http.StatusOK, "question.html", gin.H{
+		"siteinfo":   tc.SiteInfo(ctx),
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
 	})
