@@ -678,6 +678,7 @@ ui:
     update: update success
     update_password: Password changed successfully.
     flag_success: Thanks for flagging.
+    fobidden_operate_self: Forbidden to operate on yourself
   related_question:
     title: Related Questions
     btn: Add question
@@ -1022,15 +1023,6 @@ ui:
       title: Change user role to...
       btn_cancel: Cancel
       btn_submit: Submit
-      user:
-        name: User
-        description: Default with no special access.
-      admin:
-        name: Admin
-        description: Have the full power to access the site.
-      moderator:
-        name: Moderator
-        description: Has access to all posts except admin settings.
     users:
       title: Users
       name: Name
@@ -1049,6 +1041,9 @@ ui:
       suspended: Suspended
       deleted: Deleted
       normal: Normal
+      Moderator: Moderator
+      Admin: Admin
+      User: User
       filter:
         placeholder: "Filter by name, user:id"
       set_new_password: Set new password

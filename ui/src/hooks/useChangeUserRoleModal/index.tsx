@@ -4,8 +4,9 @@ import { useTranslation } from 'react-i18next';
 
 import ReactDOM from 'react-dom/client';
 
-import { Modal as AnswerModal } from '@/components';
-import { changeUserStatus } from '@/services';
+// import { Modal as AnswerModal } from '@/components';
+import { getUserRoles, changeUserRole } from '@/services';
+import { UserRoleItem } from '@/common/interface';
 
 const div = document.createElement('div');
 const root = ReactDOM.createRoot(div);
@@ -19,108 +20,57 @@ const useChangeUserRoleModal = ({ callback }: Props) => {
     keyPrefix: 'admin.user_role_modal',
   });
   const [id, setId] = useState('');
-  const [defaultType, setDefaultType] = useState('');
+  const [defaultId, setDefaultId] = useState(-1);
   const [isInvalid, setInvalidState] = useState(false);
-  const [changeType, setChangeType] = useState({
-    type: '',
-    haveContent: false,
-  });
-  const [content, setContent] = useState({
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  });
+  const [changedId, setChangeId] = useState(-1);
   const [show, setShow] = useState(false);
-  const [list] = useState<any[]>([
-    {
-      type: 'user',
-      name: t('user.name'),
-      description: t('user.description'),
-    },
-    {
-      type: 'admin',
-      name: t('admin.name'),
-      description: t('admin.description'),
-    },
-    {
-      type: 'moderator',
-      name: t('moderator.name'),
-      description: t('moderator.description'),
-    },
-  ]);
+  const [list, setList] = useState<UserRoleItem[]>([]);
+
+  const getRolesData = async () => {
+    const res = await getUserRoles();
+    setList(res);
+  };
 
   const handleRadio = (val) => {
     setInvalidState(false);
-    setContent({
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    });
-    setChangeType({
-      type: val.type,
-      haveContent: val.have_content,
-    });
+    setChangeId(val.id);
   };
 
   const onClose = () => {
-    setChangeType({
-      type: '',
-      haveContent: false,
-    });
-    setContent({
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    });
-    setContent({
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    });
+    setChangeId(-1);
+    setDefaultId(-1);
     setShow(false);
   };
 
   const handleSubmit = () => {
-    if (changeType.type === '') {
-      setInvalidState(true);
-      return;
-    }
-    if (changeType.haveContent && !content.value) {
-      setContent({
-        value: content.value,
-        isInvalid: true,
-        errorMsg: t('remark.empty'),
-      });
-      return;
-    }
-    if (defaultType === changeType.type) {
+    if (defaultId === changedId) {
       onClose();
 
       return;
     }
-    if (changeType.type === 'deleted') {
-      onClose();
+    // if (changeType.type === 'deleted') {
+    //   onClose();
 
-      AnswerModal.confirm({
-        title: t('confirm_title'),
-        content: t('confirm_content'),
-        confirmText: t('confirm_btn'),
-        confirmBtnVariant: 'danger',
-        onConfirm: () => {
-          changeUserStatus({
-            user_id: id,
-            status: changeType.type,
-          }).then(() => {
-            callback?.();
-            onClose();
-          });
-        },
-      });
-      return;
-    }
-    changeUserStatus({
+    //   AnswerModal.confirm({
+    //     title: t('confirm_title'),
+    //     content: t('confirm_content'),
+    //     confirmText: t('confirm_btn'),
+    //     confirmBtnVariant: 'danger',
+    //     onConfirm: () => {
+    //       changeUserStatus({
+    //         user_id: id,
+    //         status: changeType.type,
+    //       }).then(() => {
+    //         callback?.();
+    //         onClose();
+    //       });
+    //     },
+    //   });
+    //   return;
+    // }
+    changeUserRole({
       user_id: id,
-      status: changeType.type,
+      role_id: changedId,
     }).then(() => {
       callback?.();
       onClose();
@@ -128,12 +78,10 @@ const useChangeUserRoleModal = ({ callback }: Props) => {
   };
 
   const onShow = (params) => {
+    getRolesData();
     setId(params.id);
-    setChangeType({
-      ...changeType,
-      type: params.type,
-    });
-    setDefaultType(params.type);
+    setChangeId(params.role_id);
+    setDefaultId(params.role_id);
     setShow(true);
   };
   useLayoutEffect(() => {
@@ -146,17 +94,17 @@ const useChangeUserRoleModal = ({ callback }: Props) => {
           <Form>
             {list.map((item) => {
               return (
-                <div key={item?.type}>
-                  <Form.Group controlId={item.type} className="mb-3">
+                <div key={item?.id}>
+                  <Form.Group controlId={item.name} className="mb-3">
                     <FormCheck>
                       <FormCheck.Input
-                        id={item.type}
+                        id={item.name}
                         type="radio"
-                        checked={changeType.type === item.type}
+                        checked={changedId === item.id}
                         onChange={() => handleRadio(item)}
                         isInvalid={isInvalid}
                       />
-                      <FormCheck.Label htmlFor={item.type}>
+                      <FormCheck.Label htmlFor={item.name}>
                         <span className="fw-bold">{item.name}</span>
                         <br />
                         <span className="text-secondary">

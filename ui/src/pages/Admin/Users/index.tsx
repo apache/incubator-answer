@@ -14,8 +14,9 @@ import {
   Icon,
 } from '@/components';
 import * as Type from '@/common/interface';
-import { useChangeModal, useChangeUserRoleModal } from '@/hooks';
+import { useChangeModal, useChangeUserRoleModal, useToast } from '@/hooks';
 import { useQueryUsers } from '@/services';
+import { loggedUserInfoStore } from '@/stores';
 
 import '../index.scss';
 
@@ -42,6 +43,8 @@ const Users: FC = () => {
   const curFilter = urlSearchParams.get('filter') || UserFilterKeys[0];
   const curPage = Number(urlSearchParams.get('page') || '1');
   const curQuery = urlSearchParams.get('query') || '';
+  const currentUser = loggedUserInfoStore((state) => state.user);
+  const Toast = useToast();
   const {
     data,
     isLoading,
@@ -50,7 +53,11 @@ const Users: FC = () => {
     page: curPage,
     page_size: PAGE_SIZE,
     query: curQuery,
-    ...(curFilter === 'all' ? {} : { status: curFilter }),
+    ...(curFilter === 'all'
+      ? {}
+      : curFilter === 'staff'
+      ? { staff: true }
+      : { status: curFilter }),
   });
   const changeModal = useChangeModal({
     callback: refreshUsers,
@@ -60,18 +67,28 @@ const Users: FC = () => {
     callback: refreshUsers,
   });
 
-  const handleClick = ({ user_id, status }) => {
-    changeModal.onShow({
-      id: user_id,
-      type: status,
-    });
-  };
+  const handleAction = (type, user) => {
+    const { user_id, status, role_id, username } = user;
+    if (username === currentUser.username) {
+      Toast.onShow({
+        msg: t('fobidden_operate_self', { keyPrefix: 'toast' }),
+        variant: 'warning',
+      });
+      return;
+    }
+    if (type === 'status') {
+      changeModal.onShow({
+        id: user_id,
+        type: status,
+      });
+    }
 
-  const handleClickRole = ({ user_id, role }) => {
-    changeUserRoleModal.onShow({
-      id: user_id,
-      role,
-    });
+    if (type === 'role') {
+      changeUserRoleModal.onShow({
+        id: user_id,
+        role_id,
+      });
+    }
   };
 
   const handleFilter = (e) => {
@@ -157,7 +174,9 @@ const Users: FC = () => {
                   </span>
                 </td>
                 <td>
-                  <span className="text-bg-light">Admin</span>
+                  <span className="badge text-bg-light">
+                    {t(user.role_name)}
+                  </span>
                 </td>
                 {curFilter !== 'deleted' ? (
                   <td className="text-end">
@@ -166,15 +185,17 @@ const Users: FC = () => {
                         <Icon name="three-dots-vertical" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
-                        <Dropdown.Item>{t('set_new_password')}</Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleClick(user)}>
+                        {/* <Dropdown.Item>{t('set_new_password')}</Dropdown.Item> */}
+                        <Dropdown.Item
+                          onClick={() => handleAction('status', user)}>
                           {t('change_status')}
                         </Dropdown.Item>
-                        <Dropdown.Item onClick={() => handleClickRole(user)}>
+                        <Dropdown.Item
+                          onClick={() => handleAction('role', user)}>
                           {t('change_role')}
                         </Dropdown.Item>
-                        <Dropdown.Divider />
-                        <Dropdown.Item>{t('show_logs')}</Dropdown.Item>
+                        {/* <Dropdown.Divider />
+                        <Dropdown.Item>{t('show_logs')}</Dropdown.Item> */}
                       </Dropdown.Menu>
                     </Dropdown>
 

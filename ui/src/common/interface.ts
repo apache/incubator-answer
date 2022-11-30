@@ -444,3 +444,9 @@ export interface ReviewResp {
   count: number;
   list: ReviewItem[];
 }
+
+export interface UserRoleItem {
+  id: number;
+  name: string;
+  description: string;
+}
