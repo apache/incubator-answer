@@ -169,18 +169,17 @@ const Smtp: FC = () => {
     if (!setting) {
       return;
     }
-    const formState = {};
-    Object.keys(formData).forEach((k) => {
-      let v = setting[k];
-      if (v === null || v === undefined) {
-        v = '';
-      }
-      formState[k] = { ...formData[k], value: v };
+    const formMeta = {};
+    Object.keys(setting).forEach((k) => {
+      formMeta[k] = { ...formData[k], value: setting[k] };
     });
-    setFormData(formState);
+    setFormData({ ...formData, ...formMeta });
   }, [setting]);
 
   useEffect(() => {
+    if (formData.smtp_authentication.value === '') {
+      return;
+    }
     if (formData.smtp_authentication.value) {
       setFormData({
         ...formData,
@@ -194,7 +193,7 @@ const Smtp: FC = () => {
         smtp_password: { ...formData.smtp_password, hidden: true },
       });
     }
-  }, [formData.smtp_authentication]);
+  }, [formData.smtp_authentication.value]);
 
   const handleOnChange = (data) => {
     setFormData(data);
