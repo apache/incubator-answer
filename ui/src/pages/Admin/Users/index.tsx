@@ -160,9 +160,7 @@ const Users: FC = () => {
                 {curFilter !== 'deleted' ? (
                   <td className="text-end">
                     <Dropdown>
-                      <Dropdown.Toggle
-                        variant="link"
-                        className="no-toggle link-secondary">
+                      <Dropdown.Toggle variant="link" className="no-toggle">
                         <Icon name="three-dots-vertical" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
