@@ -16,6 +16,7 @@ export interface JSONSchema {
     [key: string]: {
       type: 'string' | 'boolean';
       title: string;
+      label?: string;
       description?: string;
       enum?: Array<string | boolean>;
       enumNames?: string[];
@@ -102,7 +103,18 @@ const SchemaForm: FC<IProps> = ({
 
   const keys = Object.keys(properties);
 
-  const handleChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const data = {
+      ...formData,
+      [name]: { ...formData[name], value, isInvalid: false },
+    };
+    if (onChange instanceof Function) {
+      onChange(data);
+    }
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
     const data = {
       ...formData,
@@ -251,7 +263,7 @@ const SchemaForm: FC<IProps> = ({
   return (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {
-        const { title, description } = properties[key];
+        const { title, description, label } = properties[key];
         const { 'ui:widget': widget = 'input', 'ui:options': options = {} } =
           uiSchema[key] || {};
         if (widget === 'select') {
@@ -262,10 +274,11 @@ const SchemaForm: FC<IProps> = ({
               className={classnames('mb-3', formData[key].hidden && 'd-none')}>
               <Form.Label>{title}</Form.Label>
               <Form.Select
-                name={key}
                 aria-label={description}
-                isInvalid={formData[key].isInvalid}
-                onChange={handleChange}>
+                name={key}
+                value={formData[key]?.value}
+                onChange={handleSelectChange}
+                isInvalid={formData[key].isInvalid}>
                 {properties[key].enum?.map((item, index) => {
                   return (
                     <option value={String(item)} key={String(item)}>
@@ -332,7 +345,7 @@ const SchemaForm: FC<IProps> = ({
                 id={title}
                 name={key}
                 type="switch"
-                label={title}
+                label={label}
                 checked={formData[key]?.value}
                 feedback={formData[key]?.errorMsg}
                 feedbackType="invalid"
@@ -357,7 +370,8 @@ const SchemaForm: FC<IProps> = ({
               <Form.Label>{title}</Form.Label>
               <TimeZonePicker
                 value={formData[key]?.value}
-                onChange={handleChange}
+                name={key}
+                onChange={handleSelectChange}
               />
               <Form.Control
                 name={key}
@@ -415,7 +429,7 @@ const SchemaForm: FC<IProps> = ({
                 placeholder={options?.placeholder || ''}
                 type={options?.type || 'text'}
                 value={formData[key]?.value}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 isInvalid={formData[key].isInvalid}
                 rows={options?.rows || 3}
               />
@@ -440,7 +454,7 @@ const SchemaForm: FC<IProps> = ({
               placeholder={options?.placeholder || ''}
               type={options?.type || 'text'}
               value={formData[key]?.value}
-              onChange={handleChange}
+              onChange={handleInputChange}
               style={options?.type === 'color' ? { width: '6rem' } : {}}
               isInvalid={formData[key].isInvalid}
             />
