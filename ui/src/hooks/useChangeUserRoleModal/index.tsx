@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 import ReactDOM from 'react-dom/client';
 
-// import { Modal as AnswerModal } from '@/components';
 import { getUserRoles, changeUserRole } from '@/services';
 import { UserRoleItem } from '@/common/interface';
 
@@ -48,26 +47,7 @@ const useChangeUserRoleModal = ({ callback }: Props) => {
 
       return;
     }
-    // if (changeType.type === 'deleted') {
-    //   onClose();
 
-    //   AnswerModal.confirm({
-    //     title: t('confirm_title'),
-    //     content: t('confirm_content'),
-    //     confirmText: t('confirm_btn'),
-    //     confirmBtnVariant: 'danger',
-    //     onConfirm: () => {
-    //       changeUserStatus({
-    //         user_id: id,
-    //         status: changeType.type,
-    //       }).then(() => {
-    //         callback?.();
-    //         onClose();
-    //       });
-    //     },
-    //   });
-    //   return;
-    // }
     changeUserRole({
       user_id: id,
       role_id: changedId,
