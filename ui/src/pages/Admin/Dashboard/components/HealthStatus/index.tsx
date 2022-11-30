@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Card, Row, Col, Badge } from 'react-bootstrap';
+import { Card, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -29,38 +29,31 @@ const HealthStatus: FC<IProps> = ({ data }) => {
             <span className="text-secondary me-1">{t('version')}</span>
             <strong>{version}</strong>
             {isLatest && (
-              <Badge
-                pill
-                bg="success"
-                className="ms-1"
-                as="a"
+              <a
+                className="ms-1 badge rounded-pill text-bg-success"
                 target="_blank"
-                href="https://github.com/answerdev/answer/releases">
+                href="https://github.com/answerdev/answer/releases"
+                rel="noreferrer">
                 {t('latest')}
-              </Badge>
+              </a>
             )}
             {!isLatest && hasNewerVersion && (
-              <Badge
-                pill
-                bg="warning"
-                text="dark"
-                className="ms-1"
-                as="a"
+              <a
+                className="ms-1 badge rounded-pill text-bg-warning"
                 target="_blank"
-                href="https://github.com/answerdev/answer/releases">
+                href="https://github.com/answerdev/answer/releases"
+                rel="noreferrer">
                 {t('update_to')} {remote_version}
-              </Badge>
+              </a>
             )}
             {!isLatest && !remote_version && (
-              <Badge
-                pill
-                bg="danger"
-                className="ms-1"
-                as="a"
+              <a
+                className="ms-1 badge rounded-pill text-bg-danger"
                 target="_blank"
-                href="https://github.com/answerdev/answer/releases">
+                href="https://github.com/answerdev/answer/releases"
+                rel="noreferrer">
                 {t('check_failed')}
-              </Badge>
+              </a>
             )}
           </Col>
           <Col xs={6} className="mb-1">

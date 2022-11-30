@@ -1,7 +1,9 @@
 import { FC } from 'react';
-import { Button, Form, Table, Stack, Badge } from 'react-bootstrap';
+import { Button, Form, Table, Stack } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+
+import classNames from 'classnames';
 
 import {
   FormatTime,
@@ -159,9 +161,13 @@ const Answers: FC = () => {
                   </Stack>
                 </td>
                 <td>
-                  <Badge bg={ADMIN_LIST_STATUS[curFilter]?.variant}>
+                  <span
+                    className={classNames(
+                      'badge',
+                      ADMIN_LIST_STATUS[curFilter]?.variant,
+                    )}>
                     {t(ADMIN_LIST_STATUS[curFilter]?.name)}
-                  </Badge>
+                  </span>
                 </td>
                 {curFilter !== 'deleted' && (
                   <td>
