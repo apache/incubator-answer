@@ -155,7 +155,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 	if err != nil {
 		return
 	}
-	sql := fmt.Sprintf("(%s UNION ALL %s)", ubSQL, bSQL)
+	sql := fmt.Sprintf("(%s UNION ALL %s)", bSQL, ubSQL)
 
 	countSQL, _, err := builder.MySQL().Select("count(*) total").From(sql, "c").ToSQL()
 	if err != nil {
