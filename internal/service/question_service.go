@@ -858,16 +858,3 @@ func (qs *QuestionService) changeQuestionToRevision(ctx context.Context, questio
 	}
 	return questionRevision, nil
 }
-
-// CheckCanUpdate can check question answer
-func (qs *QuestionService) CheckCanUpdate(ctx context.Context, req *schema.CheckCanQuestionUpdate) (exist bool, err error) {
-	_, existUnreviewed, err := qs.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
-	if err != nil {
-		return false, err
-	}
-	if existUnreviewed {
-		err = errors.BadRequest(reason.RevisionReviewUnderway)
-		return existUnreviewed, err
-	}
-	return existUnreviewed, nil
-}

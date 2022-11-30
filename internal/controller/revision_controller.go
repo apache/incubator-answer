@@ -1,12 +1,14 @@
 package controller
 
 import (
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/rank"
+	"github.com/answerdev/answer/pkg/obj"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -58,7 +60,7 @@ func (rc *RevisionController) GetRevisionList(ctx *gin.Context) {
 // @Produce json
 // @Security ApiKeyAuth
 // @Param page query string true "page id"
-// @Success 200 {object} handler.RespBody{data=[]schema.GetRevisionResp}
+// @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetUnreviewedRevisionResp}}
 // @Router /answer/api/v1/revisions/unreviewed [get]
 func (rc *RevisionController) GetUnreviewedRevisionList(ctx *gin.Context) {
 	req := &schema.RevisionSearch{}
@@ -80,11 +82,8 @@ func (rc *RevisionController) GetUnreviewedRevisionList(ctx *gin.Context) {
 	req.CanReviewAnswer = canList[1]
 	req.CanReviewTag = canList[2]
 
-	resp, count, err := rc.revisionListService.GetUnreviewedRevisionList(ctx, req)
-	handler.HandleResponse(ctx, err, gin.H{
-		"list":  resp,
-		"count": count,
-	})
+	resp, err := rc.revisionListService.GetUnreviewedRevisionPage(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
 // RevisionAudit godoc
@@ -117,4 +116,49 @@ func (rc *RevisionController) RevisionAudit(ctx *gin.Context) {
 
 	err = rc.revisionListService.RevisionAudit(ctx, req)
 	handler.HandleResponse(ctx, err, gin.H{})
+}
+
+// CheckCanUpdateRevision check can update revision
+// @Summary check can update revision
+// @Description check can update revision
+// @Tags Revision
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param id query string true "id" default(string)
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/revisions/edit/check [get]
+func (rc *RevisionController) CheckCanUpdateRevision(ctx *gin.Context) {
+	req := &schema.CheckCanQuestionUpdate{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	action := ""
+	objectTypeStr, _ := obj.GetObjectTypeStrByObjectID(req.ID)
+	switch objectTypeStr {
+	case constant.QuestionObjectType:
+		action = rank.QuestionEditRank
+	case constant.AnswerObjectType:
+		action = rank.AnswerEditRank
+	case constant.TagObjectType:
+		action = rank.TagEditRank
+	default:
+		handler.HandleResponse(ctx, errors.BadRequest(reason.ObjectNotFound), nil)
+		return
+	}
+
+	can, err := rc.rankService.CheckOperationPermission(ctx, req.UserID, action, req.ID)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	err = rc.revisionListService.CheckCanUpdateRevision(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
 }

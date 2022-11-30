@@ -1,6 +1,8 @@
 package entity
 
-import "time"
+import (
+	"time"
+)
 
 const (
 	// RevisionUnreviewedStatus this revision is unreviewed
@@ -17,20 +19,13 @@ type Revision struct {
 	CreatedAt    time.Time `xorm:"created TIMESTAMP created_at"`
 	UpdatedAt    time.Time `xorm:"updated TIMESTAMP updated_at"`
 	UserID       string    `xorm:"not null default 0 BIGINT(20) user_id"`
-	ObjectType   int       `xorm:"not null default 0 ) INT(11) object_type"`
+	ObjectType   int       `xorm:"not null default 0 INT(11) object_type"`
 	ObjectID     string    `xorm:"not null default 0 BIGINT(20) INDEX object_id"`
 	Title        string    `xorm:"not null default '' VARCHAR(255) title"`
 	Content      string    `xorm:"not null TEXT content"`
 	Log          string    `xorm:"VARCHAR(255) log"`
 	Status       int       `xorm:"not null default 1 INT(11) status"`
 	ReviewUserID int64     `xorm:"not null default 0 BIGINT(20) review_user_id"`
-}
-
-type RevisionSearch struct {
-	Page              int  `json:"page" form:"page"` // Query number of pages
-	CanReviewQuestion bool `json:"-"`
-	CanReviewAnswer   bool `json:"-"`
-	CanReviewTag      bool `json:"-"`
 }
 
 // TableName revision table name
