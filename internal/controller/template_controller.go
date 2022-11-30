@@ -1,13 +1,13 @@
 package controller
 
 import (
+	"html/template"
 	"net/http"
 	"regexp"
 
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/ui"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 )
 
@@ -98,11 +98,11 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 		})
 		return
 	}
-	spew.Dump(userinfo)
 	ctx.HTML(http.StatusOK, "homepage.html", gin.H{
 		"userinfo":   userinfo,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
+		"bio":        template.HTML(userinfo.Info.BioHTML),
 	})
 }
 

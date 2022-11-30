@@ -5,12 +5,12 @@
                 <div class="justify-content-center row">
                     <div class="col-xxl-7 col-lg-8 col-sm-12">
                         <div class="d-flex flex-column flex-md-row mb-4">
-                            <a href="/users/bmm11uodayryy"><img
-                                    src="/static/media/default-avatar.ac1be9284e893e315871fa5e571cabaf.svg"
+                            <a href="/users/{{.userinfo.Info.Username}}"><img
+                                    src="{{.userinfo.Info.Avatar}}"
                                     width="160px" height="160px" class="rounded" alt="" /></a>
                             <div class="ms-0 ms-md-4 mt-4 mt-md-0">
                                 <div class="d-flex align-items-center mb-2">
-                                    <a class="link-dark h3 mb-0" href="/users/bmm11uodayryy">{{.userinfo.Info.DisplayName}}</a>
+                                    <a class="link-dark h3 mb-0" href="/users/{{.userinfo.Info.Username}}">{{.userinfo.Info.DisplayName}}</a>
 
                                 </div>
                                 <div class="text-secondary mb-4">@{{.userinfo.Info.Username}}</div>
@@ -39,7 +39,7 @@
                     <div class="col-xxl-7 col-lg-8 col-sm-12">
                         <div>
                             <h5 class="mb-3">About Me</h5>
-                            <div class="text-center py-5 mb-4">{{.userinfo.Info.BioHTML}}</div>
+                            <div class="text-center py-5 mb-4">{{.bio}}</div>
                         </div>
                     </div>
                     <div class="mt-5 mt-lg-0 col-xxl-3 col-lg-4 col-sm-12">
