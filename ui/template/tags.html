@@ -1,44 +1,4 @@
-<!DOCTYPE html>
-
-<html>
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="manifest" href="/manifest.json"/>
-    <link href="{{.cssPath}}" rel="stylesheet" />
-    <!-- <script defer="defer" src="{{.scriptPath}}"></script> -->
-</head>
-
-<body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root">
-        <nav id="header" class="sticky-top navbar navbar-expand-lg navbar-dark">
-            <div class="d-flex align-items-center container">
-                <button aria-controls="navBarContent" id="navBarToggle" type="button" aria-label="Toggle navigation"
-                    class="answer-navBar me-2 navbar-toggler collapsed">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="d-flex justify-content-between align-items-center nav-grow flex-nowrap">
-                    <a class="lh-1 me-0 me-sm-3 navbar-brand" href="/"><img
-                            class="d-none d-lg-block logo rounded-1 me-0"
-                            src="https://answer.dev.segmentfault.com/uploads/branding/4Gud8KXBXA9.png" alt="" /><img
-                            class="lg-none logo rounded-1 me-0"
-                            src="https://answer.dev.segmentfault.com/uploads/branding/4GxqyBKy6hu.png" alt="" /></a>
-                </div>
-                <div class="me-auto navbar-collapse collapse" id="navBarContent">
-                    <hr class="hr lg-none mb-2" style="margin-top: 12px" />
-                    <div class="col-md-4">
-                        <div class="navbar-nav">
-                            <a class="nav-link" href="/questions">Questions</a><a class="nav-link" href="/tags">Tags</a>
-                        </div>
-                    </div>
-                    <hr class="hr lg-none mt-2" />
-
-                </div>
-            </div>
-        </nav>
-        <div class="position-relative page-wrap">
+{{template "header" . }}
             <div style="
             position: fixed;
             top: 90px;
@@ -56,6 +16,23 @@
                     </div>
                     <div class="mt-4 col-xxl-10 col-sm-12">
                         <div class="row">
+
+                            <div class="mb-4 col-lg-3 col-md-4 col-sm-6 col-12">
+                                <div class="h-100 card">
+                                    <div class="d-flex flex-column align-items-start card-body">
+                                        <a href="/tags/%E7%AE%97%E6%B3%95" class="badge-tag rounded-1 mb-3"><span
+                                                class="">算法</span></a>
+                                        <p class="fs-14 flex-fill text-break text-wrap text-truncate-4">212121212121221
+                                        </p>
+                                        <div class="d-flex align-items-center">
+                                            <button type="button" class="me-2 btn btn-outline-primary btn-sm">
+                                                Follow</button><span class="text-secondary fs-14 text-nowrap">0
+                                                questions</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
 
                             <div class="mb-4 col-lg-3 col-md-4 col-sm-6 col-12">
                                 <div class="h-100 card">
@@ -93,25 +70,8 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="d-flex justify-content-center" style="
-          position: fixed;
-          top: 90px;
-          left: 0px;
-          right: 0px;
-          margin: auto;
-          z-index: 5;
-        "></div>
-        <footer class="bg-light py-3">
-            <div class="container">
-                <p class="text-center mb-0 fs-14 text-secondary">
-                    Built on <a href="https://answer.dev/" target="_blank"> Answer </a>-
-                    the open-source software that power Q&amp;A communities<br />Made
-                    with love © 2022 Answer
-                </p>
-            </div>
-        </footer>
-    </div>
-</body>
 
-</html>
+
+
+{{template "footer" .}}
+

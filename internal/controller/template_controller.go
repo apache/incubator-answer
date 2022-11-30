@@ -86,3 +86,10 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 		"cssPath":    tc.cssPath,
 	})
 }
+
+func (tc *TemplateController) Page404(ctx *gin.Context) {
+	ctx.HTML(http.StatusOK, "404.html", gin.H{
+		"scriptPath": tc.scriptPath,
+		"cssPath":    tc.cssPath,
+	})
+}
