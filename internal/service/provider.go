@@ -24,6 +24,7 @@ import (
 	"github.com/answerdev/answer/internal/service/revision_common"
 	"github.com/answerdev/answer/internal/service/siteinfo"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/internal/service/search_parser"
 	"github.com/answerdev/answer/internal/service/tag"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/internal/service/uploader"
@@ -57,6 +58,7 @@ var ProviderSetService = wire.NewSet(
 	revision_common.NewRevisionService,
 	NewRevisionService,
 	rank.NewRankService,
+	search_parser.NewSearchParser,
 	NewSearchService,
 	meta.NewMetaService,
 	object_info.NewObjService,

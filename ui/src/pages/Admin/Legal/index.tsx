@@ -78,11 +78,13 @@ const Legal: FC = () => {
 
   useEffect(() => {
     getLegalSetting().then((setting) => {
-      const formMeta = { ...formData };
-      formMeta.terms_of_service.value = setting.terms_of_service_original_text;
-      formMeta.privacy_policy.value = setting.privacy_policy_original_text;
-
-      setFormData(formMeta);
+      if (setting) {
+        const formMeta = { ...formData };
+        formMeta.terms_of_service.value =
+          setting.terms_of_service_original_text;
+        formMeta.privacy_policy.value = setting.privacy_policy_original_text;
+        setFormData(formMeta);
+      }
     });
   }, []);
 

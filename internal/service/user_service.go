@@ -12,6 +12,7 @@ import (
 	"github.com/Chain-Zhang/pinyin"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
@@ -112,6 +113,7 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
+		IsAdmin:     userInfo.IsAdmin,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
@@ -322,6 +324,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
+		IsAdmin:     userInfo.IsAdmin,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
@@ -408,9 +411,14 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
+		IsAdmin:     userInfo.IsAdmin,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
+		return nil, err
+	}
+	// User verified email will update user email status. So user status cache should be updated.
+	if err = us.authService.SetUserStatus(ctx, userCacheInfo); err != nil {
 		return nil, err
 	}
 	resp.IsAdmin = userInfo.IsAdmin
@@ -478,7 +486,7 @@ func (us *UserService) encryptPassword(ctx context.Context, Pass string) (string
 
 // UserChangeEmailSendCode user change email verification
 func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.UserChangeEmailSendCodeReq) (
-	resp *schema.UserVerifyEmailErrorResponse, err error) {
+	resp *validator.FormErrorField, err error) {
 	userInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
 	if err != nil {
 		return nil, err
@@ -492,9 +500,9 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 		return nil, err
 	}
 	if exist {
-		resp = &schema.UserVerifyEmailErrorResponse{
-			Key:   "e_mail",
-			Value: reason.EmailDuplicate,
+		resp = &validator.FormErrorField{
+			ErrorField: "e_mail",
+			ErrorMsg:   reason.EmailDuplicate,
 		}
 		return resp, errors.BadRequest(reason.EmailDuplicate)
 	}

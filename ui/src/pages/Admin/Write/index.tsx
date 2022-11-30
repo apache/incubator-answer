@@ -29,7 +29,8 @@ const Legal: FC = () => {
       },
       required_tag: {
         type: 'boolean',
-        title: t('required_tag.label'),
+        title: t('required_tag.title'),
+        label: t('required_tag.label'),
         description: t('required_tag.text'),
       },
       reserved_tags: {
@@ -43,7 +44,7 @@ const Legal: FC = () => {
     recommend_tags: {
       'ui:widget': 'textarea',
       'ui:options': {
-        rows: 5,
+        rows: 10,
       },
     },
     required_tag: {
@@ -52,7 +53,7 @@ const Legal: FC = () => {
     reserved_tags: {
       'ui:widget': 'textarea',
       'ui:options': {
-        rows: 5,
+        rows: 10,
       },
     },
   };
@@ -61,14 +62,19 @@ const Legal: FC = () => {
   const onSubmit = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-
+    let recommend_tags = [];
+    if (formData.recommend_tags.value?.trim()) {
+      recommend_tags = formData.recommend_tags.value.trim().split('\n');
+    }
+    let reserved_tags = [];
+    if (formData.reserved_tags.value?.trim()) {
+      reserved_tags = formData.reserved_tags.value.trim().split('\n');
+    }
     const reqParams: Type.AdminSettingsWrite = {
-      recommend_tags: formData.recommend_tags.value.trim().split('\n'),
+      recommend_tags,
+      reserved_tags,
       required_tag: formData.required_tag.value,
-      reserved_tags: formData.reserved_tags.value.trim().split('\n'),
     };
-
-    console.log(reqParams);
     postRequireAndReservedTag(reqParams)
       .then(() => {
         Toast.onShow({
@@ -86,9 +92,13 @@ const Legal: FC = () => {
 
   const initData = () => {
     getRequireAndReservedTag().then((res) => {
-      formData.recommend_tags.value = res.recommend_tags.join('\n');
+      if (Array.isArray(res.recommend_tags)) {
+        formData.recommend_tags.value = res.recommend_tags.join('\n');
+      }
       formData.required_tag.value = res.required_tag;
-      formData.reserved_tags.value = res.reserved_tags.join('\n');
+      if (Array.isArray(res.reserved_tags)) {
+        formData.reserved_tags.value = res.reserved_tags.join('\n');
+      }
       setFormData({ ...formData });
     });
   };

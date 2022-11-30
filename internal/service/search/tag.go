@@ -9,27 +9,28 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/search_common"
-	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
+	"github.com/answerdev/answer/internal/service/tag_common"
 )
 
 type TagSearch struct {
-	repo         search_common.SearchRepo
-	tagRepo      tagcommon.TagRepo
-	followCommon activity_common.FollowRepo
-	page         int
-	size         int
-	exp          string
-	w            string
-	userID       string
-	Extra        schema.GetTagPageResp
-	order        string
+	repo             search_common.SearchRepo
+	tagCommonService *tag_common.TagCommonService
+	followCommon     activity_common.FollowRepo
+	page             int
+	size             int
+	exp              string
+	w                string
+	userID           string
+	Extra            schema.GetTagPageResp
+	order            string
 }
 
-func NewTagSearch(repo search_common.SearchRepo, tagRepo tagcommon.TagRepo, followCommon activity_common.FollowRepo) *TagSearch {
+func NewTagSearch(repo search_common.SearchRepo,
+	tagCommonService *tag_common.TagCommonService, followCommon activity_common.FollowRepo) *TagSearch {
 	return &TagSearch{
-		repo:         repo,
-		tagRepo:      tagRepo,
-		followCommon: followCommon,
+		repo:             repo,
+		tagCommonService: tagCommonService,
+		followCommon:     followCommon,
 	}
 }
 
@@ -65,7 +66,7 @@ func (ts *TagSearch) Search(ctx context.Context) (resp []schema.SearchResp, tota
 		tag              *entity.Tag
 		exists, followed bool
 	)
-	tag, exists, err = ts.tagRepo.GetTagBySlugName(ctx, ts.exp)
+	tag, exists, err = ts.tagCommonService.GetTagBySlugName(ctx, ts.exp)
 	if err != nil {
 		return
 	}
@@ -82,6 +83,8 @@ func (ts *TagSearch) Search(ctx context.Context) (resp []schema.SearchResp, tota
 		ParsedText:    tag.ParsedText,
 		QuestionCount: tag.QuestionCount,
 		IsFollower:    followed,
+		Recommend:     tag.Recommend,
+		Reserved:      tag.Reserved,
 	}
 	ts.Extra.GetExcerpt()
 

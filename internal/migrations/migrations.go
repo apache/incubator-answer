@@ -43,6 +43,7 @@ var migrations = []Migration{
 	// 0->1
 	NewMigration("this is first version, no operation", noopMigration),
 	NewMigration("add user language", addUserLanguage),
+	NewMigration("add recommend and reserved tag fields", addTagRecommendedAndReserved),
 }
 
 // GetCurrentDBVersion returns the current db version

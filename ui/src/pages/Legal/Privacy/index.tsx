@@ -23,7 +23,7 @@ const Index: FC = () => {
   return (
     <>
       <PageTitle title={t('privacy')} />
-      <h3>{t('privacy')}</h3>
+      <h3 className="mb-4">{t('privacy')}</h3>
       <div
         className="fmt"
         dangerouslySetInnerHTML={{

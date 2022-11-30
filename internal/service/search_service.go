@@ -2,92 +2,61 @@ package service
 
 import (
 	"context"
-
 	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service/activity_common"
-	"github.com/answerdev/answer/internal/service/search"
 	"github.com/answerdev/answer/internal/service/search_common"
-	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
-	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/internal/service/search_parser"
 )
 
-type Search interface {
-	Parse(dto *schema.SearchDTO) (ok bool)
-	Search(ctx context.Context) (resp []schema.SearchResp, total int64, err error)
-}
-
 type SearchService struct {
-	searchRepo           search_common.SearchRepo
-	tagSearch            *search.TagSearch
-	withinSearch         *search.WithinSearch
-	authorSearch         *search.AuthorSearch
-	scoreSearch          *search.ScoreSearch
-	answersSearch        *search.AnswersSearch
-	notAcceptedQuestion  *search.NotAcceptedQuestion
-	acceptedAnswerSearch *search.AcceptedAnswerSearch
-	inQuestionSearch     *search.InQuestionSearch
-	questionSearch       *search.QuestionSearch
-	answerSearch         *search.AnswerSearch
-	viewsSearch          *search.ViewsSearch
-	objectSearch         *search.ObjectSearch
+	searchParser *search_parser.SearchParser
+	searchRepo   search_common.SearchRepo
 }
 
 func NewSearchService(
+	searchParser *search_parser.SearchParser,
 	searchRepo search_common.SearchRepo,
-	tagRepo tagcommon.TagRepo,
-	userCommon *usercommon.UserCommon,
-	followCommon activity_common.FollowRepo,
 ) *SearchService {
 	return &SearchService{
-		searchRepo:           searchRepo,
-		tagSearch:            search.NewTagSearch(searchRepo, tagRepo, followCommon),
-		withinSearch:         search.NewWithinSearch(searchRepo),
-		authorSearch:         search.NewAuthorSearch(searchRepo, userCommon),
-		scoreSearch:          search.NewScoreSearch(searchRepo),
-		answersSearch:        search.NewAnswersSearch(searchRepo),
-		acceptedAnswerSearch: search.NewAcceptedAnswerSearch(searchRepo),
-		notAcceptedQuestion:  search.NewNotAcceptedQuestion(searchRepo),
-		inQuestionSearch:     search.NewInQuestionSearch(searchRepo),
-		questionSearch:       search.NewQuestionSearch(searchRepo),
-		answerSearch:         search.NewAnswerSearch(searchRepo),
-		viewsSearch:          search.NewViewsSearch(searchRepo),
-		objectSearch:         search.NewObjectSearch(searchRepo),
+		searchParser: searchParser,
+		searchRepo:   searchRepo,
 	}
 }
 
+// Search search contents
 func (ss *SearchService) Search(ctx context.Context, dto *schema.SearchDTO) (resp []schema.SearchResp, total int64, extra interface{}, err error) {
 	extra = nil
 	if dto.Page < 1 {
 		dto.Page = 1
 	}
 
-	switch {
-	case ss.tagSearch.Parse(dto):
-		resp, total, err = ss.tagSearch.Search(ctx)
-		extra = ss.tagSearch.Extra
-	case ss.withinSearch.Parse(dto):
-		resp, total, err = ss.withinSearch.Search(ctx)
-	case ss.authorSearch.Parse(dto):
-		resp, total, err = ss.authorSearch.Search(ctx)
-	case ss.scoreSearch.Parse(dto):
-		resp, total, err = ss.scoreSearch.Search(ctx)
-	case ss.answersSearch.Parse(dto):
-		resp, total, err = ss.answersSearch.Search(ctx)
-	case ss.acceptedAnswerSearch.Parse(dto):
-		resp, total, err = ss.acceptedAnswerSearch.Search(ctx)
-	case ss.notAcceptedQuestion.Parse(dto):
-		resp, total, err = ss.notAcceptedQuestion.Search(ctx)
-	case ss.inQuestionSearch.Parse(dto):
-		resp, total, err = ss.inQuestionSearch.Search(ctx)
-	case ss.questionSearch.Parse(dto):
-		resp, total, err = ss.questionSearch.Search(ctx)
-	case ss.answerSearch.Parse(dto):
-		resp, total, err = ss.answerSearch.Search(ctx)
-	case ss.viewsSearch.Parse(dto):
-		resp, total, err = ss.viewsSearch.Search(ctx)
-	default:
-		ss.objectSearch.Parse(dto)
-		resp, total, err = ss.objectSearch.Search(ctx)
+	// search type
+	searchType,
+		// search all
+		userID,
+		votes,
+		// search questions
+		notAccepted,
+		_,
+		views,
+		answers,
+		// search answers
+		accepted,
+		questionID,
+		_,
+		// common fields
+		tags,
+		words := ss.searchParser.ParseStructure(dto)
+
+	switch searchType {
+	case "all":
+		resp, total, err = ss.searchRepo.SearchContents(ctx, words, tags, userID, votes, dto.Page, dto.Size, dto.Order)
+		if err != nil {
+			return nil, 0, nil, err
+		}
+	case "question":
+		resp, total, err = ss.searchRepo.SearchQuestions(ctx, words, notAccepted, views, answers, dto.Page, dto.Size, dto.Order)
+	case "answer":
+		resp, total, err = ss.searchRepo.SearchAnswers(ctx, words, tags, accepted, questionID, dto.Page, dto.Size, dto.Order)
 	}
-	return resp, total, extra, err
+	return
 }

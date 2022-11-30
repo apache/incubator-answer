@@ -204,7 +204,7 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	case entity.AnswerSearchOrderByVote:
 		session = session.OrderBy("vote_count desc")
 	default:
-		session = session.OrderBy("adopted desc,vote_count desc")
+		session = session.OrderBy("adopted desc,vote_count desc,created_at asc")
 	}
 	session = session.And("status = ?", entity.AnswerStatusAvailable)
 

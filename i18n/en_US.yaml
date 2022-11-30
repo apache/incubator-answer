@@ -74,6 +74,10 @@ backend:
     tag:
       not_found:
         other: "Tag not found."
+      recommend_tag_not_found:
+        other: "Recommend Tag is not exist."
+      not_contain_synonym_tags:
+        other: "Should not contain synonym tags."
     theme:
       not_found:
         other: "Theme not found."
@@ -1173,8 +1177,9 @@ ui:
         label: Recommend Tags
         text: "Please input tag slug above, one tag per line."
       required_tag:
-        label: Required Tag
-        text: "Every new question must have at least one recommend tag"
+        title: Required Tag
+        label: Set recommend tag as required
+        text: "Every new question must have at least one recommend tag."
       reserved_tags:
         label: Reserved Tags
         text: "Reserved tags can only be added to a post by moderator."
