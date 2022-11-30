@@ -53,6 +53,7 @@ const General: FC = () => {
   const uiSchema: UISchema = {
     site_url: {
       'ui:options': {
+        type: 'url',
         validator: (value) => {
           let url: URL | undefined;
           try {
@@ -76,6 +77,7 @@ const General: FC = () => {
     },
     contact_email: {
       'ui:options': {
+        type: 'email',
         validator: (value) => {
           if (!Pattern.email.test(value)) {
             return t('contact_email.validate');
@@ -85,7 +87,9 @@ const General: FC = () => {
       },
     },
   };
-  const [formData, setFormData] = useState(initFormData(schema));
+  const [formData, setFormData] = useState<Type.FormDataType>(
+    initFormData(schema),
+  );
 
   const onSubmit = (evt) => {
     evt.preventDefault();
