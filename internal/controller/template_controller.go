@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"regexp"
 
-	"github.com/answerdev/answer/internal/base/handler"
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/ui"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 )
 
@@ -86,15 +86,21 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 
 // UserInfo user info
 func (tc *TemplateController) UserInfo(ctx *gin.Context) {
+	username := ctx.Param("username")
 	req := &schema.GetOtherUserInfoByUsernameReq{}
-	if handler.BindAndCheck(ctx, req) {
+	req.Username = username
+	userinfo, err := tc.templateRenderController.UserInfo(ctx, req)
+	if err != nil {
+		ctx.HTML(http.StatusOK, "404.html", gin.H{
+			"scriptPath": tc.scriptPath,
+			"cssPath":    tc.cssPath,
+			"err":        err.Error(),
+		})
 		return
 	}
-	tc.templateRenderController.UserInfo(ctx, req)
-
-	username := ctx.Param("username")
+	spew.Dump(userinfo)
 	ctx.HTML(http.StatusOK, "homepage.html", gin.H{
-		"username":   username,
+		"userinfo":   userinfo,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
 	})

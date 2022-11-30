@@ -10,23 +10,22 @@
                                     width="160px" height="160px" class="rounded" alt="" /></a>
                             <div class="ms-0 ms-md-4 mt-4 mt-md-0">
                                 <div class="d-flex align-items-center mb-2">
-                                    <a class="link-dark h3 mb-0" href="/users/bmm11uodayryy">robin</a>
-                                    <div class="ms-2">
-                                        <span class="text-body badge bg-light">Mod</span>
-                                    </div>
+                                    <a class="link-dark h3 mb-0" href="/users/bmm11uodayryy">{{.userinfo.Info.DisplayName}}</a>
+
                                 </div>
-                                <div class="text-secondary mb-4">@bmm11uodayryy</div>
+                                <div class="text-secondary mb-4">@{{.userinfo.Info.Username}}</div>
                                 <div class="d-flex flex-wrap mb-3">
                                     <div class="me-3">
-                                        <strong class="fs-5">89</strong><span class="text-secondary"> reputation</span>
+                                        <strong class="fs-5">{{.userinfo.Info.Rank}}</strong><span class="text-secondary"> reputation</span>
                                     </div>
                                     <div class="me-3">
-                                        <strong class="fs-5">1</strong><span class="text-secondary"> answers</span>
+                                        <strong class="fs-5">{{.userinfo.Info.AnswerCount}}</strong><span class="text-secondary"> answers</span>
                                     </div>
                                     <div>
-                                        <strong class="fs-5">1</strong><span class="text-secondary"> questions</span>
+                                        <strong class="fs-5">{{.userinfo.Info.QuestionCount}}</strong><span class="text-secondary"> questions</span>
                                     </div>
                                 </div>
+                                <div class="d-flex align-items-center"><i class="br bi-house-door-fill me-2"></i><a class="link-secondary" href="{{.userinfo.Info.Website}}">{{.userinfo.Info.Website}}</a></div>
                                 <div class="d-flex text-secondary"></div>
                             </div>
                         </div>
@@ -40,7 +39,7 @@
                     <div class="col-xxl-7 col-lg-8 col-sm-12">
                         <div>
                             <h5 class="mb-3">About Me</h5>
-                            <div class="text-center py-5 mb-4">// Hello, World !</div>
+                            <div class="text-center py-5 mb-4">{{.userinfo.Info.BioHTML}}</div>
                         </div>
                     </div>
                     <div class="mt-5 mt-lg-0 col-xxl-3 col-lg-4 col-sm-12">
