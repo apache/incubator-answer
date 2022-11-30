@@ -139,9 +139,9 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	tag := ctx.Param("tag")
 
-	req := &schema.GetTagInfoReq{}
+	req := &schema.GetTamplateTagInfoReq{}
 	req.Name = tag
-	taginifo, err := tc.templateRenderController.TagInfo(ctx, req)
+	taginifo, questionList, questionCount, err := tc.templateRenderController.TagInfo(ctx, req)
 	if err != nil {
 		ctx.HTML(http.StatusOK, "404.html", gin.H{
 			"scriptPath": tc.scriptPath,
@@ -152,10 +152,12 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 		return
 	}
 	ctx.HTML(http.StatusOK, "tag-detail.html", gin.H{
-		"tag":        taginifo,
-		"scriptPath": tc.scriptPath,
-		"cssPath":    tc.cssPath,
-		"siteinfo":   tc.SiteInfo(ctx),
+		"tag":           taginifo,
+		"questionList":  questionList,
+		"questionCount": questionCount,
+		"scriptPath":    tc.scriptPath,
+		"cssPath":       tc.cssPath,
+		"siteinfo":      tc.SiteInfo(ctx),
 	})
 }
 
