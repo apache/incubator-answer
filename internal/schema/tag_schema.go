@@ -29,7 +29,7 @@ type GetTamplateTagInfoReq struct {
 	// tag id
 	ID string `validate:"omitempty" form:"id"`
 	// tag slug name
-	Name string `validate:"omitempty,gt=0,lte=35" form:"name"`
+	Name string `validate:"omitempty" form:"name"`
 	// user id
 	UserID   string `json:"-"`
 	Page     int    `validate:"omitempty,min=1" form:"page"`

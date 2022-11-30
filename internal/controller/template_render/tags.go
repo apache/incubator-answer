@@ -22,7 +22,7 @@ func (q *TemplateRenderController) TagInfo(ctx context.Context, req *schema.GetT
 	searchQuestion := &schema.QuestionSearch{}
 	searchQuestion.Page = req.Page
 	searchQuestion.PageSize = req.PageSize
-	searchQuestion.Order = "news"
+	searchQuestion.Order = "newest"
 	searchQuestion.Tag = req.Name
 	questionList, questionCount, err = q.questionService.SearchList(ctx, searchQuestion, "")
 	if err != nil {
