@@ -35,10 +35,10 @@ func NewTemplateRenderController(
 // Returns the contents of the page in the format of 1, 2, 3, 4, and 5. If the contents are less than 5 pages, the page number is returned
 func Paginator(page, prepage int, nums int64) map[string]interface{} {
 
-	var firstpage int //前一页地址
-	var lastpage int  //后一页地址
-	//根据nums总数，和prepage每页数量 生成分页总数
-	totalpages := int(math.Ceil(float64(nums) / float64(prepage))) //page总数
+	var firstpage int //Previous page address
+	var lastpage int  //Address on the last page
+	//Generate the total number of pages based on the total number of nums and the number of prepage pages
+	totalpages := int(math.Ceil(float64(nums) / float64(prepage))) //Total number of Pages
 	if page > totalpages {
 		page = totalpages
 	}
@@ -47,7 +47,7 @@ func Paginator(page, prepage int, nums int64) map[string]interface{} {
 	}
 	var pages []int
 	switch {
-	case page >= totalpages-5 && totalpages > 5: //最后5页
+	case page >= totalpages-5 && totalpages > 5: //The last 5 pages
 		start := totalpages - 5 + 1
 		firstpage = page - 1
 		lastpage = int(math.Min(float64(totalpages), float64(page+1)))
@@ -71,7 +71,6 @@ func Paginator(page, prepage int, nums int64) map[string]interface{} {
 		}
 		firstpage = int(math.Max(float64(1), float64(page-1)))
 		lastpage = page + 1
-		//fmt.Println(pages)
 	}
 	paginatorMap := make(map[string]interface{})
 	paginatorMap["pages"] = pages
