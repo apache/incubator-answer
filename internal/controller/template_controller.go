@@ -72,10 +72,22 @@ func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.SiteInfoResp {
 
 // Index question list
 func (tc *TemplateController) Index(ctx *gin.Context) {
+	req := &schema.QuestionSearch{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	data, count, err := tc.templateRenderController.Index(ctx, req)
+	if err != nil {
+		tc.Page404(ctx)
+		return
+	}
+
 	ctx.HTML(http.StatusOK, "question.html", gin.H{
 		"siteinfo":   tc.SiteInfo(ctx),
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
+		"data":       data,
+		"page":       templaterender.Paginator(req.Page, req.PageSize, count),
 	})
 }
 
@@ -144,7 +156,7 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 	req.Username = username
 	userinfo, err := tc.templateRenderController.UserInfo(ctx, req)
 	if err != nil {
-		ctx.HTML(http.StatusOK, "404.html", gin.H{
+		ctx.HTML(http.StatusNotFound, "404.html", gin.H{
 			"scriptPath": tc.scriptPath,
 			"cssPath":    tc.cssPath,
 			"err":        err.Error(),
@@ -160,7 +172,7 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 }
 
 func (tc *TemplateController) Page404(ctx *gin.Context) {
-	ctx.HTML(http.StatusOK, "404.html", gin.H{
+	ctx.HTML(http.StatusNotFound, "404.html", gin.H{
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
 	})

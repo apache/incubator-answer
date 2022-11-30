@@ -1,6 +1,6 @@
 {{define "page"}}
 <ul class="d-inline-flex mb-0 pagination pagination-sm">
-  {{ if ne $.page.Currpage 1 }}
+  {{ if ne .page.Currpage 1 }}
   <li class="page-item">
     <a class="page-link" href="?page={{$.page.Prevpage}}"><span aria-hidden="true">Prev</span><span
         class="visually-hidden">Prev</span></a>
@@ -27,3 +27,4 @@
   {{ end }}
 </ul>
 {{end}}
+ㅤ

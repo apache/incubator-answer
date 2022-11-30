@@ -1,72 +1,60 @@
 {{template "header" . }}
-            <div class="pt-4 mt-2 mb-5 container">
-                <div class="justify-content-center row">
-                    <div class="col-xxl-7 col-lg-8 col-sm-12">
-                        <div>
-                            <div class="mb-3 d-flex flex-wrap justify-content-between">
-                                <h5 class="fs-5 text-nowrap mb-3 mb-md-0">All Questions</h5>
-                            </div>
-                            <div class="border-top border-bottom-0 list-group list-group-flush">
-                                <div class="border-bottom pt-3 pb-2 px-0 list-group-item">
-                                    <h5 class="text-wrap text-break">
-                                        <a class="link-dark" href="/questions/10010000000000949">创建的时候报错了吗？</a>
-                                    </h5>
-                                    <div
-                                        class="d-flex flex-column flex-md-row align-items-md-center fs-14 text-secondary">
-                                        <div class="d-flex">
-                                            <div class="text-secondary me-1">
-                                                <a href="/users/123123213213213123"><span
-                                                        class="me-1 text-break">123123213213213123</span></a><span
-                                                    class="fw-bold" title="Reputation">27</span>
-                                            </div>
-                                            •<time class="text-secondary ms-1" datetime="2022-11-29T07:38:07.000Z"
-                                                title="Nov 29, 2022 at 15:38">asked 1h ago</time>
-                                        </div>
-                                        <div class="ms-0 ms-md-3 mt-2 mt-md-0">
-                                            <span><i class="br bi-hand-thumbs-up-fill"></i><em
-                                                    class="fst-normal ms-1">0</em></span><span class="ms-3"><i
-                                                    class="br bi-chat-square-text-fill"></i><em
-                                                    class="fst-normal ms-1">0</em></span><span
-                                                class="summary-stat ms-3"><i class="br bi-eye-fill"></i><em
-                                                    class="fst-normal ms-1">2</em></span>
-                                        </div>
-                                    </div>
-                                    <div class="question-tags mx-n1 mt-2">
-                                        <a href="/tags/bug" class="badge-tag rounded-1 badge-tag-required m-1"><span
-                                                class="">bug</span></a><a href="/tags/notag"
-                                            class="badge-tag rounded-1 m-1"><span class="">notag</span></a>
-                                    </div>
-                                </div>
-
-
-                            </div>
-                            <div class="mt-4 mb-2 d-flex justify-content-center">
-                                <ul class="d-inline-flex mb-0 pagination pagination-sm">
-                                    <li class="page-item active">
-                                        <span class="page-link" href="/questions?page=1">1<span
-                                                class="visually-hidden">(current)</span></span>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="/questions?page=2">2</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="/questions?page=3">3</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="/questions?page=4">4</a>
-                                    </li>
-                                    <li class="page-item">
-                                        <a class="page-link" href="/questions?page=2"><span
-                                                aria-hidden="true">Next</span><span
-                                                class="visually-hidden">Next</span></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mt-5 mt-lg-0 col-xxl-3 col-lg-4 col-sm-12">
-
-                    </div>
+<div class="pt-4 mt-2 mb-5 container">
+  <div class="justify-content-center row">
+    <div class="col-xxl-7 col-lg-8 col-sm-12">
+      <div>
+        <div class="mb-3 d-flex flex-wrap justify-content-between">
+          <h5 class="fs-5 text-nowrap mb-3 mb-md-0">All Questions</h5>
+        </div>
+        <div class="border-top border-bottom-0 list-group list-group-flush">
+          {{range .data}}
+          <div class="border-bottom pt-3 pb-2 px-0 list-group-item">
+            <h5 class="text-wrap text-break">
+              <a class="link-dark" href="/questions/{{.ID}}">{{.Title}}</a>
+            </h5>
+            <div
+              class="d-flex flex-column flex-md-row align-items-md-center fs-14 text-secondary">
+              <div class="d-flex">
+                <div class="text-secondary me-1">
+                  <a href="/users/{{.UserInfo.ID}}"><span
+                    class="me-1 text-break">{{.UserInfo.DisplayName}}</span></a><span
+                  class="fw-bold" title="Reputation">{{.UserInfo.Rank}}</span>
                 </div>
+                •
+                <time class="text-secondary ms-1"
+                      datetime="2022-11-29T07:38:07.000Z"
+                      title="Nov 29, 2022 at 15:38">asked 1h ago
+                </time>
+              </div>
+              <div class="ms-0 ms-md-3 mt-2 mt-md-0">
+                <span><i class="br bi-hand-thumbs-up-fill"></i><em
+                  class="fst-normal ms-1">{{.VoteCount}}</em></span>
+                <span class="ms-3"><i
+                  class="br bi-chat-square-text-fill"></i><em
+                  class="fst-normal ms-1">{{.AnswerCount}}</em></span>
+                <span class="summary-stat ms-3"><i
+                  class="br bi-eye-fill"></i><em class="fst-normal ms-1">{{.ViewCount}}</em></span>
+              </div>
             </div>
+            <div class="question-tags mx-n1 mt-2">
+              {{range .Tags }}
+              <a href="/tags/{{.SlugName}}"
+                 class="badge-tag rounded-1 {{if .Reserved}}badge-tag-reserved{{end}} {{if .Recommend}}badge-tag-required{{end}} m-1">
+                <span class="">{{.SlugName}}</span>
+              </a>
+              {{end}}
+            </div>
+          </div>
+          {{end}}
+        </div>
+        <div class="mt-4 mb-2 d-flex justify-content-center">
+          {{template "page" .}}
+        </div>
+      </div>
+    </div>
+    <div class="mt-5 mt-lg-0 col-xxl-3 col-lg-4 col-sm-12">
+
+    </div>
+  </div>
+</div>
 {{template "footer" .}}
