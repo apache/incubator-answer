@@ -1,7 +1,9 @@
 import { FC } from 'react';
-import { Form, Table, Badge, Dropdown } from 'react-bootstrap';
+import { Form, Table, Dropdown } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+
+import classNames from 'classnames';
 
 import {
   Pagination,
@@ -26,10 +28,10 @@ const UserFilterKeys: Type.UserFilterBy[] = [
 ];
 
 const bgMap = {
-  normal: 'success',
-  suspended: 'danger',
-  deleted: 'danger',
-  inactive: 'secondary',
+  normal: 'text-bg-success',
+  suspended: 'text-bg-danger',
+  deleted: 'text-bg-danger',
+  inactive: 'text-bg-secondary',
 };
 
 const PAGE_SIZE = 10;
@@ -150,12 +152,12 @@ const Users: FC = () => {
                   </td>
                 )}
                 <td>
-                  <Badge bg={bgMap[user.status]}>{t(user.status)}</Badge>
+                  <span className={classNames('badge', bgMap[user.status])}>
+                    {t(user.status)}
+                  </span>
                 </td>
                 <td>
-                  <Badge bg="light" className="text-body">
-                    Admin
-                  </Badge>
+                  <span className="text-bg-light">Admin</span>
                 </td>
                 {curFilter !== 'deleted' ? (
                   <td className="text-end">

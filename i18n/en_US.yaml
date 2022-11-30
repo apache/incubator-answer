@@ -529,7 +529,7 @@ ui:
   footer:
     build_on: >-
       Built on <1> Answer </1>- the open-source software that power Q&A
-      communities<br />Made with love © 2022 Answer
+      communities.<br />Made with love © {{cc}}.
   upload_img:
     name: Change
     loading: loading...
@@ -1209,6 +1209,9 @@ ui:
     answer_edit: Answer edit
     tag_edit: Tag edit
     edit_summary: Edit summary
+    edit_question: Edit question
+    edit_answer: Edit answer
+    edit_tag: Edit tag
     empty: No review tasks left.
   timeline:
     undeleted: undeleted
@@ -1228,7 +1231,8 @@ ui:
     title: "History for"
     show_votes: "Show votes"
     n_or_a: N/A
-    title_for: "Timeline for"
+    title_for_question: "Timeline for"
+    title_for_answer: "Timeline for answers to {{ title }} by {{ author }}"
     title_for_tag: "Title for tag"
     datetime: Datetime
     type: Type

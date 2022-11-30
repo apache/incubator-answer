@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Modal } from '@/components';
 import { useReportModal, useToast } from '@/hooks';
 import Share from '../Share';
-import { deleteQuestion, deleteAnswer } from '@/services';
+import { deleteQuestion, deleteAnswer, editCheck } from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
 
 interface IProps {
@@ -96,6 +96,15 @@ const Index: FC<IProps> = ({
       });
     }
   };
+  const handleEdit = async (evt) => {
+    let checkObjectId = qid;
+    if (type === 'answer') {
+      checkObjectId = aid;
+    }
+    editCheck(checkObjectId).catch(() => {
+      evt.preventDefault();
+    });
+  };
 
   const handleAction = (action) => {
     if (!tryNormalLogged(true)) {
@@ -124,6 +133,7 @@ const Index: FC<IProps> = ({
               key={item.action}
               to={editUrl}
               className="link-secondary p-0 fs-14 me-3"
+              onClick={handleEdit}
               style={{ lineHeight: '23px' }}>
               {item.name}
             </Link>

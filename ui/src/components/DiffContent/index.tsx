@@ -1,17 +1,32 @@
 import { FC, memo } from 'react';
 
+import clssnames from 'classnames';
+
 import { Tag } from '@/components';
 import { diffText } from '@/utils';
 
 interface Props {
-  objectType: string;
+  objectType: string | 'question' | 'answer' | 'tag';
   newData: Record<string, any>;
   oldData?: Record<string, any>;
   className?: string;
+  opts?: Partial<{
+    showTitle: boolean;
+    showTagUrlSlug: boolean;
+  }>;
 }
 
-const Index: FC<Props> = ({ objectType, newData, oldData, className = '' }) => {
-  if (!newData?.original_text) return null;
+const Index: FC<Props> = ({
+  objectType,
+  newData,
+  oldData,
+  className = '',
+  opts = {
+    showTitle: true,
+    showTagUrlSlug: true,
+  },
+}) => {
+  if (!newData) return null;
 
   let tag = newData.tags;
   if (objectType === 'question' && oldData?.tags) {
@@ -51,7 +66,7 @@ const Index: FC<Props> = ({ objectType, newData, oldData, className = '' }) => {
 
   return (
     <div className={className}>
-      {objectType !== 'answer' && (
+      {objectType !== 'answer' && opts?.showTitle && (
         <h5
           dangerouslySetInnerHTML={{
             __html: diffText(newData.title, oldData?.title),
@@ -61,7 +76,7 @@ const Index: FC<Props> = ({ objectType, newData, oldData, className = '' }) => {
       )}
       {objectType === 'question' && (
         <div className="mb-4">
-          {tag.map((item) => {
+          {tag?.map((item) => {
             return (
               <Tag
                 key={item.slug_name}
@@ -73,8 +88,12 @@ const Index: FC<Props> = ({ objectType, newData, oldData, className = '' }) => {
           })}
         </div>
       )}
-      {objectType === 'tag' && (
-        <div className="mb-4">
+      {objectType === 'tag' && opts?.showTagUrlSlug && (
+        <div
+          className={clssnames(
+            'fs-14 font-monospace',
+            newData.original_text && 'mb-4',
+          )}>
           {`/tags/${
             newData?.main_tag_slug_name
               ? diffText(
@@ -89,7 +108,7 @@ const Index: FC<Props> = ({ objectType, newData, oldData, className = '' }) => {
         dangerouslySetInnerHTML={{
           __html: diffText(newData.original_text, oldData?.original_text),
         }}
-        className="pre-line text-break font-monospace"
+        className="pre-line text-break font-monospace fs-14"
       />
     </div>
   );

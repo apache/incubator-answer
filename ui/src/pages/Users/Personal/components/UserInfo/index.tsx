@@ -1,5 +1,5 @@
 import { FC, memo } from 'react';
-import { Badge, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -42,9 +42,7 @@ const Index: FC<Props> = ({ data }) => {
               <OverlayTrigger
                 placement="top"
                 overlay={<Tooltip>{t('mod_long')}</Tooltip>}>
-                <Badge bg="light" className="text-body">
-                  {t('mod_short')}
-                </Badge>
+                <span className="badge text-bg-light">{t('mod_short')}</span>
               </OverlayTrigger>
             </div>
           )}

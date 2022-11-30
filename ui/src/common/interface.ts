@@ -157,6 +157,13 @@ export interface SetNoticeReq {
   notice_switch: boolean;
 }
 
+export interface NotificationStatus {
+  inbox: number;
+  achievement: number;
+  revision: number;
+  can_revision: boolean;
+}
+
 export interface QuestionDetailRes {
   id: string;
   title: string;
@@ -192,7 +199,6 @@ export interface AnswerItem {
   create_time: string;
   update_time: string;
   user_info: UserInfoBase;
-
   [prop: string]: any;
 }
 
@@ -286,9 +292,9 @@ export interface AdminSettingsSmtp {
   from_name: string;
   smtp_authentication: boolean;
   smtp_host: string;
-  smtp_password: string;
+  smtp_password?: string;
   smtp_port: number;
-  smtp_username: string;
+  smtp_username?: string;
   test_email_recipient?: string;
 }
 
@@ -405,9 +411,36 @@ export interface TimelineObject {
   question_id: string;
   answer_id: string;
   main_tag_slug_name?: string;
+  display_name?: string;
 }
 
 export interface TimelineRes {
   object_info: TimelineObject;
   timeline: TimelineItem[];
+}
+
+export interface ReviewItem {
+  type: 'question' | 'answer' | 'tag';
+  info: {
+    object_id: string;
+    title: string;
+    content: string;
+    html: string;
+    tags: Tag[];
+  };
+  unreviewed_info: {
+    id: string;
+    use_id: string;
+    object_id: string;
+    title: string;
+    status: 0 | 1;
+    create_at: number;
+    user_info: UserInfoBase;
+    reason: string;
+    content: Tag | QuestionDetailRes | AnswerItem;
+  };
+}
+export interface ReviewResp {
+  count: number;
+  list: ReviewItem[];
 }
