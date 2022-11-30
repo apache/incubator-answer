@@ -1,4 +1,5 @@
 # The following fields are used for back-end
+
 backend:
   base:
     success:
@@ -97,7 +98,7 @@ backend:
         other: "Theme not found."
     revision:
       review_underway:
-        other: "Revision review underway."
+        other: "Can't edit currently, there is a version in the review queue."
       no_permission:
         other: "No permission to Revision."
     user:

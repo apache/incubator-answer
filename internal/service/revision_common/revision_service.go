@@ -28,10 +28,10 @@ func NewRevisionService(revisionRepo revision.RevisionRepo, userRepo usercommon.
 }
 
 func (rs *RevisionService) GetUnreviewedRevisionCount(ctx context.Context, req *schema.RevisionSearch) (count int64, err error) {
-	search := &entity.RevisionSearch{}
-	search.Page = 1
-	_ = copier.Copy(search, req)
-	_, count, err = rs.revisionRepo.SearchUnreviewedList(ctx, search)
+	if len(req.GetCanReviewObjectTypes()) == 0 {
+		return 0, nil
+	}
+	_, count, err = rs.revisionRepo.GetUnreviewedRevisionPage(ctx, req.Page, 1, req.GetCanReviewObjectTypes())
 	return count, err
 }
 

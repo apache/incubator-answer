@@ -147,7 +147,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	//revisions
 	r.GET("/revisions/unreviewed", a.revisionController.GetUnreviewedRevisionList)
 	r.PUT("/revisions/audit", a.revisionController.RevisionAudit)
-	r.GET("/revisions/edit/check", a.questionController.CheckCanUpdateQuestion)
+	r.GET("/revisions/edit/check", a.revisionController.CheckCanUpdateRevision)
 
 	// comment
 	r.POST("/comment", a.commentController.AddComment)
