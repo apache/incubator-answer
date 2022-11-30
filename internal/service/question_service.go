@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/base/validator"
@@ -129,7 +130,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		errorlist := make([]*validator.FormErrorField, 0)
 		errorlist = append(errorlist, &validator.FormErrorField{
 			ErrorField: "tags",
-			ErrorMsg:   reason.RecommendTagEnter,
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), reason.RecommendTagEnter),
 		})
 		err = errors.BadRequest(reason.RecommendTagEnter)
 		return errorlist, err
@@ -350,7 +351,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		errorlist := make([]*validator.FormErrorField, 0)
 		errorlist = append(errorlist, &validator.FormErrorField{
 			ErrorField: "tags",
-			ErrorMsg:   reason.RecommendTagEnter,
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), reason.RecommendTagEnter),
 		})
 		err = errors.BadRequest(reason.RecommendTagEnter)
 		return errorlist, err
