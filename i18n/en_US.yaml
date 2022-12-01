@@ -682,6 +682,7 @@ ui:
     update: update success
     update_password: Password changed successfully.
     flag_success: Thanks for flagging.
+    review: Your revision will show after review.
   related_question:
     title: Related Questions
     btn: Add question

@@ -109,8 +109,10 @@ const Ask = () => {
       id: aid,
       edit_summary: formData.description.value,
     };
-    modifyAnswer(params).then(() => {
-      navigate(`/questions/${qid}/${aid}`);
+    modifyAnswer(params).then((res) => {
+      navigate(`/questions/${qid}/${aid}`, {
+        state: { isReview: res?.wait_for_review },
+      });
     });
   };
 

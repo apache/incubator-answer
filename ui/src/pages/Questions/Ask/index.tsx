@@ -234,8 +234,10 @@ const Ask = () => {
         id: qid,
         edit_summary: formData.edit_summary.value,
       })
-        .then(() => {
-          navigate(`/questions/${qid}`);
+        .then((res) => {
+          navigate(`/questions/${qid}`, {
+            state: { isReview: res?.wait_for_review },
+          });
         })
         .catch((err) => {
           if (err.isError) {

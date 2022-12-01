@@ -440,3 +440,9 @@ export interface ReviewResp {
   count: number;
   list: ReviewItem[];
 }
+
+export interface MemberActionItem {
+  action: string;
+  name: string;
+  type: string;
+}
