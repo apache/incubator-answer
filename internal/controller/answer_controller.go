@@ -179,21 +179,12 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	info, questionInfo, has, err := ac.answerService.Get(ctx, req.ID, req.UserID)
+	_, _, _, err = ac.answerService.Get(ctx, req.ID, req.UserID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	if !has {
-		// todo !has
-		handler.HandleResponse(ctx, nil, nil)
-		return
-	}
-	handler.HandleResponse(ctx, nil, &schema.AnswerUpdateResp{
-		AnswerInfo:    info,
-		QuestionInfo:  questionInfo,
-		WaitForReview: !req.NoNeedReview,
-	})
+	handler.HandleResponse(ctx, nil, &schema.AnswerUpdateResp{WaitForReview: !req.NoNeedReview})
 }
 
 // AnswerList godoc

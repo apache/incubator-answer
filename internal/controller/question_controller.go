@@ -266,8 +266,8 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := qc.questionService.UpdateQuestion(ctx, req)
-	handler.HandleResponse(ctx, err, resp)
+	_, err = qc.questionService.UpdateQuestion(ctx, req)
+	handler.HandleResponse(ctx, err, &schema.UpdateQuestionResp{WaitForReview: !req.NoNeedReview})
 }
 
 // CloseMsgList close question msg list
