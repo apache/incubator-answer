@@ -1,6 +1,7 @@
 package templaterender
 
 import (
+	"github.com/answerdev/answer/internal/service/comment"
 	"math"
 
 	"github.com/answerdev/answer/internal/schema"
@@ -18,18 +19,23 @@ type TemplateRenderController struct {
 	questionService *service.QuestionService
 	userService     *service.UserService
 	tagService      *tag.TagService
+	answerService   *service.AnswerService
+	commentService  *comment.CommentService
 }
 
 func NewTemplateRenderController(
 	questionService *service.QuestionService,
 	userService *service.UserService,
 	tagService *tag.TagService,
-
+	answerService *service.AnswerService,
+	commentService *comment.CommentService,
 ) *TemplateRenderController {
 	return &TemplateRenderController{
 		questionService: questionService,
 		userService:     userService,
 		tagService:      tagService,
+		answerService:   answerService,
+		commentService:  commentService,
 	}
 }
 

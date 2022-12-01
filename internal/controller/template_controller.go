@@ -130,9 +130,44 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	siteInfo := tc.SiteInfo(ctx)
 	encodeTitle := url.QueryEscape("title")
 	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
+
+	detail, err := tc.templateRenderController.QuestionDetail(ctx, id)
+	if err != nil {
+		tc.Page404(ctx)
+		return
+	}
+
+	// answers
+	answerReq := &schema.AnswerList{
+		QuestionID:  id,
+		Order:       "",
+		Page:        1,
+		PageSize:    999,
+		LoginUserID: "",
+	}
+	answers, _, err := tc.templateRenderController.AnswerList(ctx, answerReq)
+	if err != nil {
+		tc.Page404(ctx)
+		return
+	}
+
+	// comments
+	objectIDs := []string{id}
+	for _, answer := range answers {
+		objectIDs = append(objectIDs, answer.ID)
+	}
+	comments, err := tc.templateRenderController.CommentList(ctx, objectIDs)
+	if err != nil {
+		tc.Page404(ctx)
+		return
+	}
+
 	ctx.HTML(http.StatusOK, "question-detail.html", gin.H{
 		"id":         id,
 		"answerid":   answerid,
+		"detail":     detail,
+		"answers":    answers,
+		"comments":   comments,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
 		"siteinfo":   siteInfo,
