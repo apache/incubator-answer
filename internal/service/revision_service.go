@@ -167,7 +167,7 @@ func (rs *RevisionService) revisionAuditAnswer(ctx context.Context, revisionitem
 		insertData.ParsedText = answerinfo.HTML
 		insertData.UpdatedAt = now
 		insertData.LastEditUserID = revisionitem.UserID
-		saveerr := rs.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time", "last_edit_user_id"})
+		saveerr := rs.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "updated_at", "last_edit_user_id"})
 		if saveerr != nil {
 			return saveerr
 		}
