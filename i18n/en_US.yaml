@@ -701,6 +701,7 @@ ui:
     update: update success
     update_password: Password changed successfully.
     flag_success: Thanks for flagging.
+    fobidden_operate_self: Forbidden to operate on yourself
   related_question:
     title: Related Questions
     btn: Add question
@@ -1041,6 +1042,10 @@ ui:
       btn_cancel: Cancel
       btn_submit: Submit
       btn_next: Next
+    user_role_modal:
+      title: Change user role to...
+      btn_cancel: Cancel
+      btn_submit: Submit
     users:
       title: Users
       name: Name
@@ -1050,15 +1055,24 @@ ui:
       delete_at: Deleted Time
       suspend_at: Suspended Time
       status: Status
+      role: Role
       action: Action
       change: Change
       all: All
+      staff: Staff
       inactive: Inactive
       suspended: Suspended
       deleted: Deleted
       normal: Normal
+      Moderator: Moderator
+      Admin: Admin
+      User: User
       filter:
         placeholder: "Filter by name, user:id"
+      set_new_password: Set new password
+      change_status: Change status
+      change_role: Change role
+      show_logs: Show logs
     questions:
       page_title: Questions
       normal: Normal

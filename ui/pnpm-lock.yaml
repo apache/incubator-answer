@@ -15,7 +15,6 @@ specifiers:
   '@types/qs': ^6.9.7
   '@types/react': ^18.0.17
   '@types/react-dom': ^18.0.6
-  '@types/react-helmet': ^6.1.5
   '@typescript-eslint/eslint-plugin': ^5.0.0
   '@typescript-eslint/parser': ^5.33.0
   axios: ^0.27.2
@@ -109,7 +108,6 @@ devDependencies:
   '@types/qs': 6.9.7
   '@types/react': 18.0.20
   '@types/react-dom': 18.0.6
-  '@types/react-helmet': 6.1.5
   '@typescript-eslint/eslint-plugin': 5.38.0_wsb62dxj2oqwgas4kadjymcmry
   '@typescript-eslint/parser': 5.38.0_irgkl5vooow2ydyo6aokmferha
   customize-cra: 1.0.0
@@ -2577,12 +2575,6 @@ packages:
 
   /@types/react-dom/18.0.6:
     resolution: {integrity: sha512-/5OFZgfIPSwy+YuIBP/FgJnQnsxhZhjjrnxudMddeblOouIodEQ75X14Rr4wGSG/bknL+Omy9iWlLo1u/9GzAA==}
-    dependencies:
-      '@types/react': 18.0.20
-    dev: true
-
-  /@types/react-helmet/6.1.5:
-    resolution: {integrity: sha512-/ICuy7OHZxR0YCAZLNg9r7I9aijWUWvxaPR6uTuyxe8tAj5RL4Sw1+R6NhXUtOsarkGYPmaHdBDvuXh2DIN/uA==}
     dependencies:
       '@types/react': 18.0.20
     dev: true
