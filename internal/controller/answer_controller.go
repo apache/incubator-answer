@@ -189,9 +189,10 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 		handler.HandleResponse(ctx, nil, nil)
 		return
 	}
-	handler.HandleResponse(ctx, nil, gin.H{
-		"info":     info,
-		"question": questionInfo,
+	handler.HandleResponse(ctx, nil, &schema.AnswerUpdateResp{
+		AnswerInfo:    info,
+		QuestionInfo:  questionInfo,
+		WaitForReview: !req.NoNeedReview,
 	})
 }
 

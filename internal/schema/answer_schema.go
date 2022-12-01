@@ -29,10 +29,16 @@ type AnswerUpdateReq struct {
 	Content      string `json:"content"`                           // content
 	HTML         string `json:"html" `                             // html
 	EditSummary  string `validate:"omitempty" json:"edit_summary"` // edit_summary
-	IsAdmin      bool   `json:"-"`
 	NoNeedReview bool   `json:"-"`
 	// whether user can edit it
 	CanEdit bool `json:"-"`
+}
+
+// AnswerUpdateResp answer update resp
+type AnswerUpdateResp struct {
+	AnswerInfo    *AnswerInfo   `json:"info"`
+	QuestionInfo  *QuestionInfo `json:"question"`
+	WaitForReview bool          `json:"wait_for_review"`
 }
 
 type AnswerListReq struct {
