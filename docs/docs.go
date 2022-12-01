@@ -3074,7 +3074,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "check can update question",
+                "description": "check can update revision",
                 "consumes": [
                     "application/json"
                 ],
@@ -3084,7 +3084,7 @@ const docTemplate = `{
                 "tags": [
                     "Revision"
                 ],
-                "summary": "check can update question",
+                "summary": "check can update revision",
                 "parameters": [
                     {
                         "type": "string",
@@ -3141,10 +3141,22 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/schema.GetRevisionResp"
-                                            }
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/pager.PageModel"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/schema.GetUnreviewedRevisionResp"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
                                         }
                                     }
                                 }
@@ -3470,10 +3482,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/schema.GetTagSynonymsResp"
-                                            }
+                                            "$ref": "#/definitions/schema.GetTagSynonymsResp"
                                         }
                                     }
                                 }
@@ -4701,6 +4710,9 @@ const docTemplate = `{
                 "answer_id": {
                     "type": "string"
                 },
+                "display_name": {
+                    "type": "string"
+                },
                 "object_type": {
                     "type": "string"
                 },
@@ -5547,21 +5559,33 @@ const docTemplate = `{
         "schema.GetTagSynonymsResp": {
             "type": "object",
             "properties": {
-                "display_name": {
-                    "description": "display name",
+                "member_actions": {
+                    "description": "MemberActions",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.PermissionMemberAction"
+                    }
+                },
+                "synonyms": {
+                    "description": "synonyms",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.TagSynonym"
+                    }
+                }
+            }
+        },
+        "schema.GetUnreviewedRevisionResp": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "$ref": "#/definitions/schema.UnreviewedRevisionInfoInfo"
+                },
+                "type": {
                     "type": "string"
                 },
-                "main_tag_slug_name": {
-                    "description": "if main tag slug name is not empty, this tag is synonymous with the main tag",
-                    "type": "string"
-                },
-                "slug_name": {
-                    "description": "slug name",
-                    "type": "string"
-                },
-                "tag_id": {
-                    "description": "tag id",
-                    "type": "string"
+                "unreviewed_info": {
+                    "$ref": "#/definitions/schema.GetRevisionResp"
                 }
             }
         },
@@ -6203,9 +6227,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "contact_email",
-                "description",
                 "name",
-                "short_description",
                 "site_url"
             ],
             "properties": {
@@ -6235,9 +6257,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "contact_email",
-                "description",
                 "name",
-                "short_description",
                 "site_url"
             ],
             "properties": {
@@ -6421,6 +6441,50 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "slug_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.TagSynonym": {
+            "type": "object",
+            "properties": {
+                "display_name": {
+                    "description": "display name",
+                    "type": "string"
+                },
+                "main_tag_slug_name": {
+                    "description": "if main tag slug name is not empty, this tag is synonymous with the main tag",
+                    "type": "string"
+                },
+                "slug_name": {
+                    "description": "slug name",
+                    "type": "string"
+                },
+                "tag_id": {
+                    "description": "tag id",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.UnreviewedRevisionInfoInfo": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "html": {
+                    "type": "string"
+                },
+                "object_id": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.TagResp"
+                    }
+                },
+                "title": {
                     "type": "string"
                 }
             }

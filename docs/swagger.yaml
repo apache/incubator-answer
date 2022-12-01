@@ -93,6 +93,8 @@ definitions:
     properties:
       answer_id:
         type: string
+      display_name:
+        type: string
       object_type:
         type: string
       question_id:
@@ -697,19 +699,25 @@ definitions:
     type: object
   schema.GetTagSynonymsResp:
     properties:
-      display_name:
-        description: display name
+      member_actions:
+        description: MemberActions
+        items:
+          $ref: '#/definitions/schema.PermissionMemberAction'
+        type: array
+      synonyms:
+        description: synonyms
+        items:
+          $ref: '#/definitions/schema.TagSynonym'
+        type: array
+    type: object
+  schema.GetUnreviewedRevisionResp:
+    properties:
+      info:
+        $ref: '#/definitions/schema.UnreviewedRevisionInfoInfo'
+      type:
         type: string
-      main_tag_slug_name:
-        description: if main tag slug name is not empty, this tag is synonymous with
-          the main tag
-        type: string
-      slug_name:
-        description: slug name
-        type: string
-      tag_id:
-        description: tag id
-        type: string
+      unreviewed_info:
+        $ref: '#/definitions/schema.GetRevisionResp'
     type: object
   schema.GetUserPageResp:
     properties:
@@ -1189,9 +1197,7 @@ definitions:
         type: string
     required:
     - contact_email
-    - description
     - name
-    - short_description
     - site_url
     type: object
   schema.SiteGeneralResp:
@@ -1213,9 +1219,7 @@ definitions:
         type: string
     required:
     - contact_email
-    - description
     - name
-    - short_description
     - site_url
     type: object
   schema.SiteInterfaceReq:
@@ -1328,6 +1332,37 @@ definitions:
       reserved:
         type: boolean
       slug_name:
+        type: string
+    type: object
+  schema.TagSynonym:
+    properties:
+      display_name:
+        description: display name
+        type: string
+      main_tag_slug_name:
+        description: if main tag slug name is not empty, this tag is synonymous with
+          the main tag
+        type: string
+      slug_name:
+        description: slug name
+        type: string
+      tag_id:
+        description: tag id
+        type: string
+    type: object
+  schema.UnreviewedRevisionInfoInfo:
+    properties:
+      content:
+        type: string
+      html:
+        type: string
+      object_id:
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/schema.TagResp'
+        type: array
+      title:
         type: string
     type: object
   schema.UpdateCommentReq:
@@ -3510,7 +3545,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: check can update question
+      description: check can update revision
       parameters:
       - default: string
         description: id
@@ -3527,7 +3562,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: check can update question
+      summary: check can update revision
       tags:
       - Revision
   /answer/api/v1/revisions/unreviewed:
@@ -3549,9 +3584,14 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/schema.GetRevisionResp'
-                  type: array
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.GetUnreviewedRevisionResp'
+                        type: array
+                    type: object
               type: object
       security:
       - ApiKeyAuth: []
@@ -3753,9 +3793,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/schema.GetTagSynonymsResp'
-                  type: array
+                  $ref: '#/definitions/schema.GetTagSynonymsResp'
               type: object
       summary: get tag synonyms
       tags:

@@ -234,6 +234,9 @@ func (qs *QuestionCommon) ListFormat(ctx context.Context, questionList []*entity
 		list = append(list, item)
 		objectIds = append(objectIds, item.ID)
 		userIds = append(userIds, questionInfo.UserID)
+		userIds = append(userIds, questionInfo.LastEditUserID)
+		userIds = append(userIds, item.LastAnsweredUserID)
+
 	}
 	tagsMap, err := qs.tagCommon.BatchGetObjectTag(ctx, objectIds)
 	if err != nil {
@@ -254,7 +257,14 @@ func (qs *QuestionCommon) ListFormat(ctx context.Context, questionList []*entity
 		if ok {
 			item.UserInfo = userInfoMap[item.UserID]
 			item.UpdateUserInfo = userInfoMap[item.UserID]
-			item.LastAnsweredUserInfo = userInfoMap[item.UserID]
+		}
+		_, ok = userInfoMap[item.LastEditUserID]
+		if ok {
+			item.UpdateUserInfo = userInfoMap[item.UserID]
+		}
+		_, ok = userInfoMap[item.LastAnsweredUserID]
+		if ok {
+			item.LastAnsweredUserInfo = userInfoMap[item.LastAnsweredUserID]
 		}
 	}
 
@@ -389,6 +399,18 @@ func (qs *QuestionCommon) ShowFormat(ctx context.Context, data *entity.Question)
 	}
 	info.Status = data.Status
 	info.UserID = data.UserID
+	info.LastEditUserID = data.LastEditUserID
+	if data.LastAnswerID != "0" {
+		answerInfo, exist, err := qs.answerRepo.GetAnswer(ctx, data.LastAnswerID)
+		if err == nil && exist {
+			if answerInfo.LastEditUserID != "0" {
+				info.LastAnsweredUserID = answerInfo.LastEditUserID
+			} else {
+				info.LastAnsweredUserID = answerInfo.UserID
+			}
+		}
+
+	}
 	info.Tags = make([]*schema.TagResp, 0)
 	return &info
 }

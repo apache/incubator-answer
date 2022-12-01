@@ -225,10 +225,14 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	insertData := new(entity.Answer)
 	insertData.ID = req.ID
 	insertData.QuestionID = req.QuestionID
-	insertData.UserID = req.UserID
 	insertData.OriginalText = req.Content
 	insertData.ParsedText = req.HTML
 	insertData.UpdatedAt = now
+
+	insertData.LastEditUserID = "0"
+	if answerInfo.UserID != req.UserID {
+		insertData.LastEditUserID = req.UserID
+	}
 
 	revisionDTO := &schema.AddRevisionDTO{
 		UserID:   req.UserID,
@@ -457,6 +461,7 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, answers []*entity
 		list = append(list, item)
 		objectIDs = append(objectIDs, info.ID)
 		userIDs = append(userIDs, info.UserID)
+		userIDs = append(userIDs, info.LastEditUserID)
 		if req.UserID != "" {
 			item.VoteStatus = as.voteRepo.GetVoteStatus(ctx, item.ID, req.UserID)
 		}
@@ -469,7 +474,10 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, answers []*entity
 		_, ok := userInfoMap[item.UserID]
 		if ok {
 			item.UserInfo = userInfoMap[item.UserID]
-			item.UpdateUserInfo = userInfoMap[item.UserID]
+		}
+		_, ok = userInfoMap[item.UpdateUserID]
+		if ok {
+			item.UpdateUserInfo = userInfoMap[item.UpdateUserID]
 		}
 	}
 

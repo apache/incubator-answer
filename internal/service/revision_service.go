@@ -128,7 +128,8 @@ func (rs *RevisionService) revisionAuditQuestion(ctx context.Context, revisionit
 		question.ParsedText = questioninfo.HTML
 		question.UpdatedAt = now
 		question.PostUpdateTime = now
-		saveerr := rs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at", "post_update_time"})
+		question.LastEditUserID = revisionitem.UserID
+		saveerr := rs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at", "post_update_time", "last_edit_user_id"})
 		if saveerr != nil {
 			return saveerr
 		}
@@ -165,7 +166,8 @@ func (rs *RevisionService) revisionAuditAnswer(ctx context.Context, revisionitem
 		insertData.OriginalText = answerinfo.Content
 		insertData.ParsedText = answerinfo.HTML
 		insertData.UpdatedAt = now
-		saveerr := rs.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"})
+		insertData.LastEditUserID = revisionitem.UserID
+		saveerr := rs.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time", "last_edit_user_id"})
 		if saveerr != nil {
 			return saveerr
 		}
