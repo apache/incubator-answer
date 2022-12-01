@@ -284,6 +284,7 @@ export interface HeadInfo {
   title?: string;
   description?: string;
   keywords?: string;
+  ldJSON?;
 }
 
 export interface AdminSettingsInterface {
