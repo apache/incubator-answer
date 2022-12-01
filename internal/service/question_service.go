@@ -282,6 +282,14 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return
 	}
 
+	dbinfo, has, err := qs.questionRepo.GetQuestion(ctx, req.ID)
+	if err != nil {
+		return
+	}
+	if !has {
+		return
+	}
+
 	now := time.Now()
 	question := &entity.Question{}
 	question.Title = req.Title
@@ -290,13 +298,8 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	question.ID = req.ID
 	question.UpdatedAt = now
 	question.PostUpdateTime = now
-	dbinfo, has, err := qs.questionRepo.GetQuestion(ctx, question.ID)
-	if err != nil {
-		return
-	}
-	if !has {
-		return
-	}
+	question.UserID = dbinfo.UserID
+
 	question.LastEditUserID = "0"
 	if dbinfo.UserID != req.UserID {
 		question.LastEditUserID = req.UserID

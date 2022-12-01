@@ -229,6 +229,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	now := time.Now()
 	insertData := new(entity.Answer)
 	insertData.ID = req.ID
+	insertData.UserID = answerInfo.UserID
 	insertData.QuestionID = req.QuestionID
 	insertData.OriginalText = req.Content
 	insertData.ParsedText = req.HTML
@@ -246,7 +247,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		Log:      req.EditSummary,
 	}
 
-	if req.NoNeedReview || req.IsAdmin || answerInfo.UserID == req.UserID {
+	if req.NoNeedReview || answerInfo.UserID == req.UserID {
 		canUpdate = true
 	}
 

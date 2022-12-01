@@ -157,7 +157,6 @@ type UpdateTagReq struct {
 	EditSummary string `validate:"omitempty" json:"edit_summary"`
 	// user id
 	UserID       string `json:"-"`
-	IsAdmin      bool   `json:"-"`
 	NoNeedReview bool   `json:"-"`
 }
 
@@ -166,6 +165,11 @@ func (r *UpdateTagReq) Check() (errFields []*validator.FormErrorField, err error
 		r.EditSummary = "tag.edit.summary" // to do i18n
 	}
 	return nil, nil
+}
+
+// UpdateTagResp update tag response
+type UpdateTagResp struct {
+	WaitForReview bool `json:"wait_for_review"`
 }
 
 // GetTagWithPageReq get tag list page request
