@@ -73,7 +73,9 @@ const Index: FC = () => {
       <Row className="py-3 justify-content-center">
         <Col xxl={10}>
           <h5 className="mb-4">
-            {t('title')}{' '}
+            {timelineData?.object_info.object_type === 'tag'
+              ? t('tag_title')
+              : t('title')}{' '}
             <Link to={linkUrl}>{timelineData?.object_info?.title}</Link>
           </h5>
           {timelineData?.object_info.object_type !== 'tag' && (
