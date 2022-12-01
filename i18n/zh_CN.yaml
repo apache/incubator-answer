@@ -571,7 +571,7 @@ ui:
         character: '用户名只能由 "a-z", "0-9", " - . _" 组成'
       avatar:
         label: 头像
-        text: 您可以上传图片作为头像，也可以 <1>重置</1> 为
+        text: 您可以上传图片作为头像。
       bio:
         label: 关于我 (可选)
       website:

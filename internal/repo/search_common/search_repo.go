@@ -3,9 +3,10 @@ package search_common
 import (
 	"context"
 	"fmt"
-	"github.com/answerdev/answer/pkg/htmltext"
 	"strings"
 	"time"
+
+	"github.com/answerdev/answer/pkg/htmltext"
 
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -67,7 +68,7 @@ func NewSearchRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo, userCommon
 }
 
 // SearchContents search question and answer data
-func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID, userID string, votes int, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
+func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs []string, userID string, votes int, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
 	if words = filterWords(words); len(words) == 0 {
 		return
 	}
@@ -116,10 +117,12 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 	}
 
 	// check tag
-	if tagID != "" {
+	if len(tagIDs) > 0 {
 		b.Join("INNER", "tag_rel", "question.id = tag_rel.object_id").
-			Where(builder.Eq{"tag_rel.tag_id": tagID})
-		argsQ = append(argsQ, tagID)
+			Where(builder.In("tag_rel.tag_id", tagIDs))
+		for _, tagID := range tagIDs {
+			argsQ = append(argsQ, tagID)
+		}
 	}
 
 	// check user
@@ -193,7 +196,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagID,
 }
 
 // SearchQuestions search question data
-func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limitNoAccepted bool, answers, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
+func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, notAccepted bool, views, answers int, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
 	if words = filterWords(words); len(words) == 0 {
 		return
 	}
@@ -223,9 +226,24 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 	}
 
 	// check need filter has not accepted
-	if limitNoAccepted {
+	if notAccepted {
 		b.And(builder.Eq{"accepted_answer_id": 0})
 		args = append(args, 0)
+	}
+
+	// check views
+	if views > -1 {
+		b.And(builder.Gte{"view_count": views})
+		args = append(args, views)
+	}
+
+	// check answers
+	if answers == 0 {
+		b.And(builder.Eq{"answer_count": answers})
+		args = append(args, answers)
+	} else if answers > 0 {
+		b.And(builder.Gte{"answer_count": answers})
+		args = append(args, answers)
 	}
 
 	if answers == 0 {
@@ -274,7 +292,7 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, limit
 }
 
 // SearchAnswers search answer data
-func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAccepted bool, questionID string, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
+func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs []string, accepted bool, questionID string, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
 	if words = filterWords(words); len(words) == 0 {
 		return
 	}
@@ -303,11 +321,23 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, limitAc
 		}
 	}
 
-	if limitAccepted {
+	// check tags
+	// check tag
+	if len(tagIDs) > 0 {
+		b.Join("INNER", "tag_rel", "question.id = tag_rel.object_id").
+			Where(builder.In("tag_rel.tag_id", tagIDs))
+		for _, tagID := range tagIDs {
+			args = append(args, tagID)
+		}
+	}
+
+	// check limit accepted
+	if accepted {
 		b.Where(builder.Eq{"adopted": schema.AnswerAdoptedEnable})
 		args = append(args, schema.AnswerAdoptedEnable)
 	}
 
+	// check question id
 	if questionID != "" {
 		b.Where(builder.Eq{"question_id": questionID})
 		args = append(args, questionID)
@@ -390,11 +420,12 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 
 		// get tags
 		err = sr.data.DB.
-			Select("`display_name`,`slug_name`,`main_tag_slug_name`").
+			Select("`display_name`,`slug_name`,`main_tag_slug_name`,`recommend`,`reserved`").
 			Table("tag").
 			Join("INNER", "tag_rel", "tag.id = tag_rel.tag_id").
 			Where(builder.Eq{"tag_rel.object_id": r["question_id"]}).
 			And(builder.Eq{"tag_rel.status": entity.TagRelStatusAvailable}).
+			UseBool("recommend", "reserved").
 			Find(&tagsEntity)
 
 		if err != nil {
@@ -421,6 +452,7 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 
 		object = schema.SearchObject{
 			ID:              string(r["id"]),
+			QuestionID:      string(r["question_id"]),
 			Title:           string(r["title"]),
 			Excerpt:         htmltext.FetchExcerpt(string(r["parsed_text"]), "...", 240),
 			CreatedAtParsed: tp.Unix(),

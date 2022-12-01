@@ -10,6 +10,7 @@ type SearchDTO struct {
 
 type SearchObject struct {
 	ID              string `json:"id"`
+	QuestionID      string `json:"question_id"`
 	Title           string `json:"title"`
 	Excerpt         string `json:"excerpt"`
 	CreatedAtParsed int64  `json:"created_at"`
@@ -29,6 +30,8 @@ type TagResp struct {
 	DisplayName string `json:"display_name"`
 	// if main tag slug name is not empty, this tag is synonymous with the main tag
 	MainTagSlugName string `json:"main_tag_slug_name"`
+	Recommend       bool   `json:"recommend"`
+	Reserved        bool   `json:"reserved"`
 }
 
 type SearchResp struct {

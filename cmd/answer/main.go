@@ -20,7 +20,7 @@ var (
 	// Name is the name of the project
 	Name = "answer"
 	// Version is the version of the project
-	Version = "development"
+	Version = "0.0.0"
 	// Revision is the git short commit revision number
 	Revision = ""
 	// Time is the build time of the project

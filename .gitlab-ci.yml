@@ -27,6 +27,8 @@ stages:
 "compile the golang project":
   image: golang:1.18
   stage: compile-golang
+  before_script:
+    - export GOPROXY=https://goproxy.cn,direct
   script:
     - make generate
     - make build

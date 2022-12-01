@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -105,6 +106,16 @@ func (qs *QuestionService) CloseMsgList(ctx context.Context, lang i18n.Language)
 
 // AddQuestion add question
 func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd) (questionInfo *schema.QuestionInfo, err error) {
+	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
+	if err != nil {
+		return
+	}
+	if !recommendExist {
+		err = fmt.Errorf("recommend is not exist")
+		err = errors.BadRequest(reason.RecommendTagNotExist).WithError(err).WithStack()
+		return
+	}
+
 	questionInfo = &schema.QuestionInfo{}
 	question := &entity.Question{}
 	now := time.Now()
@@ -215,6 +226,28 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	if dbinfo.UserID != req.UserID {
 		return
 	}
+
+	//CheckChangeTag
+	oldTags, err := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
+	if err != nil {
+		return
+	}
+	tagNameList := make([]string, 0)
+	for _, tag := range req.Tags {
+		tagNameList = append(tagNameList, tag.SlugName)
+	}
+	Tags, err := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
+	if err != nil {
+		return
+	}
+	CheckTag, CheckTaglist := qs.CheckChangeTag(ctx, oldTags, Tags)
+	if !CheckTag {
+		err = errors.BadRequest(reason.UnauthorizedError).WithMsg(fmt.Sprintf("tag [%s] cannot be modified",
+			strings.Join(CheckTaglist, ",")))
+		return
+	}
+
+	//update question to db
 	err = qs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at"})
 	if err != nil {
 		return
@@ -264,6 +297,10 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, id, loginUserID stri
 
 func (qs *QuestionService) ChangeTag(ctx context.Context, objectTagData *schema.TagChange) error {
 	return qs.tagCommon.ObjectChangeTag(ctx, objectTagData)
+}
+
+func (qs *QuestionService) CheckChangeTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
+	return qs.tagCommon.ObjectCheckChangeTag(ctx, oldobjectTagData, objectTagData)
 }
 
 func (qs *QuestionService) SearchUserList(ctx context.Context, userName, order string, page, pageSize int, loginUserID string) ([]*schema.UserQuestionInfo, int64, error) {
@@ -502,14 +539,13 @@ func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID strin
 // SearchList
 func (qs *QuestionService) SearchList(ctx context.Context, req *schema.QuestionSearch, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
 	if len(req.Tag) > 0 {
-		taginfo, has, err := qs.tagCommon.GetTagListByName(ctx, req.Tag)
+		tagInfo, has, err := qs.tagCommon.GetTagBySlugName(ctx, strings.ToLower(req.Tag))
 		if err != nil {
 			log.Error("tagCommon.GetTagListByNames error", err)
 		}
 		if has {
-			req.TagIDs = append(req.TagIDs, taginfo.ID)
+			req.TagIDs = append(req.TagIDs, tagInfo.ID)
 		}
-
 	}
 	list := make([]*schema.QuestionInfo, 0)
 	if req.UserName != "" {

@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 
 import type * as Type from '@/common/interface';
 
+const { gt, gte } = require('semver');
+
 interface IProps {
   data: Type.AdminDashboard['info'];
 }
@@ -12,7 +14,12 @@ interface IProps {
 const HealthStatus: FC<IProps> = ({ data }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'admin.dashboard' });
   const { version, remote_version } = data.version_info || {};
-  const isLatest = version === remote_version;
+  let isLatest = false;
+  let hasNewerVersion = false;
+  if (version && remote_version) {
+    isLatest = gte(version, remote_version);
+    hasNewerVersion = gt(remote_version, version);
+  }
   return (
     <Card className="mb-4">
       <Card.Body>
@@ -30,7 +37,7 @@ const HealthStatus: FC<IProps> = ({ data }) => {
                 {t('latest')}
               </a>
             )}
-            {!isLatest && remote_version && (
+            {!isLatest && hasNewerVersion && (
               <a
                 className="ms-1 badge rounded-pill text-bg-warning"
                 target="_blank"

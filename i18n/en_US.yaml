@@ -74,6 +74,10 @@ backend:
     tag:
       not_found:
         other: "Tag not found."
+      recommend_tag_not_found:
+        other: "Recommend Tag is not exist."
+      not_contain_synonym_tags:
+        other: "Should not contain synonym tags."
     theme:
       not_found:
         other: "Theme not found."
@@ -1187,8 +1191,9 @@ ui:
         label: Recommend Tags
         text: "Please input tag slug above, one tag per line."
       required_tag:
-        label: Required Tag
-        text: "Every new question must have at least one recommend tag"
+        title: Required Tag
+        label: Set recommend tag as required
+        text: "Every new question must have at least one recommend tag."
       reserved_tags:
         label: Reserved Tags
         text: "Reserved tags can only be added to a post by moderator."
@@ -1198,7 +1203,7 @@ ui:
     btn_submit: Save
     not_found_props: "Required property {{ key }} not found."
   page_review:
-    review: Reivew
+    review: Review
     proposed: proposed
     question_edit: Question edit
     answer_edit: Answer edit
@@ -1224,11 +1229,12 @@ ui:
     reopened: reopened
     created: created
     title: "History for"
+    tag_title: "Timeline for"
     show_votes: "Show votes"
     n_or_a: N/A
     title_for_question: "Timeline for"
-    title_for_answer: "Timeline for answers to {{ title }} by {{ author }}"
-    title_for_tag: "Title for tag"
+    title_for_answer: "Timeline for answer to {{ title }} by {{ author }}"
+    title_for_tag: "Timeline for tag"
     datetime: Datetime
     type: Type
     by: By

@@ -62,6 +62,13 @@ const Ask = () => {
       ...formData,
       answer: { ...formData.answer, value },
     });
+  const handleSummaryChange = (evt) => {
+    const v = evt.currentTarget.value;
+    setFormData({
+      ...formData,
+      description: { ...formData.description, value: v },
+    });
+  };
 
   const checkValidated = (): boolean => {
     let bol = true;
@@ -100,6 +107,7 @@ const Ask = () => {
       html: editorRef.current.getHtml(),
       question_id: qid,
       id: aid,
+      edit_summary: formData.description.value,
     };
     modifyAnswer(params).then(() => {
       navigate(`/questions/${qid}/${aid}`);
@@ -132,7 +140,7 @@ const Ask = () => {
               <h5 className="mb-3">{data?.question.title}</h5>
             </a>
 
-            <div className="content-wrap">
+            <div className="question-content-wrap">
               <div
                 ref={questionContentRef}
                 className="content position-absolute top-0 w-100"
@@ -166,7 +174,7 @@ const Ask = () => {
                 </Form.Select>
               </Form.Group>
 
-              <Form.Group controlId="answer" className="mt-4">
+              <Form.Group controlId="answer" className="mt-3">
                 <Form.Label>{t('form.fields.answer.label')}</Form.Label>
                 <Editor
                   value={formData.answer.value}
@@ -198,6 +206,7 @@ const Ask = () => {
                 <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>
                 <Form.Control
                   type="text"
+                  onChange={handleSummaryChange}
                   defaultValue={formData.description.value}
                   isInvalid={formData.description.isInvalid}
                   placeholder={t('form.fields.edit_summary.placeholder')}
