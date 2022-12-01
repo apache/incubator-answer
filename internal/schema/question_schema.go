@@ -120,6 +120,11 @@ type QuestionInfo struct {
 	MemberActions []*PermissionMemberAction `json:"member_actions"`
 }
 
+// UpdateQuestionResp update question resp
+type UpdateQuestionResp struct {
+	WaitForReview bool `json:"wait_for_review"`
+}
+
 type AdminQuestionInfo struct {
 	ID               string         `json:"id"`
 	Title            string         `json:"title"`
