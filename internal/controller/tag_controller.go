@@ -108,7 +108,11 @@ func (tc *TagController) UpdateTag(ctx *gin.Context) {
 	req.NoNeedReview = canList[1]
 
 	err = tc.tagService.UpdateTag(ctx, req)
-	handler.HandleResponse(ctx, err, nil)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+	} else {
+		handler.HandleResponse(ctx, err, &schema.UpdateTagResp{WaitForReview: !req.NoNeedReview})
+	}
 }
 
 // GetTagInfo get tag one

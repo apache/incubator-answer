@@ -241,7 +241,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		Log:      req.EditSummary,
 	}
 
-	if req.NoNeedReview || req.IsAdmin || answerInfo.UserID == req.UserID {
+	if req.NoNeedReview || answerInfo.UserID == req.UserID {
 		canUpdate = true
 	}
 
