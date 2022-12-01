@@ -188,10 +188,21 @@ type GetTagWithPageReq struct {
 type GetTagSynonymsReq struct {
 	// tag_id
 	TagID string `validate:"required" form:"tag_id"`
+	// user id
+	UserID string `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
 }
 
 // GetTagSynonymsResp get tag synonyms response
 type GetTagSynonymsResp struct {
+	// synonyms
+	Synonyms []*TagSynonym `json:"synonyms"`
+	// MemberActions
+	MemberActions []*PermissionMemberAction `json:"member_actions"`
+}
+
+type TagSynonym struct {
 	// tag id
 	TagID string `json:"tag_id"`
 	// slug name
