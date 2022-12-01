@@ -657,7 +657,7 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, req *schema.UpdateTag
 		Log:      req.EditSummary,
 	}
 
-	if req.IsAdmin || req.NoNeedReview {
+	if req.NoNeedReview {
 		canUpdate = true
 		err = ts.tagRepo.UpdateTag(ctx, tagInfo)
 		if err != nil {
