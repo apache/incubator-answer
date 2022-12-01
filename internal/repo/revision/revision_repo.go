@@ -5,6 +5,7 @@ import (
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/revision"
@@ -165,37 +166,21 @@ func (rr *revisionRepo) allowRecord(objectType int) (ok bool) {
 	}
 }
 
-func (rr *revisionRepo) SearchUnreviewedList(ctx context.Context, search *entity.RevisionSearch) ([]*entity.Revision, int64, error) {
-	var count int64
-	var err error
-	rows := make([]*entity.Revision, 0)
-	if search.Page > 0 {
-		search.Page = search.Page - 1
-	} else {
-		search.Page = 0
+// GetUnreviewedRevisionPage get unreviewed revision page
+func (rr *revisionRepo) GetUnreviewedRevisionPage(ctx context.Context, page int, pageSize int,
+	objectTypeList []int) (revisionList []*entity.Revision, total int64, err error) {
+	revisionList = make([]*entity.Revision, 0)
+	if len(objectTypeList) == 0 {
+		return revisionList, 0, nil
 	}
-	PageSize := 1
-	offset := search.Page * PageSize
-	objectType := make([]int, 0)
-	if search.CanReviewAnswer {
-		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.AnswerObjectType])
-	}
-	if search.CanReviewQuestion {
-		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.QuestionObjectType])
-	}
-	if search.CanReviewTag {
-		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.TagObjectType])
-	}
-
-	session := rr.data.DB.Where("")
+	session := rr.data.DB.NewSession()
 	session = session.And("status = ?", entity.RevisionUnreviewedStatus)
-	session = session.In("object_type", objectType)
-	session = session.And("status = ?", entity.RevisionUnreviewedStatus)
+	session = session.In("object_type", objectTypeList)
 	session = session.OrderBy("created_at desc")
-	session = session.Limit(PageSize, offset)
-	count, err = session.FindAndCount(&rows)
+
+	total, err = pager.Help(page, pageSize, &revisionList, &entity.Revision{}, session)
 	if err != nil {
-		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	return rows, count, nil
+	return
 }

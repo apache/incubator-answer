@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/base/validator"
@@ -129,7 +130,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		errorlist := make([]*validator.FormErrorField, 0)
 		errorlist = append(errorlist, &validator.FormErrorField{
 			ErrorField: "tags",
-			ErrorMsg:   reason.RecommendTagEnter,
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), reason.RecommendTagEnter),
 		})
 		err = errors.BadRequest(reason.RecommendTagEnter)
 		return errorlist, err
@@ -350,7 +351,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		errorlist := make([]*validator.FormErrorField, 0)
 		errorlist = append(errorlist, &validator.FormErrorField{
 			ErrorField: "tags",
-			ErrorMsg:   reason.RecommendTagEnter,
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), reason.RecommendTagEnter),
 		})
 		err = errors.BadRequest(reason.RecommendTagEnter)
 		return errorlist, err
@@ -857,17 +858,4 @@ func (qs *QuestionService) changeQuestionToRevision(ctx context.Context, questio
 		questionRevision.Tags = append(questionRevision.Tags, item)
 	}
 	return questionRevision, nil
-}
-
-// CheckCanUpdate can check question answer
-func (qs *QuestionService) CheckCanUpdate(ctx context.Context, req *schema.CheckCanQuestionUpdate) (exist bool, err error) {
-	_, existUnreviewed, err := qs.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
-	if err != nil {
-		return false, err
-	}
-	if existUnreviewed {
-		err = errors.BadRequest(reason.RevisionReviewUnderway)
-		return existUnreviewed, err
-	}
-	return existUnreviewed, nil
 }

@@ -2,6 +2,8 @@ package schema
 
 import (
 	"time"
+
+	"github.com/answerdev/answer/internal/base/constant"
 )
 
 // AddRevisionDTO add revision request
@@ -45,6 +47,20 @@ type RevisionSearch struct {
 	CanReviewAnswer   bool   `json:"-"`
 	CanReviewTag      bool   `json:"-"`
 	UserID            string `json:"-"`
+}
+
+func (r RevisionSearch) GetCanReviewObjectTypes() []int {
+	objectType := make([]int, 0)
+	if r.CanReviewAnswer {
+		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.AnswerObjectType])
+	}
+	if r.CanReviewQuestion {
+		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.QuestionObjectType])
+	}
+	if r.CanReviewTag {
+		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.TagObjectType])
+	}
+	return objectType
 }
 
 type GetUnreviewedRevisionResp struct {

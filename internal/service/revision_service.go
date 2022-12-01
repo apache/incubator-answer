@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
@@ -48,7 +49,6 @@ func NewRevisionService(
 	answerRepo answercommon.AnswerRepo,
 	tagRepo tag_common.TagRepo,
 	tagCommon *tagcommon.TagCommonService,
-
 ) *RevisionService {
 	return &RevisionService{
 		revisionRepo:      revisionRepo,
@@ -247,43 +247,48 @@ func (rs *RevisionService) revisionAuditTag(ctx context.Context, revisionitem *s
 	return nil
 }
 
-// SearchUnreviewedList get unreviewed list
-func (rs *RevisionService) GetUnreviewedRevisionList(ctx context.Context, req *schema.RevisionSearch) (resp []*schema.GetUnreviewedRevisionResp, count int64, err error) {
-	resp = []*schema.GetUnreviewedRevisionResp{}
-	search := &entity.RevisionSearch{}
-	_ = copier.Copy(search, req)
-	list, count, err := rs.revisionRepo.SearchUnreviewedList(ctx, search)
-	for _, revision := range list {
+// GetUnreviewedRevisionPage get unreviewed list
+func (rs *RevisionService) GetUnreviewedRevisionPage(ctx context.Context, req *schema.RevisionSearch) (
+	resp *pager.PageModel, err error) {
+	revisionResp := make([]*schema.GetUnreviewedRevisionResp, 0)
+	if len(req.GetCanReviewObjectTypes()) == 0 {
+		return pager.NewPageModel(0, revisionResp), nil
+	}
+	revisionPage, total, err := rs.revisionRepo.GetUnreviewedRevisionPage(
+		ctx, req.Page, 1, req.GetCanReviewObjectTypes())
+	if err != nil {
+		return nil, err
+	}
+	for _, rev := range revisionPage {
 		item := &schema.GetUnreviewedRevisionResp{}
-		_, ok := constant.ObjectTypeNumberMapping[revision.ObjectType]
+		_, ok := constant.ObjectTypeNumberMapping[rev.ObjectType]
 		if !ok {
 			continue
 		}
-		item.Type = constant.ObjectTypeNumberMapping[revision.ObjectType]
-		info, infoerr := rs.objectInfoService.GetUnreviewedRevisionInfo(ctx, revision.ObjectID)
-		if infoerr != nil {
-			return resp, 0, infoerr
+		item.Type = constant.ObjectTypeNumberMapping[rev.ObjectType]
+		info, err := rs.objectInfoService.GetUnreviewedRevisionInfo(ctx, rev.ObjectID)
+		if err != nil {
+			return nil, err
 		}
 		item.Info = info
 		revisionitem := &schema.GetRevisionResp{}
-		_ = copier.Copy(revisionitem, revision)
+		_ = copier.Copy(revisionitem, rev)
 		rs.parseItem(ctx, revisionitem)
 		item.UnreviewedInfo = revisionitem
 
 		// get user info
 		userInfo, exists, e := rs.userCommon.GetUserBasicInfoByID(ctx, revisionitem.UserID)
 		if e != nil {
-			return resp, 0, e
+			return nil, e
 		}
 		if exists {
 			var uinfo schema.UserBasicInfo
 			err = copier.Copy(&uinfo, userInfo)
 			item.UnreviewedInfo.UserInfo = uinfo
 		}
-
-		resp = append(resp, item)
+		revisionResp = append(revisionResp, item)
 	}
-	return
+	return pager.NewPageModel(total, revisionResp), nil
 }
 
 // GetRevisionList get revision list all
@@ -376,4 +381,16 @@ func (rs *RevisionService) parseItem(ctx context.Context, item *schema.GetRevisi
 		item.ContentParsed = item.Content
 	}
 	item.CreatedAtParsed = item.CreatedAt.Unix()
+}
+
+// CheckCanUpdateRevision can check revision
+func (rs *RevisionService) CheckCanUpdateRevision(ctx context.Context, req *schema.CheckCanQuestionUpdate) (err error) {
+	_, exist, err := rs.revisionRepo.ExistUnreviewedByObjectID(ctx, req.ID)
+	if err != nil {
+		return err
+	}
+	if exist {
+		return errors.BadRequest(reason.RevisionReviewUnderway)
+	}
+	return nil
 }
