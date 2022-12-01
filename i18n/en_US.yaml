@@ -1222,7 +1222,7 @@ ui:
     btn_submit: Save
     not_found_props: "Required property {{ key }} not found."
   page_review:
-    review: Reivew
+    review: Review
     proposed: proposed
     question_edit: Question edit
     answer_edit: Answer edit
