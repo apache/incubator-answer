@@ -142,7 +142,7 @@ const Ask = () => {
               <h5 className="mb-3">{data?.question.title}</h5>
             </a>
 
-            <div className="content-wrap">
+            <div className="question-content-wrap">
               <div
                 ref={questionContentRef}
                 className="content position-absolute top-0 w-100"
@@ -176,7 +176,7 @@ const Ask = () => {
                 </Form.Select>
               </Form.Group>
 
-              <Form.Group controlId="answer" className="mt-4">
+              <Form.Group controlId="answer" className="mt-3">
                 <Form.Label>{t('form.fields.answer.label')}</Form.Label>
                 <Editor
                   value={formData.answer.value}
