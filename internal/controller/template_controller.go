@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"net/url"
 	"regexp"
 	"time"
 
@@ -77,6 +78,7 @@ func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.TemplateSiteInf
 func (tc *TemplateController) Index(ctx *gin.Context) {
 	req := &schema.QuestionSearch{}
 	if handler.BindAndCheck(ctx, req) {
+		tc.Page404(ctx)
 		return
 	}
 
@@ -87,8 +89,33 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
+	siteInfo := tc.SiteInfo(ctx)
+	siteInfo.Canonical = fmt.Sprintf("%s", siteInfo.General.SiteUrl)
 	ctx.HTML(http.StatusOK, "question.html", gin.H{
-		"siteinfo":   tc.SiteInfo(ctx),
+		"siteinfo":   siteInfo,
+		"scriptPath": tc.scriptPath,
+		"cssPath":    tc.cssPath,
+		"data":       data,
+		"page":       templaterender.Paginator(page, req.PageSize, count),
+	})
+}
+
+func (tc *TemplateController) QuestionList(ctx *gin.Context) {
+	req := &schema.QuestionSearch{}
+	if handler.BindAndCheck(ctx, req) {
+		tc.Page404(ctx)
+		return
+	}
+	var page = req.Page
+	data, count, err := tc.templateRenderController.Index(ctx, req)
+	if err != nil {
+		tc.Page404(ctx)
+		return
+	}
+	siteInfo := tc.SiteInfo(ctx)
+	siteInfo.Canonical = fmt.Sprintf("%s/questions", siteInfo.General.SiteUrl)
+	ctx.HTML(http.StatusOK, "question.html", gin.H{
+		"siteinfo":   siteInfo,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
 		"data":       data,
@@ -100,12 +127,15 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	id := ctx.Param("id")
 	answerid := ctx.Param("answerid")
+	siteInfo := tc.SiteInfo(ctx)
+	encodeTitle := url.QueryEscape("title")
+	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
 	ctx.HTML(http.StatusOK, "question-detail.html", gin.H{
 		"id":         id,
 		"answerid":   answerid,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
-		"siteinfo":   tc.SiteInfo(ctx),
+		"siteinfo":   siteInfo,
 	})
 }
 
@@ -126,12 +156,14 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 		return
 	}
 	page := templaterender.Paginator(req.Page, req.PageSize, data.Count)
+	siteInfo := tc.SiteInfo(ctx)
+	siteInfo.Canonical = fmt.Sprintf("%s/tags", siteInfo.General.SiteUrl)
 	ctx.HTML(http.StatusOK, "tags.html", gin.H{
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
 		"page":       page,
 		"data":       data,
-		"siteinfo":   tc.SiteInfo(ctx),
+		"siteinfo":   siteInfo,
 	})
 }
 
@@ -161,14 +193,15 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 		return
 	}
 	page := templaterender.Paginator(nowPage, req.PageSize, questionCount)
-
+	siteInfo := tc.SiteInfo(ctx)
+	siteInfo.Canonical = fmt.Sprintf("%s/tags/%s", siteInfo.General.SiteUrl, tag)
 	ctx.HTML(http.StatusOK, "tag-detail.html", gin.H{
 		"tag":           taginifo,
 		"questionList":  questionList,
 		"questionCount": questionCount,
 		"scriptPath":    tc.scriptPath,
 		"cssPath":       tc.cssPath,
-		"siteinfo":      tc.SiteInfo(ctx),
+		"siteinfo":      siteInfo,
 		"page":          page,
 	})
 }
@@ -197,8 +230,12 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 		})
 		return
 	}
+
+	siteInfo := tc.SiteInfo(ctx)
+	siteInfo.Canonical = fmt.Sprintf("%s/users/%s", siteInfo.General.SiteUrl, username)
+
 	ctx.HTML(http.StatusOK, "homepage.html", gin.H{
-		"siteinfo":   tc.SiteInfo(ctx),
+		"siteinfo":   siteInfo,
 		"userinfo":   userinfo,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,

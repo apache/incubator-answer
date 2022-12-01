@@ -100,6 +100,7 @@ type TemplateSiteInfoResp struct {
 	Interface *SiteInterfaceResp `json:"interface"`
 	Branding  *SiteBrandingResp  `json:"branding"`
 	Year      string
+	Canonical string
 }
 
 // UpdateSMTPConfigReq get smtp config request
