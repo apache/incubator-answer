@@ -184,14 +184,26 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 	}
 	showinfo.Tags = tagmap
 
-	userinfo, has, err := qs.userCommon.GetUserBasicInfoByID(ctx, dbinfo.UserID)
+	userIds := make([]string, 0)
+	userIds = append(userIds, dbinfo.UserID)
+	userIds = append(userIds, dbinfo.LastEditUserID)
+	userIds = append(userIds, showinfo.LastAnsweredUserID)
+	userInfoMap, err := qs.userCommon.BatchUserBasicInfoByID(ctx, userIds)
 	if err != nil {
 		return showinfo, err
 	}
-	if has {
-		showinfo.UserInfo = userinfo
-		showinfo.UpdateUserInfo = userinfo
-		showinfo.LastAnsweredUserInfo = userinfo
+
+	_, ok := userInfoMap[dbinfo.UserID]
+	if ok {
+		showinfo.UserInfo = userInfoMap[dbinfo.UserID]
+	}
+	_, ok = userInfoMap[dbinfo.LastEditUserID]
+	if ok {
+		showinfo.UpdateUserInfo = userInfoMap[dbinfo.LastEditUserID]
+	}
+	_, ok = userInfoMap[showinfo.LastAnsweredUserID]
+	if ok {
+		showinfo.LastAnsweredUserInfo = userInfoMap[showinfo.LastAnsweredUserID]
 	}
 
 	if loginUserID == "" {
@@ -216,7 +228,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 	if err != nil {
 		log.Error("CollectionFunc.SearchObjectCollected", err)
 	}
-	_, ok := CollectedMap[dbinfo.ID]
+	_, ok = CollectedMap[dbinfo.ID]
 	if ok {
 		showinfo.Collected = true
 	}
@@ -233,10 +245,9 @@ func (qs *QuestionCommon) ListFormat(ctx context.Context, questionList []*entity
 		item := qs.ShowListFormat(ctx, questionInfo)
 		list = append(list, item)
 		objectIds = append(objectIds, item.ID)
-		userIds = append(userIds, questionInfo.UserID)
-		userIds = append(userIds, questionInfo.LastEditUserID)
+		userIds = append(userIds, item.UserID)
+		userIds = append(userIds, item.LastEditUserID)
 		userIds = append(userIds, item.LastAnsweredUserID)
-
 	}
 	tagsMap, err := qs.tagCommon.BatchGetObjectTag(ctx, objectIds)
 	if err != nil {
@@ -256,11 +267,10 @@ func (qs *QuestionCommon) ListFormat(ctx context.Context, questionList []*entity
 		_, ok = userInfoMap[item.UserID]
 		if ok {
 			item.UserInfo = userInfoMap[item.UserID]
-			item.UpdateUserInfo = userInfoMap[item.UserID]
 		}
 		_, ok = userInfoMap[item.LastEditUserID]
 		if ok {
-			item.UpdateUserInfo = userInfoMap[item.UserID]
+			item.UpdateUserInfo = userInfoMap[item.LastEditUserID]
 		}
 		_, ok = userInfoMap[item.LastAnsweredUserID]
 		if ok {

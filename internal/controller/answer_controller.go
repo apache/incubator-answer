@@ -203,14 +203,18 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept  json
 // @Produce  json
-// @Param data body schema.AnswerListReq  true "AnswerListReq"
+// @Param question_id query string true "question_id"
+// @Param order query string true "order"
+// @Param page query string true "page"
+// @Param page_size query string true "page_size"
 // @Success 200 {string} string ""
-// @Router /answer/api/v1/answer/list [get]
+// @Router /answer/api/v1/answer/page [get]
 func (ac *AnswerController) AnswerList(ctx *gin.Context) {
 	req := &schema.AnswerListReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{

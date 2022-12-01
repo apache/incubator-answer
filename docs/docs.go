@@ -1294,7 +1294,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/answer/list": {
+        "/answer/api/v1/answer/page": {
             "get": {
                 "security": [
                     {
@@ -1314,13 +1314,32 @@ const docTemplate = `{
                 "summary": "AnswerList",
                 "parameters": [
                     {
-                        "description": "AnswerListReq",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schema.AnswerListReq"
-                        }
+                        "type": "string",
+                        "description": "question_id",
+                        "name": "question_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "order",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "page_size",
+                        "name": "page_size",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -4868,27 +4887,6 @@ const docTemplate = `{
             "properties": {
                 "answer_id": {
                     "type": "string"
-                },
-                "question_id": {
-                    "description": "question_id",
-                    "type": "string"
-                }
-            }
-        },
-        "schema.AnswerListReq": {
-            "type": "object",
-            "properties": {
-                "order": {
-                    "description": "1 Default 2 time",
-                    "type": "string"
-                },
-                "page": {
-                    "description": "Query number of pages",
-                    "type": "integer"
-                },
-                "page_size": {
-                    "description": "Search page size",
-                    "type": "integer"
                 },
                 "question_id": {
                     "description": "question_id",

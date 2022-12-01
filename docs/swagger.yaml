@@ -206,21 +206,6 @@ definitions:
         description: question_id
         type: string
     type: object
-  schema.AnswerListReq:
-    properties:
-      order:
-        description: 1 Default 2 time
-        type: string
-      page:
-        description: Query number of pages
-        type: integer
-      page_size:
-        description: Search page size
-        type: integer
-      question_id:
-        description: question_id
-        type: string
-    type: object
   schema.AnswerUpdateReq:
     properties:
       content:
@@ -2462,18 +2447,32 @@ paths:
       summary: Get Answer
       tags:
       - api-answer
-  /answer/api/v1/answer/list:
+  /answer/api/v1/answer/page:
     get:
       consumes:
       - application/json
       description: AnswerList <br> <b>order</b> (default or updated)
       parameters:
-      - description: AnswerListReq
-        in: body
-        name: data
+      - description: question_id
+        in: query
+        name: question_id
         required: true
-        schema:
-          $ref: '#/definitions/schema.AnswerListReq'
+        type: string
+      - description: order
+        in: query
+        name: order
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: page_size
+        in: query
+        name: page_size
+        required: true
+        type: string
       produces:
       - application/json
       responses:

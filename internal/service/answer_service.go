@@ -249,7 +249,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	if !canUpdate {
 		revisionDTO.Status = entity.RevisionUnreviewedStatus
 	} else {
-		if err = as.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time"}); err != nil {
+		if err = as.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "update_time", "last_edit_user_id"}); err != nil {
 			return "", err
 		}
 		err = as.questionCommon.UpdataPostTime(ctx, req.QuestionID)
@@ -370,13 +370,22 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) 
 		return nil, nil, has, err
 	}
 	// todo UserFunc
-	userinfo, has, err := as.userCommon.GetUserBasicInfoByID(ctx, answerInfo.UserID)
+
+	userIds := make([]string, 0)
+	userIds = append(userIds, answerInfo.UserID)
+	userIds = append(userIds, answerInfo.LastEditUserID)
+	userInfoMap, err := as.userCommon.BatchUserBasicInfoByID(ctx, userIds)
 	if err != nil {
 		return nil, nil, has, err
 	}
-	if has {
-		info.UserInfo = userinfo
-		info.UpdateUserInfo = userinfo
+
+	_, ok := userInfoMap[answerInfo.UserID]
+	if ok {
+		info.UserInfo = userInfoMap[answerInfo.UserID]
+	}
+	_, ok = userInfoMap[answerInfo.LastEditUserID]
+	if ok {
+		info.UpdateUserInfo = userInfoMap[answerInfo.LastEditUserID]
 	}
 
 	if loginUserID == "" {
@@ -389,7 +398,7 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) 
 	if err != nil {
 		log.Error("CollectionFunc.SearchObjectCollected error", err)
 	}
-	_, ok := CollectedMap[answerInfo.ID]
+	_, ok = CollectedMap[answerInfo.ID]
 	if ok {
 		info.Collected = true
 	}
