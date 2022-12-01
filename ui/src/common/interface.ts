@@ -69,6 +69,7 @@ export interface AnswerParams {
   html: string;
   question_id: string;
   id: string;
+  edit_summary?: string;
 }
 
 export interface LoginReqParams {

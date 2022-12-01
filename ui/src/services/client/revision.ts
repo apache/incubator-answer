@@ -1,5 +1,3 @@
-import useSWR from 'swr';
-
 import request from '@/utils/request';
 import * as Type from '@/common/interface';
 
@@ -16,16 +14,7 @@ export const revisionAudit = (id: string, operation: 'approve' | 'reject') => {
   });
 };
 
-export const useReviewList = (page: number) => {
+export const getReviewList = (page: number) => {
   const apiUrl = `/answer/api/v1/revisions/unreviewed?page=${page}`;
-  const { data, error, mutate } = useSWR<Type.ReviewResp, Error>(
-    apiUrl,
-    request.instance.get,
-  );
-  return {
-    data,
-    isLoading: !data && !error,
-    error,
-    mutate,
-  };
+  return request.get<Type.ReviewResp>(apiUrl);
 };
