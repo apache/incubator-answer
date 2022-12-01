@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { BaseUserCard, FormatTime, Empty, DiffContent } from '@/components';
-import { useReviewList, revisionAudit } from '@/services';
+import { getReviewList, revisionAudit } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 import type * as Type from '@/common/interface';
 
@@ -13,24 +13,46 @@ const Index: FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [noTasks, setNoTasks] = useState(false);
   const [page, setPage] = useState(1);
-  const { data: reviewResp, mutate: mutateList } = useReviewList(page);
+  const [reviewResp, setReviewResp] = useState<Type.ReviewResp>();
   const ro = reviewResp?.list[0];
   const { info, type, unreviewed_info } = ro || {
     info: null,
     type: '',
     unreviewed_info: null,
   };
-  const reviewInfo = unreviewed_info?.content;
-  const mutateNextPage = () => {
-    const count = reviewResp?.count;
-    if (count && page < count) {
-      setPage(page + 1);
-    } else {
+  const resolveNextOne = (resp, pageNumber) => {
+    const { count, list = [] } = resp;
+    // auto rollback
+    if (!list.length && count && page !== 1) {
+      pageNumber = 1;
+      setPage(pageNumber);
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      queryNextOne(pageNumber);
+      return;
+    }
+    if (pageNumber !== page) {
+      setPage(pageNumber);
+    }
+    setReviewResp(resp);
+    if (!list.length) {
       setNoTasks(true);
     }
+    setTimeout(() => {
+      window.scrollTo({ top: 0 });
+    }, 150);
   };
+  const queryNextOne = (pageNumber) => {
+    getReviewList(pageNumber)
+      .then((resp) => {
+        resolveNextOne(resp, pageNumber);
+      })
+      .catch((ex) => {
+        console.log('ex: ', ex);
+      });
+  };
+  const reviewInfo = unreviewed_info?.content;
   const handlingSkip = () => {
-    mutateNextPage();
+    queryNextOne(page + 1);
   };
   const handlingApprove = () => {
     if (!unreviewed_info) {
@@ -39,7 +61,7 @@ const Index: FC = () => {
     setIsLoading(true);
     revisionAudit(unreviewed_info.id, 'approve')
       .then(() => {
-        mutateList();
+        queryNextOne(page);
       })
       .catch((ex) => {
         console.log('ex: ', ex);
@@ -55,7 +77,7 @@ const Index: FC = () => {
     setIsLoading(true);
     revisionAudit(unreviewed_info.id, 'reject')
       .then(() => {
-        mutateList();
+        queryNextOne(page);
       })
       .catch((ex) => {
         console.log('ex: ', ex);
@@ -93,14 +115,8 @@ const Index: FC = () => {
     editSummary ||= t('edit_tag');
   }
   useEffect(() => {
-    if (!reviewResp) {
-      return;
-    }
-    window.scrollTo({ top: 0 });
-    if (!reviewResp.list || !reviewResp.list.length) {
-      setNoTasks(true);
-    }
-  }, [reviewResp]);
+    queryNextOne(page);
+  }, []);
   return (
     <Container className="pt-2 mt-4 mb-5">
       <Row>

@@ -62,6 +62,13 @@ const Ask = () => {
       ...formData,
       answer: { ...formData.answer, value },
     });
+  const handleSummaryChange = (evt) => {
+    const v = evt.currentTarget.value;
+    setFormData({
+      ...formData,
+      description: { ...formData.description, value: v },
+    });
+  };
 
   const checkValidated = (): boolean => {
     let bol = true;
@@ -100,6 +107,7 @@ const Ask = () => {
       html: editorRef.current.getHtml(),
       question_id: qid,
       id: aid,
+      edit_summary: formData.description.value,
     };
     modifyAnswer(params).then(() => {
       navigate(`/questions/${qid}/${aid}`);
@@ -198,6 +206,7 @@ const Ask = () => {
                 <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>
                 <Form.Control
                   type="text"
+                  onChange={handleSummaryChange}
                   defaultValue={formData.description.value}
                   isInvalid={formData.description.isInvalid}
                   placeholder={t('form.fields.edit_summary.placeholder')}
