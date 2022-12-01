@@ -60,6 +60,11 @@ const Ask = () => {
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [checked, setCheckState] = useState(false);
   const [focusType, setForceType] = useState('');
+  const resetForm = () => {
+    setFormData(initFormData);
+    setCheckState(false);
+    setForceType('');
+  };
 
   const editorRef = useRef<EditorRef>({
     getHtml: () => '',
@@ -75,7 +80,11 @@ const Ask = () => {
   const { data: similarQuestions = { list: [] } } = useQueryQuestionByTitle(
     isEdit ? '' : formData.title.value,
   );
-
+  useEffect(() => {
+    if (!isEdit) {
+      resetForm();
+    }
+  }, [isEdit]);
   const { data: revisions = [] } = useQueryRevisions(qid);
 
   useEffect(() => {
