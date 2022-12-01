@@ -178,21 +178,12 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	info, questionInfo, has, err := ac.answerService.Get(ctx, req.ID, req.UserID)
+	_, _, _, err = ac.answerService.Get(ctx, req.ID, req.UserID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	if !has {
-		// todo !has
-		handler.HandleResponse(ctx, nil, nil)
-		return
-	}
-	handler.HandleResponse(ctx, nil, &schema.AnswerUpdateResp{
-		AnswerInfo:    info,
-		QuestionInfo:  questionInfo,
-		WaitForReview: !req.NoNeedReview,
-	})
+	handler.HandleResponse(ctx, nil, &schema.AnswerUpdateResp{WaitForReview: !req.NoNeedReview})
 }
 
 // AnswerList godoc
@@ -202,14 +193,18 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept  json
 // @Produce  json
-// @Param data body schema.AnswerListReq  true "AnswerListReq"
+// @Param question_id query string true "question_id"
+// @Param order query string true "order"
+// @Param page query string true "page"
+// @Param page_size query string true "page_size"
 // @Success 200 {string} string ""
-// @Router /answer/api/v1/answer/list [get]
+// @Router /answer/api/v1/answer/page [get]
 func (ac *AnswerController) AnswerList(ctx *gin.Context) {
 	req := &schema.AnswerListReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{

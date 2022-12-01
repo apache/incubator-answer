@@ -36,9 +36,7 @@ type AnswerUpdateReq struct {
 
 // AnswerUpdateResp answer update resp
 type AnswerUpdateResp struct {
-	AnswerInfo    *AnswerInfo   `json:"info"`
-	QuestionInfo  *QuestionInfo `json:"question"`
-	WaitForReview bool          `json:"wait_for_review"`
+	WaitForReview bool `json:"wait_for_review"`
 }
 
 type AnswerListReq struct {
