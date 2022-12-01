@@ -68,6 +68,9 @@ func (as *AnswerCommon) ShowFormat(ctx context.Context, data *entity.Answer) *sc
 	info.VoteCount = data.VoteCount
 	info.CreateTime = data.CreatedAt.Unix()
 	info.UpdateTime = data.UpdatedAt.Unix()
+	if data.UpdatedAt.Unix() < 1 {
+		info.UpdateTime = 0
+	}
 	info.UserID = data.UserID
 	return &info
 }
@@ -80,6 +83,9 @@ func (as *AnswerCommon) AdminShowFormat(ctx context.Context, data *entity.Answer
 	info.VoteCount = data.VoteCount
 	info.CreateTime = data.CreatedAt.Unix()
 	info.UpdateTime = data.UpdatedAt.Unix()
+	if data.UpdatedAt.Unix() < 1 {
+		info.UpdateTime = 0
+	}
 	info.UserID = data.UserID
 	info.Description = htmltext.FetchExcerpt(data.ParsedText, "...", 240)
 	return &info

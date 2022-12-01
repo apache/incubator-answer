@@ -129,7 +129,6 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if !exist {
 		return "", errors.BadRequest(reason.QuestionNotFound)
 	}
-	now := time.Now()
 	insertData := new(entity.Answer)
 	insertData.UserID = req.UserID
 	insertData.OriginalText = req.Content
@@ -138,7 +137,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	insertData.QuestionID = req.QuestionID
 	insertData.RevisionID = "0"
 	insertData.Status = entity.AnswerStatusAvailable
-	insertData.UpdatedAt = now
+	//insertData.UpdatedAt = now
 	if err = as.answerRepo.AddAnswer(ctx, insertData); err != nil {
 		return "", err
 	}
