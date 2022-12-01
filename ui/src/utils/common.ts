@@ -1,4 +1,9 @@
+import { useEffect } from 'react';
+
 import i18next from 'i18next';
+
+import { HeadInfo } from '@/common/interface';
+import { headInfoStore } from '@/stores';
 
 const Diff = require('diff');
 
@@ -193,6 +198,15 @@ function diffText(newText: string, oldText: string): string {
     ?.replace(/<input/gi, '&lt;input');
 }
 
+function useHeadInfo(info: HeadInfo) {
+  const { update } = headInfoStore.getState();
+
+  useEffect(() => {
+    update(info);
+  }, [info]);
+  return null;
+}
+
 export {
   thousandthDivision,
   formatCount,
@@ -206,4 +220,5 @@ export {
   labelStyle,
   handleFormError,
   diffText,
+  useHeadInfo,
 };

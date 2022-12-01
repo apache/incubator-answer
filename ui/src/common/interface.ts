@@ -280,6 +280,12 @@ export interface AdminSettingsGeneral {
   contact_email: string;
 }
 
+export interface HeadInfo {
+  title?: string;
+  description?: string;
+  keywords?: string;
+}
+
 export interface AdminSettingsInterface {
   language: string;
   theme: string;
