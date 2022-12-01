@@ -7,12 +7,15 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/revision_common"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -31,6 +34,13 @@ type TagCommonRepo interface {
 	UpdateTagQuestionCount(ctx context.Context, tagID string, questionCount int) (err error)
 }
 
+type TagRepo interface {
+	RemoveTag(ctx context.Context, tagID string) (err error)
+	UpdateTag(ctx context.Context, tag *entity.Tag) (err error)
+	UpdateTagSynonym(ctx context.Context, tagSlugNameList []string, mainTagID int64, mainTagSlugName string) (err error)
+	GetTagList(ctx context.Context, tag *entity.Tag) (tagList []*entity.Tag, err error)
+}
+
 type TagRelRepo interface {
 	AddTagRelList(ctx context.Context, tagList []*entity.TagRel) (err error)
 	RemoveTagRelListByIDs(ctx context.Context, ids []int64) (err error)
@@ -46,17 +56,22 @@ type TagCommonService struct {
 	revisionService *revision_common.RevisionService
 	tagCommonRepo   TagCommonRepo
 	tagRelRepo      TagRelRepo
+	tagRepo         TagRepo
 	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewTagCommonService new tag service
-func NewTagCommonService(tagCommonRepo TagCommonRepo, tagRelRepo TagRelRepo,
+func NewTagCommonService(
+	tagCommonRepo TagCommonRepo,
+	tagRelRepo TagRelRepo,
+	tagRepo TagRepo,
 	revisionService *revision_common.RevisionService,
 	siteInfoService *siteinfo_common.SiteInfoCommonService,
 ) *TagCommonService {
 	return &TagCommonService{
 		tagCommonRepo:   tagCommonRepo,
 		tagRelRepo:      tagRelRepo,
+		tagRepo:         tagRepo,
 		revisionService: revisionService,
 		siteInfoService: siteInfoService,
 	}
@@ -68,7 +83,7 @@ func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.Searc
 	if err != nil {
 		return
 	}
-	ts.tagsFormatRecommendAndReserved(ctx, tags)
+	ts.TagsFormatRecommendAndReserved(ctx, tags)
 	for _, tag := range tags {
 		item := schema.SearchTagLikeResp{}
 		item.SlugName = tag.SlugName
@@ -166,7 +181,7 @@ func (ts *TagCommonService) GetTagListByNames(ctx context.Context, tagNames []st
 	if err != nil {
 		return nil, err
 	}
-	ts.tagsFormatRecommendAndReserved(ctx, tagList)
+	ts.TagsFormatRecommendAndReserved(ctx, tagList)
 	return tagList, nil
 }
 
@@ -231,7 +246,7 @@ func (ts *TagCommonService) GetTagListByIDs(ctx context.Context, ids []string) (
 	if err != nil {
 		return nil, err
 	}
-	ts.tagsFormatRecommendAndReserved(ctx, tagList)
+	ts.TagsFormatRecommendAndReserved(ctx, tagList)
 	return
 }
 
@@ -242,7 +257,7 @@ func (ts *TagCommonService) GetTagPage(ctx context.Context, page, pageSize int, 
 	if err != nil {
 		return nil, 0, err
 	}
-	ts.tagsFormatRecommendAndReserved(ctx, tagList)
+	ts.TagsFormatRecommendAndReserved(ctx, tagList)
 	return
 }
 
@@ -276,7 +291,7 @@ func (ts *TagCommonService) TagFormat(ctx context.Context, tags []*entity.Tag) (
 	return objTags, nil
 }
 
-func (ts *TagCommonService) tagsFormatRecommendAndReserved(ctx context.Context, tagList []*entity.Tag) {
+func (ts *TagCommonService) TagsFormatRecommendAndReserved(ctx context.Context, tagList []*entity.Tag) {
 	if len(tagList) == 0 {
 		return
 	}
@@ -389,6 +404,7 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 		item.OriginalText = ""
 		item.ParsedText = ""
 		item.Status = entity.TagStatusAvailable
+		item.UserID = userID
 		addTagList = append(addTagList, item)
 		addTagMsgList = append(addTagMsgList, tag)
 	}
@@ -403,7 +419,31 @@ func (ts *TagCommonService) CheckTag(ctx context.Context, tags []string, userID 
 	return nil
 }
 
-func (ts *TagCommonService) ObjectCheckChangeTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
+// CheckTagsIsChange
+func (ts *TagCommonService) CheckTagsIsChange(ctx context.Context, tagNameList, oldtagNameList []string) bool {
+	check := make(map[string]bool)
+	if len(tagNameList) != len(oldtagNameList) {
+		return true
+	}
+	for _, item := range tagNameList {
+		check[item] = false
+	}
+	for _, item := range oldtagNameList {
+		_, ok := check[item]
+		if !ok {
+			return true
+		}
+		check[item] = true
+	}
+	for _, value := range check {
+		if value == false {
+			return true
+		}
+	}
+	return false
+}
+
+func (ts *TagCommonService) CheckChangeReservedTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
 	reservedTagsMap := make(map[string]bool)
 	needTagsMap := make([]string, 0)
 	for _, tag := range objectTagData {
@@ -463,6 +503,7 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 		item.OriginalText = tag.OriginalText
 		item.ParsedText = tag.ParsedText
 		item.Status = entity.TagStatusAvailable
+		item.UserID = objectTagData.UserID
 		addTagList = append(addTagList, item)
 	}
 
@@ -480,10 +521,17 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 			}
 			tagInfoJson, _ := json.Marshal(tag)
 			revisionDTO.Content = string(tagInfoJson)
-			err = ts.revisionService.AddRevision(ctx, revisionDTO, true)
+			revisionID, err := ts.revisionService.AddRevision(ctx, revisionDTO, true)
 			if err != nil {
 				return err
 			}
+			activity_queue.AddActivity(&schema.ActivityMsg{
+				UserID:           objectTagData.UserID,
+				ObjectID:         tag.ID,
+				OriginalObjectID: tag.ID,
+				ActivityTypeKey:  constant.ActTagCreated,
+				RevisionID:       revisionID,
+			})
 		}
 	}
 
@@ -572,4 +620,84 @@ func (ts *TagCommonService) CreateOrUpdateTagRelList(ctx context.Context, object
 		log.Error(err)
 	}
 	return nil
+}
+
+func (ts *TagCommonService) UpdateTag(ctx context.Context, req *schema.UpdateTagReq) (err error) {
+	var canUpdate bool
+	_, existUnreviewed, err := ts.revisionService.ExistUnreviewedByObjectID(ctx, req.TagID)
+	if err != nil {
+		return err
+	}
+	if existUnreviewed {
+		err = errors.BadRequest(reason.AnswerCannotUpdate)
+		return err
+	}
+
+	tagInfo, exist, err := ts.GetTagByID(ctx, req.TagID)
+	if err != nil {
+		return err
+	}
+	if !exist {
+		return errors.BadRequest(reason.TagNotFound)
+	}
+	//If the content is the same, ignore it
+	if tagInfo.OriginalText == req.OriginalText {
+		return nil
+	}
+
+	tagInfo.SlugName = req.SlugName
+	tagInfo.DisplayName = req.DisplayName
+	tagInfo.OriginalText = req.OriginalText
+	tagInfo.ParsedText = req.ParsedText
+
+	revisionDTO := &schema.AddRevisionDTO{
+		UserID:   req.UserID,
+		ObjectID: tagInfo.ID,
+		Title:    tagInfo.SlugName,
+		Log:      req.EditSummary,
+	}
+
+	if req.NoNeedReview {
+		canUpdate = true
+		err = ts.tagRepo.UpdateTag(ctx, tagInfo)
+		if err != nil {
+			return err
+		}
+		if tagInfo.MainTagID == 0 && len(req.SlugName) > 0 {
+			log.Debugf("tag %s update slug_name", tagInfo.SlugName)
+			tagList, err := ts.tagRepo.GetTagList(ctx, &entity.Tag{MainTagID: converter.StringToInt64(tagInfo.ID)})
+			if err != nil {
+				return err
+			}
+			updateTagSlugNames := make([]string, 0)
+			for _, tag := range tagList {
+				updateTagSlugNames = append(updateTagSlugNames, tag.SlugName)
+			}
+			err = ts.tagRepo.UpdateTagSynonym(ctx, updateTagSlugNames, converter.StringToInt64(tagInfo.ID), tagInfo.MainTagSlugName)
+			if err != nil {
+				return err
+			}
+		}
+		revisionDTO.Status = entity.RevisionReviewPassStatus
+	} else {
+		revisionDTO.Status = entity.RevisionUnreviewedStatus
+	}
+
+	tagInfoJson, _ := json.Marshal(tagInfo)
+	revisionDTO.Content = string(tagInfoJson)
+	revisionID, err := ts.revisionService.AddRevision(ctx, revisionDTO, true)
+	if err != nil {
+		return err
+	}
+	if canUpdate {
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           req.UserID,
+			ObjectID:         tagInfo.ID,
+			OriginalObjectID: tagInfo.ID,
+			ActivityTypeKey:  constant.ActTagEdited,
+			RevisionID:       revisionID,
+		})
+	}
+
+	return
 }

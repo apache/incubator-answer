@@ -40,12 +40,17 @@ func (rc *ReportController) AddReport(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := rc.rankService.CheckRankPermission(ctx, req.UserID, rank.ReportAddRank); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := rc.rankService.CheckOperationPermission(ctx, req.UserID, rank.ReportAddRank, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
-	err := rc.reportService.AddReport(ctx, req)
+	err = rc.reportService.AddReport(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

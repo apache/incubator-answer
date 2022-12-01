@@ -368,7 +368,8 @@ type ActionRecordResp struct {
 }
 
 type UserBasicInfo struct {
-	ID          string `json:"-" `           // user_id
+	ID          string `json:"-"` // user_id
+	IsAdmin     bool   `json:"-"`
 	Username    string `json:"username" `    // name
 	Rank        int    `json:"rank" `        // rank
 	DisplayName string `json:"display_name"` // display_name

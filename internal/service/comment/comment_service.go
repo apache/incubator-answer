@@ -9,9 +9,10 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/comment_common"
 	"github.com/answerdev/answer/internal/service/notice_queue"
-	object_info "github.com/answerdev/answer/internal/service/object_info"
+	"github.com/answerdev/answer/internal/service/object_info"
 	"github.com/answerdev/answer/internal/service/permission"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/jinzhu/copier"
@@ -111,9 +112,9 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 	}
 
 	if objInfo.ObjectType == constant.QuestionObjectType {
-		cs.notificationQuestionComment(ctx, objInfo.ObjectCreator, comment.ID, req.UserID)
+		cs.notificationQuestionComment(ctx, objInfo.ObjectCreatorUserID, comment.ID, req.UserID)
 	} else if objInfo.ObjectType == constant.AnswerObjectType {
-		cs.notificationAnswerComment(ctx, objInfo.ObjectCreator, comment.ID, req.UserID)
+		cs.notificationAnswerComment(ctx, objInfo.ObjectCreatorUserID, comment.ID, req.UserID)
 	}
 	if len(req.MentionUsernameList) > 0 {
 		cs.notificationMention(ctx, req.MentionUsernameList, comment.ID, req.UserID)
@@ -121,7 +122,7 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 
 	resp = &schema.GetCommentResp{}
 	resp.SetFromComment(comment)
-	resp.MemberActions = permission.GetCommentPermission(req.UserID, resp.UserID)
+	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID, req.CanEdit, req.CanDelete)
 
 	// get reply user info
 	if len(resp.ReplyUserID) > 0 {
@@ -148,6 +149,13 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 		resp.UserAvatar = userInfo.Avatar
 		resp.UserStatus = userInfo.Status
 	}
+
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           comment.UserID,
+		ObjectID:         comment.ID,
+		OriginalObjectID: req.ObjectID,
+		ActivityTypeKey:  constant.ActQuestionCommented,
+	})
 	return resp, nil
 }
 
@@ -222,7 +230,7 @@ func (cs *CommentService) GetComment(ctx context.Context, req *schema.GetComment
 	// check if current user vote this comment
 	resp.IsVote = cs.checkIsVote(ctx, req.UserID, resp.CommentID)
 
-	resp.MemberActions = permission.GetCommentPermission(req.UserID, resp.UserID)
+	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID, req.CanEdit, req.CanDelete)
 	return resp, nil
 }
 
@@ -282,7 +290,7 @@ func (cs *CommentService) GetCommentWithPage(ctx context.Context, req *schema.Ge
 		// check if current user vote this comment
 		commentResp.IsVote = cs.checkIsVote(ctx, req.UserID, commentResp.CommentID)
 
-		commentResp.MemberActions = permission.GetCommentPermission(req.UserID, commentResp.UserID)
+		commentResp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, commentResp.UserID, req.CanEdit, req.CanDelete)
 		resp = append(resp, commentResp)
 	}
 	return pager.NewPageModel(total, resp), nil

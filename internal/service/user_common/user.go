@@ -38,12 +38,13 @@ func NewUserCommon(userRepo UserRepo) *UserCommon {
 	}
 }
 
-func (us *UserCommon) GetUserBasicInfoByID(ctx context.Context, ID string) (*schema.UserBasicInfo, bool, error) {
+func (us *UserCommon) GetUserBasicInfoByID(ctx context.Context, ID string) (
+	userBasicInfo *schema.UserBasicInfo, exist bool, err error) {
 	userInfo, exist, err := us.userRepo.GetByUserID(ctx, ID)
 	if err != nil {
 		return nil, exist, err
 	}
-	info := us.UserBasicInfoFormat(ctx, userInfo)
+	info := us.FormatUserBasicInfo(ctx, userInfo)
 	return info, exist, nil
 }
 
@@ -52,7 +53,7 @@ func (us *UserCommon) GetUserBasicInfoByUserName(ctx context.Context, username s
 	if err != nil {
 		return nil, exist, err
 	}
-	info := us.UserBasicInfoFormat(ctx, userInfo)
+	info := us.FormatUserBasicInfo(ctx, userInfo)
 	return info, exist, nil
 }
 
@@ -71,21 +72,21 @@ func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, IDs []string) 
 		return userMap, err
 	}
 	for _, item := range dbInfo {
-		info := us.UserBasicInfoFormat(ctx, item)
+		info := us.FormatUserBasicInfo(ctx, item)
 		userMap[item.ID] = info
 	}
 	return userMap, nil
 }
 
-// UserBasicInfoFormat
-func (us *UserCommon) UserBasicInfoFormat(ctx context.Context, userInfo *entity.User) *schema.UserBasicInfo {
+// FormatUserBasicInfo format user basic info
+func (us *UserCommon) FormatUserBasicInfo(ctx context.Context, userInfo *entity.User) *schema.UserBasicInfo {
 	userBasicInfo := &schema.UserBasicInfo{}
-	Avatar := schema.FormatAvatarInfo(userInfo.Avatar)
 	userBasicInfo.ID = userInfo.ID
+	userBasicInfo.IsAdmin = userInfo.IsAdmin
 	userBasicInfo.Username = userInfo.Username
 	userBasicInfo.Rank = userInfo.Rank
 	userBasicInfo.DisplayName = userInfo.DisplayName
-	userBasicInfo.Avatar = Avatar
+	userBasicInfo.Avatar = schema.FormatAvatarInfo(userInfo.Avatar)
 	userBasicInfo.Website = userInfo.Website
 	userBasicInfo.Location = userInfo.Location
 	userBasicInfo.IPInfo = userInfo.IPInfo

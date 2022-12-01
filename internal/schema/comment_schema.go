@@ -19,6 +19,12 @@ type AddCommentReq struct {
 	MentionUsernameList []string `validate:"omitempty" json:"mention_username_list"`
 	// user id
 	UserID string `json:"-"`
+	// whether user can add it
+	CanAdd bool `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
+	// whether user can delete it
+	CanDelete bool `json:"-"`
 }
 
 // RemoveCommentReq remove comment
@@ -73,6 +79,10 @@ type GetCommentWithPageReq struct {
 	QueryCond string `validate:"omitempty,oneof=vote" form:"query_cond"`
 	// user id
 	UserID string `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
+	// whether user can delete it
+	CanDelete bool `json:"-"`
 }
 
 // GetCommentReq get comment list page request
@@ -81,6 +91,10 @@ type GetCommentReq struct {
 	ID string `validate:"required" form:"id"`
 	// user id
 	UserID string `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
+	// whether user can delete it
+	CanDelete bool `json:"-"`
 }
 
 // GetCommentResp comment response

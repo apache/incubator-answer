@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/answerdev/answer/internal/service/action"
 	"github.com/answerdev/answer/internal/service/activity"
+	"github.com/answerdev/answer/internal/service/activity_common"
 	answercommon "github.com/answerdev/answer/internal/service/answer_common"
 	"github.com/answerdev/answer/internal/service/auth"
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
@@ -22,6 +23,7 @@ import (
 	"github.com/answerdev/answer/internal/service/report_backyard"
 	"github.com/answerdev/answer/internal/service/report_handle_backyard"
 	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/internal/service/search_parser"
 	"github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/internal/service/search_parser"
 	"github.com/answerdev/answer/internal/service/siteinfo"
@@ -73,6 +75,8 @@ var ProviderSetService = wire.NewSet(
 	notification.NewNotificationService,
 	activity.NewAnswerActivityService,
 	dashboard.NewDashboardService,
+	activity_common.NewActivityCommon,
+	activity.NewActivityService,
 	role.NewRoleService,
 	role.NewUserRoleRelService,
 	role.NewRolePowerRelService,

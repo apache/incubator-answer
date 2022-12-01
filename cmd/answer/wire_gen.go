@@ -31,7 +31,6 @@ import (
 	"github.com/answerdev/answer/internal/repo/reason"
 	"github.com/answerdev/answer/internal/repo/report"
 	"github.com/answerdev/answer/internal/repo/revision"
-	"github.com/answerdev/answer/internal/repo/role"
 	"github.com/answerdev/answer/internal/repo/search_common"
 	"github.com/answerdev/answer/internal/repo/site_info"
 	"github.com/answerdev/answer/internal/repo/tag"
@@ -42,10 +41,12 @@ import (
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/action"
 	activity2 "github.com/answerdev/answer/internal/service/activity"
+	activity_common2 "github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/answer_common"
 	auth2 "github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/collection_common"
 	comment2 "github.com/answerdev/answer/internal/service/comment"
+	"github.com/answerdev/answer/internal/service/comment_common"
 	"github.com/answerdev/answer/internal/service/dashboard"
 	export2 "github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/follow"
@@ -60,7 +61,6 @@ import (
 	"github.com/answerdev/answer/internal/service/report_backyard"
 	"github.com/answerdev/answer/internal/service/report_handle_backyard"
 	"github.com/answerdev/answer/internal/service/revision_common"
-	role2 "github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/internal/service/search_parser"
 	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo"
@@ -120,7 +120,12 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	answerRepo := answer.NewAnswerRepo(dataData, uniqueIDRepo, userRankRepo, activityRepo)
 	questionRepo := question.NewQuestionRepo(dataData, uniqueIDRepo)
 	tagCommonRepo := tag_common.NewTagCommonRepo(dataData, uniqueIDRepo)
-	objService := object_info.NewObjService(answerRepo, questionRepo, commentCommonRepo, tagCommonRepo)
+	tagRelRepo := tag.NewTagRelRepo(dataData)
+	tagRepo := tag.NewTagRepo(dataData, uniqueIDRepo)
+	revisionRepo := revision.NewRevisionRepo(dataData, uniqueIDRepo)
+	revisionService := revision_common.NewRevisionService(revisionRepo, userRepo)
+	tagCommonService := tag_common2.NewTagCommonService(tagCommonRepo, tagRelRepo, tagRepo, revisionService, siteInfoCommonService)
+	objService := object_info.NewObjService(answerRepo, questionRepo, commentCommonRepo, tagCommonRepo, tagCommonService)
 	voteRepo := activity_common.NewVoteRepo(dataData, activityRepo)
 	commentService := comment2.NewCommentService(commentRepo, commentCommonRepo, userCommon, objService, voteRepo)
 	rankService := rank2.NewRankService(userCommon, userRankRepo, objService, configRepo)
@@ -130,12 +135,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reportController := controller.NewReportController(reportService, rankService)
 	serviceVoteRepo := activity.NewVoteRepo(dataData, uniqueIDRepo, configRepo, activityRepo, userRankRepo, voteRepo)
 	voteService := service.NewVoteService(serviceVoteRepo, uniqueIDRepo, configRepo, questionRepo, answerRepo, commentCommonRepo, objService)
-	voteController := controller.NewVoteController(voteService)
-	tagRepo := tag.NewTagRepo(dataData, uniqueIDRepo)
-	tagRelRepo := tag.NewTagRelRepo(dataData)
-	revisionRepo := revision.NewRevisionRepo(dataData, uniqueIDRepo)
-	revisionService := revision_common.NewRevisionService(revisionRepo, userRepo)
-	tagCommonService := tag_common2.NewTagCommonService(tagCommonRepo, tagRelRepo, revisionService, siteInfoCommonService)
+	voteController := controller.NewVoteController(voteService, rankService)
 	followRepo := activity_common.NewFollowRepo(dataData, uniqueIDRepo, activityRepo)
 	tagService := tag2.NewTagService(tagRepo, tagCommonService, revisionService, followRepo, siteInfoCommonService)
 	tagController := controller.NewTagController(tagService, tagCommonService, rankService)
@@ -163,19 +163,15 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon)
 	searchService := service.NewSearchService(searchParser, searchRepo)
 	searchController := controller.NewSearchController(searchService)
-	serviceRevisionService := service.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService)
-	revisionController := controller.NewRevisionController(serviceRevisionService)
+	serviceRevisionService := service.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService, objService, questionRepo, answerRepo, tagRepo, tagCommonService)
+	revisionController := controller.NewRevisionController(serviceRevisionService, rankService)
 	rankController := controller.NewRankController(rankService)
 	commonRepo := common.NewCommonRepo(dataData, uniqueIDRepo)
 	reportHandle := report_handle_backyard.NewReportHandle(questionCommon, commentRepo, configRepo)
 	reportBackyardService := report_backyard.NewReportBackyardService(reportRepo, userCommon, commonRepo, answerRepo, questionRepo, commentCommonRepo, reportHandle, configRepo)
 	controller_backyardReportController := controller_backyard.NewReportController(reportBackyardService)
 	userBackyardRepo := user.NewUserBackyardRepo(dataData, authRepo)
-	userRoleRelRepo := role.NewUserRoleRelRepo(dataData)
-	roleRepo := role.NewRoleRepo(dataData)
-	roleService := role2.NewRoleService(roleRepo)
-	userRoleRelService := role2.NewUserRoleRelService(userRoleRelRepo, roleService)
-	userBackyardService := user_backyard.NewUserBackyardService(userBackyardRepo, userRoleRelService)
+	userBackyardService := user_backyard.NewUserBackyardService(userBackyardRepo)
 	userBackyardController := controller_backyard.NewUserBackyardController(userBackyardService)
 	reasonRepo := reason.NewReasonRepo(configRepo)
 	reasonService := reason2.NewReasonService(reasonRepo)
@@ -186,12 +182,16 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	siteinfoController := controller.NewSiteinfoController(siteInfoCommonService)
 	notificationRepo := notification.NewNotificationRepo(dataData)
 	notificationCommon := notificationcommon.NewNotificationCommon(dataData, notificationRepo, userCommon, activityRepo, followRepo, objService)
-	notificationService := notification2.NewNotificationService(dataData, notificationRepo, notificationCommon)
-	notificationController := controller.NewNotificationController(notificationService)
+	notificationService := notification2.NewNotificationService(dataData, notificationRepo, notificationCommon, revisionService)
+	notificationController := controller.NewNotificationController(notificationService, rankService)
 	dashboardController := controller.NewDashboardController(dashboardService)
 	uploadController := controller.NewUploadController(uploaderService)
-	roleController := controller_backyard.NewRoleController(roleService)
-	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController, roleController)
+	activityCommon := activity_common2.NewActivityCommon(activityRepo)
+	activityActivityRepo := activity.NewActivityRepo(dataData)
+	commentCommonService := comment_common.NewCommentCommonService(commentCommonRepo)
+	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, activityCommon, tagCommonService, objService, commentCommonService, revisionService)
+	activityController := controller.NewActivityController(activityCommon, activityService)
+	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController, activityController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter()
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)

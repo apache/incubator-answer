@@ -5,6 +5,7 @@ import (
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/revision"
@@ -79,12 +80,48 @@ func (rr *revisionRepo) UpdateObjectRevisionId(ctx context.Context, revision *en
 	return nil
 }
 
+// UpdateStatus update revision status
+func (rr *revisionRepo) UpdateStatus(ctx context.Context, id string, status int) (err error) {
+	if id == "" {
+		return nil
+	}
+	var data entity.Revision
+	data.ID = id
+	data.Status = status
+	_, err = rr.data.DB.Where("id =?", id).Cols("status").Update(&data)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
 // GetRevision get revision one
 func (rr *revisionRepo) GetRevision(ctx context.Context, id string) (
 	revision *entity.Revision, exist bool, err error,
 ) {
 	revision = &entity.Revision{}
 	exist, err = rr.data.DB.ID(id).Get(revision)
+	if err != nil {
+		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+// GetRevisionByID get object's last revision by object TagID
+func (rr *revisionRepo) GetRevisionByID(ctx context.Context, revisionID string) (
+	revision *entity.Revision, exist bool, err error) {
+	revision = &entity.Revision{}
+	exist, err = rr.data.DB.Where("id = ?", revisionID).Get(revision)
+	if err != nil {
+		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (rr *revisionRepo) ExistUnreviewedByObjectID(ctx context.Context, objectID string) (
+	revision *entity.Revision, exist bool, err error) {
+	revision = &entity.Revision{}
+	exist, err = rr.data.DB.Where("object_id = ?", objectID).And("status = ?", entity.RevisionUnreviewedStatus).Get(revision)
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -127,4 +164,23 @@ func (rr *revisionRepo) allowRecord(objectType int) (ok bool) {
 	default:
 		return false
 	}
+}
+
+// GetUnreviewedRevisionPage get unreviewed revision page
+func (rr *revisionRepo) GetUnreviewedRevisionPage(ctx context.Context, page int, pageSize int,
+	objectTypeList []int) (revisionList []*entity.Revision, total int64, err error) {
+	revisionList = make([]*entity.Revision, 0)
+	if len(objectTypeList) == 0 {
+		return revisionList, 0, nil
+	}
+	session := rr.data.DB.NewSession()
+	session = session.And("status = ?", entity.RevisionUnreviewedStatus)
+	session = session.In("object_type", objectTypeList)
+	session = session.OrderBy("created_at desc")
+
+	total, err = pager.Help(page, pageSize, &revisionList, &entity.Revision{}, session)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
 }

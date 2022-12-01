@@ -24,6 +24,7 @@ type Tag struct {
 	Recommend       bool      `xorm:"not null default false BOOL recommend"`
 	Reserved        bool      `xorm:"not null default false BOOL reserved"`
 	RevisionID      string    `xorm:"not null default 0 BIGINT(20) revision_id"`
+	UserID          string    `xorm:"not null default 0 BIGINT(20) user_id"`
 }
 
 // TableName tag table name

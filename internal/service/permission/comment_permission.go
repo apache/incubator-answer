@@ -1,9 +1,13 @@
 package permission
 
-import "github.com/answerdev/answer/internal/schema"
+import (
+	"context"
 
-// TODO: There is currently no permission management
-func GetCommentPermission(userID string, commentCreatorUserID string) (
+	"github.com/answerdev/answer/internal/schema"
+)
+
+// GetCommentPermission get comment permission
+func GetCommentPermission(ctx context.Context, userID string, creatorUserID string, canEdit, canDelete bool) (
 	actions []*schema.PermissionMemberAction) {
 	actions = make([]*schema.PermissionMemberAction, 0)
 	if len(userID) > 0 {
@@ -13,44 +17,48 @@ func GetCommentPermission(userID string, commentCreatorUserID string) (
 			Type:   "reason",
 		})
 	}
-	if userID != commentCreatorUserID {
-		return actions
-	}
-	actions = append(actions, []*schema.PermissionMemberAction{
-		{
+	if canEdit || userID == creatorUserID {
+		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "edit",
 			Name:   "Edit",
 			Type:   "edit",
-		},
-		{
+		})
+	}
+
+	if canDelete || userID == creatorUserID {
+		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "delete",
 			Name:   "Delete",
 			Type:   "reason",
-		},
-	}...)
+		})
+	}
 	return actions
 }
 
-func GetTagPermission(userID string, tagCreatorUserID string) (
+// GetTagPermission get tag permission
+func GetTagPermission(ctx context.Context, canEdit, canDelete bool) (
 	actions []*schema.PermissionMemberAction) {
-	if userID != tagCreatorUserID {
-		return []*schema.PermissionMemberAction{}
-	}
-	return []*schema.PermissionMemberAction{
-		{
+	actions = make([]*schema.PermissionMemberAction, 0)
+	if canEdit {
+		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "edit",
 			Name:   "Edit",
 			Type:   "edit",
-		},
-		{
+		})
+	}
+
+	if canDelete {
+		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "delete",
 			Name:   "Delete",
 			Type:   "reason",
-		},
+		})
 	}
+	return actions
 }
 
-func GetAnswerPermission(userID string, answerAuthID string) (
+// GetAnswerPermission get answer permission
+func GetAnswerPermission(ctx context.Context, userID string, creatorUserID string, canEdit, canDelete bool) (
 	actions []*schema.PermissionMemberAction) {
 	actions = make([]*schema.PermissionMemberAction, 0)
 	if len(userID) > 0 {
@@ -60,25 +68,26 @@ func GetAnswerPermission(userID string, answerAuthID string) (
 			Type:   "reason",
 		})
 	}
-	if userID != answerAuthID {
-		return actions
-	}
-	actions = append(actions, []*schema.PermissionMemberAction{
-		{
+	if canEdit || userID == creatorUserID {
+		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "edit",
 			Name:   "Edit",
 			Type:   "edit",
-		},
-		{
+		})
+	}
+
+	if canDelete || userID == creatorUserID {
+		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "delete",
 			Name:   "Delete",
 			Type:   "confirm",
-		},
-	}...)
+		})
+	}
 	return actions
 }
 
-func GetQuestionPermission(userID string, questionAuthID string) (
+// GetQuestionPermission get question permission
+func GetQuestionPermission(ctx context.Context, userID string, creatorUserID string, canEdit, canDelete, canClose bool) (
 	actions []*schema.PermissionMemberAction) {
 	actions = make([]*schema.PermissionMemberAction, 0)
 	if len(userID) > 0 {
@@ -88,25 +97,40 @@ func GetQuestionPermission(userID string, questionAuthID string) (
 			Type:   "reason",
 		})
 	}
-	if userID != questionAuthID {
-		return actions
-	}
-	actions = append(actions, []*schema.PermissionMemberAction{
-		{
+	if canEdit || userID == creatorUserID {
+		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "edit",
 			Name:   "Edit",
 			Type:   "edit",
-		},
-		{
+		})
+	}
+	if canClose {
+		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "close",
 			Name:   "Close",
 			Type:   "confirm",
-		},
-		{
+		})
+	}
+	if canDelete || userID == creatorUserID {
+		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "delete",
 			Name:   "Delete",
 			Type:   "confirm",
-		},
-	}...)
+		})
+	}
+	return actions
+}
+
+// GetTagSynonymPermission get tag synonym permission
+func GetTagSynonymPermission(ctx context.Context, canEdit bool) (
+	actions []*schema.PermissionMemberAction) {
+	actions = make([]*schema.PermissionMemberAction, 0)
+	if canEdit {
+		actions = append(actions, &schema.PermissionMemberAction{
+			Action: "edit",
+			Name:   "Edit",
+			Type:   "edit",
+		})
+	}
 	return actions
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/service/tag"
+	"github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/builder"
@@ -22,7 +22,7 @@ type tagRepo struct {
 func NewTagRepo(
 	data *data.Data,
 	uniqueIDRepo unique.UniqueIDRepo,
-) tag.TagRepo {
+) tag_common.TagRepo {
 	return &tagRepo{
 		data:         data,
 		uniqueIDRepo: uniqueIDRepo,
