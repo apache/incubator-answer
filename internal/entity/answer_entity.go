@@ -20,7 +20,7 @@ var CmsAnswerSearchStatus = map[string]int{
 type Answer struct {
 	ID           string    `xorm:"not null pk autoincr BIGINT(20) id"`
 	CreatedAt    time.Time `xorm:"created not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
-	UpdatedAt    time.Time `xorm:"not null default CURRENT_TIMESTAMP TIMESTAMP updated_at"`
+	UpdatedAt    time.Time `xorm:"updated_at TIMESTAMP"`
 	QuestionID   string    `xorm:"not null default 0 BIGINT(20) question_id"`
 	UserID       string    `xorm:"not null default 0 BIGINT(20) INDEX user_id"`
 	OriginalText string    `xorm:"not null MEDIUMTEXT original_text"`
