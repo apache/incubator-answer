@@ -154,7 +154,8 @@ func (ts *TagService) GetFollowingTags(ctx context.Context, userID string) (
 
 // GetTagSynonyms get tag synonyms
 func (ts *TagService) GetTagSynonyms(ctx context.Context, req *schema.GetTagSynonymsReq) (
-	resp []*schema.GetTagSynonymsResp, err error) {
+	resp *schema.GetTagSynonymsResp, err error) {
+	resp = &schema.GetTagSynonymsResp{Synonyms: make([]*schema.TagSynonym, 0)}
 	tag, exist, err := ts.tagCommonService.GetTagByID(ctx, req.TagID)
 	if err != nil {
 		return
@@ -186,15 +187,15 @@ func (ts *TagService) GetTagSynonyms(ctx context.Context, req *schema.GetTagSyno
 		mainTagSlugName = tag.SlugName
 	}
 
-	resp = make([]*schema.GetTagSynonymsResp, 0)
 	for _, t := range tagList {
-		resp = append(resp, &schema.GetTagSynonymsResp{
+		resp.Synonyms = append(resp.Synonyms, &schema.TagSynonym{
 			TagID:           t.ID,
 			SlugName:        t.SlugName,
 			DisplayName:     t.DisplayName,
 			MainTagSlugName: mainTagSlugName,
 		})
 	}
+	resp.MemberActions = permission.GetTagSynonymPermission(ctx, req.CanEdit)
 	return
 }
 

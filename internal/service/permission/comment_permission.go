@@ -120,3 +120,17 @@ func GetQuestionPermission(ctx context.Context, userID string, creatorUserID str
 	}
 	return actions
 }
+
+// GetTagSynonymPermission get tag synonym permission
+func GetTagSynonymPermission(ctx context.Context, canEdit bool) (
+	actions []*schema.PermissionMemberAction) {
+	actions = make([]*schema.PermissionMemberAction, 0)
+	if canEdit {
+		actions = append(actions, &schema.PermissionMemberAction{
+			Action: "edit",
+			Name:   "Edit",
+			Type:   "edit",
+		})
+	}
+	return actions
+}

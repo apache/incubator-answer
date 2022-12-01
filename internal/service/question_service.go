@@ -284,7 +284,6 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 
 	now := time.Now()
 	question := &entity.Question{}
-	question.UserID = req.UserID
 	question.Title = req.Title
 	question.OriginalText = req.Content
 	question.ParsedText = req.HTML
@@ -297,6 +296,10 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	}
 	if !has {
 		return
+	}
+	question.LastEditUserID = "0"
+	if dbinfo.UserID != req.UserID {
+		question.LastEditUserID = req.UserID
 	}
 
 	oldTags, tagerr := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
@@ -377,7 +380,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		//Direct modification
 		revisionDTO.Status = entity.RevisionReviewPassStatus
 		//update question to db
-		saveerr := qs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at", "post_update_time"})
+		saveerr := qs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at", "post_update_time", "last_edit_user_id"})
 		if saveerr != nil {
 			return questionInfo, saveerr
 		}

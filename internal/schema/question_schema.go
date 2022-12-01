@@ -106,6 +106,8 @@ type QuestionInfo struct {
 	Status               int            `json:"status"`
 	Operation            *Operation     `json:"operation,omitempty"`
 	UserID               string         `json:"-" `
+	LastEditUserID       string         `json:"-" `
+	LastAnsweredUserID   string         `json:"-" `
 	UserInfo             *UserBasicInfo `json:"user_info"`
 	UpdateUserInfo       *UserBasicInfo `json:"update_user_info,omitempty"`
 	LastAnsweredUserInfo *UserBasicInfo `json:"last_answered_user_info,omitempty"`

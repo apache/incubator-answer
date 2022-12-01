@@ -57,6 +57,7 @@ type AnswerInfo struct {
 	UpdateTime     int64          `json:"update_time" xorm:"updated"`     // update_time
 	Adopted        int            `json:"adopted"`                        // 1 Failed 2 Adopted
 	UserID         string         `json:"-" `
+	UpdateUserID   string         `json:"-" `
 	UserInfo       *UserBasicInfo `json:"user_info,omitempty"`
 	UpdateUserInfo *UserBasicInfo `json:"update_user_info,omitempty"`
 	Collected      bool           `json:"collected"`
@@ -76,6 +77,7 @@ type AdminAnswerInfo struct {
 	UpdateTime   int64          `json:"update_time"`
 	Adopted      int            `json:"adopted"`
 	UserID       string         `json:"-" `
+	UpdateUserID string         `json:"-" `
 	UserInfo     *UserBasicInfo `json:"user_info"`
 	VoteCount    int            `json:"vote_count"`
 	QuestionInfo struct {

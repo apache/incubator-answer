@@ -186,13 +186,23 @@ func (tc *TagController) GetFollowingTags(ctx *gin.Context) {
 // @Tags Tag
 // @Produce json
 // @Param tag_id query int true "tag id"
-// @Success 200 {object} handler.RespBody{data=[]schema.GetTagSynonymsResp}
+// @Success 200 {object} handler.RespBody{data=schema.GetTagSynonymsResp}
 // @Router /answer/api/v1/tag/synonyms [get]
 func (tc *TagController) GetTagSynonyms(ctx *gin.Context) {
 	req := &schema.GetTagSynonymsReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	canList, err := tc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		rank.TagSynonymRank,
+	}, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	req.CanEdit = canList[0]
 
 	resp, err := tc.tagService.GetTagSynonyms(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
