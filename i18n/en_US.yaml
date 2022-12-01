@@ -702,6 +702,7 @@ ui:
     update_password: Password changed successfully.
     flag_success: Thanks for flagging.
     fobidden_operate_self: Forbidden to operate on yourself
+    review: Your revision will show after review.
   related_question:
     title: Related Questions
     btn: Add question

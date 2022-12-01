@@ -104,8 +104,11 @@ const Ask = () => {
       tag_id: data?.tag_id,
       edit_summary: formData.editSummary.value,
     };
-    modifyTag(params).then(() => {
-      navigate(-1);
+    modifyTag(params).then((res) => {
+      navigate(`/tags/${formData.slugName.value}/info`, {
+        replace: true,
+        state: { isReview: res.wait_for_review },
+      });
     });
   };
 
