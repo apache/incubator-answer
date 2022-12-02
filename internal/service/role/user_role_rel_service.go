@@ -10,6 +10,7 @@ import (
 type UserRoleRelRepo interface {
 	SaveUserRoleRel(ctx context.Context, userID string, roleID int) (err error)
 	GetUserRoleRelList(ctx context.Context, userIDs []string) (userRoleRelList []*entity.UserRoleRel, err error)
+	GetUserRoleRel(ctx context.Context, userID string) (rolePowerRel *entity.RolePowerRel, exist bool, err error)
 }
 
 // UserRoleRelService user service
@@ -78,4 +79,17 @@ func (us *UserRoleRelService) GetUserRoleRelMapping(ctx context.Context, userIDs
 		userRoleRelMapping[rel.UserID] = rel.RoleID
 	}
 	return userRoleRelMapping, nil
+}
+
+// GetUserRole get user role
+func (us *UserRoleRelService) GetUserRole(ctx context.Context, userID string) (roleID int, err error) {
+	rolePowerRel, exist, err := us.userRoleRelRepo.GetUserRoleRel(ctx, userID)
+	if err != nil {
+		return 0, err
+	}
+	if exist {
+		// set default role
+		return 1, nil
+	}
+	return rolePowerRel.RoleID, nil
 }

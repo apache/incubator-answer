@@ -58,3 +58,14 @@ func (ur *userRoleRelRepo) GetUserRoleRelList(ctx context.Context, userIDs []str
 	}
 	return
 }
+
+// GetUserRoleRel get user role
+func (ur *userRoleRelRepo) GetUserRoleRel(ctx context.Context, userID string) (
+	rolePowerRel *entity.RolePowerRel, exist bool, err error) {
+	rolePowerRel = &entity.RolePowerRel{}
+	exist, err = ur.data.DB.Where("user_id", userID).Get(rolePowerRel)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}

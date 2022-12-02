@@ -23,7 +23,6 @@ import (
 	"github.com/answerdev/answer/internal/service/report_backyard"
 	"github.com/answerdev/answer/internal/service/report_handle_backyard"
 	"github.com/answerdev/answer/internal/service/revision_common"
-	"github.com/answerdev/answer/internal/service/search_parser"
 	"github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/internal/service/search_parser"
 	"github.com/answerdev/answer/internal/service/siteinfo"

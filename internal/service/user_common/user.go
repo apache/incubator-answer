@@ -5,7 +5,6 @@ import (
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service/role"
 )
 
 type UserRepo interface {
@@ -28,8 +27,7 @@ type UserRepo interface {
 
 // UserCommon user service
 type UserCommon struct {
-	userRepo    UserRepo
-	roleService *role.RoleService
+	userRepo UserRepo
 }
 
 func NewUserCommon(userRepo UserRepo) *UserCommon {
@@ -82,7 +80,6 @@ func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, IDs []string) 
 func (us *UserCommon) FormatUserBasicInfo(ctx context.Context, userInfo *entity.User) *schema.UserBasicInfo {
 	userBasicInfo := &schema.UserBasicInfo{}
 	userBasicInfo.ID = userInfo.ID
-	userBasicInfo.IsAdmin = userInfo.IsAdmin
 	userBasicInfo.Username = userInfo.Username
 	userBasicInfo.Rank = userInfo.Rank
 	userBasicInfo.DisplayName = userInfo.DisplayName

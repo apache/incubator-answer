@@ -6,8 +6,8 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 )
 
-// GetCommentPermission get comment permission
-func GetCommentPermission(ctx context.Context, userID string, creatorUserID string, canEdit, canDelete bool) (
+// GetAnswerPermission get answer permission
+func GetAnswerPermission(ctx context.Context, userID string, creatorUserID string, canEdit, canDelete bool) (
 	actions []*schema.PermissionMemberAction) {
 	actions = make([]*schema.PermissionMemberAction, 0)
 	if len(userID) > 0 {
@@ -29,7 +29,7 @@ func GetCommentPermission(ctx context.Context, userID string, creatorUserID stri
 		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "delete",
 			Name:   "Delete",
-			Type:   "reason",
+			Type:   "confirm",
 		})
 	}
 	return actions

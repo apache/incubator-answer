@@ -2,6 +2,7 @@ package rank
 
 import (
 	"context"
+	"strings"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/pager"
@@ -11,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/service/activity_type"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/object_info"
+	"github.com/answerdev/answer/internal/service/role"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -60,6 +62,8 @@ type RankService struct {
 	configRepo        config.ConfigRepo
 	userRankRepo      UserRankRepo
 	objectInfoService *object_info.ObjService
+	roleService       *role.UserRoleRelService
+	rolePowerService  *role.RolePowerRelService
 }
 
 // NewRankService new rank service
@@ -67,12 +71,16 @@ func NewRankService(
 	userCommon *usercommon.UserCommon,
 	userRankRepo UserRankRepo,
 	objectInfoService *object_info.ObjService,
+	roleService *role.UserRoleRelService,
+	rolePowerService *role.RolePowerRelService,
 	configRepo config.ConfigRepo) *RankService {
 	return &RankService{
 		userCommon:        userCommon,
 		configRepo:        configRepo,
 		userRankRepo:      userRankRepo,
 		objectInfoService: objectInfoService,
+		roleService:       roleService,
+		rolePowerService:  rolePowerService,
 	}
 }
 
@@ -91,8 +99,10 @@ func (rs *RankService) CheckOperationPermission(ctx context.Context, userID stri
 	if !exist {
 		return false, nil
 	}
-	// administrator have all permissions
-	if userInfo.IsAdmin {
+	powerMapping := rs.getUserPowerMapping(ctx, userID)
+	// TODO: remove
+	act := strings.TrimPrefix(action, "rank.")
+	if powerMapping[act] {
 		return true, nil
 	}
 
@@ -141,8 +151,12 @@ func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID str
 		}
 	}
 
+	powerMapping := rs.getUserPowerMapping(ctx, userID)
+
 	for idx, action := range actions {
-		if userInfo.IsAdmin || objectOwner {
+		// TODO: remove
+		act := strings.TrimPrefix(action, "rank.")
+		if powerMapping[act] || objectOwner {
 			can[idx] = true
 			continue
 		}
@@ -202,6 +216,26 @@ func (rs *RankService) CheckVotePermission(ctx context.Context, userID, objectID
 		log.Error(err)
 	}
 	return meetRank, nil
+}
+
+// getUserPowerMapping get user power mapping
+func (rs *RankService) getUserPowerMapping(ctx context.Context, userID string) (powerMapping map[string]bool) {
+	powerMapping = make(map[string]bool, 0)
+	userRole, err := rs.roleService.GetUserRole(ctx, userID)
+	if err != nil {
+		log.Error(err)
+		return powerMapping
+	}
+	powers, err := rs.rolePowerService.GetRolePowerList(ctx, userRole)
+	if err != nil {
+		log.Error(err)
+		return powerMapping
+	}
+
+	for _, power := range powers {
+		powerMapping[power] = true
+	}
+	return powerMapping
 }
 
 // CheckRankPermission verify that the user meets the prestige criteria
