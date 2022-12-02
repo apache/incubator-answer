@@ -713,6 +713,10 @@ ui:
         <p>Are you sure you want to add another answer?</p><p>You could use the
         edit link to refine and improve your existing answer, instead.</p>
       empty: Answer cannot be empty.
+    reopen:
+      title: Reopen this post
+      content: Are you sure you want to reopen?
+      success: This post has been reopened
   delete:
     title: Delete this post
     question: >-

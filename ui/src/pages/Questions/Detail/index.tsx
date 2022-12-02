@@ -89,6 +89,12 @@ const Index = () => {
       }, 1000);
       return;
     }
+
+    if (type === 'default') {
+      window.scrollTo(0, 0);
+      getDetail();
+      return;
+    }
     requestAnswers();
   };
 

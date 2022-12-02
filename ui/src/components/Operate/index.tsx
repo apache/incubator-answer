@@ -6,7 +6,12 @@ import { useTranslation } from 'react-i18next';
 import { Modal } from '@/components';
 import { useReportModal, useToast } from '@/hooks';
 import Share from '../Share';
-import { deleteQuestion, deleteAnswer, editCheck } from '@/services';
+import {
+  deleteQuestion,
+  deleteAnswer,
+  editCheck,
+  reopenQuestion,
+} from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
 
 interface IProps {
@@ -32,7 +37,11 @@ const Index: FC<IProps> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'delete' });
   const toast = useToast();
   const reportModal = useReportModal();
-  const closeModal = useReportModal();
+
+  const refershQuestion = () => {
+    callback?.('default');
+  };
+  const closeModal = useReportModal(refershQuestion);
   const editUrl =
     type === 'answer' ? `/posts/${qid}/${aid}/edit` : `/posts/${qid}/edit`;
 
@@ -106,6 +115,25 @@ const Index: FC<IProps> = ({
     });
   };
 
+  const handleReopen = () => {
+    Modal.confirm({
+      title: t('title', { keyPrefix: 'question_detail.reopen' }),
+      content: t('content', { keyPrefix: 'question_detail.reopen' }),
+      cancelBtnVariant: 'link',
+      onConfirm: () => {
+        reopenQuestion({
+          question_id: qid,
+        }).then(() => {
+          toast.onShow({
+            msg: t('success', { keyPrefix: 'question_detail.reopen' }),
+            variant: 'success',
+          });
+          refershQuestion();
+        });
+      },
+    });
+  };
+
   const handleAction = (action) => {
     if (!tryNormalLogged(true)) {
       return;
@@ -120,6 +148,10 @@ const Index: FC<IProps> = ({
 
     if (action === 'close') {
       handleClose();
+    }
+
+    if (action === 'reopen') {
+      handleReopen();
     }
   };
 
