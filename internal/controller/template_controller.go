@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"net/url"
 	"regexp"
 	"time"
 
@@ -13,6 +12,7 @@ import (
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
@@ -160,14 +160,14 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		return
 	}
 	siteInfo := tc.SiteInfo(ctx)
-	encodeTitle := url.QueryEscape("title")
+	encodeTitle := htmltext.UrlTitle(detail.Title)
 	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
 	jsonLD := &schema.QAPageJsonLD{}
 	jsonLD.Context = "https://schema.org"
 	jsonLD.Type = "QAPage"
 	jsonLD.MainEntity.Type = "Question"
 	jsonLD.MainEntity.Name = detail.Title
-	jsonLD.MainEntity.Text = detail.HTML
+	jsonLD.MainEntity.Text = htmltext.ClearText(detail.HTML)
 	jsonLD.MainEntity.AnswerCount = int(answerCount)
 	jsonLD.MainEntity.UpvoteCount = detail.VoteCount
 	jsonLD.MainEntity.DateCreated = time.Unix(detail.CreateTime, 0)
@@ -177,7 +177,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	for _, answer := range answers {
 		item := &schema.SuggestedAnswerItem{}
 		item.Type = "Answer"
-		item.Text = answer.HTML
+		item.Text = htmltext.ClearText(answer.HTML)
 		item.DateCreated = time.Unix(answer.CreateTime, 0)
 		item.UpvoteCount = answer.VoteCount
 		item.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
