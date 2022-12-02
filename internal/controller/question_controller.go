@@ -74,8 +74,47 @@ func (qc *QuestionController) CloseQuestion(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	err := qc.questionService.CloseQuestion(ctx, req)
+	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, permission.QuestionClose, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	err = qc.questionService.CloseQuestion(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// ReopenQuestion reopen question
+// @Summary reopen question
+// @Description reopen question
+// @Tags api-question
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.ReopenQuestionReq true "question"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/question/reopen [put]
+func (qc *QuestionController) ReopenQuestion(ctx *gin.Context) {
+	req := &schema.ReopenQuestionReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, permission.QuestionReopen, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	err = qc.questionService.ReopenQuestion(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

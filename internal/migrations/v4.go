@@ -75,7 +75,7 @@ func addRoleFeatures(x *xorm.Engine) error {
 			return err
 		}
 		if exist {
-			_, err = x.ID(power.ID).Update(&power)
+			_, err = x.ID(power.ID).Update(power)
 		} else {
 			_, err = x.Insert(power)
 		}

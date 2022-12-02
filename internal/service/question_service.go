@@ -75,11 +75,6 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 		return nil
 	}
 
-	if !req.IsAdmin {
-		if questionInfo.UserID != req.UserID {
-			return errors.BadRequest(reason.QuestionCannotClose)
-		}
-	}
 	questionInfo.Status = entity.QuestionStatusClosed
 	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
 	if err != nil {
@@ -100,6 +95,30 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionClosed,
+	})
+	return nil
+}
+
+// ReopenQuestion reopen question
+func (qs *QuestionService) ReopenQuestion(ctx context.Context, req *schema.ReopenQuestionReq) error {
+	questionInfo, has, err := qs.questionRepo.GetQuestion(ctx, req.QuestionID)
+	if err != nil {
+		return err
+	}
+	if !has {
+		return nil
+	}
+
+	questionInfo.Status = entity.QuestionStatusAvailable
+	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
+	if err != nil {
+		return err
+	}
+	activity_queue.AddActivity(&schema.ActivityMsg{
+		UserID:           req.UserID,
+		ObjectID:         questionInfo.ID,
+		OriginalObjectID: questionInfo.ID,
+		ActivityTypeKey:  constant.ActQuestionReopened,
 	})
 	return nil
 }
@@ -427,6 +446,12 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 	question, err := qs.questioncommon.Info(ctx, questionID, userID)
 	if err != nil {
 		return
+	}
+	if question.Status != entity.QuestionStatusClosed {
+		per.CanReopen = false
+	}
+	if question.Status == entity.QuestionStatusClosed {
+		per.CanClose = false
 	}
 	question.MemberActions = permission.GetQuestionPermission(ctx, userID, question.UserID,
 		per.CanEdit, per.CanDelete, per.CanClose, per.CanReopen)

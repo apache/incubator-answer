@@ -88,7 +88,8 @@ func (rs *RankService) CheckOperationPermission(ctx context.Context, userID stri
 		}
 	}
 
-	return rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
+	can = rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
+	return can, nil
 }
 
 // CheckOperationPermissions verify that the user has permission
@@ -128,10 +129,7 @@ func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID str
 			can[idx] = true
 			continue
 		}
-		meetRank, err := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
-		if err != nil {
-			log.Error(err)
-		}
+		meetRank := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
 		can[idx] = meetRank
 	}
 	return can, nil
@@ -179,10 +177,7 @@ func (rs *RankService) CheckVotePermission(ctx context.Context, userID, objectID
 			action = permission.CommentVoteDown
 		}
 	}
-	meetRank, err := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
-	if err != nil {
-		log.Error(err)
-	}
+	meetRank := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
 	return meetRank, nil
 }
 
@@ -208,18 +203,19 @@ func (rs *RankService) getUserPowerMapping(ctx context.Context, userID string) (
 
 // CheckRankPermission verify that the user meets the prestige criteria
 func (rs *RankService) checkUserRank(ctx context.Context, userID string, userRank int, action string) (
-	can bool, err error) {
+	can bool) {
 	// get the amount of rank required for the current operation
 	requireRank, err := rs.configRepo.GetInt(action)
 	if err != nil {
-		return false, err
+		log.Error(err)
+		return false
 	}
 	if userRank < requireRank || requireRank < 0 {
 		log.Debugf("user %s want to do action %s, but rank %d < %d",
 			userID, action, userRank, requireRank)
-		return false, nil
+		return false
 	}
-	return true, nil
+	return true
 }
 
 // GetRankPersonalWithPage get personal comment list page

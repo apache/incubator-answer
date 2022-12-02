@@ -1,20 +1,22 @@
 package migrations
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
+	"xorm.io/xorm/schemas"
 )
 
-func addActivityTimeline(x *xorm.Engine) error {
+func addActivityTimeline(x *xorm.Engine) (err error) {
 	// only increasing field length to 128
 	type Config struct {
 		Key string `xorm:"unique VARCHAR(128) key"`
 	}
 	if err := x.Sync(new(Config)); err != nil {
-		return err
+		return fmt.Errorf("sync config table failed: %w", err)
 	}
 	defaultConfigTable := []*entity.Config{
 		{ID: 36, Key: "rank.question.add", Value: `1`},
@@ -72,18 +74,18 @@ func addActivityTimeline(x *xorm.Engine) error {
 	for _, c := range defaultConfigTable {
 		exist, err := x.Get(&entity.Config{ID: c.ID, Key: c.Key})
 		if err != nil {
-			return err
+			return fmt.Errorf("get config failed: %w", err)
 		}
 		if exist {
 			if _, err = x.Update(c, &entity.Config{ID: c.ID, Key: c.Key}); err != nil {
 				log.Errorf("update %+v config failed: %s", c, err)
-				return err
+				return fmt.Errorf("update config failed: %w", err)
 			}
 			continue
 		}
 		if _, err = x.Insert(&entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
 			log.Errorf("insert %+v config failed: %s", c, err)
-			return err
+			return fmt.Errorf("add config failed: %w", err)
 		}
 	}
 
@@ -107,5 +109,46 @@ func addActivityTimeline(x *xorm.Engine) error {
 		UpdatedAt      time.Time `xorm:"updated_at TIMESTAMP"`
 		LastEditUserID string    `xorm:"not null default 0 BIGINT(20) last_edit_user_id"`
 	}
-	return x.Sync(new(Activity), new(Revision), new(Tag), new(Question), new(Answer))
+	//logger := xormlog.NewSimpleLogger(os.Stdout)
+	//logger.SetLevel(xormlog.LOG_DEBUG)
+	//x.SetLogger(xormlog.NewLoggerAdapter(logger))
+	//
+	switch x.Dialect().URI().DBType {
+	case schemas.MYSQL:
+		_, err = x.Exec("ALTER TABLE `answer` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT NULL")
+	case schemas.POSTGRES:
+		_, err = x.Exec(`ALTER TABLE "answer" ALTER COLUMN "updated_at" DROP NOT NULL, ALTER COLUMN "updated_at" SET DEFAULT NULL`)
+	case schemas.SQLITE:
+		_, err = x.Exec(`DROP INDEX "main"."IDX_answer_user_id";
+
+ALTER TABLE "main"."answer" RENAME TO "_answer_old_20221202";
+
+CREATE TABLE "main"."answer" (
+  "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" DATETIME DEFAULT NULL,
+  "question_id" INTEGER NOT NULL DEFAULT 0,
+  "user_id" INTEGER NOT NULL DEFAULT 0,
+  "original_text" TEXT NOT NULL,
+  "parsed_text" TEXT NOT NULL,
+  "status" INTEGER NOT NULL DEFAULT 1,
+  "adopted" INTEGER NOT NULL DEFAULT 1,
+  "comment_count" INTEGER NOT NULL DEFAULT 0,
+  "vote_count" INTEGER NOT NULL DEFAULT 0,
+  "revision_id" INTEGER NOT NULL DEFAULT 0
+);
+
+INSERT INTO "main"."answer" ("id", "created_at", "updated_at", "question_id", "user_id", "original_text", "parsed_text", "status", "adopted", "comment_count", "vote_count", "revision_id") SELECT "id", "created_at", "updated_at", "question_id", "user_id", "original_text", "parsed_text", "status", "adopted", "comment_count", "vote_count", "revision_id" FROM "main"."_answer_old_20221202";
+
+CREATE INDEX "main"."IDX_answer_user_id"
+ON "answer" (
+  "user_id" ASC
+);`)
+	}
+
+	err = x.Sync(new(Activity), new(Revision), new(Tag), new(Question), new(Answer))
+	if err != nil {
+		return fmt.Errorf("sync table failed %w", err)
+	}
+	return nil
 }
