@@ -7,6 +7,7 @@ import (
 	"github.com/answerdev/answer/internal/service/revision"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
@@ -55,6 +56,7 @@ func (rs *RevisionService) GetRevision(ctx context.Context, revisionID string) (
 	revision *entity.Revision, err error) {
 	revisionInfo, exist, err := rs.revisionRepo.GetRevisionByID(ctx, revisionID)
 	if err != nil {
+		log.Error(err)
 		return nil, err
 	}
 	if !exist {

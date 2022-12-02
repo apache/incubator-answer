@@ -49,11 +49,6 @@ type CmsAnswerSearch struct {
 	QuestionID string `validate:"omitempty,gt=0,lte=24" json:"question_id" form:"question_id" ` //Query string
 }
 
-type AdminSetAnswerStatusRequest struct {
-	StatusStr string `json:"status" form:"status"`
-	AnswerID  string `json:"answer_id" form:"answer_id"`
-}
-
 // TableName answer table name
 func (Answer) TableName() string {
 	return "answer"
