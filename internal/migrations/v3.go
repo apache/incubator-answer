@@ -1,20 +1,104 @@
 package migrations
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
+	"xorm.io/xorm/schemas"
 )
 
-func addActivityTimeline(x *xorm.Engine) error {
+func addActivityTimeline(x *xorm.Engine) (err error) {
+	switch x.Dialect().URI().DBType {
+	case schemas.MYSQL:
+		_, err = x.Exec("ALTER TABLE `answer` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT NULL")
+		if err != nil {
+			return err
+		}
+		_, err = x.Exec("ALTER TABLE `question` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT NULL")
+		if err != nil {
+			return err
+		}
+	case schemas.POSTGRES:
+		_, err = x.Exec(`ALTER TABLE "answer" ALTER COLUMN "updated_at" DROP NOT NULL, ALTER COLUMN "updated_at" SET DEFAULT NULL`)
+		if err != nil {
+			return err
+		}
+		_, err = x.Exec(`ALTER TABLE "question" ALTER COLUMN "updated_at" DROP NOT NULL, ALTER COLUMN "updated_at" SET DEFAULT NULL`)
+		if err != nil {
+			return err
+		}
+	case schemas.SQLITE:
+		_, err = x.Exec(`DROP INDEX "IDX_answer_user_id";
+
+ALTER TABLE "answer" RENAME TO "_answer_old_v3";
+
+CREATE TABLE "answer" (
+  "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" DATETIME DEFAULT NULL,
+  "question_id" INTEGER NOT NULL DEFAULT 0,
+  "user_id" INTEGER NOT NULL DEFAULT 0,
+  "original_text" TEXT NOT NULL,
+  "parsed_text" TEXT NOT NULL,
+  "status" INTEGER NOT NULL DEFAULT 1,
+  "adopted" INTEGER NOT NULL DEFAULT 1,
+  "comment_count" INTEGER NOT NULL DEFAULT 0,
+  "vote_count" INTEGER NOT NULL DEFAULT 0,
+  "revision_id" INTEGER NOT NULL DEFAULT 0
+);
+
+INSERT INTO "answer" ("id", "created_at", "updated_at", "question_id", "user_id", "original_text", "parsed_text", "status", "adopted", "comment_count", "vote_count", "revision_id") SELECT "id", "created_at", "updated_at", "question_id", "user_id", "original_text", "parsed_text", "status", "adopted", "comment_count", "vote_count", "revision_id" FROM "_answer_old_v3";
+
+CREATE INDEX "IDX_answer_user_id"
+ON "answer" (
+  "user_id" ASC
+);
+DROP INDEX "IDX_question_user_id";
+
+ALTER TABLE "question" RENAME TO "_question_old_v3";
+
+CREATE TABLE "question" (
+  "id" INTEGER NOT NULL,
+  "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_at" DATETIME DEFAULT NULL,
+  "user_id" INTEGER NOT NULL DEFAULT 0,
+  "title" TEXT NOT NULL DEFAULT '',
+  "original_text" TEXT NOT NULL,
+  "parsed_text" TEXT NOT NULL,
+  "status" INTEGER NOT NULL DEFAULT 1,
+  "view_count" INTEGER NOT NULL DEFAULT 0,
+  "unique_view_count" INTEGER NOT NULL DEFAULT 0,
+  "vote_count" INTEGER NOT NULL DEFAULT 0,
+  "answer_count" INTEGER NOT NULL DEFAULT 0,
+  "collection_count" INTEGER NOT NULL DEFAULT 0,
+  "follow_count" INTEGER NOT NULL DEFAULT 0,
+  "accepted_answer_id" INTEGER NOT NULL DEFAULT 0,
+  "last_answer_id" INTEGER NOT NULL DEFAULT 0,
+  "post_update_time" DATETIME DEFAULT CURRENT_TIMESTAMP,
+  "revision_id" INTEGER NOT NULL DEFAULT 0,
+  PRIMARY KEY ("id")
+);
+
+INSERT INTO "question" ("id", "created_at", "updated_at", "user_id", "title", "original_text", "parsed_text", "status", "view_count", "unique_view_count", "vote_count", "answer_count", "collection_count", "follow_count", "accepted_answer_id", "last_answer_id", "post_update_time", "revision_id") SELECT "id", "created_at", "updated_at", "user_id", "title", "original_text", "parsed_text", "status", "view_count", "unique_view_count", "vote_count", "answer_count", "collection_count", "follow_count", "accepted_answer_id", "last_answer_id", "post_update_time", "revision_id" FROM "_question_old_v3";
+
+CREATE INDEX "IDX_question_user_id"
+ON "question" (
+  "user_id" ASC
+);`)
+		if err != nil {
+			return err
+		}
+	}
+
 	// only increasing field length to 128
 	type Config struct {
 		Key string `xorm:"unique VARCHAR(128) key"`
 	}
 	if err := x.Sync(new(Config)); err != nil {
-		return err
+		return fmt.Errorf("sync config table failed: %w", err)
 	}
 	defaultConfigTable := []*entity.Config{
 		{ID: 36, Key: "rank.question.add", Value: `1`},
@@ -29,7 +113,7 @@ func addActivityTimeline(x *xorm.Engine) error {
 		{ID: 45, Key: "rank.answer.vote_up", Value: `15`},
 		{ID: 46, Key: "rank.answer.vote_down", Value: `125`},
 		{ID: 47, Key: "rank.comment.add", Value: `1`},
-		{ID: 48, Key: "rank.comment.edit", Value: `1`},
+		{ID: 48, Key: "rank.comment.edit", Value: `-1`},
 		{ID: 49, Key: "rank.comment.delete", Value: `-1`},
 		{ID: 50, Key: "rank.report.add", Value: `1`},
 		{ID: 51, Key: "rank.tag.add", Value: `1`},
@@ -72,18 +156,18 @@ func addActivityTimeline(x *xorm.Engine) error {
 	for _, c := range defaultConfigTable {
 		exist, err := x.Get(&entity.Config{ID: c.ID, Key: c.Key})
 		if err != nil {
-			return err
+			return fmt.Errorf("get config failed: %w", err)
 		}
 		if exist {
 			if _, err = x.Update(c, &entity.Config{ID: c.ID, Key: c.Key}); err != nil {
 				log.Errorf("update %+v config failed: %s", c, err)
-				return err
+				return fmt.Errorf("update config failed: %w", err)
 			}
 			continue
 		}
 		if _, err = x.Insert(&entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
 			log.Errorf("insert %+v config failed: %s", c, err)
-			return err
+			return fmt.Errorf("add config failed: %w", err)
 		}
 	}
 
@@ -98,5 +182,19 @@ func addActivityTimeline(x *xorm.Engine) error {
 	type Tag struct {
 		UserID string `xorm:"not null default 0 BIGINT(20) user_id"`
 	}
-	return x.Sync(new(Activity), new(Revision), new(Tag))
+	type Question struct {
+		UpdatedAt      time.Time `xorm:"updated_at TIMESTAMP"`
+		LastEditUserID string    `xorm:"not null default 0 BIGINT(20) last_edit_user_id"`
+		PostUpdateTime time.Time `xorm:"post_update_time TIMESTAMP"`
+	}
+	type Answer struct {
+		UpdatedAt      time.Time `xorm:"updated_at TIMESTAMP"`
+		LastEditUserID string    `xorm:"not null default 0 BIGINT(20) last_edit_user_id"`
+	}
+
+	err = x.Sync(new(Activity), new(Revision), new(Tag), new(Question), new(Answer))
+	if err != nil {
+		return fmt.Errorf("sync table failed %w", err)
+	}
+	return nil
 }
