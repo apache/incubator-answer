@@ -144,6 +144,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	question.ParsedText = req.HTML
 	question.AcceptedAnswerID = "0"
 	question.LastAnswerID = "0"
+	question.LastEditUserID = "0"
 	//question.PostUpdateTime = nil
 	question.Status = entity.QuestionStatusAvailable
 	question.RevisionID = "0"
