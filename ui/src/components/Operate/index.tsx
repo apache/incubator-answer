@@ -1,6 +1,6 @@
 import { memo, FC } from 'react';
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from '@/components';
@@ -31,6 +31,7 @@ const Index: FC<IProps> = ({
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'delete' });
   const toast = useToast();
+  const navigate = useNavigate();
   const reportModal = useReportModal();
   const closeModal = useReportModal();
   const editUrl =
@@ -96,13 +97,14 @@ const Index: FC<IProps> = ({
       });
     }
   };
-  const handleEdit = async (evt) => {
+  const handleEdit = (evt, targetUrl) => {
+    evt.preventDefault();
     let checkObjectId = qid;
     if (type === 'answer') {
       checkObjectId = aid;
     }
-    editCheck(checkObjectId).catch(() => {
-      evt.preventDefault();
+    editCheck(checkObjectId).then(() => {
+      navigate(targetUrl);
     });
   };
 
@@ -133,7 +135,7 @@ const Index: FC<IProps> = ({
               key={item.action}
               to={editUrl}
               className="link-secondary p-0 fs-14 me-3"
-              onClick={handleEdit}
+              onClick={(evt) => handleEdit(evt, editUrl)}
               style={{ lineHeight: '23px' }}>
               {item.name}
             </Link>
