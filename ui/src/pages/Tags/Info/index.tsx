@@ -189,7 +189,7 @@ const TagIntroduction = () => {
                     <div className="mb-3">
                       {t('synonyms.text')}{' '}
                       <Tag
-                        className="me-2 mb-2"
+                        className="me-2"
                         data={{
                           slug_name: tagName || '',
                           main_tag_slug_name: '',
@@ -209,15 +209,13 @@ const TagIntroduction = () => {
                 {!isEdit &&
                   (synonymsData?.synonyms &&
                   synonymsData.synonyms.length > 0 ? (
-                    synonymsData.synonyms.map((item) => {
-                      return (
-                        <Tag
-                          key={item.tag_id}
-                          className="me-2 mb-2"
-                          data={item}
-                        />
-                      );
-                    })
+                    <div className="m-n1">
+                      {synonymsData.synonyms.map((item) => {
+                        return (
+                          <Tag key={item.tag_id} className="m-2" data={item} />
+                        );
+                      })}
+                    </div>
                   ) : (
                     <>
                       <div className="text-muted mb-3">

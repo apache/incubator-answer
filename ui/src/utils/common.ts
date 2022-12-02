@@ -173,6 +173,8 @@ function diffText(newText: string, oldText: string): string {
   if (typeof oldText !== 'string') {
     return newText
       ?.replace(/\n/gi, '<br>')
+      ?.replace(/<kbd/gi, '&lt;kbd')
+      ?.replace(/<\/kbd>/gi, '&lt;/kbd&gt;')
       ?.replace(/<iframe/gi, '&lt;iframe')
       ?.replace(/<input/gi, '&lt;input');
   }
