@@ -189,7 +189,6 @@ const TagIntroduction = () => {
                     <div className="mb-3">
                       {t('synonyms.text')}{' '}
                       <Tag
-                        className="me-2"
                         data={{
                           slug_name: tagName || '',
                           main_tag_slug_name: '',
@@ -212,7 +211,7 @@ const TagIntroduction = () => {
                     <div className="m-n1">
                       {synonymsData.synonyms.map((item) => {
                         return (
-                          <Tag key={item.tag_id} className="m-2" data={item} />
+                          <Tag key={item.tag_id} className="m-1" data={item} />
                         );
                       })}
                     </div>
