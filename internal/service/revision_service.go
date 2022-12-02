@@ -118,7 +118,7 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 }
 
 func (rs *RevisionService) revisionAuditQuestion(ctx context.Context, revisionitem *schema.GetRevisionResp) (err error) {
-	questioninfo, ok := revisionitem.ContentParsed.(*entity.QuestionWithTagsRevision)
+	questioninfo, ok := revisionitem.ContentParsed.(*schema.QuestionInfo)
 	if ok {
 		var PostUpdateTime time.Time
 		dbquestion, exist, dberr := rs.questionRepo.GetQuestion(ctx, questioninfo.ID)
@@ -126,16 +126,16 @@ func (rs *RevisionService) revisionAuditQuestion(ctx context.Context, revisionit
 			return
 		}
 
-		PostUpdateTime = questioninfo.Question.UpdatedAt
+		PostUpdateTime = time.Unix(questioninfo.UpdateTime, 0)
 		if dbquestion.PostUpdateTime.Unix() > PostUpdateTime.Unix() {
 			PostUpdateTime = dbquestion.PostUpdateTime
 		}
 		question := &entity.Question{}
-		question.ID = questioninfo.Question.ID
-		question.Title = questioninfo.Question.Title
-		question.OriginalText = questioninfo.Question.OriginalText
-		question.ParsedText = questioninfo.Question.ParsedText
-		question.UpdatedAt = questioninfo.Question.UpdatedAt
+		question.ID = questioninfo.ID
+		question.Title = questioninfo.Title
+		question.OriginalText = questioninfo.Content
+		question.ParsedText = questioninfo.HTML
+		question.UpdatedAt = time.Unix(questioninfo.UpdateTime, 0)
 		question.PostUpdateTime = PostUpdateTime
 		question.LastEditUserID = revisionitem.UserID
 		saveerr := rs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at", "post_update_time", "last_edit_user_id"})
