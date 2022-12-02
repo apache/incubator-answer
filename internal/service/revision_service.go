@@ -386,13 +386,14 @@ func (rs *RevisionService) parseItem(ctx context.Context, item *schema.GetRevisi
 }
 
 // CheckCanUpdateRevision can check revision
-func (rs *RevisionService) CheckCanUpdateRevision(ctx context.Context, req *schema.CheckCanQuestionUpdate) (err error) {
+func (rs *RevisionService) CheckCanUpdateRevision(ctx context.Context, req *schema.CheckCanQuestionUpdate) (
+	resp *schema.ErrTypeData, err error) {
 	_, exist, err := rs.revisionRepo.ExistUnreviewedByObjectID(ctx, req.ID)
 	if err != nil {
-		return err
+		return nil, nil
 	}
 	if exist {
-		return errors.BadRequest(reason.RevisionReviewUnderway)
+		return &schema.ErrTypeToast, errors.BadRequest(reason.RevisionReviewUnderway)
 	}
-	return nil
+	return nil, nil
 }

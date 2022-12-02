@@ -159,6 +159,6 @@ func (rc *RevisionController) CheckCanUpdateRevision(ctx *gin.Context) {
 		return
 	}
 
-	err = rc.revisionListService.CheckCanUpdateRevision(ctx, req)
-	handler.HandleResponse(ctx, err, nil)
+	resp, err := rc.revisionListService.CheckCanUpdateRevision(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
