@@ -135,7 +135,9 @@ const Index: FC = () => {
             <Col lg={{ span: 7, offset: 1 }}>
               <Alert variant="secondary">
                 <Stack className="align-items-start">
-                  <span className="badge text-bg-secondary">{editBadge}</span>
+                  <span className="badge text-bg-secondary mb-2">
+                    {editBadge}
+                  </span>
                   <Link to={itemLink} target="_blank">
                     {itemTitle}
                   </Link>

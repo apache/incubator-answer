@@ -190,6 +190,8 @@ function diffText(newText: string, oldText: string): string {
   return result
     .join('')
     ?.replace(/<iframe/gi, '&lt;iframe')
+    ?.replace(/<kbd/gi, '&lt;kbd')
+    ?.replace(/<\/kbd>/gi, '&lt;/kbd&gt;')
     ?.replace(/<input/gi, '&lt;input');
 }
 
