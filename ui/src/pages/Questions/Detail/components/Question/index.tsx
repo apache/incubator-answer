@@ -130,7 +130,8 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
           />
         </Col>
         <Col lg={3} className="mb-3 mb-md-0">
-          {data.update_user_info?.username !== data.user_info?.username ? (
+          {data.update_user_info &&
+          data.update_user_info?.username !== data.user_info?.username ? (
             <UserCard
               data={data?.update_user_info}
               time={data.edit_time}
