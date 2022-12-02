@@ -1,22 +1,41 @@
+import urlcat from 'urlcat';
+
 import type * as Type from '@/common/interface';
+import Pattern from '@/common/pattern';
+import { siteInfoStore } from '@/stores';
 
 const tagLanding = (tag: Type.Tag) => {
   let slugName = tag.main_tag_slug_name || tag.slug_name || '';
   slugName = slugName.toLowerCase();
-  return `/tags/${encodeURIComponent(slugName)}`;
+  return urlcat('/tags/:slugName', { slugName });
 };
 const tagInfo = (slugName: string) => {
   slugName = slugName.toLowerCase();
-  return `/tags/${encodeURIComponent(slugName)}/info`;
+  return urlcat('/tags/:slugName/info', { slugName });
 };
 const tagEdit = (tagId: string) => {
-  return `/tags/${tagId}/edit`;
+  return urlcat('/tags/:tagId/edit', { tagId });
 };
-const questionLanding = (question_id: string) => {
-  return `/questions/${question_id}`;
+const questionLanding = (questionId: string, title: string = '') => {
+  const { siteInfo } = siteInfoStore.getState();
+  if (siteInfo.permalink) {
+    title = title.toLowerCase();
+    title = title.trim().replace(/\s+/g, '-');
+    title = title.replace(Pattern.emoji, '');
+    return urlcat('/questions/:questionId/:title', { questionId, title });
+  }
+
+  return urlcat('/questions/:questionId', { questionId });
 };
-const answerLanding = (question_id: string, answer_id: string) => {
-  return `/questions/${question_id}/${answer_id}`;
+const answerLanding = (
+  questionId: string,
+  questionTitle: string = '',
+  answerId: string,
+) => {
+  const questionLandingUrl = questionLanding(questionId, questionTitle);
+  return urlcat(`${questionLandingUrl}/:answerId`, {
+    answerId,
+  });
 };
 
 export const pathFactory = {

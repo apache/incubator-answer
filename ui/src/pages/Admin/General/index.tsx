@@ -48,6 +48,13 @@ const General: FC = () => {
         title: t('contact_email.label'),
         description: t('contact_email.text'),
       },
+      permalink: {
+        type: 'boolean',
+        title: t('permalink.label'),
+        description: t('permalink.text'),
+        enum: [true, false],
+        enumNames: ['/questions/123/post-title', '/questions/123'],
+      },
     },
   };
   const uiSchema: UISchema = {
@@ -63,7 +70,7 @@ const General: FC = () => {
           }
           if (
             !url ||
-            /^https?:$/.test(url.protocol) === false ||
+            !/^https?:$/.test(url.protocol) ||
             url.pathname !== '/' ||
             url.search !== '' ||
             url.hash !== ''
@@ -86,6 +93,9 @@ const General: FC = () => {
         },
       },
     },
+    permalink: {
+      'ui:widget': 'select',
+    },
   };
   const [formData, setFormData] = useState<Type.FormDataType>(
     initFormData(schema),
@@ -100,6 +110,7 @@ const General: FC = () => {
       short_description: formData.short_description.value,
       site_url: formData.site_url.value,
       contact_email: formData.contact_email.value,
+      permalink: formData.permalink.value,
     };
 
     updateGeneralSetting(reqParams)

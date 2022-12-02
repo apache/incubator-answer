@@ -28,7 +28,6 @@ const Index = () => {
   const navigate = useNavigate();
   const { qid = '', aid = '' } = useParams();
   const [urlSearch] = useSearchParams();
-
   const page = Number(urlSearch.get('page') || 0);
   const order = urlSearch.get('order') || '';
   const [question, setQuestion] = useState<QuestionDetailRes | null>(null);

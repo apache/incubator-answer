@@ -1,5 +1,6 @@
 import { LoaderFunctionArgs, RouteObject } from 'react-router-dom';
 
+import { siteInfoStore } from '@/stores';
 import { guard } from '@/utils';
 import type { TGuardResult } from '@/utils/guard';
 
@@ -15,7 +16,7 @@ export interface RouteNode extends RouteObject {
    */
   guard?: (args: LoaderFunctionArgs) => Promise<TGuardResult>;
 }
-
+const { siteInfo } = siteInfoStore.getState();
 const routes: RouteNode[] = [
   {
     path: '/',
@@ -34,11 +35,13 @@ const routes: RouteNode[] = [
         page: 'pages/Questions',
       },
       {
-        path: 'questions/:qid',
+        path: siteInfo.permalink ? 'questions/:qid/:title' : 'questions/:qid',
         page: 'pages/Questions/Detail',
       },
       {
-        path: 'questions/:qid/:aid',
+        path: siteInfo.permalink
+          ? 'questions/:qid/:title/:aid'
+          : 'questions/:qid/:aid',
         page: 'pages/Questions/Detail',
       },
       {
