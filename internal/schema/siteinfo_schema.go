@@ -101,6 +101,7 @@ type TemplateSiteInfoResp struct {
 	Branding  *SiteBrandingResp  `json:"branding"`
 	Year      string
 	Canonical string
+	JsonLD    string
 }
 
 // UpdateSMTPConfigReq get smtp config request

@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -127,9 +128,6 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	id := ctx.Param("id")
 	answerid := ctx.Param("answerid")
-	siteInfo := tc.SiteInfo(ctx)
-	encodeTitle := url.QueryEscape("title")
-	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
 
 	detail, err := tc.templateRenderController.QuestionDetail(ctx, id)
 	if err != nil {
@@ -145,7 +143,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		PageSize:    999,
 		LoginUserID: "",
 	}
-	answers, _, err := tc.templateRenderController.AnswerList(ctx, answerReq)
+	answers, answerCount, err := tc.templateRenderController.AnswerList(ctx, answerReq)
 	if err != nil {
 		tc.Page404(ctx)
 		return
@@ -160,6 +158,37 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	if err != nil {
 		tc.Page404(ctx)
 		return
+	}
+	siteInfo := tc.SiteInfo(ctx)
+	encodeTitle := url.QueryEscape("title")
+	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
+	jsonLD := &schema.QAPageJsonLD{}
+	jsonLD.Context = "https://schema.org"
+	jsonLD.Type = "QAPage"
+	jsonLD.MainEntity.Type = "Question"
+	jsonLD.MainEntity.Name = detail.Title
+	jsonLD.MainEntity.Text = detail.HTML
+	jsonLD.MainEntity.AnswerCount = int(answerCount)
+	jsonLD.MainEntity.UpvoteCount = detail.VoteCount
+	jsonLD.MainEntity.DateCreated = time.Unix(detail.CreateTime, 0)
+	jsonLD.MainEntity.Author.Type = "Person"
+	jsonLD.MainEntity.Author.Name = detail.UserInfo.DisplayName
+	answerList := make([]*schema.SuggestedAnswerItem, 0)
+	for _, answer := range answers {
+		item := &schema.SuggestedAnswerItem{}
+		item.Type = "Answer"
+		item.Text = answer.HTML
+		item.DateCreated = time.Unix(answer.CreateTime, 0)
+		item.UpvoteCount = answer.VoteCount
+		item.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
+		item.Author.Type = "Person"
+		item.Author.Name = answer.UserInfo.DisplayName
+		answerList = append(answerList, item)
+	}
+	jsonLD.MainEntity.SuggestedAnswer = answerList
+	jsonLDStr, err := json.Marshal(jsonLD)
+	if err == nil {
+		siteInfo.JsonLD = `<script data-react-helmet="true" type="application/ld+json">` + string(jsonLDStr) + ` </script>`
 	}
 
 	ctx.HTML(http.StatusOK, "question-detail.html", gin.H{
