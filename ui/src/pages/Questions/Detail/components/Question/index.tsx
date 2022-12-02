@@ -132,7 +132,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
         <Col lg={3} className="mb-3 mb-md-0">
           {data.update_user_info?.username !== data.user_info?.username ? (
             <UserCard
-              data={data?.user_info}
+              data={data?.update_user_info}
               time={data.edit_time}
               preFix={t('edit')}
               isLogged={isLogged}
