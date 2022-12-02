@@ -162,6 +162,9 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	siteInfo := tc.SiteInfo(ctx)
 	encodeTitle := htmltext.UrlTitle(detail.Title)
 	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
+	if siteInfo.General.PermaLink == schema.PermaLinkQuestionID {
+		siteInfo.Canonical = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
+	}
 	jsonLD := &schema.QAPageJsonLD{}
 	jsonLD.Context = "https://schema.org"
 	jsonLD.Type = "QAPage"

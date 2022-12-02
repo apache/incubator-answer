@@ -5,6 +5,9 @@ import (
 	"net/url"
 )
 
+const PermaLinkQuestionIDAndTitle = 1
+const PermaLinkQuestionID = 2
+
 // SiteGeneralReq site general request
 type SiteGeneralReq struct {
 	Name             string `validate:"required,gt=1,lte=128" form:"name" json:"name"`
@@ -12,6 +15,7 @@ type SiteGeneralReq struct {
 	Description      string `validate:"required,gt=3,lte=2000" form:"description" json:"description"`
 	SiteUrl          string `validate:"required,gt=1,lte=512,url" form:"site_url" json:"site_url"`
 	ContactEmail     string `validate:"required,gt=1,lte=512,email" form:"contact_email" json:"contact_email"`
+	PermaLink        int    `validate:"required,lte=3,gte=0" form:"permalink" json:"permalink"`
 }
 
 func (r *SiteGeneralReq) FormatSiteUrl() {
