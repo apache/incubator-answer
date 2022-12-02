@@ -176,7 +176,7 @@ func (rr *revisionRepo) GetUnreviewedRevisionPage(ctx context.Context, page int,
 	session := rr.data.DB.NewSession()
 	session = session.And("status = ?", entity.RevisionUnreviewedStatus)
 	session = session.In("object_type", objectTypeList)
-	session = session.OrderBy("created_at desc")
+	session = session.OrderBy("created_at asc")
 
 	total, err = pager.Help(page, pageSize, &revisionList, &entity.Revision{}, session)
 	if err != nil {
