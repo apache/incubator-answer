@@ -44,6 +44,8 @@ type QuestionPermission struct {
 	CanDelete bool `json:"-"`
 	// whether user can close it
 	CanClose bool `json:"-"`
+	// whether user can reopen it
+	CanReopen bool `json:"-"`
 }
 
 type CheckCanQuestionUpdate struct {

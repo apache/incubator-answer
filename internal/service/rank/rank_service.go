@@ -2,7 +2,6 @@ package rank
 
 import (
 	"context"
-	"strings"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/pager"
@@ -12,6 +11,7 @@ import (
 	"github.com/answerdev/answer/internal/service/activity_type"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/object_info"
+	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/role"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/segmentfault/pacman/errors"
@@ -20,35 +20,7 @@ import (
 )
 
 const (
-	QuestionAddRank               = "rank.question.add"
-	QuestionEditRank              = "rank.question.edit"
-	QuestionEditWithoutReviewRank = "rank.question.edit_without_review"
-	QuestionDeleteRank            = "rank.question.delete"
-	QuestionVoteUpRank            = "rank.question.vote_up"
-	QuestionVoteDownRank          = "rank.question.vote_down"
-	AnswerAddRank                 = "rank.answer.add"
-	AnswerEditRank                = "rank.answer.edit"
-	AnswerEditWithoutReviewRank   = "rank.answer.edit_without_review"
-	AnswerDeleteRank              = "rank.answer.delete"
-	AnswerAcceptRank              = "rank.answer.accept"
-	AnswerVoteUpRank              = "rank.answer.vote_up"
-	AnswerVoteDownRank            = "rank.answer.vote_down"
-	CommentAddRank                = "rank.comment.add"
-	CommentEditRank               = "rank.comment.edit"
-	CommentDeleteRank             = "rank.comment.delete"
-	CommentVoteUpRank             = "rank.comment.vote_up"
-	CommentVoteDownRank           = "rank.comment.vote_down"
-	ReportAddRank                 = "rank.report.add"
-	TagAddRank                    = "rank.tag.add"
-	TagEditRank                   = "rank.tag.edit"
-	TagEditWithoutReviewRank      = "rank.tag.edit_without_review"
-	TagDeleteRank                 = "rank.tag.delete"
-	TagSynonymRank                = "rank.tag.synonym"
-	LinkUrlLimitRank              = "rank.link.url_limit"
-	VoteDetailRank                = "rank.vote.detail"
-	AnswerAuditRank               = "rank.answer.audit"
-	QuestionAuditRank             = "rank.question.audit"
-	TagAuditRank                  = "rank.tag.audit"
+	PermissionPrefix = "rank."
 )
 
 type UserRankRepo interface {
@@ -100,9 +72,7 @@ func (rs *RankService) CheckOperationPermission(ctx context.Context, userID stri
 		return false, nil
 	}
 	powerMapping := rs.getUserPowerMapping(ctx, userID)
-	// TODO: remove
-	act := strings.TrimPrefix(action, "rank.")
-	if powerMapping[act] {
+	if powerMapping[action] {
 		return true, nil
 	}
 
@@ -118,7 +88,7 @@ func (rs *RankService) CheckOperationPermission(ctx context.Context, userID stri
 		}
 	}
 
-	return rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, action)
+	return rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
 }
 
 // CheckOperationPermissions verify that the user has permission
@@ -154,13 +124,11 @@ func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID str
 	powerMapping := rs.getUserPowerMapping(ctx, userID)
 
 	for idx, action := range actions {
-		// TODO: remove
-		act := strings.TrimPrefix(action, "rank.")
-		if powerMapping[act] || objectOwner {
+		if powerMapping[action] || objectOwner {
 			can[idx] = true
 			continue
 		}
-		meetRank, err := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, action)
+		meetRank, err := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
 		if err != nil {
 			log.Error(err)
 		}
@@ -194,24 +162,24 @@ func (rs *RankService) CheckVotePermission(ctx context.Context, userID, objectID
 	switch objectInfo.ObjectType {
 	case constant.QuestionObjectType:
 		if voteUp {
-			action = QuestionVoteUpRank
+			action = permission.QuestionVoteUp
 		} else {
-			action = QuestionVoteDownRank
+			action = permission.QuestionVoteDown
 		}
 	case constant.AnswerObjectType:
 		if voteUp {
-			action = AnswerVoteUpRank
+			action = permission.AnswerVoteUp
 		} else {
-			action = AnswerVoteDownRank
+			action = permission.AnswerVoteDown
 		}
 	case constant.CommentObjectType:
 		if voteUp {
-			action = CommentVoteUpRank
+			action = permission.CommentVoteUp
 		} else {
-			action = CommentVoteDownRank
+			action = permission.CommentVoteDown
 		}
 	}
-	meetRank, err := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, action)
+	meetRank, err := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
 	if err != nil {
 		log.Error(err)
 	}

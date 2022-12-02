@@ -7,7 +7,7 @@ const (
 	QuestionEditWithoutReview = "question.edit_without_review"
 	QuestionDelete            = "question.delete"
 	QuestionClose             = "question.close"
-	QuestionOpen              = "question.open"
+	QuestionReopen            = "question.reopen"
 	QuestionVoteUp            = "question.vote_up"
 	QuestionVoteDown          = "question.vote_down"
 	AnswerAdd                 = "answer.add"

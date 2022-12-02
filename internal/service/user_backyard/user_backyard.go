@@ -78,8 +78,7 @@ func (us *UserBackyardService) UpdateUserStatus(ctx context.Context, req *schema
 func (us *UserBackyardService) UpdateUserRole(ctx context.Context, req *schema.UpdateUserRoleReq) (err error) {
 	// Users cannot modify their roles
 	if req.UserID == req.LoginUserID {
-		// TODO update user role error
-		return errors.BadRequest(reason.UnknownError)
+		return errors.BadRequest(reason.UserCannotUpdateYourRole)
 	}
 	return us.userRoleRelService.SaveUserRole(ctx, req.UserID, req.RoleID)
 }

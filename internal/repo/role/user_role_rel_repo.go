@@ -8,6 +8,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/role"
 	"github.com/segmentfault/pacman/errors"
+	"xorm.io/builder"
 	"xorm.io/xorm"
 )
 
@@ -33,7 +34,7 @@ func (ur *userRoleRelRepo) SaveUserRoleRel(ctx context.Context, userID string, r
 		}
 		if exist {
 			item.RoleID = roleID
-			_, err = ur.data.DB.Update(item)
+			_, err = ur.data.DB.ID(item.ID).Update(item)
 		} else {
 			_, err = ur.data.DB.Insert(&entity.UserRoleRel{UserID: userID, RoleID: roleID})
 		}
@@ -61,9 +62,9 @@ func (ur *userRoleRelRepo) GetUserRoleRelList(ctx context.Context, userIDs []str
 
 // GetUserRoleRel get user role
 func (ur *userRoleRelRepo) GetUserRoleRel(ctx context.Context, userID string) (
-	rolePowerRel *entity.RolePowerRel, exist bool, err error) {
-	rolePowerRel = &entity.RolePowerRel{}
-	exist, err = ur.data.DB.Where("user_id", userID).Get(rolePowerRel)
+	rolePowerRel *entity.UserRoleRel, exist bool, err error) {
+	rolePowerRel = &entity.UserRoleRel{}
+	exist, err = ur.data.DB.Where(builder.Eq{"user_id": userID}).Get(rolePowerRel)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

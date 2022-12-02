@@ -141,6 +141,8 @@ backend:
       install:
         create_config_failed:
           other: "Can’t create the config.yaml file."
+      cannot_update_your_role:
+        other: "You cannot modify your role."
   report:
     spam:
       name:

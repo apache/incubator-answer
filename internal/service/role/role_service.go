@@ -15,6 +15,10 @@ const (
 	// the current role information is translated directly.
 	// Later on, when the relevant ability is available, it can be adjusted by the user himself.
 
+	RoleUserID      = 1
+	RoleAdminID     = 2
+	RoleModeratorID = 3
+
 	roleUserName      = "User"
 	roleAdminName     = "Admin"
 	roleModeratorName = "Moderator"

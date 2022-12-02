@@ -105,7 +105,8 @@ backend:
         other: "用户名已被使用"
       set_avatar:
         other: "头像设置错误"
-
+      cannot_update_your_role:
+        other: "你无法修改自己的角色"
   report:
     spam:
       name:

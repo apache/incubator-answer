@@ -70,6 +70,7 @@ func InitDB(dataConf *data.Database) (err error) {
 
 func initAdminUser(engine *xorm.Engine) error {
 	_, err := engine.InsertOne(&entity.User{
+		ID:           "1",
 		Username:     "admin",
 		Pass:         "$2a$10$.gnUnpW.8ssRNaEvx.XwvOR2NuPsGzFLWWX2rqSIVAdIvLNZZYs5y", // admin
 		EMail:        "admin@admin.com",
@@ -78,7 +79,13 @@ func initAdminUser(engine *xorm.Engine) error {
 		Status:       1,
 		Rank:         1,
 		DisplayName:  "admin",
-		IsAdmin:      true,
+	})
+	if err != nil {
+		return err
+	}
+	_, err = engine.InsertOne(&entity.UserRoleRel{
+		UserID: "1",
+		RoleID: 2,
 	})
 	return err
 }

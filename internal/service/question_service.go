@@ -429,7 +429,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 		return
 	}
 	question.MemberActions = permission.GetQuestionPermission(ctx, userID, question.UserID,
-		per.CanEdit, per.CanDelete, per.CanClose)
+		per.CanEdit, per.CanDelete, per.CanClose, per.CanReopen)
 	return question, nil
 }
 

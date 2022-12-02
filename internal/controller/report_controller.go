@@ -5,6 +5,7 @@ import (
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/internal/service/report"
 	"github.com/gin-gonic/gin"
@@ -40,7 +41,7 @@ func (rc *ReportController) AddReport(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	can, err := rc.rankService.CheckOperationPermission(ctx, req.UserID, rank.ReportAddRank, "")
+	can, err := rc.rankService.CheckOperationPermission(ctx, req.UserID, permission.ReportAdd, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return

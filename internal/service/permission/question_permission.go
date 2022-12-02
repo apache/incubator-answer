@@ -7,7 +7,8 @@ import (
 )
 
 // GetQuestionPermission get question permission
-func GetQuestionPermission(ctx context.Context, userID string, creatorUserID string, canEdit, canDelete, canClose bool) (
+func GetQuestionPermission(ctx context.Context, userID string, creatorUserID string,
+	canEdit, canDelete, canClose, canReopen bool) (
 	actions []*schema.PermissionMemberAction) {
 	actions = make([]*schema.PermissionMemberAction, 0)
 	if len(userID) > 0 {
@@ -28,6 +29,13 @@ func GetQuestionPermission(ctx context.Context, userID string, creatorUserID str
 		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "close",
 			Name:   "Close",
+			Type:   "confirm",
+		})
+	}
+	if canReopen {
+		actions = append(actions, &schema.PermissionMemberAction{
+			Action: "reopen",
+			Name:   "Reopen",
 			Type:   "confirm",
 		})
 	}

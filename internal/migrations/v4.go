@@ -40,7 +40,7 @@ func addRoleFeatures(x *xorm.Engine) error {
 		{ID: 4, Name: "question edit without review", PowerType: permission.QuestionEditWithoutReview, Description: "question edit without review"},
 		{ID: 5, Name: "question delete", PowerType: permission.QuestionDelete, Description: "question delete"},
 		{ID: 6, Name: "question close", PowerType: permission.QuestionClose, Description: "question close"},
-		{ID: 7, Name: "question open", PowerType: permission.QuestionOpen, Description: "question open"},
+		{ID: 7, Name: "question reopen", PowerType: permission.QuestionReopen, Description: "question reopen"},
 		{ID: 8, Name: "question vote up", PowerType: permission.QuestionVoteUp, Description: "question vote up"},
 		{ID: 9, Name: "question vote down", PowerType: permission.QuestionVoteDown, Description: "question vote down"},
 		{ID: 10, Name: "answer add", PowerType: permission.AnswerAdd, Description: "answer add"},
@@ -70,14 +70,15 @@ func addRoleFeatures(x *xorm.Engine) error {
 	}
 	// insert default powers
 	for _, power := range powers {
-		exist, err := x.Get(&entity.Power{Name: power.Name})
+		exist, err := x.Get(&entity.Power{ID: power.ID})
 		if err != nil {
 			return err
 		}
 		if exist {
-			continue
+			_, err = x.ID(power.ID).Update(&power)
+		} else {
+			_, err = x.Insert(power)
 		}
-		_, err = x.Insert(power)
 		if err != nil {
 			return err
 		}
@@ -90,7 +91,7 @@ func addRoleFeatures(x *xorm.Engine) error {
 		{RoleID: 2, PowerType: permission.QuestionEditWithoutReview},
 		{RoleID: 2, PowerType: permission.QuestionDelete},
 		{RoleID: 2, PowerType: permission.QuestionClose},
-		{RoleID: 2, PowerType: permission.QuestionOpen},
+		{RoleID: 2, PowerType: permission.QuestionReopen},
 		{RoleID: 2, PowerType: permission.QuestionVoteUp},
 		{RoleID: 2, PowerType: permission.QuestionVoteDown},
 		{RoleID: 2, PowerType: permission.AnswerAdd},
@@ -123,7 +124,7 @@ func addRoleFeatures(x *xorm.Engine) error {
 		{RoleID: 3, PowerType: permission.QuestionEditWithoutReview},
 		{RoleID: 3, PowerType: permission.QuestionDelete},
 		{RoleID: 3, PowerType: permission.QuestionClose},
-		{RoleID: 3, PowerType: permission.QuestionOpen},
+		{RoleID: 3, PowerType: permission.QuestionReopen},
 		{RoleID: 3, PowerType: permission.QuestionVoteUp},
 		{RoleID: 3, PowerType: permission.QuestionVoteDown},
 		{RoleID: 3, PowerType: permission.AnswerAdd},

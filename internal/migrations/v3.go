@@ -98,5 +98,14 @@ func addActivityTimeline(x *xorm.Engine) error {
 	type Tag struct {
 		UserID string `xorm:"not null default 0 BIGINT(20) user_id"`
 	}
-	return x.Sync(new(Activity), new(Revision), new(Tag))
+	type Question struct {
+		UpdatedAt      time.Time `xorm:"updated_at TIMESTAMP"`
+		LastEditUserID string    `xorm:"not null default 0 BIGINT(20) last_edit_user_id"`
+		PostUpdateTime time.Time `xorm:"post_update_time TIMESTAMP"`
+	}
+	type Answer struct {
+		UpdatedAt      time.Time `xorm:"updated_at TIMESTAMP"`
+		LastEditUserID string    `xorm:"not null default 0 BIGINT(20) last_edit_user_id"`
+	}
+	return x.Sync(new(Activity), new(Revision), new(Tag), new(Question), new(Answer))
 }
