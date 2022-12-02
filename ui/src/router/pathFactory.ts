@@ -22,7 +22,9 @@ const questionLanding = (questionId: string, title: string = '') => {
     title = title.toLowerCase();
     title = title.trim().replace(/\s+/g, '-');
     title = title.replace(Pattern.emoji, '');
-    return urlcat('/questions/:questionId/:title', { questionId, title });
+    if (title) {
+      return urlcat('/questions/:questionId/:title', { questionId, title });
+    }
   }
 
   return urlcat('/questions/:questionId', { questionId });

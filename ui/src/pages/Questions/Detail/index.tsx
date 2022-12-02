@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 
+import Pattern from '@/common/pattern';
 import { Pagination, PageTitle } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
 import { scrollTop } from '@/utils';
@@ -26,7 +27,13 @@ import './index.scss';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { qid = '', aid = '' } = useParams();
+  const { qid = '', slugPermalink = '' } = useParams();
+  // Compatible with Permalink
+  let { aid = '' } = useParams();
+  if (!aid && Pattern.isAnswerId.test(slugPermalink)) {
+    aid = slugPermalink;
+  }
+
   const [urlSearch] = useSearchParams();
   const page = Number(urlSearch.get('page') || 0);
   const order = urlSearch.get('order') || '';
