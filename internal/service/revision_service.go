@@ -118,16 +118,25 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 }
 
 func (rs *RevisionService) revisionAuditQuestion(ctx context.Context, revisionitem *schema.GetRevisionResp) (err error) {
-	questioninfo, ok := revisionitem.ContentParsed.(*schema.QuestionInfo)
+	questioninfo, ok := revisionitem.ContentParsed.(*entity.QuestionWithTagsRevision)
 	if ok {
-		now := time.Now()
+		var PostUpdateTime time.Time
+		dbquestion, exist, dberr := rs.questionRepo.GetQuestion(ctx, questioninfo.ID)
+		if dberr != nil || !exist {
+			return
+		}
+
+		PostUpdateTime = questioninfo.Question.UpdatedAt
+		if dbquestion.PostUpdateTime.Unix() > PostUpdateTime.Unix() {
+			PostUpdateTime = dbquestion.PostUpdateTime
+		}
 		question := &entity.Question{}
-		question.ID = questioninfo.ID
-		question.Title = questioninfo.Title
-		question.OriginalText = questioninfo.Content
-		question.ParsedText = questioninfo.HTML
-		question.UpdatedAt = now
-		question.PostUpdateTime = now
+		question.ID = questioninfo.Question.ID
+		question.Title = questioninfo.Question.Title
+		question.OriginalText = questioninfo.Question.OriginalText
+		question.ParsedText = questioninfo.Question.ParsedText
+		question.UpdatedAt = questioninfo.Question.UpdatedAt
+		question.PostUpdateTime = PostUpdateTime
 		question.LastEditUserID = revisionitem.UserID
 		saveerr := rs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at", "post_update_time", "last_edit_user_id"})
 		if saveerr != nil {
