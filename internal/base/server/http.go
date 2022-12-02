@@ -4,12 +4,15 @@ import (
 	"html/template"
 	"io/fs"
 	"os"
+	"time"
 
 	brotli "github.com/anargu/gin-brotli"
 	"github.com/answerdev/answer/internal/base/middleware"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/router"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/pacman/i18n"
 )
 
 // NewHTTPServer new http server.
@@ -57,6 +60,12 @@ func NewHTTPServer(debug bool,
 	r.SetFuncMap(template.FuncMap{
 		"templateHTML": func(data string) template.HTML {
 			return template.HTML(data)
+		},
+		"translator": func(la i18n.Language, data string) string {
+			return translator.GlobalTrans.Tr(la, data)
+		},
+		"translatorTimeFormat": func(la i18n.Language, timestamp int64) string {
+			return time.Unix(timestamp, 0).Format("2006-01-02 15:04:05")
 		},
 	})
 

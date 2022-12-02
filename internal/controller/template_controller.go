@@ -274,6 +274,7 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 		"userinfo":   userinfo,
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
+		"language":   handler.GetLang(ctx),
 		"bio":        template.HTML(userinfo.Info.BioHTML),
 	})
 }
