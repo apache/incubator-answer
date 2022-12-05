@@ -169,12 +169,11 @@ func (rs *RevisionService) revisionAuditQuestion(ctx context.Context, revisionit
 func (rs *RevisionService) revisionAuditAnswer(ctx context.Context, revisionitem *schema.GetRevisionResp) (err error) {
 	answerinfo, ok := revisionitem.ContentParsed.(*schema.AnswerInfo)
 	if ok {
-		now := time.Now()
 		insertData := new(entity.Answer)
 		insertData.ID = answerinfo.ID
 		insertData.OriginalText = answerinfo.Content
 		insertData.ParsedText = answerinfo.HTML
-		insertData.UpdatedAt = now
+		insertData.UpdatedAt = time.Unix(answerinfo.UpdateTime, 0)
 		insertData.LastEditUserID = revisionitem.UserID
 		saveerr := rs.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "updated_at", "last_edit_user_id"})
 		if saveerr != nil {
