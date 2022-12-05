@@ -1,7 +1,7 @@
 import type * as Type from '@/common/interface';
 
 const tagLanding = (tag: Type.Tag) => {
-  let slugName = tag.main_tag_slug_name || tag.slug_name || '';
+  let slugName = tag.slug_name || '';
   slugName = slugName.toLowerCase();
   return `/tags/${encodeURIComponent(slugName)}`;
 };
