@@ -10,13 +10,13 @@
           class="d-flex flex-wrap align-items-center fs-14 mb-3 text-secondary">
           <time class="me-3"
                 datetime="{{timeFormatISO $.timezone .detail.CreateTime}}"
-                title="{{translatorTimeFormatLongDate $.language $.timezone .detail.CreateTime}}">Asked {{translatorTimeFormat $.language $.timezone .detail.CreateTime}}
+                title="{{translatorTimeFormatLongDate $.language $.timezone .detail.CreateTime}}">{{translator $.language "ui.question_detail.Asked"}} {{translatorTimeFormat $.language $.timezone .detail.CreateTime}}
           </time>
           <time class="me-3"
                 datetime="{{timeFormatISO $.timezone .detail.UpdateTime}}"
-                title="{{translatorTimeFormatLongDate $.language $.timezone .detail.UpdateTime}}">Modified {{translatorTimeFormat $.language $.timezone .detail.UpdateTime}}
+                title="{{translatorTimeFormatLongDate $.language $.timezone .detail.UpdateTime}}">{{translator $.language "ui.question_detail.update"}} {{translatorTimeFormat $.language $.timezone .detail.UpdateTime}}
           </time>
-          <div class="me-3">Viewed {{.detail.ViewCount}}</div>
+          <div class="me-3">{{translator $.language "ui.question_detail.Views"}} {{.detail.ViewCount}}</div>
 
         </div>
         <div class="m-n1">
@@ -54,7 +54,8 @@
             <a href="/posts/{{.detail.ID}}/timeline">
               <time class="link-secondary fs-14"
                     datetime="{{timeFormatISO $.timezone .detail.UpdateTime}}"
-                    title="{{translatorTimeFormatLongDate $.language $.timezone .detail.UpdateTime}}">edited {{translatorTimeFormat $.language $.timezone .detail.UpdateTime}}
+                    title="{{translatorTimeFormatLongDate $.language $.timezone .detail.UpdateTime}}">
+                {{translator $.language "ui.question_detail.edit"}} {{translatorTimeFormat $.language $.timezone .detail.UpdateTime}}
               </time>
             </a>
           </div>
@@ -79,7 +80,7 @@
                 <a href="/posts/{{.detail.ID}}/timeline">
                   <time class="link-secondary"
                         datetime="{{timeFormatISO $.timezone .detail.CreateTime}}"
-                        title="{{translatorTimeFormatLongDate $.language $.timezone .detail.CreateTime}}">asked {{translatorTimeFormat $.language $.timezone .detail.CreateTime}}
+                        title="{{translatorTimeFormatLongDate $.language $.timezone .detail.CreateTime}}">{{translator $.language "ui.question_detail.asked"}} {{translatorTimeFormat $.language $.timezone .detail.CreateTime}}
                   </time>
                 </a>
               </div>
@@ -116,7 +117,7 @@
           {{if eq 2 .Adopted}}
           <button type="button" disabled=""
                   class="ms-3 active opacity-100 bg-success text-white btn btn-outline-success">
-            <i class="br bi-check-circle-fill me-2"></i><span>Accepted</span>
+            <i class="br bi-check-circle-fill me-2"></i><span>{{translator $.language "ui.question_detail.answers.btn_accepted"}}</span>
           </button>
           {{end}}
         </div>
@@ -131,7 +132,8 @@
               <time
                 class="link-secondary fs-14"
                 datetime="{{timeFormatISO $.timezone .UpdateTime}}"
-                title="{{translatorTimeFormatLongDate $.language $.timezone .UpdateTime}}">edited {{translatorTimeFormat $.language $.timezone .UpdateTime}}
+                title="{{translatorTimeFormatLongDate $.language $.timezone .UpdateTime}}">
+                {{translator $.language "ui.question_detail.edit"}} {{translatorTimeFormat $.language $.timezone .UpdateTime}}
               </time>
             </a>
           </div>
@@ -157,7 +159,7 @@
                   <time
                     class="link-secondary"
                     datetime="{{timeFormatISO $.timezone .CreateTime}}"
-                    title="{{translatorTimeFormatLongDate $.language $.timezone .CreateTime}}">answered {{translatorTimeFormat $.language $.timezone .CreateTime}}
+                    title="{{translatorTimeFormatLongDate $.language $.timezone .CreateTime}}">{{translator $.language "ui.question_detail.answered"}} {{translatorTimeFormat $.language $.timezone .CreateTime}}
                   </time>
                 </a>
               </div>

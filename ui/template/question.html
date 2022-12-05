@@ -4,7 +4,7 @@
     <div class="col-xxl-7 col-lg-8 col-sm-12">
       <div>
         <div class="mb-3 d-flex flex-wrap justify-content-between">
-          <h5 class="fs-5 text-nowrap mb-3 mb-md-0">All Questions</h5>
+          <h5 class="fs-5 text-nowrap mb-3 mb-md-0">{{translator $.language "ui.question.all_questions"}}</h5>
         </div>
         <div class="border-top border-bottom-0 list-group list-group-flush">
           {{range .data}}
@@ -23,7 +23,7 @@
                 •
                 <time class="text-secondary ms-1"
                       datetime="{{timeFormatISO $.timezone .CreateTime}}"
-                      title="{{translatorTimeFormatLongDate $.language $.timezone .CreateTime}}">asked {{translatorTimeFormat $.language $.timezone .CreateTime}}
+                      title="{{translatorTimeFormatLongDate $.language $.timezone .CreateTime}}">{{translator $.language "ui.question.asked"}} {{translatorTimeFormat $.language $.timezone .CreateTime}}
                 </time>
               </div>
               <div class="ms-0 ms-md-3 mt-2 mt-md-0">
