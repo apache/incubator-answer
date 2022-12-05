@@ -241,3 +241,33 @@ func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.Upda
 	}
 	return
 }
+
+func (s *SiteInfoService) GetSeo(ctx context.Context) (resp *schema.SiteSeoResp, err error) {
+	resp = &schema.SiteSeoResp{}
+	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeSeo)
+	if err != nil {
+		log.Error(err)
+		return resp, nil
+	}
+	if !exist {
+		return resp, nil
+	}
+	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+	return resp, nil
+}
+
+func (s *SiteInfoService) SaveSeo(ctx context.Context, req schema.SiteSeoReq) (err error) {
+	var (
+		siteType = constant.SiteTypeSeo
+		content  []byte
+	)
+	content, _ = json.Marshal(req)
+
+	data := entity.SiteInfo{
+		Type:    siteType,
+		Content: string(content),
+	}
+
+	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
+	return
+}

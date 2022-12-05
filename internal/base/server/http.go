@@ -1,9 +1,6 @@
 package server
 
 import (
-	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/pkg/converter"
-	"github.com/answerdev/answer/pkg/day"
 	"html/template"
 	"io/fs"
 	"math"
@@ -11,6 +8,10 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/pkg/converter"
+	"github.com/answerdev/answer/pkg/day"
 
 	brotli "github.com/anargu/gin-brotli"
 	"github.com/answerdev/answer/internal/base/middleware"

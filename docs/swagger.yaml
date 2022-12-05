@@ -1223,6 +1223,20 @@ definitions:
       terms_of_service_parsed_text:
         type: string
     type: object
+  schema.SiteSeoReq:
+    properties:
+      robots:
+        type: string
+    required:
+    - robots
+    type: object
+  schema.SiteSeoResp:
+    properties:
+      robots:
+        type: string
+    required:
+    - robots
+    type: object
   schema.SiteWriteReq:
     properties:
       recommend_tags:
@@ -2069,6 +2083,47 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: update site legal info
+      tags:
+      - admin
+  /answer/admin/api/siteinfo/seo:
+    get:
+      description: get site seo information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SiteSeoResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get site seo information
+      tags:
+      - admin
+    put:
+      description: update site seo information
+      parameters:
+      - description: seo
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.SiteSeoReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update site seo information
       tags:
       - admin
   /answer/admin/api/siteinfo/write:
@@ -4230,6 +4285,19 @@ paths:
       summary: UserList
       tags:
       - api-question
+  /robots.txt:
+    get:
+      description: get site robots information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: get site robots information
+      tags:
+      - site
 securityDefinitions:
   ApiKeyAuth:
     in: header

@@ -18,6 +18,10 @@ type SiteGeneralReq struct {
 	PermaLink        int    `validate:"required,lte=3,gte=0" form:"permalink" json:"permalink"`
 }
 
+type SiteSeoReq struct {
+	Robots string `validate:"required" form:"robots" json:"robots"`
+}
+
 func (r *SiteGeneralReq) FormatSiteUrl() {
 	parsedUrl, err := url.Parse(r.SiteUrl)
 	if err != nil {
@@ -92,6 +96,8 @@ type SiteWriteResp SiteWriteReq
 
 // SiteLegalResp site write response
 type SiteLegalResp SiteLegalReq
+
+type SiteSeoResp SiteSeoReq
 
 // SiteInfoResp get site info response
 type SiteInfoResp struct {

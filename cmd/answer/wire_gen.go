@@ -192,7 +192,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	avatarMiddleware := middleware.NewAvatarMiddleware(serviceConf, uploaderService)
 	templateRenderController := templaterender.NewTemplateRenderController(questionService, userService, tagService, answerService, commentService)
 	templateController := controller.NewTemplateController(templateRenderController, siteInfoCommonService)
-	templateRouter := router.NewTemplateRouter(templateController, templateRenderController)
+	templateRouter := router.NewTemplateRouter(templateController, templateRenderController, siteInfoController)
 	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter)
 	application := newApplication(serverConf, ginEngine)
 	return application, func() {

@@ -787,6 +787,77 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/siteinfo/seo": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get site seo information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "get site seo information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.SiteSeoResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update site seo information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "update site seo information",
+                "parameters": [
+                    {
+                        "description": "seo",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.SiteSeoReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/siteinfo/write": {
             "get": {
                 "security": [
@@ -4337,6 +4408,26 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/robots.txt": {
+            "get": {
+                "description": "get site robots information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "site"
+                ],
+                "summary": "get site robots information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -6033,6 +6124,28 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "terms_of_service_parsed_text": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.SiteSeoReq": {
+            "type": "object",
+            "required": [
+                "robots"
+            ],
+            "properties": {
+                "robots": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.SiteSeoResp": {
+            "type": "object",
+            "required": [
+                "robots"
+            ],
+            "properties": {
+                "robots": {
                     "type": "string"
                 }
             }
