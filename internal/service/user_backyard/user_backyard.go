@@ -12,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/role"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -30,16 +31,19 @@ type UserBackyardRepo interface {
 type UserBackyardService struct {
 	userRepo           UserBackyardRepo
 	userRoleRelService *role.UserRoleRelService
+	authService        *auth.AuthService
 }
 
 // NewUserBackyardService new user backyard service
 func NewUserBackyardService(
 	userRepo UserBackyardRepo,
 	userRoleRelService *role.UserRoleRelService,
+	authService *auth.AuthService,
 ) *UserBackyardService {
 	return &UserBackyardService{
 		userRepo:           userRepo,
 		userRoleRelService: userRoleRelService,
+		authService:        authService,
 	}
 }
 
@@ -80,7 +84,14 @@ func (us *UserBackyardService) UpdateUserRole(ctx context.Context, req *schema.U
 	if req.UserID == req.LoginUserID {
 		return errors.BadRequest(reason.UserCannotUpdateYourRole)
 	}
-	return us.userRoleRelService.SaveUserRole(ctx, req.UserID, req.RoleID)
+
+	err = us.userRoleRelService.SaveUserRole(ctx, req.UserID, req.RoleID)
+	if err != nil {
+		return err
+	}
+
+	us.authService.RemoveAllUserTokens(ctx, req.UserID)
+	return
 }
 
 // GetUserInfo get user one

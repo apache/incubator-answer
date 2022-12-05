@@ -179,7 +179,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reportBackyardService := report_backyard.NewReportBackyardService(reportRepo, userCommon, commonRepo, answerRepo, questionRepo, commentCommonRepo, reportHandle, configRepo)
 	controller_backyardReportController := controller_backyard.NewReportController(reportBackyardService)
 	userBackyardRepo := user.NewUserBackyardRepo(dataData, authRepo)
-	userBackyardService := user_backyard.NewUserBackyardService(userBackyardRepo, userRoleRelService)
+	userBackyardService := user_backyard.NewUserBackyardService(userBackyardRepo, userRoleRelService, authService)
 	userBackyardController := controller_backyard.NewUserBackyardController(userBackyardService)
 	reasonRepo := reason.NewReasonRepo(configRepo)
 	reasonService := reason2.NewReasonService(reasonRepo)
