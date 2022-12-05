@@ -169,6 +169,18 @@ func (rs *RevisionService) revisionAuditQuestion(ctx context.Context, revisionit
 func (rs *RevisionService) revisionAuditAnswer(ctx context.Context, revisionitem *schema.GetRevisionResp) (err error) {
 	answerinfo, ok := revisionitem.ContentParsed.(*schema.AnswerInfo)
 	if ok {
+
+		var PostUpdateTime time.Time
+		dbquestion, exist, dberr := rs.questionRepo.GetQuestion(ctx, answerinfo.QuestionID)
+		if dberr != nil || !exist {
+			return
+		}
+
+		PostUpdateTime = time.Unix(answerinfo.UpdateTime, 0)
+		if dbquestion.PostUpdateTime.Unix() > PostUpdateTime.Unix() {
+			PostUpdateTime = dbquestion.PostUpdateTime
+		}
+
 		insertData := new(entity.Answer)
 		insertData.ID = answerinfo.ID
 		insertData.OriginalText = answerinfo.Content
@@ -179,7 +191,7 @@ func (rs *RevisionService) revisionAuditAnswer(ctx context.Context, revisionitem
 		if saveerr != nil {
 			return saveerr
 		}
-		saveerr = rs.questionCommon.UpdataPostSetTime(ctx, answerinfo.QuestionID, time.Unix(answerinfo.UpdateTime, 0))
+		saveerr = rs.questionCommon.UpdataPostSetTime(ctx, answerinfo.QuestionID, PostUpdateTime)
 		if saveerr != nil {
 			return saveerr
 		}
