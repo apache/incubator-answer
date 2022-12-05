@@ -179,7 +179,7 @@ func (rs *RevisionService) revisionAuditAnswer(ctx context.Context, revisionitem
 		if saveerr != nil {
 			return saveerr
 		}
-		saveerr = rs.questionCommon.UpdataPostTime(ctx, answerinfo.QuestionID)
+		saveerr = rs.questionCommon.UpdataPostSetTime(ctx, answerinfo.QuestionID, time.Unix(answerinfo.UpdateTime, 0))
 		if saveerr != nil {
 			return saveerr
 		}

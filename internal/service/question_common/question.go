@@ -115,6 +115,12 @@ func (qs *QuestionCommon) UpdataPostTime(ctx context.Context, questionID string)
 	questioninfo.PostUpdateTime = now
 	return qs.questionRepo.UpdateQuestion(ctx, questioninfo, []string{"post_update_time"})
 }
+func (qs *QuestionCommon) UpdataPostSetTime(ctx context.Context, questionID string, setTime time.Time) error {
+	questioninfo := &entity.Question{}
+	questioninfo.ID = questionID
+	questioninfo.PostUpdateTime = setTime
+	return qs.questionRepo.UpdateQuestion(ctx, questioninfo, []string{"post_update_time"})
+}
 
 func (qs *QuestionCommon) FindInfoByID(ctx context.Context, questionIDs []string, loginUserID string) (map[string]*schema.QuestionInfo, error) {
 	list := make(map[string]*schema.QuestionInfo)
