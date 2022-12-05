@@ -187,16 +187,6 @@ backend:
         other: "Your answer has been deleted"
       your_comment_was_deleted:
         other: "Your comment has been deleted"
-  dates:
-    long_date: "Jan 2"
-    long_date_with_year: "Jan 2, 2006"
-    long_date_with_time: "Jan 2, 2006 at 15:04"
-    now: now
-    x_seconds_ago: "{{count}}s ago"
-    x_minutes_ago: "{{count}}m ago"
-    x_hours_ago: "{{count}}h ago"
-    hour: hour
-    day: day
 
 # The following fields are used for interface presentation(Front-end)
 ui:
@@ -384,10 +374,10 @@ ui:
         slug_name:
           label: URL Slug
           description: 'Must use the character set "a-z", "0-9", "+ # - ."'
-          msg:
-            empty: URL slug cannot be empty.
-            range: URL slug up to 35 characters.
-            character: URL slug contains unallowed character set.
+          msg: "todo"
+#            empty: URL slug cannot be empty.
+#            range: URL slug up to 35 characters.
+#            character: URL slug contains unallowed character set.
         description:
           label: Description (optional)
     btn_cancel: Cancel

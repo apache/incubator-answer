@@ -171,14 +171,6 @@ backend:
         other: "你的答案已被删除"
       your_comment_was_deleted:
         other: "你的评论已被删除"
-  dates:
-    long_date: "01月02日"
-    long_date_with_year: "2006年01月02日"
-    long_date_with_time: "2006年01月02日 15:04"
-    now: 刚刚
-    x_seconds_ago: '{{count}} 秒前'
-    x_minutes_ago: '{{count}} 分钟前'
-    x_hours_ago: '{{count}} 小时前'
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -361,10 +353,10 @@ ui:
         slug_name:
           label: URL 固定链接
           description: '必须由 "a-z", "0-9", "+ # - ." 组成'
-          msg:
-            empty: 不能为空
-            range: 不能超过 35 个字符
-            character: 包含非法字符
+          msg: "todo"
+#            empty: 不能为空
+#            range: 不能超过 35 个字符
+#            character: 包含非法字符
         description:
           label: 标签描述(可选)
     btn_cancel: 取消
