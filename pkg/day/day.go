@@ -32,10 +32,11 @@ func Format(unix int64, format, tz string) (formatted string) {
 		format = strings.ReplaceAll(format, placeholders[i].old, placeholders[i].new)
 	}*/
 	toFormat := ""
-	for len(format) > 0 {
-		to, suffix := nextStdChunk(format)
-		toFormat += to
-		format = suffix
+	from := []rune(format)
+	for len(from) > 0 {
+		to, suffix := nextStdChunk(from)
+		toFormat += string(to)
+		from = suffix
 	}
 
 	_, _ = time.LoadLocation(tz)
@@ -43,26 +44,27 @@ func Format(unix int64, format, tz string) (formatted string) {
 	return
 }
 
-func nextStdChunk(from string) (to, suffix string) {
+func nextStdChunk(from []rune) (to, suffix []rune) {
 	if len(from) == 0 {
-		to = ""
-		suffix = ""
+		to = []rune{}
+		suffix = []rune{}
 		return
 	}
 
 	s := string(from[0])
 	old := ""
+
 	switch s {
 	case "Y":
-		if len(from) >= 4 && from[:4] == "YYYY" {
+		if len(from) >= 4 && string(from[:4]) == "YYYY" {
 			old = "YYYY"
-		} else if len(from) >= 2 && from[:2] == "YY" {
+		} else if len(from) >= 2 && string(from[:2]) == "YY" {
 			old = "YY"
 		}
 	case "M":
 		for i := 4; i > 0; i-- {
 			if len(from) >= i {
-				switch from[:i] {
+				switch string(from[:i]) {
 				case "MMMM":
 					old = "MMMM"
 				case "MMM":
@@ -80,7 +82,7 @@ func nextStdChunk(from string) (to, suffix string) {
 	case "D":
 		for i := 2; i >= 0; i-- {
 			if len(from) >= i {
-				switch from[:i] {
+				switch string(from[:i]) {
 				case "DD":
 					old = "DD"
 				case "D":
@@ -94,7 +96,7 @@ func nextStdChunk(from string) (to, suffix string) {
 	case "H":
 		for i := 2; i >= 0; i-- {
 			if len(from) >= i {
-				switch from[:i] {
+				switch string(from[:i]) {
 				case "HH":
 					old = "HH"
 				case "H":
@@ -108,7 +110,7 @@ func nextStdChunk(from string) (to, suffix string) {
 	case "h":
 		for i := 2; i >= 0; i-- {
 			if len(from) >= i {
-				switch from[:i] {
+				switch string(from[:i]) {
 				case "hh":
 					old = "hh"
 				case "h":
@@ -122,7 +124,7 @@ func nextStdChunk(from string) (to, suffix string) {
 	case "m":
 		for i := 2; i >= 0; i-- {
 			if len(from) >= i {
-				switch from[:i] {
+				switch string(from[:i]) {
 				case "mm":
 					old = "mm"
 				case "m":
@@ -136,7 +138,7 @@ func nextStdChunk(from string) (to, suffix string) {
 	case "s":
 		for i := 2; i >= 0; i-- {
 			if len(from) >= i {
-				switch from[:i] {
+				switch string(from[:i]) {
 				case "ss":
 					old = "ss"
 				case "s":
@@ -152,18 +154,20 @@ func nextStdChunk(from string) (to, suffix string) {
 	case "a":
 		old = "a"
 	case "[":
-		if len(from) >= 4 && from[:4] == "[at]" {
+		if len(from) >= 4 && string(from[:4]) == "[at]" {
 			old = "[at]"
 		}
 	default:
 		old = s
 	}
 
-	to, ok := placeholder[old]
+	tos, ok := placeholder[old]
 	if !ok {
-		to = old
+		to = []rune(old)
+	} else {
+		to = []rune(tos)
 	}
 
-	suffix = from[len(old):]
+	suffix = from[len([]rune(old)):]
 	return
 }
