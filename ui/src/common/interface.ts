@@ -279,7 +279,12 @@ export interface AdminSettingsGeneral {
   description: string;
   site_url: string;
   contact_email: string;
-  permalink: boolean;
+  /**
+   * 0: not set
+   * 1：with title
+   * 2: no title
+   */
+  permalink: number;
 }
 
 export interface HeadInfo {

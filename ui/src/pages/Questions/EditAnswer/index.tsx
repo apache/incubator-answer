@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
+import { pathFactory } from '@/router/pathFactory';
 import { Editor, EditorRef, Icon, PageTitle } from '@/components';
 import type * as Type from '@/common/interface';
 import {
@@ -110,10 +111,15 @@ const Ask = () => {
       edit_summary: formData.description.value,
     };
     modifyAnswer(params).then(() => {
-      navigate(`/questions/${qid}/${aid}`);
+      navigate(
+        pathFactory.answerLanding({
+          questionId: qid,
+          questionTitle: data?.question?.title,
+          answerId: aid,
+        }),
+      );
     });
   };
-
   const handleSelectedRevision = (e) => {
     const index = e.target.value;
     const revision = revisions[index];
@@ -136,7 +142,10 @@ const Ask = () => {
         </Row>
         <Row className="justify-content-center">
           <Col xxl={7} lg={8} sm={12} className="mb-4 mb-md-0">
-            <a href={`/questions/${qid}`} target="_blank" rel="noreferrer">
+            <a
+              href={pathFactory.questionLanding(qid, data?.question.title)}
+              target="_blank"
+              rel="noreferrer">
               <h5 className="mb-3">{data?.question.title}</h5>
             </a>
 

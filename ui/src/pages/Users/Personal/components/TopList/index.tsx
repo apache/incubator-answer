@@ -2,6 +2,7 @@ import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import { pathFactory } from '@/router/pathFactory';
 import { Icon } from '@/components';
 
 interface Props {
@@ -10,7 +11,6 @@ interface Props {
 }
 const Index: FC<Props> = ({ data, type }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'personal' });
-
   return (
     <ListGroup variant="flush" className="mb-4">
       {data?.map((item) => {
@@ -19,11 +19,15 @@ const Index: FC<Props> = ({ data, type }) => {
             className="p-0 border-0 mb-2"
             key={type === 'answer' ? item.answer_id : item.question_id}>
             <a
-              href={`/questions/${
+              href={
                 type === 'answer'
-                  ? `${item.question_id}/${item.answer_id}`
-                  : item.question_id
-              }`}>
+                  ? pathFactory.answerLanding({
+                      questionId: item.question_id,
+                      questionTitle: item.question_info?.title,
+                      answerId: item.answer_id,
+                    })
+                  : pathFactory.questionLanding(item.question_id, item.title)
+              }>
               {type === 'answer' ? item.question_info.title : item.title}
             </a>
             <div className="d-inline-block text-secondary ms-3 fs-14">

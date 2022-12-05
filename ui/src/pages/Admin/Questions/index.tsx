@@ -18,6 +18,7 @@ import { ADMIN_LIST_STATUS } from '@/common/constants';
 import { useEditStatusModal, useReportModal } from '@/hooks';
 import * as Type from '@/common/interface';
 import { useQuestionSearch, changeQuestionStatus } from '@/services';
+import { pathFactory } from '@/router/pathFactory';
 
 import '../index.scss';
 
@@ -138,7 +139,7 @@ const Questions: FC = () => {
               <tr key={li.id}>
                 <td>
                   <a
-                    href={`/questions/${li.id}`}
+                    href={pathFactory.questionLanding(li.id, li.title)}
                     target="_blank"
                     className="text-break text-wrap"
                     rel="noreferrer">

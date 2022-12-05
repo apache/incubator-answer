@@ -34,19 +34,23 @@ const routes: RouteNode[] = [
         page: 'pages/Questions',
       },
       {
+        path: 'questions/ask',
+        page: 'pages/Questions/Ask',
+        guard: async () => {
+          return guard.activated();
+        },
+      },
+      {
+        path: 'questions/:qid',
+        page: 'pages/Questions/Detail',
+      },
+      {
         path: 'questions/:qid/:slugPermalink',
         page: 'pages/Questions/Detail',
       },
       {
         path: 'questions/:qid/:slugPermalink/:aid',
         page: 'pages/Questions/Detail',
-      },
-      {
-        path: 'questions/ask',
-        page: 'pages/Questions/Ask',
-        guard: async () => {
-          return guard.activated();
-        },
       },
       {
         path: 'posts/:qid/edit',

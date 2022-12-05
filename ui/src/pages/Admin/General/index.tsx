@@ -49,11 +49,12 @@ const General: FC = () => {
         description: t('contact_email.text'),
       },
       permalink: {
-        type: 'boolean',
+        type: 'number',
         title: t('permalink.label'),
         description: t('permalink.text'),
-        enum: [true, false],
+        enum: [1, 2],
         enumNames: ['/questions/123/post-title', '/questions/123'],
+        default: 1,
       },
     },
   };
@@ -100,7 +101,6 @@ const General: FC = () => {
   const [formData, setFormData] = useState<Type.FormDataType>(
     initFormData(schema),
   );
-
   const onSubmit = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
@@ -110,7 +110,7 @@ const General: FC = () => {
       short_description: formData.short_description.value,
       site_url: formData.site_url.value,
       contact_email: formData.contact_email.value,
-      permalink: formData.permalink.value,
+      permalink: Number(formData.permalink.value),
     };
 
     updateGeneralSetting(reqParams)
@@ -133,10 +133,13 @@ const General: FC = () => {
     if (!setting) {
       return;
     }
-    const formMeta = {};
-    Object.keys(setting).forEach((k) => {
+    const formMeta: Type.FormDataType = {};
+    Object.keys(formData).forEach((k) => {
       formMeta[k] = { ...formData[k], value: setting[k] };
     });
+    if (formMeta.permalink.value !== 1 && formMeta.permalink.value !== 2) {
+      formMeta.permalink.value = 1;
+    }
     setFormData({ ...formData, ...formMeta });
   }, [setting]);
 

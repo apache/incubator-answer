@@ -14,6 +14,7 @@ import {
 } from '@/components';
 import { formatCount } from '@/utils';
 import { following } from '@/services';
+import { pathFactory } from '@/router/pathFactory';
 
 interface Props {
   data: any;
@@ -57,10 +58,14 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
   if (!data?.id) {
     return null;
   }
+
   return (
     <div>
       <h1 className="h3 mb-3 text-wrap text-break">
-        <Link className="link-dark" reloadDocument to={`/questions/${data.id}`}>
+        <Link
+          className="link-dark"
+          reloadDocument
+          to={pathFactory.questionLanding(data.id, data.title)}>
           {data.title}
           {data.status === 2
             ? ` [${t('closed', { keyPrefix: 'question' })}]`
