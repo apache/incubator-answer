@@ -1,9 +1,14 @@
 package server
 
 import (
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/pkg/converter"
 	"html/template"
 	"io/fs"
+	"math"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 
 	brotli "github.com/anargu/gin-brotli"
@@ -64,8 +69,62 @@ func NewHTTPServer(debug bool,
 		"translator": func(la i18n.Language, data string) string {
 			return translator.GlobalTrans.Tr(la, data)
 		},
-		"translatorTimeFormat": func(la i18n.Language, timestamp int64) string {
-			return time.Unix(timestamp, 0).Format("2006-01-02 15:04:05")
+		"timeFormatISO": func(tz string, timestamp int64) string {
+			_, _ = time.LoadLocation(tz)
+			return time.Unix(timestamp, 0).Format("2006-01-02T15:04:05.000Z")
+		},
+		"translatorTimeFormatLongDate": func(la i18n.Language, tz string, timestamp int64) string {
+			trans := translator.GlobalTrans.Tr(la, "dates.long_date_with_time")
+			return time.Unix(timestamp, 0).Format(trans)
+		},
+		"translatorTimeFormat": func(la i18n.Language, tz string, timestamp int64) string {
+			var (
+				now           = time.Now().Unix()
+				between int64 = 0
+				trans   string
+			)
+			_, _ = time.LoadLocation(tz)
+			if now > timestamp {
+				between = now - timestamp
+			}
+
+			if between <= 1 {
+				return translator.GlobalTrans.Tr(la, "dates.now")
+			}
+
+			if between > 1 && between < 60 {
+				trans = translator.GlobalTrans.Tr(la, "dates.x_seconds_ago")
+				return strings.ReplaceAll(trans, "{{count}}", converter.IntToString(between))
+			}
+
+			if between >= 60 && between < 3600 {
+				min := math.Floor(float64(between / 60))
+				trans = translator.GlobalTrans.Tr(la, "dates.x_minutes_ago")
+				return strings.ReplaceAll(trans, "{{count}}", strconv.FormatFloat(min, 'f', 0, 64))
+			}
+
+			if between >= 3600 && between < 3600*24 {
+				h := math.Floor(float64(between / 60))
+				trans = translator.GlobalTrans.Tr(la, "dates.x_hours_ago")
+				return strings.ReplaceAll(trans, "{{count}}", strconv.FormatFloat(h, 'f', 0, 64))
+			}
+
+			if between >= 3600*24 &&
+				between < 3600*24*366 &&
+				time.Unix(timestamp, 0).Format("2006") == time.Unix(now, 0).Format("2006") {
+				trans = translator.GlobalTrans.Tr(la, "dates.long_date")
+				return time.Unix(timestamp, 0).Format(trans)
+			}
+
+			trans = translator.GlobalTrans.Tr(la, "dates.long_date_with_year")
+			return time.Unix(timestamp, 0).Format(trans)
+		},
+		"wrapComments": func(comments []*schema.GetCommentResp, la i18n.Language, tz string) map[string]interface{} {
+			return map[string]interface{}{
+				"comments": comments,
+				"language": la,
+				"timezone": tz,
+			}
 		},
 	})
 

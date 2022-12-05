@@ -22,8 +22,8 @@
                 </div>
                 •
                 <time class="text-secondary ms-1"
-                      datetime="2022-11-29T07:38:07.000Z"
-                      title="Nov 29, 2022 at 15:38">asked 1h ago
+                      datetime="{{timeFormatISO $.timezone .CreateTime}}"
+                      title="{{translatorTimeFormatLongDate $.language $.timezone .CreateTime}}">asked {{translatorTimeFormat $.language $.timezone .CreateTime}}
                 </time>
               </div>
               <div class="ms-0 ms-md-3 mt-2 mt-md-0">

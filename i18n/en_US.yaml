@@ -187,6 +187,17 @@ backend:
         other: "Your answer has been deleted"
       your_comment_was_deleted:
         other: "Your comment has been deleted"
+  dates:
+    long_date: "Jan 2"
+    long_date_with_year: "Jan 2, 2006"
+    long_date_with_time: "Jan 2, 2006 at 15:04"
+    now: now
+    x_seconds_ago: "{{count}}s ago"
+    x_minutes_ago: "{{count}}m ago"
+    x_hours_ago: "{{count}}h ago"
+    hour: hour
+    day: day
+
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:

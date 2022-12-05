@@ -8,13 +8,13 @@
         </h1>
         <div
           class="d-flex flex-wrap align-items-center fs-14 mb-3 text-secondary">
-          <time class="me-3" datetime="2022-11-24T02:04:31.000Z"
-                title="Nov 24, 2022 at 10:04">Asked Nov 24
+          <time class="me-3"
+                datetime="{{timeFormatISO $.timezone .detail.CreateTime}}"
+                title="{{translatorTimeFormatLongDate $.language $.timezone .detail.CreateTime}}">Asked {{translatorTimeFormat $.language $.timezone .detail.CreateTime}}
           </time>
           <time class="me-3"
-                datetime="2022-11-28T09:48:16.000Z"
-                title="Nov 28, 2022 at 17:48">Modified 23h
-            ago
+                datetime="{{timeFormatISO $.timezone .detail.UpdateTime}}"
+                title="{{translatorTimeFormatLongDate $.language $.timezone .detail.UpdateTime}}">Modified {{translatorTimeFormat $.language $.timezone .detail.UpdateTime}}
           </time>
           <div class="me-3">Viewed {{.detail.ViewCount}}</div>
 
@@ -53,9 +53,8 @@
           <div class="mb-3 mb-md-0 col-lg-3">
             <a href="/posts/{{.detail.ID}}/timeline">
               <time class="link-secondary fs-14"
-                    datetime="2022-11-24T03:02:51.000Z"
-                    title="Nov 24, 2022 at 11:02">edited Nov
-                24
+                    datetime="{{timeFormatISO $.timezone .detail.UpdateTime}}"
+                    title="{{translatorTimeFormatLongDate $.language $.timezone .detail.UpdateTime}}">edited {{translatorTimeFormat $.language $.timezone .detail.UpdateTime}}
               </time>
             </a>
           </div>
@@ -79,8 +78,8 @@
                 </div>
                 <a href="/posts/{{.detail.ID}}/timeline">
                   <time class="link-secondary"
-                        datetime="2022-11-24T02:04:31.000Z"
-                        title="Nov 24, 2022 at 10:04">asked Nov 24
+                        datetime="{{timeFormatISO $.timezone .detail.CreateTime}}"
+                        title="{{translatorTimeFormatLongDate $.language $.timezone .detail.CreateTime}}">asked {{translatorTimeFormat $.language $.timezone .detail.CreateTime}}
                   </time>
                 </a>
               </div>
@@ -88,7 +87,7 @@
           </div>
         </div>
         <div class="comments-wrap">
-          {{template "comment" index $.comments $.detail.ID }}
+          {{template "comment" (wrapComments (index $.comments $.detail.ID) $.language $.timezone)}}
         </div>
       </div>
       <div class="d-flex align-items-center justify-content-between mt-5 mb-3"
@@ -130,8 +129,9 @@
           <div class="mb-3 mb-md-0 col-lg-3">
             <a href="/posts/{{$.detail.ID}}/{{.ID}}/timeline">
               <time
-                class="link-secondary fs-14" datetime="2022-11-28T09:48:16.000Z"
-                title="Nov 28, 2022 at 17:48">edited 23h ago
+                class="link-secondary fs-14"
+                datetime="{{timeFormatISO $.timezone .UpdateTime}}"
+                title="{{translatorTimeFormatLongDate $.language $.timezone .UpdateTime}}">edited {{translatorTimeFormat $.language $.timezone .UpdateTime}}
               </time>
             </a>
           </div>
@@ -155,8 +155,9 @@
                 </div>
                 <a href="/posts/{{$.detail.ID}}/{{.ID}}/timeline">
                   <time
-                    class="link-secondary" datetime="2022-11-28T09:48:16.000Z"
-                    title="Nov 28, 2022 at 17:48">answered 23h ago
+                    class="link-secondary"
+                    datetime="{{timeFormatISO $.timezone .CreateTime}}"
+                    title="{{translatorTimeFormatLongDate $.language $.timezone .CreateTime}}">answered {{translatorTimeFormat $.language $.timezone .CreateTime}}
                   </time>
                 </a>
               </div>
@@ -164,7 +165,7 @@
           </div>
         </div>
         <div class="comments-wrap">
-          {{template "comment" index $.comments .ID }}
+          {{template "comment" (wrapComments (index $.comments .ID) $.language $.timezone)}}
         </div>
       </div>
       {{end}}

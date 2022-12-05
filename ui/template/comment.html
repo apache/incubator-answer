@@ -1,5 +1,5 @@
 {{define "comment"}}
-{{range .}}
+{{range .comments}}
 <div class="border-bottom py-2 comment-item border-top">
   <div class="d-block">
     <div class="fmt fs-14">
@@ -11,8 +11,9 @@
       <a href="/users/{{.Username}}">{{.UserDisplayName}}</a><span
       class="mx-1">•</span>
       <time
-        class="me-3" datetime="2022-11-24T02:04:49.000Z"
-        title="Nov 24, 2022 at 10:04">Nov 24
+        class="me-3"
+        datetime="{{timeFormatISO $.timezone .CreatedAt}}"
+        title="{{translatorTimeFormatLongDate $.language $.timezone .CreatedAt}}">{{translatorTimeFormat $.language $.timezone .CreatedAt}}
       </time>
       <button type="button"
               class="me-3 btn-no-border p-0 link-secondary btn btn-link btn-sm">

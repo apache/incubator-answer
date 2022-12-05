@@ -1122,6 +1122,10 @@ definitions:
       name:
         maxLength: 128
         type: string
+      permalink:
+        maximum: 3
+        minimum: 0
+        type: integer
       short_description:
         maxLength: 255
         type: string
@@ -1132,6 +1136,7 @@ definitions:
     - contact_email
     - description
     - name
+    - permalink
     - short_description
     - site_url
     type: object
@@ -1146,6 +1151,10 @@ definitions:
       name:
         maxLength: 128
         type: string
+      permalink:
+        maximum: 3
+        minimum: 0
+        type: integer
       short_description:
         maxLength: 255
         type: string
@@ -1156,6 +1165,7 @@ definitions:
     - contact_email
     - description
     - name
+    - permalink
     - short_description
     - site_url
     type: object

@@ -5889,6 +5889,7 @@ const docTemplate = `{
                 "contact_email",
                 "description",
                 "name",
+                "permalink",
                 "short_description",
                 "site_url"
             ],
@@ -5904,6 +5905,11 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "maxLength": 128
+                },
+                "permalink": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 0
                 },
                 "short_description": {
                     "type": "string",
@@ -5921,6 +5927,7 @@ const docTemplate = `{
                 "contact_email",
                 "description",
                 "name",
+                "permalink",
                 "short_description",
                 "site_url"
             ],
@@ -5936,6 +5943,11 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "maxLength": 128
+                },
+                "permalink": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 0
                 },
                 "short_description": {
                     "type": "string",

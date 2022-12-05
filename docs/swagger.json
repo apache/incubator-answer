@@ -5877,6 +5877,7 @@
                 "contact_email",
                 "description",
                 "name",
+                "permalink",
                 "short_description",
                 "site_url"
             ],
@@ -5892,6 +5893,11 @@
                 "name": {
                     "type": "string",
                     "maxLength": 128
+                },
+                "permalink": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 0
                 },
                 "short_description": {
                     "type": "string",
@@ -5909,6 +5915,7 @@
                 "contact_email",
                 "description",
                 "name",
+                "permalink",
                 "short_description",
                 "site_url"
             ],
@@ -5924,6 +5931,11 @@
                 "name": {
                     "type": "string",
                     "maxLength": 128
+                },
+                "permalink": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 0
                 },
                 "short_description": {
                     "type": "string",

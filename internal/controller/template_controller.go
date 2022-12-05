@@ -90,14 +90,12 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
+
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s", siteInfo.General.SiteUrl)
-	ctx.HTML(http.StatusOK, "question.html", gin.H{
-		"siteinfo":   siteInfo,
-		"scriptPath": tc.scriptPath,
-		"cssPath":    tc.cssPath,
-		"data":       data,
-		"page":       templaterender.Paginator(page, req.PageSize, count),
+	tc.html(ctx, http.StatusOK, "question.html", siteInfo, gin.H{
+		"data": data,
+		"page": templaterender.Paginator(page, req.PageSize, count),
 	})
 }
 
@@ -115,12 +113,10 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	}
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/questions", siteInfo.General.SiteUrl)
-	ctx.HTML(http.StatusOK, "question.html", gin.H{
-		"siteinfo":   siteInfo,
-		"scriptPath": tc.scriptPath,
-		"cssPath":    tc.cssPath,
-		"data":       data,
-		"page":       templaterender.Paginator(page, req.PageSize, count),
+
+	tc.html(ctx, http.StatusOK, "question.html", siteInfo, gin.H{
+		"data": data,
+		"page": templaterender.Paginator(page, req.PageSize, count),
 	})
 }
 
@@ -194,15 +190,12 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		siteInfo.JsonLD = `<script data-react-helmet="true" type="application/ld+json">` + string(jsonLDStr) + ` </script>`
 	}
 
-	ctx.HTML(http.StatusOK, "question-detail.html", gin.H{
-		"id":         id,
-		"answerid":   answerid,
-		"detail":     detail,
-		"answers":    answers,
-		"comments":   comments,
-		"scriptPath": tc.scriptPath,
-		"cssPath":    tc.cssPath,
-		"siteinfo":   siteInfo,
+	tc.html(ctx, http.StatusOK, "question-detail.html", siteInfo, gin.H{
+		"id":       id,
+		"answerid": answerid,
+		"detail":   detail,
+		"answers":  answers,
+		"comments": comments,
 	})
 }
 
@@ -223,14 +216,12 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 		return
 	}
 	page := templaterender.Paginator(req.Page, req.PageSize, data.Count)
+
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/tags", siteInfo.General.SiteUrl)
-	ctx.HTML(http.StatusOK, "tags.html", gin.H{
-		"scriptPath": tc.scriptPath,
-		"cssPath":    tc.cssPath,
-		"page":       page,
-		"data":       data,
-		"siteinfo":   siteInfo,
+	tc.html(ctx, http.StatusOK, "tags.html", siteInfo, gin.H{
+		"page": page,
+		"data": data,
 	})
 }
 
@@ -260,15 +251,13 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 		return
 	}
 	page := templaterender.Paginator(nowPage, req.PageSize, questionCount)
+
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/tags/%s", siteInfo.General.SiteUrl, tag)
-	ctx.HTML(http.StatusOK, "tag-detail.html", gin.H{
+	tc.html(ctx, http.StatusOK, "tag-detail.html", siteInfo, gin.H{
 		"tag":           taginifo,
 		"questionList":  questionList,
 		"questionCount": questionCount,
-		"scriptPath":    tc.scriptPath,
-		"cssPath":       tc.cssPath,
-		"siteinfo":      siteInfo,
 		"page":          page,
 	})
 }
@@ -300,14 +289,9 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/users/%s", siteInfo.General.SiteUrl, username)
-
-	ctx.HTML(http.StatusOK, "homepage.html", gin.H{
-		"siteinfo":   siteInfo,
-		"userinfo":   userinfo,
-		"scriptPath": tc.scriptPath,
-		"cssPath":    tc.cssPath,
-		"language":   handler.GetLang(ctx),
-		"bio":        template.HTML(userinfo.Info.BioHTML),
+	tc.html(ctx, http.StatusOK, "homepage.html", siteInfo, gin.H{
+		"userinfo": userinfo,
+		"bio":      template.HTML(userinfo.Info.BioHTML),
 	})
 }
 
@@ -317,4 +301,14 @@ func (tc *TemplateController) Page404(ctx *gin.Context) {
 		"scriptPath": tc.scriptPath,
 		"cssPath":    tc.cssPath,
 	})
+}
+
+func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteInfo *schema.TemplateSiteInfoResp, data gin.H) {
+	data["siteinfo"] = siteInfo
+	data["scriptPath"] = tc.scriptPath
+	data["cssPath"] = tc.cssPath
+	data["language"] = handler.GetLang(ctx)
+	data["timezone"] = siteInfo.Interface.TimeZone
+
+	ctx.HTML(code, tpl, data)
 }
