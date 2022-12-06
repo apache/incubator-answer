@@ -81,14 +81,15 @@ func (rr *revisionRepo) UpdateObjectRevisionId(ctx context.Context, revision *en
 }
 
 // UpdateStatus update revision status
-func (rr *revisionRepo) UpdateStatus(ctx context.Context, id string, status int) (err error) {
+func (rr *revisionRepo) UpdateStatus(ctx context.Context, id string, status int, reviewUserID string) (err error) {
 	if id == "" {
 		return nil
 	}
 	var data entity.Revision
 	data.ID = id
 	data.Status = status
-	_, err = rr.data.DB.Where("id =?", id).Cols("status").Update(&data)
+	data.ReviewUserID = reviewUserID
+	_, err = rr.data.DB.Where("id =?", id).Cols("status", "review_user_id").Update(&data)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
