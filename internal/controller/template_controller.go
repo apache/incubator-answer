@@ -9,8 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/segmentfault/pacman/i18n"
-
 	"github.com/answerdev/answer/internal/base/handler"
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
@@ -326,8 +324,7 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 		siteInfo.Description = siteInfo.General.Description
 	}
 	data["description"] = siteInfo.Description
-	// data["language"] = handler.GetLang(ctx)
-	data["language"] = i18n.LanguageChinese //handler.GetLang(ctx)
+	data["language"] = handler.GetLang(ctx)
 	data["timezone"] = siteInfo.Interface.TimeZone
 
 	ctx.HTML(code, tpl, data)
