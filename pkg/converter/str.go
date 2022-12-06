@@ -24,3 +24,7 @@ func StringToInt(str string) int {
 func IntToString(data int64) string {
 	return fmt.Sprintf("%d", data)
 }
+
+func InterfaceToString(data interface{}) string {
+	return fmt.Sprintf("%d", data)
+}

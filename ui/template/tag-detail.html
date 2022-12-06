@@ -1,21 +1,22 @@
 {{template "header" . }}
 <div class="pt-4 mt-2 mb-5 container">
-    <div class="justify-content-center row">
-        <div class="col-xxl-7 col-lg-8 col-sm-12">
-            <div class="tag-box mb-5">
-                <h3 class="mb-3">
-                    <a class="link-dark" href="/tags/{{$.tag.SlugName}}">{{$.tag.SlugName}}</a>
-                </h3>
-                <p class="text-break">
-                    {{templateHTML $.tag.ParsedText}}
-                </p>
-            </div>
-            <div>
-                <div class="mb-3 d-flex flex-wrap justify-content-between">
-                    <h5 class="fs-5 text-nowrap mb-3 mb-md-0">{{.questionCount}} Questions</h5>
-                </div>
-                <div class="border-top border-bottom-0 list-group list-group-flush">
-                      {{range .questionList}}
+  <div class="justify-content-center row">
+    <div class="col-xxl-7 col-lg-8 col-sm-12">
+      <div class="tag-box mb-5">
+        <h3 class="mb-3">
+          <a class="link-dark" href="/tags/{{$.tag.SlugName}}">{{$.tag.SlugName}}</a>
+        </h3>
+        <p class="text-break">
+          {{templateHTML $.tag.ParsedText}}
+        </p>
+      </div>
+      <div>
+        <div class="mb-3 d-flex flex-wrap justify-content-between">
+          <h5 class="fs-5 text-nowrap mb-3 mb-md-0">{{ .questionCount }}
+            {{translator ($.language) ("ui.question.questions")}}</h5>
+        </div>
+        <div class="border-top border-bottom-0 list-group list-group-flush">
+          {{range .questionList}}
           <div class="border-bottom pt-3 pb-2 px-0 list-group-item">
             <h5 class="text-wrap text-break">
               <a class="link-dark" href="/questions/{{.ID}}">{{.Title}}</a>
@@ -30,8 +31,8 @@
                 </div>
                 •
                 <time class="text-secondary ms-1"
-                      datetime="2022-11-29T07:38:07.000Z"
-                      title="Nov 29, 2022 at 15:38">asked 1h ago
+                      datetime="{{timeFormatISO $.timezone .CreateTime}}"
+                      title="{{translatorTimeFormatLongDate $.language $.timezone .CreateTime}}">{{translator $.language "ui.question.asked"}} {{translatorTimeFormat $.language $.timezone .CreateTime}}
                 </time>
               </div>
               <div class="ms-0 ms-md-3 mt-2 mt-md-0">
@@ -54,13 +55,13 @@
             </div>
           </div>
           {{end}}
-                </div>
-                <div class="mt-4 mb-2 d-flex justify-content-center"></div>
-            </div>
         </div>
-        <div class="d-flex justify-content-center">
-            {{template "page" .}}
-        </div>
+        <div class="mt-4 mb-2 d-flex justify-content-center"></div>
+      </div>
     </div>
+    <div class="d-flex justify-content-center">
+      {{template "page" .}}
+    </div>
+  </div>
 </div>
 {{template "footer" .}}

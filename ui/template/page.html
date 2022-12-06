@@ -2,8 +2,8 @@
 <ul class="d-inline-flex mb-0 pagination pagination-sm">
   {{ if ne .page.Currpage 1 }}
   <li class="page-item">
-    <a class="page-link" href="?page={{$.page.Prevpage}}"><span aria-hidden="true">Prev</span><span
-        class="visually-hidden">Prev</span></a>
+    <a class="page-link" href="?page={{$.page.Prevpage}}"><span aria-hidden="true">{{translator $.language "ui.pagination.prev"}}</span><span
+        class="visually-hidden">{{translator $.language "ui.pagination.prev"}}</span></a>
   </li>
   {{ end }}
   {{ range $value := .page.Pages }}
@@ -21,8 +21,8 @@
   {{ end }}
   {{ if lt $.page.Currpage $.page.Totalpages }}
   <li class="page-item">
-    <a class="page-link" href="?page={{$.page.Nextpage}}"><span aria-hidden="true">Next</span><span
-        class="visually-hidden">Next</span></a>
+    <a class="page-link" href="?page={{$.page.Nextpage}}"><span aria-hidden="true">{{translator $.language "ui.pagination.next"}}</span><span
+        class="visually-hidden">{{translator $.language "ui.pagination.next"}}</span></a>
   </li>
   {{ end }}
 </ul>

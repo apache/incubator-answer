@@ -68,8 +68,17 @@ func NewHTTPServer(debug bool,
 		"templateHTML": func(data string) template.HTML {
 			return template.HTML(data)
 		},
-		"translator": func(la i18n.Language, data string) string {
-			return translator.GlobalTrans.Tr(la, data)
+		"translator": func(la i18n.Language, data string, params ...interface{}) string {
+			/*if len(params) > 0 && len(params)%2 == 0 {
+				for i := 0; i < len(params); i += 2 {
+					k := converter.InterfaceToString(params[i])
+					v := converter.InterfaceToString(params[i+1])
+					data = strings.ReplaceAll(data, "{{ "+k+" }}", v)
+				}
+			}*/
+
+			trans := translator.GlobalTrans.Tr(la, data)
+			return trans
 		},
 		"timeFormatISO": func(tz string, timestamp int64) string {
 			_, _ = time.LoadLocation(tz)
