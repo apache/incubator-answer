@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/segmentfault/pacman/i18n"
+
 	"github.com/answerdev/answer/internal/base/handler"
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
@@ -319,6 +321,7 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	data["siteinfo"] = siteInfo
 	data["scriptPath"] = tc.scriptPath
 	data["cssPath"] = tc.cssPath
+	data["language"] = i18n.LanguageChinese //handler.GetLang(ctx)
 	data["keywords"] = siteInfo.Keywords
 	if siteInfo.Description == "" {
 		siteInfo.Description = siteInfo.General.Description

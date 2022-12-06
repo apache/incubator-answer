@@ -12,7 +12,7 @@
 <div class="py-3 my-3 container">
     <div class="mb-4 d-flex justify-content-center row">
         <div class="col-xxl-10 col-sm-12">
-            <h3 class="mb-4">Tags</h3>
+            <h3 class="mb-4">{{translator $.language "ui.page_title.tags"}}</h3>
         </div>
         <div class="mt-4 col-xxl-10 col-sm-12">
             <div class="row">
@@ -26,7 +26,7 @@
                             </p>
                             <div class="d-flex align-items-center">
                                 <span class="text-secondary fs-14 text-nowrap">{{.QuestionCount}}
-                                    questions</span>
+                                    {{translator $.language "ui.tags.tag_label"}}</span>
                             </div>
                         </div>
                     </div>
