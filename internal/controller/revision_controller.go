@@ -7,6 +7,7 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/pkg/obj"
 	"github.com/gin-gonic/gin"
@@ -70,9 +71,9 @@ func (rc *RevisionController) GetUnreviewedRevisionList(ctx *gin.Context) {
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	canList, err := rc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.QuestionAuditRank,
-		rank.AnswerAuditRank,
-		rank.TagAuditRank,
+		permission.QuestionAudit,
+		permission.AnswerAudit,
+		permission.TagAudit,
 	}, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -102,9 +103,9 @@ func (rc *RevisionController) RevisionAudit(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	canList, err := rc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.QuestionAuditRank,
-		rank.AnswerAuditRank,
-		rank.TagAuditRank,
+		permission.QuestionAudit,
+		permission.AnswerAudit,
+		permission.TagAudit,
 	}, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -139,11 +140,11 @@ func (rc *RevisionController) CheckCanUpdateRevision(ctx *gin.Context) {
 	objectTypeStr, _ := obj.GetObjectTypeStrByObjectID(req.ID)
 	switch objectTypeStr {
 	case constant.QuestionObjectType:
-		action = rank.QuestionEditRank
+		action = permission.QuestionEdit
 	case constant.AnswerObjectType:
-		action = rank.AnswerEditRank
+		action = permission.AnswerEdit
 	case constant.TagObjectType:
-		action = rank.TagEditRank
+		action = permission.TagEdit
 	default:
 		handler.HandleResponse(ctx, errors.BadRequest(reason.ObjectNotFound), nil)
 		return

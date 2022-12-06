@@ -9,6 +9,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/gin-gonic/gin"
@@ -43,7 +44,7 @@ func (qc *QuestionController) RemoveQuestion(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, rank.QuestionDeleteRank, req.ID)
+	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, permission.QuestionDelete, req.ID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -73,8 +74,47 @@ func (qc *QuestionController) CloseQuestion(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	err := qc.questionService.CloseQuestion(ctx, req)
+	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, permission.QuestionClose, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	err = qc.questionService.CloseQuestion(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// ReopenQuestion reopen question
+// @Summary reopen question
+// @Description reopen question
+// @Tags api-question
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.ReopenQuestionReq true "question"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/question/reopen [put]
+func (qc *QuestionController) ReopenQuestion(ctx *gin.Context) {
+	req := &schema.ReopenQuestionReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, permission.QuestionReopen, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	err = qc.questionService.ReopenQuestion(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -93,8 +133,10 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	req := schema.QuestionPermission{}
 	canList, err := qc.rankService.CheckOperationPermissions(ctx, userID, []string{
-		rank.QuestionEditRank,
-		rank.QuestionDeleteRank,
+		permission.QuestionEdit,
+		permission.QuestionDelete,
+		permission.QuestionClose,
+		permission.QuestionReopen,
 	}, id)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -102,7 +144,8 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	}
 	req.CanEdit = canList[0]
 	req.CanDelete = canList[1]
-	req.CanClose = middleware.GetIsAdminFromContext(ctx)
+	req.CanClose = canList[2]
+	req.CanReopen = canList[3]
 
 	info, err := qc.questionService.GetQuestionAndAddPV(ctx, id, userID, req)
 	if err != nil {
@@ -208,9 +251,11 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.QuestionAddRank,
-		rank.QuestionEditRank,
-		rank.QuestionDeleteRank,
+		permission.QuestionAdd,
+		permission.QuestionEdit,
+		permission.QuestionDelete,
+		permission.QuestionClose,
+		permission.QuestionReopen,
 	}, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -219,7 +264,8 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	req.CanAdd = canList[0]
 	req.CanEdit = canList[1]
 	req.CanDelete = canList[2]
-	req.CanClose = middleware.GetIsAdminFromContext(ctx)
+	req.CanClose = canList[3]
+	req.CanReopen = canList[4]
 	if !req.CanAdd {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
@@ -247,9 +293,9 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.QuestionEditRank,
-		rank.QuestionDeleteRank,
-		rank.QuestionEditWithoutReviewRank,
+		permission.QuestionEdit,
+		permission.QuestionDelete,
+		permission.QuestionEditWithoutReview,
 	}, req.ID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)

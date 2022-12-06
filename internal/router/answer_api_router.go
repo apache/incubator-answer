@@ -30,6 +30,7 @@ type AnswerAPIRouter struct {
 	dashboardController      *controller.DashboardController
 	uploadController         *controller.UploadController
 	activityController       *controller.ActivityController
+	roleController           *controller_backyard.RoleController
 }
 
 func NewAnswerAPIRouter(
@@ -56,6 +57,7 @@ func NewAnswerAPIRouter(
 	dashboardController *controller.DashboardController,
 	uploadController *controller.UploadController,
 	activityController *controller.ActivityController,
+	roleController *controller_backyard.RoleController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:           langController,
@@ -81,6 +83,7 @@ func NewAnswerAPIRouter(
 		dashboardController:      dashboardController,
 		uploadController:         uploadController,
 		activityController:       activityController,
+		roleController:           roleController,
 	}
 }
 
@@ -180,6 +183,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/question", a.questionController.UpdateQuestion)
 	r.DELETE("/question", a.questionController.RemoveQuestion)
 	r.PUT("/question/status", a.questionController.CloseQuestion)
+	r.PUT("/question/reopen", a.questionController.ReopenQuestion)
 	r.GET("/question/similar", a.questionController.SearchByTitleLike)
 
 	// answer
@@ -229,6 +233,7 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	// user
 	r.GET("/users/page", a.backyardUserController.GetUserPage)
 	r.PUT("/user/status", a.backyardUserController.UpdateUserStatus)
+	r.PUT("/user/role", a.backyardUserController.UpdateUserRole)
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)
@@ -253,6 +258,9 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
 	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
 
-	//dashboard
+	// dashboard
 	r.GET("/dashboard", a.dashboardController.DashboardInfo)
+
+	// roles
+	r.GET("/roles", a.roleController.GetRoleList)
 }

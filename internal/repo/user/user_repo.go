@@ -28,7 +28,7 @@ func NewUserRepo(data *data.Data, configRepo config.ConfigRepo) usercommon.UserR
 
 // AddUser add user
 func (ur *userRepo) AddUser(ctx context.Context, user *entity.User) (err error) {
-	_, err = ur.data.DB.UseBool("is_admin").Insert(user)
+	_, err = ur.data.DB.Insert(user)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

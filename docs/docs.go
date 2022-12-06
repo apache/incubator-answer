@@ -432,6 +432,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/roles": {
+            "get": {
+                "description": "get role list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "get role list",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetRoleResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/setting/smtp": {
             "get": {
                 "security": [
@@ -883,6 +918,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/user/role": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update user role",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "update user role",
+                "parameters": [
+                    {
+                        "description": "user",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdateUserRoleReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/user/status": {
             "put": {
                 "security": [
@@ -954,6 +1028,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "search query: email, username or id:[id]",
                         "name": "query",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "staff user",
+                        "name": "staff",
                         "in": "query"
                     },
                     {
@@ -5386,6 +5466,20 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetRoleResp": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.GetSMTPConfigResp": {
             "type": "object",
             "properties": {
@@ -5613,6 +5707,14 @@ const docTemplate = `{
                 "rank": {
                     "description": "rank",
                     "type": "integer"
+                },
+                "role_id": {
+                    "description": "role id",
+                    "type": "integer"
+                },
+                "role_name": {
+                    "description": "role name",
+                    "type": "string"
                 },
                 "status": {
                     "description": "user status(normal,suspended,deleted,inactive)",
@@ -6668,6 +6770,23 @@ const docTemplate = `{
                     "description": "language",
                     "type": "string",
                     "maxLength": 100
+                }
+            }
+        },
+        "schema.UpdateUserRoleReq": {
+            "type": "object",
+            "required": [
+                "role_id",
+                "user_id"
+            ],
+            "properties": {
+                "role_id": {
+                    "description": "role id",
+                    "type": "integer"
+                },
+                "user_id": {
+                    "description": "user id",
+                    "type": "string"
                 }
             }
         },

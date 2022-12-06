@@ -80,7 +80,6 @@ func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, IDs []string) 
 func (us *UserCommon) FormatUserBasicInfo(ctx context.Context, userInfo *entity.User) *schema.UserBasicInfo {
 	userBasicInfo := &schema.UserBasicInfo{}
 	userBasicInfo.ID = userInfo.ID
-	userBasicInfo.IsAdmin = userInfo.IsAdmin
 	userBasicInfo.Username = userInfo.Username
 	userBasicInfo.Rank = userInfo.Rank
 	userBasicInfo.DisplayName = userInfo.DisplayName

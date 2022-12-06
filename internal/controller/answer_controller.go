@@ -9,6 +9,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/dashboard"
+	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
@@ -51,7 +52,7 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, rank.AnswerDeleteRank, req.ID)
+	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, permission.AnswerDelete, req.ID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -110,7 +111,7 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, rank.AnswerAddRank, "")
+	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, permission.AnswerAdd, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -159,8 +160,8 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.AnswerEditRank,
-		rank.AnswerEditWithoutReviewRank,
+		permission.AnswerEdit,
+		permission.AnswerEditWithoutReview,
 	}, req.ID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -208,8 +209,8 @@ func (ac *AnswerController) AnswerList(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.AnswerEditRank,
-		rank.AnswerDeleteRank,
+		permission.AnswerEdit,
+		permission.AnswerDelete,
 	}, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -246,7 +247,7 @@ func (ac *AnswerController) Adopted(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, rank.AnswerAcceptRank, req.QuestionID)
+	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, permission.AnswerAccept, req.QuestionID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return

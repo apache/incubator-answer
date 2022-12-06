@@ -3,22 +3,27 @@ package schema
 // RemoveQuestionReq delete question request
 type RemoveQuestionReq struct {
 	// question id
-	ID      string `validate:"required" comment:"question id" json:"id"`
+	ID      string `validate:"required" json:"id"`
 	UserID  string `json:"-" ` // user_id
 	IsAdmin bool   `json:"-"`
 }
 
 type CloseQuestionReq struct {
-	ID        string `validate:"required" comment:"question id" json:"id"`
-	UserID    string `json:"-" `          // user_id
-	CloseType int    `json:"close_type" ` // close_type
-	CloseMsg  string `json:"close_msg" `  // close_type
-	IsAdmin   bool   `json:"-"`
+	ID        string `validate:"required" json:"id"`
+	CloseType int    `json:"close_type"` // close_type
+	CloseMsg  string `json:"close_msg"`  // close_type
+	UserID    string `json:"-"`          // user_id
 }
 
 type CloseQuestionMeta struct {
 	CloseType int    `json:"close_type"`
 	CloseMsg  string `json:"close_msg"`
+}
+
+// ReopenQuestionReq reopen question request
+type ReopenQuestionReq struct {
+	QuestionID string `json:"question_id"`
+	UserID     string `json:"-"`
 }
 
 type QuestionAdd struct {
@@ -44,6 +49,8 @@ type QuestionPermission struct {
 	CanDelete bool `json:"-"`
 	// whether user can close it
 	CanClose bool `json:"-"`
+	// whether user can reopen it
+	CanReopen bool `json:"-"`
 }
 
 type CheckCanQuestionUpdate struct {
