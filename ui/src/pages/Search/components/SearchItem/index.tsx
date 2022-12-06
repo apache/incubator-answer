@@ -2,6 +2,7 @@ import { memo, FC } from 'react';
 import { ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import { pathFactory } from '@/router/pathFactory';
 import { Icon, Tag, FormatTime, BaseUserCard } from '@/components';
 import type { SearchResItem } from '@/common/interface';
 import { escapeRemove } from '@/utils';
@@ -14,9 +15,13 @@ const Index: FC<Props> = ({ data }) => {
   if (!data?.object_type) {
     return null;
   }
-  let itemUrl = `/questions/${data.object.id}`;
-  if (data.object_type === 'answer') {
-    itemUrl = `/questions/${data.object.question_id}/${data.object.id}`;
+  let itemUrl = pathFactory.questionLanding(data.object.id, data.object.title);
+  if (data.object_type === 'answer' && data.object.question_id) {
+    itemUrl = pathFactory.answerLanding({
+      questionId: data.object.question_id,
+      questionTitle: data.object.title,
+      answerId: data.object.id,
+    });
   }
   return (
     <ListGroupItem className="py-3 px-0">

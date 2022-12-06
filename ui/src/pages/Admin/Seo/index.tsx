@@ -1,44 +1,29 @@
 import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { marked } from 'marked';
-
 import type * as Type from '@/common/interface';
+import { getSeoSetting, putSeoSetting } from '@/services';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
-import { getLegalSetting, putLegalSetting } from '@/services';
 import { handleFormError } from '@/utils';
 
-const Legal: FC = () => {
+const Index: FC = () => {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'admin.legal',
+    keyPrefix: 'admin.seo',
   });
   const Toast = useToast();
-
   const schema: JSONSchema = {
     title: t('page_title'),
-    required: ['terms_of_service', 'privacy_policy'],
     properties: {
-      terms_of_service: {
+      robots: {
         type: 'string',
-        title: t('terms_of_service.label'),
-        description: t('terms_of_service.text'),
-      },
-      privacy_policy: {
-        type: 'string',
-        title: t('privacy_policy.label'),
-        description: t('privacy_policy.text'),
+        title: t('robots.label'),
+        description: t('robots.text'),
       },
     },
   };
   const uiSchema: UISchema = {
-    terms_of_service: {
-      'ui:widget': 'textarea',
-      'ui:options': {
-        rows: 10,
-      },
-    },
-    privacy_policy: {
+    robots: {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
@@ -51,16 +36,11 @@ const Legal: FC = () => {
     evt.preventDefault();
     evt.stopPropagation();
 
-    const reqParams: Type.AdminSettingsLegal = {
-      terms_of_service_original_text: formData.terms_of_service.value,
-      terms_of_service_parsed_text: marked.parse(
-        formData.terms_of_service.value,
-      ),
-      privacy_policy_original_text: formData.privacy_policy.value,
-      privacy_policy_parsed_text: marked.parse(formData.privacy_policy.value),
+    const reqParams: Type.AdminSettingsSeo = {
+      robots: formData.robots.value,
     };
 
-    putLegalSetting(reqParams)
+    putSeoSetting(reqParams)
       .then(() => {
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),
@@ -76,12 +56,10 @@ const Legal: FC = () => {
   };
 
   useEffect(() => {
-    getLegalSetting().then((setting) => {
+    getSeoSetting().then((setting) => {
       if (setting) {
         const formMeta = { ...formData };
-        formMeta.terms_of_service.value =
-          setting.terms_of_service_original_text;
-        formMeta.privacy_policy.value = setting.privacy_policy_original_text;
+        formMeta.robots.value = setting.robots;
         setFormData(formMeta);
       }
     });
@@ -105,4 +83,4 @@ const Legal: FC = () => {
   );
 };
 
-export default Legal;
+export default Index;

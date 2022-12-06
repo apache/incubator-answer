@@ -279,6 +279,19 @@ export interface AdminSettingsGeneral {
   description: string;
   site_url: string;
   contact_email: string;
+  /**
+   * 0: not set
+   * 1：with title
+   * 2: no title
+   */
+  permalink: number;
+}
+
+export interface HeadInfo {
+  title?: string;
+  description?: string;
+  keywords?: string;
+  ldJSON?;
 }
 
 export interface AdminSettingsInterface {
@@ -323,6 +336,10 @@ export interface AdminSettingsWrite {
   recommend_tags: string[];
   required_tag: string;
   reserved_tags: string[];
+}
+
+export interface AdminSettingsSeo {
+  robots: string;
 }
 
 /**

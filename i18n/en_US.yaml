@@ -147,32 +147,32 @@ backend:
     spam:
       name:
         other: "spam"
-      description:
+      desc:
         other: "This post is an advertisement, or vandalism. It is not useful or relevant to the current topic."
     rude:
       name:
         other: "rude or abusive"
-      description:
+      desc:
         other: "A reasonable person would find this content inappropriate for respectful discourse."
     duplicate:
       name:
         other: "a duplicate"
-      description:
+      desc:
         other: "This question has been asked before and already has an answer."
     not_answer:
       name:
         other: "not an answer"
-      description:
+      desc:
         other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether."
     not_need:
       name:
         other: "no longer needed"
-      description:
+      desc:
         other: "This comment is outdated, conversational or not relevant to this post."
     other:
       name:
         other: "something else"
-      description:
+      desc:
         other: "This post requires staff attention for another reason not listed above."
 
   question:
@@ -180,22 +180,22 @@ backend:
       duplicate:
         name:
           other: "spam"
-        description:
+        desc:
           other: "This question has been asked before and already has an answer."
       guideline:
         name:
           other: "a community-specific reason"
-        description:
+        desc:
           other: "This question doesn't meet a community guideline."
       multiple:
         name:
           other: "needs details or clarity"
-        description:
+        desc:
           other: "This question currently includes multiple questions in one. It should focus on one problem only."
       other:
         name:
           other: "something else"
-        description:
+        desc:
           other: "This post requires another reason not listed above."
 
   notification:
@@ -229,7 +229,7 @@ backend:
 ui:
   how_to_format:
     title: How to Format
-    description: >-
+    desc: >-
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre
       class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
       class="mb-2">put returns between paragraphs</p></li><li><p
@@ -338,7 +338,7 @@ ui:
               empty: File cannot be empty.
               only_image: Only image files are allowed.
               max_size: File size cannot exceed 4MB.
-          description:
+          desc:
             label: Description (optional)
       tab_url: Image URL
       form_url:
@@ -410,12 +410,12 @@ ui:
             range: Display name up to 35 characters.
         slug_name:
           label: URL Slug
-          description: 'Must use the character set "a-z", "0-9", "+ # - ."'
-          msg: "todo"
-#            empty: URL slug cannot be empty.
-#            range: URL slug up to 35 characters.
-#            character: URL slug contains unallowed character set.
-        description:
+          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          msg:
+            empty: URL slug cannot be empty.
+            range: URL slug up to 35 characters.
+            character: URL slug contains unallowed character set.
+        desc:
           label: Description (optional)
     btn_cancel: Cancel
     btn_submit: Submit
@@ -450,7 +450,7 @@ ui:
         slug_name:
           label: URL Slug
           info: 'Must use the character set "a-z", "0-9", "+ # - ."'
-        description:
+        desc:
           label: Description
         edit_summary:
           label: Edit Summary
@@ -511,7 +511,7 @@ ui:
     button_following: Following
     tag_label: questions
     search_placeholder: Filter by tag name
-    no_description: The tag has no description.
+    no_desc: The tag has no description.
     more: More
   ask:
     title: Add Question
@@ -752,6 +752,10 @@ ui:
         <p>Are you sure you want to add another answer?</p><p>You could use the
         edit link to refine and improve your existing answer, instead.</p>
       empty: Answer cannot be empty.
+    reopen:
+      title: Reopen this post
+      content: Are you sure you want to reopen?
+      success: This post has been reopened
   delete:
     title: Delete this post
     question: >-
@@ -912,7 +916,7 @@ ui:
     config_yaml:
       title: Create config.yaml
       label: The config.yaml file created.
-      description: >-
+      desc: >-
         You can create the <1>config.yaml</1> file manually in the
         <1>/var/wwww/xxx/</1> directory and paste the following text into it.
       info: "After you’ve done that, click “Next” button."
@@ -949,31 +953,31 @@ ui:
         empty: Email cannot be empty.
         incorrect: Email incorrect format.
     ready_title: Your Answer is Ready!
-    ready_description: >-
+    ready_desc: >-
       If you ever feel like changing more settings, visit <1>admin section</1>;
       find it in the site menu.
     good_luck: "Have fun, and good luck!"
     warn_title: Warning
-    warn_description: >-
+    warn_desc: >-
       The file <1>config.yaml</1> already exists. If you need to reset any of the
       configuration items in this file, please delete it first.
     install_now: You may try <1>installing now</1>.
     installed: Already installed
-    installed_description: >-
+    installed_desc: >-
       You appear to have already installed. To reinstall please clear your old
       database tables first.
     db_failed: Database connection failed
-    db_failed_description: >-
+    db_failed_desc: >-
       This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
 
   page_404:
-    description: "Unfortunately, this page doesn't exist."
+    desc: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage
   page_50X:
-    description: The server encountered an error and could not complete your request.
+    desc: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
-    description: "We are under maintenance, we’ll be back soon."
+    desc: "We are under maintenance, we’ll be back soon."
   nav_menus:
     dashboard: Dashboard
     contents: Contents
@@ -990,6 +994,7 @@ ui:
     write: Write
     tos: Terms of Service
     privacy: Privacy
+    seo: SEO
   admin:
     admin_header:
       title: Admin
@@ -1039,13 +1044,13 @@ ui:
       btn_cancel: Cancel
       btn_submit: Submit
       normal_name: normal
-      normal_description: A normal user can ask and answer questions.
+      normal_desc: A normal user can ask and answer questions.
       suspended_name: suspended
-      suspended_description: A suspended user can't log in.
+      suspended_desc: A suspended user can't log in.
       deleted_name: deleted
-      deleted_description: "Delete profile, authentication associations."
+      deleted_desc: "Delete profile, authentication associations."
       inactive_name: inactive
-      inactive_description: An inactive user must re-validate their email.
+      inactive_desc: An inactive user must re-validate their email.
       confirm_title: Delete this user
       confirm_content: Are you sure you want to delete this user? This is permanent!
       confirm_btn: Delete
@@ -1054,11 +1059,11 @@ ui:
     status_modal:
       title: "Change {{ type }} status to..."
       normal_name: normal
-      normal_description: A normal post available to everyone.
+      normal_desc: A normal post available to everyone.
       closed_name: closed
-      closed_description: "A closed question can't answer, but still can edit, vote and comment."
+      closed_desc: "A closed question can't answer, but still can edit, vote and comment."
       deleted_name: deleted
-      deleted_description: All reputation gained and lost will be restored.
+      deleted_desc: All reputation gained and lost will be restored.
       btn_cancel: Cancel
       btn_submit: Submit
       btn_next: Next
@@ -1130,11 +1135,11 @@ ui:
         msg: Site url cannot be empty.
         validate: Please enter a valid URL.
         text: The address of your site.
-      short_description:
+      short_desc:
         label: Short Site Description (optional)
         msg: Short site description cannot be empty.
         text: "Short description, as used in the title tag on homepage."
-      description:
+      desc:
         label: Site Description (optional)
         msg: Site description cannot be empty.
         text: "Describe this site in one sentence, as used in the meta description tag."
@@ -1143,6 +1148,9 @@ ui:
         msg: Contact email cannot be empty.
         validate: Contact email is not valid.
         text: Email address of key contact responsible for this site.
+      permalink:
+        label: Permalink
+        text: Custom URL structures can improve the usability, and forward-compatibility of your links.
     interface:
       page_title: Interface
       logo:
@@ -1236,6 +1244,11 @@ ui:
       reserved_tags:
         label: Reserved Tags
         text: "Reserved tags can only be added to a post by moderator."
+    seo:
+      page_title: SEO
+      robots:
+        label: robots.txt
+        text: This will permanently override any related site settings.
   form:
     empty: cannot be empty
     invalid: is invalid

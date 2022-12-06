@@ -18,7 +18,7 @@ const Index: FC<IProps> = ({
   className = '',
   textClassName = '',
 }) => {
-  href ||= pathFactory.tagLanding(data);
+  href ||= pathFactory.tagLanding(data?.slug_name);
 
   return (
     <a
