@@ -1,6 +1,6 @@
 .PHONY: build clean ui
 
-VERSION=0.4.0
+VERSION=0.5.0
 BIN=answer
 DIR_SRC=./cmd/answer
 DOCKER_CMD=docker
@@ -38,7 +38,6 @@ install-ui-packages:
 	@corepack prepare pnpm@v7.12.2 --activate
 
 ui:
-	@npm config set registry https://repo.huaweicloud.com/repository/npm/
 	@cd ui && pnpm install && pnpm build && cd -
 
 all: clean build
