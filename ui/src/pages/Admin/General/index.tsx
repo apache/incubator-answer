@@ -33,13 +33,13 @@ const General: FC = () => {
       },
       short_description: {
         type: 'string',
-        title: t('short_description.label'),
-        description: t('short_description.text'),
+        title: t('short_desc.label'),
+        description: t('short_desc.text'),
       },
       description: {
         type: 'string',
-        title: t('description.label'),
-        description: t('description.text'),
+        title: t('desc.label'),
+        description: t('desc.text'),
       },
       contact_email: {
         type: 'string',

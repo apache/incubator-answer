@@ -73,7 +73,7 @@ const Questions: FC = () => {
               </h3>
 
               <p className="text-break">
-                {escapeRemove(tagInfo.excerpt) || t('no_description')}
+                {escapeRemove(tagInfo.excerpt) || t('no_desc')}
                 <Link to={pathFactory.tagInfo(curTagName)} className="ms-1">
                   [{t('more')}]
                 </Link>
