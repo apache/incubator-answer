@@ -15,13 +15,13 @@
                                 <div class="text-secondary mb-4">@{{.userinfo.Info.Username}}</div>
                                 <div class="d-flex flex-wrap mb-3">
                                     <div class="me-3">
-                                        <strong class="fs-5">{{.userinfo.Info.Rank}}</strong><span class="text-secondary"> reputation</span>
+                                        <strong class="fs-5">{{.userinfo.Info.Rank}}</strong><span class="text-secondary"> {{translator $.language "ui.personal.x_reputation"}}</span>
                                     </div>
                                     <div class="me-3">
-                                        <strong class="fs-5">{{.userinfo.Info.AnswerCount}}</strong><span class="text-secondary"> answers</span>
+                                        <strong class="fs-5">{{.userinfo.Info.AnswerCount}}</strong><span class="text-secondary"> {{translator $.language "ui.personal.x_answers"}}</span>
                                     </div>
                                     <div>
-                                        <strong class="fs-5">{{.userinfo.Info.QuestionCount}}</strong><span class="text-secondary"> questions</span>
+                                        <strong class="fs-5">{{.userinfo.Info.QuestionCount}}</strong><span class="text-secondary"> {{translator $.language "ui.personal.x_questions"}}</span>
                                     </div>
                                 </div>
                                 {{if .userinfo.Info.Website }}
@@ -40,11 +40,11 @@
 
                     <div class="col-xxl-7 col-lg-8 col-sm-12">
                         <div>
-                            <h5 class="mb-3">About Me</h5>
+                            <h5 class="mb-3">{{translator $.language "ui.personal.about_me"}}</h5>
                             {{if .bio }}
                             <div class="text-center mb-4">{{.bio}}</div>
                             {{else}}
-                            <div class="text-center py-5 mb-4">// Hello, World !</div>
+                            <div class="text-center py-5 mb-4">{{translator $.language "ui.personal.about_me_empty"}}</div>
                             {{end}}
                         </div>
                     </div>
