@@ -161,9 +161,6 @@ const routes: RouteNode[] = [
       {
         path: 'users/password-reset',
         page: 'pages/Users/PasswordReset',
-        guard: async () => {
-          return guard.activated();
-        },
       },
       {
         path: 'users/account-activation',

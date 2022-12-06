@@ -55,11 +55,12 @@ func (ar *UserActiveActivityRepo) UserActive(ctx context.Context, userID string)
 		}
 
 		addActivity := &entity.Activity{
-			UserID:       userID,
-			ObjectID:     "0",
-			ActivityType: activityType,
-			Rank:         deltaRank,
-			HasRank:      1,
+			UserID:           userID,
+			ObjectID:         "0",
+			OriginalObjectID: "0",
+			ActivityType:     activityType,
+			Rank:             deltaRank,
+			HasRank:          1,
 		}
 		_, exists, err := ar.activityRepo.GetActivity(ctx, session, "0", addActivity.UserID, activityType)
 		if err != nil {

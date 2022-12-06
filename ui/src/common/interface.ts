@@ -468,3 +468,8 @@ export interface UserRoleItem {
   name: string;
   description: string;
 }
+export interface MemberActionItem {
+  action: string;
+  name: string;
+  type: string;
+}

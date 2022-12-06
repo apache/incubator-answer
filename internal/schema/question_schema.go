@@ -3,8 +3,9 @@ package schema
 // RemoveQuestionReq delete question request
 type RemoveQuestionReq struct {
 	// question id
-	ID     string `validate:"required" comment:"question id" json:"id"`
-	UserID string `json:"-" ` // user_id
+	ID      string `validate:"required" comment:"question id" json:"id"`
+	UserID  string `json:"-" ` // user_id
+	IsAdmin bool   `json:"-"`
 }
 
 type CloseQuestionReq struct {
@@ -12,6 +13,7 @@ type CloseQuestionReq struct {
 	UserID    string `json:"-" `          // user_id
 	CloseType int    `json:"close_type" ` // close_type
 	CloseMsg  string `json:"close_msg" `  // close_type
+	IsAdmin   bool   `json:"-"`
 }
 
 type CloseQuestionMeta struct {
@@ -30,6 +32,26 @@ type QuestionAdd struct {
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// user id
 	UserID string `json:"-"`
+	QuestionPermission
+}
+
+type QuestionPermission struct {
+	// whether user can add it
+	CanAdd bool `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
+	// whether user can delete it
+	CanDelete bool `json:"-"`
+	// whether user can close it
+	CanClose bool `json:"-"`
+}
+
+type CheckCanQuestionUpdate struct {
+	// question id
+	ID string `validate:"required" form:"id"`
+	// user id
+	UserID  string `json:"-"`
+	IsAdmin bool   `json:"-"`
 }
 
 type QuestionUpdate struct {
@@ -46,7 +68,10 @@ type QuestionUpdate struct {
 	// edit summary
 	EditSummary string `validate:"omitempty" json:"edit_summary"`
 	// user id
-	UserID string `json:"-"`
+	UserID       string `json:"-"`
+	IsAdmin      bool   `json:"-"`
+	NoNeedReview bool   `json:"-"`
+	QuestionPermission
 }
 
 type QuestionBaseInfo struct {
@@ -81,6 +106,8 @@ type QuestionInfo struct {
 	Status               int            `json:"status"`
 	Operation            *Operation     `json:"operation,omitempty"`
 	UserID               string         `json:"-" `
+	LastEditUserID       string         `json:"-" `
+	LastAnsweredUserID   string         `json:"-" `
 	UserInfo             *UserBasicInfo `json:"user_info"`
 	UpdateUserInfo       *UserBasicInfo `json:"update_user_info,omitempty"`
 	LastAnsweredUserInfo *UserBasicInfo `json:"last_answered_user_info,omitempty"`
@@ -91,6 +118,11 @@ type QuestionInfo struct {
 
 	// MemberActions
 	MemberActions []*PermissionMemberAction `json:"member_actions"`
+}
+
+// UpdateQuestionResp update question resp
+type UpdateQuestionResp struct {
+	WaitForReview bool `json:"wait_for_review"`
 }
 
 type AdminQuestionInfo struct {
@@ -169,7 +201,7 @@ type CmsQuestionSearch struct {
 	Page      int    `json:"page" form:"page"`           // Query number of pages
 	PageSize  int    `json:"page_size" form:"page_size"` // Search page size
 	Status    int    `json:"-" form:"-"`
-	StatusStr string `json:"status" form:"status"` // Status 1 Available 2 closed 10 UserDeleted
+	StatusStr string `json:"status" form:"status"`                                  // Status 1 Available 2 closed 10 UserDeleted
 	Query     string `validate:"omitempty,gt=0,lte=100" json:"query" form:"query" ` //Query string
 }
 

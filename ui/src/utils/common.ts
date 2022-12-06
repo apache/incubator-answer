@@ -173,23 +173,41 @@ function diffText(newText: string, oldText: string): string {
   if (typeof oldText !== 'string') {
     return newText
       ?.replace(/\n/gi, '<br>')
+      ?.replace(/<kbd/gi, '&lt;kbd')
+      ?.replace(/<\/kbd>/gi, '&lt;/kbd&gt;')
       ?.replace(/<iframe/gi, '&lt;iframe')
       ?.replace(/<input/gi, '&lt;input');
   }
   const diff = Diff.diffChars(oldText, newText);
+  // console.log(diff);
   const result = diff.map((part) => {
     if (part.added) {
-      return `<span class="review-text-add">${part.value}</span>`;
+      if (part.value.replace(/\n/g, '').length <= 0) {
+        return `<span class="review-text-add d-block">${part.value.replace(
+          /\n/g,
+          '↵\n',
+        )}</span>`;
+      }
+      return `<span class="review-text-add d-block">${part.value}</span>`;
     }
     if (part.removed) {
+      if (part.value.replace(/\n/g, '').length <= 0) {
+        return `<span class="review-text-delete text-decoration-none d-block">${part.value.replace(
+          /\n/g,
+          '↵\n',
+        )}</span>`;
+      }
       return `<span class="review-text-delete">${part.value}</span>`;
     }
+
     return part.value;
   });
 
   return result
     .join('')
     ?.replace(/<iframe/gi, '&lt;iframe')
+    ?.replace(/<kbd/gi, '&lt;kbd')
+    ?.replace(/<\/kbd>/gi, '&lt;/kbd&gt;')
     ?.replace(/<input/gi, '&lt;input');
 }
 

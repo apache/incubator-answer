@@ -110,13 +110,16 @@ const Ask = () => {
       id: aid,
       edit_summary: formData.description.value,
     };
-    modifyAnswer(params).then(() => {
+    modifyAnswer(params).then((res) => {
       navigate(
         pathFactory.answerLanding({
           questionId: qid,
           questionTitle: data?.question?.title,
           answerId: aid,
         }),
+        {
+          state: { isReview: res?.wait_for_review },
+        },
       );
     });
   };

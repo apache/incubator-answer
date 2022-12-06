@@ -235,8 +235,10 @@ const Ask = () => {
         id: qid,
         edit_summary: formData.edit_summary.value,
       })
-        .then(() => {
-          navigate(pathFactory.questionLanding(qid, params.title));
+        .then((res) => {
+          navigate(pathFactory.questionLanding(qid, params.title), {
+            state: { isReview: res?.wait_for_review },
+          });
         })
         .catch((err) => {
           if (err.isError) {

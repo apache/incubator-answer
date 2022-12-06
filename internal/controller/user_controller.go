@@ -441,9 +441,6 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	resp, err := uc.userService.UserChangeEmailSendCode(ctx, req)
 	if err != nil {
-		if resp != nil {
-			resp.ErrorMsg = translator.GlobalTrans.Tr(handler.GetLang(ctx), resp.ErrorMsg)
-		}
 		handler.HandleResponse(ctx, err, resp)
 		return
 	}

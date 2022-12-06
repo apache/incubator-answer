@@ -117,7 +117,7 @@ const Users: FC = () => {
         <thead>
           <tr>
             <th>{t('name')}</th>
-            {/* <th style={{ width: '12%' }}>{t('reputation')}</th> */}
+            <th style={{ width: '12%' }}>{t('reputation')}</th>
             <th style={{ width: '20%' }}>{t('email')}</th>
             <th className="text-nowrap" style={{ width: '15%' }}>
               {t('created_at')}
@@ -151,7 +151,6 @@ const Users: FC = () => {
                     showReputation={false}
                   />
                 </td>
-                {/* <td>{user.rank}</td> */}
                 <td className="text-break">{user.e_mail}</td>
                 <td>
                   <FormatTime time={user.created_at} />
@@ -183,7 +182,6 @@ const Users: FC = () => {
                         <Icon name="three-dots-vertical" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
-                        {/* <Dropdown.Item>{t('set_new_password')}</Dropdown.Item> */}
                         <Dropdown.Item
                           onClick={() => handleAction('status', user)}>
                           {t('change_status')}
@@ -192,19 +190,8 @@ const Users: FC = () => {
                           onClick={() => handleAction('role', user)}>
                           {t('change_role')}
                         </Dropdown.Item>
-                        {/* <Dropdown.Divider />
-                        <Dropdown.Item>{t('show_logs')}</Dropdown.Item> */}
                       </Dropdown.Menu>
                     </Dropdown>
-
-                    {/* {user.status !== 'deleted' && (
-                      <Button
-                        className="p-0 btn-no-border"
-                        variant="link"
-                        onClick={() => handleClick(user)}>
-                        {t('change')}
-                      </Button>
-                    )} */}
                   </td>
                 ) : null}
               </tr>
