@@ -161,7 +161,7 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		rank.AnswerEditRank,
 		rank.AnswerEditWithoutReviewRank,
-	}, "")
+	}, req.ID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
