@@ -1,6 +1,8 @@
 package controller_backyard
 
 import (
+	"net/http"
+
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/schema"
@@ -83,6 +85,53 @@ func (sc *SiteInfoController) GetSiteWrite(ctx *gin.Context) {
 func (sc *SiteInfoController) GetSiteLegal(ctx *gin.Context) {
 	resp, err := sc.siteInfoService.GetSiteLegal(ctx)
 	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetSeo get site seo information
+// @Summary get site seo information
+// @Description get site seo information
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteSeoResp}
+// @Router /answer/admin/api/siteinfo/seo [get]
+func (sc *SiteInfoController) GetSeo(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSeo(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetRobots get site robots information
+// @Summary get site robots information
+// @Description get site robots information
+// @Tags site
+// @Produce json
+// @Success 200 {string} txt ""
+// @Router /robots.txt [get]
+func (sc *SiteInfoController) GetRobots(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSeo(ctx)
+	if err != nil {
+		ctx.String(http.StatusOK, "")
+		return
+	}
+	ctx.String(http.StatusOK, resp.Robots)
+}
+
+// UpdateSeo update site seo information
+// @Summary update site seo information
+// @Description update site seo information
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.SiteSeoReq true "seo"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/siteinfo/seo [put]
+func (sc *SiteInfoController) UpdateSeo(ctx *gin.Context) {
+	req := schema.SiteSeoReq{}
+	if handler.BindAndCheck(ctx, &req) {
+		return
+	}
+	err := sc.siteInfoService.SaveSeo(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
 }
 
 // UpdateGeneral update site general information

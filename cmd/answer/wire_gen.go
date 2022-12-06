@@ -13,6 +13,7 @@ import (
 	"github.com/answerdev/answer/internal/base/server"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/controller"
+	"github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/controller_backyard"
 	"github.com/answerdev/answer/internal/repo/activity"
 	"github.com/answerdev/answer/internal/repo/activity_common"
@@ -205,7 +206,10 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	uiRouter := router.NewUIRouter(siteinfoController)
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService)
 	avatarMiddleware := middleware.NewAvatarMiddleware(serviceConf, uploaderService)
-	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware)
+	templateRenderController := templaterender.NewTemplateRenderController(questionService, userService, tagService, answerService, commentService)
+	templateController := controller.NewTemplateController(templateRenderController, siteInfoCommonService)
+	templateRouter := router.NewTemplateRouter(templateController, templateRenderController, siteInfoController)
+	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter)
 	application := newApplication(serverConf, ginEngine)
 	return application, func() {
 		cleanup2()

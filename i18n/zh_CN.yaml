@@ -384,10 +384,10 @@ ui:
         slug_name:
           label: URL 固定链接
           description: '必须由 "a-z", "0-9", "+ # - ." 组成'
-          msg:
-            empty: 不能为空
-            range: 不能超过 35 个字符
-            character: 包含非法字符
+          msg: "todo"
+#            empty: 不能为空
+#            range: 不能超过 35 个字符
+#            character: 包含非法字符
         description:
           label: 标签描述(可选)
     btn_cancel: 取消

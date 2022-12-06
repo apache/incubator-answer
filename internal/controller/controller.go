@@ -23,4 +23,5 @@ var ProviderSetController = wire.NewSet(
 	NewDashboardController,
 	NewUploadController,
 	NewActivityController,
+	NewTemplateController,
 )

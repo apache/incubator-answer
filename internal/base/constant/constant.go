@@ -57,4 +57,5 @@ const (
 	SiteTypeBranding  = "branding"
 	SiteTypeWrite     = "write"
 	SiteTypeLegal     = "legal"
+	SiteTypeSeo       = "seo"
 )

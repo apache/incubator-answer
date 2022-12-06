@@ -52,19 +52,19 @@ func NewTranslator(c *I18n) (tr i18n.Translator, err error) {
 		}
 
 		// only parse the backend translation
-		translation := struct {
-			Content map[string]interface{} `yaml:"backend"`
-		}{}
-		if err = yaml.Unmarshal(buf, &translation); err != nil {
-			return nil, err
-		}
-		content, err := yaml.Marshal(translation.Content)
-		if err != nil {
-			return nil, fmt.Errorf("marshal translation content failed: %s %s", file.Name(), err)
-		}
+		//translation := struct {
+		//	Content map[string]interface{} `yaml:"backend"`
+		//}{}
+		//if err = yaml.Unmarshal(buf, &translation); err != nil {
+		//	return nil, err
+		//}
+		//content, err := yaml.Marshal(translation.Content)
+		//if err != nil {
+		//	return nil, fmt.Errorf("marshal translation content failed: %s %s", file.Name(), err)
+		//}
 
 		// add translator use backend translation
-		if err = myTran.AddTranslator(content, file.Name()); err != nil {
+		if err = myTran.AddTranslator(buf, file.Name()); err != nil {
 			return nil, fmt.Errorf("add translator failed: %s %s", file.Name(), err)
 		}
 	}
