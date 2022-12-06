@@ -7,8 +7,6 @@ import { useToast } from '@/hooks';
 import { getLoggedUserInfo, changeEmail } from '@/services';
 import { handleFormError } from '@/utils';
 
-const reg = /(?<=.{2}).+(?=@)/gi;
-
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings.account',
@@ -25,6 +23,7 @@ const Index: FC = () => {
   const toast = useToast();
   useEffect(() => {
     getLoggedUserInfo().then((resp) => {
+      resp.e_mail = 'haa@sifou.com';
       setUserInfo(resp);
     });
   }, []);
@@ -91,7 +90,10 @@ const Index: FC = () => {
             <Form.Control
               type="text"
               disabled
-              defaultValue={userInfo?.e_mail?.replace(reg, () => '*'.repeat(4))}
+              defaultValue={userInfo?.e_mail?.replace(
+                /(.{2})(.+)(@.+)/i,
+                '$1****$3',
+              )}
             />
           </Form.Group>
 
