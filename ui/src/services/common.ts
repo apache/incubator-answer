@@ -38,6 +38,9 @@ export const useQueryComments = (params) => {
   if (params.page === 0) {
     params.query_cond = 'vote';
     params.page = 1;
+  } else {
+    // only first page need commentId
+    delete params.comment_id;
   }
   return useSWR<Type.ListResult>(
     `/answer/api/v1/comment/page?${qs.stringify(params, {
@@ -73,7 +76,7 @@ export const useQueryAnswerInfo = (id: string) => {
 };
 
 export const modifyQuestion = (
-  params: Type.QuestionParams & { id: string },
+  params: Type.QuestionParams & { id: string; edit_summary: string },
 ) => {
   return request.put(`/answer/api/v1/question`, params);
 };

@@ -122,12 +122,14 @@ func (tr *tagCommonRepo) GetTagListByNames(ctx context.Context, names []string) 
 }
 
 // GetTagByID get tag one
-func (tr *tagCommonRepo) GetTagByID(ctx context.Context, tagID string) (
+func (tr *tagCommonRepo) GetTagByID(ctx context.Context, tagID string, includeDeleted bool) (
 	tag *entity.Tag, exist bool, err error,
 ) {
 	tag = &entity.Tag{}
 	session := tr.data.DB.Where(builder.Eq{"id": tagID})
-	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	if !includeDeleted {
+		session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	}
 	exist, err = session.Get(tag)
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

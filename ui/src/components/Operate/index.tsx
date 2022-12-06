@@ -1,12 +1,12 @@
 import { memo, FC } from 'react';
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from '@/components';
 import { useReportModal, useToast } from '@/hooks';
 import Share from '../Share';
-import { deleteQuestion, deleteAnswer } from '@/services';
+import { deleteQuestion, deleteAnswer, editCheck } from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
 
 interface IProps {
@@ -31,6 +31,7 @@ const Index: FC<IProps> = ({
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'delete' });
   const toast = useToast();
+  const navigate = useNavigate();
   const reportModal = useReportModal();
   const closeModal = useReportModal();
   const editUrl =
@@ -96,6 +97,16 @@ const Index: FC<IProps> = ({
       });
     }
   };
+  const handleEdit = (evt, targetUrl) => {
+    evt.preventDefault();
+    let checkObjectId = qid;
+    if (type === 'answer') {
+      checkObjectId = aid;
+    }
+    editCheck(checkObjectId).then(() => {
+      navigate(targetUrl);
+    });
+  };
 
   const handleAction = (action) => {
     if (!tryNormalLogged(true)) {
@@ -124,6 +135,7 @@ const Index: FC<IProps> = ({
               key={item.action}
               to={editUrl}
               className="link-secondary p-0 fs-14 me-3"
+              onClick={(evt) => handleEdit(evt, editUrl)}
               style={{ lineHeight: '23px' }}>
               {item.name}
             </Link>

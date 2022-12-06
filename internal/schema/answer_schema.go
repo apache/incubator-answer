@@ -22,23 +22,34 @@ type AnswerAddReq struct {
 }
 
 type AnswerUpdateReq struct {
-	ID          string `json:"id"`                                // id
-	QuestionID  string `json:"question_id" `                      // question_id
-	UserID      string `json:"-" `                                // user_id
-	Title       string `json:"title" `                            // title
-	Content     string `json:"content"`                           // content
-	HTML        string `json:"html" `                             // html
-	EditSummary string `validate:"omitempty" json:"edit_summary"` // edit_summary
-	IsAdmin     bool   `json:"-"`
+	ID           string `json:"id"`                                // id
+	QuestionID   string `json:"question_id" `                      // question_id
+	UserID       string `json:"-" `                                // user_id
+	Title        string `json:"title" `                            // title
+	Content      string `json:"content"`                           // content
+	HTML         string `json:"html" `                             // html
+	EditSummary  string `validate:"omitempty" json:"edit_summary"` // edit_summary
+	NoNeedReview bool   `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
 }
 
-type AnswerList struct {
-	QuestionID  string `json:"question_id" form:"question_id"` // question_id
-	Order       string `json:"order" form:"order"`             // 1 Default 2 time
-	Page        int    `json:"page" form:"page"`               // Query number of pages
-	PageSize    int    `json:"page_size" form:"page_size"`     // Search page size
-	LoginUserID string `json:"-" `
-	IsAdmin     bool   `json:"-"`
+// AnswerUpdateResp answer update resp
+type AnswerUpdateResp struct {
+	WaitForReview bool `json:"wait_for_review"`
+}
+
+type AnswerListReq struct {
+	QuestionID string `json:"question_id" form:"question_id"` // question_id
+	Order      string `json:"order" form:"order"`             // 1 Default 2 time
+	Page       int    `json:"page" form:"page"`               // Query number of pages
+	PageSize   int    `json:"page_size" form:"page_size"`     // Search page size
+	UserID     string `json:"-" `
+	IsAdmin    bool   `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
+	// whether user can delete it
+	CanDelete bool `json:"-"`
 }
 
 type AnswerInfo struct {
@@ -50,6 +61,7 @@ type AnswerInfo struct {
 	UpdateTime     int64          `json:"update_time" xorm:"updated"`     // update_time
 	Adopted        int            `json:"adopted"`                        // 1 Failed 2 Adopted
 	UserID         string         `json:"-" `
+	UpdateUserID   string         `json:"-" `
 	UserInfo       *UserBasicInfo `json:"user_info,omitempty"`
 	UpdateUserInfo *UserBasicInfo `json:"update_user_info,omitempty"`
 	Collected      bool           `json:"collected"`
@@ -69,6 +81,7 @@ type AdminAnswerInfo struct {
 	UpdateTime   int64          `json:"update_time"`
 	Adopted      int            `json:"adopted"`
 	UserID       string         `json:"-" `
+	UpdateUserID string         `json:"-" `
 	UserInfo     *UserBasicInfo `json:"user_info"`
 	VoteCount    int            `json:"vote_count"`
 	QuestionInfo struct {
@@ -77,7 +90,13 @@ type AdminAnswerInfo struct {
 }
 
 type AnswerAdoptedReq struct {
-	QuestionID string `json:"question_id" ` // question_id
-	AnswerID   string `json:"answer_id" `
+	QuestionID string `json:"question_id"`
+	AnswerID   string `json:"answer_id"`
 	UserID     string `json:"-" `
+}
+
+type AdminSetAnswerStatusRequest struct {
+	StatusStr string `json:"status"`
+	AnswerID  string `json:"answer_id"`
+	UserID    string `json:"-" `
 }

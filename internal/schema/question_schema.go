@@ -32,6 +32,26 @@ type QuestionAdd struct {
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// user id
 	UserID string `json:"-"`
+	QuestionPermission
+}
+
+type QuestionPermission struct {
+	// whether user can add it
+	CanAdd bool `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
+	// whether user can delete it
+	CanDelete bool `json:"-"`
+	// whether user can close it
+	CanClose bool `json:"-"`
+}
+
+type CheckCanQuestionUpdate struct {
+	// question id
+	ID string `validate:"required" form:"id"`
+	// user id
+	UserID  string `json:"-"`
+	IsAdmin bool   `json:"-"`
 }
 
 type QuestionUpdate struct {
@@ -48,8 +68,10 @@ type QuestionUpdate struct {
 	// edit summary
 	EditSummary string `validate:"omitempty" json:"edit_summary"`
 	// user id
-	UserID  string `json:"-"`
-	IsAdmin bool   `json:"-"`
+	UserID       string `json:"-"`
+	IsAdmin      bool   `json:"-"`
+	NoNeedReview bool   `json:"-"`
+	QuestionPermission
 }
 
 type QuestionBaseInfo struct {
@@ -84,6 +106,8 @@ type QuestionInfo struct {
 	Status               int            `json:"status"`
 	Operation            *Operation     `json:"operation,omitempty"`
 	UserID               string         `json:"-" `
+	LastEditUserID       string         `json:"-" `
+	LastAnsweredUserID   string         `json:"-" `
 	UserInfo             *UserBasicInfo `json:"user_info"`
 	UpdateUserInfo       *UserBasicInfo `json:"update_user_info,omitempty"`
 	LastAnsweredUserInfo *UserBasicInfo `json:"last_answered_user_info,omitempty"`
@@ -94,6 +118,11 @@ type QuestionInfo struct {
 
 	// MemberActions
 	MemberActions []*PermissionMemberAction `json:"member_actions"`
+}
+
+// UpdateQuestionResp update question resp
+type UpdateQuestionResp struct {
+	WaitForReview bool `json:"wait_for_review"`
 }
 
 type AdminQuestionInfo struct {

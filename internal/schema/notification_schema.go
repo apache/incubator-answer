@@ -27,6 +27,13 @@ type NotificationContent struct {
 	UpdateTime         int64          `json:"update_time"`
 }
 
+type GetRedDot struct {
+	CanReviewQuestion bool   `json:"-"`
+	CanReviewAnswer   bool   `json:"-"`
+	CanReviewTag      bool   `json:"-"`
+	UserID            string `json:"-"`
+}
+
 // NotificationMsg notification message
 type NotificationMsg struct {
 	// trigger notification user id
@@ -57,6 +64,8 @@ type ObjectInfo struct {
 type RedDot struct {
 	Inbox       int64 `json:"inbox"`
 	Achievement int64 `json:"achievement"`
+	Revision    int64 `json:"revision"`
+	CanRevision bool  `json:"can_revision"`
 }
 
 type NotificationSearch struct {
@@ -68,8 +77,11 @@ type NotificationSearch struct {
 }
 
 type NotificationClearRequest struct {
-	UserID  string `json:"-"`
-	TypeStr string `json:"type" form:"type"` // inbox achievement
+	UserID            string `json:"-"`
+	TypeStr           string `json:"type" form:"type"` // inbox achievement
+	CanReviewQuestion bool   `json:"-"`
+	CanReviewAnswer   bool   `json:"-"`
+	CanReviewTag      bool   `json:"-"`
 }
 
 type NotificationClearIDRequest struct {

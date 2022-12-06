@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
+import {
+  useParams,
+  useSearchParams,
+  useNavigate,
+  useLocation,
+} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { Pagination, PageTitle } from '@/components';
-import { loggedUserInfoStore } from '@/stores';
+import { loggedUserInfoStore, toastStore } from '@/stores';
 import { scrollTop } from '@/utils';
 import { usePageUsers } from '@/hooks';
 import type {
@@ -26,6 +32,7 @@ import './index.scss';
 
 const Index = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation('translation');
   const { qid = '', aid = '' } = useParams();
   const [urlSearch] = useSearchParams();
 
@@ -39,6 +46,18 @@ const Index = () => {
   const { setUsers } = usePageUsers();
   const userInfo = loggedUserInfoStore((state) => state.user);
   const isAuthor = userInfo?.username === question?.user_info?.username;
+  const isLogged = Boolean(userInfo?.access_token);
+  const { state: locationState } = useLocation();
+
+  useEffect(() => {
+    if (locationState?.isReview) {
+      toastStore.getState().show({
+        msg: t('review', { keyPrefix: 'toast' }),
+        variant: 'warning',
+      });
+    }
+  }, [locationState]);
+
   const requestAnswers = async () => {
     const res = await getAnswers({
       order: order === 'updated' ? order : 'default',
@@ -126,6 +145,7 @@ const Index = () => {
               data={question}
               initPage={initPage}
               hasAnswer={answers.count > 0}
+              isLogged={isLogged}
             />
             {answers.count > 0 && (
               <>
@@ -139,6 +159,7 @@ const Index = () => {
                       questionTitle={question?.title || ''}
                       isAuthor={isAuthor}
                       callback={initPage}
+                      isLogged={isLogged}
                     />
                   );
                 })}

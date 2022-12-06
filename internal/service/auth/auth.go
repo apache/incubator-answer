@@ -40,7 +40,7 @@ func (as *AuthService) GetUserCacheInfo(ctx context.Context, accessToken string)
 	}
 	cacheInfo, _ := as.authRepo.GetUserStatus(ctx, userCacheInfo.UserID)
 	if cacheInfo != nil {
-		log.Infof("user status updated: %+v", cacheInfo)
+		log.Debugf("user status updated: %+v", cacheInfo)
 		userCacheInfo.UserStatus = cacheInfo.UserStatus
 		userCacheInfo.EmailStatus = cacheInfo.EmailStatus
 		userCacheInfo.IsAdmin = cacheInfo.IsAdmin
