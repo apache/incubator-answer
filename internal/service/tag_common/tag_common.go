@@ -79,7 +79,7 @@ func NewTagCommonService(
 
 // SearchTagLike get tag list all
 func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []schema.SearchTagLikeResp, err error) {
-	tags, err := ts.tagCommonRepo.GetTagListByName(ctx, req.Tag, 5, req.IsAdmin)
+	tags, err := ts.tagCommonRepo.GetTagListByName(ctx, req.Tag, 0, req.IsAdmin)
 	if err != nil {
 		return
 	}
