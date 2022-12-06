@@ -64,7 +64,7 @@ func NewHTTPServer(debug bool,
 	cmsauthV1.Use(authUserMiddleware.CmsAuth())
 	answerRouter.RegisterAnswerCmsAPIRouter(cmsauthV1)
 
-	r.SetFuncMap(template.FuncMap{
+	funcMap := template.FuncMap{
 		"templateHTML": func(data string) template.HTML {
 			return template.HTML(data)
 		},
@@ -138,14 +138,15 @@ func NewHTTPServer(debug bool,
 				"timezone": tz,
 			}
 		},
-	})
+	}
+	r.SetFuncMap(funcMap)
 
 	dev := os.Getenv("DEVCODE")
 	if dev != "" {
 		r.LoadHTMLGlob("../../ui/template/*")
 	} else {
 		html, _ := fs.Sub(ui.Template, "template")
-		htmlTemplate := template.Must(template.New("").ParseFS(html, "*.html"))
+		htmlTemplate := template.Must(template.New("").Funcs(funcMap).ParseFS(html, "*.html"))
 		r.SetHTMLTemplate(htmlTemplate)
 	}
 
