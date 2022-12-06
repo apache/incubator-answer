@@ -73,6 +73,14 @@ backend:
     tag:
       not_found:
         other: "标签未找到"
+      recommend_tag_not_found:
+        other: "推荐标签不存在"
+      recommend_tag_enter:
+        other: "请输入至少一个必需的标签。"
+      not_contain_synonym_tags:
+        other: "不应包含同义词标签。"
+      cannot_update:
+        other: "没有更新标签权限。"
     theme:
       not_found:
         other: "主题未找到"
@@ -89,6 +97,11 @@ backend:
         other: "用户名已被使用"
       set_avatar:
         other: "头像设置错误"
+    revision:
+      review_underway:
+        other: "目前无法编辑，有一个版本在审阅队列中。"
+      no_permission:
+        other: "无权限修改"
 
   report:
     spam:

@@ -170,6 +170,10 @@ func (rs *RankService) CheckVotePermission(ctx context.Context, userID, objectID
 	if !exist {
 		return can, nil
 	}
+	// administrator have all permissions
+	if userInfo.IsAdmin {
+		return true, nil
+	}
 
 	objectInfo, err := rs.objectInfoService.GetInfo(ctx, objectID)
 	if err != nil {
