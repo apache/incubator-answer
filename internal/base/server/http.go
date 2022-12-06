@@ -69,6 +69,7 @@ func NewHTTPServer(debug bool,
 			return template.HTML(data)
 		},
 		"translator": func(la i18n.Language, data string, params ...interface{}) string {
+			// todo
 			/*if len(params) > 0 && len(params)%2 == 0 {
 				for i := 0; i < len(params); i += 2 {
 					k := converter.InterfaceToString(params[i])
