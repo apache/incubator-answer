@@ -1,5 +1,5 @@
 {
   "*.{js,jsx,ts,tsx}": ["eslint --cache --fix"],
-  "*.{js,jsx,less,md,json}": ["prettier --write"],
+  "*.{js,jsx,scss,md,json}": ["prettier --write"],
   "*.ts?(x)": ["prettier --parser=typescript --write"]
 }

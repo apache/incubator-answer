@@ -1,3 +1,4 @@
+export const DEFAULT_SITE_NAME = 'Answer';
 export const DEFAULT_LANG = 'en_US';
 export const CURRENT_LANG_STORAGE_KEY = '_a_lang_';
 export const LANG_RESOURCE_STORAGE_KEY = '_a_lang_r_';
@@ -9,29 +10,29 @@ export const CAPTCHA_CODE_STORAGE_KEY = '_a_captcha_';
 export const ADMIN_LIST_STATUS = {
   // normal;
   1: {
-    variant: 'success',
+    variant: 'text-bg-success',
     name: 'normal',
   },
   // closed;
   2: {
-    variant: 'warning',
+    variant: 'text-bg-warning',
     name: 'closed',
   },
   // deleted
   10: {
-    variant: 'danger',
+    variant: 'text-bg-danger',
     name: 'deleted',
   },
   normal: {
-    variant: 'success',
+    variant: 'text-bg-success',
     name: 'normal',
   },
   closed: {
-    variant: 'warning',
+    variant: 'text-bg-warning',
     name: 'closed',
   },
   deleted: {
-    variant: 'danger',
+    variant: 'text-bg-danger',
     name: 'deleted',
   },
 };
@@ -557,3 +558,12 @@ export const TIMEZONES = [
   },
 ];
 export const DEFAULT_TIMEZONE = 'UTC+0';
+
+export const TIMELINE_NORMAL_ACTIVITY_TYPE = [
+  'undeleted',
+  'deleted',
+  'downvote',
+  'upvote',
+  'reopened',
+  'closed',
+];

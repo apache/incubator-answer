@@ -1,7 +1,9 @@
 import { FC } from 'react';
-import { Button, Form, Table, Badge } from 'react-bootstrap';
+import { Form, Table, Dropdown } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+
+import classNames from 'classnames';
 
 import {
   Pagination,
@@ -9,25 +11,28 @@ import {
   BaseUserCard,
   Empty,
   QueryGroup,
+  Icon,
 } from '@/components';
 import * as Type from '@/common/interface';
-import { useChangeModal } from '@/hooks';
+import { useChangeModal, useChangeUserRoleModal, useToast } from '@/hooks';
 import { useQueryUsers } from '@/services';
+import { loggedUserInfoStore } from '@/stores';
 
 import '../index.scss';
 
 const UserFilterKeys: Type.UserFilterBy[] = [
   'all',
+  'staff',
   'inactive',
   'suspended',
   'deleted',
 ];
 
 const bgMap = {
-  normal: 'success',
-  suspended: 'danger',
-  deleted: 'danger',
-  inactive: 'secondary',
+  normal: 'text-bg-success',
+  suspended: 'text-bg-danger',
+  deleted: 'text-bg-danger',
+  inactive: 'text-bg-secondary',
 };
 
 const PAGE_SIZE = 10;
@@ -38,6 +43,8 @@ const Users: FC = () => {
   const curFilter = urlSearchParams.get('filter') || UserFilterKeys[0];
   const curPage = Number(urlSearchParams.get('page') || '1');
   const curQuery = urlSearchParams.get('query') || '';
+  const currentUser = loggedUserInfoStore((state) => state.user);
+  const Toast = useToast();
   const {
     data,
     isLoading,
@@ -46,17 +53,42 @@ const Users: FC = () => {
     page: curPage,
     page_size: PAGE_SIZE,
     query: curQuery,
-    ...(curFilter === 'all' ? {} : { status: curFilter }),
+    ...(curFilter === 'all'
+      ? {}
+      : curFilter === 'staff'
+      ? { staff: true }
+      : { status: curFilter }),
   });
   const changeModal = useChangeModal({
     callback: refreshUsers,
   });
 
-  const handleClick = ({ user_id, status }) => {
-    changeModal.onShow({
-      id: user_id,
-      type: status,
-    });
+  const changeUserRoleModal = useChangeUserRoleModal({
+    callback: refreshUsers,
+  });
+
+  const handleAction = (type, user) => {
+    const { user_id, status, role_id, username } = user;
+    if (username === currentUser.username) {
+      Toast.onShow({
+        msg: t('fobidden_operate_self', { keyPrefix: 'toast' }),
+        variant: 'warning',
+      });
+      return;
+    }
+    if (type === 'status') {
+      changeModal.onShow({
+        id: user_id,
+        type: status,
+      });
+    }
+
+    if (type === 'role') {
+      changeUserRoleModal.onShow({
+        id: user_id,
+        role_id,
+      });
+    }
   };
 
   const handleFilter = (e) => {
@@ -87,20 +119,23 @@ const Users: FC = () => {
         <thead>
           <tr>
             <th>{t('name')}</th>
-            <th style={{ width: '12%' }}>{t('reputation')}</th>
+            {/* <th style={{ width: '12%' }}>{t('reputation')}</th> */}
             <th style={{ width: '20%' }}>{t('email')}</th>
             <th className="text-nowrap" style={{ width: '15%' }}>
               {t('created_at')}
             </th>
             {(curFilter === 'deleted' || curFilter === 'suspended') && (
-              <th className="text-nowrap" style={{ width: '10%' }}>
+              <th className="text-nowrap" style={{ width: '15%' }}>
                 {curFilter === 'deleted' ? t('delete_at') : t('suspend_at')}
               </th>
             )}
 
-            <th style={{ width: '10%' }}>{t('status')}</th>
+            <th style={{ width: '12%' }}>{t('status')}</th>
+            <th style={{ width: '12%' }}>{t('role')}</th>
             {curFilter !== 'deleted' ? (
-              <th style={{ width: '10%' }}>{t('action')}</th>
+              <th style={{ width: '8%' }} className="text-end">
+                {t('action')}
+              </th>
             ) : null}
           </tr>
         </thead>
@@ -112,11 +147,13 @@ const Users: FC = () => {
                   <BaseUserCard
                     data={user}
                     className="fs-6"
-                    avatarSize="24px"
+                    avatarSize="32px"
                     avatarSearchStr="s=48"
+                    avatarClass="me-2"
+                    showReputation={false}
                   />
                 </td>
-                <td>{user.rank}</td>
+                {/* <td>{user.rank}</td> */}
                 <td className="text-break">{user.e_mail}</td>
                 <td>
                   <FormatTime time={user.created_at} />
@@ -132,18 +169,44 @@ const Users: FC = () => {
                   </td>
                 )}
                 <td>
-                  <Badge bg={bgMap[user.status]}>{t(user.status)}</Badge>
+                  <span className={classNames('badge', bgMap[user.status])}>
+                    {t(user.status)}
+                  </span>
+                </td>
+                <td>
+                  <span className="badge text-bg-light">
+                    {t(user.role_name)}
+                  </span>
                 </td>
                 {curFilter !== 'deleted' ? (
-                  <td>
-                    {user.status !== 'deleted' && (
+                  <td className="text-end">
+                    <Dropdown>
+                      <Dropdown.Toggle variant="link" className="no-toggle">
+                        <Icon name="three-dots-vertical" />
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        {/* <Dropdown.Item>{t('set_new_password')}</Dropdown.Item> */}
+                        <Dropdown.Item
+                          onClick={() => handleAction('status', user)}>
+                          {t('change_status')}
+                        </Dropdown.Item>
+                        <Dropdown.Item
+                          onClick={() => handleAction('role', user)}>
+                          {t('change_role')}
+                        </Dropdown.Item>
+                        {/* <Dropdown.Divider />
+                        <Dropdown.Item>{t('show_logs')}</Dropdown.Item> */}
+                      </Dropdown.Menu>
+                    </Dropdown>
+
+                    {/* {user.status !== 'deleted' && (
                       <Button
                         className="p-0 btn-no-border"
                         variant="link"
                         onClick={() => handleClick(user)}>
                         {t('change')}
                       </Button>
-                    )}
+                    )} */}
                   </td>
                 ) : null}
               </tr>

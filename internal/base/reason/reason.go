@@ -41,6 +41,7 @@ const (
 	ObjectNotFound                   = "error.object.not_found"
 	TagNotFound                      = "error.tag.not_found"
 	TagNotContainSynonym             = "error.tag.not_contain_synonym_tags"
+	TagCannotUpdate                  = "error.tag.cannot_update"
 	RankFailToMeetTheCondition       = "error.rank.fail_to_meet_the_condition"
 	ThemeNotFound                    = "error.theme.not_found"
 	LangNotFound                     = "error.lang.not_found"
@@ -53,4 +54,7 @@ const (
 	SiteInfoNotFound                 = "error.site_info.not_found"
 	UploadFileSourceUnsupported      = "error.upload.source_unsupported"
 	RecommendTagNotExist             = "error.tag.recommend_tag_not_found"
+	RecommendTagEnter                = "error.tag.recommend_tag_enter"
+	RevisionReviewUnderway           = "error.revision.review_underway"
+	RevisionNoPermission             = "error.revision.no_permission"
 )

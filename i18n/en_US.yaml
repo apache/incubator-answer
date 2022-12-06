@@ -1,4 +1,5 @@
 # The following fields are used for back-end
+
 backend:
   base:
     success:
@@ -90,9 +91,16 @@ backend:
         other: "Please enter at least one required tag."
       not_contain_synonym_tags:
         other: "Should not contain synonym tags."
+      cannot_update:
+        other: "No permission to update."
     theme:
       not_found:
         other: "Theme not found."
+    revision:
+      review_underway:
+        other: "Can't edit currently, there is a version in the review queue."
+      no_permission:
+        other: "No permission to Revision."
     user:
       email_or_password_wrong:
         other: *email_or_password_wrong
@@ -395,6 +403,7 @@ ui:
   tag_info:
     created_at: Created
     edited_at: Edited
+    history: History
     synonyms:
       title: Synonyms
       text: The following tags will be remapped to
@@ -512,6 +521,11 @@ ui:
           label: Answer
           msg:
             empty: Answer cannot be empty.
+        edit_summary:
+          label: Edit Summary
+          placeholder: >-
+            Briefly explain your changes (corrected spelling, fixed grammar,
+            improved formatting)
     btn_post_question: Post your question
     btn_save_edits: Save edits
     answer_question: Answer your own question
@@ -532,12 +546,13 @@ ui:
       setting: Settings
       logout: Log out
       admin: Admin
+      review: Review
     search:
       placeholder: Search
   footer:
     build_on: >-
       Built on <1> Answer </1>- the open-source software that power Q&A
-      communities<br />Made with love © 2022 Answer
+      communities.<br />Made with love © {{cc}}.
   upload_img:
     name: Change
     loading: loading...
@@ -686,6 +701,8 @@ ui:
     update: update success
     update_password: Password changed successfully.
     flag_success: Thanks for flagging.
+    fobidden_operate_self: Forbidden to operate on yourself
+    review: Your revision will show after review.
   related_question:
     title: Related Questions
     btn: Add question
@@ -741,6 +758,9 @@ ui:
     logout: Log out
     verify: Verify
     add_question: Add question
+    approve: Approve
+    reject: Reject
+    skip: Skip
   search:
     title: Search Results
     keywords: Keywords
@@ -1023,6 +1043,10 @@ ui:
       btn_cancel: Cancel
       btn_submit: Submit
       btn_next: Next
+    user_role_modal:
+      title: Change user role to...
+      btn_cancel: Cancel
+      btn_submit: Submit
     users:
       title: Users
       name: Name
@@ -1032,15 +1056,24 @@ ui:
       delete_at: Deleted Time
       suspend_at: Suspended Time
       status: Status
+      role: Role
       action: Action
       change: Change
       all: All
+      staff: Staff
       inactive: Inactive
       suspended: Suspended
       deleted: Deleted
       normal: Normal
+      Moderator: Moderator
+      Admin: Admin
+      User: User
       filter:
         placeholder: "Filter by name, user:id"
+      set_new_password: Set new password
+      change_status: Change status
+      change_role: Change role
+      show_logs: Show logs
     questions:
       page_title: Questions
       normal: Normal
@@ -1189,3 +1222,41 @@ ui:
     invalid: is invalid
     btn_submit: Save
     not_found_props: "Required property {{ key }} not found."
+  page_review:
+    review: Review
+    proposed: proposed
+    question_edit: Question edit
+    answer_edit: Answer edit
+    tag_edit: Tag edit
+    edit_summary: Edit summary
+    edit_question: Edit question
+    edit_answer: Edit answer
+    edit_tag: Edit tag
+    empty: No review tasks left.
+  timeline:
+    undeleted: undeleted
+    deleted: deleted
+    downvote: downvote
+    upvote: upvote
+    accept: accept
+    cancelled: cancelled
+    commented: commented
+    rollback: rollback
+    edited: edited
+    answered: answered
+    asked: asked
+    closed: closed
+    reopened: reopened
+    created: created
+    title: "History for"
+    tag_title: "Timeline for"
+    show_votes: "Show votes"
+    n_or_a: N/A
+    title_for_question: "Timeline for"
+    title_for_answer: "Timeline for answer to {{ title }} by {{ author }}"
+    title_for_tag: "Timeline for tag"
+    datetime: Datetime
+    type: Type
+    by: By
+    comment: Comment
+    no_data: "We couldn't find anything."

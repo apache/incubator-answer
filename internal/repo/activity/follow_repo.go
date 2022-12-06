@@ -2,6 +2,7 @@ package activity
 
 import (
 	"context"
+	"time"
 
 	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/follow"
@@ -59,7 +60,7 @@ func (ar *FollowRepo) Follow(ctx context.Context, objectID, userID string) error
 			return
 		}
 
-		if has && existsActivity.Cancelled == 0 {
+		if has && existsActivity.Cancelled == entity.ActivityAvailable {
 			return
 		}
 
@@ -67,17 +68,18 @@ func (ar *FollowRepo) Follow(ctx context.Context, objectID, userID string) error
 			_, err = session.Where(builder.Eq{"id": existsActivity.ID}).
 				Cols(`cancelled`).
 				Update(&entity.Activity{
-					Cancelled: 0,
+					Cancelled: entity.ActivityAvailable,
 				})
 		} else {
 			// update existing activity with new user id and u object id
 			_, err = session.Insert(&entity.Activity{
-				UserID:       userID,
-				ObjectID:     objectID,
-				ActivityType: activityType,
-				Cancelled:    0,
-				Rank:         0,
-				HasRank:      0,
+				UserID:           userID,
+				ObjectID:         objectID,
+				OriginalObjectID: objectID,
+				ActivityType:     activityType,
+				Cancelled:        entity.ActivityAvailable,
+				Rank:             0,
+				HasRank:          0,
 			})
 		}
 
@@ -120,13 +122,14 @@ func (ar *FollowRepo) FollowCancel(ctx context.Context, objectID, userID string)
 			return
 		}
 
-		if has && existsActivity.Cancelled == 1 {
+		if has && existsActivity.Cancelled == entity.ActivityCancelled {
 			return
 		}
 		if _, err = session.Where("id = ?", existsActivity.ID).
 			Cols("cancelled").
 			Update(&entity.Activity{
-				Cancelled: 1,
+				Cancelled:   entity.ActivityCancelled,
+				CancelledAt: time.Now(),
 			}); err != nil {
 			return
 		}

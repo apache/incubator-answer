@@ -155,13 +155,14 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 	if err != nil {
 		return
 	}
-	sql := fmt.Sprintf("(%s UNION ALL %s)", ubSQL, bSQL)
+	sql := fmt.Sprintf("(%s UNION ALL %s)", bSQL, ubSQL)
 
-	querySQL, _, err := builder.MySQL().Select("*").From(sql, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	countSQL, _, err := builder.MySQL().Select("count(*) total").From(sql, "c").ToSQL()
 	if err != nil {
 		return
 	}
-	countSQL, _, err := builder.MySQL().Select("count(*) total").From(sql, "c").ToSQL()
+
+	querySQL, _, err := builder.MySQL().Select("*").From(sql, "t").OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
 	if err != nil {
 		return
 	}
@@ -197,15 +198,17 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 
 // SearchQuestions search question data
 func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, notAccepted bool, views, answers int, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
-	if words = filterWords(words); len(words) == 0 {
-		return
-	}
+	words = filterWords(words)
 	var (
 		qfs  = qFields
 		args = []interface{}{}
 	)
 	if order == "relevance" {
-		qfs, args = addRelevanceField([]string{"title", "original_text"}, words, qfs)
+		if len(words) > 0 {
+			qfs, args = addRelevanceField([]string{"title", "original_text"}, words, qfs)
+		} else {
+			order = "newest"
+		}
 	}
 
 	b := builder.MySQL().Select(qfs...).From("question")
@@ -257,11 +260,12 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, notAc
 	queryArgs := []interface{}{}
 	countArgs := []interface{}{}
 
-	querySQL, _, err := b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	countSQL, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
 	if err != nil {
 		return
 	}
-	countSQL, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
+
+	querySQL, _, err := b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
 	if err != nil {
 		return
 	}
@@ -293,15 +297,18 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, notAc
 
 // SearchAnswers search answer data
 func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs []string, accepted bool, questionID string, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
-	if words = filterWords(words); len(words) == 0 {
-		return
-	}
+	words = filterWords(words)
+
 	var (
 		afs  = aFields
 		args = []interface{}{}
 	)
 	if order == "relevance" {
-		afs, args = addRelevanceField([]string{"`answer`.`original_text`"}, words, afs)
+		if len(words) > 0 {
+			afs, args = addRelevanceField([]string{"`answer`.`original_text`"}, words, afs)
+		} else {
+			order = "newest"
+		}
 	}
 
 	b := builder.MySQL().Select(afs...).From("`answer`").
@@ -346,14 +353,16 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs 
 	queryArgs := []interface{}{}
 	countArgs := []interface{}{}
 
-	querySQL, _, err := b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
-	if err != nil {
-		return
-	}
 	countSQL, _, err := builder.MySQL().Select("count(*) total").From(b, "c").ToSQL()
 	if err != nil {
 		return
 	}
+
+	querySQL, _, err := b.OrderBy(sr.parseOrder(ctx, order)).Limit(size, page-1).ToSQL()
+	if err != nil {
+		return
+	}
+
 	queryArgs = append(queryArgs, querySQL)
 	queryArgs = append(queryArgs, args...)
 
@@ -469,20 +478,6 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 		})
 	}
 	return
-}
-
-// userBasicInfoFormat
-func (sr *searchRepo) userBasicInfoFormat(ctx context.Context, dbinfo *entity.User) *schema.UserBasicInfo {
-	return &schema.UserBasicInfo{
-		ID:          dbinfo.ID,
-		Username:    dbinfo.Username,
-		Rank:        dbinfo.Rank,
-		DisplayName: dbinfo.DisplayName,
-		Avatar:      dbinfo.Avatar,
-		Website:     dbinfo.Website,
-		Location:    dbinfo.Location,
-		IPInfo:      dbinfo.IPInfo,
-	}
 }
 
 func addRelevanceField(searchFields, words, fields []string) (res []string, args []interface{}) {

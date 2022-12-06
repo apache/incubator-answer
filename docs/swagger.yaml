@@ -89,6 +89,46 @@ definitions:
         type: integer
       list: {}
     type: object
+  schema.ActObjectInfo:
+    properties:
+      answer_id:
+        type: string
+      display_name:
+        type: string
+      object_type:
+        type: string
+      question_id:
+        type: string
+      title:
+        type: string
+      username:
+        type: string
+    type: object
+  schema.ActObjectTimeline:
+    properties:
+      activity_id:
+        type: string
+      activity_type:
+        type: string
+      cancelled:
+        type: boolean
+      cancelled_at:
+        type: integer
+      comment:
+        type: string
+      created_at:
+        type: integer
+      object_id:
+        type: string
+      object_type:
+        type: string
+      revision_id:
+        type: string
+      user_display_name:
+        type: string
+      username:
+        type: string
+    type: object
   schema.ActionRecordResp:
     properties:
       captcha_id:
@@ -162,21 +202,6 @@ definitions:
     properties:
       answer_id:
         type: string
-      question_id:
-        description: question_id
-        type: string
-    type: object
-  schema.AnswerList:
-    properties:
-      order:
-        description: 1 Default 2 time
-        type: string
-      page:
-        description: Query number of pages
-        type: integer
-      page_size:
-        description: Search page size
-        type: integer
       question_id:
         description: question_id
         type: string
@@ -378,6 +403,15 @@ definitions:
       tag_id:
         description: tag id
         type: string
+    type: object
+  schema.GetObjectTimelineResp:
+    properties:
+      object_info:
+        $ref: '#/definitions/schema.ActObjectInfo'
+      timeline:
+        items:
+          $ref: '#/definitions/schema.ActObjectTimeline'
+        type: array
     type: object
   schema.GetOtherUserInfoByUsernameResp:
     properties:
@@ -650,19 +684,25 @@ definitions:
     type: object
   schema.GetTagSynonymsResp:
     properties:
-      display_name:
-        description: display name
+      member_actions:
+        description: MemberActions
+        items:
+          $ref: '#/definitions/schema.PermissionMemberAction'
+        type: array
+      synonyms:
+        description: synonyms
+        items:
+          $ref: '#/definitions/schema.TagSynonym'
+        type: array
+    type: object
+  schema.GetUnreviewedRevisionResp:
+    properties:
+      info:
+        $ref: '#/definitions/schema.UnreviewedRevisionInfoInfo'
+      type:
         type: string
-      main_tag_slug_name:
-        description: if main tag slug name is not empty, this tag is synonymous with
-          the main tag
-        type: string
-      slug_name:
-        description: slug name
-        type: string
-      tag_id:
-        description: tag id
-        type: string
+      unreviewed_info:
+        $ref: '#/definitions/schema.GetRevisionResp'
     type: object
   schema.GetUserPageResp:
     properties:
@@ -1024,6 +1064,18 @@ definitions:
     - flagged_type
     - id
     type: object
+  schema.RevisionAuditReq:
+    properties:
+      id:
+        description: object id
+        type: string
+      operation:
+        description: approve or reject
+        type: string
+    required:
+    - id
+    - operation
+    type: object
   schema.SearchListResp:
     properties:
       count:
@@ -1130,9 +1182,7 @@ definitions:
         type: string
     required:
     - contact_email
-    - description
     - name
-    - short_description
     - site_url
     type: object
   schema.SiteGeneralResp:
@@ -1154,9 +1204,7 @@ definitions:
         type: string
     required:
     - contact_email
-    - description
     - name
-    - short_description
     - site_url
     type: object
   schema.SiteInterfaceReq:
@@ -1269,6 +1317,37 @@ definitions:
       reserved:
         type: boolean
       slug_name:
+        type: string
+    type: object
+  schema.TagSynonym:
+    properties:
+      display_name:
+        description: display name
+        type: string
+      main_tag_slug_name:
+        description: if main tag slug name is not empty, this tag is synonymous with
+          the main tag
+        type: string
+      slug_name:
+        description: slug name
+        type: string
+      tag_id:
+        description: tag id
+        type: string
+    type: object
+  schema.UnreviewedRevisionInfoInfo:
+    properties:
+      content:
+        type: string
+      html:
+        type: string
+      object_id:
+        type: string
+      tags:
+        items:
+          $ref: '#/definitions/schema.TagResp'
+        type: array
+      title:
         type: string
     type: object
   schema.UpdateCommentReq:
@@ -2189,6 +2268,69 @@ paths:
       summary: get user page
       tags:
       - admin
+  /answer/api/v1/activity/timeline:
+    get:
+      description: get object timeline
+      parameters:
+      - description: object id
+        in: query
+        name: object_id
+        type: string
+      - description: tag slug name
+        in: query
+        name: tag_slug_name
+        type: string
+      - description: object type
+        enum:
+        - question
+        - answer
+        - tag
+        in: query
+        name: object_type
+        type: string
+      - description: is show vote
+        in: query
+        name: show_vote
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetObjectTimelineResp'
+              type: object
+      summary: get object timeline
+      tags:
+      - Comment
+  /answer/api/v1/activity/timeline/detail:
+    get:
+      description: get object timeline detail
+      parameters:
+      - description: revision id
+        in: query
+        name: revision_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetObjectTimelineResp'
+              type: object
+      summary: get object timeline detail
+      tags:
+      - Comment
   /answer/api/v1/answer:
     delete:
       consumes:
@@ -2305,18 +2447,32 @@ paths:
       summary: Get Answer
       tags:
       - api-answer
-  /answer/api/v1/answer/list:
+  /answer/api/v1/answer/page:
     get:
       consumes:
       - application/json
       description: AnswerList <br> <b>order</b> (default or updated)
       parameters:
-      - description: AnswerList
-        in: body
-        name: data
+      - description: question_id
+        in: query
+        name: question_id
         required: true
-        schema:
-          $ref: '#/definitions/schema.AnswerList'
+        type: string
+      - description: order
+        in: query
+        name: order
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: string
+      - description: page_size
+        in: query
+        name: page_size
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -3362,6 +3518,85 @@ paths:
       summary: get revision list
       tags:
       - Revision
+  /answer/api/v1/revisions/audit:
+    put:
+      description: revision audit operation:approve or reject
+      parameters:
+      - description: audit
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.RevisionAuditReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: revision audit
+      tags:
+      - Revision
+  /answer/api/v1/revisions/edit/check:
+    get:
+      consumes:
+      - application/json
+      description: check can update revision
+      parameters:
+      - default: string
+        description: id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: check can update revision
+      tags:
+      - Revision
+  /answer/api/v1/revisions/unreviewed:
+    get:
+      description: get unreviewed revision list
+      parameters:
+      - description: page id
+        in: query
+        name: page
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.GetUnreviewedRevisionResp'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get unreviewed revision list
+      tags:
+      - Revision
   /answer/api/v1/search:
     get:
       description: search object
@@ -3557,9 +3792,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  items:
-                    $ref: '#/definitions/schema.GetTagSynonymsResp'
-                  type: array
+                  $ref: '#/definitions/schema.GetTagSynonymsResp'
               type: object
       summary: get tag synonyms
       tags:

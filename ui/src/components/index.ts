@@ -27,6 +27,7 @@ import QueryGroup from './QueryGroup';
 import BrandUpload from './BrandUpload';
 import SchemaForm, { JSONSchema, UISchema, initFormData } from './SchemaForm';
 import Labels from './LabelsCard';
+import DiffContent from './DiffContent';
 
 export {
   Avatar,
@@ -60,5 +61,6 @@ export {
   SchemaForm,
   initFormData,
   Labels,
+  DiffContent,
 };
 export type { EditorRef, JSONSchema, UISchema };

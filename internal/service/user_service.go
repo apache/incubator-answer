@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/Chain-Zhang/pinyin"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/base/validator"
@@ -486,7 +487,7 @@ func (us *UserService) encryptPassword(ctx context.Context, Pass string) (string
 
 // UserChangeEmailSendCode user change email verification
 func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.UserChangeEmailSendCodeReq) (
-	resp *validator.FormErrorField, err error) {
+	resp []*validator.FormErrorField, err error) {
 	userInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
 	if err != nil {
 		return nil, err
@@ -500,10 +501,10 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 		return nil, err
 	}
 	if exist {
-		resp = &validator.FormErrorField{
+		resp = append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "e_mail",
-			ErrorMsg:   reason.EmailDuplicate,
-		}
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), reason.EmailDuplicate),
+		})
 		return resp, errors.BadRequest(reason.EmailDuplicate)
 	}
 

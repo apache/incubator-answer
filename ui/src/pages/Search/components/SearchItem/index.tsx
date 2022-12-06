@@ -1,5 +1,5 @@
 import { memo, FC } from 'react';
-import { ListGroupItem, Badge } from 'react-bootstrap';
+import { ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { Icon, Tag, FormatTime, BaseUserCard } from '@/components';
@@ -21,12 +21,11 @@ const Index: FC<Props> = ({ data }) => {
   return (
     <ListGroupItem className="py-3 px-0">
       <div className="mb-2 clearfix">
-        <Badge
-          bg="dark"
-          className="me-2 float-start"
+        <span
+          className="float-start me-2 badge text-bg-dark"
           style={{ marginTop: '2px' }}>
           {data.object_type === 'question' ? 'Q' : 'A'}
-        </Badge>
+        </span>
         <a className="h5 mb-0 link-dark text-break" href={itemUrl}>
           {data.object.title}
           {data.object.status === 'closed'

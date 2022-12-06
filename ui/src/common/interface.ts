@@ -69,6 +69,7 @@ export interface AnswerParams {
   html: string;
   question_id: string;
   id: string;
+  edit_summary?: string;
 }
 
 export interface LoginReqParams {
@@ -124,6 +125,7 @@ export interface UserInfoRes extends UserInfoBase {
    */
   mail_status: number;
   language: string;
+  is_admin: boolean;
   e_mail?: string;
   [prop: string]: any;
 }
@@ -154,6 +156,13 @@ export interface CheckImgReq {
 
 export interface SetNoticeReq {
   notice_switch: boolean;
+}
+
+export interface NotificationStatus {
+  inbox: number;
+  achievement: number;
+  revision: number;
+  can_revision: boolean;
 }
 
 export interface QuestionDetailRes {
@@ -191,7 +200,6 @@ export interface AnswerItem {
   create_time: string;
   update_time: string;
   user_info: UserInfoBase;
-
   [prop: string]: any;
 }
 
@@ -245,7 +253,12 @@ export type AdminAnswerStatus = 'available' | 'deleted';
 /**
  * @description interface for Users
  */
-export type UserFilterBy = 'all' | 'inactive' | 'suspended' | 'deleted';
+export type UserFilterBy =
+  | 'all'
+  | 'staff'
+  | 'inactive'
+  | 'suspended'
+  | 'deleted';
 
 /**
  * @description interface for Flags
@@ -280,9 +293,9 @@ export interface AdminSettingsSmtp {
   from_name: string;
   smtp_authentication: boolean;
   smtp_host: string;
-  smtp_password: string;
+  smtp_password?: string;
   smtp_port: number;
-  smtp_username: string;
+  smtp_username?: string;
   test_email_recipient?: string;
 }
 
@@ -372,4 +385,74 @@ export interface AdminDashboard {
       version: string;
     };
   };
+}
+
+export interface TimelineReq {
+  show_vote: boolean;
+  object_id: string;
+}
+
+export interface TimelineItem {
+  activity_id: number;
+  revision_id: number;
+  created_at: number;
+  activity_type: string;
+  username: string;
+  user_display_name: string;
+  comment: string;
+  object_id: string;
+  object_type: string;
+  cancelled: boolean;
+  cancelled_at: any;
+}
+
+export interface TimelineObject {
+  title: string;
+  object_type: string;
+  question_id: string;
+  answer_id: string;
+  main_tag_slug_name?: string;
+  display_name?: string;
+}
+
+export interface TimelineRes {
+  object_info: TimelineObject;
+  timeline: TimelineItem[];
+}
+
+export interface ReviewItem {
+  type: 'question' | 'answer' | 'tag';
+  info: {
+    object_id: string;
+    title: string;
+    content: string;
+    html: string;
+    tags: Tag[];
+  };
+  unreviewed_info: {
+    id: string;
+    use_id: string;
+    object_id: string;
+    title: string;
+    status: 0 | 1;
+    create_at: number;
+    user_info: UserInfoBase;
+    reason: string;
+    content: Tag | QuestionDetailRes | AnswerItem;
+  };
+}
+export interface ReviewResp {
+  count: number;
+  list: ReviewItem[];
+}
+
+export interface UserRoleItem {
+  id: number;
+  name: string;
+  description: string;
+}
+export interface MemberActionItem {
+  action: string;
+  name: string;
+  type: string;
 }
