@@ -338,6 +338,10 @@ export interface AdminSettingsWrite {
   reserved_tags: string[];
 }
 
+export interface AdminSettingsSeo {
+  robots: string;
+}
+
 /**
  * @description interface for Activity
  */

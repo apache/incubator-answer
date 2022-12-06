@@ -16,8 +16,6 @@ import { useFlagSearch } from '@/services';
 import { escapeRemove } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
 
-import '../index.scss';
-
 const flagFilterKeys: Type.FlagStatus[] = ['pending', 'completed'];
 const flagTypeKeys: Type.FlagType[] = ['all', 'question', 'answer', 'comment'];
 

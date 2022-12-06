@@ -9,8 +9,6 @@ import { useGeneralSetting, updateGeneralSetting } from '@/services';
 import Pattern from '@/common/pattern';
 import { handleFormError } from '@/utils';
 
-import '../index.scss';
-
 const General: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.general',

@@ -20,8 +20,6 @@ import * as Type from '@/common/interface';
 import { useQuestionSearch, changeQuestionStatus } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 
-import '../index.scss';
-
 const questionFilterItems: Type.AdminContentsFilterBy[] = [
   'normal',
   'closed',

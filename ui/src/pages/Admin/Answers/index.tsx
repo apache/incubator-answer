@@ -21,8 +21,6 @@ import { useAnswerSearch, changeAnswerStatus } from '@/services';
 import { escapeRemove } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
 
-import '../index.scss';
-
 const answerFilterItems: Type.AdminContentsFilterBy[] = ['normal', 'deleted'];
 
 const Answers: FC = () => {

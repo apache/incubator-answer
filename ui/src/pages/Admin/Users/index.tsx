@@ -18,8 +18,6 @@ import { useChangeModal, useChangeUserRoleModal, useToast } from '@/hooks';
 import { useQueryUsers } from '@/services';
 import { loggedUserInfoStore } from '@/stores';
 
-import '../index.scss';
-
 const UserFilterKeys: Type.UserFilterBy[] = [
   'all',
   'staff',

@@ -955,6 +955,7 @@ ui:
     write: Write
     tos: Terms of Service
     privacy: Privacy
+    seo: SEO
   admin:
     admin_header:
       title: Admin
@@ -1204,6 +1205,11 @@ ui:
       reserved_tags:
         label: Reserved Tags
         text: "Reserved tags can only be added to a post by moderator."
+    seo:
+      page_title: SEO
+      robots:
+        label: robots.txt
+        text: This will permanently override any related site settings.
   form:
     empty: cannot be empty
     invalid: is invalid
