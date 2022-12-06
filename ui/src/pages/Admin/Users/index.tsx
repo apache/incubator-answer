@@ -22,7 +22,7 @@ import '../index.scss';
 
 const UserFilterKeys: Type.UserFilterBy[] = [
   'all',
-  'staff',
+  // 'staff',
   'inactive',
   'suspended',
   'deleted',
@@ -131,7 +131,7 @@ const Users: FC = () => {
             )}
 
             <th style={{ width: '12%' }}>{t('status')}</th>
-            <th style={{ width: '12%' }}>{t('role')}</th>
+            {/* <th style={{ width: '12%' }}>{t('role')}</th> */}
             {curFilter !== 'deleted' ? (
               <th style={{ width: '8%' }} className="text-end">
                 {t('action')}
@@ -173,11 +173,11 @@ const Users: FC = () => {
                     {t(user.status)}
                   </span>
                 </td>
-                <td>
-                  <span className="badge text-bg-light">
-                    {t(user.role_name)}
-                  </span>
-                </td>
+                {/* <td> */}
+                {/*  <span className="badge text-bg-light"> */}
+                {/*    {t(user.role_name)} */}
+                {/*  </span> */}
+                {/* </td> */}
                 {curFilter !== 'deleted' ? (
                   <td className="text-end">
                     <Dropdown>
@@ -190,10 +190,10 @@ const Users: FC = () => {
                           onClick={() => handleAction('status', user)}>
                           {t('change_status')}
                         </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => handleAction('role', user)}>
-                          {t('change_role')}
-                        </Dropdown.Item>
+                        {/* <Dropdown.Item */}
+                        {/*  onClick={() => handleAction('role', user)}> */}
+                        {/*  {t('change_role')} */}
+                        {/* </Dropdown.Item> */}
                         {/* <Dropdown.Divider />
                         <Dropdown.Item>{t('show_logs')}</Dropdown.Item> */}
                       </Dropdown.Menu>
