@@ -3,6 +3,7 @@ import { ListGroup } from 'react-bootstrap';
 import { NavLink, useParams, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { pathFactory } from '@/router/pathFactory';
 import type * as Type from '@/common/interface';
 import {
   Icon,
@@ -123,7 +124,9 @@ const QuestionList: FC<Props> = ({ source }) => {
               key={li.id}
               className="border-bottom pt-3 pb-2 px-0">
               <h5 className="text-wrap text-break">
-                <NavLink to={`/questions/${li.id}`} className="link-dark">
+                <NavLink
+                  to={pathFactory.questionLanding(li.id, li.title)}
+                  className="link-dark">
                   {li.title}
                   {li.status === 2 ? ` [${t('closed')}]` : ''}
                 </NavLink>

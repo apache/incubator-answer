@@ -4,17 +4,29 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import { SWRConfig } from 'swr';
 
-import { siteInfoStore, toastStore, brandingStore } from '@/stores';
+import {
+  siteInfoStore,
+  toastStore,
+  brandingStore,
+  headInfoStore,
+} from '@/stores';
 import { Header, Footer, Toast } from '@/components';
 
 const Layout: FC = () => {
   const { msg: toastMsg, variant, clear: toastClear } = toastStore();
-  const { siteInfo } = siteInfoStore.getState();
+  const siteInfo = siteInfoStore((state) => state.siteInfo);
+  const headInfo = headInfoStore((state) => state.headInfo);
   const { favicon, square_icon } = brandingStore((state) => state.branding);
 
   const closeToast = () => {
     toastClear();
   };
+  const {
+    title,
+    keywords,
+    description = siteInfo.description,
+    ldJSON,
+  } = headInfo;
 
   return (
     <HelmetProvider>
@@ -26,8 +38,10 @@ const Layout: FC = () => {
         />
         <link rel="icon" type="image/png" sizes="192x192" href={square_icon} />
         <link rel="apple-touch-icon" type="image/png" href={square_icon} />
-
-        {siteInfo && <meta name="description" content={siteInfo.description} />}
+        {title && <title>{title}</title>}
+        {keywords && <meta name="keywords" content={keywords} />}
+        {description && <meta name="description" content={description} />}
+        {ldJSON && <script type="application/ld+json">{ldJSON}</script>}
       </Helmet>
       <SWRConfig
         value={{

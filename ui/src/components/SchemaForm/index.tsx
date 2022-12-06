@@ -14,13 +14,13 @@ export interface JSONSchema {
   required?: string[];
   properties: {
     [key: string]: {
-      type: 'string' | 'boolean';
+      type: 'string' | 'boolean' | 'number';
       title: string;
       label?: string;
       description?: string;
-      enum?: Array<string | boolean>;
+      enum?: Array<string | boolean | number>;
       enumNames?: string[];
-      default?: string | boolean;
+      default?: string | boolean | number;
     };
   };
 }
@@ -477,8 +477,10 @@ const SchemaForm: FC<IProps> = ({
 export const initFormData = (schema: JSONSchema): Type.FormDataType => {
   const formData: Type.FormDataType = {};
   Object.keys(schema.properties).forEach((key) => {
+    const v = schema.properties[key]?.default;
+    // TODO: set default value by property type
     formData[key] = {
-      value: '',
+      value: typeof v !== 'undefined' ? v : '',
       isInvalid: false,
       errorMsg: '',
     };

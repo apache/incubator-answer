@@ -752,6 +752,10 @@ ui:
         <p>Are you sure you want to add another answer?</p><p>You could use the
         edit link to refine and improve your existing answer, instead.</p>
       empty: Answer cannot be empty.
+    reopen:
+      title: Reopen this post
+      content: Are you sure you want to reopen?
+      success: This post has been reopened
   delete:
     title: Delete this post
     question: >-
@@ -990,6 +994,7 @@ ui:
     write: Write
     tos: Terms of Service
     privacy: Privacy
+    seo: SEO
   admin:
     admin_header:
       title: Admin
@@ -1143,6 +1148,9 @@ ui:
         msg: Contact email cannot be empty.
         validate: Contact email is not valid.
         text: Email address of key contact responsible for this site.
+      permalink:
+        label: Permalink
+        text: Custom URL structures can improve the usability, and forward-compatibility of your links.
     interface:
       page_title: Interface
       logo:
@@ -1236,6 +1244,11 @@ ui:
       reserved_tags:
         label: Reserved Tags
         text: "Reserved tags can only be added to a post by moderator."
+    seo:
+      page_title: SEO
+      robots:
+        label: robots.txt
+        text: This will permanently override any related site settings.
   form:
     empty: cannot be empty
     invalid: is invalid

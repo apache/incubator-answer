@@ -31,7 +31,9 @@ const Questions: FC = () => {
     if (tagResp) {
       const info = { ...tagResp };
       if (info.main_tag_slug_name) {
-        navigate(pathFactory.tagLanding(info), { replace: true });
+        navigate(pathFactory.tagLanding(info.main_tag_slug_name), {
+          replace: true,
+        });
         return;
       }
       if (followResp) {
@@ -63,7 +65,7 @@ const Questions: FC = () => {
             <div className="tag-box mb-5">
               <h3 className="mb-3">
                 <Link
-                  to={pathFactory.tagLanding(tagInfo)}
+                  to={pathFactory.tagLanding(tagInfo.slug_name)}
                   replace
                   className="link-dark">
                   {tagInfo.display_name}

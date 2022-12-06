@@ -4,6 +4,7 @@ import globalStore from './global';
 import siteInfoStore from './siteInfo';
 import interfaceStore from './interface';
 import brandingStore from './branding';
+import headInfoStore from './headInfo';
 
 export {
   toastStore,
@@ -12,4 +13,5 @@ export {
   siteInfoStore,
   interfaceStore,
   brandingStore,
+  headInfoStore,
 };
