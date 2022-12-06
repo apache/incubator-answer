@@ -29,6 +29,7 @@ type AnswerAPIRouter struct {
 	notificationController   *controller.NotificationController
 	dashboardController      *controller.DashboardController
 	uploadController         *controller.UploadController
+	activityController       *controller.ActivityController
 }
 
 func NewAnswerAPIRouter(
@@ -54,6 +55,7 @@ func NewAnswerAPIRouter(
 	notificationController *controller.NotificationController,
 	dashboardController *controller.DashboardController,
 	uploadController *controller.UploadController,
+	activityController *controller.ActivityController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:           langController,
@@ -78,6 +80,7 @@ func NewAnswerAPIRouter(
 		siteinfoController:       siteinfoController,
 		dashboardController:      dashboardController,
 		uploadController:         uploadController,
+		activityController:       activityController,
 	}
 }
 
@@ -137,9 +140,15 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	//siteinfo
 	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
 	r.GET("/siteinfo/legal", a.siteinfoController.GetSiteLegalInfo)
+
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
+	//revisions
+	r.GET("/revisions/unreviewed", a.revisionController.GetUnreviewedRevisionList)
+	r.PUT("/revisions/audit", a.revisionController.RevisionAudit)
+	r.GET("/revisions/edit/check", a.revisionController.CheckCanUpdateRevision)
+
 	// comment
 	r.POST("/comment", a.commentController.AddComment)
 	r.DELETE("/comment", a.commentController.RemoveComment)
@@ -200,6 +209,11 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// upload file
 	r.POST("/file", a.uploadController.UploadFile)
+
+	// activity
+	r.GET("/activity/timeline", a.activityController.GetObjectTimeline)
+	r.GET("/activity/timeline/detail", a.activityController.GetObjectTimelineDetail)
+
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {

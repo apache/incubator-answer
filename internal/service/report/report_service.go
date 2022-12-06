@@ -47,7 +47,7 @@ func (rs *ReportService) AddReport(ctx context.Context, req *schema.AddReportReq
 
 	report := &entity.Report{
 		UserID:         req.UserID,
-		ReportedUserID: objInfo.ObjectCreator,
+		ReportedUserID: objInfo.ObjectCreatorUserID,
 		ObjectID:       req.ObjectID,
 		ObjectType:     objectTypeNumber,
 		ReportType:     req.ReportType,

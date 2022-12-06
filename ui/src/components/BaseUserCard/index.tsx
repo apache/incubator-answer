@@ -8,16 +8,20 @@ interface Props {
   data: any;
   showAvatar?: boolean;
   avatarSize?: string;
+  showReputation?: boolean;
   avatarSearchStr?: string;
   className?: string;
+  avatarClass?: string;
 }
 
 const Index: FC<Props> = ({
   data,
   showAvatar = true,
+  avatarClass = '',
   avatarSize = '20px',
   className = 'fs-14',
   avatarSearchStr = 's=48',
+  showReputation = true,
 }) => {
   return (
     <div className={`text-secondary ${className}`}>
@@ -27,7 +31,7 @@ const Index: FC<Props> = ({
             <Avatar
               avatar={data?.avatar}
               size={avatarSize}
-              className="me-1"
+              className={`me-1 ${avatarClass}`}
               searchStr={avatarSearchStr}
             />
           )}
@@ -39,7 +43,7 @@ const Index: FC<Props> = ({
             <Avatar
               avatar={data?.avatar}
               size={avatarSize}
-              className="me-1"
+              className={`me-1 ${avatarClass}`}
               searchStr={avatarSearchStr}
             />
           )}
@@ -47,9 +51,11 @@ const Index: FC<Props> = ({
         </>
       )}
 
-      <span className="fw-bold" title="Reputation">
-        {formatCount(data?.rank)}
-      </span>
+      {showReputation && (
+        <span className="fw-bold" title="Reputation">
+          {formatCount(data?.rank)}
+        </span>
+      )}
     </div>
   );
 };

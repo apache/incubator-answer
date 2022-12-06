@@ -6,7 +6,6 @@ import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
-	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/dashboard"
@@ -51,13 +50,18 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := ac.rankService.CheckRankPermission(ctx, req.UserID, rank.AnswerDeleteRank); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
+	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, rank.AnswerDeleteRank, req.ID)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	req.IsAdmin = userinfo.IsAdmin
-	err := ac.answerService.RemoveAnswer(ctx, req)
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	err = ac.answerService.RemoveAnswer(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -106,8 +110,13 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	if can, err := ac.rankService.CheckRankPermission(ctx, req.UserID, rank.AnswerAddRank); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, rank.AnswerAddRank, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
@@ -148,33 +157,33 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	req.IsAdmin = userinfo.IsAdmin
 
-	if can, err := ac.rankService.CheckRankPermission(ctx, req.UserID, rank.AnswerEditRank); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
-		return
-	}
-
-	_, err := ac.answerService.Update(ctx, req)
+	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		rank.AnswerEditRank,
+		rank.AnswerEditWithoutReviewRank,
+	}, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	info, questionInfo, has, err := ac.answerService.Get(ctx, req.ID, req.UserID)
+	req.CanEdit = canList[0]
+	req.NoNeedReview = canList[1]
+	if !req.CanEdit {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	_, err = ac.answerService.Update(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	if !has {
-		// todo !has
-		handler.HandleResponse(ctx, nil, nil)
+	_, _, _, err = ac.answerService.Get(ctx, req.ID, req.UserID)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	handler.HandleResponse(ctx, nil, gin.H{
-		"info":     info,
-		"question": questionInfo,
-	})
+	handler.HandleResponse(ctx, nil, &schema.AnswerUpdateResp{WaitForReview: !req.NoNeedReview})
 }
 
 // AnswerList godoc
@@ -184,17 +193,31 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 // @Security ApiKeyAuth
 // @Accept  json
 // @Produce  json
-// @Param data body schema.AnswerList  true "AnswerList"
+// @Param question_id query string true "question_id"
+// @Param order query string true "order"
+// @Param page query string true "page"
+// @Param page_size query string true "page_size"
 // @Success 200 {string} string ""
-// @Router /answer/api/v1/answer/list [get]
+// @Router /answer/api/v1/answer/page [get]
 func (ac *AnswerController) AnswerList(ctx *gin.Context) {
-	req := &schema.AnswerList{}
+	req := &schema.AnswerListReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	req.IsAdmin = userinfo.IsAdmin
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		rank.AnswerEditRank,
+		rank.AnswerDeleteRank,
+	}, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	req.CanEdit = canList[0]
+	req.CanDelete = canList[1]
+
 	list, count, err := ac.answerService.SearchList(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -223,12 +246,17 @@ func (ac *AnswerController) Adopted(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := ac.rankService.CheckRankPermission(ctx, req.UserID, rank.AnswerAcceptRank); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, rank.AnswerAcceptRank, req.QuestionID)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
-	err := ac.answerService.UpdateAdopted(ctx, req)
+	err = ac.answerService.UpdateAdopted(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -243,10 +271,13 @@ func (ac *AnswerController) Adopted(ctx *gin.Context) {
 // @Router /answer/admin/api/answer/status [put]
 // @Success 200 {object} handler.RespBody
 func (ac *AnswerController) AdminSetAnswerStatus(ctx *gin.Context) {
-	req := &entity.AdminSetAnswerStatusRequest{}
+	req := &schema.AdminSetAnswerStatusRequest{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	err := ac.answerService.AdminSetAnswerStatus(ctx, req.AnswerID, req.StatusStr)
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	err := ac.answerService.AdminSetAnswerStatus(ctx, req)
 	handler.HandleResponse(ctx, err, gin.H{})
 }

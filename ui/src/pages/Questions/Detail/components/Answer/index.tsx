@@ -1,6 +1,7 @@
 import { memo, FC, useEffect, useRef } from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { Link, useSearchParams } from 'react-router-dom';
 
 import {
   Actions,
@@ -22,18 +23,21 @@ interface Props {
   /** is author */
   isAuthor: boolean;
   questionTitle: string;
+  isLogged: boolean;
   callback: (type: string) => void;
 }
 const Index: FC<Props> = ({
   aid,
   data,
   isAuthor,
+  isLogged,
   questionTitle = '',
   callback,
 }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'question_detail',
   });
+  const [searchParams] = useSearchParams();
   const answerRef = useRef<HTMLDivElement>(null);
   const acceptAnswer = () => {
     acceptanceAnswer({
@@ -114,12 +118,23 @@ const Index: FC<Props> = ({
           />
         </Col>
         <Col lg={3} className="mb-3 mb-md-0">
-          {data.update_user_info?.username !== data.user_info?.username ? (
+          {data.update_user_info &&
+          data.update_user_info?.username !== data.user_info?.username ? (
             <UserCard
               data={data?.update_user_info}
               time={Number(data.update_time)}
               preFix={t('edit')}
+              isLogged={isLogged}
+              timelinePath={`/posts/${data.question_id}/${data.id}/timeline`}
             />
+          ) : isLogged ? (
+            <Link to={`/posts/${data.question_id}/${data.id}/timeline`}>
+              <FormatTime
+                time={Number(data.update_time)}
+                preFix={t('edit')}
+                className="link-secondary fs-14"
+              />
+            </Link>
           ) : (
             <FormatTime
               time={Number(data.update_time)}
@@ -133,11 +148,17 @@ const Index: FC<Props> = ({
             data={data?.user_info}
             time={Number(data.create_time)}
             preFix={t('answered')}
+            isLogged={isLogged}
+            timelinePath={`/posts/${data.question_id}/${data.id}/timeline`}
           />
         </Col>
       </Row>
 
-      <Comment objectId={data.id} mode="answer" />
+      <Comment
+        objectId={data.id}
+        mode="answer"
+        commentId={searchParams.get('commentId')}
+      />
     </div>
   );
 };

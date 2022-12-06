@@ -1,5 +1,5 @@
 import { memo, FC, useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Row, Col, Button } from 'react-bootstrap';
 
@@ -18,13 +18,15 @@ import { following } from '@/services';
 interface Props {
   data: any;
   hasAnswer: boolean;
+  isLogged: boolean;
   initPage: (type: string) => void;
 }
 
-const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
+const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'question_detail',
   });
+  const [searchParams] = useSearchParams();
   const [followed, setFollowed] = useState(data?.is_followed);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -128,12 +130,23 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
           />
         </Col>
         <Col lg={3} className="mb-3 mb-md-0">
-          {data.update_user_info?.username !== data.user_info?.username ? (
+          {data.update_user_info &&
+          data.update_user_info?.username !== data.user_info?.username ? (
             <UserCard
-              data={data?.user_info}
+              data={data?.update_user_info}
               time={data.edit_time}
               preFix={t('edit')}
+              isLogged={isLogged}
+              timelinePath={`/posts/${data.id}/timeline`}
             />
+          ) : isLogged ? (
+            <Link to={`/posts/${data.id}/timeline`}>
+              <FormatTime
+                time={data.edit_time}
+                preFix={t('edit')}
+                className="link-secondary fs-14"
+              />
+            </Link>
           ) : (
             <FormatTime
               time={data.edit_time}
@@ -147,11 +160,17 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer }) => {
             data={data?.user_info}
             time={data.create_time}
             preFix={t('asked')}
+            isLogged={isLogged}
+            timelinePath={`/posts/${data.id}/timeline`}
           />
         </Col>
       </Row>
 
-      <Comment objectId={data?.id} mode="question" />
+      <Comment
+        objectId={data?.id}
+        mode="question"
+        commentId={searchParams.get('commentId')}
+      />
     </div>
   );
 };

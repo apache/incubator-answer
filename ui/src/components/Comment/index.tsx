@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,7 @@ import { marked } from 'marked';
 import * as Types from '@/common/interface';
 import { Modal } from '@/components';
 import { usePageUsers, useReportModal } from '@/hooks';
-import { matchedUsers, parseUserInfo } from '@/utils';
+import { matchedUsers, parseUserInfo, scrollTop } from '@/utils';
 import { tryNormalLogged } from '@/utils/guard';
 import {
   useQueryComments,
@@ -24,7 +24,7 @@ import { Form, ActionBar, Reply } from './components';
 
 import './index.scss';
 
-const Comment = ({ objectId, mode }) => {
+const Comment = ({ objectId, mode, commentId }) => {
   const pageUsers = usePageUsers();
   const [pageIndex, setPageIndex] = useState(0);
   const [comments, setComments] = useState<any>([]);
@@ -32,6 +32,7 @@ const Comment = ({ objectId, mode }) => {
   const pageSize = pageIndex === 0 ? 3 : 15;
   const { data, mutate } = useQueryComments({
     object_id: objectId,
+    comment_id: commentId,
     page: pageIndex,
     page_size: pageSize,
   });
@@ -39,6 +40,13 @@ const Comment = ({ objectId, mode }) => {
   const reportModal = useReportModal();
 
   const { t } = useTranslation('translation', { keyPrefix: 'comment' });
+  const scrollCallback = useCallback((el, co) => {
+    if (pageIndex === 0 && co.comment_id === commentId) {
+      setTimeout(() => {
+        scrollTop(el);
+      }, 100);
+    }
+  }, []);
 
   useEffect(() => {
     if (!data) {
@@ -223,6 +231,9 @@ const Comment = ({ objectId, mode }) => {
         return (
           <div
             key={item.comment_id}
+            ref={(el) => {
+              scrollCallback(el, item);
+            }}
             className={classNames(
               'border-bottom py-2 comment-item',
               index === 0 && 'border-top',

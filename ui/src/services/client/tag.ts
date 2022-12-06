@@ -15,7 +15,10 @@ export const modifyTag = (params) => {
 
 export const useQuerySynonymsTags = (tagId) => {
   const apiUrl = tagId ? `/answer/api/v1/tag/synonyms?tag_id=${tagId}` : '';
-  return useSWR<Type.SynonymsTag[]>(apiUrl, request.instance.get);
+  return useSWR<{
+    synonyms: Type.SynonymsTag[];
+    member_actions?: Type.MemberActionItem[];
+  }>(apiUrl, request.instance.get);
 };
 
 export const saveSynonymsTags = (params) => {

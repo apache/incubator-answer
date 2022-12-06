@@ -10,9 +10,9 @@ import (
 // AnswerActivityRepo answer activity
 type AnswerActivityRepo interface {
 	AcceptAnswer(ctx context.Context,
-		answerObjID, questionUserID, answerUserID string, isSelf bool) (err error)
+		answerObjID, questionObjID, questionUserID, answerUserID string, isSelf bool) (err error)
 	CancelAcceptAnswer(ctx context.Context,
-		answerObjID, questionUserID, answerUserID string) (err error)
+		answerObjID, questionObjID, questionUserID, answerUserID string) (err error)
 	DeleteAnswer(ctx context.Context, answerID string) (err error)
 }
 
@@ -38,14 +38,14 @@ func NewAnswerActivityService(
 
 // AcceptAnswer accept answer change activity
 func (as *AnswerActivityService) AcceptAnswer(ctx context.Context,
-	answerObjID, questionUserID, answerUserID string, isSelf bool) (err error) {
-	return as.answerActivityRepo.AcceptAnswer(ctx, answerObjID, questionUserID, answerUserID, isSelf)
+	answerObjID, questionObjID, questionUserID, answerUserID string, isSelf bool) (err error) {
+	return as.answerActivityRepo.AcceptAnswer(ctx, answerObjID, questionObjID, questionUserID, answerUserID, isSelf)
 }
 
 // CancelAcceptAnswer cancel accept answer change activity
 func (as *AnswerActivityService) CancelAcceptAnswer(ctx context.Context,
-	answerObjID, questionUserID, answerUserID string) (err error) {
-	return as.answerActivityRepo.CancelAcceptAnswer(ctx, answerObjID, questionUserID, answerUserID)
+	answerObjID, questionObjID, questionUserID, answerUserID string) (err error) {
+	return as.answerActivityRepo.CancelAcceptAnswer(ctx, answerObjID, questionObjID, questionUserID, answerUserID)
 }
 
 // DeleteAnswer delete answer change activity

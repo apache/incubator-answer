@@ -104,8 +104,11 @@ const Ask = () => {
       tag_id: data?.tag_id,
       edit_summary: formData.editSummary.value,
     };
-    modifyTag(params).then(() => {
-      navigate(-1);
+    modifyTag(params).then((res) => {
+      navigate(`/tags/${formData.slugName.value}/info`, {
+        replace: true,
+        state: { isReview: res.wait_for_review },
+      });
     });
   };
 
@@ -175,7 +178,7 @@ const Ask = () => {
                 <Form.Control
                   value={formData.displayName.value}
                   isInvalid={formData.displayName.isInvalid}
-                  disabled={is_admin}
+                  disabled={!is_admin}
                   onChange={handleDisplayNameChange}
                 />
 
@@ -188,7 +191,7 @@ const Ask = () => {
                 <Form.Control
                   value={formData.slugName.value}
                   isInvalid={formData.slugName.isInvalid}
-                  disabled={is_admin}
+                  disabled={!is_admin}
                   onChange={handleSlugNameChange}
                 />
                 <Form.Text as="div">
@@ -255,7 +258,7 @@ const Ask = () => {
                 {t('title', { keyPrefix: 'how_to_format' })}
               </Card.Header>
               <Card.Body
-                className="fmt"
+                className="fmt small"
                 dangerouslySetInnerHTML={{
                   __html: t('description', { keyPrefix: 'how_to_format' }),
                 }}
