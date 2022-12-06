@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/revision"
 	"github.com/answerdev/answer/internal/service/unique"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/obj"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/builder"
@@ -88,7 +89,7 @@ func (rr *revisionRepo) UpdateStatus(ctx context.Context, id string, status int,
 	var data entity.Revision
 	data.ID = id
 	data.Status = status
-	data.ReviewUserID = reviewUserID
+	data.ReviewUserID = converter.StringToInt64(reviewUserID)
 	_, err = rr.data.DB.Where("id =?", id).Cols("status", "review_user_id").Update(&data)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
