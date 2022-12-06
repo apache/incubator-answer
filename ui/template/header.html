@@ -5,7 +5,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-
+    <meta name="description" content="{{.description}}" />
+    {{if .keywords }}<meta name="keywords" content="{{.keywords}}" />{{end}}
     <link rel="canonical" href="{{.siteinfo.Canonical}}" />
     <link rel="manifest" href="/manifest.json"/>
     <link href="{{.cssPath}}" rel="stylesheet" />

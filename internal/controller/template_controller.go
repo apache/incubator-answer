@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"net/http"
 	"regexp"
+	"strings"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/handler"
@@ -190,6 +191,13 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		siteInfo.JsonLD = `<script data-react-helmet="true" type="application/ld+json">` + string(jsonLDStr) + ` </script>`
 	}
 
+	siteInfo.Description = htmltext.FetchExcerpt(detail.HTML, "...", 240)
+	tags := make([]string, 0)
+	for _, tag := range detail.Tags {
+		tags = append(tags, tag.DisplayName)
+	}
+	siteInfo.Keywords = strings.Replace(strings.Trim(fmt.Sprint(tags), "[]"), " ", ",", -1)
+
 	tc.html(ctx, http.StatusOK, "question-detail.html", siteInfo, gin.H{
 		"id":       id,
 		"answerid": answerid,
@@ -254,6 +262,10 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/tags/%s", siteInfo.General.SiteUrl, tag)
+
+	siteInfo.Description = htmltext.FetchExcerpt(taginifo.ParsedText, "...", 240)
+	siteInfo.Keywords = taginifo.DisplayName
+
 	tc.html(ctx, http.StatusOK, "tag-detail.html", siteInfo, gin.H{
 		"tag":           taginifo,
 		"questionList":  questionList,
@@ -307,6 +319,11 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	data["siteinfo"] = siteInfo
 	data["scriptPath"] = tc.scriptPath
 	data["cssPath"] = tc.cssPath
+	data["keywords"] = siteInfo.Keywords
+	if siteInfo.Description == "" {
+		siteInfo.Description = siteInfo.General.Description
+	}
+	data["description"] = siteInfo.Description
 	data["language"] = handler.GetLang(ctx)
 	data["timezone"] = siteInfo.Interface.TimeZone
 

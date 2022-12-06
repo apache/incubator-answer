@@ -106,12 +106,14 @@ type SiteInfoResp struct {
 	Branding  *SiteBrandingResp  `json:"branding"`
 }
 type TemplateSiteInfoResp struct {
-	General   *SiteGeneralResp   `json:"general"`
-	Interface *SiteInterfaceResp `json:"interface"`
-	Branding  *SiteBrandingResp  `json:"branding"`
-	Year      string
-	Canonical string
-	JsonLD    string
+	General     *SiteGeneralResp   `json:"general"`
+	Interface   *SiteInterfaceResp `json:"interface"`
+	Branding    *SiteBrandingResp  `json:"branding"`
+	Year        string
+	Canonical   string
+	JsonLD      string
+	Keywords    string
+	Description string
 }
 
 // UpdateSMTPConfigReq get smtp config request
