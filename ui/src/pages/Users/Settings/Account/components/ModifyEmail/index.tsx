@@ -23,7 +23,6 @@ const Index: FC = () => {
   const toast = useToast();
   useEffect(() => {
     getLoggedUserInfo().then((resp) => {
-      resp.e_mail = 'haa@sifou.com';
       setUserInfo(resp);
     });
   }, []);
