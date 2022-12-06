@@ -133,12 +133,12 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	}
 
 	// answers
-	answerReq := &schema.AnswerList{
-		QuestionID:  id,
-		Order:       "",
-		Page:        1,
-		PageSize:    999,
-		LoginUserID: "",
+	answerReq := &schema.AnswerListReq{
+		QuestionID: id,
+		Order:      "",
+		Page:       1,
+		PageSize:   999,
+		UserID:     "",
 	}
 	answers, answerCount, err := tc.templateRenderController.AnswerList(ctx, answerReq)
 	if err != nil {
