@@ -75,7 +75,7 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 		return
 	}
 	if req.Operation == schema.RevisionAuditReject {
-		err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewRejectStatus)
+		err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewRejectStatus, req.UserID)
 		return
 	}
 	if req.Operation == schema.RevisionAuditApprove {
@@ -110,7 +110,7 @@ func (rs *RevisionService) RevisionAudit(ctx context.Context, req *schema.Revisi
 		if saveErr != nil {
 			return saveErr
 		}
-		err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewPassStatus)
+		err = rs.revisionRepo.UpdateStatus(ctx, req.ID, entity.RevisionReviewPassStatus, req.UserID)
 		return
 	}
 
