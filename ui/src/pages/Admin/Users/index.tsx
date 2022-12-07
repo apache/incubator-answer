@@ -17,6 +17,7 @@ import * as Type from '@/common/interface';
 import { useChangeModal, useChangeUserRoleModal, useToast } from '@/hooks';
 import { useQueryUsers } from '@/services';
 import { loggedUserInfoStore } from '@/stores';
+import { formatCount } from '@/utils';
 
 const UserFilterKeys: Type.UserFilterBy[] = [
   'all',
@@ -151,6 +152,7 @@ const Users: FC = () => {
                     showReputation={false}
                   />
                 </td>
+                <td>{formatCount(user.rank)}</td>
                 <td className="text-break">{user.e_mail}</td>
                 <td>
                   <FormatTime time={user.created_at} />
