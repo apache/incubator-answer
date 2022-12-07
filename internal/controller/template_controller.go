@@ -215,12 +215,7 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 	}
 	data, err := tc.templateRenderController.TagList(ctx, req)
 	if err != nil {
-		ctx.HTML(http.StatusOK, "404.html", gin.H{
-			"scriptPath": tc.scriptPath,
-			"cssPath":    tc.cssPath,
-			"err":        err.Error(),
-			"siteinfo":   tc.SiteInfo(ctx),
-		})
+		tc.Page404(ctx)
 		return
 	}
 	page := templaterender.Paginator(req.Page, req.PageSize, data.Count)
@@ -238,24 +233,14 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	tag := ctx.Param("tag")
 	req := &schema.GetTamplateTagInfoReq{}
 	if handler.BindAndCheck(ctx, req) {
-		ctx.HTML(http.StatusOK, "404.html", gin.H{
-			"scriptPath": tc.scriptPath,
-			"cssPath":    tc.cssPath,
-			"err":        "",
-			"siteinfo":   tc.SiteInfo(ctx),
-		})
+		tc.Page404(ctx)
 		return
 	}
 	nowPage := req.Page
 	req.Name = tag
 	taginifo, questionList, questionCount, err := tc.templateRenderController.TagInfo(ctx, req)
 	if err != nil {
-		ctx.HTML(http.StatusOK, "404.html", gin.H{
-			"scriptPath": tc.scriptPath,
-			"cssPath":    tc.cssPath,
-			"err":        err.Error(),
-			"siteinfo":   tc.SiteInfo(ctx),
-		})
+		tc.Page404(ctx)
 		return
 	}
 	page := templaterender.Paginator(nowPage, req.PageSize, questionCount)
@@ -281,21 +266,11 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 	req.Username = username
 	userinfo, err := tc.templateRenderController.UserInfo(ctx, req)
 	if !userinfo.Has {
-		ctx.HTML(http.StatusNotFound, "404.html", gin.H{
-			"siteinfo":   tc.SiteInfo(ctx),
-			"scriptPath": tc.scriptPath,
-			"cssPath":    tc.cssPath,
-			"err":        "",
-		})
+		tc.Page404(ctx)
 		return
 	}
 	if err != nil {
-		ctx.HTML(http.StatusNotFound, "404.html", gin.H{
-			"siteinfo":   tc.SiteInfo(ctx),
-			"scriptPath": tc.scriptPath,
-			"cssPath":    tc.cssPath,
-			"err":        err.Error(),
-		})
+		tc.Page404(ctx)
 		return
 	}
 
@@ -308,11 +283,7 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 }
 
 func (tc *TemplateController) Page404(ctx *gin.Context) {
-	ctx.HTML(http.StatusNotFound, "404.html", gin.H{
-		"siteinfo":   tc.SiteInfo(ctx),
-		"scriptPath": tc.scriptPath,
-		"cssPath":    tc.cssPath,
-	})
+	tc.html(ctx, http.StatusNotFound, "404.html", tc.SiteInfo(ctx), gin.H{})
 }
 
 func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteInfo *schema.TemplateSiteInfoResp, data gin.H) {
