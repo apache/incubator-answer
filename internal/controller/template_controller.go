@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/segmentfault/pacman/i18n"
 	"html/template"
 	"net/http"
 	"regexp"
@@ -78,7 +79,9 @@ func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.TemplateSiteInf
 
 // Index question list
 func (tc *TemplateController) Index(ctx *gin.Context) {
-	req := &schema.QuestionSearch{}
+	req := &schema.QuestionSearch{
+		Order: "newest",
+	}
 	if handler.BindAndCheck(ctx, req) {
 		tc.Page404(ctx)
 		return
@@ -101,7 +104,9 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 }
 
 func (tc *TemplateController) QuestionList(ctx *gin.Context) {
-	req := &schema.QuestionSearch{}
+	req := &schema.QuestionSearch{
+		Order: "newest",
+	}
 	if handler.BindAndCheck(ctx, req) {
 		tc.Page404(ctx)
 		return
@@ -307,14 +312,14 @@ func (tc *TemplateController) Page404(ctx *gin.Context) {
 
 func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteInfo *schema.TemplateSiteInfoResp, data gin.H) {
 	data["siteinfo"] = siteInfo
-	data["scriptPath"] = tc.scriptPath
+	data["scriptPath"] = "" //tc.scriptPath
 	data["cssPath"] = tc.cssPath
 	data["keywords"] = siteInfo.Keywords
 	if siteInfo.Description == "" {
 		siteInfo.Description = siteInfo.General.Description
 	}
 	data["description"] = siteInfo.Description
-	data["language"] = handler.GetLang(ctx)
+	data["language"] = i18n.LanguageChinese //handler.GetLang(ctx)
 	data["timezone"] = siteInfo.Interface.TimeZone
 
 	ctx.HTML(code, tpl, data)
