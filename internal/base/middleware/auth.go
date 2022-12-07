@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -18,13 +19,17 @@ var ctxUUIDKey = "ctxUuidKey"
 
 // AuthUserMiddleware auth user middleware
 type AuthUserMiddleware struct {
-	authService *auth.AuthService
+	authService           *auth.AuthService
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewAuthUserMiddleware new auth user middleware
-func NewAuthUserMiddleware(authService *auth.AuthService) *AuthUserMiddleware {
+func NewAuthUserMiddleware(
+	authService *auth.AuthService,
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService) *AuthUserMiddleware {
 	return &AuthUserMiddleware{
-		authService: authService,
+		authService:           authService,
+		siteInfoCommonService: siteInfoCommonService,
 	}
 }
 
@@ -43,6 +48,29 @@ func (am *AuthUserMiddleware) Auth() gin.HandlerFunc {
 		}
 		if userInfo != nil {
 			ctx.Set(ctxUUIDKey, userInfo)
+		}
+		ctx.Next()
+	}
+}
+
+// EjectUserBySiteInfo if admin config the site can access by nologin user, eject user.
+func (am *AuthUserMiddleware) EjectUserBySiteInfo() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		mustLogin := false
+		siteInfo, _ := am.siteInfoCommonService.GetSiteLogin(ctx)
+		if siteInfo != nil {
+			mustLogin = siteInfo.LoginRequired
+		}
+		if !mustLogin {
+			ctx.Next()
+			return
+		}
+
+		_, isLogin := ctx.Get(ctxUUIDKey)
+		if !isLogin {
+			handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+			ctx.Abort()
+			return
 		}
 		ctx.Next()
 	}

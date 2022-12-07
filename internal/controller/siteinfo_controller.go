@@ -26,7 +26,7 @@ func NewSiteinfoController(siteInfoService *siteinfo_common.SiteInfoCommonServic
 // @Description get site info
 // @Tags site
 // @Produce json
-// @Success 200 {object} handler.RespBody{data=schema.SiteGeneralResp}
+// @Success 200 {object} handler.RespBody{data=schema.SiteInfoResp}
 // @Router /answer/api/v1/siteinfo [get]
 func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
 	var err error

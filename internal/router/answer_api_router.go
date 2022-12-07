@@ -87,11 +87,17 @@ func NewAnswerAPIRouter(
 	}
 }
 
-func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
+func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// i18n
 	r.GET("/language/config", a.langController.GetLangMapping)
 	r.GET("/language/options", a.langController.GetUserLangOptions)
 
+	//siteinfo
+	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
+	r.GET("/siteinfo/legal", a.siteinfoController.GetSiteLegalInfo)
+}
+
+func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// comment
 	r.GET("/comment/page", a.commentController.GetCommentWithPage)
 	r.GET("/personal/comment/page", a.commentController.GetCommentPersonalWithPage)
@@ -139,11 +145,6 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	//rank
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
-
-	//siteinfo
-	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
-	r.GET("/siteinfo/legal", a.siteinfoController.GetSiteLegalInfo)
-
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {

@@ -245,7 +245,7 @@ func (sc *SiteInfoController) UpdateSiteLegal(ctx *gin.Context) {
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json
-// @Param data body schema.SiteLegalReq true "login info"
+// @Param data body schema.SiteLoginReq true "login info"
 // @Success 200 {object} handler.RespBody{}
 // @Router /answer/admin/api/siteinfo/login [put]
 func (sc *SiteInfoController) UpdateSiteLogin(ctx *gin.Context) {
