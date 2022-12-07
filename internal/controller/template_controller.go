@@ -311,7 +311,7 @@ func (tc *TemplateController) Page404(ctx *gin.Context) {
 
 func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteInfo *schema.TemplateSiteInfoResp, data gin.H) {
 	data["siteinfo"] = siteInfo
-	data["scriptPath"] = "" //tc.scriptPath
+	data["scriptPath"] = tc.scriptPath
 	data["cssPath"] = tc.cssPath
 	data["keywords"] = siteInfo.Keywords
 	if siteInfo.Description == "" {
