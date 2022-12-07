@@ -2,9 +2,9 @@ import { FC, memo, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
+import { usePageTags } from '@/hooks';
 import { loggedUserInfoStore } from '@/stores';
 import { activateAccount } from '@/services';
-import { PageTitle } from '@/components';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
@@ -25,7 +25,10 @@ const Index: FC = () => {
       navigate('/', { replace: true });
     }
   }, []);
-  return <PageTitle title={t('account_activation')} />;
+  usePageTags({
+    title: t('account_activation'),
+  });
+  return null;
 };
 
 export default memo(Index);

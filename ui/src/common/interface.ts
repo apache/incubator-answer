@@ -287,11 +287,15 @@ export interface AdminSettingsGeneral {
   permalink: number;
 }
 
-export interface HeadInfo {
-  title?: string;
+export interface HelmetBase {
+  pageTitle?: string;
   description?: string;
   keywords?: string;
-  ldJSON?;
+}
+
+export interface HelmetUpdate extends Omit<HelmetBase, 'pageTitle'> {
+  title?: string;
+  subtitle?: string;
 }
 
 export interface AdminSettingsInterface {
@@ -313,12 +317,12 @@ export interface AdminSettingsSmtp {
 }
 
 export interface SiteSettings {
-  branding: AdmingSettingBranding;
+  branding: AdminSettingBranding;
   general: AdminSettingsGeneral;
   interface: AdminSettingsInterface;
 }
 
-export interface AdmingSettingBranding {
+export interface AdminSettingBranding {
   logo: string;
   square_icon: string;
   mobile_logo?: string;
