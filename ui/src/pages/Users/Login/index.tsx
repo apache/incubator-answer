@@ -3,12 +3,13 @@ import { Container, Form, Button, Col } from 'react-bootstrap';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { usePageTags } from '@/hooks';
 import type {
   LoginReqParams,
   ImgCodeRes,
   FormDataType,
 } from '@/common/interface';
-import { PageTitle, Unactivate } from '@/components';
+import { Unactivate } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
 import { guard, floppyNavigation, handleFormError } from '@/utils';
 import { login, checkImgCode } from '@/services';
@@ -167,11 +168,12 @@ const Index: React.FC = () => {
       setStep(2);
     }
   }, []);
-
+  usePageTags({
+    title: t('login', { keyPrefix: 'page_title' }),
+  });
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
       <h3 className="text-center mb-5">{t('page_title')}</h3>
-      <PageTitle title={t('login', { keyPrefix: 'page_title' })} />
       {step === 1 && (
         <Col className="mx-auto" md={3}>
           <Form noValidate onSubmit={handleSubmit}>

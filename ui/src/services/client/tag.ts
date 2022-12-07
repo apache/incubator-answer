@@ -42,10 +42,10 @@ export const useFollowingTags = () => {
 export const useTagInfo = ({ id = '', name = '' }) => {
   let apiUrl;
   if (id) {
-    apiUrl = `/answer/api/v1/tag/?id=${id}`;
+    apiUrl = `/answer/api/v1/tag?id=${id}`;
   } else if (name) {
     name = encodeURIComponent(name);
-    apiUrl = `/answer/api/v1/tag/?name=${name}`;
+    apiUrl = `/answer/api/v1/tag?name=${name}`;
   }
   const { data, error } = useSWR<Type.TagInfo>(apiUrl, request.instance.get);
   return {

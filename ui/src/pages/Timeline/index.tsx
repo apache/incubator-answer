@@ -3,10 +3,11 @@ import { Container, Row, Col, Form, Table } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { usePageTags } from '@/hooks';
 import { pathFactory } from '@/router/pathFactory';
 import { loggedUserInfoStore } from '@/stores';
 import { getTimelineData } from '@/services';
-import { PageTitle, Empty } from '@/components';
+import { Empty } from '@/components';
 import * as Type from '@/common/interface';
 
 import HistoryItem from './components/Item';
@@ -74,10 +75,11 @@ const Index: FC = () => {
 
   const revisionList =
     timelineData?.timeline?.filter((item) => item.revision_id > 0) || [];
-
+  usePageTags({
+    title: pageTitle,
+  });
   return (
     <Container className="py-3">
-      <PageTitle title={pageTitle} />
       <Row className="py-3 justify-content-center">
         <Col xxl={10}>
           <h5 className="mb-4">

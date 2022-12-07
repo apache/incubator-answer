@@ -1,11 +1,11 @@
 import create from 'zustand';
 
-import { AdmingSettingBranding } from '@/common/interface';
+import { AdminSettingBranding } from '@/common/interface';
 import { DEFAULT_LANG } from '@/common/constants';
 
 interface InterfaceType {
-  branding: AdmingSettingBranding;
-  update: (params: AdmingSettingBranding) => void;
+  branding: AdminSettingBranding;
+  update: (params: AdminSettingBranding) => void;
 }
 
 const interfaceSetting = create<InterfaceType>((set) => ({

@@ -3,8 +3,8 @@ import { FC, useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Alert } from 'react-bootstrap';
 import { useTranslation, Trans } from 'react-i18next';
 
+import { usePageTags } from '@/hooks';
 import type { FormDataType } from '@/common/interface';
-import { PageTitle } from '@/components';
 import {
   dbCheck,
   installInit,
@@ -103,7 +103,6 @@ const Index: FC = () => {
   });
 
   const handleChange = (params: FormDataType) => {
-    // console.log(params);
     setErrorData({
       msg: '',
     });
@@ -240,13 +239,15 @@ const Index: FC = () => {
     configYmlCheck();
   }, []);
 
+  usePageTags({
+    title: t('install', { keyPrefix: 'page_title' })
+  });
   if (loading) {
     return <div />;
   }
 
   return (
     <div className="bg-f5 py-5 flex-grow-1">
-      <PageTitle title={t('install', { keyPrefix: 'page_title' })} />
       <Container className='py-3'>
         <Row className="justify-content-center">
           <Col lg={6}>
