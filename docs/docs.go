@@ -105,7 +105,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.AdminSetAnswerStatusRequest"
+                            "$ref": "#/definitions/schema.AdminSetAnswerStatusRequest"
                         }
                     }
                 ],
@@ -809,6 +809,77 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/schema.SiteLegalReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/admin/api/siteinfo/seo": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get site seo information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "get site seo information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.SiteSeoResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update site seo information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "update site seo information",
+                "parameters": [
+                    {
+                        "description": "seo",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.SiteSeoReq"
                         }
                     }
                 ],
@@ -2746,6 +2817,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/question/reopen": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "reopen question",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "api-question"
+                ],
+                "summary": "reopen question",
+                "parameters": [
+                    {
+                        "description": "question",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.ReopenQuestionReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/question/search": {
             "post": {
                 "description": "SearchQuestionList",
@@ -4672,20 +4782,29 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/robots.txt": {
+            "get": {
+                "description": "get site robots information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "site"
+                ],
+                "summary": "get site robots information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "entity.AdminSetAnswerStatusRequest": {
-            "type": "object",
-            "properties": {
-                "answer_id": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
         "handler.RespBody": {
             "type": "object",
             "properties": {
@@ -4812,6 +4931,9 @@ const docTemplate = `{
                 "display_name": {
                     "type": "string"
                 },
+                "main_tag_slug_name": {
+                    "type": "string"
+                },
                 "object_type": {
                     "type": "string"
                 },
@@ -4846,6 +4968,9 @@ const docTemplate = `{
                 },
                 "created_at": {
                     "type": "integer"
+                },
+                "id": {
+                    "type": "string"
                 },
                 "object_id": {
                     "type": "string"
@@ -4934,6 +5059,17 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.AdminSetAnswerStatusRequest": {
+            "type": "object",
+            "properties": {
+                "answer_id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.AdminSetQuestionStatusRequest": {
             "type": "object",
             "properties": {
@@ -4969,7 +5105,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "question_id": {
-                    "description": "question_id",
                     "type": "string"
                 }
             }
@@ -6163,6 +6298,14 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.ReopenQuestionReq": {
+            "type": "object",
+            "properties": {
+                "question_id": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.ReportHandleReq": {
             "type": "object",
             "required": [
@@ -6253,7 +6396,11 @@ const docTemplate = `{
                 },
                 "user_info": {
                     "description": "user info",
-                    "$ref": "#/definitions/schema.UserBasicInfo"
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/schema.UserBasicInfo"
+                        }
+                    ]
                 },
                 "vote_count": {
                     "type": "integer"
@@ -6265,7 +6412,11 @@ const docTemplate = `{
             "properties": {
                 "object": {
                     "description": "this object",
-                    "$ref": "#/definitions/schema.SearchObject"
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/schema.SearchObject"
+                        }
+                    ]
                 },
                 "object_type": {
                     "description": "object_type",
@@ -6328,6 +6479,7 @@ const docTemplate = `{
             "required": [
                 "contact_email",
                 "name",
+                "permalink",
                 "site_url"
             ],
             "properties": {
@@ -6342,6 +6494,11 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "maxLength": 128
+                },
+                "permalink": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 0
                 },
                 "short_description": {
                     "type": "string",
@@ -6358,6 +6515,7 @@ const docTemplate = `{
             "required": [
                 "contact_email",
                 "name",
+                "permalink",
                 "site_url"
             ],
             "properties": {
@@ -6372,6 +6530,11 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "maxLength": 128
+                },
+                "permalink": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 0
                 },
                 "short_description": {
                     "type": "string",
@@ -6457,6 +6620,28 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "terms_of_service_parsed_text": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.SiteSeoReq": {
+            "type": "object",
+            "required": [
+                "robots"
+            ],
+            "properties": {
+                "robots": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.SiteSeoResp": {
+            "type": "object",
+            "required": [
+                "robots"
+            ],
+            "properties": {
+                "robots": {
                     "type": "string"
                 }
             }
@@ -6629,7 +6814,11 @@ const docTemplate = `{
             "properties": {
                 "avatar": {
                     "description": "avatar",
-                    "$ref": "#/definitions/schema.AvatarInfo"
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/schema.AvatarInfo"
+                        }
+                    ]
                 },
                 "bio": {
                     "description": "bio",
@@ -6822,6 +7011,10 @@ const docTemplate = `{
                 },
                 "display_name": {
                     "description": "display_name",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "user_id",
                     "type": "string"
                 },
                 "ip_info": {

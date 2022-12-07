@@ -268,7 +268,7 @@ func (ac *AnswerController) Adopted(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param data body entity.AdminSetAnswerStatusRequest true "AdminSetAnswerStatusRequest"
+// @Param data body schema.AdminSetAnswerStatusRequest true "AdminSetAnswerStatusRequest"
 // @Router /answer/admin/api/answer/status [put]
 // @Success 200 {object} handler.RespBody
 func (ac *AnswerController) AdminSetAnswerStatus(ctx *gin.Context) {
