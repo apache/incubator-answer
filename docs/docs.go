@@ -5724,6 +5724,10 @@ const docTemplate = `{
                     "description": "created time",
                     "type": "integer"
                 },
+                "description": {
+                    "description": "description text",
+                    "type": "string"
+                },
                 "display_name": {
                     "description": "display name",
                     "type": "string"
