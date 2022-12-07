@@ -3,7 +3,6 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/segmentfault/pacman/i18n"
 	"html/template"
 	"net/http"
 	"regexp"
@@ -319,7 +318,7 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 		siteInfo.Description = siteInfo.General.Description
 	}
 	data["description"] = siteInfo.Description
-	data["language"] = i18n.LanguageChinese //handler.GetLang(ctx)
+	data["language"] = handler.GetLang(ctx)
 	data["timezone"] = siteInfo.Interface.TimeZone
 
 	ctx.HTML(code, tpl, data)
