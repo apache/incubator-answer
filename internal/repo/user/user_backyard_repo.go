@@ -61,6 +61,24 @@ func (ur *userBackyardRepo) UpdateUserStatus(ctx context.Context, userID string,
 	return
 }
 
+// AddUser add user
+func (ur *userBackyardRepo) AddUser(ctx context.Context, user *entity.User) (err error) {
+	_, err = ur.data.DB.Insert(user)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+// UpdateUserPassword update user password
+func (ur *userBackyardRepo) UpdateUserPassword(ctx context.Context, userID string, password string) (err error) {
+	_, err = ur.data.DB.ID(userID).Update(&entity.User{Pass: password})
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // GetUserInfo get user info
 func (ur *userBackyardRepo) GetUserInfo(ctx context.Context, userID string) (user *entity.User, exist bool, err error) {
 	user = &entity.User{}

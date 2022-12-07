@@ -234,6 +234,8 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	r.GET("/users/page", a.backyardUserController.GetUserPage)
 	r.PUT("/user/status", a.backyardUserController.UpdateUserStatus)
 	r.PUT("/user/role", a.backyardUserController.UpdateUserRole)
+	r.POST("/user", a.backyardUserController.AddUser)
+	r.PUT("/user/password", a.backyardUserController.UpdateUserPassword)
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)

@@ -14,9 +14,11 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/role"
+	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // UserBackyardRepo user repository
@@ -25,6 +27,8 @@ type UserBackyardRepo interface {
 	GetUserInfo(ctx context.Context, userID string) (user *entity.User, exist bool, err error)
 	GetUserPage(ctx context.Context, page, pageSize int, user *entity.User,
 		usernameOrDisplayName string, isStaff bool) (users []*entity.User, total int64, err error)
+	AddUser(ctx context.Context, user *entity.User) (err error)
+	UpdateUserPassword(ctx context.Context, userID string, password string) (err error)
 }
 
 // UserBackyardService user service
@@ -32,6 +36,7 @@ type UserBackyardService struct {
 	userRepo           UserBackyardRepo
 	userRoleRelService *role.UserRoleRelService
 	authService        *auth.AuthService
+	userCommonService  *usercommon.UserCommon
 }
 
 // NewUserBackyardService new user backyard service
@@ -39,11 +44,13 @@ func NewUserBackyardService(
 	userRepo UserBackyardRepo,
 	userRoleRelService *role.UserRoleRelService,
 	authService *auth.AuthService,
+	userCommonService *usercommon.UserCommon,
 ) *UserBackyardService {
 	return &UserBackyardService{
 		userRepo:           userRepo,
 		userRoleRelService: userRoleRelService,
 		authService:        authService,
+		userCommonService:  userCommonService,
 	}
 }
 
@@ -90,6 +97,57 @@ func (us *UserBackyardService) UpdateUserRole(ctx context.Context, req *schema.U
 		return err
 	}
 
+	us.authService.RemoveAllUserTokens(ctx, req.UserID)
+	return
+}
+
+// AddUser add user
+func (us *UserBackyardService) AddUser(ctx context.Context, req *schema.AddUserReq) (err error) {
+	hashPwd, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	userInfo := &entity.User{}
+	userInfo.EMail = req.Email
+	userInfo.DisplayName = req.DisplayName
+	userInfo.Pass = string(hashPwd)
+
+	userInfo.Username, err = us.userCommonService.MakeUsername(ctx, userInfo.DisplayName)
+	if err != nil {
+		return err
+	}
+	userInfo.MailStatus = entity.EmailStatusAvailable
+	userInfo.Status = entity.UserStatusAvailable
+	userInfo.Rank = 1
+
+	err = us.userRepo.AddUser(ctx, userInfo)
+	if err != nil {
+		return err
+	}
+	return
+}
+
+// UpdateUserPassword update user password
+func (us *UserBackyardService) UpdateUserPassword(ctx context.Context, req *schema.UpdateUserPasswordReq) (err error) {
+	userInfo, exist, err := us.userRepo.GetUserInfo(ctx, req.UserID)
+	if err != nil {
+		return err
+	}
+	if !exist {
+		return errors.BadRequest(reason.UserNotFound)
+	}
+
+	hashPwd, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	err = us.userRepo.UpdateUserPassword(ctx, userInfo.ID, string(hashPwd))
+	if err != nil {
+		return err
+	}
+	// logout this user
 	us.authService.RemoveAllUserTokens(ctx, req.UserID)
 	return
 }

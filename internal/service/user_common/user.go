@@ -2,9 +2,17 @@ package usercommon
 
 import (
 	"context"
+	"encoding/hex"
+	"math/rand"
+	"regexp"
+	"strings"
 
+	"github.com/Chain-Zhang/pinyin"
+	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/pkg/checker"
+	"github.com/segmentfault/pacman/errors"
 )
 
 type UserRepo interface {
@@ -93,4 +101,42 @@ func (us *UserCommon) FormatUserBasicInfo(ctx context.Context, userInfo *entity.
 		userBasicInfo.DisplayName = "Anonymous"
 	}
 	return userBasicInfo
+}
+
+// MakeUsername
+// Generate a unique Username based on the displayName
+func (us *UserCommon) MakeUsername(ctx context.Context, displayName string) (username string, err error) {
+	// Chinese processing
+	if has := checker.IsChinese(displayName); has {
+		str, err := pinyin.New(displayName).Split("").Mode(pinyin.WithoutTone).Convert()
+		if err != nil {
+			return "", errors.BadRequest(reason.UsernameInvalid)
+		} else {
+			displayName = str
+		}
+	}
+
+	username = strings.ReplaceAll(displayName, " ", "_")
+	username = strings.ToLower(username)
+	suffix := ""
+
+	re := regexp.MustCompile(`^[a-z0-9._-]{4,30}$`)
+	match := re.MatchString(username)
+	if !match {
+		return "", errors.BadRequest(reason.UsernameInvalid)
+	}
+
+	for {
+		_, has, err := us.userRepo.GetByUsername(ctx, username+suffix)
+		if err != nil {
+			return "", err
+		}
+		if !has {
+			break
+		}
+		bytes := make([]byte, 2)
+		_, _ = rand.Read(bytes)
+		suffix = hex.EncodeToString(bytes)
+	}
+	return username + suffix, nil
 }
