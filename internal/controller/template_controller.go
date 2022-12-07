@@ -276,6 +276,14 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 
 // UserInfo user info
 func (tc *TemplateController) UserInfo(ctx *gin.Context) {
+	// urlPath := ctx.Request.URL.Path
+	// filePath := ""
+	// switch urlPath {
+	// case "/users/login":
+	// 	filePath = "build/index.html"
+	// case "/users/register":
+	// 	filePath = "build/index.html"
+	// default:
 	username := ctx.Param("username")
 	req := &schema.GetOtherUserInfoByUsernameReq{}
 	req.Username = username
@@ -305,6 +313,17 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 		"userinfo": userinfo,
 		"bio":      template.HTML(userinfo.Info.BioHTML),
 	})
+	// }
+
+	// file, err := ui.Build.ReadFile(filePath)
+	// if err != nil {
+	// 	log.Error(err)
+	// 	ctx.Status(http.StatusNotFound)
+	// 	return
+	// }
+	// ctx.Header("content-type", "text/html;charset=utf-8")
+	// ctx.String(http.StatusOK, string(file))
+
 }
 
 func (tc *TemplateController) Page404(ctx *gin.Context) {
