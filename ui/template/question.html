@@ -21,10 +21,17 @@
                   class="fw-bold" title="Reputation">{{.UserInfo.Rank}}</span>
                 </div>
                 •
+                {{if eq .CreateTime .UpdateTime}}
                 <time class="text-secondary ms-1"
                       datetime="{{timeFormatISO $.timezone .CreateTime}}"
                       title="{{translatorTimeFormatLongDate $.language $.timezone .CreateTime}}">{{translator $.language "ui.question.asked"}} {{translatorTimeFormat $.language $.timezone .CreateTime}}
                 </time>
+                {{else if gt .UpdateTime 0}}
+                <time class="text-secondary ms-1"
+                      datetime="{{timeFormatISO $.timezone .UpdateTime}}"
+                      title="{{translatorTimeFormatLongDate $.language $.timezone .UpdateTime}}">{{translator $.language "ui.question.modified"}} {{translatorTimeFormat $.language $.timezone .UpdateTime}}
+                </time>
+                {{end}}
               </div>
               <div class="ms-0 ms-md-3 mt-2 mt-md-0">
                 <span><i class="br bi-hand-thumbs-up-fill"></i><em
