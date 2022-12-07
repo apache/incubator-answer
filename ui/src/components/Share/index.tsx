@@ -6,6 +6,7 @@ import { FacebookShareButton, TwitterShareButton } from 'next-share';
 import copy from 'copy-to-clipboard';
 
 import { loggedUserInfoStore } from '@/stores';
+import { pathFactory } from '@/router/pathFactory';
 
 interface IProps {
   type: 'answer' | 'question';
@@ -23,8 +24,12 @@ const Index: FC<IProps> = ({ type, qid, aid, title }) => {
 
   let baseUrl =
     type === 'question'
-      ? `${window.location.origin}/questions/${qid}`
-      : `${window.location.origin}/questions/${qid}/${aid}`;
+      ? `${window.location.origin}${pathFactory.questionLanding(qid, title)}`
+      : `${window.location.origin}${pathFactory.answerLanding({
+          questionId: qid,
+          questionTitle: title,
+          answerId: aid,
+        })}`;
   if (user.id) {
     baseUrl = `${baseUrl}?shareUserId=${user.username}`;
   }

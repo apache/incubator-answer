@@ -106,6 +106,7 @@ const TagIntroduction = () => {
       keyPrefix: 'page_title',
     })}`;
   }
+
   return (
     <>
       <PageTitle title={pageTitle} />
@@ -114,7 +115,7 @@ const TagIntroduction = () => {
           <Col xxl={7} lg={8} sm={12}>
             <h3 className="mb-3">
               <Link
-                to={pathFactory.tagLanding(tagInfo)}
+                to={pathFactory.tagLanding(tagInfo.slug_name)}
                 replace
                 className="link-dark">
                 {tagInfo.display_name}

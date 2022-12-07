@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import Pattern from '@/common/pattern';
 import { Pagination, PageTitle } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
 import { scrollTop } from '@/utils';
@@ -33,9 +34,14 @@ import './index.scss';
 const Index = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('translation');
-  const { qid = '', aid = '' } = useParams();
-  const [urlSearch] = useSearchParams();
+  const { qid = '', slugPermalink = '' } = useParams();
+  // Compatible with Permalink
+  let { aid = '' } = useParams();
+  if (!aid && Pattern.isAnswerId.test(slugPermalink)) {
+    aid = slugPermalink;
+  }
 
+  const [urlSearch] = useSearchParams();
   const page = Number(urlSearch.get('page') || 0);
   const order = urlSearch.get('order') || '';
   const [question, setQuestion] = useState<QuestionDetailRes | null>(null);
@@ -106,6 +112,12 @@ const Index = () => {
       setTimeout(() => {
         navigate(-1);
       }, 1000);
+      return;
+    }
+
+    if (type === 'default') {
+      window.scrollTo(0, 0);
+      getDetail();
       return;
     }
     requestAnswers();

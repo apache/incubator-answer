@@ -13,8 +13,6 @@ stages:
 "compile the html and other static files":
   image: node:16
   stage: compile-html
-  tags:
-    - runner-nanjing
   before_script:
     - npm config set registry https://repo.huaweicloud.com/repository/npm/
     - make install-ui-packages

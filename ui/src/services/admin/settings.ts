@@ -101,3 +101,11 @@ export const getLegalSetting = () => {
 export const putLegalSetting = (params: Type.AdminSettingsLegal) => {
   return request.put('/answer/admin/api/siteinfo/legal', params);
 };
+
+export const getSeoSetting = () => {
+  return request.get<Type.AdminSettingsSeo>('/answer/admin/api/siteinfo/seo');
+};
+
+export const putSeoSetting = (params: Type.AdminSettingsSeo) => {
+  return request.put('/answer/admin/api/siteinfo/seo', params);
+};

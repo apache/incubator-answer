@@ -17,6 +17,7 @@ import {
   useQueryQuestionByTitle,
 } from '@/services';
 import { handleFormError } from '@/utils';
+import { pathFactory } from '@/router/pathFactory';
 
 import SearchQuestion from './components/SearchQuestion';
 
@@ -235,7 +236,7 @@ const Ask = () => {
         edit_summary: formData.edit_summary.value,
       })
         .then((res) => {
-          navigate(`/questions/${qid}`, {
+          navigate(pathFactory.questionLanding(qid, params.title), {
             state: { isReview: res?.wait_for_review },
           });
         })
@@ -262,7 +263,7 @@ const Ask = () => {
             html: editorRef2.current.getHtml(),
           })
             .then(() => {
-              navigate(`/questions/${id}`);
+              navigate(pathFactory.questionLanding(id, params.title));
             })
             .catch((err) => {
               if (err.isError) {
@@ -271,7 +272,7 @@ const Ask = () => {
               }
             });
         } else {
-          navigate(`/questions/${id}`);
+          navigate(pathFactory.questionLanding(id, params.title));
         }
       }
     }
@@ -466,7 +467,7 @@ const Ask = () => {
               <Card.Body
                 className="fmt small"
                 dangerouslySetInnerHTML={{
-                  __html: t('description', { keyPrefix: 'how_to_format' }),
+                  __html: t('desc', { keyPrefix: 'how_to_format' }),
                 }}
               />
             </Card>

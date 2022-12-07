@@ -3,6 +3,7 @@ import { Card, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { pathFactory } from '@/router/pathFactory';
 import { Icon } from '@/components';
 import { useHotQuestions } from '@/services';
 
@@ -29,7 +30,7 @@ const HotQuestions: FC = () => {
             <ListGroupItem
               key={li.id}
               as={Link}
-              to={`/questions/${li.id}`}
+              to={pathFactory.questionLanding(li.id, li.title)}
               action>
               <div className="link-dark">{li.title}</div>
               {li.answer_count > 0 ? (

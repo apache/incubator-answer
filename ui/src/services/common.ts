@@ -248,3 +248,7 @@ export const changeEmailVerify = (params: { code: string }) => {
 export const getAppSettings = () => {
   return request.get<Type.SiteSettings>('/answer/api/v1/siteinfo');
 };
+
+export const reopenQuestion = (params: { question_id: string }) => {
+  return request.put('/answer/api/v1/question/reopen', params);
+};
