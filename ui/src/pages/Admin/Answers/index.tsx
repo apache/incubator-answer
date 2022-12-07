@@ -19,8 +19,7 @@ import { useEditStatusModal } from '@/hooks';
 import * as Type from '@/common/interface';
 import { useAnswerSearch, changeAnswerStatus } from '@/services';
 import { escapeRemove } from '@/utils';
-
-import '../index.scss';
+import { pathFactory } from '@/router/pathFactory';
 
 const answerFilterItems: Type.AdminContentsFilterBy[] = ['normal', 'deleted'];
 
@@ -129,7 +128,11 @@ const Answers: FC = () => {
                   <Stack>
                     <Stack direction="horizontal" gap={2}>
                       <a
-                        href={`/questions/${li.question_id}/${li.id}`}
+                        href={pathFactory.answerLanding({
+                          questionId: li.question_id,
+                          questionTitle: li.question_info.title,
+                          answerId: li.id,
+                        })}
                         target="_blank"
                         className="text-break text-wrap"
                         rel="noreferrer">

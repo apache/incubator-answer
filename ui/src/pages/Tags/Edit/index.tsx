@@ -203,7 +203,7 @@ const Ask = () => {
               </Form.Group>
 
               <Form.Group controlId="description" className="mt-4">
-                <Form.Label>{t('form.fields.description.label')}</Form.Label>
+                <Form.Label>{t('form.fields.desc.label')}</Form.Label>
                 <Editor
                   value={formData.description.value}
                   onChange={handleDescriptionChange}
@@ -260,7 +260,7 @@ const Ask = () => {
               <Card.Body
                 className="fmt small"
                 dangerouslySetInnerHTML={{
-                  __html: t('description', { keyPrefix: 'how_to_format' }),
+                  __html: t('desc', { keyPrefix: 'how_to_format' }),
                 }}
               />
             </Card>

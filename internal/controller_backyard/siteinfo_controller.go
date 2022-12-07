@@ -100,6 +100,19 @@ func (sc *SiteInfoController) GetSeo(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
+// GetSiteLogin get site info login config
+// @Summary get site info login config
+// @Description get site info login config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteLoginResp}
+// @Router /answer/admin/api/siteinfo/login [get]
+func (sc *SiteInfoController) GetSiteLogin(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteLogin(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
 // GetRobots get site robots information
 // @Summary get site robots information
 // @Description get site robots information
@@ -223,6 +236,24 @@ func (sc *SiteInfoController) UpdateSiteLegal(ctx *gin.Context) {
 		return
 	}
 	err := sc.siteInfoService.SaveSiteLegal(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// UpdateSiteLogin update site login
+// @Summary update site login
+// @Description update site login
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.SiteLegalReq true "login info"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/siteinfo/login [put]
+func (sc *SiteInfoController) UpdateSiteLogin(ctx *gin.Context) {
+	req := &schema.SiteLoginReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	err := sc.siteInfoService.SaveSiteLogin(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

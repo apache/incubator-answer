@@ -18,65 +18,38 @@ import (
 )
 
 type SiteInfoService struct {
-	siteInfoRepo     siteinfo_common.SiteInfoRepo
-	emailService     *export.EmailService
-	tagCommonService *tagcommon.TagCommonService
+	siteInfoRepo          siteinfo_common.SiteInfoRepo
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
+	emailService          *export.EmailService
+	tagCommonService      *tagcommon.TagCommonService
 }
 
 func NewSiteInfoService(
 	siteInfoRepo siteinfo_common.SiteInfoRepo,
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 	emailService *export.EmailService,
 	tagCommonService *tagcommon.TagCommonService) *SiteInfoService {
 	return &SiteInfoService{
-		siteInfoRepo:     siteInfoRepo,
-		emailService:     emailService,
-		tagCommonService: tagCommonService,
+		siteInfoRepo:          siteInfoRepo,
+		siteInfoCommonService: siteInfoCommonService,
+		emailService:          emailService,
+		tagCommonService:      tagCommonService,
 	}
 }
 
 // GetSiteGeneral get site info general
 func (s *SiteInfoService) GetSiteGeneral(ctx context.Context) (resp *schema.SiteGeneralResp, err error) {
-	resp = &schema.SiteGeneralResp{}
-	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeGeneral)
-	if err != nil {
-		log.Error(err)
-		return resp, nil
-	}
-	if !exist {
-		return resp, nil
-	}
-	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
-	return resp, nil
+	return s.siteInfoCommonService.GetSiteGeneral(ctx)
 }
 
 // GetSiteInterface get site info interface
 func (s *SiteInfoService) GetSiteInterface(ctx context.Context) (resp *schema.SiteInterfaceResp, err error) {
-	resp = &schema.SiteInterfaceResp{}
-	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeInterface)
-	if err != nil {
-		log.Error(err)
-		return resp, nil
-	}
-	if !exist {
-		return resp, nil
-	}
-	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
-	return resp, nil
+	return s.siteInfoCommonService.GetSiteInterface(ctx)
 }
 
 // GetSiteBranding get site info branding
-func (s *SiteInfoService) GetSiteBranding(ctx context.Context) (resp *schema.SiteBrandingReq, err error) {
-	resp = &schema.SiteBrandingReq{}
-	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeBranding)
-	if err != nil {
-		log.Error(err)
-		return resp, nil
-	}
-	if !exist {
-		return resp, nil
-	}
-	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
-	return resp, nil
+func (s *SiteInfoService) GetSiteBranding(ctx context.Context) (resp *schema.SiteBrandingResp, err error) {
+	return s.siteInfoCommonService.GetSiteBranding(ctx)
 }
 
 // GetSiteWrite get site info write
@@ -104,16 +77,12 @@ func (s *SiteInfoService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWr
 
 // GetSiteLegal get site legal info
 func (s *SiteInfoService) GetSiteLegal(ctx context.Context) (resp *schema.SiteLegalResp, err error) {
-	resp = &schema.SiteLegalResp{}
-	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeLegal)
-	if err != nil {
-		return nil, err
-	}
-	if !exist {
-		return resp, nil
-	}
-	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
-	return resp, nil
+	return s.siteInfoCommonService.GetSiteLegal(ctx)
+}
+
+// GetSiteLogin get site login info
+func (s *SiteInfoService) GetSiteLogin(ctx context.Context) (resp *schema.SiteLoginResp, err error) {
+	return s.siteInfoCommonService.GetSiteLogin(ctx)
 }
 
 func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGeneralReq) (err error) {
@@ -205,6 +174,17 @@ func (s *SiteInfoService) SaveSiteLegal(ctx context.Context, req *schema.SiteLeg
 		Status:  1,
 	}
 	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeLegal, data)
+}
+
+// SaveSiteLogin save site legal configuration
+func (s *SiteInfoService) SaveSiteLogin(ctx context.Context, req *schema.SiteLoginReq) (err error) {
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeLogin,
+		Content: string(content),
+		Status:  1,
+	}
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeLogin, data)
 }
 
 // GetSMTPConfig get smtp config

@@ -58,4 +58,5 @@ const (
 	RevisionReviewUnderway           = "error.revision.review_underway"
 	RevisionNoPermission             = "error.revision.no_permission"
 	UserCannotUpdateYourRole         = "error.user.cannot_update_your_role"
+	NotAllowedRegistration           = "error.user.not_allowed_registration"
 )

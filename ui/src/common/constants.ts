@@ -62,6 +62,7 @@ export const ADMIN_NAV_MENUS = [
       { name: 'smtp' },
       { name: 'legal' },
       { name: 'write' },
+      { name: 'seo' },
     ],
   },
 ];

@@ -82,6 +82,12 @@ type GetSiteLegalInfoResp struct {
 	PrivacyPolicyParsedText    string `json:"privacy_policy_parsed_text,omitempty"`
 }
 
+// SiteLoginReq site login request
+type SiteLoginReq struct {
+	AllowNewRegistrations bool `json:"allow_new_registrations"`
+	LoginRequired         bool `json:"login_required"`
+}
+
 // SiteGeneralResp site general response
 type SiteGeneralResp SiteGeneralReq
 
@@ -90,6 +96,9 @@ type SiteInterfaceResp SiteInterfaceReq
 
 // SiteBrandingResp site branding response
 type SiteBrandingResp SiteBrandingReq
+
+// SiteLoginResp site login response
+type SiteLoginResp SiteLoginReq
 
 // SiteWriteResp site write response
 type SiteWriteResp SiteWriteReq
@@ -104,6 +113,7 @@ type SiteInfoResp struct {
 	General   *SiteGeneralResp   `json:"general"`
 	Interface *SiteInterfaceResp `json:"interface"`
 	Branding  *SiteBrandingResp  `json:"branding"`
+	Login     *SiteLoginResp     `json:"login"`
 }
 type TemplateSiteInfoResp struct {
 	General     *SiteGeneralResp   `json:"general"`

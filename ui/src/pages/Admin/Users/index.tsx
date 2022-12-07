@@ -18,11 +18,9 @@ import { useChangeModal, useChangeUserRoleModal, useToast } from '@/hooks';
 import { useQueryUsers } from '@/services';
 import { loggedUserInfoStore } from '@/stores';
 
-import '../index.scss';
-
 const UserFilterKeys: Type.UserFilterBy[] = [
   'all',
-  // 'staff',
+  'staff',
   'inactive',
   'suspended',
   'deleted',
@@ -119,7 +117,7 @@ const Users: FC = () => {
         <thead>
           <tr>
             <th>{t('name')}</th>
-            {/* <th style={{ width: '12%' }}>{t('reputation')}</th> */}
+            <th style={{ width: '12%' }}>{t('reputation')}</th>
             <th style={{ width: '20%' }}>{t('email')}</th>
             <th className="text-nowrap" style={{ width: '15%' }}>
               {t('created_at')}
@@ -131,7 +129,7 @@ const Users: FC = () => {
             )}
 
             <th style={{ width: '12%' }}>{t('status')}</th>
-            {/* <th style={{ width: '12%' }}>{t('role')}</th> */}
+            <th style={{ width: '12%' }}>{t('role')}</th>
             {curFilter !== 'deleted' ? (
               <th style={{ width: '8%' }} className="text-end">
                 {t('action')}
@@ -153,7 +151,6 @@ const Users: FC = () => {
                     showReputation={false}
                   />
                 </td>
-                {/* <td>{user.rank}</td> */}
                 <td className="text-break">{user.e_mail}</td>
                 <td>
                   <FormatTime time={user.created_at} />
@@ -173,11 +170,11 @@ const Users: FC = () => {
                     {t(user.status)}
                   </span>
                 </td>
-                {/* <td> */}
-                {/*  <span className="badge text-bg-light"> */}
-                {/*    {t(user.role_name)} */}
-                {/*  </span> */}
-                {/* </td> */}
+                <td>
+                  <span className="badge text-bg-light">
+                    {t(user.role_name)}
+                  </span>
+                </td>
                 {curFilter !== 'deleted' ? (
                   <td className="text-end">
                     <Dropdown>
@@ -185,28 +182,16 @@ const Users: FC = () => {
                         <Icon name="three-dots-vertical" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
-                        {/* <Dropdown.Item>{t('set_new_password')}</Dropdown.Item> */}
                         <Dropdown.Item
                           onClick={() => handleAction('status', user)}>
                           {t('change_status')}
                         </Dropdown.Item>
-                        {/* <Dropdown.Item */}
-                        {/*  onClick={() => handleAction('role', user)}> */}
-                        {/*  {t('change_role')} */}
-                        {/* </Dropdown.Item> */}
-                        {/* <Dropdown.Divider />
-                        <Dropdown.Item>{t('show_logs')}</Dropdown.Item> */}
+                        <Dropdown.Item
+                          onClick={() => handleAction('role', user)}>
+                          {t('change_role')}
+                        </Dropdown.Item>
                       </Dropdown.Menu>
                     </Dropdown>
-
-                    {/* {user.status !== 'deleted' && (
-                      <Button
-                        className="p-0 btn-no-border"
-                        variant="link"
-                        onClick={() => handleClick(user)}>
-                        {t('change')}
-                      </Button>
-                    )} */}
                   </td>
                 ) : null}
               </tr>

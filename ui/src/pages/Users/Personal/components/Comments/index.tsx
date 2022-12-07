@@ -1,6 +1,7 @@
 import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
+import { pathFactory } from '@/router/pathFactory';
 import { FormatTime } from '@/components';
 
 interface Props {
@@ -19,11 +20,15 @@ const Index: FC<Props> = ({ visible, data }) => {
           <ListGroupItem className="py-3 px-0" key={item.comment_id}>
             <a
               className="text-break"
-              href={`/questions/${
+              href={
                 item.object_type === 'question'
-                  ? item.object_id
-                  : `${item.question_id}/${item.object_id}`
-              }`}>
+                  ? pathFactory.questionLanding(item.object_id, item.title)
+                  : pathFactory.answerLanding({
+                      questionId: item.question_id,
+                      questionTitle: item.title,
+                      answerId: item.object_id,
+                    })
+              }>
               {item.title}
             </a>
             <div

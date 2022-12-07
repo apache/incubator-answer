@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Table } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { pathFactory } from '@/router/pathFactory';
 import { loggedUserInfoStore } from '@/stores';
 import { getTimelineData } from '@/services';
 import { PageTitle, Empty } from '@/components';
@@ -44,12 +45,19 @@ const Index: FC = () => {
   let linkUrl = '';
   let pageTitle = '';
   if (timelineData?.object_info.object_type === 'question') {
-    linkUrl = `/questions/${timelineData?.object_info.question_id}`;
+    linkUrl = pathFactory.questionLanding(
+      timelineData?.object_info.question_id,
+      timelineData?.object_info.title,
+    );
     pageTitle = `${t('title_for_question')} ${timelineData?.object_info.title}`;
   }
 
   if (timelineData?.object_info.object_type === 'answer') {
-    linkUrl = `/questions/${timelineData?.object_info.question_id}/${timelineData?.object_info.answer_id}`;
+    linkUrl = pathFactory.answerLanding({
+      questionId: timelineData?.object_info.question_id,
+      questionTitle: timelineData?.object_info.title,
+      answerId: timelineData?.object_info.answer_id,
+    });
     pageTitle = `${t('title_for_answer', {
       title: timelineData?.object_info.title,
       author: timelineData?.object_info.display_name,

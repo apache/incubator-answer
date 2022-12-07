@@ -44,6 +44,11 @@ func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
 	if err != nil {
 		log.Error(err)
 	}
+
+	resp.Login, err = sc.siteInfoService.GetSiteLogin(ctx)
+	if err != nil {
+		log.Error(err)
+	}
 	handler.HandleResponse(ctx, nil, resp)
 }
 

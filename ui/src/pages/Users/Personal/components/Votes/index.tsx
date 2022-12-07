@@ -1,6 +1,7 @@
 import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 
+import { pathFactory } from '@/router/pathFactory';
 import { FormatTime } from '@/components';
 
 interface Props {
@@ -12,6 +13,7 @@ const Index: FC<Props> = ({ visible, data }) => {
   if (!visible || !data?.length) {
     return null;
   }
+
   return (
     <ListGroup variant="flush">
       {data.map((item) => {
@@ -25,11 +27,15 @@ const Index: FC<Props> = ({ visible, data }) => {
             <div>
               <a
                 className="text-break"
-                href={`/questions/${
+                href={
                   item.object_type === 'question'
-                    ? item.question_id
-                    : `${item.question_id}/${item.answer_id}`
-                }`}>
+                    ? pathFactory.questionLanding(item.question_id, item.title)
+                    : pathFactory.answerLanding({
+                        questionId: item.question_id,
+                        questionTitle: item.title,
+                        answerId: item.answer_id,
+                      })
+                }>
                 {item.title}
               </a>
               <div className="d-flex align-items-center fs-14 text-secondary">

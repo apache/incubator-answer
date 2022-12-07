@@ -11,7 +11,7 @@ const Index = () => {
         style={{ fontSize: '120px', lineHeight: 1.2 }}>
         (=‘x‘=)
       </div>
-      <div className="text-center mb-4">{t('description')}</div>
+      <div className="text-center mb-4">{t('desc')}</div>
       <div className="text-center">
         <Button as={Link} to="/" variant="link">
           {t('back_home')}

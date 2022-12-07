@@ -115,6 +115,8 @@ backend:
         other: "头像设置错误"
       cannot_update_your_role:
         other: "你无法修改自己的角色"
+      not_allowed_registration:
+        other: "目前该网站尚未开放注册"
     revision:
       review_underway:
         other: "目前无法编辑，有一个版本在审阅队列中。"
@@ -206,7 +208,7 @@ backend:
 ui:
   how_to_format:
     title: 如何设定文本格式
-    description: >-
+    desc: >-
       <ul class="mb-0"><li><p class="mb-2">添加链接：</p><pre
       class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p
       class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者
@@ -311,7 +313,7 @@ ui:
               empty: 请选择图片文件。
               only_image: 只能上传图片文件。
               max_size: 图片文件大小不能超过 4 MB。
-          description:
+          desc:
             label: 图片描述(可选)
       tab_url: 网络图片
       form_url:
@@ -383,12 +385,12 @@ ui:
             range: 不能超过 35 个字符
         slug_name:
           label: URL 固定链接
-          description: '必须由 "a-z", "0-9", "+ # - ." 组成'
-          msg: "todo"
-#            empty: 不能为空
-#            range: 不能超过 35 个字符
-#            character: 包含非法字符
-        description:
+          desc: '必须由 "a-z", "0-9", "+ # - ." 组成'
+          msg:
+            empty: 不能为空
+            range: 不能超过 35 个字符
+            character: 包含非法字符
+        desc:
           label: 标签描述(可选)
     btn_cancel: 取消
     btn_submit: 提交
@@ -420,7 +422,7 @@ ui:
         slug_name:
           label: URL 固定链接
           info: '必须由 "a-z", "0-9", "+ # - ." 组成'
-        description:
+        desc:
           label: 描述
         edit_summary:
           label: 编辑概要
@@ -471,7 +473,7 @@ ui:
     button_following: 已关注
     tag_label: 个问题
     search_placeholder: 通过标签名过滤
-    no_description: 此标签无描述。
+    no_desc: 此标签无描述。
     more: 更多
   ask:
     title: 提交新的问题
@@ -785,10 +787,10 @@ ui:
     x_answers: 个回答
     x_questions: 个问题
   page_404:
-    description: 页面不存在
+    desc: 页面不存在
     back_home: 回到主页
   page_50X:
-    description: 服务器遇到了一个错误，无法完成你的请求。
+    desc: 服务器遇到了一个错误，无法完成你的请求。
     back_home: 回到主页
   nav_menus:
     dashboard: 后台管理
@@ -821,13 +823,13 @@ ui:
       btn_cancel: 取消
       btn_submit: 提交
       normal_name: 正常
-      normal_description: 正常状态的用户可以提问和回答。
+      normal_desc: 正常状态的用户可以提问和回答。
       suspended_name: 封禁
-      suspended_description: 被封禁的用户将无法登录。
+      suspended_desc: 被封禁的用户将无法登录。
       deleted_name: 删除
-      deleted_description: 删除用户的个人信息，认证等等。
+      deleted_desc: 删除用户的个人信息，认证等等。
       inactive_name: 不活跃
-      inactive_description: 不活跃的用户必须重新验证邮箱。
+      inactive_desc: 不活跃的用户必须重新验证邮箱。
       confirm_title: 删除此用户
       confirm_content: 确定要删除此用户？此操作无法撤销！
       confirm_btn: 删除
@@ -836,11 +838,11 @@ ui:
     status_modal:
       title: '更改 {{ type }} 状态为...'
       normal_name: 正常
-      normal_description: 所有用户都可以访问
+      normal_desc: 所有用户都可以访问
       closed_name: 关闭
-      closed_description: 不能回答，但仍然可以编辑、投票和评论。
+      closed_desc: 不能回答，但仍然可以编辑、投票和评论。
       deleted_name: 删除
-      deleted_description: 所有获得/损失的声望将会恢复。
+      deleted_desc: 所有获得/损失的声望将会恢复。
       btn_cancel: 取消
       btn_submit: 提交
       btn_next: 下一步
@@ -888,11 +890,11 @@ ui:
         label: 站点名称
         msg: 不能为空
         text: 站点的名称，作为站点的标题（HTML 的 title 标签）。
-      short_description:
+      short_desc:
         label: 简短的站点标语 (可选)
         msg: 不能为空
         text: 简短的标语，作为网站主页的标题（HTML 的 title 标签）。
-      description:
+      desc:
         label: 网站描述 (可选)
         msg: 不能为空
         text: 使用一句话描述本站，作为网站的描述（HTML 的 meta 标签）。

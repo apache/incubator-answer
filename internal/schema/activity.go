@@ -39,17 +39,17 @@ type ActObjectTimeline struct {
 	ObjectType      string `json:"object_type"`
 	Cancelled       bool   `json:"cancelled"`
 	CancelledAt     int64  `json:"cancelled_at"`
-	UserID          string `json:"-"`
+	UserID          string `json:"id"`
 }
 
 // ActObjectInfo act object info
 type ActObjectInfo struct {
-	Title       string `json:"title"`
-	ObjectType  string `json:"object_type"`
-	QuestionID  string `json:"question_id"`
-	AnswerID    string `json:"answer_id"`
-	Username    string `json:"username"`
-	DisplayName string `json:"display_name"`
+	Title           string `json:"title"`
+	ObjectType      string `json:"object_type"`
+	QuestionID      string `json:"question_id"`
+	AnswerID        string `json:"answer_id"`
+	Username        string `json:"username"`
+	DisplayName     string `json:"display_name"`
 	MainTagSlugName string `json:"main_tag_slug_name"`
 }
 

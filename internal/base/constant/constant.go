@@ -58,4 +58,5 @@ const (
 	SiteTypeWrite     = "write"
 	SiteTypeLegal     = "legal"
 	SiteTypeSeo       = "seo"
+	SiteTypeLogin     = "login"
 )

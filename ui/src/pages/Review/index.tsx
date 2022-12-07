@@ -100,22 +100,23 @@ const Index: FC = () => {
   const editor = unreviewed_info?.user_info;
   const editTime = unreviewed_info?.create_at;
   if (type === 'question') {
-    itemLink = pathFactory.questionLanding(info?.object_id);
+    itemLink = pathFactory.questionLanding(info?.object_id, info?.title);
     itemTitle = info?.title;
     editBadge = t('question_edit');
     editSummary ||= t('edit_question');
   } else if (type === 'answer') {
-    itemLink = pathFactory.answerLanding(
+    itemLink = pathFactory.answerLanding({
       // @ts-ignore
-      unreviewed_info.content.question_id,
-      unreviewed_info.object_id,
-    );
+      questionId: unreviewed_info.content.question_id,
+      questionTitle: info?.title,
+      answerId: unreviewed_info.object_id,
+    });
     itemTitle = info?.title;
     editBadge = t('answer_edit');
     editSummary ||= t('edit_answer');
   } else if (type === 'tag') {
     const tagInfo = unreviewed_info.content as Type.Tag;
-    itemLink = pathFactory.tagLanding(tagInfo);
+    itemLink = pathFactory.tagLanding(tagInfo.slug_name);
     itemTitle = tagInfo.display_name;
     editBadge = t('tag_edit');
     editSummary ||= t('edit_tag');
