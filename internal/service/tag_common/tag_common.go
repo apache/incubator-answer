@@ -24,7 +24,7 @@ type TagCommonRepo interface {
 	AddTagList(ctx context.Context, tagList []*entity.Tag) (err error)
 	GetTagListByIDs(ctx context.Context, ids []string) (tagList []*entity.Tag, err error)
 	GetTagBySlugName(ctx context.Context, slugName string) (tagInfo *entity.Tag, exist bool, err error)
-	GetTagListByName(ctx context.Context, name string, limit int, hasReserved bool) (tagList []*entity.Tag, err error)
+	GetTagListByName(ctx context.Context, name string, hasReserved bool) (tagList []*entity.Tag, err error)
 	GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error)
 	GetTagByID(ctx context.Context, tagID string, includeDeleted bool) (tag *entity.Tag, exist bool, err error)
 	GetTagPage(ctx context.Context, page, pageSize int, tag *entity.Tag, queryCond string) (tagList []*entity.Tag, total int64, err error)
@@ -79,7 +79,7 @@ func NewTagCommonService(
 
 // SearchTagLike get tag list all
 func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []schema.SearchTagLikeResp, err error) {
-	tags, err := ts.tagCommonRepo.GetTagListByName(ctx, req.Tag, 0, req.IsAdmin)
+	tags, err := ts.tagCommonRepo.GetTagListByName(ctx, req.Tag, req.IsAdmin)
 	if err != nil {
 		return
 	}
