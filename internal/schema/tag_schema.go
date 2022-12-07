@@ -66,6 +66,8 @@ type GetTagResp struct {
 	OriginalText string `json:"original_text"`
 	// parsed text
 	ParsedText string `json:"parsed_text"`
+	// description text
+	Description string `json:"description"`
 	// follower amount
 	FollowCount int `json:"follow_count"`
 	// question amount
