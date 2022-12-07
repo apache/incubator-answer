@@ -25,7 +25,7 @@ require (
 	github.com/segmentfault/pacman v1.0.1
 	github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20221018072427-a15dd1434e05
 	github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20221018072427-a15dd1434e05
-	github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221109042453-26158da67632
+	github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221207032920-3662d1e32068
 	github.com/segmentfault/pacman/contrib/log/zap v0.0.0-20221018072427-a15dd1434e05
 	github.com/segmentfault/pacman/contrib/server/http v0.0.0-20221018072427-a15dd1434e05
 	github.com/spf13/cobra v1.6.1
@@ -45,6 +45,7 @@ require (
 require (
 	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
+	github.com/LinkinStars/go-i18n/v2 v2.2.2 // indirect
 	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
@@ -108,7 +109,7 @@ require (
 	golang.org/x/image v0.1.0 // indirect
 	golang.org/x/mod v0.6.0 // indirect
 	golang.org/x/sys v0.1.0 // indirect
-	golang.org/x/text v0.4.0 // indirect
+	golang.org/x/text v0.5.0 // indirect
 	golang.org/x/tools v0.2.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
