@@ -10,7 +10,7 @@
     <link rel="canonical" href="{{.siteinfo.Canonical}}" />
     <link rel="manifest" href="/manifest.json"/>
     <link href="{{.cssPath}}" rel="stylesheet" />
-    <!-- <script defer="defer" src="{{.scriptPath}}"></script> -->
+    <script defer="defer" src="{{.scriptPath}}"></script>
     {{if $.siteinfo.JsonLD }}{{ .siteinfo.JsonLD | templateHTML}}{{end}}
 </head>
 
