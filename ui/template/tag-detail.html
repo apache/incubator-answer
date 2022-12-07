@@ -12,8 +12,9 @@
       </div>
       <div>
         <div class="mb-3 d-flex flex-wrap justify-content-between">
-          <h5 class="fs-5 text-nowrap mb-3 mb-md-0">{{ .questionCount }}
-            {{translator ($.language) ("ui.question.questions")}}</h5>
+          <h5 class="fs-5 text-nowrap mb-3 mb-md-0">
+            {{translator ($.language) "ui.question.x_questions" "count" .questionCount}}
+          </h5>
         </div>
         <div class="border-top border-bottom-0 list-group list-group-flush">
           {{range .questionList}}
