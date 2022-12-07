@@ -1,4 +1,8 @@
-import { FC } from 'react';
+import {
+  ForwardRefRenderFunction,
+  forwardRef,
+  useImperativeHandle,
+} from 'react';
 import { Form, Button, Stack } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -69,8 +73,13 @@ interface IProps {
   schema: JSONSchema;
   uiSchema?: UISchema;
   formData?: Type.FormDataType;
+  hiddenSubmit?: boolean;
   onChange?: (data: Type.FormDataType) => void;
-  onSubmit: (e: React.FormEvent) => void;
+  onSubmit?: (e: React.FormEvent) => void;
+}
+
+interface IRef {
+  validator: () => Promise<boolean>;
 }
 
 /**
@@ -81,13 +90,17 @@ interface IProps {
  * @param onChange change event
  * @param onSubmit submit event
  */
-const SchemaForm: FC<IProps> = ({
-  schema,
-  uiSchema = {},
-  formData = {},
-  onChange,
-  onSubmit,
-}) => {
+const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
+  {
+    schema,
+    uiSchema = {},
+    formData = {},
+    onChange,
+    onSubmit,
+    hiddenSubmit = false,
+  },
+  ref,
+) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'form',
   });
@@ -188,9 +201,7 @@ const SchemaForm: FC<IProps> = ({
     );
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const validator = async (): Promise<boolean> => {
     const errors = requiredValidator();
     if (errors.length > 0) {
       formData = errors.reduce((acc, cur) => {
@@ -207,7 +218,7 @@ const SchemaForm: FC<IProps> = ({
       if (onChange instanceof Function) {
         onChange({ ...formData });
       }
-      return;
+      return false;
     }
     const syncErrors = await syncValidator();
     if (syncErrors.length > 0) {
@@ -223,8 +234,18 @@ const SchemaForm: FC<IProps> = ({
       if (onChange instanceof Function) {
         onChange({ ...formData });
       }
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const isValid = await validator();
+    if (!isValid) {
       return;
     }
+
     Object.keys(formData).forEach((key) => {
       formData[key].isInvalid = false;
       formData[key].errorMsg = '';
@@ -232,7 +253,9 @@ const SchemaForm: FC<IProps> = ({
     if (onChange instanceof Function) {
       onChange(formData);
     }
-    onSubmit(e);
+    if (onSubmit instanceof Function) {
+      onSubmit(e);
+    }
   };
 
   const handleUploadChange = (name: string, value: string) => {
@@ -259,6 +282,10 @@ const SchemaForm: FC<IProps> = ({
       onChange(data);
     }
   };
+
+  useImperativeHandle(ref, () => ({
+    validator,
+  }));
 
   return (
     <Form noValidate onSubmit={handleSubmit}>
@@ -312,7 +339,7 @@ const SchemaForm: FC<IProps> = ({
                       required
                       type={widget}
                       name={key}
-                      id={String(item)}
+                      id={`form-${String(item)}`}
                       label={properties[key].enumNames?.[index]}
                       checked={formData[key]?.value === item}
                       feedback={formData[key]?.errorMsg}
@@ -342,7 +369,7 @@ const SchemaForm: FC<IProps> = ({
               <Form.Label>{title}</Form.Label>
               <Form.Check
                 required
-                id={title}
+                id={`switch-${title}`}
                 name={key}
                 type="switch"
                 label={label}
@@ -419,7 +446,7 @@ const SchemaForm: FC<IProps> = ({
         if (widget === 'textarea') {
           return (
             <Form.Group
-              controlId={key}
+              controlId={`form-${key}`}
               key={key}
               className={classnames('mb-3', formData[key].hidden && 'd-none')}>
               <Form.Label>{title}</Form.Label>
@@ -468,9 +495,11 @@ const SchemaForm: FC<IProps> = ({
           </Form.Group>
         );
       })}
-      <Button variant="primary" type="submit">
-        {t('btn_submit')}
-      </Button>
+      {!hiddenSubmit && (
+        <Button variant="primary" type="submit">
+          {t('btn_submit')}
+        </Button>
+      )}
     </Form>
   );
 };
@@ -488,4 +517,4 @@ export const initFormData = (schema: JSONSchema): Type.FormDataType => {
   return formData;
 };
 
-export default SchemaForm;
+export default forwardRef(SchemaForm);

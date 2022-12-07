@@ -976,6 +976,10 @@ ui:
     tos: Terms of Service
     privacy: Privacy
     seo: SEO
+    customize: Customize
+    themes: Themes
+    css_and_html: CSS/HTML
+    login: Login
   admin:
     admin_header:
       title: Admin
@@ -1079,6 +1083,29 @@ ui:
       change_status: Change status
       change_role: Change role
       show_logs: Show logs
+      add_user: Add user
+      new_password_modal:
+        title: Set new password
+        form:
+          fields:
+            password:
+              label: Password
+        btn_cancel: Cancel
+        btn_submit: Submit
+      user_modal: 
+        title: Add new user
+        form:
+          fields:
+            display_name:
+              label: Display Name
+            email:
+              label: Email
+              msg: Email is not valid.
+            password:
+              label: Password
+        btn_cancel: Cancel
+        btn_submit: Submit
+  
     questions:
       page_title: Questions
       normal: Normal
@@ -1230,6 +1257,41 @@ ui:
       robots:
         label: robots.txt
         text: This will permanently override any related site settings.
+    themes:
+      page_title: Themes
+      themes:
+        label: Themes
+        text: Select an existing theme.
+      navbar_style:
+        label: Navbar Style
+        text: Select an existing theme.
+      primary_color:
+        label: Primary Color
+        text: Modify the colors used by your themes
+    css_and_html:
+      page_title: CSS and HTML
+      custom_css:
+        label: Custom CSS
+        text: This will insert as <link>
+      head:
+        label: Head
+        text: This will insert before </head>
+      header:
+        label: Header
+        text: This will insert after <body>
+      footer:
+        label: Footer
+        text: This will insert before </html>.
+    login:
+      page_title: Login
+      membership:
+        label: Membership
+        labelAlias: Allow new registrations
+        text: Turn off to prevent anyone from creating a new account.
+      private:
+        label: Private
+        text: Only logged in users can access this community.
+
   form:
     empty: cannot be empty
     invalid: is invalid

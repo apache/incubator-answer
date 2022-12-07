@@ -6,6 +6,8 @@ import useChangeModal from './useChangeModal';
 import useEditStatusModal from './useEditStatusModal';
 import useChangeUserRoleModal from './useChangeUserRoleModal';
 import useHeadInfo from './useHeadInfo';
+import useUserModal from './useUserModal';
+import useChangePasswordModal from './useChangePasswordModal';
 
 export {
   useTagModal,
@@ -16,4 +18,6 @@ export {
   useEditStatusModal,
   useChangeUserRoleModal,
   useHeadInfo,
+  useUserModal,
+  useChangePasswordModal,
 };
