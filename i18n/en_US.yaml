@@ -19,14 +19,14 @@ backend:
         other: "User"
       admin:
         other: "Admin"
-      Moderator:
+      moderator:
         other: "Moderator"
     description:
       user:
         other: "Default with no special access."
       admin:
         other: "Have the full power to access the site."
-      Moderator:
+      moderator:
         other: "Has access to all posts except admin settings."
 
   email:
