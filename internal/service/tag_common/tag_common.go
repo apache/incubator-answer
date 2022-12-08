@@ -443,9 +443,10 @@ func (ts *TagCommonService) CheckTagsIsChange(ctx context.Context, tagNameList, 
 	return false
 }
 
-func (ts *TagCommonService) CheckChangeReservedTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
+func (ts *TagCommonService) CheckChangeReservedTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, bool, []string, []string) {
 	reservedTagsMap := make(map[string]bool)
 	needTagsMap := make([]string, 0)
+	notNeedTagsMap := make([]string, 0)
 	for _, tag := range objectTagData {
 		if tag.Reserved {
 			reservedTagsMap[tag.SlugName] = true
@@ -456,14 +457,27 @@ func (ts *TagCommonService) CheckChangeReservedTag(ctx context.Context, oldobjec
 			_, ok := reservedTagsMap[tag.SlugName]
 			if !ok {
 				needTagsMap = append(needTagsMap, tag.SlugName)
+			} else {
+				reservedTagsMap[tag.SlugName] = false
 			}
 		}
 	}
-	if len(needTagsMap) > 0 {
-		return false, needTagsMap
+
+	for k, v := range reservedTagsMap {
+		if v {
+			notNeedTagsMap = append(notNeedTagsMap, k)
+		}
 	}
 
-	return true, []string{}
+	if len(needTagsMap) > 0 {
+		return false, true, needTagsMap, []string{}
+	}
+
+	if len(notNeedTagsMap) > 0 {
+		return true, false, []string{}, notNeedTagsMap
+	}
+
+	return true, true, []string{}, []string{}
 }
 
 // ObjectChangeTag change object tag list
