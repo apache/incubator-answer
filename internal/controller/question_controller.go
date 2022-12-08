@@ -296,6 +296,7 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		permission.QuestionEdit,
 		permission.QuestionDelete,
 		permission.QuestionEditWithoutReview,
+		permission.TagUseReservedTag,
 	}, req.ID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -304,16 +305,18 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	req.CanEdit = canList[0]
 	req.CanDelete = canList[1]
 	req.NoNeedReview = canList[2]
-
-	req.CanClose = middleware.GetIsAdminFromContext(ctx)
-	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
+	req.CanUseReservedTag = canList[3]
 	if !req.CanEdit {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
-	_, err = qc.questionService.UpdateQuestion(ctx, req)
-	handler.HandleResponse(ctx, err, &schema.UpdateQuestionResp{WaitForReview: !req.NoNeedReview})
+	resp, err := qc.questionService.UpdateQuestion(ctx, req)
+	if err != nil {
+		handler.HandleResponse(ctx, err, resp)
+		return
+	}
+	handler.HandleResponse(ctx, nil, &schema.UpdateQuestionResp{WaitForReview: !req.NoNeedReview})
 }
 
 // CloseMsgList close question msg list

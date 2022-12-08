@@ -216,6 +216,9 @@ func (ts *TagService) UpdateTagSynonym(ctx context.Context, req *schema.UpdateTa
 
 	// find all exist tag
 	for _, item := range req.SynonymTagList {
+		if item.SlugName == mainTagInfo.SlugName {
+			return errors.BadRequest(reason.TagCannotSetSynonymAsItself)
+		}
 		addSynonymTagList = append(addSynonymTagList, item.SlugName)
 	}
 	tagListInDB, err := ts.tagCommonService.GetTagListByNames(ctx, addSynonymTagList)

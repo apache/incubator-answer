@@ -109,6 +109,8 @@ backend:
         other: "Should not contain synonym tags."
       cannot_update:
         other: "No permission to update."
+      cannot_set_synonym_as_itself:
+        other: "You cannot set the synonym of the current tag as itself."
     theme:
       not_found:
         other: "Theme not found."
