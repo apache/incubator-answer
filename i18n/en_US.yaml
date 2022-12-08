@@ -1185,7 +1185,8 @@ ui:
         text: Provide email address that will receive test sends.
         msg: Test email recipients is invalid
       smtp_authentication:
-        label: SMTP Authentication
+        label: Enable authentication
+        title: SMTP Authentication
         msg: SMTP authentication cannot be empty.
         "yes": "Yes"
         "no": "No"

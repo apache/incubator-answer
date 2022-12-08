@@ -46,7 +46,8 @@ const Smtp: FC = () => {
       },
       smtp_authentication: {
         type: 'boolean',
-        title: t('smtp_authentication.label'),
+        title: t('smtp_authentication.title'),
+        label: t('smtp_authentication.label'),
         enum: [true, false],
         enumNames: [t('smtp_authentication.yes'), t('smtp_authentication.no')],
       },
