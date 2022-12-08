@@ -34,7 +34,7 @@ const initFormData = {
     errorMsg: '',
   },
 };
-const Ask = () => {
+const Index = () => {
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const { aid = '', qid = '' } = useParams();
   const [focusType, setForceType] = useState('');
@@ -247,7 +247,7 @@ const Ask = () => {
             <Card.Body
               className="fmt small"
               dangerouslySetInnerHTML={{
-                __html: t('description', { keyPrefix: 'how_to_format' }),
+                __html: t('desc', { keyPrefix: 'how_to_format' }),
               }}
             />
           </Card>
@@ -257,4 +257,4 @@ const Ask = () => {
   );
 };
 
-export default Ask;
+export default Index;

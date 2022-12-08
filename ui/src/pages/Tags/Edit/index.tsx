@@ -40,7 +40,7 @@ const initFormData = {
     errorMsg: '',
   },
 };
-const Ask = () => {
+const Index = () => {
   const { is_admin = false } = loggedUserInfoStore((state) => state.user);
 
   const { tagId } = useParams();
@@ -269,4 +269,4 @@ const Ask = () => {
   );
 };
 
-export default Ask;
+export default Index;
