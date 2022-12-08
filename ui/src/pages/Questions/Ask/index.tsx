@@ -458,7 +458,7 @@ const Ask = () => {
           </Form>
         </Col>
         <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
-          <Card className="mb-4">
+          <Card>
             <Card.Header>
               {t('title', { keyPrefix: 'how_to_format' })}
             </Card.Header>
