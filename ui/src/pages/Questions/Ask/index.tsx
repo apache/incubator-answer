@@ -141,22 +141,22 @@ const Ask = () => {
     });
 
   const checkValidated = (): boolean => {
-    let bol = true;
+    const bol = true;
     const { title, content, tags, answer } = formData;
     if (!title.value) {
-      bol = false;
-      formData.title = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('form.fields.title.msg.empty'),
-      };
+      // bol = false;
+      // formData.title = {
+      //   value: '',
+      //   isInvalid: true,
+      //   errorMsg: t('form.fields.title.msg.empty'),
+      // };
     } else if (Array.from(title.value).length > 150) {
-      bol = false;
-      formData.title = {
-        value: title.value,
-        isInvalid: true,
-        errorMsg: t('form.fields.title.msg.range'),
-      };
+      // bol = false;
+      // formData.title = {
+      //   value: title.value,
+      //   isInvalid: true,
+      //   errorMsg: t('form.fields.title.msg.range'),
+      // };
     } else {
       formData.title = {
         value: title.value,
@@ -166,12 +166,12 @@ const Ask = () => {
     }
 
     if (!content.value) {
-      bol = false;
-      formData.content = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('form.fields.body.msg.empty'),
-      };
+      // bol = false;
+      // formData.content = {
+      //   value: '',
+      //   isInvalid: true,
+      //   errorMsg: t('form.fields.body.msg.empty'),
+      // };
     } else {
       formData.content = {
         value: content.value,
@@ -181,12 +181,12 @@ const Ask = () => {
     }
 
     if (tags.value.length === 0) {
-      bol = false;
-      formData.tags = {
-        value: [],
-        isInvalid: true,
-        errorMsg: t('form.fields.tags.msg.empty'),
-      };
+      // bol = false;
+      // formData.tags = {
+      //   value: [],
+      //   isInvalid: true,
+      //   errorMsg: t('form.fields.tags.msg.empty'),
+      // };
     } else {
       formData.tags = {
         value: tags.value,
@@ -196,12 +196,12 @@ const Ask = () => {
     }
     if (checked) {
       if (!answer.value) {
-        bol = false;
-        formData.answer = {
-          value: '',
-          isInvalid: true,
-          errorMsg: t('form.fields.answer.msg.empty'),
-        };
+        // bol = false;
+        // formData.answer = {
+        //   value: '',
+        //   isInvalid: true,
+        //   errorMsg: t('form.fields.answer.msg.empty'),
+        // };
       } else {
         formData.answer = {
           value: answer.value,

@@ -47,7 +47,7 @@ const Index: FC = () => {
           {t('save')}
         </Button>
       </Card.Header>
-      <Card.Body className="pb-2">
+      <Card.Body className="my-n1">
         <TagSelector
           value={followingTags}
           onChange={handleTagsChange}

@@ -130,7 +130,9 @@ const Users: FC = () => {
             )}
 
             <th style={{ width: '12%' }}>{t('status')}</th>
-            <th style={{ width: '12%' }}>{t('role')}</th>
+            {curFilter !== 'suspended' && curFilter !== 'deleted' && (
+              <th style={{ width: '12%' }}>{t('role')}</th>
+            )}
             {curFilter !== 'deleted' ? (
               <th style={{ width: '8%' }} className="text-end">
                 {t('action')}
@@ -172,11 +174,13 @@ const Users: FC = () => {
                     {t(user.status)}
                   </span>
                 </td>
-                <td>
-                  <span className="badge text-bg-light">
-                    {t(user.role_name)}
-                  </span>
-                </td>
+                {curFilter !== 'suspended' && curFilter !== 'deleted' && (
+                  <td>
+                    <span className="badge text-bg-light">
+                      {t(user.role_name)}
+                    </span>
+                  </td>
+                )}
                 {curFilter !== 'deleted' ? (
                   <td className="text-end">
                     <Dropdown>
