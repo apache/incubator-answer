@@ -51,6 +51,8 @@ type QuestionPermission struct {
 	CanClose bool `json:"-"`
 	// whether user can reopen it
 	CanReopen bool `json:"-"`
+	// whether user can use reserved it
+	CanUseReservedTag bool `json:"-"`
 }
 
 type CheckCanQuestionUpdate struct {
@@ -76,7 +78,6 @@ type QuestionUpdate struct {
 	EditSummary string `validate:"omitempty" json:"edit_summary"`
 	// user id
 	UserID       string `json:"-"`
-	IsAdmin      bool   `json:"-"`
 	NoNeedReview bool   `json:"-"`
 	QuestionPermission
 }

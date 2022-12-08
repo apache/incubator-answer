@@ -34,4 +34,5 @@ const (
 	AnswerAudit               = "answer.audit"
 	QuestionAudit             = "question.audit"
 	TagAudit                  = "tag.audit"
+	TagUseReservedTag         = "tag.use_reserved_tag"
 )

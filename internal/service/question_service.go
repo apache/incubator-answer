@@ -352,10 +352,8 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return questionInfo, tagerr
 	}
 
-	// If it's not admin
-	if !req.IsAdmin {
-		//CheckChangeTag
-
+	// if user can not use reserved tag, old reserved tag can not be removed and new reserved tag can not be added.
+	if !req.CanUseReservedTag {
 		CheckTag, CheckTaglist := qs.CheckChangeReservedTag(ctx, oldTags, Tags)
 		if !CheckTag {
 			errMsg := fmt.Sprintf(`The reserved tag "%s" must be present.`,
@@ -393,7 +391,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		Log:      req.EditSummary,
 	}
 
-	if req.NoNeedReview || req.IsAdmin || dbinfo.UserID == req.UserID {
+	if req.NoNeedReview {
 		canUpdate = true
 	}
 
