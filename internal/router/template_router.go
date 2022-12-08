@@ -41,6 +41,6 @@ func (a *TemplateRouter) RegisterTemplateRouter(r *gin.RouterGroup) {
 
 	r.GET("/tags", a.templateController.TagList)
 	r.GET("/tags/:tag", a.templateController.TagInfo)
-	// r.GET("/users/:username", a.templateController.UserInfo)
+	r.GET("/users/:username", a.templateController.UserInfo)
 	r.GET("/404", a.templateController.Page404)
 }
