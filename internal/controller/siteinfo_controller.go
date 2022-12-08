@@ -3,6 +3,7 @@ package controller
 import (
 	"net/http"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
@@ -78,13 +79,17 @@ func (sc *SiteinfoController) GetSiteLegalInfo(ctx *gin.Context) {
 
 // GetManifestJson get manifest.json
 func (sc *SiteinfoController) GetManifestJson(ctx *gin.Context) {
+	favicon := "favicon.ico"
 	resp := &schema.GetManifestJsonResp{
-		ShortName: "Answer",
-		Name:      "Answer.dev",
+		ManifestVersion: 3,
+		Version:         constant.Version,
+		ShortName:       "Answer",
+		Name:            "Answer.dev",
 		Icons: map[string]string{
-			"src":   "favicon.ico",
-			"sizes": "64x64 32x32 24x24 16x16",
-			"type":  "image/x-icon",
+			"16":  favicon,
+			"32":  favicon,
+			"48":  favicon,
+			"128": favicon,
 		},
 		StartUrl:        ".",
 		Display:         "standalone",
@@ -95,7 +100,10 @@ func (sc *SiteinfoController) GetManifestJson(ctx *gin.Context) {
 	if err != nil {
 		log.Error(err)
 	} else if len(branding.Favicon) > 0 {
-		resp.Icons["scr"] = branding.Favicon
+		resp.Icons["16"] = branding.Favicon
+		resp.Icons["32"] = branding.Favicon
+		resp.Icons["48"] = branding.Favicon
+		resp.Icons["128"] = branding.Favicon
 	}
 	ctx.JSON(http.StatusOK, resp)
 }
