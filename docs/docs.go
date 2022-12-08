@@ -6400,11 +6400,7 @@ const docTemplate = `{
                 },
                 "user_info": {
                     "description": "user info",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/schema.UserBasicInfo"
-                        }
-                    ]
+                    "$ref": "#/definitions/schema.UserBasicInfo"
                 },
                 "vote_count": {
                     "type": "integer"
@@ -6416,11 +6412,7 @@ const docTemplate = `{
             "properties": {
                 "object": {
                     "description": "this object",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/schema.SearchObject"
-                        }
-                    ]
+                    "$ref": "#/definitions/schema.SearchObject"
                 },
                 "object_type": {
                     "description": "object_type",
@@ -6818,11 +6810,7 @@ const docTemplate = `{
             "properties": {
                 "avatar": {
                     "description": "avatar",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/schema.AvatarInfo"
-                        }
-                    ]
+                    "$ref": "#/definitions/schema.AvatarInfo"
                 },
                 "bio": {
                     "description": "bio",

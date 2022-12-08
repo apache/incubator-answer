@@ -150,16 +150,10 @@ func (rs *RankService) CheckVotePermission(ctx context.Context, userID, objectID
 	if !exist {
 		return can, nil
 	}
-	// TODO administrator have all permissions
-	//if userInfo.IsAdmin {
-	//	return true, nil
-	//}
-
 	objectInfo, err := rs.objectInfoService.GetInfo(ctx, objectID)
 	if err != nil {
 		return can, err
 	}
-
 	action := ""
 	switch objectInfo.ObjectType {
 	case constant.QuestionObjectType:
@@ -181,6 +175,11 @@ func (rs *RankService) CheckVotePermission(ctx context.Context, userID, objectID
 			action = permission.CommentVoteDown
 		}
 	}
+	powerMapping := rs.getUserPowerMapping(ctx, userID)
+	if powerMapping[action] {
+		return true, nil
+	}
+
 	meetRank := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
 	return meetRank, nil
 }

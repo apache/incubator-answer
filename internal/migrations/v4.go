@@ -121,6 +121,7 @@ func addRoleFeatures(x *xorm.Engine) error {
 		{RoleID: 2, PowerType: permission.AnswerAudit},
 		{RoleID: 2, PowerType: permission.QuestionAudit},
 		{RoleID: 2, PowerType: permission.TagAudit},
+		{RoleID: 2, PowerType: permission.TagUseReservedTag},
 
 		{RoleID: 3, PowerType: permission.QuestionAdd},
 		{RoleID: 3, PowerType: permission.QuestionEdit},
@@ -154,6 +155,7 @@ func addRoleFeatures(x *xorm.Engine) error {
 		{RoleID: 3, PowerType: permission.AnswerAudit},
 		{RoleID: 3, PowerType: permission.QuestionAudit},
 		{RoleID: 3, PowerType: permission.TagAudit},
+		{RoleID: 3, PowerType: permission.TagUseReservedTag},
 	}
 
 	// insert default powers
@@ -190,6 +192,7 @@ func addRoleFeatures(x *xorm.Engine) error {
 	defaultConfigTable := []*entity.Config{
 		{ID: 115, Key: "rank.question.close", Value: `-1`},
 		{ID: 116, Key: "rank.question.reopen", Value: `-1`},
+		{ID: 117, Key: "rank.tag.use_reserved_tag", Value: `-1`},
 	}
 	for _, c := range defaultConfigTable {
 		exist, err := x.Get(&entity.Config{ID: c.ID, Key: c.Key})
