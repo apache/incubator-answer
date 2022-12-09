@@ -15,6 +15,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/pkg/htmltext"
+	"github.com/answerdev/answer/pkg/obj"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
@@ -126,10 +127,51 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	})
 }
 
+func (tc *TemplateController) QuestionInfo301Jump(ctx *gin.Context, siteInfo *schema.TemplateSiteInfoResp) (jump bool, url string) {
+	id := ctx.Param("id")
+	title := ctx.Param("title")
+	titleIsAnswerID := false
+
+	objectType, objectTypeerr := obj.GetObjectTypeStrByObjectID(title)
+	if objectTypeerr == nil {
+		if objectType == constant.AnswerObjectType {
+			titleIsAnswerID = true
+		}
+	}
+
+	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
+	if siteInfo.General.PermaLink == schema.PermaLinkQuestionID {
+		//not have title
+		if titleIsAnswerID || len(title) == 0 {
+			return false, ""
+		}
+		return true, url
+	} else {
+		//have title
+		if len(title) > 0 && !titleIsAnswerID {
+			return false, ""
+		}
+		detail, err := tc.templateRenderController.QuestionDetail(ctx, id)
+		if err != nil {
+			tc.Page404(ctx)
+			return
+		}
+		url = fmt.Sprintf("%s/%s", url, htmltext.UrlTitle(detail.Title))
+		return true, url
+	}
+}
+
 // QuestionInfo question and answers info
 func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	id := ctx.Param("id")
 	answerid := ctx.Param("answerid")
+
+	siteInfo := tc.SiteInfo(ctx)
+	jump, jumpurl := tc.QuestionInfo301Jump(ctx, siteInfo)
+	if jump {
+		ctx.Redirect(http.StatusMovedPermanently, jumpurl)
+		return
+	}
 
 	detail, err := tc.templateRenderController.QuestionDetail(ctx, id)
 	if err != nil {
@@ -161,7 +203,6 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
-	siteInfo := tc.SiteInfo(ctx)
 	encodeTitle := htmltext.UrlTitle(detail.Title)
 	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
 	if siteInfo.General.PermaLink == schema.PermaLinkQuestionID {
