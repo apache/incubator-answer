@@ -180,15 +180,23 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	jsonLD.MainEntity.Author.Name = detail.UserInfo.DisplayName
 	answerList := make([]*schema.SuggestedAnswerItem, 0)
 	for _, answer := range answers {
-		item := &schema.SuggestedAnswerItem{}
-		item.Type = "Answer"
-		item.Text = htmltext.ClearText(answer.HTML)
-		item.DateCreated = time.Unix(answer.CreateTime, 0)
-		item.UpvoteCount = answer.VoteCount
-		item.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
-		item.Author.Type = "Person"
-		item.Author.Name = answer.UserInfo.DisplayName
-		answerList = append(answerList, item)
+		if answer.Adopted == schema.AnswerAdoptedEnable {
+			jsonLD.MainEntity.AcceptedAnswer.Type = "Answer"
+			jsonLD.MainEntity.AcceptedAnswer.Text = htmltext.ClearText(answer.HTML)
+			jsonLD.MainEntity.AcceptedAnswer.UpvoteCount = answer.VoteCount
+			jsonLD.MainEntity.AcceptedAnswer.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
+		} else {
+			item := &schema.SuggestedAnswerItem{}
+			item.Type = "Answer"
+			item.Text = htmltext.ClearText(answer.HTML)
+			item.DateCreated = time.Unix(answer.CreateTime, 0)
+			item.UpvoteCount = answer.VoteCount
+			item.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
+			item.Author.Type = "Person"
+			item.Author.Name = answer.UserInfo.DisplayName
+			answerList = append(answerList, item)
+		}
+
 	}
 	jsonLD.MainEntity.SuggestedAnswer = answerList
 	jsonLDStr, err := json.Marshal(jsonLD)
