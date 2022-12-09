@@ -252,8 +252,10 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/tags/%s", siteInfo.General.SiteUrl, tag)
-
 	siteInfo.Description = htmltext.FetchExcerpt(taginifo.ParsedText, "...", 240)
+	if len(taginifo.ParsedText) == 0 {
+		siteInfo.Description = "The tag has no description."
+	}
 	siteInfo.Keywords = taginifo.DisplayName
 
 	tc.html(ctx, http.StatusOK, "tag-detail.html", siteInfo, gin.H{
