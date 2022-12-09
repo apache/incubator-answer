@@ -5,6 +5,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/gosimple/slug"
 	strip "github.com/grokify/html-strip-tags-go"
 )
 
@@ -44,7 +45,8 @@ func ClearText(html string) (text string) {
 
 func UrlTitle(title string) (text string) {
 	title = ClearEmoji(title)
-	title = strings.ReplaceAll(title, " ", "-")
+	title = slug.Make(title)
+	// title = strings.ReplaceAll(title, " ", "-")
 	title = url.QueryEscape(title)
 	return title
 }

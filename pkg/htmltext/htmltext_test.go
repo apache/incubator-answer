@@ -1,8 +1,10 @@
 package htmltext
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/davecgh/go-spew/spew"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestClearText(t *testing.T) {
@@ -48,4 +50,16 @@ func TestFetchExcerpt(t *testing.T) {
 	expected = "hello你好😂..."
 	text = FetchExcerpt("<p>hello你好😂world</p>", "...", 8)
 	assert.Equal(t, expected, text)
+}
+
+func TestUrlTitle(t *testing.T) {
+	list := []string{
+		"hello你好😂...",
+		"这是一个，标题，title",
+	}
+	for _, title := range list {
+		formatTitle := UrlTitle(title)
+		spew.Dump(formatTitle)
+
+	}
 }
