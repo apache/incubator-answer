@@ -77,9 +77,9 @@ const Index: FC = () => {
   useEffect(() => {
     getSeoSetting().then((setting) => {
       if (setting) {
-        const formMeta = { ...formData };
-        formMeta.robots.value = setting.robots;
-        setFormData(formMeta);
+        // const formMeta = { ...formData };
+        // formMeta.robots.value = setting.robots;
+        // setFormData(formMeta);
       }
     });
   }, []);
