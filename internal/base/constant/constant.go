@@ -32,6 +32,8 @@ const (
 var (
 	Version string = ""
 
+	PathIgnoreMap map[string]bool
+
 	ObjectTypeStrMapping = map[string]int{
 		QuestionObjectType:   1,
 		AnswerObjectType:     2,
@@ -62,3 +64,11 @@ const (
 	SiteTypeSeo       = "seo"
 	SiteTypeLogin     = "login"
 )
+
+func ExistInPathIgnore(name string) bool {
+	_, ok := PathIgnoreMap[name]
+	if ok {
+		return true
+	}
+	return false
+}

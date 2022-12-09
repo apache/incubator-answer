@@ -5,6 +5,7 @@ import (
 	"io/fs"
 	"math"
 	"os"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -69,20 +70,41 @@ func NewHTTPServer(debug bool,
 	answerRouter.RegisterAnswerCmsAPIRouter(cmsauthV1)
 
 	funcMap := template.FuncMap{
+		"replaceHTMLTag": func(src string, tags ...string) string {
+			p := `(?U)<(\d+)>.+</(\d+)>`
+
+			re := regexp.MustCompile(p)
+			ms := re.FindAllStringSubmatch(src, -1)
+			for _, mi := range ms {
+				if mi[1] == mi[2] {
+					i, err := strconv.Atoi(mi[1])
+					if err != nil || len(tags) < i {
+						break
+					}
+
+					src = strings.ReplaceAll(src, mi[0], tags[i-1])
+				}
+			}
+
+			return src
+		},
+		"join": func(sep string, elems ...string) string {
+			return strings.Join(elems, sep)
+		},
 		"templateHTML": func(data string) template.HTML {
 			return template.HTML(data)
 		},
 		"translator": func(la i18n.Language, data string, params ...interface{}) string {
-			// todo
-			/*if len(params) > 0 && len(params)%2 == 0 {
+			trans := translator.GlobalTrans.Tr(la, data)
+
+			if len(params) > 0 && len(params)%2 == 0 {
 				for i := 0; i < len(params); i += 2 {
 					k := converter.InterfaceToString(params[i])
 					v := converter.InterfaceToString(params[i+1])
-					data = strings.ReplaceAll(data, "{{ "+k+" }}", v)
+					trans = strings.ReplaceAll(trans, "{{ "+k+" }}", v)
 				}
-			}*/
+			}
 
-			trans := translator.GlobalTrans.Tr(la, data)
 			return trans
 		},
 		"timeFormatISO": func(tz string, timestamp int64) string {
@@ -120,7 +142,7 @@ func NewHTTPServer(debug bool,
 			}
 
 			if between >= 3600 && between < 3600*24 {
-				h := math.Floor(float64(between / 60))
+				h := math.Floor(float64(between / 3600))
 				trans = translator.GlobalTrans.Tr(la, "ui.dates.x_hours_ago")
 				return strings.ReplaceAll(trans, "{{count}}", strconv.FormatFloat(h, 'f', 0, 64))
 			}

@@ -176,23 +176,6 @@ definitions:
     - object_id
     - report_type
     type: object
-  schema.AddUserReq:
-    properties:
-      display_name:
-        maxLength: 30
-        type: string
-      email:
-        maxLength: 500
-        type: string
-      password:
-        maxLength: 32
-        minLength: 8
-        type: string
-    required:
-    - display_name
-    - email
-    - password
-    type: object
   schema.AdminSetAnswerStatusRequest:
     properties:
       answer_id:
@@ -667,6 +650,9 @@ definitions:
       created_at:
         description: created time
         type: integer
+      description:
+        description: description text
+        type: string
       display_name:
         description: display name
         type: string
@@ -1257,17 +1243,6 @@ definitions:
     - permalink
     - site_url
     type: object
-  schema.SiteInfoResp:
-    properties:
-      branding:
-        $ref: '#/definitions/schema.SiteBrandingResp'
-      general:
-        $ref: '#/definitions/schema.SiteGeneralResp'
-      interface:
-        $ref: '#/definitions/schema.SiteInterfaceResp'
-      login:
-        $ref: '#/definitions/schema.SiteLoginResp'
-    type: object
   schema.SiteInterfaceReq:
     properties:
       language:
@@ -1321,20 +1296,6 @@ definitions:
         type: string
       terms_of_service_parsed_text:
         type: string
-    type: object
-  schema.SiteLoginReq:
-    properties:
-      allow_new_registrations:
-        type: boolean
-      login_required:
-        type: boolean
-    type: object
-  schema.SiteLoginResp:
-    properties:
-      allow_new_registrations:
-        type: boolean
-      login_required:
-        type: boolean
     type: object
   schema.SiteSeoReq:
     properties:
@@ -1571,18 +1532,6 @@ definitions:
         type: string
     required:
     - language
-    type: object
-  schema.UpdateUserPasswordReq:
-    properties:
-      password:
-        maxLength: 32
-        minLength: 8
-        type: string
-      user_id:
-        type: string
-    required:
-    - password
-    - user_id
     type: object
   schema.UpdateUserRoleReq:
     properties:
@@ -2276,47 +2225,6 @@ paths:
       summary: update site legal info
       tags:
       - admin
-  /answer/admin/api/siteinfo/login:
-    get:
-      description: get site info login config
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/handler.RespBody'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.SiteLoginResp'
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: get site info login config
-      tags:
-      - admin
-    put:
-      description: update site login
-      parameters:
-      - description: login info
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/schema.SiteLoginReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
-      summary: update site login
-      tags:
-      - admin
   /answer/admin/api/siteinfo/seo:
     get:
       description: get site seo information
@@ -2412,54 +2320,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: Get theme options
-      tags:
-      - admin
-  /answer/admin/api/user:
-    post:
-      consumes:
-      - application/json
-      description: add user
-      parameters:
-      - description: user
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/schema.AddUserReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
-      summary: add user
-      tags:
-      - admin
-  /answer/admin/api/user/password:
-    put:
-      consumes:
-      - application/json
-      description: update user password
-      parameters:
-      - description: user
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/schema.UpdateUserPasswordReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
-      summary: update user password
       tags:
       - admin
   /answer/admin/api/user/role:
@@ -3964,7 +3824,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.SiteInfoResp'
+                  $ref: '#/definitions/schema.SiteGeneralResp'
               type: object
       summary: get site info
       tags:

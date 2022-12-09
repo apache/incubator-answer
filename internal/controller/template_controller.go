@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/handler"
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
@@ -78,7 +79,9 @@ func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.TemplateSiteInf
 
 // Index question list
 func (tc *TemplateController) Index(ctx *gin.Context) {
-	req := &schema.QuestionSearch{}
+	req := &schema.QuestionSearch{
+		Order: "newest",
+	}
 	if handler.BindAndCheck(ctx, req) {
 		tc.Page404(ctx)
 		return
@@ -101,7 +104,9 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 }
 
 func (tc *TemplateController) QuestionList(ctx *gin.Context) {
-	req := &schema.QuestionSearch{}
+	req := &schema.QuestionSearch{
+		Order: "newest",
+	}
 	if handler.BindAndCheck(ctx, req) {
 		tc.Page404(ctx)
 		return
@@ -261,15 +266,23 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 
 // UserInfo user info
 func (tc *TemplateController) UserInfo(ctx *gin.Context) {
-	// urlPath := ctx.Request.URL.Path
-	// filePath := ""
-	// switch urlPath {
-	// case "/users/login":
-	// 	filePath = "build/index.html"
-	// case "/users/register":
-	// 	filePath = "build/index.html"
-	// default:
 	username := ctx.Param("username")
+	if username == "" {
+		tc.Page404(ctx)
+		return
+	}
+	exist := constant.ExistInPathIgnore(username)
+	if exist {
+		file, err := ui.Build.ReadFile("build/index.html")
+		if err != nil {
+			log.Error(err)
+			tc.Page404(ctx)
+			return
+		}
+		ctx.Header("content-type", "text/html;charset=utf-8")
+		ctx.String(http.StatusOK, string(file))
+		return
+	}
 	req := &schema.GetOtherUserInfoByUsernameReq{}
 	req.Username = username
 	userinfo, err := tc.templateRenderController.UserInfo(ctx, req)
@@ -288,16 +301,6 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 		"userinfo": userinfo,
 		"bio":      template.HTML(userinfo.Info.BioHTML),
 	})
-	// }
-
-	// file, err := ui.Build.ReadFile(filePath)
-	// if err != nil {
-	// 	log.Error(err)
-	// 	ctx.Status(http.StatusNotFound)
-	// 	return
-	// }
-	// ctx.Header("content-type", "text/html;charset=utf-8")
-	// ctx.String(http.StatusOK, string(file))
 
 }
 

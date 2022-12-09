@@ -51,6 +51,8 @@ type QuestionPermission struct {
 	CanClose bool `json:"-"`
 	// whether user can reopen it
 	CanReopen bool `json:"-"`
+	// whether user can use reserved it
+	CanUseReservedTag bool `json:"-"`
 }
 
 type CheckCanQuestionUpdate struct {
@@ -76,7 +78,6 @@ type QuestionUpdate struct {
 	EditSummary string `validate:"omitempty" json:"edit_summary"`
 	// user id
 	UserID       string `json:"-"`
-	IsAdmin      bool   `json:"-"`
 	NoNeedReview bool   `json:"-"`
 	QuestionPermission
 }
@@ -97,6 +98,7 @@ type QuestionInfo struct {
 	Title                string         `json:"title" xorm:"title"`                         // title
 	Content              string         `json:"content" xorm:"content"`                     // content
 	HTML                 string         `json:"html" xorm:"html"`                           // html
+	Description          string         `json:"description"`                                //description
 	Tags                 []*TagResp     `json:"tags" `                                      // tags
 	ViewCount            int            `json:"view_count" xorm:"view_count"`               // view_count
 	UniqueViewCount      int            `json:"unique_view_count" xorm:"unique_view_count"` // unique_view_count

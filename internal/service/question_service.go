@@ -23,6 +23,7 @@ import (
 	"github.com/answerdev/answer/internal/service/revision_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/i18n"
@@ -351,14 +352,23 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return questionInfo, tagerr
 	}
 
-	// If it's not admin
-	if !req.IsAdmin {
-		//CheckChangeTag
-
-		CheckTag, CheckTaglist := qs.CheckChangeReservedTag(ctx, oldTags, Tags)
-		if !CheckTag {
+	// if user can not use reserved tag, old reserved tag can not be removed and new reserved tag can not be added.
+	if !req.CanUseReservedTag {
+		CheckOldTag, CheckNewTag, CheckOldTaglist, CheckNewTaglist := qs.CheckChangeReservedTag(ctx, oldTags, Tags)
+		if !CheckOldTag {
 			errMsg := fmt.Sprintf(`The reserved tag "%s" must be present.`,
-				strings.Join(CheckTaglist, ","))
+				strings.Join(CheckOldTaglist, ","))
+			errorlist := make([]*validator.FormErrorField, 0)
+			errorlist = append(errorlist, &validator.FormErrorField{
+				ErrorField: "tags",
+				ErrorMsg:   errMsg,
+			})
+			err = errors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
+			return errorlist, err
+		}
+		if !CheckNewTag {
+			errMsg := fmt.Sprintf(`"%s" can only be used by moderators.`,
+				strings.Join(CheckNewTaglist, ","))
 			errorlist := make([]*validator.FormErrorField, 0)
 			errorlist = append(errorlist, &validator.FormErrorField{
 				ErrorField: "tags",
@@ -392,7 +402,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		Log:      req.EditSummary,
 	}
 
-	if req.NoNeedReview || req.IsAdmin || dbinfo.UserID == req.UserID {
+	if req.NoNeedReview {
 		canUpdate = true
 	}
 
@@ -454,6 +464,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 	if question.Status == entity.QuestionStatusClosed {
 		per.CanClose = false
 	}
+	question.Description = htmltext.FetchExcerpt(question.HTML, "...", 240)
 	question.MemberActions = permission.GetQuestionPermission(ctx, userID, question.UserID,
 		per.CanEdit, per.CanDelete, per.CanClose, per.CanReopen)
 	return question, nil
@@ -474,7 +485,7 @@ func (qs *QuestionService) ChangeTag(ctx context.Context, objectTagData *schema.
 	return qs.tagCommon.ObjectChangeTag(ctx, objectTagData)
 }
 
-func (qs *QuestionService) CheckChangeReservedTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, []string) {
+func (qs *QuestionService) CheckChangeReservedTag(ctx context.Context, oldobjectTagData, objectTagData []*entity.Tag) (bool, bool, []string, []string) {
 	return qs.tagCommon.CheckChangeReservedTag(ctx, oldobjectTagData, objectTagData)
 }
 

@@ -822,77 +822,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/admin/api/siteinfo/login": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "get site info login config",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "get site info login config",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/handler.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/schema.SiteLoginResp"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "update site login",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "update site login",
-                "parameters": [
-                    {
-                        "description": "login info",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schema.SiteLoginReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
-                        }
-                    }
-                }
-            }
-        },
         "/answer/admin/api/siteinfo/seo": {
             "get": {
                 "security": [
@@ -1050,84 +979,6 @@ const docTemplate = `{
                     "admin"
                 ],
                 "summary": "Get theme options",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
-                        }
-                    }
-                }
-            }
-        },
-        "/answer/admin/api/user": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "add user",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "add user",
-                "parameters": [
-                    {
-                        "description": "user",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schema.AddUserReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
-                        }
-                    }
-                }
-            }
-        },
-        "/answer/admin/api/user/password": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "update user password",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "admin"
-                ],
-                "summary": "update user password",
-                "parameters": [
-                    {
-                        "description": "user",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schema.UpdateUserPasswordReq"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -3605,7 +3456,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.SiteInfoResp"
+                                            "$ref": "#/definitions/schema.SiteGeneralResp"
                                         }
                                     }
                                 }
@@ -5208,29 +5059,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.AddUserReq": {
-            "type": "object",
-            "required": [
-                "display_name",
-                "email",
-                "password"
-            ],
-            "properties": {
-                "display_name": {
-                    "type": "string",
-                    "maxLength": 30
-                },
-                "email": {
-                    "type": "string",
-                    "maxLength": 500
-                },
-                "password": {
-                    "type": "string",
-                    "maxLength": 32,
-                    "minLength": 8
-                }
-            }
-        },
         "schema.AdminSetAnswerStatusRequest": {
             "type": "object",
             "properties": {
@@ -5895,6 +5723,10 @@ const docTemplate = `{
                 "created_at": {
                     "description": "created time",
                     "type": "integer"
+                },
+                "description": {
+                    "description": "description text",
+                    "type": "string"
                 },
                 "display_name": {
                     "description": "display name",
@@ -6710,23 +6542,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.SiteInfoResp": {
-            "type": "object",
-            "properties": {
-                "branding": {
-                    "$ref": "#/definitions/schema.SiteBrandingResp"
-                },
-                "general": {
-                    "$ref": "#/definitions/schema.SiteGeneralResp"
-                },
-                "interface": {
-                    "$ref": "#/definitions/schema.SiteInterfaceResp"
-                },
-                "login": {
-                    "$ref": "#/definitions/schema.SiteLoginResp"
-                }
-            }
-        },
         "schema.SiteInterfaceReq": {
             "type": "object",
             "required": [
@@ -6802,28 +6617,6 @@ const docTemplate = `{
                 },
                 "terms_of_service_parsed_text": {
                     "type": "string"
-                }
-            }
-        },
-        "schema.SiteLoginReq": {
-            "type": "object",
-            "properties": {
-                "allow_new_registrations": {
-                    "type": "boolean"
-                },
-                "login_required": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "schema.SiteLoginResp": {
-            "type": "object",
-            "properties": {
-                "allow_new_registrations": {
-                    "type": "boolean"
-                },
-                "login_required": {
-                    "type": "boolean"
                 }
             }
         },
@@ -7158,23 +6951,6 @@ const docTemplate = `{
                     "description": "language",
                     "type": "string",
                     "maxLength": 100
-                }
-            }
-        },
-        "schema.UpdateUserPasswordReq": {
-            "type": "object",
-            "required": [
-                "password",
-                "user_id"
-            ],
-            "properties": {
-                "password": {
-                    "type": "string",
-                    "maxLength": 32,
-                    "minLength": 8
-                },
-                "user_id": {
-                    "type": "string"
                 }
             }
         },

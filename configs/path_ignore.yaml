@@ -1,0 +1,11 @@
+# url path reserves the keywords list
+users:
+  - settings
+  - login
+  - register
+  - account-recovery
+  - change-email
+  - password-reset
+  - account-activation
+  - confirm-new-email
+  - account-suspended

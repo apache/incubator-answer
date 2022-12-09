@@ -153,6 +153,8 @@ type GetSMTPConfigResp struct {
 
 // GetManifestJsonResp get manifest json response
 type GetManifestJsonResp struct {
+	ManifestVersion int               `json:"manifest_version"`
+	Version         string            `json:"version"`
 	ShortName       string            `json:"short_name"`
 	Name            string            `json:"name"`
 	Icons           map[string]string `json:"icons"`

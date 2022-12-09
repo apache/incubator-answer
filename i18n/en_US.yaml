@@ -19,14 +19,14 @@ backend:
         other: "User"
       admin:
         other: "Admin"
-      Moderator:
+      moderator:
         other: "Moderator"
     description:
       user:
         other: "Default with no special access."
       admin:
         other: "Have the full power to access the site."
-      Moderator:
+      moderator:
         other: "Has access to all posts except admin settings."
 
   email:
@@ -109,6 +109,8 @@ backend:
         other: "Should not contain synonym tags."
       cannot_update:
         other: "No permission to update."
+      cannot_set_synonym_as_itself:
+        other: "You cannot set the synonym of the current tag as itself."
     theme:
       not_found:
         other: "Theme not found."

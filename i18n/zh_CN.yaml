@@ -97,6 +97,8 @@ backend:
         other: "不应包含同义词标签。"
       cannot_update:
         other: "没有更新标签权限。"
+      cannot_set_synonym_as_itself:
+        other: "你无法将当前标签的同义词设置为当前标签自己"
     theme:
       not_found:
         other: "主题未找到"
