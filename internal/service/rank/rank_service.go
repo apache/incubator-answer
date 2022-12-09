@@ -245,23 +245,24 @@ func (rs *RankService) GetRankPersonalWithPage(ctx context.Context, req *schema.
 	}
 	resp := make([]*schema.GetRankPersonalWithPageResp, 0)
 	for _, userRankInfo := range userRankPage {
+		if len(userRankInfo.ObjectID) == 0 || userRankInfo.ObjectID == "0" {
+			continue
+		}
 		commentResp := &schema.GetRankPersonalWithPageResp{
 			CreatedAt:  userRankInfo.CreatedAt.Unix(),
 			ObjectID:   userRankInfo.ObjectID,
 			Reputation: userRankInfo.Rank,
 		}
-		if len(userRankInfo.ObjectID) > 0 && userRankInfo.ObjectID != "0" {
-			objInfo, err := rs.objectInfoService.GetInfo(ctx, userRankInfo.ObjectID)
-			if err != nil {
-				log.Error(err)
-			} else {
-				commentResp.RankType = activity_type.Format(userRankInfo.ActivityType)
-				commentResp.ObjectType = objInfo.ObjectType
-				commentResp.Title = objInfo.Title
-				commentResp.Content = objInfo.Content
-				commentResp.QuestionID = objInfo.QuestionID
-				commentResp.AnswerID = objInfo.AnswerID
-			}
+		objInfo, err := rs.objectInfoService.GetInfo(ctx, userRankInfo.ObjectID)
+		if err != nil {
+			log.Error(err)
+		} else {
+			commentResp.RankType = activity_type.Format(userRankInfo.ActivityType)
+			commentResp.ObjectType = objInfo.ObjectType
+			commentResp.Title = objInfo.Title
+			commentResp.Content = objInfo.Content
+			commentResp.QuestionID = objInfo.QuestionID
+			commentResp.AnswerID = objInfo.AnswerID
 		}
 		resp = append(resp, commentResp)
 	}
