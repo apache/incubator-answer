@@ -172,7 +172,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	jsonLD.Type = "QAPage"
 	jsonLD.MainEntity.Type = "Question"
 	jsonLD.MainEntity.Name = detail.Title
-	jsonLD.MainEntity.Text = htmltext.ClearText(detail.HTML)
+	jsonLD.MainEntity.Text = detail.HTML
 	jsonLD.MainEntity.AnswerCount = int(answerCount)
 	jsonLD.MainEntity.UpvoteCount = detail.VoteCount
 	jsonLD.MainEntity.DateCreated = time.Unix(detail.CreateTime, 0)
@@ -182,7 +182,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	for _, answer := range answers {
 		if answer.Adopted == schema.AnswerAdoptedEnable {
 			jsonLD.MainEntity.AcceptedAnswer.Type = "Answer"
-			jsonLD.MainEntity.AcceptedAnswer.Text = htmltext.ClearText(answer.HTML)
+			jsonLD.MainEntity.AcceptedAnswer.Text = answer.HTML
 			jsonLD.MainEntity.AcceptedAnswer.UpvoteCount = answer.VoteCount
 			jsonLD.MainEntity.AcceptedAnswer.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
 			jsonLD.MainEntity.AcceptedAnswer.Author.Type = "Person"
@@ -191,7 +191,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		} else {
 			item := &schema.SuggestedAnswerItem{}
 			item.Type = "Answer"
-			item.Text = htmltext.ClearText(answer.HTML)
+			item.Text = answer.HTML
 			item.DateCreated = time.Unix(answer.CreateTime, 0)
 			item.UpvoteCount = answer.VoteCount
 			item.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
