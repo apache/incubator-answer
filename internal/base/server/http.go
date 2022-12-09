@@ -13,6 +13,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/day"
+	"github.com/answerdev/answer/pkg/htmltext"
 
 	brotli "github.com/anargu/gin-brotli"
 	"github.com/answerdev/answer/internal/base/middleware"
@@ -159,6 +160,9 @@ func NewHTTPServer(debug bool,
 				"language": la,
 				"timezone": tz,
 			}
+		},
+		"urlTitle": func(title string) string {
+			return htmltext.UrlTitle(title)
 		},
 	}
 	r.SetFuncMap(funcMap)

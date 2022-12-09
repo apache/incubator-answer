@@ -98,9 +98,15 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s", siteInfo.General.SiteUrl)
+
+	UrlUseTitle := false
+	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
+		UrlUseTitle = true
+	}
 	tc.html(ctx, http.StatusOK, "question.html", siteInfo, gin.H{
-		"data": data,
-		"page": templaterender.Paginator(page, req.PageSize, count),
+		"data":     data,
+		"useTitle": UrlUseTitle,
+		"page":     templaterender.Paginator(page, req.PageSize, count),
 	})
 }
 
@@ -121,9 +127,15 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/questions", siteInfo.General.SiteUrl)
 
+	UrlUseTitle := false
+	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
+		UrlUseTitle = true
+	}
+
 	tc.html(ctx, http.StatusOK, "question.html", siteInfo, gin.H{
-		"data": data,
-		"page": templaterender.Paginator(page, req.PageSize, count),
+		"data":     data,
+		"useTitle": UrlUseTitle,
+		"page":     templaterender.Paginator(page, req.PageSize, count),
 	})
 }
 
@@ -310,10 +322,16 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	}
 	siteInfo.Keywords = taginifo.DisplayName
 
+	UrlUseTitle := false
+	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
+		UrlUseTitle = true
+	}
+
 	tc.html(ctx, http.StatusOK, "tag-detail.html", siteInfo, gin.H{
 		"tag":           taginifo,
 		"questionList":  questionList,
 		"questionCount": questionCount,
+		"useTitle":      UrlUseTitle,
 		"page":          page,
 	})
 }
