@@ -93,7 +93,7 @@ func (rs *RankService) CheckOperationPermission(ctx context.Context, userID stri
 }
 
 // CheckOperationPermissions verify that the user has permission
-func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID string, actions []string, objectID string) (
+func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID string, actions []string) (
 	can []bool, err error) {
 	can = make([]bool, len(actions))
 	if len(userID) == 0 {
@@ -109,23 +109,9 @@ func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID str
 		return can, nil
 	}
 
-	objectOwner := false
-	if len(objectID) > 0 {
-		objectInfo, err := rs.objectInfoService.GetInfo(ctx, objectID)
-		if err != nil {
-			return can, err
-		}
-		// if the user is this object creator, the user can operate this object.
-		if objectInfo != nil &&
-			objectInfo.ObjectCreatorUserID == userID {
-			objectOwner = true
-		}
-	}
-
 	powerMapping := rs.getUserPowerMapping(ctx, userID)
-
 	for idx, action := range actions {
-		if powerMapping[action] || objectOwner {
+		if powerMapping[action] {
 			can[idx] = true
 			continue
 		}
@@ -133,6 +119,21 @@ func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID str
 		can[idx] = meetRank
 	}
 	return can, nil
+}
+
+// CheckOperationObjectOwner check operation object owner
+func (rs *RankService) CheckOperationObjectOwner(ctx context.Context, userID, objectID string) bool {
+	objectInfo, err := rs.objectInfoService.GetInfo(ctx, objectID)
+	if err != nil {
+		log.Error(err)
+		return false
+	}
+	// if the user is this object creator, the user can operate this object.
+	if objectInfo != nil &&
+		objectInfo.ObjectCreatorUserID == userID {
+		return true
+	}
+	return false
 }
 
 // CheckVotePermission verify that the user has vote permission
