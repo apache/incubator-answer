@@ -140,6 +140,19 @@ func (qs *QuestionService) CloseMsgList(ctx context.Context, lang i18n.Language)
 	return resp, err
 }
 
+func (qs *QuestionService) AddQuestionCheckTags(ctx context.Context, Tags []*entity.Tag) ([]string, error) {
+	list := make([]string, 0)
+	for _, tag := range Tags {
+		if tag.Reserved {
+			list = append(list, tag.DisplayName)
+		}
+	}
+	if len(list) > 0 {
+		return list, errors.BadRequest(reason.RequestFormatError)
+	}
+	return []string{}, nil
+}
+
 // AddQuestion add question
 func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd) (questionInfo any, err error) {
 	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
@@ -154,6 +167,29 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		})
 		err = errors.BadRequest(reason.RecommendTagEnter)
 		return errorlist, err
+	}
+
+	tagNameList := make([]string, 0)
+	for _, tag := range req.Tags {
+		tagNameList = append(tagNameList, tag.SlugName)
+	}
+	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
+	if tagerr != nil {
+		return questionInfo, tagerr
+	}
+	if !req.QuestionPermission.CanUseReservedTag {
+		taglist, err := qs.AddQuestionCheckTags(ctx, Tags)
+		errMsg := fmt.Sprintf(`"%s" can only be used by moderators.`,
+			strings.Join(taglist, ","))
+		if err != nil {
+			errorlist := make([]*validator.FormErrorField, 0)
+			errorlist = append(errorlist, &validator.FormErrorField{
+				ErrorField: "tags",
+				ErrorMsg:   errMsg,
+			})
+			err = errors.BadRequest(reason.RecommendTagEnter)
+			return errorlist, err
+		}
 	}
 
 	question := &entity.Question{}
@@ -187,15 +223,6 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		UserID:   question.UserID,
 		ObjectID: question.ID,
 		Title:    question.Title,
-	}
-
-	tagNameList := make([]string, 0)
-	for _, tag := range req.Tags {
-		tagNameList = append(tagNameList, tag.SlugName)
-	}
-	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
-	if tagerr != nil {
-		return questionInfo, tagerr
 	}
 
 	questionWithTagsRevision, err := qs.changeQuestionToRevision(ctx, question, Tags)
