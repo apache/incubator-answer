@@ -326,6 +326,18 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	// err = errors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
 	// return errorlist, err
 
+	errlist, err := qc.questionService.UpdateQuestionCheckTags(ctx, req)
+	if err != nil {
+		for _, item := range errlist {
+			errFields = append(errFields, item)
+		}
+	}
+
+	if len(errFields) > 0 {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
+		return
+	}
+
 	resp, err := qc.questionService.UpdateQuestion(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, resp)
