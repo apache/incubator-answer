@@ -250,7 +250,7 @@ func (rs *RankService) GetRankPersonalWithPage(ctx context.Context, req *schema.
 			ObjectID:   userRankInfo.ObjectID,
 			Reputation: userRankInfo.Rank,
 		}
-		if len(userRankInfo.ObjectID) > 0 {
+		if len(userRankInfo.ObjectID) > 0 && userRankInfo.ObjectID != "0" {
 			objInfo, err := rs.objectInfoService.GetInfo(ctx, userRankInfo.ObjectID)
 			if err != nil {
 				log.Error(err)
