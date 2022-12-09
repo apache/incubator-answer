@@ -56,13 +56,15 @@ var (
 )
 
 const (
-	SiteTypeGeneral   = "general"
-	SiteTypeInterface = "interface"
-	SiteTypeBranding  = "branding"
-	SiteTypeWrite     = "write"
-	SiteTypeLegal     = "legal"
-	SiteTypeSeo       = "seo"
-	SiteTypeLogin     = "login"
+	SiteTypeGeneral       = "general"
+	SiteTypeInterface     = "interface"
+	SiteTypeBranding      = "branding"
+	SiteTypeWrite         = "write"
+	SiteTypeLegal         = "legal"
+	SiteTypeSeo           = "seo"
+	SiteTypeLogin         = "login"
+	SiteTypeCustomCssHTML = "css-html"
+	SiteTypeTheme         = "theme"
 )
 
 func ExistInPathIgnore(name string) bool {

@@ -80,6 +80,24 @@ func (s *SiteInfoCommonService) GetSiteLogin(ctx context.Context) (resp *schema.
 	return resp, nil
 }
 
+// GetSiteCustomCssHTML get site custom css html config
+func (s *SiteInfoCommonService) GetSiteCustomCssHTML(ctx context.Context) (resp *schema.SiteCustomCssHTMLResp, err error) {
+	resp = &schema.SiteCustomCssHTMLResp{}
+	if err = s.getSiteInfoByType(ctx, constant.SiteTypeCustomCssHTML, resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// GetSiteTheme get site theme
+func (s *SiteInfoCommonService) GetSiteTheme(ctx context.Context) (resp *schema.SiteThemeResp, err error) {
+	resp = &schema.SiteThemeResp{}
+	if err = s.getSiteInfoByType(ctx, constant.SiteTypeTheme, resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func (s *SiteInfoCommonService) getSiteInfoByType(ctx context.Context, siteType string, resp interface{}) (err error) {
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, siteType)
 	if err != nil {

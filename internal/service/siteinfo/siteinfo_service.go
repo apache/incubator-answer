@@ -85,6 +85,16 @@ func (s *SiteInfoService) GetSiteLogin(ctx context.Context) (resp *schema.SiteLo
 	return s.siteInfoCommonService.GetSiteLogin(ctx)
 }
 
+// GetSiteCustomCssHTML get site custom css html config
+func (s *SiteInfoService) GetSiteCustomCssHTML(ctx context.Context) (resp *schema.SiteCustomCssHTMLResp, err error) {
+	return s.siteInfoCommonService.GetSiteCustomCssHTML(ctx)
+}
+
+// GetSiteTheme get site theme config
+func (s *SiteInfoService) GetSiteTheme(ctx context.Context) (resp *schema.SiteThemeResp, err error) {
+	return s.siteInfoCommonService.GetSiteTheme(ctx)
+}
+
 func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGeneralReq) (err error) {
 	req.FormatSiteUrl()
 	var (
@@ -185,6 +195,28 @@ func (s *SiteInfoService) SaveSiteLogin(ctx context.Context, req *schema.SiteLog
 		Status:  1,
 	}
 	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeLogin, data)
+}
+
+// SaveSiteCustomCssHTML save site custom html configuration
+func (s *SiteInfoService) SaveSiteCustomCssHTML(ctx context.Context, req *schema.SiteCustomCssHTMLReq) (err error) {
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeCustomCssHTML,
+		Content: string(content),
+		Status:  1,
+	}
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeCustomCssHTML, data)
+}
+
+// SaveSiteTheme save site custom html configuration
+func (s *SiteInfoService) SaveSiteTheme(ctx context.Context, req *schema.SiteThemeReq) (err error) {
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeTheme,
+		Content: string(content),
+		Status:  1,
+	}
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeTheme, data)
 }
 
 // GetSMTPConfig get smtp config

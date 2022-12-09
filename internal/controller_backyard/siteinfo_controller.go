@@ -113,6 +113,32 @@ func (sc *SiteInfoController) GetSiteLogin(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
+// GetSiteCustomCssHTML get site info custom html css config
+// @Summary get site info custom html css config
+// @Description get site info custom html css config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteCustomCssHTMLResp}
+// @Router /answer/admin/api/siteinfo/custom-css-html [get]
+func (sc *SiteInfoController) GetSiteCustomCssHTML(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteCustomCssHTML(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetSiteTheme get site info theme config
+// @Summary get site info theme config
+// @Description get site info theme config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteThemeResp}
+// @Router /answer/admin/api/siteinfo/theme [get]
+func (sc *SiteInfoController) GetSiteTheme(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteTheme(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
 // GetRobots get site robots information
 // @Summary get site robots information
 // @Description get site robots information
@@ -254,6 +280,42 @@ func (sc *SiteInfoController) UpdateSiteLogin(ctx *gin.Context) {
 		return
 	}
 	err := sc.siteInfoService.SaveSiteLogin(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// UpdateSiteCustomCssHTML update site custom css html config
+// @Summary update site custom css html config
+// @Description update site custom css html config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.SiteCustomCssHTMLReq true "login info"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/siteinfo/custom-css-html [put]
+func (sc *SiteInfoController) UpdateSiteCustomCssHTML(ctx *gin.Context) {
+	req := &schema.SiteCustomCssHTMLReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	err := sc.siteInfoService.SaveSiteCustomCssHTML(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// SaveSiteTheme update site custom css html config
+// @Summary update site custom css html config
+// @Description update site custom css html config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.SiteThemeReq true "login info"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/siteinfo/theme [put]
+func (sc *SiteInfoController) SaveSiteTheme(ctx *gin.Context) {
+	req := &schema.SiteThemeReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	err := sc.siteInfoService.SaveSiteTheme(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

@@ -50,6 +50,11 @@ func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
 	if err != nil {
 		log.Error(err)
 	}
+
+	resp.Theme, err = sc.siteInfoService.GetSiteTheme(ctx)
+	if err != nil {
+		log.Error(err)
+	}
 	handler.HandleResponse(ctx, nil, resp)
 }
 
