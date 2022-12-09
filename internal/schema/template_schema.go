@@ -34,6 +34,10 @@ type AcceptedAnswerItem struct {
 	Text        string `json:"text"`
 	UpvoteCount int    `json:"upvoteCount"`
 	URL         string `json:"url"`
+	Author      struct {
+		Type string `json:"@type"`
+		Name string `json:"name"`
+	} `json:"author"`
 }
 
 type SuggestedAnswerItem struct {

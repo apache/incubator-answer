@@ -185,6 +185,9 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 			jsonLD.MainEntity.AcceptedAnswer.Text = htmltext.ClearText(answer.HTML)
 			jsonLD.MainEntity.AcceptedAnswer.UpvoteCount = answer.VoteCount
 			jsonLD.MainEntity.AcceptedAnswer.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
+			jsonLD.MainEntity.AcceptedAnswer.Author.Type = "Person"
+			jsonLD.MainEntity.AcceptedAnswer.Author.Name = answer.UserInfo.DisplayName
+
 		} else {
 			item := &schema.SuggestedAnswerItem{}
 			item.Type = "Answer"
