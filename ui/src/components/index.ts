@@ -19,7 +19,6 @@ import Mentions from './Mentions';
 import FormatTime from './FormatTime';
 import Toast from './Toast';
 import AccordionNav from './AccordionNav';
-import PageTitle from './PageTitle';
 import Empty from './Empty';
 import BaseUserCard from './BaseUserCard';
 import FollowingTags from './FollowingTags';
@@ -51,7 +50,6 @@ export {
   FormatTime,
   Toast,
   AccordionNav,
-  PageTitle,
   Empty,
   BaseUserCard,
   FollowingTags,

@@ -80,7 +80,7 @@ export const getBrandSetting = () => {
   return request.get('/answer/admin/api/siteinfo/branding');
 };
 
-export const brandSetting = (params: Type.AdmingSettingBranding) => {
+export const brandSetting = (params: Type.AdminSettingBranding) => {
   return request.put('/answer/admin/api/siteinfo/branding', params);
 };
 

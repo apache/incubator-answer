@@ -640,7 +640,8 @@ ui:
       account: Account
       interface: Interface
     profile:
-      btn_name: Update profile
+      heading: Profile
+      btn_name: Save
       display_name:
         label: Display Name
         msg: Display name cannot be empty.
@@ -658,7 +659,7 @@ ui:
         custom: Custom
         btn_refresh: Refresh
         custom_text: You can upload your image.
-        default: Default
+        default: System
         msg: Please upload an avatar
       bio:
         label: About Me (optional)
@@ -670,10 +671,12 @@ ui:
         label: Location (optional)
         placeholder: "City, Country"
     notification:
+      heading: Notifications
       email:
         label: Email Notifications
         radio: "Answers to your questions, comments, and more"
     account:
+      heading: Account
       change_email_btn: Change email
       change_pass_btn: Change password
       change_email_info: >-
@@ -694,6 +697,7 @@ ui:
       pass_confirm:
         label: Confirm New Password
     interface:
+      heading: Interface
       lang:
         label: Interface Language
         text: User interface language. It will change when you refresh the page.
@@ -1212,7 +1216,8 @@ ui:
         text: Provide email address that will receive test sends.
         msg: Test email recipients is invalid
       smtp_authentication:
-        label: SMTP Authentication
+        label: Enable authentication
+        title: SMTP Authentication
         msg: SMTP authentication cannot be empty.
         "yes": "Yes"
         "no": "No"

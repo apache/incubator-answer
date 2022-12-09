@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { Editor, EditorRef, PageTitle } from '@/components';
+import { usePageTags } from '@/hooks';
+import { Editor, EditorRef } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
 import type * as Type from '@/common/interface';
 import { useTagInfo, modifyTag, useQueryRevisions } from '@/services';
@@ -39,7 +40,7 @@ const initFormData = {
     errorMsg: '',
   },
 };
-const Ask = () => {
+const Index = () => {
   const { is_admin = false } = loggedUserInfoStore((state) => state.user);
 
   const { tagId } = useParams();
@@ -143,132 +144,129 @@ const Ask = () => {
   const backPage = () => {
     navigate(-1);
   };
-
+  usePageTags({
+    title: t('edit_tag', { keyPrefix: 'page_title' }),
+  });
   return (
-    <>
-      <PageTitle title={t('edit_tag', { keyPrefix: 'page_title' })} />
-      <Container className="pt-4 mt-2 mb-5 edit-answer-wrap">
-        <Row className="justify-content-center">
-          <Col xxl={10} md={12}>
-            <h3 className="mb-4">{t('title')}</h3>
-          </Col>
-        </Row>
-        <Row className="justify-content-center">
-          <Col xxl={7} lg={8} sm={12} className="mb-4 mb-md-0">
-            <Form noValidate onSubmit={handleSubmit}>
-              <Form.Group controlId="revision" className="mb-3">
-                <Form.Label>{t('form.fields.revision.label')}</Form.Label>
-                <Form.Select onChange={handleSelectedRevision}>
-                  {revisions.map(({ create_at, reason, user_info }, index) => {
-                    const date = dayjs(create_at * 1000)
-                      .tz()
-                      .format(t('long_date_with_time', { keyPrefix: 'dates' }));
-                    return (
-                      <option key={`${create_at}`} value={index}>
-                        {`${date} - ${user_info.display_name} - ${
-                          reason || t('default_reason')
-                        }`}
-                      </option>
-                    );
-                  })}
-                </Form.Select>
-              </Form.Group>
-              <Form.Group controlId="display_name" className="mb-3">
-                <Form.Label>{t('form.fields.display_name.label')}</Form.Label>
-                <Form.Control
-                  value={formData.displayName.value}
-                  isInvalid={formData.displayName.isInvalid}
-                  disabled={!is_admin}
-                  onChange={handleDisplayNameChange}
-                />
-
-                <Form.Control.Feedback type="invalid">
-                  {formData.displayName.errorMsg}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group controlId="slug_name" className="mb-3">
-                <Form.Label>{t('form.fields.slug_name.label')}</Form.Label>
-                <Form.Control
-                  value={formData.slugName.value}
-                  isInvalid={formData.slugName.isInvalid}
-                  disabled={!is_admin}
-                  onChange={handleSlugNameChange}
-                />
-                <Form.Text as="div">
-                  {t('form.fields.slug_name.info')}
-                </Form.Text>
-                <Form.Control.Feedback type="invalid">
-                  {formData.slugName.errorMsg}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Form.Group controlId="description" className="mt-4">
-                <Form.Label>{t('form.fields.desc.label')}</Form.Label>
-                <Editor
-                  value={formData.description.value}
-                  onChange={handleDescriptionChange}
-                  className={classNames(
-                    'form-control p-0',
-                    focusType === 'description' && 'focus',
-                  )}
-                  onFocus={() => {
-                    setForceType('description');
-                  }}
-                  onBlur={() => {
-                    setForceType('');
-                  }}
-                  ref={editorRef}
-                />
-                <Form.Control
-                  value={formData.description.value}
-                  type="text"
-                  isInvalid={formData.description.isInvalid}
-                  readOnly
-                  hidden
-                />
-                <Form.Control.Feedback type="invalid">
-                  {formData.description.errorMsg}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group controlId="edit_summary" className="my-3">
-                <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>
-                <Form.Control
-                  type="text"
-                  defaultValue={formData.editSummary.value}
-                  isInvalid={formData.editSummary.isInvalid}
-                  onChange={handleEditSummaryChange}
-                  placeholder={t('form.fields.edit_summary.placeholder')}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {formData.editSummary.errorMsg}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <div className="mt-3">
-                <Button type="submit">{t('btn_save_edits')}</Button>
-                <Button variant="link" className="ms-2" onClick={backPage}>
-                  {t('btn_cancel')}
-                </Button>
-              </div>
-            </Form>
-          </Col>
-          <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
-            <Card>
-              <Card.Header>
-                {t('title', { keyPrefix: 'how_to_format' })}
-              </Card.Header>
-              <Card.Body
-                className="fmt small"
-                dangerouslySetInnerHTML={{
-                  __html: t('desc', { keyPrefix: 'how_to_format' }),
-                }}
+    <Container className="pt-4 mt-2 mb-5 edit-answer-wrap">
+      <Row className="justify-content-center">
+        <Col xxl={10} md={12}>
+          <h3 className="mb-4">{t('title')}</h3>
+        </Col>
+      </Row>
+      <Row className="justify-content-center">
+        <Col xxl={7} lg={8} sm={12} className="mb-4 mb-md-0">
+          <Form noValidate onSubmit={handleSubmit}>
+            <Form.Group controlId="revision" className="mb-3">
+              <Form.Label>{t('form.fields.revision.label')}</Form.Label>
+              <Form.Select onChange={handleSelectedRevision}>
+                {revisions.map(({ create_at, reason, user_info }, index) => {
+                  const date = dayjs(create_at * 1000)
+                    .tz()
+                    .format(t('long_date_with_time', { keyPrefix: 'dates' }));
+                  return (
+                    <option key={`${create_at}`} value={index}>
+                      {`${date} - ${user_info.display_name} - ${
+                        reason || t('default_reason')
+                      }`}
+                    </option>
+                  );
+                })}
+              </Form.Select>
+            </Form.Group>
+            <Form.Group controlId="display_name" className="mb-3">
+              <Form.Label>{t('form.fields.display_name.label')}</Form.Label>
+              <Form.Control
+                value={formData.displayName.value}
+                isInvalid={formData.displayName.isInvalid}
+                disabled={!is_admin}
+                onChange={handleDisplayNameChange}
               />
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </>
+
+              <Form.Control.Feedback type="invalid">
+                {formData.displayName.errorMsg}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="slug_name" className="mb-3">
+              <Form.Label>{t('form.fields.slug_name.label')}</Form.Label>
+              <Form.Control
+                value={formData.slugName.value}
+                isInvalid={formData.slugName.isInvalid}
+                disabled={!is_admin}
+                onChange={handleSlugNameChange}
+              />
+              <Form.Text as="div">{t('form.fields.slug_name.info')}</Form.Text>
+              <Form.Control.Feedback type="invalid">
+                {formData.slugName.errorMsg}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group controlId="description" className="mt-4">
+              <Form.Label>{t('form.fields.desc.label')}</Form.Label>
+              <Editor
+                value={formData.description.value}
+                onChange={handleDescriptionChange}
+                className={classNames(
+                  'form-control p-0',
+                  focusType === 'description' && 'focus',
+                )}
+                onFocus={() => {
+                  setForceType('description');
+                }}
+                onBlur={() => {
+                  setForceType('');
+                }}
+                ref={editorRef}
+              />
+              <Form.Control
+                value={formData.description.value}
+                type="text"
+                isInvalid={formData.description.isInvalid}
+                readOnly
+                hidden
+              />
+              <Form.Control.Feedback type="invalid">
+                {formData.description.errorMsg}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="edit_summary" className="my-3">
+              <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>
+              <Form.Control
+                type="text"
+                defaultValue={formData.editSummary.value}
+                isInvalid={formData.editSummary.isInvalid}
+                onChange={handleEditSummaryChange}
+                placeholder={t('form.fields.edit_summary.placeholder')}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formData.editSummary.errorMsg}
+              </Form.Control.Feedback>
+            </Form.Group>
+
+            <div className="mt-3">
+              <Button type="submit">{t('btn_save_edits')}</Button>
+              <Button variant="link" className="ms-2" onClick={backPage}>
+                {t('btn_cancel')}
+              </Button>
+            </div>
+          </Form>
+        </Col>
+        <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
+          <Card>
+            <Card.Header>
+              {t('title', { keyPrefix: 'how_to_format' })}
+            </Card.Header>
+            <Card.Body
+              className="fmt small"
+              dangerouslySetInnerHTML={{
+                __html: t('desc', { keyPrefix: 'how_to_format' }),
+              }}
+            />
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 
-export default Ask;
+export default Index;

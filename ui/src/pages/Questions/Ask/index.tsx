@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { Editor, EditorRef, TagSelector, PageTitle } from '@/components';
+import { usePageTags } from '@/hooks';
+import { Editor, EditorRef, TagSelector } from '@/components';
 import type * as Type from '@/common/interface';
 import {
   saveQuestion,
@@ -140,22 +141,22 @@ const Ask = () => {
     });
 
   const checkValidated = (): boolean => {
-    let bol = true;
+    const bol = true;
     const { title, content, tags, answer } = formData;
     if (!title.value) {
-      bol = false;
-      formData.title = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('form.fields.title.msg.empty'),
-      };
+      // bol = false;
+      // formData.title = {
+      //   value: '',
+      //   isInvalid: true,
+      //   errorMsg: t('form.fields.title.msg.empty'),
+      // };
     } else if (Array.from(title.value).length > 150) {
-      bol = false;
-      formData.title = {
-        value: title.value,
-        isInvalid: true,
-        errorMsg: t('form.fields.title.msg.range'),
-      };
+      // bol = false;
+      // formData.title = {
+      //   value: title.value,
+      //   isInvalid: true,
+      //   errorMsg: t('form.fields.title.msg.range'),
+      // };
     } else {
       formData.title = {
         value: title.value,
@@ -165,12 +166,12 @@ const Ask = () => {
     }
 
     if (!content.value) {
-      bol = false;
-      formData.content = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('form.fields.body.msg.empty'),
-      };
+      // bol = false;
+      // formData.content = {
+      //   value: '',
+      //   isInvalid: true,
+      //   errorMsg: t('form.fields.body.msg.empty'),
+      // };
     } else {
       formData.content = {
         value: content.value,
@@ -180,12 +181,12 @@ const Ask = () => {
     }
 
     if (tags.value.length === 0) {
-      bol = false;
-      formData.tags = {
-        value: [],
-        isInvalid: true,
-        errorMsg: t('form.fields.tags.msg.empty'),
-      };
+      // bol = false;
+      // formData.tags = {
+      //   value: [],
+      //   isInvalid: true,
+      //   errorMsg: t('form.fields.tags.msg.empty'),
+      // };
     } else {
       formData.tags = {
         value: tags.value,
@@ -195,12 +196,12 @@ const Ask = () => {
     }
     if (checked) {
       if (!answer.value) {
-        bol = false;
-        formData.answer = {
-          value: '',
-          isInvalid: true,
-          errorMsg: t('form.fields.answer.msg.empty'),
-        };
+        // bol = false;
+        // formData.answer = {
+        //   value: '',
+        //   isInvalid: true,
+        //   errorMsg: t('form.fields.answer.msg.empty'),
+        // };
       } else {
         formData.answer = {
           value: answer.value,
@@ -292,189 +293,185 @@ const Ask = () => {
   if (isEdit) {
     pageTitle = t('edit_question', { keyPrefix: 'page_title' });
   }
+  usePageTags({
+    title: pageTitle,
+  });
   return (
-    <>
-      <PageTitle title={pageTitle} />
-      <Container className="pt-4 mt-2 mb-5">
-        <Row className="justify-content-center">
-          <Col xxl={10} md={12}>
-            <h3 className="mb-4">{isEdit ? t('edit_title') : t('title')}</h3>
-          </Col>
-        </Row>
-        <Row className="justify-content-center">
-          <Col xxl={7} lg={8} sm={12} className="mb-4 mb-md-0">
-            <Form noValidate onSubmit={handleSubmit}>
-              {isEdit && (
-                <Form.Group controlId="revision" className="mb-3">
-                  <Form.Label>{t('form.fields.revision.label')}</Form.Label>
-                  <Form.Select onChange={handleSelectedRevision}>
-                    {revisions.map(
-                      ({ reason, create_at, user_info }, index) => {
-                        const date = dayjs(create_at * 1000)
-                          .tz()
-                          .format(
-                            t('long_date_with_time', { keyPrefix: 'dates' }),
-                          );
-                        return (
-                          <option key={`${create_at}`} value={index}>
-                            {`${date} - ${user_info.display_name} - ${
-                              reason || t('default_reason')
-                            }`}
-                          </option>
-                        );
-                      },
-                    )}
-                  </Form.Select>
-                </Form.Group>
-              )}
-
-              <Form.Group controlId="title" className="mb-3">
-                <Form.Label>{t('form.fields.title.label')}</Form.Label>
-                <Form.Control
-                  value={formData.title.value}
-                  isInvalid={formData.title.isInvalid}
-                  onChange={handleTitleChange}
-                  placeholder={t('form.fields.title.placeholder')}
-                  autoFocus
-                />
-
-                <Form.Control.Feedback type="invalid">
-                  {formData.title.errorMsg}
-                </Form.Control.Feedback>
-                {bool && <SearchQuestion similarQuestions={similarQuestions} />}
+    <Container className="pt-4 mt-2 mb-5">
+      <Row className="justify-content-center">
+        <Col xxl={10} md={12}>
+          <h3 className="mb-4">{isEdit ? t('edit_title') : t('title')}</h3>
+        </Col>
+      </Row>
+      <Row className="justify-content-center">
+        <Col xxl={7} lg={8} sm={12} className="mb-4 mb-md-0">
+          <Form noValidate onSubmit={handleSubmit}>
+            {isEdit && (
+              <Form.Group controlId="revision" className="mb-3">
+                <Form.Label>{t('form.fields.revision.label')}</Form.Label>
+                <Form.Select onChange={handleSelectedRevision}>
+                  {revisions.map(({ reason, create_at, user_info }, index) => {
+                    const date = dayjs(create_at * 1000)
+                      .tz()
+                      .format(t('long_date_with_time', { keyPrefix: 'dates' }));
+                    return (
+                      <option key={`${create_at}`} value={index}>
+                        {`${date} - ${user_info.display_name} - ${
+                          reason || t('default_reason')
+                        }`}
+                      </option>
+                    );
+                  })}
+                </Form.Select>
               </Form.Group>
-              <Form.Group controlId="body">
-                <Form.Label>{t('form.fields.body.label')}</Form.Label>
-                <Form.Control
-                  defaultValue={formData.content.value}
-                  isInvalid={formData.content.isInvalid}
-                  hidden
-                />
-                <Editor
-                  value={formData.content.value}
-                  onChange={handleContentChange}
-                  className={classNames(
-                    'form-control p-0',
-                    focusType === 'content' && 'focus',
-                  )}
-                  onFocus={() => {
-                    setForceType('content');
-                  }}
-                  onBlur={() => {
-                    setForceType('');
-                  }}
-                  ref={editorRef}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {formData.content.errorMsg}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group controlId="tags" className="my-3">
-                <Form.Label>{t('form.fields.tags.label')}</Form.Label>
-                <Form.Control
-                  defaultValue={JSON.stringify(formData.tags.value)}
-                  isInvalid={formData.tags.isInvalid}
-                  hidden
-                />
-                <TagSelector
-                  value={formData.tags.value}
-                  onChange={handleTagsChange}
-                  showRequiredTagText
-                />
-                <Form.Control.Feedback type="invalid">
-                  {formData.tags.errorMsg}
-                </Form.Control.Feedback>
-              </Form.Group>
-              {isEdit && (
-                <Form.Group controlId="edit_summary" className="my-3">
-                  <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>
-                  <Form.Control
-                    type="text"
-                    defaultValue={formData.edit_summary.value}
-                    isInvalid={formData.edit_summary.isInvalid}
-                    placeholder={t('form.fields.edit_summary.placeholder')}
-                    onChange={handleSummaryChange}
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    {formData.edit_summary.errorMsg}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              )}
-              {!checked && (
-                <div className="mt-3">
-                  <Button type="submit" className="me-2">
-                    {isEdit ? t('btn_save_edits') : t('btn_post_question')}
-                  </Button>
+            )}
 
-                  <Button variant="link" onClick={backPage}>
-                    {t('cancel', { keyPrefix: 'btns' })}
-                  </Button>
-                </div>
-              )}
-              {!isEdit && (
-                <>
-                  <Form.Check
-                    className="mt-5"
-                    checked={checked}
-                    type="checkbox"
-                    label={t('answer_question')}
-                    onChange={(e) => setCheckState(e.target.checked)}
-                    id="radio-answer"
-                  />
-                  {checked && (
-                    <Form.Group controlId="answer" className="mt-4">
-                      <Form.Label>{t('form.fields.answer.label')}</Form.Label>
-                      <Editor
-                        value={formData.answer.value}
-                        onChange={handleAnswerChange}
-                        ref={editorRef2}
-                        className={classNames(
-                          'form-control p-0',
-                          focusType === 'answer' && 'focus',
-                        )}
-                        onFocus={() => {
-                          setForceType('answer');
-                        }}
-                        onBlur={() => {
-                          setForceType('');
-                        }}
-                      />
-                      <Form.Control
-                        value={formData.answer.value}
-                        type="text"
-                        isInvalid={formData.answer.isInvalid}
-                        hidden
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {formData.answer.errorMsg}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  )}
-                </>
-              )}
-              {checked && (
-                <Button type="submit" className="mt-3">
-                  {t('post_question&answer')}
-                </Button>
-              )}
-            </Form>
-          </Col>
-          <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
-            <Card className="mb-4">
-              <Card.Header>
-                {t('title', { keyPrefix: 'how_to_format' })}
-              </Card.Header>
-              <Card.Body
-                className="fmt small"
-                dangerouslySetInnerHTML={{
-                  __html: t('desc', { keyPrefix: 'how_to_format' }),
-                }}
+            <Form.Group controlId="title" className="mb-3">
+              <Form.Label>{t('form.fields.title.label')}</Form.Label>
+              <Form.Control
+                value={formData.title.value}
+                isInvalid={formData.title.isInvalid}
+                onChange={handleTitleChange}
+                placeholder={t('form.fields.title.placeholder')}
+                autoFocus
               />
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </>
+
+              <Form.Control.Feedback type="invalid">
+                {formData.title.errorMsg}
+              </Form.Control.Feedback>
+              {bool && <SearchQuestion similarQuestions={similarQuestions} />}
+            </Form.Group>
+            <Form.Group controlId="body">
+              <Form.Label>{t('form.fields.body.label')}</Form.Label>
+              <Form.Control
+                defaultValue={formData.content.value}
+                isInvalid={formData.content.isInvalid}
+                hidden
+              />
+              <Editor
+                value={formData.content.value}
+                onChange={handleContentChange}
+                className={classNames(
+                  'form-control p-0',
+                  focusType === 'content' && 'focus',
+                )}
+                onFocus={() => {
+                  setForceType('content');
+                }}
+                onBlur={() => {
+                  setForceType('');
+                }}
+                ref={editorRef}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formData.content.errorMsg}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId="tags" className="my-3">
+              <Form.Label>{t('form.fields.tags.label')}</Form.Label>
+              <Form.Control
+                defaultValue={JSON.stringify(formData.tags.value)}
+                isInvalid={formData.tags.isInvalid}
+                hidden
+              />
+              <TagSelector
+                value={formData.tags.value}
+                onChange={handleTagsChange}
+                showRequiredTagText
+              />
+              <Form.Control.Feedback type="invalid">
+                {formData.tags.errorMsg}
+              </Form.Control.Feedback>
+            </Form.Group>
+            {isEdit && (
+              <Form.Group controlId="edit_summary" className="my-3">
+                <Form.Label>{t('form.fields.edit_summary.label')}</Form.Label>
+                <Form.Control
+                  type="text"
+                  defaultValue={formData.edit_summary.value}
+                  isInvalid={formData.edit_summary.isInvalid}
+                  placeholder={t('form.fields.edit_summary.placeholder')}
+                  onChange={handleSummaryChange}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {formData.edit_summary.errorMsg}
+                </Form.Control.Feedback>
+              </Form.Group>
+            )}
+            {!checked && (
+              <div className="mt-3">
+                <Button type="submit" className="me-2">
+                  {isEdit ? t('btn_save_edits') : t('btn_post_question')}
+                </Button>
+
+                <Button variant="link" onClick={backPage}>
+                  {t('cancel', { keyPrefix: 'btns' })}
+                </Button>
+              </div>
+            )}
+            {!isEdit && (
+              <>
+                <Form.Check
+                  className="mt-5"
+                  checked={checked}
+                  type="checkbox"
+                  label={t('answer_question')}
+                  onChange={(e) => setCheckState(e.target.checked)}
+                  id="radio-answer"
+                />
+                {checked && (
+                  <Form.Group controlId="answer" className="mt-4">
+                    <Form.Label>{t('form.fields.answer.label')}</Form.Label>
+                    <Editor
+                      value={formData.answer.value}
+                      onChange={handleAnswerChange}
+                      ref={editorRef2}
+                      className={classNames(
+                        'form-control p-0',
+                        focusType === 'answer' && 'focus',
+                      )}
+                      onFocus={() => {
+                        setForceType('answer');
+                      }}
+                      onBlur={() => {
+                        setForceType('');
+                      }}
+                    />
+                    <Form.Control
+                      value={formData.answer.value}
+                      type="text"
+                      isInvalid={formData.answer.isInvalid}
+                      hidden
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {formData.answer.errorMsg}
+                    </Form.Control.Feedback>
+                  </Form.Group>
+                )}
+              </>
+            )}
+            {checked && (
+              <Button type="submit" className="mt-3">
+                {t('post_question&answer')}
+              </Button>
+            )}
+          </Form>
+        </Col>
+        <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
+          <Card>
+            <Card.Header>
+              {t('title', { keyPrefix: 'how_to_format' })}
+            </Card.Header>
+            <Card.Body
+              className="fmt small"
+              dangerouslySetInnerHTML={{
+                __html: t('desc', { keyPrefix: 'how_to_format' }),
+              }}
+            />
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

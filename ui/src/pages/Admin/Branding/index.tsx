@@ -105,8 +105,7 @@ const Index: FC = () => {
       favicon: formData.favicon.value,
     };
     brandSetting(params)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         update(params);
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),

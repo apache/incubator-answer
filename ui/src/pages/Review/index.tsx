@@ -3,13 +3,8 @@ import { Container, Row, Col, Alert, Stack, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import {
-  BaseUserCard,
-  FormatTime,
-  Empty,
-  DiffContent,
-  PageTitle,
-} from '@/components';
+import { usePageTags } from '@/hooks';
+import { BaseUserCard, FormatTime, Empty, DiffContent } from '@/components';
 import { getReviewList, revisionAudit } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 import type * as Type from '@/common/interface';
@@ -124,9 +119,11 @@ const Index: FC = () => {
   useEffect(() => {
     queryNextOne(page);
   }, []);
+  usePageTags({
+    title: t('review'),
+  });
   return (
     <Container className="pt-2 mt-4 mb-5">
-      <PageTitle title={t('review')} />
       <Row>
         <Col lg={{ span: 7, offset: 1 }}>
           <h3 className="mb-4">{t('review')}</h3>

@@ -120,9 +120,7 @@ const QuestionList: FC<Props> = ({ source }) => {
       <ListGroup variant="flush" className="border-top border-bottom-0">
         {listData?.list?.map((li) => {
           return (
-            <ListGroup.Item
-              key={li.id}
-              className="border-bottom pt-3 pb-2 px-0">
+            <ListGroup.Item key={li.id} className="border-bottom py-3 px-0">
               <h5 className="text-wrap text-break">
                 <NavLink
                   to={pathFactory.questionLanding(li.id, li.title)}
@@ -131,7 +129,7 @@ const QuestionList: FC<Props> = ({ source }) => {
                   {li.status === 2 ? ` [${t('closed')}]` : ''}
                 </NavLink>
               </h5>
-              <div className="d-flex flex-column flex-md-row align-items-md-center fs-14 text-secondary">
+              <div className="d-flex flex-column flex-md-row align-items-md-center fs-14 mb-3 text-secondary">
                 <QuestionLastUpdate q={li} />
                 <div className="ms-0 ms-md-3 mt-2 mt-md-0">
                   <span>
@@ -157,7 +155,7 @@ const QuestionList: FC<Props> = ({ source }) => {
                   </span>
                 </div>
               </div>
-              <div className="question-tags mx-n1 mt-2">
+              <div className="question-tags m-n1">
                 {Array.isArray(li.tags)
                   ? li.tags.map((tag) => {
                       return (
