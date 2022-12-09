@@ -316,6 +316,16 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	// TODO: pass errFields and return errors
 	log.Info(errFields)
 
+	// errMsg := fmt.Sprintf(`The reserved tag "%s" must be present.`,
+	// 	strings.Join(CheckOldTaglist, ","))
+	// errorlist := make([]*validator.FormErrorField, 0)
+	// errorlist = append(errorlist, &validator.FormErrorField{
+	// 	ErrorField: "tags",
+	// 	ErrorMsg:   errMsg,
+	// })
+	// err = errors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
+	// return errorlist, err
+
 	resp, err := qc.questionService.UpdateQuestion(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, resp)
