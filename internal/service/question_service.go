@@ -140,6 +140,19 @@ func (qs *QuestionService) CloseMsgList(ctx context.Context, lang i18n.Language)
 	return resp, err
 }
 
+func (qs *QuestionService) AddQuestionCheckTags(ctx context.Context, Tags []*entity.Tag) ([]string, error) {
+	list := make([]string, 0)
+	for _, tag := range Tags {
+		if tag.Reserved {
+			list = append(list, tag.DisplayName)
+		}
+	}
+	if len(list) > 0 {
+		return list, errors.BadRequest(reason.RequestFormatError)
+	}
+	return []string{}, nil
+}
+
 // AddQuestion add question
 func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd) (questionInfo any, err error) {
 	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
@@ -154,6 +167,29 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		})
 		err = errors.BadRequest(reason.RecommendTagEnter)
 		return errorlist, err
+	}
+
+	tagNameList := make([]string, 0)
+	for _, tag := range req.Tags {
+		tagNameList = append(tagNameList, tag.SlugName)
+	}
+	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
+	if tagerr != nil {
+		return questionInfo, tagerr
+	}
+	if !req.QuestionPermission.CanUseReservedTag {
+		taglist, err := qs.AddQuestionCheckTags(ctx, Tags)
+		errMsg := fmt.Sprintf(`"%s" can only be used by moderators.`,
+			strings.Join(taglist, ","))
+		if err != nil {
+			errorlist := make([]*validator.FormErrorField, 0)
+			errorlist = append(errorlist, &validator.FormErrorField{
+				ErrorField: "tags",
+				ErrorMsg:   errMsg,
+			})
+			err = errors.BadRequest(reason.RecommendTagEnter)
+			return errorlist, err
+		}
 	}
 
 	question := &entity.Question{}
@@ -187,15 +223,6 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		UserID:   question.UserID,
 		ObjectID: question.ID,
 		Title:    question.Title,
-	}
-
-	tagNameList := make([]string, 0)
-	for _, tag := range req.Tags {
-		tagNameList = append(tagNameList, tag.SlugName)
-	}
-	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
-	if tagerr != nil {
-		return questionInfo, tagerr
 	}
 
 	questionWithTagsRevision, err := qs.changeQuestionToRevision(ctx, question, Tags)
@@ -286,6 +313,72 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		ActivityTypeKey:  constant.ActQuestionDeleted,
 	})
 	return nil
+}
+
+func (qs *QuestionService) UpdateQuestionCheckTags(ctx context.Context, req *schema.QuestionUpdate) (errorlist []*validator.FormErrorField, err error) {
+	dbinfo, has, err := qs.questionRepo.GetQuestion(ctx, req.ID)
+	if err != nil {
+		return
+	}
+	if !has {
+		return
+	}
+
+	oldTags, tagerr := qs.tagCommon.GetObjectEntityTag(ctx, req.ID)
+	if tagerr != nil {
+		log.Error("GetObjectEntityTag error", tagerr)
+		return nil, nil
+	}
+
+	tagNameList := make([]string, 0)
+	oldtagNameList := make([]string, 0)
+	for _, tag := range req.Tags {
+		tagNameList = append(tagNameList, tag.SlugName)
+	}
+	for _, tag := range oldTags {
+		oldtagNameList = append(oldtagNameList, tag.SlugName)
+	}
+
+	isChange := qs.tagCommon.CheckTagsIsChange(ctx, tagNameList, oldtagNameList)
+
+	//If the content is the same, ignore it
+	if dbinfo.Title == req.Title && dbinfo.OriginalText == req.Content && !isChange {
+		return
+	}
+
+	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
+	if tagerr != nil {
+		log.Error("GetTagListByNames error", tagerr)
+		return nil, nil
+	}
+
+	// if user can not use reserved tag, old reserved tag can not be removed and new reserved tag can not be added.
+	if !req.CanUseReservedTag {
+		CheckOldTag, CheckNewTag, CheckOldTaglist, CheckNewTaglist := qs.CheckChangeReservedTag(ctx, oldTags, Tags)
+		if !CheckOldTag {
+			errMsg := fmt.Sprintf(`The reserved tag "%s" must be present.`,
+				strings.Join(CheckOldTaglist, ","))
+			errorlist := make([]*validator.FormErrorField, 0)
+			errorlist = append(errorlist, &validator.FormErrorField{
+				ErrorField: "tags",
+				ErrorMsg:   errMsg,
+			})
+			err = errors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
+			return errorlist, err
+		}
+		if !CheckNewTag {
+			errMsg := fmt.Sprintf(`"%s" can only be used by moderators.`,
+				strings.Join(CheckNewTaglist, ","))
+			errorlist := make([]*validator.FormErrorField, 0)
+			errorlist = append(errorlist, &validator.FormErrorField{
+				ErrorField: "tags",
+				ErrorMsg:   errMsg,
+			})
+			err = errors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
+			return errorlist, err
+		}
+	}
+	return nil, nil
 }
 
 // UpdateQuestion update question

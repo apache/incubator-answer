@@ -162,13 +162,15 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.AnswerEdit,
 		permission.AnswerEditWithoutReview,
-	}, req.ID)
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	req.CanEdit = canList[0]
-	req.NoNeedReview = canList[1]
+
+	objectOwner := ac.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.ID)
+	req.CanEdit = canList[0] || objectOwner
+	req.NoNeedReview = canList[1] || objectOwner
 	if !req.CanEdit {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
@@ -211,7 +213,7 @@ func (ac *AnswerController) AnswerList(ctx *gin.Context) {
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.AnswerEdit,
 		permission.AnswerDelete,
-	}, "")
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
