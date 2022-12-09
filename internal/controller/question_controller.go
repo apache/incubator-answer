@@ -138,12 +138,14 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 		permission.QuestionDelete,
 		permission.QuestionClose,
 		permission.QuestionReopen,
-	}, id)
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	req.CanEdit = canList[0]
+	objectOwner := qc.rankService.CheckOperationObjectOwner(ctx, userID, id)
+
+	req.CanEdit = canList[0] || objectOwner
 	req.CanDelete = canList[1]
 	req.CanClose = canList[2]
 	req.CanReopen = canList[3]
@@ -257,7 +259,8 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 		permission.QuestionDelete,
 		permission.QuestionClose,
 		permission.QuestionReopen,
-	}, "")
+		permission.TagUseReservedTag,
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -267,6 +270,7 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	req.CanDelete = canList[2]
 	req.CanClose = canList[3]
 	req.CanReopen = canList[4]
+	req.CanUseReservedTag = canList[5]
 	if !req.CanAdd {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
@@ -299,14 +303,16 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		permission.QuestionDelete,
 		permission.QuestionEditWithoutReview,
 		permission.TagUseReservedTag,
-	}, req.ID)
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	req.CanEdit = canList[0]
+
+	objectOwner := qc.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.ID)
+	req.CanEdit = canList[0] || objectOwner
 	req.CanDelete = canList[1]
-	req.NoNeedReview = canList[2]
+	req.NoNeedReview = canList[2] || objectOwner
 	req.CanUseReservedTag = canList[3]
 	if !req.CanEdit {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
