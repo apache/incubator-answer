@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type * as Type from '@/common/interface';
-import { getSeoSetting, putSeoSetting } from '@/services';
+import { getLoginSetting, putLoginSetting } from '@/services';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
 import { handleFormError } from '@/utils';
@@ -15,25 +15,27 @@ const Index: FC = () => {
   const schema: JSONSchema = {
     title: t('page_title'),
     properties: {
-      membership: {
+      allow_new_registrations: {
         type: 'boolean',
-        title: t('membership.label'),
-        label: t('membership.labelAlias'),
+        title: t('membership.title'),
+        label: t('membership.label'),
         description: t('membership.text'),
         default: true,
       },
-      private: {
-        type: 'string',
-        title: t('private.label'),
+      login_required: {
+        type: 'boolean',
+        title: t('private.title'),
+        label: t('private.label'),
         description: t('private.text'),
+        default: false,
       },
     },
   };
   const uiSchema: UISchema = {
-    membership: {
+    allow_new_registrations: {
       'ui:widget': 'switch',
     },
-    private: {
+    login_required: {
       'ui:widget': 'switch',
     },
   };
@@ -43,11 +45,12 @@ const Index: FC = () => {
     evt.preventDefault();
     evt.stopPropagation();
 
-    const reqParams: Type.AdminSettingsSeo = {
-      robots: formData.robots.value,
+    const reqParams: Type.AdminSettingsLogin = {
+      allow_new_registrations: formData.allow_new_registrations.value,
+      login_required: formData.login_required.value,
     };
 
-    putSeoSetting(reqParams)
+    putLoginSetting(reqParams)
       .then(() => {
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),
@@ -63,11 +66,13 @@ const Index: FC = () => {
   };
 
   useEffect(() => {
-    getSeoSetting().then((setting) => {
+    getLoginSetting().then((setting) => {
       if (setting) {
         const formMeta = { ...formData };
-        formMeta.robots.value = setting.robots;
-        setFormData(formMeta);
+        formMeta.allow_new_registrations.value =
+          setting.allow_new_registrations;
+        formMeta.login_required.value = setting.login_required;
+        setFormData({ ...formMeta });
       }
     });
   }, []);

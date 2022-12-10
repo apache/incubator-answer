@@ -129,3 +129,13 @@ export const getPageCustom = () => {
 export const putPageCustom = (params: Type.AdminSettingsCustom) => {
   return request.put('/answer/admin/api/siteinfo/custom-css-html', params);
 };
+
+export const getLoginSetting = () => {
+  return request.get<Type.AdminSettingsLogin>(
+    '/answer/admin/api/siteinfo/login',
+  );
+};
+
+export const putLoginSetting = (params: Type.AdminSettingsLogin) => {
+  return request.put('/answer/admin/api/siteinfo/login', params);
+};

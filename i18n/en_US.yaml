@@ -1096,7 +1096,7 @@ ui:
               label: Password
         btn_cancel: Cancel
         btn_submit: Submit
-      user_modal: 
+      user_modal:
         title: Add new user
         form:
           fields:
@@ -1109,7 +1109,7 @@ ui:
               label: Password
         btn_cancel: Cancel
         btn_submit: Submit
-  
+
     questions:
       page_title: Questions
       normal: Normal
@@ -1290,11 +1290,12 @@ ui:
     login:
       page_title: Login
       membership:
-        label: Membership
-        labelAlias: Allow new registrations
+        title: Membership
+        label: Allow new registrations
         text: Turn off to prevent anyone from creating a new account.
       private:
-        label: Private
+        title: Private
+        label: Login required
         text: Only logged in users can access this community.
 
   form:

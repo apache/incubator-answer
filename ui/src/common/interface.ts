@@ -363,6 +363,11 @@ export interface AdminSettingsCustom {
   custom_footer: string;
 }
 
+export interface AdminSettingsLogin {
+  allow_new_registrations: boolean;
+  login_required: boolean;
+}
+
 /**
  * @description interface for Activity
  */
