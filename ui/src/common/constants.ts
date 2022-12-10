@@ -60,7 +60,7 @@ export const ADMIN_NAV_MENUS = [
         name: 'themes',
       },
       {
-        name: 'css_and_html',
+        name: 'css-html',
       },
     ],
   },

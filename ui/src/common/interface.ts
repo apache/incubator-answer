@@ -346,6 +346,16 @@ export interface AdminSettingsSeo {
   robots: string;
 }
 
+export type themeConfig = {
+  navbar_style: string;
+  primary_color: string;
+  [k: string]: string | number;
+};
+export interface AdminSettingsTheme {
+  theme: string;
+  theme_config: Record<string, themeConfig>;
+}
+
 /**
  * @description interface for Activity
  */

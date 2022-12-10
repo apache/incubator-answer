@@ -242,7 +242,7 @@ const routes: RouteNode[] = [
             page: 'pages/Admin/Themes',
           },
           {
-            path: 'css_and_html',
+            path: 'css-html',
             page: 'pages/Admin/CssAndHtml',
           },
           {

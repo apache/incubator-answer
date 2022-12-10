@@ -109,3 +109,13 @@ export const getSeoSetting = () => {
 export const putSeoSetting = (params: Type.AdminSettingsSeo) => {
   return request.put('/answer/admin/api/siteinfo/seo', params);
 };
+
+export const getThemeSetting = () => {
+  return request.get<Type.AdminSettingsTheme>(
+    '/answer/admin/api/siteinfo/theme',
+  );
+};
+
+export const putThemeSetting = (params: Type.AdminSettingsTheme) => {
+  return request.put('/answer/admin/api/siteinfo/theme', params);
+};

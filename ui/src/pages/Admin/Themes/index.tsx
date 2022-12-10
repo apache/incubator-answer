@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type * as Type from '@/common/interface';
-import { getSeoSetting, putSeoSetting } from '@/services';
+import { getThemeSetting, putThemeSetting } from '@/services';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
 import { handleFormError } from '@/utils';
@@ -21,6 +21,7 @@ const Index: FC = () => {
         description: t('themes.text'),
         enum: ['default'],
         enumNames: ['Default'],
+        default: 'default',
       },
       navbar_style: {
         type: 'string',
@@ -33,6 +34,7 @@ const Index: FC = () => {
         type: 'string',
         title: t('primary_color.label'),
         description: t('primary_color.text'),
+        default: '#ffffff',
       },
     },
   };
@@ -49,17 +51,22 @@ const Index: FC = () => {
       },
     },
   };
+  const [themeSetting, setThemeSetting] = useState<Type.AdminSettingsTheme>();
   const [formData, setFormData] = useState(initFormData(schema));
-
   const onSubmit = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-
-    const reqParams: Type.AdminSettingsSeo = {
-      robots: formData.robots.value,
+    const themeName = formData.themes.value;
+    const reqParams: Type.AdminSettingsTheme = {
+      theme: themeName,
+      theme_config: {
+        [themeName]: {
+          navbar_style: formData.navbar_style.value,
+          primary_color: formData.primary_color.value,
+        },
+      },
     };
-
-    putSeoSetting(reqParams)
+    putThemeSetting(reqParams)
       .then(() => {
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),
@@ -75,17 +82,32 @@ const Index: FC = () => {
   };
 
   useEffect(() => {
-    getSeoSetting().then((setting) => {
+    getThemeSetting().then((setting) => {
       if (setting) {
-        // const formMeta = { ...formData };
-        // formMeta.robots.value = setting.robots;
-        // setFormData(formMeta);
+        setThemeSetting(setting);
+        const themeName = setting.theme;
+        const themeConfig = setting.theme_config[themeName];
+        const formMeta = { ...formData };
+        formMeta.themes.value = themeName;
+        formMeta.navbar_style.value = themeConfig?.navbar_style;
+        formMeta.primary_color.value = themeConfig?.primary_color;
+        setFormData({ ...formMeta });
       }
     });
   }, []);
 
-  const handleOnChange = (data) => {
-    setFormData(data);
+  const handleOnChange = (cd) => {
+    console.log('cd: ', cd);
+    setFormData(cd);
+    const themeConfig = themeSetting?.theme_config[cd.themes.value];
+    if (themeConfig) {
+      themeConfig.navbar_style = cd.navbar_style.value;
+      themeConfig.primary_color = cd.primary_color.value;
+      setThemeSetting({
+        theme: themeSetting?.theme,
+        theme_config: themeSetting?.theme_config,
+      });
+    }
   };
 
   return (

@@ -982,7 +982,7 @@ ui:
     seo: SEO
     customize: Customize
     themes: Themes
-    css_and_html: CSS/HTML
+    css-html: CSS/HTML
     login: Login
   admin:
     admin_header:
