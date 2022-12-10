@@ -21,18 +21,19 @@ const useChangePasswordModal = (props: IProps = {}) => {
 
   const { title = t('title'), onConfirm } = props;
   const [visible, setVisibleState] = useState(false);
+  const [userId, setUserId] = useState('');
   const schema: JSONSchema = {
     title: t('title'),
     required: ['password'],
     properties: {
-      new_password: {
+      password: {
         type: 'string',
         title: t('form.fields.password.label'),
       },
     },
   };
   const uiSchema: UISchema = {
-    new_password: {
+    password: {
       'ui:options': {
         type: 'password',
       },
@@ -50,7 +51,8 @@ const useChangePasswordModal = (props: IProps = {}) => {
     setVisibleState(false);
   };
 
-  const onShow = () => {
+  const onShow = (user_id: string) => {
+    setUserId(user_id);
     setVisibleState(true);
   };
 
@@ -65,27 +67,17 @@ const useChangePasswordModal = (props: IProps = {}) => {
 
     if (onConfirm instanceof Function) {
       onConfirm({
-        slug_name: formData.slugName.value,
-        display_name: formData.displayName.value,
-        original_text: formData.description.value,
+        password: formData.password.value,
+        user_id: userId,
       });
       setFormData({
-        displayName: {
-          value: '',
-          isInvalid: false,
-          errorMsg: '',
-        },
-        slugName: {
-          value: '',
-          isInvalid: false,
-          errorMsg: '',
-        },
-        description: {
+        password: {
           value: '',
           isInvalid: false,
           errorMsg: '',
         },
       });
+      setUserId('');
     }
     onClose();
   };

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Form, Table, Dropdown, Button } from 'react-bootstrap';
+import { Form, Table, Dropdown, Button, Stack } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -21,7 +21,7 @@ import {
   useChangePasswordModal,
   useToast,
 } from '@/hooks';
-import { useQueryUsers } from '@/services';
+import { useQueryUsers, addUser, updateUserPassword } from '@/services';
 import { loggedUserInfoStore } from '@/stores';
 import { formatCount } from '@/utils';
 
@@ -50,8 +50,6 @@ const Users: FC = () => {
   const curQuery = urlSearchParams.get('query') || '';
   const currentUser = loggedUserInfoStore((state) => state.user);
   const Toast = useToast();
-  const userModal = useUserModal();
-  const changePasswordModal = useChangePasswordModal();
   const {
     data,
     isLoading,
@@ -74,11 +72,31 @@ const Users: FC = () => {
     callback: refreshUsers,
   });
 
+  const userModal = useUserModal({
+    onConfirm: (userModel) => {
+      addUser(userModel).then(() => {
+        if (/all|staff/.test(curFilter) && curPage === 1) {
+          refreshUsers();
+        }
+      });
+    },
+  });
+  const changePasswordModal = useChangePasswordModal({
+    onConfirm: (rd) => {
+      updateUserPassword(rd).then(() => {
+        Toast.onShow({
+          msg: t('update_password', { keyPrefix: 'toast' }),
+          variant: 'success',
+        });
+      });
+    },
+  });
+
   const handleAction = (type, user) => {
     const { user_id, status, role_id, username } = user;
     if (username === currentUser.username) {
       Toast.onShow({
-        msg: t('fobidden_operate_self', { keyPrefix: 'toast' }),
+        msg: t('forbidden_operate_self', { keyPrefix: 'toast' }),
         variant: 'warning',
       });
       return;
@@ -96,6 +114,9 @@ const Users: FC = () => {
         role_id,
       });
     }
+    if (type === 'password') {
+      changePasswordModal.onShow(user_id);
+    }
   };
 
   const handleFilter = (e) => {
@@ -107,21 +128,20 @@ const Users: FC = () => {
     <>
       <h3 className="mb-4">{t('title')}</h3>
       <div className="d-flex justify-content-between align-items-center mb-3">
-        <div>
-          <Button
-            className="me-3"
-            variant="outline-primary"
-            size="sm"
-            onClick={() => userModal.onShow()}>
-            {t('add_user')}
-          </Button>
+        <Stack direction="horizontal" gap={3}>
           <QueryGroup
             data={UserFilterKeys}
             currentSort={curFilter}
             sortKey="filter"
             i18nKeyPrefix="admin.users"
           />
-        </div>
+          <Button
+            variant="outline-primary"
+            size="sm"
+            onClick={() => userModal.onShow()}>
+            {t('add_user')}
+          </Button>
+        </Stack>
 
         <Form.Control
           size="sm"
@@ -206,7 +226,7 @@ const Users: FC = () => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
                         <Dropdown.Item
-                          onClick={() => changePasswordModal.onShow()}>
+                          onClick={() => handleAction('password', user)}>
                           {t('set_new_password')}
                         </Dropdown.Item>
                         <Dropdown.Item

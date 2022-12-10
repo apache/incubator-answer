@@ -85,22 +85,22 @@ const useAddUserModal = (props: IProps = {}) => {
 
     if (onConfirm instanceof Function) {
       onConfirm({
-        slug_name: formData.slugName.value,
-        display_name: formData.displayName.value,
-        original_text: formData.description.value,
+        display_name: formData.display_name.value,
+        email: formData.email.value,
+        password: formData.password.value,
       });
       setFormData({
-        displayName: {
+        display_name: {
           value: '',
           isInvalid: false,
           errorMsg: '',
         },
-        slugName: {
+        email: {
           value: '',
           isInvalid: false,
           errorMsg: '',
         },
-        description: {
+        password: {
           value: '',
           isInvalid: false,
           errorMsg: '',
