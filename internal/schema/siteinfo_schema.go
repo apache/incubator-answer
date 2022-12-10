@@ -131,11 +131,12 @@ type SiteSeoResp SiteSeoReq
 
 // SiteInfoResp get site info response
 type SiteInfoResp struct {
-	General   *SiteGeneralResp   `json:"general"`
-	Interface *SiteInterfaceResp `json:"interface"`
-	Branding  *SiteBrandingResp  `json:"branding"`
-	Login     *SiteLoginResp     `json:"login"`
-	Theme     *SiteThemeResp     `json:"theme"`
+	General       *SiteGeneralResp       `json:"general"`
+	Interface     *SiteInterfaceResp     `json:"interface"`
+	Branding      *SiteBrandingResp      `json:"branding"`
+	Login         *SiteLoginResp         `json:"login"`
+	Theme         *SiteThemeResp         `json:"theme"`
+	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
 }
 type TemplateSiteInfoResp struct {
 	General     *SiteGeneralResp   `json:"general"`

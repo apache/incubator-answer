@@ -488,3 +488,17 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, nil)
 }
+
+// UserRanking get user ranking
+// @Summary get user ranking
+// @Description get user ranking
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.RespBody{data=schema.GetUserToSetShowResp}
+// @Router /answer/api/v1/user/ranking [get]
+func (uc *UserController) UserRanking(ctx *gin.Context) {
+	resp, err := uc.userService.UserRanking(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}

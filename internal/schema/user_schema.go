@@ -417,3 +417,22 @@ type UserVerifyEmailSendReq struct {
 	CaptchaID   string `validate:"omitempty,gt=0,lte=500" json:"captcha_id"`
 	CaptchaCode string `validate:"omitempty,gt=0,lte=500" json:"captcha_code"`
 }
+
+// UserRankingResp user ranking response
+type UserRankingResp struct {
+	UsersWithTheMostReputation []*UserRankingSimpleInfo `json:"users_with_the_most_reputation"`
+	UsersWithTheMostVote       []*UserRankingSimpleInfo `json:"users_with_the_most_vote"`
+	Staffs                     []*UserRankingSimpleInfo `json:"staffs"`
+}
+
+// UserRankingSimpleInfo user ranking simple info
+type UserRankingSimpleInfo struct {
+	// username
+	Username string `json:"username"`
+	// rank
+	Rank int `json:"rank"`
+	// display name
+	DisplayName string `json:"display_name"`
+	// avatar
+	Avatar string `json:"avatar"`
+}

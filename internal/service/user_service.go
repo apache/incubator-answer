@@ -555,3 +555,9 @@ func (us *UserService) getSiteUrl(ctx context.Context) string {
 	}
 	return siteGeneral.SiteUrl
 }
+
+// UserRanking get user ranking
+func (us *UserService) UserRanking(ctx context.Context) (resp []*schema.UserRankingResp, err error) {
+	//us.userRepo.GetByUserID()
+	return
+}

@@ -116,6 +116,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/user/logout", a.userController.UserLogout)
 	r.PUT("/user/email", a.userController.UserChangeEmailVerify)
 	r.POST("/user/email/change/code", a.userController.UserChangeEmailSendCode)
+	r.GET("/user/ranking", a.userController.UserRanking)
 
 	//answer
 	r.GET("/answer/info", a.answerController.Get)

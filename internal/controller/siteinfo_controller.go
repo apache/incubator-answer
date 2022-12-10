@@ -55,6 +55,11 @@ func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
 	if err != nil {
 		log.Error(err)
 	}
+
+	resp.CustomCssHtml, err = sc.siteInfoService.GetSiteCustomCssHTML(ctx)
+	if err != nil {
+		log.Error(err)
+	}
 	handler.HandleResponse(ctx, nil, resp)
 }
 
