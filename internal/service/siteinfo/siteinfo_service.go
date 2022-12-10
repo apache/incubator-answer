@@ -256,6 +256,18 @@ func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.Upda
 
 func (s *SiteInfoService) GetSeo(ctx context.Context) (resp *schema.SiteSeoResp, err error) {
 	resp = &schema.SiteSeoResp{}
+	loginConfig, err := s.GetSiteLogin(ctx)
+	if err != nil {
+		log.Error(err)
+		return resp, nil
+	}
+	// If the site is set to privacy mode, prohibit crawling any page.
+	if loginConfig.LoginRequired {
+		resp.Robots = "User-agent: *\nDisallow: /"
+		return resp, nil
+	}
+
+	resp = &schema.SiteSeoResp{}
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeSeo)
 	if err != nil {
 		log.Error(err)
