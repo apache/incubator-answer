@@ -119,3 +119,13 @@ export const getThemeSetting = () => {
 export const putThemeSetting = (params: Type.AdminSettingsTheme) => {
   return request.put('/answer/admin/api/siteinfo/theme', params);
 };
+
+export const getPageCustom = () => {
+  return request.get<Type.AdminSettingsCustom>(
+    '/answer/admin/api/siteinfo/custom-css-html',
+  );
+};
+
+export const putPageCustom = (params: Type.AdminSettingsCustom) => {
+  return request.put('/answer/admin/api/siteinfo/custom-css-html', params);
+};

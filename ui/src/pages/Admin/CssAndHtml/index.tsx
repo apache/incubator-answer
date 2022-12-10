@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type * as Type from '@/common/interface';
-import { getSeoSetting, putSeoSetting } from '@/services';
+import { getPageCustom, putPageCustom } from '@/services';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
 import { handleFormError } from '@/utils';
@@ -20,17 +20,17 @@ const Index: FC = () => {
         title: t('custom_css.label'),
         description: t('custom_css.text'),
       },
-      head: {
+      custom_head: {
         type: 'string',
         title: t('head.label'),
         description: t('head.text'),
       },
-      header: {
+      custom_header: {
         type: 'string',
         title: t('header.label'),
         description: t('header.text'),
       },
-      footer: {
+      custom_footer: {
         type: 'string',
         title: t('footer.label'),
         description: t('footer.text'),
@@ -44,19 +44,19 @@ const Index: FC = () => {
         rows: 10,
       },
     },
-    head: {
+    custom_head: {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
       },
     },
-    header: {
+    custom_header: {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
       },
     },
-    footer: {
+    custom_footer: {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
@@ -69,11 +69,14 @@ const Index: FC = () => {
     evt.preventDefault();
     evt.stopPropagation();
 
-    const reqParams: Type.AdminSettingsSeo = {
-      robots: formData.robots.value,
+    const reqParams: Type.AdminSettingsCustom = {
+      custom_css: formData.custom_css.value,
+      custom_head: formData.custom_head.value,
+      custom_header: formData.custom_header.value,
+      custom_footer: formData.custom_footer.value,
     };
 
-    putSeoSetting(reqParams)
+    putPageCustom(reqParams)
       .then(() => {
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),
@@ -89,10 +92,13 @@ const Index: FC = () => {
   };
 
   useEffect(() => {
-    getSeoSetting().then((setting) => {
+    getPageCustom().then((setting) => {
       if (setting) {
         const formMeta = { ...formData };
-        formMeta.robots.value = setting.robots;
+        formMeta.custom_css.value = setting.custom_css;
+        formMeta.custom_head.value = setting.custom_head;
+        formMeta.custom_header.value = setting.custom_header;
+        formMeta.custom_footer.value = setting.custom_footer;
         setFormData(formMeta);
       }
     });

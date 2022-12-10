@@ -356,6 +356,13 @@ export interface AdminSettingsTheme {
   theme_config: Record<string, themeConfig>;
 }
 
+export interface AdminSettingsCustom {
+  custom_css: string;
+  custom_head: string;
+  custom_header: string;
+  custom_footer: string;
+}
+
 /**
  * @description interface for Activity
  */
