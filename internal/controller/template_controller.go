@@ -328,7 +328,7 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
-	siteInfo.Title = fmt.Sprintf("%s - %s", taginifo.DisplayName, siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("'%s' Questions - %s", taginifo.DisplayName, siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "tag-detail.html", siteInfo, gin.H{
 		"tag":           taginifo,
 		"questionList":  questionList,
