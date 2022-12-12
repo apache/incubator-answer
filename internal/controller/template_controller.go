@@ -132,7 +132,7 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
-	siteInfo.Title = fmt.Sprintf("Questions-%s", siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("Questions - %s", siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "question.html", siteInfo, gin.H{
 		"data":     data,
 		"useTitle": UrlUseTitle,
@@ -267,7 +267,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		tags = append(tags, tag.DisplayName)
 	}
 	siteInfo.Keywords = strings.Replace(strings.Trim(fmt.Sprint(tags), "[]"), " ", ",", -1)
-	siteInfo.Title = fmt.Sprintf("%s-%s", detail.Title, siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("%s - %s", detail.Title, siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "question-detail.html", siteInfo, gin.H{
 		"id":       id,
 		"answerid": answerid,
@@ -292,7 +292,7 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/tags", siteInfo.General.SiteUrl)
-	siteInfo.Title = fmt.Sprintf("%s-%s", "Tags", siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("%s - %s", "Tags", siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "tags.html", siteInfo, gin.H{
 		"page": page,
 		"data": data,
@@ -328,7 +328,7 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
-	siteInfo.Title = fmt.Sprintf("%s-%s", taginifo.DisplayName, siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("%s - %s", taginifo.DisplayName, siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "tag-detail.html", siteInfo, gin.H{
 		"tag":           taginifo,
 		"questionList":  questionList,
@@ -371,7 +371,7 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/users/%s", siteInfo.General.SiteUrl, username)
-	siteInfo.Title = fmt.Sprintf("%s-%s", username, siteInfo.General.Name)
+	siteInfo.Title = fmt.Sprintf("%s - %s", username, siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "homepage.html", siteInfo, gin.H{
 		"userinfo": userinfo,
 		"bio":      template.HTML(userinfo.Info.BioHTML),
