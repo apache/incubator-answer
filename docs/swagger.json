@@ -4665,6 +4665,46 @@
                 }
             }
         },
+        "/answer/api/v1/user/ranking": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user ranking",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "get user ranking",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.UserRankingResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/user/register/email": {
             "post": {
                 "description": "UserRegisterByEmail",
@@ -6892,6 +6932,9 @@
                 "branding": {
                     "$ref": "#/definitions/schema.SiteBrandingResp"
                 },
+                "custom_css_html": {
+                    "$ref": "#/definitions/schema.SiteCustomCssHTMLResp"
+                },
                 "general": {
                     "$ref": "#/definitions/schema.SiteGeneralResp"
                 },
@@ -7556,6 +7599,54 @@
             "properties": {
                 "notice_switch": {
                     "type": "boolean"
+                }
+            }
+        },
+        "schema.UserRankingResp": {
+            "type": "object",
+            "properties": {
+                "staffs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.UserRankingSimpleInfo"
+                    }
+                },
+                "users_with_the_most_reputation": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.UserRankingSimpleInfo"
+                    }
+                },
+                "users_with_the_most_vote": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.UserRankingSimpleInfo"
+                    }
+                }
+            }
+        },
+        "schema.UserRankingSimpleInfo": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "avatar",
+                    "type": "string"
+                },
+                "display_name": {
+                    "description": "display name",
+                    "type": "string"
+                },
+                "rank": {
+                    "description": "rank",
+                    "type": "integer"
+                },
+                "username": {
+                    "description": "username",
+                    "type": "string"
+                },
+                "vote_count": {
+                    "description": "vote",
+                    "type": "integer"
                 }
             }
         },

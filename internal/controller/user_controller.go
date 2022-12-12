@@ -496,7 +496,7 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody{data=schema.GetUserToSetShowResp}
+// @Success 200 {object} handler.RespBody{data=schema.UserRankingResp}
 // @Router /answer/api/v1/user/ranking [get]
 func (uc *UserController) UserRanking(ctx *gin.Context) {
 	resp, err := uc.userService.UserRanking(ctx)

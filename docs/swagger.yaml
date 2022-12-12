@@ -1294,6 +1294,8 @@ definitions:
     properties:
       branding:
         $ref: '#/definitions/schema.SiteBrandingResp'
+      custom_css_html:
+        $ref: '#/definitions/schema.SiteCustomCssHTMLResp'
       general:
         $ref: '#/definitions/schema.SiteGeneralResp'
       interface:
@@ -1761,6 +1763,39 @@ definitions:
     properties:
       notice_switch:
         type: boolean
+    type: object
+  schema.UserRankingResp:
+    properties:
+      staffs:
+        items:
+          $ref: '#/definitions/schema.UserRankingSimpleInfo'
+        type: array
+      users_with_the_most_reputation:
+        items:
+          $ref: '#/definitions/schema.UserRankingSimpleInfo'
+        type: array
+      users_with_the_most_vote:
+        items:
+          $ref: '#/definitions/schema.UserRankingSimpleInfo'
+        type: array
+    type: object
+  schema.UserRankingSimpleInfo:
+    properties:
+      avatar:
+        description: avatar
+        type: string
+      display_name:
+        description: display name
+        type: string
+      rank:
+        description: rank
+        type: integer
+      username:
+        description: username
+        type: string
+      vote_count:
+        description: vote
+        type: integer
     type: object
   schema.UserRePassWordRequest:
     properties:
@@ -4668,6 +4703,28 @@ paths:
           schema:
             type: string
       summary: RetrievePassWord
+      tags:
+      - User
+  /answer/api/v1/user/ranking:
+    get:
+      consumes:
+      - application/json
+      description: get user ranking
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.UserRankingResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user ranking
       tags:
       - User
   /answer/api/v1/user/register/email:

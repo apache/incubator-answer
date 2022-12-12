@@ -582,7 +582,7 @@ func (us *UserService) UserRanking(ctx context.Context) (resp *schema.UserRankin
 		return nil, err
 	}
 	for _, stat := range rankStat {
-		if stat.Rank == 0 {
+		if stat.Rank <= 0 {
 			continue
 		}
 		if userIDExist[stat.UserID] {
