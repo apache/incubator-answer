@@ -2,6 +2,7 @@ package activity_common
 
 import (
 	"context"
+	"time"
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/activity_queue"
@@ -18,6 +19,10 @@ type ActivityRepo interface {
 	GetUserIDObjectIDActivitySum(ctx context.Context, userID, objectID string) (int, error)
 	GetActivityTypeByConfigKey(ctx context.Context, configKey string) (activityType int, err error)
 	AddActivity(ctx context.Context, activity *entity.Activity) (err error)
+	GetUsersWhoHasGainedTheMostReputation(
+		ctx context.Context, startTime, endTime time.Time, limit int) (rankStat []*entity.ActivityUserRankStat, err error)
+	GetUsersWhoHasVoteMost(
+		ctx context.Context, startTime, endTime time.Time, limit int) (voteStat []*entity.ActivityUserVoteStat, err error)
 }
 
 type ActivityCommon struct {

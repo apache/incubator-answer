@@ -10,6 +10,8 @@ import (
 type UserRoleRelRepo interface {
 	SaveUserRoleRel(ctx context.Context, userID string, roleID int) (err error)
 	GetUserRoleRelList(ctx context.Context, userIDs []string) (userRoleRelList []*entity.UserRoleRel, err error)
+	GetUserRoleRelListByRoleID(ctx context.Context, roleIDs []int) (
+		userRoleRelList []*entity.UserRoleRel, err error)
 	GetUserRoleRel(ctx context.Context, userID string) (rolePowerRel *entity.UserRoleRel, exist bool, err error)
 }
 
@@ -92,4 +94,13 @@ func (us *UserRoleRelService) GetUserRole(ctx context.Context, userID string) (r
 		return 1, nil
 	}
 	return rolePowerRel.RoleID, nil
+}
+
+// GetUserByRoleID get user by role id
+func (us *UserRoleRelService) GetUserByRoleID(ctx context.Context, roleIDs []int) (rel []*entity.UserRoleRel, err error) {
+	rolePowerRels, err := us.userRoleRelRepo.GetUserRoleRelListByRoleID(ctx, roleIDs)
+	if err != nil {
+		return nil, err
+	}
+	return rolePowerRels, nil
 }

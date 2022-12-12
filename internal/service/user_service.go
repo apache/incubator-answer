@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"time"
 
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -12,6 +13,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
+	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/role"
@@ -31,6 +33,7 @@ type UserService struct {
 	userCommonService *usercommon.UserCommon
 	userRepo          usercommon.UserRepo
 	userActivity      activity.UserActiveActivityRepo
+	activityRepo      activity_common.ActivityRepo
 	serviceConfig     *service_config.ServiceConfig
 	emailService      *export.EmailService
 	authService       *auth.AuthService
@@ -40,6 +43,7 @@ type UserService struct {
 
 func NewUserService(userRepo usercommon.UserRepo,
 	userActivity activity.UserActiveActivityRepo,
+	activityRepo activity_common.ActivityRepo,
 	emailService *export.EmailService,
 	authService *auth.AuthService,
 	serviceConfig *service_config.ServiceConfig,
@@ -51,6 +55,7 @@ func NewUserService(userRepo usercommon.UserRepo,
 		userCommonService: userCommonService,
 		userRepo:          userRepo,
 		userActivity:      userActivity,
+		activityRepo:      activityRepo,
 		emailService:      emailService,
 		serviceConfig:     serviceConfig,
 		authService:       authService,
@@ -557,7 +562,119 @@ func (us *UserService) getSiteUrl(ctx context.Context) string {
 }
 
 // UserRanking get user ranking
-func (us *UserService) UserRanking(ctx context.Context) (resp []*schema.UserRankingResp, err error) {
-	//us.userRepo.GetByUserID()
+func (us *UserService) UserRanking(ctx context.Context) (resp *schema.UserRankingResp, err error) {
+	resp = &schema.UserRankingResp{
+		UsersWithTheMostReputation: make([]*schema.UserRankingSimpleInfo, 0),
+		UsersWithTheMostVote:       make([]*schema.UserRankingSimpleInfo, 0),
+		Staffs:                     make([]*schema.UserRankingSimpleInfo, 0),
+	}
+	endTime := time.Now()
+	startTime := endTime.AddDate(0, 0, -7)
+	limit := 20
+
+	userIDs := make([]string, 0)
+	userIDExist := make(map[string]bool, 0)
+	userInfoMapping := make(map[string]*entity.User, 0)
+
+	// get most reputation users
+	rankStat, err := us.activityRepo.GetUsersWhoHasGainedTheMostReputation(ctx, startTime, endTime, limit)
+	if err != nil {
+		return nil, err
+	}
+	for _, stat := range rankStat {
+		if stat.Rank == 0 {
+			continue
+		}
+		if userIDExist[stat.UserID] {
+			continue
+		}
+		userIDs = append(userIDs, stat.UserID)
+		userIDExist[stat.UserID] = true
+	}
+
+	voteStat, err := us.activityRepo.GetUsersWhoHasVoteMost(ctx, startTime, endTime, limit)
+	if err != nil {
+		return nil, err
+	}
+	for _, stat := range voteStat {
+		if stat.VoteCount == 0 {
+			continue
+		}
+		if userIDExist[stat.UserID] {
+			continue
+		}
+		userIDs = append(userIDs, stat.UserID)
+		userIDExist[stat.UserID] = true
+	}
+
+	// get all staff members
+	userRoleRels, err := us.userRoleService.GetUserByRoleID(ctx, []int{role.RoleAdminID, role.RoleModeratorID})
+	if err != nil {
+		return nil, err
+	}
+	for _, rel := range userRoleRels {
+		if userIDExist[rel.UserID] {
+			continue
+		}
+		userIDs = append(userIDs, rel.UserID)
+		userIDExist[rel.UserID] = true
+	}
+
+	if len(userIDs) == 0 {
+		return resp, nil
+	}
+	userInfoList, err := us.userRepo.BatchGetByID(ctx, userIDs)
+	if err != nil {
+		return nil, err
+	}
+	for _, user := range userInfoList {
+		user.Avatar = schema.FormatAvatarInfo(user.Avatar)
+		userInfoMapping[user.ID] = user
+	}
+
+	for _, stat := range rankStat {
+		if stat.Rank == 0 {
+			continue
+		}
+		userInfo := userInfoMapping[stat.UserID]
+		if userInfo == nil {
+			continue
+		}
+		resp.UsersWithTheMostReputation = append(resp.UsersWithTheMostReputation, &schema.UserRankingSimpleInfo{
+			Username:    userInfo.Username,
+			Rank:        stat.Rank,
+			DisplayName: userInfo.DisplayName,
+			Avatar:      userInfo.Avatar,
+		})
+	}
+
+	for _, stat := range voteStat {
+		if stat.VoteCount == 0 {
+			continue
+		}
+		userInfo := userInfoMapping[stat.UserID]
+		if userInfo == nil {
+			continue
+		}
+		resp.UsersWithTheMostVote = append(resp.UsersWithTheMostVote, &schema.UserRankingSimpleInfo{
+			Username:    userInfo.Username,
+			VoteCount:   stat.VoteCount,
+			DisplayName: userInfo.DisplayName,
+			Avatar:      userInfo.Avatar,
+		})
+	}
+
+	for _, rel := range userRoleRels {
+		userInfo := userInfoMapping[rel.UserID]
+		if userInfo == nil {
+			continue
+		}
+		resp.Staffs = append(resp.Staffs, &schema.UserRankingSimpleInfo{
+			Username:    userInfo.Username,
+			Rank:        userInfo.Rank,
+			DisplayName: userInfo.DisplayName,
+			Avatar:      userInfo.Avatar,
+		})
+	}
 	return
 }
