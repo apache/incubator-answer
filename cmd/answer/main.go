@@ -6,6 +6,7 @@ import (
 
 	"github.com/answerdev/answer/internal/base/conf"
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/cron"
 	"github.com/answerdev/answer/internal/cli"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/gin-gonic/gin"
@@ -60,7 +61,8 @@ func runApp() {
 	}
 }
 
-func newApplication(serverConf *conf.Server, server *gin.Engine) *pacman.Application {
+func newApplication(serverConf *conf.Server, server *gin.Engine, manager *cron.ScheduledTaskManager) *pacman.Application {
+	manager.Run()
 	return pacman.NewApp(
 		pacman.WithName(Name),
 		pacman.WithVersion(Version),
