@@ -1,8 +1,7 @@
 package schema
 
 const (
-	// SitemapMaxSize  = 50000
-	SitemapMaxSize      = 10
+	SitemapMaxSize      = 50000
 	SitemapCachekey     = "answer@sitemap"
 	SitemapPageCachekey = "answer@sitemap@page%d"
 )
