@@ -388,6 +388,10 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	if siteInfo.Description == "" {
 		siteInfo.Description = siteInfo.General.Description
 	}
+	data["title"] = siteInfo.Title
+	if siteInfo.Title == "" {
+		data["title"] = siteInfo.General.Name
+	}
 	data["description"] = siteInfo.Description
 	data["language"] = handler.GetLang(ctx)
 	data["timezone"] = siteInfo.Interface.TimeZone

@@ -109,6 +109,7 @@ type TemplateSiteInfoResp struct {
 	General     *SiteGeneralResp   `json:"general"`
 	Interface   *SiteInterfaceResp `json:"interface"`
 	Branding    *SiteBrandingResp  `json:"branding"`
+	Title       string
 	Year        string
 	Canonical   string
 	JsonLD      string
