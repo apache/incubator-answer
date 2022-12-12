@@ -1,0 +1,7 @@
+{{ .xmlHeader }}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>http://www.example.com/foo1</loc>
+    <lastmod>2018-06-04</lastmod>
+  </url>
+</urlset>

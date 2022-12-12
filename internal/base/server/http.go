@@ -172,7 +172,7 @@ func NewHTTPServer(debug bool,
 		r.LoadHTMLGlob("../../ui/template/*")
 	} else {
 		html, _ := fs.Sub(ui.Template, "template")
-		htmlTemplate := template.Must(template.New("").Funcs(funcMap).ParseFS(html, "*.html"))
+		htmlTemplate := template.Must(template.New("").Funcs(funcMap).ParseFS(html, "*"))
 		r.SetHTMLTemplate(htmlTemplate)
 	}
 

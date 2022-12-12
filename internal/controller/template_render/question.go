@@ -1,7 +1,8 @@
 package templaterender
 
 import (
-	"fmt"
+	"html/template"
+	"net/http"
 
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/gin-gonic/gin"
@@ -15,10 +16,32 @@ func (t *TemplateRenderController) QuestionDetail(ctx *gin.Context, id string) (
 	return t.questionService.GetQuestion(ctx, id, "", schema.QuestionPermission{})
 }
 
-func (t *TemplateRenderController) Sitemap(ctx *gin.Context) (string, error) {
-	return "Sitemap", nil
+func (t *TemplateRenderController) Sitemap(ctx *gin.Context) {
+	//question list page
+	ctx.Header("Content-Type", "application/xml")
+	ctx.HTML(
+		http.StatusOK, "sitemap-list.xml", gin.H{
+			"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
+			"list":      "string",
+		},
+	)
+
+	//question url list
+	ctx.Header("Content-Type", "application/xml")
+	ctx.HTML(
+		http.StatusOK, "sitemap.xml", gin.H{
+			"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
+			"list":      "string",
+		},
+	)
 }
 
 func (t *TemplateRenderController) SitemapPage(ctx *gin.Context, page int) (string, error) {
-	return fmt.Sprintf("SitemapPage-%d", page), nil
+	ctx.Header("Content-Type", "application/xml")
+	ctx.HTML(
+		http.StatusOK, "sitemap.xml", gin.H{
+			"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
+			"list":      "string",
+		},
+	)
 }
