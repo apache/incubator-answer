@@ -29,6 +29,9 @@ func NewTemplateRouter(
 // TemplateRouter template router
 func (a *TemplateRouter) RegisterTemplateRouter(r *gin.RouterGroup) {
 
+	r.GET("/sitemap.xml", a.templateController.Sitemap)
+	r.GET("/sitemap/:page", a.templateController.Sitemap)
+
 	r.GET("/robots.txt", a.siteInfoController.GetRobots)
 
 	r.GET("/", a.templateController.Index)

@@ -14,9 +14,11 @@ import (
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/obj"
 	"github.com/answerdev/answer/ui"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
 )
@@ -400,4 +402,22 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	data["timezone"] = siteInfo.Interface.TimeZone
 
 	ctx.HTML(code, tpl, data)
+}
+
+func (tc *TemplateController) Sitemap(ctx *gin.Context) {
+	page := 0
+	pageParam := ctx.Param("page")
+	pageRegexp := regexp.MustCompile(`question-(.*).xml`)
+	pageStr := pageRegexp.FindStringSubmatch(pageParam)
+	if len(pageStr) != 2 {
+		tc.Page404(ctx)
+		return
+	}
+	page = converter.StringToInt(pageStr[1])
+	if page == 0 {
+		tc.Page404(ctx)
+		return
+	}
+	spew.Dump(page)
+	ctx.String(http.StatusOK, "sitemap")
 }
