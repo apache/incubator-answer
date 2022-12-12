@@ -4677,6 +4677,46 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/user/ranking": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user ranking",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "get user ranking",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetUserToSetShowResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/user/register/email": {
             "post": {
                 "description": "UserRegisterByEmail",
@@ -6903,6 +6943,9 @@ const docTemplate = `{
             "properties": {
                 "branding": {
                     "$ref": "#/definitions/schema.SiteBrandingResp"
+                },
+                "custom_css_html": {
+                    "$ref": "#/definitions/schema.SiteCustomCssHTMLResp"
                 },
                 "general": {
                     "$ref": "#/definitions/schema.SiteGeneralResp"

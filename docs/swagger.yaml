@@ -1294,6 +1294,8 @@ definitions:
     properties:
       branding:
         $ref: '#/definitions/schema.SiteBrandingResp'
+      custom_css_html:
+        $ref: '#/definitions/schema.SiteCustomCssHTMLResp'
       general:
         $ref: '#/definitions/schema.SiteGeneralResp'
       interface:
@@ -4668,6 +4670,28 @@ paths:
           schema:
             type: string
       summary: RetrievePassWord
+      tags:
+      - User
+  /answer/api/v1/user/ranking:
+    get:
+      consumes:
+      - application/json
+      description: get user ranking
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserToSetShowResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user ranking
       tags:
       - User
   /answer/api/v1/user/register/email:
