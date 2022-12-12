@@ -238,6 +238,14 @@ const routes: RouteNode[] = [
             page: 'pages/Admin/Flags',
           },
           {
+            path: 'themes',
+            page: 'pages/Admin/Themes',
+          },
+          {
+            path: 'css-html',
+            page: 'pages/Admin/CssAndHtml',
+          },
+          {
             path: 'general',
             page: 'pages/Admin/General',
           },
@@ -276,6 +284,10 @@ const routes: RouteNode[] = [
           {
             path: 'seo',
             page: 'pages/Admin/Seo',
+          },
+          {
+            path: 'login',
+            page: 'pages/Admin/Login',
           },
         ],
       },

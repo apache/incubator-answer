@@ -29,3 +29,18 @@ export const getUserRoles = () => {
 export const changeUserRole = (params) => {
   return request.put('/answer/admin/api/user/role', params);
 };
+
+export const addUser = (params: {
+  display_name: string;
+  email: string;
+  password: string;
+}) => {
+  return request.post('/answer/admin/api/user', params);
+};
+
+export const updateUserPassword = (params: {
+  password: string;
+  user_id: string;
+}) => {
+  return request.put('/answer/admin/api/user/password', params);
+};

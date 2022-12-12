@@ -346,6 +346,28 @@ export interface AdminSettingsSeo {
   robots: string;
 }
 
+export type themeConfig = {
+  navbar_style: string;
+  primary_color: string;
+  [k: string]: string | number;
+};
+export interface AdminSettingsTheme {
+  theme: string;
+  theme_config: Record<string, themeConfig>;
+}
+
+export interface AdminSettingsCustom {
+  custom_css: string;
+  custom_head: string;
+  custom_header: string;
+  custom_footer: string;
+}
+
+export interface AdminSettingsLogin {
+  allow_new_registrations: boolean;
+  login_required: boolean;
+}
+
 /**
  * @description interface for Activity
  */

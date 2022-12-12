@@ -17,6 +17,8 @@ const formPaths = [
   'legal',
   'write',
   'seo',
+  'themes',
+  'css-html',
 ];
 
 const Index: FC = () => {

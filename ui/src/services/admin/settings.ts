@@ -109,3 +109,33 @@ export const getSeoSetting = () => {
 export const putSeoSetting = (params: Type.AdminSettingsSeo) => {
   return request.put('/answer/admin/api/siteinfo/seo', params);
 };
+
+export const getThemeSetting = () => {
+  return request.get<Type.AdminSettingsTheme>(
+    '/answer/admin/api/siteinfo/theme',
+  );
+};
+
+export const putThemeSetting = (params: Type.AdminSettingsTheme) => {
+  return request.put('/answer/admin/api/siteinfo/theme', params);
+};
+
+export const getPageCustom = () => {
+  return request.get<Type.AdminSettingsCustom>(
+    '/answer/admin/api/siteinfo/custom-css-html',
+  );
+};
+
+export const putPageCustom = (params: Type.AdminSettingsCustom) => {
+  return request.put('/answer/admin/api/siteinfo/custom-css-html', params);
+};
+
+export const getLoginSetting = () => {
+  return request.get<Type.AdminSettingsLogin>(
+    '/answer/admin/api/siteinfo/login',
+  );
+};
+
+export const putLoginSetting = (params: Type.AdminSettingsLogin) => {
+  return request.put('/answer/admin/api/siteinfo/login', params);
+};

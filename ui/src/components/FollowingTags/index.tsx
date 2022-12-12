@@ -35,7 +35,6 @@ const Index: FC = () => {
   if (!tryLoggedAndActivated().ok) {
     return null;
   }
-
   return isEdit ? (
     <Card className="mb-4">
       <Card.Header className="text-nowrap d-flex justify-content-between">
@@ -80,7 +79,9 @@ const Index: FC = () => {
           <>
             <div className="text-muted">{t('follow_tag_tip')}</div>
             <NavLink className="d-inline-block my-2" to="/tags">
-              <Button variant="outline-primary">{t('follow_a_tag')}</Button>
+              <Button size="sm" variant="outline-primary">
+                {t('follow_a_tag')}
+              </Button>
             </NavLink>
           </>
         )}
