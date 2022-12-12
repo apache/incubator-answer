@@ -25,6 +25,7 @@ import (
 type UserBackyardRepo interface {
 	UpdateUserStatus(ctx context.Context, userID string, userStatus, mailStatus int, email string) (err error)
 	GetUserInfo(ctx context.Context, userID string) (user *entity.User, exist bool, err error)
+	GetUserInfoByEmail(ctx context.Context, email string) (user *entity.User, exist bool, err error)
 	GetUserPage(ctx context.Context, page, pageSize int, user *entity.User,
 		usernameOrDisplayName string, isStaff bool) (users []*entity.User, total int64, err error)
 	AddUser(ctx context.Context, user *entity.User) (err error)
@@ -103,6 +104,14 @@ func (us *UserBackyardService) UpdateUserRole(ctx context.Context, req *schema.U
 
 // AddUser add user
 func (us *UserBackyardService) AddUser(ctx context.Context, req *schema.AddUserReq) (err error) {
+	_, has, err := us.userRepo.GetUserInfoByEmail(ctx, req.Email)
+	if err != nil {
+		return err
+	}
+	if has {
+		return errors.BadRequest(reason.EmailDuplicate)
+	}
+
 	hashPwd, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err
