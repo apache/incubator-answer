@@ -3,10 +3,12 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"strings"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
@@ -43,6 +45,7 @@ type QuestionService struct {
 	metaService           *meta.MetaService
 	collectionCommon      *collectioncommon.CollectionCommon
 	answerActivityService *activity.AnswerActivityService
+	data                  *data.Data
 }
 
 func NewQuestionService(
@@ -54,6 +57,8 @@ func NewQuestionService(
 	metaService *meta.MetaService,
 	collectionCommon *collectioncommon.CollectionCommon,
 	answerActivityService *activity.AnswerActivityService,
+	data *data.Data,
+
 ) *QuestionService {
 	return &QuestionService{
 		questionRepo:          questionRepo,
@@ -64,6 +69,7 @@ func NewQuestionService(
 		metaService:           metaService,
 		collectionCommon:      collectionCommon,
 		answerActivityService: answerActivityService,
+		data:                  data,
 	}
 }
 
@@ -1000,4 +1006,58 @@ func (qs *QuestionService) changeQuestionToRevision(ctx context.Context, questio
 		questionRevision.Tags = append(questionRevision.Tags, item)
 	}
 	return questionRevision, nil
+}
+
+func (qs *QuestionService) SitemapCron(ctx context.Context) {
+	data := &schema.SiteMapList{}
+	questionNum, err := qs.questionRepo.GetQuestionCount(ctx)
+	if err != nil {
+		log.Error("GetQuestionCount error", err)
+		return
+	}
+	if questionNum <= schema.SitemapMaxSize {
+		questionIDList, err := qs.questionRepo.GetQuestionIDsPage(ctx, 0, int(questionNum))
+		if err != nil {
+			log.Error("GetQuestionIDsPage error", err)
+			return
+		}
+		data.QuestionIDs = questionIDList
+
+	} else {
+		nums := make([]int, 0)
+		totalpages := int(math.Ceil(float64(questionNum) / float64(schema.SitemapMaxSize)))
+		for i := 1; i <= totalpages; i++ {
+			siteMapPagedata := &schema.SiteMapPageList{}
+			nums = append(nums, i)
+			questionIDList, err := qs.questionRepo.GetQuestionIDsPage(ctx, i, int(schema.SitemapMaxSize))
+			if err != nil {
+				log.Error("GetQuestionIDsPage error", err)
+				return
+			}
+			siteMapPagedata.PageData = questionIDList
+			if setCacheErr := qs.SetCache(ctx, fmt.Sprintf(schema.SitemapPageCachekey, i), siteMapPagedata); setCacheErr != nil {
+				log.Errorf("set sitemap cron SetCache failed: %s", setCacheErr)
+			}
+		}
+		data.MaxPageNum = nums
+	}
+	if setCacheErr := qs.SetCache(ctx, schema.SitemapCachekey, data); setCacheErr != nil {
+		log.Errorf("set sitemap cron SetCache failed: %s", setCacheErr)
+	}
+
+	return
+
+}
+
+func (qs *QuestionService) SetCache(ctx context.Context, cachekey string, info interface{}) error {
+	infoStr, err := json.Marshal(info)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+
+	err = qs.data.Cache.SetString(ctx, cachekey, string(infoStr), schema.DashBoardCacheTime)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+	return nil
 }

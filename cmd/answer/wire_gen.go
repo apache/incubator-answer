@@ -8,6 +8,7 @@ package main
 
 import (
 	"github.com/answerdev/answer/internal/base/conf"
+	"github.com/answerdev/answer/internal/base/cron"
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/server"
@@ -163,7 +164,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	answerActivityRepo := activity.NewAnswerActivityRepo(dataData, activityRepo, userRankRepo)
 	questionActivityRepo := activity.NewQuestionActivityRepo(dataData, activityRepo, userRankRepo)
 	answerActivityService := activity2.NewAnswerActivityService(answerActivityRepo, questionActivityRepo)
-	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, revisionService, metaService, collectionCommon, answerActivityService)
+	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, revisionService, metaService, collectionCommon, answerActivityService, dataData)
 	questionController := controller.NewQuestionController(questionService, rankService)
 	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo)
 	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configRepo, siteInfoCommonService, serviceConf, dataData)
@@ -206,11 +207,12 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	uiRouter := router.NewUIRouter(siteinfoController)
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService, siteInfoCommonService)
 	avatarMiddleware := middleware.NewAvatarMiddleware(serviceConf, uploaderService)
-	templateRenderController := templaterender.NewTemplateRenderController(questionService, userService, tagService, answerService, commentService)
+	templateRenderController := templaterender.NewTemplateRenderController(questionService, userService, tagService, answerService, commentService, dataData, siteInfoCommonService)
 	templateController := controller.NewTemplateController(templateRenderController, siteInfoCommonService)
 	templateRouter := router.NewTemplateRouter(templateController, templateRenderController, siteInfoController)
 	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter)
-	application := newApplication(serverConf, ginEngine)
+	scheduledTaskManager := cron.NewScheduledTaskManager(siteInfoCommonService, questionService)
+	application := newApplication(serverConf, ginEngine, scheduledTaskManager)
 	return application, func() {
 		cleanup2()
 		cleanup()

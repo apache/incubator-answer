@@ -41,6 +41,7 @@ type QuestionRepo interface {
 	FindByID(ctx context.Context, id []string) (questionList []*entity.Question, err error)
 	CmsSearchList(ctx context.Context, search *schema.CmsQuestionSearch) ([]*entity.Question, int64, error)
 	GetQuestionCount(ctx context.Context) (count int64, err error)
+	GetQuestionIDsPage(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error)
 }
 
 // QuestionCommon user service

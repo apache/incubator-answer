@@ -14,6 +14,7 @@ import (
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/obj"
 	"github.com/answerdev/answer/ui"
@@ -400,4 +401,29 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	data["timezone"] = siteInfo.Interface.TimeZone
 
 	ctx.HTML(code, tpl, data)
+}
+
+func (tc *TemplateController) Sitemap(ctx *gin.Context) {
+	tc.templateRenderController.Sitemap(ctx)
+}
+
+func (tc *TemplateController) SitemapPage(ctx *gin.Context) {
+	page := 0
+	pageParam := ctx.Param("page")
+	pageRegexp := regexp.MustCompile(`question-(.*).xml`)
+	pageStr := pageRegexp.FindStringSubmatch(pageParam)
+	if len(pageStr) != 2 {
+		tc.Page404(ctx)
+		return
+	}
+	page = converter.StringToInt(pageStr[1])
+	if page == 0 {
+		tc.Page404(ctx)
+		return
+	}
+	err := tc.templateRenderController.SitemapPage(ctx, page)
+	if err != nil {
+		tc.Page404(ctx)
+		return
+	}
 }

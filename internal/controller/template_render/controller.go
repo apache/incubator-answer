@@ -1,8 +1,11 @@
 package templaterender
 
 import (
-	"github.com/answerdev/answer/internal/service/comment"
 	"math"
+
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/service/comment"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
@@ -21,6 +24,8 @@ type TemplateRenderController struct {
 	tagService      *tag.TagService
 	answerService   *service.AnswerService
 	commentService  *comment.CommentService
+	data            *data.Data
+	siteInfoService *siteinfo_common.SiteInfoCommonService
 }
 
 func NewTemplateRenderController(
@@ -29,6 +34,9 @@ func NewTemplateRenderController(
 	tagService *tag.TagService,
 	answerService *service.AnswerService,
 	commentService *comment.CommentService,
+	data *data.Data,
+	siteInfoService *siteinfo_common.SiteInfoCommonService,
+
 ) *TemplateRenderController {
 	return &TemplateRenderController{
 		questionService: questionService,
@@ -36,6 +44,8 @@ func NewTemplateRenderController(
 		tagService:      tagService,
 		answerService:   answerService,
 		commentService:  commentService,
+		data:            data,
+		siteInfoService: siteInfoService,
 	}
 }
 
