@@ -10,7 +10,7 @@ import type {
   FormDataType,
 } from '@/common/interface';
 import { Unactivate } from '@/components';
-import { loggedUserInfoStore } from '@/stores';
+import { loggedUserInfoStore, loginSettingStore } from '@/stores';
 import { guard, floppyNavigation, handleFormError } from '@/utils';
 import { login, checkImgCode } from '@/services';
 import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
@@ -25,6 +25,7 @@ const Index: React.FC = () => {
   const [refresh, setRefresh] = useState(0);
   const updateUser = loggedUserInfoStore((state) => state.update);
   const storeUser = loggedUserInfoStore((state) => state.user);
+  const loginSetting = loginSettingStore((state) => state.login);
   const [formData, setFormData] = useState<FormDataType>({
     e_mail: {
       value: '',
@@ -236,15 +237,16 @@ const Index: React.FC = () => {
               </Button>
             </div>
           </Form>
-
-          <div className="text-center mt-5">
-            <Trans i18nKey="login.info_sign" ns="translation">
-              Don’t have an account?
-              <Link to="/users/register" tabIndex={2}>
-                Sign up
-              </Link>
-            </Trans>
-          </div>
+          {loginSetting.allow_new_registrations && (
+            <div className="text-center mt-5">
+              <Trans i18nKey="login.info_sign" ns="translation">
+                Don’t have an account?
+                <Link to="/users/register" tabIndex={2}>
+                  Sign up
+                </Link>
+              </Trans>
+            </div>
+          )}
         </Col>
       )}
 

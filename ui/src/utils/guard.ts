@@ -4,6 +4,7 @@ import {
   siteInfoStore,
   interfaceStore,
   brandingStore,
+  loginSettingStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
 import Storage from '@/utils/storage';
@@ -157,6 +158,16 @@ export const admin = () => {
   return gr;
 };
 
+export const allowNewRegistration = () => {
+  const gr: TGuardResult = { ok: true };
+  const loginSetting = loginSettingStore.getState().login;
+  if (!loginSetting.allow_new_registrations) {
+    gr.ok = false;
+    gr.redirect = RouteAlias.home;
+  }
+  return gr;
+};
+
 /**
  * try user was logged and all state ok
  * @param canNavigate // if true, will navigate to login page if not logged
@@ -203,6 +214,7 @@ export const initAppSettingsStore = async () => {
     siteInfoStore.getState().update(appSettings.general);
     interfaceStore.getState().update(appSettings.interface);
     brandingStore.getState().update(appSettings.branding);
+    loginSettingStore.getState().update(appSettings.login);
   }
 };
 

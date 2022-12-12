@@ -144,6 +144,10 @@ const routes: RouteNode[] = [
         path: 'users/register',
         page: 'pages/Users/Register',
         guard: async () => {
+          const allowNew = guard.allowNewRegistration();
+          if (!allowNew.ok) {
+            return allowNew;
+          }
           return guard.notLogged();
         },
       },

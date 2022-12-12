@@ -17,7 +17,12 @@ import {
   useLocation,
 } from 'react-router-dom';
 
-import { loggedUserInfoStore, siteInfoStore, brandingStore } from '@/stores';
+import {
+  loggedUserInfoStore,
+  siteInfoStore,
+  brandingStore,
+  loginSettingStore,
+} from '@/stores';
 import { logout, useQueryNotificationStatus } from '@/services';
 import { RouteAlias } from '@/router/alias';
 import { DEFAULT_SITE_NAME } from '@/common/constants';
@@ -35,6 +40,7 @@ const Header: FC = () => {
   const [searchStr, setSearch] = useState('');
   const siteInfo = siteInfoStore((state) => state.siteInfo);
   const brandingInfo = brandingStore((state) => state.branding);
+  const loginSetting = loginSettingStore((state) => state.login);
   const { data: redDot } = useQueryNotificationStatus();
   const location = useLocation();
   const handleInput = (val) => {
@@ -105,9 +111,11 @@ const Header: FC = () => {
                   href="/users/login">
                   {t('btns.login')}
                 </Button>
-                <Button variant="light" href="/users/register">
-                  {t('btns.signup')}
-                </Button>
+                {loginSetting.allow_new_registrations && (
+                  <Button variant="light" href="/users/register">
+                    {t('btns.signup')}
+                  </Button>
+                )}
               </>
             )}
           </div>
@@ -174,9 +182,11 @@ const Header: FC = () => {
                   href="/users/login">
                   {t('btns.login')}
                 </Button>
-                <Button variant="light" href="/users/register">
-                  {t('btns.signup')}
-                </Button>
+                {loginSetting.allow_new_registrations && (
+                  <Button variant="light" href="/users/register">
+                    {t('btns.signup')}
+                  </Button>
+                )}
               </>
             )}
           </Col>
