@@ -27,7 +27,7 @@ func NewSiteinfoController(siteInfoService *siteinfo_common.SiteInfoCommonServic
 // @Description get site info
 // @Tags site
 // @Produce json
-// @Success 200 {object} handler.RespBody{data=schema.SiteGeneralResp}
+// @Success 200 {object} handler.RespBody{data=schema.SiteInfoResp}
 // @Router /answer/api/v1/siteinfo [get]
 func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
 	var err error
@@ -42,6 +42,21 @@ func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
 	}
 
 	resp.Branding, err = sc.siteInfoService.GetSiteBranding(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+
+	resp.Login, err = sc.siteInfoService.GetSiteLogin(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+
+	resp.Theme, err = sc.siteInfoService.GetSiteTheme(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+
+	resp.CustomCssHtml, err = sc.siteInfoService.GetSiteCustomCssHTML(ctx)
 	if err != nil {
 		log.Error(err)
 	}

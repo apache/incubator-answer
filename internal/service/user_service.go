@@ -2,14 +2,9 @@ package service
 
 import (
 	"context"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"math/rand"
-	"regexp"
-	"strings"
 
-	"github.com/Chain-Zhang/pinyin"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
@@ -23,7 +18,6 @@ import (
 	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
-	"github.com/answerdev/answer/pkg/checker"
 	"github.com/google/uuid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -34,13 +28,14 @@ import (
 
 // UserService user service
 type UserService struct {
-	userRepo        usercommon.UserRepo
-	userActivity    activity.UserActiveActivityRepo
-	serviceConfig   *service_config.ServiceConfig
-	emailService    *export.EmailService
-	authService     *auth.AuthService
-	siteInfoService *siteinfo_common.SiteInfoCommonService
-	userRoleService *role.UserRoleRelService
+	userCommonService *usercommon.UserCommon
+	userRepo          usercommon.UserRepo
+	userActivity      activity.UserActiveActivityRepo
+	serviceConfig     *service_config.ServiceConfig
+	emailService      *export.EmailService
+	authService       *auth.AuthService
+	siteInfoService   *siteinfo_common.SiteInfoCommonService
+	userRoleService   *role.UserRoleRelService
 }
 
 func NewUserService(userRepo usercommon.UserRepo,
@@ -50,15 +45,17 @@ func NewUserService(userRepo usercommon.UserRepo,
 	serviceConfig *service_config.ServiceConfig,
 	siteInfoService *siteinfo_common.SiteInfoCommonService,
 	userRoleService *role.UserRoleRelService,
+	userCommonService *usercommon.UserCommon,
 ) *UserService {
 	return &UserService{
-		userRepo:        userRepo,
-		userActivity:    userActivity,
-		emailService:    emailService,
-		serviceConfig:   serviceConfig,
-		authService:     authService,
-		siteInfoService: siteInfoService,
-		userRoleService: userRoleService,
+		userCommonService: userCommonService,
+		userRepo:          userRepo,
+		userActivity:      userActivity,
+		emailService:      emailService,
+		serviceConfig:     serviceConfig,
+		authService:       authService,
+		siteInfoService:   siteInfoService,
+		userRoleService:   userRoleService,
 	}
 }
 
@@ -307,7 +304,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	if err != nil {
 		return nil, err
 	}
-	userInfo.Username, err = us.makeUsername(ctx, registerUserInfo.Name)
+	userInfo.Username, err = us.userCommonService.MakeUsername(ctx, registerUserInfo.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -456,44 +453,6 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	return resp, nil
 }
 
-// makeUsername
-// Generate a unique Username based on the displayName
-func (us *UserService) makeUsername(ctx context.Context, displayName string) (username string, err error) {
-	// Chinese processing
-	if has := checker.IsChinese(displayName); has {
-		str, err := pinyin.New(displayName).Split("").Mode(pinyin.WithoutTone).Convert()
-		if err != nil {
-			return "", err
-		} else {
-			displayName = str
-		}
-	}
-
-	username = strings.ReplaceAll(displayName, " ", "_")
-	username = strings.ToLower(username)
-	suffix := ""
-
-	re := regexp.MustCompile(`^[a-z0-9._-]{4,30}$`)
-	match := re.MatchString(username)
-	if !match {
-		return "", errors.BadRequest(reason.UsernameInvalid)
-	}
-
-	for {
-		_, has, err := us.userRepo.GetByUsername(ctx, username+suffix)
-		if err != nil {
-			return "", err
-		}
-		if !has {
-			break
-		}
-		bytes := make([]byte, 2)
-		_, _ = rand.Read(bytes)
-		suffix = hex.EncodeToString(bytes)
-	}
-	return username + suffix, nil
-}
-
 // verifyPassword
 // Compare whether the password is correct
 func (us *UserService) verifyPassword(ctx context.Context, LoginPass, UserPass string) bool {
@@ -595,4 +554,10 @@ func (us *UserService) getSiteUrl(ctx context.Context) string {
 		return ""
 	}
 	return siteGeneral.SiteUrl
+}
+
+// UserRanking get user ranking
+func (us *UserService) UserRanking(ctx context.Context) (resp []*schema.UserRankingResp, err error) {
+	//us.userRepo.GetByUserID()
+	return
 }

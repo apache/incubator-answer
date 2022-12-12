@@ -52,9 +52,13 @@ func NewHTTPServer(debug bool,
 	static.Use(avatarMiddleware.AvatarThumb())
 	staticRouter.RegisterStaticRouter(static)
 
+	// The route must be available without logging in
+	mustUnAuthV1 := r.Group("/answer/api/v1")
+	answerRouter.RegisterMustUnAuthAnswerAPIRouter(mustUnAuthV1)
+
 	// register api that no need to login
 	unAuthV1 := r.Group("/answer/api/v1")
-	unAuthV1.Use(authUserMiddleware.Auth())
+	unAuthV1.Use(authUserMiddleware.Auth(), authUserMiddleware.EjectUserBySiteInfo())
 	answerRouter.RegisterUnAuthAnswerAPIRouter(unAuthV1)
 
 	// register api that must be authenticated

@@ -12,6 +12,8 @@ const (
 	AdminTokenCacheTime        = 7 * 24 * time.Hour
 	AcceptLanguageFlag         = "Accept-Language"
 	UserTokenMappingCacheKey   = "answer:user-token:mapping:"
+	SiteInfoCacheKey           = "answer:site-info:"
+	SiteInfoCacheTime          = 1 * time.Hour
 )
 
 const (
@@ -54,12 +56,15 @@ var (
 )
 
 const (
-	SiteTypeGeneral   = "general"
-	SiteTypeInterface = "interface"
-	SiteTypeBranding  = "branding"
-	SiteTypeWrite     = "write"
-	SiteTypeLegal     = "legal"
-	SiteTypeSeo       = "seo"
+	SiteTypeGeneral       = "general"
+	SiteTypeInterface     = "interface"
+	SiteTypeBranding      = "branding"
+	SiteTypeWrite         = "write"
+	SiteTypeLegal         = "legal"
+	SiteTypeSeo           = "seo"
+	SiteTypeLogin         = "login"
+	SiteTypeCustomCssHTML = "css-html"
+	SiteTypeTheme         = "theme"
 )
 
 func ExistInPathIgnore(name string) bool {

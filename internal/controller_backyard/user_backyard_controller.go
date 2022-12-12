@@ -60,6 +60,50 @@ func (uc *UserBackyardController) UpdateUserRole(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
+// AddUser add user
+// @Summary add user
+// @Description add user
+// @Security ApiKeyAuth
+// @Tags admin
+// @Accept json
+// @Produce json
+// @Param data body schema.AddUserReq true "user"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/admin/api/user [post]
+func (uc *UserBackyardController) AddUser(ctx *gin.Context) {
+	req := &schema.AddUserReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	err := uc.userService.AddUser(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// UpdateUserPassword update user password
+// @Summary update user password
+// @Description update user password
+// @Security ApiKeyAuth
+// @Tags admin
+// @Accept json
+// @Produce json
+// @Param data body schema.UpdateUserPasswordReq true "user"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/admin/api/user/password [put]
+func (uc *UserBackyardController) UpdateUserPassword(ctx *gin.Context) {
+	req := &schema.UpdateUserPasswordReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	err := uc.userService.UpdateUserPassword(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
 // GetUserPage get user page
 // @Summary get user page
 // @Description get user page

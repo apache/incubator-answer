@@ -117,6 +117,8 @@ backend:
         other: "头像设置错误"
       cannot_update_your_role:
         other: "你无法修改自己的角色"
+      not_allowed_registration:
+        other: "目前该网站尚未开放注册"
     revision:
       review_underway:
         other: "目前无法编辑，有一个版本在审阅队列中。"

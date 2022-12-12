@@ -145,6 +145,8 @@ backend:
           other: "Can’t create the config.yaml file."
       cannot_update_your_role:
         other: "You cannot modify your role."
+      not_allowed_registration:
+        other: "Currently the site is not open for registration"
   report:
     spam:
       name:

@@ -11,12 +11,4 @@ var GetThemeOptions = []*GetThemeOption{
 		Label: "Default",
 		Value: "default",
 	},
-	{
-		Label: "Black",
-		Value: "black",
-	},
-	{
-		Label: "White",
-		Value: "white",
-	},
 }

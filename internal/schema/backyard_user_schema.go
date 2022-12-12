@@ -84,3 +84,18 @@ type UpdateUserRoleReq struct {
 	// login user id
 	LoginUserID string `json:"-"`
 }
+
+// AddUserReq add user request
+type AddUserReq struct {
+	DisplayName string `validate:"required,gt=4,lte=30" json:"display_name"`
+	Email       string `validate:"required,email,gt=0,lte=500" json:"email"`
+	Password    string `validate:"required,gte=8,lte=32" json:"password"`
+	LoginUserID string `json:"-"`
+}
+
+// UpdateUserPasswordReq update user password request
+type UpdateUserPasswordReq struct {
+	UserID      string `validate:"required" json:"user_id"`
+	Password    string `validate:"required,gte=8,lte=32" json:"password"`
+	LoginUserID string `json:"-"`
+}

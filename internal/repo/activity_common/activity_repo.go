@@ -3,6 +3,7 @@ package activity_common
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/activity_common"
@@ -104,5 +105,11 @@ func (ar *ActivityRepo) AddActivity(ctx context.Context, activity *entity.Activi
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	return
+}
+
+// GetUsersWhoHasGainedTheMostReputation get users who has gained the most reputation over a period of time
+func (ar *ActivityRepo) GetUsersWhoHasGainedTheMostReputation(
+	ctx context.Context, startTime, endTime time.Time, limit int) (userIDs []string, err error) {
 	return
 }

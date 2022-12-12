@@ -11,6 +11,7 @@ import (
 	"github.com/answerdev/answer/internal/service/action"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/export"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
@@ -18,11 +19,12 @@ import (
 
 // UserController user controller
 type UserController struct {
-	userService     *service.UserService
-	authService     *auth.AuthService
-	actionService   *action.CaptchaService
-	uploaderService *uploader.UploaderService
-	emailService    *export.EmailService
+	userService           *service.UserService
+	authService           *auth.AuthService
+	actionService         *action.CaptchaService
+	uploaderService       *uploader.UploaderService
+	emailService          *export.EmailService
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewUserController new controller
@@ -32,13 +34,15 @@ func NewUserController(
 	actionService *action.CaptchaService,
 	emailService *export.EmailService,
 	uploaderService *uploader.UploaderService,
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 ) *UserController {
 	return &UserController{
-		authService:     authService,
-		userService:     userService,
-		actionService:   actionService,
-		uploaderService: uploaderService,
-		emailService:    emailService,
+		authService:           authService,
+		userService:           userService,
+		actionService:         actionService,
+		uploaderService:       uploaderService,
+		emailService:          emailService,
+		siteInfoCommonService: siteInfoCommonService,
 	}
 }
 
@@ -203,6 +207,17 @@ func (uc *UserController) UserLogout(ctx *gin.Context) {
 // @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
 // @Router /answer/api/v1/user/register/email [post]
 func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
+	// check whether site allow register or not
+	siteInfo, err := uc.siteInfoCommonService.GetSiteLogin(ctx)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !siteInfo.AllowNewRegistrations {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.NotAllowedRegistration), nil)
+		return
+	}
+
 	req := &schema.UserRegisterReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
@@ -472,4 +487,18 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 	err := uc.userService.UserChangeEmailVerify(ctx, req.Content)
 	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, nil)
+}
+
+// UserRanking get user ranking
+// @Summary get user ranking
+// @Description get user ranking
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.RespBody{data=schema.GetUserToSetShowResp}
+// @Router /answer/api/v1/user/ranking [get]
+func (uc *UserController) UserRanking(ctx *gin.Context) {
+	resp, err := uc.userService.UserRanking(ctx)
+	handler.HandleResponse(ctx, err, resp)
 }

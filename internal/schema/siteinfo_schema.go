@@ -82,6 +82,26 @@ type GetSiteLegalInfoResp struct {
 	PrivacyPolicyParsedText    string `json:"privacy_policy_parsed_text,omitempty"`
 }
 
+// SiteLoginReq site login request
+type SiteLoginReq struct {
+	AllowNewRegistrations bool `json:"allow_new_registrations"`
+	LoginRequired         bool `json:"login_required"`
+}
+
+// SiteCustomCssHTMLReq site custom css html
+type SiteCustomCssHTMLReq struct {
+	CustomHead   string `validate:"omitempty,gt=0,lte=65536" json:"custom_head"`
+	CustomCss    string `validate:"omitempty,gt=0,lte=65536" json:"custom_css"`
+	CustomHeader string `validate:"omitempty,gt=0,lte=65536" json:"custom_header"`
+	CustomFooter string `validate:"omitempty,gt=0,lte=65536" json:"custom_footer"`
+}
+
+// SiteThemeReq site theme config
+type SiteThemeReq struct {
+	Theme       string                 `validate:"required,gt=0,lte=255" json:"theme"`
+	ThemeConfig map[string]interface{} `validate:"omitempty" json:"theme_config"`
+}
+
 // SiteGeneralResp site general response
 type SiteGeneralResp SiteGeneralReq
 
@@ -91,19 +111,32 @@ type SiteInterfaceResp SiteInterfaceReq
 // SiteBrandingResp site branding response
 type SiteBrandingResp SiteBrandingReq
 
+// SiteLoginResp site login response
+type SiteLoginResp SiteLoginReq
+
+// SiteCustomCssHTMLResp site custom css html response
+type SiteCustomCssHTMLResp SiteCustomCssHTMLReq
+
+// SiteThemeResp site theme response
+type SiteThemeResp SiteThemeReq
+
 // SiteWriteResp site write response
 type SiteWriteResp SiteWriteReq
 
 // SiteLegalResp site write response
 type SiteLegalResp SiteLegalReq
 
+// SiteSeoResp site write response
 type SiteSeoResp SiteSeoReq
 
 // SiteInfoResp get site info response
 type SiteInfoResp struct {
-	General   *SiteGeneralResp   `json:"general"`
-	Interface *SiteInterfaceResp `json:"interface"`
-	Branding  *SiteBrandingResp  `json:"branding"`
+	General       *SiteGeneralResp       `json:"general"`
+	Interface     *SiteInterfaceResp     `json:"interface"`
+	Branding      *SiteBrandingResp      `json:"branding"`
+	Login         *SiteLoginResp         `json:"login"`
+	Theme         *SiteThemeResp         `json:"theme"`
+	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
 }
 type TemplateSiteInfoResp struct {
 	General     *SiteGeneralResp   `json:"general"`

@@ -87,11 +87,17 @@ func NewAnswerAPIRouter(
 	}
 }
 
-func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
+func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// i18n
 	r.GET("/language/config", a.langController.GetLangMapping)
 	r.GET("/language/options", a.langController.GetUserLangOptions)
 
+	//siteinfo
+	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
+	r.GET("/siteinfo/legal", a.siteinfoController.GetSiteLegalInfo)
+}
+
+func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// comment
 	r.GET("/comment/page", a.commentController.GetCommentWithPage)
 	r.GET("/personal/comment/page", a.commentController.GetCommentPersonalWithPage)
@@ -110,6 +116,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/user/logout", a.userController.UserLogout)
 	r.PUT("/user/email", a.userController.UserChangeEmailVerify)
 	r.POST("/user/email/change/code", a.userController.UserChangeEmailSendCode)
+	r.GET("/user/ranking", a.userController.UserRanking)
 
 	//answer
 	r.GET("/answer/info", a.answerController.Get)
@@ -139,11 +146,6 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	//rank
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
-
-	//siteinfo
-	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
-	r.GET("/siteinfo/legal", a.siteinfoController.GetSiteLegalInfo)
-
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
@@ -234,6 +236,8 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	r.GET("/users/page", a.backyardUserController.GetUserPage)
 	r.PUT("/user/status", a.backyardUserController.UpdateUserStatus)
 	r.PUT("/user/role", a.backyardUserController.UpdateUserRole)
+	r.POST("/user", a.backyardUserController.AddUser)
+	r.PUT("/user/password", a.backyardUserController.UpdateUserPassword)
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)
@@ -251,11 +255,17 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	r.GET("/siteinfo/write", a.siteInfoController.GetSiteWrite)
 	r.GET("/siteinfo/legal", a.siteInfoController.GetSiteLegal)
 	r.GET("/siteinfo/seo", a.siteInfoController.GetSeo)
+	r.GET("/siteinfo/login", a.siteInfoController.GetSiteLogin)
+	r.GET("/siteinfo/custom-css-html", a.siteInfoController.GetSiteCustomCssHTML)
+	r.GET("/siteinfo/theme", a.siteInfoController.GetSiteTheme)
 	r.PUT("/siteinfo/general", a.siteInfoController.UpdateGeneral)
 	r.PUT("/siteinfo/interface", a.siteInfoController.UpdateInterface)
 	r.PUT("/siteinfo/branding", a.siteInfoController.UpdateBranding)
 	r.PUT("/siteinfo/write", a.siteInfoController.UpdateSiteWrite)
 	r.PUT("/siteinfo/legal", a.siteInfoController.UpdateSiteLegal)
+	r.PUT("/siteinfo/login", a.siteInfoController.UpdateSiteLogin)
+	r.PUT("/siteinfo/custom-css-html", a.siteInfoController.UpdateSiteCustomCssHTML)
+	r.PUT("/siteinfo/theme", a.siteInfoController.SaveSiteTheme)
 	r.PUT("/siteinfo/seo", a.siteInfoController.UpdateSeo)
 	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
 	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
