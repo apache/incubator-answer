@@ -117,6 +117,17 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 		Content: string(generalDataBytes),
 		Status:  1,
 	})
+
+	loginConfig := map[string]bool{
+		"allow_new_registrations": true,
+		"login_required":          false,
+	}
+	loginConfigDataBytes, _ := json.Marshal(loginConfig)
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "login",
+		Content: string(loginConfigDataBytes),
+		Status:  1,
+	})
 	return err
 }
 
