@@ -30,7 +30,7 @@ func NewTemplateRouter(
 func (a *TemplateRouter) RegisterTemplateRouter(r *gin.RouterGroup) {
 
 	r.GET("/sitemap.xml", a.templateController.Sitemap)
-	r.GET("/sitemap/:page", a.templateController.Sitemap)
+	r.GET("/sitemap/:page", a.templateController.SitemapPage)
 
 	r.GET("/robots.txt", a.siteInfoController.GetRobots)
 

@@ -18,7 +18,6 @@ import (
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/obj"
 	"github.com/answerdev/answer/ui"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
 )
@@ -405,6 +404,15 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 }
 
 func (tc *TemplateController) Sitemap(ctx *gin.Context) {
+	xml, err := tc.templateRenderController.Sitemap(ctx)
+	if err != nil {
+		tc.Page404(ctx)
+		return
+	}
+	ctx.String(http.StatusOK, xml)
+}
+
+func (tc *TemplateController) SitemapPage(ctx *gin.Context) {
 	page := 0
 	pageParam := ctx.Param("page")
 	pageRegexp := regexp.MustCompile(`question-(.*).xml`)
@@ -418,6 +426,10 @@ func (tc *TemplateController) Sitemap(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
-	spew.Dump(page)
-	ctx.String(http.StatusOK, "sitemap")
+	xml, err := tc.templateRenderController.SitemapPage(ctx, page)
+	if err != nil {
+		tc.Page404(ctx)
+		return
+	}
+	ctx.String(http.StatusOK, xml)
 }
