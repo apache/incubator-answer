@@ -16,6 +16,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/unique"
+	"github.com/answerdev/answer/pkg/htmltext"
 
 	"github.com/segmentfault/pacman/errors"
 )
@@ -171,6 +172,36 @@ func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err 
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
+}
+
+func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error) {
+	questionIDList = make([]*schema.SiteMapQuestionInfo, 0)
+	rows := make([]*entity.Question, 0)
+	if page > 0 {
+		page = page - 1
+	} else {
+		page = 0
+	}
+	if pageSize == 0 {
+		pageSize = constant.DefaultPageSize
+	}
+	offset := page * pageSize
+	session := qr.data.DB.Table("question")
+	session = session.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed})
+	session = session.Limit(pageSize, offset)
+	session = session.OrderBy("question.created_at asc")
+	err = session.Select("id,title,post_update_time").Find(&rows)
+	if err != nil {
+		return questionIDList, err
+	}
+	for _, question := range rows {
+		item := &schema.SiteMapQuestionInfo{}
+		item.ID = question.ID
+		item.Title = htmltext.UrlTitle(question.Title)
+		item.UpdateTime = question.PostUpdateTime.Format("2006-01-02 15:04:05")
+		questionIDList = append(questionIDList, item)
+	}
+	return questionIDList, nil
 }
 
 // GetQuestionPage get question page
