@@ -16,6 +16,7 @@ const formPaths = [
   'branding',
   'legal',
   'write',
+  'seo',
   'themes',
   'css-html',
 ];
