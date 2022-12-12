@@ -17,15 +17,17 @@ func (t *TemplateRenderController) QuestionDetail(ctx *gin.Context, id string) (
 }
 
 func (t *TemplateRenderController) Sitemap(ctx *gin.Context) {
-	//question list page
-	ctx.Header("Content-Type", "application/xml")
-	ctx.HTML(
-		http.StatusOK, "sitemap-list.xml", gin.H{
-			"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
-			"list":      "string",
-		},
-	)
-
+	if 1 == 1 {
+		//question list page
+		ctx.Header("Content-Type", "application/xml")
+		ctx.HTML(
+			http.StatusOK, "sitemap-list.xml", gin.H{
+				"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
+				"list":      "string",
+			},
+		)
+		return
+	}
 	//question url list
 	ctx.Header("Content-Type", "application/xml")
 	ctx.HTML(
@@ -36,7 +38,7 @@ func (t *TemplateRenderController) Sitemap(ctx *gin.Context) {
 	)
 }
 
-func (t *TemplateRenderController) SitemapPage(ctx *gin.Context, page int) (string, error) {
+func (t *TemplateRenderController) SitemapPage(ctx *gin.Context, page int) error {
 	ctx.Header("Content-Type", "application/xml")
 	ctx.HTML(
 		http.StatusOK, "sitemap.xml", gin.H{
@@ -44,4 +46,5 @@ func (t *TemplateRenderController) SitemapPage(ctx *gin.Context, page int) (stri
 			"list":      "string",
 		},
 	)
+	return nil
 }

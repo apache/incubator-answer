@@ -421,10 +421,9 @@ func (tc *TemplateController) SitemapPage(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
-	xml, err := tc.templateRenderController.SitemapPage(ctx, page)
+	err := tc.templateRenderController.SitemapPage(ctx, page)
 	if err != nil {
 		tc.Page404(ctx)
 		return
 	}
-	ctx.String(http.StatusOK, xml)
 }
