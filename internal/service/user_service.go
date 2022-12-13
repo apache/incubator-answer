@@ -563,23 +563,45 @@ func (us *UserService) getSiteUrl(ctx context.Context) string {
 
 // UserRanking get user ranking
 func (us *UserService) UserRanking(ctx context.Context) (resp *schema.UserRankingResp, err error) {
-	resp = &schema.UserRankingResp{
-		UsersWithTheMostReputation: make([]*schema.UserRankingSimpleInfo, 0),
-		UsersWithTheMostVote:       make([]*schema.UserRankingSimpleInfo, 0),
-		Staffs:                     make([]*schema.UserRankingSimpleInfo, 0),
-	}
+	limit := 20
 	endTime := time.Now()
 	startTime := endTime.AddDate(0, 0, -7)
-	limit := 20
-
-	userIDs := make([]string, 0)
-	userIDExist := make(map[string]bool, 0)
-	userInfoMapping := make(map[string]*entity.User, 0)
+	userIDs, userIDExist := make([]string, 0), make(map[string]bool, 0)
 
 	// get most reputation users
-	rankStat, err := us.activityRepo.GetUsersWhoHasGainedTheMostReputation(ctx, startTime, endTime, limit)
+	rankStat, rankStatUserIDs, err := us.getActivityUserRankStat(ctx, startTime, endTime, limit, userIDExist)
+	if err != nil {
+		return resp, nil
+	}
+	userIDs = append(userIDs, rankStatUserIDs...)
+
+	// get most vote users
+	voteStat, voteStatUserIDs, err := us.getActivityUserVoteStat(ctx, startTime, endTime, limit, userIDExist)
+	if err != nil {
+		return resp, nil
+	}
+	userIDs = append(userIDs, voteStatUserIDs...)
+
+	// get all staff members
+	userRoleRels, staffUserIDs, err := us.getStaff(ctx, userIDExist)
+	if err != nil {
+		return resp, nil
+	}
+	userIDs = append(userIDs, staffUserIDs...)
+
+	// get user information
+	userInfoMapping, err := us.getUserInfoMapping(ctx, userIDs)
 	if err != nil {
 		return nil, err
+	}
+	return us.warpStatRankingResp(userInfoMapping, rankStat, voteStat, userRoleRels), nil
+}
+
+func (us *UserService) getActivityUserRankStat(ctx context.Context, startTime, endTime time.Time, limit int,
+	userIDExist map[string]bool) (rankStat []*entity.ActivityUserRankStat, userIDs []string, err error) {
+	rankStat, err = us.activityRepo.GetUsersWhoHasGainedTheMostReputation(ctx, startTime, endTime, limit)
+	if err != nil {
+		return nil, nil, err
 	}
 	for _, stat := range rankStat {
 		if stat.Rank <= 0 {
@@ -591,10 +613,14 @@ func (us *UserService) UserRanking(ctx context.Context) (resp *schema.UserRankin
 		userIDs = append(userIDs, stat.UserID)
 		userIDExist[stat.UserID] = true
 	}
+	return rankStat, userIDs, nil
+}
 
-	voteStat, err := us.activityRepo.GetUsersWhoHasVoteMost(ctx, startTime, endTime, limit)
+func (us *UserService) getActivityUserVoteStat(ctx context.Context, startTime, endTime time.Time, limit int,
+	userIDExist map[string]bool) (voteStat []*entity.ActivityUserVoteStat, userIDs []string, err error) {
+	voteStat, err = us.activityRepo.GetUsersWhoHasVoteMost(ctx, startTime, endTime, limit)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	for _, stat := range voteStat {
 		if stat.VoteCount == 0 {
@@ -606,11 +632,14 @@ func (us *UserService) UserRanking(ctx context.Context) (resp *schema.UserRankin
 		userIDs = append(userIDs, stat.UserID)
 		userIDExist[stat.UserID] = true
 	}
+	return voteStat, userIDs, nil
+}
 
-	// get all staff members
-	userRoleRels, err := us.userRoleService.GetUserByRoleID(ctx, []int{role.RoleAdminID, role.RoleModeratorID})
+func (us *UserService) getStaff(ctx context.Context, userIDExist map[string]bool) (
+	userRoleRels []*entity.UserRoleRel, userIDs []string, err error) {
+	userRoleRels, err = us.userRoleService.GetUserByRoleID(ctx, []int{role.RoleAdminID, role.RoleModeratorID})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	for _, rel := range userRoleRels {
 		if userIDExist[rel.UserID] {
@@ -619,9 +648,14 @@ func (us *UserService) UserRanking(ctx context.Context) (resp *schema.UserRankin
 		userIDs = append(userIDs, rel.UserID)
 		userIDExist[rel.UserID] = true
 	}
+	return userRoleRels, userIDs, nil
+}
 
+func (us *UserService) getUserInfoMapping(ctx context.Context, userIDs []string) (
+	userInfoMapping map[string]*entity.User, err error) {
+	userInfoMapping = make(map[string]*entity.User, 0)
 	if len(userIDs) == 0 {
-		return resp, nil
+		return userInfoMapping, nil
 	}
 	userInfoList, err := us.userRepo.BatchGetByID(ctx, userIDs)
 	if err != nil {
@@ -631,50 +665,48 @@ func (us *UserService) UserRanking(ctx context.Context) (resp *schema.UserRankin
 		user.Avatar = schema.FormatAvatarInfo(user.Avatar)
 		userInfoMapping[user.ID] = user
 	}
+	return userInfoMapping, nil
+}
 
+func (us *UserService) warpStatRankingResp(
+	userInfoMapping map[string]*entity.User,
+	rankStat []*entity.ActivityUserRankStat,
+	voteStat []*entity.ActivityUserVoteStat,
+	userRoleRels []*entity.UserRoleRel) (resp *schema.UserRankingResp) {
+	resp = &schema.UserRankingResp{
+		UsersWithTheMostReputation: make([]*schema.UserRankingSimpleInfo, 0),
+		UsersWithTheMostVote:       make([]*schema.UserRankingSimpleInfo, 0),
+		Staffs:                     make([]*schema.UserRankingSimpleInfo, 0),
+	}
 	for _, stat := range rankStat {
-		if stat.Rank == 0 {
-			continue
+		if userInfo := userInfoMapping[stat.UserID]; userInfo != nil {
+			resp.UsersWithTheMostReputation = append(resp.UsersWithTheMostReputation, &schema.UserRankingSimpleInfo{
+				Username:    userInfo.Username,
+				Rank:        stat.Rank,
+				DisplayName: userInfo.DisplayName,
+				Avatar:      userInfo.Avatar,
+			})
 		}
-		userInfo := userInfoMapping[stat.UserID]
-		if userInfo == nil {
-			continue
-		}
-		resp.UsersWithTheMostReputation = append(resp.UsersWithTheMostReputation, &schema.UserRankingSimpleInfo{
-			Username:    userInfo.Username,
-			Rank:        stat.Rank,
-			DisplayName: userInfo.DisplayName,
-			Avatar:      userInfo.Avatar,
-		})
 	}
-
 	for _, stat := range voteStat {
-		if stat.VoteCount == 0 {
-			continue
+		if userInfo := userInfoMapping[stat.UserID]; userInfo != nil {
+			resp.UsersWithTheMostVote = append(resp.UsersWithTheMostVote, &schema.UserRankingSimpleInfo{
+				Username:    userInfo.Username,
+				VoteCount:   stat.VoteCount,
+				DisplayName: userInfo.DisplayName,
+				Avatar:      userInfo.Avatar,
+			})
 		}
-		userInfo := userInfoMapping[stat.UserID]
-		if userInfo == nil {
-			continue
-		}
-		resp.UsersWithTheMostVote = append(resp.UsersWithTheMostVote, &schema.UserRankingSimpleInfo{
-			Username:    userInfo.Username,
-			VoteCount:   stat.VoteCount,
-			DisplayName: userInfo.DisplayName,
-			Avatar:      userInfo.Avatar,
-		})
 	}
-
 	for _, rel := range userRoleRels {
-		userInfo := userInfoMapping[rel.UserID]
-		if userInfo == nil {
-			continue
+		if userInfo := userInfoMapping[rel.UserID]; userInfo != nil {
+			resp.Staffs = append(resp.Staffs, &schema.UserRankingSimpleInfo{
+				Username:    userInfo.Username,
+				Rank:        userInfo.Rank,
+				DisplayName: userInfo.DisplayName,
+				Avatar:      userInfo.Avatar,
+			})
 		}
-		resp.Staffs = append(resp.Staffs, &schema.UserRankingSimpleInfo{
-			Username:    userInfo.Username,
-			Rank:        userInfo.Rank,
-			DisplayName: userInfo.DisplayName,
-			Avatar:      userInfo.Avatar,
-		})
 	}
-	return
+	return resp
 }
