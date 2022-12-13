@@ -131,6 +131,9 @@ const Header: FC = () => {
               <NavLink className="nav-link" to="/tags">
                 {t('header.nav.tag')}
               </NavLink>
+              <NavLink className="nav-link" to="/users">
+                {t('header.nav.user')}
+              </NavLink>
             </Nav>
           </Col>
           <hr className="hr lg-none mt-2" />
