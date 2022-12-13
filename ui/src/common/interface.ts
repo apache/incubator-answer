@@ -321,6 +321,7 @@ export interface SiteSettings {
   general: AdminSettingsGeneral;
   interface: AdminSettingsInterface;
   login: AdminSettingsLogin;
+  custom_css_html: AdminSettingsCustom;
 }
 
 export interface AdminSettingBranding {

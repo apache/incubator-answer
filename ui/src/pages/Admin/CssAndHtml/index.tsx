@@ -42,24 +42,28 @@ const Index: FC = () => {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
+        className: ['fs-14', 'font-monospace'],
       },
     },
     custom_head: {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
+        className: ['fs-14', 'font-monospace'],
       },
     },
     custom_header: {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
+        className: ['fs-14', 'font-monospace'],
       },
     },
     custom_footer: {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
+        className: ['fs-14', 'font-monospace'],
       },
     },
   };
@@ -82,6 +86,9 @@ const Index: FC = () => {
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       })
       .catch((err) => {
         if (err.isError) {

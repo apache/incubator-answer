@@ -58,6 +58,7 @@ export interface UISchema {
         | 'url'
         | 'week';
       empty?: string;
+      className?: string | string[];
       validator?: (
         value,
         formData?,
@@ -459,6 +460,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 onChange={handleInputChange}
                 isInvalid={formData[key].isInvalid}
                 rows={options?.rows || 3}
+                className={classnames(options.className)}
               />
               <Form.Control.Feedback type="invalid">
                 {formData[key]?.errorMsg}

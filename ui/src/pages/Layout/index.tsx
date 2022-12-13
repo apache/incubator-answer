@@ -5,7 +5,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { SWRConfig } from 'swr';
 
 import { toastStore, brandingStore, pageTagStore } from '@/stores';
-import { Header, Footer, Toast } from '@/components';
+import { Header, Footer, Toast, Customize } from '@/components';
 
 const Layout: FC = () => {
   const { msg: toastMsg, variant, clear: toastClear } = toastStore();
@@ -41,6 +41,7 @@ const Layout: FC = () => {
         </div>
         <Toast msg={toastMsg} variant={variant} onClose={closeToast} />
         <Footer />
+        <Customize />
       </SWRConfig>
     </HelmetProvider>
   );
