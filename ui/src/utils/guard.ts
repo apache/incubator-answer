@@ -5,6 +5,7 @@ import {
   interfaceStore,
   brandingStore,
   loginSettingStore,
+  customizeStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
 import Storage from '@/utils/storage';
@@ -256,6 +257,7 @@ export const initAppSettingsStore = async () => {
     interfaceStore.getState().update(appSettings.interface);
     brandingStore.getState().update(appSettings.branding);
     loginSettingStore.getState().update(appSettings.login);
+    customizeStore.getState().update(appSettings.custom_css_html);
   }
 };
 

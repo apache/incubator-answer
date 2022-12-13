@@ -6,6 +6,7 @@ import siteInfoStore from './siteInfo';
 import interfaceStore from './interface';
 import brandingStore from './branding';
 import pageTagStore from './pageTags';
+import customizeStore from './customize';
 
 export {
   toastStore,
@@ -15,4 +16,5 @@ export {
   brandingStore,
   pageTagStore,
   loginSettingStore,
+  customizeStore,
 };

@@ -45,7 +45,10 @@ const useAddUserModal = (props: IProps = {}) => {
     display_name: {
       'ui:options': {
         validator: (value) => {
-          if (value.length > 30) {
+          const MIN_LENGTH = 4;
+          const MAX_LENGTH = 30;
+
+          if (value.length < MIN_LENGTH || value.length > MAX_LENGTH) {
             return t('form.fields.display_name.msg');
           }
           return true;

@@ -27,6 +27,7 @@ import BrandUpload from './BrandUpload';
 import SchemaForm, { JSONSchema, UISchema, initFormData } from './SchemaForm';
 import Labels from './LabelsCard';
 import DiffContent from './DiffContent';
+import Customize from './Customize';
 
 export {
   Avatar,
@@ -60,5 +61,6 @@ export {
   initFormData,
   Labels,
   DiffContent,
+  Customize,
 };
 export type { EditorRef, JSONSchema, UISchema };
