@@ -159,7 +159,7 @@ const routes: RouteNode[] = [
         path: 'users/account-recovery',
         page: 'pages/Users/AccountForgot',
         guard: () => {
-          return guard.activated();
+          return guard.notLogged();
         },
       },
       {

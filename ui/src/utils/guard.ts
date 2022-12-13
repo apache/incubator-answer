@@ -120,7 +120,7 @@ export const notLogged = () => {
 };
 
 export const notActivated = () => {
-  const gr = logged();
+  const gr: TGuardResult = { ok: true };
   const us = deriveLoginState();
   if (us.isActivated) {
     gr.ok = false;
@@ -195,6 +195,8 @@ export const shouldLoginRequired = () => {
       RouteAlias.register,
       '/users/account-recovery',
       'users/change-email',
+      'users/password-reset',
+      'users/account-activation',
       'users/account-activation/success',
       '/users/account-activation/failed',
       '/users/confirm-new-email',
