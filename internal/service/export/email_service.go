@@ -122,7 +122,7 @@ func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body, co
 func (es *EmailService) VerifyUrlExpired(ctx context.Context, code string) (content string) {
 	content, err := es.emailRepo.VerifyCode(ctx, code)
 	if err != nil {
-		log.Error(err)
+		log.Warn(err)
 	}
 	return content
 }

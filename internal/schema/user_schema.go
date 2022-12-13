@@ -106,16 +106,16 @@ func FormatAvatarInfo(avatarJson string) string {
 	if avatarJson == "" {
 		return ""
 	}
-	AvatarInfo := &AvatarInfo{}
-	err := json.Unmarshal([]byte(avatarJson), AvatarInfo)
+	avatarInfo := &AvatarInfo{}
+	err := json.Unmarshal([]byte(avatarJson), avatarInfo)
 	if err != nil {
 		return ""
 	}
-	switch AvatarInfo.Type {
+	switch avatarInfo.Type {
 	case "gravatar":
-		return AvatarInfo.Gravatar
+		return avatarInfo.Gravatar
 	case "custom":
-		return AvatarInfo.Custom
+		return avatarInfo.Custom
 	default:
 		return ""
 	}
@@ -431,6 +431,8 @@ type UserRankingSimpleInfo struct {
 	Username string `json:"username"`
 	// rank
 	Rank int `json:"rank"`
+	// vote
+	VoteCount int `json:"vote_count"`
 	// display name
 	DisplayName string `json:"display_name"`
 	// avatar

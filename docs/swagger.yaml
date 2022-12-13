@@ -1764,6 +1764,39 @@ definitions:
       notice_switch:
         type: boolean
     type: object
+  schema.UserRankingResp:
+    properties:
+      staffs:
+        items:
+          $ref: '#/definitions/schema.UserRankingSimpleInfo'
+        type: array
+      users_with_the_most_reputation:
+        items:
+          $ref: '#/definitions/schema.UserRankingSimpleInfo'
+        type: array
+      users_with_the_most_vote:
+        items:
+          $ref: '#/definitions/schema.UserRankingSimpleInfo'
+        type: array
+    type: object
+  schema.UserRankingSimpleInfo:
+    properties:
+      avatar:
+        description: avatar
+        type: string
+      display_name:
+        description: display name
+        type: string
+      rank:
+        description: rank
+        type: integer
+      username:
+        description: username
+        type: string
+      vote_count:
+        description: vote
+        type: integer
+    type: object
   schema.UserRePassWordRequest:
     properties:
       code:
@@ -4687,7 +4720,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.GetUserToSetShowResp'
+                  $ref: '#/definitions/schema.UserRankingResp'
               type: object
       security:
       - ApiKeyAuth: []

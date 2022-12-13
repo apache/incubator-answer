@@ -60,6 +60,17 @@ func (ur *userRoleRelRepo) GetUserRoleRelList(ctx context.Context, userIDs []str
 	return
 }
 
+// GetUserRoleRelListByRoleID get user role all by role id
+func (ur *userRoleRelRepo) GetUserRoleRelListByRoleID(ctx context.Context, roleIDs []int) (
+	userRoleRelList []*entity.UserRoleRel, err error) {
+	userRoleRelList = make([]*entity.UserRoleRel, 0)
+	err = ur.data.DB.In("role_id", roleIDs).Find(&userRoleRelList)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // GetUserRoleRel get user role
 func (ur *userRoleRelRepo) GetUserRoleRel(ctx context.Context, userID string) (
 	rolePowerRel *entity.UserRoleRel, exist bool, err error) {

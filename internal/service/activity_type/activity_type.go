@@ -12,6 +12,14 @@ const (
 )
 
 var (
+	ActivityTypeList = []string{
+		QuestionVoteUp,
+		QuestionVoteDown,
+		AnswerVoteUp,
+		AnswerVoteDown,
+		CommentVoteUp,
+		CommentVoteDown,
+	}
 	activityTypeFlagMapping = map[string]string{
 		QuestionVoteUp:   "upvote",
 		QuestionVoteDown: "downvote",

@@ -56,16 +56,20 @@ func NewUserController(
 // @Success 200 {object} handler.RespBody{data=schema.GetUserToSetShowResp}
 // @Router /answer/api/v1/user/info [get]
 func (uc *UserController) GetUserInfoByUserID(ctx *gin.Context) {
-	userID := middleware.GetLoginUserIDFromContext(ctx)
 	token := middleware.ExtractToken(ctx)
-
-	// if user is no login return null in data
-	if len(token) == 0 || len(userID) == 0 {
+	if len(token) == 0 {
 		handler.HandleResponse(ctx, nil, nil)
 		return
 	}
 
-	resp, err := uc.userService.GetUserInfoByUserID(ctx, token, userID)
+	// if user is no login return null in data
+	userInfo, _ := uc.authService.GetUserCacheInfo(ctx, token)
+	if userInfo == nil {
+		handler.HandleResponse(ctx, nil, nil)
+		return
+	}
+
+	resp, err := uc.userService.GetUserInfoByUserID(ctx, token, userInfo.UserID)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -496,7 +500,7 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody{data=schema.GetUserToSetShowResp}
+// @Success 200 {object} handler.RespBody{data=schema.UserRankingResp}
 // @Router /answer/api/v1/user/ranking [get]
 func (uc *UserController) UserRanking(ctx *gin.Context) {
 	resp, err := uc.userService.UserRanking(ctx)

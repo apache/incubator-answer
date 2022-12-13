@@ -118,7 +118,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	roleService := role2.NewRoleService(roleRepo)
 	userRoleRelService := role2.NewUserRoleRelService(userRoleRelRepo, roleService)
 	userCommon := usercommon.NewUserCommon(userRepo)
-	userService := service.NewUserService(userRepo, userActiveActivityRepo, emailService, authService, serviceConf, siteInfoCommonService, userRoleRelService, userCommon)
+	userService := service.NewUserService(userRepo, userActiveActivityRepo, activityRepo, emailService, authService, serviceConf, siteInfoCommonService, userRoleRelService, userCommon)
 	captchaRepo := captcha.NewCaptchaRepo(dataData)
 	captchaService := action.NewCaptchaService(captchaRepo)
 	uploaderService := uploader.NewUploaderService(serviceConf, siteInfoCommonService)

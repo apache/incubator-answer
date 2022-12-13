@@ -95,27 +95,23 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 	//siteinfo
 	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
 	r.GET("/siteinfo/legal", a.siteinfoController.GetSiteLegalInfo)
-}
-
-func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
-	// comment
-	r.GET("/comment/page", a.commentController.GetCommentWithPage)
-	r.GET("/personal/comment/page", a.commentController.GetCommentPersonalWithPage)
-	r.GET("/comment", a.commentController.GetComment)
 
 	// user
-	r.GET("/user/info", a.userController.GetUserInfoByUserID)
-	r.GET("/user/action/record", a.userController.ActionRecord)
 	r.POST("/user/login/email", a.userController.UserEmailLogin)
 	r.POST("/user/register/email", a.userController.UserRegisterByEmail)
 	r.POST("/user/email/verification", a.userController.UserVerifyEmail)
+	r.PUT("/user/email", a.userController.UserChangeEmailVerify)
+	r.GET("/user/action/record", a.userController.ActionRecord)
 	r.POST("/user/password/reset", a.userController.RetrievePassWord)
 	r.POST("/user/password/replacement", a.userController.UseRePassWord)
-	r.GET("/personal/user/info", a.userController.GetOtherUserInfoByUsername)
-	r.POST("/user/email/verification/send", a.userController.UserVerifyEmailSend)
-	r.GET("/user/logout", a.userController.UserLogout)
-	r.PUT("/user/email", a.userController.UserChangeEmailVerify)
+	r.GET("/user/info", a.userController.GetUserInfoByUserID)
+}
+
+func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
+	// user
 	r.POST("/user/email/change/code", a.userController.UserChangeEmailSendCode)
+	r.POST("/user/email/verification/send", a.userController.UserVerifyEmailSend)
+	r.GET("/personal/user/info", a.userController.GetOtherUserInfoByUsername)
 	r.GET("/user/ranking", a.userController.UserRanking)
 
 	//answer
@@ -130,6 +126,11 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/question/similar/tag", a.questionController.SimilarQuestion)
 	r.GET("/personal/qa/top", a.questionController.UserTop)
 	r.GET("/personal/question/page", a.questionController.UserList)
+
+	// comment
+	r.GET("/comment/page", a.commentController.GetCommentWithPage)
+	r.GET("/personal/comment/page", a.commentController.GetCommentPersonalWithPage)
+	r.GET("/comment", a.commentController.GetComment)
 
 	//revision
 	r.GET("/revisions", a.revisionController.GetRevisionList)
@@ -195,6 +196,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.DELETE("/answer", a.answerController.RemoveAnswer)
 
 	// user
+	r.GET("/user/logout", a.userController.UserLogout)
 	r.PUT("/user/password", a.userController.UserModifyPassWord)
 	r.PUT("/user/info", a.userController.UserUpdateInfo)
 	r.PUT("/user/interface", a.userController.UserUpdateInterface)

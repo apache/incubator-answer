@@ -4707,7 +4707,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.GetUserToSetShowResp"
+                                            "$ref": "#/definitions/schema.UserRankingResp"
                                         }
                                     }
                                 }
@@ -7611,6 +7611,54 @@ const docTemplate = `{
             "properties": {
                 "notice_switch": {
                     "type": "boolean"
+                }
+            }
+        },
+        "schema.UserRankingResp": {
+            "type": "object",
+            "properties": {
+                "staffs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.UserRankingSimpleInfo"
+                    }
+                },
+                "users_with_the_most_reputation": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.UserRankingSimpleInfo"
+                    }
+                },
+                "users_with_the_most_vote": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.UserRankingSimpleInfo"
+                    }
+                }
+            }
+        },
+        "schema.UserRankingSimpleInfo": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "description": "avatar",
+                    "type": "string"
+                },
+                "display_name": {
+                    "description": "display name",
+                    "type": "string"
+                },
+                "rank": {
+                    "description": "rank",
+                    "type": "integer"
+                },
+                "username": {
+                    "description": "username",
+                    "type": "string"
+                },
+                "vote_count": {
+                    "description": "vote",
+                    "type": "integer"
                 }
             }
         },
