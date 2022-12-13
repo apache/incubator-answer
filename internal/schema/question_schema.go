@@ -1,5 +1,11 @@
 package schema
 
+const (
+	SitemapMaxSize      = 50000
+	SitemapCachekey     = "answer@sitemap"
+	SitemapPageCachekey = "answer@sitemap@page%d"
+)
+
 // RemoveQuestionReq delete question request
 type RemoveQuestionReq struct {
 	// question id
@@ -217,4 +223,19 @@ type CmsQuestionSearch struct {
 type AdminSetQuestionStatusRequest struct {
 	StatusStr  string `json:"status" form:"status"`
 	QuestionID string `json:"question_id" form:"question_id"`
+}
+
+type SiteMapList struct {
+	QuestionIDs []*SiteMapQuestionInfo `json:"question_ids"`
+	MaxPageNum  []int                  `json:"max_page_num"`
+}
+
+type SiteMapPageList struct {
+	PageData []*SiteMapQuestionInfo `json:"page_data"`
+}
+
+type SiteMapQuestionInfo struct {
+	ID         string `json:"id"`
+	Title      string `json:"title"`
+	UpdateTime string `json:"time"`
 }

@@ -6,6 +6,7 @@ require (
 	github.com/Chain-Zhang/pinyin v0.1.3
 	github.com/anargu/gin-brotli v0.0.0-20220116052358-12bf532d5267
 	github.com/bwmarrin/snowflake v0.3.0
+	github.com/davecgh/go-spew v1.1.1
 	github.com/disintegration/imaging v1.6.2
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-playground/locales v0.14.0
@@ -23,6 +24,7 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/ory/dockertest/v3 v3.9.1
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/segmentfault/pacman v1.0.1
 	github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20221018072427-a15dd1434e05
 	github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20221018072427-a15dd1434e05
@@ -52,7 +54,6 @@ require (
 	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
 	github.com/containerd/continuity v0.3.0 // indirect
-	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/docker/cli v20.10.14+incompatible // indirect
 	github.com/docker/docker v20.10.7+incompatible // indirect
 	github.com/docker/go-connections v0.4.0 // indirect
@@ -73,7 +74,6 @@ require (
 	github.com/inconshreveable/mousetrap v1.0.1 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/jxskiss/ginregex v0.2.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible // indirect
 	github.com/lestrrat-go/strftime v1.0.6 // indirect

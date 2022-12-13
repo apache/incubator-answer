@@ -1,7 +1,9 @@
 {{ .xmlHeader }}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {{ range .list }}
   <url>
-    <loc>http://www.example.com/foo1</loc>
-    <lastmod>2018-06-04</lastmod>
+    <loc>{{$.general.SiteUrl}}/questions/{{.ID}}/{{.Title}}</loc>
+    <lastmod>{{.UpdateTime}}</lastmod>
   </url>
+   {{ end }}
 </urlset>
