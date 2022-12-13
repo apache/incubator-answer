@@ -24,16 +24,17 @@ type QAPageJsonLD struct {
 			Type string `json:"@type"`
 			Name string `json:"name"`
 		} `json:"author"`
-		AcceptedAnswer  AcceptedAnswerItem     `json:"acceptedAnswer"`
+		AcceptedAnswer  *AcceptedAnswerItem    `json:"acceptedAnswer,omitempty"`
 		SuggestedAnswer []*SuggestedAnswerItem `json:"suggestedAnswer"`
 	} `json:"mainEntity"`
 }
 
 type AcceptedAnswerItem struct {
-	Type        string `json:"@type"`
-	Text        string `json:"text"`
-	UpvoteCount int    `json:"upvoteCount"`
-	URL         string `json:"url"`
+	Type        string    `json:"@type"`
+	Text        string    `json:"text"`
+	DateCreated time.Time `json:"dateCreated"`
+	UpvoteCount int       `json:"upvoteCount"`
+	URL         string    `json:"url"`
 	Author      struct {
 		Type string `json:"@type"`
 		Name string `json:"name"`

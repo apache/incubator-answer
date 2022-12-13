@@ -2,26 +2,26 @@
 <ul class="d-inline-flex mb-0 pagination pagination-sm">
   {{ if ne .page.Currpage 1 }}
   <li class="page-item">
-    <a class="page-link" href="?page={{$.page.Prevpage}}"><span aria-hidden="true">{{translator $.language "ui.pagination.prev"}}</span><span
+    <a class="page-link" href="{{$.path}}?page={{$.page.Prevpage}}"><span aria-hidden="true">{{translator $.language "ui.pagination.prev"}}</span><span
         class="visually-hidden">{{translator $.language "ui.pagination.prev"}}</span></a>
   </li>
   {{ end }}
   {{ range $value := .page.Pages }}
   {{ if eq $.page.Currpage $value }}
   <li class="page-item active">
-    <span class="page-link" href="?page={{$value}}">{{$value}}
+    <span class="page-link" href="{{$.path}}?page={{$value}}">{{$value}}
       <span class="visually-hidden">(current)</span>
     </span>
   </li>
   {{ else }}
   <li class="page-item">
-    <a class="page-link" href="?page={{$value}}">{{$value}}</a>
+    <a class="page-link" href="{{$.path}}?page={{$value}}">{{$value}}</a>
   </li>
   {{ end }}
   {{ end }}
   {{ if lt $.page.Currpage $.page.Totalpages }}
   <li class="page-item">
-    <a class="page-link" href="?page={{$.page.Nextpage}}"><span aria-hidden="true">{{translator $.language "ui.pagination.next"}}</span><span
+    <a class="page-link" href="{{$.path}}?page={{$.page.Nextpage}}"><span aria-hidden="true">{{translator $.language "ui.pagination.next"}}</span><span
         class="visually-hidden">{{translator $.language "ui.pagination.next"}}</span></a>
   </li>
   {{ end }}
