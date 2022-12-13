@@ -2,9 +2,11 @@ package cron
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/robfig/cron/v3"
 )
 
 // ScheduledTaskManager scheduled task manager
@@ -26,6 +28,12 @@ func NewScheduledTaskManager(
 }
 
 func (s *ScheduledTaskManager) Run() {
-	ctx := context.Background()
-	s.questionService.SitemapCron(ctx)
+	fmt.Println("start cron")
+	c := cron.New()
+	c.AddFunc("0 */1 * * *", func() {
+		ctx := context.Background()
+		fmt.Println("sitemap cron execution")
+		s.questionService.SitemapCron(ctx)
+	})
+	c.Start()
 }
