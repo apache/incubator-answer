@@ -6463,7 +6463,6 @@
             "required": [
                 "contact_email",
                 "name",
-                "permalink",
                 "site_url"
             ],
             "properties": {
@@ -6478,11 +6477,6 @@
                 "name": {
                     "type": "string",
                     "maxLength": 128
-                },
-                "permalink": {
-                    "type": "integer",
-                    "maximum": 3,
-                    "minimum": 0
                 },
                 "short_description": {
                     "type": "string",
@@ -6499,7 +6493,6 @@
             "required": [
                 "contact_email",
                 "name",
-                "permalink",
                 "site_url"
             ],
             "properties": {
@@ -6514,11 +6507,6 @@
                 "name": {
                     "type": "string",
                     "maxLength": 128
-                },
-                "permalink": {
-                    "type": "integer",
-                    "maximum": 3,
-                    "minimum": 0
                 },
                 "short_description": {
                     "type": "string",
@@ -6611,9 +6599,15 @@
         "schema.SiteSeoReq": {
             "type": "object",
             "required": [
+                "permalink",
                 "robots"
             ],
             "properties": {
+                "permalink": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 0
+                },
                 "robots": {
                     "type": "string"
                 }
@@ -6622,9 +6616,15 @@
         "schema.SiteSeoResp": {
             "type": "object",
             "required": [
+                "permalink",
                 "robots"
             ],
             "properties": {
+                "permalink": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 0
+                },
                 "robots": {
                     "type": "string"
                 }

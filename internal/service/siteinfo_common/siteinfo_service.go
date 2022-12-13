@@ -87,3 +87,16 @@ func (s *SiteInfoCommonService) GetSiteLegal(ctx context.Context) (resp *schema.
 	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 	return resp, nil
 }
+
+func (s *SiteInfoCommonService) GetSiteSeo(ctx context.Context) (resp *schema.SiteSeoReq, err error) {
+	resp = &schema.SiteSeoReq{}
+	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeSeo)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return resp, nil
+	}
+	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
+	return resp, nil
+}
