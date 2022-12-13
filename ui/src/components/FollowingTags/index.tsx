@@ -78,7 +78,7 @@ const Index: FC = () => {
         ) : (
           <>
             <div className="text-muted">{t('follow_tag_tip')}</div>
-            <NavLink className="d-inline-block my-2" to="/tags">
+            <NavLink className="d-inline-block mt-3" to="/tags">
               <Button size="sm" variant="outline-primary">
                 {t('follow_a_tag')}
               </Button>

@@ -6,13 +6,14 @@ import ReactDOM from 'react-dom/client';
 
 import type * as Type from '@/common/interface';
 import { SchemaForm, JSONSchema, UISchema, initFormData } from '@/components';
+import { handleFormError } from '@/utils';
 
 const div = document.createElement('div');
 const root = ReactDOM.createRoot(div);
 
 interface IProps {
   title?: string;
-  onConfirm?: (formData: any) => void;
+  onConfirm?: (formData: any) => Promise<any>;
 }
 const useChangePasswordModal = (props: IProps = {}) => {
   const { t } = useTranslation('translation', {
@@ -29,6 +30,7 @@ const useChangePasswordModal = (props: IProps = {}) => {
       password: {
         type: 'string',
         title: t('form.fields.password.label'),
+        description: t('form.fields.password.text'),
       },
     },
   };
@@ -36,6 +38,14 @@ const useChangePasswordModal = (props: IProps = {}) => {
     password: {
       'ui:options': {
         type: 'password',
+        validator: (value) => {
+          const MIN_LENGTH = 8;
+          const MAX_LENGTH = 32;
+          if (value.length < MIN_LENGTH || value.length > MAX_LENGTH) {
+            return t('form.fields.password.msg');
+          }
+          return true;
+        },
       },
     },
   };
@@ -69,17 +79,25 @@ const useChangePasswordModal = (props: IProps = {}) => {
       onConfirm({
         password: formData.password.value,
         user_id: userId,
-      });
-      setFormData({
-        password: {
-          value: '',
-          isInvalid: false,
-          errorMsg: '',
-        },
-      });
-      setUserId('');
+      })
+        .then(() => {
+          setFormData({
+            password: {
+              value: '',
+              isInvalid: false,
+              errorMsg: '',
+            },
+          });
+          setUserId('');
+          onClose();
+        })
+        .catch((err) => {
+          if (err.isError) {
+            const data = handleFormError(err, formData);
+            setFormData({ ...data });
+          }
+        });
     }
-    onClose();
   };
 
   const handleOnChange = (data) => {

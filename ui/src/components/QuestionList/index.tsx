@@ -129,7 +129,7 @@ const QuestionList: FC<Props> = ({ source }) => {
                   {li.status === 2 ? ` [${t('closed')}]` : ''}
                 </NavLink>
               </h5>
-              <div className="d-flex flex-column flex-md-row align-items-md-center fs-14 mb-3 text-secondary">
+              <div className="d-flex flex-column flex-md-row align-items-md-center fs-14 mb-2 text-secondary">
                 <QuestionLastUpdate q={li} />
                 <div className="ms-0 ms-md-3 mt-2 mt-md-0">
                   <span>
