@@ -98,6 +98,15 @@ func (s *SiteInfoCommonService) GetSiteTheme(ctx context.Context) (resp *schema.
 	return resp, nil
 }
 
+// GetSiteSeo get site seo
+func (s *SiteInfoCommonService) GetSiteSeo(ctx context.Context) (resp *schema.SiteSeoReq, err error) {
+	resp = &schema.SiteSeoReq{}
+	if err = s.getSiteInfoByType(ctx, constant.SiteTypeSeo, resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 func (s *SiteInfoCommonService) getSiteInfoByType(ctx context.Context, siteType string, resp interface{}) (err error) {
 	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, siteType)
 	if err != nil {
