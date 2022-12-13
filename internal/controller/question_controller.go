@@ -6,6 +6,7 @@ import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
@@ -248,7 +249,8 @@ func (qc *QuestionController) SearchList(c *gin.Context) {
 // @Router /answer/api/v1/question [post]
 func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	req := &schema.QuestionAdd{}
-	if handler.BindAndCheck(ctx, req) {
+	errFields := handler.BindAndCheckReturnErr(ctx, req)
+	if ctx.IsAborted() {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
@@ -277,6 +279,19 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	}
 
 	resp, err := qc.questionService.AddQuestion(ctx, req)
+	if err != nil {
+		errlist, ok := resp.([]*validator.FormErrorField)
+		if ok {
+			for _, item := range errlist {
+				errFields = append(errFields, item)
+			}
+		}
+	}
+	if len(errFields) > 0 {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
+		return
+	}
+
 	handler.HandleResponse(ctx, err, resp)
 }
 
