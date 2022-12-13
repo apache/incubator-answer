@@ -2,6 +2,7 @@ package question
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
 	"unicode"
@@ -198,7 +199,7 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 		item := &schema.SiteMapQuestionInfo{}
 		item.ID = question.ID
 		item.Title = htmltext.UrlTitle(question.Title)
-		item.UpdateTime = question.PostUpdateTime.Format("2006-01-02 15:04:05")
+		item.UpdateTime = fmt.Sprintf("%v", question.PostUpdateTime.UTC())
 		questionIDList = append(questionIDList, item)
 	}
 	return questionIDList, nil
