@@ -72,8 +72,8 @@ func (t *TemplateRenderController) SitemapPage(ctx *gin.Context, page int) error
 	cachekey := fmt.Sprintf(schema.SitemapPageCachekey, page)
 	infoStr, err := t.data.Cache.GetString(ctx, cachekey)
 	if err != nil {
-		log.Errorf("get Cache failed: %s", err)
-		return err
+		//If there is no cache, return directly.
+		return nil
 	}
 	if err = json.Unmarshal([]byte(infoStr), sitemapInfo); err != nil {
 		log.Errorf("get sitemap info failed: %s", err)
