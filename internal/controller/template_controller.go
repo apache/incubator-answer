@@ -75,6 +75,12 @@ func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.TemplateSiteInf
 	if err != nil {
 		log.Error(err)
 	}
+
+	resp.SiteSeo, err = tc.siteInfoService.GetSiteSeo(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+
 	resp.Year = fmt.Sprintf("%d", time.Now().Year())
 	return resp
 }
@@ -101,7 +107,7 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 	siteInfo.Canonical = fmt.Sprintf("%s", siteInfo.General.SiteUrl)
 
 	UrlUseTitle := false
-	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
+	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
 	siteInfo.Title = ""
@@ -130,7 +136,7 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	siteInfo.Canonical = fmt.Sprintf("%s/questions", siteInfo.General.SiteUrl)
 
 	UrlUseTitle := false
-	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
+	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
 	siteInfo.Title = fmt.Sprintf("Questions - %s", siteInfo.General.Name)
@@ -154,7 +160,7 @@ func (tc *TemplateController) QuestionInfo301Jump(ctx *gin.Context, siteInfo *sc
 	}
 
 	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
-	if siteInfo.General.PermaLink == schema.PermaLinkQuestionID {
+	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionID {
 		//not have title
 		if titleIsAnswerID || len(title) == 0 {
 			return false, ""
@@ -219,7 +225,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	}
 	encodeTitle := htmltext.UrlTitle(detail.Title)
 	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
-	if siteInfo.General.PermaLink == schema.PermaLinkQuestionID {
+	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionID {
 		siteInfo.Canonical = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
 	}
 	jsonLD := &schema.QAPageJsonLD{}
@@ -326,7 +332,7 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	siteInfo.Keywords = taginifo.DisplayName
 
 	UrlUseTitle := false
-	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
+	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
 	siteInfo.Title = fmt.Sprintf("'%s' Questions - %s", taginifo.DisplayName, siteInfo.General.Name)

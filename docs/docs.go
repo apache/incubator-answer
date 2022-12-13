@@ -6871,7 +6871,6 @@ const docTemplate = `{
             "required": [
                 "contact_email",
                 "name",
-                "permalink",
                 "site_url"
             ],
             "properties": {
@@ -6886,11 +6885,6 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "maxLength": 128
-                },
-                "permalink": {
-                    "type": "integer",
-                    "maximum": 3,
-                    "minimum": 0
                 },
                 "short_description": {
                     "type": "string",
@@ -6907,7 +6901,6 @@ const docTemplate = `{
             "required": [
                 "contact_email",
                 "name",
-                "permalink",
                 "site_url"
             ],
             "properties": {
@@ -6922,11 +6915,6 @@ const docTemplate = `{
                 "name": {
                     "type": "string",
                     "maxLength": 128
-                },
-                "permalink": {
-                    "type": "integer",
-                    "maximum": 3,
-                    "minimum": 0
                 },
                 "short_description": {
                     "type": "string",
@@ -7064,9 +7052,15 @@ const docTemplate = `{
         "schema.SiteSeoReq": {
             "type": "object",
             "required": [
+                "permalink",
                 "robots"
             ],
             "properties": {
+                "permalink": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 0
+                },
                 "robots": {
                     "type": "string"
                 }
@@ -7075,9 +7069,15 @@ const docTemplate = `{
         "schema.SiteSeoResp": {
             "type": "object",
             "required": [
+                "permalink",
                 "robots"
             ],
             "properties": {
+                "permalink": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 0
+                },
                 "robots": {
                     "type": "string"
                 }
