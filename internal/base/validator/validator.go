@@ -124,9 +124,13 @@ func (m *MyValidator) Check(value interface{}) (errFields []*FormErrorField, err
 
 	if v, ok := value.(Checker); ok {
 		errFields, err = v.Check()
-		if err != nil {
-			return errFields, err
+		if err == nil {
+			return nil, nil
 		}
+		for _, errField := range errFields {
+			errField.ErrorMsg = translator.GlobalTrans.Tr(m.Lang, errField.ErrorMsg)
+		}
+		return errFields, err
 	}
 	return nil, nil
 }
