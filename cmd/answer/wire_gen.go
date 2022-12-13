@@ -8,6 +8,7 @@ package main
 
 import (
 	"github.com/answerdev/answer/internal/base/conf"
+	"github.com/answerdev/answer/internal/base/cron"
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/server"
@@ -210,7 +211,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	templateController := controller.NewTemplateController(templateRenderController, siteInfoCommonService)
 	templateRouter := router.NewTemplateRouter(templateController, templateRenderController, siteInfoController)
 	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter)
-	application := newApplication(serverConf, ginEngine)
+	scheduledTaskManager := cron.NewScheduledTaskManager(siteInfoCommonService)
+	application := newApplication(serverConf, ginEngine, scheduledTaskManager)
 	return application, func() {
 		cleanup2()
 		cleanup()

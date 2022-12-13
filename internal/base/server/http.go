@@ -13,6 +13,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/day"
+	"github.com/answerdev/answer/pkg/htmltext"
 
 	brotli "github.com/anargu/gin-brotli"
 	"github.com/answerdev/answer/internal/base/middleware"
@@ -164,6 +165,9 @@ func NewHTTPServer(debug bool,
 				"timezone": tz,
 			}
 		},
+		"urlTitle": func(title string) string {
+			return htmltext.UrlTitle(title)
+		},
 	}
 	r.SetFuncMap(funcMap)
 
@@ -172,7 +176,7 @@ func NewHTTPServer(debug bool,
 		r.LoadHTMLGlob("../../ui/template/*")
 	} else {
 		html, _ := fs.Sub(ui.Template, "template")
-		htmlTemplate := template.Must(template.New("").Funcs(funcMap).ParseFS(html, "*.html"))
+		htmlTemplate := template.Must(template.New("").Funcs(funcMap).ParseFS(html, "*"))
 		r.SetHTMLTemplate(htmlTemplate)
 	}
 

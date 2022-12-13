@@ -46,7 +46,7 @@ func (cc *CommentController) AddComment(ctx *gin.Context) {
 		permission.CommentAdd,
 		permission.CommentEdit,
 		permission.CommentDelete,
-	}, "")
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -146,7 +146,7 @@ func (cc *CommentController) GetCommentWithPage(ctx *gin.Context) {
 	canList, err := cc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.CommentEdit,
 		permission.CommentDelete,
-	}, "")
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -198,7 +198,7 @@ func (cc *CommentController) GetComment(ctx *gin.Context) {
 	canList, err := cc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.CommentEdit,
 		permission.CommentDelete,
-	}, "")
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return

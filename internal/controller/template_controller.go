@@ -14,7 +14,9 @@ import (
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/htmltext"
+	"github.com/answerdev/answer/pkg/obj"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
@@ -97,9 +99,16 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s", siteInfo.General.SiteUrl)
+
+	UrlUseTitle := false
+	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
+		UrlUseTitle = true
+	}
+	siteInfo.Title = ""
 	tc.html(ctx, http.StatusOK, "question.html", siteInfo, gin.H{
-		"data": data,
-		"page": templaterender.Paginator(page, req.PageSize, count),
+		"data":     data,
+		"useTitle": UrlUseTitle,
+		"page":     templaterender.Paginator(page, req.PageSize, count),
 	})
 }
 
@@ -120,16 +129,63 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/questions", siteInfo.General.SiteUrl)
 
+	UrlUseTitle := false
+	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
+		UrlUseTitle = true
+	}
+	siteInfo.Title = fmt.Sprintf("Questions - %s", siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "question.html", siteInfo, gin.H{
-		"data": data,
-		"page": templaterender.Paginator(page, req.PageSize, count),
+		"data":     data,
+		"useTitle": UrlUseTitle,
+		"page":     templaterender.Paginator(page, req.PageSize, count),
 	})
+}
+
+func (tc *TemplateController) QuestionInfo301Jump(ctx *gin.Context, siteInfo *schema.TemplateSiteInfoResp) (jump bool, url string) {
+	id := ctx.Param("id")
+	title := ctx.Param("title")
+	titleIsAnswerID := false
+
+	objectType, objectTypeerr := obj.GetObjectTypeStrByObjectID(title)
+	if objectTypeerr == nil {
+		if objectType == constant.AnswerObjectType {
+			titleIsAnswerID = true
+		}
+	}
+
+	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
+	if siteInfo.General.PermaLink == schema.PermaLinkQuestionID {
+		//not have title
+		if titleIsAnswerID || len(title) == 0 {
+			return false, ""
+		}
+		return true, url
+	} else {
+		//have title
+		if len(title) > 0 && !titleIsAnswerID {
+			return false, ""
+		}
+		detail, err := tc.templateRenderController.QuestionDetail(ctx, id)
+		if err != nil {
+			tc.Page404(ctx)
+			return
+		}
+		url = fmt.Sprintf("%s/%s", url, htmltext.UrlTitle(detail.Title))
+		return true, url
+	}
 }
 
 // QuestionInfo question and answers info
 func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	id := ctx.Param("id")
 	answerid := ctx.Param("answerid")
+
+	siteInfo := tc.SiteInfo(ctx)
+	jump, jumpurl := tc.QuestionInfo301Jump(ctx, siteInfo)
+	if jump {
+		ctx.Redirect(http.StatusMovedPermanently, jumpurl)
+		return
+	}
 
 	detail, err := tc.templateRenderController.QuestionDetail(ctx, id)
 	if err != nil {
@@ -161,7 +217,6 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
-	siteInfo := tc.SiteInfo(ctx)
 	encodeTitle := htmltext.UrlTitle(detail.Title)
 	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
 	if siteInfo.General.PermaLink == schema.PermaLinkQuestionID {
@@ -172,7 +227,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	jsonLD.Type = "QAPage"
 	jsonLD.MainEntity.Type = "Question"
 	jsonLD.MainEntity.Name = detail.Title
-	jsonLD.MainEntity.Text = htmltext.ClearText(detail.HTML)
+	jsonLD.MainEntity.Text = detail.HTML
 	jsonLD.MainEntity.AnswerCount = int(answerCount)
 	jsonLD.MainEntity.UpvoteCount = detail.VoteCount
 	jsonLD.MainEntity.DateCreated = time.Unix(detail.CreateTime, 0)
@@ -180,15 +235,26 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	jsonLD.MainEntity.Author.Name = detail.UserInfo.DisplayName
 	answerList := make([]*schema.SuggestedAnswerItem, 0)
 	for _, answer := range answers {
-		item := &schema.SuggestedAnswerItem{}
-		item.Type = "Answer"
-		item.Text = htmltext.ClearText(answer.HTML)
-		item.DateCreated = time.Unix(answer.CreateTime, 0)
-		item.UpvoteCount = answer.VoteCount
-		item.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
-		item.Author.Type = "Person"
-		item.Author.Name = answer.UserInfo.DisplayName
-		answerList = append(answerList, item)
+		if answer.Adopted == schema.AnswerAdoptedEnable {
+			jsonLD.MainEntity.AcceptedAnswer.Type = "Answer"
+			jsonLD.MainEntity.AcceptedAnswer.Text = answer.HTML
+			jsonLD.MainEntity.AcceptedAnswer.UpvoteCount = answer.VoteCount
+			jsonLD.MainEntity.AcceptedAnswer.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
+			jsonLD.MainEntity.AcceptedAnswer.Author.Type = "Person"
+			jsonLD.MainEntity.AcceptedAnswer.Author.Name = answer.UserInfo.DisplayName
+
+		} else {
+			item := &schema.SuggestedAnswerItem{}
+			item.Type = "Answer"
+			item.Text = answer.HTML
+			item.DateCreated = time.Unix(answer.CreateTime, 0)
+			item.UpvoteCount = answer.VoteCount
+			item.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
+			item.Author.Type = "Person"
+			item.Author.Name = answer.UserInfo.DisplayName
+			answerList = append(answerList, item)
+		}
+
 	}
 	jsonLD.MainEntity.SuggestedAnswer = answerList
 	jsonLDStr, err := json.Marshal(jsonLD)
@@ -202,7 +268,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		tags = append(tags, tag.DisplayName)
 	}
 	siteInfo.Keywords = strings.Replace(strings.Trim(fmt.Sprint(tags), "[]"), " ", ",", -1)
-
+	siteInfo.Title = fmt.Sprintf("%s - %s", detail.Title, siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "question-detail.html", siteInfo, gin.H{
 		"id":       id,
 		"answerid": answerid,
@@ -227,6 +293,7 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/tags", siteInfo.General.SiteUrl)
+	siteInfo.Title = fmt.Sprintf("%s - %s", "Tags", siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "tags.html", siteInfo, gin.H{
 		"page": page,
 		"data": data,
@@ -252,14 +319,22 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/tags/%s", siteInfo.General.SiteUrl, tag)
-
 	siteInfo.Description = htmltext.FetchExcerpt(taginifo.ParsedText, "...", 240)
+	if len(taginifo.ParsedText) == 0 {
+		siteInfo.Description = "The tag has no description."
+	}
 	siteInfo.Keywords = taginifo.DisplayName
 
+	UrlUseTitle := false
+	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
+		UrlUseTitle = true
+	}
+	siteInfo.Title = fmt.Sprintf("'%s' Questions - %s", taginifo.DisplayName, siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "tag-detail.html", siteInfo, gin.H{
 		"tag":           taginifo,
 		"questionList":  questionList,
 		"questionCount": questionCount,
+		"useTitle":      UrlUseTitle,
 		"page":          page,
 	})
 }
@@ -297,6 +372,7 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/users/%s", siteInfo.General.SiteUrl, username)
+	siteInfo.Title = fmt.Sprintf("%s - %s", username, siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "homepage.html", siteInfo, gin.H{
 		"userinfo": userinfo,
 		"bio":      template.HTML(userinfo.Info.BioHTML),
@@ -316,9 +392,38 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	if siteInfo.Description == "" {
 		siteInfo.Description = siteInfo.General.Description
 	}
+	data["title"] = siteInfo.Title
+	if siteInfo.Title == "" {
+		data["title"] = siteInfo.General.Name
+	}
 	data["description"] = siteInfo.Description
 	data["language"] = handler.GetLang(ctx)
 	data["timezone"] = siteInfo.Interface.TimeZone
 
 	ctx.HTML(code, tpl, data)
+}
+
+func (tc *TemplateController) Sitemap(ctx *gin.Context) {
+	tc.templateRenderController.Sitemap(ctx)
+}
+
+func (tc *TemplateController) SitemapPage(ctx *gin.Context) {
+	page := 0
+	pageParam := ctx.Param("page")
+	pageRegexp := regexp.MustCompile(`question-(.*).xml`)
+	pageStr := pageRegexp.FindStringSubmatch(pageParam)
+	if len(pageStr) != 2 {
+		tc.Page404(ctx)
+		return
+	}
+	page = converter.StringToInt(pageStr[1])
+	if page == 0 {
+		tc.Page404(ctx)
+		return
+	}
+	err := tc.templateRenderController.SitemapPage(ctx, page)
+	if err != nil {
+		tc.Page404(ctx)
+		return
+	}
 }

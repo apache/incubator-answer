@@ -47,7 +47,7 @@ func (nc *NotificationController) GetRedDot(ctx *gin.Context) {
 		permission.QuestionAudit,
 		permission.AnswerAudit,
 		permission.TagAudit,
-	}, "")
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -80,7 +80,7 @@ func (nc *NotificationController) ClearRedDot(ctx *gin.Context) {
 		permission.QuestionAudit,
 		permission.AnswerAudit,
 		permission.TagAudit,
-	}, "")
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return

@@ -7,6 +7,7 @@ package main
 
 import (
 	"github.com/answerdev/answer/internal/base/conf"
+	"github.com/answerdev/answer/internal/base/cron"
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/server"
@@ -40,6 +41,7 @@ func initApplication(
 		controller_backyard.ProviderSetController,
 		templaterender.ProviderSetTemplateRenderController,
 		service.ProviderSetService,
+		cron.ProviderSetService,
 		repo.ProviderSetRepo,
 		translator.ProviderSet,
 		middleware.ProviderSetMiddleware,
