@@ -181,7 +181,7 @@ const TagSelector: FC<IProps> = ({
       onFocus={onFocus}
       onBlur={onBlur}
       onKeyDown={handleKeyDown}>
-      <div className="d-flex flex-wrap mx-n1">
+      <div className="d-flex flex-wrap m-n1">
         {initialValue?.map((item, index) => {
           return (
             <Button
