@@ -29,6 +29,7 @@ func NewScheduledTaskManager(
 
 func (s *ScheduledTaskManager) Run() {
 	fmt.Println("start cron")
+	s.questionService.SitemapCron(context.Background())
 	c := cron.New()
 	c.AddFunc("0 */1 * * *", func() {
 		ctx := context.Background()
