@@ -404,10 +404,18 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 }
 
 func (tc *TemplateController) Sitemap(ctx *gin.Context) {
+	if tc.checkPrivateMode(ctx) {
+		tc.Page404(ctx)
+		return
+	}
 	tc.templateRenderController.Sitemap(ctx)
 }
 
 func (tc *TemplateController) SitemapPage(ctx *gin.Context) {
+	if tc.checkPrivateMode(ctx) {
+		tc.Page404(ctx)
+		return
+	}
 	page := 0
 	pageParam := ctx.Param("page")
 	pageRegexp := regexp.MustCompile(`question-(.*).xml`)
@@ -426,4 +434,16 @@ func (tc *TemplateController) SitemapPage(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
+}
+
+func (tc *TemplateController) checkPrivateMode(ctx *gin.Context) bool {
+	resp, err := tc.siteInfoService.GetSiteLogin(ctx)
+	if err != nil {
+		log.Error(err)
+		return false
+	}
+	if resp.LoginRequired {
+		return true
+	}
+	return false
 }
