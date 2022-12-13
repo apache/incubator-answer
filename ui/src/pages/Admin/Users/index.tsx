@@ -74,20 +74,34 @@ const Users: FC = () => {
 
   const userModal = useUserModal({
     onConfirm: (userModel) => {
-      addUser(userModel).then(() => {
-        if (/all|staff/.test(curFilter) && curPage === 1) {
-          refreshUsers();
-        }
+      return new Promise((resolve, reject) => {
+        addUser(userModel)
+          .then(() => {
+            if (/all|staff/.test(curFilter) && curPage === 1) {
+              refreshUsers();
+            }
+            resolve(true);
+          })
+          .catch((e) => {
+            reject(e);
+          });
       });
     },
   });
   const changePasswordModal = useChangePasswordModal({
     onConfirm: (rd) => {
-      updateUserPassword(rd).then(() => {
-        Toast.onShow({
-          msg: t('update_password', { keyPrefix: 'toast' }),
-          variant: 'success',
-        });
+      return new Promise((resolve, reject) => {
+        updateUserPassword(rd)
+          .then(() => {
+            Toast.onShow({
+              msg: t('update_password', { keyPrefix: 'toast' }),
+              variant: 'success',
+            });
+            resolve(true);
+          })
+          .catch((e) => {
+            reject(e);
+          });
       });
     },
   });
