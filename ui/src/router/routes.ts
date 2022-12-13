@@ -1,7 +1,7 @@
-import { LoaderFunctionArgs, RouteObject } from 'react-router-dom';
+import { RouteObject } from 'react-router-dom';
 
 import { guard } from '@/utils';
-import type { TGuardResult } from '@/utils/guard';
+import type { TGuardFunc } from '@/utils/guard';
 
 export interface RouteNode extends RouteObject {
   page: string;
@@ -13,14 +13,18 @@ export interface RouteNode extends RouteObject {
    * if guard returned the `TGuardResult` has `redirect` field,
    * then auto redirect route to the `redirect` target.
    */
-  guard?: (args: LoaderFunctionArgs) => Promise<TGuardResult>;
+  guard?: TGuardFunc;
 }
 
 const routes: RouteNode[] = [
   {
     path: '/',
     page: 'pages/Layout',
-    guard: async () => {
+    guard: () => {
+      const gr = guard.shouldLoginRequired();
+      if (!gr.ok) {
+        return gr;
+      }
       return guard.notForbidden();
     },
     children: [
@@ -36,7 +40,7 @@ const routes: RouteNode[] = [
       {
         path: 'questions/ask',
         page: 'pages/Questions/Ask',
-        guard: async () => {
+        guard: () => {
           return guard.activated();
         },
       },
@@ -55,7 +59,7 @@ const routes: RouteNode[] = [
       {
         path: 'posts/:qid/edit',
         page: 'pages/Questions/Ask',
-        guard: async () => {
+        guard: () => {
           return guard.activated();
         },
       },
@@ -83,7 +87,7 @@ const routes: RouteNode[] = [
       {
         path: 'tags/:tagId/edit',
         page: 'pages/Tags/Edit',
-        guard: async () => {
+        guard: () => {
           return guard.activated();
         },
       },
@@ -99,7 +103,7 @@ const routes: RouteNode[] = [
       {
         path: 'users/settings',
         page: 'pages/Users/Settings',
-        guard: async () => {
+        guard: () => {
           return guard.logged();
         },
         children: [
@@ -132,7 +136,7 @@ const routes: RouteNode[] = [
       {
         path: 'users/login',
         page: 'pages/Users/Login',
-        guard: async () => {
+        guard: () => {
           const notLogged = guard.notLogged();
           if (notLogged.ok) {
             return notLogged;
@@ -143,15 +147,19 @@ const routes: RouteNode[] = [
       {
         path: 'users/register',
         page: 'pages/Users/Register',
-        guard: async () => {
+        guard: () => {
+          const allowNew = guard.allowNewRegistration();
+          if (!allowNew.ok) {
+            return allowNew;
+          }
           return guard.notLogged();
         },
       },
       {
         path: 'users/account-recovery',
         page: 'pages/Users/AccountForgot',
-        guard: async () => {
-          return guard.activated();
+        guard: () => {
+          return guard.notLogged();
         },
       },
       {
@@ -169,14 +177,14 @@ const routes: RouteNode[] = [
       {
         path: 'users/account-activation/success',
         page: 'pages/Users/ActivationResult',
-        guard: async () => {
+        guard: () => {
           return guard.activated();
         },
       },
       {
         path: '/users/account-activation/failed',
         page: 'pages/Users/ActivationResult',
-        guard: async () => {
+        guard: () => {
           return guard.notActivated();
         },
       },
@@ -187,28 +195,28 @@ const routes: RouteNode[] = [
       {
         path: '/users/account-suspended',
         page: 'pages/Users/Suspended',
-        guard: async () => {
+        guard: () => {
           return guard.forbidden();
         },
       },
       {
         path: '/posts/:qid/timeline',
         page: 'pages/Timeline',
-        guard: async () => {
+        guard: () => {
           return guard.logged();
         },
       },
       {
         path: '/posts/:qid/:aid/timeline',
         page: 'pages/Timeline',
-        guard: async () => {
+        guard: () => {
           return guard.logged();
         },
       },
       {
         path: '/tags/:tid/timeline',
         page: 'pages/Timeline',
-        guard: async () => {
+        guard: () => {
           return guard.logged();
         },
       },
@@ -216,8 +224,10 @@ const routes: RouteNode[] = [
       {
         path: 'admin',
         page: 'pages/Admin',
-        guard: async () => {
+        loader: async () => {
           await guard.pullLoggedUser(true);
+        },
+        guard: () => {
           return guard.admin();
         },
         children: [

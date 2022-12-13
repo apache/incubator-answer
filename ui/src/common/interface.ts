@@ -320,6 +320,7 @@ export interface SiteSettings {
   branding: AdminSettingBranding;
   general: AdminSettingsGeneral;
   interface: AdminSettingsInterface;
+  login: AdminSettingsLogin;
 }
 
 export interface AdminSettingBranding {
