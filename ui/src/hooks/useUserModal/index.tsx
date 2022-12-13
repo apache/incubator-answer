@@ -7,13 +7,14 @@ import ReactDOM from 'react-dom/client';
 import pattern from '@/common/pattern';
 import type * as Type from '@/common/interface';
 import { SchemaForm, JSONSchema, UISchema, initFormData } from '@/components';
+import { handleFormError } from '@/utils';
 
 const div = document.createElement('div');
 const root = ReactDOM.createRoot(div);
 
 interface IProps {
   title?: string;
-  onConfirm?: (formData: any) => void;
+  onConfirm?: (formData: any) => Promise<any>;
 }
 const useAddUserModal = (props: IProps = {}) => {
   const { t } = useTranslation('translation', {
@@ -41,6 +42,16 @@ const useAddUserModal = (props: IProps = {}) => {
     },
   };
   const uiSchema: UISchema = {
+    display_name: {
+      'ui:options': {
+        validator: (value) => {
+          if (value.length > 30) {
+            return t('form.fields.display_name.msg');
+          }
+          return true;
+        },
+      },
+    },
     email: {
       'ui:options': {
         type: 'email',
@@ -55,6 +66,14 @@ const useAddUserModal = (props: IProps = {}) => {
     password: {
       'ui:options': {
         type: 'password',
+        validator: (value) => {
+          const MIN_LENGTH = 8;
+          const MAX_LENGTH = 32;
+          if (value.length < MIN_LENGTH || value.length > MAX_LENGTH) {
+            return t('form.fields.password.msg');
+          }
+          return true;
+        },
       },
     },
   };
@@ -88,26 +107,34 @@ const useAddUserModal = (props: IProps = {}) => {
         display_name: formData.display_name.value,
         email: formData.email.value,
         password: formData.password.value,
-      });
-      setFormData({
-        display_name: {
-          value: '',
-          isInvalid: false,
-          errorMsg: '',
-        },
-        email: {
-          value: '',
-          isInvalid: false,
-          errorMsg: '',
-        },
-        password: {
-          value: '',
-          isInvalid: false,
-          errorMsg: '',
-        },
-      });
+      })
+        .then(() => {
+          setFormData({
+            display_name: {
+              value: '',
+              isInvalid: false,
+              errorMsg: '',
+            },
+            email: {
+              value: '',
+              isInvalid: false,
+              errorMsg: '',
+            },
+            password: {
+              value: '',
+              isInvalid: false,
+              errorMsg: '',
+            },
+          });
+          onClose();
+        })
+        .catch((err) => {
+          if (err.isError) {
+            const data = handleFormError(err, formData);
+            setFormData({ ...data });
+          }
+        });
     }
-    onClose();
   };
 
   const handleOnChange = (data) => {
