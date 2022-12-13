@@ -75,6 +75,12 @@ func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.TemplateSiteInf
 	if err != nil {
 		log.Error(err)
 	}
+
+	resp.SiteSeo, err = tc.siteInfoService.GetSiteSeo(ctx)
+	if err != nil {
+		log.Error(err)
+	}
+
 	resp.Year = fmt.Sprintf("%d", time.Now().Year())
 	return resp
 }
@@ -101,7 +107,7 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 	siteInfo.Canonical = fmt.Sprintf("%s", siteInfo.General.SiteUrl)
 
 	UrlUseTitle := false
-	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
+	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
 	siteInfo.Title = ""
@@ -109,6 +115,7 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 		"data":     data,
 		"useTitle": UrlUseTitle,
 		"page":     templaterender.Paginator(page, req.PageSize, count),
+		"path":     "questions",
 	})
 }
 
@@ -130,7 +137,7 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	siteInfo.Canonical = fmt.Sprintf("%s/questions", siteInfo.General.SiteUrl)
 
 	UrlUseTitle := false
-	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
+	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
 	siteInfo.Title = fmt.Sprintf("Questions - %s", siteInfo.General.Name)
@@ -141,7 +148,7 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	})
 }
 
-func (tc *TemplateController) QuestionInfo301Jump(ctx *gin.Context, siteInfo *schema.TemplateSiteInfoResp) (jump bool, url string) {
+func (tc *TemplateController) QuestionInfo301Jump(ctx *gin.Context, siteInfo *schema.TemplateSiteInfoResp, correctTitle bool) (jump bool, url string) {
 	id := ctx.Param("id")
 	title := ctx.Param("title")
 	titleIsAnswerID := false
@@ -154,7 +161,7 @@ func (tc *TemplateController) QuestionInfo301Jump(ctx *gin.Context, siteInfo *sc
 	}
 
 	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
-	if siteInfo.General.PermaLink == schema.PermaLinkQuestionID {
+	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionID {
 		//not have title
 		if titleIsAnswerID || len(title) == 0 {
 			return false, ""
@@ -162,7 +169,7 @@ func (tc *TemplateController) QuestionInfo301Jump(ctx *gin.Context, siteInfo *sc
 		return true, url
 	} else {
 		//have title
-		if len(title) > 0 && !titleIsAnswerID {
+		if len(title) > 0 && !titleIsAnswerID && correctTitle {
 			return false, ""
 		}
 		detail, err := tc.templateRenderController.QuestionDetail(ctx, id)
@@ -178,18 +185,25 @@ func (tc *TemplateController) QuestionInfo301Jump(ctx *gin.Context, siteInfo *sc
 // QuestionInfo question and answers info
 func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	id := ctx.Param("id")
+	title := ctx.Param("title")
 	answerid := ctx.Param("answerid")
 
-	siteInfo := tc.SiteInfo(ctx)
-	jump, jumpurl := tc.QuestionInfo301Jump(ctx, siteInfo)
-	if jump {
-		ctx.Redirect(http.StatusMovedPermanently, jumpurl)
-		return
-	}
+	correctTitle := false
 
 	detail, err := tc.templateRenderController.QuestionDetail(ctx, id)
 	if err != nil {
 		tc.Page404(ctx)
+		return
+	}
+	encodeTitle := htmltext.UrlTitle(detail.Title)
+	if encodeTitle == title {
+		correctTitle = true
+	}
+
+	siteInfo := tc.SiteInfo(ctx)
+	jump, jumpurl := tc.QuestionInfo301Jump(ctx, siteInfo, correctTitle)
+	if jump {
+		ctx.Redirect(http.StatusMovedPermanently, jumpurl)
 		return
 	}
 
@@ -217,9 +231,8 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
-	encodeTitle := htmltext.UrlTitle(detail.Title)
 	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
-	if siteInfo.General.PermaLink == schema.PermaLinkQuestionID {
+	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionID {
 		siteInfo.Canonical = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
 	}
 	jsonLD := &schema.QAPageJsonLD{}
@@ -236,13 +249,15 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	answerList := make([]*schema.SuggestedAnswerItem, 0)
 	for _, answer := range answers {
 		if answer.Adopted == schema.AnswerAdoptedEnable {
-			jsonLD.MainEntity.AcceptedAnswer.Type = "Answer"
-			jsonLD.MainEntity.AcceptedAnswer.Text = answer.HTML
-			jsonLD.MainEntity.AcceptedAnswer.UpvoteCount = answer.VoteCount
-			jsonLD.MainEntity.AcceptedAnswer.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
-			jsonLD.MainEntity.AcceptedAnswer.Author.Type = "Person"
-			jsonLD.MainEntity.AcceptedAnswer.Author.Name = answer.UserInfo.DisplayName
-
+			acceptedAnswerItem := &schema.AcceptedAnswerItem{}
+			acceptedAnswerItem.Type = "Answer"
+			acceptedAnswerItem.Text = answer.HTML
+			acceptedAnswerItem.DateCreated = time.Unix(answer.CreateTime, 0)
+			acceptedAnswerItem.UpvoteCount = answer.VoteCount
+			acceptedAnswerItem.URL = fmt.Sprintf("%s/%s", siteInfo.Canonical, answer.ID)
+			acceptedAnswerItem.Author.Type = "Person"
+			acceptedAnswerItem.Author.Name = answer.UserInfo.DisplayName
+			jsonLD.MainEntity.AcceptedAnswer = acceptedAnswerItem
 		} else {
 			item := &schema.SuggestedAnswerItem{}
 			item.Type = "Answer"
@@ -326,7 +341,7 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	siteInfo.Keywords = taginifo.DisplayName
 
 	UrlUseTitle := false
-	if siteInfo.General.PermaLink == schema.PermaLinkQuestionIDAndTitle {
+	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
 	siteInfo.Title = fmt.Sprintf("'%s' Questions - %s", taginifo.DisplayName, siteInfo.General.Name)
@@ -399,6 +414,10 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	data["description"] = siteInfo.Description
 	data["language"] = handler.GetLang(ctx)
 	data["timezone"] = siteInfo.Interface.TimeZone
+	_, ok := data["path"]
+	if !ok {
+		data["path"] = ""
+	}
 
 	ctx.HTML(code, tpl, data)
 }

@@ -15,11 +15,11 @@ type SiteGeneralReq struct {
 	Description      string `validate:"omitempty,gt=3,lte=2000" form:"description" json:"description"`
 	SiteUrl          string `validate:"required,gt=1,lte=512,url" form:"site_url" json:"site_url"`
 	ContactEmail     string `validate:"required,gt=1,lte=512,email" form:"contact_email" json:"contact_email"`
-	PermaLink        int    `validate:"required,lte=3,gte=0" form:"permalink" json:"permalink"`
 }
 
 type SiteSeoReq struct {
-	Robots string `validate:"required" form:"robots" json:"robots"`
+	PermaLink int    `validate:"required,lte=3,gte=0" form:"permalink" json:"permalink"`
+	Robots    string `validate:"required" form:"robots" json:"robots"`
 }
 
 func (r *SiteGeneralReq) FormatSiteUrl() {
@@ -142,6 +142,7 @@ type TemplateSiteInfoResp struct {
 	General     *SiteGeneralResp   `json:"general"`
 	Interface   *SiteInterfaceResp `json:"interface"`
 	Branding    *SiteBrandingResp  `json:"branding"`
+	SiteSeo     *SiteSeoReq        `json:"siteseo"`
 	Title       string
 	Year        string
 	Canonical   string

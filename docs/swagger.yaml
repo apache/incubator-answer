@@ -1247,10 +1247,6 @@ definitions:
       name:
         maxLength: 128
         type: string
-      permalink:
-        maximum: 3
-        minimum: 0
-        type: integer
       short_description:
         maxLength: 255
         type: string
@@ -1260,7 +1256,6 @@ definitions:
     required:
     - contact_email
     - name
-    - permalink
     - site_url
     type: object
   schema.SiteGeneralResp:
@@ -1274,10 +1269,6 @@ definitions:
       name:
         maxLength: 128
         type: string
-      permalink:
-        maximum: 3
-        minimum: 0
-        type: integer
       short_description:
         maxLength: 255
         type: string
@@ -1287,7 +1278,6 @@ definitions:
     required:
     - contact_email
     - name
-    - permalink
     - site_url
     type: object
   schema.SiteInfoResp:
@@ -1375,16 +1365,26 @@ definitions:
     type: object
   schema.SiteSeoReq:
     properties:
+      permalink:
+        maximum: 3
+        minimum: 0
+        type: integer
       robots:
         type: string
     required:
+    - permalink
     - robots
     type: object
   schema.SiteSeoResp:
     properties:
+      permalink:
+        maximum: 3
+        minimum: 0
+        type: integer
       robots:
         type: string
     required:
+    - permalink
     - robots
     type: object
   schema.SiteThemeReq:
