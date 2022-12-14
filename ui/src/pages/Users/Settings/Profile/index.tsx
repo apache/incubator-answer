@@ -413,7 +413,7 @@ const Index: React.FC = () => {
           <Form.Label>{t('website.label')}</Form.Label>
           <Form.Control
             required
-            type="text"
+            type="url"
             placeholder={t('website.placeholder')}
             value={formData.website.value}
             isInvalid={formData.website.isInvalid}
