@@ -1,4 +1,5 @@
 import loginSettingStore from '@/stores/loginSetting';
+import seoSettingStore from '@/stores/seoSetting';
 
 import toastStore from './toast';
 import loggedUserInfoStore from './userInfo';
@@ -7,6 +8,7 @@ import interfaceStore from './interface';
 import brandingStore from './branding';
 import pageTagStore from './pageTags';
 import customizeStore from './customize';
+import themeSettingStore from './themeSetting';
 
 export {
   toastStore,
@@ -17,4 +19,6 @@ export {
   pageTagStore,
   loginSettingStore,
   customizeStore,
+  themeSettingStore,
+  seoSettingStore,
 };

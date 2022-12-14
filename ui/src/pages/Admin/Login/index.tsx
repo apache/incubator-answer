@@ -6,6 +6,7 @@ import { getLoginSetting, putLoginSetting } from '@/services';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
 import { handleFormError } from '@/utils';
+import { loginSettingStore } from '@/stores';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -40,6 +41,7 @@ const Index: FC = () => {
     },
   };
   const [formData, setFormData] = useState(initFormData(schema));
+  const { update: updateLoginSetting } = loginSettingStore((_) => _);
 
   const onSubmit = (evt) => {
     evt.preventDefault();
@@ -56,6 +58,7 @@ const Index: FC = () => {
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
+        updateLoginSetting(reqParams);
       })
       .catch((err) => {
         if (err.isError) {

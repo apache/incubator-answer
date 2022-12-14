@@ -17,11 +17,14 @@ import {
   useLocation,
 } from 'react-router-dom';
 
+import classnames from 'classnames';
+
 import {
   loggedUserInfoStore,
   siteInfoStore,
   brandingStore,
   loginSettingStore,
+  themeSettingStore,
 } from '@/stores';
 import { logout, useQueryNotificationStatus } from '@/services';
 import { RouteAlias } from '@/router/alias';
@@ -41,6 +44,7 @@ const Header: FC = () => {
   const siteInfo = siteInfoStore((state) => state.siteInfo);
   const brandingInfo = brandingStore((state) => state.branding);
   const loginSetting = loginSettingStore((state) => state.login);
+  const { theme, theme_config } = themeSettingStore((_) => _);
   const { data: redDot } = useQueryNotificationStatus();
   const location = useLocation();
   const handleInput = (val) => {
@@ -69,8 +73,16 @@ const Header: FC = () => {
     }
   }, [location.pathname]);
 
+  let themeType = 'theme-colored';
+  if (theme && theme_config[theme]) {
+    themeType = `theme-${theme_config[theme].navbar_style}`;
+  }
+
   return (
-    <Navbar variant="dark" expand="lg" className="sticky-top" id="header">
+    <Navbar
+      expand="lg"
+      className={classnames('sticky-top', themeType)}
+      id="header">
       <Container className="d-flex align-items-center">
         <Navbar.Toggle
           aria-controls="navBarContent"
@@ -105,14 +117,15 @@ const Header: FC = () => {
               <NavItems redDot={redDot} userInfo={user} logOut={handleLogout} />
             ) : (
               <>
-                <Button
-                  variant="link"
-                  className="me-2 text-white"
-                  href="/users/login">
+                <Button variant="link" className="me-2" href="/users/login">
                   {t('btns.login')}
                 </Button>
                 {loginSetting.allow_new_registrations && (
-                  <Button variant="light" href="/users/register">
+                  <Button
+                    variant={
+                      themeType === 'theme-colored' ? 'light' : 'primary'
+                    }
+                    href="/users/register">
                     {t('btns.signup')}
                   </Button>
                 )}
@@ -142,7 +155,7 @@ const Header: FC = () => {
             <Form action="/search" className="w-75 px-0 px-lg-2">
               <FormControl
                 placeholder={t('header.search.placeholder')}
-                className="text-white placeholder-search"
+                className="placeholder-search"
                 value={searchStr}
                 name="q"
                 onChange={(e) => handleInput(e.target.value)}
@@ -166,7 +179,10 @@ const Header: FC = () => {
                 <Nav.Item className="me-3">
                   <Link
                     to="/questions/ask"
-                    className="text-capitalize text-nowrap btn btn-light">
+                    className={classnames('text-capitalize text-nowrap btn', {
+                      'btn-light': themeType !== 'theme-light',
+                      'btn-primary': themeType === 'theme-light',
+                    })}>
                     {t('btns.add_question')}
                   </Link>
                 </Nav.Item>
@@ -181,12 +197,19 @@ const Header: FC = () => {
               <>
                 <Button
                   variant="link"
-                  className="me-2 text-white"
+                  className={classnames('me-2', {
+                    'link-light': themeType === 'theme-colored',
+                    'link-primary': themeType !== 'theme-colored',
+                  })}
                   href="/users/login">
                   {t('btns.login')}
                 </Button>
                 {loginSetting.allow_new_registrations && (
-                  <Button variant="light" href="/users/register">
+                  <Button
+                    variant={
+                      themeType === 'theme-colored' ? 'light' : 'primary'
+                    }
+                    href="/users/register">
                     {t('btns.signup')}
                   </Button>
                 )}
