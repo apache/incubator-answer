@@ -28,7 +28,6 @@ stages:
 #  before_script:
 #    - export GOPROXY=https://goproxy.cn,direct
   script:
-    - make generate
     - make build
   artifacts:
     paths:
