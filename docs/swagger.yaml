@@ -1292,6 +1292,8 @@ definitions:
         $ref: '#/definitions/schema.SiteInterfaceResp'
       login:
         $ref: '#/definitions/schema.SiteLoginResp'
+      siteseo:
+        $ref: '#/definitions/schema.SiteSeoReq'
       theme:
         $ref: '#/definitions/schema.SiteThemeResp'
     type: object
