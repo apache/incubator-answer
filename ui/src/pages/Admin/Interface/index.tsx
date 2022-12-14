@@ -35,13 +35,6 @@ const Interface: FC = () => {
   const schema: JSONSchema = {
     title: t('page_title'),
     properties: {
-      theme: {
-        type: 'string',
-        title: t('theme.label'),
-        description: t('theme.text'),
-        enum: themes?.map((theme) => theme.value) || [],
-        enumNames: themes?.map((theme) => theme.label) || [],
-      },
       language: {
         type: 'string',
         title: t('language.label'),
