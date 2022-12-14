@@ -32,6 +32,7 @@ func (a *TemplateRouter) RegisterTemplateRouter(r *gin.RouterGroup) {
 	r.GET("/sitemap/:page", a.templateController.SitemapPage)
 
 	r.GET("/robots.txt", a.siteInfoController.GetRobots)
+	r.GET("/custom.css", a.siteInfoController.GetCss)
 
 	r.GET("/", a.templateController.Index)
 	r.GET("/index", a.templateController.Index)

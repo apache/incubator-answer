@@ -155,6 +155,22 @@ func (sc *SiteInfoController) GetRobots(ctx *gin.Context) {
 	ctx.String(http.StatusOK, resp.Robots)
 }
 
+// GetRobots get site robots information
+// @Summary get site robots information
+// @Description get site robots information
+// @Tags site
+// @Produce json
+// @Success 200 {string} txt ""
+// @Router /custom.css [get]
+func (sc *SiteInfoController) GetCss(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteCustomCssHTML(ctx)
+	if err != nil {
+		ctx.String(http.StatusOK, "")
+		return
+	}
+	ctx.String(http.StatusOK, resp.CustomCss)
+}
+
 // UpdateSeo update site seo information
 // @Summary update site seo information
 // @Description update site seo information
