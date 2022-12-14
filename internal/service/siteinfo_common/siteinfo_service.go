@@ -9,6 +9,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 )
 
+//go:generate mockgen -source=./siteinfo_service.go -destination=../mock/siteinfo_repo_mock.go -package=mock
 type SiteInfoRepo interface {
 	SaveByType(ctx context.Context, siteType string, data *entity.SiteInfo) (err error)
 	GetByType(ctx context.Context, siteType string) (siteInfo *entity.SiteInfo, exist bool, err error)
