@@ -137,13 +137,13 @@ type SiteInfoResp struct {
 	Login         *SiteLoginResp         `json:"login"`
 	Theme         *SiteThemeResp         `json:"theme"`
 	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
-	SiteSeo       *SiteSeoReq            `json:"siteseo"`
+	SiteSeo       *SiteSeoReq            `json:"site_seo"`
 }
 type TemplateSiteInfoResp struct {
 	General     *SiteGeneralResp   `json:"general"`
 	Interface   *SiteInterfaceResp `json:"interface"`
 	Branding    *SiteBrandingResp  `json:"branding"`
-	SiteSeo     *SiteSeoReq        `json:"siteseo"`
+	SiteSeo     *SiteSeoReq        `json:"site_seo"`
 	Title       string
 	Year        string
 	Canonical   string
