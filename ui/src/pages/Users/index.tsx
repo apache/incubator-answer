@@ -1,6 +1,7 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { Fragment } from 'react';
 
 import { usePageTags } from '@/hooks';
 import { useQueryContributeUsers } from '@/services';
@@ -33,7 +34,7 @@ const Users = () => {
               return null;
             }
             return (
-              <>
+              <Fragment key={key}>
                 <Row className="mb-4">
                   <Col>
                     <h6 className="mb-0">{t(key)}</h6>
@@ -65,7 +66,7 @@ const Users = () => {
                     </Col>
                   ))}
                 </Row>
-              </>
+              </Fragment>
             );
           })}
         </Col>

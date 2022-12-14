@@ -2,77 +2,74 @@ import { FC, memo, useEffect } from 'react';
 
 import { customizeStore } from '@/stores';
 
-const getElementByAttr = (attr: string, elName: string) => {
-  let el = document.querySelector(`[${attr}]`);
-  if (!el) {
-    el = document.createElement(elName);
-    el.setAttribute(attr, '');
-  }
-  return el;
+const CUSTOM_MARK_HEAD = 'customize_head';
+const CUSTOM_MARK_HEADER = 'customize_header';
+const CUSTOM_MARK_FOOTER = 'customize_footer';
+
+const makeMarker = (mark) => {
+  return `<!--${mark}-->`;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const textToDf = (t) => {
-  const dummyDoc = document.createElement('div');
-  dummyDoc.innerHTML = t;
-  const frag = document.createDocumentFragment();
-  while (dummyDoc.childNodes.length) {
-    frag.appendChild(dummyDoc.children[0]);
+type pos = 'afterbegin' | 'beforeend';
+const renderCustomArea = (el, part, pos: pos, content: string = '') => {
+  let startMarkNode;
+  let endMarkNode;
+  const { childNodes } = el;
+  for (let i = 0; i < childNodes.length; i += 1) {
+    const node = childNodes[i];
+    if (node.nodeType === 8 && node.nodeValue === part) {
+      if (!startMarkNode) {
+        startMarkNode = node;
+      } else {
+        endMarkNode = node;
+        break;
+      }
+    }
   }
-  return frag;
+  if (startMarkNode && endMarkNode) {
+    while (
+      startMarkNode.nextSibling &&
+      startMarkNode.nextSibling !== endMarkNode
+    ) {
+      el.removeChild(startMarkNode.nextSibling);
+    }
+  }
+  if (startMarkNode) {
+    el.removeChild(startMarkNode);
+  }
+  if (endMarkNode) {
+    el.removeChild(endMarkNode);
+  }
+  el.insertAdjacentHTML(pos, makeMarker(part));
+  el.insertAdjacentHTML(pos, content);
+  el.insertAdjacentHTML(pos, makeMarker(part));
+};
+const handleCustomHead = (content) => {
+  const el = document.head;
+  renderCustomArea(el, CUSTOM_MARK_HEAD, 'beforeend', content);
 };
 
-const injectCustomCSS = (t: string) => {
-  if (!t) {
-    return;
-  }
-  const el = getElementByAttr('data-custom-css', 'style');
-  el.textContent = t;
-  document.head.insertBefore(el, document.head.lastChild);
+const handleCustomHeader = (content) => {
+  const el = document.body;
+  renderCustomArea(el, CUSTOM_MARK_HEADER, 'afterbegin', content);
 };
 
-const injectCustomHead = (t: string) => {
-  if (!t) {
-    return;
-  }
-  setTimeout(() => {
-    const el = getElementByAttr('data-custom-head', 'style');
-    el.textContent = t;
-    document.head.appendChild(el);
-  }, 200);
-};
-
-const injectCustomHeader = (t: string) => {
-  if (!t) {
-    return;
-  }
-  // const frag = textToDf(t);
-  t = ' Customize Header ';
-  document.body.insertBefore(
-    document.createComment(t),
-    document.body.firstChild,
-  );
-};
-
-const injectCustomFooter = (t: string) => {
-  if (!t) {
-    return;
-  }
-  // FIXME
-  t = ' Customize Footer ';
-  // const frag = textToDf(t);
-  document.documentElement.appendChild(document.createComment(t));
+const handleCustomFooter = (content) => {
+  const el = document.documentElement;
+  renderCustomArea(el, CUSTOM_MARK_FOOTER, 'beforeend', content);
 };
 
 const Index: FC = () => {
-  const { custom_css, custom_head, custom_header, custom_footer } =
-    customizeStore((state) => state);
+  const { custom_head, custom_header, custom_footer } = customizeStore(
+    (state) => state,
+  );
   useEffect(() => {
-    injectCustomCSS(custom_css);
-    injectCustomHead(custom_head);
-    injectCustomHeader(custom_header);
-    injectCustomFooter(custom_footer);
-  }, []);
+    setTimeout(() => {
+      handleCustomHead(custom_head);
+    }, 1000);
+    handleCustomHeader(custom_header);
+    handleCustomFooter(custom_footer);
+  }, [custom_head, custom_header, custom_footer]);
   return (
     <>
       {null}
