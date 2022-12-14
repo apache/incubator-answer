@@ -380,11 +380,12 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 	req := &schema.GetOtherUserInfoByUsernameReq{}
 	req.Username = username
 	userinfo, err := tc.templateRenderController.UserInfo(ctx, req)
-	if !userinfo.Has {
+
+	if err != nil {
 		tc.Page404(ctx)
 		return
 	}
-	if err != nil {
+	if !userinfo.Has {
 		tc.Page404(ctx)
 		return
 	}
