@@ -15,7 +15,6 @@ import (
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/log"
 )
 
 // QuestionController question controller
@@ -333,19 +332,6 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
-
-	// TODO: pass errFields and return errors
-	log.Info(errFields)
-
-	// errMsg := fmt.Sprintf(`The reserved tag "%s" must be present.`,
-	// 	strings.Join(CheckOldTaglist, ","))
-	// errorlist := make([]*validator.FormErrorField, 0)
-	// errorlist = append(errorlist, &validator.FormErrorField{
-	// 	ErrorField: "tags",
-	// 	ErrorMsg:   errMsg,
-	// })
-	// err = errors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
-	// return errorlist, err
 
 	errlist, err := qc.questionService.UpdateQuestionCheckTags(ctx, req)
 	if err != nil {
