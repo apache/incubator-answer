@@ -41,7 +41,7 @@ func NewHTTPServer(debug bool,
 		gin.SetMode(gin.ReleaseMode)
 	}
 	r := gin.New()
-	r.Use(brotli.Brotli(brotli.DefaultCompression))
+	r.Use(brotli.Brotli(brotli.DefaultCompression), middleware.ExtractAndSetAcceptLanguage)
 	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK") })
 
 	viewRouter.Register(r)

@@ -1,8 +1,12 @@
 package schema
 
 import (
+	"context"
 	"fmt"
 	"net/url"
+
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/translator"
 )
 
 const PermaLinkQuestionIDAndTitle = 1
@@ -118,7 +122,28 @@ type SiteLoginResp SiteLoginReq
 type SiteCustomCssHTMLResp SiteCustomCssHTMLReq
 
 // SiteThemeResp site theme response
-type SiteThemeResp SiteThemeReq
+type SiteThemeResp struct {
+	ThemeOptions []*ThemeOption         `json:"theme_options"`
+	Theme        string                 `json:"theme"`
+	ThemeConfig  map[string]interface{} `json:"theme_config"`
+}
+
+func (s *SiteThemeResp) TrTheme(ctx context.Context) {
+	la := handler.GetLangByCtx(ctx)
+	for _, option := range s.ThemeOptions {
+		tr := translator.GlobalTrans.Tr(la, option.Value)
+		// if tr is equal the option value means not found translation, so use the original label
+		if tr != option.Value {
+			option.Label = tr
+		}
+	}
+}
+
+// ThemeOption get label option
+type ThemeOption struct {
+	Label string `json:"label"`
+	Value string `json:"value"`
+}
 
 // SiteWriteResp site write response
 type SiteWriteResp SiteWriteReq

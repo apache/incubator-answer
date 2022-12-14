@@ -91,10 +91,13 @@ func (s *SiteInfoCommonService) GetSiteCustomCssHTML(ctx context.Context) (resp 
 
 // GetSiteTheme get site theme
 func (s *SiteInfoCommonService) GetSiteTheme(ctx context.Context) (resp *schema.SiteThemeResp, err error) {
-	resp = &schema.SiteThemeResp{}
+	resp = &schema.SiteThemeResp{
+		ThemeOptions: schema.GetThemeOptions,
+	}
 	if err = s.getSiteInfoByType(ctx, constant.SiteTypeTheme, resp); err != nil {
 		return nil, err
 	}
+	resp.TrTheme(ctx)
 	return resp, nil
 }
 
