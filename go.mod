@@ -14,6 +14,8 @@ require (
 	github.com/go-playground/validator/v10 v10.11.1
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/goccy/go-json v0.9.11
+	github.com/golang/mock v1.4.4
+	github.com/gomarkdown/markdown v0.0.0-20221013030248-663e2500819c
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
 	github.com/gosimple/slug v1.13.1
