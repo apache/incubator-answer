@@ -248,6 +248,7 @@ ui:
     install: Answer Installation
     upgrade: Answer Upgrade
     maintenance: Website Maintenance
+    users: Users
   notifications:
     title: Notifications
     inbox: Inbox
@@ -1104,7 +1105,7 @@ ui:
           fields:
             display_name:
               label: Display Name
-              msg: display_name must be at maximum 30 characters in length.
+              msg: display_name must be at 4 - 30 characters in length.
             email:
               label: Email
               msg: Email is not valid.
@@ -1346,3 +1347,12 @@ ui:
     by: By
     comment: Comment
     no_data: "We couldn't find anything."
+  users:
+    title: Users
+    users_with_the_most_reputation: Users with the highest reputation scores
+    users_with_the_most_vote: Users who voted the most
+    staffs: Our community staff
+    reputation: reputation
+    votes: votes
+
+

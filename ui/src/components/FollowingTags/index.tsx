@@ -46,7 +46,7 @@ const Index: FC = () => {
           {t('save')}
         </Button>
       </Card.Header>
-      <Card.Body className="my-n1">
+      <Card.Body>
         <TagSelector
           value={followingTags}
           onChange={handleTagsChange}
@@ -67,14 +67,14 @@ const Index: FC = () => {
           {t('edit')}
         </Button>
       </Card.Header>
-      <Card.Body className="m-n1">
+      <Card.Body>
         {followingTags?.length ? (
-          <>
+          <div className="m-n1">
             {followingTags.map((item) => {
               const slugName = item?.slug_name;
               return <Tag key={slugName} className="m-1" data={item} />;
             })}
-          </>
+          </div>
         ) : (
           <>
             <div className="text-muted">{t('follow_tag_tip')}</div>

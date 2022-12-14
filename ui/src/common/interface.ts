@@ -503,3 +503,11 @@ export interface MemberActionItem {
   name: string;
   type: string;
 }
+
+export interface User {
+  username: string;
+  rank: number;
+  vote_count: number;
+  display_name: string;
+  avatar: string;
+}

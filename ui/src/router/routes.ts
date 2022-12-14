@@ -93,6 +93,10 @@ const routes: RouteNode[] = [
       },
       // for users
       {
+        path: 'users',
+        page: 'pages/Users',
+      },
+      {
         path: 'users/:username',
         page: 'pages/Users/Personal',
       },
