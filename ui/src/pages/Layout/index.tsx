@@ -5,7 +5,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { SWRConfig } from 'swr';
 
 import { toastStore, brandingStore, pageTagStore } from '@/stores';
-import { Header, Footer, Toast, Customize } from '@/components';
+import { Header, Footer, Toast, Customize, CustomizeTheme } from '@/components';
 
 const Layout: FC = () => {
   const { msg: toastMsg, variant, clear: toastClear } = toastStore();
@@ -31,6 +31,7 @@ const Layout: FC = () => {
         {keywords && <meta name="keywords" content={keywords} />}
         {description && <meta name="description" content={description} />}
       </Helmet>
+      <CustomizeTheme />
       <SWRConfig
         value={{
           revalidateOnFocus: false,

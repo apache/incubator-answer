@@ -19,9 +19,6 @@ const siteInfo = create<SiteInfoType>((set) => ({
   update: (params) =>
     set((_) => {
       const o = { ..._.siteInfo, ...params };
-      if (o.permalink !== 1 && o.permalink !== 2) {
-        o.permalink = 1;
-      }
       return {
         siteInfo: o,
       };

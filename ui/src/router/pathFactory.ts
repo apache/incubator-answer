@@ -1,7 +1,7 @@
 import urlcat from 'urlcat';
 
 import Pattern from '@/common/pattern';
-import { siteInfoStore } from '@/stores';
+import { seoSettingStore } from '@/stores';
 
 const tagLanding = (slugName: string) => {
   if (!slugName) {
@@ -21,8 +21,8 @@ const tagEdit = (tagId: string) => {
   return urlcat('/tags/:tagId/edit', { tagId });
 };
 const questionLanding = (questionId: string, title: string = '') => {
-  const { siteInfo } = siteInfoStore.getState();
-  if (siteInfo.permalink === 1) {
+  const { seo } = seoSettingStore.getState();
+  if (seo.permalink === 1) {
     title = title.toLowerCase();
     title = title.trim().replace(/\s+/g, '-');
     title = title.replace(Pattern.emoji, '');

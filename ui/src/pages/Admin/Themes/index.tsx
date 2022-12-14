@@ -6,12 +6,14 @@ import { getThemeSetting, putThemeSetting } from '@/services';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
 import { handleFormError } from '@/utils';
+import { themeSettingStore } from '@/stores';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.themes',
   });
   const Toast = useToast();
+  const [themeSetting, setThemeSetting] = useState<Type.AdminSettingsTheme>();
   const schema: JSONSchema = {
     title: t('page_title'),
     properties: {
@@ -19,8 +21,8 @@ const Index: FC = () => {
         type: 'string',
         title: t('themes.label'),
         description: t('themes.text'),
-        enum: ['default'],
-        enumNames: ['Default'],
+        enum: themeSetting?.theme_options?.map((_) => _.value),
+        enumNames: themeSetting?.theme_options?.map((_) => _.label),
         default: 'default',
       },
       navbar_style: {
@@ -51,8 +53,8 @@ const Index: FC = () => {
       },
     },
   };
-  const [themeSetting, setThemeSetting] = useState<Type.AdminSettingsTheme>();
   const [formData, setFormData] = useState(initFormData(schema));
+  const { update: updateThemeSetting } = themeSettingStore((_) => _);
   const onSubmit = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
@@ -72,6 +74,7 @@ const Index: FC = () => {
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
+        updateThemeSetting(reqParams);
       })
       .catch((err) => {
         if (err.isError) {
@@ -97,13 +100,13 @@ const Index: FC = () => {
   }, []);
 
   const handleOnChange = (cd) => {
-    console.log('cd: ', cd);
     setFormData(cd);
     const themeConfig = themeSetting?.theme_config[cd.themes.value];
     if (themeConfig) {
       themeConfig.navbar_style = cd.navbar_style.value;
       themeConfig.primary_color = cd.primary_color.value;
       setThemeSetting({
+        ...themeSetting,
         theme: themeSetting?.theme,
         theme_config: themeSetting?.theme_config,
       });

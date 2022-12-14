@@ -279,12 +279,6 @@ export interface AdminSettingsGeneral {
   description: string;
   site_url: string;
   contact_email: string;
-  /**
-   * 0: not set
-   * 1：with title
-   * 2: no title
-   */
-  permalink: number;
 }
 
 export interface HelmetBase {
@@ -300,7 +294,6 @@ export interface HelmetUpdate extends Omit<HelmetBase, 'pageTitle'> {
 
 export interface AdminSettingsInterface {
   language: string;
-  theme: string;
   time_zone?: string;
 }
 
@@ -322,6 +315,8 @@ export interface SiteSettings {
   interface: AdminSettingsInterface;
   login: AdminSettingsLogin;
   custom_css_html: AdminSettingsCustom;
+  theme: AdminSettingsTheme;
+  site_seo: AdminSettingsSeo;
 }
 
 export interface AdminSettingBranding {
@@ -346,6 +341,12 @@ export interface AdminSettingsWrite {
 
 export interface AdminSettingsSeo {
   robots: string;
+  /**
+   * 0: not set
+   * 1：with title
+   * 2: no title
+   */
+  permalink: number;
 }
 
 export type themeConfig = {
@@ -355,6 +356,7 @@ export type themeConfig = {
 };
 export interface AdminSettingsTheme {
   theme: string;
+  theme_options?: { label: string; value: string }[];
   theme_config: Record<string, themeConfig>;
 }
 

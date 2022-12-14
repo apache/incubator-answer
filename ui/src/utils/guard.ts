@@ -6,6 +6,8 @@ import {
   brandingStore,
   loginSettingStore,
   customizeStore,
+  themeSettingStore,
+  seoSettingStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
 import Storage from '@/utils/storage';
@@ -258,6 +260,8 @@ export const initAppSettingsStore = async () => {
     brandingStore.getState().update(appSettings.branding);
     loginSettingStore.getState().update(appSettings.login);
     customizeStore.getState().update(appSettings.custom_css_html);
+    themeSettingStore.getState().update(appSettings.theme);
+    seoSettingStore.getState().update(appSettings.site_seo);
   }
 };
 

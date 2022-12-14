@@ -28,6 +28,7 @@ import SchemaForm, { JSONSchema, UISchema, initFormData } from './SchemaForm';
 import Labels from './LabelsCard';
 import DiffContent from './DiffContent';
 import Customize from './Customize';
+import CustomizeTheme from './CustomizeTheme';
 
 export {
   Avatar,
@@ -62,5 +63,6 @@ export {
   Labels,
   DiffContent,
   Customize,
+  CustomizeTheme,
 };
 export type { EditorRef, JSONSchema, UISchema };

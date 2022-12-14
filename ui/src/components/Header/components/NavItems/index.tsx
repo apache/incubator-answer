@@ -20,9 +20,7 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
         as={NavLink}
         to="/users/notifications/inbox"
         className="icon-link d-flex align-items-center justify-content-center p-0 me-3 position-relative">
-        <div className="text-white text-opacity-75">
-          <Icon name="bell-fill" className="fs-4" />
-        </div>
+        <Icon name="bell-fill" className="fs-4" />
         {(redDot?.inbox || 0) > 0 && <div className="unread-dot bg-danger" />}
       </Nav.Link>
 
@@ -30,9 +28,7 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
         as={Link}
         to="/users/notifications/achievement"
         className="icon-link d-flex align-items-center justify-content-center p-0 me-3 position-relative">
-        <div className="text-white text-opacity-75">
-          <Icon name="trophy-fill" className="fs-4" />
-        </div>
+        <Icon name="trophy-fill" className="fs-4" />
         {(redDot?.achievement || 0) > 0 && (
           <div className="unread-dot bg-danger" />
         )}

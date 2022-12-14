@@ -18,6 +18,7 @@
     "bootstrap-icons": "1.10.2",
     "classnames": "^2.3.1",
     "codemirror": "5.65.0",
+    "color": "^4.2.3",
     "copy-to-clipboard": "^3.3.2",
     "dayjs": "^1.11.5",
     "diff": "^5.1.0",

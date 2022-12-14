@@ -15,6 +15,14 @@ const Index: FC = () => {
   const schema: JSONSchema = {
     title: t('page_title'),
     properties: {
+      permalink: {
+        type: 'number',
+        title: t('permalink.label'),
+        description: t('permalink.text'),
+        enum: [1, 2],
+        enumNames: ['/questions/123/post-title', '/questions/123'],
+        default: 1,
+      },
       robots: {
         type: 'string',
         title: t('robots.label'),
@@ -23,6 +31,9 @@ const Index: FC = () => {
     },
   };
   const uiSchema: UISchema = {
+    permalink: {
+      'ui:widget': 'select',
+    },
     robots: {
       'ui:widget': 'textarea',
       'ui:options': {
@@ -37,6 +48,7 @@ const Index: FC = () => {
     evt.stopPropagation();
 
     const reqParams: Type.AdminSettingsSeo = {
+      permalink: Number(formData.permalink.value),
       robots: formData.robots.value,
     };
 
@@ -60,6 +72,10 @@ const Index: FC = () => {
       if (setting) {
         const formMeta = { ...formData };
         formMeta.robots.value = setting.robots;
+        formMeta.permalink.value = setting.permalink;
+        if (formMeta.permalink.value !== 1 && formMeta.permalink.value !== 2) {
+          formMeta.permalink.value = 1;
+        }
         setFormData(formMeta);
       }
     });
