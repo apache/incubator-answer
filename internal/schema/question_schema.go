@@ -1,5 +1,10 @@
 package schema
 
+import (
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/pkg/converter"
+)
+
 const (
 	SitemapMaxSize      = 50000
 	SitemapCachekey     = "answer@sitemap"
@@ -46,6 +51,16 @@ type QuestionAdd struct {
 	QuestionPermission
 }
 
+func (req *QuestionAdd) Check() (errFields []*validator.FormErrorField, err error) {
+	req.HTML = converter.Markdown2HTML(req.Content)
+	for _, tag := range req.Tags {
+		if len(tag.OriginalText) > 0 {
+			tag.ParsedText = converter.Markdown2HTML(tag.OriginalText)
+		}
+	}
+	return nil, nil
+}
+
 type QuestionPermission struct {
 	// whether user can add it
 	CanAdd bool `json:"-"`
@@ -86,6 +101,11 @@ type QuestionUpdate struct {
 	UserID       string `json:"-"`
 	NoNeedReview bool   `json:"-"`
 	QuestionPermission
+}
+
+func (req *QuestionUpdate) Check() (errFields []*validator.FormErrorField, err error) {
+	req.HTML = converter.Markdown2HTML(req.Content)
+	return nil, nil
 }
 
 type QuestionBaseInfo struct {

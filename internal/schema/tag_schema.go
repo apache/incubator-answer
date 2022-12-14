@@ -5,6 +5,7 @@ import (
 
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -175,8 +176,9 @@ type UpdateTagReq struct {
 
 func (r *UpdateTagReq) Check() (errFields []*validator.FormErrorField, err error) {
 	if len(r.EditSummary) == 0 {
-		r.EditSummary = "tag.edit.summary" // to do i18n
+		r.EditSummary = "tag.edit.summary"
 	}
+	r.ParsedText = converter.Markdown2HTML(r.OriginalText)
 	return nil, nil
 }
 
