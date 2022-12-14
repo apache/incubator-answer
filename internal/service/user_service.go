@@ -571,21 +571,21 @@ func (us *UserService) UserRanking(ctx context.Context) (resp *schema.UserRankin
 	// get most reputation users
 	rankStat, rankStatUserIDs, err := us.getActivityUserRankStat(ctx, startTime, endTime, limit, userIDExist)
 	if err != nil {
-		return resp, nil
+		return nil, err
 	}
 	userIDs = append(userIDs, rankStatUserIDs...)
 
 	// get most vote users
 	voteStat, voteStatUserIDs, err := us.getActivityUserVoteStat(ctx, startTime, endTime, limit, userIDExist)
 	if err != nil {
-		return resp, nil
+		return nil, err
 	}
 	userIDs = append(userIDs, voteStatUserIDs...)
 
 	// get all staff members
 	userRoleRels, staffUserIDs, err := us.getStaff(ctx, userIDExist)
 	if err != nil {
-		return resp, nil
+		return nil, err
 	}
 	userIDs = append(userIDs, staffUserIDs...)
 
@@ -623,7 +623,7 @@ func (us *UserService) getActivityUserVoteStat(ctx context.Context, startTime, e
 		return nil, nil, err
 	}
 	for _, stat := range voteStat {
-		if stat.VoteCount == 0 {
+		if stat.VoteCount <= 0 {
 			continue
 		}
 		if userIDExist[stat.UserID] {
@@ -679,6 +679,9 @@ func (us *UserService) warpStatRankingResp(
 		Staffs:                     make([]*schema.UserRankingSimpleInfo, 0),
 	}
 	for _, stat := range rankStat {
+		if stat.Rank <= 0 {
+			continue
+		}
 		if userInfo := userInfoMapping[stat.UserID]; userInfo != nil {
 			resp.UsersWithTheMostReputation = append(resp.UsersWithTheMostReputation, &schema.UserRankingSimpleInfo{
 				Username:    userInfo.Username,
@@ -689,6 +692,9 @@ func (us *UserService) warpStatRankingResp(
 		}
 	}
 	for _, stat := range voteStat {
+		if stat.VoteCount <= 0 {
+			continue
+		}
 		if userInfo := userInfoMapping[stat.UserID]; userInfo != nil {
 			resp.UsersWithTheMostVote = append(resp.UsersWithTheMostVote, &schema.UserRankingSimpleInfo{
 				Username:    userInfo.Username,
