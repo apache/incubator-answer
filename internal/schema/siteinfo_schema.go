@@ -140,16 +140,17 @@ type SiteInfoResp struct {
 	SiteSeo       *SiteSeoReq            `json:"site_seo"`
 }
 type TemplateSiteInfoResp struct {
-	General     *SiteGeneralResp   `json:"general"`
-	Interface   *SiteInterfaceResp `json:"interface"`
-	Branding    *SiteBrandingResp  `json:"branding"`
-	SiteSeo     *SiteSeoReq        `json:"site_seo"`
-	Title       string
-	Year        string
-	Canonical   string
-	JsonLD      string
-	Keywords    string
-	Description string
+	General       *SiteGeneralResp       `json:"general"`
+	Interface     *SiteInterfaceResp     `json:"interface"`
+	Branding      *SiteBrandingResp      `json:"branding"`
+	SiteSeo       *SiteSeoReq            `json:"site_seo"`
+	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
+	Title         string
+	Year          string
+	Canonical     string
+	JsonLD        string
+	Keywords      string
+	Description   string
 }
 
 // UpdateSMTPConfigReq get smtp config request

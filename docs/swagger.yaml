@@ -1292,7 +1292,7 @@ definitions:
         $ref: '#/definitions/schema.SiteInterfaceResp'
       login:
         $ref: '#/definitions/schema.SiteLoginResp'
-      siteseo:
+      site_seo:
         $ref: '#/definitions/schema.SiteSeoReq'
       theme:
         $ref: '#/definitions/schema.SiteThemeResp'
@@ -4814,6 +4814,19 @@ paths:
       summary: vote up
       tags:
       - Activity
+  /custom.css:
+    get:
+      description: get site robots information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: get site robots information
+      tags:
+      - site
   /installation/base-info:
     post:
       consumes:

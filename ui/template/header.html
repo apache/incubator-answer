@@ -11,13 +11,14 @@
     <link rel="canonical" href="{{.siteinfo.Canonical}}" />
     <link rel="manifest" href="/manifest.json"/>
     <link href="{{.cssPath}}" rel="stylesheet" />
+    <link href="/custom.css" rel="stylesheet">
     <script defer="defer" src="{{.scriptPath}}"></script>
+     {{templateHTML .HeadCode}}
     {{if $.siteinfo.JsonLD }}{{ .siteinfo.JsonLD | templateHTML}}{{end}}
 </head>
 
 <body>
-
-
+{{templateHTML .HeaderCode}}
 <noscript>You need to enable JavaScript to run this app.</noscript>
 <div id="root">
   <nav id="header" class="sticky-top navbar navbar-expand-lg navbar-dark">

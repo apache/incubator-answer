@@ -4865,6 +4865,26 @@ const docTemplate = `{
                 }
             }
         },
+        "/custom.css": {
+            "get": {
+                "description": "get site robots information",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "site"
+                ],
+                "summary": "get site robots information",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/installation/base-info": {
             "post": {
                 "description": "init base info",
@@ -6944,7 +6964,7 @@ const docTemplate = `{
                 "login": {
                     "$ref": "#/definitions/schema.SiteLoginResp"
                 },
-                "siteseo": {
+                "site_seo": {
                     "$ref": "#/definitions/schema.SiteSeoReq"
                 },
                 "theme": {

@@ -81,6 +81,10 @@ func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.TemplateSiteInf
 		log.Error(err)
 	}
 
+	resp.CustomCssHtml, err = tc.siteInfoService.GetSiteCustomCssHTML(ctx)
+	if err != nil {
+		log.Error(err)
+	}
 	resp.Year = fmt.Sprintf("%d", time.Now().Year())
 	return resp
 }
@@ -414,6 +418,9 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	data["description"] = siteInfo.Description
 	data["language"] = handler.GetLang(ctx)
 	data["timezone"] = siteInfo.Interface.TimeZone
+	data["HeadCode"] = siteInfo.CustomCssHtml.CustomHead
+	data["HeaderCode"] = siteInfo.CustomCssHtml.CustomHeader
+	data["FooterCode"] = siteInfo.CustomCssHtml.CustomFooter
 	_, ok := data["path"]
 	if !ok {
 		data["path"] = ""
