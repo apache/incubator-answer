@@ -6964,7 +6964,7 @@ const docTemplate = `{
                 "login": {
                     "$ref": "#/definitions/schema.SiteLoginResp"
                 },
-                "site_seo": {
+                "site__seo": {
                     "$ref": "#/definitions/schema.SiteSeoReq"
                 },
                 "theme": {
@@ -7124,17 +7124,19 @@ const docTemplate = `{
         },
         "schema.SiteThemeResp": {
             "type": "object",
-            "required": [
-                "theme"
-            ],
             "properties": {
                 "theme": {
-                    "type": "string",
-                    "maxLength": 255
+                    "type": "string"
                 },
                 "theme_config": {
                     "type": "object",
                     "additionalProperties": true
+                },
+                "theme_options": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.ThemeOption"
+                    }
                 }
             }
         },
@@ -7239,6 +7241,17 @@ const docTemplate = `{
                 },
                 "tag_id": {
                     "description": "tag id",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.ThemeOption": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "value": {
                     "type": "string"
                 }
             }

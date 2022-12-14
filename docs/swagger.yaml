@@ -1292,7 +1292,7 @@ definitions:
         $ref: '#/definitions/schema.SiteInterfaceResp'
       login:
         $ref: '#/definitions/schema.SiteLoginResp'
-      site_seo:
+      site__seo:
         $ref: '#/definitions/schema.SiteSeoReq'
       theme:
         $ref: '#/definitions/schema.SiteThemeResp'
@@ -1403,13 +1403,14 @@ definitions:
   schema.SiteThemeResp:
     properties:
       theme:
-        maxLength: 255
         type: string
       theme_config:
         additionalProperties: true
         type: object
-    required:
-    - theme
+      theme_options:
+        items:
+          $ref: '#/definitions/schema.ThemeOption'
+        type: array
     type: object
   schema.SiteWriteReq:
     properties:
@@ -1483,6 +1484,13 @@ definitions:
         type: string
       tag_id:
         description: tag id
+        type: string
+    type: object
+  schema.ThemeOption:
+    properties:
+      label:
+        type: string
+      value:
         type: string
     type: object
   schema.UnreviewedRevisionInfoInfo:
