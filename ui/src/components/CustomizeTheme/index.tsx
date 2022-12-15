@@ -59,13 +59,6 @@ const Index: FC = () => {
                 box-shadow: 0 0 0 0.25rem ${primaryColor.fade(0.75).string()};
                 border-color: ${tintColor(primaryColor, 0.5)};
               }
-              .badge-tag:not(.badge-tag-reserved, .badge-tag-required) {
-                color: ${shadeColor(primaryColor, 0.4)};
-                background: ${tintColor(primaryColor, 0.8).fade(0.5).string()};
-              }
-              .badge-tag:hover:not(.badge-tag-reserved, .badge-tag-required) {
-                background: ${tintColor(primaryColor, 0.8).hex()};
-              }
             `}
         </style>
       )}
