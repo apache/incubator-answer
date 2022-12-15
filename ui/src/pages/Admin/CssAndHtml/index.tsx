@@ -6,6 +6,7 @@ import { getPageCustom, putPageCustom } from '@/services';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
 import { handleFormError } from '@/utils';
+import { customizeStore } from '@/stores';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -68,7 +69,6 @@ const Index: FC = () => {
     },
   };
   const [formData, setFormData] = useState(initFormData(schema));
-
   const onSubmit = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
@@ -86,9 +86,7 @@ const Index: FC = () => {
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
-        setTimeout(() => {
-          window.location.reload();
-        }, 3000);
+        customizeStore.getState().update(reqParams);
       })
       .catch((err) => {
         if (err.isError) {
