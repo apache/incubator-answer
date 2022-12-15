@@ -189,16 +189,16 @@ func (sp *SearchParser) parseUserID(query *string, currentUserID string) (userID
 
 	re := regexp.MustCompile(exprUserID)
 	res := re.FindStringSubmatch(q)
-	if len(res) == 2 {
+	if strings.Index(q, exprMe) != -1 {
+		userID = currentUserID
+		q = strings.ReplaceAll(q, exprMe, "")
+	} else if len(res) == 2 {
 		name := res[1]
 		user, has, err := sp.userCommon.GetUserBasicInfoByUserName(nil, name)
 		if err == nil && has {
 			userID = user.ID
 			q = re.ReplaceAllString(q, "")
 		}
-	} else if strings.Index(q, exprMe) != -1 {
-		userID = currentUserID
-		q = strings.ReplaceAll(q, exprMe, "")
 	}
 	*query = strings.TrimSpace(q)
 	return
