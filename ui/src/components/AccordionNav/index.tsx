@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Accordion, Badge, Button, Stack } from 'react-bootstrap';
+import { Accordion, Button, Stack } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useMatch } from 'react-router-dom';
 
@@ -33,9 +33,9 @@ function MenuNode({ menu, callback, activeKey, isLeaf = false }) {
         {!isLeaf ? <Icon name="chevron-right" className="me-1" /> : null}
         {t(menu.name)}
         {menu.badgeContent ? (
-          <Badge bg="dark" className="ms-auto top-0">
+          <span className="badge text-bg-dark ms-auto top-0">
             {menu.badgeContent}
-          </Badge>
+          </span>
         ) : null}
       </Stack>
     </Button>

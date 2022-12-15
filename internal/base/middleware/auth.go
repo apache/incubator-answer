@@ -113,15 +113,20 @@ func (am *AuthUserMiddleware) CmsAuth() gin.HandlerFunc {
 
 // GetLoginUserIDFromContext get user id from context
 func GetLoginUserIDFromContext(ctx *gin.Context) (userID string) {
-	userInfo, exist := ctx.Get(ctxUUIDKey)
-	if !exist {
+	userInfo := GetUserInfoFromContext(ctx)
+	if userInfo == nil {
 		return ""
 	}
-	u, ok := userInfo.(*entity.UserCacheInfo)
-	if !ok {
-		return ""
+	return userInfo.UserID
+}
+
+// GetIsAdminFromContext get user is admin from context
+func GetIsAdminFromContext(ctx *gin.Context) (isAdmin bool) {
+	userInfo := GetUserInfoFromContext(ctx)
+	if userInfo == nil {
+		return false
 	}
-	return u.UserID
+	return userInfo.IsAdmin
 }
 
 // GetUserInfoFromContext get user info from context

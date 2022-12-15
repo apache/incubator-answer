@@ -3,20 +3,24 @@ package controller
 import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
+	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
+	"github.com/segmentfault/pacman/errors"
 )
 
 // VoteController activity controller
 type VoteController struct {
 	VoteService *service.VoteService
+	rankService *rank.RankService
 }
 
 // NewVoteController new controller
-func NewVoteController(voteService *service.VoteService) *VoteController {
-	return &VoteController{VoteService: voteService}
+func NewVoteController(voteService *service.VoteService, rankService *rank.RankService) *VoteController {
+	return &VoteController{VoteService: voteService, rankService: rankService}
 }
 
 // VoteUp godoc
@@ -34,9 +38,19 @@ func (vc *VoteController) VoteUp(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	can, err := vc.rankService.CheckVotePermission(ctx, req.UserID, req.ObjectID, true)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
 	dto := &schema.VoteDTO{}
 	_ = copier.Copy(dto, req)
-	dto.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	resp, err := vc.VoteService.VoteUp(ctx, dto)
 	if err != nil {
 		handler.HandleResponse(ctx, err, schema.ErrTypeToast)
@@ -60,10 +74,20 @@ func (vc *VoteController) VoteDown(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	can, err := vc.rankService.CheckVotePermission(ctx, req.UserID, req.ObjectID, false)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
 	dto := &schema.VoteDTO{}
 	_ = copier.Copy(dto, req)
-
-	dto.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	resp, err := vc.VoteService.VoteDown(ctx, dto)
 	if err != nil {
 		handler.HandleResponse(ctx, err, schema.ErrTypeToast)

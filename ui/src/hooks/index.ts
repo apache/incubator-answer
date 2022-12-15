@@ -4,6 +4,7 @@ import useReportModal from './useReportModal';
 import usePageUsers from './usePageUsers';
 import useChangeModal from './useChangeModal';
 import useEditStatusModal from './useEditStatusModal';
+import useChangeUserRoleModal from './useChangeUserRoleModal';
 
 export {
   useTagModal,
@@ -12,4 +13,5 @@ export {
   usePageUsers,
   useChangeModal,
   useEditStatusModal,
+  useChangeUserRoleModal,
 };

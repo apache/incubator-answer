@@ -1005,6 +1005,110 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/activity/timeline": {
+            "get": {
+                "description": "get object timeline",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "get object timeline",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "object id",
+                        "name": "object_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "tag slug name",
+                        "name": "tag_slug_name",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "question",
+                            "answer",
+                            "tag"
+                        ],
+                        "type": "string",
+                        "description": "object type",
+                        "name": "object_type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "is show vote",
+                        "name": "show_vote",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetObjectTimelineResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/activity/timeline/detail": {
+            "get": {
+                "description": "get object timeline detail",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Comment"
+                ],
+                "summary": "get object timeline detail",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "revision id",
+                        "name": "revision_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetObjectTimelineResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/answer": {
             "put": {
                 "security": [
@@ -1190,7 +1294,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/answer/list": {
+        "/answer/api/v1/answer/page": {
             "get": {
                 "security": [
                     {
@@ -1210,13 +1314,32 @@ const docTemplate = `{
                 "summary": "AnswerList",
                 "parameters": [
                     {
-                        "description": "AnswerList",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schema.AnswerList"
-                        }
+                        "type": "string",
+                        "description": "question_id",
+                        "name": "question_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "order",
+                        "name": "order",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "page_size",
+                        "name": "page_size",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -2927,6 +3050,141 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/revisions/audit": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "revision audit operation:approve or reject",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Revision"
+                ],
+                "summary": "revision audit",
+                "parameters": [
+                    {
+                        "description": "audit",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.RevisionAuditReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/revisions/edit/check": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "check can update revision",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Revision"
+                ],
+                "summary": "check can update revision",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "string",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/revisions/unreviewed": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get unreviewed revision list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Revision"
+                ],
+                "summary": "get unreviewed revision list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "page id",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/pager.PageModel"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/schema.GetUnreviewedRevisionResp"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/search": {
             "get": {
                 "security": [
@@ -3243,10 +3501,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/schema.GetTagSynonymsResp"
-                                            }
+                                            "$ref": "#/definitions/schema.GetTagSynonymsResp"
                                         }
                                     }
                                 }
@@ -4468,6 +4723,67 @@ const docTemplate = `{
                 "list": {}
             }
         },
+        "schema.ActObjectInfo": {
+            "type": "object",
+            "properties": {
+                "answer_id": {
+                    "type": "string"
+                },
+                "display_name": {
+                    "type": "string"
+                },
+                "object_type": {
+                    "type": "string"
+                },
+                "question_id": {
+                    "type": "string"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.ActObjectTimeline": {
+            "type": "object",
+            "properties": {
+                "activity_id": {
+                    "type": "string"
+                },
+                "activity_type": {
+                    "type": "string"
+                },
+                "cancelled": {
+                    "type": "boolean"
+                },
+                "cancelled_at": {
+                    "type": "integer"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "integer"
+                },
+                "object_id": {
+                    "type": "string"
+                },
+                "object_type": {
+                    "type": "string"
+                },
+                "revision_id": {
+                    "type": "string"
+                },
+                "user_display_name": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.ActionRecordResp": {
             "type": "object",
             "properties": {
@@ -4571,27 +4887,6 @@ const docTemplate = `{
             "properties": {
                 "answer_id": {
                     "type": "string"
-                },
-                "question_id": {
-                    "description": "question_id",
-                    "type": "string"
-                }
-            }
-        },
-        "schema.AnswerList": {
-            "type": "object",
-            "properties": {
-                "order": {
-                    "description": "1 Default 2 time",
-                    "type": "string"
-                },
-                "page": {
-                    "description": "Query number of pages",
-                    "type": "integer"
-                },
-                "page_size": {
-                    "description": "Search page size",
-                    "type": "integer"
                 },
                 "question_id": {
                     "description": "question_id",
@@ -4871,6 +5166,20 @@ const docTemplate = `{
                 "tag_id": {
                     "description": "tag id",
                     "type": "string"
+                }
+            }
+        },
+        "schema.GetObjectTimelineResp": {
+            "type": "object",
+            "properties": {
+                "object_info": {
+                    "$ref": "#/definitions/schema.ActObjectInfo"
+                },
+                "timeline": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.ActObjectTimeline"
+                    }
                 }
             }
         },
@@ -5248,21 +5557,33 @@ const docTemplate = `{
         "schema.GetTagSynonymsResp": {
             "type": "object",
             "properties": {
-                "display_name": {
-                    "description": "display name",
+                "member_actions": {
+                    "description": "MemberActions",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.PermissionMemberAction"
+                    }
+                },
+                "synonyms": {
+                    "description": "synonyms",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.TagSynonym"
+                    }
+                }
+            }
+        },
+        "schema.GetUnreviewedRevisionResp": {
+            "type": "object",
+            "properties": {
+                "info": {
+                    "$ref": "#/definitions/schema.UnreviewedRevisionInfoInfo"
+                },
+                "type": {
                     "type": "string"
                 },
-                "main_tag_slug_name": {
-                    "description": "if main tag slug name is not empty, this tag is synonymous with the main tag",
-                    "type": "string"
-                },
-                "slug_name": {
-                    "description": "slug name",
-                    "type": "string"
-                },
-                "tag_id": {
-                    "description": "tag id",
-                    "type": "string"
+                "unreviewed_info": {
+                    "$ref": "#/definitions/schema.GetRevisionResp"
                 }
             }
         },
@@ -5758,6 +6079,23 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.RevisionAuditReq": {
+            "type": "object",
+            "required": [
+                "id",
+                "operation"
+            ],
+            "properties": {
+                "id": {
+                    "description": "object id",
+                    "type": "string"
+                },
+                "operation": {
+                    "description": "approve or reject",
+                    "type": "string"
+                }
+            }
+        },
         "schema.SearchListResp": {
             "type": "object",
             "properties": {
@@ -5887,9 +6225,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "contact_email",
-                "description",
                 "name",
-                "short_description",
                 "site_url"
             ],
             "properties": {
@@ -5919,9 +6255,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "contact_email",
-                "description",
                 "name",
-                "short_description",
                 "site_url"
             ],
             "properties": {
@@ -6105,6 +6439,50 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "slug_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.TagSynonym": {
+            "type": "object",
+            "properties": {
+                "display_name": {
+                    "description": "display name",
+                    "type": "string"
+                },
+                "main_tag_slug_name": {
+                    "description": "if main tag slug name is not empty, this tag is synonymous with the main tag",
+                    "type": "string"
+                },
+                "slug_name": {
+                    "description": "slug name",
+                    "type": "string"
+                },
+                "tag_id": {
+                    "description": "tag id",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.UnreviewedRevisionInfoInfo": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "html": {
+                    "type": "string"
+                },
+                "object_id": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.TagResp"
+                    }
+                },
+                "title": {
                     "type": "string"
                 }
             }

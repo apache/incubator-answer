@@ -21,3 +21,11 @@ export const useQueryUsers = (params) => {
     mutate,
   };
 };
+
+export const getUserRoles = () => {
+  return request.get('/answer/admin/api/roles');
+};
+
+export const changeUserRole = (params) => {
+  return request.put('/answer/admin/api/user/role', params);
+};

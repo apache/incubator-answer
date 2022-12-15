@@ -3,6 +3,7 @@ package schema
 type VoteReq struct {
 	ObjectID string `validate:"required" form:"object_id" json:"object_id"`  //	 id
 	IsCancel bool   `validate:"omitempty" form:"is_cancel" json:"is_cancel"` // is cancel
+	UserID   string `json:"-"`
 }
 
 type VoteDTO struct {

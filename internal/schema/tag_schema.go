@@ -23,6 +23,10 @@ type GetTagInfoReq struct {
 	Name string `validate:"omitempty,gt=0,lte=35" form:"name"`
 	// user id
 	UserID string `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
+	// whether user can delete it
+	CanDelete bool `json:"-"`
 }
 
 func (r *GetTagInfoReq) Check() (errFields []*validator.FormErrorField, err error) {
@@ -152,7 +156,8 @@ type UpdateTagReq struct {
 	// edit summary
 	EditSummary string `validate:"omitempty" json:"edit_summary"`
 	// user id
-	UserID string `json:"-"`
+	UserID       string `json:"-"`
+	NoNeedReview bool   `json:"-"`
 }
 
 func (r *UpdateTagReq) Check() (errFields []*validator.FormErrorField, err error) {
@@ -160,6 +165,11 @@ func (r *UpdateTagReq) Check() (errFields []*validator.FormErrorField, err error
 		r.EditSummary = "tag.edit.summary" // to do i18n
 	}
 	return nil, nil
+}
+
+// UpdateTagResp update tag response
+type UpdateTagResp struct {
+	WaitForReview bool `json:"wait_for_review"`
 }
 
 // GetTagWithPageReq get tag list page request
@@ -182,10 +192,21 @@ type GetTagWithPageReq struct {
 type GetTagSynonymsReq struct {
 	// tag_id
 	TagID string `validate:"required" form:"tag_id"`
+	// user id
+	UserID string `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
 }
 
 // GetTagSynonymsResp get tag synonyms response
 type GetTagSynonymsResp struct {
+	// synonyms
+	Synonyms []*TagSynonym `json:"synonyms"`
+	// MemberActions
+	MemberActions []*PermissionMemberAction `json:"member_actions"`
+}
+
+type TagSynonym struct {
 	// tag id
 	TagID string `json:"tag_id"`
 	// slug name

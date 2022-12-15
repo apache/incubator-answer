@@ -480,20 +480,6 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 	return
 }
 
-// userBasicInfoFormat
-func (sr *searchRepo) userBasicInfoFormat(ctx context.Context, dbinfo *entity.User) *schema.UserBasicInfo {
-	return &schema.UserBasicInfo{
-		ID:          dbinfo.ID,
-		Username:    dbinfo.Username,
-		Rank:        dbinfo.Rank,
-		DisplayName: dbinfo.DisplayName,
-		Avatar:      dbinfo.Avatar,
-		Website:     dbinfo.Website,
-		Location:    dbinfo.Location,
-		IPInfo:      dbinfo.IPInfo,
-	}
-}
-
 func addRelevanceField(searchFields, words, fields []string) (res []string, args []interface{}) {
 	relevanceRes := []string{}
 	args = []interface{}{}

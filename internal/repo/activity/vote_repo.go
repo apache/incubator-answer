@@ -3,6 +3,7 @@ package activity
 import (
 	"context"
 	"strings"
+	"time"
 
 	"github.com/answerdev/answer/pkg/converter"
 
@@ -100,18 +101,19 @@ func (vr *VoteRepo) vote(ctx context.Context, objectID string, userID, objectUse
 				Get(&existsActivity)
 
 			// is is voted,return
-			if has && existsActivity.Cancelled == 0 {
+			if has && existsActivity.Cancelled == entity.ActivityAvailable {
 				return
 			}
 
 			insertActivity = entity.Activity{
-				ObjectID:      objectID,
-				UserID:        activityUserID,
-				TriggerUserID: converter.StringToInt64(triggerUserID),
-				ActivityType:  activityType,
-				Rank:          deltaRank,
-				HasRank:       hasRank,
-				Cancelled:     0,
+				ObjectID:         objectID,
+				OriginalObjectID: objectID,
+				UserID:           activityUserID,
+				TriggerUserID:    converter.StringToInt64(triggerUserID),
+				ActivityType:     activityType,
+				Rank:             deltaRank,
+				HasRank:          hasRank,
+				Cancelled:        entity.ActivityAvailable,
 			}
 
 			// trigger user rank and send notification
@@ -131,7 +133,7 @@ func (vr *VoteRepo) vote(ctx context.Context, objectID string, userID, objectUse
 			if has {
 				if _, err = session.Where("id = ?", existsActivity.ID).Cols("`cancelled`").
 					Update(&entity.Activity{
-						Cancelled: 0,
+						Cancelled: entity.ActivityAvailable,
 					}); err != nil {
 					return
 				}
@@ -201,13 +203,14 @@ func (vr *VoteRepo) voteCancel(ctx context.Context, objectID string, userID, obj
 				return
 			}
 
-			if existsActivity.Cancelled == 1 {
+			if existsActivity.Cancelled == entity.ActivityCancelled {
 				return
 			}
 
-			if _, err = session.Where("id = ?", existsActivity.ID).Cols("`cancelled`").
+			if _, err = session.Where("id = ?", existsActivity.ID).Cols("cancelled", "cancelled_at").
 				Update(&entity.Activity{
-					Cancelled: 1,
+					Cancelled:   entity.ActivityCancelled,
+					CancelledAt: time.Now(),
 				}); err != nil {
 				return
 			}

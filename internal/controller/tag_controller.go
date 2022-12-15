@@ -42,8 +42,7 @@ func (tc *TagController) SearchTagLike(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	userinfo := middleware.GetUserInfoFromContext(ctx)
-	req.IsAdmin = userinfo.IsAdmin
+	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 	resp, err := tc.tagCommonService.SearchTagLike(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
@@ -64,12 +63,17 @@ func (tc *TagController) RemoveTag(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := tc.rankService.CheckRankPermission(ctx, req.UserID, rank.TagDeleteRank); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := tc.rankService.CheckOperationPermission(ctx, req.UserID, rank.TagDeleteRank, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
-	err := tc.tagService.RemoveTag(ctx, req.TagID)
+	err = tc.tagService.RemoveTag(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -89,13 +93,26 @@ func (tc *TagController) UpdateTag(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := tc.rankService.CheckRankPermission(ctx, req.UserID, rank.TagEditRank); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	canList, err := tc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		rank.TagEditRank,
+		rank.TagEditWithoutReviewRank,
+	}, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
 		return
 	}
+	if !canList[0] {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+	req.NoNeedReview = canList[1]
 
-	err := tc.tagService.UpdateTag(ctx, req)
-	handler.HandleResponse(ctx, err, nil)
+	err = tc.tagService.UpdateTag(ctx, req)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+	} else {
+		handler.HandleResponse(ctx, err, &schema.UpdateTagResp{WaitForReview: !req.NoNeedReview})
+	}
 }
 
 // GetTagInfo get tag one
@@ -115,6 +132,16 @@ func (tc *TagController) GetTagInfo(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	canList, err := tc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		rank.TagEditRank,
+		rank.TagDeleteRank,
+	}, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	req.CanEdit = canList[0]
+	req.CanDelete = canList[1]
 
 	resp, err := tc.tagService.GetTagInfo(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
@@ -163,13 +190,23 @@ func (tc *TagController) GetFollowingTags(ctx *gin.Context) {
 // @Tags Tag
 // @Produce json
 // @Param tag_id query int true "tag id"
-// @Success 200 {object} handler.RespBody{data=[]schema.GetTagSynonymsResp}
+// @Success 200 {object} handler.RespBody{data=schema.GetTagSynonymsResp}
 // @Router /answer/api/v1/tag/synonyms [get]
 func (tc *TagController) GetTagSynonyms(ctx *gin.Context) {
 	req := &schema.GetTagSynonymsReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	canList, err := tc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		rank.TagSynonymRank,
+	}, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	req.CanEdit = canList[0]
 
 	resp, err := tc.tagService.GetTagSynonyms(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
@@ -191,11 +228,16 @@ func (tc *TagController) UpdateTagSynonym(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	if can, err := tc.rankService.CheckRankPermission(ctx, req.UserID, rank.TagSynonymRank); err != nil || !can {
-		handler.HandleResponse(ctx, err, errors.Forbidden(reason.RankFailToMeetTheCondition))
+	can, err := tc.rankService.CheckOperationPermission(ctx, req.UserID, rank.TagSynonymRank, "")
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
 
-	err := tc.tagService.UpdateTagSynonym(ctx, req)
+	err = tc.tagService.UpdateTagSynonym(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }

@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Container, Row, Col, Button, Card } from 'react-bootstrap';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
@@ -11,22 +11,41 @@ import {
   useQuerySynonymsTags,
   saveSynonymsTags,
   deleteTag,
+  editCheck,
 } from '@/services';
+import { pathFactory } from '@/router/pathFactory';
+import { loggedUserInfoStore, toastStore } from '@/stores';
 
 const TagIntroduction = () => {
+  const userInfo = loggedUserInfoStore((state) => state.user);
+  const { state: locationState } = useLocation();
+  const isLogged = Boolean(userInfo?.access_token);
   const [isEdit, setEditState] = useState(false);
   const { tagName } = useParams();
   const { data: tagInfo } = useTagInfo({ name: tagName });
   const { t } = useTranslation('translation', { keyPrefix: 'tag_info' });
   const navigate = useNavigate();
-  const { data: synonymsTags, mutate } = useQuerySynonymsTags(tagInfo?.tag_id);
+  const { data: synonymsData, mutate } = useQuerySynonymsTags(tagInfo?.tag_id);
+
+  useEffect(() => {
+    if (locationState?.isReview) {
+      toastStore.getState().show({
+        msg: t('review', { keyPrefix: 'toast' }),
+        variant: 'warning',
+      });
+    }
+  }, [locationState]);
+
   if (!tagInfo) {
     return null;
   }
   if (tagInfo.main_tag_slug_name) {
-    navigate(`/tags/${tagInfo.main_tag_slug_name}/info`, { replace: true });
+    navigate(pathFactory.tagInfo(tagInfo.main_tag_slug_name), {
+      replace: true,
+    });
     return null;
   }
+
   const handleEdit = () => {
     setEditState(true);
   };
@@ -34,7 +53,7 @@ const TagIntroduction = () => {
   const handleSave = () => {
     saveSynonymsTags({
       tag_id: tagInfo?.tag_id,
-      synonym_tag_list: synonymsTags,
+      synonym_tag_list: synonymsData?.synonyms,
     }).then(() => {
       mutate();
       setEditState(false);
@@ -42,16 +61,21 @@ const TagIntroduction = () => {
   };
 
   const handleTagsChange = (value) => {
-    mutate([...value], {
-      revalidate: false,
-    });
+    mutate(
+      { ...synonymsData, synonyms: [...value] },
+      {
+        revalidate: false,
+      },
+    );
   };
 
   const handleEditTag = () => {
-    navigate(`/tags/${tagInfo?.tag_id}/edit`);
+    editCheck(tagInfo?.tag_id).then(() => {
+      navigate(pathFactory.tagEdit(tagInfo?.tag_id));
+    });
   };
   const handleDeleteTag = () => {
-    if (synonymsTags && synonymsTags.length > 0) {
+    if (synonymsData?.synonyms && synonymsData.synonyms.length > 0) {
       Modal.confirm({
         title: t('delete.title'),
         content: t('delete.content2'),
@@ -90,7 +114,7 @@ const TagIntroduction = () => {
           <Col xxl={7} lg={8} sm={12}>
             <h3 className="mb-3">
               <Link
-                to={`/tags/${tagInfo?.slug_name}`}
+                to={pathFactory.tagLanding(tagInfo)}
                 replace
                 className="link-dark">
                 {tagInfo.display_name}
@@ -125,6 +149,16 @@ const TagIntroduction = () => {
                   </Button>
                 );
               })}
+              {isLogged && (
+                <Link
+                  to={`/tags/${tagInfo?.tag_id}/timeline`}
+                  className={classNames(
+                    'link-secondary btn-no-border p-0 fs-14',
+                    tagInfo?.member_actions?.length > 0 && 'ms-3',
+                  )}>
+                  {t('history')}
+                </Link>
+              )}
             </div>
           </Col>
           <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
@@ -138,14 +172,16 @@ const TagIntroduction = () => {
                     onClick={handleSave}>
                     {t('synonyms.btn_save')}
                   </Button>
-                ) : (
+                ) : synonymsData?.member_actions?.find(
+                    (v) => v.action === 'edit',
+                  ) ? (
                   <Button
                     variant="link"
                     className="p-0 btn-no-border"
                     onClick={handleEdit}>
                     {t('synonyms.btn_edit')}
                   </Button>
-                )}
+                ) : null}
               </Card.Header>
               <Card.Body>
                 {isEdit && (
@@ -153,7 +189,6 @@ const TagIntroduction = () => {
                     <div className="mb-3">
                       {t('synonyms.text')}{' '}
                       <Tag
-                        className="me-2 mb-2"
                         data={{
                           slug_name: tagName || '',
                           main_tag_slug_name: '',
@@ -164,34 +199,37 @@ const TagIntroduction = () => {
                       />
                     </div>
                     <TagSelector
-                      value={synonymsTags}
+                      value={synonymsData?.synonyms}
                       onChange={handleTagsChange}
                       hiddenDescription
                     />
                   </>
                 )}
                 {!isEdit &&
-                  (synonymsTags && synonymsTags.length > 0 ? (
-                    synonymsTags.map((item) => {
-                      return (
-                        <Tag
-                          key={item.tag_id}
-                          className="me-2 mb-2"
-                          data={item}
-                        />
-                      );
-                    })
+                  (synonymsData?.synonyms &&
+                  synonymsData.synonyms.length > 0 ? (
+                    <div className="m-n1">
+                      {synonymsData.synonyms.map((item) => {
+                        return (
+                          <Tag key={item.tag_id} className="m-1" data={item} />
+                        );
+                      })}
+                    </div>
                   ) : (
                     <>
                       <div className="text-muted mb-3">
                         {t('synonyms.empty')}
                       </div>
-                      <Button
-                        variant="outline-primary"
-                        size="sm"
-                        onClick={handleEdit}>
-                        {t('synonyms.btn_add')}
-                      </Button>
+                      {synonymsData?.member_actions?.find(
+                        (v) => v.action === 'edit',
+                      ) && (
+                        <Button
+                          variant="outline-primary"
+                          size="sm"
+                          onClick={handleEdit}>
+                          {t('synonyms.btn_add')}
+                        </Button>
+                      )}
                     </>
                   ))}
               </Card.Body>

@@ -20,6 +20,7 @@ import {
 import { loggedUserInfoStore, siteInfoStore, brandingStore } from '@/stores';
 import { logout, useQueryNotificationStatus } from '@/services';
 import { RouteAlias } from '@/router/alias';
+import { DEFAULT_SITE_NAME } from '@/common/constants';
 
 import NavItems from './components/NavItems';
 
@@ -88,7 +89,7 @@ const Header: FC = () => {
                 />
               </>
             ) : (
-              <span>{siteInfo.name || 'Answer'}</span>
+              <span>{siteInfo.name || DEFAULT_SITE_NAME}</span>
             )}
           </Navbar.Brand>
 
@@ -121,9 +122,6 @@ const Header: FC = () => {
               </NavLink>
               <NavLink className="nav-link" to="/tags">
                 {t('header.nav.tag')}
-              </NavLink>
-              <NavLink className="nav-link d-none" to="/users">
-                {t('header.nav.user')}
               </NavLink>
             </Nav>
           </Col>

@@ -37,8 +37,8 @@ const Smtp: FC = () => {
         type: 'boolean',
         title: t('encryption.label'),
         description: t('encryption.text'),
-        enum: [true, false],
-        enumNames: ['SSL', ''],
+        enum: ['SSL', ''],
+        enumNames: ['SSL', 'None'],
       },
       smtp_port: {
         type: 'string',
@@ -54,12 +54,10 @@ const Smtp: FC = () => {
       smtp_username: {
         type: 'string',
         title: t('smtp_username.label'),
-        description: t('smtp_username.text'),
       },
       smtp_password: {
         type: 'string',
         title: t('smtp_password.label'),
-        description: t('smtp_password.text'),
       },
       test_email_recipient: {
         type: 'string',
@@ -69,19 +67,45 @@ const Smtp: FC = () => {
     },
   };
   const uiSchema: UISchema = {
+    from_email: {
+      'ui:options': {
+        type: 'email',
+      },
+    },
     encryption: {
-      'ui:widget': 'radio',
+      'ui:widget': 'select',
+    },
+    smtp_username: {
+      'ui:options': {
+        validator: (value: string, formData) => {
+          if (formData.smtp_authentication.value) {
+            if (!value) {
+              return t('smtp_username.msg');
+            }
+          }
+          return true;
+        },
+      },
     },
     smtp_password: {
       'ui:options': {
         type: 'password',
+        validator: (value: string, formData) => {
+          if (formData.smtp_authentication.value) {
+            if (!value) {
+              return t('smtp_password.msg');
+            }
+          }
+          return true;
+        },
       },
     },
     smtp_authentication: {
-      'ui:widget': 'radio',
+      'ui:widget': 'switch',
     },
     smtp_port: {
       'ui:options': {
+        type: 'number',
         validator: (value) => {
           if (!/^[1-9][0-9]*$/.test(value) || Number(value) > 65535) {
             return t('smtp_port.msg');
@@ -92,6 +116,7 @@ const Smtp: FC = () => {
     },
     test_email_recipient: {
       'ui:options': {
+        type: 'email',
         validator: (value) => {
           if (value && !pattern.email.test(value)) {
             return t('test_email_recipient.msg');
@@ -116,8 +141,12 @@ const Smtp: FC = () => {
       encryption: formData.encryption.value,
       smtp_port: Number(formData.smtp_port.value),
       smtp_authentication: formData.smtp_authentication.value,
-      smtp_username: formData.smtp_username.value,
-      smtp_password: formData.smtp_password.value,
+      ...(formData.smtp_authentication.value
+        ? { smtp_username: formData.smtp_username.value }
+        : {}),
+      ...(formData.smtp_authentication.value
+        ? { smtp_password: formData.smtp_password.value }
+        : {}),
       test_email_recipient: formData.test_email_recipient.value,
     };
 
@@ -140,16 +169,31 @@ const Smtp: FC = () => {
     if (!setting) {
       return;
     }
-    const formState = {};
-    Object.keys(formData).forEach((k) => {
-      let v = setting[k];
-      if (v === null || v === undefined) {
-        v = '';
-      }
-      formState[k] = { ...formData[k], value: v };
+    const formMeta = {};
+    Object.keys(setting).forEach((k) => {
+      formMeta[k] = { ...formData[k], value: setting[k] };
     });
-    setFormData(formState);
+    setFormData({ ...formData, ...formMeta });
   }, [setting]);
+
+  useEffect(() => {
+    if (formData.smtp_authentication.value === '') {
+      return;
+    }
+    if (formData.smtp_authentication.value) {
+      setFormData({
+        ...formData,
+        smtp_username: { ...formData.smtp_username, hidden: false },
+        smtp_password: { ...formData.smtp_password, hidden: false },
+      });
+    } else {
+      setFormData({
+        ...formData,
+        smtp_username: { ...formData.smtp_username, hidden: true },
+        smtp_password: { ...formData.smtp_password, hidden: true },
+      });
+    }
+  }, [formData.smtp_authentication.value]);
 
   const handleOnChange = (data) => {
     setFormData(data);

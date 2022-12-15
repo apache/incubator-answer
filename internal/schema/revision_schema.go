@@ -2,6 +2,8 @@ package schema
 
 import (
 	"time"
+
+	"github.com/answerdev/answer/internal/base/constant"
 )
 
 // AddRevisionDTO add revision request
@@ -16,12 +18,55 @@ type AddRevisionDTO struct {
 	Content string
 	// log
 	Log string
+	// status
+	Status int
 }
 
 // GetRevisionListReq get revision list all request
 type GetRevisionListReq struct {
 	// object id
 	ObjectID string `validate:"required" comment:"object_id" form:"object_id"`
+}
+
+const RevisionAuditApprove = "approve"
+const RevisionAuditReject = "reject"
+
+type RevisionAuditReq struct {
+	// object id
+	ID                string `validate:"required" comment:"id" form:"id"`
+	Operation         string `validate:"required" comment:"operation" form:"operation"` //approve or reject
+	UserID            string `json:"-"`
+	CanReviewQuestion bool   `json:"-"`
+	CanReviewAnswer   bool   `json:"-"`
+	CanReviewTag      bool   `json:"-"`
+}
+
+type RevisionSearch struct {
+	Page              int    `json:"page" form:"page"` // Query number of pages
+	CanReviewQuestion bool   `json:"-"`
+	CanReviewAnswer   bool   `json:"-"`
+	CanReviewTag      bool   `json:"-"`
+	UserID            string `json:"-"`
+}
+
+func (r RevisionSearch) GetCanReviewObjectTypes() []int {
+	objectType := make([]int, 0)
+	if r.CanReviewAnswer {
+		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.AnswerObjectType])
+	}
+	if r.CanReviewQuestion {
+		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.QuestionObjectType])
+	}
+	if r.CanReviewTag {
+		objectType = append(objectType, constant.ObjectTypeStrMapping[constant.TagObjectType])
+	}
+	return objectType
+}
+
+type GetUnreviewedRevisionResp struct {
+	Type           string                      `json:"type"`
+	Info           *UnreviewedRevisionInfoInfo `json:"info"`
+	UnreviewedInfo *GetRevisionResp            `json:"unreviewed_info"`
 }
 
 // GetRevisionResp get revision response
