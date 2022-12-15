@@ -3,7 +3,6 @@ package server
 import (
 	"html/template"
 	"io/fs"
-	"os"
 
 	brotli "github.com/anargu/gin-brotli"
 	"github.com/answerdev/answer/internal/base/middleware"
@@ -32,15 +31,9 @@ func NewHTTPServer(debug bool,
 	r.Use(brotli.Brotli(brotli.DefaultCompression), middleware.ExtractAndSetAcceptLanguage)
 	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK") })
 
-	dev := os.Getenv("DEVCODE")
-	if dev != "" {
-		r.SetFuncMap(funcMap)
-		r.LoadHTMLGlob("../../ui/template/*")
-	} else {
-		html, _ := fs.Sub(ui.Template, "template")
-		htmlTemplate := template.Must(template.New("").Funcs(funcMap).ParseFS(html, "*"))
-		r.SetHTMLTemplate(htmlTemplate)
-	}
+	html, _ := fs.Sub(ui.Template, "template")
+	htmlTemplate := template.Must(template.New("").Funcs(funcMap).ParseFS(html, "*"))
+	r.SetHTMLTemplate(htmlTemplate)
 
 	viewRouter.Register(r)
 
