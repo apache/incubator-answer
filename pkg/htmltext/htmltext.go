@@ -1,9 +1,12 @@
 package htmltext
 
 import (
-	"github.com/grokify/html-strip-tags-go"
+	"net/url"
 	"regexp"
 	"strings"
+
+	"github.com/gosimple/slug"
+	strip "github.com/grokify/html-strip-tags-go"
 )
 
 // ClearText clear HTML, get the clear text
@@ -38,6 +41,25 @@ func ClearText(html string) (text string) {
 	re = regexp.MustCompile(spaceReg)
 	text = strings.TrimSpace(re.ReplaceAllString(text, spaceRepl))
 	return
+}
+
+func UrlTitle(title string) (text string) {
+	title = ClearEmoji(title)
+	title = slug.Make(title)
+	// title = strings.ReplaceAll(title, " ", "-")
+	title = url.QueryEscape(title)
+	return title
+}
+
+func ClearEmoji(s string) string {
+	ret := ""
+	rs := []rune(s)
+	for i := 0; i < len(rs); i++ {
+		if len(string(rs[i])) != 4 {
+			ret += string(rs[i])
+		}
+	}
+	return ret
 }
 
 // FetchExcerpt return the excerpt from the HTML string

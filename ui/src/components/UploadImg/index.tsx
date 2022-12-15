@@ -23,7 +23,6 @@ const Index: React.FC<IProps> = ({
   const [status, setStatus] = useState(false);
 
   const onChange = (e: any) => {
-    console.log('uploading', e);
     if (status) {
       return;
     }
@@ -37,7 +36,6 @@ const Index: React.FC<IProps> = ({
       //   return;
       // }
       setStatus(true);
-      console.log('uploading', e.target.files);
       uploadImage({ file: e.target.files[0], type })
         .then((res) => {
           uploadCallback(res);

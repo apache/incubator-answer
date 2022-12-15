@@ -1,0 +1,51 @@
+{{define "header"}}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{{.title}}</title>
+    <meta name="description" content="{{.description}}" />
+    {{if .keywords }}<meta name="keywords" content="{{.keywords}}" />{{end}}
+    <link rel="canonical" href="{{.siteinfo.Canonical}}" />
+    <link rel="manifest" href="/manifest.json"/>
+    <link href="{{.cssPath}}" rel="stylesheet" />
+    <link href="/custom.css" rel="stylesheet">
+    <script defer="defer" src="{{.scriptPath}}"></script>
+    {{if $.siteinfo.JsonLD }}{{ .siteinfo.JsonLD | templateHTML}}{{end}}
+</head>
+
+<body>
+<noscript>You need to enable JavaScript to run this app.</noscript>
+<div id="root">
+  <nav id="header" class="sticky-top navbar navbar-expand-lg navbar-dark">
+    <div class="d-flex align-items-center container">
+      <button aria-controls="navBarContent" id="navBarToggle" type="button"
+              aria-label="Toggle navigation"
+              class="answer-navBar me-2 navbar-toggler collapsed">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div
+        class="d-flex justify-content-between align-items-center nav-grow flex-nowrap">
+        <a class="lh-1 me-0 me-sm-3 navbar-brand" href="/">
+          {{.siteinfo.General.Name}}
+        </a>
+      </div>
+      <div class="me-auto navbar-collapse collapse" id="navBarContent">
+        <hr class="hr lg-none mb-2" style="margin-top: 12px"/>
+        <div class="col-md-4">
+          <div class="navbar-nav">
+            <a class="nav-link"
+               href="/questions">{{translator $.language "ui.header.nav.question"}}</a>
+            <a class="nav-link"
+               href="/tags">{{translator $.language "ui.header.nav.tag"}}</a>
+          </div>
+        </div>
+        <hr class="hr lg-none mt-2"/>
+
+      </div>
+    </div>
+  </nav>
+  <div class="position-relative page-wrap">
+    {{end}}

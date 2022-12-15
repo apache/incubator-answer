@@ -10,11 +10,7 @@ import {
 import { interfaceStore } from '@/stores';
 import { JSONSchema, SchemaForm, UISchema } from '@/components';
 import { DEFAULT_TIMEZONE } from '@/common/constants';
-import {
-  updateInterfaceSetting,
-  useInterfaceSetting,
-  useThemeOptions,
-} from '@/services';
+import { updateInterfaceSetting, useInterfaceSetting } from '@/services';
 import {
   setupAppLanguage,
   loadLanguageOptions,
@@ -27,7 +23,6 @@ const Interface: FC = () => {
     keyPrefix: 'admin.interface',
   });
   const storeInterface = interfaceStore.getState().interface;
-  const { data: themes } = useThemeOptions();
   const Toast = useToast();
   const [langs, setLangs] = useState<LangsType[]>();
   const { data: setting } = useInterfaceSetting();
@@ -35,13 +30,6 @@ const Interface: FC = () => {
   const schema: JSONSchema = {
     title: t('page_title'),
     properties: {
-      theme: {
-        type: 'string',
-        title: t('theme.label'),
-        description: t('theme.text'),
-        enum: themes?.map((theme) => theme.value) || [],
-        enumNames: themes?.map((theme) => theme.label) || [],
-      },
       language: {
         type: 'string',
         title: t('language.label'),
@@ -58,11 +46,6 @@ const Interface: FC = () => {
   };
 
   const [formData, setFormData] = useState<FormDataType>({
-    theme: {
-      value: setting?.theme || storeInterface.theme,
-      isInvalid: false,
-      errorMsg: '',
-    },
     language: {
       value: setting?.language || storeInterface.language,
       isInvalid: false,
@@ -76,9 +59,6 @@ const Interface: FC = () => {
   });
 
   const uiSchema: UISchema = {
-    theme: {
-      'ui:widget': 'select',
-    },
     language: {
       'ui:widget': 'select',
     },
@@ -90,30 +70,11 @@ const Interface: FC = () => {
     const res: LangsType[] = await loadLanguageOptions(true);
     setLangs(res);
   };
-  // set default theme value
-  if (!formData.theme.value && Array.isArray(themes) && themes.length) {
-    setFormData({
-      ...formData,
-      theme: {
-        value: themes[0].value,
-        isInvalid: false,
-        errorMsg: '',
-      },
-    });
-  }
 
   const checkValidated = (): boolean => {
     let ret = true;
-    const { theme, language } = formData;
+    const { language } = formData;
     const formCheckData = { ...formData };
-    if (!theme.value) {
-      ret = false;
-      formCheckData.theme = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('theme.msg'),
-      };
-    }
     if (!language.value) {
       ret = false;
       formCheckData.language = {
@@ -134,7 +95,6 @@ const Interface: FC = () => {
       return;
     }
     const reqParams: AdminSettingsInterface = {
-      theme: formData.theme.value,
       language: formData.language.value,
       time_zone: formData.time_zone.value,
     };
@@ -156,21 +116,6 @@ const Interface: FC = () => {
         }
       });
   };
-  // const imgUpload = (file: any) => {
-  //   return new Promise((resolve) => {
-  //     uploadAvatar(file).then((res) => {
-  //       setFormData({
-  //         ...formData,
-  //         logo: {
-  //           value: res,
-  //           isInvalid: false,
-  //           errorMsg: '',
-  //         },
-  //       });
-  //       resolve(true);
-  //     });
-  //   });
-  // };
 
   useEffect(() => {
     if (setting) {

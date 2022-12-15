@@ -19,7 +19,6 @@ import Mentions from './Mentions';
 import FormatTime from './FormatTime';
 import Toast from './Toast';
 import AccordionNav from './AccordionNav';
-import PageTitle from './PageTitle';
 import Empty from './Empty';
 import BaseUserCard from './BaseUserCard';
 import FollowingTags from './FollowingTags';
@@ -28,6 +27,8 @@ import BrandUpload from './BrandUpload';
 import SchemaForm, { JSONSchema, UISchema, initFormData } from './SchemaForm';
 import Labels from './LabelsCard';
 import DiffContent from './DiffContent';
+import Customize from './Customize';
+import CustomizeTheme from './CustomizeTheme';
 
 export {
   Avatar,
@@ -51,7 +52,6 @@ export {
   FormatTime,
   Toast,
   AccordionNav,
-  PageTitle,
   Empty,
   BaseUserCard,
   FollowingTags,
@@ -62,5 +62,7 @@ export {
   initFormData,
   Labels,
   DiffContent,
+  Customize,
+  CustomizeTheme,
 };
 export type { EditorRef, JSONSchema, UISchema };

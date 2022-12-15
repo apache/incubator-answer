@@ -1,5 +1,10 @@
 package schema
 
+import (
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/pkg/converter"
+)
+
 // RemoveAnswerReq delete answer request
 type RemoveAnswerReq struct {
 	// answer id
@@ -21,6 +26,11 @@ type AnswerAddReq struct {
 	UserID     string `json:"-" `           // user_id
 }
 
+func (req *AnswerAddReq) Check() (errFields []*validator.FormErrorField, err error) {
+	req.HTML = converter.Markdown2HTML(req.Content)
+	return nil, nil
+}
+
 type AnswerUpdateReq struct {
 	ID           string `json:"id"`                                // id
 	QuestionID   string `json:"question_id" `                      // question_id
@@ -32,6 +42,11 @@ type AnswerUpdateReq struct {
 	NoNeedReview bool   `json:"-"`
 	// whether user can edit it
 	CanEdit bool `json:"-"`
+}
+
+func (req *AnswerUpdateReq) Check() (errFields []*validator.FormErrorField, err error) {
+	req.HTML = converter.Markdown2HTML(req.Content)
+	return nil, nil
 }
 
 // AnswerUpdateResp answer update resp

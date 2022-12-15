@@ -3,10 +3,10 @@ import { Container, Col, Form, Button } from 'react-bootstrap';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { usePageTags } from '@/hooks';
 import { loggedUserInfoStore } from '@/stores';
 import type { FormDataType } from '@/common/interface';
 import { replacementPassword } from '@/services';
-import { PageTitle } from '@/components';
 import { handleFormError } from '@/utils';
 
 const Index: React.FC = () => {
@@ -112,89 +112,88 @@ const Index: React.FC = () => {
         }
       });
   };
-
+  usePageTags({
+    title: t('account_recovery', { keyPrefix: 'page_title' }),
+  });
   return (
-    <>
-      <PageTitle title={t('account_recovery', { keyPrefix: 'page_title' })} />
-      <Container style={{ paddingTop: '4rem', paddingBottom: '6rem' }}>
-        <h3 className="text-center mb-5">{t('page_title')}</h3>
-        {step === 1 && (
-          <Col className="mx-auto" md={3}>
-            <Form noValidate onSubmit={handleSubmit} autoComplete="off">
-              <Form.Group controlId="email" className="mb-3">
-                <Form.Label>{t('password.label')}</Form.Label>
-                <Form.Control
-                  autoComplete="off"
-                  required
-                  type="password"
-                  maxLength={32}
-                  isInvalid={formData.pass.isInvalid}
-                  onChange={(e) => {
-                    handleChange({
-                      pass: {
-                        value: e.target.value,
-                        isInvalid: false,
-                        errorMsg: '',
-                      },
-                    });
-                  }}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {formData.pass.errorMsg}
-                </Form.Control.Feedback>
-              </Form.Group>
+    <Container style={{ paddingTop: '4rem', paddingBottom: '6rem' }}>
+      <h3 className="text-center mb-5">{t('page_title')}</h3>
+      {step === 1 && (
+        <Col className="mx-auto" md={3}>
+          <Form noValidate onSubmit={handleSubmit} autoComplete="off">
+            <Form.Group controlId="email" className="mb-3">
+              <Form.Label>{t('password.label')}</Form.Label>
+              <Form.Control
+                autoComplete="off"
+                required
+                type="password"
+                maxLength={32}
+                isInvalid={formData.pass.isInvalid}
+                onChange={(e) => {
+                  handleChange({
+                    pass: {
+                      value: e.target.value,
+                      isInvalid: false,
+                      errorMsg: '',
+                    },
+                  });
+                }}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formData.pass.errorMsg}
+              </Form.Control.Feedback>
+            </Form.Group>
 
-              <Form.Group controlId="password" className="mb-3">
-                <Form.Label>{t('password_confirm.label')}</Form.Label>
-                <Form.Control
-                  autoComplete="off"
-                  required
-                  type="password"
-                  maxLength={32}
-                  isInvalid={formData.passSecond.isInvalid}
-                  onChange={(e) => {
-                    handleChange({
-                      passSecond: {
-                        value: e.target.value,
-                        isInvalid: false,
-                        errorMsg: '',
-                      },
-                    });
-                  }}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {formData.passSecond.errorMsg}
-                </Form.Control.Feedback>
-              </Form.Group>
+            <Form.Group controlId="password" className="mb-3">
+              <Form.Label>{t('password_confirm.label')}</Form.Label>
+              <Form.Control
+                autoComplete="off"
+                required
+                type="password"
+                maxLength={32}
+                isInvalid={formData.passSecond.isInvalid}
+                onChange={(e) => {
+                  handleChange({
+                    passSecond: {
+                      value: e.target.value,
+                      isInvalid: false,
+                      errorMsg: '',
+                    },
+                  });
+                }}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formData.passSecond.errorMsg}
+              </Form.Control.Feedback>
+            </Form.Group>
 
-              <div className="d-grid mb-3">
-                <Button variant="primary" type="submit">
-                  {t('btn_name')}
-                </Button>
-              </div>
-            </Form>
-          </Col>
-        )}
-
-        {step === 2 && (
-          <Col className="mx-auto px-4" md={6}>
-            <div className="text-center">
-              <p>{t('reset_success')}</p>
-              <Link to="/users/login">{t('to_login')}</Link>
+            <div className="d-grid mb-3">
+              <Button variant="primary" type="submit">
+                {t('btn_name')}
+              </Button>
             </div>
-          </Col>
-        )}
+          </Form>
+        </Col>
+      )}
 
-        {step === 3 && (
-          <Col className="mx-auto px-4" md={6}>
-            <div className="text-center">
-              <p>{t('link_invalid')}</p>
-              <Link to="/users/login">{t('to_login')}</Link>
-            </div>
-          </Col>
-        )}
-      </Container>
-    </>
+      {step === 2 && (
+        <Col className="mx-auto px-4" md={6}>
+          <div className="text-center">
+            <p>{t('reset_success')}</p>
+            <Link to="/users/login">{t('to_login')}</Link>
+          </div>
+        </Col>
+      )}
+
+      {step === 3 && (
+        <Col className="mx-auto px-4" md={6}>
+          <div className="text-center">
+            <p>{t('link_invalid')}</p>
+            <Link to="/users/login">{t('to_login')}</Link>
+          </div>
+        </Col>
+      )}
+    </Container>
   );
 };
 

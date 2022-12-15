@@ -43,7 +43,7 @@ func (ur *UserRankRepo) TriggerUserRank(ctx context.Context,
 	if deltaRank < 0 {
 		// if user rank is lower than 1 after this action, then user rank will be set to 1 only.
 		var isReachMin bool
-		isReachMin, err = ur.checkUserMinRank(ctx, session, userID, activityType)
+		isReachMin, err = ur.checkUserMinRank(ctx, session, userID, deltaRank)
 		if err != nil {
 			return false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		}
@@ -52,7 +52,7 @@ func (ur *UserRankRepo) TriggerUserRank(ctx context.Context,
 			if err != nil {
 				return false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 			}
-			return false, nil
+			return true, nil
 		}
 	} else {
 		isReachStandard, err = ur.checkUserTodayRank(ctx, session, userID, activityType)

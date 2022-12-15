@@ -1,9 +1,16 @@
 package schema
 
 import (
+	"context"
 	"fmt"
 	"net/url"
+
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/translator"
 )
+
+const PermaLinkQuestionIDAndTitle = 1
+const PermaLinkQuestionID = 2
 
 // SiteGeneralReq site general request
 type SiteGeneralReq struct {
@@ -12,6 +19,11 @@ type SiteGeneralReq struct {
 	Description      string `validate:"omitempty,gt=3,lte=2000" form:"description" json:"description"`
 	SiteUrl          string `validate:"required,gt=1,lte=512,url" form:"site_url" json:"site_url"`
 	ContactEmail     string `validate:"required,gt=1,lte=512,email" form:"contact_email" json:"contact_email"`
+}
+
+type SiteSeoReq struct {
+	PermaLink int    `validate:"required,lte=3,gte=0" form:"permalink" json:"permalink"`
+	Robots    string `validate:"required" form:"robots" json:"robots"`
 }
 
 func (r *SiteGeneralReq) FormatSiteUrl() {
@@ -74,6 +86,26 @@ type GetSiteLegalInfoResp struct {
 	PrivacyPolicyParsedText    string `json:"privacy_policy_parsed_text,omitempty"`
 }
 
+// SiteLoginReq site login request
+type SiteLoginReq struct {
+	AllowNewRegistrations bool `json:"allow_new_registrations"`
+	LoginRequired         bool `json:"login_required"`
+}
+
+// SiteCustomCssHTMLReq site custom css html
+type SiteCustomCssHTMLReq struct {
+	CustomHead   string `validate:"omitempty,gt=0,lte=65536" json:"custom_head"`
+	CustomCss    string `validate:"omitempty,gt=0,lte=65536" json:"custom_css"`
+	CustomHeader string `validate:"omitempty,gt=0,lte=65536" json:"custom_header"`
+	CustomFooter string `validate:"omitempty,gt=0,lte=65536" json:"custom_footer"`
+}
+
+// SiteThemeReq site theme config
+type SiteThemeReq struct {
+	Theme       string                 `validate:"required,gt=0,lte=255" json:"theme"`
+	ThemeConfig map[string]interface{} `validate:"omitempty" json:"theme_config"`
+}
+
 // SiteGeneralResp site general response
 type SiteGeneralResp SiteGeneralReq
 
@@ -83,17 +115,67 @@ type SiteInterfaceResp SiteInterfaceReq
 // SiteBrandingResp site branding response
 type SiteBrandingResp SiteBrandingReq
 
+// SiteLoginResp site login response
+type SiteLoginResp SiteLoginReq
+
+// SiteCustomCssHTMLResp site custom css html response
+type SiteCustomCssHTMLResp SiteCustomCssHTMLReq
+
+// SiteThemeResp site theme response
+type SiteThemeResp struct {
+	ThemeOptions []*ThemeOption         `json:"theme_options"`
+	Theme        string                 `json:"theme"`
+	ThemeConfig  map[string]interface{} `json:"theme_config"`
+}
+
+func (s *SiteThemeResp) TrTheme(ctx context.Context) {
+	la := handler.GetLangByCtx(ctx)
+	for _, option := range s.ThemeOptions {
+		tr := translator.GlobalTrans.Tr(la, option.Value)
+		// if tr is equal the option value means not found translation, so use the original label
+		if tr != option.Value {
+			option.Label = tr
+		}
+	}
+}
+
+// ThemeOption get label option
+type ThemeOption struct {
+	Label string `json:"label"`
+	Value string `json:"value"`
+}
+
 // SiteWriteResp site write response
 type SiteWriteResp SiteWriteReq
 
 // SiteLegalResp site write response
 type SiteLegalResp SiteLegalReq
 
+// SiteSeoResp site write response
+type SiteSeoResp SiteSeoReq
+
 // SiteInfoResp get site info response
 type SiteInfoResp struct {
-	General   *SiteGeneralResp   `json:"general"`
-	Interface *SiteInterfaceResp `json:"interface"`
-	Branding  *SiteBrandingResp  `json:"branding"`
+	General       *SiteGeneralResp       `json:"general"`
+	Interface     *SiteInterfaceResp     `json:"interface"`
+	Branding      *SiteBrandingResp      `json:"branding"`
+	Login         *SiteLoginResp         `json:"login"`
+	Theme         *SiteThemeResp         `json:"theme"`
+	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
+	SiteSeo       *SiteSeoReq            `json:"site__seo"`
+}
+type TemplateSiteInfoResp struct {
+	General       *SiteGeneralResp       `json:"general"`
+	Interface     *SiteInterfaceResp     `json:"interface"`
+	Branding      *SiteBrandingResp      `json:"branding"`
+	SiteSeo       *SiteSeoReq            `json:"site_seo"`
+	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
+	Title         string
+	Year          string
+	Canonical     string
+	JsonLD        string
+	Keywords      string
+	Description   string
 }
 
 // UpdateSMTPConfigReq get smtp config request
@@ -119,4 +201,17 @@ type GetSMTPConfigResp struct {
 	SMTPUsername       string `json:"smtp_username"`
 	SMTPPassword       string `json:"smtp_password"`
 	SMTPAuthentication bool   `json:"smtp_authentication"`
+}
+
+// GetManifestJsonResp get manifest json response
+type GetManifestJsonResp struct {
+	ManifestVersion int               `json:"manifest_version"`
+	Version         string            `json:"version"`
+	ShortName       string            `json:"short_name"`
+	Name            string            `json:"name"`
+	Icons           map[string]string `json:"icons"`
+	StartUrl        string            `json:"start_url"`
+	Display         string            `json:"display"`
+	ThemeColor      string            `json:"theme_color"`
+	BackgroundColor string            `json:"background_color"`
 }

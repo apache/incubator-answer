@@ -1,1 +1,44 @@
-<!doctype html><html><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><link rel="manifest" href="/manifest.json"/><title>Answer</title><script defer="defer" src="/static/js/main.1bed8401.js"></script><link href="/static/css/main.6975b122.css" rel="stylesheet"></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>Answer</title>
+    <script defer="defer" src="/static/js/main.9de9552b.js"></script>
+    <link href="/static/css/main.d4180d41.css" rel="stylesheet">
+    <link href="/custom.css" rel="stylesheet">
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <style>
+        @keyframes _doc-spin {
+          to {
+            transform: rotate(360deg);
+          }
+        }
+        #doc-spinner {
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+        #doc-spinner .spinner {
+          box-sizing: border-box;
+          display: inline-block;
+          width: 2rem;
+          height: 2rem;
+          vertical-align: -0.125em;
+          border: 0.25rem solid currentColor;
+          border-right-color: transparent;
+          color: rgba(108, 117, 125, 0.75);
+          border-radius: 50%;
+          animation: 0.75s linear infinite _doc-spin;
+        }
+      </style>
+      <div id="doc-spinner"><div class="spinner"></div></div>
+    </div>
+  </body>
+</html>

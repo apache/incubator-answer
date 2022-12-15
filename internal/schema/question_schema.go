@@ -1,24 +1,40 @@
 package schema
 
+import (
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/pkg/converter"
+)
+
+const (
+	SitemapMaxSize      = 50000
+	SitemapCachekey     = "answer@sitemap"
+	SitemapPageCachekey = "answer@sitemap@page%d"
+)
+
 // RemoveQuestionReq delete question request
 type RemoveQuestionReq struct {
 	// question id
-	ID      string `validate:"required" comment:"question id" json:"id"`
+	ID      string `validate:"required" json:"id"`
 	UserID  string `json:"-" ` // user_id
 	IsAdmin bool   `json:"-"`
 }
 
 type CloseQuestionReq struct {
-	ID        string `validate:"required" comment:"question id" json:"id"`
-	UserID    string `json:"-" `          // user_id
-	CloseType int    `json:"close_type" ` // close_type
-	CloseMsg  string `json:"close_msg" `  // close_type
-	IsAdmin   bool   `json:"-"`
+	ID        string `validate:"required" json:"id"`
+	CloseType int    `json:"close_type"` // close_type
+	CloseMsg  string `json:"close_msg"`  // close_type
+	UserID    string `json:"-"`          // user_id
 }
 
 type CloseQuestionMeta struct {
 	CloseType int    `json:"close_type"`
 	CloseMsg  string `json:"close_msg"`
+}
+
+// ReopenQuestionReq reopen question request
+type ReopenQuestionReq struct {
+	QuestionID string `json:"question_id"`
+	UserID     string `json:"-"`
 }
 
 type QuestionAdd struct {
@@ -35,6 +51,16 @@ type QuestionAdd struct {
 	QuestionPermission
 }
 
+func (req *QuestionAdd) Check() (errFields []*validator.FormErrorField, err error) {
+	req.HTML = converter.Markdown2HTML(req.Content)
+	for _, tag := range req.Tags {
+		if len(tag.OriginalText) > 0 {
+			tag.ParsedText = converter.Markdown2HTML(tag.OriginalText)
+		}
+	}
+	return nil, nil
+}
+
 type QuestionPermission struct {
 	// whether user can add it
 	CanAdd bool `json:"-"`
@@ -44,6 +70,10 @@ type QuestionPermission struct {
 	CanDelete bool `json:"-"`
 	// whether user can close it
 	CanClose bool `json:"-"`
+	// whether user can reopen it
+	CanReopen bool `json:"-"`
+	// whether user can use reserved it
+	CanUseReservedTag bool `json:"-"`
 }
 
 type CheckCanQuestionUpdate struct {
@@ -69,9 +99,13 @@ type QuestionUpdate struct {
 	EditSummary string `validate:"omitempty" json:"edit_summary"`
 	// user id
 	UserID       string `json:"-"`
-	IsAdmin      bool   `json:"-"`
 	NoNeedReview bool   `json:"-"`
 	QuestionPermission
+}
+
+func (req *QuestionUpdate) Check() (errFields []*validator.FormErrorField, err error) {
+	req.HTML = converter.Markdown2HTML(req.Content)
+	return nil, nil
 }
 
 type QuestionBaseInfo struct {
@@ -90,6 +124,7 @@ type QuestionInfo struct {
 	Title                string         `json:"title" xorm:"title"`                         // title
 	Content              string         `json:"content" xorm:"content"`                     // content
 	HTML                 string         `json:"html" xorm:"html"`                           // html
+	Description          string         `json:"description"`                                //description
 	Tags                 []*TagResp     `json:"tags" `                                      // tags
 	ViewCount            int            `json:"view_count" xorm:"view_count"`               // view_count
 	UniqueViewCount      int            `json:"unique_view_count" xorm:"unique_view_count"` // unique_view_count
@@ -208,4 +243,19 @@ type CmsQuestionSearch struct {
 type AdminSetQuestionStatusRequest struct {
 	StatusStr  string `json:"status" form:"status"`
 	QuestionID string `json:"question_id" form:"question_id"`
+}
+
+type SiteMapList struct {
+	QuestionIDs []*SiteMapQuestionInfo `json:"question_ids"`
+	MaxPageNum  []int                  `json:"max_page_num"`
+}
+
+type SiteMapPageList struct {
+	PageData []*SiteMapQuestionInfo `json:"page_data"`
+}
+
+type SiteMapQuestionInfo struct {
+	ID         string `json:"id"`
+	Title      string `json:"title"`
+	UpdateTime string `json:"time"`
 }

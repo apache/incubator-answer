@@ -2,14 +2,10 @@ package service
 
 import (
 	"context"
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"math/rand"
-	"regexp"
-	"strings"
+	"time"
 
-	"github.com/Chain-Zhang/pinyin"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
@@ -17,12 +13,13 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
+	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/export"
+	"github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
-	"github.com/answerdev/answer/pkg/checker"
 	"github.com/google/uuid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -33,28 +30,37 @@ import (
 
 // UserService user service
 type UserService struct {
-	userRepo        usercommon.UserRepo
-	userActivity    activity.UserActiveActivityRepo
-	serviceConfig   *service_config.ServiceConfig
-	emailService    *export.EmailService
-	authService     *auth.AuthService
-	siteInfoService *siteinfo_common.SiteInfoCommonService
+	userCommonService *usercommon.UserCommon
+	userRepo          usercommon.UserRepo
+	userActivity      activity.UserActiveActivityRepo
+	activityRepo      activity_common.ActivityRepo
+	serviceConfig     *service_config.ServiceConfig
+	emailService      *export.EmailService
+	authService       *auth.AuthService
+	siteInfoService   *siteinfo_common.SiteInfoCommonService
+	userRoleService   *role.UserRoleRelService
 }
 
 func NewUserService(userRepo usercommon.UserRepo,
 	userActivity activity.UserActiveActivityRepo,
+	activityRepo activity_common.ActivityRepo,
 	emailService *export.EmailService,
 	authService *auth.AuthService,
 	serviceConfig *service_config.ServiceConfig,
 	siteInfoService *siteinfo_common.SiteInfoCommonService,
+	userRoleService *role.UserRoleRelService,
+	userCommonService *usercommon.UserCommon,
 ) *UserService {
 	return &UserService{
-		userRepo:        userRepo,
-		userActivity:    userActivity,
-		emailService:    emailService,
-		serviceConfig:   serviceConfig,
-		authService:     authService,
-		siteInfoService: siteInfoService,
+		userCommonService: userCommonService,
+		userRepo:          userRepo,
+		userActivity:      userActivity,
+		activityRepo:      activityRepo,
+		emailService:      emailService,
+		serviceConfig:     serviceConfig,
+		authService:       authService,
+		siteInfoService:   siteInfoService,
+		userRoleService:   userRoleService,
 	}
 }
 
@@ -67,9 +73,14 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	if !exist {
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
+	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
+	if err != nil {
+		log.Error(err)
+	}
 	resp = &schema.GetUserToSetShowResp{}
 	resp.GetFromUserEntity(userInfo)
 	resp.AccessToken = token
+	resp.IsAdmin = roleID == role.RoleAdminID
 	return resp, nil
 }
 
@@ -108,19 +119,24 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 		log.Error("UpdateLastLoginDate", err.Error())
 	}
 
+	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
+	if err != nil {
+		log.Error(err)
+	}
+
 	resp = &schema.GetUserResp{}
 	resp.GetFromUserEntity(userInfo)
 	userCacheInfo := &entity.UserCacheInfo{
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
-		IsAdmin:     userInfo.IsAdmin,
+		IsAdmin:     roleID == role.RoleAdminID,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
 		return nil, err
 	}
-	resp.IsAdmin = userInfo.IsAdmin
+	resp.IsAdmin = userCacheInfo.IsAdmin
 	if resp.IsAdmin {
 		err = us.authService.SetCmsUserCacheInfo(ctx, resp.AccessToken, userCacheInfo)
 		if err != nil {
@@ -293,7 +309,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	if err != nil {
 		return nil, err
 	}
-	userInfo.Username, err = us.makeUsername(ctx, registerUserInfo.Name)
+	userInfo.Username, err = us.userCommonService.MakeUsername(ctx, registerUserInfo.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -318,6 +334,11 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	}
 	go us.emailService.Send(ctx, userInfo.EMail, title, body, code, data.ToJSONString())
 
+	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
+	if err != nil {
+		log.Error(err)
+	}
+
 	// return user info and token
 	resp = &schema.GetUserResp{}
 	resp.GetFromUserEntity(userInfo)
@@ -325,13 +346,13 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
-		IsAdmin:     userInfo.IsAdmin,
+		IsAdmin:     roleID == role.RoleAdminID,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
 		return nil, err
 	}
-	resp.IsAdmin = userInfo.IsAdmin
+	resp.IsAdmin = userCacheInfo.IsAdmin
 	if resp.IsAdmin {
 		err = us.authService.SetCmsUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
 		if err != nil {
@@ -406,13 +427,18 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 		log.Error(err)
 	}
 
+	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
+	if err != nil {
+		log.Error(err)
+	}
+
 	resp = &schema.GetUserResp{}
 	resp.GetFromUserEntity(userInfo)
 	userCacheInfo := &entity.UserCacheInfo{
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
-		IsAdmin:     userInfo.IsAdmin,
+		IsAdmin:     roleID == role.RoleAdminID,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
@@ -422,7 +448,7 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	if err = us.authService.SetUserStatus(ctx, userCacheInfo); err != nil {
 		return nil, err
 	}
-	resp.IsAdmin = userInfo.IsAdmin
+	resp.IsAdmin = userCacheInfo.IsAdmin
 	if resp.IsAdmin {
 		err = us.authService.SetCmsUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
 		if err != nil {
@@ -430,44 +456,6 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 		}
 	}
 	return resp, nil
-}
-
-// makeUsername
-// Generate a unique Username based on the displayName
-func (us *UserService) makeUsername(ctx context.Context, displayName string) (username string, err error) {
-	// Chinese processing
-	if has := checker.IsChinese(displayName); has {
-		str, err := pinyin.New(displayName).Split("").Mode(pinyin.WithoutTone).Convert()
-		if err != nil {
-			return "", err
-		} else {
-			displayName = str
-		}
-	}
-
-	username = strings.ReplaceAll(displayName, " ", "_")
-	username = strings.ToLower(username)
-	suffix := ""
-
-	re := regexp.MustCompile(`^[a-z0-9._-]{4,30}$`)
-	match := re.MatchString(username)
-	if !match {
-		return "", errors.BadRequest(reason.UsernameInvalid)
-	}
-
-	for {
-		_, has, err := us.userRepo.GetByUsername(ctx, username+suffix)
-		if err != nil {
-			return "", err
-		}
-		if !has {
-			break
-		}
-		bytes := make([]byte, 2)
-		_, _ = rand.Read(bytes)
-		suffix = hex.EncodeToString(bytes)
-	}
-	return username + suffix, nil
 }
 
 // verifyPassword
@@ -571,4 +559,160 @@ func (us *UserService) getSiteUrl(ctx context.Context) string {
 		return ""
 	}
 	return siteGeneral.SiteUrl
+}
+
+// UserRanking get user ranking
+func (us *UserService) UserRanking(ctx context.Context) (resp *schema.UserRankingResp, err error) {
+	limit := 20
+	endTime := time.Now()
+	startTime := endTime.AddDate(0, 0, -7)
+	userIDs, userIDExist := make([]string, 0), make(map[string]bool, 0)
+
+	// get most reputation users
+	rankStat, rankStatUserIDs, err := us.getActivityUserRankStat(ctx, startTime, endTime, limit, userIDExist)
+	if err != nil {
+		return nil, err
+	}
+	userIDs = append(userIDs, rankStatUserIDs...)
+
+	// get most vote users
+	voteStat, voteStatUserIDs, err := us.getActivityUserVoteStat(ctx, startTime, endTime, limit, userIDExist)
+	if err != nil {
+		return nil, err
+	}
+	userIDs = append(userIDs, voteStatUserIDs...)
+
+	// get all staff members
+	userRoleRels, staffUserIDs, err := us.getStaff(ctx, userIDExist)
+	if err != nil {
+		return nil, err
+	}
+	userIDs = append(userIDs, staffUserIDs...)
+
+	// get user information
+	userInfoMapping, err := us.getUserInfoMapping(ctx, userIDs)
+	if err != nil {
+		return nil, err
+	}
+	return us.warpStatRankingResp(userInfoMapping, rankStat, voteStat, userRoleRels), nil
+}
+
+func (us *UserService) getActivityUserRankStat(ctx context.Context, startTime, endTime time.Time, limit int,
+	userIDExist map[string]bool) (rankStat []*entity.ActivityUserRankStat, userIDs []string, err error) {
+	rankStat, err = us.activityRepo.GetUsersWhoHasGainedTheMostReputation(ctx, startTime, endTime, limit)
+	if err != nil {
+		return nil, nil, err
+	}
+	for _, stat := range rankStat {
+		if stat.Rank <= 0 {
+			continue
+		}
+		if userIDExist[stat.UserID] {
+			continue
+		}
+		userIDs = append(userIDs, stat.UserID)
+		userIDExist[stat.UserID] = true
+	}
+	return rankStat, userIDs, nil
+}
+
+func (us *UserService) getActivityUserVoteStat(ctx context.Context, startTime, endTime time.Time, limit int,
+	userIDExist map[string]bool) (voteStat []*entity.ActivityUserVoteStat, userIDs []string, err error) {
+	voteStat, err = us.activityRepo.GetUsersWhoHasVoteMost(ctx, startTime, endTime, limit)
+	if err != nil {
+		return nil, nil, err
+	}
+	for _, stat := range voteStat {
+		if stat.VoteCount <= 0 {
+			continue
+		}
+		if userIDExist[stat.UserID] {
+			continue
+		}
+		userIDs = append(userIDs, stat.UserID)
+		userIDExist[stat.UserID] = true
+	}
+	return voteStat, userIDs, nil
+}
+
+func (us *UserService) getStaff(ctx context.Context, userIDExist map[string]bool) (
+	userRoleRels []*entity.UserRoleRel, userIDs []string, err error) {
+	userRoleRels, err = us.userRoleService.GetUserByRoleID(ctx, []int{role.RoleAdminID, role.RoleModeratorID})
+	if err != nil {
+		return nil, nil, err
+	}
+	for _, rel := range userRoleRels {
+		if userIDExist[rel.UserID] {
+			continue
+		}
+		userIDs = append(userIDs, rel.UserID)
+		userIDExist[rel.UserID] = true
+	}
+	return userRoleRels, userIDs, nil
+}
+
+func (us *UserService) getUserInfoMapping(ctx context.Context, userIDs []string) (
+	userInfoMapping map[string]*entity.User, err error) {
+	userInfoMapping = make(map[string]*entity.User, 0)
+	if len(userIDs) == 0 {
+		return userInfoMapping, nil
+	}
+	userInfoList, err := us.userRepo.BatchGetByID(ctx, userIDs)
+	if err != nil {
+		return nil, err
+	}
+	for _, user := range userInfoList {
+		user.Avatar = schema.FormatAvatarInfo(user.Avatar)
+		userInfoMapping[user.ID] = user
+	}
+	return userInfoMapping, nil
+}
+
+func (us *UserService) warpStatRankingResp(
+	userInfoMapping map[string]*entity.User,
+	rankStat []*entity.ActivityUserRankStat,
+	voteStat []*entity.ActivityUserVoteStat,
+	userRoleRels []*entity.UserRoleRel) (resp *schema.UserRankingResp) {
+	resp = &schema.UserRankingResp{
+		UsersWithTheMostReputation: make([]*schema.UserRankingSimpleInfo, 0),
+		UsersWithTheMostVote:       make([]*schema.UserRankingSimpleInfo, 0),
+		Staffs:                     make([]*schema.UserRankingSimpleInfo, 0),
+	}
+	for _, stat := range rankStat {
+		if stat.Rank <= 0 {
+			continue
+		}
+		if userInfo := userInfoMapping[stat.UserID]; userInfo != nil {
+			resp.UsersWithTheMostReputation = append(resp.UsersWithTheMostReputation, &schema.UserRankingSimpleInfo{
+				Username:    userInfo.Username,
+				Rank:        stat.Rank,
+				DisplayName: userInfo.DisplayName,
+				Avatar:      userInfo.Avatar,
+			})
+		}
+	}
+	for _, stat := range voteStat {
+		if stat.VoteCount <= 0 {
+			continue
+		}
+		if userInfo := userInfoMapping[stat.UserID]; userInfo != nil {
+			resp.UsersWithTheMostVote = append(resp.UsersWithTheMostVote, &schema.UserRankingSimpleInfo{
+				Username:    userInfo.Username,
+				VoteCount:   stat.VoteCount,
+				DisplayName: userInfo.DisplayName,
+				Avatar:      userInfo.Avatar,
+			})
+		}
+	}
+	for _, rel := range userRoleRels {
+		if userInfo := userInfoMapping[rel.UserID]; userInfo != nil {
+			resp.Staffs = append(resp.Staffs, &schema.UserRankingSimpleInfo{
+				Username:    userInfo.Username,
+				Rank:        userInfo.Rank,
+				DisplayName: userInfo.DisplayName,
+				Avatar:      userInfo.Avatar,
+			})
+		}
+	}
+	return resp
 }

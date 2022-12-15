@@ -108,7 +108,7 @@ const Index: FC = () => {
             <Form.Control
               autoComplete="off"
               required
-              type="text"
+              type="email"
               placeholder=""
               value={formData.e_mail.value}
               isInvalid={formData.e_mail.isInvalid}

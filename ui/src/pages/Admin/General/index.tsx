@@ -9,8 +9,6 @@ import { useGeneralSetting, updateGeneralSetting } from '@/services';
 import Pattern from '@/common/pattern';
 import { handleFormError } from '@/utils';
 
-import '../index.scss';
-
 const General: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.general',
@@ -35,13 +33,13 @@ const General: FC = () => {
       },
       short_description: {
         type: 'string',
-        title: t('short_description.label'),
-        description: t('short_description.text'),
+        title: t('short_desc.label'),
+        description: t('short_desc.text'),
       },
       description: {
         type: 'string',
-        title: t('description.label'),
-        description: t('description.text'),
+        title: t('desc.label'),
+        description: t('desc.text'),
       },
       contact_email: {
         type: 'string',
@@ -63,7 +61,7 @@ const General: FC = () => {
           }
           if (
             !url ||
-            /^https?:$/.test(url.protocol) === false ||
+            !/^https?:$/.test(url.protocol) ||
             url.pathname !== '/' ||
             url.search !== '' ||
             url.hash !== ''
@@ -90,7 +88,6 @@ const General: FC = () => {
   const [formData, setFormData] = useState<Type.FormDataType>(
     initFormData(schema),
   );
-
   const onSubmit = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
@@ -122,8 +119,8 @@ const General: FC = () => {
     if (!setting) {
       return;
     }
-    const formMeta = {};
-    Object.keys(setting).forEach((k) => {
+    const formMeta: Type.FormDataType = {};
+    Object.keys(formData).forEach((k) => {
       formMeta[k] = { ...formData[k], value: setting[k] };
     });
     setFormData({ ...formData, ...formMeta });

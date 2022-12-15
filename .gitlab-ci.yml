@@ -13,8 +13,6 @@ stages:
 "compile the html and other static files":
   image: node:16
   stage: compile-html
-  tags:
-    - runner-nanjing
   before_script:
     - npm config set registry https://repo.huaweicloud.com/repository/npm/
     - make install-ui-packages
@@ -27,10 +25,9 @@ stages:
 "compile the golang project":
   image: golang:1.18
   stage: compile-golang
-  before_script:
-    - export GOPROXY=https://goproxy.cn,direct
+#  before_script:
+#    - export GOPROXY=https://goproxy.cn,direct
   script:
-    - make generate
     - make build
   artifacts:
     paths:
@@ -38,8 +35,8 @@ stages:
 
 "build docker images and push":
   stage: push
-  before_script:
-    - export GOPROXY=https://goproxy.cn,direct
+#  before_script:
+#    - export GOPROXY=https://goproxy.cn,direct
   extends: .docker-build-push
   only:
     - test

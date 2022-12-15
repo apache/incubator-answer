@@ -3,6 +3,7 @@ import { Accordion, ListGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@/components';
+import { pathFactory } from '@/router/pathFactory';
 
 import './index.scss';
 
@@ -28,7 +29,7 @@ const SearchQuestion = ({ similarQuestions }) => {
                   as="a"
                   className="link-dark"
                   key={item.id}
-                  href={`/questions/${item.id}`}
+                  href={pathFactory.questionLanding(item.id, item.title)}
                   target="_blank">
                   <span className="text-wrap text-break">
                     {item.title}

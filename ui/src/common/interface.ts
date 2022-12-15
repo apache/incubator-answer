@@ -281,9 +281,19 @@ export interface AdminSettingsGeneral {
   contact_email: string;
 }
 
+export interface HelmetBase {
+  pageTitle?: string;
+  description?: string;
+  keywords?: string;
+}
+
+export interface HelmetUpdate extends Omit<HelmetBase, 'pageTitle'> {
+  title?: string;
+  subtitle?: string;
+}
+
 export interface AdminSettingsInterface {
   language: string;
-  theme: string;
   time_zone?: string;
 }
 
@@ -300,12 +310,16 @@ export interface AdminSettingsSmtp {
 }
 
 export interface SiteSettings {
-  branding: AdmingSettingBranding;
+  branding: AdminSettingBranding;
   general: AdminSettingsGeneral;
   interface: AdminSettingsInterface;
+  login: AdminSettingsLogin;
+  custom_css_html: AdminSettingsCustom;
+  theme: AdminSettingsTheme;
+  site_seo: AdminSettingsSeo;
 }
 
-export interface AdmingSettingBranding {
+export interface AdminSettingBranding {
   logo: string;
   square_icon: string;
   mobile_logo?: string;
@@ -323,6 +337,39 @@ export interface AdminSettingsWrite {
   recommend_tags: string[];
   required_tag: string;
   reserved_tags: string[];
+}
+
+export interface AdminSettingsSeo {
+  robots: string;
+  /**
+   * 0: not set
+   * 1：with title
+   * 2: no title
+   */
+  permalink: number;
+}
+
+export type themeConfig = {
+  navbar_style: string;
+  primary_color: string;
+  [k: string]: string | number;
+};
+export interface AdminSettingsTheme {
+  theme: string;
+  theme_options?: { label: string; value: string }[];
+  theme_config: Record<string, themeConfig>;
+}
+
+export interface AdminSettingsCustom {
+  custom_css: string;
+  custom_head: string;
+  custom_header: string;
+  custom_footer: string;
+}
+
+export interface AdminSettingsLogin {
+  allow_new_registrations: boolean;
+  login_required: boolean;
 }
 
 /**
@@ -455,4 +502,12 @@ export interface MemberActionItem {
   action: string;
   name: string;
   type: string;
+}
+
+export interface User {
+  username: string;
+  rank: number;
+  vote_count: number;
+  display_name: string;
+  avatar: string;
 }
