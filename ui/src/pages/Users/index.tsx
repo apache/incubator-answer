@@ -50,8 +50,9 @@ const Users = () => {
                       sm={6}
                       className="mb-4">
                       <div className="d-flex">
-                        <Avatar size="48px" avatar={user?.avatar} />
-
+                        <Link to={`/users/${user.username}`}>
+                          <Avatar size="48px" avatar={user?.avatar} />
+                        </Link>
                         <div className="ms-2">
                           <Link to={`/users/${user.username}`}>
                             {user.display_name}
