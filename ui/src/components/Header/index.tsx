@@ -44,7 +44,6 @@ const Header: FC = () => {
   const siteInfo = siteInfoStore((state) => state.siteInfo);
   const brandingInfo = brandingStore((state) => state.branding);
   const loginSetting = loginSettingStore((state) => state.login);
-  const { theme, theme_config } = themeSettingStore((_) => _);
   const { data: redDot } = useQueryNotificationStatus();
   const location = useLocation();
   const handleInput = (val) => {
@@ -73,6 +72,7 @@ const Header: FC = () => {
     }
   }, [location.pathname]);
 
+  const { theme, theme_config } = themeSettingStore((_) => _);
   let themeType = 'theme-colored';
   if (theme && theme_config[theme]) {
     themeType = `theme-${theme_config[theme].navbar_style}`;
@@ -80,8 +80,12 @@ const Header: FC = () => {
 
   return (
     <Navbar
+      variant={themeType === 'theme-colored' ? 'dark' : ''}
       expand="lg"
-      className={classnames('sticky-top', themeType)}
+      className={classnames('sticky-top', themeType, {
+        'bg-light': themeType === 'theme-light',
+        'bg-primary': themeType !== 'theme-light',
+      })}
       id="header">
       <Container className="d-flex align-items-center">
         <Navbar.Toggle
@@ -114,7 +118,13 @@ const Header: FC = () => {
           {/* mobile nav */}
           <div className="d-flex lg-none align-items-center flex-lg-nowrap">
             {user?.username ? (
-              <NavItems redDot={redDot} userInfo={user} logOut={handleLogout} />
+              <Nav className="flex-row">
+                <NavItems
+                  redDot={redDot}
+                  userInfo={user}
+                  logOut={handleLogout}
+                />
+              </Nav>
             ) : (
               <>
                 <Button variant="link" className="me-2" href="/users/login">

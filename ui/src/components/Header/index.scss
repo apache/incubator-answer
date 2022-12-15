@@ -2,19 +2,19 @@
 @import 'bootstrap/scss/variables';
 #header {
   --bs-navbar-padding-y: 0.75rem;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15), 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
   .logo {
     max-height: 1.75rem;
   }
 
   .nav-link {
+    &.active {
+      font-weight: 700;
+    }
     &.icon-link {
       width: 36px;
       height: 36px;
     }
-  }
-
-  .placeholder-search {
-    box-shadow: none;
   }
 
   .answer-navBar {
@@ -31,21 +31,13 @@
   }
 
   .hr {
-    color: #fff;
+    color: var(--bs-navbar-color);
   }
 
   // style for colored navbar
   &.theme-colored {
-    background: linear-gradient(180deg, #0033FF 0%, rgba(0, 51, 255, 0.95) 100%);
-    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .15), $box-shadow-sm;
-    .nav-link {
-      color: rgba(255, 255, 255, 0.7);
-      &.active {
-        font-weight: bold;
-        color: #fff;
-      }
-    }
     .placeholder-search {
+      box-shadow: none;
       color: #fff;
       background-color: rgba(255, 255, 255, .2);
       border: $border-width $border-style rgba(255, 255, 255, .2);
@@ -54,29 +46,6 @@
       }
       &::placeholder {
         color: rgba(255, 255, 255, 0.75);
-      }
-    }
-  }
-  // style for light navbar
-  &.theme-light {
-    background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.95) 100%);
-    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15), 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
-    .nav-link {
-      color: rgba(0, 0, 0, 0.55);
-      &.active {
-        font-weight: bold;
-        color: rgba(0, 0, 0, 0.75)
-      }
-    }
-    .placeholder-search {
-      color: rgba(0, 0, 0, 0.75);
-      background-color: #fff;
-      border: 1px solid #CED4DA;
-      &:focus {
-        border: 1px solid rgba(0, 0, 0, 0.75);
-      }
-      &::placeholder {
-        color: #6C757D
       }
     }
   }
