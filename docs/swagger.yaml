@@ -1,11 +1,4 @@
 definitions:
-  entity.AdminSetAnswerStatusRequest:
-    properties:
-      answer_id:
-        type: string
-      status:
-        type: string
-    type: object
   handler.RespBody:
     properties:
       code:
@@ -95,6 +88,8 @@ definitions:
         type: string
       display_name:
         type: string
+      main_tag_slug_name:
+        type: string
       object_type:
         type: string
       question_id:
@@ -179,6 +174,13 @@ definitions:
     - object_id
     - report_type
     type: object
+  schema.AdminSetAnswerStatusRequest:
+    properties:
+      answer_id:
+        type: string
+      status:
+        type: string
+    type: object
   schema.AdminSetQuestionStatusRequest:
     properties:
       question_id:
@@ -203,7 +205,6 @@ definitions:
       answer_id:
         type: string
       question_id:
-        description: question_id
         type: string
     type: object
   schema.AnswerUpdateReq:
@@ -1722,7 +1723,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/entity.AdminSetAnswerStatusRequest'
+          $ref: '#/definitions/schema.AdminSetAnswerStatusRequest'
       produces:
       - application/json
       responses:

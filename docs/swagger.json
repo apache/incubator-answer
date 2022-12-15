@@ -93,7 +93,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.AdminSetAnswerStatusRequest"
+                            "$ref": "#/definitions/schema.AdminSetAnswerStatusRequest"
                         }
                     }
                 ],
@@ -4583,17 +4583,6 @@
         }
     },
     "definitions": {
-        "entity.AdminSetAnswerStatusRequest": {
-            "type": "object",
-            "properties": {
-                "answer_id": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
         "handler.RespBody": {
             "type": "object",
             "properties": {
@@ -4720,6 +4709,9 @@
                 "display_name": {
                     "type": "string"
                 },
+                "main_tag_slug_name": {
+                    "type": "string"
+                },
                 "object_type": {
                     "type": "string"
                 },
@@ -4842,6 +4834,17 @@
                 }
             }
         },
+        "schema.AdminSetAnswerStatusRequest": {
+            "type": "object",
+            "properties": {
+                "answer_id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.AdminSetQuestionStatusRequest": {
             "type": "object",
             "properties": {
@@ -4877,7 +4880,6 @@
                     "type": "string"
                 },
                 "question_id": {
-                    "description": "question_id",
                     "type": "string"
                 }
             }

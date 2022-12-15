@@ -105,7 +105,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/entity.AdminSetAnswerStatusRequest"
+                            "$ref": "#/definitions/schema.AdminSetAnswerStatusRequest"
                         }
                     }
                 ],
@@ -4595,17 +4595,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "entity.AdminSetAnswerStatusRequest": {
-            "type": "object",
-            "properties": {
-                "answer_id": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
         "handler.RespBody": {
             "type": "object",
             "properties": {
@@ -4732,6 +4721,9 @@ const docTemplate = `{
                 "display_name": {
                     "type": "string"
                 },
+                "main_tag_slug_name": {
+                    "type": "string"
+                },
                 "object_type": {
                     "type": "string"
                 },
@@ -4854,6 +4846,17 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.AdminSetAnswerStatusRequest": {
+            "type": "object",
+            "properties": {
+                "answer_id": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.AdminSetQuestionStatusRequest": {
             "type": "object",
             "properties": {
@@ -4889,7 +4892,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "question_id": {
-                    "description": "question_id",
                     "type": "string"
                 }
             }
