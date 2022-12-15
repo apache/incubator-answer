@@ -25,9 +25,9 @@ backend:
       not_found:
         other: "答案未找到"
       cannot_deleted:
-        other: "No permission to delete."
+        other: "无删除权限"
       cannot_update:
-        other: "No permission to update."
+        other: "无修改权限"
     comment:
       edit_without_permission:
         other: "不允许编辑评论"
@@ -66,11 +66,11 @@ backend:
       not_found:
         other: "问题未找到"
       cannot_deleted:
-        other: "No permission to delete."
+        other: "无删除权限"
       cannot_close:
-        other: "No permission to close."
+        other: "无关闭权限"
       cannot_update:
-        other: "No permission to update."
+        other: "无更新权限"
     rank:
       fail_to_meet_the_condition:
         other: "级别不符合条件"
@@ -114,15 +114,15 @@ backend:
         other: "头像设置错误"
       config:
         read_config_failed:
-          other: "Read config failed"
+          other: "读取配置失败"
       database:
         connection_failed:
-          other: "Database connection failed"
+          other: "数据连接异常！"
         create_table_failed:
-          other: "Create table failed"
+          other: "创建表失败"
       install:
         create_config_failed:
-          other: "Can’t create the config.yaml file."
+          other: "无法创建配置文件"
   report:
     spam:
       name:
@@ -232,10 +232,10 @@ ui:
     confirm_email: 确认电子邮件
     account_suspended: 账号已封禁
     admin: 后台管理
-    change_email: Modify Email
-    install: Answer Installation
-    upgrade: Answer Upgrade
-    maintenance: Website Maintenance
+    change_email: 修改邮箱
+    install: Answer 安装
+    upgrade: Answer 升级
+    maintenance: 网站维护
   notifications:
     title: 通知
     inbox: 收件箱
@@ -391,7 +391,7 @@ ui:
   tag_info:
     created_at: 创建于
     edited_at: 编辑于
-    history: History
+    history: 历史
     synonyms:
       title: 同义词
       text: 以下标签等同于
@@ -434,8 +434,8 @@ ui:
     x_seconds_ago: "{{count}} 秒前"
     x_minutes_ago: "{{count}} 分钟前"
     x_hours_ago: "{{count}} 小时前"
-    hour: hour
-    day: day
+    hour: 小时
+    day: 天
   comment:
     btn_add_comment: 添加评论
     reply_to: 回复
@@ -505,9 +505,9 @@ ui:
           msg:
             empty: 回答内容不能为空
         edit_summary:
-          label: Edit Summary
+          label: 编辑理由
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
+            简单描述更改原因 (错别字、文字表达、格式等等)
     btn_post_question: 提交问题
     btn_save_edits: 保存更改
     answer_question: 直接发表回答
@@ -518,7 +518,7 @@ ui:
     search_tag: 搜索标签
     hint: "选择至少一个与问题相关的标签。"
     no_result: 没有匹配的标签
-    tag_required_text: Required tag (at least one)
+    tag_required_text: 必填标签 (至少一个)
   header:
     nav:
       question: 问题
@@ -528,7 +528,7 @@ ui:
       setting: 账号设置
       logout: 退出登录
       admin: 后台管理
-      review: Review
+      review: 审查
     search:
       placeholder: 搜索
   footer:
@@ -549,14 +549,14 @@ ui:
     another: >-
       我们向您发送了另一封激活电子邮件，地址为 <bold>{{mail}}</bold>。它可能需要几分钟才能到达；请务必检查您的垃圾邮件文件夹。
     btn_name: 重新发送激活邮件
-    change_btn_name: Change email
+    change_btn_name: 更改邮箱
     msg:
       empty: 不能为空
   login:
     page_title: 欢迎来到 Answer
     info_sign: 没有帐户？<1>注册</1>
     info_login: 已经有一个帐户？<1>登录</1>
-    agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
+    agreements: 登录即表示您同意<1>隐私政策</1>和<3>服务条款</3>。
     forgot_pass: 忘记密码?
     name:
       label: 昵称
@@ -582,15 +582,15 @@ ui:
       msg:
         empty: 邮箱不能为空
   change_email:
-    page_title: Welcome to Answer
-    btn_cancel: Cancel
-    btn_update: Update email address
+    page_title: 欢迎来到 Answer
+    btn_cancel: 取消
+    btn_update: 更新电子邮件地址
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
-      label: New Email
+      label: 新邮箱
       msg:
-        empty: Email cannot be empty.
+        empty: 邮箱不能为空
   password_reset:
     page_title: 密码重置
     btn_name: 重置我的密码
@@ -629,12 +629,12 @@ ui:
       avatar:
         label: 头像
         gravatar: Gravatar
-        gravatar_text: You can change image on <1>gravatar.com</1>
-        custom: Custom
-        btn_refresh: Refresh
-        custom_text: You can upload your image.
-        default: Default
-        msg: Please upload an avatar
+        gravatar_text: 您可以在 <1>gravatar.com</1> 更改图像
+        custom: 自定义
+        btn_refresh: 刷新
+        custom_text: 您可以上传您的图片。
+        default: 默认
+        msg: 请上传头像
       bio:
         label: 关于我 (可选)
       website:
@@ -675,8 +675,8 @@ ui:
     update: 更新成功
     update_password: 更改密码成功。
     flag_success: 感谢您的标记，我们会尽快处理。
-    fobidden_operate_self: Forbidden to operate on yourself
-    review: Your revision will show after review.
+    fobidden_operate_self: 禁止操作
+    review: 您的修订将在审核通过后显示。
   related_question:
     title: 相关问题
     btn: 我要提问
@@ -725,9 +725,9 @@ ui:
     logout: 退出登录
     verify: 验证
     add_question: 我要提问
-    approve: Approve
-    reject: Reject
-    skip: Skip
+    approve: 批准
+    reject: 拒绝
+    skip: 略过
   search:
     title: 搜索结果
     keywords: 关键词
@@ -741,7 +741,7 @@ ui:
       newest: 最新的
       active: 活跃的
       score: 评分
-      more: More
+      more: 更多
     tips:
       title: 高级搜索提示
       tag: "<1>[tag]</1> 在指定标签中搜索"
@@ -805,12 +805,12 @@ ui:
     newest: 最新
     score: 评分
     edit_profile: 编辑我的资料
-    visited_x_days: "Visited {{ count }} days"
-    viewed: Viewed
+    visited_x_days: "已访问 {{ count }} 天"
+    viewed: 阅读次数
     joined: 加入于
     last_login: 上次登录
     about_me: 关于我
-    about_me_empty: "// Hello, World !"
+    about_me_empty: "Hello, World!"
     top_answers: 热门回答
     top_questions: 热门问题
     stats: 状态
@@ -828,9 +828,9 @@ ui:
     x_questions: 个问题
   install:
     title: Answer
-    next: Next
-    done: Done
-    config_yaml_error: Can’t create the config.yaml file.
+    next: 下一步
+    done: 完成
+    config_yaml_error: 无法创建配置文件
     lang:
       label: Please Choose a Language
     db_type:
@@ -900,10 +900,10 @@ ui:
     warn_description: >-
       The file <1>config.yaml</1> already exists. If you need to reset any of the configuration items in this file, please delete it first.
     install_now: You may try <1>installing now</1>.
-    installed: Already installed
+    installed: 已安裝
     installed_description: >-
       You appear to have already installed. To reinstall please clear your old database tables first.
-    db_failed: Database connection failed
+    db_failed: 数据连接异常！
     db_failed_description: >-
       This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
   page_404:
@@ -925,47 +925,47 @@ ui:
     general: 一般
     interface: 界面
     smtp: SMTP
-    branding: Branding
-    legal: Legal
-    write: Write
-    tos: Terms of Service
-    privacy: Privacy
+    branding: 品牌
+    legal: 法律条款
+    write: 撰写
+    tos: 服务条款
+    privacy: 隐私政策
   admin:
     admin_header:
       title: 后台管理
     dashboard:
       title: 后台管理
       welcome: 欢迎来到 Answer 后台管理！
-      site_statistics: Site Statistics
-      questions: "Questions:"
-      answers: "Answers:"
-      comments: "Comments:"
-      votes: "Votes:"
-      active_users: "Active users:"
-      flags: "Flags:"
-      site_health_status: Site Health Status
+      site_statistics: 站点统计
+      questions: "问题:"
+      answers: "回答:"
+      comments: "评论:"
+      votes: "投票:"
+      active_users: "活跃用户:"
+      flags: "举报:"
+      site_health_status: '健康状态:'
       version: "版本"
       https: "HTTPS:"
-      uploading_files: "Uploading files:"
+      uploading_files: "上传文件:"
       smtp: "SMTP:"
-      timezone: "Timezone:"
-      system_info: System Info
-      storage_used: "Storage used:"
-      uptime: "Uptime:"
-      answer_links: Answer Links
-      documents: Documents
-      feedback: Feedback
-      review: Review
-      config: Config
-      update_to: Update to
-      latest: Latest
-      check_failed: Check failed
-      "yes": "Yes"
-      "no": "No"
-      not_allowed: Not allowed
-      allowed: Allowed
-      enabled: Enabled
-      disabled: Disabled
+      timezone: "时区："
+      system_info: 系统信息
+      storage_used: "已用存储空间："
+      uptime: "运行时间："
+      answer_links: 回答链接
+      documents: 文档
+      feedback: 用户反馈
+      review: 审查
+      config: 配置
+      update_to: 更新到
+      latest: 最新版本
+      check_failed: 校验失败
+      "yes": "是"
+      "no": "否"
+      not_allowed: 拒绝
+      allowed: 允许
+      enabled: 已启用
+      disabled: 停用
     flags:
       title: 举报
       pending: 等待处理
@@ -1003,9 +1003,9 @@ ui:
       btn_submit: 提交
       btn_next: 下一步
     user_role_modal:
-      title: Change user role to...
-      btn_cancel: Cancel
-      btn_submit: Submit
+      title: 更改用户状态为...
+      btn_cancel: 取消
+      btn_submit: 提交
     users:
       title: 用户
       name: 名称
@@ -1015,21 +1015,21 @@ ui:
       delete_at: 删除时间
       suspend_at: 封禁时间
       status: 状态
-      role: Role
+      role: 角色
       action: 操作
       change: 更改
       all: 全部
-      staff: Staff
+      staff: 工作人员
       inactive: 不活跃
       suspended: 已封禁
       deleted: 已删除
       normal: 正常
-      Moderator: Moderator
-      Admin: Admin
-      User: User
+      Moderator: 版主
+      Admin: 管理员
+      User: 用户
       filter:
-        placeholder: "Filter by name, user:id"
-      set_new_password: Set new password
+        placeholder: "按名称筛选，用户：id"
+      set_new_password: 设置新密码
       change_status: Change status
       change_role: Change role
       show_logs: Show logs
@@ -1183,39 +1183,39 @@ ui:
     not_found_props: "Required property {{ key }} not found."
   page_review:
     review: Review
-    proposed: proposed
-    question_edit: Question edit
-    answer_edit: Answer edit
-    tag_edit: Tag edit
-    edit_summary: Edit summary
-    edit_question: Edit question
-    edit_answer: Edit answer
-    edit_tag: Edit tag
-    empty: No review tasks left.
+    proposed: 提案
+    question_edit: 问题编辑
+    answer_edit: 回答编辑
+    tag_edit: '标签管理: 编辑标签'
+    edit_summary: 编辑汇总
+    edit_question: 编辑问题
+    edit_answer: 编辑回答
+    edit_tag: 编辑标签
+    empty: 没有剩余的审核任务。
   timeline:
-    undeleted: undeleted
-    deleted: deleted
-    downvote: downvote
-    upvote: upvote
-    accept: accept
-    cancelled: cancelled
-    commented: commented
-    rollback: rollback
-    edited: edited
-    answered: answered
-    asked: asked
-    closed: closed
-    reopened: reopened
-    created: created
-    title: "History for"
-    tag_title: "Timeline for"
-    show_votes: "Show votes"
+    undeleted: 取消删除
+    deleted: 删除
+    downvote: 反对
+    upvote: 赞同
+    accept: 采纳
+    cancelled: 已取消
+    commented: '评论:'
+    rollback: 回滚
+    edited: 最后编辑于
+    answered: 回答于
+    asked: 提问于
+    closed: 关闭
+    reopened: 重新开启
+    created: 创建于
+    title: "历史记录"
+    tag_title: "时间线"
+    show_votes: "显示投票"
     n_or_a: N/A
-    title_for_question: "Timeline for"
-    title_for_answer: "Timeline for answer to {{ title }} by {{ author }}"
-    title_for_tag: "Timeline for tag"
-    datetime: Datetime
-    type: Type
-    by: By
-    comment: Comment
-    no_data: "We couldn't find anything."
+    title_for_question: "时间线"
+    title_for_answer: "{{ title }} 的 {{ author }} 回答时间线"
+    title_for_tag: "时间线"
+    datetime: 日期时间
+    type: 类型
+    by: 由
+    comment: 评论
+    no_data: "空空如也"
