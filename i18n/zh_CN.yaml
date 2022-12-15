@@ -836,7 +836,7 @@ ui:
     db_type:
       label: Database Engine
     db_username:
-      label: Username
+      label: 用户名
       placeholder: root
       msg: Username cannot be empty.
     db_password:
