@@ -82,6 +82,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     handleSubmit();
   };
   const handleFocusForTextArea = () => {
+    setForceType('answer');
     setShowEditor(true);
   };
 
