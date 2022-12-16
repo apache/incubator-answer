@@ -838,42 +838,42 @@ ui:
     db_username:
       label: 用户名
       placeholder: root
-      msg: Username cannot be empty.
+      msg: 用户名不能为空
     db_password:
       label: 密码
       placeholder: root
-      msg: Password cannot be empty.
+      msg: 密码不能为空
     db_host:
-      label: Database Host
+      label: 数据库服务器地址
       placeholder: "db: 3306"
       msg: 数据库地址不能为空
     db_name:
       label: 数据库名
       placeholder: answer
-      msg: Database Name cannot be empty.
+      msg: 数据库名称不能为空。
     db_file:
       label: Database File
       placeholder: /data/answer.db
-      msg: Database File cannot be empty.
+      msg: 数据库文件不能为空。
     config_yaml:
-      title: Create config.yaml
-      label: The config.yaml file created.
+      title: 创建 config.yaml
+      label: 已创建 config.yaml 文件。
       description: >-
-        You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
-      info: "After you’ve done that, click “Next” button."
-    site_information: Site Information
-    admin_account: Admin Account
+        您可以手动在 <1>/var/wwww/xxx/</1> 目录中创建<1>config.yaml</1> 文件并粘贴以下文本。
+      info: "完成后，点击“下一步”按钮。"
+    site_information: 站点信息
+    admin_account: 管理员帐户
     site_name:
-      label: Site Name
-      msg: Site Name cannot be empty.
+      label: 站点名称
+      msg: 站点名称不能为空。
     site_url:
-      label: Site URL
+      label: 站点地址（URL）
       text: The address of your site.
       msg:
-        empty: Site URL cannot be empty.
-        incorrect: Site URL incorrect format.
+        empty: 站点URL不能为空。
+        incorrect: 站点URL格式不正确。
     contact_email:
-      label: Contact Email
+      label: 联系邮箱
       text: Email address of key contact responsible for this site.
       msg:
         empty: Contact Email cannot be empty.
@@ -1030,9 +1030,9 @@ ui:
       filter:
         placeholder: "按名称筛选，用户：id"
       set_new_password: 设置新密码
-      change_status: Change status
-      change_role: Change role
-      show_logs: Show logs
+      change_status: 更改状态
+      change_role: 更改角色
+      show_logs: 显示日志
     questions:
       page_title: 问题
       normal: 正常
