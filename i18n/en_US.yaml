@@ -732,6 +732,7 @@ ui:
     write_answer:
       title: Your Answer
       btn_name: Post your answer
+      add_another_answer: Add another answer
       confirm_title: Continue to answer
       continue: Continue
       confirm_info: >-
