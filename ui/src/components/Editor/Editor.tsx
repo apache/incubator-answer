@@ -19,6 +19,7 @@ const Editor = ({
   onBlur,
   editorPlaceholder,
   getEditorInstance,
+  autoFocus,
 }) => {
   const elRef = useRef<HTMLDivElement>(null);
   const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
@@ -38,6 +39,9 @@ const Editor = ({
           lineWrapping: true,
           placeholder: editorPlaceholder,
         });
+        if (autoFocus) {
+          cm.focus();
+        }
         cm.on('change', (e) => {
           const newValue = e.getValue();
           eventRef.current?.onChange?.(newValue);
