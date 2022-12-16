@@ -118,13 +118,7 @@ const Header: FC = () => {
           {/* mobile nav */}
           <div className="d-flex lg-none align-items-center flex-lg-nowrap">
             {user?.username ? (
-              <Nav className="flex-row">
-                <NavItems
-                  redDot={redDot}
-                  userInfo={user}
-                  logOut={handleLogout}
-                />
-              </Nav>
+              <NavItems redDot={redDot} userInfo={user} logOut={handleLogout} />
             ) : (
               <>
                 <Button variant="link" className="me-2" href="/users/login">
