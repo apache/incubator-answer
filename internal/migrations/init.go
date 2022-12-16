@@ -73,6 +73,10 @@ func InitDB(dataConf *data.Database) (err error) {
 	if err != nil {
 		return fmt.Errorf("sync table failed: %s", err)
 	}
+	_, err = engine.InsertOne(&entity.Version{ID: 1, VersionNumber: ExpectedVersion()})
+	if err != nil {
+		return fmt.Errorf("init version table failed: %s", err)
+	}
 
 	err = initAdminUser(engine)
 	if err != nil {
