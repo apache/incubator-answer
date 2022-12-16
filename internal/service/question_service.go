@@ -1044,9 +1044,6 @@ func (qs *QuestionService) SitemapCron(ctx context.Context) {
 	if setCacheErr := qs.SetCache(ctx, schema.SitemapCachekey, data); setCacheErr != nil {
 		log.Errorf("set sitemap cron SetCache failed: %s", setCacheErr)
 	}
-
-	return
-
 }
 
 func (qs *QuestionService) SetCache(ctx context.Context, cachekey string, info interface{}) error {

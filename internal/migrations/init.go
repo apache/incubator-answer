@@ -116,6 +116,9 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 		Content: string(generalDataBytes),
 		Status:  1,
 	})
+	if err != nil {
+		return err
+	}
 
 	loginConfig := map[string]bool{
 		"allow_new_registrations": true,

@@ -277,6 +277,9 @@ func (es *EmailService) TestTemplate(ctx context.Context) (title, body string, e
 		return "", "", fmt.Errorf("email test body template parse error: %s", err)
 	}
 	tmpl, err = template.New("test_body").Parse(ec.TestBody)
+	if err != nil {
+		return "", "", fmt.Errorf("test_body template parse error: %s", err)
+	}
 	err = tmpl.Execute(bodyBuf, templateData)
 	if err != nil {
 		return "", "", err

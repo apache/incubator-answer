@@ -162,6 +162,9 @@ func (ts *TagCommonService) SetTagsAttribute(ctx context.Context, tags []string,
 	default:
 		return
 	}
+	if err != nil {
+		return err
+	}
 	err = ts.tagCommonRepo.UpdateTagsAttribute(ctx, tagslist, attribute, false)
 	if err != nil {
 		return err
@@ -439,7 +442,7 @@ func (ts *TagCommonService) CheckTagsIsChange(ctx context.Context, tagNameList, 
 		check[item] = true
 	}
 	for _, value := range check {
-		if value == false {
+		if !value {
 			return true
 		}
 	}

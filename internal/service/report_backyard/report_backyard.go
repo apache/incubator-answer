@@ -2,6 +2,7 @@ package report_backyard
 
 import (
 	"context"
+
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/pkg/htmltext"
 
@@ -84,9 +85,15 @@ func (rs *ReportBackyardService) ListReportPage(ctx context.Context, dto schema.
 
 	// flagged users
 	flaggedUsers, err = rs.commonUser.BatchUserBasicInfoByID(ctx, flaggedUserIds)
+	if err != nil {
+		return nil, err
+	}
 
 	// flag users
 	users, err = rs.commonUser.BatchUserBasicInfoByID(ctx, userIds)
+	if err != nil {
+		return nil, err
+	}
 	for _, r := range resp {
 		r.ReportedUser = flaggedUsers[r.ReportedUserID]
 		r.ReportUser = users[r.UserID]
