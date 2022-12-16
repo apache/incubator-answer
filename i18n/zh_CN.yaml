@@ -840,15 +840,15 @@ ui:
       placeholder: root
       msg: Username cannot be empty.
     db_password:
-      label: Password
+      label: 密码
       placeholder: root
       msg: Password cannot be empty.
     db_host:
       label: Database Host
-      placeholder: "db:3306"
-      msg: Database Host cannot be empty.
+      placeholder: "db: 3306"
+      msg: 数据库地址不能为空
     db_name:
-      label: Database Name
+      label: 数据库名
       placeholder: answer
       msg: Database Name cannot be empty.
     db_file:
