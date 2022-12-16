@@ -5,6 +5,7 @@ import (
 
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/pkg/htmltext"
+	"github.com/segmentfault/pacman/log"
 
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -106,13 +107,13 @@ func (rs *ReportBackyardService) ListReportPage(ctx context.Context, dto schema.
 // HandleReported handle the reported object
 func (rs *ReportBackyardService) HandleReported(ctx context.Context, req schema.ReportHandleReq) (err error) {
 	var (
-		reported   = entity.Report{}
+		reported   *entity.Report
 		handleData = entity.Report{
 			FlaggedContent: req.FlaggedContent,
 			FlaggedType:    req.FlaggedType,
 			Status:         entity.ReportStatusCompleted,
 		}
-		exist = false
+		exist bool
 	)
 
 	reported, exist, err = rs.reportRepo.GetByID(ctx, req.ID)
@@ -159,6 +160,7 @@ func (rs *ReportBackyardService) parseObject(ctx context.Context, resp *[]*schem
 
 		objIds, err = rs.commonRepo.GetObjectIDMap(r.ObjectID)
 		if err != nil {
+			log.Error(err)
 			continue
 		}
 
@@ -175,11 +177,19 @@ func (rs *ReportBackyardService) parseObject(ctx context.Context, resp *[]*schem
 		answerId, ok = objIds["answer"]
 		if ok {
 			answer, _, err = rs.answerRepo.GetAnswer(ctx, answerId)
+			if err != nil {
+				log.Error(err)
+				continue
+			}
 		}
 
 		commentId, ok = objIds["comment"]
 		if ok {
 			cmt, _, err = rs.commentCommonRepo.GetComment(ctx, commentId)
+			if err != nil {
+				log.Error(err)
+				continue
+			}
 		}
 
 		switch r.OType {
@@ -208,15 +218,20 @@ func (rs *ReportBackyardService) parseObject(ctx context.Context, resp *[]*schem
 				ReasonType: r.ReportType,
 			}
 			err = rs.configRepo.GetJsonConfigByIDAndSetToObject(r.ReportType, r.Reason)
+			if err != nil {
+				log.Error(err)
+			}
 		}
 		if r.FlaggedType > 0 {
 			r.FlaggedReason = &schema.ReasonItem{
 				ReasonType: r.FlaggedType,
 			}
-			_ = rs.configRepo.GetJsonConfigByIDAndSetToObject(r.FlaggedType, r.FlaggedReason)
+			err = rs.configRepo.GetJsonConfigByIDAndSetToObject(r.FlaggedType, r.FlaggedReason)
+			if err != nil {
+				log.Error(err)
+			}
 		}
 
 		res[i] = r
 	}
-	resp = &res
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/pacman/log"
 )
 
 type AvatarMiddleware struct {
@@ -52,7 +53,10 @@ func (am *AvatarMiddleware) AvatarThumb() gin.HandlerFunc {
 				ctx.Next()
 				return
 			}
-			ctx.Writer.WriteString(string(avatarfile))
+			_, err = ctx.Writer.WriteString(string(avatarfile))
+			if err != nil {
+				log.Error(err)
+			}
 			ctx.Abort()
 			return
 

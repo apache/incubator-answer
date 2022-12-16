@@ -15,6 +15,7 @@ import (
 	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 // UserController user controller
@@ -294,11 +295,13 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
-
 		return
 	}
-	uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
-	err := uc.userService.UserVerifyEmailSend(ctx, userInfo.UserID)
+	_, err := uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
+	if err != nil {
+		log.Error(err)
+	}
+	err = uc.userService.UserVerifyEmailSend(ctx, userInfo.UserID)
 	handler.HandleResponse(ctx, err, nil)
 }
 

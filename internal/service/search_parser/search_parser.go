@@ -318,7 +318,7 @@ func (sp *SearchParser) parseAccepted(query *string) (accepted bool) {
 
 	if strings.Contains(q, expr) {
 		accepted = true
-		strings.ReplaceAll(q, expr, "")
+		q = strings.ReplaceAll(q, expr, "")
 	}
 
 	*query = strings.TrimSpace(q)

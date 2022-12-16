@@ -32,7 +32,7 @@ func NewReportHandle(
 }
 
 // HandleObject this handle object status
-func (rh *ReportHandle) HandleObject(ctx context.Context, reported entity.Report, req schema.ReportHandleReq) (err error) {
+func (rh *ReportHandle) HandleObject(ctx context.Context, reported *entity.Report, req schema.ReportHandleReq) (err error) {
 	var (
 		objectID        = reported.ObjectID
 		reportedUserID  = reported.ReportedUserID

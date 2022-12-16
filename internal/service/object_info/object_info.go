@@ -148,6 +148,9 @@ func (os *ObjService) GetInfo(ctx context.Context, objectID string) (objInfo *sc
 		if err != nil {
 			return nil, err
 		}
+		if !exist {
+			break
+		}
 		objInfo = &schema.SimpleObjectInfo{
 			ObjectID:            answerInfo.ID,
 			ObjectCreatorUserID: answerInfo.UserID,
