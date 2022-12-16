@@ -100,7 +100,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
             <div className="d-flex">
               <TextArea
                 className="w-100"
-                rows={12}
+                rows={8}
                 autoFocus={false}
                 onFocus={handleFocusForTextArea}
               />
@@ -113,6 +113,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
                 focusType === 'answer' && 'focus',
               )}
               value={formData.content.value}
+              autoFocus
               onChange={(val) => {
                 setFormData({
                   content: {
