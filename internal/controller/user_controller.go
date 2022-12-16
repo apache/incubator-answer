@@ -198,6 +198,10 @@ func (uc *UserController) UseRePassWord(ctx *gin.Context) {
 // @Router /answer/api/v1/user/logout [get]
 func (uc *UserController) UserLogout(ctx *gin.Context) {
 	accessToken := middleware.ExtractToken(ctx)
+	if len(accessToken) == 0 {
+		handler.HandleResponse(ctx, nil, nil)
+		return
+	}
 	_ = uc.authService.RemoveUserCacheInfo(ctx, accessToken)
 	handler.HandleResponse(ctx, nil, nil)
 }
