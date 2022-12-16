@@ -1,5 +1,4 @@
 import { FC, memo } from 'react';
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { pathFactory } from '@/router/pathFactory';
@@ -12,11 +11,11 @@ interface Props {
 const Index: FC<Props> = ({ data, type }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'personal' });
   return (
-    <ListGroup variant="flush" className="mb-4">
+    <ol className="mb-4 list-unstyled">
       {data?.map((item) => {
         return (
-          <ListGroupItem
-            className="p-0 border-0 mb-2"
+          <li
+            className="mb-2"
             key={type === 'answer' ? item.answer_id : item.question_id}>
             <a
               href={
@@ -58,10 +57,10 @@ const Index: FC<Props> = ({ data, type }) => {
                 <span> {t('accepted')}</span>
               </div>
             )}
-          </ListGroupItem>
+          </li>
         );
       })}
-    </ListGroup>
+    </ol>
   );
 };
 
