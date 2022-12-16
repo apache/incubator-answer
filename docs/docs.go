@@ -6944,6 +6944,9 @@ const docTemplate = `{
                 "login": {
                     "$ref": "#/definitions/schema.SiteLoginResp"
                 },
+                "siteseo": {
+                    "$ref": "#/definitions/schema.SiteSeoReq"
+                },
                 "theme": {
                     "$ref": "#/definitions/schema.SiteThemeResp"
                 }
