@@ -102,6 +102,7 @@ type QuestionBaseInfo struct {
 type QuestionInfo struct {
 	ID                   string         `json:"id" `
 	Title                string         `json:"title" xorm:"title"`                         // title
+	UrlTitle             string         `json:"url_title" xorm:"url_title"`                 // title
 	Content              string         `json:"content" xorm:"content"`                     // content
 	HTML                 string         `json:"html" xorm:"html"`                           // html
 	Description          string         `json:"description"`                                //description

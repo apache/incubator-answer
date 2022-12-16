@@ -30,8 +30,8 @@ changelog:
 # modelines, feel free to remove those if you don't want/use them:
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
-
-# sudo apt-get install build-essential 
+# sqlite3 need cgo to build
+# sudo apt-get install build-essential
 # sudo apt-get install gcc-multilib g++-multilib
 # sudo apt-get install gcc-mingw-w64
 # sudo apt-get -y install gcc-aarch64-linux-gnu
