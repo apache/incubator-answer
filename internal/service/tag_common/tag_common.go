@@ -212,6 +212,9 @@ func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.T
 // GetObjectTag get object tag
 func (ts *TagCommonService) GetObjectTag(ctx context.Context, objectId string) (objTags []*schema.TagResp, err error) {
 	tagsInfoList, err := ts.GetObjectEntityTag(ctx, objectId)
+	if err != nil {
+		return nil, err
+	}
 	return ts.TagFormat(ctx, tagsInfoList)
 }
 

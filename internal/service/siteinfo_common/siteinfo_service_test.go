@@ -1,6 +1,7 @@
 package siteinfo_common
 
 import (
+	"context"
 	"testing"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -25,7 +26,7 @@ func TestSiteInfoCommonService_GetSiteGeneral(t *testing.T) {
 	defer ctl.Finish()
 	mockInit(ctl)
 	siteInfoCommonService := NewSiteInfoCommonService(mockSiteInfoRepo)
-	resp, err := siteInfoCommonService.GetSiteGeneral(nil)
+	resp, err := siteInfoCommonService.GetSiteGeneral(context.TODO())
 	assert.NoError(t, err)
 	assert.Equal(t, resp.Name, "name")
 }

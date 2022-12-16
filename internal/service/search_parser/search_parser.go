@@ -191,7 +191,7 @@ func (sp *SearchParser) parseUserID(query *string, currentUserID string) (userID
 	res := re.FindStringSubmatch(q)
 	if len(res) == 2 {
 		name := res[1]
-		user, has, err := sp.userCommon.GetUserBasicInfoByUserName(nil, name)
+		user, has, err := sp.userCommon.GetUserBasicInfoByUserName(context.TODO(), name)
 		if err == nil && has {
 			userID = user.ID
 			q = re.ReplaceAllString(q, "")
