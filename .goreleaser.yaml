@@ -1,0 +1,38 @@
+# This is an example .goreleaser.yml file with some sensible defaults.
+# Make sure to check the documentation at https://goreleaser.com
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod tidy
+builds:
+  - env:
+      - CGO_ENABLED=1
+      - CC=aarch64-linux-gnu-gcc
+      - CXX=aarch64-linux-gnu-g++
+    main: ./cmd/answer/.
+    goos:
+      - linux
+archives:
+  - replacements:
+      linux: Linux
+      amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Version }}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+# modelines, feel free to remove those if you don't want/use them:
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# vim: set ts=2 sw=2 tw=0 fo=cnqoj
+# sqlite3 need cgo to build
+# sudo apt-get install build-essential
+# sudo apt-get install gcc-multilib g++-multilib
+# sudo apt-get install gcc-mingw-w64
+# sudo apt-get -y install gcc-aarch64-linux-gnu
+# goreleaser release --snapshot --rm-dist
