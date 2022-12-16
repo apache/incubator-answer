@@ -2,7 +2,7 @@
 backend:
   base:
     success:
-      other: "Success."
+      other: "成功!"
     unknown:
       other: "Unknown error."
     request_format_error:
