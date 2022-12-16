@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/url"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -44,7 +44,7 @@ func (am *AvatarMiddleware) AvatarThumb() gin.HandlerFunc {
 			filePath := fmt.Sprintf("%s/avatar/%s", uploadPath, urlfileName)
 			var avatarfile []byte
 			if size == 0 {
-				avatarfile, err = ioutil.ReadFile(filePath)
+				avatarfile, err = os.ReadFile(filePath)
 			} else {
 				avatarfile, err = am.uploaderService.AvatarThumbFile(ctx, uploadPath, urlfileName, size)
 			}
