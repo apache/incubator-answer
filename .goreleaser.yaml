@@ -2,9 +2,9 @@ before:
   hooks:
     - go mod tidy
 builds:
-  - id: build-linux
+  - id: build-amd64
     main: ./cmd/answer/.
-    binary: PrometheusAlert
+    binary: answer
     ldflags: -s -w -X main.Version=${{.Version}} -X main.Revision={{.ShortCommit}} -X main.BuildDate={{.Date}} -X main.BuildUser=goreleaser
     goos:
       - darwin
@@ -14,7 +14,7 @@ builds:
   # linux windows need cgomingw64-gcc
   - id: build-windows
     main: ./cmd/answer/.
-    binary: PrometheusAlert
+    binary: answer
     ldflags: -s -w -X main.Version=${{.Version}} -X main.Revision={{.ShortCommit}} -X main.BuildDate={{.Date}} -X main.BuildUser=goreleaser
     env:
       - CC=x86_64-w64-mingw32-gcc
@@ -24,9 +24,9 @@ builds:
     goarch:
       - amd64
     # linux arm64 need cgo arm64
-  - id: build-arm
+  - id: build-arm64
     main: ./cmd/answer/.
-    binary: PrometheusAlert
+    binary: answer
     ldflags: -s -w -X main.Version=${{.Version}} -X main.Revision={{.ShortCommit}} -X main.BuildDate={{.Date}} -X main.BuildUser=goreleaser
     env:
       - CC=aarch64-linux-gnu-gcc
@@ -51,3 +51,10 @@ changelog:
     exclude:
       - '^docs:'
       - '^test:'
+
+
+# sudo apt-get install build-essential 
+# sudo apt-get install gcc-multilib g++-multilib
+# sudo apt-get install gcc-mingw-w64
+# sudo apt-get -y install gcc-aarch64-linux-gnu
+# goreleaser release --snapshot --rm-dist
