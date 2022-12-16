@@ -5,7 +5,7 @@ builds:
   - id: build-amd64
     main: ./cmd/answer/.
     binary: answer
-    ldflags: -s -w -X main.Version=${{.Version}} -X main.Revision={{.ShortCommit}} -X main.BuildDate={{.Date}} -X main.BuildUser=goreleaser
+    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
     goos:
       - darwin
       - linux
@@ -15,7 +15,7 @@ builds:
   - id: build-windows
     main: ./cmd/answer/.
     binary: answer
-    ldflags: -s -w -X main.Version=${{.Version}} -X main.Revision={{.ShortCommit}} -X main.BuildDate={{.Date}} -X main.BuildUser=goreleaser
+    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
     env:
       - CC=x86_64-w64-mingw32-gcc
       - CXX=x86_64-w64-mingw32-g++
@@ -27,7 +27,7 @@ builds:
   - id: build-arm64
     main: ./cmd/answer/.
     binary: answer
-    ldflags: -s -w -X main.Version=${{.Version}} -X main.Revision={{.ShortCommit}} -X main.BuildDate={{.Date}} -X main.BuildUser=goreleaser
+    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
     env:
       - CC=aarch64-linux-gnu-gcc
       - CXX=aarch64-linux-gnu-g++
