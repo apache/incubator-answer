@@ -30,7 +30,7 @@ const HotQuestions: FC = () => {
             <ListGroupItem
               key={li.id}
               as={Link}
-              to={pathFactory.questionLanding(li.id, li.title)}
+              to={pathFactory.questionLanding(li.id, li.url_title)}
               action>
               <div className="link-dark">{li.title}</div>
               {li.answer_count > 0 ? (

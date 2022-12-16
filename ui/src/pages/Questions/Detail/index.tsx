@@ -178,6 +178,7 @@ const Index = () => {
                     key={item?.id}
                     data={item}
                     questionTitle={question?.title || ''}
+                    slugTitle={question?.url_title}
                     isAuthor={isAuthor}
                     callback={initPage}
                     isLogged={isLogged}

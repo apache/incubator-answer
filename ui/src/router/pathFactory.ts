@@ -1,6 +1,5 @@
 import urlcat from 'urlcat';
 
-import Pattern from '@/common/pattern';
 import { seoSettingStore } from '@/stores';
 
 const tagLanding = (slugName: string) => {
@@ -20,30 +19,25 @@ const tagInfo = (slugName: string) => {
 const tagEdit = (tagId: string) => {
   return urlcat('/tags/:tagId/edit', { tagId });
 };
-const questionLanding = (questionId: string, title: string = '') => {
+const questionLanding = (questionId: string, slugTitle: string = '') => {
   const { seo } = seoSettingStore.getState();
-  if (seo.permalink === 1) {
-    title = title.toLowerCase();
-    title = title.trim().replace(/\s+/g, '-');
-    title = title.replace(Pattern.emoji, '');
-    if (title) {
-      return urlcat('/questions/:questionId/:slugPermalink', {
-        questionId,
-        slugPermalink: title,
-      });
-    }
+  if (seo.permalink === 1 && slugTitle) {
+    return urlcat('/questions/:questionId/:slugPermalink', {
+      questionId,
+      slugPermalink: slugTitle,
+    });
   }
 
   return urlcat('/questions/:questionId', { questionId });
 };
 const answerLanding = (params: {
   questionId: string;
-  questionTitle?: string;
+  slugTitle?: string;
   answerId: string;
 }) => {
   const questionLandingUrl = questionLanding(
     params.questionId,
-    params.questionTitle,
+    params.slugTitle,
   );
   return urlcat(`${questionLandingUrl}/:answerId`, {
     answerId: params.answerId,

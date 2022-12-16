@@ -13,21 +13,25 @@ interface IProps {
   qid: any;
   aid?: any;
   title: string;
+  slugTitle: string;
 }
 
-const Index: FC<IProps> = ({ type, qid, aid, title }) => {
+const Index: FC<IProps> = ({ type, qid, aid, title, slugTitle = '' }) => {
   const user = loggedUserInfoStore((state) => state.user);
   const [show, setShow] = useState(false);
   const [showTip, setShowTip] = useState(false);
   const [canSystemShare, setSystemShareState] = useState(false);
   const { t } = useTranslation();
-
+  //  FIXME: pathFactory
   let baseUrl =
     type === 'question'
-      ? `${window.location.origin}${pathFactory.questionLanding(qid, title)}`
+      ? `${window.location.origin}${pathFactory.questionLanding(
+          qid,
+          slugTitle,
+        )}`
       : `${window.location.origin}${pathFactory.answerLanding({
           questionId: qid,
-          questionTitle: title,
+          slugTitle,
           answerId: aid,
         })}`;
   if (user.id) {

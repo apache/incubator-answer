@@ -29,7 +29,7 @@ const SearchQuestion = ({ similarQuestions }) => {
                   as="a"
                   className="link-dark"
                   key={item.id}
-                  href={pathFactory.questionLanding(item.id, item.title)}
+                  href={pathFactory.questionLanding(item.id, item.url_title)}
                   target="_blank">
                   <span className="text-wrap text-break">
                     {item.title}

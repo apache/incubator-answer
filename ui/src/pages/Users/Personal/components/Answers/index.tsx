@@ -23,7 +23,7 @@ const Index: FC<Props> = ({ visible, data }) => {
               <a
                 href={pathFactory.answerLanding({
                   questionId: item.question_id,
-                  questionTitle: item.question_info?.title,
+                  slugTitle: item.question_info?.url_title,
                   answerId: item.answer_id,
                 })}
                 className="text-break">

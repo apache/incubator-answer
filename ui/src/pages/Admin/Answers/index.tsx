@@ -130,7 +130,7 @@ const Answers: FC = () => {
                       <a
                         href={pathFactory.answerLanding({
                           questionId: li.question_id,
-                          questionTitle: li.question_info.title,
+                          slugTitle: li.question_info.url_title,
                           answerId: li.id,
                         })}
                         target="_blank"
