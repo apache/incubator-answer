@@ -66,6 +66,9 @@ const Index: FC = () => {
               .form-check-input:focus {
                 box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), .4);
               }
+              .dropdown-menu {
+                --bs-dropdown-link-active-bg: rgb(var(--bs-primary-rgb));
+              }
             `}
         </style>
       )}
