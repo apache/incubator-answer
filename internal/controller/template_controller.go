@@ -426,7 +426,6 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	if !ok {
 		data["path"] = ""
 	}
-
 	ctx.HTML(code, tpl, data)
 }
 
