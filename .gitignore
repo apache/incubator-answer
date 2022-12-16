@@ -23,3 +23,5 @@ tmp
 vendor/
 /answer-data/
 /answer
+
+dist/
