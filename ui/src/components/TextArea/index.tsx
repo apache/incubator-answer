@@ -1,7 +1,9 @@
 import { FC, useRef, useEffect, memo } from 'react';
 import { FormControl, FormControlProps } from 'react-bootstrap';
 
-const TextArea: FC<FormControlProps> = ({ value, onChange, size }) => {
+const TextArea: FC<
+  FormControlProps & { rows?: number; autoFocus?: boolean }
+> = ({ value, onChange, size, rows = 1, autoFocus = true, ...rest }) => {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   const autoGrow = () => {
@@ -21,13 +23,14 @@ const TextArea: FC<FormControlProps> = ({ value, onChange, size }) => {
     <FormControl
       as="textarea"
       className="resize-none font-monospace"
-      rows={1}
+      rows={rows}
       size={size}
       value={value}
       onChange={onChange}
-      autoFocus
+      autoFocus={autoFocus}
       ref={ref}
       onInput={autoGrow}
+      {...rest}
     />
   );
 };

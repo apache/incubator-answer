@@ -128,6 +128,13 @@ const Index = () => {
       count: answers.count + 1,
       list: [...answers.list, obj],
     });
+
+    if (question) {
+      setQuestion({
+        ...question,
+        answered: true,
+      });
+    }
   };
 
   useEffect(() => {
