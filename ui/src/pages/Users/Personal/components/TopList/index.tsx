@@ -23,10 +23,13 @@ const Index: FC<Props> = ({ data, type }) => {
                 type === 'answer'
                   ? pathFactory.answerLanding({
                       questionId: item.question_id,
-                      questionTitle: item.question_info?.title,
+                      slugTitle: item.question_info?.url_title,
                       answerId: item.answer_id,
                     })
-                  : pathFactory.questionLanding(item.question_id, item.title)
+                  : pathFactory.questionLanding(
+                      item.question_id,
+                      item.url_title,
+                    )
               }>
               {type === 'answer' ? item.question_info.title : item.title}
             </a>

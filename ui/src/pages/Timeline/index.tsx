@@ -48,7 +48,7 @@ const Index: FC = () => {
   if (timelineData?.object_info.object_type === 'question') {
     linkUrl = pathFactory.questionLanding(
       timelineData?.object_info.question_id,
-      timelineData?.object_info.title,
+      timelineData?.object_info.url_title,
     );
     pageTitle = `${t('title_for_question')} ${timelineData?.object_info.title}`;
   }
@@ -56,7 +56,7 @@ const Index: FC = () => {
   if (timelineData?.object_info.object_type === 'answer') {
     linkUrl = pathFactory.answerLanding({
       questionId: timelineData?.object_info.question_id,
-      questionTitle: timelineData?.object_info.title,
+      slugTitle: timelineData?.object_info.url_title,
       answerId: timelineData?.object_info.answer_id,
     });
     pageTitle = `${t('title_for_answer', {

@@ -102,7 +102,7 @@ const Flags: FC = () => {
                     <a
                       href={pathFactory.questionLanding(
                         li.question_id,
-                        li.title,
+                        li.url_title,
                       )}
                       target="_blank"
                       className="text-wrap text-break mt-2"

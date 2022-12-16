@@ -54,6 +54,7 @@ export interface TagInfo extends TagBase {
 }
 export interface QuestionParams {
   title: string;
+  url_title?: string;
   content: string;
   html: string;
   tags: Tag[];
@@ -396,6 +397,7 @@ export interface SearchParams {
 export interface SearchResItem {
   object_type: string;
   object: {
+    url_title?: string;
     id: string;
     question_id?: string;
     title: string;
@@ -455,6 +457,7 @@ export interface TimelineItem {
 
 export interface TimelineObject {
   title: string;
+  url_title?: string;
   object_type: string;
   question_id: string;
   answer_id: string;
@@ -470,6 +473,7 @@ export interface TimelineRes {
 export interface ReviewItem {
   type: 'question' | 'answer' | 'tag';
   info: {
+    url_title?: string;
     object_id: string;
     title: string;
     content: string;

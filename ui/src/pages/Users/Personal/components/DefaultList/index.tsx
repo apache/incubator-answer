@@ -29,7 +29,7 @@ const Index: FC<Props> = ({ visible, tabName, data }) => {
                 className="text-break"
                 href={pathFactory.questionLanding(
                   tabName === 'questions' ? item.question_id : item.id,
-                  item.title,
+                  item.url_title,
                 )}>
                 {item.title}
                 {tabName === 'questions' && item.status === 'closed'

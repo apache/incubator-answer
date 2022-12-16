@@ -95,7 +95,7 @@ const Index: FC = () => {
   const editor = unreviewed_info?.user_info;
   const editTime = unreviewed_info?.create_at;
   if (type === 'question') {
-    itemLink = pathFactory.questionLanding(info?.object_id, info?.title);
+    itemLink = pathFactory.questionLanding(info?.object_id, info?.url_title);
     itemTitle = info?.title;
     editBadge = t('question_edit');
     editSummary ||= t('edit_question');
@@ -103,7 +103,7 @@ const Index: FC = () => {
     itemLink = pathFactory.answerLanding({
       // @ts-ignore
       questionId: unreviewed_info.content.question_id,
-      questionTitle: info?.title,
+      slugTitle: info?.url_title,
       answerId: unreviewed_info.object_id,
     });
     itemTitle = info?.title;

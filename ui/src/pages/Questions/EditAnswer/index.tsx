@@ -115,7 +115,7 @@ const Index = () => {
       navigate(
         pathFactory.answerLanding({
           questionId: qid,
-          questionTitle: data?.question?.title,
+          slugTitle: data?.question?.url_title,
           answerId: aid,
         }),
         {
@@ -147,7 +147,7 @@ const Index = () => {
       <Row className="justify-content-center">
         <Col xxl={7} lg={8} sm={12} className="mb-4 mb-md-0">
           <a
-            href={pathFactory.questionLanding(qid, data?.question.title)}
+            href={pathFactory.questionLanding(qid, data?.question.url_title)}
             target="_blank"
             rel="noreferrer">
             <h5 className="mb-3">{data?.question.title}</h5>
