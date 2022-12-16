@@ -2,6 +2,7 @@
 @import 'bootstrap/scss/variables';
 #header {
   --bs-navbar-padding-y: 0.75rem;
+  background: linear-gradient(180deg, rgb(var(--bs-primary-rgb)) 0%, rgba(var(--bs-primary-rgb), 0.95) 100%);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15), 0 0.125rem 0.25rem rgb(0 0 0 / 8%);
   .logo {
     max-height: 1.75rem;
@@ -48,6 +49,11 @@
         color: rgba(255, 255, 255, 0.75);
       }
     }
+  }
+
+  // style for colored navbar
+  &.theme-light {
+    background: linear-gradient(180deg, rgb(var(--bs-light-rgb)) 0%, rgba(var(--bs-light-rgb), 0.95) 100%);
   }
 }
 
