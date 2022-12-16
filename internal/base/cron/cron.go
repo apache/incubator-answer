@@ -7,6 +7,7 @@ import (
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/robfig/cron/v3"
+	"github.com/segmentfault/pacman/log"
 )
 
 // ScheduledTaskManager scheduled task manager
@@ -31,10 +32,13 @@ func (s *ScheduledTaskManager) Run() {
 	fmt.Println("start cron")
 	s.questionService.SitemapCron(context.Background())
 	c := cron.New()
-	c.AddFunc("0 */1 * * *", func() {
+	_, err := c.AddFunc("0 */1 * * *", func() {
 		ctx := context.Background()
 		fmt.Println("sitemap cron execution")
 		s.questionService.SitemapCron(ctx)
 	})
+	if err != nil {
+		log.Error(err)
+	}
 	c.Start()
 }

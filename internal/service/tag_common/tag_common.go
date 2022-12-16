@@ -162,6 +162,9 @@ func (ts *TagCommonService) SetTagsAttribute(ctx context.Context, tags []string,
 	default:
 		return
 	}
+	if err != nil {
+		return err
+	}
 	err = ts.tagCommonRepo.UpdateTagsAttribute(ctx, tagslist, attribute, false)
 	if err != nil {
 		return err
@@ -212,6 +215,9 @@ func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.T
 // GetObjectTag get object tag
 func (ts *TagCommonService) GetObjectTag(ctx context.Context, objectId string) (objTags []*schema.TagResp, err error) {
 	tagsInfoList, err := ts.GetObjectEntityTag(ctx, objectId)
+	if err != nil {
+		return nil, err
+	}
 	return ts.TagFormat(ctx, tagsInfoList)
 }
 
@@ -436,7 +442,7 @@ func (ts *TagCommonService) CheckTagsIsChange(ctx context.Context, tagNameList, 
 		check[item] = true
 	}
 	for _, value := range check {
-		if value == false {
+		if !value {
 			return true
 		}
 	}

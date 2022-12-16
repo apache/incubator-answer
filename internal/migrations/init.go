@@ -11,6 +11,23 @@ import (
 	"xorm.io/xorm"
 )
 
+const (
+	defaultSEORobotTxt = `User-agent: *
+Disallow: /admin
+Disallow: /search
+Disallow: /install
+Disallow: /review
+Disallow: /users/login
+Disallow: /users/register
+Disallow: /users/account-recovery
+Disallow: /users/oauth/*
+Disallow: /users/*/*
+Disallow: /answer/api
+Disallow: /*?code*
+
+Sitemap: `
+)
+
 var tables = []interface{}{
 	&entity.Activity{},
 	&entity.Answer{},
@@ -116,6 +133,9 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 		Content: string(generalDataBytes),
 		Status:  1,
 	})
+	if err != nil {
+		return err
+	}
 
 	loginConfig := map[string]bool{
 		"allow_new_registrations": true,
@@ -127,6 +147,19 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 		Content: string(loginConfigDataBytes),
 		Status:  1,
 	})
+
+	seoData := map[string]string{
+		"robots": defaultSEORobotTxt + siteURL + "/sitemap.xml",
+	}
+	seoDataBytes, _ := json.Marshal(seoData)
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "seo",
+		Content: string(seoDataBytes),
+		Status:  1,
+	})
+	if err != nil {
+		return err
+	}
 	return err
 }
 

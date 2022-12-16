@@ -170,7 +170,6 @@ func (ar *authRepo) RemoveAllUserTokens(ctx context.Context, userID string) {
 	if err := ar.data.Cache.Del(ctx, key); err != nil {
 		log.Error(err)
 	}
-	return
 }
 
 // NewAuthRepo new repository

@@ -108,7 +108,7 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 	}
 
 	siteInfo := tc.SiteInfo(ctx)
-	siteInfo.Canonical = fmt.Sprintf("%s", siteInfo.General.SiteUrl)
+	siteInfo.Canonical = siteInfo.General.SiteUrl
 
 	UrlUseTitle := false
 	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionIDAndTitle {

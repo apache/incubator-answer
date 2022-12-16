@@ -49,7 +49,7 @@ func (sp *SearchParser) ParseStructure(dto *schema.SearchDTO) (
 		all           = 0
 		q             = 0
 		a             = 0
-		withWords     = []string{}
+		withWords     []string
 		limitWords    = 5
 	)
 
@@ -194,7 +194,7 @@ func (sp *SearchParser) parseUserID(query *string, currentUserID string) (userID
 		q = strings.ReplaceAll(q, exprMe, "")
 	} else if len(res) == 2 {
 		name := res[1]
-		user, has, err := sp.userCommon.GetUserBasicInfoByUserName(nil, name)
+		user, has, err := sp.userCommon.GetUserBasicInfoByUserName(context.TODO(), name)
 		if err == nil && has {
 			userID = user.ID
 			q = re.ReplaceAllString(q, "")
@@ -247,7 +247,7 @@ func (sp *SearchParser) parseNotAccepted(query *string) (notAccepted bool) {
 		expr = `hasaccepted:no`
 	)
 
-	if strings.Index(q, expr) != -1 {
+	if strings.Contains(q, expr) {
 		q = strings.ReplaceAll(q, expr, "")
 		notAccepted = true
 	}
@@ -263,7 +263,7 @@ func (sp *SearchParser) parseIsQuestion(query *string) (isQuestion bool) {
 		expr = `is:question`
 	)
 
-	if strings.Index(q, expr) == 0 {
+	if strings.Contains(q, expr) {
 		q = strings.ReplaceAll(q, expr, "")
 		isQuestion = true
 	}
@@ -316,9 +316,9 @@ func (sp *SearchParser) parseAccepted(query *string) (accepted bool) {
 		expr = `isaccepted:yes`
 	)
 
-	if strings.Index(q, expr) != -1 {
+	if strings.Contains(q, expr) {
 		accepted = true
-		strings.ReplaceAll(q, expr, "")
+		q = strings.ReplaceAll(q, expr, "")
 	}
 
 	*query = strings.TrimSpace(q)
@@ -350,7 +350,7 @@ func (sp *SearchParser) parseIsAnswer(query *string) (isAnswer bool) {
 		expr = `is:answer`
 	)
 
-	if strings.Index(q, expr) != -1 {
+	if strings.Contains(q, expr) {
 		isAnswer = true
 		q = strings.ReplaceAll(q, expr, "")
 	}
