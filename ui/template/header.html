@@ -12,8 +12,14 @@
     <link rel="manifest" href="/manifest.json"/>
     <link href="{{.cssPath}}" rel="stylesheet" />
     <link href="/custom.css" rel="stylesheet">
-    <script defer="defer" src="{{.scriptPath}}"></script>
+    <link rel="icon" type="image/png" href="{{.siteinfo.Branding.Favicon}}" data-rh="true">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{.siteinfo.Branding.SquareIcon}}" data-rh="true">
+    <!-- <script defer="defer" src="{{.scriptPath}}"></script> -->
     {{if $.siteinfo.JsonLD }}{{ .siteinfo.JsonLD | templateHTML}}{{end}}
+
+
+
+
 </head>
 
 <body>
