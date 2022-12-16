@@ -40,23 +40,36 @@ builds:
       - linux
     goarch:
       - arm64
-  # - id: darwin-arm64
+  # - id: darwin
   #   main: ./cmd/answer/.
   #   binary: answer
   #   goos:
   #     - darwin
+  #   ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
+  #todo 
+  # - id: darwin-arm64
+  #   main: ./cmd/answer/.
+  #   binary: answer
+  #   env:
+  #     - CC=oa64-clang
+  #     - CXX=oa64-clang++
+  #   goos:
+  #     - darwin
   #   goarch:
   #     - arm64
-  #   ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser  -extldflags "-static"
+  #   ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser  
   #   flags: -v
   # - id: darwin-amd64
   #   main: ./cmd/answer/.
   #   binary: answer
+  #   env:
+  #     - CC=o64-clang
+  #     - CXX=o64-clang++
   #   goos:
   #     - darwin
   #   goarch:
-  #     - arm64
-  #   ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser  -extldflags "-static"
+  #     - amd64
+  #   ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser  
   #   flags: -v
 
 
