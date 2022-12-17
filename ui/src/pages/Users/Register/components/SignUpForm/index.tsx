@@ -139,11 +139,15 @@ const Index: React.FC<Props> = ({ callback }) => {
     register(reqParams)
       .then((res) => {
         updateUser(res);
+        setModalState(false);
         callback();
       })
       .catch((err) => {
         if (err.isError) {
           const data = handleFormError(err, formData);
+          if (!err.list.find((v) => v.error_field.indexOf('captcha') >= 0)) {
+            setModalState(false);
+          }
           setFormData({ ...data });
         }
       });
