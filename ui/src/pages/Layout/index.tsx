@@ -7,6 +7,7 @@ import { SWRConfig } from 'swr';
 import { toastStore, brandingStore, pageTagStore } from '@/stores';
 import { Header, Footer, Toast, Customize, CustomizeTheme } from '@/components';
 
+const doInsertCustomCSS = !document.querySelector('link[href="/custom.css"]');
 const Layout: FC = () => {
   const { msg: toastMsg, variant, clear: toastClear } = toastStore();
   const closeToast = () => {
@@ -30,7 +31,12 @@ const Layout: FC = () => {
         <title>{pageTitle}</title>
         {keywords && <meta name="keywords" content={keywords} />}
         {description && <meta name="description" content={description} />}
-        <link rel="stylesheet" href={`${process.env.PUBLIC_URL}/custom.css`} />
+        {doInsertCustomCSS && (
+          <link
+            rel="stylesheet"
+            href={`${process.env.PUBLIC_URL}/custom.css`}
+          />
+        )}
       </Helmet>
       <CustomizeTheme />
       <SWRConfig
