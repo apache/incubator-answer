@@ -4717,6 +4717,41 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/user/register/captcha": {
+            "get": {
+                "description": "UserRegisterCaptcha",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "UserRegisterCaptcha",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetUserResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/user/register/email": {
             "post": {
                 "description": "UserRegisterByEmail",
@@ -7712,6 +7747,14 @@ const docTemplate = `{
                 "pass"
             ],
             "properties": {
+                "captcha_code": {
+                    "description": "captcha_code",
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "e_mail": {
                     "description": "email",
                     "type": "string",

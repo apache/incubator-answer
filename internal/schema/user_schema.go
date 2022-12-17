@@ -232,8 +232,10 @@ type UserRegisterReq struct {
 	// email
 	Email string `validate:"required,email,gt=0,lte=500" json:"e_mail" `
 	// password
-	Pass string `validate:"required,gte=8,lte=32" json:"pass"`
-	IP   string `json:"-" `
+	Pass        string `validate:"required,gte=8,lte=32" json:"pass"`
+	IP          string `json:"-" `
+	CaptchaID   string `json:"captcha_id"`   // captcha_id
+	CaptchaCode string `json:"captcha_code"` // captcha_code
 }
 
 func (u *UserRegisterReq) Check() (errFields []*validator.FormErrorField, err error) {
