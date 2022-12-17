@@ -316,6 +316,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	userInfo.IPInfo = registerUserInfo.IP
 	userInfo.MailStatus = entity.EmailStatusToBeVerified
 	userInfo.Status = entity.UserStatusAvailable
+	userInfo.LastLoginDate = time.Now()
 	err = us.userRepo.AddUser(ctx, userInfo)
 	if err != nil {
 		return nil, err

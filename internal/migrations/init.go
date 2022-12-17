@@ -151,6 +151,9 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 		Content: string(loginConfigDataBytes),
 		Status:  1,
 	})
+	if err != nil {
+		return err
+	}
 
 	seoData := map[string]string{
 		"robots": defaultSEORobotTxt + siteURL + "/sitemap.xml",
