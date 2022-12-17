@@ -30,6 +30,7 @@ const Layout: FC = () => {
         <title>{pageTitle}</title>
         {keywords && <meta name="keywords" content={keywords} />}
         {description && <meta name="description" content={description} />}
+        <link rel="stylesheet" href={`${process.env.PUBLIC_URL}/custom.css`} />
       </Helmet>
       <CustomizeTheme />
       <SWRConfig

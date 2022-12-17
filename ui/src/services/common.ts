@@ -96,6 +96,11 @@ export const register = (params: Type.RegisterReqParams) => {
   return request.post<any>('/answer/api/v1/user/register/email', params);
 };
 
+export const getRegisterCaptcha = () => {
+  const apiUrl = '/answer/api/v1/user/register/captcha';
+  return request.get(apiUrl);
+};
+
 export const logout = () => {
   return request.get('/answer/api/v1/user/logout');
 };
