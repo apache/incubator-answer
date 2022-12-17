@@ -7,7 +7,7 @@ import { SWRConfig } from 'swr';
 import { toastStore, brandingStore, pageTagStore } from '@/stores';
 import { Header, Footer, Toast, Customize, CustomizeTheme } from '@/components';
 
-const doInsertCustomCSS = !document.querySelector('link[href="/custom.css"]');
+const doInsertCustomCSS = !document.querySelector('link[href*="custom.css"]');
 const Layout: FC = () => {
   const { msg: toastMsg, variant, clear: toastClear } = toastStore();
   const closeToast = () => {
