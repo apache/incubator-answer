@@ -1,6 +1,8 @@
 package htmltext
 
 import (
+	"io/ioutil"
+	"net/http"
 	"net/url"
 	"regexp"
 	"strings"
@@ -79,4 +81,17 @@ func FetchExcerpt(html, trimMarker string, limit int) (text string) {
 
 	text += trimMarker
 	return
+}
+
+func GetPicByUrl(Url string) string {
+	res, err := http.Get(Url)
+	if err != nil {
+		return ""
+	}
+	defer res.Body.Close()
+	pix, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return ""
+	}
+	return string(pix)
 }
