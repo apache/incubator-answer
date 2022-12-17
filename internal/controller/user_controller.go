@@ -232,6 +232,15 @@ func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 		return
 	}
 	req.IP = ctx.ClientIP()
+	captchaPass := uc.actionService.UserRegisterVerifyCaptcha(ctx, req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+		return
+	}
 
 	resp, err := uc.userService.UserRegisterByEmail(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
@@ -409,6 +418,19 @@ func (uc *UserController) ActionRecord(ctx *gin.Context) {
 	req.IP = ctx.ClientIP()
 
 	resp, err := uc.actionService.ActionRecord(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// UserRegisterCaptcha godoc
+// @Summary UserRegisterCaptcha
+// @Description UserRegisterCaptcha
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Router /answer/api/v1/user/register/captcha [get]
+func (uc *UserController) UserRegisterCaptcha(ctx *gin.Context) {
+	resp, err := uc.actionService.UserRegisterCaptcha(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
 

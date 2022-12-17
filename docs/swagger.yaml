@@ -1823,6 +1823,12 @@ definitions:
     type: object
   schema.UserRegisterReq:
     properties:
+      captcha_code:
+        description: captcha_code
+        type: string
+      captcha_id:
+        description: captcha_id
+        type: string
       e_mail:
         description: email
         maxLength: 500
@@ -4735,6 +4741,26 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: get user ranking
+      tags:
+      - User
+  /answer/api/v1/user/register/captcha:
+    get:
+      consumes:
+      - application/json
+      description: UserRegisterCaptcha
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserResp'
+              type: object
+      summary: UserRegisterCaptcha
       tags:
       - User
   /answer/api/v1/user/register/email:
