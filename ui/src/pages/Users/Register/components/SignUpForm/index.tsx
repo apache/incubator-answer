@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { PicAuthCodeModal } from '@/components/Modal';
-import { ImgCodeRes, LoginReqParams } from '@/common/interface';
+import { ImgCodeRes } from '@/common/interface';
 import type { FormDataType, RegisterReqParams } from '@/common/interface';
 import {
   register,
@@ -125,14 +125,6 @@ const Index: React.FC<Props> = ({ callback }) => {
   const handleRegister = (event?: any) => {
     if (event) {
       event.preventDefault();
-    }
-    const params: LoginReqParams = {
-      e_mail: formData.e_mail.value,
-      pass: formData.pass.value,
-    };
-    if (imgCode.verify) {
-      params.captcha_code = formData.captcha_code.value;
-      params.captcha_id = imgCode.captcha_id;
     }
     const reqParams: RegisterReqParams = {
       name: formData.name.value,
