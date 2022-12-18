@@ -1,54 +1,124 @@
 {{define "header"}}
 <!DOCTYPE html>
 <html>
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{{.title}}</title>
-    <meta name="description" content="{{.description}}"  data-rh="true"/>
-    {{if .keywords }}<meta name="keywords" content="{{.keywords}}"  data-rh="true"/>{{end}}
+    <meta name="description" content="{{.description}}" data-rh="true" />
+    {{if .keywords }}
+    <meta name="keywords" content="{{.keywords}}" data-rh="true" />
+    {{end}}
     <link rel="canonical" href="{{.siteinfo.Canonical}}" />
-    <link rel="manifest" href="/manifest.json"/>
+    <link rel="manifest" href="/manifest.json" />
     <link href="{{.cssPath}}" rel="stylesheet" />
-    <link href="/custom.css" rel="stylesheet">
-    <link rel="icon" type="image/png" href="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}/favicon.ico{{end}}" data-rh="true">
-    <link rel="icon" type="image/png" sizes="192x192" href="{{.siteinfo.Branding.SquareIcon}}" data-rh="true">
-    <link rel="apple-touch-icon" type="image/png" href="{{.siteinfo.Branding.SquareIcon}}"  data-rh="true"/>
+    <link href="/custom.css" rel="stylesheet" />
+    <link
+      rel="icon"
+      type="image/png"
+      href="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}/favicon.ico{{end}}"
+      data-rh="true"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="{{.siteinfo.Branding.SquareIcon}}"
+      data-rh="true"
+    />
+    <link
+      rel="apple-touch-icon"
+      type="image/png"
+      href="{{.siteinfo.Branding.SquareIcon}}"
+      data-rh="true"
+    />
     <script defer="defer" src="{{.scriptPath}}"></script>
     {{if $.siteinfo.JsonLD }}{{ .siteinfo.JsonLD | templateHTML}}{{end}}
-</head>
+  </head>
 
-<body>
-<noscript>You need to enable JavaScript to run this app.</noscript>
-<div id="root">
-  <nav id="header" class="sticky-top navbar navbar-expand-lg navbar-dark">
-    <div class="d-flex align-items-center container">
-      <button aria-controls="navBarContent" id="navBarToggle" type="button"
-              aria-label="Toggle navigation"
-              class="answer-navBar me-2 navbar-toggler collapsed">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div
-        class="d-flex justify-content-between align-items-center nav-grow flex-nowrap">
-        <a class="lh-1 me-0 me-sm-3 navbar-brand" href="/">
-          {{.siteinfo.General.Name}}
-        </a>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root">
+      <div id="spin-mask" hidden>
+        <script>
+          try {
+            document.querySelector('#spin-mask').removeAttribute('hidden');
+          } catch (ex) {}
+        </script>
+        <style>
+          @keyframes _doc-spin {
+            to {
+              transform: rotate(360deg);
+            }
+          }
+          #spin-mask {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: white;
+            z-index: 9999;
+          }
+          #spin-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+          #spin-container .spinner {
+            box-sizing: border-box;
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            vertical-align: -0.125em;
+            border: 0.25rem solid currentColor;
+            border-right-color: transparent;
+            color: rgba(108, 117, 125, 0.75);
+            border-radius: 50%;
+            animation: 0.75s linear infinite _doc-spin;
+          }
+        </style>
+        <div id="spin-container">
+          <div class="spinner"></div>
+        </div>
       </div>
-      <div class="me-auto navbar-collapse collapse" id="navBarContent">
-        <hr class="hr lg-none mb-2" style="margin-top: 12px"/>
-        <div class="col-md-4">
-          <div class="navbar-nav">
-            <a class="nav-link"
-               href="/questions">{{translator $.language "ui.header.nav.question"}}</a>
-            <a class="nav-link"
-               href="/tags">{{translator $.language "ui.header.nav.tag"}}</a>
+
+      <nav id="header" class="sticky-top navbar navbar-expand-lg navbar-dark">
+        <div class="d-flex align-items-center container">
+          <button
+            aria-controls="navBarContent"
+            id="navBarToggle"
+            type="button"
+            aria-label="Toggle navigation"
+            class="answer-navBar me-2 navbar-toggler collapsed"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div
+            class="d-flex justify-content-between align-items-center nav-grow flex-nowrap"
+          >
+            <a class="lh-1 me-0 me-sm-3 navbar-brand" href="/">
+              {{.siteinfo.General.Name}}
+            </a>
+          </div>
+          <div class="me-auto navbar-collapse collapse" id="navBarContent">
+            <hr class="hr lg-none mb-2" style="margin-top: 12px" />
+            <div class="col-md-4">
+              <div class="navbar-nav">
+                <a class="nav-link" href="/questions"
+                  >{{translator $.language "ui.header.nav.question"}}</a
+                >
+                <a class="nav-link" href="/tags"
+                  >{{translator $.language "ui.header.nav.tag"}}</a
+                >
+              </div>
+            </div>
+            <hr class="hr lg-none mt-2" />
           </div>
         </div>
-        <hr class="hr lg-none mt-2"/>
-
-      </div>
+      </nav>
+      <div class="position-relative page-wrap">{{end}}</div>
     </div>
-  </nav>
-  <div class="position-relative page-wrap">
-    {{end}}
+  </body>
+</html>
