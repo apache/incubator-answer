@@ -26,7 +26,7 @@
 docker run -d -p 9080:80 -v answer-data:/data --name answer answerdev/answer:latest
 ```
 
-其他安装配置细节请参考 [INSTALL.md](./INSTALL.md)
+其他安装配置细节请参考 [INSTALL_CN.md](./INSTALL_CN.md)
 
 ## 贡献
 
