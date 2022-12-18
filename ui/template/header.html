@@ -6,15 +6,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{{.title}}</title>
-    <meta name="description" content="{{.description}}" />
-    {{if .keywords }}<meta name="keywords" content="{{.keywords}}" />{{end}}
+    <meta name="description" content="{{.description}}"  data-rh="true"/>
+    {{if .keywords }}<meta name="keywords" content="{{.keywords}}"  data-rh="true"/>{{end}}
     <link rel="canonical" href="{{.siteinfo.Canonical}}" />
     <link rel="manifest" href="/manifest.json"/>
     <link href="{{.cssPath}}" rel="stylesheet" />
     <link href="/custom.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}/favicon.ico{{end}}" data-rh="true">
     <link rel="icon" type="image/png" sizes="192x192" href="{{.siteinfo.Branding.SquareIcon}}" data-rh="true">
-    <link rel="apple-touch-icon" type="image/png" href={{.siteinfo.Branding.SquareIcon}} />
+    <link rel="apple-touch-icon" type="image/png" href="{{.siteinfo.Branding.SquareIcon}}"  data-rh="true"/>
     <script defer="defer" src="{{.scriptPath}}"></script>
     {{if $.siteinfo.JsonLD }}{{ .siteinfo.JsonLD | templateHTML}}{{end}}
 </head>
