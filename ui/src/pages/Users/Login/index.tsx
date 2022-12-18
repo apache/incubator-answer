@@ -3,13 +3,14 @@ import { Container, Form, Button, Col } from 'react-bootstrap';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { usePageTags } from '@/hooks';
 import type {
   LoginReqParams,
   ImgCodeRes,
   FormDataType,
 } from '@/common/interface';
-import { PageTitle, Unactivate } from '@/components';
-import { loggedUserInfoStore } from '@/stores';
+import { Unactivate } from '@/components';
+import { loggedUserInfoStore, loginSettingStore } from '@/stores';
 import { guard, floppyNavigation, handleFormError } from '@/utils';
 import { login, checkImgCode } from '@/services';
 import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
@@ -24,6 +25,7 @@ const Index: React.FC = () => {
   const [refresh, setRefresh] = useState(0);
   const updateUser = loggedUserInfoStore((state) => state.update);
   const storeUser = loggedUserInfoStore((state) => state.user);
+  const loginSetting = loginSettingStore((state) => state.login);
   const [formData, setFormData] = useState<FormDataType>({
     e_mail: {
       value: '',
@@ -167,11 +169,12 @@ const Index: React.FC = () => {
       setStep(2);
     }
   }, []);
-
+  usePageTags({
+    title: t('login', { keyPrefix: 'page_title' }),
+  });
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
       <h3 className="text-center mb-5">{t('page_title')}</h3>
-      <PageTitle title={t('login', { keyPrefix: 'page_title' })} />
       {step === 1 && (
         <Col className="mx-auto" md={3}>
           <Form noValidate onSubmit={handleSubmit}>
@@ -234,15 +237,16 @@ const Index: React.FC = () => {
               </Button>
             </div>
           </Form>
-
-          <div className="text-center mt-5">
-            <Trans i18nKey="login.info_sign" ns="translation">
-              Don’t have an account?
-              <Link to="/users/register" tabIndex={2}>
-                Sign up
-              </Link>
-            </Trans>
-          </div>
+          {loginSetting.allow_new_registrations && (
+            <div className="text-center mt-5">
+              <Trans i18nKey="login.info_sign" ns="translation">
+                Don’t have an account?
+                <Link to="/users/register" tabIndex={2}>
+                  Sign up
+                </Link>
+              </Trans>
+            </div>
+          )}
         </Col>
       )}
 

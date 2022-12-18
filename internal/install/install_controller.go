@@ -187,5 +187,4 @@ func InitBaseInfo(ctx *gin.Context) {
 		time.Sleep(1 * time.Second)
 		os.Exit(0)
 	}()
-	return
 }

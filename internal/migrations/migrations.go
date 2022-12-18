@@ -45,6 +45,8 @@ var migrations = []Migration{
 	NewMigration("add user language", addUserLanguage),
 	NewMigration("add recommend and reserved tag fields", addTagRecommendedAndReserved),
 	NewMigration("add activity timeline", addActivityTimeline),
+	NewMigration("add user role", addRoleFeatures),
+	NewMigration("add theme and private mode", addThemeAndPrivateMode),
 }
 
 // GetCurrentDBVersion returns the current db version

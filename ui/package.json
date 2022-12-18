@@ -18,9 +18,11 @@
     "bootstrap-icons": "1.10.2",
     "classnames": "^2.3.1",
     "codemirror": "5.65.0",
+    "color": "^4.2.3",
     "copy-to-clipboard": "^3.3.2",
     "dayjs": "^1.11.5",
     "diff": "^5.1.0",
+    "emoji-regex": "^10.2.1",
     "i18next": "^21.9.0",
     "katex": "^0.16.2",
     "lodash": "^4.17.21",
@@ -37,6 +39,7 @@
     "react-router-dom": "^6.4.0",
     "semver": "^7.3.8",
     "swr": "^1.3.0",
+    "urlcat": "^3.0.0",
     "zustand": "^4.1.1"
   },
   "devDependencies": {
@@ -47,6 +50,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/color": "^3.0.3",
     "@types/jest": "^27.5.2",
     "@types/lodash": "^4.14.184",
     "@types/marked": "^4.0.6",

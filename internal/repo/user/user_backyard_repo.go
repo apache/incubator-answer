@@ -3,10 +3,7 @@ package user
 import (
 	"context"
 	"encoding/json"
-	"net/mail"
-	"strings"
 	"time"
-	"unicode"
 
 	"xorm.io/builder"
 
@@ -64,6 +61,24 @@ func (ur *userBackyardRepo) UpdateUserStatus(ctx context.Context, userID string,
 	return
 }
 
+// AddUser add user
+func (ur *userBackyardRepo) AddUser(ctx context.Context, user *entity.User) (err error) {
+	_, err = ur.data.DB.Insert(user)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+// UpdateUserPassword update user password
+func (ur *userBackyardRepo) UpdateUserPassword(ctx context.Context, userID string, password string) (err error) {
+	_, err = ur.data.DB.ID(userID).Update(&entity.User{Pass: password})
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // GetUserInfo get user info
 func (ur *userBackyardRepo) GetUserInfo(ctx context.Context, userID string) (user *entity.User, exist bool, err error) {
 	user = &entity.User{}
@@ -74,50 +89,39 @@ func (ur *userBackyardRepo) GetUserInfo(ctx context.Context, userID string) (use
 	return
 }
 
+// GetUserInfoByEmail get user info
+func (ur *userBackyardRepo) GetUserInfoByEmail(ctx context.Context, email string) (user *entity.User, exist bool, err error) {
+	userInfo := &entity.User{}
+	exist, err = ur.data.DB.Where("e_mail = ?", email).
+		Where("status != ?", entity.UserStatusDeleted).Get(userInfo)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // GetUserPage get user page
-func (ur *userBackyardRepo) GetUserPage(ctx context.Context, page, pageSize int, user *entity.User, query string) (users []*entity.User, total int64, err error) {
+func (ur *userBackyardRepo) GetUserPage(ctx context.Context, page, pageSize int, user *entity.User,
+	usernameOrDisplayName string, isStaff bool) (users []*entity.User, total int64, err error) {
 	users = make([]*entity.User, 0)
 	session := ur.data.DB.NewSession()
 	switch user.Status {
 	case entity.UserStatusDeleted:
-		session.Desc("deleted_at")
+		session.Desc("user.deleted_at")
 	case entity.UserStatusSuspended:
-		session.Desc("suspended_at")
+		session.Desc("user.suspended_at")
 	default:
-		session.Desc("created_at")
+		session.Desc("user.created_at")
 	}
 
-	if len(query) > 0 {
-		if email, e := mail.ParseAddress(query); e == nil {
-			session.And(builder.Eq{"e_mail": email.Address})
-		} else {
-			var (
-				idSearch = false
-				id       = ""
-			)
-
-			if strings.Contains(query, "user:") {
-				idSearch = true
-				id = strings.TrimSpace(strings.TrimPrefix(query, "user:"))
-				for _, r := range id {
-					if !unicode.IsDigit(r) {
-						idSearch = false
-						break
-					}
-				}
-			}
-
-			if idSearch {
-				session.And(builder.Eq{
-					"id": id,
-				})
-			} else {
-				session.And(builder.Or(
-					builder.Like{"username", query},
-					builder.Like{"display_name", query},
-				))
-			}
-		}
+	if len(usernameOrDisplayName) > 0 {
+		session.And(builder.Or(
+			builder.Like{"user.username", usernameOrDisplayName},
+			builder.Like{"user.display_name", usernameOrDisplayName},
+		))
+	}
+	if isStaff {
+		session.Join("INNER", "user_role_rel", "user.id = user_role_rel.user_id AND user_role_rel.role_id > 1")
 	}
 
 	total, err = pager.Help(page, pageSize, &users, user, session)

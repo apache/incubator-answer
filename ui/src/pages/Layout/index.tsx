@@ -1,34 +1,29 @@
 import { FC, memo } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { HelmetProvider } from 'react-helmet-async';
 
 import { SWRConfig } from 'swr';
 
-import { siteInfoStore, toastStore, brandingStore } from '@/stores';
-import { Header, Footer, Toast } from '@/components';
+import { toastStore } from '@/stores';
+import {
+  Header,
+  Footer,
+  Toast,
+  Customize,
+  CustomizeTheme,
+  PageTags,
+} from '@/components';
 
 const Layout: FC = () => {
   const { msg: toastMsg, variant, clear: toastClear } = toastStore();
-  const { siteInfo } = siteInfoStore.getState();
-  const { favicon, square_icon } = brandingStore((state) => state.branding);
-
   const closeToast = () => {
     toastClear();
   };
 
   return (
     <HelmetProvider>
-      <Helmet>
-        <link
-          rel="icon"
-          type="image/png"
-          href={favicon || square_icon || '/favicon.ico'}
-        />
-        <link rel="icon" type="image/png" sizes="192x192" href={square_icon} />
-        <link rel="apple-touch-icon" type="image/png" href={square_icon} />
-
-        {siteInfo && <meta name="description" content={siteInfo.description} />}
-      </Helmet>
+      <PageTags />
+      <CustomizeTheme />
       <SWRConfig
         value={{
           revalidateOnFocus: false,
@@ -39,6 +34,7 @@ const Layout: FC = () => {
         </div>
         <Toast msg={toastMsg} variant={variant} onClose={closeToast} />
         <Footer />
+        <Customize />
       </SWRConfig>
     </HelmetProvider>
   );

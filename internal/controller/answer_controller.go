@@ -9,6 +9,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/dashboard"
+	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
@@ -51,7 +52,7 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, rank.AnswerDeleteRank, req.ID)
+	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, permission.AnswerDelete, req.ID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -110,7 +111,7 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, rank.AnswerAddRank, "")
+	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, permission.AnswerAdd, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -159,15 +160,17 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.AnswerEditRank,
-		rank.AnswerEditWithoutReviewRank,
-	}, req.ID)
+		permission.AnswerEdit,
+		permission.AnswerEditWithoutReview,
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	req.CanEdit = canList[0]
-	req.NoNeedReview = canList[1]
+
+	objectOwner := ac.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.ID)
+	req.CanEdit = canList[0] || objectOwner
+	req.NoNeedReview = canList[1] || objectOwner
 	if !req.CanEdit {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
@@ -208,9 +211,9 @@ func (ac *AnswerController) AnswerList(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.AnswerEditRank,
-		rank.AnswerDeleteRank,
-	}, "")
+		permission.AnswerEdit,
+		permission.AnswerDelete,
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -246,7 +249,7 @@ func (ac *AnswerController) Adopted(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, rank.AnswerAcceptRank, req.QuestionID)
+	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, permission.AnswerAccept, req.QuestionID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -267,7 +270,7 @@ func (ac *AnswerController) Adopted(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param data body entity.AdminSetAnswerStatusRequest true "AdminSetAnswerStatusRequest"
+// @Param data body schema.AdminSetAnswerStatusRequest true "AdminSetAnswerStatusRequest"
 // @Router /answer/admin/api/answer/status [put]
 // @Success 200 {object} handler.RespBody
 func (ac *AnswerController) AdminSetAnswerStatus(ctx *gin.Context) {

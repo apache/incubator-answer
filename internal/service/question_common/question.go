@@ -11,6 +11,7 @@ import (
 	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/meta"
+	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/segmentfault/pacman/errors"
 
 	"github.com/answerdev/answer/internal/entity"
@@ -41,6 +42,7 @@ type QuestionRepo interface {
 	FindByID(ctx context.Context, id []string) (questionList []*entity.Question, err error)
 	CmsSearchList(ctx context.Context, search *schema.CmsQuestionSearch) ([]*entity.Question, int64, error)
 	GetQuestionCount(ctx context.Context) (count int64, err error)
+	GetQuestionIDsPage(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error)
 }
 
 // QuestionCommon user service
@@ -393,6 +395,7 @@ func (qs *QuestionCommon) ShowFormat(ctx context.Context, data *entity.Question)
 	info := schema.QuestionInfo{}
 	info.ID = data.ID
 	info.Title = data.Title
+	info.UrlTitle = htmltext.UrlTitle(data.Title)
 	info.Content = data.OriginalText
 	info.HTML = data.ParsedText
 	info.ViewCount = data.ViewCount

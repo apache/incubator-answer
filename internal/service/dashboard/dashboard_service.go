@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"time"
@@ -208,7 +208,7 @@ func (ds *DashboardService) RemoteVersion(ctx context.Context) string {
 	}
 	defer resp.Body.Close()
 
-	respByte, err := ioutil.ReadAll(resp.Body)
+	respByte, err := io.ReadAll(resp.Body)
 	if err != nil {
 		log.Error("http.Client error", err)
 		return ""

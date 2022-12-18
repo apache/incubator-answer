@@ -31,19 +31,19 @@ func (ss *SearchService) Search(ctx context.Context, dto *schema.SearchDTO) (res
 
 	// search type
 	searchType,
-		// search all
+	// search all
 		userID,
 		votes,
-		// search questions
+	// search questions
 		notAccepted,
 		_,
 		views,
 		answers,
-		// search answers
+	// search answers
 		accepted,
 		questionID,
 		_,
-		// common fields
+	// common fields
 		tags,
 		words := ss.searchParser.ParseStructure(dto)
 

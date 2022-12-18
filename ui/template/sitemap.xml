@@ -1,0 +1,9 @@
+{{ .xmlHeader }}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  {{ range .list }}
+  <url>
+    <loc>{{$.general.SiteUrl}}/questions/{{.ID}}/{{.Title}}</loc>
+    <lastmod>{{.UpdateTime}}</lastmod>
+  </url>
+   {{ end }}
+</urlset>

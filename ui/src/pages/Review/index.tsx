@@ -3,13 +3,8 @@ import { Container, Row, Col, Alert, Stack, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import {
-  BaseUserCard,
-  FormatTime,
-  Empty,
-  DiffContent,
-  PageTitle,
-} from '@/components';
+import { usePageTags } from '@/hooks';
+import { BaseUserCard, FormatTime, Empty, DiffContent } from '@/components';
 import { getReviewList, revisionAudit } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 import type * as Type from '@/common/interface';
@@ -100,22 +95,23 @@ const Index: FC = () => {
   const editor = unreviewed_info?.user_info;
   const editTime = unreviewed_info?.create_at;
   if (type === 'question') {
-    itemLink = pathFactory.questionLanding(info?.object_id);
+    itemLink = pathFactory.questionLanding(info?.object_id, info?.url_title);
     itemTitle = info?.title;
     editBadge = t('question_edit');
     editSummary ||= t('edit_question');
   } else if (type === 'answer') {
-    itemLink = pathFactory.answerLanding(
+    itemLink = pathFactory.answerLanding({
       // @ts-ignore
-      unreviewed_info.content.question_id,
-      unreviewed_info.object_id,
-    );
+      questionId: unreviewed_info.content.question_id,
+      slugTitle: info?.url_title,
+      answerId: unreviewed_info.object_id,
+    });
     itemTitle = info?.title;
     editBadge = t('answer_edit');
     editSummary ||= t('edit_answer');
   } else if (type === 'tag') {
     const tagInfo = unreviewed_info.content as Type.Tag;
-    itemLink = pathFactory.tagLanding(tagInfo);
+    itemLink = pathFactory.tagLanding(tagInfo.slug_name);
     itemTitle = tagInfo.display_name;
     editBadge = t('tag_edit');
     editSummary ||= t('edit_tag');
@@ -123,9 +119,11 @@ const Index: FC = () => {
   useEffect(() => {
     queryNextOne(page);
   }, []);
+  usePageTags({
+    title: t('review'),
+  });
   return (
     <Container className="pt-2 mt-4 mb-5">
-      <PageTitle title={t('review')} />
       <Row>
         <Col lg={{ span: 7, offset: 1 }}>
           <h3 className="mb-4">{t('review')}</h3>

@@ -27,17 +27,17 @@ const useEditStatusModal = ({
     {
       type: 'normal',
       name: t('normal_name'),
-      description: t('normal_description'),
+      description: t('normal_desc'),
     },
     {
       type: 'closed',
       name: t('closed_name'),
-      description: t('closed_description'),
+      description: t('closed_desc'),
     },
     {
       type: 'deleted',
       name: t('deleted_name'),
-      description: t('deleted_description'),
+      description: t('deleted_desc'),
     },
   ]);
 

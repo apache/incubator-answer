@@ -23,6 +23,7 @@ import (
 	"github.com/answerdev/answer/internal/service/report_backyard"
 	"github.com/answerdev/answer/internal/service/report_handle_backyard"
 	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/internal/service/search_parser"
 	"github.com/answerdev/answer/internal/service/siteinfo"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
@@ -75,4 +76,7 @@ var ProviderSetService = wire.NewSet(
 	dashboard.NewDashboardService,
 	activity_common.NewActivityCommon,
 	activity.NewActivityService,
+	role.NewRoleService,
+	role.NewUserRoleRelService,
+	role.NewRolePowerRelService,
 )

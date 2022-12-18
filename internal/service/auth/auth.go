@@ -19,6 +19,8 @@ type AuthRepo interface {
 	GetBackyardUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error)
 	SetBackyardUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) error
 	RemoveBackyardUserCacheInfo(ctx context.Context, accessToken string) (err error)
+	AddUserTokenMapping(ctx context.Context, userID, accessToken string) (err error)
+	RemoveAllUserTokens(ctx context.Context, userID string)
 }
 
 // AuthService kit service
@@ -76,6 +78,16 @@ func (as *AuthService) UpdateUserCacheInfo(ctx context.Context, token string, us
 
 func (as *AuthService) RemoveUserCacheInfo(ctx context.Context, accessToken string) (err error) {
 	return as.authRepo.RemoveUserCacheInfo(ctx, accessToken)
+}
+
+// AddUserTokenMapping add user token mapping
+func (as *AuthService) AddUserTokenMapping(ctx context.Context, userID, accessToken string) (err error) {
+	return as.authRepo.AddUserTokenMapping(ctx, userID, accessToken)
+}
+
+// RemoveAllUserTokens Log out all users under this user id
+func (as *AuthService) RemoveAllUserTokens(ctx context.Context, userID string) {
+	as.authRepo.RemoveAllUserTokens(ctx, userID)
 }
 
 //cms

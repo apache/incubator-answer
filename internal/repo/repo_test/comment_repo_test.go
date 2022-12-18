@@ -33,7 +33,6 @@ func Test_commentRepo_AddComment(t *testing.T) {
 
 	err = commentRepo.RemoveComment(context.TODO(), testCommentEntity.ID)
 	assert.NoError(t, err)
-	return
 }
 
 func Test_commentRepo_GetCommentPage(t *testing.T) {
@@ -55,7 +54,6 @@ func Test_commentRepo_GetCommentPage(t *testing.T) {
 
 	err = commentRepo.RemoveComment(context.TODO(), testCommentEntity.ID)
 	assert.NoError(t, err)
-	return
 }
 
 func Test_commentRepo_UpdateComment(t *testing.T) {
@@ -77,5 +75,4 @@ func Test_commentRepo_UpdateComment(t *testing.T) {
 
 	err = commentRepo.RemoveComment(context.TODO(), testCommentEntity.ID)
 	assert.NoError(t, err)
-	return
 }

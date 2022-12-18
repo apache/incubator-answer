@@ -3,9 +3,11 @@ package activity_common
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/activity_type"
 	"github.com/answerdev/answer/pkg/obj"
 	"xorm.io/builder"
 	"xorm.io/xorm"
@@ -101,6 +103,52 @@ func (ar *ActivityRepo) GetUserIDObjectIDActivitySum(ctx context.Context, userID
 // AddActivity add activity
 func (ar *ActivityRepo) AddActivity(ctx context.Context, activity *entity.Activity) (err error) {
 	_, err = ar.data.DB.Insert(activity)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+// GetUsersWhoHasGainedTheMostReputation get users who has gained the most reputation over a period of time
+func (ar *ActivityRepo) GetUsersWhoHasGainedTheMostReputation(
+	ctx context.Context, startTime, endTime time.Time, limit int) (rankStat []*entity.ActivityUserRankStat, err error) {
+	rankStat = make([]*entity.ActivityUserRankStat, 0)
+	session := ar.data.DB.Select("user_id, SUM(rank) AS rank_amount").Table("activity")
+	session.Where("has_rank = 1 AND cancelled = 0")
+	session.Where("created_at >= ?", startTime)
+	session.Where("created_at <= ?", endTime)
+	session.GroupBy("user_id")
+	session.Desc("rank_amount")
+	session.Limit(limit)
+	err = session.Find(&rankStat)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+// GetUsersWhoHasVoteMost get users who has vote most
+func (ar *ActivityRepo) GetUsersWhoHasVoteMost(
+	ctx context.Context, startTime, endTime time.Time, limit int) (voteStat []*entity.ActivityUserVoteStat, err error) {
+	voteStat = make([]*entity.ActivityUserVoteStat, 0)
+
+	actIDs := make([]int, 0)
+	for _, act := range activity_type.ActivityTypeList {
+		configType, err := ar.configRepo.GetConfigType(act)
+		if err == nil {
+			actIDs = append(actIDs, configType)
+		}
+	}
+
+	session := ar.data.DB.Select("user_id, COUNT(*) AS vote_count").Table("activity")
+	session.Where("cancelled = 0")
+	session.In("activity_type", actIDs)
+	session.Where("created_at >= ?", startTime)
+	session.Where("created_at <= ?", endTime)
+	session.GroupBy("user_id")
+	session.Desc("vote_count")
+	session.Limit(limit)
+	err = session.Find(&voteStat)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

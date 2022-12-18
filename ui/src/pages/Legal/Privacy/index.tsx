@@ -1,11 +1,14 @@
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { usePageTags } from '@/hooks';
 import { useLegalPrivacy } from '@/services';
-import { PageTitle } from '@/components';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'nav_menus' });
+  usePageTags({
+    title: t('privacy'),
+  });
   const { data: privacy } = useLegalPrivacy();
   const contentText = privacy?.privacy_policy_original_text;
   let matchUrl: URL | undefined;
@@ -19,10 +22,8 @@ const Index: FC = () => {
     window.location.replace(matchUrl.toString());
     return null;
   }
-
   return (
     <>
-      <PageTitle title={t('privacy')} />
       <h3 className="mb-4">{t('privacy')}</h3>
       <div
         className="fmt"

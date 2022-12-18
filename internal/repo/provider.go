@@ -19,6 +19,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/reason"
 	"github.com/answerdev/answer/internal/repo/report"
 	"github.com/answerdev/answer/internal/repo/revision"
+	"github.com/answerdev/answer/internal/repo/role"
 	"github.com/answerdev/answer/internal/repo/search_common"
 	"github.com/answerdev/answer/internal/repo/site_info"
 	"github.com/answerdev/answer/internal/repo/tag"
@@ -67,4 +68,8 @@ var ProviderSetRepo = wire.NewSet(
 	reason.NewReasonRepo,
 	site_info.NewSiteInfo,
 	notification.NewNotificationRepo,
+	role.NewRoleRepo,
+	role.NewUserRoleRelRepo,
+	role.NewRolePowerRelRepo,
+	role.NewPowerRepo,
 )

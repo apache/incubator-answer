@@ -35,7 +35,6 @@ const Index: FC = () => {
   if (!tryLoggedAndActivated().ok) {
     return null;
   }
-
   return isEdit ? (
     <Card className="mb-4">
       <Card.Header className="text-nowrap d-flex justify-content-between">
@@ -47,7 +46,7 @@ const Index: FC = () => {
           {t('save')}
         </Button>
       </Card.Header>
-      <Card.Body className="pb-2">
+      <Card.Body>
         <TagSelector
           value={followingTags}
           onChange={handleTagsChange}
@@ -68,19 +67,21 @@ const Index: FC = () => {
           {t('edit')}
         </Button>
       </Card.Header>
-      <Card.Body className="m-n1">
+      <Card.Body>
         {followingTags?.length ? (
-          <>
+          <div className="m-n1">
             {followingTags.map((item) => {
               const slugName = item?.slug_name;
               return <Tag key={slugName} className="m-1" data={item} />;
             })}
-          </>
+          </div>
         ) : (
           <>
             <div className="text-muted">{t('follow_tag_tip')}</div>
-            <NavLink className="d-inline-block my-2" to="/tags">
-              <Button variant="outline-primary">{t('follow_a_tag')}</Button>
+            <NavLink className="d-inline-block mt-3" to="/tags">
+              <Button size="sm" variant="outline-primary">
+                {t('follow_a_tag')}
+              </Button>
             </NavLink>
           </>
         )}

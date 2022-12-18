@@ -35,22 +35,22 @@ const useChangeModal = ({ callback }: Props) => {
     {
       type: 'normal',
       name: t('normal_name'),
-      description: t('normal_description'),
+      description: t('normal_desc'),
     },
     {
       type: 'suspended',
       name: t('suspended_name'),
-      description: t('suspended_description'),
+      description: t('suspended_desc'),
     },
     {
       type: 'deleted',
       name: t('deleted_name'),
-      description: t('deleted_description'),
+      description: t('deleted_desc'),
     },
     {
       type: 'inactive',
       name: t('inactive_name'),
-      description: t('inactive_description'),
+      description: t('inactive_desc'),
     },
   ]);
 

@@ -1,12 +1,12 @@
 import React, { FormEvent, useState, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Stack, ButtonGroup } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
 import { marked } from 'marked';
 import MD5 from 'md5';
 
 import type { FormDataType } from '@/common/interface';
-import { UploadImg, Avatar } from '@/components';
+import { UploadImg, Avatar, Icon } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
 import { useToast } from '@/hooks';
 import { modifyUserInfo, getLoggedUserInfo } from '@/services';
@@ -19,7 +19,7 @@ const Index: React.FC = () => {
   const toast = useToast();
   const { user, update } = loggedUserInfoStore();
   const [mailHash, setMailHash] = useState('');
-  const [count, setCount] = useState(0);
+  const [count] = useState(0);
 
   const [formData, setFormData] = useState<FormDataType>({
     display_name: {
@@ -60,6 +60,40 @@ const Index: React.FC = () => {
   const handleChange = (params: FormDataType) => {
     setFormData({ ...formData, ...params });
   };
+  const handleAvatarChange = (evt) => {
+    const { value: v } = evt.currentTarget;
+    if (v === 'gravatar') {
+      handleChange({
+        avatar: {
+          ...formData.avatar,
+          type: 'gravatar',
+          gravatar: `https://www.gravatar.com/avatar/${mailHash}`,
+          isInvalid: false,
+          errorMsg: '',
+        },
+      });
+    }
+    if (v === 'custom') {
+      handleChange({
+        avatar: {
+          ...formData.avatar,
+          type: 'custom',
+          isInvalid: false,
+          errorMsg: '',
+        },
+      });
+    }
+    if (v === 'default') {
+      handleChange({
+        avatar: {
+          ...formData.avatar,
+          type: 'default',
+          isInvalid: false,
+          errorMsg: '',
+        },
+      });
+    }
+  };
 
   const avatarUpload = (path: string) => {
     setFormData({
@@ -68,6 +102,17 @@ const Index: React.FC = () => {
         ...formData.avatar,
         type: 'custom',
         custom: path,
+        isInvalid: false,
+        errorMsg: '',
+      },
+    });
+  };
+  const removeCustomAvatar = () => {
+    setFormData({
+      ...formData,
+      avatar: {
+        ...formData.avatar,
+        custom: '',
         isInvalid: false,
         errorMsg: '',
       },
@@ -201,265 +246,220 @@ const Index: React.FC = () => {
     });
   };
 
-  const refreshGravatar = () => {
-    setCount((pre) => pre + 1);
-  };
+  // const refreshGravatar = () => {
+  //   setCount((pre) => pre + 1);
+  // };
 
   useEffect(() => {
     getProfile();
   }, []);
   return (
-    <Form noValidate onSubmit={handleSubmit}>
-      <Form.Group controlId="displayName" className="mb-3">
-        <Form.Label>{t('display_name.label')}</Form.Label>
-        <Form.Control
-          required
-          type="text"
-          value={formData.display_name.value}
-          isInvalid={formData.display_name.isInvalid}
-          onChange={(e) =>
-            handleChange({
-              display_name: {
-                value: e.target.value,
-                isInvalid: false,
-                errorMsg: '',
-              },
-            })
-          }
-        />
-        <Form.Control.Feedback type="invalid">
-          {formData.display_name.errorMsg}
-        </Form.Control.Feedback>
-      </Form.Group>
-
-      <Form.Group controlId="userName" className="mb-3">
-        <Form.Label>{t('username.label')}</Form.Label>
-        <Form.Control
-          required
-          type="text"
-          value={formData.username.value}
-          isInvalid={formData.username.isInvalid}
-          onChange={(e) =>
-            handleChange({
-              username: {
-                value: e.target.value,
-                isInvalid: false,
-                errorMsg: '',
-              },
-            })
-          }
-        />
-        <Form.Text as="div">{t('username.caption')}</Form.Text>
-        <Form.Control.Feedback type="invalid">
-          {formData.username.errorMsg}
-        </Form.Control.Feedback>
-      </Form.Group>
-
-      <Form.Group className="mb-3">
-        <Form.Label>{t('avatar.label')}</Form.Label>
-        <div className="mb-2">
-          <Form.Check
-            inline
-            type="radio"
-            id="gravatar"
-            label={t('avatar.gravatar')}
-            className="mb-0"
-            checked={formData.avatar.type === 'gravatar'}
-            onChange={() =>
+    <>
+      <h3 className="mb-4">{t('heading')}</h3>
+      <Form noValidate onSubmit={handleSubmit}>
+        <Form.Group controlId="displayName" className="mb-3">
+          <Form.Label>{t('display_name.label')}</Form.Label>
+          <Form.Control
+            required
+            type="text"
+            value={formData.display_name.value}
+            isInvalid={formData.display_name.isInvalid}
+            onChange={(e) =>
               handleChange({
-                avatar: {
-                  ...formData.avatar,
-                  type: 'gravatar',
-                  gravatar: `https://www.gravatar.com/avatar/${mailHash}`,
+                display_name: {
+                  value: e.target.value,
                   isInvalid: false,
                   errorMsg: '',
                 },
               })
             }
           />
-          <Form.Check
-            inline
-            type="radio"
-            label={t('avatar.custom')}
-            id="custom"
-            className="mb-0"
-            checked={formData.avatar.type === 'custom'}
-            onChange={() =>
-              handleChange({
-                avatar: {
-                  ...formData.avatar,
-                  type: 'custom',
-                  isInvalid: false,
-                  errorMsg: '',
-                },
-              })
-            }
-          />
-          <Form.Check
-            inline
-            type="radio"
-            id="default"
-            label={t('avatar.default')}
-            className="mb-0"
-            checked={formData.avatar.type === 'default'}
-            onChange={() =>
-              handleChange({
-                avatar: {
-                  ...formData.avatar,
-                  type: 'default',
-                  isInvalid: false,
-                  errorMsg: '',
-                },
-              })
-            }
-          />
-        </div>
-        <div className="d-flex align-items-center">
-          {formData.avatar.type === 'gravatar' && (
-            <>
-              <Avatar
-                size="128px"
-                avatar={formData.avatar.gravatar}
-                searchStr={`s=256&d=identicon${
-                  count > 0 ? `&t=${new Date().valueOf()}` : ''
-                }`}
-                className="me-3 rounded"
-              />
-              <div>
-                <Button
-                  variant="outline-secondary"
-                  className="mb-2"
-                  onClick={refreshGravatar}>
-                  {t('avatar.btn_refresh')}
-                </Button>
-                <div>
-                  <Form.Text className="text-muted mt-0">
-                    <Trans i18nKey="settings.profile.gravatar_text">
-                      You can change your image on{' '}
-                      <a
-                        href="https://gravatar.com"
-                        target="_blank"
-                        rel="noreferrer">
-                        gravatar.com
-                      </a>
-                    </Trans>
-                  </Form.Text>
-                </div>
-              </div>
-            </>
-          )}
+          <Form.Control.Feedback type="invalid">
+            {formData.display_name.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
 
-          {formData.avatar.type === 'custom' && (
-            <>
-              <Avatar
-                size="128px"
-                searchStr="s=256"
-                avatar={formData.avatar.custom}
-                className="me-3 rounded"
-              />
-              <div>
-                <UploadImg
-                  type="avatar"
-                  uploadCallback={avatarUpload}
-                  className="mb-2"
+        <Form.Group controlId="userName" className="mb-3">
+          <Form.Label>{t('username.label')}</Form.Label>
+          <Form.Control
+            required
+            type="text"
+            value={formData.username.value}
+            isInvalid={formData.username.isInvalid}
+            onChange={(e) =>
+              handleChange({
+                username: {
+                  value: e.target.value,
+                  isInvalid: false,
+                  errorMsg: '',
+                },
+              })
+            }
+          />
+          <Form.Text as="div">{t('username.caption')}</Form.Text>
+          <Form.Control.Feedback type="invalid">
+            {formData.username.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>{t('avatar.label')}</Form.Label>
+          <div className="mb-3">
+            <Form.Select
+              name="avatar.type"
+              value={formData.avatar.type}
+              onChange={handleAvatarChange}>
+              <option value="gravatar" key="gravatar">
+                {t('avatar.gravatar')}
+              </option>
+              <option value="default" key="default">
+                {t('avatar.default')}
+              </option>
+              <option value="custom" key="custom">
+                {t('avatar.custom')}
+              </option>
+            </Form.Select>
+          </div>
+          <div className="d-flex">
+            {formData.avatar.type === 'gravatar' && (
+              <Stack>
+                <Avatar
+                  size="160px"
+                  avatar={formData.avatar.gravatar}
+                  searchStr={`s=256&d=identicon${
+                    count > 0 ? `&t=${new Date().valueOf()}` : ''
+                  }`}
+                  className="me-3 rounded"
                 />
-                <div>
-                  <Form.Text className="text-muted mt-0">
-                    <Trans i18nKey="settings.profile.avatar.text">
-                      You can upload your image.
-                    </Trans>
-                  </Form.Text>
-                </div>
-              </div>
-            </>
-          )}
-          {formData.avatar.type === 'default' && (
-            <Avatar size="128px" avatar="" className="me-3 rounded" />
-          )}
-        </div>
-        <Form.Control
-          isInvalid={formData.avatar.isInvalid}
-          className="d-none"
-        />
-        <Form.Control.Feedback type="invalid">
-          {formData.avatar.errorMsg}
-        </Form.Control.Feedback>
-      </Form.Group>
+                <Form.Text className="text-muted mt-1">
+                  <Trans i18nKey="settings.profile.avatar.gravatar_text">
+                    You can change image on
+                    <a
+                      href="https://gravatar.com"
+                      target="_blank"
+                      rel="noreferrer">
+                      gravatar.com
+                    </a>
+                  </Trans>
+                </Form.Text>
+              </Stack>
+            )}
 
-      <Form.Group controlId="bio" className="mb-3">
-        <Form.Label>{t('bio.label')}</Form.Label>
-        <Form.Control
-          className="font-monospace"
-          required
-          as="textarea"
-          rows={5}
-          value={formData.bio.value}
-          isInvalid={formData.bio.isInvalid}
-          onChange={(e) =>
-            handleChange({
-              bio: {
-                value: e.target.value,
-                isInvalid: false,
-                errorMsg: '',
-              },
-            })
-          }
-        />
-        <Form.Control.Feedback type="invalid">
-          {formData.bio.errorMsg}
-        </Form.Control.Feedback>
-      </Form.Group>
+            {formData.avatar.type === 'custom' && (
+              <Stack>
+                <Stack direction="horizontal" className="align-items-start">
+                  <Avatar
+                    size="160px"
+                    searchStr="s=256"
+                    avatar={formData.avatar.custom}
+                    className="me-2 bg-gray-300 "
+                  />
+                  <ButtonGroup vertical className="fit-content">
+                    <UploadImg type="avatar" uploadCallback={avatarUpload}>
+                      <Icon name="cloud-upload" />
+                    </UploadImg>
+                    <Button
+                      variant="outline-secondary"
+                      onClick={removeCustomAvatar}>
+                      <Icon name="trash" />
+                    </Button>
+                  </ButtonGroup>
+                </Stack>
+                <Form.Text className="text-muted mt-1">
+                  <Trans i18nKey="settings.profile.avatar.text">
+                    You can upload your image.
+                  </Trans>
+                </Form.Text>
+              </Stack>
+            )}
+            {formData.avatar.type === 'default' && (
+              <Avatar size="160px" avatar="" />
+            )}
+          </div>
+          <Form.Control
+            isInvalid={formData.avatar.isInvalid}
+            className="d-none"
+          />
+          <Form.Control.Feedback type="invalid">
+            {formData.avatar.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
 
-      <Form.Group controlId="website" className="mb-3">
-        <Form.Label>{t('website.label')}</Form.Label>
-        <Form.Control
-          required
-          type="text"
-          placeholder={t('website.placeholder')}
-          value={formData.website.value}
-          isInvalid={formData.website.isInvalid}
-          onChange={(e) =>
-            handleChange({
-              website: {
-                value: e.target.value,
-                isInvalid: false,
-                errorMsg: '',
-              },
-            })
-          }
-        />
-        <Form.Control.Feedback type="invalid">
-          {formData.website.errorMsg}
-        </Form.Control.Feedback>
-      </Form.Group>
+        <Form.Group controlId="bio" className="mb-3">
+          <Form.Label>{t('bio.label')}</Form.Label>
+          <Form.Control
+            className="font-monospace"
+            required
+            as="textarea"
+            rows={5}
+            value={formData.bio.value}
+            isInvalid={formData.bio.isInvalid}
+            onChange={(e) =>
+              handleChange({
+                bio: {
+                  value: e.target.value,
+                  isInvalid: false,
+                  errorMsg: '',
+                },
+              })
+            }
+          />
+          <Form.Control.Feedback type="invalid">
+            {formData.bio.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
 
-      <Form.Group controlId="email" className="mb-3">
-        <Form.Label>{t('location.label')}</Form.Label>
-        <Form.Control
-          required
-          type="text"
-          placeholder={t('location.placeholder')}
-          value={formData.location.value}
-          isInvalid={formData.location.isInvalid}
-          onChange={(e) =>
-            handleChange({
-              location: {
-                value: e.target.value,
-                isInvalid: false,
-                errorMsg: '',
-              },
-            })
-          }
-        />
-        <Form.Control.Feedback type="invalid">
-          {formData.location.errorMsg}
-        </Form.Control.Feedback>
-      </Form.Group>
+        <Form.Group controlId="website" className="mb-3">
+          <Form.Label>{t('website.label')}</Form.Label>
+          <Form.Control
+            required
+            type="url"
+            placeholder={t('website.placeholder')}
+            value={formData.website.value}
+            isInvalid={formData.website.isInvalid}
+            onChange={(e) =>
+              handleChange({
+                website: {
+                  value: e.target.value,
+                  isInvalid: false,
+                  errorMsg: '',
+                },
+              })
+            }
+          />
+          <Form.Control.Feedback type="invalid">
+            {formData.website.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
 
-      <Button variant="primary" type="submit">
-        {t('btn_name')}
-      </Button>
-    </Form>
+        <Form.Group controlId="email" className="mb-3">
+          <Form.Label>{t('location.label')}</Form.Label>
+          <Form.Control
+            required
+            type="text"
+            placeholder={t('location.placeholder')}
+            value={formData.location.value}
+            isInvalid={formData.location.isInvalid}
+            onChange={(e) =>
+              handleChange({
+                location: {
+                  value: e.target.value,
+                  isInvalid: false,
+                  errorMsg: '',
+                },
+              })
+            }
+          />
+          <Form.Control.Feedback type="invalid">
+            {formData.location.errorMsg}
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        <Button variant="primary" type="submit">
+          {t('btn_name')}
+        </Button>
+      </Form>
+    </>
   );
 };
 

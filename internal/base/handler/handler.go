@@ -59,3 +59,17 @@ func BindAndCheck(ctx *gin.Context, data interface{}) bool {
 	}
 	return false
 }
+
+// BindAndCheckReturnErr bind request and check
+func BindAndCheckReturnErr(ctx *gin.Context, data interface{}) (errFields []*validator.FormErrorField) {
+	lang := GetLang(ctx)
+	if err := ctx.ShouldBind(data); err != nil {
+		log.Errorf("http_handle BindAndCheck fail, %s", err.Error())
+		HandleResponse(ctx, myErrors.New(http.StatusBadRequest, reason.RequestFormatError), nil)
+		ctx.Abort()
+		return nil
+	}
+
+	errFields, _ = validator.GetValidatorByLang(lang.Abbr()).Check(data)
+	return errFields
+}

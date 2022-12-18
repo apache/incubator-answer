@@ -30,6 +30,7 @@ type AnswerAPIRouter struct {
 	dashboardController      *controller.DashboardController
 	uploadController         *controller.UploadController
 	activityController       *controller.ActivityController
+	roleController           *controller_backyard.RoleController
 }
 
 func NewAnswerAPIRouter(
@@ -56,6 +57,7 @@ func NewAnswerAPIRouter(
 	dashboardController *controller.DashboardController,
 	uploadController *controller.UploadController,
 	activityController *controller.ActivityController,
+	roleController *controller_backyard.RoleController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:           langController,
@@ -81,32 +83,38 @@ func NewAnswerAPIRouter(
 		dashboardController:      dashboardController,
 		uploadController:         uploadController,
 		activityController:       activityController,
+		roleController:           roleController,
 	}
 }
 
-func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
+func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// i18n
 	r.GET("/language/config", a.langController.GetLangMapping)
 	r.GET("/language/options", a.langController.GetUserLangOptions)
 
-	// comment
-	r.GET("/comment/page", a.commentController.GetCommentWithPage)
-	r.GET("/personal/comment/page", a.commentController.GetCommentPersonalWithPage)
-	r.GET("/comment", a.commentController.GetComment)
+	//siteinfo
+	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
+	r.GET("/siteinfo/legal", a.siteinfoController.GetSiteLegalInfo)
 
 	// user
-	r.GET("/user/info", a.userController.GetUserInfoByUserID)
-	r.GET("/user/action/record", a.userController.ActionRecord)
 	r.POST("/user/login/email", a.userController.UserEmailLogin)
 	r.POST("/user/register/email", a.userController.UserRegisterByEmail)
+	r.GET("/user/register/captcha", a.userController.UserRegisterCaptcha)
 	r.POST("/user/email/verification", a.userController.UserVerifyEmail)
+	r.PUT("/user/email", a.userController.UserChangeEmailVerify)
+	r.GET("/user/action/record", a.userController.ActionRecord)
 	r.POST("/user/password/reset", a.userController.RetrievePassWord)
 	r.POST("/user/password/replacement", a.userController.UseRePassWord)
-	r.GET("/personal/user/info", a.userController.GetOtherUserInfoByUsername)
-	r.POST("/user/email/verification/send", a.userController.UserVerifyEmailSend)
+	r.GET("/user/info", a.userController.GetUserInfoByUserID)
+}
+
+func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
+	// user
 	r.GET("/user/logout", a.userController.UserLogout)
-	r.PUT("/user/email", a.userController.UserChangeEmailVerify)
 	r.POST("/user/email/change/code", a.userController.UserChangeEmailSendCode)
+	r.POST("/user/email/verification/send", a.userController.UserVerifyEmailSend)
+	r.GET("/personal/user/info", a.userController.GetOtherUserInfoByUsername)
+	r.GET("/user/ranking", a.userController.UserRanking)
 
 	//answer
 	r.GET("/answer/info", a.answerController.Get)
@@ -120,6 +128,11 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/question/similar/tag", a.questionController.SimilarQuestion)
 	r.GET("/personal/qa/top", a.questionController.UserTop)
 	r.GET("/personal/question/page", a.questionController.UserList)
+
+	// comment
+	r.GET("/comment/page", a.commentController.GetCommentWithPage)
+	r.GET("/personal/comment/page", a.commentController.GetCommentPersonalWithPage)
+	r.GET("/comment", a.commentController.GetComment)
 
 	//revision
 	r.GET("/revisions", a.revisionController.GetRevisionList)
@@ -136,11 +149,6 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	//rank
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
-
-	//siteinfo
-	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
-	r.GET("/siteinfo/legal", a.siteinfoController.GetSiteLegalInfo)
-
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
@@ -180,6 +188,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/question", a.questionController.UpdateQuestion)
 	r.DELETE("/question", a.questionController.RemoveQuestion)
 	r.PUT("/question/status", a.questionController.CloseQuestion)
+	r.PUT("/question/reopen", a.questionController.ReopenQuestion)
 	r.GET("/question/similar", a.questionController.SearchByTitleLike)
 
 	// answer
@@ -229,6 +238,9 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	// user
 	r.GET("/users/page", a.backyardUserController.GetUserPage)
 	r.PUT("/user/status", a.backyardUserController.UpdateUserStatus)
+	r.PUT("/user/role", a.backyardUserController.UpdateUserRole)
+	r.POST("/user", a.backyardUserController.AddUser)
+	r.PUT("/user/password", a.backyardUserController.UpdateUserPassword)
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)
@@ -245,14 +257,25 @@ func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
 	r.GET("/siteinfo/branding", a.siteInfoController.GetSiteBranding)
 	r.GET("/siteinfo/write", a.siteInfoController.GetSiteWrite)
 	r.GET("/siteinfo/legal", a.siteInfoController.GetSiteLegal)
+	r.GET("/siteinfo/seo", a.siteInfoController.GetSeo)
+	r.GET("/siteinfo/login", a.siteInfoController.GetSiteLogin)
+	r.GET("/siteinfo/custom-css-html", a.siteInfoController.GetSiteCustomCssHTML)
+	r.GET("/siteinfo/theme", a.siteInfoController.GetSiteTheme)
 	r.PUT("/siteinfo/general", a.siteInfoController.UpdateGeneral)
 	r.PUT("/siteinfo/interface", a.siteInfoController.UpdateInterface)
 	r.PUT("/siteinfo/branding", a.siteInfoController.UpdateBranding)
 	r.PUT("/siteinfo/write", a.siteInfoController.UpdateSiteWrite)
 	r.PUT("/siteinfo/legal", a.siteInfoController.UpdateSiteLegal)
+	r.PUT("/siteinfo/login", a.siteInfoController.UpdateSiteLogin)
+	r.PUT("/siteinfo/custom-css-html", a.siteInfoController.UpdateSiteCustomCssHTML)
+	r.PUT("/siteinfo/theme", a.siteInfoController.SaveSiteTheme)
+	r.PUT("/siteinfo/seo", a.siteInfoController.UpdateSeo)
 	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
 	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
 
-	//dashboard
+	// dashboard
 	r.GET("/dashboard", a.dashboardController.DashboardInfo)
+
+	// roles
+	r.GET("/roles", a.roleController.GetRoleList)
 }

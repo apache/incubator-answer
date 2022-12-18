@@ -1,0 +1,46 @@
+{{template "header" . }}
+<div style="
+            position: fixed;
+            top: 90px;
+            left: 0px;
+            right: 0px;
+            margin: auto;
+            z-index: 5;
+          ">
+    <div class="d-flex justify-content-center"></div>
+</div>
+<div class="py-3 my-3 container">
+    <div class="mb-4 d-flex justify-content-center row">
+        <div class="col-xxl-10 col-sm-12">
+            <h3 class="mb-4">{{translator $.language "ui.page_title.tags"}}</h3>
+        </div>
+        <div class="mt-4 col-xxl-10 col-sm-12">
+            <div class="row">
+                {{ range .data.List }}
+                <div class="mb-4 col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="h-100 card">
+                        <div class="d-flex flex-column align-items-start card-body">
+                            <a href="/tags/{{.SlugName}}" class="badge-tag rounded-1 mb-3"><span
+                                    class="">{{.SlugName}}</span></a>
+                            <p class="fs-14 flex-fill text-break text-wrap text-truncate-4">{{.ParsedText}}
+                            </p>
+                            <div class="d-flex align-items-center">
+                                <span class="text-secondary fs-14 text-nowrap">{{.QuestionCount}}
+                                    {{translator $.language "ui.tags.tag_label"}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{ end }}
+
+            </div>
+            <div class="d-flex justify-content-center">
+               {{template "page" .}}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{{template "footer" .}}
