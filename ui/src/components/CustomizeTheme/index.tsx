@@ -76,6 +76,12 @@ const Index: FC = () => {
               .dropdown-menu {
                 --bs-dropdown-link-active-bg: rgb(var(--bs-primary-rgb));
               }
+              .link-primary {
+                color: ${primaryColor.hex()}!important;
+              }
+              .link-primary:hover, .link-primary:focus {
+                color: ${shadeColor(primaryColor, 0.8).hex()}!important
+              }
             `}
         </style>
       )}
