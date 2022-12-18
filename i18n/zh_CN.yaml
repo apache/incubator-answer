@@ -11,6 +11,21 @@ backend:
       other: "未登录"
     database_error:
       other: "数据服务异常"
+  role:
+    name:
+      user:
+        other: "User"
+      admin:
+        other: "Admin"
+      moderator:
+        other: "Moderator"
+    description:
+      user:
+        other: "Default with no special access."
+      admin:
+        other: "Have the full power to access the site."
+      moderator:
+        other: "Has access to all posts except admin settings."
   email:
     other: "邮箱"
   password:
@@ -90,6 +105,8 @@ backend:
         other: "不应包含同义词标签。"
       cannot_update:
         other: "没有更新标签权限。"
+      cannot_set_synonym_as_itself:
+        other: "You cannot set the synonym of the current tag as itself."
     theme:
       not_found:
         other: "主题未找到"
@@ -123,59 +140,63 @@ backend:
       install:
         create_config_failed:
           other: "无法创建配置文件"
+      cannot_update_your_role:
+        other: "You cannot modify your role."
+      not_allowed_registration:
+        other: "Currently the site is not open for registration"
   report:
     spam:
       name:
         other: "垃圾信息"
-      description:
-        other: "此帖子是一个广告贴，或是破坏性行为。它对当前的主题无用，也不相关。"
+      desc:
+        other: "This post is an advertisement, or vandalism. It is not useful or relevant to the current topic."
     rude:
       name:
         other: "粗鲁或辱骂的"
-      description:
-        other: "有理智的人都会发现此内容不适合进行尊重的讨论。"
+      desc:
+        other: "A reasonable person would find this content inappropriate for respectful discourse."
     duplicate:
       name:
         other: "重复信息"
-      description:
-        other: "此问题以前就有人问过，而且已经有了答案。"
+      desc:
+        other: "This question has been asked before and already has an answer."
     not_answer:
       name:
         other: "不是答案"
-      description:
-        other: "此帖子是作为一个答案发布的，但它并没有试图回答这个问题。总之，它可能应该是个编辑，评论，另一个问题或者被删除。"
+      desc:
+        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether."
     not_need:
       name:
         other: "不再需要"
-      description:
-        other: "此条评论是过时的，对话性的或与本帖无关。"
+      desc:
+        other: "This comment is outdated, conversational or not relevant to this post."
     other:
       name:
         other: "其他原因"
-      description:
-        other: "此帖子需要工作人员关注，因为是上述所列以外的其他理由。"
+      desc:
+        other: "This post requires staff attention for another reason not listed above."
   question:
     close:
       duplicate:
         name:
           other: "垃圾信息"
-        description:
-          other: "此问题以前就有人问过，而且已经有了答案。"
+        desc:
+          other: "This question has been asked before and already has an answer."
       guideline:
         name:
           other: "社区特定原因"
-        description:
-          other: "此问题不符合社区准则。"
+        desc:
+          other: "This question doesn't meet a community guideline."
       multiple:
         name:
           other: "需要细节或澄清"
-        description:
-          other: "此问题目前涵盖多个问题。它应该只集中在一个问题上。"
+        desc:
+          other: "This question currently includes multiple questions in one. It should focus on one problem only."
       other:
         name:
           other: "其他原因"
-        description:
-          other: "此帖子需要上述所列以外的其他理由。"
+        desc:
+          other: "This post requires another reason not listed above."
   notification:
     action:
       update_question:
@@ -206,8 +227,8 @@ backend:
 ui:
   how_to_format:
     title: 如何设定文本格式
-    description: >-
-      <ul class="mb-0"><li><p class="mb-2">添加链接：</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者 **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用 4 个空格缩进代码</p></li><li><p class="mb-2">在行首添加<code>&gt;</code>表示引用</p></li><li><p class="mb-2">反引号进行转义 <code>`像 _这样_`</code></p></li><li><p class="mb-2">使用<code>```</code>创建代码块</p><pre class="mb-0"><code>```<br/>// 这是代码<br/>```</code></pre></li></ul>
+    desc: >-
+      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: 上一页
     next: 下一页
@@ -236,6 +257,7 @@ ui:
     install: Answer 安装
     upgrade: Answer 升级
     maintenance: 网站维护
+    users: Users
   notifications:
     title: 通知
     inbox: 收件箱
@@ -307,8 +329,8 @@ ui:
               empty: 请选择图片文件。
               only_image: 只能上传图片文件。
               max_size: 图片文件大小不能超过 4 MB。
-          description:
-            label: 图片描述(可选)
+          desc:
+            label: Description (optional)
       tab_url: 网络图片
       form_url:
         fields:
@@ -379,13 +401,13 @@ ui:
             range: 不能超过 35 个字符
         slug_name:
           label: URL 固定链接
-          description: '必须由 "a-z", "0-9", "+ # - ." 组成'
+          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
           msg:
             empty: 不能为空
             range: 不能超过 35 个字符
             character: 包含非法字符
-        description:
-          label: 标签描述(可选)
+        desc:
+          label: Description (optional)
     btn_cancel: 取消
     btn_submit: 提交
   tag_info:
@@ -418,8 +440,8 @@ ui:
         slug_name:
           label: URL 固定链接
           info: '必须由 "a-z", "0-9", "+ # - ." 组成'
-        description:
-          label: 描述
+        desc:
+          label: Description
         edit_summary:
           label: 编辑概要
           placeholder: >-
@@ -475,7 +497,7 @@ ui:
     button_following: 已关注
     tag_label: 个问题
     search_placeholder: 通过标签名过滤
-    no_description: 此标签无描述。
+    no_desc: The tag has no description.
     more: 更多
   ask:
     title: 提交新的问题
@@ -533,7 +555,7 @@ ui:
       placeholder: 搜索
   footer:
     build_on: >-
-      Built on <1> Answer </1>- the open-source software that power Q&A communities<br />Made with love © 2022 Answer
+      Built on <1> Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
     name: 更改图片
     loading: 加载中...
@@ -615,7 +637,8 @@ ui:
       account: 账号
       interface: 界面
     profile:
-      btn_name: 保存更改
+      heading: Profile
+      btn_name: Save
       display_name:
         label: 昵称
         msg: 昵称不能为空
@@ -633,7 +656,7 @@ ui:
         custom: 自定义
         btn_refresh: 刷新
         custom_text: 您可以上传您的图片。
-        default: 默认
+        default: System
         msg: 请上传头像
       bio:
         label: 关于我 (可选)
@@ -645,10 +668,12 @@ ui:
         label: 位置 (可选)
         placeholder: "城市, 国家"
     notification:
+      heading: Notifications
       email:
         label: 邮件通知
         radio: "你的提问有新的回答，评论，和其他"
     account:
+      heading: Account
       change_email_btn: 更改邮箱
       change_pass_btn: 更改密码
       change_email_info: >-
@@ -668,6 +693,7 @@ ui:
       pass_confirm:
         label: 确认新密码
     interface:
+      heading: Interface
       lang:
         label: 界面语言
         text: 设置用户界面语言，在刷新页面后生效。
@@ -675,7 +701,7 @@ ui:
     update: 更新成功
     update_password: 更改密码成功。
     flag_success: 感谢您的标记，我们会尽快处理。
-    fobidden_operate_self: 禁止操作
+    forbidden_operate_self: Forbidden to operate on yourself
     review: 您的修订将在审核通过后显示。
   related_question:
     title: 相关问题
@@ -701,11 +727,16 @@ ui:
     write_answer:
       title: 你的回答
       btn_name: 提交你的回答
+      add_another_answer: Add another answer
       confirm_title: 继续回答
       continue: 继续
       confirm_info: >-
         <p>您确定要提交一个新的回答吗？</p><p>您可以直接编辑和改善您之前的回答的。</p>
       empty: 回答内容不能为空。
+    reopen:
+      title: Reopen this post
+      content: Are you sure you want to reopen?
+      success: This post has been reopened
   delete:
     title: 删除
     question: >-
@@ -858,8 +889,8 @@ ui:
     config_yaml:
       title: 创建 config.yaml
       label: 已创建 config.yaml 文件。
-      description: >-
-        您可以手动在 <1>/var/wwww/xxx/</1> 目录中创建<1>config.yaml</1> 文件并粘贴以下文本。
+      desc: >-
+        You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
       info: "完成后，点击“下一步”按钮。"
     site_information: 站点信息
     admin_account: 管理员帐户
@@ -893,27 +924,27 @@ ui:
         empty: Email cannot be empty.
         incorrect: Email incorrect format.
     ready_title: Your Answer is Ready!
-    ready_description: >-
+    ready_desc: >-
       If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.
     good_luck: "Have fun, and good luck!"
     warn_title: Warning
-    warn_description: >-
+    warn_desc: >-
       The file <1>config.yaml</1> already exists. If you need to reset any of the configuration items in this file, please delete it first.
     install_now: You may try <1>installing now</1>.
     installed: 已安裝
-    installed_description: >-
+    installed_desc: >-
       You appear to have already installed. To reinstall please clear your old database tables first.
     db_failed: 数据连接异常！
-    db_failed_description: >-
+    db_failed_desc: >-
       This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
   page_404:
-    description: "页面不存在"
+    desc: "Unfortunately, this page doesn't exist."
     back_home: 回到主页
   page_50X:
-    description: 服务器遇到了一个错误，无法完成你的请求。
+    desc: The server encountered an error and could not complete your request.
     back_home: 回到主页
   page_maintenance:
-    description: "We are under maintenance, we’ll be back soon."
+    desc: "We are under maintenance, we’ll be back soon."
   nav_menus:
     dashboard: 后台管理
     contents: 内容管理
@@ -930,6 +961,11 @@ ui:
     write: 撰写
     tos: 服务条款
     privacy: 隐私政策
+    seo: SEO
+    customize: Customize
+    themes: Themes
+    css-html: CSS/HTML
+    login: Login
   admin:
     admin_header:
       title: 后台管理
@@ -979,13 +1015,13 @@ ui:
       btn_cancel: 取消
       btn_submit: 提交
       normal_name: 正常
-      normal_description: 正常状态的用户可以提问和回答。
+      normal_desc: A normal user can ask and answer questions.
       suspended_name: 封禁
-      suspended_description: 被封禁的用户将无法登录。
+      suspended_desc: A suspended user can't log in.
       deleted_name: 删除
-      deleted_description: "删除用户的个人信息，认证等等。"
+      deleted_desc: "Delete profile, authentication associations."
       inactive_name: 不活跃
-      inactive_description: 不活跃的用户必须重新验证邮箱。
+      inactive_desc: An inactive user must re-validate their email.
       confirm_title: 删除此用户
       confirm_content: 确定要删除此用户？此操作无法撤销！
       confirm_btn: 删除
@@ -994,11 +1030,11 @@ ui:
     status_modal:
       title: "更改 {{ type }} 状态为..."
       normal_name: 正常
-      normal_description: 所有用户都可以访问
+      normal_desc: A normal post available to everyone.
       closed_name: 关闭
-      closed_description: "不能回答，但仍然可以编辑、投票和评论。"
+      closed_desc: "A closed question can't answer, but still can edit, vote and comment."
       deleted_name: 删除
-      deleted_description: 所有获得/损失的声望将会恢复。
+      deleted_desc: All reputation gained and lost will be restored.
       btn_cancel: 取消
       btn_submit: 提交
       btn_next: 下一步
@@ -1033,6 +1069,32 @@ ui:
       change_status: 更改状态
       change_role: 更改角色
       show_logs: 显示日志
+      add_user: Add user
+      new_password_modal:
+        title: Set new password
+        form:
+          fields:
+            password:
+              label: Password
+              text: The user will be logged out and need to login again.
+              msg: Password must be at 8 - 32 characters in length.
+        btn_cancel: Cancel
+        btn_submit: Submit
+      user_modal:
+        title: Add new user
+        form:
+          fields:
+            display_name:
+              label: Display Name
+              msg: display_name must be at 4 - 30 characters in length.
+            email:
+              label: Email
+              msg: Email is not valid.
+            password:
+              label: Password
+              msg: Password must be at 8 - 32 characters in length.
+        btn_cancel: Cancel
+        btn_submit: Submit
     questions:
       page_title: 问题
       normal: 正常
@@ -1070,14 +1132,14 @@ ui:
         msg: Site url cannot be empty.
         validate: Please enter a valid URL.
         text: The address of your site.
-      short_description:
-        label: 简短的站点标语 (可选)
-        msg: 不能为空
-        text: "简短的标语，作为网站主页的标题（HTML 的 title 标签）。"
-      description:
-        label: 网站描述 (可选)
-        msg: 不能为空
-        text: "使用一句话描述本站，作为网站的描述（HTML 的 meta 标签）。"
+      short_desc:
+        label: Short Site Description (optional)
+        msg: Short site description cannot be empty.
+        text: "Short description, as used in the title tag on homepage."
+      desc:
+        label: Site Description (optional)
+        msg: Site description cannot be empty.
+        text: "Describe this site in one sentence, as used in the meta description tag."
       contact_email:
         label: Contact Email
         msg: Contact email cannot be empty.
@@ -1136,7 +1198,8 @@ ui:
         text: 提供用于接收测试邮件的邮箱地址。
         msg: 地址无效
       smtp_authentication:
-        label: SMTP 认证
+        label: Enable authentication
+        title: SMTP Authentication
         msg: 不能为空
         "yes": "是"
         "no": "否"
@@ -1176,6 +1239,49 @@ ui:
       reserved_tags:
         label: Reserved Tags
         text: "Reserved tags can only be added to a post by moderator."
+    seo:
+      page_title: SEO
+      permalink:
+        label: Permalink
+        text: Custom URL structures can improve the usability, and forward-compatibility of your links.
+      robots:
+        label: robots.txt
+        text: This will permanently override any related site settings.
+    themes:
+      page_title: Themes
+      themes:
+        label: Themes
+        text: Select an existing theme.
+      navbar_style:
+        label: Navbar Style
+        text: Select an existing theme.
+      primary_color:
+        label: Primary Color
+        text: Modify the colors used by your themes
+    css_and_html:
+      page_title: CSS and HTML
+      custom_css:
+        label: Custom CSS
+        text: This will insert as <link>
+      head:
+        label: Head
+        text: This will insert before </head>
+      header:
+        label: Header
+        text: This will insert after <body>
+      footer:
+        label: Footer
+        text: This will insert before </html>.
+    login:
+      page_title: Login
+      membership:
+        title: Membership
+        label: Allow new registrations
+        text: Turn off to prevent anyone from creating a new account.
+      private:
+        title: Private
+        label: Login required
+        text: Only logged in users can access this community.
   form:
     empty: cannot be empty
     invalid: is invalid
@@ -1219,3 +1325,12 @@ ui:
     by: 由
     comment: 评论
     no_data: "空空如也"
+  users:
+    title: Users
+    users_with_the_most_reputation: Users with the highest reputation scores
+    users_with_the_most_vote: Users who voted the most
+    staffs: Our community staff
+    reputation: reputation
+    votes: votes
+
+
