@@ -38,7 +38,7 @@ func addThemeAndPrivateMode(x *xorm.Engine) error {
 		return fmt.Errorf("get config failed: %w", err)
 	}
 	if !exist {
-		_, err = x.InsertOne(siteInfo)
+		_, err = x.InsertOne(themeSiteInfo)
 	}
 	return err
 }
