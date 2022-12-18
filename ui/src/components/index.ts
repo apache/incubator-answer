@@ -29,6 +29,7 @@ import Labels from './LabelsCard';
 import DiffContent from './DiffContent';
 import Customize from './Customize';
 import CustomizeTheme from './CustomizeTheme';
+import PageTags from './PageTags';
 
 export {
   Avatar,
@@ -64,5 +65,6 @@ export {
   DiffContent,
   Customize,
   CustomizeTheme,
+  PageTags,
 };
 export type { EditorRef, JSONSchema, UISchema };
