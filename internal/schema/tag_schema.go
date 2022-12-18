@@ -5,6 +5,7 @@ import (
 
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -27,6 +28,17 @@ type GetTagInfoReq struct {
 	CanEdit bool `json:"-"`
 	// whether user can delete it
 	CanDelete bool `json:"-"`
+}
+
+type GetTamplateTagInfoReq struct {
+	// tag id
+	ID string `validate:"omitempty" form:"id"`
+	// tag slug name
+	Name string `validate:"omitempty" form:"name"`
+	// user id
+	UserID   string `json:"-"`
+	Page     int    `validate:"omitempty,min=1" form:"page"`
+	PageSize int    `validate:"omitempty,min=1" form:"page_size"`
 }
 
 func (r *GetTagInfoReq) Check() (errFields []*validator.FormErrorField, err error) {
@@ -55,6 +67,8 @@ type GetTagResp struct {
 	OriginalText string `json:"original_text"`
 	// parsed text
 	ParsedText string `json:"parsed_text"`
+	// description text
+	Description string `json:"description"`
 	// follower amount
 	FollowCount int `json:"follow_count"`
 	// question amount
@@ -162,8 +176,9 @@ type UpdateTagReq struct {
 
 func (r *UpdateTagReq) Check() (errFields []*validator.FormErrorField, err error) {
 	if len(r.EditSummary) == 0 {
-		r.EditSummary = "tag.edit.summary" // to do i18n
+		r.EditSummary = "tag.edit.summary"
 	}
+	r.ParsedText = converter.Markdown2HTML(r.OriginalText)
 	return nil, nil
 }
 

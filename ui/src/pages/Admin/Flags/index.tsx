@@ -14,8 +14,7 @@ import { useReportModal } from '@/hooks';
 import * as Type from '@/common/interface';
 import { useFlagSearch } from '@/services';
 import { escapeRemove } from '@/utils';
-
-import '../index.scss';
+import { pathFactory } from '@/router/pathFactory';
 
 const flagFilterKeys: Type.FlagStatus[] = ['pending', 'completed'];
 const flagTypeKeys: Type.FlagType[] = ['all', 'question', 'answer', 'comment'];
@@ -101,7 +100,10 @@ const Flags: FC = () => {
                     </small>
                     <BaseUserCard data={li.reported_user} className="mt-2" />
                     <a
-                      href={`/questions/${li.question_id}`}
+                      href={pathFactory.questionLanding(
+                        li.question_id,
+                        li.url_title,
+                      )}
                       target="_blank"
                       className="text-wrap text-break mt-2"
                       rel="noreferrer">

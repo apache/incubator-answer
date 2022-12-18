@@ -1,0 +1,90 @@
+env:
+  - GO11MODULE=on
+  - GO111MODULE=on
+  - GOPROXY=https://goproxy.io
+  - CGO_ENABLED=1
+
+before:
+  hooks:
+    - go mod tidy
+builds:
+  - id: build-amd64
+    main: ./cmd/answer/.
+    binary: answer
+    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
+    goos:
+      - linux
+    goarch:
+      - amd64
+  # linux windows need cgomingw64-gcc
+  - id: build-windows
+    main: ./cmd/answer/.
+    binary: answer
+    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
+    env:
+      - CC=x86_64-w64-mingw32-gcc
+      - CXX=x86_64-w64-mingw32-g++
+    goos:
+      - windows
+    goarch:
+      - amd64
+    # linux arm64 need cgo arm64
+  - id: build-arm64
+    main: ./cmd/answer/.
+    binary: answer
+    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
+    env:
+      - CC=aarch64-linux-gnu-gcc
+      - CXX=aarch64-linux-gnu-g++
+    goos:
+      - linux
+    goarch:
+      - arm64
+  - id: build-darwin-arm64
+    main: ./cmd/answer/.
+    binary: answer
+    env:
+      - CC=oa64-clang
+      - CXX=oa64-clang++
+    goos:
+      - darwin
+    goarch:
+      - arm64
+    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser  
+    flags: -v
+  - id: build-darwin-amd64
+    main: ./cmd/answer/.
+    binary: answer
+    env:
+      - CC=o64-clang
+      - CXX=o64-clang++
+    goos:
+      - darwin
+    goarch:
+      - amd64
+    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser  
+    flags: -v
+
+
+archives:
+  - replacements:
+      darwin: Darwin
+      amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ incpatch .Version }}"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+
+
+# sudo apt-get install build-essential 
+# sudo apt-get install gcc-multilib g++-multilib
+# sudo apt-get install gcc-mingw-w64
+# sudo apt-get -y install gcc-aarch64-linux-gnu gcc-arm-linux-gnueabihf
+# sudo apt-get install clang llvm
+# goreleaser release --snapshot --rm-dist

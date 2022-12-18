@@ -204,15 +204,13 @@ const useTagModal = (props: IProps = {}) => {
                 isInvalid={formData.slugName.isInvalid}
               />
 
-              <Form.Text as="div">
-                {t('form.fields.slug_name.description')}
-              </Form.Text>
+              <Form.Text as="div">{t('form.fields.slug_name.desc')}</Form.Text>
               <Form.Control.Feedback type="invalid">
                 {formData.slugName.errorMsg}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="description">
-              <Form.Label>{t('form.fields.description.label')}</Form.Label>
+              <Form.Label>{t('form.fields.desc.label')}</Form.Label>
               <Form.Control
                 className="font-monospace"
                 value={formData.description.value}

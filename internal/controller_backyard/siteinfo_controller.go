@@ -1,6 +1,8 @@
 package controller_backyard
 
 import (
+	"net/http"
+
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/schema"
@@ -83,6 +85,109 @@ func (sc *SiteInfoController) GetSiteWrite(ctx *gin.Context) {
 func (sc *SiteInfoController) GetSiteLegal(ctx *gin.Context) {
 	resp, err := sc.siteInfoService.GetSiteLegal(ctx)
 	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetSeo get site seo information
+// @Summary get site seo information
+// @Description get site seo information
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteSeoResp}
+// @Router /answer/admin/api/siteinfo/seo [get]
+func (sc *SiteInfoController) GetSeo(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSeo(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetSiteLogin get site info login config
+// @Summary get site info login config
+// @Description get site info login config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteLoginResp}
+// @Router /answer/admin/api/siteinfo/login [get]
+func (sc *SiteInfoController) GetSiteLogin(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteLogin(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetSiteCustomCssHTML get site info custom html css config
+// @Summary get site info custom html css config
+// @Description get site info custom html css config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteCustomCssHTMLResp}
+// @Router /answer/admin/api/siteinfo/custom-css-html [get]
+func (sc *SiteInfoController) GetSiteCustomCssHTML(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteCustomCssHTML(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetSiteTheme get site info theme config
+// @Summary get site info theme config
+// @Description get site info theme config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteThemeResp}
+// @Router /answer/admin/api/siteinfo/theme [get]
+func (sc *SiteInfoController) GetSiteTheme(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteTheme(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// GetRobots get site robots information
+// @Summary get site robots information
+// @Description get site robots information
+// @Tags site
+// @Produce json
+// @Success 200 {string} txt ""
+// @Router /robots.txt [get]
+func (sc *SiteInfoController) GetRobots(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSeo(ctx)
+	if err != nil {
+		ctx.String(http.StatusOK, "")
+		return
+	}
+	ctx.String(http.StatusOK, resp.Robots)
+}
+
+// GetRobots get site robots information
+// @Summary get site robots information
+// @Description get site robots information
+// @Tags site
+// @Produce json
+// @Success 200 {string} txt ""
+// @Router /custom.css [get]
+func (sc *SiteInfoController) GetCss(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteCustomCssHTML(ctx)
+	if err != nil {
+		ctx.String(http.StatusOK, "")
+		return
+	}
+	ctx.Header("content-type", "text/css;charset=utf-8")
+	ctx.String(http.StatusOK, resp.CustomCss)
+}
+
+// UpdateSeo update site seo information
+// @Summary update site seo information
+// @Description update site seo information
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.SiteSeoReq true "seo"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/siteinfo/seo [put]
+func (sc *SiteInfoController) UpdateSeo(ctx *gin.Context) {
+	req := schema.SiteSeoReq{}
+	if handler.BindAndCheck(ctx, &req) {
+		return
+	}
+	err := sc.siteInfoService.SaveSeo(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
 }
 
 // UpdateGeneral update site general information
@@ -174,6 +279,60 @@ func (sc *SiteInfoController) UpdateSiteLegal(ctx *gin.Context) {
 		return
 	}
 	err := sc.siteInfoService.SaveSiteLegal(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// UpdateSiteLogin update site login
+// @Summary update site login
+// @Description update site login
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.SiteLoginReq true "login info"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/siteinfo/login [put]
+func (sc *SiteInfoController) UpdateSiteLogin(ctx *gin.Context) {
+	req := &schema.SiteLoginReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	err := sc.siteInfoService.SaveSiteLogin(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// UpdateSiteCustomCssHTML update site custom css html config
+// @Summary update site custom css html config
+// @Description update site custom css html config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.SiteCustomCssHTMLReq true "login info"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/siteinfo/custom-css-html [put]
+func (sc *SiteInfoController) UpdateSiteCustomCssHTML(ctx *gin.Context) {
+	req := &schema.SiteCustomCssHTMLReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	err := sc.siteInfoService.SaveSiteCustomCssHTML(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// SaveSiteTheme update site custom css html config
+// @Summary update site custom css html config
+// @Description update site custom css html config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.SiteThemeReq true "login info"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/siteinfo/theme [put]
+func (sc *SiteInfoController) SaveSiteTheme(ctx *gin.Context) {
+	req := &schema.SiteThemeReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	err := sc.siteInfoService.SaveSiteTheme(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

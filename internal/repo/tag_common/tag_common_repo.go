@@ -55,7 +55,7 @@ func (tr *tagCommonRepo) GetTagBySlugName(ctx context.Context, slugName string) 
 }
 
 // GetTagListByName get tag list all like name
-func (tr *tagCommonRepo) GetTagListByName(ctx context.Context, name string, limit int, hasReserved bool) (tagList []*entity.Tag, err error) {
+func (tr *tagCommonRepo) GetTagListByName(ctx context.Context, name string, hasReserved bool) (tagList []*entity.Tag, err error) {
 	tagList = make([]*entity.Tag, 0)
 	cond := &entity.Tag{}
 	session := tr.data.DB.Where("")
@@ -65,13 +65,13 @@ func (tr *tagCommonRepo) GetTagListByName(ctx context.Context, name string, limi
 		cond.Recommend = true
 	}
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
-	session.Limit(limit).Asc("slug_name")
-	if !hasReserved {
-		cond.Reserved = false
-		session.UseBool("recommend", "reserved")
-	} else {
-		session.UseBool("recommend")
-	}
+	session.Asc("slug_name")
+	// if !hasReserved {
+	// 	cond.Reserved = false
+	// 	session.UseBool("recommend", "reserved")
+	// } else {
+	session.UseBool("recommend")
+	// }
 	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList, cond)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

@@ -3,9 +3,11 @@ import { Container, Row, Col, Form, Table } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { usePageTags } from '@/hooks';
+import { pathFactory } from '@/router/pathFactory';
 import { loggedUserInfoStore } from '@/stores';
 import { getTimelineData } from '@/services';
-import { PageTitle, Empty } from '@/components';
+import { Empty } from '@/components';
 import * as Type from '@/common/interface';
 
 import HistoryItem from './components/Item';
@@ -44,12 +46,19 @@ const Index: FC = () => {
   let linkUrl = '';
   let pageTitle = '';
   if (timelineData?.object_info.object_type === 'question') {
-    linkUrl = `/questions/${timelineData?.object_info.question_id}`;
+    linkUrl = pathFactory.questionLanding(
+      timelineData?.object_info.question_id,
+      timelineData?.object_info.url_title,
+    );
     pageTitle = `${t('title_for_question')} ${timelineData?.object_info.title}`;
   }
 
   if (timelineData?.object_info.object_type === 'answer') {
-    linkUrl = `/questions/${timelineData?.object_info.question_id}/${timelineData?.object_info.answer_id}`;
+    linkUrl = pathFactory.answerLanding({
+      questionId: timelineData?.object_info.question_id,
+      slugTitle: timelineData?.object_info.url_title,
+      answerId: timelineData?.object_info.answer_id,
+    });
     pageTitle = `${t('title_for_answer', {
       title: timelineData?.object_info.title,
       author: timelineData?.object_info.display_name,
@@ -66,10 +75,11 @@ const Index: FC = () => {
 
   const revisionList =
     timelineData?.timeline?.filter((item) => item.revision_id > 0) || [];
-
+  usePageTags({
+    title: pageTitle,
+  });
   return (
     <Container className="py-3">
-      <PageTitle title={pageTitle} />
       <Row className="py-3 justify-content-center">
         <Col xxl={10}>
           <h5 className="mb-4">

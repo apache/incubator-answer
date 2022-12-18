@@ -1,7 +1,9 @@
 package schema
 
 import (
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/jinzhu/copier"
 )
 
@@ -27,6 +29,11 @@ type AddCommentReq struct {
 	CanDelete bool `json:"-"`
 }
 
+func (req *AddCommentReq) Check() (errFields []*validator.FormErrorField, err error) {
+	req.ParsedText = converter.Markdown2HTML(req.OriginalText)
+	return nil, nil
+}
+
 // RemoveCommentReq remove comment
 type RemoveCommentReq struct {
 	// comment id
@@ -45,6 +52,11 @@ type UpdateCommentReq struct {
 	ParsedText string `validate:"omitempty" json:"parsed_text"`
 	// user id
 	UserID string `json:"-"`
+}
+
+func (req *UpdateCommentReq) Check() (errFields []*validator.FormErrorField, err error) {
+	req.ParsedText = converter.Markdown2HTML(req.OriginalText)
+	return nil, nil
 }
 
 // GetCommentListReq get comment list all request

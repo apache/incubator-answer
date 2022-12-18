@@ -96,6 +96,11 @@ export const register = (params: Type.RegisterReqParams) => {
   return request.post<any>('/answer/api/v1/user/register/email', params);
 };
 
+export const getRegisterCaptcha = () => {
+  const apiUrl = '/answer/api/v1/user/register/captcha';
+  return request.get(apiUrl);
+};
+
 export const logout = () => {
   return request.get('/answer/api/v1/user/logout');
 };
@@ -247,4 +252,8 @@ export const changeEmailVerify = (params: { code: string }) => {
 
 export const getAppSettings = () => {
   return request.get<Type.SiteSettings>('/answer/api/v1/siteinfo');
+};
+
+export const reopenQuestion = (params: { question_id: string }) => {
+  return request.put('/answer/api/v1/question/reopen', params);
 };

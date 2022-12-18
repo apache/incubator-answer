@@ -5,6 +5,7 @@ import (
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/internal/service/tag"
 	"github.com/answerdev/answer/internal/service/tag_common"
@@ -63,7 +64,7 @@ func (tc *TagController) RemoveTag(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	can, err := tc.rankService.CheckOperationPermission(ctx, req.UserID, rank.TagDeleteRank, "")
+	can, err := tc.rankService.CheckOperationPermission(ctx, req.UserID, permission.TagDelete, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -94,9 +95,9 @@ func (tc *TagController) UpdateTag(ctx *gin.Context) {
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	canList, err := tc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.TagEditRank,
-		rank.TagEditWithoutReviewRank,
-	}, "")
+		permission.TagEdit,
+		permission.TagEditWithoutReview,
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -133,9 +134,9 @@ func (tc *TagController) GetTagInfo(ctx *gin.Context) {
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	canList, err := tc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.TagEditRank,
-		rank.TagDeleteRank,
-	}, "")
+		permission.TagEdit,
+		permission.TagDelete,
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -199,14 +200,12 @@ func (tc *TagController) GetTagSynonyms(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	canList, err := tc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.TagSynonymRank,
-	}, "")
+	can, err := tc.rankService.CheckOperationPermission(ctx, req.UserID, permission.TagSynonym, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	req.CanEdit = canList[0]
+	req.CanEdit = can
 
 	resp, err := tc.tagService.GetTagSynonyms(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
@@ -228,7 +227,7 @@ func (tc *TagController) UpdateTagSynonym(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	can, err := tc.rankService.CheckOperationPermission(ctx, req.UserID, rank.TagSynonymRank, "")
+	can, err := tc.rankService.CheckOperationPermission(ctx, req.UserID, permission.TagSynonym, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return

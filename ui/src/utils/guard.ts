@@ -4,6 +4,10 @@ import {
   siteInfoStore,
   interfaceStore,
   brandingStore,
+  loginSettingStore,
+  customizeStore,
+  themeSettingStore,
+  seoSettingStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
 import Storage from '@/utils/storage';
@@ -25,6 +29,7 @@ export type TGuardResult = {
   ok: boolean;
   redirect?: string;
 };
+export type TGuardFunc = () => TGuardResult;
 
 export const deriveLoginState = (): TLoginState => {
   const ls: TLoginState = {
@@ -54,8 +59,18 @@ export const deriveLoginState = (): TLoginState => {
   if (ls.isNormal && user.is_admin === true) {
     ls.isAdmin = true;
   }
-
   return ls;
+};
+
+const isIgnoredPath = (ignoredPath: string | string[]) => {
+  if (!Array.isArray(ignoredPath)) {
+    ignoredPath = [ignoredPath];
+  }
+  const { pathname } = window.location;
+  const matchingPath = ignoredPath.find((_) => {
+    return pathname.indexOf(_) !== -1;
+  });
+  return !!matchingPath;
 };
 
 let pullLock = false;
@@ -108,7 +123,7 @@ export const notLogged = () => {
 };
 
 export const notActivated = () => {
-  const gr = logged();
+  const gr: TGuardResult = { ok: true };
   const us = deriveLoginState();
   if (us.isActivated) {
     gr.ok = false;
@@ -128,7 +143,7 @@ export const activated = () => {
 };
 
 export const forbidden = () => {
-  const gr = logged();
+  const gr: TGuardResult = { ok: true };
   const us = deriveLoginState();
   if (gr.ok && !us.isForbidden) {
     gr.ok = false;
@@ -154,6 +169,46 @@ export const admin = () => {
     gr.ok = false;
     gr.redirect = RouteAlias.home;
   }
+  return gr;
+};
+
+export const allowNewRegistration = () => {
+  const gr: TGuardResult = { ok: true };
+  const loginSetting = loginSettingStore.getState().login;
+  if (!loginSetting.allow_new_registrations) {
+    gr.ok = false;
+    gr.redirect = RouteAlias.home;
+  }
+  return gr;
+};
+
+export const shouldLoginRequired = () => {
+  const gr: TGuardResult = { ok: true };
+  const loginSetting = loginSettingStore.getState().login;
+  if (!loginSetting.login_required) {
+    return gr;
+  }
+  const us = deriveLoginState();
+  if (us.isLogged) {
+    return gr;
+  }
+  if (
+    isIgnoredPath([
+      RouteAlias.login,
+      RouteAlias.register,
+      '/users/account-recovery',
+      'users/change-email',
+      'users/password-reset',
+      'users/account-activation',
+      'users/account-activation/success',
+      '/users/account-activation/failed',
+      '/users/confirm-new-email',
+    ])
+  ) {
+    return gr;
+  }
+  gr.ok = false;
+  gr.redirect = RouteAlias.login;
   return gr;
 };
 
@@ -203,12 +258,15 @@ export const initAppSettingsStore = async () => {
     siteInfoStore.getState().update(appSettings.general);
     interfaceStore.getState().update(appSettings.interface);
     brandingStore.getState().update(appSettings.branding);
+    loginSettingStore.getState().update(appSettings.login);
+    customizeStore.getState().update(appSettings.custom_css_html);
+    themeSettingStore.getState().update(appSettings.theme);
+    seoSettingStore.getState().update(appSettings.site_seo);
   }
 };
 
 export const shouldInitAppFetchData = () => {
-  const { pathname } = window.location;
-  if (pathname === '/install') {
+  if (isIgnoredPath('/install')) {
     return false;
   }
 
@@ -222,7 +280,6 @@ export const setupApp = async () => {
    * 2. must pre init app settings for app render
    */
   // TODO: optimize `initAppSettingsStore` by server render
-
   if (shouldInitAppFetchData()) {
     await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
     setupAppLanguage();

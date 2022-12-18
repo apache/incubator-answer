@@ -8,4 +8,5 @@ var ProviderSetController = wire.NewSet(
 	NewUserBackyardController,
 	NewThemeController,
 	NewSiteInfoController,
+	NewRoleController,
 )

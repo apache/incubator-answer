@@ -69,9 +69,8 @@ func NewSearchRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo, userCommon
 
 // SearchContents search question and answer data
 func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs []string, userID string, votes int, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
-	if words = filterWords(words); len(words) == 0 {
-		return
-	}
+	words = filterWords(words)
+
 	var (
 		b     *builder.Builder
 		ub    *builder.Builder
@@ -80,9 +79,14 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 		argsQ = []interface{}{}
 		argsA = []interface{}{}
 	)
+
 	if order == "relevance" {
-		qfs, argsQ = addRelevanceField([]string{"title", "original_text"}, words, qfs)
-		afs, argsA = addRelevanceField([]string{"`answer`.`original_text`"}, words, afs)
+		if len(words) > 0 {
+			qfs, argsQ = addRelevanceField([]string{"title", "original_text"}, words, qfs)
+			afs, argsA = addRelevanceField([]string{"`answer`.`original_text`"}, words, afs)
+		} else {
+			order = "newest"
+		}
 	}
 
 	b = builder.MySQL().Select(qfs...).From("`question`")

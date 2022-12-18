@@ -40,8 +40,6 @@ func NewObjService(
 	}
 }
 func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID string) (objInfo *schema.UnreviewedRevisionInfoInfo, err error) {
-	objInfo = &schema.UnreviewedRevisionInfoInfo{}
-
 	objectType, err := obj.GetObjectTypeStrByObjectID(objectID)
 	if err != nil {
 		return nil, err
@@ -149,6 +147,9 @@ func (os *ObjService) GetInfo(ctx context.Context, objectID string) (objInfo *sc
 		questionInfo, exist, err := os.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
 		if err != nil {
 			return nil, err
+		}
+		if !exist {
+			break
 		}
 		objInfo = &schema.SimpleObjectInfo{
 			ObjectID:            answerInfo.ID,

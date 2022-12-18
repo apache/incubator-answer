@@ -106,16 +106,16 @@ func FormatAvatarInfo(avatarJson string) string {
 	if avatarJson == "" {
 		return ""
 	}
-	AvatarInfo := &AvatarInfo{}
-	err := json.Unmarshal([]byte(avatarJson), AvatarInfo)
+	avatarInfo := &AvatarInfo{}
+	err := json.Unmarshal([]byte(avatarJson), avatarInfo)
 	if err != nil {
 		return ""
 	}
-	switch AvatarInfo.Type {
+	switch avatarInfo.Type {
 	case "gravatar":
-		return AvatarInfo.Gravatar
+		return avatarInfo.Gravatar
 	case "custom":
-		return AvatarInfo.Custom
+		return avatarInfo.Custom
 	default:
 		return ""
 	}
@@ -232,8 +232,10 @@ type UserRegisterReq struct {
 	// email
 	Email string `validate:"required,email,gt=0,lte=500" json:"e_mail" `
 	// password
-	Pass string `validate:"required,gte=8,lte=32" json:"pass"`
-	IP   string `json:"-" `
+	Pass        string `validate:"required,gte=8,lte=32" json:"pass"`
+	IP          string `json:"-" `
+	CaptchaID   string `json:"captcha_id"`   // captcha_id
+	CaptchaCode string `json:"captcha_code"` // captcha_code
 }
 
 func (u *UserRegisterReq) Check() (errFields []*validator.FormErrorField, err error) {
@@ -368,8 +370,7 @@ type ActionRecordResp struct {
 }
 
 type UserBasicInfo struct {
-	ID          string `json:"-"` // user_id
-	IsAdmin     bool   `json:"-"`
+	ID          string `json:"id"`           // user_id
 	Username    string `json:"username" `    // name
 	Rank        int    `json:"rank" `        // rank
 	DisplayName string `json:"display_name"` // display_name
@@ -417,4 +418,25 @@ type UserChangeEmailVerifyReq struct {
 type UserVerifyEmailSendReq struct {
 	CaptchaID   string `validate:"omitempty,gt=0,lte=500" json:"captcha_id"`
 	CaptchaCode string `validate:"omitempty,gt=0,lte=500" json:"captcha_code"`
+}
+
+// UserRankingResp user ranking response
+type UserRankingResp struct {
+	UsersWithTheMostReputation []*UserRankingSimpleInfo `json:"users_with_the_most_reputation"`
+	UsersWithTheMostVote       []*UserRankingSimpleInfo `json:"users_with_the_most_vote"`
+	Staffs                     []*UserRankingSimpleInfo `json:"staffs"`
+}
+
+// UserRankingSimpleInfo user ranking simple info
+type UserRankingSimpleInfo struct {
+	// username
+	Username string `json:"username"`
+	// rank
+	Rank int `json:"rank"`
+	// vote
+	VoteCount int `json:"vote_count"`
+	// display name
+	DisplayName string `json:"display_name"`
+	// avatar
+	Avatar string `json:"avatar"`
 }

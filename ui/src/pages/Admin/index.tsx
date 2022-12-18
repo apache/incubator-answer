@@ -3,7 +3,8 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 
-import { AccordionNav, PageTitle } from '@/components';
+import { usePageTags } from '@/hooks';
+import { AccordionNav } from '@/components';
 import { ADMIN_NAV_MENUS } from '@/common/constants';
 
 import './index.scss';
@@ -15,15 +16,19 @@ const formPaths = [
   'branding',
   'legal',
   'write',
+  'seo',
+  'themes',
+  'css-html',
 ];
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
   const { pathname } = useLocation();
-
+  usePageTags({
+    title: t('admin'),
+  });
   return (
     <>
-      <PageTitle title={t('admin')} />
       <div className="bg-light py-2">
         <Container className="py-1">
           <h6 className="mb-0 fw-bold lh-base">

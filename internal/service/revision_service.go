@@ -305,7 +305,7 @@ func (rs *RevisionService) GetUnreviewedRevisionPage(ctx context.Context, req *s
 		}
 		if exists {
 			var uinfo schema.UserBasicInfo
-			err = copier.Copy(&uinfo, userInfo)
+			_ = copier.Copy(&uinfo, userInfo)
 			item.UnreviewedInfo.UserInfo = uinfo
 		}
 		revisionResp = append(revisionResp, item)

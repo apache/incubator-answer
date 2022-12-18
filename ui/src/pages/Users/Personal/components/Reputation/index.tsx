@@ -3,6 +3,7 @@ import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { FormatTime } from '@/components';
+import { pathFactory } from '@/router/pathFactory';
 
 interface Props {
   visible: boolean;
@@ -30,11 +31,18 @@ const Index: FC<Props> = ({ visible, data }) => {
             <div>
               <a
                 className="text-break"
-                href={`/questions/${
+                href={
                   item.object_type === 'question'
-                    ? item.object_id
-                    : `${item.question_id}/${item.object_id}`
-                }`}>
+                    ? pathFactory.questionLanding(
+                        item.object_id,
+                        item.url_title,
+                      )
+                    : pathFactory.answerLanding({
+                        questionId: item.question_id,
+                        slugTitle: item.url_title,
+                        answerId: item.object_id,
+                      })
+                }>
                 {item.title}
               </a>
               <div className="d-flex align-items-center fs-14 text-secondary">

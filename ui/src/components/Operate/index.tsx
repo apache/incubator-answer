@@ -6,7 +6,12 @@ import { useTranslation } from 'react-i18next';
 import { Modal } from '@/components';
 import { useReportModal, useToast } from '@/hooks';
 import Share from '../Share';
-import { deleteQuestion, deleteAnswer, editCheck } from '@/services';
+import {
+  deleteQuestion,
+  deleteAnswer,
+  editCheck,
+  reopenQuestion,
+} from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
 
 interface IProps {
@@ -14,6 +19,7 @@ interface IProps {
   qid: string;
   aid?: string;
   title: string;
+  slugTitle: string;
   hasAnswer?: boolean;
   isAccepted: boolean;
   callback: (type: string) => void;
@@ -24,6 +30,7 @@ const Index: FC<IProps> = ({
   qid,
   aid = '',
   title,
+  slugTitle,
   isAccepted = false,
   hasAnswer = false,
   memberActions = [],
@@ -33,7 +40,11 @@ const Index: FC<IProps> = ({
   const toast = useToast();
   const navigate = useNavigate();
   const reportModal = useReportModal();
-  const closeModal = useReportModal();
+
+  const refershQuestion = () => {
+    callback?.('default');
+  };
+  const closeModal = useReportModal(refershQuestion);
   const editUrl =
     type === 'answer' ? `/posts/${qid}/${aid}/edit` : `/posts/${qid}/edit`;
 
@@ -108,6 +119,25 @@ const Index: FC<IProps> = ({
     });
   };
 
+  const handleReopen = () => {
+    Modal.confirm({
+      title: t('title', { keyPrefix: 'question_detail.reopen' }),
+      content: t('content', { keyPrefix: 'question_detail.reopen' }),
+      cancelBtnVariant: 'link',
+      onConfirm: () => {
+        reopenQuestion({
+          question_id: qid,
+        }).then(() => {
+          toast.onShow({
+            msg: t('success', { keyPrefix: 'question_detail.reopen' }),
+            variant: 'success',
+          });
+          refershQuestion();
+        });
+      },
+    });
+  };
+
   const handleAction = (action) => {
     if (!tryNormalLogged(true)) {
       return;
@@ -123,11 +153,21 @@ const Index: FC<IProps> = ({
     if (action === 'close') {
       handleClose();
     }
+
+    if (action === 'reopen') {
+      handleReopen();
+    }
   };
 
   return (
     <div className="d-flex align-items-center">
-      <Share type={type} qid={qid} aid={aid} title={title} />
+      <Share
+        type={type}
+        qid={qid}
+        aid={aid}
+        title={title}
+        slugTitle={slugTitle}
+      />
       {memberActions?.map((item) => {
         if (item.action === 'edit') {
           return (

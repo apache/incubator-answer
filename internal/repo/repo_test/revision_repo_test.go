@@ -3,12 +3,13 @@ package repo_test
 import (
 	"context"
 	"encoding/json"
+	"testing"
+
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/repo/question"
 	"github.com/answerdev/answer/internal/repo/revision"
 	"github.com/answerdev/answer/internal/repo/unique"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 var q = &entity.Question{
@@ -53,6 +54,7 @@ func Test_revisionRepo_AddRevision(t *testing.T) {
 	assert.NotEqual(t, "", q.ID)
 
 	content, err := json.Marshal(q)
+	assert.NoError(t, err)
 	// auto update false
 	rev := getRev(q.ID, q.Title, string(content))
 	err = revisionRepo.AddRevision(context.TODO(), rev, false)

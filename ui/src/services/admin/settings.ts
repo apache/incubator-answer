@@ -22,19 +22,6 @@ export const updateGeneralSetting = (params: Type.AdminSettingsGeneral) => {
   return request.put(apiUrl, params);
 };
 
-export const useThemeOptions = () => {
-  const apiUrl = `/answer/admin/api/theme/options`;
-  const { data, error } = useSWR<{ label: string; value: string }[]>(
-    [apiUrl],
-    request.instance.get,
-  );
-  return {
-    data,
-    isLoading: !data && !error,
-    error,
-  };
-};
-
 export const useInterfaceSetting = () => {
   const apiUrl = `/answer/admin/api/siteinfo/interface`;
   const { data, error } = useSWR<Type.AdminSettingsInterface, Error>(
@@ -80,7 +67,7 @@ export const getBrandSetting = () => {
   return request.get('/answer/admin/api/siteinfo/branding');
 };
 
-export const brandSetting = (params: Type.AdmingSettingBranding) => {
+export const brandSetting = (params: Type.AdminSettingBranding) => {
   return request.put('/answer/admin/api/siteinfo/branding', params);
 };
 
@@ -100,4 +87,42 @@ export const getLegalSetting = () => {
 
 export const putLegalSetting = (params: Type.AdminSettingsLegal) => {
   return request.put('/answer/admin/api/siteinfo/legal', params);
+};
+
+export const getSeoSetting = () => {
+  return request.get<Type.AdminSettingsSeo>('/answer/admin/api/siteinfo/seo');
+};
+
+export const putSeoSetting = (params: Type.AdminSettingsSeo) => {
+  return request.put('/answer/admin/api/siteinfo/seo', params);
+};
+
+export const getThemeSetting = () => {
+  return request.get<Type.AdminSettingsTheme>(
+    '/answer/admin/api/siteinfo/theme',
+  );
+};
+
+export const putThemeSetting = (params: Type.AdminSettingsTheme) => {
+  return request.put('/answer/admin/api/siteinfo/theme', params);
+};
+
+export const getPageCustom = () => {
+  return request.get<Type.AdminSettingsCustom>(
+    '/answer/admin/api/siteinfo/custom-css-html',
+  );
+};
+
+export const putPageCustom = (params: Type.AdminSettingsCustom) => {
+  return request.put('/answer/admin/api/siteinfo/custom-css-html', params);
+};
+
+export const getLoginSetting = () => {
+  return request.get<Type.AdminSettingsLogin>(
+    '/answer/admin/api/siteinfo/login',
+  );
+};
+
+export const putLoginSetting = (params: Type.AdminSettingsLogin) => {
+  return request.put('/answer/admin/api/siteinfo/login', params);
 };

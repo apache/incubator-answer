@@ -66,10 +66,11 @@ a {
   display: inline-block;
   font-size: 14px;
   background: rgba($blue-100, 0.5);
-  padding: 0px 7px 1px;
+  padding: 0 7px 1px;
   color: $blue-700;
   border: 1px solid transparent;
   &:hover {
+    color: $blue-700;
     background: $blue-100;
   }
 }
@@ -214,7 +215,6 @@ a {
     max-width: 100%;
   }
   p {
-    word-break: break-all;
     > code {
       background-color: #e9ecef;
       color: #212529;
