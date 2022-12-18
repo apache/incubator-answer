@@ -1,6 +1,6 @@
 .PHONY: build clean ui
 
-VERSION=0.5.0
+VERSION=1.0.0
 BIN=answer
 DIR_SRC=./cmd/answer
 DOCKER_CMD=docker
