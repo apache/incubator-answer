@@ -155,6 +155,16 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 		return err
 	}
 
+	themeConfig := `{"theme":"default","theme_config":{"default":{"navbar_style":"colored","primary_color":"#0033ff"}}}`
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "theme",
+		Content: themeConfig,
+		Status:  1,
+	})
+	if err != nil {
+		return err
+	}
+
 	seoData := map[string]string{
 		"robots": defaultSEORobotTxt + siteURL + "/sitemap.xml",
 	}
