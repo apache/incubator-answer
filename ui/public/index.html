@@ -11,7 +11,9 @@
     <div id="root">
       <div id="spin-mask" hidden>
         <script>
-          document.querySelector('#spin-mask').removeAttribute('hidden');
+          try {
+            document.querySelector('#spin-mask').removeAttribute('hidden');
+          } catch (ex){}
         </script>
         <style>
           @keyframes _doc-spin {
