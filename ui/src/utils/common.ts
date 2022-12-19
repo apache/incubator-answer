@@ -187,7 +187,7 @@ function diffText(newText: string, oldText: string): string {
           '↵\n',
         )}</span>`;
       }
-      return `<span class="review-text-add d-block">${part.value}</span>`;
+      return `<span class="review-text-add">${part.value}</span>`;
     }
     if (part.removed) {
       if (part.value.replace(/\n/g, '').length <= 0) {
