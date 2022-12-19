@@ -36,7 +36,6 @@ func (r *SiteGeneralReq) FormatSiteUrl() {
 
 // SiteInterfaceReq site interface request
 type SiteInterfaceReq struct {
-	Theme    string `validate:"required,gt=1,lte=128" form:"theme" json:"theme"`
 	Language string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
 	TimeZone string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
 }
