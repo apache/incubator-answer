@@ -122,7 +122,6 @@ const Personal: FC = () => {
           <h5 className="mb-3">{t('stats')}</h5>
           {userInfo?.info && (
             <>
-              <FormatTime time={1671290521} preFix={t('last_login')} />
               <div className="text-secondary">
                 <FormatTime
                   time={userInfo.info.created_at}
