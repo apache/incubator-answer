@@ -2,21 +2,63 @@ package validator
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"strings"
 
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/go-playground/locales"
+	german "github.com/go-playground/locales/de"
 	english "github.com/go-playground/locales/en"
-	zhongwen "github.com/go-playground/locales/zh"
+	spanish "github.com/go-playground/locales/es"
+	french "github.com/go-playground/locales/fr"
+	italian "github.com/go-playground/locales/it"
+	japanese "github.com/go-playground/locales/ja"
+	korean "github.com/go-playground/locales/ko"
+	portuguese "github.com/go-playground/locales/pt"
+	russian "github.com/go-playground/locales/ru"
+	vietnamese "github.com/go-playground/locales/vi"
+	chinese "github.com/go-playground/locales/zh"
+	chineseTraditional "github.com/go-playground/locales/zh_Hant_TW"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	"github.com/go-playground/validator/v10/translations/en"
+	"github.com/go-playground/validator/v10/translations/es"
+	"github.com/go-playground/validator/v10/translations/fr"
+	"github.com/go-playground/validator/v10/translations/it"
+	"github.com/go-playground/validator/v10/translations/ja"
+	"github.com/go-playground/validator/v10/translations/pt"
+	"github.com/go-playground/validator/v10/translations/ru"
+	"github.com/go-playground/validator/v10/translations/vi"
 	"github.com/go-playground/validator/v10/translations/zh"
+	"github.com/go-playground/validator/v10/translations/zh_tw"
 	myErrors "github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
+)
+
+type TranslatorLocal struct {
+	La           i18n.Language
+	Lo           locales.Translator
+	RegisterFunc func(v *validator.Validate, trans ut.Translator) (err error)
+}
+
+var (
+	allLanguageTranslators = []*TranslatorLocal{
+		{La: i18n.LanguageChinese, Lo: chinese.New(), RegisterFunc: zh.RegisterDefaultTranslations},
+		{La: i18n.LanguageChineseTraditional, Lo: chineseTraditional.New(), RegisterFunc: zh_tw.RegisterDefaultTranslations},
+		{La: i18n.LanguageEnglish, Lo: english.New(), RegisterFunc: en.RegisterDefaultTranslations},
+		{La: i18n.LanguageGerman, Lo: german.New(), RegisterFunc: nil},
+		{La: i18n.LanguageSpanish, Lo: spanish.New(), RegisterFunc: es.RegisterDefaultTranslations},
+		{La: i18n.LanguageFrench, Lo: french.New(), RegisterFunc: fr.RegisterDefaultTranslations},
+		{La: i18n.LanguageItalian, Lo: italian.New(), RegisterFunc: it.RegisterDefaultTranslations},
+		{La: i18n.LanguageJapanese, Lo: japanese.New(), RegisterFunc: ja.RegisterDefaultTranslations},
+		{La: i18n.LanguageKorean, Lo: korean.New(), RegisterFunc: nil},
+		{La: i18n.LanguagePortuguese, Lo: portuguese.New(), RegisterFunc: pt.RegisterDefaultTranslations},
+		{La: i18n.LanguageRussian, Lo: russian.New(), RegisterFunc: ru.RegisterDefaultTranslations},
+		{La: i18n.LanguageVietnamese, Lo: vietnamese.New(), RegisterFunc: vi.RegisterDefaultTranslations},
+	}
 )
 
 // MyValidator my validator
@@ -36,23 +78,21 @@ type FormErrorField struct {
 var GlobalValidatorMapping = make(map[string]*MyValidator, 0)
 
 func init() {
-	zhTran, zhVal := getTran(zhongwen.New(), i18n.LanguageChinese.Abbr()), createDefaultValidator(i18n.LanguageChinese)
-	if err := zh.RegisterDefaultTranslations(zhVal, zhTran); err != nil {
-		panic(err)
+	for _, t := range allLanguageTranslators {
+		tran, val := getTran(t.Lo), createDefaultValidator(t.La)
+		if t.RegisterFunc != nil {
+			if err := t.RegisterFunc(val, tran); err != nil {
+				panic(err)
+			}
+		}
+		GlobalValidatorMapping[t.La.Abbr()] = &MyValidator{Validate: val, Tran: tran, Lang: t.La}
 	}
-	GlobalValidatorMapping[i18n.LanguageChinese.Abbr()] = &MyValidator{Validate: zhVal, Tran: zhTran, Lang: i18n.LanguageChinese}
-
-	enTran, enVal := getTran(english.New(), i18n.LanguageEnglish.Abbr()), createDefaultValidator(i18n.LanguageEnglish)
-	if err := en.RegisterDefaultTranslations(enVal, enTran); err != nil {
-		panic(err)
-	}
-	GlobalValidatorMapping[i18n.LanguageEnglish.Abbr()] = &MyValidator{Validate: enVal, Tran: enTran, Lang: i18n.LanguageEnglish}
 }
 
-func getTran(lo locales.Translator, la string) ut.Translator {
-	tran, ok := ut.New(lo, lo).GetTranslator(la)
+func getTran(lo locales.Translator) ut.Translator {
+	tran, ok := ut.New(lo, lo).GetTranslator(lo.Locale())
 	if !ok {
-		panic(ok)
+		panic(fmt.Sprintf("not found translator %s", lo.Locale()))
 	}
 	return tran
 }
@@ -83,7 +123,7 @@ func GetValidatorByLang(la string) *MyValidator {
 	if GlobalValidatorMapping[la] != nil {
 		return GlobalValidatorMapping[la]
 	}
-	return GlobalValidatorMapping[i18n.DefaultLang.Abbr()]
+	return GlobalValidatorMapping[i18n.DefaultLanguage.Abbr()]
 }
 
 // Check /
