@@ -566,7 +566,7 @@ ui:
       empty: 不能为空
   inactive:
     first: >-
-      马上就好了！我们发送了一封激活邮件到 <bold>{{mail}}</bold>。请按照邮件中的说明激活您的帐户。
+      就差一步！我们发送了一封激活邮件到 <bold>{{mail}}</bold>。请按照邮件中的说明激活您的账户。
     info: "如果没有收到，请检查您的垃圾邮件文件夹。"
     another: >-
       我们向您发送了另一封激活电子邮件，地址为 <bold>{{mail}}</bold>。它可能需要几分钟才能到达；请务必检查您的垃圾邮件文件夹。
@@ -576,8 +576,8 @@ ui:
       empty: 不能为空
   login:
     page_title: 欢迎来到 Answer
-    info_sign: 没有帐户？<1>注册</1>
-    info_login: 已经有一个帐户？<1>登录</1>
+    info_sign: 没有账户？<1>注册</1>
+    info_login: 已经有一个账户？<1>登录</1>
     agreements: 登录即表示您同意<1>隐私政策</1>和<3>服务条款</3>。
     forgot_pass: 忘记密码?
     name:
@@ -893,7 +893,7 @@ ui:
         You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
       info: "完成后，点击“下一步”按钮。"
     site_information: 站点信息
-    admin_account: 管理员帐户
+    admin_account: 管理员账户
     site_name:
       label: 站点名称
       msg: 站点名称不能为空。
