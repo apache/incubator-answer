@@ -14,11 +14,13 @@ const siteInfo = create<SiteInfoType>((set) => ({
     short_description: '',
     site_url: '',
     contact_email: '',
+    permalink: 1,
   },
   update: (params) =>
-    set(() => {
+    set((_) => {
+      const o = { ..._.siteInfo, ...params };
       return {
-        siteInfo: params,
+        siteInfo: o,
       };
     }),
 }));

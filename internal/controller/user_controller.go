@@ -11,18 +11,21 @@ import (
 	"github.com/answerdev/answer/internal/service/action"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/export"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 // UserController user controller
 type UserController struct {
-	userService     *service.UserService
-	authService     *auth.AuthService
-	actionService   *action.CaptchaService
-	uploaderService *uploader.UploaderService
-	emailService    *export.EmailService
+	userService           *service.UserService
+	authService           *auth.AuthService
+	actionService         *action.CaptchaService
+	uploaderService       *uploader.UploaderService
+	emailService          *export.EmailService
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewUserController new controller
@@ -32,13 +35,15 @@ func NewUserController(
 	actionService *action.CaptchaService,
 	emailService *export.EmailService,
 	uploaderService *uploader.UploaderService,
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 ) *UserController {
 	return &UserController{
-		authService:     authService,
-		userService:     userService,
-		actionService:   actionService,
-		uploaderService: uploaderService,
-		emailService:    emailService,
+		authService:           authService,
+		userService:           userService,
+		actionService:         actionService,
+		uploaderService:       uploaderService,
+		emailService:          emailService,
+		siteInfoCommonService: siteInfoCommonService,
 	}
 }
 
@@ -52,16 +57,20 @@ func NewUserController(
 // @Success 200 {object} handler.RespBody{data=schema.GetUserToSetShowResp}
 // @Router /answer/api/v1/user/info [get]
 func (uc *UserController) GetUserInfoByUserID(ctx *gin.Context) {
-	userID := middleware.GetLoginUserIDFromContext(ctx)
 	token := middleware.ExtractToken(ctx)
-
-	// if user is no login return null in data
-	if len(token) == 0 || len(userID) == 0 {
+	if len(token) == 0 {
 		handler.HandleResponse(ctx, nil, nil)
 		return
 	}
 
-	resp, err := uc.userService.GetUserInfoByUserID(ctx, token, userID)
+	// if user is no login return null in data
+	userInfo, _ := uc.authService.GetUserCacheInfo(ctx, token)
+	if userInfo == nil {
+		handler.HandleResponse(ctx, nil, nil)
+		return
+	}
+
+	resp, err := uc.userService.GetUserInfoByUserID(ctx, token, userInfo.UserID)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -189,6 +198,10 @@ func (uc *UserController) UseRePassWord(ctx *gin.Context) {
 // @Router /answer/api/v1/user/logout [get]
 func (uc *UserController) UserLogout(ctx *gin.Context) {
 	accessToken := middleware.ExtractToken(ctx)
+	if len(accessToken) == 0 {
+		handler.HandleResponse(ctx, nil, nil)
+		return
+	}
 	_ = uc.authService.RemoveUserCacheInfo(ctx, accessToken)
 	handler.HandleResponse(ctx, nil, nil)
 }
@@ -203,11 +216,31 @@ func (uc *UserController) UserLogout(ctx *gin.Context) {
 // @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
 // @Router /answer/api/v1/user/register/email [post]
 func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
+	// check whether site allow register or not
+	siteInfo, err := uc.siteInfoCommonService.GetSiteLogin(ctx)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !siteInfo.AllowNewRegistrations {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.NotAllowedRegistration), nil)
+		return
+	}
+
 	req := &schema.UserRegisterReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
 	req.IP = ctx.ClientIP()
+	captchaPass := uc.actionService.UserRegisterVerifyCaptcha(ctx, req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+		return
+	}
 
 	resp, err := uc.userService.UserRegisterByEmail(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
@@ -275,11 +308,13 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
-
 		return
 	}
-	uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
-	err := uc.userService.UserVerifyEmailSend(ctx, userInfo.UserID)
+	_, err := uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
+	if err != nil {
+		log.Error(err)
+	}
+	err = uc.userService.UserVerifyEmailSend(ctx, userInfo.UserID)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -386,6 +421,19 @@ func (uc *UserController) ActionRecord(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
+// UserRegisterCaptcha godoc
+// @Summary UserRegisterCaptcha
+// @Description UserRegisterCaptcha
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Router /answer/api/v1/user/register/captcha [get]
+func (uc *UserController) UserRegisterCaptcha(ctx *gin.Context) {
+	resp, err := uc.actionService.UserRegisterCaptcha(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
 // UserNoticeSet godoc
 // @Summary UserNoticeSet
 // @Description UserNoticeSet
@@ -472,4 +520,18 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 	err := uc.userService.UserChangeEmailVerify(ctx, req.Content)
 	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, nil)
+}
+
+// UserRanking get user ranking
+// @Summary get user ranking
+// @Description get user ranking
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {object} handler.RespBody{data=schema.UserRankingResp}
+// @Router /answer/api/v1/user/ranking [get]
+func (uc *UserController) UserRanking(ctx *gin.Context) {
+	resp, err := uc.userService.UserRanking(ctx)
+	handler.HandleResponse(ctx, err, resp)
 }

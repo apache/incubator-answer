@@ -3,15 +3,31 @@ import { Toast } from 'react-bootstrap';
 
 import ReactDOM from 'react-dom/client';
 
-const div = document.createElement('div');
-div.style.position = 'fixed';
-div.style.top = '90px';
-div.style.left = '0';
-div.style.right = '0';
-div.style.margin = 'auto';
-div.style.zIndex = '5';
+const toastPortal = document.createElement('div');
+toastPortal.style.position = 'fixed';
+toastPortal.style.top = '90px';
+toastPortal.style.left = '0';
+toastPortal.style.right = '0';
+toastPortal.style.margin = 'auto';
+toastPortal.style.zIndex = '5';
 
-const root = ReactDOM.createRoot(div);
+const setPortalPosition = () => {
+  const header = document.querySelector('#header');
+  if (header) {
+    toastPortal.style.top = `${header.getBoundingClientRect().top + 90}px`;
+  }
+};
+const startHandlePortalPosition = () => {
+  setPortalPosition();
+  window.addEventListener('scroll', setPortalPosition);
+};
+
+const stopHandlePortalPosition = () => {
+  setPortalPosition();
+  window.removeEventListener('scroll', setPortalPosition);
+};
+
+const root = ReactDOM.createRoot(toastPortal);
 
 interface Params {
   /** main content */
@@ -29,20 +45,21 @@ const useToast = () => {
 
   const onClose = () => {
     const parent = document.querySelector('.page-wrap');
-    if (parent?.contains(div)) {
-      parent.removeChild(div);
+    if (parent?.contains(toastPortal)) {
+      parent.removeChild(toastPortal);
     }
-
+    stopHandlePortalPosition();
     setShow(false);
   };
 
   const onShow = (t: Params) => {
     setData(t);
+    startHandlePortalPosition();
     setShow(true);
   };
   useLayoutEffect(() => {
     const parent = document.querySelector('.page-wrap');
-    parent?.appendChild(div);
+    parent?.appendChild(toastPortal);
 
     root.render(
       <div className="d-flex justify-content-center">

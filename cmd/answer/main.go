@@ -6,6 +6,7 @@ import (
 
 	"github.com/answerdev/answer/internal/base/conf"
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/cron"
 	"github.com/answerdev/answer/internal/cli"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/gin-gonic/gin"
@@ -45,6 +46,7 @@ func runApp() {
 	if err != nil {
 		panic(err)
 	}
+	conf.GetPathIgnoreList()
 	app, cleanup, err := initApplication(
 		c.Debug, c.Server, c.Data.Database, c.Data.Cache, c.I18n, c.Swaggerui, c.ServiceConfig, log.GetLogger())
 	if err != nil {
@@ -59,7 +61,8 @@ func runApp() {
 	}
 }
 
-func newApplication(serverConf *conf.Server, server *gin.Engine) *pacman.Application {
+func newApplication(serverConf *conf.Server, server *gin.Engine, manager *cron.ScheduledTaskManager) *pacman.Application {
+	manager.Run()
 	return pacman.NewApp(
 		pacman.WithName(Name),
 		pacman.WithVersion(Version),

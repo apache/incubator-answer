@@ -54,6 +54,17 @@ export const ADMIN_NAV_MENUS = [
     // badgeContent: 5,
   },
   {
+    name: 'customize',
+    children: [
+      {
+        name: 'themes',
+      },
+      {
+        name: 'css-html',
+      },
+    ],
+  },
+  {
     name: 'settings',
     children: [
       { name: 'general' },
@@ -62,6 +73,8 @@ export const ADMIN_NAV_MENUS = [
       { name: 'smtp' },
       { name: 'legal' },
       { name: 'write' },
+      { name: 'seo' },
+      { name: 'login' },
     ],
   },
 ];

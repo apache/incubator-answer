@@ -9,6 +9,7 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/service/action"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 // captchaRepo captcha repository
@@ -65,7 +66,7 @@ func (cr *captchaRepo) SetCaptcha(ctx context.Context, key, captcha string) (err
 func (cr *captchaRepo) GetCaptcha(ctx context.Context, key string) (captcha string, err error) {
 	captcha, err = cr.data.Cache.GetString(ctx, key)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		log.Debug(err)
 	}
 	// TODO: cache reflect should return empty when key not found
 	return captcha, nil

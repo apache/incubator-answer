@@ -5,8 +5,7 @@ import type * as Type from '@/common/interface';
 import { useToast } from '@/hooks';
 import { useSmtpSetting, updateSmtpSetting } from '@/services';
 import pattern from '@/common/pattern';
-import { SchemaForm, JSONSchema, UISchema } from '@/components';
-import { initFormData } from '../../../components/SchemaForm/index';
+import { SchemaForm, JSONSchema, UISchema, initFormData } from '@/components';
 import { handleFormError } from '@/utils';
 
 const Smtp: FC = () => {
@@ -47,7 +46,8 @@ const Smtp: FC = () => {
       },
       smtp_authentication: {
         type: 'boolean',
-        title: t('smtp_authentication.label'),
+        title: t('smtp_authentication.title'),
+        label: t('smtp_authentication.label'),
         enum: [true, false],
         enumNames: [t('smtp_authentication.yes'), t('smtp_authentication.no')],
       },

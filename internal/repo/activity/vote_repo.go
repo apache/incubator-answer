@@ -70,6 +70,7 @@ var LimitDownActions = map[string][]string{
 
 func (vr *VoteRepo) vote(ctx context.Context, objectID string, userID, objectUserID string, actions []string) (resp *schema.VoteResp, err error) {
 	resp = &schema.VoteResp{}
+	notificationUserIDs := make([]string, 0)
 	_, err = vr.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
 		result = nil
 		for _, action := range actions {
@@ -126,8 +127,7 @@ func (vr *VoteRepo) vote(ctx context.Context, objectID string, userID, objectUse
 				if isReachStandard {
 					insertActivity.Rank = 0
 				}
-
-				vr.sendNotification(ctx, activityUserID, objectUserID, objectID)
+				notificationUserIDs = append(notificationUserIDs, activityUserID)
 			}
 
 			if has {
@@ -165,11 +165,15 @@ func (vr *VoteRepo) vote(ctx context.Context, objectID string, userID, objectUse
 	resp, err = vr.GetVoteResultByObjectId(ctx, objectID)
 	resp.VoteStatus = vr.voteCommon.GetVoteStatus(ctx, objectID, userID)
 
+	for _, activityUserID := range notificationUserIDs {
+		vr.sendNotification(ctx, activityUserID, objectUserID, objectID)
+	}
 	return
 }
 
 func (vr *VoteRepo) voteCancel(ctx context.Context, objectID string, userID, objectUserID string, actions []string) (resp *schema.VoteResp, err error) {
 	resp = &schema.VoteResp{}
+	notificationUserIDs := make([]string, 0)
 	_, err = vr.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
 		for _, action := range actions {
 			var (
@@ -216,13 +220,12 @@ func (vr *VoteRepo) voteCancel(ctx context.Context, objectID string, userID, obj
 			}
 
 			// trigger user rank and send notification
-			if hasRank != 0 {
+			if hasRank != 0 && existsActivity.Rank > 0 {
 				_, err = vr.userRankRepo.TriggerUserRank(ctx, session, activityUserID, -deltaRank, activityType)
 				if err != nil {
 					return
 				}
-
-				vr.sendNotification(ctx, activityUserID, objectUserID, objectID)
+				notificationUserIDs = append(notificationUserIDs, activityUserID)
 			}
 
 			// update votes
@@ -245,6 +248,10 @@ func (vr *VoteRepo) voteCancel(ctx context.Context, objectID string, userID, obj
 	}
 	resp, err = vr.GetVoteResultByObjectId(ctx, objectID)
 	resp.VoteStatus = vr.voteCommon.GetVoteStatus(ctx, objectID, userID)
+
+	for _, activityUserID := range notificationUserIDs {
+		vr.sendNotification(ctx, activityUserID, objectUserID, objectID)
+	}
 	return
 }
 

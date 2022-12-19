@@ -28,7 +28,7 @@ func NewUserRepo(data *data.Data, configRepo config.ConfigRepo) usercommon.UserR
 
 // AddUser add user
 func (ur *userRepo) AddUser(ctx context.Context, user *entity.User) (err error) {
-	_, err = ur.data.DB.UseBool("is_admin").Insert(user)
+	_, err = ur.data.DB.Insert(user)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -151,7 +151,8 @@ func (ur *userRepo) GetByUsername(ctx context.Context, username string) (userInf
 // GetByEmail get user by email
 func (ur *userRepo) GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error) {
 	userInfo = &entity.User{}
-	exist, err = ur.data.DB.Where("e_mail = ?", email).Get(userInfo)
+	exist, err = ur.data.DB.Where("e_mail = ?", email).
+		Where("status != ?", entity.UserStatusDeleted).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

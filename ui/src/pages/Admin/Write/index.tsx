@@ -10,14 +10,11 @@ import {
 } from '@/services';
 import { handleFormError } from '@/utils';
 
-import '../index.scss';
-
-const Legal: FC = () => {
+const Index: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.write',
   });
   const Toast = useToast();
-  // const updateSiteInfo = siteInfoStore((state) => state.update);
 
   const schema: JSONSchema = {
     title: t('page_title'),
@@ -125,4 +122,4 @@ const Legal: FC = () => {
   );
 };
 
-export default Legal;
+export default Index;

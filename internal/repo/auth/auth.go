@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 // authRepo auth repository
@@ -41,6 +42,9 @@ func (ar *authRepo) SetUserCacheInfo(ctx context.Context, accessToken string, us
 		string(userInfoCache), constant.UserTokenCacheTime)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if err := ar.AddUserTokenMapping(ctx, userInfo.UserID, accessToken); err != nil {
+		log.Error(err)
 	}
 	return nil
 }
@@ -128,6 +132,44 @@ func (ar *authRepo) RemoveBackyardUserCacheInfo(ctx context.Context, accessToken
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return nil
+}
+
+// AddUserTokenMapping add user token mapping
+func (ar *authRepo) AddUserTokenMapping(ctx context.Context, userID, accessToken string) (err error) {
+	key := constant.UserTokenMappingCacheKey + userID
+	resp, _ := ar.data.Cache.GetString(ctx, key)
+	mapping := make(map[string]bool, 0)
+	if len(resp) > 0 {
+		_ = json.Unmarshal([]byte(resp), &mapping)
+	}
+	mapping[accessToken] = true
+	content, _ := json.Marshal(mapping)
+	return ar.data.Cache.SetString(ctx, key, string(content), constant.UserTokenCacheTime)
+}
+
+// RemoveAllUserTokens Log out all users under this user id
+func (ar *authRepo) RemoveAllUserTokens(ctx context.Context, userID string) {
+	key := constant.UserTokenMappingCacheKey + userID
+	resp, _ := ar.data.Cache.GetString(ctx, key)
+	mapping := make(map[string]bool, 0)
+	if len(resp) > 0 {
+		_ = json.Unmarshal([]byte(resp), &mapping)
+		log.Debugf("find %d user tokens by user id %s", len(mapping), userID)
+	}
+
+	for token := range mapping {
+		if err := ar.RemoveUserCacheInfo(ctx, token); err != nil {
+			log.Error(err)
+		} else {
+			log.Debugf("del user %s token success")
+		}
+	}
+	if err := ar.RemoveUserStatus(ctx, userID); err != nil {
+		log.Error(err)
+	}
+	if err := ar.data.Cache.Del(ctx, key); err != nil {
+		log.Error(err)
+	}
 }
 
 // NewAuthRepo new repository

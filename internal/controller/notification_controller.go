@@ -5,6 +5,7 @@ import (
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/notification"
+	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/gin-gonic/gin"
 )
@@ -43,10 +44,10 @@ func (nc *NotificationController) GetRedDot(ctx *gin.Context) {
 	req.UserID = userID
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	canList, err := nc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.QuestionAuditRank,
-		rank.AnswerAuditRank,
-		rank.TagAuditRank,
-	}, "")
+		permission.QuestionAudit,
+		permission.AnswerAudit,
+		permission.TagAudit,
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
@@ -76,10 +77,10 @@ func (nc *NotificationController) ClearRedDot(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	canList, err := nc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		rank.QuestionAuditRank,
-		rank.AnswerAuditRank,
-		rank.TagAuditRank,
-	}, "")
+		permission.QuestionAudit,
+		permission.AnswerAudit,
+		permission.TagAudit,
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return

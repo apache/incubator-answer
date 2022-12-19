@@ -14,18 +14,18 @@ backend:
   role:
     name:
       user:
-        other: "User"
+        other: "用户"
       admin:
-        other: "Admin"
+        other: "管理员"
       moderator:
-        other: "Moderator"
+        other: "版主"
     description:
       user:
-        other: "Default with no special access."
+        other: "默认没有特殊访问权限。"
       admin:
-        other: "Have the full power to access the site."
+        other: "拥有进入网站的全部权限。"
       moderator:
-        other: "Has access to all posts except admin settings."
+        other: "有权访问所有的帖子，无法进入管理员设置页面。"
   email:
     other: "邮箱"
   password:
@@ -106,7 +106,7 @@ backend:
       cannot_update:
         other: "没有更新标签权限。"
       cannot_set_synonym_as_itself:
-        other: "You cannot set the synonym of the current tag as itself."
+        other: "你无法将当前标签的同义词设置为当前标签自己"
     theme:
       not_found:
         other: "主题未找到"
@@ -141,9 +141,15 @@ backend:
         create_config_failed:
           other: "无法创建配置文件"
       cannot_update_your_role:
-        other: "You cannot modify your role."
+        other: "你无法修改自己的角色"
       not_allowed_registration:
-        other: "Currently the site is not open for registration"
+        other: "目前该网站尚未开放注册"
+    revision:
+      review_underway:
+        other: "目前无法编辑，有一个版本在审阅队列中。"
+      no_permission:
+        other: "无权限修改"
+
   report:
     spam:
       name:
@@ -228,7 +234,15 @@ ui:
   how_to_format:
     title: 如何设定文本格式
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">添加链接：</p><pre
+      class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p
+      class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者
+      **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用 4
+      个空格缩进代码</p></li><li><p
+      class="mb-2">在行首添加<code>&gt;</code>表示引用</p></li><li><p class="mb-2">反引号进行转义
+      <code>`像 _这样_`</code></p></li><li><p
+      class="mb-2">使用<code>```</code>创建代码块</p><pre class="mb-0"><code>```<br/>//
+      这是代码<br/>```</code></pre></li></ul>
   pagination:
     prev: 上一页
     next: 下一页
@@ -330,7 +344,7 @@ ui:
               only_image: 只能上传图片文件。
               max_size: 图片文件大小不能超过 4 MB。
           desc:
-            label: Description (optional)
+            label: 图片描述(可选)
       tab_url: 网络图片
       form_url:
         fields:
@@ -401,13 +415,13 @@ ui:
             range: 不能超过 35 个字符
         slug_name:
           label: URL 固定链接
-          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          desc: '必须由 "a-z", "0-9", "+ # - ." 组成'
           msg:
             empty: 不能为空
             range: 不能超过 35 个字符
             character: 包含非法字符
         desc:
-          label: Description (optional)
+          label: 标签描述(可选)
     btn_cancel: 取消
     btn_submit: 提交
   tag_info:
@@ -441,7 +455,7 @@ ui:
           label: URL 固定链接
           info: '必须由 "a-z", "0-9", "+ # - ." 组成'
         desc:
-          label: Description
+          label: 描述
         edit_summary:
           label: 编辑概要
           placeholder: >-
@@ -497,7 +511,7 @@ ui:
     button_following: 已关注
     tag_label: 个问题
     search_placeholder: 通过标签名过滤
-    no_desc: The tag has no description.
+    no_desc: 此标签无描述。
     more: 更多
   ask:
     title: 提交新的问题
@@ -555,7 +569,8 @@ ui:
       placeholder: 搜索
   footer:
     build_on: >-
-      Built on <1> Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
+      Built on <1> Answer </1>- the open-source software that powers Q&A
+      communities<br />Made with love © 2022 Answer
   upload_img:
     name: 更改图片
     loading: 加载中...
@@ -938,10 +953,10 @@ ui:
     db_failed_desc: >-
       This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
   page_404:
-    desc: "Unfortunately, this page doesn't exist."
+    desc: 页面不存在
     back_home: 回到主页
   page_50X:
-    desc: The server encountered an error and could not complete your request.
+    desc: 服务器遇到了一个错误，无法完成你的请求。
     back_home: 回到主页
   page_maintenance:
     desc: "We are under maintenance, we’ll be back soon."
@@ -1015,13 +1030,13 @@ ui:
       btn_cancel: 取消
       btn_submit: 提交
       normal_name: 正常
-      normal_desc: A normal user can ask and answer questions.
+      normal_desc: 正常状态的用户可以提问和回答。
       suspended_name: 封禁
-      suspended_desc: A suspended user can't log in.
+      suspended_desc: 被封禁的用户将无法登录。
       deleted_name: 删除
-      deleted_desc: "Delete profile, authentication associations."
+      deleted_desc: 删除用户的个人信息，认证等等。
       inactive_name: 不活跃
-      inactive_desc: An inactive user must re-validate their email.
+      inactive_desc: 不活跃的用户必须重新验证邮箱。
       confirm_title: 删除此用户
       confirm_content: 确定要删除此用户？此操作无法撤销！
       confirm_btn: 删除
@@ -1030,11 +1045,11 @@ ui:
     status_modal:
       title: "更改 {{ type }} 状态为..."
       normal_name: 正常
-      normal_desc: A normal post available to everyone.
+      normal_desc: 所有用户都可以访问
       closed_name: 关闭
-      closed_desc: "A closed question can't answer, but still can edit, vote and comment."
+      closed_desc: 不能回答，但仍然可以编辑、投票和评论。
       deleted_name: 删除
-      deleted_desc: All reputation gained and lost will be restored.
+      deleted_desc: 所有获得/损失的声望将会恢复。
       btn_cancel: 取消
       btn_submit: 提交
       btn_next: 下一步
@@ -1126,25 +1141,15 @@ ui:
       name:
         label: 站点名称
         msg: 不能为空
-        text: "站点的名称，作为站点的标题（HTML 的 title 标签）。"
-      site_url:
-        label: Site URL
-        msg: Site url cannot be empty.
-        validate: Please enter a valid URL.
-        text: The address of your site.
+        text: 站点的名称，作为站点的标题（HTML 的 title 标签）。
       short_desc:
-        label: Short Site Description (optional)
-        msg: Short site description cannot be empty.
-        text: "Short description, as used in the title tag on homepage."
+        label: 简短的站点标语 (可选)
+        msg: 不能为空
+        text: 简短的标语，作为网站主页的标题（HTML 的 title 标签）。
       desc:
-        label: Site Description (optional)
-        msg: Site description cannot be empty.
-        text: "Describe this site in one sentence, as used in the meta description tag."
-      contact_email:
-        label: Contact Email
-        msg: Contact email cannot be empty.
-        validate: Contact email is not valid.
-        text: Email address of key contact responsible for this site.
+        label: 网站描述 (可选)
+        msg: 不能为空
+        text: 使用一句话描述本站，作为网站的描述（HTML 的 meta 标签）。
     interface:
       page_title: 界面
       logo:

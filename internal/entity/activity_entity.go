@@ -28,6 +28,16 @@ type ActivityRankSum struct {
 	Rank int `xorm:"not null default 0 INT(11) rank"`
 }
 
+type ActivityUserRankStat struct {
+	UserID string `xorm:"user_id"`
+	Rank   int    `xorm:"rank_amount"`
+}
+
+type ActivityUserVoteStat struct {
+	UserID    string `xorm:"user_id"`
+	VoteCount int    `xorm:"vote_count"`
+}
+
 // TableName activity table name
 func (Activity) TableName() string {
 	return "activity"

@@ -5,6 +5,9 @@ import usePageUsers from './usePageUsers';
 import useChangeModal from './useChangeModal';
 import useEditStatusModal from './useEditStatusModal';
 import useChangeUserRoleModal from './useChangeUserRoleModal';
+import useUserModal from './useUserModal';
+import useChangePasswordModal from './useChangePasswordModal';
+import usePageTags from './usePageTags';
 
 export {
   useTagModal,
@@ -14,4 +17,7 @@ export {
   useChangeModal,
   useEditStatusModal,
   useChangeUserRoleModal,
+  useUserModal,
+  useChangePasswordModal,
+  usePageTags,
 };

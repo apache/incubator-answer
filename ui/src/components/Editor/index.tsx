@@ -49,10 +49,19 @@ interface Props extends EventRef {
   editorPlaceholder?;
   className?;
   value;
+  autoFocus?: boolean;
 }
 
 const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
-  { editorPlaceholder = '', className = '', value, onChange, onFocus, onBlur },
+  {
+    editorPlaceholder = '',
+    className = '',
+    value,
+    onChange,
+    onFocus,
+    onBlur,
+    autoFocus = false,
+  },
   ref,
 ) => {
   const [markdown, setMarkdown] = useState<string>(value || '');
@@ -146,6 +155,7 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
         <div className="content-wrap">
           <Editor
             value={markdown}
+            autoFocus={autoFocus}
             onChange={handleChange}
             onFocus={handleFocus}
             onBlur={handleBlur}

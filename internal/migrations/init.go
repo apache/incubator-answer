@@ -6,8 +6,26 @@ import (
 
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/service/permission"
 	"golang.org/x/crypto/bcrypt"
 	"xorm.io/xorm"
+)
+
+const (
+	defaultSEORobotTxt = `User-agent: *
+Disallow: /admin
+Disallow: /search
+Disallow: /install
+Disallow: /review
+Disallow: /users/login
+Disallow: /users/register
+Disallow: /users/account-recovery
+Disallow: /users/oauth/*
+Disallow: /users/*/*
+Disallow: /answer/api
+Disallow: /*?code*
+
+Sitemap: `
 )
 
 var tables = []interface{}{
@@ -28,6 +46,10 @@ var tables = []interface{}{
 	&entity.Uniqid{},
 	&entity.User{},
 	&entity.Version{},
+	&entity.Role{},
+	&entity.RolePowerRel{},
+	&entity.Power{},
+	&entity.UserRoleRel{},
 }
 
 // InitDB init db
@@ -51,6 +73,10 @@ func InitDB(dataConf *data.Database) (err error) {
 	if err != nil {
 		return fmt.Errorf("sync table failed: %s", err)
 	}
+	_, err = engine.InsertOne(&entity.Version{ID: 1, VersionNumber: ExpectedVersion()})
+	if err != nil {
+		return fmt.Errorf("init version table failed: %s", err)
+	}
 
 	err = initAdminUser(engine)
 	if err != nil {
@@ -61,11 +87,17 @@ func InitDB(dataConf *data.Database) (err error) {
 	if err != nil {
 		return fmt.Errorf("init config table: %s", err)
 	}
+
+	err = initRolePower(engine)
+	if err != nil {
+		return fmt.Errorf("init role and power failed: %s", err)
+	}
 	return nil
 }
 
 func initAdminUser(engine *xorm.Engine) error {
 	_, err := engine.InsertOne(&entity.User{
+		ID:           "1",
 		Username:     "admin",
 		Pass:         "$2a$10$.gnUnpW.8ssRNaEvx.XwvOR2NuPsGzFLWWX2rqSIVAdIvLNZZYs5y", // admin
 		EMail:        "admin@admin.com",
@@ -74,7 +106,6 @@ func initAdminUser(engine *xorm.Engine) error {
 		Status:       1,
 		Rank:         1,
 		DisplayName:  "admin",
-		IsAdmin:      true,
 	})
 	return err
 }
@@ -106,13 +137,53 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 		Content: string(generalDataBytes),
 		Status:  1,
 	})
+	if err != nil {
+		return err
+	}
+
+	loginConfig := map[string]bool{
+		"allow_new_registrations": true,
+		"login_required":          false,
+	}
+	loginConfigDataBytes, _ := json.Marshal(loginConfig)
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "login",
+		Content: string(loginConfigDataBytes),
+		Status:  1,
+	})
+	if err != nil {
+		return err
+	}
+
+	themeConfig := `{"theme":"default","theme_config":{"default":{"navbar_style":"colored","primary_color":"#0033ff"}}}`
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "theme",
+		Content: themeConfig,
+		Status:  1,
+	})
+	if err != nil {
+		return err
+	}
+
+	seoData := map[string]string{
+		"robots": defaultSEORobotTxt + siteURL + "/sitemap.xml",
+	}
+	seoDataBytes, _ := json.Marshal(seoData)
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "seo",
+		Content: string(seoDataBytes),
+		Status:  1,
+	})
+	if err != nil {
+		return err
+	}
 	return err
 }
 
 func updateAdminInfo(engine *xorm.Engine, adminName, adminPassword, adminEmail string) error {
 	generateFromPassword, err := bcrypt.GenerateFromPassword([]byte(adminPassword), bcrypt.DefaultCost)
 	if err != nil {
-		return fmt.Errorf("")
+		return err
 	}
 	adminPassword = string(generateFromPassword)
 
@@ -191,26 +262,26 @@ func initConfigTable(engine *xorm.Engine) error {
 		{ID: 32, Key: "question.follow", Value: `0`},
 		{ID: 33, Key: "email.config", Value: `{"from_name":"","from_email":"","smtp_host":"","smtp_port":465,"smtp_password":"","smtp_username":"","smtp_authentication":true,"encryption":"","register_title":"[{{.SiteName}}] Confirm your new account","register_body":"Welcome to {{.SiteName}}<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n","pass_reset_title":"[{{.SiteName }}] Password reset","pass_reset_body":"Somebody asked to reset your password on [{{.SiteName}}].<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n","change_title":"[{{.SiteName}}] Confirm your new email address","change_body":"Confirm your new email address for {{.SiteName}}  by clicking on the following link:<br><br>\n\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n","test_title":"[{{.SiteName}}] Test Email","test_body":"This is a test email."}`},
 		{ID: 35, Key: "tag.follow", Value: `0`},
-		{ID: 36, Key: "rank.question.add", Value: `0`},
-		{ID: 37, Key: "rank.question.edit", Value: `0`},
-		{ID: 38, Key: "rank.question.delete", Value: `0`},
-		{ID: 39, Key: "rank.question.vote_up", Value: `0`},
-		{ID: 40, Key: "rank.question.vote_down", Value: `0`},
-		{ID: 41, Key: "rank.answer.add", Value: `0`},
-		{ID: 42, Key: "rank.answer.edit", Value: `0`},
-		{ID: 43, Key: "rank.answer.delete", Value: `0`},
-		{ID: 44, Key: "rank.answer.accept", Value: `0`},
-		{ID: 45, Key: "rank.answer.vote_up", Value: `0`},
-		{ID: 46, Key: "rank.answer.vote_down", Value: `0`},
-		{ID: 47, Key: "rank.comment.add", Value: `0`},
-		{ID: 48, Key: "rank.comment.edit", Value: `0`},
-		{ID: 49, Key: "rank.comment.delete", Value: `0`},
-		{ID: 50, Key: "rank.report.add", Value: `0`},
-		{ID: 51, Key: "rank.tag.add", Value: `0`},
-		{ID: 52, Key: "rank.tag.edit", Value: `0`},
-		{ID: 53, Key: "rank.tag.delete", Value: `0`},
-		{ID: 54, Key: "rank.tag.synonym", Value: `0`},
-		{ID: 55, Key: "rank.link.url_limit", Value: `0`},
+		{ID: 36, Key: "rank.question.add", Value: `1`},
+		{ID: 37, Key: "rank.question.edit", Value: `200`},
+		{ID: 38, Key: "rank.question.delete", Value: `-1`},
+		{ID: 39, Key: "rank.question.vote_up", Value: `15`},
+		{ID: 40, Key: "rank.question.vote_down", Value: `125`},
+		{ID: 41, Key: "rank.answer.add", Value: `1`},
+		{ID: 42, Key: "rank.answer.edit", Value: `200`},
+		{ID: 43, Key: "rank.answer.delete", Value: `-1`},
+		{ID: 44, Key: "rank.answer.accept", Value: `1`},
+		{ID: 45, Key: "rank.answer.vote_up", Value: `15`},
+		{ID: 46, Key: "rank.answer.vote_down", Value: `125`},
+		{ID: 47, Key: "rank.comment.add", Value: `1`},
+		{ID: 48, Key: "rank.comment.edit", Value: `-1`},
+		{ID: 49, Key: "rank.comment.delete", Value: `-1`},
+		{ID: 50, Key: "rank.report.add", Value: `1`},
+		{ID: 51, Key: "rank.tag.add", Value: `1`},
+		{ID: 52, Key: "rank.tag.edit", Value: `100`},
+		{ID: 53, Key: "rank.tag.delete", Value: `-1`},
+		{ID: 54, Key: "rank.tag.synonym", Value: `20000`},
+		{ID: 55, Key: "rank.link.url_limit", Value: `10`},
 		{ID: 56, Key: "rank.vote.detail", Value: `0`},
 		{ID: 57, Key: "reason.spam", Value: `{"name":"spam","description":"This post is an advertisement, or vandalism. It is not useful or relevant to the current topic."}`},
 		{ID: 58, Key: "reason.rude_or_abusive", Value: `{"name":"rude or abusive","description":"A reasonable person would find this content inappropriate for respectful discourse."}`},
@@ -262,7 +333,155 @@ func initConfigTable(engine *xorm.Engine) error {
 		{ID: 104, Key: "tag.rollback", Value: `0`},
 		{ID: 105, Key: "tag.deleted", Value: `0`},
 		{ID: 106, Key: "tag.undeleted", Value: `0`},
+		{ID: 107, Key: "rank.comment.vote_up", Value: `1`},
+		{ID: 108, Key: "rank.comment.vote_down", Value: `1`},
+		{ID: 109, Key: "rank.question.edit_without_review", Value: `2000`},
+		{ID: 110, Key: "rank.answer.edit_without_review", Value: `2000`},
+		{ID: 111, Key: "rank.tag.edit_without_review", Value: `20000`},
+		{ID: 112, Key: "rank.answer.audit", Value: `2000`},
+		{ID: 113, Key: "rank.question.audit", Value: `2000`},
+		{ID: 114, Key: "rank.tag.audit", Value: `20000`},
+		{ID: 115, Key: "rank.question.close", Value: `-1`},
+		{ID: 116, Key: "rank.question.reopen", Value: `-1`},
+		{ID: 117, Key: "rank.tag.use_reserved_tag", Value: `-1`},
 	}
 	_, err := engine.Insert(defaultConfigTable)
 	return err
+}
+
+func initRolePower(engine *xorm.Engine) (err error) {
+	roles := []*entity.Role{
+		{ID: 1, Name: "User", Description: "Default with no special access."},
+		{ID: 2, Name: "Admin", Description: "Have the full power to access the site."},
+		{ID: 3, Name: "Moderator", Description: "Has access to all posts except admin settings."},
+	}
+	_, err = engine.Insert(roles)
+	if err != nil {
+		return err
+	}
+
+	powers := []*entity.Power{
+		{ID: 1, Name: "admin access", PowerType: permission.AdminAccess, Description: "admin access"},
+		{ID: 2, Name: "question add", PowerType: permission.QuestionAdd, Description: "question add"},
+		{ID: 3, Name: "question edit", PowerType: permission.QuestionEdit, Description: "question edit"},
+		{ID: 4, Name: "question edit without review", PowerType: permission.QuestionEditWithoutReview, Description: "question edit without review"},
+		{ID: 5, Name: "question delete", PowerType: permission.QuestionDelete, Description: "question delete"},
+		{ID: 6, Name: "question close", PowerType: permission.QuestionClose, Description: "question close"},
+		{ID: 7, Name: "question reopen", PowerType: permission.QuestionReopen, Description: "question reopen"},
+		{ID: 8, Name: "question vote up", PowerType: permission.QuestionVoteUp, Description: "question vote up"},
+		{ID: 9, Name: "question vote down", PowerType: permission.QuestionVoteDown, Description: "question vote down"},
+		{ID: 10, Name: "answer add", PowerType: permission.AnswerAdd, Description: "answer add"},
+		{ID: 11, Name: "answer edit", PowerType: permission.AnswerEdit, Description: "answer edit"},
+		{ID: 12, Name: "answer edit without review", PowerType: permission.AnswerEditWithoutReview, Description: "answer edit without review"},
+		{ID: 13, Name: "answer delete", PowerType: permission.AnswerDelete, Description: "answer delete"},
+		{ID: 14, Name: "answer accept", PowerType: permission.AnswerAccept, Description: "answer accept"},
+		{ID: 15, Name: "answer vote up", PowerType: permission.AnswerVoteUp, Description: "answer vote up"},
+		{ID: 16, Name: "answer vote down", PowerType: permission.AnswerVoteDown, Description: "answer vote down"},
+		{ID: 17, Name: "comment add", PowerType: permission.CommentAdd, Description: "comment add"},
+		{ID: 18, Name: "comment edit", PowerType: permission.CommentEdit, Description: "comment edit"},
+		{ID: 19, Name: "comment delete", PowerType: permission.CommentDelete, Description: "comment delete"},
+		{ID: 20, Name: "comment vote up", PowerType: permission.CommentVoteUp, Description: "comment vote up"},
+		{ID: 21, Name: "comment vote down", PowerType: permission.CommentVoteDown, Description: "comment vote down"},
+		{ID: 22, Name: "report add", PowerType: permission.ReportAdd, Description: "report add"},
+		{ID: 23, Name: "tag add", PowerType: permission.TagAdd, Description: "tag add"},
+		{ID: 24, Name: "tag edit", PowerType: permission.TagEdit, Description: "tag edit"},
+		{ID: 25, Name: "tag edit without review", PowerType: permission.TagEditWithoutReview, Description: "tag edit without review"},
+		{ID: 26, Name: "tag edit slug name", PowerType: permission.TagEditSlugName, Description: "tag edit slug name"},
+		{ID: 27, Name: "tag delete", PowerType: permission.TagDelete, Description: "tag delete"},
+		{ID: 28, Name: "tag synonym", PowerType: permission.TagSynonym, Description: "tag synonym"},
+		{ID: 29, Name: "link url limit", PowerType: permission.LinkUrlLimit, Description: "link url limit"},
+		{ID: 30, Name: "vote detail", PowerType: permission.VoteDetail, Description: "vote detail"},
+		{ID: 31, Name: "answer audit", PowerType: permission.AnswerAudit, Description: "answer audit"},
+		{ID: 32, Name: "question audit", PowerType: permission.QuestionAudit, Description: "question audit"},
+		{ID: 33, Name: "tag audit", PowerType: permission.TagAudit, Description: "tag audit"},
+	}
+	_, err = engine.Insert(powers)
+	if err != nil {
+		return err
+	}
+
+	rolePowerRels := []*entity.RolePowerRel{
+		{RoleID: 2, PowerType: permission.AdminAccess},
+		{RoleID: 2, PowerType: permission.QuestionAdd},
+		{RoleID: 2, PowerType: permission.QuestionEdit},
+		{RoleID: 2, PowerType: permission.QuestionEditWithoutReview},
+		{RoleID: 2, PowerType: permission.QuestionDelete},
+		{RoleID: 2, PowerType: permission.QuestionClose},
+		{RoleID: 2, PowerType: permission.QuestionReopen},
+		{RoleID: 2, PowerType: permission.QuestionVoteUp},
+		{RoleID: 2, PowerType: permission.QuestionVoteDown},
+		{RoleID: 2, PowerType: permission.AnswerAdd},
+		{RoleID: 2, PowerType: permission.AnswerEdit},
+		{RoleID: 2, PowerType: permission.AnswerEditWithoutReview},
+		{RoleID: 2, PowerType: permission.AnswerDelete},
+		{RoleID: 2, PowerType: permission.AnswerAccept},
+		{RoleID: 2, PowerType: permission.AnswerVoteUp},
+		{RoleID: 2, PowerType: permission.AnswerVoteDown},
+		{RoleID: 2, PowerType: permission.CommentAdd},
+		{RoleID: 2, PowerType: permission.CommentEdit},
+		{RoleID: 2, PowerType: permission.CommentDelete},
+		{RoleID: 2, PowerType: permission.CommentVoteUp},
+		{RoleID: 2, PowerType: permission.CommentVoteDown},
+		{RoleID: 2, PowerType: permission.ReportAdd},
+		{RoleID: 2, PowerType: permission.TagAdd},
+		{RoleID: 2, PowerType: permission.TagEdit},
+		{RoleID: 2, PowerType: permission.TagEditSlugName},
+		{RoleID: 2, PowerType: permission.TagEditWithoutReview},
+		{RoleID: 2, PowerType: permission.TagDelete},
+		{RoleID: 2, PowerType: permission.TagSynonym},
+		{RoleID: 2, PowerType: permission.LinkUrlLimit},
+		{RoleID: 2, PowerType: permission.VoteDetail},
+		{RoleID: 2, PowerType: permission.AnswerAudit},
+		{RoleID: 2, PowerType: permission.QuestionAudit},
+		{RoleID: 2, PowerType: permission.TagAudit},
+		{RoleID: 2, PowerType: permission.TagUseReservedTag},
+
+		{RoleID: 3, PowerType: permission.QuestionAdd},
+		{RoleID: 3, PowerType: permission.QuestionEdit},
+		{RoleID: 3, PowerType: permission.QuestionEditWithoutReview},
+		{RoleID: 3, PowerType: permission.QuestionDelete},
+		{RoleID: 3, PowerType: permission.QuestionClose},
+		{RoleID: 3, PowerType: permission.QuestionReopen},
+		{RoleID: 3, PowerType: permission.QuestionVoteUp},
+		{RoleID: 3, PowerType: permission.QuestionVoteDown},
+		{RoleID: 3, PowerType: permission.AnswerAdd},
+		{RoleID: 3, PowerType: permission.AnswerEdit},
+		{RoleID: 3, PowerType: permission.AnswerEditWithoutReview},
+		{RoleID: 3, PowerType: permission.AnswerDelete},
+		{RoleID: 3, PowerType: permission.AnswerAccept},
+		{RoleID: 3, PowerType: permission.AnswerVoteUp},
+		{RoleID: 3, PowerType: permission.AnswerVoteDown},
+		{RoleID: 3, PowerType: permission.CommentAdd},
+		{RoleID: 3, PowerType: permission.CommentEdit},
+		{RoleID: 3, PowerType: permission.CommentDelete},
+		{RoleID: 3, PowerType: permission.CommentVoteUp},
+		{RoleID: 3, PowerType: permission.CommentVoteDown},
+		{RoleID: 3, PowerType: permission.ReportAdd},
+		{RoleID: 3, PowerType: permission.TagAdd},
+		{RoleID: 3, PowerType: permission.TagEdit},
+		{RoleID: 3, PowerType: permission.TagEditSlugName},
+		{RoleID: 3, PowerType: permission.TagEditWithoutReview},
+		{RoleID: 3, PowerType: permission.TagDelete},
+		{RoleID: 3, PowerType: permission.TagSynonym},
+		{RoleID: 3, PowerType: permission.LinkUrlLimit},
+		{RoleID: 3, PowerType: permission.VoteDetail},
+		{RoleID: 3, PowerType: permission.AnswerAudit},
+		{RoleID: 3, PowerType: permission.QuestionAudit},
+		{RoleID: 3, PowerType: permission.TagAudit},
+		{RoleID: 3, PowerType: permission.TagUseReservedTag},
+	}
+	_, err = engine.Insert(rolePowerRels)
+	if err != nil {
+		return err
+	}
+
+	adminUserRoleRel := &entity.UserRoleRel{
+		UserID: "1",
+		RoleID: 2,
+	}
+	_, err = engine.Insert(adminUserRoleRel)
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -8,7 +8,6 @@ import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
 import { getLegalSetting, putLegalSetting } from '@/services';
 import { handleFormError } from '@/utils';
-import '../index.scss';
 
 const Legal: FC = () => {
   const { t } = useTranslation('translation', {

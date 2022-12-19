@@ -23,6 +23,7 @@ interface Props {
   /** is author */
   isAuthor: boolean;
   questionTitle: string;
+  slugTitle: string;
   isLogged: boolean;
   callback: (type: string) => void;
 }
@@ -32,6 +33,7 @@ const Index: FC<Props> = ({
   isAuthor,
   isLogged,
   questionTitle = '',
+  slugTitle,
   callback,
 }) => {
   const { t } = useTranslation('translation', {
@@ -114,6 +116,7 @@ const Index: FC<Props> = ({
             type="answer"
             isAccepted={data.adopted === 2}
             title={questionTitle}
+            slugTitle={slugTitle}
             callback={callback}
           />
         </Col>

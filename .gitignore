@@ -9,6 +9,7 @@
 /.fleet
 /.vscode/*.log
 /cmd/answer/*.sh
+/cmd/answer/answer
 /cmd/answer/uploads/*
 /cmd/logs
 /configs/config-dev.yaml
@@ -22,3 +23,5 @@ tmp
 vendor/
 /answer-data/
 /answer
+
+dist/

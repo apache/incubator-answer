@@ -12,6 +12,9 @@ import { marked } from 'marked';
 import { htmlRender } from './utils';
 
 let scrollTop = 0;
+marked.setOptions({
+  breaks: true,
+});
 
 const Index = ({ value }, ref) => {
   const [html, setHtml] = useState('');
