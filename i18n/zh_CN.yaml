@@ -144,11 +144,6 @@ backend:
         other: "你无法修改自己的角色"
       not_allowed_registration:
         other: "目前该网站尚未开放注册"
-    revision:
-      review_underway:
-        other: "目前无法编辑，有一个版本在审阅队列中。"
-      no_permission:
-        other: "无权限修改"
 
   report:
     spam:
