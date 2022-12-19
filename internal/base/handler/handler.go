@@ -52,7 +52,7 @@ func BindAndCheck(ctx *gin.Context, data interface{}) bool {
 		return true
 	}
 
-	errField, err := validator.GetValidatorByLang(lang.Abbr()).Check(data)
+	errField, err := validator.GetValidatorByLang(lang).Check(data)
 	if err != nil {
 		HandleResponse(ctx, err, errField)
 		return true
@@ -70,6 +70,6 @@ func BindAndCheckReturnErr(ctx *gin.Context, data interface{}) (errFields []*val
 		return nil
 	}
 
-	errFields, _ = validator.GetValidatorByLang(lang.Abbr()).Check(data)
+	errFields, _ = validator.GetValidatorByLang(lang).Check(data)
 	return errFields
 }

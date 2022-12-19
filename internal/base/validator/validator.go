@@ -75,7 +75,7 @@ type FormErrorField struct {
 }
 
 // GlobalValidatorMapping is a mapping from validator to translator used
-var GlobalValidatorMapping = make(map[string]*MyValidator, 0)
+var GlobalValidatorMapping = make(map[i18n.Language]*MyValidator, 0)
 
 func init() {
 	for _, t := range allLanguageTranslators {
@@ -85,7 +85,7 @@ func init() {
 				panic(err)
 			}
 		}
-		GlobalValidatorMapping[t.La.Abbr()] = &MyValidator{Validate: val, Tran: tran, Lang: t.La}
+		GlobalValidatorMapping[t.La] = &MyValidator{Validate: val, Tran: tran, Lang: t.La}
 	}
 }
 
@@ -119,11 +119,11 @@ func createDefaultValidator(la i18n.Language) *validator.Validate {
 	return validate
 }
 
-func GetValidatorByLang(la string) *MyValidator {
-	if GlobalValidatorMapping[la] != nil {
-		return GlobalValidatorMapping[la]
+func GetValidatorByLang(lang i18n.Language) *MyValidator {
+	if GlobalValidatorMapping[lang] != nil {
+		return GlobalValidatorMapping[lang]
 	}
-	return GlobalValidatorMapping[i18n.DefaultLanguage.Abbr()]
+	return GlobalValidatorMapping[i18n.DefaultLanguage]
 }
 
 // Check /
