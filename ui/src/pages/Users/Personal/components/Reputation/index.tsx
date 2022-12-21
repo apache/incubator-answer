@@ -19,7 +19,9 @@ const Index: FC<Props> = ({ visible, data }) => {
     <ListGroup variant="flush">
       {data.map((item) => {
         return (
-          <ListGroupItem className="d-flex py-3 px-0" key={item.object_id}>
+          <ListGroupItem
+            className="d-flex py-3 px-0 bg-transparent"
+            key={item.object_id}>
             <div
               className={`me-3 text-end ${
                 item.reputation > 0 ? 'text-success' : 'text-danger'
