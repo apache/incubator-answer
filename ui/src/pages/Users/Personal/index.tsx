@@ -109,7 +109,7 @@ const Personal: FC = () => {
           {!list?.length && !isLoading && <Empty />}
 
           {count > 0 && (
-            <div className="d-flex justify-content-center border-top py-4">
+            <div className="d-flex justify-content-center py-4">
               <Pagination
                 pageSize={30}
                 totalSize={count || 0}
