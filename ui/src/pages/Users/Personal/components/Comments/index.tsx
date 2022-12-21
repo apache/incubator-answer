@@ -17,7 +17,9 @@ const Index: FC<Props> = ({ visible, data }) => {
     <ListGroup variant="flush">
       {data.map((item) => {
         return (
-          <ListGroupItem className="py-3 px-0" key={item.comment_id}>
+          <ListGroupItem
+            className="py-3 px-0 bg-transparent"
+            key={item.comment_id}>
             <a
               className="text-break"
               href={

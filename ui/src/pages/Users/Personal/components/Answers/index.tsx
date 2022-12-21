@@ -18,7 +18,9 @@ const Index: FC<Props> = ({ visible, data }) => {
     <ListGroup variant="flush">
       {data.map((item) => {
         return (
-          <ListGroupItem className="py-3 px-0" key={item.answer_id}>
+          <ListGroupItem
+            className="py-3 px-0 bg-transparent"
+            key={item.answer_id}>
             <h6 className="mb-2">
               <a
                 href={pathFactory.answerLanding({

@@ -22,7 +22,7 @@ const Index: FC<Props> = ({ visible, tabName, data }) => {
       {data.map((item) => {
         return (
           <ListGroupItem
-            className="py-3 px-0"
+            className="py-3 px-0 bg-transparent"
             key={tabName === 'questions' ? item.question_id : item.id}>
             <h6 className="mb-2">
               <a
