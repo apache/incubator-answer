@@ -320,13 +320,13 @@ func (ts *TagService) GetTagWithPage(ctx context.Context, req *schema.GetTagWith
 
 	resp := make([]*schema.GetTagPageResp, 0)
 	for _, tag := range tags {
-		excerpt := htmltext.FetchExcerpt(tag.ParsedText, "...", 240)
+		//excerpt := htmltext.FetchExcerpt(tag.ParsedText, "...", 240)
 		resp = append(resp, &schema.GetTagPageResp{
 			TagID:         tag.ID,
 			SlugName:      tag.SlugName,
 			DisplayName:   tag.DisplayName,
-			OriginalText:  excerpt,
-			ParsedText:    excerpt,
+			OriginalText:  tag.OriginalText,
+			ParsedText:    tag.ParsedText,
 			FollowCount:   tag.FollowCount,
 			QuestionCount: tag.QuestionCount,
 			IsFollower:    ts.checkTagIsFollow(ctx, req.UserID, tag.ID),
