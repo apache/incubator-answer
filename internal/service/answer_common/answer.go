@@ -19,7 +19,7 @@ type AnswerRepo interface {
 	GetByID(ctx context.Context, id string) (*entity.Answer, bool, error)
 	GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error)
 	SearchList(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error)
-	CmsSearchList(ctx context.Context, search *entity.CmsAnswerSearch) ([]*entity.Answer, int64, error)
+	AdminSearchList(ctx context.Context, search *entity.AdminAnswerSearch) ([]*entity.Answer, int64, error)
 	UpdateAnswerStatus(ctx context.Context, answer *entity.Answer) (err error)
 	GetAnswerCount(ctx context.Context) (count int64, err error)
 }
@@ -43,11 +43,11 @@ func (as *AnswerCommon) SearchAnswered(ctx context.Context, userID, questionID s
 	return has, nil
 }
 
-func (as *AnswerCommon) CmsSearchList(ctx context.Context, search *entity.CmsAnswerSearch) ([]*entity.Answer, int64, error) {
+func (as *AnswerCommon) AdminSearchList(ctx context.Context, search *entity.AdminAnswerSearch) ([]*entity.Answer, int64, error) {
 	if search.Status == 0 {
 		search.Status = 1
 	}
-	return as.answerRepo.CmsSearchList(ctx, search)
+	return as.answerRepo.AdminSearchList(ctx, search)
 }
 
 func (as *AnswerCommon) Search(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error) {

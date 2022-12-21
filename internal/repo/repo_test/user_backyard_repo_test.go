@@ -10,43 +10,43 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_userBackyardRepo_GetUserInfo(t *testing.T) {
-	userBackyardRepo := user.NewUserBackyardRepo(testDataSource, auth.NewAuthRepo(testDataSource))
-	got, exist, err := userBackyardRepo.GetUserInfo(context.TODO(), "1")
+func Test_userAdminRepo_GetUserInfo(t *testing.T) {
+	userAdminRepo := user.NewUserAdminRepo(testDataSource, auth.NewAuthRepo(testDataSource))
+	got, exist, err := userAdminRepo.GetUserInfo(context.TODO(), "1")
 	assert.NoError(t, err)
 	assert.True(t, exist)
 	assert.Equal(t, "1", got.ID)
 }
 
-func Test_userBackyardRepo_GetUserPage(t *testing.T) {
-	userBackyardRepo := user.NewUserBackyardRepo(testDataSource, auth.NewAuthRepo(testDataSource))
-	got, total, err := userBackyardRepo.GetUserPage(context.TODO(), 1, 1, &entity.User{Username: "admin"}, "", false)
+func Test_userAdminRepo_GetUserPage(t *testing.T) {
+	userAdminRepo := user.NewUserAdminRepo(testDataSource, auth.NewAuthRepo(testDataSource))
+	got, total, err := userAdminRepo.GetUserPage(context.TODO(), 1, 1, &entity.User{Username: "admin"}, "", false)
 	assert.NoError(t, err)
 	assert.Equal(t, int64(1), total)
 	assert.Equal(t, "1", got[0].ID)
 }
 
-func Test_userBackyardRepo_UpdateUserStatus(t *testing.T) {
-	userBackyardRepo := user.NewUserBackyardRepo(testDataSource, auth.NewAuthRepo(testDataSource))
-	got, exist, err := userBackyardRepo.GetUserInfo(context.TODO(), "1")
+func Test_userAdminRepo_UpdateUserStatus(t *testing.T) {
+	userAdminRepo := user.NewUserAdminRepo(testDataSource, auth.NewAuthRepo(testDataSource))
+	got, exist, err := userAdminRepo.GetUserInfo(context.TODO(), "1")
 	assert.NoError(t, err)
 	assert.True(t, exist)
 	assert.Equal(t, entity.UserStatusAvailable, got.Status)
 
-	err = userBackyardRepo.UpdateUserStatus(context.TODO(), "1", entity.UserStatusSuspended, entity.EmailStatusAvailable,
+	err = userAdminRepo.UpdateUserStatus(context.TODO(), "1", entity.UserStatusSuspended, entity.EmailStatusAvailable,
 		"admin@admin.com")
 	assert.NoError(t, err)
 
-	got, exist, err = userBackyardRepo.GetUserInfo(context.TODO(), "1")
+	got, exist, err = userAdminRepo.GetUserInfo(context.TODO(), "1")
 	assert.NoError(t, err)
 	assert.True(t, exist)
 	assert.Equal(t, entity.UserStatusSuspended, got.Status)
 
-	err = userBackyardRepo.UpdateUserStatus(context.TODO(), "1", entity.UserStatusAvailable, entity.EmailStatusAvailable,
+	err = userAdminRepo.UpdateUserStatus(context.TODO(), "1", entity.UserStatusAvailable, entity.EmailStatusAvailable,
 		"admin@admin.com")
 	assert.NoError(t, err)
 
-	got, exist, err = userBackyardRepo.GetUserInfo(context.TODO(), "1")
+	got, exist, err = userAdminRepo.GetUserInfo(context.TODO(), "1")
 	assert.NoError(t, err)
 	assert.True(t, exist)
 	assert.Equal(t, entity.UserStatusAvailable, got.Status)

@@ -21,7 +21,7 @@
                 "tags": [
                     "admin"
                 ],
-                "summary": "CmsSearchList",
+                "summary": "AdminSearchAnswerList",
                 "parameters": [
                     {
                         "type": "integer",
@@ -172,7 +172,7 @@
                 "tags": [
                     "admin"
                 ],
-                "summary": "CmsSearchList",
+                "summary": "AdminSearchList",
                 "parameters": [
                     {
                         "type": "integer",

@@ -40,7 +40,7 @@ type QuestionRepo interface {
 	UpdateAccepted(ctx context.Context, question *entity.Question) (err error)
 	UpdateLastAnswer(ctx context.Context, question *entity.Question) (err error)
 	FindByID(ctx context.Context, id []string) (questionList []*entity.Question, err error)
-	CmsSearchList(ctx context.Context, search *schema.CmsQuestionSearch) ([]*entity.Question, int64, error)
+	AdminSearchList(ctx context.Context, search *schema.AdminQuestionSearch) ([]*entity.Question, int64, error)
 	GetQuestionCount(ctx context.Context) (count int64, err error)
 	GetQuestionIDsPage(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error)
 }

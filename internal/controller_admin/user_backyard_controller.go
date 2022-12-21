@@ -1,21 +1,21 @@
-package controller_backyard
+package controller_admin
 
 import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service/user_backyard"
+	"github.com/answerdev/answer/internal/service/user_admin"
 	"github.com/gin-gonic/gin"
 )
 
-// UserBackyardController user controller
-type UserBackyardController struct {
-	userService *user_backyard.UserBackyardService
+// UserAdminController user controller
+type UserAdminController struct {
+	userService *user_admin.UserAdminService
 }
 
-// NewUserBackyardController new controller
-func NewUserBackyardController(userService *user_backyard.UserBackyardService) *UserBackyardController {
-	return &UserBackyardController{userService: userService}
+// NewUserAdminController new controller
+func NewUserAdminController(userService *user_admin.UserAdminService) *UserAdminController {
+	return &UserAdminController{userService: userService}
 }
 
 // UpdateUserStatus update user
@@ -28,7 +28,7 @@ func NewUserBackyardController(userService *user_backyard.UserBackyardService) *
 // @Param data body schema.UpdateUserStatusReq true "user"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/user/status [put]
-func (uc *UserBackyardController) UpdateUserStatus(ctx *gin.Context) {
+func (uc *UserAdminController) UpdateUserStatus(ctx *gin.Context) {
 	req := &schema.UpdateUserStatusReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
@@ -48,7 +48,7 @@ func (uc *UserBackyardController) UpdateUserStatus(ctx *gin.Context) {
 // @Param data body schema.UpdateUserRoleReq true "user"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/user/role [put]
-func (uc *UserBackyardController) UpdateUserRole(ctx *gin.Context) {
+func (uc *UserAdminController) UpdateUserRole(ctx *gin.Context) {
 	req := &schema.UpdateUserRoleReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
@@ -70,7 +70,7 @@ func (uc *UserBackyardController) UpdateUserRole(ctx *gin.Context) {
 // @Param data body schema.AddUserReq true "user"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/user [post]
-func (uc *UserBackyardController) AddUser(ctx *gin.Context) {
+func (uc *UserAdminController) AddUser(ctx *gin.Context) {
 	req := &schema.AddUserReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
@@ -92,7 +92,7 @@ func (uc *UserBackyardController) AddUser(ctx *gin.Context) {
 // @Param data body schema.UpdateUserPasswordReq true "user"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/user/password [put]
-func (uc *UserBackyardController) UpdateUserPassword(ctx *gin.Context) {
+func (uc *UserAdminController) UpdateUserPassword(ctx *gin.Context) {
 	req := &schema.UpdateUserPasswordReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
@@ -117,7 +117,7 @@ func (uc *UserBackyardController) UpdateUserPassword(ctx *gin.Context) {
 // @Param status query string false "user status" Enums(suspended, deleted, inactive)
 // @Success 200 {object} handler.RespBody{data=pager.PageModel{records=[]schema.GetUserPageResp}}
 // @Router /answer/admin/api/users/page [get]
-func (uc *UserBackyardController) GetUserPage(ctx *gin.Context) {
+func (uc *UserAdminController) GetUserPage(ctx *gin.Context) {
 	req := &schema.GetUserPageReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return

@@ -619,7 +619,7 @@ func (qs *QuestionService) SearchUserList(ctx context.Context, userName, order s
 	for _, item := range questionlist {
 		info := &schema.UserQuestionInfo{}
 		_ = copier.Copy(info, item)
-		status, ok := entity.CmsQuestionSearchStatusIntToString[item.Status]
+		status, ok := entity.AdminQuestionSearchStatusIntToString[item.Status]
 		if ok {
 			info.Status = status
 		}
@@ -796,7 +796,7 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 		item.AnswerCount = question.AnswerCount
 		item.CollectionCount = question.CollectionCount
 		item.FollowCount = question.FollowCount
-		status, ok := entity.CmsQuestionSearchStatusIntToString[question.Status]
+		status, ok := entity.AdminQuestionSearchStatusIntToString[question.Status]
 		if ok {
 			item.Status = status
 		}
@@ -864,7 +864,7 @@ func (qs *QuestionService) SearchList(ctx context.Context, req *schema.QuestionS
 }
 
 func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionID string, setStatusStr string) error {
-	setStatus, ok := entity.CmsQuestionSearchStatus[setStatusStr]
+	setStatus, ok := entity.AdminQuestionSearchStatus[setStatusStr]
 	if !ok {
 		return fmt.Errorf("question status does not exist")
 	}
@@ -919,10 +919,10 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 	return nil
 }
 
-func (qs *QuestionService) CmsSearchList(ctx context.Context, search *schema.CmsQuestionSearch, loginUserID string) ([]*schema.AdminQuestionInfo, int64, error) {
+func (qs *QuestionService) AdminSearchList(ctx context.Context, search *schema.AdminQuestionSearch, loginUserID string) ([]*schema.AdminQuestionInfo, int64, error) {
 	list := make([]*schema.AdminQuestionInfo, 0)
 
-	status, ok := entity.CmsQuestionSearchStatus[search.StatusStr]
+	status, ok := entity.AdminQuestionSearchStatus[search.StatusStr]
 	if ok {
 		search.Status = status
 	}
@@ -930,7 +930,7 @@ func (qs *QuestionService) CmsSearchList(ctx context.Context, search *schema.Cms
 	if search.Status == 0 {
 		search.Status = 1
 	}
-	dblist, count, err := qs.questionRepo.CmsSearchList(ctx, search)
+	dblist, count, err := qs.questionRepo.AdminSearchList(ctx, search)
 	if err != nil {
 		return list, count, err
 	}
@@ -958,11 +958,11 @@ func (qs *QuestionService) CmsSearchList(ctx context.Context, search *schema.Cms
 	return list, count, nil
 }
 
-// CmsSearchList
-func (qs *QuestionService) CmsSearchAnswerList(ctx context.Context, search *entity.CmsAnswerSearch, loginUserID string) ([]*schema.AdminAnswerInfo, int64, error) {
+// AdminSearchList
+func (qs *QuestionService) AdminSearchAnswerList(ctx context.Context, search *entity.AdminAnswerSearch, loginUserID string) ([]*schema.AdminAnswerInfo, int64, error) {
 	answerlist := make([]*schema.AdminAnswerInfo, 0)
 
-	status, ok := entity.CmsAnswerSearchStatus[search.StatusStr]
+	status, ok := entity.AdminAnswerSearchStatus[search.StatusStr]
 	if ok {
 		search.Status = status
 	}
@@ -970,7 +970,7 @@ func (qs *QuestionService) CmsSearchAnswerList(ctx context.Context, search *enti
 	if search.Status == 0 {
 		search.Status = 1
 	}
-	dblist, count, err := qs.questioncommon.AnswerCommon.CmsSearchList(ctx, search)
+	dblist, count, err := qs.questioncommon.AnswerCommon.AdminSearchList(ctx, search)
 	if err != nil {
 		return answerlist, count, err
 	}

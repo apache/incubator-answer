@@ -1,20 +1,20 @@
-package controller_backyard
+package controller_admin
 
 import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service/report_backyard"
+	"github.com/answerdev/answer/internal/service/report_admin"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/gin-gonic/gin"
 )
 
 // ReportController report controller
 type ReportController struct {
-	reportService *report_backyard.ReportBackyardService
+	reportService *report_admin.ReportAdminService
 }
 
 // NewReportController new controller
-func NewReportController(reportService *report_backyard.ReportBackyardService) *ReportController {
+func NewReportController(reportService *report_admin.ReportAdminService) *ReportController {
 	return &ReportController{reportService: reportService}
 }
 

@@ -1,11 +1,11 @@
-package controller_backyard
+package controller_admin
 
 import "github.com/google/wire"
 
 // ProviderSetController is controller providers.
 var ProviderSetController = wire.NewSet(
 	NewReportController,
-	NewUserBackyardController,
+	NewUserAdminController,
 	NewThemeController,
 	NewSiteInfoController,
 	NewRoleController,
