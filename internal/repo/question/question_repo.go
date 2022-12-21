@@ -271,7 +271,7 @@ func (qr *questionRepo) SearchList(ctx context.Context, search *schema.QuestionS
 	return rows, count, nil
 }
 
-func (qr *questionRepo) CmsSearchList(ctx context.Context, search *schema.CmsQuestionSearch) ([]*entity.Question, int64, error) {
+func (qr *questionRepo) AdminSearchList(ctx context.Context, search *schema.AdminQuestionSearch) ([]*entity.Question, int64, error) {
 	var (
 		count   int64
 		err     error

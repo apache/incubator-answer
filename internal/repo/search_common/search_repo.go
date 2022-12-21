@@ -448,14 +448,14 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 		_ = copier.Copy(&tags, tagsEntity)
 		switch objectKey {
 		case "question":
-			for k, v := range entity.CmsQuestionSearchStatus {
+			for k, v := range entity.AdminQuestionSearchStatus {
 				if v == converter.StringToInt(string(r["status"])) {
 					status = k
 					break
 				}
 			}
 		case "answer":
-			for k, v := range entity.CmsAnswerSearchStatus {
+			for k, v := range entity.AdminAnswerSearchStatus {
 				if v == converter.StringToInt(string(r["status"])) {
 					status = k
 					break

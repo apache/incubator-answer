@@ -36,10 +36,8 @@ const Index = () => {
       <Row className="justify-content-center">
         <Col xxl={7} lg={8} sm={12} className="mb-3">
           <Head data={extra} />
-
-          <ListGroup variant="flush" className="mb-5">
-            <SearchHead sort={order} count={count} />
-
+          <SearchHead sort={order} count={count} />
+          <ListGroup className="rounded-0 mb-5">
             {list?.map((item) => {
               return <SearchItem key={item.object.id} data={item} />;
             })}

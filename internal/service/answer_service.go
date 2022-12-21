@@ -413,7 +413,7 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) 
 }
 
 func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.AdminSetAnswerStatusRequest) error {
-	setStatus, ok := entity.CmsAnswerSearchStatus[req.StatusStr]
+	setStatus, ok := entity.AdminAnswerSearchStatus[req.StatusStr]
 	if !ok {
 		return fmt.Errorf("question status does not exist")
 	}

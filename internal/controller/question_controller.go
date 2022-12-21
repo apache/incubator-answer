@@ -480,8 +480,8 @@ func (qc *QuestionController) UserCollectionList(ctx *gin.Context) {
 	})
 }
 
-// CmsSearchList godoc
-// @Summary CmsSearchList
+// AdminSearchList godoc
+// @Summary AdminSearchList
 // @Description Status:[available,closed,deleted]
 // @Tags admin
 // @Accept json
@@ -493,21 +493,21 @@ func (qc *QuestionController) UserCollectionList(ctx *gin.Context) {
 // @Param query query string false "question id or title"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/question/page [get]
-func (qc *QuestionController) CmsSearchList(ctx *gin.Context) {
-	req := &schema.CmsQuestionSearch{}
+func (qc *QuestionController) AdminSearchList(ctx *gin.Context) {
+	req := &schema.AdminQuestionSearch{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
 	userID := middleware.GetLoginUserIDFromContext(ctx)
-	questionList, count, err := qc.questionService.CmsSearchList(ctx, req, userID)
+	questionList, count, err := qc.questionService.AdminSearchList(ctx, req, userID)
 	handler.HandleResponse(ctx, err, gin.H{
 		"list":  questionList,
 		"count": count,
 	})
 }
 
-// CmsSearchAnswerList godoc
-// @Summary CmsSearchList
+// AdminSearchAnswerList godoc
+// @Summary AdminSearchAnswerList
 // @Description Status:[available,deleted]
 // @Tags admin
 // @Accept json
@@ -520,13 +520,13 @@ func (qc *QuestionController) CmsSearchList(ctx *gin.Context) {
 // @Param question_id query string false "question id"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/answer/page [get]
-func (qc *QuestionController) CmsSearchAnswerList(ctx *gin.Context) {
-	req := &entity.CmsAnswerSearch{}
+func (qc *QuestionController) AdminSearchAnswerList(ctx *gin.Context) {
+	req := &entity.AdminAnswerSearch{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
 	userID := middleware.GetLoginUserIDFromContext(ctx)
-	questionList, count, err := qc.questionService.CmsSearchAnswerList(ctx, req, userID)
+	questionList, count, err := qc.questionService.AdminSearchAnswerList(ctx, req, userID)
 	handler.HandleResponse(ctx, err, gin.H{
 		"list":  questionList,
 		"count": count,

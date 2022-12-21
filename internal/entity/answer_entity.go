@@ -11,7 +11,7 @@ const (
 	AnswerStatusDeleted   = 10
 )
 
-var CmsAnswerSearchStatus = map[string]int{
+var AdminAnswerSearchStatus = map[string]int{
 	"available": AnswerStatusAvailable,
 	"deleted":   AnswerStatusDeleted,
 }
@@ -40,7 +40,7 @@ type AnswerSearch struct {
 	PageSize int    `json:"page_size" form:"page_size"` // Search page size
 }
 
-type CmsAnswerSearch struct {
+type AdminAnswerSearch struct {
 	Page       int    `json:"page" form:"page"`           // Query number of pages
 	PageSize   int    `json:"page_size" form:"page_size"` // Search page size
 	Status     int    `json:"-" form:"-"`

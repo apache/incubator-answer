@@ -138,7 +138,7 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 	}
 	resp.IsAdmin = userCacheInfo.IsAdmin
 	if resp.IsAdmin {
-		err = us.authService.SetCmsUserCacheInfo(ctx, resp.AccessToken, userCacheInfo)
+		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, userCacheInfo)
 		if err != nil {
 			return nil, err
 		}
@@ -355,7 +355,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	}
 	resp.IsAdmin = userCacheInfo.IsAdmin
 	if resp.IsAdmin {
-		err = us.authService.SetCmsUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
+		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
 		if err != nil {
 			return nil, err
 		}
@@ -451,7 +451,7 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	}
 	resp.IsAdmin = userCacheInfo.IsAdmin
 	if resp.IsAdmin {
-		err = us.authService.SetCmsUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
+		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
 		if err != nil {
 			return nil, err
 		}
