@@ -128,6 +128,13 @@ const Index = () => {
       count: answers.count + 1,
       list: [...answers.list, obj],
     });
+
+    if (question) {
+      setQuestion({
+        ...question,
+        answered: true,
+      });
+    }
   };
 
   useEffect(() => {
@@ -171,6 +178,7 @@ const Index = () => {
                     key={item?.id}
                     data={item}
                     questionTitle={question?.title || ''}
+                    slugTitle={question?.url_title}
                     isAuthor={isAuthor}
                     callback={initPage}
                     isLogged={isLogged}

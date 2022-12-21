@@ -162,7 +162,7 @@ type SiteInfoResp struct {
 	Login         *SiteLoginResp         `json:"login"`
 	Theme         *SiteThemeResp         `json:"theme"`
 	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
-	SiteSeo       *SiteSeoReq            `json:"site__seo"`
+	SiteSeo       *SiteSeoReq            `json:"site_seo"`
 }
 type TemplateSiteInfoResp struct {
 	General       *SiteGeneralResp       `json:"general"`

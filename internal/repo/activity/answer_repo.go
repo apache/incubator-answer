@@ -27,15 +27,12 @@ type AnswerActivityRepo struct {
 }
 
 const (
-	acceptAction         = "accept"
-	acceptedAction       = "accepted"
-	acceptCancelAction   = "accept_cancel"
-	acceptedCancelAction = "accepted_cancel"
+	acceptAction   = "accept"
+	acceptedAction = "accepted"
 )
 
 var (
-	acceptActionList       = []string{acceptAction, acceptedAction}
-	acceptCancelActionList = []string{acceptCancelAction, acceptedCancelAction}
+	acceptActionList = []string{acceptAction, acceptedAction}
 )
 
 // NewAnswerActivityRepo new repository

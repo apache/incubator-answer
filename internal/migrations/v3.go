@@ -95,6 +95,7 @@ ON "question" (
 
 	// only increasing field length to 128
 	type Config struct {
+		ID  int    `xorm:"not null pk autoincr INT(11) id"`
 		Key string `xorm:"unique VARCHAR(128) key"`
 	}
 	if err := x.Sync(new(Config)); err != nil {
@@ -172,22 +173,34 @@ ON "question" (
 	}
 
 	type Revision struct {
-		ReviewUserID int64 `xorm:"not null default 0 BIGINT(20) review_user_id"`
+		ID           string `xorm:"not null pk autoincr BIGINT(20) id"`
+		ObjectID     string `xorm:"not null default 0 BIGINT(20) INDEX object_id"`
+		ReviewUserID int64  `xorm:"not null default 0 BIGINT(20) review_user_id"`
 	}
 	type Activity struct {
+		ID               string    `xorm:"not null pk autoincr BIGINT(20) id"`
 		CancelledAt      time.Time `xorm:"TIMESTAMP cancelled_at"`
+		UserID           string    `xorm:"not null index BIGINT(20) user_id"`
+		TriggerUserID    int64     `xorm:"not null default 0 index BIGINT(20) trigger_user_id"`
+		ObjectID         string    `xorm:"not null default 0 index BIGINT(20) object_id"`
 		RevisionID       int64     `xorm:"not null default 0 BIGINT(20) revision_id"`
 		OriginalObjectID string    `xorm:"not null default 0 BIGINT(20) original_object_id"`
 	}
 	type Tag struct {
-		UserID string `xorm:"not null default 0 BIGINT(20) user_id"`
+		ID       string `xorm:"not null pk comment('tag_id') BIGINT(20) id"`
+		SlugName string `xorm:"not null default '' unique VARCHAR(35) slug_name"`
+		UserID   string `xorm:"not null default 0 BIGINT(20) user_id"`
 	}
 	type Question struct {
+		ID             string    `xorm:"not null pk BIGINT(20) id"`
+		UserID         string    `xorm:"not null default 0 BIGINT(20) INDEX user_id"`
 		UpdatedAt      time.Time `xorm:"updated_at TIMESTAMP"`
 		LastEditUserID string    `xorm:"not null default 0 BIGINT(20) last_edit_user_id"`
 		PostUpdateTime time.Time `xorm:"post_update_time TIMESTAMP"`
 	}
 	type Answer struct {
+		ID             string    `xorm:"not null pk autoincr BIGINT(20) id"`
+		UserID         string    `xorm:"not null default 0 BIGINT(20) INDEX user_id"`
 		UpdatedAt      time.Time `xorm:"updated_at TIMESTAMP"`
 		LastEditUserID string    `xorm:"not null default 0 BIGINT(20) last_edit_user_id"`
 	}

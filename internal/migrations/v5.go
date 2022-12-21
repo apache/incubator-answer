@@ -26,5 +26,19 @@ func addThemeAndPrivateMode(x *xorm.Engine) error {
 	if !exist {
 		_, err = x.InsertOne(siteInfo)
 	}
+
+	themeConfig := `{"theme":"default","theme_config":{"default":{"navbar_style":"colored","primary_color":"#0033ff"}}}`
+	themeSiteInfo := &entity.SiteInfo{
+		Type:    "theme",
+		Content: themeConfig,
+		Status:  1,
+	}
+	exist, err = x.Get(&entity.SiteInfo{Type: themeSiteInfo.Type})
+	if err != nil {
+		return fmt.Errorf("get config failed: %w", err)
+	}
+	if !exist {
+		_, err = x.InsertOne(themeSiteInfo)
+	}
 	return err
 }

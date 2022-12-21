@@ -48,6 +48,26 @@ func (cs *CaptchaService) ActionRecord(ctx context.Context, req *schema.ActionRe
 	return
 }
 
+func (cs *CaptchaService) UserRegisterCaptcha(ctx context.Context) (resp *schema.ActionRecordResp, err error) {
+	resp = &schema.ActionRecordResp{}
+	resp.CaptchaID, resp.CaptchaImg, err = cs.GenerateCaptcha(ctx)
+	resp.Verify = true
+	return
+}
+
+func (cs *CaptchaService) UserRegisterVerifyCaptcha(
+	ctx context.Context, id string, VerifyValue string,
+) bool {
+	if id == "" || VerifyValue == "" {
+		return false
+	}
+	pass, err := cs.VerifyCaptcha(ctx, id, VerifyValue)
+	if err != nil {
+		return false
+	}
+	return pass
+}
+
 // ActionRecordVerifyCaptcha
 // Verify that you need to enter a CAPTCHA, and that the CAPTCHA is correct
 func (cs *CaptchaService) ActionRecordVerifyCaptcha(
@@ -58,6 +78,9 @@ func (cs *CaptchaService) ActionRecordVerifyCaptcha(
 		return true
 	}
 	if num >= 3 {
+		if id == "" || VerifyValue == "" {
+			return false
+		}
 		pass, err := cs.VerifyCaptcha(ctx, id, VerifyValue)
 		if err != nil {
 			return false

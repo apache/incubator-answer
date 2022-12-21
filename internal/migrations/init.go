@@ -11,6 +11,23 @@ import (
 	"xorm.io/xorm"
 )
 
+const (
+	defaultSEORobotTxt = `User-agent: *
+Disallow: /admin
+Disallow: /search
+Disallow: /install
+Disallow: /review
+Disallow: /users/login
+Disallow: /users/register
+Disallow: /users/account-recovery
+Disallow: /users/oauth/*
+Disallow: /users/*/*
+Disallow: /answer/api
+Disallow: /*?code*
+
+Sitemap: `
+)
+
 var tables = []interface{}{
 	&entity.Activity{},
 	&entity.Answer{},
@@ -55,6 +72,10 @@ func InitDB(dataConf *data.Database) (err error) {
 	err = engine.Sync(tables...)
 	if err != nil {
 		return fmt.Errorf("sync table failed: %s", err)
+	}
+	_, err = engine.InsertOne(&entity.Version{ID: 1, VersionNumber: ExpectedVersion()})
+	if err != nil {
+		return fmt.Errorf("init version table failed: %s", err)
 	}
 
 	err = initAdminUser(engine)
@@ -116,6 +137,9 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 		Content: string(generalDataBytes),
 		Status:  1,
 	})
+	if err != nil {
+		return err
+	}
 
 	loginConfig := map[string]bool{
 		"allow_new_registrations": true,
@@ -127,6 +151,32 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 		Content: string(loginConfigDataBytes),
 		Status:  1,
 	})
+	if err != nil {
+		return err
+	}
+
+	themeConfig := `{"theme":"default","theme_config":{"default":{"navbar_style":"colored","primary_color":"#0033ff"}}}`
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "theme",
+		Content: themeConfig,
+		Status:  1,
+	})
+	if err != nil {
+		return err
+	}
+
+	seoData := map[string]string{
+		"robots": defaultSEORobotTxt + siteURL + "/sitemap.xml",
+	}
+	seoDataBytes, _ := json.Marshal(seoData)
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "seo",
+		Content: string(seoDataBytes),
+		Status:  1,
+	})
+	if err != nil {
+		return err
+	}
 	return err
 }
 

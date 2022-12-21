@@ -204,7 +204,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	roleController := controller_backyard.NewRoleController(roleService)
 	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_backyardReportController, userBackyardController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController, activityController, roleController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
-	uiRouter := router.NewUIRouter(siteinfoController)
+	uiRouter := router.NewUIRouter(siteinfoController, siteInfoCommonService)
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService, siteInfoCommonService)
 	avatarMiddleware := middleware.NewAvatarMiddleware(serviceConf, uploaderService)
 	templateRenderController := templaterender.NewTemplateRenderController(questionService, userService, tagService, answerService, commentService, dataData, siteInfoCommonService)

@@ -180,6 +180,7 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 		objInfo, err = vs.objectService.GetInfo(ctx, voteInfo.ObjectID)
 		if err != nil {
 			log.Error(err)
+			continue
 		}
 
 		item := schema.GetVoteWithPageResp{

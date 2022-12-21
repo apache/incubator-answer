@@ -281,9 +281,7 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	if err != nil {
 		errlist, ok := resp.([]*validator.FormErrorField)
 		if ok {
-			for _, item := range errlist {
-				errFields = append(errFields, item)
-			}
+			errFields = append(errFields, errlist...)
 		}
 	}
 	if len(errFields) > 0 {
@@ -335,9 +333,7 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 
 	errlist, err := qc.questionService.UpdateQuestionCheckTags(ctx, req)
 	if err != nil {
-		for _, item := range errlist {
-			errFields = append(errFields, item)
-		}
+		errFields = append(errFields, errlist...)
 	}
 
 	if len(errFields) > 0 {

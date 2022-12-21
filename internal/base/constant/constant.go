@@ -69,8 +69,5 @@ const (
 
 func ExistInPathIgnore(name string) bool {
 	_, ok := PathIgnoreMap[name]
-	if ok {
-		return true
-	}
-	return false
+	return ok
 }

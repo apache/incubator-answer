@@ -1,36 +1,28 @@
 import { FC, memo } from 'react';
 import { Outlet } from 'react-router-dom';
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { HelmetProvider } from 'react-helmet-async';
 
 import { SWRConfig } from 'swr';
 
-import { toastStore, brandingStore, pageTagStore } from '@/stores';
-import { Header, Footer, Toast, Customize, CustomizeTheme } from '@/components';
+import { toastStore } from '@/stores';
+import {
+  Header,
+  Footer,
+  Toast,
+  Customize,
+  CustomizeTheme,
+  PageTags,
+} from '@/components';
 
 const Layout: FC = () => {
   const { msg: toastMsg, variant, clear: toastClear } = toastStore();
   const closeToast = () => {
     toastClear();
   };
-  const { favicon, square_icon } = brandingStore((state) => state.branding);
-  const { pageTitle, keywords, description } = pageTagStore(
-    (state) => state.items,
-  );
 
   return (
     <HelmetProvider>
-      <Helmet>
-        <link
-          rel="icon"
-          type="image/png"
-          href={favicon || square_icon || '/favicon.ico'}
-        />
-        <link rel="icon" type="image/png" sizes="192x192" href={square_icon} />
-        <link rel="apple-touch-icon" type="image/png" href={square_icon} />
-        <title>{pageTitle}</title>
-        {keywords && <meta name="keywords" content={keywords} />}
-        {description && <meta name="description" content={description} />}
-      </Helmet>
+      <PageTags />
       <CustomizeTheme />
       <SWRConfig
         value={{

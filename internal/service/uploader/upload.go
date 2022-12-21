@@ -119,12 +119,14 @@ func (us *UploaderService) AvatarThumbFile(ctx *gin.Context, uploadPath, fileNam
 		return avatarfile, fmt.Errorf("img extension not exist")
 	}
 	err = imaging.Encode(&buf, new_image, FormatExts[fileSuffix])
-
 	if err != nil {
 		return avatarfile, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 	thumbReader := bytes.NewReader(buf.Bytes())
-	dir.CreateDirIfNotExist(path.Join(us.serviceConfig.UploadPath, avatarThumbSubPath))
+	err = dir.CreateDirIfNotExist(path.Join(us.serviceConfig.UploadPath, avatarThumbSubPath))
+	if err != nil {
+		return nil, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
 	avatarFilePath := path.Join(avatarThumbSubPath, thumbFileName)
 	savefilePath := path.Join(us.serviceConfig.UploadPath, avatarFilePath)
 	out, err := os.Create(savefilePath)

@@ -15,6 +15,7 @@ import (
 	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 // UserController user controller
@@ -197,6 +198,10 @@ func (uc *UserController) UseRePassWord(ctx *gin.Context) {
 // @Router /answer/api/v1/user/logout [get]
 func (uc *UserController) UserLogout(ctx *gin.Context) {
 	accessToken := middleware.ExtractToken(ctx)
+	if len(accessToken) == 0 {
+		handler.HandleResponse(ctx, nil, nil)
+		return
+	}
 	_ = uc.authService.RemoveUserCacheInfo(ctx, accessToken)
 	handler.HandleResponse(ctx, nil, nil)
 }
@@ -227,6 +232,15 @@ func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 		return
 	}
 	req.IP = ctx.ClientIP()
+	captchaPass := uc.actionService.UserRegisterVerifyCaptcha(ctx, req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+		return
+	}
 
 	resp, err := uc.userService.UserRegisterByEmail(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
@@ -294,11 +308,13 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
-
 		return
 	}
-	uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
-	err := uc.userService.UserVerifyEmailSend(ctx, userInfo.UserID)
+	_, err := uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
+	if err != nil {
+		log.Error(err)
+	}
+	err = uc.userService.UserVerifyEmailSend(ctx, userInfo.UserID)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -402,6 +418,19 @@ func (uc *UserController) ActionRecord(ctx *gin.Context) {
 	req.IP = ctx.ClientIP()
 
 	resp, err := uc.actionService.ActionRecord(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// UserRegisterCaptcha godoc
+// @Summary UserRegisterCaptcha
+// @Description UserRegisterCaptcha
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Router /answer/api/v1/user/register/captcha [get]
+func (uc *UserController) UserRegisterCaptcha(ctx *gin.Context) {
+	resp, err := uc.actionService.UserRegisterCaptcha(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
 

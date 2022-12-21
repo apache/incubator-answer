@@ -65,7 +65,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
         <Link
           className="link-dark"
           reloadDocument
-          to={pathFactory.questionLanding(data.id, data.title)}>
+          to={pathFactory.questionLanding(data.id, data.url_title)}>
           {data.title}
           {data.status === 2
             ? ` [${t('closed', { keyPrefix: 'question' })}]`
@@ -129,6 +129,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
             type="question"
             memberActions={data?.member_actions}
             title={data.title}
+            slugTitle={data.url_title}
             hasAnswer={hasAnswer}
             isAccepted={Boolean(data?.accepted_answer_id)}
             callback={initPage}

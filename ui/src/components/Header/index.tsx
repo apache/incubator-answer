@@ -44,7 +44,6 @@ const Header: FC = () => {
   const siteInfo = siteInfoStore((state) => state.siteInfo);
   const brandingInfo = brandingStore((state) => state.branding);
   const loginSetting = loginSettingStore((state) => state.login);
-  const { theme, theme_config } = themeSettingStore((_) => _);
   const { data: redDot } = useQueryNotificationStatus();
   const location = useLocation();
   const handleInput = (val) => {
@@ -73,6 +72,7 @@ const Header: FC = () => {
     }
   }, [location.pathname]);
 
+  const { theme, theme_config } = themeSettingStore((_) => _);
   let themeType = 'theme-colored';
   if (theme && theme_config[theme]) {
     themeType = `theme-${theme_config[theme].navbar_style}`;
@@ -80,6 +80,7 @@ const Header: FC = () => {
 
   return (
     <Navbar
+      variant={themeType === 'theme-colored' ? 'dark' : ''}
       expand="lg"
       className={classnames('sticky-top', themeType)}
       id="header">

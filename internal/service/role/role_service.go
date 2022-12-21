@@ -81,5 +81,4 @@ func (rs *RoleService) translateRole(ctx context.Context, role *entity.Role) {
 		role.Name = translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), trRoleNameModerator)
 		role.Description = translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), trRoleDescriptionModerator)
 	}
-	return
 }

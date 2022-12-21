@@ -76,21 +76,21 @@ func Paginator(page, pageSize int, nums int64) *schema.Paginator {
 		prevpage = page - 1
 		nextpage = int(math.Min(float64(totalpages), float64(page+1)))
 		pages = make([]int, 5)
-		for i, _ := range pages {
+		for i := range pages {
 			pages[i] = start + i
 		}
 	case page >= 3 && totalpages > 5:
 		start := page - 3 + 1
 		pages = make([]int, 5)
 		prevpage = page - 3
-		for i, _ := range pages {
+		for i := range pages {
 			pages[i] = start + i
 		}
 		prevpage = page - 1
 		nextpage = page + 1
 	default:
 		pages = make([]int, int(math.Min(5, float64(totalpages))))
-		for i, _ := range pages {
+		for i := range pages {
 			pages[i] = i + 1
 		}
 		prevpage = int(math.Max(float64(1), float64(page-1)))

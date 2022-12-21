@@ -99,6 +99,7 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 	// user
 	r.POST("/user/login/email", a.userController.UserEmailLogin)
 	r.POST("/user/register/email", a.userController.UserRegisterByEmail)
+	r.GET("/user/register/captcha", a.userController.UserRegisterCaptcha)
 	r.POST("/user/email/verification", a.userController.UserVerifyEmail)
 	r.PUT("/user/email", a.userController.UserChangeEmailVerify)
 	r.GET("/user/action/record", a.userController.ActionRecord)
@@ -109,6 +110,7 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// user
+	r.GET("/user/logout", a.userController.UserLogout)
 	r.POST("/user/email/change/code", a.userController.UserChangeEmailSendCode)
 	r.POST("/user/email/verification/send", a.userController.UserVerifyEmailSend)
 	r.GET("/personal/user/info", a.userController.GetOtherUserInfoByUsername)
@@ -196,7 +198,6 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.DELETE("/answer", a.answerController.RemoveAnswer)
 
 	// user
-	r.GET("/user/logout", a.userController.UserLogout)
 	r.PUT("/user/password", a.userController.UserModifyPassWord)
 	r.PUT("/user/info", a.userController.UserUpdateInfo)
 	r.PUT("/user/interface", a.userController.UserUpdateInterface)

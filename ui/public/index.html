@@ -5,36 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link rel="stylesheet" href="%PUBLIC_URL%/custom.css" />
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
-      <style>
-        @keyframes _doc-spin {
-          to { transform: rotate(360deg) }
-        }
-        #doc-spinner {
-          position: fixed;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-        }
-        #doc-spinner .spinner {
-          box-sizing: border-box;
-          display: inline-block;
-          width: 2rem;
-          height: 2rem;
-          vertical-align: -.125em;
-          border: .25rem solid currentColor;
-          border-right-color: transparent;
-          color: rgba(108, 117, 125, .75);
-          border-radius: 50%;
-          animation: 0.75s linear infinite _doc-spin;
-        }
-      </style>
-      <div id="doc-spinner">
-        <div class="spinner"></div>
+      <div id="spin-mask" hidden>
+        <script>
+          try {
+            document.querySelector('#spin-mask').removeAttribute('hidden');
+          } catch (ex){}
+        </script>
+        <style>
+          @keyframes _doc-spin {
+            to { transform: rotate(360deg) }
+          }
+          #spin-mask {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: white;
+            z-index: 9999;
+          }
+          #spin-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+          #spin-container .spinner {
+            box-sizing: border-box;
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            vertical-align: -.125em;
+            border: .25rem solid currentColor;
+            border-right-color: transparent;
+            color: rgba(108, 117, 125, .75);
+            border-radius: 50%;
+            animation: 0.75s linear infinite _doc-spin;
+          }
+        </style>
+        <div id="spin-container">
+          <div class="spinner"></div>
+        </div>
       </div>
     </div>
   </body>

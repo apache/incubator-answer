@@ -59,12 +59,28 @@ const Index: FC = () => {
                 box-shadow: 0 0 0 0.25rem ${primaryColor.fade(0.75).string()};
                 border-color: ${tintColor(primaryColor, 0.5)};
               }
-              .badge-tag:not(.badge-tag-reserved, .badge-tag-required) {
-                color: ${shadeColor(primaryColor, 0.4)};
-                background: ${tintColor(primaryColor, 0.8).fade(0.5).string()};
+              .form-check-input:checked {
+                background-color: ${primaryColor.hex()};
+                border-color: ${primaryColor.hex()};
               }
-              .badge-tag:hover:not(.badge-tag-reserved, .badge-tag-required) {
-                background: ${tintColor(primaryColor, 0.8).hex()};
+              .form-check-input:focus {
+                border-color: ${tintColor(primaryColor, 0.5)};
+                box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), .4);
+              }
+              .form-switch .form-check-input:focus {
+                background-image: url("data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%27-4 -4 8 8%27%3e%3ccircle r=%273%27 fill=%27${tintColor(
+                  primaryColor,
+                  0.5,
+                )}%27/%3e%3c/svg%3e");
+              }
+              .dropdown-menu {
+                --bs-dropdown-link-active-bg: rgb(var(--bs-primary-rgb));
+              }
+              .link-primary {
+                color: ${primaryColor.hex()}!important;
+              }
+              .link-primary:hover, .link-primary:focus {
+                color: ${shadeColor(primaryColor, 0.8).hex()}!important
               }
             `}
         </style>

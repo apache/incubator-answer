@@ -9,3 +9,5 @@ users:
   - account-activation
   - confirm-new-email
   - account-suspended
+questions:
+  - ask

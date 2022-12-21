@@ -108,7 +108,7 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 	}
 
 	siteInfo := tc.SiteInfo(ctx)
-	siteInfo.Canonical = fmt.Sprintf("%s", siteInfo.General.SiteUrl)
+	siteInfo.Canonical = siteInfo.General.SiteUrl
 
 	UrlUseTitle := false
 	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionIDAndTitle {
@@ -191,6 +191,18 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	id := ctx.Param("id")
 	title := ctx.Param("title")
 	answerid := ctx.Param("answerid")
+
+	if id == "ask" {
+		file, err := ui.Build.ReadFile("build/index.html")
+		if err != nil {
+			log.Error(err)
+			tc.Page404(ctx)
+			return
+		}
+		ctx.Header("content-type", "text/html;charset=utf-8")
+		ctx.String(http.StatusOK, string(file))
+		return
+	}
 
 	correctTitle := false
 
@@ -426,7 +438,6 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	if !ok {
 		data["path"] = ""
 	}
-
 	ctx.HTML(code, tpl, data)
 }
 

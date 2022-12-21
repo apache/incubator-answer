@@ -120,10 +120,12 @@ const QuestionList: FC<Props> = ({ source }) => {
       <ListGroup variant="flush" className="border-top border-bottom-0">
         {listData?.list?.map((li) => {
           return (
-            <ListGroup.Item key={li.id} className="border-bottom py-3 px-0">
+            <ListGroup.Item
+              key={li.id}
+              className="border-bottom bg-transparent py-3 px-0">
               <h5 className="text-wrap text-break">
                 <NavLink
-                  to={pathFactory.questionLanding(li.id, li.title)}
+                  to={pathFactory.questionLanding(li.id, li.url_title)}
                   className="link-dark">
                   {li.title}
                   {li.status === 2 ? ` [${t('closed')}]` : ''}

@@ -237,7 +237,7 @@ const Ask = () => {
         edit_summary: formData.edit_summary.value,
       })
         .then((res) => {
-          navigate(pathFactory.questionLanding(qid, params.title), {
+          navigate(pathFactory.questionLanding(qid, params.url_title), {
             state: { isReview: res?.wait_for_review },
           });
         })
@@ -264,7 +264,7 @@ const Ask = () => {
             html: editorRef2.current.getHtml(),
           })
             .then(() => {
-              navigate(pathFactory.questionLanding(id, params.title));
+              navigate(pathFactory.questionLanding(id, params.url_title));
             })
             .catch((err) => {
               if (err.isError) {
@@ -273,7 +273,7 @@ const Ask = () => {
               }
             });
         } else {
-          navigate(pathFactory.questionLanding(id, params.title));
+          navigate(pathFactory.questionLanding(id));
         }
       }
     }

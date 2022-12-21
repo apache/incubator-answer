@@ -168,6 +168,7 @@ func (sc *SiteInfoController) GetCss(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "")
 		return
 	}
+	ctx.Header("content-type", "text/css;charset=utf-8")
 	ctx.String(http.StatusOK, resp.CustomCss)
 }
 

@@ -15,11 +15,14 @@ const Index: FC<Props> = ({ data }) => {
   if (!data?.object_type) {
     return null;
   }
-  let itemUrl = pathFactory.questionLanding(data.object.id, data.object.title);
+  let itemUrl = pathFactory.questionLanding(
+    data.object.id,
+    data.object.url_title,
+  );
   if (data.object_type === 'answer' && data.object.question_id) {
     itemUrl = pathFactory.answerLanding({
       questionId: data.object.question_id,
-      questionTitle: data.object.title,
+      slugTitle: data.object.url_title,
       answerId: data.object.id,
     });
   }

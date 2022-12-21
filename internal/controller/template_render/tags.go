@@ -19,6 +19,9 @@ func (q *TemplateRenderController) TagInfo(ctx context.Context, req *schema.GetT
 	dto := &schema.GetTagInfoReq{}
 	_ = copier.Copy(dto, req)
 	resp, err = q.tagService.GetTagInfo(ctx, dto)
+	if err != nil {
+		return
+	}
 	searchQuestion := &schema.QuestionSearch{}
 	searchQuestion.Page = req.Page
 	searchQuestion.PageSize = req.PageSize
