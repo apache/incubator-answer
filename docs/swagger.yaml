@@ -1292,7 +1292,7 @@ definitions:
         $ref: '#/definitions/schema.SiteInterfaceResp'
       login:
         $ref: '#/definitions/schema.SiteLoginResp'
-      site__seo:
+      site_seo:
         $ref: '#/definitions/schema.SiteSeoReq'
       theme:
         $ref: '#/definitions/schema.SiteThemeResp'
@@ -1302,15 +1302,11 @@ definitions:
       language:
         maxLength: 128
         type: string
-      theme:
-        maxLength: 128
-        type: string
       time_zone:
         maxLength: 128
         type: string
     required:
     - language
-    - theme
     - time_zone
     type: object
   schema.SiteInterfaceResp:
@@ -1318,15 +1314,11 @@ definitions:
       language:
         maxLength: 128
         type: string
-      theme:
-        maxLength: 128
-        type: string
       time_zone:
         maxLength: 128
         type: string
     required:
     - language
-    - theme
     - time_zone
     type: object
   schema.SiteLegalReq:
