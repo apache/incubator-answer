@@ -6999,7 +6999,7 @@ const docTemplate = `{
                 "login": {
                     "$ref": "#/definitions/schema.SiteLoginResp"
                 },
-                "site__seo": {
+                "site_seo": {
                     "$ref": "#/definitions/schema.SiteSeoReq"
                 },
                 "theme": {
@@ -7011,15 +7011,10 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "language",
-                "theme",
                 "time_zone"
             ],
             "properties": {
                 "language": {
-                    "type": "string",
-                    "maxLength": 128
-                },
-                "theme": {
                     "type": "string",
                     "maxLength": 128
                 },
@@ -7033,15 +7028,10 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "language",
-                "theme",
                 "time_zone"
             ],
             "properties": {
                 "language": {
-                    "type": "string",
-                    "maxLength": 128
-                },
-                "theme": {
                     "type": "string",
                     "maxLength": 128
                 },
