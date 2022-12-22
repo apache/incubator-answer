@@ -205,7 +205,7 @@ backend:
         other: "answered question"
       update_answer:
         other: "updated answer"
-      adopt_answer:
+      accept_answer:
         other: "accepted answer"
       comment_question:
         other: "commented question"

@@ -133,22 +133,22 @@ func (ar *answerRepo) GetAnswerPage(ctx context.Context, page, pageSize int, ans
 	return
 }
 
-// UpdateAdopted
+// UpdateAccepted
 // If no answer is selected, the answer id can be 0
-func (ar *answerRepo) UpdateAdopted(ctx context.Context, id string, questionID string) error {
+func (ar *answerRepo) UpdateAccepted(ctx context.Context, id string, questionID string) error {
 	if questionID == "" {
 		return nil
 	}
 	var data entity.Answer
 	data.ID = id
 
-	data.Adopted = schema.AnswerAdoptedFailed
+	data.Accepted = schema.AnswerAcceptedFailed
 	_, err := ar.data.DB.Where("question_id =?", questionID).Cols("adopted").Update(&data)
 	if err != nil {
 		return err
 	}
 	if id != "0" {
-		data.Adopted = schema.AnswerAdoptedEnable
+		data.Accepted = schema.AnswerAcceptedEnable
 		_, err = ar.data.DB.Where("id = ?", id).Cols("adopted").Update(&data)
 		if err != nil {
 			return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

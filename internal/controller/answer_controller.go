@@ -232,18 +232,18 @@ func (ac *AnswerController) AnswerList(ctx *gin.Context) {
 	})
 }
 
-// Adopted godoc
-// @Summary Adopted
-// @Description Adopted
+// Accepted godoc
+// @Summary Accepted
+// @Description Accepted
 // @Tags api-answer
 // @Accept  json
 // @Produce  json
 // @Security ApiKeyAuth
-// @Param data body schema.AnswerAdoptedReq  true "AnswerAdoptedReq"
+// @Param data body schema.AnswerAcceptedReq  true "AnswerAcceptedReq"
 // @Success 200 {string} string ""
 // @Router /answer/api/v1/answer/acceptance [post]
-func (ac *AnswerController) Adopted(ctx *gin.Context) {
-	req := &schema.AnswerAdoptedReq{}
+func (ac *AnswerController) Accepted(ctx *gin.Context) {
+	req := &schema.AnswerAcceptedReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
@@ -259,7 +259,7 @@ func (ac *AnswerController) Adopted(ctx *gin.Context) {
 		return
 	}
 
-	err = ac.answerService.UpdateAdopted(ctx, req)
+	err = ac.answerService.UpdateAccepted(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

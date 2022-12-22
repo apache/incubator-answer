@@ -344,8 +344,8 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs 
 
 	// check limit accepted
 	if accepted {
-		b.Where(builder.Eq{"adopted": schema.AnswerAdoptedEnable})
-		args = append(args, schema.AnswerAdoptedEnable)
+		b.Where(builder.Eq{"adopted": schema.AnswerAcceptedEnable})
+		args = append(args, schema.AnswerAcceptedEnable)
 	}
 
 	// check question id
