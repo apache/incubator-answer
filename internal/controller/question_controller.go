@@ -277,6 +277,19 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 		return
 	}
 
+	errList, err := qc.questionService.CheckAddQuestion(ctx, req)
+	if err != nil {
+		errlist, ok := errList.([]*validator.FormErrorField)
+		if ok {
+			errFields = append(errFields, errlist...)
+		}
+	}
+
+	if len(errFields) > 0 {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
+		return
+	}
+
 	resp, err := qc.questionService.AddQuestion(ctx, req)
 	if err != nil {
 		errlist, ok := resp.([]*validator.FormErrorField)
@@ -284,6 +297,7 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 			errFields = append(errFields, errlist...)
 		}
 	}
+
 	if len(errFields) > 0 {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
 		return
