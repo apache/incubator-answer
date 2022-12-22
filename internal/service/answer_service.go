@@ -80,7 +80,7 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 		if answerInfo.VoteCount > 0 {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
-		if answerInfo.Adopted == schema.AnswerAdoptedEnable {
+		if answerInfo.Accepted == schema.AnswerAcceptedEnable {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
 		questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
@@ -138,7 +138,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	insertData.UserID = req.UserID
 	insertData.OriginalText = req.Content
 	insertData.ParsedText = req.HTML
-	insertData.Adopted = schema.AnswerAdoptedFailed
+	insertData.Accepted = schema.AnswerAcceptedFailed
 	insertData.QuestionID = req.QuestionID
 	insertData.RevisionID = "0"
 	insertData.LastEditUserID = "0"
@@ -285,8 +285,8 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	return insertData.ID, nil
 }
 
-// UpdateAdopted
-func (as *AnswerService) UpdateAdopted(ctx context.Context, req *schema.AnswerAdoptedReq) error {
+// UpdateAccepted
+func (as *AnswerService) UpdateAccepted(ctx context.Context, req *schema.AnswerAcceptedReq) error {
 	if req.AnswerID == "" {
 		req.AnswerID = "0"
 	}
@@ -330,7 +330,7 @@ func (as *AnswerService) UpdateAdopted(ctx context.Context, req *schema.AnswerAd
 		}
 	}
 
-	err = as.answerRepo.UpdateAdopted(ctx, req.AnswerID, req.QuestionID)
+	err = as.answerRepo.UpdateAccepted(ctx, req.AnswerID, req.QuestionID)
 	if err != nil {
 		return err
 	}

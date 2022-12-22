@@ -27,7 +27,7 @@ type Answer struct {
 	OriginalText   string    `xorm:"not null MEDIUMTEXT original_text"`
 	ParsedText     string    `xorm:"not null MEDIUMTEXT parsed_text"`
 	Status         int       `xorm:"not null default 1 INT(11) status"`
-	Adopted        int       `xorm:"not null default 1 INT(11) adopted"`
+	Accepted       int       `xorm:"not null default 1 INT(11) adopted"`
 	CommentCount   int       `xorm:"not null default 0 INT(11) comment_count"`
 	VoteCount      int       `xorm:"not null default 0 INT(11) vote_count"`
 	RevisionID     string    `xorm:"not null default 0 BIGINT(20) revision_id"`

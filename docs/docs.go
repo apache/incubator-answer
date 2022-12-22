@@ -1671,7 +1671,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Adopted",
+                "description": "Accepted",
                 "consumes": [
                     "application/json"
                 ],
@@ -1681,15 +1681,15 @@ const docTemplate = `{
                 "tags": [
                     "api-answer"
                 ],
-                "summary": "Adopted",
+                "summary": "Accepted",
                 "parameters": [
                     {
-                        "description": "AnswerAdoptedReq",
+                        "description": "AnswerAcceptedReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.AnswerAdoptedReq"
+                            "$ref": "#/definitions/schema.AnswerAcceptedReq"
                         }
                     }
                 ],
@@ -5490,6 +5490,17 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.AnswerAcceptedReq": {
+            "type": "object",
+            "properties": {
+                "answer_id": {
+                    "type": "string"
+                },
+                "question_id": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.AnswerAddReq": {
             "type": "object",
             "properties": {
@@ -5503,17 +5514,6 @@ const docTemplate = `{
                 },
                 "question_id": {
                     "description": "question_id",
-                    "type": "string"
-                }
-            }
-        },
-        "schema.AnswerAdoptedReq": {
-            "type": "object",
-            "properties": {
-                "answer_id": {
-                    "type": "string"
-                },
-                "question_id": {
                     "type": "string"
                 }
             }

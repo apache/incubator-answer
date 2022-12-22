@@ -207,6 +207,13 @@ definitions:
       status:
         type: string
     type: object
+  schema.AnswerAcceptedReq:
+    properties:
+      answer_id:
+        type: string
+      question_id:
+        type: string
+    type: object
   schema.AnswerAddReq:
     properties:
       content:
@@ -217,13 +224,6 @@ definitions:
         type: string
       question_id:
         description: question_id
-        type: string
-    type: object
-  schema.AnswerAdoptedReq:
-    properties:
-      answer_id:
-        type: string
-      question_id:
         type: string
     type: object
   schema.AnswerUpdateReq:
@@ -2881,14 +2881,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: Adopted
+      description: Accepted
       parameters:
-      - description: AnswerAdoptedReq
+      - description: AnswerAcceptedReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.AnswerAdoptedReq'
+          $ref: '#/definitions/schema.AnswerAcceptedReq'
       produces:
       - application/json
       responses:
@@ -2898,7 +2898,7 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: Adopted
+      summary: Accepted
       tags:
       - api-answer
   /answer/api/v1/answer/info:

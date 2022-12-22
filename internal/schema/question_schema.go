@@ -199,7 +199,7 @@ type GetCloseTypeResp struct {
 type UserAnswerInfo struct {
 	AnswerID     string `json:"answer_id"`
 	QuestionID   string `json:"question_id"`
-	Adopted      int    `json:"adopted"`
+	Accepted     int    `json:"accepted"`
 	VoteCount    int    `json:"vote_count"`
 	CreateTime   int    `json:"create_time"`
 	UpdateTime   int    `json:"update_time"`
