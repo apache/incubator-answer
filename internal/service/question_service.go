@@ -158,6 +158,54 @@ func (qs *QuestionService) AddQuestionCheckTags(ctx context.Context, Tags []*ent
 	}
 	return []string{}, nil
 }
+func (qs *QuestionService) CheckAddQuestion(ctx context.Context, req *schema.QuestionAdd) (errorlist any, err error) {
+	if len(req.Tags) == 0 {
+		errorlist := make([]*validator.FormErrorField, 0)
+		errorlist = append(errorlist, &validator.FormErrorField{
+			ErrorField: "tags",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), reason.TagNotFound),
+		})
+		err = errors.BadRequest(reason.RecommendTagEnter)
+		return errorlist, err
+	}
+	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
+	if err != nil {
+		return
+	}
+	if !recommendExist {
+		errorlist := make([]*validator.FormErrorField, 0)
+		errorlist = append(errorlist, &validator.FormErrorField{
+			ErrorField: "tags",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), reason.RecommendTagEnter),
+		})
+		err = errors.BadRequest(reason.RecommendTagEnter)
+		return errorlist, err
+	}
+
+	tagNameList := make([]string, 0)
+	for _, tag := range req.Tags {
+		tagNameList = append(tagNameList, tag.SlugName)
+	}
+	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
+	if tagerr != nil {
+		return errorlist, tagerr
+	}
+	if !req.QuestionPermission.CanUseReservedTag {
+		taglist, err := qs.AddQuestionCheckTags(ctx, Tags)
+		errMsg := fmt.Sprintf(`"%s" can only be used by moderators.`,
+			strings.Join(taglist, ","))
+		if err != nil {
+			errorlist := make([]*validator.FormErrorField, 0)
+			errorlist = append(errorlist, &validator.FormErrorField{
+				ErrorField: "tags",
+				ErrorMsg:   errMsg,
+			})
+			err = errors.BadRequest(reason.RecommendTagEnter)
+			return errorlist, err
+		}
+	}
+	return nil, nil
+}
 
 // AddQuestion add question
 func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd) (questionInfo any, err error) {
