@@ -34,7 +34,9 @@ func (cr *captchaRepo) SetActionType(ctx context.Context, ip, actionType string,
 }
 
 func (cr *captchaRepo) GetActionType(ctx context.Context, ip, actionType string) (amount int, err error) {
-	cacheKey := fmt.Sprintf("ActionRecord:%s@%s", ip, actionType)
+	//cacheKey := fmt.Sprintf("ActionRecord:%s@%s", ip, actionType)
+	//Detects behavior based on ip only
+	cacheKey := fmt.Sprintf("ActionRecord:%s@", ip)
 	res, err := cr.data.Cache.GetInt64(ctx, cacheKey)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
