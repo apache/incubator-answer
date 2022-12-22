@@ -6999,7 +6999,7 @@ const docTemplate = `{
                 "login": {
                     "$ref": "#/definitions/schema.SiteLoginResp"
                 },
-                "site__seo": {
+                "site_seo": {
                     "$ref": "#/definitions/schema.SiteSeoReq"
                 },
                 "theme": {
