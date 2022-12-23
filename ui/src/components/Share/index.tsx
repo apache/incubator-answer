@@ -22,7 +22,6 @@ const Index: FC<IProps> = ({ type, qid, aid, title, slugTitle = '' }) => {
   const [showTip, setShowTip] = useState(false);
   const [canSystemShare, setSystemShareState] = useState(false);
   const { t } = useTranslation();
-  //  FIXME: pathFactory
   let baseUrl =
     type === 'question'
       ? `${window.location.origin}${pathFactory.questionLanding(
@@ -46,7 +45,11 @@ const Index: FC<IProps> = ({ type, qid, aid, title, slugTitle = '' }) => {
   const handleCopy = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
-    copy(baseUrl);
+    let copyText = baseUrl;
+    if (title) {
+      copyText = `${title} ${baseUrl}`;
+    }
+    copy(copyText);
     setShowTip(true);
     setTimeout(closeShare, 1000);
   };
