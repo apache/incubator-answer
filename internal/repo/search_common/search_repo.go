@@ -135,8 +135,8 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 					ast + ".tag_id": tagID,
 					ast + ".status": entity.TagRelStatusAvailable,
 				})
-			argsQ = append(argsQ, tagID, entity.TagRelStatusAvailable)
-			argsA = append(argsA, tagID, entity.TagRelStatusAvailable)
+			argsQ = append(argsQ, entity.TagRelStatusAvailable, tagID)
+			argsA = append(argsA, entity.TagRelStatusAvailable, tagID)
 		}
 	}
 
@@ -252,7 +252,7 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagID
 					ast + ".tag_id": tagID,
 					ast + ".status": entity.TagRelStatusAvailable,
 				})
-			args = append(args, tagID, entity.TagRelStatusAvailable)
+			args = append(args, entity.TagRelStatusAvailable, tagID)
 		}
 	}
 
@@ -365,7 +365,7 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs 
 					ast + ".tag_id": tagID,
 					ast + ".status": entity.TagRelStatusAvailable,
 				})
-			args = append(args, tagID, entity.TagRelStatusAvailable)
+			args = append(args, entity.TagRelStatusAvailable, tagID)
 		}
 	}
 
