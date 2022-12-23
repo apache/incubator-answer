@@ -38,6 +38,7 @@ require (
 	github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.7
+	github.com/yuin/goldmark v1.4.13
 	golang.org/x/crypto v0.1.0
 	golang.org/x/net v0.1.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
