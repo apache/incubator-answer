@@ -126,11 +126,17 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 		for ti, tagID := range tagIDs {
 			ast := "tag_rel" + strconv.Itoa(ti)
 			b.Join("INNER", "tag_rel as "+ast, "question.id = "+ast+".object_id").
-				And(builder.Eq{ast + ".tag_id": tagID})
+				And(builder.Eq{
+					ast + ".tag_id": tagID,
+					ast + ".status": entity.TagRelStatusAvailable,
+				})
 			ub.Join("INNER", "tag_rel as "+ast, "question_id = "+ast+".object_id").
-				And(builder.Eq{ast + ".tag_id": tagID})
-			argsQ = append(argsQ, tagID)
-			argsA = append(argsA, tagID)
+				And(builder.Eq{
+					ast + ".tag_id": tagID,
+					ast + ".status": entity.TagRelStatusAvailable,
+				})
+			argsQ = append(argsQ, tagID, entity.TagRelStatusAvailable)
+			argsA = append(argsA, tagID, entity.TagRelStatusAvailable)
 		}
 	}
 
@@ -242,8 +248,11 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagID
 		for ti, tagID := range tagIDs {
 			ast := "tag_rel" + strconv.Itoa(ti)
 			b.Join("INNER", "tag_rel as "+ast, "question.id = "+ast+".object_id").
-				And(builder.Eq{ast + ".tag_id": tagID})
-			args = append(args, tagID)
+				And(builder.Eq{
+					ast + ".tag_id": tagID,
+					ast + ".status": entity.TagRelStatusAvailable,
+				})
+			args = append(args, tagID, entity.TagRelStatusAvailable)
 		}
 	}
 
@@ -352,8 +361,11 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs 
 		for ti, tagID := range tagIDs {
 			ast := "tag_rel" + strconv.Itoa(ti)
 			b.Join("INNER", "tag_rel as "+ast, "question_id = "+ast+".object_id").
-				And(builder.Eq{ast + ".tag_id": tagID})
-			args = append(args, tagID)
+				And(builder.Eq{
+					ast + ".tag_id": tagID,
+					ast + ".status": entity.TagRelStatusAvailable,
+				})
+			args = append(args, tagID, entity.TagRelStatusAvailable)
 		}
 	}
 
