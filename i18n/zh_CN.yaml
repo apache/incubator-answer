@@ -1233,62 +1233,62 @@ ui:
         label: Recommend Tags
         text: "Please input tag slug above, one tag per line."
       required_tag:
-        title: Required Tag
-        label: Set recommend tag as required
-        text: "Every new question must have at least one recommend tag."
+        title: 必需的标签
+        label: 根据需要设置推荐标签
+        text: "每个新问题必须至少有一个推荐标签。"
       reserved_tags:
-        label: Reserved Tags
-        text: "Reserved tags can only be added to a post by moderator."
+        label: 保留标签
+        text: "保留的标签只能由版主添加到一个帖子中。"
     seo:
-      page_title: SEO
+      page_title: 搜索引擎优化
       permalink:
-        label: Permalink
-        text: Custom URL structures can improve the usability, and forward-compatibility of your links.
+        label: 固定链接
+        text: 自定义URL结构可以提高可用性，以及你的链接的向前兼容性。
       robots:
         label: robots.txt
-        text: This will permanently override any related site settings.
+        text: 这将永久覆盖任何相关的网站设置。
     themes:
-      page_title: Themes
+      page_title: 主题
       themes:
-        label: Themes
-        text: Select an existing theme.
+        label: 主题
+        text: 选择一个现有主题。
       navbar_style:
-        label: Navbar Style
-        text: Select an existing theme.
+        label: 导航栏样式
+        text: 选择一个现有主题。
       primary_color:
-        label: Primary Color
-        text: Modify the colors used by your themes
+        label: 主色调
+        text: 修改您主题使用的颜色
     css_and_html:
-      page_title: CSS and HTML
+      page_title: CSS 与 HTML
       custom_css:
-        label: Custom CSS
-        text: This will insert as <link>
+        label: 自定义CSS
+        text: 这将在 <link> 之前插入
       head:
-        label: Head
-        text: This will insert before </head>
+        label: 头部
+        text: 这将在 </head> 之前插入
       header:
-        label: Header
-        text: This will insert after <body>
+        label: 标题
+        text: 这将在 <body> 之前插入
       footer:
-        label: Footer
-        text: This will insert before </html>.
+        label: 页脚
+        text: 这将在 </html> 之前插入
     login:
-      page_title: Login
+      page_title: 登录
       membership:
-        title: Membership
-        label: Allow new registrations
-        text: Turn off to prevent anyone from creating a new account.
+        title: 会员
+        label: 允许新注册
+        text: 关闭以防止任何人创建新帐户。
       private:
-        title: Private
-        label: Login required
-        text: Only logged in users can access this community.
+        title: 非公开的
+        label: 需要登录
+        text: 只有登录用户才能访问这个社区。
   form:
-    empty: cannot be empty
-    invalid: is invalid
-    btn_submit: Save
-    not_found_props: "Required property {{ key }} not found."
+    empty: 不能为空
+    invalid: 是无效的
+    btn_submit: 保存
+    not_found_props: "所需属性 {{ key }} 未找到。"
   page_review:
-    review: Review
+    review: 评论
     proposed: 提案
     question_edit: 问题编辑
     answer_edit: 回答编辑
@@ -1326,11 +1326,11 @@ ui:
     comment: 评论
     no_data: "空空如也"
   users:
-    title: Users
-    users_with_the_most_reputation: Users with the highest reputation scores
-    users_with_the_most_vote: Users who voted the most
-    staffs: Our community staff
-    reputation: reputation
-    votes: votes
+    title: 用户
+    users_with_the_most_reputation: 信誉积分最高的用户
+    users_with_the_most_vote: 投票最多的用户
+    staffs: 我们的社区工作人员
+    reputation: 声望值
+    votes: 投票
 
 
