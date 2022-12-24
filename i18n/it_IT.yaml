@@ -14,18 +14,18 @@ backend:
   role:
     name:
       user:
-        other: "User"
+        other: "Utente"
       admin:
-        other: "Admin"
+        other: "Amministratore"
       moderator:
-        other: "Moderator"
+        other: "Moderatore"
     description:
       user:
-        other: "Default with no special access."
+        other: "Predefinito senza alcun accesso speciale."
       admin:
-        other: "Have the full power to access the site."
+        other: "Avere il pieno potere di accedere al sito."
       moderator:
-        other: "Has access to all posts except admin settings."
+        other: "Ha accesso a tutti i post tranne le impostazioni di amministratore."
   email:
     other: "email"
   password:
@@ -40,9 +40,9 @@ backend:
       not_found:
         other: "Risposta non trovata"
       cannot_deleted:
-        other: "No permission to delete."
+        other: "Permesso per cancellare mancante."
       cannot_update:
-        other: "No permission to update."
+        other: "Nessun permesso per l'aggiornamento."
     comment:
       edit_without_permission:
         other: "Non si hanno di privilegi sufficienti per modificare il commento"
@@ -81,11 +81,11 @@ backend:
       not_found:
         other: "domanda non trovata"
       cannot_deleted:
-        other: "No permission to delete."
+        other: "Permesso per cancellare mancante."
       cannot_close:
-        other: "No permission to close."
+        other: "Nessun permesso per chiudere."
       cannot_update:
-        other: "No permission to update."
+        other: "Nessun permesso per l'aggiornamento."
     rank:
       fail_to_meet_the_condition:
         other: "Condizioni non valide per il grado"
@@ -98,23 +98,23 @@ backend:
       not_found:
         other: "Etichetta non trovata"
       recommend_tag_not_found:
-        other: "Recommend Tag is not exist."
+        other: "Il Tag consigliato non esiste."
       recommend_tag_enter:
-        other: "Please enter at least one required tag."
+        other: "Inserisci almeno un tag."
       not_contain_synonym_tags:
-        other: "Should not contain synonym tags."
+        other: "Non deve contenere tag sinonimi."
       cannot_update:
-        other: "No permission to update."
+        other: "Nessun permesso per l'aggiornamento."
       cannot_set_synonym_as_itself:
-        other: "You cannot set the synonym of the current tag as itself."
+        other: "Non puoi impostare il sinonimo del tag corrente come se stesso."
     theme:
       not_found:
         other: "tema non trovato"
     revision:
       review_underway:
-        other: "Can't edit currently, there is a version in the review queue."
+        other: "Non è possibile modificare al momento, c'è una versione nella coda di revisione."
       no_permission:
-        other: "No permission to Revision."
+        other: "Nessun permesso per la revisione."
     user:
       email_or_password_wrong:
         other:
@@ -128,75 +128,75 @@ backend:
       username_duplicate:
         other: "utente già in uso"
       set_avatar:
-        other: "Avatar set failed."
+        other: "Inserimento dell'Avatar non riuscito."
       config:
         read_config_failed:
-          other: "Read config failed"
+          other: "Configurazione lettura non riuscita"
       database:
         connection_failed:
-          other: "Database connection failed"
+          other: "Connessione al database non riuscita"
         create_table_failed:
-          other: "Create table failed"
+          other: "Creazione tabella non riuscita"
       install:
         create_config_failed:
-          other: "Can’t create the config.yaml file."
+          other: "Impossibile creare il file config.yaml."
       cannot_update_your_role:
-        other: "You cannot modify your role."
+        other: "Non puoi modificare il tuo ruolo."
       not_allowed_registration:
-        other: "Currently the site is not open for registration"
+        other: "Al momento il sito non è aperto per la registrazione"
   report:
     spam:
       name:
-        other: "spam"
+        other: "posta indesiderata"
       desc:
-        other: "This post is an advertisement, or vandalism. It is not useful or relevant to the current topic."
+        other: "Questo articolo è una pubblicità o vandalismo. Non è utile o rilevante all'argomento corrente."
     rude:
       name:
         other: "scortese o violento"
       desc:
-        other: "A reasonable person would find this content inappropriate for respectful discourse."
+        other: "Una persona ragionevole trova questo contenuto inappropriato a un discorso rispettoso."
     duplicate:
       name:
         other: "duplicato"
       desc:
-        other: "This question has been asked before and already has an answer."
+        other: "Questa domanda è già stata posta e ha già una risposta."
     not_answer:
       name:
         other: "non è una risposta"
       desc:
-        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether."
+        other: "Questo è stato pubblicato come una risposta, ma non tenta di rispondere alla domanda. Dovrebbe forse essere una modifica, un commento, un'altra domanda, o cancellata del tutto."
     not_need:
       name:
         other: "non più necessario"
       desc:
-        other: "This comment is outdated, conversational or not relevant to this post."
+        other: "Questo commento è obsoleto, conversazionale o non pertinente per questo post."
     other:
       name:
         other: "altro"
       desc:
-        other: "This post requires staff attention for another reason not listed above."
+        other: "Questo articolo richiede una supervisione dello staff per altre ragioni non listate sopra."
   question:
     close:
       duplicate:
         name:
-          other: "spam"
+          other: "posta indesiderata"
         desc:
-          other: "This question has been asked before and already has an answer."
+          other: "Questa domanda è già stata posta e ha già una risposta."
       guideline:
         name:
           other: "motivo legato alla community"
         desc:
-          other: "This question doesn't meet a community guideline."
+          other: "Questa domanda non soddisfa le linee guida della comunità."
       multiple:
         name:
           other: "richiede maggiori dettagli o chiarezza"
         desc:
-          other: "This question currently includes multiple questions in one. It should focus on one problem only."
+          other: "Questa domanda attualmente include più domande in uno. Dovrebbe concentrarsi su un solo problema."
       other:
         name:
           other: "altro"
         desc:
-          other: "This post requires another reason not listed above."
+          other: "Questo articolo richiede un'altro motivo non listato sopra."
   notification:
     action:
       update_question:
@@ -206,7 +206,7 @@ backend:
       update_answer:
         other: "risposta aggiornata"
       accept_answer:
-        other: "accepted answer"
+        other: "risposta accettata"
       comment_question:
         other: "domanda commentata"
       comment_answer:
@@ -226,21 +226,21 @@ backend:
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: How to Format
+    title: Come formattare
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url. om)</code></pre></li><li><p class="mb-2">mette i rendimenti tra i paragrafi</p></li><li><p class="mb-2"><em>_italic_</em> o **<strong>grassetto</strong>**</p></li><li><p class="mb-2">trattino di codice per 4 spazi</p></li><li><p class="mb-2">preventivo inserendo <code>&gt;</code> all'inizio della riga</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">crea recinzioni di codice con backticks <code>`</code></p><pre class="mb-0">````<code><br/>codice qui<br/>`````</code></pre></li></ul>
   pagination:
-    prev: Prev
-    next: Next
+    prev: Prec
+    next: Successivo
   page_title:
-    question: Question
-    questions: Questions
+    question: Domanda
+    questions: Domande
     tag: Tag
     tags: Tags
     tag_wiki: tag wiki
-    edit_tag: Edit Tag
-    ask_a_question: Add Question
-    edit_question: Edit Question
+    edit_tag: Modifica Tag
+    ask_a_question: Aggiungi una domanda
+    edit_question: Modifica Domanda
     edit_answer: Edit Answer
     search: Search
     posts_containing: Posts containing
