@@ -29,18 +29,18 @@ module.exports = {
   devServer: function(configFunction) {
     return function(proxy, allowedHost) {
       const config = configFunction(proxy, allowedHost);
-      config.proxy = {
-        '/answer': {
+      config.proxy = [
+        {
+          context: ['/answer', '/installation'],
           target: process.env.REACT_APP_API_URL,
           changeOrigin: true,
           secure: false,
         },
-        '/installation': {
+        {
+          context: ['/custom.css'],
           target: process.env.REACT_APP_API_URL,
-          changeOrigin: true,
-          secure: false,
-        },
-      };
+        }
+      ];
       return config;
     };
   }

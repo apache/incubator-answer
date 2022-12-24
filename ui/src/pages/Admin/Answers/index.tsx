@@ -56,7 +56,7 @@ const Answers: FC = () => {
       Modal.confirm({
         title: t('title', { keyPrefix: 'delete' }),
         content:
-          item.adopted === 2
+          item.accepted === 2
             ? t('answer_accepted', { keyPrefix: 'delete' })
             : `<p>${t('other', { keyPrefix: 'delete' })}</p>`,
         cancelBtnVariant: 'link',
@@ -138,7 +138,7 @@ const Answers: FC = () => {
                         rel="noreferrer">
                         {li.question_info.title}
                       </a>
-                      {li.adopted === 2 && (
+                      {li.accepted === 2 && (
                         <Icon
                           name="check-circle-fill"
                           className="ms-2 text-success"

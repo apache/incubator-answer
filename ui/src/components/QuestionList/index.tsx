@@ -117,12 +117,12 @@ const QuestionList: FC<Props> = ({ source }) => {
           i18nKeyPrefix="question"
         />
       </div>
-      <ListGroup variant="flush" className="border-top border-bottom-0">
+      <ListGroup className="rounded-0">
         {listData?.list?.map((li) => {
           return (
             <ListGroup.Item
               key={li.id}
-              className="border-bottom bg-transparent py-3 px-0">
+              className="bg-transparent py-3 px-0 border-start-0 border-end-0">
               <h5 className="text-wrap text-break">
                 <NavLink
                   to={pathFactory.questionLanding(li.id, li.url_title)}

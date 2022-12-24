@@ -9,7 +9,7 @@ import { themeSettingStore } from '@/stores';
 const Index: FC = () => {
   const { theme, theme_config } = themeSettingStore((_) => _);
   let primaryColor;
-  if (theme_config[theme]?.primary_color) {
+  if (theme_config?.[theme]?.primary_color) {
     primaryColor = Color(theme_config[theme].primary_color);
   }
 

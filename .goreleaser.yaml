@@ -39,7 +39,21 @@ builds:
     goos:
       - linux
     goarch:
-      - arm64
+  - arm64
+    - id: build-arm7
+    main: ./cmd/answer/.
+    binary: answer
+    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
+    env:
+      - CC=arm-linux-gnueabihf-gcc
+      - CXX=arm-linux-gnueabihf-g++
+      - AR=arm-linux-gnueabihf-ar
+    goos:
+      - linux
+    goarch:
+      - arm
+    goarm:
+      - 7
   - id: build-darwin-arm64
     main: ./cmd/answer/.
     binary: answer

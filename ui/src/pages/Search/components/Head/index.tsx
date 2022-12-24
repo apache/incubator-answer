@@ -37,7 +37,7 @@ const Index: FC<Props> = ({ data }) => {
     <div className="mb-5">
       <h3 className="mb-3">{t('title')}</h3>
       <p>
-        <span className="text-secondary">{t('keywords')}</span>
+        <span className="text-secondary me-1">{t('keywords')}</span>
         {q?.replace(reg, '')}
         <br />
         {options?.length && (

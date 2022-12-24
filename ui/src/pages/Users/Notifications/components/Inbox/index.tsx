@@ -14,7 +14,7 @@ const Inbox = ({ data, handleReadNotification }) => {
     return <Empty />;
   }
   return (
-    <ListGroup className="border-top border-bottom" variant="flush">
+    <ListGroup className="rounded-0">
       {data.map((item) => {
         const { comment, question, answer } =
           item?.object_info?.object_map || {};
@@ -35,7 +35,10 @@ const Inbox = ({ data, handleReadNotification }) => {
         return (
           <ListGroup.Item
             key={item.id}
-            className={classNames('py-3', !item.is_read && 'warning')}>
+            className={classNames(
+              'py-3 border-start-0 border-end-0',
+              !item.is_read && 'warning',
+            )}>
             <div>
               {item.user_info.status !== 'deleted' ? (
                 <Link to={`/users/${item.user_info.username}`}>

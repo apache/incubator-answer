@@ -7,8 +7,8 @@ const (
 	AnswerTheQuestion = "notification.action.answer_the_question"
 	// UpdateAnswer update answer
 	UpdateAnswer = "notification.action.update_answer"
-	// AdoptAnswer adopt answer
-	AdoptAnswer = "notification.action.adopt_answer"
+	// AcceptAnswer accept answer
+	AcceptAnswer = "notification.action.accept_answer"
 	// CommentQuestion comment question
 	CommentQuestion = "notification.action.comment_question"
 	// CommentAnswer comment answer

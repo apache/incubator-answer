@@ -33,7 +33,7 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
-                "summary": "CmsSearchList",
+                "summary": "AdminSearchAnswerList",
                 "parameters": [
                     {
                         "type": "integer",
@@ -184,7 +184,7 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
-                "summary": "CmsSearchList",
+                "summary": "AdminSearchList",
                 "parameters": [
                     {
                         "type": "integer",
@@ -1671,7 +1671,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Adopted",
+                "description": "Accepted",
                 "consumes": [
                     "application/json"
                 ],
@@ -1681,15 +1681,15 @@ const docTemplate = `{
                 "tags": [
                     "api-answer"
                 ],
-                "summary": "Adopted",
+                "summary": "Accepted",
                 "parameters": [
                     {
-                        "description": "AnswerAdoptedReq",
+                        "description": "AnswerAcceptedReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.AnswerAdoptedReq"
+                            "$ref": "#/definitions/schema.AnswerAcceptedReq"
                         }
                     }
                 ],
@@ -5490,6 +5490,17 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.AnswerAcceptedReq": {
+            "type": "object",
+            "properties": {
+                "answer_id": {
+                    "type": "string"
+                },
+                "question_id": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.AnswerAddReq": {
             "type": "object",
             "properties": {
@@ -5503,17 +5514,6 @@ const docTemplate = `{
                 },
                 "question_id": {
                     "description": "question_id",
-                    "type": "string"
-                }
-            }
-        },
-        "schema.AnswerAdoptedReq": {
-            "type": "object",
-            "properties": {
-                "answer_id": {
-                    "type": "string"
-                },
-                "question_id": {
                     "type": "string"
                 }
             }
@@ -6999,7 +6999,7 @@ const docTemplate = `{
                 "login": {
                     "$ref": "#/definitions/schema.SiteLoginResp"
                 },
-                "site__seo": {
+                "site_seo": {
                     "$ref": "#/definitions/schema.SiteSeoReq"
                 },
                 "theme": {
@@ -7011,15 +7011,10 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "language",
-                "theme",
                 "time_zone"
             ],
             "properties": {
                 "language": {
-                    "type": "string",
-                    "maxLength": 128
-                },
-                "theme": {
                     "type": "string",
                     "maxLength": 128
                 },
@@ -7033,15 +7028,10 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "language",
-                "theme",
                 "time_zone"
             ],
             "properties": {
                 "language": {
-                    "type": "string",
-                    "maxLength": 128
-                },
-                "theme": {
                     "type": "string",
                     "maxLength": 128
                 },

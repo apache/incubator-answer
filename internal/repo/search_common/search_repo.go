@@ -3,6 +3,7 @@ package search_common
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -122,10 +123,20 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 
 	// check tag
 	if len(tagIDs) > 0 {
-		b.Join("INNER", "tag_rel", "question.id = tag_rel.object_id").
-			Where(builder.In("tag_rel.tag_id", tagIDs))
-		for _, tagID := range tagIDs {
-			argsQ = append(argsQ, tagID)
+		for ti, tagID := range tagIDs {
+			ast := "tag_rel" + strconv.Itoa(ti)
+			b.Join("INNER", "tag_rel as "+ast, "question.id = "+ast+".object_id").
+				And(builder.Eq{
+					ast + ".tag_id": tagID,
+					ast + ".status": entity.TagRelStatusAvailable,
+				})
+			ub.Join("INNER", "tag_rel as "+ast, "question_id = "+ast+".object_id").
+				And(builder.Eq{
+					ast + ".tag_id": tagID,
+					ast + ".status": entity.TagRelStatusAvailable,
+				})
+			argsQ = append(argsQ, entity.TagRelStatusAvailable, tagID)
+			argsA = append(argsA, entity.TagRelStatusAvailable, tagID)
 		}
 	}
 
@@ -201,7 +212,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 }
 
 // SearchQuestions search question data
-func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, notAccepted bool, views, answers int, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
+func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagIDs []string, notAccepted bool, views, answers int, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
 	words = filterWords(words)
 	var (
 		qfs  = qFields
@@ -229,6 +240,19 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, notAc
 		} else {
 			b.Or(builder.Like{"original_text", word})
 			args = append(args, "%"+word+"%")
+		}
+	}
+
+	// check tag
+	if len(tagIDs) > 0 {
+		for ti, tagID := range tagIDs {
+			ast := "tag_rel" + strconv.Itoa(ti)
+			b.Join("INNER", "tag_rel as "+ast, "question.id = "+ast+".object_id").
+				And(builder.Eq{
+					ast + ".tag_id": tagID,
+					ast + ".status": entity.TagRelStatusAvailable,
+				})
+			args = append(args, entity.TagRelStatusAvailable, tagID)
 		}
 	}
 
@@ -332,20 +356,23 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs 
 		}
 	}
 
-	// check tags
 	// check tag
 	if len(tagIDs) > 0 {
-		b.Join("INNER", "tag_rel", "question.id = tag_rel.object_id").
-			Where(builder.In("tag_rel.tag_id", tagIDs))
-		for _, tagID := range tagIDs {
-			args = append(args, tagID)
+		for ti, tagID := range tagIDs {
+			ast := "tag_rel" + strconv.Itoa(ti)
+			b.Join("INNER", "tag_rel as "+ast, "question_id = "+ast+".object_id").
+				And(builder.Eq{
+					ast + ".tag_id": tagID,
+					ast + ".status": entity.TagRelStatusAvailable,
+				})
+			args = append(args, entity.TagRelStatusAvailable, tagID)
 		}
 	}
 
 	// check limit accepted
 	if accepted {
-		b.Where(builder.Eq{"adopted": schema.AnswerAdoptedEnable})
-		args = append(args, schema.AnswerAdoptedEnable)
+		b.Where(builder.Eq{"adopted": schema.AnswerAcceptedEnable})
+		args = append(args, schema.AnswerAcceptedEnable)
 	}
 
 	// check question id
@@ -448,14 +475,14 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 		_ = copier.Copy(&tags, tagsEntity)
 		switch objectKey {
 		case "question":
-			for k, v := range entity.CmsQuestionSearchStatus {
+			for k, v := range entity.AdminQuestionSearchStatus {
 				if v == converter.StringToInt(string(r["status"])) {
 					status = k
 					break
 				}
 			}
 		case "answer":
-			for k, v := range entity.CmsAnswerSearchStatus {
+			for k, v := range entity.AdminAnswerSearchStatus {
 				if v == converter.StringToInt(string(r["status"])) {
 					status = k
 					break

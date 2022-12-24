@@ -72,17 +72,17 @@ const Header: FC = () => {
     }
   }, [location.pathname]);
 
+  let navbarStyle = 'theme-colored';
   const { theme, theme_config } = themeSettingStore((_) => _);
-  let themeType = 'theme-colored';
-  if (theme && theme_config[theme]) {
-    themeType = `theme-${theme_config[theme].navbar_style}`;
+  if (theme_config?.[theme]?.navbar_style) {
+    navbarStyle = `theme-${theme_config[theme].navbar_style}`;
   }
 
   return (
     <Navbar
-      variant={themeType === 'theme-colored' ? 'dark' : ''}
+      variant={navbarStyle === 'theme-colored' ? 'dark' : ''}
       expand="lg"
-      className={classnames('sticky-top', themeType)}
+      className={classnames('sticky-top', navbarStyle)}
       id="header">
       <Container className="d-flex align-items-center">
         <Navbar.Toggle
@@ -124,7 +124,7 @@ const Header: FC = () => {
                 {loginSetting.allow_new_registrations && (
                   <Button
                     variant={
-                      themeType === 'theme-colored' ? 'light' : 'primary'
+                      navbarStyle === 'theme-colored' ? 'light' : 'primary'
                     }
                     href="/users/register">
                     {t('btns.signup')}
@@ -181,8 +181,8 @@ const Header: FC = () => {
                   <Link
                     to="/questions/ask"
                     className={classnames('text-capitalize text-nowrap btn', {
-                      'btn-light': themeType !== 'theme-light',
-                      'btn-primary': themeType === 'theme-light',
+                      'btn-light': navbarStyle !== 'theme-light',
+                      'btn-primary': navbarStyle === 'theme-light',
                     })}>
                     {t('btns.add_question')}
                   </Link>
@@ -199,8 +199,8 @@ const Header: FC = () => {
                 <Button
                   variant="link"
                   className={classnames('me-2', {
-                    'link-light': themeType === 'theme-colored',
-                    'link-primary': themeType !== 'theme-colored',
+                    'link-light': navbarStyle === 'theme-colored',
+                    'link-primary': navbarStyle !== 'theme-colored',
                   })}
                   href="/users/login">
                   {t('btns.login')}
@@ -208,7 +208,7 @@ const Header: FC = () => {
                 {loginSetting.allow_new_registrations && (
                   <Button
                     variant={
-                      themeType === 'theme-colored' ? 'light' : 'primary'
+                      navbarStyle === 'theme-colored' ? 'light' : 'primary'
                     }
                     href="/users/register">
                     {t('btns.signup')}

@@ -1,4 +1,4 @@
-package controller_backyard
+package controller_admin
 
 import (
 	"github.com/answerdev/answer/internal/base/handler"

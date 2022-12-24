@@ -199,7 +199,7 @@ type GetCloseTypeResp struct {
 type UserAnswerInfo struct {
 	AnswerID     string `json:"answer_id"`
 	QuestionID   string `json:"question_id"`
-	Adopted      int    `json:"adopted"`
+	Accepted     int    `json:"accepted"`
 	VoteCount    int    `json:"vote_count"`
 	CreateTime   int    `json:"create_time"`
 	UpdateTime   int    `json:"update_time"`
@@ -233,7 +233,7 @@ type QuestionSearch struct {
 	UserID   string   `json:"-" form:"-"`
 }
 
-type CmsQuestionSearch struct {
+type AdminQuestionSearch struct {
 	Page      int    `json:"page" form:"page"`           // Query number of pages
 	PageSize  int    `json:"page_size" form:"page_size"` // Search page size
 	Status    int    `json:"-" form:"-"`

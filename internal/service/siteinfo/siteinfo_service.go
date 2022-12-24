@@ -114,22 +114,9 @@ func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGe
 
 func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.SiteInterfaceReq) (err error) {
 	var (
-		siteType   = "interface"
-		themeExist bool
-		content    []byte
+		siteType = "interface"
+		content  []byte
 	)
-
-	// check theme
-	for _, theme := range schema.GetThemeOptions {
-		if theme.Value == req.Theme {
-			themeExist = true
-			break
-		}
-	}
-	if !themeExist {
-		err = errors.BadRequest(reason.ThemeNotFound)
-		return
-	}
 
 	// check language
 	if !translator.CheckLanguageIsValid(req.Language) {

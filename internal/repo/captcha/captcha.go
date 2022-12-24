@@ -25,7 +25,7 @@ func NewCaptchaRepo(data *data.Data) action.CaptchaRepo {
 }
 
 func (cr *captchaRepo) SetActionType(ctx context.Context, ip, actionType string, amount int) (err error) {
-	cacheKey := fmt.Sprintf("ActionRecord:%s@%s", ip, actionType)
+	cacheKey := fmt.Sprintf("ActionRecord:%s@", ip)
 	err = cr.data.Cache.SetInt64(ctx, cacheKey, int64(amount), 6*time.Minute)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -34,17 +34,16 @@ func (cr *captchaRepo) SetActionType(ctx context.Context, ip, actionType string,
 }
 
 func (cr *captchaRepo) GetActionType(ctx context.Context, ip, actionType string) (amount int, err error) {
-	cacheKey := fmt.Sprintf("ActionRecord:%s@%s", ip, actionType)
+	cacheKey := fmt.Sprintf("ActionRecord:%s@", ip)
 	res, err := cr.data.Cache.GetInt64(ctx, cacheKey)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	// TODO: cache reflect should return empty when key not found
 	return int(res), nil
 }
 
 func (cr *captchaRepo) DelActionType(ctx context.Context, ip, actionType string) (err error) {
-	cacheKey := fmt.Sprintf("ActionRecord:%s@%s", ip, actionType)
+	cacheKey := fmt.Sprintf("ActionRecord:%s@", ip)
 	err = cr.data.Cache.Del(ctx, cacheKey)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -54,7 +53,6 @@ func (cr *captchaRepo) DelActionType(ctx context.Context, ip, actionType string)
 
 // SetCaptcha set captcha to cache
 func (cr *captchaRepo) SetCaptcha(ctx context.Context, key, captcha string) (err error) {
-	// TODO make cache time to config
 	err = cr.data.Cache.SetString(ctx, key, captcha, 6*time.Minute)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -68,6 +66,5 @@ func (cr *captchaRepo) GetCaptcha(ctx context.Context, key string) (captcha stri
 	if err != nil {
 		log.Debug(err)
 	}
-	// TODO: cache reflect should return empty when key not found
 	return captcha, nil
 }

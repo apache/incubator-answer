@@ -220,7 +220,7 @@ func (vr *VoteRepo) voteCancel(ctx context.Context, objectID string, userID, obj
 			}
 
 			// trigger user rank and send notification
-			if hasRank != 0 && existsActivity.Rank > 0 {
+			if hasRank != 0 && existsActivity.Rank != 0 {
 				_, err = vr.userRankRepo.TriggerUserRank(ctx, session, activityUserID, -deltaRank, activityType)
 				if err != nil {
 					return

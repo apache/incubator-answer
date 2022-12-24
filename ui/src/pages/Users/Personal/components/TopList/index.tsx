@@ -51,7 +51,7 @@ const Index: FC<Props> = ({ data, type }) => {
               </div>
             )}
 
-            {type === 'answer' && item.adopted === 2 && (
+            {type === 'answer' && item.accepted === 2 && (
               <div className="d-inline-block text-success ms-3 fs-14">
                 <Icon name="check-circle-fill" />
                 <span> {t('accepted')}</span>

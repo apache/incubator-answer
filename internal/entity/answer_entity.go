@@ -11,7 +11,7 @@ const (
 	AnswerStatusDeleted   = 10
 )
 
-var CmsAnswerSearchStatus = map[string]int{
+var AdminAnswerSearchStatus = map[string]int{
 	"available": AnswerStatusAvailable,
 	"deleted":   AnswerStatusDeleted,
 }
@@ -27,7 +27,7 @@ type Answer struct {
 	OriginalText   string    `xorm:"not null MEDIUMTEXT original_text"`
 	ParsedText     string    `xorm:"not null MEDIUMTEXT parsed_text"`
 	Status         int       `xorm:"not null default 1 INT(11) status"`
-	Adopted        int       `xorm:"not null default 1 INT(11) adopted"`
+	Accepted       int       `xorm:"not null default 1 INT(11) adopted"`
 	CommentCount   int       `xorm:"not null default 0 INT(11) comment_count"`
 	VoteCount      int       `xorm:"not null default 0 INT(11) vote_count"`
 	RevisionID     string    `xorm:"not null default 0 BIGINT(20) revision_id"`
@@ -40,7 +40,7 @@ type AnswerSearch struct {
 	PageSize int    `json:"page_size" form:"page_size"` // Search page size
 }
 
-type CmsAnswerSearch struct {
+type AdminAnswerSearch struct {
 	Page       int    `json:"page" form:"page"`           // Query number of pages
 	PageSize   int    `json:"page_size" form:"page_size"` // Search page size
 	Status     int    `json:"-" form:"-"`
