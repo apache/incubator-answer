@@ -205,8 +205,8 @@ backend:
         other: "domanda risposta"
       update_answer:
         other: "risposta aggiornata"
-      adopt_answer:
-        other: "risposta accettata"
+      accept_answer:
+        other: "accepted answer"
       comment_question:
         other: "domanda commentata"
       comment_answer:
