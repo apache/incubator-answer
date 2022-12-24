@@ -205,8 +205,8 @@ backend:
         other: "回答了问题"
       update_answer:
         other: "更新了答案"
-      adopt_answer:
-        other: "接受了答案"
+      accept_answer:
+        other: "accepted answer"
       comment_question:
         other: "评论了问题"
       comment_answer:
