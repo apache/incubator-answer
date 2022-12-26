@@ -111,6 +111,9 @@ backend:
         other: "No permission to update."
       cannot_set_synonym_as_itself:
         other: "You cannot set the synonym of the current tag as itself."
+    smtp:
+      config_from_name_cannot_be_email:
+        other: "The From Name cannot be a email address."
     theme:
       not_found:
         other: "Theme not found."
