@@ -1,6 +1,7 @@
 package install
 
 import (
+	"net/http"
 	"os"
 	"path/filepath"
 	"time"
@@ -28,6 +29,21 @@ import (
 // @Router /installation/language/options [get]
 func LangOptions(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, translator.LanguageOptions)
+}
+
+// CheckConfigFileAndRedirectToInstallPage if config file not exist try to redirect to install page
+// @Summary if config file not exist try to redirect to install page
+// @Description if config file not exist try to redirect to install page
+// @Tags installation
+// @Accept json
+// @Produce json
+// @Router / [get]
+func CheckConfigFileAndRedirectToInstallPage(ctx *gin.Context) {
+	if cli.CheckConfigFile(confPath) {
+		ctx.Redirect(http.StatusFound, "/50x")
+	} else {
+		ctx.Redirect(http.StatusFound, "/install")
+	}
 }
 
 // CheckConfigFile check config file if exist when installation
