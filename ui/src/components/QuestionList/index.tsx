@@ -28,9 +28,9 @@ interface Props {
   source: 'questions' | 'tag';
 }
 
-const QuestionLastUpdate = ({ q }) => {
+const QuestionLastUpdate = ({ q, order }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
-  if (q.update_time > q.edit_time) {
+  if (order !== 'newest' && q.update_time > q.edit_time) {
     // question answered
     return (
       <div className="d-flex">
@@ -49,7 +49,7 @@ const QuestionLastUpdate = ({ q }) => {
     );
   }
 
-  if (q.edit_time > q.update_time) {
+  if (order !== 'newest' && q.edit_time > q.update_time) {
     // question modified
     return (
       <div className="d-flex">
@@ -132,7 +132,7 @@ const QuestionList: FC<Props> = ({ source }) => {
                 </NavLink>
               </h5>
               <div className="d-flex flex-column flex-md-row align-items-md-center fs-14 mb-2 text-secondary">
-                <QuestionLastUpdate q={li} />
+                <QuestionLastUpdate q={li} order={curOrder} />
                 <div className="ms-0 ms-md-3 mt-2 mt-md-0">
                   <span>
                     <Icon name="hand-thumbs-up-fill" />
