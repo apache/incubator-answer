@@ -93,16 +93,18 @@ const Index: FC<Props> = ({
           className={classnames(
             'fs-14 font-monospace',
             newData.original_text && 'mb-4',
-          )}>
-          {`/tags/${
-            newData?.main_tag_slug_name
-              ? diffText(
-                  newData.main_tag_slug_name,
-                  oldData?.main_tag_slug_name,
-                )
-              : diffText(newData.slug_name, oldData?.slug_name)
-          }`}
-        </div>
+          )}
+          dangerouslySetInnerHTML={{
+            __html: `/tags/${
+              newData?.main_tag_slug_name
+                ? diffText(
+                    newData.main_tag_slug_name,
+                    oldData?.main_tag_slug_name,
+                  )
+                : diffText(newData.slug_name, oldData?.slug_name)
+            }`,
+          }}
+        />
       )}
       <div
         dangerouslySetInnerHTML={{

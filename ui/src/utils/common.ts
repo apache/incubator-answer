@@ -179,6 +179,8 @@ function diffText(newText: string, oldText: string): string {
       ?.replace(/<input/gi, '&lt;input');
   }
   const diff = Diff.diffChars(oldText, newText);
+  console.log(diff);
+
   const result = diff.map((part) => {
     if (part.added) {
       if (part.value.replace(/\n/g, '').length <= 0) {
