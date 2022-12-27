@@ -1,8 +1,9 @@
-import { FC, memo } from 'react';
+import { FC, memo, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import { unsubscribe } from '@/services';
 import { usePageTags } from '@/hooks';
 
 const Index: FC = () => {
@@ -10,6 +11,13 @@ const Index: FC = () => {
   usePageTags({
     title: t('page_title'),
   });
+  const [searchParams] = useSearchParams();
+  const code = searchParams.get('code');
+  useEffect(() => {
+    if (code) {
+      unsubscribe(code);
+    }
+  }, [code]);
   return (
     <Container className="pt-4 mt-2 mb-5">
       <Row className="justify-content-center">
