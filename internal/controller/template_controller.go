@@ -152,7 +152,7 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	})
 }
 
-func (tc *TemplateController) QuestionInfo301Jump(ctx *gin.Context, siteInfo *schema.TemplateSiteInfoResp, correctTitle bool) (jump bool, url string) {
+func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *schema.TemplateSiteInfoResp, correctTitle bool) (jump bool, url string) {
 	id := ctx.Param("id")
 	title := ctx.Param("title")
 	titleIsAnswerID := false
@@ -182,6 +182,9 @@ func (tc *TemplateController) QuestionInfo301Jump(ctx *gin.Context, siteInfo *sc
 			return
 		}
 		url = fmt.Sprintf("%s/%s", url, htmltext.UrlTitle(detail.Title))
+		if titleIsAnswerID {
+			url = fmt.Sprintf("%s/%s", url, title)
+		}
 		return true, url
 	}
 }
@@ -217,9 +220,9 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	}
 
 	siteInfo := tc.SiteInfo(ctx)
-	jump, jumpurl := tc.QuestionInfo301Jump(ctx, siteInfo, correctTitle)
+	jump, jumpurl := tc.QuestionInfoeRdirect(ctx, siteInfo, correctTitle)
 	if jump {
-		ctx.Redirect(http.StatusMovedPermanently, jumpurl)
+		ctx.Redirect(http.StatusFound, jumpurl)
 		return
 	}
 

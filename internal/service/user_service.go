@@ -168,7 +168,7 @@ func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRet
 	if err != nil {
 		return "", err
 	}
-	go us.emailService.Send(ctx, req.Email, title, body, code, data.ToJSONString())
+	go us.emailService.SendAndSaveCode(ctx, req.Email, title, body, code, data.ToJSONString())
 	return code, nil
 }
 
@@ -333,7 +333,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	if err != nil {
 		return nil, err
 	}
-	go us.emailService.Send(ctx, userInfo.EMail, title, body, code, data.ToJSONString())
+	go us.emailService.SendAndSaveCode(ctx, userInfo.EMail, title, body, code, data.ToJSONString())
 
 	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
 	if err != nil {
@@ -382,7 +382,7 @@ func (us *UserService) UserVerifyEmailSend(ctx context.Context, userID string) e
 	if err != nil {
 		return err
 	}
-	go us.emailService.Send(ctx, userInfo.EMail, title, body, code, data.ToJSONString())
+	go us.emailService.SendAndSaveCode(ctx, userInfo.EMail, title, body, code, data.ToJSONString())
 	return nil
 }
 
@@ -514,7 +514,7 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 	}
 	log.Infof("send email confirmation %s", verifyEmailURL)
 
-	go us.emailService.Send(context.Background(), req.Email, title, body, code, data.ToJSONString())
+	go us.emailService.SendAndSaveCode(context.Background(), req.Email, title, body, code, data.ToJSONString())
 	return nil, nil
 }
 
@@ -596,6 +596,25 @@ func (us *UserService) UserRanking(ctx context.Context) (resp *schema.UserRankin
 		return nil, err
 	}
 	return us.warpStatRankingResp(userInfoMapping, rankStat, voteStat, userRoleRels), nil
+}
+
+// UserUnsubscribeEmailNotification user unsubscribe email notification
+func (us *UserService) UserUnsubscribeEmailNotification(
+	ctx context.Context, req *schema.UserUnsubscribeEmailNotificationReq) (err error) {
+	data := &schema.EmailCodeContent{}
+	err = data.FromJSONString(req.Content)
+	if err != nil || len(data.UserID) == 0 {
+		return errors.BadRequest(reason.EmailVerifyURLExpired)
+	}
+
+	userInfo, exist, err := us.userRepo.GetByUserID(ctx, data.UserID)
+	if err != nil {
+		return err
+	}
+	if !exist {
+		return errors.BadRequest(reason.UserNotFound)
+	}
+	return us.userRepo.UpdateNoticeStatus(ctx, userInfo.ID, schema.NoticeStatusOff)
 }
 
 func (us *UserService) getActivityUserRankStat(ctx context.Context, startTime, endTime time.Time, limit int,

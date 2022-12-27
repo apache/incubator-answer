@@ -106,6 +106,7 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 	r.POST("/user/password/reset", a.userController.RetrievePassWord)
 	r.POST("/user/password/replacement", a.userController.UseRePassWord)
 	r.GET("/user/info", a.userController.GetUserInfoByUserID)
+	r.PUT("/user/email/notification", a.userController.UserUnsubscribeEmailNotification)
 }
 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
