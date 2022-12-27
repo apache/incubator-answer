@@ -535,3 +535,28 @@ func (uc *UserController) UserRanking(ctx *gin.Context) {
 	resp, err := uc.userService.UserRanking(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
+
+// UserUnsubscribeEmailNotification unsubscribe email notification
+// @Summary unsubscribe email notification
+// @Description unsubscribe email notification
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/api/v1/user/email/notification [put]
+func (uc *UserController) UserUnsubscribeEmailNotification(ctx *gin.Context) {
+	req := &schema.UserUnsubscribeEmailNotificationReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.Content = uc.emailService.VerifyUrlExpired(ctx, req.Code)
+	if len(req.Content) == 0 {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyURLExpired),
+			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeURLExpired})
+		return
+	}
+
+	err := uc.userService.UserUnsubscribeEmailNotification(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}

@@ -23,8 +23,8 @@ func NewEmailRepo(data *data.Data) export.EmailRepo {
 }
 
 // SetCode The email code is used to verify that the link in the message is out of date
-func (e *emailRepo) SetCode(ctx context.Context, code, content string) error {
-	err := e.data.Cache.SetString(ctx, code, content, 10*time.Minute)
+func (e *emailRepo) SetCode(ctx context.Context, code, content string, duration time.Duration) error {
+	err := e.data.Cache.SetString(ctx, code, content, duration)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
