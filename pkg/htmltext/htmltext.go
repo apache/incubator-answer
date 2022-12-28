@@ -75,11 +75,10 @@ func FetchExcerpt(html, trimMarker string, limit int) (text string) {
 	runeText := []rune(text)
 	if len(runeText) <= limit {
 		text = string(runeText)
-	} else {
-		text = string(runeText[0:limit])
+		return
 	}
 
-	text += trimMarker
+	text = string(runeText[0:limit]) + trimMarker
 	return
 }
 
