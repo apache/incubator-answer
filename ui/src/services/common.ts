@@ -257,3 +257,8 @@ export const getAppSettings = () => {
 export const reopenQuestion = (params: { question_id: string }) => {
   return request.put('/answer/api/v1/question/reopen', params);
 };
+
+export const unsubscribe = (code: string) => {
+  const apiUrl = '/answer/api/v1/user/email/notification';
+  return request.put(apiUrl, { code });
+};

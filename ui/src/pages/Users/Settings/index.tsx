@@ -43,12 +43,14 @@ const Index: React.FC = () => {
   });
   const getProfile = () => {
     getLoggedUserInfo().then((res) => {
-      formData.display_name.value = res.display_name;
-      formData.bio.value = res.bio;
-      formData.avatar.value = res.avatar;
-      formData.location.value = res.location;
-      formData.website.value = res.website;
-      setFormData({ ...formData });
+      if (res) {
+        formData.display_name.value = res.display_name;
+        formData.bio.value = res.bio;
+        formData.avatar.value = res.avatar;
+        formData.location.value = res.location;
+        formData.website.value = res.website;
+        setFormData({ ...formData });
+      }
     });
   };
 

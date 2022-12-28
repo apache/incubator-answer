@@ -838,6 +838,11 @@ ui:
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was
       already changed?
+  unsubscribe:
+    page_title: Unsubscribe
+    success_title: Unsubscribe Successful
+    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
+    link: Change settings
   question:
     following_tags: Following Tags
     edit: Edit
