@@ -343,21 +343,6 @@ func (cs *CommentService) convertCommentEntity2Resp(ctx context.Context, req *sc
 	return commentResp, nil
 }
 
-func (cs *CommentService) checkCommentWhetherOwner(ctx context.Context, userID, commentID string) error {
-	// check comment if user self
-	comment, exist, err := cs.commentCommonRepo.GetComment(ctx, commentID)
-	if err != nil {
-		return err
-	}
-	if !exist {
-		return errors.BadRequest(reason.CommentNotFound)
-	}
-	if comment.UserID != userID {
-		return errors.BadRequest(reason.CommentEditWithoutPermission)
-	}
-	return nil
-}
-
 func (cs *CommentService) checkIsVote(ctx context.Context, userID, commentID string) (isVote bool) {
 	status := cs.voteCommon.GetVoteStatus(ctx, commentID, userID)
 	return len(status) > 0

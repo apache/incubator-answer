@@ -1,7 +1,7 @@
 package htmltext
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -89,7 +89,7 @@ func GetPicByUrl(Url string) string {
 		return ""
 	}
 	defer res.Body.Close()
-	pix, err := ioutil.ReadAll(res.Body)
+	pix, err := io.ReadAll(res.Body)
 	if err != nil {
 		return ""
 	}
