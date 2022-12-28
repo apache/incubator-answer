@@ -126,6 +126,10 @@ func (us *UserCommon) MakeUsername(ctx context.Context, displayName string) (use
 		return "", errors.BadRequest(reason.UsernameInvalid)
 	}
 
+	if checker.IsReservedUsername(username) {
+		return "", errors.BadRequest(reason.UsernameInvalid)
+	}
+
 	for {
 		_, has, err := us.userRepo.GetByUsername(ctx, username+suffix)
 		if err != nil {
