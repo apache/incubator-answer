@@ -69,7 +69,7 @@ const Index: FC<Props> = ({
     <div id={data.id} ref={answerRef} className="answer-item py-4">
       <article
         dangerouslySetInnerHTML={{ __html: data?.html }}
-        className="fmt"
+        className="fmt text-break text-wrap"
       />
       <div className="d-flex align-items-center mt-4">
         <Actions
