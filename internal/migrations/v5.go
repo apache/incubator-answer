@@ -25,6 +25,9 @@ func addThemeAndPrivateMode(x *xorm.Engine) error {
 	}
 	if !exist {
 		_, err = x.InsertOne(siteInfo)
+		if err != nil {
+			return fmt.Errorf("insert site info failed: %w", err)
+		}
 	}
 
 	themeConfig := `{"theme":"default","theme_config":{"default":{"navbar_style":"colored","primary_color":"#0033ff"}}}`
