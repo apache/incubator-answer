@@ -207,6 +207,13 @@ definitions:
       status:
         type: string
     type: object
+  schema.AnswerAcceptedReq:
+    properties:
+      answer_id:
+        type: string
+      question_id:
+        type: string
+    type: object
   schema.AnswerAddReq:
     properties:
       content:
@@ -217,13 +224,6 @@ definitions:
         type: string
       question_id:
         description: question_id
-        type: string
-    type: object
-  schema.AnswerAdoptedReq:
-    properties:
-      answer_id:
-        type: string
-      question_id:
         type: string
     type: object
   schema.AnswerUpdateReq:
@@ -1302,15 +1302,11 @@ definitions:
       language:
         maxLength: 128
         type: string
-      theme:
-        maxLength: 128
-        type: string
       time_zone:
         maxLength: 128
         type: string
     required:
     - language
-    - theme
     - time_zone
     type: object
   schema.SiteInterfaceResp:
@@ -1318,15 +1314,11 @@ definitions:
       language:
         maxLength: 128
         type: string
-      theme:
-        maxLength: 128
-        type: string
       time_zone:
         maxLength: 128
         type: string
     required:
     - language
-    - theme
     - time_zone
     type: object
   schema.SiteLegalReq:
@@ -1932,7 +1924,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: CmsSearchList
+      summary: AdminSearchAnswerList
       tags:
       - admin
   /answer/admin/api/answer/status:
@@ -2024,7 +2016,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: CmsSearchList
+      summary: AdminSearchList
       tags:
       - admin
   /answer/admin/api/question/status:
@@ -2889,14 +2881,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: Adopted
+      description: Accepted
       parameters:
-      - description: AnswerAdoptedReq
+      - description: AnswerAcceptedReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.AnswerAdoptedReq'
+          $ref: '#/definitions/schema.AnswerAcceptedReq'
       produces:
       - application/json
       responses:
@@ -2906,7 +2898,7 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: Adopted
+      summary: Accepted
       tags:
       - api-answer
   /answer/api/v1/answer/info:

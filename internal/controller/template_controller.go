@@ -264,7 +264,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	jsonLD.MainEntity.Author.Name = detail.UserInfo.DisplayName
 	answerList := make([]*schema.SuggestedAnswerItem, 0)
 	for _, answer := range answers {
-		if answer.Adopted == schema.AnswerAdoptedEnable {
+		if answer.Accepted == schema.AnswerAcceptedEnable {
 			acceptedAnswerItem := &schema.AcceptedAnswerItem{}
 			acceptedAnswerItem.Type = "Answer"
 			acceptedAnswerItem.Text = answer.HTML

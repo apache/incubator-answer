@@ -371,8 +371,8 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs 
 
 	// check limit accepted
 	if accepted {
-		b.Where(builder.Eq{"adopted": schema.AnswerAdoptedEnable})
-		args = append(args, schema.AnswerAdoptedEnable)
+		b.Where(builder.Eq{"adopted": schema.AnswerAcceptedEnable})
+		args = append(args, schema.AnswerAcceptedEnable)
 	}
 
 	// check question id
@@ -475,14 +475,14 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 		_ = copier.Copy(&tags, tagsEntity)
 		switch objectKey {
 		case "question":
-			for k, v := range entity.CmsQuestionSearchStatus {
+			for k, v := range entity.AdminQuestionSearchStatus {
 				if v == converter.StringToInt(string(r["status"])) {
 					status = k
 					break
 				}
 			}
 		case "answer":
-			for k, v := range entity.CmsAnswerSearchStatus {
+			for k, v := range entity.AdminAnswerSearchStatus {
 				if v == converter.StringToInt(string(r["status"])) {
 					status = k
 					break

@@ -23,7 +23,7 @@ const Index: FC = () => {
         description: t('themes.text'),
         enum: themeSetting?.theme_options?.map((_) => _.value),
         enumNames: themeSetting?.theme_options?.map((_) => _.label),
-        default: 'default',
+        default: themeSetting?.theme_options?.[0]?.value,
       },
       navbar_style: {
         type: 'string',
@@ -31,12 +31,13 @@ const Index: FC = () => {
         description: t('navbar_style.text'),
         enum: ['colored', 'light'],
         enumNames: ['Colored', 'Light'],
+        default: 'colored',
       },
       primary_color: {
         type: 'string',
         title: t('primary_color.label'),
         description: t('primary_color.text'),
-        default: '#ffffff',
+        default: '#0033FF',
       },
     },
   };
@@ -68,6 +69,7 @@ const Index: FC = () => {
         },
       },
     };
+
     putThemeSetting(reqParams)
       .then(() => {
         Toast.onShow({

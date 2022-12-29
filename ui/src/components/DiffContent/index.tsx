@@ -1,6 +1,6 @@
 import { FC, memo } from 'react';
 
-import clssnames from 'classnames';
+import classnames from 'classnames';
 
 import { Tag } from '@/components';
 import { diffText } from '@/utils';
@@ -90,7 +90,7 @@ const Index: FC<Props> = ({
       )}
       {objectType === 'tag' && opts?.showTagUrlSlug && (
         <div
-          className={clssnames(
+          className={classnames(
             'fs-14 font-monospace',
             newData.original_text && 'mb-4',
           )}>

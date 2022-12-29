@@ -1,7 +1,6 @@
 import { FC, memo, useState } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
 
 import { TagSelector, Tag } from '@/components';
 import { tryLoggedAndActivated } from '@/utils/guard';
@@ -78,11 +77,13 @@ const Index: FC = () => {
         ) : (
           <>
             <div className="text-muted">{t('follow_tag_tip')}</div>
-            <NavLink className="d-inline-block mt-3" to="/tags">
-              <Button size="sm" variant="outline-primary">
-                {t('follow_a_tag')}
-              </Button>
-            </NavLink>
+            <Button
+              size="sm"
+              className="mt-3"
+              variant="outline-primary"
+              onClick={() => setEditState(true)}>
+              {t('follow_a_tag')}
+            </Button>
           </>
         )}
       </Card.Body>

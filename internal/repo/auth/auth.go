@@ -95,8 +95,8 @@ func (ar *authRepo) RemoveUserStatus(ctx context.Context, userID string) (err er
 	return nil
 }
 
-// GetBackyardUserCacheInfo get backyard user cache info
-func (ar *authRepo) GetBackyardUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error) {
+// GetAdminUserCacheInfo get admin user cache info
+func (ar *authRepo) GetAdminUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error) {
 	userInfoCache, err := ar.data.Cache.GetString(ctx, constant.AdminTokenCacheKey+accessToken)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -110,8 +110,8 @@ func (ar *authRepo) GetBackyardUserCacheInfo(ctx context.Context, accessToken st
 	return userInfo, nil
 }
 
-// SetBackyardUserCacheInfo set backyard user cache info
-func (ar *authRepo) SetBackyardUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) (err error) {
+// SetAdminUserCacheInfo set admin user cache info
+func (ar *authRepo) SetAdminUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) (err error) {
 	userInfoCache, err := json.Marshal(userInfo)
 	if err != nil {
 		return err
@@ -125,8 +125,8 @@ func (ar *authRepo) SetBackyardUserCacheInfo(ctx context.Context, accessToken st
 	return nil
 }
 
-// RemoveBackyardUserCacheInfo remove backyard user cache info
-func (ar *authRepo) RemoveBackyardUserCacheInfo(ctx context.Context, accessToken string) (err error) {
+// RemoveAdminUserCacheInfo remove admin user cache info
+func (ar *authRepo) RemoveAdminUserCacheInfo(ctx context.Context, accessToken string) (err error) {
 	err = ar.data.Cache.Del(ctx, constant.AdminTokenCacheKey+accessToken)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

@@ -49,6 +49,7 @@ var funcMap = template.FuncMap{
 				k := converter.InterfaceToString(params[i])
 				v := converter.InterfaceToString(params[i+1])
 				trans = strings.ReplaceAll(trans, "{{ "+k+" }}", v)
+				trans = strings.ReplaceAll(trans, "{{"+k+"}}", v)
 			}
 		}
 

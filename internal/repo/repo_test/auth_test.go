@@ -61,26 +61,26 @@ func Test_authRepo_RemoveUserStatus(t *testing.T) {
 	assert.Error(t, err)
 }
 
-func Test_authRepo_SetBackyardUserCacheInfo(t *testing.T) {
+func Test_authRepo_SetAdminUserCacheInfo(t *testing.T) {
 	authRepo := auth.NewAuthRepo(testDataSource)
 
-	err := authRepo.SetBackyardUserCacheInfo(context.TODO(), token, &entity.UserCacheInfo{UserID: userID})
+	err := authRepo.SetAdminUserCacheInfo(context.TODO(), token, &entity.UserCacheInfo{UserID: userID})
 	assert.NoError(t, err)
 
-	cacheInfo, err := authRepo.GetBackyardUserCacheInfo(context.TODO(), token)
+	cacheInfo, err := authRepo.GetAdminUserCacheInfo(context.TODO(), token)
 	assert.NoError(t, err)
 	assert.Equal(t, userID, cacheInfo.UserID)
 }
 
-func Test_authRepo_RemoveBackyardUserCacheInfo(t *testing.T) {
+func Test_authRepo_RemoveAdminUserCacheInfo(t *testing.T) {
 	authRepo := auth.NewAuthRepo(testDataSource)
 
-	err := authRepo.SetBackyardUserCacheInfo(context.TODO(), token, &entity.UserCacheInfo{UserID: userID})
+	err := authRepo.SetAdminUserCacheInfo(context.TODO(), token, &entity.UserCacheInfo{UserID: userID})
 	assert.NoError(t, err)
 
-	err = authRepo.RemoveBackyardUserCacheInfo(context.TODO(), token)
+	err = authRepo.RemoveAdminUserCacheInfo(context.TODO(), token)
 	assert.NoError(t, err)
 
-	_, err = authRepo.GetBackyardUserCacheInfo(context.TODO(), token)
+	_, err = authRepo.GetAdminUserCacheInfo(context.TODO(), token)
 	assert.Error(t, err)
 }

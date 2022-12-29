@@ -1,4 +1,4 @@
-package report_backyard
+package report_admin
 
 import (
 	"context"
@@ -16,35 +16,35 @@ import (
 	"github.com/answerdev/answer/internal/service/comment_common"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/report_common"
-	"github.com/answerdev/answer/internal/service/report_handle_backyard"
+	"github.com/answerdev/answer/internal/service/report_handle_admin"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 )
 
-// ReportBackyardService user service
-type ReportBackyardService struct {
+// ReportAdminService user service
+type ReportAdminService struct {
 	reportRepo        report_common.ReportRepo
 	commonUser        *usercommon.UserCommon
 	commonRepo        *common.CommonRepo
 	answerRepo        answercommon.AnswerRepo
 	questionRepo      questioncommon.QuestionRepo
 	commentCommonRepo comment_common.CommentCommonRepo
-	reportHandle      *report_handle_backyard.ReportHandle
+	reportHandle      *report_handle_admin.ReportHandle
 	configRepo        config.ConfigRepo
 }
 
-// NewReportBackyardService new report service
-func NewReportBackyardService(
+// NewReportAdminService new report service
+func NewReportAdminService(
 	reportRepo report_common.ReportRepo,
 	commonUser *usercommon.UserCommon,
 	commonRepo *common.CommonRepo,
 	answerRepo answercommon.AnswerRepo,
 	questionRepo questioncommon.QuestionRepo,
 	commentCommonRepo comment_common.CommentCommonRepo,
-	reportHandle *report_handle_backyard.ReportHandle,
-	configRepo config.ConfigRepo) *ReportBackyardService {
-	return &ReportBackyardService{
+	reportHandle *report_handle_admin.ReportHandle,
+	configRepo config.ConfigRepo) *ReportAdminService {
+	return &ReportAdminService{
 		reportRepo:        reportRepo,
 		commonUser:        commonUser,
 		commonRepo:        commonRepo,
@@ -57,7 +57,7 @@ func NewReportBackyardService(
 }
 
 // ListReportPage list report pages
-func (rs *ReportBackyardService) ListReportPage(ctx context.Context, dto schema.GetReportListPageDTO) (pageModel *pager.PageModel, err error) {
+func (rs *ReportAdminService) ListReportPage(ctx context.Context, dto schema.GetReportListPageDTO) (pageModel *pager.PageModel, err error) {
 	var (
 		resp  []*schema.GetReportListPageResp
 		flags []entity.Report
@@ -105,7 +105,7 @@ func (rs *ReportBackyardService) ListReportPage(ctx context.Context, dto schema.
 }
 
 // HandleReported handle the reported object
-func (rs *ReportBackyardService) HandleReported(ctx context.Context, req schema.ReportHandleReq) (err error) {
+func (rs *ReportAdminService) HandleReported(ctx context.Context, req schema.ReportHandleReq) (err error) {
 	var (
 		reported   *entity.Report
 		handleData = entity.Report{
@@ -139,7 +139,7 @@ func (rs *ReportBackyardService) HandleReported(ctx context.Context, req schema.
 	return
 }
 
-func (rs *ReportBackyardService) parseObject(ctx context.Context, resp *[]*schema.GetReportListPageResp) {
+func (rs *ReportAdminService) parseObject(ctx context.Context, resp *[]*schema.GetReportListPageResp) {
 	var (
 		res = *resp
 	)

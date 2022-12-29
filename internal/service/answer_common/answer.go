@@ -15,11 +15,11 @@ type AnswerRepo interface {
 	GetAnswer(ctx context.Context, id string) (answer *entity.Answer, exist bool, err error)
 	GetAnswerList(ctx context.Context, answer *entity.Answer) (answerList []*entity.Answer, err error)
 	GetAnswerPage(ctx context.Context, page, pageSize int, answer *entity.Answer) (answerList []*entity.Answer, total int64, err error)
-	UpdateAdopted(ctx context.Context, id string, questionID string) error
+	UpdateAccepted(ctx context.Context, id string, questionID string) error
 	GetByID(ctx context.Context, id string) (*entity.Answer, bool, error)
 	GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error)
 	SearchList(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error)
-	CmsSearchList(ctx context.Context, search *entity.CmsAnswerSearch) ([]*entity.Answer, int64, error)
+	AdminSearchList(ctx context.Context, search *entity.AdminAnswerSearch) ([]*entity.Answer, int64, error)
 	UpdateAnswerStatus(ctx context.Context, answer *entity.Answer) (err error)
 	GetAnswerCount(ctx context.Context) (count int64, err error)
 }
@@ -43,11 +43,11 @@ func (as *AnswerCommon) SearchAnswered(ctx context.Context, userID, questionID s
 	return has, nil
 }
 
-func (as *AnswerCommon) CmsSearchList(ctx context.Context, search *entity.CmsAnswerSearch) ([]*entity.Answer, int64, error) {
+func (as *AnswerCommon) AdminSearchList(ctx context.Context, search *entity.AdminAnswerSearch) ([]*entity.Answer, int64, error) {
 	if search.Status == 0 {
 		search.Status = 1
 	}
-	return as.answerRepo.CmsSearchList(ctx, search)
+	return as.answerRepo.AdminSearchList(ctx, search)
 }
 
 func (as *AnswerCommon) Search(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error) {
@@ -64,7 +64,7 @@ func (as *AnswerCommon) ShowFormat(ctx context.Context, data *entity.Answer) *sc
 	info.QuestionID = data.QuestionID
 	info.Content = data.OriginalText
 	info.HTML = data.ParsedText
-	info.Adopted = data.Adopted
+	info.Accepted = data.Accepted
 	info.VoteCount = data.VoteCount
 	info.CreateTime = data.CreatedAt.Unix()
 	info.UpdateTime = data.UpdatedAt.Unix()
@@ -80,7 +80,7 @@ func (as *AnswerCommon) AdminShowFormat(ctx context.Context, data *entity.Answer
 	info := schema.AdminAnswerInfo{}
 	info.ID = data.ID
 	info.QuestionID = data.QuestionID
-	info.Adopted = data.Adopted
+	info.Accepted = data.Accepted
 	info.VoteCount = data.VoteCount
 	info.CreateTime = data.CreatedAt.Unix()
 	info.UpdateTime = data.UpdatedAt.Unix()

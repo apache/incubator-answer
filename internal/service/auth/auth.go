@@ -16,9 +16,9 @@ type AuthRepo interface {
 	SetUserStatus(ctx context.Context, userID string, userInfo *entity.UserCacheInfo) (err error)
 	GetUserStatus(ctx context.Context, userID string) (userInfo *entity.UserCacheInfo, err error)
 	RemoveUserStatus(ctx context.Context, userID string) (err error)
-	GetBackyardUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error)
-	SetBackyardUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) error
-	RemoveBackyardUserCacheInfo(ctx context.Context, accessToken string) (err error)
+	GetAdminUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error)
+	SetAdminUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) error
+	RemoveAdminUserCacheInfo(ctx context.Context, accessToken string) (err error)
 	AddUserTokenMapping(ctx context.Context, userID, accessToken string) (err error)
 	RemoveAllUserTokens(ctx context.Context, userID string)
 }
@@ -90,17 +90,17 @@ func (as *AuthService) RemoveAllUserTokens(ctx context.Context, userID string) {
 	as.authRepo.RemoveAllUserTokens(ctx, userID)
 }
 
-//cms
+//Admin
 
-func (as *AuthService) GetCmsUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error) {
-	return as.authRepo.GetBackyardUserCacheInfo(ctx, accessToken)
+func (as *AuthService) GetAdminUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error) {
+	return as.authRepo.GetAdminUserCacheInfo(ctx, accessToken)
 }
 
-func (as *AuthService) SetCmsUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) (err error) {
-	err = as.authRepo.SetBackyardUserCacheInfo(ctx, accessToken, userInfo)
+func (as *AuthService) SetAdminUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) (err error) {
+	err = as.authRepo.SetAdminUserCacheInfo(ctx, accessToken, userInfo)
 	return err
 }
 
-func (as *AuthService) RemoveCmsUserCacheInfo(ctx context.Context, accessToken string) (err error) {
-	return as.authRepo.RemoveBackyardUserCacheInfo(ctx, accessToken)
+func (as *AuthService) RemoveAdminUserCacheInfo(ctx context.Context, accessToken string) (err error) {
+	return as.authRepo.RemoveAdminUserCacheInfo(ctx, accessToken)
 }

@@ -10,13 +10,13 @@ const (
 	QuestionStatusDeleted   = 10
 )
 
-var CmsQuestionSearchStatus = map[string]int{
+var AdminQuestionSearchStatus = map[string]int{
 	"available": QuestionStatusAvailable,
 	"closed":    QuestionStatusClosed,
 	"deleted":   QuestionStatusDeleted,
 }
 
-var CmsQuestionSearchStatusIntToString = map[int]string{
+var AdminQuestionSearchStatusIntToString = map[int]string{
 	QuestionStatusAvailable: "available",
 	QuestionStatusClosed:    "closed",
 	QuestionStatusDeleted:   "deleted",

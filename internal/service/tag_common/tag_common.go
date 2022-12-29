@@ -661,7 +661,9 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, req *schema.UpdateTag
 		return errors.BadRequest(reason.TagNotFound)
 	}
 	//If the content is the same, ignore it
-	if tagInfo.OriginalText == req.OriginalText {
+	if tagInfo.OriginalText == req.OriginalText &&
+		tagInfo.DisplayName == req.DisplayName &&
+		tagInfo.SlugName == req.SlugName {
 		return nil
 	}
 

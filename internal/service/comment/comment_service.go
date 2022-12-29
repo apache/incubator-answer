@@ -168,17 +168,11 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 
 // RemoveComment delete comment
 func (cs *CommentService) RemoveComment(ctx context.Context, req *schema.RemoveCommentReq) (err error) {
-	if err := cs.checkCommentWhetherOwner(ctx, req.UserID, req.CommentID); err != nil {
-		return err
-	}
 	return cs.commentRepo.RemoveComment(ctx, req.CommentID)
 }
 
 // UpdateComment update comment
 func (cs *CommentService) UpdateComment(ctx context.Context, req *schema.UpdateCommentReq) (err error) {
-	if err := cs.checkCommentWhetherOwner(ctx, req.UserID, req.CommentID); err != nil {
-		return err
-	}
 	comment := &entity.Comment{}
 	_ = copier.Copy(comment, req)
 	comment.ID = req.CommentID

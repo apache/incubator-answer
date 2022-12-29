@@ -81,7 +81,7 @@ const Tags = () => {
                   <Card.Body className="d-flex flex-column align-items-start">
                     <Tag className="mb-3" data={tag} />
 
-                    <p className="fs-14 flex-fill text-break text-wrap text-truncate-4">
+                    <p className="fs-14 flex-fill text-break text-wrap text-truncate-3">
                       {tag.original_text}
                     </p>
                     <div className="d-flex align-items-center">

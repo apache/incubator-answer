@@ -57,9 +57,9 @@ func NewHTTPServer(debug bool,
 	authV1.Use(authUserMiddleware.MustAuth())
 	answerRouter.RegisterAnswerAPIRouter(authV1)
 
-	cmsauthV1 := r.Group("/answer/admin/api")
-	cmsauthV1.Use(authUserMiddleware.CmsAuth())
-	answerRouter.RegisterAnswerCmsAPIRouter(cmsauthV1)
+	adminauthV1 := r.Group("/answer/admin/api")
+	adminauthV1.Use(authUserMiddleware.AdminAuth())
+	answerRouter.RegisterAnswerAdminAPIRouter(adminauthV1)
 
 	templateRouter.RegisterTemplateRouter(rootGroup)
 	return r

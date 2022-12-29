@@ -1,4 +1,4 @@
-package user_backyard
+package user_admin
 
 import (
 	"context"
@@ -21,8 +21,8 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// UserBackyardRepo user repository
-type UserBackyardRepo interface {
+// UserAdminRepo user repository
+type UserAdminRepo interface {
 	UpdateUserStatus(ctx context.Context, userID string, userStatus, mailStatus int, email string) (err error)
 	GetUserInfo(ctx context.Context, userID string) (user *entity.User, exist bool, err error)
 	GetUserInfoByEmail(ctx context.Context, email string) (user *entity.User, exist bool, err error)
@@ -32,22 +32,22 @@ type UserBackyardRepo interface {
 	UpdateUserPassword(ctx context.Context, userID string, password string) (err error)
 }
 
-// UserBackyardService user service
-type UserBackyardService struct {
-	userRepo           UserBackyardRepo
+// UserAdminService user service
+type UserAdminService struct {
+	userRepo           UserAdminRepo
 	userRoleRelService *role.UserRoleRelService
 	authService        *auth.AuthService
 	userCommonService  *usercommon.UserCommon
 }
 
-// NewUserBackyardService new user backyard service
-func NewUserBackyardService(
-	userRepo UserBackyardRepo,
+// NewUserAdminService new user admin service
+func NewUserAdminService(
+	userRepo UserAdminRepo,
 	userRoleRelService *role.UserRoleRelService,
 	authService *auth.AuthService,
 	userCommonService *usercommon.UserCommon,
-) *UserBackyardService {
-	return &UserBackyardService{
+) *UserAdminService {
+	return &UserAdminService{
 		userRepo:           userRepo,
 		userRoleRelService: userRoleRelService,
 		authService:        authService,
@@ -56,7 +56,7 @@ func NewUserBackyardService(
 }
 
 // UpdateUserStatus update user
-func (us *UserBackyardService) UpdateUserStatus(ctx context.Context, req *schema.UpdateUserStatusReq) (err error) {
+func (us *UserAdminService) UpdateUserStatus(ctx context.Context, req *schema.UpdateUserStatusReq) (err error) {
 	userInfo, exist, err := us.userRepo.GetUserInfo(ctx, req.UserID)
 	if err != nil {
 		return
@@ -87,7 +87,7 @@ func (us *UserBackyardService) UpdateUserStatus(ctx context.Context, req *schema
 }
 
 // UpdateUserRole update user role
-func (us *UserBackyardService) UpdateUserRole(ctx context.Context, req *schema.UpdateUserRoleReq) (err error) {
+func (us *UserAdminService) UpdateUserRole(ctx context.Context, req *schema.UpdateUserRoleReq) (err error) {
 	// Users cannot modify their roles
 	if req.UserID == req.LoginUserID {
 		return errors.BadRequest(reason.UserCannotUpdateYourRole)
@@ -103,7 +103,7 @@ func (us *UserBackyardService) UpdateUserRole(ctx context.Context, req *schema.U
 }
 
 // AddUser add user
-func (us *UserBackyardService) AddUser(ctx context.Context, req *schema.AddUserReq) (err error) {
+func (us *UserAdminService) AddUser(ctx context.Context, req *schema.AddUserReq) (err error) {
 	_, has, err := us.userRepo.GetUserInfoByEmail(ctx, req.Email)
 	if err != nil {
 		return err
@@ -138,7 +138,7 @@ func (us *UserBackyardService) AddUser(ctx context.Context, req *schema.AddUserR
 }
 
 // UpdateUserPassword update user password
-func (us *UserBackyardService) UpdateUserPassword(ctx context.Context, req *schema.UpdateUserPasswordReq) (err error) {
+func (us *UserAdminService) UpdateUserPassword(ctx context.Context, req *schema.UpdateUserPasswordReq) (err error) {
 	userInfo, exist, err := us.userRepo.GetUserInfo(ctx, req.UserID)
 	if err != nil {
 		return err
@@ -162,7 +162,7 @@ func (us *UserBackyardService) UpdateUserPassword(ctx context.Context, req *sche
 }
 
 // GetUserInfo get user one
-func (us *UserBackyardService) GetUserInfo(ctx context.Context, userID string) (resp *schema.GetUserInfoResp, err error) {
+func (us *UserAdminService) GetUserInfo(ctx context.Context, userID string) (resp *schema.GetUserInfoResp, err error) {
 	user, exist, err := us.userRepo.GetUserInfo(ctx, userID)
 	if err != nil {
 		return
@@ -177,7 +177,7 @@ func (us *UserBackyardService) GetUserInfo(ctx context.Context, userID string) (
 }
 
 // GetUserPage get user list page
-func (us *UserBackyardService) GetUserPage(ctx context.Context, req *schema.GetUserPageReq) (pageModel *pager.PageModel, err error) {
+func (us *UserAdminService) GetUserPage(ctx context.Context, req *schema.GetUserPageReq) (pageModel *pager.PageModel, err error) {
 	user := &entity.User{}
 	_ = copier.Copy(user, req)
 
@@ -246,7 +246,7 @@ func (us *UserBackyardService) GetUserPage(ctx context.Context, req *schema.GetU
 	return pager.NewPageModel(total, resp), nil
 }
 
-func (us *UserBackyardService) setUserRoleInfo(ctx context.Context, resp []*schema.GetUserPageResp) {
+func (us *UserAdminService) setUserRoleInfo(ctx context.Context, resp []*schema.GetUserPageResp) {
 	var userIDs []string
 	for _, u := range resp {
 		userIDs = append(userIDs, u.UserID)

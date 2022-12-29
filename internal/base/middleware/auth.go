@@ -113,7 +113,7 @@ func (am *AuthUserMiddleware) MustAuth() gin.HandlerFunc {
 	}
 }
 
-func (am *AuthUserMiddleware) CmsAuth() gin.HandlerFunc {
+func (am *AuthUserMiddleware) AdminAuth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		token := ExtractToken(ctx)
 		if len(token) == 0 {
@@ -121,7 +121,7 @@ func (am *AuthUserMiddleware) CmsAuth() gin.HandlerFunc {
 			ctx.Abort()
 			return
 		}
-		userInfo, err := am.authService.GetCmsUserCacheInfo(ctx, token)
+		userInfo, err := am.authService.GetAdminUserCacheInfo(ctx, token)
 		if err != nil {
 			handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
 			ctx.Abort()
