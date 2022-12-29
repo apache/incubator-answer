@@ -292,14 +292,18 @@ func (us *UserService) UserUpdateInterface(ctx context.Context, req *schema.Upda
 
 // UserRegisterByEmail user register
 func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo *schema.UserRegisterReq) (
-	resp *schema.GetUserResp, err error,
+	resp *schema.GetUserResp, errFields []*validator.FormErrorField, err error,
 ) {
 	_, has, err := us.userRepo.GetByEmail(ctx, registerUserInfo.Email)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	if has {
-		return nil, errors.BadRequest(reason.EmailDuplicate)
+		errFields = append(errFields, &validator.FormErrorField{
+			ErrorField: "e_mail",
+			ErrorMsg:   reason.EmailDuplicate,
+		})
+		return nil, errFields, errors.BadRequest(reason.EmailDuplicate)
 	}
 
 	userInfo := &entity.User{}
@@ -307,11 +311,15 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	userInfo.DisplayName = registerUserInfo.Name
 	userInfo.Pass, err = us.encryptPassword(ctx, registerUserInfo.Pass)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	userInfo.Username, err = us.userCommonService.MakeUsername(ctx, registerUserInfo.Name)
 	if err != nil {
-		return nil, err
+		errFields = append(errFields, &validator.FormErrorField{
+			ErrorField: "name",
+			ErrorMsg:   reason.UsernameInvalid,
+		})
+		return nil, errFields, err
 	}
 	userInfo.IPInfo = registerUserInfo.IP
 	userInfo.MailStatus = entity.EmailStatusToBeVerified
@@ -319,7 +327,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	userInfo.LastLoginDate = time.Now()
 	err = us.userRepo.AddUser(ctx, userInfo)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	// send email
@@ -331,7 +339,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	go us.emailService.SendAndSaveCode(ctx, userInfo.EMail, title, body, code, data.ToJSONString())
 
@@ -351,16 +359,16 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	resp.IsAdmin = userCacheInfo.IsAdmin
 	if resp.IsAdmin {
 		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
 		if err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 	}
-	return resp, nil
+	return resp, nil, nil
 }
 
 func (us *UserService) UserVerifyEmailSend(ctx context.Context, userID string) error {

@@ -242,8 +242,15 @@ func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := uc.userService.UserRegisterByEmail(ctx, req)
-	handler.HandleResponse(ctx, err, resp)
+	resp, errFields, err := uc.userService.UserRegisterByEmail(ctx, req)
+	if len(errFields) > 0 {
+		for _, field := range errFields {
+			field.ErrorMsg = translator.GlobalTrans.Tr(handler.GetLang(ctx), field.ErrorMsg)
+		}
+		handler.HandleResponse(ctx, err, errFields)
+	} else {
+		handler.HandleResponse(ctx, err, resp)
+	}
 }
 
 // UserVerifyEmail godoc
