@@ -126,7 +126,13 @@ const Header: FC = () => {
               <NavItems redDot={redDot} userInfo={user} logOut={handleLogout} />
             ) : (
               <>
-                <Button variant="link" className="me-2" href="/users/login">
+                <Button
+                  variant="link"
+                  className={classnames('me-2', {
+                    'link-light': navbarStyle === 'theme-colored',
+                    'link-primary': navbarStyle !== 'theme-colored',
+                  })}
+                  href="/users/login">
                   {t('btns.login')}
                 </Button>
                 {loginSetting.allow_new_registrations && (
