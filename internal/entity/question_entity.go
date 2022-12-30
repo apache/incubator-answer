@@ -22,11 +22,6 @@ var AdminQuestionSearchStatusIntToString = map[int]string{
 	QuestionStatusDeleted:   "deleted",
 }
 
-type QuestionTag struct {
-	Question `xorm:"extends"`
-	TagRel   `xorm:"extends"`
-}
-
 // Question question
 type Question struct {
 	ID               string    `xorm:"not null pk BIGINT(20) id"`

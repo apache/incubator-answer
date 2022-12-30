@@ -15,19 +15,20 @@ func (q *TemplateRenderController) TagList(ctx context.Context, req *schema.GetT
 	return
 }
 
-func (q *TemplateRenderController) TagInfo(ctx context.Context, req *schema.GetTamplateTagInfoReq) (resp *schema.GetTagResp, questionList []*schema.QuestionInfo, questionCount int64, err error) {
+func (q *TemplateRenderController) TagInfo(ctx context.Context, req *schema.GetTamplateTagInfoReq) (resp *schema.GetTagResp, questionList []*schema.QuestionPageResp, questionCount int64, err error) {
 	dto := &schema.GetTagInfoReq{}
 	_ = copier.Copy(dto, req)
 	resp, err = q.tagService.GetTagInfo(ctx, dto)
 	if err != nil {
 		return
 	}
-	searchQuestion := &schema.QuestionSearch{}
+	searchQuestion := &schema.QuestionPageReq{}
 	searchQuestion.Page = req.Page
 	searchQuestion.PageSize = req.PageSize
-	searchQuestion.Order = "newest"
+	searchQuestion.OrderCond = "newest"
 	searchQuestion.Tag = req.Name
-	questionList, questionCount, err = q.questionService.SearchList(ctx, searchQuestion, "")
+	searchQuestion.LoginUserID = req.UserID
+	questionList, questionCount, err = q.questionService.GetQuestionPage(ctx, searchQuestion)
 	if err != nil {
 		return
 	}

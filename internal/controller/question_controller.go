@@ -1,10 +1,9 @@
 package controller
 
 import (
-	"context"
-
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
+	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
@@ -31,7 +30,7 @@ func NewQuestionController(questionService *service.QuestionService, rankService
 // RemoveQuestion delete question
 // @Summary delete question
 // @Description delete question
-// @Tags api-question
+// @Tags Question
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
@@ -62,7 +61,7 @@ func (qc *QuestionController) RemoveQuestion(ctx *gin.Context) {
 // CloseQuestion Close question
 // @Summary Close question
 // @Description Close question
-// @Tags api-question
+// @Tags Question
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
@@ -92,7 +91,7 @@ func (qc *QuestionController) CloseQuestion(ctx *gin.Context) {
 // ReopenQuestion reopen question
 // @Summary reopen question
 // @Description reopen question
-// @Tags api-question
+// @Tags Question
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
@@ -119,10 +118,10 @@ func (qc *QuestionController) ReopenQuestion(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
-// GetQuestion godoc
-// @Summary GetQuestion Question
-// @Description GetQuestion Question
-// @Tags api-question
+// GetQuestion get question details
+// @Summary get question details
+// @Description get question details
+// @Tags Question
 // @Security ApiKeyAuth
 // @Accept  json
 // @Produce  json
@@ -161,7 +160,7 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 // SimilarQuestion godoc
 // @Summary Search Similar Question
 // @Description Search Similar Question
-// @Tags api-question
+// @Tags Question
 // @Accept  json
 // @Produce  json
 // @Param question_id query string true "question_id"  default()
@@ -181,65 +180,34 @@ func (qc *QuestionController) SimilarQuestion(ctx *gin.Context) {
 	})
 }
 
-// Index godoc
-// @Summary SearchQuestionList
-// @Description SearchQuestionList <br>  "order"  Enums(newest, active,frequent,score,unanswered)
-// @Tags api-question
+// QuestionPage get questions by page
+// @Summary get questions by page
+// @Description get questions by page
+// @Tags Question
 // @Accept  json
 // @Produce  json
-// @Param data body schema.QuestionSearch  true "QuestionSearch"
-// @Success 200 {string} string ""
+// @Param data body schema.QuestionPageReq  true "QuestionPageReq"
+// @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.QuestionPageResp}}
 // @Router /answer/api/v1/question/page [get]
-func (qc *QuestionController) Index(ctx *gin.Context) {
-	req := &schema.QuestionSearch{}
+func (qc *QuestionController) QuestionPage(ctx *gin.Context) {
+	req := &schema.QuestionPageReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	userID := middleware.GetLoginUserIDFromContext(ctx)
-	list, count, err := qc.questionService.SearchList(ctx, req, userID)
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	questions, total, err := qc.questionService.GetQuestionPage(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	handler.HandleResponse(ctx, nil, gin.H{
-		"list":  list,
-		"count": count,
-	})
-}
-
-// SearchList godoc
-// @Summary SearchQuestionList
-// @Description SearchQuestionList
-// @Tags api-question
-// @Accept  json
-// @Produce  json
-// @Param data body schema.QuestionSearch  true "QuestionSearch"
-// @Router  /answer/api/v1/question/search [post]
-// @Success 200 {string} string ""
-func (qc *QuestionController) SearchList(c *gin.Context) {
-	Request := new(schema.QuestionSearch)
-	err := c.BindJSON(Request)
-	if err != nil {
-		handler.HandleResponse(c, err, nil)
-		return
-	}
-	ctx := context.Background()
-	userID := middleware.GetLoginUserIDFromContext(c)
-	list, count, err := qc.questionService.SearchList(ctx, Request, userID)
-	if err != nil {
-		handler.HandleResponse(c, err, nil)
-		return
-	}
-	handler.HandleResponse(c, nil, gin.H{
-		"list":  list,
-		"count": count,
-	})
+	handler.HandleResponse(ctx, nil, pager.NewPageModel(total, questions))
 }
 
 // AddQuestion add question
 // @Summary add question
 // @Description add question
-// @Tags api-question
+// @Tags Question
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
@@ -309,7 +277,7 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 // UpdateQuestion update question
 // @Summary update question
 // @Description update question
-// @Tags api-question
+// @Tags Question
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
@@ -366,7 +334,7 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 // CloseMsgList close question msg list
 // @Summary close question msg list
 // @Description close question msg list
-// @Tags api-question
+// @Tags Question
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
@@ -380,7 +348,7 @@ func (qc *QuestionController) CloseMsgList(ctx *gin.Context) {
 // SearchByTitleLike add question title like
 // @Summary add question title like
 // @Description add question title like
-// @Tags api-question
+// @Tags Question
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
@@ -397,7 +365,7 @@ func (qc *QuestionController) SearchByTitleLike(ctx *gin.Context) {
 // UserTop godoc
 // @Summary UserTop
 // @Description UserTop
-// @Tags api-question
+// @Tags Question
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
@@ -417,7 +385,7 @@ func (qc *QuestionController) UserTop(ctx *gin.Context) {
 // UserList godoc
 // @Summary UserList
 // @Description UserList
-// @Tags api-question
+// @Tags Question
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
