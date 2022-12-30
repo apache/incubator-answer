@@ -384,8 +384,11 @@ func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	err := uc.userService.UpdateInfo(ctx, req)
-	handler.HandleResponse(ctx, err, nil)
+	errFields, err := uc.userService.UpdateInfo(ctx, req)
+	for _, field := range errFields {
+		field.ErrorMsg = translator.GlobalTrans.Tr(handler.GetLang(ctx), field.ErrorMsg)
+	}
+	handler.HandleResponse(ctx, err, errFields)
 }
 
 // UserUpdateInterface update user interface config
