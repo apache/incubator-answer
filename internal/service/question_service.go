@@ -476,11 +476,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	question.UpdatedAt = now
 	question.PostUpdateTime = now
 	question.UserID = dbinfo.UserID
-
-	question.LastEditUserID = "0"
-	if dbinfo.UserID != req.UserID {
-		question.LastEditUserID = req.UserID
-	}
+	question.LastEditUserID = req.UserID
 
 	oldTags, tagerr := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
 	if tagerr != nil {

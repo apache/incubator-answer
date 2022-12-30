@@ -297,20 +297,20 @@ func (qs *QuestionCommon) FormatQuestionsPage(
 			t.OperationType = askedOp
 			t.OperatedAt = questionInfo.CreatedAt.Unix()
 			t.Operator = &schema.QuestionPageRespOperator{ID: questionInfo.UserID}
-		}
+		} else {
+			// if no one
+			if haveEdited {
+				t.OperationType = modifiedOp
+				t.OperatedAt = questionInfo.UpdatedAt.Unix()
+				t.Operator = &schema.QuestionPageRespOperator{ID: questionInfo.LastEditUserID}
+			}
 
-		// if no one
-		if haveEdited {
-			t.OperationType = modifiedOp
-			t.OperatedAt = questionInfo.UpdatedAt.Unix()
-			t.Operator = &schema.QuestionPageRespOperator{ID: questionInfo.LastEditUserID}
-		}
-
-		if haveAnswered {
-			if t.LastAnsweredAt.Unix() > t.OperatedAt {
-				t.OperationType = answeredOp
-				t.OperatedAt = t.LastAnsweredAt.Unix()
-				t.Operator = &schema.QuestionPageRespOperator{ID: t.LastAnsweredUserID}
+			if haveAnswered {
+				if t.LastAnsweredAt.Unix() > t.OperatedAt {
+					t.OperationType = answeredOp
+					t.OperatedAt = t.LastAnsweredAt.Unix()
+					t.Operator = &schema.QuestionPageRespOperator{ID: t.LastAnsweredUserID}
+				}
 			}
 		}
 		formattedQuestions = append(formattedQuestions, t)
