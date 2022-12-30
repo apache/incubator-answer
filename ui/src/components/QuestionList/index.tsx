@@ -28,60 +28,6 @@ interface Props {
   source: 'questions' | 'tag';
 }
 
-const QuestionLastUpdate = ({ q, order }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'question' });
-  if (order !== 'newest' && q.update_time > q.edit_time) {
-    // question answered
-    return (
-      <div className="d-flex">
-        <BaseUserCard
-          data={q.last_answered_user_info}
-          showAvatar={false}
-          className="me-1"
-        />
-        •
-        <FormatTime
-          time={q.update_time}
-          className="text-secondary ms-1"
-          preFix={t('answered')}
-        />
-      </div>
-    );
-  }
-
-  if (order !== 'newest' && q.edit_time > q.update_time) {
-    // question modified
-    return (
-      <div className="d-flex">
-        <BaseUserCard
-          data={q.update_user_info}
-          showAvatar={false}
-          className="me-1"
-        />
-        •
-        <FormatTime
-          time={q.edit_time}
-          className="text-secondary ms-1"
-          preFix={t('modified')}
-        />
-      </div>
-    );
-  }
-
-  // default: asked
-  return (
-    <div className="d-flex">
-      <BaseUserCard data={q.user_info} showAvatar={false} className="me-1" />
-      •
-      <FormatTime
-        time={q.create_time}
-        preFix={t('asked')}
-        className="text-secondary ms-1"
-      />
-    </div>
-  );
-};
-
 const QuestionList: FC<Props> = ({ source }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
   const { tagName = '' } = useParams();
@@ -132,7 +78,19 @@ const QuestionList: FC<Props> = ({ source }) => {
                 </NavLink>
               </h5>
               <div className="d-flex flex-column flex-md-row align-items-md-center fs-14 mb-2 text-secondary">
-                <QuestionLastUpdate q={li} order={curOrder} />
+                <div className="d-flex">
+                  <BaseUserCard
+                    data={li.operator}
+                    showAvatar={false}
+                    className="me-1"
+                  />
+                  •
+                  <FormatTime
+                    time={li.operated_at}
+                    className="text-secondary ms-1"
+                    preFix={t(li.operation_type)}
+                  />
+                </div>
                 <div className="ms-0 ms-md-3 mt-2 mt-md-0">
                   <span>
                     <Icon name="hand-thumbs-up-fill" />
