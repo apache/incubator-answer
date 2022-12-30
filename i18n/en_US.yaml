@@ -204,7 +204,13 @@ backend:
           other: "something else"
         desc:
           other: "This post requires another reason not listed above."
-
+    operation_type:
+      asked:
+        other: "asked"
+      answered:
+        other: "answered"
+      modified:
+        other: "modified"
   notification:
     action:
       update_question:

@@ -91,8 +91,8 @@ func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.TemplateSiteInf
 
 // Index question list
 func (tc *TemplateController) Index(ctx *gin.Context) {
-	req := &schema.QuestionSearch{
-		Order: "newest",
+	req := &schema.QuestionPageReq{
+		OrderCond: "newest",
 	}
 	if handler.BindAndCheck(ctx, req) {
 		tc.Page404(ctx)
@@ -124,8 +124,8 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 }
 
 func (tc *TemplateController) QuestionList(ctx *gin.Context) {
-	req := &schema.QuestionSearch{
-		Order: "newest",
+	req := &schema.QuestionPageReq{
+		OrderCond: "newest",
 	}
 	if handler.BindAndCheck(ctx, req) {
 		tc.Page404(ctx)
