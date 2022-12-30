@@ -210,7 +210,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	templateRenderController := templaterender.NewTemplateRenderController(questionService, userService, tagService, answerService, commentService, dataData, siteInfoCommonService)
 	templateController := controller.NewTemplateController(templateRenderController, siteInfoCommonService)
 	templateRouter := router.NewTemplateRouter(templateController, templateRenderController, siteInfoController)
-	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter)
+	connectorController := controller.NewConnectorController(siteInfoCommonService)
+	pluginAPIRouter := router.NewPluginAPIRouter(connectorController)
+	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter, pluginAPIRouter)
 	scheduledTaskManager := cron.NewScheduledTaskManager(siteInfoCommonService, questionService)
 	application := newApplication(serverConf, ginEngine, scheduledTaskManager)
 	return application, func() {
