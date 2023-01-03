@@ -167,12 +167,12 @@ backend:
         other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether."
     not_need:
       name:
-        other: "no longer needed"
+        other: "n’est plus nécessaire"
       desc:
         other: "This comment is outdated, conversational or not relevant to this post."
     other:
       name:
-        other: "something else"
+        other: "quelque chose d'autre"
       desc:
         other: "This post requires staff attention for another reason not listed above."
   question:
@@ -194,7 +194,7 @@ backend:
           other: "This question currently includes multiple questions in one. It should focus on one problem only."
       other:
         name:
-          other: "something else"
+          other: "quelque chose d'autre"
         desc:
           other: "This post requires another reason not listed above."
   notification:
@@ -216,17 +216,17 @@ backend:
       mention_you:
         other: "mentioned you"
       your_question_is_closed:
-        other: "Your question has been closed"
+        other: "Une réponse a été publiée pour votre question"
       your_question_was_deleted:
         other: "Une réponse a été publiée pour votre question"
       your_answer_was_deleted:
         other: "Your answer has been deleted"
       your_comment_was_deleted:
-        other: "Your comment has been deleted"
+        other: "Votre commentaire a été supprimé"
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: How to Format
+    title: Comment mettre en forme
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
@@ -235,22 +235,22 @@ ui:
   page_title:
     question: Question
     questions: Questions
-    tag: Tag
-    tags: Tags
+    tag: Étiquette
+    tags: Étiquettes
     tag_wiki: tag wiki
-    edit_tag: Edit Tag
-    ask_a_question: Add Question
-    edit_question: Edit Question
-    edit_answer: Edit Answer
-    search: Search
+    edit_tag: Modifier l'étiquette
+    ask_a_question: Ajouter une question
+    edit_question: Modifier la question
+    edit_answer: Modifier la réponse
+    search: Rechercher
     posts_containing: Posts containing
-    settings: Settings
+    settings: Paramètres
     notifications: Notifications
-    login: Log In
+    login: Se connecter
     sign_up: Sign Up
-    account_recovery: Account Recovery
+    account_recovery: Récupération de compte
     account_activation: Account Activation
-    confirm_email: Confirm Email
+    confirm_email: Confirmez votre adresse e-mail
     account_suspended: Account Suspended
     admin: Admin
     change_email: Modify Email
@@ -277,16 +277,16 @@ ui:
     chart:
       text: Chart
       flow_chart: Flow chart
-      sequence_diagram: Sequence diagram
-      class_diagram: Class diagram
-      state_diagram: State diagram
+      sequence_diagram: Diagramme de séquence
+      class_diagram: Diagramme de classe
+      state_diagram: Diagramme d'état
       entity_relationship_diagram: Entity relationship diagram
       user_defined_diagram: User defined diagram
-      gantt_chart: Gantt chart
-      pie_chart: Pie chart
+      gantt_chart: Diagramme de Gantt
+      pie_chart: Camembert
     code:
-      text: Code Sample
-      add_code: Add code sample
+      text: Exemple de Code
+      add_code: Ajouter un exemple de code
       form:
         fields:
           code:
@@ -296,10 +296,10 @@ ui:
           language:
             label: Language (optional)
             placeholder: Automatic detection
-      btn_cancel: Cancel
+      btn_cancel: Annuler
       btn_confirm: Ajouter
     formula:
-      text: Formula
+      text: Formule
       options:
         inline: Inline formula
         block: Block formula
@@ -313,7 +313,7 @@ ui:
         h5: Heading 5
         h6: Heading 6
     help:
-      text: Help
+      text: Aide
     hr:
       text: Horizontal Rule
     image:
@@ -324,10 +324,10 @@ ui:
         fields:
           file:
             label: Image File
-            btn: Select image
+            btn: Sélectionner une image
             msg:
-              empty: File cannot be empty.
-              only_image: Only image files are allowed.
+              empty: Le fichier ne doit pas être vide.
+              only_image: Seules les images sont autorisées.
               max_size: File size cannot exceed 4MB.
           desc:
             label: Description (optionnel)
@@ -341,17 +341,17 @@ ui:
           name:
             label: Description (optionnel)
       btn_cancel: Annuler
-      btn_confirm: Add
+      btn_confirm: Ajouter
       uploading: Téléversement en cours
     indent:
-      text: Indent
+      text: Indentation
     outdent:
       text: Outdent
     italic:
       text: Emphasis
     link:
-      text: Hyperlink
-      add_link: Add hyperlink
+      text: Hyperlien
+      add_link: Ajouter un lien hypertexte
       form:
         fields:
           url:
@@ -369,7 +369,7 @@ ui:
     table:
       text: Table
       heading: Heading
-      cell: Cell
+      cell: Cellule
   close_modal:
     title: I am closing this post as...
     btn_cancel: Cancel
@@ -408,22 +408,22 @@ ui:
             character: URL slug contains unallowed character set.
         desc:
           label: Description (optional)
-    btn_cancel: Cancel
-    btn_submit: Submit
+    btn_cancel: Annuler
+    btn_submit: Valider
   tag_info:
-    created_at: Created
-    edited_at: Edited
-    history: History
+    created_at: Créé
+    edited_at: Modifié
+    history: Historique
     synonyms:
-      title: Synonyms
+      title: Synonymes
       text: The following tags will be remapped to
-      empty: No synonyms found.
-      btn_add: Add a synonym
-      btn_edit: Edit
-      btn_save: Save
+      empty: Aucun synonyme trouvé.
+      btn_add: Ajouter un synonyme
+      btn_edit: Modifier
+      btn_save: Enregistrer
     synonyms_text: The following tags will be remapped to
     delete:
-      title: Delete this tag
+      title: Supprimer cette étiquette
       content: >-
         <p>We do not allowed deleting tag with posts.</p><p>Please remove this tag from the posts first.</p>
       content2: Are you sure you wish to delete?
@@ -447,7 +447,7 @@ ui:
           placeholder: >-
             Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_save_edits: Save edits
-    btn_cancel: Cancel
+    btn_cancel: Annuler
   dates:
     long_date: MMM D
     long_date_with_year: "MMM D, YYYY"
@@ -456,18 +456,18 @@ ui:
     x_seconds_ago: "{{count}}s ago"
     x_minutes_ago: "{{count}}m ago"
     x_hours_ago: "{{count}}h ago"
-    hour: hour
-    day: day
+    hour: heure
+    day: jour
   comment:
-    btn_add_comment: Add comment
-    reply_to: Reply to
-    btn_reply: Reply
+    btn_add_comment: Ajoutez un commentaire
+    reply_to: Répondre à
+    btn_reply: Répondre
     btn_edit: Edit
-    btn_delete: Delete
+    btn_delete: Supprimer
     btn_flag: Flag
     btn_save_edits: Save edits
-    btn_cancel: Cancel
-    show_more: Show more comment
+    btn_cancel: Annuler
+    show_more: Afficher plus de commentaires
     tip_question: >-
       Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
     tip_answer: >-
@@ -509,7 +509,7 @@ ui:
         revision:
           label: Revision
         title:
-          label: Title
+          label: Titre
           placeholder: Be specific and imagine you're asking a question to another person
           msg:
             empty: Title cannot be empty.
@@ -523,16 +523,16 @@ ui:
           msg:
             empty: Tags cannot be empty.
         answer:
-          label: Answer
+          label: Réponse
           msg:
-            empty: Answer cannot be empty.
+            empty: La réponse ne peut être vide.
         edit_summary:
           label: Edit Summary
           placeholder: >-
             Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_post_question: Post your question
     btn_save_edits: Save edits
-    answer_question: Answer your own question
+    answer_question: Répondre à votre propre question
     post_question&answer: Post your question and answer
   tag_selector:
     add_btn: Add tag
@@ -545,20 +545,20 @@ ui:
     nav:
       question: Questions
       tag: Tags
-      user: Users
-      profile: Profile
-      setting: Settings
-      logout: Log out
-      admin: Admin
+      user: Utilisateurs
+      profile: Profil
+      setting: Paramètres
+      logout: Se déconnecter
+      admin: Administration
       review: Review
     search:
-      placeholder: Search
+      placeholder: Rechercher
   footer:
     build_on: >-
       Built on <1> Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
     name: Change
-    loading: loading...
+    loading: chargement en cours...
   pic_auth_code:
     title: Captcha
     placeholder: Type the text above
@@ -570,10 +570,10 @@ ui:
     info: "If it doesn't arrive, check your spam folder."
     another: >-
       We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.
-    btn_name: Resend activation email
+    btn_name: Renvoyer le mail d'activation
     change_btn_name: Change email
     msg:
-      empty: Cannot be empty.
+      empty: Ne peut pas être vide.
   login:
     page_title: Welcome to Answer
     info_sign: Don't have an account? <1>Sign up</1>
@@ -605,7 +605,7 @@ ui:
         empty: Email cannot be empty.
   change_email:
     page_title: Welcome to Answer
-    btn_cancel: Cancel
+    btn_cancel: Annuler
     btn_update: Update email address
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
@@ -614,21 +614,21 @@ ui:
       msg:
         empty: Email cannot be empty.
   password_reset:
-    page_title: Password Reset
-    btn_name: Reset my password
+    page_title: Réinitialiser le mot de passe
+    btn_name: Réinitialiser mon mot de passe
     reset_success: >-
-      You successfully changed your password; you will be redirected to the log in page.
+      Vous avez modifié votre mot de passe avec succès ; vous allez être redirigé vers la page de connexion.
     link_invalid: >-
       Sorry, this password reset link is no longer valid. Perhaps your password is already reset?
-    to_login: Continue to log in page
+    to_login: Continuer vers la page de connexion
     password:
-      label: Password
+      label: Mot de passe
       msg:
-        empty: Password cannot be empty.
+        empty: Le mot de passe ne peut pas être vide.
         length: The length needs to be between 8 and 32
         different: The passwords entered on both sides are inconsistent
     password_confirm:
-      label: Confirm New Password
+      label: Confirmer le nouveau mot de passe
   settings:
     page_title: Settings
     nav:
@@ -637,20 +637,20 @@ ui:
       account: Account
       interface: Interface
     profile:
-      heading: Profile
+      heading: Profil
       btn_name: Save
       display_name:
-        label: Display Name
+        label: Nom affiché
         msg: Display name cannot be empty.
         msg_range: Display name up to 30 characters
       username:
-        label: Username
+        label: Nom d'utilisateur
         caption: People can mention you as "@username".
-        msg: Username cannot be empty.
+        msg: Le nom d'utilisateur ne peut pas être vide.
         msg_range: Username up to 30 characters
         character: 'Must use the character set "a-z", "0-9", " - . _"'
       avatar:
-        label: Profile Image
+        label: Image de profil
         gravatar: Gravatar
         gravatar_text: You can change image on <1>gravatar.com</1>
         custom: Custom
@@ -659,14 +659,14 @@ ui:
         default: System
         msg: Please upload an avatar
       bio:
-        label: About Me (optional)
+        label: À propos de moi (optionnel)
       website:
-        label: Website (optional)
+        label: Site web (facultatif)
         placeholder: "https://example.com"
         msg: Website incorrect format
       location:
         label: Location (optional)
-        placeholder: "City, Country"
+        placeholder: "Ville, Pays"
     notification:
       heading: Notifications
       email:
@@ -705,29 +705,29 @@ ui:
     review: Your revision will show after review.
   related_question:
     title: Related Questions
-    btn: Add question
-    answers: answers
+    btn: Ajouter une question
+    answers: réponses
   question_detail:
     Asked: Asked
     asked: asked
     update: Modified
-    edit: edited
+    edit: modifié
     Views: Viewed
-    Follow: Follow
-    Following: Following
-    answered: answered
+    Follow: S’abonner
+    Following: Abonné(s)
+    answered: répondu
     closed_in: Closed in
     show_exist: Show existing question.
     answers:
-      title: Answers
+      title: Réponses
       score: Score
       newest: Newest
-      btn_accept: Accept
-      btn_accepted: Accepted
+      btn_accept: Accepter
+      btn_accepted: Accepté
     write_answer:
-      title: Your Answer
-      btn_name: Post your answer
-      add_another_answer: Add another answer
+      title: Votre réponse
+      btn_name: Poster votre réponse
+      add_another_answer: Ajouter une autre réponse
       confirm_title: Continue to answer
       continue: Continue
       confirm_info: >-
@@ -745,23 +745,23 @@ ui:
       <p>We do not recommend <strong>deleting accepted answer</strong> because doing so deprives future readers of this knowledge. </p> Repeated deletion of accepted answers can result in your account being blocked from answering. Are you sure you wish to delete?
     other: Are you sure you wish to delete?
     tip_question_deleted: This post has been deleted
-    tip_answer_deleted: This answer has been deleted
+    tip_answer_deleted: Cette réponse a été supprimée
   btns:
-    confirm: Confirm
-    cancel: Cancel
+    confirm: Confimer
+    cancel: Annuler
     save: Save
-    delete: Delete
+    delete: Supprimer
     login: Log in
     signup: Sign up
     logout: Log out
     verify: Verify
-    add_question: Add question
-    approve: Approve
+    add_question: Ajouter une question
+    approve: Approuver
     reject: Reject
-    skip: Skip
+    skip: Ignorer
   search:
-    title: Search Results
-    keywords: Keywords
+    title: Résultats de la recherche
+    keywords: Mots-clés
     options: Options
     follow: Follow
     following: Following
@@ -788,10 +788,10 @@ ui:
     via: Share post via...
     copied: Copied
     facebook: Share to Facebook
-    twitter: Share to Twitter
-  cannot_vote_for_self: You can't vote for your own post
+    twitter: Partager sur Twitter
+  cannot_vote_for_self: Vous ne pouvez pas voter pour votre propre message
   modal_confirm:
-    title: Error...
+    title: Erreur...
   account_result:
     page_title: Welcome to Answer
     success: Your new account is confirmed; you will be redirected to the home page.
