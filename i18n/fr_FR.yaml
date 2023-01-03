@@ -795,10 +795,10 @@ ui:
   account_result:
     page_title: Welcome to Answer
     success: Your new account is confirmed; you will be redirected to the home page.
-    link: Continue to homepage
+    link: Continuer vers la page d'accueil
     invalid: >-
       Sorry, this account confirmation link is no longer valid. Perhaps your account is already active?
-    confirm_new_email: Your email has been updated.
+    confirm_new_email: Votre adresse email a été mise à jour.
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
   question:
@@ -806,10 +806,10 @@ ui:
     edit: Edit
     save: Save
     follow_tag_tip: Follow tags to curate your list of questions.
-    hot_questions: Hot Questions
-    all_questions: All Questions
-    x_questions: "{{ count }} Questions"
-    x_answers: "{{ count }} answers"
+    hot_questions: Questions populaires
+    all_questions: Toutes les questions
+    x_questions: "{{ count }} questions"
+    x_answers: "{{ count }} réponses"
     questions: Questions
     answers: Answers
     newest: Newest
@@ -835,15 +835,15 @@ ui:
     votes: Votes
     newest: Newest
     score: Score
-    edit_profile: Edit Profile
+    edit_profile: Modifier votre profil
     visited_x_days: "Visited {{ count }} days"
     viewed: Viewed
     joined: Joined
-    last_login: Seen
-    about_me: About Me
+    last_login: Vu
+    about_me: À propos de moi
     about_me_empty: "// Hello, World !"
-    top_answers: Top Answers
-    top_questions: Top Questions
+    top_answers: Les meilleures réponses
+    top_questions: Questions les plus populaires
     stats: Stats
     list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
     accepted: Accepted
@@ -863,15 +863,15 @@ ui:
     done: Done
     config_yaml_error: Can’t create the config.yaml file.
     lang:
-      label: Please Choose a Language
+      label: Veuillez choisir une langue
     db_type:
       label: Database Engine
     db_username:
-      label: Username
+      label: Nom d'utilisateur
       placeholder: root
-      msg: Username cannot be empty.
+      msg: Le nom d'utilisateur ne peut pas être vide.
     db_password:
-      label: Password
+      label: Mot de passe
       placeholder: root
       msg: Password cannot be empty.
     db_host:
@@ -880,7 +880,7 @@ ui:
       msg: Database Host cannot be empty.
     db_name:
       label: Database Name
-      placeholder: answer
+      placeholder: réponse
       msg: Database Name cannot be empty.
     db_file:
       label: Database File
