@@ -118,32 +118,32 @@ backend:
     user:
       email_or_password_wrong:
         other:
-          other: Email and password do not match.
+          other: L'e-mail et le mot de passe ne correspondent pas.
       not_found:
         other: "Utilisateur non trouvé."
       suspended:
-        other: "User has been suspended."
+        other: "L'utilisateur a été suspendu."
       username_invalid:
-        other: "Username is invalid."
+        other: "Le nom d'utilisateur est invalide."
       username_duplicate:
-        other: "Username is already in use."
+        other: "Nom d'utilisateur déjà utilisé."
       set_avatar:
-        other: "Avatar set failed."
+        other: "La configuration de l'avatar a échoué."
       config:
         read_config_failed:
-          other: "Read config failed"
+          other: "La lecture de la configuration a échoué"
       database:
         connection_failed:
-          other: "Database connection failed"
+          other: "Échec de la connexion à la base de données"
         create_table_failed:
-          other: "Create table failed"
+          other: "La création de la table a échoué"
       install:
         create_config_failed:
-          other: "Can’t create the config.yaml file."
+          other: "Impossible de créer le fichier config.yaml."
       cannot_update_your_role:
-        other: "You cannot modify your role."
+        other: "Vous ne pouvez pas modifier votre rôle."
       not_allowed_registration:
-        other: "Currently the site is not open for registration"
+        other: "Actuellement, le site n'est pas ouvert aux inscriptions"
   report:
     spam:
       name:
@@ -157,12 +157,12 @@ backend:
         other: "A reasonable person would find this content inappropriate for respectful discourse."
     duplicate:
       name:
-        other: "a duplicate"
+        other: "doublon"
       desc:
-        other: "This question has been asked before and already has an answer."
+        other: "Cette question a déjà été posée auparavant et a déjà une réponse."
     not_answer:
       name:
-        other: "not an answer"
+        other: "ce n'est pas une réponse"
       desc:
         other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether."
     not_need:
@@ -218,7 +218,7 @@ backend:
       your_question_is_closed:
         other: "Your question has been closed"
       your_question_was_deleted:
-        other: "Your question has been deleted"
+        other: "Une réponse a été publiée pour votre question"
       your_answer_was_deleted:
         other: "Your answer has been deleted"
       your_comment_was_deleted:
