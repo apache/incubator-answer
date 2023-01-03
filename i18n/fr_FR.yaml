@@ -2,36 +2,36 @@
 backend:
   base:
     success:
-      other: "Success."
+      other: "Succès."
     unknown:
-      other: "Unknown error."
+      other: "Erreur inconnue."
     request_format_error:
-      other: "Request format is not valid."
+      other: "Format de fichier incorrect."
     unauthorized_error:
-      other: "Unauthorized."
+      other: "Non autorisé."
     database_error:
-      other: "Data server error."
+      other: "Erreur du serveur de données."
   role:
     name:
       user:
-        other: "User"
+        other: "Utilisateur"
       admin:
         other: "Admin"
       moderator:
-        other: "Moderator"
+        other: "Modérateur"
     description:
       user:
-        other: "Default with no special access."
+        other: "Par défaut, sans accès spécial."
       admin:
-        other: "Have the full power to access the site."
+        other: "Possède tous les droits pour accéder au site."
       moderator:
-        other: "Has access to all posts except admin settings."
+        other: "Possède les accès à tous les messages sauf aux paramètres d'administration."
   email:
     other: "Email"
   password:
-    other: "Password"
+    other: "Mot de passe"
   email_or_password_wrong_error:
-    other: "Email and password do not match."
+    other: "L'email et le mot de passe ne correspondent pas."
   error:
     admin:
       email_or_password_wrong:
