@@ -35,81 +35,81 @@ backend:
   error:
     admin:
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: L'email et le mot de passe ne correspondent pas.
     answer:
       not_found:
-        other: "Answer do not found."
+        other: "Réponse introuvable."
       cannot_deleted:
-        other: "No permission to delete."
+        other: "Pas de permission pour supprimer."
       cannot_update:
-        other: "No permission to update."
+        other: "Pas de permission pour mettre à jour."
     comment:
       edit_without_permission:
-        other: "Comment are not allowed to edit."
+        other: "Les commentaires ne sont pas autorisés à être modifiés."
       not_found:
-        other: "Comment not found."
+        other: "Commentaire non trouvé."
     email:
       duplicate:
-        other: "Email already exists."
+        other: "L'adresse e-mail existe déjà."
       need_to_be_verified:
-        other: "Email should be verified."
+        other: "L'adresse e-mail doit être vérifiée."
       verify_url_expired:
-        other: "Email verified URL has expired, please resend the email."
+        other: "L'URL de vérification de l'email a expiré, veuillez renvoyer l'email."
     lang:
       not_found:
-        other: "Language file not found."
+        other: "Fichier de langue non trouvé."
     object:
       captcha_verification_failed:
-        other: "Captcha wrong."
+        other: "Le Captcha est incorrect."
       disallow_follow:
-        other: "You are not allowed to follow."
+        other: "Vous n’êtes pas autorisé à suivre."
       disallow_vote:
-        other: "You are not allowed to vote."
+        other: "Vous n’êtes pas autorisé à voter."
       disallow_vote_your_self:
-        other: "You can't vote for your own post."
+        other: "Vous ne pouvez pas voter pour votre propre message."
       not_found:
-        other: "Object not found."
+        other: "Objet non trouvé."
       verification_failed:
-        other: "Verification failed."
+        other: "La vérification a échoué."
       email_or_password_incorrect:
-        other: "Email and password do not match."
+        other: "L'e-mail et le mot de passe ne correspondent pas."
       old_password_verification_failed:
-        other: "The old password verification failed"
+        other: "La vérification de l'ancien mot de passe a échoué"
       new_password_same_as_previous_setting:
-        other: "The new password is the same as the previous one."
+        other: "Le nouveau mot de passe est le même que le précédent."
     question:
       not_found:
-        other: "Question not found."
+        other: "Question non trouvée."
       cannot_deleted:
-        other: "No permission to delete."
+        other: "Pas de permission de suppression."
       cannot_close:
-        other: "No permission to close."
+        other: "Pas de permission pour fermer."
       cannot_update:
-        other: "No permission to update."
+        other: "Pas de permission pour mettre à jour."
     rank:
       fail_to_meet_the_condition:
         other: "Rank fail to meet the condition."
     report:
       handle_failed:
-        other: "Report handle failed."
+        other: "La gestion du rapport a échoué."
       not_found:
-        other: "Report not found."
+        other: "Rapport non trouvé."
     tag:
       not_found:
-        other: "Tag not found."
+        other: "Tag non trouvé."
       recommend_tag_not_found:
-        other: "Recommend Tag is not exist."
+        other: "L'étiquette de recommandation n'existe pas."
       recommend_tag_enter:
-        other: "Please enter at least one required tag."
+        other: "Veuillez entrer au moins une étiquette."
       not_contain_synonym_tags:
-        other: "Should not contain synonym tags."
+        other: "Ne dois pas contenir d'étiquettes synonymes."
       cannot_update:
-        other: "No permission to update."
+        other: "Pas de permission pour mettre à jour."
       cannot_set_synonym_as_itself:
         other: "You cannot set the synonym of the current tag as itself."
     theme:
       not_found:
-        other: "Theme not found."
+        other: "Thème non trouvé."
     revision:
       review_underway:
         other: "Can't edit currently, there is a version in the review queue."
@@ -120,7 +120,7 @@ backend:
         other:
           other: Email and password do not match.
       not_found:
-        other: "User not found."
+        other: "Utilisateur non trouvé."
       suspended:
         other: "User has been suspended."
       username_invalid:
