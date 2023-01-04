@@ -481,80 +481,80 @@ ui:
     tip_question: >-
       Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
     tip_answer: >-
-      Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
+      Utilisez des commentaires pour répondre à d'autres utilisateurs ou leur signaler des modifications. Si vous ajoutez de nouvelles informations, modifiez votre message au lieu de commenter.
   edit_answer:
-    title: Edit Answer
-    default_reason: Edit answer
+    title: Modifier la réponse
+    default_reason: Modifier la réponse
     form:
       fields:
         revision:
-          label: Revision
+          label: Modification
         answer:
-          label: Answer
+          label: Réponse
         edit_summary:
-          label: Edit Summary
+          label: Modifier le résumé
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
+            Expliquez brièvement vos changements (correction orthographique, correction grammaticale, mise en forme améliorée)
+    btn_save_edits: Enregistrer les modifications
+    btn_cancel: Annuler
   tags:
-    title: Tags
+    title: Étiquettes
     sort_buttons:
-      popular: Popular
-      name: Name
-      newest: newest
-    button_follow: Follow
-    button_following: Following
+      popular: Populaire
+      name: Nom
+      newest: les plus récents
+    button_follow: Suivre
+    button_following: Abonnements
     tag_label: questions
-    search_placeholder: Filter by tag name
-    no_desc: The tag has no description.
-    more: More
+    search_placeholder: Filtrer par étiquette
+    no_desc: L'étiquette n'a pas de description.
+    more: Plus
   ask:
-    title: Add Question
-    edit_title: Edit Question
-    default_reason: Edit question
-    similar_questions: Similar questions
+    title: Ajouter une question
+    edit_title: Modifier la question
+    default_reason: Modifier la question
+    similar_questions: Questions similaires
     form:
       fields:
         revision:
-          label: Revision
+          label: Modification
         title:
           label: Titre
-          placeholder: Be specific and imagine you're asking a question to another person
+          placeholder: Soyez précis et imaginez que vous posez une question à une autre personne
           msg:
-            empty: Title cannot be empty.
-            range: Title up to 150 characters
+            empty: Le titre ne peut pas être vide.
+            range: Titre de 150 caractères maximum
         body:
-          label: Body
+          label: Corps
           msg:
-            empty: Body cannot be empty.
+            empty: Le corps ne peut pas être vide.
         tags:
-          label: Tags
+          label: Étiquettes
           msg:
-            empty: Tags cannot be empty.
+            empty: Les étiquettes ne peuvent pas être vides.
         answer:
           label: Réponse
           msg:
             empty: La réponse ne peut être vide.
         edit_summary:
-          label: Edit Summary
+          label: Modifier le résumé
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_post_question: Post your question
-    btn_save_edits: Save edits
+            Expliquez brièvement vos changements (correction orthographique, correction grammaticale, mise en forme améliorée)
+    btn_post_question: Publier votre question
+    btn_save_edits: Enregistrer les modifications
     answer_question: Répondre à votre propre question
-    post_question&answer: Post your question and answer
+    post_question&answer: Publiez votre question et votre réponse
   tag_selector:
-    add_btn: Add tag
-    create_btn: Create new tag
-    search_tag: Search tag
-    hint: "Describe what your question is about, at least one tag is required."
-    no_result: No tags matched
-    tag_required_text: Required tag (at least one)
+    add_btn: Ajouter une étiquette
+    create_btn: Créer une nouvelle étiquette
+    search_tag: Rechercher une étiquette
+    hint: "Décrivez en quoi consiste votre question, au moins une étiquette est requise."
+    no_result: Aucune étiquette correspondante
+    tag_required_text: Étiquette requise (au moins une)
   header:
     nav:
       question: Questions
-      tag: Tags
+      tag: Étiquettes
       user: Utilisateurs
       profile: Profil
       setting: Paramètres
@@ -567,16 +567,16 @@ ui:
     build_on: >-
       Built on <1> Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
-    name: Change
+    name: Remplacer
     loading: chargement en cours...
   pic_auth_code:
     title: Captcha
-    placeholder: Type the text above
+    placeholder: Saisissez le texte ci-dessus
     msg:
-      empty: Captcha cannot be empty.
+      empty: Le captcha ne peut pas être vide.
   inactive:
     first: >-
-      You're almost done! We sent an activation mail to <bold>{{mail}}</bold>. Please follow the instructions in the mail to activate your account.
+      Vous avez presque fini ! Un mail de confirmation a été envoyé à <bold>{{mail}}</bold>. Veuillez suivre les instructions dans le mail pour activer votre compte.
     info: "If it doesn't arrive, check your spam folder."
     another: >-
       We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.
@@ -675,12 +675,12 @@ ui:
         placeholder: "https://example.com"
         msg: Website incorrect format
       location:
-        label: Location (optional)
+        label: Emplacement (facultatif)
         placeholder: "Ville, Pays"
     notification:
       heading: Notifications
       email:
-        label: Email Notifications
+        label: Notifications par email
         radio: "Answers to your questions, comments, and more"
     account:
       heading: Account
