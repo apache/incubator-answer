@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next';
 import i18next from 'i18next';
 import en_US from '@i18n/en_US.yaml';
 import zh_CN from '@i18n/zh_CN.yaml';
+import zh_TW from '@i18n/zh_TW.yaml';
 
 import { DEFAULT_LANG } from '@/common/constants';
 
@@ -17,6 +18,9 @@ i18next
       zh_CN: {
         translation: zh_CN.ui,
       },
+      zh_TW: {
+        translation: zh_TW.ui,
+      },      
     },
     // debug: process.env.NODE_ENV === 'development',
     fallbackLng: process.env.REACT_APP_LANG || DEFAULT_LANG,
