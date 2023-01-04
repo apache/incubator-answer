@@ -16,6 +16,22 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/": {
+            "get": {
+                "description": "if config file not exist try to redirect to install page",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "installation"
+                ],
+                "summary": "if config file not exist try to redirect to install page",
+                "responses": {}
+            }
+        },
         "/answer/admin/api/answer/page": {
             "get": {
                 "security": [
@@ -2687,7 +2703,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-question"
+                    "Question"
                 ],
                 "summary": "UserTop",
                 "parameters": [
@@ -2910,7 +2926,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-question"
+                    "Question"
                 ],
                 "summary": "update question",
                 "parameters": [
@@ -2947,7 +2963,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-question"
+                    "Question"
                 ],
                 "summary": "add question",
                 "parameters": [
@@ -2984,7 +3000,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-question"
+                    "Question"
                 ],
                 "summary": "delete question",
                 "parameters": [
@@ -3023,7 +3039,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-question"
+                    "Question"
                 ],
                 "summary": "close question msg list",
                 "responses": {
@@ -3043,7 +3059,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "GetQuestion Question",
+                "description": "get question details",
                 "consumes": [
                     "application/json"
                 ],
@@ -3051,9 +3067,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-question"
+                    "Question"
                 ],
-                "summary": "GetQuestion Question",
+                "summary": "get question details",
                 "parameters": [
                     {
                         "type": "string",
@@ -3076,7 +3092,7 @@ const docTemplate = `{
         },
         "/answer/api/v1/question/page": {
             "get": {
-                "description": "SearchQuestionList \u003cbr\u003e  \"order\"  Enums(newest, active,frequent,score,unanswered)",
+                "description": "get questions by page",
                 "consumes": [
                     "application/json"
                 ],
@@ -3084,17 +3100,17 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-question"
+                    "Question"
                 ],
-                "summary": "SearchQuestionList",
+                "summary": "get questions by page",
                 "parameters": [
                     {
-                        "description": "QuestionSearch",
+                        "description": "QuestionPageReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.QuestionSearch"
+                            "$ref": "#/definitions/schema.QuestionPageReq"
                         }
                     }
                 ],
@@ -3102,7 +3118,34 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/pager.PageModel"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/schema.QuestionPageResp"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -3123,7 +3166,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-question"
+                    "Question"
                 ],
                 "summary": "reopen question",
                 "parameters": [
@@ -3147,40 +3190,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/question/search": {
-            "post": {
-                "description": "SearchQuestionList",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "api-question"
-                ],
-                "summary": "SearchQuestionList",
-                "parameters": [
-                    {
-                        "description": "QuestionSearch",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/schema.QuestionSearch"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/answer/api/v1/question/similar": {
             "get": {
                 "security": [
@@ -3196,7 +3205,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-question"
+                    "Question"
                 ],
                 "summary": "add question title like",
                 "parameters": [
@@ -3229,7 +3238,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-question"
+                    "Question"
                 ],
                 "summary": "Search Similar Question",
                 "parameters": [
@@ -3267,7 +3276,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-question"
+                    "Question"
                 ],
                 "summary": "Close question",
                 "parameters": [
@@ -4231,6 +4240,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/user/email/notification": {
+            "put": {
+                "description": "unsubscribe email notification",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "unsubscribe email notification",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/user/email/verification": {
             "post": {
                 "description": "UserVerifyEmail",
@@ -5119,7 +5151,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-question"
+                    "Question"
                 ],
                 "summary": "UserList",
                 "parameters": [
@@ -6593,27 +6625,112 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.QuestionSearch": {
+        "schema.QuestionPageReq": {
             "type": "object",
             "properties": {
-                "order": {
-                    "description": "Search order by",
-                    "type": "string"
+                "orderCond": {
+                    "type": "string",
+                    "enum": [
+                        "newest",
+                        "active",
+                        "frequent",
+                        "score",
+                        "unanswered"
+                    ]
                 },
                 "page": {
-                    "description": "Query number of pages",
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 1
                 },
-                "page_size": {
-                    "description": "Search page size",
-                    "type": "integer"
+                "pageSize": {
+                    "type": "integer",
+                    "minimum": 1
                 },
                 "tag": {
-                    "description": "Tags     []string ` + "`" + `json:\"tags\" form:\"tags\"` + "`" + `           // Search tag",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 100
                 },
                 "username": {
-                    "description": "Search username",
+                    "type": "string",
+                    "maxLength": 100
+                }
+            }
+        },
+        "schema.QuestionPageResp": {
+            "type": "object",
+            "properties": {
+                "accepted_answer_id": {
+                    "description": "answer information",
+                    "type": "string"
+                },
+                "answer_count": {
+                    "type": "integer"
+                },
+                "collection_count": {
+                    "type": "integer"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "follow_count": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "last_answer_id": {
+                    "type": "string"
+                },
+                "operated_at": {
+                    "description": "operator information",
+                    "type": "integer"
+                },
+                "operation_type": {
+                    "type": "string"
+                },
+                "operator": {
+                    "$ref": "#/definitions/schema.QuestionPageRespOperator"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.TagResp"
+                    }
+                },
+                "title": {
+                    "type": "string"
+                },
+                "unique_view_count": {
+                    "type": "integer"
+                },
+                "url_title": {
+                    "type": "string"
+                },
+                "view_count": {
+                    "description": "question statistical information",
+                    "type": "integer"
+                },
+                "vote_count": {
+                    "type": "integer"
+                }
+            }
+        },
+        "schema.QuestionPageRespOperator": {
+            "type": "object",
+            "properties": {
+                "display_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "rank": {
+                    "type": "integer"
+                },
+                "username": {
                     "type": "string"
                 }
             }
