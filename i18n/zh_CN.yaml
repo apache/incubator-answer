@@ -107,6 +107,9 @@ backend:
         other: "没有更新标签权限。"
       cannot_set_synonym_as_itself:
         other: "您不能将当前标签的同义词设置为本身。"
+    smtp:
+      config_from_name_cannot_be_email:
+        other: "The From Name cannot be a email address."
     theme:
       not_found:
         other: "主题未找到"
@@ -129,21 +132,21 @@ backend:
         other: "用户名已被使用"
       set_avatar:
         other: "头像设置错误"
-      config:
-        read_config_failed:
-          other: "读取配置失败"
-      database:
-        connection_failed:
-          other: "数据连接异常！"
-        create_table_failed:
-          other: "创建表失败"
-      install:
-        create_config_failed:
-          other: "无法创建配置文件"
       cannot_update_your_role:
         other: "您不能修改自己的角色。"
       not_allowed_registration:
         other: "目前该站点未开放注册"
+    config:
+      read_config_failed:
+        other: "Read config failed"
+    database:
+      connection_failed:
+        other: "Database connection failed"
+      create_table_failed:
+        other: "Create table failed"
+    install:
+      create_config_failed:
+        other: "Can’t create the config.yaml file."
   report:
     spam:
       name:
@@ -197,6 +200,13 @@ backend:
           other: "其他原因"
         desc:
           other: "这个帖子需要上面没有列出的另一个原因。"
+    operation_type:
+      asked:
+        other: "asked"
+      answered:
+        other: "answered"
+      modified:
+        other: "modified"
   notification:
     action:
       update_question:
@@ -801,6 +811,11 @@ ui:
     confirm_new_email: 你的电子邮箱已更新
     confirm_new_email_invalid: >-
       抱歉，此验证链接已失效。也许是你的邮箱已经成功更改了？
+  unsubscribe:
+    page_title: Unsubscribe
+    success_title: Unsubscribe Successful
+    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
+    link: Change settings
   question:
     following_tags: 已关注的标签
     edit: 编辑
@@ -991,6 +1006,7 @@ ui:
       answer_links: 回答链接
       documents: 文档
       feedback: 用户反馈
+      support: Support
       review: 审查
       config: 配置
       update_to: 更新到
