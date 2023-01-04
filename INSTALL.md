@@ -52,7 +52,7 @@ Download the version you need for your current system
 > The following command -C specifies the data directory required for answer, you can modify it as you see fit
 
 ```bash
-. /answer init -C . /answer-data/
+INSTALL_PORT=9080 ./answer init -C ./answer-data/
 ```
 
 Then visit: [http://127.0.0.1:9080/install](http://127.0.0.1:9080/install) to install, the configuration is the same as using docker installation
@@ -60,8 +60,9 @@ Then visit: [http://127.0.0.1:9080/install](http://127.0.0.1:9080/install) to in
 ### Step 3: Start with command line
 After the installation is complete, the program will exit, so use the command to start the project formally
 ```bash
-. /answer run -C . /answer-data/
+./answer run -C ./answer-data/
 ```
+*Note*: You may want to check `./answer-data/conf/config.yaml` and confirm the settings there before running.
 
 After normal startup you can access [http://127.0.0.1:9080/](http://127.0.0.1:9080/) to log in using the administrator username password specified during installation
 
