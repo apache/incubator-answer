@@ -107,6 +107,9 @@ backend:
         other: "Nessun permesso per l'aggiornamento."
       cannot_set_synonym_as_itself:
         other: "Non puoi impostare il sinonimo del tag corrente come se stesso."
+    smtp:
+      config_from_name_cannot_be_email:
+        other: "The From Name cannot be a email address."
     theme:
       not_found:
         other: "tema non trovato"
@@ -129,21 +132,21 @@ backend:
         other: "utente già in uso"
       set_avatar:
         other: "Inserimento dell'Avatar non riuscito."
-      config:
-        read_config_failed:
-          other: "Configurazione lettura non riuscita"
-      database:
-        connection_failed:
-          other: "Connessione al database non riuscita"
-        create_table_failed:
-          other: "Creazione tabella non riuscita"
-      install:
-        create_config_failed:
-          other: "Impossibile creare il file config.yaml."
       cannot_update_your_role:
         other: "Non puoi modificare il tuo ruolo."
       not_allowed_registration:
         other: "Al momento il sito non è aperto per la registrazione"
+    config:
+      read_config_failed:
+        other: "Read config failed"
+    database:
+      connection_failed:
+        other: "Database connection failed"
+      create_table_failed:
+        other: "Create table failed"
+    install:
+      create_config_failed:
+        other: "Can’t create the config.yaml file."
   report:
     spam:
       name:
@@ -197,6 +200,13 @@ backend:
           other: "altro"
         desc:
           other: "Questo articolo richiede un'altro motivo non listato sopra."
+    operation_type:
+      asked:
+        other: "asked"
+      answered:
+        other: "answered"
+      modified:
+        other: "modified"
   notification:
     action:
       update_question:
@@ -801,6 +811,11 @@ ui:
     confirm_new_email: Your email has been updated.
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
+  unsubscribe:
+    page_title: Unsubscribe
+    success_title: Unsubscribe Successful
+    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
+    link: Change settings
   question:
     following_tags: Following Tags
     edit: Edit
@@ -991,6 +1006,7 @@ ui:
       answer_links: Answer Links
       documents: Documents
       feedback: Feedback
+      support: Support
       review: Review
       config: Config
       update_to: Update to
