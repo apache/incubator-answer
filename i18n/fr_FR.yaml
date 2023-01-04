@@ -107,6 +107,9 @@ backend:
         other: "Pas de permission pour mettre à jour."
       cannot_set_synonym_as_itself:
         other: "You cannot set the synonym of the current tag as itself."
+    smtp:
+      config_from_name_cannot_be_email:
+        other: "The From Name cannot be a email address."
     theme:
       not_found:
         other: "Thème non trouvé."
@@ -129,21 +132,21 @@ backend:
         other: "Nom d'utilisateur déjà utilisé."
       set_avatar:
         other: "La configuration de l'avatar a échoué."
-      config:
-        read_config_failed:
-          other: "La lecture de la configuration a échoué"
-      database:
-        connection_failed:
-          other: "Échec de la connexion à la base de données"
-        create_table_failed:
-          other: "La création de la table a échoué"
-      install:
-        create_config_failed:
-          other: "Impossible de créer le fichier config.yaml."
       cannot_update_your_role:
         other: "Vous ne pouvez pas modifier votre rôle."
       not_allowed_registration:
         other: "Actuellement, le site n'est pas ouvert aux inscriptions"
+    config:
+      read_config_failed:
+        other: "Read config failed"
+    database:
+      connection_failed:
+        other: "Database connection failed"
+      create_table_failed:
+        other: "Create table failed"
+    install:
+      create_config_failed:
+        other: "Can’t create the config.yaml file."
   report:
     spam:
       name:
@@ -197,6 +200,13 @@ backend:
           other: "quelque chose d'autre"
         desc:
           other: "Ce message nécessite l'attention du personnel pour une autre raison non listée ci-dessus."
+    operation_type:
+      asked:
+        other: "asked"
+      answered:
+        other: "answered"
+      modified:
+        other: "modified"
   notification:
     action:
       update_question:
@@ -801,6 +811,11 @@ ui:
     confirm_new_email: Votre adresse email a été mise à jour.
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
+  unsubscribe:
+    page_title: Unsubscribe
+    success_title: Unsubscribe Successful
+    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
+    link: Change settings
   question:
     following_tags: Following Tags
     edit: Edit
@@ -991,6 +1006,7 @@ ui:
       answer_links: Answer Links
       documents: Documents
       feedback: Feedback
+      support: Support
       review: Review
       config: Config
       update_to: Update to
