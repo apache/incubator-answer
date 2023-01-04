@@ -46,7 +46,7 @@ func (g *GitHub) ConnectorLogoContentType() string {
 }
 
 func (g *GitHub) ConnectorName() string {
-	return "GitHubConnector"
+	return "GitHub"
 }
 
 func (g *GitHub) ConnectorSlugName() string {
@@ -58,39 +58,88 @@ func (g *GitHub) ConnectorSender(ctx *plugin.GinContext) {
 		ClientID:     g.ClientID,
 		ClientSecret: g.ClientSecret,
 		Endpoint:     oauth2GitHub.Endpoint,
-		RedirectURL:  "http://127.0.0.1:8080/answer/api/v1/oauth/redirect/github",
+		RedirectURL:  "http://127.0.0.1:8080/answer/api/v1/oauth/redirect/github", // TODO: Pass by parameter
 		Scopes:       nil,
 	}
-	ctx.Redirect(http.StatusFound, oauth2Config.AuthCodeURL(""))
+	ctx.Redirect(http.StatusFound, oauth2Config.AuthCodeURL("state"))
 }
 
 func (g *GitHub) ConnectorReceiver(ctx *plugin.GinContext) {
 	code := ctx.Query("code")
 	//state := ctx.Query("state")
 
+	// Exchange code for token
 	oauth2Config := &oauth2.Config{
 		ClientID:     g.ClientID,
 		ClientSecret: g.ClientSecret,
 		Endpoint:     oauth2GitHub.Endpoint,
 	}
-	token, err := oauth2Config.Exchange(context.Background(), code+"1")
+	token, err := oauth2Config.Exchange(context.Background(), code)
 	if err != nil {
-		ctx.Error(err)
 		ctx.Redirect(http.StatusFound, "/50x")
 		return
 	}
 
+	// Exchange token for user info
 	cli := github.NewClient(oauth2.NewClient(context.Background(), oauth2.StaticTokenSource(
 		&oauth2.Token{AccessToken: token.AccessToken},
 	)))
 	userInfo, _, err := cli.Users.Get(context.Background(), "")
 	if err != nil {
-		ctx.Error(err)
 		ctx.Redirect(http.StatusFound, "/50x")
 		return
 	}
 
 	fmt.Printf("user info is :%+v", userInfo)
-	ctx.Redirect(http.StatusFound, "/")
+	// TODO
+	// If user email exists, try to login this user.
+	// If user email not exists, try to register this user.
+
+	ctx.Redirect(http.StatusFound, "/login-success?access_token=token")
 	return
+}
+
+func (g *GitHub) ConnectorLoginURL(redirectURL, state string) (loginURL string) {
+	oauth2Config := &oauth2.Config{
+		ClientID:     g.ClientID,
+		ClientSecret: g.ClientSecret,
+		Endpoint:     oauth2GitHub.Endpoint,
+		RedirectURL:  redirectURL,
+	}
+	return oauth2Config.AuthCodeURL(state)
+}
+
+func (g *GitHub) ConnectorLoginUserInfo(code string) (userInfo *plugin.UserExternalLogin, err error) {
+	// Exchange code for token
+	oauth2Config := &oauth2.Config{
+		ClientID:     g.ClientID,
+		ClientSecret: g.ClientSecret,
+		Endpoint:     oauth2GitHub.Endpoint,
+	}
+	token, err := oauth2Config.Exchange(context.Background(), code)
+	if err != nil {
+		return nil, err
+	}
+
+	// Exchange token for user info
+	cli := github.NewClient(oauth2.NewClient(context.Background(), oauth2.StaticTokenSource(
+		&oauth2.Token{AccessToken: token.AccessToken},
+	)))
+	resp, _, err := cli.Users.Get(context.Background(), "")
+	if err != nil {
+		return nil, err
+	}
+
+	userInfo = &plugin.UserExternalLogin{
+		Provider:    g.ConnectorSlugName(),
+		ExternalID:  fmt.Sprintf("%d", resp.GetID()),
+		Email:       resp.GetEmail(),
+		Name:        resp.GetName(),
+		FirstName:   resp.GetName(),
+		LastName:    resp.GetName(),
+		NickName:    resp.GetName(),
+		Description: resp.GetBio(),
+		AvatarUrl:   resp.GetAvatarURL(),
+	}
+	return userInfo, nil
 }

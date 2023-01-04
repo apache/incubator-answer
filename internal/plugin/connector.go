@@ -1,7 +1,5 @@
 package plugin
 
-import "time"
-
 type Connector interface {
 	Base
 
@@ -26,25 +24,20 @@ type Connector interface {
 	ConnectorSender(ctx *GinContext)
 	ConnectorReceiver(ctx *GinContext)
 
-	//ConnectorLoginURL() (loginURL string)
-	//ConnectorLoginUserInfo(code string) (userInfo *UserExternalLogin)
+	//ConnectorLoginURL(redirectURL string) (loginURL string)
+	//ConnectorLoginUserInfo(code string) (userInfo *UserExternalLogin, err error)
 }
 
 type UserExternalLogin struct {
-	Provider          string
-	ExternalID        string
-	Email             string
-	Name              string
-	FirstName         string
-	LastName          string
-	NickName          string
-	Description       string
-	AvatarUrl         string
-	Location          string
-	AccessToken       string
-	AccessTokenSecret string
-	RefreshToken      string
-	ExpiresAt         time.Time
+	Provider    string
+	ExternalID  string
+	Email       string
+	Name        string
+	FirstName   string
+	LastName    string
+	NickName    string
+	Description string
+	AvatarUrl   string
 }
 
 var (
