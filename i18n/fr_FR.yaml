@@ -109,7 +109,7 @@ backend:
         other: "You cannot set the synonym of the current tag as itself."
     smtp:
       config_from_name_cannot_be_email:
-        other: "The From Name cannot be a email address."
+        other: "Le nom d'expéditeur ne peut pas être une adresse e-mail."
     theme:
       not_found:
         other: "Thème non trouvé."
@@ -138,15 +138,15 @@ backend:
         other: "Actuellement, le site n'est pas ouvert aux inscriptions"
     config:
       read_config_failed:
-        other: "Read config failed"
+        other: "La lecture de la configuration a échoué"
     database:
       connection_failed:
-        other: "Database connection failed"
+        other: "La connexion à la base de données a échoué"
       create_table_failed:
-        other: "Create table failed"
+        other: "La création de la table a échoué"
     install:
       create_config_failed:
-        other: "Can’t create the config.yaml file."
+        other: "Impossible de créer le fichier config.yaml."
   report:
     spam:
       name:
@@ -202,27 +202,27 @@ backend:
           other: "Ce message nécessite l'attention du personnel pour une autre raison non listée ci-dessus."
     operation_type:
       asked:
-        other: "asked"
+        other: "a demandé"
       answered:
-        other: "answered"
+        other: "a répondu"
       modified:
-        other: "modified"
+        other: "modifié"
   notification:
     action:
       update_question:
-        other: "updated question"
+        other: "question mise à jour"
       answer_the_question:
-        other: "answered question"
+        other: "question répondue"
       update_answer:
-        other: "updated answer"
+        other: "réponse mise à jour"
       accept_answer:
-        other: "accepted answer"
+        other: "réponse acceptée"
       comment_question:
-        other: "commented question"
+        other: "a commenté la question"
       comment_answer:
-        other: "commented answer"
+        other: "a commenté la réponse"
       reply_to_you:
-        other: "replied to you"
+        other: "vous a répondu"
       mention_you:
         other: "vous a mentionné"
       your_question_is_closed:
@@ -283,15 +283,15 @@ ui:
     blockquote:
       text: Bloc de citation
     bold:
-      text: Strong
+      text: Gras
     chart:
-      text: Chart
-      flow_chart: Flow chart
+      text: Diagramme
+      flow_chart: Organigramme
       sequence_diagram: Diagramme de séquence
       class_diagram: Diagramme de classe
       state_diagram: Diagramme d'état
-      entity_relationship_diagram: Entity relationship diagram
-      user_defined_diagram: User defined diagram
+      entity_relationship_diagram: Diagramme entité-association
+      user_defined_diagram: Diagramme défini par l'utilisateur
       gantt_chart: Diagramme de Gantt
       pie_chart: Camembert
     code:
@@ -302,52 +302,52 @@ ui:
           code:
             label: Code
             msg:
-              empty: Code cannot be empty.
+              empty: Le code ne peut pas être vide.
           language:
-            label: Language (optional)
-            placeholder: Automatic detection
+            label: Langue (facultatif)
+            placeholder: Détection automatique
       btn_cancel: Annuler
       btn_confirm: Ajouter
     formula:
       text: Formule
       options:
-        inline: Inline formula
-        block: Block formula
+        inline: Formule en ligne
+        block: Bloc de formule
     heading:
-      text: Heading
+      text: Titre
       options:
-        h1: Heading 1
-        h2: Heading 2
-        h3: Heading 3
-        h4: Heading 4
-        h5: Heading 5
-        h6: Heading 6
+        h1: Titre de niveau 1
+        h2: Titre de niveau 2
+        h3: Titre de niveau 3
+        h4: Titre de niveau 4
+        h5: Titre de niveau 5
+        h6: Titre de niveau 6
     help:
       text: Aide
     hr:
-      text: Horizontal Rule
+      text: Ligne horizontale
     image:
       text: Image
-      add_image: Add image
+      add_image: Ajouter une image
       tab_image: Téléverser une image
       form_image:
         fields:
           file:
-            label: Image File
+            label: Fichier image
             btn: Sélectionner une image
             msg:
               empty: Le fichier ne doit pas être vide.
               only_image: Seules les images sont autorisées.
-              max_size: File size cannot exceed 4MB.
+              max_size: La taille du fichier ne doit pas dépasser 4 Mo.
           desc:
             label: Description (optionnel)
-      tab_url: Image URL
+      tab_url: URL de l'image
       form_url:
         fields:
           url:
-            label: Image URL
+            label: URL de l'image
             msg:
-              empty: Image URL cannot be empty.
+              empty: L'URL de l'image ne peut pas être vide.
           name:
             label: Description (optionnel)
       btn_cancel: Annuler
@@ -367,9 +367,9 @@ ui:
           url:
             label: URL
             msg:
-              empty: URL cannot be empty.
+              empty: L'URL ne peut pas être vide.
           name:
-            label: Description (optional)
+            label: Description (facultatif)
       btn_cancel: Annuler
       btn_confirm: Ajouter
     ordered_list:
