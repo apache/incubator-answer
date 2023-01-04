@@ -253,7 +253,7 @@ const TagSelector: FC<IProps> = ({
                   variant="link"
                   className="px-3 btn-no-border w-100 text-start"
                   onClick={() => {
-                    tagModal.onShow();
+                    tagModal.onShow(tag);
                   }}>
                   + {t('create_btn')}
                 </Button>

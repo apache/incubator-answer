@@ -6,11 +6,14 @@ import (
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/meta"
+	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/segmentfault/pacman/errors"
 
@@ -30,8 +33,8 @@ type QuestionRepo interface {
 	UpdateQuestion(ctx context.Context, question *entity.Question, Cols []string) (err error)
 	GetQuestion(ctx context.Context, id string) (question *entity.Question, exist bool, err error)
 	GetQuestionList(ctx context.Context, question *entity.Question) (questions []*entity.Question, err error)
-	GetQuestionPage(ctx context.Context, page, pageSize int, question *entity.Question) (questions []*entity.Question, total int64, err error)
-	SearchList(ctx context.Context, search *schema.QuestionSearch) ([]*entity.QuestionTag, int64, error)
+	GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string) (
+		questionList []*entity.Question, total int64, err error)
 	UpdateQuestionStatus(ctx context.Context, question *entity.Question) (err error)
 	SearchByTitleLike(ctx context.Context, title string) (questionList []*entity.Question, err error)
 	UpdatePvCount(ctx context.Context, questionID string) (err error)
@@ -126,21 +129,15 @@ func (qs *QuestionCommon) UpdataPostSetTime(ctx context.Context, questionID stri
 
 func (qs *QuestionCommon) FindInfoByID(ctx context.Context, questionIDs []string, loginUserID string) (map[string]*schema.QuestionInfo, error) {
 	list := make(map[string]*schema.QuestionInfo)
-	listAddTag := make([]*entity.QuestionTag, 0)
 	questionList, err := qs.questionRepo.FindByID(ctx, questionIDs)
 	if err != nil {
 		return list, err
 	}
-	for _, item := range questionList {
-		itemAddTag := &entity.QuestionTag{}
-		itemAddTag.Question = *item
-		listAddTag = append(listAddTag, itemAddTag)
-	}
-	QuestionInfo, err := qs.ListFormat(ctx, listAddTag, loginUserID)
+	questions, err := qs.FormatQuestions(ctx, questionList, loginUserID)
 	if err != nil {
 		return list, err
 	}
-	for _, item := range QuestionInfo {
+	for _, item := range questions {
 		list[item.ID] = item
 	}
 	return list, nil
@@ -193,9 +190,15 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 	showinfo.Tags = tagmap
 
 	userIds := make([]string, 0)
-	userIds = append(userIds, dbinfo.UserID)
-	userIds = append(userIds, dbinfo.LastEditUserID)
-	userIds = append(userIds, showinfo.LastAnsweredUserID)
+	if checker.IsNotZeroString(dbinfo.UserID) {
+		userIds = append(userIds, dbinfo.UserID)
+	}
+	if checker.IsNotZeroString(dbinfo.LastEditUserID) {
+		userIds = append(userIds, dbinfo.LastEditUserID)
+	}
+	if checker.IsNotZeroString(showinfo.LastAnsweredUserID) {
+		userIds = append(userIds, showinfo.LastAnsweredUserID)
+	}
 	userInfoMap, err := qs.userCommon.BatchUserBasicInfoByID(ctx, userIds)
 	if err != nil {
 		return showinfo, err
@@ -244,13 +247,114 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 	return showinfo, nil
 }
 
-func (qs *QuestionCommon) ListFormat(ctx context.Context, questionList []*entity.QuestionTag, loginUserID string) ([]*schema.QuestionInfo, error) {
+func (qs *QuestionCommon) FormatQuestionsPage(
+	ctx context.Context, questionList []*entity.Question, loginUserID string, orderCond string) (
+	formattedQuestions []*schema.QuestionPageResp, err error) {
+	language := handler.GetLangByCtx(ctx)
+	askedOp := translator.GlobalTrans.Tr(language, schema.QuestionPageRespOperationTypeAsked)
+	answeredOp := translator.GlobalTrans.Tr(language, schema.QuestionPageRespOperationTypeAnswered)
+	modifiedOp := translator.GlobalTrans.Tr(language, schema.QuestionPageRespOperationTypeModified)
+
+	formattedQuestions = make([]*schema.QuestionPageResp, 0)
+
+	questionIDs := make([]string, 0)
+	userIDs := make([]string, 0)
+	for _, questionInfo := range questionList {
+		t := &schema.QuestionPageResp{
+			ID:               questionInfo.ID,
+			Title:            questionInfo.Title,
+			UrlTitle:         htmltext.UrlTitle(questionInfo.Title),
+			Description:      htmltext.FetchExcerpt(questionInfo.ParsedText, "...", 240),
+			Status:           questionInfo.Status,
+			ViewCount:        questionInfo.ViewCount,
+			UniqueViewCount:  questionInfo.UniqueViewCount,
+			VoteCount:        questionInfo.VoteCount,
+			AnswerCount:      questionInfo.AnswerCount,
+			CollectionCount:  questionInfo.CollectionCount,
+			FollowCount:      questionInfo.FollowCount,
+			AcceptedAnswerID: questionInfo.AcceptedAnswerID,
+			LastAnswerID:     questionInfo.LastAnswerID,
+		}
+
+		questionIDs = append(questionIDs, questionInfo.ID)
+		userIDs = append(userIDs, questionInfo.UserID)
+		haveEdited, haveAnswered := false, false
+		if checker.IsNotZeroString(questionInfo.LastEditUserID) {
+			haveEdited = true
+			userIDs = append(userIDs, questionInfo.LastEditUserID)
+		}
+		if checker.IsNotZeroString(questionInfo.LastAnswerID) {
+			haveAnswered = true
+
+			answerInfo, exist, err := qs.answerRepo.GetAnswer(ctx, questionInfo.LastAnswerID)
+			if err == nil && exist {
+				if answerInfo.LastEditUserID != "0" {
+					t.LastAnsweredUserID = answerInfo.LastEditUserID
+				} else {
+					t.LastAnsweredUserID = answerInfo.UserID
+				}
+				t.LastAnsweredAt = answerInfo.CreatedAt
+				userIDs = append(userIDs, t.LastAnsweredUserID)
+			}
+		}
+
+		// if order condition is newest or nobody edited or nobody answered, only show question author
+		if orderCond == schema.QuestionOrderCondNewest || (!haveEdited && !haveAnswered) {
+			t.OperationType = askedOp
+			t.OperatedAt = questionInfo.CreatedAt.Unix()
+			t.Operator = &schema.QuestionPageRespOperator{ID: questionInfo.UserID}
+		} else {
+			// if no one
+			if haveEdited {
+				t.OperationType = modifiedOp
+				t.OperatedAt = questionInfo.UpdatedAt.Unix()
+				t.Operator = &schema.QuestionPageRespOperator{ID: questionInfo.LastEditUserID}
+			}
+
+			if haveAnswered {
+				if t.LastAnsweredAt.Unix() > t.OperatedAt {
+					t.OperationType = answeredOp
+					t.OperatedAt = t.LastAnsweredAt.Unix()
+					t.Operator = &schema.QuestionPageRespOperator{ID: t.LastAnsweredUserID}
+				}
+			}
+		}
+		formattedQuestions = append(formattedQuestions, t)
+	}
+
+	tagsMap, err := qs.tagCommon.BatchGetObjectTag(ctx, questionIDs)
+	if err != nil {
+		return formattedQuestions, err
+	}
+	userInfoMap, err := qs.userCommon.BatchUserBasicInfoByID(ctx, userIDs)
+	if err != nil {
+		return formattedQuestions, err
+	}
+
+	for _, item := range formattedQuestions {
+		tags, ok := tagsMap[item.ID]
+		if ok {
+			item.Tags = tags
+		} else {
+			item.Tags = make([]*schema.TagResp, 0)
+		}
+		userInfo := userInfoMap[item.Operator.ID]
+		if userInfo != nil {
+			item.Operator.DisplayName = userInfo.DisplayName
+			item.Operator.Username = userInfo.Username
+			item.Operator.Rank = userInfo.Rank
+		}
+	}
+	return formattedQuestions, nil
+}
+
+func (qs *QuestionCommon) FormatQuestions(ctx context.Context, questionList []*entity.Question, loginUserID string) ([]*schema.QuestionInfo, error) {
 	list := make([]*schema.QuestionInfo, 0)
 	objectIds := make([]string, 0)
 	userIds := make([]string, 0)
 
 	for _, questionInfo := range questionList {
-		item := qs.ShowListFormat(ctx, questionInfo)
+		item := qs.ShowFormat(ctx, questionInfo)
 		list = append(list, item)
 		objectIds = append(objectIds, item.ID)
 		userIds = append(userIds, item.UserID)
@@ -387,8 +491,8 @@ func (as *QuestionCommon) RemoveAnswer(ctx context.Context, id string) (err erro
 	return as.answerRepo.RemoveAnswer(ctx, id)
 }
 
-func (qs *QuestionCommon) ShowListFormat(ctx context.Context, data *entity.QuestionTag) *schema.QuestionInfo {
-	return qs.ShowFormat(ctx, &data.Question)
+func (qs *QuestionCommon) ShowListFormat(ctx context.Context, data *entity.Question) *schema.QuestionInfo {
+	return qs.ShowFormat(ctx, data)
 }
 
 func (qs *QuestionCommon) ShowFormat(ctx context.Context, data *entity.Question) *schema.QuestionInfo {

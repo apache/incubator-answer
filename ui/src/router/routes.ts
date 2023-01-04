@@ -337,6 +337,10 @@ const routes: RouteNode[] = [
           },
         ],
       },
+      {
+        path: '/users/unsubscribe',
+        page: 'pages/Users/Unsubscribe',
+      },
     ],
   },
   {

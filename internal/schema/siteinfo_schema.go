@@ -3,10 +3,14 @@ package schema
 import (
 	"context"
 	"fmt"
+	"net/mail"
 	"net/url"
 
 	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/segmentfault/pacman/errors"
 )
 
 const PermaLinkQuestionIDAndTitle = 1
@@ -188,6 +192,17 @@ type UpdateSMTPConfigReq struct {
 	SMTPPassword       string `validate:"omitempty,gt=0,lte=256" json:"smtp_password"`
 	SMTPAuthentication bool   `validate:"omitempty" json:"smtp_authentication"`
 	TestEmailRecipient string `validate:"omitempty,email" json:"test_email_recipient"`
+}
+
+func (r *UpdateSMTPConfigReq) Check() (errField []*validator.FormErrorField, err error) {
+	_, err = mail.ParseAddress(r.FromName)
+	if err == nil {
+		return append(errField, &validator.FormErrorField{
+			ErrorField: "from_name",
+			ErrorMsg:   reason.SMTPConfigFromNameCannotBeEmail,
+		}), errors.BadRequest(reason.SMTPConfigFromNameCannotBeEmail)
+	}
+	return nil, nil
 }
 
 // GetSMTPConfigResp get smtp config response

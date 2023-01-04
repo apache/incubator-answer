@@ -205,70 +205,40 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 	return questionIDList, nil
 }
 
-// GetQuestionPage get question page
-func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, question *entity.Question) (questionList []*entity.Question, total int64, err error) {
+// GetQuestionPage query question page
+func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string) (
+	questionList []*entity.Question, total int64, err error) {
 	questionList = make([]*entity.Question, 0)
-	total, err = pager.Help(page, pageSize, questionList, question, qr.data.DB.NewSession())
-	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	return
-}
 
-// SearchList
-func (qr *questionRepo) SearchList(ctx context.Context, search *schema.QuestionSearch) ([]*entity.QuestionTag, int64, error) {
-	var count int64
-	var err error
-	rows := make([]*entity.QuestionTag, 0)
-	if search.Page > 0 {
-		search.Page = search.Page - 1
-	} else {
-		search.Page = 0
+	session := qr.data.DB.Where("question.status = ? OR question.status = ?",
+		entity.QuestionStatusAvailable, entity.QuestionStatusClosed)
+	if len(tagID) > 0 {
+		session.Join("LEFT", "tag_rel", "question.id = tag_rel.object_id")
+		session.And("tag_rel.tag_id = ?", tagID)
+		session.And("tag_rel.status = ?", entity.TagRelStatusAvailable)
 	}
-	if search.PageSize == 0 {
-		search.PageSize = constant.DefaultPageSize
+	if len(userID) > 0 {
+		session.And("question.user_id = ?", userID)
 	}
-	offset := search.Page * search.PageSize
-	session := qr.data.DB.Table("question")
-
-	if len(search.TagIDs) > 0 {
-		session = session.Join("LEFT", "tag_rel", "question.id = tag_rel.object_id")
-		session = session.And("tag_rel.tag_id =?", search.TagIDs[0])
-		// session = session.In("tag_rel.tag_id ", search.TagIDs)
-		session = session.And("tag_rel.status =?", entity.TagRelStatusAvailable)
-	}
-
-	if len(search.UserID) > 0 {
-		session = session.And("question.user_id = ?", search.UserID)
-	}
-
-	session = session.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed})
-	// if search.Status > 0 {
-	// 	session = session.And("question.status = ?", search.Status)
-	// }
-	// switch
-	// newest, active,frequent,score,unanswered
-	switch search.Order {
+	switch orderCond {
 	case "newest":
-		session = session.OrderBy("question.created_at desc")
+		session.OrderBy("question.created_at DESC")
 	case "active":
-		session = session.OrderBy("question.post_update_time desc,question.updated_at desc")
+		session.OrderBy("question.post_update_time DESC, question.updated_at DESC")
 	case "frequent":
-		session = session.OrderBy("question.view_count desc")
+		session.OrderBy("question.view_count DESC")
 	case "score":
-		session = session.OrderBy("question.vote_count desc,question.view_count desc")
+		session.OrderBy("question.vote_count DESC, question.view_count DESC")
 	case "unanswered":
-		session = session.And("question.last_answer_id = 0")
-		session = session.OrderBy("question.created_at desc")
+		session.Where("question.last_answer_id = 0")
+		session.OrderBy("question.created_at DESC")
 	}
-	session = session.Limit(search.PageSize, offset)
-	session = session.Select("question.id,question.user_id,last_edit_user_id,question.title,question.original_text,question.parsed_text,question.status,question.view_count,question.unique_view_count,question.vote_count,question.answer_count,question.collection_count,question.follow_count,question.accepted_answer_id,question.last_answer_id,question.created_at,question.updated_at,question.post_update_time,question.revision_id")
-	count, err = session.FindAndCount(&rows)
+
+	total, err = pager.Help(page, pageSize, &questionList, &entity.Question{}, session)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return rows, count, err
 	}
-	return rows, count, nil
+	return questionList, total, err
 }
 
 func (qr *questionRepo) AdminSearchList(ctx context.Context, search *schema.AdminQuestionSearch) ([]*entity.Question, int64, error) {

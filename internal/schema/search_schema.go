@@ -26,6 +26,7 @@ type SearchObject struct {
 }
 
 type TagResp struct {
+	ID          string `json:"-"`
 	SlugName    string `json:"slug_name"`
 	DisplayName string `json:"display_name"`
 	// if main tag slug name is not empty, this tag is synonymous with the main tag

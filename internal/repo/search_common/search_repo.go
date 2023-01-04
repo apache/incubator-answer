@@ -29,7 +29,7 @@ var (
 		"`question`.`id` as `question_id`",
 		"`title`",
 		"`parsed_text`",
-		"`question`.`created_at`",
+		"`question`.`created_at` as `created_at`",
 		"`user_id`",
 		"`vote_count`",
 		"`answer_count`",
@@ -42,7 +42,7 @@ var (
 		"`question_id`",
 		"`question`.`title` as `title`",
 		"`answer`.`parsed_text` as `parsed_text`",
-		"`answer`.`created_at`",
+		"`answer`.`created_at` as `created_at`",
 		"`answer`.`user_id` as `user_id`",
 		"`answer`.`vote_count` as `vote_count`",
 		"0 as `answer_count`",
@@ -466,6 +466,7 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 			Where(builder.Eq{"tag_rel.object_id": r["question_id"]}).
 			And(builder.Eq{"tag_rel.status": entity.TagRelStatusAvailable}).
 			UseBool("recommend", "reserved").
+			OrderBy("tag.recommend DESC, tag.reserved DESC, tag.id DESC").
 			Find(&tagsEntity)
 
 		if err != nil {

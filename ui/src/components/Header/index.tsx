@@ -49,6 +49,14 @@ const Header: FC = () => {
   const handleInput = (val) => {
     setSearch(val);
   };
+  const handleSearch = (evt) => {
+    evt.preventDefault();
+    if (!searchStr) {
+      return;
+    }
+    const searchUrl = `/search?q=${encodeURIComponent(searchStr)}`;
+    navigate(searchUrl);
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -118,7 +126,13 @@ const Header: FC = () => {
               <NavItems redDot={redDot} userInfo={user} logOut={handleLogout} />
             ) : (
               <>
-                <Button variant="link" className="me-2" href="/users/login">
+                <Button
+                  variant="link"
+                  className={classnames('me-2', {
+                    'link-light': navbarStyle === 'theme-colored',
+                    'link-primary': navbarStyle !== 'theme-colored',
+                  })}
+                  href="/users/login">
                   {t('btns.login')}
                 </Button>
                 {loginSetting.allow_new_registrations && (
@@ -153,7 +167,10 @@ const Header: FC = () => {
           <hr className="hr lg-none mt-2" />
 
           <Col lg={4} className="d-flex justify-content-center">
-            <Form action="/search" className="w-75 px-0 px-lg-2">
+            <Form
+              action="/search"
+              className="w-75 px-0 px-lg-2"
+              onSubmit={handleSearch}>
               <FormControl
                 placeholder={t('header.search.placeholder')}
                 className="placeholder-search"
