@@ -190,9 +190,15 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 	showinfo.Tags = tagmap
 
 	userIds := make([]string, 0)
-	userIds = append(userIds, dbinfo.UserID)
-	userIds = append(userIds, dbinfo.LastEditUserID)
-	userIds = append(userIds, showinfo.LastAnsweredUserID)
+	if checker.IsNotZeroString(dbinfo.UserID) {
+		userIds = append(userIds, dbinfo.UserID)
+	}
+	if checker.IsNotZeroString(dbinfo.LastEditUserID) {
+		userIds = append(userIds, dbinfo.LastEditUserID)
+	}
+	if checker.IsNotZeroString(showinfo.LastAnsweredUserID) {
+		userIds = append(userIds, showinfo.LastAnsweredUserID)
+	}
 	userInfoMap, err := qs.userCommon.BatchUserBasicInfoByID(ctx, userIds)
 	if err != nil {
 		return showinfo, err
