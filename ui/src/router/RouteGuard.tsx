@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 import { floppyNavigation } from '@/utils';
 import { TGuardFunc } from '@/utils/guard';
+import { loggedUserInfoStore } from '@/stores';
 
 const Index: FC<{
   children: ReactNode;
@@ -16,7 +17,8 @@ const Index: FC<{
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  useEffect(() => {
+  const { user } = loggedUserInfoStore();
+  const runGuards = () => {
     if (onEnter) {
       const gr = onEnter();
       const redirectUrl = gr.redirect;
@@ -26,8 +28,15 @@ const Index: FC<{
         });
       }
     }
+  };
+  useEffect(() => {
+    runGuards();
   }, [location]);
-
+  useEffect(() => {
+    if (!user.access_token) {
+      runGuards();
+    }
+  }, [user]);
   return (
     <>
       {/* Route Guard */}

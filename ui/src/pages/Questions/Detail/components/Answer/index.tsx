@@ -1,5 +1,5 @@
 import { memo, FC, useEffect, useRef } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 
@@ -107,8 +107,8 @@ const Index: FC<Props> = ({
         )}
       </div>
 
-      <Row className="mt-4 mb-3">
-        <Col className="mb-3 mb-md-0">
+      <div className="d-block d-md-flex flex-wrap mt-4 mb-3">
+        <div className="mb-3 mb-md-0 me-4 flex-grow-1">
           <Operate
             qid={data.question_id}
             aid={data.id}
@@ -119,8 +119,8 @@ const Index: FC<Props> = ({
             slugTitle={slugTitle}
             callback={callback}
           />
-        </Col>
-        <Col lg={3} className="mb-3 mb-md-0">
+        </div>
+        <div className="mb-3 mb-md-0 me-4" style={{ minWidth: '196px' }}>
           {data.update_user_info &&
           data.update_user_info?.username !== data.user_info?.username ? (
             <UserCard
@@ -145,8 +145,8 @@ const Index: FC<Props> = ({
               className="text-secondary fs-14"
             />
           )}
-        </Col>
-        <Col lg={4}>
+        </div>
+        <div style={{ minWidth: '196px' }}>
           <UserCard
             data={data?.user_info}
             time={Number(data.create_time)}
@@ -154,8 +154,8 @@ const Index: FC<Props> = ({
             isLogged={isLogged}
             timelinePath={`/posts/${data.question_id}/${data.id}/timeline`}
           />
-        </Col>
-      </Row>
+        </div>
+      </div>
 
       <Comment
         objectId={data.id}
