@@ -135,21 +135,21 @@ backend:
         other: "Username is already in use."
       set_avatar:
         other: "Avatar set failed."
-      config:
-        read_config_failed:
-          other: "Read config failed"
-      database:
-        connection_failed:
-          other: "Database connection failed"
-        create_table_failed:
-          other: "Create table failed"
-      install:
-        create_config_failed:
-          other: "Can’t create the config.yaml file."
       cannot_update_your_role:
         other: "You cannot modify your role."
       not_allowed_registration:
         other: "Currently the site is not open for registration"
+    config:
+      read_config_failed:
+        other: "Read config failed"
+    database:
+      connection_failed:
+        other: "Database connection failed"
+      create_table_failed:
+        other: "Create table failed"
+    install:
+      create_config_failed:
+        other: "Can’t create the config.yaml file."
   report:
     spam:
       name:
