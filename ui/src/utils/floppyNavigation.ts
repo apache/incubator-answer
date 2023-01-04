@@ -33,10 +33,13 @@ const navigate = (pathname: string, callback: Function) => {
 /**
  * auto navigate to login page with redirect info
  */
-const navigateToLogin = () => {
-  storageLoginRedirect();
+const navigateToLogin = (callback?: Function) => {
   navigate(RouteAlias.login, () => {
-    window.location.replace(RouteAlias.login);
+    if (callback) {
+      callback(RouteAlias.login);
+    } else {
+      window.location.replace(RouteAlias.login);
+    }
   });
 };
 
