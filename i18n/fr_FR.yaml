@@ -1310,13 +1310,13 @@ ui:
     answer_edit: Answer edit
     tag_edit: Tag edit
     edit_summary: Edit summary
-    edit_question: Edit question
-    edit_answer: Edit answer
-    edit_tag: Edit tag
+    edit_question: Modifier la question
+    edit_answer: Modifier la réponse
+    edit_tag: Modifier l’étiquette
     empty: No review tasks left.
   timeline:
-    undeleted: undeleted
-    deleted: deleted
+    undeleted: restauré
+    deleted: supprimé
     downvote: downvote
     upvote: upvote
     accept: accept
