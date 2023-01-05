@@ -283,3 +283,11 @@ a {
 .pre-line {
   white-space: pre-wrap;
 }
+
+@keyframes bg-fade-out {
+  0%, 25% {background-color: var(--bs-highlight-bg)}
+  100% { background-color: transparent }
+}
+.bg-fade-out {
+  animation: 2s ease 1s bg-fade-out;
+}

@@ -3,6 +3,8 @@ import { Container, Form, Button, Col } from 'react-bootstrap';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
+import { RouteAlias } from '@/router/alias';
+import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
 import { usePageTags } from '@/hooks';
 import type {
   LoginReqParams,
@@ -13,8 +15,6 @@ import { Unactivate } from '@/components';
 import { loggedUserInfoStore, loginSettingStore } from '@/stores';
 import { guard, floppyNavigation, handleFormError } from '@/utils';
 import { login, checkImgCode } from '@/services';
-import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
-import { RouteAlias } from '@/router/alias';
 import { PicAuthCodeModal } from '@/components/Modal';
 import Storage from '@/utils/storage';
 
@@ -91,6 +91,14 @@ const Index: React.FC = () => {
     return bol;
   };
 
+  const handleLoginRedirect = () => {
+    const redirect = Storage.get(REDIRECT_PATH_STORAGE_KEY) || RouteAlias.home;
+    Storage.remove(REDIRECT_PATH_STORAGE_KEY);
+    floppyNavigation.navigate(redirect, () => {
+      navigate(redirect, { replace: true });
+    });
+  };
+
   const handleLogin = (event?: any) => {
     if (event) {
       event.preventDefault();
@@ -113,24 +121,12 @@ const Index: React.FC = () => {
           setStep(2);
           setRefresh((pre) => pre + 1);
         } else {
-          const path =
-            Storage.get(REDIRECT_PATH_STORAGE_KEY) || RouteAlias.home;
-          Storage.remove(REDIRECT_PATH_STORAGE_KEY);
-          floppyNavigation.navigate(path, () => {
-            navigate(path, { replace: true });
-          });
+          handleLoginRedirect();
         }
 
         setModalState(false);
       })
       .catch((err) => {
-        // if (err.isError && err.key) {
-        //   formData[err.key].isInvalid = true;
-        //   formData[err.key].errorMsg = err.value;
-        //   if (err.key.indexOf('captcha') < 0) {
-        //     setModalState(false);
-        //   }
-        // }
         if (err.isError) {
           const data = handleFormError(err, formData);
           if (!err.list.find((v) => v.error_field.indexOf('captcha') >= 0)) {
