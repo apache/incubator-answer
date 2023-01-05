@@ -4,11 +4,11 @@ backend:
     success:
       other: "成功!"
     unknown:
-      other: "Unknown error."
+      other: "未知的錯誤。"
     request_format_error:
-      other: "Request format is not valid."
+      other: "請求的格式無效。"
     unauthorized_error:
-      other: "Unauthorized."
+      other: "未授權。"
     database_error:
       other: "Data server error."
   role:
@@ -29,13 +29,13 @@ backend:
   email:
     other: "Email"
   password:
-    other: "Password"
+    other: "密碼"
   email_or_password_wrong_error:
-    other: "Email and password do not match."
+    other: "電子郵箱和密碼不匹配。"
   error:
     admin:
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: 電子郵箱和密碼不匹配。
     answer:
       not_found:
         other: "Answer do not found."
@@ -70,22 +70,22 @@ backend:
       not_found:
         other: "Object not found."
       verification_failed:
-        other: "Verification failed."
+        other: "驗證失敗。"
       email_or_password_incorrect:
-        other: "Email and password do not match."
+        other: "電子郵箱和密碼不匹配。"
       old_password_verification_failed:
-        other: "The old password verification failed"
+        other: "舊密碼驗證失敗"
       new_password_same_as_previous_setting:
-        other: "The new password is the same as the previous one."
+        other: "新密碼與先前的一樣。"
     question:
       not_found:
-        other: "Question not found."
+        other: "找不到問題。"
       cannot_deleted:
-        other: "No permission to delete."
+        other: "沒有刪除的權限。"
       cannot_close:
-        other: "No permission to close."
+        other: "沒有關閉的權限。"
       cannot_update:
-        other: "No permission to update."
+        other: "沒有更新的權限。"
     rank:
       fail_to_meet_the_condition:
         other: "Rank fail to meet the condition."
@@ -112,7 +112,7 @@ backend:
         other: "The From Name cannot be a email address."
     theme:
       not_found:
-        other: "Theme not found."
+        other: "未找到主題。"
     revision:
       review_underway:
         other: "Can't edit currently, there is a version in the review queue."
