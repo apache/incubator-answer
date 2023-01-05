@@ -1319,30 +1319,30 @@ ui:
     deleted: supprimé
     downvote: downvote
     upvote: upvote
-    accept: accept
-    cancelled: cancelled
-    commented: commented
+    accept: accepté
+    cancelled: annulé
+    commented: commenté
     rollback: rollback
-    edited: edited
-    answered: answered
-    asked: asked
-    closed: closed
-    reopened: reopened
-    created: created
+    edited: modifié
+    answered: répondu
+    asked: demandé
+    closed: fermé
+    reopened: réouvert
+    created: créé
     title: "History for"
     tag_title: "Timeline for"
-    show_votes: "Show votes"
+    show_votes: "Afficher les votes"
     n_or_a: N/A
     title_for_question: "Timeline for"
     title_for_answer: "Timeline for answer to {{ title }} by {{ author }}"
     title_for_tag: "Timeline for tag"
-    datetime: Datetime
+    datetime: Date et heure
     type: Type
-    by: By
+    by: Par
     comment: Comment
-    no_data: "We couldn't find anything."
+    no_data: "Nous n'avons rien pu trouver."
   users:
-    title: Users
+    title: Utilisateurs
     users_with_the_most_reputation: Users with the highest reputation scores
     users_with_the_most_vote: Users who voted the most
     staffs: Our community staff
