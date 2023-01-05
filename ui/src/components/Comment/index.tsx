@@ -10,7 +10,7 @@ import { marked } from 'marked';
 import * as Types from '@/common/interface';
 import { Modal } from '@/components';
 import { usePageUsers, useReportModal } from '@/hooks';
-import { matchedUsers, parseUserInfo, scrollTop } from '@/utils';
+import { matchedUsers, parseUserInfo, scrollTop, bgFadeOut } from '@/utils';
 import { tryNormalLogged } from '@/utils/guard';
 import {
   useQueryComments,
@@ -44,6 +44,7 @@ const Comment = ({ objectId, mode, commentId }) => {
     if (pageIndex === 0 && co.comment_id === commentId) {
       setTimeout(() => {
         scrollTop(el);
+        bgFadeOut(el);
       }, 100);
     }
   }, []);

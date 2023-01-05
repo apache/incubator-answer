@@ -12,7 +12,7 @@ import {
   FormatTime,
   htmlRender,
 } from '@/components';
-import { scrollTop } from '@/utils';
+import { scrollTop, bgFadeOut } from '@/utils';
 import { AnswerItem } from '@/common/interface';
 import { acceptanceAnswer } from '@/services';
 
@@ -61,6 +61,7 @@ const Index: FC<Props> = ({
       }, 100);
     }
     htmlRender(answerRef.current.querySelector('.fmt'));
+    bgFadeOut(answerRef.current);
   }, [data.id, answerRef.current]);
   if (!data?.id) {
     return null;

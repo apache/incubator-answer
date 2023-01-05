@@ -36,6 +36,15 @@ function scrollTop(element) {
   });
 }
 
+const bgFadeOut = (el) => {
+  if (el && !el.classList.contains('bg-fade-out')) {
+    el.classList.add('bg-fade-out');
+    setTimeout(() => {
+      el.classList.remove('bg-fade-out');
+    }, 3200);
+  }
+};
+
 /**
  * Extract user info from markdown
  * @param markdown string
@@ -209,6 +218,7 @@ export {
   thousandthDivision,
   formatCount,
   scrollTop,
+  bgFadeOut,
   matchedUsers,
   parseUserInfo,
   formatUptime,

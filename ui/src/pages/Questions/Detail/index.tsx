@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import Pattern from '@/common/pattern';
 import { Pagination } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
-import { scrollTop } from '@/utils';
+import { scrollTop, bgFadeOut } from '@/utils';
 import { usePageTags, usePageUsers } from '@/hooks';
 import type {
   ListResult,
@@ -35,7 +35,9 @@ const Index = () => {
   const navigate = useNavigate();
   const { t } = useTranslation('translation');
   const { qid = '', slugPermalink = '' } = useParams();
-  // Compatible with Permalink
+  /**
+   * Note: Compatible with Permalink
+   */
   let { aid = '' } = useParams();
   if (!aid && Pattern.isAnswerId.test(slugPermalink)) {
     aid = slugPermalink;
@@ -77,6 +79,7 @@ const Index = () => {
         // scroll into view;
         const element = document.getElementById('answerHeader');
         scrollTop(element);
+        bgFadeOut(element);
       }
 
       res.list.forEach((item) => {
