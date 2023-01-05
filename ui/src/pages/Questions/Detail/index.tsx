@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import Pattern from '@/common/pattern';
 import { Pagination } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
-import { scrollTop, bgFadeOut } from '@/utils';
+import { scrollTop } from '@/utils';
 import { usePageTags, usePageUsers } from '@/hooks';
 import type {
   ListResult,
@@ -81,7 +81,6 @@ const Index = () => {
         // scroll into view;
         const element = document.getElementById('answerHeader');
         scrollTop(element);
-        bgFadeOut(element);
       }
 
       res.list.forEach((item) => {

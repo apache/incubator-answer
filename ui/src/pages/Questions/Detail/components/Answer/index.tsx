@@ -61,7 +61,9 @@ const Index: FC<Props> = ({
       }, 100);
     }
     htmlRender(answerRef.current.querySelector('.fmt'));
-    bgFadeOut(answerRef.current);
+    if (!searchParams.get('commentId')) {
+      bgFadeOut(answerRef.current);
+    }
   }, [data.id, answerRef.current]);
   if (!data?.id) {
     return null;
