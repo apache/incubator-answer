@@ -17,10 +17,14 @@ const Index: FC<Props> = ({ id }) => {
     keyPrefix: 'related_question',
   });
 
-  const { data } = useSimilarQuestion({
+  const { data, isLoading } = useSimilarQuestion({
     question_id: id,
     page_size: 5,
   });
+
+  if (isLoading) {
+    return null;
+  }
 
   return (
     <Card>

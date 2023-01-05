@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import Pattern from '@/common/pattern';
 import { Pagination } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
-import { scrollTop, bgFadeOut } from '@/utils';
+import { scrollTop } from '@/utils';
 import { usePageTags, usePageUsers } from '@/hooks';
 import type {
   ListResult,
@@ -27,6 +27,7 @@ import {
   RelatedQuestions,
   WriteAnswer,
   Alert,
+  ContentLoader,
 } from './components';
 
 import './index.scss';
@@ -47,6 +48,7 @@ const Index = () => {
   const page = Number(urlSearch.get('page') || 0);
   const order = urlSearch.get('order') || '';
   const [question, setQuestion] = useState<QuestionDetailRes | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [answers, setAnswers] = useState<ListResult<AnswerItem>>({
     count: -1,
     list: [],
@@ -79,7 +81,6 @@ const Index = () => {
         // scroll into view;
         const element = document.getElementById('answerHeader');
         scrollTop(element);
-        bgFadeOut(element);
       }
 
       res.list.forEach((item) => {
@@ -98,15 +99,20 @@ const Index = () => {
   };
 
   const getDetail = async () => {
-    const res = await questionDetail(qid);
-    if (res) {
-      // undo
-      setUsers([
-        res.user_info,
-        res?.update_user_info,
-        res?.last_answered_user_info,
-      ]);
-      setQuestion(res);
+    setIsLoading(true);
+    try {
+      const res = await questionDetail(qid);
+      if (res) {
+        setUsers([
+          res.user_info,
+          res?.update_user_info,
+          res?.last_answered_user_info,
+        ]);
+        setQuestion(res);
+      }
+      setIsLoading(false);
+    } catch (e) {
+      setIsLoading(false);
     }
   };
 
@@ -165,13 +171,17 @@ const Index = () => {
           {question?.operation?.operation_type && (
             <Alert data={question.operation} />
           )}
-          <Question
-            data={question}
-            initPage={initPage}
-            hasAnswer={answers.count > 0}
-            isLogged={isLogged}
-          />
-          {answers.count > 0 && (
+          {isLoading ? (
+            <ContentLoader />
+          ) : (
+            <Question
+              data={question}
+              initPage={initPage}
+              hasAnswer={answers.count > 0}
+              isLogged={isLogged}
+            />
+          )}
+          {!isLoading && answers.count > 0 && (
             <>
               <AnswerHead count={answers.count} order={order} />
               {answers?.list?.map((item) => {
@@ -191,7 +201,7 @@ const Index = () => {
             </>
           )}
 
-          {Math.ceil(answers.count / 15) > 1 && (
+          {!isLoading && Math.ceil(answers.count / 15) > 1 && (
             <div className="d-flex justify-content-center answer-item pt-4">
               <Pagination
                 currentPage={Number(page || 1)}
@@ -201,7 +211,7 @@ const Index = () => {
             </div>
           )}
 
-          {!question?.operation?.operation_type && (
+          {!isLoading && !question?.operation?.operation_type && (
             <WriteAnswer
               visible={answers.count === 0}
               data={{
