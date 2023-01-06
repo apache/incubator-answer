@@ -2,7 +2,7 @@ package entity
 
 import "time"
 
-// UserExternalLogin
+// UserExternalLogin user external login
 type UserExternalLogin struct {
 	ID         int64     `xorm:"not null pk autoincr BIGINT(20) id"`
 	CreatedAt  time.Time `xorm:"created TIMESTAMP created_at"`

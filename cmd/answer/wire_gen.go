@@ -40,6 +40,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/tag_common"
 	"github.com/answerdev/answer/internal/repo/unique"
 	"github.com/answerdev/answer/internal/repo/user"
+	"github.com/answerdev/answer/internal/repo/user_external_login"
 	"github.com/answerdev/answer/internal/router"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/action"
@@ -74,7 +75,7 @@ import (
 	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/answerdev/answer/internal/service/user_admin"
 	"github.com/answerdev/answer/internal/service/user_common"
-	"github.com/answerdev/answer/internal/service/user_external_login"
+	user_external_login2 "github.com/answerdev/answer/internal/service/user_external_login"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/log"
 )
@@ -211,7 +212,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	templateRenderController := templaterender.NewTemplateRenderController(questionService, userService, tagService, answerService, commentService, dataData, siteInfoCommonService)
 	templateController := controller.NewTemplateController(templateRenderController, siteInfoCommonService)
 	templateRouter := router.NewTemplateRouter(templateController, templateRenderController, siteInfoController)
-	userExternalLoginService := user_external_login.NewUserExternalLoginService(userRepo, userCommon)
+	userExternalLoginRepo := user_external_login.NewUserExternalLoginRepo(dataData)
+	userExternalLoginService := user_external_login2.NewUserExternalLoginService(userRepo, userCommon, userExternalLoginRepo)
 	connectorController := controller.NewConnectorController(siteInfoCommonService, userExternalLoginService)
 	pluginAPIRouter := router.NewPluginAPIRouter(connectorController)
 	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter, pluginAPIRouter)

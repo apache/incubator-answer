@@ -11,6 +11,7 @@ import (
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/internal/service/user_external_login"
 	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/pacman/log"
 )
 
 const (
@@ -70,6 +71,7 @@ func (cc *ConnectorController) ConnectorLogin(connector plugin.Connector) (fn fu
 		}
 		resp, err := cc.userExternalService.ExternalLogin(ctx, connector.ConnectorSlugName(), userInfo)
 		if err != nil {
+			log.Error(err)
 			ctx.Redirect(http.StatusFound, "/50x")
 			return
 		}

@@ -31,10 +31,12 @@ type UserExternalLoginService struct {
 func NewUserExternalLoginService(
 	userRepo usercommon.UserRepo,
 	userCommonService *usercommon.UserCommon,
+	userExternalLoginRepo UserExternalLoginRepo,
 ) *UserExternalLoginService {
 	return &UserExternalLoginService{
-		userRepo:          userRepo,
-		userCommonService: userCommonService,
+		userRepo:              userRepo,
+		userCommonService:     userCommonService,
+		userExternalLoginRepo: userExternalLoginRepo,
 	}
 }
 
@@ -55,12 +57,13 @@ func (us *UserExternalLoginService) ExternalLogin(
 	if err != nil {
 		return nil, err
 	}
-	if exist {
-		// if user already exists, try to bind this user
-		err = us.BindOldUser(ctx, provider, externalUserInfo, oldUserInfo)
-	} else {
+	if !exist {
 		oldUserInfo, err = us.RegisterNewUser(ctx, provider, externalUserInfo)
+		if err != nil {
+			return nil, err
+		}
 	}
+	err = us.BindOldUser(ctx, provider, externalUserInfo, oldUserInfo)
 	if err != nil {
 		return nil, err
 	}
@@ -72,7 +75,6 @@ func (us *UserExternalLoginService) ExternalLogin(
 
 func (us *UserExternalLoginService) RegisterNewUser(ctx context.Context, provider string,
 	externalUserInfo plugin.ExternalLoginUserInfo) (userInfo *entity.User, err error) {
-
 	userInfo = &entity.User{}
 	userInfo.EMail = externalUserInfo.Email
 	userInfo.DisplayName = externalUserInfo.Name
