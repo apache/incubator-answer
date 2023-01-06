@@ -2,15 +2,15 @@
 backend:
   base:
     success:
-      other: "成功"
+      other: "成功。"
     unknown:
-      other: "未知错误"
+      other: "未知错误。"
     request_format_error:
-      other: "请求格式错误"
+      other: "请求格式错误。"
     unauthorized_error:
-      other: "未登录"
+      other: "未授权。"
     database_error:
-      other: "数据服务异常"
+      other: "数据服务器错误。"
   role:
     name:
       user:
@@ -31,30 +31,30 @@ backend:
   password:
     other: "密码"
   email_or_password_wrong_error:
-    other: "邮箱或密码错误"
+    other: "邮箱和密码不匹配。"
   error:
     admin:
       email_or_password_wrong:
-        other: 邮箱或密码错误
+        other: 邮箱和密码不匹配。
     answer:
       not_found:
-        other: "答案未找到"
+        other: "没有找到答案。"
       cannot_deleted:
-        other: "无删除权限"
+        other: "没有删除权限。"
       cannot_update:
-        other: "无修改权限"
+        other: "没有更新权限。"
     comment:
       edit_without_permission:
-        other: "不允许编辑评论"
+        other: "不允许编辑评论。"
       not_found:
-        other: "评论未找到"
+        other: "评论未找到。"
     email:
       duplicate:
-        other: "邮箱已经存在"
+        other: "邮箱已经存在。"
       need_to_be_verified:
-        other: "邮箱需要验证"
+        other: "邮箱需要验证。"
       verify_url_expired:
-        other: "邮箱验证的网址已过期，请重新发送邮件"
+        other: "邮箱验证的网址已过期，请重新发送邮件。"
     lang:
       not_found:
         other: "语言未找到"
@@ -216,7 +216,7 @@ backend:
       update_answer:
         other: "更新了答案"
       accept_answer:
-        other: "接受了答案"
+        other: "已接受的回答"
       comment_question:
         other: "评论了问题"
       comment_answer:
