@@ -373,21 +373,21 @@ ui:
       btn_cancel: Annuler
       btn_confirm: Ajouter
     ordered_list:
-      text: Numbered List
+      text: Liste numérotée
     unordered_list:
-      text: Bulleted List
+      text: Liste à puces
     table:
       text: Table
       heading: Heading
       cell: Cellule
   close_modal:
     title: I am closing this post as...
-    btn_cancel: Cancel
-    btn_submit: Submit
+    btn_cancel: Annuler
+    btn_submit: Valider
     remark:
       empty: Cannot be empty.
     msg:
-      empty: Please select a reason.
+      empty: Veuillez sélectionner une raison.
   report_modal:
     flag_title: Je suis en train de signaler ce post comme...
     close_title: Je ferme ce post comme...
@@ -439,8 +439,8 @@ ui:
       content2: Are you sure you wish to delete?
       close: Close
   edit_tag:
-    title: Edit Tag
-    default_reason: Edit tag
+    title: Editer le tag
+    default_reason: Éditer le tag
     form:
       fields:
         revision:
@@ -456,13 +456,13 @@ ui:
           label: Edit Summary
           placeholder: >-
             Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_save_edits: Save edits
+    btn_save_edits: Enregistrer les modifications
     btn_cancel: Annuler
   dates:
     long_date: MMM D
     long_date_with_year: "MMM D, YYYY"
     long_date_with_time: "MMM D, YYYY [at] HH:mm"
-    now: now
+    now: maintenant
     x_seconds_ago: "{{count}}s ago"
     x_minutes_ago: "{{count}}m ago"
     x_hours_ago: "{{count}}h ago"
@@ -472,10 +472,10 @@ ui:
     btn_add_comment: Ajoutez un commentaire
     reply_to: Répondre à
     btn_reply: Répondre
-    btn_edit: Edit
+    btn_edit: Éditer
     btn_delete: Supprimer
-    btn_flag: Flag
-    btn_save_edits: Save edits
+    btn_flag: Balise
+    btn_save_edits: Enregistrer les modifications
     btn_cancel: Annuler
     show_more: Afficher plus de commentaires
     tip_question: >-
@@ -594,33 +594,33 @@ ui:
       label: Name
       msg:
         empty: Name cannot be empty.
-        range: Name up to 30 characters.
+        range: Le nom doit contenir moins de 30 caractères.
     email:
       label: Email
       msg:
         empty: Email cannot be empty.
     password:
-      label: Password
+      label: Mot de passe
       msg:
         empty: Password cannot be empty.
         different: The passwords entered on both sides are inconsistent
   account_forgot:
-    page_title: Forgot Your Password
-    btn_name: Send me recovery email
+    page_title: Mot de passe oublié
+    btn_name: Envoyer un e-mail de récupération
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
-      label: Email
+      label: E-mail
       msg:
-        empty: Email cannot be empty.
+        empty: L'e-mail ne peut pas être vide.
   change_email:
-    page_title: Welcome to Answer
+    page_title: Bienvenue sur Answer
     btn_cancel: Annuler
-    btn_update: Update email address
+    btn_update: Mettre à jour l'adresse e-mail
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
-      label: New Email
+      label: Nouvel e-mail
       msg:
         empty: Email cannot be empty.
   password_reset:
@@ -640,15 +640,15 @@ ui:
     password_confirm:
       label: Confirmer le nouveau mot de passe
   settings:
-    page_title: Settings
+    page_title: Paramètres
     nav:
-      profile: Profile
+      profile: Profil
       notification: Notifications
-      account: Account
+      account: Compte
       interface: Interface
     profile:
       heading: Profil
-      btn_name: Save
+      btn_name: Enregistrer
       display_name:
         label: Nom affiché
         msg: Display name cannot be empty.
@@ -663,10 +663,10 @@ ui:
         label: Image de profil
         gravatar: Gravatar
         gravatar_text: You can change image on <1>gravatar.com</1>
-        custom: Custom
-        btn_refresh: Refresh
+        custom: Personnaliser
+        btn_refresh: Actualiser
         custom_text: You can upload your image.
-        default: System
+        default: Système
         msg: Please upload an avatar
       bio:
         label: À propos de moi (optionnel)
@@ -684,20 +684,20 @@ ui:
         radio: "Answers to your questions, comments, and more"
     account:
       heading: Account
-      change_email_btn: Change email
+      change_email_btn: Modifier l'adresse e-mail
       change_pass_btn: Change password
       change_email_info: >-
         We've sent an email to that address. Please follow the confirmation instructions.
       email:
-        label: Email
-        msg: Email cannot be empty.
-      password_title: Password
+        label: E-mail
+        msg: L'e-mail ne peut pas être vide.
+      password_title: Mot de passe
       current_pass:
-        label: Current Password
+        label: Mot de passe actuel
         msg:
-          empty: Current Password cannot be empty.
+          empty: Le mot de passe actuel ne peut pas être vide.
           length: The length needs to be between 8 and 32.
-          different: The two entered passwords do not match.
+          different: Le mot de passe saisi ne correspond pas.
       new_pass:
         label: New Password
       pass_confirm:
@@ -759,30 +759,30 @@ ui:
   btns:
     confirm: Confimer
     cancel: Annuler
-    save: Save
+    save: Enregistrer
     delete: Supprimer
-    login: Log in
+    login: Se connecter
     signup: Sign up
     logout: Log out
     verify: Verify
     add_question: Ajouter une question
     approve: Approuver
-    reject: Reject
+    reject: Rejeter
     skip: Ignorer
   search:
     title: Résultats de la recherche
     keywords: Mots-clés
     options: Options
-    follow: Follow
-    following: Following
+    follow: Suivre
+    following: Abonnements
     counts: "{{count}} Results"
-    more: More
+    more: Plus
     sort_btns:
-      relevance: Relevance
-      newest: Newest
-      active: Active
+      relevance: Pertinence
+      newest: Les plus récents
+      active: Actif
       score: Score
-      more: More
+      more: Plus
     tips:
       title: Advanced Search Tips
       tag: "<1>[tag]</1> search withing a tag"
@@ -793,17 +793,17 @@ ui:
       is_answer: "<1>is:answer</1> search answers"
     empty: We couldn't find anything. <br /> Try different or less specific keywords.
   share:
-    name: Share
-    copy: Copy link
-    via: Share post via...
-    copied: Copied
-    facebook: Share to Facebook
+    name: Partager
+    copy: Copier le lien
+    via: Partager via...
+    copied: Copié
+    facebook: Partager sur Facebook
     twitter: Partager sur Twitter
   cannot_vote_for_self: Vous ne pouvez pas voter pour votre propre message
   modal_confirm:
     title: Erreur...
   account_result:
-    page_title: Welcome to Answer
+    page_title: Bienvenue sur Answer
     success: Your new account is confirmed; you will be redirected to the home page.
     link: Continuer vers la page d'accueil
     invalid: >-
@@ -812,8 +812,8 @@ ui:
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
   unsubscribe:
-    page_title: Unsubscribe
-    success_title: Unsubscribe Successful
+    page_title: Se désabonner
+    success_title: Désabonnement réussi
     success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
     link: Change settings
   question:
