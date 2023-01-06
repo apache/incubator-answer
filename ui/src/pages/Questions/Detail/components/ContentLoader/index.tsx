@@ -14,47 +14,47 @@ const Index: FC = () => {
 
       <div style={{ marginBottom: '2rem' }}>
         <p>
-          <div
+          <span
             className="placeholder w-100 d-block align-top mb-1"
             style={{ height: '24px' }}
           />
-          <div
+          <span
             className="placeholder w-100 d-block align-top mb-1"
             style={{ height: '24px' }}
           />
-          <div
+          <span
             className="placeholder w-100 d-block align-top mb-1"
             style={{ height: '24px' }}
           />
 
-          <div
+          <span
             className="placeholder w-100 d-block align-top mb-1"
             style={{ height: '24px' }}
           />
-          <div
+          <span
             className="placeholder w-75 d-block align-top"
             style={{ height: '24px' }}
           />
         </p>
 
         <p>
-          <div
+          <span
             className="placeholder w-100 d-block align-top mb-1"
             style={{ height: '24px' }}
           />
-          <div
+          <span
             className="placeholder w-100 d-block align-top mb-1"
             style={{ height: '24px' }}
           />
-          <div
+          <span
             className="placeholder w-100 d-block align-top mb-1"
             style={{ height: '24px' }}
           />
-          <div
+          <span
             className="placeholder w-100 d-block align-top mb-1"
             style={{ height: '24px' }}
           />
-          <div
+          <span
             className="placeholder w-50 d-block align-top"
             style={{ height: '24px' }}
           />
