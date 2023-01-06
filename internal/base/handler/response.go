@@ -21,7 +21,7 @@ type RespBody struct {
 // TrMsg translate the reason cause as a message
 func (r *RespBody) TrMsg(lang i18n.Language) *RespBody {
 	if len(r.Message) == 0 {
-		r.Message = translator.GlobalTrans.Tr(lang, r.Reason)
+		r.Message = translator.Tr(lang, r.Reason)
 	}
 	return r
 }

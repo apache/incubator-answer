@@ -6,9 +6,7 @@ import (
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
-	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/config"
@@ -250,13 +248,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 func (qs *QuestionCommon) FormatQuestionsPage(
 	ctx context.Context, questionList []*entity.Question, loginUserID string, orderCond string) (
 	formattedQuestions []*schema.QuestionPageResp, err error) {
-	language := handler.GetLangByCtx(ctx)
-	askedOp := translator.GlobalTrans.Tr(language, schema.QuestionPageRespOperationTypeAsked)
-	answeredOp := translator.GlobalTrans.Tr(language, schema.QuestionPageRespOperationTypeAnswered)
-	modifiedOp := translator.GlobalTrans.Tr(language, schema.QuestionPageRespOperationTypeModified)
-
 	formattedQuestions = make([]*schema.QuestionPageResp, 0)
-
 	questionIDs := make([]string, 0)
 	userIDs := make([]string, 0)
 	for _, questionInfo := range questionList {
@@ -300,20 +292,20 @@ func (qs *QuestionCommon) FormatQuestionsPage(
 
 		// if order condition is newest or nobody edited or nobody answered, only show question author
 		if orderCond == schema.QuestionOrderCondNewest || (!haveEdited && !haveAnswered) {
-			t.OperationType = askedOp
+			t.OperationType = schema.QuestionPageRespOperationTypeAsked
 			t.OperatedAt = questionInfo.CreatedAt.Unix()
 			t.Operator = &schema.QuestionPageRespOperator{ID: questionInfo.UserID}
 		} else {
 			// if no one
 			if haveEdited {
-				t.OperationType = modifiedOp
+				t.OperationType = schema.QuestionPageRespOperationTypeModified
 				t.OperatedAt = questionInfo.UpdatedAt.Unix()
 				t.Operator = &schema.QuestionPageRespOperator{ID: questionInfo.LastEditUserID}
 			}
 
 			if haveAnswered {
 				if t.LastAnsweredAt.Unix() > t.OperatedAt {
-					t.OperationType = answeredOp
+					t.OperationType = schema.QuestionPageRespOperationTypeAnswered
 					t.OperatedAt = t.LastAnsweredAt.Unix()
 					t.Operator = &schema.QuestionPageRespOperator{ID: t.LastAnsweredUserID}
 				}

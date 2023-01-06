@@ -134,7 +134,7 @@ type SiteThemeResp struct {
 func (s *SiteThemeResp) TrTheme(ctx context.Context) {
 	la := handler.GetLangByCtx(ctx)
 	for _, option := range s.ThemeOptions {
-		tr := translator.GlobalTrans.Tr(la, option.Value)
+		tr := translator.Tr(la, option.Value)
 		// if tr is equal the option value means not found translation, so use the original label
 		if tr != option.Value {
 			option.Label = tr

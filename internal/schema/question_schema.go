@@ -246,9 +246,9 @@ type QuestionPageReq struct {
 }
 
 const (
-	QuestionPageRespOperationTypeAsked    = "question.operation_type.asked"
-	QuestionPageRespOperationTypeAnswered = "question.operation_type.answered"
-	QuestionPageRespOperationTypeModified = "question.operation_type.modified"
+	QuestionPageRespOperationTypeAsked    = "asked"
+	QuestionPageRespOperationTypeAnswered = "answered"
+	QuestionPageRespOperationTypeModified = "modified"
 )
 
 type QuestionPageResp struct {

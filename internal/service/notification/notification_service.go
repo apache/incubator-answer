@@ -134,7 +134,7 @@ func (ns *NotificationService) GetNotificationPage(ctx context.Context, searchCo
 			continue
 		}
 		lang, _ := ctx.Value(constant.AcceptLanguageFlag).(i18n.Language)
-		item.NotificationAction = translator.GlobalTrans.Tr(lang, item.NotificationAction)
+		item.NotificationAction = translator.Tr(lang, item.NotificationAction)
 		item.ID = notificationInfo.ID
 		item.UpdateTime = notificationInfo.UpdatedAt.Unix()
 		if notificationInfo.IsRead == schema.NotificationRead {
