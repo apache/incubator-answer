@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"time"
+
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/pkg/converter"
 )
@@ -199,7 +201,7 @@ type GetCloseTypeResp struct {
 type UserAnswerInfo struct {
 	AnswerID     string `json:"answer_id"`
 	QuestionID   string `json:"question_id"`
-	Adopted      int    `json:"adopted"`
+	Accepted     int    `json:"accepted"`
 	VoteCount    int    `json:"vote_count"`
 	CreateTime   int    `json:"create_time"`
 	UpdateTime   int    `json:"update_time"`
@@ -222,18 +224,69 @@ type UserQuestionInfo struct {
 	Status           string        `json:"status"`
 }
 
-type QuestionSearch struct {
-	Page     int    `json:"page" form:"page"`           // Query number of pages
-	PageSize int    `json:"page_size" form:"page_size"` // Search page size
-	Order    string `json:"order" form:"order"`         // Search order by
-	// Tags     []string `json:"tags" form:"tags"`           // Search tag
-	Tag      string   `json:"tag" form:"tag"`           //Search tag
-	TagIDs   []string `json:"-" form:"-"`               // Search tag
-	UserName string   `json:"username" form:"username"` // Search username
-	UserID   string   `json:"-" form:"-"`
+const (
+	QuestionOrderCondNewest     = "newest"
+	QuestionOrderCondActive     = "active"
+	QuestionOrderCondFrequent   = "frequent"
+	QuestionOrderCondScore      = "score"
+	QuestionOrderCondUnanswered = "unanswered"
+)
+
+// QuestionPageReq query questions page
+type QuestionPageReq struct {
+	Page      int    `validate:"omitempty,min=1" form:"page"`
+	PageSize  int    `validate:"omitempty,min=1" form:"page_size"`
+	OrderCond string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
+	Tag       string `validate:"omitempty,gt=0,lte=100" form:"tag"`
+	Username  string `validate:"omitempty,gt=0,lte=100" form:"username"`
+
+	LoginUserID      string `json:"-"`
+	UserIDBeSearched string `json:"-"`
+	TagID            string `json:"-"`
 }
 
-type CmsQuestionSearch struct {
+const (
+	QuestionPageRespOperationTypeAsked    = "question.operation_type.asked"
+	QuestionPageRespOperationTypeAnswered = "question.operation_type.answered"
+	QuestionPageRespOperationTypeModified = "question.operation_type.modified"
+)
+
+type QuestionPageResp struct {
+	ID          string     `json:"id" `
+	Title       string     `json:"title"`
+	UrlTitle    string     `json:"url_title"`
+	Description string     `json:"description"`
+	Status      int        `json:"status"`
+	Tags        []*TagResp `json:"tags"`
+
+	// question statistical information
+	ViewCount       int `json:"view_count"`
+	UniqueViewCount int `json:"unique_view_count"`
+	VoteCount       int `json:"vote_count"`
+	AnswerCount     int `json:"answer_count"`
+	CollectionCount int `json:"collection_count"`
+	FollowCount     int `json:"follow_count"`
+
+	// answer information
+	AcceptedAnswerID   string    `json:"accepted_answer_id"`
+	LastAnswerID       string    `json:"last_answer_id"`
+	LastAnsweredUserID string    `json:"-"`
+	LastAnsweredAt     time.Time `json:"-"`
+
+	// operator information
+	OperatedAt    int64                     `json:"operated_at"`
+	Operator      *QuestionPageRespOperator `json:"operator"`
+	OperationType string                    `json:"operation_type"`
+}
+
+type QuestionPageRespOperator struct {
+	ID          string `json:"id"`
+	Username    string `json:"username"`
+	Rank        int    `json:"rank"`
+	DisplayName string `json:"display_name"`
+}
+
+type AdminQuestionSearch struct {
 	Page      int    `json:"page" form:"page"`           // Query number of pages
 	PageSize  int    `json:"page_size" form:"page_size"` // Search page size
 	Status    int    `json:"-" form:"-"`

@@ -330,28 +330,31 @@ func (ts *TagCommonService) tagFormatRecommendAndReserved(ctx context.Context, t
 // BatchGetObjectTag batch get object tag
 func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []string) (map[string][]*schema.TagResp, error) {
 	objectIDTagMap := make(map[string][]*schema.TagResp)
-	tagIDList := make([]string, 0)
-	tagsInfoMap := make(map[string]*entity.Tag)
-
-	tagList, err := ts.tagRelRepo.BatchGetObjectTagRelList(ctx, objectIds)
+	objectTagRelList, err := ts.tagRelRepo.BatchGetObjectTagRelList(ctx, objectIds)
 	if err != nil {
 		return objectIDTagMap, err
 	}
-	for _, tag := range tagList {
+	tagIDList := make([]string, 0)
+	for _, tag := range objectTagRelList {
 		tagIDList = append(tagIDList, tag.TagID)
 	}
 	tagsInfoList, err := ts.GetTagListByIDs(ctx, tagIDList)
 	if err != nil {
 		return objectIDTagMap, err
 	}
-	for _, item := range tagsInfoList {
-		tagsInfoMap[item.ID] = item
+	tagsInfoMapping := make(map[string]*entity.Tag)
+	tagsRank := make(map[string]int) // Used for sorting
+	for idx, item := range tagsInfoList {
+		tagsInfoMapping[item.ID] = item
+		tagsRank[item.ID] = idx
 	}
-	for _, item := range tagList {
-		_, ok := tagsInfoMap[item.TagID]
+
+	for _, item := range objectTagRelList {
+		_, ok := tagsInfoMapping[item.TagID]
 		if ok {
-			tagInfo := tagsInfoMap[item.TagID]
+			tagInfo := tagsInfoMapping[item.TagID]
 			t := &schema.TagResp{
+				ID:              tagInfo.ID,
 				SlugName:        tagInfo.SlugName,
 				DisplayName:     tagInfo.DisplayName,
 				MainTagSlugName: tagInfo.MainTagSlugName,
@@ -361,12 +364,10 @@ func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []s
 			objectIDTagMap[item.ObjectID] = append(objectIDTagMap[item.ObjectID], t)
 		}
 	}
-	for _, taglist := range objectIDTagMap {
-		sort.SliceStable(taglist, func(i, j int) bool {
-			return taglist[i].Reserved
-		})
-		sort.SliceStable(taglist, func(i, j int) bool {
-			return taglist[i].Recommend
+	// The sorting in tagsRank is correct, object tags should be sorted by tagsRank
+	for _, objectTags := range objectIDTagMap {
+		sort.SliceStable(objectTags, func(i, j int) bool {
+			return tagsRank[objectTags[i].ID] < tagsRank[objectTags[j].ID]
 		})
 	}
 	return objectIDTagMap, nil
@@ -661,7 +662,9 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, req *schema.UpdateTag
 		return errors.BadRequest(reason.TagNotFound)
 	}
 	//If the content is the same, ignore it
-	if tagInfo.OriginalText == req.OriginalText {
+	if tagInfo.OriginalText == req.OriginalText &&
+		tagInfo.DisplayName == req.DisplayName &&
+		tagInfo.SlugName == req.SlugName {
 		return nil
 	}
 

@@ -1,5 +1,4 @@
 import { FC, memo } from 'react';
-import { ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { QueryGroup } from '@/components';
@@ -16,7 +15,7 @@ const Index: FC<Props> = ({ sort, count = 0 }) => {
   });
 
   return (
-    <ListGroupItem className="d-flex flex-wrap align-items-center justify-content-between divide-line pb-3 border-bottom px-0">
+    <div className="d-flex flex-wrap align-items-center justify-content-between pt-2 pb-3">
       <h5 className="mb-0">{t('counts', { count, keyPrefix: 'search' })}</h5>
       <QueryGroup
         data={sortBtns}
@@ -24,7 +23,7 @@ const Index: FC<Props> = ({ sort, count = 0 }) => {
         sortKey="order"
         i18nKeyPrefix="search.sort_btns"
       />
-    </ListGroupItem>
+    </div>
   );
 };
 

@@ -14,7 +14,7 @@ import (
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/controller"
 	"github.com/answerdev/answer/internal/controller/template_render"
-	"github.com/answerdev/answer/internal/controller_backyard"
+	"github.com/answerdev/answer/internal/controller_admin"
 	"github.com/answerdev/answer/internal/repo"
 	"github.com/answerdev/answer/internal/router"
 	"github.com/answerdev/answer/internal/service"
@@ -38,7 +38,7 @@ func initApplication(
 		server.ProviderSetServer,
 		router.ProviderSetRouter,
 		controller.ProviderSetController,
-		controller_backyard.ProviderSetController,
+		controller_admin.ProviderSetController,
 		templaterender.ProviderSetTemplateRenderController,
 		service.ProviderSetService,
 		cron.ProviderSetService,

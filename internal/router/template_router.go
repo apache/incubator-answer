@@ -3,20 +3,20 @@ package router
 import (
 	"github.com/answerdev/answer/internal/controller"
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
-	"github.com/answerdev/answer/internal/controller_backyard"
+	"github.com/answerdev/answer/internal/controller_admin"
 	"github.com/gin-gonic/gin"
 )
 
 type TemplateRouter struct {
 	templateController       *controller.TemplateController
 	templateRenderController *templaterender.TemplateRenderController
-	siteInfoController       *controller_backyard.SiteInfoController
+	siteInfoController       *controller_admin.SiteInfoController
 }
 
 func NewTemplateRouter(
 	templateController *controller.TemplateController,
 	templateRenderController *templaterender.TemplateRenderController,
-	siteInfoController *controller_backyard.SiteInfoController,
+	siteInfoController *controller_admin.SiteInfoController,
 
 ) *TemplateRouter {
 	return &TemplateRouter{

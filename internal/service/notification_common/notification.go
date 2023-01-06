@@ -73,7 +73,7 @@ func (ns *NotificationCommon) HandleNotification() {
 
 // AddNotification
 // need set
-// UserID
+// LoginUserID
 // Type  1 inbox 2 achievement
 // [inbox] Activity
 // [achievement] Rank
@@ -191,7 +191,7 @@ func (ns *NotificationCommon) SendNotificationToAllFollower(ctx context.Context,
 	if msg.NotificationAction != constant.UpdateQuestion &&
 		msg.NotificationAction != constant.AnswerTheQuestion &&
 		msg.NotificationAction != constant.UpdateAnswer &&
-		msg.NotificationAction != constant.AdoptAnswer {
+		msg.NotificationAction != constant.AcceptAnswer {
 		return
 	}
 	condObjectID := msg.ObjectID

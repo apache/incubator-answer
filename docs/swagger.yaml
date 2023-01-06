@@ -207,6 +207,13 @@ definitions:
       status:
         type: string
     type: object
+  schema.AnswerAcceptedReq:
+    properties:
+      answer_id:
+        type: string
+      question_id:
+        type: string
+    type: object
   schema.AnswerAddReq:
     properties:
       content:
@@ -217,13 +224,6 @@ definitions:
         type: string
       question_id:
         description: question_id
-        type: string
-    type: object
-  schema.AnswerAdoptedReq:
-    properties:
-      answer_id:
-        type: string
-      question_id:
         type: string
     type: object
   schema.AnswerUpdateReq:
@@ -1004,23 +1004,80 @@ definitions:
     - tags
     - title
     type: object
-  schema.QuestionSearch:
+  schema.QuestionPageReq:
     properties:
-      order:
-        description: Search order by
+      orderCond:
+        enum:
+        - newest
+        - active
+        - frequent
+        - score
+        - unanswered
         type: string
       page:
-        description: Query number of pages
+        minimum: 1
         type: integer
-      page_size:
-        description: Search page size
+      pageSize:
+        minimum: 1
         type: integer
       tag:
-        description: Tags     []string `json:"tags" form:"tags"`           // Search
-          tag
+        maxLength: 100
         type: string
       username:
-        description: Search username
+        maxLength: 100
+        type: string
+    type: object
+  schema.QuestionPageResp:
+    properties:
+      accepted_answer_id:
+        description: answer information
+        type: string
+      answer_count:
+        type: integer
+      collection_count:
+        type: integer
+      description:
+        type: string
+      follow_count:
+        type: integer
+      id:
+        type: string
+      last_answer_id:
+        type: string
+      operated_at:
+        description: operator information
+        type: integer
+      operation_type:
+        type: string
+      operator:
+        $ref: '#/definitions/schema.QuestionPageRespOperator'
+      status:
+        type: integer
+      tags:
+        items:
+          $ref: '#/definitions/schema.TagResp'
+        type: array
+      title:
+        type: string
+      unique_view_count:
+        type: integer
+      url_title:
+        type: string
+      view_count:
+        description: question statistical information
+        type: integer
+      vote_count:
+        type: integer
+    type: object
+  schema.QuestionPageRespOperator:
+    properties:
+      display_name:
+        type: string
+      id:
+        type: string
+      rank:
+        type: integer
+      username:
         type: string
     type: object
   schema.QuestionUpdate:
@@ -1292,7 +1349,7 @@ definitions:
         $ref: '#/definitions/schema.SiteInterfaceResp'
       login:
         $ref: '#/definitions/schema.SiteLoginResp'
-      site__seo:
+      site_seo:
         $ref: '#/definitions/schema.SiteSeoReq'
       theme:
         $ref: '#/definitions/schema.SiteThemeResp'
@@ -1302,15 +1359,11 @@ definitions:
       language:
         maxLength: 128
         type: string
-      theme:
-        maxLength: 128
-        type: string
       time_zone:
         maxLength: 128
         type: string
     required:
     - language
-    - theme
     - time_zone
     type: object
   schema.SiteInterfaceResp:
@@ -1318,15 +1371,11 @@ definitions:
       language:
         maxLength: 128
         type: string
-      theme:
-        maxLength: 128
-        type: string
       time_zone:
         maxLength: 128
         type: string
     required:
     - language
-    - theme
     - time_zone
     type: object
   schema.SiteLegalReq:
@@ -1894,6 +1943,17 @@ definitions:
 info:
   contact: {}
 paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: if config file not exist try to redirect to install page
+      produces:
+      - application/json
+      responses: {}
+      summary: if config file not exist try to redirect to install page
+      tags:
+      - installation
   /answer/admin/api/answer/page:
     get:
       consumes:
@@ -1932,7 +1992,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: CmsSearchList
+      summary: AdminSearchAnswerList
       tags:
       - admin
   /answer/admin/api/answer/status:
@@ -2024,7 +2084,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: CmsSearchList
+      summary: AdminSearchList
       tags:
       - admin
   /answer/admin/api/question/status:
@@ -2889,14 +2949,14 @@ paths:
     post:
       consumes:
       - application/json
-      description: Adopted
+      description: Accepted
       parameters:
-      - description: AnswerAdoptedReq
+      - description: AnswerAcceptedReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.AnswerAdoptedReq'
+          $ref: '#/definitions/schema.AnswerAcceptedReq'
       produces:
       - application/json
       responses:
@@ -2906,7 +2966,7 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: Adopted
+      summary: Accepted
       tags:
       - api-answer
   /answer/api/v1/answer/info:
@@ -3525,7 +3585,7 @@ paths:
       - ApiKeyAuth: []
       summary: UserTop
       tags:
-      - api-question
+      - Question
   /answer/api/v1/personal/rank/page:
     get:
       description: user personal rank list
@@ -3653,7 +3713,7 @@ paths:
       - ApiKeyAuth: []
       summary: delete question
       tags:
-      - api-question
+      - Question
     post:
       consumes:
       - application/json
@@ -3676,7 +3736,7 @@ paths:
       - ApiKeyAuth: []
       summary: add question
       tags:
-      - api-question
+      - Question
     put:
       consumes:
       - application/json
@@ -3699,7 +3759,7 @@ paths:
       - ApiKeyAuth: []
       summary: update question
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/closemsglist:
     get:
       consumes:
@@ -3716,12 +3776,12 @@ paths:
       - ApiKeyAuth: []
       summary: close question msg list
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/info:
     get:
       consumes:
       - application/json
-      description: GetQuestion Question
+      description: get question details
       parameters:
       - default: "1"
         description: Question TagID
@@ -3738,31 +3798,43 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: GetQuestion Question
+      summary: get question details
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/page:
     get:
       consumes:
       - application/json
-      description: SearchQuestionList <br>  "order"  Enums(newest, active,frequent,score,unanswered)
+      description: get questions by page
       parameters:
-      - description: QuestionSearch
+      - description: QuestionPageReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.QuestionSearch'
+          $ref: '#/definitions/schema.QuestionPageReq'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            type: string
-      summary: SearchQuestionList
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.QuestionPageResp'
+                        type: array
+                    type: object
+              type: object
+      summary: get questions by page
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/reopen:
     put:
       consumes:
@@ -3786,29 +3858,7 @@ paths:
       - ApiKeyAuth: []
       summary: reopen question
       tags:
-      - api-question
-  /answer/api/v1/question/search:
-    post:
-      consumes:
-      - application/json
-      description: SearchQuestionList
-      parameters:
-      - description: QuestionSearch
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/schema.QuestionSearch'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: SearchQuestionList
-      tags:
-      - api-question
+      - Question
   /answer/api/v1/question/similar:
     get:
       consumes:
@@ -3832,7 +3882,7 @@ paths:
       - ApiKeyAuth: []
       summary: add question title like
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/similar/tag:
     get:
       consumes:
@@ -3854,7 +3904,7 @@ paths:
             type: string
       summary: Search Similar Question
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/status:
     put:
       consumes:
@@ -3878,7 +3928,7 @@ paths:
       - ApiKeyAuth: []
       summary: Close question
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/tags:
     get:
       description: get tag list
@@ -4445,6 +4495,21 @@ paths:
           schema:
             $ref: '#/definitions/handler.RespBody'
       summary: send email to the user email then change their email
+      tags:
+      - User
+  /answer/api/v1/user/email/notification:
+    put:
+      consumes:
+      - application/json
+      description: unsubscribe email notification
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: unsubscribe email notification
       tags:
       - User
   /answer/api/v1/user/email/verification:
@@ -5015,7 +5080,7 @@ paths:
       - ApiKeyAuth: []
       summary: UserList
       tags:
-      - api-question
+      - Question
   /robots.txt:
     get:
       description: get site robots information

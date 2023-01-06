@@ -111,6 +111,9 @@ backend:
         other: "No permission to update."
       cannot_set_synonym_as_itself:
         other: "You cannot set the synonym of the current tag as itself."
+    smtp:
+      config_from_name_cannot_be_email:
+        other: "The From Name cannot be a email address."
     theme:
       not_found:
         other: "Theme not found."
@@ -132,21 +135,21 @@ backend:
         other: "Username is already in use."
       set_avatar:
         other: "Avatar set failed."
-      config:
-        read_config_failed:
-          other: "Read config failed"
-      database:
-        connection_failed:
-          other: "Database connection failed"
-        create_table_failed:
-          other: "Create table failed"
-      install:
-        create_config_failed:
-          other: "Can’t create the config.yaml file."
       cannot_update_your_role:
         other: "You cannot modify your role."
       not_allowed_registration:
         other: "Currently the site is not open for registration"
+    config:
+      read_config_failed:
+        other: "Read config failed"
+    database:
+      connection_failed:
+        other: "Database connection failed"
+      create_table_failed:
+        other: "Create table failed"
+    install:
+      create_config_failed:
+        other: "Can’t create the config.yaml file."
   report:
     spam:
       name:
@@ -201,7 +204,13 @@ backend:
           other: "something else"
         desc:
           other: "This post requires another reason not listed above."
-
+    operation_type:
+      asked:
+        other: "asked"
+      answered:
+        other: "answered"
+      modified:
+        other: "modified"
   notification:
     action:
       update_question:
@@ -210,7 +219,7 @@ backend:
         other: "answered question"
       update_answer:
         other: "updated answer"
-      adopt_answer:
+      accept_answer:
         other: "accepted answer"
       comment_question:
         other: "commented question"
@@ -838,6 +847,11 @@ ui:
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was
       already changed?
+  unsubscribe:
+    page_title: Unsubscribe
+    success_title: Unsubscribe Successful
+    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
+    link: Change settings
   question:
     following_tags: Following Tags
     edit: Edit
@@ -1034,6 +1048,7 @@ ui:
       answer_links: Answer Links
       documents: Documents
       feedback: Feedback
+      support: Support
       review: Review
       config: Config
       update_to: Update to

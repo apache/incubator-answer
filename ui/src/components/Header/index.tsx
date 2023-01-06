@@ -49,6 +49,14 @@ const Header: FC = () => {
   const handleInput = (val) => {
     setSearch(val);
   };
+  const handleSearch = (evt) => {
+    evt.preventDefault();
+    if (!searchStr) {
+      return;
+    }
+    const searchUrl = `/search?q=${encodeURIComponent(searchStr)}`;
+    navigate(searchUrl);
+  };
 
   const handleLogout = async () => {
     await logout();
@@ -72,17 +80,17 @@ const Header: FC = () => {
     }
   }, [location.pathname]);
 
+  let navbarStyle = 'theme-colored';
   const { theme, theme_config } = themeSettingStore((_) => _);
-  let themeType = 'theme-colored';
-  if (theme && theme_config[theme]) {
-    themeType = `theme-${theme_config[theme].navbar_style}`;
+  if (theme_config?.[theme]?.navbar_style) {
+    navbarStyle = `theme-${theme_config[theme].navbar_style}`;
   }
 
   return (
     <Navbar
-      variant={themeType === 'theme-colored' ? 'dark' : ''}
+      variant={navbarStyle === 'theme-colored' ? 'dark' : ''}
       expand="lg"
-      className={classnames('sticky-top', themeType)}
+      className={classnames('sticky-top', navbarStyle)}
       id="header">
       <Container className="d-flex align-items-center">
         <Navbar.Toggle
@@ -118,13 +126,19 @@ const Header: FC = () => {
               <NavItems redDot={redDot} userInfo={user} logOut={handleLogout} />
             ) : (
               <>
-                <Button variant="link" className="me-2" href="/users/login">
+                <Button
+                  variant="link"
+                  className={classnames('me-2', {
+                    'link-light': navbarStyle === 'theme-colored',
+                    'link-primary': navbarStyle !== 'theme-colored',
+                  })}
+                  href="/users/login">
                   {t('btns.login')}
                 </Button>
                 {loginSetting.allow_new_registrations && (
                   <Button
                     variant={
-                      themeType === 'theme-colored' ? 'light' : 'primary'
+                      navbarStyle === 'theme-colored' ? 'light' : 'primary'
                     }
                     href="/users/register">
                     {t('btns.signup')}
@@ -153,7 +167,10 @@ const Header: FC = () => {
           <hr className="hr lg-none mt-2" />
 
           <Col lg={4} className="d-flex justify-content-center">
-            <Form action="/search" className="w-75 px-0 px-lg-2">
+            <Form
+              action="/search"
+              className="w-75 px-0 px-lg-2"
+              onSubmit={handleSearch}>
               <FormControl
                 placeholder={t('header.search.placeholder')}
                 className="placeholder-search"
@@ -181,8 +198,8 @@ const Header: FC = () => {
                   <Link
                     to="/questions/ask"
                     className={classnames('text-capitalize text-nowrap btn', {
-                      'btn-light': themeType !== 'theme-light',
-                      'btn-primary': themeType === 'theme-light',
+                      'btn-light': navbarStyle !== 'theme-light',
+                      'btn-primary': navbarStyle === 'theme-light',
                     })}>
                     {t('btns.add_question')}
                   </Link>
@@ -199,8 +216,8 @@ const Header: FC = () => {
                 <Button
                   variant="link"
                   className={classnames('me-2', {
-                    'link-light': themeType === 'theme-colored',
-                    'link-primary': themeType !== 'theme-colored',
+                    'link-light': navbarStyle === 'theme-colored',
+                    'link-primary': navbarStyle !== 'theme-colored',
                   })}
                   href="/users/login">
                   {t('btns.login')}
@@ -208,7 +225,7 @@ const Header: FC = () => {
                 {loginSetting.allow_new_registrations && (
                   <Button
                     variant={
-                      themeType === 'theme-colored' ? 'light' : 'primary'
+                      navbarStyle === 'theme-colored' ? 'light' : 'primary'
                     }
                     href="/users/register">
                     {t('btns.signup')}

@@ -28,60 +28,6 @@ interface Props {
   source: 'questions' | 'tag';
 }
 
-const QuestionLastUpdate = ({ q }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'question' });
-  if (q.update_time > q.edit_time) {
-    // question answered
-    return (
-      <div className="d-flex">
-        <BaseUserCard
-          data={q.last_answered_user_info}
-          showAvatar={false}
-          className="me-1"
-        />
-        •
-        <FormatTime
-          time={q.update_time}
-          className="text-secondary ms-1"
-          preFix={t('answered')}
-        />
-      </div>
-    );
-  }
-
-  if (q.edit_time > q.update_time) {
-    // question modified
-    return (
-      <div className="d-flex">
-        <BaseUserCard
-          data={q.update_user_info}
-          showAvatar={false}
-          className="me-1"
-        />
-        •
-        <FormatTime
-          time={q.edit_time}
-          className="text-secondary ms-1"
-          preFix={t('modified')}
-        />
-      </div>
-    );
-  }
-
-  // default: asked
-  return (
-    <div className="d-flex">
-      <BaseUserCard data={q.user_info} showAvatar={false} className="me-1" />
-      •
-      <FormatTime
-        time={q.create_time}
-        preFix={t('asked')}
-        className="text-secondary ms-1"
-      />
-    </div>
-  );
-};
-
 const QuestionList: FC<Props> = ({ source }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
   const { tagName = '' } = useParams();
@@ -117,12 +63,12 @@ const QuestionList: FC<Props> = ({ source }) => {
           i18nKeyPrefix="question"
         />
       </div>
-      <ListGroup variant="flush" className="border-top border-bottom-0">
+      <ListGroup className="rounded-0">
         {listData?.list?.map((li) => {
           return (
             <ListGroup.Item
               key={li.id}
-              className="border-bottom bg-transparent py-3 px-0">
+              className="bg-transparent py-3 px-0 border-start-0 border-end-0">
               <h5 className="text-wrap text-break">
                 <NavLink
                   to={pathFactory.questionLanding(li.id, li.url_title)}
@@ -132,7 +78,19 @@ const QuestionList: FC<Props> = ({ source }) => {
                 </NavLink>
               </h5>
               <div className="d-flex flex-column flex-md-row align-items-md-center fs-14 mb-2 text-secondary">
-                <QuestionLastUpdate q={li} />
+                <div className="d-flex">
+                  <BaseUserCard
+                    data={li.operator}
+                    showAvatar={false}
+                    className="me-1"
+                  />
+                  •
+                  <FormatTime
+                    time={li.operated_at}
+                    className="text-secondary ms-1"
+                    preFix={t(li.operation_type)}
+                  />
+                </div>
                 <div className="ms-0 ms-md-3 mt-2 mt-md-0">
                   <span>
                     <Icon name="hand-thumbs-up-fill" />

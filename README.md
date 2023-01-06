@@ -26,13 +26,13 @@ To learn more about the project, visit [answer.dev](https://answer.dev).
 docker run -d -p 9080:80 -v answer-data:/data --name answer answerdev/answer:latest
 ```
 
-For more information, see [INSTALL.md](./INSTALL.md)
+For more information, see [Installation](https://answer.dev/docs/installation)
 
 ## Contributing
 
 Contributions are always welcome!
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for ways to get started.
+See [CONTRIBUTING](https://answer.dev/docs/development/contributing/) for ways to get started.
 
 ## License
 

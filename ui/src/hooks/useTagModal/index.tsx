@@ -39,8 +39,21 @@ const useTagModal = (props: IProps = {}) => {
     setVisibleState(false);
   };
 
-  const onShow = () => {
+  const onShow = (searchStr = '') => {
     setVisibleState(true);
+    setFormData({
+      ...formData,
+      displayName: {
+        value: searchStr,
+        isInvalid: false,
+        errorMsg: '',
+      },
+      slugName: {
+        value: searchStr,
+        isInvalid: false,
+        errorMsg: '',
+      },
+    });
   };
 
   const checkValidated = (): boolean => {

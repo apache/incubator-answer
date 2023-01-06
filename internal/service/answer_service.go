@@ -15,11 +15,13 @@ import (
 	"github.com/answerdev/answer/internal/service/activity_queue"
 	answercommon "github.com/answerdev/answer/internal/service/answer_common"
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
+	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/notice_queue"
 	"github.com/answerdev/answer/internal/service/permission"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/revision_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/encryption"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -36,6 +38,7 @@ type AnswerService struct {
 	revisionService       *revision_common.RevisionService
 	AnswerCommon          *answercommon.AnswerCommon
 	voteRepo              activity_common.VoteRepo
+	emailService          *export.EmailService
 }
 
 func NewAnswerService(
@@ -49,6 +52,7 @@ func NewAnswerService(
 	answerAcceptActivityRepo *activity.AnswerActivityService,
 	answerCommon *answercommon.AnswerCommon,
 	voteRepo activity_common.VoteRepo,
+	emailService *export.EmailService,
 ) *AnswerService {
 	return &AnswerService{
 		answerRepo:            answerRepo,
@@ -61,6 +65,7 @@ func NewAnswerService(
 		answerActivityService: answerAcceptActivityRepo,
 		AnswerCommon:          answerCommon,
 		voteRepo:              voteRepo,
+		emailService:          emailService,
 	}
 }
 
@@ -80,7 +85,7 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 		if answerInfo.VoteCount > 0 {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
-		if answerInfo.Adopted == schema.AnswerAdoptedEnable {
+		if answerInfo.Accepted == schema.AnswerAcceptedEnable {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
 		questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
@@ -138,7 +143,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	insertData.UserID = req.UserID
 	insertData.OriginalText = req.Content
 	insertData.ParsedText = req.HTML
-	insertData.Adopted = schema.AnswerAdoptedFailed
+	insertData.Accepted = schema.AnswerAcceptedFailed
 	insertData.QuestionID = req.QuestionID
 	insertData.RevisionID = "0"
 	insertData.LastEditUserID = "0"
@@ -176,7 +181,8 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if err != nil {
 		return insertData.ID, err
 	}
-	as.notificationAnswerTheQuestion(ctx, questionInfo.UserID, insertData.ID, req.UserID)
+	as.notificationAnswerTheQuestion(ctx, questionInfo.UserID, questionInfo.ID, insertData.ID, req.UserID, questionInfo.Title,
+		insertData.OriginalText)
 
 	activity_queue.AddActivity(&schema.ActivityMsg{
 		UserID:           insertData.UserID,
@@ -285,8 +291,8 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	return insertData.ID, nil
 }
 
-// UpdateAdopted
-func (as *AnswerService) UpdateAdopted(ctx context.Context, req *schema.AnswerAdoptedReq) error {
+// UpdateAccepted
+func (as *AnswerService) UpdateAccepted(ctx context.Context, req *schema.AnswerAcceptedReq) error {
 	if req.AnswerID == "" {
 		req.AnswerID = "0"
 	}
@@ -330,7 +336,7 @@ func (as *AnswerService) UpdateAdopted(ctx context.Context, req *schema.AnswerAd
 		}
 	}
 
-	err = as.answerRepo.UpdateAdopted(ctx, req.AnswerID, req.QuestionID)
+	err = as.answerRepo.UpdateAccepted(ctx, req.AnswerID, req.QuestionID)
 	if err != nil {
 		return err
 	}
@@ -413,7 +419,7 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) 
 }
 
 func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.AdminSetAnswerStatusRequest) error {
-	setStatus, ok := entity.CmsAnswerSearchStatus[req.StatusStr]
+	setStatus, ok := entity.AdminAnswerSearchStatus[req.StatusStr]
 	if !ok {
 		return fmt.Errorf("question status does not exist")
 	}
@@ -542,7 +548,12 @@ func (as *AnswerService) notificationUpdateAnswer(ctx context.Context, questionU
 	notice_queue.AddNotification(msg)
 }
 
-func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context, questionUserID, answerID, answerUserID string) {
+func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
+	questionUserID, questionID, answerID, answerUserID, questionTitle, answerSummary string) {
+	// If the question is answered by me, there is no notification for myself.
+	if questionUserID == answerUserID {
+		return
+	}
 	msg := &schema.NotificationMsg{
 		TriggerUserID:  answerUserID,
 		ReceiverUserID: questionUserID,
@@ -552,4 +563,43 @@ func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context, ques
 	msg.ObjectType = constant.AnswerObjectType
 	msg.NotificationAction = constant.AnswerTheQuestion
 	notice_queue.AddNotification(msg)
+
+	userInfo, exist, err := as.userRepo.GetByUserID(ctx, questionUserID)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	if !exist {
+		log.Warnf("user %s not found", questionUserID)
+		return
+	}
+	if userInfo.NoticeStatus == schema.NoticeStatusOff || len(userInfo.EMail) == 0 {
+		return
+	}
+
+	rawData := &schema.NewAnswerTemplateRawData{
+		QuestionTitle:   questionTitle,
+		QuestionID:      questionID,
+		AnswerID:        answerID,
+		AnswerSummary:   answerSummary,
+		UnsubscribeCode: encryption.MD5(userInfo.Pass),
+	}
+	answerUser, _, _ := as.userCommon.GetUserBasicInfoByID(ctx, answerUserID)
+	if answerUser != nil {
+		rawData.AnswerUserDisplayName = answerUser.DisplayName
+	}
+	codeContent := &schema.EmailCodeContent{
+		SourceType: schema.UnsubscribeSourceType,
+		Email:      userInfo.EMail,
+		UserID:     userInfo.ID,
+	}
+
+	title, body, err := as.emailService.NewAnswerTemplate(ctx, rawData)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+
+	go as.emailService.SendAndSaveCodeWithTime(
+		ctx, userInfo.EMail, title, body, rawData.UnsubscribeCode, codeContent.ToJSONString(), 7*24*time.Hour)
 }

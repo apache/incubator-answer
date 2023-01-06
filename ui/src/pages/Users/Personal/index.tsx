@@ -109,7 +109,7 @@ const Personal: FC = () => {
           {!list?.length && !isLoading && <Empty />}
 
           {count > 0 && (
-            <div className="d-flex justify-content-center border-top py-4">
+            <div className="d-flex justify-content-center py-4">
               <Pagination
                 pageSize={30}
                 totalSize={count || 0}
@@ -122,7 +122,6 @@ const Personal: FC = () => {
           <h5 className="mb-3">{t('stats')}</h5>
           {userInfo?.info && (
             <>
-              <FormatTime time={1671290521} preFix={t('last_login')} />
               <div className="text-secondary">
                 <FormatTime
                   time={userInfo.info.created_at}

@@ -91,8 +91,8 @@ func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.TemplateSiteInf
 
 // Index question list
 func (tc *TemplateController) Index(ctx *gin.Context) {
-	req := &schema.QuestionSearch{
-		Order: "newest",
+	req := &schema.QuestionPageReq{
+		OrderCond: "newest",
 	}
 	if handler.BindAndCheck(ctx, req) {
 		tc.Page404(ctx)
@@ -124,8 +124,8 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 }
 
 func (tc *TemplateController) QuestionList(ctx *gin.Context) {
-	req := &schema.QuestionSearch{
-		Order: "newest",
+	req := &schema.QuestionPageReq{
+		OrderCond: "newest",
 	}
 	if handler.BindAndCheck(ctx, req) {
 		tc.Page404(ctx)
@@ -152,7 +152,7 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	})
 }
 
-func (tc *TemplateController) QuestionInfo301Jump(ctx *gin.Context, siteInfo *schema.TemplateSiteInfoResp, correctTitle bool) (jump bool, url string) {
+func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *schema.TemplateSiteInfoResp, correctTitle bool) (jump bool, url string) {
 	id := ctx.Param("id")
 	title := ctx.Param("title")
 	titleIsAnswerID := false
@@ -182,6 +182,9 @@ func (tc *TemplateController) QuestionInfo301Jump(ctx *gin.Context, siteInfo *sc
 			return
 		}
 		url = fmt.Sprintf("%s/%s", url, htmltext.UrlTitle(detail.Title))
+		if titleIsAnswerID {
+			url = fmt.Sprintf("%s/%s", url, title)
+		}
 		return true, url
 	}
 }
@@ -217,9 +220,9 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	}
 
 	siteInfo := tc.SiteInfo(ctx)
-	jump, jumpurl := tc.QuestionInfo301Jump(ctx, siteInfo, correctTitle)
+	jump, jumpurl := tc.QuestionInfoeRdirect(ctx, siteInfo, correctTitle)
 	if jump {
-		ctx.Redirect(http.StatusMovedPermanently, jumpurl)
+		ctx.Redirect(http.StatusFound, jumpurl)
 		return
 	}
 
@@ -264,7 +267,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	jsonLD.MainEntity.Author.Name = detail.UserInfo.DisplayName
 	answerList := make([]*schema.SuggestedAnswerItem, 0)
 	for _, answer := range answers {
-		if answer.Adopted == schema.AnswerAdoptedEnable {
+		if answer.Accepted == schema.AnswerAcceptedEnable {
 			acceptedAnswerItem := &schema.AcceptedAnswerItem{}
 			acceptedAnswerItem.Type = "Answer"
 			acceptedAnswerItem.Text = answer.HTML

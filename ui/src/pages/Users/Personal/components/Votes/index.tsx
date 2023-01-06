@@ -15,10 +15,12 @@ const Index: FC<Props> = ({ visible, data }) => {
   }
 
   return (
-    <ListGroup variant="flush">
+    <ListGroup className="rounded-0">
       {data.map((item) => {
         return (
-          <ListGroupItem className="d-flex py-3 px-0" key={item.object_id}>
+          <ListGroupItem
+            className="d-flex py-3 px-0 bg-transparent border-start-0 border-end-0"
+            key={item.object_id}>
             <div
               className="me-3 text-end text-secondary flex-shrink-0"
               style={{ width: '80px' }}>

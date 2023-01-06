@@ -2,35 +2,35 @@ package router
 
 import (
 	"github.com/answerdev/answer/internal/controller"
-	"github.com/answerdev/answer/internal/controller_backyard"
+	"github.com/answerdev/answer/internal/controller_admin"
 	"github.com/gin-gonic/gin"
 )
 
 type AnswerAPIRouter struct {
-	langController           *controller.LangController
-	userController           *controller.UserController
-	commentController        *controller.CommentController
-	reportController         *controller.ReportController
-	voteController           *controller.VoteController
-	tagController            *controller.TagController
-	followController         *controller.FollowController
-	collectionController     *controller.CollectionController
-	questionController       *controller.QuestionController
-	answerController         *controller.AnswerController
-	searchController         *controller.SearchController
-	revisionController       *controller.RevisionController
-	rankController           *controller.RankController
-	backyardReportController *controller_backyard.ReportController
-	backyardUserController   *controller_backyard.UserBackyardController
-	reasonController         *controller.ReasonController
-	themeController          *controller_backyard.ThemeController
-	siteInfoController       *controller_backyard.SiteInfoController
-	siteinfoController       *controller.SiteinfoController
-	notificationController   *controller.NotificationController
-	dashboardController      *controller.DashboardController
-	uploadController         *controller.UploadController
-	activityController       *controller.ActivityController
-	roleController           *controller_backyard.RoleController
+	langController         *controller.LangController
+	userController         *controller.UserController
+	commentController      *controller.CommentController
+	reportController       *controller.ReportController
+	voteController         *controller.VoteController
+	tagController          *controller.TagController
+	followController       *controller.FollowController
+	collectionController   *controller.CollectionController
+	questionController     *controller.QuestionController
+	answerController       *controller.AnswerController
+	searchController       *controller.SearchController
+	revisionController     *controller.RevisionController
+	rankController         *controller.RankController
+	adminReportController  *controller_admin.ReportController
+	adminUserController    *controller_admin.UserAdminController
+	reasonController       *controller.ReasonController
+	themeController        *controller_admin.ThemeController
+	siteInfoController     *controller_admin.SiteInfoController
+	siteinfoController     *controller.SiteinfoController
+	notificationController *controller.NotificationController
+	dashboardController    *controller.DashboardController
+	uploadController       *controller.UploadController
+	activityController     *controller.ActivityController
+	roleController         *controller_admin.RoleController
 }
 
 func NewAnswerAPIRouter(
@@ -47,43 +47,43 @@ func NewAnswerAPIRouter(
 	searchController *controller.SearchController,
 	revisionController *controller.RevisionController,
 	rankController *controller.RankController,
-	backyardReportController *controller_backyard.ReportController,
-	backyardUserController *controller_backyard.UserBackyardController,
+	adminReportController *controller_admin.ReportController,
+	adminUserController *controller_admin.UserAdminController,
 	reasonController *controller.ReasonController,
-	themeController *controller_backyard.ThemeController,
-	siteInfoController *controller_backyard.SiteInfoController,
+	themeController *controller_admin.ThemeController,
+	siteInfoController *controller_admin.SiteInfoController,
 	siteinfoController *controller.SiteinfoController,
 	notificationController *controller.NotificationController,
 	dashboardController *controller.DashboardController,
 	uploadController *controller.UploadController,
 	activityController *controller.ActivityController,
-	roleController *controller_backyard.RoleController,
+	roleController *controller_admin.RoleController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
-		langController:           langController,
-		userController:           userController,
-		commentController:        commentController,
-		reportController:         reportController,
-		voteController:           voteController,
-		tagController:            tagController,
-		followController:         followController,
-		collectionController:     collectionController,
-		questionController:       questionController,
-		answerController:         answerController,
-		searchController:         searchController,
-		revisionController:       revisionController,
-		rankController:           rankController,
-		backyardReportController: backyardReportController,
-		backyardUserController:   backyardUserController,
-		reasonController:         reasonController,
-		themeController:          themeController,
-		siteInfoController:       siteInfoController,
-		notificationController:   notificationController,
-		siteinfoController:       siteinfoController,
-		dashboardController:      dashboardController,
-		uploadController:         uploadController,
-		activityController:       activityController,
-		roleController:           roleController,
+		langController:         langController,
+		userController:         userController,
+		commentController:      commentController,
+		reportController:       reportController,
+		voteController:         voteController,
+		tagController:          tagController,
+		followController:       followController,
+		collectionController:   collectionController,
+		questionController:     questionController,
+		answerController:       answerController,
+		searchController:       searchController,
+		revisionController:     revisionController,
+		rankController:         rankController,
+		adminReportController:  adminReportController,
+		adminUserController:    adminUserController,
+		reasonController:       reasonController,
+		themeController:        themeController,
+		siteInfoController:     siteInfoController,
+		notificationController: notificationController,
+		siteinfoController:     siteinfoController,
+		dashboardController:    dashboardController,
+		uploadController:       uploadController,
+		activityController:     activityController,
+		roleController:         roleController,
 	}
 }
 
@@ -106,6 +106,7 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 	r.POST("/user/password/reset", a.userController.RetrievePassWord)
 	r.POST("/user/password/replacement", a.userController.UseRePassWord)
 	r.GET("/user/info", a.userController.GetUserInfoByUserID)
+	r.PUT("/user/email/notification", a.userController.UserUnsubscribeEmailNotification)
 }
 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
@@ -123,8 +124,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	//question
 	r.GET("/question/info", a.questionController.GetQuestion)
-	r.POST("/question/search", a.questionController.SearchList)
-	r.GET("/question/page", a.questionController.Index)
+	r.GET("/question/page", a.questionController.QuestionPage)
 	r.GET("/question/similar/tag", a.questionController.SimilarQuestion)
 	r.GET("/personal/qa/top", a.questionController.UserTop)
 	r.GET("/personal/question/page", a.questionController.UserList)
@@ -142,7 +142,6 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/tags/following", a.tagController.GetFollowingTags)
 	r.GET("/tag", a.tagController.GetTagInfo)
 	r.GET("/tag/synonyms", a.tagController.GetTagSynonyms)
-	r.GET("/question/index", a.questionController.Index)
 
 	//search
 	r.GET("/search", a.searchController.Search)
@@ -194,7 +193,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	// answer
 	r.POST("/answer", a.answerController.Add)
 	r.PUT("/answer", a.answerController.Update)
-	r.POST("/answer/acceptance", a.answerController.Adopted)
+	r.POST("/answer/acceptance", a.answerController.Accepted)
 	r.DELETE("/answer", a.answerController.RemoveAnswer)
 
 	// user
@@ -225,22 +224,22 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 }
 
-func (a *AnswerAPIRouter) RegisterAnswerCmsAPIRouter(r *gin.RouterGroup) {
-	r.GET("/question/page", a.questionController.CmsSearchList)
+func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
+	r.GET("/question/page", a.questionController.AdminSearchList)
 	r.PUT("/question/status", a.questionController.AdminSetQuestionStatus)
-	r.GET("/answer/page", a.questionController.CmsSearchAnswerList)
+	r.GET("/answer/page", a.questionController.AdminSearchAnswerList)
 	r.PUT("/answer/status", a.answerController.AdminSetAnswerStatus)
 
 	// report
-	r.GET("/reports/page", a.backyardReportController.ListReportPage)
-	r.PUT("/report", a.backyardReportController.Handle)
+	r.GET("/reports/page", a.adminReportController.ListReportPage)
+	r.PUT("/report", a.adminReportController.Handle)
 
 	// user
-	r.GET("/users/page", a.backyardUserController.GetUserPage)
-	r.PUT("/user/status", a.backyardUserController.UpdateUserStatus)
-	r.PUT("/user/role", a.backyardUserController.UpdateUserRole)
-	r.POST("/user", a.backyardUserController.AddUser)
-	r.PUT("/user/password", a.backyardUserController.UpdateUserPassword)
+	r.GET("/users/page", a.adminUserController.GetUserPage)
+	r.PUT("/user/status", a.adminUserController.UpdateUserStatus)
+	r.PUT("/user/role", a.adminUserController.UpdateUserRole)
+	r.POST("/user", a.adminUserController.AddUser)
+	r.PUT("/user/password", a.adminUserController.UpdateUserPassword)
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)

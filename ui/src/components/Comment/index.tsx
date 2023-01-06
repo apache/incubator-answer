@@ -258,7 +258,7 @@ const Comment = ({ objectId, mode, commentId }) => {
                 )}
 
                 <div
-                  className="fmt fs-14"
+                  className="fmt fs-14 text-break text-wrap"
                   dangerouslySetInnerHTML={{ __html: item.parsed_text }}
                 />
               </div>

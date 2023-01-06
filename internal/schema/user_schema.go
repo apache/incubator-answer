@@ -349,8 +349,8 @@ func (u *UserRePassWordRequest) Check() (errFields []*validator.FormErrorField, 
 }
 
 type UserNoticeSetRequest struct {
-	UserID       string `json:"-" ` // user_id
-	NoticeSwitch bool   `json:"notice_switch" `
+	NoticeSwitch bool   `json:"notice_switch"`
+	UserID       string `json:"-"`
 }
 
 type UserNoticeSetResp struct {
@@ -396,20 +396,6 @@ type UserChangeEmailSendCodeReq struct {
 	UserID string `json:"-"`
 }
 
-type EmailCodeContent struct {
-	Email  string `json:"e_mail"`
-	UserID string `json:"user_id"`
-}
-
-func (r *EmailCodeContent) ToJSONString() string {
-	codeBytes, _ := json.Marshal(r)
-	return string(codeBytes)
-}
-
-func (r *EmailCodeContent) FromJSONString(data string) error {
-	return json.Unmarshal([]byte(data), &r)
-}
-
 type UserChangeEmailVerifyReq struct {
 	Code    string `validate:"required,gt=0,lte=500" json:"code"`
 	Content string `json:"-"`
@@ -439,4 +425,10 @@ type UserRankingSimpleInfo struct {
 	DisplayName string `json:"display_name"`
 	// avatar
 	Avatar string `json:"avatar"`
+}
+
+// UserUnsubscribeEmailNotificationReq user unsubscribe email notification request
+type UserUnsubscribeEmailNotificationReq struct {
+	Code    string `validate:"required,gt=0,lte=500" json:"code"`
+	Content string `json:"-"`
 }

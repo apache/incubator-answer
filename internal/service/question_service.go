@@ -158,9 +158,66 @@ func (qs *QuestionService) AddQuestionCheckTags(ctx context.Context, Tags []*ent
 	}
 	return []string{}, nil
 }
+func (qs *QuestionService) CheckAddQuestion(ctx context.Context, req *schema.QuestionAdd) (errorlist any, err error) {
+	if len(req.Tags) == 0 {
+		errorlist := make([]*validator.FormErrorField, 0)
+		errorlist = append(errorlist, &validator.FormErrorField{
+			ErrorField: "tags",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), reason.TagNotFound),
+		})
+		err = errors.BadRequest(reason.RecommendTagEnter)
+		return errorlist, err
+	}
+	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
+	if err != nil {
+		return
+	}
+	if !recommendExist {
+		errorlist := make([]*validator.FormErrorField, 0)
+		errorlist = append(errorlist, &validator.FormErrorField{
+			ErrorField: "tags",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), reason.RecommendTagEnter),
+		})
+		err = errors.BadRequest(reason.RecommendTagEnter)
+		return errorlist, err
+	}
+
+	tagNameList := make([]string, 0)
+	for _, tag := range req.Tags {
+		tagNameList = append(tagNameList, tag.SlugName)
+	}
+	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
+	if tagerr != nil {
+		return errorlist, tagerr
+	}
+	if !req.QuestionPermission.CanUseReservedTag {
+		taglist, err := qs.AddQuestionCheckTags(ctx, Tags)
+		errMsg := fmt.Sprintf(`"%s" can only be used by moderators.`,
+			strings.Join(taglist, ","))
+		if err != nil {
+			errorlist := make([]*validator.FormErrorField, 0)
+			errorlist = append(errorlist, &validator.FormErrorField{
+				ErrorField: "tags",
+				ErrorMsg:   errMsg,
+			})
+			err = errors.BadRequest(reason.RecommendTagEnter)
+			return errorlist, err
+		}
+	}
+	return nil, nil
+}
 
 // AddQuestion add question
 func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd) (questionInfo any, err error) {
+	if len(req.Tags) == 0 {
+		errorlist := make([]*validator.FormErrorField, 0)
+		errorlist = append(errorlist, &validator.FormErrorField{
+			ErrorField: "tags",
+			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), reason.TagNotFound),
+		})
+		err = errors.BadRequest(reason.RecommendTagEnter)
+		return errorlist, err
+	}
 	recommendExist, err := qs.tagCommon.ExistRecommend(ctx, req.Tags)
 	if err != nil {
 		return
@@ -419,11 +476,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	question.UpdatedAt = now
 	question.PostUpdateTime = now
 	question.UserID = dbinfo.UserID
-
-	question.LastEditUserID = "0"
-	if dbinfo.UserID != req.UserID {
-		question.LastEditUserID = req.UserID
-	}
+	question.LastEditUserID = req.UserID
 
 	oldTags, tagerr := qs.tagCommon.GetObjectEntityTag(ctx, question.ID)
 	if tagerr != nil {
@@ -598,19 +651,20 @@ func (qs *QuestionService) SearchUserList(ctx context.Context, userName, order s
 	if !Exist {
 		return userlist, 0, nil
 	}
-	search := &schema.QuestionSearch{}
-	search.Order = order
+	search := &schema.QuestionPageReq{}
+	search.OrderCond = order
 	search.Page = page
 	search.PageSize = pageSize
-	search.UserID = userinfo.ID
-	questionlist, count, err := qs.SearchList(ctx, search, loginUserID)
+	search.UserIDBeSearched = userinfo.ID
+	search.LoginUserID = loginUserID
+	questionlist, count, err := qs.GetQuestionPage(ctx, search)
 	if err != nil {
 		return userlist, 0, err
 	}
 	for _, item := range questionlist {
 		info := &schema.UserQuestionInfo{}
 		_ = copier.Copy(info, item)
-		status, ok := entity.CmsQuestionSearchStatusIntToString[item.Status]
+		status, ok := entity.AdminQuestionSearchStatusIntToString[item.Status]
 		if ok {
 			info.Status = status
 		}
@@ -721,12 +775,13 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 	if !Exist {
 		return userQuestionlist, userAnswerlist, nil
 	}
-	search := &schema.QuestionSearch{}
-	search.Order = "score"
+	search := &schema.QuestionPageReq{}
+	search.OrderCond = "score"
 	search.Page = 0
 	search.PageSize = 5
-	search.UserID = userinfo.ID
-	questionlist, _, err := qs.SearchList(ctx, search, loginUserID)
+	search.UserIDBeSearched = userinfo.ID
+	search.LoginUserID = loginUserID
+	questionlist, _, err := qs.GetQuestionPage(ctx, search)
 	if err != nil {
 		return userQuestionlist, userAnswerlist, err
 	}
@@ -787,7 +842,7 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 		item.AnswerCount = question.AnswerCount
 		item.CollectionCount = question.CollectionCount
 		item.FollowCount = question.FollowCount
-		status, ok := entity.CmsQuestionSearchStatusIntToString[question.Status]
+		status, ok := entity.AdminQuestionSearchStatusIntToString[question.Status]
 		if ok {
 			item.Status = status
 		}
@@ -801,61 +856,68 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 }
 
 // SimilarQuestion
-func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID string, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
-	list := make([]*schema.QuestionInfo, 0)
+func (qs *QuestionService) SimilarQuestion(ctx context.Context, questionID string, loginUserID string) ([]*schema.QuestionPageResp, int64, error) {
 	question, err := qs.questioncommon.Info(ctx, questionID, loginUserID)
 	if err != nil {
-		return list, 0, nil
+		return nil, 0, nil
 	}
 	tagNames := make([]string, 0, len(question.Tags))
 	for _, tag := range question.Tags {
 		tagNames = append(tagNames, tag.SlugName)
 	}
-	search := &schema.QuestionSearch{}
-	search.Order = "frequent"
+	search := &schema.QuestionPageReq{}
+	search.OrderCond = "frequent"
 	search.Page = 0
 	search.PageSize = 6
 	if len(tagNames) > 0 {
 		search.Tag = tagNames[0]
 	}
-	return qs.SearchList(ctx, search, loginUserID)
+	search.LoginUserID = loginUserID
+	return qs.GetQuestionPage(ctx, search)
 }
 
-// SearchList
-func (qs *QuestionService) SearchList(ctx context.Context, req *schema.QuestionSearch, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
+// GetQuestionPage query questions page
+func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.QuestionPageReq) (
+	questions []*schema.QuestionPageResp, total int64, err error) {
+	questions = make([]*schema.QuestionPageResp, 0)
+
+	// query by tag condition
 	if len(req.Tag) > 0 {
-		tagInfo, has, err := qs.tagCommon.GetTagBySlugName(ctx, strings.ToLower(req.Tag))
+		tagInfo, exist, err := qs.tagCommon.GetTagBySlugName(ctx, strings.ToLower(req.Tag))
 		if err != nil {
-			log.Error("tagCommon.GetTagListByNames error", err)
+			return nil, 0, err
 		}
-		if has {
-			req.TagIDs = append(req.TagIDs, tagInfo.ID)
+		if exist {
+			req.TagID = tagInfo.ID
 		}
 	}
-	list := make([]*schema.QuestionInfo, 0)
-	if req.UserName != "" {
-		userinfo, exist, err := qs.userCommon.GetUserBasicInfoByUserName(ctx, req.UserName)
+
+	// query by user condition
+	if req.Username != "" {
+		userinfo, exist, err := qs.userCommon.GetUserBasicInfoByUserName(ctx, req.Username)
 		if err != nil {
-			return list, 0, err
+			return nil, 0, err
 		}
 		if !exist {
-			return list, 0, err
+			return questions, 0, nil
 		}
-		req.UserID = userinfo.ID
+		req.UserIDBeSearched = userinfo.ID
 	}
-	questionList, count, err := qs.questionRepo.SearchList(ctx, req)
+
+	questionList, total, err := qs.questionRepo.GetQuestionPage(ctx, req.Page, req.PageSize,
+		req.UserIDBeSearched, req.TagID, req.OrderCond)
 	if err != nil {
-		return list, count, err
+		return nil, 0, err
 	}
-	list, err = qs.questioncommon.ListFormat(ctx, questionList, loginUserID)
+	questions, err = qs.questioncommon.FormatQuestionsPage(ctx, questionList, req.LoginUserID, req.OrderCond)
 	if err != nil {
-		return list, count, err
+		return nil, 0, err
 	}
-	return list, count, nil
+	return questions, total, nil
 }
 
 func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionID string, setStatusStr string) error {
-	setStatus, ok := entity.CmsQuestionSearchStatus[setStatusStr]
+	setStatus, ok := entity.AdminQuestionSearchStatus[setStatusStr]
 	if !ok {
 		return fmt.Errorf("question status does not exist")
 	}
@@ -910,10 +972,10 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 	return nil
 }
 
-func (qs *QuestionService) CmsSearchList(ctx context.Context, search *schema.CmsQuestionSearch, loginUserID string) ([]*schema.AdminQuestionInfo, int64, error) {
+func (qs *QuestionService) AdminSearchList(ctx context.Context, search *schema.AdminQuestionSearch, loginUserID string) ([]*schema.AdminQuestionInfo, int64, error) {
 	list := make([]*schema.AdminQuestionInfo, 0)
 
-	status, ok := entity.CmsQuestionSearchStatus[search.StatusStr]
+	status, ok := entity.AdminQuestionSearchStatus[search.StatusStr]
 	if ok {
 		search.Status = status
 	}
@@ -921,7 +983,7 @@ func (qs *QuestionService) CmsSearchList(ctx context.Context, search *schema.Cms
 	if search.Status == 0 {
 		search.Status = 1
 	}
-	dblist, count, err := qs.questionRepo.CmsSearchList(ctx, search)
+	dblist, count, err := qs.questionRepo.AdminSearchList(ctx, search)
 	if err != nil {
 		return list, count, err
 	}
@@ -949,11 +1011,11 @@ func (qs *QuestionService) CmsSearchList(ctx context.Context, search *schema.Cms
 	return list, count, nil
 }
 
-// CmsSearchList
-func (qs *QuestionService) CmsSearchAnswerList(ctx context.Context, search *entity.CmsAnswerSearch, loginUserID string) ([]*schema.AdminAnswerInfo, int64, error) {
+// AdminSearchList
+func (qs *QuestionService) AdminSearchAnswerList(ctx context.Context, search *entity.AdminAnswerSearch, loginUserID string) ([]*schema.AdminAnswerInfo, int64, error) {
 	answerlist := make([]*schema.AdminAnswerInfo, 0)
 
-	status, ok := entity.CmsAnswerSearchStatus[search.StatusStr]
+	status, ok := entity.AdminAnswerSearchStatus[search.StatusStr]
 	if ok {
 		search.Status = status
 	}
@@ -961,7 +1023,7 @@ func (qs *QuestionService) CmsSearchAnswerList(ctx context.Context, search *enti
 	if search.Status == 0 {
 		search.Status = 1
 	}
-	dblist, count, err := qs.questioncommon.AnswerCommon.CmsSearchList(ctx, search)
+	dblist, count, err := qs.questioncommon.AnswerCommon.AdminSearchList(ctx, search)
 	if err != nil {
 		return answerlist, count, err
 	}

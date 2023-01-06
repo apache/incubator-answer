@@ -1,6 +1,6 @@
 import { FC, memo } from 'react';
 
-import clssnames from 'classnames';
+import classnames from 'classnames';
 
 import { Tag } from '@/components';
 import { diffText } from '@/utils';
@@ -90,19 +90,21 @@ const Index: FC<Props> = ({
       )}
       {objectType === 'tag' && opts?.showTagUrlSlug && (
         <div
-          className={clssnames(
+          className={classnames(
             'fs-14 font-monospace',
             newData.original_text && 'mb-4',
-          )}>
-          {`/tags/${
-            newData?.main_tag_slug_name
-              ? diffText(
-                  newData.main_tag_slug_name,
-                  oldData?.main_tag_slug_name,
-                )
-              : diffText(newData.slug_name, oldData?.slug_name)
-          }`}
-        </div>
+          )}
+          dangerouslySetInnerHTML={{
+            __html: `/tags/${
+              newData?.main_tag_slug_name
+                ? diffText(
+                    newData.main_tag_slug_name,
+                    oldData?.main_tag_slug_name,
+                  )
+                : diffText(newData.slug_name, oldData?.slug_name)
+            }`,
+          }}
+        />
       )}
       <div
         dangerouslySetInnerHTML={{

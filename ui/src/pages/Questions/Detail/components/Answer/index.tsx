@@ -44,7 +44,7 @@ const Index: FC<Props> = ({
   const acceptAnswer = () => {
     acceptanceAnswer({
       question_id: data.question_id,
-      answer_id: data.adopted === 2 ? '0' : data.id,
+      answer_id: data.accepted === 2 ? '0' : data.id,
     }).then(() => {
       callback?.('');
     });
@@ -69,7 +69,7 @@ const Index: FC<Props> = ({
     <div id={data.id} ref={answerRef} className="answer-item py-4">
       <article
         dangerouslySetInnerHTML={{ __html: data?.html }}
-        className="fmt"
+        className="fmt text-break text-wrap"
       />
       <div className="d-flex align-items-center mt-4">
         <Actions
@@ -85,7 +85,7 @@ const Index: FC<Props> = ({
           }}
         />
 
-        {data?.adopted === 2 && (
+        {data?.accepted === 2 && (
           <Button
             disabled={!isAuthor}
             variant="outline-success"
@@ -96,7 +96,7 @@ const Index: FC<Props> = ({
           </Button>
         )}
 
-        {isAuthor && data.adopted === 1 && (
+        {isAuthor && data.accepted === 1 && (
           <Button
             variant="outline-success"
             className="ms-3"
@@ -114,7 +114,7 @@ const Index: FC<Props> = ({
             aid={data.id}
             memberActions={data?.member_actions}
             type="answer"
-            isAccepted={data.adopted === 2}
+            isAccepted={data.accepted === 2}
             title={questionTitle}
             slugTitle={slugTitle}
             callback={callback}
