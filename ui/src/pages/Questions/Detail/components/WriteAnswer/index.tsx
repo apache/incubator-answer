@@ -32,6 +32,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   });
   const [showEditor, setShowEditor] = useState<boolean>(visible);
   const [focusType, setForceType] = useState('');
+  const [editorFoucsState, setEditorFoucsState] = useState(false);
 
   const handleSubmit = () => {
     if (!formData.content.value) {
@@ -84,6 +85,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const handleFocusForTextArea = () => {
     setForceType('answer');
     setShowEditor(true);
+    setEditorFoucsState(true);
   };
 
   return (
@@ -114,7 +116,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
                 focusType === 'answer' && 'focus',
               )}
               value={formData.content.value}
-              autoFocus
+              autoFocus={editorFoucsState}
               onChange={(val) => {
                 setFormData({
                   content: {

@@ -18,7 +18,7 @@ const Index: FC<Props> = ({ visible, siteUrl = '' }) => {
       <p>
         <Trans i18nKey="install.ready_description">
           If you ever feel like changing more settings, visit
-          <a href={`${siteUrl}/users/login`}>admin section</a>; find it in the
+          <a href={`${siteUrl}/users/login`}> admin section</a>; find it in the
           site menu.
         </Trans>
       </p>
