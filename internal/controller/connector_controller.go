@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	connectorRedirectRouterPrefix = "/answer/api/v1/connector/redirect/"
-	connectorLoginRouterPrefix    = "/answer/api/v1/connector/login/"
+	ConnectorRedirectRouterPrefix = "/answer/api/v1/connector/redirect/"
+	ConnectorLoginRouterPrefix    = "/answer/api/v1/connector/login/"
 )
 
 // ConnectorController comment controller
@@ -36,15 +36,6 @@ func NewConnectorController(
 	}
 }
 
-func (cc *ConnectorController) ConnectorRedirectRegisterRouters(r *gin.Engine) {
-	_ = plugin.CallConnector(func(connector plugin.Connector) error {
-		r.GET(connectorLoginRouterPrefix+connector.ConnectorSlugName(), cc.ConnectorRedirect(connector))
-		r.GET(connectorRedirectRouterPrefix+connector.ConnectorSlugName(), cc.ConnectorLogin(connector))
-		return nil
-	})
-	r.GET("/answer/api/v1/connector/info", cc.ConnectorsInfo)
-}
-
 func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn func(ctx *gin.Context)) {
 	return func(ctx *gin.Context) {
 		general, err := cc.siteInfoService.GetSiteGeneral(ctx)
@@ -53,7 +44,7 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 			return
 		}
 
-		receiverURL := fmt.Sprintf("%s%s%s", general.SiteUrl, connectorLoginRouterPrefix, connector.ConnectorSlugName())
+		receiverURL := fmt.Sprintf("%s%s%s", general.SiteUrl, ConnectorLoginRouterPrefix, connector.ConnectorSlugName())
 		redirectURL := connector.ConnectorSender(ctx, receiverURL)
 		if len(redirectURL) > 0 {
 			ctx.Redirect(http.StatusFound, redirectURL)
@@ -69,7 +60,8 @@ func (cc *ConnectorController) ConnectorLogin(connector plugin.Connector) (fn fu
 			ctx.Redirect(http.StatusFound, "/50x")
 			return
 		}
-		resp, err := cc.userExternalService.ExternalLogin(ctx, connector.ConnectorSlugName(), userInfo)
+		userInfo.Provider = connector.ConnectorSlugName()
+		resp, err := cc.userExternalService.ExternalLogin(ctx, userInfo)
 		if err != nil {
 			log.Error(err)
 			ctx.Redirect(http.StatusFound, "/50x")
@@ -78,7 +70,7 @@ func (cc *ConnectorController) ConnectorLogin(connector plugin.Connector) (fn fu
 		if len(resp.AccessToken) > 0 {
 			ctx.Redirect(http.StatusFound, fmt.Sprintf("/index?token=%s", resp.AccessToken))
 		} else {
-			ctx.Redirect(http.StatusFound, fmt.Sprintf("/binding?external_id=%s", resp.ExternalID))
+			ctx.Redirect(http.StatusFound, fmt.Sprintf("/binding?binding_key=%s", resp.BindingKey))
 		}
 	}
 }
@@ -95,7 +87,7 @@ func (cc *ConnectorController) ConnectorsInfo(ctx *gin.Context) {
 		resp = append(resp, &schema.ConnectorInfoResp{
 			Name: fn.ConnectorSlugName(),
 			Icon: fn.ConnectorLogo(),
-			Link: fmt.Sprintf("%s%s%s", general.SiteUrl, connectorLoginRouterPrefix, fn.ConnectorSlugName()),
+			Link: fmt.Sprintf("%s%s%s", general.SiteUrl, ConnectorLoginRouterPrefix, fn.ConnectorSlugName()),
 		})
 		return nil
 	})
@@ -104,4 +96,22 @@ func (cc *ConnectorController) ConnectorsInfo(ctx *gin.Context) {
 		return
 	}
 	handler.HandleResponse(ctx, nil, resp)
+}
+
+func (cc *ConnectorController) ExternalLoginBindingUserSendEmail(ctx *gin.Context) {
+	req := &schema.ExternalLoginBindingUserSendEmailReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	resp, err := cc.userExternalService.ExternalLoginBindingUserSendEmail(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+func (cc *ConnectorController) ExternalLoginBindingUser(ctx *gin.Context) {
+	req := &schema.ExternalLoginBindingUserReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	resp, err := cc.userExternalService.ExternalLoginBindingUser(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }

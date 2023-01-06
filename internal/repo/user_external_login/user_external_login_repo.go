@@ -55,7 +55,7 @@ func (ur *userExternalLoginRepo) GetByExternalID(ctx context.Context, externalID
 
 // SetCacheUserExternalLoginInfo cache user info for external login
 func (ur *userExternalLoginRepo) SetCacheUserExternalLoginInfo(
-	ctx context.Context, info plugin.ExternalLoginUserInfo) (err error) {
+	ctx context.Context, key string, info plugin.ExternalLoginUserInfo) (err error) {
 	cacheData, _ := json.Marshal(info)
 	return ur.data.Cache.SetString(ctx, constant.ConnectorUserExternalInfoCacheKey+info.ExternalID,
 		string(cacheData), constant.ConnectorUserExternalInfoCacheTime)
@@ -63,8 +63,8 @@ func (ur *userExternalLoginRepo) SetCacheUserExternalLoginInfo(
 
 // GetCacheUserExternalLoginInfo cache user info for external login
 func (ur *userExternalLoginRepo) GetCacheUserExternalLoginInfo(
-	ctx context.Context, externalID string) (info plugin.ExternalLoginUserInfo, err error) {
-	res, err := ur.data.Cache.GetString(ctx, constant.ConnectorUserExternalInfoCacheKey+externalID)
+	ctx context.Context, key string) (info plugin.ExternalLoginUserInfo, err error) {
+	res, err := ur.data.Cache.GetString(ctx, constant.ConnectorUserExternalInfoCacheKey+key)
 	if err != nil {
 		return info, err
 	}

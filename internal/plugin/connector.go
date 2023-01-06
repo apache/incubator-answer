@@ -29,11 +29,19 @@ type Connector interface {
 	ConnectorReceiver(ctx *GinContext) (userInfo ExternalLoginUserInfo, err error)
 }
 
+// ExternalLoginUserInfo external login user info
 type ExternalLoginUserInfo struct {
+	// Third party identification
+	// e.g. facebook, twitter, instagram
+	Provider string
+	// required. The unique user ID provided by the third-party login
 	ExternalID string
-	Name       string
-	Email      string
-	MetaInfo   string
+	// optional. This name is used preferentially during registration
+	Name string
+	// optional. If email exist will bind the existing user
+	Email string
+	// optional. The original user information provided by the third-party login platform
+	MetaInfo string
 }
 
 var (
