@@ -109,7 +109,7 @@ backend:
         other: "您不能将当前标签的同义词设置为本身。"
     smtp:
       config_from_name_cannot_be_email:
-        other: "The From Name cannot be a email address."
+        other: "发件人名称不能是电子邮件地址。"
     theme:
       not_found:
         other: "主题未找到"
@@ -138,15 +138,15 @@ backend:
         other: "目前该站点未开放注册"
     config:
       read_config_failed:
-        other: "Read config failed"
+        other: "读取配置失败"
     database:
       connection_failed:
-        other: "Database connection failed"
+        other: "数据库连接失败"
       create_table_failed:
-        other: "Create table failed"
+        other: "创建表失败"
     install:
       create_config_failed:
-        other: "Can’t create the config.yaml file."
+        other: "无法创建 config.yaml 文件。"
   report:
     spam:
       name:
@@ -202,11 +202,11 @@ backend:
           other: "这个帖子需要上面没有列出的另一个原因。"
     operation_type:
       asked:
-        other: "asked"
+        other: "提问于"
       answered:
-        other: "answered"
+        other: "回答于"
       modified:
-        other: "modified"
+        other: "修改于"
   notification:
     action:
       update_question:
@@ -238,7 +238,7 @@ ui:
   how_to_format:
     title: 如何设定文本格式
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">添加链接：</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者 **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用 4 个空格缩进代码</p></li><li><p class="mb-2">在行首添加<code>&gt;</code>表示引用</p></li><li><p class="mb-2">反引号进行转义 <code>`像 _这样_`</code></p></li><li><p class="mb-2">使用<code>```</code>创建代码块</p><pre class="mb-0"><code>```<br/>// 这是代码<br/>```</code></pre></li></ul>
   pagination:
     prev: 上一页
     next: 下一页
@@ -812,10 +812,10 @@ ui:
     confirm_new_email_invalid: >-
       抱歉，此验证链接已失效。也许是你的邮箱已经成功更改了？
   unsubscribe:
-    page_title: Unsubscribe
-    success_title: Unsubscribe Successful
-    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
-    link: Change settings
+    page_title: 退订
+    success_title: 取消订阅成功
+    success_desc: 您已成功地从此订阅者列表中移除，并且将不会再收到我们的任何电子邮件。
+    link: 更改设置
   question:
     following_tags: 已关注的标签
     edit: 编辑
@@ -1006,7 +1006,7 @@ ui:
       answer_links: 回答链接
       documents: 文档
       feedback: 用户反馈
-      support: Support
+      support: 帮助
       review: 审查
       config: 配置
       update_to: 更新到
