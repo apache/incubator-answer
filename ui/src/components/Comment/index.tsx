@@ -100,6 +100,9 @@ const Comment = ({ objectId, mode, commentId }) => {
     const users = matchedUsers(item.value);
     const userNames = unionBy(users.map((user) => user.userName));
     const html = marked.parse(parseUserInfo(item.value));
+    if (!item.value || !html) {
+      return;
+    }
     const params = {
       object_id: objectId,
       original_text: item.value,
