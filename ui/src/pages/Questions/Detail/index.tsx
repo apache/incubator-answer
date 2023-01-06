@@ -171,6 +171,7 @@ const Index = () => {
           {question?.operation?.operation_type && (
             <Alert data={question.operation} />
           )}
+          <ContentLoader />
           {isLoading ? (
             <ContentLoader />
           ) : (
