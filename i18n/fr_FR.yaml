@@ -814,22 +814,22 @@ ui:
   unsubscribe:
     page_title: Se désabonner
     success_title: Désabonnement réussi
-    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
-    link: Change settings
+    success_desc: Vous avez été supprimé de cette liste d'abonnés avec succès et ne recevrez plus d'e-mails.
+    link: Modifier les paramètres
   question:
-    following_tags: Following Tags
-    edit: Edit
-    save: Save
+    following_tags: Hashtags suivis
+    edit: Éditer
+    save: Enregistrer
     follow_tag_tip: Follow tags to curate your list of questions.
     hot_questions: Questions populaires
     all_questions: Toutes les questions
     x_questions: "{{ count }} questions"
     x_answers: "{{ count }} réponses"
     questions: Questions
-    answers: Answers
-    newest: Newest
-    active: Active
-    frequent: Frequent
+    answers: Réponses
+    newest: Les plus récents
+    active: Actif
+    frequent: Fréquents
     score: Score
     unanswered: Unanswered
     modified: modified
