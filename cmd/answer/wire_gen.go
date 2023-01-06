@@ -74,6 +74,7 @@ import (
 	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/answerdev/answer/internal/service/user_admin"
 	"github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/internal/service/user_external_login"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/log"
 )
@@ -117,7 +118,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	roleRepo := role.NewRoleRepo(dataData)
 	roleService := role2.NewRoleService(roleRepo)
 	userRoleRelService := role2.NewUserRoleRelService(userRoleRelRepo, roleService)
-	userCommon := usercommon.NewUserCommon(userRepo)
+	userCommon := usercommon.NewUserCommon(userRepo, userRoleRelService, authService)
 	userService := service.NewUserService(userRepo, userActiveActivityRepo, activityRepo, emailService, authService, serviceConf, siteInfoCommonService, userRoleRelService, userCommon)
 	captchaRepo := captcha.NewCaptchaRepo(dataData)
 	captchaService := action.NewCaptchaService(captchaRepo)
@@ -210,7 +211,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	templateRenderController := templaterender.NewTemplateRenderController(questionService, userService, tagService, answerService, commentService, dataData, siteInfoCommonService)
 	templateController := controller.NewTemplateController(templateRenderController, siteInfoCommonService)
 	templateRouter := router.NewTemplateRouter(templateController, templateRenderController, siteInfoController)
-	connectorController := controller.NewConnectorController(siteInfoCommonService)
+	userExternalLoginService := user_external_login.NewUserExternalLoginService(userRepo, userCommon)
+	connectorController := controller.NewConnectorController(siteInfoCommonService, userExternalLoginService)
 	pluginAPIRouter := router.NewPluginAPIRouter(connectorController)
 	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter, pluginAPIRouter)
 	scheduledTaskManager := cron.NewScheduledTaskManager(siteInfoCommonService, questionService)

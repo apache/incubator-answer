@@ -11,8 +11,11 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/auth"
+	"github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 type UserRepo interface {
@@ -35,12 +38,20 @@ type UserRepo interface {
 
 // UserCommon user service
 type UserCommon struct {
-	userRepo UserRepo
+	userRepo        UserRepo
+	userRoleService *role.UserRoleRelService
+	authService     *auth.AuthService
 }
 
-func NewUserCommon(userRepo UserRepo) *UserCommon {
+func NewUserCommon(
+	userRepo UserRepo,
+	userRoleService *role.UserRoleRelService,
+	authService *auth.AuthService,
+) *UserCommon {
 	return &UserCommon{
-		userRepo: userRepo,
+		userRepo:        userRepo,
+		userRoleService: userRoleService,
+		authService:     authService,
 	}
 }
 
@@ -143,4 +154,30 @@ func (us *UserCommon) MakeUsername(ctx context.Context, displayName string) (use
 		suffix = hex.EncodeToString(bytes)
 	}
 	return username + suffix, nil
+}
+
+func (us *UserCommon) CacheLoginUserInfo(ctx context.Context, userID string, userStatus, emailStatus int) (
+	accessToken string, userCacheInfo *entity.UserCacheInfo, err error) {
+	roleID, err := us.userRoleService.GetUserRole(ctx, userID)
+	if err != nil {
+		log.Error(err)
+	}
+
+	userCacheInfo = &entity.UserCacheInfo{
+		UserID:      userID,
+		EmailStatus: emailStatus,
+		UserStatus:  userStatus,
+		IsAdmin:     roleID == role.RoleAdminID,
+	}
+
+	accessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
+	if err != nil {
+		return "", nil, err
+	}
+	if userCacheInfo.IsAdmin {
+		if err = us.authService.SetAdminUserCacheInfo(ctx, accessToken, &entity.UserCacheInfo{UserID: userID}); err != nil {
+			return "", nil, err
+		}
+	}
+	return accessToken, userCacheInfo, nil
 }

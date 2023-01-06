@@ -32,6 +32,7 @@ import (
 	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/answerdev/answer/internal/service/user_admin"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/internal/service/user_external_login"
 	"github.com/google/wire"
 )
 
@@ -79,4 +80,5 @@ var ProviderSetService = wire.NewSet(
 	role.NewRoleService,
 	role.NewUserRoleRelService,
 	role.NewRolePowerRelService,
+	user_external_login.NewUserExternalLoginService,
 )

@@ -21,23 +21,19 @@ type Connector interface {
 
 	// ConnectorSender presents the sender of the connector
 	// It handles the start endpoint of the connector
-	ConnectorSender(ctx *GinContext)
-	ConnectorReceiver(ctx *GinContext)
+	// receiverURL is the whole URL of the receiver
+	ConnectorSender(ctx *GinContext, receiverURL string) (redirectURL string)
 
-	//ConnectorLoginURL(redirectURL string) (loginURL string)
-	//ConnectorLoginUserInfo(code string) (userInfo *UserExternalLogin, err error)
+	// ConnectorReceiver presents the receiver of the connector
+	// It handles the callback endpoint of the connector, and returns the
+	ConnectorReceiver(ctx *GinContext) (userInfo ExternalLoginUserInfo, err error)
 }
 
-type UserExternalLogin struct {
-	Provider    string
-	ExternalID  string
-	Email       string
-	Name        string
-	FirstName   string
-	LastName    string
-	NickName    string
-	Description string
-	AvatarUrl   string
+type ExternalLoginUserInfo struct {
+	ExternalID string
+	Name       string
+	Email      string
+	MetaInfo   string
 }
 
 var (

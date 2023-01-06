@@ -15,7 +15,7 @@ require (
 	github.com/go-resty/resty/v2 v2.7.0
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/goccy/go-json v0.9.11
-	github.com/golang/mock v1.4.4
+	github.com/golang/mock v1.6.0
 	github.com/google/go-github/v48 v48.2.0
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
@@ -51,6 +51,7 @@ require (
 )
 
 require (
+	cloud.google.com/go/compute v1.6.1 // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20170929234023-d6e3b3328b78 // indirect
 	github.com/KyleBanks/depth v1.2.1 // indirect
 	github.com/LinkinStars/go-i18n/v2 v2.2.2 // indirect

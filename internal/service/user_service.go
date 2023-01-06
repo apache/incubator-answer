@@ -435,34 +435,19 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	if err = us.userActivity.UserActive(ctx, userInfo.ID); err != nil {
 		log.Error(err)
 	}
-
-	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
+	accessToken, userCacheInfo, err := us.userCommonService.CacheLoginUserInfo(
+		ctx, userInfo.ID, userInfo.MailStatus, userInfo.Status)
 	if err != nil {
-		log.Error(err)
+		return nil, err
 	}
 
 	resp = &schema.GetUserResp{}
 	resp.GetFromUserEntity(userInfo)
-	userCacheInfo := &entity.UserCacheInfo{
-		UserID:      userInfo.ID,
-		EmailStatus: userInfo.MailStatus,
-		UserStatus:  userInfo.Status,
-		IsAdmin:     roleID == role.RoleAdminID,
-	}
-	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
-	if err != nil {
-		return nil, err
-	}
+	resp.IsAdmin = userCacheInfo.IsAdmin
+	resp.AccessToken = accessToken
 	// User verified email will update user email status. So user status cache should be updated.
 	if err = us.authService.SetUserStatus(ctx, userCacheInfo); err != nil {
 		return nil, err
-	}
-	resp.IsAdmin = userCacheInfo.IsAdmin
-	if resp.IsAdmin {
-		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
-		if err != nil {
-			return nil, err
-		}
 	}
 	return resp, nil
 }
