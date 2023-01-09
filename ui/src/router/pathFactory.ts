@@ -6,14 +6,12 @@ const tagLanding = (slugName: string) => {
   if (!slugName) {
     return '/tags';
   }
-  slugName = slugName.toLowerCase();
   return urlcat('/tags/:slugName', { slugName });
 };
 const tagInfo = (slugName: string) => {
   if (!slugName) {
     return '/tags';
   }
-  slugName = slugName.toLowerCase();
   return urlcat('/tags/:slugName/info', { slugName });
 };
 const tagEdit = (tagId: string) => {
