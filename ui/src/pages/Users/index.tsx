@@ -51,7 +51,11 @@ const Users = () => {
                       className="mb-4">
                       <div className="d-flex">
                         <Link to={`/users/${user.username}`}>
-                          <Avatar size="48px" avatar={user?.avatar} />
+                          <Avatar
+                            size="48px"
+                            avatar={user?.avatar}
+                            searchStr="s=96"
+                          />
                         </Link>
                         <div className="ms-2">
                           <Link to={`/users/${user.username}`}>
