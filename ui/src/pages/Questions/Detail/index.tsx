@@ -123,7 +123,6 @@ const Index = () => {
       }, 1000);
       return;
     }
-
     if (type === 'default') {
       window.scrollTo(0, 0);
       getDetail();
@@ -150,6 +149,7 @@ const Index = () => {
     if (!qid) {
       return;
     }
+    window.scrollTo(0, 0);
     getDetail();
     requestAnswers();
   }, [qid]);
