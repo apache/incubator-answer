@@ -22,10 +22,26 @@ type ExternalLoginBindingUserSendEmailResp struct {
 
 // ExternalLoginBindingUserReq external login binding user request
 type ExternalLoginBindingUserReq struct {
-	Code string `validate:"required,gt=0,lte=500" json:"code"`
+	Code    string `validate:"required,gt=0,lte=500" json:"code"`
+	Content string `json:"-"`
 }
 
 // ExternalLoginBindingUserResp external login binding user response
 type ExternalLoginBindingUserResp struct {
 	AccessToken string `json:"access_token"`
+}
+
+// ExternalLoginUserInfoCache external login user info
+type ExternalLoginUserInfoCache struct {
+	// Third party identification
+	// e.g. facebook, twitter, instagram
+	Provider string
+	// required. The unique user ID provided by the third-party login
+	ExternalID string
+	// optional. This name is used preferentially during registration
+	Name string
+	// optional. If email exist will bind the existing user
+	Email string
+	// optional. The original user information provided by the third-party login platform
+	MetaInfo string
 }

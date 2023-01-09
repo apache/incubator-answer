@@ -22,8 +22,8 @@ func (pr *PluginAPIRouter) RegisterConnector(r *gin.Engine) {
 	connectorController := pr.connectorController
 	_ = plugin.CallConnector(func(connector plugin.Connector) error {
 		connectorSlugName := connector.ConnectorSlugName()
-		r.GET(controller.ConnectorLoginRouterPrefix+connectorSlugName, connectorController.ConnectorRedirect(connector))
-		r.GET(controller.ConnectorRedirectRouterPrefix+connectorSlugName, connectorController.ConnectorLogin(connector))
+		r.GET(controller.ConnectorLoginRouterPrefix+connectorSlugName, connectorController.ConnectorLogin(connector))
+		r.GET(controller.ConnectorRedirectRouterPrefix+connectorSlugName, connectorController.ConnectorRedirect(connector))
 		return nil
 	})
 	r.GET("/answer/api/v1/connector/info", connectorController.ConnectorsInfo)

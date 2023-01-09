@@ -31,9 +31,6 @@ type Connector interface {
 
 // ExternalLoginUserInfo external login user info
 type ExternalLoginUserInfo struct {
-	// Third party identification
-	// e.g. facebook, twitter, instagram
-	Provider string
 	// required. The unique user ID provided by the third-party login
 	ExternalID string
 	// optional. This name is used preferentially during registration

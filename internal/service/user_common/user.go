@@ -2,8 +2,6 @@ package usercommon
 
 import (
 	"context"
-	"encoding/hex"
-	"math/rand"
 	"regexp"
 	"strings"
 
@@ -14,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/pkg/checker"
+	"github.com/answerdev/answer/pkg/random"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -149,9 +148,7 @@ func (us *UserCommon) MakeUsername(ctx context.Context, displayName string) (use
 		if !has {
 			break
 		}
-		bytes := make([]byte, 2)
-		_, _ = rand.Read(bytes)
-		suffix = hex.EncodeToString(bytes)
+		suffix = random.UsernameSuffix()
 	}
 	return username + suffix, nil
 }

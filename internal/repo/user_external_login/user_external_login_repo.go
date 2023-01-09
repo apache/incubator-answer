@@ -8,7 +8,7 @@ import (
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/plugin"
+	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/user_external_login"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -55,15 +55,15 @@ func (ur *userExternalLoginRepo) GetByExternalID(ctx context.Context, externalID
 
 // SetCacheUserExternalLoginInfo cache user info for external login
 func (ur *userExternalLoginRepo) SetCacheUserExternalLoginInfo(
-	ctx context.Context, key string, info plugin.ExternalLoginUserInfo) (err error) {
+	ctx context.Context, key string, info *schema.ExternalLoginUserInfoCache) (err error) {
 	cacheData, _ := json.Marshal(info)
-	return ur.data.Cache.SetString(ctx, constant.ConnectorUserExternalInfoCacheKey+info.ExternalID,
+	return ur.data.Cache.SetString(ctx, constant.ConnectorUserExternalInfoCacheKey+key,
 		string(cacheData), constant.ConnectorUserExternalInfoCacheTime)
 }
 
 // GetCacheUserExternalLoginInfo cache user info for external login
 func (ur *userExternalLoginRepo) GetCacheUserExternalLoginInfo(
-	ctx context.Context, key string) (info plugin.ExternalLoginUserInfo, err error) {
+	ctx context.Context, key string) (info *schema.ExternalLoginUserInfoCache, err error) {
 	res, err := ur.data.Cache.GetString(ctx, constant.ConnectorUserExternalInfoCacheKey+key)
 	if err != nil {
 		return info, err

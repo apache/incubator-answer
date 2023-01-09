@@ -4,5 +4,5 @@ import "time"
 
 const (
 	ConnectorUserExternalInfoCacheKey  = "answer:connector:"
-	ConnectorUserExternalInfoCacheTime = 24 * time.Hour
+	ConnectorUserExternalInfoCacheTime = 10 * time.Minute
 )
