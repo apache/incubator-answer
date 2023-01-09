@@ -27,7 +27,6 @@ import './index.scss';
 const Comment = ({ objectId, mode, commentId }) => {
   const pageUsers = usePageUsers();
   const [pageIndex, setPageIndex] = useState(0);
-  const [comments, setComments] = useState<any>([]);
   const [visibleComment, setVisibleComment] = useState(false);
   const pageSize = pageIndex === 0 ? 3 : 15;
   const { data, mutate } = useQueryComments({
@@ -36,6 +35,7 @@ const Comment = ({ objectId, mode, commentId }) => {
     page: pageIndex,
     page_size: pageSize,
   });
+  const [comments, setComments] = useState<any>(data?.list || []);
 
   const reportModal = useReportModal();
 
