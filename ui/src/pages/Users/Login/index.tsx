@@ -12,7 +12,11 @@ import type {
   FormDataType,
 } from '@/common/interface';
 import { Unactivate } from '@/components';
-import { loggedUserInfoStore, loginSettingStore } from '@/stores';
+import {
+  loggedUserInfoStore,
+  loginSettingStore,
+  siteInfoStore,
+} from '@/stores';
 import { guard, floppyNavigation, handleFormError } from '@/utils';
 import { login, checkImgCode } from '@/services';
 import { PicAuthCodeModal } from '@/components/Modal';
@@ -23,8 +27,8 @@ const Index: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [refresh, setRefresh] = useState(0);
-  const updateUser = loggedUserInfoStore((state) => state.update);
-  const storeUser = loggedUserInfoStore((state) => state.user);
+  const { name: siteName } = siteInfoStore((_) => _.siteInfo);
+  const { user: storeUser, update: updateUser } = loggedUserInfoStore((_) => _);
   const loginSetting = loginSettingStore((state) => state.login);
   const [formData, setFormData] = useState<FormDataType>({
     e_mail: {
@@ -170,7 +174,9 @@ const Index: React.FC = () => {
   });
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
-      <h3 className="text-center mb-5">{t('page_title')}</h3>
+      <h3 className="text-center mb-5">
+        {t('page_title', { site_name: siteName })}
+      </h3>
       {step === 1 && (
         <Col className="mx-auto" md={3}>
           <Form noValidate onSubmit={handleSubmit}>
