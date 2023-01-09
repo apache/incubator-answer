@@ -300,12 +300,13 @@ type AvatarInfo struct {
 
 func (u *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {
 	if len(u.Username) > 0 {
+		errFields := make([]*validator.FormErrorField, 0)
 		re := regexp.MustCompile(`^[a-z0-9._-]{4,30}$`)
 		match := re.MatchString(u.Username)
 		if !match {
 			errField := &validator.FormErrorField{
 				ErrorField: "username",
-				ErrorMsg:   err.Error(),
+				ErrorMsg:   reason.UsernameInvalid,
 			}
 			errFields = append(errFields, errField)
 			return errFields, errors.BadRequest(reason.UsernameInvalid)
