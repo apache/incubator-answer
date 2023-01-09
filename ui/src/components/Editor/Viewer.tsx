@@ -14,6 +14,7 @@ import { htmlRender } from './utils';
 let scrollTop = 0;
 marked.setOptions({
   breaks: true,
+  sanitize: true,
 });
 
 const Index = ({ value }, ref) => {
