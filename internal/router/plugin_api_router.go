@@ -28,5 +28,4 @@ func (pr *PluginAPIRouter) RegisterConnector(r *gin.Engine) {
 	})
 	r.GET("/answer/api/v1/connector/info", connectorController.ConnectorsInfo)
 	r.POST("/answer/api/v1/connector/binding/email", connectorController.ExternalLoginBindingUserSendEmail)
-	r.POST("/answer/api/v1/connector/binding", connectorController.ExternalLoginBindingUser)
 }

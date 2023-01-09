@@ -206,49 +206,10 @@ func (us *UserExternalLoginService) ExternalLoginBindingUserSendEmail(
 // ExternalLoginBindingUser
 // The user clicks on the email link of the bound account and requests the API to bind the user officially
 func (us *UserExternalLoginService) ExternalLoginBindingUser(
-	ctx context.Context, req *schema.ExternalLoginBindingUserReq) (
-	resp *schema.ExternalLoginBindingUserResp, err error) {
-	data := &schema.EmailCodeContent{}
-	err = data.FromJSONString(req.Content)
-	if err != nil {
-		return nil, errors.BadRequest(reason.EmailVerifyURLExpired)
-	}
-	if data.SourceType != schema.BindingSourceType {
-		log.Warnf("invalid email source type %s", data.BindingKey)
-		return nil, errors.BadRequest(reason.EmailVerifyURLExpired)
-	}
-
-	oldUserInfo, exist, err := us.userRepo.GetByUserID(ctx, data.UserID)
-	if err != nil {
-		return nil, err
-	}
-	if !exist {
-		return nil, errors.BadRequest(reason.UserNotFound)
-	}
-
-	// If the user's email is not already authenticated, update the email status.
-	if oldUserInfo.MailStatus == entity.EmailStatusToBeVerified {
-		err = us.userRepo.UpdateEmailStatus(ctx, data.UserID, entity.EmailStatusAvailable)
-		if err != nil {
-			return nil, err
-		}
-		if err = us.userActivity.UserActive(ctx, data.UserID); err != nil {
-			log.Error(err)
-		}
-		oldUserInfo.MailStatus = entity.EmailStatusAvailable
-	}
-
-	externalLoginInfo, err := us.userExternalLoginRepo.GetCacheUserExternalLoginInfo(ctx, data.BindingKey)
+	ctx context.Context, bindingKey string, oldUserInfo *entity.User) (err error) {
+	externalLoginInfo, err := us.userExternalLoginRepo.GetCacheUserExternalLoginInfo(ctx, bindingKey)
 	if err != nil || len(externalLoginInfo.ExternalID) == 0 {
-		return nil, errors.BadRequest(reason.UserNotFound)
+		return errors.BadRequest(reason.UserNotFound)
 	}
-	err = us.bindOldUser(ctx, externalLoginInfo, oldUserInfo)
-	if err != nil {
-		return nil, err
-	}
-
-	accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
-		ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status)
-	resp = &schema.ExternalLoginBindingUserResp{AccessToken: accessToken}
-	return resp, err
+	return us.bindOldUser(ctx, externalLoginInfo, oldUserInfo)
 }

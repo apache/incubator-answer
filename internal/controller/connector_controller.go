@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/answerdev/answer/internal/base/handler"
-	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/plugin"
 	_ "github.com/answerdev/answer/internal/plugin/connector"
 	"github.com/answerdev/answer/internal/schema"
@@ -13,7 +12,6 @@ import (
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/internal/service/user_external_login"
 	"github.com/gin-gonic/gin"
-	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -82,9 +80,9 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 			return
 		}
 		if len(resp.AccessToken) > 0 {
-			ctx.Redirect(http.StatusFound, fmt.Sprintf("/index?token=%s", resp.AccessToken))
+			ctx.Redirect(http.StatusFound, fmt.Sprintf("/users/oauth?access_token=%s", resp.AccessToken))
 		} else {
-			ctx.Redirect(http.StatusFound, fmt.Sprintf("/binding?binding_key=%s", resp.BindingKey))
+			ctx.Redirect(http.StatusFound, fmt.Sprintf("/users/confirm-email?binding_key=%s", resp.BindingKey))
 		}
 	}
 }
@@ -119,22 +117,5 @@ func (cc *ConnectorController) ExternalLoginBindingUserSendEmail(ctx *gin.Contex
 	}
 
 	resp, err := cc.userExternalService.ExternalLoginBindingUserSendEmail(ctx, req)
-	handler.HandleResponse(ctx, err, resp)
-}
-
-func (cc *ConnectorController) ExternalLoginBindingUser(ctx *gin.Context) {
-	req := &schema.ExternalLoginBindingUserReq{}
-	if handler.BindAndCheck(ctx, req) {
-		return
-	}
-
-	req.Content = cc.emailService.VerifyUrlExpired(ctx, req.Code)
-	if len(req.Content) == 0 {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyURLExpired),
-			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeURLExpired})
-		return
-	}
-
-	resp, err := cc.userExternalService.ExternalLoginBindingUser(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }
