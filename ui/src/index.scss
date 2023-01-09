@@ -119,6 +119,9 @@ a {
   border: none;
   box-shadow: none;
 }
+.btn-no-focus:focus {
+  background-color: unset !important;
+}
 
 .pointer:hover {
   cursor: pointer;
