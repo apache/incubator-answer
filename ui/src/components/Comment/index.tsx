@@ -35,7 +35,7 @@ const Comment = ({ objectId, mode, commentId }) => {
     page: pageIndex,
     page_size: pageSize,
   });
-  const [comments, setComments] = useState<any>(data?.list || []);
+  const [comments, setComments] = useState<any>([]);
 
   const reportModal = useReportModal();
 
@@ -167,9 +167,8 @@ const Comment = ({ objectId, mode, commentId }) => {
         deleteComment(id).then(() => {
           if (pageIndex === 0) {
             mutate();
-          } else {
-            setComments(comments.filter((item) => item.comment_id !== id));
           }
+          setComments(comments.filter((item) => item.comment_id !== id));
         });
       },
     });
