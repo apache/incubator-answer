@@ -52,7 +52,7 @@ const ToolItem: FC<IProps> = (props) => {
     <OverlayTrigger placement="bottom" overlay={<Tooltip>{tip}</Tooltip>}>
       <Button
         variant="link"
-        className={`p-0 b-0 btn-no-border toolbar icon-${label} ${
+        className={`p-0 b-0 btn-no-border btn-no-focus toolbar icon-${label} ${
           disable ? 'disabled' : ''
         } `}
         disabled={disable}
