@@ -291,7 +291,12 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   return (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {
-        const { title, description, label } = properties[key];
+        const {
+          title,
+          description,
+          label,
+          default: defaultValue,
+        } = properties[key];
         const { 'ui:widget': widget = 'input', 'ui:options': options = {} } =
           uiSchema[key] || {};
         if (widget === 'select') {
@@ -304,7 +309,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
               <Form.Select
                 aria-label={description}
                 name={key}
-                value={formData[key]?.value}
+                value={formData[key]?.value || defaultValue}
                 onChange={handleSelectChange}
                 isInvalid={formData[key].isInvalid}>
                 {properties[key].enum?.map((item, index) => {
@@ -342,7 +347,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                       name={key}
                       id={`form-${String(item)}`}
                       label={properties[key].enumNames?.[index]}
-                      checked={formData[key]?.value === item}
+                      checked={(formData[key]?.value || defaultValue) === item}
                       feedback={formData[key]?.errorMsg}
                       feedbackType="invalid"
                       isInvalid={formData[key].isInvalid}
@@ -374,7 +379,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 name={key}
                 type="switch"
                 label={label}
-                checked={formData[key]?.value}
+                checked={formData[key]?.value || defaultValue}
                 feedback={formData[key]?.errorMsg}
                 feedbackType="invalid"
                 isInvalid={formData[key].isInvalid}
@@ -397,7 +402,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
               controlId={key}>
               <Form.Label>{title}</Form.Label>
               <TimeZonePicker
-                value={formData[key]?.value}
+                value={formData[key]?.value || defaultValue}
                 name={key}
                 onChange={handleSelectChange}
               />
@@ -456,7 +461,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 name={key}
                 placeholder={options?.placeholder || ''}
                 type={options?.type || 'text'}
-                value={formData[key]?.value}
+                value={formData[key]?.value || defaultValue}
                 onChange={handleInputChange}
                 isInvalid={formData[key].isInvalid}
                 rows={options?.rows || 3}
@@ -482,7 +487,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
               name={key}
               placeholder={options?.placeholder || ''}
               type={options?.type || 'text'}
-              value={formData[key]?.value}
+              value={formData[key]?.value || defaultValue}
               onChange={handleInputChange}
               style={options?.type === 'color' ? { width: '6rem' } : {}}
               isInvalid={formData[key].isInvalid}

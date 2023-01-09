@@ -8,7 +8,7 @@ import {
   AdminSettingsInterface,
 } from '@/common/interface';
 import { interfaceStore } from '@/stores';
-import { JSONSchema, SchemaForm, UISchema } from '@/components';
+import { JSONSchema, SchemaForm, UISchema, initFormData } from '@/components';
 import { DEFAULT_TIMEZONE } from '@/common/constants';
 import { updateInterfaceSetting, useInterfaceSetting } from '@/services';
 import {
@@ -36,27 +36,18 @@ const Interface: FC = () => {
         description: t('language.text'),
         enum: langs?.map((lang) => lang.value),
         enumNames: langs?.map((lang) => lang.label),
+        default: setting?.language || storeInterface.language,
       },
       time_zone: {
         type: 'string',
         title: t('time_zone.label'),
         description: t('time_zone.text'),
+        default: setting?.time_zone || DEFAULT_TIMEZONE,
       },
     },
   };
 
-  const [formData, setFormData] = useState<FormDataType>({
-    language: {
-      value: setting?.language || storeInterface.language,
-      isInvalid: false,
-      errorMsg: '',
-    },
-    time_zone: {
-      value: setting?.time_zone || DEFAULT_TIMEZONE,
-      isInvalid: false,
-      errorMsg: '',
-    },
-  });
+  const [formData, setFormData] = useState<FormDataType>(initFormData(schema));
 
   const uiSchema: UISchema = {
     language: {
