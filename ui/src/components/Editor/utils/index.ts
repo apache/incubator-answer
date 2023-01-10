@@ -113,4 +113,20 @@ export function htmlRender(el: HTMLElement | null) {
       });
     },
   );
+
+  el.querySelectorAll('table').forEach((table) => {
+    if (
+      (table.parentNode as HTMLDivElement)?.classList.contains(
+        'table-responsive',
+      )
+    ) {
+      return;
+    }
+
+    table.classList.add('table', 'table-bordered');
+    const div = document.createElement('div');
+    div.className = 'table-responsive';
+    table.parentNode?.replaceChild(div, table);
+    div.appendChild(table);
+  });
 }
