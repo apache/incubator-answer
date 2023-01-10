@@ -5723,6 +5723,9 @@ const docTemplate = `{
         "schema.ExternalLoginBindingUserSendEmailResp": {
             "type": "object",
             "properties": {
+                "access_token": {
+                    "type": "string"
+                },
                 "email_exist_and_must_be_confirmed": {
                     "type": "boolean"
                 }

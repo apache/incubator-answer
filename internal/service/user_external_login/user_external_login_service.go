@@ -180,6 +180,11 @@ func (us *UserExternalLoginService) ExternalLoginBindingUserSendEmail(
 		if err != nil {
 			return nil, err
 		}
+		resp.AccessToken, _, err = us.userCommonService.CacheLoginUserInfo(
+			ctx, userInfo.ID, userInfo.MailStatus, userInfo.Status)
+		if err != nil {
+			log.Error(err)
+		}
 	}
 	err = us.userExternalLoginRepo.SetCacheUserExternalLoginInfo(ctx, req.BindingKey, externalLoginInfo)
 	if err != nil {

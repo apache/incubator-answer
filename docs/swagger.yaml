@@ -312,6 +312,8 @@ definitions:
     type: object
   schema.ExternalLoginBindingUserSendEmailResp:
     properties:
+      access_token:
+        type: string
       email_exist_and_must_be_confirmed:
         type: boolean
     type: object

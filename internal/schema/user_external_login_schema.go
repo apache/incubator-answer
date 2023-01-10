@@ -17,7 +17,8 @@ type ExternalLoginBindingUserSendEmailReq struct {
 
 // ExternalLoginBindingUserSendEmailResp external login binding user response
 type ExternalLoginBindingUserSendEmailResp struct {
-	EmailExistAndMustBeConfirmed bool `json:"email_exist_and_must_be_confirmed"`
+	EmailExistAndMustBeConfirmed bool   `json:"email_exist_and_must_be_confirmed"`
+	AccessToken                  string `json:"access_token"`
 }
 
 // ExternalLoginBindingUserReq external login binding user request
