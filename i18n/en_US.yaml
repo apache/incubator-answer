@@ -1361,6 +1361,8 @@ ui:
     invalid: is invalid
     btn_submit: Save
     not_found_props: "Required property {{ key }} not found."
+    select: Select
+    
   page_review:
     review: Review
     proposed: proposed
