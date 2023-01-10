@@ -426,7 +426,7 @@ ui:
     history: Historique
     synonyms:
       title: Synonymes
-      text: The following tags will be remapped to
+      text: Les tags suivants seront redistribués vers
       empty: Aucun synonyme trouvé.
       btn_add: Ajouter un synonyme
       btn_edit: Modifier
@@ -593,7 +593,7 @@ ui:
     name:
       label: Name
       msg:
-        empty: Name cannot be empty.
+        empty: Le nom ne peut pas être vide.
         range: Le nom doit contenir moins de 30 caractères.
     email:
       label: Email
@@ -681,13 +681,13 @@ ui:
       heading: Notifications
       email:
         label: Notifications par email
-        radio: "Answers to your questions, comments, and more"
+        radio: "Réponses à vos questions, commentaires et plus"
     account:
-      heading: Account
+      heading: Compte
       change_email_btn: Modifier l'adresse e-mail
-      change_pass_btn: Change password
+      change_pass_btn: Changer le mot de passe
       change_email_info: >-
-        We've sent an email to that address. Please follow the confirmation instructions.
+        Nous vous avons envoyé un mail à cette adresse. Merci de suivre les instructions.
       email:
         label: E-mail
         msg: L'e-mail ne peut pas être vide.
@@ -696,65 +696,65 @@ ui:
         label: Mot de passe actuel
         msg:
           empty: Le mot de passe actuel ne peut pas être vide.
-          length: The length needs to be between 8 and 32.
+          length: La longueur doit être comprise entre 8 et 32.
           different: Le mot de passe saisi ne correspond pas.
       new_pass:
-        label: New Password
+        label: Nouveau mot de passe
       pass_confirm:
-        label: Confirm New Password
+        label: Confirmer le nouveau mot de passe
     interface:
       heading: Interface
       lang:
-        label: Interface Language
-        text: User interface language. It will change when you refresh the page.
+        label: Langue de l'interface
+        text: Langue de l'interface utilisateur. Cela changera lorsque vous rafraîchissez la page.
   toast:
-    update: update success
-    update_password: Password changed successfully.
-    flag_success: Thanks for flagging.
-    forbidden_operate_self: Forbidden to operate on yourself
-    review: Your revision will show after review.
+    update: mise à jour effectuée
+    update_password: Mot de passe changé avec succès.
+    flag_success: Merci pour votre signalement.
+    forbidden_operate_self: Interdit d'opérer sur vous-même
+    review: Votre révision s'affichera après vérification.
   related_question:
-    title: Related Questions
+    title: Questions liées
     btn: Ajouter une question
     answers: réponses
   question_detail:
-    Asked: Asked
-    asked: asked
-    update: Modified
+    Asked: Demandé
+    asked: demandé
+    update: Modifié
     edit: modifié
-    Views: Viewed
+    Views: Consultée
     Follow: S’abonner
     Following: Abonné(s)
     answered: répondu
-    closed_in: Closed in
-    show_exist: Show existing question.
+    closed_in: Fermé dans
+    show_exist: Afficher la question existante.
     answers:
       title: Réponses
       score: Score
-      newest: Newest
+      newest: Les plus récents
       btn_accept: Accepter
       btn_accepted: Accepté
     write_answer:
       title: Votre réponse
       btn_name: Poster votre réponse
       add_another_answer: Ajouter une autre réponse
-      confirm_title: Continue to answer
-      continue: Continue
+      confirm_title: Continuer à répondre
+      continue: Continuer
       confirm_info: >-
-        <p>Are you sure you want to add another answer?</p><p>You could use the edit link to refine and improve your existing answer, instead.</p>
-      empty: Answer cannot be empty.
+        <p>Êtes-vous sûr de vouloir ajouter une autre réponse ?</p><p>Vous pouvez utiliser le lien d'édition pour affiner et améliorer votre réponse existante.</p>
+      empty: La réponse ne peut être vide.
     reopen:
-      title: Reopen this post
-      content: Are you sure you want to reopen?
-      success: This post has been reopened
+      title: Rouvrir ce message
+      content: Êtes-vous sûr de vouloir rouvrir ?
+      success: Ce message a été rouvert
   delete:
-    title: Delete this post
+    title: Supprimer la publication
     question: >-
-      We do not recommend <strong>deleting questions with answers</strong> because doing so deprives future readers of this knowledge.</p><p>Repeated deletion of answered questions can result in your account being blocked from asking. Are you sure you wish to delete?
+      Nous ne recommandons pas <strong>de supprimer des questions avec des réponses</strong> car cela prive les futurs lecteurs de cette connaissance.</p><p>Suppression répétée des questions répondues peut empêcher votre compte de poser. Êtes-vous sûr de vouloir supprimer ?
     answer_accepted: >-
-      <p>We do not recommend <strong>deleting accepted answer</strong> because doing so deprives future readers of this knowledge. </p> Repeated deletion of accepted answers can result in your account being blocked from answering. Are you sure you wish to delete?
-    other: Are you sure you wish to delete?
-    tip_question_deleted: This post has been deleted
+      <p>Nous ne recommandons pas <strong>de supprimer la réponse acceptée</strong> car cela prive les futurs lecteurs de cette connaissance. </p> La suppression répétée des réponses acceptées peut empêcher votre compte de répondre. Êtes-vous sûr de vouloir supprimer ?
+    other: Êtes-vous sûr de vouloir supprimer ?
+    tip_question_deleted: Ce message a été supprimé
     tip_answer_deleted: Cette réponse a été supprimée
   btns:
     confirm: Confimer
@@ -762,9 +762,9 @@ ui:
     save: Enregistrer
     delete: Supprimer
     login: Se connecter
-    signup: Sign up
-    logout: Log out
-    verify: Verify
+    signup: S'inscrire
+    logout: Se déconnecter
+    verify: Vérifier
     add_question: Ajouter une question
     approve: Approuver
     reject: Rejeter
@@ -775,7 +775,7 @@ ui:
     options: Options
     follow: Suivre
     following: Abonnements
-    counts: "{{count}} Results"
+    counts: "{{count}} Résultats"
     more: Plus
     sort_btns:
       relevance: Pertinence
@@ -784,14 +784,14 @@ ui:
       score: Score
       more: Plus
     tips:
-      title: Advanced Search Tips
-      tag: "<1>[tag]</1> search withing a tag"
-      user: "<1>user:username</1> search by author"
-      answer: "<1>answers:0</1> unanswered questions"
-      score: "<1>score:3</1> posts with a 3+ score"
-      question: "<1>is:question</1> search questions"
-      is_answer: "<1>is:answer</1> search answers"
-    empty: We couldn't find anything. <br /> Try different or less specific keywords.
+      title: Astuces de recherche avancée
+      tag: "<1>[tag]</1> recherche à l'aide d'un tag"
+      user: "<1>utilisateur:username</1> recherche par auteur"
+      answer: "<1>réponses:0</1> questions sans réponses"
+      score: "<1>score:3</1> messages avec plus de 3 points"
+      question: "<1>est:question</1> rechercher des questions"
+      is_answer: "<1>est :réponse</1> réponses de recherche"
+    empty: Nous n'avons rien trouvé. <br /> Essayez des mots-clés différents ou moins spécifiques.
   share:
     name: Partager
     copy: Copier le lien
@@ -804,10 +804,10 @@ ui:
     title: Erreur...
   account_result:
     page_title: Bienvenue sur Answer
-    success: Your new account is confirmed; you will be redirected to the home page.
+    success: Votre nouveau compte est confirmé; vous serez redirigé vers la page d'accueil.
     link: Continuer vers la page d'accueil
     invalid: >-
-      Sorry, this account confirmation link is no longer valid. Perhaps your account is already active?
+      Désolé, ce lien de confirmation n'est plus valide. Votre compte est peut-être déjà activé ?
     confirm_new_email: Votre adresse email a été mise à jour.
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
@@ -1317,7 +1317,7 @@ ui:
   timeline:
     undeleted: restauré
     deleted: supprimé
-    downvote: downvote
+    downvote: vote négatif
     upvote: upvote
     accept: accepté
     cancelled: annulé
