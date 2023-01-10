@@ -11,7 +11,7 @@ import type {
   ImgCodeRes,
   FormDataType,
 } from '@/common/interface';
-import { Unactivate } from '@/components';
+import { Unactivate, OauthButtons } from '@/components';
 import { loggedUserInfoStore, loginSettingStore } from '@/stores';
 import { guard, floppyNavigation, handleFormError } from '@/utils';
 import { login, checkImgCode } from '@/services';
@@ -173,6 +173,7 @@ const Index: React.FC = () => {
       <h3 className="text-center mb-5">{t('page_title')}</h3>
       {step === 1 && (
         <Col className="mx-auto" md={3}>
+          <OauthButtons className="mb-5" />
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group controlId="email" className="mb-3">
               <Form.Label>{t('email.label')}</Form.Label>

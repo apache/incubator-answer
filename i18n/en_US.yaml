@@ -281,6 +281,7 @@ ui:
     upgrade: Answer Upgrade
     maintenance: Website Maintenance
     users: Users
+    oauth_callback: Processing
   notifications:
     title: Notifications
     inbox: Inbox
@@ -647,6 +648,18 @@ ui:
       label: New Email
       msg:
         empty: Email cannot be empty.
+  oauth_bind_email:
+    page_title: Welcome to Answer
+    subtitle: Add a recovery email to your account.
+    btn_update: Update email address
+    email:
+      label: Email
+      msg:
+        empty: Email cannot be empty.
+    modal_title: Email already existes.
+    modal_content: This email address already registered. Are you sure you want to connect to the existing account?
+    modal_cancel: Change email
+    modal_confirm: Connect to the existing account
   password_reset:
     page_title: Password Reset
     btn_name: Reset my password

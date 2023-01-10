@@ -204,6 +204,14 @@ const routes: RouteNode[] = [
         },
       },
       {
+        path: '/users/confirm-email',
+        page: 'pages/Users/OauthBindEmail',
+      },
+      {
+        path: '/users/oauth',
+        page: 'pages/Users/OauthCallback',
+      },
+      {
         path: '/posts/:qid/timeline',
         page: 'pages/Timeline',
         guard: () => {

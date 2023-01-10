@@ -515,3 +515,9 @@ export interface User {
   display_name: string;
   avatar: string;
 }
+
+export interface OauthBindEmailReq {
+  binding_key: string;
+  email: string;
+  must: boolean;
+}
