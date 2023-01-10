@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import { Editor, Modal, TextArea } from '@/components';
 import { FormDataType } from '@/common/interface';
 import { postAnswer } from '@/services';
+import { guard } from '@/utils';
 
 interface Props {
   visible?: boolean;
@@ -31,10 +32,13 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     },
   });
   const [showEditor, setShowEditor] = useState<boolean>(visible);
-  const [focusType, setForceType] = useState('');
-  const [editorFoucsState, setEditorFoucsState] = useState(false);
+  const [focusType, setFocusType] = useState('');
+  const [editorFocusState, setEditorFocusState] = useState(false);
 
   const handleSubmit = () => {
+    if (!guard.tryNormalLogged(true)) {
+      return;
+    }
     if (!formData.content.value) {
       setFormData({
         content: {
@@ -63,6 +67,9 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   };
 
   const clickBtn = () => {
+    if (!guard.tryNormalLogged(true)) {
+      return;
+    }
     if (data?.answered && !showEditor) {
       Modal.confirm({
         title: t('confirm_title'),
@@ -82,10 +89,14 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
 
     handleSubmit();
   };
-  const handleFocusForTextArea = () => {
-    setForceType('answer');
+  const handleFocusForTextArea = (evt) => {
+    if (!guard.tryNormalLogged(true)) {
+      evt.currentTarget.blur();
+      return;
+    }
+    setFocusType('answer');
     setShowEditor(true);
-    setEditorFoucsState(true);
+    setEditorFocusState(true);
   };
 
   return (
@@ -116,7 +127,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
                 focusType === 'answer' && 'focus',
               )}
               value={formData.content.value}
-              autoFocus={editorFoucsState}
+              autoFocus={editorFocusState}
               onChange={(val) => {
                 setFormData({
                   content: {
@@ -127,10 +138,10 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
                 });
               }}
               onFocus={() => {
-                setForceType('answer');
+                setFocusType('answer');
               }}
               onBlur={() => {
-                setForceType('');
+                setFocusType('');
               }}
             />
           )}

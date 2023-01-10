@@ -60,6 +60,7 @@ const Header: FC = () => {
   const handleLogout = async () => {
     await logout();
     clearUserStore();
+    window.location.replace(window.location.href);
   };
   const onLoginClick = (evt) => {
     evt.preventDefault();
