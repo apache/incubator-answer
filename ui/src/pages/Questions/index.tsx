@@ -48,7 +48,7 @@ const Questions: FC = () => {
               </div>
             </div>
           )}
-          <FollowingTags />
+          {loggedUser.access_token && <FollowingTags />}
           <HotQuestions />
         </Col>
       </Row>
