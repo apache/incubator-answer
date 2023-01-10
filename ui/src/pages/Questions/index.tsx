@@ -39,10 +39,10 @@ const Questions: FC = () => {
                   })}
                 </h5>
                 <p className="card-text">{siteInfo.description}</p>
-                <Link to="/users/login" className="card-link btn btn-primary">
+                <Link to="/users/login" className="btn btn-primary">
                   {t('login', { keyPrefix: 'btns' })}
                 </Link>
-                <Link to="/users/register" className="card-link">
+                <Link to="/users/register" className="btn btn-link ms-2">
                   {t('signup', { keyPrefix: 'btns' })}
                 </Link>
               </div>
