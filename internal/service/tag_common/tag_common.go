@@ -508,13 +508,13 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 
 	tagInDbMapping := make(map[string]*entity.Tag)
 	for _, tag := range tagListInDb {
-		tagInDbMapping[tag.SlugName] = tag
+		tagInDbMapping[strings.ToLower(tag.SlugName)] = tag
 		thisObjTagIDList = append(thisObjTagIDList, tag.ID)
 	}
 
 	addTagList := make([]*entity.Tag, 0)
 	for _, tag := range objectTagData.Tags {
-		_, ok := tagInDbMapping[tag.SlugName]
+		_, ok := tagInDbMapping[strings.ToLower(tag.SlugName)]
 		if ok {
 			continue
 		}
