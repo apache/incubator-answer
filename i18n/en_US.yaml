@@ -607,7 +607,7 @@ ui:
     msg:
       empty: Cannot be empty.
   login:
-    page_title: Welcome to Answer
+    page_title: Welcome to {{site_name}}
     info_sign: Don't have an account? <1>Sign up</1>
     info_login: Already have an account? <1>Log in</1>
     agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.

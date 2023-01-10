@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
-import { Tag, Pagination, QueryGroup } from '@/components';
+import { Tag, Pagination, QueryGroup, TagsLoader } from '@/components';
 import { formatCount } from '@/utils';
 import { useQueryTags, following } from '@/services';
 
@@ -19,7 +19,11 @@ const Tags = () => {
   const sort = urlSearch.get('sort');
 
   const pageSize = 20;
-  const { data: tags, mutate } = useQueryTags({
+  const {
+    data: tags,
+    mutate,
+    isLoading,
+  } = useQueryTags({
     page,
     page_size: pageSize,
     ...(searchTag ? { slug_name: searchTag } : {}),
@@ -69,39 +73,43 @@ const Tags = () => {
 
         <Col className="mt-4" xxl={10} sm={12}>
           <Row>
-            {tags?.list?.map((tag) => (
-              <Col
-                key={tag.slug_name}
-                xs={12}
-                lg={3}
-                md={4}
-                sm={6}
-                className="mb-4">
-                <Card className="h-100">
-                  <Card.Body className="d-flex flex-column align-items-start">
-                    <Tag className="mb-3" data={tag} />
+            {isLoading ? (
+              <TagsLoader />
+            ) : (
+              tags?.list?.map((tag) => (
+                <Col
+                  key={tag.slug_name}
+                  xs={12}
+                  lg={3}
+                  md={4}
+                  sm={6}
+                  className="mb-4">
+                  <Card className="h-100">
+                    <Card.Body className="d-flex flex-column align-items-start">
+                      <Tag className="mb-3" data={tag} />
 
-                    <p className="fs-14 flex-fill text-break text-wrap text-truncate-3">
-                      {tag.original_text}
-                    </p>
-                    <div className="d-flex align-items-center">
-                      <Button
-                        className={`me-2 ${tag.is_follower ? 'active' : ''}`}
-                        variant="outline-primary"
-                        size="sm"
-                        onClick={() => handleFollow(tag)}>
-                        {tag.is_follower
-                          ? t('button_following')
-                          : t('button_follow')}
-                      </Button>
-                      <span className="text-secondary fs-14 text-nowrap">
-                        {formatCount(tag.question_count)} {t('tag_label')}
-                      </span>
-                    </div>
-                  </Card.Body>
-                </Card>
-              </Col>
-            ))}
+                      <p className="fs-14 flex-fill text-break text-wrap text-truncate-3">
+                        {tag.original_text}
+                      </p>
+                      <div className="d-flex align-items-center">
+                        <Button
+                          className={`me-2 ${tag.is_follower ? 'active' : ''}`}
+                          variant="outline-primary"
+                          size="sm"
+                          onClick={() => handleFollow(tag)}>
+                          {tag.is_follower
+                            ? t('button_following')
+                            : t('button_follow')}
+                        </Button>
+                        <span className="text-secondary fs-14 text-nowrap">
+                          {formatCount(tag.question_count)} {t('tag_label')}
+                        </span>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              ))
+            )}
           </Row>
           <div className="d-flex justify-content-center">
             <Pagination

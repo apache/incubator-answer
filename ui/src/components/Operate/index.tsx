@@ -41,10 +41,10 @@ const Index: FC<IProps> = ({
   const navigate = useNavigate();
   const reportModal = useReportModal();
 
-  const refershQuestion = () => {
+  const refreshQuestion = () => {
     callback?.('default');
   };
-  const closeModal = useReportModal(refershQuestion);
+  const closeModal = useReportModal(refreshQuestion);
   const editUrl =
     type === 'answer' ? `/posts/${qid}/${aid}/edit` : `/posts/${qid}/edit`;
 
@@ -132,7 +132,7 @@ const Index: FC<IProps> = ({
             msg: t('success', { keyPrefix: 'question_detail.reopen' }),
             variant: 'success',
           });
-          refershQuestion();
+          refreshQuestion();
         });
       },
     });
