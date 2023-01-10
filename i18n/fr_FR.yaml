@@ -106,7 +106,7 @@ backend:
       cannot_update:
         other: "Pas de permission pour mettre à jour."
       cannot_set_synonym_as_itself:
-        other: "You cannot set the synonym of the current tag as itself."
+        other: "Vous ne pouvez pas définir le synonyme de la balise actuelle comme elle-même."
     smtp:
       config_from_name_cannot_be_email:
         other: "Le nom d'expéditeur ne peut pas être une adresse e-mail."
@@ -117,7 +117,7 @@ backend:
       review_underway:
         other: "Impossible d'éditer actuellement, il y a une version dans la file d'attente des revues."
       no_permission:
-        other: "No permission to Revision."
+        other: "Vous n'êtes pas autorisé à répondre."
     user:
       email_or_password_wrong:
         other:
@@ -253,7 +253,7 @@ ui:
     edit_question: Modifier la question
     edit_answer: Modifier la réponse
     search: Rechercher
-    posts_containing: Posts containing
+    posts_containing: Messages contenant
     settings: Paramètres
     notifications: Notifications
     login: Se connecter
@@ -358,7 +358,7 @@ ui:
     outdent:
       text: Outdent
     italic:
-      text: Emphasis
+      text: Mise en valeur
     link:
       text: Hyperlien
       add_link: Ajouter un lien hypertexte
@@ -377,15 +377,15 @@ ui:
     unordered_list:
       text: Liste à puces
     table:
-      text: Table
-      heading: Heading
+      text: Tableau
+      heading: Titre
       cell: Cellule
   close_modal:
-    title: I am closing this post as...
+    title: Je ferme ce post comme...
     btn_cancel: Annuler
     btn_submit: Valider
     remark:
-      empty: Cannot be empty.
+      empty: Ne peut pas être vide.
     msg:
       empty: Veuillez sélectionner une raison.
   report_modal:
@@ -405,19 +405,19 @@ ui:
     form:
       fields:
         display_name:
-          label: Display Name
+          label: Nom d'affichage
           msg:
             empty: Display name cannot be empty.
-            range: Display name up to 35 characters.
+            range: Le nom doit contenir moins de 35 caractères.
         slug_name:
-          label: URL Slug
-          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          label: URL simplifiée
+          desc: 'Doit utiliser le jeu de caractères "a-z", "0-9", "+ # - ."'
           msg:
-            empty: URL slug cannot be empty.
-            range: URL slug up to 35 characters.
-            character: URL slug contains unallowed character set.
+            empty: L'URL ne peut pas être vide.
+            range: Titre de 35 caractères maximum.
+            character: Le slug d'URL contient un jeu de caractères non autorisé.
         desc:
-          label: Description (optional)
+          label: Description (facultatif)
     btn_cancel: Annuler
     btn_submit: Valider
   tag_info:
