@@ -213,7 +213,6 @@ const Index = () => {
 
           {!isLoading && !question?.operation?.operation_type && (
             <WriteAnswer
-              visible={answers.count === 0}
               data={{
                 qid,
                 answered: question?.answered,
