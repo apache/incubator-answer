@@ -12,7 +12,7 @@ import {
   FormatTime,
   htmlRender,
 } from '@/components';
-import { formatCount } from '@/utils';
+import { formatCount, guard } from '@/utils';
 import { following } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 
@@ -33,6 +33,9 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
 
   const handleFollow = (e) => {
     e.preventDefault();
+    if (!guard.tryNormalLogged(true)) {
+      return;
+    }
     following({
       object_id: data?.id,
       is_cancel: followed,

@@ -9,7 +9,7 @@ import { FollowingTags } from '@/components';
 import { useTagInfo, useFollow, useQuerySynonymsTags } from '@/services';
 import QuestionList from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
-import { escapeRemove } from '@/utils';
+import { escapeRemove, guard } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
 
 const Questions: FC = () => {
@@ -23,6 +23,9 @@ const Questions: FC = () => {
   const { data: followResp } = useFollow(tagFollow);
   const { data: synonymsRes } = useQuerySynonymsTags(tagInfo?.tag_id);
   const toggleFollow = () => {
+    if (!guard.tryNormalLogged(true)) {
+      return;
+    }
     setTagFollow({
       is_cancel: tagInfo.is_follower,
       object_id: tagInfo.tag_id,

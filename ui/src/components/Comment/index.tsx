@@ -75,6 +75,9 @@ const Comment = ({ objectId, mode, commentId }) => {
   }, [data]);
 
   const handleReply = (id) => {
+    if (!tryNormalLogged(true)) {
+      return;
+    }
     setComments(
       comments.map((item) => {
         if (item.comment_id === id) {
@@ -305,7 +308,9 @@ const Comment = ({ objectId, mode, commentId }) => {
           variant="link"
           className="p-0 fs-14 btn-no-border"
           onClick={() => {
-            setVisibleComment(!visibleComment);
+            if (tryNormalLogged(true)) {
+              setVisibleComment(!visibleComment);
+            }
           }}>
           {t('btn_add_comment')}
         </Button>

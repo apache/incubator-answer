@@ -97,7 +97,7 @@ const Index: FC<IProps> = ({
           deleteAnswer({
             id: aid,
           }).then(() => {
-            // refersh page
+            // refresh page
             toast.onShow({
               msg: t('tip_answer_deleted'),
               variant: 'success',
