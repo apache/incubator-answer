@@ -312,6 +312,9 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 value={formData[key]?.value || defaultValue}
                 onChange={handleSelectChange}
                 isInvalid={formData[key].isInvalid}>
+                <option disabled selected>
+                  {t('select')}
+                </option>
                 {properties[key].enum?.map((item, index) => {
                   return (
                     <option value={String(item)} key={String(item)}>
