@@ -1043,6 +1043,8 @@ ui:
     themes: Themes
     css-html: CSS/HTML
     login: Login
+    plugins: Plugins
+    installed_plugins: Installed Plugins
   admin:
     admin_header:
       title: Admin
@@ -1362,7 +1364,24 @@ ui:
         title: Private
         label: Login required
         text: Only logged in users can access this community.
+    installed_plugins:
+      title: Installed Plugins
+      filter:
+        all: All
+        active: Active
+        inactive: Inactive
+        outdated: Outdated
+      plugins:
+        label: Plugins
+        text: Select an existing plugin.
+      name: Name
+      version: Version
+      status: Status
+      action: Action
+      deactivate: Deactivate
+      settings: Settings
 
+      
   form:
     empty: cannot be empty
     invalid: is invalid

@@ -261,6 +261,11 @@ export type UserFilterBy =
   | 'suspended'
   | 'deleted';
 
+export type InstalledPluginsFilterBy =
+  | 'all'
+  | 'active'
+  | 'inactive'
+  | 'outdated';
 /**
  * @description interface for Flags
  */

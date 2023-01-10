@@ -77,6 +77,14 @@ export const ADMIN_NAV_MENUS = [
       { name: 'login' },
     ],
   },
+  {
+    name: 'plugins',
+    children: [
+      {
+        name: 'installed_plugins',
+      },
+    ],
+  },
 ];
 
 export const ADMIN_LEGAL_MENUS = [{ name: 'tos' }, { name: 'privacy' }];
