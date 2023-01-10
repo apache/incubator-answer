@@ -106,7 +106,7 @@ func (cc *ConnectorController) ConnectorsInfo(ctx *gin.Context) {
 	err = plugin.CallConnector(func(fn plugin.Connector) error {
 		resp = append(resp, &schema.ConnectorInfoResp{
 			Name: fn.ConnectorSlugName(),
-			Icon: fn.ConnectorLogo(),
+			Icon: fn.ConnectorLogoSVG(),
 			Link: fmt.Sprintf("%s%s%s", general.SiteUrl, ConnectorLoginRouterPrefix, fn.ConnectorSlugName()),
 		})
 		return nil

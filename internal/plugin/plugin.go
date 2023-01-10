@@ -1,35 +1,43 @@
 package plugin
 
-import "github.com/gin-gonic/gin"
+import (
+	"encoding/json"
+
+	"github.com/gin-gonic/gin"
+)
 
 // GinContext is a wrapper of gin.Context
 // We export it to make it easy to use in plugins
 type GinContext = gin.Context
 
+// StatusManager is a manager that manages the status of plugins
+// Init Plugins:
+// json.Unmarshal([]byte(`{"plugin1": true, "plugin2": false}`), &plugin.StatusManager)
+// Dump Status:
+// json.Marshal(plugin.StatusManager)
+var StatusManager = statusManager{
+	status: make(map[string]bool),
+}
+
 // Register registers a plugin
 func Register(p Base) {
 	registerBase(p)
 
-	switch pType := p.(type) {
-	case Connector:
-		registerConnector(pType)
-	case Parser:
-		registerParser(pType)
-	case Filter:
-		registerFilter(pType)
+	if _, ok := p.(Config); ok {
+		registerConfig(p.(Config))
 	}
-}
 
-// Dump returns all registered plugins infos
-func Dump() []Info {
-	var infos []Info
+	if _, ok := p.(Connector); ok {
+		registerConnector(p.(Connector))
+	}
 
-	CallBase(func(p Base) error {
-		infos = append(infos, p.Info())
-		return nil
-	})
+	if _, ok := p.(Parser); ok {
+		registerParser(p.(Parser))
+	}
 
-	return infos
+	if _, ok := p.(Filter); ok {
+		registerFilter(p.(Filter))
+	}
 }
 
 type Stack[T Base] struct {
@@ -41,16 +49,17 @@ type Caller[T Base] func(p T) error
 type CallFn[T Base] func(fn Caller[T]) error
 
 // MakePlugin creates a plugin caller and register stack manager
+// The parameter super presents if the plugin can be disabled.
 // It returns a register function and a caller function
 // The register function is used to register a plugin, it will be called in the plugin's init function
 // The caller function is used to call all registered plugins
-func MakePlugin[T Base]() (CallFn[T], RegisterFn[T]) {
+func MakePlugin[T Base](super bool) (CallFn[T], RegisterFn[T]) {
 	stack := Stack[T]{}
 
 	call := func(fn Caller[T]) error {
 		for _, p := range stack.plugins {
 			// If the plugin is disabled, skip it
-			if p.Info().Disabled {
+			if !super && !StatusManager.IsEnabled(p.Info().SlugName) {
 				continue
 			}
 
@@ -66,4 +75,29 @@ func MakePlugin[T Base]() (CallFn[T], RegisterFn[T]) {
 	}
 
 	return call, register
+}
+
+type statusManager struct {
+	status map[string]bool
+}
+
+func (m *statusManager) Enable(name string, enabled bool) {
+	m.status[name] = enabled
+}
+
+func (m *statusManager) IsEnabled(name string) bool {
+	if status, ok := m.status[name]; ok {
+		return status
+	}
+	return true
+}
+
+// MarshalJSON implements the json.Marshaler interface.
+func (m *statusManager) MarshalJSON() ([]byte, error) {
+	return json.Marshal(m.status)
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (m *statusManager) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &m.status)
 }

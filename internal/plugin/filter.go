@@ -8,5 +8,5 @@ type Filter interface {
 var (
 	// CallFilter is a function that calls all registered parsers
 	CallFilter,
-	registerFilter = MakePlugin[Filter]()
+	registerFilter = MakePlugin[Filter](false)
 )

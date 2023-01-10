@@ -8,5 +8,5 @@ type Parser interface {
 var (
 	// CallParser is a function that calls all registered parsers
 	CallParser,
-	registerParser = MakePlugin[Parser]()
+	registerParser = MakePlugin[Parser](false)
 )

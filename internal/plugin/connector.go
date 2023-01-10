@@ -3,12 +3,8 @@ package plugin
 type Connector interface {
 	Base
 
-	// ConnectorLogo presents the logo binary data of the connector
-	ConnectorLogo() []byte
-
-	// ConnectorLogoContentType presents the content type of the logo
-	// e.g. image/png, image/jpeg, image/gif
-	ConnectorLogoContentType() string
+	// ConnectorLogoSVG presents the logo in svg format
+	ConnectorLogoSVG() string
 
 	// ConnectorName presents the name of the connector
 	// e.g. Facebook, Twitter, Instagram
@@ -44,5 +40,5 @@ type ExternalLoginUserInfo struct {
 var (
 	// CallConnector is a function that calls all registered connectors
 	CallConnector,
-	registerConnector = MakePlugin[Connector]()
+	registerConnector = MakePlugin[Connector](false)
 )
