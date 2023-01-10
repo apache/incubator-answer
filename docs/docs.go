@@ -16,6 +16,22 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/": {
+            "get": {
+                "description": "if config file not exist try to redirect to install page",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "installation"
+                ],
+                "summary": "if config file not exist try to redirect to install page",
+                "responses": {}
+            }
+        },
         "/answer/admin/api/answer/page": {
             "get": {
                 "security": [
@@ -2092,6 +2108,52 @@ const docTemplate = `{
                                                     }
                                                 }
                                             ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/connector/binding/email": {
+            "post": {
+                "description": "external login binding user send email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Plugin"
+                ],
+                "summary": "external login binding user send email",
+                "parameters": [
+                    {
+                        "description": "external login binding user send email",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.ExternalLoginBindingUserSendEmailReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.ExternalLoginBindingUserSendEmailResp"
                                         }
                                     }
                                 }
@@ -4231,6 +4293,29 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/user/email/notification": {
+            "put": {
+                "description": "unsubscribe email notification",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "unsubscribe email notification",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/user/email/verification": {
             "post": {
                 "description": "UserVerifyEmail",
@@ -5610,6 +5695,35 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "switch": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "schema.ExternalLoginBindingUserSendEmailReq": {
+            "type": "object",
+            "required": [
+                "binding_key",
+                "email"
+            ],
+            "properties": {
+                "binding_key": {
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "email": {
+                    "type": "string",
+                    "maxLength": 512
+                },
+                "must": {
+                    "description": "If must is true, whatever email if exists, try to bind user.\nIf must is false, when email exist, will only be prompted with a warning.",
+                    "type": "boolean"
+                }
+            }
+        },
+        "schema.ExternalLoginBindingUserSendEmailResp": {
+            "type": "object",
+            "properties": {
+                "email_exist_and_must_be_confirmed": {
                     "type": "boolean"
                 }
             }

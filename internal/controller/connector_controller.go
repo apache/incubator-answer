@@ -60,6 +60,12 @@ func (cc *ConnectorController) ConnectorLogin(connector plugin.Connector) (fn fu
 
 func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn func(ctx *gin.Context)) {
 	return func(ctx *gin.Context) {
+		siteGeneral, err := cc.siteInfoService.GetSiteGeneral(ctx)
+		if err != nil {
+			log.Errorf("get site info failed: %v", err)
+			ctx.Redirect(http.StatusFound, "/50x")
+			return
+		}
 		userInfo, err := connector.ConnectorReceiver(ctx)
 		if err != nil {
 			log.Errorf("connector received failed: %v", err)
@@ -80,9 +86,11 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 			return
 		}
 		if len(resp.AccessToken) > 0 {
-			ctx.Redirect(http.StatusFound, fmt.Sprintf("/users/oauth?access_token=%s", resp.AccessToken))
+			ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/oauth?access_token=%s",
+				siteGeneral.SiteUrl, resp.AccessToken))
 		} else {
-			ctx.Redirect(http.StatusFound, fmt.Sprintf("/users/confirm-email?binding_key=%s", resp.BindingKey))
+			ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/confirm-email?binding_key=%s",
+				siteGeneral.SiteUrl, resp.BindingKey))
 		}
 	}
 }
@@ -110,6 +118,15 @@ func (cc *ConnectorController) ConnectorsInfo(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, resp)
 }
 
+// ExternalLoginBindingUserSendEmail external login binding user send email
+// @Summary external login binding user send email
+// @Description external login binding user send email
+// @Tags Plugin
+// @Accept json
+// @Produce json
+// @Param data body schema.ExternalLoginBindingUserSendEmailReq  true "external login binding user send email"
+// @Success 200 {object} handler.RespBody{data=schema.ExternalLoginBindingUserSendEmailResp}
+// @Router /answer/api/v1/connector/binding/email [post]
 func (cc *ConnectorController) ExternalLoginBindingUserSendEmail(ctx *gin.Context) {
 	req := &schema.ExternalLoginBindingUserSendEmailReq{}
 	if handler.BindAndCheck(ctx, req) {

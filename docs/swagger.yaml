@@ -293,6 +293,28 @@ definitions:
       switch:
         type: boolean
     type: object
+  schema.ExternalLoginBindingUserSendEmailReq:
+    properties:
+      binding_key:
+        maxLength: 100
+        type: string
+      email:
+        maxLength: 512
+        type: string
+      must:
+        description: |-
+          If must is true, whatever email if exists, try to bind user.
+          If must is false, when email exist, will only be prompted with a warning.
+        type: boolean
+    required:
+    - binding_key
+    - email
+    type: object
+  schema.ExternalLoginBindingUserSendEmailResp:
+    properties:
+      email_exist_and_must_be_confirmed:
+        type: boolean
+    type: object
   schema.FollowReq:
     properties:
       is_cancel:
@@ -1886,6 +1908,17 @@ definitions:
 info:
   contact: {}
 paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      description: if config file not exist try to redirect to install page
+      produces:
+      - application/json
+      responses: {}
+      summary: if config file not exist try to redirect to install page
+      tags:
+      - installation
   /answer/admin/api/answer/page:
     get:
       consumes:
@@ -3140,6 +3173,33 @@ paths:
       summary: get comment page
       tags:
       - Comment
+  /answer/api/v1/connector/binding/email:
+    post:
+      consumes:
+      - application/json
+      description: external login binding user send email
+      parameters:
+      - description: external login binding user send email
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.ExternalLoginBindingUserSendEmailReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.ExternalLoginBindingUserSendEmailResp'
+              type: object
+      summary: external login binding user send email
+      tags:
+      - Plugin
   /answer/api/v1/file:
     post:
       consumes:
@@ -4437,6 +4497,21 @@ paths:
           schema:
             $ref: '#/definitions/handler.RespBody'
       summary: send email to the user email then change their email
+      tags:
+      - User
+  /answer/api/v1/user/email/notification:
+    put:
+      consumes:
+      - application/json
+      description: unsubscribe email notification
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: unsubscribe email notification
       tags:
       - User
   /answer/api/v1/user/email/verification:
