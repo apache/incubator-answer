@@ -242,6 +242,12 @@ a {
       margin-bottom: 0;
     }
   }
+  table {
+    td,
+    th {
+      word-break: initial;
+    }
+  }
 }
 
 .upload-img-wrap {
@@ -288,8 +294,13 @@ a {
 }
 
 @keyframes bg-fade-out {
-  0%, 25% {background-color: var(--bs-highlight-bg)}
-  100% { background-color: transparent }
+  0%,
+  25% {
+    background-color: var(--bs-highlight-bg);
+  }
+  100% {
+    background-color: transparent;
+  }
 }
 .bg-fade-out {
   animation: bg-fade-out 2s ease 0.3s;
