@@ -217,6 +217,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// upload file
 	r.POST("/file", a.uploadController.UploadFile)
+	r.POST("/post/render", a.uploadController.PostRender)
 
 	// activity
 	r.GET("/activity/timeline", a.activityController.GetObjectTimeline)
