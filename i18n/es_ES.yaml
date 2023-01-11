@@ -4,88 +4,88 @@ backend:
     success:
       other: "Success."
     unknown:
-      other: "Unknown error."
+      other: "Error desconocido."
     request_format_error:
-      other: "Request format is not valid."
+      other: "Formato de la solicitud inválido."
     unauthorized_error:
-      other: "Unauthorized."
+      other: "No autorizado."
     database_error:
-      other: "Data server error."
+      other: "Error en el servidor de datos."
   role:
     name:
       user:
-        other: "User"
+        other: "Usuario"
       admin:
-        other: "Admin"
+        other: "Administrador"
       moderator:
-        other: "Moderator"
+        other: "Moderador"
     description:
       user:
-        other: "Default with no special access."
+        other: "Predeterminado sin acceso especial."
       admin:
-        other: "Have the full power to access the site."
+        other: "Dispone de acceso total al sitio web y sus ajustes."
       moderator:
-        other: "Has access to all posts except admin settings."
+        other: "Dispone de acceso a todas las publicaciones y ajustes de administrador."
   email:
-    other: "Email"
+    other: "Correo electrónico"
   password:
-    other: "Password"
+    other: "Contraseña"
   email_or_password_wrong_error:
-    other: "Email and password do not match."
+    other: "Contraseña o correo incorrecto."
   error:
     admin:
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: Contraseña o correo incorrecto.
     answer:
       not_found:
-        other: "Answer do not found."
+        other: "Respuesta no encontrada."
       cannot_deleted:
-        other: "No permission to delete."
+        other: "Sin permiso para eliminar."
       cannot_update:
-        other: "No permission to update."
+        other: "Sin permiso para actualizar."
     comment:
       edit_without_permission:
-        other: "Comment are not allowed to edit."
+        other: "Edición del comentario no permitida."
       not_found:
-        other: "Comment not found."
+        other: "Comentario no encontrado."
     email:
       duplicate:
-        other: "Email already exists."
+        other: "Correo electrónico ya en uso."
       need_to_be_verified:
-        other: "Email should be verified."
+        other: "El correo debe ser verificado."
       verify_url_expired:
-        other: "Email verified URL has expired, please resend the email."
+        other: "La URL verificada del correo electrónico ha caducado. Por favor, vuelva a enviar el correo electrónico."
     lang:
       not_found:
-        other: "Language file not found."
+        other: "Archivo de idioma no encontrado."
     object:
       captcha_verification_failed:
-        other: "Captcha wrong."
+        other: "Captcha fallido."
       disallow_follow:
-        other: "You are not allowed to follow."
+        other: "No dispones de permiso para seguir."
       disallow_vote:
-        other: "You are not allowed to vote."
+        other: "No dispones de permiso para votar."
       disallow_vote_your_self:
-        other: "You can't vote for your own post."
+        other: "No puedes votar a tu propia publicación."
       not_found:
-        other: "Object not found."
+        other: "Objeto no encontrado."
       verification_failed:
-        other: "Verification failed."
+        other: "Verificación fallida."
       email_or_password_incorrect:
-        other: "Email and password do not match."
+        other: "Contraseña o correo incorrecto."
       old_password_verification_failed:
-        other: "The old password verification failed"
+        other: "La verificación de la contraseña antigua falló"
       new_password_same_as_previous_setting:
-        other: "The new password is the same as the previous one."
+        other: "La nueva contraseña es igual a la anterior."
     question:
       not_found:
-        other: "Question not found."
+        other: "Pregunta no encontrada."
       cannot_deleted:
-        other: "No permission to delete."
+        other: "Sin permiso para eliminar."
       cannot_close:
-        other: "No permission to close."
+        other: "Sin permiso para cerrar."
       cannot_update:
-        other: "No permission to update."
+        other: "Sin permiso para actualizar."
     rank:
       fail_to_meet_the_condition:
         other: "Rank fail to meet the condition."
