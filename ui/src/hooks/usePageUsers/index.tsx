@@ -23,7 +23,6 @@ const usePageUsers = () => {
         setUsers(uniqBy([...users, data], 'userName'));
         globalUsers = uniqBy([...globalUsers, data], 'userName');
       }
-      console.log('users', globalUsers);
     },
   };
 };

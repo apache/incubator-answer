@@ -268,3 +268,8 @@ export const unsubscribe = (code: string) => {
   const apiUrl = '/answer/api/v1/user/email/notification';
   return request.put(apiUrl, { code });
 };
+
+export const markdownToHtml = (content: string) => {
+  const apiUrl = '/answer/api/v1/post/render';
+  return request.post(apiUrl, { content });
+};
