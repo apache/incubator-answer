@@ -6936,10 +6936,6 @@
         },
         "schema.SiteBrandingReq": {
             "type": "object",
-            "required": [
-                "logo",
-                "square_icon"
-            ],
             "properties": {
                 "favicon": {
                     "type": "string",
@@ -6961,10 +6957,6 @@
         },
         "schema.SiteBrandingResp": {
             "type": "object",
-            "required": [
-                "logo",
-                "square_icon"
-            ],
             "properties": {
                 "favicon": {
                     "type": "string",

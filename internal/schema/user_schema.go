@@ -228,7 +228,7 @@ type UserEmailLogin struct {
 // UserRegisterReq user register request
 type UserRegisterReq struct {
 	// name
-	Name string `validate:"required,gt=4,lte=30" json:"name"`
+	Name string `validate:"required,gt=3,lte=30" json:"name"`
 	// email
 	Email string `validate:"required,email,gt=0,lte=500" json:"e_mail" `
 	// password
@@ -277,7 +277,7 @@ type UpdateInfoRequest struct {
 	// display_name
 	DisplayName string `validate:"required,gt=0,lte=30" json:"display_name"`
 	// username
-	Username string `validate:"omitempty,gt=0,lte=30" json:"username"`
+	Username string `validate:"omitempty,gt=3,lte=30" json:"username"`
 	// avatar
 	Avatar AvatarInfo `json:"avatar"`
 	// bio
