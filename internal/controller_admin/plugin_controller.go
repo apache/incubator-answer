@@ -19,17 +19,39 @@ func NewPluginController(roleService *service.RoleService) *PluginController {
 }
 
 // GetPluginList get plugin list
+// @Summary get plugin list
+// @Description get plugin list
+// @Tags admin
+// @Security ApiKeyAuth
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} handler.RespBody{data=[]schema.GetCommentResp}
+// @Router /answer/admin/api/plugins [get]
 func (pc *PluginController) GetPluginList(ctx *gin.Context) {
-	plugin.CallBase(func(base plugin.Base) error {
-		base.Info()
+	resp := make([]*schema.GetPluginListResp, 0)
+	_ = plugin.CallBase(func(base plugin.Base) error {
+		info := base.Info()
+		resp = append(resp, &schema.GetPluginListResp{
+			Name:        info.Name,
+			Description: info.Description,
+			Version:     info.Version,
+			Enabled:     plugin.StatusManager.IsEnabled(info.SlugName),
+		})
 		return nil
 	})
-
-	resp, err := pc.roleService.GetRoleList(ctx)
-	handler.HandleResponse(ctx, err, resp)
+	handler.HandleResponse(ctx, nil, resp)
 }
 
 // UpdatePluginStatus update plugin status
+// @Summary update plugin status
+// @Description update plugin status
+// @Tags admin
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.UpdatePluginStatusReq true "UpdatePluginStatusReq"
+// @Success 200 {object} handler.RespBody
+// @Router  /answer/api/v1/question/status [put]
 func (pc *PluginController) UpdatePluginStatus(ctx *gin.Context) {
 	req := &schema.UpdatePluginStatusReq{}
 	if handler.BindAndCheck(ctx, req) {
@@ -42,12 +64,22 @@ func (pc *PluginController) UpdatePluginStatus(ctx *gin.Context) {
 
 // GetPluginConfig get plugin config
 func (pc *PluginController) GetPluginConfig(ctx *gin.Context) {
+	req := &schema.GetPluginConfigReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
 	resp, err := pc.roleService.GetRoleList(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
 
 // UpdatePluginConfig get plugin config
 func (pc *PluginController) UpdatePluginConfig(ctx *gin.Context) {
+	req := &schema.GetPluginConfigReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
 	resp, err := pc.roleService.GetRoleList(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }
