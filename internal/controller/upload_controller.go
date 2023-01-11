@@ -3,7 +3,9 @@ package controller
 import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/uploader"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -62,4 +64,22 @@ func (uc *UploadController) UploadFile(ctx *gin.Context) {
 		return
 	}
 	handler.HandleResponse(ctx, err, url)
+}
+
+// PostRender render post content
+// @Summary render post content
+// @Description render post content
+// @Tags Upload
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.PostRenderReq true "PostRenderReq"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/post/render [post]
+func (uc *UploadController) PostRender(ctx *gin.Context) {
+	req := &schema.PostRenderReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	handler.HandleResponse(ctx, nil, converter.Markdown2HTML(req.Content))
 }
