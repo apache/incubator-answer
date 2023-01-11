@@ -104,9 +104,24 @@ const Index = () => {
       const res = await questionDetail(qid);
       if (res) {
         setUsers([
-          res.user_info,
-          res?.update_user_info,
-          res?.last_answered_user_info,
+          {
+            id: res.user_info.id,
+            displayName: res.user_info.display_name,
+            userName: res.user_info.username,
+            avatar_url: res.user_info.avatar,
+          },
+          {
+            id: res?.update_user_info?.id,
+            displayName: res?.update_user_info?.display_name,
+            userName: res?.update_user_info?.username,
+            avatar_url: res?.update_user_info?.avatar,
+          },
+          {
+            id: res?.last_answered_user_info?.id,
+            displayName: res?.last_answered_user_info?.display_name,
+            userName: res?.last_answered_user_info?.username,
+            avatar_url: res?.last_answered_user_info?.avatar,
+          },
         ]);
         setQuestion(res);
       }
