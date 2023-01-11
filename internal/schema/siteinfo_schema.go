@@ -46,9 +46,9 @@ type SiteInterfaceReq struct {
 
 // SiteBrandingReq site branding request
 type SiteBrandingReq struct {
-	Logo       string `validate:"required,gt=0,lte=512" form:"logo" json:"logo"`
+	Logo       string `validate:"omitempty,gt=0,lte=512" form:"logo" json:"logo"`
 	MobileLogo string `validate:"omitempty,gt=0,lte=512" form:"mobile_logo" json:"mobile_logo"`
-	SquareIcon string `validate:"required,gt=0,lte=512" form:"square_icon" json:"square_icon"`
+	SquareIcon string `validate:"omitempty,gt=0,lte=512" form:"square_icon" json:"square_icon"`
 	Favicon    string `validate:"omitempty,gt=0,lte=512" form:"favicon" json:"favicon"`
 }
 
