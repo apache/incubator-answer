@@ -251,7 +251,7 @@ const Image: FC<IEditorContext> = ({ editor }) => {
 
                 <Form.Group controlId="editor.imgDescription" className="mb-3">
                   <Form.Label>
-                    {t('image.form_image.fields.description.label')}
+                    {t('image.form_image.fields.desc.label')}
                   </Form.Label>
                   <Form.Control
                     type="text"
