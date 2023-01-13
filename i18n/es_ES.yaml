@@ -25,7 +25,7 @@ backend:
       admin:
         other: "Dispone de acceso total al sitio web y sus ajustes."
       moderator:
-        other: "Dispone de acceso a todas las publicaciones y ajustes de administrador."
+        other: "Dispone de acceso a todas las publicaciones pero no a los ajustes de administrador."
   email:
     other: "Correo electrónico"
   password:
