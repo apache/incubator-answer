@@ -30,6 +30,7 @@ func init() {
 func (g *Google) Info() plugin.Info {
 	return plugin.Info{
 		Name:        "google connector",
+		SlugName:    "google_connector",
 		Description: "google connector plugin",
 		Version:     "0.0.1",
 	}

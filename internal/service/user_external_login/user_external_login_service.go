@@ -23,6 +23,9 @@ type UserExternalLoginRepo interface {
 	AddUserExternalLogin(ctx context.Context, user *entity.UserExternalLogin) (err error)
 	UpdateInfo(ctx context.Context, userInfo *entity.UserExternalLogin) (err error)
 	GetByExternalID(ctx context.Context, externalID string) (userInfo *entity.UserExternalLogin, exist bool, err error)
+	GetUserExternalLoginList(ctx context.Context, userID string) (
+		resp []*entity.UserExternalLogin, err error)
+	DeleteUserExternalLogin(ctx context.Context, userID, externalID string) (err error)
 	SetCacheUserExternalLoginInfo(ctx context.Context, key string, info *schema.ExternalLoginUserInfoCache) (err error)
 	GetCacheUserExternalLoginInfo(ctx context.Context, key string) (info *schema.ExternalLoginUserInfoCache, err error)
 }
@@ -217,4 +220,16 @@ func (us *UserExternalLoginService) ExternalLoginBindingUser(
 		return errors.BadRequest(reason.UserNotFound)
 	}
 	return us.bindOldUser(ctx, externalLoginInfo, oldUserInfo)
+}
+
+// GetExternalLoginUserInfoList get external login user info list
+func (us *UserExternalLoginService) GetExternalLoginUserInfoList(
+	ctx context.Context, userID string) (resp []*entity.UserExternalLogin, err error) {
+	return us.userExternalLoginRepo.GetUserExternalLoginList(ctx, userID)
+}
+
+// ExternalLoginUnbinding external login unbinding
+func (us *UserExternalLoginService) ExternalLoginUnbinding(
+	ctx context.Context, req *schema.ExternalLoginUnbindingReq) (err error) {
+	return us.userExternalLoginRepo.DeleteUserExternalLogin(ctx, req.UserID, req.ExternalID)
 }

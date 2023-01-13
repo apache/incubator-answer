@@ -53,6 +53,27 @@ func (ur *userExternalLoginRepo) GetByExternalID(ctx context.Context, externalID
 	return
 }
 
+// GetUserExternalLoginList get by external ID
+func (ur *userExternalLoginRepo) GetUserExternalLoginList(ctx context.Context, userID string) (
+	resp []*entity.UserExternalLogin, err error) {
+	resp = make([]*entity.UserExternalLogin, 0)
+	err = ur.data.DB.Where("user_id = ?", userID).Find(&resp)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+// DeleteUserExternalLogin delete external user login info
+func (ur *userExternalLoginRepo) DeleteUserExternalLogin(ctx context.Context, userID, externalID string) (err error) {
+	cond := &entity.UserExternalLogin{}
+	_, err = ur.data.DB.Where("user_id = ? AND external_id = ?", userID, externalID).Delete(cond)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // SetCacheUserExternalLoginInfo cache user info for external login
 func (ur *userExternalLoginRepo) SetCacheUserExternalLoginInfo(
 	ctx context.Context, key string, info *schema.ExternalLoginUserInfoCache) (err error) {

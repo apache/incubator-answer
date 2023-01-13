@@ -46,3 +46,9 @@ type ExternalLoginUserInfoCache struct {
 	// optional. The original user information provided by the third-party login platform
 	MetaInfo string
 }
+
+// ExternalLoginUnbindingReq external login unbinding user
+type ExternalLoginUnbindingReq struct {
+	ExternalID string `validate:"required,gt=0,lte=128" json:"external_id"`
+	UserID     string `json:"-"`
+}

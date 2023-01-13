@@ -10,19 +10,19 @@ const (
 )
 
 type ConfigField struct {
-	Name        string
-	Description string
-	Required    bool
-	Type        ConfigType
-	Items       []ConfigFieldItem
+	Name        string            `json:"name"`
+	Description string            `json:"description"`
+	Required    bool              `json:"required"`
+	Type        ConfigType        `json:"type"`
+	Items       []ConfigFieldItem `json:"items"`
 }
 
 type ConfigFieldItem struct {
-	Name        string
-	Label       string
-	Value       string
-	PlaceHolder string
-	Selected    bool
+	Name        string `json:"name"`
+	Label       string `json:"label"`
+	Value       string `json:"value"`
+	PlaceHolder string `json:"place_holder"`
+	Selected    bool   `json:"selected"`
 }
 
 type Config interface {

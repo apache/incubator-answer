@@ -65,6 +65,7 @@ func NewHTTPServer(debug bool,
 	templateRouter.RegisterTemplateRouter(rootGroup)
 
 	// plugin routes
-	pluginAPIRouter.RegisterConnector(r)
+	pluginAPIRouter.RegisterUnAuthConnectorRouter(mustUnAuthV1)
+	pluginAPIRouter.RegisterAuthConnectorRouter(authV1)
 	return r
 }

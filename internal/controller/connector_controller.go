@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/plugin"
 	_ "github.com/answerdev/answer/internal/plugin/connector"
 	"github.com/answerdev/answer/internal/schema"
@@ -16,8 +17,9 @@ import (
 )
 
 const (
-	ConnectorLoginRouterPrefix    = "/answer/api/v1/connector/login/"
-	ConnectorRedirectRouterPrefix = "/answer/api/v1/connector/redirect/"
+	commonRouterPrefix            = "/answer/api/v1"
+	ConnectorLoginRouterPrefix    = "/connector/login/"
+	ConnectorRedirectRouterPrefix = "/connector/redirect/"
 )
 
 // ConnectorController comment controller
@@ -49,7 +51,8 @@ func (cc *ConnectorController) ConnectorLogin(connector plugin.Connector) (fn fu
 			return
 		}
 
-		receiverURL := fmt.Sprintf("%s%s%s", general.SiteUrl, ConnectorRedirectRouterPrefix, connector.ConnectorSlugName())
+		receiverURL := fmt.Sprintf("%s%s%s%s", general.SiteUrl,
+			commonRouterPrefix, ConnectorRedirectRouterPrefix, connector.ConnectorSlugName())
 		redirectURL := connector.ConnectorSender(ctx, receiverURL)
 		if len(redirectURL) > 0 {
 			ctx.Redirect(http.StatusFound, redirectURL)
@@ -76,8 +79,8 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 			Provider:   connector.ConnectorSlugName(),
 			ExternalID: userInfo.ExternalID,
 			Name:       userInfo.Name,
-			//Email:      userInfo.Email,
-			MetaInfo: userInfo.MetaInfo,
+			Email:      userInfo.Email,
+			MetaInfo:   userInfo.MetaInfo,
 		}
 		resp, err := cc.userExternalService.ExternalLogin(ctx, u)
 		if err != nil {
@@ -95,33 +98,38 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 	}
 }
 
+// ConnectorsInfo get all enabled connectors
+// @Summary get all enabled connectors
+// @Description get all enabled connectors
+// @Tags PluginConnector
+// @Security ApiKeyAuth
+// @Produce  json
+// @Success 200 {object} handler.RespBody{data=[]schema.ConnectorInfoResp}
+// @Router /answer/api/v1/connector/info [get]
 func (cc *ConnectorController) ConnectorsInfo(ctx *gin.Context) {
-	general, err := cc.siteInfoService.GetSiteGeneral(ctx)
-	if err != nil {
-		handler.HandleResponse(ctx, err, nil)
-		return
-	}
+	//general, err := cc.siteInfoService.GetSiteGeneral(ctx)
+	//if err != nil {
+	//	handler.HandleResponse(ctx, err, nil)
+	//	return
+	//}
 
 	resp := make([]*schema.ConnectorInfoResp, 0)
-	err = plugin.CallConnector(func(fn plugin.Connector) error {
+	_ = plugin.CallConnector(func(fn plugin.Connector) error {
 		resp = append(resp, &schema.ConnectorInfoResp{
-			Name: fn.ConnectorSlugName(),
+			Name: fn.ConnectorName(),
 			Icon: fn.ConnectorLogoSVG(),
-			Link: fmt.Sprintf("%s%s%s", general.SiteUrl, ConnectorLoginRouterPrefix, fn.ConnectorSlugName()),
+			Link: fmt.Sprintf("%s%s%s%s", "http://10.0.20.88:8080",
+				commonRouterPrefix, ConnectorLoginRouterPrefix, fn.ConnectorSlugName()),
 		})
 		return nil
 	})
-	if err != nil {
-		handler.HandleResponse(ctx, err, nil)
-		return
-	}
 	handler.HandleResponse(ctx, nil, resp)
 }
 
 // ExternalLoginBindingUserSendEmail external login binding user send email
 // @Summary external login binding user send email
 // @Description external login binding user send email
-// @Tags Plugin
+// @Tags PluginConnector
 // @Accept json
 // @Produce json
 // @Param data body schema.ExternalLoginBindingUserSendEmailReq  true "external login binding user send email"
@@ -135,4 +143,69 @@ func (cc *ConnectorController) ExternalLoginBindingUserSendEmail(ctx *gin.Contex
 
 	resp, err := cc.userExternalService.ExternalLoginBindingUserSendEmail(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
+}
+
+// ConnectorsUserInfo get all connectors info about user
+// @Summary get all connectors info about user
+// @Description get all connectors info about user
+// @Tags PluginConnector
+// @Security ApiKeyAuth
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=[]schema.ConnectorUserInfoResp}
+// @Router /answer/api/v1/connector/user/info [get]
+func (cc *ConnectorController) ConnectorsUserInfo(ctx *gin.Context) {
+	general, err := cc.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+
+	userID := middleware.GetLoginUserIDFromContext(ctx)
+
+	userInfoList, err := cc.userExternalService.GetExternalLoginUserInfoList(ctx, userID)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	userExternalLoginMapping := make(map[string]string)
+	for _, userInfo := range userInfoList {
+		userExternalLoginMapping[userInfo.Provider] = userInfo.ExternalID
+	}
+
+	resp := make([]*schema.ConnectorUserInfoResp, 0)
+	_ = plugin.CallConnector(func(fn plugin.Connector) error {
+		externalID := userExternalLoginMapping[fn.ConnectorSlugName()]
+		resp = append(resp, &schema.ConnectorUserInfoResp{
+			Name: fn.ConnectorName(),
+			Icon: fn.ConnectorLogoSVG(),
+			Link: fmt.Sprintf("%s%s%s%s", general.SiteUrl,
+				commonRouterPrefix, ConnectorLoginRouterPrefix, fn.ConnectorSlugName()),
+			Binding:    len(externalID) > 0,
+			ExternalID: externalID,
+		})
+		return nil
+	})
+	handler.HandleResponse(ctx, nil, resp)
+}
+
+// ExternalLoginUnbinding unbind external user login
+// @Summary unbind external user login
+// @Description unbind external user login
+// @Tags PluginConnector
+// @Security ApiKeyAuth
+// @Accept json
+// @Produce json
+// @Param data body schema.ExternalLoginUnbindingReq true "ExternalLoginUnbindingReq"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/api/v1/connector/user/unbinding [delete]
+func (cc *ConnectorController) ExternalLoginUnbinding(ctx *gin.Context) {
+	req := &schema.ExternalLoginUnbindingReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	err := cc.userExternalService.ExternalLoginUnbinding(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
 }

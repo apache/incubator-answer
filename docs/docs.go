@@ -183,6 +183,185 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/plugin/config": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get plugin config",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AdminPlugin"
+                ],
+                "summary": "get plugin config",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "plugin_slug_name",
+                        "name": "plugin_slug_name",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetPluginConfigResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update plugin config",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AdminPlugin"
+                ],
+                "summary": "update plugin config",
+                "parameters": [
+                    {
+                        "description": "UpdatePluginConfigReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdatePluginConfigReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/admin/api/plugin/status": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update plugin status",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AdminPlugin"
+                ],
+                "summary": "update plugin status",
+                "parameters": [
+                    {
+                        "description": "UpdatePluginStatusReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdatePluginStatusReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/admin/api/plugins": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get plugin list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AdminPlugin"
+                ],
+                "summary": "get plugin list",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "status: active/inactive",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "have config",
+                        "name": "have_config",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.GetPluginListResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/question/page": {
             "get": {
                 "security": [
@@ -2127,7 +2306,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Plugin"
+                    "PluginConnector"
                 ],
                 "summary": "external login binding user send email",
                 "parameters": [
@@ -2158,6 +2337,125 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/connector/info": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get all enabled connectors",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PluginConnector"
+                ],
+                "summary": "get all enabled connectors",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.ConnectorInfoResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/connector/user/info": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get all connectors info about user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PluginConnector"
+                ],
+                "summary": "get all connectors info about user",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/schema.ConnectorUserInfoResp"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/connector/user/unbinding": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "unbind external user login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PluginConnector"
+                ],
+                "summary": "unbind external user login",
+                "parameters": [
+                    {
+                        "description": "ExternalLoginUnbindingReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.ExternalLoginUnbindingReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
                         }
                     }
                 }
@@ -5699,6 +5997,63 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.ConfigFields": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "required": {
+                    "type": "boolean"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "ui_widget": {
+                    "$ref": "#/definitions/schema.UIWidget"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.ConnectorInfoResp": {
+            "type": "object",
+            "properties": {
+                "icon": {
+                    "type": "string"
+                },
+                "link": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.ConnectorUserInfoResp": {
+            "type": "object",
+            "properties": {
+                "binding": {
+                    "type": "boolean"
+                },
+                "external_id": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "link": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.ExternalLoginBindingUserSendEmailReq": {
             "type": "object",
             "required": [
@@ -5728,6 +6083,18 @@ const docTemplate = `{
                 },
                 "email_exist_and_must_be_confirmed": {
                     "type": "boolean"
+                }
+            }
+        },
+        "schema.ExternalLoginUnbindingReq": {
+            "type": "object",
+            "required": [
+                "external_id"
+            ],
+            "properties": {
+                "external_id": {
+                    "type": "string",
+                    "maxLength": 128
                 }
             }
         },
@@ -6011,6 +6378,53 @@ const docTemplate = `{
                 },
                 "info": {
                     "$ref": "#/definitions/schema.GetOtherUserInfoByUsernameResp"
+                }
+            }
+        },
+        "schema.GetPluginConfigResp": {
+            "type": "object",
+            "properties": {
+                "config_fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.ConfigFields"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "description": "ConfigFields []plugin.ConfigField ` + "`" + `json:\"config_fields\"` + "`" + `",
+                    "type": "string"
+                },
+                "slug_name": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.GetPluginListResp": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "have_config": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "slug_name": {
+                    "type": "string"
+                },
+                "version": {
+                    "type": "string"
                 }
             }
         },
@@ -7398,6 +7812,17 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.UIWidget": {
+            "type": "object",
+            "properties": {
+                "placeholder": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.UnreviewedRevisionInfoInfo": {
             "type": "object",
             "properties": {
@@ -7492,6 +7917,37 @@ const docTemplate = `{
                     "description": "website",
                     "type": "string",
                     "maxLength": 500
+                }
+            }
+        },
+        "schema.UpdatePluginConfigReq": {
+            "type": "object",
+            "required": [
+                "plugin_slug_name"
+            ],
+            "properties": {
+                "config_fields": {
+                    "type": "object",
+                    "additionalProperties": {}
+                },
+                "plugin_slug_name": {
+                    "type": "string",
+                    "maxLength": 100
+                }
+            }
+        },
+        "schema.UpdatePluginStatusReq": {
+            "type": "object",
+            "required": [
+                "plugin_slug_name"
+            ],
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "plugin_slug_name": {
+                    "type": "string",
+                    "maxLength": 100
                 }
             }
         },

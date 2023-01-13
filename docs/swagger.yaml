@@ -293,6 +293,43 @@ definitions:
       switch:
         type: boolean
     type: object
+  schema.ConfigFields:
+    properties:
+      description:
+        type: string
+      required:
+        type: boolean
+      title:
+        type: string
+      type:
+        type: string
+      ui_widget:
+        $ref: '#/definitions/schema.UIWidget'
+      value:
+        type: string
+    type: object
+  schema.ConnectorInfoResp:
+    properties:
+      icon:
+        type: string
+      link:
+        type: string
+      name:
+        type: string
+    type: object
+  schema.ConnectorUserInfoResp:
+    properties:
+      binding:
+        type: boolean
+      external_id:
+        type: string
+      icon:
+        type: string
+      link:
+        type: string
+      name:
+        type: string
+    type: object
   schema.ExternalLoginBindingUserSendEmailReq:
     properties:
       binding_key:
@@ -316,6 +353,14 @@ definitions:
         type: string
       email_exist_and_must_be_confirmed:
         type: boolean
+    type: object
+  schema.ExternalLoginUnbindingReq:
+    properties:
+      external_id:
+        maxLength: 128
+        type: string
+    required:
+    - external_id
     type: object
   schema.FollowReq:
     properties:
@@ -523,6 +568,37 @@ definitions:
         type: boolean
       info:
         $ref: '#/definitions/schema.GetOtherUserInfoByUsernameResp'
+    type: object
+  schema.GetPluginConfigResp:
+    properties:
+      config_fields:
+        items:
+          $ref: '#/definitions/schema.ConfigFields'
+        type: array
+      description:
+        type: string
+      name:
+        description: ConfigFields []plugin.ConfigField `json:"config_fields"`
+        type: string
+      slug_name:
+        type: string
+      version:
+        type: string
+    type: object
+  schema.GetPluginListResp:
+    properties:
+      description:
+        type: string
+      enabled:
+        type: boolean
+      have_config:
+        type: boolean
+      name:
+        type: string
+      slug_name:
+        type: string
+      version:
+        type: string
     type: object
   schema.GetRankPersonalWithPageResp:
     properties:
@@ -1509,6 +1585,13 @@ definitions:
       value:
         type: string
     type: object
+  schema.UIWidget:
+    properties:
+      placeholder:
+        type: string
+      type:
+        type: string
+    type: object
   schema.UnreviewedRevisionInfoInfo:
     properties:
       content:
@@ -1577,6 +1660,27 @@ definitions:
         type: string
     required:
     - display_name
+    type: object
+  schema.UpdatePluginConfigReq:
+    properties:
+      config_fields:
+        additionalProperties: {}
+        type: object
+      plugin_slug_name:
+        maxLength: 100
+        type: string
+    required:
+    - plugin_slug_name
+    type: object
+  schema.UpdatePluginStatusReq:
+    properties:
+      enabled:
+        type: boolean
+      plugin_slug_name:
+        maxLength: 100
+        type: string
+    required:
+    - plugin_slug_name
     type: object
   schema.UpdateSMTPConfigReq:
     properties:
@@ -2016,6 +2120,112 @@ paths:
       summary: Get language options
       tags:
       - Lang
+  /answer/admin/api/plugin/config:
+    get:
+      description: get plugin config
+      parameters:
+      - description: plugin_slug_name
+        in: query
+        name: plugin_slug_name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetPluginConfigResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get plugin config
+      tags:
+      - AdminPlugin
+    put:
+      consumes:
+      - application/json
+      description: update plugin config
+      parameters:
+      - description: UpdatePluginConfigReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdatePluginConfigReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update plugin config
+      tags:
+      - AdminPlugin
+  /answer/admin/api/plugin/status:
+    put:
+      consumes:
+      - application/json
+      description: update plugin status
+      parameters:
+      - description: UpdatePluginStatusReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdatePluginStatusReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update plugin status
+      tags:
+      - AdminPlugin
+  /answer/admin/api/plugins:
+    get:
+      consumes:
+      - application/json
+      description: get plugin list
+      parameters:
+      - description: 'status: active/inactive'
+        in: query
+        name: status
+        type: string
+      - description: have config
+        in: query
+        name: have_config
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.GetPluginListResp'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get plugin list
+      tags:
+      - AdminPlugin
   /answer/admin/api/question/page:
     get:
       consumes:
@@ -3201,7 +3411,75 @@ paths:
               type: object
       summary: external login binding user send email
       tags:
-      - Plugin
+      - PluginConnector
+  /answer/api/v1/connector/info:
+    get:
+      description: get all enabled connectors
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.ConnectorInfoResp'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get all enabled connectors
+      tags:
+      - PluginConnector
+  /answer/api/v1/connector/user/info:
+    get:
+      description: get all connectors info about user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/schema.ConnectorUserInfoResp'
+                  type: array
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get all connectors info about user
+      tags:
+      - PluginConnector
+  /answer/api/v1/connector/user/unbinding:
+    delete:
+      consumes:
+      - application/json
+      description: unbind external user login
+      parameters:
+      - description: ExternalLoginUnbindingReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.ExternalLoginUnbindingReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: unbind external user login
+      tags:
+      - PluginConnector
   /answer/api/v1/file:
     post:
       consumes:

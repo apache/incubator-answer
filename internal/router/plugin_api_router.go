@@ -18,7 +18,7 @@ func NewPluginAPIRouter(
 	}
 }
 
-func (pr *PluginAPIRouter) RegisterConnector(r *gin.Engine) {
+func (pr *PluginAPIRouter) RegisterUnAuthConnectorRouter(r *gin.RouterGroup) {
 	connectorController := pr.connectorController
 	_ = plugin.CallConnector(func(connector plugin.Connector) error {
 		connectorSlugName := connector.ConnectorSlugName()
@@ -26,6 +26,12 @@ func (pr *PluginAPIRouter) RegisterConnector(r *gin.Engine) {
 		r.GET(controller.ConnectorRedirectRouterPrefix+connectorSlugName, connectorController.ConnectorRedirect(connector))
 		return nil
 	})
-	r.GET("/answer/api/v1/connector/info", connectorController.ConnectorsInfo)
-	r.POST("/answer/api/v1/connector/binding/email", connectorController.ExternalLoginBindingUserSendEmail)
+	r.GET("/connector/info", connectorController.ConnectorsInfo)
+	r.POST("/connector/binding/email", connectorController.ExternalLoginBindingUserSendEmail)
+}
+
+func (pr *PluginAPIRouter) RegisterAuthConnectorRouter(r *gin.RouterGroup) {
+	connectorController := pr.connectorController
+	r.GET("/connector/user/info", connectorController.ConnectorsUserInfo)
+	r.DELETE("/connector/user/unbinding", connectorController.ExternalLoginUnbinding)
 }
