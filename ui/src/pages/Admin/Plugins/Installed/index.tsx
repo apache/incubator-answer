@@ -5,21 +5,18 @@ import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
-import { Pagination, Empty, QueryGroup, Icon } from '@/components';
+import { Empty, QueryGroup, Icon } from '@/components';
 import * as Type from '@/common/interface';
-import { useQueryUsers } from '@/services';
+import { useQueryPlugins, updatePluginStatus } from '@/services';
 
 const InstalledPluginsFilterKeys: Type.InstalledPluginsFilterBy[] = [
   'all',
   'active',
   'inactive',
-  'outdated',
 ];
 
 const bgMap = {
-  normal: 'text-bg-success',
-  suspended: 'text-bg-danger',
-  deleted: 'text-bg-danger',
+  active: 'text-bg-success',
   inactive: 'text-bg-secondary',
 };
 
@@ -34,7 +31,7 @@ const Users: FC = () => {
     urlSearchParams.get('filter') || InstalledPluginsFilterKeys[0];
   const curPage = Number(urlSearchParams.get('page') || '1');
   const curQuery = urlSearchParams.get('query') || '';
-  const { data, isLoading } = useQueryUsers({
+  const { data, isLoading, mutate } = useQueryPlugins({
     page: curPage,
     page_size: PAGE_SIZE,
     query: curQuery,
@@ -46,6 +43,22 @@ const Users: FC = () => {
   });
 
   const handleAction = (type, plugin) => {
+    if (type === 'deactivate') {
+      updatePluginStatus({
+        enabled: false,
+        plugin_slug_name: plugin.slug_name,
+      }).then(() => {
+        mutate();
+      });
+    }
+    if (type === 'activate') {
+      updatePluginStatus({
+        enabled: true,
+        plugin_slug_name: plugin.slug_name,
+      }).then(() => {
+        mutate();
+      });
+    }
     console.log(type, plugin);
   };
 
@@ -76,19 +89,23 @@ const Users: FC = () => {
           </tr>
         </thead>
         <tbody className="align-middle">
-          {data?.list.map((plugin) => {
+          {data?.map((plugin) => {
             return (
-              <tr key={plugin.user_id}>
+              <tr key={plugin.slug_name}>
                 <td>
-                  <div>Twitter Logins</div>
+                  <div>{plugin.name}</div>
                   <div className="text-muted text-small">
-                    Enable login with Twitter
+                    {plugin.description}
                   </div>
                 </td>
                 <td className="text-break">{plugin.version}</td>
                 <td>
-                  <span className={classNames('badge', bgMap[plugin.status])}>
-                    {t(`filter.${plugin.status}`)}
+                  <span
+                    className={classNames(
+                      'badge',
+                      bgMap[plugin.enabled ? 'active' : 'inactive'],
+                    )}>
+                    {t(`filter.${plugin.enabled ? 'active' : 'inactive'}`)}
                   </span>
                 </td>
                 {curFilter !== 'deleted' ? (
@@ -98,10 +115,18 @@ const Users: FC = () => {
                         <Icon name="three-dots-vertical" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
-                        <Dropdown.Item
-                          onClick={() => handleAction('deactivate', plugin)}>
-                          {t('deactivate')}
-                        </Dropdown.Item>
+                        {plugin.enabled ? (
+                          <Dropdown.Item
+                            onClick={() => handleAction('deactivate', plugin)}>
+                            {t('deactivate')}
+                          </Dropdown.Item>
+                        ) : (
+                          <Dropdown.Item
+                            onClick={() => handleAction('activate', plugin)}>
+                            {t('activate')}
+                          </Dropdown.Item>
+                        )}
+
                         <Dropdown.Item
                           onClick={() => handleAction('settings', plugin)}>
                           {t('settings')}
@@ -115,14 +140,7 @@ const Users: FC = () => {
           })}
         </tbody>
       </Table>
-      {Number(data?.count) <= 0 && !isLoading && <Empty />}
-      <div className="mt-4 mb-2 d-flex justify-content-center">
-        <Pagination
-          currentPage={curPage}
-          totalSize={data?.count || 0}
-          pageSize={PAGE_SIZE}
-        />
-      </div>
+      {Number(data?.length) <= 0 && !isLoading && <Empty />}
     </>
   );
 };

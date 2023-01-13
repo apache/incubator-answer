@@ -32,7 +32,9 @@ function MenuNode({
           'text-nowrap d-flex flex-nowrap align-items-center w-100',
           { expanding, 'link-dark': activeKey !== menu.name },
         )}>
-        <span className="me-auto">{t(menu.name)}</span>
+        <span className="me-auto">
+          {menu.displayName ? menu.displayName : t(menu.name)}
+        </span>
         {menu.badgeContent ? (
           <span className="badge text-bg-dark">{menu.badgeContent}</span>
         ) : null}

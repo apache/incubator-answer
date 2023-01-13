@@ -28,45 +28,48 @@ export interface JSONSchema {
     };
   };
 }
+
+export interface UIOptions {
+  rows?: number;
+  placeholder?: string;
+  type?:
+    | 'color'
+    | 'date'
+    | 'datetime-local'
+    | 'email'
+    | 'month'
+    | 'number'
+    | 'password'
+    | 'range'
+    | 'search'
+    | 'tel'
+    | 'text'
+    | 'time'
+    | 'url'
+    | 'week';
+  empty?: string;
+  className?: string | string[];
+  validator?: (
+    value,
+    formData?,
+  ) => Promise<string | true | void> | true | string;
+  textRender?: () => React.ReactElement;
+  imageType?: Type.UploadType;
+  acceptType?: string;
+}
+export type UIWidget =
+  | 'textarea'
+  | 'text'
+  | 'checkbox'
+  | 'radio'
+  | 'select'
+  | 'upload'
+  | 'timezone'
+  | 'switch';
 export interface UISchema {
   [key: string]: {
-    'ui:widget'?:
-      | 'textarea'
-      | 'text'
-      | 'checkbox'
-      | 'radio'
-      | 'select'
-      | 'upload'
-      | 'timezone'
-      | 'switch';
-    'ui:options'?: {
-      rows?: number;
-      placeholder?: string;
-      type?:
-        | 'color'
-        | 'date'
-        | 'datetime-local'
-        | 'email'
-        | 'month'
-        | 'number'
-        | 'password'
-        | 'range'
-        | 'search'
-        | 'tel'
-        | 'text'
-        | 'time'
-        | 'url'
-        | 'week';
-      empty?: string;
-      className?: string | string[];
-      validator?: (
-        value,
-        formData?,
-      ) => Promise<string | true | void> | true | string;
-      textRender?: () => React.ReactElement;
-      imageType?: Type.UploadType;
-      acceptType?: string;
-    };
+    'ui:widget'?: UIWidget;
+    'ui:options'?: UIOptions;
   };
 }
 
@@ -309,7 +312,11 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
               <Form.Select
                 aria-label={description}
                 name={key}
-                value={formData[key]?.value || defaultValue}
+                value={
+                  formData[key]?.value !== undefined
+                    ? formData[key]?.value
+                    : defaultValue
+                }
                 onChange={handleSelectChange}
                 isInvalid={formData[key].isInvalid}>
                 <option disabled selected>
@@ -350,7 +357,11 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                       name={key}
                       id={`form-${String(item)}`}
                       label={properties[key].enumNames?.[index]}
-                      checked={(formData[key]?.value || defaultValue) === item}
+                      checked={
+                        (formData[key]?.value !== undefined
+                          ? formData[key]?.value
+                          : defaultValue) === item
+                      }
                       feedback={formData[key]?.errorMsg}
                       feedbackType="invalid"
                       isInvalid={formData[key].isInvalid}
@@ -382,7 +393,11 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 name={key}
                 type="switch"
                 label={label}
-                checked={formData[key]?.value || defaultValue}
+                checked={
+                  formData[key]?.value !== undefined
+                    ? formData[key]?.value
+                    : defaultValue
+                }
                 feedback={formData[key]?.errorMsg}
                 feedbackType="invalid"
                 isInvalid={formData[key].isInvalid}
@@ -405,7 +420,11 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
               controlId={key}>
               <Form.Label>{title}</Form.Label>
               <TimeZonePicker
-                value={formData[key]?.value || defaultValue}
+                value={
+                  formData[key]?.value !== undefined
+                    ? formData[key]?.value
+                    : defaultValue
+                }
                 name={key}
                 onChange={handleSelectChange}
               />
@@ -464,7 +483,11 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 name={key}
                 placeholder={options?.placeholder || ''}
                 type={options?.type || 'text'}
-                value={formData[key]?.value || defaultValue}
+                value={
+                  formData[key]?.value !== undefined
+                    ? formData[key]?.value
+                    : defaultValue
+                }
                 onChange={handleInputChange}
                 isInvalid={formData[key].isInvalid}
                 rows={options?.rows || 3}
@@ -490,7 +513,11 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
               name={key}
               placeholder={options?.placeholder || ''}
               type={options?.type || 'text'}
-              value={formData[key]?.value || defaultValue}
+              value={
+                formData[key]?.value !== undefined
+                  ? formData[key]?.value
+                  : defaultValue
+              }
               onChange={handleInputChange}
               style={options?.type === 'color' ? { width: '6rem' } : {}}
               isInvalid={formData[key].isInvalid}

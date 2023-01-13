@@ -1379,6 +1379,7 @@ ui:
       status: Status
       action: Action
       deactivate: Deactivate
+      activate: Activate
       settings: Settings
 
       

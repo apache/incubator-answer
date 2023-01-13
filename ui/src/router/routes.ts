@@ -315,6 +315,10 @@ const routes: RouteNode[] = [
             path: 'installed_plugins',
             page: 'pages/Admin/Plugins/Installed',
           },
+          {
+            path: ':slug_name',
+            page: 'pages/Admin/Plugins/Config',
+          },
         ],
       },
       // for review
