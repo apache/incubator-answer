@@ -54,7 +54,7 @@ backend:
       need_to_be_verified:
         other: "El correo debe ser verificado."
       verify_url_expired:
-        other: "La URL verificada del correo electrónico ha caducado. Por favor, vuelva a enviar el correo electrónico."
+        other: "La URL de verificación del correo electrónico ha caducado. Por favor, vuelva a enviar el correo."
     lang:
       not_found:
         other: "Archivo de idioma no encontrado."
