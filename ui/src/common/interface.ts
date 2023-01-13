@@ -521,3 +521,14 @@ export interface OauthBindEmailReq {
   email: string;
   must: boolean;
 }
+
+export interface OauthConnectorItem {
+  icon: string;
+  name: string;
+  link: string;
+}
+
+export interface UserOauthConnectorItem extends OauthConnectorItem {
+  binding: boolean;
+  external_id: string;
+}

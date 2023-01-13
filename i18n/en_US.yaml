@@ -747,6 +747,13 @@ ui:
       lang:
         label: Interface Language
         text: User interface language. It will change when you refresh the page.
+    my_logins:
+      title: My Logins
+      lable: Log in or sign up on this site using these accounts.
+      modal_title: Remove Login
+      modal_content: Are you sure you want to remove this login from your account?
+      modal_confirm_btn: Remove
+      remove_success: Removed successfully
   toast:
     update: update success
     update_password: Password changed successfully.
@@ -1362,7 +1369,7 @@ ui:
     btn_submit: Save
     not_found_props: "Required property {{ key }} not found."
     select: Select
-    
+
   page_review:
     review: Review
     proposed: proposed

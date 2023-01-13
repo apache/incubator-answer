@@ -32,7 +32,6 @@ import CustomizeTheme from './CustomizeTheme';
 import PageTags from './PageTags';
 import QuestionListLoader from './QuestionListLoader';
 import TagsLoader from './TagsLoader';
-import OauthButtons from './OauthButtons';
 
 export {
   Avatar,
@@ -71,6 +70,5 @@ export {
   PageTags,
   QuestionListLoader,
   TagsLoader,
-  OauthButtons,
 };
 export type { EditorRef, JSONSchema, UISchema };
