@@ -12,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/activity"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/role"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
@@ -38,6 +39,7 @@ type UserAdminService struct {
 	userRoleRelService *role.UserRoleRelService
 	authService        *auth.AuthService
 	userCommonService  *usercommon.UserCommon
+	userActivity       activity.UserActiveActivityRepo
 }
 
 // NewUserAdminService new user admin service
@@ -46,12 +48,14 @@ func NewUserAdminService(
 	userRoleRelService *role.UserRoleRelService,
 	authService *auth.AuthService,
 	userCommonService *usercommon.UserCommon,
+	userActivity activity.UserActiveActivityRepo,
 ) *UserAdminService {
 	return &UserAdminService{
 		userRepo:           userRepo,
 		userRoleRelService: userRoleRelService,
 		authService:        authService,
 		userCommonService:  userCommonService,
+		userActivity:       userActivity,
 	}
 }
 
@@ -83,7 +87,17 @@ func (us *UserAdminService) UpdateUserStatus(ctx context.Context, req *schema.Up
 		userInfo.Status = entity.UserStatusAvailable
 		userInfo.MailStatus = entity.EmailStatusAvailable
 	}
-	return us.userRepo.UpdateUserStatus(ctx, userInfo.ID, userInfo.Status, userInfo.MailStatus, userInfo.EMail)
+
+	err = us.userRepo.UpdateUserStatus(ctx, userInfo.ID, userInfo.Status, userInfo.MailStatus, userInfo.EMail)
+	if err != nil {
+		return err
+	}
+
+	// if user reputation is zero means this user is inactive, so try to activate this user.
+	if req.IsNormal() && userInfo.Rank == 0 {
+		return us.userActivity.UserActive(ctx, userInfo.ID)
+	}
+	return nil
 }
 
 // UpdateUserRole update user role
