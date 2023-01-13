@@ -77,7 +77,6 @@ const Index: FC = () => {
           email: formData.email.value,
           must: true,
         }).then((result) => {
-          debugger;
           if (result.access_token) {
             getUserInfo(result.access_token);
           } else {
@@ -113,7 +112,6 @@ const Index: FC = () => {
         must: false,
       })
         .then((res) => {
-          debugger;
           if (res.email_exist_and_must_be_confirmed) {
             connectConfirm();
           }
