@@ -7,6 +7,7 @@ import { loggedUserInfoStore } from '@/stores';
 import { getLoggedUserInfo } from '@/services';
 import Storage from '@/utils/storage';
 import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
+import { guard } from '@/utils';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
@@ -22,9 +23,15 @@ const Index: FC = () => {
       Storage.set(LOGGED_TOKEN_STORAGE_KEY, token);
       getLoggedUserInfo().then((res) => {
         updateUser(res);
-        setTimeout(() => {
-          loginRedirect();
-        }, 0);
+        const userStat = guard.deriveLoginState();
+        if (userStat.isNotActivated) {
+          // inactive
+          navigate('/users/login?status=inactive', { replace: true });
+        } else {
+          setTimeout(() => {
+            loginRedirect();
+          }, 0);
+        }
       });
     } else {
       navigate('/', { replace: true });

@@ -162,7 +162,7 @@ const Index: React.FC = () => {
   useEffect(() => {
     const isInactive = searchParams.get('status');
 
-    if ((storeUser.id && storeUser.mail_status === 2) || isInactive) {
+    if (storeUser.id && (storeUser.mail_status === 2 || isInactive)) {
       setStep(2);
     }
   }, []);
