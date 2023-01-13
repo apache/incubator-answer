@@ -2,65 +2,65 @@
 backend:
   base:
     success:
-      other: "Success."
+      other: "Erfolgreich."
     unknown:
-      other: "Unknown error."
+      other: "Unbekannter Fehler."
     request_format_error:
       other: "Request format is not valid."
     unauthorized_error:
-      other: "Unauthorized."
+      other: "Nicht autorisiert."
     database_error:
       other: "Data server error."
   role:
     name:
       user:
-        other: "User"
+        other: "Nutzer"
       admin:
         other: "Admin"
       moderator:
         other: "Moderator"
     description:
       user:
-        other: "Default with no special access."
+        other: "Standard ohne speziellen Zugriff."
       admin:
         other: "Have the full power to access the site."
       moderator:
-        other: "Has access to all posts except admin settings."
+        other: "Hat Zugriff auf alle Beiträge außer Admin-Einstellungen."
   email:
-    other: "Email"
+    other: "E-Mail"
   password:
-    other: "Password"
+    other: "Passwort"
   email_or_password_wrong_error:
-    other: "Email and password do not match."
+    other: "E-Mail und Password stimmen nicht überein."
   error:
     admin:
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: E-Mail und Password stimmen nicht überein.
     answer:
       not_found:
         other: "Answer do not found."
       cannot_deleted:
-        other: "No permission to delete."
+        other: "Keine Berechtigung zum Löschen."
       cannot_update:
-        other: "No permission to update."
+        other: "Keine Berechtigung zum Aktualisieren."
     comment:
       edit_without_permission:
-        other: "Comment are not allowed to edit."
+        other: "Kommentar kann nicht bearbeitet werden."
       not_found:
-        other: "Comment not found."
+        other: "Kommentar wurde nicht gefunden."
     email:
       duplicate:
-        other: "Email already exists."
+        other: "E-Mail existiert bereits."
       need_to_be_verified:
-        other: "Email should be verified."
+        other: "E-Mail muss überprüft werden."
       verify_url_expired:
         other: "Email verified URL has expired, please resend the email."
     lang:
       not_found:
-        other: "Language file not found."
+        other: "Sprachdatei nicht gefunden."
     object:
       captcha_verification_failed:
-        other: "Captcha wrong."
+        other: "Captcha ist falsch."
       disallow_follow:
         other: "You are not allowed to follow."
       disallow_vote:
@@ -72,20 +72,20 @@ backend:
       verification_failed:
         other: "Verification failed."
       email_or_password_incorrect:
-        other: "Email and password do not match."
+        other: "E-Mail und Password stimmen nicht überein."
       old_password_verification_failed:
         other: "The old password verification failed"
       new_password_same_as_previous_setting:
         other: "The new password is the same as the previous one."
     question:
       not_found:
-        other: "Question not found."
+        other: "Frage nicht gefunden."
       cannot_deleted:
-        other: "No permission to delete."
+        other: "Keine Berechtigung zum Löschen."
       cannot_close:
         other: "No permission to close."
       cannot_update:
-        other: "No permission to update."
+        other: "Keine Berechtigung zum Aktualisieren."
     rank:
       fail_to_meet_the_condition:
         other: "Rank fail to meet the condition."
@@ -96,7 +96,7 @@ backend:
         other: "Report not found."
     tag:
       not_found:
-        other: "Tag not found."
+        other: "Schlagwort nicht gefunden."
       recommend_tag_not_found:
         other: "Recommend Tag is not exist."
       recommend_tag_enter:
