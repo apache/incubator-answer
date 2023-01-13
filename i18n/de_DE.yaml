@@ -184,7 +184,7 @@ backend:
         name:
           other: "spam"
         desc:
-          other: "This question has been asked before and already has an answer."
+          other: "Diese Frage ist bereits gestellt worden und hat bereits eine Antwort."
       guideline:
         name:
           other: "a community-specific reason"
@@ -240,24 +240,24 @@ ui:
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
-    prev: Prev
-    next: Next
+    prev: Zurück
+    next: Weiter
   page_title:
-    question: Question
-    questions: Questions
-    tag: Tag
-    tags: Tags
+    question: Frage
+    questions: Fragen
+    tag: Schlagwort
+    tags: Schlagwörter
     tag_wiki: tag wiki
     edit_tag: Edit Tag
     ask_a_question: Add Question
     edit_question: Edit Question
     edit_answer: Edit Answer
-    search: Search
+    search: Suche
     posts_containing: Posts containing
-    settings: Settings
+    settings: Einstellungen
     notifications: Notifications
-    login: Log In
-    sign_up: Sign Up
+    login: Anmelden
+    sign_up: Registrieren
     account_recovery: Account Recovery
     account_activation: Account Activation
     confirm_email: Confirm Email
@@ -377,7 +377,7 @@ ui:
     unordered_list:
       text: Bulleted List
     table:
-      text: Table
+      text: Tabelle
       heading: Heading
       cell: Cell
   close_modal:
