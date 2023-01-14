@@ -70,13 +70,13 @@ backend:
       not_found:
         other: "Object not found."
       verification_failed:
-        other: "Verification failed."
+        other: "Verifizierung fehlgeschlagen."
       email_or_password_incorrect:
         other: "E-Mail und Password stimmen nicht überein."
       old_password_verification_failed:
         other: "The old password verification failed"
       new_password_same_as_previous_setting:
-        other: "The new password is the same as the previous one."
+        other: "Das neue Passwort ist das gleiche wie das vorherige Passwort."
     question:
       not_found:
         other: "Frage nicht gefunden."
@@ -596,13 +596,13 @@ ui:
         empty: Name cannot be empty.
         range: Name up to 30 characters.
     email:
-      label: Email
+      label: E-Mail
       msg:
-        empty: Email cannot be empty.
+        empty: E-Mail-Feld darf nicht leer sein.
     password:
-      label: Password
+      label: Passwort
       msg:
-        empty: Password cannot be empty.
+        empty: Passwort-Feld darf nicht leer sein.
         different: The passwords entered on both sides are inconsistent
   account_forgot:
     page_title: Forgot Your Password
@@ -610,7 +610,7 @@ ui:
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
-      label: Email
+      label: E-Mail
       msg:
         empty: Email cannot be empty.
   change_email:
@@ -684,24 +684,24 @@ ui:
         radio: "Answers to your questions, comments, and more"
     account:
       heading: Account
-      change_email_btn: Change email
-      change_pass_btn: Change password
+      change_email_btn: E-Mail-Adresse ändern
+      change_pass_btn: Passwort ändern
       change_email_info: >-
         We've sent an email to that address. Please follow the confirmation instructions.
       email:
-        label: Email
-        msg: Email cannot be empty.
-      password_title: Password
+        label: E-Mail
+        msg: E-Mail-Feld darf nicht leer sein.
+      password_title: Passwort
       current_pass:
-        label: Current Password
+        label: Aktuelles Passwort
         msg:
           empty: Current Password cannot be empty.
           length: The length needs to be between 8 and 32.
           different: The two entered passwords do not match.
       new_pass:
-        label: New Password
+        label: Neues Passwort
       pass_confirm:
-        label: Confirm New Password
+        label: Neues Passwort bestätigen
     interface:
       heading: Interface
       lang:
@@ -757,10 +757,10 @@ ui:
     tip_question_deleted: This post has been deleted
     tip_answer_deleted: This answer has been deleted
   btns:
-    confirm: Confirm
-    cancel: Cancel
-    save: Save
-    delete: Delete
+    confirm: Bestätigen
+    cancel: Abbrechen
+    save: Speichern
+    delete: Löschen
     login: Log in
     signup: Sign up
     logout: Log out
@@ -886,7 +886,7 @@ ui:
       placeholder: root
       msg: Username cannot be empty.
     db_password:
-      label: Password
+      label: Passwort
       placeholder: root
       msg: Password cannot be empty.
     db_host:
@@ -1012,8 +1012,8 @@ ui:
       update_to: Update to
       latest: Latest
       check_failed: Check failed
-      "yes": "Yes"
-      "no": "No"
+      "yes": "Ja"
+      "no": "Nein"
       not_allowed: Not allowed
       allowed: Allowed
       enabled: Enabled
@@ -1061,7 +1061,7 @@ ui:
     users:
       title: Users
       name: Name
-      email: Email
+      email: E-Mail
       reputation: Reputation
       created_at: Created Time
       delete_at: Deleted Time
@@ -1200,7 +1200,7 @@ ui:
         ssl: SSL
         none: None
       smtp_port:
-        label: SMTP Port
+        label: SMTP-Port
         msg: SMTP port must be number 1 ~ 65535.
         text: The port to your mail server.
       smtp_username:
