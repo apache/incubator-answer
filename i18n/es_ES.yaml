@@ -825,17 +825,17 @@ ui:
     all_questions: Todas las preguntas
     x_questions: "{{ count }} Preguntas"
     x_answers: "{{ count }} respuestas"
-    questions: Questions
-    answers: Answers
-    newest: Newest
+    questions: Preguntas
+    answers: Respuestas
+    newest: Más reciente
     active: Active
     frequent: Frequent
-    score: Score
-    unanswered: Unanswered
-    modified: modified
-    answered: answered
-    asked: asked
-    closed: closed
+    score: Puntuación
+    unanswered: Sin respuesta
+    modified: modificada
+    answered: respondida
+    asked: preguntada
+    closed: cerrada
     follow_a_tag: Seguir una etiqueta
     more: Más
   personal:
@@ -855,13 +855,13 @@ ui:
     viewed: Viewed
     joined: Joined
     last_login: Seen
-    about_me: About Me
-    about_me_empty: "// Hello, World !"
-    top_answers: Top Answers
+    about_me: Sobre mí
+    about_me_empty: "// ¡Hola Mundo!"
+    top_answers: Mejores respuestas
     top_questions: Top Questions
-    stats: Stats
+    stats: Estadísticas
     list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
-    accepted: Accepted
+    accepted: Aceptada
     answered: answered
     asked: asked
     upvote: upvote
