@@ -513,36 +513,36 @@ ui:
     title: Add Question
     edit_title: Edit Question
     default_reason: Edit question
-    similar_questions: Similar questions
+    similar_questions: Preguntas similares
     form:
       fields:
         revision:
           label: Revision
         title:
-          label: Title
-          placeholder: Be specific and imagine you're asking a question to another person
+          label: Título
+          placeholder: Sé preciso e imagina que le estás preguntando esto a una persona
           msg:
-            empty: Title cannot be empty.
-            range: Title up to 150 characters
+            empty: El título no puede estar vacío.
+            range: Título hasta 150 caracteres
         body:
-          label: Body
+          label: Cuerpo
           msg:
-            empty: Body cannot be empty.
+            empty: Cuerpo no puede estar vacío.
         tags:
-          label: Tags
+          label: Etiquetas
           msg:
-            empty: Tags cannot be empty.
+            empty: Se requiere al menos una etiqueta.
         answer:
-          label: Answer
+          label: Respuesta
           msg:
-            empty: Answer cannot be empty.
+            empty: La respuesta no puede estar vacía.
         edit_summary:
-          label: Edit Summary
+          label: Editar resumen
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_post_question: Post your question
-    btn_save_edits: Save edits
-    answer_question: Answer your own question
+            Explique brevemente sus cambios (ortografía corregida, gramática corregida, formato mejorado)
+    btn_post_question: Publica tu pregunta
+    btn_save_edits: Guardar cambios
+    answer_question: Responde a tu propia pregunta
     post_question&answer: Publicar una pregunta y su respuesta
   tag_selector:
     add_btn: Añadir etiqueta
@@ -699,29 +699,29 @@ ui:
           length: The length needs to be between 8 and 32.
           different: The two entered passwords do not match.
       new_pass:
-        label: New Password
+        label: Nueva Contraseña
       pass_confirm:
-        label: Confirm New Password
+        label: Confirmar Nueva Contraseña
     interface:
-      heading: Interface
+      heading: Interfaz
       lang:
-        label: Interface Language
-        text: User interface language. It will change when you refresh the page.
+        label: Idioma de la Interfaz
+        text: Idioma de la interfaz de usuario. Cambiará cuando actualices la página.
   toast:
-    update: update success
-    update_password: Password changed successfully.
-    flag_success: Thanks for flagging.
-    forbidden_operate_self: Forbidden to operate on yourself
+    update: actualización correcta
+    update_password: Contraseña cambiada con éxito.
+    flag_success: Gracias por reportar.
+    forbidden_operate_self: No puedes modificar tu propio usuario
     review: Your revision will show after review.
   related_question:
-    title: Related Questions
-    btn: Add question
-    answers: answers
+    title: Preguntas relacionadas
+    btn: Añadir pregunta
+    answers: respuestas
   question_detail:
-    Asked: Asked
-    asked: asked
-    update: Modified
-    edit: edited
+    Asked: Preguntada
+    asked: preguntada
+    update: Modificada
+    edit: editada
     Views: Visto
     Follow: Seguir
     Following: Siguiendo
@@ -738,7 +738,7 @@ ui:
       title: Tu respuesta
       btn_name: Publica tu respuesta
       add_another_answer: Añadir otra respuesta
-      confirm_title: Continue to answer
+      confirm_title: Continuar a pregunta
       continue: Continuar
       confirm_info: >-
         <p>¿Seguro que quieres añadir otra respuesta?</p><p>Puedes utilizar el enlace de edición para detallar y mejorar tu respuesta existente en su lugar.</p>
@@ -789,42 +789,42 @@ ui:
       user: "<1>user:username</1> search by author"
       answer: "<1>answers:0</1> unanswered questions"
       score: "<1>score:3</1> posts with a 3+ score"
-      question: "<1>is:question</1> search questions"
-      is_answer: "<1>is:answer</1> search answers"
-    empty: We couldn't find anything. <br /> Try different or less specific keywords.
+      question: "<1>is:question</1> buscar preguntas"
+      is_answer: "<1>is:answer</1> buscar respuestas"
+    empty: No pudimos encontrar nada. <br /> Prueba a buscar con palabras diferentes o menos específicas.
   share:
-    name: Share
-    copy: Copy link
-    via: Share post via...
-    copied: Copied
-    facebook: Share to Facebook
-    twitter: Share to Twitter
-  cannot_vote_for_self: You can't vote for your own post
+    name: Compartir
+    copy: Copiar enlace
+    via: Compartir vía...
+    copied: Copiado
+    facebook: Compartir en Facebook
+    twitter: Compartir en Twitter
+  cannot_vote_for_self: No puedes votar a tu propia publicación
   modal_confirm:
     title: Error...
   account_result:
-    page_title: Welcome to Answer
-    success: Your new account is confirmed; you will be redirected to the home page.
-    link: Continue to homepage
+    page_title: Bienvenido a Answer
+    success: Tu nueva cuenta ha sido confirmada, serás redirigido a la página de inicio.
+    link: Continuar a la página de inicio
     invalid: >-
-      Sorry, this account confirmation link is no longer valid. Perhaps your account is already active?
-    confirm_new_email: Your email has been updated.
+      Lo sentimos, este link de confirmación de cuenta ya no es válido. ¿Quizás tu cuenta ya está activa?
+    confirm_new_email: Tu email ha sido actualizado.
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
   unsubscribe:
-    page_title: Unsubscribe
-    success_title: Unsubscribe Successful
-    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
-    link: Change settings
+    page_title: Desuscribir
+    success_title: Desuscrito con éxito
+    success_desc: Has sido eliminado con éxito de esta lista de suscriptores y no recibirás más correos electrónicos nuestros.
+    link: Cambiar ajustes
   question:
     following_tags: Following Tags
-    edit: Edit
-    save: Save
-    follow_tag_tip: Follow tags to curate your list of questions.
-    hot_questions: Hot Questions
-    all_questions: All Questions
-    x_questions: "{{ count }} Questions"
-    x_answers: "{{ count }} answers"
+    edit: Editar
+    save: Guardar
+    follow_tag_tip: Sigue etiquetas para personalizar tu lista de preguntas.
+    hot_questions: Preguntas del momento
+    all_questions: Todas las preguntas
+    x_questions: "{{ count }} Preguntas"
+    x_answers: "{{ count }} respuestas"
     questions: Questions
     answers: Answers
     newest: Newest
