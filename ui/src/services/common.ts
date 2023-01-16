@@ -19,12 +19,18 @@ export const useQueryQuestionByTitle = (title) => {
 };
 
 export const useQueryTags = (params) => {
-  return useSWR<Type.ListResult>(
+  const { data, error, mutate } = useSWR<Type.ListResult>(
     `/answer/api/v1/tags/page?${qs.stringify(params, {
       skipNulls: true,
     })}`,
     request.instance.get,
   );
+  return {
+    data,
+    isLoading: !data && !error,
+    error,
+    mutate,
+  };
 };
 
 export const useQueryRevisions = (object_id: string | undefined) => {
@@ -261,4 +267,9 @@ export const reopenQuestion = (params: { question_id: string }) => {
 export const unsubscribe = (code: string) => {
   const apiUrl = '/answer/api/v1/user/email/notification';
   return request.put(apiUrl, { code });
+};
+
+export const markdownToHtml = (content: string) => {
+  const apiUrl = '/answer/api/v1/post/render';
+  return request.post(apiUrl, { content });
 };

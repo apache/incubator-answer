@@ -102,6 +102,7 @@ export interface ModifyUserReq {
 }
 
 export interface UserInfoBase {
+  id?: string;
   avatar: any;
   username: string;
   display_name: string;

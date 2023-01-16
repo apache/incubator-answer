@@ -38,6 +38,7 @@ const Index: FC = () => {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
+        className: 'font-monospace',
       },
     },
   };

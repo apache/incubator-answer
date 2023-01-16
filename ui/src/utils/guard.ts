@@ -8,6 +8,7 @@ import {
   customizeStore,
   themeSettingStore,
   seoSettingStore,
+  loginToContinueStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
 import Storage from '@/utils/storage';
@@ -225,7 +226,7 @@ export const tryNormalLogged = (canNavigate: boolean = false) => {
   // must assert logged state first and return
   if (!us.isLogged) {
     if (canNavigate) {
-      floppyNavigation.navigateToLogin();
+      loginToContinueStore.getState().update({ show: true });
     }
     return false;
   }

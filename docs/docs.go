@@ -6948,10 +6948,6 @@ const docTemplate = `{
         },
         "schema.SiteBrandingReq": {
             "type": "object",
-            "required": [
-                "logo",
-                "square_icon"
-            ],
             "properties": {
                 "favicon": {
                     "type": "string",
@@ -6973,10 +6969,6 @@ const docTemplate = `{
         },
         "schema.SiteBrandingResp": {
             "type": "object",
-            "required": [
-                "logo",
-                "square_icon"
-            ],
             "properties": {
                 "favicon": {
                     "type": "string",

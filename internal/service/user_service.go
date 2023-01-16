@@ -510,7 +510,7 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 	if exist {
 		resp = append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "e_mail",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), reason.EmailDuplicate),
+			ErrorMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.EmailDuplicate),
 		})
 		return resp, errors.BadRequest(reason.EmailDuplicate)
 	}

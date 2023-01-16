@@ -102,7 +102,7 @@ func createDefaultValidator(la i18n.Language) *validator.Validate {
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) (res string) {
 		defer func() {
 			if len(res) > 0 {
-				res = translator.GlobalTrans.Tr(la, res)
+				res = translator.Tr(la, res)
 			}
 		}()
 		if jsonTag := fld.Tag.Get("json"); len(jsonTag) > 0 {
@@ -168,7 +168,7 @@ func (m *MyValidator) Check(value interface{}) (errFields []*FormErrorField, err
 			return nil, nil
 		}
 		for _, errField := range errFields {
-			errField.ErrorMsg = translator.GlobalTrans.Tr(m.Lang, errField.ErrorMsg)
+			errField.ErrorMsg = translator.Tr(m.Lang, errField.ErrorMsg)
 		}
 		return errFields, err
 	}

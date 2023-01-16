@@ -74,8 +74,8 @@ func (rs *ReportService) GetReportTypeList(ctx context.Context, lang i18n.Langua
 		err = errors.BadRequest(reason.UnknownError)
 	}
 	for _, t := range resp {
-		t.Name = translator.GlobalTrans.Tr(lang, t.Name)
-		t.Description = translator.GlobalTrans.Tr(lang, t.Description)
+		t.Name = translator.Tr(lang, t.Name)
+		t.Description = translator.Tr(lang, t.Description)
 	}
 	return resp, err
 }

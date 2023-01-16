@@ -188,7 +188,7 @@ const TagSelector: FC<IProps> = ({
               key={item.slug_name}
               className={classNames(
                 'm-1 text-nowrap d-flex align-items-center',
-                index === repeatIndex && 'warning',
+                index === repeatIndex && 'bg-fade-out',
               )}
               variant={`outline-${
                 item.reserved ? 'danger' : item.recommend ? 'dark' : 'secondary'
