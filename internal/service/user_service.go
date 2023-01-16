@@ -22,6 +22,7 @@ import (
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/google/uuid"
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"golang.org/x/crypto/bcrypt"
@@ -267,12 +268,17 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 	if err != nil {
 		return nil, errors.BadRequest(reason.UserSetAvatar).WithError(err).WithStack()
 	}
+	xss := bluemonday.UGCPolicy()
+	bio := xss.Sanitize(
+		req.BioHTML,
+	)
+
 	userInfo := entity.User{}
 	userInfo.ID = req.UserID
 	userInfo.Avatar = string(avatar)
 	userInfo.DisplayName = req.DisplayName
 	userInfo.Bio = req.Bio
-	userInfo.BioHTML = req.BioHTML
+	userInfo.BioHTML = bio
 	userInfo.Location = req.Location
 	userInfo.Website = req.Website
 	userInfo.Username = req.Username
