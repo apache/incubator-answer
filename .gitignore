@@ -15,8 +15,7 @@
 /configs/config-dev.yaml
 /go.work*
 /logs
-/ui/build
-/ui/build/index.html
+
 /ui/node_modules
 /vendor
 Thumbs*.db
