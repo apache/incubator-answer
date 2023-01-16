@@ -8,6 +8,7 @@ import (
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/pkg/checker"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -283,7 +284,7 @@ type UpdateInfoRequest struct {
 	// bio
 	Bio string `validate:"omitempty,gt=0,lte=4096" json:"bio"`
 	// bio
-	BioHTML string `validate:"omitempty,gt=0,lte=4096" json:"bio_html"`
+	BioHTML string `json:"-"`
 	// website
 	Website string `validate:"omitempty,gt=0,lte=500" json:"website"`
 	// location
@@ -298,11 +299,11 @@ type AvatarInfo struct {
 	Custom   string `validate:"omitempty,gt=0,lte=200"  json:"custom"`
 }
 
-func (u *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {
-	if len(u.Username) > 0 {
+func (req *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {
+	if len(req.Username) > 0 {
 		errFields := make([]*validator.FormErrorField, 0)
 		re := regexp.MustCompile(`^[a-z0-9._-]{4,30}$`)
-		match := re.MatchString(u.Username)
+		match := re.MatchString(req.Username)
 		if !match {
 			errField := &validator.FormErrorField{
 				ErrorField: "username",
@@ -312,6 +313,7 @@ func (u *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err 
 			return errFields, errors.BadRequest(reason.UsernameInvalid)
 		}
 	}
+	req.BioHTML = converter.Markdown2HTML(req.Bio)
 	return nil, nil
 }
 
