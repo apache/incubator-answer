@@ -585,7 +585,8 @@ ui:
     msg:
       empty: Cannot be empty.
   login:
-    page_title: Welcome to Answer
+    page_title: Welcome to {{site_name}}
+    login_to_continue: Log in to continue
     info_sign: Don't have an account? <1>Sign up</1>
     info_login: Already have an account? <1>Log in</1>
     agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
@@ -1222,14 +1223,14 @@ ui:
     branding:
       page_title: Branding
       logo:
-        label: Logo
+        label: Logo (optional)
         msg: Logo cannot be empty.
         text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
       mobile_logo:
         label: Mobile Logo (optional)
         text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the “logo” setting will be used.
       square_icon:
-        label: Square Icon
+        label: Square Icon (optional)
         msg: Square icon cannot be empty.
         text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
       favicon:
