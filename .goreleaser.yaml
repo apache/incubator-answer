@@ -2,7 +2,7 @@ env:
   - GO11MODULE=on
   - GO111MODULE=on
   - GOPROXY=https://goproxy.io
-  - CGO_ENABLED=1
+  - CGO_ENABLED=0
 
 before:
   hooks:
