@@ -34,9 +34,10 @@ const Config = () => {
         description: item.description,
         default: item.value,
       };
-      if (item.uiOptions) {
+
+      if (item.ui_options) {
         uiSchema[item.name] = {
-          'ui:options': item.uiOptions,
+          'ui:options': item.ui_options,
         };
       }
       if (item.required) {
@@ -72,8 +73,7 @@ const Config = () => {
       plugin_slug_name: slug_name,
       config_fields,
     };
-    updatePluginConfig(params).then((res) => {
-      console.log(res);
+    updatePluginConfig(params).then(() => {
       Toast.onShow({
         msg: t('update', { keyPrefix: 'toast' }),
         variant: 'success',
@@ -82,7 +82,6 @@ const Config = () => {
   };
 
   const handleOnChange = (form) => {
-    console.log(form);
     setFormData(form);
   };
 

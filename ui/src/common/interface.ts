@@ -549,7 +549,7 @@ export interface PluginItem {
   type: UIWidget;
   title: string;
   description: string;
-  uiOptions?: UIOptions;
+  ui_options?: UIOptions;
   option?: PluginOption[];
   value?: string;
   required?: boolean;

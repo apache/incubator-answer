@@ -113,7 +113,7 @@ const AccordionNav: FC<AccordionProps> = ({ menus = [], path = '/' }) => {
   };
   useEffect(() => {
     setOpenKey(getOpenKey());
-  }, [activeKey]);
+  }, [activeKey, menus]);
   return (
     <Accordion activeKey={openKey} flush>
       <Nav variant="pills" className="flex-column" activeKey={activeKey}>
