@@ -7,28 +7,31 @@ import {
   useImperativeHandle,
 } from 'react';
 
-import { marked } from 'marked';
+import { markdownToHtml } from '@/services';
 
 import { htmlRender } from './utils';
 
 let scrollTop = 0;
-marked.setOptions({
-  breaks: true,
-});
+let renderTimer;
 
 const Index = ({ value }, ref) => {
   const [html, setHtml] = useState('');
-
   const previewRef = useRef<HTMLDivElement>(null);
 
+  const renderMarkdown = (markdown) => {
+    clearTimeout(renderTimer);
+    const timeout = renderTimer ? 1000 : 0;
+    renderTimer = setTimeout(() => {
+      markdownToHtml(markdown).then((resp) => {
+        scrollTop = previewRef.current?.scrollTop || 0;
+        setHtml(resp);
+      });
+    }, timeout);
+  };
   useEffect(() => {
-    const previewHtml = marked(value).replace(
-      /<img/gi,
-      '<img referrerpolicy="no-referrer"',
-    );
-    scrollTop = previewRef.current?.scrollTop || 0;
-    setHtml(previewHtml);
+    renderMarkdown(value);
   }, [value]);
+
   useEffect(() => {
     if (!html) {
       return;

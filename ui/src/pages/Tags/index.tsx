@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { usePageTags } from '@/hooks';
 import { Tag, Pagination, QueryGroup, TagsLoader } from '@/components';
 import { formatCount } from '@/utils';
+import { tryNormalLogged } from '@/utils/guard';
 import { useQueryTags, following } from '@/services';
 
 const sortBtns = ['popular', 'name', 'newest'];
@@ -35,6 +36,9 @@ const Tags = () => {
   };
 
   const handleFollow = (tag) => {
+    if (!tryNormalLogged(true)) {
+      return;
+    }
     following({
       object_id: tag.tag_id,
       is_cancel: tag.is_follower,

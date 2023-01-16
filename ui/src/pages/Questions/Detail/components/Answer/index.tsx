@@ -54,14 +54,18 @@ const Index: FC<Props> = ({
     if (!answerRef?.current) {
       return;
     }
+
+    htmlRender(answerRef.current.querySelector('.fmt'));
+
     if (aid === data.id) {
       setTimeout(() => {
         const element = answerRef.current;
         scrollTop(element);
+        if (!searchParams.get('commentId')) {
+          bgFadeOut(answerRef.current);
+        }
       }, 100);
     }
-    htmlRender(answerRef.current.querySelector('.fmt'));
-    bgFadeOut(answerRef.current);
   }, [data.id, answerRef.current]);
   if (!data?.id) {
     return null;

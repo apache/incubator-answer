@@ -18,10 +18,6 @@
   }
 }
 
-:root {
-  overflow-y: scroll;
-}
-
 html,
 body {
   padding: 0;
@@ -300,7 +296,7 @@ a {
   }
 }
 .bg-fade-out {
-  animation: 2s ease 1s bg-fade-out;
+  animation: bg-fade-out 2s ease 0.3s;
 }
 
 

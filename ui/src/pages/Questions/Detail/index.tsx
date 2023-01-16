@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import Pattern from '@/common/pattern';
 import { Pagination } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
-import { scrollTop, bgFadeOut } from '@/utils';
+import { scrollTop } from '@/utils';
 import { usePageTags, usePageUsers } from '@/hooks';
 import type {
   ListResult,
@@ -81,7 +81,6 @@ const Index = () => {
         // scroll into view;
         const element = document.getElementById('answerHeader');
         scrollTop(element);
-        bgFadeOut(element);
       }
 
       res.list.forEach((item) => {
@@ -105,9 +104,24 @@ const Index = () => {
       const res = await questionDetail(qid);
       if (res) {
         setUsers([
-          res.user_info,
-          res?.update_user_info,
-          res?.last_answered_user_info,
+          {
+            id: res.user_info.id,
+            displayName: res.user_info.display_name,
+            userName: res.user_info.username,
+            avatar_url: res.user_info.avatar,
+          },
+          {
+            id: res?.update_user_info?.id,
+            displayName: res?.update_user_info?.display_name,
+            userName: res?.update_user_info?.username,
+            avatar_url: res?.update_user_info?.avatar,
+          },
+          {
+            id: res?.last_answered_user_info?.id,
+            displayName: res?.last_answered_user_info?.display_name,
+            userName: res?.last_answered_user_info?.username,
+            avatar_url: res?.last_answered_user_info?.avatar,
+          },
         ]);
         setQuestion(res);
       }
@@ -124,7 +138,6 @@ const Index = () => {
       }, 1000);
       return;
     }
-
     if (type === 'default') {
       window.scrollTo(0, 0);
       getDetail();
@@ -151,6 +164,7 @@ const Index = () => {
     if (!qid) {
       return;
     }
+    window.scrollTo(0, 0);
     getDetail();
     requestAnswers();
   }, [qid]);
@@ -214,7 +228,6 @@ const Index = () => {
 
           {!isLoading && !question?.operation?.operation_type && (
             <WriteAnswer
-              visible={answers.count === 0}
               data={{
                 qid,
                 answered: question?.answered,

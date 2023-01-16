@@ -12,10 +12,54 @@ const Index: FC = () => {
         style={{ height: '24px' }}
       />
 
-      <div
-        className="placeholder w-100 align-top"
-        style={{ height: '450px', marginBottom: '2rem' }}
-      />
+      <div style={{ marginBottom: '2rem' }}>
+        <p>
+          <span
+            className="placeholder w-100 d-block align-top mb-1"
+            style={{ height: '24px' }}
+          />
+          <span
+            className="placeholder w-100 d-block align-top mb-1"
+            style={{ height: '24px' }}
+          />
+          <span
+            className="placeholder w-100 d-block align-top mb-1"
+            style={{ height: '24px' }}
+          />
+
+          <span
+            className="placeholder w-100 d-block align-top mb-1"
+            style={{ height: '24px' }}
+          />
+          <span
+            className="placeholder w-75 d-block align-top"
+            style={{ height: '24px' }}
+          />
+        </p>
+
+        <p>
+          <span
+            className="placeholder w-100 d-block align-top mb-1"
+            style={{ height: '24px' }}
+          />
+          <span
+            className="placeholder w-100 d-block align-top mb-1"
+            style={{ height: '24px' }}
+          />
+          <span
+            className="placeholder w-100 d-block align-top mb-1"
+            style={{ height: '24px' }}
+          />
+          <span
+            className="placeholder w-100 d-block align-top mb-1"
+            style={{ height: '24px' }}
+          />
+          <span
+            className="placeholder w-50 d-block align-top"
+            style={{ height: '24px' }}
+          />
+        </p>
+      </div>
 
       <div className="d-flex">
         <div

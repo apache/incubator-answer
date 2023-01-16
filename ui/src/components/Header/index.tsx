@@ -28,7 +28,6 @@ import {
   themeSettingStore,
 } from '@/stores';
 import { logout, useQueryNotificationStatus } from '@/services';
-import { DEFAULT_SITE_NAME } from '@/common/constants';
 
 import NavItems from './components/NavItems';
 
@@ -61,6 +60,7 @@ const Header: FC = () => {
   const handleLogout = async () => {
     await logout();
     clearUserStore();
+    window.location.replace(window.location.href);
   };
   const onLoginClick = (evt) => {
     evt.preventDefault();
@@ -121,7 +121,7 @@ const Header: FC = () => {
                 />
               </>
             ) : (
-              <span>{siteInfo.name || DEFAULT_SITE_NAME}</span>
+              <span>{siteInfo.name}</span>
             )}
           </Navbar.Brand>
 
