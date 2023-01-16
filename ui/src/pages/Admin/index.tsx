@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -27,21 +27,22 @@ const formPaths = [
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
   const { pathname } = useLocation();
-  const { data: plugins } = useQueryPlugins({
-    query: 'active',
-  });
+  const { data: configurablePlugins, mutate: updateConfigurablePlugins } =
+    useQueryPlugins({
+      status: 'active',
+      have_config: true,
+    });
   usePageTags({
     title: t('admin'),
   });
-  const inactivePlugins = plugins?.filter((v) => v.enabled) || [];
 
   const menus = cloneDeep(ADMIN_NAV_MENUS);
-  if (inactivePlugins?.length > 0) {
+  if (configurablePlugins && configurablePlugins.length > 0) {
     menus.forEach((item) => {
       if (item.name === 'plugins' && item.children) {
         item.children = [
           ...item.children,
-          ...inactivePlugins.map((plugin) => ({
+          ...configurablePlugins.map((plugin) => ({
             name: plugin.slug_name,
             displayName: plugin.name,
           })),
@@ -49,6 +50,18 @@ const Index: FC = () => {
       }
     });
   }
+
+  const observePlugins = (evt) => {
+    if (evt.data.msgType === 'refreshConfigurablePlugins') {
+      updateConfigurablePlugins();
+    }
+  };
+  useEffect(() => {
+    window.addEventListener('message', observePlugins);
+    return () => {
+      window.removeEventListener('message', observePlugins);
+    };
+  }, []);
 
   return (
     <>

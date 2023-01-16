@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Table, Dropdown, Stack } from 'react-bootstrap';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
@@ -20,46 +20,40 @@ const bgMap = {
   inactive: 'text-bg-secondary',
 };
 
-const PAGE_SIZE = 10;
 const Users: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.installed_plugins',
   });
-
+  const navigate = useNavigate();
   const [urlSearchParams] = useSearchParams();
   const curFilter =
     urlSearchParams.get('filter') || InstalledPluginsFilterKeys[0];
-  const curPage = Number(urlSearchParams.get('page') || '1');
-  const curQuery = urlSearchParams.get('query') || '';
-  const { data, isLoading, mutate } = useQueryPlugins({
-    page: curPage,
-    page_size: PAGE_SIZE,
-    query: curQuery,
-    ...(curFilter === 'all'
-      ? {}
-      : curFilter === 'staff'
-      ? { staff: true }
-      : { status: curFilter }),
+  const {
+    data,
+    isLoading,
+    mutate: updatePlugins,
+  } = useQueryPlugins({
+    status: curFilter === 'all' ? undefined : curFilter,
   });
-
-  const handleAction = (type, plugin) => {
-    if (type === 'deactivate') {
-      updatePluginStatus({
-        enabled: false,
-        plugin_slug_name: plugin.slug_name,
-      }).then(() => {
-        mutate();
-      });
-    }
-    if (type === 'activate') {
-      updatePluginStatus({
-        enabled: true,
-        plugin_slug_name: plugin.slug_name,
-      }).then(() => {
-        mutate();
-      });
-    }
-    console.log(type, plugin);
+  const emitPluginChange = (type) => {
+    window.postMessage({
+      msgType: type,
+    });
+  };
+  const handleStatus = (plugin) => {
+    updatePluginStatus({
+      enabled: !plugin.enabled,
+      plugin_slug_name: plugin.slug_name,
+    }).then(() => {
+      updatePlugins();
+      if (plugin.have_config) {
+        emitPluginChange('refreshConfigurablePlugins');
+      }
+    });
+  };
+  const handleSettings = (plugin) => {
+    const url = `/admin/${plugin.slug_name}`;
+    navigate(url);
   };
 
   return (
@@ -116,21 +110,19 @@ const Users: FC = () => {
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
                         {plugin.enabled ? (
-                          <Dropdown.Item
-                            onClick={() => handleAction('deactivate', plugin)}>
+                          <Dropdown.Item onClick={() => handleStatus(plugin)}>
                             {t('deactivate')}
                           </Dropdown.Item>
                         ) : (
-                          <Dropdown.Item
-                            onClick={() => handleAction('activate', plugin)}>
+                          <Dropdown.Item onClick={() => handleStatus(plugin)}>
                             {t('activate')}
                           </Dropdown.Item>
                         )}
-
-                        <Dropdown.Item
-                          onClick={() => handleAction('settings', plugin)}>
-                          {t('settings')}
-                        </Dropdown.Item>
+                        {plugin.enabled && plugin.have_config && (
+                          <Dropdown.Item onClick={() => handleSettings(plugin)}>
+                            {t('settings')}
+                          </Dropdown.Item>
+                        )}
                       </Dropdown.Menu>
                     </Dropdown>
                   </td>
