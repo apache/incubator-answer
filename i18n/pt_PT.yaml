@@ -2,15 +2,15 @@
 backend:
   base:
     success:
-      other: "Success."
+      other: "Sucesso."
     unknown:
-      other: "Unknown error."
+      other: "Erro desconhecido."
     request_format_error:
-      other: "Request format is not valid."
+      other: "Formato de solicitação não é válido."
     unauthorized_error:
-      other: "Unauthorized."
+      other: "Não autorizado."
     database_error:
-      other: "Data server error."
+      other: "Erro no servidor de dados."
   role:
     name:
       user:
