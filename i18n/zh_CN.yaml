@@ -585,7 +585,8 @@ ui:
     msg:
       empty: 不能为空
   login:
-    page_title: 欢迎来到 Answer
+    page_title: Welcome to {{site_name}}
+    login_to_continue: Log in to continue
     info_sign: 没有账户？<1>注册</1>
     info_login: 已经有一个账户？<1>登录</1>
     agreements: 登录即表示您同意<1>隐私政策</1>和<3>服务条款</3>。
@@ -1222,14 +1223,14 @@ ui:
     branding:
       page_title: 品牌
       logo:
-        label: 图标
+        label: Logo (optional)
         msg: 图标不能为空。
         text: 在你的网站左上方的Logo图标。使用一个高度为56，长宽比大于3:1的宽长方形图像。如果留空，将显示网站标题文本。
       mobile_logo:
         label: 移动端图标（可选）
         text: 在你的网站的移动版上使用的标志。使用一个高度为56的宽矩形图像。如果留空，将使用 "Logo"设置中的图像。
       square_icon:
-        label: 方形图标
+        label: Square Icon (optional)
         msg: 方形图标不能为空。
         text: 用作元数据图标的基础的图像。最好是大于512x512。
       favicon:
