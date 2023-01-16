@@ -35,6 +35,8 @@ const Index = () => {
       },
     });
   };
+
+  if (!data?.length) return null;
   return (
     <div className="mt-5">
       <div className="form-label">{t('title')}</div>
