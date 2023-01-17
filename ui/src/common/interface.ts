@@ -131,6 +131,7 @@ export interface UserInfoRes extends UserInfoBase {
   language: string;
   is_admin: boolean;
   e_mail?: string;
+  have_password: boolean;
   [prop: string]: any;
 }
 

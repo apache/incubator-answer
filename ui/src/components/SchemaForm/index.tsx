@@ -319,9 +319,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 }
                 onChange={handleSelectChange}
                 isInvalid={formData[key].isInvalid}>
-                <option disabled selected>
-                  {t('select')}
-                </option>
                 {properties[key].enum?.map((item, index) => {
                   return (
                     <option value={String(item)} key={String(item)}>
@@ -543,10 +540,14 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
 export const initFormData = (schema: JSONSchema): Type.FormDataType => {
   const formData: Type.FormDataType = {};
   Object.keys(schema.properties).forEach((key) => {
-    const v = schema.properties[key]?.default;
-    // TODO: set default value by property type
+    const prop = schema.properties[key];
+    let defaultVal = prop?.default;
+    if (typeof defaultVal === 'undefined' && Array.isArray(prop?.enum)) {
+      // eslint-disable-next-line prefer-destructuring
+      defaultVal = prop.enum[0];
+    }
     formData[key] = {
-      value: typeof v !== 'undefined' ? v : '',
+      value: defaultVal,
       isInvalid: false,
       errorMsg: '',
     };

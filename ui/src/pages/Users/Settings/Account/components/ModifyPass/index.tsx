@@ -6,11 +6,13 @@ import { useToast } from '@/hooks';
 import type { FormDataType } from '@/common/interface';
 import { modifyPassword } from '@/services';
 import { handleFormError } from '@/utils';
+import { loggedUserInfoStore } from '@/stores';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings.account',
   });
+  const { user } = loggedUserInfoStore();
   const [showForm, setFormState] = useState(false);
   const toast = useToast();
   const [formData, setFormData] = useState<FormDataType>({
@@ -42,8 +44,7 @@ const Index: FC = () => {
   const checkValidated = (): boolean => {
     let bol = true;
     const { old_pass, pass, pass2 } = formData;
-
-    if (!old_pass.value) {
+    if (!old_pass.value && user.have_password) {
       bol = false;
       formData.old_pass = {
         value: '',
@@ -137,7 +138,6 @@ const Index: FC = () => {
               required
               type="password"
               placeholder=""
-              // value={formData.password.value}
               isInvalid={formData.old_pass.isInvalid}
               onChange={(e) =>
                 handleChange({
@@ -161,7 +161,6 @@ const Index: FC = () => {
               required
               type="password"
               maxLength={32}
-              // value={formData.password.value}
               isInvalid={formData.pass.isInvalid}
               onChange={(e) =>
                 handleChange({
@@ -185,7 +184,6 @@ const Index: FC = () => {
               required
               type="password"
               maxLength={32}
-              // value={formData.password.value}
               isInvalid={formData.pass2.isInvalid}
               onChange={(e) =>
                 handleChange({
