@@ -85,7 +85,8 @@ func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 
 type GetUserToSetShowResp struct {
 	*GetUserResp
-	Avatar *AvatarInfo `json:"avatar"`
+	Avatar       *AvatarInfo `json:"avatar"`
+	HavePassword bool        `json:"have_password"`
 }
 
 func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
@@ -254,9 +255,9 @@ func (u *UserRegisterReq) Check() (errFields []*validator.FormErrorField, err er
 
 // UserModifyPassWordRequest
 type UserModifyPassWordRequest struct {
-	UserID  string `json:"-" `        // user_id
-	OldPass string `json:"old_pass" ` // old password
-	Pass    string `json:"pass" `     // password
+	OldPass string `validate:"omitempty,gte=8,lte=32" json:"old_pass"`
+	Pass    string `validate:"required,gte=8,lte=32" json:"pass"`
+	UserID  string `json:"-"`
 }
 
 func (u *UserModifyPassWordRequest) Check() (errFields []*validator.FormErrorField, err error) {

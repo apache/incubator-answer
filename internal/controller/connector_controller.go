@@ -107,18 +107,18 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 // @Success 200 {object} handler.RespBody{data=[]schema.ConnectorInfoResp}
 // @Router /answer/api/v1/connector/info [get]
 func (cc *ConnectorController) ConnectorsInfo(ctx *gin.Context) {
-	//general, err := cc.siteInfoService.GetSiteGeneral(ctx)
-	//if err != nil {
-	//	handler.HandleResponse(ctx, err, nil)
-	//	return
-	//}
+	general, err := cc.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
 
 	resp := make([]*schema.ConnectorInfoResp, 0)
 	_ = plugin.CallConnector(func(fn plugin.Connector) error {
 		resp = append(resp, &schema.ConnectorInfoResp{
 			Name: fn.ConnectorName(),
 			Icon: fn.ConnectorLogoSVG(),
-			Link: fmt.Sprintf("%s%s%s%s", "http://10.0.20.88:8080",
+			Link: fmt.Sprintf("%s%s%s%s", general.SiteUrl,
 				commonRouterPrefix, ConnectorLoginRouterPrefix, fn.ConnectorSlugName()),
 		})
 		return nil

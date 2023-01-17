@@ -69,7 +69,8 @@ func NewUserService(userRepo usercommon.UserRepo,
 }
 
 // GetUserInfoByUserID get user info by user id
-func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID string) (resp *schema.GetUserToSetShowResp, err error) {
+func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID string) (
+	resp *schema.GetUserToSetShowResp, err error) {
 	userInfo, exist, err := us.userRepo.GetByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -85,6 +86,7 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	resp.GetFromUserEntity(userInfo)
 	resp.AccessToken = token
 	resp.IsAdmin = roleID == role.RoleAdminID
+	resp.HavePassword = len(userInfo.Pass) > 0
 	return resp, nil
 }
 
@@ -469,8 +471,11 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 
 // verifyPassword
 // Compare whether the password is correct
-func (us *UserService) verifyPassword(ctx context.Context, LoginPass, UserPass string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(UserPass), []byte(LoginPass))
+func (us *UserService) verifyPassword(ctx context.Context, loginPass, userPass string) bool {
+	if len(loginPass) == 0 && len(userPass) == 0 {
+		return true
+	}
+	err := bcrypt.CompareHashAndPassword([]byte(userPass), []byte(loginPass))
 	return err == nil
 }
 
