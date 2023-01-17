@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
+import { WelcomeTitle } from '@/components';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'account_result' });
@@ -15,7 +16,7 @@ const Index: FC = () => {
     <Container className="pt-4 mt-2 mb-5">
       <Row className="justify-content-center">
         <Col lg={6}>
-          <h3 className="text-center mt-3 mb-5">{t('page_title')}</h3>
+          <WelcomeTitle className="mt-3 mb-5" />
           {location.pathname?.includes('success') && (
             <>
               <p className="text-center">{t('success')}</p>

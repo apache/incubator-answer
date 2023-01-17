@@ -3,7 +3,7 @@ import { Container, Col, Form, Button } from 'react-bootstrap';
 import { useTranslation, Trans } from 'react-i18next';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
-import { Modal } from '@/components';
+import { Modal, WelcomeTitle } from '@/components';
 import type { FormDataType } from '@/common/interface';
 import { usePageTags } from '@/hooks';
 import { loggedUserInfoStore } from '@/stores';
@@ -135,7 +135,7 @@ const Index: FC = () => {
   }, []);
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '6rem' }}>
-      <h3 className="text-center mb-5">{t('page_title')}</h3>
+      <WelcomeTitle />
       {showResult ? (
         <Col md={6} className="mx-auto text-center">
           <p>

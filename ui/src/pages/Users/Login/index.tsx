@@ -11,13 +11,9 @@ import type {
   ImgCodeRes,
   FormDataType,
 } from '@/common/interface';
-import { Unactivate } from '@/components';
+import { Unactivate, WelcomeTitle } from '@/components';
 import { PluginOauth } from '@/plugins';
-import {
-  loggedUserInfoStore,
-  loginSettingStore,
-  siteInfoStore,
-} from '@/stores';
+import { loggedUserInfoStore, loginSettingStore } from '@/stores';
 import { guard, floppyNavigation, handleFormError } from '@/utils';
 import { login, checkImgCode } from '@/services';
 import { PicAuthCodeModal } from '@/components/Modal';
@@ -28,7 +24,6 @@ const Index: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [refresh, setRefresh] = useState(0);
-  const { name: siteName } = siteInfoStore((_) => _.siteInfo);
   const { user: storeUser, update: updateUser } = loggedUserInfoStore((_) => _);
   const loginSetting = loginSettingStore((state) => state.login);
   const [formData, setFormData] = useState<FormDataType>({
@@ -175,9 +170,7 @@ const Index: React.FC = () => {
   });
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
-      <h3 className="text-center mb-5">
-        {t('page_title', { site_name: siteName })}
-      </h3>
+      <WelcomeTitle />
       {step === 1 && (
         <Col className="mx-auto" md={3}>
           <PluginOauth className="mb-5" />

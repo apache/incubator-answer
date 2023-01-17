@@ -585,7 +585,6 @@ ui:
     msg:
       empty: 不能为空
   login:
-    page_title: 欢迎来到 Answer
     info_sign: 没有账户？<1>注册</1>
     info_login: 已经有一个账户？<1>登录</1>
     agreements: 登录即表示您同意<1>隐私政策</1>和<3>服务条款</3>。
@@ -614,7 +613,6 @@ ui:
       msg:
         empty: 邮箱不能为空
   change_email:
-    page_title: 欢迎来到 Answer
     btn_cancel: 取消
     btn_update: 更新电子邮件地址
     send_success: >-
@@ -803,7 +801,6 @@ ui:
   modal_confirm:
     title: 发生错误...
   account_result:
-    page_title: 欢迎来到 Answer
     success: 你的账号已通过验证，即将返回首页。
     link: 返回首页
     invalid: >-
@@ -976,12 +973,13 @@ ui:
     themes: Themes
     css-html: CSS/HTML
     login: Login
+  website_welcome: 欢迎来到 {{site_name}}
   admin:
     admin_header:
       title: 后台管理
     dashboard:
       title: 后台管理
-      welcome: 欢迎来到 Answer 后台管理！
+      welcome: 欢迎来到 {{site_name}} 后台管理！
       site_statistics: 站点统计
       questions: "问题:"
       answers: "回答:"

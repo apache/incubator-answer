@@ -608,7 +608,6 @@ ui:
     msg:
       empty: Cannot be empty.
   login:
-    page_title: Welcome to {{site_name}}
     login_to_continue: Log in to continue
     info_sign: Don't have an account? <1>Sign up</1>
     info_login: Already have an account? <1>Log in</1>
@@ -639,7 +638,6 @@ ui:
       msg:
         empty: Email cannot be empty.
   change_email:
-    page_title: Welcome to Answer
     btn_cancel: Cancel
     btn_update: Update email address
     send_success: >-
@@ -650,7 +648,6 @@ ui:
       msg:
         empty: Email cannot be empty.
   oauth_bind_email:
-    page_title: Welcome to Answer
     subtitle: Add a recovery email to your account.
     btn_update: Update email address
     email:
@@ -858,7 +855,6 @@ ui:
   modal_confirm:
     title: Error...
   account_result:
-    page_title: Welcome to Answer
     success: Your new account is confirmed; you will be redirected to the home page.
     link: Continue to homepage
     invalid: >-
@@ -1046,12 +1042,13 @@ ui:
     login: Login
     plugins: Plugins
     installed_plugins: Installed Plugins
+  website_welcome: Welcome to {{site_name}}
   admin:
     admin_header:
       title: Admin
     dashboard:
       title: Dashboard
-      welcome: Welcome to Answer Admin!
+      welcome: Welcome to {{site_name}} Admin!
       site_statistics: Site Statistics
       questions: "Questions:"
       answers: "Answers:"
@@ -1383,7 +1380,7 @@ ui:
       activate: Activate
       settings: Settings
 
-      
+
   form:
     empty: cannot be empty
     invalid: is invalid
