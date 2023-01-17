@@ -27,6 +27,7 @@ const initUser: UserInfoRes = {
   mail_status: 1,
   language: 'Default',
   is_admin: false,
+  have_password: true,
 };
 
 const loggedUserInfoStore = create<UserInfoStore>((set) => ({
