@@ -22,12 +22,12 @@ type PluginConfigRepo interface {
 // PluginCommonService user service
 type PluginCommonService struct {
 	configRepo       config.ConfigRepo
-	PluginConfigRepo PluginConfigRepo
+	pluginConfigRepo PluginConfigRepo
 }
 
 // NewPluginCommonService new report service
 func NewPluginCommonService(
-	PluginConfigRepo PluginConfigRepo,
+	pluginConfigRepo PluginConfigRepo,
 	configRepo config.ConfigRepo) *PluginCommonService {
 
 	// init plugin status
@@ -41,7 +41,7 @@ func NewPluginCommonService(
 	}
 
 	// init plugin config
-	pluginConfigs, err := PluginConfigRepo.GetPluginConfigAll(context.Background())
+	pluginConfigs, err := pluginConfigRepo.GetPluginConfigAll(context.Background())
 	if err != nil {
 		log.Error(err)
 	} else {
@@ -60,7 +60,7 @@ func NewPluginCommonService(
 
 	return &PluginCommonService{
 		configRepo:       configRepo,
-		PluginConfigRepo: PluginConfigRepo,
+		pluginConfigRepo: pluginConfigRepo,
 	}
 }
 
@@ -76,5 +76,5 @@ func (ps *PluginCommonService) UpdatePluginStatus(ctx context.Context) (err erro
 // UpdatePluginConfig update plugin config
 func (ps *PluginCommonService) UpdatePluginConfig(ctx context.Context, req *schema.UpdatePluginConfigReq) (err error) {
 	configValue, _ := json.Marshal(req.ConfigFields)
-	return ps.PluginConfigRepo.SavePluginConfig(ctx, req.PluginSlugName, string(configValue))
+	return ps.pluginConfigRepo.SavePluginConfig(ctx, req.PluginSlugName, string(configValue))
 }
