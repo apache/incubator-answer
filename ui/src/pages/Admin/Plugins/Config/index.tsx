@@ -4,16 +4,17 @@ import { useParams } from 'react-router-dom';
 
 import { isEmpty } from 'lodash';
 
+import * as Type from '@/common/interface';
 import { useToast } from '@/hooks';
 import type * as Types from '@/common/interface';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useQueryPluginConfig, updatePluginConfig } from '@/services';
 
 const Config = () => {
+  const { t } = useTranslation('translation');
   const { slug_name } = useParams<{ slug_name: string }>();
   const { data } = useQueryPluginConfig({ plugin_slug_name: slug_name });
   const Toast = useToast();
-  const { t } = useTranslation('translation');
   const [schema, setSchema] = useState<JSONSchema | null>(null);
 
   const uiSchema: UISchema = {};
@@ -51,13 +52,20 @@ const Config = () => {
       properties,
     });
   }, [data?.config_fields]);
-
   useEffect(() => {
-    if (!schema || formData) {
+    if (!schema) {
       return;
     }
-    setFormData(initFormData(schema));
-  }, [schema, formData]);
+    if (!formData) {
+      setFormData(initFormData(schema));
+    } else {
+      const formMeta: Type.FormDataType = {};
+      Object.keys(formData).forEach((k) => {
+        formMeta[k] = { ...formData[k], value: data?.[k] };
+      });
+      setFormData({ ...formData, ...formMeta });
+    }
+  }, [schema, data]);
 
   const onSubmit = (evt) => {
     if (!formData) {
