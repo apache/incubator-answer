@@ -4,7 +4,7 @@
 //go:build !wireinject
 // +build !wireinject
 
-package main
+package answercmd
 
 import (
 	"github.com/answerdev/answer/internal/base/conf"
