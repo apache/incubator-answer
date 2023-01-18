@@ -6,16 +6,18 @@ import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/plugin"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/plugin_common"
 	"github.com/gin-gonic/gin"
 )
 
 // PluginController role controller
 type PluginController struct {
+	PluginCommonService *plugin_common.PluginCommonService
 }
 
 // NewPluginController new controller
-func NewPluginController() *PluginController {
-	return &PluginController{}
+func NewPluginController(PluginCommonService *plugin_common.PluginCommonService) *PluginController {
+	return &PluginController{PluginCommonService: PluginCommonService}
 }
 
 // GetPluginList get plugin list
@@ -106,7 +108,8 @@ func (pc *PluginController) UpdatePluginStatus(ctx *gin.Context) {
 	}
 
 	plugin.StatusManager.Enable(req.PluginSlugName, req.Enabled)
-	handler.HandleResponse(ctx, nil, nil)
+	err := pc.PluginCommonService.UpdatePluginStatus(ctx)
+	handler.HandleResponse(ctx, err, nil)
 }
 
 // GetPluginConfig get plugin config
@@ -186,5 +189,11 @@ func (pc *PluginController) UpdatePluginConfig(ctx *gin.Context) {
 		}
 		return nil
 	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+
+	err = pc.PluginCommonService.UpdatePluginConfig(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }

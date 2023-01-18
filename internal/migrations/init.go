@@ -50,6 +50,7 @@ var tables = []interface{}{
 	&entity.RolePowerRel{},
 	&entity.Power{},
 	&entity.UserRoleRel{},
+	&entity.PluginConfig{},
 }
 
 // InitDB init db
@@ -344,6 +345,7 @@ func initConfigTable(engine *xorm.Engine) error {
 		{ID: 115, Key: "rank.question.close", Value: `-1`},
 		{ID: 116, Key: "rank.question.reopen", Value: `-1`},
 		{ID: 117, Key: "rank.tag.use_reserved_tag", Value: `-1`},
+		{ID: 118, Key: "plugin.status", Value: `{}`},
 	}
 	_, err := engine.Insert(defaultConfigTable)
 	return err

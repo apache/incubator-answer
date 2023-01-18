@@ -16,6 +16,7 @@ import (
 	"github.com/answerdev/answer/internal/service/notification"
 	notficationcommon "github.com/answerdev/answer/internal/service/notification_common"
 	"github.com/answerdev/answer/internal/service/object_info"
+	"github.com/answerdev/answer/internal/service/plugin_common"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/internal/service/reason"
@@ -81,4 +82,5 @@ var ProviderSetService = wire.NewSet(
 	role.NewUserRoleRelService,
 	role.NewRolePowerRelService,
 	user_external_login.NewUserExternalLoginService,
+	plugin_common.NewPluginCommonService,
 )

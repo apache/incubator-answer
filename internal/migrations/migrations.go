@@ -55,6 +55,7 @@ var migrations = []Migration{
 	NewMigration("add activity timeline", addActivityTimeline, false),
 	NewMigration("add user role", addRoleFeatures, false),
 	NewMigration("add theme and private mode", addThemeAndPrivateMode, true),
+	NewMigration("add plugin", addPlugin, false),
 }
 
 // GetCurrentDBVersion returns the current db version

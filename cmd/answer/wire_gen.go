@@ -28,6 +28,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/export"
 	"github.com/answerdev/answer/internal/repo/meta"
 	"github.com/answerdev/answer/internal/repo/notification"
+	"github.com/answerdev/answer/internal/repo/plugin_config"
 	"github.com/answerdev/answer/internal/repo/question"
 	"github.com/answerdev/answer/internal/repo/rank"
 	"github.com/answerdev/answer/internal/repo/reason"
@@ -58,6 +59,7 @@ import (
 	notification2 "github.com/answerdev/answer/internal/service/notification"
 	"github.com/answerdev/answer/internal/service/notification_common"
 	"github.com/answerdev/answer/internal/service/object_info"
+	"github.com/answerdev/answer/internal/service/plugin_common"
 	"github.com/answerdev/answer/internal/service/question_common"
 	rank2 "github.com/answerdev/answer/internal/service/rank"
 	reason2 "github.com/answerdev/answer/internal/service/reason"
@@ -206,7 +208,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, activityCommon, tagCommonService, objService, commentCommonService, revisionService, metaService)
 	activityController := controller.NewActivityController(activityCommon, activityService)
 	roleController := controller_admin.NewRoleController(roleService)
-	pluginController := controller_admin.NewPluginController()
+	pluginConfigRepo := plugin_config.NewPluginConfigRepo(dataData)
+	pluginCommonService := plugin_common.NewPluginCommonService(pluginConfigRepo, configRepo)
+	pluginController := controller_admin.NewPluginController(pluginCommonService)
 	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_adminReportController, userAdminController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController, activityController, roleController, pluginController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter(siteinfoController, siteInfoCommonService)

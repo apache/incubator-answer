@@ -14,6 +14,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/export"
 	"github.com/answerdev/answer/internal/repo/meta"
 	"github.com/answerdev/answer/internal/repo/notification"
+	"github.com/answerdev/answer/internal/repo/plugin_config"
 	"github.com/answerdev/answer/internal/repo/question"
 	"github.com/answerdev/answer/internal/repo/rank"
 	"github.com/answerdev/answer/internal/repo/reason"
@@ -74,4 +75,5 @@ var ProviderSetRepo = wire.NewSet(
 	role.NewRolePowerRelRepo,
 	role.NewPowerRepo,
 	user_external_login.NewUserExternalLoginRepo,
+	plugin_config.NewPluginConfigRepo,
 )
