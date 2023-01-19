@@ -10,24 +10,24 @@ backend:
     unauthorized_error:
       other: "未授權。"
     database_error:
-      other: "Data server error."
+      other: "資料庫錯誤。"
   role:
     name:
       user:
-        other: "User"
+        other: "使用者"
       admin:
-        other: "Admin"
+        other: "管理者"
       moderator:
-        other: "Moderator"
+        other: "版主"
     description:
       user:
-        other: "Default with no special access."
+        other: "預設沒有特別閱讀權限"
       admin:
-        other: "Have the full power to access the site."
+        other: "擁有所有權限"
       moderator:
         other: "Has access to all posts except admin settings."
   email:
-    other: "Email"
+    other: "電子郵件"
   password:
     other: "密碼"
   email_or_password_wrong_error:
@@ -38,11 +38,11 @@ backend:
         other: 電子郵箱和密碼不匹配。
     answer:
       not_found:
-        other: "Answer do not found."
+        other: "無答案。"
       cannot_deleted:
-        other: "No permission to delete."
+        other: "無刪除權限。"
       cannot_update:
-        other: "No permission to update."
+        other: "無更新權限。"
     comment:
       edit_without_permission:
         other: "Comment are not allowed to edit."
