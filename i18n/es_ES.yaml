@@ -2,7 +2,7 @@
 backend:
   base:
     success:
-      other: "Success."
+      other: "Completado."
     unknown:
       other: "Error desconocido."
     request_format_error:
@@ -88,17 +88,17 @@ backend:
         other: "Sin permiso para actualizar."
     rank:
       fail_to_meet_the_condition:
-        other: "Rank fail to meet the condition."
+        other: "El rango no cumple la condición."
     report:
       handle_failed:
-        other: "Report handle failed."
+        other: "Error en el manejador del reporte."
       not_found:
-        other: "Report not found."
+        other: "Informe no encontrado."
     tag:
       not_found:
         other: "Etiqueta no encontrada."
       recommend_tag_not_found:
-        other: "Recommend Tag is not exist."
+        other: "Etiqueta recomendada no existe."
       recommend_tag_enter:
         other: "Por favor, introduce al menos una de las etiquetas requeridas."
       not_contain_synonym_tags:
@@ -109,7 +109,7 @@ backend:
         other: "No se puede establecer como sinónimo de una etiqueta la propia etiqueta."
     smtp:
       config_from_name_cannot_be_email:
-        other: "The From Name cannot be a email address."
+        other: "¡Su nombre de usuario no puede ser una dirección de correo electrónico!"
     theme:
       not_found:
         other: "Tema no encontrado."
