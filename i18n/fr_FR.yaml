@@ -407,7 +407,7 @@ ui:
         display_name:
           label: Nom d'affichage
           msg:
-            empty: Display name cannot be empty.
+            empty: Le nom d'affichage ne peut être vide.
             range: Le nom doit contenir moins de 35 caractères.
         slug_name:
           label: URL simplifiée
@@ -431,36 +431,36 @@ ui:
       btn_add: Ajouter un synonyme
       btn_edit: Modifier
       btn_save: Enregistrer
-    synonyms_text: The following tags will be remapped to
+    synonyms_text: Les balises suivantes seront remappées en
     delete:
       title: Supprimer cette étiquette
       content: >-
-        <p>We do not allowed deleting tag with posts.</p><p>Please remove this tag from the posts first.</p>
-      content2: Are you sure you wish to delete?
-      close: Close
+        <p>Nous ne permettons pas de supprimer le tag avec les posts.</p><p>Veuillez d'abord supprimer ce tag des posts.</p>
+      content2: Etes-vous sûr de vouloir supprimer ?
+      close: Fermer
   edit_tag:
     title: Editer le tag
     default_reason: Éditer le tag
     form:
       fields:
         revision:
-          label: Revision
+          label: Révision
         display_name:
-          label: Display Name
+          label: Nom d'affichage
         slug_name:
           label: URL Slug
-          info: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          info: 'Doit utiliser le jeu de caractères "a-z", "0-9", "+ # - ."'
         desc:
           label: Description
         edit_summary:
-          label: Edit Summary
+          label: Modifier le résumé
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
+            Expliquez brièvement vos changements (correction orthographique, correction grammaticale, mise en forme améliorée)
     btn_save_edits: Enregistrer les modifications
     btn_cancel: Annuler
   dates:
-    long_date: MMM D
-    long_date_with_year: "MMM D, YYYY"
+    long_date: D MMM
+    long_date_with_year: "D MMMM YYYY"
     long_date_with_time: "MMM D, YYYY [at] HH:mm"
     now: maintenant
     x_seconds_ago: "{{count}}s ago"
