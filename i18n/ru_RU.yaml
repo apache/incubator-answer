@@ -2,47 +2,47 @@
 backend:
   base:
     success:
-      other: "Success."
+      other: "Выполнено."
     unknown:
-      other: "Unknown error."
+      other: "Неизвестная ошибка."
     request_format_error:
-      other: "Request format is not valid."
+      other: "Формат файла не корректен."
     unauthorized_error:
-      other: "Unauthorized."
+      other: "Авторизация не выполнена."
     database_error:
-      other: "Data server error."
+      other: "Ошибка сервера данных."
   role:
     name:
       user:
-        other: "User"
+        other: "Пользователь"
       admin:
-        other: "Admin"
+        other: "Администратор"
       moderator:
-        other: "Moderator"
+        other: "Модератор"
     description:
       user:
-        other: "Default with no special access."
+        other: "По умолчанию, без специального доступа."
       admin:
-        other: "Have the full power to access the site."
+        other: "Имейте все полномочия для доступа к сайту."
       moderator:
-        other: "Has access to all posts except admin settings."
+        other: "Имеет доступ ко всем сообщениям, кроме настроек администратора."
   email:
-    other: "Email"
+    other: "Эл. почта"
   password:
-    other: "Password"
+    other: "Пароль"
   email_or_password_wrong_error:
-    other: "Email and password do not match."
+    other: "Неверное имя пользователя или пароль."
   error:
     admin:
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: Неверное имя пользователя или пароль.
     answer:
       not_found:
-        other: "Answer do not found."
+        other: "Ответ не найден."
       cannot_deleted:
-        other: "No permission to delete."
+        other: "Недостаточно прав для удаления."
       cannot_update:
-        other: "No permission to update."
+        other: "Нет прав для обновления."
     comment:
       edit_without_permission:
         other: "Comment are not allowed to edit."
