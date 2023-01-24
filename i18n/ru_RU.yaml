@@ -45,26 +45,26 @@ backend:
         other: "Нет прав для обновления."
     comment:
       edit_without_permission:
-        other: "Comment are not allowed to edit."
+        other: "Комментарий не может редактироваться."
       not_found:
-        other: "Comment not found."
+        other: "Комментарий не найден."
     email:
       duplicate:
-        other: "Email already exists."
+        other: "Адрес электронной почты уже существует."
       need_to_be_verified:
-        other: "Email should be verified."
+        other: "Адрес электронной почты должен быть подтвержден."
       verify_url_expired:
-        other: "Email verified URL has expired, please resend the email."
+        other: "Срок действия подтверждённого адреса электронной почты истек, пожалуйста, отправьте письмо повторно."
     lang:
       not_found:
-        other: "Language file not found."
+        other: "Языковой файл не найден."
     object:
       captcha_verification_failed:
-        other: "Captcha wrong."
+        other: "Captcha введена неверно."
       disallow_follow:
-        other: "You are not allowed to follow."
+        other: "Вы не можете подписаться."
       disallow_vote:
-        other: "You are not allowed to vote."
+        other: "Вы не можете голосовать."
       disallow_vote_your_self:
         other: "You can't vote for your own post."
       not_found:
