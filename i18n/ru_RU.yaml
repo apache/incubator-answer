@@ -68,56 +68,56 @@ backend:
       disallow_vote_your_self:
         other: "Вы не можете голосовать за собственный отзыв."
       not_found:
-        other: "Object not found."
+        other: "Объект не найден."
       verification_failed:
-        other: "Verification failed."
+        other: "Проверка не удалась."
       email_or_password_incorrect:
-        other: "Email and password do not match."
+        other: "Email или пароль не совпадают."
       old_password_verification_failed:
-        other: "The old password verification failed"
+        other: "Не удалось подтвердить старый пароль"
       new_password_same_as_previous_setting:
-        other: "The new password is the same as the previous one."
+        other: "Пароль не может быть таким же как прежний."
     question:
       not_found:
-        other: "Question not found."
+        other: "Вопрос не найден."
       cannot_deleted:
-        other: "No permission to delete."
+        other: "Недостаточно прав для удаления."
       cannot_close:
-        other: "No permission to close."
+        other: "Нет разрешения на закрытие."
       cannot_update:
-        other: "No permission to update."
+        other: "Нет разрешения на обновление."
     rank:
       fail_to_meet_the_condition:
-        other: "Rank fail to meet the condition."
+        other: "Ранг не соответствует условию."
     report:
       handle_failed:
-        other: "Report handle failed."
+        other: "Не удалось обработать отчет."
       not_found:
-        other: "Report not found."
+        other: "Отчет не найден."
     tag:
       not_found:
-        other: "Tag not found."
+        other: "Тег не найден."
       recommend_tag_not_found:
-        other: "Recommend Tag is not exist."
+        other: "Рекомендуемый тег не существует."
       recommend_tag_enter:
-        other: "Please enter at least one required tag."
+        other: "Пожалуйста, введите хотя бы один тег."
       not_contain_synonym_tags:
-        other: "Should not contain synonym tags."
+        other: "Не должно содержать теги синонимы."
       cannot_update:
-        other: "No permission to update."
+        other: "Нет прав для обновления."
       cannot_set_synonym_as_itself:
-        other: "You cannot set the synonym of the current tag as itself."
+        other: "Вы не можете установить синоним текущего тега."
     smtp:
       config_from_name_cannot_be_email:
-        other: "The From Name cannot be a email address."
+        other: "Имя пользователя не может быть адрес электронной почты."
     theme:
       not_found:
-        other: "Theme not found."
+        other: "Тема не найдена."
     revision:
       review_underway:
-        other: "Can't edit currently, there is a version in the review queue."
+        other: "В настоящее время не удается редактировать версию, в очереди на проверку."
       no_permission:
-        other: "No permission to Revision."
+        other: "Нет прав на ревизию."
     user:
       email_or_password_wrong:
         other:
@@ -241,68 +241,68 @@ ui:
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Prev
-    next: Next
+    next: Следующий
   page_title:
-    question: Question
-    questions: Questions
-    tag: Tag
-    tags: Tags
-    tag_wiki: tag wiki
-    edit_tag: Edit Tag
-    ask_a_question: Add Question
-    edit_question: Edit Question
-    edit_answer: Edit Answer
-    search: Search
-    posts_containing: Posts containing
-    settings: Settings
-    notifications: Notifications
-    login: Log In
-    sign_up: Sign Up
-    account_recovery: Account Recovery
-    account_activation: Account Activation
-    confirm_email: Confirm Email
-    account_suspended: Account Suspended
-    admin: Admin
-    change_email: Modify Email
-    install: Answer Installation
-    upgrade: Answer Upgrade
-    maintenance: Website Maintenance
-    users: Users
+    question: Вопрос
+    questions: Вопросы
+    tag: Тэг
+    tags: Теги
+    tag_wiki: wiki тэг
+    edit_tag: Изменить тег
+    ask_a_question: Добавить вопрос
+    edit_question: Редактировать вопрос
+    edit_answer: Редактировать ответ
+    search: Поиск
+    posts_containing: Посты содержащие
+    settings: Настройки
+    notifications: Уведомления
+    login: Вход
+    sign_up: Регистрация
+    account_recovery: Восстановление аккаунта
+    account_activation: Активация учётной записи
+    confirm_email: Подтвердить адрес электронной почты
+    account_suspended: Аккаунт заблокирован
+    admin: Управление
+    change_email: Изменить Email
+    install: Установка ответа
+    upgrade: Обновить ответ
+    maintenance: Обслуживание сайта
+    users: Пользователи
   notifications:
-    title: Notifications
-    inbox: Inbox
-    achievement: Achievements
-    all_read: Mark all as read
-    show_more: Show more
+    title: Уведомления
+    inbox: Входящие
+    achievement: Достижения
+    all_read: Отметить всё как прочитанное
+    show_more: Показать еще
   suspended:
-    title: Your Account has been Suspended
-    until_time: "Your account was suspended until {{ time }}."
-    forever: This user was suspended forever.
-    end: You don't meet a community guideline.
+    title: Ваш аккаунт заблокирован
+    until_time: "Ваша учетная запись была заблокирована до {{ time }}."
+    forever: Этот пользователь был навсегда заблокирован.
+    end: Вы не соответствуете правилам сообщества.
   editor:
     blockquote:
-      text: Blockquote
+      text: Цитата
     bold:
-      text: Strong
+      text: Жирный
     chart:
-      text: Chart
-      flow_chart: Flow chart
-      sequence_diagram: Sequence diagram
-      class_diagram: Class diagram
-      state_diagram: State diagram
-      entity_relationship_diagram: Entity relationship diagram
-      user_defined_diagram: User defined diagram
-      gantt_chart: Gantt chart
-      pie_chart: Pie chart
+      text: Диаграмма
+      flow_chart: Блок-схема
+      sequence_diagram: Диаграмма последовательности
+      class_diagram: Диаграмма классов
+      state_diagram: Диаграмма состояний
+      entity_relationship_diagram: Диаграмма связей сущностей
+      user_defined_diagram: Пользовательская диаграмма
+      gantt_chart: Диаграмма Гантта
+      pie_chart: Круговая диаграмма
     code:
-      text: Code Sample
-      add_code: Add code sample
+      text: Фрагмент кода
+      add_code: Добавить пример кода
       form:
         fields:
           code:
-            label: Code
+            label: Код
             msg:
-              empty: Code cannot be empty.
+              empty: Код не может быть пустым.
           language:
             label: Language (optional)
             placeholder: Automatic detection
@@ -385,79 +385,79 @@ ui:
     btn_cancel: Cancel
     btn_submit: Submit
     remark:
-      empty: Cannot be empty.
+      empty: Не может быть пустым.
     msg:
-      empty: Please select a reason.
+      empty: Пожалуйста, выбери причину.
   report_modal:
-    flag_title: I am flagging to report this post as...
-    close_title: I am closing this post as...
-    review_question_title: Review question
-    review_answer_title: Review answer
-    review_comment_title: Review comment
-    btn_cancel: Cancel
-    btn_submit: Submit
+    flag_title: Я помечаю, чтобы пожаловаться на эту публикацию как...
+    close_title: Я закрываю этот пост как...
+    review_question_title: Проверить вопрос
+    review_answer_title: Проверить ответ
+    review_comment_title: Просмотр комментариев
+    btn_cancel: Отмена
+    btn_submit: Отправить
     remark:
-      empty: Cannot be empty.
+      empty: Не может быть пустым.
     msg:
-      empty: Please select a reason.
+      empty: Пожалуйста, выбери причину.
   tag_modal:
-    title: Create new tag
+    title: Создать новый тег
     form:
       fields:
         display_name:
-          label: Display Name
+          label: Показывать имя
           msg:
-            empty: Display name cannot be empty.
-            range: Display name up to 35 characters.
+            empty: Отображаемое название не может быть пустым.
+            range: Отображаемое имя до 35 символов.
         slug_name:
-          label: URL Slug
-          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          label: Идентификатор URL
+          desc: 'Необходимо использовать набор символов "a-z", "0-9", "+ # - ."'
           msg:
-            empty: URL slug cannot be empty.
-            range: URL slug up to 35 characters.
-            character: URL slug contains unallowed character set.
+            empty: URL не может быть пустым.
+            range: URL slug до 35 символов.
+            character: URL slug содержит недопустимый набор символов.
         desc:
-          label: Description (optional)
-    btn_cancel: Cancel
-    btn_submit: Submit
+          label: Описание (опционально)
+    btn_cancel: Отмена
+    btn_submit: Отправить
   tag_info:
-    created_at: Created
-    edited_at: Edited
-    history: History
+    created_at: Создано
+    edited_at: Отредактировано
+    history: История
     synonyms:
-      title: Synonyms
-      text: The following tags will be remapped to
-      empty: No synonyms found.
-      btn_add: Add a synonym
-      btn_edit: Edit
-      btn_save: Save
-    synonyms_text: The following tags will be remapped to
+      title: Синонимы
+      text: Следующие теги будут переназначены на
+      empty: Синонимы не найдены.
+      btn_add: Добавить синоним
+      btn_edit: Редактировать
+      btn_save: Сохранить
+    synonyms_text: Следующие теги будут переназначены на
     delete:
-      title: Delete this tag
+      title: Удалить этот тег
       content: >-
-        <p>We do not allowed deleting tag with posts.</p><p>Please remove this tag from the posts first.</p>
-      content2: Are you sure you wish to delete?
-      close: Close
+        <p>Мы не разрешаем удалять тег с сообщениями.</p><p>Пожалуйста, сначала удалите этот тег из сообщений</p>
+      content2: Вы действительно хотите удалить?
+      close: Закрыть
   edit_tag:
-    title: Edit Tag
-    default_reason: Edit tag
+    title: Изменить тег
+    default_reason: Правка тега
     form:
       fields:
         revision:
-          label: Revision
+          label: Редакция
         display_name:
-          label: Display Name
+          label: Показывать имя
         slug_name:
-          label: URL Slug
-          info: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          label: Идентификатор URL
+          info: 'Необходимо использовать набор символов "a-z", "0-9", "+ # - ."'
         desc:
-          label: Description
+          label: Описание
         edit_summary:
-          label: Edit Summary
+          label: Изменить краткое описание
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
+            Кратко опишите ваши изменения (исправленная орфография, исправленная грамматика, улучшенное форматирование)
+    btn_save_edits: Сохранить изменения
+    btn_cancel: Отмена
   dates:
     long_date: MMM D
     long_date_with_year: "MMM D, YYYY"
