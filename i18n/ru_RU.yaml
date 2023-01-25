@@ -66,7 +66,7 @@ backend:
       disallow_vote:
         other: "Вы не можете голосовать."
       disallow_vote_your_self:
-        other: "You can't vote for your own post."
+        other: "Вы не можете голосовать за собственный отзыв."
       not_found:
         other: "Object not found."
       verification_failed:
