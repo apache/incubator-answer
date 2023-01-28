@@ -2,7 +2,6 @@ package schema
 
 import (
 	"encoding/json"
-	"regexp"
 
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/validator"
@@ -301,10 +300,7 @@ type AvatarInfo struct {
 
 func (req *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {
 	if len(req.Username) > 0 {
-		errFields := make([]*validator.FormErrorField, 0)
-		re := regexp.MustCompile(`^[a-z0-9._-]{4,30}$`)
-		match := re.MatchString(req.Username)
-		if !match {
+		if checker.IsInvalidUsername(req.Username) {
 			errField := &validator.FormErrorField{
 				ErrorField: "username",
 				ErrorMsg:   reason.UsernameInvalid,
