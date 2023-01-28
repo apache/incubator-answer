@@ -51,7 +51,8 @@ type UpdateCommentReq struct {
 	// parsed comment content
 	ParsedText string `validate:"omitempty" json:"parsed_text"`
 	// user id
-	UserID string `json:"-"`
+	UserID  string `json:"-"`
+	IsAdmin bool   `json:"-"`
 }
 
 func (req *UpdateCommentReq) Check() (errFields []*validator.FormErrorField, err error) {
