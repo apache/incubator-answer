@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/answerdev/answer/internal/plugin"
+	"github.com/answerdev/answer/plugin"
 	"github.com/google/go-github/v48/github"
 	"golang.org/x/oauth2"
 	oauth2GitHub "golang.org/x/oauth2/github"

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 
 	"github.com/answerdev/answer/configs"
-	"github.com/segmentfault/pacman/log"
 )
 
 var (
@@ -14,7 +13,6 @@ var (
 func init() {
 	var usernames []string
 	_ = json.Unmarshal(configs.ReservedUsernames, &usernames)
-	log.Debugf("get reserved usernames %d", len(usernames))
 	for _, username := range usernames {
 		reservedUsernameMapping[username] = true
 	}

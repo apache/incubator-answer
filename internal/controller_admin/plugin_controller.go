@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 
 	"github.com/answerdev/answer/internal/base/handler"
-	"github.com/answerdev/answer/internal/plugin"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/plugin_common"
+	"github.com/answerdev/answer/plugin"
 	"github.com/gin-gonic/gin"
 )
 

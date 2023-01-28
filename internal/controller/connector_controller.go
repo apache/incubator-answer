@@ -6,12 +6,11 @@ import (
 
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
-	"github.com/answerdev/answer/internal/plugin"
-	_ "github.com/answerdev/answer/internal/plugin/connector"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/internal/service/user_external_login"
+	"github.com/answerdev/answer/plugin"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
 )

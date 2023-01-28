@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/answerdev/answer/internal/controller"
-	"github.com/answerdev/answer/internal/plugin"
+	"github.com/answerdev/answer/plugin"
 	"github.com/gin-gonic/gin"
 )
 
