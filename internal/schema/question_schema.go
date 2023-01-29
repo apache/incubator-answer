@@ -219,7 +219,7 @@ type UserQuestionInfo struct {
 	ViewCount        int           `json:"view_count"`
 	AnswerCount      int           `json:"answer_count"`
 	CollectionCount  int           `json:"collection_count"`
-	CreateTime       int           `json:"create_time"`
+	CreatedAt        int64         `json:"created_at"`
 	AcceptedAnswerID string        `json:"accepted_answer_id"`
 	Status           string        `json:"status"`
 }
@@ -253,6 +253,7 @@ const (
 
 type QuestionPageResp struct {
 	ID          string     `json:"id" `
+	CreatedAt   int64      `json:"created_at"`
 	Title       string     `json:"title"`
 	UrlTitle    string     `json:"url_title"`
 	Description string     `json:"description"`
