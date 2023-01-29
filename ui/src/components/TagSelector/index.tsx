@@ -155,6 +155,7 @@ const TagSelector: FC<IProps> = ({
   };
   const handleKeyDown = (e) => {
     e.stopPropagation();
+
     if (!tags) {
       return;
     }
@@ -166,13 +167,20 @@ const TagSelector: FC<IProps> = ({
     if (keyCode === 40 && currentIndex < tags.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }
-    if (
-      keyCode === 13 &&
-      currentIndex > -1 &&
-      currentIndex <= tags.length - 1
-    ) {
+
+    if (keyCode === 13 && currentIndex > -1) {
       e.preventDefault();
-      handleClick(tags[currentIndex]);
+
+      if (tags.length === 0) {
+        tagModal.onShow(tag);
+        return;
+      }
+      if (currentIndex <= tags.length - 1) {
+        handleClick(tags[currentIndex]);
+        if (currentIndex === tags.length - 1 && currentIndex > 0) {
+          setCurrentIndex(currentIndex - 1);
+        }
+      }
     }
   };
   return (
