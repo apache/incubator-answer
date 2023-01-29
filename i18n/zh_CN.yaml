@@ -405,10 +405,10 @@ ui:
     form:
       fields:
         display_name:
-          label: 显示名称（别名）
+          label: 显示名称
           msg:
-            empty: 不能为空
-            range: 不能超过 35 个字符
+            empty: 显示名称不能为空。
+            range: 显示名称不能超过 35 个字符。
         slug_name:
           label: URL 固定链接
           desc: '必须使用字符集 "a-z"、"0-9"、"+ # - ."'
@@ -446,7 +446,7 @@ ui:
         revision:
           label: 编辑历史
         display_name:
-          label: 名称
+          label: 显示名称
         slug_name:
           label: URL 固定链接
           info: '必须由 "a-z", "0-9", "+ # - ." 组成'
@@ -652,7 +652,7 @@ ui:
       btn_name: 保存
       display_name:
         label: 昵称
-        msg: 昵称不能为空
+        msg: 昵称不能为空。
         msg_range: 昵称不能超过 30 个字符
       username:
         label: 用户名
@@ -1103,7 +1103,7 @@ ui:
           fields:
             display_name:
               label: 昵称
-              msg: 昵称的长度必须是4-30个字符。
+              msg: 昵称的长度必须是 3-30 个字符。
             email:
               label: 邮箱
               msg: 电子邮箱无效。
