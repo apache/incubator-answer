@@ -32,6 +32,7 @@ import CustomizeTheme from './CustomizeTheme';
 import PageTags from './PageTags';
 import QuestionListLoader from './QuestionListLoader';
 import TagsLoader from './TagsLoader';
+import Counts from './Counts';
 
 export {
   Avatar,
@@ -70,5 +71,6 @@ export {
   PageTags,
   QuestionListLoader,
   TagsLoader,
+  Counts,
 };
 export type { EditorRef, JSONSchema, UISchema };
