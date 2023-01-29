@@ -254,6 +254,7 @@ func (qs *QuestionCommon) FormatQuestionsPage(
 	for _, questionInfo := range questionList {
 		t := &schema.QuestionPageResp{
 			ID:               questionInfo.ID,
+			CreatedAt:        questionInfo.CreatedAt.Unix(),
 			Title:            questionInfo.Title,
 			UrlTitle:         htmltext.UrlTitle(questionInfo.Title),
 			Description:      htmltext.FetchExcerpt(questionInfo.ParsedText, "...", 240),

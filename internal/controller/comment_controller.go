@@ -111,6 +111,7 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 	can, err := cc.rankService.CheckOperationPermission(ctx, req.UserID, permission.CommentEdit, req.CommentID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)

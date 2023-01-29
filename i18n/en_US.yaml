@@ -52,6 +52,8 @@ backend:
         other: "Comment are not allowed to edit."
       not_found:
         other: "Comment not found."
+      cannot_edit_after_deadline:
+        other: "The comment time has been too long to modify."
     email:
       duplicate:
         other: "Email already exists."
