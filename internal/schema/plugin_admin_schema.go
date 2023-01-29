@@ -1,5 +1,7 @@
 package schema
 
+import "github.com/answerdev/answer/plugin"
+
 const (
 	PluginStatusActive   PluginStatus = "active"
 	PluginStatusInactive PluginStatus = "inactive"
@@ -31,41 +33,11 @@ type GetPluginConfigReq struct {
 }
 
 type GetPluginConfigResp struct {
-	//ConfigFields []plugin.ConfigField `json:"config_fields"`
-	Name         string         `json:"name"`
-	SlugName     string         `json:"slug_name"`
-	Description  string         `json:"description"`
-	Version      string         `json:"version"`
-	ConfigFields []*ConfigField `json:"config_fields"`
-}
-
-const (
-	TEXT     ConfigFieldType = "text"
-	Select   ConfigFieldType = "select"
-	Checkbox ConfigFieldType = "checkbox"
-)
-
-type ConfigFieldType string
-
-type ConfigField struct {
-	Name        string          `json:"name"`
-	Type        ConfigFieldType `json:"type"`
-	Title       string          `json:"title"`
-	Description string          `json:"description"`
-	Required    bool            `json:"required"`
-	Value       string          `json:"value"`
-	UIOptions   UIOptions       `json:"ui_options"`
-	Options     []Option        `json:"options"`
-}
-
-type UIOptions struct {
-	Placeholder string `json:"placeholder"`
-	Type        string `json:"type"`
-}
-
-type Option struct {
-	Label string `json:"label"`
-	Value string `json:"value"`
+	Name         string               `json:"name"`
+	SlugName     string               `json:"slug_name"`
+	Description  string               `json:"description"`
+	Version      string               `json:"version"`
+	ConfigFields []plugin.ConfigField `json:"config_fields"`
 }
 
 type UpdatePluginConfigReq struct {

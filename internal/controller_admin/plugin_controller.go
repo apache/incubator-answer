@@ -144,23 +144,7 @@ func (pc *PluginController) GetPluginConfig(ctx *gin.Context) {
 		if fn.Info().SlugName != req.PluginSlugName {
 			return nil
 		}
-		// resp.ConfigFields = fn.ConfigFields()
-		configFields := fn.ConfigFields()
-		resp.ConfigFields = make([]*schema.ConfigField, 0)
-		for _, field := range configFields {
-			resp.ConfigFields = append(resp.ConfigFields, &schema.ConfigField{
-				Name:        field.Items[0].Name,
-				Type:        schema.TEXT,
-				Title:       field.Name,
-				Description: field.Description,
-				Required:    field.Required,
-				UIOptions: schema.UIOptions{
-					Placeholder: field.Items[0].PlaceHolder,
-					Type:        string(schema.TEXT),
-				},
-				Value: field.Items[0].Value,
-			})
-		}
+		resp.ConfigFields = fn.ConfigFields()
 		return nil
 	})
 	handler.HandleResponse(ctx, nil, resp)

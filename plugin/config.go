@@ -1,28 +1,56 @@
 package plugin
 
-type ConfigType int
+type ConfigType string
+type InputType string
 
 const (
-	ConfigTypeInput ConfigType = iota
-	ConfigTypeTextarea
-	ConfigTypeSelect
-	ConfigTypeCheckbox
+	ConfigTypeInput    ConfigType = "input"
+	ConfigTypeTextarea ConfigType = "textarea"
+	ConfigTypeCheckbox ConfigType = "checkbox"
+	ConfigTypeRadio    ConfigType = "radio"
+	ConfigTypeSelect   ConfigType = "select"
+	ConfigTypeUpload   ConfigType = "upload"
+	ConfigTypeTimezone ConfigType = "timezone"
+	ConfigTypeSwitch   ConfigType = "switch"
+)
+
+const (
+	InputTypeText     InputType = "text"
+	InputTypeColor    InputType = "color"
+	InputTypeDate     InputType = "date"
+	InputTypeDatetime InputType = "datetime-local"
+	InputTypeEmail    InputType = "email"
+	InputTypeMonth    InputType = "month"
+	InputTypeNumber   InputType = "number"
+	InputTypePassword InputType = "password"
+	InputTypeRange    InputType = "range"
+	InputTypeSearch   InputType = "search"
+	InputTypeTel      InputType = "tel"
+	InputTypeTime     InputType = "time"
+	InputTypeUrl      InputType = "url"
+	InputTypeWeek     InputType = "week"
 )
 
 type ConfigField struct {
-	Name        string            `json:"name"`
-	Description string            `json:"description"`
-	Required    bool              `json:"required"`
-	Type        ConfigType        `json:"type"`
-	Items       []ConfigFieldItem `json:"items"`
+	Name        string               `json:"name"`
+	Type        ConfigType           `json:"type"`
+	Title       string               `json:"title"`
+	Description string               `json:"description"`
+	Required    bool                 `json:"required"`
+	Value       string               `json:"value"`
+	UIOptions   ConfigFieldUIOptions `json:"ui_options"`
+	Options     []ConfigFieldOption  `json:"options,omitempty"`
 }
 
-type ConfigFieldItem struct {
-	Name        string `json:"name"`
-	Label       string `json:"label"`
-	Value       string `json:"value"`
-	PlaceHolder string `json:"place_holder"`
-	Selected    bool   `json:"selected"`
+type ConfigFieldUIOptions struct {
+	Placeholder string    `json:"placeholder,omitempty"`
+	Rows        string    `json:"rows,omitempty"`
+	InputType   InputType `json:"input_type,omitempty"`
+}
+
+type ConfigFieldOption struct {
+	Label string `json:"label"`
+	Value string `json:"value"`
 }
 
 type Config interface {
