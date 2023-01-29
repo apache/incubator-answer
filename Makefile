@@ -5,7 +5,7 @@ BIN=answer
 DIR_SRC=./cmd/answer
 DOCKER_CMD=docker
 
-GO_ENV=CGO_ENABLED=0
+GO_ENV=CGO_ENABLED=0 GO111MODULE=on
 Revision=$(shell git rev-parse --short HEAD)
 GO_FLAGS=-ldflags="-X main.Version=$(VERSION) -X 'main.Revision=$(Revision)' -X 'main.Time=`date`' -extldflags -static"
 GO=$(GO_ENV) $(shell which go)
@@ -21,8 +21,8 @@ universal: generate
 	@rm -f ${BIN}_amd64 ${BIN}_arm64
 
 generate:
-	@$(GO) get github.com/google/wire/cmd/wire@latest
-	@$(GO) install github.com/golang/mock/mockgen@v1.6.0
+	@$(GO) get github.com/google/wire/cmd/wire@v0.5.0
+	@$(GO) get github.com/golang/mock/mockgen@v1.6.0
 	@$(GO) generate ./...
 	@$(GO) mod tidy
 
