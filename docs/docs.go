@@ -6716,6 +6716,9 @@ const docTemplate = `{
                 "collection_count": {
                     "type": "integer"
                 },
+                "created_at": {
+                    "type": "integer"
+                },
                 "description": {
                     "type": "string"
                 },

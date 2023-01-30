@@ -25,6 +25,7 @@ import (
 type TemplateController struct {
 	scriptPath               string
 	cssPath                  string
+	Version                  string
 	templateRenderController *templaterender.TemplateRenderController
 	siteInfoService          *siteinfo_common.SiteInfoCommonService
 }
@@ -38,6 +39,7 @@ func NewTemplateController(
 	return &TemplateController{
 		scriptPath:               script,
 		cssPath:                  css,
+		Version:                  constant.Version,
 		templateRenderController: templateRenderController,
 		siteInfoService:          siteInfoService,
 	}
@@ -437,6 +439,7 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	data["HeadCode"] = siteInfo.CustomCssHtml.CustomHead
 	data["HeaderCode"] = siteInfo.CustomCssHtml.CustomHeader
 	data["FooterCode"] = siteInfo.CustomCssHtml.CustomFooter
+	data["Version"] = tc.Version
 	_, ok := data["path"]
 	if !ok {
 		data["path"] = ""

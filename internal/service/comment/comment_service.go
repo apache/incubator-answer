@@ -134,7 +134,8 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 
 	resp = &schema.GetCommentResp{}
 	resp.SetFromComment(comment)
-	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID, req.CanEdit, req.CanDelete)
+	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID,
+		time.Now(), req.CanEdit, req.CanDelete)
 
 	// get reply user info
 	if len(resp.ReplyUserID) > 0 {
@@ -185,6 +186,19 @@ func (cs *CommentService) RemoveComment(ctx context.Context, req *schema.RemoveC
 
 // UpdateComment update comment
 func (cs *CommentService) UpdateComment(ctx context.Context, req *schema.UpdateCommentReq) (err error) {
+	old, exist, err := cs.commentCommonRepo.GetComment(ctx, req.CommentID)
+	if err != nil {
+		return
+	}
+	if !exist {
+		return errors.BadRequest(reason.CommentNotFound)
+	}
+
+	// user can edit the comment that was posted by himself before deadline.
+	if !req.IsAdmin && (time.Now().After(old.CreatedAt.Add(constant.CommentEditDeadline))) {
+		return errors.BadRequest(reason.CommentCannotEditAfterDeadline)
+	}
+
 	comment := &entity.Comment{}
 	_ = copier.Copy(comment, req)
 	comment.ID = req.CommentID
@@ -198,7 +212,7 @@ func (cs *CommentService) GetComment(ctx context.Context, req *schema.GetComment
 		return
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.UnknownError)
+		return nil, errors.BadRequest(reason.CommentNotFound)
 	}
 
 	resp = &schema.GetCommentResp{
@@ -243,7 +257,8 @@ func (cs *CommentService) GetComment(ctx context.Context, req *schema.GetComment
 	// check if current user vote this comment
 	resp.IsVote = cs.checkIsVote(ctx, req.UserID, resp.CommentID)
 
-	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID, req.CanEdit, req.CanDelete)
+	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID,
+		comment.CreatedAt, req.CanEdit, req.CanDelete)
 	return resp, nil
 }
 
@@ -339,7 +354,7 @@ func (cs *CommentService) convertCommentEntity2Resp(ctx context.Context, req *sc
 	commentResp.IsVote = cs.checkIsVote(ctx, req.UserID, commentResp.CommentID)
 
 	commentResp.MemberActions = permission.GetCommentPermission(ctx,
-		req.UserID, commentResp.UserID, req.CanEdit, req.CanDelete)
+		req.UserID, commentResp.UserID, comment.CreatedAt, req.CanEdit, req.CanDelete)
 	return commentResp, nil
 }
 

@@ -1041,6 +1041,8 @@ definitions:
         type: integer
       collection_count:
         type: integer
+      created_at:
+        type: integer
       description:
         type: string
       follow_count:
