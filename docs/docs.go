@@ -2911,6 +2911,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/post/render": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "render post content",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Upload"
+                ],
+                "summary": "render post content",
+                "parameters": [
+                    {
+                        "description": "PostRenderReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.PostRenderReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/question": {
             "put": {
                 "security": [
@@ -6585,6 +6624,14 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.PostRenderReq": {
+            "type": "object",
+            "properties": {
+                "content": {
                     "type": "string"
                 }
             }
