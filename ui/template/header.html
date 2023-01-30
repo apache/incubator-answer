@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{{.title}}</title>
     <meta name="description" content="{{.description}}" data-rh="true" />
-    {{if .keywords }}
-    <meta name="keywords" content="{{.keywords}}" data-rh="true" />
-    {{end}}
+    <meta name="generator" content="Answer {{.Version}} - https://github.com/answerdev/answer">
+    {{if .keywords }}<meta name="keywords" content="{{.keywords}}" data-rh="true" />{{end}}
+
     <link rel="canonical" href="{{.siteinfo.Canonical}}" />
     <link rel="manifest" href="/manifest.json" />
     <link href="{{.cssPath}}" rel="stylesheet" />

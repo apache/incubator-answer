@@ -976,6 +976,11 @@ definitions:
       type:
         type: string
     type: object
+  schema.PostRenderReq:
+    properties:
+      content:
+        type: string
+    type: object
   schema.QuestionAdd:
     properties:
       content:
@@ -1035,6 +1040,8 @@ definitions:
       answer_count:
         type: integer
       collection_count:
+        type: integer
+      created_at:
         type: integer
       description:
         type: string
@@ -3684,6 +3691,30 @@ paths:
       summary: user's votes
       tags:
       - Activity
+  /answer/api/v1/post/render:
+    post:
+      consumes:
+      - application/json
+      description: render post content
+      parameters:
+      - description: PostRenderReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.PostRenderReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: render post content
+      tags:
+      - Upload
   /answer/api/v1/question:
     delete:
       consumes:
