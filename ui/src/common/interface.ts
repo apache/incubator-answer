@@ -552,7 +552,7 @@ export interface PluginItem {
   title: string;
   description: string;
   ui_options?: UIOptions;
-  option?: PluginOption[];
+  options?: PluginOption[];
   value?: string;
   required?: boolean;
 }

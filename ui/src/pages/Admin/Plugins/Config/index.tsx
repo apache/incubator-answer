@@ -36,6 +36,13 @@ const Config = () => {
         default: item.value,
       };
 
+      if (item.options instanceof Array) {
+        properties[item.name].enum = item.options.map((option) => option.value);
+        properties[item.name].enumNames = item.options.map(
+          (option) => option.label,
+        );
+      }
+
       if (item.ui_options) {
         uiSchema[item.name] = {
           'ui:options': item.ui_options,

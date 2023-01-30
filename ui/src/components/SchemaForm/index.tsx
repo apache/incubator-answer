@@ -30,7 +30,14 @@ export interface JSONSchema {
 }
 
 export interface UIOptions {
-  rows?: number;
+  empty?: string;
+  className?: string | string[];
+  validator?: (
+    value,
+    formData?,
+  ) => Promise<string | true | void> | true | string;
+}
+export interface InputOptions extends UIOptions {
   placeholder?: string;
   type?:
     | 'color'
@@ -47,19 +54,31 @@ export interface UIOptions {
     | 'time'
     | 'url'
     | 'week';
-  empty?: string;
-  className?: string | string[];
-  validator?: (
-    value,
-    formData?,
-  ) => Promise<string | true | void> | true | string;
-  textRender?: () => React.ReactElement;
-  imageType?: Type.UploadType;
-  acceptType?: string;
 }
+export interface SelectOptions extends UIOptions {}
+export interface UploadOptions extends UIOptions {
+  acceptType?: string;
+  imageType?: Type.UploadType;
+}
+
+export interface SwitchOptions extends UIOptions {}
+
+export interface TimezoneOptions extends UIOptions {
+  placeholder?: string;
+}
+
+export interface CheckboxOptions extends UIOptions {}
+
+export interface RadioOptions extends UIOptions {}
+
+export interface TextareaOptions extends UIOptions {
+  placeholder?: string;
+  rows?: number;
+}
+
 export type UIWidget =
   | 'textarea'
-  | 'text'
+  | 'input'
   | 'checkbox'
   | 'radio'
   | 'select'
@@ -69,7 +88,15 @@ export type UIWidget =
 export interface UISchema {
   [key: string]: {
     'ui:widget'?: UIWidget;
-    'ui:options'?: UIOptions;
+    'ui:options'?:
+      | InputOptions
+      | SelectOptions
+      | UploadOptions
+      | SwitchOptions
+      | TimezoneOptions
+      | CheckboxOptions
+      | RadioOptions
+      | TextareaOptions;
   };
 }
 
@@ -295,8 +322,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {
         const { title, description, label } = properties[key];
-        const { 'ui:widget': widget = 'input', 'ui:options': options = {} } =
-          uiSchema[key] || {};
+        const { 'ui:widget': widget = 'input' } = uiSchema[key] || {};
         if (widget === 'select') {
           return (
             <Form.Group
@@ -420,6 +446,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
         }
 
         if (widget === 'upload') {
+          const options: UploadOptions = uiSchema[key]?.['ui:options'] || {};
           return (
             <Form.Group
               key={title}
@@ -448,6 +475,8 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
         }
 
         if (widget === 'textarea') {
+          const options: TextareaOptions = uiSchema[key]?.['ui:options'] || {};
+
           return (
             <Form.Group
               controlId={`form-${key}`}
@@ -458,7 +487,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 as="textarea"
                 name={key}
                 placeholder={options?.placeholder || ''}
-                type={options?.type || 'text'}
                 value={formData[key]?.value || ''}
                 onChange={handleInputChange}
                 isInvalid={formData[key].isInvalid}
@@ -475,6 +503,9 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             </Form.Group>
           );
         }
+
+        const options: InputOptions = uiSchema[key]?.['ui:options'] || {};
+
         return (
           <Form.Group
             controlId={key}
