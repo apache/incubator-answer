@@ -138,7 +138,7 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 		time.Now(), req.CanEdit, req.CanDelete)
 
 	// get reply user info
-	if len(resp.ReplyUserID) > 0 {
+	if len(resp.ReplyUserID) > 0 && resp.ReplyUserID != req.UserID {
 		replyUser, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, resp.ReplyUserID)
 		if err != nil {
 			return nil, err
@@ -148,7 +148,7 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 			resp.ReplyUserDisplayName = replyUser.DisplayName
 			resp.ReplyUserStatus = replyUser.Status
 		}
-		cs.notificationCommentReply(ctx, replyUser.ID, objInfo.QuestionID, req.UserID)
+		cs.notificationCommentReply(ctx, replyUser.ID, comment.ID, req.UserID)
 	}
 
 	// get user info
