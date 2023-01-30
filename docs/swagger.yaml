@@ -1587,10 +1587,6 @@ definitions:
         description: bio
         maxLength: 4096
         type: string
-      bio_html:
-        description: bio
-        maxLength: 4096
-        type: string
       display_name:
         description: display_name
         maxLength: 30
