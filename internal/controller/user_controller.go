@@ -113,7 +113,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
@@ -124,7 +124,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 		_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "e_mail",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.EmailOrPasswordWrong),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.EmailOrPasswordWrong),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.EmailOrPasswordWrong), errFields)
 		return
@@ -151,7 +151,7 @@ func (uc *UserController) RetrievePassWord(ctx *gin.Context) {
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
@@ -236,14 +236,22 @@ func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
 	}
 
-	resp, err := uc.userService.UserRegisterByEmail(ctx, req)
-	handler.HandleResponse(ctx, err, resp)
+	resp, errFields, err := uc.userService.UserRegisterByEmail(ctx, req)
+	if len(errFields) > 0 {
+		for _, field := range errFields {
+			field.ErrorMsg = translator.
+				Tr(handler.GetLang(ctx), field.ErrorMsg)
+		}
+		handler.HandleResponse(ctx, err, errFields)
+	} else {
+		handler.HandleResponse(ctx, err, resp)
+	}
 }
 
 // UserVerifyEmail godoc
@@ -305,7 +313,7 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
@@ -343,7 +351,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	if !oldPassVerification {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "old_pass",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.OldPasswordVerificationFailed),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.OldPasswordVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.OldPasswordVerificationFailed), errFields)
 		return
@@ -351,7 +359,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	if req.OldPass == req.Pass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "pass",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.NewPasswordSameAsPreviousSetting),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.NewPasswordSameAsPreviousSetting),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.NewPasswordSameAsPreviousSetting), errFields)
 		return
@@ -377,8 +385,11 @@ func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	err := uc.userService.UpdateInfo(ctx, req)
-	handler.HandleResponse(ctx, err, nil)
+	errFields, err := uc.userService.UpdateInfo(ctx, req)
+	for _, field := range errFields {
+		field.ErrorMsg = translator.Tr(handler.GetLang(ctx), field.ErrorMsg)
+	}
+	handler.HandleResponse(ctx, err, errFields)
 }
 
 // UserUpdateInterface update user interface config
@@ -481,7 +492,7 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
@@ -534,4 +545,29 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 func (uc *UserController) UserRanking(ctx *gin.Context) {
 	resp, err := uc.userService.UserRanking(ctx)
 	handler.HandleResponse(ctx, err, resp)
+}
+
+// UserUnsubscribeEmailNotification unsubscribe email notification
+// @Summary unsubscribe email notification
+// @Description unsubscribe email notification
+// @Tags User
+// @Accept json
+// @Produce json
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/api/v1/user/email/notification [put]
+func (uc *UserController) UserUnsubscribeEmailNotification(ctx *gin.Context) {
+	req := &schema.UserUnsubscribeEmailNotificationReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.Content = uc.emailService.VerifyUrlExpired(ctx, req.Code)
+	if len(req.Content) == 0 {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.EmailVerifyURLExpired),
+			&schema.ForbiddenResp{Type: schema.ForbiddenReasonTypeURLExpired})
+		return
+	}
+
+	err := uc.userService.UserUnsubscribeEmailNotification(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
 }

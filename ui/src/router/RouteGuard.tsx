@@ -16,7 +16,7 @@ const Index: FC<{
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  useEffect(() => {
+  const callGuards = () => {
     if (onEnter) {
       const gr = onEnter();
       const redirectUrl = gr.redirect;
@@ -26,8 +26,10 @@ const Index: FC<{
         });
       }
     }
+  };
+  useEffect(() => {
+    callGuards();
   }, [location]);
-
   return (
     <>
       {/* Route Guard */}

@@ -34,6 +34,7 @@ func NewInstallHTTPServer() *gin.Engine {
 	}))
 
 	installApi := r.Group("")
+	installApi.GET("/", CheckConfigFileAndRedirectToInstallPage)
 	installApi.GET("/install", WebPage)
 	installApi.GET("/50x", WebPage)
 	installApi.GET("/installation/language/options", LangOptions)

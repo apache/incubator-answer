@@ -111,6 +111,9 @@ backend:
         other: "No permission to update."
       cannot_set_synonym_as_itself:
         other: "You cannot set the synonym of the current tag as itself."
+    smtp:
+      config_from_name_cannot_be_email:
+        other: "The From Name cannot be a email address."
     theme:
       not_found:
         other: "Theme not found."
@@ -132,21 +135,21 @@ backend:
         other: "Username is already in use."
       set_avatar:
         other: "Avatar set failed."
-      config:
-        read_config_failed:
-          other: "Read config failed"
-      database:
-        connection_failed:
-          other: "Database connection failed"
-        create_table_failed:
-          other: "Create table failed"
-      install:
-        create_config_failed:
-          other: "Can’t create the config.yaml file."
       cannot_update_your_role:
         other: "You cannot modify your role."
       not_allowed_registration:
         other: "Currently the site is not open for registration"
+    config:
+      read_config_failed:
+        other: "Read config failed"
+    database:
+      connection_failed:
+        other: "Database connection failed"
+      create_table_failed:
+        other: "Create table failed"
+    install:
+      create_config_failed:
+        other: "Can’t create the config.yaml file."
   report:
     spam:
       name:
@@ -201,7 +204,13 @@ backend:
           other: "something else"
         desc:
           other: "This post requires another reason not listed above."
-
+    operation_type:
+      asked:
+        other: "asked"
+      answered:
+        other: "answered"
+      modified:
+        other: "modified"
   notification:
     action:
       update_question:
@@ -598,7 +607,8 @@ ui:
     msg:
       empty: Cannot be empty.
   login:
-    page_title: Welcome to Answer
+    page_title: Welcome to {{site_name}}
+    login_to_continue: Log in to continue
     info_sign: Don't have an account? <1>Sign up</1>
     info_login: Already have an account? <1>Log in</1>
     agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
@@ -838,6 +848,11 @@ ui:
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was
       already changed?
+  unsubscribe:
+    page_title: Unsubscribe
+    success_title: Unsubscribe Successful
+    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
+    link: Change settings
   question:
     following_tags: Following Tags
     edit: Edit
@@ -1034,6 +1049,7 @@ ui:
       answer_links: Answer Links
       documents: Documents
       feedback: Feedback
+      support: Support
       review: Review
       config: Config
       update_to: Update to
@@ -1251,14 +1267,14 @@ ui:
     branding:
       page_title: Branding
       logo:
-        label: Logo
+        label: Logo (optional)
         msg: Logo cannot be empty.
         text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
       mobile_logo:
         label: Mobile Logo (optional)
         text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the “logo” setting will be used.
       square_icon:
-        label: Square Icon
+        label: Square Icon (optional)
         msg: Square icon cannot be empty.
         text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
       favicon:

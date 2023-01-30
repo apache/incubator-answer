@@ -1,7 +1,7 @@
 import { FC, memo } from 'react';
 import { Nav, Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Link, NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 import type * as Type from '@/common/interface';
 import { Avatar, Icon } from '@/components';
@@ -14,6 +14,13 @@ interface Props {
 
 const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const handleLinkClick = (evt) => {
+    evt.preventDefault();
+    const { href } = evt.currentTarget;
+    const { pathname } = new URL(href);
+    navigate(pathname);
+  };
   return (
     <>
       <Nav className="flex-row">
@@ -26,7 +33,7 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
         </Nav.Link>
 
         <Nav.Link
-          as={Link}
+          as={NavLink}
           to="/users/notifications/achievement"
           className="icon-link d-flex align-items-center justify-content-center p-0 me-3 position-relative">
           <Icon name="trophy-fill" className="fs-4" />
@@ -46,17 +53,26 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
         </Dropdown.Toggle>
 
         <Dropdown.Menu>
-          <Dropdown.Item href={`/users/${userInfo.username}`}>
+          <Dropdown.Item
+            href={`/users/${userInfo.username}`}
+            onClick={handleLinkClick}>
             {t('header.nav.profile')}
           </Dropdown.Item>
-          <Dropdown.Item href="/users/settings/profile">
+          <Dropdown.Item
+            href="/users/settings/profile"
+            onClick={handleLinkClick}>
             {t('header.nav.setting')}
           </Dropdown.Item>
           {userInfo?.is_admin ? (
-            <Dropdown.Item href="/admin">{t('header.nav.admin')}</Dropdown.Item>
+            <Dropdown.Item href="/admin" onClick={handleLinkClick}>
+              {t('header.nav.admin')}
+            </Dropdown.Item>
           ) : null}
           {redDot?.can_revision ? (
-            <Dropdown.Item href="/review" className="position-relative">
+            <Dropdown.Item
+              href="/review"
+              className="position-relative"
+              onClick={handleLinkClick}>
               {t('header.nav.review')}
               {redDot?.revision > 0 && (
                 <span className="position-absolute top-50 translate-middle-y end-0 me-3 p-2 bg-danger border border-light rounded-circle">

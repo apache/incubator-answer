@@ -16,7 +16,7 @@ const AnswerLinks = () => {
           </Col>
           <Col xs={6}>
             <a href="https://meta.answer.dev" target="_blank" rel="noreferrer">
-              {t('feedback')}
+              {t('support')}
             </a>
           </Col>
         </Row>

@@ -4,11 +4,11 @@ backend:
     success:
       other: "成功!"
     unknown:
-      other: "Unknown error."
+      other: "未知的錯誤。"
     request_format_error:
-      other: "Request format is not valid."
+      other: "請求的格式無效。"
     unauthorized_error:
-      other: "Unauthorized."
+      other: "未授權。"
     database_error:
       other: "Data server error."
   role:
@@ -29,13 +29,13 @@ backend:
   email:
     other: "Email"
   password:
-    other: "Password"
+    other: "密碼"
   email_or_password_wrong_error:
-    other: "Email and password do not match."
+    other: "電子郵箱和密碼不匹配。"
   error:
     admin:
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: 電子郵箱和密碼不匹配。
     answer:
       not_found:
         other: "Answer do not found."
@@ -70,22 +70,22 @@ backend:
       not_found:
         other: "Object not found."
       verification_failed:
-        other: "Verification failed."
+        other: "驗證失敗。"
       email_or_password_incorrect:
-        other: "Email and password do not match."
+        other: "電子郵箱和密碼不匹配。"
       old_password_verification_failed:
-        other: "The old password verification failed"
+        other: "舊密碼驗證失敗"
       new_password_same_as_previous_setting:
-        other: "The new password is the same as the previous one."
+        other: "新密碼與先前的一樣。"
     question:
       not_found:
-        other: "Question not found."
+        other: "找不到問題。"
       cannot_deleted:
-        other: "No permission to delete."
+        other: "沒有刪除的權限。"
       cannot_close:
-        other: "No permission to close."
+        other: "沒有關閉的權限。"
       cannot_update:
-        other: "No permission to update."
+        other: "沒有更新的權限。"
     rank:
       fail_to_meet_the_condition:
         other: "Rank fail to meet the condition."
@@ -107,9 +107,12 @@ backend:
         other: "No permission to update."
       cannot_set_synonym_as_itself:
         other: "You cannot set the synonym of the current tag as itself."
+    smtp:
+      config_from_name_cannot_be_email:
+        other: "The From Name cannot be a email address."
     theme:
       not_found:
-        other: "Theme not found."
+        other: "未找到主題。"
     revision:
       review_underway:
         other: "Can't edit currently, there is a version in the review queue."
@@ -129,21 +132,21 @@ backend:
         other: "Username is already in use."
       set_avatar:
         other: "Avatar set failed."
-      config:
-        read_config_failed:
-          other: "Read config failed"
-      database:
-        connection_failed:
-          other: "Database connection failed"
-        create_table_failed:
-          other: "Create table failed"
-      install:
-        create_config_failed:
-          other: "Can’t create the config.yaml file."
       cannot_update_your_role:
         other: "You cannot modify your role."
       not_allowed_registration:
         other: "Currently the site is not open for registration"
+    config:
+      read_config_failed:
+        other: "Read config failed"
+    database:
+      connection_failed:
+        other: "Database connection failed"
+      create_table_failed:
+        other: "Create table failed"
+    install:
+      create_config_failed:
+        other: "Can’t create the config.yaml file."
   report:
     spam:
       name:
@@ -197,6 +200,13 @@ backend:
           other: "something else"
         desc:
           other: "This post requires another reason not listed above."
+    operation_type:
+      asked:
+        other: "asked"
+      answered:
+        other: "answered"
+      modified:
+        other: "modified"
   notification:
     action:
       update_question:
@@ -801,6 +811,11 @@ ui:
     confirm_new_email: Your email has been updated.
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
+  unsubscribe:
+    page_title: Unsubscribe
+    success_title: Unsubscribe Successful
+    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
+    link: Change settings
   question:
     following_tags: Following Tags
     edit: Edit
@@ -991,6 +1006,7 @@ ui:
       answer_links: Answer Links
       documents: Documents
       feedback: Feedback
+      support: Support
       review: Review
       config: Config
       update_to: Update to

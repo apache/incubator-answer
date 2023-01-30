@@ -466,6 +466,7 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 			Where(builder.Eq{"tag_rel.object_id": r["question_id"]}).
 			And(builder.Eq{"tag_rel.status": entity.TagRelStatusAvailable}).
 			UseBool("recommend", "reserved").
+			OrderBy("tag.recommend DESC, tag.reserved DESC, tag.id DESC").
 			Find(&tagsEntity)
 
 		if err != nil {

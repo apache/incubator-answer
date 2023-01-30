@@ -60,18 +60,13 @@ func (tr *tagCommonRepo) GetTagListByName(ctx context.Context, name string, hasR
 	cond := &entity.Tag{}
 	session := tr.data.DB.Where("")
 	if name != "" {
-		session.Where("slug_name LIKE ?", name+"%")
+		session.Where("slug_name LIKE ? or display_name LIKE ?", name+"%", name+"%")
 	} else {
+		session.UseBool("recommend")
 		cond.Recommend = true
 	}
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	session.Asc("slug_name")
-	// if !hasReserved {
-	// 	cond.Reserved = false
-	// 	session.UseBool("recommend", "reserved")
-	// } else {
-	session.UseBool("recommend")
-	// }
 	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList, cond)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

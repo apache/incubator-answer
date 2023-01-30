@@ -26,13 +26,13 @@
 docker run -d -p 9080:80 -v answer-data:/data --name answer answerdev/answer:latest
 ```
 
-其他安装配置细节请参考 [INSTALL_CN.md](./INSTALL_CN.md)
+其他安装配置细节请参考 [Installation](https://answer.dev/docs/installation)
 
 ## 贡献
 
 我们随时欢迎你的贡献!
 
-参考 [CONTRIBUTING.md](CONTRIBUTING.md) 开始贡献。
+参考 [CONTRIBUTING](https://answer.dev/docs/development/contributing/) 开始贡献。
 
 ## License
 

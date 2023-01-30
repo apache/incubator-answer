@@ -1,7 +1,7 @@
 package htmltext
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -75,11 +75,10 @@ func FetchExcerpt(html, trimMarker string, limit int) (text string) {
 	runeText := []rune(text)
 	if len(runeText) <= limit {
 		text = string(runeText)
-	} else {
-		text = string(runeText[0:limit])
+		return
 	}
 
-	text += trimMarker
+	text = string(runeText[0:limit]) + trimMarker
 	return
 }
 
@@ -89,7 +88,7 @@ func GetPicByUrl(Url string) string {
 		return ""
 	}
 	defer res.Body.Close()
-	pix, err := ioutil.ReadAll(res.Body)
+	pix, err := io.ReadAll(res.Body)
 	if err != nil {
 		return ""
 	}

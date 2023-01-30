@@ -11,8 +11,8 @@ import (
 	"github.com/segmentfault/pacman/log"
 )
 
-func (t *TemplateRenderController) Index(ctx *gin.Context, req *schema.QuestionSearch) ([]*schema.QuestionInfo, int64, error) {
-	return t.questionService.SearchList(ctx, req, req.UserID)
+func (t *TemplateRenderController) Index(ctx *gin.Context, req *schema.QuestionPageReq) ([]*schema.QuestionPageResp, int64, error) {
+	return t.questionService.GetQuestionPage(ctx, req)
 }
 
 func (t *TemplateRenderController) QuestionDetail(ctx *gin.Context, id string) (resp *schema.QuestionInfo, err error) {

@@ -15,7 +15,6 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/goccy/go-json v0.9.11
 	github.com/golang/mock v1.4.4
-	github.com/gomarkdown/markdown v0.0.0-20221013030248-663e2500819c
 	github.com/google/uuid v1.3.0
 	github.com/google/wire v0.5.0
 	github.com/gosimple/slug v1.13.1
@@ -24,6 +23,7 @@ require (
 	github.com/jinzhu/now v1.1.5
 	github.com/lib/pq v1.10.7
 	github.com/mattn/go-sqlite3 v1.14.16
+	github.com/microcosm-cc/bluemonday v1.0.21
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/ory/dockertest/v3 v3.9.1
 	github.com/robfig/cron/v3 v3.0.1
@@ -55,6 +55,7 @@ require (
 	github.com/Microsoft/go-winio v0.5.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
 	github.com/andybalholm/brotli v1.0.4 // indirect
+	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/cenkalti/backoff/v4 v4.1.3 // indirect
 	github.com/containerd/continuity v0.3.0 // indirect
 	github.com/docker/cli v20.10.14+incompatible // indirect
@@ -71,6 +72,7 @@ require (
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
+	github.com/gorilla/css v1.0.0 // indirect
 	github.com/gosimple/unidecode v1.0.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect

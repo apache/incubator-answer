@@ -23,7 +23,7 @@ const Index: FC<Props> = ({ visible, errorMsg, nextCallback }) => {
           <div className="fmt">
             <p>
               <Trans
-                i18nKey="install.config_yaml.description"
+                i18nKey="install.config_yaml.desc"
                 components={{ 1: <code /> }}
               />
             </p>

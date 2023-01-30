@@ -4,7 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import { SWRConfig } from 'swr';
 
-import { toastStore } from '@/stores';
+import { toastStore, loginToContinueStore } from '@/stores';
 import {
   Header,
   Footer,
@@ -13,13 +13,14 @@ import {
   CustomizeTheme,
   PageTags,
 } from '@/components';
+import { LoginToContinueModal } from '@/components/Modal';
 
 const Layout: FC = () => {
   const { msg: toastMsg, variant, clear: toastClear } = toastStore();
   const closeToast = () => {
     toastClear();
   };
-
+  const { show: showLoginToContinueModal } = loginToContinueStore();
   return (
     <HelmetProvider>
       <PageTags />
@@ -35,6 +36,7 @@ const Layout: FC = () => {
         <Toast msg={toastMsg} variant={variant} onClose={closeToast} />
         <Footer />
         <Customize />
+        <LoginToContinueModal visible={showLoginToContinueModal} />
       </SWRConfig>
     </HelmetProvider>
   );

@@ -27,19 +27,19 @@ func NewSearchParser(tagCommonService *tag_common.TagCommonService, userCommon *
 // but if match two type, it will return false
 func (sp *SearchParser) ParseStructure(dto *schema.SearchDTO) (
 	searchType string,
-// search all
+	// search all
 	userID string,
 	votes int,
-// search questions
+	// search questions
 	notAccepted bool,
 	isQuestion bool,
 	views,
 	answers int,
-// search answers
+	// search answers
 	accepted bool,
 	questionID string,
 	isAnswer bool,
-// common fields
+	// common fields
 	tags,
 	words []string,
 ) {
@@ -202,7 +202,7 @@ func (sp *SearchParser) parseUserID(query *string, currentUserID string) (userID
 
 	re := regexp.MustCompile(exprUserID)
 	res := re.FindStringSubmatch(q)
-	if strings.Index(q, exprMe) != -1 {
+	if strings.Contains(q, exprMe) {
 		userID = currentUserID
 		q = strings.ReplaceAll(q, exprMe, "")
 	} else if len(res) == 2 {

@@ -34,21 +34,21 @@
             >
               <div class="d-flex">
                 <div class="text-secondary me-1">
-                  <a href="/users/{{.UserInfo.Username}}"
+                  <a href="/users/{{.Operator.Username}}"
                     ><span class="me-1 text-break"
-                      >{{.UserInfo.DisplayName}}</span
+                      >{{.Operator.DisplayName}}</span
                     ></a
                   ><span class="fw-bold" title="Reputation"
-                    >{{.UserInfo.Rank}}</span
+                    >{{.Operator.Rank}}</span
                   >
                 </div>
                 •
                 <time
                   class="text-secondary ms-1"
-                  datetime="{{timeFormatISO $.timezone .CreateTime}}"
-                  title="{{translatorTimeFormatLongDate $.language $.timezone .CreateTime}}"
+                  datetime="{{timeFormatISO $.timezone .OperatedAt}}"
+                  title="{{translatorTimeFormatLongDate $.language $.timezone .OperatedAt}}"
                   >{{translator $.language "ui.question.asked"}}
-                  {{translatorTimeFormat $.language $.timezone .CreateTime}}
+                  {{translatorTimeFormat $.language $.timezone .OperatedAt}}
                 </time>
               </div>
               <div class="ms-0 ms-md-3 mt-2 mt-md-0">

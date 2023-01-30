@@ -19,6 +19,7 @@ import {
 
 import classnames from 'classnames';
 
+import { floppyNavigation } from '@/utils';
 import {
   loggedUserInfoStore,
   siteInfoStore,
@@ -27,8 +28,6 @@ import {
   themeSettingStore,
 } from '@/stores';
 import { logout, useQueryNotificationStatus } from '@/services';
-import { RouteAlias } from '@/router/alias';
-import { DEFAULT_SITE_NAME } from '@/common/constants';
 
 import NavItems from './components/NavItems';
 
@@ -36,7 +35,7 @@ import './index.scss';
 
 const Header: FC = () => {
   const navigate = useNavigate();
-  const { user, clear } = loggedUserInfoStore();
+  const { user, clear: clearUserStore } = loggedUserInfoStore();
   const { t } = useTranslation();
   const [urlSearch] = useSearchParams();
   const q = urlSearch.get('q');
@@ -49,11 +48,25 @@ const Header: FC = () => {
   const handleInput = (val) => {
     setSearch(val);
   };
+  const handleSearch = (evt) => {
+    evt.preventDefault();
+    if (!searchStr) {
+      return;
+    }
+    const searchUrl = `/search?q=${encodeURIComponent(searchStr)}`;
+    navigate(searchUrl);
+  };
 
   const handleLogout = async () => {
     await logout();
-    clear();
-    navigate(RouteAlias.home);
+    clearUserStore();
+    window.location.replace(window.location.href);
+  };
+  const onLoginClick = (evt) => {
+    evt.preventDefault();
+    floppyNavigation.navigateToLogin((loginPath) => {
+      navigate(loginPath, { replace: true });
+    });
   };
 
   useEffect(() => {
@@ -108,7 +121,7 @@ const Header: FC = () => {
                 />
               </>
             ) : (
-              <span>{siteInfo.name || DEFAULT_SITE_NAME}</span>
+              <span>{siteInfo.name}</span>
             )}
           </Navbar.Brand>
 
@@ -118,7 +131,14 @@ const Header: FC = () => {
               <NavItems redDot={redDot} userInfo={user} logOut={handleLogout} />
             ) : (
               <>
-                <Button variant="link" className="me-2" href="/users/login">
+                <Button
+                  variant="link"
+                  className={classnames('me-2', {
+                    'link-light': navbarStyle === 'theme-colored',
+                    'link-primary': navbarStyle !== 'theme-colored',
+                  })}
+                  onClick={onLoginClick}
+                  href="/users/login">
                   {t('btns.login')}
                 </Button>
                 {loginSetting.allow_new_registrations && (
@@ -153,7 +173,10 @@ const Header: FC = () => {
           <hr className="hr lg-none mt-2" />
 
           <Col lg={4} className="d-flex justify-content-center">
-            <Form action="/search" className="w-75 px-0 px-lg-2">
+            <Form
+              action="/search"
+              className="w-75 px-0 px-lg-2"
+              onSubmit={handleSearch}>
               <FormControl
                 placeholder={t('header.search.placeholder')}
                 className="placeholder-search"
@@ -202,6 +225,7 @@ const Header: FC = () => {
                     'link-light': navbarStyle === 'theme-colored',
                     'link-primary': navbarStyle !== 'theme-colored',
                   })}
+                  onClick={onLoginClick}
                   href="/users/login">
                   {t('btns.login')}
                 </Button>

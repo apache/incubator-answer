@@ -3,10 +3,14 @@ package schema
 import (
 	"context"
 	"fmt"
+	"net/mail"
 	"net/url"
 
 	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/segmentfault/pacman/errors"
 )
 
 const PermaLinkQuestionIDAndTitle = 1
@@ -42,9 +46,9 @@ type SiteInterfaceReq struct {
 
 // SiteBrandingReq site branding request
 type SiteBrandingReq struct {
-	Logo       string `validate:"required,gt=0,lte=512" form:"logo" json:"logo"`
+	Logo       string `validate:"omitempty,gt=0,lte=512" form:"logo" json:"logo"`
 	MobileLogo string `validate:"omitempty,gt=0,lte=512" form:"mobile_logo" json:"mobile_logo"`
-	SquareIcon string `validate:"required,gt=0,lte=512" form:"square_icon" json:"square_icon"`
+	SquareIcon string `validate:"omitempty,gt=0,lte=512" form:"square_icon" json:"square_icon"`
 	Favicon    string `validate:"omitempty,gt=0,lte=512" form:"favicon" json:"favicon"`
 }
 
@@ -130,7 +134,7 @@ type SiteThemeResp struct {
 func (s *SiteThemeResp) TrTheme(ctx context.Context) {
 	la := handler.GetLangByCtx(ctx)
 	for _, option := range s.ThemeOptions {
-		tr := translator.GlobalTrans.Tr(la, option.Value)
+		tr := translator.Tr(la, option.Value)
 		// if tr is equal the option value means not found translation, so use the original label
 		if tr != option.Value {
 			option.Label = tr
@@ -188,6 +192,17 @@ type UpdateSMTPConfigReq struct {
 	SMTPPassword       string `validate:"omitempty,gt=0,lte=256" json:"smtp_password"`
 	SMTPAuthentication bool   `validate:"omitempty" json:"smtp_authentication"`
 	TestEmailRecipient string `validate:"omitempty,email" json:"test_email_recipient"`
+}
+
+func (r *UpdateSMTPConfigReq) Check() (errField []*validator.FormErrorField, err error) {
+	_, err = mail.ParseAddress(r.FromName)
+	if err == nil {
+		return append(errField, &validator.FormErrorField{
+			ErrorField: "from_name",
+			ErrorMsg:   reason.SMTPConfigFromNameCannotBeEmail,
+		}), errors.BadRequest(reason.SMTPConfigFromNameCannotBeEmail)
+	}
+	return nil, nil
 }
 
 // GetSMTPConfigResp get smtp config response
