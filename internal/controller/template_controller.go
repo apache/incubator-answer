@@ -141,6 +141,9 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	}
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/questions", siteInfo.General.SiteUrl)
+	if page > 1 {
+		siteInfo.Canonical = fmt.Sprintf("%s/questions?page=%d", siteInfo.General.SiteUrl, page)
+	}
 
 	UrlUseTitle := false
 	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionIDAndTitle {
@@ -329,6 +332,9 @@ func (tc *TemplateController) TagList(ctx *gin.Context) {
 
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/tags", siteInfo.General.SiteUrl)
+	if req.Page > 1 {
+		siteInfo.Canonical = fmt.Sprintf("%s/tags?page=%d", siteInfo.General.SiteUrl, req.Page)
+	}
 	siteInfo.Title = fmt.Sprintf("%s - %s", "Tags", siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "tags.html", siteInfo, gin.H{
 		"page": page,
@@ -355,6 +361,9 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 
 	siteInfo := tc.SiteInfo(ctx)
 	siteInfo.Canonical = fmt.Sprintf("%s/tags/%s", siteInfo.General.SiteUrl, tag)
+	if req.Page > 1 {
+		siteInfo.Canonical = fmt.Sprintf("%s/tags/%s?page=%d", siteInfo.General.SiteUrl, tag, req.Page)
+	}
 	siteInfo.Description = htmltext.FetchExcerpt(taginifo.ParsedText, "...", 240)
 	if len(taginifo.ParsedText) == 0 {
 		siteInfo.Description = "The tag has no description."
