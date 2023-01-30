@@ -267,7 +267,7 @@ export const initAppSettingsStore = async () => {
 };
 
 export const shouldInitAppFetchData = () => {
-  if (isIgnoredPath('/install')) {
+  if (isIgnoredPath('/install') && window.location.pathname === '/install') {
     return false;
   }
 
