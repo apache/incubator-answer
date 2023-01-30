@@ -615,7 +615,7 @@ ui:
       msg:
         empty: 邮箱不能为空
   change_email:
-    page_title: 欢迎来到 Answer
+    page_title: 欢迎来到 {{site_name}}
     btn_cancel: 取消
     btn_update: 更新电子邮件地址
     send_success: >-
@@ -804,7 +804,7 @@ ui:
   modal_confirm:
     title: 发生错误...
   account_result:
-    page_title: 欢迎来到 Answer
+    page_title: 欢迎来到 {{site_name}}
     success: 你的账号已通过验证，即将返回首页。
     link: 返回首页
     invalid: >-
