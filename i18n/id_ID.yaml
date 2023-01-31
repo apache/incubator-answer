@@ -14,18 +14,18 @@ backend:
   role:
     name:
       user:
-        other: "User"
+        other: "Pengguna"
       admin:
         other: "Admin"
       moderator:
         other: "Moderator"
     description:
       user:
-        other: "Default with no special access."
+        other: "Default tanpa akses khusus."
       admin:
-        other: "Have the full power to access the site."
+        other: "Memiliki hak penuh untuk mengakses website."
       moderator:
-        other: "Has access to all posts except admin settings."
+        other: "Memiliki hak penuh pada semua pertanyaan, kecuali pengaturan Admin."
   email:
     other: "Email"
   password:
@@ -64,221 +64,221 @@ backend:
       disallow_follow:
         other: "Anda tidak diizinkan untuk mengikuti."
       disallow_vote:
-        other: "You are not allowed to vote."
+        other: "Anda tidak diizinkan untuk melakukan voring."
       disallow_vote_your_self:
-        other: "You can't vote for your own post."
+        other: "Anda tidak dapat melakukan voting untuk ulasan Anda sendiri."
       not_found:
-        other: "Object not found."
+        other: "Objek tidak ditemukan."
       verification_failed:
-        other: "Verification failed."
+        other: "Verifikasi gagal."
       email_or_password_incorrect:
-        other: "Email and password do not match."
+        other: "Email dan kata sandi tidak cocok."
       old_password_verification_failed:
-        other: "The old password verification failed"
+        other: "Verifikasi password lama, gagal"
       new_password_same_as_previous_setting:
-        other: "The new password is the same as the previous one."
+        other: "Password baru sama dengan password yang sebelumnya."
     question:
       not_found:
-        other: "Question not found."
+        other: "Pertanyaan tidak ditemukan."
       cannot_deleted:
-        other: "No permission to delete."
+        other: "Tidak memiliki izin untuk menghapus."
       cannot_close:
-        other: "No permission to close."
+        other: "Tidak memiliki izin untuk menutup."
       cannot_update:
-        other: "No permission to update."
+        other: "Tidak memiliki izin untuk memperbaharui."
     rank:
       fail_to_meet_the_condition:
-        other: "Rank fail to meet the condition."
+        other: "Peringkat gagal memenuhi syarat."
     report:
       handle_failed:
-        other: "Report handle failed."
+        other: "Laporan penanganan gagal."
       not_found:
-        other: "Report not found."
+        other: "Laporan tidak ditemukan."
     tag:
       not_found:
-        other: "Tag not found."
+        other: "Tag tidak ditemukan."
       recommend_tag_not_found:
-        other: "Recommend Tag is not exist."
+        other: "Tag rekomendasi tidak ada."
       recommend_tag_enter:
-        other: "Please enter at least one required tag."
+        other: "Silahkan isi setidaknya satu tag yang diperlukan."
       not_contain_synonym_tags:
-        other: "Should not contain synonym tags."
+        other: "Tidak boleh mengandung Tag sinonim."
       cannot_update:
-        other: "No permission to update."
+        other: "Tidak memiliki izin untuk memperbaharui."
       cannot_set_synonym_as_itself:
-        other: "You cannot set the synonym of the current tag as itself."
+        other: "Anda tidak bisa menetapkan sinonim dari tag saat ini dengan tag yang sama."
     smtp:
       config_from_name_cannot_be_email:
-        other: "The From Name cannot be a email address."
+        other: "Nama Pengguna tidak bisa menjadi alamat email."
     theme:
       not_found:
-        other: "Theme not found."
+        other: "Tema tidak ditemukan."
     revision:
       review_underway:
-        other: "Can't edit currently, there is a version in the review queue."
+        other: "Tidak dapat mengedit saat ini, sedang ada review versi pada antrian."
       no_permission:
-        other: "No permission to Revision."
+        other: "Tidak memiliki izin untuk merevisi."
     user:
       email_or_password_wrong:
         other:
-          other: Email and password do not match.
+          other: Email dan kata sandi tidak cocok.
       not_found:
-        other: "User not found."
+        other: "Pengguna tidak ditemukan."
       suspended:
-        other: "User has been suspended."
+        other: "Pengguna ini telah ditangguhkan."
       username_invalid:
-        other: "Username is invalid."
+        other: "Nama pengguna tidak valid."
       username_duplicate:
-        other: "Username is already in use."
+        other: "Nama pengguna sudah digunakan."
       set_avatar:
-        other: "Avatar set failed."
+        other: "Set avatar gagal."
       cannot_update_your_role:
-        other: "You cannot modify your role."
+        other: "Anda tidak dapat memodifikasi role anda sendiri."
       not_allowed_registration:
-        other: "Currently the site is not open for registration"
+        other: "Website tidak membuka pendaftaran baru untuk saat ini"
     config:
       read_config_failed:
-        other: "Read config failed"
+        other: "Gagal membaca konfigurasi"
     database:
       connection_failed:
-        other: "Database connection failed"
+        other: "Koneksi ke database gagal"
       create_table_failed:
-        other: "Create table failed"
+        other: "Gagal membuat tabel"
     install:
       create_config_failed:
-        other: "Can’t create the config.yaml file."
+        other: "Tidak dapat membuat konfigurasi pada file .YAML."
   report:
     spam:
       name:
-        other: "spam"
+        other: "Spam"
       desc:
-        other: "This post is an advertisement, or vandalism. It is not useful or relevant to the current topic."
+        other: "Posting ini adalah iklan, atau vandalisme. Tidak berguna atau relevan dengan topik saat ini."
     rude:
       name:
-        other: "rude or abusive"
+        other: "kasar atau kejam"
       desc:
-        other: "A reasonable person would find this content inappropriate for respectful discourse."
+        other: "Orang yang berakal sehat akan menganggap konten ini tidak pantas untuk wacana yang terhormat."
     duplicate:
       name:
-        other: "a duplicate"
+        other: "Duplikat"
       desc:
-        other: "This question has been asked before and already has an answer."
+        other: "Pertanyaan ini telah ditanyakan sebelumnya dan sudah ada jawabannya."
     not_answer:
       name:
-        other: "not an answer"
+        other: "bukan jawaban"
       desc:
-        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether."
+        other: "Ini diposting sebagai jawaban, tetapi tidak menjawab pertanyaan. Itu mungkin berupa suntingan, komentar, pertanyaan lain, atau telah dihapus sepenuhnya."
     not_need:
       name:
-        other: "no longer needed"
+        other: "tidak Dibutuhkan Lagi"
       desc:
-        other: "This comment is outdated, conversational or not relevant to this post."
+        other: "Komentar ini kedaluwarsa, sesuai percakapan, atau tidak relevan dengan postingan ini."
     other:
       name:
-        other: "something else"
+        other: "lainnya"
       desc:
-        other: "This post requires staff attention for another reason not listed above."
+        other: "Posting ini membutuhkan perhatian staf karena alasan lain yang tidak tercantum di atas."
   question:
     close:
       duplicate:
         name:
           other: "spam"
         desc:
-          other: "This question has been asked before and already has an answer."
+          other: "Pertanyaan ini telah ditanyakan sebelumnya dan sudah ada jawabannya."
       guideline:
         name:
           other: "a community-specific reason"
         desc:
-          other: "This question doesn't meet a community guideline."
+          other: "Pertanyaan ini tidak sesuai dengan pedoman komunitas."
       multiple:
         name:
-          other: "needs details or clarity"
+          other: "membutuhkan detail atau kejelasan"
         desc:
-          other: "This question currently includes multiple questions in one. It should focus on one problem only."
+          other: "Pertanyaan ini mencakup beberapa pertanyaan pada satu post. Pertanyaan harus fokus pada satu masalah saja."
       other:
         name:
-          other: "something else"
+          other: "lainnya"
         desc:
-          other: "This post requires another reason not listed above."
+          other: "Posting ini membutuhkan alasan lain yang tidak tercantum di atas."
     operation_type:
       asked:
-        other: "asked"
+        other: "ditanyakan"
       answered:
-        other: "answered"
+        other: "dijawab"
       modified:
-        other: "modified"
+        other: "dimodifikasi"
   notification:
     action:
       update_question:
-        other: "updated question"
+        other: "pertanyaan yang diperbaharui"
       answer_the_question:
-        other: "answered question"
+        other: "pertanyaan yang dijawab"
       update_answer:
-        other: "updated answer"
+        other: "jawaban yang diperbaharui"
       accept_answer:
-        other: "accepted answer"
+        other: "pertanyaan yanag diterima"
       comment_question:
-        other: "commented question"
+        other: "pertanyaan yang dikomentari"
       comment_answer:
-        other: "commented answer"
+        other: "jawaban yang dikomentari"
       reply_to_you:
-        other: "replied to you"
+        other: "membalas Anda"
       mention_you:
-        other: "mentioned you"
+        other: "menyebutmu"
       your_question_is_closed:
-        other: "Your question has been closed"
+        other: "Pertanyaanmu telah ditutup"
       your_question_was_deleted:
-        other: "Your question has been deleted"
+        other: "Pertanyaanmu telah dihapus"
       your_answer_was_deleted:
-        other: "Your answer has been deleted"
+        other: "Jawabanmu telah dihapus"
       your_comment_was_deleted:
-        other: "Your comment has been deleted"
+        other: "Komentarmu telah dihapus"
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: How to Format
+    title: Cara memformat
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
-    prev: Prev
-    next: Next
+    prev: Sebelumnya
+    next: Selanjutnya
   page_title:
-    question: Question
-    questions: Questions
+    question: Pertanyaan
+    questions: Pertanyaan
     tag: Tag
     tags: Tags
     tag_wiki: tag wiki
-    edit_tag: Edit Tag
-    ask_a_question: Add Question
-    edit_question: Edit Question
-    edit_answer: Edit Answer
-    search: Search
-    posts_containing: Posts containing
-    settings: Settings
-    notifications: Notifications
+    edit_tag: Ubah Tag
+    ask_a_question: Tambahkan Pertanyaan
+    edit_question: Sunting Pertanyaan
+    edit_answer: Sunting jawaban
+    search: Cari
+    posts_containing: Postingan mengandung
+    settings: Pengaturan
+    notifications: Pemberitahuan
     login: Log In
-    sign_up: Sign Up
-    account_recovery: Account Recovery
-    account_activation: Account Activation
-    confirm_email: Confirm Email
-    account_suspended: Account Suspended
+    sign_up: Daftar
+    account_recovery: Pemulihan Akun
+    account_activation: Aktivasi Akun
+    confirm_email: Konfirmasi email
+    account_suspended: Akun Ditangguhkan
     admin: Admin
-    change_email: Modify Email
-    install: Answer Installation
-    upgrade: Answer Upgrade
-    maintenance: Website Maintenance
-    users: Users
+    change_email: Modifikasi email
+    install: Instalasi Answer
+    upgrade: Meng-upgrade Answer
+    maintenance: Pemeliharaan Website
+    users: Pengguna
   notifications:
-    title: Notifications
-    inbox: Inbox
-    achievement: Achievements
-    all_read: Mark all as read
-    show_more: Show more
+    title: Pemberitahuan
+    inbox: Kotak Masuk
+    achievement: Pencapaian
+    all_read: Tandai Semua Jika Sudah Dibaca
+    show_more: Tampilkan lebih banyak
   suspended:
-    title: Your Account has been Suspended
-    until_time: "Your account was suspended until {{ time }}."
-    forever: This user was suspended forever.
-    end: You don't meet a community guideline.
+    title: Akun Anda telah ditangguhkan
+    until_time: "Akun anda ditangguhkan sampai {{ time }}."
+    forever: Pengguna ini ditangguhkan selamanya.
+    end: Anda tidak sesuai dengan syarat pedoman komunitas.
   editor:
     blockquote:
       text: Blockquote
@@ -296,18 +296,18 @@ ui:
       pie_chart: Pie chart
     code:
       text: Code Sample
-      add_code: Add code sample
+      add_code: Tambahkan sample code
       form:
         fields:
           code:
             label: Code
             msg:
-              empty: Code cannot be empty.
+              empty: Code tidak boleh kosong.
           language:
-            label: Language (optional)
-            placeholder: Automatic detection
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: Bahasa (opsional)
+            placeholder: Deteksi otomatis
+      btn_cancel: Batal
+      btn_confirm: Tambah
     formula:
       text: Formula
       options:
@@ -327,32 +327,32 @@ ui:
     hr:
       text: Horizontal Rule
     image:
-      text: Image
-      add_image: Add image
-      tab_image: Upload image
+      text: Gambar
+      add_image: Tambahkan gambar
+      tab_image: Unggah gambar
       form_image:
         fields:
           file:
-            label: Image File
-            btn: Select image
+            label: File Gambar
+            btn: Pilih gambar
             msg:
-              empty: File cannot be empty.
-              only_image: Only image files are allowed.
-              max_size: File size cannot exceed 4MB.
+              empty: File tidak boleh kosong.
+              only_image: Hanya file Gambar yang diperbolehkan.
+              max_size: Ukuran file tidak boleh melebihi 4MB.
           desc:
-            label: Description (optional)
-      tab_url: Image URL
+            label: Deskripsi (opsional)
+      tab_url: URL gambar
       form_url:
         fields:
           url:
-            label: Image URL
+            label: URL gambar
             msg:
-              empty: Image URL cannot be empty.
+              empty: URL gambar tidak boleh kosong.
           name:
-            label: Description (optional)
-      btn_cancel: Cancel
-      btn_confirm: Add
-      uploading: Uploading
+            label: Deskripsi (opsional)
+      btn_cancel: Batal
+      btn_confirm: Tambah
+      uploading: Sedang mengunggah
     indent:
       text: Indent
     outdent:
@@ -370,8 +370,8 @@ ui:
               empty: URL cannot be empty.
           name:
             label: Description (optional)
-      btn_cancel: Cancel
-      btn_confirm: Add
+      btn_cancel: Batal
+      btn_confirm: Tambah
     ordered_list:
       text: Numbered List
     unordered_list:
@@ -381,8 +381,8 @@ ui:
       heading: Heading
       cell: Cell
   close_modal:
-    title: I am closing this post as...
-    btn_cancel: Cancel
+    title: Postingan ini saya tutup sebagai...
+    btn_cancel: Batal
     btn_submit: Submit
     remark:
       empty: Cannot be empty.
@@ -421,78 +421,78 @@ ui:
     btn_cancel: Cancel
     btn_submit: Submit
   tag_info:
-    created_at: Created
-    edited_at: Edited
-    history: History
+    created_at: Dibuat
+    edited_at: Disunting
+    history: Riwayat
     synonyms:
-      title: Synonyms
-      text: The following tags will be remapped to
-      empty: No synonyms found.
-      btn_add: Add a synonym
-      btn_edit: Edit
-      btn_save: Save
-    synonyms_text: The following tags will be remapped to
+      title: Sinonim
+      text: Tag berikut akan dipetakan ulang ke
+      empty: Sinonim tidak ditemukan.
+      btn_add: Tambahkan sinonim
+      btn_edit: Sunting
+      btn_save: Simpan
+    synonyms_text: Tag berikut akan dipetakan ulang ke
     delete:
-      title: Delete this tag
+      title: Hapus tagar ini
       content: >-
         <p>We do not allowed deleting tag with posts.</p><p>Please remove this tag from the posts first.</p>
-      content2: Are you sure you wish to delete?
-      close: Close
+      content2: Anda yakin ingin menghapusnya?
+      close: Tutup
   edit_tag:
-    title: Edit Tag
-    default_reason: Edit tag
+    title: Sunting tag
+    default_reason: Sunting tag
     form:
       fields:
         revision:
-          label: Revision
+          label: Revisi
         display_name:
-          label: Display Name
+          label: Nama Tampilan
         slug_name:
           label: URL Slug
-          info: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          info: 'Harus menggunakan set karakter "a-z", "0-9", "+ # - ."'
         desc:
-          label: Description
+          label: Deskripsi
         edit_summary:
-          label: Edit Summary
+          label: Sunting ringkasan
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
+            Jelaskan secara singkat perubahan yang Anda lakukan (ejaan yang diperbaiki, tata bahasa yang diperbaiki, pemformatan yang ditingkatkan)
+    btn_save_edits: Simpan suntingan
+    btn_cancel: Batal
   dates:
     long_date: MMM D
     long_date_with_year: "MMM D, YYYY"
     long_date_with_time: "MMM D, YYYY [at] HH:mm"
-    now: now
+    now: sekarang
     x_seconds_ago: "{{count}}s ago"
     x_minutes_ago: "{{count}}m ago"
     x_hours_ago: "{{count}}h ago"
-    hour: hour
-    day: day
+    hour: jam
+    day: hari
   comment:
-    btn_add_comment: Add comment
-    reply_to: Reply to
-    btn_reply: Reply
-    btn_edit: Edit
-    btn_delete: Delete
+    btn_add_comment: Tambahkan Komentar
+    reply_to: Balas ke
+    btn_reply: Balas
+    btn_edit: Sunting
+    btn_delete: Hapus
     btn_flag: Flag
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
-    show_more: Show more comment
+    btn_save_edits: Simpan suntingan
+    btn_cancel: Batal
+    show_more: Tampilkan lebih banyak komentar
     tip_question: >-
-      Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
+      Gunakan komentar untuk meminta informasi lebih lanjut atau menyarankan perbaikan. Hindari menjawab pertanyaan di komentar.
     tip_answer: >-
-      Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
+      Gunakan komentar untuk membalas pengguna lain atau memberi tahu mereka tentang perubahan. Jika Anda menambahkan informasi baru, cukup edit posting Anda.
   edit_answer:
-    title: Edit Answer
-    default_reason: Edit answer
+    title: Sunting jawaban
+    default_reason: Edit jawaban
     form:
       fields:
         revision:
-          label: Revision
+          label: Revisi
         answer:
-          label: Answer
+          label: Jawaban
         edit_summary:
-          label: Edit Summary
+          label: Sunting ringkasan
           placeholder: >-
             Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_save_edits: Save edits
@@ -555,35 +555,35 @@ ui:
     nav:
       question: Questions
       tag: Tags
-      user: Users
-      profile: Profile
-      setting: Settings
-      logout: Log out
+      user: Pengguna
+      profile: Profil
+      setting: Pengaturan
+      logout: Keluar
       admin: Admin
-      review: Review
+      review: Ulasan
     search:
-      placeholder: Search
+      placeholder: Cari
   footer:
     build_on: >-
       Built on <1> Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
-    name: Change
-    loading: loading...
+    name: Ubah
+    loading: sedang memuat...
   pic_auth_code:
-    title: Captcha
-    placeholder: Type the text above
+    title: Capthcha
+    placeholder: Masukkan teks di atas
     msg:
-      empty: Captcha cannot be empty.
+      empty: Captcha tidak boleh kosong.
   inactive:
     first: >-
-      You're almost done! We sent an activation mail to <bold>{{mail}}</bold>. Please follow the instructions in the mail to activate your account.
-    info: "If it doesn't arrive, check your spam folder."
+      Kamu hampir selesai! Kami telah mengirimkan email aktivasi ke <bold>{{mail}}</bold>. Silakan ikuti petunjuk dalam email untuk mengaktifkan akun Anda.
+    info: "Jika tidak ada email masuk, mohon periksa folder spam Anda."
     another: >-
-      We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.
-    btn_name: Resend activation email
-    change_btn_name: Change email
+      Kami telah mengirimkan email aktivasi lain kepada Anda di <bold>{{mail}}</bold>. Mungkin butuh beberapa menit untuk tiba; pastikan untuk memeriksa folder spam Anda.
+    btn_name: Kirim ulang email aktivasi
+    change_btn_name: Ganti email
     msg:
-      empty: Cannot be empty.
+      empty: Tidak bisa kosong.
   login:
     page_title: Welcome to {{site_name}}
     login_to_continue: Log in to continue
