@@ -585,55 +585,55 @@ ui:
     msg:
       empty: Tidak bisa kosong.
   login:
-    page_title: Welcome to {{site_name}}
-    login_to_continue: Log in to continue
-    info_sign: Don't have an account? <1>Sign up</1>
-    info_login: Already have an account? <1>Log in</1>
-    agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
-    forgot_pass: Forgot password?
+    page_title: Selamat datang ke {{site_name}}
+    login_to_continue: Masuk untuk melanjutkan
+    info_sign: Belum punya akun? <1>Daftar</1>
+    info_login: Sudah punya akun? <1>Masuk</1>
+    agreements: Dengan mendaftar, Anda menyetujui <1>kebijakan privasi</1> dan <3>persyaratan layanan</3>.
+    forgot_pass: Lupa password?
     name:
-      label: Name
+      label: Nama
       msg:
-        empty: Name cannot be empty.
-        range: Name up to 30 characters.
+        empty: Nama tidak boleh kosong.
+        range: Nama harus menunjukkan 1-30 karakter.
     email:
       label: Email
       msg:
-        empty: Email cannot be empty.
+        empty: Email tidak boleh kosong.
     password:
-      label: Password
+      label: Kata sandi
       msg:
-        empty: Password cannot be empty.
-        different: The passwords entered on both sides are inconsistent
+        empty: Kata sandi tidak boleh kosong.
+        different: Kata sandi yang dimasukkan tidak sama
   account_forgot:
-    page_title: Forgot Your Password
-    btn_name: Send me recovery email
+    page_title: Lupa kata sandi Anda
+    btn_name: Tulis email pemulihan
     send_success: >-
-      If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
+      Jika akun cocok dengan <strong>{{mail}}</strong>, Anda akan segera menerima email berisi petunjuk tentang cara menyetel ulang sandi.
     email:
       label: Email
       msg:
-        empty: Email cannot be empty.
+        empty: Email tidak boleh kosong.
   change_email:
-    page_title: Welcome to Answer
-    btn_cancel: Cancel
-    btn_update: Update email address
+    page_title: Selamat datang di Answer
+    btn_cancel: Batal
+    btn_update: Perbarui alamat email
     send_success: >-
-      If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
+      Jika akun cocok dengan <strong>{{mail}}</strong>, Anda akan segera menerima email berisi petunjuk tentang cara menyetel ulang sandi.
     email:
-      label: New Email
+      label: Email Baru
       msg:
-        empty: Email cannot be empty.
+        empty: Email tidak boleh kosong.
   password_reset:
-    page_title: Password Reset
-    btn_name: Reset my password
+    page_title: Atur ulang kata sandi
+    btn_name: Atur ulang kata sandi saya
     reset_success: >-
-      You successfully changed your password; you will be redirected to the log in page.
+      Anda berhasil mengubah kata sandi Anda; Anda akan dialihkan ke halaman login.
     link_invalid: >-
-      Sorry, this password reset link is no longer valid. Perhaps your password is already reset?
-    to_login: Continue to log in page
+      Maaf, link setel ulang sandi ini sudah tidak valid. Mungkin kata sandi Anda sudah diatur ulang?
+    to_login: Lanjutkan ke halaman Login
     password:
-      label: Password
+      label: Kata sandi
       msg:
         empty: Password cannot be empty.
         length: The length needs to be between 8 and 32
@@ -706,67 +706,67 @@ ui:
     interface:
       heading: Interface
       lang:
-        label: Interface Language
-        text: User interface language. It will change when you refresh the page.
+        label: Bahasa Antarmuka
+        text: Bahasa antarmuka pengguna. Itu akan berubah ketika Anda me-refresh halaman.
   toast:
-    update: update success
-    update_password: Password changed successfully.
-    flag_success: Thanks for flagging.
-    forbidden_operate_self: Forbidden to operate on yourself
-    review: Your revision will show after review.
+    update: pembaruan sukses
+    update_password: Kata sandi berhasil diganti.
+    flag_success: Terima kasih telah menandai.
+    forbidden_operate_self: Dilarang melakukan operasi ini pada diri sendiri
+    review: Revisi Anda akan ditampilkan setelah ditinjau.
   related_question:
-    title: Related Questions
-    btn: Add question
-    answers: answers
+    title: Pertanyaan Terkait
+    btn: Tambahkan pertanyaan
+    answers: jawaban
   question_detail:
-    Asked: Asked
-    asked: asked
-    update: Modified
-    edit: edited
-    Views: Viewed
-    Follow: Follow
-    Following: Following
-    answered: answered
-    closed_in: Closed in
-    show_exist: Show existing question.
+    Asked: Ditanyakan
+    asked: ditanyakan
+    update: Diubah
+    edit: disunting
+    Views: Dilihat
+    Follow: Ikuti
+    Following: Mengikuti
+    answered: dijawab
+    closed_in: Ditutup pada
+    show_exist: Gunakan pertanyaan yang sudah ada.
     answers:
-      title: Answers
-      score: Score
-      newest: Newest
-      btn_accept: Accept
-      btn_accepted: Accepted
+      title: Jawaban
+      score: Nilai
+      newest: Terbaru
+      btn_accept: Terima
+      btn_accepted: Diterima
     write_answer:
-      title: Your Answer
-      btn_name: Post your answer
-      add_another_answer: Add another answer
-      confirm_title: Continue to answer
-      continue: Continue
+      title: Jawaban Anda
+      btn_name: Kirimkan jawaban Anda
+      add_another_answer: Tambahkan jawaban lain
+      confirm_title: Lanjutkan menjawab
+      continue: Lanjutkan
       confirm_info: >-
-        <p>Are you sure you want to add another answer?</p><p>You could use the edit link to refine and improve your existing answer, instead.</p>
-      empty: Answer cannot be empty.
+        <p>Yakin ingin menambahkan jawaban lain?</p><p>Sebagai gantinya, Anda dapat menggunakan tautan edit untuk menyaring dan menyempurnakan jawaban anda.</p>
+      empty: Jawaban tidak boleh kosong.
     reopen:
-      title: Reopen this post
-      content: Are you sure you want to reopen?
-      success: This post has been reopened
+      title: Buka kembali postingan ini
+      content: Kamu yakin ingin membuka kembali?
+      success: Postingan ini telah dibuka kembali
   delete:
-    title: Delete this post
+    title: Hapus pos ini
     question: >-
-      We do not recommend <strong>deleting questions with answers</strong> because doing so deprives future readers of this knowledge.</p><p>Repeated deletion of answered questions can result in your account being blocked from asking. Are you sure you wish to delete?
+      Kami tidak menyarankan <strong>menghapus pertanyaan dengan jawaban</strong> karena hal itu menghilangkan pengetahuan ini dari pembaca di masa mendatang.</p><p>Penghapusan berulang atas pertanyaan yang dijawab dapat mengakibatkan akun Anda diblokir untuk bertanya. Apakah Anda yakin ingin menghapus?
     answer_accepted: >-
-      <p>We do not recommend <strong>deleting accepted answer</strong> because doing so deprives future readers of this knowledge. </p> Repeated deletion of accepted answers can result in your account being blocked from answering. Are you sure you wish to delete?
-    other: Are you sure you wish to delete?
-    tip_question_deleted: This post has been deleted
-    tip_answer_deleted: This answer has been deleted
+      <p>Kami tidak menyarankan <strong>menghapus jawaban yang diterima</strong> karena hal itu menghilangkan pengetahuan ini dari pembaca di masa mendatang. </p> Penghapusan berulang dari jawaban yang diterima dapat menyebabkan akun Anda diblokir dari menjawab. Apakah Anda yakin ingin menghapus?
+    other: Anda yakin ingin menghapusnya?
+    tip_question_deleted: Kiriman ini sudah dihapus
+    tip_answer_deleted: Jawaban ini telah dihapus
   btns:
-    confirm: Confirm
-    cancel: Cancel
-    save: Save
-    delete: Delete
-    login: Log in
-    signup: Sign up
-    logout: Log out
-    verify: Verify
-    add_question: Add question
+    confirm: Konfirmasi
+    cancel: Batal
+    save: Simpan
+    delete: Hapus
+    login: Masuk
+    signup: Daftar
+    logout: Keluar
+    verify: Verifikasi
+    add_question: Tambahkan pertanyaan
     approve: Approve
     reject: Reject
     skip: Skip
@@ -827,59 +827,59 @@ ui:
     x_questions: "{{ count }} Questions"
     x_answers: "{{ count }} answers"
     questions: Questions
-    answers: Answers
-    newest: Newest
-    active: Active
-    frequent: Frequent
-    score: Score
-    unanswered: Unanswered
-    modified: modified
-    answered: answered
-    asked: asked
-    closed: closed
-    follow_a_tag: Follow a tag
-    more: More
+    answers: Jawaban
+    newest: Terbaru
+    active: Aktif
+    frequent: Sering
+    score: Nilai
+    unanswered: Belum dijawab
+    modified: diubah
+    answered: dijawab
+    asked: ditanyakan
+    closed: ditutup
+    follow_a_tag: Ikuti tagar
+    more: Lebih
   personal:
-    overview: Overview
-    answers: Answers
-    answer: answer
-    questions: Questions
-    question: question
+    overview: Ringkasan
+    answers: Jawaban
+    answer: jawaban
+    questions: Pertanyaan
+    question: pertanyaan
     bookmarks: Bookmarks
-    reputation: Reputation
-    comments: Comments
-    votes: Votes
-    newest: Newest
-    score: Score
-    edit_profile: Edit Profile
-    visited_x_days: "Visited {{ count }} days"
-    viewed: Viewed
-    joined: Joined
-    last_login: Seen
-    about_me: About Me
+    reputation: Reputasi
+    comments: Komentar
+    votes: Vote
+    newest: Terbaru
+    score: Nilai
+    edit_profile: Ubah profil
+    visited_x_days: "Dikunjungi {{ count }} hari"
+    viewed: Dilihat
+    joined: Bergabung
+    last_login: Dilihat
+    about_me: Tentang Saya
     about_me_empty: "// Hello, World !"
-    top_answers: Top Answers
-    top_questions: Top Questions
-    stats: Stats
-    list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
-    accepted: Accepted
-    answered: answered
-    asked: asked
+    top_answers: Jawaban terpopuler
+    top_questions: Pertanyaan terpopuler
+    stats: Statistik
+    list_empty: Postingan tidak ditemukan.<br />Mungkin Anda ingin memilih tab lain?
+    accepted: Diterima
+    answered: dijawab
+    asked: ditanyakan
     upvote: upvote
     downvote: downvote
     mod_short: Mod
-    mod_long: Moderators
-    x_reputation: reputation
-    x_votes: votes received
-    x_answers: answers
-    x_questions: questions
+    mod_long: Moderator
+    x_reputation: reputasi
+    x_votes: vote diterima
+    x_answers: jawaban
+    x_questions: pertanyaan
   install:
-    title: Answer
-    next: Next
-    done: Done
-    config_yaml_error: Can’t create the config.yaml file.
+    title: Jawaban
+    next: Selanjutnya
+    done: Selesai
+    config_yaml_error: Tidak dapat membuat konfigurasi file .yaml
     lang:
-      label: Please Choose a Language
+      label: Silakan pilih Bahasa
     db_type:
       label: Database Engine
     db_username:
@@ -950,64 +950,64 @@ ui:
     installed: Already installed
     installed_desc: >-
       You appear to have already installed. To reinstall please clear your old database tables first.
-    db_failed: Database connection failed
+    db_failed: Koneksi ke database gagal
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+      Ini berarti bahwa informasi database dalam file <1>config.yaml</1> Anda salah atau koneksi ke server database tidak dapat dilakukan. Ini bisa berarti server database Anda sedang down.
   page_404:
-    desc: "Unfortunately, this page doesn't exist."
-    back_home: Back to homepage
+    desc: "Sayangnya, halaman ini tidak ada."
+    back_home: Kembali ke beranda
   page_50X:
-    desc: The server encountered an error and could not complete your request.
-    back_home: Back to homepage
+    desc: Server mengalami kesalahan internal dan tidak dapat menyelesaikan permintaan Anda.
+    back_home: Kembali ke beranda
   page_maintenance:
-    desc: "We are under maintenance, we’ll be back soon."
+    desc: "Sedang dalam perbaikan, akan kembali secepatnya."
   nav_menus:
-    dashboard: Dashboard
-    contents: Contents
-    questions: Questions
-    answers: Answers
-    users: Users
+    dashboard: Dasbor
+    contents: Konten
+    questions: Pertanyaan
+    answers: Jawaban
+    users: Pengguna
     flags: Flags
-    settings: Settings
-    general: General
+    settings: Pengaturan
+    general: Umum
     interface: Interface
     smtp: SMTP
     branding: Branding
     legal: Legal
     write: Write
     tos: Terms of Service
-    privacy: Privacy
+    privacy: Privasi
     seo: SEO
-    customize: Customize
-    themes: Themes
+    customize: Kostumisasi
+    themes: Tema
     css-html: CSS/HTML
-    login: Login
+    login: Masuk
   admin:
     admin_header:
       title: Admin
     dashboard:
-      title: Dashboard
-      welcome: Welcome to Answer Admin!
+      title: Dasbor
+      welcome: Selamat datang di Answer Admin!
       site_statistics: Site Statistics
-      questions: "Questions:"
-      answers: "Answers:"
-      comments: "Comments:"
-      votes: "Votes:"
-      active_users: "Active users:"
+      questions: "Pertanyaan:"
+      answers: "Jawaban:"
+      comments: "Komentar:"
+      votes: "Vote:"
+      active_users: "Pengguna aktif:"
       flags: "Flags:"
       site_health_status: Site Health Status
-      version: "Version:"
+      version: "Versi:"
       https: "HTTPS:"
-      uploading_files: "Uploading files:"
+      uploading_files: "Mengunggah berkas:"
       smtp: "SMTP:"
-      timezone: "Timezone:"
-      system_info: System Info
-      storage_used: "Storage used:"
+      timezone: "Zona Waktu:"
+      system_info: Informasi Sistem
+      storage_used: "Penyimpanan yang terpakai:"
       uptime: "Uptime:"
-      answer_links: Answer Links
-      documents: Documents
-      feedback: Feedback
-      support: Support
+      answer_links: Tautan Answer
+      documents: Dokumen
+      feedback: Masukan
+      support: Dukungan
       review: Review
       config: Config
       update_to: Update to
@@ -1064,70 +1064,70 @@ ui:
       name: Name
       email: Email
       reputation: Reputation
-      created_at: Created Time
-      delete_at: Deleted Time
-      suspend_at: Suspended Time
+      created_at: Waktu Pembuatan
+      delete_at: Waktu Penghapusan
+      suspend_at: Waktu penundaan
       status: Status
       role: Role
       action: Action
-      change: Change
-      all: All
-      staff: Staff
-      inactive: Inactive
-      suspended: Suspended
-      deleted: Deleted
+      change: Ubah
+      all: Semua
+      staff: Staf
+      inactive: Tidak Aktif
+      suspended: Ditangguhkan
+      deleted: Dihapus
       normal: Normal
       Moderator: Moderator
       Admin: Admin
-      User: User
+      User: Pengguna
       filter:
-        placeholder: "Filter by name, user:id"
-      set_new_password: Set new password
-      change_status: Change status
-      change_role: Change role
-      show_logs: Show logs
-      add_user: Add user
+        placeholder: "Filter berdasarkan nama, user:id"
+      set_new_password: Atur password baru
+      change_status: Ubah status
+      change_role: Ubah role
+      show_logs: Tampilkan log
+      add_user: Tambahkan pengguna
       new_password_modal:
-        title: Set new password
+        title: Atur password baru
         form:
           fields:
             password:
               label: Password
-              text: The user will be logged out and need to login again.
-              msg: Password must be at 8 - 32 characters in length.
-        btn_cancel: Cancel
-        btn_submit: Submit
+              text: Pengguna akan keluar dan harus masuk lagi.
+              msg: Panjang kata sandi minimal 8 - 32 karakter.
+        btn_cancel: Batal
+        btn_submit: Kirim
       user_modal:
-        title: Add new user
+        title: Tambahkan pengguna baru
         form:
           fields:
             display_name:
-              label: Display Name
-              msg: display_name must be at 4 - 30 characters in length.
+              label: Nama
+              msg: panjang nama minimal 4 - 30 karakter.
             email:
               label: Email
-              msg: Email is not valid.
+              msg: Email tidak sah.
             password:
-              label: Password
-              msg: Password must be at 8 - 32 characters in length.
-        btn_cancel: Cancel
-        btn_submit: Submit
+              label: Kata sandi
+              msg: Panjang kata sandi minimal 8 - 32 karakter.
+        btn_cancel: Batal
+        btn_submit: Kirim
     questions:
-      page_title: Questions
+      page_title: Pertanyaan
       normal: Normal
-      closed: Closed
-      deleted: Deleted
+      closed: Ditutup
+      deleted: Dihapus
       post: Post
-      votes: Votes
-      answers: Answers
-      created: Created
+      votes: Vote
+      answers: Jawaban
+      created: Dibuat
       status: Status
       action: Action
-      change: Change
+      change: Ubah
       filter:
-        placeholder: "Filter by title, question:id"
+        placeholder: "Filter berdasarkan judul, question:id"
     answers:
-      page_title: Answers
+      page_title: Jawaban
       normal: Normal
       deleted: Deleted
       post: Post
@@ -1195,21 +1195,21 @@ ui:
         msg: SMTP host cannot be empty.
         text: Your mail server.
       encryption:
-        label: Encryption
-        msg: Encryption cannot be empty.
+        label: Enkripsi
+        msg: Enkripsi tidak boleh kosong.
         text: For most servers SSL is the recommended option.
         ssl: SSL
-        none: None
+        none: Tidak ada
       smtp_port:
         label: SMTP Port
         msg: SMTP port must be number 1 ~ 65535.
-        text: The port to your mail server.
+        text: Port untuk server email Anda.
       smtp_username:
         label: SMTP Username
-        msg: SMTP username cannot be empty.
+        msg: Nama Pengguna SMTP tidak boleh kosong.
       smtp_password:
         label: SMTP Password
-        msg: SMTP password cannot be empty.
+        msg: Password SMTP tidak boleh kosong.
       test_email_recipient:
         label: Test Email Recipients
         text: Provide email address that will receive test sends.
