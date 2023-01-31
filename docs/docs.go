@@ -5574,10 +5574,15 @@ const docTemplate = `{
         },
         "schema.AnswerAddReq": {
             "type": "object",
+            "required": [
+                "content"
+            ],
             "properties": {
                 "content": {
                     "description": "content",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 65535,
+                    "minLength": 6
                 },
                 "html": {
                     "description": "html",
@@ -5591,10 +5596,15 @@ const docTemplate = `{
         },
         "schema.AnswerUpdateReq": {
             "type": "object",
+            "required": [
+                "content"
+            ],
             "properties": {
                 "content": {
                     "description": "content",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 65535,
+                    "minLength": 6
                 },
                 "edit_summary": {
                     "description": "edit_summary",

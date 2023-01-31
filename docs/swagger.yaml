@@ -218,6 +218,8 @@ definitions:
     properties:
       content:
         description: content
+        maxLength: 65535
+        minLength: 6
         type: string
       html:
         description: html
@@ -225,11 +227,15 @@ definitions:
       question_id:
         description: question_id
         type: string
+    required:
+    - content
     type: object
   schema.AnswerUpdateReq:
     properties:
       content:
         description: content
+        maxLength: 65535
+        minLength: 6
         type: string
       edit_summary:
         description: edit_summary
@@ -246,6 +252,8 @@ definitions:
       title:
         description: title
         type: string
+    required:
+    - content
     type: object
   schema.AvatarInfo:
     properties:
