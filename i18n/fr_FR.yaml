@@ -238,7 +238,7 @@ ui:
   how_to_format:
     title: Comment mettre en forme
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">Pour faire des liens</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">mettre des retour entre les paragraphes</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>gras</strong>**</p></li><li><p class="mb-2">indenter le code par 4 espaces</p></li><li><p class="mb-2">citation en plaçant <code>&gt;</code> au début de la ligne</p></li><li><p class="mb-2">guillemets inversés <code>`comme_ca_`</code></p></li><li><p class="mb-2">créer une banière de code avec les guillemets inversés <code>`</code></p><pre class="mb-0"><code>```<br/>code ici<br/>```</code></pre></li></ul>
   pagination:
     prev: Préc
     next: Suivant
@@ -356,7 +356,7 @@ ui:
     indent:
       text: Indentation
     outdent:
-      text: Outdent
+      text: Désindenter
     italic:
       text: Mise en valeur
     link:
@@ -821,7 +821,7 @@ ui:
     following_tags: Hashtags suivis
     edit: Éditer
     save: Enregistrer
-    follow_tag_tip: Follow tags to curate your list of questions.
+    follow_tag_tip: Suivez les tags pour organiser votre liste de questions.
     hot_questions: Questions populaires
     all_questions: Toutes les questions
     x_questions: "{{ count }} questions"
@@ -946,7 +946,7 @@ ui:
     warn_title: Attention
     warn_desc: >-
       Le fichier <1>config.yaml</1> existe déjà. Si vous avez besoin de réinitialiser l'un des éléments de configuration de ce fichier, veuillez le supprimer d'abord.
-    install_now: You may try <1>installing now</1>.
+    install_now: Vous pouvez essayer de <1>l'installer maintenant</1>.
     installed: Déjà installé
     installed_desc: >-
       Il semble que se soit déjà installer. Pour tout réinstaller, veuillez d'abord nettoyer votre ancienne base de données.
@@ -1036,7 +1036,7 @@ ui:
       suspended_name: suspendu
       suspended_desc: Un utilisateur suspendu ne peut pas se connecter.
       deleted_name: supprimé
-      deleted_desc: "Delete profile, authentication associations."
+      deleted_desc: "Supprimer le profil et les informations d'authentification associées."
       inactive_name: inactif
       inactive_desc: Un utilisateur inactif doit revalider son email.
       confirm_title: Supprimer cet utilisateur
@@ -1167,7 +1167,7 @@ ui:
       logo:
         label: Logo (optionnel)
         msg: Le logo ne peut pas être vide.
-        text: You can upload your image or <1>reset</1> it to the site title text.
+        text: Vous pouvez télécharger votre image ou la <1>réinitialiser</1> sur le texte du titre du site.
       theme:
         label: Thème
         msg: Le thème ne peut pas être vide.
@@ -1208,46 +1208,46 @@ ui:
         label: Nom d'utilisateur SMTP
         msg: Le nom d'utilisateur SMTP ne peut pas être vide.
       smtp_password:
-        label: SMTP Password
-        msg: SMTP password cannot be empty.
+        label: Mot de passe SMTP
+        msg: Le mot de passe SMTP ne peut être vide.
       test_email_recipient:
-        label: Test Email Recipients
-        text: Provide email address that will receive test sends.
-        msg: Test email recipients is invalid
+        label: Destinataires de l'email de test
+        text: Indiquez l'adresse email qui recevra l'email de test.
+        msg: Le destinataire de l'email de test est invalide
       smtp_authentication:
-        label: Enable authentication
-        title: SMTP Authentication
-        msg: SMTP authentication cannot be empty.
-        "yes": "Yes"
-        "no": "No"
+        label: Activer l'authentification
+        title: Authentification SMTP
+        msg: L'authentification SMTP ne peut pas être vide.
+        "yes": "Oui"
+        "no": "Non"
     branding:
-      page_title: Branding
+      page_title: Marque
       logo:
-        label: Logo (optional)
-        msg: Logo cannot be empty.
-        text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
+        label: Logo (optionnel)
+        msg: Le logo ne peut pas être vide.
+        text: L'image du logo en haut à gauche de votre site. Utilisez une grande image rectangulaire avec une hauteur de 56 et un ratio d'aspect supérieur à 3:1. Si laissé vide, le titre du site sera affiché.
       mobile_logo:
-        label: Mobile Logo (optional)
-        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the “logo” setting will be used.
+        label: Logo mobile (optionnel)
+        text: Le logo utilisé sur la version mobile de votre site. Utilisez une image rectangulaire large avec une hauteur de 56. Si laissé vide, l'image du paramètre « logo » sera utilisée.
       square_icon:
-        label: Square Icon (optional)
-        msg: Square icon cannot be empty.
-        text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
+        label: Icône carrée (optionnel)
+        msg: L'icône carrée ne peut pas être vide.
+        text: Image utilisée comme base pour les icônes de métadonnées. Idéalement supérieure à 512x512.
       favicon:
-        label: Favicon (optional)
-        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, “square icon” will be used.
+        label: Favicon (optionnel)
+        text: Une favicon pour votre site. Pour fonctionner correctement sur un CDN, il doit s'agir d'un png. Sera redimensionné en 32x32. Si laissé vide, « icône carrée » sera utilisé.
     legal:
-      page_title: Legal
+      page_title: Légal
       terms_of_service:
-        label: Terms of Service
-        text: "You can add terms of service content here. If you already have a document hosted elsewhere, provide the full URL here."
+        label: Conditions d'utilisation
+        text: "Vous pouvez ajouter le contenu des conditions de service ici. Si vous avez déjà un document hébergé ailleurs, veuillez fournir l'URL complète ici."
       privacy_policy:
-        label: Privacy Policy
-        text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
+        label: Politique de Confidentialité
+        text: "Vous pouvez ajouter le contenu des conditions de service ici. Si vous avez déjà un document hébergé ailleurs, veuillez fournir l'URL complète ici."
     write:
-      page_title: Write
+      page_title: Écrire
       recommend_tags:
-        label: Recommend Tags
+        label: Tags recommandés
         text: "Veuillez entrer le slug du tag ci-dessus, un tag par ligne."
       required_tag:
         title: Tag requis
@@ -1306,7 +1306,7 @@ ui:
     not_found_props: "La propriété requise {{ key }} est introuvable."
   page_review:
     review: Vérifier
-    proposed: proposed
+    proposed: proposé
     question_edit: Modifier la question
     answer_edit: Modifier la réponse
     tag_edit: Modifier le tag
