@@ -10,7 +10,12 @@ import { marked } from 'marked';
 import * as Types from '@/common/interface';
 import { Modal } from '@/components';
 import { usePageUsers, useReportModal } from '@/hooks';
-import { matchedUsers, parseUserInfo, scrollTop, bgFadeOut } from '@/utils';
+import {
+  matchedUsers,
+  parseUserInfo,
+  scrollToElementTop,
+  bgFadeOut,
+} from '@/utils';
 import { tryNormalLogged } from '@/utils/guard';
 import {
   useQueryComments,
@@ -43,7 +48,7 @@ const Comment = ({ objectId, mode, commentId }) => {
   const scrollCallback = useCallback((el, co) => {
     if (pageIndex === 0 && co.comment_id === commentId) {
       setTimeout(() => {
-        scrollTop(el);
+        scrollToElementTop(el);
         bgFadeOut(el);
       }, 100);
     }
@@ -102,13 +107,14 @@ const Comment = ({ objectId, mode, commentId }) => {
   const handleSendReply = (item) => {
     const users = matchedUsers(item.value);
     const userNames = unionBy(users.map((user) => user.userName));
-    const html = marked.parse(parseUserInfo(item.value));
-    if (!item.value || !html) {
+    const commentMarkDown = parseUserInfo(item.value);
+    const html = marked.parse(commentMarkDown);
+    if (!commentMarkDown || !html) {
       return;
     }
     const params = {
       object_id: objectId,
-      original_text: item.value,
+      original_text: commentMarkDown,
       mention_username_list: userNames,
       parsed_text: html,
       ...(item.type === 'reply'
