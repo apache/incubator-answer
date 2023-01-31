@@ -1,4 +1,6 @@
 import i18next from 'i18next';
+import parse from 'html-react-parser';
+import * as DOMPurify from 'dompurify';
 
 const Diff = require('diff');
 
@@ -221,6 +223,13 @@ function diffText(newText: string, oldText?: string): string {
     ?.replace(/<input/gi, '&lt;input');
 }
 
+function htmlToReact(html: string) {
+  const cleanedHtml = DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true },
+  });
+  return parse(cleanedHtml);
+}
+
 export {
   thousandthDivision,
   formatCount,
@@ -236,4 +245,5 @@ export {
   labelStyle,
   handleFormError,
   diffText,
+  htmlToReact,
 };

@@ -107,13 +107,14 @@ const Comment = ({ objectId, mode, commentId }) => {
   const handleSendReply = (item) => {
     const users = matchedUsers(item.value);
     const userNames = unionBy(users.map((user) => user.userName));
-    const html = marked.parse(parseUserInfo(item.value));
-    if (!item.value || !html) {
+    const commentMarkDown = parseUserInfo(item.value);
+    const html = marked.parse(commentMarkDown);
+    if (!commentMarkDown || !html) {
       return;
     }
     const params = {
       object_id: objectId,
-      original_text: item.value,
+      original_text: commentMarkDown,
       mention_username_list: userNames,
       parsed_text: html,
       ...(item.type === 'reply'
