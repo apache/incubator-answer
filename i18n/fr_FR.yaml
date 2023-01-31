@@ -463,9 +463,9 @@ ui:
     long_date_with_year: "D MMMM YYYY"
     long_date_with_time: "MMM D, YYYY [at] HH:mm"
     now: maintenant
-    x_seconds_ago: "{{count}}s ago"
-    x_minutes_ago: "{{count}}m ago"
-    x_hours_ago: "{{count}}h ago"
+    x_seconds_ago: "il y a {{count}}s"
+    x_minutes_ago: "il y a {{count}}m"
+    x_hours_ago: "il y a {{count}}h"
     hour: heure
     day: jour
   comment:
@@ -586,30 +586,30 @@ ui:
       empty: Ne peut pas être vide.
   login:
     page_title: Welcome to {{site_name}}
-    login_to_continue: Log in to continue
-    info_sign: Don't have an account? <1>Sign up</1>
-    info_login: Already have an account? <1>Log in</1>
-    agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
-    forgot_pass: Forgot password?
+    login_to_continue: Connectez-vous pour continuer
+    info_sign: Vous n'avez pas de compte ? <1>Inscrivez-vous</1>
+    info_login: Vous avez déjà un compte ? <1>Connectez-vous</1>
+    agreements: En vous inscrivant, vous acceptez la <1>politique de confidentialité</1> et les <3>conditions de service</3>.
+    forgot_pass: Mot de passe oublié ?
     name:
-      label: Name
+      label: Nom
       msg:
         empty: Le nom ne peut pas être vide.
         range: Le nom doit contenir moins de 30 caractères.
     email:
       label: Email
       msg:
-        empty: Email cannot be empty.
+        empty: L'email ne peut pas être vide.
     password:
       label: Mot de passe
       msg:
-        empty: Password cannot be empty.
-        different: The passwords entered on both sides are inconsistent
+        empty: Le mot de passe ne peut pas être vide.
+        different: Les mots de passe saisis ne sont pas identiques
   account_forgot:
     page_title: Mot de passe oublié
     btn_name: Envoyer un e-mail de récupération
     send_success: >-
-      If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
+      Si un compte est associé à <strong>{{mail}}</strong>, vous recevrez un email contenant les instructions pour réinitialiser votre mot de passe.
     email:
       label: E-mail
       msg:
@@ -837,11 +837,11 @@ ui:
     answered: answered
     asked: asked
     closed: closed
-    follow_a_tag: Follow a tag
-    more: More
+    follow_a_tag: Suivre ce tag
+    more: Plus
   personal:
-    overview: Overview
-    answers: Answers
+    overview: Aperçu
+    answers: Réponses
     answer: answer
     questions: Questions
     question: question
@@ -865,23 +865,23 @@ ui:
     accepted: Accepted
     answered: answered
     asked: asked
-    upvote: upvote
-    downvote: downvote
-    mod_short: Mod
-    mod_long: Moderators
-    x_reputation: reputation
-    x_votes: votes received
-    x_answers: answers
+    upvote: voter pour
+    downvote: voter contre
+    mod_short: Modérateurs
+    mod_long: Modérateurs
+    x_reputation: réputation
+    x_votes: votes reçus
+    x_answers: réponses
     x_questions: questions
   install:
-    title: Answer
-    next: Next
-    done: Done
-    config_yaml_error: Can’t create the config.yaml file.
+    title: Réponse
+    next: Suivant
+    done: Terminé
+    config_yaml_error: Impossible de créer le fichier config.yaml.
     lang:
       label: Veuillez choisir une langue
     db_type:
-      label: Database Engine
+      label: Type de base de données
     db_username:
       label: Nom d'utilisateur
       placeholder: root
@@ -889,63 +889,63 @@ ui:
     db_password:
       label: Mot de passe
       placeholder: root
-      msg: Password cannot be empty.
+      msg: Le mot de passe ne peut pas être vide.
     db_host:
-      label: Database Host
+      label: Hôte de base de données
       placeholder: "db:3306"
-      msg: Database Host cannot be empty.
+      msg: L'hôte de la base de données ne peut pas être vide.
     db_name:
-      label: Database Name
+      label: Nom de la base de donnée
       placeholder: réponse
-      msg: Database Name cannot be empty.
+      msg: Le nom de la base de données ne peut pas être vide.
     db_file:
-      label: Database File
+      label: Fichier de la base de données
       placeholder: /data/answer.db
-      msg: Database File cannot be empty.
+      msg: Le fichier ne doit pas être vide.
     config_yaml:
-      title: Create config.yaml
-      label: The config.yaml file created.
+      title: Créer config.yaml
+      label: Le fichier config.yaml a été créé.
       desc: >-
-        You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
-      info: "After you’ve done that, click “Next” button."
-    site_information: Site Information
-    admin_account: Admin Account
+        Vous pouvez créer manuellement le fichier <1>config.yaml</1> dans le répertoire <1>/var/wwww/xxx/</1> et y coller le texte suivant.
+      info: "Après avoir fait cela, cliquez sur le bouton \"Suivant\"."
+    site_information: Informations du site
+    admin_account: Compte Admin
     site_name:
-      label: Site Name
-      msg: Site Name cannot be empty.
+      label: Nom du site
+      msg: Le nom ne peut pas être vide.
     site_url:
-      label: Site URL
-      text: The address of your site.
+      label: URL du site
+      text: L'adresse de ce site.
       msg:
-        empty: Site URL cannot be empty.
-        incorrect: Site URL incorrect format.
+        empty: L'URL ne peut pas être vide.
+        incorrect: Le format de l'URL est incorrect.
     contact_email:
-      label: Contact Email
-      text: Email address of key contact responsible for this site.
+      label: Email du contact
+      text: L'adresse email du responsable du site.
       msg:
-        empty: Contact Email cannot be empty.
-        incorrect: Contact Email incorrect format.
+        empty: L'adresse email ne peut pas être vide.
+        incorrect: Le format de l'adresse email du contact est incorrect.
     admin_name:
-      label: Name
-      msg: Name cannot be empty.
+      label: Nom
+      msg: Le nom ne peut pas être vide.
     admin_password:
-      label: Password
+      label: Mot de passe
       text: >-
-        You will need this password to log in. Please store it in a secure location.
-      msg: Password cannot be empty.
+        Vous aurez besoin de ce mot de passe pour vous connecter . Sauvegarder le de façon sécurisée.
+      msg: Le mot de passe ne peut pas être vide.
     admin_email:
       label: Email
-      text: You will need this email to log in.
+      text: Vous aurez besoin de cet email pour vous connecter.
       msg:
-        empty: Email cannot be empty.
-        incorrect: Email incorrect format.
-    ready_title: Your Answer is Ready!
+        empty: L'email ne peut pas être vide.
+        incorrect: Le format de l'email est incorrect.
+    ready_title: Votre Réponse est prête !
     ready_desc: >-
-      If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.
-    good_luck: "Have fun, and good luck!"
-    warn_title: Warning
+      Si vous avez envie de changer plus de paramètres, visitez la <1>section admin</1>; retrouvez la dans le menu du site.
+    good_luck: "Amusez-vous et bonne chance !"
+    warn_title: Attention
     warn_desc: >-
-      The file <1>config.yaml</1> already exists. If you need to reset any of the configuration items in this file, please delete it first.
+      Le fichier <1>config.yaml</1> existe déjà. Si vous avez besoin de réinitialiser l'un des éléments de configuration de ce fichier, veuillez le supprimer d'abord.
     install_now: You may try <1>installing now</1>.
     installed: Already installed
     installed_desc: >-
@@ -1006,12 +1006,12 @@ ui:
       uptime: "Uptime:"
       answer_links: Answer Links
       documents: Documents
-      feedback: Feedback
+      feedback: Commentaires
       support: Support
-      review: Review
-      config: Config
-      update_to: Update to
-      latest: Latest
+      review: Vérifier
+      config: Configuration
+      update_to: Mise à jour vers
+      latest: Récents
       check_failed: Check failed
       "yes": "Yes"
       "no": "No"
