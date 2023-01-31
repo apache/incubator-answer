@@ -20,6 +20,7 @@ const routes: RouteNode[] = [
   {
     path: '/',
     page: 'pages/Layout',
+    loader: guard.setupApp,
     guard: () => {
       const gr = guard.shouldLoginRequired();
       if (!gr.ok) {
