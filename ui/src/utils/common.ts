@@ -21,7 +21,7 @@ function formatCount($num: number): string {
   return res;
 }
 
-function scrollTop(element) {
+function scrollToElementTop(element) {
   if (!element) {
     return;
   }
@@ -35,6 +35,15 @@ function scrollTop(element) {
     top: offsetPosition,
   });
 }
+
+const scrollToDocTop = () => {
+  setTimeout(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  });
+};
 
 const bgFadeOut = (el) => {
   if (el && !el.classList.contains('bg-fade-out')) {
@@ -167,7 +176,7 @@ function handleFormError(
   return data;
 }
 
-function diffText(newText: string, oldText: string): string {
+function diffText(newText: string, oldText?: string): string {
   if (!newText) {
     return '';
   }
@@ -181,8 +190,6 @@ function diffText(newText: string, oldText: string): string {
       ?.replace(/<input/gi, '&lt;input');
   }
   const diff = Diff.diffChars(oldText, newText);
-  console.log(diff);
-
   const result = diff.map((part) => {
     if (part.added) {
       if (part.value.replace(/\n/g, '').length <= 0) {
@@ -217,7 +224,8 @@ function diffText(newText: string, oldText: string): string {
 export {
   thousandthDivision,
   formatCount,
-  scrollTop,
+  scrollToElementTop,
+  scrollToDocTop,
   bgFadeOut,
   matchedUsers,
   parseUserInfo,
