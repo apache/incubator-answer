@@ -81,7 +81,7 @@ backend:
       not_found:
         other: "Question non trouvée."
       cannot_deleted:
-        other: "Pas de permission de suppression."
+        other: "Pas de permission pour supprimer."
       cannot_close:
         other: "Pas de permission pour fermer."
       cannot_update:
@@ -98,11 +98,11 @@ backend:
       not_found:
         other: "Tag non trouvé."
       recommend_tag_not_found:
-        other: "L'étiquette de recommandation n'existe pas."
+        other: "Le tag de recommandation n'existe pas."
       recommend_tag_enter:
-        other: "Veuillez entrer au moins une étiquette."
+        other: "Veuillez entrer au moins un des tags requis."
       not_contain_synonym_tags:
-        other: "Ne dois pas contenir d'étiquettes synonymes."
+        other: "Ne dois pas contenir de tags synonymes."
       cannot_update:
         other: "Pas de permission pour mettre à jour."
       cannot_set_synonym_as_itself:
@@ -121,7 +121,7 @@ backend:
     user:
       email_or_password_wrong:
         other:
-          other: L'e-mail et le mot de passe ne correspondent pas.
+          other: L'email et le mot de passe ne correspondent pas.
       not_found:
         other: "Utilisateur non trouvé."
       suspended:
