@@ -192,7 +192,7 @@ func copyDirEntries(sourceFs embed.FS, sourceDir string, targetDir string) (err 
 func buildBinary(b *buildingMaterial) (err error) {
 	versionInfo := b.originalAnswerInfo
 	cmdPkg := "github.com/answerdev/answer/cmd"
-	ldflags := fmt.Sprintf("-X %s.Version='%s' -X %s.Revision='%s' -X %s.Time='%s'",
+	ldflags := fmt.Sprintf("-X %s.Version=%s -X %s.Revision=%s -X %s.Time=%s",
 		cmdPkg, versionInfo.Version, cmdPkg, versionInfo.Revision, cmdPkg, versionInfo.Time)
 	err = b.newExecCmd("go", "build",
 		"-ldflags", ldflags, "-o", b.outputPath, ".").Run()
