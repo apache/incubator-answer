@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
+import { handleFormError } from '@/utils';
 import { usePageTags } from '@/hooks';
 import { pathFactory } from '@/router/pathFactory';
 import { Editor, EditorRef, Icon } from '@/components';
@@ -19,11 +20,11 @@ import {
 import './index.scss';
 
 interface FormDataItem {
-  answer: Type.FormValue<string>;
+  content: Type.FormValue<string>;
   description: Type.FormValue<string>;
 }
 const initFormData = {
-  answer: {
+  content: {
     value: '',
     isInvalid: false,
     errorMsg: '',
@@ -55,14 +56,14 @@ const Index = () => {
     if (!data) {
       return;
     }
-    formData.answer.value = data.info.content;
+    formData.content.value = data.info.content;
     setFormData({ ...formData });
   }, [data]);
 
   const handleAnswerChange = (value: string) =>
     setFormData({
       ...formData,
-      answer: { ...formData.answer, value },
+      content: { ...formData.content, value },
     });
   const handleSummaryChange = (evt) => {
     const v = evt.currentTarget.value;
@@ -74,18 +75,18 @@ const Index = () => {
 
   const checkValidated = (): boolean => {
     let bol = true;
-    const { answer } = formData;
+    const { content } = formData;
 
-    if (!answer.value) {
+    if (!content.value || Array.from(content.value.trim()).length < 6) {
       bol = false;
-      formData.answer = {
-        value: '',
+      formData.content = {
+        value: content.value,
         isInvalid: true,
-        errorMsg: '标题不能为空',
+        errorMsg: t('form.fields.answer.feedback.characters'),
       };
     } else {
-      formData.answer = {
-        value: answer.value,
+      formData.content = {
+        value: content.value,
         isInvalid: false,
         errorMsg: '',
       };
@@ -105,29 +106,36 @@ const Index = () => {
     }
 
     const params: Type.AnswerParams = {
-      content: formData.answer.value,
+      content: formData.content.value,
       html: editorRef.current.getHtml(),
       question_id: qid,
       id: aid,
       edit_summary: formData.description.value,
     };
-    modifyAnswer(params).then((res) => {
-      navigate(
-        pathFactory.answerLanding({
-          questionId: qid,
-          slugTitle: data?.question?.url_title,
-          answerId: aid,
-        }),
-        {
-          state: { isReview: res?.wait_for_review },
-        },
-      );
-    });
+    modifyAnswer(params)
+      .then((res) => {
+        navigate(
+          pathFactory.answerLanding({
+            questionId: qid,
+            slugTitle: data?.question?.url_title,
+            answerId: aid,
+          }),
+          {
+            state: { isReview: res?.wait_for_review },
+          },
+        );
+      })
+      .catch((ex) => {
+        if (ex.isError) {
+          const stateData = handleFormError(ex, formData);
+          setFormData({ ...stateData });
+        }
+      });
   };
   const handleSelectedRevision = (e) => {
     const index = e.target.value;
     const revision = revisions[index];
-    formData.answer.value = revision.content.content;
+    formData.content.value = revision.content.content;
     setFormData({ ...formData });
   };
 
@@ -190,7 +198,7 @@ const Index = () => {
             <Form.Group controlId="answer" className="mt-3">
               <Form.Label>{t('form.fields.answer.label')}</Form.Label>
               <Editor
-                value={formData.answer.value}
+                value={formData.content.value}
                 onChange={handleAnswerChange}
                 className={classNames(
                   'form-control p-0',
@@ -205,14 +213,14 @@ const Index = () => {
                 ref={editorRef}
               />
               <Form.Control
-                value={formData.answer.value}
+                value={formData.content.value}
                 type="text"
-                isInvalid={formData.answer.isInvalid}
+                isInvalid={formData.content.isInvalid}
                 readOnly
                 hidden
               />
               <Form.Control.Feedback type="invalid">
-                {formData.answer.errorMsg}
+                {formData.content.errorMsg}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="edit_summary" className="my-3">
