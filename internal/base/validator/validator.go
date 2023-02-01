@@ -23,6 +23,7 @@ import (
 	chineseTraditional "github.com/go-playground/locales/zh_Hant_TW"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
+	"github.com/go-playground/validator/v10/non-standard/validators"
 	"github.com/go-playground/validator/v10/translations/en"
 	"github.com/go-playground/validator/v10/translations/es"
 	"github.com/go-playground/validator/v10/translations/fr"
@@ -99,6 +100,7 @@ func getTran(lo locales.Translator) ut.Translator {
 
 func createDefaultValidator(la i18n.Language) *validator.Validate {
 	validate := validator.New()
+	_ = validate.RegisterValidation("notblank", validators.NotBlank)
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) (res string) {
 		defer func() {
 			if len(res) > 0 {
