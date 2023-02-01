@@ -21,6 +21,7 @@ import (
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/internal/service/user_external_login"
+	"github.com/answerdev/answer/pkg/checker"
 	"github.com/google/uuid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -246,20 +247,31 @@ func (us *UserService) UserModifyPassword(ctx context.Context, request *schema.U
 }
 
 // UpdateInfo update user info
-func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoRequest) (err error) {
+func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoRequest) (
+	errFields []*validator.FormErrorField, err error) {
 	if len(req.Username) > 0 {
 		userInfo, exist, err := us.userRepo.GetByUsername(ctx, req.Username)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		if exist && userInfo.ID != req.UserID {
-			return errors.BadRequest(reason.UsernameDuplicate)
+			errFields = append(errFields, &validator.FormErrorField{
+				ErrorField: "username",
+				ErrorMsg:   reason.UsernameDuplicate,
+			})
+			return errFields, errors.BadRequest(reason.UsernameDuplicate)
+		}
+		if checker.IsReservedUsername(req.Username) {
+			errFields = append(errFields, &validator.FormErrorField{
+				ErrorField: "username",
+				ErrorMsg:   reason.UsernameInvalid,
+			})
+			return errFields, errors.BadRequest(reason.UsernameInvalid)
 		}
 	}
 	avatar, err := json.Marshal(req.Avatar)
 	if err != nil {
-		err = errors.BadRequest(reason.UserSetAvatar).WithError(err).WithStack()
-		return err
+		return nil, errors.BadRequest(reason.UserSetAvatar).WithError(err).WithStack()
 	}
 	userInfo := entity.User{}
 	userInfo.ID = req.UserID
@@ -270,10 +282,8 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 	userInfo.Location = req.Location
 	userInfo.Website = req.Website
 	userInfo.Username = req.Username
-	if err := us.userRepo.UpdateInfo(ctx, &userInfo); err != nil {
-		return err
-	}
-	return nil
+	err = us.userRepo.UpdateInfo(ctx, &userInfo)
+	return nil, err
 }
 
 func (us *UserService) UserEmailHas(ctx context.Context, email string) (bool, error) {
@@ -505,7 +515,7 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 	if exist {
 		resp = append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "e_mail",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), reason.EmailDuplicate),
+			ErrorMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.EmailDuplicate),
 		})
 		return resp, errors.BadRequest(reason.EmailDuplicate)
 	}

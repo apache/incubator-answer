@@ -187,7 +187,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reportAdminService := report_admin.NewReportAdminService(reportRepo, userCommon, commonRepo, answerRepo, questionRepo, commentCommonRepo, reportHandle, configRepo)
 	controller_adminReportController := controller_admin.NewReportController(reportAdminService)
 	userAdminRepo := user.NewUserAdminRepo(dataData, authRepo)
-	userAdminService := user_admin.NewUserAdminService(userAdminRepo, userRoleRelService, authService, userCommon)
+	userAdminService := user_admin.NewUserAdminService(userAdminRepo, userRoleRelService, authService, userCommon, userActiveActivityRepo)
 	userAdminController := controller_admin.NewUserAdminController(userAdminService)
 	reasonRepo := reason.NewReasonRepo(configRepo)
 	reasonService := reason2.NewReasonService(reasonRepo)

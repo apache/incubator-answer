@@ -2,7 +2,6 @@ package usercommon
 
 import (
 	"context"
-	"regexp"
 	"strings"
 
 	"github.com/Chain-Zhang/pinyin"
@@ -130,9 +129,7 @@ func (us *UserCommon) MakeUsername(ctx context.Context, displayName string) (use
 	username = strings.ToLower(username)
 	suffix := ""
 
-	re := regexp.MustCompile(`^[a-z0-9._-]{4,30}$`)
-	match := re.MatchString(username)
-	if !match {
+	if checker.IsInvalidUsername(username) {
 		return "", errors.BadRequest(reason.UsernameInvalid)
 	}
 

@@ -2,12 +2,12 @@ package schema
 
 import (
 	"encoding/json"
-	"regexp"
 
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/pkg/checker"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -229,7 +229,7 @@ type UserEmailLogin struct {
 // UserRegisterReq user register request
 type UserRegisterReq struct {
 	// name
-	Name string `validate:"required,gt=4,lte=30" json:"name"`
+	Name string `validate:"required,gt=3,lte=30" json:"name"`
 	// email
 	Email string `validate:"required,email,gt=0,lte=500" json:"e_mail" `
 	// password
@@ -278,13 +278,13 @@ type UpdateInfoRequest struct {
 	// display_name
 	DisplayName string `validate:"required,gt=0,lte=30" json:"display_name"`
 	// username
-	Username string `validate:"omitempty,gt=0,lte=30" json:"username"`
+	Username string `validate:"omitempty,gt=3,lte=30" json:"username"`
 	// avatar
 	Avatar AvatarInfo `json:"avatar"`
 	// bio
 	Bio string `validate:"omitempty,gt=0,lte=4096" json:"bio"`
 	// bio
-	BioHTML string `validate:"omitempty,gt=0,lte=4096" json:"bio_html"`
+	BioHTML string `json:"-"`
 	// website
 	Website string `validate:"omitempty,gt=0,lte=500" json:"website"`
 	// location
@@ -299,19 +299,18 @@ type AvatarInfo struct {
 	Custom   string `validate:"omitempty,gt=0,lte=200"  json:"custom"`
 }
 
-func (u *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {
-	if len(u.Username) > 0 {
-		re := regexp.MustCompile(`^[a-z0-9._-]{4,30}$`)
-		match := re.MatchString(u.Username)
-		if !match {
+func (req *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {
+	if len(req.Username) > 0 {
+		if checker.IsInvalidUsername(req.Username) {
 			errField := &validator.FormErrorField{
 				ErrorField: "username",
-				ErrorMsg:   err.Error(),
+				ErrorMsg:   reason.UsernameInvalid,
 			}
 			errFields = append(errFields, errField)
 			return errFields, errors.BadRequest(reason.UsernameInvalid)
 		}
 	}
+	req.BioHTML = converter.Markdown2HTML(req.Bio)
 	return nil, nil
 }
 

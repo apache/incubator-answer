@@ -113,7 +113,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
@@ -124,7 +124,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 		_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "e_mail",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.EmailOrPasswordWrong),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.EmailOrPasswordWrong),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.EmailOrPasswordWrong), errFields)
 		return
@@ -151,14 +151,14 @@ func (uc *UserController) RetrievePassWord(ctx *gin.Context) {
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
 	}
 	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP())
-	code, err := uc.userService.RetrievePassWord(ctx, req)
-	handler.HandleResponse(ctx, err, code)
+	_, err := uc.userService.RetrievePassWord(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
 }
 
 // UseRePassWord godoc
@@ -236,7 +236,7 @@ func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
@@ -245,7 +245,8 @@ func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 	resp, errFields, err := uc.userService.UserRegisterByEmail(ctx, req)
 	if len(errFields) > 0 {
 		for _, field := range errFields {
-			field.ErrorMsg = translator.GlobalTrans.Tr(handler.GetLang(ctx), field.ErrorMsg)
+			field.ErrorMsg = translator.
+				Tr(handler.GetLang(ctx), field.ErrorMsg)
 		}
 		handler.HandleResponse(ctx, err, errFields)
 	} else {
@@ -312,7 +313,7 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
@@ -350,7 +351,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	if !oldPassVerification {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "old_pass",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.OldPasswordVerificationFailed),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.OldPasswordVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.OldPasswordVerificationFailed), errFields)
 		return
@@ -358,7 +359,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	if req.OldPass == req.Pass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "pass",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.NewPasswordSameAsPreviousSetting),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.NewPasswordSameAsPreviousSetting),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.NewPasswordSameAsPreviousSetting), errFields)
 		return
@@ -384,8 +385,11 @@ func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	err := uc.userService.UpdateInfo(ctx, req)
-	handler.HandleResponse(ctx, err, nil)
+	errFields, err := uc.userService.UpdateInfo(ctx, req)
+	for _, field := range errFields {
+		field.ErrorMsg = translator.Tr(handler.GetLang(ctx), field.ErrorMsg)
+	}
+	handler.HandleResponse(ctx, err, errFields)
 }
 
 // UserUpdateInterface update user interface config
@@ -488,7 +492,7 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
-			ErrorMsg:   translator.GlobalTrans.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
 		})
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return

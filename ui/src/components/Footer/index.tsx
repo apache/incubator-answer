@@ -5,12 +5,10 @@ import { Trans } from 'react-i18next';
 import dayjs from 'dayjs';
 
 import { siteInfoStore } from '@/stores';
-import { DEFAULT_SITE_NAME } from '@/common/constants';
 
 const Index = () => {
   const fullYear = dayjs().format('YYYY');
-  const siteName =
-    siteInfoStore((state) => state.siteInfo.name) || DEFAULT_SITE_NAME;
+  const siteName = siteInfoStore((state) => state.siteInfo.name);
   const cc = `${fullYear} ${siteName}`;
   return (
     <footer className="bg-light py-3">

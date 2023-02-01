@@ -218,6 +218,8 @@ definitions:
     properties:
       content:
         description: content
+        maxLength: 65535
+        minLength: 6
         type: string
       html:
         description: html
@@ -225,11 +227,15 @@ definitions:
       question_id:
         description: question_id
         type: string
+    required:
+    - content
     type: object
   schema.AnswerUpdateReq:
     properties:
       content:
         description: content
+        maxLength: 65535
+        minLength: 6
         type: string
       edit_summary:
         description: edit_summary
@@ -246,6 +252,8 @@ definitions:
       title:
         description: title
         type: string
+    required:
+    - content
     type: object
   schema.AvatarInfo:
     properties:
@@ -1076,6 +1084,11 @@ definitions:
       type:
         type: string
     type: object
+  schema.PostRenderReq:
+    properties:
+      content:
+        type: string
+    type: object
   schema.QuestionAdd:
     properties:
       content:
@@ -1104,23 +1117,82 @@ definitions:
     - tags
     - title
     type: object
-  schema.QuestionSearch:
+  schema.QuestionPageReq:
     properties:
-      order:
-        description: Search order by
+      orderCond:
+        enum:
+        - newest
+        - active
+        - frequent
+        - score
+        - unanswered
         type: string
       page:
-        description: Query number of pages
+        minimum: 1
         type: integer
-      page_size:
-        description: Search page size
+      pageSize:
+        minimum: 1
         type: integer
       tag:
-        description: Tags     []string `json:"tags" form:"tags"`           // Search
-          tag
+        maxLength: 100
         type: string
       username:
-        description: Search username
+        maxLength: 100
+        type: string
+    type: object
+  schema.QuestionPageResp:
+    properties:
+      accepted_answer_id:
+        description: answer information
+        type: string
+      answer_count:
+        type: integer
+      collection_count:
+        type: integer
+      created_at:
+        type: integer
+      description:
+        type: string
+      follow_count:
+        type: integer
+      id:
+        type: string
+      last_answer_id:
+        type: string
+      operated_at:
+        description: operator information
+        type: integer
+      operation_type:
+        type: string
+      operator:
+        $ref: '#/definitions/schema.QuestionPageRespOperator'
+      status:
+        type: integer
+      tags:
+        items:
+          $ref: '#/definitions/schema.TagResp'
+        type: array
+      title:
+        type: string
+      unique_view_count:
+        type: integer
+      url_title:
+        type: string
+      view_count:
+        description: question statistical information
+        type: integer
+      vote_count:
+        type: integer
+    type: object
+  schema.QuestionPageRespOperator:
+    properties:
+      display_name:
+        type: string
+      id:
+        type: string
+      rank:
+        type: integer
+      username:
         type: string
     type: object
   schema.QuestionUpdate:
@@ -1284,9 +1356,6 @@ definitions:
       square_icon:
         maxLength: 512
         type: string
-    required:
-    - logo
-    - square_icon
     type: object
   schema.SiteBrandingResp:
     properties:
@@ -1302,9 +1371,6 @@ definitions:
       square_icon:
         maxLength: 512
         type: string
-    required:
-    - logo
-    - square_icon
     type: object
   schema.SiteCustomCssHTMLReq:
     properties:
@@ -1635,10 +1701,6 @@ definitions:
         $ref: '#/definitions/schema.AvatarInfo'
         description: avatar
       bio:
-        description: bio
-        maxLength: 4096
-        type: string
-      bio_html:
         description: bio
         maxLength: 4096
         type: string
@@ -3857,7 +3919,7 @@ paths:
       - ApiKeyAuth: []
       summary: UserTop
       tags:
-      - api-question
+      - Question
   /answer/api/v1/personal/rank/page:
     get:
       description: user personal rank list
@@ -3962,6 +4024,30 @@ paths:
       summary: user's votes
       tags:
       - Activity
+  /answer/api/v1/post/render:
+    post:
+      consumes:
+      - application/json
+      description: render post content
+      parameters:
+      - description: PostRenderReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.PostRenderReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: render post content
+      tags:
+      - Upload
   /answer/api/v1/question:
     delete:
       consumes:
@@ -3985,7 +4071,7 @@ paths:
       - ApiKeyAuth: []
       summary: delete question
       tags:
-      - api-question
+      - Question
     post:
       consumes:
       - application/json
@@ -4008,7 +4094,7 @@ paths:
       - ApiKeyAuth: []
       summary: add question
       tags:
-      - api-question
+      - Question
     put:
       consumes:
       - application/json
@@ -4031,7 +4117,7 @@ paths:
       - ApiKeyAuth: []
       summary: update question
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/closemsglist:
     get:
       consumes:
@@ -4048,12 +4134,12 @@ paths:
       - ApiKeyAuth: []
       summary: close question msg list
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/info:
     get:
       consumes:
       - application/json
-      description: GetQuestion Question
+      description: get question details
       parameters:
       - default: "1"
         description: Question TagID
@@ -4070,31 +4156,43 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: GetQuestion Question
+      summary: get question details
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/page:
     get:
       consumes:
       - application/json
-      description: SearchQuestionList <br>  "order"  Enums(newest, active,frequent,score,unanswered)
+      description: get questions by page
       parameters:
-      - description: QuestionSearch
+      - description: QuestionPageReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.QuestionSearch'
+          $ref: '#/definitions/schema.QuestionPageReq'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            type: string
-      summary: SearchQuestionList
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/pager.PageModel'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/schema.QuestionPageResp'
+                        type: array
+                    type: object
+              type: object
+      summary: get questions by page
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/reopen:
     put:
       consumes:
@@ -4118,29 +4216,7 @@ paths:
       - ApiKeyAuth: []
       summary: reopen question
       tags:
-      - api-question
-  /answer/api/v1/question/search:
-    post:
-      consumes:
-      - application/json
-      description: SearchQuestionList
-      parameters:
-      - description: QuestionSearch
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/schema.QuestionSearch'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: string
-      summary: SearchQuestionList
-      tags:
-      - api-question
+      - Question
   /answer/api/v1/question/similar:
     get:
       consumes:
@@ -4164,7 +4240,7 @@ paths:
       - ApiKeyAuth: []
       summary: add question title like
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/similar/tag:
     get:
       consumes:
@@ -4186,7 +4262,7 @@ paths:
             type: string
       summary: Search Similar Question
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/status:
     put:
       consumes:
@@ -4210,7 +4286,7 @@ paths:
       - ApiKeyAuth: []
       summary: Close question
       tags:
-      - api-question
+      - Question
   /answer/api/v1/question/tags:
     get:
       description: get tag list
@@ -5362,7 +5438,7 @@ paths:
       - ApiKeyAuth: []
       summary: UserList
       tags:
-      - api-question
+      - Question
   /robots.txt:
     get:
       description: get site robots information

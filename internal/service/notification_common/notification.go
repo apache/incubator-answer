@@ -73,7 +73,7 @@ func (ns *NotificationCommon) HandleNotification() {
 
 // AddNotification
 // need set
-// UserID
+// LoginUserID
 // Type  1 inbox 2 achievement
 // [inbox] Activity
 // [achievement] Rank

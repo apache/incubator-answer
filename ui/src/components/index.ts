@@ -30,6 +30,8 @@ import DiffContent from './DiffContent';
 import Customize from './Customize';
 import CustomizeTheme from './CustomizeTheme';
 import PageTags from './PageTags';
+import QuestionListLoader from './QuestionListLoader';
+import TagsLoader from './TagsLoader';
 
 export {
   Avatar,
@@ -66,5 +68,7 @@ export {
   Customize,
   CustomizeTheme,
   PageTags,
+  QuestionListLoader,
+  TagsLoader,
 };
 export type { EditorRef, JSONSchema, UISchema };

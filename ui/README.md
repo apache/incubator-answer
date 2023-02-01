@@ -71,7 +71,7 @@ If you would like to help us with the i18n translation, please visit [Answer@Cro
             ├── common (project information/data defined here)
             ├── components (all components of the project)
             ├── hooks (all hooks of the project)
-            ├── i18n (Initialize the front-end i18n)
+            ├── i18n (Used only to initialize the front-end i18n tool)
             ├── pages (all pages of the project)
             ├── router (Project routing definition)
             ├── services (all data api of the project)

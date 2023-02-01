@@ -106,3 +106,12 @@ func CheckLanguageIsValid(lang string) bool {
 	}
 	return false
 }
+
+// Tr use language to translate data. If this language translation is not available, return default english translation.
+func Tr(lang i18n.Language, data string) string {
+	translation := GlobalTrans.Tr(lang, data)
+	if translation == data {
+		return GlobalTrans.Tr(i18n.DefaultLanguage, data)
+	}
+	return translation
+}

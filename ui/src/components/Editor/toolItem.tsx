@@ -56,6 +56,7 @@ const ToolItem: FC<IProps> = (props) => {
           disable ? 'disabled' : ''
         } `}
         disabled={disable}
+        tabIndex={-1}
         onClick={(e) => {
           e.preventDefault();
           if (typeof onClick === 'function') {

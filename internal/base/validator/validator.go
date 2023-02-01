@@ -23,6 +23,7 @@ import (
 	chineseTraditional "github.com/go-playground/locales/zh_Hant_TW"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
+	"github.com/go-playground/validator/v10/non-standard/validators"
 	"github.com/go-playground/validator/v10/translations/en"
 	"github.com/go-playground/validator/v10/translations/es"
 	"github.com/go-playground/validator/v10/translations/fr"
@@ -99,10 +100,11 @@ func getTran(lo locales.Translator) ut.Translator {
 
 func createDefaultValidator(la i18n.Language) *validator.Validate {
 	validate := validator.New()
+	_ = validate.RegisterValidation("notblank", validators.NotBlank)
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) (res string) {
 		defer func() {
 			if len(res) > 0 {
-				res = translator.GlobalTrans.Tr(la, res)
+				res = translator.Tr(la, res)
 			}
 		}()
 		if jsonTag := fld.Tag.Get("json"); len(jsonTag) > 0 {
@@ -168,7 +170,7 @@ func (m *MyValidator) Check(value interface{}) (errFields []*FormErrorField, err
 			return nil, nil
 		}
 		for _, errField := range errFields {
-			errField.ErrorMsg = translator.GlobalTrans.Tr(m.Lang, errField.ErrorMsg)
+			errField.ErrorMsg = translator.Tr(m.Lang, errField.ErrorMsg)
 		}
 		return errFields, err
 	}

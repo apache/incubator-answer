@@ -5,6 +5,10 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/pkg/checker"
+	"github.com/segmentfault/pacman/errors"
 	"xorm.io/xorm/schemas"
 )
 
@@ -77,9 +81,21 @@ type InitBaseInfoReq struct {
 	SiteName      string `validate:"required,gt=0,lte=30" json:"site_name"`
 	SiteURL       string `validate:"required,gt=0,lte=512,url" json:"site_url"`
 	ContactEmail  string `validate:"required,email,gt=0,lte=500" json:"contact_email"`
-	AdminName     string `validate:"required,gt=4,lte=30" json:"name"`
+	AdminName     string `validate:"required,gt=3,lte=30" json:"name"`
 	AdminPassword string `validate:"required,gte=8,lte=32" json:"password"`
 	AdminEmail    string `validate:"required,email,gt=0,lte=500" json:"email"`
+}
+
+func (r *InitBaseInfoReq) Check() (errFields []*validator.FormErrorField, err error) {
+	if checker.IsInvalidUsername(r.AdminName) {
+		errField := &validator.FormErrorField{
+			ErrorField: "name",
+			ErrorMsg:   reason.UsernameInvalid,
+		}
+		errFields = append(errFields, errField)
+		return errFields, errors.BadRequest(reason.UsernameInvalid)
+	}
+	return
 }
 
 func (r *InitBaseInfoReq) FormatSiteUrl() {

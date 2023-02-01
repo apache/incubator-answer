@@ -7,10 +7,10 @@ import (
 	"github.com/answerdev/answer/pkg/dir"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
-	_ "github.com/mattn/go-sqlite3"
 	"github.com/segmentfault/pacman/cache"
 	"github.com/segmentfault/pacman/contrib/cache/memory"
 	"github.com/segmentfault/pacman/log"
+	_ "modernc.org/sqlite"
 	"xorm.io/core"
 	"xorm.io/xorm"
 	ormlog "xorm.io/xorm/log"
@@ -43,6 +43,7 @@ func NewDB(debug bool, dataConf *Database) (*xorm.Engine, error) {
 		if err := dir.CreateDirIfNotExist(dbFileDir); err != nil {
 			log.Errorf("create database dir failed: %s", err)
 		}
+		dataConf.MaxOpenConn = 1
 	}
 	engine, err := xorm.NewEngine(dataConf.Driver, dataConf.Connection)
 	if err != nil {

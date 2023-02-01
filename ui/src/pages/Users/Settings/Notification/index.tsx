@@ -31,13 +31,15 @@ const Index = () => {
 
   const getProfile = () => {
     getLoggedUserInfo().then((res) => {
-      setFormData({
-        notice_switch: {
-          value: res.notice_status === 1,
-          isInvalid: false,
-          errorMsg: '',
-        },
-      });
+      if (res) {
+        setFormData({
+          notice_switch: {
+            value: res.notice_status === 1,
+            isInvalid: false,
+            errorMsg: '',
+          },
+        });
+      }
     });
   };
 

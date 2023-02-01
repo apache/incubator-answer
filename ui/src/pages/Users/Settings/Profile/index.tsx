@@ -2,7 +2,6 @@ import React, { FormEvent, useState, useEffect } from 'react';
 import { Form, Button, Stack, ButtonGroup } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { marked } from 'marked';
 import MD5 from 'md5';
 
 import type { FormDataType } from '@/common/interface';
@@ -205,7 +204,6 @@ const Index: React.FC = () => {
       bio: formData.bio.value,
       website: formData.website.value,
       location: formData.location.value,
-      bio_html: marked.parse(formData.bio.value),
     };
 
     modifyUserInfo(params)

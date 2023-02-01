@@ -16,6 +16,7 @@ const (
 const (
 	EmailOrPasswordWrong             = "error.object.email_or_password_incorrect"
 	CommentNotFound                  = "error.comment.not_found"
+	CommentCannotEditAfterDeadline   = "error.comment.cannot_edit_after_deadline"
 	QuestionNotFound                 = "error.question.not_found"
 	QuestionCannotDeleted            = "error.question.cannot_deleted"
 	QuestionCannotClose              = "error.question.cannot_close"
