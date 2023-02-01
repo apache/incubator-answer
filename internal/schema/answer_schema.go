@@ -32,13 +32,13 @@ func (req *AnswerAddReq) Check() (errFields []*validator.FormErrorField, err err
 }
 
 type AnswerUpdateReq struct {
-	ID           string `json:"id"`                                          // id
-	QuestionID   string `json:"question_id" `                                // question_id
-	UserID       string `json:"-" `                                          // user_id
-	Title        string `json:"title" `                                      // title
-	Content      string `validate:"required,gte=6,lte=65535" json:"content"` // content
-	HTML         string `json:"html" `                                       // html
-	EditSummary  string `validate:"omitempty" json:"edit_summary"`           // edit_summary
+	ID           string `json:"id"`                                                   // id
+	QuestionID   string `json:"question_id" `                                         // question_id
+	UserID       string `json:"-" `                                                   // user_id
+	Title        string `json:"title" `                                               // title
+	Content      string `validate:"required,notblank,gte=6,lte=65535" json:"content"` // content
+	HTML         string `json:"html" `                                                // html
+	EditSummary  string `validate:"omitempty" json:"edit_summary"`                    // edit_summary
 	NoNeedReview bool   `json:"-"`
 	// whether user can edit it
 	CanEdit bool `json:"-"`
