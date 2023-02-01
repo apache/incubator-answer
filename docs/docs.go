@@ -7520,11 +7520,6 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 4096
                 },
-                "bio_html": {
-                    "description": "bio",
-                    "type": "string",
-                    "maxLength": 4096
-                },
                 "display_name": {
                     "description": "display_name",
                     "type": "string",
