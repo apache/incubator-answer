@@ -35,18 +35,36 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const [focusType, setFocusType] = useState('');
   const [editorFocusState, setEditorFocusState] = useState(false);
 
+  const checkValidated = (): boolean => {
+    let bol = true;
+    const { content } = formData;
+
+    if (!content.value || Array.from(content.value.trim()).length < 6) {
+      bol = false;
+      formData.content = {
+        value: content.value,
+        isInvalid: true,
+        errorMsg: t('characters'),
+      };
+    } else {
+      formData.content = {
+        value: content.value,
+        isInvalid: false,
+        errorMsg: '',
+      };
+    }
+
+    setFormData({
+      ...formData,
+    });
+    return bol;
+  };
+
   const handleSubmit = () => {
     if (!guard.tryNormalLogged(true)) {
       return;
     }
-    if (!formData.content.value) {
-      setFormData({
-        content: {
-          value: '',
-          isInvalid: true,
-          errorMsg: t('empty'),
-        },
-      });
+    if (!checkValidated()) {
       return;
     }
     postAnswer({

@@ -77,12 +77,12 @@ const Index = () => {
     let bol = true;
     const { content } = formData;
 
-    if (!content.value) {
+    if (!content.value || Array.from(content.value.trim()).length < 6) {
       bol = false;
       formData.content = {
-        value: '',
+        value: content.value,
         isInvalid: true,
-        errorMsg: '标题不能为空',
+        errorMsg: t('form.fields.answer.feedback.characters'),
       };
     } else {
       formData.content = {
