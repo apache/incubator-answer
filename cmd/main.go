@@ -16,7 +16,7 @@ import (
 	"github.com/segmentfault/pacman/log"
 )
 
-// go build -ldflags "-X answercmd.Version=x.y.z"
+// go build -ldflags "-X github.com/answerdev/answer/cmd.Version=x.y.z"
 var (
 	// Name is the name of the project
 	Name = "answer"

@@ -191,9 +191,11 @@ func copyDirEntries(sourceFs embed.FS, sourceDir string, targetDir string) (err 
 
 func buildBinary(b *buildingMaterial) (err error) {
 	versionInfo := b.originalAnswerInfo
-	ldflags := fmt.Sprintf(`-ldflags="-X answercmd.Version=%s -X answercmd.Revision=%s -X answercmd.Time=%s`,
-		versionInfo.Version, versionInfo.Revision, versionInfo.Time)
-	err = b.newExecCmd("go", "build", ldflags, "-o", b.outputPath, ".").Run()
+	cmdPkg := "github.com/answerdev/answer/cmd"
+	ldflags := fmt.Sprintf("-X %s.Version='%s' -X %s.Revision='%s' -X %s.Time='%s'",
+		cmdPkg, versionInfo.Version, cmdPkg, versionInfo.Revision, cmdPkg, versionInfo.Time)
+	err = b.newExecCmd("go", "build",
+		"-ldflags", ldflags, "-o", b.outputPath, ".").Run()
 	if err != nil {
 		return err
 	}
@@ -201,8 +203,7 @@ func buildBinary(b *buildingMaterial) (err error) {
 }
 
 func cleanByproduct(b *buildingMaterial) (err error) {
-	//return os.RemoveAll(b.tmpDir)
-	return nil
+	return os.RemoveAll(b.tmpDir)
 }
 
 func (b *buildingMaterial) newExecCmd(command string, args ...string) *exec.Cmd {
@@ -238,6 +239,6 @@ func main() {
 
 go 1.19
 
-replace github.com/answerdev/answer latest => replace github.com/answerdev/answer feature-plugin
+replace github.com/answerdev/answer latest => github.com/answerdev/answer feature-plugin
 `
 )
