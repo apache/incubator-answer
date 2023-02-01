@@ -20,10 +20,10 @@ const (
 )
 
 type AnswerAddReq struct {
-	QuestionID string `json:"question_id" `                                 // question_id
-	Content    string `validate:"required,gte=6,lte=65535" json:"content" ` // content
-	HTML       string `json:"html" `                                        // html
-	UserID     string `json:"-" `                                           // user_id
+	QuestionID string `json:"question_id" `                                          // question_id
+	Content    string `validate:"required,notblank,gte=6,lte=65535" json:"content" ` // content
+	HTML       string `json:"html" `                                                 // html
+	UserID     string `json:"-" `                                                    // user_id
 }
 
 func (req *AnswerAddReq) Check() (errFields []*validator.FormErrorField, err error) {
