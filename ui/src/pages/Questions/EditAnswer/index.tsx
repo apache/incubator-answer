@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -36,7 +36,6 @@ const initFormData = {
   },
 };
 const Index = () => {
-  const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const { aid = '', qid = '' } = useParams();
   const [focusType, setForceType] = useState('');
 
@@ -44,6 +43,10 @@ const Index = () => {
   const navigate = useNavigate();
 
   const { data } = useQueryAnswerInfo(aid);
+  const [formData, setFormData] = useState<FormDataItem>(initFormData);
+
+  initFormData.content.value = data?.info.content || '';
+
   const { data: revisions = [] } = useQueryRevisions(aid);
 
   const editorRef = useRef<EditorRef>({
@@ -51,14 +54,6 @@ const Index = () => {
   });
 
   const questionContentRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!data) {
-      return;
-    }
-    formData.content.value = data.info.content;
-    setFormData({ ...formData });
-  }, [data]);
 
   const handleAnswerChange = (value: string) =>
     setFormData({
@@ -145,6 +140,8 @@ const Index = () => {
   usePageTags({
     title: t('edit_answer', { keyPrefix: 'page_title' }),
   });
+
+  console.log('formData.content.value', formData.content.value);
   return (
     <Container className="pt-4 mt-2 mb-5 edit-answer-wrap">
       <Row className="justify-content-center">
