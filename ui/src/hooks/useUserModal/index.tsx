@@ -57,7 +57,7 @@ const useAddUserModal = (props: IProps = {}) => {
     },
     email: {
       'ui:options': {
-        type: 'email',
+        inputType: 'email',
         validator: (value) => {
           if (value && !pattern.email.test(value)) {
             return t('form.fields.email.msg');
@@ -68,7 +68,7 @@ const useAddUserModal = (props: IProps = {}) => {
     },
     password: {
       'ui:options': {
-        type: 'password',
+        inputType: 'password',
         validator: (value) => {
           const MIN_LENGTH = 8;
           const MAX_LENGTH = 32;

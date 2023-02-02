@@ -29,7 +29,7 @@ export interface JSONSchema {
   };
 }
 
-export interface UIOptions {
+export interface BaseUIOptions {
   empty?: string;
   className?: string | string[];
   validator?: (
@@ -37,9 +37,9 @@ export interface UIOptions {
     formData?,
   ) => Promise<string | true | void> | true | string;
 }
-export interface InputOptions extends UIOptions {
+export interface InputOptions extends BaseUIOptions {
   placeholder?: string;
-  type?:
+  inputType?:
     | 'color'
     | 'date'
     | 'datetime-local'
@@ -55,26 +55,36 @@ export interface InputOptions extends UIOptions {
     | 'url'
     | 'week';
 }
-export interface SelectOptions extends UIOptions {}
-export interface UploadOptions extends UIOptions {
+export interface SelectOptions extends BaseUIOptions {}
+export interface UploadOptions extends BaseUIOptions {
   acceptType?: string;
   imageType?: Type.UploadType;
 }
 
-export interface SwitchOptions extends UIOptions {}
+export interface SwitchOptions extends BaseUIOptions {}
 
-export interface TimezoneOptions extends UIOptions {
+export interface TimezoneOptions extends BaseUIOptions {
   placeholder?: string;
 }
 
-export interface CheckboxOptions extends UIOptions {}
+export interface CheckboxOptions extends BaseUIOptions {}
 
-export interface RadioOptions extends UIOptions {}
+export interface RadioOptions extends BaseUIOptions {}
 
-export interface TextareaOptions extends UIOptions {
+export interface TextareaOptions extends BaseUIOptions {
   placeholder?: string;
   rows?: number;
 }
+
+export type UIOptions =
+  | InputOptions
+  | SelectOptions
+  | UploadOptions
+  | SwitchOptions
+  | TimezoneOptions
+  | CheckboxOptions
+  | RadioOptions
+  | TextareaOptions;
 
 export type UIWidget =
   | 'textarea'
@@ -88,15 +98,7 @@ export type UIWidget =
 export interface UISchema {
   [key: string]: {
     'ui:widget'?: UIWidget;
-    'ui:options'?:
-      | InputOptions
-      | SelectOptions
-      | UploadOptions
-      | SwitchOptions
-      | TimezoneOptions
-      | CheckboxOptions
-      | RadioOptions
-      | TextareaOptions;
+    'ui:options'?: UIOptions;
   };
 }
 
@@ -515,10 +517,10 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             <Form.Control
               name={key}
               placeholder={options?.placeholder || ''}
-              type={options?.type || 'text'}
+              type={options?.inputType || 'text'}
               value={formData[key]?.value || ''}
               onChange={handleInputChange}
-              style={options?.type === 'color' ? { width: '6rem' } : {}}
+              style={options?.inputType === 'color' ? { width: '6rem' } : {}}
               isInvalid={formData[key].isInvalid}
             />
             <Form.Control.Feedback type="invalid">

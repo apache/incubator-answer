@@ -69,7 +69,7 @@ const Smtp: FC = () => {
   const uiSchema: UISchema = {
     from_email: {
       'ui:options': {
-        type: 'email',
+        inputType: 'email',
       },
     },
     encryption: {
@@ -89,7 +89,7 @@ const Smtp: FC = () => {
     },
     smtp_password: {
       'ui:options': {
-        type: 'password',
+        inputType: 'password',
         validator: (value: string, formData) => {
           if (formData.smtp_authentication.value) {
             if (!value) {
@@ -105,7 +105,7 @@ const Smtp: FC = () => {
     },
     smtp_port: {
       'ui:options': {
-        type: 'number',
+        inputType: 'number',
         validator: (value) => {
           if (!/^[1-9][0-9]*$/.test(value) || Number(value) > 65535) {
             return t('smtp_port.msg');
@@ -116,7 +116,7 @@ const Smtp: FC = () => {
     },
     test_email_recipient: {
       'ui:options': {
-        type: 'email',
+        inputType: 'email',
         validator: (value) => {
           if (value && !pattern.email.test(value)) {
             return t('test_email_recipient.msg');

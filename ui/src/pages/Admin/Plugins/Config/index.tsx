@@ -9,6 +9,7 @@ import { useToast } from '@/hooks';
 import type * as Types from '@/common/interface';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useQueryPluginConfig, updatePluginConfig } from '@/services';
+import { InputOptions } from '@/components/SchemaForm';
 
 const Config = () => {
   const { t } = useTranslation('translation');
@@ -44,6 +45,11 @@ const Config = () => {
       }
 
       if (item.ui_options) {
+        if ((item.ui_options as InputOptions & { input_type })?.input_type) {
+          (item.ui_options as InputOptions).inputType = (
+            item.ui_options as InputOptions & { input_type }
+          ).input_type;
+        }
         uiSchema[item.name] = {
           'ui:options': item.ui_options,
         };
