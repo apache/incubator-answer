@@ -439,7 +439,7 @@ ui:
       content2: Anda yakin ingin menghapusnya?
       close: Tutup
   edit_tag:
-    title: Sunting tag
+    title: Ubah Tag
     default_reason: Sunting tag
     form:
       fields:
