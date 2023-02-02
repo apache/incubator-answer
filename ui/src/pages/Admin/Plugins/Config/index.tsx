@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 
 import { isEmpty } from 'lodash';
 
-import * as Type from '@/common/interface';
 import { useToast } from '@/hooks';
 import type * as Types from '@/common/interface';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
@@ -59,26 +58,14 @@ const Config = () => {
       }
     });
 
-    setSchema({
+    const result = {
       title: data?.name || '',
       required,
       properties,
-    });
+    };
+    setSchema(result);
+    setFormData(initFormData(result));
   }, [data?.config_fields]);
-  useEffect(() => {
-    if (!schema) {
-      return;
-    }
-    if (!formData) {
-      setFormData(initFormData(schema));
-    } else {
-      const formMeta: Type.FormDataType = {};
-      Object.keys(formData).forEach((k) => {
-        formMeta[k] = { ...formData[k], value: data?.[k] };
-      });
-      setFormData({ ...formData, ...formMeta });
-    }
-  }, [schema, data]);
 
   const onSubmit = (evt) => {
     if (!formData) {
