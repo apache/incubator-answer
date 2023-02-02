@@ -16,7 +16,7 @@ type AddCommentReq struct {
 	// original comment content
 	OriginalText string `validate:"required" json:"original_text"`
 	// parsed comment content
-	ParsedText string `validate:"required" json:"parsed_text"`
+	ParsedText string `json:"-"`
 	// @ user id list
 	MentionUsernameList []string `validate:"omitempty" json:"mention_username_list"`
 	// user id
@@ -49,7 +49,7 @@ type UpdateCommentReq struct {
 	// original comment content
 	OriginalText string `validate:"omitempty" json:"original_text"`
 	// parsed comment content
-	ParsedText string `validate:"omitempty" json:"parsed_text"`
+	ParsedText string `json:"-"`
 	// user id
 	UserID  string `json:"-"`
 	IsAdmin bool   `json:"-"`
