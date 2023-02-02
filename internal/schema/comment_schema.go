@@ -14,7 +14,7 @@ type AddCommentReq struct {
 	// reply comment id
 	ReplyCommentID string `validate:"omitempty" json:"reply_comment_id"`
 	// original comment content
-	OriginalText string `validate:"required" json:"original_text"`
+	OriginalText string `validate:"required,gte=2,lte=600" json:"original_text"`
 	// parsed comment content
 	ParsedText string `json:"-"`
 	// @ user id list
@@ -47,7 +47,7 @@ type UpdateCommentReq struct {
 	// comment id
 	CommentID string `validate:"required" json:"comment_id"`
 	// original comment content
-	OriginalText string `validate:"omitempty" json:"original_text"`
+	OriginalText string `validate:"required,gte=2,lte=600" json:"original_text"`
 	// parsed comment content
 	ParsedText string `json:"-"`
 	// user id
