@@ -45,12 +45,11 @@ const Index = () => {
       <div className="d-grid gap-2 mt-3">
         {data?.map((item) => {
           return (
-            <div>
+            <div key={item.name}>
               <Button
                 variant={item.binding ? 'outline-danger' : 'outline-secondary'}
                 href={item.link}
-                onClick={(e) => deleteLogins(e, item)}
-                key={item.name}>
+                onClick={(e) => deleteLogins(e, item)}>
                 <img
                   src={`data:image/svg+xml;base64,${item.icon}`}
                   alt=""
