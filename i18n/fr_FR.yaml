@@ -992,9 +992,9 @@ ui:
       questions: "Questions :"
       answers: "Réponses :"
       comments: "Commentaires :"
-      votes: "Votes :"
+      votes: "Votes:"
       active_users: "Utilisateurs actifs :"
-      flags: "Signalements :"
+      flags: "Signalements:"
       site_health_status: Etat de santé du site
       version: "Version :"
       https: "HTTPS :"
