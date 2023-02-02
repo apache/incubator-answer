@@ -42,23 +42,25 @@ const Index = () => {
       <div className="form-label">{t('title')}</div>
       <small className="form-text mt-0">{t('lable')}</small>
 
-      <div className="mt-3">
+      <div className="d-grid gap-2 mt-3">
         {data?.map((item) => {
           return (
-            <Button
-              variant={item.binding ? 'outline-danger' : 'outline-secondary'}
-              href={item.link}
-              onClick={(e) => deleteLogins(e, item)}
-              key={item.name}>
-              <img
-                src={`data:image/svg+xml;base64,${item.icon}`}
-                alt=""
-                width={16}
-                height={16}
-                className="btnSvg me-2"
-              />
-              <span> {item.name}</span>
-            </Button>
+            <div>
+              <Button
+                variant={item.binding ? 'outline-danger' : 'outline-secondary'}
+                href={item.link}
+                onClick={(e) => deleteLogins(e, item)}
+                key={item.name}>
+                <img
+                  src={`data:image/svg+xml;base64,${item.icon}`}
+                  alt=""
+                  width={16}
+                  height={16}
+                  className="btnSvg me-2"
+                />
+                <span> {item.name}</span>
+              </Button>
+            </div>
           );
         })}
       </div>
