@@ -50,14 +50,13 @@ const Index = () => {
               href={item.link}
               onClick={(e) => deleteLogins(e, item)}
               key={item.name}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                className="btnSvg"
-                viewBox="0 0 24 24">
-                <path d={item.icon} />
-              </svg>
+              <img
+                src={`data:image/svg+xml;base64,${item.icon}`}
+                alt=""
+                width={16}
+                height={16}
+                className="btnSvg me-2"
+              />
               <span> {item.name}</span>
             </Button>
           );

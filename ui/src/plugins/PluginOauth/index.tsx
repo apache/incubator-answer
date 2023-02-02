@@ -17,15 +17,14 @@ const Index: FC<Props> = ({ className }) => {
       {data?.map((item) => {
         return (
           <Button variant="outline-secondary" href={item.link} key={item.name}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              className="btnSvg"
-              viewBox="0 0 24 24">
-              <path d={item.icon} />
-            </svg>
-            <span> {item.name}</span>
+            <img
+              src={`data:image/svg+xml;base64,${item.icon}`}
+              alt=""
+              width={16}
+              height={16}
+              className="btnSvg me-2"
+            />
+            <span>{item.name}</span>
           </Button>
         );
       })}
