@@ -129,7 +129,7 @@ backend:
       username_invalid:
         other: "utente non valido"
       username_duplicate:
-        other: "utente già in uso"
+        other: "Nome utente già in uso"
       set_avatar:
         other: "Inserimento dell'Avatar non riuscito."
       cannot_update_your_role:
