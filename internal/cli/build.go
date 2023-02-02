@@ -208,6 +208,7 @@ func cleanByproduct(b *buildingMaterial) (err error) {
 
 func (b *buildingMaterial) newExecCmd(command string, args ...string) *exec.Cmd {
 	cmd := exec.Command(command, args...)
+	fmt.Println(cmd.Args)
 	cmd.Dir = b.tmpDir
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

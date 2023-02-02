@@ -22,5 +22,6 @@ tmp
 vendor/
 /answer-data/
 /answer
+/new_answer
 
 dist/
