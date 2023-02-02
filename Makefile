@@ -21,8 +21,10 @@ universal: generate
 	@rm -f ${BIN}_amd64 ${BIN}_arm64
 
 generate:
-	@$(GO) get github.com/google/wire/cmd/wire@v0.5.0
-	@$(GO) get github.com/golang/mock/mockgen@v1.6.0
+# @$(GO) get github.com/google/wire/cmd/wire@v0.5.0
+# @$(GO) get github.com/golang/mock/mockgen@v1.6.0
+	@$(GO) isntall github.com/google/wire/cmd/wire@v0.5.0
+	@$(GO) install github.com/golang/mock/mockgen@v1.6.0
 	@$(GO) generate ./...
 	@$(GO) mod tidy
 
