@@ -147,9 +147,8 @@ definitions:
         type: string
       original_text:
         description: original comment content
-        type: string
-      parsed_text:
-        description: parsed comment content
+        maxLength: 600
+        minLength: 2
         type: string
       reply_comment_id:
         description: reply comment id
@@ -157,7 +156,6 @@ definitions:
     required:
     - object_id
     - original_text
-    - parsed_text
     type: object
   schema.AddReportReq:
     properties:
@@ -217,15 +215,10 @@ definitions:
   schema.AnswerAddReq:
     properties:
       content:
-        description: content
         maxLength: 65535
         minLength: 6
         type: string
-      html:
-        description: html
-        type: string
       question_id:
-        description: question_id
         type: string
     required:
     - content
@@ -233,24 +226,16 @@ definitions:
   schema.AnswerUpdateReq:
     properties:
       content:
-        description: content
         maxLength: 65535
         minLength: 6
         type: string
       edit_summary:
-        description: edit_summary
-        type: string
-      html:
-        description: html
         type: string
       id:
-        description: id
         type: string
       question_id:
-        description: question_id
         type: string
       title:
-        description: title
         type: string
     required:
     - content
@@ -996,11 +981,6 @@ definitions:
         maxLength: 65535
         minLength: 6
         type: string
-      html:
-        description: html
-        maxLength: 65535
-        minLength: 6
-        type: string
       tags:
         description: tags
         items:
@@ -1013,7 +993,6 @@ definitions:
         type: string
     required:
     - content
-    - html
     - tags
     - title
     type: object
@@ -1105,11 +1084,6 @@ definitions:
       edit_summary:
         description: edit summary
         type: string
-      html:
-        description: html
-        maxLength: 65535
-        minLength: 6
-        type: string
       id:
         description: question id
         type: string
@@ -1125,7 +1099,6 @@ definitions:
         type: string
     required:
     - content
-    - html
     - id
     - tags
     - title
@@ -1505,9 +1478,6 @@ definitions:
       original_text:
         description: original text
         type: string
-      parsed_text:
-        description: parsed text
-        type: string
       slug_name:
         description: slug_name
         maxLength: 35
@@ -1573,12 +1543,12 @@ definitions:
         type: string
       original_text:
         description: original comment content
-        type: string
-      parsed_text:
-        description: parsed comment content
+        maxLength: 600
+        minLength: 2
         type: string
     required:
     - comment_id
+    - original_text
     type: object
   schema.UpdateFollowTagsReq:
     properties:
@@ -1658,9 +1628,6 @@ definitions:
         type: string
       original_text:
         description: original text
-        type: string
-      parsed_text:
-        description: parsed text
         type: string
       slug_name:
         description: slug_name
