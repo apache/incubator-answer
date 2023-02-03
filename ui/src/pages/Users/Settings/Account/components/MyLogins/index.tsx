@@ -14,6 +14,10 @@ const Index = () => {
     keyPrefix: 'settings.my_logins',
   });
 
+  const { t: t2 } = useTranslation('translation', {
+    keyPrefix: 'plugins.oauth',
+  });
+
   const deleteLogins = (e, item) => {
     if (!item.binding) {
       return;
@@ -57,7 +61,12 @@ const Index = () => {
                   height={16}
                   className="btnSvg me-2"
                 />
-                <span> {item.name}</span>
+                <span>
+                  {' '}
+                  {t2(item.binding ? 'remove' : 'connect', {
+                    auth_name: item.name,
+                  })}
+                </span>
               </Button>
             </div>
           );
