@@ -238,7 +238,28 @@ ui:
   how_to_format:
     title: Cómo formatear
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0">
+       <li><p class="mb-2">Para hacer enlaces</p>
+       <pre class="mb-2">
+       <code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)
+       </code>
+       </pre>
+       </li>
+       <li><p class="mb-2">Colocar saltos de línea entre párrafos</p></li>
+       <li><p class="mb-2"><em>_cursiva_</em> o **<strong>negrita</strong>**</p></li>
+       <li><p class="mb-2">Indentar el código con 4 espacios</p></li>
+       <li><p class="mb-2">Citar colocando <code>&gt;</code> al inicio de la línea</p></li>
+       <li><p class="mb-2">Escape con backticks <code>`como _esto_`</code></p></li>
+       <li><p class="mb-2">Crear barreras de código con backticks <code>`</code></p>
+       <pre class="mb-0">
+       <code>
+       ```<br/>
+       código aquí<br/>
+       ```
+       </code>
+       </pre>
+       </li>
+      </ul>
   pagination:
     prev: Anterior
     next: Siguiente
@@ -287,13 +308,13 @@ ui:
     chart:
       text: Gráfica
       flow_chart: Diagrama de flujo
-      sequence_diagram: Sequence diagram
-      class_diagram: Class diagram
-      state_diagram: State diagram
-      entity_relationship_diagram: Entity relationship diagram
-      user_defined_diagram: User defined diagram
+      sequence_diagram: Diagrama de secuencia
+      class_diagram: Diagrama de clase
+      state_diagram: Diagrama de estado
+      entity_relationship_diagram: Diagrama de relación de entidad
+      user_defined_diagram: Diagrama definido por el usuario
       gantt_chart: Diagrama de Gantt
-      pie_chart: Pie chart
+      pie_chart: Grafico de torta
     code:
       text: Código
       add_code: Añadir código
@@ -381,7 +402,7 @@ ui:
       heading: Encabezado
       cell: Celda
   close_modal:
-    title: I am closing this post as...
+    title: Estoy cerrando este post como...
     btn_cancel: Cancelar
     btn_submit: Enviar
     remark:
@@ -389,11 +410,11 @@ ui:
     msg:
       empty: Por favor selecciona una razón.
   report_modal:
-    flag_title: I am flagging to report this post as...
-    close_title: I am closing this post as...
-    review_question_title: Review question
-    review_answer_title: Review answer
-    review_comment_title: Review comment
+    flag_title: Estoy marcando este post como...
+    close_title: Estoy cerrando este post como...
+    review_question_title: Revisar pregunta
+    review_answer_title: Revisar respuesta
+    review_comment_title: Revisar comentario
     btn_cancel: Cancelar
     btn_submit: Enviar
     remark:
@@ -408,7 +429,7 @@ ui:
           label: Nombre a mostrar
           msg:
             empty: El nombre a mostrar no puede estar vacío.
-            range: Display name up to 35 characters.
+            range: Nombre a mostrar con un máximo de 35 caracteres.
         slug_name:
           label: URL amigable
           desc: 'Debe usar el conjunto de caracteres "a-z", "0-9", "+ # - ."'
@@ -426,12 +447,12 @@ ui:
     history: Historial
     synonyms:
       title: Sinónimos
-      text: The following tags will be remapped to
+      text: Las siguientes etiquetas serán reasignadas a
       empty: No se encontraron sinónimos.
       btn_add: Añadir un sinónimo
       btn_edit: Editar
       btn_save: Guardar
-    synonyms_text: The following tags will be remapped to
+    synonyms_text: Las siguientes etiquetas serán reasignadas a
     delete:
       title: Eliminar esta etiqueta
       content: >-
