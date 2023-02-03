@@ -456,7 +456,7 @@ ui:
     delete:
       title: Eliminar esta etiqueta
       content: >-
-        <p>We do not allowed deleting tag with posts.</p><p>Please remove this tag from the posts first.</p>
+        <p>No se permite la eliminación de etiquetas con posts.</p><p>Por favor antes elimina esta etiqueta del post.</p>
       content2: '¿Estás seguro de que deseas borrarlo?'
       close: Cerrar
   edit_tag:
@@ -529,16 +529,16 @@ ui:
     tag_label: preguntas
     search_placeholder: Filtrar por nombre de etiqueta
     no_desc: La etiqueta no tiene descripción.
-    more: More
+    more: Mas
   ask:
-    title: Add Question
-    edit_title: Edit Question
-    default_reason: Edit question
+    title: Agregar una pregunta
+    edit_title: Editar pregunta
+    default_reason: Editar pregunta
     similar_questions: Preguntas similares
     form:
       fields:
         revision:
-          label: Revision
+          label: Revisión
         title:
           label: Título
           placeholder: Sé preciso e imagina que le estás preguntando esto a una persona
@@ -606,8 +606,8 @@ ui:
     msg:
       empty: No puede estar en blanco.
   login:
-    page_title: Welcome to {{site_name}}
-    login_to_continue: Log in to continue
+    page_title: Bienvenido a {{site_name}}
+    login_to_continue: Inicia sesión para continuar
     info_sign: '¿No tienes cuenta? <1>Regístrate</1>'
     info_login: '¿Ya tienes una cuenta? <1>Inicia sesión</1>'
     agreements: Al registrarte, aceptas la <1>política de privacidad</1> y los <3>términos de servicio</3>.
@@ -688,7 +688,7 @@ ui:
         custom: Propia
         btn_refresh: Actualizar
         custom_text: Puedes subir tu propia imagen.
-        default: System
+        default: Sistema
         msg: Por favor, sube una imagen
       bio:
         label: Sobre mí (opcional)
@@ -715,11 +715,11 @@ ui:
         msg: El correo electrónico no puede estar vacío.
       password_title: Password
       current_pass:
-        label: Current Password
+        label: Contraseña actual
         msg:
-          empty: Current Password cannot be empty.
-          length: The length needs to be between 8 and 32.
-          different: The two entered passwords do not match.
+          empty: La contraseña actual no puede estar vacía.
+          length: El largo necesita estar entre 8 y 32 caracteres.
+          different: Las contraseñas no coinciden.
       new_pass:
         label: Nueva Contraseña
       pass_confirm:
@@ -734,7 +734,7 @@ ui:
     update_password: Contraseña cambiada con éxito.
     flag_success: Gracias por reportar.
     forbidden_operate_self: No puedes modificar tu propio usuario
-    review: Your revision will show after review.
+    review: Tu revisión será visible luego de ser aprobada.
   related_question:
     title: Preguntas relacionadas
     btn: Añadir pregunta
@@ -748,7 +748,7 @@ ui:
     Follow: Seguir
     Following: Siguiendo
     answered: respondida
-    closed_in: Closed in
+    closed_in: Cerrado el
     show_exist: Mostrar una pregunta existente.
     answers:
       title: Respuestas
@@ -772,9 +772,13 @@ ui:
   delete:
     title: Eliminar esta publicación
     question: >-
-      We do not recommend <strong>deleting questions with answers</strong> because doing so deprives future readers of this knowledge.</p><p>Repeated deletion of answered questions can result in your account being blocked from asking. Are you sure you wish to delete?
+      No recomendamos <strong>borrar preguntas con respuestas</strong> porque esto priva a los lectores futuros de este conocimiento.
+      </p><p>
+      El borrado repetido de preguntas respondidas puede resultar en que tu cuenta se bloquee para hacer preguntas. ¿Estás seguro de que deseas borrarlo?
     answer_accepted: >-
-      <p>We do not recommend <strong>deleting accepted answer</strong> because doing so deprives future readers of this knowledge. </p> Repeated deletion of accepted answers can result in your account being blocked from answering. Are you sure you wish to delete?
+      <p>No recomendamos <strong>borrar la respuesta aceptada</strong> porque esto priva a los lectores futuros de este conocimiento.</p>
+
+      El borrado repetido de respuestas aceptadas puede resultar en que tu cuenta se bloquee para responder. ¿Estás seguro de que deseas borrarlo?
     other: '¿Estás seguro de que deseas borrarlo?'
     tip_question_deleted: Esta publicación ha sido eliminada
     tip_answer_deleted: Esta respuesta ha sido eliminada
@@ -804,13 +808,13 @@ ui:
       newest: Más reciente
       active: Activas
       score: Puntuación
-      more: More
+      more: Mas
     tips:
-      title: Advanced Search Tips
-      tag: "<1>[tag]</1> search withing a tag"
-      user: "<1>user:username</1> search by author"
-      answer: "<1>answers:0</1> unanswered questions"
-      score: "<1>score:3</1> posts with a 3+ score"
+      title: Consejos de búsqueda avanzada
+      tag: "<1>[tag]</1> búsqueda por etiquetas"
+      user: "<1>user:username</1> búsqueda por autor"
+      answer: "<1>answers:0</1> preguntas sin responder"
+      score: "<1>score:3</1> Publicaciones con un puntaje de 3 o más"
       question: "<1>is:question</1> buscar preguntas"
       is_answer: "<1>is:answer</1> buscar respuestas"
     empty: No pudimos encontrar nada. <br /> Prueba a buscar con palabras diferentes o menos específicas.
@@ -832,14 +836,14 @@ ui:
       Lo sentimos, este link de confirmación de cuenta ya no es válido. ¿Quizás tu cuenta ya está activa?
     confirm_new_email: Tu email ha sido actualizado.
     confirm_new_email_invalid: >-
-      Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
+      Lo siento, este enlace de confirmación ya no es válido. ¿Quizás ya se haya cambiado tu correo electrónico?
   unsubscribe:
     page_title: Desuscribir
     success_title: Desuscrito con éxito
     success_desc: Has sido eliminado con éxito de esta lista de suscriptores y no recibirás más correos electrónicos nuestros.
     link: Cambiar ajustes
   question:
-    following_tags: Following Tags
+    following_tags: Etiquetas seguidas
     edit: Editar
     save: Guardar
     follow_tag_tip: Sigue etiquetas para personalizar tu lista de preguntas.
@@ -850,8 +854,8 @@ ui:
     questions: Preguntas
     answers: Respuestas
     newest: Más reciente
-    active: Active
-    frequent: Frequent
+    active: Activo
+    frequent: Frecuente
     score: Puntuación
     unanswered: Sin respuesta
     modified: modificada
@@ -874,8 +878,8 @@ ui:
     score: Puntuación
     edit_profile: Editar perfil
     visited_x_days: "Visitado {{ count }} días"
-    viewed: Viewed
-    joined: Joined
+    viewed: Visto
+    joined: Unido
     last_login: Seen
     about_me: Sobre mí
     about_me_empty: "// ¡Hola Mundo!"
