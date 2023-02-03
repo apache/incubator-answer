@@ -3,7 +3,7 @@ import { ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { pathFactory } from '@/router/pathFactory';
-import { Icon, Tag, FormatTime, BaseUserCard } from '@/components';
+import { Tag, FormatTime, BaseUserCard, Counts } from '@/components';
 import type { SearchResItem } from '@/common/interface';
 import { escapeRemove } from '@/utils';
 
@@ -51,23 +51,17 @@ const Index: FC<Props> = ({ data }) => {
           className="me-3"
           preFix={data.object_type === 'question' ? 'asked' : 'answered'}
         />
-        <div className="d-flex align-items-center my-2 my-sm-0">
-          <div className="d-flex align-items-center me-3">
-            <Icon name="hand-thumbs-up-fill me-1" />
-            <span> {data.object?.vote_count}</span>
-          </div>
-          <div
-            className={`d-flex align-items-center ${
-              data.object?.accepted ? 'text-success' : ''
-            }`}>
-            {data.object?.accepted ? (
-              <Icon name="check-circle-fill me-1" />
-            ) : (
-              <Icon name="chat-square-text-fill me-1" />
-            )}
-            <span>{data.object?.answer_count}</span>
-          </div>
-        </div>
+
+        <Counts
+          className="my-2 my-sm-0"
+          showViews={false}
+          isAccepted={data.object?.accepted}
+          data={{
+            votes: data.object?.vote_count,
+            answers: data.object?.answer_count,
+            views: 0,
+          }}
+        />
       </div>
 
       {data.object?.excerpt && (

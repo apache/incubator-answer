@@ -72,13 +72,13 @@ func (rs *RoleService) GetRoleMapping(ctx context.Context) (roleMapping map[int]
 func (rs *RoleService) translateRole(ctx context.Context, role *entity.Role) {
 	switch role.Name {
 	case roleUserName:
-		role.Name = translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), trRoleNameUser)
-		role.Description = translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), trRoleDescriptionUser)
+		role.Name = translator.Tr(handler.GetLangByCtx(ctx), trRoleNameUser)
+		role.Description = translator.Tr(handler.GetLangByCtx(ctx), trRoleDescriptionUser)
 	case roleAdminName:
-		role.Name = translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), trRoleNameAdmin)
-		role.Description = translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), trRoleDescriptionAdmin)
+		role.Name = translator.Tr(handler.GetLangByCtx(ctx), trRoleNameAdmin)
+		role.Description = translator.Tr(handler.GetLangByCtx(ctx), trRoleDescriptionAdmin)
 	case roleModeratorName:
-		role.Name = translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), trRoleNameModerator)
-		role.Description = translator.GlobalTrans.Tr(handler.GetLangByCtx(ctx), trRoleDescriptionModerator)
+		role.Name = translator.Tr(handler.GetLangByCtx(ctx), trRoleNameModerator)
+		role.Description = translator.Tr(handler.GetLangByCtx(ctx), trRoleDescriptionModerator)
 	}
 }

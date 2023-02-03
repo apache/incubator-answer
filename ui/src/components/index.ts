@@ -33,6 +33,7 @@ import PageTags from './PageTags';
 import QuestionListLoader from './QuestionListLoader';
 import TagsLoader from './TagsLoader';
 import WelcomeTitle from './WelcomeTitle';
+import Counts from './Counts';
 
 export {
   Avatar,
@@ -72,5 +73,6 @@ export {
   QuestionListLoader,
   TagsLoader,
   WelcomeTitle,
+  Counts,
 };
 export type { EditorRef, JSONSchema, UISchema };

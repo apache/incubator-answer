@@ -40,7 +40,7 @@ const Index = () => {
   return (
     <div className="mt-5">
       <div className="form-label">{t('title')}</div>
-      <small className="form-text mt-0">{t('lable')}</small>
+      <small className="form-text mt-0">{t('label')}</small>
 
       <div className="d-grid gap-2 mt-3">
         {data?.map((item) => {

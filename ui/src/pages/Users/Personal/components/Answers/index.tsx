@@ -2,7 +2,7 @@ import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, FormatTime, Tag } from '@/components';
+import { FormatTime, Tag, Counts } from '@/components';
 import { pathFactory } from '@/router/pathFactory';
 
 interface Props {
@@ -35,21 +35,16 @@ const Index: FC<Props> = ({ visible, data }) => {
             <div className="d-flex align-items-center fs-14 text-secondary mb-2">
               <FormatTime
                 time={item.create_time}
-                className="me-4"
+                className="me-3"
                 preFix={t('answered')}
               />
 
-              <div className="d-flex align-items-center me-3">
-                <Icon name="hand-thumbs-up-fill me-1" />
-                <span>{item?.vote_count}</span>
-              </div>
-
-              {item.accepted === 2 && (
-                <div className="d-flex align-items-center me-3 text-success">
-                  <Icon name="check-circle-fill me-1" />
-                  <span>{t('accepted')}</span>
-                </div>
-              )}
+              <Counts
+                data={{ votes: item?.vote_count, views: 0, answers: 0 }}
+                showAnswers={false}
+                showViews={false}
+                showAccepted={item.accepted === 2}
+              />
             </div>
             <div>
               {item.question_info?.tags?.map((tag) => {

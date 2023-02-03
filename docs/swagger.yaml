@@ -1241,9 +1241,6 @@ definitions:
       square_icon:
         maxLength: 512
         type: string
-    required:
-    - logo
-    - square_icon
     type: object
   schema.SiteBrandingResp:
     properties:
@@ -1259,9 +1256,6 @@ definitions:
       square_icon:
         maxLength: 512
         type: string
-    required:
-    - logo
-    - square_icon
     type: object
   schema.SiteCustomCssHTMLReq:
     properties:

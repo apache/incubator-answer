@@ -228,7 +228,7 @@ type UserEmailLogin struct {
 // UserRegisterReq user register request
 type UserRegisterReq struct {
 	// name
-	Name string `validate:"required,gt=4,lte=30" json:"name"`
+	Name string `validate:"required,gt=3,lte=30" json:"name"`
 	// email
 	Email string `validate:"required,email,gt=0,lte=500" json:"e_mail" `
 	// password
@@ -277,7 +277,7 @@ type UpdateInfoRequest struct {
 	// display_name
 	DisplayName string `validate:"required,gt=0,lte=30" json:"display_name"`
 	// username
-	Username string `validate:"omitempty,gt=0,lte=30" json:"username"`
+	Username string `validate:"omitempty,gt=3,lte=30" json:"username"`
 	// avatar
 	Avatar AvatarInfo `json:"avatar"`
 	// bio
@@ -300,12 +300,13 @@ type AvatarInfo struct {
 
 func (u *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {
 	if len(u.Username) > 0 {
+		errFields := make([]*validator.FormErrorField, 0)
 		re := regexp.MustCompile(`^[a-z0-9._-]{4,30}$`)
 		match := re.MatchString(u.Username)
 		if !match {
 			errField := &validator.FormErrorField{
 				ErrorField: "username",
-				ErrorMsg:   err.Error(),
+				ErrorMsg:   reason.UsernameInvalid,
 			}
 			errFields = append(errFields, errField)
 			return errFields, errors.BadRequest(reason.UsernameInvalid)

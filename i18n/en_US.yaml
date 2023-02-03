@@ -509,6 +509,8 @@ ui:
           label: Revision
         answer:
           label: Answer
+          feedback:
+            characters: content must be at least 6 characters in length.
         edit_summary:
           label: Edit Summary
           placeholder: >-
@@ -748,7 +750,7 @@ ui:
         text: User interface language. It will change when you refresh the page.
     my_logins:
       title: My Logins
-      lable: Log in or sign up on this site using these accounts.
+      label: Log in or sign up on this site using these accounts.
       modal_title: Remove Login
       modal_content: Are you sure you want to remove this login from your account?
       modal_confirm_btn: Remove
@@ -790,6 +792,7 @@ ui:
         <p>Are you sure you want to add another answer?</p><p>You could use the
         edit link to refine and improve your existing answer, instead.</p>
       empty: Answer cannot be empty.
+      characters: content must be at least 6 characters in length.
     reopen:
       title: Reopen this post
       content: Are you sure you want to reopen?
@@ -1012,7 +1015,11 @@ ui:
     db_failed: Database connection failed
     db_failed_desc: >-
       This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
-
+  counts:
+    views: views
+    votes: votes
+    answers: answers
+    accepted: Accepted
   page_404:
     desc: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage
@@ -1050,7 +1057,7 @@ ui:
       title: Admin
     dashboard:
       title: Dashboard
-      welcome: Welcome to {{site_name}} Admin!
+      welcome: Welcome to Answer Admin!
       site_statistics: Site Statistics
       questions: "Questions:"
       answers: "Answers:"
