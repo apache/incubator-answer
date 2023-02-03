@@ -140,8 +140,6 @@ const Index = () => {
   usePageTags({
     title: t('edit_answer', { keyPrefix: 'page_title' }),
   });
-
-  console.log('formData.content.value', formData.content.value);
   return (
     <Container className="pt-4 mt-2 mb-5 edit-answer-wrap">
       <Row className="justify-content-center">

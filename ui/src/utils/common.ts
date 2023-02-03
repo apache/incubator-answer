@@ -171,8 +171,11 @@ function handleFormError(
 ) {
   if (error.list?.length > 0) {
     error.list.forEach((item) => {
-      data[item.error_field].isInvalid = true;
-      data[item.error_field].errorMsg = item.error_msg;
+      const errorFieldObject = data[item.error_field];
+      if (errorFieldObject) {
+        errorFieldObject.isInvalid = true;
+        errorFieldObject.errorMsg = item.error_msg;
+      }
     });
   }
   return data;
