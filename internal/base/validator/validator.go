@@ -23,7 +23,6 @@ import (
 	chineseTraditional "github.com/go-playground/locales/zh_Hant_TW"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
-	"github.com/go-playground/validator/v10/non-standard/validators"
 	"github.com/go-playground/validator/v10/translations/en"
 	"github.com/go-playground/validator/v10/translations/es"
 	"github.com/go-playground/validator/v10/translations/fr"
@@ -98,9 +97,29 @@ func getTran(lo locales.Translator) ut.Translator {
 	return tran
 }
 
+func NotBlank(fl validator.FieldLevel) (res bool) {
+	field := fl.Field()
+	switch field.Kind() {
+	case reflect.String:
+		trimSpace := strings.TrimSpace(field.String())
+		res := len(trimSpace) > 0
+		if !res {
+			field.SetString(trimSpace)
+		}
+		return true
+	case reflect.Chan, reflect.Map, reflect.Slice, reflect.Array:
+		return field.Len() > 0
+	case reflect.Ptr, reflect.Interface, reflect.Func:
+		return !field.IsNil()
+	default:
+		return field.IsValid() && field.Interface() != reflect.Zero(field.Type()).Interface()
+	}
+}
+
 func createDefaultValidator(la i18n.Language) *validator.Validate {
 	validate := validator.New()
-	_ = validate.RegisterValidation("notblank", validators.NotBlank)
+	// _ = validate.RegisterValidation("notblank", validators.NotBlank)
+	_ = validate.RegisterValidation("notblank", NotBlank)
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) (res string) {
 		defer func() {
 			if len(res) > 0 {
