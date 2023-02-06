@@ -2,7 +2,7 @@
     <img alt="logo" src="docs/img/logo.svg" height="99px">
 </a>
 
-# Answer - Build Q&A community
+# Answer - Build Q & A community
 
 An open-source knowledge-based community software. You can use it to quickly build your Q&A community for product technical support, customer support, user communication, and more.
 
