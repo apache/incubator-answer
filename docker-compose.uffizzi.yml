@@ -1,0 +1,36 @@
+version: "3"
+
+# uffizzi integration
+x-uffizzi:
+  ingress:
+    service: answer
+    port: 80
+
+services:
+
+  answer:
+    image: "${ANSWER_IMAGE}"
+    volumes:
+      - answer-data:/data
+    deploy:
+      resources:
+        limits:
+          memory: 4000M
+
+  mysql:
+   image: mysql:latest
+   environment:
+    - MYSQL_DATABASE=answer
+    - MYSQL_ROOT_PASSWORD=password
+    - MYSQL_USER=mysql
+    - MYSQL_PASSWORD=mysql
+   volumes:
+      - sql_data:/var/lib/mysql
+   deploy:
+            resources:
+              limits:
+                memory: 500M
+
+volumes:
+  answer-data:
+  sql_data:
