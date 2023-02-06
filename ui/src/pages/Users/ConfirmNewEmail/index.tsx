@@ -4,7 +4,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
-import { loggedUserInfoStore } from '@/stores';
+import { loggedUserInfoStore, siteInfoStore } from '@/stores';
 import { changeEmailVerify, getLoggedUserInfo } from '@/services';
 
 const Index: FC = () => {
@@ -13,6 +13,7 @@ const Index: FC = () => {
   const [step, setStep] = useState('loading');
 
   const updateUser = loggedUserInfoStore((state) => state.update);
+  const siteName = siteInfoStore((state) => state.siteInfo.name);
 
   useEffect(() => {
     const code = searchParams.get('code');
@@ -38,7 +39,9 @@ const Index: FC = () => {
     <Container className="pt-4 mt-2 mb-5">
       <Row className="justify-content-center">
         <Col lg={6}>
-          <h3 className="text-center mt-3 mb-5">{t('page_title')}</h3>
+          <h3 className="text-center mt-3 mb-5">
+            {t('page_title', { site_name: siteName })}
+          </h3>
           {step === 'success' && (
             <>
               <p className="text-center">{t('confirm_new_email')}</p>

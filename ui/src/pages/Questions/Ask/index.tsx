@@ -143,21 +143,7 @@ const Ask = () => {
   const checkValidated = (): boolean => {
     const bol = true;
     const { title, content, tags, answer } = formData;
-    if (!title.value) {
-      // bol = false;
-      // formData.title = {
-      //   value: '',
-      //   isInvalid: true,
-      //   errorMsg: t('form.fields.title.msg.empty'),
-      // };
-    } else if (Array.from(title.value).length > 150) {
-      // bol = false;
-      // formData.title = {
-      //   value: title.value,
-      //   isInvalid: true,
-      //   errorMsg: t('form.fields.title.msg.range'),
-      // };
-    } else {
+    if (title.value && Array.from(title.value).length <= 150) {
       formData.title = {
         value: title.value,
         isInvalid: false,
@@ -165,14 +151,7 @@ const Ask = () => {
       };
     }
 
-    if (!content.value) {
-      // bol = false;
-      // formData.content = {
-      //   value: '',
-      //   isInvalid: true,
-      //   errorMsg: t('form.fields.body.msg.empty'),
-      // };
-    } else {
+    if (content.value) {
       formData.content = {
         value: content.value,
         isInvalid: false,
@@ -180,29 +159,16 @@ const Ask = () => {
       };
     }
 
-    if (tags.value.length === 0) {
-      // bol = false;
-      // formData.tags = {
-      //   value: [],
-      //   isInvalid: true,
-      //   errorMsg: t('form.fields.tags.msg.empty'),
-      // };
-    } else {
+    if (Array.isArray(tags.value) && tags.value.length > 0) {
       formData.tags = {
         value: tags.value,
         isInvalid: false,
         errorMsg: '',
       };
     }
+
     if (checked) {
-      if (!answer.value) {
-        // bol = false;
-        // formData.answer = {
-        //   value: '',
-        //   isInvalid: true,
-        //   errorMsg: t('form.fields.answer.msg.empty'),
-        // };
-      } else {
+      if (answer.value) {
         formData.answer = {
           value: answer.value,
           isInvalid: false,
@@ -227,7 +193,6 @@ const Ask = () => {
     const params: Type.QuestionParams = {
       title: formData.title.value,
       content: formData.content.value,
-      html: editorRef.current.getHtml(),
       tags: formData.tags.value,
     };
     if (isEdit) {
@@ -261,7 +226,6 @@ const Ask = () => {
           postAnswer({
             question_id: id,
             content: formData.answer.value,
-            html: editorRef2.current.getHtml(),
           })
             .then(() => {
               navigate(pathFactory.questionLanding(id, params.url_title));

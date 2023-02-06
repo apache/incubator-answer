@@ -10,7 +10,12 @@ import { marked } from 'marked';
 import * as Types from '@/common/interface';
 import { Modal } from '@/components';
 import { usePageUsers, useReportModal } from '@/hooks';
-import { matchedUsers, parseUserInfo, scrollTop, bgFadeOut } from '@/utils';
+import {
+  matchedUsers,
+  parseUserInfo,
+  scrollToElementTop,
+  bgFadeOut,
+} from '@/utils';
 import { tryNormalLogged } from '@/utils/guard';
 import {
   useQueryComments,
@@ -43,7 +48,7 @@ const Comment = ({ objectId, mode, commentId }) => {
   const scrollCallback = useCallback((el, co) => {
     if (pageIndex === 0 && co.comment_id === commentId) {
       setTimeout(() => {
-        scrollTop(el);
+        scrollToElementTop(el);
         bgFadeOut(el);
       }, 100);
     }
@@ -102,13 +107,14 @@ const Comment = ({ objectId, mode, commentId }) => {
   const handleSendReply = (item) => {
     const users = matchedUsers(item.value);
     const userNames = unionBy(users.map((user) => user.userName));
-    const html = marked.parse(parseUserInfo(item.value));
-    if (!item.value || !html) {
-      return;
-    }
+    const commentMarkDown = parseUserInfo(item.value);
+    const html = marked.parse(commentMarkDown);
+    // if (!commentMarkDown || !html) {
+    //   return;
+    // }
     const params = {
       object_id: objectId,
-      original_text: item.value,
+      original_text: commentMarkDown,
       mention_username_list: userNames,
       parsed_text: html,
       ...(item.type === 'reply'
@@ -119,7 +125,7 @@ const Comment = ({ objectId, mode, commentId }) => {
     };
 
     if (item.type === 'edit') {
-      updateComment({
+      return updateComment({
         ...params,
         comment_id: item.comment_id,
       }).then(() => {
@@ -134,30 +140,29 @@ const Comment = ({ objectId, mode, commentId }) => {
           }),
         );
       });
-    } else {
-      addComment(params).then((res) => {
-        if (item.type === 'reply') {
-          const index = comments.findIndex(
-            (comment) => comment.comment_id === item.comment_id,
-          );
-          comments[index].showReply = false;
-          comments.splice(index + 1, 0, res);
-          setComments([...comments]);
-        } else {
-          setComments([
-            ...comments.map((comment) => {
-              if (comment.comment_id === item.comment_id) {
-                comment.showReply = false;
-              }
-              return comment;
-            }),
-            res,
-          ]);
-        }
-
-        setVisibleComment(false);
-      });
     }
+    return addComment(params).then((res) => {
+      if (item.type === 'reply') {
+        const index = comments.findIndex(
+          (comment) => comment.comment_id === item.comment_id,
+        );
+        comments[index].showReply = false;
+        comments.splice(index + 1, 0, res);
+        setComments([...comments]);
+      } else {
+        setComments([
+          ...comments.map((comment) => {
+            if (comment.comment_id === item.comment_id) {
+              comment.showReply = false;
+            }
+            return comment;
+          }),
+          res,
+        ]);
+      }
+
+      setVisibleComment(false);
+    });
   };
 
   const handleDelete = (id) => {

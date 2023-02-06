@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { pathFactory } from '@/router/pathFactory';
 import type * as Type from '@/common/interface';
 import {
-  Icon,
   Tag,
   Pagination,
   FormatTime,
@@ -14,6 +13,7 @@ import {
   BaseUserCard,
   QueryGroup,
   QuestionListLoader,
+  Counts,
 } from '@/components';
 import { useQuestionList } from '@/services';
 
@@ -95,29 +95,15 @@ const QuestionList: FC<Props> = ({ source }) => {
                       preFix={t(li.operation_type)}
                     />
                   </div>
-                  <div className="ms-0 ms-md-3 mt-2 mt-md-0">
-                    <span>
-                      <Icon name="hand-thumbs-up-fill" />
-                      <em className="fst-normal ms-1">{li.vote_count}</em>
-                    </span>
-                    <span
-                      className={`ms-3 ${
-                        li.accepted_answer_id >= 1 ? 'text-success' : ''
-                      }`}>
-                      <Icon
-                        name={
-                          li.accepted_answer_id >= 1
-                            ? 'check-circle-fill'
-                            : 'chat-square-text-fill'
-                        }
-                      />
-                      <em className="fst-normal ms-1">{li.answer_count}</em>
-                    </span>
-                    <span className="summary-stat ms-3">
-                      <Icon name="eye-fill" />
-                      <em className="fst-normal ms-1">{li.view_count}</em>
-                    </span>
-                  </div>
+                  <Counts
+                    data={{
+                      votes: li.vote_count,
+                      answers: li.answer_count,
+                      views: li.view_count,
+                    }}
+                    isAccepted={li.accepted_answer_id >= 1}
+                    className="ms-0 ms-md-3 mt-2 mt-md-0"
+                  />
                 </div>
                 <div className="question-tags m-n1">
                   {Array.isArray(li.tags)
@@ -139,7 +125,7 @@ const QuestionList: FC<Props> = ({ source }) => {
           currentPage={curPage}
           totalSize={count}
           pageSize={pageSize}
-          pathname="/questions"
+          pathname={source === 'questions' ? '/questions' : ''}
         />
       </div>
     </div>

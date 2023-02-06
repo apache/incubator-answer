@@ -52,6 +52,8 @@ backend:
         other: "Comment are not allowed to edit."
       not_found:
         other: "Comment not found."
+      cannot_edit_after_deadline:
+        other: "The comment time has been too long to modify."
     email:
       duplicate:
         other: "Email already exists."
@@ -508,6 +510,8 @@ ui:
           label: Revision
         answer:
           label: Answer
+          feedback:
+            characters: content must be at least 6 characters in length.
         edit_summary:
           label: Edit Summary
           placeholder: >-
@@ -638,7 +642,7 @@ ui:
       msg:
         empty: Email cannot be empty.
   change_email:
-    page_title: Welcome to Answer
+    page_title: Welcome to {{site_name}}
     btn_cancel: Cancel
     btn_update: Update email address
     send_success: >-
@@ -772,6 +776,7 @@ ui:
         <p>Are you sure you want to add another answer?</p><p>You could use the
         edit link to refine and improve your existing answer, instead.</p>
       empty: Answer cannot be empty.
+      characters: content must be at least 6 characters in length.
     reopen:
       title: Reopen this post
       content: Are you sure you want to reopen?
@@ -838,7 +843,7 @@ ui:
   modal_confirm:
     title: Error...
   account_result:
-    page_title: Welcome to Answer
+    page_title: Welcome to {{site_name}}
     success: Your new account is confirmed; you will be redirected to the home page.
     link: Continue to homepage
     invalid: >-
@@ -993,8 +998,12 @@ ui:
       database tables first.
     db_failed: Database connection failed
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
-
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+  counts:
+    views: views
+    votes: votes
+    answers: answers
+    accepted: Accepted
   page_404:
     desc: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage

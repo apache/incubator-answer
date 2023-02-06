@@ -144,7 +144,7 @@ type TagItem struct {
 	// original text
 	OriginalText string `validate:"omitempty" json:"original_text"`
 	// parsed text
-	ParsedText string `validate:"omitempty" json:"parsed_text"`
+	ParsedText string `json:"-"`
 }
 
 // RemoveTagReq delete tag request
@@ -166,7 +166,7 @@ type UpdateTagReq struct {
 	// original text
 	OriginalText string `validate:"omitempty" json:"original_text"`
 	// parsed text
-	ParsedText string `validate:"omitempty" json:"parsed_text"`
+	ParsedText string `json:"-"`
 	// edit summary
 	EditSummary string `validate:"omitempty" json:"edit_summary"`
 	// user id

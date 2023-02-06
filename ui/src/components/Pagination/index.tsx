@@ -3,6 +3,8 @@ import { Pagination } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
+import { scrollToDocTop } from '@/utils';
+
 interface Props {
   currentPage: number;
   pageSize: number;
@@ -49,7 +51,7 @@ const PageItem = ({ page, currentPage, path }: PageItemProps) => {
         e.preventDefault();
         e.stopPropagation();
         navigate(path);
-        window.scrollTo(0, 0);
+        scrollToDocTop();
       }}>
       {page}
     </Pagination.Item>
@@ -91,7 +93,7 @@ const Index: FC<Props> = ({
           onClick={(e) => {
             e.preventDefault();
             navigate(handleParams(currentPage - 1));
-            window.scrollTo(0, 0);
+            scrollToDocTop();
           }}>
           {t('prev')}
         </Pagination.Prev>
@@ -186,7 +188,7 @@ const Index: FC<Props> = ({
           onClick={(e) => {
             e.preventDefault();
             navigate(handleParams(currentPage + 1));
-            window.scrollTo(0, 0);
+            scrollToDocTop();
           }}>
           {t('next')}
         </Pagination.Next>

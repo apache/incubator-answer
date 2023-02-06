@@ -11,6 +11,7 @@ import (
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
 	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
+	"xorm.io/xorm"
 )
 
 // collectionRepo collection repository
@@ -29,15 +30,28 @@ func NewCollectionRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo) collec
 
 // AddCollection add collection
 func (cr *collectionRepo) AddCollection(ctx context.Context, collection *entity.Collection) (err error) {
-	id, err := cr.uniqueIDRepo.GenUniqueIDStr(ctx, collection.TableName())
-	if err == nil {
-		collection.ID = id
-		_, err = cr.data.DB.Insert(collection)
+	_, err = cr.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		var has bool
+		dbcollection := &entity.Collection{}
+		result = nil
+		has, err = session.Where("user_id = ? and object_id = ?", collection.UserID, collection.ObjectID).Get(dbcollection)
 		if err != nil {
-			return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+			return
 		}
-	}
-	return nil
+		if has {
+			return
+		}
+		id, err := cr.uniqueIDRepo.GenUniqueIDStr(ctx, collection.TableName())
+		if err == nil {
+			collection.ID = id
+			_, err = session.Insert(collection)
+			if err != nil {
+				return result, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+			}
+		}
+		return
+	})
+	return err
 }
 
 // RemoveCollection delete collection

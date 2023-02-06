@@ -2911,6 +2911,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/post/render": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "render post content",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Upload"
+                ],
+                "summary": "render post content",
+                "parameters": [
+                    {
+                        "description": "PostRenderReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.PostRenderReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/question": {
             "put": {
                 "security": [
@@ -5425,8 +5464,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "object_id",
-                "original_text",
-                "parsed_text"
+                "original_text"
             ],
             "properties": {
                 "mention_username_list": {
@@ -5442,11 +5480,9 @@ const docTemplate = `{
                 },
                 "original_text": {
                     "description": "original comment content",
-                    "type": "string"
-                },
-                "parsed_text": {
-                    "description": "parsed comment content",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 600,
+                    "minLength": 2
                 },
                 "reply_comment_id": {
                     "description": "reply comment id",
@@ -5535,46 +5571,41 @@ const docTemplate = `{
         },
         "schema.AnswerAddReq": {
             "type": "object",
+            "required": [
+                "content"
+            ],
             "properties": {
                 "content": {
-                    "description": "content",
-                    "type": "string"
-                },
-                "html": {
-                    "description": "html",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 65535,
+                    "minLength": 6
                 },
                 "question_id": {
-                    "description": "question_id",
                     "type": "string"
                 }
             }
         },
         "schema.AnswerUpdateReq": {
             "type": "object",
+            "required": [
+                "content"
+            ],
             "properties": {
                 "content": {
-                    "description": "content",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 65535,
+                    "minLength": 6
                 },
                 "edit_summary": {
-                    "description": "edit_summary",
-                    "type": "string"
-                },
-                "html": {
-                    "description": "html",
                     "type": "string"
                 },
                 "id": {
-                    "description": "id",
                     "type": "string"
                 },
                 "question_id": {
-                    "description": "question_id",
                     "type": "string"
                 },
                 "title": {
-                    "description": "title",
                     "type": "string"
                 }
             }
@@ -6589,23 +6620,24 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.PostRenderReq": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.QuestionAdd": {
             "type": "object",
             "required": [
                 "content",
-                "html",
                 "tags",
                 "title"
             ],
             "properties": {
                 "content": {
                     "description": "content",
-                    "type": "string",
-                    "maxLength": 65535,
-                    "minLength": 6
-                },
-                "html": {
-                    "description": "html",
                     "type": "string",
                     "maxLength": 65535,
                     "minLength": 6
@@ -6667,6 +6699,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "collection_count": {
+                    "type": "integer"
+                },
+                "created_at": {
                     "type": "integer"
                 },
                 "description": {
@@ -6739,7 +6774,6 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "content",
-                "html",
                 "id",
                 "tags",
                 "title"
@@ -6754,12 +6788,6 @@ const docTemplate = `{
                 "edit_summary": {
                     "description": "edit summary",
                     "type": "string"
-                },
-                "html": {
-                    "description": "html",
-                    "type": "string",
-                    "maxLength": 65535,
-                    "minLength": 6
                 },
                 "id": {
                     "description": "question id",
@@ -7326,10 +7354,6 @@ const docTemplate = `{
                     "description": "original text",
                     "type": "string"
                 },
-                "parsed_text": {
-                    "description": "parsed text",
-                    "type": "string"
-                },
                 "slug_name": {
                     "description": "slug_name",
                     "type": "string",
@@ -7416,7 +7440,8 @@ const docTemplate = `{
         "schema.UpdateCommentReq": {
             "type": "object",
             "required": [
-                "comment_id"
+                "comment_id",
+                "original_text"
             ],
             "properties": {
                 "comment_id": {
@@ -7425,11 +7450,9 @@ const docTemplate = `{
                 },
                 "original_text": {
                     "description": "original comment content",
-                    "type": "string"
-                },
-                "parsed_text": {
-                    "description": "parsed comment content",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 600,
+                    "minLength": 2
                 }
             }
         },
@@ -7456,11 +7479,6 @@ const docTemplate = `{
                     "$ref": "#/definitions/schema.AvatarInfo"
                 },
                 "bio": {
-                    "description": "bio",
-                    "type": "string",
-                    "maxLength": 4096
-                },
-                "bio_html": {
                     "description": "bio",
                     "type": "string",
                     "maxLength": 4096
@@ -7547,10 +7565,6 @@ const docTemplate = `{
                 },
                 "original_text": {
                     "description": "original text",
-                    "type": "string"
-                },
-                "parsed_text": {
-                    "description": "parsed text",
                     "type": "string"
                 },
                 "slug_name": {
