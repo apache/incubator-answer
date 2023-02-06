@@ -2,237 +2,239 @@
 backend:
   base:
     success:
-      other: "Completado."
+      other: Completado.
     unknown:
-      other: "Error desconocido."
+      other: Error desconocido.
     request_format_error:
-      other: "Formato de la solicitud inválido."
+      other: Formato de la solicitud inválido.
     unauthorized_error:
-      other: "No autorizado."
+      other: No autorizado.
     database_error:
-      other: "Error en el servidor de datos."
+      other: Error en el servidor de datos.
   role:
     name:
       user:
-        other: "Usuario"
+        other: Usuario
       admin:
-        other: "Administrador"
+        other: Administrador
       moderator:
-        other: "Moderador"
+        other: Moderador
     description:
       user:
-        other: "Predeterminado sin acceso especial."
+        other: Predeterminado sin acceso especial.
       admin:
-        other: "Dispone de acceso total al sitio web y sus ajustes."
+        other: Dispone de acceso total al sitio web y sus ajustes.
       moderator:
-        other: "Dispone de acceso a todas las publicaciones pero no a los ajustes de administrador."
+        other: Dispone de acceso a todas las publicaciones pero no a los ajustes de administrador.
   email:
-    other: "Correo electrónico"
+    other: Correo electrónico
   password:
-    other: "Contraseña"
+    other: Contraseña
   email_or_password_wrong_error:
-    other: "Contraseña o correo incorrecto."
+    other: Contraseña o correo incorrecto.
   error:
     admin:
       email_or_password_wrong:
         other: Contraseña o correo incorrecto.
     answer:
       not_found:
-        other: "Respuesta no encontrada."
+        other: Respuesta no encontrada.
       cannot_deleted:
-        other: "Sin permiso para eliminar."
+        other: Sin permiso para eliminar.
       cannot_update:
-        other: "Sin permiso para actualizar."
+        other: Sin permiso para actualizar.
     comment:
       edit_without_permission:
-        other: "Edición del comentario no permitida."
+        other: Edición del comentario no permitida.
       not_found:
-        other: "Comentario no encontrado."
+        other: Comentario no encontrado.
+      cannot_edit_after_deadline:
+        other: The comment time has been too long to modify.
     email:
       duplicate:
-        other: "Correo electrónico ya en uso."
+        other: Correo electrónico ya en uso.
       need_to_be_verified:
-        other: "El correo debe ser verificado."
+        other: El correo debe ser verificado.
       verify_url_expired:
-        other: "La URL de verificación del correo electrónico ha caducado. Por favor, vuelva a enviar el correo."
+        other: La URL de verificación del correo electrónico ha caducado. Por favor, vuelva a enviar el correo.
     lang:
       not_found:
-        other: "Archivo de idioma no encontrado."
+        other: Archivo de idioma no encontrado.
     object:
       captcha_verification_failed:
-        other: "Captcha fallido."
+        other: Captcha fallido.
       disallow_follow:
-        other: "No dispones de permiso para seguir."
+        other: No dispones de permiso para seguir.
       disallow_vote:
-        other: "No dispones de permiso para votar."
+        other: No dispones de permiso para votar.
       disallow_vote_your_self:
-        other: "No puedes votar a tu propia publicación."
+        other: No puedes votar a tu propia publicación.
       not_found:
-        other: "Objeto no encontrado."
+        other: Objeto no encontrado.
       verification_failed:
-        other: "Verificación fallida."
+        other: Verificación fallida.
       email_or_password_incorrect:
-        other: "Contraseña o correo incorrecto."
+        other: Contraseña o correo incorrecto.
       old_password_verification_failed:
-        other: "La verificación de la contraseña antigua falló"
+        other: La verificación de la contraseña antigua falló
       new_password_same_as_previous_setting:
-        other: "La nueva contraseña es igual a la anterior."
+        other: La nueva contraseña es igual a la anterior.
     question:
       not_found:
-        other: "Pregunta no encontrada."
+        other: Pregunta no encontrada.
       cannot_deleted:
-        other: "Sin permiso para eliminar."
+        other: Sin permiso para eliminar.
       cannot_close:
-        other: "Sin permiso para cerrar."
+        other: Sin permiso para cerrar.
       cannot_update:
-        other: "Sin permiso para actualizar."
+        other: Sin permiso para actualizar.
     rank:
       fail_to_meet_the_condition:
-        other: "El rango no cumple la condición."
+        other: El rango no cumple la condición.
     report:
       handle_failed:
-        other: "Error en el manejador del reporte."
+        other: Error en el manejador del reporte.
       not_found:
-        other: "Informe no encontrado."
+        other: Informe no encontrado.
     tag:
       not_found:
-        other: "Etiqueta no encontrada."
+        other: Etiqueta no encontrada.
       recommend_tag_not_found:
-        other: "Etiqueta recomendada no existe."
+        other: Etiqueta recomendada no existe.
       recommend_tag_enter:
-        other: "Por favor, introduce al menos una de las etiquetas requeridas."
+        other: Por favor, introduce al menos una de las etiquetas requeridas.
       not_contain_synonym_tags:
-        other: "No debe contener etiquetas sinónimas."
+        other: No debe contener etiquetas sinónimas.
       cannot_update:
-        other: "Sin permiso para actualizar."
+        other: Sin permiso para actualizar.
       cannot_set_synonym_as_itself:
-        other: "No se puede establecer como sinónimo de una etiqueta la propia etiqueta."
+        other: No se puede establecer como sinónimo de una etiqueta la propia etiqueta.
     smtp:
       config_from_name_cannot_be_email:
-        other: "¡Su nombre de usuario no puede ser una dirección de correo electrónico!"
+        other: '¡Su nombre de usuario no puede ser una dirección de correo electrónico!'
     theme:
       not_found:
-        other: "Tema no encontrado."
+        other: Tema no encontrado.
     revision:
       review_underway:
-        other: "No se puede editar actualmente, hay una versión en la cola de revisiones."
+        other: No se puede editar actualmente, hay una versión en la cola de revisiones.
       no_permission:
-        other: "Sin permiso para revisar."
+        other: Sin permiso para revisar.
     user:
       email_or_password_wrong:
         other:
           other: Contraseña o correo incorrecto.
       not_found:
-        other: "Usuario no encontrado."
+        other: Usuario no encontrado.
       suspended:
-        other: "El usuario ha sido suspendido."
+        other: El usuario ha sido suspendido.
       username_invalid:
-        other: "Nombre de usuario no válido."
+        other: Nombre de usuario no válido.
       username_duplicate:
-        other: "El nombre de usuario ya está en uso."
+        other: El nombre de usuario ya está en uso.
       set_avatar:
-        other: "Fallo al actualizar el avatar."
+        other: Fallo al actualizar el avatar.
       cannot_update_your_role:
-        other: "No puedes modificar tu propio rol."
+        other: No puedes modificar tu propio rol.
       not_allowed_registration:
-        other: "Actualmente el sitio no acepta registros"
+        other: Actualmente el sitio no acepta registros
     config:
       read_config_failed:
-        other: "Lectura de configuración fallida"
+        other: Lectura de configuración fallida
     database:
       connection_failed:
-        other: "Conexión a la base de datos fallida"
+        other: Conexión a la base de datos fallida
       create_table_failed:
-        other: "Creación de tabla fallida"
+        other: Creación de tabla fallida
     install:
       create_config_failed:
-        other: "Can't create the config.yaml file."
+        other: Can't create the config.yaml file.
   report:
     spam:
       name:
-        other: "spam"
+        other: spam
       desc:
-        other: "Esta publicación es un anuncio o vandalismo. No es útil ni relevante para el tema actual."
+        other: Esta publicación es un anuncio o vandalismo. No es útil ni relevante para el tema actual.
     rude:
       name:
-        other: "grosero o abusivo"
+        other: grosero o abusivo
       desc:
-        other: "Una persona con juicio encontraría este contenido inapropiado para un discurso respuetuoso."
+        other: Una persona con juicio encontraría este contenido inapropiado para un discurso respuetuoso.
     duplicate:
       name:
-        other: "duplicado"
+        other: duplicado
       desc:
-        other: "La pregunta ya ha sido preguntada y resuelta previamente."
+        other: La pregunta ya ha sido preguntada y resuelta previamente.
     not_answer:
       name:
-        other: "no una respuesta"
+        other: no una respuesta
       desc:
-        other: "Esto fue publicado como una respuesta, pero no intenta responder a la pregunta. Posiblemente debería de ser una edición, un comentario, otra pregunta o directamente eliminado totalmente."
+        other: Esto fue publicado como una respuesta, pero no intenta responder a la pregunta. Posiblemente debería de ser una edición, un comentario, otra pregunta o directamente eliminado totalmente.
     not_need:
       name:
-        other: "ya no necesario"
+        other: ya no necesario
       desc:
-        other: "El comentario está desactualizado, es altamente controvertido o ya no relevante para esta publicación."
+        other: El comentario está desactualizado, es altamente controvertido o ya no relevante para esta publicación.
     other:
       name:
-        other: "otra razón"
+        other: otra razón
       desc:
-        other: "Esta publicación requiere revisión por parte del gestor del sitio por alguna razón diferente a las anteriores."
+        other: Esta publicación requiere revisión por parte del gestor del sitio por alguna razón diferente a las anteriores.
   question:
     close:
       duplicate:
         name:
-          other: "spam"
+          other: spam
         desc:
-          other: "La pregunta ya ha sido preguntada y resuelta previamente."
+          other: La pregunta ya ha sido preguntada y resuelta previamente.
       guideline:
         name:
-          other: "razón específica de la comunidad"
+          other: razón específica de la comunidad
         desc:
-          other: "Esta pregunta infringe alguna norma de la comunidad."
+          other: Esta pregunta infringe alguna norma de la comunidad.
       multiple:
         name:
-          other: "necesita más detalles o aclaraciónes"
+          other: necesita más detalles o aclaraciónes
         desc:
-          other: "Esta pregunta incluye múltiples preguntas en una. Debería centrarse en un único problema/pregunta."
+          other: Esta pregunta incluye múltiples preguntas en una. Debería centrarse en un único problema/pregunta.
       other:
         name:
-          other: "otra razón"
+          other: otra razón
         desc:
-          other: "Esta publicación requiere revisión por parte del gestor del sitio por alguna razón diferente a las anteriores."
+          other: Esta publicación requiere revisión por parte del gestor del sitio por alguna razón diferente a las anteriores.
     operation_type:
       asked:
-        other: "preguntada"
+        other: preguntada
       answered:
-        other: "respondida"
+        other: respondida
       modified:
-        other: "modificada"
+        other: modificada
   notification:
     action:
       update_question:
-        other: "pregunta actualizada"
+        other: pregunta actualizada
       answer_the_question:
-        other: "pregunta respondidas"
+        other: pregunta respondidas
       update_answer:
-        other: "respuesta actualizada"
+        other: respuesta actualizada
       accept_answer:
-        other: "respuesta aceptada"
+        other: respuesta aceptada
       comment_question:
-        other: "pregunta comentada"
+        other: pregunta comentada
       comment_answer:
-        other: "respuesta comentada"
+        other: respuesta comentada
       reply_to_you:
-        other: "te ha respondido"
+        other: te ha respondido
       mention_you:
-        other: "te ha mencionado"
+        other: te ha mencionado
       your_question_is_closed:
-        other: "Tu pregunta ha sido cerrada"
+        other: Tu pregunta ha sido cerrada
       your_question_was_deleted:
-        other: "Tu pregunta ha sido eliminada"
+        other: Tu pregunta ha sido eliminada
       your_answer_was_deleted:
-        other: "Tu respuesta ha sido eliminada"
+        other: Tu respuesta ha sido eliminada
       your_comment_was_deleted:
-        other: "Tu comentario ha sido eliminado"
+        other: Tu comentario ha sido eliminado
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -512,6 +514,8 @@ ui:
           label: Revisión
         answer:
           label: Respuesta
+          feedback:
+            characters: content must be at least 6 characters in length.
         edit_summary:
           label: Editar resumen
           placeholder: >-
@@ -636,7 +640,7 @@ ui:
       msg:
         empty: El correo electrónico no puede estar vacío.
   change_email:
-    page_title: Bienvenido a Answer
+    page_title: Welcome to {{site_name}}
     btn_cancel: Cancelar
     btn_update: Actualizar dirección de correo
     send_success: >-
@@ -765,6 +769,7 @@ ui:
       confirm_info: >-
         <p>¿Seguro que quieres añadir otra respuesta?</p><p>Puedes utilizar el enlace de edición para detallar y mejorar tu respuesta existente en su lugar.</p>
       empty: La respuesta no puede estar vacía.
+      characters: content must be at least 6 characters in length.
     reopen:
       title: Reabrir esta publicación
       content: '¿Seguro que quieres reabrir esta publicación?'
@@ -829,7 +834,7 @@ ui:
   modal_confirm:
     title: Error...
   account_result:
-    page_title: Bienvenido a Answer
+    page_title: Welcome to {{site_name}}
     success: Tu nueva cuenta ha sido confirmada, serás redirigido a la página de inicio.
     link: Continuar a la página de inicio
     invalid: >-
@@ -977,7 +982,12 @@ ui:
       You appear to have already installed. To reinstall please clear your old database tables first.
     db_failed: Database connection failed
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+  counts:
+    views: views
+    votes: votes
+    answers: answers
+    accepted: Accepted
   page_404:
     desc: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage
