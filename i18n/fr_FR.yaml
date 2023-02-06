@@ -102,7 +102,7 @@ backend:
       recommend_tag_not_found:
         other: Le tag de recommandation n'existe pas.
       recommend_tag_enter:
-        other: Veuillez entrer au moins un des tags requis.
+        other: Veuillez saisir au moins un tag.
       not_contain_synonym_tags:
         other: Ne dois pas contenir de tags synonymes.
       cannot_update:
