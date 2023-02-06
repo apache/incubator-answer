@@ -146,7 +146,7 @@ backend:
         other: "La création de la table a échoué"
     install:
       create_config_failed:
-        other: "Impossible de créer le fichier config.yaml."
+        other: "Can't create the config.yaml file."
   report:
     spam:
       name:
@@ -477,7 +477,7 @@ ui:
     btn_flag: Balise
     btn_save_edits: Enregistrer les modifications
     btn_cancel: Annuler
-    show_more: Afficher plus de commentaires
+    show_more: Show more comments
     tip_question: >-
       Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires.
     tip_answer: >-
@@ -653,12 +653,12 @@ ui:
       display_name:
         label: Nom affiché
         msg: Le nom ne peut être vide.
-        msg_range: Le nom doit contenir moins de 30 caractères
+        msg_range: Display name up to 30 characters.
       username:
         label: Nom d'utilisateur
         caption: Les gens peuvent vous mentionner avec "@username".
         msg: Le nom d'utilisateur ne peut pas être vide.
-        msg_range: Le nom d'utilisateur doit contenir moins de 30 caractères
+        msg_range: Username up to 30 characters.
         character: 'Doit utiliser seulement les caractères "a-z", "0-9", " - . _"'
       avatar:
         label: Image de profil
@@ -815,7 +815,7 @@ ui:
   unsubscribe:
     page_title: Se désabonner
     success_title: Désabonnement réussi
-    success_desc: Vous avez été supprimé de cette liste d'abonnés avec succès et ne recevrez plus d'e-mails.
+    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
     link: Modifier les paramètres
   question:
     following_tags: Hashtags suivis
@@ -877,7 +877,7 @@ ui:
     title: Réponse
     next: Suivant
     done: Terminé
-    config_yaml_error: Impossible de créer le fichier config.yaml.
+    config_yaml_error: Can't create the config.yaml file.
     lang:
       label: Veuillez choisir une langue
     db_type:
@@ -907,7 +907,7 @@ ui:
       label: Le fichier config.yaml a été créé.
       desc: >-
         Vous pouvez créer manuellement le fichier <1>config.yaml</1> dans le répertoire <1>/var/wwww/xxx/</1> et y coller le texte suivant.
-      info: "Après avoir fait cela, cliquez sur le bouton \"Suivant\"."
+      info: After you've done that, click "Next" button.
     site_information: Informations du site
     admin_account: Compte Admin
     site_name:
@@ -952,7 +952,7 @@ ui:
       Il semble que se soit déjà installer. Pour tout réinstaller, veuillez d'abord nettoyer votre ancienne base de données.
     db_failed: La connexion à la base de données a échoué
     db_failed_desc: >-
-      Il semble que les informations de la base de données présentes dans le fichier <1>config.yaml</1> soient incorrect ou que le contact avec le serveur ne puisse pas être établi. Cela peut vouloir dire que l'hôte de la base de données soit non opérationnel.
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
   page_404:
     desc: "Nous sommes désolés, mais cette page n’existe pas."
     back_home: Retour à la page d'accueil
@@ -960,7 +960,7 @@ ui:
     desc: Le serveur a rencontré une erreur et n'a pas pu répondre à votre requête.
     back_home: Retour à la page d'accueil
   page_maintenance:
-    desc: "Nous sommes en maintenance, nous serons bientôt de retour."
+    desc: "We are under maintenance, we'll be back soon."
   nav_menus:
     dashboard: Tableau de bord
     contents: Contenus
@@ -1094,7 +1094,7 @@ ui:
             password:
               label: Mot de passe
               text: L'utilisateur sera déconnecté et devra se reconnecter.
-              msg: Le mot de passe doit comporter entre 8 et 32 caractères.
+              msg: Password must be at 8-32 characters in length.
         btn_cancel: Annuler
         btn_submit: Valider
       user_modal:
@@ -1103,13 +1103,13 @@ ui:
           fields:
             display_name:
               label: Nom affiché
-              msg: le nom affiché doit avoir une longueur de 4 à 30 caractères.
+              msg: Display Name must be at 3-30 characters in length.
             email:
               label: Email
               msg: L'email n'est pas valide.
             password:
               label: Mot de passe
-              msg: Le mot de passe doit comporter entre 8 et 32 caractères.
+              msg: Password must be at 8-32 characters in length.
         btn_cancel: Annuler
         btn_submit: Valider
     questions:
@@ -1228,14 +1228,14 @@ ui:
         text: L'image du logo en haut à gauche de votre site. Utilisez une grande image rectangulaire avec une hauteur de 56 et un ratio d'aspect supérieur à 3:1. Si laissé vide, le titre du site sera affiché.
       mobile_logo:
         label: Logo mobile (optionnel)
-        text: Le logo utilisé sur la version mobile de votre site. Utilisez une image rectangulaire large avec une hauteur de 56. Si laissé vide, l'image du paramètre « logo » sera utilisée.
+        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
       square_icon:
         label: Icône carrée (optionnel)
         msg: L'icône carrée ne peut pas être vide.
         text: Image utilisée comme base pour les icônes de métadonnées. Idéalement supérieure à 512x512.
       favicon:
         label: Favicon (optionnel)
-        text: Une favicon pour votre site. Pour fonctionner correctement sur un CDN, il doit s'agir d'un png. Sera redimensionné en 32x32. Si laissé vide, « icône carrée » sera utilisé.
+        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
     legal:
       page_title: Légal
       terms_of_service:
