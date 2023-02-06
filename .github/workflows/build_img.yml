@@ -70,20 +70,20 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
-    - name: Build arm64
-      uses: docker/build-push-action@v4
-      with:
-        context: .
-        file: ./Dockerfile
-        platforms: linux/arm64
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+    # - name: Build arm64
+    #   uses: docker/build-push-action@v4
+    #   with:
+    #     context: .
+    #     file: ./Dockerfile
+    #     platforms: linux/arm64
+    #     push: true
+    #     tags: ${{ steps.meta.outputs.tags }}
+    #     labels: ${{ steps.meta.outputs.labels }}
 
-    - name: Push image to GHCR
-      run: |
-        docker buildx imagetools create \
-          --tag ghcr.io/${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
-          ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+    # - name: Push image to GHCR
+    #   run: |
+    #     docker buildx imagetools create \
+    #       --tag ghcr.io/${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
+    #       ${{ env.REGISTRY }}/${{ env.IMAGE }}:latest
 
 
