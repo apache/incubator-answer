@@ -54,6 +54,7 @@ const (
 	InstallConfigFailed              = "error.install.create_config_failed"
 	SiteInfoNotFound                 = "error.site_info.not_found"
 	UploadFileSourceUnsupported      = "error.upload.source_unsupported"
+	UploadFileUnsupportedFileFormat  = "error.upload.unsupported_file_format"
 	RecommendTagNotExist             = "error.tag.recommend_tag_not_found"
 	RecommendTagEnter                = "error.tag.recommend_tag_enter"
 	RevisionReviewUnderway           = "error.revision.review_underway"
