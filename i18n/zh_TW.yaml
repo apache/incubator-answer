@@ -25,7 +25,7 @@ backend:
       admin:
         other: "擁有所有權限"
       moderator:
-        other: "Has access to all posts except admin settings."
+        other: "可以訪問除了管理員設定以外的所有貼文"
   email:
     other: "電子郵件"
   password:
@@ -62,13 +62,13 @@ backend:
       captcha_verification_failed:
         other: "驗證碼錯誤。"
       disallow_follow:
-        other: "You are not allowed to follow."
+        other: "你不能追蹤"
       disallow_vote:
-        other: "You are not allowed to vote."
+        other: "你不能投票"
       disallow_vote_your_self:
-        other: "You can't vote for your own post."
+        other: "你不能為自己的貼文投票"
       not_found:
-        other: "Object not found."
+        other: "找不到物件"
       verification_failed:
         other: "驗證失敗。"
       email_or_password_incorrect:
@@ -88,7 +88,7 @@ backend:
         other: "沒有更新的權限。"
     rank:
       fail_to_meet_the_condition:
-        other: "Rank fail to meet the condition."
+        other: "無法為條件排序"
     report:
       handle_failed:
         other: "Report handle failed."
