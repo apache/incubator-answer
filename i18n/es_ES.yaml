@@ -201,7 +201,7 @@ backend:
         name:
           other: otra razón
         desc:
-          other: Esta publicación requiere revisión por parte del gestor del sitio por alguna razón diferente a las anteriores.
+          other: Esta publicación requiere otra razón no listada arriba.
     operation_type:
       asked:
         other: preguntada
@@ -359,7 +359,7 @@ ui:
             label: Archivo de imagen
             btn: Seleccionar imagen
             msg:
-              empty: Archivo de imagen es necesario.
+              empty: El título no puede estar vacío.
               only_image: Solo se permiten archivos de imagen.
               max_size: El tamaño del archivo no puede superar 4MB.
           desc:
@@ -412,7 +412,7 @@ ui:
     msg:
       empty: Por favor selecciona una razón.
   report_modal:
-    flag_title: Estoy marcando este post como...
+    flag_title: Estoy marcando para reportar este post de...
     close_title: Estoy cerrando este post como...
     review_question_title: Revisar pregunta
     review_answer_title: Revisar respuesta
@@ -436,8 +436,8 @@ ui:
           label: URL amigable
           desc: 'Debe usar el conjunto de caracteres "a-z", "0-9", "+ # - ."'
           msg:
-            empty: La URL amigable no puede estar vacía.
-            range: URL amigable de hasta 35 caracteres.
+            empty: URL no puede estar vacío.
+            range: URL slug hasta 35 caracteres.
             character: La URL amigable contiene caracteres no permitidos.
         desc:
           label: Descripción (opcional)
