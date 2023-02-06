@@ -146,7 +146,7 @@ backend:
         other: "Gagal membuat tabel"
     install:
       create_config_failed:
-        other: "Tidak dapat membuat konfigurasi pada file .YAML."
+        other: "Can't create the config.yaml file."
   report:
     spam:
       name:
@@ -477,7 +477,7 @@ ui:
     btn_flag: Flag
     btn_save_edits: Simpan suntingan
     btn_cancel: Batal
-    show_more: Tampilkan lebih banyak komentar
+    show_more: Show more comments
     tip_question: >-
       Gunakan komentar untuk meminta informasi lebih lanjut atau menyarankan perbaikan. Hindari menjawab pertanyaan di komentar.
     tip_answer: >-
@@ -653,12 +653,12 @@ ui:
       display_name:
         label: Display Name
         msg: Display name cannot be empty.
-        msg_range: Display name up to 30 characters
+        msg_range: Display name up to 30 characters.
       username:
         label: Username
         caption: People can mention you as "@username".
         msg: Username cannot be empty.
-        msg_range: Username up to 30 characters
+        msg_range: Username up to 30 characters.
         character: 'Must use the character set "a-z", "0-9", " - . _"'
       avatar:
         label: Profile Image
@@ -815,7 +815,7 @@ ui:
   unsubscribe:
     page_title: Unsubscribe
     success_title: Unsubscribe Successful
-    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
+    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
     link: Change settings
   question:
     following_tags: Following Tags
@@ -877,7 +877,7 @@ ui:
     title: Jawaban
     next: Selanjutnya
     done: Selesai
-    config_yaml_error: Tidak dapat membuat konfigurasi file .yaml
+    config_yaml_error: Can't create the config.yaml file.
     lang:
       label: Silakan pilih Bahasa
     db_type:
@@ -907,7 +907,7 @@ ui:
       label: The config.yaml file created.
       desc: >-
         You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
-      info: "After you’ve done that, click “Next” button."
+      info: After you've done that, click "Next" button.
     site_information: Site Information
     admin_account: Admin Account
     site_name:
@@ -952,7 +952,7 @@ ui:
       You appear to have already installed. To reinstall please clear your old database tables first.
     db_failed: Koneksi ke database gagal
     db_failed_desc: >-
-      Ini berarti bahwa informasi database dalam file <1>config.yaml</1> Anda salah atau koneksi ke server database tidak dapat dilakukan. Ini bisa berarti server database Anda sedang down.
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
   page_404:
     desc: "Sayangnya, halaman ini tidak ada."
     back_home: Kembali ke beranda
@@ -960,7 +960,7 @@ ui:
     desc: Server mengalami kesalahan internal dan tidak dapat menyelesaikan permintaan Anda.
     back_home: Kembali ke beranda
   page_maintenance:
-    desc: "Sedang dalam perbaikan, akan kembali secepatnya."
+    desc: "We are under maintenance, we'll be back soon."
   nav_menus:
     dashboard: Dasbor
     contents: Konten
@@ -1094,7 +1094,7 @@ ui:
             password:
               label: Password
               text: Pengguna akan keluar dan harus masuk lagi.
-              msg: Panjang kata sandi minimal 8 - 32 karakter.
+              msg: Password must be at 8-32 characters in length.
         btn_cancel: Batal
         btn_submit: Kirim
       user_modal:
@@ -1103,13 +1103,13 @@ ui:
           fields:
             display_name:
               label: Nama
-              msg: panjang nama minimal 4 - 30 karakter.
+              msg: Display Name must be at 3-30 characters in length.
             email:
               label: Email
               msg: Email tidak sah.
             password:
               label: Kata sandi
-              msg: Panjang kata sandi minimal 8 - 32 karakter.
+              msg: Password must be at 8-32 characters in length.
         btn_cancel: Batal
         btn_submit: Kirim
     questions:
@@ -1228,14 +1228,14 @@ ui:
         text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
       mobile_logo:
         label: Mobile Logo (optional)
-        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the “logo” setting will be used.
+        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
       square_icon:
         label: Square Icon (optional)
         msg: Square icon cannot be empty.
         text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
       favicon:
         label: Favicon (optional)
-        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, “square icon” will be used.
+        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
     legal:
       page_title: Legal
       terms_of_service:
