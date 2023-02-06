@@ -111,7 +111,7 @@ backend:
         other: Вы не можете установить синоним текущего тега.
     smtp:
       config_from_name_cannot_be_email:
-        other: Имя пользователя не может быть адрес электронной почты.
+        other: Имя От не может быть адресом электронной почты.
     theme:
       not_found:
         other: Тема не найдена.
@@ -285,7 +285,7 @@ ui:
     blockquote:
       text: Цитата
     bold:
-      text: Жирный
+      text: Сильный
     chart:
       text: Диаграмма
       flow_chart: Блок-схема
@@ -415,7 +415,7 @@ ui:
           label: Идентификатор URL
           desc: 'Необходимо использовать набор символов "a-z", "0-9", "+ # - ."'
           msg:
-            empty: URL не может быть пустым.
+            empty: URL slug не может быть пустым.
             range: URL slug до 35 символов.
             character: URL slug содержит недопустимый набор символов.
         desc:
