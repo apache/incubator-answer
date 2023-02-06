@@ -2,237 +2,239 @@
 backend:
   base:
     success:
-      other: "成功!"
+      other: 成功!
     unknown:
-      other: "未知的錯誤。"
+      other: 未知的錯誤。
     request_format_error:
-      other: "請求的格式無效。"
+      other: 請求的格式無效。
     unauthorized_error:
-      other: "未授權。"
+      other: 未授權。
     database_error:
-      other: "資料庫錯誤。"
+      other: 資料庫錯誤。
   role:
     name:
       user:
-        other: "使用者"
+        other: 使用者
       admin:
-        other: "管理者"
+        other: 管理者
       moderator:
-        other: "版主"
+        other: 版主
     description:
       user:
-        other: "預設沒有特別閱讀權限"
+        other: 預設沒有特別閱讀權限
       admin:
-        other: "擁有所有權限"
+        other: 擁有所有權限
       moderator:
-        other: "可以訪問除了管理員設定以外的所有貼文"
+        other: 可以訪問除了管理員設定以外的所有貼文
   email:
-    other: "電子郵件"
+    other: 電子郵件
   password:
-    other: "密碼"
+    other: 密碼
   email_or_password_wrong_error:
-    other: "電子郵箱和密碼不匹配。"
+    other: 電子郵箱和密碼不匹配。
   error:
     admin:
       email_or_password_wrong:
         other: 電子郵箱和密碼不匹配。
     answer:
       not_found:
-        other: "無答案。"
+        other: 無答案。
       cannot_deleted:
-        other: "無刪除權限。"
+        other: 無刪除權限。
       cannot_update:
-        other: "無更新權限。"
+        other: 無更新權限。
     comment:
       edit_without_permission:
-        other: "不允許編輯評論。"
+        other: 不允許編輯評論。
       not_found:
-        other: "無評論。"
+        other: 無評論。
+      cannot_edit_after_deadline:
+        other: The comment time has been too long to modify.
     email:
       duplicate:
-        other: "該電子郵件已被使用"
+        other: 該電子郵件已被使用
       need_to_be_verified:
-        other: "需驗證電子郵件信箱。"
+        other: 需驗證電子郵件信箱。
       verify_url_expired:
-        other: "電子郵件驗證網址已過期，請重發確認郵件。"
+        other: 電子郵件驗證網址已過期，請重發確認郵件。
     lang:
       not_found:
-        other: "無此語系檔。"
+        other: 無此語系檔。
     object:
       captcha_verification_failed:
-        other: "驗證碼錯誤。"
+        other: 驗證碼錯誤。
       disallow_follow:
-        other: "你不能追蹤"
+        other: 你不能追蹤
       disallow_vote:
-        other: "你不能投票"
+        other: 你不能投票
       disallow_vote_your_self:
-        other: "你不能為自己的貼文投票"
+        other: 你不能為自己的貼文投票
       not_found:
-        other: "找不到物件"
+        other: 找不到物件
       verification_failed:
-        other: "驗證失敗。"
+        other: 驗證失敗。
       email_or_password_incorrect:
-        other: "電子郵箱和密碼不匹配。"
+        other: 電子郵箱和密碼不匹配。
       old_password_verification_failed:
-        other: "舊密碼驗證失敗"
+        other: 舊密碼驗證失敗
       new_password_same_as_previous_setting:
-        other: "新密碼與先前的一樣。"
+        other: 新密碼與先前的一樣。
     question:
       not_found:
-        other: "找不到問題。"
+        other: 找不到問題。
       cannot_deleted:
-        other: "沒有刪除的權限。"
+        other: 沒有刪除的權限。
       cannot_close:
-        other: "沒有關閉的權限。"
+        other: 沒有關閉的權限。
       cannot_update:
-        other: "沒有更新的權限。"
+        other: 沒有更新的權限。
     rank:
       fail_to_meet_the_condition:
-        other: "無法為條件排序"
+        other: 無法為條件排序
     report:
       handle_failed:
-        other: "Report handle failed."
+        other: Report handle failed.
       not_found:
-        other: "找不到報告"
+        other: 找不到報告
     tag:
       not_found:
-        other: "Tag not found."
+        other: Tag not found.
       recommend_tag_not_found:
-        other: "Recommend Tag is not exist."
+        other: Recommend Tag is not exist.
       recommend_tag_enter:
-        other: "Please enter at least one required tag."
+        other: Please enter at least one required tag.
       not_contain_synonym_tags:
-        other: "Should not contain synonym tags."
+        other: Should not contain synonym tags.
       cannot_update:
-        other: "No permission to update."
+        other: No permission to update.
       cannot_set_synonym_as_itself:
-        other: "You cannot set the synonym of the current tag as itself."
+        other: You cannot set the synonym of the current tag as itself.
     smtp:
       config_from_name_cannot_be_email:
-        other: "The From Name cannot be a email address."
+        other: The From Name cannot be a email address.
     theme:
       not_found:
-        other: "未找到主題。"
+        other: 未找到主題。
     revision:
       review_underway:
-        other: "Can't edit currently, there is a version in the review queue."
+        other: Can't edit currently, there is a version in the review queue.
       no_permission:
-        other: "No permission to Revision."
+        other: No permission to Revision.
     user:
       email_or_password_wrong:
         other:
           other: Email and password do not match.
       not_found:
-        other: "User not found."
+        other: User not found.
       suspended:
-        other: "User has been suspended."
+        other: User has been suspended.
       username_invalid:
-        other: "Username is invalid."
+        other: Username is invalid.
       username_duplicate:
-        other: "Username is already in use."
+        other: Username is already in use.
       set_avatar:
-        other: "Avatar set failed."
+        other: Avatar set failed.
       cannot_update_your_role:
-        other: "You cannot modify your role."
+        other: You cannot modify your role.
       not_allowed_registration:
-        other: "Currently the site is not open for registration"
+        other: Currently the site is not open for registration
     config:
       read_config_failed:
-        other: "Read config failed"
+        other: Read config failed
     database:
       connection_failed:
-        other: "Database connection failed"
+        other: Database connection failed
       create_table_failed:
-        other: "Create table failed"
+        other: Create table failed
     install:
       create_config_failed:
-        other: "Can't create the config.yaml file."
+        other: Can't create the config.yaml file.
   report:
     spam:
       name:
-        other: "spam"
+        other: spam
       desc:
-        other: "This post is an advertisement, or vandalism. It is not useful or relevant to the current topic."
+        other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
     rude:
       name:
-        other: "rude or abusive"
+        other: rude or abusive
       desc:
-        other: "A reasonable person would find this content inappropriate for respectful discourse."
+        other: A reasonable person would find this content inappropriate for respectful discourse.
     duplicate:
       name:
-        other: "重複"
+        other: 重複
       desc:
-        other: "This question has been asked before and already has an answer."
+        other: This question has been asked before and already has an answer.
     not_answer:
       name:
-        other: "not an answer"
+        other: not an answer
       desc:
-        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether."
+        other: This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether.
     not_need:
       name:
-        other: "no longer needed"
+        other: no longer needed
       desc:
-        other: "This comment is outdated, conversational or not relevant to this post."
+        other: This comment is outdated, conversational or not relevant to this post.
     other:
       name:
-        other: "something else"
+        other: something else
       desc:
-        other: "This post requires staff attention for another reason not listed above."
+        other: This post requires staff attention for another reason not listed above.
   question:
     close:
       duplicate:
         name:
-          other: "spam"
+          other: spam
         desc:
-          other: "This question has been asked before and already has an answer."
+          other: This question has been asked before and already has an answer.
       guideline:
         name:
-          other: "a community-specific reason"
+          other: a community-specific reason
         desc:
-          other: "This question doesn't meet a community guideline."
+          other: This question doesn't meet a community guideline.
       multiple:
         name:
-          other: "needs details or clarity"
+          other: needs details or clarity
         desc:
-          other: "This question currently includes multiple questions in one. It should focus on one problem only."
+          other: This question currently includes multiple questions in one. It should focus on one problem only.
       other:
         name:
-          other: "something else"
+          other: something else
         desc:
-          other: "This post requires another reason not listed above."
+          other: This post requires another reason not listed above.
     operation_type:
       asked:
-        other: "asked"
+        other: asked
       answered:
-        other: "answered"
+        other: answered
       modified:
-        other: "modified"
+        other: modified
   notification:
     action:
       update_question:
-        other: "updated question"
+        other: updated question
       answer_the_question:
-        other: "answered question"
+        other: answered question
       update_answer:
-        other: "updated answer"
+        other: updated answer
       accept_answer:
-        other: "accepted answer"
+        other: accepted answer
       comment_question:
-        other: "commented question"
+        other: commented question
       comment_answer:
-        other: "commented answer"
+        other: commented answer
       reply_to_you:
-        other: "replied to you"
+        other: replied to you
       mention_you:
-        other: "mentioned you"
+        other: mentioned you
       your_question_is_closed:
-        other: "Your question has been closed"
+        other: Your question has been closed
       your_question_was_deleted:
-        other: "Your question has been deleted"
+        other: Your question has been deleted
       your_answer_was_deleted:
-        other: "Your answer has been deleted"
+        other: Your answer has been deleted
       your_comment_was_deleted:
-        other: "Your comment has been deleted"
+        other: Your comment has been deleted
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -491,6 +493,8 @@ ui:
           label: Revision
         answer:
           label: Answer
+          feedback:
+            characters: content must be at least 6 characters in length.
         edit_summary:
           label: Edit Summary
           placeholder: >-
@@ -615,7 +619,7 @@ ui:
       msg:
         empty: Email cannot be empty.
   change_email:
-    page_title: Welcome to Answer
+    page_title: Welcome to {{site_name}}
     btn_cancel: Cancel
     btn_update: Update email address
     send_success: >-
@@ -744,6 +748,7 @@ ui:
       confirm_info: >-
         <p>Are you sure you want to add another answer?</p><p>You could use the edit link to refine and improve your existing answer, instead.</p>
       empty: Answer cannot be empty.
+      characters: content must be at least 6 characters in length.
     reopen:
       title: Reopen this post
       content: Are you sure you want to reopen?
@@ -804,7 +809,7 @@ ui:
   modal_confirm:
     title: Error...
   account_result:
-    page_title: Welcome to Answer
+    page_title: Welcome to {{site_name}}
     success: Your new account is confirmed; you will be redirected to the home page.
     link: Continue to homepage
     invalid: >-
@@ -952,7 +957,12 @@ ui:
       You appear to have already installed. To reinstall please clear your old database tables first.
     db_failed: Database connection failed
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+  counts:
+    views: views
+    votes: votes
+    answers: answers
+    accepted: Accepted
   page_404:
     desc: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage
