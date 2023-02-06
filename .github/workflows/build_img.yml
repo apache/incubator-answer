@@ -2,7 +2,7 @@ name: Build Docker Hub Image
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "githubaction" ]
     tags:
       - v2.*
       - v1.*
