@@ -49,7 +49,7 @@ backend:
       not_found:
         other: Commentaire non trouvé.
       cannot_edit_after_deadline:
-        other: The comment time has been too long to modify.
+        other: Le commentaire a été posté il y a trop longtemps pour être modifié.
     email:
       duplicate:
         other: L'adresse e-mail existe déjà.
