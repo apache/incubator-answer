@@ -10,10 +10,9 @@
 
 # production
 
-
 /build/*/*/*
 /build/*.json
-/build/*.ico
+/build/*.html
 /build/*.txt
 
 # misc

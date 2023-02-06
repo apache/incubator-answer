@@ -1,6 +1,6 @@
 .PHONY: build clean ui
 
-VERSION=1.0.3
+VERSION=1.0.4
 BIN=answer
 DIR_SRC=./cmd/answer
 DOCKER_CMD=docker
@@ -23,6 +23,8 @@ universal: generate
 generate:
 	@$(GO) get github.com/google/wire/cmd/wire@v0.5.0
 	@$(GO) get github.com/golang/mock/mockgen@v1.6.0
+	@$(GO) install github.com/google/wire/cmd/wire@v0.5.0
+	@$(GO) install github.com/golang/mock/mockgen@v1.6.0
 	@$(GO) generate ./...
 	@$(GO) mod tidy
 
@@ -39,6 +41,6 @@ install-ui-packages:
 	@corepack prepare pnpm@v7.12.2 --activate
 
 ui:
-	@cd ui && pnpm install && pnpm build && cd -
+	@cd ui && pnpm install && pnpm build && sed -i 's/%AnswerVersion%/'$(VERSION)'/g' ./build/index.html && cd -
 
 all: clean build

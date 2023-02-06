@@ -48,7 +48,7 @@ class Request {
       },
       (error) => {
         const { status, data: respData } = error.response || {};
-        const { data = {}, msg = '' } = respData || {};
+        const { data = {}, msg = '', reason = '' } = respData || {};
         if (status === 400) {
           // show error message
           if (data instanceof Object && data.err_type) {
@@ -79,7 +79,13 @@ class Request {
 
           if (data instanceof Array && data.length > 0) {
             // handle form error
-            return Promise.reject({ isError: true, list: data });
+            return Promise.reject({
+              code: status,
+              msg,
+              reason,
+              isError: true,
+              list: data,
+            });
           }
 
           if (!data || Object.keys(data).length <= 0) {

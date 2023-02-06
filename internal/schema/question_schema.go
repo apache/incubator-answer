@@ -41,11 +41,11 @@ type ReopenQuestionReq struct {
 
 type QuestionAdd struct {
 	// question title
-	Title string `validate:"required,gte=6,lte=150" json:"title"`
+	Title string `validate:"required,notblank,gte=6,lte=150" json:"title"`
 	// content
-	Content string `validate:"required,gte=6,lte=65535" json:"content"`
+	Content string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
 	// html
-	HTML string `validate:"required,gte=6,lte=65535" json:"html"`
+	HTML string `json:"-"`
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// user id
@@ -90,11 +90,11 @@ type QuestionUpdate struct {
 	// question id
 	ID string `validate:"required" json:"id"`
 	// question title
-	Title string `validate:"required,gte=6,lte=150" json:"title"`
+	Title string `validate:"required,notblank,gte=6,lte=150" json:"title"`
 	// content
-	Content string `validate:"required,gte=6,lte=65535" json:"content"`
+	Content string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
 	// html
-	HTML string `validate:"required,gte=6,lte=65535" json:"html"`
+	HTML string `json:"-"`
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// edit summary

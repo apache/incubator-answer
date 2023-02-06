@@ -5808,8 +5808,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "object_id",
-                "original_text",
-                "parsed_text"
+                "original_text"
             ],
             "properties": {
                 "mention_username_list": {
@@ -5825,11 +5824,9 @@ const docTemplate = `{
                 },
                 "original_text": {
                     "description": "original comment content",
-                    "type": "string"
-                },
-                "parsed_text": {
-                    "description": "parsed comment content",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 600,
+                    "minLength": 2
                 },
                 "reply_comment_id": {
                     "description": "reply comment id",
@@ -5923,17 +5920,11 @@ const docTemplate = `{
             ],
             "properties": {
                 "content": {
-                    "description": "content",
                     "type": "string",
                     "maxLength": 65535,
                     "minLength": 6
                 },
-                "html": {
-                    "description": "html",
-                    "type": "string"
-                },
                 "question_id": {
-                    "description": "question_id",
                     "type": "string"
                 }
             }
@@ -5945,29 +5936,20 @@ const docTemplate = `{
             ],
             "properties": {
                 "content": {
-                    "description": "content",
                     "type": "string",
                     "maxLength": 65535,
                     "minLength": 6
                 },
                 "edit_summary": {
-                    "description": "edit_summary",
-                    "type": "string"
-                },
-                "html": {
-                    "description": "html",
                     "type": "string"
                 },
                 "id": {
-                    "description": "id",
                     "type": "string"
                 },
                 "question_id": {
-                    "description": "question_id",
                     "type": "string"
                 },
                 "title": {
-                    "description": "title",
                     "type": "string"
                 }
             }
@@ -7142,19 +7124,12 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "content",
-                "html",
                 "tags",
                 "title"
             ],
             "properties": {
                 "content": {
                     "description": "content",
-                    "type": "string",
-                    "maxLength": 65535,
-                    "minLength": 6
-                },
-                "html": {
-                    "description": "html",
                     "type": "string",
                     "maxLength": 65535,
                     "minLength": 6
@@ -7291,7 +7266,6 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "content",
-                "html",
                 "id",
                 "tags",
                 "title"
@@ -7306,12 +7280,6 @@ const docTemplate = `{
                 "edit_summary": {
                     "description": "edit summary",
                     "type": "string"
-                },
-                "html": {
-                    "description": "html",
-                    "type": "string",
-                    "maxLength": 65535,
-                    "minLength": 6
                 },
                 "id": {
                     "description": "question id",
@@ -7878,10 +7846,6 @@ const docTemplate = `{
                     "description": "original text",
                     "type": "string"
                 },
-                "parsed_text": {
-                    "description": "parsed text",
-                    "type": "string"
-                },
                 "slug_name": {
                     "description": "slug_name",
                     "type": "string",
@@ -7979,7 +7943,8 @@ const docTemplate = `{
         "schema.UpdateCommentReq": {
             "type": "object",
             "required": [
-                "comment_id"
+                "comment_id",
+                "original_text"
             ],
             "properties": {
                 "comment_id": {
@@ -7988,11 +7953,9 @@ const docTemplate = `{
                 },
                 "original_text": {
                     "description": "original comment content",
-                    "type": "string"
-                },
-                "parsed_text": {
-                    "description": "parsed comment content",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 600,
+                    "minLength": 2
                 }
             }
         },
@@ -8136,10 +8099,6 @@ const docTemplate = `{
                 },
                 "original_text": {
                     "description": "original text",
-                    "type": "string"
-                },
-                "parsed_text": {
-                    "description": "parsed text",
                     "type": "string"
                 },
                 "slug_name": {

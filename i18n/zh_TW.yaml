@@ -10,24 +10,24 @@ backend:
     unauthorized_error:
       other: "未授權。"
     database_error:
-      other: "Data server error."
+      other: "資料庫錯誤。"
   role:
     name:
       user:
-        other: "User"
+        other: "使用者"
       admin:
-        other: "Admin"
+        other: "管理者"
       moderator:
-        other: "Moderator"
+        other: "版主"
     description:
       user:
-        other: "Default with no special access."
+        other: "預設沒有特別閱讀權限"
       admin:
-        other: "Have the full power to access the site."
+        other: "擁有所有權限"
       moderator:
-        other: "Has access to all posts except admin settings."
+        other: "可以訪問除了管理員設定以外的所有貼文"
   email:
-    other: "Email"
+    other: "電子郵件"
   password:
     other: "密碼"
   email_or_password_wrong_error:
@@ -38,37 +38,37 @@ backend:
         other: 電子郵箱和密碼不匹配。
     answer:
       not_found:
-        other: "Answer do not found."
+        other: "無答案。"
       cannot_deleted:
-        other: "No permission to delete."
+        other: "無刪除權限。"
       cannot_update:
-        other: "No permission to update."
+        other: "無更新權限。"
     comment:
       edit_without_permission:
-        other: "Comment are not allowed to edit."
+        other: "不允許編輯評論。"
       not_found:
-        other: "Comment not found."
+        other: "無評論。"
     email:
       duplicate:
-        other: "Email already exists."
+        other: "該電子郵件已被使用"
       need_to_be_verified:
-        other: "Email should be verified."
+        other: "需驗證電子郵件信箱。"
       verify_url_expired:
-        other: "Email verified URL has expired, please resend the email."
+        other: "電子郵件驗證網址已過期，請重發確認郵件。"
     lang:
       not_found:
-        other: "Language file not found."
+        other: "無此語系檔。"
     object:
       captcha_verification_failed:
-        other: "Captcha wrong."
+        other: "驗證碼錯誤。"
       disallow_follow:
-        other: "You are not allowed to follow."
+        other: "你不能追蹤"
       disallow_vote:
-        other: "You are not allowed to vote."
+        other: "你不能投票"
       disallow_vote_your_self:
-        other: "You can't vote for your own post."
+        other: "你不能為自己的貼文投票"
       not_found:
-        other: "Object not found."
+        other: "找不到物件"
       verification_failed:
         other: "驗證失敗。"
       email_or_password_incorrect:
@@ -88,7 +88,7 @@ backend:
         other: "沒有更新的權限。"
     rank:
       fail_to_meet_the_condition:
-        other: "Rank fail to meet the condition."
+        other: "無法為條件排序"
     report:
       handle_failed:
         other: "Report handle failed."
@@ -585,7 +585,8 @@ ui:
     msg:
       empty: Cannot be empty.
   login:
-    page_title: Welcome to Answer
+    page_title: Welcome to {{site_name}}
+    login_to_continue: Log in to continue
     info_sign: Don't have an account? <1>Sign up</1>
     info_login: Already have an account? <1>Log in</1>
     agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
@@ -1222,14 +1223,14 @@ ui:
     branding:
       page_title: Branding
       logo:
-        label: Logo
+        label: Logo (optional)
         msg: Logo cannot be empty.
         text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
       mobile_logo:
         label: Mobile Logo (optional)
         text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the “logo” setting will be used.
       square_icon:
-        label: Square Icon
+        label: Square Icon (optional)
         msg: Square icon cannot be empty.
         text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
       favicon:

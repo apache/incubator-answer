@@ -38,6 +38,7 @@ func NewDB(debug bool, dataConf *Database) (*xorm.Engine, error) {
 		dataConf.Driver = string(schemas.MYSQL)
 	}
 	if dataConf.Driver == string(schemas.SQLITE) {
+		dataConf.Driver = "sqlite"
 		dbFileDir := filepath.Dir(dataConf.Connection)
 		log.Debugf("try to create database directory %s", dbFileDir)
 		if err := dir.CreateDirIfNotExist(dbFileDir); err != nil {
