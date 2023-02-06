@@ -8,6 +8,7 @@ import (
 	"github.com/google/wire"
 	myTran "github.com/segmentfault/pacman/contrib/i18n"
 	"github.com/segmentfault/pacman/i18n"
+	"github.com/segmentfault/pacman/log"
 	"gopkg.in/yaml.v3"
 )
 
@@ -68,12 +69,14 @@ func NewTranslator(c *I18n) (tr i18n.Translator, err error) {
 
 		content, err := yaml.Marshal(translation)
 		if err != nil {
-			return nil, fmt.Errorf("marshal translation content failed: %s %s", file.Name(), err)
+			log.Debugf("marshal translation content failed: %s %s", file.Name(), err)
+			continue
 		}
 
 		// add translator use backend translation
 		if err = myTran.AddTranslator(content, file.Name()); err != nil {
-			return nil, fmt.Errorf("add translator failed: %s %s", file.Name(), err)
+			log.Debugf("add translator failed: %s %s", file.Name(), err)
+			continue
 		}
 	}
 	GlobalTrans = myTran.GlobalTrans
