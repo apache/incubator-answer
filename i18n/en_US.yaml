@@ -149,7 +149,7 @@ backend:
         other: "Create table failed"
     install:
       create_config_failed:
-        other: "Can’t create the config.yaml file."
+        other: "Can't create the config.yaml file."
   report:
     spam:
       name:
@@ -492,7 +492,7 @@ ui:
     btn_flag: Flag
     btn_save_edits: Save edits
     btn_cancel: Cancel
-    show_more: Show more comment
+    show_more: Show more comments
     tip_question: >-
       Use comments to ask for more information or suggest improvements. Avoid
       answering questions in comments.
@@ -679,12 +679,12 @@ ui:
       display_name:
         label: Display Name
         msg: Display name cannot be empty.
-        msg_range: Display name up to 30 characters
+        msg_range: Display name up to 30 characters.
       username:
         label: Username
         caption: People can mention you as "@username".
         msg: Username cannot be empty.
-        msg_range: Username up to 30 characters
+        msg_range: Username up to 30 characters.
         character: 'Must use the character set "a-z", "0-9", " - . _"'
       avatar:
         label: Profile Image
@@ -851,7 +851,7 @@ ui:
   unsubscribe:
     page_title: Unsubscribe
     success_title: Unsubscribe Successful
-    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
+    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
     link: Change settings
   question:
     following_tags: Following Tags
@@ -913,7 +913,7 @@ ui:
     title: Answer
     next: Next
     done: Done
-    config_yaml_error: Can’t create the config.yaml file.
+    config_yaml_error: Can't create the config.yaml file.
     lang:
       label: Please Choose a Language
     db_type:
@@ -944,7 +944,7 @@ ui:
       desc: >-
         You can create the <1>config.yaml</1> file manually in the
         <1>/var/wwww/xxx/</1> directory and paste the following text into it.
-      info: "After you’ve done that, click “Next” button."
+      info: After you've done that, click "Next" button.
     site_information: Site Information
     admin_account: Admin Account
     site_name:
@@ -993,7 +993,7 @@ ui:
       database tables first.
     db_failed: Database connection failed
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
 
   page_404:
     desc: "Unfortunately, this page doesn't exist."
@@ -1002,7 +1002,7 @@ ui:
     desc: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
-    desc: "We are under maintenance, we’ll be back soon."
+    desc: "We are under maintenance, we'll be back soon."
   nav_menus:
     dashboard: Dashboard
     contents: Contents
@@ -1136,7 +1136,7 @@ ui:
             password:
               label: Password
               text: The user will be logged out and need to login again.
-              msg: Password must be at 8 - 32 characters in length.
+              msg: Password must be at 8-32 characters in length.
         btn_cancel: Cancel
         btn_submit: Submit
       user_modal:
@@ -1145,13 +1145,13 @@ ui:
           fields:
             display_name:
               label: Display Name
-              msg: display_name must be at 4 - 30 characters in length.
+              msg: Display Name must be at 3-30 characters in length.
             email:
               label: Email
               msg: Email is not valid.
             password:
               label: Password
-              msg: Password must be at 8 - 32 characters in length.
+              msg: Password must be at 8-32 characters in length.
 
         btn_cancel: Cancel
         btn_submit: Submit
@@ -1272,14 +1272,14 @@ ui:
         text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
       mobile_logo:
         label: Mobile Logo (optional)
-        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the “logo” setting will be used.
+        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
       square_icon:
         label: Square Icon (optional)
         msg: Square icon cannot be empty.
         text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
       favicon:
         label: Favicon (optional)
-        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, “square icon” will be used.
+        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
     legal:
       page_title: Legal
       terms_of_service:
