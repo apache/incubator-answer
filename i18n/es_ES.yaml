@@ -49,7 +49,7 @@ backend:
       not_found:
         other: Comentario no encontrado.
       cannot_edit_after_deadline:
-        other: The comment time has been too long to modify.
+        other: El tiempo del comentario ha sido demasiado largo para modificarlo.
     email:
       duplicate:
         other: Correo electrónico ya en uso.
@@ -148,7 +148,7 @@ backend:
         other: Creación de tabla fallida
     install:
       create_config_failed:
-        other: Can't create the config.yaml file.
+        other: No es posible crear el archivo config.yaml.
   report:
     spam:
       name:
@@ -500,7 +500,7 @@ ui:
     btn_flag: Reportar
     btn_save_edits: Guardar cambios
     btn_cancel: Cancelar
-    show_more: Show more comments
+    show_more: Mostrar más comentarios
     tip_question: >-
       Utiliza los comentarios para pedir más información o sugerir mejoras y modificaciones. Evita responder preguntas en los comentarios.
     tip_answer: >-
@@ -515,7 +515,7 @@ ui:
         answer:
           label: Respuesta
           feedback:
-            characters: content must be at least 6 characters in length.
+            characters: El contenido debe tener al menos 6 caracteres.
         edit_summary:
           label: Editar resumen
           placeholder: >-
@@ -640,7 +640,7 @@ ui:
       msg:
         empty: El correo electrónico no puede estar vacío.
   change_email:
-    page_title: Welcome to {{site_name}}
+    page_title: Bienvenido a {{site_name}}
     btn_cancel: Cancelar
     btn_update: Actualizar dirección de correo
     send_success: >-
