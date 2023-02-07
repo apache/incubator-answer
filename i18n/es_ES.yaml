@@ -149,6 +149,9 @@ backend:
     install:
       create_config_failed:
         other: No es posible crear el archivo config.yaml.
+    upload:
+      unsupported_file_format:
+        other: Unsupported file format.
   report:
     spam:
       name:
