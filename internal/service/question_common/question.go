@@ -31,9 +31,10 @@ type QuestionRepo interface {
 	UpdateQuestion(ctx context.Context, question *entity.Question, Cols []string) (err error)
 	GetQuestion(ctx context.Context, id string) (question *entity.Question, exist bool, err error)
 	GetQuestionList(ctx context.Context, question *entity.Question) (questions []*entity.Question, err error)
-	GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string) (
+	GetQuestionPage(ctx context.Context, page, pageSize int, userID string, tagID []string, orderCond string) (
 		questionList []*entity.Question, total int64, err error)
 	UpdateQuestionStatus(ctx context.Context, question *entity.Question) (err error)
+	UpdateQuestionTop(ctx context.Context, question *entity.Question) (err error)
 	SearchByTitleLike(ctx context.Context, title string) (questionList []*entity.Question, err error)
 	UpdatePvCount(ctx context.Context, questionID string) (err error)
 	UpdateAnswerCount(ctx context.Context, questionID string, num int) (err error)
@@ -254,7 +255,6 @@ func (qs *QuestionCommon) FormatQuestionsPage(
 	for _, questionInfo := range questionList {
 		t := &schema.QuestionPageResp{
 			ID:               questionInfo.ID,
-			CreatedAt:        questionInfo.CreatedAt.Unix(),
 			Title:            questionInfo.Title,
 			UrlTitle:         htmltext.UrlTitle(questionInfo.Title),
 			Description:      htmltext.FetchExcerpt(questionInfo.ParsedText, "...", 240),
@@ -267,7 +267,10 @@ func (qs *QuestionCommon) FormatQuestionsPage(
 			FollowCount:      questionInfo.FollowCount,
 			AcceptedAnswerID: questionInfo.AcceptedAnswerID,
 			LastAnswerID:     questionInfo.LastAnswerID,
+			Top:              questionInfo.Top,
 		}
+
+		t.AnswerCount, _ = qs.answerRepo.CountAnswerByQuestion(ctx, t.ID)
 
 		questionIDs = append(questionIDs, questionInfo.ID)
 		userIDs = append(userIDs, questionInfo.UserID)
@@ -498,7 +501,7 @@ func (qs *QuestionCommon) ShowFormat(ctx context.Context, data *entity.Question)
 	info.ViewCount = data.ViewCount
 	info.UniqueViewCount = data.UniqueViewCount
 	info.VoteCount = data.VoteCount
-	info.AnswerCount = data.AnswerCount
+	info.AnswerCount, _ = qs.answerRepo.CountAnswerByQuestion(ctx, info.ID)
 	info.CollectionCount = data.CollectionCount
 	info.FollowCount = data.FollowCount
 	info.AcceptedAnswerID = data.AcceptedAnswerID

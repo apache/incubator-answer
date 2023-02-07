@@ -68,6 +68,17 @@ func (ts *TagService) UpdateTag(ctx context.Context, req *schema.UpdateTagReq) (
 	return ts.tagCommonService.UpdateTag(ctx, req)
 }
 
+// AddTag add tag
+func (ts *TagService) AddTag(ctx context.Context, req *schema.AddTagReq) (err error) {
+	tag := &entity.Tag{}
+	tag.SlugName = req.SlugName
+	tag.DisplayName = req.DisplayName
+	tag.OriginalText = req.OriginalText
+	tag.Status = entity.TagStatusAvailable
+	tag.UserID = req.UserID
+	return ts.tagCommonService.AddTagList(ctx, []*entity.Tag{tag})
+}
+
 // GetTagInfo get tag one
 func (ts *TagService) GetTagInfo(ctx context.Context, req *schema.GetTagInfoReq) (resp *schema.GetTagResp, err error) {
 	var (

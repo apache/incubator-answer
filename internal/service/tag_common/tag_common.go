@@ -25,6 +25,8 @@ type TagCommonRepo interface {
 	GetTagListByIDs(ctx context.Context, ids []string) (tagList []*entity.Tag, err error)
 	GetTagBySlugName(ctx context.Context, slugName string) (tagInfo *entity.Tag, exist bool, err error)
 	GetTagListByName(ctx context.Context, name string, hasReserved bool) (tagList []*entity.Tag, err error)
+	GetTagListByMainTagID(ctx context.Context, id string) (tagList []*entity.Tag, err error)
+
 	GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error)
 	GetTagByID(ctx context.Context, tagID string, includeDeleted bool) (tag *entity.Tag, exist bool, err error)
 	GetTagPage(ctx context.Context, page, pageSize int, tag *entity.Tag, queryCond string) (tagList []*entity.Tag, total int64, err error)
@@ -249,6 +251,16 @@ func (ts *TagCommonService) GetTagBySlugName(ctx context.Context, slugName strin
 // GetTagListByIDs get object tag
 func (ts *TagCommonService) GetTagListByIDs(ctx context.Context, ids []string) (tagList []*entity.Tag, err error) {
 	tagList, err = ts.tagCommonRepo.GetTagListByIDs(ctx, ids)
+	if err != nil {
+		return nil, err
+	}
+	ts.TagsFormatRecommendAndReserved(ctx, tagList)
+	return
+}
+
+// GetTagListByMainTagID get object tag
+func (ts *TagCommonService) GetTagListByMainTagID(ctx context.Context, id string) (tagList []*entity.Tag, err error) {
+	tagList, err = ts.tagCommonRepo.GetTagListByMainTagID(ctx, id)
 	if err != nil {
 		return nil, err
 	}

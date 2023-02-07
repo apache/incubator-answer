@@ -100,7 +100,9 @@ const QuestionList: FC<Props> = ({ source }) => {
                       votes: li.vote_count,
                       answers: li.answer_count,
                       views: li.view_count,
+                      top: li.top,
                     }}
+                    showTop
                     isAccepted={li.accepted_answer_id >= 1}
                     className="ms-0 ms-md-3 mt-2 mt-md-0"
                   />

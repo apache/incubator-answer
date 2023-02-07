@@ -41,11 +41,11 @@ type ReopenQuestionReq struct {
 
 type QuestionAdd struct {
 	// question title
-	Title string `validate:"required,notblank,gte=6,lte=150" json:"title"`
+	Title string `validate:"required,gte=6,lte=150" json:"title"`
 	// content
-	Content string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
+	Content string `validate:"required,gte=6,lte=65535" json:"content"`
 	// html
-	HTML string `json:"-"`
+	HTML string `validate:"required,gte=6,lte=65535" json:"html"`
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// user id
@@ -90,11 +90,11 @@ type QuestionUpdate struct {
 	// question id
 	ID string `validate:"required" json:"id"`
 	// question title
-	Title string `validate:"required,notblank,gte=6,lte=150" json:"title"`
+	Title string `validate:"required,gte=6,lte=150" json:"title"`
 	// content
-	Content string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
+	Content string `validate:"required,gte=6,lte=65535" json:"content"`
 	// html
-	HTML string `json:"-"`
+	HTML string `validate:"required,gte=6,lte=65535" json:"html"`
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// edit summary
@@ -114,7 +114,7 @@ type QuestionBaseInfo struct {
 	ID              string `json:"id" `
 	Title           string `json:"title" xorm:"title"`                       // title
 	ViewCount       int    `json:"view_count" xorm:"view_count"`             // view count
-	AnswerCount     int    `json:"answer_count" xorm:"answer_count"`         // answer count
+	AnswerCount     int64  `json:"answer_count" xorm:"answer_count"`         // answer count
 	CollectionCount int    `json:"collection_count" xorm:"collection_count"` // collection count
 	FollowCount     int    `json:"follow_count" xorm:"follow_count"`         // follow count
 	Status          string `json:"status"`
@@ -132,7 +132,7 @@ type QuestionInfo struct {
 	ViewCount            int            `json:"view_count" xorm:"view_count"`               // view_count
 	UniqueViewCount      int            `json:"unique_view_count" xorm:"unique_view_count"` // unique_view_count
 	VoteCount            int            `json:"vote_count" xorm:"vote_count"`               // vote_count
-	AnswerCount          int            `json:"answer_count" xorm:"answer_count"`           // answer count
+	AnswerCount          int64          `json:"answer_count" xorm:"answer_count"`           // answer count
 	CollectionCount      int            `json:"collection_count" xorm:"collection_count"`   // collection count
 	FollowCount          int            `json:"follow_count" xorm:"follow_count"`           // follow count
 	AcceptedAnswerID     string         `json:"accepted_answer_id" `                        // accepted_answer_id
@@ -174,6 +174,7 @@ type AdminQuestionInfo struct {
 	EditTime         int64          `json:"edit_time"`
 	UserID           string         `json:"-" `
 	UserInfo         *UserBasicInfo `json:"user_info"`
+	Top              bool           `json:"top"`
 }
 
 type Operation struct {
@@ -219,7 +220,7 @@ type UserQuestionInfo struct {
 	ViewCount        int           `json:"view_count"`
 	AnswerCount      int           `json:"answer_count"`
 	CollectionCount  int           `json:"collection_count"`
-	CreatedAt        int64         `json:"created_at"`
+	CreateTime       int           `json:"create_time"`
 	AcceptedAnswerID string        `json:"accepted_answer_id"`
 	Status           string        `json:"status"`
 }
@@ -240,9 +241,9 @@ type QuestionPageReq struct {
 	Tag       string `validate:"omitempty,gt=0,lte=100" form:"tag"`
 	Username  string `validate:"omitempty,gt=0,lte=100" form:"username"`
 
-	LoginUserID      string `json:"-"`
-	UserIDBeSearched string `json:"-"`
-	TagID            string `json:"-"`
+	LoginUserID      string   `json:"-"`
+	UserIDBeSearched string   `json:"-"`
+	TagIDs           []string `json:"-"`
 }
 
 const (
@@ -253,7 +254,6 @@ const (
 
 type QuestionPageResp struct {
 	ID          string     `json:"id" `
-	CreatedAt   int64      `json:"created_at"`
 	Title       string     `json:"title"`
 	UrlTitle    string     `json:"url_title"`
 	Description string     `json:"description"`
@@ -261,12 +261,13 @@ type QuestionPageResp struct {
 	Tags        []*TagResp `json:"tags"`
 
 	// question statistical information
-	ViewCount       int `json:"view_count"`
-	UniqueViewCount int `json:"unique_view_count"`
-	VoteCount       int `json:"vote_count"`
-	AnswerCount     int `json:"answer_count"`
-	CollectionCount int `json:"collection_count"`
-	FollowCount     int `json:"follow_count"`
+	ViewCount       int   `json:"view_count"`
+	UniqueViewCount int   `json:"unique_view_count"`
+	VoteCount       int   `json:"vote_count"`
+	AnswerCount     int64 `json:"answer_count"`
+	CollectionCount int   `json:"collection_count"`
+	FollowCount     int   `json:"follow_count"`
+	Top             bool  `json:"top"`
 
 	// answer information
 	AcceptedAnswerID   string    `json:"accepted_answer_id"`

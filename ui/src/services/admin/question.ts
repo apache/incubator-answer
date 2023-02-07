@@ -27,3 +27,7 @@ export const changeQuestionStatus = (
     status,
   });
 };
+
+export const changeQuestionTop = (question_id: string) => {
+  return request.put(`/answer/admin/api/question/${question_id}/top`, {});
+};

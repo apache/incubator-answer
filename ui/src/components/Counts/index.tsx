@@ -10,12 +10,14 @@ interface Props {
     votes: number;
     answers: number;
     views: number;
+    top?: boolean;
   };
   showVotes?: boolean;
   showAnswers?: boolean;
   showViews?: boolean;
   showAccepted?: boolean;
   isAccepted?: boolean;
+  showTop?: boolean;
   className?: string;
 }
 const Index: FC<Props> = ({
@@ -25,6 +27,7 @@ const Index: FC<Props> = ({
   showViews = true,
   isAccepted = false,
   showAccepted = false,
+  showTop = false,
   className = '',
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'counts' });
@@ -68,6 +71,12 @@ const Index: FC<Props> = ({
           <em className="fst-normal ms-1">
             {data.views} {t('views')}
           </em>
+        </span>
+      )}
+
+      {showTop && data.top && (
+        <span className="summary-stat ms-3 badge text-bg-success">
+          {t('top')}
         </span>
       )}
     </div>

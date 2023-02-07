@@ -13,6 +13,10 @@ export const modifyTag = (params) => {
   return request.put('/answer/api/v1/tag', params);
 };
 
+export const addTag = (params) => {
+  return request.post('/answer/api/v1/tag', params);
+};
+
 export const useQuerySynonymsTags = (tagId) => {
   const apiUrl = tagId ? `/answer/api/v1/tag/synonyms?tag_id=${tagId}` : '';
   return useSWR<{

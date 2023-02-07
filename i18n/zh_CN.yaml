@@ -953,6 +953,12 @@ ui:
     db_failed: 数据连接异常！
     db_failed_desc: >-
       这或者意味着数据库信息在 <1>config.yaml</1> 文件不正确，或者无法与数据库服务器建立联系。这可能意味着您的主机数据库服务器已关闭。
+  counts:
+    views: 浏览
+    votes: 支持
+    answers: 回答
+    accepted: 采纳
+    top: 置顶
   page_404:
     desc: "很抱歉，此页面不存在。"
     back_home: 回到主页
@@ -1126,6 +1132,11 @@ ui:
       change: 更改
       filter:
         placeholder: "按标题过滤，问题:id"
+      top:
+        ok: 置顶
+        cancel: 取消置顶
+        okContent: 这个问题将会置顶
+        cancelContent: 这个问题将会取消置顶
     answers:
       page_title: 回答
       normal: 正常

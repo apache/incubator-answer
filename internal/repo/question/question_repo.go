@@ -107,6 +107,16 @@ func (qr *questionRepo) UpdateQuestionStatus(ctx context.Context, question *enti
 	return nil
 }
 
+func (qr *questionRepo) UpdateQuestionTop(ctx context.Context, question *entity.Question) (err error) {
+	now := time.Now()
+	question.UpdatedAt = now
+	_, err = qr.data.DB.Where("id =?", question.ID).Cols("top", "updated_at").Update(question)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
 func (qr *questionRepo) UpdateAccepted(ctx context.Context, question *entity.Question) (err error) {
 	_, err = qr.data.DB.Where("id =?", question.ID).Cols("accepted_answer_id").Update(question)
 	if err != nil {
@@ -206,20 +216,22 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 }
 
 // GetQuestionPage query question page
-func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string) (
+func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, userID string, tagIDs []string, orderCond string) (
 	questionList []*entity.Question, total int64, err error) {
 	questionList = make([]*entity.Question, 0)
 
 	session := qr.data.DB.Where("question.status = ? OR question.status = ?",
 		entity.QuestionStatusAvailable, entity.QuestionStatusClosed)
-	if len(tagID) > 0 {
+	if len(tagIDs) > 0 {
 		session.Join("LEFT", "tag_rel", "question.id = tag_rel.object_id")
-		session.And("tag_rel.tag_id = ?", tagID)
+		session.In("tag_rel.tag_id", tagIDs)
 		session.And("tag_rel.status = ?", entity.TagRelStatusAvailable)
 	}
 	if len(userID) > 0 {
 		session.And("question.user_id = ?", userID)
 	}
+	session.OrderBy("question.top DESC")
+
 	switch orderCond {
 	case "newest":
 		session.OrderBy("question.created_at DESC")

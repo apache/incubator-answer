@@ -175,6 +175,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	// tag
 	r.GET("/question/tags", a.tagController.SearchTagLike)
 	r.PUT("/tag", a.tagController.UpdateTag)
+	r.POST("/tag", a.tagController.AddTag)
 	r.DELETE("/tag", a.tagController.RemoveTag)
 	r.PUT("/tag/synonym", a.tagController.UpdateTagSynonym)
 
@@ -228,6 +229,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.GET("/question/page", a.questionController.AdminSearchList)
 	r.PUT("/question/status", a.questionController.AdminSetQuestionStatus)
+	r.PUT("/question/:id/top", a.questionController.AdminChangeQuestionTop)
 	r.GET("/answer/page", a.questionController.AdminSearchAnswerList)
 	r.PUT("/answer/status", a.answerController.AdminSetAnswerStatus)
 

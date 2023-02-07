@@ -1,23 +1,27 @@
 import { FC } from 'react';
-import { Button, Form, Table, Stack } from 'react-bootstrap';
+import { Button, Form, Stack, Table } from 'react-bootstrap';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
 import {
-  FormatTime,
-  Icon,
-  Pagination,
-  Modal,
   BaseUserCard,
   Empty,
+  FormatTime,
+  Icon,
+  Modal,
+  Pagination,
   QueryGroup,
 } from '@/components';
 import { ADMIN_LIST_STATUS } from '@/common/constants';
 import { useEditStatusModal, useReportModal } from '@/hooks';
 import * as Type from '@/common/interface';
-import { useQuestionSearch, changeQuestionStatus } from '@/services';
+import {
+  changeQuestionStatus,
+  changeQuestionTop,
+  useQuestionSearch,
+} from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 
 const questionFilterItems: Type.AdminContentsFilterBy[] = [
@@ -90,6 +94,17 @@ const Questions: FC = () => {
     changeModal.onShow({
       id: itemId,
       type: curFilter,
+    });
+  };
+  const handleChangeTop = (itemId: string, top: boolean) => {
+    Modal.confirm({
+      title: top ? t('top.cancel') : t('top.ok'),
+      content: top ? t('top.cancelContent') : t('top.okContent'),
+      onConfirm: () => {
+        changeQuestionTop(itemId).then(() => {
+          refreshList();
+        });
+      },
     });
   };
 
@@ -178,12 +193,21 @@ const Questions: FC = () => {
                 </td>
                 {curFilter !== 'deleted' && (
                   <td>
-                    <Button
-                      variant="link"
-                      className="p-0 btn-no-border"
-                      onClick={() => handleChange(li.id)}>
-                      {t('change')}
-                    </Button>
+                    <div className="btn-group">
+                      <Button
+                        variant="link"
+                        className="p-0 btn-no-border"
+                        onClick={() => handleChange(li.id)}>
+                        {t('change')}
+                      </Button>
+                      &nbsp; &nbsp;
+                      <Button
+                        variant="link"
+                        className="p-0 btn-no-border"
+                        onClick={() => handleChangeTop(li.id, li.top)}>
+                        {li.top ? t('top.cancel') : t('top.ok')}
+                      </Button>
+                    </div>
                   </td>
                 )}
               </tr>

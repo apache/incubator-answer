@@ -533,3 +533,9 @@ func (qc *QuestionController) AdminSetQuestionStatus(ctx *gin.Context) {
 	err := qc.questionService.AdminSetQuestionStatus(ctx, req.QuestionID, req.StatusStr)
 	handler.HandleResponse(ctx, err, gin.H{})
 }
+
+func (qc *QuestionController) AdminChangeQuestionTop(ctx *gin.Context) {
+	id := ctx.Param("id")
+	err := qc.questionService.AdminChangeQuestionTop(ctx, id)
+	handler.HandleResponse(ctx, err, gin.H{})
+}

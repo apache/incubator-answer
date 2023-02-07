@@ -74,7 +74,7 @@ func (ur *UserRankRepo) checkUserMinRank(ctx context.Context, session *xorm.Sess
 	isReachStandard bool, err error,
 ) {
 	bean := &entity.User{ID: userID}
-	_, err = session.Select("rank").Get(bean)
+	_, err = session.Get(bean)
 	if err != nil {
 		return false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

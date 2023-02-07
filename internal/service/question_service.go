@@ -17,6 +17,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
 	"github.com/answerdev/answer/internal/service/activity_queue"
+	answercommon "github.com/answerdev/answer/internal/service/answer_common"
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
 	"github.com/answerdev/answer/internal/service/meta"
 	"github.com/answerdev/answer/internal/service/notice_queue"
@@ -37,6 +38,7 @@ import (
 
 // QuestionService user service
 type QuestionService struct {
+	answerRepo            answercommon.AnswerRepo
 	questionRepo          questioncommon.QuestionRepo
 	tagCommon             *tagcommon.TagCommonService
 	questioncommon        *questioncommon.QuestionCommon
@@ -49,6 +51,7 @@ type QuestionService struct {
 }
 
 func NewQuestionService(
+	answerRepo answercommon.AnswerRepo,
 	questionRepo questioncommon.QuestionRepo,
 	tagCommon *tagcommon.TagCommonService,
 	questioncommon *questioncommon.QuestionCommon,
@@ -61,6 +64,7 @@ func NewQuestionService(
 
 ) *QuestionService {
 	return &QuestionService{
+		answerRepo:            answerRepo,
 		questionRepo:          questionRepo,
 		tagCommon:             tagCommon,
 		questioncommon:        questioncommon,
@@ -839,7 +843,7 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 		item.ID = question.ID
 		item.Title = question.Title
 		item.ViewCount = question.ViewCount
-		item.AnswerCount = question.AnswerCount
+		item.AnswerCount, _ = qs.answerRepo.CountAnswerByQuestion(ctx, item.ID)
 		item.CollectionCount = question.CollectionCount
 		item.FollowCount = question.FollowCount
 		status, ok := entity.AdminQuestionSearchStatusIntToString[question.Status]
@@ -888,7 +892,20 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 			return nil, 0, err
 		}
 		if exist {
-			req.TagID = tagInfo.ID
+			tagIDs := make([]string, 0)
+			tagIDs = append(tagIDs, tagInfo.ID)
+			mainTagID := tagInfo.ID
+			if tagInfo.MainTagID != 0 {
+				mainTagID = fmt.Sprintf("%d", tagInfo.MainTagID)
+			}
+			tags, err := qs.tagCommon.GetTagListByMainTagID(ctx, mainTagID)
+			if err != nil {
+				return nil, 0, err
+			}
+			for _, tag := range tags {
+				tagIDs = append(tagIDs, tag.ID)
+			}
+			req.TagIDs = tagIDs
 		}
 	}
 
@@ -905,7 +922,7 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 	}
 
 	questionList, total, err := qs.questionRepo.GetQuestionPage(ctx, req.Page, req.PageSize,
-		req.UserIDBeSearched, req.TagID, req.OrderCond)
+		req.UserIDBeSearched, req.TagIDs, req.OrderCond)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -914,6 +931,17 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 		return nil, 0, err
 	}
 	return questions, total, nil
+}
+
+func (qs *QuestionService) AdminChangeQuestionTop(ctx context.Context, id string) error {
+	question, exist, err := qs.questionRepo.GetQuestion(ctx, id)
+	if err != nil {
+		return err
+	}
+	if !exist {
+		return errors.BadRequest(reason.QuestionNotFound)
+	}
+	return qs.questionRepo.UpdateQuestionTop(ctx, &entity.Question{ID: question.ID, Top: !question.Top})
 }
 
 func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionID string, setStatusStr string) error {
@@ -994,6 +1022,7 @@ func (qs *QuestionService) AdminSearchList(ctx context.Context, search *schema.A
 		item.CreateTime = dbitem.CreatedAt.Unix()
 		item.UpdateTime = dbitem.PostUpdateTime.Unix()
 		item.EditTime = dbitem.UpdatedAt.Unix()
+		item.Top = dbitem.Top
 		list = append(list, item)
 		userIds = append(userIds, dbitem.UserID)
 	}

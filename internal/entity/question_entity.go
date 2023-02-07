@@ -36,13 +36,14 @@ type Question struct {
 	ViewCount        int       `xorm:"not null default 0 INT(11) view_count"`
 	UniqueViewCount  int       `xorm:"not null default 0 INT(11) unique_view_count"`
 	VoteCount        int       `xorm:"not null default 0 INT(11) vote_count"`
-	AnswerCount      int       `xorm:"not null default 0 INT(11) answer_count"`
+	AnswerCount      int64     `xorm:"not null default 0 INT(11) answer_count"`
 	CollectionCount  int       `xorm:"not null default 0 INT(11) collection_count"`
 	FollowCount      int       `xorm:"not null default 0 INT(11) follow_count"`
 	AcceptedAnswerID string    `xorm:"not null default 0 BIGINT(20) accepted_answer_id"`
 	LastAnswerID     string    `xorm:"not null default 0 BIGINT(20) last_answer_id"`
 	PostUpdateTime   time.Time `xorm:"post_update_time TIMESTAMP"`
 	RevisionID       string    `xorm:"not null default 0 BIGINT(20) revision_id"`
+	Top              bool      `xorm:"not null default false BOOL top"`
 }
 
 // TableName question table name

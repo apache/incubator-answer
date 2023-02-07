@@ -1,20 +1,26 @@
 import { useState } from 'react';
-import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { usePageTags } from '@/hooks';
-import { Tag, Pagination, QueryGroup, TagsLoader } from '@/components';
+import { usePageTags, useTagModal, useToast } from '@/hooks';
+import { Pagination, QueryGroup, Tag, TagsLoader } from '@/components';
 import { formatCount } from '@/utils';
 import { tryNormalLogged } from '@/utils/guard';
-import { useQueryTags, following } from '@/services';
+import { addTag, following, useQueryTags } from '@/services';
+import { loggedUserInfoStore } from '@/stores';
 
 const sortBtns = ['popular', 'name', 'newest'];
 
 const Tags = () => {
   const [urlSearch] = useSearchParams();
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
+
+  const { is_admin } = loggedUserInfoStore((state) => state.user);
+
   const [searchTag, setSearchTag] = useState('');
+
+  const toast = useToast();
 
   const page = Number(urlSearch.get('page')) || 1;
   const sort = urlSearch.get('sort');
@@ -46,6 +52,18 @@ const Tags = () => {
       mutate();
     });
   };
+
+  const tagModel = useTagModal({
+    onConfirm: (data) => {
+      addTag(data).then(() => {
+        toast.onShow({
+          msg: '添加成功',
+          variant: 'success',
+        });
+        mutate();
+      });
+    },
+  });
   usePageTags({
     title: t('tags', { keyPrefix: 'page_title' }),
   });
@@ -53,7 +71,21 @@ const Tags = () => {
     <Container className="py-3 my-3">
       <Row className="mb-4 d-flex justify-content-center">
         <Col xxl={10} sm={12}>
-          <h3 className="mb-4">{t('title')}</h3>
+          <h3 className="mb-4">
+            {t('title')}
+            {is_admin && (
+              <button
+                type="button"
+                className="btn btn-primary float-end btn-sm"
+                onClick={() => {
+                  tagModel.onShow();
+                }}>
+                <span className="me-1">+</span>
+                {t('add_btn', { keyPrefix: 'tag_selector' })}
+              </button>
+            )}
+          </h3>
+
           <div className="d-flex justify-content-between align-items-center flex-wrap">
             <Form>
               <Form.Group controlId="formBasicEmail">

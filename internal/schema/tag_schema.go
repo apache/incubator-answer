@@ -187,6 +187,18 @@ type UpdateTagResp struct {
 	WaitForReview bool `json:"wait_for_review"`
 }
 
+// AddTagReq add one tag request
+type AddTagReq struct {
+	// slug_name
+	SlugName string `validate:"omitempty,gt=0,lte=35" json:"slug_name"`
+	// display_name
+	DisplayName string `validate:"omitempty,gt=0,lte=35" json:"display_name"`
+	// original text
+	OriginalText string `validate:"omitempty" json:"original_text"`
+
+	UserID string `json:"-"`
+}
+
 // GetTagWithPageReq get tag list page request
 type GetTagWithPageReq struct {
 	// page

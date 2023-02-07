@@ -1006,6 +1006,7 @@ ui:
     votes: votes
     answers: answers
     accepted: Accepted
+    top: TOP
   page_404:
     desc: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage
@@ -1181,6 +1182,11 @@ ui:
       change: Change
       filter:
         placeholder: "Filter by title, question:id"
+      top:
+        ok: top
+        cancel: unTop
+        okContent: This question will be pinned to the top.
+        cancelContent: This question will be unpinned to the top.
     answers:
       page_title: Answers
       normal: Normal
