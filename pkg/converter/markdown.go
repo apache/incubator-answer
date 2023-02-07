@@ -57,6 +57,8 @@ func (r *DangerousHTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegis
 	reg.Register(ast.KindHTMLBlock, r.renderHTMLBlock)
 	reg.Register(ast.KindRawHTML, r.renderRawHTML)
 	reg.Register(ast.KindLink, r.renderLink)
+	reg.Register(ast.KindAutoLink, r.renderAutoLink)
+
 }
 
 func (r *DangerousHTMLRenderer) renderRawHTML(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
@@ -90,6 +92,7 @@ func (r *DangerousHTMLRenderer) renderHTMLBlock(w util.BufWriter, source []byte,
 }
 
 func (r *DangerousHTMLRenderer) renderLink(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+
 	n := node.(*ast.Link)
 	if entering && r.renderLinkIsUrl(string(n.Destination)) {
 		_, _ = w.WriteString("<a href=\"")
@@ -109,6 +112,31 @@ func (r *DangerousHTMLRenderer) renderLink(w util.BufWriter, source []byte, node
 	} else {
 		_, _ = w.WriteString("</a>")
 	}
+	return ast.WalkContinue, nil
+}
+
+func (r *DangerousHTMLRenderer) renderAutoLink(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+	n := node.(*ast.AutoLink)
+
+	if !entering || !r.renderLinkIsUrl(string(n.URL(source))) {
+		return ast.WalkContinue, nil
+	}
+	_, _ = w.WriteString(`<a href="`)
+	url := n.URL(source)
+	label := n.Label(source)
+	if n.AutoLinkType == ast.AutoLinkEmail && !bytes.HasPrefix(bytes.ToLower(url), []byte("mailto:")) {
+		_, _ = w.WriteString("mailto:")
+	}
+	_, _ = w.Write(util.EscapeHTML(util.URLEscape(url, false)))
+	if n.Attributes() != nil {
+		_ = w.WriteByte('"')
+		html.RenderAttributes(w, n, html.LinkAttributeFilter)
+		_ = w.WriteByte('>')
+	} else {
+		_, _ = w.WriteString(`">`)
+	}
+	_, _ = w.Write(util.EscapeHTML(label))
+	_, _ = w.WriteString(`</a>`)
 	return ast.WalkContinue, nil
 }
 
