@@ -1104,7 +1104,7 @@ ui:
             password:
               label: Mot de passe
               text: L'utilisateur sera déconnecté et devra se reconnecter.
-              msg: Password must be at 8-32 characters in length.
+              msg: Le mot de passe doit contenir entre 8 et 32 caractères.
         btn_cancel: Annuler
         btn_submit: Valider
       user_modal:
@@ -1113,13 +1113,13 @@ ui:
           fields:
             display_name:
               label: Nom affiché
-              msg: Display Name must be at 3-30 characters in length.
+              msg: Le nom affiché doit avoir une longueur de 3 à 30 caractères.
             email:
               label: Email
               msg: L'email n'est pas valide.
             password:
               label: Mot de passe
-              msg: Password must be at 8-32 characters in length.
+              msg: Le mot de passe doit contenir entre 8 et 32 caractères.
         btn_cancel: Annuler
         btn_submit: Valider
     questions:
@@ -1238,14 +1238,14 @@ ui:
         text: L'image du logo en haut à gauche de votre site. Utilisez une grande image rectangulaire avec une hauteur de 56 et un ratio d'aspect supérieur à 3:1. Si laissé vide, le titre du site sera affiché.
       mobile_logo:
         label: Logo mobile (optionnel)
-        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
+        text: Le logo utilisé sur la version mobile de votre site. Utilisez une image rectangulaire large avec une hauteur de 56. Si laissé vide, l'image du paramètre « logo » sera utilisée.
       square_icon:
         label: Icône carrée (optionnel)
         msg: L'icône carrée ne peut pas être vide.
         text: Image utilisée comme base pour les icônes de métadonnées. Idéalement supérieure à 512x512.
       favicon:
         label: Favicon (optionnel)
-        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
+        text: Une favicon pour votre site. Pour fonctionner correctement sur un CDN, il doit s'agir d'un png. Sera redimensionné en 32x32. Si laissé vide, « icône carrée » sera utilisé.
     legal:
       page_title: Légal
       terms_of_service:
