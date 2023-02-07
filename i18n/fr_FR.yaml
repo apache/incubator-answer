@@ -151,7 +151,7 @@ backend:
         other: Impossible de créer le fichier config.yaml.
     upload:
       unsupported_file_format:
-        other: Unsupported file format.
+        other: Format de fichier non supporté.
   report:
     spam:
       name:
