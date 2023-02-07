@@ -2,12 +2,12 @@ name: Node Build Test
 
 on:
   push:
-    branches: [ "main","githubaction"]
+    branches: [ "main","githubaction","test"]
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  build-and-push:
+  node-build-test:
     runs-on: [self-hosted, linux]
     steps:
     - name: Checkout
