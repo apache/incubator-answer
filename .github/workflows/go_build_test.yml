@@ -2,7 +2,7 @@ name: Go Build Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main","githubaction" ]
   pull_request:
     branches: [ "main" ]
 
