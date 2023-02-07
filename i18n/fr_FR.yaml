@@ -148,7 +148,7 @@ backend:
         other: La création de la table a échoué
     install:
       create_config_failed:
-        other: Can't create the config.yaml file.
+        other: Impossible de créer le fichier config.yaml.
   report:
     spam:
       name:
@@ -479,7 +479,7 @@ ui:
     btn_flag: Balise
     btn_save_edits: Enregistrer les modifications
     btn_cancel: Annuler
-    show_more: Show more comments
+    show_more: Afficher plus de commentaires
     tip_question: >-
       Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires.
     tip_answer: >-
@@ -494,7 +494,7 @@ ui:
         answer:
           label: Réponse
           feedback:
-            characters: content must be at least 6 characters in length.
+            characters: le contenu doit comporter au moins 6 caractères.
         edit_summary:
           label: Modifier le résumé
           placeholder: >-
@@ -619,7 +619,7 @@ ui:
       msg:
         empty: L'e-mail ne peut pas être vide.
   change_email:
-    page_title: Welcome to {{site_name}}
+    page_title: Bienvenue sur {{site_name}}
     btn_cancel: Annuler
     btn_update: Mettre à jour l'adresse e-mail
     send_success: >-
@@ -657,12 +657,12 @@ ui:
       display_name:
         label: Nom affiché
         msg: Le nom ne peut être vide.
-        msg_range: Display name up to 30 characters.
+        msg_range: Le nom doit contenir moins de 30 caractères.
       username:
         label: Nom d'utilisateur
         caption: Les gens peuvent vous mentionner avec "@username".
         msg: Le nom d'utilisateur ne peut pas être vide.
-        msg_range: Username up to 30 characters.
+        msg_range: Le nom d'utilisateur doit contenir moins de 30 caractères.
         character: 'Doit utiliser seulement les caractères "a-z", "0-9", " - . _"'
       avatar:
         label: Image de profil
@@ -748,7 +748,7 @@ ui:
       confirm_info: >-
         <p>Êtes-vous sûr de vouloir ajouter une autre réponse ?</p><p>Vous pouvez utiliser le lien d'édition pour affiner et améliorer votre réponse existante.</p>
       empty: La réponse ne peut être vide.
-      characters: content must be at least 6 characters in length.
+      characters: le contenu doit comporter au moins 6 caractères.
     reopen:
       title: Rouvrir ce message
       content: Êtes-vous sûr de vouloir rouvrir ?
@@ -809,7 +809,7 @@ ui:
   modal_confirm:
     title: Erreur...
   account_result:
-    page_title: Welcome to {{site_name}}
+    page_title: Bienvenue sur {{site_name}}
     success: Votre nouveau compte est confirmé; vous serez redirigé vers la page d'accueil.
     link: Continuer vers la page d'accueil
     invalid: >-
@@ -820,7 +820,7 @@ ui:
   unsubscribe:
     page_title: Se désabonner
     success_title: Désabonnement réussi
-    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
+    success_desc: Vous avez été supprimé de cette liste d'abonnés avec succès et ne recevrez plus d'e-mails.
     link: Modifier les paramètres
   question:
     following_tags: Hashtags suivis
@@ -882,7 +882,7 @@ ui:
     title: Réponse
     next: Suivant
     done: Terminé
-    config_yaml_error: Can't create the config.yaml file.
+    config_yaml_error: Impossible de créer le fichier config.yaml.
     lang:
       label: Veuillez choisir une langue
     db_type:
@@ -912,7 +912,7 @@ ui:
       label: Le fichier config.yaml a été créé.
       desc: >-
         Vous pouvez créer manuellement le fichier <1>config.yaml</1> dans le répertoire <1>/var/wwww/xxx/</1> et y coller le texte suivant.
-      info: After you've done that, click "Next" button.
+      info: Après avoir fini, cliquez sur le bouton "Suivant".
     site_information: Informations du site
     admin_account: Compte Admin
     site_name:
@@ -957,12 +957,12 @@ ui:
       Il semble que se soit déjà installer. Pour tout réinstaller, veuillez d'abord nettoyer votre ancienne base de données.
     db_failed: La connexion à la base de données a échoué
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+      Il semble que les informations de la base de données présentes dans le fichier <1>config.yaml</1> soient incorrects ou que le contact avec le serveur ne puisse pas être établi. Cela peut vouloir dire que l'hôte de la base de données soit non opérationnel.
   counts:
-    views: views
+    views: vues
     votes: votes
-    answers: answers
-    accepted: Accepted
+    answers: réponses
+    accepted: Accepté
   page_404:
     desc: "Nous sommes désolés, mais cette page n’existe pas."
     back_home: Retour à la page d'accueil
@@ -970,7 +970,7 @@ ui:
     desc: Le serveur a rencontré une erreur et n'a pas pu répondre à votre requête.
     back_home: Retour à la page d'accueil
   page_maintenance:
-    desc: "We are under maintenance, we'll be back soon."
+    desc: "Nous sommes en maintenance, nous serons bientôt de retour."
   nav_menus:
     dashboard: Tableau de bord
     contents: Contenus
