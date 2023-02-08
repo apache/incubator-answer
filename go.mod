@@ -139,3 +139,4 @@ require (
 
 // github action runner Sometimes it will time out.
 replace gitee.com/travelliu/dm v1.8.11192 => github.com/aichy126/dm v1.8.11192
+replace modernc.org/z v1.2.19 => github.com/aichy126/modernc.org_z v1.2.19
