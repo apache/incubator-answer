@@ -223,9 +223,7 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 	session := qr.data.DB.Where("question.status = ? OR question.status = ?",
 		entity.QuestionStatusAvailable, entity.QuestionStatusClosed)
 	if len(tagIDs) > 0 {
-		session.Join("LEFT", "tag_rel", "question.id = tag_rel.object_id")
-		session.In("tag_rel.tag_id", tagIDs)
-		session.And("tag_rel.status = ?", entity.TagRelStatusAvailable)
+		session.Where(builder.In("id", builder.Select("object_id").From("tag_rel").And(builder.Eq{"status": entity.TagRelStatusAvailable}).Where(builder.In("tag_id", tagIDs))))
 	}
 	if len(userID) > 0 {
 		session.And("question.user_id = ?", userID)
