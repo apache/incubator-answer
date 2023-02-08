@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  build-and-push:
+  build-goreleaser:
     runs-on: [self-hosted, linux]
 
     steps:

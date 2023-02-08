@@ -2,13 +2,13 @@ name: Go Build Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main","githubaction","test" ]
   pull_request:
     branches: [ "main" ]
 
 
 jobs:
-  build-and-push:
+  go-build-test:
     runs-on: [self-hosted, linux]
 
     steps:
