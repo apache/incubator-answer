@@ -448,7 +448,7 @@ ui:
     delete:
       title: Delete this tag
       content: >-
-        <p>We do not allowed deleting tag with posts.</p><p>Please remove this tag
+        <p>We do not allow deleting tag with posts.</p><p>Please remove this tag
         from the posts first.</p>
       content2: Are you sure you wish to delete?
       close: Close

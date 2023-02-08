@@ -440,7 +440,7 @@ ui:
     delete:
       title: Hapus tagar ini
       content: >-
-        <p>We do not allowed deleting tag with posts.</p><p>Please remove this tag from the posts first.</p>
+        <p>We do not allow deleting tag with posts.</p><p>Please remove this tag from the posts first.</p>
       content2: Anda yakin ingin menghapusnya?
       close: Tutup
   edit_tag:
