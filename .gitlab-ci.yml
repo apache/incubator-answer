@@ -16,7 +16,7 @@ stages:
     LoadBalancerIP: 10.0.10.98
     KubernetesCluster: dev
     KubernetesNamespace: "sf-web"
-    InstallArgs: --set service.loadBalancerIP=${LoadBalancerIP} --set image.tag=$CI_COMMIT_SHORT_SHA --set replicaCount=1 --set serivce.targetPort=80
+    InstallArgs: --set service.loadBalancerIP=${LoadBalancerIP} --set image.tag=latest --set replicaCount=1 --set serivce.targetPort=80
     ChartName: answer
     InstallPolicy: replace
 
