@@ -33,7 +33,7 @@ var (
 		"`user_id`",
 		"`vote_count`",
 		"`answer_count`",
-		"0 as `accepted`",
+		"CASE WHEN `accepted_answer_id` > 0 THEN 2 ELSE 0 END as `accepted`",
 		"`question`.`status` as `status`",
 		"`post_update_time`",
 	}

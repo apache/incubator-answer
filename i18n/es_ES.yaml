@@ -2,7 +2,7 @@
 backend:
   base:
     success:
-      other: "Success."
+      other: "Completado."
     unknown:
       other: "Error desconocido."
     request_format_error:
@@ -88,17 +88,17 @@ backend:
         other: "Sin permiso para actualizar."
     rank:
       fail_to_meet_the_condition:
-        other: "Rank fail to meet the condition."
+        other: "El rango no cumple la condición."
     report:
       handle_failed:
-        other: "Report handle failed."
+        other: "Error en el manejador del reporte."
       not_found:
-        other: "Report not found."
+        other: "Informe no encontrado."
     tag:
       not_found:
         other: "Etiqueta no encontrada."
       recommend_tag_not_found:
-        other: "Recommend Tag is not exist."
+        other: "Etiqueta recomendada no existe."
       recommend_tag_enter:
         other: "Por favor, introduce al menos una de las etiquetas requeridas."
       not_contain_synonym_tags:
@@ -109,13 +109,13 @@ backend:
         other: "No se puede establecer como sinónimo de una etiqueta la propia etiqueta."
     smtp:
       config_from_name_cannot_be_email:
-        other: "The From Name cannot be a email address."
+        other: "¡Su nombre de usuario no puede ser una dirección de correo electrónico!"
     theme:
       not_found:
         other: "Tema no encontrado."
     revision:
       review_underway:
-        other: "Can't edit currently, there is a version in the review queue."
+        other: "No se puede editar actualmente, hay una versión en la cola de revisiones."
       no_permission:
         other: "Sin permiso para revisar."
     user:
@@ -236,9 +236,30 @@ backend:
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: How to Format
+    title: Cómo formatear
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0">
+       <li><p class="mb-2">Para hacer enlaces</p>
+       <pre class="mb-2">
+       <code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)
+       </code>
+       </pre>
+       </li>
+       <li><p class="mb-2">Colocar saltos de línea entre párrafos</p></li>
+       <li><p class="mb-2"><em>_cursiva_</em> o **<strong>negrita</strong>**</p></li>
+       <li><p class="mb-2">Indentar el código con 4 espacios</p></li>
+       <li><p class="mb-2">Citar colocando <code>&gt;</code> al inicio de la línea</p></li>
+       <li><p class="mb-2">Escape con backticks <code>`como _esto_`</code></p></li>
+       <li><p class="mb-2">Crear barreras de código con backticks <code>`</code></p>
+       <pre class="mb-0">
+       <code>
+       ```<br/>
+       código aquí<br/>
+       ```
+       </code>
+       </pre>
+       </li>
+      </ul>
   pagination:
     prev: Anterior
     next: Siguiente
@@ -287,13 +308,13 @@ ui:
     chart:
       text: Gráfica
       flow_chart: Diagrama de flujo
-      sequence_diagram: Sequence diagram
-      class_diagram: Class diagram
-      state_diagram: State diagram
-      entity_relationship_diagram: Entity relationship diagram
-      user_defined_diagram: User defined diagram
+      sequence_diagram: Diagrama de secuencia
+      class_diagram: Diagrama de clase
+      state_diagram: Diagrama de estado
+      entity_relationship_diagram: Diagrama de relación de entidad
+      user_defined_diagram: Diagrama definido por el usuario
       gantt_chart: Diagrama de Gantt
-      pie_chart: Pie chart
+      pie_chart: Grafico de torta
     code:
       text: Código
       add_code: Añadir código
@@ -381,7 +402,7 @@ ui:
       heading: Encabezado
       cell: Celda
   close_modal:
-    title: I am closing this post as...
+    title: Estoy cerrando este post como...
     btn_cancel: Cancelar
     btn_submit: Enviar
     remark:
@@ -389,11 +410,11 @@ ui:
     msg:
       empty: Por favor selecciona una razón.
   report_modal:
-    flag_title: I am flagging to report this post as...
-    close_title: I am closing this post as...
-    review_question_title: Review question
-    review_answer_title: Review answer
-    review_comment_title: Review comment
+    flag_title: Estoy marcando este post como...
+    close_title: Estoy cerrando este post como...
+    review_question_title: Revisar pregunta
+    review_answer_title: Revisar respuesta
+    review_comment_title: Revisar comentario
     btn_cancel: Cancelar
     btn_submit: Enviar
     remark:
@@ -408,7 +429,7 @@ ui:
           label: Nombre a mostrar
           msg:
             empty: El nombre a mostrar no puede estar vacío.
-            range: Display name up to 35 characters.
+            range: Nombre a mostrar con un máximo de 35 caracteres.
         slug_name:
           label: URL amigable
           desc: 'Debe usar el conjunto de caracteres "a-z", "0-9", "+ # - ."'
@@ -426,16 +447,16 @@ ui:
     history: Historial
     synonyms:
       title: Sinónimos
-      text: The following tags will be remapped to
+      text: Las siguientes etiquetas serán reasignadas a
       empty: No se encontraron sinónimos.
       btn_add: Añadir un sinónimo
       btn_edit: Editar
       btn_save: Guardar
-    synonyms_text: The following tags will be remapped to
+    synonyms_text: Las siguientes etiquetas serán reasignadas a
     delete:
       title: Eliminar esta etiqueta
       content: >-
-        <p>We do not allowed deleting tag with posts.</p><p>Please remove this tag from the posts first.</p>
+        <p>No se permite la eliminación de etiquetas con posts.</p><p>Por favor antes elimina esta etiqueta del post.</p>
       content2: '¿Estás seguro de que deseas borrarlo?'
       close: Cerrar
   edit_tag:
@@ -508,16 +529,16 @@ ui:
     tag_label: preguntas
     search_placeholder: Filtrar por nombre de etiqueta
     no_desc: La etiqueta no tiene descripción.
-    more: More
+    more: Mas
   ask:
-    title: Add Question
-    edit_title: Edit Question
-    default_reason: Edit question
+    title: Agregar una pregunta
+    edit_title: Editar pregunta
+    default_reason: Editar pregunta
     similar_questions: Preguntas similares
     form:
       fields:
         revision:
-          label: Revision
+          label: Revisión
         title:
           label: Título
           placeholder: Sé preciso e imagina que le estás preguntando esto a una persona
@@ -585,7 +606,8 @@ ui:
     msg:
       empty: No puede estar en blanco.
   login:
-    page_title: Bienvenido a Answer
+    page_title: Bienvenido a {{site_name}}
+    login_to_continue: Inicia sesión para continuar
     info_sign: '¿No tienes cuenta? <1>Regístrate</1>'
     info_login: '¿Ya tienes una cuenta? <1>Inicia sesión</1>'
     agreements: Al registrarte, aceptas la <1>política de privacidad</1> y los <3>términos de servicio</3>.
@@ -666,7 +688,7 @@ ui:
         custom: Propia
         btn_refresh: Actualizar
         custom_text: Puedes subir tu propia imagen.
-        default: System
+        default: Sistema
         msg: Por favor, sube una imagen
       bio:
         label: Sobre mí (opcional)
@@ -693,11 +715,11 @@ ui:
         msg: El correo electrónico no puede estar vacío.
       password_title: Password
       current_pass:
-        label: Current Password
+        label: Contraseña actual
         msg:
-          empty: Current Password cannot be empty.
-          length: The length needs to be between 8 and 32.
-          different: The two entered passwords do not match.
+          empty: La contraseña actual no puede estar vacía.
+          length: El largo necesita estar entre 8 y 32 caracteres.
+          different: Las contraseñas no coinciden.
       new_pass:
         label: Nueva Contraseña
       pass_confirm:
@@ -712,7 +734,7 @@ ui:
     update_password: Contraseña cambiada con éxito.
     flag_success: Gracias por reportar.
     forbidden_operate_self: No puedes modificar tu propio usuario
-    review: Your revision will show after review.
+    review: Tu revisión será visible luego de ser aprobada.
   related_question:
     title: Preguntas relacionadas
     btn: Añadir pregunta
@@ -726,7 +748,7 @@ ui:
     Follow: Seguir
     Following: Siguiendo
     answered: respondida
-    closed_in: Closed in
+    closed_in: Cerrado el
     show_exist: Mostrar una pregunta existente.
     answers:
       title: Respuestas
@@ -750,9 +772,13 @@ ui:
   delete:
     title: Eliminar esta publicación
     question: >-
-      We do not recommend <strong>deleting questions with answers</strong> because doing so deprives future readers of this knowledge.</p><p>Repeated deletion of answered questions can result in your account being blocked from asking. Are you sure you wish to delete?
+      No recomendamos <strong>borrar preguntas con respuestas</strong> porque esto priva a los lectores futuros de este conocimiento.
+      </p><p>
+      El borrado repetido de preguntas respondidas puede resultar en que tu cuenta se bloquee para hacer preguntas. ¿Estás seguro de que deseas borrarlo?
     answer_accepted: >-
-      <p>We do not recommend <strong>deleting accepted answer</strong> because doing so deprives future readers of this knowledge. </p> Repeated deletion of accepted answers can result in your account being blocked from answering. Are you sure you wish to delete?
+      <p>No recomendamos <strong>borrar la respuesta aceptada</strong> porque esto priva a los lectores futuros de este conocimiento.</p>
+
+      El borrado repetido de respuestas aceptadas puede resultar en que tu cuenta se bloquee para responder. ¿Estás seguro de que deseas borrarlo?
     other: '¿Estás seguro de que deseas borrarlo?'
     tip_question_deleted: Esta publicación ha sido eliminada
     tip_answer_deleted: Esta respuesta ha sido eliminada
@@ -782,13 +808,13 @@ ui:
       newest: Más reciente
       active: Activas
       score: Puntuación
-      more: More
+      more: Mas
     tips:
-      title: Advanced Search Tips
-      tag: "<1>[tag]</1> search withing a tag"
-      user: "<1>user:username</1> search by author"
-      answer: "<1>answers:0</1> unanswered questions"
-      score: "<1>score:3</1> posts with a 3+ score"
+      title: Consejos de búsqueda avanzada
+      tag: "<1>[tag]</1> búsqueda por etiquetas"
+      user: "<1>user:username</1> búsqueda por autor"
+      answer: "<1>answers:0</1> preguntas sin responder"
+      score: "<1>score:3</1> Publicaciones con un puntaje de 3 o más"
       question: "<1>is:question</1> buscar preguntas"
       is_answer: "<1>is:answer</1> buscar respuestas"
     empty: No pudimos encontrar nada. <br /> Prueba a buscar con palabras diferentes o menos específicas.
@@ -810,14 +836,14 @@ ui:
       Lo sentimos, este link de confirmación de cuenta ya no es válido. ¿Quizás tu cuenta ya está activa?
     confirm_new_email: Tu email ha sido actualizado.
     confirm_new_email_invalid: >-
-      Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
+      Lo siento, este enlace de confirmación ya no es válido. ¿Quizás ya se haya cambiado tu correo electrónico?
   unsubscribe:
     page_title: Desuscribir
     success_title: Desuscrito con éxito
     success_desc: Has sido eliminado con éxito de esta lista de suscriptores y no recibirás más correos electrónicos nuestros.
     link: Cambiar ajustes
   question:
-    following_tags: Following Tags
+    following_tags: Etiquetas seguidas
     edit: Editar
     save: Guardar
     follow_tag_tip: Sigue etiquetas para personalizar tu lista de preguntas.
@@ -828,8 +854,8 @@ ui:
     questions: Preguntas
     answers: Respuestas
     newest: Más reciente
-    active: Active
-    frequent: Frequent
+    active: Activo
+    frequent: Frecuente
     score: Puntuación
     unanswered: Sin respuesta
     modified: modificada
@@ -852,8 +878,8 @@ ui:
     score: Puntuación
     edit_profile: Editar perfil
     visited_x_days: "Visitado {{ count }} días"
-    viewed: Viewed
-    joined: Joined
+    viewed: Visto
+    joined: Unido
     last_login: Seen
     about_me: Sobre mí
     about_me_empty: "// ¡Hola Mundo!"
@@ -1222,14 +1248,14 @@ ui:
     branding:
       page_title: Branding
       logo:
-        label: Logo
+        label: Logo (optional)
         msg: Logo cannot be empty.
         text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
       mobile_logo:
         label: Mobile Logo (optional)
         text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the “logo” setting will be used.
       square_icon:
-        label: Square Icon
+        label: Square Icon (optional)
         msg: Square icon cannot be empty.
         text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
       favicon:

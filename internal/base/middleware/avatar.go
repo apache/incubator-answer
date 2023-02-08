@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -53,6 +54,8 @@ func (am *AvatarMiddleware) AvatarThumb() gin.HandlerFunc {
 				ctx.Next()
 				return
 			}
+			ext := strings.ToLower(path.Ext(filePath)[1:])
+			ctx.Header("content-type", fmt.Sprintf("image/%s", ext))
 			_, err = ctx.Writer.WriteString(string(avatarfile))
 			if err != nil {
 				log.Error(err)
@@ -60,6 +63,17 @@ func (am *AvatarMiddleware) AvatarThumb() gin.HandlerFunc {
 			ctx.Abort()
 			return
 
+		} else {
+			uUrl, err := url.Parse(u)
+			if err != nil {
+				ctx.Next()
+				return
+			}
+			_, urlfileName := filepath.Split(uUrl.Path)
+			uploadPath := am.serviceConfig.UploadPath
+			filePath := fmt.Sprintf("%s/%s", uploadPath, urlfileName)
+			ext := strings.ToLower(path.Ext(filePath)[1:])
+			ctx.Header("content-type", fmt.Sprintf("image/%s", ext))
 		}
 		ctx.Next()
 	}

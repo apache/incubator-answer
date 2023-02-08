@@ -2,14 +2,13 @@ name: Node Build Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main","githubaction","test"]
   pull_request:
     branches: [ "main" ]
 
 jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-
+  node-build-test:
+    runs-on: [self-hosted, linux]
     steps:
     - name: Checkout
       uses: actions/checkout@v3

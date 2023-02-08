@@ -405,17 +405,17 @@ ui:
     form:
       fields:
         display_name:
-          label: 显示名称（别名）
+          label: 显示名称
           msg:
-            empty: 不能为空
-            range: 不能超过 35 个字符
+            empty: 显示名称不能为空。
+            range: 显示名称不能超过 35 个字符。
         slug_name:
           label: URL 固定链接
-          desc: '必须使用字符集 "a-z"、"0-9"、"+ # - ."'
+          desc: '必须由 "a-z", "0-9", "+ # - ." 组成'
           msg:
-            empty: 不能为空
-            range: 不能超过 35 个字符
-            character: 包含非法字符
+            empty: URL 固定链接不能为空。
+            range: URL 固定链接不能超过 35 个字符。
+            character: URL 固定链接包含非法字符。
         desc:
           label: 描述(可选)
     btn_cancel: 取消
@@ -446,7 +446,7 @@ ui:
         revision:
           label: 编辑历史
         display_name:
-          label: 名称
+          label: 显示名称
         slug_name:
           label: URL 固定链接
           info: '必须由 "a-z", "0-9", "+ # - ." 组成'
@@ -585,6 +585,8 @@ ui:
     msg:
       empty: 不能为空
   login:
+    page_title: 欢迎来到 {{site_name}}
+    login_to_continue: 登录以继续
     info_sign: 没有账户？<1>注册</1>
     info_login: 已经有一个账户？<1>登录</1>
     agreements: 登录即表示您同意<1>隐私政策</1>和<3>服务条款</3>。
@@ -613,6 +615,7 @@ ui:
       msg:
         empty: 邮箱不能为空
   change_email:
+    page_title: 欢迎来到 {{site_name}}
     btn_cancel: 取消
     btn_update: 更新电子邮件地址
     send_success: >-
@@ -649,8 +652,8 @@ ui:
       btn_name: 保存
       display_name:
         label: 昵称
-        msg: 昵称不能为空
-        msg_range: 昵称不能超过 30 个字符
+        msg: 昵称不能为空。
+        msg_range: 昵称不能超过 30 个字符。
       username:
         label: 用户名
         caption: 用户之间可以通过 "@用户名" 进行交互。
@@ -801,6 +804,7 @@ ui:
   modal_confirm:
     title: 发生错误...
   account_result:
+    page_title: 欢迎来到 {{site_name}}
     success: 你的账号已通过验证，即将返回首页。
     link: 返回首页
     invalid: >-
@@ -1100,7 +1104,7 @@ ui:
           fields:
             display_name:
               label: 昵称
-              msg: 昵称的长度必须是4-30个字符。
+              msg: 昵称的长度必须是 3-30 个字符。
             email:
               label: 邮箱
               msg: 电子邮箱无效。
@@ -1220,14 +1224,14 @@ ui:
     branding:
       page_title: 品牌
       logo:
-        label: 图标
+        label: Logo (可选)
         msg: 图标不能为空。
         text: 在你的网站左上方的Logo图标。使用一个高度为56，长宽比大于3:1的宽长方形图像。如果留空，将显示网站标题文本。
       mobile_logo:
         label: 移动端图标（可选）
         text: 在你的网站的移动版上使用的标志。使用一个高度为56的宽矩形图像。如果留空，将使用 "Logo"设置中的图像。
       square_icon:
-        label: 方形图标
+        label: 方形图标 (可选)
         msg: 方形图标不能为空。
         text: 用作元数据图标的基础的图像。最好是大于512x512。
       favicon:
@@ -1245,7 +1249,7 @@ ui:
       page_title: 编辑
       recommend_tags:
         label: 推荐标签
-        text: "请输入以上标签，每行一个标签。"
+        text: "请在上方输入标签固定链接，每行一个标签。"
       required_tag:
         title: 必需的标签
         label: 根据需要设置推荐标签
