@@ -4,13 +4,9 @@ on:
   push:
     branches:
       - 'dev'
-      - 'dev/**'
-      - 'githubaction'
   pull_request:
     branches: 
       - 'dev'
-      - 'dev/**'
-      - 'githubaction'
 
 jobs:
   node-build-test:
