@@ -2,9 +2,8 @@ name: Build Dev Image
 
 on:
   push:
-    branches: [ "test","githubaction" ]
-    tags:
-      - "v*.*.*"
+    branches: [ "test","dev" ]
+
 
 jobs:
   build:
