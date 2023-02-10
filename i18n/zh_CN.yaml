@@ -434,9 +434,9 @@ ui:
     synonyms_text: 以下标签等同于
     delete:
       title: 删除标签
-      content: >-
-        <p>不允许删除有关联问题的标签。</p><p>请先从关联的问题中删除此标签的引用。</p>
-      content2: 确定要删除吗？
+      content2: >-
+        <p>不允许删除有同义词标签。</p><p>请先从移除对应的同义词。</p>
+      content: 确定要删除吗？
       close: 关闭
   edit_tag:
     title: 编辑标签
