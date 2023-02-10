@@ -206,16 +206,14 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 }
 
 // GetQuestionPage query question page
-func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string) (
+func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, userID string, tagIDs []string, orderCond string) (
 	questionList []*entity.Question, total int64, err error) {
 	questionList = make([]*entity.Question, 0)
 
 	session := qr.data.DB.Where("question.status = ? OR question.status = ?",
 		entity.QuestionStatusAvailable, entity.QuestionStatusClosed)
-	if len(tagID) > 0 {
-		session.Join("LEFT", "tag_rel", "question.id = tag_rel.object_id")
-		session.And("tag_rel.tag_id = ?", tagID)
-		session.And("tag_rel.status = ?", entity.TagRelStatusAvailable)
+	if len(tagIDs) > 0 {
+		session.Where(builder.In("id", builder.Select("object_id").From("tag_rel").And(builder.Eq{"status": entity.TagRelStatusAvailable}).Where(builder.In("tag_id", tagIDs))))
 	}
 	if len(userID) > 0 {
 		session.And("question.user_id = ?", userID)

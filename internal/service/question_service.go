@@ -888,7 +888,20 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 			return nil, 0, err
 		}
 		if exist {
-			req.TagID = tagInfo.ID
+			tagIDs := make([]string, 0)
+			tagIDs = append(tagIDs, tagInfo.ID)
+			mainTagID := tagInfo.ID
+			if tagInfo.MainTagID != 0 {
+				mainTagID = fmt.Sprintf("%d", tagInfo.MainTagID)
+			}
+			tags, err := qs.tagCommon.GetTagListByMainTagID(ctx, mainTagID)
+			if err != nil {
+				return nil, 0, err
+			}
+			for _, tag := range tags {
+				tagIDs = append(tagIDs, tag.ID)
+			}
+			req.TagIDs = tagIDs
 		}
 	}
 
@@ -905,7 +918,7 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 	}
 
 	questionList, total, err := qs.questionRepo.GetQuestionPage(ctx, req.Page, req.PageSize,
-		req.UserIDBeSearched, req.TagID, req.OrderCond)
+		req.UserIDBeSearched, req.TagIDs, req.OrderCond)
 	if err != nil {
 		return nil, 0, err
 	}

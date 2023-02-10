@@ -116,6 +116,20 @@ func (tr *tagCommonRepo) GetTagListByNames(ctx context.Context, names []string) 
 	return
 }
 
+// GetTagListByMainTagID get tag list by main tag
+func (tr *tagCommonRepo) GetTagListByMainTagID(ctx context.Context, id string) (tagList []*entity.Tag, err error) {
+	tagList = make([]*entity.Tag, 0)
+	cond := &entity.Tag{}
+	session := tr.data.DB.Where("main_tag_id = ?", id)
+	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	session.Asc("slug_name")
+	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList, cond)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // GetTagByID get tag one
 func (tr *tagCommonRepo) GetTagByID(ctx context.Context, tagID string, includeDeleted bool) (
 	tag *entity.Tag, exist bool, err error,

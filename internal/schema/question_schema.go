@@ -240,9 +240,9 @@ type QuestionPageReq struct {
 	Tag       string `validate:"omitempty,gt=0,lte=100" form:"tag"`
 	Username  string `validate:"omitempty,gt=0,lte=100" form:"username"`
 
-	LoginUserID      string `json:"-"`
-	UserIDBeSearched string `json:"-"`
-	TagID            string `json:"-"`
+	LoginUserID      string   `json:"-"`
+	UserIDBeSearched string   `json:"-"`
+	TagIDs           []string `json:"-"`
 }
 
 const (

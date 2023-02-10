@@ -26,6 +26,7 @@ type TagCommonRepo interface {
 	GetTagBySlugName(ctx context.Context, slugName string) (tagInfo *entity.Tag, exist bool, err error)
 	GetTagListByName(ctx context.Context, name string, hasReserved bool) (tagList []*entity.Tag, err error)
 	GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error)
+	GetTagListByMainTagID(ctx context.Context, id string) (tagList []*entity.Tag, err error)
 	GetTagByID(ctx context.Context, tagID string, includeDeleted bool) (tag *entity.Tag, exist bool, err error)
 	GetTagPage(ctx context.Context, page, pageSize int, tag *entity.Tag, queryCond string) (tagList []*entity.Tag, total int64, err error)
 	GetRecommendTagList(ctx context.Context) (tagList []*entity.Tag, err error)
@@ -104,6 +105,16 @@ func (ts *TagCommonService) GetSiteWriteRecommendTag(ctx context.Context) (tags 
 		tags = append(tags, item.SlugName)
 	}
 	return tags, nil
+}
+
+// GetTagListByMainTagID get object tag
+func (ts *TagCommonService) GetTagListByMainTagID(ctx context.Context, id string) (tagList []*entity.Tag, err error) {
+	tagList, err = ts.tagCommonRepo.GetTagListByMainTagID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	ts.TagsFormatRecommendAndReserved(ctx, tagList)
+	return
 }
 
 func (ts *TagCommonService) SetSiteWriteTag(ctx context.Context, recommendTags, reservedTags []string, userID string) (
