@@ -4,12 +4,12 @@ on:
   push:
     branches:
       - 'dev'
-      - 'releases/**'
+      - 'dev/**'
       - 'githubaction'
   pull_request:
     branches: 
       - 'dev'
-      - 'releases/**'
+      - 'dev/**'
       - 'githubaction'
 
 jobs:
