@@ -32,8 +32,7 @@ jobs:
     name: Go Build Test
     runs-on: [self-hosted, linux]
     needs:
-      - node-build-test:
-
+      - node-build-test
     steps:
     - name: Checkout
       uses: actions/checkout@v3
