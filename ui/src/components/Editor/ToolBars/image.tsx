@@ -251,7 +251,12 @@ const Image: FC<IEditorContext> = ({ editor }) => {
 
                 <Form.Group controlId="editor.imgDescription" className="mb-3">
                   <Form.Label>
-                    {t('image.form_image.fields.desc.label')}
+                    {`${t('image.form_image.fields.desc.label')} ${t(
+                      'optional',
+                      {
+                        keyPrefix: 'form',
+                      },
+                    )}`}
                   </Form.Label>
                   <Form.Control
                     type="text"
@@ -285,7 +290,9 @@ const Image: FC<IEditorContext> = ({ editor }) => {
 
                 <Form.Group controlId="editor.imgName" className="mb-3">
                   <Form.Label>
-                    {t('image.form_url.fields.name.label')}
+                    {`${t('image.form_url.fields.name.label')} ${t('optional', {
+                      keyPrefix: 'form',
+                    })}`}
                   </Form.Label>
                   <Form.Control
                     type="text"

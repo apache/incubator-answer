@@ -384,7 +384,11 @@ const Index: React.FC = () => {
         </Form.Group>
 
         <Form.Group controlId="bio" className="mb-3">
-          <Form.Label>{t('bio.label')}</Form.Label>
+          <Form.Label>
+            {`${t('bio.label')} ${t('optional', {
+              keyPrefix: 'form',
+            })}`}
+          </Form.Label>
           <Form.Control
             className="font-monospace"
             required
@@ -408,7 +412,9 @@ const Index: React.FC = () => {
         </Form.Group>
 
         <Form.Group controlId="website" className="mb-3">
-          <Form.Label>{t('website.label')}</Form.Label>
+          <Form.Label>{`${t('website.label')} ${t('optional', {
+            keyPrefix: 'form',
+          })}`}</Form.Label>
           <Form.Control
             required
             type="url"
@@ -431,7 +437,9 @@ const Index: React.FC = () => {
         </Form.Group>
 
         <Form.Group controlId="email" className="mb-3">
-          <Form.Label>{t('location.label')}</Form.Label>
+          <Form.Label>{`${t('location.label')} ${t('optional', {
+            keyPrefix: 'form',
+          })}`}</Form.Label>
           <Form.Control
             required
             type="text"
