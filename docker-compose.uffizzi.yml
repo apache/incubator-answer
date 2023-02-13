@@ -1,4 +1,4 @@
-version: "3"
+version: "3.9"
 
 # uffizzi integration
 x-uffizzi:
@@ -26,6 +26,11 @@ services:
       - ADMIN_EMAIL=admin123@admin.com
     volumes:
       - answer-data:/data
+    depends_on:
+      mysql:
+        condition: service_healthy
+    links:
+      - db
     deploy:
       resources:
         limits:
@@ -38,6 +43,11 @@ services:
     - MYSQL_ROOT_PASSWORD=password
     - MYSQL_USER=mysql
     - MYSQL_PASSWORD=mysql
+   healthcheck:
+     test: [ "CMD", "mysqladmin" ,"ping", "-uroot", "-ppassword" ]
+     timeout: 20s
+     retries: 10
+   command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci', '--skip-character-set-client-handshake']
    volumes:
       - sql_data:/var/lib/mysql
    deploy:
