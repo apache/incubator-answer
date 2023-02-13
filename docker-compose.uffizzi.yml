@@ -10,6 +10,20 @@ services:
 
   answer:
     image: "${ANSWER_IMAGE}"
+    environment:
+      - AUTO_INSTALL=true
+      - DB_TYPE=mysql
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - DB_HOST=127.0.0.1:3306
+      - DB_NAME=answer
+      - LANGUAGE=en_US
+      - SITE_NAME=answer-test
+      - SITE_URL=http://localhost
+      - CONTACT_EMAIL=test@answer.com
+      - ADMIN_NAME=admin123
+      - ADMIN_PASSWORD=admin123
+      - ADMIN_EMAIL=admin123@admin.com
     volumes:
       - answer-data:/data
     deploy:
