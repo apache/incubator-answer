@@ -21,6 +21,11 @@ func Run(configPath string) {
 		panic(err)
 	}
 
+	// try to install by env
+	if installByEnv, err := TryToInstallByEnv(); installByEnv && err != nil {
+		fmt.Printf("[auto-install] try to init by env fail: %v\n", err)
+	}
+
 	installServer := NewInstallHTTPServer()
 	if len(port) == 0 {
 		port = "80"
