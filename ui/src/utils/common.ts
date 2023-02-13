@@ -168,9 +168,16 @@ function labelStyle(color, hover) {
 function handleFormError(
   error: { list: Array<{ error_field: string; error_msg: string }> },
   data: any,
+  keymap?: Array<{ from: string; to: string }>,
 ) {
   if (error.list?.length > 0) {
     error.list.forEach((item) => {
+      if (keymap?.length) {
+        const key = keymap.find((k) => k.from === item.error_field);
+        if (key) {
+          item.error_field = key.to;
+        }
+      }
       const errorFieldObject = data[item.error_field];
       if (errorFieldObject) {
         errorFieldObject.isInvalid = true;
