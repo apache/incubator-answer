@@ -283,7 +283,7 @@ export const setupApp = async () => {
   // TODO: optimize `initAppSettingsStore` by server render
   if (shouldInitAppFetchData()) {
     await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
-    setupAppLanguage();
+    await setupAppLanguage();
     setupAppTimeZone();
   }
 };

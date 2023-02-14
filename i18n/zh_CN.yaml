@@ -105,6 +105,8 @@ backend:
         other: "不应包含同义词标签。"
       cannot_update:
         other: "没有更新标签权限。"
+      is_used_cannot_delete:
+        other: "您不能删除正在被使用的标签"
       cannot_set_synonym_as_itself:
         other: "您不能将当前标签的同义词设置为本身。"
     smtp:
