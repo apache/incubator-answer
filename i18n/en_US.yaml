@@ -108,6 +108,8 @@ backend:
         other: Should not contain synonym tags.
       cannot_update:
         other: No permission to update.
+      is_used_cannot_delete:
+        other: "You cannot delete a tag that is in use"
       cannot_set_synonym_as_itself:
         other: You cannot set the synonym of the current tag as itself.
     smtp:

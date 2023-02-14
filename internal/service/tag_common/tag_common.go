@@ -563,6 +563,10 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 	return nil
 }
 
+func (ts *TagCommonService) CountTagRelByTagID(ctx context.Context, tagID string) (count int64, err error) {
+	return ts.tagRelRepo.CountTagRelByTagID(ctx, tagID)
+}
+
 // RefreshTagQuestionCount refresh tag question count
 func (ts *TagCommonService) RefreshTagQuestionCount(ctx context.Context, tagIDs []string) (err error) {
 	for _, tagID := range tagIDs {
