@@ -41,7 +41,7 @@ const Image: FC<IEditorContext> = ({ editor }) => {
 
     if (filteredFiles.length > 0) {
       AnswerModal.confirm({
-        content: t('image.only_image'),
+        content: t('image.form_image.fields.file.msg.only_image'),
       });
       return false;
     }
@@ -51,7 +51,7 @@ const Image: FC<IEditorContext> = ({ editor }) => {
 
     if (filteredImages.length > 0) {
       AnswerModal.confirm({
-        content: t('image.max_size'),
+        content: t('image.form_image.fields.file.msg.max_size'),
       });
       return false;
     }
@@ -96,13 +96,24 @@ const Image: FC<IEditorContext> = ({ editor }) => {
     const endPos = { ...startPos, ch: startPos.ch + loadingText.length };
 
     editor.replaceSelection(loadingText);
-    const urls = await upload(fileList);
-
-    const text = urls.map(({ name, url }) => {
-      return `![${name}](${url})`;
+    const urls = await upload(fileList).catch((ex) => {
+      console.log('ex: ', ex);
     });
 
-    editor.replaceRange(text.join('\n'), startPos, endPos);
+    const text: string[] = [];
+    if (Array.isArray(urls)) {
+      urls.forEach(({ name, url }) => {
+        if (name && url) {
+          text.push(`![${name}](${url})`);
+        }
+      });
+    }
+    if (text.length) {
+      editor.replaceRange(text.join('\n'), startPos, endPos);
+    } else {
+      // Clear loading text
+      editor.replaceRange('', startPos, endPos);
+    }
   };
 
   const paste = async (_, event) => {
