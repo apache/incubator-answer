@@ -454,10 +454,13 @@ ui:
     synonyms_text: The following tags will be remapped to
     delete:
       title: Delete this tag
-      content: >-
-        <p>We do not allowed deleting tag with posts.</p><p>Please remove this tag
-        from the posts first.</p>
-      content2: Are you sure you wish to delete?
+      tip_with_posts: >-
+        <p>We do not allowed <strong>deleting tag with posts</strong>.</p>
+        <p>Please remove this tag from the posts first.</p>
+      tip_with_synonyms: >-
+        <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p>
+        <p>Please remove the synonyms from this tag first.</p>
+      tip: Are you sure you wish to delete?
       close: Close
   edit_tag:
     title: Edit Tag

@@ -86,15 +86,27 @@ const TagIntroduction = () => {
     if (synonymsData?.synonyms && synonymsData.synonyms.length > 0) {
       Modal.confirm({
         title: t('delete.title'),
-        content: t('delete.content2'),
+        content: t('delete.tip_with_synonyms'),
         showConfirm: false,
         cancelText: t('delete.close'),
       });
       return;
     }
+    if (tagInfo.question_count > 0) {
+      Modal.confirm({
+        title: t('delete.title'),
+        content: t('delete.tip_with_posts'),
+        showConfirm: false,
+        cancelText: t('delete.close'),
+      });
+      return;
+    }
+
     Modal.confirm({
       title: t('delete.title'),
-      content: t('delete.content'),
+      content: t('delete.tip'),
+      confirmText: t('delete', { keyPrefix: 'btns' }),
+      confirmBtnVariant: 'danger',
       onConfirm: () => {
         deleteTag(tagInfo.tag_id);
       },
