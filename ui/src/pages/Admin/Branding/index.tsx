@@ -44,22 +44,28 @@ const Index: FC = () => {
     properties: {
       logo: {
         type: 'string',
-        title: t('logo.label'),
+        title: `${t('logo.label')} ${t('optional', { keyPrefix: 'form' })}`,
         description: t('logo.text'),
       },
       mobile_logo: {
         type: 'string',
-        title: t('mobile_logo.label'),
+        title: `${t('mobile_logo.label')} ${t('optional', {
+          keyPrefix: 'form',
+        })}`,
         description: t('mobile_logo.text'),
       },
       square_icon: {
         type: 'string',
-        title: t('square_icon.label'),
+        title: `${t('square_icon.label')} ${t('optional', {
+          keyPrefix: 'form',
+        })}`,
         description: t('square_icon.text'),
       },
       favicon: {
         type: 'string',
-        title: t('favicon.label'),
+        title: `${t('favicon.label')} ${t('optional', {
+          keyPrefix: 'form',
+        })}`,
         description: t('favicon.text'),
       },
     },

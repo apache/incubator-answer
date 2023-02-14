@@ -239,7 +239,12 @@ const Code: FC<IEditorContext> = ({ editor, wrapText }) => {
             )}
           </Form.Group>
           <Form.Group controlId="editor.codeLanguageType" className="mb-3">
-            <Form.Label>{t('code.form.fields.language.label')}</Form.Label>
+            <Form.Label>{`${t('code.form.fields.language.label')} ${t(
+              'optional',
+              {
+                keyPrefix: 'form',
+              },
+            )}`}</Form.Label>
             <Select
               options={codeLanguageType}
               value={lang}

@@ -225,7 +225,9 @@ const useTagModal = (props: IProps = {}) => {
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="description">
-              <Form.Label>{t('form.fields.desc.label')}</Form.Label>
+              <Form.Label>{`${t('form.fields.desc.label')} ${t('optional', {
+                keyPrefix: 'form',
+              })}`}</Form.Label>
               <Form.Control
                 className="font-monospace"
                 value={formData.description.value}

@@ -88,7 +88,12 @@ const Link: FC<IEditorContext> = ({ editor }) => {
             </Form.Group>
 
             <Form.Group controlId="editor.internetSiteName" className="mb-3">
-              <Form.Label>{t('link.form.fields.name.label')}</Form.Label>
+              <Form.Label>{`${t('link.form.fields.name.label')} ${t(
+                'optional',
+                {
+                  keyPrefix: 'form',
+                },
+              )}`}</Form.Label>
               <Form.Control
                 type="text"
                 value={name.value}

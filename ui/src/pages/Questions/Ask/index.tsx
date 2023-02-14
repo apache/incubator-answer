@@ -110,25 +110,25 @@ const Ask = () => {
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      title: { ...formData.title, value: e.currentTarget.value },
+      title: { ...formData.title, value: e.currentTarget.value, errorMsg: '' },
     });
   };
   const handleContentChange = (value: string) => {
     setFormData({
       ...formData,
-      content: { ...formData.content, value },
+      content: { ...formData.content, value, errorMsg: '' },
     });
   };
   const handleTagsChange = (value) =>
     setFormData({
       ...formData,
-      tags: { ...formData.tags, value },
+      tags: { ...formData.tags, value, errorMsg: '' },
     });
 
   const handleAnswerChange = (value: string) =>
     setFormData({
       ...formData,
-      answer: { ...formData.answer, value },
+      answer: { ...formData.answer, value, errorMsg: '' },
     });
 
   const handleSummaryChange = (evt: React.ChangeEvent<HTMLInputElement>) =>
@@ -140,55 +140,9 @@ const Ask = () => {
       },
     });
 
-  const checkValidated = (): boolean => {
-    const bol = true;
-    const { title, content, tags, answer } = formData;
-    if (title.value && Array.from(title.value).length <= 150) {
-      formData.title = {
-        value: title.value,
-        isInvalid: false,
-        errorMsg: '',
-      };
-    }
-
-    if (content.value) {
-      formData.content = {
-        value: content.value,
-        isInvalid: false,
-        errorMsg: '',
-      };
-    }
-
-    if (Array.isArray(tags.value) && tags.value.length > 0) {
-      formData.tags = {
-        value: tags.value,
-        isInvalid: false,
-        errorMsg: '',
-      };
-    }
-
-    if (checked) {
-      if (answer.value) {
-        formData.answer = {
-          value: answer.value,
-          isInvalid: false,
-          errorMsg: '',
-        };
-      }
-    }
-
-    setFormData({
-      ...formData,
-    });
-    return bol;
-  };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     event.stopPropagation();
-    if (!checkValidated()) {
-      return;
-    }
 
     const params: Type.QuestionParams = {
       title: formData.title.value,
@@ -232,7 +186,9 @@ const Ask = () => {
             })
             .catch((err) => {
               if (err.isError) {
-                const data = handleFormError(err, formData);
+                const data = handleFormError(err, formData, [
+                  { from: 'content', to: 'answer' },
+                ]);
                 setFormData({ ...data });
               }
             });
