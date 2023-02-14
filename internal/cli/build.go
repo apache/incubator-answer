@@ -6,14 +6,43 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path"
 	"path/filepath"
 	"strings"
 	"text/template"
 
+	"github.com/Masterminds/semver/v3"
 	"github.com/answerdev/answer/pkg/dir"
 	"github.com/answerdev/answer/pkg/writer"
 	"github.com/answerdev/answer/ui"
 	cp "github.com/otiai10/copy"
+)
+
+const (
+	mainGoTpl = `package main
+
+import (
+	answercmd "github.com/answerdev/answer/cmd"
+
+  // remote plugins
+	{{- range .remote_plugins}}
+	_ "{{.}}"
+	{{- end}}
+
+  // local plugins
+	{{- range .local_plugins}}
+	_ "answer/{{.}}"
+	{{- end}}
+)
+
+func main() {
+	answercmd.Main()
+}
+`
+	goModTpl = `module answer
+
+go 1.19
+`
 )
 
 type answerBuilder struct {
@@ -22,10 +51,11 @@ type answerBuilder struct {
 }
 
 type buildingMaterial struct {
-	plugins            []*pluginInfo
-	outputPath         string
-	tmpDir             string
-	originalAnswerInfo OriginalAnswerInfo
+	answerModuleReplacement string
+	plugins                 []*pluginInfo
+	outputPath              string
+	tmpDir                  string
+	originalAnswerInfo      OriginalAnswerInfo
 }
 
 type OriginalAnswerInfo struct {
@@ -44,17 +74,15 @@ type pluginInfo struct {
 }
 
 func newAnswerBuilder(outputPath string, plugins []string, originalAnswerInfo OriginalAnswerInfo) *answerBuilder {
+	material := &buildingMaterial{originalAnswerInfo: originalAnswerInfo}
 	parentDir, _ := filepath.Abs(".")
-	tmpDir, _ := os.MkdirTemp(parentDir, "answer_build")
+	material.tmpDir, _ = os.MkdirTemp(parentDir, "answer_build")
 	if len(outputPath) == 0 {
 		outputPath = filepath.Join(parentDir, "new_answer")
 	}
-	material := &buildingMaterial{
-		plugins:            formatPlugins(plugins),
-		outputPath:         outputPath,
-		tmpDir:             tmpDir,
-		originalAnswerInfo: originalAnswerInfo,
-	}
+	material.outputPath = outputPath
+	material.plugins = formatPlugins(plugins)
+	material.answerModuleReplacement = os.Getenv("ANSWER_MODULE")
 	return &answerBuilder{
 		buildingMaterial: material,
 	}
@@ -103,7 +131,7 @@ func createMainGoFile(b *buildingMaterial) (err error) {
 	)
 	for _, p := range b.plugins {
 		if len(p.Path) == 0 {
-			remotePlugins = append(remotePlugins, p.Name)
+			remotePlugins = append(remotePlugins, versionedModulePath(p.Name, p.Version))
 		} else {
 			localPluginDir := filepath.Base(p.Path)
 			localPlugins = append(localPlugins, localPluginDir)
@@ -139,6 +167,15 @@ func createMainGoFile(b *buildingMaterial) (err error) {
 }
 
 func downloadGoModFile(b *buildingMaterial) (err error) {
+	// If user specify a module replacement, use it. Otherwise, use the latest version.
+	if len(b.answerModuleReplacement) > 0 {
+		replacement := fmt.Sprintf("%s=%s", "github.com/answerdev/answer@latest", b.answerModuleReplacement)
+		err = b.newExecCmd("go", "mod", "edit", "-replace", replacement).Run()
+		if err != nil {
+			return err
+		}
+	}
+
 	err = b.newExecCmd("go", "mod", "tidy").Run()
 	if err != nil {
 		return err
@@ -215,31 +252,17 @@ func (b *buildingMaterial) newExecCmd(command string, args ...string) *exec.Cmd 
 	return cmd
 }
 
-const (
-	mainGoTpl = `package main
-
-import (
-	answercmd "github.com/answerdev/answer/cmd"
-
-  // remote plugins
-	{{- range .remote_plugins}}
-	_ "{{.}}"
-	{{- end}}
-
-  // local plugins
-	{{- range .local_plugins}}
-	_ "answer/{{.}}"
-	{{- end}}
-)
-
-func main() {
-	answercmd.Main()
+func versionedModulePath(modulePath, moduleVersion string) string {
+	if moduleVersion == "" {
+		return modulePath
+	}
+	ver, err := semver.StrictNewVersion(strings.TrimPrefix(moduleVersion, "v"))
+	if err != nil {
+		return modulePath
+	}
+	major := ver.Major()
+	if major > 1 {
+		modulePath += fmt.Sprintf("/v%d", major)
+	}
+	return path.Clean(modulePath)
 }
-`
-	goModTpl = `module answer
-
-go 1.19
-
-replace github.com/answerdev/answer latest => github.com/answerdev/answer feature-plugin
-`
-)

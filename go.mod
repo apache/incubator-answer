@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/Chain-Zhang/pinyin v0.1.3
+	github.com/Masterminds/semver/v3 v3.1.1
 	github.com/anargu/gin-brotli v0.0.0-20220116052358-12bf532d5267
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
 	github.com/bwmarrin/snowflake v0.3.0
@@ -141,4 +142,5 @@ require (
 
 // github action runner Sometimes it will time out.
 replace gitee.com/travelliu/dm v1.8.11192 => github.com/aichy126/dm v1.8.11192
+
 replace modernc.org/z v1.2.19 => github.com/aichy126/modernc.org_z v1.2.19
