@@ -38,6 +38,7 @@ type TagRepo interface {
 	RemoveTag(ctx context.Context, tagID string) (err error)
 	UpdateTag(ctx context.Context, tag *entity.Tag) (err error)
 	UpdateTagSynonym(ctx context.Context, tagSlugNameList []string, mainTagID int64, mainTagSlugName string) (err error)
+	GetTagSynonymCount(ctx context.Context, tagID string) (count int64, err error)
 	GetTagList(ctx context.Context, tag *entity.Tag) (tagList []*entity.Tag, err error)
 }
 
