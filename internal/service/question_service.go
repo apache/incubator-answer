@@ -323,6 +323,10 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	if err != nil {
 		return err
 	}
+	//if the status is deleted, return directly
+	if questionInfo.Status == entity.QuestionStatusDeleted {
+		return nil
+	}
 	if !has {
 		return nil
 	}

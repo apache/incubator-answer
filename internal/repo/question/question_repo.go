@@ -199,7 +199,7 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 		item := &schema.SiteMapQuestionInfo{}
 		item.ID = question.ID
 		item.Title = htmltext.UrlTitle(question.Title)
-		item.UpdateTime = fmt.Sprintf("%v", question.PostUpdateTime.UTC())
+		item.UpdateTime = fmt.Sprintf("%v", question.PostUpdateTime.Format(time.RFC3339))
 		questionIDList = append(questionIDList, item)
 	}
 	return questionIDList, nil

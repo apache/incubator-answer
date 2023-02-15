@@ -4066,22 +4066,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/handler.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/entity.Tag"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
+                            "$ref": "#/definitions/handler.RespBody"
                         }
                     }
                 }
@@ -5309,59 +5294,6 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "entity.Tag": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
-                "displayName": {
-                    "type": "string"
-                },
-                "followCount": {
-                    "type": "integer"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "mainTagID": {
-                    "type": "integer"
-                },
-                "mainTagSlugName": {
-                    "type": "string"
-                },
-                "originalText": {
-                    "type": "string"
-                },
-                "parsedText": {
-                    "type": "string"
-                },
-                "questionCount": {
-                    "type": "integer"
-                },
-                "recommend": {
-                    "type": "boolean"
-                },
-                "reserved": {
-                    "type": "boolean"
-                },
-                "revisionID": {
-                    "type": "string"
-                },
-                "slugName": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "type": "string"
-                },
-                "userID": {
-                    "type": "string"
-                }
-            }
-        },
         "handler.RespBody": {
             "type": "object",
             "properties": {

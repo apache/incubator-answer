@@ -56,7 +56,7 @@ func (tc *TagController) SearchTagLike(ctx *gin.Context) {
 // @Tags Tag
 // @Produce json
 // @Param tags query []string false "string collection" collectionFormat(csv)
-// @Success 200 {object} handler.RespBody{data=[]*schema.TagItem}
+// @Success 200 {object} handler.RespBody{}
 // @Router /answer/api/v1/tags [get]
 func (tc *TagController) GetTagsBySlugName(ctx *gin.Context) {
 	req := &schema.SearchTagsBySlugName{}
