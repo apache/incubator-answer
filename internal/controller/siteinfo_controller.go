@@ -31,7 +31,7 @@ func NewSiteinfoController(siteInfoService *siteinfo_common.SiteInfoCommonServic
 // @Router /answer/api/v1/siteinfo [get]
 func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
 	var err error
-	resp := &schema.SiteInfoResp{}
+	resp := &schema.SiteInfoResp{Version: constant.Version}
 	resp.General, err = sc.siteInfoService.GetSiteGeneral(ctx)
 	if err != nil {
 		log.Error(err)

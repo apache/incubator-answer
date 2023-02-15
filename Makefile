@@ -41,6 +41,6 @@ install-ui-packages:
 	@corepack prepare pnpm@v7.12.2 --activate
 
 ui:
-	@cd ui && pnpm install && pnpm build && sed -i 's/%AnswerVersion%/'$(VERSION)'/g' ./build/index.html && cd -
+	@cd ui && pnpm install && pnpm build && cd -
 
 all: clean build
