@@ -135,6 +135,20 @@ func (ts *TagService) GetTagInfo(ctx context.Context, req *schema.GetTagInfoReq)
 	return resp, nil
 }
 
+func (ts *TagService) GetTagsBySlugName(ctx context.Context, tagNames []string) ([]*schema.TagItem, error) {
+	tagList := make([]*schema.TagItem, 0)
+	tagListInDB, err := ts.tagCommonService.GetTagListByNames(ctx, tagNames)
+	if err != nil {
+		return tagList, err
+	}
+	for _, tag := range tagListInDB {
+		tagItem := &schema.TagItem{}
+		copier.Copy(tagItem, tag)
+		tagList = append(tagList, tagItem)
+	}
+	return tagList, nil
+}
+
 // GetFollowingTags get following tags
 func (ts *TagService) GetFollowingTags(ctx context.Context, userID string) (
 	resp []*schema.GetFollowingTagsResp, err error) {

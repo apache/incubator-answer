@@ -16,6 +16,12 @@ type SearchTagLikeReq struct {
 	IsAdmin bool   `json:"-"`
 }
 
+type SearchTagsBySlugName struct {
+	Tags    string   `json:"tags" form:"tags"`
+	TagList []string `json:"-"`
+	IsAdmin bool     `json:"-"`
+}
+
 // GetTagInfoReq get tag info request
 type GetTagInfoReq struct {
 	// tag id
