@@ -51,6 +51,7 @@ var tables = []interface{}{
 	&entity.Power{},
 	&entity.UserRoleRel{},
 	&entity.PluginConfig{},
+	&entity.UserExternalLogin{},
 }
 
 // InitDB init db
