@@ -18,11 +18,11 @@ const PermaLinkQuestionID = 2
 
 // SiteGeneralReq site general request
 type SiteGeneralReq struct {
-	Name             string `validate:"required,gt=1,lte=128" form:"name" json:"name"`
-	ShortDescription string `validate:"omitempty,gt=3,lte=255" form:"short_description" json:"short_description"`
-	Description      string `validate:"omitempty,gt=3,lte=2000" form:"description" json:"description"`
-	SiteUrl          string `validate:"required,gt=1,lte=512,url" form:"site_url" json:"site_url"`
-	ContactEmail     string `validate:"required,gt=1,lte=512,email" form:"contact_email" json:"contact_email"`
+	Name             string `validate:"required,sanitizer,gt=1,lte=128" form:"name" json:"name"`
+	ShortDescription string `validate:"omitempty,sanitizer,gt=3,lte=255" form:"short_description" json:"short_description"`
+	Description      string `validate:"omitempty,sanitizer,gt=3,lte=2000" form:"description" json:"description"`
+	SiteUrl          string `validate:"required,sanitizer,gt=1,lte=512,url" form:"site_url" json:"site_url"`
+	ContactEmail     string `validate:"required,sanitizer,gt=1,lte=512,email" form:"contact_email" json:"contact_email"`
 }
 
 type SiteSeoReq struct {
