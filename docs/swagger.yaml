@@ -1,39 +1,4 @@
 definitions:
-  entity.Tag:
-    properties:
-      createdAt:
-        type: string
-      displayName:
-        type: string
-      followCount:
-        type: integer
-      id:
-        type: string
-      mainTagID:
-        type: integer
-      mainTagSlugName:
-        type: string
-      originalText:
-        type: string
-      parsedText:
-        type: string
-      questionCount:
-        type: integer
-      recommend:
-        type: boolean
-      reserved:
-        type: boolean
-      revisionID:
-        type: string
-      slugName:
-        type: string
-      status:
-        type: integer
-      updatedAt:
-        type: string
-      userID:
-        type: string
-    type: object
   handler.RespBody:
     properties:
       code:
@@ -4403,14 +4368,7 @@ paths:
         "200":
           description: OK
           schema:
-            allOf:
-            - $ref: '#/definitions/handler.RespBody'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/entity.Tag'
-                  type: array
-              type: object
+            $ref: '#/definitions/handler.RespBody'
       summary: get tags list
       tags:
       - Tag
