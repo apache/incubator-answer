@@ -32,8 +32,17 @@ export const loadLanguageOptions = async (forAdmin = false) => {
   return languageOptions;
 };
 
+const pullLanguageConf = (res) => {
+  return getLanguageConfig().then((langConf) => {
+    if (langConf && langConf.ui) {
+      res.resources = langConf.ui;
+      Storage.set(LANG_RESOURCE_STORAGE_KEY, res);
+    }
+  });
+};
 const addI18nResource = async (langName) => {
   const res = { lng: langName, resources: undefined };
+  const storageResource = Storage.get(LANG_RESOURCE_STORAGE_KEY);
   if (process.env.NODE_ENV === 'development') {
     try {
       const { default: resConf } = await import(`@i18n/${langName}.yaml`);
@@ -41,17 +50,13 @@ const addI18nResource = async (langName) => {
     } catch (ex) {
       console.log('ex: ', ex);
     }
+  } else if (storageResource && storageResource.lng === res.lng) {
+    res.resources = storageResource.resources;
+    pullLanguageConf(res);
   } else {
-    const storageResource = Storage.get(LANG_RESOURCE_STORAGE_KEY);
-    if (storageResource?.lng === res.lng) {
-      res.resources = storageResource.resources;
-    } else {
-      const langConf = await getLanguageConfig();
-      if (langConf) {
-        res.resources = langConf;
-      }
-    }
+    await pullLanguageConf(res);
   }
+
   if (res.resources) {
     i18next.addResourceBundle(
       res.lng,
@@ -60,7 +65,6 @@ const addI18nResource = async (langName) => {
       true,
       true,
     );
-    Storage.set(LANG_RESOURCE_STORAGE_KEY, res);
   }
 };
 
