@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import dayjs from 'dayjs';
@@ -16,6 +16,7 @@ import {
   useQueryRevisions,
   postAnswer,
   useQueryQuestionByTitle,
+  getTagsBySlugName,
 } from '@/services';
 import { handleFormError } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
@@ -77,6 +78,17 @@ const Ask = () => {
 
   const { qid } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initQueryTags = () => {
+    const queryTags = searchParams.get('tags');
+    if (!queryTags) {
+      return;
+    }
+    getTagsBySlugName(queryTags).then((tags) => {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      handleTagsChange(tags);
+    });
+  };
 
   const isEdit = qid !== undefined;
   const { data: similarQuestions = { list: [] } } = useQueryQuestionByTitle(
@@ -85,6 +97,7 @@ const Ask = () => {
   useEffect(() => {
     if (!isEdit) {
       resetForm();
+      initQueryTags();
     }
   }, [isEdit]);
   const { data: revisions = [] } = useQueryRevisions(qid);
