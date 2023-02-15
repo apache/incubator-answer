@@ -15,6 +15,7 @@ import {
   Link,
   useNavigate,
   useLocation,
+  useMatch,
 } from 'react-router-dom';
 
 import classnames from 'classnames';
@@ -35,16 +36,22 @@ import './index.scss';
 
 const Header: FC = () => {
   const navigate = useNavigate();
-  const { user, clear: clearUserStore } = loggedUserInfoStore();
-  const { t } = useTranslation();
+  const location = useLocation();
   const [urlSearch] = useSearchParams();
   const q = urlSearch.get('q');
+  const { user, clear: clearUserStore } = loggedUserInfoStore();
+  const { t } = useTranslation();
   const [searchStr, setSearch] = useState('');
   const siteInfo = siteInfoStore((state) => state.siteInfo);
   const brandingInfo = brandingStore((state) => state.branding);
   const loginSetting = loginSettingStore((state) => state.login);
   const { data: redDot } = useQueryNotificationStatus();
-  const location = useLocation();
+  const tagMatch = useMatch('/tags/:slugName');
+  let askUrl = '/questions/ask';
+  if (tagMatch && tagMatch.params.slugName) {
+    askUrl = `${askUrl}?tags=${tagMatch.params.slugName}`;
+  }
+
   const handleInput = (val) => {
     setSearch(val);
   };
@@ -189,7 +196,7 @@ const Header: FC = () => {
 
           <Nav.Item className="lg-none mt-3 pb-1">
             <Link
-              to="/questions/ask"
+              to={askUrl}
               className="text-capitalize text-nowrap btn btn-light">
               {t('btns.add_question')}
             </Link>
@@ -202,7 +209,7 @@ const Header: FC = () => {
               <Nav className="d-flex align-items-center flex-lg-nowrap">
                 <Nav.Item className="me-3">
                   <Link
-                    to="/questions/ask"
+                    to={askUrl}
                     className={classnames('text-capitalize text-nowrap btn', {
                       'btn-light': navbarStyle !== 'theme-light',
                       'btn-primary': navbarStyle === 'theme-light',
