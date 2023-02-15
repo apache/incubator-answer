@@ -3,15 +3,13 @@ import { Container } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
-import { Unactivate } from '@/components';
-import { siteInfoStore } from '@/stores';
+import { Unactivate, WelcomeTitle } from '@/components';
 
 import SignUpForm from './components/SignUpForm';
 
 const Index: React.FC = () => {
   const [showForm, setShowForm] = useState(true);
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
-  const { name: siteName } = siteInfoStore((_) => _.siteInfo);
   const onStep = () => {
     setShowForm((bol) => !bol);
   };
@@ -20,9 +18,7 @@ const Index: React.FC = () => {
   });
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
-      <h3 className="text-center mb-5">
-        {t('page_title', { site_name: siteName })}
-      </h3>
+      <WelcomeTitle />
       {showForm ? (
         <SignUpForm callback={onStep} />
       ) : (

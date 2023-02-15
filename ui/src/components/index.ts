@@ -32,6 +32,7 @@ import CustomizeTheme from './CustomizeTheme';
 import PageTags from './PageTags';
 import QuestionListLoader from './QuestionListLoader';
 import TagsLoader from './TagsLoader';
+import WelcomeTitle from './WelcomeTitle';
 import Counts from './Counts';
 
 export {
@@ -71,6 +72,7 @@ export {
   PageTags,
   QuestionListLoader,
   TagsLoader,
+  WelcomeTitle,
   Counts,
 };
 export type { EditorRef, JSONSchema, UISchema };

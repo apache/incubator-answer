@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { RouteObject, createBrowserRouter } from 'react-router-dom';
+import { RouteObject } from 'react-router-dom';
 
 import Layout from '@/pages/Layout';
 import ErrorBoundary from '@/pages/50X';
@@ -49,4 +49,4 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteObject[]) => {
 
 routeWrapper(baseRoutes, routes);
 
-export { routes, createBrowserRouter };
+export default routes;

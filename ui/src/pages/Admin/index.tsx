@@ -1,11 +1,14 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 
+import { cloneDeep } from 'lodash';
+
 import { usePageTags } from '@/hooks';
 import { AccordionNav } from '@/components';
 import { ADMIN_NAV_MENUS } from '@/common/constants';
+import { useQueryPlugins } from '@/services';
 
 import './index.scss';
 
@@ -24,9 +27,42 @@ const formPaths = [
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
   const { pathname } = useLocation();
+  const { data: configurablePlugins, mutate: updateConfigurablePlugins } =
+    useQueryPlugins({
+      status: 'active',
+      have_config: true,
+    });
   usePageTags({
     title: t('admin'),
   });
+
+  const menus = cloneDeep(ADMIN_NAV_MENUS);
+  if (configurablePlugins && configurablePlugins.length > 0) {
+    menus.forEach((item) => {
+      if (item.name === 'plugins' && item.children) {
+        item.children = [
+          ...item.children,
+          ...configurablePlugins.map((plugin) => ({
+            name: plugin.slug_name,
+            displayName: plugin.name,
+          })),
+        ];
+      }
+    });
+  }
+
+  const observePlugins = (evt) => {
+    if (evt.data.msgType === 'refreshConfigurablePlugins') {
+      updateConfigurablePlugins();
+    }
+  };
+  useEffect(() => {
+    window.addEventListener('message', observePlugins);
+    return () => {
+      window.removeEventListener('message', observePlugins);
+    };
+  }, []);
+
   return (
     <>
       <div className="bg-light py-2">
@@ -39,7 +75,7 @@ const Index: FC = () => {
       <Container className="admin-container">
         <Row>
           <Col lg={2}>
-            <AccordionNav menus={ADMIN_NAV_MENUS} path="/admin/" />
+            <AccordionNav menus={menus} path="/admin/" />
           </Col>
           <Col lg={formPaths.find((v) => pathname.includes(v)) ? 6 : 10}>
             <Outlet />

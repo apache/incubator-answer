@@ -71,6 +71,13 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
         isInvalid: true,
         errorMsg: t('admin_name.msg'),
       };
+    } else if (/[^a-z0-9\-._]/.test(name.value)) {
+      bol = false;
+      data.name = {
+        value: name.value,
+        isInvalid: true,
+        errorMsg: t('admin_name.character'),
+      };
     }
 
     if (!password.value) {

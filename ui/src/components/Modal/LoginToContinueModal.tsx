@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { loginToContinueStore, siteInfoStore } from '@/stores';
+import { WelcomeTitle } from '@/components';
 
 interface IProps {
   visible: boolean;
@@ -32,7 +33,7 @@ const Index: React.FC<IProps> = ({ visible = false }) => {
       </Modal.Header>
       <Modal.Body className="p-5">
         <div className="d-flex flex-column align-items-center text-center text-body">
-          <h3>{t('page_title', { site_name: siteInfo.name })}</h3>
+          <WelcomeTitle className="mb-2" />
           <p>{siteInfo.description}</p>
         </div>
         <div className="d-grid gap-2">

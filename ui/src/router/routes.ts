@@ -20,6 +20,7 @@ const routes: RouteNode[] = [
   {
     path: '/',
     page: 'pages/Layout',
+    loader: guard.setupApp,
     guard: () => {
       const gr = guard.shouldLoginRequired();
       if (!gr.ok) {
@@ -204,6 +205,14 @@ const routes: RouteNode[] = [
         },
       },
       {
+        path: '/users/confirm-email',
+        page: 'pages/Users/OauthBindEmail',
+      },
+      {
+        path: '/users/oauth',
+        page: 'pages/Users/OauthCallback',
+      },
+      {
         path: '/posts/:qid/timeline',
         page: 'pages/Timeline',
         guard: () => {
@@ -302,6 +311,14 @@ const routes: RouteNode[] = [
           {
             path: 'login',
             page: 'pages/Admin/Login',
+          },
+          {
+            path: 'installed_plugins',
+            page: 'pages/Admin/Plugins/Installed',
+          },
+          {
+            path: ':slug_name',
+            page: 'pages/Admin/Plugins/Config',
           },
         ],
       },

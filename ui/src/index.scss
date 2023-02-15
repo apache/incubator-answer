@@ -298,3 +298,9 @@ a {
 .bg-fade-out {
   animation: bg-fade-out 2s ease 0.3s;
 }
+
+
+.btnSvg, .btnSvg:hover {
+  fill: currentColor;
+  vertical-align: -0.125em;
+}

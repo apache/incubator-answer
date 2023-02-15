@@ -21,7 +21,7 @@ const Index: FC = () => {
         title: t('membership.title'),
         label: t('membership.label'),
         description: t('membership.text'),
-        default: true,
+        default: false,
       },
       login_required: {
         type: 'boolean',
