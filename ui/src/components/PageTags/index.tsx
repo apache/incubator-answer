@@ -1,7 +1,7 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
-import { brandingStore, pageTagStore } from '@/stores';
+import { brandingStore, pageTagStore, siteInfoStore } from '@/stores';
 
 const doInsertCustomCSS = !document.querySelector('link[href*="custom.css"]');
 
@@ -10,6 +10,23 @@ const Index: FC = () => {
   const { pageTitle, keywords, description } = pageTagStore(
     (state) => state.items,
   );
+  const appVersion = siteInfoStore((_) => _.version);
+  const setAppGenerator = () => {
+    if (!appVersion) {
+      return;
+    }
+    const generatorMetaNode = document.querySelector('meta[name="generator"]');
+    if (generatorMetaNode) {
+      generatorMetaNode.setAttribute(
+        'content',
+        `Answer ${appVersion} - https://github.com/answerdev/answer`,
+      );
+    }
+  };
+
+  useEffect(() => {
+    setAppGenerator();
+  }, [appVersion]);
   return (
     <Helmet>
       <link
