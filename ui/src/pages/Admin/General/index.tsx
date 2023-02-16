@@ -119,7 +119,7 @@ const General: FC = () => {
         }
 
         setFormData({ ...formData });
-        updateSiteInfo(reqParams);
+        updateSiteInfo(res);
       })
       .catch((err) => {
         if (err.isError) {
