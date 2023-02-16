@@ -231,6 +231,7 @@ const routes: RouteNode[] = [
         page: 'pages/Admin',
         loader: async () => {
           await guard.pullLoggedUser(true);
+          return null;
         },
         guard: () => {
           return guard.admin();
