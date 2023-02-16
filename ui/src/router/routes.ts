@@ -1,9 +1,9 @@
-import { RouteObject } from 'react-router-dom';
+import type { RouteObject } from 'react-router-dom';
 
 import { guard } from '@/utils';
 import type { TGuardFunc } from '@/utils/guard';
 
-export interface RouteNode extends RouteObject {
+export type RouteNode = RouteObject & {
   page: string;
   children?: RouteNode[];
   /**
@@ -14,7 +14,7 @@ export interface RouteNode extends RouteObject {
    * then auto redirect route to the `redirect` target.
    */
   guard?: TGuardFunc;
-}
+};
 
 const routes: RouteNode[] = [
   {
@@ -113,6 +113,7 @@ const routes: RouteNode[] = [
         children: [
           {
             index: true,
+            // @ts-ignore
             page: 'pages/Users/Settings/Profile',
           },
           {
@@ -237,6 +238,7 @@ const routes: RouteNode[] = [
         children: [
           {
             index: true,
+            // @ts-ignore
             page: 'pages/Admin/Dashboard',
           },
           {
@@ -329,6 +331,7 @@ const routes: RouteNode[] = [
         children: [
           {
             path: 'tos',
+            // @ts-ignore
             page: 'pages/Legal/Tos',
           },
           {
