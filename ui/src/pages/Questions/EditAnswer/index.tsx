@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 
 import { handleFormError } from '@/utils';
-import { usePageTags } from '@/hooks';
+import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { pathFactory } from '@/router/pathFactory';
 import { Editor, EditorRef, Icon } from '@/components';
 import type * as Type from '@/common/interface';
@@ -44,6 +44,8 @@ const Index = () => {
 
   const { data } = useQueryAnswerInfo(aid);
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
+  const [immData, setImmData] = useState(initFormData);
+  const [contentChanged, setContentChanged] = useState(false);
 
   initFormData.content.value = data?.info.content || '';
 
@@ -54,6 +56,19 @@ const Index = () => {
   });
 
   const questionContentRef = useRef<HTMLDivElement>(null);
+
+  usePromptWithUnload({
+    when: contentChanged,
+  });
+
+  useEffect(() => {
+    const { content, description } = formData;
+    if (immData.content.value !== content.value || description.value) {
+      setContentChanged(true);
+    } else {
+      setContentChanged(false);
+    }
+  }, [formData.content.value, formData.description.value]);
 
   const handleAnswerChange = (value: string) =>
     setFormData({
@@ -93,7 +108,9 @@ const Index = () => {
     return bol;
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setContentChanged(false);
+
     event.preventDefault();
     event.stopPropagation();
     if (!checkValidated()) {
@@ -131,6 +148,7 @@ const Index = () => {
     const index = e.target.value;
     const revision = revisions[index];
     formData.content.value = revision.content.content;
+    setImmData({ ...formData });
     setFormData({ ...formData });
   };
 

@@ -1406,5 +1406,7 @@ ui:
     staffs: Our community staff
     reputation: reputation
     votes: votes
-
+  prompt:
+    leave_page: "Are you sure you want to leave the page?"
+    changes_not_save: "Your changes may not be saved."
 

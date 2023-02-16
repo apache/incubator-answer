@@ -92,6 +92,7 @@ const General: FC = () => {
   const [formData, setFormData] = useState<Type.FormDataType>(
     initFormData(schema),
   );
+
   const onSubmit = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
@@ -104,12 +105,21 @@ const General: FC = () => {
     };
 
     updateGeneralSetting(reqParams)
-      .then(() => {
+      .then((res) => {
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
-        updateSiteInfo(reqParams);
+        if (res.name) {
+          formData.name.value = res.name;
+          formData.description.value = res.description;
+          formData.short_description.value = res.short_description;
+          formData.site_url.value = res.site_url;
+          formData.contact_email.value = res.contact_email;
+        }
+
+        setFormData({ ...formData });
+        updateSiteInfo(res);
       })
       .catch((err) => {
         if (err.isError) {
