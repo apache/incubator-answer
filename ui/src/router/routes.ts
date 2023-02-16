@@ -1,9 +1,13 @@
-import type { RouteObject } from 'react-router-dom';
+import type { IndexRouteObject, NonIndexRouteObject } from 'react-router-dom';
 
 import { guard } from '@/utils';
 import type { TGuardFunc } from '@/utils/guard';
 
-export type RouteNode = RouteObject & {
+type IndexRouteNode = Omit<IndexRouteObject, 'children'>;
+type NonIndexRouteNode = Omit<NonIndexRouteObject, 'children'>;
+type UnionRouteNode = IndexRouteNode | NonIndexRouteNode;
+
+export type RouteNode = UnionRouteNode & {
   page: string;
   children?: RouteNode[];
   /**
@@ -113,7 +117,6 @@ const routes: RouteNode[] = [
         children: [
           {
             index: true,
-            // @ts-ignore
             page: 'pages/Users/Settings/Profile',
           },
           {
@@ -239,7 +242,6 @@ const routes: RouteNode[] = [
         children: [
           {
             index: true,
-            // @ts-ignore
             page: 'pages/Admin/Dashboard',
           },
           {
@@ -332,7 +334,6 @@ const routes: RouteNode[] = [
         children: [
           {
             path: 'tos',
-            // @ts-ignore
             page: 'pages/Legal/Tos',
           },
           {
