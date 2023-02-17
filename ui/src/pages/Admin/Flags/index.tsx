@@ -98,7 +98,10 @@ const Flags: FC = () => {
                     <small className="text-secondary">
                       Flagged {li.object_type}
                     </small>
-                    <BaseUserCard data={li.reported_user} className="mt-2" />
+                    <BaseUserCard
+                      data={li.reported_user}
+                      className="mt-2 fs-14"
+                    />
                     <a
                       href={pathFactory.questionLanding(
                         li.question_id,

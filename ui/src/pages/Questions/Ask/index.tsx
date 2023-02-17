@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import dayjs from 'dayjs';
 import classNames from 'classnames';
+import { isEqual } from 'lodash';
 
-import { usePageTags } from '@/hooks';
+import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { Editor, EditorRef, TagSelector } from '@/components';
 import type * as Type from '@/common/interface';
 import {
@@ -16,6 +17,7 @@ import {
   useQueryRevisions,
   postAnswer,
   useQueryQuestionByTitle,
+  getTagsBySlugName,
 } from '@/services';
 import { handleFormError } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
@@ -60,7 +62,9 @@ const Ask = () => {
   };
   const { t } = useTranslation('translation', { keyPrefix: 'ask' });
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
+  const [immData, setImmData] = useState<FormDataItem>(initFormData);
   const [checked, setCheckState] = useState(false);
+  const [contentChanged, setContentChanged] = useState(false);
   const [focusType, setForceType] = useState('');
   const resetForm = () => {
     setFormData(initFormData);
@@ -77,14 +81,60 @@ const Ask = () => {
 
   const { qid } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const initQueryTags = () => {
+    const queryTags = searchParams.get('tags');
+    if (!queryTags) {
+      return;
+    }
+    getTagsBySlugName(queryTags).then((tags) => {
+      // eslint-disable-next-line @typescript-eslint/no-use-before-define
+      handleTagsChange(tags);
+    });
+  };
 
   const isEdit = qid !== undefined;
   const { data: similarQuestions = { list: [] } } = useQueryQuestionByTitle(
     isEdit ? '' : formData.title.value,
   );
+
+  useEffect(() => {
+    const { title, tags, content, answer } = formData;
+    const { title: editTitle, tags: editTags, content: editContent } = immData;
+
+    // edited
+    if (qid) {
+      if (
+        editTitle.value !== title.value ||
+        editContent.value !== content.value ||
+        !isEqual(
+          editTags.value.map((v) => v.slug_name),
+          tags.value.map((v) => v.slug_name),
+        )
+      ) {
+        setContentChanged(true);
+      } else {
+        setContentChanged(false);
+      }
+      return;
+    }
+
+    // write
+    if (title.value || tags.value.length > 0 || content.value || answer.value) {
+      setContentChanged(true);
+    } else {
+      setContentChanged(false);
+    }
+  }, [formData]);
+
+  usePromptWithUnload({
+    when: contentChanged,
+  });
+
   useEffect(() => {
     if (!isEdit) {
       resetForm();
+      initQueryTags();
     }
   }, [isEdit]);
   const { data: revisions = [] } = useQueryRevisions(qid);
@@ -103,6 +153,7 @@ const Ask = () => {
           original_text: '',
         };
       });
+      setImmData({ ...formData });
       setFormData({ ...formData });
     });
   }, [qid]);
@@ -141,6 +192,7 @@ const Ask = () => {
     });
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setContentChanged(false);
     event.preventDefault();
     event.stopPropagation();
 
@@ -206,6 +258,7 @@ const Ask = () => {
     const index = e.target.value;
     const revision = revisions[index];
     formData.content.value = revision.content.content;
+    setImmData({ ...formData });
     setFormData({ ...formData });
   };
   const bool = similarQuestions.length > 0 && !isEdit;

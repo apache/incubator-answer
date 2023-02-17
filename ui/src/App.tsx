@@ -1,7 +1,7 @@
-import { RouterProvider } from 'react-router-dom';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import './i18n/init';
-import { routes, createBrowserRouter } from '@/router';
+import routes from '@/router';
 
 function App() {
   const router = createBrowserRouter(routes);
