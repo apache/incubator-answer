@@ -166,6 +166,7 @@ type SiteInfoResp struct {
 	Theme         *SiteThemeResp         `json:"theme"`
 	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
 	SiteSeo       *SiteSeoReq            `json:"site_seo"`
+	Version       string                 `json:"version"`
 }
 type TemplateSiteInfoResp struct {
 	General       *SiteGeneralResp       `json:"general"`
