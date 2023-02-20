@@ -123,7 +123,10 @@ const Flags: FC = () => {
                       time={li.created_at}
                       className="fs-14 text-secondary"
                     />
-                    <BaseUserCard data={li.report_user} className="mt-2 mb-2" />
+                    <BaseUserCard
+                      data={li.report_user}
+                      className="mt-2 mb-2 fs-14"
+                    />
                     {li.flagged_reason ? (
                       <small>{li.flagged_content}</small>
                     ) : (
