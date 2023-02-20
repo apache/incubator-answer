@@ -354,7 +354,7 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	}
 
 	questionInfo.Status = entity.QuestionStatusDeleted
-	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
+	err = qs.questionRepo.UpdateQuestionStatusWithOutUpdateTime(ctx, questionInfo)
 	if err != nil {
 		return err
 	}
