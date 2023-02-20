@@ -8,7 +8,7 @@ type Connector interface {
 
 	// ConnectorName presents the name of the connector
 	// e.g. Facebook, Twitter, Instagram
-	ConnectorName() string
+	ConnectorName() Translator
 
 	// ConnectorSlugName presents the slug name of the connector
 	// Please use lowercase and hyphen as the separator

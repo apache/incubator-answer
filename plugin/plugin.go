@@ -2,7 +2,8 @@ package plugin
 
 import (
 	"encoding/json"
-
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/gin-gonic/gin"
 )
 
@@ -100,4 +101,20 @@ func (m *statusManager) MarshalJSON() ([]byte, error) {
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (m *statusManager) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &m.status)
+}
+
+// Translator presents a generator of translated string.
+// We use it to delegate the translation work outside the plugin.
+type Translator func(ctx *GinContext) string
+
+// Translate translates the key to the current language of the context
+func Translate(ctx *GinContext, key string) string {
+	return translator.Tr(handler.GetLang(ctx), key)
+}
+
+// MakeTranslator generates a translator from the key
+func MakeTranslator(key string) Translator {
+	return func(ctx *GinContext) string {
+		return translator.Tr(handler.GetLang(ctx), key)
+	}
 }
