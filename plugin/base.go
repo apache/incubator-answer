@@ -2,9 +2,9 @@ package plugin
 
 // Info presents the plugin information
 type Info struct {
-	Name        string
+	Name        Translator
 	SlugName    string
-	Description string
+	Description Translator
 	Author      string
 	Version     string
 }
