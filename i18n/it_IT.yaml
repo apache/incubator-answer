@@ -2,237 +2,242 @@
 backend:
   base:
     success:
-      other: "Successo"
+      other: Successo
     unknown:
-      other: "Errore sconosciuto"
+      other: Errore sconosciuto
     request_format_error:
-      other: "Il formato della richiesta non è valido"
+      other: Il formato della richiesta non è valido
     unauthorized_error:
-      other: "Non autorizzato"
+      other: Non autorizzato
     database_error:
-      other: "Errore server dati"
+      other: Errore server dati
   role:
     name:
       user:
-        other: "Utente"
+        other: Utente
       admin:
-        other: "Amministratore"
+        other: Amministratore
       moderator:
-        other: "Moderatore"
+        other: Moderatore
     description:
       user:
-        other: "Predefinito senza alcun accesso speciale."
+        other: Predefinito senza alcun accesso speciale.
       admin:
-        other: "Avere il pieno potere di accedere al sito."
+        other: Avere il pieno potere di accedere al sito.
       moderator:
-        other: "Ha accesso a tutti i post tranne le impostazioni di amministratore."
+        other: Ha accesso a tutti i post tranne le impostazioni di amministratore.
   email:
-    other: "email"
+    other: email
   password:
-    other: "password"
+    other: password
   email_or_password_wrong_error:
-    other: "Email o password errati"
+    other: Email o password errati
   error:
     admin:
       email_or_password_wrong:
         other: Email o password errati
     answer:
       not_found:
-        other: "Risposta non trovata"
+        other: Risposta non trovata
       cannot_deleted:
-        other: "Permesso per cancellare mancante."
+        other: Permesso per cancellare mancante.
       cannot_update:
-        other: "Nessun permesso per l'aggiornamento."
+        other: Nessun permesso per l'aggiornamento.
     comment:
       edit_without_permission:
-        other: "Non si hanno di privilegi sufficienti per modificare il commento"
+        other: Non si hanno di privilegi sufficienti per modificare il commento
       not_found:
-        other: "Commento non trovato"
+        other: Commento non trovato
+      cannot_edit_after_deadline:
+        other: The comment time has been too long to modify.
     email:
       duplicate:
-        other: "email già esistente"
+        other: email già esistente
       need_to_be_verified:
-        other: "email deve essere verificata"
+        other: email deve essere verificata
       verify_url_expired:
-        other: "l'url di verifica email è scaduto, si prega di reinviare la email"
+        other: l'url di verifica email è scaduto, si prega di reinviare la email
     lang:
       not_found:
-        other: "lingua non trovata"
+        other: lingua non trovata
     object:
       captcha_verification_failed:
-        other: "captcha errato"
+        other: captcha errato
       disallow_follow:
-        other: "Non sei autorizzato a seguire"
+        other: Non sei autorizzato a seguire
       disallow_vote:
-        other: "non sei autorizzato a votare"
+        other: non sei autorizzato a votare
       disallow_vote_your_self:
-        other: "Non puoi votare un tuo post!"
+        other: Non puoi votare un tuo post!
       not_found:
-        other: "oggetto non trovato"
+        other: oggetto non trovato
       verification_failed:
-        other: "verifica fallita"
+        other: verifica fallita
       email_or_password_incorrect:
-        other: "email o password incorretti"
+        other: email o password incorretti
       old_password_verification_failed:
-        other: "la verifica della vecchia password è fallita"
+        other: la verifica della vecchia password è fallita
       new_password_same_as_previous_setting:
-        other: "La nuova password è identica alla precedente"
+        other: La nuova password è identica alla precedente
     question:
       not_found:
-        other: "domanda non trovata"
+        other: domanda non trovata
       cannot_deleted:
-        other: "Permesso per cancellare mancante."
+        other: Permesso per cancellare mancante.
       cannot_close:
-        other: "Nessun permesso per chiudere."
+        other: Nessun permesso per chiudere.
       cannot_update:
-        other: "Nessun permesso per l'aggiornamento."
+        other: Nessun permesso per l'aggiornamento.
     rank:
       fail_to_meet_the_condition:
-        other: "Condizioni non valide per il grado"
+        other: Condizioni non valide per il grado
     report:
       handle_failed:
-        other: "Gestione del report fallita"
+        other: Gestione del report fallita
       not_found:
-        other: "Report non trovato"
+        other: Report non trovato
     tag:
       not_found:
-        other: "Etichetta non trovata"
+        other: Etichetta non trovata
       recommend_tag_not_found:
-        other: "Il Tag consigliato non esiste."
+        other: Il Tag consigliato non esiste.
       recommend_tag_enter:
-        other: "Inserisci almeno un tag."
+        other: Inserisci almeno un tag.
       not_contain_synonym_tags:
-        other: "Non deve contenere tag sinonimi."
+        other: Non deve contenere tag sinonimi.
       cannot_update:
-        other: "Nessun permesso per l'aggiornamento."
+        other: Nessun permesso per l'aggiornamento.
       cannot_set_synonym_as_itself:
-        other: "Non puoi impostare il sinonimo del tag corrente come se stesso."
+        other: Non puoi impostare il sinonimo del tag corrente come se stesso.
     smtp:
       config_from_name_cannot_be_email:
-        other: "The From Name cannot be a email address."
+        other: The From Name cannot be a email address.
     theme:
       not_found:
-        other: "tema non trovato"
+        other: tema non trovato
     revision:
       review_underway:
-        other: "Non è possibile modificare al momento, c'è una versione nella coda di revisione."
+        other: Non è possibile modificare al momento, c'è una versione nella coda di revisione.
       no_permission:
-        other: "Nessun permesso per la revisione."
+        other: Nessun permesso per la revisione.
     user:
       email_or_password_wrong:
         other:
           other: Email o password errati
       not_found:
-        other: "utente non trovato"
+        other: utente non trovato
       suspended:
-        other: "utente sospeso"
+        other: utente sospeso
       username_invalid:
-        other: "utente non valido"
+        other: utente non valido
       username_duplicate:
-        other: "Nome utente già in uso"
+        other: Nome utente già in uso
       set_avatar:
-        other: "Inserimento dell'Avatar non riuscito."
+        other: Inserimento dell'Avatar non riuscito.
       cannot_update_your_role:
-        other: "Non puoi modificare il tuo ruolo."
+        other: Non puoi modificare il tuo ruolo.
       not_allowed_registration:
-        other: "Al momento il sito non è aperto per la registrazione"
+        other: Al momento il sito non è aperto per la registrazione
     config:
       read_config_failed:
-        other: "Read config failed"
+        other: Read config failed
     database:
       connection_failed:
-        other: "Database connection failed"
+        other: Database connection failed
       create_table_failed:
-        other: "Create table failed"
+        other: Create table failed
     install:
       create_config_failed:
-        other: "Can’t create the config.yaml file."
+        other: Can't create the config.yaml file.
+    upload:
+      unsupported_file_format:
+        other: Unsupported file format.
   report:
     spam:
       name:
-        other: "posta indesiderata"
+        other: posta indesiderata
       desc:
-        other: "Questo articolo è una pubblicità o vandalismo. Non è utile o rilevante all'argomento corrente."
+        other: Questo articolo è una pubblicità o vandalismo. Non è utile o rilevante all'argomento corrente.
     rude:
       name:
-        other: "scortese o violento"
+        other: scortese o violento
       desc:
-        other: "Una persona ragionevole trova questo contenuto inappropriato a un discorso rispettoso."
+        other: Una persona ragionevole trova questo contenuto inappropriato a un discorso rispettoso.
     duplicate:
       name:
-        other: "duplicato"
+        other: duplicato
       desc:
-        other: "Questa domanda è già stata posta e ha già una risposta."
+        other: Questa domanda è già stata posta e ha già una risposta.
     not_answer:
       name:
-        other: "non è una risposta"
+        other: non è una risposta
       desc:
-        other: "Questo è stato pubblicato come una risposta, ma non tenta di rispondere alla domanda. Dovrebbe forse essere una modifica, un commento, un'altra domanda, o cancellata del tutto."
+        other: Questo è stato pubblicato come una risposta, ma non tenta di rispondere alla domanda. Dovrebbe forse essere una modifica, un commento, un'altra domanda, o cancellata del tutto.
     not_need:
       name:
-        other: "non più necessario"
+        other: non più necessario
       desc:
-        other: "Questo commento è obsoleto, conversazionale o non pertinente per questo post."
+        other: Questo commento è obsoleto, conversazionale o non pertinente per questo post.
     other:
       name:
-        other: "altro"
+        other: altro
       desc:
-        other: "Questo articolo richiede una supervisione dello staff per altre ragioni non listate sopra."
+        other: Questo articolo richiede una supervisione dello staff per altre ragioni non listate sopra.
   question:
     close:
       duplicate:
         name:
-          other: "posta indesiderata"
+          other: posta indesiderata
         desc:
-          other: "Questa domanda è già stata posta e ha già una risposta."
+          other: Questa domanda è già stata posta e ha già una risposta.
       guideline:
         name:
-          other: "motivo legato alla community"
+          other: motivo legato alla community
         desc:
-          other: "Questa domanda non soddisfa le linee guida della comunità."
+          other: Questa domanda non soddisfa le linee guida della comunità.
       multiple:
         name:
-          other: "richiede maggiori dettagli o chiarezza"
+          other: richiede maggiori dettagli o chiarezza
         desc:
-          other: "Questa domanda attualmente include più domande in uno. Dovrebbe concentrarsi su un solo problema."
+          other: Questa domanda attualmente include più domande in uno. Dovrebbe concentrarsi su un solo problema.
       other:
         name:
-          other: "altro"
+          other: altro
         desc:
-          other: "Questo articolo richiede un'altro motivo non listato sopra."
+          other: Questo articolo richiede un'altro motivo non listato sopra.
     operation_type:
       asked:
-        other: "asked"
+        other: asked
       answered:
-        other: "answered"
+        other: answered
       modified:
-        other: "modified"
+        other: modified
   notification:
     action:
       update_question:
-        other: "domanda aggiornata"
+        other: domanda aggiornata
       answer_the_question:
-        other: "domanda risposta"
+        other: domanda risposta
       update_answer:
-        other: "risposta aggiornata"
+        other: risposta aggiornata
       accept_answer:
-        other: "risposta accettata"
+        other: risposta accettata
       comment_question:
-        other: "domanda commentata"
+        other: domanda commentata
       comment_answer:
-        other: "risposta commentata"
+        other: risposta commentata
       reply_to_you:
-        other: "hai ricevuto risposta"
+        other: hai ricevuto risposta
       mention_you:
-        other: "sei stato menzionato"
+        other: sei stato menzionato
       your_question_is_closed:
-        other: "la tua domanda è stata chiusa"
+        other: la tua domanda è stata chiusa
       your_question_was_deleted:
-        other: "la tua domanda è stata rimossa"
+        other: la tua domanda è stata rimossa
       your_answer_was_deleted:
-        other: "la tua risposta è stata rimossa"
+        other: la tua risposta è stata rimossa
       your_comment_was_deleted:
-        other: "il tuo commento è stato rimosso"
+        other: il tuo commento è stato rimosso
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -435,7 +440,7 @@ ui:
     delete:
       title: Delete this tag
       content: >-
-        <p>We do not allowed deleting tag with posts.</p><p>Please remove this tag from the posts first.</p>
+        <p>We do not allow deleting tag with posts.</p><p>Please remove this tag from the posts first.</p>
       content2: Are you sure you wish to delete?
       close: Close
   edit_tag:
@@ -477,7 +482,7 @@ ui:
     btn_flag: Flag
     btn_save_edits: Save edits
     btn_cancel: Cancel
-    show_more: Show more comment
+    show_more: Show more comments
     tip_question: >-
       Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
     tip_answer: >-
@@ -491,6 +496,8 @@ ui:
           label: Revision
         answer:
           label: Answer
+          feedback:
+            characters: content must be at least 6 characters in length.
         edit_summary:
           label: Edit Summary
           placeholder: >-
@@ -615,7 +622,7 @@ ui:
       msg:
         empty: Email cannot be empty.
   change_email:
-    page_title: Welcome to Answer
+    page_title: Welcome to {{site_name}}
     btn_cancel: Cancel
     btn_update: Update email address
     send_success: >-
@@ -653,12 +660,12 @@ ui:
       display_name:
         label: Display Name
         msg: Display name cannot be empty.
-        msg_range: Display name up to 30 characters
+        msg_range: Display name up to 30 characters.
       username:
         label: Username
         caption: People can mention you as "@username".
         msg: Username cannot be empty.
-        msg_range: Username up to 30 characters
+        msg_range: Username up to 30 characters.
         character: 'Must use the character set "a-z", "0-9", " - . _"'
       avatar:
         label: Profile Image
@@ -744,6 +751,7 @@ ui:
       confirm_info: >-
         <p>Are you sure you want to add another answer?</p><p>You could use the edit link to refine and improve your existing answer, instead.</p>
       empty: Answer cannot be empty.
+      characters: content must be at least 6 characters in length.
     reopen:
       title: Reopen this post
       content: Are you sure you want to reopen?
@@ -804,7 +812,7 @@ ui:
   modal_confirm:
     title: Error...
   account_result:
-    page_title: Welcome to Answer
+    page_title: Welcome to {{site_name}}
     success: Your new account is confirmed; you will be redirected to the home page.
     link: Continue to homepage
     invalid: >-
@@ -815,7 +823,7 @@ ui:
   unsubscribe:
     page_title: Unsubscribe
     success_title: Unsubscribe Successful
-    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
+    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
     link: Change settings
   question:
     following_tags: Following Tags
@@ -877,7 +885,7 @@ ui:
     title: Answer
     next: Next
     done: Done
-    config_yaml_error: Can’t create the config.yaml file.
+    config_yaml_error: Can't create the config.yaml file.
     lang:
       label: Please Choose a Language
     db_type:
@@ -907,7 +915,7 @@ ui:
       label: The config.yaml file created.
       desc: >-
         You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
-      info: "After you’ve done that, click “Next” button."
+      info: After you've done that, click "Next" button.
     site_information: Site Information
     admin_account: Admin Account
     site_name:
@@ -953,6 +961,11 @@ ui:
     db_failed: Database connection failed
     db_failed_desc: >-
       This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+  counts:
+    views: views
+    votes: votes
+    answers: answers
+    accepted: Accepted
   page_404:
     desc: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage
@@ -960,7 +973,7 @@ ui:
     desc: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
-    desc: "We are under maintenance, we’ll be back soon."
+    desc: "We are under maintenance, we'll be back soon."
   nav_menus:
     dashboard: Dashboard
     contents: Contents
@@ -1094,7 +1107,7 @@ ui:
             password:
               label: Password
               text: The user will be logged out and need to login again.
-              msg: Password must be at 8 - 32 characters in length.
+              msg: Password must be at 8-32 characters in length.
         btn_cancel: Cancel
         btn_submit: Submit
       user_modal:
@@ -1103,13 +1116,13 @@ ui:
           fields:
             display_name:
               label: Display Name
-              msg: display_name must be at 4 - 30 characters in length.
+              msg: Display Name must be at 3-30 characters in length.
             email:
               label: Email
               msg: Email is not valid.
             password:
               label: Password
-              msg: Password must be at 8 - 32 characters in length.
+              msg: Password must be at 8-32 characters in length.
         btn_cancel: Cancel
         btn_submit: Submit
     questions:
@@ -1228,14 +1241,14 @@ ui:
         text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
       mobile_logo:
         label: Mobile Logo (optional)
-        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the “logo” setting will be used.
+        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
       square_icon:
         label: Square Icon (optional)
         msg: Square icon cannot be empty.
         text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
       favicon:
         label: Favicon (optional)
-        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, “square icon” will be used.
+        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
     legal:
       page_title: Legal
       terms_of_service:
