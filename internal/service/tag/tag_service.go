@@ -50,6 +50,25 @@ func NewTagService(
 
 // RemoveTag delete tag
 func (ts *TagService) RemoveTag(ctx context.Context, req *schema.RemoveTagReq) (err error) {
+	//If the tag has associated problems, it cannot be deleted
+	tagCount, err := ts.tagCommonService.CountTagRelByTagID(ctx, req.TagID)
+	if err != nil {
+		return err
+	}
+	if tagCount > 0 {
+		return errors.BadRequest(reason.TagIsUsedCannotDelete)
+	}
+
+	//If the tag has associated problems, it cannot be deleted
+	tagSynonymCount, err := ts.tagRepo.GetTagSynonymCount(ctx, req.TagID)
+	if err != nil {
+		return err
+	}
+	if tagSynonymCount > 0 {
+		return errors.BadRequest(reason.TagIsUsedCannotDelete)
+	}
+
+	// tagRelRepo
 	err = ts.tagRepo.RemoveTag(ctx, req.TagID)
 	if err != nil {
 		return err
@@ -114,6 +133,20 @@ func (ts *TagService) GetTagInfo(ctx context.Context, req *schema.GetTagInfoReq)
 	resp.MemberActions = permission.GetTagPermission(ctx, req.CanEdit, req.CanDelete)
 	resp.GetExcerpt()
 	return resp, nil
+}
+
+func (ts *TagService) GetTagsBySlugName(ctx context.Context, tagNames []string) ([]*schema.TagItem, error) {
+	tagList := make([]*schema.TagItem, 0)
+	tagListInDB, err := ts.tagCommonService.GetTagListByNames(ctx, tagNames)
+	if err != nil {
+		return tagList, err
+	}
+	for _, tag := range tagListInDB {
+		tagItem := &schema.TagItem{}
+		copier.Copy(tagItem, tag)
+		tagList = append(tagList, tagItem)
+	}
+	return tagList, nil
 }
 
 // GetFollowingTags get following tags

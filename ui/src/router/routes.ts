@@ -1,9 +1,13 @@
-import { RouteObject } from 'react-router-dom';
+import type { IndexRouteObject, NonIndexRouteObject } from 'react-router-dom';
 
 import { guard } from '@/utils';
 import type { TGuardFunc } from '@/utils/guard';
 
-export interface RouteNode extends RouteObject {
+type IndexRouteNode = Omit<IndexRouteObject, 'children'>;
+type NonIndexRouteNode = Omit<NonIndexRouteObject, 'children'>;
+type UnionRouteNode = IndexRouteNode | NonIndexRouteNode;
+
+export type RouteNode = UnionRouteNode & {
   page: string;
   children?: RouteNode[];
   /**
@@ -14,7 +18,7 @@ export interface RouteNode extends RouteObject {
    * then auto redirect route to the `redirect` target.
    */
   guard?: TGuardFunc;
-}
+};
 
 const routes: RouteNode[] = [
   {
@@ -239,6 +243,7 @@ const routes: RouteNode[] = [
         page: 'pages/Admin',
         loader: async () => {
           await guard.pullLoggedUser(true);
+          return null;
         },
         guard: () => {
           return guard.admin();

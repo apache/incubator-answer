@@ -327,6 +327,7 @@ export interface SiteSettings {
   custom_css_html: AdminSettingsCustom;
   theme: AdminSettingsTheme;
   site_seo: AdminSettingsSeo;
+  version: string;
 }
 
 export interface AdminSettingBranding {

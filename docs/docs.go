@@ -4040,6 +4040,38 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/tags": {
+            "get": {
+                "description": "get tags list",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "get tags list",
+                "parameters": [
+                    {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "collectionFormat": "csv",
+                        "description": "string collection",
+                        "name": "tags",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/tags/following": {
             "get": {
                 "security": [
@@ -7141,6 +7173,9 @@ const docTemplate = `{
                 },
                 "theme": {
                     "$ref": "#/definitions/schema.SiteThemeResp"
+                },
+                "version": {
+                    "type": "string"
                 }
             }
         },

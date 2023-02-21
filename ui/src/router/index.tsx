@@ -6,9 +6,9 @@ import ErrorBoundary from '@/pages/50X';
 import baseRoutes, { RouteNode } from '@/router/routes';
 import RouteGuard from '@/router/RouteGuard';
 
-const routes: RouteObject[] = [];
+const routes: RouteNode[] = [];
 
-const routeWrapper = (routeNodes: RouteNode[], root: RouteObject[]) => {
+const routeWrapper = (routeNodes: RouteNode[], root: RouteNode[]) => {
   routeNodes.forEach((rn) => {
     if (rn.page === 'pages/Layout') {
       rn.element = rn.guard ? (
@@ -49,4 +49,4 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteObject[]) => {
 
 routeWrapper(baseRoutes, routes);
 
-export default routes;
+export default routes as RouteObject[];

@@ -38,6 +38,7 @@ require (
 	github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.7
+	github.com/tidwall/gjson v1.14.4
 	github.com/yuin/goldmark v1.4.13
 	golang.org/x/crypto v0.1.0
 	golang.org/x/net v0.1.0
@@ -109,6 +110,8 @@ require (
 	github.com/spf13/viper v1.13.0 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/syndtr/goleveldb v1.0.0 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20180127040702-4e3ac2762d5f // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
@@ -136,7 +139,3 @@ require (
 	modernc.org/token v1.0.0 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
-
-// github action runner Sometimes it will time out.
-replace gitee.com/travelliu/dm v1.8.11192 => github.com/aichy126/dm v1.8.11192
-replace modernc.org/z v1.2.19 => github.com/aichy126/modernc.org_z v1.2.19

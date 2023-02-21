@@ -2,237 +2,242 @@
 backend:
   base:
     success:
-      other: "Succès."
+      other: Succès.
     unknown:
-      other: "Erreur inconnue."
+      other: Erreur inconnue.
     request_format_error:
-      other: "Format de fichier incorrect."
+      other: Format de fichier incorrect.
     unauthorized_error:
-      other: "Non autorisé."
+      other: Non autorisé.
     database_error:
-      other: "Erreur du serveur de données."
+      other: Erreur du serveur de données.
   role:
     name:
       user:
-        other: "Utilisateur"
+        other: Utilisateur
       admin:
-        other: "Admin"
+        other: Admin
       moderator:
-        other: "Modérateur"
+        other: Modérateur
     description:
       user:
-        other: "Par défaut, sans accès spécial."
+        other: Par défaut, sans accès spécial.
       admin:
-        other: "Possède tous les droits pour accéder au site."
+        other: Possède tous les droits pour accéder au site.
       moderator:
-        other: "Possède les accès à tous les messages sauf aux paramètres d'administration."
+        other: Possède les accès à tous les messages sauf aux paramètres d'administration.
   email:
-    other: "Email"
+    other: Email
   password:
-    other: "Mot de passe"
+    other: Mot de passe
   email_or_password_wrong_error:
-    other: "L'email et le mot de passe ne correspondent pas."
+    other: L'email et le mot de passe ne correspondent pas.
   error:
     admin:
       email_or_password_wrong:
         other: L'email et le mot de passe ne correspondent pas.
     answer:
       not_found:
-        other: "Réponse introuvable."
+        other: Réponse introuvable.
       cannot_deleted:
-        other: "Pas de permission pour supprimer."
+        other: Pas de permission pour supprimer.
       cannot_update:
-        other: "Pas de permission pour mettre à jour."
+        other: Pas de permission pour mettre à jour.
     comment:
       edit_without_permission:
-        other: "Les commentaires ne sont pas autorisés à être modifiés."
+        other: Les commentaires ne sont pas autorisés à être modifiés.
       not_found:
-        other: "Commentaire non trouvé."
+        other: Commentaire non trouvé.
+      cannot_edit_after_deadline:
+        other: Le commentaire a été posté il y a trop longtemps pour être modifié.
     email:
       duplicate:
-        other: "L'adresse e-mail existe déjà."
+        other: L'adresse e-mail existe déjà.
       need_to_be_verified:
-        other: "L'adresse e-mail doit être vérifiée."
+        other: L'adresse e-mail doit être vérifiée.
       verify_url_expired:
-        other: "L'URL de vérification de l'email a expiré, veuillez renvoyer l'email."
+        other: L'URL de vérification de l'email a expiré, veuillez renvoyer l'email.
     lang:
       not_found:
-        other: "Fichier de langue non trouvé."
+        other: Fichier de langue non trouvé.
     object:
       captcha_verification_failed:
-        other: "Le Captcha est incorrect."
+        other: Le Captcha est incorrect.
       disallow_follow:
-        other: "Vous n’êtes pas autorisé à suivre."
+        other: Vous n’êtes pas autorisé à suivre.
       disallow_vote:
-        other: "Vous n’êtes pas autorisé à voter."
+        other: Vous n’êtes pas autorisé à voter.
       disallow_vote_your_self:
-        other: "Vous ne pouvez pas voter pour votre propre message."
+        other: Vous ne pouvez pas voter pour votre propre message.
       not_found:
-        other: "Objet non trouvé."
+        other: Objet non trouvé.
       verification_failed:
-        other: "La vérification a échoué."
+        other: La vérification a échoué.
       email_or_password_incorrect:
-        other: "L'e-mail et le mot de passe ne correspondent pas."
+        other: L'e-mail et le mot de passe ne correspondent pas.
       old_password_verification_failed:
-        other: "La vérification de l'ancien mot de passe a échoué"
+        other: La vérification de l'ancien mot de passe a échoué
       new_password_same_as_previous_setting:
-        other: "Le nouveau mot de passe est le même que le précédent."
+        other: Le nouveau mot de passe est le même que le précédent.
     question:
       not_found:
-        other: "Question non trouvée."
+        other: Question non trouvée.
       cannot_deleted:
-        other: "Pas de permission pour supprimer."
+        other: Pas de permission pour supprimer.
       cannot_close:
-        other: "Pas de permission pour fermer."
+        other: Pas de permission pour fermer.
       cannot_update:
-        other: "Pas de permission pour mettre à jour."
+        other: Pas de permission pour mettre à jour.
     rank:
       fail_to_meet_the_condition:
-        other: "Le rang ne remplit pas la condition."
+        other: Le rang ne remplit pas la condition.
     report:
       handle_failed:
-        other: "La gestion du rapport a échoué."
+        other: La gestion du rapport a échoué.
       not_found:
-        other: "Rapport non trouvé."
+        other: Rapport non trouvé.
     tag:
       not_found:
-        other: "Tag non trouvé."
+        other: Tag non trouvé.
       recommend_tag_not_found:
-        other: "Le tag de recommandation n'existe pas."
+        other: Le tag de recommandation n'existe pas.
       recommend_tag_enter:
-        other: "Veuillez entrer au moins un des tags requis."
+        other: Veuillez saisir au moins un tag.
       not_contain_synonym_tags:
-        other: "Ne dois pas contenir de tags synonymes."
+        other: Ne dois pas contenir de tags synonymes.
       cannot_update:
-        other: "Pas de permission pour mettre à jour."
+        other: Pas de permission pour mettre à jour.
       cannot_set_synonym_as_itself:
-        other: "Vous ne pouvez pas définir le synonyme de la balise actuelle comme elle-même."
+        other: Vous ne pouvez pas définir le synonyme de la balise actuelle comme elle-même.
     smtp:
       config_from_name_cannot_be_email:
-        other: "Le nom d'expéditeur ne peut pas être une adresse e-mail."
+        other: Le nom d'expéditeur ne peut pas être une adresse e-mail.
     theme:
       not_found:
-        other: "Thème non trouvé."
+        other: Thème non trouvé.
     revision:
       review_underway:
-        other: "Impossible d'éditer actuellement, il y a une version dans la file d'attente des revues."
+        other: Impossible d'éditer actuellement, il y a une version dans la file d'attente des revues.
       no_permission:
-        other: "Vous n'êtes pas autorisé à Vérifier."
+        other: Vous n'êtes pas autorisé à Vérifier.
     user:
       email_or_password_wrong:
         other:
           other: L'email et le mot de passe ne correspondent pas.
       not_found:
-        other: "Utilisateur non trouvé."
+        other: Utilisateur non trouvé.
       suspended:
-        other: "L'utilisateur a été suspendu."
+        other: L'utilisateur a été suspendu.
       username_invalid:
-        other: "Le nom d'utilisateur est invalide."
+        other: Le nom d'utilisateur est invalide.
       username_duplicate:
-        other: "Nom d'utilisateur déjà utilisé."
+        other: Nom d'utilisateur déjà utilisé.
       set_avatar:
-        other: "La configuration de l'avatar a échoué."
+        other: La configuration de l'avatar a échoué.
       cannot_update_your_role:
-        other: "Vous ne pouvez pas modifier votre rôle."
+        other: Vous ne pouvez pas modifier votre rôle.
       not_allowed_registration:
-        other: "Actuellement, le site n'est pas ouvert aux inscriptions"
+        other: Actuellement, le site n'est pas ouvert aux inscriptions
     config:
       read_config_failed:
-        other: "La lecture de la configuration a échoué"
+        other: La lecture de la configuration a échoué
     database:
       connection_failed:
-        other: "La connexion à la base de données a échoué"
+        other: La connexion à la base de données a échoué
       create_table_failed:
-        other: "La création de la table a échoué"
+        other: La création de la table a échoué
     install:
       create_config_failed:
-        other: "Impossible de créer le fichier config.yaml."
+        other: Impossible de créer le fichier config.yaml.
+    upload:
+      unsupported_file_format:
+        other: Format de fichier non supporté.
   report:
     spam:
       name:
-        other: "spam"
+        other: spam
       desc:
-        other: "Ce message est une publicité ou un vandalisme. Il n'est pas utile ou pertinent pour le sujet actuel."
+        other: Ce message est une publicité ou un vandalisme. Il n'est pas utile ou pertinent pour le sujet actuel.
     rude:
       name:
-        other: "grossier ou abusif"
+        other: grossier ou abusif
       desc:
-        other: "Une personne raisonnable jugerait que ce contenu est inapproprié pour un discours respectueux."
+        other: Une personne raisonnable jugerait que ce contenu est inapproprié pour un discours respectueux.
     duplicate:
       name:
-        other: "doublon"
+        other: doublon
       desc:
-        other: "Cette question a déjà été posée auparavant et a déjà une réponse."
+        other: Cette question a déjà été posée auparavant et a déjà une réponse.
     not_answer:
       name:
-        other: "ce n'est pas une réponse"
+        other: ce n'est pas une réponse
       desc:
-        other: "Cela a été posté comme une réponse, mais il n'essaie pas de répondre à la question. Il devrait s'agir d'une modification, d'un commentaire, d'une autre question, ou d'une suppression totale."
+        other: Cela a été posté comme une réponse, mais il n'essaie pas de répondre à la question. Il devrait s'agir d'une modification, d'un commentaire, d'une autre question, ou d'une suppression totale.
     not_need:
       name:
-        other: "n’est plus nécessaire"
+        other: n’est plus nécessaire
       desc:
-        other: "Ce commentaire est obsolète, conversationnel ou non pertinent pour ce post."
+        other: Ce commentaire est obsolète, conversationnel ou non pertinent pour ce post.
     other:
       name:
-        other: "quelque chose d'autre"
+        other: quelque chose d'autre
       desc:
-        other: "Ce message nécessite l'attention du personnel pour une autre raison non listée ci-dessus."
+        other: Ce message nécessite l'attention du personnel pour une autre raison non listée ci-dessus.
   question:
     close:
       duplicate:
         name:
-          other: "spam"
+          other: spam
         desc:
-          other: "Cette question a déjà été posée auparavant et a déjà une réponse."
+          other: Cette question a déjà été posée auparavant et a déjà une réponse.
       guideline:
         name:
-          other: "une raison spécifique à la communauté"
+          other: une raison spécifique à la communauté
         desc:
-          other: "Cette question ne répond pas à une règle communautaire."
+          other: Cette question ne répond pas à une règle communautaire.
       multiple:
         name:
-          other: "a besoin de détails ou de clarté"
+          other: a besoin de détails ou de clarté
         desc:
-          other: "Cette question comprend actuellement plusieurs questions en une seule. Elle ne devrait se concentrer que sur un seul problème."
+          other: Cette question comprend actuellement plusieurs questions en une seule. Elle ne devrait se concentrer que sur un seul problème.
       other:
         name:
-          other: "quelque chose d'autre"
+          other: quelque chose d'autre
         desc:
-          other: "Ce message nécessite l'attention du personnel pour une autre raison non listée ci-dessus."
+          other: Ce message nécessite l'attention du personnel pour une autre raison non listée ci-dessus.
     operation_type:
       asked:
-        other: "a demandé"
+        other: a demandé
       answered:
-        other: "a répondu"
+        other: a répondu
       modified:
-        other: "modifié"
+        other: modifié
   notification:
     action:
       update_question:
-        other: "question mise à jour"
+        other: question mise à jour
       answer_the_question:
-        other: "question répondue"
+        other: question répondue
       update_answer:
-        other: "réponse mise à jour"
+        other: réponse mise à jour
       accept_answer:
-        other: "réponse acceptée"
+        other: réponse acceptée
       comment_question:
-        other: "a commenté la question"
+        other: a commenté la question
       comment_answer:
-        other: "a commenté la réponse"
+        other: a commenté la réponse
       reply_to_you:
-        other: "vous a répondu"
+        other: vous a répondu
       mention_you:
-        other: "vous a mentionné"
+        other: vous a mentionné
       your_question_is_closed:
-        other: "Une réponse a été publiée pour votre question"
+        other: Une réponse a été publiée pour votre question
       your_question_was_deleted:
-        other: "Une réponse a été publiée pour votre question"
+        other: Une réponse a été publiée pour votre question
       your_answer_was_deleted:
-        other: "Votre réponse a bien été supprimée"
+        other: Votre réponse a bien été supprimée
       your_comment_was_deleted:
-        other: "Votre commentaire a été supprimé"
+        other: Votre commentaire a été supprimé
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -491,6 +496,8 @@ ui:
           label: Modification
         answer:
           label: Réponse
+          feedback:
+            characters: le contenu doit comporter au moins 6 caractères.
         edit_summary:
           label: Modifier le résumé
           placeholder: >-
@@ -615,7 +622,7 @@ ui:
       msg:
         empty: L'e-mail ne peut pas être vide.
   change_email:
-    page_title: Bienvenue sur Answer
+    page_title: Bienvenue sur {{site_name}}
     btn_cancel: Annuler
     btn_update: Mettre à jour l'adresse e-mail
     send_success: >-
@@ -653,12 +660,12 @@ ui:
       display_name:
         label: Nom affiché
         msg: Le nom ne peut être vide.
-        msg_range: Le nom doit contenir moins de 30 caractères
+        msg_range: Le nom doit contenir moins de 30 caractères.
       username:
         label: Nom d'utilisateur
         caption: Les gens peuvent vous mentionner avec "@username".
         msg: Le nom d'utilisateur ne peut pas être vide.
-        msg_range: Le nom d'utilisateur doit contenir moins de 30 caractères
+        msg_range: Le nom d'utilisateur doit contenir moins de 30 caractères.
         character: 'Doit utiliser seulement les caractères "a-z", "0-9", " - . _"'
       avatar:
         label: Image de profil
@@ -744,6 +751,7 @@ ui:
       confirm_info: >-
         <p>Êtes-vous sûr de vouloir ajouter une autre réponse ?</p><p>Vous pouvez utiliser le lien d'édition pour affiner et améliorer votre réponse existante.</p>
       empty: La réponse ne peut être vide.
+      characters: le contenu doit comporter au moins 6 caractères.
     reopen:
       title: Rouvrir ce message
       content: Êtes-vous sûr de vouloir rouvrir ?
@@ -804,7 +812,7 @@ ui:
   modal_confirm:
     title: Erreur...
   account_result:
-    page_title: Bienvenue sur Answer
+    page_title: Bienvenue sur {{site_name}}
     success: Votre nouveau compte est confirmé; vous serez redirigé vers la page d'accueil.
     link: Continuer vers la page d'accueil
     invalid: >-
@@ -907,7 +915,7 @@ ui:
       label: Le fichier config.yaml a été créé.
       desc: >-
         Vous pouvez créer manuellement le fichier <1>config.yaml</1> dans le répertoire <1>/var/wwww/xxx/</1> et y coller le texte suivant.
-      info: "Après avoir fait cela, cliquez sur le bouton \"Suivant\"."
+      info: Après avoir fini, cliquez sur le bouton "Suivant".
     site_information: Informations du site
     admin_account: Compte Admin
     site_name:
@@ -952,7 +960,12 @@ ui:
       Il semble que se soit déjà installer. Pour tout réinstaller, veuillez d'abord nettoyer votre ancienne base de données.
     db_failed: La connexion à la base de données a échoué
     db_failed_desc: >-
-      Il semble que les informations de la base de données présentes dans le fichier <1>config.yaml</1> soient incorrect ou que le contact avec le serveur ne puisse pas être établi. Cela peut vouloir dire que l'hôte de la base de données soit non opérationnel.
+      Il semble que les informations de la base de données présentes dans le fichier <1>config.yaml</1> soient incorrects ou que le contact avec le serveur ne puisse pas être établi. Cela peut vouloir dire que l'hôte de la base de données soit non opérationnel.
+  counts:
+    views: vues
+    votes: votes
+    answers: réponses
+    accepted: Accepté
   page_404:
     desc: "Nous sommes désolés, mais cette page n’existe pas."
     back_home: Retour à la page d'accueil
@@ -1094,7 +1107,7 @@ ui:
             password:
               label: Mot de passe
               text: L'utilisateur sera déconnecté et devra se reconnecter.
-              msg: Le mot de passe doit comporter entre 8 et 32 caractères.
+              msg: Le mot de passe doit contenir entre 8 et 32 caractères.
         btn_cancel: Annuler
         btn_submit: Valider
       user_modal:
@@ -1103,13 +1116,13 @@ ui:
           fields:
             display_name:
               label: Nom affiché
-              msg: le nom affiché doit avoir une longueur de 4 à 30 caractères.
+              msg: Le nom affiché doit avoir une longueur de 3 à 30 caractères.
             email:
               label: Email
               msg: L'email n'est pas valide.
             password:
               label: Mot de passe
-              msg: Le mot de passe doit comporter entre 8 et 32 caractères.
+              msg: Le mot de passe doit contenir entre 8 et 32 caractères.
         btn_cancel: Annuler
         btn_submit: Valider
     questions:

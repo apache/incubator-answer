@@ -78,6 +78,10 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 	if !exist {
 		return nil
 	}
+	// if the status is deleted, return directly
+	if answerInfo.Status == entity.AnswerStatusDeleted {
+		return nil
+	}
 	if !req.IsAdmin {
 		if answerInfo.UserID != req.UserID {
 			return errors.BadRequest(reason.AnswerCannotDeleted)

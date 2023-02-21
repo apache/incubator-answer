@@ -205,7 +205,7 @@ func (sc *SiteInfoController) UpdateGeneral(ctx *gin.Context) {
 		return
 	}
 	err := sc.siteInfoService.SaveSiteGeneral(ctx, req)
-	handler.HandleResponse(ctx, err, nil)
+	handler.HandleResponse(ctx, err, req)
 }
 
 // UpdateInterface update site interface
