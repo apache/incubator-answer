@@ -1335,6 +1335,8 @@ definitions:
         $ref: '#/definitions/schema.SiteSeoReq'
       theme:
         $ref: '#/definitions/schema.SiteThemeResp'
+      version:
+        type: string
     type: object
   schema.SiteInterfaceReq:
     properties:
