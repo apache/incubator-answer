@@ -41,7 +41,6 @@ func InstallAllInitialEnvironment(dataDirPath string) {
 	FormatAllPath(dataDirPath)
 	installUploadDir()
 	installI18nBundle()
-	installReservedUsernames()
 	fmt.Println("install all initial environment done")
 }
 
@@ -112,18 +111,5 @@ func installI18nBundle() {
 		} else {
 			fmt.Printf("[i18n] install %s bundle success\n", item.Name())
 		}
-	}
-}
-
-func installReservedUsernames() {
-	reservedUsernamesJsonFilePath := filepath.Join(ConfigFileDir, DefaultReservedUsernamesConfigFileName)
-	if !dir.CheckFileExist(reservedUsernamesJsonFilePath) {
-		err := writer.WriteFile(reservedUsernamesJsonFilePath, string(configs.ReservedUsernames))
-		if err != nil {
-			fmt.Printf("[%s] write file fail: %s\n", DefaultReservedUsernamesConfigFileName, err)
-		} else {
-			fmt.Printf("[%s] write file success\n", DefaultReservedUsernamesConfigFileName)
-		}
-		return
 	}
 }

@@ -16,6 +16,7 @@ const (
 const (
 	EmailOrPasswordWrong             = "error.object.email_or_password_incorrect"
 	CommentNotFound                  = "error.comment.not_found"
+	CommentCannotEditAfterDeadline   = "error.comment.cannot_edit_after_deadline"
 	QuestionNotFound                 = "error.question.not_found"
 	QuestionCannotDeleted            = "error.question.cannot_deleted"
 	QuestionCannotClose              = "error.question.cannot_close"
@@ -42,6 +43,7 @@ const (
 	TagNotFound                      = "error.tag.not_found"
 	TagNotContainSynonym             = "error.tag.not_contain_synonym_tags"
 	TagCannotUpdate                  = "error.tag.cannot_update"
+	TagIsUsedCannotDelete            = "error.tag.is_used_cannot_delete"
 	RankFailToMeetTheCondition       = "error.rank.fail_to_meet_the_condition"
 	ThemeNotFound                    = "error.theme.not_found"
 	LangNotFound                     = "error.lang.not_found"
@@ -53,6 +55,7 @@ const (
 	InstallConfigFailed              = "error.install.create_config_failed"
 	SiteInfoNotFound                 = "error.site_info.not_found"
 	UploadFileSourceUnsupported      = "error.upload.source_unsupported"
+	UploadFileUnsupportedFileFormat  = "error.upload.unsupported_file_format"
 	RecommendTagNotExist             = "error.tag.recommend_tag_not_found"
 	RecommendTagEnter                = "error.tag.recommend_tag_enter"
 	RevisionReviewUnderway           = "error.revision.review_underway"

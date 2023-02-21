@@ -33,6 +33,7 @@ import (
 	"github.com/go-playground/validator/v10/translations/vi"
 	"github.com/go-playground/validator/v10/translations/zh"
 	"github.com/go-playground/validator/v10/translations/zh_tw"
+	"github.com/microcosm-cc/bluemonday"
 	myErrors "github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
@@ -97,8 +98,46 @@ func getTran(lo locales.Translator) ut.Translator {
 	return tran
 }
 
+func NotBlank(fl validator.FieldLevel) (res bool) {
+	field := fl.Field()
+	switch field.Kind() {
+	case reflect.String:
+		trimSpace := strings.TrimSpace(field.String())
+		res := len(trimSpace) > 0
+		if !res {
+			field.SetString(trimSpace)
+		}
+		return true
+	case reflect.Chan, reflect.Map, reflect.Slice, reflect.Array:
+		return field.Len() > 0
+	case reflect.Ptr, reflect.Interface, reflect.Func:
+		return !field.IsNil()
+	default:
+		return field.IsValid() && field.Interface() != reflect.Zero(field.Type()).Interface()
+	}
+}
+
+func Sanitizer(fl validator.FieldLevel) (res bool) {
+	field := fl.Field()
+	switch field.Kind() {
+	case reflect.String:
+		filter := bluemonday.UGCPolicy()
+		field.SetString(filter.Sanitize(field.String()))
+		return true
+	case reflect.Chan, reflect.Map, reflect.Slice, reflect.Array:
+		return field.Len() > 0
+	case reflect.Ptr, reflect.Interface, reflect.Func:
+		return !field.IsNil()
+	default:
+		return field.IsValid() && field.Interface() != reflect.Zero(field.Type()).Interface()
+	}
+}
+
 func createDefaultValidator(la i18n.Language) *validator.Validate {
 	validate := validator.New()
+	// _ = validate.RegisterValidation("notblank", validators.NotBlank)
+	_ = validate.RegisterValidation("notblank", NotBlank)
+	_ = validate.RegisterValidation("sanitizer", Sanitizer)
 	validate.RegisterTagNameFunc(func(fld reflect.StructField) (res string) {
 		defer func() {
 			if len(res) > 0 {

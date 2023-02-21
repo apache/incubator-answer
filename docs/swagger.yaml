@@ -147,9 +147,8 @@ definitions:
         type: string
       original_text:
         description: original comment content
-        type: string
-      parsed_text:
-        description: parsed comment content
+        maxLength: 600
+        minLength: 2
         type: string
       reply_comment_id:
         description: reply comment id
@@ -157,7 +156,6 @@ definitions:
     required:
     - object_id
     - original_text
-    - parsed_text
     type: object
   schema.AddReportReq:
     properties:
@@ -217,35 +215,30 @@ definitions:
   schema.AnswerAddReq:
     properties:
       content:
-        description: content
-        type: string
-      html:
-        description: html
+        maxLength: 65535
+        minLength: 6
         type: string
       question_id:
-        description: question_id
         type: string
+    required:
+    - content
     type: object
   schema.AnswerUpdateReq:
     properties:
       content:
-        description: content
+        maxLength: 65535
+        minLength: 6
         type: string
       edit_summary:
-        description: edit_summary
-        type: string
-      html:
-        description: html
         type: string
       id:
-        description: id
         type: string
       question_id:
-        description: question_id
         type: string
       title:
-        description: title
         type: string
+    required:
+    - content
     type: object
   schema.AvatarInfo:
     properties:
@@ -976,15 +969,15 @@ definitions:
       type:
         type: string
     type: object
+  schema.PostRenderReq:
+    properties:
+      content:
+        type: string
+    type: object
   schema.QuestionAdd:
     properties:
       content:
         description: content
-        maxLength: 65535
-        minLength: 6
-        type: string
-      html:
-        description: html
         maxLength: 65535
         minLength: 6
         type: string
@@ -1000,7 +993,6 @@ definitions:
         type: string
     required:
     - content
-    - html
     - tags
     - title
     type: object
@@ -1035,6 +1027,8 @@ definitions:
       answer_count:
         type: integer
       collection_count:
+        type: integer
+      created_at:
         type: integer
       description:
         type: string
@@ -1090,11 +1084,6 @@ definitions:
       edit_summary:
         description: edit summary
         type: string
-      html:
-        description: html
-        maxLength: 65535
-        minLength: 6
-        type: string
       id:
         description: question id
         type: string
@@ -1110,7 +1099,6 @@ definitions:
         type: string
     required:
     - content
-    - html
     - id
     - tags
     - title
@@ -1490,9 +1478,6 @@ definitions:
       original_text:
         description: original text
         type: string
-      parsed_text:
-        description: parsed text
-        type: string
       slug_name:
         description: slug_name
         maxLength: 35
@@ -1558,12 +1543,12 @@ definitions:
         type: string
       original_text:
         description: original comment content
-        type: string
-      parsed_text:
-        description: parsed comment content
+        maxLength: 600
+        minLength: 2
         type: string
     required:
     - comment_id
+    - original_text
     type: object
   schema.UpdateFollowTagsReq:
     properties:
@@ -1579,10 +1564,6 @@ definitions:
         $ref: '#/definitions/schema.AvatarInfo'
         description: avatar
       bio:
-        description: bio
-        maxLength: 4096
-        type: string
-      bio_html:
         description: bio
         maxLength: 4096
         type: string
@@ -1647,9 +1628,6 @@ definitions:
         type: string
       original_text:
         description: original text
-        type: string
-      parsed_text:
-        description: parsed text
         type: string
       slug_name:
         description: slug_name
@@ -3684,6 +3662,30 @@ paths:
       summary: user's votes
       tags:
       - Activity
+  /answer/api/v1/post/render:
+    post:
+      consumes:
+      - application/json
+      description: render post content
+      parameters:
+      - description: PostRenderReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.PostRenderReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: render post content
+      tags:
+      - Upload
   /answer/api/v1/question:
     delete:
       consumes:
@@ -4347,6 +4349,27 @@ paths:
                   $ref: '#/definitions/schema.GetTagSynonymsResp'
               type: object
       summary: get tag synonyms
+      tags:
+      - Tag
+  /answer/api/v1/tags:
+    get:
+      description: get tags list
+      parameters:
+      - collectionFormat: csv
+        description: string collection
+        in: query
+        items:
+          type: string
+        name: tags
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: get tags list
       tags:
       - Tag
   /answer/api/v1/tags/following:

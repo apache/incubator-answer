@@ -121,33 +121,14 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 		return nil, err
 	}
 
-	if objInfo.ObjectType == constant.QuestionObjectType {
-		cs.notificationQuestionComment(ctx, objInfo.ObjectCreatorUserID,
-			objInfo.QuestionID, objInfo.Title, comment.ID, req.UserID, comment.OriginalText)
-	} else if objInfo.ObjectType == constant.AnswerObjectType {
-		cs.notificationAnswerComment(ctx, objInfo.QuestionID, objInfo.Title, objInfo.AnswerID,
-			objInfo.ObjectCreatorUserID, comment.ID, req.UserID, comment.OriginalText)
-	}
-	if len(req.MentionUsernameList) > 0 {
-		cs.notificationMention(ctx, req.MentionUsernameList, comment.ID, req.UserID)
-	}
-
 	resp = &schema.GetCommentResp{}
 	resp.SetFromComment(comment)
-	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID, req.CanEdit, req.CanDelete)
+	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID,
+		time.Now(), req.CanEdit, req.CanDelete)
 
-	// get reply user info
-	if len(resp.ReplyUserID) > 0 {
-		replyUser, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, resp.ReplyUserID)
-		if err != nil {
-			return nil, err
-		}
-		if exist {
-			resp.ReplyUsername = replyUser.Username
-			resp.ReplyUserDisplayName = replyUser.DisplayName
-			resp.ReplyUserStatus = replyUser.Status
-		}
-		cs.notificationCommentReply(ctx, replyUser.ID, objInfo.QuestionID, req.UserID)
+	commentResp, err := cs.addCommentNotification(ctx, req, resp, comment, objInfo)
+	if err != nil {
+		return commentResp, err
 	}
 
 	// get user info
@@ -178,6 +159,50 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 	return resp, nil
 }
 
+func (cs *CommentService) addCommentNotification(
+	ctx context.Context, req *schema.AddCommentReq, resp *schema.GetCommentResp,
+	comment *entity.Comment, objInfo *schema.SimpleObjectInfo) (*schema.GetCommentResp, error) {
+	// The priority of the notification
+	// 1. reply to user
+	// 2. comment mention to user
+	// 3. answer or question was commented
+	alreadyNotifiedUserID := make(map[string]bool)
+
+	// get reply user info
+	if len(resp.ReplyUserID) > 0 && resp.ReplyUserID != req.UserID {
+		replyUser, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, resp.ReplyUserID)
+		if err != nil {
+			return nil, err
+		}
+		if exist {
+			resp.ReplyUsername = replyUser.Username
+			resp.ReplyUserDisplayName = replyUser.DisplayName
+			resp.ReplyUserStatus = replyUser.Status
+		}
+		cs.notificationCommentReply(ctx, replyUser.ID, comment.ID, req.UserID)
+		alreadyNotifiedUserID[replyUser.ID] = true
+		return nil, nil
+	}
+
+	if len(req.MentionUsernameList) > 0 {
+		alreadyNotifiedUserIDs := cs.notificationMention(
+			ctx, req.MentionUsernameList, comment.ID, req.UserID, alreadyNotifiedUserID)
+		for _, userID := range alreadyNotifiedUserIDs {
+			alreadyNotifiedUserID[userID] = true
+		}
+		return nil, nil
+	}
+
+	if objInfo.ObjectType == constant.QuestionObjectType && !alreadyNotifiedUserID[objInfo.ObjectCreatorUserID] {
+		cs.notificationQuestionComment(ctx, objInfo.ObjectCreatorUserID,
+			objInfo.QuestionID, objInfo.Title, comment.ID, req.UserID, comment.OriginalText)
+	} else if objInfo.ObjectType == constant.AnswerObjectType && !alreadyNotifiedUserID[objInfo.ObjectCreatorUserID] {
+		cs.notificationAnswerComment(ctx, objInfo.QuestionID, objInfo.Title, objInfo.AnswerID,
+			objInfo.ObjectCreatorUserID, comment.ID, req.UserID, comment.OriginalText)
+	}
+	return nil, nil
+}
+
 // RemoveComment delete comment
 func (cs *CommentService) RemoveComment(ctx context.Context, req *schema.RemoveCommentReq) (err error) {
 	return cs.commentRepo.RemoveComment(ctx, req.CommentID)
@@ -185,6 +210,19 @@ func (cs *CommentService) RemoveComment(ctx context.Context, req *schema.RemoveC
 
 // UpdateComment update comment
 func (cs *CommentService) UpdateComment(ctx context.Context, req *schema.UpdateCommentReq) (err error) {
+	old, exist, err := cs.commentCommonRepo.GetComment(ctx, req.CommentID)
+	if err != nil {
+		return
+	}
+	if !exist {
+		return errors.BadRequest(reason.CommentNotFound)
+	}
+
+	// user can edit the comment that was posted by himself before deadline.
+	if !req.IsAdmin && (time.Now().After(old.CreatedAt.Add(constant.CommentEditDeadline))) {
+		return errors.BadRequest(reason.CommentCannotEditAfterDeadline)
+	}
+
 	comment := &entity.Comment{}
 	_ = copier.Copy(comment, req)
 	comment.ID = req.CommentID
@@ -198,7 +236,7 @@ func (cs *CommentService) GetComment(ctx context.Context, req *schema.GetComment
 		return
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.UnknownError)
+		return nil, errors.BadRequest(reason.CommentNotFound)
 	}
 
 	resp = &schema.GetCommentResp{
@@ -243,7 +281,8 @@ func (cs *CommentService) GetComment(ctx context.Context, req *schema.GetComment
 	// check if current user vote this comment
 	resp.IsVote = cs.checkIsVote(ctx, req.UserID, resp.CommentID)
 
-	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID, req.CanEdit, req.CanDelete)
+	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID,
+		comment.CreatedAt, req.CanEdit, req.CanDelete)
 	return resp, nil
 }
 
@@ -339,7 +378,7 @@ func (cs *CommentService) convertCommentEntity2Resp(ctx context.Context, req *sc
 	commentResp.IsVote = cs.checkIsVote(ctx, req.UserID, commentResp.CommentID)
 
 	commentResp.MemberActions = permission.GetCommentPermission(ctx,
-		req.UserID, commentResp.UserID, req.CanEdit, req.CanDelete)
+		req.UserID, commentResp.UserID, comment.CreatedAt, req.CanEdit, req.CanDelete)
 	return commentResp, nil
 }
 
@@ -521,14 +560,16 @@ func (cs *CommentService) notificationCommentReply(ctx context.Context, replyUse
 	notice_queue.AddNotification(msg)
 }
 
-func (cs *CommentService) notificationMention(ctx context.Context, mentionUsernameList []string, commentID, commentUserID string) {
+func (cs *CommentService) notificationMention(
+	ctx context.Context, mentionUsernameList []string, commentID, commentUserID string,
+	alreadyNotifiedUserID map[string]bool) (alreadyNotifiedUserIDs []string) {
 	for _, username := range mentionUsernameList {
 		userInfo, exist, err := cs.userCommon.GetUserBasicInfoByUserName(ctx, username)
 		if err != nil {
 			log.Error(err)
 			continue
 		}
-		if exist {
+		if exist && !alreadyNotifiedUserID[userInfo.ID] {
 			msg := &schema.NotificationMsg{
 				ReceiverUserID: userInfo.ID,
 				TriggerUserID:  commentUserID,
@@ -538,6 +579,8 @@ func (cs *CommentService) notificationMention(ctx context.Context, mentionUserna
 			msg.ObjectType = constant.CommentObjectType
 			msg.NotificationAction = constant.MentionYou
 			notice_queue.AddNotification(msg)
+			alreadyNotifiedUserIDs = append(alreadyNotifiedUserIDs, userInfo.ID)
 		}
 	}
+	return alreadyNotifiedUserIDs
 }

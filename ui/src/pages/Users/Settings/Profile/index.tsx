@@ -2,7 +2,6 @@ import React, { FormEvent, useState, useEffect } from 'react';
 import { Form, Button, Stack, ButtonGroup } from 'react-bootstrap';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { marked } from 'marked';
 import MD5 from 'md5';
 
 import type { FormDataType } from '@/common/interface';
@@ -205,7 +204,6 @@ const Index: React.FC = () => {
       bio: formData.bio.value,
       website: formData.website.value,
       location: formData.location.value,
-      bio_html: marked.parse(formData.bio.value),
     };
 
     modifyUserInfo(params)
@@ -386,7 +384,11 @@ const Index: React.FC = () => {
         </Form.Group>
 
         <Form.Group controlId="bio" className="mb-3">
-          <Form.Label>{t('bio.label')}</Form.Label>
+          <Form.Label>
+            {`${t('bio.label')} ${t('optional', {
+              keyPrefix: 'form',
+            })}`}
+          </Form.Label>
           <Form.Control
             className="font-monospace"
             required
@@ -410,7 +412,9 @@ const Index: React.FC = () => {
         </Form.Group>
 
         <Form.Group controlId="website" className="mb-3">
-          <Form.Label>{t('website.label')}</Form.Label>
+          <Form.Label>{`${t('website.label')} ${t('optional', {
+            keyPrefix: 'form',
+          })}`}</Form.Label>
           <Form.Control
             required
             type="url"
@@ -433,7 +437,9 @@ const Index: React.FC = () => {
         </Form.Group>
 
         <Form.Group controlId="email" className="mb-3">
-          <Form.Label>{t('location.label')}</Form.Label>
+          <Form.Label>{`${t('location.label')} ${t('optional', {
+            keyPrefix: 'form',
+          })}`}</Form.Label>
           <Form.Control
             required
             type="text"

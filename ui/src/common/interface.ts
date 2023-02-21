@@ -56,7 +56,7 @@ export interface QuestionParams {
   title: string;
   url_title?: string;
   content: string;
-  html: string;
+  html?: string;
   tags: Tag[];
 }
 
@@ -207,7 +207,7 @@ export interface AnswerItem {
 
 export interface PostAnswerReq {
   content: string;
-  html: string;
+  html?: string;
   question_id: string;
 }
 
@@ -319,6 +319,7 @@ export interface SiteSettings {
   custom_css_html: AdminSettingsCustom;
   theme: AdminSettingsTheme;
   site_seo: AdminSettingsSeo;
+  version: string;
 }
 
 export interface AdminSettingBranding {

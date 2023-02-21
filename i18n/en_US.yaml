@@ -3,240 +3,249 @@
 backend:
   base:
     success:
-      other: "Success."
+      other: Success.
     unknown:
-      other: "Unknown error."
+      other: Unknown error.
     request_format_error:
-      other: "Request format is not valid."
+      other: Request format is not valid.
     unauthorized_error:
-      other: "Unauthorized."
+      other: Unauthorized.
     database_error:
-      other: "Data server error."
-
+      other: Data server error.
   role:
     name:
       user:
-        other: "User"
+        other: User
       admin:
-        other: "Admin"
+        other: Admin
       moderator:
-        other: "Moderator"
+        other: Moderator
     description:
       user:
-        other: "Default with no special access."
+        other: Default with no special access.
       admin:
-        other: "Have the full power to access the site."
+        other: Have the full power to access the site.
       moderator:
-        other: "Has access to all posts except admin settings."
-
+        other: Has access to all posts except admin settings.
   email:
-    other: "Email"
+    other: Email
   password:
-    other: "Password"
-
-  email_or_password_wrong_error: &email_or_password_wrong
-    other: "Email and password do not match."
-
+    other: Password
+  email_or_password_wrong_error:
+    other: Email and password do not match.
   error:
     admin:
-      email_or_password_wrong: *email_or_password_wrong
+      email_or_password_wrong:
+        other: Email and password do not match.
     answer:
       not_found:
-        other: "Answer do not found."
+        other: Answer do not found.
       cannot_deleted:
-        other: "No permission to delete."
+        other: No permission to delete.
       cannot_update:
-        other: "No permission to update."
+        other: No permission to update.
     comment:
       edit_without_permission:
-        other: "Comment are not allowed to edit."
+        other: Comment are not allowed to edit.
       not_found:
-        other: "Comment not found."
+        other: Comment not found.
+      cannot_edit_after_deadline:
+        other: The comment time has been too long to modify.
     email:
       duplicate:
-        other: "Email already exists."
+        other: Email already exists.
       need_to_be_verified:
-        other: "Email should be verified."
+        other: Email should be verified.
       verify_url_expired:
-        other: "Email verified URL has expired, please resend the email."
+        other: Email verified URL has expired, please resend the email.
     lang:
       not_found:
-        other: "Language file not found."
+        other: Language file not found.
     object:
       captcha_verification_failed:
-        other: "Captcha wrong."
+        other: Captcha wrong.
       disallow_follow:
-        other: "You are not allowed to follow."
+        other: You are not allowed to follow.
       disallow_vote:
-        other: "You are not allowed to vote."
+        other: You are not allowed to vote.
       disallow_vote_your_self:
-        other: "You can't vote for your own post."
+        other: You can't vote for your own post.
       not_found:
-        other: "Object not found."
+        other: Object not found.
       verification_failed:
-        other: "Verification failed."
+        other: Verification failed.
       email_or_password_incorrect:
-        other: "Email and password do not match."
+        other: Email and password do not match.
       old_password_verification_failed:
-        other: "The old password verification failed"
+        other: The old password verification failed
       new_password_same_as_previous_setting:
-        other: "The new password is the same as the previous one."
+        other: The new password is the same as the previous one.
     question:
       not_found:
-        other: "Question not found."
+        other: Question not found.
       cannot_deleted:
-        other: "No permission to delete."
+        other: No permission to delete.
       cannot_close:
-        other: "No permission to close."
+        other: No permission to close.
       cannot_update:
-        other: "No permission to update."
+        other: No permission to update.
     rank:
       fail_to_meet_the_condition:
-        other: "Rank fail to meet the condition."
+        other: Rank fail to meet the condition.
     report:
       handle_failed:
-        other: "Report handle failed."
+        other: Report handle failed.
       not_found:
-        other: "Report not found."
+        other: Report not found.
     tag:
       not_found:
-        other: "Tag not found."
+        other: Tag not found.
       recommend_tag_not_found:
-        other: "Recommend Tag is not exist."
+        other: Recommend Tag is not exist.
       recommend_tag_enter:
-        other: "Please enter at least one required tag."
+        other: Please enter at least one required tag.
       not_contain_synonym_tags:
-        other: "Should not contain synonym tags."
+        other: Should not contain synonym tags.
       cannot_update:
-        other: "No permission to update."
+        other: No permission to update.
+      is_used_cannot_delete:
+        other: "You cannot delete a tag that is in use"
       cannot_set_synonym_as_itself:
-        other: "You cannot set the synonym of the current tag as itself."
+        other: You cannot set the synonym of the current tag as itself.
     smtp:
       config_from_name_cannot_be_email:
-        other: "The From Name cannot be a email address."
+        other: The From Name cannot be a email address.
     theme:
       not_found:
-        other: "Theme not found."
+        other: Theme not found.
     revision:
       review_underway:
-        other: "Can't edit currently, there is a version in the review queue."
+        other: Can't edit currently, there is a version in the review queue.
       no_permission:
-        other: "No permission to Revision."
+        other: No permission to Revision.
     user:
       email_or_password_wrong:
-        other: *email_or_password_wrong
+        other:
+          other: Email and password do not match.
       not_found:
-        other: "User not found."
+        other: User not found.
       suspended:
-        other: "User has been suspended."
+        other: User has been suspended.
       username_invalid:
-        other: "Username is invalid."
+        other: Username is invalid.
       username_duplicate:
-        other: "Username is already in use."
+        other: Username is already in use.
       set_avatar:
-        other: "Avatar set failed."
+        other: Avatar set failed.
       cannot_update_your_role:
-        other: "You cannot modify your role."
+        other: You cannot modify your role.
       not_allowed_registration:
-        other: "Currently the site is not open for registration"
+        other: Currently the site is not open for registration
     config:
       read_config_failed:
-        other: "Read config failed"
+        other: Read config failed
     database:
       connection_failed:
-        other: "Database connection failed"
+        other: Database connection failed
       create_table_failed:
-        other: "Create table failed"
+        other: Create table failed
     install:
       create_config_failed:
-        other: "Can't create the config.yaml file."
+        other: Can't create the config.yaml file.
+    upload:
+      unsupported_file_format:
+        other: Unsupported file format.
   report:
     spam:
       name:
-        other: "spam"
+        other: spam
       desc:
-        other: "This post is an advertisement, or vandalism. It is not useful or relevant to the current topic."
+        other: This post is an advertisement, or vandalism. It is not useful or relevant
+          to the current topic.
     rude:
       name:
-        other: "rude or abusive"
+        other: rude or abusive
       desc:
-        other: "A reasonable person would find this content inappropriate for respectful discourse."
+        other: A reasonable person would find this content inappropriate for respectful
+          discourse.
     duplicate:
       name:
-        other: "a duplicate"
+        other: a duplicate
       desc:
-        other: "This question has been asked before and already has an answer."
+        other: This question has been asked before and already has an answer.
     not_answer:
       name:
-        other: "not an answer"
+        other: not an answer
       desc:
-        other: "This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether."
+        other: This was posted as an answer, but it does not attempt to answer the
+          question. It should possibly be an edit, a comment, another question,
+          or deleted altogether.
     not_need:
       name:
-        other: "no longer needed"
+        other: no longer needed
       desc:
-        other: "This comment is outdated, conversational or not relevant to this post."
+        other: This comment is outdated, conversational or not relevant to this post.
     other:
       name:
-        other: "something else"
+        other: something else
       desc:
-        other: "This post requires staff attention for another reason not listed above."
-
+        other: This post requires staff attention for another reason not listed above.
   question:
     close:
       duplicate:
         name:
-          other: "spam"
+          other: spam
         desc:
-          other: "This question has been asked before and already has an answer."
+          other: This question has been asked before and already has an answer.
       guideline:
         name:
-          other: "a community-specific reason"
+          other: a community-specific reason
         desc:
-          other: "This question doesn't meet a community guideline."
+          other: This question doesn't meet a community guideline.
       multiple:
         name:
-          other: "needs details or clarity"
+          other: needs details or clarity
         desc:
-          other: "This question currently includes multiple questions in one. It should focus on one problem only."
+          other: This question currently includes multiple questions in one. It should
+            focus on one problem only.
       other:
         name:
-          other: "something else"
+          other: something else
         desc:
-          other: "This post requires another reason not listed above."
+          other: This post requires another reason not listed above.
     operation_type:
       asked:
-        other: "asked"
+        other: asked
       answered:
-        other: "answered"
+        other: answered
       modified:
-        other: "modified"
+        other: modified
   notification:
     action:
       update_question:
-        other: "updated question"
+        other: updated question
       answer_the_question:
-        other: "answered question"
+        other: answered question
       update_answer:
-        other: "updated answer"
+        other: updated answer
       accept_answer:
-        other: "accepted answer"
+        other: accepted answer
       comment_question:
-        other: "commented question"
+        other: commented question
       comment_answer:
-        other: "commented answer"
+        other: commented answer
       reply_to_you:
-        other: "replied to you"
+        other: replied to you
       mention_you:
-        other: "mentioned you"
+        other: mentioned you
       your_question_is_closed:
-        other: "Your question has been closed"
+        other: Your question has been closed
       your_question_was_deleted:
-        other: "Your question has been deleted"
+        other: Your question has been deleted
       your_answer_was_deleted:
-        other: "Your answer has been deleted"
+        other: Your answer has been deleted
       your_comment_was_deleted:
-        other: "Your comment has been deleted"
+        other: Your comment has been deleted
 
 # The following fields are used for interface presentation(Front-end)
 ui:
@@ -317,7 +326,7 @@ ui:
             msg:
               empty: Code cannot be empty.
           language:
-            label: Language (optional)
+            label: Language
             placeholder: Automatic detection
       btn_cancel: Cancel
       btn_confirm: Add
@@ -353,7 +362,7 @@ ui:
               only_image: Only image files are allowed.
               max_size: File size cannot exceed 4MB.
           desc:
-            label: Description (optional)
+            label: Description
       tab_url: Image URL
       form_url:
         fields:
@@ -362,7 +371,7 @@ ui:
             msg:
               empty: Image URL cannot be empty.
           name:
-            label: Description (optional)
+            label: Description
       btn_cancel: Cancel
       btn_confirm: Add
       uploading: Uploading
@@ -382,7 +391,7 @@ ui:
             msg:
               empty: URL cannot be empty.
           name:
-            label: Description (optional)
+            label: Description
       btn_cancel: Cancel
       btn_confirm: Add
     ordered_list:
@@ -430,7 +439,7 @@ ui:
             range: URL slug up to 35 characters.
             character: URL slug contains unallowed character set.
         desc:
-          label: Description (optional)
+          label: Description
     btn_cancel: Cancel
     btn_submit: Submit
   tag_info:
@@ -447,10 +456,13 @@ ui:
     synonyms_text: The following tags will be remapped to
     delete:
       title: Delete this tag
-      content: >-
-        <p>We do not allow deleting tag with posts.</p><p>Please remove this tag
-        from the posts first.</p>
-      content2: Are you sure you wish to delete?
+      tip_with_posts: >-
+        <p>We do not allowed <strong>deleting tag with posts</strong>.</p>
+        <p>Please remove this tag from the posts first.</p>
+      tip_with_synonyms: >-
+        <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p>
+        <p>Please remove the synonyms from this tag first.</p>
+      tip: Are you sure you wish to delete?
       close: Close
   edit_tag:
     title: Edit Tag
@@ -508,6 +520,8 @@ ui:
           label: Revision
         answer:
           label: Answer
+          feedback:
+            characters: content must be at least 6 characters in length.
         edit_summary:
           label: Edit Summary
           placeholder: >-
@@ -638,7 +652,7 @@ ui:
       msg:
         empty: Email cannot be empty.
   change_email:
-    page_title: Welcome to Answer
+    page_title: Welcome to {{site_name}}
     btn_cancel: Cancel
     btn_update: Update email address
     send_success: >-
@@ -696,13 +710,13 @@ ui:
         default: System
         msg: Please upload an avatar
       bio:
-        label: About Me (optional)
+        label: About Me
       website:
-        label: Website (optional)
+        label: Website
         placeholder: "https://example.com"
         msg: Website incorrect format
       location:
-        label: Location (optional)
+        label: Location
         placeholder: "City, Country"
     notification:
       heading: Notifications
@@ -772,6 +786,7 @@ ui:
         <p>Are you sure you want to add another answer?</p><p>You could use the
         edit link to refine and improve your existing answer, instead.</p>
       empty: Answer cannot be empty.
+      characters: content must be at least 6 characters in length.
     reopen:
       title: Reopen this post
       content: Are you sure you want to reopen?
@@ -838,7 +853,7 @@ ui:
   modal_confirm:
     title: Error...
   account_result:
-    page_title: Welcome to Answer
+    page_title: Welcome to {{site_name}}
     success: Your new account is confirmed; you will be redirected to the home page.
     link: Continue to homepage
     invalid: >-
@@ -993,8 +1008,12 @@ ui:
       database tables first.
     db_failed: Database connection failed
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
-
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+  counts:
+    views: views
+    votes: votes
+    answers: answers
+    accepted: Accepted
   page_404:
     desc: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage
@@ -1194,11 +1213,11 @@ ui:
         validate: Please enter a valid URL.
         text: The address of your site.
       short_desc:
-        label: Short Site Description (optional)
+        label: Short Site Description
         msg: Short site description cannot be empty.
         text: "Short description, as used in the title tag on homepage."
       desc:
-        label: Site Description (optional)
+        label: Site Description
         msg: Site description cannot be empty.
         text: "Describe this site in one sentence, as used in the meta description tag."
       contact_email:
@@ -1208,14 +1227,6 @@ ui:
         text: Email address of key contact responsible for this site.
     interface:
       page_title: Interface
-      logo:
-        label: Logo (optional)
-        msg: Site logo cannot be empty.
-        text: You can upload your image or <1>reset</1> it to the site title text.
-      theme:
-        label: Theme
-        msg: Theme cannot be empty.
-        text: Select an existing theme.
       language:
         label: Interface Language
         msg: Interface language cannot be empty.
@@ -1267,18 +1278,18 @@ ui:
     branding:
       page_title: Branding
       logo:
-        label: Logo (optional)
+        label: Logo
         msg: Logo cannot be empty.
         text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
       mobile_logo:
-        label: Mobile Logo (optional)
+        label: Mobile Logo
         text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
       square_icon:
-        label: Square Icon (optional)
+        label: Square Icon
         msg: Square icon cannot be empty.
         text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
       favicon:
-        label: Favicon (optional)
+        label: Favicon
         text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
     legal:
       page_title: Legal
@@ -1345,6 +1356,7 @@ ui:
         text: Only logged in users can access this community.
 
   form:
+    optional: (optional)
     empty: cannot be empty
     invalid: is invalid
     btn_submit: Save
@@ -1394,5 +1406,7 @@ ui:
     staffs: Our community staff
     reputation: reputation
     votes: votes
-
+  prompt:
+    leave_page: "Are you sure you want to leave the page?"
+    changes_not_save: "Your changes may not be saved."
 

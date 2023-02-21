@@ -5,10 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { marked } from 'marked';
 import classNames from 'classnames';
 
+import { usePromptWithUnload } from '@/hooks';
 import { Editor, Modal, TextArea } from '@/components';
 import { FormDataType } from '@/common/interface';
 import { postAnswer } from '@/services';
-import { guard } from '@/utils';
+import { guard, handleFormError } from '@/utils';
 
 interface Props {
   visible?: boolean;
@@ -35,35 +36,64 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const [focusType, setFocusType] = useState('');
   const [editorFocusState, setEditorFocusState] = useState(false);
 
+  usePromptWithUnload({
+    when: Boolean(formData.content.value),
+  });
+
+  const checkValidated = (): boolean => {
+    let bol = true;
+    const { content } = formData;
+
+    if (!content.value || Array.from(content.value.trim()).length < 6) {
+      bol = false;
+      formData.content = {
+        value: content.value,
+        isInvalid: true,
+        errorMsg: t('characters'),
+      };
+    } else {
+      formData.content = {
+        value: content.value,
+        isInvalid: false,
+        errorMsg: '',
+      };
+    }
+
+    setFormData({
+      ...formData,
+    });
+    return bol;
+  };
+
   const handleSubmit = () => {
     if (!guard.tryNormalLogged(true)) {
       return;
     }
-    if (!formData.content.value) {
-      setFormData({
-        content: {
-          value: '',
-          isInvalid: true,
-          errorMsg: t('empty'),
-        },
-      });
+    if (!checkValidated()) {
       return;
     }
     postAnswer({
       question_id: data?.qid,
       content: formData.content.value,
       html: marked.parse(formData.content.value),
-    }).then((res) => {
-      setShowEditor(false);
-      setFormData({
-        content: {
-          value: '',
-          isInvalid: false,
-          errorMsg: '',
-        },
+    })
+      .then((res) => {
+        setShowEditor(false);
+        setFormData({
+          content: {
+            value: '',
+            isInvalid: false,
+            errorMsg: '',
+          },
+        });
+        callback?.(res.info);
+      })
+      .catch((ex) => {
+        if (ex.isError) {
+          const stateData = handleFormError(ex, formData);
+          setFormData({ ...stateData });
+        }
       });
-      callback?.(res.info);
-    });
   };
 
   const clickBtn = () => {

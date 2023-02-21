@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +6,8 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { usePageTags } from '@/hooks';
+import { handleFormError } from '@/utils';
+import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { pathFactory } from '@/router/pathFactory';
 import { Editor, EditorRef, Icon } from '@/components';
 import type * as Type from '@/common/interface';
@@ -19,11 +20,11 @@ import {
 import './index.scss';
 
 interface FormDataItem {
-  answer: Type.FormValue<string>;
+  content: Type.FormValue<string>;
   description: Type.FormValue<string>;
 }
 const initFormData = {
-  answer: {
+  content: {
     value: '',
     isInvalid: false,
     errorMsg: '',
@@ -35,7 +36,6 @@ const initFormData = {
   },
 };
 const Index = () => {
-  const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const { aid = '', qid = '' } = useParams();
   const [focusType, setForceType] = useState('');
 
@@ -43,6 +43,12 @@ const Index = () => {
   const navigate = useNavigate();
 
   const { data } = useQueryAnswerInfo(aid);
+  const [formData, setFormData] = useState<FormDataItem>(initFormData);
+  const [immData, setImmData] = useState(initFormData);
+  const [contentChanged, setContentChanged] = useState(false);
+
+  initFormData.content.value = data?.info.content || '';
+
   const { data: revisions = [] } = useQueryRevisions(aid);
 
   const editorRef = useRef<EditorRef>({
@@ -51,18 +57,23 @@ const Index = () => {
 
   const questionContentRef = useRef<HTMLDivElement>(null);
 
+  usePromptWithUnload({
+    when: contentChanged,
+  });
+
   useEffect(() => {
-    if (!data) {
-      return;
+    const { content, description } = formData;
+    if (immData.content.value !== content.value || description.value) {
+      setContentChanged(true);
+    } else {
+      setContentChanged(false);
     }
-    formData.answer.value = data.info.content;
-    setFormData({ ...formData });
-  }, [data]);
+  }, [formData.content.value, formData.description.value]);
 
   const handleAnswerChange = (value: string) =>
     setFormData({
       ...formData,
-      answer: { ...formData.answer, value },
+      content: { ...formData.content, value },
     });
   const handleSummaryChange = (evt) => {
     const v = evt.currentTarget.value;
@@ -74,18 +85,18 @@ const Index = () => {
 
   const checkValidated = (): boolean => {
     let bol = true;
-    const { answer } = formData;
+    const { content } = formData;
 
-    if (!answer.value) {
+    if (!content.value || Array.from(content.value.trim()).length < 6) {
       bol = false;
-      formData.answer = {
-        value: '',
+      formData.content = {
+        value: content.value,
         isInvalid: true,
-        errorMsg: '标题不能为空',
+        errorMsg: t('form.fields.answer.feedback.characters'),
       };
     } else {
-      formData.answer = {
-        value: answer.value,
+      formData.content = {
+        value: content.value,
         isInvalid: false,
         errorMsg: '',
       };
@@ -97,7 +108,9 @@ const Index = () => {
     return bol;
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setContentChanged(false);
+
     event.preventDefault();
     event.stopPropagation();
     if (!checkValidated()) {
@@ -105,29 +118,37 @@ const Index = () => {
     }
 
     const params: Type.AnswerParams = {
-      content: formData.answer.value,
+      content: formData.content.value,
       html: editorRef.current.getHtml(),
       question_id: qid,
       id: aid,
       edit_summary: formData.description.value,
     };
-    modifyAnswer(params).then((res) => {
-      navigate(
-        pathFactory.answerLanding({
-          questionId: qid,
-          slugTitle: data?.question?.url_title,
-          answerId: aid,
-        }),
-        {
-          state: { isReview: res?.wait_for_review },
-        },
-      );
-    });
+    modifyAnswer(params)
+      .then((res) => {
+        navigate(
+          pathFactory.answerLanding({
+            questionId: qid,
+            slugTitle: data?.question?.url_title,
+            answerId: aid,
+          }),
+          {
+            state: { isReview: res?.wait_for_review },
+          },
+        );
+      })
+      .catch((ex) => {
+        if (ex.isError) {
+          const stateData = handleFormError(ex, formData);
+          setFormData({ ...stateData });
+        }
+      });
   };
   const handleSelectedRevision = (e) => {
     const index = e.target.value;
     const revision = revisions[index];
-    formData.answer.value = revision.content.content;
+    formData.content.value = revision.content.content;
+    setImmData({ ...formData });
     setFormData({ ...formData });
   };
 
@@ -190,7 +211,7 @@ const Index = () => {
             <Form.Group controlId="answer" className="mt-3">
               <Form.Label>{t('form.fields.answer.label')}</Form.Label>
               <Editor
-                value={formData.answer.value}
+                value={formData.content.value}
                 onChange={handleAnswerChange}
                 className={classNames(
                   'form-control p-0',
@@ -205,14 +226,14 @@ const Index = () => {
                 ref={editorRef}
               />
               <Form.Control
-                value={formData.answer.value}
+                value={formData.content.value}
                 type="text"
-                isInvalid={formData.answer.isInvalid}
+                isInvalid={formData.content.isInvalid}
                 readOnly
                 hidden
               />
               <Form.Control.Feedback type="invalid">
-                {formData.answer.errorMsg}
+                {formData.content.errorMsg}
               </Form.Control.Feedback>
             </Form.Group>
             <Form.Group controlId="edit_summary" className="my-3">

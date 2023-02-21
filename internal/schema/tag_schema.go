@@ -16,6 +16,12 @@ type SearchTagLikeReq struct {
 	IsAdmin bool   `json:"-"`
 }
 
+type SearchTagsBySlugName struct {
+	Tags    string   `json:"tags" form:"tags"`
+	TagList []string `json:"-"`
+	IsAdmin bool     `json:"-"`
+}
+
 // GetTagInfoReq get tag info request
 type GetTagInfoReq struct {
 	// tag id
@@ -144,7 +150,7 @@ type TagItem struct {
 	// original text
 	OriginalText string `validate:"omitempty" json:"original_text"`
 	// parsed text
-	ParsedText string `validate:"omitempty" json:"parsed_text"`
+	ParsedText string `json:"-"`
 }
 
 // RemoveTagReq delete tag request
@@ -166,7 +172,7 @@ type UpdateTagReq struct {
 	// original text
 	OriginalText string `validate:"omitempty" json:"original_text"`
 	// parsed text
-	ParsedText string `validate:"omitempty" json:"parsed_text"`
+	ParsedText string `json:"-"`
 	// edit summary
 	EditSummary string `validate:"omitempty" json:"edit_summary"`
 	// user id

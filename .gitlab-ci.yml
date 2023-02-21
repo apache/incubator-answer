@@ -5,47 +5,7 @@ include:
     file: ".deploy-helm.yml"
 
 stages:
-  - compile-html
-  - compile-golang
-  - push
   - deploy-dev
-
-"compile the html and other static files":
-  image: node:16
-  stage: compile-html
-  before_script:
-    - npm config set registry https://repo.huaweicloud.com/repository/npm/
-    - make install-ui-packages
-  script:
-    - make ui
-  artifacts:
-    paths:
-      - ./build
-
-"compile the golang project":
-  image: golang:1.18
-  stage: compile-golang
-#  before_script:
-#    - export GOPROXY=https://goproxy.cn,direct
-  script:
-    - make build
-  artifacts:
-    paths:
-      - ./answer
-
-"build docker images and push":
-  stage: push
-#  before_script:
-#    - export GOPROXY=https://goproxy.cn,direct
-  extends: .docker-build-push
-  only:
-    - test
-  variables:
-    DockerNamespace: sf_app
-    DockerImage: answer
-    DockerTag: "$CI_COMMIT_SHORT_SHA latest"
-    DockerfilePath: .
-    PushPolicy: qingcloud
 
 "deploy-to-local-develop-environment":
   stage: deploy-dev
@@ -56,7 +16,7 @@ stages:
     LoadBalancerIP: 10.0.10.98
     KubernetesCluster: dev
     KubernetesNamespace: "sf-web"
-    InstallArgs: --set service.loadBalancerIP=${LoadBalancerIP} --set image.tag=$CI_COMMIT_SHORT_SHA --set replicaCount=1 --set serivce.targetPort=80
+    InstallArgs: --set service.loadBalancerIP=${LoadBalancerIP} --set image.tag=latest --set replicaCount=1 --set serivce.targetPort=80
     ChartName: answer
     InstallPolicy: replace
 

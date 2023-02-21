@@ -1,4 +1,6 @@
 import i18next from 'i18next';
+import parse from 'html-react-parser';
+import * as DOMPurify from 'dompurify';
 
 const Diff = require('diff');
 
@@ -21,7 +23,7 @@ function formatCount($num: number): string {
   return res;
 }
 
-function scrollTop(element) {
+function scrollToElementTop(element) {
   if (!element) {
     return;
   }
@@ -35,6 +37,15 @@ function scrollTop(element) {
     top: offsetPosition,
   });
 }
+
+const scrollToDocTop = () => {
+  setTimeout(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  });
+};
 
 const bgFadeOut = (el) => {
   if (el && !el.classList.contains('bg-fade-out')) {
@@ -157,17 +168,27 @@ function labelStyle(color, hover) {
 function handleFormError(
   error: { list: Array<{ error_field: string; error_msg: string }> },
   data: any,
+  keymap?: Array<{ from: string; to: string }>,
 ) {
   if (error.list?.length > 0) {
     error.list.forEach((item) => {
-      data[item.error_field].isInvalid = true;
-      data[item.error_field].errorMsg = item.error_msg;
+      if (keymap?.length) {
+        const key = keymap.find((k) => k.from === item.error_field);
+        if (key) {
+          item.error_field = key.to;
+        }
+      }
+      const errorFieldObject = data[item.error_field];
+      if (errorFieldObject) {
+        errorFieldObject.isInvalid = true;
+        errorFieldObject.errorMsg = item.error_msg;
+      }
     });
   }
   return data;
 }
 
-function diffText(newText: string, oldText: string): string {
+function diffText(newText: string, oldText?: string): string {
   if (!newText) {
     return '';
   }
@@ -181,8 +202,6 @@ function diffText(newText: string, oldText: string): string {
       ?.replace(/<input/gi, '&lt;input');
   }
   const diff = Diff.diffChars(oldText, newText);
-  console.log(diff);
-
   const result = diff.map((part) => {
     if (part.added) {
       if (part.value.replace(/\n/g, '').length <= 0) {
@@ -214,10 +233,18 @@ function diffText(newText: string, oldText: string): string {
     ?.replace(/<input/gi, '&lt;input');
 }
 
+function htmlToReact(html: string) {
+  const cleanedHtml = DOMPurify.sanitize(html, {
+    USE_PROFILES: { html: true },
+  });
+  return parse(cleanedHtml);
+}
+
 export {
   thousandthDivision,
   formatCount,
-  scrollTop,
+  scrollToElementTop,
+  scrollToDocTop,
   bgFadeOut,
   matchedUsers,
   parseUserInfo,
@@ -228,4 +255,5 @@ export {
   labelStyle,
   handleFormError,
   diffText,
+  htmlToReact,
 };

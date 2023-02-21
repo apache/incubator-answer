@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import Pattern from '@/common/pattern';
 import { Pagination } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
-import { scrollTop } from '@/utils';
+import { scrollToElementTop } from '@/utils';
 import { usePageTags, usePageUsers } from '@/hooks';
 import type {
   ListResult,
@@ -80,7 +80,7 @@ const Index = () => {
       if (page > 0 || order) {
         // scroll into view;
         const element = document.getElementById('answerHeader');
-        scrollTop(element);
+        scrollToElementTop(element);
       }
 
       res.list.forEach((item) => {

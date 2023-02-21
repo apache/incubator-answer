@@ -58,3 +58,8 @@ export const useTagInfo = ({ id = '', name = '' }) => {
 export const followTags = (params) => {
   return request.put('/answer/api/v1/follow/tags', params);
 };
+
+export const getTagsBySlugName = (slugNames: string) => {
+  const apiUrl = `/answer/api/v1/tags?tags=${encodeURIComponent(slugNames)}`;
+  return request.get<Type.TagInfo[]>(apiUrl);
+};

@@ -12,7 +12,7 @@ import {
   FormatTime,
   htmlRender,
 } from '@/components';
-import { scrollTop, bgFadeOut } from '@/utils';
+import { scrollToElementTop, bgFadeOut } from '@/utils';
 import { AnswerItem } from '@/common/interface';
 import { acceptanceAnswer } from '@/services';
 
@@ -60,7 +60,7 @@ const Index: FC<Props> = ({
     if (aid === data.id) {
       setTimeout(() => {
         const element = answerRef.current;
-        scrollTop(element);
+        scrollToElementTop(element);
         if (!searchParams.get('commentId')) {
           bgFadeOut(answerRef.current);
         }
