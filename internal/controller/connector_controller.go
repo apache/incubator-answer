@@ -115,7 +115,7 @@ func (cc *ConnectorController) ConnectorsInfo(ctx *gin.Context) {
 	resp := make([]*schema.ConnectorInfoResp, 0)
 	_ = plugin.CallConnector(func(fn plugin.Connector) error {
 		resp = append(resp, &schema.ConnectorInfoResp{
-			Name: fn.ConnectorName(),
+			Name: fn.ConnectorName()(ctx),
 			Icon: fn.ConnectorLogoSVG(),
 			Link: fmt.Sprintf("%s%s%s%s", general.SiteUrl,
 				commonRouterPrefix, ConnectorLoginRouterPrefix, fn.ConnectorSlugName()),
@@ -175,7 +175,7 @@ func (cc *ConnectorController) ConnectorsUserInfo(ctx *gin.Context) {
 	_ = plugin.CallConnector(func(fn plugin.Connector) error {
 		externalID := userExternalLoginMapping[fn.ConnectorSlugName()]
 		resp = append(resp, &schema.ConnectorUserInfoResp{
-			Name: fn.ConnectorName(),
+			Name: fn.ConnectorName()(ctx),
 			Icon: fn.ConnectorLogoSVG(),
 			Link: fmt.Sprintf("%s%s%s%s", general.SiteUrl,
 				commonRouterPrefix, ConnectorLoginRouterPrefix, fn.ConnectorSlugName()),

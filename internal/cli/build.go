@@ -15,7 +15,8 @@ import (
 	"github.com/answerdev/answer/pkg/dir"
 	"github.com/answerdev/answer/pkg/writer"
 	"github.com/answerdev/answer/ui"
-	cp "github.com/otiai10/copy"
+	"github.com/segmentfault/pacman/log"
+	"gopkg.in/yaml.v3"
 )
 
 const (
@@ -100,6 +101,7 @@ func BuildNewAnswer(outputPath string, plugins []string, originalAnswerInfo Orig
 	builder := newAnswerBuilder(outputPath, plugins, originalAnswerInfo)
 	builder.DoTask(createMainGoFile)
 	builder.DoTask(downloadGoModFile)
+	builder.DoTask(mergeI18nFiles)
 	builder.DoTask(replaceNecessaryFile)
 	builder.DoTask(buildBinary)
 	builder.DoTask(cleanByproduct)
@@ -126,19 +128,19 @@ func createMainGoFile(b *buildingMaterial) (err error) {
 	}
 
 	var (
-		localPlugins  []string
+		//localPlugins  []string
 		remotePlugins []string
 	)
 	for _, p := range b.plugins {
-		if len(p.Path) == 0 {
-			remotePlugins = append(remotePlugins, versionedModulePath(p.Name, p.Version))
-		} else {
-			localPluginDir := filepath.Base(p.Path)
-			localPlugins = append(localPlugins, localPluginDir)
-			if err := cp.Copy(p.Path, filepath.Join(b.tmpDir, localPluginDir)); err != nil {
-				return err
-			}
-		}
+		//if len(p.Path) == 0 {
+		remotePlugins = append(remotePlugins, versionedModulePath(p.Name, p.Version))
+		//} else {
+		//localPluginDir := filepath.Base(p.Path)
+		//localPlugins = append(localPlugins, localPluginDir)
+		//if err := cp.Copy(p.Path, filepath.Join(b.tmpDir, localPluginDir)); err != nil {
+		//	return err
+		//}
+		//}
 	}
 
 	mainGoFile := &bytes.Buffer{}
@@ -148,7 +150,7 @@ func createMainGoFile(b *buildingMaterial) (err error) {
 	}
 	err = tmpl.Execute(mainGoFile, map[string]any{
 		"remote_plugins": remotePlugins,
-		"local_plugins":  localPlugins,
+		//"local_plugins":  localPlugins,
 	})
 	if err != nil {
 		return err
@@ -162,6 +164,17 @@ func createMainGoFile(b *buildingMaterial) (err error) {
 	err = writer.WriteFile(filepath.Join(b.tmpDir, "go.mod"), goModTpl)
 	if err != nil {
 		return err
+	}
+
+	for _, p := range b.plugins {
+		if len(p.Path) == 0 {
+			continue
+		}
+		replacement := fmt.Sprintf("%s@v%s=%s", p.Name, p.Version, p.Path)
+		err = b.newExecCmd("go", "mod", "edit", "-replace", replacement).Run()
+		if err != nil {
+			return err
+		}
 	}
 	return
 }
@@ -192,6 +205,93 @@ func replaceNecessaryFile(b *buildingMaterial) (err error) {
 	fmt.Printf("try to replace ui build directory\n")
 	uiBuildDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/answer/ui")
 	err = copyDirEntries(ui.Build, ".", uiBuildDir)
+	return err
+}
+
+func mergeI18nFiles(b *buildingMaterial) (err error) {
+	fmt.Printf("try to merge i18n files\n")
+
+	type YamlPluginContent struct {
+		Plugin map[string]any `yaml:"plugin"`
+	}
+
+	pluginAllTranslations := make(map[string]*YamlPluginContent)
+	for _, plugin := range b.plugins {
+		i18nDir := filepath.Join(b.tmpDir, fmt.Sprintf("vendor/%s/i18n", plugin.Name))
+		fmt.Println("i18n dir: ", i18nDir)
+		if !dir.CheckDirExist(i18nDir) {
+			continue
+		}
+
+		entries, err := os.ReadDir(i18nDir)
+		if err != nil {
+			return err
+		}
+
+		for _, file := range entries {
+			// ignore directory
+			if file.IsDir() {
+				continue
+			}
+			// ignore non-YAML file
+			if filepath.Ext(file.Name()) != ".yaml" {
+				continue
+			}
+			buf, err := os.ReadFile(filepath.Join(i18nDir, file.Name()))
+			if err != nil {
+				log.Debugf("read translation file failed: %s %s", file.Name(), err)
+				continue
+			}
+
+			translation := &YamlPluginContent{}
+			if err = yaml.Unmarshal(buf, translation); err != nil {
+				log.Debugf("unmarshal translation file failed: %s %s", file.Name(), err)
+				continue
+			}
+
+			if pluginAllTranslations[file.Name()] == nil {
+				pluginAllTranslations[file.Name()] = &YamlPluginContent{Plugin: make(map[string]any)}
+			}
+			for k, v := range translation.Plugin {
+				pluginAllTranslations[file.Name()].Plugin[k] = v
+			}
+		}
+	}
+
+	originalI18nDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/answer/i18n")
+	entries, err := os.ReadDir(originalI18nDir)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range entries {
+		// ignore directory
+		if file.IsDir() {
+			continue
+		}
+		// ignore non-YAML file
+		filename := file.Name()
+		if filepath.Ext(filename) != ".yaml" && filename != "i18n.yaml" {
+			continue
+		}
+
+		// if plugin don't have this translation file, ignore it
+		if pluginAllTranslations[filename] == nil {
+			continue
+		}
+
+		out, _ := yaml.Marshal(pluginAllTranslations[filename])
+
+		buf, err := os.OpenFile(filepath.Join(originalI18nDir, filename), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+		if err != nil {
+			log.Debugf("read translation file failed: %s %s", filename, err)
+			continue
+		}
+
+		_, _ = buf.WriteString("\n")
+		_, _ = buf.Write(out)
+		_ = buf.Close()
+	}
 	return err
 }
 

@@ -56,6 +56,7 @@ func NewTranslator(c *I18n) (tr i18n.Translator, err error) {
 		originalTr := struct {
 			Backend map[string]map[string]interface{} `yaml:"backend"`
 			UI      map[string]interface{}            `yaml:"ui"`
+			Plugin  map[string]interface{}            `yaml:"plugin"`
 		}{}
 		if err = yaml.Unmarshal(buf, &originalTr); err != nil {
 			return nil, err
@@ -66,6 +67,7 @@ func NewTranslator(c *I18n) (tr i18n.Translator, err error) {
 		}
 		translation["backend"] = originalTr.Backend
 		translation["ui"] = originalTr.UI
+		translation["plugin"] = originalTr.Plugin
 
 		content, err := yaml.Marshal(translation)
 		if err != nil {

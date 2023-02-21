@@ -199,7 +199,7 @@ To run answer, use:
 		Run: func(_ *cobra.Command, _ []string) {
 			_ = plugin.CallBase(func(base plugin.Base) error {
 				info := base.Info()
-				fmt.Printf("%s[%s] made by %s\n", info.Name, info.Version, info.Author)
+				fmt.Printf("%s[%s] made by %s\n", info.SlugName, info.Version, info.Author)
 				return nil
 			})
 		},
