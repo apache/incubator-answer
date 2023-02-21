@@ -2,239 +2,244 @@
 backend:
   base:
     success:
-      other: "成功。"
+      other: 成功。
     unknown:
-      other: "未知错误。"
+      other: 未知错误。
     request_format_error:
-      other: "请求格式错误。"
+      other: 请求格式错误。
     unauthorized_error:
-      other: "未授权。"
+      other: 未授权。
     database_error:
-      other: "数据服务器错误。"
+      other: 数据服务器错误。
   role:
     name:
       user:
-        other: "用户"
+        other: 用户
       admin:
-        other: "管理员"
+        other: 管理员
       moderator:
-        other: "版主"
+        other: 版主
     description:
       user:
-        other: "默认没有特殊访问权限。"
+        other: 默认没有特殊访问权限。
       admin:
-        other: "拥有管理网站的全部权限。"
+        other: 拥有管理网站的全部权限。
       moderator:
-        other: "拥有访问除管理员设置以外的所有权限。"
+        other: 拥有访问除管理员设置以外的所有权限。
   email:
-    other: "邮箱"
+    other: 邮箱
   password:
-    other: "密码"
+    other: 密码
   email_or_password_wrong_error:
-    other: "邮箱和密码不匹配。"
+    other: 邮箱和密码不匹配。
   error:
     admin:
       email_or_password_wrong:
         other: 邮箱和密码不匹配。
     answer:
       not_found:
-        other: "没有找到答案。"
+        other: 没有找到答案。
       cannot_deleted:
-        other: "没有删除权限。"
+        other: 没有删除权限。
       cannot_update:
-        other: "没有更新权限。"
+        other: 没有更新权限。
     comment:
       edit_without_permission:
-        other: "不允许编辑评论。"
+        other: 不允许编辑评论。
       not_found:
-        other: "评论未找到。"
+        other: 评论未找到。
+      cannot_edit_after_deadline:
+        other: The comment time has been too long to modify.
     email:
       duplicate:
-        other: "邮箱已经存在。"
+        other: 邮箱已经存在。
       need_to_be_verified:
-        other: "邮箱需要验证。"
+        other: 邮箱需要验证。
       verify_url_expired:
-        other: "邮箱验证的网址已过期，请重新发送邮件。"
+        other: 邮箱验证的网址已过期，请重新发送邮件。
     lang:
       not_found:
-        other: "语言未找到"
+        other: 语言未找到
     object:
       captcha_verification_failed:
-        other: "验证码错误"
+        other: 验证码错误
       disallow_follow:
-        other: "你不能关注"
+        other: 你不能关注
       disallow_vote:
-        other: "你不能投票"
+        other: 你不能投票
       disallow_vote_your_self:
-        other: "你不能为自己的帖子投票！"
+        other: 你不能为自己的帖子投票！
       not_found:
-        other: "对象未找到"
+        other: 对象未找到
       verification_failed:
-        other: "验证失败"
+        other: 验证失败
       email_or_password_incorrect:
-        other: "邮箱或密码不正确"
+        other: 邮箱或密码不正确
       old_password_verification_failed:
-        other: "旧密码验证失败"
+        other: 旧密码验证失败
       new_password_same_as_previous_setting:
-        other: "新密码与之前的设置相同"
+        other: 新密码与之前的设置相同
     question:
       not_found:
-        other: "问题未找到"
+        other: 问题未找到
       cannot_deleted:
-        other: "无删除权限"
+        other: 无删除权限
       cannot_close:
-        other: "无关闭权限"
+        other: 无关闭权限
       cannot_update:
-        other: "无更新权限"
+        other: 无更新权限
     rank:
       fail_to_meet_the_condition:
-        other: "级别不符合条件"
+        other: 级别不符合条件
     report:
       handle_failed:
-        other: "报告处理失败"
+        other: 报告处理失败
       not_found:
-        other: "报告未找到"
+        other: 报告未找到
     tag:
       not_found:
-        other: "标签未找到"
+        other: 标签未找到
       recommend_tag_not_found:
-        other: "推荐标签不存在"
+        other: 推荐标签不存在
       recommend_tag_enter:
-        other: "请输入至少一个必需的标签。"
+        other: 请输入至少一个必需的标签。
       not_contain_synonym_tags:
-        other: "不应包含同义词标签。"
+        other: 不应包含同义词标签。
       cannot_update:
-        other: "没有更新标签权限。"
+        other: 没有更新标签权限。
       is_used_cannot_delete:
-        other: "您不能删除正在被使用的标签"
+        other: 您不能删除正在被使用的标签
       cannot_set_synonym_as_itself:
-        other: "您不能将当前标签的同义词设置为本身。"
+        other: 您不能将当前标签的同义词设置为本身。
     smtp:
       config_from_name_cannot_be_email:
-        other: "发件人名称不能是电子邮件地址。"
+        other: 发件人名称不能是电子邮件地址。
     theme:
       not_found:
-        other: "主题未找到"
+        other: 主题未找到
     revision:
       review_underway:
-        other: "目前无法编辑，有一个版本在审阅队列中。"
+        other: 目前无法编辑，有一个版本在审阅队列中。
       no_permission:
-        other: "无权限修改"
+        other: 无权限修改
     user:
       email_or_password_wrong:
         other:
           other: 邮箱或密码错误
       not_found:
-        other: "用户未找到"
+        other: 用户未找到
       suspended:
-        other: "用户已被暂停"
+        other: 用户已被暂停
       username_invalid:
-        other: "用户名无效"
+        other: 用户名无效
       username_duplicate:
-        other: "用户名已被使用"
+        other: 用户名已被使用
       set_avatar:
-        other: "头像设置错误"
+        other: 头像设置错误
       cannot_update_your_role:
-        other: "您不能修改自己的角色。"
+        other: 您不能修改自己的角色。
       not_allowed_registration:
-        other: "目前该站点未开放注册"
+        other: 目前该站点未开放注册
     config:
       read_config_failed:
-        other: "读取配置失败"
+        other: 读取配置失败
     database:
       connection_failed:
-        other: "数据库连接失败"
+        other: 数据库连接失败
       create_table_failed:
-        other: "创建表失败"
+        other: 创建表失败
     install:
       create_config_failed:
-        other: "无法创建 config.yaml 文件。"
+        other: Can't create the config.yaml file.
+    upload:
+      unsupported_file_format:
+        other: Unsupported file format.
   report:
     spam:
       name:
-        other: "垃圾信息"
+        other: 垃圾信息
       desc:
-        other: "这个帖子是一个广告，或是破坏性行为。它对当前的主题没有用处，也不相关。"
+        other: 这个帖子是一个广告，或是破坏性行为。它对当前的主题没有用处，也不相关。
     rude:
       name:
-        other: "粗鲁或辱骂的"
+        other: 粗鲁或辱骂的
       desc:
-        other: "一个有理智的人都会认为这种内容不适合进行尊重性的讨论。"
+        other: 一个有理智的人都会认为这种内容不适合进行尊重性的讨论。
     duplicate:
       name:
-        other: "重复信息"
+        other: 重复信息
       desc:
-        other: "此问题以前就有人问过，而且已经有了答案。"
+        other: 此问题以前就有人问过，而且已经有了答案。
     not_answer:
       name:
-        other: "不是答案"
+        other: 不是答案
       desc:
-        other: "此帖子是作为一个答案发布的，但它并没有试图回答这个问题。总之，它可能应该是个编辑，评论，另一个问题或者被删除。"
+        other: 此帖子是作为一个答案发布的，但它并没有试图回答这个问题。总之，它可能应该是个编辑，评论，另一个问题或者被删除。
     not_need:
       name:
-        other: "不再需要"
+        other: 不再需要
       desc:
-        other: "此评论已过时，对话或与此帖子无关。"
+        other: 此评论已过时，对话或与此帖子无关。
     other:
       name:
-        other: "其他原因"
+        other: 其他原因
       desc:
-        other: "此帖子需要工作人员关注，因为是上述所列以外的其他理由。"
+        other: 此帖子需要工作人员关注，因为是上述所列以外的其他理由。
   question:
     close:
       duplicate:
         name:
-          other: "垃圾信息"
+          other: 垃圾信息
         desc:
-          other: "此问题以前就有人问过，而且已经有了答案。"
+          other: 此问题以前就有人问过，而且已经有了答案。
       guideline:
         name:
-          other: "社区特定原因"
+          other: 社区特定原因
         desc:
-          other: "此问题不符合社区准则。"
+          other: 此问题不符合社区准则。
       multiple:
         name:
-          other: "需要细节或澄清"
+          other: 需要细节或澄清
         desc:
-          other: "此问题目前涵盖多个问题。它应该只集中在一个问题上。"
+          other: 此问题目前涵盖多个问题。它应该只集中在一个问题上。
       other:
         name:
-          other: "其他原因"
+          other: 其他原因
         desc:
-          other: "这个帖子需要上面没有列出的另一个原因。"
+          other: 这个帖子需要上面没有列出的另一个原因。
     operation_type:
       asked:
-        other: "提问于"
+        other: 提问于
       answered:
-        other: "回答于"
+        other: 回答于
       modified:
-        other: "修改于"
+        other: 修改于
   notification:
     action:
       update_question:
-        other: "更新了问题"
+        other: 更新了问题
       answer_the_question:
-        other: "回答了问题"
+        other: 回答了问题
       update_answer:
-        other: "更新了答案"
+        other: 更新了答案
       accept_answer:
-        other: "已接受的回答"
+        other: 已接受的回答
       comment_question:
-        other: "评论了问题"
+        other: 评论了问题
       comment_answer:
-        other: "评论了答案"
+        other: 评论了答案
       reply_to_you:
-        other: "回复了你"
+        other: 回复了你
       mention_you:
-        other: "提到了你"
+        other: 提到了你
       your_question_is_closed:
-        other: "你的问题已被关闭"
+        other: 你的问题已被关闭
       your_question_was_deleted:
-        other: "你的问题已被删除"
+        other: 你的问题已被删除
       your_answer_was_deleted:
-        other: "你的答案已被删除"
+        other: 你的答案已被删除
       your_comment_was_deleted:
-        other: "你的评论已被删除"
+        other: 你的评论已被删除
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -479,7 +484,7 @@ ui:
     btn_flag: 举报
     btn_save_edits: 保存
     btn_cancel: 取消
-    show_more: 显示更多评论
+    show_more: Show more comments
     tip_question: >-
       使用评论提问更多信息或者提出改进意见。尽量避免使用评论功能回答问题。
     tip_answer: >-
@@ -493,6 +498,8 @@ ui:
           label: 编辑历史
         answer:
           label: 回答内容
+          feedback:
+            characters: content must be at least 6 characters in length.
         edit_summary:
           label: 编辑概要
           placeholder: >-
@@ -617,7 +624,7 @@ ui:
       msg:
         empty: 邮箱不能为空
   change_email:
-    page_title: 欢迎来到 {{site_name}}
+    page_title: Welcome to {{site_name}}
     btn_cancel: 取消
     btn_update: 更新电子邮件地址
     send_success: >-
@@ -655,12 +662,12 @@ ui:
       display_name:
         label: 昵称
         msg: 昵称不能为空。
-        msg_range: 昵称不能超过 30 个字符。
+        msg_range: Display name up to 30 characters.
       username:
         label: 用户名
         caption: 用户之间可以通过 "@用户名" 进行交互。
         msg: 用户名不能为空
-        msg_range: 用户名不能超过 30 个字符
+        msg_range: Username up to 30 characters.
         character: '用户名只能由 "a-z", "0-9", " - . _" 组成'
       avatar:
         label: 头像
@@ -746,6 +753,7 @@ ui:
       confirm_info: >-
         <p>您确定要提交一个新的回答吗？</p><p>您可以直接编辑和改善您之前的回答的。</p>
       empty: 回答内容不能为空。
+      characters: content must be at least 6 characters in length.
     reopen:
       title: 重新打开这个帖子
       content: 确定要重新打开吗？
@@ -806,7 +814,7 @@ ui:
   modal_confirm:
     title: 发生错误...
   account_result:
-    page_title: 欢迎来到 {{site_name}}
+    page_title: Welcome to {{site_name}}
     success: 你的账号已通过验证，即将返回首页。
     link: 返回首页
     invalid: >-
@@ -817,7 +825,7 @@ ui:
   unsubscribe:
     page_title: 退订
     success_title: 取消订阅成功
-    success_desc: 您已成功地从此订阅者列表中移除，并且将不会再收到我们的任何电子邮件。
+    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
     link: 更改设置
   question:
     following_tags: 已关注的标签
@@ -879,7 +887,7 @@ ui:
     title: Answer
     next: 下一步
     done: 完成
-    config_yaml_error: 无法创建配置文件
+    config_yaml_error: Can't create the config.yaml file.
     lang:
       label: 请选择一种语言
     db_type:
@@ -909,7 +917,7 @@ ui:
       label: 已创建 config.yaml 文件。
       desc: >-
         您可以手动在 <1>/var/wwww/xxx/</1> 目录中创建<1>config.yaml</1> 文件并粘贴以下文本。
-      info: "完成后，点击“下一步”按钮。"
+      info: After you've done that, click "Next" button.
     site_information: 站点信息
     admin_account: 管理员账户
     site_name:
@@ -954,7 +962,12 @@ ui:
       您似乎已经安装过了。要重新安装，请先清除旧的数据库表。
     db_failed: 数据连接异常！
     db_failed_desc: >-
-      这或者意味着数据库信息在 <1>config.yaml</1> 文件不正确，或者无法与数据库服务器建立联系。这可能意味着您的主机数据库服务器已关闭。
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+  counts:
+    views: views
+    votes: votes
+    answers: answers
+    accepted: Accepted
   page_404:
     desc: "很抱歉，此页面不存在。"
     back_home: 回到主页
@@ -962,7 +975,7 @@ ui:
     desc: 服务器遇到了一个错误，无法完成你的请求。
     back_home: 回到主页
   page_maintenance:
-    desc: "我们正在进行维护，我们将很快回来。"
+    desc: "We are under maintenance, we'll be back soon."
   nav_menus:
     dashboard: 后台管理
     contents: 内容管理
@@ -1096,7 +1109,7 @@ ui:
             password:
               label: 密码
               text: 用户将被注销，需要再次登录。
-              msg: 密码的长度必须是8-32个字符。
+              msg: Password must be at 8-32 characters in length.
         btn_cancel: 取消
         btn_submit: 提交
       user_modal:
@@ -1105,13 +1118,13 @@ ui:
           fields:
             display_name:
               label: 昵称
-              msg: 昵称的长度必须是 3-30 个字符。
+              msg: Display Name must be at 3-30 characters in length.
             email:
               label: 邮箱
               msg: 电子邮箱无效。
             password:
               label: 密码
-              msg: 密码的长度必须是8-32个字符。
+              msg: Password must be at 8-32 characters in length.
         btn_cancel: 取消
         btn_submit: 提交
     questions:
@@ -1230,14 +1243,14 @@ ui:
         text: 在你的网站左上方的Logo图标。使用一个高度为56，长宽比大于3:1的宽长方形图像。如果留空，将显示网站标题文本。
       mobile_logo:
         label: 移动端图标（可选）
-        text: 在你的网站的移动版上使用的标志。使用一个高度为56的宽矩形图像。如果留空，将使用 "Logo"设置中的图像。
+        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
       square_icon:
         label: 方形图标 (可选)
         msg: 方形图标不能为空。
         text: 用作元数据图标的基础的图像。最好是大于512x512。
       favicon:
         label: 收藏夹图标(可选)
-        text: 网站的图标。要在 CDN 正常工作，它必须是 png。 将调整大小到32x32。如果留空，将使用“方形图标”。
+        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
     legal:
       page_title: 法律条款
       terms_of_service:
