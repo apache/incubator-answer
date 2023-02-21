@@ -85,7 +85,6 @@ export const pullLoggedUser = async (forceRePull = false) => {
   if (Date.now() - dedupeTimestamp < 1000 * 10) {
     return;
   }
-
   dedupeTimestamp = Date.now();
   const loggedUserInfo = await getLoggedUserInfo().catch((ex) => {
     dedupeTimestamp = 0;

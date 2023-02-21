@@ -8,8 +8,8 @@ import useChangeUserRoleModal from './useChangeUserRoleModal';
 import useUserModal from './useUserModal';
 import useChangePasswordModal from './useChangePasswordModal';
 import usePageTags from './usePageTags';
-import usePromptWithUnload from './usePrompt';
 import useLoginRedirect from './useLoginRedirect';
+import usePromptWithUnload from './usePrompt';
 
 export {
   useTagModal,
@@ -22,6 +22,6 @@ export {
   useUserModal,
   useChangePasswordModal,
   usePageTags,
-  usePromptWithUnload,
   useLoginRedirect,
+  usePromptWithUnload,
 };
