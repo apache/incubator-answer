@@ -85,6 +85,7 @@ export const pullLoggedUser = async (forceRePull = false) => {
   if (Date.now() - dedupeTimestamp < 1000 * 10) {
     return;
   }
+
   dedupeTimestamp = Date.now();
   const loggedUserInfo = await getLoggedUserInfo().catch((ex) => {
     dedupeTimestamp = 0;
@@ -261,6 +262,7 @@ export const initAppSettingsStore = async () => {
   const appSettings = await getAppSettings();
   if (appSettings) {
     siteInfoStore.getState().update(appSettings.general);
+    siteInfoStore.getState().updateVersion(appSettings.version);
     interfaceStore.getState().update(appSettings.interface);
     brandingStore.getState().update(appSettings.branding);
     loginSettingStore.getState().update(appSettings.login);

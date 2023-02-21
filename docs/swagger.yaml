@@ -1435,6 +1435,8 @@ definitions:
         $ref: '#/definitions/schema.SiteSeoReq'
       theme:
         $ref: '#/definitions/schema.SiteThemeResp'
+      version:
+        type: string
     type: object
   schema.SiteInterfaceReq:
     properties:
@@ -4678,6 +4680,27 @@ paths:
                   $ref: '#/definitions/schema.GetTagSynonymsResp'
               type: object
       summary: get tag synonyms
+      tags:
+      - Tag
+  /answer/api/v1/tags:
+    get:
+      description: get tags list
+      parameters:
+      - collectionFormat: csv
+        description: string collection
+        in: query
+        items:
+          type: string
+        name: tags
+        type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: get tags list
       tags:
       - Tag
   /answer/api/v1/tags/following:

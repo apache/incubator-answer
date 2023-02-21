@@ -294,7 +294,7 @@ const Index: FC = () => {
                       <h5>{t('warn_title')}</h5>
                       <p>
                         <Trans
-                          i18nKey="install.warn_description"
+                          i18nKey="install.warn_desc"
                           components={{ 1: <code /> }}
                         />{' '}
                         <Trans i18nKey="install.install_now">
@@ -313,7 +313,7 @@ const Index: FC = () => {
                       <h5>{t('db_failed')}</h5>
                       <p>
                         <Trans
-                          i18nKey="install.db_failed_description"
+                          i18nKey="install.db_failed_desc"
                           components={{ 1: <code /> }}
                         />
                       </p>
@@ -323,7 +323,7 @@ const Index: FC = () => {
                   {step === 8 && (
                     <div>
                       <h5>{t('installed')}</h5>
-                      <p>{t('installed_description')}</p>
+                      <p>{t('installed_desc')}</p>
                     </div>
                   )}
                 </Card.Body>

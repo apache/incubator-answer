@@ -107,6 +107,14 @@ func (qr *questionRepo) UpdateQuestionStatus(ctx context.Context, question *enti
 	return nil
 }
 
+func (qr *questionRepo) UpdateQuestionStatusWithOutUpdateTime(ctx context.Context, question *entity.Question) (err error) {
+	_, err = qr.data.DB.Where("id =?", question.ID).Cols("status").Update(question)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
 func (qr *questionRepo) UpdateAccepted(ctx context.Context, question *entity.Question) (err error) {
 	_, err = qr.data.DB.Where("id =?", question.ID).Cols("accepted_answer_id").Update(question)
 	if err != nil {
@@ -199,7 +207,7 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 		item := &schema.SiteMapQuestionInfo{}
 		item.ID = question.ID
 		item.Title = htmltext.UrlTitle(question.Title)
-		item.UpdateTime = fmt.Sprintf("%v", question.PostUpdateTime.UTC())
+		item.UpdateTime = fmt.Sprintf("%v", question.PostUpdateTime.Format(time.RFC3339))
 		questionIDList = append(questionIDList, item)
 	}
 	return questionIDList, nil

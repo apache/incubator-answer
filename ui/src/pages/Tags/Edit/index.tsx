@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { usePageTags } from '@/hooks';
+import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { Editor, EditorRef } from '@/components';
 import { loggedUserInfoStore } from '@/stores';
 import type * as Type from '@/common/interface';
@@ -40,6 +40,7 @@ const initFormData = {
     errorMsg: '',
   },
 };
+
 const Index = () => {
   const { is_admin = false } = loggedUserInfoStore((state) => state.user);
 
@@ -54,10 +55,44 @@ const Index = () => {
   initFormData.slugName.value = data?.slug_name || '';
   initFormData.description.value = data?.original_text || '';
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
+  const [immData, setImmData] = useState(initFormData);
+  const [contentChanged, setContentChanged] = useState(false);
 
   const editorRef = useRef<EditorRef>({
     getHtml: () => '',
   });
+
+  usePromptWithUnload({
+    when: contentChanged,
+  });
+
+  useEffect(() => {
+    const { displayName, slugName, description, editSummary } = formData;
+    const {
+      displayName: display_name,
+      slugName: slug_name,
+      description: original_text,
+    } = immData;
+    if (!display_name || !slug_name || !original_text) {
+      return;
+    }
+
+    if (
+      display_name.value !== displayName.value ||
+      slug_name.value !== slugName.value ||
+      original_text.value !== description.value ||
+      editSummary.value
+    ) {
+      setContentChanged(true);
+    } else {
+      setContentChanged(false);
+    }
+  }, [
+    formData.displayName.value,
+    formData.slugName.value,
+    formData.description.value,
+    formData.editSummary.value,
+  ]);
 
   const handleDescriptionChange = (value: string) =>
     setFormData({
@@ -91,6 +126,8 @@ const Index = () => {
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    setContentChanged(false);
+
     event.preventDefault();
     event.stopPropagation();
     if (!checkValidated()) {
@@ -117,6 +154,9 @@ const Index = () => {
     const index = e.target.value;
     const revision = revisions[index];
     formData.description.value = revision.content.original_text;
+    formData.displayName.value = revision.content.display_name;
+    formData.slugName.value = revision.content.slug_name;
+    setImmData({ ...formData });
     setFormData({ ...formData });
   };
 

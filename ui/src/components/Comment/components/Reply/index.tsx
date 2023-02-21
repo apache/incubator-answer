@@ -5,13 +5,18 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 import { TextArea, Mentions } from '@/components';
-import { usePageUsers } from '@/hooks';
+import { usePageUsers, usePromptWithUnload } from '@/hooks';
 
 const Index = ({ userName, onSendReply, onCancel, mode }) => {
   const [value, setValue] = useState('');
   const pageUsers = usePageUsers();
   const { t } = useTranslation('translation', { keyPrefix: 'comment' });
   const [validationErrorMsg, setValidationErrorMsg] = useState('');
+
+  usePromptWithUnload({
+    when: Boolean(value),
+  });
+
   const handleChange = (e) => {
     setValue(e.target.value);
   };

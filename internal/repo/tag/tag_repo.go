@@ -8,6 +8,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/internal/service/unique"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/builder"
 )
@@ -55,6 +56,14 @@ func (tr *tagRepo) UpdateTagSynonym(ctx context.Context, tagSlugNameList []strin
 	bean := &entity.Tag{MainTagID: mainTagID, MainTagSlugName: mainTagSlugName}
 	session := tr.data.DB.In("slug_name", tagSlugNameList).MustCols("main_tag_id", "main_tag_slug_name")
 	_, err = session.Update(bean)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (tr *tagRepo) GetTagSynonymCount(ctx context.Context, tagID string) (count int64, err error) {
+	count, err = tr.data.DB.Count(&entity.Tag{MainTagID: converter.StringToInt64(tagID), Status: entity.TagStatusAvailable})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

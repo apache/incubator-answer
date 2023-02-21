@@ -7,49 +7,33 @@ env:
 before:
   hooks:
     - go mod tidy
+
+release:
+  draft: true
+
 builds:
-  - id: build-amd64
+  - id: build
     main: ./cmd/answer/.
     binary: answer
     ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
+    flags: -v
     goos:
       - linux
+      - darwin
     goarch:
       - amd64
+      - arm64
   - id: build-windows
     main: ./cmd/answer/.
     binary: answer
     ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
+    flags: -v
     goos:
       - windows
     goarch:
       - amd64
-  - id: build-arm64
-    main: ./cmd/answer/.
-    binary: answer
-    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
-    goos:
-      - linux
-    goarch:
-      - arm64
-  - id: build-darwin-arm64
-    main: ./cmd/answer/.
-    binary: answer
-    goos:
-      - darwin
-    goarch:
-      - arm64
-    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
-    flags: -v
-  - id: build-darwin-amd64
-    main: ./cmd/answer/.
-    binary: answer
-    goos:
-      - darwin
-    goarch:
-      - amd64
-    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
-    flags: -v
+
+
 
 
 archives:
@@ -70,3 +54,4 @@ changelog:
       - '^test:'
 
 # goreleaser release --snapshot --rm-dist
+

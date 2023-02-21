@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { marked } from 'marked';
 import classNames from 'classnames';
 
+import { usePromptWithUnload } from '@/hooks';
 import { Editor, Modal, TextArea } from '@/components';
 import { FormDataType } from '@/common/interface';
 import { postAnswer } from '@/services';
@@ -34,6 +35,10 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const [showEditor, setShowEditor] = useState<boolean>(visible);
   const [focusType, setFocusType] = useState('');
   const [editorFocusState, setEditorFocusState] = useState(false);
+
+  usePromptWithUnload({
+    when: Boolean(formData.content.value),
+  });
 
   const checkValidated = (): boolean => {
     let bol = true;

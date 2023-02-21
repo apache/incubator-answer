@@ -34,6 +34,7 @@ type QuestionRepo interface {
 	GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string) (
 		questionList []*entity.Question, total int64, err error)
 	UpdateQuestionStatus(ctx context.Context, question *entity.Question) (err error)
+	UpdateQuestionStatusWithOutUpdateTime(ctx context.Context, question *entity.Question) (err error)
 	SearchByTitleLike(ctx context.Context, title string) (questionList []*entity.Question, err error)
 	UpdatePvCount(ctx context.Context, questionID string) (err error)
 	UpdateAnswerCount(ctx context.Context, questionID string, num int) (err error)
