@@ -128,19 +128,10 @@ func createMainGoFile(b *buildingMaterial) (err error) {
 	}
 
 	var (
-		//localPlugins  []string
 		remotePlugins []string
 	)
 	for _, p := range b.plugins {
-		//if len(p.Path) == 0 {
 		remotePlugins = append(remotePlugins, versionedModulePath(p.Name, p.Version))
-		//} else {
-		//localPluginDir := filepath.Base(p.Path)
-		//localPlugins = append(localPlugins, localPluginDir)
-		//if err := cp.Copy(p.Path, filepath.Join(b.tmpDir, localPluginDir)); err != nil {
-		//	return err
-		//}
-		//}
 	}
 
 	mainGoFile := &bytes.Buffer{}
@@ -150,7 +141,6 @@ func createMainGoFile(b *buildingMaterial) (err error) {
 	}
 	err = tmpl.Execute(mainGoFile, map[string]any{
 		"remote_plugins": remotePlugins,
-		//"local_plugins":  localPlugins,
 	})
 	if err != nil {
 		return err
