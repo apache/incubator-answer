@@ -103,18 +103,48 @@ func (m *statusManager) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &m.status)
 }
 
-// Translator presents a generator of translated string.
-// We use it to delegate the translation work outside the plugin.
-type Translator func(ctx *GinContext) string
-
 // Translate translates the key to the current language of the context
 func Translate(ctx *GinContext, key string) string {
 	return translator.Tr(handler.GetLang(ctx), key)
 }
 
+// TranslateFn presents a generator of translated string.
+// We use it to delegate the translation work outside the plugin.
+type TranslateFn func(ctx *GinContext) string
+
+// Translator contains a function that translates the key to the current language of the context
+type Translator struct {
+	fn  TranslateFn
+	ctx *GinContext
+}
+
 // MakeTranslator generates a translator from the key
 func MakeTranslator(key string) Translator {
-	return func(ctx *GinContext) string {
-		return translator.Tr(handler.GetLang(ctx), key)
+	t := func(ctx *GinContext) string {
+		return Translate(ctx, key)
 	}
+
+	return Translator{fn: t}
+}
+
+// SetContext sets the context of the multi translators
+func SetContext(ctx *GinContext, ts ...Translator) {
+	for _, t := range ts {
+		t.SetContext(ctx)
+	}
+}
+
+// Translate translates the key to the current language of the context
+func (t *Translator) Translate(ctx *GinContext) string {
+	return t.fn(ctx)
+}
+
+// SetContext sets the context of the translator
+func (t *Translator) SetContext(ctx *GinContext) {
+	t.ctx = ctx
+}
+
+// String returns the translated string through the context
+func (t *Translator) String() string {
+	return t.fn(t.ctx)
 }
