@@ -309,7 +309,7 @@ func (req *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, er
 			return errFields, errors.BadRequest(reason.UsernameInvalid)
 		}
 	}
-	req.BioHTML = converter.Markdown2HTML(req.Bio)
+	req.BioHTML = converter.Markdown2BasicHTML(req.Bio)
 	return nil, nil
 }
 
