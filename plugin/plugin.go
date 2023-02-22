@@ -135,8 +135,8 @@ func SetContext(ctx *GinContext, ts ...Translator) {
 }
 
 // Translate translates the key to the current language of the context
-func (t *Translator) Translate(ctx *GinContext) string {
-	if t == nil {
+func (t Translator) Translate(ctx *GinContext) string {
+	if &t == nil || t.fn == nil {
 		return ""
 	}
 
@@ -144,11 +144,11 @@ func (t *Translator) Translate(ctx *GinContext) string {
 }
 
 // SetContext sets the context of the translator
-func (t *Translator) SetContext(ctx *GinContext) {
+func (t Translator) SetContext(ctx *GinContext) {
 	t.ctx = ctx
 }
 
 // String returns the translated string through the context
-func (t *Translator) String() string {
+func (t Translator) String() string {
 	return t.Translate(t.ctx)
 }
