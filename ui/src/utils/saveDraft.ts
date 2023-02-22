@@ -45,29 +45,16 @@ class SaveDraft {
     }
     if (this.type === 'question') {
       const { params, callback } = data as QuestionDraft;
-      if (
-        !params.title &&
-        !params.content &&
-        !params.tags.length &&
-        !params.answer
-      ) {
-        this.remove();
-        return;
-      }
 
       this.storeDraft(params, callback);
     }
 
     if (this.type === 'answer') {
       const { content, questionId, callback } = data as AnswerDraft;
-      if (!questionId) {
+      if (!questionId || !content) {
         return;
       }
 
-      if (!content) {
-        this.remove();
-        return;
-      }
       this.storeDraft({ content, questionId }, callback);
     }
   }, 3000);

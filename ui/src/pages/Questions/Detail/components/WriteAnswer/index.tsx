@@ -45,6 +45,8 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   });
 
   const removeDraft = () => {
+    // immediately remove debounced save
+    saveDraft.save.cancel();
     saveDraft.remove();
     setHasDraft(false);
   };
@@ -67,13 +69,13 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   useEffect(() => {
     const { content } = formData;
 
-    // save Draft
-    saveDraft.save({
-      questionId: data?.qid,
-      content: content.value,
-    });
-
     if (content.value) {
+      // save Draft
+      saveDraft.save({
+        questionId: data?.qid,
+        content: content.value,
+      });
+
       setHasDraft(true);
     } else {
       removeDraft();

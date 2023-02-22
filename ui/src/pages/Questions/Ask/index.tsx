@@ -103,6 +103,7 @@ const Ask = () => {
   );
 
   const removeDraft = () => {
+    saveDraft.save.cancel();
     saveDraft.remove();
     setHasDraft(false);
   };
@@ -149,20 +150,18 @@ const Ask = () => {
       }
       return;
     }
-
-    // save draft
-    saveDraft.save({
-      params: {
-        title: title.value,
-        tags: tags.value,
-        content: content.value,
-        answer: answer.value,
-      },
-      callback: () => setHasDraft(true),
-    });
-
     // write
     if (title.value || tags.value.length > 0 || content.value || answer.value) {
+      // save draft
+      saveDraft.save({
+        params: {
+          title: title.value,
+          tags: tags.value,
+          content: content.value,
+          answer: answer.value,
+        },
+        callback: () => setHasDraft(true),
+      });
       setContentChanged(true);
     } else {
       removeDraft();
