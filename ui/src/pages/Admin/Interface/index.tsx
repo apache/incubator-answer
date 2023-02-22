@@ -112,7 +112,12 @@ const Interface: FC = () => {
     if (setting) {
       const formMeta = {};
       Object.keys(setting).forEach((k) => {
-        formMeta[k] = { ...formData[k], value: setting[k] };
+        // In this form, all form items are `Select` and must have a default value
+        let fieldVal = setting[k];
+        if (!fieldVal && formData[k] && formData[k].value) {
+          fieldVal = formData[k].value;
+        }
+        formMeta[k] = { ...formData[k], value: fieldVal };
       });
       setFormData({ ...formData, ...formMeta });
     }

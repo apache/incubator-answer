@@ -87,8 +87,6 @@ export const ADMIN_NAV_MENUS = [
   },
 ];
 
-export const ADMIN_LEGAL_MENUS = [{ name: 'tos' }, { name: 'privacy' }];
-
 export const TIMEZONES = [
   {
     label: 'Africa',
@@ -578,7 +576,7 @@ export const TIMEZONES = [
     options: [{ value: 'UTC', label: 'UTC' }],
   },
 ];
-export const DEFAULT_TIMEZONE = 'UTC+0';
+export const DEFAULT_TIMEZONE = 'UTC';
 
 export const TIMELINE_NORMAL_ACTIVITY_TYPE = [
   'undeleted',
