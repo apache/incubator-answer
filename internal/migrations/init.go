@@ -114,9 +114,8 @@ func initAdminUser(engine *xorm.Engine) error {
 
 func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail string) error {
 	interfaceData := map[string]string{
-		"logo":     "",
-		"theme":    "black",
-		"language": language,
+		"language":  language,
+		"time_zone": "UTC",
 	}
 	interfaceDataBytes, _ := json.Marshal(interfaceData)
 	_, err := engine.InsertOne(&entity.SiteInfo{
