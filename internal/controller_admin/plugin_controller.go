@@ -49,9 +49,9 @@ func (pc *PluginController) GetPluginList(ctx *gin.Context) {
 	_ = plugin.CallBase(func(base plugin.Base) error {
 		info := base.Info()
 		resp = append(resp, &schema.GetPluginListResp{
-			Name:        info.Name(ctx),
+			Name:        info.Name.Translate(ctx),
 			SlugName:    info.SlugName,
-			Description: info.Description(ctx),
+			Description: info.Description.Translate(ctx),
 			Version:     info.Version,
 			Enabled:     plugin.StatusManager.IsEnabled(info.SlugName),
 			HaveConfig:  pluginConfigMapping[info.SlugName],
@@ -133,9 +133,9 @@ func (pc *PluginController) GetPluginConfig(ctx *gin.Context) {
 			return nil
 		}
 		info := base.Info()
-		resp.Name = info.Name(ctx)
+		resp.Name = info.Name.Translate(ctx)
 		resp.SlugName = info.SlugName
-		resp.Description = info.Description(ctx)
+		resp.Description = info.Description.Translate(ctx)
 		resp.Version = info.Version
 		return nil
 	})

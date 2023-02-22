@@ -48,8 +48,8 @@ func (g *GetPluginConfigResp) SetConfigFields(ctx *gin.Context, fields []plugin.
 		configField := ConfigField{
 			Name:        field.Name,
 			Type:        string(field.Type),
-			Title:       field.Title(ctx),
-			Description: field.Description(ctx),
+			Title:       field.Title.Translate(ctx),
+			Description: field.Description.Translate(ctx),
 			Required:    field.Required,
 			Value:       field.Value,
 			UIOptions: ConfigFieldUIOptions{
@@ -57,13 +57,11 @@ func (g *GetPluginConfigResp) SetConfigFields(ctx *gin.Context, fields []plugin.
 				InputType: string(field.UIOptions.InputType),
 			},
 		}
-		if field.UIOptions.Placeholder != nil {
-			configField.UIOptions.Placeholder = field.UIOptions.Placeholder(ctx)
-		}
+		configField.UIOptions.Placeholder = field.UIOptions.Placeholder.Translate(ctx)
 
 		for _, option := range field.Options {
 			configField.Options = append(configField.Options, ConfigFieldOption{
-				Label: option.Label(ctx),
+				Label: option.Label.Translate(ctx),
 				Value: option.Value,
 			})
 		}
