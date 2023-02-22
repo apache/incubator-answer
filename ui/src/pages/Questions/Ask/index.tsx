@@ -10,6 +10,7 @@ import { isEqual } from 'lodash';
 import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { Editor, EditorRef, TagSelector } from '@/components';
 import type * as Type from '@/common/interface';
+import { DRAFT_QUESTION_STORAGE_KEY } from '@/common/constants';
 import {
   saveQuestion,
   questionDetail,
@@ -19,7 +20,7 @@ import {
   useQueryQuestionByTitle,
   getTagsBySlugName,
 } from '@/services';
-import { handleFormError } from '@/utils';
+import { handleFormError, SaveDraft, storageExpires } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
 
 import SearchQuestion from './components/SearchQuestion';
@@ -31,6 +32,8 @@ interface FormDataItem {
   answer: Type.FormValue<string>;
   edit_summary: Type.FormValue<string>;
 }
+
+const saveDraft = new SaveDraft({ type: 'question' });
 
 const Ask = () => {
   const initFormData = {
@@ -66,6 +69,7 @@ const Ask = () => {
   const [checked, setCheckState] = useState(false);
   const [contentChanged, setContentChanged] = useState(false);
   const [focusType, setForceType] = useState('');
+  const [hasDraft, setHasDraft] = useState(false);
   const resetForm = () => {
     setFormData(initFormData);
     setCheckState(false);
@@ -98,6 +102,33 @@ const Ask = () => {
     isEdit ? '' : formData.title.value,
   );
 
+  const removeDraft = () => {
+    saveDraft.remove();
+    setHasDraft(false);
+  };
+
+  useEffect(() => {
+    if (!qid) {
+      initQueryTags();
+      const draft = storageExpires.get(DRAFT_QUESTION_STORAGE_KEY);
+      if (draft) {
+        formData.title.value = draft.title;
+        formData.content.value = draft.content;
+        formData.tags.value = draft.tags;
+        formData.answer.value = draft.answer;
+        setCheckState(Boolean(draft.answer));
+        setHasDraft(true);
+        setFormData({ ...formData });
+      } else {
+        resetForm();
+      }
+    }
+
+    return () => {
+      resetForm();
+    };
+  }, [qid]);
+
   useEffect(() => {
     const { title, tags, content, answer } = formData;
     const { title: editTitle, tags: editTags, content: editContent } = immData;
@@ -119,10 +150,22 @@ const Ask = () => {
       return;
     }
 
+    // save draft
+    saveDraft.save({
+      params: {
+        title: title.value,
+        tags: tags.value,
+        content: content.value,
+        answer: answer.value,
+      },
+      callback: () => setHasDraft(true),
+    });
+
     // write
     if (title.value || tags.value.length > 0 || content.value || answer.value) {
       setContentChanged(true);
     } else {
+      removeDraft();
       setContentChanged(false);
     }
   }, [formData]);
@@ -131,12 +174,6 @@ const Ask = () => {
     when: contentChanged,
   });
 
-  useEffect(() => {
-    if (!isEdit) {
-      resetForm();
-      initQueryTags();
-    }
-  }, [isEdit]);
   const { data: revisions = [] } = useQueryRevisions(qid);
 
   useEffect(() => {
@@ -190,6 +227,14 @@ const Ask = () => {
         value: evt.currentTarget.value,
       },
     });
+
+  const deleteDraft = () => {
+    const res = window.confirm(t('discard_confirm', { keyPrefix: 'draft' }));
+    if (res) {
+      removeDraft();
+      resetForm();
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setContentChanged(false);
@@ -248,6 +293,7 @@ const Ask = () => {
           navigate(pathFactory.questionLanding(id));
         }
       }
+      deleteDraft();
     }
   };
   const backPage = () => {
@@ -380,6 +426,12 @@ const Ask = () => {
                 <Button variant="link" onClick={backPage}>
                   {t('cancel', { keyPrefix: 'btns' })}
                 </Button>
+
+                {hasDraft && (
+                  <Button variant="link" onClick={deleteDraft}>
+                    {t('discard_draft', { keyPrefix: 'btns' })}
+                  </Button>
+                )}
               </div>
             )}
             {!isEdit && (
@@ -411,7 +463,6 @@ const Ask = () => {
                       }}
                     />
                     <Form.Control
-                      value={formData.answer.value}
                       type="text"
                       isInvalid={formData.answer.isInvalid}
                       hidden
@@ -424,9 +475,14 @@ const Ask = () => {
               </>
             )}
             {checked && (
-              <Button type="submit" className="mt-3">
-                {t('post_question&answer')}
-              </Button>
+              <div className="mt-3">
+                <Button type="submit">{t('post_question&answer')}</Button>
+                {hasDraft && (
+                  <Button variant="link" className="ms-2" onClick={deleteDraft}>
+                    {t('discard_draft', { keyPrefix: 'btns' })}
+                  </Button>
+                )}
+              </div>
             )}
           </Form>
         </Col>

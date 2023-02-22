@@ -819,6 +819,7 @@ ui:
     approve: Approve
     reject: Reject
     skip: Skip
+    discard_draft: Discard draft
   search:
     title: Search Results
     keywords: Keywords
@@ -1409,4 +1410,6 @@ ui:
   prompt:
     leave_page: "Are you sure you want to leave the page?"
     changes_not_save: "Your changes may not be saved."
+  draft:
+    discard_confirm: "Are you sure you want to discard your draft?"
 
