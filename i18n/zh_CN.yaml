@@ -997,7 +997,13 @@ ui:
     themes: 主题
     css-html: CSS/HTML
     login: 登录
+    plugins: 插件
+    installed_plugins: 插件列表
   website_welcome: 欢迎来到 {{site_name}}
+  plugins:
+    oauth:
+      connect: 连接到 {{ auth_name }}
+      remove: 解绑 {{ auth_name }}
   admin:
     admin_header:
       title: 后台管理
@@ -1315,6 +1321,23 @@ ui:
         title: 非公开的
         label: 需要登录
         text: 只有登录用户才能访问这个社区。
+    installed_plugins:
+      title: 插件列表
+      filter:
+        all: 全部
+        active: 启用
+        inactive: 未启用
+        outdated: 已过期
+      plugins:
+        label: 插件
+        text: 选择一个插件
+      name: 插件名称
+      version: 插件版本
+      status: 状态
+      action: 操作
+      deactivate: 停用
+      activate: 启用
+      settings: 设置
   form:
     empty: 不能为空
     invalid: 是无效的
