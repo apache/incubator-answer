@@ -9,6 +9,7 @@ import { usePageTags } from '@/hooks';
 import { AccordionNav } from '@/components';
 import { ADMIN_NAV_MENUS } from '@/common/constants';
 import { useQueryPlugins } from '@/services';
+import { interfaceStore } from '@/stores';
 
 import './index.scss';
 
@@ -27,14 +28,12 @@ const formPaths = [
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
   const { pathname } = useLocation();
+  const interfaceLang = interfaceStore((_) => _.interface.language);
   const { data: configurablePlugins, mutate: updateConfigurablePlugins } =
     useQueryPlugins({
       status: 'active',
       have_config: true,
     });
-  usePageTags({
-    title: t('admin'),
-  });
 
   const menus = cloneDeep(ADMIN_NAV_MENUS);
   if (configurablePlugins && configurablePlugins.length > 0) {
@@ -62,7 +61,13 @@ const Index: FC = () => {
       window.removeEventListener('message', observePlugins);
     };
   }, []);
+  useEffect(() => {
+    updateConfigurablePlugins();
+  }, [interfaceLang]);
 
+  usePageTags({
+    title: t('admin'),
+  });
   return (
     <>
       <div className="bg-light py-2">
