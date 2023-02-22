@@ -573,10 +573,10 @@ export const TIMEZONES = [
 
   {
     label: 'UTC',
-    options: [{ value: 'UTC+0', label: 'UTC' }],
+    options: [{ value: 'UTC', label: 'UTC' }],
   },
 ];
-export const DEFAULT_TIMEZONE = 'UTC+0';
+export const DEFAULT_TIMEZONE = 'UTC';
 
 export const TIMELINE_NORMAL_ACTIVITY_TYPE = [
   'undeleted',
