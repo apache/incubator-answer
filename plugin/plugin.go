@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"encoding/json"
+
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/gin-gonic/gin"
@@ -114,8 +115,7 @@ type TranslateFn func(ctx *GinContext) string
 
 // Translator contains a function that translates the key to the current language of the context
 type Translator struct {
-	fn  TranslateFn
-	ctx *GinContext
+	fn TranslateFn
 }
 
 // MakeTranslator generates a translator from the key
@@ -123,15 +123,7 @@ func MakeTranslator(key string) Translator {
 	t := func(ctx *GinContext) string {
 		return Translate(ctx, key)
 	}
-
 	return Translator{fn: t}
-}
-
-// SetContext sets the context of the multi translators
-func SetContext(ctx *GinContext, ts ...Translator) {
-	for _, t := range ts {
-		t.SetContext(ctx)
-	}
 }
 
 // Translate translates the key to the current language of the context
@@ -139,16 +131,5 @@ func (t Translator) Translate(ctx *GinContext) string {
 	if &t == nil || t.fn == nil {
 		return ""
 	}
-
 	return t.fn(ctx)
-}
-
-// SetContext sets the context of the translator
-func (t Translator) SetContext(ctx *GinContext) {
-	t.ctx = ctx
-}
-
-// String returns the translated string through the context
-func (t Translator) String() string {
-	return t.Translate(t.ctx)
 }

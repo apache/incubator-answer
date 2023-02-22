@@ -9,7 +9,7 @@ func init() {
 	plugin.Register(&Connector{})
 }
 
-func (g *Connector) Info() plugin.Info {
+func (c *Connector) Info() plugin.Info {
 	return plugin.Info{
 		Name:     plugin.MakeTranslator("plugin.connector.name"),
 		SlugName: "connector",
