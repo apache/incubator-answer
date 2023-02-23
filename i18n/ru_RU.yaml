@@ -108,7 +108,7 @@ backend:
       cannot_update:
         other: Нет прав для обновления.
       is_used_cannot_delete:
-        other: "You cannot delete a tag that is in use"
+        other: You cannot delete a tag that is in use
       cannot_set_synonym_as_itself:
         other: Вы не можете установить синоним текущего тега.
     smtp:
