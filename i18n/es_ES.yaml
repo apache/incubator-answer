@@ -108,7 +108,7 @@ backend:
       cannot_update:
         other: Sin permiso para actualizar.
       is_used_cannot_delete:
-        other: "You cannot delete a tag that is in use"
+        other: You cannot delete a tag that is in use
       cannot_set_synonym_as_itself:
         other: No se puede establecer como sinónimo de una etiqueta la propia etiqueta.
     smtp:
