@@ -67,6 +67,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   }, []);
 
   useEffect(() => {
+    const draft = storageExpires.get(DRAFT_ANSWER_STORAGE_KEY);
     const { content } = formData;
 
     if (content.value) {
@@ -77,7 +78,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
       });
 
       setHasDraft(true);
-    } else {
+    } else if (draft?.questionId === data.qid && !content.value) {
       removeDraft();
     }
   }, [formData.content.value]);
