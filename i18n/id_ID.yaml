@@ -108,7 +108,7 @@ backend:
       cannot_update:
         other: Tidak memiliki izin untuk memperbaharui.
       is_used_cannot_delete:
-        other: "You cannot delete a tag that is in use"
+        other: You cannot delete a tag that is in use
       cannot_set_synonym_as_itself:
         other: Anda tidak bisa menetapkan sinonim dari tag saat ini dengan tag yang sama.
     smtp:
