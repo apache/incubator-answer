@@ -1,5 +1,6 @@
-import { useLayoutEffect, useState, MouseEvent } from 'react';
+import { useLayoutEffect, useState, MouseEvent, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 
 import ReactDOM from 'react-dom/client';
 
@@ -7,6 +8,7 @@ const div = document.createElement('div');
 const root = ReactDOM.createRoot(div);
 
 const useImgViewer = () => {
+  const location = useLocation();
   const [visible, setVisible] = useState(false);
   const [imgSrc, setImgSrc] = useState('');
   const onClose = () => {
@@ -65,6 +67,9 @@ const useImgViewer = () => {
       </Modal>,
     );
   });
+  useEffect(() => {
+    onClose();
+  }, [location]);
   return {
     onClose,
     checkClickForImgView,
