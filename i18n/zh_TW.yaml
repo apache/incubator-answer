@@ -108,7 +108,7 @@ backend:
       cannot_update:
         other: 沒有權限更新標籤。
       is_used_cannot_delete:
-        other: "You cannot delete a tag that is in use"
+        other: You cannot delete a tag that is in use
       cannot_set_synonym_as_itself:
         other: 你不能將當前標籤的同義詞設置為本身。
     smtp:
