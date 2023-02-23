@@ -35,6 +35,8 @@ backend:
     other: Email and password do not match.
   error:
     admin:
+      cannot_update_their_password:
+        other: You cannot modify your password.
       email_or_password_wrong:
         other: Email and password do not match.
     answer:

@@ -153,6 +153,10 @@ func (us *UserAdminService) AddUser(ctx context.Context, req *schema.AddUserReq)
 
 // UpdateUserPassword update user password
 func (us *UserAdminService) UpdateUserPassword(ctx context.Context, req *schema.UpdateUserPasswordReq) (err error) {
+	// Users cannot modify their password
+	if req.UserID == req.LoginUserID {
+		return errors.BadRequest(reason.AdminCannotUpdateTheirPassword)
+	}
 	userInfo, exist, err := us.userRepo.GetUserInfo(ctx, req.UserID)
 	if err != nil {
 		return err
