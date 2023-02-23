@@ -1,4 +1,4 @@
-import { memo, useState, FC } from 'react';
+import { memo, useState, FC, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -9,7 +9,8 @@ import { usePromptWithUnload } from '@/hooks';
 import { Editor, Modal, TextArea } from '@/components';
 import { FormDataType } from '@/common/interface';
 import { postAnswer } from '@/services';
-import { guard, handleFormError } from '@/utils';
+import { guard, handleFormError, SaveDraft, storageExpires } from '@/utils';
+import { DRAFT_ANSWER_STORAGE_KEY } from '@/common/constants';
 
 interface Props {
   visible?: boolean;
@@ -20,6 +21,8 @@ interface Props {
   };
   callback?: (obj) => void;
 }
+
+const saveDraft = new SaveDraft({ type: 'answer' });
 
 const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const { t } = useTranslation('translation', {
@@ -35,10 +38,49 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const [showEditor, setShowEditor] = useState<boolean>(visible);
   const [focusType, setFocusType] = useState('');
   const [editorFocusState, setEditorFocusState] = useState(false);
+  const [hasDraft, setHasDraft] = useState(false);
 
   usePromptWithUnload({
     when: Boolean(formData.content.value),
   });
+
+  const removeDraft = () => {
+    // immediately remove debounced save
+    saveDraft.save.cancel();
+    saveDraft.remove();
+    setHasDraft(false);
+  };
+
+  useEffect(() => {
+    const draft = storageExpires.get(DRAFT_ANSWER_STORAGE_KEY);
+    if (draft?.questionId === data.qid && draft?.content) {
+      setFormData({
+        content: {
+          value: draft.content,
+          isInvalid: false,
+          errorMsg: '',
+        },
+      });
+      setShowEditor(true);
+      setHasDraft(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const { content } = formData;
+
+    if (content.value) {
+      // save Draft
+      saveDraft.save({
+        questionId: data?.qid,
+        content: content.value,
+      });
+
+      setHasDraft(true);
+    } else {
+      removeDraft();
+    }
+  }, [formData.content.value]);
 
   const checkValidated = (): boolean => {
     let bol = true;
@@ -65,6 +107,24 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     return bol;
   };
 
+  const resetForm = () => {
+    setFormData({
+      content: {
+        value: '',
+        isInvalid: false,
+        errorMsg: '',
+      },
+    });
+  };
+
+  const deleteDraft = () => {
+    const res = window.confirm(t('discard_confirm', { keyPrefix: 'draft' }));
+    if (res) {
+      removeDraft();
+      resetForm();
+    }
+  };
+
   const handleSubmit = () => {
     if (!guard.tryNormalLogged(true)) {
       return;
@@ -86,6 +146,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
             errorMsg: '',
           },
         });
+        deleteDraft();
         callback?.(res.info);
       })
       .catch((ex) => {
@@ -128,7 +189,6 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     setShowEditor(true);
     setEditorFocusState(true);
   };
-
   return (
     <Form noValidate className="mt-4">
       {(!data.answered || showEditor) && (
@@ -186,6 +246,11 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
         <Button onClick={clickBtn}>{t('add_another_answer')}</Button>
       ) : (
         <Button onClick={clickBtn}>{t('btn_name')}</Button>
+      )}
+      {hasDraft && (
+        <Button variant="link" className="ms-2" onClick={deleteDraft}>
+          {t('discard_draft', { keyPrefix: 'btns' })}
+        </Button>
       )}
     </Form>
   );

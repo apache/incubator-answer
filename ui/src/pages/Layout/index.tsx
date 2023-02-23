@@ -14,12 +14,14 @@ import {
   PageTags,
 } from '@/components';
 import { LoginToContinueModal } from '@/components/Modal';
+import { useImgViewer } from '@/hooks';
 
 const Layout: FC = () => {
   const { msg: toastMsg, variant, clear: toastClear } = toastStore();
   const closeToast = () => {
     toastClear();
   };
+  const imgViewer = useImgViewer();
   const { show: showLoginToContinueModal } = loginToContinueStore();
   return (
     <HelmetProvider>
@@ -30,7 +32,10 @@ const Layout: FC = () => {
           revalidateOnFocus: false,
         }}>
         <Header />
-        <div className="position-relative page-wrap">
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
+        <div
+          className="position-relative page-wrap"
+          onClick={imgViewer.checkClickForImgView}>
           <Outlet />
         </div>
         <Toast msg={toastMsg} variant={variant} onClose={closeToast} />
