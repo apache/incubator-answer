@@ -64,4 +64,6 @@ const (
 	TagCannotSetSynonymAsItself      = "error.tag.cannot_set_synonym_as_itself"
 	NotAllowedRegistration           = "error.user.not_allowed_registration"
 	SMTPConfigFromNameCannotBeEmail  = "error.smtp.config_from_name_cannot_be_email"
+	AdminCannotUpdateTheirPassword   = "error.admin.cannot_update_their_password"
+	AdminCannotModifySelfStatus      = "error.admin.cannot_modify_self_status"
 )

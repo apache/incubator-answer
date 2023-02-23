@@ -149,13 +149,13 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 }
 
 // RetrievePassWord .
-func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRetrievePassWordRequest) (string, error) {
+func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRetrievePassWordRequest) error {
 	userInfo, has, err := us.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil {
-		return "", err
+		return err
 	}
 	if !has {
-		return "", errors.BadRequest(reason.UserNotFound)
+		return nil
 	}
 
 	// send email
@@ -167,10 +167,10 @@ func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRet
 	verifyEmailURL := fmt.Sprintf("%s/users/password-reset?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.PassResetTemplate(ctx, verifyEmailURL)
 	if err != nil {
-		return "", err
+		return err
 	}
 	go us.emailService.SendAndSaveCode(ctx, req.Email, title, body, code, data.ToJSONString())
-	return code, nil
+	return nil
 }
 
 // UseRePassword

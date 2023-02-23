@@ -157,7 +157,7 @@ func (uc *UserController) RetrievePassWord(ctx *gin.Context) {
 		return
 	}
 	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP())
-	_, err := uc.userService.RetrievePassWord(ctx, req)
+	err := uc.userService.RetrievePassWord(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
