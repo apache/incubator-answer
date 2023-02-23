@@ -61,6 +61,10 @@ func NewUserAdminService(
 
 // UpdateUserStatus update user
 func (us *UserAdminService) UpdateUserStatus(ctx context.Context, req *schema.UpdateUserStatusReq) (err error) {
+	// Admin cannot modify their status
+	if req.UserID == req.LoginUserID {
+		return errors.BadRequest(reason.AdminCannotModifySelfStatus)
+	}
 	userInfo, exist, err := us.userRepo.GetUserInfo(ctx, req.UserID)
 	if err != nil {
 		return
