@@ -292,7 +292,7 @@ const Ask = () => {
           navigate(pathFactory.questionLanding(id));
         }
       }
-      deleteDraft();
+      removeDraft();
     }
   };
   const backPage = () => {
