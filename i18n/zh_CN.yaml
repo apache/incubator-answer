@@ -486,7 +486,7 @@ ui:
     btn_flag: 举报
     btn_save_edits: 保存
     btn_cancel: 取消
-    show_more: Show more comments
+    show_more: 显示更多评论
     tip_question: >-
       使用评论提问更多信息或者提出改进意见。尽量避免使用评论功能回答问题。
     tip_answer: >-
@@ -626,7 +626,7 @@ ui:
       msg:
         empty: 邮箱不能为空
   change_email:
-    page_title: Welcome to {{site_name}}
+    page_title: 欢迎来到 {{site_name}}
     btn_cancel: 取消
     btn_update: 更新电子邮件地址
     send_success: >-
@@ -1236,14 +1236,14 @@ ui:
         msg: 图标不能为空。
         text: 在你的网站左上方的Logo图标。使用一个高度为56，长宽比大于3:1的宽长方形图像。如果留空，将显示网站标题文本。
       mobile_logo:
-        label: 移动端图标
+        label: Mobile Logo
         text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
       square_icon:
         label: Square Icon
         msg: 方形图标不能为空。
         text: 用作元数据图标的基础的图像。最好是大于512x512。
       favicon:
-        label: 收藏夹图标
+        label: Favicon
         text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
     legal:
       page_title: 法律条款
