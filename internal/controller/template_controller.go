@@ -451,6 +451,7 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	if !ok {
 		data["path"] = ""
 	}
+	ctx.Header("X-Frame-Options", "DENY")
 	ctx.HTML(code, tpl, data)
 }
 

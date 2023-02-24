@@ -164,7 +164,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if err != nil {
 		log.Error("UpdateLastAnswer error", err.Error())
 	}
-	err = as.questionCommon.UpdataPostTime(ctx, req.QuestionID)
+	err = as.questionCommon.UpdatePostTime(ctx, req.QuestionID)
 	if err != nil {
 		return insertData.ID, err
 	}
@@ -268,7 +268,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		if err = as.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "updated_at", "last_edit_user_id"}); err != nil {
 			return "", err
 		}
-		err = as.questionCommon.UpdataPostTime(ctx, req.QuestionID)
+		err = as.questionCommon.UpdatePostTime(ctx, req.QuestionID)
 		if err != nil {
 			return insertData.ID, err
 		}
