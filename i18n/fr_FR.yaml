@@ -108,7 +108,7 @@ backend:
       cannot_update:
         other: Pas de permission pour mettre à jour.
       is_used_cannot_delete:
-        other: You cannot delete a tag that is in use
+        other: Vous ne pouvez pas supprimer un tag utilisé
       cannot_set_synonym_as_itself:
         other: Vous ne pouvez pas définir le synonyme de la balise actuelle comme elle-même.
     smtp:
@@ -311,7 +311,7 @@ ui:
             msg:
               empty: Le code ne peut pas être vide.
           language:
-            label: Language
+            label: Langage
             placeholder: Détection automatique
       btn_cancel: Annuler
       btn_confirm: Ajouter
@@ -442,10 +442,10 @@ ui:
     delete:
       title: Supprimer cette étiquette
       tip_with_posts: >-
-        <p>We do not allowed <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
+        <p>Nous ne permettons pas de <strong>supprimer un tag avec des posts.</strong></p><p>Veuillez d'abord supprimer ce tag des posts.</p>
       tip_with_synonyms: >-
-        <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
-      tip: Are you sure you wish to delete?
+        <p>Nous ne permettons pas de <strong>supprimer un tag avec des synonymes</strong>.</p> <p>Veuillez d'abord supprimer les synonymes de ce tag.</p>
+      tip: Êtes-vous sûr de vouloir supprimer ?
       close: Fermer
   edit_tag:
     title: Editer le tag
@@ -681,13 +681,13 @@ ui:
         default: Système
         msg: Veuillez charger un avatar
       bio:
-        label: About Me
+        label: À propos de moi
       website:
-        label: Website
+        label: Site Web
         placeholder: "https://example.com"
         msg: Format du site web incorrect
       location:
-        label: Location
+        label: Position
         placeholder: "Ville, Pays"
     notification:
       heading: Notifications
@@ -1167,11 +1167,11 @@ ui:
         validate: Indiquez une URL valide.
         text: L'adresse de ce site.
       short_desc:
-        label: Short Site Description
+        label: Description Courte du Site
         msg: La description courte ne peut pas être vide.
         text: "La description courte, telle qu'elle est utilisée dans le tag titre de la page d'accueil."
       desc:
-        label: Site Description
+        label: Description du Site
         msg: La description du site ne peut pas être vide.
         text: "Décrivez ce site en une phrase, telle qu'elle est utilisée dans la balise meta description."
       contact_email:
@@ -1236,10 +1236,10 @@ ui:
         msg: Le logo ne peut pas être vide.
         text: L'image du logo en haut à gauche de votre site. Utilisez une grande image rectangulaire avec une hauteur de 56 et un ratio d'aspect supérieur à 3:1. Si laissé vide, le titre du site sera affiché.
       mobile_logo:
-        label: Mobile Logo
+        label: Logo Mobile
         text: Le logo utilisé sur la version mobile de votre site. Utilisez une image rectangulaire large avec une hauteur de 56. Si laissé vide, l'image du paramètre « logo » sera utilisée.
       square_icon:
-        label: Square Icon
+        label: Icône carrée
         msg: L'icône carrée ne peut pas être vide.
         text: Image utilisée comme base pour les icônes de métadonnées. Idéalement supérieure à 512x512.
       favicon:
@@ -1309,7 +1309,7 @@ ui:
         label: Connexion requise
         text: Seuls les utilisateurs connectés peuvent accéder à cette communauté.
   form:
-    optional: (optional)
+    optional: (optionnel)
     empty: ne peut pas être vide
     invalid: est invalide
     btn_submit: Sauvegarder
@@ -1360,6 +1360,6 @@ ui:
     reputation: réputation
     votes: votes
   prompt:
-    leave_page: "Are you sure you want to leave the page?"
-    changes_not_save: "Your changes may not be saved."
+    leave_page: "Voulez-vous vraiment quitter la page ?"
+    changes_not_save: "Impossible d'enregistrer vos modifications."
 
