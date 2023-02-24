@@ -47,7 +47,7 @@ const Personal: FC = () => {
     tabName,
   );
   let pageTitle = '';
-  if (userInfo) {
+  if (userInfo && userInfo.info && userInfo.has) {
     pageTitle = `${userInfo.info.display_name} (${userInfo.info.username})`;
   }
   const { count = 0, list = [] } = listData?.[tabName] || {};
