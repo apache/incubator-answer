@@ -147,7 +147,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
             errorMsg: '',
           },
         });
-        deleteDraft();
+        removeDraft();
         callback?.(res.info);
       })
       .catch((ex) => {
