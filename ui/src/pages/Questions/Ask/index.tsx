@@ -421,10 +421,11 @@ const Ask = () => {
                 <Button type="submit" className="me-2">
                   {isEdit ? t('btn_save_edits') : t('btn_post_question')}
                 </Button>
-
-                <Button variant="link" onClick={backPage}>
-                  {t('cancel', { keyPrefix: 'btns' })}
-                </Button>
+                {isEdit && (
+                  <Button variant="link" onClick={backPage}>
+                    {t('cancel', { keyPrefix: 'btns' })}
+                  </Button>
+                )}
 
                 {hasDraft && (
                   <Button variant="link" onClick={deleteDraft}>
