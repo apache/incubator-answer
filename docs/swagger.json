@@ -7676,7 +7676,6 @@
             ],
             "properties": {
                 "status": {
-                    "description": "user status",
                     "type": "string",
                     "enum": [
                         "normal",
@@ -7686,7 +7685,6 @@
                     ]
                 },
                 "user_id": {
-                    "description": "user id",
                     "type": "string"
                 }
             }

@@ -1691,7 +1691,6 @@ definitions:
   schema.UpdateUserStatusReq:
     properties:
       status:
-        description: user status
         enum:
         - normal
         - suspended
@@ -1699,7 +1698,6 @@ definitions:
         - inactive
         type: string
       user_id:
-        description: user id
         type: string
     required:
     - status

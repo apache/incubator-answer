@@ -7688,7 +7688,6 @@ const docTemplate = `{
             ],
             "properties": {
                 "status": {
-                    "description": "user status",
                     "type": "string",
                     "enum": [
                         "normal",
@@ -7698,7 +7697,6 @@ const docTemplate = `{
                     ]
                 },
                 "user_id": {
-                    "description": "user id",
                     "type": "string"
                 }
             }
