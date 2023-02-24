@@ -486,7 +486,7 @@ ui:
     btn_flag: 舉報
     btn_save_edits: 保存
     btn_cancel: 取消
-    show_more: Show more comments
+    show_more: 顯示更多評論
     tip_question: >-
       使用評論提問更多信息或者提出改進意見。盡量避免使用評論功能回答問題。
     tip_answer: >-
