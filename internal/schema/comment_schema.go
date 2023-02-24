@@ -53,6 +53,12 @@ type UpdateCommentReq struct {
 	// user id
 	UserID  string `json:"-"`
 	IsAdmin bool   `json:"-"`
+
+	CanAdd bool `json:"-"`
+	// whether user can edit it
+	CanEdit bool `json:"-"`
+	// whether user can delete it
+	CanDelete bool `json:"-"`
 }
 
 func (req *UpdateCommentReq) Check() (errFields []*validator.FormErrorField, err error) {
