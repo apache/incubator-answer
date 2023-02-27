@@ -23,6 +23,7 @@ const formPaths = [
   'seo',
   'themes',
   'css-html',
+  'github_connector',
 ];
 
 const Index: FC = () => {

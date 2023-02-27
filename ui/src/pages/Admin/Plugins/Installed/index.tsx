@@ -72,11 +72,11 @@ const Users: FC = () => {
       <Table>
         <thead>
           <tr>
-            <th style={{ width: '12%' }}>{t('name')}</th>
-            <th style={{ width: '20%' }}>{t('version')}</th>
-            <th style={{ width: '12%' }}>{t('status')}</th>
+            <th>{t('name')}</th>
+            <th style={{ width: '17%' }}>{t('version')}</th>
+            <th style={{ width: '11%' }}>{t('status')}</th>
             {curFilter !== 'deleted' ? (
-              <th style={{ width: '8%' }} className="text-end">
+              <th style={{ width: '11%' }} className="text-end">
                 {t('action')}
               </th>
             ) : null}
@@ -88,9 +88,7 @@ const Users: FC = () => {
               <tr key={plugin.slug_name}>
                 <td>
                   <div>{plugin.name}</div>
-                  <div className="text-muted text-small">
-                    {plugin.description}
-                  </div>
+                  <div className="fs-14">{plugin.description}</div>
                 </td>
                 <td className="text-break">{plugin.version}</td>
                 <td>
