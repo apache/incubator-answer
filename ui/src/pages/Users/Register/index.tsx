@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
 import { Unactivate, WelcomeTitle } from '@/components';
+import { PluginOauth } from '@/plugins';
 
 import SignUpForm from './components/SignUpForm';
 
@@ -19,6 +20,7 @@ const Index: React.FC = () => {
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
       <WelcomeTitle />
+      <PluginOauth className="mb-5" />
       {showForm ? (
         <SignUpForm callback={onStep} />
       ) : (
