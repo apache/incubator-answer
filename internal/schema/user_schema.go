@@ -386,7 +386,6 @@ type GetOtherUserInfoByUsernameReq struct {
 
 type GetOtherUserInfoResp struct {
 	Info *GetOtherUserInfoByUsernameResp `json:"info"`
-	Has  bool                            `json:"has"`
 }
 
 type UserChangeEmailSendCodeReq struct {
