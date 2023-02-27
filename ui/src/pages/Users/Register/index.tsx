@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { Container, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
@@ -20,9 +20,12 @@ const Index: React.FC = () => {
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
       <WelcomeTitle />
-      <PluginOauth className="mb-5" />
+
       {showForm ? (
-        <SignUpForm callback={onStep} />
+        <Col className="mx-auto" md={3}>
+          <PluginOauth className="mb-5" />
+          <SignUpForm callback={onStep} />
+        </Col>
       ) : (
         <Unactivate visible={!showForm} />
       )}
