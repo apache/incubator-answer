@@ -37,6 +37,7 @@ const useImgViewer = () => {
     }
     const img = target as HTMLImageElement;
     if (!img.naturalWidth || !img.naturalHeight) {
+      img.classList.add('broken');
       return;
     }
     const src = img.currentSrc || img.src;
