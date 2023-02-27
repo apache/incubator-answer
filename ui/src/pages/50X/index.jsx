@@ -1,9 +1,19 @@
+import { useEffect } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const Index = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_50X' });
+  useEffect(() => {
+    // auto height of container
+    const pageWrap = document.querySelector('.page-wrap');
+    pageWrap.style.display = 'contents';
+
+    return () => {
+      pageWrap.style.display = 'block';
+    };
+  }, []);
   return (
     <Container className="d-flex flex-column justify-content-center align-items-center page-wrap">
       <div
