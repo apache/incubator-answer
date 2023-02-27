@@ -3,8 +3,6 @@ import { Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import './index.scss';
-
 const Index = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_404' });
   useEffect(() => {
