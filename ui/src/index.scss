@@ -124,6 +124,10 @@ a {
   cursor: zoom-out;
 }
 
+img:not(a img, img.broken) {
+  cursor: zoom-in;
+}
+
 .resize-none {
   resize: none;
 }

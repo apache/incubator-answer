@@ -37,6 +37,7 @@ const useImgViewer = () => {
     }
     const img = target as HTMLImageElement;
     if (!img.naturalWidth || !img.naturalHeight) {
+      img.classList.add('broken');
       return;
     }
     const src = img.currentSrc || img.src;
@@ -55,13 +56,11 @@ const useImgViewer = () => {
         scrollable
         contentClassName="bg-transparent"
         onHide={onClose}>
-        <Modal.Body>
-          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */}
+        <Modal.Body onClick={onClose}>
           <img
             className="cursor-zoom-out img-fluid position-absolute top-50 start-50 translate-middle"
             src={imgSrc}
             alt={imgSrc}
-            onClick={onClose}
           />
         </Modal.Body>
       </Modal>,
