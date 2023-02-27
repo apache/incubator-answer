@@ -170,10 +170,11 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 					log.Error("json.Unmarshal QuestionCloseJson error", err.Error())
 				} else {
 					operation := &schema.Operation{}
-					operation.OperationType = closeinfo.Name
-					operation.OperationDescription = closeinfo.Description
-					operation.OperationMsg = closemsg.CloseMsg
-					operation.OperationTime = metainfo.CreatedAt.Unix()
+					operation.Type = closeinfo.Name
+					operation.Description = closeinfo.Description
+					operation.Msg = closemsg.CloseMsg
+					operation.Time = metainfo.CreatedAt.Unix()
+					operation.Level = schema.OperationLevelInfo
 					showinfo.Operation = operation
 				}
 

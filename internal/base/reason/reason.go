@@ -21,6 +21,7 @@ const (
 	QuestionCannotDeleted            = "error.question.cannot_deleted"
 	QuestionCannotClose              = "error.question.cannot_close"
 	QuestionCannotUpdate             = "error.question.cannot_update"
+	QuestionAlreadyDeleted           = "error.question.already_deleted"
 	AnswerNotFound                   = "error.answer.not_found"
 	AnswerCannotDeleted              = "error.answer.cannot_deleted"
 	AnswerCannotUpdate               = "error.answer.cannot_update"

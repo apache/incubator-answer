@@ -81,6 +81,8 @@ backend:
       new_password_same_as_previous_setting:
         other: The new password is the same as the previous one.
     question:
+      already_deleted:
+        other: This post has been deleted.
       not_found:
         other: Question not found.
       cannot_deleted:
