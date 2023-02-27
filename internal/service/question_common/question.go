@@ -86,7 +86,7 @@ func NewQuestionCommon(questionRepo QuestionRepo,
 	}
 }
 
-func (qs *QuestionCommon) UpdataPv(ctx context.Context, questionID string) error {
+func (qs *QuestionCommon) UpdatePv(ctx context.Context, questionID string) error {
 	return qs.questionRepo.UpdatePvCount(ctx, questionID)
 }
 

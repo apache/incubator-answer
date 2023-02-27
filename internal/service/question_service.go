@@ -630,7 +630,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 func (qs *QuestionService) GetQuestionAndAddPV(ctx context.Context, questionID, loginUserID string,
 	per schema.QuestionPermission) (
 	resp *schema.QuestionInfo, err error) {
-	err = qs.questioncommon.UpdataPv(ctx, questionID)
+	err = qs.questioncommon.UpdatePv(ctx, questionID)
 	if err != nil {
 		log.Error(err)
 	}
