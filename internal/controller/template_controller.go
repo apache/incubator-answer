@@ -404,12 +404,7 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 	req := &schema.GetOtherUserInfoByUsernameReq{}
 	req.Username = username
 	userinfo, err := tc.templateRenderController.UserInfo(ctx, req)
-
 	if err != nil {
-		tc.Page404(ctx)
-		return
-	}
-	if !userinfo.Has {
 		tc.Page404(ctx)
 		return
 	}
@@ -419,7 +414,7 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 	siteInfo.Title = fmt.Sprintf("%s - %s", username, siteInfo.General.Name)
 	tc.html(ctx, http.StatusOK, "homepage.html", siteInfo, gin.H{
 		"userinfo": userinfo,
-		"bio":      template.HTML(userinfo.Info.BioHTML),
+		"bio":      template.HTML(userinfo.BioHTML),
 	})
 
 }

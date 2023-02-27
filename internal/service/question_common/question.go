@@ -148,7 +148,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 		return showinfo, err
 	}
 	if !has {
-		return showinfo, errors.BadRequest(reason.QuestionNotFound)
+		return showinfo, errors.NotFound(reason.QuestionNotFound)
 	}
 	showinfo = qs.ShowFormat(ctx, dbinfo)
 

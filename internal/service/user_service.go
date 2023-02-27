@@ -86,19 +86,17 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 }
 
 func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username string) (
-	resp *schema.GetOtherUserInfoResp, err error,
+	resp *schema.GetOtherUserInfoByUsernameResp, err error,
 ) {
 	userInfo, exist, err := us.userRepo.GetByUsername(ctx, username)
 	if err != nil {
 		return nil, err
 	}
-	resp = &schema.GetOtherUserInfoResp{}
 	if !exist {
-		return resp, nil
+		return nil, errors.NotFound(reason.UserNotFound)
 	}
-	resp.Has = true
-	resp.Info = &schema.GetOtherUserInfoByUsernameResp{}
-	resp.Info.GetFromUserEntity(userInfo)
+	resp = &schema.GetOtherUserInfoByUsernameResp{}
+	resp.GetFromUserEntity(userInfo)
 	return resp, nil
 }
 
