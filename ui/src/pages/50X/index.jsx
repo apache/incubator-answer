@@ -21,6 +21,8 @@ const Index = () => {
         style={{ fontSize: '120px', lineHeight: 1.2 }}>
         (=T^T=)
       </div>
+
+      <h4 className="text-center mb-2">{t('http_error')}</h4>
       <div className="text-center mb-3">{t('desc')}</div>
       <div className="text-center">
         <Button as={Link} to="/" variant="link">
