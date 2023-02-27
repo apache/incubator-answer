@@ -1020,9 +1020,11 @@ ui:
     answers: answers
     accepted: Accepted
   page_404:
+    http_error: HTTP Error 404
     desc: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage
   page_50X:
+    http_error: HTTP Error 500
     desc: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
