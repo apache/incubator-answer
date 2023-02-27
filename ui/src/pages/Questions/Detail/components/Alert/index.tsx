@@ -10,38 +10,38 @@ interface Props {
 const Index: FC<Props> = ({ data }) => {
   const { t } = useTranslation();
   return (
-    <Alert className="mb-4" variant="info">
-      <div>
-        {data.operation_msg.indexOf('http') > -1 ? (
-          <p>
-            {data.operation_description}{' '}
-            <a href={data.operation_msg} style={{ color: '#055160' }}>
-              <strong>{t('question_detail.show_exist')}</strong>
-            </a>
-          </p>
-        ) : (
-          <p>
-            {data.operation_msg
-              ? data.operation_msg
-              : data.operation_description}
-          </p>
-        )}
-        <div className="fs-14">
-          {t('question_detail.closed_in')}{' '}
-          <time
-            dateTime={dayjs.unix(data.operation_time).tz().toISOString()}
-            title={dayjs
-              .unix(data.operation_time)
-              .tz()
-              .format(t('dates.long_date_with_time'))}>
-            {dayjs
-              .unix(data.operation_time)
-              .tz()
-              .format(t('dates.long_date_with_year'))}
-          </time>
-          .
+    <Alert className="mb-4" variant={data.level}>
+      {data.level === 'info' ? (
+        <div>
+          {data.msg.indexOf('http') > -1 ? (
+            <p>
+              {data.description}{' '}
+              <a href={data.msg} style={{ color: '#055160' }}>
+                <strong>{t('question_detail.show_exist')}</strong>
+              </a>
+            </p>
+          ) : (
+            <p>{data.msg ? data.msg : data.description}</p>
+          )}
+          <div className="fs-14">
+            {t('question_detail.closed_in')}{' '}
+            <time
+              dateTime={dayjs.unix(data.time).tz().toISOString()}
+              title={dayjs
+                .unix(data.time)
+                .tz()
+                .format(t('dates.long_date_with_time'))}>
+              {dayjs
+                .unix(data.time)
+                .tz()
+                .format(t('dates.long_date_with_year'))}
+            </time>
+            .
+          </div>
         </div>
-      </div>
+      ) : (
+        data.msg
+      )}
     </Alert>
   );
 };

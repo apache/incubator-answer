@@ -183,9 +183,7 @@ const Index = () => {
     <Container className="pt-4 mt-2 mb-5 questionDetailPage">
       <Row className="justify-content-center">
         <Col xxl={7} lg={8} sm={12} className="mb-5 mb-md-0">
-          {question?.operation?.operation_type && (
-            <Alert data={question.operation} />
-          )}
+          {question?.operation?.level && <Alert data={question.operation} />}
           {isLoading ? (
             <ContentLoader />
           ) : (
