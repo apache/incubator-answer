@@ -194,7 +194,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	notificationCommon := notificationcommon.NewNotificationCommon(dataData, notificationRepo, userCommon, activityRepo, followRepo, objService)
 	notificationService := notification2.NewNotificationService(dataData, notificationRepo, notificationCommon, revisionService)
 	notificationController := controller.NewNotificationController(notificationService, rankService)
-	dashboardController := controller.NewDashboardController(dashboardService)
+	dashboardController := controller_admin.NewDashboardController(dashboardService)
 	uploadController := controller.NewUploadController(uploaderService)
 	activityCommon := activity_common2.NewActivityCommon(activityRepo)
 	activityActivityRepo := activity.NewActivityRepo(dataData)

@@ -1,4 +1,4 @@
-package controller
+package controller_admin
 
 import (
 	"github.com/answerdev/answer/internal/base/handler"
