@@ -121,7 +121,7 @@ a {
 }
 
 .cursor-zoom-out {
-  cursor: zoom-out;
+  cursor: zoom-out !important;
 }
 
 img:not(a img, img.broken) {
