@@ -172,7 +172,7 @@ func createMainGoFile(b *buildingMaterial) (err error) {
 func downloadGoModFile(b *buildingMaterial) (err error) {
 	// If user specify a module replacement, use it. Otherwise, use the latest version.
 	if len(b.answerModuleReplacement) > 0 {
-		replacement := fmt.Sprintf("%s=%s", "github.com/answerdev/answer@latest", b.answerModuleReplacement)
+		replacement := fmt.Sprintf("%s=%s", "github.com/answerdev/answer", b.answerModuleReplacement)
 		err = b.newExecCmd("go", "mod", "edit", "-replace", replacement).Run()
 		if err != nil {
 			return err
