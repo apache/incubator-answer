@@ -232,6 +232,11 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		return "", nil
 	}
 
+	if answerInfo.Status == entity.AnswerStatusDeleted {
+		err = errors.BadRequest(reason.AnswerCannotUpdate)
+		return "", err
+	}
+
 	//If the content is the same, ignore it
 	if answerInfo.OriginalText == req.Content {
 		return "", nil
@@ -473,6 +478,7 @@ func (as *AnswerService) SearchList(ctx context.Context, req *schema.AnswerListR
 	dbSearch.Page = req.Page
 	dbSearch.PageSize = req.PageSize
 	dbSearch.Order = req.Order
+	dbSearch.IncludeDeleted = req.CanDelete
 	answerOriginalList, count, err := as.answerRepo.SearchList(ctx, &dbSearch)
 	if err != nil {
 		return list, count, err

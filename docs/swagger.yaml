@@ -488,8 +488,6 @@ definitions:
     type: object
   schema.GetOtherUserInfoResp:
     properties:
-      has:
-        type: boolean
       info:
         $ref: '#/definitions/schema.GetOtherUserInfoByUsernameResp'
     type: object
@@ -1201,7 +1199,8 @@ definitions:
       title:
         type: string
       user_info:
-        $ref: '#/definitions/schema.UserBasicInfo'
+        allOf:
+        - $ref: '#/definitions/schema.UserBasicInfo'
         description: user info
       vote_count:
         type: integer
@@ -1209,7 +1208,8 @@ definitions:
   schema.SearchResp:
     properties:
       object:
-        $ref: '#/definitions/schema.SearchObject'
+        allOf:
+        - $ref: '#/definitions/schema.SearchObject'
         description: this object
       object_type:
         description: object_type
@@ -1563,7 +1563,8 @@ definitions:
   schema.UpdateInfoRequest:
     properties:
       avatar:
-        $ref: '#/definitions/schema.AvatarInfo'
+        allOf:
+        - $ref: '#/definitions/schema.AvatarInfo'
         description: avatar
       bio:
         description: bio
