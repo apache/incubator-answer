@@ -22,8 +22,5 @@ func IsSupportedImageFile(file io.Reader, ext string) bool {
 	default:
 		return false
 	}
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }

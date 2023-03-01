@@ -123,8 +123,6 @@ func Migrate(dbConf *data.Database, cacheConf *data.CacheConf) error {
 		}
 		currentDBVersion++
 	}
-	if cache != nil {
-		cacheCleanup()
-	}
+	cacheCleanup()
 	return nil
 }
