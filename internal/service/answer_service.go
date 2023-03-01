@@ -232,6 +232,11 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		return "", nil
 	}
 
+	if answerInfo.Status == entity.AnswerStatusDeleted {
+		err = errors.BadRequest(reason.AnswerCannotUpdate)
+		return "", err
+	}
+
 	//If the content is the same, ignore it
 	if answerInfo.OriginalText == req.Content {
 		return "", nil
