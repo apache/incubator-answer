@@ -74,6 +74,7 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 			ctx.Redirect(http.StatusFound, "/50x")
 			return
 		}
+		log.Debugf("connector received: %+v", userInfo)
 		u := &schema.ExternalLoginUserInfoCache{
 			Provider:   connector.ConnectorSlugName(),
 			ExternalID: userInfo.ExternalID,

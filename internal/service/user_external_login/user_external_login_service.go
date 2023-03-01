@@ -68,13 +68,18 @@ func (us *UserExternalLoginService) ExternalLogin(
 		return nil, err
 	}
 	if exist {
+		// if user is already a member, login directly
 		oldUserInfo, exist, err := us.userRepo.GetByUserID(ctx, oldExternalLoginUserInfo.UserID)
 		if err != nil {
 			return nil, err
 		}
-		if exist {
+		if exist && oldUserInfo.Status != entity.UserStatusDeleted {
+			newMailStatus, err := us.activeUser(ctx, oldUserInfo.MailStatus, oldUserInfo.ID)
+			if err != nil {
+				log.Error(err)
+			}
 			accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
-				ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status)
+				ctx, oldUserInfo.ID, newMailStatus, oldUserInfo.Status)
 			return &schema.UserExternalLoginResp{AccessToken: accessToken}, err
 		}
 	}
@@ -93,19 +98,27 @@ func (us *UserExternalLoginService) ExternalLogin(
 	if err != nil {
 		return nil, err
 	}
+	// if user is not a member, register a new user
 	if !exist {
 		oldUserInfo, err = us.registerNewUser(ctx, externalUserInfo)
 		if err != nil {
 			return nil, err
 		}
 	}
+	// bind external user info to user
 	err = us.bindOldUser(ctx, externalUserInfo, oldUserInfo)
 	if err != nil {
 		return nil, err
 	}
 
+	// If user login with external account and email is exist, active user directly.
+	newMailStatus, err := us.activeUser(ctx, oldUserInfo.MailStatus, oldUserInfo.ID)
+	if err != nil {
+		log.Error(err)
+	}
+
 	accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
-		ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status)
+		ctx, oldUserInfo.ID, newMailStatus, oldUserInfo.Status)
 	return &schema.UserExternalLoginResp{AccessToken: accessToken}, err
 }
 
@@ -148,6 +161,22 @@ func (us *UserExternalLoginService) bindOldUser(ctx context.Context,
 		err = us.userExternalLoginRepo.AddUserExternalLogin(ctx, newExternalUserInfo)
 	}
 	return err
+}
+
+func (us *UserExternalLoginService) activeUser(ctx context.Context, oldMailStatus int, userID string) (
+	mailStatus int, err error) {
+	log.Infof("user %s login with external account, try to active email, old status is %d", userID, oldMailStatus)
+	if oldMailStatus == entity.EmailStatusAvailable {
+		return oldMailStatus, nil
+	}
+	err = us.userRepo.UpdateEmailStatus(ctx, userID, entity.EmailStatusAvailable)
+	if err != nil {
+		return oldMailStatus, err
+	}
+	if err = us.userActivity.UserActive(ctx, userID); err != nil {
+		return oldMailStatus, err
+	}
+	return entity.EmailStatusAvailable, nil
 }
 
 // ExternalLoginBindingUserSendEmail Send an email for third-party account login for binding user
