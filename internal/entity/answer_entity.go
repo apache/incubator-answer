@@ -35,9 +35,11 @@ type Answer struct {
 
 type AnswerSearch struct {
 	Answer
-	Order    string `json:"order_by" `                  // default or updated
-	Page     int    `json:"page" form:"page"`           // Query number of pages
-	PageSize int    `json:"page_size" form:"page_size"` // Search page size
+	IncludeDeleted bool   `json:"include_deleted"`
+	LoginUserID    string `json:"login_user_id"`
+	Order          string `json:"order_by"`                   // default or updated
+	Page           int    `json:"page" form:"page"`           // Query number of pages
+	PageSize       int    `json:"page_size" form:"page_size"` // Search page size
 }
 
 type AdminAnswerSearch struct {

@@ -206,7 +206,9 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	default:
 		session = session.OrderBy("adopted desc,vote_count desc,created_at asc")
 	}
-	session = session.And("status = ?", entity.AnswerStatusAvailable)
+	if !search.IncludeDeleted {
+		session = session.And("status = ? OR user_id = ?", entity.AnswerStatusAvailable, search.UserID)
+	}
 
 	session = session.Limit(search.PageSize, offset)
 	count, err = session.FindAndCount(&rows)
