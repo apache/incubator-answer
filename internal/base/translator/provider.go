@@ -20,6 +20,8 @@ var GlobalTrans i18n.Translator
 type LangOption struct {
 	Label string `json:"label"`
 	Value string `json:"value"`
+	// Translation completion percentage
+	Progress int `json:"progress"`
 }
 
 // DefaultLangOption default language option. If user config the language is default, the language option is admin choose.
@@ -94,6 +96,11 @@ func NewTranslator(c *I18n) (tr i18n.Translator, err error) {
 		return nil, fmt.Errorf("i18n file parsing failed: %s", err)
 	}
 	LanguageOptions = s.LangOption
+	for _, option := range LanguageOptions {
+		if option.Progress != 100 {
+			option.Label = fmt.Sprintf("%s (%d%%)", option.Label, option.Progress)
+		}
+	}
 	return GlobalTrans, err
 }
 
