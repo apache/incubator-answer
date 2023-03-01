@@ -56,9 +56,9 @@ const useImgViewer = () => {
         scrollable
         contentClassName="bg-transparent"
         onHide={onClose}>
-        <Modal.Body onClick={onClose}>
+        <Modal.Body onClick={onClose} className="p-0 d-flex">
           <img
-            className="cursor-zoom-out img-fluid position-absolute top-50 start-50 translate-middle"
+            className="cursor-zoom-out img-fluid m-auto"
             src={imgSrc}
             alt={imgSrc}
           />
