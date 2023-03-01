@@ -1410,8 +1410,10 @@ ui:
     reputation: reputation
     votes: votes
   prompt:
-    leave_page: "Are you sure you want to leave the page?"
-    changes_not_save: "Your changes may not be saved."
+    leave_page: Are you sure you want to leave the page?
+    changes_not_save: Your changes may not be saved.
   draft:
-    discard_confirm: "Are you sure you want to discard your draft?"
+    discard_confirm: Are you sure you want to discard your draft?
+  messages:
+     post_deleted: This post has been deleted.
 
