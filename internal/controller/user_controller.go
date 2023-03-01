@@ -203,6 +203,7 @@ func (uc *UserController) UserLogout(ctx *gin.Context) {
 		return
 	}
 	_ = uc.authService.RemoveUserCacheInfo(ctx, accessToken)
+	_ = uc.authService.RemoveAdminUserCacheInfo(ctx, accessToken)
 	handler.HandleResponse(ctx, nil, nil)
 }
 
