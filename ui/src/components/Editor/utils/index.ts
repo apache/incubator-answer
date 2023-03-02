@@ -114,19 +114,8 @@ export function htmlRender(el: HTMLElement | null) {
     },
   );
 
-  el.querySelectorAll('table').forEach((table) => {
-    if (
-      (table.parentNode as HTMLDivElement)?.classList.contains(
-        'table-responsive',
-      )
-    ) {
-      return;
-    }
-
-    table.classList.add('table', 'table-bordered');
-    const div = document.createElement('div');
-    div.className = 'table-responsive';
-    table.parentNode?.replaceChild(div, table);
-    div.appendChild(table);
-  });
+  // remove change table style to htmlToReact function
+  /**
+   * @description: You modify the DOM with other scripts after React has rendered the DOM. This way, on the next render cycle (re-render), React cannot find the DOM node it rendered before, because it has been modified or removed by other scripts.
+   */
 }
