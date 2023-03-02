@@ -75,7 +75,7 @@ func (us *UserExternalLoginService) ExternalLogin(
 			return nil, err
 		}
 		if exist && oldUserInfo.Status != entity.UserStatusDeleted {
-			newMailStatus, err := us.activeUser(ctx, oldUserInfo.MailStatus, oldUserInfo.ID)
+			newMailStatus, err := us.activeUser(ctx, oldUserInfo, externalUserInfo)
 			if err != nil {
 				log.Error(err)
 			}
@@ -113,7 +113,7 @@ func (us *UserExternalLoginService) ExternalLogin(
 	}
 
 	// If user login with external account and email is exist, active user directly.
-	newMailStatus, err := us.activeUser(ctx, oldUserInfo.MailStatus, oldUserInfo.ID)
+	newMailStatus, err := us.activeUser(ctx, oldUserInfo, externalUserInfo)
 	if err != nil {
 		log.Error(err)
 	}
@@ -176,18 +176,37 @@ func (us *UserExternalLoginService) bindOldUser(ctx context.Context,
 	return err
 }
 
-func (us *UserExternalLoginService) activeUser(ctx context.Context, oldMailStatus int, userID string) (
+func (us *UserExternalLoginService) activeUser(ctx context.Context, oldUserInfo *entity.User,
+	externalUserInfo *schema.ExternalLoginUserInfoCache) (
 	mailStatus int, err error) {
-	log.Infof("user %s login with external account, try to active email, old status is %d", userID, oldMailStatus)
-	if oldMailStatus == entity.EmailStatusAvailable {
-		return oldMailStatus, nil
+	log.Infof("user %s login with external account, try to active email, old status is %d",
+		oldUserInfo.ID, oldUserInfo.MailStatus)
+
+	// try to active user email
+	if oldUserInfo.MailStatus == entity.EmailStatusAvailable {
+		return oldUserInfo.MailStatus, nil
 	}
-	err = us.userRepo.UpdateEmailStatus(ctx, userID, entity.EmailStatusAvailable)
+	err = us.userRepo.UpdateEmailStatus(ctx, oldUserInfo.ID, entity.EmailStatusAvailable)
 	if err != nil {
-		return oldMailStatus, err
+		return oldUserInfo.MailStatus, err
 	}
-	if err = us.userActivity.UserActive(ctx, userID); err != nil {
-		return oldMailStatus, err
+
+	// try to update user avatar
+	if len(externalUserInfo.Avatar) > 0 && len(schema.FormatAvatarInfo(oldUserInfo.Avatar)) == 0 {
+		avatarInfo := &schema.AvatarInfo{
+			Type:   schema.AvatarTypeCustom,
+			Custom: externalUserInfo.Avatar,
+		}
+		avatar, _ := json.Marshal(avatarInfo)
+		oldUserInfo.Avatar = string(avatar)
+		err = us.userRepo.UpdateInfo(ctx, oldUserInfo)
+		if err != nil {
+			log.Error(err)
+		}
+	}
+
+	if err = us.userActivity.UserActive(ctx, oldUserInfo.ID); err != nil {
+		return oldUserInfo.MailStatus, err
 	}
 	return entity.EmailStatusAvailable, nil
 }
