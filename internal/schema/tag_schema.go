@@ -161,6 +161,30 @@ type RemoveTagReq struct {
 	UserID string `json:"-"`
 }
 
+// AddTagReq add tag request
+type AddTagReq struct {
+	// slug_name
+	SlugName string `validate:"required,gt=0,lte=35" json:"slug_name"`
+	// display_name
+	DisplayName string `validate:"required,gt=0,lte=35" json:"display_name"`
+	// original text
+	OriginalText string `validate:"required" json:"original_text"`
+	// parsed text
+	ParsedText string `json:"-"`
+	// user id
+	UserID string `json:"-"`
+}
+
+func (req *AddTagReq) Check() (errFields []*validator.FormErrorField, err error) {
+	req.ParsedText = converter.Markdown2HTML(req.OriginalText)
+	return nil, nil
+}
+
+// AddTagResp add tag response
+type AddTagResp struct {
+	TagID string `json:"tag_id"`
+}
+
 // UpdateTagReq update tag request
 type UpdateTagReq struct {
 	// tag_id

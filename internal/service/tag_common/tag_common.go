@@ -222,6 +222,27 @@ func (ts *TagCommonService) GetObjectTag(ctx context.Context, objectId string) (
 	return ts.TagFormat(ctx, tagsInfoList)
 }
 
+// AddTag get object tag
+func (ts *TagCommonService) AddTag(ctx context.Context, req *schema.AddTagReq) (err error) {
+	_, exist, err := ts.GetTagBySlugName(ctx, req.SlugName)
+	if err != nil {
+		return err
+	}
+	if exist {
+		return errors.BadRequest(reason.TagAlreadyExist)
+	}
+	tagInfo := &entity.Tag{
+		SlugName:     req.SlugName,
+		DisplayName:  req.DisplayName,
+		OriginalText: req.OriginalText,
+		ParsedText:   req.ParsedText,
+		Status:       entity.TagStatusAvailable,
+		UserID:       req.UserID,
+	}
+	tagList := []*entity.Tag{tagInfo}
+	return ts.tagCommonRepo.AddTagList(ctx, tagList)
+}
+
 // AddTagList get object tag
 func (ts *TagCommonService) AddTagList(ctx context.Context, tagList []*entity.Tag) (err error) {
 	return ts.tagCommonRepo.AddTagList(ctx, tagList)
