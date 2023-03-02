@@ -1,5 +1,7 @@
 package uid
 
+import "strconv"
+
 const salt = int64(12345678)
 
 var AlphanumericSet = []rune{
@@ -18,7 +20,7 @@ func init() {
 }
 
 // NumToString num to string
-func NumToString(id int64) string {
+func NumToShortID(id int64) string {
 	id = id + salt
 	var code []rune
 	for id > 0 {
@@ -30,7 +32,7 @@ func NumToString(id int64) string {
 }
 
 // StringToNum string to num
-func StringToNum(code string) int64 {
+func ShortIDToNum(code string) int64 {
 	var id int64
 	runes := []rune(code)
 
@@ -41,4 +43,16 @@ func StringToNum(code string) int64 {
 	}
 	id = id - salt
 	return id
+}
+
+func EnShortID(id string) string {
+	num, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return ""
+	}
+	return NumToShortID(num)
+}
+func DeShortID(sid string) string {
+	num := ShortIDToNum(sid)
+	return strconv.FormatInt(num, 10)
 }
