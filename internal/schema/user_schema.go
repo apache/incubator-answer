@@ -3,11 +3,13 @@ package schema
 import (
 	"encoding/json"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/converter"
+	"github.com/answerdev/answer/pkg/gravatar"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -74,7 +76,7 @@ type GetUserResp struct {
 
 func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 	_ = copier.Copy(r, userInfo)
-	r.Avatar = FormatAvatarInfo(userInfo.Avatar)
+	r.Avatar = FormatAvatarInfo(userInfo.Avatar, userInfo.EMail)
 	r.CreatedAt = userInfo.CreatedAt.Unix()
 	r.LastLoginDate = userInfo.LastLoginDate.Unix()
 	statusShow, ok := UserStatusShow[userInfo.Status]
@@ -102,7 +104,13 @@ func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
 	r.Avatar = avatarInfo
 }
 
-func FormatAvatarInfo(avatarJson string) string {
+func FormatAvatarInfo(avatarJson, email string) (res string) {
+	defer func() {
+		if constant.DefaultAvatar == "gravatar" && len(res) == 0 {
+			res = gravatar.GetAvatarURL(email)
+		}
+	}()
+
 	if avatarJson == "" {
 		return ""
 	}
@@ -170,7 +178,7 @@ type GetOtherUserInfoByUsernameResp struct {
 
 func (r *GetOtherUserInfoByUsernameResp) GetFromUserEntity(userInfo *entity.User) {
 	_ = copier.Copy(r, userInfo)
-	Avatar := FormatAvatarInfo(userInfo.Avatar)
+	Avatar := FormatAvatarInfo(userInfo.Avatar, userInfo.EMail)
 	r.Avatar = Avatar
 
 	r.CreatedAt = userInfo.CreatedAt.Unix()

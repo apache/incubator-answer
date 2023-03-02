@@ -29,6 +29,14 @@ func NewSiteInfoService(
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 	emailService *export.EmailService,
 	tagCommonService *tagcommon.TagCommonService) *SiteInfoService {
+
+	resp, err := siteInfoCommonService.GetSiteInterface(context.Background())
+	if err != nil {
+		log.Error(err)
+	} else {
+		constant.DefaultAvatar = resp.DefaultAvatar
+	}
+
 	return &SiteInfoService{
 		siteInfoRepo:          siteInfoRepo,
 		siteInfoCommonService: siteInfoCommonService,
@@ -132,6 +140,9 @@ func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.Site
 	}
 
 	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
+	if err == nil {
+		constant.DefaultAvatar = req.DefaultAvatar
+	}
 	return
 }
 

@@ -700,7 +700,7 @@ func (us *UserService) getUserInfoMapping(ctx context.Context, userIDs []string)
 		return nil, err
 	}
 	for _, user := range userInfoList {
-		user.Avatar = schema.FormatAvatarInfo(user.Avatar)
+		user.Avatar = schema.FormatAvatarInfo(user.Avatar, user.EMail)
 		userInfoMapping[user.ID] = user
 	}
 	return userInfoMapping, nil

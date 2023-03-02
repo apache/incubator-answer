@@ -40,8 +40,9 @@ func (r *SiteGeneralReq) FormatSiteUrl() {
 
 // SiteInterfaceReq site interface request
 type SiteInterfaceReq struct {
-	Language string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
-	TimeZone string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
+	Language      string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
+	TimeZone      string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
+	DefaultAvatar string `validate:"required,oneof=system gravatar" form:"default_avatar" json:"default_avatar"`
 }
 
 // SiteBrandingReq site branding request
