@@ -87,7 +87,15 @@ const Users: FC = () => {
             return (
               <tr key={plugin.slug_name}>
                 <td>
-                  <div>{plugin.name}</div>
+                  <div>
+                    {plugin.link ? (
+                      <a href={plugin.link} target="_blank" rel="noreferrer">
+                        {plugin.name}
+                      </a>
+                    ) : (
+                      plugin.name
+                    )}
+                  </div>
                   <div className="fs-14">{plugin.description}</div>
                 </td>
                 <td className="text-break">{plugin.version}</td>
