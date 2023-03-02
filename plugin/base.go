@@ -7,6 +7,7 @@ type Info struct {
 	Description Translator
 	Author      string
 	Version     string
+	Link        string
 }
 
 // Base is the base plugin

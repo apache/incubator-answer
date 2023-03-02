@@ -24,6 +24,7 @@ type GetPluginListResp struct {
 	Version     string `json:"version"`
 	Enabled     bool   `json:"enabled"`
 	HaveConfig  bool   `json:"have_config"`
+	Link        string `json:"link"`
 }
 
 type UpdatePluginStatusReq struct {

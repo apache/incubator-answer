@@ -55,6 +55,7 @@ func (pc *PluginController) GetPluginList(ctx *gin.Context) {
 			Version:     info.Version,
 			Enabled:     plugin.StatusManager.IsEnabled(info.SlugName),
 			HaveConfig:  pluginConfigMapping[info.SlugName],
+			Link:        info.Link,
 		})
 		return nil
 	})
