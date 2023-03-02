@@ -10,6 +10,18 @@ export const DRAFT_QUESTION_STORAGE_KEY = '_a_dq_';
 export const DRAFT_ANSWER_STORAGE_KEY = '_a_da_';
 export const DRAFT_TIMESIGH_STORAGE_KEY = '|_a_t_s_|';
 
+export const IGNORE_PATH_LIST = [
+  '/users/login',
+  '/users/register',
+  '/users/account-recovery',
+  '/users/change-email',
+  '/users/password-reset',
+  '/users/account-activation',
+  '/users/account-activation/success',
+  '/users/account-activation/failed',
+  '/users/confirm-new-email',
+];
+
 export const ADMIN_LIST_STATUS = {
   // normal;
   1: {
