@@ -33,6 +33,8 @@ type ExternalLoginUserInfo struct {
 	Name string
 	// optional. If email exist will bind the existing user
 	Email string
+	// optional. The avatar URL provided by the third-party login platform
+	Avatar string
 	// optional. The original user information provided by the third-party login platform
 	MetaInfo string
 }

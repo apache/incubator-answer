@@ -103,6 +103,12 @@ func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
 	r.Avatar = avatarInfo
 }
 
+const (
+	AvatarTypeDefault  = "default"
+	AvatarTypeGravatar = "gravatar"
+	AvatarTypeCustom   = "custom"
+)
+
 func FormatAvatarInfo(avatarJson string) string {
 	if avatarJson == "" {
 		return ""
@@ -113,9 +119,9 @@ func FormatAvatarInfo(avatarJson string) string {
 		return ""
 	}
 	switch avatarInfo.Type {
-	case "gravatar":
+	case AvatarTypeGravatar:
 		return avatarInfo.Gravatar
-	case "custom":
+	case AvatarTypeCustom:
 		return avatarInfo.Custom
 	default:
 		return ""

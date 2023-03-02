@@ -2,6 +2,7 @@ package user_external_login
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"time"
 
@@ -127,10 +128,22 @@ func (us *UserExternalLoginService) registerNewUser(ctx context.Context,
 	userInfo = &entity.User{}
 	userInfo.EMail = externalUserInfo.Email
 	userInfo.DisplayName = externalUserInfo.Name
+
 	userInfo.Username, err = us.userCommonService.MakeUsername(ctx, externalUserInfo.Name)
 	if err != nil {
+		log.Error(err)
 		userInfo.Username = random.Username()
 	}
+
+	if len(externalUserInfo.Avatar) > 0 {
+		avatarInfo := &schema.AvatarInfo{
+			Type:   schema.AvatarTypeCustom,
+			Custom: externalUserInfo.Avatar,
+		}
+		avatar, _ := json.Marshal(avatarInfo)
+		userInfo.Avatar = string(avatar)
+	}
+
 	userInfo.MailStatus = entity.EmailStatusToBeVerified
 	userInfo.Status = entity.UserStatusAvailable
 	userInfo.LastLoginDate = time.Now()

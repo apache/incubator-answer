@@ -80,6 +80,7 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 			ExternalID: userInfo.ExternalID,
 			Name:       userInfo.Name,
 			Email:      userInfo.Email,
+			Avatar:     userInfo.Avatar,
 			MetaInfo:   userInfo.MetaInfo,
 		}
 		resp, err := cc.userExternalService.ExternalLogin(ctx, u)
