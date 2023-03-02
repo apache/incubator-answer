@@ -127,9 +127,9 @@ func (us *UserExternalLoginService) registerNewUser(ctx context.Context,
 	externalUserInfo *schema.ExternalLoginUserInfoCache) (userInfo *entity.User, err error) {
 	userInfo = &entity.User{}
 	userInfo.EMail = externalUserInfo.Email
-	userInfo.DisplayName = externalUserInfo.Name
+	userInfo.DisplayName = externalUserInfo.DisplayName
 
-	userInfo.Username, err = us.userCommonService.MakeUsername(ctx, externalUserInfo.Name)
+	userInfo.Username, err = us.userCommonService.MakeUsername(ctx, externalUserInfo.Username)
 	if err != nil {
 		log.Error(err)
 		userInfo.Username = random.Username()
@@ -183,13 +183,14 @@ func (us *UserExternalLoginService) activeUser(ctx context.Context, oldUserInfo 
 		oldUserInfo.ID, oldUserInfo.MailStatus)
 
 	// try to active user email
-	if oldUserInfo.MailStatus == entity.EmailStatusAvailable {
-		return oldUserInfo.MailStatus, nil
+	if oldUserInfo.MailStatus == entity.EmailStatusToBeVerified {
+		err = us.userRepo.UpdateEmailStatus(ctx, oldUserInfo.ID, entity.EmailStatusAvailable)
+		if err != nil {
+			return oldUserInfo.MailStatus, err
+		}
 	}
-	err = us.userRepo.UpdateEmailStatus(ctx, oldUserInfo.ID, entity.EmailStatusAvailable)
-	if err != nil {
-		return oldUserInfo.MailStatus, err
-	}
+
+	log.Warn(len(externalUserInfo.Avatar), len(schema.FormatAvatarInfo(oldUserInfo.Avatar)))
 
 	// try to update user avatar
 	if len(externalUserInfo.Avatar) > 0 && len(schema.FormatAvatarInfo(oldUserInfo.Avatar)) == 0 {

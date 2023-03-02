@@ -30,7 +30,9 @@ type ExternalLoginUserInfo struct {
 	// required. The unique user ID provided by the third-party login
 	ExternalID string
 	// optional. This name is used preferentially during registration
-	Name string
+	DisplayName string
+	// optional. This username is used preferentially during registration
+	Username string
 	// optional. If email exist will bind the existing user
 	Email string
 	// optional. The avatar URL provided by the third-party login platform

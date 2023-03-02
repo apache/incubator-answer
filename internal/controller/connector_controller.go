@@ -74,14 +74,15 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 			ctx.Redirect(http.StatusFound, "/50x")
 			return
 		}
-		log.Debugf("connector received: %+v", userInfo)
+		log.Infof("connector received: %+v", userInfo)
 		u := &schema.ExternalLoginUserInfoCache{
-			Provider:   connector.ConnectorSlugName(),
-			ExternalID: userInfo.ExternalID,
-			Name:       userInfo.Name,
-			Email:      userInfo.Email,
-			Avatar:     userInfo.Avatar,
-			MetaInfo:   userInfo.MetaInfo,
+			Provider:    connector.ConnectorSlugName(),
+			ExternalID:  userInfo.ExternalID,
+			DisplayName: userInfo.DisplayName,
+			Username:    userInfo.Username,
+			Email:       userInfo.Email,
+			Avatar:      userInfo.Avatar,
+			MetaInfo:    userInfo.MetaInfo,
 		}
 		resp, err := cc.userExternalService.ExternalLogin(ctx, u)
 		if err != nil {
