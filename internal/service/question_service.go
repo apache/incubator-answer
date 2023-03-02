@@ -472,7 +472,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	}
 	if dbinfo.Status == entity.QuestionStatusDeleted {
 		err = errors.BadRequest(reason.QuestionCannotUpdate)
-		return
+		return nil, err
 	}
 
 	now := time.Now()
