@@ -1,7 +1,6 @@
 package uid
 
 import (
-	"fmt"
 	"strconv"
 )
 
@@ -40,7 +39,7 @@ func NumToShortID(id int64) string {
 		return ""
 	}
 	id = id + salt
-	fmt.Println("[EN1]", typeCode, id)
+	// fmt.Println("[EN1]", typeCode, id)
 	var code []rune
 	var tcode []rune
 	for id > 0 {
@@ -53,7 +52,7 @@ func NumToShortID(id int64) string {
 		tcode = append(tcode, AlphanumericSet[idx])
 		typeCode = typeCode / int64(len(AlphanumericSet))
 	}
-	fmt.Println("[EN2]", string(tcode), string(code))
+	// fmt.Println("[EN2]", string(tcode), string(code))
 	return string(tcode) + string(code)
 }
 
@@ -64,7 +63,7 @@ func ShortIDToNum(code string) int64 {
 	}
 	scodeType := code[0:1]
 	code = code[1:int32(len(code))]
-	fmt.Println("[DE1]", scodeType, code)
+	// fmt.Println("[DE1]", scodeType, code)
 	var id, codeType int64
 	runes := []rune(code)
 	codeRunes := []rune(scodeType)
@@ -80,7 +79,7 @@ func ShortIDToNum(code string) int64 {
 		codeType = codeType*int64(len(AlphanumericSet)) + int64(idx)
 	}
 	id = id - salt
-	fmt.Println("[DE2]", codeType, id)
+	// fmt.Println("[DE2]", codeType, id)
 
 	return 10000000000000000 + codeType*10000000000000 + id
 }
@@ -93,6 +92,12 @@ func EnShortID(id string) string {
 	return NumToShortID(num)
 }
 func DeShortID(sid string) string {
-	num := ShortIDToNum(sid)
-	return strconv.FormatInt(num, 10)
+	num, err := strconv.ParseInt(sid, 10, 64)
+	if err != nil {
+		return strconv.FormatInt(ShortIDToNum(sid), 10)
+	}
+	if num < 10000000000000000 {
+		return strconv.FormatInt(ShortIDToNum(sid), 10)
+	}
+	return sid
 }

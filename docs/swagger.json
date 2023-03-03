@@ -6974,7 +6974,11 @@
                 },
                 "user_info": {
                     "description": "user info",
-                    "$ref": "#/definitions/schema.UserBasicInfo"
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/schema.UserBasicInfo"
+                        }
+                    ]
                 },
                 "vote_count": {
                     "type": "integer"
@@ -6986,7 +6990,11 @@
             "properties": {
                 "object": {
                     "description": "this object",
-                    "$ref": "#/definitions/schema.SearchObject"
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/schema.SearchObject"
+                        }
+                    ]
                 },
                 "object_type": {
                     "description": "object_type",
@@ -7499,7 +7507,11 @@
             "properties": {
                 "avatar": {
                     "description": "avatar",
-                    "$ref": "#/definitions/schema.AvatarInfo"
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/schema.AvatarInfo"
+                        }
+                    ]
                 },
                 "bio": {
                     "description": "bio",
