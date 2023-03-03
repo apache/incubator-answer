@@ -223,13 +223,13 @@ func (ts *TagCommonService) GetObjectTag(ctx context.Context, objectId string) (
 }
 
 // AddTag get object tag
-func (ts *TagCommonService) AddTag(ctx context.Context, req *schema.AddTagReq) (err error) {
+func (ts *TagCommonService) AddTag(ctx context.Context, req *schema.AddTagReq) (resp *schema.AddTagResp, err error) {
 	_, exist, err := ts.GetTagBySlugName(ctx, req.SlugName)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if exist {
-		return errors.BadRequest(reason.TagAlreadyExist)
+		return nil, errors.BadRequest(reason.TagAlreadyExist)
 	}
 	tagInfo := &entity.Tag{
 		SlugName:     req.SlugName,
@@ -240,7 +240,11 @@ func (ts *TagCommonService) AddTag(ctx context.Context, req *schema.AddTagReq) (
 		UserID:       req.UserID,
 	}
 	tagList := []*entity.Tag{tagInfo}
-	return ts.tagCommonRepo.AddTagList(ctx, tagList)
+	err = ts.tagCommonRepo.AddTagList(ctx, tagList)
+	if err != nil {
+		return nil, err
+	}
+	return &schema.AddTagResp{SlugName: tagInfo.SlugName}, nil
 }
 
 // AddTagList get object tag

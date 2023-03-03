@@ -126,12 +126,8 @@ func (tc *TagController) AddTag(ctx *gin.Context) {
 		return
 	}
 
-	err = tc.tagCommonService.AddTag(ctx, req)
-	if err != nil {
-		handler.HandleResponse(ctx, err, nil)
-	} else {
-		handler.HandleResponse(ctx, err, nil)
-	}
+	resp, err := tc.tagCommonService.AddTag(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
 // UpdateTag update tag

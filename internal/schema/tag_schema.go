@@ -168,7 +168,7 @@ type AddTagReq struct {
 	// display_name
 	DisplayName string `validate:"required,gt=0,lte=35" json:"display_name"`
 	// original text
-	OriginalText string `validate:"required" json:"original_text"`
+	OriginalText string `validate:"required,gt=0,lte=65536" json:"original_text"`
 	// parsed text
 	ParsedText string `json:"-"`
 	// user id
@@ -177,12 +177,13 @@ type AddTagReq struct {
 
 func (req *AddTagReq) Check() (errFields []*validator.FormErrorField, err error) {
 	req.ParsedText = converter.Markdown2HTML(req.OriginalText)
+	req.SlugName = strings.ToLower(req.SlugName)
 	return nil, nil
 }
 
 // AddTagResp add tag response
 type AddTagResp struct {
-	TagID string `json:"tag_id"`
+	SlugName string `json:"slug_name"`
 }
 
 // UpdateTagReq update tag request

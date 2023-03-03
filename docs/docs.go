@@ -3932,6 +3932,38 @@ const docTemplate = `{
                     }
                 }
             },
+            "post": {
+                "description": "add tag",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "add tag",
+                "parameters": [
+                    {
+                        "description": "tag",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.AddTagReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "delete tag",
                 "consumes": [
@@ -5542,6 +5574,30 @@ const docTemplate = `{
                 "report_type": {
                     "description": "report type",
                     "type": "integer"
+                }
+            }
+        },
+        "schema.AddTagReq": {
+            "type": "object",
+            "required": [
+                "display_name",
+                "original_text",
+                "slug_name"
+            ],
+            "properties": {
+                "display_name": {
+                    "description": "display_name",
+                    "type": "string",
+                    "maxLength": 35
+                },
+                "original_text": {
+                    "description": "original text",
+                    "type": "string"
+                },
+                "slug_name": {
+                    "description": "slug_name",
+                    "type": "string",
+                    "maxLength": 35
                 }
             }
         },
@@ -7173,6 +7229,9 @@ const docTemplate = `{
                 },
                 "theme": {
                     "$ref": "#/definitions/schema.SiteThemeResp"
+                },
+                "version": {
+                    "type": "string"
                 }
             }
         },
