@@ -81,6 +81,13 @@ const routes: RouteNode[] = [
         page: 'pages/Tags',
       },
       {
+        path: 'tags/create',
+        page: 'pages/Tags/Create',
+        guard: () => {
+          return guard.isAdminOrModerator();
+        },
+      },
+      {
         path: 'tags/:tagName',
         page: 'pages/Tags/Detail',
       },

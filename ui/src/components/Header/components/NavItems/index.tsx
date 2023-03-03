@@ -63,7 +63,7 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
             onClick={handleLinkClick}>
             {t('header.nav.setting')}
           </Dropdown.Item>
-          {userInfo?.is_admin ? (
+          {userInfo?.role_id === 2 ? (
             <Dropdown.Item href="/admin" onClick={handleLinkClick}>
               {t('header.nav.admin')}
             </Dropdown.Item>
