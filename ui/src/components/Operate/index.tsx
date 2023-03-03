@@ -13,6 +13,7 @@ import {
   reopenQuestion,
 } from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
+import { floppyNavigation } from '@/utils';
 
 interface IProps {
   type: 'answer' | 'question';
@@ -109,6 +110,9 @@ const Index: FC<IProps> = ({
     }
   };
   const handleEdit = (evt, targetUrl) => {
+    if (!floppyNavigation.shouldProcessLinkClick(evt)) {
+      return;
+    }
     evt.preventDefault();
     let checkObjectId = qid;
     if (type === 'answer') {
