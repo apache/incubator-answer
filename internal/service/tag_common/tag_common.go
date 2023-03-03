@@ -244,6 +244,17 @@ func (ts *TagCommonService) AddTag(ctx context.Context, req *schema.AddTagReq) (
 	if err != nil {
 		return nil, err
 	}
+	revisionDTO := &schema.AddRevisionDTO{
+		UserID:   req.UserID,
+		ObjectID: tagInfo.ID,
+		Title:    tagInfo.SlugName,
+	}
+	tagInfoJson, _ := json.Marshal(tagInfo)
+	revisionDTO.Content = string(tagInfoJson)
+	_, err = ts.revisionService.AddRevision(ctx, revisionDTO, true)
+	if err != nil {
+		return nil, err
+	}
 	return &schema.AddTagResp{SlugName: tagInfo.SlugName}, nil
 }
 

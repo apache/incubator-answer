@@ -4,6 +4,7 @@ import (
 	"strings"
 
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 
 	"github.com/answerdev/answer/internal/base/handler"
@@ -154,7 +155,7 @@ func GetIsAdminFromContext(ctx *gin.Context) (isAdmin bool) {
 	if userInfo == nil {
 		return false
 	}
-	return userInfo.IsAdmin
+	return userInfo.RoleID == role.RoleAdminID
 }
 
 // GetUserInfoFromContext get user info from context

@@ -166,7 +166,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	answerActivityService := activity2.NewAnswerActivityService(answerActivityRepo, questionActivityRepo)
 	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, revisionService, metaService, collectionCommon, answerActivityService, dataData)
 	questionController := controller.NewQuestionController(questionService, rankService)
-	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService)
+	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService, userRoleRelService)
 	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configRepo, siteInfoCommonService, serviceConf, dataData)
 	answerController := controller.NewAnswerController(answerService, rankService, dashboardService)
 	searchParser := search_parser.NewSearchParser(tagCommonService, userCommon)

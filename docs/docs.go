@@ -5592,7 +5592,8 @@ const docTemplate = `{
                 },
                 "original_text": {
                     "description": "original text",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 65536
                 },
                 "slug_name": {
                     "description": "slug_name",
@@ -5992,14 +5993,6 @@ const docTemplate = `{
                 "id": {
                     "description": "user id",
                     "type": "string"
-                },
-                "ip_info": {
-                    "description": "ip info",
-                    "type": "string"
-                },
-                "is_admin": {
-                    "description": "is admin",
-                    "type": "boolean"
                 },
                 "last_login_date": {
                     "description": "last login date",
@@ -6484,10 +6477,6 @@ const docTemplate = `{
                     "description": "ip info",
                     "type": "string"
                 },
-                "is_admin": {
-                    "description": "is admin",
-                    "type": "boolean"
-                },
                 "language": {
                     "description": "language",
                     "type": "string"
@@ -6518,6 +6507,10 @@ const docTemplate = `{
                 },
                 "rank": {
                     "description": "rank",
+                    "type": "integer"
+                },
+                "role_id": {
+                    "description": "role id",
                     "type": "integer"
                 },
                 "status": {
@@ -6584,10 +6577,6 @@ const docTemplate = `{
                     "description": "ip info",
                     "type": "string"
                 },
-                "is_admin": {
-                    "description": "is admin",
-                    "type": "boolean"
-                },
                 "language": {
                     "description": "language",
                     "type": "string"
@@ -6618,6 +6607,10 @@ const docTemplate = `{
                 },
                 "rank": {
                     "description": "rank",
+                    "type": "integer"
+                },
+                "role_id": {
+                    "description": "role id",
                     "type": "integer"
                 },
                 "status": {
