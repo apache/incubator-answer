@@ -24,6 +24,7 @@ type TLoginState = {
   isForbidden: boolean;
   isNormal: boolean;
   isAdmin: boolean;
+  isModerator: boolean;
 };
 
 export type TGuardResult = {
@@ -40,6 +41,7 @@ export const deriveLoginState = (): TLoginState => {
     isForbidden: false,
     isNormal: false,
     isAdmin: false,
+    isModerator: false,
   };
   const { user } = loggedUserInfoStore.getState();
   if (user.access_token) {
@@ -57,8 +59,11 @@ export const deriveLoginState = (): TLoginState => {
   if (ls.isActivated && !ls.isForbidden) {
     ls.isNormal = true;
   }
-  if (ls.isNormal && user.is_admin === true) {
+  if (ls.isNormal && user.role_id === 2) {
     ls.isAdmin = true;
+  }
+  if (ls.isNormal && user.role_id === 3) {
+    ls.isModerator = true;
   }
   return ls;
 };
@@ -168,6 +173,16 @@ export const admin = () => {
   const gr = logged();
   const us = deriveLoginState();
   if (gr.ok && !us.isAdmin) {
+    gr.ok = false;
+    gr.redirect = RouteAlias.home;
+  }
+  return gr;
+};
+
+export const isAdminOrModerator = () => {
+  const gr = logged();
+  const us = deriveLoginState();
+  if (gr.ok && !us.isAdmin && !us.isModerator) {
     gr.ok = false;
     gr.redirect = RouteAlias.home;
   }

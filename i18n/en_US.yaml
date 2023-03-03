@@ -270,6 +270,7 @@ ui:
     tag: Tag
     tags: Tags
     tag_wiki: tag wiki
+    create_tag: Create Tag
     edit_tag: Edit Tag
     ask_a_question: Add Question
     edit_question: Edit Question
@@ -433,7 +434,7 @@ ui:
             range: Display name up to 35 characters.
         slug_name:
           label: URL Slug
-          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          desc: URL slug up to 35 characters.
           msg:
             empty: URL slug cannot be empty.
             range: URL slug up to 35 characters.
@@ -442,6 +443,7 @@ ui:
           label: Description
     btn_cancel: Cancel
     btn_submit: Submit
+    btn_post: Post new tag
   tag_info:
     created_at: Created
     edited_at: Edited
