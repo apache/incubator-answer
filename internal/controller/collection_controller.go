@@ -7,6 +7,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/pkg/converter"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -37,6 +38,7 @@ func (cc *CollectionController) CollectionSwitch(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.ObjectID = uid.DeShortID(req.ObjectID)
 
 	dto := &schema.CollectionSwitchDTO{}
 	_ = copier.Copy(dto, req)
