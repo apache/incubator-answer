@@ -7,10 +7,14 @@ import {
   FormDataType,
   AdminSettingsInterface,
 } from '@/common/interface';
-import { interfaceStore } from '@/stores';
+import { interfaceStore, loggedUserInfoStore } from '@/stores';
 import { JSONSchema, SchemaForm, UISchema } from '@/components';
 import { DEFAULT_TIMEZONE, SYSTEM_AVATAR_OPTIONS } from '@/common/constants';
-import { updateInterfaceSetting, useInterfaceSetting } from '@/services';
+import {
+  updateInterfaceSetting,
+  useInterfaceSetting,
+  getLoggedUserInfo,
+} from '@/services';
 import {
   setupAppLanguage,
   loadLanguageOptions,
@@ -26,8 +30,6 @@ const Interface: FC = () => {
   const Toast = useToast();
   const [langs, setLangs] = useState<LangsType[]>();
   const { data: setting } = useInterfaceSetting();
-
-  console.log('setting', langs);
 
   const schema: JSONSchema = {
     title: t('page_title'),
@@ -122,6 +124,9 @@ const Interface: FC = () => {
         interfaceStore.getState().update(reqParams);
         setupAppLanguage();
         setupAppTimeZone();
+        getLoggedUserInfo().then((info) => {
+          loggedUserInfoStore.getState().update(info);
+        });
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',

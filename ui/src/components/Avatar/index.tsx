@@ -3,7 +3,6 @@ import { memo, FC } from 'react';
 import classNames from 'classnames';
 
 import DefaultAvatar from '@/assets/images/default-avatar.svg';
-import { interfaceStore } from '@/stores';
 
 interface IProps {
   /** avatar url */
@@ -15,9 +14,6 @@ interface IProps {
 }
 
 const Index: FC<IProps> = ({ avatar, size, className, searchStr = '' }) => {
-  const { default_avatar } = interfaceStore((state) => state.interface);
-
-  console.log('avatar', default_avatar);
   let url = '';
   if (typeof avatar === 'string') {
     if (avatar.length > 1) {
