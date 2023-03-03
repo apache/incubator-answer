@@ -19,7 +19,6 @@ import (
 	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/uid"
-	"github.com/davecgh/go-spew/spew"
 
 	"github.com/segmentfault/pacman/errors"
 )
@@ -232,7 +231,6 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 		return questionIDList, err
 	}
 	for _, question := range rows {
-		spew.Dump(question)
 		item := &schema.SiteMapQuestionInfo{}
 		item.ID = uid.EnShortID(question.ID)
 		item.Title = htmltext.UrlTitle(question.Title)
@@ -313,6 +311,7 @@ func (qr *questionRepo) AdminSearchList(ctx context.Context, search *schema.Admi
 			idSearch = false
 			id       = ""
 		)
+
 		if strings.Contains(search.Query, "question:") {
 			idSearch = true
 			id = strings.TrimSpace(strings.TrimPrefix(search.Query, "question:"))
@@ -344,6 +343,9 @@ func (qr *questionRepo) AdminSearchList(ctx context.Context, search *schema.Admi
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return rows, count, err
+	}
+	for _, item := range rows {
+		item.ID = uid.EnShortID(item.ID)
 	}
 	return rows, count, nil
 }
