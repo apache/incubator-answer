@@ -100,6 +100,10 @@ func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
 	}
 	avatarInfo := &AvatarInfo{}
 	_ = json.Unmarshal([]byte(userInfo.Avatar), avatarInfo)
+	if constant.DefaultAvatar == "gravatar" && avatarInfo.Type == "" {
+		avatarInfo.Type = "gravatar"
+		avatarInfo.Gravatar = gravatar.GetAvatarURL(userInfo.EMail)
+	}
 	// if json.Unmarshal Error avatarInfo.Type is Empty
 	r.Avatar = avatarInfo
 }
