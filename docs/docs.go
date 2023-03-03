@@ -3932,6 +3932,38 @@ const docTemplate = `{
                     }
                 }
             },
+            "post": {
+                "description": "add tag",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "add tag",
+                "parameters": [
+                    {
+                        "description": "tag",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.AddTagReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            },
             "delete": {
                 "description": "delete tag",
                 "consumes": [
@@ -5545,6 +5577,31 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.AddTagReq": {
+            "type": "object",
+            "required": [
+                "display_name",
+                "original_text",
+                "slug_name"
+            ],
+            "properties": {
+                "display_name": {
+                    "description": "display_name",
+                    "type": "string",
+                    "maxLength": 35
+                },
+                "original_text": {
+                    "description": "original text",
+                    "type": "string",
+                    "maxLength": 65536
+                },
+                "slug_name": {
+                    "description": "slug_name",
+                    "type": "string",
+                    "maxLength": 35
+                }
+            }
+        },
         "schema.AddUserReq": {
             "type": "object",
             "required": [
@@ -5936,14 +5993,6 @@ const docTemplate = `{
                 "id": {
                     "description": "user id",
                     "type": "string"
-                },
-                "ip_info": {
-                    "description": "ip info",
-                    "type": "string"
-                },
-                "is_admin": {
-                    "description": "is admin",
-                    "type": "boolean"
                 },
                 "last_login_date": {
                     "description": "last login date",
@@ -6428,10 +6477,6 @@ const docTemplate = `{
                     "description": "ip info",
                     "type": "string"
                 },
-                "is_admin": {
-                    "description": "is admin",
-                    "type": "boolean"
-                },
                 "language": {
                     "description": "language",
                     "type": "string"
@@ -6462,6 +6507,10 @@ const docTemplate = `{
                 },
                 "rank": {
                     "description": "rank",
+                    "type": "integer"
+                },
+                "role_id": {
+                    "description": "role id",
                     "type": "integer"
                 },
                 "status": {
@@ -6528,10 +6577,6 @@ const docTemplate = `{
                     "description": "ip info",
                     "type": "string"
                 },
-                "is_admin": {
-                    "description": "is admin",
-                    "type": "boolean"
-                },
                 "language": {
                     "description": "language",
                     "type": "string"
@@ -6562,6 +6607,10 @@ const docTemplate = `{
                 },
                 "rank": {
                     "description": "rank",
+                    "type": "integer"
+                },
+                "role_id": {
+                    "description": "role id",
                     "type": "integer"
                 },
                 "status": {
@@ -7173,6 +7222,9 @@ const docTemplate = `{
                 },
                 "theme": {
                     "$ref": "#/definitions/schema.SiteThemeResp"
+                },
+                "version": {
+                    "type": "string"
                 }
             }
         },

@@ -68,8 +68,8 @@ type GetUserResp struct {
 	Language string `json:"language"`
 	// access token
 	AccessToken string `json:"access_token"`
-	// is admin
-	IsAdmin bool `json:"is_admin"`
+	// role id
+	RoleID int `json:"role_id"`
 	// user status
 	Status string `json:"status"`
 }
@@ -167,11 +167,7 @@ type GetOtherUserInfoByUsernameResp struct {
 	// website
 	Website string `json:"website"`
 	// location
-	Location string `json:"location"`
-	// ip info
-	IPInfo string `json:"ip_info"`
-	// is admin
-	IsAdmin   bool   `json:"is_admin"`
+	Location  string `json:"location"`
 	Status    string `json:"status"`
 	StatusMsg string `json:"status_msg,omitempty"`
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
 	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/role"
 	"github.com/gin-gonic/gin"
 )
 
@@ -40,7 +41,7 @@ func (ac *ActivityController) GetObjectTimeline(ctx *gin.Context) {
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	if userInfo := middleware.GetUserInfoFromContext(ctx); userInfo != nil {
-		req.IsAdmin = userInfo.IsAdmin
+		req.IsAdmin = userInfo.RoleID == role.RoleAdminID
 	}
 
 	resp, err := ac.activityService.GetObjectTimeline(ctx, req)

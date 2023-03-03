@@ -81,7 +81,7 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	resp = &schema.GetUserToSetShowResp{}
 	resp.GetFromUserEntity(userInfo)
 	resp.AccessToken = token
-	resp.IsAdmin = roleID == role.RoleAdminID
+	resp.RoleID = roleID
 	return resp, nil
 }
 
@@ -131,14 +131,14 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
-		IsAdmin:     roleID == role.RoleAdminID,
+		RoleID:      roleID,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
 		return nil, err
 	}
-	resp.IsAdmin = userCacheInfo.IsAdmin
-	if resp.IsAdmin {
+	resp.RoleID = userCacheInfo.RoleID
+	if resp.RoleID == role.RoleAdminID {
 		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, userCacheInfo)
 		if err != nil {
 			return nil, err
@@ -365,14 +365,14 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
-		IsAdmin:     roleID == role.RoleAdminID,
+		RoleID:      roleID,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
 		return nil, nil, err
 	}
-	resp.IsAdmin = userCacheInfo.IsAdmin
-	if resp.IsAdmin {
+	resp.RoleID = userCacheInfo.RoleID
+	if resp.RoleID == role.RoleAdminID {
 		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
 		if err != nil {
 			return nil, nil, err
@@ -457,7 +457,7 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
-		IsAdmin:     roleID == role.RoleAdminID,
+		RoleID:      roleID,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
@@ -467,8 +467,8 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	if err = us.authService.SetUserStatus(ctx, userCacheInfo); err != nil {
 		return nil, err
 	}
-	resp.IsAdmin = userCacheInfo.IsAdmin
-	if resp.IsAdmin {
+	resp.RoleID = userCacheInfo.RoleID
+	if resp.RoleID == role.RoleAdminID {
 		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
 		if err != nil {
 			return nil, err
