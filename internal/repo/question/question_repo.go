@@ -19,6 +19,7 @@ import (
 	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/uid"
+	"github.com/davecgh/go-spew/spew"
 
 	"github.com/segmentfault/pacman/errors"
 )
@@ -226,15 +227,20 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 	session = session.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed})
 	session = session.Limit(pageSize, offset)
 	session = session.OrderBy("question.created_at asc")
-	err = session.Select("id,title,post_update_time").Find(&rows)
+	err = session.Select("id,title,created_at,post_update_time").Find(&rows)
 	if err != nil {
 		return questionIDList, err
 	}
 	for _, question := range rows {
+		spew.Dump(question)
 		item := &schema.SiteMapQuestionInfo{}
 		item.ID = uid.EnShortID(question.ID)
 		item.Title = htmltext.UrlTitle(question.Title)
-		item.UpdateTime = fmt.Sprintf("%v", question.PostUpdateTime.Format(time.RFC3339))
+		updateTime := fmt.Sprintf("%v", question.PostUpdateTime.Format(time.RFC3339))
+		if question.PostUpdateTime.Unix() < 1 {
+			updateTime = fmt.Sprintf("%v", question.CreatedAt.Format(time.RFC3339))
+		}
+		item.UpdateTime = updateTime
 		questionIDList = append(questionIDList, item)
 	}
 	return questionIDList, nil

@@ -4,7 +4,6 @@ import (
 	"strconv"
 )
 
-// const salt = int64(1000000)
 const salt = int64(0)
 
 var AlphanumericSet = []rune{
