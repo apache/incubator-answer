@@ -1235,6 +1235,9 @@ ui:
         label: Timezone
         msg: Timezone cannot be empty.
         text: Choose a city in the same timezone as you.
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
