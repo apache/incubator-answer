@@ -4,6 +4,8 @@ language_options:
     value: "en_US"
   - label: "Español(ES)"
     value: "es_ES"
+  - label: "Português(BR)"
+    value: "pt_BR"
   - label: "Português(PT)"
     value: "pt_PT"
   - label: "Deutsch(DE)"
