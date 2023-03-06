@@ -14,35 +14,35 @@ backend:
   role:
     name:
       user:
-        other: User
+        other: Usuário
       admin:
-        other: Admin
+        other: Administrador
       moderator:
-        other: Moderator
+        other: Moderador
     description:
       user:
-        other: Default with no special access.
+        other: Padrão sem acesso especial.
       admin:
-        other: Have the full power to access the site.
+        other: Possui acesso total ao site.
       moderator:
-        other: Has access to all posts except admin settings.
+        other: Possui acesso a todas as postagens exceto às configurações de usuários.
   email:
-    other: Email
+    other: E-mail
   password:
-    other: Password
+    other: Senha
   email_or_password_wrong_error:
-    other: Email and password do not match.
+    other: O e-mail e a palavra-passe não coincidem.
   error:
     admin:
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: O e-mail e a palavra-passe não coincidem.
     answer:
       not_found:
-        other: Answer do not found.
+        other: Resposta não encontrada.
       cannot_deleted:
-        other: No permission to delete.
+        other: Sem permissão para remover.
       cannot_update:
-        other: No permission to update.
+        other: Sem permissão para atualizar.
     comment:
       edit_without_permission:
         other: Comment are not allowed to edit.
