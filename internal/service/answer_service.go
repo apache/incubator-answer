@@ -479,6 +479,7 @@ func (as *AnswerService) SearchList(ctx context.Context, req *schema.AnswerListR
 	dbSearch.PageSize = req.PageSize
 	dbSearch.Order = req.Order
 	dbSearch.IncludeDeleted = req.CanDelete
+	dbSearch.LoginUserID = req.UserID
 	answerOriginalList, count, err := as.answerRepo.SearchList(ctx, &dbSearch)
 	if err != nil {
 		return list, count, err
