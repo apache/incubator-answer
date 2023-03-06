@@ -92,8 +92,7 @@ const Index = () => {
         return v;
       });
 
-      console.log(res);
-      setAnswers(res);
+      setAnswers({ ...res, count: res.list.length });
       if (page > 0 || order) {
         // scroll into view;
         const element = document.getElementById('answerHeader');
