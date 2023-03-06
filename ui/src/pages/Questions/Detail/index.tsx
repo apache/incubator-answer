@@ -80,7 +80,10 @@ const Index = () => {
       res.list = res.list?.filter((v) => {
         // delete answers pnly show to author and admin and has searchparams aid
         if (v.status === 10) {
-          if ((isAuthor || isAdmin) && aid === v.id) {
+          if (
+            (v?.user_info.username === userInfo?.username || isAdmin) &&
+            aid === v.id
+          ) {
             return v;
           }
           return null;
