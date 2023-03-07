@@ -3,6 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type { FormDataType } from '@/common/interface';
+import Patern from '@/common/patern';
 import Progress from '../Progress';
 
 interface Props {
@@ -54,8 +55,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
       };
     }
 
-    const mailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-    if (contact_email.value && !contact_email.value.match(mailReg)) {
+    if (contact_email.value && !contact_email.value.match(Patern.mail)) {
       bol = false;
       data.contact_email = {
         value: contact_email.value,
@@ -91,7 +91,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
       };
     }
 
-    if (email.value && !email.value.match(mailReg)) {
+    if (email.value && !email.value.match(Patern.mail)) {
       bol = false;
       data.email = {
         value: email.value,
