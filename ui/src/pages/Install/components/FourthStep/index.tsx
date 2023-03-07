@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type { FormDataType } from '@/common/interface';
-import Patern from '@/common/patern';
+import Pattern from '@/common/pattern';
 import Progress from '../Progress';
 
 interface Props {
@@ -55,7 +55,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
       };
     }
 
-    if (contact_email.value && !contact_email.value.match(Patern.mail)) {
+    if (contact_email.value && !Pattern.email.test(contact_email.value)) {
       bol = false;
       data.contact_email = {
         value: contact_email.value,
@@ -91,7 +91,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
       };
     }
 
-    if (email.value && !email.value.match(Patern.mail)) {
+    if (email.value && !Pattern.email.test(email.value)) {
       bol = false;
       data.email = {
         value: email.value,
