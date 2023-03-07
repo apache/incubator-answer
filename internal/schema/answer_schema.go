@@ -84,6 +84,7 @@ type AnswerInfo struct {
 	VoteStatus     string         `json:"vote_status"`
 	VoteCount      int            `json:"vote_count"`
 	QuestionInfo   *QuestionInfo  `json:"question_info,omitempty"`
+	Status         int            `json:"status"`
 
 	// MemberActions
 	MemberActions []*PermissionMemberAction `json:"member_actions"`

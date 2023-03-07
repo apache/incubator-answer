@@ -107,6 +107,8 @@ backend:
         other: No debe contener etiquetas sinónimas.
       cannot_update:
         other: Sin permiso para actualizar.
+      is_used_cannot_delete:
+        other: You cannot delete a tag that is in use
       cannot_set_synonym_as_itself:
         other: No se puede establecer como sinónimo de una etiqueta la propia etiqueta.
     smtp:
@@ -330,7 +332,7 @@ ui:
             msg:
               empty: Código no puede estar vacío.
           language:
-            label: Lenguage (opcional)
+            label: Language
             placeholder: Detección automática
       btn_cancel: Cancelar
       btn_confirm: Añadir
@@ -366,7 +368,7 @@ ui:
               only_image: Solo se permiten archivos de imagen.
               max_size: El tamaño del archivo no puede superar 4MB.
           desc:
-            label: Descripción (opcional)
+            label: Description
       tab_url: URL de la imagen
       form_url:
         fields:
@@ -375,7 +377,7 @@ ui:
             msg:
               empty: La URL de la imagen no puede estar vacía.
           name:
-            label: Descripción (opcional)
+            label: Description
       btn_cancel: Cancelar
       btn_confirm: Añadir
       uploading: Subiendo
@@ -395,7 +397,7 @@ ui:
             msg:
               empty: La dirección no puede estar vacía.
           name:
-            label: Descripción (opcional)
+            label: Description
       btn_cancel: Cancelar
       btn_confirm: Añadir
     ordered_list:
@@ -443,7 +445,7 @@ ui:
             range: URL slug hasta 35 caracteres.
             character: La URL amigable contiene caracteres no permitidos.
         desc:
-          label: Descripción (opcional)
+          label: Description
     btn_cancel: Cancelar
     btn_submit: Enviar
   tag_info:
@@ -460,9 +462,11 @@ ui:
     synonyms_text: Las siguientes etiquetas serán reasignadas a
     delete:
       title: Eliminar esta etiqueta
-      content: >-
-        <p>No se permite la eliminación de etiquetas con posts.</p><p>Por favor antes elimina esta etiqueta del post.</p>
-      content2: '¿Estás seguro de que deseas borrarlo?'
+      tip_with_posts: >-
+        <p>We do not allowed <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
+      tip_with_synonyms: >-
+        <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
+      tip: Are you sure you wish to delete?
       close: Cerrar
   edit_tag:
     title: Editar etiqueta
@@ -698,13 +702,13 @@ ui:
         default: Sistema
         msg: Por favor, sube una imagen
       bio:
-        label: Sobre mí (opcional)
+        label: About Me
       website:
-        label: Sitio web (opcional)
+        label: Website
         placeholder: "https://example.com"
         msg: Formato del sitio web incorrecto
       location:
-        label: Ubicación (opcional)
+        label: Location
         placeholder: "Ciudad, País"
     notification:
       heading: Notificaciones
@@ -1188,11 +1192,11 @@ ui:
         validate: Please enter a valid URL.
         text: The address of your site.
       short_desc:
-        label: Short Site Description (optional)
+        label: Short Site Description
         msg: Short site description cannot be empty.
         text: "Short description, as used in the title tag on homepage."
       desc:
-        label: Site Description (optional)
+        label: Site Description
         msg: Site description cannot be empty.
         text: "Describe this site in one sentence, as used in the meta description tag."
       contact_email:
@@ -1202,14 +1206,6 @@ ui:
         text: Email address of key contact responsible for this site.
     interface:
       page_title: Interface
-      logo:
-        label: Logo (optional)
-        msg: Site logo cannot be empty.
-        text: You can upload your image or <1>reset</1> it to the site title text.
-      theme:
-        label: Theme
-        msg: Theme cannot be empty.
-        text: Select an existing theme.
       language:
         label: Interface Language
         msg: Interface language cannot be empty.
@@ -1261,18 +1257,18 @@ ui:
     branding:
       page_title: Branding
       logo:
-        label: Logo (optional)
+        label: Logo
         msg: Logo cannot be empty.
         text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
       mobile_logo:
-        label: Mobile Logo (optional)
+        label: Mobile Logo
         text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
       square_icon:
-        label: Square Icon (optional)
+        label: Square Icon
         msg: Square icon cannot be empty.
         text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
       favicon:
-        label: Favicon (optional)
+        label: Favicon
         text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
     legal:
       page_title: Legal
@@ -1338,6 +1334,7 @@ ui:
         label: Inicio de sesión requerido
         text: Sólo usuarios con sesión iniciada pueden acceder a esta comunidad.
   form:
+    optional: (optional)
     empty: no puede estar en blanco
     invalid: no es válido
     btn_submit: Guardar
@@ -1387,5 +1384,7 @@ ui:
     staffs: Nuestor equipo de la comunidad
     reputation: reputación
     votes: votos
-
+  prompt:
+    leave_page: "Are you sure you want to leave the page?"
+    changes_not_save: "Your changes may not be saved."
 

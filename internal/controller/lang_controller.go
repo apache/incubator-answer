@@ -41,7 +41,6 @@ func (u *LangController) GetLangMapping(ctx *gin.Context) {
 // @Tags Lang
 // @Produce json
 // @Success 200 {object} handler.RespBody{}
-// @Router /answer/api/v1/language/options [get]
 // @Router /answer/admin/api/language/options [get]
 func (u *LangController) GetAdminLangOptions(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, translator.LanguageOptions)

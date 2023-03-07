@@ -47,7 +47,11 @@ const useReportModal = (callback?: () => void) => {
       setShow(true);
     });
   };
-
+  const asyncCallback = () => {
+    setTimeout(() => {
+      callback?.();
+    });
+  };
   const handleRadio = (val) => {
     setInvalidState(false);
     setContent({
@@ -93,8 +97,8 @@ const useReportModal = (callback?: () => void) => {
         close_type: reportType.type,
         close_msg: content.value,
       }).then(() => {
-        callback?.();
         onClose();
+        asyncCallback();
       });
       return;
     }
@@ -109,8 +113,8 @@ const useReportModal = (callback?: () => void) => {
           msg: t('flag_success', { keyPrefix: 'toast' }),
           variant: 'warning',
         });
-        callback?.();
         onClose();
+        asyncCallback();
       });
     }
 
@@ -121,8 +125,8 @@ const useReportModal = (callback?: () => void) => {
         flagged_type: reportType.type,
         id: params.id,
       }).then(() => {
-        callback?.();
         onClose();
+        asyncCallback();
       });
     }
   };

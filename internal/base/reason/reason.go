@@ -21,6 +21,7 @@ const (
 	QuestionCannotDeleted            = "error.question.cannot_deleted"
 	QuestionCannotClose              = "error.question.cannot_close"
 	QuestionCannotUpdate             = "error.question.cannot_update"
+	QuestionAlreadyDeleted           = "error.question.already_deleted"
 	AnswerNotFound                   = "error.answer.not_found"
 	AnswerCannotDeleted              = "error.answer.cannot_deleted"
 	AnswerCannotUpdate               = "error.answer.cannot_update"
@@ -65,4 +66,6 @@ const (
 	TagCannotSetSynonymAsItself      = "error.tag.cannot_set_synonym_as_itself"
 	NotAllowedRegistration           = "error.user.not_allowed_registration"
 	SMTPConfigFromNameCannotBeEmail  = "error.smtp.config_from_name_cannot_be_email"
+	AdminCannotUpdateTheirPassword   = "error.admin.cannot_update_their_password"
+	AdminCannotModifySelfStatus      = "error.admin.cannot_modify_self_status"
 )

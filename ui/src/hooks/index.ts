@@ -9,6 +9,7 @@ import useUserModal from './useUserModal';
 import useChangePasswordModal from './useChangePasswordModal';
 import usePageTags from './usePageTags';
 import usePromptWithUnload from './usePrompt';
+import useImgViewer from './useImgViewer';
 
 export {
   useTagModal,
@@ -22,4 +23,5 @@ export {
   useChangePasswordModal,
   usePageTags,
   usePromptWithUnload,
+  useImgViewer,
 };

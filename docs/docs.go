@@ -6033,9 +6033,6 @@ const docTemplate = `{
         "schema.GetOtherUserInfoResp": {
             "type": "object",
             "properties": {
-                "has": {
-                    "type": "boolean"
-                },
                 "info": {
                     "$ref": "#/definitions/schema.GetOtherUserInfoByUsernameResp"
                 }
@@ -7737,7 +7734,6 @@ const docTemplate = `{
             ],
             "properties": {
                 "status": {
-                    "description": "user status",
                     "type": "string",
                     "enum": [
                         "normal",
@@ -7747,7 +7743,6 @@ const docTemplate = `{
                     ]
                 },
                 "user_id": {
-                    "description": "user id",
                     "type": "string"
                 }
             }
@@ -8042,6 +8037,10 @@ const docTemplate = `{
             "properties": {
                 "label": {
                     "type": "string"
+                },
+                "progress": {
+                    "description": "Translation completion percentage",
+                    "type": "integer"
                 },
                 "value": {
                     "type": "string"
