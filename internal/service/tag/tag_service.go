@@ -102,7 +102,7 @@ func (ts *TagService) GetTagInfo(ctx context.Context, req *schema.GetTagInfoReq)
 		return nil, err
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.TagNotFound)
+		return nil, errors.NotFound(reason.TagNotFound)
 	}
 
 	resp = &schema.GetTagResp{}
@@ -113,7 +113,7 @@ func (ts *TagService) GetTagInfo(ctx context.Context, req *schema.GetTagInfoReq)
 			return nil, err
 		}
 		if !exist {
-			return nil, errors.BadRequest(reason.TagNotFound)
+			return nil, errors.NotFound(reason.TagNotFound)
 		}
 		resp.MainTagSlugName = tagInfo.SlugName
 	}

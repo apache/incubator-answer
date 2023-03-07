@@ -6,7 +6,7 @@ import {
 import { useTranslation } from 'react-i18next';
 
 // https://gist.github.com/chaance/2f3c14ec2351a175024f62fd6ba64aa6
-// The link above is an example of implementing usePromt with useBlocer.
+// The link above is an example of implementing usePrompt with useBlocker.
 interface PromptProps {
   when: boolean;
   beforeUnload?: boolean;

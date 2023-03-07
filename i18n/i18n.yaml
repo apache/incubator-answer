@@ -1,28 +1,41 @@
 # all support language
 language_options:
-  - label: "English(US)"
+  - label: "English"
     value: "en_US"
-  - label: "Español(ES)"
+    progress: 100
+  - label: "Español"
     value: "es_ES"
+    progress: 0
   - label: "Português(BR)"
     value: "pt_BR"
-  - label: "Português(PT)"
+    progress: 0
+  - label: "Português"
     value: "pt_PT"
-  - label: "Deutsch(DE)"
+    progress: 0
+  - label: "Deutsch"
     value: "de_DE"
-  - label: "Français(FR)"
+    progress: 4
+  - label: "Français"
     value: "fr_FR"
-  - label: "日本語(JA)"
+    progress: 100
+  - label: "日本語"
     value: "ja_JP"
-  - label: "Italiano(IT)"
+    progress: 0
+  - label: "Italiano"
     value: "it_IT"
-  - label: "Русский(RU)"
+    progress: 16
+  - label: "Русский"
     value: "ru_RU"
-  - label: "简体中文(CN)"
+    progress: 13
+  - label: "简体中文"
     value: "zh_CN"
-  - label: "繁體中文(CN)"
+    progress: 100
+  - label: "繁體中文"
     value: "zh_TW"
-  - label: "한국어(KO)"
+    progress: 100
+  - label: "한국어"
     value: "ko_KR"
-  - label: "Tiếng Việt(VI)"
+    progress: 0
+  - label: "Tiếng Việt"
     value: "vi_VN"
+    progress: 0

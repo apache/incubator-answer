@@ -112,14 +112,14 @@ func (qs *QuestionCommon) UpdateLastAnswer(ctx context.Context, questionID, Answ
 	return qs.questionRepo.UpdateLastAnswer(ctx, question)
 }
 
-func (qs *QuestionCommon) UpdataPostTime(ctx context.Context, questionID string) error {
+func (qs *QuestionCommon) UpdatePostTime(ctx context.Context, questionID string) error {
 	questioninfo := &entity.Question{}
 	now := time.Now()
 	questioninfo.ID = questionID
 	questioninfo.PostUpdateTime = now
 	return qs.questionRepo.UpdateQuestion(ctx, questioninfo, []string{"post_update_time"})
 }
-func (qs *QuestionCommon) UpdataPostSetTime(ctx context.Context, questionID string, setTime time.Time) error {
+func (qs *QuestionCommon) UpdatePostSetTime(ctx context.Context, questionID string, setTime time.Time) error {
 	questioninfo := &entity.Question{}
 	questioninfo.ID = questionID
 	questioninfo.PostUpdateTime = setTime
@@ -148,7 +148,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 		return showinfo, err
 	}
 	if !has {
-		return showinfo, errors.BadRequest(reason.QuestionNotFound)
+		return showinfo, errors.NotFound(reason.QuestionNotFound)
 	}
 	showinfo = qs.ShowFormat(ctx, dbinfo)
 
@@ -170,10 +170,11 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 					log.Error("json.Unmarshal QuestionCloseJson error", err.Error())
 				} else {
 					operation := &schema.Operation{}
-					operation.OperationType = closeinfo.Name
-					operation.OperationDescription = closeinfo.Description
-					operation.OperationMsg = closemsg.CloseMsg
-					operation.OperationTime = metainfo.CreatedAt.Unix()
+					operation.Type = closeinfo.Name
+					operation.Description = closeinfo.Description
+					operation.Msg = closemsg.CloseMsg
+					operation.Time = metainfo.CreatedAt.Unix()
+					operation.Level = schema.OperationLevelInfo
 					showinfo.Operation = operation
 				}
 

@@ -63,7 +63,7 @@ export const deriveLoginState = (): TLoginState => {
   return ls;
 };
 
-const isIgnoredPath = (ignoredPath: string | string[]) => {
+export const isIgnoredPath = (ignoredPath: string | string[]) => {
   if (!Array.isArray(ignoredPath)) {
     ignoredPath = [ignoredPath];
   }

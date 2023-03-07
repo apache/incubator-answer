@@ -68,3 +68,11 @@ func (cr *captchaRepo) GetCaptcha(ctx context.Context, key string) (captcha stri
 	}
 	return captcha, nil
 }
+
+func (cr *captchaRepo) DelCaptcha(ctx context.Context, key string) (err error) {
+	err = cr.data.Cache.Del(ctx, key)
+	if err != nil {
+		log.Debug(err)
+	}
+	return nil
+}
