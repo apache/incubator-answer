@@ -2,10 +2,9 @@ package schema
 
 // UpdateUserStatusReq update user request
 type UpdateUserStatusReq struct {
-	// user id
-	UserID string `validate:"required" json:"user_id"`
-	// user status
-	Status string `validate:"required,oneof=normal suspended deleted inactive" json:"status" enums:"normal,suspended,deleted,inactive"`
+	UserID      string `validate:"required" json:"user_id"`
+	Status      string `validate:"required,oneof=normal suspended deleted inactive" json:"status" enums:"normal,suspended,deleted,inactive"`
+	LoginUserID string `json:"-"`
 }
 
 const (

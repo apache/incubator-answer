@@ -35,6 +35,17 @@ func Markdown2HTML(source string) string {
 	return buf.String()
 }
 
+// Markdown2BasicHTML convert markdown to html ,Only basic syntax can be used
+func Markdown2BasicHTML(source string) string {
+	content := Markdown2HTML(source)
+	filter := bluemonday.NewPolicy()
+	filter.AllowElements("p", "b", "br")
+	filter.AllowAttrs("src").OnElements("img")
+	filter.AddSpaceWhenStrippingTag(true)
+	content = filter.Sanitize(content)
+	return content
+}
+
 type DangerousHTMLFilterExtension struct {
 }
 

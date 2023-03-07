@@ -470,6 +470,10 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	if !has {
 		return
 	}
+	if dbinfo.Status == entity.QuestionStatusDeleted {
+		err = errors.BadRequest(reason.QuestionCannotUpdate)
+		return nil, err
+	}
 
 	now := time.Now()
 	question := &entity.Question{}
@@ -614,12 +618,23 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 	if err != nil {
 		return
 	}
+	// If the question is deleted, only the administrator and the author can view it
+	if question.Status == entity.QuestionStatusDeleted && !per.CanReopen && question.UserID != userID {
+		return nil, errors.NotFound(reason.QuestionNotFound)
+	}
 	if question.Status != entity.QuestionStatusClosed {
 		per.CanReopen = false
 	}
 	if question.Status == entity.QuestionStatusClosed {
 		per.CanClose = false
 	}
+	if question.Status == entity.QuestionStatusDeleted {
+		operation := &schema.Operation{}
+		operation.Msg = translator.Tr(handler.GetLangByCtx(ctx), reason.QuestionAlreadyDeleted)
+		operation.Level = schema.OperationLevelDanger
+		question.Operation = operation
+	}
+
 	question.Description = htmltext.FetchExcerpt(question.HTML, "...", 240)
 	question.MemberActions = permission.GetQuestionPermission(ctx, userID, question.UserID,
 		per.CanEdit, per.CanDelete, per.CanClose, per.CanReopen)
@@ -630,7 +645,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 func (qs *QuestionService) GetQuestionAndAddPV(ctx context.Context, questionID, loginUserID string,
 	per schema.QuestionPermission) (
 	resp *schema.QuestionInfo, err error) {
-	err = qs.questioncommon.UpdataPv(ctx, questionID)
+	err = qs.questioncommon.UpdatePv(ctx, questionID)
 	if err != nil {
 		log.Error(err)
 	}

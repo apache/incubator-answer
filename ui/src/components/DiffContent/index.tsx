@@ -69,7 +69,10 @@ const Index: FC<Props> = ({
       {objectType !== 'answer' && opts?.showTitle && (
         <h5
           dangerouslySetInnerHTML={{
-            __html: diffText(newData.title, oldData?.title),
+            __html: diffText(
+              newData.title?.replace(/</gi, '&lt;'),
+              oldData?.title?.replace(/</gi, '&lt;'),
+            ),
           }}
           className="mb-3"
         />

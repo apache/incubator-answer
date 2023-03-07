@@ -238,7 +238,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
     const errors = requiredValidator();
     if (errors.length > 0) {
       formData = errors.reduce((acc, cur) => {
-        console.log('schema.properties[cur]', cur);
         acc[cur] = {
           ...formData[cur],
           isInvalid: true,
