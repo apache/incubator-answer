@@ -5972,9 +5972,6 @@
         "schema.GetOtherUserInfoResp": {
             "type": "object",
             "properties": {
-                "has": {
-                    "type": "boolean"
-                },
                 "info": {
                     "$ref": "#/definitions/schema.GetOtherUserInfoByUsernameResp"
                 }
@@ -7161,6 +7158,9 @@
                 },
                 "theme": {
                     "$ref": "#/definitions/schema.SiteThemeResp"
+                },
+                "version": {
+                    "type": "string"
                 }
             }
         },
@@ -7673,7 +7673,6 @@
             ],
             "properties": {
                 "status": {
-                    "description": "user status",
                     "type": "string",
                     "enum": [
                         "normal",
@@ -7683,7 +7682,6 @@
                     ]
                 },
                 "user_id": {
-                    "description": "user id",
                     "type": "string"
                 }
             }
@@ -7978,6 +7976,10 @@
             "properties": {
                 "label": {
                     "type": "string"
+                },
+                "progress": {
+                    "description": "Translation completion percentage",
+                    "type": "integer"
                 },
                 "value": {
                     "type": "string"

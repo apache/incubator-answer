@@ -47,7 +47,9 @@ export const useTagInfo = ({ id = '', name = '' }) => {
     name = encodeURIComponent(name);
     apiUrl = `/answer/api/v1/tag?name=${name}`;
   }
-  const { data, error } = useSWR<Type.TagInfo>(apiUrl, request.instance.get);
+  const { data, error } = useSWR<Type.TagInfo>(apiUrl, (url) =>
+    request.get(url, { allow404: true }),
+  );
   return {
     data,
     isLoading: !data && !error,

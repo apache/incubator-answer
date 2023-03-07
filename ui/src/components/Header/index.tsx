@@ -70,6 +70,11 @@ const Header: FC = () => {
     window.location.replace(window.location.href);
   };
   const onLoginClick = (evt) => {
+    if (location.pathname === '/users/login') {
+      evt.preventDefault();
+      window.location.reload();
+      return;
+    }
     if (floppyNavigation.shouldProcessLinkClick(evt)) {
       evt.preventDefault();
       floppyNavigation.navigateToLogin((loginPath) => {

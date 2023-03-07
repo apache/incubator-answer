@@ -56,6 +56,7 @@ const Index = () => {
   const { setUsers } = usePageUsers();
   const userInfo = loggedUserInfoStore((state) => state.user);
   const isAuthor = userInfo?.username === question?.user_info?.username;
+  const isAdmin = userInfo?.is_admin;
   const isLogged = Boolean(userInfo?.access_token);
   const { state: locationState } = useLocation();
 
@@ -76,7 +77,22 @@ const Index = () => {
       page_size: 999,
     });
     if (res) {
-      setAnswers(res);
+      res.list = res.list?.filter((v) => {
+        // delete answers pnly show to author and admin and has searchparams aid
+        if (v.status === 10) {
+          if (
+            (v?.user_info.username === userInfo?.username || isAdmin) &&
+            aid === v.id
+          ) {
+            return v;
+          }
+          return null;
+        }
+
+        return v;
+      });
+
+      setAnswers({ ...res, count: res.list.length });
       if (page > 0 || order) {
         // scroll into view;
         const element = document.getElementById('answerHeader');
@@ -183,9 +199,7 @@ const Index = () => {
     <Container className="pt-4 mt-2 mb-5 questionDetailPage">
       <Row className="justify-content-center">
         <Col xxl={7} lg={8} sm={12} className="mb-5 mb-md-0">
-          {question?.operation?.operation_type && (
-            <Alert data={question.operation} />
-          )}
+          {question?.operation?.level && <Alert data={question.operation} />}
           {isLoading ? (
             <ContentLoader />
           ) : (

@@ -488,8 +488,6 @@ definitions:
     type: object
   schema.GetOtherUserInfoResp:
     properties:
-      has:
-        type: boolean
       info:
         $ref: '#/definitions/schema.GetOtherUserInfoByUsernameResp'
     type: object
@@ -1335,6 +1333,8 @@ definitions:
         $ref: '#/definitions/schema.SiteSeoReq'
       theme:
         $ref: '#/definitions/schema.SiteThemeResp'
+      version:
+        type: string
     type: object
   schema.SiteInterfaceReq:
     properties:
@@ -1689,7 +1689,6 @@ definitions:
   schema.UpdateUserStatusReq:
     properties:
       status:
-        description: user status
         enum:
         - normal
         - suspended
@@ -1697,7 +1696,6 @@ definitions:
         - inactive
         type: string
       user_id:
-        description: user id
         type: string
     required:
     - status
@@ -1909,6 +1907,9 @@ definitions:
     properties:
       label:
         type: string
+      progress:
+        description: Translation completion percentage
+        type: integer
       value:
         type: string
     type: object

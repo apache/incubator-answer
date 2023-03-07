@@ -18,7 +18,7 @@ const Index: FC<Props> = ({ visible, introduction, data }) => {
       <h5 className="mb-3">{t('about_me')}</h5>
       {introduction ? (
         <div
-          className="mb-4 text-break"
+          className="mb-4 text-break fmt"
           dangerouslySetInnerHTML={{ __html: introduction }}
         />
       ) : (

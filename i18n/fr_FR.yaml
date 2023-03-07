@@ -107,6 +107,8 @@ backend:
         other: Ne dois pas contenir de tags synonymes.
       cannot_update:
         other: Pas de permission pour mettre à jour.
+      is_used_cannot_delete:
+        other: Vous ne pouvez pas supprimer un tag utilisé
       cannot_set_synonym_as_itself:
         other: Vous ne pouvez pas définir le synonyme de la balise actuelle comme elle-même.
     smtp:
@@ -309,7 +311,7 @@ ui:
             msg:
               empty: Le code ne peut pas être vide.
           language:
-            label: Langue (facultatif)
+            label: Langage
             placeholder: Détection automatique
       btn_cancel: Annuler
       btn_confirm: Ajouter
@@ -345,7 +347,7 @@ ui:
               only_image: Seules les images sont autorisées.
               max_size: La taille du fichier ne doit pas dépasser 4 Mo.
           desc:
-            label: Description (optionnel)
+            label: Description
       tab_url: URL de l'image
       form_url:
         fields:
@@ -354,7 +356,7 @@ ui:
             msg:
               empty: L'URL de l'image ne peut pas être vide.
           name:
-            label: Description (optionnel)
+            label: Description
       btn_cancel: Annuler
       btn_confirm: Ajouter
       uploading: Téléversement en cours
@@ -374,7 +376,7 @@ ui:
             msg:
               empty: L'URL ne peut pas être vide.
           name:
-            label: Description (facultatif)
+            label: Description
       btn_cancel: Annuler
       btn_confirm: Ajouter
     ordered_list:
@@ -422,7 +424,7 @@ ui:
             range: Titre de 35 caractères maximum.
             character: Le slug d'URL contient un jeu de caractères non autorisé.
         desc:
-          label: Description (facultatif)
+          label: Description
     btn_cancel: Annuler
     btn_submit: Valider
   tag_info:
@@ -439,9 +441,11 @@ ui:
     synonyms_text: Les balises suivantes seront remappées en
     delete:
       title: Supprimer cette étiquette
-      content: >-
-        <p>Nous ne permettons pas de supprimer le tag avec les posts.</p><p>Veuillez d'abord supprimer ce tag des posts.</p>
-      content2: Etes-vous sûr de vouloir supprimer ?
+      tip_with_posts: >-
+        <p>Nous ne permettons pas de <strong>supprimer un tag avec des posts.</strong></p><p>Veuillez d'abord supprimer ce tag des posts.</p>
+      tip_with_synonyms: >-
+        <p>Nous ne permettons pas de <strong>supprimer un tag avec des synonymes</strong>.</p> <p>Veuillez d'abord supprimer les synonymes de ce tag.</p>
+      tip: Êtes-vous sûr de vouloir supprimer ?
       close: Fermer
   edit_tag:
     title: Editer le tag
@@ -677,13 +681,13 @@ ui:
         default: Système
         msg: Veuillez charger un avatar
       bio:
-        label: À propos de moi (optionnel)
+        label: À propos de moi
       website:
-        label: Site web (facultatif)
+        label: Site Web
         placeholder: "https://example.com"
         msg: Format du site web incorrect
       location:
-        label: Emplacement (facultatif)
+        label: Position
         placeholder: "Ville, Pays"
     notification:
       heading: Notifications
@@ -1163,11 +1167,11 @@ ui:
         validate: Indiquez une URL valide.
         text: L'adresse de ce site.
       short_desc:
-        label: Description courte (optionnel)
+        label: Description Courte
         msg: La description courte ne peut pas être vide.
         text: "La description courte, telle qu'elle est utilisée dans le tag titre de la page d'accueil."
       desc:
-        label: Description du site (optionnel)
+        label: Description du Site
         msg: La description du site ne peut pas être vide.
         text: "Décrivez ce site en une phrase, telle qu'elle est utilisée dans la balise meta description."
       contact_email:
@@ -1177,14 +1181,6 @@ ui:
         text: L'adresse email du responsable du site.
     interface:
       page_title: Interface
-      logo:
-        label: Logo (optionnel)
-        msg: Le logo ne peut pas être vide.
-        text: Vous pouvez télécharger votre image ou la <1>réinitialiser</1> sur le texte du titre du site.
-      theme:
-        label: Thème
-        msg: Le thème ne peut pas être vide.
-        text: Sélectionne un thème existant.
       language:
         label: Langue de l'interface
         msg: La langue de l'interface ne peut pas être vide.
@@ -1236,18 +1232,18 @@ ui:
     branding:
       page_title: Marque
       logo:
-        label: Logo (optionnel)
+        label: Logo
         msg: Le logo ne peut pas être vide.
         text: L'image du logo en haut à gauche de votre site. Utilisez une grande image rectangulaire avec une hauteur de 56 et un ratio d'aspect supérieur à 3:1. Si laissé vide, le titre du site sera affiché.
       mobile_logo:
-        label: Logo mobile (optionnel)
+        label: Logo Mobile
         text: Le logo utilisé sur la version mobile de votre site. Utilisez une image rectangulaire large avec une hauteur de 56. Si laissé vide, l'image du paramètre « logo » sera utilisée.
       square_icon:
-        label: Icône carrée (optionnel)
+        label: Icône carrée
         msg: L'icône carrée ne peut pas être vide.
         text: Image utilisée comme base pour les icônes de métadonnées. Idéalement supérieure à 512x512.
       favicon:
-        label: Favicon (optionnel)
+        label: Favicon
         text: Une favicon pour votre site. Pour fonctionner correctement sur un CDN, il doit s'agir d'un png. Sera redimensionné en 32x32. Si laissé vide, « icône carrée » sera utilisé.
     legal:
       page_title: Légal
@@ -1313,6 +1309,7 @@ ui:
         label: Connexion requise
         text: Seuls les utilisateurs connectés peuvent accéder à cette communauté.
   form:
+    optional: (optionnel)
     empty: ne peut pas être vide
     invalid: est invalide
     btn_submit: Sauvegarder
@@ -1362,5 +1359,7 @@ ui:
     staffs: Staff de la communauté
     reputation: réputation
     votes: votes
-
+  prompt:
+    leave_page: "Voulez-vous vraiment quitter la page ?"
+    changes_not_save: "Impossible d'enregistrer vos modifications."
 

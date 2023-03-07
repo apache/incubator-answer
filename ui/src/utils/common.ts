@@ -237,7 +237,26 @@ function htmlToReact(html: string) {
   const cleanedHtml = DOMPurify.sanitize(html, {
     USE_PROFILES: { html: true },
   });
-  return parse(cleanedHtml);
+
+  const ele = document.createElement('div');
+  ele.innerHTML = cleanedHtml;
+
+  ele.querySelectorAll('table').forEach((table) => {
+    if (
+      (!table || (table.parentNode as HTMLDivElement))?.classList.contains(
+        'table-responsive',
+      )
+    ) {
+      return;
+    }
+
+    table.classList.add('table', 'table-bordered');
+    const div = document.createElement('div');
+    div.className = 'table-responsive';
+    table.parentNode?.replaceChild(div, table);
+    div.appendChild(table);
+  });
+  return parse(ele.innerHTML);
 }
 
 export {

@@ -8,7 +8,10 @@ export const usePersonalInfoByName = (username: string) => {
   const apiUrl = '/answer/api/v1/personal/user/info';
   const { data, error, mutate } = useSWR<Type.UserInfoRes, Error>(
     username ? `${apiUrl}?username=${username}` : null,
-    request.instance.get,
+    (url) =>
+      request.get(url, {
+        allow404: true,
+      }),
   );
   return {
     data,

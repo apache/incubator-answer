@@ -16,6 +16,7 @@ import (
 type CaptchaRepo interface {
 	SetCaptcha(ctx context.Context, key, captcha string) (err error)
 	GetCaptcha(ctx context.Context, key string) (captcha string, err error)
+	DelCaptcha(ctx context.Context, key string) (err error)
 	SetActionType(ctx context.Context, ip, actionType string, amount int) (err error)
 	GetActionType(ctx context.Context, ip, actionType string) (amount int, err error)
 	DelActionType(ctx context.Context, ip, actionType string) (err error)
@@ -143,6 +144,12 @@ func (cs *CaptchaService) GenerateCaptcha(ctx context.Context) (key, captchaBase
 func (cs *CaptchaService) VerifyCaptcha(ctx context.Context, key, captcha string) (isCorrect bool, err error) {
 	realCaptcha, err := cs.captchaRepo.GetCaptcha(ctx, key)
 	if err != nil {
+		log.Error("VerifyCaptcha GetCaptcha Error", err.Error())
+		return false, nil
+	}
+	err = cs.captchaRepo.DelCaptcha(ctx, key)
+	if err != nil {
+		log.Error("VerifyCaptcha DelCaptcha Error", err.Error())
 		return false, nil
 	}
 	return strings.TrimSpace(captcha) == realCaptcha, nil
