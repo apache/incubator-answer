@@ -107,9 +107,6 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 		if !exist {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
-		if questionInfo.AnswerCount > 1 {
-			return errors.BadRequest(reason.AnswerCannotDeleted)
-		}
 		if questionInfo.AcceptedAnswerID != "" {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
