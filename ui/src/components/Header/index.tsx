@@ -71,6 +71,10 @@ const Header: FC = () => {
   };
   const onLoginClick = (evt) => {
     evt.preventDefault();
+    if (location.pathname === '/users/login') {
+      window.location.reload();
+      return;
+    }
     floppyNavigation.navigateToLogin((loginPath) => {
       navigate(loginPath, { replace: true });
     });

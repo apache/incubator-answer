@@ -171,6 +171,7 @@ export const saveQuestion = (params: Type.QuestionParams) => {
 export const questionDetail = (id: string) => {
   return request.get<Type.QuestionDetailRes>(
     `/answer/api/v1/question/info?id=${id}`,
+    { allow404: true },
   );
 };
 

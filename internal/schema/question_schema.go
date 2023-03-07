@@ -176,11 +176,20 @@ type AdminQuestionInfo struct {
 	UserInfo         *UserBasicInfo `json:"user_info"`
 }
 
+type OperationLevel string
+
+const (
+	OperationLevelInfo    OperationLevel = "info"
+	OperationLevelDanger  OperationLevel = "danger"
+	OperationLevelWarning OperationLevel = "warning"
+)
+
 type Operation struct {
-	OperationType        string `json:"operation_type"`
-	OperationDescription string `json:"operation_description"`
-	OperationMsg         string `json:"operation_msg"`
-	OperationTime        int64  `json:"operation_time"`
+	Type        string         `json:"type"`
+	Description string         `json:"description"`
+	Msg         string         `json:"msg"`
+	Time        int64          `json:"time"`
+	Level       OperationLevel `json:"level"`
 }
 
 type GetCloseTypeResp struct {

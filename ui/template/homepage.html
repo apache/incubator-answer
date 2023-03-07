@@ -3,28 +3,28 @@
                 <div class="justify-content-center row">
                     <div class="col-xxl-7 col-lg-8 col-sm-12">
                         <div class="d-flex flex-column flex-md-row mb-4">
-                            <a href="/users/{{.userinfo.Info.Username}}"><img
-                                    src="{{.userinfo.Info.Avatar}}"
+                            <a href="/users/{{.userinfo.Username}}"><img
+                                    src="{{.userinfo.Avatar}}"
                                     width="160px" height="160px" class="rounded" alt="" /></a>
                             <div class="ms-0 ms-md-4 mt-4 mt-md-0">
                                 <div class="d-flex align-items-center mb-2">
-                                    <a class="link-dark h3 mb-0" href="/users/{{.userinfo.Info.Username}}">{{.userinfo.Info.DisplayName}}</a>
+                                    <a class="link-dark h3 mb-0" href="/users/{{.userinfo.Username}}">{{.userinfo.DisplayName}}</a>
 
                                 </div>
-                                <div class="text-secondary mb-4">@{{.userinfo.Info.Username}}</div>
+                                <div class="text-secondary mb-4">@{{.userinfo.Username}}</div>
                                 <div class="d-flex flex-wrap mb-3">
                                     <div class="me-3">
-                                        <strong class="fs-5">{{.userinfo.Info.Rank}}</strong><span class="text-secondary"> {{translator $.language "ui.personal.x_reputation"}}</span>
+                                        <strong class="fs-5">{{.userinfo.Rank}}</strong><span class="text-secondary"> {{translator $.language "ui.personal.x_reputation"}}</span>
                                     </div>
                                     <div class="me-3">
-                                        <strong class="fs-5">{{.userinfo.Info.AnswerCount}}</strong><span class="text-secondary"> {{translator $.language "ui.personal.x_answers"}}</span>
+                                        <strong class="fs-5">{{.userinfo.AnswerCount}}</strong><span class="text-secondary"> {{translator $.language "ui.personal.x_answers"}}</span>
                                     </div>
                                     <div>
-                                        <strong class="fs-5">{{.userinfo.Info.QuestionCount}}</strong><span class="text-secondary"> {{translator $.language "ui.personal.x_questions"}}</span>
+                                        <strong class="fs-5">{{.userinfo.QuestionCount}}</strong><span class="text-secondary"> {{translator $.language "ui.personal.x_questions"}}</span>
                                     </div>
                                 </div>
-                                {{if .userinfo.Info.Website }}
-                                <div class="d-flex align-items-center"><i class="br bi-house-door-fill me-2"></i><a class="link-secondary" href="{{.userinfo.Info.Website}}">{{.userinfo.Info.Website}}</a></div>
+                                {{if .userinfo.Website }}
+                                <div class="d-flex align-items-center"><i class="br bi-house-door-fill me-2"></i><a class="link-secondary" href="{{.userinfo.Website}}">{{.userinfo.Website}}</a></div>
                                 {{else}}
                                 {{end}}
                                 <div class="d-flex text-secondary"></div>
