@@ -49,6 +49,7 @@ func NewTranslator(c *I18n) (tr i18n.Translator, err error) {
 		if filepath.Ext(file.Name()) != ".yaml" && file.Name() != "i18n.yaml" {
 			continue
 		}
+		log.Debugf("try to read file: %s", file.Name())
 		buf, err := os.ReadFile(filepath.Join(c.BundleDir, file.Name()))
 		if err != nil {
 			return nil, fmt.Errorf("read file failed: %s %s", file.Name(), err)
