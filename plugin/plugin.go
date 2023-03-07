@@ -73,6 +73,11 @@ func MakePlugin[T Base](super bool) (CallFn[T], RegisterFn[T]) {
 	}
 
 	register := func(p T) {
+		for _, plugin := range stack.plugins {
+			if plugin.Info().SlugName == p.Info().SlugName {
+				panic("plugin " + p.Info().SlugName + " is already registered")
+			}
+		}
 		stack.plugins = append(stack.plugins, p)
 	}
 
