@@ -73,6 +73,7 @@ func (as *AnswerCommon) ShowFormat(ctx context.Context, data *entity.Answer) *sc
 	}
 	info.UserID = data.UserID
 	info.UpdateUserID = data.LastEditUserID
+	info.Status = data.Status
 	return &info
 }
 

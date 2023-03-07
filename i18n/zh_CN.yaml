@@ -1,4 +1,5 @@
 #The following fields are used for back-end
+
 backend:
   base:
     success:
@@ -80,6 +81,8 @@ backend:
       new_password_same_as_previous_setting:
         other: 新密码与之前的设置相同
     question:
+      already_deleted:
+        other: 该内容已被删除
       not_found:
         other: 问题未找到
       cannot_deleted:

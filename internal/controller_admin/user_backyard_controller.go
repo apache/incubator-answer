@@ -34,6 +34,8 @@ func (uc *UserAdminController) UpdateUserStatus(ctx *gin.Context) {
 		return
 	}
 
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+
 	err := uc.userService.UpdateUserStatus(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }

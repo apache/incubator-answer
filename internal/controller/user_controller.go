@@ -157,7 +157,7 @@ func (uc *UserController) RetrievePassWord(ctx *gin.Context) {
 		return
 	}
 	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP())
-	_, err := uc.userService.RetrievePassWord(ctx, req)
+	err := uc.userService.RetrievePassWord(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -203,6 +203,7 @@ func (uc *UserController) UserLogout(ctx *gin.Context) {
 		return
 	}
 	_ = uc.authService.RemoveUserCacheInfo(ctx, accessToken)
+	_ = uc.authService.RemoveAdminUserCacheInfo(ctx, accessToken)
 	handler.HandleResponse(ctx, nil, nil)
 }
 

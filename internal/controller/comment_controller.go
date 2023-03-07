@@ -112,6 +112,18 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
+	canList, err := cc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.CommentAdd,
+		permission.CommentEdit,
+		permission.CommentDelete,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	req.CanAdd = canList[0]
+	req.CanEdit = canList[1]
+	req.CanDelete = canList[2]
 	can, err := cc.rankService.CheckOperationPermission(ctx, req.UserID, permission.CommentEdit, req.CommentID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -122,8 +134,8 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 		return
 	}
 
-	err = cc.commentService.UpdateComment(ctx, req)
-	handler.HandleResponse(ctx, err, nil)
+	resp, err := cc.commentService.UpdateComment(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
 // GetCommentWithPage get comment page

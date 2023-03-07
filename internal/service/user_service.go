@@ -86,19 +86,17 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 }
 
 func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username string) (
-	resp *schema.GetOtherUserInfoResp, err error,
+	resp *schema.GetOtherUserInfoByUsernameResp, err error,
 ) {
 	userInfo, exist, err := us.userRepo.GetByUsername(ctx, username)
 	if err != nil {
 		return nil, err
 	}
-	resp = &schema.GetOtherUserInfoResp{}
 	if !exist {
-		return resp, nil
+		return nil, errors.NotFound(reason.UserNotFound)
 	}
-	resp.Has = true
-	resp.Info = &schema.GetOtherUserInfoByUsernameResp{}
-	resp.Info.GetFromUserEntity(userInfo)
+	resp = &schema.GetOtherUserInfoByUsernameResp{}
+	resp.GetFromUserEntity(userInfo)
 	return resp, nil
 }
 
@@ -149,13 +147,13 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 }
 
 // RetrievePassWord .
-func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRetrievePassWordRequest) (string, error) {
+func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRetrievePassWordRequest) error {
 	userInfo, has, err := us.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil {
-		return "", err
+		return err
 	}
 	if !has {
-		return "", errors.BadRequest(reason.UserNotFound)
+		return nil
 	}
 
 	// send email
@@ -167,10 +165,10 @@ func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRet
 	verifyEmailURL := fmt.Sprintf("%s/users/password-reset?code=%s", us.getSiteUrl(ctx), code)
 	title, body, err := us.emailService.PassResetTemplate(ctx, verifyEmailURL)
 	if err != nil {
-		return "", err
+		return err
 	}
 	go us.emailService.SendAndSaveCode(ctx, req.Email, title, body, code, data.ToJSONString())
-	return code, nil
+	return nil
 }
 
 // UseRePassword
