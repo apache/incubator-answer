@@ -136,6 +136,24 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 		handler.HandleResponse(ctx, nil, nil)
 		return
 	}
+
+	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.AnswerEdit,
+		permission.AnswerDelete,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+
+	objectOwner := ac.rankService.CheckOperationObjectOwner(ctx, req.UserID, info.ID)
+	req.CanEdit = canList[0] || objectOwner
+	req.CanDelete = canList[1] || objectOwner
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+	info.MemberActions = permission.GetAnswerPermission(ctx, req.UserID, info.UserID, req.CanEdit, req.CanDelete)
 	handler.HandleResponse(ctx, nil, gin.H{
 		"info":     info,
 		"question": questionInfo,
