@@ -70,14 +70,17 @@ const Header: FC = () => {
     window.location.replace(window.location.href);
   };
   const onLoginClick = (evt) => {
-    evt.preventDefault();
     if (location.pathname === '/users/login') {
+      evt.preventDefault();
       window.location.reload();
       return;
     }
-    floppyNavigation.navigateToLogin((loginPath) => {
-      navigate(loginPath, { replace: true });
-    });
+    if (floppyNavigation.shouldProcessLinkClick(evt)) {
+      evt.preventDefault();
+      floppyNavigation.navigateToLogin((loginPath) => {
+        navigate(loginPath, { replace: true });
+      });
+    }
   };
 
   useEffect(() => {

@@ -7,10 +7,14 @@ import {
   FormDataType,
   AdminSettingsInterface,
 } from '@/common/interface';
-import { interfaceStore } from '@/stores';
+import { interfaceStore, loggedUserInfoStore } from '@/stores';
 import { JSONSchema, SchemaForm, UISchema } from '@/components';
-import { DEFAULT_TIMEZONE } from '@/common/constants';
-import { updateInterfaceSetting, useInterfaceSetting } from '@/services';
+import { DEFAULT_TIMEZONE, SYSTEM_AVATAR_OPTIONS } from '@/common/constants';
+import {
+  updateInterfaceSetting,
+  useInterfaceSetting,
+  getLoggedUserInfo,
+} from '@/services';
 import {
   setupAppLanguage,
   loadLanguageOptions,
@@ -42,6 +46,13 @@ const Interface: FC = () => {
         title: t('time_zone.label'),
         description: t('time_zone.text'),
       },
+      default_avatar: {
+        type: 'string',
+        title: t('avatar.label'),
+        description: t('avatar.text'),
+        enum: SYSTEM_AVATAR_OPTIONS?.map((v) => v.value),
+        enumNames: SYSTEM_AVATAR_OPTIONS?.map((v) => v.label),
+      },
     },
   };
 
@@ -56,6 +67,11 @@ const Interface: FC = () => {
       isInvalid: false,
       errorMsg: '',
     },
+    default_avatar: {
+      value: setting?.default_avatar || 'System',
+      isInvalid: false,
+      errorMsg: '',
+    },
   });
 
   const uiSchema: UISchema = {
@@ -64,6 +80,9 @@ const Interface: FC = () => {
     },
     time_zone: {
       'ui:widget': 'timezone',
+    },
+    default_avatar: {
+      'ui:widget': 'select',
     },
   };
   const getLangs = async () => {
@@ -97,6 +116,7 @@ const Interface: FC = () => {
     const reqParams: AdminSettingsInterface = {
       language: formData.language.value,
       time_zone: formData.time_zone.value,
+      default_avatar: formData.default_avatar.value,
     };
 
     updateInterfaceSetting(reqParams)
@@ -104,6 +124,9 @@ const Interface: FC = () => {
         interfaceStore.getState().update(reqParams);
         setupAppLanguage();
         setupAppTimeZone();
+        getLoggedUserInfo().then((info) => {
+          loggedUserInfoStore.getState().update(info);
+        });
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',

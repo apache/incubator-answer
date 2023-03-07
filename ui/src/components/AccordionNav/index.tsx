@@ -5,6 +5,7 @@ import { useNavigate, useMatch } from 'react-router-dom';
 
 import classNames from 'classnames';
 
+import { floppyNavigation } from '@/utils';
 import { Icon } from '@/components';
 import './index.css';
 
@@ -101,10 +102,12 @@ const AccordionNav: FC<AccordionProps> = ({ menus = [], path = '/' }) => {
 
   const [openKey, setOpenKey] = useState(getOpenKey());
   const menuClick = (evt, menu, href, isLeaf) => {
-    evt.preventDefault();
     evt.stopPropagation();
     if (isLeaf) {
-      navigate(href);
+      if (floppyNavigation.shouldProcessLinkClick(evt)) {
+        evt.preventDefault();
+        navigate(href);
+      }
     } else {
       setOpenKey(openKey === menu.name ? '' : menu.name);
     }

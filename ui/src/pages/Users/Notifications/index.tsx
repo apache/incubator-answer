@@ -10,6 +10,7 @@ import {
   clearNotificationStatus,
   readNotification,
 } from '@/services';
+import { floppyNavigation } from '@/utils';
 
 import Inbox from './components/Inbox';
 import Achievements from './components/Achievements';
@@ -45,6 +46,9 @@ const Notifications = () => {
   const navigate = useNavigate();
 
   const handleTypeChange = (evt, val) => {
+    if (!floppyNavigation.shouldProcessLinkClick(evt)) {
+      return;
+    }
     evt.preventDefault();
     if (type === val) {
       return;

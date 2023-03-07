@@ -12,6 +12,7 @@ const interfaceSetting = create<InterfaceType>((set) => ({
   interface: {
     language: DEFAULT_LANG,
     time_zone: '',
+    default_avatar: 'system',
   },
   update: (params) =>
     set(() => {

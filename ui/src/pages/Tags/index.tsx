@@ -1,6 +1,14 @@
 import { useState } from 'react';
-import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
-import { useSearchParams } from 'react-router-dom';
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Button,
+  Form,
+  Stack,
+} from 'react-bootstrap';
+import { useSearchParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
@@ -8,6 +16,7 @@ import { Tag, Pagination, QueryGroup, TagsLoader } from '@/components';
 import { formatCount } from '@/utils';
 import { tryNormalLogged } from '@/utils/guard';
 import { useQueryTags, following } from '@/services';
+import { loggedUserInfoStore } from '@/stores';
 
 const sortBtns = ['popular', 'name', 'newest'];
 
@@ -15,6 +24,7 @@ const Tags = () => {
   const [urlSearch] = useSearchParams();
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
   const [searchTag, setSearchTag] = useState('');
+  const { role_id } = loggedUserInfoStore((_) => _.user);
 
   const page = Number(urlSearch.get('page')) || 1;
   const sort = urlSearch.get('sort');
@@ -55,17 +65,26 @@ const Tags = () => {
         <Col xxl={10} sm={12}>
           <h3 className="mb-4">{t('title')}</h3>
           <div className="d-flex justify-content-between align-items-center flex-wrap">
-            <Form>
-              <Form.Group controlId="formBasicEmail">
-                <Form.Control
-                  value={searchTag}
-                  placeholder={t('search_placeholder')}
-                  type="text"
-                  onChange={handleChange}
-                  size="sm"
-                />
-              </Form.Group>
-            </Form>
+            <Stack direction="horizontal" gap={3}>
+              <Form>
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Control
+                    value={searchTag}
+                    placeholder={t('search_placeholder')}
+                    type="text"
+                    onChange={handleChange}
+                    size="sm"
+                  />
+                </Form.Group>
+              </Form>
+              {role_id === 2 || role_id === 3 ? (
+                <Link
+                  className="btn btn-outline-primary btn-sm"
+                  to="/tags/create">
+                  {t('title', { keyPrefix: 'tag_modal' })}
+                </Link>
+              ) : null}
+            </Stack>
             <QueryGroup
               data={sortBtns}
               currentSort={sort || 'popular'}
