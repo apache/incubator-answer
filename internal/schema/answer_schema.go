@@ -25,6 +25,8 @@ type AnswerAddReq struct {
 	Content    string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
 	HTML       string `json:"-"`
 	UserID     string `json:"-"`
+	CanEdit    bool   `json:"-"`
+	CanDelete  bool   `json:"-"`
 }
 
 func (req *AnswerAddReq) Check() (errFields []*validator.FormErrorField, err error) {
