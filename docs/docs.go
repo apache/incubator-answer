@@ -7173,6 +7173,9 @@ const docTemplate = `{
                 },
                 "theme": {
                     "$ref": "#/definitions/schema.SiteThemeResp"
+                },
+                "version": {
+                    "type": "string"
                 }
             }
         },
