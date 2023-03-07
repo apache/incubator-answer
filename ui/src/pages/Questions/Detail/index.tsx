@@ -56,7 +56,7 @@ const Index = () => {
   const { setUsers } = usePageUsers();
   const userInfo = loggedUserInfoStore((state) => state.user);
   const isAuthor = userInfo?.username === question?.user_info?.username;
-  const isAdmin = userInfo?.is_admin;
+  const isAdmin = userInfo?.role_id === 2;
   const isLogged = Boolean(userInfo?.access_token);
   const { state: locationState } = useLocation();
 
