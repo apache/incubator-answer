@@ -442,9 +442,9 @@ ui:
     delete:
       title: 删除标签
       tip_with_posts: >-
-        <p>We do not allowed <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
+        <p>我们不允许 <strong>删除带有同义词的标签</strong>。</p> <p>请先从此标签中删除同义词。</p>
       tip_with_synonyms: >-
-        <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
+        <p>我们不允许 <strong>删除带有同义词的标签</strong>。</p> <p>请先从此标签中删除同义词。</p>
       tip: 确定要删除吗？
       close: 关闭
   edit_tag:
@@ -486,7 +486,7 @@ ui:
     btn_flag: 举报
     btn_save_edits: 保存
     btn_cancel: 取消
-    show_more: Show more comments
+    show_more: 显示更多评论
     tip_question: >-
       使用评论提问更多信息或者提出改进意见。尽量避免使用评论功能回答问题。
     tip_answer: >-
@@ -626,7 +626,7 @@ ui:
       msg:
         empty: 邮箱不能为空
   change_email:
-    page_title: Welcome to {{site_name}}
+    page_title: 欢迎来到 {{site_name}}
     btn_cancel: 取消
     btn_update: 更新电子邮件地址
     send_success: >-
@@ -755,7 +755,7 @@ ui:
       confirm_info: >-
         <p>您确定要提交一个新的回答吗？</p><p>您可以直接编辑和改善您之前的回答的。</p>
       empty: 回答内容不能为空。
-      characters: content must be at least 6 characters in length.
+      characters: 内容长度至少 6 个字符
     reopen:
       title: 重新打开这个帖子
       content: 确定要重新打开吗？
@@ -816,7 +816,7 @@ ui:
   modal_confirm:
     title: 发生错误...
   account_result:
-    page_title: Welcome to {{site_name}}
+    page_title: 欢迎来到 {{site_name}}
     success: 你的账号已通过验证，即将返回首页。
     link: 返回首页
     invalid: >-
@@ -827,7 +827,7 @@ ui:
   unsubscribe:
     page_title: 退订
     success_title: 取消订阅成功
-    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
+    success_desc: 您已成功地从此订阅者列表中移除，并且将不会再收到我们的任何电子邮件。
     link: 更改设置
   question:
     following_tags: 已关注的标签
@@ -889,7 +889,7 @@ ui:
     title: Answer
     next: 下一步
     done: 完成
-    config_yaml_error: Can't create the config.yaml file.
+    config_yaml_error: 无法创建 config.yaml 文件。
     lang:
       label: 请选择一种语言
     db_type:
@@ -919,7 +919,7 @@ ui:
       label: 已创建 config.yaml 文件。
       desc: >-
         您可以手动在 <1>/var/wwww/xxx/</1> 目录中创建<1>config.yaml</1> 文件并粘贴以下文本。
-      info: After you've done that, click "Next" button.
+      info: 完成后，点击“下一步”按钮。
     site_information: 站点信息
     admin_account: 管理员账户
     site_name:
@@ -964,12 +964,12 @@ ui:
       您似乎已经安装过了。要重新安装，请先清除旧的数据库表。
     db_failed: 数据连接异常！
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+      这或者意味着数据库信息在 <1>config.yaml</1> 文件不正确，或者无法与数据库服务器建立联系。这可能意味着您的主机数据库服务器已关闭。
   counts:
-    views: views
-    votes: votes
-    answers: answers
-    accepted: Accepted
+    views: 次浏览
+    votes: 个点赞
+    answers: 个回答
+    accepted: 已被采纳
   page_404:
     desc: "很抱歉，此页面不存在。"
     back_home: 回到主页
@@ -977,7 +977,7 @@ ui:
     desc: 服务器遇到了一个错误，无法完成你的请求。
     back_home: 回到主页
   page_maintenance:
-    desc: "We are under maintenance, we'll be back soon."
+    desc: "我们正在进行维护，我们将很快回来。"
   nav_menus:
     dashboard: 后台管理
     contents: 内容管理
@@ -1111,7 +1111,7 @@ ui:
             password:
               label: 密码
               text: 用户将被注销，需要再次登录。
-              msg: Password must be at 8-32 characters in length.
+              msg: 密码的长度必须是8-32个字符。
         btn_cancel: 取消
         btn_submit: 提交
       user_modal:
@@ -1120,13 +1120,13 @@ ui:
           fields:
             display_name:
               label: 昵称
-              msg: Display Name must be at 3-30 characters in length.
+              msg: 显示名称长度必须为 3-30 个字符
             email:
               label: 邮箱
               msg: 电子邮箱无效。
             password:
               label: 密码
-              msg: Password must be at 8-32 characters in length.
+              msg: 密码的长度必须是8-32个字符。
         btn_cancel: 取消
         btn_submit: 提交
     questions:
@@ -1167,11 +1167,11 @@ ui:
         validate: 请输入一个有效的 URL。
         text: 此网站的地址。
       short_desc:
-        label: Short Site Description
+        label: 简短站点描述
         msg: 简短网站描述不能为空。
         text: "简短的标语，作为网站主页的标题（Html 的 title 标签）。"
       desc:
-        label: Site Description
+        label: 站点描述
         msg: 网站描述不能为空。
         text: "使用一句话描述本站，作为网站的描述（Html 的 meta 标签）。"
       contact_email:
@@ -1232,19 +1232,19 @@ ui:
     branding:
       page_title: 品牌
       logo:
-        label: Logo
+        label: 网站标志(Logo)
         msg: 图标不能为空。
         text: 在你的网站左上方的Logo图标。使用一个高度为56，长宽比大于3:1的宽长方形图像。如果留空，将显示网站标题文本。
       mobile_logo:
-        label: 移动端图标
-        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
+        label: 移动端 Logo
+        text: 在你的网站的移动版上使用的标志。使用一个高度为56的宽矩形图像。如果留空，将使用 "Logo"设置中的图像。
       square_icon:
-        label: Square Icon
+        label: 方形图标
         msg: 方形图标不能为空。
         text: 用作元数据图标的基础的图像。最好是大于512x512。
       favicon:
         label: 收藏夹图标
-        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
+        text: 网站的图标。要在 CDN 正常工作，它必须是 png。 将调整大小到32x32。如果留空，将使用“方形图标”。
     legal:
       page_title: 法律条款
       terms_of_service:
@@ -1309,7 +1309,7 @@ ui:
         label: 需要登录
         text: 只有登录用户才能访问这个社区。
   form:
-    optional: (optional)
+    optional: (选填)
     empty: 不能为空
     invalid: 是无效的
     btn_submit: 保存
@@ -1360,6 +1360,6 @@ ui:
     reputation: 声望值
     votes: 投票
   prompt:
-    leave_page: "Are you sure you want to leave the page?"
-    changes_not_save: "Your changes may not be saved."
+    leave_page: "确定要离开此页面？"
+    changes_not_save: "您的更改尚未保存"
 

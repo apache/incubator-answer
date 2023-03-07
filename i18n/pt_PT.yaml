@@ -14,155 +14,155 @@ backend:
   role:
     name:
       user:
-        other: User
+        other: Usuário
       admin:
-        other: Admin
+        other: Administrador
       moderator:
-        other: Moderator
+        other: Moderador
     description:
       user:
-        other: Default with no special access.
+        other: Padrão sem acesso especial.
       admin:
-        other: Have the full power to access the site.
+        other: Possui acesso total ao site.
       moderator:
-        other: Has access to all posts except admin settings.
+        other: Possui acesso a todas as postagens exceto às configurações de usuários.
   email:
-    other: Email
+    other: E-mail
   password:
-    other: Password
+    other: Senha
   email_or_password_wrong_error:
-    other: Email and password do not match.
+    other: O e-mail e a palavra-passe não coincidem.
   error:
     admin:
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: O e-mail e a palavra-passe não coincidem.
     answer:
       not_found:
-        other: Answer do not found.
+        other: Resposta não encontrada.
       cannot_deleted:
-        other: No permission to delete.
+        other: Sem permissão para remover.
       cannot_update:
-        other: No permission to update.
+        other: Sem permissão para atualizar.
     comment:
       edit_without_permission:
-        other: Comment are not allowed to edit.
+        other: Não é possível alterar comentários.
       not_found:
-        other: Comment not found.
+        other: Comentário não encontrado.
       cannot_edit_after_deadline:
-        other: The comment time has been too long to modify.
+        other: O tempo do comentário foi muito longo para ser modificado.
     email:
       duplicate:
-        other: Email already exists.
+        other: O e-mail já existe.
       need_to_be_verified:
-        other: Email should be verified.
+        other: O e-mail deve ser verificado.
       verify_url_expired:
-        other: Email verified URL has expired, please resend the email.
+        other: O e-mail verificado URL expirou, por favor, reenvie o e-mail.
     lang:
       not_found:
-        other: Language file not found.
+        other: Arquivo de idioma não encontrado.
     object:
       captcha_verification_failed:
-        other: Captcha wrong.
+        other: O Captcha está incorreto.
       disallow_follow:
-        other: You are not allowed to follow.
+        other: Você não possui autorização suficiente para seguir.
       disallow_vote:
-        other: You are not allowed to vote.
+        other: Você não possui permissão para votar.
       disallow_vote_your_self:
-        other: You can't vote for your own post.
+        other: Você não pode votar na sua própria postagem.
       not_found:
-        other: Object not found.
+        other: Objeto não encontrado.
       verification_failed:
-        other: Verification failed.
+        other: A verificação falhou.
       email_or_password_incorrect:
-        other: Email and password do not match.
+        other: O e-mail e a senha não correspondem.
       old_password_verification_failed:
-        other: The old password verification failed
+        other: Falha na verificação de senha antiga
       new_password_same_as_previous_setting:
-        other: The new password is the same as the previous one.
+        other: A nova senha é a mesma que a anterior.
     question:
       not_found:
-        other: Question not found.
+        other: Pergunta não encontrada.
       cannot_deleted:
-        other: No permission to delete.
+        other: Sem permissão para remover.
       cannot_close:
-        other: No permission to close.
+        other: Sem permissão para fechar.
       cannot_update:
-        other: No permission to update.
+        other: Sem permissão para atualizar.
     rank:
       fail_to_meet_the_condition:
-        other: Rank fail to meet the condition.
+        other: O nível não consegue satisfazer a condição.
     report:
       handle_failed:
-        other: Report handle failed.
+        other: Falha ao manusear relatório.
       not_found:
-        other: Report not found.
+        other: Relatório não encontrado.
     tag:
       not_found:
-        other: Tag not found.
+        other: Marcador não encontrado.
       recommend_tag_not_found:
-        other: Recommend Tag is not exist.
+        other: O marcador recomendado não existe.
       recommend_tag_enter:
-        other: Please enter at least one required tag.
+        other: Por favor, insira pelo menos um marcador obrigatório.
       not_contain_synonym_tags:
-        other: Should not contain synonym tags.
+        other: Não deve conter marcadores sinónimos.
       cannot_update:
-        other: No permission to update.
+        other: Sem permissão para atualizar.
       is_used_cannot_delete:
-        other: You cannot delete a tag that is in use
+        other: Não é possível excluir um marcador em uso
       cannot_set_synonym_as_itself:
-        other: You cannot set the synonym of the current tag as itself.
+        other: Você não pode definir o sinônimo do marcador atual como a si mesmo.
     smtp:
       config_from_name_cannot_be_email:
-        other: The From Name cannot be a email address.
+        other: Nome do remetente não pode ser um endereço de e-mail.
     theme:
       not_found:
-        other: Theme not found.
+        other: Tema não encontrado.
     revision:
       review_underway:
-        other: Can't edit currently, there is a version in the review queue.
+        other: Não é possível neste momento, há uma versão na fila de análise.
       no_permission:
-        other: No permission to Revision.
+        other: Sem permissão para realizar Revisão.
     user:
       email_or_password_wrong:
         other:
-          other: Email and password do not match.
+          other: O e-mail e a senha não conferem.
       not_found:
-        other: User not found.
+        other: Usuário não encontrado.
       suspended:
-        other: User has been suspended.
+        other: O usuário foi suspenso.
       username_invalid:
-        other: Username is invalid.
+        other: Nome de usuário inválido.
       username_duplicate:
-        other: Username is already in use.
+        other: O nome de usuário já em uso.
       set_avatar:
-        other: Avatar set failed.
+        other: Configuração de avatar falhou.
       cannot_update_your_role:
-        other: You cannot modify your role.
+        other: Você não pode modificar a sua função.
       not_allowed_registration:
-        other: Currently the site is not open for registration
+        other: O site não está aberto para novos registros
     config:
       read_config_failed:
-        other: Read config failed
+        other: Falha ao ler configuração
     database:
       connection_failed:
-        other: Database connection failed
+        other: Falha ao conectar-se ao banco de dados
       create_table_failed:
-        other: Create table failed
+        other: Falha ao criar tabela
     install:
       create_config_failed:
-        other: Can't create the config.yaml file.
+        other: Não foi possível criar o arquivo de configuração.
     upload:
       unsupported_file_format:
-        other: Unsupported file format.
+        other: Formato de arquivo não suportado.
   report:
     spam:
       name:
         other: spam
       desc:
-        other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
+        other: Essa postagem é um anúncio, ou vandalismo. Não é útil ou relevante para o tópico atual.
     rude:
       name:
-        other: rude or abusive
+        other: rude ou abusivo
       desc:
         other: A reasonable person would find this content inappropriate for respectful discourse.
     duplicate:
@@ -264,73 +264,73 @@ ui:
     settings: Settings
     notifications: Notifications
     login: Log In
-    sign_up: Sign Up
-    account_recovery: Account Recovery
-    account_activation: Account Activation
-    confirm_email: Confirm Email
-    account_suspended: Account Suspended
-    admin: Admin
-    change_email: Modify Email
-    install: Answer Installation
-    upgrade: Answer Upgrade
-    maintenance: Website Maintenance
-    users: Users
+    sign_up: Registar-se
+    account_recovery: Recuperação de conta
+    account_activation: Ativação de conta
+    confirm_email: Confirmar E-mail
+    account_suspended: Conta suspensa
+    admin: Administrador
+    change_email: Modificar e-mail
+    install: Instalação do Answer
+    upgrade: Atualização do Answer
+    maintenance: Manutenção do website
+    users: Usuários
   notifications:
-    title: Notifications
-    inbox: Inbox
-    achievement: Achievements
-    all_read: Mark all as read
-    show_more: Show more
+    title: Notificações
+    inbox: Caixa de entrada
+    achievement: Conquistas
+    all_read: Marcar todos como lida
+    show_more: Mostrar mais
   suspended:
-    title: Your Account has been Suspended
-    until_time: "Your account was suspended until {{ time }}."
-    forever: This user was suspended forever.
-    end: You don't meet a community guideline.
+    title: A sua conta foi suspensa
+    until_time: "Sua conta está suspensa até {{ time }}."
+    forever: Este usuário foi suspenso permanentemente.
+    end: Você não atende a uma diretriz da comunidade.
   editor:
     blockquote:
-      text: Blockquote
+      text: Bloco de citação
     bold:
-      text: Strong
+      text: Negrito
     chart:
-      text: Chart
-      flow_chart: Flow chart
-      sequence_diagram: Sequence diagram
-      class_diagram: Class diagram
-      state_diagram: State diagram
-      entity_relationship_diagram: Entity relationship diagram
-      user_defined_diagram: User defined diagram
-      gantt_chart: Gantt chart
-      pie_chart: Pie chart
+      text: Gráfico
+      flow_chart: Gráfico de fluxo
+      sequence_diagram: Diagrama de sequência
+      class_diagram: Diagrama de classe
+      state_diagram: Diagrama de estado
+      entity_relationship_diagram: Diagrama de relacionamento de entidade
+      user_defined_diagram: Diagrama definido pelo usuário
+      gantt_chart: Gráfico de Gantt
+      pie_chart: Gráfico de pizza
     code:
-      text: Code Sample
-      add_code: Add code sample
+      text: Exemplo de código
+      add_code: Adicionar exemplo de código
       form:
         fields:
           code:
-            label: Code
+            label: Código
             msg:
-              empty: Code cannot be empty.
+              empty: Código não pode ser vazio.
           language:
-            label: Language
-            placeholder: Automatic detection
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: Idioma
+            placeholder: Deteção automática
+      btn_cancel: Cancelar
+      btn_confirm: Adicionar
     formula:
-      text: Formula
+      text: Fórmula
       options:
-        inline: Inline formula
-        block: Block formula
+        inline: Fórmula na linha
+        block: Bloco de fórmula
     heading:
-      text: Heading
+      text: Cabeçalho
       options:
-        h1: Heading 1
-        h2: Heading 2
-        h3: Heading 3
-        h4: Heading 4
-        h5: Heading 5
-        h6: Heading 6
+        h1: Cabeçalho 1
+        h2: Cabeçalho 2
+        h3: Cabeçalho 3
+        h4: Cabeçalho 4
+        h5: Cabeçalho 5
+        h6: Cabeçalho 6
     help:
-      text: Help
+      text: Ajuda
     hr:
       text: Horizontal Rule
     image:
