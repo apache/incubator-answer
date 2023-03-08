@@ -92,19 +92,14 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 		if answerInfo.Accepted == schema.AnswerAcceptedEnable {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
-		questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
+		_, exist, err := as.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
 		if err != nil {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
 		if !exist {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
-		if questionInfo.AnswerCount > 1 {
-			return errors.BadRequest(reason.AnswerCannotDeleted)
-		}
-		if questionInfo.AcceptedAnswerID != "" {
-			return errors.BadRequest(reason.AnswerCannotDeleted)
-		}
+
 	}
 
 	// user add question count
