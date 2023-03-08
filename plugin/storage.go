@@ -8,6 +8,24 @@ const (
 	AdminBranding UploadSource = "admin_branding"
 )
 
+var (
+	DefaultFileTypeCheckMapping = map[UploadSource]map[string]bool{
+		UserAvatar: {
+			".jpg":  true,
+			".jpeg": true,
+			".png":  true,
+		},
+		UserPost: {
+			".jpg":  true,
+			".jpeg": true,
+			".png":  true,
+		},
+		AdminBranding: {
+			".ico": true,
+		},
+	}
+)
+
 type UploadFileResponse struct {
 	// FullURL is the URL that can be used to access the file
 	FullURL string
