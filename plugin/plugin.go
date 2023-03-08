@@ -40,6 +40,10 @@ func Register(p Base) {
 	if _, ok := p.(Filter); ok {
 		registerFilter(p.(Filter))
 	}
+
+	if _, ok := p.(Storage); ok {
+		registerStorage(p.(Storage))
+	}
 }
 
 type Stack[T Base] struct {
