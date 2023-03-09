@@ -26,6 +26,7 @@ import (
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/htmltext"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/i18n"
@@ -719,12 +720,13 @@ func (qs *QuestionService) SearchUserAnswerList(ctx context.Context, userName, o
 	for _, item := range answerList {
 		answerinfo := qs.questioncommon.AnswerCommon.ShowFormat(ctx, item)
 		answerlist = append(answerlist, answerinfo)
-		questionIDs = append(questionIDs, item.QuestionID)
+		questionIDs = append(questionIDs, uid.DeShortID(item.QuestionID))
 	}
 	questionMaps, err := qs.questioncommon.FindInfoByID(ctx, questionIDs, loginUserID)
 	if err != nil {
 		return userAnswerlist, count, err
 	}
+
 	for _, item := range answerlist {
 		_, ok := questionMaps[item.QuestionID]
 		if ok {
