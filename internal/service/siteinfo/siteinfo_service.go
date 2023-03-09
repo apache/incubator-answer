@@ -12,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -280,5 +281,11 @@ func (s *SiteInfoService) SaveSeo(ctx context.Context, req schema.SiteSeoReq) (e
 	}
 
 	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
+	if err != nil {
+		return
+	}
+	if req.PermaLink == schema.PermaLinkQuestionIDAndTitleByShortID || req.PermaLink == schema.PermaLinkQuestionIDByShortID {
+		uid.ShortIDSwitch = true
+	}
 	return
 }
