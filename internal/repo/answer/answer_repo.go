@@ -210,7 +210,9 @@ func (ar *answerRepo) GetByUserIDQuestionID(ctx context.Context, userID string, 
 
 // SearchList
 func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error) {
-	search.QuestionID = uid.DeShortID(search.QuestionID)
+	if search.QuestionID != "" {
+		search.QuestionID = uid.DeShortID(search.QuestionID)
+	}
 	search.ID = uid.DeShortID(search.ID)
 	var count int64
 	var err error

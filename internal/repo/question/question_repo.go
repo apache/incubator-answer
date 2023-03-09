@@ -173,7 +173,7 @@ func (qr *questionRepo) SearchByTitleLike(ctx context.Context, title string) (qu
 
 func (qr *questionRepo) FindByID(ctx context.Context, id []string) (questionList []*entity.Question, err error) {
 	for key, itemID := range id {
-		id[key] = uid.EnShortID(itemID)
+		id[key] = uid.DeShortID(itemID)
 	}
 	questionList = make([]*entity.Question, 0)
 	err = qr.data.DB.Table("question").In("id", id).Find(&questionList)
@@ -181,7 +181,7 @@ func (qr *questionRepo) FindByID(ctx context.Context, id []string) (questionList
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	for _, item := range questionList {
-		item.ID = uid.DeShortID(item.ID)
+		item.ID = uid.EnShortID(item.ID)
 	}
 	return
 }
