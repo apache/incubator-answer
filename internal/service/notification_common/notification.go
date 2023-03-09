@@ -14,6 +14,7 @@ import (
 	"github.com/answerdev/answer/internal/service/notice_queue"
 	"github.com/answerdev/answer/internal/service/object_info"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/goccy/go-json"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -81,12 +82,13 @@ func (ns *NotificationCommon) HandleNotification() {
 // ObjectInfo.ObjectID
 // ObjectInfo.ObjectType
 func (ns *NotificationCommon) AddNotification(ctx context.Context, msg *schema.NotificationMsg) error {
+
 	req := &schema.NotificationContent{
 		TriggerUserID:  msg.TriggerUserID,
 		ReceiverUserID: msg.ReceiverUserID,
 		ObjectInfo: schema.ObjectInfo{
 			Title:      msg.Title,
-			ObjectID:   msg.ObjectID,
+			ObjectID:   uid.DeShortID(msg.ObjectID),
 			ObjectType: msg.ObjectType,
 		},
 		NotificationAction: msg.NotificationAction,
@@ -100,8 +102,8 @@ func (ns *NotificationCommon) AddNotification(ctx context.Context, msg *schema.N
 		req.ObjectInfo.Title = objInfo.Title
 		questionID = objInfo.QuestionID
 		objectMap := make(map[string]string)
-		objectMap["question"] = objInfo.QuestionID
-		objectMap["answer"] = objInfo.AnswerID
+		objectMap["question"] = uid.DeShortID(objInfo.QuestionID)
+		objectMap["answer"] = uid.DeShortID(objInfo.AnswerID)
 		objectMap["comment"] = objInfo.CommentID
 		req.ObjectInfo.ObjectMap = objectMap
 	}

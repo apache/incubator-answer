@@ -1201,8 +1201,7 @@ definitions:
       title:
         type: string
       user_info:
-        allOf:
-        - $ref: '#/definitions/schema.UserBasicInfo'
+        $ref: '#/definitions/schema.UserBasicInfo'
         description: user info
       vote_count:
         type: integer
@@ -1210,8 +1209,7 @@ definitions:
   schema.SearchResp:
     properties:
       object:
-        allOf:
-        - $ref: '#/definitions/schema.SearchObject'
+        $ref: '#/definitions/schema.SearchObject'
         description: this object
       object_type:
         description: object_type
@@ -1565,8 +1563,7 @@ definitions:
   schema.UpdateInfoRequest:
     properties:
       avatar:
-        allOf:
-        - $ref: '#/definitions/schema.AvatarInfo'
+        $ref: '#/definitions/schema.AvatarInfo'
         description: avatar
       bio:
         description: bio
