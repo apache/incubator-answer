@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/pkg/obj"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -45,7 +46,7 @@ func (rc *RevisionController) GetRevisionList(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), nil)
 		return
 	}
-
+	objectID = uid.DeShortID(objectID)
 	req := &schema.GetRevisionListReq{
 		ObjectID: objectID,
 	}
@@ -137,6 +138,7 @@ func (rc *RevisionController) CheckCanUpdateRevision(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	action := ""
+	req.ID = uid.DeShortID(req.ID)
 	objectTypeStr, _ := obj.GetObjectTypeStrByObjectID(req.ID)
 	switch objectTypeStr {
 	case constant.QuestionObjectType:

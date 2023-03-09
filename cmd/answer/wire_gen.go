@@ -128,7 +128,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	answerRepo := answer.NewAnswerRepo(dataData, uniqueIDRepo, userRankRepo, activityRepo)
 	questionRepo := question.NewQuestionRepo(dataData, uniqueIDRepo)
 	tagCommonRepo := tag_common.NewTagCommonRepo(dataData, uniqueIDRepo)
-	tagRelRepo := tag.NewTagRelRepo(dataData)
+	tagRelRepo := tag.NewTagRelRepo(dataData, uniqueIDRepo)
 	tagRepo := tag.NewTagRepo(dataData, uniqueIDRepo)
 	revisionRepo := revision.NewRevisionRepo(dataData, uniqueIDRepo)
 	revisionService := revision_common.NewRevisionService(revisionRepo, userRepo)
