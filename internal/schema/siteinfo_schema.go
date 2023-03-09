@@ -15,6 +15,8 @@ import (
 
 const PermaLinkQuestionIDAndTitle = 1
 const PermaLinkQuestionID = 2
+const PermaLinkQuestionIDAndTitleByShortID = 3
+const PermaLinkQuestionIDByShortID = 4
 
 // SiteGeneralReq site general request
 type SiteGeneralReq struct {
