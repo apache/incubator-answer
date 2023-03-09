@@ -6,6 +6,8 @@ import (
 
 const salt = int64(0)
 
+var ShortIDSwitch = false
+
 var AlphanumericSet = []rune{
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -84,12 +86,16 @@ func ShortIDToNum(code string) int64 {
 }
 
 func EnShortID(id string) string {
-	num, err := strconv.ParseInt(id, 10, 64)
-	if err != nil {
-		return ""
+	if ShortIDSwitch {
+		num, err := strconv.ParseInt(id, 10, 64)
+		if err != nil {
+			return ""
+		}
+		return NumToShortID(num)
 	}
-	return NumToShortID(num)
+	return id
 }
+
 func DeShortID(sid string) string {
 	num, err := strconv.ParseInt(sid, 10, 64)
 	if err != nil {
