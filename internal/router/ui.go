@@ -106,6 +106,7 @@ func (a *UIRouter) Register(r *gin.Engine) {
 		default:
 			filePath = UIIndexFilePath
 			c.Header("content-type", "text/html;charset=utf-8")
+			c.Header("X-Frame-Options", "DENY")
 		}
 		file, err := ui.Build.ReadFile(filePath)
 		if err != nil {

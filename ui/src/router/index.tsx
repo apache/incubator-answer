@@ -2,9 +2,10 @@ import { Suspense, lazy } from 'react';
 import { RouteObject } from 'react-router-dom';
 
 import Layout from '@/pages/Layout';
-import ErrorBoundary from '@/pages/50X';
-import baseRoutes, { RouteNode } from '@/router/routes';
-import RouteGuard from '@/router/RouteGuard';
+
+import baseRoutes, { RouteNode } from './routes';
+import RouteGuard from './RouteGuard';
+import RouteErrorBoundary from './RouteErrorBoundary';
 
 const routes: RouteNode[] = [];
 
@@ -18,7 +19,7 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteNode[]) => {
       ) : (
         <Layout />
       );
-      rn.errorElement = <ErrorBoundary />;
+      rn.errorElement = <RouteErrorBoundary />;
     } else {
       /**
        * cannot use a fully dynamic import statement
@@ -37,6 +38,7 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteNode[]) => {
           )}
         </Suspense>
       );
+      rn.errorElement = <RouteErrorBoundary />;
     }
     root.push(rn);
     const children = Array.isArray(rn.children) ? rn.children : null;

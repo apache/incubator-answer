@@ -2,18 +2,23 @@ import axios, { AxiosResponse } from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 
 import { Modal } from '@/components';
-import { loggedUserInfoStore, toastStore } from '@/stores';
-import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
+import { loggedUserInfoStore, toastStore, notFoundStore } from '@/stores';
+import { LOGGED_TOKEN_STORAGE_KEY, IGNORE_PATH_LIST } from '@/common/constants';
 import { RouteAlias } from '@/router/alias';
 import { getCurrentLang } from '@/utils/localize';
 
 import Storage from './storage';
 import { floppyNavigation } from './floppyNavigation';
+import { isIgnoredPath } from './guard';
 
 const baseConfig = {
   timeout: 10000,
   withCredentials: true,
 };
+
+interface APIconfig extends AxiosRequestConfig {
+  allow404: boolean;
+}
 
 class Request {
   instance: AxiosInstance;
@@ -49,6 +54,9 @@ class Request {
       (error) => {
         const { status, data: respData } = error.response || {};
         const { data = {}, msg = '', reason = '' } = respData || {};
+
+        console.log('response error:', error);
+
         if (status === 400) {
           // show error message
           if (data instanceof Object && data.err_type) {
@@ -99,12 +107,14 @@ class Request {
         // 401: Re-login required
         if (status === 401) {
           // clear userinfo
+          notFoundStore.getState().hide();
           loggedUserInfoStore.getState().clear();
           floppyNavigation.navigateToLogin();
           return Promise.reject(false);
         }
         if (status === 403) {
           // Permission interception
+          notFoundStore.getState().hide();
           if (data?.type === 'url_expired') {
             // url expired
             floppyNavigation.navigate(RouteAlias.activationFailed, () => {
@@ -135,6 +145,14 @@ class Request {
           }
           return Promise.reject(false);
         }
+
+        if (status === 404 && error.config?.allow404) {
+          if (isIgnoredPath(IGNORE_PATH_LIST)) {
+            return Promise.reject(false);
+          }
+          notFoundStore.getState().show();
+          return Promise.reject(false);
+        }
         if (status >= 500) {
           console.error(
             `Request failed with status code ${status}, ${msg || ''}`,
@@ -149,7 +167,7 @@ class Request {
     return this.instance.request(config);
   }
 
-  public get<T = any>(url: string, config?: AxiosRequestConfig): Promise<T> {
+  public get<T = any>(url: string, config?: APIconfig): Promise<T> {
     return this.instance.get(url, config);
   }
 

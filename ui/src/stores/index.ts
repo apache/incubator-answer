@@ -10,6 +10,7 @@ import pageTagStore from './pageTags';
 import customizeStore from './customize';
 import themeSettingStore from './themeSetting';
 import loginToContinueStore from './loginToContinue';
+import notFoundStore from './notFound';
 
 export {
   toastStore,
@@ -23,4 +24,5 @@ export {
   themeSettingStore,
   seoSettingStore,
   loginToContinueStore,
+  notFoundStore,
 };

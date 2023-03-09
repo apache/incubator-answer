@@ -89,6 +89,7 @@ func (ds *DashboardService) StatisticalByCache(ctx context.Context) (*schema.Das
 	}
 	startTime := time.Now().Unix() - schema.AppStartTime.Unix()
 	dashboardInfo.AppStartTime = fmt.Sprintf("%d", startTime)
+	dashboardInfo.VersionInfo.Version = constant.Version
 	return dashboardInfo, nil
 }
 

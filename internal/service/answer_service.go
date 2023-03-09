@@ -92,19 +92,14 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 		if answerInfo.Accepted == schema.AnswerAcceptedEnable {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
-		questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
+		_, exist, err := as.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
 		if err != nil {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
 		if !exist {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
-		if questionInfo.AnswerCount > 1 {
-			return errors.BadRequest(reason.AnswerCannotDeleted)
-		}
-		if questionInfo.AcceptedAnswerID != "" {
-			return errors.BadRequest(reason.AnswerCannotDeleted)
-		}
+
 	}
 
 	// user add question count
@@ -164,7 +159,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if err != nil {
 		log.Error("UpdateLastAnswer error", err.Error())
 	}
-	err = as.questionCommon.UpdataPostTime(ctx, req.QuestionID)
+	err = as.questionCommon.UpdatePostTime(ctx, req.QuestionID)
 	if err != nil {
 		return insertData.ID, err
 	}
@@ -232,6 +227,11 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		return "", nil
 	}
 
+	if answerInfo.Status == entity.AnswerStatusDeleted {
+		err = errors.BadRequest(reason.AnswerCannotUpdate)
+		return "", err
+	}
+
 	//If the content is the same, ignore it
 	if answerInfo.OriginalText == req.Content {
 		return "", nil
@@ -268,7 +268,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		if err = as.answerRepo.UpdateAnswer(ctx, insertData, []string{"original_text", "parsed_text", "updated_at", "last_edit_user_id"}); err != nil {
 			return "", err
 		}
-		err = as.questionCommon.UpdataPostTime(ctx, req.QuestionID)
+		err = as.questionCommon.UpdatePostTime(ctx, req.QuestionID)
 		if err != nil {
 			return insertData.ID, err
 		}
@@ -473,6 +473,8 @@ func (as *AnswerService) SearchList(ctx context.Context, req *schema.AnswerListR
 	dbSearch.Page = req.Page
 	dbSearch.PageSize = req.PageSize
 	dbSearch.Order = req.Order
+	dbSearch.IncludeDeleted = req.CanDelete
+	dbSearch.LoginUserID = req.UserID
 	answerOriginalList, count, err := as.answerRepo.SearchList(ctx, &dbSearch)
 	if err != nil {
 		return list, count, err

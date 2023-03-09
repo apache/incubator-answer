@@ -1,5 +1,5 @@
 import { memo, FC, useEffect, useRef } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 
@@ -72,6 +72,11 @@ const Index: FC<Props> = ({
   }
   return (
     <div id={data.id} ref={answerRef} className="answer-item py-4">
+      {data.status === 10 && (
+        <Alert variant="danger" className="mb-4">
+          {t('post_deleted', { keyPrefix: 'messages' })}
+        </Alert>
+      )}
       <article
         dangerouslySetInnerHTML={{ __html: data?.html }}
         className="fmt text-break text-wrap"

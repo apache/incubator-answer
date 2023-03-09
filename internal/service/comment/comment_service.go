@@ -213,24 +213,40 @@ func (cs *CommentService) RemoveComment(ctx context.Context, req *schema.RemoveC
 }
 
 // UpdateComment update comment
-func (cs *CommentService) UpdateComment(ctx context.Context, req *schema.UpdateCommentReq) (err error) {
+func (cs *CommentService) UpdateComment(ctx context.Context, req *schema.UpdateCommentReq) (
+	resp *schema.GetCommentResp, err error) {
+	resp = &schema.GetCommentResp{}
+
 	old, exist, err := cs.commentCommonRepo.GetComment(ctx, req.CommentID)
 	if err != nil {
 		return
 	}
 	if !exist {
-		return errors.BadRequest(reason.CommentNotFound)
+		return resp, errors.BadRequest(reason.CommentNotFound)
 	}
 
 	// user can edit the comment that was posted by himself before deadline.
 	if !req.IsAdmin && (time.Now().After(old.CreatedAt.Add(constant.CommentEditDeadline))) {
-		return errors.BadRequest(reason.CommentCannotEditAfterDeadline)
+		return resp, errors.BadRequest(reason.CommentCannotEditAfterDeadline)
 	}
 
 	comment := &entity.Comment{}
 	_ = copier.Copy(comment, req)
 	comment.ID = req.CommentID
-	return cs.commentRepo.UpdateComment(ctx, comment)
+	resp.SetFromComment(comment)
+	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID,
+		time.Now(), req.CanEdit, req.CanDelete)
+	userInfo, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, resp.UserID)
+	if err != nil {
+		return nil, err
+	}
+	if exist {
+		resp.Username = userInfo.Username
+		resp.UserDisplayName = userInfo.DisplayName
+		resp.UserAvatar = userInfo.Avatar
+		resp.UserStatus = userInfo.Status
+	}
+	return resp, cs.commentRepo.UpdateComment(ctx, comment)
 }
 
 // GetComment get comment one

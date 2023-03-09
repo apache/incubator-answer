@@ -1167,7 +1167,7 @@ ui:
         validate: Indiquez une URL valide.
         text: L'adresse de ce site.
       short_desc:
-        label: Description Courte du Site
+        label: Description Courte
         msg: La description courte ne peut pas être vide.
         text: "La description courte, telle qu'elle est utilisée dans le tag titre de la page d'accueil."
       desc:

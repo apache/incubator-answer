@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 import classNames from 'classnames';
 import { unionBy } from 'lodash';
-import { marked } from 'marked';
 
 import * as Types from '@/common/interface';
 import { Modal } from '@/components';
@@ -108,15 +107,11 @@ const Comment = ({ objectId, mode, commentId }) => {
     const users = matchedUsers(item.value);
     const userNames = unionBy(users.map((user) => user.userName));
     const commentMarkDown = parseUserInfo(item.value);
-    const html = marked.parse(commentMarkDown);
-    // if (!commentMarkDown || !html) {
-    //   return;
-    // }
+
     const params = {
       object_id: objectId,
       original_text: commentMarkDown,
       mention_username_list: userNames,
-      parsed_text: html,
       ...(item.type === 'reply'
         ? {
             reply_comment_id: item.comment_id,
@@ -128,13 +123,13 @@ const Comment = ({ objectId, mode, commentId }) => {
       return updateComment({
         ...params,
         comment_id: item.comment_id,
-      }).then(() => {
+      }).then((res) => {
         setComments(
           comments.map((comment) => {
             if (comment.comment_id === item.comment_id) {
               comment.showEdit = false;
-              comment.parsed_text = html;
-              comment.original_text = item.value;
+              comment.parsed_text = res.parsed_text;
+              comment.original_text = res.original_text;
             }
             return comment;
           }),
