@@ -375,7 +375,7 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		log.Errorf("user DeleteQuestion rank rollback error %s", err.Error())
 	}
 	activity_queue.AddActivity(&schema.ActivityMsg{
-		UserID:           questionInfo.UserID,
+		UserID:           req.UserID,
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionDeleted,
