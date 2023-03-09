@@ -8,7 +8,6 @@ import {
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import Pattern from '@/common/pattern';
 import { Pagination } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
 import { scrollToElementTop } from '@/utils';
@@ -40,7 +39,7 @@ const Index = () => {
    * Note: Compatible with Permalink
    */
   let { aid = '' } = useParams();
-  if (!aid && Pattern.isAnswerId.test(slugPermalink)) {
+  if (!aid && slugPermalink) {
     aid = slugPermalink;
   }
 
@@ -56,7 +55,7 @@ const Index = () => {
   const { setUsers } = usePageUsers();
   const userInfo = loggedUserInfoStore((state) => state.user);
   const isAuthor = userInfo?.username === question?.user_info?.username;
-  const isAdmin = userInfo?.is_admin;
+  const isAdmin = userInfo?.role_id === 2;
   const isLogged = Boolean(userInfo?.access_token);
   const { state: locationState } = useLocation();
 
@@ -76,9 +75,10 @@ const Index = () => {
       page: 1,
       page_size: 999,
     });
+
     if (res) {
       res.list = res.list?.filter((v) => {
-        // delete answers pnly show to author and admin and has searchparams aid
+        // delete answers only show to author and admin and has search params aid
         if (v.status === 10) {
           if (
             (v?.user_info.username === userInfo?.username || isAdmin) &&
