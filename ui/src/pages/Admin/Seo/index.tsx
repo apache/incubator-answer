@@ -19,8 +19,13 @@ const Index: FC = () => {
         type: 'number',
         title: t('permalink.label'),
         description: t('permalink.text'),
-        enum: [1, 2],
-        enumNames: ['/questions/123/post-title', '/questions/123'],
+        enum: [1, 2, 3, 4],
+        enumNames: [
+          '/questions/10020000009999999/post-title',
+          '/questions/10020000009999999',
+          '/questions/2jsXF/post-title',
+          '/questions/2jsXF',
+        ],
         default: 1,
       },
       robots: {
@@ -74,7 +79,7 @@ const Index: FC = () => {
         const formMeta = { ...formData };
         formMeta.robots.value = setting.robots;
         formMeta.permalink.value = setting.permalink;
-        if (formMeta.permalink.value !== 1 && formMeta.permalink.value !== 2) {
+        if (!/[1234]/.test(formMeta.permalink.value)) {
           formMeta.permalink.value = 1;
         }
         setFormData(formMeta);
