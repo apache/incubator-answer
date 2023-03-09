@@ -297,6 +297,8 @@ func (s *SiteInfoService) SaveSeo(ctx context.Context, req schema.SiteSeoReq) (e
 	}
 	if req.PermaLink == schema.PermaLinkQuestionIDAndTitleByShortID || req.PermaLink == schema.PermaLinkQuestionIDByShortID {
 		uid.ShortIDSwitch = true
+	} else {
+		uid.ShortIDSwitch = false
 	}
 	return
 }

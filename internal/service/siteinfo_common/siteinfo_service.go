@@ -33,6 +33,8 @@ func NewSiteInfoCommonService(siteInfoRepo SiteInfoRepo) *SiteInfoCommonService 
 	}
 	if seoinfo.PermaLink == schema.PermaLinkQuestionIDAndTitleByShortID || seoinfo.PermaLink == schema.PermaLinkQuestionIDByShortID {
 		uid.ShortIDSwitch = true
+	} else {
+		uid.ShortIDSwitch = false
 	}
 
 	return siteInfo
