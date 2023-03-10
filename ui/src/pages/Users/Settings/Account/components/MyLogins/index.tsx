@@ -61,7 +61,6 @@ const Index = () => {
                   }}
                 />
                 <span>
-                  {' '}
                   {t2(item.binding ? 'remove' : 'connect', {
                     auth_name: item.name,
                   })}
