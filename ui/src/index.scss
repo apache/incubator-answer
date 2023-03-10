@@ -309,6 +309,10 @@ img:not(a img, img.broken) {
 
 
 .btnSvg, .btnSvg:hover {
+  display: inline-block;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
   fill: currentColor;
   vertical-align: -0.125em;
 }

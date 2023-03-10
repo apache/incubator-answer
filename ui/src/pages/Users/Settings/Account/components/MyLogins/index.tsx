@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Modal } from '@/components';
 import { useOauthConnectorInfoByUser, userOauthUnbind } from '@/services';
 import { useToast } from '@/hooks';
+import { base64ToSvg } from '@/utils';
 
 const Index = () => {
   const { data, mutate } = useOauthConnectorInfoByUser();
@@ -54,12 +55,10 @@ const Index = () => {
                 variant={item.binding ? 'outline-danger' : 'outline-secondary'}
                 href={item.link}
                 onClick={(e) => deleteLogins(e, item)}>
-                <img
-                  src={`data:image/svg+xml;base64,${item.icon}`}
-                  alt=""
-                  width={16}
-                  height={16}
-                  className="btnSvg me-2"
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: base64ToSvg(item.icon),
+                  }}
                 />
                 <span>
                   {' '}
