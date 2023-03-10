@@ -2,6 +2,8 @@ import React, { FC, FormEvent, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import classname from 'classnames';
+
 import { useToast } from '@/hooks';
 import type { FormDataType } from '@/common/interface';
 import { modifyPassword } from '@/services';
@@ -131,7 +133,9 @@ const Index: FC = () => {
     <div className="mt-5">
       {showForm ? (
         <Form noValidate onSubmit={handleSubmit}>
-          <Form.Group controlId="oldPass" className="mb-3">
+          <Form.Group
+            controlId="oldPass"
+            className={classname('mb-3', user.have_password ? '' : 'd-none')}>
             <Form.Label>{t('current_pass.label')}</Form.Label>
             <Form.Control
               autoComplete="off"
