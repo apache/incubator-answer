@@ -68,7 +68,7 @@ const Interface: FC = () => {
       errorMsg: '',
     },
     default_avatar: {
-      value: setting?.default_avatar || 'System',
+      value: setting?.default_avatar || 'system',
       isInvalid: false,
       errorMsg: '',
     },
@@ -145,6 +145,9 @@ const Interface: FC = () => {
       const formMeta = {};
       Object.keys(setting).forEach((k) => {
         formMeta[k] = { ...formData[k], value: setting[k] };
+        if (k === 'default_avatar') {
+          formMeta[k].value = setting[k] || 'system';
+        }
       });
       setFormData({ ...formData, ...formMeta });
     }
