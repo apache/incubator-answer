@@ -70,6 +70,8 @@ type GetUserResp struct {
 	IsAdmin bool `json:"is_admin"`
 	// user status
 	Status string `json:"status"`
+	// user have password
+	HavePassword bool `json:"have_password"`
 }
 
 func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
@@ -81,6 +83,7 @@ func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 	if ok {
 		r.Status = statusShow
 	}
+	r.HavePassword = len(userInfo.Pass) > 0
 }
 
 type GetUserToSetShowResp struct {
