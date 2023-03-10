@@ -15,7 +15,8 @@ const siteInfo = create<IProps>((set) => ({
   update: (params) =>
     set((state) => {
       const o = { ...state.seo, ...params };
-      if (o.permalink !== 1 && o.permalink !== 2) {
+      // @ts-ignore
+      if (!/[1234]/.test(o.permalink)) {
         o.permalink = 1;
       }
       return {
