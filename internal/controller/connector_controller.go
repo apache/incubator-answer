@@ -210,6 +210,6 @@ func (cc *ConnectorController) ExternalLoginUnbinding(ctx *gin.Context) {
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	err := cc.userExternalService.ExternalLoginUnbinding(ctx, req)
-	handler.HandleResponse(ctx, err, nil)
+	resp, err := cc.userExternalService.ExternalLoginUnbinding(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }

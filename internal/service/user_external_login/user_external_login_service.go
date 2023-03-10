@@ -292,6 +292,24 @@ func (us *UserExternalLoginService) GetExternalLoginUserInfoList(
 
 // ExternalLoginUnbinding external login unbinding
 func (us *UserExternalLoginService) ExternalLoginUnbinding(
-	ctx context.Context, req *schema.ExternalLoginUnbindingReq) (err error) {
-	return us.userExternalLoginRepo.DeleteUserExternalLogin(ctx, req.UserID, req.ExternalID)
+	ctx context.Context, req *schema.ExternalLoginUnbindingReq) (resp any, err error) {
+	// If user has only one external login and never set password, he can't unbind it.
+	userInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.BadRequest(reason.UserNotFound)
+	}
+	if len(userInfo.Pass) == 0 {
+		loginList, err := us.userExternalLoginRepo.GetUserExternalLoginList(ctx, req.UserID)
+		if err != nil {
+			return nil, err
+		}
+		if len(loginList) <= 1 {
+			return schema.ErrTypeToast, errors.BadRequest(reason.UserExternalLoginUnbindingForbidden)
+		}
+	}
+
+	return nil, us.userExternalLoginRepo.DeleteUserExternalLogin(ctx, req.UserID, req.ExternalID)
 }
