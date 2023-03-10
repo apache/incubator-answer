@@ -6,6 +6,8 @@ import { Modal } from '@/components';
 import { useOauthConnectorInfoByUser, userOauthUnbind } from '@/services';
 import { useToast } from '@/hooks';
 import { base64ToSvg } from '@/utils';
+import Storage from '@/utils/storage';
+import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
 
 const Index = () => {
   const { data, mutate } = useOauthConnectorInfoByUser();
@@ -21,6 +23,7 @@ const Index = () => {
 
   const deleteLogins = (e, item) => {
     if (!item.binding) {
+      Storage.set(REDIRECT_PATH_STORAGE_KEY, window.location.pathname);
       return;
     }
     e.preventDefault();
