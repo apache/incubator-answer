@@ -7287,7 +7287,7 @@ const docTemplate = `{
             "properties": {
                 "permalink": {
                     "type": "integer",
-                    "maximum": 3,
+                    "maximum": 4,
                     "minimum": 0
                 },
                 "robots": {
@@ -7304,7 +7304,7 @@ const docTemplate = `{
             "properties": {
                 "permalink": {
                     "type": "integer",
-                    "maximum": 3,
+                    "maximum": 4,
                     "minimum": 0
                 },
                 "robots": {

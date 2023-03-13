@@ -1408,7 +1408,7 @@ definitions:
   schema.SiteSeoReq:
     properties:
       permalink:
-        maximum: 3
+        maximum: 4
         minimum: 0
         type: integer
       robots:
@@ -1420,7 +1420,7 @@ definitions:
   schema.SiteSeoResp:
     properties:
       permalink:
-        maximum: 3
+        maximum: 4
         minimum: 0
         type: integer
       robots:
