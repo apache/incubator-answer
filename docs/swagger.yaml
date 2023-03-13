@@ -356,6 +356,9 @@ definitions:
       title:
         description: title
         type: string
+      url_title:
+        description: url title
+        type: string
     type: object
   schema.GetCommentResp:
     properties:
@@ -537,6 +540,9 @@ definitions:
         type: integer
       title:
         description: title
+        type: string
+      url_title:
+        description: url title
         type: string
     type: object
   schema.GetReportTypeResp:
@@ -955,6 +961,9 @@ definitions:
         type: string
       title:
         description: title
+        type: string
+      url_title:
+        description: url title
         type: string
       vote_type:
         description: vote type
@@ -1412,7 +1421,7 @@ definitions:
   schema.SiteSeoReq:
     properties:
       permalink:
-        maximum: 3
+        maximum: 4
         minimum: 0
         type: integer
       robots:
@@ -1424,7 +1433,7 @@ definitions:
   schema.SiteSeoResp:
     properties:
       permalink:
-        maximum: 3
+        maximum: 4
         minimum: 0
         type: integer
       robots:

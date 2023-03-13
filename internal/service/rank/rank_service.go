@@ -14,6 +14,7 @@ import (
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/role"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
@@ -260,6 +261,7 @@ func (rs *RankService) GetRankPersonalWithPage(ctx context.Context, req *schema.
 			commentResp.RankType = activity_type.Format(userRankInfo.ActivityType)
 			commentResp.ObjectType = objInfo.ObjectType
 			commentResp.Title = objInfo.Title
+			commentResp.UrlTitle = htmltext.UrlTitle(objInfo.Title)
 			commentResp.Content = objInfo.Content
 			commentResp.QuestionID = objInfo.QuestionID
 			commentResp.AnswerID = objInfo.AnswerID

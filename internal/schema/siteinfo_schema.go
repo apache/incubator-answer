@@ -28,7 +28,7 @@ type SiteGeneralReq struct {
 }
 
 type SiteSeoReq struct {
-	PermaLink int    `validate:"required,lte=3,gte=0" form:"permalink" json:"permalink"`
+	PermaLink int    `validate:"required,lte=4,gte=0" form:"permalink" json:"permalink"`
 	Robots    string `validate:"required" form:"robots" json:"robots"`
 }
 

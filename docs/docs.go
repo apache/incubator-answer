@@ -5835,6 +5835,10 @@ const docTemplate = `{
                 "title": {
                     "description": "title",
                     "type": "string"
+                },
+                "url_title": {
+                    "description": "url title",
+                    "type": "string"
                 }
             }
         },
@@ -6081,6 +6085,10 @@ const docTemplate = `{
                 },
                 "title": {
                     "description": "title",
+                    "type": "string"
+                },
+                "url_title": {
+                    "description": "url title",
                     "type": "string"
                 }
             }
@@ -6659,6 +6667,10 @@ const docTemplate = `{
                 },
                 "title": {
                     "description": "title",
+                    "type": "string"
+                },
+                "url_title": {
+                    "description": "url title",
                     "type": "string"
                 },
                 "vote_type": {
@@ -7324,7 +7336,7 @@ const docTemplate = `{
             "properties": {
                 "permalink": {
                     "type": "integer",
-                    "maximum": 3,
+                    "maximum": 4,
                     "minimum": 0
                 },
                 "robots": {
@@ -7341,7 +7353,7 @@ const docTemplate = `{
             "properties": {
                 "permalink": {
                     "type": "integer",
-                    "maximum": 3,
+                    "maximum": 4,
                     "minimum": 0
                 },
                 "robots": {
