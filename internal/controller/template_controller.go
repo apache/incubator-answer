@@ -160,6 +160,14 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 	id := ctx.Param("id")
 	title := ctx.Param("title")
 	titleIsAnswerID := false
+	NeedChangeShortID := false
+	isShortID := uid.IsShortID(id)
+	if uid.ShortIDSwitch {
+		if !isShortID {
+			id = uid.EnShortID(id)
+			NeedChangeShortID = true
+		}
+	}
 
 	objectType, objectTypeerr := obj.GetObjectTypeStrByObjectID(uid.DeShortID(title))
 	if objectTypeerr == nil {
@@ -167,21 +175,23 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 			titleIsAnswerID = true
 		}
 	}
+
 	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
 	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionID {
+		if len(ctx.Request.URL.Query()) > 0 {
+			url = fmt.Sprintf("%s?%s", url, ctx.Request.URL.RawQuery)
+		}
+		if NeedChangeShortID {
+			return true, url
+		}
 		//not have title
 		if titleIsAnswerID || len(title) == 0 {
 			return false, ""
 		}
-		if len(ctx.Request.URL.Query()) > 0 {
-			url = fmt.Sprintf("%s?%s", url, ctx.Request.URL.RawQuery)
-		}
+
 		return true, url
 	} else {
-		//have title
-		if len(title) > 0 && !titleIsAnswerID && correctTitle {
-			return false, ""
-		}
+
 		detail, err := tc.templateRenderController.QuestionDetail(ctx, id)
 		if err != nil {
 			tc.Page404(ctx)
@@ -194,6 +204,13 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 
 		if len(ctx.Request.URL.Query()) > 0 {
 			url = fmt.Sprintf("%s?%s", url, ctx.Request.URL.RawQuery)
+		}
+		//have title
+		if len(title) > 0 && !titleIsAnswerID && correctTitle {
+			if NeedChangeShortID {
+				return true, url
+			}
+			return false, ""
 		}
 		return true, url
 	}

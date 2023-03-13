@@ -13,10 +13,10 @@ import (
 	"github.com/segmentfault/pacman/errors"
 )
 
-const PermaLinkQuestionIDAndTitle = 1
-const PermaLinkQuestionID = 2
-const PermaLinkQuestionIDAndTitleByShortID = 3
-const PermaLinkQuestionIDByShortID = 4
+const PermaLinkQuestionIDAndTitle = 1          // /questions/10010000000000001/post-title
+const PermaLinkQuestionID = 2                  // /questions/10010000000000001
+const PermaLinkQuestionIDAndTitleByShortID = 3 // /questions/11/post-title
+const PermaLinkQuestionIDByShortID = 4         // /questions/11
 
 // SiteGeneralReq site general request
 type SiteGeneralReq struct {
