@@ -834,6 +834,7 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 	for _, item := range questionlist {
 		info := &schema.UserQuestionInfo{}
 		_ = copier.Copy(info, item)
+		info.UrlTitle = htmltext.UrlTitle(info.Title)
 		userQuestionlist = append(userQuestionlist, info)
 	}
 
@@ -842,6 +843,7 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 		_ = copier.Copy(info, item)
 		info.AnswerID = item.ID
 		info.QuestionID = item.QuestionID
+		info.QuestionInfo.UrlTitle = htmltext.UrlTitle(info.QuestionInfo.Title)
 		userAnswerlist = append(userAnswerlist, info)
 	}
 
