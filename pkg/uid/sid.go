@@ -106,3 +106,14 @@ func DeShortID(sid string) string {
 	}
 	return sid
 }
+
+func IsShortID(id string) bool {
+	num, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return true
+	}
+	if num < 10000000000000000 {
+		return true
+	}
+	return false
+}
