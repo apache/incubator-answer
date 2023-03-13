@@ -4,7 +4,7 @@ import (
 	"strconv"
 )
 
-const salt = int64(0)
+const salt = int64(100)
 
 var ShortIDSwitch = false
 
@@ -23,6 +23,28 @@ func init() {
 	}
 }
 
+func EnToShortID(id int64) string {
+	id = id + salt
+	var code []rune
+	for id > 0 {
+		idx := id % int64(len(AlphanumericSet))
+		code = append(code, AlphanumericSet[idx])
+		id = id / int64(len(AlphanumericSet))
+	}
+	return string(code)
+}
+func DeToShortID(code string) int64 {
+	var id int64
+	runes := []rune(code)
+	for i := len(runes) - 1; i >= 0; i-- {
+		ru := runes[i]
+		idx := AlphanumericIndex[ru]
+		id = id*int64(len(AlphanumericSet)) + int64(idx)
+	}
+	id = id - salt
+	return id
+}
+
 // NumToString num to string
 func NumToShortID(id int64) string {
 	sid := strconv.FormatInt(id, 10)
@@ -39,21 +61,8 @@ func NumToShortID(id int64) string {
 	if err != nil {
 		return ""
 	}
-	id = id + salt
-	// fmt.Println("[EN1]", typeCode, id)
-	var code []rune
-	var tcode []rune
-	for id > 0 {
-		idx := id % int64(len(AlphanumericSet))
-		code = append(code, AlphanumericSet[idx])
-		id = id / int64(len(AlphanumericSet))
-	}
-	for typeCode > 0 {
-		idx := typeCode % int64(len(AlphanumericSet))
-		tcode = append(tcode, AlphanumericSet[idx])
-		typeCode = typeCode / int64(len(AlphanumericSet))
-	}
-	// fmt.Println("[EN2]", string(tcode), string(code))
+	code := EnToShortID(id)
+	tcode := EnToShortID(typeCode)
 	return string(tcode) + string(code)
 }
 
@@ -62,26 +71,11 @@ func ShortIDToNum(code string) int64 {
 	if len(code) < 2 {
 		return 0
 	}
-	scodeType := code[0:1]
-	code = code[1:int32(len(code))]
-	// fmt.Println("[DE1]", scodeType, code)
-	var id, codeType int64
-	runes := []rune(code)
-	codeRunes := []rune(scodeType)
+	scodeType := code[0:2]
+	code = code[2:int32(len(code))]
 
-	for i := len(runes) - 1; i >= 0; i-- {
-		ru := runes[i]
-		idx := AlphanumericIndex[ru]
-		id = id*int64(len(AlphanumericSet)) + int64(idx)
-	}
-	for i := len(codeRunes) - 1; i >= 0; i-- {
-		ru := codeRunes[i]
-		idx := AlphanumericIndex[ru]
-		codeType = codeType*int64(len(AlphanumericSet)) + int64(idx)
-	}
-	id = id - salt
-	// fmt.Println("[DE2]", codeType, id)
-
+	id := DeToShortID(code)
+	codeType := DeToShortID(scodeType)
 	return 10000000000000000 + codeType*10000000000000 + id
 }
 
