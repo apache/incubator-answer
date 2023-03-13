@@ -5778,6 +5778,10 @@ const docTemplate = `{
                 "title": {
                     "description": "title",
                     "type": "string"
+                },
+                "url_title": {
+                    "description": "url title",
+                    "type": "string"
                 }
             }
         },
@@ -6032,6 +6036,10 @@ const docTemplate = `{
                 },
                 "title": {
                     "description": "title",
+                    "type": "string"
+                },
+                "url_title": {
+                    "description": "url title",
                     "type": "string"
                 }
             }
@@ -6610,6 +6618,10 @@ const docTemplate = `{
                 },
                 "title": {
                     "description": "title",
+                    "type": "string"
+                },
+                "url_title": {
+                    "description": "url title",
                     "type": "string"
                 },
                 "vote_type": {

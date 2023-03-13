@@ -337,6 +337,9 @@ definitions:
       title:
         description: title
         type: string
+      url_title:
+        description: url title
+        type: string
     type: object
   schema.GetCommentResp:
     properties:
@@ -524,6 +527,9 @@ definitions:
         type: integer
       title:
         description: title
+        type: string
+      url_title:
+        description: url title
         type: string
     type: object
   schema.GetReportTypeResp:
@@ -942,6 +948,9 @@ definitions:
         type: string
       title:
         description: title
+        type: string
+      url_title:
+        description: url title
         type: string
       vote_type:
         description: vote type

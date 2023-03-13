@@ -26,6 +26,8 @@ type GetRankPersonalWithPageResp struct {
 	ObjectType string `json:"object_type" enums:"question,answer,tag,comment"`
 	// title
 	Title string `json:"title"`
+	// url title
+	UrlTitle string `json:"url_title"`
 	// content
 	Content string `json:"content"`
 	// reputation

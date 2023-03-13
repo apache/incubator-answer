@@ -9,6 +9,7 @@ import (
 	"github.com/answerdev/answer/internal/service/comment_common"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/object_info"
+	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/obj"
 	"github.com/segmentfault/pacman/log"
 
@@ -190,6 +191,7 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 			AnswerID:   objInfo.AnswerID,
 			ObjectType: objInfo.ObjectType,
 			Title:      objInfo.Title,
+			UrlTitle:   htmltext.UrlTitle(objInfo.Title),
 			Content:    objInfo.Content,
 			VoteType:   activity_type.Format(voteInfo.ActivityType),
 		}

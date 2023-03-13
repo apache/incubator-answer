@@ -5766,6 +5766,10 @@
                 "title": {
                     "description": "title",
                     "type": "string"
+                },
+                "url_title": {
+                    "description": "url title",
+                    "type": "string"
                 }
             }
         },
@@ -6020,6 +6024,10 @@
                 },
                 "title": {
                     "description": "title",
+                    "type": "string"
+                },
+                "url_title": {
+                    "description": "url title",
                     "type": "string"
                 }
             }
@@ -6598,6 +6606,10 @@
                 },
                 "title": {
                     "description": "title",
+                    "type": "string"
+                },
+                "url_title": {
+                    "description": "url title",
                     "type": "string"
                 },
                 "vote_type": {
