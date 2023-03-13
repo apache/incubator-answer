@@ -770,13 +770,13 @@ func (qs *QuestionService) SearchUserCollectionList(ctx context.Context, page, p
 		return list, count, err
 	}
 	for _, id := range questionIDs {
-		_, ok := questionMaps[id]
+		_, ok := questionMaps[uid.EnShortID(id)]
 		if ok {
-			questionMaps[id].LastAnsweredUserInfo = nil
-			questionMaps[id].UpdateUserInfo = nil
-			questionMaps[id].Content = ""
-			questionMaps[id].HTML = ""
-			list = append(list, questionMaps[id])
+			questionMaps[uid.EnShortID(id)].LastAnsweredUserInfo = nil
+			questionMaps[uid.EnShortID(id)].UpdateUserInfo = nil
+			questionMaps[uid.EnShortID(id)].Content = ""
+			questionMaps[uid.EnShortID(id)].HTML = ""
+			list = append(list, questionMaps[uid.EnShortID(id)])
 		}
 	}
 
