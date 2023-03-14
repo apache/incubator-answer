@@ -167,6 +167,11 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 			id = uid.EnShortID(id)
 			NeedChangeShortID = true
 		}
+	} else {
+		if isShortID {
+			NeedChangeShortID = true
+			id = uid.DeShortID(id)
+		}
 	}
 
 	objectType, objectTypeerr := obj.GetObjectTypeStrByObjectID(uid.DeShortID(title))
