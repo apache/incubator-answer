@@ -299,8 +299,8 @@ ui:
     upgrade: Answer Upgrade
     maintenance: Website Maintenance
     users: Users
-    404: HTTP Error 404
-    50X: HTTP Error 500
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
   notifications:
     title: Notifications
     inbox: Inbox

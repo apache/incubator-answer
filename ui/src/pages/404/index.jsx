@@ -19,7 +19,7 @@ const Index = () => {
   }, []);
 
   usePageTags({
-    title: t('404', { keyPrefix: 'page_title' }),
+    title: t('http_404', { keyPrefix: 'page_title' }),
   });
   return (
     <Container

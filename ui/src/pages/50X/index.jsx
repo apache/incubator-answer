@@ -19,7 +19,7 @@ const Index = () => {
   }, []);
 
   usePageTags({
-    title: t('50X', { keyPrefix: 'page_title' }),
+    title: t('http_50X', { keyPrefix: 'page_title' }),
   });
   return (
     <Container
