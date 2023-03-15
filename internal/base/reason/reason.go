@@ -25,6 +25,7 @@ const (
 	AnswerNotFound                   = "error.answer.not_found"
 	AnswerCannotDeleted              = "error.answer.cannot_deleted"
 	AnswerCannotUpdate               = "error.answer.cannot_update"
+	AnswerCannotAddByClosedQuestion  = "error.answer.question_closed_cannot_add"
 	CommentEditWithoutPermission     = "error.comment.edit_without_permission"
 	DisallowVote                     = "error.object.disallow_vote"
 	DisallowFollow                   = "error.object.disallow_follow"

@@ -44,6 +44,8 @@ backend:
         other: 没有删除权限。
       cannot_update:
         other: 没有更新权限。
+      question_closed_cannot_add:
+        other: 问题已关闭不可以新增回答
     comment:
       edit_without_permission:
         other: 不允许编辑评论。

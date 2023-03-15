@@ -6,6 +6,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
 	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 )
 
@@ -37,6 +38,7 @@ func (ac *ActivityController) GetObjectTimeline(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.ObjectID = uid.DeShortID(req.ObjectID)
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	if userInfo := middleware.GetUserInfoFromContext(ctx); userInfo != nil {
