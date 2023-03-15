@@ -111,9 +111,9 @@ const Tags = () => {
                     <Card.Body className="d-flex flex-column align-items-start">
                       <Tag className="mb-3" data={tag} />
 
-                      <p className="fs-14 flex-fill text-break text-wrap text-truncate-3 reset-p">
+                      <div className="fs-14 flex-fill text-break text-wrap text-truncate-3 reset-p mb-3">
                         {htmlToReact(tag.parsed_text)}
-                      </p>
+                      </div>
                       <div className="d-flex align-items-center">
                         <Button
                           className={`me-2 ${tag.is_follower ? 'active' : ''}`}
