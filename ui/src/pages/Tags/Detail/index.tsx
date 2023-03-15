@@ -31,6 +31,11 @@ const Questions: FC = () => {
       object_id: tagInfo.tag_id,
     });
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [curTagName]);
+
   useEffect(() => {
     if (tagResp) {
       const info = { ...tagResp };
