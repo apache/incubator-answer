@@ -16,8 +16,7 @@ const Config = () => {
   const { data } = useQueryPluginConfig({ plugin_slug_name: slug_name });
   const Toast = useToast();
   const [schema, setSchema] = useState<JSONSchema | null>(null);
-
-  const uiSchema: UISchema = {};
+  const [uiSchema, setUISchema] = useState<UISchema>();
   const required: string[] = [];
 
   const [formData, setFormData] = useState<Types.FormDataType | null>(null);
@@ -27,7 +26,7 @@ const Config = () => {
       return;
     }
     const properties: JSONSchema['properties'] = {};
-
+    const uiConf: UISchema = {};
     data.config_fields?.forEach((item) => {
       properties[item.name] = {
         type: 'string',
@@ -42,28 +41,27 @@ const Config = () => {
           (option) => option.label,
         );
       }
-
+      uiConf[item.name] = {};
+      uiConf[item.name]['ui:widget'] = item.type;
       if (item.ui_options) {
         if ((item.ui_options as InputOptions & { input_type })?.input_type) {
           (item.ui_options as InputOptions).inputType = (
             item.ui_options as InputOptions & { input_type }
           ).input_type;
         }
-        uiSchema[item.name] = {
-          'ui:options': item.ui_options,
-        };
+        uiConf[item.name]['ui:options'] = item.ui_options;
       }
       if (item.required) {
         required.push(item.name);
       }
     });
-
     const result = {
       title: data?.name || '',
       required,
       properties,
     };
     setSchema(result);
+    setUISchema(uiConf);
     setFormData(initFormData(result));
   }, [data?.config_fields]);
 
