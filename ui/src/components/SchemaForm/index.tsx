@@ -148,6 +148,35 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   }
 
   const keys = Object.keys(properties);
+  /**
+   * Prevent components such as `select` from having default values,
+   * which are not generated on `formData`
+   */
+  const setDefaultValueAsDomBehaviour = () => {
+    keys.forEach((k) => {
+      const formVal = formData[k]?.value;
+      const metaProp = properties[k];
+      const uiCtrl = uiSchema[k]?.['ui:widget'];
+      if (
+        !metaProp ||
+        !uiCtrl ||
+        formVal ||
+        formVal === 0 ||
+        formVal === false
+      ) {
+        return;
+      }
+      if (uiCtrl === 'select' && metaProp.enum?.[0] !== undefined) {
+        formData[k] = {
+          errorMsg: '',
+          isInvalid: false,
+          value: metaProp.enum?.[0],
+        };
+        console.log('formData[k]: ', k, formData[k]);
+      }
+    });
+  };
+  setDefaultValueAsDomBehaviour();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -297,16 +326,17 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
     }
   };
 
-  const handleCheckboxChange = (
+  const handleInputCheck = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
   ) => {
-    const { name } = e.target;
+    const { name, checked } = e.currentTarget;
+    const freshVal = checked ? schema.properties[name]?.enum?.[index] : '';
     const data = {
       ...formData,
       [name]: {
         ...formData[name],
-        value: schema.properties[name]?.enum?.[index],
+        value: freshVal,
         isInvalid: false,
       },
     };
@@ -324,6 +354,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
       {keys.map((key) => {
         const { title, description, label } = properties[key];
         const { 'ui:widget': widget = 'input' } = uiSchema[key] || {};
+
         if (widget === 'select') {
           return (
             <Form.Group
@@ -354,6 +385,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             </Form.Group>
           );
         }
+
         if (widget === 'checkbox' || widget === 'radio') {
           return (
             <Form.Group
@@ -376,7 +408,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                       feedback={formData[key]?.errorMsg}
                       feedbackType="invalid"
                       isInvalid={formData[key].isInvalid}
-                      onChange={(e) => handleCheckboxChange(e, index)}
+                      onChange={(e) => handleInputCheck(e, index)}
                     />
                   );
                 })}
@@ -544,11 +576,8 @@ export const initFormData = (schema: JSONSchema): Type.FormDataType => {
   const formData: Type.FormDataType = {};
   Object.keys(schema.properties).forEach((key) => {
     const prop = schema.properties[key];
-    let defaultVal = prop?.default;
-    if (typeof defaultVal === 'undefined' && Array.isArray(prop?.enum)) {
-      // eslint-disable-next-line prefer-destructuring
-      defaultVal = prop.enum[0];
-    }
+    const defaultVal = prop?.default;
+
     formData[key] = {
       value: defaultVal,
       isInvalid: false,
