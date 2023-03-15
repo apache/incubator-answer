@@ -240,7 +240,7 @@ const Index = () => {
             </div>
           )}
 
-          {!isLoading && !question?.operation?.operation_type && (
+          {!isLoading && !question?.operation?.type && (
             <WriteAnswer
               data={{
                 qid,
