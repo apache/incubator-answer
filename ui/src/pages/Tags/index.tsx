@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
 import { Tag, Pagination, QueryGroup, TagsLoader } from '@/components';
-import { formatCount } from '@/utils';
+import { formatCount, htmlToReact } from '@/utils';
 import { tryNormalLogged } from '@/utils/guard';
 import { useQueryTags, following } from '@/services';
 import { loggedUserInfoStore } from '@/stores';
@@ -111,8 +111,8 @@ const Tags = () => {
                     <Card.Body className="d-flex flex-column align-items-start">
                       <Tag className="mb-3" data={tag} />
 
-                      <p className="fs-14 flex-fill text-break text-wrap text-truncate-3">
-                        {tag.original_text}
+                      <p className="fs-14 flex-fill text-break text-wrap text-truncate-3 reset-p">
+                        {htmlToReact(tag.parsed_text)}
                       </p>
                       <div className="d-flex align-items-center">
                         <Button

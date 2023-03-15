@@ -294,6 +294,12 @@ img:not(a img, img.broken) {
   white-space: pre-wrap;
 }
 
+.reset-p {
+  p {
+    margin-bottom: 0;
+  }
+}
+
 @keyframes bg-fade-out {
   0%,
   25% {
