@@ -48,6 +48,8 @@ backend:
         other: No permission to delete.
       cannot_update:
         other: No permission to update.
+      question_closed_cannot_add:
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
         other: Comment are not allowed to edit.

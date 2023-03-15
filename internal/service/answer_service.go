@@ -146,6 +146,10 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if !exist {
 		return "", errors.BadRequest(reason.QuestionNotFound)
 	}
+	if questionInfo.Status == entity.QuestionStatusClosed || questionInfo.Status == entity.QuestionStatusDeleted {
+		err = errors.BadRequest(reason.AnswerCannotAddByClosedQuestion)
+		return "", err
+	}
 	insertData := new(entity.Answer)
 	insertData.UserID = req.UserID
 	insertData.OriginalText = req.Content
