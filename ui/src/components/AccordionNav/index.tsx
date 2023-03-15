@@ -20,7 +20,7 @@ function MenuNode({
   const href = isLeaf ? `${path}${menu.name}` : '#';
 
   return (
-    <Nav.Item key={menu.name}>
+    <Nav.Item key={menu.name} className="w-100">
       <Nav.Link
         eventKey={menu.name}
         as={isLeaf ? 'a' : 'button'}
@@ -32,7 +32,7 @@ function MenuNode({
           'text-nowrap d-flex flex-nowrap align-items-center w-100',
           { expanding, 'link-dark': activeKey !== menu.name },
         )}>
-        <span className="me-auto">
+        <span className="me-auto text-truncate">
           {menu.displayName ? menu.displayName : t(menu.name)}
         </span>
         {menu.badgeContent ? (
