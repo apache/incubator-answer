@@ -144,7 +144,7 @@ const Index = () => {
               <Form.Control
                 value={formData.displayName.value}
                 isInvalid={formData.displayName.isInvalid}
-                disabled={role_id !== 2}
+                disabled={role_id !== 2 && role_id !== 3}
                 onChange={handleDisplayNameChange}
               />
 
@@ -157,7 +157,7 @@ const Index = () => {
               <Form.Control
                 value={formData.slugName.value}
                 isInvalid={formData.slugName.isInvalid}
-                disabled={role_id !== 2}
+                disabled={role_id !== 2 && role_id !== 3}
                 onChange={handleSlugNameChange}
               />
               <Form.Text as="div">{t('form.fields.slug_name.desc')}</Form.Text>
