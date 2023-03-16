@@ -7,6 +7,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/rank"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -38,6 +39,7 @@ func (vc *VoteController) VoteUp(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.ObjectID = uid.DeShortID(req.ObjectID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	can, err := vc.rankService.CheckVotePermission(ctx, req.UserID, req.ObjectID, true)
 	if err != nil {
@@ -74,7 +76,7 @@ func (vc *VoteController) VoteDown(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-
+	req.ObjectID = uid.DeShortID(req.ObjectID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	can, err := vc.rankService.CheckVotePermission(ctx, req.UserID, req.ObjectID, false)
 	if err != nil {
