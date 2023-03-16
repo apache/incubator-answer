@@ -42,13 +42,13 @@ const Index: FC<Props> = ({
 
   const handleClick = (e, type) => {
     const str = handleParams(type);
-    if (pathname) {
-      if (floppyNavigation.shouldProcessLinkClick(e)) {
-        e.preventDefault();
+    if (floppyNavigation.shouldProcessLinkClick(e)) {
+      e.preventDefault();
+      if (pathname) {
         navigate(`${pathname}${str}`);
+      } else {
+        setUrlSearchParams(str);
       }
-    } else {
-      setUrlSearchParams(str);
     }
   };
 

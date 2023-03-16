@@ -30,7 +30,7 @@ const Index: FC<IProps> = ({
         data.recommend && 'badge-tag-required',
         className,
       )}>
-      <span className={textClassName}>{data.slug_name}</span>
+      <span className={textClassName}>{data.display_name}</span>
     </Link>
   );
 };
