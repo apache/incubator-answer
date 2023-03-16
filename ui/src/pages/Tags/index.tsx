@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
 import { Tag, Pagination, QueryGroup, TagsLoader } from '@/components';
-import { formatCount, htmlToReact } from '@/utils';
+import { formatCount, escapeRemove } from '@/utils';
 import { tryNormalLogged } from '@/utils/guard';
 import { useQueryTags, following } from '@/services';
 import { loggedUserInfoStore } from '@/stores';
@@ -112,7 +112,7 @@ const Tags = () => {
                       <Tag className="mb-3" data={tag} />
 
                       <div className="fs-14 flex-fill text-break text-wrap text-truncate-3 reset-p mb-3">
-                        {htmlToReact(tag.parsed_text)}
+                        {escapeRemove(tag.excerpt)}
                       </div>
                       <div className="d-flex align-items-center">
                         <Button
