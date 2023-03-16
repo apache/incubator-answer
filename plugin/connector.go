@@ -22,7 +22,7 @@ type Connector interface {
 
 	// ConnectorReceiver presents the receiver of the connector
 	// It handles the callback endpoint of the connector, and returns the
-	ConnectorReceiver(ctx *GinContext) (userInfo ExternalLoginUserInfo, err error)
+	ConnectorReceiver(ctx *GinContext, receiverURL string) (userInfo ExternalLoginUserInfo, err error)
 }
 
 // ExternalLoginUserInfo external login user info
@@ -34,6 +34,7 @@ type ExternalLoginUserInfo struct {
 	// optional. This username is used preferentially during registration
 	Username string
 	// optional. If email exist will bind the existing user
+	// IMPORTANT: The email must have been verified. If the plugin can't guarantee the email is verified, please leave it empty.
 	Email string
 	// optional. The avatar URL provided by the third-party login platform
 	Avatar string
