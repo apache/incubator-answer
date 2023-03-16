@@ -190,8 +190,6 @@ func (us *UserExternalLoginService) activeUser(ctx context.Context, oldUserInfo 
 		}
 	}
 
-	log.Warn(len(externalUserInfo.Avatar), len(schema.FormatAvatarInfo(oldUserInfo.Avatar)))
-
 	// try to update user avatar
 	if len(externalUserInfo.Avatar) > 0 && len(schema.FormatAvatarInfo(oldUserInfo.Avatar)) == 0 {
 		avatarInfo := &schema.AvatarInfo{
