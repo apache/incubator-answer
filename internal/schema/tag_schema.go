@@ -271,7 +271,8 @@ type GetFollowingTagsResp struct {
 }
 
 type SearchTagLikeResp struct {
-	SlugName  string `json:"slug_name"`
-	Recommend bool   `json:"recommend"`
-	Reserved  bool   `json:"reserved"`
+	SlugName    string `json:"slug_name"`
+	DisplayName string `json:"display_name"`
+	Recommend   bool   `json:"recommend"`
+	Reserved    bool   `json:"reserved"`
 }
