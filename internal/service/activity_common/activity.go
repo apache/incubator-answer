@@ -7,6 +7,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/pkg/converter"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
 )
@@ -60,8 +61,8 @@ func (ac *ActivityCommon) HandleActivity() {
 			act := &entity.Activity{
 				UserID:           msg.UserID,
 				TriggerUserID:    msg.TriggerUserID,
-				ObjectID:         msg.ObjectID,
-				OriginalObjectID: msg.OriginalObjectID,
+				ObjectID:         uid.DeShortID(msg.ObjectID),
+				OriginalObjectID: uid.DeShortID(msg.OriginalObjectID),
 				ActivityType:     activityType,
 				Cancelled:        entity.ActivityAvailable,
 			}
