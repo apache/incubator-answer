@@ -88,6 +88,7 @@ func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.Searc
 	for _, tag := range tags {
 		item := schema.SearchTagLikeResp{}
 		item.SlugName = tag.SlugName
+		item.DisplayName = tag.DisplayName
 		item.Recommend = tag.Recommend
 		item.Reserved = tag.Reserved
 		resp = append(resp, item)
