@@ -240,15 +240,17 @@ const Index = () => {
             </div>
           )}
 
-          {!isLoading && !question?.operation?.type && (
-            <WriteAnswer
-              data={{
-                qid,
-                answered: question?.answered,
-              }}
-              callback={writeAnswerCallback}
-            />
-          )}
+          {!isLoading &&
+            Number(question?.status) !== 2 &&
+            !question?.operation?.type && (
+              <WriteAnswer
+                data={{
+                  qid,
+                  answered: question?.answered,
+                }}
+                callback={writeAnswerCallback}
+              />
+            )}
         </Col>
         <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
           <RelatedQuestions id={question?.id || ''} />
