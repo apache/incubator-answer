@@ -30,5 +30,5 @@ func addPlugin(x *xorm.Engine) error {
 		}
 	}
 
-	return x.Sync(new(entity.PluginConfig))
+	return x.Sync(new(entity.PluginConfig), new(entity.UserExternalLogin))
 }
