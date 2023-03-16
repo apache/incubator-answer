@@ -104,7 +104,7 @@ func (m *statusManager) IsEnabled(name string) bool {
 	if status, ok := m.status[name]; ok {
 		return status
 	}
-	return true
+	return false
 }
 
 // MarshalJSON implements the json.Marshaler interface.
