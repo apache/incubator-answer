@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { ListGroup } from 'react-bootstrap';
-import { NavLink, useParams, useSearchParams } from 'react-router-dom';
+import { NavLink, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { pathFactory } from '@/router/pathFactory';
@@ -15,7 +15,6 @@ import {
   QuestionListLoader,
   Counts,
 } from '@/components';
-import { useQuestionList } from '@/services';
 
 const QuestionOrderKeys: Type.QuestionOrderBy[] = [
   'newest',
@@ -27,28 +26,17 @@ const QuestionOrderKeys: Type.QuestionOrderBy[] = [
 
 interface Props {
   source: 'questions' | 'tag';
+  data;
+  isLoading: boolean;
 }
 
-const QuestionList: FC<Props> = ({ source }) => {
+const QuestionList: FC<Props> = ({ source, data, isLoading = false }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
-  const { tagName = '' } = useParams();
   const [urlSearchParams] = useSearchParams();
   const curOrder = urlSearchParams.get('order') || QuestionOrderKeys[0];
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const pageSize = 20;
-  const reqParams: Type.QueryQuestionsReq = {
-    page_size: pageSize,
-    page: curPage,
-    order: curOrder as Type.QuestionOrderBy,
-    tag: tagName,
-  };
-
-  if (source === 'questions') {
-    delete reqParams.tag;
-  }
-  const { data: listData, isLoading } = useQuestionList(reqParams);
-  const count = listData?.count || 0;
-
+  const count = data?.count || 0;
   return (
     <div>
       <div className="mb-3 d-flex flex-wrap justify-content-between">
@@ -68,7 +56,7 @@ const QuestionList: FC<Props> = ({ source }) => {
         {isLoading ? (
           <QuestionListLoader />
         ) : (
-          listData?.list?.map((li) => {
+          data?.list?.map((li) => {
             return (
               <ListGroup.Item
                 key={li.id}
