@@ -108,6 +108,8 @@ type GetTagPageResp struct {
 	DisplayName string `json:"display_name"`
 	// excerpt
 	Excerpt string `json:"excerpt"`
+	//description
+	Description string `json:"description"`
 	// original text
 	OriginalText string `json:"original_text"`
 	// parsed_text
@@ -127,7 +129,7 @@ type GetTagPageResp struct {
 }
 
 func (tr *GetTagPageResp) GetExcerpt() {
-	excerpt := strings.TrimSpace(tr.OriginalText)
+	excerpt := strings.TrimSpace(tr.ParsedText)
 	idx := strings.Index(excerpt, "\n")
 	if idx >= 0 {
 		excerpt = excerpt[0:idx]

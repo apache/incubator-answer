@@ -6178,6 +6178,10 @@ const docTemplate = `{
                     "description": "created time",
                     "type": "integer"
                 },
+                "description": {
+                    "description": "description",
+                    "type": "string"
+                },
                 "display_name": {
                     "description": "display_name",
                     "type": "string"
