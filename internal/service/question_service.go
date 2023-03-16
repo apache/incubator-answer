@@ -481,7 +481,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	question.Title = req.Title
 	question.OriginalText = req.Content
 	question.ParsedText = req.HTML
-	question.ID = req.ID
+	question.ID = uid.DeShortID(req.ID)
 	question.UpdatedAt = now
 	question.PostUpdateTime = now
 	question.UserID = dbinfo.UserID
