@@ -2,7 +2,6 @@ package router
 
 import (
 	"github.com/answerdev/answer/internal/controller"
-	"github.com/answerdev/answer/plugin"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,12 +19,8 @@ func NewPluginAPIRouter(
 
 func (pr *PluginAPIRouter) RegisterUnAuthConnectorRouter(r *gin.RouterGroup) {
 	connectorController := pr.connectorController
-	_ = plugin.CallConnector(func(connector plugin.Connector) error {
-		connectorSlugName := connector.ConnectorSlugName()
-		r.GET(controller.ConnectorLoginRouterPrefix+connectorSlugName, connectorController.ConnectorLogin(connector))
-		r.GET(controller.ConnectorRedirectRouterPrefix+connectorSlugName, connectorController.ConnectorRedirect(connector))
-		return nil
-	})
+	r.GET(controller.ConnectorLoginRouterPrefix+":name", connectorController.ConnectorLoginDispatcher)
+	r.GET(controller.ConnectorRedirectRouterPrefix+":name", connectorController.ConnectorRedirectDispatcher)
 	r.GET("/connector/info", connectorController.ConnectorsInfo)
 	r.POST("/connector/binding/email", connectorController.ExternalLoginBindingUserSendEmail)
 }

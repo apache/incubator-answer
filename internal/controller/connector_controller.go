@@ -41,6 +41,41 @@ func NewConnectorController(
 	}
 }
 
+// ConnectorLoginDispatcher dispatch connector login request to specific connector by slug name
+// We can't register specific router for each connector when application start, because the plugin status will be changed by admin.
+// If the plugin is disabled, the router should be unavailable.
+func (cc *ConnectorController) ConnectorLoginDispatcher(ctx *gin.Context) {
+	slugName := ctx.Param("name")
+	var c plugin.Connector
+	_ = plugin.CallConnector(func(connector plugin.Connector) error {
+		if connector.ConnectorSlugName() == slugName {
+			c = connector
+		}
+		return nil
+	})
+	if c == nil {
+		ctx.Redirect(http.StatusFound, "/50x")
+		return
+	}
+	cc.ConnectorLogin(c)(ctx)
+}
+
+func (cc *ConnectorController) ConnectorRedirectDispatcher(ctx *gin.Context) {
+	slugName := ctx.Param("name")
+	var c plugin.Connector
+	_ = plugin.CallConnector(func(connector plugin.Connector) error {
+		if connector.ConnectorSlugName() == slugName {
+			c = connector
+		}
+		return nil
+	})
+	if c == nil {
+		ctx.Redirect(http.StatusFound, "/50x")
+		return
+	}
+	cc.ConnectorRedirect(c)(ctx)
+}
+
 func (cc *ConnectorController) ConnectorLogin(connector plugin.Connector) (fn func(ctx *gin.Context)) {
 	return func(ctx *gin.Context) {
 		general, err := cc.siteInfoService.GetSiteGeneral(ctx)
@@ -68,13 +103,15 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 			ctx.Redirect(http.StatusFound, "/50x")
 			return
 		}
-		userInfo, err := connector.ConnectorReceiver(ctx)
+		receiverURL := fmt.Sprintf("%s%s%s%s", siteGeneral.SiteUrl,
+			commonRouterPrefix, ConnectorRedirectRouterPrefix, connector.ConnectorSlugName())
+		userInfo, err := connector.ConnectorReceiver(ctx, receiverURL)
 		if err != nil {
 			log.Errorf("connector received failed: %v", err)
 			ctx.Redirect(http.StatusFound, "/50x")
 			return
 		}
-		log.Infof("connector received: %+v", userInfo)
+		log.Debugf("connector received: %+v", userInfo)
 		u := &schema.ExternalLoginUserInfoCache{
 			Provider:    connector.ConnectorSlugName(),
 			ExternalID:  userInfo.ExternalID,
