@@ -23,8 +23,8 @@ const Index: FC = () => {
         enumNames: [
           '/questions/10010000000000001/post-title',
           '/questions/10010000000000001',
-          '/questions/11/post-title',
-          '/questions/11',
+          '/questions/D1D1/post-title',
+          '/questions/D1D1',
         ],
         default: 1,
       },
