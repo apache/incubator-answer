@@ -200,6 +200,7 @@ func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.T
 	}
 	tagNames := make([]string, 0)
 	for _, item := range tags {
+		item.SlugName = strings.ReplaceAll(item.SlugName, " ", "-")
 		tagNames = append(tagNames, item.SlugName)
 	}
 	list, err := ts.GetTagListByNames(ctx, tagNames)
@@ -233,7 +234,7 @@ func (ts *TagCommonService) AddTag(ctx context.Context, req *schema.AddTagReq) (
 		return nil, errors.BadRequest(reason.TagAlreadyExist)
 	}
 	tagInfo := &entity.Tag{
-		SlugName:     req.SlugName,
+		SlugName:     strings.ReplaceAll(req.SlugName, " ", "-"),
 		DisplayName:  req.DisplayName,
 		OriginalText: req.OriginalText,
 		ParsedText:   req.ParsedText,
@@ -557,7 +558,7 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 			continue
 		}
 		item := &entity.Tag{}
-		item.SlugName = tag.SlugName
+		item.SlugName = strings.ReplaceAll(tag.SlugName, " ", "-")
 		item.DisplayName = tag.DisplayName
 		item.OriginalText = tag.OriginalText
 		item.ParsedText = tag.ParsedText

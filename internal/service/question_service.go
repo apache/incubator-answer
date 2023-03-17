@@ -235,6 +235,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 
 	tagNameList := make([]string, 0)
 	for _, tag := range req.Tags {
+		tag.SlugName = strings.ReplaceAll(tag.SlugName, " ", "-")
 		tagNameList = append(tagNameList, tag.SlugName)
 	}
 	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
@@ -495,6 +496,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	tagNameList := make([]string, 0)
 	oldtagNameList := make([]string, 0)
 	for _, tag := range req.Tags {
+		tag.SlugName = strings.ReplaceAll(tag.SlugName, " ", "-")
 		tagNameList = append(tagNameList, tag.SlugName)
 	}
 	for _, tag := range oldTags {
