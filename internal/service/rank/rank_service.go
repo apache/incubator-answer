@@ -15,6 +15,7 @@ import (
 	"github.com/answerdev/answer/internal/service/role"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/htmltext"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
@@ -124,6 +125,7 @@ func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID str
 
 // CheckOperationObjectOwner check operation object owner
 func (rs *RankService) CheckOperationObjectOwner(ctx context.Context, userID, objectID string) bool {
+	objectID = uid.DeShortID(objectID)
 	objectInfo, err := rs.objectInfoService.GetInfo(ctx, objectID)
 	if err != nil {
 		log.Error(err)
