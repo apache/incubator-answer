@@ -27,7 +27,6 @@ const Index: FC = () => {
       required_tag: {
         type: 'boolean',
         title: t('required_tag.title'),
-        label: t('required_tag.label'),
         description: t('required_tag.text'),
       },
       reserved_tags: {
@@ -46,6 +45,9 @@ const Index: FC = () => {
     },
     required_tag: {
       'ui:widget': 'switch',
+      'ui:options': {
+        label: t('required_tag.label'),
+      },
     },
     reserved_tags: {
       'ui:widget': 'textarea',

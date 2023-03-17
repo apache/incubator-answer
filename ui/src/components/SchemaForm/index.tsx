@@ -20,7 +20,6 @@ export interface JSONSchema {
     [key: string]: {
       type: 'string' | 'boolean' | 'number';
       title: string;
-      label?: string;
       description?: string;
       enum?: Array<string | boolean | number>;
       enumNames?: string[];
@@ -61,7 +60,9 @@ export interface UploadOptions extends BaseUIOptions {
   imageType?: Type.UploadType;
 }
 
-export interface SwitchOptions extends BaseUIOptions {}
+export interface SwitchOptions extends BaseUIOptions {
+  label?: string;
+}
 
 export interface TimezoneOptions extends BaseUIOptions {
   placeholder?: string;
@@ -172,7 +173,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
           isInvalid: false,
           value: metaProp.enum?.[0],
         };
-        console.log('formData[k]: ', k, formData[k]);
       }
     });
   };
@@ -348,13 +348,13 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   useImperativeHandle(ref, () => ({
     validator,
   }));
-
+  console.log('uiSchema: ', uiSchema);
   return (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {
-        const { title, description, label } = properties[key];
-        const { 'ui:widget': widget = 'input' } = uiSchema[key] || {};
-
+        const { title, description } = properties[key];
+        const { 'ui:widget': widget = 'input', 'ui:options': uiOpt } =
+          uiSchema[key] || {};
         if (widget === 'select') {
           return (
             <Form.Group
@@ -435,7 +435,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 id={`switch-${title}`}
                 name={key}
                 type="switch"
-                label={label}
+                label={(uiOpt as SwitchOptions)?.label}
                 checked={formData[key]?.value || ''}
                 feedback={formData[key]?.errorMsg}
                 feedbackType="invalid"
