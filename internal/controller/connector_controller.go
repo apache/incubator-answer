@@ -54,6 +54,7 @@ func (cc *ConnectorController) ConnectorLoginDispatcher(ctx *gin.Context) {
 		return nil
 	})
 	if c == nil {
+		log.Errorf("connector %s not found", slugName)
 		ctx.Redirect(http.StatusFound, "/50x")
 		return
 	}
@@ -70,6 +71,7 @@ func (cc *ConnectorController) ConnectorRedirectDispatcher(ctx *gin.Context) {
 		return nil
 	})
 	if c == nil {
+		log.Errorf("connector %s not found", slugName)
 		ctx.Redirect(http.StatusFound, "/50x")
 		return
 	}

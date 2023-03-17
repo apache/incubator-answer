@@ -59,6 +59,7 @@ func (g *GetPluginConfigResp) SetConfigFields(ctx *gin.Context, fields []plugin.
 			},
 		}
 		configField.UIOptions.Placeholder = field.UIOptions.Placeholder.Translate(ctx)
+		configField.UIOptions.Label = field.UIOptions.Label.Translate(ctx)
 
 		for _, option := range field.Options {
 			configField.Options = append(configField.Options, ConfigFieldOption{
@@ -76,7 +77,7 @@ type ConfigField struct {
 	Title       string               `json:"title"`
 	Description string               `json:"description"`
 	Required    bool                 `json:"required"`
-	Value       string               `json:"value"`
+	Value       any                  `json:"value"`
 	UIOptions   ConfigFieldUIOptions `json:"ui_options"`
 	Options     []ConfigFieldOption  `json:"options,omitempty"`
 }
@@ -85,6 +86,7 @@ type ConfigFieldUIOptions struct {
 	Placeholder string `json:"placeholder,omitempty"`
 	Rows        string `json:"rows,omitempty"`
 	InputType   string `json:"input_type,omitempty"`
+	Label       string `json:"label,omitempty"`
 }
 
 type ConfigFieldOption struct {

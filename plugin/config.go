@@ -37,7 +37,7 @@ type ConfigField struct {
 	Title       Translator           `json:"title"`
 	Description Translator           `json:"description"`
 	Required    bool                 `json:"required"`
-	Value       string               `json:"value"`
+	Value       any                  `json:"value"`
 	UIOptions   ConfigFieldUIOptions `json:"ui_options"`
 	Options     []ConfigFieldOption  `json:"options,omitempty"`
 }
@@ -46,6 +46,7 @@ type ConfigFieldUIOptions struct {
 	Placeholder Translator `json:"placeholder,omitempty"`
 	Rows        string     `json:"rows,omitempty"`
 	InputType   InputType  `json:"input_type,omitempty"`
+	Label       Translator `json:"label,omitempty"`
 }
 
 type ConfigFieldOption struct {
