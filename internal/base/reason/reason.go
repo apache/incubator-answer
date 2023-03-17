@@ -46,6 +46,7 @@ const (
 	TagNotContainSynonym             = "error.tag.not_contain_synonym_tags"
 	TagCannotUpdate                  = "error.tag.cannot_update"
 	TagIsUsedCannotDelete            = "error.tag.is_used_cannot_delete"
+	TagAlreadyExist                  = "error.tag.already_exist"
 	RankFailToMeetTheCondition       = "error.rank.fail_to_meet_the_condition"
 	ThemeNotFound                    = "error.theme.not_found"
 	LangNotFound                     = "error.lang.not_found"

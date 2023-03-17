@@ -20,6 +20,7 @@ import (
 	"github.com/answerdev/answer/internal/service/permission"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/internal/service/role"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/encryption"
 	"github.com/answerdev/answer/pkg/uid"
@@ -40,6 +41,7 @@ type AnswerService struct {
 	AnswerCommon          *answercommon.AnswerCommon
 	voteRepo              activity_common.VoteRepo
 	emailService          *export.EmailService
+	roleService           *role.UserRoleRelService
 }
 
 func NewAnswerService(
@@ -54,6 +56,7 @@ func NewAnswerService(
 	answerCommon *answercommon.AnswerCommon,
 	voteRepo activity_common.VoteRepo,
 	emailService *export.EmailService,
+	roleService *role.UserRoleRelService,
 ) *AnswerService {
 	return &AnswerService{
 		answerRepo:            answerRepo,
@@ -67,6 +70,7 @@ func NewAnswerService(
 		AnswerCommon:          answerCommon,
 		voteRepo:              voteRepo,
 		emailService:          emailService,
+		roleService:           roleService,
 	}
 }
 
@@ -83,7 +87,11 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 	if answerInfo.Status == entity.AnswerStatusDeleted {
 		return nil
 	}
-	if !req.IsAdmin {
+	roleID, err := as.roleService.GetUserRole(ctx, req.UserID)
+	if err != nil {
+		return err
+	}
+	if roleID != role.RoleAdminID && roleID != role.RoleModeratorID {
 		if answerInfo.UserID != req.UserID {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}

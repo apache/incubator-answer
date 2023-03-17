@@ -106,6 +106,8 @@ backend:
       not_found:
         other: Report not found.
     tag:
+      already_exist:
+        other: Tag already exists.
       not_found:
         other: Tag not found.
       recommend_tag_not_found:

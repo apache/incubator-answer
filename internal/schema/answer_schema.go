@@ -10,8 +10,9 @@ type RemoveAnswerReq struct {
 	// answer id
 	ID string `validate:"required" json:"id"`
 	// user id
-	UserID  string `json:"-"`
-	IsAdmin bool   `json:"-"`
+	UserID string `json:"-"`
+	// whether user can delete it
+	CanDelete bool `json:"-"`
 }
 
 const (

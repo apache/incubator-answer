@@ -175,6 +175,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// tag
 	r.GET("/question/tags", a.tagController.SearchTagLike)
+	r.POST("/tag", a.tagController.AddTag)
 	r.PUT("/tag", a.tagController.UpdateTag)
 	r.DELETE("/tag", a.tagController.RemoveTag)
 	r.PUT("/tag/synonym", a.tagController.UpdateTagSynonym)
