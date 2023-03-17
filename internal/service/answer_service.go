@@ -22,6 +22,7 @@ import (
 	"github.com/answerdev/answer/internal/service/revision_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/encryption"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -159,7 +160,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if err != nil {
 		log.Error("IncreaseAnswerCount error", err.Error())
 	}
-	err = as.questionCommon.UpdateLastAnswer(ctx, req.QuestionID, insertData.ID)
+	err = as.questionCommon.UpdateLastAnswer(ctx, req.QuestionID, uid.DeShortID(insertData.ID))
 	if err != nil {
 		log.Error("UpdateLastAnswer error", err.Error())
 	}

@@ -198,7 +198,7 @@ func (ns *NotificationCommon) SendNotificationToAllFollower(ctx context.Context,
 	}
 	condObjectID := msg.ObjectID
 	if len(questionID) > 0 {
-		condObjectID = questionID
+		condObjectID = uid.DeShortID(questionID)
 	}
 	userIDs, err := ns.followRepo.GetFollowUserIDs(ctx, condObjectID)
 	if err != nil {
