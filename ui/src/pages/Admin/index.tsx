@@ -13,19 +13,14 @@ import { interfaceStore } from '@/stores';
 
 import './index.scss';
 
-const formPaths = [
-  'general',
-  'smtp',
-  'interface',
-  'branding',
-  'legal',
-  'write',
-  'seo',
-  'themes',
-  'css-html',
-  'github_connector',
+const g10Paths = [
+  'dashboard',
+  'questions',
+  'answers',
+  'users',
+  'flags',
+  'installed_plugins',
 ];
-
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
   const { pathname } = useLocation();
@@ -83,7 +78,7 @@ const Index: FC = () => {
           <Col lg={2}>
             <AccordionNav menus={menus} path="/admin/" />
           </Col>
-          <Col lg={formPaths.find((v) => pathname.includes(v)) ? 6 : 10}>
+          <Col lg={g10Paths.find((v) => pathname.includes(v)) ? 10 : 6}>
             <Outlet />
           </Col>
         </Row>
