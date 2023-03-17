@@ -17,7 +17,6 @@ const Index = () => {
       notice_switch: {
         type: 'boolean',
         title: t('email.label'),
-        label: t('email.radio'),
         default: false,
       },
     },
@@ -25,6 +24,9 @@ const Index = () => {
   const uiSchema: UISchema = {
     notice_switch: {
       'ui:widget': 'switch',
+      'ui:options': {
+        label: t('email.radio'),
+      },
     },
   };
   const [formData, setFormData] = useState<FormDataType>(initFormData(schema));

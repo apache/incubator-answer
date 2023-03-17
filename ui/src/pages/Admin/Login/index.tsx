@@ -19,14 +19,12 @@ const Index: FC = () => {
       allow_new_registrations: {
         type: 'boolean',
         title: t('membership.title'),
-        label: t('membership.label'),
         description: t('membership.text'),
         default: false,
       },
       login_required: {
         type: 'boolean',
         title: t('private.title'),
-        label: t('private.label'),
         description: t('private.text'),
         default: false,
       },
@@ -35,9 +33,15 @@ const Index: FC = () => {
   const uiSchema: UISchema = {
     allow_new_registrations: {
       'ui:widget': 'switch',
+      'ui:options': {
+        label: t('membership.label'),
+      },
     },
     login_required: {
       'ui:widget': 'switch',
+      'ui:options': {
+        label: t('private.label'),
+      },
     },
   };
   const [formData, setFormData] = useState(initFormData(schema));
