@@ -3,255 +3,254 @@
 backend:
   base:
     success:
-      other: Success.
+      other: Úspech.
     unknown:
-      other: Unknown error.
+      other: Neznáma chyba.
     request_format_error:
-      other: Request format is not valid.
+      other: Formát žiadosti nie je platný.
     unauthorized_error:
-      other: Unauthorized.
+      other: Neoprávnené.
     database_error:
-      other: Data server error.
+      other: Chyba dátového servera.
   role:
     name:
       user:
-        other: User
+        other: Užívateľ
       admin:
-        other: Admin
+        other: Správca
       moderator:
-        other: Moderator
+        other: Moderátor
     description:
       user:
-        other: Default with no special access.
+        other: Predvolené bez špeciálneho prístupu.
       admin:
-        other: Have the full power to access the site.
+        other: Má plnú moc a prístup k stránke.
       moderator:
-        other: Has access to all posts except admin settings.
+        other: Má prístup ku všetkým príspevkom okrem nastavení správcu.
   email:
-    other: Email
+    other: E-mail
   password:
-    other: Password
+    other: Heslo
   email_or_password_wrong_error:
-    other: Email and password do not match.
+    other: E-mail a heslo sa nezhodujú.
   error:
     admin:
       cannot_update_their_password:
-        other: You cannot modify your password.
+        other: Svoje heslo nemôžete upraviť.
       cannot_modify_self_status:
-        other: You cannot modify your status.
+        other: Nemôžete upraviť svoj stav.
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: E-mail a heslo sa nezhodujú.
     answer:
       not_found:
-        other: Answer do not found.
+        other: Odpoveď sa nenašla.
       cannot_deleted:
-        other: No permission to delete.
+        other: Žiadne povolenie na odstránenie.
       cannot_update:
-        other: No permission to update.
+        other: Žiadne povolenie na aktualizáciu.
     comment:
       edit_without_permission:
-        other: Comment are not allowed to edit.
+        other: Komentár nie je dovolené upravovať.
       not_found:
-        other: Comment not found.
+        other: Komentár sa nenašiel.
       cannot_edit_after_deadline:
-        other: The comment time has been too long to modify.
+        other: Čas na úpravu komentára bol príliš dlhý.
     email:
       duplicate:
-        other: Email already exists.
+        other: E-mail už existuje.
       need_to_be_verified:
-        other: Email should be verified.
+        other: E-mail by sa mal overiť.
       verify_url_expired:
-        other: Email verified URL has expired, please resend the email.
+        other: Platnosť overenej adresy URL e-mailu vypršala, pošlite e-mail znova.
     lang:
       not_found:
-        other: Language file not found.
+        other: Jazykový súbor sa nenašiel.
     object:
       captcha_verification_failed:
-        other: Captcha wrong.
+        other: Captcha zle.
       disallow_follow:
-        other: You are not allowed to follow.
+        other: Nemáte dovolené sledovať.
       disallow_vote:
-        other: You are not allowed to vote.
+        other: Nemáte povolené hlasovať.
       disallow_vote_your_self:
-        other: You can't vote for your own post.
+        other: Nemôžete hlasovať za svoj vlastný príspevok.
       not_found:
-        other: Object not found.
+        other: Objekt sa nenašiel.
       verification_failed:
-        other: Verification failed.
+        other: Overenie zlyhalo.
       email_or_password_incorrect:
-        other: Email and password do not match.
+        other: E-mail a heslo sa nezhodujú.
       old_password_verification_failed:
-        other: The old password verification failed
+        other: Overenie starého hesla zlyhalo
       new_password_same_as_previous_setting:
-        other: The new password is the same as the previous one.
+        other: Nové heslo je rovnaké ako predchádzajúce.
     question:
       already_deleted:
-        other: This post has been deleted.
+        other: Tento príspevok bol odstránený.
       not_found:
-        other: Question not found.
+        other: Otázka sa nenašla.
       cannot_deleted:
-        other: No permission to delete.
+        other: Žiadne povolenie na odstránenie.
       cannot_close:
-        other: No permission to close.
+        other: Žiadne povolenie na uzavretie.
       cannot_update:
-        other: No permission to update.
+        other: Žiadne povolenie na aktualizáciu.
     rank:
       fail_to_meet_the_condition:
-        other: Rank fail to meet the condition.
+        other: Poradie nespĺňa podmienku.
     report:
       handle_failed:
-        other: Report handle failed.
+        other: Spracovanie prehľadu zlyhalo.
       not_found:
-        other: Report not found.
+        other: Prehľad sa nenašiel.
     tag:
       not_found:
-        other: Tag not found.
+        other: Značka sa nenašla.
       recommend_tag_not_found:
-        other: Recommend Tag is not exist.
+        other: Značka Odporúčania neexistuje
       recommend_tag_enter:
-        other: Please enter at least one required tag.
+        other: Zadajte aspoň jednu požadovanú značku.
       not_contain_synonym_tags:
-        other: Should not contain synonym tags.
+        other: Nemal by obsahovať synonymické značky.
       cannot_update:
-        other: No permission to update.
+        other: Žiadne povolenie na aktualizáciu.
       is_used_cannot_delete:
-        other: You cannot delete a tag that is in use
+        other: Nemôžete odstrániť značku, ktorá sa používa
       cannot_set_synonym_as_itself:
-        other: You cannot set the synonym of the current tag as itself.
+        other: Synonymum aktuálnej značky nemôžete nastaviť ako samotnú.
     smtp:
       config_from_name_cannot_be_email:
-        other: The From Name cannot be a email address.
+        other: Meno odosielateľa nemôže byť e-mailová adresa.
     theme:
       not_found:
-        other: Theme not found.
+        other: Téma sa nenašla.
     revision:
       review_underway:
-        other: Can't edit currently, there is a version in the review queue.
+        other: Momentálne nie je možné upravovať, vo fronte na kontrolu je verzia.
       no_permission:
-        other: No permission to Revision.
+        other: Žiadne povolenie na revíziu.
     user:
       email_or_password_wrong:
         other:
-          other: Email and password do not match.
+          other: E-mail a heslo sa nezhodujú.
       not_found:
-        other: User not found.
+        other: Používateľ nenájdený.
       suspended:
-        other: User has been suspended.
+        other: Používateľ bol pozastavený.
       username_invalid:
-        other: Username is invalid.
+        other: Používateľské meno je neplatné.
       username_duplicate:
-        other: Username is already in use.
+        other: Používateľské meno sa už používa.
       set_avatar:
-        other: Avatar set failed.
+        other: Nastavenie avatara zlyhalo.
       cannot_update_your_role:
-        other: You cannot modify your role.
+        other: Svoju rolu nemôžete zmeniť.
       not_allowed_registration:
-        other: Currently the site is not open for registration
+        other: V súčasnosti nie je stránka otvorená na registráciu
     config:
       read_config_failed:
-        other: Read config failed
+        other: Read Config zlyhal
     database:
       connection_failed:
-        other: Database connection failed
+        other: Databázové pripojenie zlyhalo
       create_table_failed:
-        other: Create table failed
+        other: Vytvorenie tabuľky zlyhalo
     install:
       create_config_failed:
-        other: Can't create the config.yaml file.
+        other: Nie je možné vytvoriť súbor config.yaml.
     upload:
       unsupported_file_format:
-        other: Unsupported file format.
+        other: Nepodporovaný formát súboru.
   report:
     spam:
       name:
-        other: spam
+        other: nevyžiadaná pošta
       desc:
-        other: This post is an advertisement, or vandalism. It is not useful or relevant
-          to the current topic.
+        other: Tento príspevok je reklama alebo vandalizmus. Nie je to užitočné ani relevantné
+          pre aktuálnu tému.
     rude:
       name:
-        other: rude or abusive
+        other: hrubý alebo urážlivý
       desc:
-        other: A reasonable person would find this content inappropriate for respectful
-          discourse.
+        other: Rozumný človek by považoval tento obsah za nevhodný na zdvorilý prejav.
     duplicate:
       name:
-        other: a duplicate
+        other: duplikát
       desc:
-        other: This question has been asked before and already has an answer.
+        other: Táto otázka už bola položená a už má odpoveď.
     not_answer:
       name:
-        other: not an answer
+        other: nie odpoveď
       desc:
-        other: This was posted as an answer, but it does not attempt to answer the
-          question. It should possibly be an edit, a comment, another question,
-          or deleted altogether.
+        other: Toto bolo uverejnené ako odpoveď, ale nepokúša sa odpovedať
+          na otázku. Možno by to mala byť úprava, komentár, iná otázka,
+          alebo úplne vymazané.
     not_need:
       name:
-        other: no longer needed
+        other: už nie sú potrebné
       desc:
-        other: This comment is outdated, conversational or not relevant to this post.
+        other: Tento komentár je zastaraný, konverzačný alebo nesúvisí s týmto príspevkom.
     other:
       name:
-        other: something else
+        other: niečo iné
       desc:
-        other: This post requires staff attention for another reason not listed above.
+        other: Tento príspevok si vyžaduje pozornosť zamestnancov z iného dôvodu, ktorý nie je uvedený vyššie.
   question:
     close:
       duplicate:
         name:
-          other: spam
+          other: nevyžiadaná pošta
         desc:
-          other: This question has been asked before and already has an answer.
+          other: Táto otázka už bola položená a už má odpoveď.
       guideline:
         name:
-          other: a community-specific reason
+          other: dôvod špecifický pre komunitu
         desc:
-          other: This question doesn't meet a community guideline.
+          other: Táto otázka nespĺňa pokyny pre komunitu.
       multiple:
         name:
-          other: needs details or clarity
+          other: potrebuje podrobnosti alebo jasnosť
         desc:
-          other: This question currently includes multiple questions in one. It should
-            focus on one problem only.
+          other: Táto otázka momentálne obsahuje viacero otázok v jednej. Malo by
+            sa zamerať len na jeden problém.
       other:
         name:
-          other: something else
+          other: niečo iné
         desc:
-          other: This post requires another reason not listed above.
+          other: Tento príspevok vyžaduje iný dôvod, ktorý nie je uvedený vyššie.
     operation_type:
       asked:
-        other: asked
+        other: požiadaný
       answered:
-        other: answered
+        other: zodpovedaný
       modified:
-        other: modified
+        other: upravený
   notification:
     action:
       update_question:
-        other: updated question
+        other: aktualizovaná otázka
       answer_the_question:
-        other: answered question
+        other: zodpovedaná otázka
       update_answer:
-        other: updated answer
+        other: aktualizovaná odpoveď
       accept_answer:
-        other: accepted answer
+        other: prijatá odpoveď
       comment_question:
-        other: commented question
+        other: komentovaná otázka
       comment_answer:
-        other: commented answer
+        other: komentovaná odpoveď
       reply_to_you:
-        other: replied to you
+        other: odpovedal vám
       mention_you:
-        other: mentioned you
+        other: spomenul vás
       your_question_is_closed:
-        other: Your question has been closed
+        other: Vaša otázka bola uzavretá
       your_question_was_deleted:
-        other: Your question has been deleted
+        other: Vaša otázka bola odstránená
       your_answer_was_deleted:
-        other: Your answer has been deleted
+        other: Vaša odpoveď bola odstránená
       your_comment_was_deleted:
-        other: Your comment has been deleted
+        other: Váš komentár bol odstránený
 
 # The following fields are used for interface presentation(Front-end)
 ui:
