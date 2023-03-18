@@ -255,57 +255,57 @@ backend:
 # The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: How to Format
+    title: Ako formátovať
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre
+      <ul class="mb-0"><li><p class="mb-2">Vytvorenie odkazov</p><pre
       class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
-      class="mb-2">put returns between paragraphs</p></li><li><p
+      class="mb-2">vložiť návratky medzi odseky</p></li><li><p
       class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p
-      class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by
-      placing <code>&gt;</code> at start of line</p></li><li><p
-      class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p
-      class="mb-2">create code fences with backticks <code>`</code></p><pre
+      class="mb-2">odsadenie kódu o 4 medzery</p></li><li><p class="mb-2">citovať podľa
+      umiestnenie <code>&gt;</code> na začiatok riadku</p></li><li><p
+      class="mb-2">backtick označenie <code>`ako _this_`</code></p></li><li><p
+      class="mb-2">vytvorte kódové ploty s <code>`</code></p><pre
       class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
-    prev: Prev
-    next: Next
+    prev: Predch
+    next: Ďalšie
   page_title:
-    question: Question
-    questions: Questions
-    tag: Tag
-    tags: Tags
-    tag_wiki: tag wiki
-    edit_tag: Edit Tag
-    ask_a_question: Add Question
-    edit_question: Edit Question
-    edit_answer: Edit Answer
-    search: Search
-    posts_containing: Posts containing
-    settings: Settings
-    notifications: Notifications
-    login: Log In
-    sign_up: Sign Up
-    account_recovery: Account Recovery
-    account_activation: Account Activation
-    confirm_email: Confirm Email
-    account_suspended: Account Suspended
+    question: Otázka
+    questions: Otázky
+    tag: Značka
+    tags: Značky
+    tag_wiki: značka wiki
+    edit_tag: Upraviť značku
+    ask_a_question: Pridať otázku
+    edit_question: Úpraviť otázku
+    edit_answer: Úpraviť odpoveť
+    search: Vyhľadávanie
+    posts_containing: Príspevky obsahujúce
+    settings: Nastavenie
+    notifications: Oznámenia
+    login: Prihlásiť sa
+    sign_up: Prihlásiť Se
+    account_recovery: Obnovenie účtu
+    account_activation: Aktivácia účtu
+    confirm_email: Potvrď email
+    account_suspended: Účet pozastavený
     admin: Admin
-    change_email: Modify Email
-    install: Answer Installation
+    change_email: Upraviť e-mail
+    install: Answer Inštalácia
     upgrade: Answer Upgrade
-    maintenance: Website Maintenance
-    users: Users
+    maintenance: Údržba webových stránok
+    users: Užívatelia
   notifications:
-    title: Notifications
-    inbox: Inbox
-    achievement: Achievements
-    all_read: Mark all as read
-    show_more: Show more
+    title: Oznámenia
+    inbox: Doručená pošta
+    achievement: Úspechy
+    all_read: Označiť všetko ako prečítané
+    show_more: Zobraziť viac
   suspended:
-    title: Your Account has been Suspended
-    until_time: "Your account was suspended until {{ time }}."
-    forever: This user was suspended forever.
-    end: You don't meet a community guideline.
+    title: Váš účet bol pozastavený
+    until_time: "Váš účet bol pozastavený do {{ time }}."
+    forever: Tento používateľ bol navždy pozastavený.
+    end: Nespĺňate pokyny pre komunitu.
   editor:
     blockquote:
       text: Blockquote
@@ -408,88 +408,88 @@ ui:
       heading: Heading
       cell: Cell
   close_modal:
-    title: I am closing this post as...
-    btn_cancel: Cancel
-    btn_submit: Submit
+    title: Tento príspevok uzatváram ako...
+    btn_cancel: Zrušiť
+    btn_submit: Potvrdiť
     remark:
-      empty: Cannot be empty.
+      empty: Nemôže byť prázdny.
     msg:
-      empty: Please select a reason.
+      empty: Vyberte dôvod.
   report_modal:
-    flag_title: I am flagging to report this post as...
-    close_title: I am closing this post as...
-    review_question_title: Review question
-    review_answer_title: Review answer
-    review_comment_title: Review comment
-    btn_cancel: Cancel
-    btn_submit: Submit
+    flag_title: Označujem, aby som tento príspevok nahlásil ako ...
+    close_title: Tento príspevok zatváram ako ...
+    review_question_title: Kontrola otázky
+    review_answer_title: Kontrola odpovede
+    review_comment_title: Kontrola komentára
+    btn_cancel: Zrušiť
+    btn_submit: Potvrdiť
     remark:
-      empty: Cannot be empty.
+      empty: Nemôže byť prázdny.
     msg:
-      empty: Please select a reason.
+      empty: Vyberte dôvod.
   tag_modal:
-    title: Create new tag
+    title: Vytvorte novú značku
     form:
       fields:
         display_name:
-          label: Display Name
+          label: Zobrazovaný názov
           msg:
-            empty: Display name cannot be empty.
-            range: Display name up to 35 characters.
+            empty: Zobrazovaný názov nemôže byť prázdny.
+            range: Zobrazovaný názov do 35 znakov.
         slug_name:
           label: URL Slug
-          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          desc: 'Musíte použiť znakovú sadu "a-z", "0-9", "+ # - ."'
           msg:
-            empty: URL slug cannot be empty.
-            range: URL slug up to 35 characters.
-            character: URL slug contains unallowed character set.
+            empty: URL slug nemôže byť prázdny.
+            range: URL slug do 35 znakov.
+            character: URL slug obsahuje nepovolenú znakovú sadu.
         desc:
-          label: Description
-    btn_cancel: Cancel
-    btn_submit: Submit
+          label: Opis
+    btn_cancel: Zrušiť
+    btn_submit: Potvrdiť
   tag_info:
-    created_at: Created
-    edited_at: Edited
-    history: History
+    created_at: Vytvorená
+    edited_at: Upravená
+    history: História
     synonyms:
-      title: Synonyms
-      text: The following tags will be remapped to
-      empty: No synonyms found.
-      btn_add: Add a synonym
-      btn_edit: Edit
-      btn_save: Save
-    synonyms_text: The following tags will be remapped to
+      title: Synonymá
+      text: Nasledujúce značky budú premapované na
+      empty: Nenašli sa žiadne synonymá.
+      btn_add: Pridajte synonymum
+      btn_edit: Upraviť
+      btn_save: Uložiť
+    synonyms_text: Nasledujúce značky budú premapované na
     delete:
-      title: Delete this tag
+      title: Odstrániť túto značku
       tip_with_posts: >-
-        <p>We do not allowed <strong>deleting tag with posts</strong>.</p>
-        <p>Please remove this tag from the posts first.</p>
+        <p>Nepovoľujeme <strong>odstraňovať značku s príspevkami</strong>.</p>
+        <p>Najskôr odstráňte túto značku z príspevkov.</p>
       tip_with_synonyms: >-
-        <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p>
-        <p>Please remove the synonyms from this tag first.</p>
-      tip: Are you sure you wish to delete?
-      close: Close
+        <p>Nepovoľujeme <strong>odstraňovať značku so synonymami</strong>.</p>
+        <p>Najskôr odstráňte z tejto značky synonymá.</p>
+      tip: Naozaj chcete odstrániť?
+      close: Zavrieť
   edit_tag:
-    title: Edit Tag
-    default_reason: Edit tag
+    title: Upraviť značku
+    default_reason: Upraviť značku
     form:
       fields:
         revision:
-          label: Revision
+          label: Revízia
         display_name:
-          label: Display Name
+          label: Zobrazovaný názov
         slug_name:
           label: URL Slug
-          info: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          info: 'Musíte použiť znakovú sadu "a-z", "0-9", "+ # - ."'
         desc:
-          label: Description
+          label: Opis
         edit_summary:
-          label: Edit Summary
+          label: Zhrnutie
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar,
-            improved formatting)
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
+            Stručne vysvetlite svoje zmeny (opravený pravopis, opravená gramatika,
+            vylepšené formátovanie)
+    btn_save_edits: Uložiť úpravy
+    btn_cancel: Zrušiť
   dates:
     long_date: MMM D
     long_date_with_year: "MMM D, YYYY"
