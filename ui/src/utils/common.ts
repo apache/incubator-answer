@@ -206,7 +206,7 @@ function diffText(newText: string, oldText?: string): string {
   }
 
   if (typeof oldText !== 'string') {
-    return escapeHtml(newText?.replace(/\n/gi, '<br>'));
+    return escapeHtml(newText);
   }
   const diff = Diff.diffChars(escapeHtml(oldText), escapeHtml(newText));
   const result = diff.map((part) => {
