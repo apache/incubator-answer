@@ -34,6 +34,10 @@ backend:
     other: 電郵和密碼不匹配。
   error:
     admin:
+      cannot_update_their_password:
+        other: You cannot modify your password.
+      cannot_modify_self_status:
+        other: You cannot modify your status.
       email_or_password_wrong:
         other: 電郵和密碼不匹配。
     answer:
@@ -80,6 +84,8 @@ backend:
       new_password_same_as_previous_setting:
         other: 新密碼與先前的一樣。
     question:
+      already_deleted:
+        other: This post has been deleted.
       not_found:
         other: 找不到問題。
       cannot_deleted:
@@ -487,8 +493,10 @@ ui:
     btn_save_edits: 保存
     btn_cancel: 取消
     show_more: 顯示更多評論
-    tip_question: 通过評論询问更多问题或提出改進建議。避免在評論中回答問題。
-    tip_answer: 使用評論回復其他用戶或通知他們进行更改。如果你要添加新的信息，請編輯你的帖子，而不是發表評論。
+    tip_question: >-
+      通过評論询问更多问题或提出改進建議。避免在評論中回答問題。
+    tip_answer: >-
+      使用評論回復其他用戶或通知他們进行更改。如果你要添加新的信息，請編輯你的帖子，而不是發表評論。
   edit_answer:
     title: 編輯回答
     default_reason: 編輯回答
@@ -502,7 +510,8 @@ ui:
             characters: 內容必須至少6個字元長度。
         edit_summary:
           label: 編輯概要
-          placeholder: 簡單描述更改原因 (錯別字、文字表達、格式等等)
+          placeholder: >-
+            簡單描述更改原因 (錯別字、文字表達、格式等等)
     btn_save_edits: 儲存更改
     btn_cancel: 取消
   tags:
@@ -546,7 +555,8 @@ ui:
             empty: 回答內容不能為空
         edit_summary:
           label: 編輯概要
-          placeholder: 簡單描述更改原因 (錯別字、文字表達、格式等等)
+          placeholder: >-
+            簡單描述更改原因 (錯別字、文字表達、格式等等)
     btn_post_question: 提出問題
     btn_save_edits: 儲存更改
     answer_question: 回答您自己的問題
@@ -555,7 +565,7 @@ ui:
     add_btn: 建立標籤
     create_btn: 建立新標籤
     search_tag: 搜尋標籤
-    hint: 请描述您的問題，至少需要一個標籤。
+    hint: "请描述您的問題，至少需要一個標籤。"
     no_result: 沒有匹配的標籤
     tag_required_text: 必填標籤 (至少一個)
   header:
@@ -582,9 +592,11 @@ ui:
     msg:
       empty: 验证码不能為空
   inactive:
-    first: 就差一步！我們寄送了一封啟用電子郵件到 <bold>{{mail}}</bold>。請按照郵件中的說明啟用您的帳戶。
-    info: 如果沒有收到，請檢查您的垃圾郵件文件夾。
-    another: 我們向您發送了另一封啟用電子郵件，地址為 <bold>{{mail}}</bold>。它可能需要幾分鐘才能到達；請務必檢查您的垃圾郵件文件夾。
+    first: >-
+      就差一步！我們寄送了一封啟用電子郵件到 <bold>{{mail}}</bold>。請按照郵件中的說明啟用您的帳戶。
+    info: "如果沒有收到，請檢查您的垃圾郵件文件夾。"
+    another: >-
+      我們向您發送了另一封啟用電子郵件，地址為 <bold>{{mail}}</bold>。它可能需要幾分鐘才能到達；請務必檢查您的垃圾郵件文件夾。
     btn_name: 重新發送啟用郵件
     change_btn_name: 更改郵箱
     msg:
@@ -613,7 +625,8 @@ ui:
   account_forgot:
     page_title: 忘記密碼
     btn_name: 向我發送恢復郵件
-    send_success: 如果帳號與<strong>{{mail}}</strong>相符，您應該很快就會收到一封電子郵件，說明如何重置您的密碼。
+    send_success: >-
+      如果帳號與<strong>{{mail}}</strong>相符，您應該很快就會收到一封電子郵件，說明如何重置您的密碼。
     email:
       label: 郵箱
       msg:
@@ -622,7 +635,8 @@ ui:
     page_title: 歡迎來到 {{site_name}}
     btn_cancel: 取消
     btn_update: 更新電子郵件地址
-    send_success: 如果帳號與<strong>{{mail}}</strong>相符，您應該很快就會收到一封電子郵件，說明如何重置您的密碼。
+    send_success: >-
+      如果帳號與<strong>{{mail}}</strong>相符，您應該很快就會收到一封電子郵件，說明如何重置您的密碼。
     email:
       label: 新電子郵件
       msg:
@@ -630,8 +644,10 @@ ui:
   password_reset:
     page_title: 密碼重置
     btn_name: 重置我的密碼
-    reset_success: 你已經成功更改密碼，將返回登入頁面
-    link_invalid: 抱歉，此密碼重置連結已失效。也許是你已經重置過密碼了？
+    reset_success: >-
+      你已經成功更改密碼，將返回登入頁面
+    link_invalid: >-
+      抱歉，此密碼重置連結已失效。也許是你已經重置過密碼了？
     to_login: 前往登入頁面
     password:
       label: 密碼
@@ -660,7 +676,7 @@ ui:
         caption: 用戶之間可以通過 "@用戶名" 進行交互。
         msg: 用戶名不能為空
         msg_range: 使用者名稱最長 30 個字元。
-        character: 必須由 "a-z", "0-9", " - . _" 組成
+        character: '必須由 "a-z", "0-9", " - . _" 組成'
       avatar:
         label: 頭像
         gravatar: 頭像
@@ -674,21 +690,22 @@ ui:
         label: 關於我
       website:
         label: 網站
-        placeholder: https://example.com
+        placeholder: "https://example.com"
         msg: 網站格式不正確
       location:
         label: 位置
-        placeholder: 城市, 國家
+        placeholder: "城市, 國家"
     notification:
       heading: 通知
       email:
         label: 郵件通知
-        radio: 回答你的問題，評論，以及更多
+        radio: "回答你的問題，評論，以及更多"
     account:
       heading: 帳號
       change_email_btn: 更改郵箱
       change_pass_btn: 更改密碼
-      change_email_info: 我們已經寄出一封郵件至此電子郵件地址，請遵照說明進行確認。
+      change_email_info: >-
+        我們已經寄出一封郵件至此電子郵件地址，請遵照說明進行確認。
       email:
         label: 郵箱
         msg: 郵箱不能為空
@@ -741,7 +758,8 @@ ui:
       add_another_answer: 添加另一個答案
       confirm_title: 繼續回答
       continue: 繼續
-      confirm_info: <p>您確定要添加一個新的回答嗎？</p><p>您可以使用编辑链接来完善和改进您现有的答案。</p>
+      confirm_info: >-
+        <p>您確定要添加一個新的回答嗎？</p><p>您可以使用编辑链接来完善和改进您现有的答案。</p>
       empty: 回答內容不能為空。
       characters: 內容必須至少6個字元長度。
     reopen:
@@ -750,8 +768,10 @@ ui:
       success: 這個貼文已被重新打開
   delete:
     title: 刪除此貼
-    question: 我們不建議<strong>刪除有回答的貼文</strong>。因為這樣做會使得後來的讀者無法從該問題中獲得幫助。</p><p>如果刪除過多有回答的貼文，你的帳號將會被禁止提問。你確定要刪除嗎？
-    answer_accepted: <p>我們不建議<strong>刪除被採納的回答</strong>。因為這樣做會使得後來的讀者無法從該回答中獲得幫助。</p>如果刪除過多被採納的貼文，你的帳號將會被禁止回答任何提問。你確定要刪除嗎？
+    question: >-
+      我們不建議<strong>刪除有回答的貼文</strong>。因為這樣做會使得後來的讀者無法從該問題中獲得幫助。</p><p>如果刪除過多有回答的貼文，你的帳號將會被禁止提問。你確定要刪除嗎？
+    answer_accepted: >-
+      <p>我們不建議<strong>刪除被採納的回答</strong>。因為這樣做會使得後來的讀者無法從該回答中獲得幫助。</p>如果刪除過多被採納的貼文，你的帳號將會被禁止回答任何提問。你確定要刪除嗎？
     other: 你確定要刪除？
     tip_question_deleted: 該帖子已被刪除。
     tip_answer_deleted: 此回答已被刪除
@@ -768,6 +788,7 @@ ui:
     approve: 核准
     reject: 拒絕
     skip: 略過
+    discard_draft: Discard draft
   search:
     title: 搜尋結果
     keywords: 關鍵詞
@@ -784,12 +805,12 @@ ui:
       more: 更多
     tips:
       title: 高級搜尋提示
-      tag: <1>[tag]</1> 在指定標籤中搜尋
-      user: <1>user:username</1> 根據作者搜尋
-      answer: <1>answers:0</1> 搜尋未回答的問題
-      score: <1>score:3</1> 得分為 3+ 的帖子
-      question: <1>is:question</1> 只搜尋問題
-      is_answer: <1>is:answer</1> 只搜尋回答
+      tag: "<1>[tag]</1> 在指定標籤中搜尋"
+      user: "<1>user:username</1> 根據作者搜尋"
+      answer: "<1>answers:0</1> 搜尋未回答的問題"
+      score: "<1>score:3</1> 得分為 3+ 的帖子"
+      question: "<1>is:question</1> 只搜尋問題"
+      is_answer: "<1>is:answer</1> 只搜尋回答"
     empty: 找不到任何相關的內容。<br /> 請嘗試其他關鍵字，或者減少查找內容的長度。
   share:
     name: 分享
@@ -805,9 +826,11 @@ ui:
     page_title: 歡迎來到 {{site_name}}
     success: 你的帳號已通過驗證，即將返回首頁。
     link: 繼續訪問主頁
-    invalid: 抱歉，此驗證連結已失效。也許是你的帳號已經通過驗證了？
+    invalid: >-
+      抱歉，此驗證連結已失效。也許是你的帳號已經通過驗證了？
     confirm_new_email: 你的電子郵箱已更新
-    confirm_new_email_invalid: 抱歉，此驗證連結已失效。也許是你的郵箱已經成功更改了？
+    confirm_new_email_invalid: >-
+      抱歉，此驗證連結已失效。也許是你的郵箱已經成功更改了？
   unsubscribe:
     page_title: 退訂
     success_title: 取消訂閱成功
@@ -848,12 +871,12 @@ ui:
     newest: 最新
     score: 評分
     edit_profile: 編輯個人資料
-    visited_x_days: 已造訪 {{ count }} 天
+    visited_x_days: "已造訪 {{ count }} 天"
     viewed: 閱讀次數
     joined: 加入於
     last_login: 出現時間
     about_me: 關於我
-    about_me_empty: // 你好, 世界 !
+    about_me_empty: "// 你好, 世界 !"
     top_answers: 熱門回答
     top_questions: 熱門問題
     stats: 狀態
@@ -887,7 +910,7 @@ ui:
       placeholder: root
       msg: 密碼不能為空
     db_host:
-      label: "數據庫伺服器"
+      label: 數據庫伺服器
       placeholder: "db: 3306"
       msg: 資料庫主機位址不能為空
     db_name:
@@ -901,7 +924,8 @@ ui:
     config_yaml:
       title: 創建 config.yaml
       label: 已創建 config.yaml 文件。
-      desc: 您可以手動在 <1>/var/wwww/xxx/</1> 目錄中創建<1>config.yaml</1> 文件並粘貼以下文本。
+      desc: >-
+        您可以手動在 <1>/var/wwww/xxx/</1> 目錄中創建<1>config.yaml</1> 文件並粘貼以下文本。
       info: 完成後點擊"下一步"按鈕。
     site_information: 網站資訊
     admin_account: 管理員帳戶
@@ -925,7 +949,8 @@ ui:
       msg: 暱稱不能為空。
     admin_password:
       label: 密碼
-      text: 您需要此密碼才能登入。請將其儲存在一個安全的位置。
+      text: >-
+        您需要此密碼才能登入。請將其儲存在一個安全的位置。
       msg: 密碼不能為空。
     admin_email:
       label: 郵箱
@@ -934,28 +959,34 @@ ui:
         empty: 郵箱不能為空。
         incorrect: 郵箱格式不正確。
     ready_title: 你的Answer已經準備好了!
-    ready_desc: 如果你想改變更多的設定，請瀏覽<1>管理員部分</1>；在網站選單中找到它。
-    good_luck: 玩得愉快，祝您好運！
+    ready_desc: >-
+      如果你想改變更多的設定，請瀏覽<1>管理員部分</1>；在網站選單中找到它。
+    good_luck: "玩得愉快，祝您好運！"
     warn_title: 警告
-    warn_desc: 檔案<1>config.yaml</1>已存在。如果您需要重置此文件中的任何配置項，請先刪除它。
+    warn_desc: >-
+      檔案<1>config.yaml</1>已存在。如果您需要重置此文件中的任何配置項，請先刪除它。
     install_now: 您可以嘗試<1>現在安裝</1>。
     installed: 已安裝
-    installed_desc: 您似乎已經安裝過了。要重新安裝，請先清除舊的資料庫表。
+    installed_desc: >-
+      您似乎已經安裝過了。要重新安裝，請先清除舊的資料庫表。
     db_failed: 資料連接異常！
-    db_failed_desc: 這要么意味著你<1>config.yaml</1>文件中的數據庫信息不正確，要么意味著無法與數據庫服務器建立聯繫。這可能意味著你的主機的數據庫服務器已經停機。
+    db_failed_desc: >-
+      這要么意味著你<1>config.yaml</1>文件中的數據庫信息不正確，要么意味著無法與數據庫服務器建立聯繫。這可能意味著你的主機的數據庫服務器已經停機。
   counts:
     views: 觀看
     votes: 得票
     answers: 回答
     accepted: 已採納
   page_404:
-    desc: 很抱歉，此頁面不存在。
+    http_error: HTTP Error 404
+    desc: "很抱歉，此頁面不存在。"
     back_home: 回到首頁
   page_50X:
+    http_error: HTTP Error 500
     desc: 伺服器遇到了一個錯誤，無法完成你的請求。
     back_home: 回到首頁
   page_maintenance:
-    desc: 我們正在維護中，很快就會回來。
+    desc: "我們正在維護中，很快就會回來。"
   nav_menus:
     dashboard: 後台管理
     contents: 內容
@@ -990,15 +1021,15 @@ ui:
       votes: "投票:"
       active_users: "活躍用戶:"
       flags: "檢舉:"
-      site_health_status: "健康狀態:"
-      version: 版本
+      site_health_status: '健康狀態:'
+      version: "版本"
       https: "HTTPS:"
       uploading_files: "上傳文件:"
       smtp: "SMTP:"
-      timezone: 時區：
+      timezone: "時區："
       system_info: 系統資訊
-      storage_used: 已用儲存空間：
-      uptime: 運行時間：
+      storage_used: "已用儲存空間："
+      uptime: "運行時間："
       answer_links: 回答連結
       documents: 文件
       feedback: 用戶反饋
@@ -1008,8 +1039,8 @@ ui:
       update_to: 更新到
       latest: 最新版本
       check_failed: 校驗失敗
-      yes: 是
-      no: 否
+      "yes": "是"
+      "no": "否"
       not_allowed: 不允許
       allowed: 允許
       enabled: 已啟用
@@ -1031,7 +1062,7 @@ ui:
       suspended_name: 停權
       suspended_desc: 被停權的使用者將無法登入。
       deleted_name: 刪除
-      deleted_desc: 刪除個人資料和身份驗證關聯。
+      deleted_desc: "刪除個人資料和身份驗證關聯。"
       inactive_name: 不活躍
       inactive_desc: 不活躍的用戶必須重新驗證郵箱。
       confirm_title: 刪除此用戶
@@ -1040,11 +1071,11 @@ ui:
       msg:
         empty: 請選擇一個原因
     status_modal:
-      title: 更改 {{ type }} 狀態為...
+      title: "更改 {{ type }} 狀態為..."
       normal_name: 正常
       normal_desc: 所有使用者都可以瀏覽的普通貼文。
       closed_name: 關閉
-      closed_desc: 關閉的問題不能回答，但仍然可以編輯、投票和評論。
+      closed_desc: "關閉的問題不能回答，但仍然可以編輯、投票和評論。"
       deleted_name: 刪除
       deleted_desc: 獲得和失去的所有信譽將被恢復。
       btn_cancel: 取消
@@ -1076,7 +1107,7 @@ ui:
       Admin: 管理員
       User: 用戶
       filter:
-        placeholder: 按名稱篩選，用戶：id
+        placeholder: "按名稱篩選，用戶：id"
       set_new_password: 設置新密碼
       change_status: 更改狀態
       change_role: 更改角色
@@ -1120,7 +1151,7 @@ ui:
       action: 操作
       change: 更改
       filter:
-        placeholder: 按標題過濾，問題:id
+        placeholder: "按標題過濾，問題:id"
     answers:
       page_title: 回答
       normal: 正常
@@ -1132,13 +1163,13 @@ ui:
       action: 操作
       change: 更改
       filter:
-        placeholder: 按名稱篩選，answer:id
+        placeholder: "按名稱篩選，answer:id"
     general:
       page_title: 一般
       name:
         label: 網站名稱
         msg: 不能為空
-        text: 網站的名稱，如標題標籤中所用。
+        text: "網站的名稱，如標題標籤中所用。"
       site_url:
         label: 網站網址
         msg: 網站網址不能為空。
@@ -1147,11 +1178,11 @@ ui:
       short_desc:
         label: 網站簡短描述
         msg: 網站簡短描述不能為空。
-        text: 簡短的描述，如主頁上的標題標籤所使用的那样。
+        text: "簡短的描述，如主頁上的標題標籤所使用的那样。"
       desc:
         label: 網站描述
         msg: 網站描述不能為空。
-        text: 使用一句話描述本站，作為網站的描述（Html 的 meta 標籤）。
+        text: "使用一句話描述本站，作為網站的描述（Html 的 meta 標籤）。"
       contact_email:
         label: 聯絡人信箱
         msg: 聯絡人信箱不能為空。
@@ -1205,8 +1236,8 @@ ui:
         label: 啟用身份驗證
         title: SMTP身份驗證
         msg: SMTP 身份驗證不能為空。
-        yes: 是
-        no: 否
+        "yes": "是"
+        "no": "否"
     branding:
       page_title: 品牌
       logo:
@@ -1227,22 +1258,22 @@ ui:
       page_title: 法律條款
       terms_of_service:
         label: 服務條款
-        text: 您可以在此加入服務內容的條款。如果您已經在別處托管了文檔，請在這裡提供完整的URL。
+        text: "您可以在此加入服務內容的條款。如果您已經在別處托管了文檔，請在這裡提供完整的URL。"
       privacy_policy:
         label: 隱私條款
-        text: 您可以在此加入隱私政策內容。如果您已經在別處托管了文檔，請在這裡提供完整的URL。
+        text: "您可以在此加入隱私政策內容。如果您已經在別處托管了文檔，請在這裡提供完整的URL。"
     write:
       page_title: 編輯
       recommend_tags:
         label: 推薦標籤
-        text: 請在上方輸入標籤固定連結，每行一個標籤。
+        text: "請在上方輸入標籤固定連結，每行一個標籤。"
       required_tag:
         title: 必需的標籤
         label: 根據需要設置推薦標籤
-        text: 每個新問題必須至少有一個推薦標籤。
+        text: "每個新問題必須至少有一個推薦標籤。"
       reserved_tags:
         label: 保留標籤
-        text: 保留的標籤只能由版主加入到一個貼文中。
+        text: "保留的標籤只能由版主加入到一個貼文中。"
     seo:
       page_title: 搜尋引擎優化
       permalink:
@@ -1291,13 +1322,13 @@ ui:
     empty: 不能為空
     invalid: 是無效的
     btn_submit: 儲存
-    not_found_props: 所需屬性 {{ key }} 未找到。
+    not_found_props: "所需屬性 {{ key }} 未找到。"
   page_review:
     review: 審核
     proposed: 提案
     question_edit: 問題編輯
     answer_edit: 回答編輯
-    tag_edit: "標籤管理: 編輯標籤"
+    tag_edit: '標籤管理: 編輯標籤'
     edit_summary: 編輯摘要
     edit_question: 編輯問題
     edit_answer: 編輯回答
@@ -1310,7 +1341,7 @@ ui:
     upvote: 贊同
     accept: 採納
     cancelled: 已取消
-    commented: "評論:"
+    commented: '評論:'
     rollback: 回滾
     edited: 最後編輯於
     answered: 回答於
@@ -1318,18 +1349,18 @@ ui:
     closed: 關閉
     reopened: 重新開啟
     created: 創建於
-    title: 歷史記錄
-    tag_title: 時間線
-    show_votes: 顯示投票
+    title: "歷史記錄"
+    tag_title: "時間線"
+    show_votes: "顯示投票"
     n_or_a: N/A
-    title_for_question: 時間線
+    title_for_question: "時間線"
     title_for_answer: "{{ title }} 的 {{ author }} 回答時間線"
-    title_for_tag: 標籤的時間線
+    title_for_tag: "標籤的時間線"
     datetime: 日期時間
     type: 類型
     by: 由
     comment: 評論
-    no_data: 我們找不到任何東西。
+    no_data: "我們找不到任何東西。"
   users:
     title: 用戶
     users_with_the_most_reputation: 信譽積分最高的用戶
@@ -1340,3 +1371,8 @@ ui:
   prompt:
     leave_page: 你確定要離開此頁面？
     changes_not_save: 你所做的變更可能不會儲存。
+  draft:
+    discard_confirm: Are you sure you want to discard your draft?
+  messages:
+    post_deleted: This post has been deleted.
+
