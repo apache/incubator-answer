@@ -493,23 +493,23 @@ ui:
   dates:
     long_date: MMM D
     long_date_with_year: "MMM D, YYYY"
-    long_date_with_time: "MMM D, YYYY [at] HH:mm"
-    now: now
-    x_seconds_ago: "{{count}}s ago"
-    x_minutes_ago: "{{count}}m ago"
-    x_hours_ago: "{{count}}h ago"
-    hour: hour
-    day: day
+    long_date_with_time: "MMM D, YYYY [o] HH:mm"
+    now: teraz
+    x_seconds_ago: "pred {{count}}s"
+    x_minutes_ago: "pred {{count}}m"
+    x_hours_ago: "pred {{count}}h"
+    hour: hodina
+    day: deň
   comment:
-    btn_add_comment: Add comment
+    btn_add_comment: Pridať komentár
     reply_to: Reply to
     btn_reply: Reply
-    btn_edit: Edit
-    btn_delete: Delete
+    btn_edit: Upraviť
+    btn_delete: Zmazať
     btn_flag: Flag
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
-    show_more: Show more comments
+    btn_save_edits: Uložiť zmeny
+    btn_cancel: Zrušiť
+    show_more: Zobraziť viac komentárov
     tip_question: >-
       Use comments to ask for more information or suggest improvements. Avoid
       answering questions in comments.
@@ -517,566 +517,554 @@ ui:
       Use comments to reply to other users or notify them of changes. If you are
       adding new information, edit your post instead of commenting.
   edit_answer:
-    title: Edit Answer
-    default_reason: Edit answer
+    title: Uprav odpoveď
+    default_reason: Uprav odpoveď
     form:
       fields:
         revision:
-          label: Revision
+          label: Revízia
         answer:
-          label: Answer
+          label: Odpoveď
           feedback:
-            characters: content must be at least 6 characters in length.
+            characters: Obsah musí mať dĺžku najmenej 6 znakov.
         edit_summary:
-          label: Edit Summary
+          label: Upraviť zhrnutie
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar,
-            improved formatting)
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
+            Stručne vysvetlite svoje zmeny (opravený pravopis, opravená gramatika,
+            vylepšené formátovanie)
+    btn_save_edits: Uložiť úpravy
+    btn_cancel: Zrušiť
   tags:
-    title: Tags
+    title: Značky
     sort_buttons:
-      popular: Popular
-      name: Name
-      newest: newest
-    button_follow: Follow
-    button_following: Following
-    tag_label: questions
-    search_placeholder: Filter by tag name
-    no_desc: The tag has no description.
-    more: More
+      popular: Populárne
+      name: názov
+      newest: najnovšie
+    button_follow: Sledovať
+    button_following: Sledované
+    tag_label: otázky
+    search_placeholder: Filter podľa názvu značky
+    no_desc: Značka nemá popis.
+    more: Viac
   ask:
-    title: Add Question
-    edit_title: Edit Question
-    default_reason: Edit question
-    similar_questions: Similar questions
+    title: Pridať otázku
+    edit_title: Upraviť otázku
+    default_reason: Upraviť otázku
+    similar_questions: Podobné otázky
     form:
       fields:
         revision:
-          label: Revision
+          label: Revízia
         title:
-          label: Title
-          placeholder: Be specific and imagine you're asking a question to another person
+          label: Názov
+          placeholder: Buďte konkrétny a predstavte si, že kladiete otázku inej osobe
           msg:
-            empty: Title cannot be empty.
-            range: Title up to 150 characters
+            empty: Názov nemôže byť prázdny.
+            range: Názov má viac ako 150 znakov --
         body:
-          label: Body
+          label: Telo
           msg:
-            empty: Body cannot be empty.
+            empty: Telo nemôže byť prázdne.
         tags:
-          label: Tags
+          label: Značky --
           msg:
-            empty: Tags cannot be empty.
+            empty: Značky nemôžu byť prázdne.
         answer:
-          label: Answer
+          label: Odpoveď
           msg:
-            empty: Answer cannot be empty.
+            empty: Odpoveď nemôže byť prázdna.
         edit_summary:
-          label: Edit Summary
+          label: Upraviť zhrnutie
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar,
-            improved formatting)
-    btn_post_question: Post your question
-    btn_save_edits: Save edits
-    answer_question: Answer your own question
-    post_question&answer: Post your question and answer
+            Stručne vysvetlite svoje zmeny (opravený pravopis, opravená gramatika,
+            vylepšené formátovanie)
+    btn_post_question: Pošlite svoju otázku
+    btn_save_edits: Uložiť úpravy
+    answer_question: Odpovedzte na svoju vlastnú otázku
+    post_question&answer: Pošlite svoju otázku a odpoveď
   tag_selector:
-    add_btn: Add tag
-    create_btn: Create new tag
-    search_tag: Search tag
-    hint: "Describe what your question is about, at least one tag is required."
-    no_result: No tags matched
-    tag_required_text: Required tag (at least one)
+    add_btn: Pridať značku
+    create_btn: Vytvoriť novú značku
+    search_tag: Vyhľadať značku --
+    hint: „Popíšte, o čom je vaša otázka, vyžaduje sa aspoň jedna značka.“
+    no_result: Žiadne značky sa neyhodujú
+    tag_required_text: Požadovaná značka (aspoň jedna)
   header:
     nav:
-      question: Questions
-      tag: Tags
-      user: Users
-      profile: Profile
-      setting: Settings
-      logout: Log out
-      admin: Admin
-      review: Review
+      question: Otázky
+      tag: Značky
+      user: Užívatelia
+      profile: Profil
+      setting: Nastavenia
+      logout: Odhlásiť sa
+      admin: Správca
+      review: Preskúmanie
     search:
-      placeholder: Search
+      placeholder: Vyhľadávanie
   footer:
     build_on: >-
-      Built on <1> Answer </1>- the open-source software that powers Q&A
-      communities.<br />Made with love © {{cc}}.
+      Postavený na <1> Answer </1>- open-source software, ktorý poháňa Q&A
+      komunity.<br />Vyrobené s láskou © {{cc}}.
   upload_img:
-    name: Change
-    loading: loading...
+    name: Zmena
+    loading: načítavanie...
   pic_auth_code:
-    title: Captcha
-    placeholder: Type the text above
+    title: captcha
+    placeholder: Zadajte vyššie uvedený text
     msg:
-      empty: Captcha cannot be empty.
+      empty: Captcha nemôže byť prázdna.
   inactive:
     first: >-
-      You're almost done! We sent an activation mail to <bold>{{mail}}</bold>.
-      Please follow the instructions in the mail to activate your account.
-    info: "If it doesn't arrive, check your spam folder."
+      Ste takmer na konci! Poslali sme Vám aktivačný mail na adresu <bold>{{mail}}</bold>.
+      K aktivácií účtu postupujte prosím podľa pokynov v e-maily.
+    info: "Ak neprichádza, skontrolujte priečinok spamu."
     another: >-
-      We sent another activation email to you at <bold>{{mail}}</bold>. It might
-      take a few minutes for it to arrive; be sure to check your spam folder.
-    btn_name: Resend activation email
-    change_btn_name: Change email
+      Poslali sme vám ďalší aktivačný e-mail na adresu <bold>{{mail}}</bold>. Môže to trvať niekoľko minút; Nezabudnite skontrolovať priečinok spamu.
+    btn_name: Opätovne odoslať aktivačný e-mail
+    change_btn_name: Zmeniť e-mail
     msg:
-      empty: Cannot be empty.
+      empty: Nemôže byť prázdny.
   login:
-    page_title: Welcome to {{site_name}}
-    login_to_continue: Log in to continue
-    info_sign: Don't have an account? <1>Sign up</1>
-    info_login: Already have an account? <1>Log in</1>
-    agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
-    forgot_pass: Forgot password?
+    page_title: Vitajte na stránke {{site_name}}
+    login_to_continue: Pre pokračovanie sa prihláste
+    info_sign: Nemáte účet? <1>Sign up</1>
+    info_login: Máte už účet? <1>Log in</1>
+    agreements: Registráciou súhlasíte s <1>zásadami ochrany osobných údajov</1> a <3>podmienkami služby</3>.
+    forgot_pass: Zabudli ste heslo?
     name:
-      label: Name
+      label: Prihlasovacie meno
       msg:
-        empty: Name cannot be empty.
-        range: Name up to 30 characters.
+        empty: Prihlasovacie meno nemôže byť prázdne.
+        range: Prihlasovacie meno nesmie mať viac ako 30 znakov.
     email:
       label: Email
       msg:
-        empty: Email cannot be empty.
+        empty: E-mail nemôže byť prázdny.
     password:
-      label: Password
+      label: Heslo
       msg:
-        empty: Password cannot be empty.
-        different: The passwords entered on both sides are inconsistent
+        empty: Heslo nemôže byť prázdne.
+        different: Heslá zadané na oboch stranách sú nekonzistentné
   account_forgot:
-    page_title: Forgot Your Password
-    btn_name: Send me recovery email
+    page_title: Zabudli ste heslo
+    btn_name: Pošlite mi e-mail na obnovenie
     send_success: >-
-      If an account matches <strong>{{mail}}</strong>, you should receive an email
-      with instructions on how to reset your password shortly.
+      Ak sa účet zhoduje s <strong>{{mail}}</strong>, tak by ste mali čoskoro dostať e-mail s pokynmi, ako resetovať svoje heslo.
     email:
       label: Email
       msg:
-        empty: Email cannot be empty.
+        empty: E-mail nemôže byť prázdny.
   change_email:
-    page_title: Welcome to {{site_name}}
-    btn_cancel: Cancel
-    btn_update: Update email address
+    page_title: Vitajte na stránke {{site_name}}
+    btn_cancel: Zrušiť
+    btn_update: Aktualizovať e-mailovú adresu
     send_success: >-
-      If an account matches <strong>{{mail}}</strong>, you should receive an email
-      with instructions on how to reset your password shortly.
+      Ak sa účet zhoduje s <strong>{{mail}}</strong>, tak by ste mali čoskoro dostať e-mail s pokynmi, ako resetovať svoje heslo.
     email:
-      label: New Email
+      label: Nový e-mail
       msg:
-        empty: Email cannot be empty.
+        empty: E-mail nemôže byť prázdny.
   password_reset:
-    page_title: Password Reset
-    btn_name: Reset my password
+    page_title: Resetovanie hesla
+    btn_name: Obnoviť heslo
     reset_success: >-
-      You successfully changed your password; you will be redirected to the log in
-      page.
+      Úspešne ste zmenili svoje heslo; Budete presmerovaný na prihlásenie.
     link_invalid: >-
-      Sorry, this password reset link is no longer valid. Perhaps your password is
-      already reset?
-    to_login: Continue to log in page
+      Ospravedlňujeme sa, tento odkaz na obnovenie hesla už nie je platný. Možno už došlo k resetovaniu vašho hesla?
     password:
-      label: Password
+      label: Heslo
       msg:
-        empty: Password cannot be empty.
-        length: The length needs to be between 8 and 32
-        different: The passwords entered on both sides are inconsistent
+        empty: Heslo nemôže byť prázdne.
+        length: Dĺžka musí byť medzi 8 a 32
+        different: Heslá zadané na oboch stranách sú nekonzistentné
     password_confirm:
-      label: Confirm New Password
+      label: Potvrďte nové heslo
   settings:
-    page_title: Settings
+    page_title: Nastavenia
     nav:
-      profile: Profile
-      notification: Notifications
-      account: Account
-      interface: Interface
+      profile: Profil
+      notification: Oznámenia
+      account: Účet
+      interface: Rozhranie
     profile:
-      heading: Profile
-      btn_name: Save
+      heading: Profil
+      btn_name: Uložiť
       display_name:
-        label: Display Name
-        msg: Display name cannot be empty.
-        msg_range: Display name up to 30 characters.
+        label: Zobrazované meno
+        msg: Zobrazované meno nemôže byť prázdne.
+        msg_range: Zobrazované meno nesmie mať viac ako 30 znakov.
       username:
-        label: Username
-        caption: People can mention you as "@username".
-        msg: Username cannot be empty.
-        msg_range: Username up to 30 characters.
-        character: 'Must use the character set "a-z", "0-9", " - . _"'
+        label: Užívateľské meno
+        caption: Ľudia vás môžu spomenúť ako "@username".
+        msg: Užívateľské meno nemôže byť prázdne.
+        msg_range: Používateľské meno nesmie mať viac ako 30 znakov.
+        character: 'Musí použiť súpravu znakov "a-z", "0-9", " - . _"'
       avatar:
-        label: Profile Image
+        label: Profilová fotka
         gravatar: Gravatar
-        gravatar_text: You can change image on <1>gravatar.com</1>
-        custom: Custom
-        btn_refresh: Refresh
-        custom_text: You can upload your image.
-        default: System
-        msg: Please upload an avatar
+        gravatar_text: Fotku môžete zmeniť na <1>gravatar.com</1>
+        custom: Vlastný
+        btn_refresh: Obnoviť
+        custom_text: Môžete nahrať svoju fotku.
+        default: Systém
+        msg: Nahrajte avatara prosím
       bio:
-        label: About Me
+        label: O mne
       website:
-        label: Website
+        label: Webová stránka
         placeholder: "https://example.com"
-        msg: Website incorrect format
+        msg: Nesprávny formát webovej stránky
       location:
-        label: Location
-        placeholder: "City, Country"
+        label: Poloha
+        placeholder: "Mesto, Krajina"
     notification:
-      heading: Notifications
+      heading: Oznámenia
       email:
-        label: Email Notifications
-        radio: "Answers to your questions, comments, and more"
+        label: E-mailové upozornenia
+        radio: "Odpovede na vaše otázky, komentáre a ďalšie"
     account:
-      heading: Account
-      change_email_btn: Change email
-      change_pass_btn: Change password
+      heading: Účet
+      change_email_btn: Zmeniť email
+      change_pass_btn: Zmeniť heslo
       change_email_info: >-
-        We've sent an email to that address. Please follow the confirmation
-        instructions.
+        Na túto adresu sme poslali email. Postupujte podľa inštrukcií.
       email:
-        label: Email
-        msg: Email cannot be empty.
-      password_title: Password
+        label: E-mail
+        msg: Email nemôže byť prázdny.
+      password_title: Heslo
       current_pass:
-        label: Current Password
+        label: Súčasné heslo
         msg:
-          empty: Current Password cannot be empty.
-          length: The length needs to be between 8 and 32.
-          different: The two entered passwords do not match.
+          empty: Aktuálne heslo nemôže byť prázdne.
+          length: Dĺžka musí byť medzi 8 a 32.
+          different: Zadané heslá sa nezhodujú.
       new_pass:
-        label: New Password
+        label: Nové heslo
       pass_confirm:
-        label: Confirm New Password
+        label: Potvrďiť nové heslo
     interface:
-      heading: Interface
+      heading: Rozhranie
       lang:
-        label: Interface Language
-        text: User interface language. It will change when you refresh the page.
+        label: Jazyk rozhrania
+        text: Jazyk používateľského rozhrania. Zmení sa pri obnove stránky.
   toast:
-    update: update success
-    update_password: Password changed successfully.
-    flag_success: Thanks for flagging.
-    forbidden_operate_self: Forbidden to operate on yourself
-    review: Your revision will show after review.
+    update: aktualizácia úspešna
+    update_password: Heslo bolo úspešne zmenené.
+    flag_success: Ďakujeme za označenie.
+    forbidden_operate_self: Zakázané pracovať na sebe
+    review: Vaša revízia sa zobrazí po preskúmaní.
   related_question:
-    title: Related Questions
-    btn: Add question
-    answers: answers
+    title: Súvisiace otázky
+    btn: Pridať otázku
+    answers: odpovede
   question_detail:
-    Asked: Asked
-    asked: asked
-    update: Modified
-    edit: edited
-    Views: Viewed
-    Follow: Follow
-    Following: Following
-    answered: answered
-    closed_in: Closed in
-    show_exist: Show existing question.
+    Asked: Opýtané
+    asked: opýtané
+    update: Aktualizované
+    edit: upravené
+    Views: Videné
+    Follow: Sledovať
+    Following: Sledované
+    answered: zodpovedaný
+    closed_in: Uzatvorené
+    show_exist: Ukázať existujúcu otázku.
     answers:
-      title: Answers
-      score: Score
-      newest: Newest
-      btn_accept: Accept
-      btn_accepted: Accepted
+      title: Odpovede
+      score: Skóre
+      newest: Najnovšie
+      btn_accept: Súhlasiť
+      btn_accepted: Prijaté
     write_answer:
-      title: Your Answer
-      btn_name: Post your answer
-      add_another_answer: Add another answer
-      confirm_title: Continue to answer
-      continue: Continue
+      title: Vaša odpoveď
+      btn_name: Pošlite svoju odpoveď
+      add_another_answer: Pridajte ďalšiu odpoveď
+      confirm_title: Pokračovať v odpovedi
+      continue: Pokračovať
       confirm_info: >-
-        <p>Are you sure you want to add another answer?</p><p>You could use the
-        edit link to refine and improve your existing answer, instead.</p>
-      empty: Answer cannot be empty.
-      characters: content must be at least 6 characters in length.
+        <p>Ste si istí, že chcete pridať ďalšiu odpoveď?</p><p>Mohli by ste namiesto toho použiť
+        úpravu na vylepšenie svojej už existujúcej odpovede.</p>
+      empty: Odpoveď nemôže byť prázdna.
+      characters: Minimálna dĺžka obsahu musí byť 6 znakov.
     reopen:
-      title: Reopen this post
-      content: Are you sure you want to reopen?
-      success: This post has been reopened
+      title: Znovu otvoriť tento príspevok
+      content: Ste si istý, že ho chcete znovu otvoriť?
+      success: Tento príspevok bol znovu otvorený
   delete:
-    title: Delete this post
+    title: Odstrániť tento príspevok
     question: >-
-      We do not recommend <strong>deleting questions with answers</strong> because
-      doing so deprives future readers of this knowledge.</p><p>Repeated deletion
-      of answered questions can result in your account being blocked from asking.
-      Are you sure you wish to delete?
+      Neodporúčame <strong> mazanie otázok s odpoveďmi</strong> pretože
+      týmto oberáte budúcich čitateľov o tieto vedomostí.</p><p> Opakované mazanie
+      zodpovedaných otázok môže mať za následok zablokovanie možnosti kladenia otázok z vášho účtu.
+      Ste si istí, že chcete otázku odstrániť?
     answer_accepted: >-
-      <p>We do not recommend <strong>deleting accepted answer</strong> because
-      doing so deprives future readers of this knowledge. </p> Repeated deletion
-      of accepted answers can result in your account being blocked from answering.
-      Are you sure you wish to delete?
-    other: Are you sure you wish to delete?
-    tip_question_deleted: This post has been deleted
-    tip_answer_deleted: This answer has been deleted
+      <p>Neodporúčame <strong>odstránenie akceptovanej odpovede</strong> pretože
+      týmto oberáte budúcich čitateľov o tieto vedomostí.</p>Opakované mazanie
+      akceptovaných odpovedí môže mať za následok zablokovanie možnosti odpovedať z vášho účtu.
+      Ste si istí, že chcete odstrániť odpoveď?
+    other: Ste si istí, že ju chcete odstrániť?
+    tip_question_deleted: Tento príspevok bol odstránený
+    tip_answer_deleted: Táto odpoveď bola odstránená
   btns:
-    confirm: Confirm
-    cancel: Cancel
-    save: Save
-    delete: Delete
-    login: Log in
-    signup: Sign up
-    logout: Log out
-    verify: Verify
-    add_question: Add question
-    approve: Approve
-    reject: Reject
-    skip: Skip
-    discard_draft: Discard draft
+    confirm: Potvrdiť
+    cancel: Zrušiť
+    save: Uložiť
+    delete: Vymazať
+    login: Prihlásiť sa
+    signup: Registrovať sa
+    logout: Odhlásiť sa
+    verify: Preveriť
+    add_question: Pridať otázku
+    approve: Schváliť
+    reject: Odmietnuť
+    skip: Preskočiť
+    discard_draft: Zahodiť koncept
   search:
-    title: Search Results
-    keywords: Keywords
-    options: Options
-    follow: Follow
-    following: Following
-    counts: "{{count}} Results"
-    more: More
+    title: Výsledky vyhľadávania
+    keywords: Kľúčové slová
+    options: možnosti
+    follow: Sledovať
+    following: Sledované
+    counts: "{{count}} výsledky"
+    more: Viac
     sort_btns:
-      relevance: Relevance
-      newest: Newest
-      active: Active
-      score: Score
-      more: More
+      relevance: Relevantnosť
+      newest: Najnovšie
+      active: Aktívne
+      score: Skóre
+      more: Viac
     tips:
-      title: Advanced Search Tips
-      tag: "<1>[tag]</1> search withing a tag"
-      user: "<1>user:username</1> search by author"
-      answer: "<1>answers:0</1> unanswered questions"
-      score: "<1>score:3</1> posts with a 3+ score"
-      question: "<1>is:question</1> search questions"
-      is_answer: "<1>is:answer</1> search answers"
-    empty: We couldn't find anything. <br /> Try different or less specific keywords.
+      title: Tipy na pokročilé vyhľadávanie
+      tag: "<1>[tag]</1> vyhľadávať v rámci značky"
+      user: "<1>user:username</1> hľadať podľa autora"
+      answer: "<1>answers:0</1> nezodpovedané otázky"
+      score: "<1>score:3</1> Príspevky so skóre 3+"
+      question: "<1>is:question</1> hľadať otázky"
+      is_answer: "<1>is:answer</1> hľadať odpovede"
+    empty: Nemohli sme nič nájsť. <br /> Vyskúšajte iné alebo menej špecifické kľúčové slová.
   share:
-    name: Share
-    copy: Copy link
-    via: Share post via...
-    copied: Copied
-    facebook: Share to Facebook
-    twitter: Share to Twitter
-  cannot_vote_for_self: You can't vote for your own post
+    name: Zdieľať
+    copy: Skopírovať odkaz
+    via: Zdieľajte príspevok cez...
+    copied: Skopírované
+    facebook: Zdieľať na Facebooku
+    twitter: Zdieľať na Twitteri
+  cannot_vote_for_self: Nemôžete hlasovať za svoj vlastný príspevok
   modal_confirm:
-    title: Error...
+    title: Chyba...
   account_result:
-    page_title: Welcome to {{site_name}}
-    success: Your new account is confirmed; you will be redirected to the home page.
-    link: Continue to homepage
+    page_title: Vitajte na stránke {{site_name}}
+    success: Váš nový účet je potvrdený; Budete presmerovaný na domovskú stránku.
+    link: Pokračovať na domovskú stránku
     invalid: >-
-      Sorry, this account confirmation link is no longer valid. Perhaps your
-      account is already active?
-    confirm_new_email: Your email has been updated.
+      Ospravedlňujeme sa, tento odkaz na potvrdenie účtu už nie je platný. Váš profil už možno je aktívny.
+    confirm_new_email: Váš email bol aktualizovaný.
     confirm_new_email_invalid: >-
-      Sorry, this confirmation link is no longer valid. Perhaps your email was
-      already changed?
+      Ospravedlňujeme sa, tento potvrdzovací odkaz už nie je platný. Váš e-mail je už môžno zmenený.
   unsubscribe:
-    page_title: Unsubscribe
-    success_title: Unsubscribe Successful
-    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
-    link: Change settings
+    page_title: Zrušiť odber
+    success_title: Úspešne zrušenie odberu
+    success_desc: Boli ste úspešne odstránený zo zoznamu odoberateľov a nebudete od nás dostávať žiadne ďalšie emaily.
+    link: Zmeniť nastavenia
   question:
-    following_tags: Following Tags
-    edit: Edit
-    save: Save
-    follow_tag_tip: Follow tags to curate your list of questions.
-    hot_questions: Hot Questions
-    all_questions: All Questions
-    x_questions: "{{ count }} Questions"
-    x_answers: "{{ count }} answers"
-    questions: Questions
-    answers: Answers
-    newest: Newest
-    active: Active
-    frequent: Frequent
-    score: Score
-    unanswered: Unanswered
-    modified: modified
-    answered: answered
-    asked: asked
-    closed: closed
-    follow_a_tag: Follow a tag
-    more: More
+    following_tags: Nasledujúce značky
+    edit: Upraviť
+    save: Uložiť
+    follow_tag_tip: Postupujte podľa značiek a upravte si zoznam otázok.
+    hot_questions: Najlepšie otázky
+    all_questions: Všetky otázky
+    x_questions: "{{ count }} otázky/otázok"
+    x_answers: "{{ count }} odpovede/odpovedí"
+    questions: Otázky
+    answers: Odpovede
+    newest: Najnovšie
+    active: Aktívne
+    frequent: Časté
+    score: Skóre
+    unanswered: Nezodpovedané
+    modified: upravené
+    answered: zodpovedané
+    asked: opýtané
+    closed: uzatvorené
+    follow_a_tag: Sledovať značku
+    more: Viac
   personal:
-    overview: Overview
-    answers: Answers
-    answer: answer
-    questions: Questions
-    question: question
-    bookmarks: Bookmarks
-    reputation: Reputation
-    comments: Comments
-    votes: Votes
-    newest: Newest
-    score: Score
-    edit_profile: Edit Profile
-    visited_x_days: "Visited {{ count }} days"
-    viewed: Viewed
-    joined: Joined
-    last_login: Seen
-    about_me: About Me
-    about_me_empty: "// Hello, World !"
-    top_answers: Top Answers
-    top_questions: Top Questions
-    stats: Stats
-    list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
-    accepted: Accepted
-    answered: answered
-    asked: asked
-    upvote: upvote
-    downvote: downvote
-    mod_short: Mod
-    mod_long: Moderators
-    x_reputation: reputation
-    x_votes: votes received
-    x_answers: answers
-    x_questions: questions
+    overview: Prehľad
+    answers: Odpovede
+    answer: odpoveď
+    questions: Otázky
+    question: otázka
+    bookmarks: Záložky
+    reputation: Reputácia
+    comments: Komentáre
+    votes: Hlasovanie
+    newest: Najnovšie
+    score: Skóre
+    edit_profile: Upraviť profil
+    visited_x_days: "Navštívené {{ count }} dni"
+    viewed: Videné
+    joined: Pripojené
+    last_login: Videné
+    about_me: O mne
+    about_me_empty: "// Dobrý deň, svet!"
+    top_answers: Najlepšie odpovede
+    top_questions: Najlepšie otázky
+    stats: Štatistiky
+    list_empty: Nenašli sa žiadne príspevky.<br/>Chceli by ste vybrať inú kartu?
+    accepted: Prijaté
+    answered: zodpovedané
+    asked: opýtané
+    upvote: hlasovať za
+    downvote: hlasovať proti
+    mod_short: mod
+    mod_long: Moderátori
+    x_reputation: reputácia
+    x_votes: Získané hlasy
+    x_answers: odpovede
+    x_questions: otázky
   install:
-    title: Answer
-    next: Next
-    done: Done
-    config_yaml_error: Can't create the config.yaml file.
+    title: Odpoveď
+    next: Ďalšie
+    done: hotovo
+    config_yaml_error: Nie je možné vytvoriť súbor config.yaml.
     lang:
-      label: Please Choose a Language
+      label: Vyberte jazyk
     db_type:
-      label: Database Engine
+      label: Databázový engine
     db_username:
-      label: Username
+      label: Užívateľské meno
       placeholder: root
-      msg: Username cannot be empty.
+      msg: Užívateľské meno nemôže byť prázdne.
     db_password:
-      label: Password
+      label: Heslo
       placeholder: root
-      msg: Password cannot be empty.
+      msg: Heslo nemôže byť prázdne.
     db_host:
-      label: Database Host
+      label: Hostiteľ databázy
       placeholder: "db:3306"
-      msg: Database Host cannot be empty.
+      msg: Hostiteľ databázy nemôže byť prázdny.
     db_name:
-      label: Database Name
-      placeholder: answer
-      msg: Database Name cannot be empty.
+      label: Názov databázy
+      placeholder: odpoveď
+      msg: Názov databázy nemôže byť prázdny.
     db_file:
-      label: Database File
+      label: Databázový súbor
       placeholder: /data/answer.db
-      msg: Database File cannot be empty.
+      msg: Databázový súbor nemôže byť prázdny.
     config_yaml:
-      title: Create config.yaml
-      label: The config.yaml file created.
+      title: Vytvoriť config.yaml
+      label: Vytvorený súbor Config.yaml.
       desc: >-
-        You can create the <1>config.yaml</1> file manually in the
-        <1>/var/wwww/xxx/</1> directory and paste the following text into it.
-      info: After you've done that, click "Next" button.
-    site_information: Site Information
-    admin_account: Admin Account
+        Môžete vytvoriť <1>config.yaml</1> súbor manuálne v
+        <1>/var/wwww/xxx/</1> adresári a vložte do neho nasledujúci text.
+      info: Potom, čo ste to urobili, kliknite na tlačidlo „Ďalej“.
+    site_information: Informácie o stránke
+    admin_account: Správca
     site_name:
-      label: Site Name
-      msg: Site Name cannot be empty.
+      label: Názov stránky
+      msg: Názov stránky nemôže byť prázdny.
     site_url:
-      label: Site URL
-      text: The address of your site.
+      label: URL stránky
+      text: Adresa vašej stránky.
       msg:
-        empty: Site URL cannot be empty.
-        incorrect: Site URL incorrect format.
+        empty: URL stránky nemôže byť prázdny.
+        incorrect: Nesprávny formát adresy URL.
     contact_email:
-      label: Contact Email
-      text: Email address of key contact responsible for this site.
+      label: kontaktný email
+      text: Emailová adresa kontaktu zodpovedného za túto stránku.
       msg:
-        empty: Contact Email cannot be empty.
-        incorrect: Contact Email incorrect format.
+        empty: Kontaktný email nemôže byť prázdny.
+        incorrect: Nesprávny formát kontaktného emailu.
     admin_name:
-      label: Name
-      msg: Name cannot be empty.
+      label: Meno
+      msg: Meno nemôže byť prázdne.
     admin_password:
-      label: Password
+      label: Heslo
       text: >-
-        You will need this password to log in. Please store it in a secure
-        location.
-      msg: Password cannot be empty.
+        Na prihlásenie budete potrebovať toto heslo. Uložte si ho na bezpečné miesto.
+      msg: Heslo nemôže byť prázdne.
     admin_email:
-      label: Email
-      text: You will need this email to log in.
+      label: E-mail
+      text: Na prihlásenie budete potrebovať tento email.
       msg:
-        empty: Email cannot be empty.
-        incorrect: Email incorrect format.
-    ready_title: Your Answer is Ready!
+        empty: E-mail nemôže byť prázdny.
+        incorrect: Nesprávny formát e-mailu
+    ready_title: Vaša odpoveď je pripravená!
     ready_desc: >-
-      If you ever feel like changing more settings, visit <1>admin section</1>;
-      find it in the site menu.
-    good_luck: "Have fun, and good luck!"
-    warn_title: Warning
+      Ak niekedy budete chcieť zmeniť viac nastavení, navštívte stránku <1>admin section</1>;
+      Nájdete ju v ponuke stránok.
+    good_luck: „Bavte sa a veľa šťastia!“
+    warn_title: Upozornenie
     warn_desc: >-
-      The file <1>config.yaml</1> already exists. If you need to reset any of the
-      configuration items in this file, please delete it first.
-    install_now: You may try <1>installing now</1>.
-    installed: Already installed
+      Súbor <1>config.yaml</1> už existuje. Ak v tomto súbore potrebujete resetovať niektorú z konfiguračných položiek, najskôr ho odstráňte.
+    install_now: Môžete skúsiť <1>installing now</1>.
+    installed: Už nainštalované
     installed_desc: >-
-      You appear to have already installed. To reinstall please clear your old
-      database tables first.
-    db_failed: Database connection failed
+      Zdá sa, že ste už aplikáciu answer nainštalovali. Ak chcete aplikáciu preinštalovať, najprv vymažte staré tabuľky z databázy.
+    db_failed: Databázové pripojenie zlyhalo
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+      To buď znamená, že informácia o databáze v súbore  <1>config.yaml</1> sú nesprávna alebo že sa nepodarilo nadviazať kontakt s databázovým serverom. To môže znamenať, že databázový server vášho hostiteľa nefunguje.
   counts:
-    views: views
-    votes: votes
-    answers: answers
-    accepted: Accepted
+    views: videnia
+    votes: hlasy
+    answers: odpovede
+    accepted: Prijaté
   page_404:
     http_error: HTTP Error 404
-    desc: "Unfortunately, this page doesn't exist."
-    back_home: Back to homepage
+    desc: "Žiaľ, táto stránka neexistuje."
+    back_home: Späť na domovskú stránku
   page_50X:
     http_error: HTTP Error 500
-    desc: The server encountered an error and could not complete your request.
-    back_home: Back to homepage
+    desc: Na serveri sa vyskytla chyba a nebolo možné dokončiť vašu požiadavku.
+    back_home: Späť na domovskú stránku
   page_maintenance:
-    desc: "We are under maintenance, we'll be back soon."
+    desc: "Prebieha údržba, čoskoro sa vrátime."
   nav_menus:
-    dashboard: Dashboard
-    contents: Contents
-    questions: Questions
-    answers: Answers
-    users: Users
-    flags: Flags
-    settings: Settings
-    general: General
-    interface: Interface
+    dashboard: Nástenka
+    contents: Obsah
+    questions: Otázky
+    answers: Odpovede
+    users: Užívatelia
+    flags: Vlajky
+    settings: Nastavenia
+    general: Všeobecné
+    interface: Rozhranie
     smtp: SMTP
     branding: Branding
     legal: Legal
-    write: Write
-    tos: Terms of Service
-    privacy: Privacy
+    write: write
+    tos: Podmienky služby
+    privacy: Súkromie
     seo: SEO
-    customize: Customize
-    themes: Themes
+    customize: Prispôsobiť
+    themes: Témy
     css-html: CSS/HTML
-    login: Login
+    login: Prihlásiť sa
   admin:
     admin_header:
       title: Admin
     dashboard:
-      title: Dashboard
-      welcome: Welcome to Answer Admin!
-      site_statistics: Site Statistics
-      questions: "Questions:"
-      answers: "Answers:"
-      comments: "Comments:"
-      votes: "Votes:"
-      active_users: "Active users:"
-      flags: "Flags:"
+      title: Nástenka
+      welcome: Vitajte v Administrátorovi odpovedí!
+      site_statistics: Štatistiky stránky
+      questions: "Otázky:"
+      answers: "Odpovede:"
+      comments: "Komentáre:"
+      votes: "Hlasy:"
+      active_users: "Aktívni používatelia:"
+      flags: "Vlajky:"
       site_health_status: Site Health Status
-      version: "Version:"
+      version: "Verzia:"
       https: "HTTPS:"
-      uploading_files: "Uploading files:"
+      uploading_files: "Nahrávanie súborov:"
       smtp: "SMTP:"
-      timezone: "Timezone:"
-      system_info: System Info
-      storage_used: "Storage used:"
+      timezone: "Časové pásmo:"
+      system_info: Systémové informácie
+      storage_used: "Použité úložisko:"
       uptime: "Uptime:"
-      answer_links: Answer Links
-      documents: Documents
-      feedback: Feedback
-      support: Support
+      answer_links: Odkazy na odpovede
+      documents: Dokumenty
+      feedback: Spätná väzba
+      support: Podpora
       review: Review
       config: Config
       update_to: Update to
@@ -1420,4 +1408,4 @@ ui:
   draft:
     discard_confirm: Are you sure you want to discard your draft?
   messages:
-     post_deleted: This post has been deleted.
+     post_deleted: Tento príspevok bol odstránený.
