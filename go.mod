@@ -27,7 +27,7 @@ require (
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/ory/dockertest/v3 v3.9.1
 	github.com/robfig/cron/v3 v3.0.1
-	github.com/segmentfault/pacman v1.0.2
+	github.com/segmentfault/pacman v1.0.3
 	github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20221219081300-f734f4a16aa0
 	github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20221018072427-a15dd1434e05
 	github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221219081300-f734f4a16aa0

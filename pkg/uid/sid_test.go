@@ -27,21 +27,6 @@ func Test_ShortID(t *testing.T) {
 	}
 }
 
-func Test_ShortIDBase(t *testing.T) {
-	nums := []int64{
-		1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-		11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-		100, 200, 300, 400, 500, 600, 700, 800, 900, 999, 1000,
-		2000, 3000,
-		3100, 3200, 3300, 3400, 3500, 3600, 3700, 3800, 3900, 3999, 4000,
-	}
-	for _, num := range nums {
-		code := EnToShortID(num)
-		denum := DeToShortID(code)
-		fmt.Println(num, code, denum)
-	}
-}
-
 func Test_EnDeShortID(t *testing.T) {
 	nums := []string{"0", "1", "10", "100", "1000", "10000", "100000", "1234567", "10000000000000000", "10010000000001316", "19930000000001316"}
 	ShortIDSwitch = true
