@@ -19,7 +19,8 @@ const tagEdit = (tagId: string) => {
 };
 const questionLanding = (questionId: string, slugTitle: string = '') => {
   const { seo } = seoSettingStore.getState();
-  if (seo.permalink === 1 && slugTitle) {
+  // @ts-ignore
+  if (/[13]/.test(seo.permalink) && slugTitle) {
     return urlcat('/questions/:questionId/:slugPermalink', {
       questionId,
       slugPermalink: slugTitle,

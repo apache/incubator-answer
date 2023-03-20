@@ -13,8 +13,10 @@ import (
 	"github.com/segmentfault/pacman/errors"
 )
 
-const PermaLinkQuestionIDAndTitle = 1
-const PermaLinkQuestionID = 2
+const PermaLinkQuestionIDAndTitle = 1          // /questions/10010000000000001/post-title
+const PermaLinkQuestionID = 2                  // /questions/10010000000000001
+const PermaLinkQuestionIDAndTitleByShortID = 3 // /questions/11/post-title
+const PermaLinkQuestionIDByShortID = 4         // /questions/11
 
 // SiteGeneralReq site general request
 type SiteGeneralReq struct {
@@ -26,7 +28,7 @@ type SiteGeneralReq struct {
 }
 
 type SiteSeoReq struct {
-	PermaLink int    `validate:"required,lte=3,gte=0" form:"permalink" json:"permalink"`
+	PermaLink int    `validate:"required,lte=4,gte=0" form:"permalink" json:"permalink"`
 	Robots    string `validate:"required" form:"robots" json:"robots"`
 }
 
@@ -40,8 +42,9 @@ func (r *SiteGeneralReq) FormatSiteUrl() {
 
 // SiteInterfaceReq site interface request
 type SiteInterfaceReq struct {
-	Language string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
-	TimeZone string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
+	Language      string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
+	TimeZone      string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
+	DefaultAvatar string `validate:"required,oneof=system gravatar" form:"default_avatar" json:"default_avatar"`
 }
 
 // SiteBrandingReq site branding request

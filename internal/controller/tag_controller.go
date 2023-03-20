@@ -98,6 +98,38 @@ func (tc *TagController) RemoveTag(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
+// AddTag add tag
+// @Summary add tag
+// @Description add tag
+// @Tags Tag
+// @Accept json
+// @Produce json
+// @Param data body schema.AddTagReq true "tag"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/tag [post]
+func (tc *TagController) AddTag(ctx *gin.Context) {
+	req := &schema.AddTagReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	canList, err := tc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.TagAdd,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !canList[0] {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	resp, err := tc.tagCommonService.AddTag(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
+}
+
 // UpdateTag update tag
 // @Summary update tag
 // @Description update tag

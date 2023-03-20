@@ -4,7 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import { SWRConfig } from 'swr';
 
-import { toastStore, loginToContinueStore, notFoundStore } from '@/stores';
+import { toastStore, loginToContinueStore, errorCode } from '@/stores';
 import {
   Header,
   Footer,
@@ -16,6 +16,7 @@ import {
 import { LoginToContinueModal } from '@/components/Modal';
 import { useImgViewer } from '@/hooks';
 import Component404 from '@/pages/404';
+import Component50X from '@/pages/50X';
 
 const Layout: FC = () => {
   const location = useLocation();
@@ -23,13 +24,13 @@ const Layout: FC = () => {
   const closeToast = () => {
     toastClear();
   };
-  const { visible: show404, hide: notFoundHide } = notFoundStore();
+  const { code: httpStatusCode, reset: httpStatusReset } = errorCode();
 
   const imgViewer = useImgViewer();
   const { show: showLoginToContinueModal } = loginToContinueStore();
 
   useEffect(() => {
-    notFoundHide();
+    httpStatusReset();
   }, [location]);
   return (
     <HelmetProvider>
@@ -44,7 +45,13 @@ const Layout: FC = () => {
         <div
           className="position-relative page-wrap"
           onClick={imgViewer.checkClickForImgView}>
-          {show404 ? <Component404 /> : <Outlet />}
+          {httpStatusCode === '404' ? (
+            <Component404 />
+          ) : httpStatusCode === '50X' ? (
+            <Component50X />
+          ) : (
+            <Outlet />
+          )}
         </div>
         <Toast msg={toastMsg} variant={variant} onClose={closeToast} />
         <Footer />

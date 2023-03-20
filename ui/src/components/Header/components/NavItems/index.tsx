@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 
 import type * as Type from '@/common/interface';
 import { Avatar, Icon } from '@/components';
+import { floppyNavigation } from '@/utils';
 
 interface Props {
   redDot: Type.NotificationStatus | undefined;
@@ -16,10 +17,12 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const handleLinkClick = (evt) => {
-    evt.preventDefault();
-    const { href } = evt.currentTarget;
-    const { pathname } = new URL(href);
-    navigate(pathname);
+    if (floppyNavigation.shouldProcessLinkClick(evt)) {
+      evt.preventDefault();
+      const { href } = evt.currentTarget;
+      const { pathname } = new URL(href);
+      navigate(pathname);
+    }
   };
   return (
     <>
@@ -63,7 +66,7 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
             onClick={handleLinkClick}>
             {t('header.nav.setting')}
           </Dropdown.Item>
-          {userInfo?.is_admin ? (
+          {userInfo?.role_id === 2 ? (
             <Dropdown.Item href="/admin" onClick={handleLinkClick}>
               {t('header.nav.admin')}
             </Dropdown.Item>

@@ -15,7 +15,7 @@ import HistoryItem from './components/Item';
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'timeline' });
   const { qid = '', aid = '', tid = '' } = useParams();
-  const { is_admin } = loggedUserInfoStore((state) => state.user);
+  const { role_id } = loggedUserInfoStore((state) => state.user);
   const [showVotes, setShowVotes] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [timelineData, setTimelineData] = useState<Type.TimelineRes>();
@@ -114,7 +114,7 @@ const Index: FC = () => {
                     data={item}
                     objectInfo={timelineData?.object_info}
                     key={item.activity_id}
-                    isAdmin={is_admin}
+                    isAdmin={role_id === 2}
                     revisionList={revisionList}
                   />
                 );

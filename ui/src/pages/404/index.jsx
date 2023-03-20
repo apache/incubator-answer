@@ -3,6 +3,9 @@ import { Container, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+// eslint-disable-next-line import/no-unresolved
+import { usePageTags } from '@/hooks';
+
 const Index = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_404' });
   useEffect(() => {
@@ -14,6 +17,10 @@ const Index = () => {
       pageWrap.style.display = 'block';
     };
   }, []);
+
+  usePageTags({
+    title: t('http_404', { keyPrefix: 'page_title' }),
+  });
   return (
     <Container
       className="d-flex flex-column justify-content-center align-items-center"

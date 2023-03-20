@@ -12,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -29,6 +30,14 @@ func NewSiteInfoService(
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 	emailService *export.EmailService,
 	tagCommonService *tagcommon.TagCommonService) *SiteInfoService {
+
+	resp, err := siteInfoCommonService.GetSiteInterface(context.Background())
+	if err != nil {
+		log.Error(err)
+	} else {
+		constant.DefaultAvatar = resp.DefaultAvatar
+	}
+
 	return &SiteInfoService{
 		siteInfoRepo:          siteInfoRepo,
 		siteInfoCommonService: siteInfoCommonService,
@@ -132,6 +141,9 @@ func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.Site
 	}
 
 	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
+	if err == nil {
+		constant.DefaultAvatar = req.DefaultAvatar
+	}
 	return
 }
 
@@ -280,5 +292,13 @@ func (s *SiteInfoService) SaveSeo(ctx context.Context, req schema.SiteSeoReq) (e
 	}
 
 	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
+	if err != nil {
+		return
+	}
+	if req.PermaLink == schema.PermaLinkQuestionIDAndTitleByShortID || req.PermaLink == schema.PermaLinkQuestionIDByShortID {
+		uid.ShortIDSwitch = true
+	} else {
+		uid.ShortIDSwitch = false
+	}
 	return
 }

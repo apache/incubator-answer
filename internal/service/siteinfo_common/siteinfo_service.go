@@ -7,6 +7,8 @@ import (
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/pkg/uid"
+	"github.com/segmentfault/pacman/log"
 )
 
 //go:generate mockgen -source=./siteinfo_service.go -destination=../mock/siteinfo_repo_mock.go -package=mock
@@ -22,9 +24,20 @@ type SiteInfoCommonService struct {
 
 // NewSiteInfoCommonService new site info common service
 func NewSiteInfoCommonService(siteInfoRepo SiteInfoRepo) *SiteInfoCommonService {
-	return &SiteInfoCommonService{
+	siteInfo := &SiteInfoCommonService{
 		siteInfoRepo: siteInfoRepo,
 	}
+	seoinfo, err := siteInfo.GetSiteSeo(context.Background())
+	if err != nil {
+		log.Error("seoinfo error", err)
+	}
+	if seoinfo.PermaLink == schema.PermaLinkQuestionIDAndTitleByShortID || seoinfo.PermaLink == schema.PermaLinkQuestionIDByShortID {
+		uid.ShortIDSwitch = true
+	} else {
+		uid.ShortIDSwitch = false
+	}
+
+	return siteInfo
 }
 
 // GetSiteGeneral get site info general

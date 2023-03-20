@@ -8,6 +8,7 @@ import (
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/internal/service/report"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -39,7 +40,7 @@ func (rc *ReportController) AddReport(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-
+	req.ObjectID = uid.DeShortID(req.ObjectID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	can, err := rc.rankService.CheckOperationPermission(ctx, req.UserID, permission.ReportAdd, "")
 	if err != nil {

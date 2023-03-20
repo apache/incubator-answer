@@ -3,7 +3,7 @@ import { Pagination } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 
-import { scrollToDocTop } from '@/utils';
+import { scrollToDocTop, floppyNavigation } from '@/utils';
 
 interface Props {
   currentPage: number;
@@ -48,10 +48,12 @@ const PageItem = ({ page, currentPage, path }: PageItemProps) => {
       active={currentPage === page}
       href={path}
       onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        navigate(path);
-        scrollToDocTop();
+        if (floppyNavigation.shouldProcessLinkClick(e)) {
+          e.preventDefault();
+          e.stopPropagation();
+          navigate(path);
+          scrollToDocTop();
+        }
       }}>
       {page}
     </Pagination.Item>
@@ -91,9 +93,11 @@ const Index: FC<Props> = ({
         <Pagination.Prev
           href={handleParams(currentPage - 1)}
           onClick={(e) => {
-            e.preventDefault();
-            navigate(handleParams(currentPage - 1));
-            scrollToDocTop();
+            if (floppyNavigation.shouldProcessLinkClick(e)) {
+              e.preventDefault();
+              navigate(handleParams(currentPage - 1));
+              scrollToDocTop();
+            }
           }}>
           {t('prev')}
         </Pagination.Prev>
@@ -186,9 +190,11 @@ const Index: FC<Props> = ({
           disabled={currentPage === totalPage}
           href={handleParams(currentPage + 1)}
           onClick={(e) => {
-            e.preventDefault();
-            navigate(handleParams(currentPage + 1));
-            scrollToDocTop();
+            if (floppyNavigation.shouldProcessLinkClick(e)) {
+              e.preventDefault();
+              navigate(handleParams(currentPage + 1));
+              scrollToDocTop();
+            }
           }}>
           {t('next')}
         </Pagination.Next>

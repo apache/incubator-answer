@@ -45,7 +45,7 @@ func (as *AuthService) GetUserCacheInfo(ctx context.Context, accessToken string)
 		log.Debugf("user status updated: %+v", cacheInfo)
 		userCacheInfo.UserStatus = cacheInfo.UserStatus
 		userCacheInfo.EmailStatus = cacheInfo.EmailStatus
-		userCacheInfo.IsAdmin = cacheInfo.IsAdmin
+		userCacheInfo.RoleID = cacheInfo.RoleID
 		// update current user cache info
 		err := as.authRepo.SetUserCacheInfo(ctx, accessToken, userCacheInfo)
 		if err != nil {

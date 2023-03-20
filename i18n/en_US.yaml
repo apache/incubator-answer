@@ -48,6 +48,8 @@ backend:
         other: No permission to delete.
       cannot_update:
         other: No permission to update.
+      question_closed_cannot_add:
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
         other: Comment are not allowed to edit.
@@ -104,6 +106,8 @@ backend:
       not_found:
         other: Report not found.
     tag:
+      already_exist:
+        other: Tag already exists.
       not_found:
         other: Tag not found.
       recommend_tag_not_found:
@@ -276,6 +280,7 @@ ui:
     tag: Tag
     tags: Tags
     tag_wiki: tag wiki
+    create_tag: Create Tag
     edit_tag: Edit Tag
     ask_a_question: Add Question
     edit_question: Edit Question
@@ -296,6 +301,8 @@ ui:
     upgrade: Answer Upgrade
     maintenance: Website Maintenance
     users: Users
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
   notifications:
     title: Notifications
     inbox: Inbox
@@ -439,7 +446,7 @@ ui:
             range: Display name up to 35 characters.
         slug_name:
           label: URL Slug
-          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          desc: URL slug up to 35 characters.
           msg:
             empty: URL slug cannot be empty.
             range: URL slug up to 35 characters.
@@ -448,6 +455,7 @@ ui:
           label: Description
     btn_cancel: Cancel
     btn_submit: Submit
+    btn_post: Post new tag
   tag_info:
     created_at: Created
     edited_at: Edited
@@ -1244,6 +1252,9 @@ ui:
         label: Timezone
         msg: Timezone cannot be empty.
         text: Choose a city in the same timezone as you.
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:

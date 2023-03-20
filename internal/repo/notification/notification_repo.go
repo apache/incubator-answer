@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	notficationcommon "github.com/answerdev/answer/internal/service/notification_common"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -27,6 +28,7 @@ func NewNotificationRepo(data *data.Data) notficationcommon.NotificationRepo {
 
 // AddNotification add notification
 func (nr *notificationRepo) AddNotification(ctx context.Context, notification *entity.Notification) (err error) {
+	notification.ObjectID = uid.DeShortID(notification.ObjectID)
 	_, err = nr.data.DB.Insert(notification)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -37,6 +39,7 @@ func (nr *notificationRepo) AddNotification(ctx context.Context, notification *e
 func (nr *notificationRepo) UpdateNotificationContent(ctx context.Context, notification *entity.Notification) (err error) {
 	now := time.Now()
 	notification.UpdatedAt = now
+	notification.ObjectID = uid.DeShortID(notification.ObjectID)
 	_, err = nr.data.DB.Where("id =?", notification.ID).Cols("content", "updated_at").Update(notification)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

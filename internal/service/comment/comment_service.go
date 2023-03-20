@@ -18,6 +18,9 @@ import (
 	"github.com/answerdev/answer/internal/service/permission"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/encryption"
+	"github.com/answerdev/answer/pkg/htmltext"
+	"github.com/answerdev/answer/pkg/uid"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -97,6 +100,9 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 	if err != nil {
 		return nil, err
 	}
+	objInfo.ObjectID = uid.DeShortID(objInfo.ObjectID)
+	objInfo.QuestionID = uid.DeShortID(objInfo.QuestionID)
+	objInfo.AnswerID = uid.DeShortID(objInfo.AnswerID)
 	if objInfo.ObjectType == constant.QuestionObjectType || objInfo.ObjectType == constant.AnswerObjectType {
 		comment.QuestionID = objInfo.QuestionID
 	}
@@ -442,8 +448,10 @@ func (cs *CommentService) GetCommentPersonalWithPage(ctx context.Context, req *s
 			if err != nil {
 				log.Error(err)
 			} else {
+				spew.Dump("==", objInfo)
 				commentResp.ObjectType = objInfo.ObjectType
 				commentResp.Title = objInfo.Title
+				commentResp.UrlTitle = htmltext.UrlTitle(objInfo.Title)
 				commentResp.QuestionID = objInfo.QuestionID
 				commentResp.AnswerID = objInfo.AnswerID
 			}

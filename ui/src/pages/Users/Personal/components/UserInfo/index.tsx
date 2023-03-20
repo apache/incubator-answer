@@ -37,7 +37,7 @@ const Index: FC<Props> = ({ data }) => {
           ) : (
             <span className="link-dark h3 mb-0">{data.display_name}</span>
           )}
-          {data?.is_admin && (
+          {data?.role_id === 2 && (
             <div className="ms-2">
               <OverlayTrigger
                 placement="top"
