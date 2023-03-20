@@ -33,7 +33,7 @@ func Markdown2HTML(source string) string {
 		return source
 	}
 	html := buf.String()
-	filter := bluemonday.NewPolicy()
+	filter := bluemonday.UGCPolicy()
 	html = filter.Sanitize(html)
 	return html
 }
