@@ -910,7 +910,7 @@ ui:
       placeholder: root
       msg: 密碼不能為空
     db_host:
-      label: 數據庫伺服器
+      label: 資料庫主機位址
       placeholder: "db: 3306"
       msg: 資料庫主機位址不能為空
     db_name:
