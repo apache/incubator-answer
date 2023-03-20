@@ -34,6 +34,10 @@ backend:
     other: Contraseña o correo incorrecto.
   error:
     admin:
+      cannot_update_their_password:
+        other: You cannot modify your password.
+      cannot_modify_self_status:
+        other: You cannot modify your status.
       email_or_password_wrong:
         other: Contraseña o correo incorrecto.
     answer:
@@ -80,6 +84,8 @@ backend:
       new_password_same_as_previous_setting:
         other: La nueva contraseña es igual a la anterior.
     question:
+      already_deleted:
+        other: This post has been deleted.
       not_found:
         other: Pregunta no encontrada.
       cannot_deleted:
@@ -807,6 +813,7 @@ ui:
     approve: Aprobar
     reject: Rechazar
     skip: Omitir
+    discard_draft: Discard draft
   search:
     title: Resultados de la búsqueda
     keywords: Palabras claves
@@ -996,9 +1003,11 @@ ui:
     answers: answers
     accepted: Accepted
   page_404:
+    http_error: HTTP Error 404
     desc: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage
   page_50X:
+    http_error: HTTP Error 500
     desc: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
@@ -1385,6 +1394,10 @@ ui:
     reputation: reputación
     votes: votos
   prompt:
-    leave_page: "Are you sure you want to leave the page?"
-    changes_not_save: "Your changes may not be saved."
+    leave_page: Are you sure you want to leave the page?
+    changes_not_save: Your changes may not be saved.
+  draft:
+    discard_confirm: Are you sure you want to discard your draft?
+  messages:
+    post_deleted: This post has been deleted.
 

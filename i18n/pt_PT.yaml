@@ -34,6 +34,10 @@ backend:
     other: O e-mail e a palavra-passe não coincidem.
   error:
     admin:
+      cannot_update_their_password:
+        other: You cannot modify your password.
+      cannot_modify_self_status:
+        other: You cannot modify your status.
       email_or_password_wrong:
         other: O e-mail e a palavra-passe não coincidem.
     answer:
@@ -80,6 +84,8 @@ backend:
       new_password_same_as_previous_setting:
         other: A nova senha é a mesma que a anterior.
     question:
+      already_deleted:
+        other: This post has been deleted.
       not_found:
         other: Pergunta não encontrada.
       cannot_deleted:
@@ -782,6 +788,7 @@ ui:
     approve: Approve
     reject: Reject
     skip: Skip
+    discard_draft: Discard draft
   search:
     title: Search Results
     keywords: Keywords
@@ -971,9 +978,11 @@ ui:
     answers: answers
     accepted: Accepted
   page_404:
+    http_error: HTTP Error 404
     desc: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage
   page_50X:
+    http_error: HTTP Error 500
     desc: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
@@ -1360,6 +1369,10 @@ ui:
     reputation: reputation
     votes: votes
   prompt:
-    leave_page: "Are you sure you want to leave the page?"
-    changes_not_save: "Your changes may not be saved."
+    leave_page: Are you sure you want to leave the page?
+    changes_not_save: Your changes may not be saved.
+  draft:
+    discard_confirm: Are you sure you want to discard your draft?
+  messages:
+    post_deleted: This post has been deleted.
 
