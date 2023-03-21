@@ -161,14 +161,14 @@ func (us *UserCommon) CacheLoginUserInfo(ctx context.Context, userID string, use
 		UserID:      userID,
 		EmailStatus: emailStatus,
 		UserStatus:  userStatus,
-		IsAdmin:     roleID == role.RoleAdminID,
+		RoleID:      roleID,
 	}
 
 	accessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
 		return "", nil, err
 	}
-	if userCacheInfo.IsAdmin {
+	if userCacheInfo.RoleID == role.RoleAdminID {
 		if err = us.authService.SetAdminUserCacheInfo(ctx, accessToken, &entity.UserCacheInfo{UserID: userID}); err != nil {
 			return "", nil, err
 		}
