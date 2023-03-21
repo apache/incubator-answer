@@ -525,6 +525,7 @@ ui:
     tip_answer: >-
       Use comments to reply to other users or notify them of changes. If you are
       adding new information, edit your post instead of commenting.
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: Edit Answer
     default_reason: Edit answer
@@ -784,6 +785,11 @@ ui:
     answered: answered
     closed_in: Closed in
     show_exist: Show existing question.
+    useful: Useful
+    question_useful: It is useful and clear
+    question_un_useful: It is unclear or not useful
+    answer_useful: It is useful
+    answer_un_useful: It is not useful
     answers:
       title: Answers
       score: Score

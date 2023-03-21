@@ -83,6 +83,7 @@ const Index: FC<Props> = ({
       />
       <div className="d-flex align-items-center mt-4">
         <Actions
+          source="answer"
           data={{
             id: data?.id,
             isHate: data?.vote_status === 'vote_down',
