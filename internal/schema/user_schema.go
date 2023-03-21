@@ -3,11 +3,13 @@ package schema
 import (
 	"encoding/json"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/converter"
+	"github.com/answerdev/answer/pkg/gravatar"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -66,8 +68,8 @@ type GetUserResp struct {
 	Language string `json:"language"`
 	// access token
 	AccessToken string `json:"access_token"`
-	// is admin
-	IsAdmin bool `json:"is_admin"`
+	// role id
+	RoleID int `json:"role_id"`
 	// user status
 	Status string `json:"status"`
 	// user have password
@@ -76,7 +78,7 @@ type GetUserResp struct {
 
 func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 	_ = copier.Copy(r, userInfo)
-	r.Avatar = FormatAvatarInfo(userInfo.Avatar)
+	r.Avatar = FormatAvatarInfo(userInfo.Avatar, userInfo.EMail)
 	r.CreatedAt = userInfo.CreatedAt.Unix()
 	r.LastLoginDate = userInfo.LastLoginDate.Unix()
 	statusShow, ok := UserStatusShow[userInfo.Status]
@@ -102,6 +104,10 @@ func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
 	}
 	avatarInfo := &AvatarInfo{}
 	_ = json.Unmarshal([]byte(userInfo.Avatar), avatarInfo)
+	if constant.DefaultAvatar == "gravatar" && avatarInfo.Type == "" {
+		avatarInfo.Type = "gravatar"
+		avatarInfo.Gravatar = gravatar.GetAvatarURL(userInfo.EMail)
+	}
 	// if json.Unmarshal Error avatarInfo.Type is Empty
 	r.Avatar = avatarInfo
 }
@@ -112,7 +118,13 @@ const (
 	AvatarTypeCustom   = "custom"
 )
 
-func FormatAvatarInfo(avatarJson string) string {
+func FormatAvatarInfo(avatarJson, email string) (res string) {
+	defer func() {
+		if constant.DefaultAvatar == "gravatar" && len(res) == 0 {
+			res = gravatar.GetAvatarURL(email)
+		}
+	}()
+
 	if avatarJson == "" {
 		return ""
 	}
@@ -169,18 +181,14 @@ type GetOtherUserInfoByUsernameResp struct {
 	// website
 	Website string `json:"website"`
 	// location
-	Location string `json:"location"`
-	// ip info
-	IPInfo string `json:"ip_info"`
-	// is admin
-	IsAdmin   bool   `json:"is_admin"`
+	Location  string `json:"location"`
 	Status    string `json:"status"`
 	StatusMsg string `json:"status_msg,omitempty"`
 }
 
 func (r *GetOtherUserInfoByUsernameResp) GetFromUserEntity(userInfo *entity.User) {
 	_ = copier.Copy(r, userInfo)
-	Avatar := FormatAvatarInfo(userInfo.Avatar)
+	Avatar := FormatAvatarInfo(userInfo.Avatar, userInfo.EMail)
 	r.Avatar = Avatar
 
 	r.CreatedAt = userInfo.CreatedAt.Unix()

@@ -188,20 +188,27 @@ function handleFormError(
   return data;
 }
 
+function escapeHtml(str: string) {
+  const tagsToReplace = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '`': '&#96;',
+  };
+  return str.replace(/[&<>"'`]/g, (tag) => tagsToReplace[tag] || tag);
+}
+
 function diffText(newText: string, oldText?: string): string {
   if (!newText) {
     return '';
   }
 
   if (typeof oldText !== 'string') {
-    return newText
-      ?.replace(/\n/gi, '<br>')
-      ?.replace(/<kbd/gi, '&lt;kbd')
-      ?.replace(/<\/kbd>/gi, '&lt;/kbd&gt;')
-      ?.replace(/<iframe/gi, '&lt;iframe')
-      ?.replace(/<input/gi, '&lt;input');
+    return escapeHtml(newText);
   }
-  const diff = Diff.diffChars(oldText, newText);
+  const diff = Diff.diffChars(escapeHtml(oldText), escapeHtml(newText));
   const result = diff.map((part) => {
     if (part.added) {
       if (part.value.replace(/\n/g, '').length <= 0) {
@@ -225,12 +232,7 @@ function diffText(newText: string, oldText?: string): string {
     return part.value;
   });
 
-  return result
-    .join('')
-    ?.replace(/<iframe/gi, '&lt;iframe')
-    ?.replace(/<kbd/gi, '&lt;kbd')
-    ?.replace(/<\/kbd>/gi, '&lt;/kbd&gt;')
-    ?.replace(/<input/gi, '&lt;input');
+  return result.join('');
 }
 
 function htmlToReact(html: string) {

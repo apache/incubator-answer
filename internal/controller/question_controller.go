@@ -12,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/pkg/converter"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -42,6 +43,7 @@ func (qc *QuestionController) RemoveQuestion(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, permission.QuestionDelete, req.ID)
@@ -73,6 +75,7 @@ func (qc *QuestionController) CloseQuestion(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, permission.QuestionClose, "")
 	if err != nil {
@@ -103,6 +106,7 @@ func (qc *QuestionController) ReopenQuestion(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.QuestionID = uid.DeShortID(req.QuestionID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, permission.QuestionReopen, "")
 	if err != nil {
@@ -130,6 +134,7 @@ func (qc *QuestionController) ReopenQuestion(ctx *gin.Context) {
 // @Router /answer/api/v1/question/info [get]
 func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	id := ctx.Query("id")
+	id = uid.DeShortID(id)
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	req := schema.QuestionPermission{}
 	canList, err := qc.rankService.CheckOperationPermissions(ctx, userID, []string{
@@ -168,6 +173,7 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 // @Router /answer/api/v1/question/similar/tag [get]
 func (qc *QuestionController) SimilarQuestion(ctx *gin.Context) {
 	questionID := ctx.Query("question_id")
+	questionID = uid.DeShortID(questionID)
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	list, count, err := qc.questionService.SimilarQuestion(ctx, questionID, userID)
 	if err != nil {
@@ -290,6 +296,7 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	if ctx.IsAborted() {
 		return
 	}
+	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
@@ -507,6 +514,7 @@ func (qc *QuestionController) AdminSearchAnswerList(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.QuestionID = uid.DeShortID(req.QuestionID)
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	questionList, count, err := qc.questionService.AdminSearchAnswerList(ctx, req, userID)
 	handler.HandleResponse(ctx, err, gin.H{
@@ -530,6 +538,7 @@ func (qc *QuestionController) AdminSetQuestionStatus(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.QuestionID = uid.DeShortID(req.QuestionID)
 	err := qc.questionService.AdminSetQuestionStatus(ctx, req.QuestionID, req.StatusStr)
 	handler.HandleResponse(ctx, err, gin.H{})
 }

@@ -20,8 +20,10 @@ import (
 	"github.com/answerdev/answer/internal/service/permission"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/internal/service/role"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/encryption"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -39,6 +41,7 @@ type AnswerService struct {
 	AnswerCommon          *answercommon.AnswerCommon
 	voteRepo              activity_common.VoteRepo
 	emailService          *export.EmailService
+	roleService           *role.UserRoleRelService
 }
 
 func NewAnswerService(
@@ -53,6 +56,7 @@ func NewAnswerService(
 	answerCommon *answercommon.AnswerCommon,
 	voteRepo activity_common.VoteRepo,
 	emailService *export.EmailService,
+	roleService *role.UserRoleRelService,
 ) *AnswerService {
 	return &AnswerService{
 		answerRepo:            answerRepo,
@@ -66,6 +70,7 @@ func NewAnswerService(
 		AnswerCommon:          answerCommon,
 		voteRepo:              voteRepo,
 		emailService:          emailService,
+		roleService:           roleService,
 	}
 }
 
@@ -82,7 +87,11 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 	if answerInfo.Status == entity.AnswerStatusDeleted {
 		return nil
 	}
-	if !req.IsAdmin {
+	roleID, err := as.roleService.GetUserRole(ctx, req.UserID)
+	if err != nil {
+		return err
+	}
+	if roleID != role.RoleAdminID && roleID != role.RoleModeratorID {
 		if answerInfo.UserID != req.UserID {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
@@ -92,19 +101,14 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 		if answerInfo.Accepted == schema.AnswerAcceptedEnable {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
-		questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
+		_, exist, err := as.questionRepo.GetQuestion(ctx, answerInfo.QuestionID)
 		if err != nil {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
 		if !exist {
 			return errors.BadRequest(reason.AnswerCannotDeleted)
 		}
-		if questionInfo.AnswerCount > 1 {
-			return errors.BadRequest(reason.AnswerCannotDeleted)
-		}
-		if questionInfo.AcceptedAnswerID != "" {
-			return errors.BadRequest(reason.AnswerCannotDeleted)
-		}
+
 	}
 
 	// user add question count
@@ -143,6 +147,10 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if !exist {
 		return "", errors.BadRequest(reason.QuestionNotFound)
 	}
+	if questionInfo.Status == entity.QuestionStatusClosed || questionInfo.Status == entity.QuestionStatusDeleted {
+		err = errors.BadRequest(reason.AnswerCannotAddByClosedQuestion)
+		return "", err
+	}
 	insertData := new(entity.Answer)
 	insertData.UserID = req.UserID
 	insertData.OriginalText = req.Content
@@ -160,7 +168,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if err != nil {
 		log.Error("IncreaseAnswerCount error", err.Error())
 	}
-	err = as.questionCommon.UpdateLastAnswer(ctx, req.QuestionID, insertData.ID)
+	err = as.questionCommon.UpdateLastAnswer(ctx, req.QuestionID, uid.DeShortID(insertData.ID))
 	if err != nil {
 		log.Error("UpdateLastAnswer error", err.Error())
 	}

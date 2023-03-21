@@ -11,6 +11,7 @@ import (
 	"github.com/answerdev/answer/internal/service/dashboard"
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -49,15 +50,18 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-
+	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, permission.AnswerDelete, req.ID)
+	objectOwner := ac.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.ID)
+	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.AnswerDelete,
+	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	if !can {
+	req.CanDelete = canList[0] || objectOwner
+	if !req.CanDelete {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
@@ -109,6 +113,7 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.QuestionID = uid.DeShortID(req.QuestionID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, permission.AnswerAdd, "")
@@ -136,6 +141,24 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 		handler.HandleResponse(ctx, nil, nil)
 		return
 	}
+
+	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.AnswerEdit,
+		permission.AnswerDelete,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+
+	objectOwner := ac.rankService.CheckOperationObjectOwner(ctx, req.UserID, info.ID)
+	req.CanEdit = canList[0] || objectOwner
+	req.CanDelete = canList[1] || objectOwner
+	if !can {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+	info.MemberActions = permission.GetAnswerPermission(ctx, req.UserID, info.UserID, req.CanEdit, req.CanDelete)
 	handler.HandleResponse(ctx, nil, gin.H{
 		"info":     info,
 		"question": questionInfo,

@@ -12,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	notficationcommon "github.com/answerdev/answer/internal/service/notification_common"
 	"github.com/answerdev/answer/internal/service/revision_common"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
@@ -139,6 +140,20 @@ func (ns *NotificationService) GetNotificationPage(ctx context.Context, searchCo
 		item.UpdateTime = notificationInfo.UpdatedAt.Unix()
 		if notificationInfo.IsRead == schema.NotificationRead {
 			item.IsRead = true
+		}
+		answerID, ok := item.ObjectInfo.ObjectMap["answer"]
+		if ok {
+			if item.ObjectInfo.ObjectID == answerID {
+				item.ObjectInfo.ObjectID = uid.EnShortID(item.ObjectInfo.ObjectMap["answer"])
+			}
+			item.ObjectInfo.ObjectMap["answer"] = uid.EnShortID(item.ObjectInfo.ObjectMap["answer"])
+		}
+		questionID, ok := item.ObjectInfo.ObjectMap["question"]
+		if ok {
+			if item.ObjectInfo.ObjectID == questionID {
+				item.ObjectInfo.ObjectID = uid.EnShortID(item.ObjectInfo.ObjectMap["question"])
+			}
+			item.ObjectInfo.ObjectMap["question"] = uid.EnShortID(item.ObjectInfo.ObjectMap["question"])
 		}
 		resp = append(resp, item)
 	}

@@ -202,7 +202,7 @@ const TagSelector: FC<IProps> = ({
                 item.reserved ? 'danger' : item.recommend ? 'dark' : 'secondary'
               }`}
               size="sm">
-              {item.slug_name}
+              {item.display_name}
               <span className="ms-1" onMouseUp={() => handleRemove(item)}>
                 ×
               </span>
@@ -247,7 +247,7 @@ const TagSelector: FC<IProps> = ({
                     eventKey={index}
                     active={index === currentIndex}
                     onClick={() => handleClick(item)}>
-                    {item.slug_name}
+                    {item.display_name}
                   </Dropdown.Item>
                 );
               })}

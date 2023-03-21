@@ -12,7 +12,7 @@ import {
   useLegalTos,
   useLegalPrivacy,
 } from '@/services';
-import userStore from '@/stores/userInfo';
+import userStore from '@/stores/loggedUserInfoStore';
 import { handleFormError } from '@/utils';
 
 interface Props {

@@ -601,3 +601,14 @@ export const TIMELINE_NORMAL_ACTIVITY_TYPE = [
   'reopened',
   'closed',
 ];
+
+export const SYSTEM_AVATAR_OPTIONS = [
+  {
+    label: 'System',
+    value: 'system',
+  },
+  {
+    label: 'Gravatar',
+    value: 'gravatar',
+  },
+];

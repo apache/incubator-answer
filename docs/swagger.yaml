@@ -174,6 +174,25 @@ definitions:
     - object_id
     - report_type
     type: object
+  schema.AddTagReq:
+    properties:
+      display_name:
+        description: display_name
+        maxLength: 35
+        type: string
+      original_text:
+        description: original text
+        maxLength: 65536
+        type: string
+      slug_name:
+        description: slug_name
+        maxLength: 35
+        type: string
+    required:
+    - display_name
+    - original_text
+    - slug_name
+    type: object
   schema.AddUserReq:
     properties:
       display_name:
@@ -406,6 +425,9 @@ definitions:
       title:
         description: title
         type: string
+      url_title:
+        description: url title
+        type: string
     type: object
   schema.GetCommentResp:
     properties:
@@ -523,12 +545,6 @@ definitions:
       id:
         description: user id
         type: string
-      ip_info:
-        description: ip info
-        type: string
-      is_admin:
-        description: is admin
-        type: boolean
       last_login_date:
         description: last login date
         type: integer
@@ -625,6 +641,9 @@ definitions:
       title:
         description: title
         type: string
+      url_title:
+        description: url title
+        type: string
     type: object
   schema.GetReportTypeResp:
     properties:
@@ -718,6 +737,9 @@ definitions:
       created_at:
         description: created time
         type: integer
+      description:
+        description: description
+        type: string
       display_name:
         description: display_name
         type: string
@@ -904,9 +926,6 @@ definitions:
       ip_info:
         description: ip info
         type: string
-      is_admin:
-        description: is admin
-        type: boolean
       language:
         description: language
         type: string
@@ -930,6 +949,9 @@ definitions:
         type: integer
       rank:
         description: rank
+        type: integer
+      role_id:
+        description: role id
         type: integer
       status:
         description: user status
@@ -978,9 +1000,6 @@ definitions:
       ip_info:
         description: ip info
         type: string
-      is_admin:
-        description: is admin
-        type: boolean
       language:
         description: language
         type: string
@@ -1004,6 +1023,9 @@ definitions:
         type: integer
       rank:
         description: rank
+        type: integer
+      role_id:
+        description: role id
         type: integer
       status:
         description: user status
@@ -1042,6 +1064,9 @@ definitions:
         type: string
       title:
         description: title
+        type: string
+      url_title:
+        description: url title
         type: string
       vote_type:
         description: vote type
@@ -1438,6 +1463,11 @@ definitions:
     type: object
   schema.SiteInterfaceReq:
     properties:
+      default_avatar:
+        enum:
+        - system
+        - gravatar
+        type: string
       language:
         maxLength: 128
         type: string
@@ -1445,11 +1475,17 @@ definitions:
         maxLength: 128
         type: string
     required:
+    - default_avatar
     - language
     - time_zone
     type: object
   schema.SiteInterfaceResp:
     properties:
+      default_avatar:
+        enum:
+        - system
+        - gravatar
+        type: string
       language:
         maxLength: 128
         type: string
@@ -1457,6 +1493,7 @@ definitions:
         maxLength: 128
         type: string
     required:
+    - default_avatar
     - language
     - time_zone
     type: object
@@ -1499,7 +1536,7 @@ definitions:
   schema.SiteSeoReq:
     properties:
       permalink:
-        maximum: 3
+        maximum: 4
         minimum: 0
         type: integer
       robots:
@@ -1511,7 +1548,7 @@ definitions:
   schema.SiteSeoResp:
     properties:
       permalink:
-        maximum: 3
+        maximum: 4
         minimum: 0
         type: integer
       robots:
@@ -4612,6 +4649,27 @@ paths:
                   $ref: '#/definitions/schema.GetTagResp'
               type: object
       summary: get tag one
+      tags:
+      - Tag
+    post:
+      consumes:
+      - application/json
+      description: add tag
+      parameters:
+      - description: tag
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AddTagReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: add tag
       tags:
       - Tag
     put:

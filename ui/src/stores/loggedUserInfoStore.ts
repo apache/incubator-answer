@@ -28,6 +28,7 @@ const initUser: UserInfoRes = {
   language: 'Default',
   is_admin: false,
   have_password: true,
+  role_id: 1,
 };
 
 const loggedUserInfoStore = create<UserInfoStore>((set) => ({

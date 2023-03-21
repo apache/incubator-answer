@@ -5,6 +5,7 @@ import (
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/follow"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 )
@@ -34,7 +35,7 @@ func (fc *FollowController) Follow(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-
+	req.ObjectID = uid.DeShortID(req.ObjectID)
 	dto := &schema.FollowDTO{}
 	_ = copier.Copy(dto, req)
 	dto.UserID = middleware.GetLoginUserIDFromContext(ctx)

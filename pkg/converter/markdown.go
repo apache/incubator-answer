@@ -32,7 +32,10 @@ func Markdown2HTML(source string) string {
 		log.Error(err)
 		return source
 	}
-	return buf.String()
+	html := buf.String()
+	filter := bluemonday.UGCPolicy()
+	html = filter.Sanitize(html)
+	return html
 }
 
 // Markdown2BasicHTML convert markdown to html ,Only basic syntax can be used

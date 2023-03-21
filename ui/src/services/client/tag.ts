@@ -65,3 +65,8 @@ export const getTagsBySlugName = (slugNames: string) => {
   const apiUrl = `/answer/api/v1/tags?tags=${encodeURIComponent(slugNames)}`;
   return request.get<Type.TagInfo[]>(apiUrl);
 };
+
+export const createTag = (params: Type.TagBase) => {
+  const apiUrl = '/answer/api/v1/tag';
+  return request.post<Type.TagInfo>(apiUrl, params);
+};

@@ -43,8 +43,27 @@ const navigateToLogin = (callback?: Function) => {
   });
 };
 
+/**
+ * Determine if a Link click event should be handled
+ */
+const shouldProcessLinkClick = (evt) => {
+  if (evt.defaultPrevented) {
+    return false;
+  }
+  const { target, nodeName } = evt.currentTarget;
+  if (nodeName.toLowerCase() !== 'a') {
+    return false;
+  }
+  return (
+    evt.button === 0 &&
+    (!target || target === '_self') &&
+    !(evt.metaKey || evt.ctrlKey || evt.shiftKey || evt.altKey)
+  );
+};
+
 export const floppyNavigation = {
   differentCurrent,
   navigate,
   navigateToLogin,
+  shouldProcessLinkClick,
 };

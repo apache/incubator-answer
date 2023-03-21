@@ -86,7 +86,7 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	resp = &schema.GetUserToSetShowResp{}
 	resp.GetFromUserEntity(userInfo)
 	resp.AccessToken = token
-	resp.IsAdmin = roleID == role.RoleAdminID
+	resp.RoleID = roleID
 	resp.HavePassword = len(userInfo.Pass) > 0
 	return resp, nil
 }
@@ -135,14 +135,14 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
-		IsAdmin:     roleID == role.RoleAdminID,
+		RoleID:      roleID,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
 		return nil, err
 	}
-	resp.IsAdmin = userCacheInfo.IsAdmin
-	if resp.IsAdmin {
+	resp.RoleID = userCacheInfo.RoleID
+	if resp.RoleID == role.RoleAdminID {
 		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, userCacheInfo)
 		if err != nil {
 			return nil, err
@@ -369,14 +369,14 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
-		IsAdmin:     roleID == role.RoleAdminID,
+		RoleID:      roleID,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
 		return nil, nil, err
 	}
-	resp.IsAdmin = userCacheInfo.IsAdmin
-	if resp.IsAdmin {
+	resp.RoleID = userCacheInfo.RoleID
+	if resp.RoleID == role.RoleAdminID {
 		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
 		if err != nil {
 			return nil, nil, err
@@ -468,11 +468,26 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 
 	resp = &schema.GetUserResp{}
 	resp.GetFromUserEntity(userInfo)
-	resp.IsAdmin = userCacheInfo.IsAdmin
-	resp.AccessToken = accessToken
+	userCacheInfo := &entity.UserCacheInfo{
+		UserID:      userInfo.ID,
+		EmailStatus: userInfo.MailStatus,
+		UserStatus:  userInfo.Status,
+		RoleID:      roleID,
+	}
+	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
+	if err != nil {
+		return nil, err
+	}
 	// User verified email will update user email status. So user status cache should be updated.
 	if err = us.authService.SetUserStatus(ctx, userCacheInfo); err != nil {
 		return nil, err
+	}
+	resp.RoleID = userCacheInfo.RoleID
+	if resp.RoleID == role.RoleAdminID {
+		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
+		if err != nil {
+			return nil, err
+		}
 	}
 	return resp, nil
 }
@@ -703,7 +718,7 @@ func (us *UserService) getUserInfoMapping(ctx context.Context, userIDs []string)
 		return nil, err
 	}
 	for _, user := range userInfoList {
-		user.Avatar = schema.FormatAvatarInfo(user.Avatar)
+		user.Avatar = schema.FormatAvatarInfo(user.Avatar, user.EMail)
 		userInfoMapping[user.ID] = user
 	}
 	return userInfoMapping, nil
