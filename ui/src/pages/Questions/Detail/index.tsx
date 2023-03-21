@@ -57,6 +57,7 @@ const Index = () => {
   const isAuthor = userInfo?.username === question?.user_info?.username;
   const isAdmin = userInfo?.role_id === 2;
   const isLogged = Boolean(userInfo?.access_token);
+  const loggedUserRank = userInfo?.rank;
   const { state: locationState } = useLocation();
 
   useEffect(() => {
@@ -247,6 +248,7 @@ const Index = () => {
                 data={{
                   qid,
                   answered: question?.answered,
+                  loggedUserRank,
                 }}
                 callback={writeAnswerCallback}
               />

@@ -801,10 +801,18 @@ ui:
         edit link to refine and improve your existing answer, instead.</p>
       empty: Answer cannot be empty.
       characters: content must be at least 6 characters in length.
+      tips:
+        header_1: Thanks for your answer
+        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
+        li1_2: Back up any statements you make with references or personal experience.
+        header_2: But <strong>avoid</strong> ...
+        li2_1: Asking for help, seeking clarification, or responding to other answers.
+
     reopen:
       title: Reopen this post
       content: Are you sure you want to reopen?
       success: This post has been reopened
+
   delete:
     title: Delete this post
     question: >-
