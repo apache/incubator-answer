@@ -34,6 +34,8 @@ import QuestionListLoader from './QuestionListLoader';
 import TagsLoader from './TagsLoader';
 import WelcomeTitle from './WelcomeTitle';
 import Counts from './Counts';
+import QuestionList from './QuestionList';
+import HotQuestions from './HotQuestions';
 
 export {
   Avatar,
@@ -74,5 +76,7 @@ export {
   TagsLoader,
   WelcomeTitle,
   Counts,
+  QuestionList,
+  HotQuestions,
 };
 export type { EditorRef, JSONSchema, UISchema };

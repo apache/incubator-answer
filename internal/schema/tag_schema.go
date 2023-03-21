@@ -108,6 +108,8 @@ type GetTagPageResp struct {
 	DisplayName string `json:"display_name"`
 	// excerpt
 	Excerpt string `json:"excerpt"`
+	//description
+	Description string `json:"description"`
 	// original text
 	OriginalText string `json:"original_text"`
 	// parsed_text
@@ -127,7 +129,7 @@ type GetTagPageResp struct {
 }
 
 func (tr *GetTagPageResp) GetExcerpt() {
-	excerpt := strings.TrimSpace(tr.OriginalText)
+	excerpt := strings.TrimSpace(tr.ParsedText)
 	idx := strings.Index(excerpt, "\n")
 	if idx >= 0 {
 		excerpt = excerpt[0:idx]
@@ -159,6 +161,31 @@ type RemoveTagReq struct {
 	TagID string `validate:"required" json:"tag_id"`
 	// user id
 	UserID string `json:"-"`
+}
+
+// AddTagReq add tag request
+type AddTagReq struct {
+	// slug_name
+	SlugName string `validate:"required,gt=0,lte=35" json:"slug_name"`
+	// display_name
+	DisplayName string `validate:"required,gt=0,lte=35" json:"display_name"`
+	// original text
+	OriginalText string `validate:"required,gt=0,lte=65536" json:"original_text"`
+	// parsed text
+	ParsedText string `json:"-"`
+	// user id
+	UserID string `json:"-"`
+}
+
+func (req *AddTagReq) Check() (errFields []*validator.FormErrorField, err error) {
+	req.ParsedText = converter.Markdown2HTML(req.OriginalText)
+	req.SlugName = strings.ToLower(req.SlugName)
+	return nil, nil
+}
+
+// AddTagResp add tag response
+type AddTagResp struct {
+	SlugName string `json:"slug_name"`
 }
 
 // UpdateTagReq update tag request
@@ -269,7 +296,8 @@ type GetFollowingTagsResp struct {
 }
 
 type SearchTagLikeResp struct {
-	SlugName  string `json:"slug_name"`
-	Recommend bool   `json:"recommend"`
-	Reserved  bool   `json:"reserved"`
+	SlugName    string `json:"slug_name"`
+	DisplayName string `json:"display_name"`
+	Recommend   bool   `json:"recommend"`
+	Reserved    bool   `json:"reserved"`
 }

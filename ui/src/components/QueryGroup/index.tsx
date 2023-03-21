@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
 
+import { floppyNavigation } from '@/utils';
+
 interface Props {
   data;
   i18nKeyPrefix: string;
@@ -39,12 +41,14 @@ const Index: FC<Props> = ({
   };
 
   const handleClick = (e, type) => {
-    e.preventDefault();
     const str = handleParams(type);
-    if (pathname) {
-      navigate(`${pathname}${str}`);
-    } else {
-      setUrlSearchParams(str);
+    if (floppyNavigation.shouldProcessLinkClick(e)) {
+      e.preventDefault();
+      if (pathname) {
+        navigate(`${pathname}${str}`);
+      } else {
+        setUrlSearchParams(str);
+      }
     }
   };
 

@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect, useLayoutEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import { brandingStore, pageTagStore, siteInfoStore } from '@/stores';
@@ -23,10 +23,21 @@ const Index: FC = () => {
       );
     }
   };
+  const setDocTitle = () => {
+    try {
+      if (pageTitle) {
+        document.title = pageTitle;
+      }
+      // eslint-disable-next-line no-empty
+    } catch (ex) {}
+  };
 
   useEffect(() => {
     setAppGenerator();
   }, [appVersion]);
+  useLayoutEffect(() => {
+    setDocTitle();
+  }, [pageTitle]);
   return (
     <Helmet>
       <link

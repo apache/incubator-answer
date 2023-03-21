@@ -26,13 +26,13 @@ export interface ReportParams {
 export interface TagBase {
   display_name: string;
   slug_name: string;
-  recommend: boolean;
-  reserved: boolean;
+  original_text?: string;
+  recommend?: boolean;
+  reserved?: boolean;
 }
 
 export interface Tag extends TagBase {
   main_tag_slug_name?: string;
-  original_text?: string;
   parsed_text?: string;
 }
 
@@ -103,6 +103,11 @@ export interface ModifyUserReq {
   website: string;
 }
 
+enum RoleId {
+  User = 1,
+  Admin = 2,
+  Moderator = 3,
+}
 export interface UserInfoBase {
   id?: string;
   avatar: any;
@@ -116,7 +121,7 @@ export interface UserInfoBase {
    */
   status?: string;
   /** roles */
-  is_admin?: boolean;
+  role_id: RoleId;
 }
 
 export interface UserInfoRes extends UserInfoBase {
@@ -129,7 +134,6 @@ export interface UserInfoRes extends UserInfoBase {
    */
   mail_status: number;
   language: string;
-  is_admin: boolean;
   e_mail?: string;
   have_password: boolean;
   [prop: string]: any;
@@ -305,6 +309,7 @@ export interface HelmetUpdate extends Omit<HelmetBase, 'pageTitle'> {
 export interface AdminSettingsInterface {
   language: string;
   time_zone?: string;
+  default_avatar?: string;
 }
 
 export interface AdminSettingsSmtp {

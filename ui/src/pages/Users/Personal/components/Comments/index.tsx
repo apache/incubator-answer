@@ -24,11 +24,14 @@ const Index: FC<Props> = ({ visible, data }) => {
               className="text-break"
               href={
                 item.object_type === 'question'
-                  ? pathFactory.questionLanding(item.object_id, item.url_title)
+                  ? pathFactory.questionLanding(
+                      item.question_id,
+                      item.url_title,
+                    )
                   : pathFactory.answerLanding({
                       questionId: item.question_id,
                       slugTitle: item.url_title,
-                      answerId: item.object_id,
+                      answerId: item.answer_id,
                     })
               }>
               {item.title}

@@ -90,7 +90,7 @@ func (us *UserCommon) FormatUserBasicInfo(ctx context.Context, userInfo *entity.
 	userBasicInfo.Username = userInfo.Username
 	userBasicInfo.Rank = userInfo.Rank
 	userBasicInfo.DisplayName = userInfo.DisplayName
-	userBasicInfo.Avatar = schema.FormatAvatarInfo(userInfo.Avatar)
+	userBasicInfo.Avatar = schema.FormatAvatarInfo(userInfo.Avatar, userInfo.EMail)
 	userBasicInfo.Website = userInfo.Website
 	userBasicInfo.Location = userInfo.Location
 	userBasicInfo.IPInfo = userInfo.IPInfo

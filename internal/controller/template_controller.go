@@ -17,6 +17,7 @@ import (
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/obj"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
@@ -159,8 +160,21 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 	id := ctx.Param("id")
 	title := ctx.Param("title")
 	titleIsAnswerID := false
+	NeedChangeShortID := false
+	isShortID := uid.IsShortID(id)
+	if uid.ShortIDSwitch {
+		if !isShortID {
+			id = uid.EnShortID(id)
+			NeedChangeShortID = true
+		}
+	} else {
+		if isShortID {
+			NeedChangeShortID = true
+			id = uid.DeShortID(id)
+		}
+	}
 
-	objectType, objectTypeerr := obj.GetObjectTypeStrByObjectID(title)
+	objectType, objectTypeerr := obj.GetObjectTypeStrByObjectID(uid.DeShortID(title))
 	if objectTypeerr == nil {
 		if objectType == constant.AnswerObjectType {
 			titleIsAnswerID = true
@@ -169,16 +183,20 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 
 	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
 	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionID {
+		if len(ctx.Request.URL.Query()) > 0 {
+			url = fmt.Sprintf("%s?%s", url, ctx.Request.URL.RawQuery)
+		}
+		if NeedChangeShortID {
+			return true, url
+		}
 		//not have title
 		if titleIsAnswerID || len(title) == 0 {
 			return false, ""
 		}
+
 		return true, url
 	} else {
-		//have title
-		if len(title) > 0 && !titleIsAnswerID && correctTitle {
-			return false, ""
-		}
+
 		detail, err := tc.templateRenderController.QuestionDetail(ctx, id)
 		if err != nil {
 			tc.Page404(ctx)
@@ -187,6 +205,17 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 		url = fmt.Sprintf("%s/%s", url, htmltext.UrlTitle(detail.Title))
 		if titleIsAnswerID {
 			url = fmt.Sprintf("%s/%s", url, title)
+		}
+
+		if len(ctx.Request.URL.Query()) > 0 {
+			url = fmt.Sprintf("%s?%s", url, ctx.Request.URL.RawQuery)
+		}
+		//have title
+		if len(title) > 0 && !titleIsAnswerID && correctTitle {
+			if NeedChangeShortID {
+				return true, url
+			}
+			return false, ""
 		}
 		return true, url
 	}

@@ -353,10 +353,10 @@ func (ts *TagService) GetTagWithPage(ctx context.Context, req *schema.GetTagWith
 
 	resp := make([]*schema.GetTagPageResp, 0)
 	for _, tag := range tags {
-		//excerpt := htmltext.FetchExcerpt(tag.ParsedText, "...", 240)
-		resp = append(resp, &schema.GetTagPageResp{
+		item := &schema.GetTagPageResp{
 			TagID:         tag.ID,
 			SlugName:      tag.SlugName,
+			Description:   htmltext.FetchExcerpt(tag.ParsedText, "...", 240),
 			DisplayName:   tag.DisplayName,
 			OriginalText:  tag.OriginalText,
 			ParsedText:    tag.ParsedText,
@@ -367,7 +367,10 @@ func (ts *TagService) GetTagWithPage(ctx context.Context, req *schema.GetTagWith
 			UpdatedAt:     tag.UpdatedAt.Unix(),
 			Recommend:     tag.Recommend,
 			Reserved:      tag.Reserved,
-		})
+		}
+		item.GetExcerpt()
+		resp = append(resp, item)
+
 	}
 	return pager.NewPageModel(total, resp), nil
 }

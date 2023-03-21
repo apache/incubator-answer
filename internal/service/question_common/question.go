@@ -13,6 +13,7 @@ import (
 	"github.com/answerdev/answer/internal/service/meta"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/htmltext"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 
 	"github.com/answerdev/answer/internal/entity"
@@ -147,6 +148,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 	if err != nil {
 		return showinfo, err
 	}
+	dbinfo.ID = uid.DeShortID(dbinfo.ID)
 	if !has {
 		return showinfo, errors.NotFound(reason.QuestionNotFound)
 	}

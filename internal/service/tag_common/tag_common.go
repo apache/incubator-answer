@@ -88,6 +88,7 @@ func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.Searc
 	for _, tag := range tags {
 		item := schema.SearchTagLikeResp{}
 		item.SlugName = tag.SlugName
+		item.DisplayName = tag.DisplayName
 		item.Recommend = tag.Recommend
 		item.Reserved = tag.Reserved
 		resp = append(resp, item)
@@ -199,6 +200,7 @@ func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.T
 	}
 	tagNames := make([]string, 0)
 	for _, item := range tags {
+		item.SlugName = strings.ReplaceAll(item.SlugName, " ", "-")
 		tagNames = append(tagNames, item.SlugName)
 	}
 	list, err := ts.GetTagListByNames(ctx, tagNames)
@@ -220,6 +222,42 @@ func (ts *TagCommonService) GetObjectTag(ctx context.Context, objectId string) (
 		return nil, err
 	}
 	return ts.TagFormat(ctx, tagsInfoList)
+}
+
+// AddTag get object tag
+func (ts *TagCommonService) AddTag(ctx context.Context, req *schema.AddTagReq) (resp *schema.AddTagResp, err error) {
+	_, exist, err := ts.GetTagBySlugName(ctx, req.SlugName)
+	if err != nil {
+		return nil, err
+	}
+	if exist {
+		return nil, errors.BadRequest(reason.TagAlreadyExist)
+	}
+	tagInfo := &entity.Tag{
+		SlugName:     strings.ReplaceAll(req.SlugName, " ", "-"),
+		DisplayName:  req.DisplayName,
+		OriginalText: req.OriginalText,
+		ParsedText:   req.ParsedText,
+		Status:       entity.TagStatusAvailable,
+		UserID:       req.UserID,
+	}
+	tagList := []*entity.Tag{tagInfo}
+	err = ts.tagCommonRepo.AddTagList(ctx, tagList)
+	if err != nil {
+		return nil, err
+	}
+	revisionDTO := &schema.AddRevisionDTO{
+		UserID:   req.UserID,
+		ObjectID: tagInfo.ID,
+		Title:    tagInfo.SlugName,
+	}
+	tagInfoJson, _ := json.Marshal(tagInfo)
+	revisionDTO.Content = string(tagInfoJson)
+	_, err = ts.revisionService.AddRevision(ctx, revisionDTO, true)
+	if err != nil {
+		return nil, err
+	}
+	return &schema.AddTagResp{SlugName: tagInfo.SlugName}, nil
 }
 
 // AddTagList get object tag
@@ -520,7 +558,7 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 			continue
 		}
 		item := &entity.Tag{}
-		item.SlugName = tag.SlugName
+		item.SlugName = strings.ReplaceAll(tag.SlugName, " ", "-")
 		item.DisplayName = tag.DisplayName
 		item.OriginalText = tag.OriginalText
 		item.ParsedText = tag.ParsedText

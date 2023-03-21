@@ -1,5 +1,4 @@
 #The following fields are used for back-end
-
 backend:
   base:
     success:
@@ -35,6 +34,10 @@ backend:
     other: 邮箱和密码不匹配。
   error:
     admin:
+      cannot_update_their_password:
+        other: You cannot modify your password.
+      cannot_modify_self_status:
+        other: You cannot modify your status.
       email_or_password_wrong:
         other: 邮箱和密码不匹配。
     answer:
@@ -44,6 +47,8 @@ backend:
         other: 没有删除权限。
       cannot_update:
         other: 没有更新权限。
+      question_closed_cannot_add:
+        other: 问题已关闭不可以新增回答
     comment:
       edit_without_permission:
         other: 不允许编辑评论。
@@ -82,7 +87,7 @@ backend:
         other: 新密码与之前的设置相同
     question:
       already_deleted:
-        other: 该内容已被删除
+        other: This post has been deleted.
       not_found:
         other: 问题未找到
       cannot_deleted:
@@ -785,6 +790,7 @@ ui:
     approve: 批准
     reject: 拒绝
     skip: 略过
+    discard_draft: Discard draft
   search:
     title: 搜索结果
     keywords: 关键词
@@ -974,9 +980,11 @@ ui:
     answers: 个回答
     accepted: 已被采纳
   page_404:
+    http_error: HTTP Error 404
     desc: "很抱歉，此页面不存在。"
     back_home: 回到主页
   page_50X:
+    http_error: HTTP Error 500
     desc: 服务器遇到了一个错误，无法完成你的请求。
     back_home: 回到主页
   page_maintenance:
@@ -1364,6 +1372,10 @@ ui:
     reputation: 声望值
     votes: 投票
   prompt:
-    leave_page: "确定要离开此页面？"
-    changes_not_save: "您的更改尚未保存"
+    leave_page: 确定要离开此页面？
+    changes_not_save: 您的更改尚未保存
+  draft:
+    discard_confirm: Are you sure you want to discard your draft?
+  messages:
+    post_deleted: This post has been deleted.
 

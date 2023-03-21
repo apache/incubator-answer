@@ -18,6 +18,7 @@ import (
 	answercommon "github.com/answerdev/answer/internal/service/answer_common"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/internal/service/unique"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -46,6 +47,7 @@ func NewAnswerRepo(
 
 // AddAnswer add answer
 func (ar *answerRepo) AddAnswer(ctx context.Context, answer *entity.Answer) (err error) {
+	answer.QuestionID = uid.DeShortID(answer.QuestionID)
 	ID, err := ar.uniqueIDRepo.GenUniqueIDStr(ctx, answer.TableName())
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -56,11 +58,14 @@ func (ar *answerRepo) AddAnswer(ctx context.Context, answer *entity.Answer) (err
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	answer.ID = uid.EnShortID(answer.ID)
+	answer.QuestionID = uid.EnShortID(answer.QuestionID)
 	return nil
 }
 
 // RemoveAnswer delete answer
 func (ar *answerRepo) RemoveAnswer(ctx context.Context, id string) (err error) {
+	id = uid.DeShortID(id)
 	answer := &entity.Answer{
 		ID:     id,
 		Status: entity.AnswerStatusDeleted,
@@ -74,6 +79,8 @@ func (ar *answerRepo) RemoveAnswer(ctx context.Context, id string) (err error) {
 
 // UpdateAnswer update answer
 func (ar *answerRepo) UpdateAnswer(ctx context.Context, answer *entity.Answer, Colar []string) (err error) {
+	answer.ID = uid.DeShortID(answer.ID)
+	answer.QuestionID = uid.DeShortID(answer.QuestionID)
 	_, err = ar.data.DB.ID(answer.ID).Cols(Colar...).Update(answer)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -83,6 +90,7 @@ func (ar *answerRepo) UpdateAnswer(ctx context.Context, answer *entity.Answer, C
 
 func (ar *answerRepo) UpdateAnswerStatus(ctx context.Context, answer *entity.Answer) (err error) {
 	now := time.Now()
+	answer.ID = uid.DeShortID(answer.ID)
 	answer.UpdatedAt = now
 	_, err = ar.data.DB.Where("id =?", answer.ID).Cols("status", "updated_at").Update(answer)
 	if err != nil {
@@ -95,11 +103,15 @@ func (ar *answerRepo) UpdateAnswerStatus(ctx context.Context, answer *entity.Ans
 func (ar *answerRepo) GetAnswer(ctx context.Context, id string) (
 	answer *entity.Answer, exist bool, err error,
 ) {
+	id = uid.DeShortID(id)
 	answer = &entity.Answer{}
 	exist, err = ar.data.DB.ID(id).Get(answer)
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	answer.ID = uid.EnShortID(answer.ID)
+	answer.QuestionID = uid.EnShortID(answer.QuestionID)
+
 	return
 }
 
@@ -116,19 +128,31 @@ func (ar *answerRepo) GetAnswerCount(ctx context.Context) (count int64, err erro
 // GetAnswerList get answer list all
 func (ar *answerRepo) GetAnswerList(ctx context.Context, answer *entity.Answer) (answerList []*entity.Answer, err error) {
 	answerList = make([]*entity.Answer, 0)
+	answer.ID = uid.DeShortID(answer.ID)
+	answer.QuestionID = uid.DeShortID(answer.QuestionID)
 	err = ar.data.DB.Find(answerList, answer)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	for _, item := range answerList {
+		item.ID = uid.EnShortID(item.ID)
+		item.QuestionID = uid.EnShortID(item.QuestionID)
 	}
 	return
 }
 
 // GetAnswerPage get answer page
 func (ar *answerRepo) GetAnswerPage(ctx context.Context, page, pageSize int, answer *entity.Answer) (answerList []*entity.Answer, total int64, err error) {
+	answer.ID = uid.DeShortID(answer.ID)
+	answer.QuestionID = uid.DeShortID(answer.QuestionID)
 	answerList = make([]*entity.Answer, 0)
 	total, err = pager.Help(page, pageSize, answerList, answer, ar.data.DB.NewSession())
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	for _, item := range answerList {
+		item.ID = uid.EnShortID(item.ID)
+		item.QuestionID = uid.EnShortID(item.QuestionID)
 	}
 	return
 }
@@ -139,6 +163,8 @@ func (ar *answerRepo) UpdateAccepted(ctx context.Context, id string, questionID 
 	if questionID == "" {
 		return nil
 	}
+	id = uid.DeShortID(id)
+	questionID = uid.DeShortID(questionID)
 	var data entity.Answer
 	data.ID = id
 
@@ -160,24 +186,34 @@ func (ar *answerRepo) UpdateAccepted(ctx context.Context, id string, questionID 
 // GetByID
 func (ar *answerRepo) GetByID(ctx context.Context, id string) (*entity.Answer, bool, error) {
 	var resp entity.Answer
+	id = uid.DeShortID(id)
 	has, err := ar.data.DB.Where("id =? ", id).Get(&resp)
 	if err != nil {
 		return &resp, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	resp.ID = uid.EnShortID(resp.ID)
+	resp.QuestionID = uid.EnShortID(resp.QuestionID)
 	return &resp, has, nil
 }
 
 func (ar *answerRepo) GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error) {
+	questionID = uid.DeShortID(questionID)
 	var resp entity.Answer
 	has, err := ar.data.DB.Where("question_id =? and  user_id = ?", questionID, userID).Get(&resp)
 	if err != nil {
 		return &resp, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	resp.ID = uid.EnShortID(resp.ID)
+	resp.QuestionID = uid.EnShortID(resp.QuestionID)
 	return &resp, has, nil
 }
 
 // SearchList
 func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error) {
+	if search.QuestionID != "" {
+		search.QuestionID = uid.DeShortID(search.QuestionID)
+	}
+	search.ID = uid.DeShortID(search.ID)
 	var count int64
 	var err error
 	rows := make([]*entity.Answer, 0)
@@ -215,6 +251,10 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	if err != nil {
 		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	for _, item := range rows {
+		item.ID = uid.EnShortID(item.ID)
+		item.QuestionID = uid.EnShortID(item.QuestionID)
+	}
 	return rows, count, nil
 }
 
@@ -224,6 +264,9 @@ func (ar *answerRepo) AdminSearchList(ctx context.Context, search *entity.AdminA
 		err     error
 		session = ar.data.DB.Table([]string{entity.Answer{}.TableName(), "a"}).Select("a.*")
 	)
+	if search.QuestionID != "" {
+		search.QuestionID = uid.DeShortID(search.QuestionID)
+	}
 
 	session.Where(builder.Eq{
 		"a.status": search.Status,
@@ -250,6 +293,7 @@ func (ar *answerRepo) AdminSearchList(ctx context.Context, search *entity.AdminA
 		if strings.Contains(search.Query, "answer:") {
 			idSearch = true
 			id = strings.TrimSpace(strings.TrimPrefix(search.Query, "answer:"))
+			id = uid.DeShortID(id)
 			for _, r := range id {
 				if !unicode.IsDigit(r) {
 					idSearch = false
@@ -284,6 +328,10 @@ func (ar *answerRepo) AdminSearchList(ctx context.Context, search *entity.AdminA
 	count, err = session.FindAndCount(&rows)
 	if err != nil {
 		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	for _, item := range rows {
+		item.ID = uid.EnShortID(item.ID)
+		item.QuestionID = uid.EnShortID(item.QuestionID)
 	}
 	return rows, count, nil
 }

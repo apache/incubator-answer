@@ -30,6 +30,7 @@ func NewCollectionRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo) collec
 
 // AddCollection add collection
 func (cr *collectionRepo) AddCollection(ctx context.Context, collection *entity.Collection) (err error) {
+	needAdd := false
 	_, err = cr.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
 		var has bool
 		dbcollection := &entity.Collection{}
@@ -41,16 +42,23 @@ func (cr *collectionRepo) AddCollection(ctx context.Context, collection *entity.
 		if has {
 			return
 		}
+		needAdd = true
+		return
+	})
+	if err != nil {
+		return
+	}
+	if needAdd {
 		id, err := cr.uniqueIDRepo.GenUniqueIDStr(ctx, collection.TableName())
 		if err == nil {
 			collection.ID = id
-			_, err = session.Insert(collection)
+			_, err = cr.data.DB.Insert(collection)
 			if err != nil {
-				return result, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+				return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 			}
 		}
-		return
-	})
+	}
+
 	return err
 }
 

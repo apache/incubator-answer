@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 
 import { Modal } from '@/components';
-import { loggedUserInfoStore, toastStore, notFoundStore } from '@/stores';
+import { loggedUserInfoStore, toastStore, errorCode } from '@/stores';
 import { LOGGED_TOKEN_STORAGE_KEY, IGNORE_PATH_LIST } from '@/common/constants';
 import { RouteAlias } from '@/router/alias';
 import { getCurrentLang } from '@/utils/localize';
@@ -107,14 +107,14 @@ class Request {
         // 401: Re-login required
         if (status === 401) {
           // clear userinfo
-          notFoundStore.getState().hide();
+          errorCode.getState().reset();
           loggedUserInfoStore.getState().clear();
           floppyNavigation.navigateToLogin();
           return Promise.reject(false);
         }
         if (status === 403) {
           // Permission interception
-          notFoundStore.getState().hide();
+          errorCode.getState().reset();
           if (data?.type === 'url_expired') {
             // url expired
             floppyNavigation.navigate(RouteAlias.activationFailed, () => {
@@ -150,10 +150,14 @@ class Request {
           if (isIgnoredPath(IGNORE_PATH_LIST)) {
             return Promise.reject(false);
           }
-          notFoundStore.getState().show();
+          errorCode.getState().update('404');
           return Promise.reject(false);
         }
         if (status >= 500) {
+          if (isIgnoredPath(IGNORE_PATH_LIST)) {
+            return Promise.reject(false);
+          }
+          errorCode.getState().update('50X');
           console.error(
             `Request failed with status code ${status}, ${msg || ''}`,
           );

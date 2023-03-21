@@ -26,6 +26,7 @@ import (
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/htmltext"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/i18n"
@@ -234,6 +235,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 
 	tagNameList := make([]string, 0)
 	for _, tag := range req.Tags {
+		tag.SlugName = strings.ReplaceAll(tag.SlugName, " ", "-")
 		tagNameList = append(tagNameList, tag.SlugName)
 	}
 	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
@@ -374,7 +376,7 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		log.Errorf("user DeleteQuestion rank rollback error %s", err.Error())
 	}
 	activity_queue.AddActivity(&schema.ActivityMsg{
-		UserID:           questionInfo.UserID,
+		UserID:           req.UserID,
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,
 		ActivityTypeKey:  constant.ActQuestionDeleted,
@@ -480,7 +482,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	question.Title = req.Title
 	question.OriginalText = req.Content
 	question.ParsedText = req.HTML
-	question.ID = req.ID
+	question.ID = uid.DeShortID(req.ID)
 	question.UpdatedAt = now
 	question.PostUpdateTime = now
 	question.UserID = dbinfo.UserID
@@ -494,6 +496,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	tagNameList := make([]string, 0)
 	oldtagNameList := make([]string, 0)
 	for _, tag := range req.Tags {
+		tag.SlugName = strings.ReplaceAll(tag.SlugName, " ", "-")
 		tagNameList = append(tagNameList, tag.SlugName)
 	}
 	for _, tag := range oldTags {
@@ -719,12 +722,13 @@ func (qs *QuestionService) SearchUserAnswerList(ctx context.Context, userName, o
 	for _, item := range answerList {
 		answerinfo := qs.questioncommon.AnswerCommon.ShowFormat(ctx, item)
 		answerlist = append(answerlist, answerinfo)
-		questionIDs = append(questionIDs, item.QuestionID)
+		questionIDs = append(questionIDs, uid.DeShortID(item.QuestionID))
 	}
 	questionMaps, err := qs.questioncommon.FindInfoByID(ctx, questionIDs, loginUserID)
 	if err != nil {
 		return userAnswerlist, count, err
 	}
+
 	for _, item := range answerlist {
 		_, ok := questionMaps[item.QuestionID]
 		if ok {
@@ -768,13 +772,13 @@ func (qs *QuestionService) SearchUserCollectionList(ctx context.Context, page, p
 		return list, count, err
 	}
 	for _, id := range questionIDs {
-		_, ok := questionMaps[id]
+		_, ok := questionMaps[uid.EnShortID(id)]
 		if ok {
-			questionMaps[id].LastAnsweredUserInfo = nil
-			questionMaps[id].UpdateUserInfo = nil
-			questionMaps[id].Content = ""
-			questionMaps[id].HTML = ""
-			list = append(list, questionMaps[id])
+			questionMaps[uid.EnShortID(id)].LastAnsweredUserInfo = nil
+			questionMaps[uid.EnShortID(id)].UpdateUserInfo = nil
+			questionMaps[uid.EnShortID(id)].Content = ""
+			questionMaps[uid.EnShortID(id)].HTML = ""
+			list = append(list, questionMaps[uid.EnShortID(id)])
 		}
 	}
 
@@ -832,6 +836,7 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 	for _, item := range questionlist {
 		info := &schema.UserQuestionInfo{}
 		_ = copier.Copy(info, item)
+		info.UrlTitle = htmltext.UrlTitle(info.Title)
 		userQuestionlist = append(userQuestionlist, info)
 	}
 
@@ -840,6 +845,7 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 		_ = copier.Copy(info, item)
 		info.AnswerID = item.ID
 		info.QuestionID = item.QuestionID
+		info.QuestionInfo.UrlTitle = htmltext.UrlTitle(info.QuestionInfo.Title)
 		userAnswerlist = append(userAnswerlist, info)
 	}
 
