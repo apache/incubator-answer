@@ -287,7 +287,7 @@ ui:
     sign_up: Prihlásiť Se
     account_recovery: Obnovenie účtu
     account_activation: Aktivácia účtu
-    confirm_email: Potvrď email
+    confirm_email: Potvrď e-mail
     account_suspended: Účet pozastavený
     admin: Admin
     change_email: Upraviť e-mail
@@ -637,7 +637,7 @@ ui:
         empty: Prihlasovacie meno nemôže byť prázdne.
         range: Prihlasovacie meno nesmie mať viac ako 30 znakov.
     email:
-      label: Email
+      label: E-mail
       msg:
         empty: E-mail nemôže byť prázdny.
     password:
@@ -651,7 +651,7 @@ ui:
     send_success: >-
       Ak sa účet zhoduje s <strong>{{mail}}</strong>, tak by ste mali čoskoro dostať e-mail s pokynmi, ako resetovať svoje heslo.
     email:
-      label: Email
+      label: E-mail
       msg:
         empty: E-mail nemôže byť prázdny.
   change_email:
@@ -724,13 +724,13 @@ ui:
         radio: "Odpovede na vaše otázky, komentáre a ďalšie"
     account:
       heading: Účet
-      change_email_btn: Zmeniť email
+      change_email_btn: Zmeniť e-mail
       change_pass_btn: Zmeniť heslo
       change_email_info: >-
-        Na túto adresu sme poslali email. Postupujte podľa inštrukcií.
+        Na túto adresu sme poslali e-mail. Postupujte podľa inštrukcií.
       email:
         label: E-mail
-        msg: Email nemôže byť prázdny.
+        msg: E-mail nemôže byť prázdny.
       password_title: Heslo
       current_pass:
         label: Súčasné heslo
@@ -857,13 +857,13 @@ ui:
     link: Pokračovať na domovskú stránku
     invalid: >-
       Ospravedlňujeme sa, tento odkaz na potvrdenie účtu už nie je platný. Váš profil už možno je aktívny.
-    confirm_new_email: Váš email bol aktualizovaný.
+    confirm_new_email: Váš e-mail bol aktualizovaný.
     confirm_new_email_invalid: >-
       Ospravedlňujeme sa, tento potvrdzovací odkaz už nie je platný. Váš e-mail je už môžno zmenený.
   unsubscribe:
     page_title: Zrušiť odber
     success_title: Úspešne zrušenie odberu
-    success_desc: Boli ste úspešne odstránený zo zoznamu odoberateľov a nebudete od nás dostávať žiadne ďalšie emaily.
+    success_desc: Boli ste úspešne odstránený zo zoznamu odoberateľov a nebudete od nás dostávať žiadne ďalšie e-maily.
     link: Zmeniť nastavenia
   question:
     following_tags: Nasledujúce značky
@@ -969,11 +969,11 @@ ui:
         empty: URL stránky nemôže byť prázdny.
         incorrect: Nesprávny formát adresy URL.
     contact_email:
-      label: kontaktný email
-      text: Emailová adresa kontaktu zodpovedného za túto stránku.
+      label: kontaktný e-mail
+      text: E-mailová adresa kontaktu zodpovedného za túto stránku.
       msg:
-        empty: Kontaktný email nemôže byť prázdny.
-        incorrect: Nesprávny formát kontaktného emailu.
+        empty: Kontaktný e-mail nemôže byť prázdny.
+        incorrect: Nesprávny formát kontaktného e-mailu.
     admin_name:
       label: Meno
       msg: Meno nemôže byť prázdne.
@@ -984,7 +984,7 @@ ui:
       msg: Heslo nemôže byť prázdne.
     admin_email:
       label: E-mail
-      text: Na prihlásenie budete potrebovať tento email.
+      text: Na prihlásenie budete potrebovať tento e-mail.
       msg:
         empty: E-mail nemôže byť prázdny.
         incorrect: Nesprávny formát e-mailu
@@ -1007,7 +1007,7 @@ ui:
     views: videnia
     votes: hlasy
     answers: odpovede
-    accepted: Prijaté
+    accepted: prijaté
   page_404:
     http_error: HTTP Error 404
     desc: "Žiaľ, táto stránka neexistuje."
@@ -1030,8 +1030,8 @@ ui:
     interface: Rozhranie
     smtp: SMTP
     branding: Branding
-    legal: Legal
-    write: write
+    legal: legálne
+    write: písať
     tos: Podmienky služby
     privacy: Súkromie
     seo: SEO
@@ -1065,347 +1065,347 @@ ui:
       documents: Dokumenty
       feedback: Spätná väzba
       support: Podpora
-      review: Review
-      config: Config
-      update_to: Update to
-      latest: Latest
-      check_failed: Check failed
-      "yes": "Yes"
-      "no": "No"
-      not_allowed: Not allowed
-      allowed: Allowed
-      enabled: Enabled
-      disabled: Disabled
+      review: Preskúmanie
+      config: Konfigurácia
+      update_to: Aktualizovať na
+      latest: Posledné
+      check_failed: Skontrolovať zlyhanie
+      "yes": "Áno"
+      "no": "Nie"
+      not_allowed: Nepovolené
+      allowed: Povolené
+      enabled: Povolené
+      disabled: Zablokované
     flags:
-      title: Flags
-      pending: Pending
-      completed: Completed
-      flagged: Flagged
-      created: Created
-      action: Action
-      review: Review
+      title: Vlajky
+      pending: Prebiehajúce
+      completed: Dokončené
+      flagged: Označené
+      created: Vytvorené
+      action: Akcia
+      review: Preskúmanie
     change_modal:
-      title: Change user status to...
-      btn_cancel: Cancel
-      btn_submit: Submit
-      normal_name: normal
-      normal_desc: A normal user can ask and answer questions.
-      suspended_name: suspended
-      suspended_desc: A suspended user can't log in.
-      deleted_name: deleted
-      deleted_desc: "Delete profile, authentication associations."
-      inactive_name: inactive
-      inactive_desc: An inactive user must re-validate their email.
-      confirm_title: Delete this user
-      confirm_content: Are you sure you want to delete this user? This is permanent!
-      confirm_btn: Delete
+      title: Zmeňte stav používateľa na...
+      btn_cancel: Zrušiť
+      btn_submit: Odovzdať
+      normal_name: normálne
+      normal_desc: Normálny používateľ môže klásť a odpovedať na otázky.
+      suspended_name: pozastavené
+      suspended_desc: Pozastavený používateľ sa nemôže prihlásiť.
+      deleted_name: vymazané
+      deleted_desc: "Odstrániť profil, autentifikačné združenia."
+      inactive_name: neaktívne
+      inactive_desc: Neaktívny užívateľ musí znovu overiť svoj e-mail.
+      confirm_title: Odstráňte tohto používateľa
+      confirm_content: Ste si istí, že chcete tohto používateľa odstrániť? Táto akcia sa nedá zmeniť
+      confirm_btn: Vymazať
       msg:
-        empty: Please select a reason.
+        empty: Vyberte dôvod.
     status_modal:
-      title: "Change {{ type }} status to..."
-      normal_name: normal
-      normal_desc: A normal post available to everyone.
-      closed_name: closed
-      closed_desc: "A closed question can't answer, but still can edit, vote and comment."
-      deleted_name: deleted
-      deleted_desc: All reputation gained and lost will be restored.
-      btn_cancel: Cancel
-      btn_submit: Submit
-      btn_next: Next
+      title: "Zmena {{ type }}  stav na..."
+      normal_name: normálne
+      normal_desc: Normálny príspevok je k dispozícii pre všetkých.
+      closed_name: Uzavreté
+      closed_desc: "Na uzavretú otázku nemôžete odpovedať, ale stále ju môžete upravovať, hlasovať a komentovať."
+      deleted_name: Vymazané
+      deleted_desc: Získaná a stratená reputácia sa obnoví.
+      btn_cancel: Zrušiť
+      btn_submit: Odovdať
+      btn_next: Ďalšie
     user_role_modal:
-      title: Change user role to...
-      btn_cancel: Cancel
-      btn_submit: Submit
+      title: Zmeňte rolu používateľa na...
+      btn_cancel: Zrušiť
+      btn_submit: Odovzdať
     users:
-      title: Users
-      name: Name
-      email: Email
-      reputation: Reputation
-      created_at: Created Time
-      delete_at: Deleted Time
-      suspend_at: Suspended Time
-      status: Status
-      role: Role
-      action: Action
-      change: Change
-      all: All
-      staff: Staff
-      inactive: Inactive
-      suspended: Suspended
-      deleted: Deleted
-      normal: Normal
-      Moderator: Moderator
+      title: Používatelia
+      name: Meno
+      email: E-mail
+      reputation: Reputácia
+      created_at: Čas vytvorenia
+      delete_at: Čas vymazania
+      suspend_at: Čas pozastavenia
+      status: Stav
+      role: Rola
+      action: Akcia
+      change: Zmena
+      all: Všetko
+      staff: Personál
+      inactive: Neaktívne
+      suspended: Pozastavené
+      deleted: Vymazané
+      normal: Normálné
+      Moderator: Moderátor
       Admin: Admin
-      User: User
+      User: Používateľ
       filter:
-        placeholder: "Filter by name, user:id"
-      set_new_password: Set new password
-      change_status: Change status
-      change_role: Change role
-      show_logs: Show logs
-      add_user: Add user
+        placeholder: "Filter podľa mena, používateľ: ID"
+      set_new_password: Nastaviť nové heslo
+      change_status: Zmentiť stavu
+      change_role: Zmeniť rolu
+      show_logs: Zobraziť protokoly
+      add_user: Pridať používateľa
       new_password_modal:
-        title: Set new password
+        title: Nastaviť nové heslo
         form:
           fields:
             password:
-              label: Password
-              text: The user will be logged out and need to login again.
-              msg: Password must be at 8-32 characters in length.
-        btn_cancel: Cancel
-        btn_submit: Submit
+              label: Heslo
+              text: Používateľ bude odhlásený a bude sa musieť znova prihlásiť.
+              msg: Heslo musí mať dĺžku 8-32 znakov.
+        btn_cancel: Zrušiť
+        btn_submit: Odovzdať
       user_modal:
-        title: Add new user
+        title: Pridať nového používateľa
         form:
           fields:
             display_name:
-              label: Display Name
-              msg: Display Name must be at 3-30 characters in length.
+              label: Zobraziť meno
+              msg: Zobrazené meno musí mať dlhú dĺžku 3-30 znakov.
             email:
-              label: Email
-              msg: Email is not valid.
+              label: E-mail
+              msg: E-mail nie je platný.
             password:
-              label: Password
-              msg: Password must be at 8-32 characters in length.
+              label: Heslo
+              msg: Heslo musí mať dĺžku 8-32 znakov.
 
-        btn_cancel: Cancel
-        btn_submit: Submit
+        btn_cancel: Zrušiť
+        btn_submit: Odovzdať
 
     questions:
-      page_title: Questions
-      normal: Normal
-      closed: Closed
-      deleted: Deleted
-      post: Post
-      votes: Votes
-      answers: Answers
-      created: Created
-      status: Status
-      action: Action
-      change: Change
+      page_title: Otázky
+      normal: Normalne
+      closed: Uzatvorené
+      deleted: Vymazané
+      post: poslané
+      votes: Hlasy
+      answers: Odpovede
+      created: Vytvorené
+      status: Stav
+      action: Akcia
+      change: Zmena
       filter:
-        placeholder: "Filter by title, question:id"
+        placeholder: "Filter podľa názvu, otázka:id"
     answers:
-      page_title: Answers
-      normal: Normal
-      deleted: Deleted
-      post: Post
-      votes: Votes
-      created: Created
-      status: Status
-      action: Action
-      change: Change
+      page_title: Odpovede
+      normal: Normalne
+      deleted: Vymazané
+      post: Poslané
+      votes: Hlasy
+      created: Vytvorené
+      status: Stav
+      action: Akcia
+      change: Zmena
       filter:
-        placeholder: "Filter by title, answer:id"
+        placeholder: "Filter podľa názvu, odpoveď:id"
     general:
-      page_title: General
+      page_title: Všeobecné
       name:
-        label: Site Name
-        msg: Site name cannot be empty.
-        text: "The name of this site, as used in the title tag."
+        label: Názov stránky
+        msg: Názov stránky nemôže byť prázdny.
+        text: "Názov tejto stránky, ako sa používa v titulnej značke."
       site_url:
-        label: Site URL
-        msg: Site url cannot be empty.
-        validate: Please enter a valid URL.
-        text: The address of your site.
+        label: URL stránky
+        msg: URL stránky nemôže byť prázdne.
+        validate: Prosím vložte platnú URL.
+        text: Adresa vašej stránky.
       short_desc:
-        label: Short Site Description
-        msg: Short site description cannot be empty.
-        text: "Short description, as used in the title tag on homepage."
+        label: Krátky popis stránky
+        msg: Krátky popis stránky nemôže byť prázdny.
+        text: "Krátky popis, ako sa používa v titulnej značke na domovskej stránke."
       desc:
-        label: Site Description
-        msg: Site description cannot be empty.
-        text: "Describe this site in one sentence, as used in the meta description tag."
+        label: Popis stránky
+        msg: Popis stránky nemôže byť prázdny.
+        text: "Popíšte túto stránku jednou vetou, ako sa používa v značke meta description."
       contact_email:
-        label: Contact Email
-        msg: Contact email cannot be empty.
-        validate: Contact email is not valid.
-        text: Email address of key contact responsible for this site.
+        label: Kontaktný e-mail
+        msg: Kontaktný e-mail nemôže byť prázdny.
+        validate: Kontaktný e-mail je neplatný.
+        text: E-mailová adresa kontaktu zodpovedného za túto stránku.
     interface:
-      page_title: Interface
+      page_title: Rozhranie
       language:
-        label: Interface Language
-        msg: Interface language cannot be empty.
-        text: User interface language. It will change when you refresh the page.
+        label: Jazyk rozhrania
+        msg: Jazyk rozhrania nemôže byť prázdny.
+        text: Jazyk používateľského rozhrania. Zmení sa po obnovení stránky.
       time_zone:
-        label: Timezone
-        msg: Timezone cannot be empty.
-        text: Choose a city in the same timezone as you.
+        label: Časové pásmo
+        msg: Časové pásmo nemôže byť prázdne.
+        text: Vyberte si mesto v rovnakom časovom pásme v akom ste vy.
     smtp:
       page_title: SMTP
       from_email:
-        label: From Email
-        msg: From email cannot be empty.
-        text: The email address which emails are sent from.
+        label: E-mail odosielateľa
+        msg: E-mail odosielateľa nemôže byť prázdny.
+        text: E-mailová adresa, z ktorej sa odosielajú e-maily.
       from_name:
-        label: From Name
-        msg: From name cannot be empty.
-        text: The name which emails are sent from.
+        label: Meno odosielateľa
+        msg: Meno odosielateľa nemôže byť prázdne.
+        text: Meno, z ktorého sa odosielajú e-maily.
       smtp_host:
-        label: SMTP Host
-        msg: SMTP host cannot be empty.
-        text: Your mail server.
+        label: Hostiteľ SMTP
+        msg: Hostiteľ SMTP nemôže byť prázdny.
+        text: Váš mailový server.
       encryption:
-        label: Encryption
-        msg: Encryption cannot be empty.
-        text: For most servers SSL is the recommended option.
+        label: Šifrovanie
+        msg: Šifrovanie nemôže byť prázdne.
+        text: Pre väčšinu serverov je SSL odporúčaná možnosť.
         ssl: SSL
-        none: None
+        none: Žiadne
       smtp_port:
         label: SMTP Port
-        msg: SMTP port must be number 1 ~ 65535.
-        text: The port to your mail server.
+        msg: Port SMTP musí byť číslo z intervalu 1 ~ 65535.
+        text: Port na váš e-mailový server.
       smtp_username:
-        label: SMTP Username
-        msg: SMTP username cannot be empty.
+        label: Používateľské meno SMTP
+        msg: Používateľské meno SMTP nemôže byť prázdne.
       smtp_password:
-        label: SMTP Password
-        msg: SMTP password cannot be empty.
+        label: Heslo SMTP
+        msg: Heslo SMTP nemôže byť prázdne.
       test_email_recipient:
-        label: Test Email Recipients
-        text: Provide email address that will receive test sends.
-        msg: Test email recipients is invalid
+        label: Prijemcovia testovacieho e-mailu
+        text: Zadajte e-mailovú adresu, na ktorú sa budú odosielať testy.
+        msg: Príjemcovia testovacieho e-mailu sú neplatní
       smtp_authentication:
-        label: Enable authentication
-        title: SMTP Authentication
-        msg: SMTP authentication cannot be empty.
-        "yes": "Yes"
-        "no": "No"
+        label: Povoliť autentifikáciu
+        title: Autentifikácia SMTP
+        msg: Autentifikácia SMTP nemôže byť prázdna.
+        "yes": "Áno"
+        "no": "Nie"
     branding:
       page_title: Branding
       logo:
         label: Logo
-        msg: Logo cannot be empty.
-        text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
+        msg: Logo nemôže byť prázdne.
+        text: Obrázok loga v ľavej hornej časti vašej stránky. Použite široký obdĺžnikový obrázok s výškou 56 a pomerom strán väčším ako 3:1. Ak nezadáte nič, tak sa zobrazí text názvu stránky.
       mobile_logo:
-        label: Mobile Logo
-        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
+        label: Logo mobilu
+        text: Logo použité na mobilnej verzii vášho webu. Použite široký obdĺžnikový obrázok s výškou 56. Ak pole ponecháte prázdne, použije sa obrázok z nastavenia „logo“.
       square_icon:
-        label: Square Icon
-        msg: Square icon cannot be empty.
-        text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
+        label: Štvorcová ikona
+        msg: Ikona štvorca nemôže byť prázdna.
+        text: Obrázok použitý ako základ pre ikony metadát. V ideálnom prípade by mal byť väčšií ako 512 x 512.
       favicon:
-        label: Favicon
-        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
+        label: favicon
+        text:  Favicon pre váš web. Ak chcete cez CDN fungovať správne, musí byť vo formáte png. Veľkosť sa zmení na 32 x 32. Ak nebude nič zadané,  použije sa „štvorcová ikona“.
     legal:
-      page_title: Legal
+      page_title: Legálne
       terms_of_service:
-        label: Terms of Service
-        text: "You can add terms of service content here. If you already have a document hosted elsewhere, provide the full URL here."
+        label: Podmienky služby
+        text: "Tu môžete pridať obsah zmluvných podmienok. Ak už máte dokument umiestnený inde, uveďte tu celú URL adresu."
       privacy_policy:
-        label: Privacy Policy
-        text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
+        label: Zásady ochrany osobných údajov
+        text: "Tu môžete pridať obsah zásad ochrany osobných údajov. Ak už máte dokument umiestnený inde, uveďte tu celú URL adresu."
     write:
-      page_title: Write
+      page_title: Písať
       recommend_tags:
-        label: Recommend Tags
-        text: "Please input tag slug above, one tag per line."
+        label: Odporúčané značky
+        text: "Vyššie zadajte tag slug, jednu značku na riadok."
       required_tag:
-        title: Required Tag
-        label: Set recommend tag as required
-        text: "Every new question must have at least one recommend tag."
+        title: Požadovaná značka
+        label: Nastavte odporúčanú značku podľa potreby
+        text: "Každá nová otázka musí mať aspoň jedenu odporúčaciu značku."
       reserved_tags:
-        label: Reserved Tags
-        text: "Reserved tags can only be added to a post by moderator."
+        label: Vyhradené značky
+        text: "Vyhradené značky môže k príspevku pridať iba moderátor"
     seo:
       page_title: SEO
       permalink:
-        label: Permalink
-        text: Custom URL structures can improve the usability, and forward-compatibility of your links.
+        label: trvalý odkaz
+        text: Vlastné štruktúry URL môžu zlepšiť použiteľnosť a doprednú kompatibilitu vašich odkazov.
       robots:
         label: robots.txt
-        text: This will permanently override any related site settings.
+        text: Toto natrvalo prepíše všetky nastavenia súvisiace so stránkou.
     themes:
-      page_title: Themes
+      page_title: Témy
       themes:
-        label: Themes
-        text: Select an existing theme.
+        label: Témy
+        text: Vyberte existujúcu tému.
       navbar_style:
-        label: Navbar Style
-        text: Select an existing theme.
+        label: Štýl navigačnej lišty
+        text: Vyberte existujúcu tému.
       primary_color:
-        label: Primary Color
-        text: Modify the colors used by your themes
+        label: Primárna farba
+        text: Upraviť farby používané vašími motívmi
     css_and_html:
       page_title: CSS and HTML
       custom_css:
-        label: Custom CSS
-        text: This will insert as <link>
+        label: Vlastné CSS
+        text: Toto sa vloží ako <link>
       head:
         label: Head
-        text: This will insert before </head>
+        text: Toto sa vloží pred </head>
       header:
-        label: Header
-        text: This will insert after <body>
+        label: Hlavička
+        text: Toto sa vloží po <body>
       footer:
-        label: Footer
-        text: This will insert before </html>.
+        label: Päta
+        text: Toto sa vloží pred </html>.
     login:
-      page_title: Login
+      page_title: Prihlásenie
       membership:
-        title: Membership
-        label: Allow new registrations
-        text: Turn off to prevent anyone from creating a new account.
+        title: Členstvo
+        label: Povoliť nové registrácie
+        text:  Vypnúť, aby sa zabránilo vytvorenie nového účtu hocikým.
       private:
-        title: Private
-        label: Login required
-        text: Only logged in users can access this community.
+        title: Súkromné
+        label: Vyžaduje sa prihlásenie
+        text: Do tejto komunity majú prístup iba prihlásení používatelia
 
   form:
-    optional: (optional)
-    empty: cannot be empty
-    invalid: is invalid
-    btn_submit: Save
-    not_found_props: "Required property {{ key }} not found."
+    optional: (voliteľné)
+    empty: nemôže byť prázdne
+    invalid: je neplatné
+    btn_submit: Uložiť
+    not_found_props: "Požadovaná vlastnosť {{ key }} nebola nájdená."
   page_review:
-    review: Review
-    proposed: proposed
-    question_edit: Question edit
-    answer_edit: Answer edit
-    tag_edit: Tag edit
-    edit_summary: Edit summary
-    edit_question: Edit question
-    edit_answer: Edit answer
-    edit_tag: Edit tag
-    empty: No review tasks left.
+    review: Preskúmanie
+    proposed: navrhované
+    question_edit: Úprava otázky
+    answer_edit: Úprava odpovede
+    tag_edit: Úprava značky
+    edit_summary: Upraviť súhrn
+    edit_question: Upraviť otázku
+    edit_answer: Upraviť odpoveď
+    edit_tag: Upraviť značku
+    empty: Nezostali žiadne úlohy kontroly.
   timeline:
-    undeleted: undeleted
-    deleted: deleted
-    downvote: downvote
-    upvote: upvote
-    accept: accept
-    cancelled: cancelled
-    commented: commented
+    undeleted: zrušené zmazanie
+    deleted: vymazané
+    downvote: hlasovať proti
+    upvote: hlasovať za
+    accept: akceptované
+    cancelled: zrušené
+    commented: komentované
     rollback: rollback
-    edited: edited
-    answered: answered
-    asked: asked
-    closed: closed
-    reopened: reopened
-    created: created
-    title: "History for"
-    tag_title: "Timeline for"
-    show_votes: "Show votes"
+    edited: zmenené
+    answered: odpovedané
+    asked: spýtané
+    closed: uzavreté
+    reopened: znovu otvorené
+    created: vytvorené
+    title: "História pre"
+    tag_title: "Časová os pre"
+    show_votes: "Zobraziť hlasy"
     n_or_a: N/A
-    title_for_question: "Timeline for"
-    title_for_answer: "Timeline for answer to {{ title }} by {{ author }}"
-    title_for_tag: "Timeline for tag"
-    datetime: Datetime
-    type: Type
-    by: By
-    comment: Comment
-    no_data: "We couldn't find anything."
+    title_for_question: "Časová os pre"
+    title_for_answer: "Časová os odpovede pre {{ title }} od {{ author }}"
+    title_for_tag: "Časová os pre značku"
+    datetime: Dátum a čas
+    type: Typ
+    by: Od
+    comment: Komentár
+    no_data: "Nič sa nám nepodarilo nájsť."
   users:
-    title: Users
-    users_with_the_most_reputation: Users with the highest reputation scores
-    users_with_the_most_vote: Users who voted the most
-    staffs: Our community staff
-    reputation: reputation
-    votes: votes
+    title: Použivatelia
+    users_with_the_most_reputation: Používatelia s najvyšším skóre reputácie
+    users_with_the_most_vote: Používatelia, ktorí hlasovali najviac
+    staffs: Zamestnanci našej komunity
+    reputation: reputácia
+    votes: hlasy
   prompt:
-    leave_page: Are you sure you want to leave the page?
-    changes_not_save: Your changes may not be saved.
+    leave_page: Ste si istý, že chcete opustiť stránku?
+    changes_not_save: Vaše zmeny nemusia byť uložené.
   draft:
-    discard_confirm: Are you sure you want to discard your draft?
+    discard_confirm: Naozaj chcete zahodiť svoj koncept?
   messages:
      post_deleted: Tento príspevok bol odstránený.
