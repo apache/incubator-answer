@@ -69,7 +69,7 @@ const Index: FC<IProps> = ({
     if (type === 'question') {
       Modal.confirm({
         title: t('title'),
-        content: hasAnswer ? `<p>${t('question')}</p>` : `<p>${t('other')}</p>`,
+        content: hasAnswer ? t('question') : t('other'),
         cancelBtnVariant: 'link',
         confirmBtnVariant: 'danger',
         confirmText: t('delete', { keyPrefix: 'btns' }),
@@ -90,7 +90,7 @@ const Index: FC<IProps> = ({
     if (type === 'answer' && aid) {
       Modal.confirm({
         title: t('title'),
-        content: isAccepted ? t('answer_accepted') : `<p>${t('other')}</p>`,
+        content: isAccepted ? t('answer_accepted') : t('other'),
         cancelBtnVariant: 'link',
         confirmBtnVariant: 'danger',
         confirmText: t('delete', { keyPrefix: 'btns' }),
@@ -128,6 +128,7 @@ const Index: FC<IProps> = ({
       title: t('title', { keyPrefix: 'question_detail.reopen' }),
       content: t('content', { keyPrefix: 'question_detail.reopen' }),
       cancelBtnVariant: 'link',
+      confirmText: t('confirm_btn', { keyPrefix: 'question_detail.reopen' }),
       onConfirm: () => {
         reopenQuestion({
           question_id: qid,

@@ -67,8 +67,8 @@ const Questions: FC = () => {
         title: t('title', { keyPrefix: 'delete' }),
         content:
           item.answer_count > 0
-            ? `<p>${t('question', { keyPrefix: 'delete' })}</p>`
-            : `<p>${t('other', { keyPrefix: 'delete' })}</p>`,
+            ? t('question', { keyPrefix: 'delete' })
+            : t('other', { keyPrefix: 'delete' }),
         cancelBtnVariant: 'link',
         confirmBtnVariant: 'danger',
         confirmText: t('delete', { keyPrefix: 'btns' }),

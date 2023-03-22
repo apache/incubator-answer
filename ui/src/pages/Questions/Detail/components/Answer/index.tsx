@@ -1,5 +1,5 @@
 import { memo, FC, useEffect, useRef } from 'react';
-import { Button, Alert } from 'react-bootstrap';
+import { Button, Alert, Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 
@@ -20,8 +20,7 @@ interface Props {
   data: AnswerItem;
   /** router answer id */
   aid?: string;
-  /** is author */
-  isAuthor: boolean;
+  canAccept: boolean;
   questionTitle: string;
   slugTitle: string;
   isLogged: boolean;
@@ -30,11 +29,11 @@ interface Props {
 const Index: FC<Props> = ({
   aid,
   data,
-  isAuthor,
   isLogged,
   questionTitle = '',
   slugTitle,
   callback,
+  canAccept = false,
 }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'question_detail',
@@ -77,12 +76,21 @@ const Index: FC<Props> = ({
           {t('post_deleted', { keyPrefix: 'messages' })}
         </Alert>
       )}
+      {data?.accepted === 2 && (
+        <div style={{ lineHeight: '20px' }} className="mb-3">
+          <Badge bg="success" pill>
+            <Icon name="check-circle-fill me-1" />
+            Best answer
+          </Badge>
+        </div>
+      )}
       <article
         dangerouslySetInnerHTML={{ __html: data?.html }}
         className="fmt text-break text-wrap"
       />
       <div className="d-flex align-items-center mt-4">
         <Actions
+          source="answer"
           data={{
             id: data?.id,
             isHate: data?.vote_status === 'vote_down',
@@ -95,24 +103,17 @@ const Index: FC<Props> = ({
           }}
         />
 
-        {data?.accepted === 2 && (
+        {canAccept && (
           <Button
-            disabled={!isAuthor}
-            variant="outline-success"
-            className="ms-3 active opacity-100 bg-success text-white"
-            onClick={acceptAnswer}>
-            <Icon name="check-circle-fill" className="me-2" />
-            <span>{t('answers.btn_accepted')}</span>
-          </Button>
-        )}
-
-        {isAuthor && data.accepted === 1 && (
-          <Button
-            variant="outline-success"
+            variant={data.accepted === 2 ? 'success' : 'outline-success'}
             className="ms-3"
             onClick={acceptAnswer}>
             <Icon name="check-circle-fill" className="me-2" />
-            <span>{t('answers.btn_accept')}</span>
+            <span>
+              {data.accepted === 2
+                ? t('answers.btn_accepted')
+                : t('answers.btn_accept')}
+            </span>
           </Button>
         )}
       </div>

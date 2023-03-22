@@ -1,5 +1,5 @@
 import { memo, FC, useState, useEffect } from 'react';
-import { Button, ButtonGroup } from 'react-bootstrap';
+import { Button, ButtonGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
@@ -12,6 +12,7 @@ import { bookmark, postVote } from '@/services';
 
 interface Props {
   className?: string;
+  source: 'question' | 'answer';
   data: {
     id: string;
     votesCount: number;
@@ -24,7 +25,7 @@ interface Props {
   };
 }
 
-const Index: FC<Props> = ({ className, data }) => {
+const Index: FC<Props> = ({ className, data, source }) => {
   const [votes, setVotes] = useState(0);
   const [like, setLike] = useState(false);
   const [hate, setHated] = useState(false);
@@ -101,21 +102,40 @@ const Index: FC<Props> = ({ className, data }) => {
   return (
     <div className={classNames(className)}>
       <ButtonGroup>
-        <Button
-          variant="outline-secondary"
-          active={like}
-          onClick={() => handleVote('up')}>
-          <Icon name="hand-thumbs-up-fill" />
-        </Button>
+        <OverlayTrigger
+          overlay={
+            <Tooltip>
+              {source === 'question'
+                ? t('question_detail.question_useful')
+                : t('question_detail.answer_useful')}
+            </Tooltip>
+          }>
+          <Button
+            variant="outline-secondary"
+            active={like}
+            onClick={() => handleVote('up')}>
+            <Icon name="hand-thumbs-up-fill me-2" />
+            <span>{t('question_detail.useful')}</span>
+          </Button>
+        </OverlayTrigger>
         <Button variant="outline-secondary" className="opacity-100" disabled>
           {votes}
         </Button>
-        <Button
-          variant="outline-secondary"
-          active={hate}
-          onClick={() => handleVote('down')}>
-          <Icon name="hand-thumbs-down-fill" />
-        </Button>
+        <OverlayTrigger
+          overlay={
+            <Tooltip>
+              {source === 'question'
+                ? t('question_detail.question_un_useful')
+                : t('question_detail.answer_un_useful')}
+            </Tooltip>
+          }>
+          <Button
+            variant="outline-secondary"
+            active={hate}
+            onClick={() => handleVote('down')}>
+            <Icon name="hand-thumbs-down-fill" />
+          </Button>
+        </OverlayTrigger>
       </ButtonGroup>
       {!data?.hideCollect && (
         <Button
