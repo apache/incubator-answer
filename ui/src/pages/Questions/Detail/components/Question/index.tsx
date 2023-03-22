@@ -114,6 +114,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
 
       <Actions
         className="mt-4"
+        source="question"
         data={{
           id: data?.id,
           isHate: data?.vote_status === 'vote_down',
