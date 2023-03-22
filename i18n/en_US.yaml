@@ -815,6 +815,7 @@ ui:
         li2_1: Asking for help, seeking clarification, or responding to other answers.
 
     reopen:
+      confirm_btn: Reopen
       title: Reopen this post
       content: Are you sure you want to reopen?
       success: This post has been reopened
