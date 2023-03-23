@@ -261,7 +261,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
                     components={{ strong: <strong /> }}
                   />
                 </p>
-                <ul>
+                <ul className="mb-0">
                   <li>{t('tips.li2_1')}</li>
                 </ul>
               </Alert>
