@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToDocTop } from '@/utils';
 import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { pathFactory } from '@/router/pathFactory';
 import { Editor, EditorRef, Icon } from '@/components';
@@ -27,6 +27,9 @@ interface FormDataItem {
 const Index = () => {
   const { aid = '', qid = '' } = useParams();
   const [focusType, setForceType] = useState('');
+  useLayoutEffect(() => {
+    scrollToDocTop();
+  }, []);
 
   const { t } = useTranslation('translation', { keyPrefix: 'edit_answer' });
   const navigate = useNavigate();

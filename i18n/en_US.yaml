@@ -1044,13 +1044,11 @@ ui:
     votes: votes
     answers: answers
     accepted: Accepted
-  page_404:
-    http_error: HTTP Error 404
-    desc: "Unfortunately, this page doesn't exist."
-    back_home: Back to homepage
-  page_50X:
-    http_error: HTTP Error 500
-    desc: The server encountered an error and could not complete your request.
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: You don’t have permission to access this page.
+    desc_404: Unfortunately, this page doesn't exist.
+    desc_50X: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
     desc: "We are under maintenance, we'll be back soon."

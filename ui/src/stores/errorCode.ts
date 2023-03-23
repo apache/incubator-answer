@@ -1,6 +1,6 @@
 import create from 'zustand';
 
-type codeType = '404' | '50X' | '';
+type codeType = '403' | '404' | '50X' | '';
 
 interface NotFoundType {
   code: codeType;
