@@ -55,7 +55,7 @@ class Request {
         const { status, data: respData } = error.response || {};
         const { data = {}, msg = '', reason = '' } = respData || {};
 
-        console.log('response error:', error);
+        // console.log('response error:', error);
 
         if (status === 400) {
           // show error message
@@ -114,7 +114,6 @@ class Request {
         }
         if (status === 403) {
           // Permission interception
-          errorCode.getState().reset();
           if (data?.type === 'url_expired') {
             // url expired
             floppyNavigation.navigate(RouteAlias.activationFailed, () => {
@@ -134,6 +133,14 @@ class Request {
             floppyNavigation.navigate(RouteAlias.suspended, () => {
               window.location.replace(RouteAlias.suspended);
             });
+            return Promise.reject(false);
+          }
+
+          if (isIgnoredPath(IGNORE_PATH_LIST)) {
+            return Promise.reject(false);
+          }
+          if (error.config?.url.includes('/admin/api')) {
+            errorCode.getState().update('403');
             return Promise.reject(false);
           }
 
