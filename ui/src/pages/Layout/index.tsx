@@ -12,11 +12,10 @@ import {
   Customize,
   CustomizeTheme,
   PageTags,
+  HttpErrorContent,
 } from '@/components';
 import { LoginToContinueModal } from '@/components/Modal';
 import { useImgViewer } from '@/hooks';
-import Component404 from '@/pages/404';
-import Component50X from '@/pages/50X';
 
 const Layout: FC = () => {
   const location = useLocation();
@@ -44,11 +43,14 @@ const Layout: FC = () => {
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
         <div
           className="position-relative page-wrap"
+          style={{ display: httpStatusCode ? 'contents' : 'block' }}
           onClick={imgViewer.checkClickForImgView}>
-          {httpStatusCode === '404' ? (
-            <Component404 />
-          ) : httpStatusCode === '50X' ? (
-            <Component50X />
+          {httpStatusCode ? (
+            <div
+              className="d-flex flex-column justify-content-center align-items-center"
+              style={{ flex: 1 }}>
+              <HttpErrorContent httpCode={httpStatusCode} />
+            </div>
           ) : (
             <Outlet />
           )}
