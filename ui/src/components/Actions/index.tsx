@@ -1,5 +1,5 @@
 import { memo, FC, useState, useEffect } from 'react';
-import { Button, ButtonGroup, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Button, ButtonGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import classNames from 'classnames';
@@ -102,40 +102,31 @@ const Index: FC<Props> = ({ className, data, source }) => {
   return (
     <div className={classNames(className)}>
       <ButtonGroup>
-        <OverlayTrigger
-          overlay={
-            <Tooltip>
-              {source === 'question'
-                ? t('question_detail.question_useful')
-                : t('question_detail.answer_useful')}
-            </Tooltip>
-          }>
-          <Button
-            variant="outline-secondary"
-            active={like}
-            onClick={() => handleVote('up')}>
-            <Icon name="hand-thumbs-up-fill me-2" />
-            <span>{t('question_detail.useful')}</span>
-          </Button>
-        </OverlayTrigger>
+        <Button
+          title={
+            source === 'question'
+              ? t('question_detail.question_useful')
+              : t('question_detail.answer_useful')
+          }
+          variant="outline-secondary"
+          active={like}
+          onClick={() => handleVote('up')}>
+          <Icon name="hand-thumbs-up-fill" />
+        </Button>
         <Button variant="outline-secondary" className="opacity-100" disabled>
           {votes}
         </Button>
-        <OverlayTrigger
-          overlay={
-            <Tooltip>
-              {source === 'question'
-                ? t('question_detail.question_un_useful')
-                : t('question_detail.answer_un_useful')}
-            </Tooltip>
-          }>
-          <Button
-            variant="outline-secondary"
-            active={hate}
-            onClick={() => handleVote('down')}>
-            <Icon name="hand-thumbs-down-fill" />
-          </Button>
-        </OverlayTrigger>
+        <Button
+          title={
+            source === 'question'
+              ? t('question_detail.question_un_useful')
+              : t('question_detail.answer_un_useful')
+          }
+          variant="outline-secondary"
+          active={hate}
+          onClick={() => handleVote('down')}>
+          <Icon name="hand-thumbs-down-fill" />
+        </Button>
       </ButtonGroup>
       {!data?.hideCollect && (
         <Button
