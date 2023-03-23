@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Button, Dropdown, Tooltip, OverlayTrigger } from 'react-bootstrap';
+import { Button, Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
@@ -31,19 +31,15 @@ const ActionBar = ({
         )}
         <span className="mx-1">•</span>
         <FormatTime time={createdAt} className="me-3" />
-        <OverlayTrigger
-          overlay={<Tooltip className="comment-tip">{t('tip_vote')}</Tooltip>}>
-          <Button
-            variant="link"
-            size="sm"
-            className={`me-3 btn-no-border p-0 ${
-              isVote ? '' : 'link-secondary'
-            }`}
-            onClick={onVote}>
-            <Icon name="hand-thumbs-up-fill" />
-            {voteCount > 0 && <span className="ms-2">{voteCount}</span>}
-          </Button>
-        </OverlayTrigger>
+        <Button
+          title={t('tip_vote')}
+          variant="link"
+          size="sm"
+          className={`me-3 btn-no-border p-0 ${isVote ? '' : 'link-secondary'}`}
+          onClick={onVote}>
+          <Icon name="hand-thumbs-up-fill" />
+          {voteCount > 0 && <span className="ms-2">{voteCount}</span>}
+        </Button>
         <Button
           variant="link"
           size="sm"
