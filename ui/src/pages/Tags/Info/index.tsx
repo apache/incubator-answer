@@ -204,7 +204,8 @@ const TagIntroduction = () => {
                       data={{
                         slug_name: tagName || '',
                         main_tag_slug_name: '',
-                        display_name: '',
+                        display_name:
+                          tagInfo?.display_name || tagInfo?.slug_name || '',
                         recommend: false,
                         reserved: false,
                       }}
