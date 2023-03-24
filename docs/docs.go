@@ -7230,6 +7230,9 @@ const docTemplate = `{
                 "login": {
                     "$ref": "#/definitions/schema.SiteLoginResp"
                 },
+                "revision": {
+                    "type": "string"
+                },
                 "site_seo": {
                     "$ref": "#/definitions/schema.SiteSeoReq"
                 },

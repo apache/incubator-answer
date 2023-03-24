@@ -30,7 +30,8 @@ const (
 // object TagID AnswerList
 // key equal database's table name
 var (
-	Version string = ""
+	Version  string = ""
+	Revision string = ""
 
 	PathIgnoreMap map[string]bool
 

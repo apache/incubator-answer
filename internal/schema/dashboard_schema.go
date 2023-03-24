@@ -27,6 +27,7 @@ type DashboardInfo struct {
 
 type DashboardInfoVersion struct {
 	Version       string `json:"version"`
+	Revision      string `json:"revision"`
 	RemoteVersion string `json:"remote_version"`
 }
 

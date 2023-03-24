@@ -159,6 +159,7 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
+	info.ID = uid.EnShortID(info.ID)
 	handler.HandleResponse(ctx, nil, info)
 }
 
