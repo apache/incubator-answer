@@ -262,8 +262,10 @@ func (ts *TagCommonService) AddTag(ctx context.Context, req *schema.AddTagReq) (
 	if exist {
 		return nil, errors.BadRequest(reason.TagAlreadyExist)
 	}
+	SlugName := strings.ReplaceAll(req.SlugName, " ", "-")
+	SlugName = strings.ToLower(SlugName)
 	tagInfo := &entity.Tag{
-		SlugName:     strings.ReplaceAll(req.SlugName, " ", "-"),
+		SlugName:     SlugName,
 		DisplayName:  req.DisplayName,
 		OriginalText: req.OriginalText,
 		ParsedText:   req.ParsedText,
@@ -564,7 +566,7 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 	thisObjTagNameList := make([]string, 0)
 	thisObjTagIDList := make([]string, 0)
 	for _, t := range objectTagData.Tags {
-		// t.SlugName = strings.ToLower(t.SlugName)
+		t.SlugName = strings.ToLower(t.SlugName)
 		thisObjTagNameList = append(thisObjTagNameList, t.SlugName)
 	}
 
