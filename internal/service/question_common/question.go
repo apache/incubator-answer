@@ -414,6 +414,11 @@ func (qs *QuestionCommon) RemoveQuestion(ctx context.Context, req *schema.Remove
 	if !has {
 		return nil
 	}
+
+	if questionInfo.Status == entity.QuestionStatusDeleted {
+		return nil
+	}
+
 	questionInfo.Status = entity.QuestionStatusDeleted
 	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
 	if err != nil {
