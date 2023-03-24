@@ -471,6 +471,7 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	data["HeaderCode"] = siteInfo.CustomCssHtml.CustomHeader
 	data["FooterCode"] = siteInfo.CustomCssHtml.CustomFooter
 	data["Version"] = constant.Version
+	data["Revision"] = constant.Revision
 	_, ok := data["path"]
 	if !ok {
 		data["path"] = ""

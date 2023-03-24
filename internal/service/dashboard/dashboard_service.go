@@ -90,6 +90,7 @@ func (ds *DashboardService) StatisticalByCache(ctx context.Context) (*schema.Das
 	startTime := time.Now().Unix() - schema.AppStartTime.Unix()
 	dashboardInfo.AppStartTime = fmt.Sprintf("%d", startTime)
 	dashboardInfo.VersionInfo.Version = constant.Version
+	dashboardInfo.VersionInfo.Revision = constant.Revision
 	return dashboardInfo, nil
 }
 
@@ -194,6 +195,7 @@ func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	dashboardInfo.AppStartTime = fmt.Sprintf("%d", startTime)
 	dashboardInfo.TimeZone = siteInfoInterface.TimeZone
 	dashboardInfo.VersionInfo.Version = constant.Version
+	dashboardInfo.VersionInfo.Revision = constant.Revision
 	dashboardInfo.VersionInfo.RemoteVersion = ds.RemoteVersion(ctx)
 	return dashboardInfo, nil
 }
