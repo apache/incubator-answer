@@ -2,24 +2,26 @@ import create from 'zustand';
 
 type codeType = '403' | '404' | '50X' | '';
 
-interface NotFoundType {
+interface ErrorCodeType {
   code: codeType;
-  update: (code: codeType) => void;
+  msg: string;
+  update: (code: codeType, msg?: string) => void;
   reset: () => void;
 }
 
-const notFound = create<NotFoundType>((set) => ({
+const Index = create<ErrorCodeType>((set) => ({
   code: '',
-  update: (code: codeType) => {
+  msg: '',
+  update: (code: codeType, msg: string = '') => {
     set(() => {
-      return { code };
+      return { code, msg };
     });
   },
   reset: () => {
     set(() => {
-      return { code: '' };
+      return { code: '', msg: '' };
     });
   },
 }));
 
-export default notFound;
+export default Index;

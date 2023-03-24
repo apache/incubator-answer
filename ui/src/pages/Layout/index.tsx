@@ -4,7 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import { SWRConfig } from 'swr';
 
-import { toastStore, loginToContinueStore, errorCode } from '@/stores';
+import { toastStore, loginToContinueStore, errorCodeStore } from '@/stores';
 import {
   Header,
   Footer,
@@ -23,8 +23,7 @@ const Layout: FC = () => {
   const closeToast = () => {
     toastClear();
   };
-  const { code: httpStatusCode, reset: httpStatusReset } = errorCode();
-
+  const { code: httpStatusCode, reset: httpStatusReset } = errorCodeStore();
   const imgViewer = useImgViewer();
   const { show: showLoginToContinueModal } = loginToContinueStore();
 
@@ -43,14 +42,9 @@ const Layout: FC = () => {
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
         <div
           className="position-relative page-wrap"
-          style={{ display: httpStatusCode ? 'contents' : 'block' }}
           onClick={imgViewer.checkClickForImgView}>
           {httpStatusCode ? (
-            <div
-              className="d-flex flex-column justify-content-center align-items-center"
-              style={{ flex: 1 }}>
-              <HttpErrorContent httpCode={httpStatusCode} />
-            </div>
+            <HttpErrorContent httpCode={httpStatusCode} />
           ) : (
             <Outlet />
           )}

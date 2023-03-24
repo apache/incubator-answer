@@ -2,6 +2,8 @@ import type { IndexRouteObject, NonIndexRouteObject } from 'react-router-dom';
 
 import { guard } from '@/utils';
 import type { TGuardFunc } from '@/utils/guard';
+import { editCheck } from '@/services';
+import { isEditable } from '@/utils/guard';
 
 type IndexRouteNode = Omit<IndexRouteObject, 'children'>;
 type NonIndexRouteNode = Omit<NonIndexRouteObject, 'children'>;
@@ -70,6 +72,13 @@ const routes: RouteNode[] = [
       {
         path: 'posts/:qid/:aid/edit',
         page: 'pages/Questions/EditAnswer',
+        loader: async ({ params }) => {
+          const ret = await editCheck(params.aid as string, true);
+          return ret;
+        },
+        guard: (args) => {
+          return isEditable(args);
+        },
       },
       {
         path: '/search',
