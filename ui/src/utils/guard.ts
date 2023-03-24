@@ -174,7 +174,7 @@ export const admin = () => {
   const us = deriveLoginState();
   if (gr.ok && !us.isAdmin) {
     gr.ok = false;
-    gr.redirect = RouteAlias.home;
+    gr.redirect = '';
   }
   return gr;
 };
