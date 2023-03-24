@@ -4,7 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import { SWRConfig } from 'swr';
 
-import { toastStore, loginToContinueStore, errorCode } from '@/stores';
+import { toastStore, loginToContinueStore, errorCodeStore } from '@/stores';
 import {
   Header,
   Footer,
@@ -23,8 +23,7 @@ const Layout: FC = () => {
   const closeToast = () => {
     toastClear();
   };
-  const { code: httpStatusCode, reset: httpStatusReset } = errorCode();
-
+  const { code: httpStatusCode, reset: httpStatusReset } = errorCodeStore();
   const imgViewer = useImgViewer();
   const { show: showLoginToContinueModal } = loginToContinueStore();
 

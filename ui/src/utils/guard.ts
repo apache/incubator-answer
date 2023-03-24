@@ -30,8 +30,16 @@ type TLoginState = {
 export type TGuardResult = {
   ok: boolean;
   redirect?: string;
+  error?: {
+    code?: number | string;
+    msg?: string;
+  };
 };
-export type TGuardFunc = () => TGuardResult;
+export type TGuardFunc = (args: {
+  loaderData?: any;
+  path?: string;
+  page?: string;
+}) => TGuardResult;
 
 export const deriveLoginState = (): TLoginState => {
   const ls: TLoginState = {
@@ -185,6 +193,19 @@ export const isAdminOrModerator = () => {
   if (gr.ok && !us.isAdmin && !us.isModerator) {
     gr.ok = false;
     gr.redirect = RouteAlias.home;
+  }
+  return gr;
+};
+
+export const isEditable = (args) => {
+  const loaderData = args?.loaderData || {};
+  const gr: TGuardResult = { ok: true };
+  if (loaderData.code === 400) {
+    gr.ok = false;
+    gr.error = {
+      code: '403',
+      msg: loaderData.msg,
+    };
   }
   return gr;
 };

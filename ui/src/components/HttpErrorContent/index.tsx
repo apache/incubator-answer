@@ -4,12 +4,13 @@ import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
 
-const Index = ({ httpCode = '' }) => {
+const Index = ({ httpCode = '', errMsg = '' }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_error' });
 
   usePageTags({
     title: t(`http_${httpCode}`, { keyPrefix: 'page_title' }),
   });
+
   return (
     <>
       <div
@@ -18,7 +19,9 @@ const Index = ({ httpCode = '' }) => {
         (=‘x‘=)
       </div>
       <h4 className="text-center">{t('http_error', { code: httpCode })}</h4>
-      <div className="text-center mb-3 fs-5">{t(`desc_${httpCode}`)}</div>
+      <div className="text-center mb-3 fs-5">
+        {errMsg || t(`desc_${httpCode}`)}
+      </div>
       <div className="text-center">
         <Link to="/" className="btn btn-link">
           {t('back_home')}
