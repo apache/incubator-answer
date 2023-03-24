@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { memo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -6,13 +6,28 @@ import { usePageTags } from '@/hooks';
 
 const Index = ({ httpCode = '', errMsg = '' }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_error' });
+  useEffect(() => {
+    // auto height of container
+    const pageWrap = document.querySelector('.page-wrap');
+    if (pageWrap) {
+      // @ts-ignore
+      pageWrap.style.display = 'contents';
+    }
+
+    return () => {
+      if (pageWrap) {
+        // @ts-ignore
+        pageWrap.style.display = 'block';
+      }
+    };
+  }, []);
 
   usePageTags({
     title: t(`http_${httpCode}`, { keyPrefix: 'page_title' }),
   });
 
   return (
-    <>
+    <div className="d-flex flex-column flex-shrink-1 flex-grow-1 justify-content-center align-items-center">
       <div
         className="mb-4 text-secondary"
         style={{ fontSize: '120px', lineHeight: 1.2 }}>
@@ -27,7 +42,7 @@ const Index = ({ httpCode = '', errMsg = '' }) => {
           {t('back_home')}
         </Link>
       </div>
-    </>
+    </div>
   );
 };
 

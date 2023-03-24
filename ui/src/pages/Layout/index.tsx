@@ -42,14 +42,9 @@ const Layout: FC = () => {
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
         <div
           className="position-relative page-wrap"
-          style={{ display: httpStatusCode ? 'contents' : 'block' }}
           onClick={imgViewer.checkClickForImgView}>
           {httpStatusCode ? (
-            <div
-              className="d-flex flex-column justify-content-center align-items-center"
-              style={{ flex: 1 }}>
-              <HttpErrorContent httpCode={httpStatusCode} />
-            </div>
+            <HttpErrorContent httpCode={httpStatusCode} />
           ) : (
             <Outlet />
           )}

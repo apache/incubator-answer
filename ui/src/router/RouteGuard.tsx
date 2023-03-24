@@ -3,7 +3,8 @@ import { useLocation, useNavigate, useLoaderData } from 'react-router-dom';
 
 import { floppyNavigation } from '@/utils';
 import { TGuardFunc } from '@/utils/guard';
-import { errorCodeStore } from '@/stores';
+
+import RouteErrorBoundary from './RouteErrorBoundary';
 
 const RouteGuard: FC<{
   children: ReactNode;
@@ -20,20 +21,14 @@ const RouteGuard: FC<{
     page,
   });
 
-  const { update: updateHttpError } = errorCodeStore();
-  const handleGuardError = () => {
-    const err = gr.error;
-    let errCode = err?.code;
-    if (errCode && typeof errCode !== 'string') {
-      errCode = errCode.toString();
-    }
-    if (errCode === '403' || errCode === '404' || errCode === '50X') {
-      updateHttpError(errCode, err?.msg);
-    }
-  };
-  useEffect(() => {
-    handleGuardError();
-  }, [gr.error]);
+  let guardError;
+  const errCode = gr.error?.code;
+  if (errCode === '403' || errCode === '404' || errCode === '50X') {
+    guardError = {
+      code: errCode,
+      msg: gr.error?.msg,
+    };
+  }
   const handleGuardRedirect = () => {
     const redirectUrl = gr.redirect;
     if (redirectUrl) {
@@ -47,8 +42,10 @@ const RouteGuard: FC<{
   }, [location]);
   return (
     <>
-      {/* Route Guard */}
       {gr.ok ? children : null}
+      {!gr.ok && guardError ? (
+        <RouteErrorBoundary errCode={guardError.code} />
+      ) : null}
     </>
   );
 };
