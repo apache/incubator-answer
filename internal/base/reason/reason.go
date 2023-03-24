@@ -48,6 +48,7 @@ const (
 	TagIsUsedCannotDelete            = "error.tag.is_used_cannot_delete"
 	TagAlreadyExist                  = "error.tag.already_exist"
 	RankFailToMeetTheCondition       = "error.rank.fail_to_meet_the_condition"
+	VoteRankFailToMeetTheCondition   = "error.rank.vote_fail_to_meet_the_condition"
 	ThemeNotFound                    = "error.theme.not_found"
 	LangNotFound                     = "error.lang.not_found"
 	ReportHandleFailed               = "error.report.handle_failed"
