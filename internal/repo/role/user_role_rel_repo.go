@@ -28,15 +28,15 @@ func NewUserRoleRelRepo(data *data.Data) role.UserRoleRelRepo {
 func (ur *userRoleRelRepo) SaveUserRoleRel(ctx context.Context, userID string, roleID int) (err error) {
 	_, err = ur.data.DB.Transaction(func(session *xorm.Session) (interface{}, error) {
 		item := &entity.UserRoleRel{UserID: userID}
-		exist, err := ur.data.DB.Get(item)
+		exist, err := session.Get(item)
 		if err != nil {
 			return nil, err
 		}
 		if exist {
 			item.RoleID = roleID
-			_, err = ur.data.DB.ID(item.ID).Update(item)
+			_, err = session.ID(item.ID).Update(item)
 		} else {
-			_, err = ur.data.DB.Insert(&entity.UserRoleRel{UserID: userID, RoleID: roleID})
+			_, err = session.Insert(&entity.UserRoleRel{UserID: userID, RoleID: roleID})
 		}
 		if err != nil {
 			return nil, err
