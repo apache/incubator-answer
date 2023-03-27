@@ -8,15 +8,13 @@ const Index = ({ httpCode = '', errMsg = '' }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_error' });
   useEffect(() => {
     // auto height of container
-    const pageWrap = document.querySelector('.page-wrap');
+    const pageWrap = document.querySelector('.page-wrap') as HTMLElement;
     if (pageWrap) {
-      // @ts-ignore
       pageWrap.style.display = 'contents';
     }
 
     return () => {
       if (pageWrap) {
-        // @ts-ignore
         pageWrap.style.display = 'block';
       }
     };
