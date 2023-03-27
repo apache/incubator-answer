@@ -452,7 +452,7 @@ ui:
             range: Nombre a mostrar con un máximo de 35 caracteres.
         slug_name:
           label: URL amigable
-          desc: URL slug up to 35 characters.
+          desc: 'Debe usar el conjunto de caracteres "a-z", "0-9", "+ # - ."'
           msg:
             empty: URL no puede estar vacío.
             range: URL slug hasta 35 caracteres.
