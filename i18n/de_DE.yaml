@@ -431,7 +431,7 @@ ui:
             range: Display name up to 35 characters.
         slug_name:
           label: URL Slug
-          desc: URL slug up to 35 characters.
+          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
           msg:
             empty: URL slug cannot be empty.
             range: URL slug up to 35 characters.
