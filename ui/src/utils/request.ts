@@ -62,10 +62,10 @@ class Request {
         } = error.response || {};
         const { data = {}, msg = '' } = errModel || {};
         if (status === 400) {
-          if (data.err_type && errConfig?.passingError) {
+          if (data?.err_type && errConfig?.passingError) {
             return errModel;
           }
-          if (data.err_type) {
+          if (data?.err_type) {
             if (data.err_type === 'toast') {
               // toast error message
               toastStore.getState().show({

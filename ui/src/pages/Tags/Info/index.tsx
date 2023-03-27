@@ -108,7 +108,9 @@ const TagIntroduction = () => {
       confirmText: t('delete', { keyPrefix: 'btns' }),
       confirmBtnVariant: 'danger',
       onConfirm: () => {
-        deleteTag(tagInfo.tag_id);
+        deleteTag(tagInfo.tag_id).then(() => {
+          navigate('/tags', { replace: true });
+        });
       },
     });
   };
