@@ -47,6 +47,8 @@ backend:
         other: Tidak memiliki izin untuk menghapus.
       cannot_update:
         other: Tidak memiliki izin untuk memperbaharui.
+      question_closed_cannot_add:
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
         other: Komentar tidak boleh diedit.
@@ -103,6 +105,8 @@ backend:
       not_found:
         other: Laporan tidak ditemukan.
     tag:
+      already_exist:
+        other: Tag already exists.
       not_found:
         other: Tag tidak ditemukan.
       recommend_tag_not_found:
@@ -261,6 +265,7 @@ ui:
     tag: Tag
     tags: Tags
     tag_wiki: tag wiki
+    create_tag: Create Tag
     edit_tag: Ubah Tag
     ask_a_question: Tambahkan Pertanyaan
     edit_question: Sunting Pertanyaan
@@ -281,6 +286,8 @@ ui:
     upgrade: Meng-upgrade Answer
     maintenance: Pemeliharaan Website
     users: Pengguna
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
   notifications:
     title: Pemberitahuan
     inbox: Kotak Masuk
@@ -424,7 +431,7 @@ ui:
             range: Display name up to 35 characters.
         slug_name:
           label: URL Slug
-          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          desc: URL slug up to 35 characters.
           msg:
             empty: URL slug cannot be empty.
             range: URL slug up to 35 characters.
@@ -433,6 +440,7 @@ ui:
           label: Description
     btn_cancel: Cancel
     btn_submit: Submit
+    btn_post: Post new tag
   tag_info:
     created_at: Dibuat
     edited_at: Disunting
@@ -1198,6 +1206,9 @@ ui:
         label: Timezone
         msg: Timezone cannot be empty.
         text: Choose a city in the same timezone as you.
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
