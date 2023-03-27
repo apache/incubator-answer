@@ -47,6 +47,8 @@ backend:
         other: Sin permiso para eliminar.
       cannot_update:
         other: Sin permiso para actualizar.
+      question_closed_cannot_add:
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
         other: Edición del comentario no permitida.
@@ -103,6 +105,8 @@ backend:
       not_found:
         other: Informe no encontrado.
     tag:
+      already_exist:
+        other: Tag already exists.
       not_found:
         other: Etiqueta no encontrada.
       recommend_tag_not_found:
@@ -282,6 +286,7 @@ ui:
     tag: Etiqueta
     tags: Etiquetas
     tag_wiki: tag wiki
+    create_tag: Create Tag
     edit_tag: Editar etiqueta
     ask_a_question: Añadir Pregunta
     edit_question: Editar Pregunta
@@ -302,6 +307,8 @@ ui:
     upgrade: Actualización de Answer
     maintenance: Mantenimiento del sitio web
     users: Usuarios
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
   notifications:
     title: Notificaciones
     inbox: Buzón de entrada
@@ -445,7 +452,7 @@ ui:
             range: Nombre a mostrar con un máximo de 35 caracteres.
         slug_name:
           label: URL amigable
-          desc: 'Debe usar el conjunto de caracteres "a-z", "0-9", "+ # - ."'
+          desc: URL slug up to 35 characters.
           msg:
             empty: URL no puede estar vacío.
             range: URL slug hasta 35 caracteres.
@@ -454,6 +461,7 @@ ui:
           label: Description
     btn_cancel: Cancelar
     btn_submit: Enviar
+    btn_post: Post new tag
   tag_info:
     created_at: Creado
     edited_at: Editado
@@ -1223,6 +1231,9 @@ ui:
         label: Timezone
         msg: Timezone cannot be empty.
         text: Choose a city in the same timezone as you.
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
