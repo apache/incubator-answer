@@ -134,7 +134,7 @@
 
     if (browerInfo.name === 'IE') {
       const div = document.getElementById('protect-brower');
-      div.innerText = 'Sorry, this site does not support Internet Explorer, in order not to affect the normal use of the function, please use a more modern browser to visit. (like edge, firefox, chrome, safari.)'
+      div.innerText = 'Sorry, this site does not support Internet Explorer. In order to avoid affecting the normal use of our features, please use a more modern browser such as Edge, Firefox, Chrome, or Safari.'
     } else {
       const notSupport = defaultList.some(item => {
         if (item.name === browerInfo.name) {
