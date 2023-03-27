@@ -48,7 +48,7 @@ backend:
       cannot_update:
         other: 没有更新权限。
       question_closed_cannot_add:
-        other: 问题已关闭不可以新增回答
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
         other: 不允许编辑评论。
@@ -105,6 +105,8 @@ backend:
       not_found:
         other: 报告未找到
     tag:
+      already_exist:
+        other: Tag already exists.
       not_found:
         other: 标签未找到
       recommend_tag_not_found:
@@ -263,6 +265,7 @@ ui:
     tag: 标签
     tags: 标签
     tag_wiki: 标签 wiki
+    create_tag: Create Tag
     edit_tag: 编辑标签
     ask_a_question: 提问题
     edit_question: 编辑问题
@@ -283,6 +286,8 @@ ui:
     upgrade: Answer 升级
     maintenance: 网站维护
     users: 用户
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
   notifications:
     title: 通知
     inbox: 收件箱
@@ -426,7 +431,7 @@ ui:
             range: 显示名称不能超过 35 个字符。
         slug_name:
           label: URL 固定链接
-          desc: '必须由 "a-z", "0-9", "+ # - ." 组成'
+          desc: URL slug up to 35 characters.
           msg:
             empty: URL 固定链接不能为空。
             range: URL 固定链接不能超过 35 个字符。
@@ -435,6 +440,7 @@ ui:
           label: 描述
     btn_cancel: 取消
     btn_submit: 提交
+    btn_post: Post new tag
   tag_info:
     created_at: 创建于
     edited_at: 编辑于
@@ -1200,6 +1206,9 @@ ui:
         label: 时区
         msg: 时区不能为空。
         text: 选择一个与您相同时区的城市。
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
