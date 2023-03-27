@@ -35,9 +35,9 @@ backend:
   error:
     admin:
       cannot_update_their_password:
-        other: Vous ne pouvez pas modifier votre mot de passe.
+        other: You cannot modify your password.
       cannot_modify_self_status:
-        other: Vous ne pouvez pas modifier votre statut.
+        other: You cannot modify your status.
       email_or_password_wrong:
         other: L'email et le mot de passe ne correspondent pas.
     answer:
@@ -87,7 +87,7 @@ backend:
         other: Le nouveau mot de passe est le même que le précédent.
     question:
       already_deleted:
-        other: Ce message a été supprimé.
+        other: This post has been deleted.
       not_found:
         other: Question non trouvée.
       cannot_deleted:
@@ -431,7 +431,7 @@ ui:
             range: Le nom doit contenir moins de 35 caractères.
         slug_name:
           label: URL simplifiée
-          desc: URL slug up to 35 characters.
+          desc: 'Doit utiliser le jeu de caractères "a-z", "0-9", "+ # - ."'
           msg:
             empty: L'URL ne peut pas être vide.
             range: Titre de 35 caractères maximum.
@@ -796,7 +796,7 @@ ui:
     approve: Approuver
     reject: Rejeter
     skip: Ignorer
-    discard_draft: Abandonner le brouillon
+    discard_draft: Discard draft
   search:
     title: Résultats de la recherche
     keywords: Mots-clés
@@ -986,11 +986,11 @@ ui:
     answers: réponses
     accepted: Accepté
   page_404:
-    http_error: Erreur HTTP 404
+    http_error: HTTP Error 404
     desc: "Nous sommes désolés, mais cette page n’existe pas."
     back_home: Retour à la page d'accueil
   page_50X:
-    http_error: Erreur HTTP 500
+    http_error: HTTP Error 500
     desc: Le serveur a rencontré une erreur et n'a pas pu répondre à votre requête.
     back_home: Retour à la page d'accueil
   page_maintenance:
@@ -1383,7 +1383,7 @@ ui:
     leave_page: Voulez-vous vraiment quitter la page ?
     changes_not_save: Impossible d'enregistrer vos modifications.
   draft:
-    discard_confirm: Êtes-vous sûr de vouloir abandonner ce brouillon ?
+    discard_confirm: Are you sure you want to discard your draft?
   messages:
-    post_deleted: Ce message a été supprimé.
+    post_deleted: This post has been deleted.
 
