@@ -47,6 +47,8 @@ backend:
         other: Pas de permission pour supprimer.
       cannot_update:
         other: Pas de permission pour mettre à jour.
+      question_closed_cannot_add:
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
         other: Les commentaires ne sont pas autorisés à être modifiés.
@@ -103,6 +105,8 @@ backend:
       not_found:
         other: Rapport non trouvé.
     tag:
+      already_exist:
+        other: Tag already exists.
       not_found:
         other: Tag non trouvé.
       recommend_tag_not_found:
@@ -261,6 +265,7 @@ ui:
     tag: Étiquette
     tags: Étiquettes
     tag_wiki: tag wiki
+    create_tag: Create Tag
     edit_tag: Modifier l'étiquette
     ask_a_question: Ajouter une question
     edit_question: Modifier la question
@@ -281,6 +286,8 @@ ui:
     upgrade: Mise à jour d'Answer
     maintenance: Maintenance du site
     users: Utilisateurs
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
   notifications:
     title: Notifications
     inbox: Boîte de réception
@@ -433,6 +440,7 @@ ui:
           label: Description
     btn_cancel: Annuler
     btn_submit: Valider
+    btn_post: Post new tag
   tag_info:
     created_at: Créé
     edited_at: Modifié
@@ -1198,6 +1206,9 @@ ui:
         label: Fuseau Horaire
         msg: Le fuseau horaire ne peut pas être vide.
         text: Choisissez une ville dans le même fuseau horaire que vous.
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
