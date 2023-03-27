@@ -1,5 +1,4 @@
-# The following fields are used for back-end
-
+#The following fields are used for back-end
 backend:
   base:
     success:
@@ -48,6 +47,8 @@ backend:
         other: Žiadne povolenie na odstránenie.
       cannot_update:
         other: Žiadne povolenie na aktualizáciu.
+      question_closed_cannot_add:
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
         other: Komentár nie je dovolené upravovať.
@@ -104,6 +105,8 @@ backend:
       not_found:
         other: Prehľad sa nenašiel.
     tag:
+      already_exist:
+        other: Tag already exists.
       not_found:
         other: Značka sa nenašla.
       recommend_tag_not_found:
@@ -166,8 +169,7 @@ backend:
       name:
         other: nevyžiadaná pošta
       desc:
-        other: Tento príspevok je reklama alebo vandalizmus. Nie je to užitočné ani relevantné
-          pre aktuálnu tému.
+        other: Tento príspevok je reklama alebo vandalizmus. Nie je to užitočné ani relevantné pre aktuálnu tému.
     rude:
       name:
         other: hrubý alebo urážlivý
@@ -182,9 +184,7 @@ backend:
       name:
         other: nie odpoveď
       desc:
-        other: Toto bolo uverejnené ako odpoveď, ale nepokúša sa odpovedať
-          na otázku. Možno by to mala byť úprava, komentár, iná otázka,
-          alebo úplne vymazané.
+        other: Toto bolo uverejnené ako odpoveď, ale nepokúša sa odpovedať na otázku. Možno by to mala byť úprava, komentár, iná otázka, alebo úplne vymazané.
     not_need:
       name:
         other: už nie sú potrebné
@@ -211,8 +211,7 @@ backend:
         name:
           other: potrebuje podrobnosti alebo jasnosť
         desc:
-          other: Táto otázka momentálne obsahuje viacero otázok v jednej. Malo by
-            sa zamerať len na jeden problém.
+          other: Táto otázka momentálne obsahuje viacero otázok v jednej. Malo by sa zamerať len na jeden problém.
       other:
         name:
           other: niečo iné
@@ -251,21 +250,12 @@ backend:
         other: Vaša odpoveď bola odstránená
       your_comment_was_deleted:
         other: Váš komentár bol odstránený
-
-# The following fields are used for interface presentation(Front-end)
+#The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
     title: Ako formátovať
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">Vytvorenie odkazov</p><pre
-      class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p
-      class="mb-2">vložiť návratky medzi odseky</p></li><li><p
-      class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p
-      class="mb-2">odsadenie kódu o 4 medzery</p></li><li><p class="mb-2">citovať podľa
-      umiestnenie <code>&gt;</code> na začiatok riadku</p></li><li><p
-      class="mb-2">backtick označenie <code>`ako _this_`</code></p></li><li><p
-      class="mb-2">vytvorte kódové ploty s <code>`</code></p><pre
-      class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">Vytvorenie odkazov</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">vložiť návratky medzi odseky</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">odsadenie kódu o 4 medzery</p></li><li><p class="mb-2">citovať podľa umiestnenie <code>&gt;</code> na začiatok riadku</p></li><li><p class="mb-2">backtick označenie <code>`ako _this_`</code></p></li><li><p class="mb-2">vytvorte kódové ploty s <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Predch
     next: Ďalšie
@@ -275,6 +265,7 @@ ui:
     tag: Značka
     tags: Značky
     tag_wiki: značka wiki
+    create_tag: Create Tag
     edit_tag: Upraviť značku
     ask_a_question: Pridať otázku
     edit_question: Úpraviť otázku
@@ -295,6 +286,8 @@ ui:
     upgrade: Answer Upgrade
     maintenance: Údržba webových stránok
     users: Užívatelia
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
   notifications:
     title: Oznámenia
     inbox: Doručená pošta
@@ -447,6 +440,7 @@ ui:
           label: Opis
     btn_cancel: Zrušiť
     btn_submit: Potvrdiť
+    btn_post: Post new tag
   tag_info:
     created_at: Vytvorená
     edited_at: Upravená
@@ -462,11 +456,9 @@ ui:
     delete:
       title: Odstrániť túto značku
       tip_with_posts: >-
-        <p>Nepovoľujeme <strong>odstraňovať značku s príspevkami</strong>.</p>
-        <p>Najskôr odstráňte túto značku z príspevkov.</p>
+        <p>Nepovoľujeme <strong>odstraňovať značku s príspevkami</strong>.</p> <p>Najskôr odstráňte túto značku z príspevkov.</p>
       tip_with_synonyms: >-
-        <p>Nepovoľujeme <strong>odstraňovať značku so synonymami</strong>.</p>
-        <p>Najskôr odstráňte z tejto značky synonymá.</p>
+        <p>Nepovoľujeme <strong>odstraňovať značku so synonymami</strong>.</p> <p>Najskôr odstráňte z tejto značky synonymá.</p>
       tip: Naozaj chcete odstrániť?
       close: Zavrieť
   edit_tag:
@@ -486,8 +478,7 @@ ui:
         edit_summary:
           label: Zhrnutie
           placeholder: >-
-            Stručne vysvetlite svoje zmeny (opravený pravopis, opravená gramatika,
-            vylepšené formátovanie)
+            Stručne vysvetlite svoje zmeny (opravený pravopis, opravená gramatika, vylepšené formátovanie)
     btn_save_edits: Uložiť úpravy
     btn_cancel: Zrušiť
   dates:
@@ -511,11 +502,9 @@ ui:
     btn_cancel: Zrušiť
     show_more: Zobraziť viac komentárov
     tip_question: >-
-      Use comments to ask for more information or suggest improvements. Avoid
-      answering questions in comments.
+      Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
     tip_answer: >-
-      Use comments to reply to other users or notify them of changes. If you are
-      adding new information, edit your post instead of commenting.
+      Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
   edit_answer:
     title: Uprav odpoveď
     default_reason: Uprav odpoveď
@@ -530,8 +519,7 @@ ui:
         edit_summary:
           label: Upraviť zhrnutie
           placeholder: >-
-            Stručne vysvetlite svoje zmeny (opravený pravopis, opravená gramatika,
-            vylepšené formátovanie)
+            Stručne vysvetlite svoje zmeny (opravený pravopis, opravená gramatika, vylepšené formátovanie)
     btn_save_edits: Uložiť úpravy
     btn_cancel: Zrušiť
   tags:
@@ -576,8 +564,7 @@ ui:
         edit_summary:
           label: Upraviť zhrnutie
           placeholder: >-
-            Stručne vysvetlite svoje zmeny (opravený pravopis, opravená gramatika,
-            vylepšené formátovanie)
+            Stručne vysvetlite svoje zmeny (opravený pravopis, opravená gramatika, vylepšené formátovanie)
     btn_post_question: Pošlite svoju otázku
     btn_save_edits: Uložiť úpravy
     answer_question: Odpovedzte na svoju vlastnú otázku
@@ -586,7 +573,7 @@ ui:
     add_btn: Pridať značku
     create_btn: Vytvoriť novú značku
     search_tag: Vyhľadať značku --
-    hint: „Popíšte, o čom je vaša otázka, vyžaduje sa aspoň jedna značka.“
+    hint: "„Popíšte, o čom je vaša otázka, vyžaduje sa aspoň jedna značka.“"
     no_result: Žiadne značky sa neyhodujú
     tag_required_text: Požadovaná značka (aspoň jedna)
   header:
@@ -603,8 +590,7 @@ ui:
       placeholder: Vyhľadávanie
   footer:
     build_on: >-
-      Postavený na <1> Answer </1>- open-source software, ktorý poháňa Q&A
-      komunity.<br />Vyrobené s láskou © {{cc}}.
+      Postavený na <1> Answer </1>- open-source software, ktorý poháňa Q&A komunity.<br />Vyrobené s láskou © {{cc}}.
   upload_img:
     name: Zmena
     loading: načítavanie...
@@ -615,8 +601,7 @@ ui:
       empty: Captcha nemôže byť prázdna.
   inactive:
     first: >-
-      Ste takmer na konci! Poslali sme Vám aktivačný mail na adresu <bold>{{mail}}</bold>.
-      K aktivácií účtu postupujte prosím podľa pokynov v e-maily.
+      Ste takmer na konci! Poslali sme Vám aktivačný mail na adresu <bold>{{mail}}</bold>. K aktivácií účtu postupujte prosím podľa pokynov v e-maily.
     info: "Ak neprichádza, skontrolujte priečinok spamu."
     another: >-
       Poslali sme vám ďalší aktivačný e-mail na adresu <bold>{{mail}}</bold>. Môže to trvať niekoľko minút; Nezabudnite skontrolovať priečinok spamu.
@@ -671,6 +656,7 @@ ui:
       Úspešne ste zmenili svoje heslo; Budete presmerovaný na prihlásenie.
     link_invalid: >-
       Ospravedlňujeme sa, tento odkaz na obnovenie hesla už nie je platný. Možno už došlo k resetovaniu vašho hesla?
+    to_login: Continue to log in page
     password:
       label: Heslo
       msg:
@@ -781,8 +767,7 @@ ui:
       confirm_title: Pokračovať v odpovedi
       continue: Pokračovať
       confirm_info: >-
-        <p>Ste si istí, že chcete pridať ďalšiu odpoveď?</p><p>Mohli by ste namiesto toho použiť
-        úpravu na vylepšenie svojej už existujúcej odpovede.</p>
+        <p>Ste si istí, že chcete pridať ďalšiu odpoveď?</p><p>Mohli by ste namiesto toho použiť úpravu na vylepšenie svojej už existujúcej odpovede.</p>
       empty: Odpoveď nemôže byť prázdna.
       characters: Minimálna dĺžka obsahu musí byť 6 znakov.
     reopen:
@@ -792,15 +777,9 @@ ui:
   delete:
     title: Odstrániť tento príspevok
     question: >-
-      Neodporúčame <strong> mazanie otázok s odpoveďmi</strong> pretože
-      týmto oberáte budúcich čitateľov o tieto vedomostí.</p><p> Opakované mazanie
-      zodpovedaných otázok môže mať za následok zablokovanie možnosti kladenia otázok z vášho účtu.
-      Ste si istí, že chcete otázku odstrániť?
+      Neodporúčame <strong> mazanie otázok s odpoveďmi</strong> pretože týmto oberáte budúcich čitateľov o tieto vedomostí.</p><p> Opakované mazanie zodpovedaných otázok môže mať za následok zablokovanie možnosti kladenia otázok z vášho účtu. Ste si istí, že chcete otázku odstrániť?
     answer_accepted: >-
-      <p>Neodporúčame <strong>odstránenie akceptovanej odpovede</strong> pretože
-      týmto oberáte budúcich čitateľov o tieto vedomostí.</p>Opakované mazanie
-      akceptovaných odpovedí môže mať za následok zablokovanie možnosti odpovedať z vášho účtu.
-      Ste si istí, že chcete odstrániť odpoveď?
+      <p>Neodporúčame <strong>odstránenie akceptovanej odpovede</strong> pretože týmto oberáte budúcich čitateľov o tieto vedomostí.</p>Opakované mazanie akceptovaných odpovedí môže mať za následok zablokovanie možnosti odpovedať z vášho účtu. Ste si istí, že chcete odstrániť odpoveď?
     other: Ste si istí, že ju chcete odstrániť?
     tip_question_deleted: Tento príspevok bol odstránený
     tip_answer_deleted: Táto odpoveď bola odstránená
@@ -954,8 +933,7 @@ ui:
       title: Vytvoriť config.yaml
       label: Vytvorený súbor Config.yaml.
       desc: >-
-        Môžete vytvoriť <1>config.yaml</1> súbor manuálne v
-        <1>/var/wwww/xxx/</1> adresári a vložte do neho nasledujúci text.
+        Môžete vytvoriť <1>config.yaml</1> súbor manuálne v <1>/var/wwww/xxx/</1> adresári a vložte do neho nasledujúci text.
       info: Potom, čo ste to urobili, kliknite na tlačidlo „Ďalej“.
     site_information: Informácie o stránke
     admin_account: Správca
@@ -990,9 +968,8 @@ ui:
         incorrect: Nesprávny formát e-mailu
     ready_title: Vaša odpoveď je pripravená!
     ready_desc: >-
-      Ak niekedy budete chcieť zmeniť viac nastavení, navštívte stránku <1>admin section</1>;
-      Nájdete ju v ponuke stránok.
-    good_luck: „Bavte sa a veľa šťastia!“
+      Ak niekedy budete chcieť zmeniť viac nastavení, navštívte stránku <1>admin section</1>; Nájdete ju v ponuke stránok.
+    good_luck: "„Bavte sa a veľa šťastia!“"
     warn_title: Upozornenie
     warn_desc: >-
       Súbor <1>config.yaml</1> už existuje. Ak v tomto súbore potrebujete resetovať niektorú z konfiguračných položiek, najskôr ho odstráňte.
@@ -1167,10 +1144,8 @@ ui:
             password:
               label: Heslo
               msg: Heslo musí mať dĺžku 8-32 znakov.
-
         btn_cancel: Zrušiť
         btn_submit: Odovzdať
-
     questions:
       page_title: Otázky
       normal: Normalne
@@ -1231,6 +1206,9 @@ ui:
         label: Časové pásmo
         msg: Časové pásmo nemôže byť prázdne.
         text: Vyberte si mesto v rovnakom časovom pásme v akom ste vy.
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
@@ -1286,7 +1264,7 @@ ui:
         text: Obrázok použitý ako základ pre ikony metadát. V ideálnom prípade by mal byť väčšií ako 512 x 512.
       favicon:
         label: favicon
-        text:  Favicon pre váš web. Ak chcete cez CDN fungovať správne, musí byť vo formáte png. Veľkosť sa zmení na 32 x 32. Ak nebude nič zadané,  použije sa „štvorcová ikona“.
+        text: Favicon pre váš web. Ak chcete cez CDN fungovať správne, musí byť vo formáte png. Veľkosť sa zmení na 32 x 32. Ak nebude nič zadané,  použije sa „štvorcová ikona“.
     legal:
       page_title: Legálne
       terms_of_service:
@@ -1345,12 +1323,11 @@ ui:
       membership:
         title: Členstvo
         label: Povoliť nové registrácie
-        text:  Vypnúť, aby sa zabránilo vytvorenie nového účtu hocikým.
+        text: Vypnúť, aby sa zabránilo vytvorenie nového účtu hocikým.
       private:
         title: Súkromné
         label: Vyžaduje sa prihlásenie
         text: Do tejto komunity majú prístup iba prihlásení používatelia
-
   form:
     optional: (voliteľné)
     empty: nemôže byť prázdne
@@ -1408,4 +1385,5 @@ ui:
   draft:
     discard_confirm: Naozaj chcete zahodiť svoj koncept?
   messages:
-     post_deleted: Tento príspevok bol odstránený.
+    post_deleted: Tento príspevok bol odstránený.
+
