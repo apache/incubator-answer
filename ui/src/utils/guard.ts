@@ -182,6 +182,10 @@ export const admin = () => {
   const us = deriveLoginState();
   if (gr.ok && !us.isAdmin) {
     gr.ok = false;
+    gr.error = {
+      code: '403',
+      msg: '',
+    };
     gr.redirect = '';
   }
   return gr;
@@ -192,7 +196,11 @@ export const isAdminOrModerator = () => {
   const us = deriveLoginState();
   if (gr.ok && !us.isAdmin && !us.isModerator) {
     gr.ok = false;
-    gr.redirect = RouteAlias.home;
+    gr.error = {
+      code: '403',
+      msg: '',
+    };
+    gr.redirect = '';
   }
   return gr;
 };
