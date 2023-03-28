@@ -80,6 +80,13 @@ export function createEditorUtils(
 
 export function htmlRender(el: HTMLElement | null) {
   if (!el) return;
+  // Replace all br tags with newlines
+  // Fixed an issue where the BR tag in the editor block formula HTML caused rendering errors.
+  el.querySelectorAll('br').forEach((br) => {
+    br.parentNode?.insertBefore(document.createTextNode('\n'), br);
+    br.parentNode?.removeChild(br);
+  });
+
   import('mermaid').then(({ default: mermaid }) => {
     mermaid.initialize({ startOnLoad: false });
 
