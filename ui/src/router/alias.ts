@@ -1,7 +1,7 @@
 export const RouteAlias = {
   home: '/',
   login: '/users/login',
-  register: '/users/register',
+  signUp: '/users/register',
   activation: '/users/login?status=inactive',
   activationFailed: '/users/account-activation/failed',
   suspended: '/users/account-suspended',

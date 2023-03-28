@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { usePageTags } from '@/hooks';
 import { Unactivate, WelcomeTitle } from '@/components';
 import { PluginOauth } from '@/plugins';
+import { guard } from '@/utils';
 
 import SignUpForm from './components/SignUpForm';
 
@@ -17,6 +18,9 @@ const Index: React.FC = () => {
   usePageTags({
     title: t('sign_up', { keyPrefix: 'page_title' }),
   });
+  if (!guard.singUpAgent().ok) {
+    return null;
+  }
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
       <WelcomeTitle />

@@ -158,8 +158,13 @@ const routes: RouteNode[] = [
         guard: () => {
           const notLogged = guard.notLogged();
           if (notLogged.ok) {
+            const la = guard.loginAgent();
+            if (!la.ok) {
+              return la;
+            }
             return notLogged;
           }
+
           return guard.notActivated();
         },
       },
@@ -171,7 +176,14 @@ const routes: RouteNode[] = [
           if (!allowNew.ok) {
             return allowNew;
           }
-          return guard.notLogged();
+          const notLogged = guard.notLogged();
+          if (notLogged.ok) {
+            const sa = guard.singUpAgent();
+            if (!sa.ok) {
+              return sa;
+            }
+          }
+          return notLogged;
         },
       },
       {

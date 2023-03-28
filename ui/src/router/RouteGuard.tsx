@@ -21,8 +21,9 @@ const Index: FC<{
       const gr = onEnter();
       const redirectUrl = gr.redirect;
       if (redirectUrl) {
-        floppyNavigation.navigate(redirectUrl, () => {
-          navigate(redirectUrl, { replace: true });
+        floppyNavigation.navigate(redirectUrl, {
+          handler: navigate,
+          options: { replace: true },
         });
       }
     }

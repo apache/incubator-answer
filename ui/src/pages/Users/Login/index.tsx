@@ -94,8 +94,9 @@ const Index: React.FC = () => {
   const handleLoginRedirect = () => {
     const redirect = Storage.get(REDIRECT_PATH_STORAGE_KEY) || RouteAlias.home;
     Storage.remove(REDIRECT_PATH_STORAGE_KEY);
-    floppyNavigation.navigate(redirect, () => {
-      navigate(redirect, { replace: true });
+    floppyNavigation.navigate(redirect, {
+      handler: navigate,
+      options: { replace: true },
     });
   };
 
@@ -168,6 +169,9 @@ const Index: React.FC = () => {
   usePageTags({
     title: t('login', { keyPrefix: 'page_title' }),
   });
+  if (!guard.loginAgent().ok) {
+    return null;
+  }
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
       <WelcomeTitle />

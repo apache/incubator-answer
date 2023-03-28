@@ -117,22 +117,20 @@ class Request {
           errorCode.getState().reset();
           if (data?.type === 'url_expired') {
             // url expired
-            floppyNavigation.navigate(RouteAlias.activationFailed, () => {
-              window.location.replace(RouteAlias.activationFailed);
+            floppyNavigation.navigate(RouteAlias.activationFailed, {
+              handler: 'replace',
             });
             return Promise.reject(false);
           }
           if (data?.type === 'inactive') {
             // inactivated
-            floppyNavigation.navigate(RouteAlias.activation, () => {
-              window.location.href = RouteAlias.activation;
-            });
+            floppyNavigation.navigate(RouteAlias.activation);
             return Promise.reject(false);
           }
 
           if (data?.type === 'suspended') {
-            floppyNavigation.navigate(RouteAlias.suspended, () => {
-              window.location.replace(RouteAlias.suspended);
+            floppyNavigation.navigate(RouteAlias.suspended, {
+              handler: 'replace',
             });
             return Promise.reject(false);
           }

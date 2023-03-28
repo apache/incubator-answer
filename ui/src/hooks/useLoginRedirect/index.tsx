@@ -11,8 +11,11 @@ const Index = () => {
   const loginRedirect = () => {
     const redirect = Storage.get(REDIRECT_PATH_STORAGE_KEY) || RouteAlias.home;
     Storage.remove(REDIRECT_PATH_STORAGE_KEY);
-    floppyNavigation.navigate(redirect, () => {
-      navigate(redirect, { replace: true });
+    floppyNavigation.navigate(redirect, {
+      handler: navigate,
+      options: {
+        replace: true,
+      },
     });
   };
 
