@@ -16,6 +16,7 @@ import {
 } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 import { loggedUserInfoStore, toastStore } from '@/stores';
+import { htmlToReact } from '@/utils';
 
 const TagIntroduction = () => {
   const userInfo = loggedUserInfoStore((state) => state.user);
@@ -144,10 +145,9 @@ const TagIntroduction = () => {
             />
           </div>
 
-          <div
-            className="content text-break"
-            dangerouslySetInnerHTML={{ __html: tagInfo?.parsed_text }}
-          />
+          <div className="content text-break">
+            {htmlToReact(tagInfo?.parsed_text)}
+          </div>
           <div className="mt-4">
             {tagInfo?.member_actions.map((action, index) => {
               return (

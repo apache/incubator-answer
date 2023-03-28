@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { handleFormError, scrollToDocTop } from '@/utils';
+import { handleFormError, scrollToDocTop, htmlToReact } from '@/utils';
 import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { pathFactory } from '@/router/pathFactory';
 import { Editor, EditorRef, Icon } from '@/components';
@@ -195,9 +195,9 @@ const Index = () => {
           <div className="question-content-wrap">
             <div
               ref={questionContentRef}
-              className="content position-absolute top-0 w-100"
-              dangerouslySetInnerHTML={{ __html: data?.question.html }}
-            />
+              className="content position-absolute top-0 w-100">
+              {htmlToReact(data?.question.html)}
+            </div>
             <div
               className="resize-bottom"
               style={{ maxHeight: questionContentRef?.current?.scrollHeight }}

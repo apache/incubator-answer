@@ -12,7 +12,7 @@ import {
   FormatTime,
   htmlRender,
 } from '@/components';
-import { formatCount, guard } from '@/utils';
+import { formatCount, guard, htmlToReact } from '@/utils';
 import { following } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 
@@ -106,11 +106,9 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
           return <Tag className="m-1" key={item.slug_name} data={item} />;
         })}
       </div>
-      <article
-        ref={ref}
-        dangerouslySetInnerHTML={{ __html: data?.html }}
-        className="fmt text-break text-wrap mt-4"
-      />
+      <article ref={ref} className="fmt text-break text-wrap mt-4">
+        {htmlToReact(data?.html)}
+      </article>
 
       <Actions
         className="mt-4"

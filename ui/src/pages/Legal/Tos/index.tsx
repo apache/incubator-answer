@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
 import { useLegalTos } from '@/services';
+import { htmlToReact } from '@/utils';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'nav_menus' });
@@ -23,15 +24,12 @@ const Index: FC = () => {
     return null;
   }
   return (
-    <>
+    <div>
       <h3 className="mb-4">{t('tos')}</h3>
-      <div
-        className="fmt"
-        dangerouslySetInnerHTML={{
-          __html: tos?.terms_of_service_parsed_text || '',
-        }}
-      />
-    </>
+      <div className="fmt">
+        {htmlToReact(tos?.terms_of_service_parsed_text || '')}
+      </div>
+    </div>
   );
 };
 

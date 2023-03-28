@@ -12,7 +12,7 @@ import {
   FormatTime,
   htmlRender,
 } from '@/components';
-import { scrollToElementTop, bgFadeOut } from '@/utils';
+import { scrollToElementTop, bgFadeOut, htmlToReact } from '@/utils';
 import { AnswerItem } from '@/common/interface';
 import { acceptanceAnswer } from '@/services';
 
@@ -77,17 +77,16 @@ const Index: FC<Props> = ({
         </Alert>
       )}
       {data?.accepted === 2 && (
-        <div style={{ lineHeight: '20px' }} className="mb-3">
+        <div className="mb-3 lh-1">
           <Badge bg="success" pill>
             <Icon name="check-circle-fill me-1" />
             Best answer
           </Badge>
         </div>
       )}
-      <article
-        dangerouslySetInnerHTML={{ __html: data?.html }}
-        className="fmt text-break text-wrap"
-      />
+      <article className="fmt text-break text-wrap">
+        {htmlToReact(data?.html)}
+      </article>
       <div className="d-flex align-items-center mt-4">
         <Actions
           source="answer"
