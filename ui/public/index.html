@@ -62,7 +62,7 @@
         <div id="spin-container">
           <div class="spinner"></div>
         </div>
-        <div id="protect-brower"></div>
+        <div id="protect-brower">Sorry, this site does not support Internet Explorer. In order to avoid affecting the normal use of our features, please use a more modern browser such as Edge, Firefox, Chrome, or Safari.</div>
       </div>
     </div>
   </body>
@@ -86,6 +86,9 @@
       {
         name: 'Safari',
         version: '15'
+      },
+      {
+        name: 'IE',
       }
     ];
     function getBrowerTypeAndVersion(){
@@ -95,6 +98,7 @@
       };
       var ua = navigator.userAgent.toLowerCase();
       var s;
+      ((ua.indexOf("compatible") > -1 && ua.indexOf("MSIE") > -1) || (ua.indexOf('Trident') > -1 && ua.indexOf("rv:11.0") > -1)) ? brower = { name: 'IE', version: '' } :
       (s = ua.match(/edge\/([\d\.]+)/)) ? brower = { name: 'Edge', version: s[1] } :
       (s = ua.match(/firefox\/([\d\.]+)/)) ? brower = { name: 'Firefox', version: s[1] } :
       (s = ua.match(/chrome\/([\d\.]+)/)) ?  brower = { name: 'Chrome', version: s[1] } :
@@ -126,16 +130,24 @@
     }
 
     const browerInfo = getBrowerTypeAndVersion();
-    const notSupport = defaultList.some(item => {
-      if (item.name === browerInfo.name) {
-        return compareVersion(browerInfo.version, item.version) === -1;
-      }
-      return false;
-    });
 
-    if (notSupport) {
+
+    if (browerInfo.name === 'IE') {
       const div = document.getElementById('protect-brower');
-      div.innerText = 'The current browser version is too low, in order not to affect the normal use of the function, please upgrade the browser to the latest version.'
+      div.innerText = 'Sorry, this site does not support Internet Explorer. In order to avoid affecting the normal use of our features, please use a more modern browser such as Edge, Firefox, Chrome, or Safari.'
+    } else {
+      const notSupport = defaultList.some(item => {
+        if (item.name === browerInfo.name) {
+          return compareVersion(browerInfo.version, item.version) === -1;
+        }
+        return false;
+      });
+      if (notSupport) {
+        const div = document.getElementById('protect-brower');
+        div.innerText = 'The current browser version is too low, in order not to affect the normal use of the function, please upgrade the browser to the latest version.'
+      }
     }
+
+
   </script>
 </html>
