@@ -26,6 +26,17 @@ export interface UcSettings {
   account_setting_agent: UcSettingAgent;
 }
 
+export interface UcBrandingEntry {
+  icon: string;
+  name: string;
+  label: string;
+  url: string;
+}
+export interface UcBranding {
+  enabled: boolean;
+  personal_branding: UcBrandingEntry[];
+}
+
 export const getUcAgent = () => {
   const apiUrl = `/answer/api/v1/user-center/agent`;
   return request.get<UcAgent>(apiUrl);
@@ -34,4 +45,9 @@ export const getUcAgent = () => {
 export const getUcSettings = () => {
   const apiUrl = `/answer/api/v1/user-center/user/settings`;
   return request.get<UcSettings>(apiUrl);
+};
+
+export const getUcBranding = (username: string) => {
+  const apiUrl = `/answer/api/v1/user-center/personal/branding?username=${username}`;
+  return request.get<UcBranding>(apiUrl);
 };
