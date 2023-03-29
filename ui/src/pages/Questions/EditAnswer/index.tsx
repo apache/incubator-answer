@@ -6,10 +6,10 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { handleFormError, scrollToDocTop, htmlToReact } from '@/utils';
+import { handleFormError, scrollToDocTop } from '@/utils';
 import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { pathFactory } from '@/router/pathFactory';
-import { Editor, EditorRef, Icon } from '@/components';
+import { Editor, EditorRef, Icon, htmlRender } from '@/components';
 import type * as Type from '@/common/interface';
 import {
   useQueryAnswerInfo,
@@ -72,6 +72,13 @@ const Index = () => {
   });
 
   const questionContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!questionContentRef?.current) {
+      return;
+    }
+    htmlRender(questionContentRef.current);
+  }, [questionContentRef]);
 
   usePromptWithUnload({
     when: contentChanged,
@@ -195,9 +202,9 @@ const Index = () => {
           <div className="question-content-wrap">
             <div
               ref={questionContentRef}
-              className="content position-absolute top-0 w-100">
-              {htmlToReact(data?.question.html)}
-            </div>
+              className="content position-absolute top-0 w-100"
+              dangerouslySetInnerHTML={{ __html: data?.question.html }}
+            />
             <div
               className="resize-bottom"
               style={{ maxHeight: questionContentRef?.current?.scrollHeight }}

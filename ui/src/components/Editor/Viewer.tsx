@@ -8,7 +8,6 @@ import {
 } from 'react';
 
 import { markdownToHtml } from '@/services';
-import { htmlToReact } from '@/utils';
 
 import { htmlRender } from './utils';
 
@@ -51,9 +50,9 @@ const Index = ({ value }, ref) => {
   return (
     <div
       ref={previewRef}
-      className="preview-wrap position-relative p-3 bg-light rounded text-break text-wrap mt-2 fmt">
-      {htmlToReact(html)}
-    </div>
+      className="preview-wrap position-relative p-3 bg-light rounded text-break text-wrap mt-2 fmt"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
   );
 };
 
