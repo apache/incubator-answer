@@ -348,7 +348,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   useImperativeHandle(ref, () => ({
     validator,
   }));
-  console.log('uiSchema: ', uiSchema);
+
   return (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {

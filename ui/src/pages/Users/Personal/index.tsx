@@ -47,14 +47,16 @@ const Personal: FC = () => {
     },
     tabName,
   );
+  const { count = 0, list = [] } = listData?.[tabName] || {};
+
   let pageTitle = '';
   if (userInfo?.username) {
     pageTitle = `${userInfo?.display_name} (${userInfo?.username})`;
   }
-  const { count = 0, list = [] } = listData?.[tabName] || {};
   usePageTags({
     title: pageTitle,
   });
+
   return (
     <Container className="pt-4 mt-2 mb-5">
       <Row className="justify-content-center">

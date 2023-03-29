@@ -1,62 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { FC, memo } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
 import { usePageTags } from '@/hooks';
-import type { FormDataType } from '@/common/interface';
-import { getLoggedUserInfo } from '@/services';
 
 import Nav from './components/Nav';
 
-const Index: React.FC = () => {
+const Index: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings.profile',
   });
 
-  const [formData, setFormData] = useState<FormDataType>({
-    display_name: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
-    avatar: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
-    bio: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
-    website: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
-    location: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
-  });
-  const getProfile = () => {
-    getLoggedUserInfo().then((res) => {
-      if (res) {
-        formData.display_name.value = res.display_name;
-        formData.bio.value = res.bio;
-        formData.avatar.value = res.avatar;
-        formData.location.value = res.location;
-        formData.website.value = res.website;
-        setFormData({ ...formData });
-      }
-    });
-  };
-
-  useEffect(() => {
-    getProfile();
-  }, []);
   usePageTags({
     title: t('settings', { keyPrefix: 'page_title' }),
   });
@@ -81,4 +36,4 @@ const Index: React.FC = () => {
   );
 };
 
-export default React.memo(Index);
+export default memo(Index);

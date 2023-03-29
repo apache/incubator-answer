@@ -22,7 +22,7 @@ import {
   useToast,
 } from '@/hooks';
 import { useQueryUsers, addUser, updateUserPassword } from '@/services';
-import { loggedUserInfoStore } from '@/stores';
+import { loggedUserInfoStore, userCenterStore } from '@/stores';
 import { formatCount } from '@/utils';
 
 const UserFilterKeys: Type.UserFilterBy[] = [
@@ -49,6 +49,7 @@ const Users: FC = () => {
   const curPage = Number(urlSearchParams.get('page') || '1');
   const curQuery = urlSearchParams.get('query') || '';
   const currentUser = loggedUserInfoStore((state) => state.user);
+  const { agent: ucAgent } = userCenterStore();
   const Toast = useToast();
   const {
     data,
@@ -149,12 +150,14 @@ const Users: FC = () => {
             sortKey="filter"
             i18nKeyPrefix="admin.users"
           />
-          <Button
-            variant="outline-primary"
-            size="sm"
-            onClick={() => userModal.onShow()}>
-            {t('add_user')}
-          </Button>
+          {!ucAgent?.enabled ? (
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={() => userModal.onShow()}>
+              {t('add_user')}
+            </Button>
+          ) : null}
         </Stack>
 
         <Form.Control
@@ -239,10 +242,12 @@ const Users: FC = () => {
                         <Icon name="three-dots-vertical" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
-                        <Dropdown.Item
-                          onClick={() => handleAction('password', user)}>
-                          {t('set_new_password')}
-                        </Dropdown.Item>
+                        {!ucAgent?.enabled ? (
+                          <Dropdown.Item
+                            onClick={() => handleAction('password', user)}>
+                            {t('set_new_password')}
+                          </Dropdown.Item>
+                        ) : null}
                         <Dropdown.Item
                           onClick={() => handleAction('status', user)}>
                           {t('change_status')}

@@ -31,7 +31,7 @@ const initUser: UserInfoRes = {
   role_id: 1,
 };
 
-const loggedUserInfoStore = create<UserInfoStore>((set) => ({
+const loggedUserInfo = create<UserInfoStore>((set) => ({
   user: initUser,
   update: (params) => {
     if (!params.language) {
@@ -51,4 +51,4 @@ const loggedUserInfoStore = create<UserInfoStore>((set) => ({
     }),
 }));
 
-export default loggedUserInfoStore;
+export default loggedUserInfo;

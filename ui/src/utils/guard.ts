@@ -16,6 +16,7 @@ import { LOGGED_USER_STORAGE_KEY } from '@/common/constants';
 import Storage from './storage';
 import { setupAppLanguage, setupAppTimeZone } from './localize';
 import { floppyNavigation } from './floppyNavigation';
+import { pullUcAgent, getLoginUrl, getSignUpUrl } from './userCenter';
 
 type TLoginState = {
   isLogged: boolean;
@@ -79,20 +80,20 @@ export const isIgnoredPath = (ignoredPath: string | string[]) => {
   return !!matchingPath;
 };
 
-let pullLock = false;
-let dedupeTimestamp = 0;
+let pluLock = false;
+let pluTimestamp = 0;
 export const pullLoggedUser = async (forceRePull = false) => {
   // only pull once if not force re-pull
-  if (pullLock && !forceRePull) {
+  if (pluLock && !forceRePull) {
     return;
   }
   // dedupe pull requests in this time span in 10 seconds
-  if (Date.now() - dedupeTimestamp < 1000 * 10) {
+  if (Date.now() - pluTimestamp < 1000 * 10) {
     return;
   }
-  dedupeTimestamp = Date.now();
+  pluTimestamp = Date.now();
   const loggedUserInfo = await getLoggedUserInfo().catch((ex) => {
-    dedupeTimestamp = 0;
+    pluTimestamp = 0;
     if (!deriveLoginState().isLogged) {
       // load fallback userInfo from local storage
       const storageLoggedUserInfo = Storage.get(LOGGED_USER_STORAGE_KEY);
@@ -103,7 +104,7 @@ export const pullLoggedUser = async (forceRePull = false) => {
     console.error(ex);
   });
   if (loggedUserInfo) {
-    pullLock = true;
+    pluLock = true;
     loggedUserInfoStore.getState().update(loggedUserInfo);
   }
 };
@@ -198,6 +199,26 @@ export const allowNewRegistration = () => {
   return gr;
 };
 
+export const loginAgent = () => {
+  const gr: TGuardResult = { ok: true };
+  const loginUrl = getLoginUrl();
+  if (loginUrl !== RouteAlias.login) {
+    gr.ok = false;
+    gr.redirect = loginUrl;
+  }
+  return gr;
+};
+
+export const singUpAgent = () => {
+  const gr: TGuardResult = { ok: true };
+  const signUpUrl = getSignUpUrl();
+  if (signUpUrl !== RouteAlias.signUp) {
+    gr.ok = false;
+    gr.redirect = signUpUrl;
+  }
+  return gr;
+};
+
 export const shouldLoginRequired = () => {
   const gr: TGuardResult = { ok: true };
   const loginSetting = loginSettingStore.getState().login;
@@ -211,7 +232,7 @@ export const shouldLoginRequired = () => {
   if (
     isIgnoredPath([
       RouteAlias.login,
-      RouteAlias.register,
+      RouteAlias.signUp,
       '/users/account-recovery',
       'users/change-email',
       'users/password-reset',
@@ -246,12 +267,10 @@ export const tryNormalLogged = (canNavigate: boolean = false) => {
     return false;
   }
   if (us.isNotActivated) {
-    floppyNavigation.navigate(RouteAlias.activation, () => {
-      window.location.href = RouteAlias.activation;
-    });
+    floppyNavigation.navigate(RouteAlias.activation);
   } else if (us.isForbidden) {
-    floppyNavigation.navigate(RouteAlias.suspended, () => {
-      window.location.replace(RouteAlias.suspended);
+    floppyNavigation.navigate(RouteAlias.suspended, {
+      handler: 'replace',
     });
   }
 
@@ -296,7 +315,11 @@ export const setupApp = async () => {
    * 2. must pre init app settings for app render
    */
   // TODO: optimize `initAppSettingsStore` by server render
-  await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
+  await Promise.allSettled([
+    pullLoggedUser(),
+    pullUcAgent(),
+    initAppSettingsStore(),
+  ]);
   setupAppLanguage();
   setupAppTimeZone();
   appInitialized = true;
