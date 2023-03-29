@@ -12,7 +12,7 @@ import {
   FormatTime,
   htmlRender,
 } from '@/components';
-import { scrollToElementTop, bgFadeOut, htmlToReact } from '@/utils';
+import { scrollToElementTop, bgFadeOut } from '@/utils';
 import { AnswerItem } from '@/common/interface';
 import { acceptanceAnswer } from '@/services';
 
@@ -84,9 +84,10 @@ const Index: FC<Props> = ({
           </Badge>
         </div>
       )}
-      <article className="fmt text-break text-wrap">
-        {htmlToReact(data?.html)}
-      </article>
+      <article
+        className="fmt text-break text-wrap"
+        dangerouslySetInnerHTML={{ __html: data?.html }}
+      />
       <div className="d-flex align-items-center mt-4">
         <Actions
           source="answer"

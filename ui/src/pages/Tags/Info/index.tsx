@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 
 import { usePageTags } from '@/hooks';
-import { Tag, TagSelector, FormatTime, Modal } from '@/components';
+import { Tag, TagSelector, FormatTime, Modal, htmlRender } from '@/components';
 import {
   useTagInfo,
   useQuerySynonymsTags,
@@ -16,7 +16,6 @@ import {
 } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
 import { loggedUserInfoStore, toastStore } from '@/stores';
-import { htmlToReact } from '@/utils';
 
 const TagIntroduction = () => {
   const userInfo = loggedUserInfoStore((state) => state.user);
@@ -45,6 +44,15 @@ const TagIntroduction = () => {
       });
     }
   }, [locationState]);
+
+  useEffect(() => {
+    const fmt = document.querySelector('.content.fmt') as HTMLElement;
+    if (!fmt) {
+      return;
+    }
+    htmlRender(fmt);
+  }, [tagInfo?.parsed_text]);
+
   if (!tagInfo) {
     return null;
   }
@@ -145,9 +153,10 @@ const TagIntroduction = () => {
             />
           </div>
 
-          <div className="content text-break">
-            {htmlToReact(tagInfo?.parsed_text)}
-          </div>
+          <div
+            className="content text-break fmt"
+            dangerouslySetInnerHTML={{ __html: tagInfo?.parsed_text }}
+          />
           <div className="mt-4">
             {tagInfo?.member_actions.map((action, index) => {
               return (
