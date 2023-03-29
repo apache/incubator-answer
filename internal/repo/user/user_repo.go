@@ -7,9 +7,12 @@ import (
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/config"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/plugin"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
 )
 
@@ -137,7 +140,9 @@ func (ur *userRepo) GetByUserID(ctx context.Context, userID string) (userInfo *e
 	exist, err = ur.data.DB.Where("id = ?", userID).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return
 	}
+	ur.tryToDecorateUserInfoFromUserCenter(ctx, userInfo)
 	return
 }
 
@@ -147,6 +152,7 @@ func (ur *userRepo) BatchGetByID(ctx context.Context, ids []string) ([]*entity.U
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	ur.tryToDecorateUserListFromUserCenter(ctx, list)
 	return list, nil
 }
 
@@ -156,7 +162,9 @@ func (ur *userRepo) GetByUsername(ctx context.Context, username string) (userInf
 	exist, err = ur.data.DB.Where("username = ?", username).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return
 	}
+	ur.tryToDecorateUserInfoFromUserCenter(ctx, userInfo)
 	return
 }
 
@@ -171,11 +179,102 @@ func (ur *userRepo) GetByEmail(ctx context.Context, email string) (userInfo *ent
 	return
 }
 
-func (vr *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
+func (ur *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
 	list := make([]*entity.User, 0)
-	count, err = vr.data.DB.Where("mail_status =?", entity.EmailStatusAvailable).And("status =?", entity.UserStatusAvailable).FindAndCount(&list)
+	count, err = ur.data.DB.Where("mail_status =?", entity.EmailStatusAvailable).And("status =?", entity.UserStatusAvailable).FindAndCount(&list)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
+}
+
+func (ur *userRepo) tryToDecorateUserInfoFromUserCenter(ctx context.Context, original *entity.User) {
+	uc, ok := plugin.GetUserCenter()
+	if !ok {
+		return
+	}
+
+	userInfo := &entity.UserExternalLogin{}
+	session := ur.data.DB.Where("user_id = ?", original.ID)
+	session.Where("provider = ?", uc.Info().SlugName)
+	exist, err := session.Get(userInfo)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	if !exist {
+		return
+	}
+
+	userCenterBasicUserInfo, err := uc.UserInfo(userInfo.ExternalID)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+
+	// In general, usernames should be guaranteed unique by the User Center plugin, so there are no inconsistencies.
+	if original.Username != userCenterBasicUserInfo.Username {
+		log.Warnf("user %s username is inconsistent with user center", original.ID)
+	}
+	decorateByUserCenterUser(original, userCenterBasicUserInfo)
+}
+
+func (ur *userRepo) tryToDecorateUserListFromUserCenter(ctx context.Context, original []*entity.User) {
+	log.Debugf("try to decorate user list from user center, original: %+v", original)
+	uc, ok := plugin.GetUserCenter()
+	if !ok {
+		return
+	}
+
+	ids := make([]string, 0)
+	originalUserIDMapping := make(map[string]*entity.User, 0)
+	for _, user := range original {
+		originalUserIDMapping[user.ID] = user
+		ids = append(ids, user.ID)
+	}
+
+	userExternalLoginList := make([]*entity.UserExternalLogin, 0)
+	session := ur.data.DB.Where("provider = ?", uc.Info().SlugName)
+	session.In("user_id", ids)
+	err := session.Find(&userExternalLoginList)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+
+	userExternalIDs := make([]string, 0)
+	originalExternalIDMapping := make(map[string]*entity.User, 0)
+	for _, u := range userExternalLoginList {
+		originalExternalIDMapping[u.ExternalID] = originalUserIDMapping[u.UserID]
+		userExternalIDs = append(userExternalIDs, u.ExternalID)
+	}
+
+	ucUsers, err := uc.UserList(userExternalIDs)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+
+	for _, ucUser := range ucUsers {
+		decorateByUserCenterUser(originalExternalIDMapping[ucUser.ExternalID], ucUser)
+	}
+}
+
+func decorateByUserCenterUser(original *entity.User, ucUser *plugin.UserCenterBasicUserInfo) {
+	if original == nil || ucUser == nil {
+		return
+	}
+	// In general, usernames should be guaranteed unique by the User Center plugin, so there are no inconsistencies.
+	if original.Username != ucUser.Username {
+		log.Warnf("user %s username is inconsistent with user center", original.ID)
+	}
+	original.DisplayName = ucUser.DisplayName
+	original.EMail = ucUser.Email
+	original.Avatar = schema.CustomAvatar(ucUser.Avatar).ToJsonString()
+	original.Mobile = ucUser.Mobile
+
+	// If plugin enable rank agent, use rank from user center.
+	if plugin.RankAgentEnabled() {
+		original.Rank = ucUser.Rank
+	}
 }

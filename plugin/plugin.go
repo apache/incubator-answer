@@ -48,6 +48,10 @@ func Register(p Base) {
 	if _, ok := p.(Cache); ok {
 		registerCache(p.(Cache))
 	}
+
+	if _, ok := p.(UserCenter); ok {
+		registerUserCenter(p.(UserCenter))
+	}
 }
 
 type Stack[T Base] struct {

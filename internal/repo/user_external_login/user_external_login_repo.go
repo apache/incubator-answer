@@ -43,10 +43,10 @@ func (ur *userExternalLoginRepo) UpdateInfo(ctx context.Context, userInfo *entit
 }
 
 // GetByExternalID get by external ID
-func (ur *userExternalLoginRepo) GetByExternalID(ctx context.Context, externalID string) (
+func (ur *userExternalLoginRepo) GetByExternalID(ctx context.Context, provider, externalID string) (
 	userInfo *entity.UserExternalLogin, exist bool, err error) {
 	userInfo = &entity.UserExternalLogin{}
-	exist, err = ur.data.DB.Where("external_id = ?", externalID).Get(userInfo)
+	exist, err = ur.data.DB.Where("external_id = ?", externalID).Where("provider = ?", provider).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

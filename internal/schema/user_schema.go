@@ -143,6 +143,13 @@ func FormatAvatarInfo(avatarJson, email string) (res string) {
 	}
 }
 
+func CustomAvatar(url string) *AvatarInfo {
+	return &AvatarInfo{
+		Type:   AvatarTypeCustom,
+		Custom: url,
+	}
+}
+
 // GetUserStatusResp get user status info
 type GetUserStatusResp struct {
 	// user status
@@ -314,6 +321,11 @@ type AvatarInfo struct {
 	Type     string `validate:"omitempty,gt=0,lte=100"  json:"type"`
 	Gravatar string `validate:"omitempty,gt=0,lte=200"  json:"gravatar"`
 	Custom   string `validate:"omitempty,gt=0,lte=200"  json:"custom"`
+}
+
+func (a *AvatarInfo) ToJsonString() string {
+	data, _ := json.Marshal(a)
+	return string(data)
 }
 
 func (req *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {

@@ -25,4 +25,5 @@ var ProviderSetController = wire.NewSet(
 	NewActivityController,
 	NewTemplateController,
 	NewConnectorController,
+	NewUserCenterController,
 )
