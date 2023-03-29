@@ -707,6 +707,7 @@ ui:
       label: Confirm New Password
   settings:
     page_title: Settings
+    goto_modify: Go to Modify
     nav:
       profile: Profile
       notification: Notifications
