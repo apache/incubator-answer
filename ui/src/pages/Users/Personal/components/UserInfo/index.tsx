@@ -115,6 +115,9 @@ const Index: FC<Props> = ({ data }) => {
             </>
           ) : null}
           {ucBranding.map((b, i) => {
+            if (!b.label) {
+              return null;
+            }
             return (
               <div
                 key={b.name}
@@ -128,9 +131,13 @@ const Index: FC<Props> = ({ data }) => {
                     }}
                   />
                 ) : null}
-                <a className="link-secondary" href={b.url}>
-                  {b.label}
-                </a>
+                {b.url ? (
+                  <a className="link-secondary" href={b.url}>
+                    {b.label}
+                  </a>
+                ) : (
+                  <span>{b.label}</span>
+                )}
               </div>
             );
           })}
