@@ -12,7 +12,6 @@ import (
 	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/renderer/html"
-	goldmarkHTML "github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/util"
 )
 
@@ -24,7 +23,7 @@ func Markdown2HTML(source string) string {
 			parser.WithAutoHeadingID(),
 		),
 		goldmark.WithRendererOptions(
-			goldmarkHTML.WithHardWraps(),
+			html.WithHardWraps(),
 		),
 	)
 	var buf bytes.Buffer
@@ -55,14 +54,14 @@ type DangerousHTMLFilterExtension struct {
 func (e *DangerousHTMLFilterExtension) Extend(m goldmark.Markdown) {
 	m.Renderer().AddOptions(renderer.WithNodeRenderers(
 		util.Prioritized(&DangerousHTMLRenderer{
-			Config: goldmarkHTML.NewConfig(),
+			Config: html.NewConfig(),
 			Filter: bluemonday.UGCPolicy(),
 		}, 1),
 	))
 }
 
 type DangerousHTMLRenderer struct {
-	goldmarkHTML.Config
+	html.Config
 	Filter *bluemonday.Policy
 }
 
