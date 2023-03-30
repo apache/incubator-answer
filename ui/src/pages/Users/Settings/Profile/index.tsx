@@ -228,7 +228,6 @@ const Index: React.FC = () => {
   };
 
   const getProfile = () => {
-    console.log('getProfile@Profile');
     getLoggedUserInfo().then((res) => {
       formData.display_name.value = res.display_name;
       formData.username.value = res.username;

@@ -131,6 +131,7 @@ export const resendEmail = (params?: Type.ImgCodeReq) => {
  * @returns {UserInfo}
  */
 export const getLoggedUserInfo = () => {
+  // TODO: After merging `1.0.8` versions, set the `passingError` parameter for this request
   return request.get<Type.UserInfoRes>('/answer/api/v1/user/info');
 };
 
