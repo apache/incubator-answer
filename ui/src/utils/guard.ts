@@ -11,9 +11,7 @@ import {
   loginToContinueStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
-import { LOGGED_USER_STORAGE_KEY } from '@/common/constants';
 
-import Storage from './storage';
 import { setupAppLanguage, setupAppTimeZone } from './localize';
 import { floppyNavigation } from './floppyNavigation';
 import { pullUcAgent, getLoginUrl, getSignUpUrl } from './userCenter';
@@ -94,13 +92,7 @@ export const pullLoggedUser = async (forceRePull = false) => {
   pluTimestamp = Date.now();
   const loggedUserInfo = await getLoggedUserInfo().catch((ex) => {
     pluTimestamp = 0;
-    if (!deriveLoginState().isLogged) {
-      // load fallback userInfo from local storage
-      const storageLoggedUserInfo = Storage.get(LOGGED_USER_STORAGE_KEY);
-      if (storageLoggedUserInfo) {
-        loggedUserInfoStore.getState().update(storageLoggedUserInfo);
-      }
-    }
+    loggedUserInfoStore.getState().clear(false);
     console.error(ex);
   });
   if (loggedUserInfo) {
