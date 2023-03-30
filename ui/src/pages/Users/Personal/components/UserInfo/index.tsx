@@ -114,7 +114,7 @@ const Index: FC<Props> = ({ data }) => {
               )}
             </>
           ) : null}
-          {ucBranding.map((b, i) => {
+          {ucBranding.map((b, i, a) => {
             if (!b.label) {
               return null;
             }
@@ -122,7 +122,7 @@ const Index: FC<Props> = ({ data }) => {
               <div
                 key={b.name}
                 className={classnames('d-flex', 'align-items-center', {
-                  'ms-3': i > 0,
+                  'me-3': i < a.length - 1,
                 })}>
                 {b.icon ? (
                   <span

@@ -248,10 +248,12 @@ const Users: FC = () => {
                             {t('set_new_password')}
                           </Dropdown.Item>
                         ) : null}
-                        <Dropdown.Item
-                          onClick={() => handleAction('status', user)}>
-                          {t('change_status')}
-                        </Dropdown.Item>
+                        {!ucAgent?.enabled ? (
+                          <Dropdown.Item
+                            onClick={() => handleAction('status', user)}>
+                            {t('change_status')}
+                          </Dropdown.Item>
+                        ) : null}
                         <Dropdown.Item
                           onClick={() => handleAction('role', user)}>
                           {t('change_role')}
