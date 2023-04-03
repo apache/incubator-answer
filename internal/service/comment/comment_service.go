@@ -448,7 +448,6 @@ func (cs *CommentService) GetCommentPersonalWithPage(ctx context.Context, req *s
 			if err != nil {
 				log.Error(err)
 			} else {
-				spew.Dump("==", objInfo)
 				commentResp.ObjectType = objInfo.ObjectType
 				commentResp.Title = objInfo.Title
 				commentResp.UrlTitle = htmltext.UrlTitle(objInfo.Title)
