@@ -335,12 +335,15 @@ func (qs *QuestionCommon) FormatQuestionsPage(
 		} else {
 			item.Tags = make([]*schema.TagResp, 0)
 		}
-		userInfo := userInfoMap[item.Operator.ID]
-		if userInfo != nil {
-			item.Operator.DisplayName = userInfo.DisplayName
-			item.Operator.Username = userInfo.Username
-			item.Operator.Rank = userInfo.Rank
+		userInfo, ok := userInfoMap[item.Operator.ID]
+		if ok {
+			if userInfo != nil {
+				item.Operator.DisplayName = userInfo.DisplayName
+				item.Operator.Username = userInfo.Username
+				item.Operator.Rank = userInfo.Rank
+			}
 		}
+
 	}
 	return formattedQuestions, nil
 }
