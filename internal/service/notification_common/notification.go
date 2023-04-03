@@ -15,6 +15,7 @@ import (
 	"github.com/answerdev/answer/internal/service/object_info"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/uid"
+	"github.com/answerdev/answer/plugin"
 	"github.com/goccy/go-json"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -82,7 +83,9 @@ func (ns *NotificationCommon) HandleNotification() {
 // ObjectInfo.ObjectID
 // ObjectInfo.ObjectType
 func (ns *NotificationCommon) AddNotification(ctx context.Context, msg *schema.NotificationMsg) error {
-
+	if msg.Type == schema.NotificationTypeAchievement && plugin.RankAgentEnabled() {
+		return nil
+	}
 	req := &schema.NotificationContent{
 		TriggerUserID:  msg.TriggerUserID,
 		ReceiverUserID: msg.ReceiverUserID,

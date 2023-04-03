@@ -24,8 +24,7 @@ type UserExternalLoginRepo interface {
 	AddUserExternalLogin(ctx context.Context, user *entity.UserExternalLogin) (err error)
 	UpdateInfo(ctx context.Context, userInfo *entity.UserExternalLogin) (err error)
 	GetByExternalID(ctx context.Context, provider, externalID string) (userInfo *entity.UserExternalLogin, exist bool, err error)
-	GetUserExternalLoginList(ctx context.Context, userID string) (
-		resp []*entity.UserExternalLogin, err error)
+	GetUserExternalLoginList(ctx context.Context, userID string) (resp []*entity.UserExternalLogin, err error)
 	DeleteUserExternalLogin(ctx context.Context, userID, externalID string) (err error)
 	SetCacheUserExternalLoginInfo(ctx context.Context, key string, info *schema.ExternalLoginUserInfoCache) (err error)
 	GetCacheUserExternalLoginInfo(ctx context.Context, key string) (info *schema.ExternalLoginUserInfoCache, err error)
@@ -76,6 +75,9 @@ func (us *UserExternalLoginService) ExternalLogin(
 			return nil, err
 		}
 		if exist && oldUserInfo.Status != entity.UserStatusDeleted {
+			if err := us.userRepo.UpdateLastLoginDate(ctx, oldUserInfo.ID); err != nil {
+				log.Errorf("update user last login date failed: %v", err)
+			}
 			newMailStatus, err := us.activeUser(ctx, oldUserInfo, externalUserInfo)
 			if err != nil {
 				log.Error(err)

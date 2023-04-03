@@ -53,6 +53,9 @@ func (us *UserCenterLoginService) ExternalLogin(
 			return nil, err
 		}
 		if exist {
+			if err := us.userRepo.UpdateLastLoginDate(ctx, oldUserInfo.ID); err != nil {
+				log.Errorf("update user last login date failed: %v", err)
+			}
 			accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
 				ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status)
 			return &schema.UserExternalLoginResp{AccessToken: accessToken}, err
