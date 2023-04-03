@@ -2,13 +2,21 @@ package plugin
 
 type UserCenter interface {
 	Base
+	// Description returns the description of the user center, including the name, icon, url, etc.
 	Description() UserCenterDesc
+	// ControlCenterItems returns the items that will be displayed in the control center
 	ControlCenterItems() []ControlCenter
+	// LoginCallback is called when the user center login callback is called
 	LoginCallback(ctx *GinContext) (userInfo *UserCenterBasicUserInfo, err error)
+	// SignUpCallback is called when the user center sign up callback is called
 	SignUpCallback(ctx *GinContext) (userInfo *UserCenterBasicUserInfo, err error)
+	// UserInfo returns the user information
 	UserInfo(externalID string) (userInfo *UserCenterBasicUserInfo, err error)
+	// UserList returns the user list information
 	UserList(externalIDs []string) (userInfo []*UserCenterBasicUserInfo, err error)
+	// UserSettings returns the user settings
 	UserSettings(externalID string) (userSettings *SettingInfo, err error)
+	// PersonalBranding returns the personal branding information
 	PersonalBranding(externalID string) (branding []*PersonalBranding)
 }
 
@@ -21,14 +29,23 @@ type UserCenterDesc struct {
 	RankAgentEnabled  bool   `json:"rank_agent_enabled"`
 }
 
+type UserStatus int
+
+const (
+	UserStatusAvailable UserStatus = 1
+	UserStatusSuspended UserStatus = 9
+	UserStatusDeleted   UserStatus = 10
+)
+
 type UserCenterBasicUserInfo struct {
-	ExternalID  string `json:"external_id"`
-	Username    string `json:"username"`
-	DisplayName string `json:"display_name"`
-	Email       string `json:"email"`
-	Rank        int    `json:"rank"`
-	Avatar      string `json:"avatar"`
-	Mobile      string `json:"mobile"`
+	ExternalID  string     `json:"external_id"`
+	Username    string     `json:"username"`
+	DisplayName string     `json:"display_name"`
+	Email       string     `json:"email"`
+	Rank        int        `json:"rank"`
+	Avatar      string     `json:"avatar"`
+	Mobile      string     `json:"mobile"`
+	Status      UserStatus `json:"status"`
 }
 
 type ControlCenter struct {

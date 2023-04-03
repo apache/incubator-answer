@@ -142,7 +142,10 @@ func (ur *userRepo) GetByUserID(ctx context.Context, userID string) (userInfo *e
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return
 	}
-	ur.tryToDecorateUserInfoFromUserCenter(ctx, userInfo)
+	err = tryToDecorateUserInfoFromUserCenter(ctx, ur.data, userInfo)
+	if err != nil {
+		return nil, false, err
+	}
 	return
 }
 
@@ -152,7 +155,7 @@ func (ur *userRepo) BatchGetByID(ctx context.Context, ids []string) ([]*entity.U
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	ur.tryToDecorateUserListFromUserCenter(ctx, list)
+	tryToDecorateUserListFromUserCenter(ctx, ur.data, list)
 	return list, nil
 }
 
@@ -164,7 +167,10 @@ func (ur *userRepo) GetByUsername(ctx context.Context, username string) (userInf
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return
 	}
-	ur.tryToDecorateUserInfoFromUserCenter(ctx, userInfo)
+	err = tryToDecorateUserInfoFromUserCenter(ctx, ur.data, userInfo)
+	if err != nil {
+		return nil, false, err
+	}
 	return
 }
 
@@ -188,28 +194,27 @@ func (ur *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
 	return
 }
 
-func (ur *userRepo) tryToDecorateUserInfoFromUserCenter(ctx context.Context, original *entity.User) {
+func tryToDecorateUserInfoFromUserCenter(ctx context.Context, data *data.Data, original *entity.User) (err error) {
 	uc, ok := plugin.GetUserCenter()
 	if !ok {
-		return
+		return nil
 	}
 
 	userInfo := &entity.UserExternalLogin{}
-	session := ur.data.DB.Where("user_id = ?", original.ID)
+	session := data.DB.Where("user_id = ?", original.ID)
 	session.Where("provider = ?", uc.Info().SlugName)
 	exist, err := session.Get(userInfo)
 	if err != nil {
-		log.Error(err)
-		return
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	if !exist {
-		return
+		return nil
 	}
 
 	userCenterBasicUserInfo, err := uc.UserInfo(userInfo.ExternalID)
 	if err != nil {
 		log.Error(err)
-		return
+		return errors.BadRequest(reason.UserNotFound).WithError(err).WithStack()
 	}
 
 	// In general, usernames should be guaranteed unique by the User Center plugin, so there are no inconsistencies.
@@ -217,10 +222,10 @@ func (ur *userRepo) tryToDecorateUserInfoFromUserCenter(ctx context.Context, ori
 		log.Warnf("user %s username is inconsistent with user center", original.ID)
 	}
 	decorateByUserCenterUser(original, userCenterBasicUserInfo)
+	return nil
 }
 
-func (ur *userRepo) tryToDecorateUserListFromUserCenter(ctx context.Context, original []*entity.User) {
-	log.Debugf("try to decorate user list from user center, original: %+v", original)
+func tryToDecorateUserListFromUserCenter(ctx context.Context, data *data.Data, original []*entity.User) {
 	uc, ok := plugin.GetUserCenter()
 	if !ok {
 		return
@@ -234,7 +239,7 @@ func (ur *userRepo) tryToDecorateUserListFromUserCenter(ctx context.Context, ori
 	}
 
 	userExternalLoginList := make([]*entity.UserExternalLogin, 0)
-	session := ur.data.DB.Where("provider = ?", uc.Info().SlugName)
+	session := data.DB.Where("provider = ?", uc.Info().SlugName)
 	session.In("user_id", ids)
 	err := session.Find(&userExternalLoginList)
 	if err != nil {
@@ -248,10 +253,13 @@ func (ur *userRepo) tryToDecorateUserListFromUserCenter(ctx context.Context, ori
 		originalExternalIDMapping[u.ExternalID] = originalUserIDMapping[u.UserID]
 		userExternalIDs = append(userExternalIDs, u.ExternalID)
 	}
+	if len(userExternalIDs) == 0 {
+		return
+	}
 
 	ucUsers, err := uc.UserList(userExternalIDs)
 	if err != nil {
-		log.Error(err)
+		log.Errorf("get user list from user center failed: %v, %v", err, userExternalIDs)
 		return
 	}
 
@@ -277,4 +285,5 @@ func decorateByUserCenterUser(original *entity.User, ucUser *plugin.UserCenterBa
 	if plugin.RankAgentEnabled() {
 		original.Rank = ucUser.Rank
 	}
+	original.Status = int(ucUser.Status)
 }

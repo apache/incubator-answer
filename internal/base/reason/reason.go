@@ -11,6 +11,8 @@ const (
 	UnauthorizedError = "base.unauthorized_error"
 	// DatabaseError database error
 	DatabaseError = "base.database_error"
+	// ForbiddenError forbidden error
+	ForbiddenError = "base.forbidden_error"
 )
 
 const (
@@ -25,7 +27,7 @@ const (
 	AnswerNotFound                      = "error.answer.not_found"
 	AnswerCannotDeleted                 = "error.answer.cannot_deleted"
 	AnswerCannotUpdate                  = "error.answer.cannot_update"
-	AnswerCannotAddByClosedQuestion  = "error.answer.question_closed_cannot_add"
+	AnswerCannotAddByClosedQuestion     = "error.answer.question_closed_cannot_add"
 	CommentEditWithoutPermission        = "error.comment.edit_without_permission"
 	DisallowVote                        = "error.object.disallow_vote"
 	DisallowFollow                      = "error.object.disallow_follow"
@@ -46,7 +48,7 @@ const (
 	TagNotContainSynonym                = "error.tag.not_contain_synonym_tags"
 	TagCannotUpdate                     = "error.tag.cannot_update"
 	TagIsUsedCannotDelete               = "error.tag.is_used_cannot_delete"
-	TagAlreadyExist                  = "error.tag.already_exist"
+	TagAlreadyExist                     = "error.tag.already_exist"
 	RankFailToMeetTheCondition          = "error.rank.fail_to_meet_the_condition"
 	ThemeNotFound                       = "error.theme.not_found"
 	LangNotFound                        = "error.lang.not_found"

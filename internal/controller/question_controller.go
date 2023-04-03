@@ -515,6 +515,9 @@ func (qc *QuestionController) AdminSearchAnswerList(ctx *gin.Context) {
 		return
 	}
 	req.QuestionID = uid.DeShortID(req.QuestionID)
+	if req.QuestionID == "0" {
+		req.QuestionID = ""
+	}
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	questionList, count, err := qc.questionService.AdminSearchAnswerList(ctx, req, userID)
 	handler.HandleResponse(ctx, err, gin.H{

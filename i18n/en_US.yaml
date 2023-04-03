@@ -12,6 +12,8 @@ backend:
       other: Unauthorized.
     database_error:
       other: Data server error.
+    forbidden_error:
+      other: Forbidden.
   role:
     name:
       user:

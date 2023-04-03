@@ -16,6 +16,7 @@ import (
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/uid"
+	"github.com/answerdev/answer/plugin"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
@@ -228,6 +229,9 @@ func (rs *RankService) checkUserRank(ctx context.Context, userID string, userRan
 // GetRankPersonalWithPage get personal comment list page
 func (rs *RankService) GetRankPersonalWithPage(ctx context.Context, req *schema.GetRankPersonalWithPageReq) (
 	pageModel *pager.PageModel, err error) {
+	if plugin.RankAgentEnabled() {
+		return pager.NewPageModel(0, []string{}), nil
+	}
 	if len(req.Username) > 0 {
 		userInfo, exist, err := rs.userCommon.GetUserBasicInfoByUserName(ctx, req.Username)
 		if err != nil {
