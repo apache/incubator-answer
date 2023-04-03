@@ -81,7 +81,9 @@ const Header: FC = () => {
     }
     if (floppyNavigation.shouldProcessLinkClick(evt)) {
       evt.preventDefault();
-      floppyNavigation.navigateToLogin();
+      floppyNavigation.navigateToLogin({
+        handler: navigate,
+      });
     }
   };
 

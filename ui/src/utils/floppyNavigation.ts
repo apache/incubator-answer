@@ -21,17 +21,25 @@ const storageLoginRedirect = () => {
 };
 
 /**
- * Determining whether an url is an external link
+ * Determining if an url is a full link
  */
-const isExternalLink = (url = '') => {
+const isFullLink = (url = '') => {
   let ret = false;
-  try {
-    const urlObject = new URL(url, document.baseURI);
-    if (urlObject && urlObject.origin !== window.location.origin) {
-      ret = true;
-    }
-    // eslint-disable-next-line no-empty
-  } catch (ex) {}
+  if (/^(http:|https:|\/\/)/i.test(url)) {
+    ret = true;
+  }
+  return ret;
+};
+
+/**
+ * Determining if a link is routable
+ */
+const isRoutableLink = (url = '') => {
+  let ret = true;
+  if (isFullLink(url)) {
+    ret = false;
+  }
+
   return ret;
 };
 
@@ -55,7 +63,7 @@ const navigate = (
     if (to === RouteAlias.login || to === getLoginUrl()) {
       storageLoginRedirect();
     }
-    if (isExternalLink(to)) {
+    if (!isRoutableLink(to) && handler !== 'href' && handler !== 'replace') {
       handler = 'href';
     }
     if (handler === 'href') {
@@ -86,10 +94,11 @@ const shouldProcessLinkClick = (evt) => {
   if (evt.defaultPrevented) {
     return false;
   }
-  const { target, nodeName } = evt.currentTarget;
-  if (nodeName.toLowerCase() !== 'a') {
+  const nodeName = evt.currentTarget?.nodeName;
+  if (nodeName?.toLowerCase() !== 'a') {
     return false;
   }
+  const target = evt.currentTarget?.target;
   return (
     evt.button === 0 &&
     (!target || target === '_self') &&
@@ -97,9 +106,27 @@ const shouldProcessLinkClick = (evt) => {
   );
 };
 
+/**
+ * Automatic handling of click events on route links
+ */
+const handleRouteLinkClick = (evt) => {
+  if (!shouldProcessLinkClick(evt)) {
+    return;
+  }
+  const curTarget = evt.currentTarget;
+  const href = curTarget?.getAttribute('href');
+  if (!isRoutableLink(href)) {
+    evt.preventDefault();
+    navigate(href);
+  }
+};
+
 export const floppyNavigation = {
   differentCurrent,
   navigate,
   navigateToLogin,
   shouldProcessLinkClick,
+  isFullLink,
+  isRoutableLink,
+  handleRouteLinkClick,
 };
