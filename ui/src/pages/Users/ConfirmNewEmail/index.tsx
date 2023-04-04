@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
 import { loggedUserInfoStore, siteInfoStore } from '@/stores';
-import { changeEmailVerify, getLoggedUserInfo } from '@/services';
+import { changeEmailVerify } from '@/services';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'account_result' });
@@ -20,12 +20,12 @@ const Index: FC = () => {
     if (code) {
       // do
       changeEmailVerify({ code })
-        .then(() => {
+        .then((res) => {
           setStep('success');
-          getLoggedUserInfo().then((res) => {
+          if (res?.access_token) {
             // update user info
             updateUser(res);
-          });
+          }
         })
         .catch(() => {
           setStep('invalid');
