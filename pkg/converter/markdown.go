@@ -34,6 +34,7 @@ func Markdown2HTML(source string) string {
 	}
 	html := buf.String()
 	filter := bluemonday.UGCPolicy()
+	filter.AllowStyling()
 	html = filter.Sanitize(html)
 	return html
 }
