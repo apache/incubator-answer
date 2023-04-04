@@ -19,6 +19,7 @@ const baseConfig = {
 interface ApiConfig extends AxiosRequestConfig {
   // Configure whether to allow takeover of 404 errors
   allow404?: boolean;
+  ignoreError?: '403' | '50X';
   // Configure whether to pass errors directly
   passingError?: boolean;
 }
@@ -169,7 +170,11 @@ class Request {
           if (isIgnoredPath(IGNORE_PATH_LIST)) {
             return Promise.reject(false);
           }
-          errorCodeStore.getState().update('50X');
+
+          if (error.config?.ignoreError !== '50X') {
+            errorCodeStore.getState().update('50X');
+          }
+
           console.error(
             `Request failed with status code ${status}, ${msg || ''}`,
           );
