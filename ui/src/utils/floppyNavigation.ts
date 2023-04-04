@@ -60,9 +60,17 @@ const navigate = (
     if (!differentCurrent(to)) {
       return;
     }
+    /**
+     * 1. Blocking redirection of two login pages
+     * 2. Auto storage login redirect
+     */
     if (to === RouteAlias.login || to === getLoginUrl()) {
+      if (!differentCurrent(RouteAlias.login)) {
+        return;
+      }
       storageLoginRedirect();
     }
+
     if (!isRoutableLink(to) && handler !== 'href' && handler !== 'replace') {
       handler = 'href';
     }

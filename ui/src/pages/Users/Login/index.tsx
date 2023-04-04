@@ -11,9 +11,13 @@ import type {
   ImgCodeRes,
   FormDataType,
 } from '@/common/interface';
-import { Unactivate, WelcomeTitle } from '@/components';
+import { SvgIcon, Unactivate, WelcomeTitle } from '@/components';
 import { PluginOauth } from '@/plugins';
-import { loggedUserInfoStore, loginSettingStore } from '@/stores';
+import {
+  loggedUserInfoStore,
+  loginSettingStore,
+  userCenterStore,
+} from '@/stores';
 import { guard, floppyNavigation, handleFormError } from '@/utils';
 import { login, checkImgCode } from '@/services';
 import { PicAuthCodeModal } from '@/components/Modal';
@@ -26,6 +30,10 @@ const Index: React.FC = () => {
   const [refresh, setRefresh] = useState(0);
   const { user: storeUser, update: updateUser } = loggedUserInfoStore((_) => _);
   const loginSetting = loginSettingStore((state) => state.login);
+  const ucAgent = userCenterStore().agent;
+  const ucLoginRedirect =
+    ucAgent?.enabled && ucAgent?.agent_info?.login_redirect_url;
+
   const [formData, setFormData] = useState<FormDataType>({
     e_mail: {
       value: '',
@@ -56,6 +64,9 @@ const Index: React.FC = () => {
   };
 
   const getImgCode = () => {
+    if (ucLoginRedirect) {
+      return;
+    }
     checkImgCode({
       action: 'login',
     }).then((res) => {
@@ -169,13 +180,26 @@ const Index: React.FC = () => {
   usePageTags({
     title: t('login', { keyPrefix: 'page_title' }),
   });
-  if (!guard.loginAgent().ok) {
-    return null;
-  }
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
       <WelcomeTitle />
-      {step === 1 && (
+      {ucLoginRedirect && step === 1 && (
+        <Col className="mx-auto" md={3}>
+          <Button
+            className="w-100"
+            variant="outline-secondary"
+            href={ucAgent?.agent_info.login_redirect_url}>
+            <SvgIcon base64={ucAgent?.agent_info.icon} />
+            <span>
+              {t('connect', {
+                auth_name: ucAgent?.agent_info.name,
+                keyPrefix: 'plugins.oauth',
+              })}
+            </span>
+          </Button>
+        </Col>
+      )}
+      {step === 1 && !ucLoginRedirect && (
         <Col className="mx-auto" md={3}>
           <PluginOauth className="mb-5" />
           <Form noValidate onSubmit={handleSubmit}>

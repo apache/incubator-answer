@@ -268,9 +268,10 @@ function base64ToSvg(base64: string) {
   // svg add class btnSvg
   const parser = new DOMParser();
   const doc = parser.parseFromString(svgxml, 'image/svg+xml');
+  const parseError = doc.querySelector('parsererror');
   const svg = doc.querySelector('svg');
   let str = '';
-  if (svg) {
+  if (svg && !parseError) {
     svg.classList.add('btnSvg');
     svg.classList.add('me-2');
 
