@@ -14,18 +14,28 @@ import (
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 )
 
 // QuestionController question controller
 type QuestionController struct {
 	questionService *service.QuestionService
+	answerService   *service.AnswerService
 	rankService     *rank.RankService
 }
 
 // NewQuestionController new controller
-func NewQuestionController(questionService *service.QuestionService, rankService *rank.RankService) *QuestionController {
-	return &QuestionController{questionService: questionService, rankService: rankService}
+func NewQuestionController(
+	questionService *service.QuestionService,
+	answerService *service.AnswerService,
+	rankService *rank.RankService,
+) *QuestionController {
+	return &QuestionController{
+		questionService: questionService,
+		answerService:   answerService,
+		rankService:     rankService,
+	}
 }
 
 // RemoveQuestion delete question
@@ -275,6 +285,109 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 
 	if len(errFields) > 0 {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
+		return
+	}
+
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// AddQuestionByAnswer add question
+// @Summary add question and answer
+// @Description add question and answer
+// @Tags Question
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.QuestionAddByAnswer true "question"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/question/answer [post]
+func (qc *QuestionController) AddQuestionByAnswer(ctx *gin.Context) {
+	req := &schema.QuestionAddByAnswer{}
+	errFields := handler.BindAndCheckReturnErr(ctx, req)
+	if ctx.IsAborted() {
+		return
+	}
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.QuestionAdd,
+		permission.QuestionEdit,
+		permission.QuestionDelete,
+		permission.QuestionClose,
+		permission.QuestionReopen,
+		permission.TagUseReservedTag,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	req.CanAdd = canList[0]
+	req.CanEdit = canList[1]
+	req.CanDelete = canList[2]
+	req.CanClose = canList[3]
+	req.CanReopen = canList[4]
+	req.CanUseReservedTag = canList[5]
+	if !req.CanAdd {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+	questionReq := new(schema.QuestionAdd)
+	err = copier.Copy(questionReq, req)
+	if err != nil {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RequestFormatError), nil)
+		return
+	}
+	errList, err := qc.questionService.CheckAddQuestion(ctx, questionReq)
+	if err != nil {
+		errlist, ok := errList.([]*validator.FormErrorField)
+		if ok {
+			errFields = append(errFields, errlist...)
+		}
+	}
+
+	if len(errFields) > 0 {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
+		return
+	}
+
+	resp, err := qc.questionService.AddQuestion(ctx, questionReq)
+	if err != nil {
+		errlist, ok := resp.([]*validator.FormErrorField)
+		if ok {
+			errFields = append(errFields, errlist...)
+		}
+	}
+
+	if len(errFields) > 0 {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
+		return
+	}
+	//add the question id to the answer
+	questionInfo, ok := resp.(*schema.QuestionInfo)
+	if ok {
+		answerReq := &schema.AnswerAddReq{}
+		answerReq.QuestionID = uid.DeShortID(questionInfo.ID)
+		answerReq.UserID = middleware.GetLoginUserIDFromContext(ctx)
+		answerReq.Content = req.AnswerContent
+		answerReq.HTML = req.AnswerHTML
+		answerID, err := qc.answerService.Insert(ctx, answerReq)
+		if err != nil {
+			handler.HandleResponse(ctx, err, nil)
+			return
+		}
+		info, questionInfo, has, err := qc.answerService.Get(ctx, answerID, req.UserID)
+		if err != nil {
+			handler.HandleResponse(ctx, err, nil)
+			return
+		}
+		if !has {
+			handler.HandleResponse(ctx, nil, nil)
+			return
+		}
+		handler.HandleResponse(ctx, err, gin.H{
+			"info":     info,
+			"question": questionInfo,
+		})
 		return
 	}
 

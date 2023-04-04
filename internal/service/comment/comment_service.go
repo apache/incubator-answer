@@ -20,7 +20,6 @@ import (
 	"github.com/answerdev/answer/pkg/encryption"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/uid"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -448,7 +447,6 @@ func (cs *CommentService) GetCommentPersonalWithPage(ctx context.Context, req *s
 			if err != nil {
 				log.Error(err)
 			} else {
-				spew.Dump("==", objInfo)
 				commentResp.ObjectType = objInfo.ObjectType
 				commentResp.Title = objInfo.Title
 				commentResp.UrlTitle = htmltext.UrlTitle(objInfo.Title)
