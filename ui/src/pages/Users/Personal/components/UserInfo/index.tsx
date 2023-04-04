@@ -5,11 +5,10 @@ import { Link } from 'react-router-dom';
 
 import classnames from 'classnames';
 
-import { Avatar, Icon } from '@/components';
+import { Avatar, Icon, SvgIcon } from '@/components';
 import type { UserInfoRes } from '@/common/interface';
 import { getUcBranding, UcBrandingEntry } from '@/services';
 import { userCenterStore } from '@/stores';
-import { base64ToSvg } from '@/utils';
 
 interface Props {
   data: UserInfoRes;
@@ -124,13 +123,7 @@ const Index: FC<Props> = ({ data }) => {
                 className={classnames('d-flex', 'align-items-center', {
                   'me-3': i < a.length - 1,
                 })}>
-                {b.icon ? (
-                  <span
-                    dangerouslySetInnerHTML={{
-                      __html: base64ToSvg(b.icon),
-                    }}
-                  />
-                ) : null}
+                {b.icon ? <SvgIcon base64={b.icon} /> : null}
                 {b.url ? (
                   <a className="link-secondary" href={b.url}>
                     {b.label}

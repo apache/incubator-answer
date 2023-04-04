@@ -158,10 +158,6 @@ const routes: RouteNode[] = [
         guard: () => {
           const notLogged = guard.notLogged();
           if (notLogged.ok) {
-            const la = guard.loginAgent();
-            if (!la.ok) {
-              return la;
-            }
             return notLogged;
           }
 

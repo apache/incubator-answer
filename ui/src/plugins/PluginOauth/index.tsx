@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 
 import { useGetStartUseOauthConnector } from '@/services';
-import { base64ToSvg } from '@/utils';
+import { SvgIcon } from '@/components';
 
 interface Props {
   className?: string;
@@ -20,12 +20,7 @@ const Index: FC<Props> = ({ className }) => {
       {data?.map((item) => {
         return (
           <Button variant="outline-secondary" href={item.link} key={item.name}>
-            <span
-              dangerouslySetInnerHTML={{
-                __html: base64ToSvg(item.icon),
-              }}
-            />
-
+            <SvgIcon base64={item.icon} />
             <span>{t('connect', { auth_name: item.name })}</span>
           </Button>
         );

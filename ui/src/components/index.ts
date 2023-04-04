@@ -3,6 +3,7 @@ import Editor, { EditorRef, htmlRender } from './Editor';
 import Header from './Header';
 import Footer from './Footer';
 import Icon from './Icon';
+import SvgIcon from './Icon/svg';
 import Modal from './Modal';
 import TagSelector from './TagSelector';
 import Unactivate from './Unactivate';
@@ -42,6 +43,7 @@ export {
   Header,
   Footer,
   Icon,
+  SvgIcon,
   Modal,
   Unactivate,
   UploadImg,
