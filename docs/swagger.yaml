@@ -1019,6 +1019,33 @@ definitions:
     - tags
     - title
     type: object
+  schema.QuestionAddByAnswer:
+    properties:
+      answer_content:
+        maxLength: 65535
+        minLength: 6
+        type: string
+      content:
+        description: content
+        maxLength: 65535
+        minLength: 6
+        type: string
+      tags:
+        description: tags
+        items:
+          $ref: '#/definitions/schema.TagItem'
+        type: array
+      title:
+        description: question title
+        maxLength: 150
+        minLength: 6
+        type: string
+    required:
+    - answer_content
+    - content
+    - tags
+    - title
+    type: object
   schema.QuestionPageReq:
     properties:
       orderCond:
@@ -3794,6 +3821,30 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: update question
+      tags:
+      - Question
+  /answer/api/v1/question/answer:
+    post:
+      consumes:
+      - application/json
+      description: add question and answer
+      parameters:
+      - description: question
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.QuestionAddByAnswer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: add question and answer
       tags:
       - Question
   /answer/api/v1/question/closemsglist:

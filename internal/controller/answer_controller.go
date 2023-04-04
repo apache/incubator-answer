@@ -138,7 +138,6 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 		return
 	}
 	if !has {
-		// todo !has
 		handler.HandleResponse(ctx, nil, nil)
 		return
 	}
