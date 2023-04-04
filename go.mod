@@ -156,3 +156,5 @@ require (
 	modernc.org/token v1.0.0 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
+
+replace lukechampine.com/uint128 v1.1.1 => github.com/aichy126/uint128 v1.1.1
