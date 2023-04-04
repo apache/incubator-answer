@@ -661,6 +661,7 @@ ui:
       label: 确认新密码
   settings:
     page_title: 设置
+    goto_modify: 前往修改
     nav:
       profile: 我的资料
       notification: 通知
