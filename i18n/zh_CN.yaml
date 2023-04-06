@@ -1363,8 +1363,8 @@ ui:
     no_data: "空空如也"
   users:
     title: 用户
-    users_with_the_most_reputation: 信誉积分最高的用户
-    users_with_the_most_vote: 投票最多的用户
+    users_with_the_most_reputation: 本周信誉积分最高的用户
+    users_with_the_most_vote: 本周投票最多的用户
     staffs: 我们的社区工作人员
     reputation: 声望值
     votes: 投票
