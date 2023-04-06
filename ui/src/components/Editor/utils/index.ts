@@ -80,6 +80,15 @@ export function createEditorUtils(
 
 export function htmlRender(el: HTMLElement | null) {
   if (!el) return;
+  // Replace all br tags with newlines
+  // Fixed an issue where the BR tag in the editor block formula HTML caused rendering errors.
+  el.querySelectorAll('p').forEach((p) => {
+    if (p.innerHTML.startsWith('$$') && p.innerHTML.endsWith('$$')) {
+      const str = p.innerHTML.replace(/<br>/g, '\n');
+      p.innerHTML = str;
+    }
+  });
+
   import('mermaid').then(({ default: mermaid }) => {
     mermaid.initialize({ startOnLoad: false });
 
@@ -99,6 +108,7 @@ export function htmlRender(el: HTMLElement | null) {
       render(el, {
         delimiters: [
           { left: '$$', right: '$$', display: true },
+          { left: '$$<br>', right: '<br>$$', display: true },
           {
             left: '\\begin{equation}',
             right: '\\end{equation}',
@@ -114,8 +124,26 @@ export function htmlRender(el: HTMLElement | null) {
     },
   );
 
-  // remove change table style to htmlToReact function
-  /**
-   * @description: You modify the DOM with other scripts after React has rendered the DOM. This way, on the next render cycle (re-render), React cannot find the DOM node it rendered before, because it has been modified or removed by other scripts.
-   */
+  // change table style
+
+  el.querySelectorAll('table').forEach((table) => {
+    if (
+      (table.parentNode as HTMLDivElement)?.classList.contains(
+        'table-responsive',
+      )
+    ) {
+      return;
+    }
+
+    table.classList.add('table', 'table-bordered');
+    const div = document.createElement('div');
+    div.className = 'table-responsive';
+    table.parentNode?.replaceChild(div, table);
+    div.appendChild(table);
+  });
+
+  // video width 100%
+  el.querySelectorAll('video').forEach((video) => {
+    video.style.width = '100%';
+  });
 }
