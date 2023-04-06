@@ -141,9 +141,4 @@ export function htmlRender(el: HTMLElement | null) {
     table.parentNode?.replaceChild(div, table);
     div.appendChild(table);
   });
-
-  // video width 100%
-  el.querySelectorAll('video').forEach((video) => {
-    video.style.width = '100%';
-  });
 }
