@@ -1,1 +1,147 @@
-namespace: default
+# Default values for answer.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: answerdev/answer
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+# Environment variables
+# Configure environment variables below
+# https://answer.dev/docs/env
+env:
+  - name: LOG_LEVEL
+    # [DEBUG INFO WARN ERROR]
+    value: "INFO"
+  # uncomment the below values to use AUTO_INSTALL and not have to go through the setup process.
+  # Once used to do the initial setup, these variables wont be used moving forward.
+  # You must at a minimum comment AUTO_INSTALL after initial setup to prevent an error about the database already being initiated.
+  # - name: AUTO_INSTALL
+  #   value: "true"
+  # - name: DB_TYPE
+  #   value: "sqlite3"
+  #   # DB_FILE Only for sqlite3
+  # - name: DB_FILE
+  #   value: "/data/answer.db"
+  # - name: LANGUAGE
+  #   value: "en-US"
+  # - name: SITE_NAME
+  #   value: "MyAnswer"
+  # - name: SITE_URL
+  #   value: "http://localhost:80"
+  # - name: CONTACT_EMAIL
+  #   value: "support@mydomain.com"
+  # - name: ADMIN_NAME
+  #   # lowercase
+  #   value: "myadmin"
+  # - name: ADMIN_PASSWORD
+  #   # 32 Characters MAX
+  #   value: "MyInsecurePasswordInTheRepo!"
+  #   # Use valueFrom to use a secret
+  #   # valueFrom:
+  #   #   secretKeyRef:
+  #   #     key: answer-admin-password
+  #   #     name: answer-secrets
+  # - name: ADMIN_EMAIL
+  #   value: "myAdmin@mydomain.com"
+
+# Configure extra containers
+extraContainers: []
+  # - name: cloudsql-proxy 
+  #   image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.1.2
+  #   command:
+  #     - /cloud-sql-proxy
+  #   args:
+  #     - project:region:instance
+  #     - --port=5432
+  #     - --auto-iam-authn
+  #   ports:
+  #     - containerPort: 5432
+
+# Persistence for the /data volume
+# Without persistence, your uploads and config.yaml will not be remembered between restarts.
+persistence:
+  enabled: true
+  # If set to "-", storageClassName: "", which disables dynamic provisioning
+  # If undefined (the default) or set to null, no storageClassName spec is
+  #  set, choosing the default provisioner.  (gp2 on AWS, standard on
+  #  GKE, AWS & OpenStack)
+  # storageClass: "-"
+  accessMode: ReadWriteOnce
+  size: 5Gi
+  annotations: {}
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: answer.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: answer-tls
+  #    hosts:
+  #      - answer.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

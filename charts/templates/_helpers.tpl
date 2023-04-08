@@ -34,7 +34,7 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "answer.labels" -}}
-helm.sh/chart: {{ .Release.Name }}
+helm.sh/chart: {{ include "answer.chart" . }}
 {{ include "answer.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
@@ -46,6 +46,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 Selector labels
 */}}
 {{- define "answer.selectorLabels" -}}
-app.kubernetes.io/name: answer
+app.kubernetes.io/name: {{ include "answer.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "answer.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create }}
+{{- default (include "answer.fullname" .) .Values.serviceAccount.name }}
+{{- else }}
+{{- default "default" .Values.serviceAccount.name }}
+{{- end }}
 {{- end }}

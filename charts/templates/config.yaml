@@ -1,9 +1,0 @@
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: answer-config
-  namespace: {{ .Values.namespace | default "default" | quote }}
-data:
-  default.yaml: |-
-    #
