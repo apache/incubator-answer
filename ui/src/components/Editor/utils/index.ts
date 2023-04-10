@@ -144,7 +144,6 @@ export function htmlRender(el: HTMLElement | null) {
 
   // add rel nofollow for link not inlcludes domain
   el.querySelectorAll('a').forEach((a) => {
-    if (a?.href?.includes('http')) return;
     const base = window.location.origin;
     const targetUrl = new URL(a.href, base);
     if (targetUrl.toString() !== window.location.href) {
