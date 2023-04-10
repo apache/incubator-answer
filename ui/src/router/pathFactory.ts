@@ -20,7 +20,7 @@ const tagEdit = (tagId: string) => {
 const questionLanding = (questionId: string, slugTitle: string = '') => {
   const { seo } = seoSettingStore.getState();
   if (!questionId) {
-    return slugTitle ? `/questions/null/slugTitle` : '/questions/null';
+    return slugTitle ? `/questions/null/${slugTitle}` : '/questions/null';
   }
   // @ts-ignore
   if (/[13]/.test(seo.permalink) && slugTitle) {
