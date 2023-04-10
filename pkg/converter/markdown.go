@@ -37,6 +37,7 @@ func Markdown2HTML(source string) string {
 	filter.AllowStyling()
 	filter.RequireNoFollowOnLinks(false)
 	filter.RequireParseableURLs(false)
+	filter.RequireNoFollowOnFullyQualifiedLinks(false)
 	html = filter.Sanitize(html)
 	return html
 }
