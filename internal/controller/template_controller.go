@@ -23,6 +23,8 @@ import (
 	"github.com/segmentfault/pacman/log"
 )
 
+var SiteUrl = ""
+
 type TemplateController struct {
 	scriptPath               string
 	cssPath                  string
@@ -67,6 +69,7 @@ func (tc *TemplateController) SiteInfo(ctx *gin.Context) *schema.TemplateSiteInf
 	if err != nil {
 		log.Error(err)
 	}
+	SiteUrl = resp.General.SiteUrl
 	resp.Interface, err = tc.siteInfoService.GetSiteInterface(ctx)
 	if err != nil {
 		log.Error(err)

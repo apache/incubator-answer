@@ -28,7 +28,7 @@
           {{end}}
         </div>
         <article class="fmt text-break text-wrap mt-4">
-          {{templateHTML .detail.HTML}}
+          {{formatLinkNofollow .detail.HTML}}
         </article>
         <div class="mt-4">
           <div role="group" class="btn-group">
@@ -98,7 +98,7 @@
       {{range .answers}}
       <div id="10020000000000930" class="answer-item py-4">
         <article class="fmt">
-          {{templateHTML .HTML}}
+          {{formatLinkNofollow .HTML}}
         </article>
         <div class="d-flex align-items-center mt-4">
           <div class="">

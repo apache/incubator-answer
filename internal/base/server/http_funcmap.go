@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/controller"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/day"
@@ -40,6 +41,9 @@ var funcMap = template.FuncMap{
 	},
 	"templateHTML": func(data string) template.HTML {
 		return template.HTML(data)
+	},
+	"formatLinkNofollow": func(data string) template.HTML {
+		return template.HTML(FormatLinkNofollow(data))
 	},
 	"translator": func(la i18n.Language, data string, params ...interface{}) string {
 		trans := translator.GlobalTrans.Tr(la, data)
@@ -115,4 +119,22 @@ var funcMap = template.FuncMap{
 	"urlTitle": func(title string) string {
 		return htmltext.UrlTitle(title)
 	},
+}
+
+func FormatLinkNofollow(html string) string {
+	var hrefRegexp = regexp.MustCompile("(?m)<a.*?[^<]>.*?</a>")
+	match := hrefRegexp.FindAllString(html, -1)
+	if match != nil {
+		for _, v := range match {
+			hasNofollow := strings.Contains(v, "rel=\"nofollow\"")
+			hasSiteUrl := strings.Contains(v, controller.SiteUrl)
+			if !hasSiteUrl {
+				if !hasNofollow {
+					nofollowUrl := strings.Replace(v, "<a", "<a rel=\"nofollow\"", 1)
+					html = strings.Replace(html, v, nofollowUrl, 1)
+				}
+			}
+		}
+	}
+	return html
 }
