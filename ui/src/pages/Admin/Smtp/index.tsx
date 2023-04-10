@@ -179,7 +179,7 @@ const Smtp: FC = () => {
   }, [setting]);
 
   useEffect(() => {
-    if (formData.smtp_authentication.value === '') {
+    if (!/true|false/.test(formData.smtp_authentication.value)) {
       return;
     }
     if (formData.smtp_authentication.value) {
