@@ -18,6 +18,7 @@ import (
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/obj"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -89,6 +90,10 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 		item.ObjectType, _ = obj.GetObjectTypeStrByObjectID(act.ObjectID)
 		if item.Cancelled {
 			item.CancelledAt = act.CancelledAt.Unix()
+		}
+
+		if item.ObjectType == constant.QuestionObjectType || item.ObjectType == constant.AnswerObjectType {
+			item.ObjectID = uid.EnShortID(act.ObjectID)
 		}
 
 		// database save activity type is number, change to activity type string is like "question.asked".
