@@ -33,7 +33,7 @@ const Smtp: FC = () => {
         description: t('smtp_host.text'),
       },
       encryption: {
-        type: 'boolean',
+        type: 'string',
         title: t('encryption.label'),
         description: t('encryption.text'),
         enum: ['SSL', ''],
@@ -179,7 +179,7 @@ const Smtp: FC = () => {
   }, [setting]);
 
   useEffect(() => {
-    if (formData.smtp_authentication.value === '') {
+    if (!/true|false/.test(formData.smtp_authentication.value)) {
       return;
     }
     if (formData.smtp_authentication.value) {
