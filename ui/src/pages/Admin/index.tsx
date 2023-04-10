@@ -1,7 +1,7 @@
 import { FC, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useMatch } from 'react-router-dom';
 
 import { cloneDeep } from 'lodash';
 
@@ -23,7 +23,9 @@ const g10Paths = [
 ];
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
-  const { pathname } = useLocation();
+  const pathMatch = useMatch('/admin/:path');
+  const curPath = pathMatch?.params.path || 'dashboard';
+
   const interfaceLang = interfaceStore((_) => _.interface.language);
   const { data: configurablePlugins, mutate: updateConfigurablePlugins } =
     useQueryPlugins({
@@ -78,7 +80,7 @@ const Index: FC = () => {
           <Col lg={2}>
             <AccordionNav menus={menus} path="/admin/" />
           </Col>
-          <Col lg={g10Paths.find((v) => pathname.includes(v)) ? 10 : 6}>
+          <Col lg={g10Paths.find((v) => curPath.includes(v)) ? 10 : 6}>
             <Outlet />
           </Col>
         </Row>

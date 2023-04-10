@@ -2,6 +2,7 @@ import {
   ForwardRefRenderFunction,
   forwardRef,
   useImperativeHandle,
+  useEffect,
 } from 'react';
 import { Form, Button, Stack } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -155,16 +156,10 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
    */
   const setDefaultValueAsDomBehaviour = () => {
     keys.forEach((k) => {
-      const formVal = formData[k]?.value;
+      const fieldVal = formData[k]?.value;
       const metaProp = properties[k];
       const uiCtrl = uiSchema[k]?.['ui:widget'];
-      if (
-        !metaProp ||
-        !uiCtrl ||
-        formVal ||
-        formVal === 0 ||
-        formVal === false
-      ) {
+      if (!metaProp || !uiCtrl || fieldVal !== undefined) {
         return;
       }
       if (uiCtrl === 'select' && metaProp.enum?.[0] !== undefined) {
@@ -176,7 +171,9 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
       }
     });
   };
-  setDefaultValueAsDomBehaviour();
+  useEffect(() => {
+    setDefaultValueAsDomBehaviour();
+  }, [formData]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -348,7 +345,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   useImperativeHandle(ref, () => ({
     validator,
   }));
-  console.log('uiSchema: ', uiSchema);
   return (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {
@@ -577,7 +573,6 @@ export const initFormData = (schema: JSONSchema): Type.FormDataType => {
   Object.keys(schema.properties).forEach((key) => {
     const prop = schema.properties[key];
     const defaultVal = prop?.default;
-
     formData[key] = {
       value: defaultVal,
       isInvalid: false,
