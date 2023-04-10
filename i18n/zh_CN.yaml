@@ -11,6 +11,17 @@ backend:
       other: 未授权。
     database_error:
       other: 数据服务器错误。
+  action:
+    report:
+      other: 举报
+    edit:
+      other: 编辑
+    delete:
+      other: 删除
+    close:
+      other: 关闭
+    reopen:
+      other: 重新打开
   role:
     name:
       user:
