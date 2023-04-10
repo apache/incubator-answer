@@ -146,7 +146,8 @@ export function htmlRender(el: HTMLElement | null) {
   el.querySelectorAll('a').forEach((a) => {
     const base = window.location.origin;
     const targetUrl = new URL(a.href, base);
-    if (targetUrl.toString() !== window.location.href) {
+
+    if (targetUrl.origin !== base) {
       a.rel = 'nofollow';
     }
   });
