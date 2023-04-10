@@ -12,6 +12,17 @@ backend:
       other: Unauthorized.
     database_error:
       other: Data server error.
+  action:
+    report:
+      other: Flag
+    edit:
+      other: Edit
+    delete:
+      other: Delete
+    close:
+      other: Close
+    reopen:
+      other: Reopen
   role:
     name:
       user:
