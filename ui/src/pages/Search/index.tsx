@@ -21,7 +21,7 @@ const Index = () => {
   const [searchParams] = useSearchParams();
   const page = searchParams.get('page') || 1;
   const q = searchParams.get('q') || '';
-  const order = searchParams.get('order') || 'relevance';
+  const order = searchParams.get('order') || 'active';
 
   const { data, isLoading } = useSearch({
     q,

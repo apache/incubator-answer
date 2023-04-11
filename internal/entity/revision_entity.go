@@ -5,6 +5,8 @@ import (
 )
 
 const (
+	// RevisioNnormalStatus this revision is Nnormal
+	RevisioNnormalStatus = 0
 	// RevisionUnreviewedStatus this revision is unreviewed
 	RevisionUnreviewedStatus = 1
 	// RevisionReviewPassStatus this revision is reviewed and approved by operator

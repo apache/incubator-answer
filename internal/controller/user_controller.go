@@ -529,9 +529,9 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 		return
 	}
 
-	err := uc.userService.UserChangeEmailVerify(ctx, req.Content)
+	resp, err := uc.userService.UserChangeEmailVerify(ctx, req.Content)
 	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
-	handler.HandleResponse(ctx, err, nil)
+	handler.HandleResponse(ctx, err, resp)
 }
 
 // UserRanking get user ranking

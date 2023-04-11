@@ -13,7 +13,7 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteNode[]) => {
   routeNodes.forEach((rn) => {
     if (rn.page === 'pages/Layout') {
       rn.element = rn.guard ? (
-        <RouteGuard onEnter={rn.guard} path={rn.path}>
+        <RouteGuard onEnter={rn.guard} path={rn.path} page={rn.page}>
           <Layout />
         </RouteGuard>
       ) : (
@@ -30,7 +30,7 @@ const routeWrapper = (routeNodes: RouteNode[], root: RouteNode[]) => {
       rn.element = (
         <Suspense>
           {rn.guard ? (
-            <RouteGuard onEnter={rn.guard} path={rn.path}>
+            <RouteGuard onEnter={rn.guard} path={rn.path} page={rn.page}>
               <Ctrl />
             </RouteGuard>
           ) : (

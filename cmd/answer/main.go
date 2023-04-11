@@ -53,6 +53,7 @@ func runApp() {
 		panic(err)
 	}
 	constant.Version = Version
+	constant.Revision = Revision
 	schema.AppStartTime = time.Now()
 
 	defer cleanup()

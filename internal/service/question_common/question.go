@@ -335,12 +335,15 @@ func (qs *QuestionCommon) FormatQuestionsPage(
 		} else {
 			item.Tags = make([]*schema.TagResp, 0)
 		}
-		userInfo := userInfoMap[item.Operator.ID]
-		if userInfo != nil {
-			item.Operator.DisplayName = userInfo.DisplayName
-			item.Operator.Username = userInfo.Username
-			item.Operator.Rank = userInfo.Rank
+		userInfo, ok := userInfoMap[item.Operator.ID]
+		if ok {
+			if userInfo != nil {
+				item.Operator.DisplayName = userInfo.DisplayName
+				item.Operator.Username = userInfo.Username
+				item.Operator.Rank = userInfo.Rank
+			}
 		}
+
 	}
 	return formattedQuestions, nil
 }
@@ -414,6 +417,11 @@ func (qs *QuestionCommon) RemoveQuestion(ctx context.Context, req *schema.Remove
 	if !has {
 		return nil
 	}
+
+	if questionInfo.Status == entity.QuestionStatusDeleted {
+		return nil
+	}
+
 	questionInfo.Status = entity.QuestionStatusDeleted
 	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
 	if err != nil {

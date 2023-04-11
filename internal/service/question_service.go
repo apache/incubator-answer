@@ -572,6 +572,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	// It's not you or the administrator that needs to be reviewed
 	if !canUpdate {
 		revisionDTO.Status = entity.RevisionUnreviewedStatus
+		revisionDTO.UserID = req.UserID //use revision userid
 	} else {
 		//Direct modification
 		revisionDTO.Status = entity.RevisionReviewPassStatus

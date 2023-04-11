@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -6,10 +6,10 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 import classNames from 'classnames';
 
-import { handleFormError } from '@/utils';
+import { handleFormError, scrollToDocTop } from '@/utils';
 import { usePageTags, usePromptWithUnload } from '@/hooks';
 import { pathFactory } from '@/router/pathFactory';
-import { Editor, EditorRef, Icon } from '@/components';
+import { Editor, EditorRef, Icon, htmlRender } from '@/components';
 import type * as Type from '@/common/interface';
 import {
   useQueryAnswerInfo,
@@ -23,31 +23,47 @@ interface FormDataItem {
   content: Type.FormValue<string>;
   description: Type.FormValue<string>;
 }
-const initFormData = {
-  content: {
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  },
-  description: {
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  },
-};
+
 const Index = () => {
   const { aid = '', qid = '' } = useParams();
   const [focusType, setForceType] = useState('');
+  useLayoutEffect(() => {
+    scrollToDocTop();
+  }, []);
 
   const { t } = useTranslation('translation', { keyPrefix: 'edit_answer' });
   const navigate = useNavigate();
+
+  const initFormData = {
+    content: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+    description: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+  };
 
   const { data } = useQueryAnswerInfo(aid);
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [immData, setImmData] = useState(initFormData);
   const [contentChanged, setContentChanged] = useState(false);
 
-  initFormData.content.value = data?.info.content || '';
+  useLayoutEffect(() => {
+    if (data?.info?.content) {
+      setFormData({
+        ...formData,
+        content: {
+          value: data.info.content,
+          isInvalid: false,
+          errorMsg: '',
+        },
+      });
+    }
+  }, [data?.info?.content]);
 
   const { data: revisions = [] } = useQueryRevisions(aid);
 
@@ -56,6 +72,13 @@ const Index = () => {
   });
 
   const questionContentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!questionContentRef?.current) {
+      return;
+    }
+    htmlRender(questionContentRef.current);
+  }, [questionContentRef]);
 
   usePromptWithUnload({
     when: contentChanged,
@@ -147,9 +170,11 @@ const Index = () => {
   const handleSelectedRevision = (e) => {
     const index = e.target.value;
     const revision = revisions[index];
-    formData.content.value = revision.content.content;
-    setImmData({ ...formData });
-    setFormData({ ...formData });
+    if (revision?.content) {
+      formData.content.value = revision.content.content;
+      setImmData({ ...formData });
+      setFormData({ ...formData });
+    }
   };
 
   const backPage = () => {
@@ -192,7 +217,7 @@ const Index = () => {
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group controlId="revision" className="mb-3">
               <Form.Label>{t('form.fields.revision.label')}</Form.Label>
-              <Form.Select onChange={handleSelectedRevision}>
+              <Form.Select onChange={handleSelectedRevision} defaultValue={0}>
                 {revisions.map(({ create_at, reason, user_info }, index) => {
                   const date = dayjs(create_at * 1000)
                     .tz()

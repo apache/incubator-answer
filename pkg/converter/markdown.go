@@ -34,6 +34,10 @@ func Markdown2HTML(source string) string {
 	}
 	html := buf.String()
 	filter := bluemonday.UGCPolicy()
+	filter.AllowStyling()
+	filter.RequireNoFollowOnLinks(false)
+	filter.RequireParseableURLs(false)
+	filter.RequireNoFollowOnFullyQualifiedLinks(false)
 	html = filter.Sanitize(html)
 	return html
 }
@@ -110,6 +114,7 @@ func (r *DangerousHTMLRenderer) renderLink(w util.BufWriter, source []byte, node
 	n := node.(*ast.Link)
 	if entering && r.renderLinkIsUrl(string(n.Destination)) {
 		_, _ = w.WriteString("<a href=\"")
+		// _, _ = w.WriteString("<a test=\"1\" rel=\"nofollow\" href=\"")
 		if r.Unsafe || !html.IsDangerousURL(n.Destination) {
 			_, _ = w.Write(util.EscapeHTML(util.URLEscape(n.Destination, true)))
 		}

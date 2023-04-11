@@ -1,8 +1,9 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
 import { useLegalPrivacy } from '@/services';
+import { htmlRender } from '@/components';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'nav_menus' });
@@ -12,6 +13,15 @@ const Index: FC = () => {
   const { data: privacy } = useLegalPrivacy();
   const contentText = privacy?.privacy_policy_original_text;
   let matchUrl: URL | undefined;
+
+  useEffect(() => {
+    const fmt = document.querySelector('.fmt') as HTMLElement;
+    if (!fmt) {
+      return;
+    }
+    htmlRender(fmt);
+  }, [privacy?.privacy_policy_parsed_text]);
+
   try {
     if (contentText) {
       matchUrl = new URL(contentText);

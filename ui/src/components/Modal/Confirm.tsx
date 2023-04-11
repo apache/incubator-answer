@@ -45,7 +45,7 @@ const Index = ({
         cancelBtnVariant={cancelBtnVariant}
         confirmBtnVariant={confirmBtnVariant}
         {...props}>
-        <div dangerouslySetInnerHTML={{ __html: content }} />
+        <p dangerouslySetInnerHTML={{ __html: content }} />
       </Modal>,
     );
   }
