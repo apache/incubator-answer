@@ -11,6 +11,17 @@ backend:
       other: Unauthorized.
     database_error:
       other: Data server error.
+  action:
+    report:
+      other: Flag
+    edit:
+      other: Edit
+    delete:
+      other: Delete
+    close:
+      other: Close
+    reopen:
+      other: Reopen
   role:
     name:
       user:
@@ -99,6 +110,8 @@ backend:
     rank:
       fail_to_meet_the_condition:
         other: Rank fail to meet the condition.
+      vote_fail_to_meet_the_condition:
+        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
     report:
       handle_failed:
         other: Report handle failed.
@@ -288,6 +301,7 @@ ui:
     users: Users
     http_404: HTTP Error 404
     http_50X: HTTP Error 500
+    http_403: HTTP Error 403
   notifications:
     title: Notifications
     inbox: Inbox
@@ -505,6 +519,7 @@ ui:
       Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
     tip_answer: >-
       Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: Edit Answer
     default_reason: Edit answer
@@ -754,6 +769,11 @@ ui:
     answered: answered
     closed_in: Closed in
     show_exist: Show existing question.
+    useful: Useful
+    question_useful: It is useful and clear
+    question_un_useful: It is unclear or not useful
+    answer_useful: It is useful
+    answer_un_useful: It is not useful
     answers:
       title: Answers
       score: Score
@@ -770,7 +790,14 @@ ui:
         <p>Are you sure you want to add another answer?</p><p>You could use the edit link to refine and improve your existing answer, instead.</p>
       empty: Answer cannot be empty.
       characters: content must be at least 6 characters in length.
+      tips:
+        header_1: Thanks for your answer
+        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
+        li1_2: Back up any statements you make with references or personal experience.
+        header_2: But <strong>avoid</strong> ...
+        li2_1: Asking for help, seeking clarification, or responding to other answers.
     reopen:
+      confirm_btn: Reopen
       title: Reopen this post
       content: Are you sure you want to reopen?
       success: This post has been reopened
@@ -985,13 +1012,11 @@ ui:
     votes: votes
     answers: answers
     accepted: Accepted
-  page_404:
-    http_error: HTTP Error 404
-    desc: "Unfortunately, this page doesn't exist."
-    back_home: Back to homepage
-  page_50X:
-    http_error: HTTP Error 500
-    desc: The server encountered an error and could not complete your request.
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: You don’t have permission to access this page.
+    desc_404: Unfortunately, this page doesn't exist.
+    desc_50X: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
     desc: "We are under maintenance, we'll be back soon."
@@ -1374,8 +1399,8 @@ ui:
     no_data: "We couldn't find anything."
   users:
     title: Users
-    users_with_the_most_reputation: Users with the highest reputation scores
-    users_with_the_most_vote: Users who voted the most
+    users_with_the_most_reputation: Users with the highest reputation scores this week
+    users_with_the_most_vote: Users who voted the most this week
     staffs: Our community staff
     reputation: reputation
     votes: votes
