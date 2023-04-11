@@ -328,6 +328,7 @@ export interface SiteSettings {
   theme: AdminSettingsTheme;
   site_seo: AdminSettingsSeo;
   version: string;
+  revision: string;
 }
 
 export interface AdminSettingBranding {
