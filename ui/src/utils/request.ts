@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 
 import { Modal } from '@/components';
-import { loggedUserInfoStore, toastStore, errorCode } from '@/stores';
+import { loggedUserInfoStore, toastStore, errorCodeStore } from '@/stores';
 import { LOGGED_TOKEN_STORAGE_KEY, IGNORE_PATH_LIST } from '@/common/constants';
 import { RouteAlias } from '@/router/alias';
 import { getCurrentLang } from '@/utils/localize';
@@ -16,8 +16,12 @@ const baseConfig = {
   withCredentials: true,
 };
 
-interface APIconfig extends AxiosRequestConfig {
-  allow404: boolean;
+interface ApiConfig extends AxiosRequestConfig {
+  // Configure whether to allow takeover of 404 errors
+  allow404?: boolean;
+  ignoreError?: '403' | '50X';
+  // Configure whether to pass errors directly
+  passingError?: boolean;
 }
 
 class Request {
@@ -52,14 +56,17 @@ class Request {
         return data;
       },
       (error) => {
-        const { status, data: respData } = error.response || {};
-        const { data = {}, msg = '', reason = '' } = respData || {};
-
-        console.log('response error:', error);
-
+        const {
+          status,
+          data: errModel,
+          config: errConfig,
+        } = error.response || {};
+        const { data = {}, msg = '' } = errModel || {};
         if (status === 400) {
-          // show error message
-          if (data instanceof Object && data.err_type) {
+          if (data?.err_type && errConfig?.passingError) {
+            return errModel;
+          }
+          if (data?.err_type) {
             if (data.err_type === 'toast') {
               // toast error message
               toastStore.getState().show({
@@ -90,7 +97,6 @@ class Request {
             return Promise.reject({
               code: status,
               msg,
-              reason,
               isError: true,
               list: data,
             });
@@ -107,14 +113,13 @@ class Request {
         // 401: Re-login required
         if (status === 401) {
           // clear userinfo
-          errorCode.getState().reset();
+          errorCodeStore.getState().reset();
           loggedUserInfoStore.getState().clear();
           floppyNavigation.navigateToLogin();
           return Promise.reject(false);
         }
         if (status === 403) {
           // Permission interception
-          errorCode.getState().reset();
           if (data?.type === 'url_expired') {
             // url expired
             floppyNavigation.navigate(RouteAlias.activationFailed, () => {
@@ -137,6 +142,14 @@ class Request {
             return Promise.reject(false);
           }
 
+          if (isIgnoredPath(IGNORE_PATH_LIST)) {
+            return Promise.reject(false);
+          }
+          if (error.config?.url.includes('/admin/api')) {
+            errorCodeStore.getState().update('403');
+            return Promise.reject(false);
+          }
+
           if (msg) {
             toastStore.getState().show({
               msg,
@@ -150,14 +163,18 @@ class Request {
           if (isIgnoredPath(IGNORE_PATH_LIST)) {
             return Promise.reject(false);
           }
-          errorCode.getState().update('404');
+          errorCodeStore.getState().update('404');
           return Promise.reject(false);
         }
         if (status >= 500) {
           if (isIgnoredPath(IGNORE_PATH_LIST)) {
             return Promise.reject(false);
           }
-          errorCode.getState().update('50X');
+
+          if (error.config?.ignoreError !== '50X') {
+            errorCodeStore.getState().update('50X');
+          }
+
           console.error(
             `Request failed with status code ${status}, ${msg || ''}`,
           );
@@ -171,7 +188,7 @@ class Request {
     return this.instance.request(config);
   }
 
-  public get<T = any>(url: string, config?: APIconfig): Promise<T> {
+  public get<T = any>(url: string, config?: ApiConfig): Promise<T> {
     return this.instance.get(url, config);
   }
 

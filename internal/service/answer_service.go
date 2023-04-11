@@ -326,6 +326,7 @@ func (as *AnswerService) UpdateAccepted(ctx context.Context, req *schema.AnswerA
 		if err != nil {
 			return err
 		}
+		newAnswerInfo.ID = uid.DeShortID(newAnswerInfo.ID)
 		if !newAnswerInfoexist {
 			return errors.BadRequest(reason.AnswerNotFound)
 		}
@@ -335,12 +336,13 @@ func (as *AnswerService) UpdateAccepted(ctx context.Context, req *schema.AnswerA
 	if err != nil {
 		return err
 	}
+	questionInfo.ID = uid.DeShortID(questionInfo.ID)
 	if !exist {
 		return errors.BadRequest(reason.QuestionNotFound)
 	}
-	if questionInfo.UserID != req.UserID {
-		return fmt.Errorf("no permission to set answer")
-	}
+	// if questionInfo.UserID != req.UserID {
+	// 	return fmt.Errorf("no permission to set answer")
+	// }
 	if questionInfo.AcceptedAnswerID == req.AnswerID {
 		return nil
 	}
@@ -351,6 +353,7 @@ func (as *AnswerService) UpdateAccepted(ctx context.Context, req *schema.AnswerA
 		if err != nil {
 			return err
 		}
+		oldAnswerInfo.ID = uid.DeShortID(oldAnswerInfo.ID)
 	}
 
 	err = as.answerRepo.UpdateAccepted(ctx, req.AnswerID, req.QuestionID)

@@ -1,8 +1,7 @@
-import Error50X from '@/pages/50X';
-// import Page404 from '@/pages/404';
+import { HttpErrorContent } from '@/components';
 
-const Index = () => {
-  return <Error50X />;
+const Index = ({ errCode = '50X', errMsg = '' }) => {
+  return <HttpErrorContent httpCode={errCode} errMsg={errMsg} />;
 };
 
 export default Index;

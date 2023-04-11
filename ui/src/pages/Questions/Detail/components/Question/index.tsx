@@ -108,12 +108,13 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
       </div>
       <article
         ref={ref}
-        dangerouslySetInnerHTML={{ __html: data?.html }}
         className="fmt text-break text-wrap mt-4"
+        dangerouslySetInnerHTML={{ __html: data?.html }}
       />
 
       <Actions
         className="mt-4"
+        source="question"
         data={{
           id: data?.id,
           isHate: data?.vote_status === 'vote_down',

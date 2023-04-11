@@ -47,6 +47,8 @@ backend:
         other: Silme izni yok.
       cannot_update:
         other: Düzenleme izni yok.
+      question_closed_cannot_add:
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
         other: Yorum düzenleme izni yok.
@@ -103,6 +105,8 @@ backend:
       not_found:
         other: Rapor bulunamadı.
     tag:
+      already_exist:
+        other: Tag already exists.
       not_found:
         other: Etiket bulunamadı.
       recommend_tag_not_found:
@@ -261,6 +265,7 @@ ui:
     tag: Etiket
     tags: Etiketler
     tag_wiki: tag wiki
+    create_tag: Create Tag
     edit_tag: Etiketi Düzenle
     ask_a_question: Soru Ekle
     edit_question: Soruyu Düzenle
@@ -280,7 +285,9 @@ ui:
     install: Answer Installation
     upgrade: Answer Upgrade
     maintenance: Website Bakımı
-    users: Kullanıcı
+    users: Kullanıcılar
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
   notifications:
     title: Bildirimler
     inbox: Gelen Kutusu
@@ -424,7 +431,7 @@ ui:
             range: Display name up to 35 characters.
         slug_name:
           label: URL Slug
-          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          desc: URL slug up to 35 characters.
           msg:
             empty: URL slug cannot be empty.
             range: URL slug up to 35 characters.
@@ -433,6 +440,7 @@ ui:
           label: Description
     btn_cancel: İptal Et
     btn_submit: Gönder
+    btn_post: Post new tag
   tag_info:
     created_at: Oluşturuldu
     edited_at: Düzenlendi
@@ -1198,6 +1206,9 @@ ui:
         label: Timezone
         msg: Timezone cannot be empty.
         text: Choose a city in the same timezone as you.
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:

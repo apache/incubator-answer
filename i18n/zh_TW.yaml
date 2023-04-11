@@ -47,6 +47,8 @@ backend:
         other: 沒有刪除權限。
       cannot_update:
         other: 沒有更新權限。
+      question_closed_cannot_add:
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
         other: 不允許編輯評論。
@@ -103,6 +105,8 @@ backend:
       not_found:
         other: 找不到報告。
     tag:
+      already_exist:
+        other: Tag already exists.
       not_found:
         other: 找不到標籤。
       recommend_tag_not_found:
@@ -261,6 +265,7 @@ ui:
     tag: 標籤
     tags: 標籤
     tag_wiki: 標籤 wiki
+    create_tag: Create Tag
     edit_tag: 編輯標籤
     ask_a_question: 提問題
     edit_question: 編輯問題
@@ -281,6 +286,8 @@ ui:
     upgrade: Answer 升級
     maintenance: 網站維護
     users: 用戶
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
   notifications:
     title: 通知
     inbox: 收件夾
@@ -424,7 +431,7 @@ ui:
             range: 顯示名稱不能超過 35 個字符。
         slug_name:
           label: URL 固定連結
-          desc: '必須由 "a-z", "0-9", "+ # - ." 組成'
+          desc: URL slug up to 35 characters.
           msg:
             empty: URL 固定連結不能為空。
             range: URL 固定連結不能超過 35 個字元。
@@ -433,6 +440,7 @@ ui:
           label: 描述
     btn_cancel: 取消
     btn_submit: 提交
+    btn_post: Post new tag
   tag_info:
     created_at: 創建於
     edited_at: 編輯於
@@ -977,13 +985,11 @@ ui:
     votes: 得票
     answers: 回答
     accepted: 已採納
-  page_404:
-    http_error: HTTP Error 404
-    desc: "很抱歉，此頁面不存在。"
-    back_home: 回到首頁
-  page_50X:
-    http_error: HTTP Error 500
-    desc: 伺服器遇到了一個錯誤，無法完成你的請求。
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: 你无权访问此頁面。
+    desc_404: 很抱歉，此頁面不存在。
+    desc_50X: 伺服器遇到了一個錯誤，無法完成你的請求。
     back_home: 回到首頁
   page_maintenance:
     desc: "我們正在維護中，很快就會回來。"
@@ -1198,6 +1204,9 @@ ui:
         label: 時區
         msg: 時區不能為空。
         text: 選擇一個與您相同時區的城市。
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:

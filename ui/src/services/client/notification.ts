@@ -34,7 +34,7 @@ export const useQueryNotificationStatus = () => {
 
   return useSWR<Type.NotificationStatus>(
     tryLoggedAndActivated().ok ? apiUrl : null,
-    request.instance.get,
+    (url) => request.get(url, { ignoreError: '50X' }),
     {
       refreshInterval: 3000,
     },

@@ -11,6 +11,17 @@ backend:
       other: 未授权。
     database_error:
       other: 数据服务器错误。
+  action:
+    report:
+      other: 举报
+    edit:
+      other: 编辑
+    delete:
+      other: 删除
+    close:
+      other: 关闭
+    reopen:
+      other: 重新打开
   role:
     name:
       user:
@@ -35,9 +46,9 @@ backend:
   error:
     admin:
       cannot_update_their_password:
-        other: You cannot modify your password.
+        other: 您无法修改自己的密码。
       cannot_modify_self_status:
-        other: You cannot modify your status.
+        other: 您无法修改自己的状态。
       email_or_password_wrong:
         other: 邮箱和密码不匹配。
     answer:
@@ -48,7 +59,7 @@ backend:
       cannot_update:
         other: 没有更新权限。
       question_closed_cannot_add:
-        other: 问题已关闭不可以新增回答
+        other: 问题已关闭，无法添加。
     comment:
       edit_without_permission:
         other: 不允许编辑评论。
@@ -87,7 +98,7 @@ backend:
         other: 新密码与之前的设置相同
     question:
       already_deleted:
-        other: This post has been deleted.
+        other: 此问题已被删除.
       not_found:
         other: 问题未找到
       cannot_deleted:
@@ -99,12 +110,16 @@ backend:
     rank:
       fail_to_meet_the_condition:
         other: 级别不符合条件
+      vote_fail_to_meet_the_condition:
+        other: 感谢您的投票。您至少需要{{ rank }}声望才能投票。
     report:
       handle_failed:
         other: 报告处理失败
       not_found:
         other: 报告未找到
     tag:
+      already_exist:
+        other: 标签已存在。
       not_found:
         other: 标签未找到
       recommend_tag_not_found:
@@ -263,6 +278,7 @@ ui:
     tag: 标签
     tags: 标签
     tag_wiki: 标签 wiki
+    create_tag: 创建标签
     edit_tag: 编辑标签
     ask_a_question: 提问题
     edit_question: 编辑问题
@@ -283,6 +299,8 @@ ui:
     upgrade: Answer 升级
     maintenance: 网站维护
     users: 用户
+    http_404: HTTP 错误 404
+    http_50X: HTTP 错误 500
   notifications:
     title: 通知
     inbox: 收件箱
@@ -426,7 +444,7 @@ ui:
             range: 显示名称不能超过 35 个字符。
         slug_name:
           label: URL 固定链接
-          desc: '必须由 "a-z", "0-9", "+ # - ." 组成'
+          desc: URL 地址不能超过 35 个字符。
           msg:
             empty: URL 固定链接不能为空。
             range: URL 固定链接不能超过 35 个字符。
@@ -435,6 +453,7 @@ ui:
           label: 描述
     btn_cancel: 取消
     btn_submit: 提交
+    btn_post: 发布新标签
   tag_info:
     created_at: 创建于
     edited_at: 编辑于
@@ -584,7 +603,7 @@ ui:
       placeholder: 搜索
   footer:
     build_on: >-
-      基于<1>Answer</1>--为问答社区提供动力的开源软件。<br />Made with love © {{cc}}.
+      基于 <1>Answer</1> - 为问答社区提供动力的开源软件。<br />Made with love © {{cc}}.
   upload_img:
     name: 更改图片
     loading: 加载中...
@@ -790,7 +809,7 @@ ui:
     approve: 批准
     reject: 拒绝
     skip: 略过
-    discard_draft: Discard draft
+    discard_draft: 丢弃草稿
   search:
     title: 搜索结果
     keywords: 关键词
@@ -927,7 +946,7 @@ ui:
       title: 创建 config.yaml
       label: 已创建 config.yaml 文件。
       desc: >-
-        您可以手动在 <1>/var/wwww/xxx/</1> 目录中创建<1>config.yaml</1> 文件并粘贴以下文本。
+        您可以手动在 <1>/var/wwww/xxx/</1> 目录中创建 <1>config.yaml</1> 文件并粘贴以下文本。
       info: 完成后，点击“下一步”按钮。
     site_information: 站点信息
     admin_account: 管理员账户
@@ -966,8 +985,8 @@ ui:
     good_luck: "玩得愉快，祝您好运！"
     warn_title: 警告
     warn_desc: >-
-      文件<1>config.yaml</1>已存在。如果您需要重置此文件中的任何配置项，请先删除它。
-    install_now: 您可以尝试<1>现在安装</1>。
+      文件 <1>config.yaml</1> 已存在。如果您需要重置此文件中的任何配置项，请先删除它。
+    install_now: 您可以尝试 <1>现在安装</1>。
     installed: 已安裝
     installed_desc: >-
       您似乎已经安装过了。要重新安装，请先清除旧的数据库表。
@@ -979,13 +998,11 @@ ui:
     votes: 个点赞
     answers: 个回答
     accepted: 已被采纳
-  page_404:
-    http_error: HTTP Error 404
-    desc: "很抱歉，此页面不存在。"
-    back_home: 回到主页
-  page_50X:
-    http_error: HTTP Error 500
-    desc: 服务器遇到了一个错误，无法完成你的请求。
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: 你无权访问此页面。
+    desc_404: 很抱歉，此页面不存在。
+    desc_50X: 服务器遇到了一个错误，无法完成你的请求。
     back_home: 回到主页
   page_maintenance:
     desc: "我们正在进行维护，我们将很快回来。"
@@ -1189,7 +1206,7 @@ ui:
         msg: 简短网站描述不能为空。
         text: "简短的标语，作为网站主页的标题（Html 的 title 标签）。"
       desc:
-        label: 站点描述
+        label: 网站介绍
         msg: 网站描述不能为空。
         text: "使用一句话描述本站，作为网站的描述（Html 的 meta 标签）。"
       contact_email:
@@ -1207,6 +1224,9 @@ ui:
         label: 时区
         msg: 时区不能为空。
         text: 选择一个与您相同时区的城市。
+      avatar:
+        label: 默认头像
+        text: 没有自定义头像的用户。
     smtp:
       page_title: SMTP
       from_email:
@@ -1389,8 +1409,8 @@ ui:
     no_data: "空空如也"
   users:
     title: 用户
-    users_with_the_most_reputation: 信誉积分最高的用户
-    users_with_the_most_vote: 投票最多的用户
+    users_with_the_most_reputation: 本周信誉积分最高的用户
+    users_with_the_most_vote: 本周投票最多的用户
     staffs: 我们的社区工作人员
     reputation: 声望值
     votes: 投票
@@ -1398,7 +1418,7 @@ ui:
     leave_page: 确定要离开此页面？
     changes_not_save: 您的更改尚未保存
   draft:
-    discard_confirm: Are you sure you want to discard your draft?
+    discard_confirm: 您确定要丢弃您的草稿吗？
   messages:
-    post_deleted: This post has been deleted.
+    post_deleted: 该帖子已被删除。
 

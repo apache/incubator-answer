@@ -5,6 +5,7 @@ import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/permission"
@@ -52,7 +53,13 @@ func (rc *RevisionController) GetRevisionList(ctx *gin.Context) {
 	}
 
 	resp, err := rc.revisionListService.GetRevisionList(ctx, req)
-	handler.HandleResponse(ctx, err, resp)
+	list := make([]schema.GetRevisionResp, 0)
+	for _, item := range resp {
+		if item.Status == entity.RevisioNnormalStatus || item.Status == entity.RevisionReviewPassStatus {
+			list = append(list, item)
+		}
+	}
+	handler.HandleResponse(ctx, err, list)
 }
 
 // GetUnreviewedRevisionList godoc

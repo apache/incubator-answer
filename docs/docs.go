@@ -3407,6 +3407,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/question/answer": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "add question and answer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Question"
+                ],
+                "summary": "add question and answer",
+                "parameters": [
+                    {
+                        "description": "question",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.QuestionAddByAnswer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/question/closemsglist": {
             "get": {
                 "security": [
@@ -7243,6 +7282,41 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.QuestionAddByAnswer": {
+            "type": "object",
+            "required": [
+                "answer_content",
+                "content",
+                "tags",
+                "title"
+            ],
+            "properties": {
+                "answer_content": {
+                    "type": "string",
+                    "maxLength": 65535,
+                    "minLength": 6
+                },
+                "content": {
+                    "description": "content",
+                    "type": "string",
+                    "maxLength": 65535,
+                    "minLength": 6
+                },
+                "tags": {
+                    "description": "tags",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.TagItem"
+                    }
+                },
+                "title": {
+                    "description": "question title",
+                    "type": "string",
+                    "maxLength": 150,
+                    "minLength": 6
+                }
+            }
+        },
         "schema.QuestionPageReq": {
             "type": "object",
             "properties": {
@@ -7721,6 +7795,9 @@ const docTemplate = `{
                 },
                 "login": {
                     "$ref": "#/definitions/schema.SiteLoginResp"
+                },
+                "revision": {
+                    "type": "string"
                 },
                 "site_seo": {
                     "$ref": "#/definitions/schema.SiteSeoReq"

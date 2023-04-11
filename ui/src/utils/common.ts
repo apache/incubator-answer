@@ -1,6 +1,4 @@
 import i18next from 'i18next';
-import parse from 'html-react-parser';
-import * as DOMPurify from 'dompurify';
 
 const Diff = require('diff');
 
@@ -235,52 +233,6 @@ function diffText(newText: string, oldText?: string): string {
   return result.join('');
 }
 
-function htmlToReact(html: string) {
-  const cleanedHtml = DOMPurify.sanitize(html, {
-    USE_PROFILES: { html: true },
-  });
-
-  const ele = document.createElement('div');
-  ele.innerHTML = cleanedHtml;
-
-  ele.querySelectorAll('table').forEach((table) => {
-    if (
-      (!table || (table.parentNode as HTMLDivElement))?.classList.contains(
-        'table-responsive',
-      )
-    ) {
-      return;
-    }
-
-    table.classList.add('table', 'table-bordered');
-    const div = document.createElement('div');
-    div.className = 'table-responsive';
-    table.parentNode?.replaceChild(div, table);
-    div.appendChild(table);
-  });
-  return parse(ele.innerHTML);
-}
-
-function base64ToSvg(base64: string) {
-  // base64 to svg xml
-  const svgxml = atob(base64);
-
-  // svg add class btnSvg
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(svgxml, 'image/svg+xml');
-  const svg = doc.querySelector('svg');
-  let str = '';
-  if (svg) {
-    svg.classList.add('btnSvg');
-    svg.classList.add('me-2');
-
-    // transform svg to string
-    const serializer = new XMLSerializer();
-    str = serializer.serializeToString(doc);
-  }
-  return str;
-}
-
 export {
   thousandthDivision,
   formatCount,
@@ -296,6 +248,4 @@ export {
   labelStyle,
   handleFormError,
   diffText,
-  htmlToReact,
-  base64ToSvg,
 };

@@ -32,6 +32,7 @@ const ActionBar = ({
         <span className="mx-1">•</span>
         <FormatTime time={createdAt} className="me-3" />
         <Button
+          title={t('tip_vote')}
           variant="link"
           size="sm"
           className={`me-3 btn-no-border p-0 ${isVote ? '' : 'link-secondary'}`}

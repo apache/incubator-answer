@@ -47,6 +47,8 @@ backend:
         other: Недостаточно прав для удаления.
       cannot_update:
         other: Нет прав для обновления.
+      question_closed_cannot_add:
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
         other: Комментарий не может редактироваться.
@@ -103,6 +105,8 @@ backend:
       not_found:
         other: Отчет не найден.
     tag:
+      already_exist:
+        other: Tag already exists.
       not_found:
         other: Тег не найден.
       recommend_tag_not_found:
@@ -261,6 +265,7 @@ ui:
     tag: Тэг
     tags: Теги
     tag_wiki: wiki тэг
+    create_tag: Create Tag
     edit_tag: Изменить тег
     ask_a_question: Добавить вопрос
     edit_question: Редактировать вопрос
@@ -281,6 +286,8 @@ ui:
     upgrade: Обновить ответ
     maintenance: Обслуживание сайта
     users: Пользователи
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
   notifications:
     title: Уведомления
     inbox: Входящие
@@ -424,7 +431,7 @@ ui:
             range: Отображаемое имя до 35 символов.
         slug_name:
           label: Идентификатор URL
-          desc: 'Необходимо использовать набор символов "a-z", "0-9", "+ # - ."'
+          desc: URL slug up to 35 characters.
           msg:
             empty: URL slug не может быть пустым.
             range: URL slug до 35 символов.
@@ -433,6 +440,7 @@ ui:
           label: Description
     btn_cancel: Отмена
     btn_submit: Отправить
+    btn_post: Post new tag
   tag_info:
     created_at: Создано
     edited_at: Отредактировано
@@ -1198,6 +1206,9 @@ ui:
         label: Timezone
         msg: Timezone cannot be empty.
         text: Choose a city in the same timezone as you.
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
