@@ -28,6 +28,7 @@ require (
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/ory/dockertest/v3 v3.9.1
 	github.com/robfig/cron/v3 v3.0.1
+	github.com/scottleedavis/go-exif-remove v0.0.0-20230314195146-7e059d593405
 	github.com/segmentfault/pacman v1.0.3
 	github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20221219081300-f734f4a16aa0
 	github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20221018072427-a15dd1434e05
@@ -42,7 +43,7 @@ require (
 	github.com/tidwall/gjson v1.14.4
 	github.com/yuin/goldmark v1.4.13
 	golang.org/x/crypto v0.1.0
-	golang.org/x/net v0.5.0
+	golang.org/x/net v0.7.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/yaml.v3 v3.0.1
 	modernc.org/sqlite v1.14.2
@@ -65,14 +66,20 @@ require (
 	github.com/docker/docker v20.10.7+incompatible // indirect
 	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/docker/go-units v0.4.0 // indirect
+	github.com/dsoprea/go-exif v0.0.0-20190901173045-3ce78807c90f // indirect
+	github.com/dsoprea/go-jpeg-image-structure v0.0.0-20190422055009-d6f9ba25cf48 // indirect
+	github.com/dsoprea/go-logging v0.0.0-20190624164917-c4f10aab7696 // indirect
+	github.com/dsoprea/go-png-image-structure v0.0.0-20190624104353-c9b28dcdc5c8 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
+	github.com/go-errors/errors v1.0.1 // indirect
 	github.com/go-openapi/jsonpointer v0.19.5 // indirect
 	github.com/go-openapi/jsonreference v0.20.0 // indirect
 	github.com/go-openapi/spec v0.20.7 // indirect
 	github.com/go-openapi/swag v0.22.3 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
+	github.com/golang/geo v0.0.0-20190812012225-f41920e961ce // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
@@ -123,8 +130,8 @@ require (
 	go.uber.org/zap v1.23.0 // indirect
 	golang.org/x/image v0.1.0 // indirect
 	golang.org/x/mod v0.6.0 // indirect
-	golang.org/x/sys v0.4.0 // indirect
-	golang.org/x/text v0.6.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/tools v0.2.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
