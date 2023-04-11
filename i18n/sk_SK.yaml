@@ -106,7 +106,7 @@ backend:
         other: Prehľad sa nenašiel.
     tag:
       already_exist:
-        other: Tag already exists.
+        other: Tento tag už existuje.
       not_found:
         other: Značka sa nenašla.
       recommend_tag_not_found:
@@ -265,7 +265,7 @@ ui:
     tag: Značka
     tags: Značky
     tag_wiki: značka wiki
-    create_tag: Create Tag
+    create_tag: Vytvoriť štítok
     edit_tag: Upraviť značku
     ask_a_question: Pridať otázku
     edit_question: Úpraviť otázku
@@ -280,14 +280,14 @@ ui:
     account_activation: Aktivácia účtu
     confirm_email: Potvrď e-mail
     account_suspended: Účet pozastavený
-    admin: Admin
+    admin: Administrátor
     change_email: Upraviť e-mail
     install: Answer Inštalácia
     upgrade: Answer Upgrade
     maintenance: Údržba webových stránok
     users: Užívatelia
-    http_404: HTTP Error 404
-    http_50X: HTTP Error 500
+    http_404: HTTP chyba 404
+    http_50X: HTTP chyba 403
   notifications:
     title: Oznámenia
     inbox: Doručená pošta
@@ -303,31 +303,31 @@ ui:
     blockquote:
       text: Blockquote
     bold:
-      text: Strong
+      text: Silný
     chart:
-      text: Chart
+      text: Rebríček
       flow_chart: Flow chart
       sequence_diagram: Sequence diagram
       class_diagram: Class diagram
       state_diagram: State diagram
       entity_relationship_diagram: Entity relationship diagram
       user_defined_diagram: User defined diagram
-      gantt_chart: Gantt chart
-      pie_chart: Pie chart
+      gantt_chart: Ganttov diagram
+      pie_chart: Koláčový graf
     code:
       text: Code Sample
       add_code: Add code sample
       form:
         fields:
           code:
-            label: Code
+            label: Kód
             msg:
               empty: Code cannot be empty.
           language:
-            label: Language
+            label: Jazyk
             placeholder: Automatic detection
-      btn_cancel: Cancel
-      btn_confirm: Add
+      btn_cancel: Zrušiť
+      btn_confirm: Pridať
     formula:
       text: Formula
       options:
@@ -343,36 +343,36 @@ ui:
         h5: Heading 5
         h6: Heading 6
     help:
-      text: Help
+      text: Pomoc
     hr:
       text: Horizontal Rule
     image:
-      text: Image
-      add_image: Add image
-      tab_image: Upload image
+      text: Obrázok
+      add_image: Pridať obrázok
+      tab_image: Nahrať obrázok
       form_image:
         fields:
           file:
-            label: Image File
-            btn: Select image
+            label: Obrázkový súbor
+            btn: Vyberte obrázok
             msg:
-              empty: File cannot be empty.
-              only_image: Only image files are allowed.
+              empty: Názov súboru nemôže byť prázdny.
+              only_image: Povolené sú iba obrázkové súbory.
               max_size: File size cannot exceed 4MB.
           desc:
-            label: Description
-      tab_url: Image URL
+            label: Popis
+      tab_url: URL obrázka
       form_url:
         fields:
           url:
-            label: Image URL
+            label: URL obrázka
             msg:
-              empty: Image URL cannot be empty.
+              empty: URL obrázka nemôže byť prázdna.
           name:
             label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
-      uploading: Uploading
+      btn_cancel: Zrušiť
+      btn_confirm: Pridať
+      uploading: Nahrávanie
     indent:
       text: Indent
     outdent:
@@ -380,26 +380,26 @@ ui:
     italic:
       text: Emphasis
     link:
-      text: Hyperlink
-      add_link: Add hyperlink
+      text: Hypertextový odkaz
+      add_link: Pridať hypertextový odkaz
       form:
         fields:
           url:
-            label: URL
+            label: URL adresa
             msg:
-              empty: URL cannot be empty.
+              empty: URL adresa nemôže byť prázdna.
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: Popis
+      btn_cancel: Zrušiť
+      btn_confirm: Pridať
     ordered_list:
-      text: Numbered List
+      text: Očíslovaný zoznam
     unordered_list:
       text: Bulleted List
     table:
       text: Table
       heading: Heading
-      cell: Cell
+      cell: Bunka
   close_modal:
     title: Tento príspevok uzatváram ako...
     btn_cancel: Zrušiť
@@ -493,11 +493,11 @@ ui:
     day: deň
   comment:
     btn_add_comment: Pridať komentár
-    reply_to: Reply to
-    btn_reply: Reply
+    reply_to: Odpovedať
+    btn_reply: Odpovedať
     btn_edit: Upraviť
     btn_delete: Zmazať
-    btn_flag: Flag
+    btn_flag: Vlajka
     btn_save_edits: Uložiť zmeny
     btn_cancel: Zrušiť
     show_more: Zobraziť viac komentárov
@@ -698,7 +698,7 @@ ui:
         label: O mne
       website:
         label: Webová stránka
-        placeholder: "https://example.com"
+        placeholder: "https://priklad.com"
         msg: Nesprávny formát webovej stránky
       location:
         label: Poloha
@@ -911,11 +911,11 @@ ui:
       label: Databázový engine
     db_username:
       label: Užívateľské meno
-      placeholder: root
+      placeholder: super užívateľ
       msg: Užívateľské meno nemôže byť prázdne.
     db_password:
       label: Heslo
-      placeholder: root
+      placeholder: super užívateľ
       msg: Heslo nemôže byť prázdne.
     db_host:
       label: Hostiteľ databázy
@@ -986,11 +986,11 @@ ui:
     answers: odpovede
     accepted: prijaté
   page_404:
-    http_error: HTTP Error 404
+    http_error: HTTP chyba 404
     desc: "Žiaľ, táto stránka neexistuje."
     back_home: Späť na domovskú stránku
   page_50X:
-    http_error: HTTP Error 500
+    http_error: HTTP chyba 500
     desc: Na serveri sa vyskytla chyba a nebolo možné dokončiť vašu požiadavku.
     back_home: Späť na domovskú stránku
   page_maintenance:
@@ -1006,7 +1006,7 @@ ui:
     general: Všeobecné
     interface: Rozhranie
     smtp: SMTP
-    branding: Branding
+    branding: Budovanie značky
     legal: legálne
     write: písať
     tos: Podmienky služby
@@ -1018,7 +1018,7 @@ ui:
     login: Prihlásiť sa
   admin:
     admin_header:
-      title: Admin
+      title: Administrátor
     dashboard:
       title: Nástenka
       welcome: Vitajte v Administrátorovi odpovedí!
@@ -1037,7 +1037,7 @@ ui:
       timezone: "Časové pásmo:"
       system_info: Systémové informácie
       storage_used: "Použité úložisko:"
-      uptime: "Uptime:"
+      uptime: "Doba prevádzky:"
       answer_links: Odkazy na odpovede
       documents: Dokumenty
       feedback: Spätná väzba
@@ -1112,7 +1112,7 @@ ui:
       deleted: Vymazané
       normal: Normálné
       Moderator: Moderátor
-      Admin: Admin
+      Admin: Správca
       User: Používateľ
       filter:
         placeholder: "Filter podľa mena, používateľ: ID"
@@ -1207,8 +1207,8 @@ ui:
         msg: Časové pásmo nemôže byť prázdne.
         text: Vyberte si mesto v rovnakom časovom pásme v akom ste vy.
       avatar:
-        label: Default Avatar
-        text: For users without a custom avatar of their own.
+        label: Predvolený avatar
+        text: Pre používateľov bez vlastného avatara.
     smtp:
       page_title: SMTP
       from_email:
@@ -1250,7 +1250,7 @@ ui:
         "yes": "Áno"
         "no": "Nie"
     branding:
-      page_title: Branding
+      page_title: Budovanie značky
       logo:
         label: Logo
         msg: Logo nemôže byť prázdne.
@@ -1305,7 +1305,7 @@ ui:
         label: Primárna farba
         text: Upraviť farby používané vašími motívmi
     css_and_html:
-      page_title: CSS and HTML
+      page_title: CSS a HTML
       custom_css:
         label: Vlastné CSS
         text: Toto sa vloží ako <link>
@@ -1353,7 +1353,7 @@ ui:
     accept: akceptované
     cancelled: zrušené
     commented: komentované
-    rollback: rollback
+    rollback: Návrat
     edited: zmenené
     answered: odpovedané
     asked: spýtané
