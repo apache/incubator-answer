@@ -11,6 +11,17 @@ backend:
       other: Non autorisé.
     database_error:
       other: Erreur du serveur de données.
+  action:
+    report:
+      other: Flag
+    edit:
+      other: Edit
+    delete:
+      other: Delete
+    close:
+      other: Close
+    reopen:
+      other: Reopen
   role:
     name:
       user:
@@ -99,6 +110,8 @@ backend:
     rank:
       fail_to_meet_the_condition:
         other: Le rang ne remplit pas la condition.
+      vote_fail_to_meet_the_condition:
+        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
     report:
       handle_failed:
         other: La gestion du rapport a échoué.
@@ -288,6 +301,7 @@ ui:
     users: Utilisateurs
     http_404: Erreur HTTP 404
     http_50X: Erreur HTTP 500
+    http_403: HTTP Error 403
   notifications:
     title: Notifications
     inbox: Boîte de réception
@@ -505,6 +519,7 @@ ui:
       Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires.
     tip_answer: >-
       Utilisez des commentaires pour répondre à d'autres utilisateurs ou leur signaler des modifications. Si vous ajoutez de nouvelles informations, modifiez votre message au lieu de commenter.
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: Modifier la réponse
     default_reason: Modifier la réponse
@@ -754,6 +769,11 @@ ui:
     answered: répondu
     closed_in: Fermé dans
     show_exist: Afficher la question existante.
+    useful: Useful
+    question_useful: It is useful and clear
+    question_un_useful: It is unclear or not useful
+    answer_useful: It is useful
+    answer_un_useful: It is not useful
     answers:
       title: Réponses
       score: Score
@@ -770,7 +790,14 @@ ui:
         <p>Êtes-vous sûr de vouloir ajouter une autre réponse ?</p><p>Vous pouvez utiliser le lien d'édition pour affiner et améliorer votre réponse existante.</p>
       empty: La réponse ne peut être vide.
       characters: le contenu doit comporter au moins 6 caractères.
+      tips:
+        header_1: Thanks for your answer
+        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
+        li1_2: Back up any statements you make with references or personal experience.
+        header_2: But <strong>avoid</strong> ...
+        li2_1: Asking for help, seeking clarification, or responding to other answers.
     reopen:
+      confirm_btn: Reopen
       title: Rouvrir ce message
       content: Êtes-vous sûr de vouloir rouvrir ?
       success: Ce message a été rouvert
@@ -985,14 +1012,12 @@ ui:
     votes: votes
     answers: réponses
     accepted: Accepté
-  page_404:
-    http_error: Erreur HTTP 404
-    desc: "Nous sommes désolés, mais cette page n’existe pas."
-    back_home: Retour à la page d'accueil
-  page_50X:
-    http_error: Erreur HTTP 500
-    desc: Le serveur a rencontré une erreur et n'a pas pu répondre à votre requête.
-    back_home: Retour à la page d'accueil
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: You don’t have permission to access this page.
+    desc_404: Unfortunately, this page doesn't exist.
+    desc_50X: The server encountered an error and could not complete your request.
+    back_home: Back to homepage
   page_maintenance:
     desc: "Nous sommes en maintenance, nous serons bientôt de retour."
   nav_menus:
@@ -1374,8 +1399,8 @@ ui:
     no_data: "Nous n'avons rien pu trouver."
   users:
     title: Utilisateurs
-    users_with_the_most_reputation: Utilisateurs avec les scores de réputation les plus élevés
-    users_with_the_most_vote: Utilisateurs qui ont le plus voté
+    users_with_the_most_reputation: Users with the highest reputation scores this week
+    users_with_the_most_vote: Users who voted the most this week
     staffs: Staff de la communauté
     reputation: réputation
     votes: votes

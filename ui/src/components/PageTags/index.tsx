@@ -11,6 +11,7 @@ const Index: FC = () => {
     (state) => state.items,
   );
   const appVersion = siteInfoStore((_) => _.version);
+  const hashVersion = siteInfoStore((_) => _.revision);
   const setAppGenerator = () => {
     if (!appVersion) {
       return;
@@ -19,7 +20,7 @@ const Index: FC = () => {
     if (generatorMetaNode) {
       generatorMetaNode.setAttribute(
         'content',
-        `Answer ${appVersion} - https://github.com/answerdev/answer`,
+        `Answer ${appVersion} - https://github.com/answerdev/answer version ${hashVersion}`,
       );
     }
   };
