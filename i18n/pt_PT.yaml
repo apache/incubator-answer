@@ -70,7 +70,7 @@ backend:
       captcha_verification_failed:
         other: O Captcha está incorreto.
       disallow_follow:
-        other: Você não possui autorização suficiente para seguir.
+        other: Você não tem permissão para seguir.
       disallow_vote:
         other: Você não possui permissão para votar.
       disallow_vote_your_self:
@@ -108,7 +108,7 @@ backend:
       already_exist:
         other: Tag already exists.
       not_found:
-        other: Marcador não encontrado.
+        other: Marca não encontrada.
       recommend_tag_not_found:
         other: O marcador recomendado não existe.
       recommend_tag_enter:
@@ -129,9 +129,9 @@ backend:
         other: Tema não encontrado.
     revision:
       review_underway:
-        other: Não é possível neste momento, há uma versão na fila de análise.
+        other: Não é possível editar atualmente, há uma versão na fila de análise.
       no_permission:
-        other: Sem permissão para realizar Revisão.
+        other: Sem permissão de modificação.
     user:
       email_or_password_wrong:
         other:
@@ -139,7 +139,7 @@ backend:
       not_found:
         other: Usuário não encontrado.
       suspended:
-        other: O usuário foi suspenso.
+        other: O utilizador foi suspenso.
       username_invalid:
         other: Nome de usuário inválido.
       username_duplicate:
