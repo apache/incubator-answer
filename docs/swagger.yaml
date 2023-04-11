@@ -305,19 +305,42 @@ definitions:
       switch:
         type: boolean
     type: object
-  schema.ConfigFields:
+  schema.ConfigField:
     properties:
       description:
         type: string
+      name:
+        type: string
+      options:
+        items:
+          $ref: '#/definitions/schema.ConfigFieldOption'
+        type: array
       required:
         type: boolean
       title:
         type: string
       type:
         type: string
-      ui_widget:
-        $ref: '#/definitions/schema.UIWidget'
+      ui_options:
+        $ref: '#/definitions/schema.ConfigFieldUIOptions'
+      value: {}
+    type: object
+  schema.ConfigFieldOption:
+    properties:
+      label:
+        type: string
       value:
+        type: string
+    type: object
+  schema.ConfigFieldUIOptions:
+    properties:
+      input_type:
+        type: string
+      label:
+        type: string
+      placeholder:
+        type: string
+      rows:
         type: string
     type: object
   schema.ConnectorInfoResp:
@@ -580,12 +603,11 @@ definitions:
     properties:
       config_fields:
         items:
-          $ref: '#/definitions/schema.ConfigFields'
+          $ref: '#/definitions/schema.ConfigField'
         type: array
       description:
         type: string
       name:
-        description: ConfigFields []plugin.ConfigField `json:"config_fields"`
         type: string
       slug_name:
         type: string
@@ -600,6 +622,8 @@ definitions:
         type: boolean
       have_config:
         type: boolean
+      link:
+        type: string
       name:
         type: string
       slug_name:
@@ -920,6 +944,9 @@ definitions:
       follow_count:
         description: follow count
         type: integer
+      have_password:
+        description: user have password
+        type: boolean
       id:
         description: user id
         type: string
@@ -994,6 +1021,8 @@ definitions:
       follow_count:
         description: follow count
         type: integer
+      have_password:
+        type: boolean
       id:
         description: user id
         type: string
@@ -1687,13 +1716,6 @@ definitions:
       value:
         type: string
     type: object
-  schema.UIWidget:
-    properties:
-      placeholder:
-        type: string
-      type:
-        type: string
-    type: object
   schema.UnreviewedRevisionInfoInfo:
     properties:
       content:
@@ -1971,11 +1993,15 @@ definitions:
   schema.UserModifyPassWordRequest:
     properties:
       old_pass:
-        description: old password
+        maxLength: 32
+        minLength: 8
         type: string
       pass:
-        description: password
+        maxLength: 32
+        minLength: 8
         type: string
+    required:
+    - pass
     type: object
   schema.UserNoticeSetRequest:
     properties:

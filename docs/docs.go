@@ -6149,11 +6149,20 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.ConfigFields": {
+        "schema.ConfigField": {
             "type": "object",
             "properties": {
                 "description": {
                     "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "options": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.ConfigFieldOption"
+                    }
                 },
                 "required": {
                     "type": "boolean"
@@ -6164,10 +6173,36 @@ const docTemplate = `{
                 "type": {
                     "type": "string"
                 },
-                "ui_widget": {
-                    "$ref": "#/definitions/schema.UIWidget"
+                "ui_options": {
+                    "$ref": "#/definitions/schema.ConfigFieldUIOptions"
+                },
+                "value": {}
+            }
+        },
+        "schema.ConfigFieldOption": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
                 },
                 "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.ConfigFieldUIOptions": {
+            "type": "object",
+            "properties": {
+                "input_type": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "placeholder": {
+                    "type": "string"
+                },
+                "rows": {
                     "type": "string"
                 }
             }
@@ -6532,14 +6567,13 @@ const docTemplate = `{
                 "config_fields": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/schema.ConfigFields"
+                        "$ref": "#/definitions/schema.ConfigField"
                     }
                 },
                 "description": {
                     "type": "string"
                 },
                 "name": {
-                    "description": "ConfigFields []plugin.ConfigField ` + "`" + `json:\"config_fields\"` + "`" + `",
                     "type": "string"
                 },
                 "slug_name": {
@@ -6561,6 +6595,9 @@ const docTemplate = `{
                 },
                 "have_config": {
                     "type": "boolean"
+                },
+                "link": {
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -7009,6 +7046,10 @@ const docTemplate = `{
                     "description": "follow count",
                     "type": "integer"
                 },
+                "have_password": {
+                    "description": "user have password",
+                    "type": "boolean"
+                },
                 "id": {
                     "description": "user id",
                     "type": "string"
@@ -7108,6 +7149,9 @@ const docTemplate = `{
                 "follow_count": {
                     "description": "follow count",
                     "type": "integer"
+                },
+                "have_password": {
+                    "type": "boolean"
                 },
                 "id": {
                     "description": "user id",
@@ -8096,17 +8140,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UIWidget": {
-            "type": "object",
-            "properties": {
-                "placeholder": {
-                    "type": "string"
-                },
-                "type": {
-                    "type": "string"
-                }
-            }
-        },
         "schema.UnreviewedRevisionInfoInfo": {
             "type": "object",
             "properties": {
@@ -8493,14 +8526,19 @@ const docTemplate = `{
         },
         "schema.UserModifyPassWordRequest": {
             "type": "object",
+            "required": [
+                "pass"
+            ],
             "properties": {
                 "old_pass": {
-                    "description": "old password",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 8
                 },
                 "pass": {
-                    "description": "password",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 8
                 }
             }
         },
