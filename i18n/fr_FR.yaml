@@ -35,9 +35,9 @@ backend:
   error:
     admin:
       cannot_update_their_password:
-        other: You cannot modify your password.
+        other: Vous ne pouvez pas modifier votre mot de passe.
       cannot_modify_self_status:
-        other: You cannot modify your status.
+        other: Vous ne pouvez pas modifier votre statut.
       email_or_password_wrong:
         other: L'email et le mot de passe ne correspondent pas.
     answer:
@@ -48,7 +48,7 @@ backend:
       cannot_update:
         other: Pas de permission pour mettre à jour.
       question_closed_cannot_add:
-        other: Questions are closed and cannot be added.
+        other: Les questions sont fermées et ne peuvent pas être ajoutées.
     comment:
       edit_without_permission:
         other: Les commentaires ne sont pas autorisés à être modifiés.
@@ -87,7 +87,7 @@ backend:
         other: Le nouveau mot de passe est le même que le précédent.
     question:
       already_deleted:
-        other: This post has been deleted.
+        other: Ce message a été supprimé.
       not_found:
         other: Question non trouvée.
       cannot_deleted:
@@ -106,7 +106,7 @@ backend:
         other: Rapport non trouvé.
     tag:
       already_exist:
-        other: Tag already exists.
+        other: Le tag existe déjà.
       not_found:
         other: Tag non trouvé.
       recommend_tag_not_found:
@@ -265,7 +265,7 @@ ui:
     tag: Étiquette
     tags: Étiquettes
     tag_wiki: tag wiki
-    create_tag: Create Tag
+    create_tag: Créer un tag
     edit_tag: Modifier l'étiquette
     ask_a_question: Ajouter une question
     edit_question: Modifier la question
@@ -286,8 +286,8 @@ ui:
     upgrade: Mise à jour d'Answer
     maintenance: Maintenance du site
     users: Utilisateurs
-    http_404: HTTP Error 404
-    http_50X: HTTP Error 500
+    http_404: Erreur HTTP 404
+    http_50X: Erreur HTTP 500
   notifications:
     title: Notifications
     inbox: Boîte de réception
@@ -431,7 +431,7 @@ ui:
             range: Le nom doit contenir moins de 35 caractères.
         slug_name:
           label: URL simplifiée
-          desc: 'Doit utiliser le jeu de caractères "a-z", "0-9", "+ # - ."'
+          desc: Titre de 35 caractères maximum.
           msg:
             empty: L'URL ne peut pas être vide.
             range: Titre de 35 caractères maximum.
@@ -440,7 +440,7 @@ ui:
           label: Description
     btn_cancel: Annuler
     btn_submit: Valider
-    btn_post: Post new tag
+    btn_post: Publier un nouveau tag
   tag_info:
     created_at: Créé
     edited_at: Modifié
@@ -796,7 +796,7 @@ ui:
     approve: Approuver
     reject: Rejeter
     skip: Ignorer
-    discard_draft: Discard draft
+    discard_draft: Abandonner le brouillon
   search:
     title: Résultats de la recherche
     keywords: Mots-clés
@@ -986,11 +986,11 @@ ui:
     answers: réponses
     accepted: Accepté
   page_404:
-    http_error: HTTP Error 404
+    http_error: Erreur HTTP 404
     desc: "Nous sommes désolés, mais cette page n’existe pas."
     back_home: Retour à la page d'accueil
   page_50X:
-    http_error: HTTP Error 500
+    http_error: Erreur HTTP 500
     desc: Le serveur a rencontré une erreur et n'a pas pu répondre à votre requête.
     back_home: Retour à la page d'accueil
   page_maintenance:
@@ -1207,8 +1207,8 @@ ui:
         msg: Le fuseau horaire ne peut pas être vide.
         text: Choisissez une ville dans le même fuseau horaire que vous.
       avatar:
-        label: Default Avatar
-        text: For users without a custom avatar of their own.
+        label: Avatar par défaut
+        text: Pour les utilisateurs sans avatar personnalisé.
     smtp:
       page_title: SMTP
       from_email:
@@ -1383,7 +1383,7 @@ ui:
     leave_page: Voulez-vous vraiment quitter la page ?
     changes_not_save: Impossible d'enregistrer vos modifications.
   draft:
-    discard_confirm: Are you sure you want to discard your draft?
+    discard_confirm: Êtes-vous sûr de vouloir abandonner ce brouillon ?
   messages:
-    post_deleted: This post has been deleted.
+    post_deleted: Ce message a été supprimé.
 

@@ -285,7 +285,7 @@ ui:
     install: Answer Installation
     upgrade: Answer Upgrade
     maintenance: Website Bakımı
-    users: Kullanıcı
+    users: Kullanıcılar
     http_404: HTTP Error 404
     http_50X: HTTP Error 500
   notifications:
