@@ -3,12 +3,14 @@ package siteinfo
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
@@ -23,26 +25,28 @@ type SiteInfoService struct {
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 	emailService          *export.EmailService
 	tagCommonService      *tagcommon.TagCommonService
+	configRepo            config.ConfigRepo
 }
 
 func NewSiteInfoService(
 	siteInfoRepo siteinfo_common.SiteInfoRepo,
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 	emailService *export.EmailService,
-	tagCommonService *tagcommon.TagCommonService) *SiteInfoService {
-
+	tagCommonService *tagcommon.TagCommonService,
+	configRepo config.ConfigRepo,
+) *SiteInfoService {
 	resp, err := siteInfoCommonService.GetSiteInterface(context.Background())
 	if err != nil {
 		log.Error(err)
 	} else {
 		constant.DefaultAvatar = resp.DefaultAvatar
 	}
-
 	return &SiteInfoService{
 		siteInfoRepo:          siteInfoRepo,
 		siteInfoCommonService: siteInfoCommonService,
 		emailService:          emailService,
 		tagCommonService:      tagCommonService,
+		configRepo:            configRepo,
 	}
 }
 
@@ -299,6 +303,31 @@ func (s *SiteInfoService) SaveSeo(ctx context.Context, req schema.SiteSeoReq) (e
 		uid.ShortIDSwitch = true
 	} else {
 		uid.ShortIDSwitch = false
+	}
+	return
+}
+
+func (s *SiteInfoService) GetPrivilegesConfig(ctx context.Context) (resp *schema.GetPrivilegesConfigResp, err error) {
+	resp = &schema.GetPrivilegesConfigResp{
+		Privileges: make(map[string]int, 0),
+	}
+	for _, key := range constant.RankAllKeys {
+		v, err := s.configRepo.GetInt(key)
+		if err != nil {
+			log.Error(err)
+			continue
+		}
+		resp.Privileges[key] = v
+	}
+	return resp, nil
+}
+
+func (s *SiteInfoService) UpdatePrivilegesConfig(ctx context.Context, req *schema.UpdatePrivilegesConfigReq) (err error) {
+	for key, value := range req.Privileges {
+		err = s.configRepo.SetConfig(key, fmt.Sprintf("%d", value))
+		if err != nil {
+			return
+		}
 	}
 	return
 }

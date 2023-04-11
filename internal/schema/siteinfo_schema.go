@@ -233,3 +233,13 @@ type GetManifestJsonResp struct {
 	ThemeColor      string            `json:"theme_color"`
 	BackgroundColor string            `json:"background_color"`
 }
+
+// GetPrivilegesConfigResp
+type GetPrivilegesConfigResp struct {
+	Privileges map[string]int `json:"privileges"`
+}
+
+// UpdatePrivilegesConfigReq
+type UpdatePrivilegesConfigReq struct {
+	Privileges map[string]int `json:"privileges"`
+}
