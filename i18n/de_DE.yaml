@@ -11,6 +11,17 @@ backend:
       other: Nicht autorisiert.
     database_error:
       other: Datenbank-Fehler.
+  action:
+    report:
+      other: Flag
+    edit:
+      other: Edit
+    delete:
+      other: Delete
+    close:
+      other: Close
+    reopen:
+      other: Reopen
   role:
     name:
       user:
@@ -99,6 +110,8 @@ backend:
     rank:
       fail_to_meet_the_condition:
         other: Rang erfüllt die Bedingung nicht.
+      vote_fail_to_meet_the_condition:
+        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
     report:
       handle_failed:
         other: Berichtshandle fehlgeschlagen.
@@ -288,6 +301,7 @@ ui:
     users: Benutzer
     http_404: HTTP-Fehler 404
     http_50X: HTTP-Fehler 500
+    http_403: HTTP Error 403
   notifications:
     title: Benachrichtigungen
     inbox: Posteingang
@@ -505,6 +519,7 @@ ui:
       Verwenden Sie Kommentare, um weitere Informationen anzufordern oder Verbesserungen vorzuschlagen. Vermeiden Sie die Beantwortung von Fragen in Kommentaren.
     tip_answer: >-
       Verwenden Sie Kommentare, um anderen Benutzern zu antworten oder sie über Änderungen zu informieren. Wenn Sie neue Informationen hinzufügen, bearbeiten Sie Ihren Beitrag, anstatt ihn zu kommentieren.
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: Antwort bearbeiten
     default_reason: Antwort bearbeiten
@@ -605,7 +620,7 @@ ui:
     info: "Wenn es nicht ankommt, überprüfen Sie Ihren Spam-Ordner."
     another: >-
       Wir haben Ihnen eine weitere Aktivierungs-E-Mail an <bold>{{mail}}</bold> gesendet. Es kann einige Minuten dauern, bis es ankommt; überprüfen Sie unbedingt Ihren Spam-Ordner.
-    btn_name: Resend activation email
+    btn_name: Aktivierungs Mail erneut senden
     change_btn_name: Ändern Sie die E-Mail
     msg:
       empty: Kann nicht leer sein.
@@ -683,37 +698,37 @@ ui:
         label: Nutzername
         caption: Andere können Sie als „@Benutzername“ erwähnen.
         msg: Benutzername darf nicht leer sein.
-        msg_range: Username up to 30 characters.
-        character: 'Must use the character set "a-z", "0-9", " - . _"'
+        msg_range: Benutzername bis zu 30 Zeichen.
+        character: 'Muss den Zeichensatz "a-z", "0-9", " - . _" verwenden'
       avatar:
-        label: Profile Image
+        label: Profilbild
         gravatar: Gravatar
-        gravatar_text: You can change image on <1>gravatar.com</1>
-        custom: Custom
-        btn_refresh: Refresh
-        custom_text: You can upload your image.
+        gravatar_text: Sie können das Bild auf <1>gravatar.com</1> ändern
+        custom: Benutzerdefiniert
+        btn_refresh: Aktualisieren
+        custom_text: Sie können Ihr Bild hochladen.
         default: System
-        msg: Please upload an avatar
+        msg: Bitte laden Sie einen Avatar hoch
       bio:
-        label: About Me
+        label: Über mich
       website:
-        label: Website
+        label: Webseite
         placeholder: "https://example.com"
-        msg: Website incorrect format
+        msg: Website falsches Format
       location:
-        label: Location
-        placeholder: "City, Country"
+        label: Standort
+        placeholder: "Stadt, Land"
     notification:
-      heading: Notifications
+      heading: Benachrichtigungen
       email:
-        label: Email Notifications
-        radio: "Answers to your questions, comments, and more"
+        label: E-Mail-Benachrichtigungen
+        radio: "Antworten auf Ihre Fragen, Kommentare und mehr"
     account:
-      heading: Account
+      heading: Konto
       change_email_btn: E-Mail-Adresse ändern
       change_pass_btn: Passwort ändern
       change_email_info: >-
-        We've sent an email to that address. Please follow the confirmation instructions.
+        Wir haben eine E-Mail an diese Adresse gesendet. Bitte folgen Sie den Bestätigungsanweisungen.
       email:
         label: E-Mail
         msg: E-Mail-Feld darf nicht leer sein.
@@ -721,39 +736,44 @@ ui:
       current_pass:
         label: Aktuelles Passwort
         msg:
-          empty: Current Password cannot be empty.
-          length: The length needs to be between 8 and 32.
-          different: The two entered passwords do not match.
+          empty: Aktuelles Passwort darf nicht leer sein.
+          length: Die Länge muss zwischen 8 und 32 liegen.
+          different: Die beiden eingegebenen Passwörter stimmen nicht überein.
       new_pass:
         label: Neues Passwort
       pass_confirm:
         label: Neues Passwort bestätigen
     interface:
-      heading: Interface
+      heading: Schnittstelle
       lang:
-        label: Interface Language
-        text: User interface language. It will change when you refresh the page.
+        label: Schnittstellensprache
+        text: Sprache der Benutzeroberfläche. Es ändert sich, wenn Sie die Seite aktualisieren.
   toast:
-    update: update success
-    update_password: Password changed successfully.
-    flag_success: Thanks for flagging.
-    forbidden_operate_self: Forbidden to operate on yourself
-    review: Your revision will show after review.
+    update: erfolg aktualisieren
+    update_password: Das Kennwort wurde erfolgreich geändert.
+    flag_success: Danke fürs Markieren.
+    forbidden_operate_self: Verboten, an sich selbst zu operieren
+    review: Ihre Überarbeitung wird nach der Überprüfung angezeigt.
   related_question:
-    title: Related Questions
-    btn: Add question
-    answers: answers
+    title: Verwandte Fragen
+    btn: Frage hinzufügen
+    answers: antworten
   question_detail:
-    Asked: Asked
-    asked: asked
-    update: Modified
-    edit: edited
+    Asked: Fragte
+    asked: fragte
+    update: Geändert
+    edit: bearbeitet
     Views: Gesehen
     Follow: Folgen
     Following: Folgend
     answered: beantwortet
     closed_in: Abgeschlossen in
     show_exist: Bestehende Frage anzeigen.
+    useful: Useful
+    question_useful: It is useful and clear
+    question_un_useful: It is unclear or not useful
+    answer_useful: It is useful
+    answer_un_useful: It is not useful
     answers:
       title: Antworten
       score: Punkte
@@ -770,7 +790,14 @@ ui:
         <p>Sind Sie sicher, dass Sie eine weitere Antwort hinzufügen möchten?</p><p>Sie können stattdessen den Editier-Link verwenden, um Ihre bestehende Antwort zu verfeinern und zu verbessern.</p>
       empty: Antwort darf nicht leer sein.
       characters: der Inhalt muss mindestens 6 Zeichen lang sein.
+      tips:
+        header_1: Thanks for your answer
+        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
+        li1_2: Back up any statements you make with references or personal experience.
+        header_2: But <strong>avoid</strong> ...
+        li2_1: Asking for help, seeking clarification, or responding to other answers.
     reopen:
+      confirm_btn: Reopen
       title: Diesen Beitrag erneut öffnen
       content: Möchten Sie wirklich wieder öffnen?
       success: Dieser Beitrag wurde wieder geöffnet
@@ -931,7 +958,7 @@ ui:
       msg: Database File cannot be empty.
     config_yaml:
       title: Create config.yaml
-      label: The config.yaml file created.
+      label: Die erstellte config.yaml-Datei.
       desc: >-
         Sie können die <1>config.yaml</1> Datei manuell im <1>/var/wwww/xxx/</1> Verzeichnis erstellen und den folgenden Text einfügen.
       info: Nachdem Sie dies getan haben, klicken Sie auf "Weiter".
@@ -958,7 +985,7 @@ ui:
     admin_password:
       label: Passwort
       text: >-
-        You will need this password to log in. Please store it in a secure location.
+        Sie benötigen dieses Passwort, um sich anzumelden. Bitte bewahren Sie es an einem sicheren Ort auf.
       msg: Passwort kann nicht leer sein.
     admin_email:
       label: Email
@@ -985,14 +1012,12 @@ ui:
     votes: stimmen
     answers: antworten
     accepted: Akzeptiert
-  page_404:
-    http_error: HTTP-Fehler 404
-    desc: "Leider existiert diese Seite nicht."
-    back_home: Zurück zur Hauptseite
-  page_50X:
-    http_error: HTTP-Fehler 500
-    desc: Der Server hat einen Fehler festgestellt und konnte Ihre Anfrage nicht abschließen.
-    back_home: Zurück zur Hauptseite
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: You don’t have permission to access this page.
+    desc_404: Unfortunately, this page doesn't exist.
+    desc_50X: The server encountered an error and could not complete your request.
+    back_home: Back to homepage
   page_maintenance:
     desc: "Wir werden gewartet, wir sind bald wieder da."
   nav_menus:
@@ -1002,45 +1027,45 @@ ui:
     answers: Antworten
     users: Benutzer
     flags: Flaggen
-    settings: Settings
-    general: General
-    interface: Interface
+    settings: Einstellungen
+    general: Allgemein
+    interface: Schnittstelle
     smtp: SMTP
     branding: Branding
-    legal: Legal
-    write: Write
-    tos: Terms of Service
-    privacy: Privacy
+    legal: Gesetzliche
+    write: Schreiben
+    tos: Nutzungsbedingungen
+    privacy: Privatsphäre
     seo: SEO
-    customize: Customize
-    themes: Themes
+    customize: Anpassen
+    themes: Themen
     css-html: CSS/HTML
-    login: Login
+    login: Anmeldung
   admin:
     admin_header:
-      title: Admin
+      title: Administrator
     dashboard:
-      title: Dashboard
-      welcome: Welcome to Answer Admin!
-      site_statistics: Site Statistics
-      questions: "Questions:"
-      answers: "Answers:"
-      comments: "Comments:"
-      votes: "Votes:"
-      active_users: "Active users:"
-      flags: "Flags:"
-      site_health_status: Site Health Status
-      version: "Version:"
+      title: Armaturenbrett
+      welcome: Willkommen beim Answer-Admin!
+      site_statistics: Site-Statistiken
+      questions: "Fragen:"
+      answers: "Antworten:"
+      comments: "Kommentare:"
+      votes: "Stimmen:"
+      active_users: "Aktive Benutzer:"
+      flags: "Flaggen:"
+      site_health_status: Website-Gesundheitsstatus
+      version: "Ausführung:"
       https: "HTTPS:"
-      uploading_files: "Uploading files:"
+      uploading_files: "Dateien hochladen:"
       smtp: "SMTP:"
-      timezone: "Timezone:"
-      system_info: System Info
-      storage_used: "Storage used:"
-      uptime: "Uptime:"
-      answer_links: Answer Links
-      documents: Documents
-      feedback: Feedback
+      timezone: "Zeitzone:"
+      system_info: Systeminformationen
+      storage_used: "Verwendeter Speicher:"
+      uptime: "Betriebszeit:"
+      answer_links: Antwortlinks
+      documents: Unterlagen
+      feedback: Rückmeldung
       support: Support
       review: Review
       config: Config
@@ -1374,8 +1399,8 @@ ui:
     no_data: "We couldn't find anything."
   users:
     title: Users
-    users_with_the_most_reputation: Users with the highest reputation scores
-    users_with_the_most_vote: Users who voted the most
+    users_with_the_most_reputation: Users with the highest reputation scores this week
+    users_with_the_most_vote: Users who voted the most this week
     staffs: Our community staff
     reputation: reputation
     votes: votes

@@ -11,6 +11,17 @@ backend:
       other: Neoprávnené.
     database_error:
       other: Chyba dátového servera.
+  action:
+    report:
+      other: Flag
+    edit:
+      other: Edit
+    delete:
+      other: Delete
+    close:
+      other: Close
+    reopen:
+      other: Reopen
   role:
     name:
       user:
@@ -99,6 +110,8 @@ backend:
     rank:
       fail_to_meet_the_condition:
         other: Poradie nespĺňa podmienku.
+      vote_fail_to_meet_the_condition:
+        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
     report:
       handle_failed:
         other: Spracovanie prehľadu zlyhalo.
@@ -288,6 +301,7 @@ ui:
     users: Užívatelia
     http_404: HTTP chyba 404
     http_50X: HTTP chyba 403
+    http_403: HTTP Error 403
   notifications:
     title: Oznámenia
     inbox: Doručená pošta
@@ -505,6 +519,7 @@ ui:
       Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
     tip_answer: >-
       Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: Uprav odpoveď
     default_reason: Uprav odpoveď
@@ -754,6 +769,11 @@ ui:
     answered: zodpovedaný
     closed_in: Uzatvorené
     show_exist: Ukázať existujúcu otázku.
+    useful: Useful
+    question_useful: It is useful and clear
+    question_un_useful: It is unclear or not useful
+    answer_useful: It is useful
+    answer_un_useful: It is not useful
     answers:
       title: Odpovede
       score: Skóre
@@ -770,7 +790,14 @@ ui:
         <p>Ste si istí, že chcete pridať ďalšiu odpoveď?</p><p>Mohli by ste namiesto toho použiť úpravu na vylepšenie svojej už existujúcej odpovede.</p>
       empty: Odpoveď nemôže byť prázdna.
       characters: Minimálna dĺžka obsahu musí byť 6 znakov.
+      tips:
+        header_1: Thanks for your answer
+        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
+        li1_2: Back up any statements you make with references or personal experience.
+        header_2: But <strong>avoid</strong> ...
+        li2_1: Asking for help, seeking clarification, or responding to other answers.
     reopen:
+      confirm_btn: Reopen
       title: Znovu otvoriť tento príspevok
       content: Ste si istý, že ho chcete znovu otvoriť?
       success: Tento príspevok bol znovu otvorený
@@ -985,14 +1012,12 @@ ui:
     votes: hlasy
     answers: odpovede
     accepted: prijaté
-  page_404:
-    http_error: HTTP chyba 404
-    desc: "Žiaľ, táto stránka neexistuje."
-    back_home: Späť na domovskú stránku
-  page_50X:
-    http_error: HTTP chyba 500
-    desc: Na serveri sa vyskytla chyba a nebolo možné dokončiť vašu požiadavku.
-    back_home: Späť na domovskú stránku
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: You don’t have permission to access this page.
+    desc_404: Unfortunately, this page doesn't exist.
+    desc_50X: The server encountered an error and could not complete your request.
+    back_home: Back to homepage
   page_maintenance:
     desc: "Prebieha údržba, čoskoro sa vrátime."
   nav_menus:
@@ -1374,8 +1399,8 @@ ui:
     no_data: "Nič sa nám nepodarilo nájsť."
   users:
     title: Použivatelia
-    users_with_the_most_reputation: Používatelia s najvyšším skóre reputácie
-    users_with_the_most_vote: Používatelia, ktorí hlasovali najviac
+    users_with_the_most_reputation: Users with the highest reputation scores this week
+    users_with_the_most_vote: Users who voted the most this week
     staffs: Zamestnanci našej komunity
     reputation: reputácia
     votes: hlasy

@@ -301,6 +301,7 @@ ui:
     users: 用户
     http_404: HTTP 错误 404
     http_50X: HTTP 错误 500
+    http_403: HTTP 错误 403
   notifications:
     title: 通知
     inbox: 收件箱
@@ -518,6 +519,7 @@ ui:
       使用评论提问更多信息或者提出改进意见。尽量避免使用评论功能回答问题。
     tip_answer: >-
       使用评论对回答者进行回复，或者通知回答者你已更新了问题的内容。如果要补充或者完善问题的内容，请在原问题中更改。
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: 编辑回答
     default_reason: 编辑回答
@@ -767,6 +769,11 @@ ui:
     answered: 回答于
     closed_in: 关闭于
     show_exist: 查看相关问题。
+    useful: Useful
+    question_useful: It is useful and clear
+    question_un_useful: It is unclear or not useful
+    answer_useful: It is useful
+    answer_un_useful: It is not useful
     answers:
       title: 个回答
       score: 评分
@@ -783,7 +790,14 @@ ui:
         <p>您确定要提交一个新的回答吗？</p><p>您可以直接编辑和改善您之前的回答的。</p>
       empty: 回答内容不能为空。
       characters: 内容长度至少 6 个字符
+      tips:
+        header_1: Thanks for your answer
+        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
+        li1_2: Back up any statements you make with references or personal experience.
+        header_2: But <strong>avoid</strong> ...
+        li2_1: Asking for help, seeking clarification, or responding to other answers.
     reopen:
+      confirm_btn: 重新打开
       title: 重新打开这个帖子
       content: 确定要重新打开吗？
       success: 这个帖子已被重新打开
@@ -1000,10 +1014,10 @@ ui:
     accepted: 已被采纳
   page_error:
     http_error: HTTP Error {{ code }}
-    desc_403: 你无权访问此页面。
-    desc_404: 很抱歉，此页面不存在。
-    desc_50X: 服务器遇到了一个错误，无法完成你的请求。
-    back_home: 回到主页
+    desc_403: You don’t have permission to access this page.
+    desc_404: Unfortunately, this page doesn't exist.
+    desc_50X: The server encountered an error and could not complete your request.
+    back_home: Back to homepage
   page_maintenance:
     desc: "我们正在进行维护，我们将很快回来。"
   nav_menus:
@@ -1385,8 +1399,8 @@ ui:
     no_data: "空空如也"
   users:
     title: 用户
-    users_with_the_most_reputation: 本周信誉积分最高的用户
-    users_with_the_most_vote: 本周投票最多的用户
+    users_with_the_most_reputation: Users with the highest reputation scores this week
+    users_with_the_most_vote: Users who voted the most this week
     staffs: 我们的社区工作人员
     reputation: 声望值
     votes: 投票

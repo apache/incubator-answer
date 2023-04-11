@@ -11,6 +11,17 @@ backend:
       other: Tidak diizinkan.
     database_error:
       other: Kesalahan data server.
+  action:
+    report:
+      other: Flag
+    edit:
+      other: Edit
+    delete:
+      other: Delete
+    close:
+      other: Close
+    reopen:
+      other: Reopen
   role:
     name:
       user:
@@ -99,6 +110,8 @@ backend:
     rank:
       fail_to_meet_the_condition:
         other: Peringkat gagal memenuhi syarat.
+      vote_fail_to_meet_the_condition:
+        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
     report:
       handle_failed:
         other: Laporan penanganan gagal.
@@ -288,6 +301,7 @@ ui:
     users: Pengguna
     http_404: HTTP Error 404
     http_50X: HTTP Error 500
+    http_403: HTTP Error 403
   notifications:
     title: Pemberitahuan
     inbox: Kotak Masuk
@@ -505,6 +519,7 @@ ui:
       Gunakan komentar untuk meminta informasi lebih lanjut atau menyarankan perbaikan. Hindari menjawab pertanyaan di komentar.
     tip_answer: >-
       Gunakan komentar untuk membalas pengguna lain atau memberi tahu mereka tentang perubahan. Jika Anda menambahkan informasi baru, cukup edit posting Anda.
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: Sunting jawaban
     default_reason: Edit jawaban
@@ -754,6 +769,11 @@ ui:
     answered: dijawab
     closed_in: Ditutup pada
     show_exist: Gunakan pertanyaan yang sudah ada.
+    useful: Useful
+    question_useful: It is useful and clear
+    question_un_useful: It is unclear or not useful
+    answer_useful: It is useful
+    answer_un_useful: It is not useful
     answers:
       title: Jawaban
       score: Nilai
@@ -770,7 +790,14 @@ ui:
         <p>Yakin ingin menambahkan jawaban lain?</p><p>Sebagai gantinya, Anda dapat menggunakan tautan edit untuk menyaring dan menyempurnakan jawaban anda.</p>
       empty: Jawaban tidak boleh kosong.
       characters: content must be at least 6 characters in length.
+      tips:
+        header_1: Thanks for your answer
+        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
+        li1_2: Back up any statements you make with references or personal experience.
+        header_2: But <strong>avoid</strong> ...
+        li2_1: Asking for help, seeking clarification, or responding to other answers.
     reopen:
+      confirm_btn: Reopen
       title: Buka kembali postingan ini
       content: Kamu yakin ingin membuka kembali?
       success: Postingan ini telah dibuka kembali
@@ -985,14 +1012,12 @@ ui:
     votes: votes
     answers: answers
     accepted: Accepted
-  page_404:
-    http_error: HTTP Error 404
-    desc: "Sayangnya, halaman ini tidak ada."
-    back_home: Kembali ke beranda
-  page_50X:
-    http_error: HTTP Error 500
-    desc: Server mengalami kesalahan internal dan tidak dapat menyelesaikan permintaan Anda.
-    back_home: Kembali ke beranda
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: You don’t have permission to access this page.
+    desc_404: Unfortunately, this page doesn't exist.
+    desc_50X: The server encountered an error and could not complete your request.
+    back_home: Back to homepage
   page_maintenance:
     desc: "We are under maintenance, we'll be back soon."
   nav_menus:
@@ -1374,8 +1399,8 @@ ui:
     no_data: "We couldn't find anything."
   users:
     title: Users
-    users_with_the_most_reputation: Users with the highest reputation scores
-    users_with_the_most_vote: Users who voted the most
+    users_with_the_most_reputation: Users with the highest reputation scores this week
+    users_with_the_most_vote: Users who voted the most this week
     staffs: Our community staff
     reputation: reputation
     votes: votes
