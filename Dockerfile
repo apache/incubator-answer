@@ -11,8 +11,8 @@ FROM golang:1.19-alpine AS golang-builder
 LABEL maintainer="aichy@sf.com"
 
 ARG GOPROXY
-ENV GOPROXY ${GOPROXY:-direct}
-# ENV GOPROXY=https://goproxy.io,direct
+# ENV GOPROXY ${GOPROXY:-direct}
+ENV GOPROXY=https://goproxy.io,direct
 
 ENV GOPATH /go
 ENV GOROOT /usr/local/go
