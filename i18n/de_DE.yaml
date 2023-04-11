@@ -1054,18 +1054,18 @@ ui:
       votes: "Stimmen:"
       active_users: "Aktive Benutzer:"
       flags: "Flaggen:"
-      site_health_status: Site Health Status
-      version: "Version:"
+      site_health_status: Website-Gesundheitsstatus
+      version: "Ausführung:"
       https: "HTTPS:"
-      uploading_files: "Uploading files:"
+      uploading_files: "Dateien hochladen:"
       smtp: "SMTP:"
-      timezone: "Timezone:"
-      system_info: System Info
-      storage_used: "Storage used:"
-      uptime: "Uptime:"
-      answer_links: Answer Links
-      documents: Documents
-      feedback: Feedback
+      timezone: "Zeitzone:"
+      system_info: Systeminformationen
+      storage_used: "Verwendeter Speicher:"
+      uptime: "Betriebszeit:"
+      answer_links: Antwortlinks
+      documents: Unterlagen
+      feedback: Rückmeldung
       support: Support
       review: Review
       config: Config
