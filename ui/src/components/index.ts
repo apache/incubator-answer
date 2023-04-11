@@ -36,6 +36,7 @@ import WelcomeTitle from './WelcomeTitle';
 import Counts from './Counts';
 import QuestionList from './QuestionList';
 import HotQuestions from './HotQuestions';
+import HttpErrorContent from './HttpErrorContent';
 
 export {
   Avatar,
@@ -78,5 +79,6 @@ export {
   Counts,
   QuestionList,
   HotQuestions,
+  HttpErrorContent,
 };
 export type { EditorRef, JSONSchema, UISchema };

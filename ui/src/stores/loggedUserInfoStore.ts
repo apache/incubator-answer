@@ -34,7 +34,7 @@ const initUser: UserInfoRes = {
 const loggedUserInfoStore = create<UserInfoStore>((set) => ({
   user: initUser,
   update: (params) => {
-    if (!params.language) {
+    if (!params?.language) {
       params.language = 'Default';
     }
     set(() => {

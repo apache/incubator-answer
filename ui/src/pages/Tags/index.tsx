@@ -27,7 +27,7 @@ const Tags = () => {
   const { role_id } = loggedUserInfoStore((_) => _.user);
 
   const page = Number(urlSearch.get('page')) || 1;
-  const sort = urlSearch.get('sort');
+  const sort = urlSearch.get('sort') || sortBtns[0];
 
   const pageSize = 20;
   const {

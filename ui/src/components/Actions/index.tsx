@@ -12,6 +12,7 @@ import { bookmark, postVote } from '@/services';
 
 interface Props {
   className?: string;
+  source: 'question' | 'answer';
   data: {
     id: string;
     votesCount: number;
@@ -24,7 +25,7 @@ interface Props {
   };
 }
 
-const Index: FC<Props> = ({ className, data }) => {
+const Index: FC<Props> = ({ className, data, source }) => {
   const [votes, setVotes] = useState(0);
   const [like, setLike] = useState(false);
   const [hate, setHated] = useState(false);
@@ -102,6 +103,11 @@ const Index: FC<Props> = ({ className, data }) => {
     <div className={classNames(className)}>
       <ButtonGroup>
         <Button
+          title={
+            source === 'question'
+              ? t('question_detail.question_useful')
+              : t('question_detail.answer_useful')
+          }
           variant="outline-secondary"
           active={like}
           onClick={() => handleVote('up')}>
@@ -111,6 +117,11 @@ const Index: FC<Props> = ({ className, data }) => {
           {votes}
         </Button>
         <Button
+          title={
+            source === 'question'
+              ? t('question_detail.question_un_useful')
+              : t('question_detail.answer_un_useful')
+          }
           variant="outline-secondary"
           active={hate}
           onClick={() => handleVote('down')}>

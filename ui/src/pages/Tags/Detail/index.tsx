@@ -28,7 +28,7 @@ const Questions: FC = () => {
   const routeParams = useParams();
   const curTagName = routeParams.tagName || '';
   const [urlSearchParams] = useSearchParams();
-  const curOrder = urlSearchParams.get('order') || 'newest';
+  const curOrder = urlSearchParams.get('order') || 'active';
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const reqParams: Type.QueryQuestionsReq = {
     page_size: 20,

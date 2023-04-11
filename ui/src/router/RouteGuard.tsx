@@ -1,41 +1,53 @@
 import { FC, ReactNode, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useLoaderData } from 'react-router-dom';
 
 import { floppyNavigation } from '@/utils';
 import { TGuardFunc } from '@/utils/guard';
 
-const Index: FC<{
+import RouteErrorBoundary from './RouteErrorBoundary';
+
+const RouteGuard: FC<{
   children: ReactNode;
-  onEnter?: TGuardFunc;
+  onEnter: TGuardFunc;
   path?: string;
-}> = ({
-  children,
-  onEnter,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  path,
-}) => {
+  page?: string;
+}> = ({ children, onEnter, path, page }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const callGuards = () => {
-    if (onEnter) {
-      const gr = onEnter();
-      const redirectUrl = gr.redirect;
-      if (redirectUrl) {
-        floppyNavigation.navigate(redirectUrl, () => {
-          navigate(redirectUrl, { replace: true });
-        });
-      }
+  const loaderData = useLoaderData();
+  const gr = onEnter({
+    loaderData,
+    path,
+    page,
+  });
+
+  let guardError;
+  const errCode = gr.error?.code;
+  if (errCode === '403' || errCode === '404' || errCode === '50X') {
+    guardError = {
+      code: errCode,
+      msg: gr.error?.msg,
+    };
+  }
+  const handleGuardRedirect = () => {
+    const redirectUrl = gr.redirect;
+    if (redirectUrl) {
+      floppyNavigation.navigate(redirectUrl, () => {
+        navigate(redirectUrl, { replace: true });
+      });
     }
   };
   useEffect(() => {
-    callGuards();
+    handleGuardRedirect();
   }, [location]);
   return (
     <>
-      {/* Route Guard */}
-      {children}
+      {gr.ok ? children : null}
+      {!gr.ok && guardError ? (
+        <RouteErrorBoundary errCode={guardError.code} />
+      ) : null}
     </>
   );
 };
 
-export default Index;
+export default RouteGuard;

@@ -977,13 +977,11 @@ ui:
     votes: 得票
     answers: 回答
     accepted: 已採納
-  page_404:
-    http_error: HTTP Error 404
-    desc: "很抱歉，此頁面不存在。"
-    back_home: 回到首頁
-  page_50X:
-    http_error: HTTP Error 500
-    desc: 伺服器遇到了一個錯誤，無法完成你的請求。
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: 你无权访问此頁面。
+    desc_404: 很抱歉，此頁面不存在。
+    desc_50X: 伺服器遇到了一個錯誤，無法完成你的請求。
     back_home: 回到首頁
   page_maintenance:
     desc: "我們正在維護中，很快就會回來。"
