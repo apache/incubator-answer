@@ -11,6 +11,7 @@ import (
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/pkg/obj"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -50,6 +51,7 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 		if err != nil {
 			return nil, err
 		}
+		questionInfo.ID = uid.EnShortID(questionInfo.ID)
 		if !exist {
 			break
 		}
@@ -85,6 +87,7 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 		if !exist {
 			break
 		}
+		questionInfo.ID = uid.EnShortID(questionInfo.ID)
 		objInfo = &schema.UnreviewedRevisionInfoInfo{
 			ObjectID: answerInfo.ID,
 			Title:    questionInfo.Title,

@@ -2,23 +2,34 @@
 backend:
   base:
     success:
-      other: Success.
+      other: 成功
     unknown:
-      other: Unknown error.
+      other: 不明なエラー
     request_format_error:
-      other: Request format is not valid.
+      other: リクエスト形式が無効です。
     unauthorized_error:
-      other: Unauthorized.
+      other: 権限がありません。
     database_error:
-      other: Data server error.
+      other: データサーバーエラー
+  action:
+    report:
+      other: Flag
+    edit:
+      other: Edit
+    delete:
+      other: Delete
+    close:
+      other: Close
+    reopen:
+      other: Reopen
   role:
     name:
       user:
-        other: User
+        other: ユーザー
       admin:
-        other: Admin
+        other: 管理者
       moderator:
-        other: Moderator
+        other: モデレーター
     description:
       user:
         other: Default with no special access.
@@ -27,90 +38,96 @@ backend:
       moderator:
         other: Has access to all posts except admin settings.
   email:
-    other: Email
+    other: メールアドレス
   password:
-    other: Password
+    other: パスワード
   email_or_password_wrong_error:
-    other: Email and password do not match.
+    other: メールアドレスとパスワードが一致しません。
   error:
     admin:
       cannot_update_their_password:
-        other: You cannot modify your password.
+        other: パスワードは変更できません。
       cannot_modify_self_status:
-        other: You cannot modify your status.
+        other: ステータスを変更できません。
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: メールアドレスとパスワードが一致しません。
     answer:
       not_found:
         other: Answer do not found.
       cannot_deleted:
-        other: No permission to delete.
+        other: 削除する権限がありません。
       cannot_update:
-        other: No permission to update.
+        other: 更新する権限がありません。
+      question_closed_cannot_add:
+        other: 質問はクローズされて、追加できません。
     comment:
       edit_without_permission:
-        other: Comment are not allowed to edit.
+        other: コメントを編集することはできません。
       not_found:
-        other: Comment not found.
+        other: コメントが見つかりません。
       cannot_edit_after_deadline:
-        other: The comment time has been too long to modify.
+        other: コメント時間が長すぎて変更できません。
     email:
       duplicate:
-        other: Email already exists.
+        other: メールアドレスは既に存在しています。
       need_to_be_verified:
-        other: Email should be verified.
+        other: 電子メールを確認する必要があります。
       verify_url_expired:
-        other: Email verified URL has expired, please resend the email.
+        other: メール認証済みURLの有効期限が切れています。メールを再送信してください。
     lang:
       not_found:
-        other: Language file not found.
+        other: 言語ファイルが見つかりません。
     object:
       captcha_verification_failed:
-        other: Captcha wrong.
+        other: Captchaが間違っています。
       disallow_follow:
-        other: You are not allowed to follow.
+        other: フォローが許可されていません。
       disallow_vote:
-        other: You are not allowed to vote.
+        other: 投票が許可されていません。
       disallow_vote_your_self:
-        other: You can't vote for your own post.
+        other: 自分の投稿には投票できません。
       not_found:
-        other: Object not found.
+        other: オブジェクトが見つかりません。
       verification_failed:
-        other: Verification failed.
+        other: 認証に失敗しました。
       email_or_password_incorrect:
-        other: Email and password do not match.
+        other: メールアドレスとパスワードが一致しません。
       old_password_verification_failed:
-        other: The old password verification failed
+        other: 古いパスワードの確認に失敗しました。
       new_password_same_as_previous_setting:
-        other: The new password is the same as the previous one.
+        other: 新しいパスワードは前のパスワードと同じです。
     question:
       already_deleted:
-        other: This post has been deleted.
+        other: この投稿は削除されました。
       not_found:
-        other: Question not found.
+        other: 質問が見つかりません。
       cannot_deleted:
-        other: No permission to delete.
+        other: 削除する権限がありません。
       cannot_close:
-        other: No permission to close.
+        other: クローズする権限がありません。
       cannot_update:
-        other: No permission to update.
+        other: 更新する権限がありません。
     rank:
       fail_to_meet_the_condition:
-        other: Rank fail to meet the condition.
+        other: ランクは条件を満たしていません。
+      vote_fail_to_meet_the_condition:
+        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
     report:
       handle_failed:
-        other: Report handle failed.
+        other: レポートの処理に失敗しました。
       not_found:
-        other: Report not found.
+        other: レポートが見つかりません。
     tag:
+      already_exist:
+        other: タグは既に存在します。
       not_found:
-        other: Tag not found.
+        other: タグが見つかりません。
       recommend_tag_not_found:
-        other: Recommend Tag is not exist.
+        other: 推奨タグは存在しません。
       recommend_tag_enter:
-        other: Please enter at least one required tag.
+        other: 少なくとも 1 つの必須タグを入力してください。
       not_contain_synonym_tags:
-        other: Should not contain synonym tags.
+        other: 同義語のタグを含めないでください。
       cannot_update:
         other: No permission to update.
       is_used_cannot_delete:
@@ -261,6 +278,7 @@ ui:
     tag: Tag
     tags: Tags
     tag_wiki: tag wiki
+    create_tag: Create Tag
     edit_tag: Edit Tag
     ask_a_question: Add Question
     edit_question: Edit Question
@@ -281,6 +299,9 @@ ui:
     upgrade: Answer Upgrade
     maintenance: Website Maintenance
     users: Users
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
+    http_403: HTTP Error 403
   notifications:
     title: Notifications
     inbox: Inbox
@@ -294,12 +315,12 @@ ui:
     end: You don't meet a community guideline.
   editor:
     blockquote:
-      text: Blockquote
+      text: 引用
     bold:
       text: Strong
     chart:
       text: Chart
-      flow_chart: Flow chart
+      flow_chart: フローチャート
       sequence_diagram: Sequence diagram
       class_diagram: Class diagram
       state_diagram: State diagram
@@ -313,61 +334,61 @@ ui:
       form:
         fields:
           code:
-            label: Code
+            label: コード
             msg:
               empty: Code cannot be empty.
           language:
-            label: Language
-            placeholder: Automatic detection
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: 言語
+            placeholder: 自動検出
+      btn_cancel: キャンセル
+      btn_confirm: 追加
     formula:
-      text: Formula
+      text: 数式
       options:
         inline: Inline formula
         block: Block formula
     heading:
-      text: Heading
+      text: 見出し
       options:
-        h1: Heading 1
-        h2: Heading 2
-        h3: Heading 3
-        h4: Heading 4
-        h5: Heading 5
-        h6: Heading 6
+        h1: 見出し1
+        h2: 見出し2
+        h3: 見出し3
+        h4: 見出し4
+        h5: 見出し5
+        h6: 見出し6
     help:
-      text: Help
+      text: ヘルプ
     hr:
       text: Horizontal Rule
     image:
-      text: Image
-      add_image: Add image
-      tab_image: Upload image
+      text: 画像
+      add_image: 画像を追加する
+      tab_image: 画像をアップロードする
       form_image:
         fields:
           file:
-            label: Image File
-            btn: Select image
+            label: 画像ファイル
+            btn: 画像を選択する
             msg:
-              empty: File cannot be empty.
-              only_image: Only image files are allowed.
-              max_size: File size cannot exceed 4MB.
+              empty: ファイルは空にできません。
+              only_image: 画像ファイルのみが許可されています。
+              max_size: ファイルサイズは4MBを超えることはできません。
           desc:
-            label: Description
-      tab_url: Image URL
+            label: 説明
+      tab_url: 画像URL
       form_url:
         fields:
           url:
-            label: Image URL
+            label: 画像URL
             msg:
-              empty: Image URL cannot be empty.
+              empty: 画像のURLは空にできません。
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
-      uploading: Uploading
+            label: 説明
+      btn_cancel: キャンセル
+      btn_confirm: 追加
+      uploading: アップロード中
     indent:
-      text: Indent
+      text: インデント
     outdent:
       text: Outdent
     italic:
@@ -424,7 +445,7 @@ ui:
             range: Display name up to 35 characters.
         slug_name:
           label: URL Slug
-          desc: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          desc: '文字セット「a-z」、「0-9」、「+ # -」を使用する必要があります。'
           msg:
             empty: URL slug cannot be empty.
             range: URL slug up to 35 characters.
@@ -433,6 +454,7 @@ ui:
           label: Description
     btn_cancel: Cancel
     btn_submit: Submit
+    btn_post: Post new tag
   tag_info:
     created_at: Created
     edited_at: Edited
@@ -497,6 +519,7 @@ ui:
       Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
     tip_answer: >-
       Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: Edit Answer
     default_reason: Edit answer
@@ -701,17 +724,17 @@ ui:
         label: Email Notifications
         radio: "Answers to your questions, comments, and more"
     account:
-      heading: Account
-      change_email_btn: Change email
-      change_pass_btn: Change password
+      heading: アカウント
+      change_email_btn: メールアドレスを変更する
+      change_pass_btn: パスワードを変更する
       change_email_info: >-
         We've sent an email to that address. Please follow the confirmation instructions.
       email:
-        label: Email
+        label: メールアドレス
         msg: Email cannot be empty.
-      password_title: Password
+      password_title: パスワード
       current_pass:
-        label: Current Password
+        label: 現在のパスワード
         msg:
           empty: Current Password cannot be empty.
           length: The length needs to be between 8 and 32.
@@ -746,6 +769,11 @@ ui:
     answered: answered
     closed_in: Closed in
     show_exist: Show existing question.
+    useful: Useful
+    question_useful: It is useful and clear
+    question_un_useful: It is unclear or not useful
+    answer_useful: It is useful
+    answer_un_useful: It is not useful
     answers:
       title: Answers
       score: Score
@@ -762,7 +790,14 @@ ui:
         <p>Are you sure you want to add another answer?</p><p>You could use the edit link to refine and improve your existing answer, instead.</p>
       empty: Answer cannot be empty.
       characters: content must be at least 6 characters in length.
+      tips:
+        header_1: Thanks for your answer
+        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
+        li1_2: Back up any statements you make with references or personal experience.
+        header_2: But <strong>avoid</strong> ...
+        li2_1: Asking for help, seeking clarification, or responding to other answers.
     reopen:
+      confirm_btn: Reopen
       title: Reopen this post
       content: Are you sure you want to reopen?
       success: This post has been reopened
@@ -977,13 +1012,11 @@ ui:
     votes: votes
     answers: answers
     accepted: Accepted
-  page_404:
-    http_error: HTTP Error 404
-    desc: "Unfortunately, this page doesn't exist."
-    back_home: Back to homepage
-  page_50X:
-    http_error: HTTP Error 500
-    desc: The server encountered an error and could not complete your request.
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: You don’t have permission to access this page.
+    desc_404: Unfortunately, this page doesn't exist.
+    desc_50X: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
     desc: "We are under maintenance, we'll be back soon."
@@ -1198,6 +1231,9 @@ ui:
         label: Timezone
         msg: Timezone cannot be empty.
         text: Choose a city in the same timezone as you.
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
@@ -1363,8 +1399,8 @@ ui:
     no_data: "We couldn't find anything."
   users:
     title: Users
-    users_with_the_most_reputation: Users with the highest reputation scores
-    users_with_the_most_vote: Users who voted the most
+    users_with_the_most_reputation: Users with the highest reputation scores this week
+    users_with_the_most_vote: Users who voted the most this week
     staffs: Our community staff
     reputation: reputation
     votes: votes

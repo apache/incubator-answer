@@ -36,3 +36,11 @@ const (
 	TagAudit                  = "tag.audit"
 	TagUseReservedTag         = "tag.use_reserved_tag"
 )
+
+const (
+	reportActionName = "action.report"
+	editActionName   = "action.edit"
+	deleteActionName = "action.delete"
+	closeActionName  = "action.close"
+	reopenActionName = "action.reopen"
+)

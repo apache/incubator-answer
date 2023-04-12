@@ -64,6 +64,5 @@ func TestUrlTitle(t *testing.T) {
 	for _, title := range list {
 		formatTitle := UrlTitle(title)
 		spew.Dump(formatTitle)
-
 	}
 }

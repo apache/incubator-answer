@@ -15,7 +15,7 @@ builds:
   - id: build
     main: ./cmd/answer/.
     binary: answer
-    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
+    ldflags: -s -w -X github.com/answerdev/answer/cmd.Version={{.Version}} -X github.com/answerdev/answer/cmd.Revision={{.ShortCommit}} -X github.com/answerdev/answer/cmd.Time={{.Date}} -X main.BuildUser=goreleaser
     flags: -v
     goos:
       - linux
@@ -26,7 +26,7 @@ builds:
   - id: build-windows
     main: ./cmd/answer/.
     binary: answer
-    ldflags: -s -w -X main.Version={{.Version}} -X main.Revision={{.ShortCommit}} -X main.Time={{.Date}} -X main.BuildUser=goreleaser
+    ldflags: -s -w -X github.com/answerdev/answer/cmd.Version={{.Version}} -X github.com/answerdev/answer/cmd.Revision={{.ShortCommit}} -X github.com/answerdev/answer/cmd.Time={{.Date}} -X main.BuildUser=goreleaser
     flags: -v
     goos:
       - windows

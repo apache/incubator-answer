@@ -85,13 +85,42 @@ func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.Searc
 		return
 	}
 	ts.TagsFormatRecommendAndReserved(ctx, tags)
+	mainTagId := make([]string, 0)
 	for _, tag := range tags {
-		item := schema.SearchTagLikeResp{}
-		item.SlugName = tag.SlugName
-		item.DisplayName = tag.DisplayName
-		item.Recommend = tag.Recommend
-		item.Reserved = tag.Reserved
-		resp = append(resp, item)
+		if tag.MainTagID != 0 {
+			mainTagId = append(mainTagId, converter.IntToString(tag.MainTagID))
+		}
+	}
+	mainTagList, err := ts.tagCommonRepo.GetTagListByIDs(ctx, mainTagId)
+	if err != nil {
+		return
+	}
+	mainTagMap := make(map[string]*entity.Tag)
+	for _, tag := range mainTagList {
+		mainTagMap[tag.ID] = tag
+	}
+	for _, tag := range tags {
+		if tag.MainTagID != 0 {
+			_, ok := mainTagMap[converter.IntToString(tag.MainTagID)]
+			if ok {
+				tag.SlugName = mainTagMap[converter.IntToString(tag.MainTagID)].SlugName
+				tag.DisplayName = mainTagMap[converter.IntToString(tag.MainTagID)].DisplayName
+				tag.Reserved = mainTagMap[converter.IntToString(tag.MainTagID)].Reserved
+				tag.Recommend = mainTagMap[converter.IntToString(tag.MainTagID)].Recommend
+			}
+		}
+	}
+	RepetitiveTag := make(map[string]bool)
+	for _, tag := range tags {
+		if _, ok := RepetitiveTag[tag.SlugName]; !ok {
+			item := schema.SearchTagLikeResp{}
+			item.SlugName = tag.SlugName
+			item.DisplayName = tag.DisplayName
+			item.Recommend = tag.Recommend
+			item.Reserved = tag.Reserved
+			resp = append(resp, item)
+			RepetitiveTag[tag.SlugName] = true
+		}
 	}
 	return resp, nil
 }
@@ -233,8 +262,10 @@ func (ts *TagCommonService) AddTag(ctx context.Context, req *schema.AddTagReq) (
 	if exist {
 		return nil, errors.BadRequest(reason.TagAlreadyExist)
 	}
+	SlugName := strings.ReplaceAll(req.SlugName, " ", "-")
+	SlugName = strings.ToLower(SlugName)
 	tagInfo := &entity.Tag{
-		SlugName:     strings.ReplaceAll(req.SlugName, " ", "-"),
+		SlugName:     SlugName,
 		DisplayName:  req.DisplayName,
 		OriginalText: req.OriginalText,
 		ParsedText:   req.ParsedText,
@@ -535,7 +566,7 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 	thisObjTagNameList := make([]string, 0)
 	thisObjTagIDList := make([]string, 0)
 	for _, t := range objectTagData.Tags {
-		// t.SlugName = strings.ToLower(t.SlugName)
+		t.SlugName = strings.ToLower(t.SlugName)
 		thisObjTagNameList = append(thisObjTagNameList, t.SlugName)
 	}
 

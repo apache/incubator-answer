@@ -6,8 +6,9 @@ import { DEFAULT_SITE_NAME } from '@/common/constants';
 interface SiteInfoType {
   siteInfo: AdminSettingsGeneral;
   version: string;
+  revision: string;
   update: (params: AdminSettingsGeneral) => void;
-  updateVersion: (ver: string) => void;
+  updateVersion: (ver: string, revision: string) => void;
 }
 
 const siteInfo = create<SiteInfoType>((set) => ({
@@ -20,6 +21,7 @@ const siteInfo = create<SiteInfoType>((set) => ({
     permalink: 1,
   },
   version: '',
+  revision: '',
   update: (params) =>
     set((_) => {
       const o = { ..._.siteInfo, ...params };
@@ -30,9 +32,9 @@ const siteInfo = create<SiteInfoType>((set) => ({
         siteInfo: o,
       };
     }),
-  updateVersion: (ver) => {
+  updateVersion: (ver, revision) => {
     set(() => {
-      return { version: ver };
+      return { version: ver, revision };
     });
   },
 }));

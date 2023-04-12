@@ -63,6 +63,33 @@ func (req *QuestionAdd) Check() (errFields []*validator.FormErrorField, err erro
 	return nil, nil
 }
 
+type QuestionAddByAnswer struct {
+	// question title
+	Title string `validate:"required,notblank,gte=6,lte=150" json:"title"`
+	// content
+	Content string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
+	// html
+	HTML          string `json:"-"`
+	AnswerContent string `validate:"required,notblank,gte=6,lte=65535" json:"answer_content"`
+	AnswerHTML    string `json:"-"`
+	// tags
+	Tags []*TagItem `validate:"required,dive" json:"tags"`
+	// user id
+	UserID string `json:"-"`
+	QuestionPermission
+}
+
+func (req *QuestionAddByAnswer) Check() (errFields []*validator.FormErrorField, err error) {
+	req.HTML = converter.Markdown2HTML(req.Content)
+	req.AnswerHTML = converter.Markdown2HTML(req.AnswerContent)
+	for _, tag := range req.Tags {
+		if len(tag.OriginalText) > 0 {
+			tag.ParsedText = converter.Markdown2HTML(tag.OriginalText)
+		}
+	}
+	return nil, nil
+}
+
 type QuestionPermission struct {
 	// whether user can add it
 	CanAdd bool `json:"-"`

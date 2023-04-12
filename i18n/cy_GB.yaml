@@ -2,15 +2,15 @@
 backend:
   base:
     success:
-      other: Success.
+      other: Llwyddiant.
     unknown:
-      other: Unknown error.
+      other: Gwall anhysbys.
     request_format_error:
-      other: Request format is not valid.
+      other: Nid yw fformat y cais yn ddilys.
     unauthorized_error:
-      other: Unauthorized.
+      other: Anawdurdodedig.
     database_error:
-      other: Data server error.
+      other: Gwall gweinydd data.
   action:
     report:
       other: Flag
@@ -25,385 +25,385 @@ backend:
   role:
     name:
       user:
-        other: User
+        other: Defnyddiwr
       admin:
-        other: Admin
+        other: Gweinyddwr
       moderator:
-        other: Moderator
+        other: Aroglygydd
     description:
       user:
-        other: Default with no special access.
+        other: Diofyn heb unrhyw fynediad arbennig.
       admin:
-        other: Have the full power to access the site.
+        other: Bod â'r pŵer llawn i gael mynediad i'r safle.
       moderator:
-        other: Has access to all posts except admin settings.
+        other: Mae ganddo fynediad i bob post ac eithrio gosodiadau gweinyddol.
   email:
-    other: Email
+    other: Ebost
   password:
-    other: Password
+    other: Cyfrinair
   email_or_password_wrong_error:
-    other: Email and password do not match.
+    other: Nid yw e-bost a chyfrinair yn cyfateb.
   error:
     admin:
       cannot_update_their_password:
-        other: You cannot modify your password.
+        other: Ni allwch addasu eich cyfrinair.
       cannot_modify_self_status:
-        other: You cannot modify your status.
+        other: Ni allwch addasu eich statws.
       email_or_password_wrong:
-        other: Email and password do not match.
+        other: Nid yw e-bost a chyfrinair yn cyfateb.
     answer:
       not_found:
-        other: Answer do not found.
+        other: Ateb heb ei ddarganfod.
       cannot_deleted:
-        other: No permission to delete.
+        other: Dim caniatâd i ddileu.
       cannot_update:
-        other: No permission to update.
+        other: Dim caniatâd i ddiweddaru.
       question_closed_cannot_add:
-        other: Questions are closed and cannot be added.
+        other: Mae cwestiynau ar gau ac ni ellir eu hychwanegu.
     comment:
       edit_without_permission:
-        other: Comment are not allowed to edit.
+        other: Nid oes modd golygu sylwadau.
       not_found:
-        other: Comment not found.
+        other: Sylw heb ei ganfod.
       cannot_edit_after_deadline:
-        other: The comment time has been too long to modify.
+        other: Mae'r amser sylwadau wedi bod yn rhy hir i'w addasu.
     email:
       duplicate:
-        other: Email already exists.
+        other: E-bost yn bodoli eisoes.
       need_to_be_verified:
-        other: Email should be verified.
+        other: Dylid gwirio e-bost.
       verify_url_expired:
-        other: Email verified URL has expired, please resend the email.
+        other: Mae'r URL wedi'i wirio gan e-bost wedi dod i ben, anfonwch yr e-bost eto.
     lang:
       not_found:
-        other: Language file not found.
+        other: Ffeil iaith heb ei chanfod.
     object:
       captcha_verification_failed:
-        other: Captcha wrong.
+        other: Captcha anghywir.
       disallow_follow:
-        other: You are not allowed to follow.
+        other: Ni chaniateir i chi ddilyn.
       disallow_vote:
-        other: You are not allowed to vote.
+        other: Ni chaniateir i chi pleidleisio.
       disallow_vote_your_self:
-        other: You can't vote for your own post.
+        other: Ni allwch bleidleisio dros eich post eich hun.
       not_found:
-        other: Object not found.
+        other: Heb ganfod y gwrthrych.
       verification_failed:
-        other: Verification failed.
+        other: Methodd y dilysu.
       email_or_password_incorrect:
-        other: Email and password do not match.
+        other: Nid yw e-bost a chyfrinair yn cyfateb.
       old_password_verification_failed:
-        other: The old password verification failed
+        other: Methodd yr hen ddilysiad cyfrinair
       new_password_same_as_previous_setting:
-        other: The new password is the same as the previous one.
+        other: Mae'r cyfrinair newydd yr un fath â'r un blaenorol.
     question:
       already_deleted:
-        other: This post has been deleted.
+        other: Mae'r postiad hwn wedi'i ddileu.
       not_found:
-        other: Question not found.
+        other: Cwestiwn heb ei ganfod.
       cannot_deleted:
-        other: No permission to delete.
+        other: Dim caniatâd i ddileu.
       cannot_close:
-        other: No permission to close.
+        other: Dim caniatâd i cau.
       cannot_update:
-        other: No permission to update.
+        other: Dim caniatâd i ddiweddaru.
     rank:
       fail_to_meet_the_condition:
-        other: Rank fail to meet the condition.
+        other: Rank yn methu â bodloni'r amod.
       vote_fail_to_meet_the_condition:
         other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
     report:
       handle_failed:
-        other: Report handle failed.
+        other: Methodd handlen yr adroddiad.
       not_found:
-        other: Report not found.
+        other: Heb ganfod yr adroddiad.
     tag:
       already_exist:
-        other: Tag already exists.
+        other: Tag yn bodoli eisoes.
       not_found:
-        other: Tag not found.
+        other: Tag heb ei ddarganfod.
       recommend_tag_not_found:
-        other: Recommend Tag is not exist.
+        other: Nid yw Tag argymell yn bodoli.
       recommend_tag_enter:
-        other: Please enter at least one required tag.
+        other: Rhowch o leiaf un tag gofynnol.
       not_contain_synonym_tags:
-        other: Should not contain synonym tags.
+        other: Ni ddylai gynnwys tagiau cyfystyr.
       cannot_update:
-        other: No permission to update.
+        other: Dim caniatâd i ddiweddaru.
       is_used_cannot_delete:
-        other: You cannot delete a tag that is in use
+        other: Ni allwch ddileu tag sy'n cael ei ddefnyddio
       cannot_set_synonym_as_itself:
-        other: You cannot set the synonym of the current tag as itself.
+        other: Ni allwch osod cyfystyr y tag cyfredol fel ei hun.
     smtp:
       config_from_name_cannot_be_email:
-        other: The From Name cannot be a email address.
+        other: Ni all yr 'Enw O' fod yn gyfeiriad e-bost.
     theme:
       not_found:
-        other: Theme not found.
+        other: Thema heb ei ddarganfod.
     revision:
       review_underway:
-        other: Can't edit currently, there is a version in the review queue.
+        other: Methu â golygu ar hyn o bryd, mae fersiwn yn y ciw adolygu.
       no_permission:
-        other: No permission to Revision.
+        other: Dim caniatâd i adolygu.
     user:
       email_or_password_wrong:
         other:
-          other: Email and password do not match.
+          other: Nid yw e-bost a chyfrinair yn cyfateb.
       not_found:
-        other: User not found.
+        other: Defnyddwr heb ei ddarganfod.
       suspended:
-        other: User has been suspended.
+        other: Mae'r defnyddiwr hwn wedi'i atal.
       username_invalid:
-        other: Username is invalid.
+        other: Mae'r enw defnyddiwr yn annilys.
       username_duplicate:
-        other: Username is already in use.
+        other: Cymerwyd yr enw defnyddiwr eisoes.
       set_avatar:
-        other: Avatar set failed.
+        other: Methodd gwneud avatar.
       cannot_update_your_role:
-        other: You cannot modify your role.
+        other: Ni allwch addasu eich rôl.
       not_allowed_registration:
-        other: Currently the site is not open for registration
+        other: Ar hyn o bryd nid yw'r safle ar agor i'w gofrestru
     config:
       read_config_failed:
-        other: Read config failed
+        other: Wedi methu darllen y ffurfwedd
     database:
       connection_failed:
-        other: Database connection failed
+        other: Methodd cysylltiad cronfa ddata
       create_table_failed:
-        other: Create table failed
+        other: Methwyd creu tabl
     install:
       create_config_failed:
-        other: Can't create the config.yaml file.
+        other: Methu creu'r ffeil config.yaml.
     upload:
       unsupported_file_format:
-        other: Unsupported file format.
+        other: Fformat ffeil anghydnaws.
   report:
     spam:
       name:
-        other: spam
+        other: sbam
       desc:
-        other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
+        other: Mae'r swydd hon yn hysbyseb, neu fandaliaeth. Nid yw'n ddefnyddiol nac yn berthnasol i'r pwnc cyfredol.
     rude:
       name:
-        other: rude or abusive
+        other: anghwrtais neu sarhaus
       desc:
-        other: A reasonable person would find this content inappropriate for respectful discourse.
+        other: Byddai person rhesymol yn gweld y cynnwys hwn yn amhriodol ar gyfer trafodaeth barchus.
     duplicate:
       name:
-        other: a duplicate
+        other: dyblyg
       desc:
-        other: This question has been asked before and already has an answer.
+        other: Mae'r cwestiwn hwn wedi'i ofyn o'r blaen ac mae ganddo ateb yn barod.
     not_answer:
       name:
-        other: not an answer
+        other: nid ateb
       desc:
-        other: This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether.
+        other: Postiwyd hwn fel ateb, ond nid yw'n ceisio ateb y cwestiwn. Mae'n bosibl y dylai fod yn olygiad, yn sylwad, yn gwestiwn arall, neu'n cael ei ddileu yn gyfan gwbl.
     not_need:
       name:
-        other: no longer needed
+        other: nad oes ei angen yn pellach
       desc:
-        other: This comment is outdated, conversational or not relevant to this post.
+        other: Mae'r sylw hwn yn hen ffasiwn, yn sgyrsiol neu ddim yn berthnasol i'r post hwn.
     other:
       name:
-        other: something else
+        other: rhywbeth arall
       desc:
-        other: This post requires staff attention for another reason not listed above.
+        other: Mae'r swydd hon angen sylw staff am reswm arall nad yw wedi'i restru uchod.
   question:
     close:
       duplicate:
         name:
-          other: spam
+          other: sbam
         desc:
-          other: This question has been asked before and already has an answer.
+          other: Mae'r cwestiwn hwn wedi'i ofyn o'r blaen ac mae ganddo ateb yn barod.
       guideline:
         name:
-          other: a community-specific reason
+          other: rheswm cymunedol-benodol
         desc:
-          other: This question doesn't meet a community guideline.
+          other: Nid yw'r cwestiwn hwn yn bodloni canllaw cymunedol.
       multiple:
         name:
-          other: needs details or clarity
+          other: angen manylion neu eglurder
         desc:
-          other: This question currently includes multiple questions in one. It should focus on one problem only.
+          other: Mae'r cwestiwn hwn ar hyn o bryd yn cynnwys cwestiynau lluosog mewn un. Dylai ganolbwyntio ar un broblem yn unig.
       other:
         name:
-          other: something else
+          other: rhywbeth arall
         desc:
-          other: This post requires another reason not listed above.
+          other: Mae'r swydd hon angen reswm arall nad yw wedi'i restru uchod.
     operation_type:
       asked:
-        other: asked
+        other: gofynnodd
       answered:
-        other: answered
+        other: atebodd
       modified:
-        other: modified
+        other: wedi newid
   notification:
     action:
       update_question:
-        other: updated question
+        other: cwestiwn wedi'i ddiweddaru
       answer_the_question:
-        other: answered question
+        other: cwestiwn wedi ei ateb
       update_answer:
-        other: updated answer
+        other: ateb wedi'i ddiweddaru
       accept_answer:
-        other: accepted answer
+        other: ateb derbyniol
       comment_question:
-        other: commented question
+        other: cwestiwn a wnaed
       comment_answer:
-        other: commented answer
+        other: ateb a wnaed
       reply_to_you:
-        other: replied to you
+        other: atebodd i chi
       mention_you:
-        other: mentioned you
+        other: wedi sôn amdanoch
       your_question_is_closed:
-        other: Your question has been closed
+        other: Mae eich cwestiwn wedi’i gau
       your_question_was_deleted:
-        other: Your question has been deleted
+        other: Mae eich cwestiwn wedi’i dileu
       your_answer_was_deleted:
-        other: Your answer has been deleted
+        other: Mae eich ateb wedi’i dileu
       your_comment_was_deleted:
-        other: Your comment has been deleted
+        other: Mae eich sylw wedi’i dileu
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: How to Format
+    title: Sut i Fformatio
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">i wneud cysylltiadau</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">rhoi toriad llinell rhwng paragraffau</p></li><li><p class="mb-2"><em>_italig_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">cod mewnoliad gan 4 bylchau</p></li><li><p class="mb-2">dyfyniad trwy osod <code>&gt;</code> ar ddechrau'r llinell</p></li><li><p class="mb-2">backtic yn dianc<code>`fel_hyn_`</code></p></li><li><p class="mb-2">creu ffensys cod gyda backticks <code>`</code></p><pre class="mb-0"><code>```<br/>cod yma<br/>```</code></pre></li></ul>
   pagination:
-    prev: Prev
-    next: Next
+    prev: Cynt
+    next: Nesaf
   page_title:
-    question: Question
-    questions: Questions
+    question: Cwestiwn
+    questions: Cwestiynau
     tag: Tag
-    tags: Tags
-    tag_wiki: tag wiki
-    create_tag: Create Tag
-    edit_tag: Edit Tag
-    ask_a_question: Add Question
-    edit_question: Edit Question
-    edit_answer: Edit Answer
-    search: Search
-    posts_containing: Posts containing
-    settings: Settings
-    notifications: Notifications
-    login: Log In
-    sign_up: Sign Up
-    account_recovery: Account Recovery
-    account_activation: Account Activation
-    confirm_email: Confirm Email
-    account_suspended: Account Suspended
-    admin: Admin
-    change_email: Modify Email
-    install: Answer Installation
-    upgrade: Answer Upgrade
-    maintenance: Website Maintenance
-    users: Users
-    http_404: HTTP Error 404
-    http_50X: HTTP Error 500
+    tags: Tagiau
+    tag_wiki: wici tag
+    create_tag: Creu Tag
+    edit_tag: Golygu Tag
+    ask_a_question: Ychwanegu Cwestiwn
+    edit_question: Golygu Cwestiwn
+    edit_answer: Golygu Ateb
+    search: Chwiliwch
+    posts_containing: Postiadau yn cynnwys
+    settings: Gosodiadau
+    notifications: Hysbysiadau
+    login: Mewngofnodi
+    sign_up: Cofrestru
+    account_recovery: Adfer Cyfrif
+    account_activation: Ysgogi Cyfrif
+    confirm_email: Cadarnhau e-bost
+    account_suspended: Cyfrif wedi'i atal
+    admin: Gweinyddu
+    change_email: Addasu E-bost
+    install: Ateb Gosod
+    upgrade: Ateb Uwchraddio
+    maintenance: Cynnal a Chadw Gwefan
+    users: Defnyddwyr
+    http_404: Gwall HTTP 404
+    http_50X: Gwall HTTP 500
     http_403: HTTP Error 403
   notifications:
-    title: Notifications
-    inbox: Inbox
-    achievement: Achievements
-    all_read: Mark all as read
-    show_more: Show more
+    title: Hysbysiadau
+    inbox: Mewnflwch
+    achievement: Llwyddiannau
+    all_read: Marciwch y cyfan fel wedi'i ddarllen
+    show_more: Dangos mwy
   suspended:
-    title: Your Account has been Suspended
-    until_time: "Your account was suspended until {{ time }}."
-    forever: This user was suspended forever.
-    end: You don't meet a community guideline.
+    title: Mae'ch Cyfrif wedi'i Atal
+    until_time: "Cafodd eich cyfrif ei atal tan {{ time }}."
+    forever: Cafodd y defnyddiwr hwn ei atal am byth.
+    end: Nid ydych yn bodloni canllaw cymunedol.
   editor:
     blockquote:
-      text: Blockquote
+      text: Dyfyniad
     bold:
-      text: Strong
+      text: Cryf
     chart:
-      text: Chart
-      flow_chart: Flow chart
-      sequence_diagram: Sequence diagram
-      class_diagram: Class diagram
-      state_diagram: State diagram
-      entity_relationship_diagram: Entity relationship diagram
-      user_defined_diagram: User defined diagram
-      gantt_chart: Gantt chart
-      pie_chart: Pie chart
+      text: Siart
+      flow_chart: Siart llif
+      sequence_diagram: Diagram dilyniant
+      class_diagram: Diagram dosbarth
+      state_diagram: Diagram cyflwr
+      entity_relationship_diagram: Diagram perthynas endid
+      user_defined_diagram: Diagram wedi'i ddiffinio gan y defnyddiwr
+      gantt_chart: Siart Gantt
+      pie_chart: Siart cylch
     code:
-      text: Code Sample
-      add_code: Add code sample
+      text: Sampl côd
+      add_code: Ychwanegu sampl côd
       form:
         fields:
           code:
-            label: Code
+            label: Côd
             msg:
-              empty: Code cannot be empty.
+              empty: Ni all côd fod yn wag.
           language:
-            label: Language
-            placeholder: Automatic detection
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: Iaith
+            placeholder: Synhwyriad awtomatig
+      btn_cancel: Canslo
+      btn_confirm: Ychwanegu
     formula:
-      text: Formula
+      text: Fformiwla
       options:
-        inline: Inline formula
-        block: Block formula
+        inline: Fformiwla mewn-lein
+        block: Fformiwla bloc
     heading:
-      text: Heading
+      text: Pennawd
       options:
-        h1: Heading 1
-        h2: Heading 2
-        h3: Heading 3
-        h4: Heading 4
-        h5: Heading 5
-        h6: Heading 6
+        h1: Pennawd 1
+        h2: Pennawd 2
+        h3: Pennawd 3
+        h4: Pennawd 4
+        h5: Pennawd 5
+        h6: Pennawd 6
     help:
-      text: Help
+      text: Cymorth
     hr:
-      text: Horizontal Rule
+      text: Llinell lorweddol
     image:
-      text: Image
-      add_image: Add image
-      tab_image: Upload image
+      text: Delwedd
+      add_image: Ychwanegu delwedd
+      tab_image: Uwchlwytho delwedd
       form_image:
         fields:
           file:
-            label: Image File
-            btn: Select image
+            label: Ffeil Delwedd
+            btn: Dewis delwedd
             msg:
-              empty: File cannot be empty.
-              only_image: Only image files are allowed.
-              max_size: File size cannot exceed 4MB.
+              empty: Ni all ffeil fod yn wag.
+              only_image: Dim ond ffeiliau delwedd a ganiateir.
+              max_size: Ni all maint y ffeil fod yn fwy na 4MB.
           desc:
-            label: Description
-      tab_url: Image URL
+            label: Disgrifiad
+      tab_url: URL delwedd
       form_url:
         fields:
           url:
-            label: Image URL
+            label: URL delwedd
             msg:
-              empty: Image URL cannot be empty.
+              empty: Ni all URL delwedd fod yn wag.
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
-      uploading: Uploading
+            label: Disgrifiad
+      btn_cancel: Canslo
+      btn_confirm: Ychwanegu
+      uploading: Wrthi'n uwchlwytho
     indent:
-      text: Indent
+      text: Mewnoliad
     outdent:
-      text: Outdent
+      text: Alloliad
     italic:
-      text: Emphasis
+      text: Pwyslais
     link:
-      text: Hyperlink
-      add_link: Add hyperlink
+      text: Hypergyswllt
+      add_link: Ychwanegu hypergyswllt
       form:
         fields:
           url:
             label: URL
             msg:
-              empty: URL cannot be empty.
+              empty: Ni all URL fod yn wag.
           name:
-            label: Description
+            label: Disgrifiad
       btn_cancel: Cancel
       btn_confirm: Add
     ordered_list:
