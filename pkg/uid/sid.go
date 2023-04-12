@@ -48,7 +48,7 @@ func EnShortID(id string) string {
 	if ShortIDSwitch {
 		num, err := strconv.ParseInt(id, 10, 64)
 		if err != nil {
-			return ""
+			return id
 		}
 		return NumToShortID(num)
 	}

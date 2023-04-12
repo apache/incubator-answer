@@ -39,3 +39,6 @@ language_options:
   - label: "Tiếng Việt"
     value: "vi_VN"
     progress: 0
+  - label: "Slovak"
+    value: "sk_SK"
+    progress: 100

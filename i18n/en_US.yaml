@@ -12,6 +12,17 @@ backend:
       other: Unauthorized.
     database_error:
       other: Data server error.
+  action:
+    report:
+      other: Flag
+    edit:
+      other: Edit
+    delete:
+      other: Delete
+    close:
+      other: Close
+    reopen:
+      other: Reopen
   role:
     name:
       user:
@@ -100,6 +111,8 @@ backend:
     rank:
       fail_to_meet_the_condition:
         other: Rank fail to meet the condition.
+      vote_fail_to_meet_the_condition:
+        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
     report:
       handle_failed:
         other: Report handle failed.

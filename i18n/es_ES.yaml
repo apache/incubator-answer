@@ -11,6 +11,17 @@ backend:
       other: No autorizado.
     database_error:
       other: Error en el servidor de datos.
+  action:
+    report:
+      other: Flag
+    edit:
+      other: Edit
+    delete:
+      other: Delete
+    close:
+      other: Close
+    reopen:
+      other: Reopen
   role:
     name:
       user:
@@ -47,6 +58,8 @@ backend:
         other: Sin permiso para eliminar.
       cannot_update:
         other: Sin permiso para actualizar.
+      question_closed_cannot_add:
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
         other: Edición del comentario no permitida.
@@ -97,12 +110,16 @@ backend:
     rank:
       fail_to_meet_the_condition:
         other: El rango no cumple la condición.
+      vote_fail_to_meet_the_condition:
+        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
     report:
       handle_failed:
         other: Error en el manejador del reporte.
       not_found:
         other: Informe no encontrado.
     tag:
+      already_exist:
+        other: Tag already exists.
       not_found:
         other: Etiqueta no encontrada.
       recommend_tag_not_found:
@@ -282,6 +299,7 @@ ui:
     tag: Etiqueta
     tags: Etiquetas
     tag_wiki: tag wiki
+    create_tag: Create Tag
     edit_tag: Editar etiqueta
     ask_a_question: Añadir Pregunta
     edit_question: Editar Pregunta
@@ -302,6 +320,9 @@ ui:
     upgrade: Actualización de Answer
     maintenance: Mantenimiento del sitio web
     users: Usuarios
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
+    http_403: HTTP Error 403
   notifications:
     title: Notificaciones
     inbox: Buzón de entrada
@@ -454,6 +475,7 @@ ui:
           label: Description
     btn_cancel: Cancelar
     btn_submit: Enviar
+    btn_post: Post new tag
   tag_info:
     created_at: Creado
     edited_at: Editado
@@ -518,6 +540,7 @@ ui:
       Utiliza los comentarios para pedir más información o sugerir mejoras y modificaciones. Evita responder preguntas en los comentarios.
     tip_answer: >-
       Usa comentarios para responder a otros usuarios o notificarles de cambios. Si estás añadiendo nueva información, edita tu publicación en vez de comentar.
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: Editar respuesta
     default_reason: Editar respuesta
@@ -767,6 +790,11 @@ ui:
     answered: respondida
     closed_in: Cerrado el
     show_exist: Mostrar una pregunta existente.
+    useful: Useful
+    question_useful: It is useful and clear
+    question_un_useful: It is unclear or not useful
+    answer_useful: It is useful
+    answer_un_useful: It is not useful
     answers:
       title: Respuestas
       score: Puntuación
@@ -783,7 +811,14 @@ ui:
         <p>¿Seguro que quieres añadir otra respuesta?</p><p>Puedes utilizar el enlace de edición para detallar y mejorar tu respuesta existente en su lugar.</p>
       empty: La respuesta no puede estar vacía.
       characters: content must be at least 6 characters in length.
+      tips:
+        header_1: Thanks for your answer
+        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
+        li1_2: Back up any statements you make with references or personal experience.
+        header_2: But <strong>avoid</strong> ...
+        li2_1: Asking for help, seeking clarification, or responding to other answers.
     reopen:
+      confirm_btn: Reopen
       title: Reabrir esta publicación
       content: '¿Seguro que quieres reabrir esta publicación?'
       success: Esta publicación ha sido reabierta
@@ -1002,13 +1037,11 @@ ui:
     votes: votes
     answers: answers
     accepted: Accepted
-  page_404:
-    http_error: HTTP Error 404
-    desc: "Unfortunately, this page doesn't exist."
-    back_home: Back to homepage
-  page_50X:
-    http_error: HTTP Error 500
-    desc: The server encountered an error and could not complete your request.
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: You don’t have permission to access this page.
+    desc_404: Unfortunately, this page doesn't exist.
+    desc_50X: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
     desc: "We are under maintenance, we'll be back soon."
@@ -1223,6 +1256,9 @@ ui:
         label: Timezone
         msg: Timezone cannot be empty.
         text: Choose a city in the same timezone as you.
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
@@ -1388,8 +1424,8 @@ ui:
     no_data: "We couldn't find anything."
   users:
     title: Usuarios
-    users_with_the_most_reputation: Usuarios con la reputación más alta
-    users_with_the_most_vote: Usuarios que más han votado
+    users_with_the_most_reputation: Users with the highest reputation scores this week
+    users_with_the_most_vote: Users who voted the most this week
     staffs: Nuestor equipo de la comunidad
     reputation: reputación
     votes: votos
