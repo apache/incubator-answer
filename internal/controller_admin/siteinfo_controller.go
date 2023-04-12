@@ -386,9 +386,9 @@ func (sc *SiteInfoController) GetPrivilegesConfig(ctx *gin.Context) {
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json
-// @Param data body schema.UpdatePrivilegesConfigReq true "smtp config"
+// @Param data body schema.UpdatePrivilegesConfigReq true "config"
 // @Success 200 {object} handler.RespBody{}
-// @Router /answer/admin/api/setting/smtp [put]
+// @Router /answer/admin/api/setting/privileges [put]
 func (sc *SiteInfoController) UpdatePrivilegesConfig(ctx *gin.Context) {
 	req := &schema.UpdatePrivilegesConfigReq{}
 	if handler.BindAndCheck(ctx, req) {

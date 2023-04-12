@@ -308,25 +308,49 @@ func (s *SiteInfoService) SaveSeo(ctx context.Context, req schema.SiteSeoReq) (e
 }
 
 func (s *SiteInfoService) GetPrivilegesConfig(ctx context.Context) (resp *schema.GetPrivilegesConfigResp, err error) {
-	resp = &schema.GetPrivilegesConfigResp{
-		Privileges: make(map[string]int, 0),
+	privilege := &schema.UpdatePrivilegesConfigReq{}
+	if err = s.siteInfoCommonService.GetSiteInfoByType(ctx, constant.SiteTypePrivileges, privilege); err != nil {
+		return nil, err
 	}
-	for _, key := range constant.RankAllKeys {
-		v, err := s.configRepo.GetInt(key)
-		if err != nil {
-			log.Error(err)
-			continue
-		}
-		resp.Privileges[key] = v
+	resp = &schema.GetPrivilegesConfigResp{
+		Options:       schema.DefaultPrivilegeOptions,
+		SelectedLevel: schema.PrivilegeLevel2,
+	}
+	if privilege != nil && privilege.Level > 0 {
+		resp.SelectedLevel = privilege.Level
 	}
 	return resp, nil
 }
 
 func (s *SiteInfoService) UpdatePrivilegesConfig(ctx context.Context, req *schema.UpdatePrivilegesConfigReq) (err error) {
-	for key, value := range req.Privileges {
-		err = s.configRepo.SetConfig(key, fmt.Sprintf("%d", value))
+	var chooseOption *schema.PrivilegeOption
+	for _, option := range schema.DefaultPrivilegeOptions {
+		if option.Level == req.Level {
+			chooseOption = option
+			break
+		}
+	}
+	if chooseOption == nil {
+		return nil
+	}
+
+	// update site info that user choose which privilege level
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypePrivileges,
+		Content: string(content),
+		Status:  1,
+	}
+	err = s.siteInfoRepo.SaveByType(ctx, constant.SiteTypePrivileges, data)
+	if err != nil {
+		return err
+	}
+
+	// update privilege in config
+	for _, privilege := range chooseOption.Privileges {
+		err = s.configRepo.SetConfig(privilege.Key, fmt.Sprintf("%d", privilege.Value))
 		if err != nil {
-			return
+			return err
 		}
 	}
 	return
