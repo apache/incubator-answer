@@ -1,6 +1,6 @@
 import { memo, useState, FC, useEffect } from 'react';
-import { Form, Button } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
+import { Form, Button, Alert } from 'react-bootstrap';
+import { useTranslation, Trans } from 'react-i18next';
 
 import { marked } from 'marked';
 import classNames from 'classnames';
@@ -18,6 +18,7 @@ interface Props {
     /** question  id */
     qid: string;
     answered?: boolean;
+    loggedUserRank: number;
   };
   callback?: (obj) => void;
 }
@@ -39,6 +40,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const [focusType, setFocusType] = useState('');
   const [editorFocusState, setEditorFocusState] = useState(false);
   const [hasDraft, setHasDraft] = useState(false);
+  const [showTips, setShowTips] = useState(data.loggedUserRank < 100);
 
   usePromptWithUnload({
     when: Boolean(formData.content.value),
@@ -212,29 +214,58 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
             </div>
           )}
           {showEditor && (
-            <Editor
-              className={classNames(
-                'form-control p-0',
-                focusType === 'answer' && 'focus',
-              )}
-              value={formData.content.value}
-              autoFocus={editorFocusState}
-              onChange={(val) => {
-                setFormData({
-                  content: {
-                    value: val,
-                    isInvalid: false,
-                    errorMsg: '',
-                  },
-                });
-              }}
-              onFocus={() => {
-                setFocusType('answer');
-              }}
-              onBlur={() => {
-                setFocusType('');
-              }}
-            />
+            <>
+              <Editor
+                className={classNames(
+                  'form-control p-0',
+                  focusType === 'answer' && 'focus',
+                )}
+                value={formData.content.value}
+                autoFocus={editorFocusState}
+                onChange={(val) => {
+                  setFormData({
+                    content: {
+                      value: val,
+                      isInvalid: false,
+                      errorMsg: '',
+                    },
+                  });
+                }}
+                onFocus={() => {
+                  setFocusType('answer');
+                }}
+                onBlur={() => {
+                  setFocusType('');
+                }}
+              />
+
+              <Alert
+                variant="warning"
+                show={data.loggedUserRank < 100 && showTips}
+                onClose={() => setShowTips(false)}
+                dismissible
+                className="mt-3">
+                <p>{t('tips.header_1')}</p>
+                <ul>
+                  <li>
+                    <Trans
+                      i18nKey="question_detail.write_answer.tips.li1_1"
+                      components={{ strong: <strong /> }}
+                    />
+                  </li>
+                  <li>{t('tips.li1_2')}</li>
+                </ul>
+                <p>
+                  <Trans
+                    i18nKey="question_detail.write_answer.tips.header_2"
+                    components={{ strong: <strong /> }}
+                  />
+                </p>
+                <ul className="mb-0">
+                  <li>{t('tips.li2_1')}</li>
+                </ul>
+              </Alert>
+            </>
           )}
 
           <Form.Control.Feedback type="invalid">

@@ -979,13 +979,11 @@ ui:
     votes: 个点赞
     answers: 个回答
     accepted: 已被采纳
-  page_404:
-    http_error: HTTP Error 404
-    desc: "很抱歉，此页面不存在。"
-    back_home: 回到主页
-  page_50X:
-    http_error: HTTP Error 500
-    desc: 服务器遇到了一个错误，无法完成你的请求。
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: 你无权访问此页面。
+    desc_404: 很抱歉，此页面不存在。
+    desc_50X: 服务器遇到了一个错误，无法完成你的请求。
     back_home: 回到主页
   page_maintenance:
     desc: "我们正在进行维护，我们将很快回来。"
@@ -1366,8 +1364,8 @@ ui:
     no_data: "空空如也"
   users:
     title: 用户
-    users_with_the_most_reputation: 信誉积分最高的用户
-    users_with_the_most_vote: 投票最多的用户
+    users_with_the_most_reputation: 本周信誉积分最高的用户
+    users_with_the_most_vote: 本周投票最多的用户
     staffs: 我们的社区工作人员
     reputation: 声望值
     votes: 投票

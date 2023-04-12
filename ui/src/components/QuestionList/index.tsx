@@ -17,8 +17,8 @@ import {
 } from '@/components';
 
 const QuestionOrderKeys: Type.QuestionOrderBy[] = [
-  'newest',
   'active',
+  'newest',
   'frequent',
   'score',
   'unanswered',
