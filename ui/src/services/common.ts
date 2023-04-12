@@ -130,9 +130,8 @@ export const resendEmail = (params?: Type.ImgCodeReq) => {
  * @description get login userinfo
  * @returns {UserInfo}
  */
-export const getLoggedUserInfo = () => {
-  // TODO: After merging `1.0.8` versions, set the `passingError` parameter for this request
-  return request.get<Type.UserInfoRes>('/answer/api/v1/user/info');
+export const getLoggedUserInfo = (config = { passingError: false }) => {
+  return request.get<Type.UserInfoRes>('/answer/api/v1/user/info', config);
 };
 
 export const modifyPassword = (params: Type.ModifyPasswordReq) => {

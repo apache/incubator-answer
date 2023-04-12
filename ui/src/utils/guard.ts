@@ -98,7 +98,9 @@ export const pullLoggedUser = async (forceRePull = false) => {
     return;
   }
   pluTimestamp = Date.now();
-  const loggedUserInfo = await getLoggedUserInfo().catch((ex) => {
+  const loggedUserInfo = await getLoggedUserInfo({
+    passingError: true,
+  }).catch((ex) => {
     pluTimestamp = 0;
     loggedUserInfoStore.getState().clear(false);
     console.error(ex);
