@@ -23,6 +23,10 @@ backend:
       other: Close
     reopen:
       other: Reopen
+    pin:
+      other: pin
+    hide:
+      other: hide
   role:
     name:
       user:
