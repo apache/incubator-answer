@@ -358,9 +358,8 @@ func (qs *QuestionService) OperationQuestion(ctx context.Context, req *schema.Op
 	actMap[schema.QuestionOperationUnPin] = constant.ActQuestionUnPin
 	actMap[schema.QuestionOperationHide] = constant.ActQuestionHide
 	actMap[schema.QuestionOperationShow] = constant.ActQuestionShow
-
 	_, ok := actMap[req.Operation]
-	if !ok {
+	if ok {
 		activity_queue.AddActivity(&schema.ActivityMsg{
 			UserID:           req.UserID,
 			ObjectID:         questionInfo.ID,
