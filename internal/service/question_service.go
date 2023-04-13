@@ -319,6 +319,59 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	return
 }
 
+// OperationQuestion
+func (qs *QuestionService) OperationQuestion(ctx context.Context, req *schema.OperationQuestionReq) (err error) {
+	questionInfo, has, err := qs.questionRepo.GetQuestion(ctx, req.ID)
+	if err != nil {
+		return err
+	}
+	if !has {
+		return nil
+	}
+	// Hidden question cannot be placed at the top
+	if questionInfo.Show == entity.QuestionHide && req.Operation == schema.QuestionOperationPin {
+		return nil
+	}
+	// Question cannot be hidden when they are at the top
+	if questionInfo.Pin == entity.QuestionPin && req.Operation == schema.QuestionOperationHide {
+		return nil
+	}
+
+	switch req.Operation {
+	case schema.QuestionOperationHide:
+		questionInfo.Show = entity.QuestionHide
+	case schema.QuestionOperationShow:
+		questionInfo.Show = entity.QuestionShow
+	case schema.QuestionOperationPin:
+		questionInfo.Pin = entity.QuestionPin
+	case schema.QuestionOperationUnPin:
+		questionInfo.Pin = entity.QuestionUnPin
+	}
+
+	err = qs.questionRepo.UpdateQuestionOperation(ctx, questionInfo)
+	if err != nil {
+		return err
+	}
+
+	actMap := make(map[string]constant.ActivityTypeKey)
+	actMap[schema.QuestionOperationPin] = constant.ActQuestionPin
+	actMap[schema.QuestionOperationUnPin] = constant.ActQuestionUnPin
+	actMap[schema.QuestionOperationHide] = constant.ActQuestionHide
+	actMap[schema.QuestionOperationShow] = constant.ActQuestionShow
+
+	_, ok := actMap[req.Operation]
+	if !ok {
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           req.UserID,
+			ObjectID:         questionInfo.ID,
+			OriginalObjectID: questionInfo.ID,
+			ActivityTypeKey:  actMap[req.Operation],
+		})
+	}
+
+	return nil
+}
+
 // RemoveQuestion delete question
 func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.RemoveQuestionReq) (err error) {
 	questionInfo, has, err := qs.questionRepo.GetQuestion(ctx, req.ID)

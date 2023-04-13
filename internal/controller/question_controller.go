@@ -105,8 +105,8 @@ func (qc *QuestionController) OperationQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
-
-	handler.HandleResponse(ctx, nil, nil)
+	err = qc.questionService.OperationQuestion(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
 }
 
 // CloseQuestion Close question

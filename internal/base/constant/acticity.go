@@ -29,6 +29,10 @@ const (
 	ActQuestionRollback  ActivityTypeKey = "question.rollback"
 	ActQuestionDeleted   ActivityTypeKey = "question.deleted"
 	ActQuestionUndeleted ActivityTypeKey = "question.undeleted"
+	ActQuestionPin       ActivityTypeKey = "question.pin"
+	ActQuestionUnPin     ActivityTypeKey = "question.unpin"
+	ActQuestionHide      ActivityTypeKey = "question.hide"
+	ActQuestionShow      ActivityTypeKey = "question.show"
 )
 
 const (

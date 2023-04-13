@@ -125,6 +125,15 @@ func (qr *questionRepo) UpdateQuestionStatusWithOutUpdateTime(ctx context.Contex
 	return nil
 }
 
+func (qr *questionRepo) UpdateQuestionOperation(ctx context.Context, question *entity.Question) (err error) {
+	question.ID = uid.DeShortID(question.ID)
+	_, err = qr.data.DB.Where("id =?", question.ID).Cols("pin", "show").Update(question)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
 func (qr *questionRepo) UpdateAccepted(ctx context.Context, question *entity.Question) (err error) {
 	question.ID = uid.DeShortID(question.ID)
 	_, err = qr.data.DB.Where("id =?", question.ID).Cols("accepted_answer_id").Update(question)
