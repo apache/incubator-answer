@@ -191,6 +191,8 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 		permission.QuestionDelete,
 		permission.QuestionClose,
 		permission.QuestionReopen,
+		permission.QuestionPin,
+		permission.QuestionHide,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -202,6 +204,8 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	req.CanDelete = canList[1]
 	req.CanClose = canList[2]
 	req.CanReopen = canList[3]
+	req.CanPin = canList[4]
+	req.CanHide = canList[5]
 
 	info, err := qc.questionService.GetQuestionAndAddPV(ctx, id, userID, req)
 	if err != nil {

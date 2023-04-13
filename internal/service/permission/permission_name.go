@@ -45,4 +45,6 @@ const (
 	deleteActionName = "action.delete"
 	closeActionName  = "action.close"
 	reopenActionName = "action.reopen"
+	pinActionName    = "action.pin"
+	hideActionName   = "action.hide"
 )

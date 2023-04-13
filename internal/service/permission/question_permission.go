@@ -10,7 +10,7 @@ import (
 
 // GetQuestionPermission get question permission
 func GetQuestionPermission(ctx context.Context, userID string, creatorUserID string,
-	canEdit, canDelete, canClose, canReopen bool) (
+	canEdit, canDelete, canClose, canReopen, canPin, canHide bool) (
 	actions []*schema.PermissionMemberAction) {
 	lang := handler.GetLangByCtx(ctx)
 	actions = make([]*schema.PermissionMemberAction, 0)
@@ -39,6 +39,20 @@ func GetQuestionPermission(ctx context.Context, userID string, creatorUserID str
 		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "reopen",
 			Name:   translator.Tr(lang, reopenActionName),
+			Type:   "confirm",
+		})
+	}
+	if canPin {
+		actions = append(actions, &schema.PermissionMemberAction{
+			Action: "pin",
+			Name:   translator.Tr(lang, pinActionName),
+			Type:   "confirm",
+		})
+	}
+	if canHide {
+		actions = append(actions, &schema.PermissionMemberAction{
+			Action: "hide",
+			Name:   translator.Tr(lang, hideActionName),
 			Type:   "confirm",
 		})
 	}
