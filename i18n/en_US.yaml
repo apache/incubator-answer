@@ -789,6 +789,7 @@ ui:
     btn: Add question
     answers: answers
   question_detail:
+    action: Action
     Asked: Asked
     asked: asked
     update: Modified
@@ -827,13 +828,14 @@ ui:
         li1_2: Back up any statements you make with references or personal experience.
         header_2: But <strong>avoid</strong> ...
         li2_1: Asking for help, seeking clarification, or responding to other answers.
-
     reopen:
       confirm_btn: Reopen
       title: Reopen this post
       content: Are you sure you want to reopen?
-      success: This post has been reopened
-
+    pin:
+      title: Pin this post
+      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
+      confirm_btn: Pin
   delete:
     title: Delete this post
     question: >-
@@ -847,7 +849,6 @@ ui:
       of accepted answers can result in your account being blocked from answering.
       Are you sure you wish to delete?
     other: Are you sure you wish to delete?
-    tip_question_deleted: This post has been deleted
     tip_answer_deleted: This answer has been deleted
   btns:
     confirm: Confirm
@@ -863,6 +864,7 @@ ui:
     reject: Reject
     skip: Skip
     discard_draft: Discard draft
+    pinned: Pinned
   search:
     title: Search Results
     keywords: Keywords
@@ -1434,6 +1436,10 @@ ui:
     closed: closed
     reopened: reopened
     created: created
+    pin: pinned
+    unpin: unpinned
+    show: listed
+    hide: unlisted
     title: "History for"
     tag_title: "Timeline for"
     show_votes: "Show votes"
@@ -1459,5 +1465,9 @@ ui:
   draft:
     discard_confirm: Are you sure you want to discard your draft?
   messages:
-     post_deleted: This post has been deleted.
-
+    post_deleted: This post has been deleted.
+    post_pin: This post has been pinned.
+    post_unpin: This post has been unpinned.
+    post_hide_list:  This post has been hidden from list.
+    post_show_list: This post has been shown to list.
+    post_reopen: This post has been reopened.

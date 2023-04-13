@@ -526,3 +526,8 @@ export interface User {
   display_name: string;
   avatar: string;
 }
+
+export interface QuestionOperationReq {
+  id: string;
+  operation: 'pin' | 'unpin' | 'hide' | 'show';
+}
