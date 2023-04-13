@@ -10,6 +10,8 @@ const (
 	QuestionReopen            = "question.reopen"
 	QuestionVoteUp            = "question.vote_up"
 	QuestionVoteDown          = "question.vote_down"
+	QuestionPin               = "question.pin"  //Top or untop the question
+	QuestionHide              = "question.hide" //hide or show the question
 	AnswerAdd                 = "answer.add"
 	AnswerEdit                = "answer.edit"
 	AnswerEditWithoutReview   = "answer.edit_without_review"

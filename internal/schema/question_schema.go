@@ -8,9 +8,13 @@ import (
 )
 
 const (
-	SitemapMaxSize      = 50000
-	SitemapCachekey     = "answer@sitemap"
-	SitemapPageCachekey = "answer@sitemap@page%d"
+	SitemapMaxSize         = 50000
+	SitemapCachekey        = "answer@sitemap"
+	SitemapPageCachekey    = "answer@sitemap@page%d"
+	QuestionOperationPin   = "pin"
+	QuestionOperationUnPin = "unpin"
+	QuestionOperationHide  = "hide"
+	QuestionOperationShow  = "show"
 )
 
 // RemoveQuestionReq delete question request
@@ -26,6 +30,14 @@ type CloseQuestionReq struct {
 	CloseType int    `json:"close_type"` // close_type
 	CloseMsg  string `json:"close_msg"`  // close_type
 	UserID    string `json:"-"`          // user_id
+}
+
+type OperationQuestionReq struct {
+	ID        string `validate:"required" json:"id"`
+	Operation string `json:"operation"` // operation [pin unpin hide show]
+	UserID    string `json:"-"`         // user_id
+	CanPin    bool   `json:"-"`
+	CanList   bool   `json:"-"`
 }
 
 type CloseQuestionMeta struct {

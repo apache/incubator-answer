@@ -3168,6 +3168,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/question/operation": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Operation question \\n operation [pin unpin hide show]",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Question"
+                ],
+                "summary": "Operation question",
+                "parameters": [
+                    {
+                        "description": "question",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.OperationQuestionReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/question/page": {
             "get": {
                 "description": "get questions by page",
@@ -6735,6 +6774,21 @@ const docTemplate = `{
             "properties": {
                 "type": {
                     "description": "inbox achievement",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.OperationQuestionReq": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "operation": {
+                    "description": "operation [pin unpin hide show]",
                     "type": "string"
                 }
             }
