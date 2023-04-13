@@ -311,6 +311,8 @@ type QuestionPageResp struct {
 	Title       string     `json:"title"`
 	UrlTitle    string     `json:"url_title"`
 	Description string     `json:"description"`
+	Pin         int        `json:"pin"`  // 1: unpin, 2: pin
+	Show        int        `json:"show"` // 0: show, 1: hide
 	Status      int        `json:"status"`
 	Tags        []*TagResp `json:"tags"`
 

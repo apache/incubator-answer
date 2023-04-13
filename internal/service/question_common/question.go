@@ -271,6 +271,8 @@ func (qs *QuestionCommon) FormatQuestionsPage(
 			FollowCount:      questionInfo.FollowCount,
 			AcceptedAnswerID: questionInfo.AcceptedAnswerID,
 			LastAnswerID:     questionInfo.LastAnswerID,
+			Pin:              questionInfo.Pin,
+			Show:             questionInfo.Show,
 		}
 
 		questionIDs = append(questionIDs, questionInfo.ID)

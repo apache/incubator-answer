@@ -6948,6 +6948,14 @@ const docTemplate = `{
                 "operator": {
                     "$ref": "#/definitions/schema.QuestionPageRespOperator"
                 },
+                "pin": {
+                    "description": "1: unpin, 2: pin",
+                    "type": "integer"
+                },
+                "show": {
+                    "description": "0: show, 1: hide",
+                    "type": "integer"
+                },
                 "status": {
                     "type": "integer"
                 },

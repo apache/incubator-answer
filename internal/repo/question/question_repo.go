@@ -258,19 +258,22 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 	}
 	if len(userID) > 0 {
 		session.And("question.user_id = ?", userID)
+	} else {
+		session.And("question.show = ?", entity.QuestionShow)
 	}
+
 	switch orderCond {
 	case "newest":
-		session.OrderBy("question.created_at DESC")
+		session.OrderBy("question.pin desc,question.created_at DESC")
 	case "active":
-		session.OrderBy("question.post_update_time DESC, question.updated_at DESC")
+		session.OrderBy("question.pin desc,question.post_update_time DESC, question.updated_at DESC")
 	case "frequent":
-		session.OrderBy("question.view_count DESC")
+		session.OrderBy("question.pin desc,question.view_count DESC")
 	case "score":
-		session.OrderBy("question.vote_count DESC, question.view_count DESC")
+		session.OrderBy("question.pin desc,question.vote_count DESC, question.view_count DESC")
 	case "unanswered":
 		session.Where("question.last_answer_id = 0")
-		session.OrderBy("question.created_at DESC")
+		session.OrderBy("question.pin desc,question.created_at DESC")
 	}
 
 	total, err = pager.Help(page, pageSize, &questionList, &entity.Question{}, session)
