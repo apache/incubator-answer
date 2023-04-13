@@ -528,6 +528,8 @@ func (qs *QuestionCommon) ShowFormat(ctx context.Context, data *entity.Question)
 		info.QuestionUpdateTime = 0
 	}
 	info.Status = data.Status
+	info.Pin = data.Pin
+	info.Show = data.Show
 	info.UserID = data.UserID
 	info.LastEditUserID = data.LastEditUserID
 	if data.LastAnswerID != "0" {

@@ -184,6 +184,8 @@ type QuestionInfo struct {
 	UpdateTime           int64          `json:"-"`                                          // update_time
 	PostUpdateTime       int64          `json:"update_time"`
 	QuestionUpdateTime   int64          `json:"edit_time"`
+	Pin                  int            `json:"pin"`  // 1: unpin, 2: pin
+	Show                 int            `json:"show"` // 0: show, 1: hide
 	Status               int            `json:"status"`
 	Operation            *Operation     `json:"operation,omitempty"`
 	UserID               string         `json:"-" `
