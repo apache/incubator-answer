@@ -270,6 +270,8 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	question.Status = entity.QuestionStatusAvailable
 	question.RevisionID = "0"
 	question.CreatedAt = now
+	question.Pin = entity.QuestionUnPin
+	question.Show = entity.QuestionShow
 	//question.UpdatedAt = nil
 	err = qs.questionRepo.AddQuestion(ctx, question)
 	if err != nil {
@@ -698,6 +700,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 		per.CanHide = false
 		per.CanPin = false
 	}
+
 	if question.Status == entity.QuestionStatusDeleted {
 		operation := &schema.Operation{}
 		operation.Msg = translator.Tr(handler.GetLangByCtx(ctx), reason.QuestionAlreadyDeleted)
