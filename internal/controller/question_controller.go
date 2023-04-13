@@ -89,7 +89,9 @@ func (qc *QuestionController) OperationQuestion(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.QuestionPin,
+		permission.QuestionUnPin,
 		permission.QuestionHide,
+		permission.QuestionShow,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -192,7 +194,9 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 		permission.QuestionClose,
 		permission.QuestionReopen,
 		permission.QuestionPin,
+		permission.QuestionUnPin,
 		permission.QuestionHide,
+		permission.QuestionShow,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -205,7 +209,9 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	req.CanClose = canList[2]
 	req.CanReopen = canList[3]
 	req.CanPin = canList[4]
-	req.CanHide = canList[5]
+	req.CanUnPin = canList[5]
+	req.CanHide = canList[6]
+	req.CanShow = canList[7]
 
 	info, err := qc.questionService.GetQuestionAndAddPV(ctx, id, userID, req)
 	if err != nil {

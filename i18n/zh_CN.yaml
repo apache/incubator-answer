@@ -26,6 +26,10 @@ backend:
       other: 置顶
     hide:
       other: 隐藏
+    unpin:
+      other: 取消置顶
+    show:
+      other: 显示
   role:
     name:
       user:

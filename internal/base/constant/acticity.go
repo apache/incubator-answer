@@ -14,6 +14,10 @@ const (
 	ActFollow    = "follow"
 	ActAccepted  = "accepted"
 	ActAccept    = "accept"
+	ActPin       = "pin"
+	ActUnPin     = "unpin"
+	ActShow      = "show"
+	ActHide      = "hide"
 )
 
 const (

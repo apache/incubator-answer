@@ -10,8 +10,10 @@ const (
 	QuestionReopen            = "question.reopen"
 	QuestionVoteUp            = "question.vote_up"
 	QuestionVoteDown          = "question.vote_down"
-	QuestionPin               = "question.pin"  //Top or untop the question
-	QuestionHide              = "question.hide" //hide or show the question
+	QuestionPin               = "question.pin"   //Top  the question
+	QuestionUnPin             = "question.unpin" //untop the question
+	QuestionHide              = "question.hide"  //hide  the question
+	QuestionShow              = "question.show"  //show the question
 	AnswerAdd                 = "answer.add"
 	AnswerEdit                = "answer.edit"
 	AnswerEditWithoutReview   = "answer.edit_without_review"
@@ -46,5 +48,7 @@ const (
 	closeActionName  = "action.close"
 	reopenActionName = "action.reopen"
 	pinActionName    = "action.pin"
+	unpinActionName  = "action.unpin"
 	hideActionName   = "action.hide"
+	showActionName   = "action.show"
 )

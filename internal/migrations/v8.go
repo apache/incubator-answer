@@ -1,18 +1,22 @@
 package migrations
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/permission"
+	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
 )
 
 func addRolePinAndHideFeatures(x *xorm.Engine) error {
 
 	powers := []*entity.Power{
-		{ID: 34, Name: "question pin", PowerType: permission.QuestionPin, Description: "Top or untop the question"},
-		{ID: 35, Name: "question hide", PowerType: permission.QuestionHide, Description: "hide or show the question"},
+		{ID: 34, Name: "question pin", PowerType: permission.QuestionPin, Description: "top the question"},
+		{ID: 35, Name: "question hide", PowerType: permission.QuestionHide, Description: "hide  the question"},
+		{ID: 36, Name: "question unpin", PowerType: permission.QuestionUnPin, Description: "untop the question"},
+		{ID: 37, Name: "question show", PowerType: permission.QuestionShow, Description: "show the question"},
 	}
 	// insert default powers
 	for _, power := range powers {
@@ -34,9 +38,13 @@ func addRolePinAndHideFeatures(x *xorm.Engine) error {
 
 		{RoleID: 2, PowerType: permission.QuestionPin},
 		{RoleID: 2, PowerType: permission.QuestionHide},
+		{RoleID: 2, PowerType: permission.QuestionUnPin},
+		{RoleID: 2, PowerType: permission.QuestionShow},
 
 		{RoleID: 3, PowerType: permission.QuestionPin},
 		{RoleID: 3, PowerType: permission.QuestionHide},
+		{RoleID: 3, PowerType: permission.QuestionUnPin},
+		{RoleID: 3, PowerType: permission.QuestionShow},
 	}
 
 	// insert default powers
@@ -53,6 +61,31 @@ func addRolePinAndHideFeatures(x *xorm.Engine) error {
 			return err
 		}
 	}
+
+	defaultConfigTable := []*entity.Config{
+		{ID: 119, Key: "question.pin", Value: `0`},
+		{ID: 120, Key: "question.unpin", Value: `0`},
+		{ID: 121, Key: "question.show", Value: `0`},
+		{ID: 122, Key: "question.hide", Value: `0`},
+	}
+	for _, c := range defaultConfigTable {
+		exist, err := x.Get(&entity.Config{ID: c.ID, Key: c.Key})
+		if err != nil {
+			return fmt.Errorf("get config failed: %w", err)
+		}
+		if exist {
+			if _, err = x.Update(c, &entity.Config{ID: c.ID, Key: c.Key}); err != nil {
+				log.Errorf("update %+v config failed: %s", c, err)
+				return fmt.Errorf("update config failed: %w", err)
+			}
+			continue
+		}
+		if _, err = x.Insert(&entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
+			log.Errorf("insert %+v config failed: %s", c, err)
+			return fmt.Errorf("add config failed: %w", err)
+		}
+	}
+
 	type Question struct {
 		ID               string    `xorm:"not null pk BIGINT(20) id"`
 		CreatedAt        time.Time `xorm:"not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`

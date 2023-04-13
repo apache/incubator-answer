@@ -685,6 +685,20 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 	if question.Status == entity.QuestionStatusClosed {
 		per.CanClose = false
 	}
+	if question.Pin == entity.QuestionPin {
+		per.CanPin = false
+		per.CanHide = false
+	}
+	if question.Pin == entity.QuestionUnPin {
+		per.CanUnPin = false
+	}
+	if question.Show == entity.QuestionShow {
+		per.CanShow = false
+	}
+	if question.Show == entity.QuestionHide {
+		per.CanHide = false
+		per.CanPin = false
+	}
 	if question.Status == entity.QuestionStatusDeleted {
 		operation := &schema.Operation{}
 		operation.Msg = translator.Tr(handler.GetLangByCtx(ctx), reason.QuestionAlreadyDeleted)
@@ -694,7 +708,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 
 	question.Description = htmltext.FetchExcerpt(question.HTML, "...", 240)
 	question.MemberActions = permission.GetQuestionPermission(ctx, userID, question.UserID,
-		per.CanEdit, per.CanDelete, per.CanClose, per.CanReopen, per.CanPin, per.CanHide)
+		per.CanEdit, per.CanDelete, per.CanClose, per.CanReopen, per.CanPin, per.CanHide, per.CanUnPin, per.CanShow)
 	return question, nil
 }
 

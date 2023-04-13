@@ -27,6 +27,10 @@ backend:
       other: pin
     hide:
       other: hide
+    unpin:
+      other: unpin
+    show:
+      other: show
   role:
     name:
       user:

@@ -114,9 +114,11 @@ type QuestionPermission struct {
 	// whether user can reopen it
 	CanReopen bool `json:"-"`
 	// whether user can pin it
-	CanPin bool `json:"-"`
+	CanPin   bool `json:"-"`
+	CanUnPin bool `json:"-"`
 	// whether user can hide it
 	CanHide bool `json:"-"`
+	CanShow bool `json:"-"`
 	// whether user can use reserved it
 	CanUseReservedTag bool `json:"-"`
 }
