@@ -300,7 +300,7 @@ const Index: React.FC = () => {
           </Form.Control.Feedback>
         </Form.Group>
 
-        <Form.Group className="mb-3">
+        <Form.Group controlId="avatar" className="mb-3">
           <Form.Label>{t('avatar.label')}</Form.Label>
           <div className="mb-3">
             <Form.Select

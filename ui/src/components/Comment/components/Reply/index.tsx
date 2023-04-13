@@ -37,7 +37,7 @@ const Index = ({ userName, onSendReply, onCancel, mode }) => {
         {t('reply_to')} {userName}
       </div>
       <div className="d-flex mb-1 align-items-start flex-column flex-md-row">
-        <div>
+        <div className="w-100">
           <div
             className={classNames('custom-form-control', {
               'is-invalid': validationErrorMsg,

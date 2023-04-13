@@ -11,6 +11,7 @@ import {
   Comment,
   FormatTime,
   htmlRender,
+  Icon,
 } from '@/components';
 import { formatCount, guard } from '@/utils';
 import { following } from '@/services';
@@ -65,6 +66,13 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
   return (
     <div>
       <h1 className="h3 mb-3 text-wrap text-break">
+        {data?.pin === 2 && (
+          <Icon
+            name="pin-fill"
+            className="me-1"
+            title={t('pinned', { keyPrefix: 'btns' })}
+          />
+        )}
         <Link
           className="link-dark"
           reloadDocument
