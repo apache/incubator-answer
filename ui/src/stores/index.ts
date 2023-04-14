@@ -10,7 +10,7 @@ import pageTagStore from './pageTags';
 import customizeStore from './customize';
 import themeSettingStore from './themeSetting';
 import loginToContinueStore from './loginToContinue';
-import errorCode from './errorCode';
+import errorCodeStore from './errorCode';
 
 export {
   toastStore,
@@ -24,6 +24,6 @@ export {
   themeSettingStore,
   seoSettingStore,
   loginToContinueStore,
-  errorCode,
+  errorCodeStore,
   userCenterStore,
 };

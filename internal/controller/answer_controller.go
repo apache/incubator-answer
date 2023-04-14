@@ -81,6 +81,7 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 // @Success 200 {string} string ""
 func (ac *AnswerController) Get(ctx *gin.Context) {
 	id := ctx.Query("id")
+	id = uid.DeShortID(id)
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 
 	info, questionInfo, has, err := ac.answerService.Get(ctx, id, userID)
@@ -137,7 +138,6 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 		return
 	}
 	if !has {
-		// todo !has
 		handler.HandleResponse(ctx, nil, nil)
 		return
 	}
@@ -181,6 +181,7 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.QuestionID = uid.DeShortID(req.QuestionID)
 
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.AnswerEdit,
@@ -232,6 +233,7 @@ func (ac *AnswerController) AnswerList(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.QuestionID = uid.DeShortID(req.QuestionID)
 
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.AnswerEdit,
@@ -272,6 +274,8 @@ func (ac *AnswerController) Accepted(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.AnswerID = uid.DeShortID(req.AnswerID)
+	req.QuestionID = uid.DeShortID(req.QuestionID)
 	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, permission.AnswerAccept, req.QuestionID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -301,6 +305,7 @@ func (ac *AnswerController) AdminSetAnswerStatus(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	req.AnswerID = uid.DeShortID(req.AnswerID)
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 

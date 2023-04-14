@@ -58,8 +58,11 @@ export interface QuestionParams {
   title: string;
   url_title?: string;
   content: string;
-  html?: string;
   tags: Tag[];
+}
+
+export interface QuestionWithAnswer extends QuestionParams {
+  answer_content: string;
 }
 
 export interface ListResult<T = any> {
@@ -333,6 +336,7 @@ export interface SiteSettings {
   theme: AdminSettingsTheme;
   site_seo: AdminSettingsSeo;
   version: string;
+  revision: string;
 }
 
 export interface AdminSettingBranding {

@@ -16,7 +16,7 @@ const Questions: FC = () => {
   const { user: loggedUser } = loggedUserInfoStore((_) => _);
   const [urlSearchParams] = useSearchParams();
   const curPage = Number(urlSearchParams.get('page')) || 1;
-  const curOrder = urlSearchParams.get('order') || 'newest';
+  const curOrder = urlSearchParams.get('order') || 'active';
   const reqParams: Type.QueryQuestionsReq = {
     page_size: 20,
     page: curPage,

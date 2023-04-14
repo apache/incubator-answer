@@ -11,6 +11,17 @@ backend:
       other: 未授權。
     database_error:
       other: 資料庫錯誤。
+  action:
+    report:
+      other: Flag
+    edit:
+      other: Edit
+    delete:
+      other: Delete
+    close:
+      other: Close
+    reopen:
+      other: Reopen
   role:
     name:
       user:
@@ -47,6 +58,8 @@ backend:
         other: 沒有刪除權限。
       cannot_update:
         other: 沒有更新權限。
+      question_closed_cannot_add:
+        other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
         other: 不允許編輯評論。
@@ -97,12 +110,16 @@ backend:
     rank:
       fail_to_meet_the_condition:
         other: 級別不符合條件
+      vote_fail_to_meet_the_condition:
+        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
     report:
       handle_failed:
         other: 報告處理失敗。
       not_found:
         other: 找不到報告。
     tag:
+      already_exist:
+        other: Tag already exists.
       not_found:
         other: 找不到標籤。
       recommend_tag_not_found:
@@ -261,6 +278,7 @@ ui:
     tag: 標籤
     tags: 標籤
     tag_wiki: 標籤 wiki
+    create_tag: Create Tag
     edit_tag: 編輯標籤
     ask_a_question: 提問題
     edit_question: 編輯問題
@@ -281,6 +299,9 @@ ui:
     upgrade: Answer 升級
     maintenance: 網站維護
     users: 用戶
+    http_404: HTTP Error 404
+    http_50X: HTTP Error 500
+    http_403: HTTP Error 403
   notifications:
     title: 通知
     inbox: 收件夾
@@ -424,7 +445,7 @@ ui:
             range: 顯示名稱不能超過 35 個字符。
         slug_name:
           label: URL 固定連結
-          desc: '必須由 "a-z", "0-9", "+ # - ." 組成'
+          desc: URL slug up to 35 characters.
           msg:
             empty: URL 固定連結不能為空。
             range: URL 固定連結不能超過 35 個字元。
@@ -433,6 +454,7 @@ ui:
           label: 描述
     btn_cancel: 取消
     btn_submit: 提交
+    btn_post: Post new tag
   tag_info:
     created_at: 創建於
     edited_at: 編輯於
@@ -497,6 +519,7 @@ ui:
       通过評論询问更多问题或提出改進建議。避免在評論中回答問題。
     tip_answer: >-
       使用評論回復其他用戶或通知他們进行更改。如果你要添加新的信息，請編輯你的帖子，而不是發表評論。
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: 編輯回答
     default_reason: 編輯回答
@@ -746,6 +769,11 @@ ui:
     answered: 回答於
     closed_in: 關閉於
     show_exist: 顯示現有問題。
+    useful: Useful
+    question_useful: It is useful and clear
+    question_un_useful: It is unclear or not useful
+    answer_useful: It is useful
+    answer_un_useful: It is not useful
     answers:
       title: 個回答
       score: 評分
@@ -762,7 +790,14 @@ ui:
         <p>您確定要添加一個新的回答嗎？</p><p>您可以使用编辑链接来完善和改进您现有的答案。</p>
       empty: 回答內容不能為空。
       characters: 內容必須至少6個字元長度。
+      tips:
+        header_1: Thanks for your answer
+        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
+        li1_2: Back up any statements you make with references or personal experience.
+        header_2: But <strong>avoid</strong> ...
+        li2_1: Asking for help, seeking clarification, or responding to other answers.
     reopen:
+      confirm_btn: Reopen
       title: 重新打開這個貼文
       content: 確定要重新打開嗎？
       success: 這個貼文已被重新打開
@@ -977,14 +1012,12 @@ ui:
     votes: 得票
     answers: 回答
     accepted: 已採納
-  page_404:
-    http_error: HTTP Error 404
-    desc: "很抱歉，此頁面不存在。"
-    back_home: 回到首頁
-  page_50X:
-    http_error: HTTP Error 500
-    desc: 伺服器遇到了一個錯誤，無法完成你的請求。
-    back_home: 回到首頁
+  page_error:
+    http_error: HTTP Error {{ code }}
+    desc_403: You don’t have permission to access this page.
+    desc_404: Unfortunately, this page doesn't exist.
+    desc_50X: The server encountered an error and could not complete your request.
+    back_home: Back to homepage
   page_maintenance:
     desc: "我們正在維護中，很快就會回來。"
   nav_menus:
@@ -1198,6 +1231,9 @@ ui:
         label: 時區
         msg: 時區不能為空。
         text: 選擇一個與您相同時區的城市。
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
@@ -1363,8 +1399,8 @@ ui:
     no_data: "我們找不到任何東西。"
   users:
     title: 用戶
-    users_with_the_most_reputation: 信譽積分最高的用戶
-    users_with_the_most_vote: 投票最多的用戶
+    users_with_the_most_reputation: Users with the highest reputation scores this week
+    users_with_the_most_vote: Users who voted the most this week
     staffs: 我們的社區工作人員
     reputation: 聲望值
     votes: 選票

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -20,6 +21,7 @@ import (
 	"github.com/answerdev/answer/plugin"
 	"github.com/disintegration/imaging"
 	"github.com/gin-gonic/gin"
+	exifremove "github.com/scottleedavis/go-exif-remove"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -218,6 +220,7 @@ func (us *UploaderService) uploadFile(ctx *gin.Context, file *multipart.FileHead
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 	defer src.Close()
+	Dexif(filePath, filePath)
 
 	if !checker.IsSupportedImageFile(src, filepath.Ext(fileSubPath)) {
 		return "", errors.BadRequest(reason.UploadFileUnsupportedFileFormat)
@@ -240,4 +243,20 @@ func (us *UploaderService) tryToUploadByPlugin(ctx *gin.Context, source plugin.U
 		return nil
 	})
 	return url, err
+}
+
+func Dexif(filepath string, destpath string) error {
+	img, err := ioutil.ReadFile(filepath)
+	if err != nil {
+		return err
+	}
+	noExifBytes, err := exifremove.Remove(img)
+	if err != nil {
+		return err
+	}
+	err = os.WriteFile(destpath, noExifBytes, 0644)
+	if err != nil {
+		return err
+	}
+	return nil
 }

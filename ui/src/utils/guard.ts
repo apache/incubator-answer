@@ -11,9 +11,14 @@ import {
   loginToContinueStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
+import {
+  LOGGED_TOKEN_STORAGE_KEY,
+  REDIRECT_PATH_STORAGE_KEY,
+} from '@/common/constants';
+import Storage from '@/utils/storage';
 
 import { setupAppLanguage, setupAppTimeZone } from './localize';
-import { floppyNavigation } from './floppyNavigation';
+import { floppyNavigation, NavigateConfig } from './floppyNavigation';
 import { pullUcAgent, getLoginUrl, getSignUpUrl } from './userCenter';
 
 type TLoginState = {
@@ -29,8 +34,16 @@ type TLoginState = {
 export type TGuardResult = {
   ok: boolean;
   redirect?: string;
+  error?: {
+    code?: number | string;
+    msg?: string;
+  };
 };
-export type TGuardFunc = () => TGuardResult;
+export type TGuardFunc = (args: {
+  loaderData?: any;
+  path?: string;
+  page?: string;
+}) => TGuardResult;
 
 export const deriveLoginState = (): TLoginState => {
   const ls: TLoginState = {
@@ -90,7 +103,9 @@ export const pullLoggedUser = async (forceRePull = false) => {
     return;
   }
   pluTimestamp = Date.now();
-  const loggedUserInfo = await getLoggedUserInfo().catch((ex) => {
+  const loggedUserInfo = await getLoggedUserInfo({
+    passingError: true,
+  }).catch((ex) => {
     pluTimestamp = 0;
     loggedUserInfoStore.getState().clear(false);
     console.error(ex);
@@ -166,7 +181,11 @@ export const admin = () => {
   const us = deriveLoginState();
   if (gr.ok && !us.isAdmin) {
     gr.ok = false;
-    gr.redirect = RouteAlias.home;
+    gr.error = {
+      code: '403',
+      msg: '',
+    };
+    gr.redirect = '';
   }
   return gr;
 };
@@ -176,7 +195,24 @@ export const isAdminOrModerator = () => {
   const us = deriveLoginState();
   if (gr.ok && !us.isAdmin && !us.isModerator) {
     gr.ok = false;
-    gr.redirect = RouteAlias.home;
+    gr.error = {
+      code: '403',
+      msg: '',
+    };
+    gr.redirect = '';
+  }
+  return gr;
+};
+
+export const isEditable = (args) => {
+  const loaderData = args?.loaderData || {};
+  const gr: TGuardResult = { ok: true };
+  if (loaderData.code === 400) {
+    gr.ok = false;
+    gr.error = {
+      code: '403',
+      msg: loaderData.msg,
+    };
   }
   return gr;
 };
@@ -280,6 +316,51 @@ export const tryLoggedAndActivated = () => {
 };
 
 /**
+ * Auto handling of page redirect logic after a successful login
+ */
+export const handleLoginRedirect = (handler?: NavigateConfig['handler']) => {
+  const redirectUrl = Storage.get(REDIRECT_PATH_STORAGE_KEY) || RouteAlias.home;
+  Storage.remove(REDIRECT_PATH_STORAGE_KEY);
+  floppyNavigation.navigate(redirectUrl, {
+    handler,
+    options: { replace: true },
+  });
+};
+
+/**
+ * Unified processing of login logic after getting `access_token`
+ */
+export const handleLoginWithToken = (
+  token: string | null,
+  handler?: NavigateConfig['handler'],
+) => {
+  if (token) {
+    Storage.set(LOGGED_TOKEN_STORAGE_KEY, token);
+    getLoggedUserInfo().then((res) => {
+      loggedUserInfoStore.getState().update(res);
+      const userStat = deriveLoginState();
+      if (userStat.isNotActivated) {
+        floppyNavigation.navigate(RouteAlias.activation, {
+          handler,
+          options: {
+            replace: true,
+          },
+        });
+      } else {
+        handleLoginRedirect(handler);
+      }
+    });
+  } else {
+    floppyNavigation.navigate(RouteAlias.home, {
+      handler,
+      options: {
+        replace: true,
+      },
+    });
+  }
+};
+
+/**
  * Initialize app configuration
  */
 let appInitialized = false;
@@ -287,7 +368,9 @@ export const initAppSettingsStore = async () => {
   const appSettings = await getAppSettings();
   if (appSettings) {
     siteInfoStore.getState().update(appSettings.general);
-    siteInfoStore.getState().updateVersion(appSettings.version);
+    siteInfoStore
+      .getState()
+      .updateVersion(appSettings.version, appSettings.revision);
     interfaceStore.getState().update(appSettings.interface);
     brandingStore.getState().update(appSettings.branding);
     loginSettingStore.getState().update(appSettings.login);
@@ -306,7 +389,6 @@ export const setupApp = async () => {
    * 1. must pre init logged user info for router guard
    * 2. must pre init app settings for app render
    */
-  // TODO: optimize `initAppSettingsStore` by server render
   await Promise.allSettled([
     pullLoggedUser(),
     pullUcAgent(),

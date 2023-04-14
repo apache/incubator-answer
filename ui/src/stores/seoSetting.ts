@@ -7,7 +7,7 @@ interface IProps {
   update: (params: AdminSettingsSeo) => void;
 }
 
-const siteInfo = create<IProps>((set) => ({
+const Index = create<IProps>((set) => ({
   seo: {
     robots: '',
     permalink: 1,
@@ -25,4 +25,4 @@ const siteInfo = create<IProps>((set) => ({
     }),
 }));
 
-export default siteInfo;
+export default Index;

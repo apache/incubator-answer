@@ -58,7 +58,7 @@ const Answers: FC = () => {
         content:
           item.accepted === 2
             ? t('answer_accepted', { keyPrefix: 'delete' })
-            : `<p>${t('other', { keyPrefix: 'delete' })}</p>`,
+            : t('other', { keyPrefix: 'delete' }),
         cancelBtnVariant: 'link',
         confirmBtnVariant: 'danger',
         confirmText: t('delete', { keyPrefix: 'btns' }),

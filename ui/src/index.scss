@@ -218,6 +218,9 @@ img:not(a img, img.broken) {
   img {
     max-width: 100%;
   }
+  video {
+    max-width: 100%;
+  }
   p {
     > code {
       background-color: #e9ecef;

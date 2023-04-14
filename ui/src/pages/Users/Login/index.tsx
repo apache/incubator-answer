@@ -3,25 +3,22 @@ import { Container, Form, Button, Col } from 'react-bootstrap';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { RouteAlias } from '@/router/alias';
-import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
 import { usePageTags } from '@/hooks';
 import type {
   LoginReqParams,
   ImgCodeRes,
   FormDataType,
 } from '@/common/interface';
-import { SvgIcon, Unactivate, WelcomeTitle } from '@/components';
-import { PluginOauth } from '@/plugins';
+import { Unactivate, WelcomeTitle } from '@/components';
+import { PluginOauth, PluginUcLogin } from '@/plugins';
 import {
   loggedUserInfoStore,
   loginSettingStore,
   userCenterStore,
 } from '@/stores';
-import { guard, floppyNavigation, handleFormError } from '@/utils';
+import { guard, handleFormError } from '@/utils';
 import { login, checkImgCode } from '@/services';
 import { PicAuthCodeModal } from '@/components/Modal';
-import Storage from '@/utils/storage';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
@@ -102,15 +99,6 @@ const Index: React.FC = () => {
     return bol;
   };
 
-  const handleLoginRedirect = () => {
-    const redirect = Storage.get(REDIRECT_PATH_STORAGE_KEY) || RouteAlias.home;
-    Storage.remove(REDIRECT_PATH_STORAGE_KEY);
-    floppyNavigation.navigate(redirect, {
-      handler: navigate,
-      options: { replace: true },
-    });
-  };
-
   const handleLogin = (event?: any) => {
     if (event) {
       event.preventDefault();
@@ -133,7 +121,7 @@ const Index: React.FC = () => {
           setStep(2);
           setRefresh((pre) => pre + 1);
         } else {
-          handleLoginRedirect();
+          guard.handleLoginRedirect(navigate);
         }
 
         setModalState(false);
@@ -184,19 +172,8 @@ const Index: React.FC = () => {
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
       <WelcomeTitle />
       {ucLoginRedirect && step === 1 && (
-        <Col className="mx-auto" md={3}>
-          <Button
-            className="w-100"
-            variant="outline-secondary"
-            href={ucAgent?.agent_info.login_redirect_url}>
-            <SvgIcon base64={ucAgent?.agent_info.icon} />
-            <span>
-              {t('connect', {
-                auth_name: ucAgent?.agent_info.name,
-                keyPrefix: 'plugins.oauth',
-              })}
-            </span>
-          </Button>
+        <Col className="mx-auto" md={4}>
+          <PluginUcLogin />
         </Col>
       )}
       {step === 1 && !ucLoginRedirect && (

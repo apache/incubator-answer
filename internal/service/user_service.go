@@ -577,37 +577,66 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 }
 
 // UserChangeEmailVerify user change email verify code
-func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string) (err error) {
+func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string) (resp *schema.GetUserResp, err error) {
 	data := &schema.EmailCodeContent{}
 	err = data.FromJSONString(content)
 	if err != nil {
-		return errors.BadRequest(reason.EmailVerifyURLExpired)
+		return nil, errors.BadRequest(reason.EmailVerifyURLExpired)
 	}
 
 	_, exist, err := us.userRepo.GetByEmail(ctx, data.Email)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if exist {
-		return errors.BadRequest(reason.EmailDuplicate)
+		return nil, errors.BadRequest(reason.EmailDuplicate)
 	}
 
-	_, exist, err = us.userRepo.GetByUserID(ctx, data.UserID)
+	userInfo, exist, err := us.userRepo.GetByUserID(ctx, data.UserID)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if !exist {
-		return errors.BadRequest(reason.UserNotFound)
+		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 	err = us.userRepo.UpdateEmail(ctx, data.UserID, data.Email)
 	if err != nil {
-		return errors.BadRequest(reason.UserNotFound)
+		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 	err = us.userRepo.UpdateEmailStatus(ctx, data.UserID, entity.EmailStatusAvailable)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+
+	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
+	if err != nil {
+		log.Error(err)
+	}
+
+	resp = &schema.GetUserResp{}
+	resp.GetFromUserEntity(userInfo)
+	userCacheInfo := &entity.UserCacheInfo{
+		UserID:      userInfo.ID,
+		EmailStatus: entity.EmailStatusAvailable,
+		UserStatus:  userInfo.Status,
+		RoleID:      roleID,
+	}
+	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
+	if err != nil {
+		return nil, err
+	}
+	// User verified email will update user email status. So user status cache should be updated.
+	if err = us.authService.SetUserStatus(ctx, userCacheInfo); err != nil {
+		return nil, err
+	}
+	resp.RoleID = userCacheInfo.RoleID
+	if resp.RoleID == role.RoleAdminID {
+		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
+		if err != nil {
+			return nil, err
+		}
+	}
+	return resp, nil
 }
 
 // getSiteUrl get site url

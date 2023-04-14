@@ -187,6 +187,7 @@ type SiteInfoResp struct {
 	SiteSeo       *SiteSeoReq            `json:"site_seo"`
 	SiteUsers     *SiteUsersResp         `json:"site_users"`
 	Version       string                 `json:"version"`
+	Revision      string                 `json:"revision"`
 }
 type TemplateSiteInfoResp struct {
 	General       *SiteGeneralResp       `json:"general"`
@@ -242,6 +243,7 @@ type GetSMTPConfigResp struct {
 type GetManifestJsonResp struct {
 	ManifestVersion int               `json:"manifest_version"`
 	Version         string            `json:"version"`
+	Revision        string            `json:"revision"`
 	ShortName       string            `json:"short_name"`
 	Name            string            `json:"name"`
 	Icons           map[string]string `json:"icons"`

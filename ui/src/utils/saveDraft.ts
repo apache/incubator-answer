@@ -11,7 +11,7 @@ export type QuestionDraft = {
     title: string;
     content: string;
     tags: any[];
-    answer: string;
+    answer_content: string;
   };
   callback?: () => void;
 };

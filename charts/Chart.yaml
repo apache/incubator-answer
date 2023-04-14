@@ -1,6 +1,6 @@
 apiVersion: v2
 name: answer
-description: a simple answer deployments for kubernetes
+description: A simple answer deployments for kubernetes
 type: application
 version: 0.1.0
-appVersion: "0.1.0"
+appVersion: "1.0.7"

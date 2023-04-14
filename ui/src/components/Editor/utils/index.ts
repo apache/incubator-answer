@@ -142,8 +142,13 @@ export function htmlRender(el: HTMLElement | null) {
     div.appendChild(table);
   });
 
-  // video width 100%
-  el.querySelectorAll('video').forEach((video) => {
-    video.style.width = '100%';
+  // add rel nofollow for link not inlcludes domain
+  el.querySelectorAll('a').forEach((a) => {
+    const base = window.location.origin;
+    const targetUrl = new URL(a.href, base);
+
+    if (targetUrl.origin !== base) {
+      a.rel = 'nofollow';
+    }
   });
 }
