@@ -82,10 +82,6 @@ import (
 	"github.com/segmentfault/pacman/log"
 )
 
-import (
-	_ "git.backyard.segmentfault.com/segmentfault/answer-private-plugins/user_center/wecom"
-)
-
 // Injectors from wire.go:
 
 // initApplication init application.
