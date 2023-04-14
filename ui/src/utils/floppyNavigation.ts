@@ -47,15 +47,12 @@ const isRoutableLink = (url = '') => {
  * only navigate if not same as current url
  */
 type NavigateHandler = 'href' | 'replace' | NavigateFunction;
-interface NavigateConfig {
-  handler: NavigateHandler;
+export interface NavigateConfig {
+  handler?: NavigateHandler;
   options?: any;
 }
-const navigate = (
-  to: string | number,
-  config: NavigateConfig = { handler: 'href' },
-) => {
-  let { handler } = config;
+const navigate = (to: string | number, config: NavigateConfig = {}) => {
+  let { handler = 'href' } = config;
   if (to && typeof to === 'string') {
     if (!differentCurrent(to)) {
       return;
@@ -130,7 +127,6 @@ const handleRouteLinkClick = (evt) => {
 };
 
 export const floppyNavigation = {
-  differentCurrent,
   navigate,
   navigateToLogin,
   shouldProcessLinkClick,

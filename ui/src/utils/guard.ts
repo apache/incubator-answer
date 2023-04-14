@@ -11,9 +11,14 @@ import {
   loginToContinueStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
+import {
+  LOGGED_TOKEN_STORAGE_KEY,
+  REDIRECT_PATH_STORAGE_KEY,
+} from '@/common/constants';
+import Storage from '@/utils/storage';
 
 import { setupAppLanguage, setupAppTimeZone } from './localize';
-import { floppyNavigation } from './floppyNavigation';
+import { floppyNavigation, NavigateConfig } from './floppyNavigation';
 import { pullUcAgent, getLoginUrl, getSignUpUrl } from './userCenter';
 
 type TLoginState = {
@@ -311,6 +316,51 @@ export const tryLoggedAndActivated = () => {
 };
 
 /**
+ * Auto handling of page redirect logic after a successful login
+ */
+export const handleLoginRedirect = (handler?: NavigateConfig['handler']) => {
+  const redirectUrl = Storage.get(REDIRECT_PATH_STORAGE_KEY) || RouteAlias.home;
+  Storage.remove(REDIRECT_PATH_STORAGE_KEY);
+  floppyNavigation.navigate(redirectUrl, {
+    handler,
+    options: { replace: true },
+  });
+};
+
+/**
+ * Unified processing of login logic after getting `access_token`
+ */
+export const handleLoginWithToken = (
+  token: string | null,
+  handler?: NavigateConfig['handler'],
+) => {
+  if (token) {
+    Storage.set(LOGGED_TOKEN_STORAGE_KEY, token);
+    getLoggedUserInfo().then((res) => {
+      loggedUserInfoStore.getState().update(res);
+      const userStat = deriveLoginState();
+      if (userStat.isNotActivated) {
+        floppyNavigation.navigate(RouteAlias.activation, {
+          handler,
+          options: {
+            replace: true,
+          },
+        });
+      } else {
+        handleLoginRedirect(handler);
+      }
+    });
+  } else {
+    floppyNavigation.navigate(RouteAlias.home, {
+      handler,
+      options: {
+        replace: true,
+      },
+    });
+  }
+};
+
+/**
  * Initialize app configuration
  */
 let appInitialized = false;
@@ -339,7 +389,6 @@ export const setupApp = async () => {
    * 1. must pre init logged user info for router guard
    * 2. must pre init app settings for app render
    */
-  // TODO: optimize `initAppSettingsStore` by server render
   await Promise.allSettled([
     pullLoggedUser(),
     pullUcAgent(),

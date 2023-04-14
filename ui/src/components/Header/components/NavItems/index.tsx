@@ -93,7 +93,9 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
         </Dropdown.Menu>
       </Dropdown>
       {/* Dropdown for user center agent info */}
-      {ucAgent?.enabled && ucAgent?.agent_info ? (
+      {ucAgent?.enabled &&
+      (ucAgent?.agent_info?.url ||
+        ucAgent?.agent_info?.control_center?.length) ? (
         <Dropdown align="end">
           <Dropdown.Toggle
             variant="success"
@@ -104,10 +106,15 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
-            <Dropdown.Item href={ucAgent.agent_info.url}>
-              {ucAgent.agent_info.name}
-            </Dropdown.Item>
-            <Dropdown.Divider />
+            {ucAgent.agent_info.url ? (
+              <Dropdown.Item href={ucAgent.agent_info.url}>
+                {ucAgent.agent_info.name}
+              </Dropdown.Item>
+            ) : null}
+            {ucAgent.agent_info.url &&
+            ucAgent.agent_info.control_center?.length ? (
+              <Dropdown.Divider />
+            ) : null}
             {ucAgent.agent_info.control_center?.map((ctrl) => {
               return (
                 <Dropdown.Item key={ctrl.name} href={ctrl.url}>
