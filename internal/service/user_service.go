@@ -248,6 +248,18 @@ func (us *UserService) UserModifyPassword(ctx context.Context, request *schema.U
 // UpdateInfo update user info
 func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoRequest) (
 	errFields []*validator.FormErrorField, err error) {
+	siteUsers, err := us.siteInfoService.GetSiteUsers(ctx)
+	if err != nil {
+		return nil, err
+	}
+	oldUserInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.BadRequest(reason.UserNotFound)
+	}
+
 	if len(req.Username) > 0 {
 		userInfo, exist, err := us.userRepo.GetByUsername(ctx, req.Username)
 		if err != nil {
@@ -268,21 +280,46 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 			return errFields, errors.BadRequest(reason.UsernameInvalid)
 		}
 	}
-	avatar, err := json.Marshal(req.Avatar)
-	if err != nil {
-		return nil, errors.BadRequest(reason.UserSetAvatar).WithError(err).WithStack()
-	}
-	userInfo := entity.User{}
-	userInfo.ID = req.UserID
-	userInfo.Avatar = string(avatar)
-	userInfo.DisplayName = req.DisplayName
-	userInfo.Bio = req.Bio
-	userInfo.BioHTML = req.BioHTML
-	userInfo.Location = req.Location
-	userInfo.Website = req.Website
-	userInfo.Username = req.Username
-	err = us.userRepo.UpdateInfo(ctx, &userInfo)
+
+	cond := us.formatUserInfoForUpdateInfo(oldUserInfo, req, siteUsers)
+	err = us.userRepo.UpdateInfo(ctx, cond)
 	return nil, err
+}
+
+func (us *UserService) formatUserInfoForUpdateInfo(
+	oldUserInfo *entity.User, req *schema.UpdateInfoRequest, siteUsersConf *schema.SiteUsersResp) *entity.User {
+	avatar, _ := json.Marshal(req.Avatar)
+
+	userInfo := &entity.User{}
+	userInfo.DisplayName = oldUserInfo.DisplayName
+	userInfo.Username = oldUserInfo.Username
+	userInfo.Avatar = oldUserInfo.Avatar
+	userInfo.Bio = oldUserInfo.Bio
+	userInfo.BioHTML = oldUserInfo.BioHTML
+	userInfo.Website = oldUserInfo.Website
+	userInfo.Location = oldUserInfo.Location
+	userInfo.ID = req.UserID
+
+	if siteUsersConf.AllowUpdateDisplayName {
+		userInfo.DisplayName = req.DisplayName
+	}
+	if siteUsersConf.AllowUpdateUsername {
+		userInfo.Username = req.Username
+	}
+	if siteUsersConf.AllowUpdateAvatar {
+		userInfo.Avatar = string(avatar)
+	}
+	if siteUsersConf.AllowUpdateBio {
+		userInfo.Bio = req.Bio
+		userInfo.BioHTML = req.BioHTML
+	}
+	if siteUsersConf.AllowUpdateWebsite {
+		userInfo.Website = req.Website
+	}
+	if siteUsersConf.AllowUpdateLocation {
+		userInfo.Location = req.Location
+	}
+	return userInfo
 }
 
 func (us *UserService) UserEmailHas(ctx context.Context, email string) (bool, error) {

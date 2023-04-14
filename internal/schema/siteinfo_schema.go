@@ -94,7 +94,13 @@ type GetSiteLegalInfoResp struct {
 
 // SiteUsersReq site users config request
 type SiteUsersReq struct {
-	DefaultAvatar string `validate:"required,oneof=system gravatar" form:"default_avatar" json:"default_avatar"`
+	DefaultAvatar          string `validate:"required,oneof=system gravatar" form:"default_avatar" json:"default_avatar"`
+	AllowUpdateDisplayName bool   `form:"allow_update_display_name" json:"allow_update_display_name"`
+	AllowUpdateUsername    bool   `form:"allow_update_username" json:"allow_update_username"`
+	AllowUpdateAvatar      bool   `form:"allow_update_avatar" json:"allow_update_avatar"`
+	AllowUpdateBio         bool   `form:"allow_update_bio" json:"allow_update_bio"`
+	AllowUpdateWebsite     bool   `form:"allow_update_website" json:"allow_update_website"`
+	AllowUpdateLocation    bool   `form:"allow_update_location" json:"allow_update_location"`
 }
 
 // SiteLoginReq site login request
@@ -179,6 +185,7 @@ type SiteInfoResp struct {
 	Theme         *SiteThemeResp         `json:"theme"`
 	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
 	SiteSeo       *SiteSeoReq            `json:"site_seo"`
+	SiteUsers     *SiteUsersResp         `json:"site_users"`
 	Version       string                 `json:"version"`
 }
 type TemplateSiteInfoResp struct {
