@@ -150,6 +150,8 @@ func (us *UserExternalLoginService) registerNewUser(ctx context.Context,
 	userInfo.MailStatus = entity.EmailStatusToBeVerified
 	userInfo.Status = entity.UserStatusAvailable
 	userInfo.LastLoginDate = time.Now()
+	userInfo.Bio = externalUserInfo.Bio
+	userInfo.BioHTML = externalUserInfo.Bio
 	err = us.userRepo.AddUser(ctx, userInfo)
 	if err != nil {
 		return nil, err

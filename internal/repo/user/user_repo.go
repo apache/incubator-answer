@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/config"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/plugin"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -276,14 +277,28 @@ func decorateByUserCenterUser(original *entity.User, ucUser *plugin.UserCenterBa
 	if original.Username != ucUser.Username {
 		log.Warnf("user %s username is inconsistent with user center", original.ID)
 	}
-	original.DisplayName = ucUser.DisplayName
-	original.EMail = ucUser.Email
-	original.Avatar = schema.CustomAvatar(ucUser.Avatar).ToJsonString()
-	original.Mobile = ucUser.Mobile
+	if len(ucUser.DisplayName) > 0 {
+		original.DisplayName = ucUser.DisplayName
+	}
+	if len(ucUser.Email) > 0 {
+		original.EMail = ucUser.Email
+	}
+	if len(ucUser.Avatar) > 0 {
+		original.Avatar = schema.CustomAvatar(ucUser.Avatar).ToJsonString()
+	}
+	if len(ucUser.Mobile) > 0 {
+		original.Mobile = ucUser.Mobile
+	}
+	if len(ucUser.Bio) > 0 {
+		original.Bio = ucUser.Bio
+		original.BioHTML = converter.Markdown2HTML(ucUser.Bio)
+	}
 
 	// If plugin enable rank agent, use rank from user center.
 	if plugin.RankAgentEnabled() {
 		original.Rank = ucUser.Rank
 	}
-	original.Status = int(ucUser.Status)
+	if ucUser.Status != plugin.UserStatusAvailable {
+		original.Status = int(ucUser.Status)
+	}
 }

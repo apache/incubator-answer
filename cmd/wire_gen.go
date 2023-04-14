@@ -82,6 +82,10 @@ import (
 	"github.com/segmentfault/pacman/log"
 )
 
+import (
+	_ "git.backyard.segmentfault.com/segmentfault/answer-private-plugins/user_center/wecom"
+)
+
 // Injectors from wire.go:
 
 // initApplication init application.
@@ -220,7 +224,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	templateController := controller.NewTemplateController(templateRenderController, siteInfoCommonService)
 	templateRouter := router.NewTemplateRouter(templateController, templateRenderController, siteInfoController)
 	connectorController := controller.NewConnectorController(siteInfoCommonService, emailService, userExternalLoginService)
-	userCenterLoginService := user_external_login2.NewUserCenterLoginService(userRepo, userCommon, userExternalLoginRepo, userActiveActivityRepo)
+	userCenterLoginService := user_external_login2.NewUserCenterLoginService(userRepo, userCommon, userExternalLoginRepo, userActiveActivityRepo, siteInfoCommonService)
 	userCenterController := controller.NewUserCenterController(userCenterLoginService, siteInfoCommonService)
 	pluginAPIRouter := router.NewPluginAPIRouter(connectorController, userCenterController)
 	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter, pluginAPIRouter)

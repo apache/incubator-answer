@@ -143,8 +143,9 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 	}
 
 	loginConfig := map[string]bool{
-		"allow_new_registrations": true,
-		"login_required":          false,
+		"allow_new_registrations":   true,
+		"allow_email_registrations": true,
+		"login_required":            false,
 	}
 	loginConfigDataBytes, _ := json.Marshal(loginConfig)
 	_, err = engine.InsertOne(&entity.SiteInfo{

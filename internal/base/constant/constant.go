@@ -65,6 +65,7 @@ const (
 	SiteTypeLogin         = "login"
 	SiteTypeCustomCssHTML = "css-html"
 	SiteTypeTheme         = "theme"
+	SiteTypeUsers         = "users"
 )
 
 func ExistInPathIgnore(name string) bool {

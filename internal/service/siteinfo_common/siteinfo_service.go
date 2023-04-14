@@ -67,6 +67,15 @@ func (s *SiteInfoCommonService) GetSiteBranding(ctx context.Context) (resp *sche
 	return resp, nil
 }
 
+// GetSiteUsers get site info about users
+func (s *SiteInfoCommonService) GetSiteUsers(ctx context.Context) (resp *schema.SiteUsersResp, err error) {
+	resp = &schema.SiteUsersResp{}
+	if err = s.getSiteInfoByType(ctx, constant.SiteTypeUsers, resp); err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
 // GetSiteWrite get site info write
 func (s *SiteInfoCommonService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWriteResp, err error) {
 	resp = &schema.SiteWriteResp{}

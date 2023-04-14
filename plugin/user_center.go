@@ -18,15 +18,18 @@ type UserCenter interface {
 	UserSettings(externalID string) (userSettings *SettingInfo, err error)
 	// PersonalBranding returns the personal branding information
 	PersonalBranding(externalID string) (branding []*PersonalBranding)
+	// AfterLogin is called after the user logs in
+	AfterLogin(externalID, accessToken string)
 }
 
 type UserCenterDesc struct {
-	Name              string `json:"name"`
-	Icon              string `json:"icon"`
-	Url               string `json:"url"`
-	LoginRedirectURL  string `json:"login_redirect_url"`
-	SignUpRedirectURL string `json:"sign_up_redirect_url"`
-	RankAgentEnabled  bool   `json:"rank_agent_enabled"`
+	Name                 string `json:"name"`
+	Icon                 string `json:"icon"`
+	Url                  string `json:"url"`
+	LoginRedirectURL     string `json:"login_redirect_url"`
+	SignUpRedirectURL    string `json:"sign_up_redirect_url"`
+	RankAgentEnabled     bool   `json:"rank_agent_enabled"`
+	MustAuthEmailEnabled bool   `json:"must_auth_email_enabled"`
 }
 
 type UserStatus int
@@ -45,6 +48,7 @@ type UserCenterBasicUserInfo struct {
 	Rank        int        `json:"rank"`
 	Avatar      string     `json:"avatar"`
 	Mobile      string     `json:"mobile"`
+	Bio         string     `json:"bio"`
 	Status      UserStatus `json:"status"`
 }
 

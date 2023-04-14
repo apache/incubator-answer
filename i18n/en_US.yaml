@@ -66,6 +66,8 @@ backend:
         other: Email should be verified.
       verify_url_expired:
         other: Email verified URL has expired, please resend the email.
+      illegal_email_domain_error:
+        other: The domain name of the current email address cannot be registered.
     lang:
       not_found:
         other: Language file not found.

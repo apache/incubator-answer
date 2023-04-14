@@ -7,6 +7,7 @@ import (
 	brotli "github.com/anargu/gin-brotli"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/router"
+	"github.com/answerdev/answer/plugin"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 )
@@ -67,5 +68,12 @@ func NewHTTPServer(debug bool,
 	// plugin routes
 	pluginAPIRouter.RegisterUnAuthConnectorRouter(mustUnAuthV1)
 	pluginAPIRouter.RegisterAuthConnectorRouter(authV1)
+
+	_ = plugin.CallAgent(func(agent plugin.Agent) error {
+		agent.RegisterUnAuthRouter(unAuthV1)
+		agent.RegisterAuthUserRouter(authV1)
+		agent.RegisterAuthAdminRouter(adminauthV1)
+		return nil
+	})
 	return r
 }

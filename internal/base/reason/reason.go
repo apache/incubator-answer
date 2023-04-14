@@ -42,6 +42,7 @@ const (
 	EmailDuplicate                      = "error.email.duplicate"
 	EmailVerifyURLExpired               = "error.email.verify_url_expired"
 	EmailNeedToBeVerified               = "error.email.need_to_be_verified"
+	EmailIllegalDomainError             = "error.email.illegal_email_domain_error"
 	UserSuspended                       = "error.user.suspended"
 	ObjectNotFound                      = "error.object.not_found"
 	TagNotFound                         = "error.tag.not_found"

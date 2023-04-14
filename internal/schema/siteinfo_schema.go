@@ -92,10 +92,17 @@ type GetSiteLegalInfoResp struct {
 	PrivacyPolicyParsedText    string `json:"privacy_policy_parsed_text,omitempty"`
 }
 
+// SiteUsersReq site users config request
+type SiteUsersReq struct {
+	DefaultAvatar string `validate:"required,oneof=system gravatar" form:"default_avatar" json:"default_avatar"`
+}
+
 // SiteLoginReq site login request
 type SiteLoginReq struct {
-	AllowNewRegistrations bool `json:"allow_new_registrations"`
-	LoginRequired         bool `json:"login_required"`
+	AllowNewRegistrations   bool     `json:"allow_new_registrations"`
+	AllowEmailRegistrations bool     `json:"allow_email_registrations"`
+	LoginRequired           bool     `json:"login_required"`
+	AllowEmailDomains       []string `json:"allow_email_domains"`
 }
 
 // SiteCustomCssHTMLReq site custom css html
@@ -126,6 +133,9 @@ type SiteLoginResp SiteLoginReq
 
 // SiteCustomCssHTMLResp site custom css html response
 type SiteCustomCssHTMLResp SiteCustomCssHTMLReq
+
+// SiteUsersResp site users response
+type SiteUsersResp SiteUsersReq
 
 // SiteThemeResp site theme response
 type SiteThemeResp struct {

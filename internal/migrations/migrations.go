@@ -57,6 +57,7 @@ var migrations = []Migration{
 	NewMigration("add theme and private mode", addThemeAndPrivateMode, true),
 	NewMigration("add new answer notification", addNewAnswerNotification, true),
 	NewMigration("add plugin", addPlugin, false),
+	NewMigration("add login limitations", addLoginLimitations, true),
 }
 
 // GetCurrentDBVersion returns the current db version

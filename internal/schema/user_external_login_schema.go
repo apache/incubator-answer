@@ -4,6 +4,8 @@ package schema
 type UserExternalLoginResp struct {
 	BindingKey  string `json:"binding_key"`
 	AccessToken string `json:"access_token"`
+	// ErrMsg error message, if not empty, means login failed and this message should be displayed.
+	ErrMsg string `json:"-"`
 }
 
 // ExternalLoginBindingUserSendEmailReq external login binding user request
@@ -49,6 +51,8 @@ type ExternalLoginUserInfoCache struct {
 	Avatar string
 	// optional. The original user information provided by the third-party login platform
 	MetaInfo string
+	// optional. The bio provided by the third-party login platform
+	Bio string
 }
 
 // ExternalLoginUnbindingReq external login unbinding user

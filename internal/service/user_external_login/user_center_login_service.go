@@ -5,10 +5,15 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/random"
 	"github.com/answerdev/answer/plugin"
 	"github.com/segmentfault/pacman/log"
@@ -20,6 +25,7 @@ type UserCenterLoginService struct {
 	userExternalLoginRepo UserExternalLoginRepo
 	userCommonService     *usercommon.UserCommon
 	userActivity          activity.UserActiveActivityRepo
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewUserCenterLoginService new user external login service
@@ -28,21 +34,36 @@ func NewUserCenterLoginService(
 	userCommonService *usercommon.UserCommon,
 	userExternalLoginRepo UserExternalLoginRepo,
 	userActivity activity.UserActiveActivityRepo,
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 ) *UserCenterLoginService {
 	return &UserCenterLoginService{
 		userRepo:              userRepo,
 		userCommonService:     userCommonService,
 		userExternalLoginRepo: userExternalLoginRepo,
 		userActivity:          userActivity,
+		siteInfoCommonService: siteInfoCommonService,
 	}
 }
 
 func (us *UserCenterLoginService) ExternalLogin(
-	ctx context.Context, provider string, basicUserInfo *plugin.UserCenterBasicUserInfo) (
+	ctx context.Context, userCenter plugin.UserCenter, basicUserInfo *plugin.UserCenterBasicUserInfo) (
 	resp *schema.UserExternalLoginResp, err error) {
 
+	if len(basicUserInfo.Email) > 0 {
+		// check whether site allow register or not
+		siteInfo, err := us.siteInfoCommonService.GetSiteLogin(ctx)
+		if err != nil {
+			return nil, err
+		}
+		if !checker.EmailInAllowEmailDomain(basicUserInfo.Email, siteInfo.AllowEmailDomains) {
+			log.Debugf("email domain not allowed: %s", basicUserInfo.Email)
+			return &schema.UserExternalLoginResp{
+				ErrMsg: translator.Tr(handler.GetLangByCtx(ctx), reason.EmailIllegalDomainError)}, nil
+		}
+	}
+
 	oldExternalLoginUserInfo, exist, err := us.userExternalLoginRepo.GetByExternalID(ctx,
-		provider, basicUserInfo.ExternalID)
+		userCenter.Info().SlugName, basicUserInfo.ExternalID)
 	if err != nil {
 		return nil, err
 	}
@@ -62,7 +83,13 @@ func (us *UserCenterLoginService) ExternalLogin(
 		}
 	}
 
-	oldUserInfo, err := us.registerNewUser(ctx, provider, basicUserInfo)
+	// cache external user info, waiting for user enter email address.
+	if userCenter.Description().MustAuthEmailEnabled && len(basicUserInfo.Email) == 0 {
+		// TODO: check
+		return &schema.UserExternalLoginResp{ErrMsg: "Requires authorized email to login"}, nil
+	}
+
+	oldUserInfo, err := us.registerNewUser(ctx, userCenter.Info().SlugName, basicUserInfo)
 	if err != nil {
 		return nil, err
 	}
@@ -98,6 +125,8 @@ func (us *UserCenterLoginService) registerNewUser(ctx context.Context, provider 
 	userInfo.MailStatus = entity.EmailStatusAvailable
 	userInfo.Status = entity.UserStatusAvailable
 	userInfo.LastLoginDate = time.Now()
+	userInfo.Bio = basicUserInfo.Bio
+	userInfo.BioHTML = basicUserInfo.Bio
 	err = us.userRepo.AddUser(ctx, userInfo)
 	if err != nil {
 		return nil, err

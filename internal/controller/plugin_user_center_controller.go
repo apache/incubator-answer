@@ -3,6 +3,8 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"net/url"
+	"strings"
 
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
@@ -90,8 +92,8 @@ func (uc *UserCenterController) UserCenterPersonalBranding(ctx *gin.Context) {
 
 func (uc *UserCenterController) UserCenterLoginRedirect(ctx *gin.Context) {
 	var redirectURL string
-	_ = plugin.CallUserCenter(func(uc plugin.UserCenter) error {
-		info := uc.Description()
+	_ = plugin.CallUserCenter(func(userCenter plugin.UserCenter) error {
+		info := userCenter.Description()
 		redirectURL = info.LoginRedirectURL
 		return nil
 	})
@@ -100,9 +102,9 @@ func (uc *UserCenterController) UserCenterLoginRedirect(ctx *gin.Context) {
 
 func (uc *UserCenterController) UserCenterSignUpRedirect(ctx *gin.Context) {
 	var redirectURL string
-	_ = plugin.CallUserCenter(func(uc plugin.UserCenter) error {
-		info := uc.Description()
-		redirectURL = info.SignUpRedirectURL
+	_ = plugin.CallUserCenter(func(userCenter plugin.UserCenter) error {
+		info := userCenter.Description()
+		redirectURL = info.LoginRedirectURL
 		return nil
 	})
 	ctx.Redirect(http.StatusFound, redirectURL)
@@ -128,12 +130,17 @@ func (uc *UserCenterController) UserCenterLoginCallback(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := uc.userCenterLoginService.ExternalLogin(ctx, userCenter.Info().SlugName, userInfo)
+	resp, err := uc.userCenterLoginService.ExternalLogin(ctx, userCenter, userInfo)
 	if err != nil {
 		log.Errorf("external login failed: %v", err)
 		ctx.Redirect(http.StatusFound, "/50x")
 		return
 	}
+	if len(resp.ErrMsg) > 0 {
+		ctx.String(http.StatusOK, resp.ErrMsg)
+		return
+	}
+	userCenter.AfterLogin(userInfo.ExternalID, resp.AccessToken)
 	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/oauth?access_token=%s",
 		siteGeneral.SiteUrl, resp.AccessToken))
 }
@@ -158,12 +165,17 @@ func (uc *UserCenterController) UserCenterSignUpCallback(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := uc.userCenterLoginService.ExternalLogin(ctx, userCenter.Info().SlugName, userInfo)
+	resp, err := uc.userCenterLoginService.ExternalLogin(ctx, userCenter, userInfo)
 	if err != nil {
 		log.Errorf("external login failed: %v", err)
 		ctx.Redirect(http.StatusFound, "/50x")
 		return
 	}
+	if len(resp.ErrMsg) > 0 {
+		ctx.String(http.StatusOK, resp.ErrMsg)
+		return
+	}
+	userCenter.AfterLogin(userInfo.ExternalID, resp.AccessToken)
 	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/oauth?access_token=%s",
 		siteGeneral.SiteUrl, resp.AccessToken))
 }
@@ -173,4 +185,18 @@ func (uc *UserCenterController) UserCenterUserSettings(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	resp, err := uc.userCenterLoginService.UserCenterUserSettings(ctx, userID)
 	handler.HandleResponse(ctx, err, resp)
+}
+
+func (uc *UserCenterController) formatRedirectURL(ctx *gin.Context, redirectURL string) string {
+	if !strings.Contains(redirectURL, "CALLBACK_URL") {
+		return redirectURL
+	}
+	general, err := uc.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		log.Error(err)
+		ctx.Redirect(http.StatusFound, "/50x")
+		return ""
+	}
+	callbackURL := fmt.Sprintf("%s%s%s", general.SiteUrl, commonRouterPrefix, "/user-center/login/callback")
+	return strings.ReplaceAll(redirectURL, "CALLBACK_URL", url.QueryEscape(callbackURL))
 }

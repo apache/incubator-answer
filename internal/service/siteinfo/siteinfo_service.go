@@ -61,6 +61,11 @@ func (s *SiteInfoService) GetSiteBranding(ctx context.Context) (resp *schema.Sit
 	return s.siteInfoCommonService.GetSiteBranding(ctx)
 }
 
+// GetSiteUsers get site info about users
+func (s *SiteInfoService) GetSiteUsers(ctx context.Context) (resp *schema.SiteUsersResp, err error) {
+	return s.siteInfoCommonService.GetSiteUsers(ctx)
+}
+
 // GetSiteWrite get site info write
 func (s *SiteInfoService) GetSiteWrite(ctx context.Context) (resp *schema.SiteWriteResp, err error) {
 	resp = &schema.SiteWriteResp{}
@@ -216,6 +221,17 @@ func (s *SiteInfoService) SaveSiteTheme(ctx context.Context, req *schema.SiteThe
 		Status:  1,
 	}
 	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeTheme, data)
+}
+
+// SaveSiteUsers save site users
+func (s *SiteInfoService) SaveSiteUsers(ctx context.Context, req *schema.SiteUsersReq) (err error) {
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeUsers,
+		Content: string(content),
+		Status:  1,
+	}
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeUsers, data)
 }
 
 // GetSMTPConfig get smtp config
