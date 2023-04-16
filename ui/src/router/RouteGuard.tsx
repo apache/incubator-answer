@@ -1,4 +1,4 @@
-import { FC, ReactNode, useEffect } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useLoaderData } from 'react-router-dom';
 
 import { floppyNavigation } from '@/utils';
@@ -15,37 +15,49 @@ const RouteGuard: FC<{
   const navigate = useNavigate();
   const location = useLocation();
   const loaderData = useLoaderData();
-  const gr = onEnter({
-    loaderData,
-    path,
-    page,
-  });
+  const [grOk, setGrOk] = useState(true);
+  const [routeError, setRouteError] = useState<{
+    code: string;
+    msg: string;
+  }>();
+  const applyGuard = () => {
+    if (typeof onEnter !== 'function') {
+      return;
+    }
+    const gr = onEnter({
+      loaderData,
+      path,
+      page,
+    });
 
-  let guardError;
-  const errCode = gr.error?.code;
-  if (errCode === '403' || errCode === '404' || errCode === '50X') {
-    guardError = {
-      code: errCode,
-      msg: gr.error?.msg,
-    };
-  }
-  const handleGuardRedirect = () => {
-    const redirectUrl = gr.redirect;
-    if (redirectUrl) {
-      floppyNavigation.navigate(redirectUrl, {
+    setGrOk(gr.ok);
+    if (gr.error?.code && /403|404|50X/i.test(gr.error.code.toString())) {
+      setRouteError({
+        code: `${gr.error.code}`,
+        msg: gr.error.msg || '',
+      });
+      return;
+    }
+    if (gr.redirect) {
+      floppyNavigation.navigate(gr.redirect, {
         handler: navigate,
         options: { replace: true },
       });
     }
   };
   useEffect(() => {
-    handleGuardRedirect();
+    /**
+     * NOTICE:
+     *  Must be put in `useEffect`,
+     *  otherwise `guard` may not get `loggedUserInfo` correctly
+     */
+    applyGuard();
   }, [location]);
   return (
     <>
-      {gr.ok ? children : null}
-      {!gr.ok && guardError ? (
-        <RouteErrorBoundary errCode={guardError.code} />
+      {grOk ? children : null}
+      {!grOk && routeError ? (
+        <RouteErrorBoundary errCode={routeError.code} />
       ) : null}
     </>
   );
