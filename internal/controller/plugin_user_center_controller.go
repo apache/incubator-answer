@@ -187,6 +187,12 @@ func (uc *UserCenterController) UserCenterUserSettings(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
+// UserCenterAdminFunctionAgent user center admin function agent
+func (uc *UserCenterController) UserCenterAdminFunctionAgent(ctx *gin.Context) {
+	resp, err := uc.userCenterLoginService.UserCenterAdminFunctionAgent(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
 func (uc *UserCenterController) formatRedirectURL(ctx *gin.Context, redirectURL string) string {
 	if !strings.Contains(redirectURL, "CALLBACK_URL") {
 		return redirectURL

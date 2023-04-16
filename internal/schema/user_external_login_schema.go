@@ -67,6 +67,10 @@ type UserCenterUserSettingsResp struct {
 	AccountSettingAgent UserSettingAgent `json:"account_setting_agent"`
 }
 
+type UserCenterAdminFunctionAgentResp struct {
+	RoleAgentEnabled bool `json:"role_agent_enabled"`
+}
+
 type UserSettingAgent struct {
 	Enabled     bool   `json:"enabled"`
 	RedirectURL string `json:"redirect_url"`

@@ -355,7 +355,7 @@ func (sc *SiteInfoController) SaveSiteTheme(ctx *gin.Context) {
 // @Security ApiKeyAuth
 // @Tags admin
 // @Produce json
-// @Param data body schema.SiteBrandingReq true "users info"
+// @Param data body schema.SiteUsersReq true "users info"
 // @Success 200 {object} handler.RespBody{}
 // @Router /answer/admin/api/siteinfo/users [put]
 func (sc *SiteInfoController) UpdateSiteUsers(ctx *gin.Context) {

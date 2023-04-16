@@ -195,6 +195,18 @@ func (us *UserCenterLoginService) UserCenterUserSettings(ctx context.Context, us
 	return resp, nil
 }
 
+func (us *UserCenterLoginService) UserCenterAdminFunctionAgent(ctx context.Context) (
+	resp *schema.UserCenterAdminFunctionAgentResp, err error) {
+	resp = &schema.UserCenterAdminFunctionAgentResp{}
+	userCenter, ok := plugin.GetUserCenter()
+	if !ok {
+		return
+	}
+	desc := userCenter.Description()
+	resp.RoleAgentEnabled = desc.RoleAgentEnabled
+	return resp, nil
+}
+
 func (us *UserCenterLoginService) UserCenterPersonalBranding(ctx context.Context, username string) (
 	resp *schema.UserCenterPersonalBranding, err error) {
 	resp = &schema.UserCenterPersonalBranding{

@@ -305,19 +305,42 @@ definitions:
       switch:
         type: boolean
     type: object
-  schema.ConfigFields:
+  schema.ConfigField:
     properties:
       description:
         type: string
+      name:
+        type: string
+      options:
+        items:
+          $ref: '#/definitions/schema.ConfigFieldOption'
+        type: array
       required:
         type: boolean
       title:
         type: string
       type:
         type: string
-      ui_widget:
-        $ref: '#/definitions/schema.UIWidget'
+      ui_options:
+        $ref: '#/definitions/schema.ConfigFieldUIOptions'
+      value: {}
+    type: object
+  schema.ConfigFieldOption:
+    properties:
+      label:
+        type: string
       value:
+        type: string
+    type: object
+  schema.ConfigFieldUIOptions:
+    properties:
+      input_type:
+        type: string
+      label:
+        type: string
+      placeholder:
+        type: string
+      rows:
         type: string
     type: object
   schema.ConnectorInfoResp:
@@ -580,12 +603,11 @@ definitions:
     properties:
       config_fields:
         items:
-          $ref: '#/definitions/schema.ConfigFields'
+          $ref: '#/definitions/schema.ConfigField'
         type: array
       description:
         type: string
       name:
-        description: ConfigFields []plugin.ConfigField `json:"config_fields"`
         type: string
       slug_name:
         type: string
@@ -600,6 +622,8 @@ definitions:
         type: boolean
       have_config:
         type: boolean
+      link:
+        type: string
       name:
         type: string
       slug_name:
@@ -920,6 +944,9 @@ definitions:
       follow_count:
         description: follow count
         type: integer
+      have_password:
+        description: user have password
+        type: boolean
       id:
         description: user id
         type: string
@@ -994,6 +1021,8 @@ definitions:
       follow_count:
         description: follow count
         type: integer
+      have_password:
+        type: boolean
       id:
         description: user id
         type: string
@@ -1485,6 +1514,8 @@ definitions:
         type: string
       site_seo:
         $ref: '#/definitions/schema.SiteSeoReq'
+      site_users:
+        $ref: '#/definitions/schema.SiteUsersResp'
       theme:
         $ref: '#/definitions/schema.SiteThemeResp'
       version:
@@ -1550,6 +1581,12 @@ definitions:
     type: object
   schema.SiteLoginReq:
     properties:
+      allow_email_domains:
+        items:
+          type: string
+        type: array
+      allow_email_registrations:
+        type: boolean
       allow_new_registrations:
         type: boolean
       login_required:
@@ -1557,6 +1594,12 @@ definitions:
     type: object
   schema.SiteLoginResp:
     properties:
+      allow_email_domains:
+        items:
+          type: string
+        type: array
+      allow_email_registrations:
+        type: boolean
       allow_new_registrations:
         type: boolean
       login_required:
@@ -1608,6 +1651,50 @@ definitions:
         items:
           $ref: '#/definitions/schema.ThemeOption'
         type: array
+    type: object
+  schema.SiteUsersReq:
+    properties:
+      allow_update_avatar:
+        type: boolean
+      allow_update_bio:
+        type: boolean
+      allow_update_display_name:
+        type: boolean
+      allow_update_location:
+        type: boolean
+      allow_update_username:
+        type: boolean
+      allow_update_website:
+        type: boolean
+      default_avatar:
+        enum:
+        - system
+        - gravatar
+        type: string
+    required:
+    - default_avatar
+    type: object
+  schema.SiteUsersResp:
+    properties:
+      allow_update_avatar:
+        type: boolean
+      allow_update_bio:
+        type: boolean
+      allow_update_display_name:
+        type: boolean
+      allow_update_location:
+        type: boolean
+      allow_update_username:
+        type: boolean
+      allow_update_website:
+        type: boolean
+      default_avatar:
+        enum:
+        - system
+        - gravatar
+        type: string
+    required:
+    - default_avatar
     type: object
   schema.SiteWriteReq:
     properties:
@@ -1685,13 +1772,6 @@ definitions:
       label:
         type: string
       value:
-        type: string
-    type: object
-  schema.UIWidget:
-    properties:
-      placeholder:
-        type: string
-      type:
         type: string
     type: object
   schema.UnreviewedRevisionInfoInfo:
@@ -1971,11 +2051,15 @@ definitions:
   schema.UserModifyPassWordRequest:
     properties:
       old_pass:
-        description: old password
+        maxLength: 32
+        minLength: 8
         type: string
       pass:
-        description: password
+        maxLength: 32
+        minLength: 8
         type: string
+    required:
+    - pass
     type: object
   schema.UserNoticeSetRequest:
     properties:
@@ -2879,6 +2963,47 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: update site custom css html config
+      tags:
+      - admin
+  /answer/admin/api/siteinfo/users:
+    get:
+      description: get site user config
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SiteUsersResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get site user config
+      tags:
+      - admin
+    put:
+      description: update site info config about users
+      parameters:
+      - description: users info
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.SiteUsersReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update site info config about users
       tags:
       - admin
   /answer/admin/api/siteinfo/write:

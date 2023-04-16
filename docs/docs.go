@@ -1301,6 +1301,77 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/siteinfo/users": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get site user config",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "get site user config",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.SiteUsersResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update site info config about users",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "update site info config about users",
+                "parameters": [
+                    {
+                        "description": "users info",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.SiteUsersReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/siteinfo/write": {
             "get": {
                 "security": [
@@ -6149,11 +6220,20 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.ConfigFields": {
+        "schema.ConfigField": {
             "type": "object",
             "properties": {
                 "description": {
                     "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "options": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.ConfigFieldOption"
+                    }
                 },
                 "required": {
                     "type": "boolean"
@@ -6164,10 +6244,36 @@ const docTemplate = `{
                 "type": {
                     "type": "string"
                 },
-                "ui_widget": {
-                    "$ref": "#/definitions/schema.UIWidget"
+                "ui_options": {
+                    "$ref": "#/definitions/schema.ConfigFieldUIOptions"
+                },
+                "value": {}
+            }
+        },
+        "schema.ConfigFieldOption": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
                 },
                 "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.ConfigFieldUIOptions": {
+            "type": "object",
+            "properties": {
+                "input_type": {
+                    "type": "string"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "placeholder": {
+                    "type": "string"
+                },
+                "rows": {
                     "type": "string"
                 }
             }
@@ -6532,14 +6638,13 @@ const docTemplate = `{
                 "config_fields": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/schema.ConfigFields"
+                        "$ref": "#/definitions/schema.ConfigField"
                     }
                 },
                 "description": {
                     "type": "string"
                 },
                 "name": {
-                    "description": "ConfigFields []plugin.ConfigField ` + "`" + `json:\"config_fields\"` + "`" + `",
                     "type": "string"
                 },
                 "slug_name": {
@@ -6561,6 +6666,9 @@ const docTemplate = `{
                 },
                 "have_config": {
                     "type": "boolean"
+                },
+                "link": {
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -7009,6 +7117,10 @@ const docTemplate = `{
                     "description": "follow count",
                     "type": "integer"
                 },
+                "have_password": {
+                    "description": "user have password",
+                    "type": "boolean"
+                },
                 "id": {
                     "description": "user id",
                     "type": "string"
@@ -7108,6 +7220,9 @@ const docTemplate = `{
                 "follow_count": {
                     "description": "follow count",
                     "type": "integer"
+                },
+                "have_password": {
+                    "type": "boolean"
                 },
                 "id": {
                     "description": "user id",
@@ -7802,6 +7917,9 @@ const docTemplate = `{
                 "site_seo": {
                     "$ref": "#/definitions/schema.SiteSeoReq"
                 },
+                "site_users": {
+                    "$ref": "#/definitions/schema.SiteUsersResp"
+                },
                 "theme": {
                     "$ref": "#/definitions/schema.SiteThemeResp"
                 },
@@ -7897,6 +8015,15 @@ const docTemplate = `{
         "schema.SiteLoginReq": {
             "type": "object",
             "properties": {
+                "allow_email_domains": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "allow_email_registrations": {
+                    "type": "boolean"
+                },
                 "allow_new_registrations": {
                     "type": "boolean"
                 },
@@ -7908,6 +8035,15 @@ const docTemplate = `{
         "schema.SiteLoginResp": {
             "type": "object",
             "properties": {
+                "allow_email_domains": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "allow_email_registrations": {
+                    "type": "boolean"
+                },
                 "allow_new_registrations": {
                     "type": "boolean"
                 },
@@ -7981,6 +8117,72 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/schema.ThemeOption"
                     }
+                }
+            }
+        },
+        "schema.SiteUsersReq": {
+            "type": "object",
+            "required": [
+                "default_avatar"
+            ],
+            "properties": {
+                "allow_update_avatar": {
+                    "type": "boolean"
+                },
+                "allow_update_bio": {
+                    "type": "boolean"
+                },
+                "allow_update_display_name": {
+                    "type": "boolean"
+                },
+                "allow_update_location": {
+                    "type": "boolean"
+                },
+                "allow_update_username": {
+                    "type": "boolean"
+                },
+                "allow_update_website": {
+                    "type": "boolean"
+                },
+                "default_avatar": {
+                    "type": "string",
+                    "enum": [
+                        "system",
+                        "gravatar"
+                    ]
+                }
+            }
+        },
+        "schema.SiteUsersResp": {
+            "type": "object",
+            "required": [
+                "default_avatar"
+            ],
+            "properties": {
+                "allow_update_avatar": {
+                    "type": "boolean"
+                },
+                "allow_update_bio": {
+                    "type": "boolean"
+                },
+                "allow_update_display_name": {
+                    "type": "boolean"
+                },
+                "allow_update_location": {
+                    "type": "boolean"
+                },
+                "allow_update_username": {
+                    "type": "boolean"
+                },
+                "allow_update_website": {
+                    "type": "boolean"
+                },
+                "default_avatar": {
+                    "type": "string",
+                    "enum": [
+                        "system",
+                        "gravatar"
+                    ]
                 }
             }
         },
@@ -8092,17 +8294,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "value": {
-                    "type": "string"
-                }
-            }
-        },
-        "schema.UIWidget": {
-            "type": "object",
-            "properties": {
-                "placeholder": {
-                    "type": "string"
-                },
-                "type": {
                     "type": "string"
                 }
             }
@@ -8493,14 +8684,19 @@ const docTemplate = `{
         },
         "schema.UserModifyPassWordRequest": {
             "type": "object",
+            "required": [
+                "pass"
+            ],
             "properties": {
                 "old_pass": {
-                    "description": "old password",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 8
                 },
                 "pass": {
-                    "description": "password",
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 8
                 }
             }
         },
