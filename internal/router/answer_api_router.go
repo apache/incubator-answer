@@ -282,6 +282,8 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/siteinfo/users", a.siteInfoController.UpdateSiteUsers)
 	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
 	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
+	r.GET("/setting/privileges", a.siteInfoController.GetPrivilegesConfig)
+	r.PUT("/setting/privileges", a.siteInfoController.UpdatePrivilegesConfig)
 
 	// dashboard
 	r.GET("/dashboard", a.dashboardController.DashboardInfo)

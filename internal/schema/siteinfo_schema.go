@@ -6,6 +6,7 @@ import (
 	"net/mail"
 	"net/url"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
@@ -251,4 +252,80 @@ type GetManifestJsonResp struct {
 	Display         string            `json:"display"`
 	ThemeColor      string            `json:"theme_color"`
 	BackgroundColor string            `json:"background_color"`
+}
+
+const (
+	// PrivilegeLevel1 low
+	PrivilegeLevel1 PrivilegeLevel = 1
+	// PrivilegeLevel2 medium
+	PrivilegeLevel2 PrivilegeLevel = 2
+	// PrivilegeLevel3 high
+	PrivilegeLevel3 PrivilegeLevel = 3
+)
+
+type PrivilegeLevel int
+
+// GetPrivilegesConfigResp get privileges config response
+type GetPrivilegesConfigResp struct {
+	Options       []*PrivilegeOption `json:"options"`
+	SelectedLevel PrivilegeLevel     `json:"selected_level"`
+}
+
+// PrivilegeOption privilege option
+type PrivilegeOption struct {
+	Level      PrivilegeLevel        `json:"level"`
+	Privileges []*constant.Privilege `json:"privileges"`
+}
+
+// UpdatePrivilegesConfigReq update privileges config request
+type UpdatePrivilegesConfigReq struct {
+	Level PrivilegeLevel `validate:"required,min=1,max=3" json:"level"`
+}
+
+var (
+	DefaultPrivilegeOptions      []*PrivilegeOption
+	privilegeOptionsLevelMapping = map[string][]int{
+		constant.RankQuestionAddKey:               {1, 1, 1},
+		constant.RankAnswerAddKey:                 {1, 1, 1},
+		constant.RankCommentAddKey:                {1, 1, 1},
+		constant.RankAnswerAcceptKey:              {1, 1, 1},
+		constant.RankReportAddKey:                 {1, 1, 1},
+		constant.RankCommentVoteUpKey:             {1, 1, 1},
+		constant.RankLinkUrlLimitKey:              {1, 10, 10},
+		constant.RankQuestionVoteUpKey:            {1, 1, 15},
+		constant.RankAnswerVoteUpKey:              {1, 1, 15},
+		constant.RankQuestionVoteDownKey:          {125, 125, 125},
+		constant.RankAnswerVoteDownKey:            {125, 125, 125},
+		constant.RankTagAddKey:                    {1, 750, 1500},
+		constant.RankTagEditKey:                   {1, 50, 100},
+		constant.RankQuestionEditKey:              {1, 100, 200},
+		constant.RankAnswerEditKey:                {1, 100, 200},
+		constant.RankQuestionEditWithoutReviewKey: {1, 1000, 2000},
+		constant.RankAnswerEditWithoutReviewKey:   {1, 1000, 2000},
+		constant.RankQuestionAuditKey:             {1, 1000, 2000},
+		constant.RankAnswerAuditKey:               {1, 1000, 2000},
+		constant.RankTagAuditKey:                  {1, 2500, 5000},
+		constant.RankTagEditWithoutReviewKey:      {1, 10000, 20000},
+		constant.RankTagSynonymKey:                {1, 10000, 20000},
+	}
+)
+
+func init() {
+	for _, option := range []PrivilegeLevel{PrivilegeLevel1, PrivilegeLevel2, PrivilegeLevel3} {
+		op := &PrivilegeOption{
+			Level: option,
+		}
+		for _, privilege := range constant.RankAllPrivileges {
+			if len(privilegeOptionsLevelMapping[privilege.Key]) == 0 {
+				fmt.Println("privilege key not found: ", privilege.Key)
+				continue
+			}
+			op.Privileges = append(op.Privileges, &constant.Privilege{
+				Label: privilege.Label,
+				Value: privilegeOptionsLevelMapping[privilege.Key][option-1],
+				Key:   privilege.Key,
+			})
+		}
+		DefaultPrivilegeOptions = append(DefaultPrivilegeOptions, op)
+	}
 }

@@ -193,7 +193,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reasonService := reason2.NewReasonService(reasonRepo)
 	reasonController := controller.NewReasonController(reasonService)
 	themeController := controller_admin.NewThemeController()
-	siteInfoService := siteinfo.NewSiteInfoService(siteInfoRepo, siteInfoCommonService, emailService, tagCommonService)
+	siteInfoService := siteinfo.NewSiteInfoService(siteInfoRepo, siteInfoCommonService, emailService, tagCommonService, configRepo)
 	siteInfoController := controller_admin.NewSiteInfoController(siteInfoService)
 	siteinfoController := controller.NewSiteinfoController(siteInfoCommonService)
 	notificationRepo := notification.NewNotificationRepo(dataData)

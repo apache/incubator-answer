@@ -66,6 +66,7 @@ const (
 	SiteTypeLogin         = "login"
 	SiteTypeCustomCssHTML = "css-html"
 	SiteTypeTheme         = "theme"
+	SiteTypePrivileges    = "privileges"
 	SiteTypeUsers         = "users"
 )
 
