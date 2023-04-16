@@ -1426,6 +1426,13 @@ ui:
         title: Membership
         label: Allow new registrations
         text: Turn off to prevent anyone from creating a new account.
+      email_registration:
+        title: Email registration
+        label: Allow email registration
+        text: Turn off to prevent anyone creating new account through email.
+      allowed_email_domains:
+        title: Allowed email domains
+        text: Email domains that users must register accounts with. One domain per line. Ignored when empty.
       private:
         title: Private
         label: Login required
