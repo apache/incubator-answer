@@ -37,11 +37,18 @@ export interface UcBranding {
   personal_branding: UcBrandingEntry[];
 }
 
+export interface AdminUcAgent {
+  user_status_agent_enabled: boolean;
+}
+
 export const getUcAgent = () => {
   const apiUrl = `/answer/api/v1/user-center/agent`;
   return request.get<UcAgent>(apiUrl);
 };
-
+export const getAdminUcAgent = () => {
+  const apiUrl = `/answer/admin/api/user-center/agent`;
+  return request.get<AdminUcAgent>(apiUrl);
+};
 export const getUcSettings = () => {
   const apiUrl = `/answer/api/v1/user-center/user/settings`;
   return request.get<UcSettings>(apiUrl);

@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Form, Table, Dropdown, Button, Stack } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +21,13 @@ import {
   useChangePasswordModal,
   useToast,
 } from '@/hooks';
-import { useQueryUsers, addUser, updateUserPassword } from '@/services';
+import {
+  useQueryUsers,
+  addUser,
+  updateUserPassword,
+  getAdminUcAgent,
+  AdminUcAgent,
+} from '@/services';
 import { loggedUserInfoStore, userCenterStore } from '@/stores';
 import { formatCount } from '@/utils';
 
@@ -50,6 +56,9 @@ const Users: FC = () => {
   const curQuery = urlSearchParams.get('query') || '';
   const currentUser = loggedUserInfoStore((state) => state.user);
   const { agent: ucAgent } = userCenterStore();
+  const [adminUcAgent, setAdminUcAgent] = useState<AdminUcAgent>({
+    user_status_agent_enabled: false,
+  });
   const Toast = useToast();
   const {
     data,
@@ -139,6 +148,13 @@ const Users: FC = () => {
     urlSearchParams.delete('page');
     setUrlSearchParams(urlSearchParams);
   };
+  useEffect(() => {
+    if (ucAgent?.enabled) {
+      getAdminUcAgent().then((resp) => {
+        setAdminUcAgent(resp);
+      });
+    }
+  }, [ucAgent]);
   return (
     <>
       <h3 className="mb-4">{t('title')}</h3>
@@ -248,7 +264,8 @@ const Users: FC = () => {
                             {t('set_new_password')}
                           </Dropdown.Item>
                         ) : null}
-                        {!ucAgent?.enabled ? (
+                        {!ucAgent?.enabled ||
+                        !adminUcAgent.user_status_agent_enabled ? (
                           <Dropdown.Item
                             onClick={() => handleAction('status', user)}>
                             {t('change_status')}
