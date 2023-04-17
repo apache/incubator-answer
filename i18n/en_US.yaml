@@ -1164,8 +1164,9 @@ ui:
     seo: SEO
     customize: Customize
     themes: Themes
-    css-html: CSS/HTML
+    css_html: CSS/HTML
     login: Login
+    privileges: Privileges
     plugins: Plugins
     installed_plugins: Installed Plugins
   website_welcome: Welcome to {{site_name}}
@@ -1368,9 +1369,6 @@ ui:
         label: Timezone
         msg: Timezone cannot be empty.
         text: Choose a city in the same timezone as you.
-      avatar:
-        label: Default Avatar
-        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
@@ -1514,7 +1512,30 @@ ui:
       deactivate: Deactivate
       activate: Activate
       settings: Settings
-
+    settings_users:
+      title: Users
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
+      profile_editable:
+        title: Profile Editable
+      allow_update_display_name:
+        label: Allow users to change their display name
+      allow_update_username:
+        label: Allow users to change their username
+      allow_update_avatar:
+        label: Allow users to change their profile image
+      allow_update_bio:
+        label: Allow users to change their about me
+      allow_update_website:
+        label: Allow users to change their website
+      allow_update_location:
+        label: Allow users to change their location
+    privilege:
+      title: Privileges
+      level:
+        label: Reputation required level
+        text: Choose the reputation required for the privileges
 
   form:
     optional: (optional)

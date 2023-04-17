@@ -19,7 +19,7 @@ const g10Paths = [
   'answers',
   'users',
   'flags',
-  'installed_plugins',
+  'installed-plugins',
 ];
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
@@ -80,7 +80,7 @@ const Index: FC = () => {
           <Col lg={2}>
             <AccordionNav menus={menus} path="/admin/" />
           </Col>
-          <Col lg={g10Paths.find((v) => curPath.includes(v)) ? 10 : 6}>
+          <Col lg={g10Paths.find((v) => curPath === v) ? 10 : 6}>
             <Outlet />
           </Col>
         </Row>
