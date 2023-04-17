@@ -804,14 +804,15 @@ func (qs *QuestionService) SearchUserAnswerList(ctx context.Context, userName, o
 		if ok {
 			item.QuestionInfo = questionMaps[item.QuestionID]
 		}
-	}
-	for _, item := range answerlist {
 		info := &schema.UserAnswerInfo{}
 		_ = copier.Copy(info, item)
 		info.AnswerID = item.ID
 		info.QuestionID = item.QuestionID
-		userAnswerlist = append(userAnswerlist, info)
+		if item.QuestionInfo.Status != entity.QuestionStatusDeleted {
+			userAnswerlist = append(userAnswerlist, info)
+		}
 	}
+
 	return userAnswerlist, count, nil
 }
 
