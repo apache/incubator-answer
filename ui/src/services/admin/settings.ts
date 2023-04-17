@@ -13,6 +13,19 @@ export interface AdminSettingsUsers {
   default_avatar: string;
 }
 
+interface PrivilegeLevel {
+  level: number;
+  level_desc: string;
+  privileges: {
+    label: string;
+    value: number;
+  }[];
+}
+export interface AdminSettingsPrivilege {
+  selected_level: number;
+  options: PrivilegeLevel[];
+}
+
 export const useGeneralSetting = () => {
   const apiUrl = `/answer/admin/api/siteinfo/general`;
   const { data, error } = useSWR<Type.AdminSettingsGeneral, Error>(
@@ -143,4 +156,16 @@ export const getUsersSetting = () => {
 
 export const putUsersSetting = (params: AdminSettingsUsers) => {
   return request.put('/answer/admin/api/siteinfo/users', params);
+};
+
+export const getPrivilegeSetting = () => {
+  return request.get<AdminSettingsPrivilege>(
+    '/answer/admin/api/setting/privileges',
+  );
+};
+
+export const putPrivilegeSetting = (level: number) => {
+  return request.put('/answer/admin/api/setting/privileges', {
+    level,
+  });
 };

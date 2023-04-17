@@ -1471,6 +1471,11 @@ ui:
         label: Allow users to change their website
       allow_update_location:
         label: Allow users to change their location
+    privilege:
+      title: Privileges
+      level:
+        label: Reputation required level
+        text: Choose the reputation required for the privileges
 
   form:
     optional: (optional)

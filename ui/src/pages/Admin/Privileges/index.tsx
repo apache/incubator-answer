@@ -2,132 +2,51 @@ import { FC, FormEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useToast } from '@/hooks';
+import { FormDataType } from '@/common/interface';
+import { JSONSchema, SchemaForm, UISchema, initFormData } from '@/components';
 import {
-  LangsType,
-  FormDataType,
-  AdminSettingsInterface,
-} from '@/common/interface';
-import { interfaceStore, loggedUserInfoStore } from '@/stores';
-import { JSONSchema, SchemaForm, UISchema } from '@/components';
-import { DEFAULT_TIMEZONE, SYSTEM_AVATAR_OPTIONS } from '@/common/constants';
-import {
-  updateInterfaceSetting,
-  useInterfaceSetting,
-  getLoggedUserInfo,
+  getPrivilegeSetting,
+  putPrivilegeSetting,
+  AdminSettingsPrivilege,
 } from '@/services';
-import {
-  setupAppLanguage,
-  loadLanguageOptions,
-  setupAppTimeZone,
-} from '@/utils/localize';
 import { handleFormError } from '@/utils';
+import * as Type from '@/common/interface';
 
-const Interface: FC = () => {
+const Index: FC = () => {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'admin.interface',
+    keyPrefix: 'admin.privilege',
   });
-  const storeInterface = interfaceStore.getState().interface;
   const Toast = useToast();
-  const [langs, setLangs] = useState<LangsType[]>();
-  const { data: setting } = useInterfaceSetting();
+  const [privilege, setPrivilege] = useState<AdminSettingsPrivilege>();
 
   const schema: JSONSchema = {
-    title: t('page_title'),
+    title: t('title'),
     properties: {
-      language: {
-        type: 'string',
-        title: t('language.label'),
-        description: t('language.text'),
-        enum: langs?.map((lang) => lang.value),
-        enumNames: langs?.map((lang) => lang.label),
-        default: setting?.language || storeInterface.language,
-      },
-      time_zone: {
-        type: 'string',
-        title: t('time_zone.label'),
-        description: t('time_zone.text'),
-        default: setting?.time_zone || DEFAULT_TIMEZONE,
-      },
-      default_avatar: {
-        type: 'string',
-        title: t('avatar.label'),
-        description: t('avatar.text'),
-        enum: SYSTEM_AVATAR_OPTIONS?.map((v) => v.value),
-        enumNames: SYSTEM_AVATAR_OPTIONS?.map((v) => v.label),
+      level: {
+        type: 'number',
+        title: t('level.label'),
+        description: t('level.text'),
+        enum: privilege?.options.map((_) => _.level),
+        enumNames: privilege?.options.map((_) => _.level_desc),
+        default: 1,
       },
     },
   };
 
-  const [formData, setFormData] = useState<FormDataType>({
-    language: {
-      value: setting?.language || storeInterface.language,
-      isInvalid: false,
-      errorMsg: '',
-    },
-    time_zone: {
-      value: setting?.time_zone || DEFAULT_TIMEZONE,
-      isInvalid: false,
-      errorMsg: '',
-    },
-    default_avatar: {
-      value: 'system',
-      isInvalid: false,
-      errorMsg: '',
-    },
-  });
+  const [formData, setFormData] = useState<FormDataType>(initFormData(schema));
 
   const uiSchema: UISchema = {
-    language: {
+    level: {
       'ui:widget': 'select',
     },
-    time_zone: {
-      'ui:widget': 'timezone',
-    },
-    default_avatar: {
-      'ui:widget': 'select',
-    },
-  };
-  const getLangs = async () => {
-    const res: LangsType[] = await loadLanguageOptions(true);
-    setLangs(res);
   };
 
-  const checkValidated = (): boolean => {
-    let ret = true;
-    const { language } = formData;
-    const formCheckData = { ...formData };
-    if (!language.value) {
-      ret = false;
-      formCheckData.language = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('language.msg'),
-      };
-    }
-    setFormData({
-      ...formCheckData,
-    });
-    return ret;
-  };
   const onSubmit = (evt: FormEvent) => {
     evt.preventDefault();
     evt.stopPropagation();
-    if (checkValidated() === false) {
-      return;
-    }
-    const reqParams: AdminSettingsInterface = {
-      language: formData.language.value,
-      time_zone: formData.time_zone.value,
-    };
-
-    updateInterfaceSetting(reqParams)
+    const lv = Number(formData.level.value);
+    putPrivilegeSetting(lv)
       .then(() => {
-        interfaceStore.getState().update(reqParams);
-        setupAppLanguage();
-        setupAppTimeZone();
-        getLoggedUserInfo().then((info) => {
-          loggedUserInfoStore.getState().update(info);
-        });
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
@@ -142,27 +61,25 @@ const Interface: FC = () => {
   };
 
   useEffect(() => {
-    if (setting) {
-      const formMeta = {};
-      Object.keys(setting).forEach((k) => {
-        formMeta[k] = { ...formData[k], value: setting[k] };
-        if (k === 'default_avatar') {
-          formMeta[k].value = setting[k] || 'system';
-        }
-      });
+    getPrivilegeSetting().then((resp) => {
+      setPrivilege(resp);
+      const formMeta: Type.FormDataType = {};
+      formMeta.level = {
+        value: resp.selected_level,
+        errorMsg: '',
+        isInvalid: false,
+      };
       setFormData({ ...formData, ...formMeta });
-    }
-  }, [setting]);
-  useEffect(() => {
-    getLangs();
+    });
   }, []);
 
   const handleOnChange = (data) => {
     setFormData(data);
   };
+
   return (
     <>
-      <h3 className="mb-4">{t('page_title')}</h3>
+      <h3 className="mb-4">{t('title')}</h3>
       <SchemaForm
         schema={schema}
         uiSchema={uiSchema}
@@ -174,4 +91,4 @@ const Interface: FC = () => {
   );
 };
 
-export default Interface;
+export default Index;

@@ -13,7 +13,7 @@ import {
 import { handleFormError } from '@/utils';
 import * as Type from '@/common/interface';
 
-const Interface: FC = () => {
+const Index: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.settings_users',
   });
@@ -174,4 +174,4 @@ const Interface: FC = () => {
   );
 };
 
-export default Interface;
+export default Index;

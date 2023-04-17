@@ -161,9 +161,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   const { t } = useTranslation('translation', {
     keyPrefix: 'form',
   });
-
-  const { required = [], properties } = schema;
-
+  const { required = [], properties = {} } = schema || {};
   // check required field
   const excludes = required.filter((key) => !properties[key]);
 
@@ -196,7 +194,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   useEffect(() => {
     setDefaultValueAsDomBehaviour();
   }, [formData]);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const data = {
@@ -367,7 +364,9 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   useImperativeHandle(ref, () => ({
     validator,
   }));
-
+  if (!formData || !schema || !schema.properties) {
+    return null;
+  }
   return (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {
@@ -379,7 +378,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
         } = properties[key];
         const { 'ui:widget': widget = 'input', 'ui:options': uiOpt } =
           uiSchema[key] || {};
-        const fieldObject = formData[key];
+        const fieldData = formData[key];
         const uiSimplify = widget === 'legend' || uiOpt?.simplify;
         let groupClassName: BaseUIOptions['fieldClassName'] = uiOpt?.simplify
           ? 'mb-2'
@@ -390,6 +389,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
         if (uiOpt?.fieldClassName) {
           groupClassName = uiOpt.fieldClassName;
         }
+
         return (
           <Form.Group
             key={title}
@@ -476,7 +476,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             ) : null}
             {/* Unified handling of `Feedback` and `Text` */}
             <Form.Control.Feedback type="invalid">
-              {fieldObject?.errorMsg}
+              {fieldData?.errorMsg}
             </Form.Control.Feedback>
             {description ? (
               <Form.Text className="text-muted">{description}</Form.Text>
