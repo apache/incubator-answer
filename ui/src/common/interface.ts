@@ -384,6 +384,7 @@ export interface AdminSettingsCustom {
   custom_head: string;
   custom_header: string;
   custom_footer: string;
+  custom_sidebar: string;
 }
 
 export interface AdminSettingsLogin {

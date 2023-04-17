@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Pagination } from '@/components';
+import { Pagination, CustomSidebar } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
 import { scrollToElementTop } from '@/utils';
 import { usePageTags, usePageUsers } from '@/hooks';
@@ -256,6 +256,7 @@ const Index = () => {
             )}
         </Col>
         <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
+          <CustomSidebar />
           <RelatedQuestions id={question?.id || ''} />
         </Col>
       </Row>

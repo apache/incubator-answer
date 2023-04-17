@@ -4,7 +4,12 @@ import { useMatch, Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
-import { FollowingTags, QuestionList, HotQuestions } from '@/components';
+import {
+  FollowingTags,
+  QuestionList,
+  HotQuestions,
+  CustomSidebar,
+} from '@/components';
 import { siteInfoStore, loggedUserInfoStore } from '@/stores';
 import { useQuestionList } from '@/services';
 import * as Type from '@/common/interface';
@@ -44,6 +49,7 @@ const Questions: FC = () => {
           />
         </Col>
         <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
+          <CustomSidebar />
           {!loggedUser.username && (
             <div className="card mb-4">
               <div className="card-body">
