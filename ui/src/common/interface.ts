@@ -312,7 +312,6 @@ export interface HelmetUpdate extends Omit<HelmetBase, 'pageTitle'> {
 export interface AdminSettingsInterface {
   language: string;
   time_zone?: string;
-  default_avatar?: string;
 }
 
 export interface AdminSettingsSmtp {

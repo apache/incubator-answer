@@ -74,7 +74,8 @@ export const ADMIN_NAV_MENUS = [
         name: 'themes',
       },
       {
-        name: 'css-html',
+        name: 'css_html',
+        path: 'css-html',
       },
     ],
   },
@@ -89,6 +90,8 @@ export const ADMIN_NAV_MENUS = [
       { name: 'write' },
       { name: 'seo' },
       { name: 'login' },
+      { name: 'users', path: 'settings-users' },
+      { name: 'privileges' },
     ],
   },
   {
@@ -96,6 +99,7 @@ export const ADMIN_NAV_MENUS = [
     children: [
       {
         name: 'installed_plugins',
+        path: 'installed-plugins',
       },
     ],
   },
