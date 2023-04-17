@@ -390,6 +390,8 @@ export interface AdminSettingsCustom {
 export interface AdminSettingsLogin {
   allow_new_registrations: boolean;
   login_required: boolean;
+  allow_email_registrations: boolean;
+  allow_email_domains: string[];
 }
 
 /**
