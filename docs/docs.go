@@ -662,6 +662,77 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/setting/privileges": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "GetPrivilegesConfig get privileges config",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "GetPrivilegesConfig get privileges config",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetPrivilegesConfigResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update privileges config",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "update privileges config",
+                "parameters": [
+                    {
+                        "description": "config",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UpdatePrivilegesConfigReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/setting/smtp": {
             "get": {
                 "security": [
@@ -5780,6 +5851,17 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "constant.Privilege": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            }
+        },
         "handler.RespBody": {
             "type": "object",
             "properties": {
@@ -6681,6 +6763,20 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetPrivilegesConfigResp": {
+            "type": "object",
+            "properties": {
+                "options": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.PrivilegeOption"
+                    }
+                },
+                "selected_level": {
+                    "type": "integer"
+                }
+            }
+        },
         "schema.GetRankPersonalWithPageResp": {
             "type": "object",
             "properties": {
@@ -7368,6 +7464,20 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.PrivilegeOption": {
+            "type": "object",
+            "properties": {
+                "level": {
+                    "type": "integer"
+                },
+                "privileges": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/constant.Privilege"
+                    }
+                }
+            }
+        },
         "schema.QuestionAdd": {
             "type": "object",
             "required": [
@@ -7809,6 +7919,10 @@ const docTemplate = `{
                 "custom_header": {
                     "type": "string",
                     "maxLength": 65536
+                },
+                "custom_sidebar": {
+                    "type": "string",
+                    "maxLength": 65536
                 }
             }
         },
@@ -7828,6 +7942,10 @@ const docTemplate = `{
                     "maxLength": 65536
                 },
                 "custom_header": {
+                    "type": "string",
+                    "maxLength": 65536
+                },
+                "custom_sidebar": {
                     "type": "string",
                     "maxLength": 65536
                 }
@@ -8417,6 +8535,19 @@ const docTemplate = `{
                 "plugin_slug_name": {
                     "type": "string",
                     "maxLength": 100
+                }
+            }
+        },
+        "schema.UpdatePrivilegesConfigReq": {
+            "type": "object",
+            "required": [
+                "level"
+            ],
+            "properties": {
+                "level": {
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 1
                 }
             }
         },

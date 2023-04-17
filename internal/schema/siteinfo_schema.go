@@ -114,10 +114,11 @@ type SiteLoginReq struct {
 
 // SiteCustomCssHTMLReq site custom css html
 type SiteCustomCssHTMLReq struct {
-	CustomHead   string `validate:"omitempty,gt=0,lte=65536" json:"custom_head"`
-	CustomCss    string `validate:"omitempty,gt=0,lte=65536" json:"custom_css"`
-	CustomHeader string `validate:"omitempty,gt=0,lte=65536" json:"custom_header"`
-	CustomFooter string `validate:"omitempty,gt=0,lte=65536" json:"custom_footer"`
+	CustomHead    string `validate:"omitempty,gt=0,lte=65536" json:"custom_head"`
+	CustomCss     string `validate:"omitempty,gt=0,lte=65536" json:"custom_css"`
+	CustomHeader  string `validate:"omitempty,gt=0,lte=65536" json:"custom_header"`
+	CustomFooter  string `validate:"omitempty,gt=0,lte=65536" json:"custom_footer"`
+	CustomSideBar string `validate:"omitempty,gt=0,lte=65536" json:"custom_sidebar"`
 }
 
 // SiteThemeReq site theme config

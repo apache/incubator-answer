@@ -1,4 +1,11 @@
 definitions:
+  constant.Privilege:
+    properties:
+      label:
+        type: string
+      value:
+        type: integer
+    type: object
   handler.RespBody:
     properties:
       code:
@@ -631,6 +638,15 @@ definitions:
       version:
         type: string
     type: object
+  schema.GetPrivilegesConfigResp:
+    properties:
+      options:
+        items:
+          $ref: '#/definitions/schema.PrivilegeOption'
+        type: array
+      selected_level:
+        type: integer
+    type: object
   schema.GetRankPersonalWithPageResp:
     properties:
       answer_id:
@@ -1126,6 +1142,15 @@ definitions:
       content:
         type: string
     type: object
+  schema.PrivilegeOption:
+    properties:
+      level:
+        type: integer
+      privileges:
+        items:
+          $ref: '#/definitions/constant.Privilege'
+        type: array
+    type: object
   schema.QuestionAdd:
     properties:
       content:
@@ -1438,6 +1463,9 @@ definitions:
       custom_header:
         maxLength: 65536
         type: string
+      custom_sidebar:
+        maxLength: 65536
+        type: string
     type: object
   schema.SiteCustomCssHTMLResp:
     properties:
@@ -1451,6 +1479,9 @@ definitions:
         maxLength: 65536
         type: string
       custom_header:
+        maxLength: 65536
+        type: string
+      custom_sidebar:
         maxLength: 65536
         type: string
     type: object
@@ -1859,6 +1890,15 @@ definitions:
         type: string
     required:
     - plugin_slug_name
+    type: object
+  schema.UpdatePrivilegesConfigReq:
+    properties:
+      level:
+        maximum: 3
+        minimum: 1
+        type: integer
+    required:
+    - level
     type: object
   schema.UpdateSMTPConfigReq:
     properties:
@@ -2594,6 +2634,47 @@ paths:
                   type: array
               type: object
       summary: get role list
+      tags:
+      - admin
+  /answer/admin/api/setting/privileges:
+    get:
+      description: GetPrivilegesConfig get privileges config
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetPrivilegesConfigResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: GetPrivilegesConfig get privileges config
+      tags:
+      - admin
+    put:
+      description: update privileges config
+      parameters:
+      - description: config
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdatePrivilegesConfigReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update privileges config
       tags:
       - admin
   /answer/admin/api/setting/smtp:
