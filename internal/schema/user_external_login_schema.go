@@ -68,7 +68,7 @@ type UserCenterUserSettingsResp struct {
 }
 
 type UserCenterAdminFunctionAgentResp struct {
-	RoleAgentEnabled bool `json:"role_agent_enabled"`
+	UserStatusAgentEnabled bool `json:"user_status_agent_enabled"`
 }
 
 type UserSettingAgent struct {

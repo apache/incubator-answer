@@ -7907,10 +7907,6 @@
                 "custom_header": {
                     "type": "string",
                     "maxLength": 65536
-                },
-                "custom_sidebar": {
-                    "type": "string",
-                    "maxLength": 65536
                 }
             }
         },
@@ -7930,10 +7926,6 @@
                     "maxLength": 65536
                 },
                 "custom_header": {
-                    "type": "string",
-                    "maxLength": 65536
-                },
-                "custom_sidebar": {
                     "type": "string",
                     "maxLength": 65536
                 }
@@ -8037,18 +8029,10 @@
         "schema.SiteInterfaceReq": {
             "type": "object",
             "required": [
-                "default_avatar",
                 "language",
                 "time_zone"
             ],
             "properties": {
-                "default_avatar": {
-                    "type": "string",
-                    "enum": [
-                        "system",
-                        "gravatar"
-                    ]
-                },
                 "language": {
                     "type": "string",
                     "maxLength": 128
@@ -8062,18 +8046,10 @@
         "schema.SiteInterfaceResp": {
             "type": "object",
             "required": [
-                "default_avatar",
                 "language",
                 "time_zone"
             ],
             "properties": {
-                "default_avatar": {
-                    "type": "string",
-                    "enum": [
-                        "system",
-                        "gravatar"
-                    ]
-                },
                 "language": {
                     "type": "string",
                     "maxLength": 128

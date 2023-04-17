@@ -40,6 +40,60 @@ backend:
         other: Have the full power to access the site.
       moderator:
         other: Has access to all posts except admin settings.
+  privilege:
+    level_1:
+      description:
+        other: Level 1 (less reputation required for startup community)
+    level_2:
+      description:
+        other: Level 2 (low reputation required for startup community)
+    level_3:
+      description:
+        other: Level 3 (high reputation required for mature community)
+    rank_question_add_label:
+      other: Ask question
+    rank_answer_add_label:
+      other: Write answer
+    rank_comment_add_label:
+      other: Write comment
+    rank_answer_accept_label:
+      other: Accept answer
+    rank_report_add_label:
+      other: Flag
+    rank_comment_vote_up_label:
+      other: Upvote comment
+    rank_link_url_limit_label:
+      other: Post more than 2 links at a time
+    rank_question_vote_up_label:
+      other: Upvote question
+    rank_answer_vote_up_label:
+      other: Upvote answer
+    rank_question_vote_down_label:
+      other: Downvote question
+    rank_answer_vote_down_label:
+      other: Downvote answer
+    rank_tag_add_label:
+      other: Create new tag
+    rank_tag_edit_label:
+      other: Edit tag description (need to review)
+    rank_question_edit_label:
+      other: Edit other's question (need to review)
+    rank_answer_edit_label:
+      other: Edit other's answer (need to review)
+    rank_question_edit_without_review_label:
+      other: Edit other's question without review
+    rank_answer_edit_without_review_label:
+      other: Edit other's answer without review
+    rank_question_audit_label:
+      other: Review question edits
+    rank_answer_audit_label:
+      other: Review answer edits
+    rank_tag_audit_label:
+      other: Review tag edits
+    rank_tag_edit_without_review_label:
+      other: Edit tag description without review
+    rank_tag_synonym_label:
+      other: Manage tag synonyms
   email:
     other: Email
   password:

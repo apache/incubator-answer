@@ -37,6 +37,60 @@ backend:
         other: 拥有管理网站的全部权限。
       moderator:
         other: 拥有访问除管理员设置以外的所有权限。
+  privilege:
+    level_1:
+      description:
+        other: 等级1（创业社区所需的声望最低）
+    level_2:
+      description:
+        other: 等级2（创业社区所需的声望较低）
+    level_3:
+      description:
+        other: 等级3（成熟社区所需的声望较高）
+    rank_question_add_label:
+      other: 提问
+    rank_answer_add_label:
+      other: 回答问题
+    rank_comment_add_label:
+      other: 发表评论
+    rank_answer_accept_label:
+      other: 接受答案
+    rank_report_add_label:
+      other: 举报
+    rank_comment_vote_up_label:
+      other: 评论点赞
+    rank_link_url_limit_label:
+      other: 一次发布超过两个链接
+    rank_question_vote_up_label:
+      other: 问题点赞
+    rank_answer_vote_up_label:
+      other: 答案点赞
+    rank_question_vote_down_label:
+      other: 问题点踩
+    rank_answer_vote_down_label:
+      other: 答案点踩
+    rank_tag_add_label:
+      other: 创建新标签
+    rank_tag_edit_label:
+      other: 编辑标签描述（需要审核）
+    rank_question_edit_label:
+      other: 编辑他人提问（需要审核）
+    rank_answer_edit_label:
+      other: 编辑他人回答（需要审核）
+    rank_question_edit_without_review_label:
+      other: 编辑他人提问（无需审核）
+    rank_answer_edit_without_review_label:
+      other: 编辑他人回答（无需审核）
+    rank_question_audit_label:
+      other: 审核问题编辑
+    rank_answer_audit_label:
+      other: 审核答案编辑
+    rank_tag_audit_label:
+      other: 审核标签编辑
+    rank_tag_edit_without_review_label:
+      other: 编辑标签描述（无需审核）
+    rank_tag_synonym_label:
+      other: 管理标签同义词
   email:
     other: 邮箱
   password:

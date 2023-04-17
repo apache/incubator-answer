@@ -1463,9 +1463,6 @@ definitions:
       custom_header:
         maxLength: 65536
         type: string
-      custom_sidebar:
-        maxLength: 65536
-        type: string
     type: object
   schema.SiteCustomCssHTMLResp:
     properties:
@@ -1479,9 +1476,6 @@ definitions:
         maxLength: 65536
         type: string
       custom_header:
-        maxLength: 65536
-        type: string
-      custom_sidebar:
         maxLength: 65536
         type: string
     type: object
@@ -1554,11 +1548,6 @@ definitions:
     type: object
   schema.SiteInterfaceReq:
     properties:
-      default_avatar:
-        enum:
-        - system
-        - gravatar
-        type: string
       language:
         maxLength: 128
         type: string
@@ -1566,17 +1555,11 @@ definitions:
         maxLength: 128
         type: string
     required:
-    - default_avatar
     - language
     - time_zone
     type: object
   schema.SiteInterfaceResp:
     properties:
-      default_avatar:
-        enum:
-        - system
-        - gravatar
-        type: string
       language:
         maxLength: 128
         type: string
@@ -1584,7 +1567,6 @@ definitions:
         maxLength: 128
         type: string
     required:
-    - default_avatar
     - language
     - time_zone
     type: object

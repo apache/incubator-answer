@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
@@ -35,7 +36,7 @@ func NewSiteInfoService(
 	tagCommonService *tagcommon.TagCommonService,
 	configRepo config.ConfigRepo,
 ) *SiteInfoService {
-	resp, err := siteInfoCommonService.GetSiteInterface(context.Background())
+	resp, err := siteInfoCommonService.GetSiteUsers(context.Background())
 	if err != nil {
 		log.Error(err)
 	} else {
@@ -131,29 +132,18 @@ func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGe
 }
 
 func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.SiteInterfaceReq) (err error) {
-	var (
-		siteType = "interface"
-		content  []byte
-	)
-
 	// check language
 	if !translator.CheckLanguageIsValid(req.Language) {
 		err = errors.BadRequest(reason.LangNotFound)
 		return
 	}
 
-	content, _ = json.Marshal(req)
-
+	content, _ := json.Marshal(req)
 	data := entity.SiteInfo{
-		Type:    siteType,
+		Type:    constant.SiteTypeInterface,
 		Content: string(content),
 	}
-
-	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
-	if err == nil {
-		constant.DefaultAvatar = req.DefaultAvatar
-	}
-	return
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeInterface, &data)
 }
 
 // SaveSiteBranding save site branding information
@@ -235,7 +225,11 @@ func (s *SiteInfoService) SaveSiteUsers(ctx context.Context, req *schema.SiteUse
 		Content: string(content),
 		Status:  1,
 	}
-	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeUsers, data)
+	err = s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeUsers, data)
+	if err == nil {
+		constant.DefaultAvatar = req.DefaultAvatar
+	}
+	return err
 }
 
 // GetSMTPConfig get smtp config
@@ -329,13 +323,32 @@ func (s *SiteInfoService) GetPrivilegesConfig(ctx context.Context) (resp *schema
 		return nil, err
 	}
 	resp = &schema.GetPrivilegesConfigResp{
-		Options:       schema.DefaultPrivilegeOptions,
-		SelectedLevel: schema.PrivilegeLevel2,
+		Options:       s.translatePrivilegeOptions(ctx),
+		SelectedLevel: schema.PrivilegeLevel3,
 	}
 	if privilege != nil && privilege.Level > 0 {
 		resp.SelectedLevel = privilege.Level
 	}
 	return resp, nil
+}
+
+func (s *SiteInfoService) translatePrivilegeOptions(ctx context.Context) (options []*schema.PrivilegeOption) {
+	la := handler.GetLangByCtx(ctx)
+	for _, option := range schema.DefaultPrivilegeOptions {
+		op := &schema.PrivilegeOption{
+			Level:     option.Level,
+			LevelDesc: translator.Tr(la, option.LevelDesc),
+		}
+		for _, privilege := range option.Privileges {
+			op.Privileges = append(op.Privileges, &constant.Privilege{
+				Key:   privilege.Key,
+				Label: translator.Tr(la, privilege.Label),
+				Value: privilege.Value,
+			})
+		}
+		options = append(options, op)
+	}
+	return
 }
 
 func (s *SiteInfoService) UpdatePrivilegesConfig(ctx context.Context, req *schema.UpdatePrivilegesConfigReq) (err error) {

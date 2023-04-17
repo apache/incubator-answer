@@ -5,6 +5,7 @@ import (
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/pkg/token"
+	"github.com/answerdev/answer/plugin"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -50,6 +51,14 @@ func (as *AuthService) GetUserCacheInfo(ctx context.Context, accessToken string)
 		err := as.authRepo.SetUserCacheInfo(ctx, accessToken, userCacheInfo)
 		if err != nil {
 			return nil, err
+		}
+	}
+
+	// try to get user status from user center
+	uc, ok := plugin.GetUserCenter()
+	if ok && len(userCacheInfo.ExternalID) > 0 {
+		if userStatus := uc.UserStatus(userCacheInfo.ExternalID); userStatus != plugin.UserStatusAvailable {
+			userCacheInfo.UserStatus = int(userStatus)
 		}
 	}
 	return userCacheInfo, nil

@@ -7919,10 +7919,6 @@ const docTemplate = `{
                 "custom_header": {
                     "type": "string",
                     "maxLength": 65536
-                },
-                "custom_sidebar": {
-                    "type": "string",
-                    "maxLength": 65536
                 }
             }
         },
@@ -7942,10 +7938,6 @@ const docTemplate = `{
                     "maxLength": 65536
                 },
                 "custom_header": {
-                    "type": "string",
-                    "maxLength": 65536
-                },
-                "custom_sidebar": {
                     "type": "string",
                     "maxLength": 65536
                 }
@@ -8049,18 +8041,10 @@ const docTemplate = `{
         "schema.SiteInterfaceReq": {
             "type": "object",
             "required": [
-                "default_avatar",
                 "language",
                 "time_zone"
             ],
             "properties": {
-                "default_avatar": {
-                    "type": "string",
-                    "enum": [
-                        "system",
-                        "gravatar"
-                    ]
-                },
                 "language": {
                     "type": "string",
                     "maxLength": 128
@@ -8074,18 +8058,10 @@ const docTemplate = `{
         "schema.SiteInterfaceResp": {
             "type": "object",
             "required": [
-                "default_avatar",
                 "language",
                 "time_zone"
             ],
             "properties": {
-                "default_avatar": {
-                    "type": "string",
-                    "enum": [
-                        "system",
-                        "gravatar"
-                    ]
-                },
                 "language": {
                     "type": "string",
                     "maxLength": 128

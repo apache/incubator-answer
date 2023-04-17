@@ -206,7 +206,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// user
 	r.PUT("/user/password", middleware.BanAPIWhenUserCenterEnabled, a.userController.UserModifyPassWord)
-	r.PUT("/user/info", middleware.BanAPIWhenUserCenterEnabled, a.userController.UserUpdateInfo)
+	r.PUT("/user/info", a.userController.UserUpdateInfo)
 	r.PUT("/user/interface", a.userController.UserUpdateInterface)
 	r.POST("/user/notice/set", a.userController.UserNoticeSet)
 

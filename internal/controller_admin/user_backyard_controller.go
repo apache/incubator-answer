@@ -32,7 +32,7 @@ func NewUserAdminController(userService *user_admin.UserAdminService) *UserAdmin
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/user/status [put]
 func (uc *UserAdminController) UpdateUserStatus(ctx *gin.Context) {
-	if plugin.UserCenterEnabled() {
+	if u, ok := plugin.GetUserCenter(); ok && u.Description().UserStatusAgentEnabled {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.ForbiddenError), nil)
 		return
 	}

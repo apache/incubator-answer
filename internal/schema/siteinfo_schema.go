@@ -43,9 +43,8 @@ func (r *SiteGeneralReq) FormatSiteUrl() {
 
 // SiteInterfaceReq site interface request
 type SiteInterfaceReq struct {
-	Language      string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
-	TimeZone      string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
-	DefaultAvatar string `validate:"required,oneof=system gravatar" form:"default_avatar" json:"default_avatar"`
+	Language string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
+	TimeZone string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
 }
 
 // SiteBrandingReq site branding request
@@ -275,6 +274,7 @@ type GetPrivilegesConfigResp struct {
 // PrivilegeOption privilege option
 type PrivilegeOption struct {
 	Level      PrivilegeLevel        `json:"level"`
+	LevelDesc  string                `json:"level_desc"`
 	Privileges []*constant.Privilege `json:"privileges"`
 }
 
@@ -312,21 +312,27 @@ var (
 )
 
 func init() {
-	for _, option := range []PrivilegeLevel{PrivilegeLevel1, PrivilegeLevel2, PrivilegeLevel3} {
-		op := &PrivilegeOption{
-			Level: option,
-		}
+	DefaultPrivilegeOptions = append(DefaultPrivilegeOptions, &PrivilegeOption{
+		Level:     PrivilegeLevel1,
+		LevelDesc: reason.PrivilegeLevel1Desc,
+	}, &PrivilegeOption{
+		Level:     PrivilegeLevel2,
+		LevelDesc: reason.PrivilegeLevel2Desc,
+	}, &PrivilegeOption{
+		Level:     PrivilegeLevel3,
+		LevelDesc: reason.PrivilegeLevel3Desc,
+	})
+
+	for _, option := range DefaultPrivilegeOptions {
 		for _, privilege := range constant.RankAllPrivileges {
 			if len(privilegeOptionsLevelMapping[privilege.Key]) == 0 {
-				fmt.Println("privilege key not found: ", privilege.Key)
 				continue
 			}
-			op.Privileges = append(op.Privileges, &constant.Privilege{
+			option.Privileges = append(option.Privileges, &constant.Privilege{
 				Label: privilege.Label,
-				Value: privilegeOptionsLevelMapping[privilege.Key][option-1],
+				Value: privilegeOptionsLevelMapping[privilege.Key][option.Level-1],
 				Key:   privilege.Key,
 			})
 		}
-		DefaultPrivilegeOptions = append(DefaultPrivilegeOptions, op)
 	}
 }

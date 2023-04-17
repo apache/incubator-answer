@@ -83,7 +83,7 @@ func (us *UserExternalLoginService) ExternalLogin(
 				log.Error(err)
 			}
 			accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
-				ctx, oldUserInfo.ID, newMailStatus, oldUserInfo.Status)
+				ctx, oldUserInfo.ID, newMailStatus, oldUserInfo.Status, oldExternalLoginUserInfo.ExternalID)
 			return &schema.UserExternalLoginResp{AccessToken: accessToken}, err
 		}
 	}
@@ -122,7 +122,7 @@ func (us *UserExternalLoginService) ExternalLogin(
 	}
 
 	accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
-		ctx, oldUserInfo.ID, newMailStatus, oldUserInfo.Status)
+		ctx, oldUserInfo.ID, newMailStatus, oldUserInfo.Status, oldExternalLoginUserInfo.ExternalID)
 	return &schema.UserExternalLoginResp{AccessToken: accessToken}, err
 }
 
@@ -251,7 +251,7 @@ func (us *UserExternalLoginService) ExternalLoginBindingUserSendEmail(
 			return nil, err
 		}
 		resp.AccessToken, _, err = us.userCommonService.CacheLoginUserInfo(
-			ctx, userInfo.ID, userInfo.MailStatus, userInfo.Status)
+			ctx, userInfo.ID, userInfo.MailStatus, userInfo.Status, externalLoginInfo.ExternalID)
 		if err != nil {
 			log.Error(err)
 		}

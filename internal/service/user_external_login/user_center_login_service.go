@@ -78,7 +78,7 @@ func (us *UserCenterLoginService) ExternalLogin(
 				log.Errorf("update user last login date failed: %v", err)
 			}
 			accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
-				ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status)
+				ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status, oldExternalLoginUserInfo.ExternalID)
 			return &schema.UserExternalLoginResp{AccessToken: accessToken}, err
 		}
 	}
@@ -97,7 +97,7 @@ func (us *UserCenterLoginService) ExternalLogin(
 	us.activeUser(ctx, oldUserInfo)
 
 	accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
-		ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status)
+		ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status, oldExternalLoginUserInfo.ExternalID)
 	return &schema.UserExternalLoginResp{AccessToken: accessToken}, err
 }
 
@@ -203,7 +203,7 @@ func (us *UserCenterLoginService) UserCenterAdminFunctionAgent(ctx context.Conte
 		return
 	}
 	desc := userCenter.Description()
-	resp.RoleAgentEnabled = desc.RoleAgentEnabled
+	resp.UserStatusAgentEnabled = desc.UserStatusAgentEnabled
 	return resp, nil
 }
 

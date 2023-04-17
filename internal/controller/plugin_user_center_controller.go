@@ -137,7 +137,7 @@ func (uc *UserCenterController) UserCenterLoginCallback(ctx *gin.Context) {
 		return
 	}
 	if len(resp.ErrMsg) > 0 {
-		ctx.String(http.StatusOK, resp.ErrMsg)
+		ctx.Redirect(http.StatusFound, "/50x?msg="+resp.ErrMsg)
 		return
 	}
 	userCenter.AfterLogin(userInfo.ExternalID, resp.AccessToken)
@@ -172,7 +172,7 @@ func (uc *UserCenterController) UserCenterSignUpCallback(ctx *gin.Context) {
 		return
 	}
 	if len(resp.ErrMsg) > 0 {
-		ctx.String(http.StatusOK, resp.ErrMsg)
+		ctx.Redirect(http.StatusFound, "/50x?msg="+resp.ErrMsg)
 		return
 	}
 	userCenter.AfterLogin(userInfo.ExternalID, resp.AccessToken)

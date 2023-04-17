@@ -150,7 +150,7 @@ func (us *UserCommon) MakeUsername(ctx context.Context, displayName string) (use
 	return username + suffix, nil
 }
 
-func (us *UserCommon) CacheLoginUserInfo(ctx context.Context, userID string, userStatus, emailStatus int) (
+func (us *UserCommon) CacheLoginUserInfo(ctx context.Context, userID string, userStatus, emailStatus int, externalID string) (
 	accessToken string, userCacheInfo *entity.UserCacheInfo, err error) {
 	roleID, err := us.userRoleService.GetUserRole(ctx, userID)
 	if err != nil {
@@ -162,6 +162,7 @@ func (us *UserCommon) CacheLoginUserInfo(ctx context.Context, userID string, use
 		EmailStatus: emailStatus,
 		UserStatus:  userStatus,
 		RoleID:      roleID,
+		ExternalID:  externalID,
 	}
 
 	accessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
