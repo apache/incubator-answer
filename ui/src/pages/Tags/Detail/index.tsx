@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
 import * as Type from '@/common/interface';
-import { FollowingTags } from '@/components';
+import { FollowingTags, CustomSidebar } from '@/components';
 import {
   useTagInfo,
   useFollow,
@@ -152,6 +152,7 @@ const Questions: FC = () => {
           <QuestionList source="tag" data={listData} isLoading={listLoading} />
         </Col>
         <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
+          <CustomSidebar />
           <FollowingTags />
           <HotQuestions />
         </Col>
