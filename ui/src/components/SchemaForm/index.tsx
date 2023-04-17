@@ -1,4 +1,4 @@
-import {
+import React, {
   ForwardRefRenderFunction,
   forwardRef,
   useImperativeHandle,
@@ -40,7 +40,11 @@ export interface JSONSchema {
 
 export interface BaseUIOptions {
   empty?: string;
-  className?: string | string[];
+  // Will be appended to the className of the form component itself
+  className?: classnames.Argument;
+  // The className that will be attached to a form field container
+  fieldClassName?: classnames.Argument;
+  // Make a form component render into simplified mode
   simplify?: boolean;
   validator?: (
     value,
@@ -130,7 +134,9 @@ interface IRef {
 
 /**
  * TODO:
- *  1. Normalize and document `formData[key].hidden && 'd-none'`
+ *  * Normalize and document `formData[key].hidden && 'd-none'`
+ *  * `handleXXChange` methods are placed in the concrete component
+ *  * Improving field hints for `formData`
  */
 
 /**
@@ -373,18 +379,31 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
         } = properties[key];
         const { 'ui:widget': widget = 'input', 'ui:options': uiOpt } =
           uiSchema[key] || {};
+        const fieldObject = formData[key];
+        const uiSimplify = widget === 'legend' || uiOpt?.simplify;
+        let groupClassName: BaseUIOptions['fieldClassName'] = uiOpt?.simplify
+          ? 'mb-2'
+          : 'mb-3';
+        if (widget === 'legend') {
+          groupClassName = 'mb-0';
+        }
+        if (uiOpt?.fieldClassName) {
+          groupClassName = uiOpt.fieldClassName;
+        }
         return (
           <Form.Group
             key={title}
             controlId={key}
-            className={classnames({
-              'mb-3': widget !== 'legend' && !uiOpt?.simplify,
-              'd-none': formData[key].hidden,
-            })}>
+            className={classnames(
+              groupClassName,
+              formData[key].hidden ? 'd-none' : null,
+            )}>
+            {/* Uniform processing `label` */}
+            {title && !uiSimplify ? <Form.Label>{title}</Form.Label> : null}
+            {/* Handling of individual specific controls */}
             {widget === 'legend' ? <Legend title={title} /> : null}
             {widget === 'select' ? (
               <Select
-                title={title}
                 desc={description}
                 fieldName={key}
                 onChange={handleSelectChange}
@@ -396,8 +415,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             {widget === 'radio' || widget === 'checkbox' ? (
               <Check
                 type={widget}
-                title={title}
-                desc={description}
                 fieldName={key}
                 onChange={handleInputCheck}
                 enumValues={enumValues}
@@ -408,7 +425,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             {widget === 'switch' ? (
               <Switch
                 title={title}
-                desc={description}
                 label={uiOpt && 'label' in uiOpt ? uiOpt.label : ''}
                 fieldName={key}
                 onChange={handleSwitchChange}
@@ -417,8 +433,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             ) : null}
             {widget === 'timezone' ? (
               <Timezone
-                title={title}
-                desc={description}
                 fieldName={key}
                 onChange={handleSelectChange}
                 formData={formData}
@@ -426,14 +440,12 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             ) : null}
             {widget === 'upload' ? (
               <Upload
-                title={title}
                 type={
                   uiOpt && 'imageType' in uiOpt ? uiOpt.imageType : undefined
                 }
                 acceptType={
                   uiOpt && 'acceptType' in uiOpt ? uiOpt.acceptType : ''
                 }
-                desc={description}
                 fieldName={key}
                 onChange={handleUploadChange}
                 formData={formData}
@@ -441,8 +453,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             ) : null}
             {widget === 'textarea' ? (
               <Textarea
-                title={title}
-                desc={description}
                 placeholder={
                   uiOpt && 'placeholder' in uiOpt ? uiOpt.placeholder : ''
                 }
@@ -455,8 +465,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             ) : null}
             {widget === 'input' ? (
               <Input
-                title={title}
-                desc={description}
                 type={uiOpt && 'inputType' in uiOpt ? uiOpt.inputType : 'text'}
                 placeholder={
                   uiOpt && 'placeholder' in uiOpt ? uiOpt.placeholder : ''
@@ -466,216 +474,15 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 formData={formData}
               />
             ) : null}
+            {/* Unified handling of `Feedback` and `Text` */}
+            <Form.Control.Feedback type="invalid">
+              {fieldObject?.errorMsg}
+            </Form.Control.Feedback>
+            {description ? (
+              <Form.Text className="text-muted">{description}</Form.Text>
+            ) : null}
           </Form.Group>
         );
-        // if (widget === 'select') {
-        //   return (
-        //     <Form.Group
-        //       key={title}
-        //       controlId={key}
-        //       className={classnames('mb-3', formData[key].hidden && 'd-none')}>
-        //       <Form.Label>{title}</Form.Label>
-        //       <Form.Select
-        //         aria-label={description}
-        //         name={key}
-        //         value={formData[key]?.value || ''}
-        //         onChange={handleSelectChange}
-        //         isInvalid={formData[key].isInvalid}>
-        //         {properties[key].enum?.map((item, index) => {
-        //           return (
-        //             <option value={String(item)} key={String(item)}>
-        //               {properties[key].enumNames?.[index]}
-        //             </option>
-        //           );
-        //         })}
-        //       </Form.Select>
-        //       <Form.Control.Feedback type="invalid">
-        //         {formData[key]?.errorMsg}
-        //       </Form.Control.Feedback>
-        //       {description && (
-        //         <Form.Text className="text-muted">{description}</Form.Text>
-        //       )}
-        //     </Form.Group>
-        //   );
-        // }
-
-        // if (widget === 'checkbox' || widget === 'radio') {
-        //   return (
-        //     <Form.Group
-        //       key={title}
-        //       className={classnames('mb-3', formData[key].hidden && 'd-none')}
-        //       controlId={key}>
-        //       <Form.Label>{title}</Form.Label>
-        //       <Stack direction="horizontal">
-        //         {properties[key].enum?.map((item, index) => {
-        //           return (
-        //             <Form.Check
-        //               key={String(item)}
-        //               inline
-        //               required
-        //               type={widget}
-        //               name={key}
-        //               id={`form-${String(item)}`}
-        //               label={properties[key].enumNames?.[index]}
-        //               checked={(formData[key]?.value || '') === item}
-        //               feedback={formData[key]?.errorMsg}
-        //               feedbackType="invalid"
-        //               isInvalid={formData[key].isInvalid}
-        //               onChange={(e) => handleInputCheck(e, index)}
-        //             />
-        //           );
-        //         })}
-        //       </Stack>
-        //       <Form.Control.Feedback type="invalid">
-        //         {formData[key]?.errorMsg}
-        //       </Form.Control.Feedback>
-        //       {description && (
-        //         <Form.Text className="text-muted">{description}</Form.Text>
-        //       )}
-        //     </Form.Group>
-        //   );
-        // }
-
-        // if (widget === 'switch') {
-        //   return (
-        //     <Form.Group
-        //       key={title}
-        //       className={classnames('mb-3', formData[key].hidden && 'd-none')}
-        //       controlId={key}>
-        //       <Form.Label>{title}</Form.Label>
-        //       <Form.Check
-        //         required
-        //         id={`switch-${title}`}
-        //         name={key}
-        //         type="switch"
-        //         label={(uiOpt as SwitchOptions)?.label}
-        //         checked={formData[key]?.value || ''}
-        //         feedback={formData[key]?.errorMsg}
-        //         feedbackType="invalid"
-        //         isInvalid={formData[key].isInvalid}
-        //         onChange={handleSwitchChange}
-        //       />
-        //       <Form.Control.Feedback type="invalid">
-        //         {formData[key]?.errorMsg}
-        //       </Form.Control.Feedback>
-        //       {description && (
-        //         <Form.Text className="text-muted">{description}</Form.Text>
-        //       )}
-        //     </Form.Group>
-        //   );
-        // }
-        // if (widget === 'timezone') {
-        //   return (
-        //     <Form.Group
-        //       key={title}
-        //       className={classnames('mb-3', formData[key].hidden && 'd-none')}
-        //       controlId={key}>
-        //       <Form.Label>{title}</Form.Label>
-        //       <TimeZonePicker
-        //         value={formData[key]?.value || ''}
-        //         name={key}
-        //         onChange={handleSelectChange}
-        //       />
-        //       <Form.Control
-        //         name={key}
-        //         className="d-none"
-        //         isInvalid={formData[key].isInvalid}
-        //       />
-        //       <Form.Control.Feedback type="invalid">
-        //         {formData[key]?.errorMsg}
-        //       </Form.Control.Feedback>
-        //       {description && (
-        //         <Form.Text className="text-muted">{description}</Form.Text>
-        //       )}
-        //     </Form.Group>
-        //   );
-        // }
-
-        // if (widget === 'upload') {
-        //   const options: UploadOptions = uiSchema[key]?.['ui:options'] || {};
-        //   return (
-        //     <Form.Group
-        //       key={title}
-        //       className={classnames('mb-3', formData[key].hidden && 'd-none')}
-        //       controlId={key}>
-        //       <Form.Label>{title}</Form.Label>
-        //       <BrandUpload
-        //         type={options.imageType || 'avatar'}
-        //         acceptType={options.acceptType || ''}
-        //         value={formData[key]?.value}
-        //         onChange={(value) => handleUploadChange(key, value)}
-        //       />
-        //       <Form.Control
-        //         name={key}
-        //         className="d-none"
-        //         isInvalid={formData[key].isInvalid}
-        //       />
-        //       <Form.Control.Feedback type="invalid">
-        //         {formData[key]?.errorMsg}
-        //       </Form.Control.Feedback>
-        //       {description && (
-        //         <Form.Text className="text-muted">{description}</Form.Text>
-        //       )}
-        //     </Form.Group>
-        //   );
-        // }
-
-        // if (widget === 'textarea') {
-        //   const options: TextareaOptions = uiSchema[key]?.['ui:options'] || {};
-        //
-        //   return (
-        //     <Form.Group
-        //       controlId={`form-${key}`}
-        //       key={key}
-        //       className={classnames('mb-3', formData[key].hidden && 'd-none')}>
-        //       <Form.Label>{title}</Form.Label>
-        //       <Form.Control
-        //         as="textarea"
-        //         name={key}
-        //         placeholder={options?.placeholder || ''}
-        //         value={formData[key]?.value || ''}
-        //         onChange={handleInputChange}
-        //         isInvalid={formData[key].isInvalid}
-        //         rows={options?.rows || 3}
-        //         className={classnames(options.className)}
-        //       />
-        //       <Form.Control.Feedback type="invalid">
-        //         {formData[key]?.errorMsg}
-        //       </Form.Control.Feedback>
-        //
-        //       {description && (
-        //         <Form.Text className="text-muted">{description}</Form.Text>
-        //       )}
-        //     </Form.Group>
-        //   );
-        // }
-
-        // const options: InputOptions = uiSchema[key]?.['ui:options'] || {};
-        //
-        // return (
-        //   <Form.Group
-        //     controlId={key}
-        //     key={key}
-        //     className={classnames('mb-3', formData[key].hidden && 'd-none')}>
-        //     <Form.Label>{title}</Form.Label>
-        //     <Form.Control
-        //       name={key}
-        //       placeholder={options?.placeholder || ''}
-        //       type={options?.inputType || 'text'}
-        //       value={formData[key]?.value || ''}
-        //       onChange={handleInputChange}
-        //       style={options?.inputType === 'color' ? { width: '6rem' } : {}}
-        //       isInvalid={formData[key].isInvalid}
-        //     />
-        //     <Form.Control.Feedback type="invalid">
-        //       {formData[key]?.errorMsg}
-        //     </Form.Control.Feedback>
-        //
-        //     {description && (
-        //       <Form.Text className="text-muted">{description}</Form.Text>
-        //     )}
-        //   </Form.Group>
-        // );
       })}
       {!hiddenSubmit && (
         <Button variant="primary" type="submit">
