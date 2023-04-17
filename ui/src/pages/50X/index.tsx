@@ -1,7 +1,11 @@
+import { useSearchParams } from 'react-router-dom';
+
 import { HttpErrorContent } from '@/components';
 
 const Index = () => {
-  return <HttpErrorContent httpCode="50X" />;
+  const [searchParams] = useSearchParams();
+  const msg = searchParams.get('msg') || '';
+  return <HttpErrorContent httpCode="50X" errMsg={msg} showErroCode={!msg} />;
 };
 
 export default Index;

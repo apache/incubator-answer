@@ -36,6 +36,7 @@ module.exports = {
     'react/no-unescaped-entities': 'off',
     'react/require-default-props': 'off',
     'arrow-body-style': 'off',
+    "global-require": "off",
     'react/prop-types': 0,
     'react/no-danger': 'off',
     'jsx-a11y/no-static-element-interactions': 'off',
