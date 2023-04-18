@@ -14,6 +14,7 @@ import (
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/checker"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/random"
 	"github.com/answerdev/answer/plugin"
 	"github.com/segmentfault/pacman/log"
@@ -85,7 +86,6 @@ func (us *UserCenterLoginService) ExternalLogin(
 
 	// cache external user info, waiting for user enter email address.
 	if userCenter.Description().MustAuthEmailEnabled && len(basicUserInfo.Email) == 0 {
-		// TODO: check
 		return &schema.UserExternalLoginResp{ErrMsg: "Requires authorized email to login"}, nil
 	}
 
@@ -126,7 +126,7 @@ func (us *UserCenterLoginService) registerNewUser(ctx context.Context, provider 
 	userInfo.Status = entity.UserStatusAvailable
 	userInfo.LastLoginDate = time.Now()
 	userInfo.Bio = basicUserInfo.Bio
-	userInfo.BioHTML = basicUserInfo.Bio
+	userInfo.BioHTML = converter.Markdown2HTML(basicUserInfo.Bio)
 	err = us.userRepo.AddUser(ctx, userInfo)
 	if err != nil {
 		return nil, err

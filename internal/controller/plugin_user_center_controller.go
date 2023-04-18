@@ -3,8 +3,6 @@ package controller
 import (
 	"fmt"
 	"net/http"
-	"net/url"
-	"strings"
 
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
@@ -126,7 +124,9 @@ func (uc *UserCenterController) UserCenterLoginCallback(ctx *gin.Context) {
 	userInfo, err := userCenter.LoginCallback(ctx)
 	if err != nil {
 		log.Error(err)
-		ctx.Redirect(http.StatusFound, "/50x")
+		if !ctx.IsAborted() {
+			ctx.Redirect(http.StatusFound, "/50x")
+		}
 		return
 	}
 
@@ -191,18 +191,4 @@ func (uc *UserCenterController) UserCenterUserSettings(ctx *gin.Context) {
 func (uc *UserCenterController) UserCenterAdminFunctionAgent(ctx *gin.Context) {
 	resp, err := uc.userCenterLoginService.UserCenterAdminFunctionAgent(ctx)
 	handler.HandleResponse(ctx, err, resp)
-}
-
-func (uc *UserCenterController) formatRedirectURL(ctx *gin.Context, redirectURL string) string {
-	if !strings.Contains(redirectURL, "CALLBACK_URL") {
-		return redirectURL
-	}
-	general, err := uc.siteInfoService.GetSiteGeneral(ctx)
-	if err != nil {
-		log.Error(err)
-		ctx.Redirect(http.StatusFound, "/50x")
-		return ""
-	}
-	callbackURL := fmt.Sprintf("%s%s%s", general.SiteUrl, commonRouterPrefix, "/user-center/login/callback")
-	return strings.ReplaceAll(redirectURL, "CALLBACK_URL", url.QueryEscape(callbackURL))
 }

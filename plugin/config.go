@@ -12,6 +12,7 @@ const (
 	ConfigTypeUpload   ConfigType = "upload"
 	ConfigTypeTimezone ConfigType = "timezone"
 	ConfigTypeSwitch   ConfigType = "switch"
+	ConfigTypeButton   ConfigType = "button"
 )
 
 const (
@@ -43,15 +44,21 @@ type ConfigField struct {
 }
 
 type ConfigFieldUIOptions struct {
-	Placeholder Translator `json:"placeholder,omitempty"`
-	Rows        string     `json:"rows,omitempty"`
-	InputType   InputType  `json:"input_type,omitempty"`
-	Label       Translator `json:"label,omitempty"`
+	Placeholder Translator                 `json:"placeholder,omitempty"`
+	Rows        string                     `json:"rows,omitempty"`
+	InputType   InputType                  `json:"input_type,omitempty"`
+	Label       Translator                 `json:"label,omitempty"`
+	Action      *ConfigFieldUIOptionAction `json:"action,omitempty"`
+	Text        Translator                 `json:"text,omitempty"`
 }
 
 type ConfigFieldOption struct {
 	Label Translator `json:"label"`
 	Value string     `json:"value"`
+}
+
+type ConfigFieldUIOptionAction struct {
+	Url string `json:"url"`
 }
 
 type Config interface {
