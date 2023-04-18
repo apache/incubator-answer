@@ -6,5 +6,16 @@ import Timezone from './Timezone';
 import Upload from './Upload';
 import Textarea from './Textarea';
 import Input from './Input';
+import Button from './Button';
 
-export { Legend, Select, Check, Switch, Timezone, Upload, Textarea, Input };
+export {
+  Legend,
+  Select,
+  Check,
+  Switch,
+  Timezone,
+  Upload,
+  Textarea,
+  Input,
+  Button,
+};

@@ -11,6 +11,7 @@ import classnames from 'classnames';
 
 import type * as Type from '@/common/interface';
 
+import type { UIAction } from './index.d';
 import {
   Legend,
   Select,
@@ -20,6 +21,7 @@ import {
   Upload,
   Textarea,
   Input,
+  Button as CtrlButton,
 } from './components';
 
 export interface JSONSchema {
@@ -45,12 +47,14 @@ export interface BaseUIOptions {
   // The className that will be attached to a form field container
   fieldClassName?: classnames.Argument;
   // Make a form component render into simplified mode
+  readOnly?: boolean;
   simplify?: boolean;
   validator?: (
     value,
     formData?,
   ) => Promise<string | true | void> | true | string;
 }
+
 export interface InputOptions extends BaseUIOptions {
   placeholder?: string;
   inputType?:
@@ -92,6 +96,12 @@ export interface TextareaOptions extends BaseUIOptions {
   rows?: number;
 }
 
+export interface ButtonOptions extends BaseUIOptions {
+  text: string;
+  icon?: string;
+  action?: UIAction;
+}
+
 export type UIOptions =
   | InputOptions
   | SelectOptions
@@ -100,7 +110,8 @@ export type UIOptions =
   | TimezoneOptions
   | CheckboxOptions
   | RadioOptions
-  | TextareaOptions;
+  | TextareaOptions
+  | ButtonOptions;
 
 export type UIWidget =
   | 'textarea'
@@ -111,7 +122,8 @@ export type UIWidget =
   | 'upload'
   | 'timezone'
   | 'switch'
-  | 'legend';
+  | 'legend'
+  | 'button';
 export interface UISchema {
   [key: string]: {
     'ui:widget'?: UIWidget;
@@ -134,9 +146,13 @@ interface IRef {
 
 /**
  * TODO:
- *  * Normalize and document `formData[key].hidden && 'd-none'`
- *  * `handleXXChange` methods are placed in the concrete component
- *  * Improving field hints for `formData`
+ *  - Normalize and document `formData[key].hidden && 'd-none'`
+ *  - Normalize and document `hiddenSubmit`
+ *  - `handleXXChange` methods are placed in the concrete component
+ *  - Improving field hints for `formData`
+ *  - Optimise form data updates
+ *    * Automatic field type conversion
+ *    * Dynamic field generation
  */
 
 /**
@@ -378,7 +394,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
         } = properties[key];
         const { 'ui:widget': widget = 'input', 'ui:options': uiOpt } =
           uiSchema[key] || {};
-        const fieldData = formData[key];
+        const fieldState = formData[key];
         const uiSimplify = widget === 'legend' || uiOpt?.simplify;
         let groupClassName: BaseUIOptions['fieldClassName'] = uiOpt?.simplify
           ? 'mb-2'
@@ -389,7 +405,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
         if (uiOpt?.fieldClassName) {
           groupClassName = uiOpt.fieldClassName;
         }
-
+        const readOnly = uiOpt?.readOnly || false;
         return (
           <Form.Group
             key={title}
@@ -472,11 +488,21 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 fieldName={key}
                 onChange={handleInputChange}
                 formData={formData}
+                readOnly={readOnly}
+              />
+            ) : null}
+            {widget === 'button' ? (
+              <CtrlButton
+                fieldName={key}
+                text={uiOpt && 'text' in uiOpt ? uiOpt.text : ''}
+                action={uiOpt && 'action' in uiOpt ? uiOpt.action : undefined}
+                formData={formData}
+                readOnly={readOnly}
               />
             ) : null}
             {/* Unified handling of `Feedback` and `Text` */}
             <Form.Control.Feedback type="invalid">
-              {fieldData?.errorMsg}
+              {fieldState?.errorMsg}
             </Form.Control.Feedback>
             {description ? (
               <Form.Text className="text-muted">{description}</Form.Text>
