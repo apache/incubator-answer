@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import QrCode from 'qrcode';
 
 import { userCenterStore } from '@/stores';
-import { guard } from '@/utils';
+import { guard, getUserAgentType } from '@/utils';
 
 import { getLoginConf, checkLoginResult } from './wecom.service';
 
@@ -47,7 +47,11 @@ const Index: FC = () => {
       return;
     }
     getLoginConf().then((res) => {
-      handleQrCode(res?.redirect_url);
+      if (getUserAgentType() === 'wxwork') {
+        window.location.replace(res?.redirect_url);
+      } else {
+        handleQrCode(res?.redirect_url);
+      }
       handleLoginResult(res?.key);
     });
   }, [agentName]);
@@ -56,7 +60,7 @@ const Index: FC = () => {
       clearTimeout(checkTimer);
     };
   }, []);
-  if (/WeCom/i.test(agentName)) {
+  if (/WeCom/i.test(agentName) && getUserAgentType() !== 'wxwork') {
     return (
       <Card className="text-center">
         <Card.Body>
