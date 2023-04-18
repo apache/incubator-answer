@@ -1,7 +1,7 @@
 const {
   addWebpackModuleRule,
   addWebpackAlias,
-  setWebpackOptimizationSplitChunks,
+  // setWebpackOptimizationSplitChunks,
 } = require("customize-cra");
 
 const path = require("path");
@@ -19,12 +19,14 @@ module.exports = {
       use: "yaml-loader"
     })(config);
 
-    setWebpackOptimizationSplitChunks({
-      chunks: "all",
-      maxInitialRequests: 20,
-      maxAsyncRequests: 20,
-      minSize: 1024 * 5,
-    })(config);
+    // if (process.env.NODE_ENV === "production") {
+    //   setWebpackOptimizationSplitChunks({
+    //     chunks: "all",
+    //     maxInitialRequests: 20,
+    //     maxAsyncRequests: 20,
+    //     minSize: 1024 * 5,
+    //   })(config);
+    // }
 
     // add i18n dir to ModuleScopePlugin allowedPaths
     const moduleScopePlugin = config.resolve.plugins.find(_ => _.constructor.name === "ModuleScopePlugin");
