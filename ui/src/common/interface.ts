@@ -326,6 +326,16 @@ export interface AdminSettingsSmtp {
   test_email_recipient?: string;
 }
 
+export interface AdminSettingsUsers {
+  allow_update_avatar: boolean;
+  allow_update_bio: boolean;
+  allow_update_display_name: boolean;
+  allow_update_location: boolean;
+  allow_update_username: boolean;
+  allow_update_website: boolean;
+  default_avatar: string;
+}
+
 export interface SiteSettings {
   branding: AdminSettingBranding;
   general: AdminSettingsGeneral;
@@ -334,6 +344,7 @@ export interface SiteSettings {
   custom_css_html: AdminSettingsCustom;
   theme: AdminSettingsTheme;
   site_seo: AdminSettingsSeo;
+  site_users: AdminSettingsUsers;
   version: string;
   revision: string;
 }

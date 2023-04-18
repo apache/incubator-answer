@@ -12,13 +12,14 @@ import {
 } from '@/services';
 import { handleFormError } from '@/utils';
 import * as Type from '@/common/interface';
+import { siteInfoStore } from '@/stores';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'admin.settings_users',
   });
   const Toast = useToast();
-
+  const { updateUsers: updateUsersStore } = siteInfoStore();
   const schema: JSONSchema = {
     title: t('title'),
     properties: {
@@ -129,6 +130,7 @@ const Index: FC = () => {
     };
     putUsersSetting(reqParams)
       .then(() => {
+        updateUsersStore(reqParams);
         Toast.onShow({
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',

@@ -6,9 +6,14 @@ import MD5 from 'md5';
 
 import type { FormDataType } from '@/common/interface';
 import { UploadImg, Avatar, Icon } from '@/components';
-import { loggedUserInfoStore, userCenterStore } from '@/stores';
+import { loggedUserInfoStore, userCenterStore, siteInfoStore } from '@/stores';
 import { useToast } from '@/hooks';
-import { modifyUserInfo, getLoggedUserInfo, getUcSettings } from '@/services';
+import {
+  modifyUserInfo,
+  getLoggedUserInfo,
+  getUcSettings,
+  UcSettingAgent,
+} from '@/services';
 import { handleFormError } from '@/utils';
 
 const Index: React.FC = () => {
@@ -18,9 +23,10 @@ const Index: React.FC = () => {
   const toast = useToast();
   const { user, update } = loggedUserInfoStore();
   const { agent: ucAgent } = userCenterStore();
+  const { users: usersSetting } = siteInfoStore();
   const [mailHash, setMailHash] = useState('');
   const [count] = useState(0);
-  const [profileAgent, setProfileAgent] = useState('');
+  const [profileAgent, setProfileAgent] = useState<UcSettingAgent>();
 
   const [formData, setFormData] = useState<FormDataType>({
     display_name: {
@@ -248,11 +254,9 @@ const Index: React.FC = () => {
   const initData = () => {
     if (ucAgent?.enabled) {
       getUcSettings().then((resp) => {
-        if (
-          resp.profile_setting_agent?.enabled &&
-          resp.profile_setting_agent?.redirect_url
-        ) {
-          setProfileAgent(resp.profile_setting_agent.redirect_url);
+        setProfileAgent(resp.profile_setting_agent);
+        if (resp.profile_setting_agent?.enabled === false) {
+          getProfile();
         }
       });
     } else {
@@ -266,16 +270,19 @@ const Index: React.FC = () => {
   return (
     <>
       <h3 className="mb-4">{t('heading')}</h3>
-      {profileAgent ? (
-        <a href={profileAgent}>{t('goto_modify', { keyPrefix: 'settings' })}</a>
+      {profileAgent?.enabled && profileAgent?.redirect_url ? (
+        <a href={profileAgent.redirect_url}>
+          {t('goto_modify', { keyPrefix: 'settings' })}
+        </a>
       ) : null}
-      {!ucAgent?.enabled ? (
+      {!ucAgent?.enabled || profileAgent?.enabled === false ? (
         <Form noValidate onSubmit={handleSubmit}>
           <Form.Group controlId="displayName" className="mb-3">
             <Form.Label>{t('display_name.label')}</Form.Label>
             <Form.Control
               required
               type="text"
+              readOnly={!usersSetting.allow_update_display_name}
               value={formData.display_name.value}
               isInvalid={formData.display_name.isInvalid}
               onChange={(e) =>
@@ -298,6 +305,7 @@ const Index: React.FC = () => {
             <Form.Control
               required
               type="text"
+              readOnly={!usersSetting.allow_update_username}
               value={formData.username.value}
               isInvalid={formData.username.isInvalid}
               onChange={(e) =>
@@ -321,6 +329,7 @@ const Index: React.FC = () => {
             <div className="mb-3">
               <Form.Select
                 name="avatar.type"
+                disabled={!usersSetting.allow_update_avatar}
                 value={formData.avatar.type}
                 onChange={handleAvatarChange}>
                 <option value="gravatar" key="gravatar">
@@ -369,11 +378,15 @@ const Index: React.FC = () => {
                       className="me-2 bg-gray-300 "
                     />
                     <ButtonGroup vertical className="fit-content">
-                      <UploadImg type="avatar" uploadCallback={avatarUpload}>
+                      <UploadImg
+                        type="avatar"
+                        disabled={!usersSetting.allow_update_avatar}
+                        uploadCallback={avatarUpload}>
                         <Icon name="cloud-upload" />
                       </UploadImg>
                       <Button
                         variant="outline-secondary"
+                        disabled={!usersSetting.allow_update_avatar}
                         onClick={removeCustomAvatar}>
                         <Icon name="trash" />
                       </Button>
@@ -410,6 +423,7 @@ const Index: React.FC = () => {
               required
               as="textarea"
               rows={5}
+              readOnly={!usersSetting.allow_update_bio}
               value={formData.bio.value}
               isInvalid={formData.bio.isInvalid}
               onChange={(e) =>
@@ -435,6 +449,7 @@ const Index: React.FC = () => {
               required
               type="url"
               placeholder={t('website.placeholder')}
+              readOnly={!usersSetting.allow_update_website}
               value={formData.website.value}
               isInvalid={formData.website.isInvalid}
               onChange={(e) =>
@@ -460,6 +475,7 @@ const Index: React.FC = () => {
               required
               type="text"
               placeholder={t('location.placeholder')}
+              readOnly={!usersSetting.allow_update_location}
               value={formData.location.value}
               isInvalid={formData.location.isInvalid}
               onChange={(e) =>

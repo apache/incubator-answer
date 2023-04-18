@@ -371,6 +371,7 @@ export const initAppSettingsStore = async () => {
     siteInfoStore
       .getState()
       .updateVersion(appSettings.version, appSettings.revision);
+    siteInfoStore.getState().updateUsers(appSettings.site_users);
     interfaceStore.getState().update(appSettings.interface);
     brandingStore.getState().update(appSettings.branding);
     loginSettingStore.getState().update(appSettings.login);
