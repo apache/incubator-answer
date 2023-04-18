@@ -1478,6 +1478,9 @@ ui:
       footer:
         label: Footer
         text: This will insert before </html>.
+      sidebar:
+        label: Sidebar
+        text: This will insert in sidebar.
     login:
       page_title: Login
       membership:

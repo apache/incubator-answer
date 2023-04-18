@@ -1,5 +1,7 @@
 import i18next from 'i18next';
 
+import pattern from '@/common/pattern';
+
 const Diff = require('diff');
 
 function thousandthDivision(num) {
@@ -254,6 +256,23 @@ function base64ToSvg(base64: string) {
   return str;
 }
 
+// Determine whether the user is in WeChat or Enterprise WeChat or DingTalk, and return the corresponding type
+
+function getUserAgentType() {
+  const ua = navigator.userAgent.toLowerCase();
+  if (pattern.wxwork.test(ua)) {
+    return 'wxwork';
+  }
+  // if (pattern.wx.test(ua)) {
+  //   return 'weixin';
+  // }
+
+  // if (pattern.dingtalk.test(ua)) {
+  //   return 'dingtalk';
+  // }
+  return null;
+}
+
 export {
   thousandthDivision,
   formatCount,
@@ -270,4 +289,5 @@ export {
   handleFormError,
   diffText,
   base64ToSvg,
+  getUserAgentType,
 };
