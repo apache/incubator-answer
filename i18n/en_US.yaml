@@ -24,13 +24,13 @@ backend:
     reopen:
       other: Reopen
     pin:
-      other: pin
+      other: Pin
     hide:
-      other: hide
+      other: Unlist
     unpin:
-      other: unpin
+      other: Unpin
     show:
-      other: show
+      other: List
   role:
     name:
       user:
