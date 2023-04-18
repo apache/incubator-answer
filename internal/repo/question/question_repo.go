@@ -233,6 +233,7 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 	offset := page * pageSize
 	session := qr.data.DB.Table("question")
 	session = session.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed})
+	session.And("question.show = ?", entity.QuestionShow)
 	session = session.Limit(pageSize, offset)
 	session = session.OrderBy("question.created_at asc")
 	err = session.Select("id,title,created_at,post_update_time").Find(&rows)
