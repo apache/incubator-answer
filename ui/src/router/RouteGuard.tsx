@@ -2,7 +2,7 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useLoaderData } from 'react-router-dom';
 
 import { floppyNavigation } from '@/utils';
-import { TGuardFunc } from '@/utils/guard';
+import { TGuardFunc, TGuardResult } from '@/utils/guard';
 
 import RouteErrorBoundary from './RouteErrorBoundary';
 
@@ -15,11 +15,10 @@ const RouteGuard: FC<{
   const navigate = useNavigate();
   const location = useLocation();
   const loaderData = useLoaderData();
-  const [grOk, setGrOk] = useState(true);
-  const [routeError, setRouteError] = useState<{
-    code: string;
-    msg: string;
-  }>();
+  const [gk, setKeeper] = useState<TGuardResult>({
+    ok: true,
+  });
+  const [gkError, setGkError] = useState<TGuardResult['error']>();
   const applyGuard = () => {
     if (typeof onEnter !== 'function') {
       return;
@@ -30,14 +29,16 @@ const RouteGuard: FC<{
       page,
     });
 
-    setGrOk(gr.ok);
-    if (gr.error?.code && /403|404|50X/i.test(gr.error.code.toString())) {
-      setRouteError({
-        code: `${gr.error.code}`,
-        msg: gr.error.msg || '',
-      });
+    setKeeper(gr);
+    if (
+      gk.ok === false &&
+      gk.error?.code &&
+      /403|404|50X/i.test(gk.error.code.toString())
+    ) {
+      setGkError(gk.error);
       return;
     }
+    setGkError(undefined);
     if (gr.redirect) {
       floppyNavigation.navigate(gr.redirect, {
         handler: navigate,
@@ -53,12 +54,22 @@ const RouteGuard: FC<{
      */
     applyGuard();
   }, [location]);
+
+  let asOK = gk.ok;
+  if (gk.ok === false && gk.redirect) {
+    /**
+     * It is possible that the route guard verification fails
+     *    but the current page is already the target page for the route guard jump
+     * This should render `children`!
+     */
+
+    asOK = floppyNavigation.equalToCurrentHref(gk.redirect);
+  }
+
   return (
     <>
-      {grOk ? children : null}
-      {!grOk && routeError ? (
-        <RouteErrorBoundary errCode={routeError.code} />
-      ) : null}
+      {asOK ? children : null}
+      {gkError ? <RouteErrorBoundary errCode={gkError.code as string} /> : null}
     </>
   );
 };
