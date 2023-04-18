@@ -1,6 +1,7 @@
 const {
   addWebpackModuleRule,
-  addWebpackAlias
+  addWebpackAlias,
+  setWebpackOptimizationSplitChunks,
 } = require("customize-cra");
 
 const path = require("path");
@@ -16,6 +17,13 @@ module.exports = {
     addWebpackModuleRule({
       test: /\.ya?ml$/,
       use: "yaml-loader"
+    })(config);
+
+    setWebpackOptimizationSplitChunks({
+      chunks: "all",
+      maxInitialRequests: 20,
+      maxAsyncRequests: 20,
+      minSize: 1024 * 5,
     })(config);
 
     // add i18n dir to ModuleScopePlugin allowedPaths
