@@ -11,6 +11,7 @@ import classnames from 'classnames';
 
 import type * as Type from '@/common/interface';
 
+import type { UIAction } from './index.d';
 import {
   Legend,
   Select,
@@ -20,6 +21,7 @@ import {
   Upload,
   Textarea,
   Input,
+  Button as CtrlButton,
 } from './components';
 
 export interface JSONSchema {
@@ -52,6 +54,7 @@ export interface BaseUIOptions {
     formData?,
   ) => Promise<string | true | void> | true | string;
 }
+
 export interface InputOptions extends BaseUIOptions {
   placeholder?: string;
   inputType?:
@@ -93,6 +96,12 @@ export interface TextareaOptions extends BaseUIOptions {
   rows?: number;
 }
 
+export interface ButtonOptions extends BaseUIOptions {
+  text: string;
+  icon?: string;
+  action?: UIAction;
+}
+
 export type UIOptions =
   | InputOptions
   | SelectOptions
@@ -101,7 +110,8 @@ export type UIOptions =
   | TimezoneOptions
   | CheckboxOptions
   | RadioOptions
-  | TextareaOptions;
+  | TextareaOptions
+  | ButtonOptions;
 
 export type UIWidget =
   | 'textarea'
@@ -112,7 +122,8 @@ export type UIWidget =
   | 'upload'
   | 'timezone'
   | 'switch'
-  | 'legend';
+  | 'legend'
+  | 'button';
 export interface UISchema {
   [key: string]: {
     'ui:widget'?: UIWidget;
@@ -136,6 +147,7 @@ interface IRef {
 /**
  * TODO:
  *  - Normalize and document `formData[key].hidden && 'd-none'`
+ *  - Normalize and document `hiddenSubmit`
  *  - `handleXXChange` methods are placed in the concrete component
  *  - Improving field hints for `formData`
  *  - Optimise form data updates
@@ -394,7 +406,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
           groupClassName = uiOpt.fieldClassName;
         }
         const readOnly = uiOpt?.readOnly || false;
-
         return (
           <Form.Group
             key={title}
@@ -476,6 +487,15 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 }
                 fieldName={key}
                 onChange={handleInputChange}
+                formData={formData}
+                readOnly={readOnly}
+              />
+            ) : null}
+            {widget === 'button' ? (
+              <CtrlButton
+                fieldName={key}
+                text={uiOpt && 'text' in uiOpt ? uiOpt.text : ''}
+                action={uiOpt && 'action' in uiOpt ? uiOpt.action : undefined}
                 formData={formData}
                 readOnly={readOnly}
               />
