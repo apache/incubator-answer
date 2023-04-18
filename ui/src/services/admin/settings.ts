@@ -19,6 +19,7 @@ interface PrivilegeLevel {
   privileges: {
     label: string;
     value: number;
+    key: string;
   }[];
 }
 export interface AdminSettingsPrivilege {

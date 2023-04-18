@@ -10,7 +10,6 @@ import {
   AdminSettingsPrivilege,
 } from '@/services';
 import { handleFormError } from '@/utils';
-import * as Type from '@/common/interface';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -18,27 +17,66 @@ const Index: FC = () => {
   });
   const Toast = useToast();
   const [privilege, setPrivilege] = useState<AdminSettingsPrivilege>();
-
-  const schema: JSONSchema = {
+  const [schema, setSchema] = useState<JSONSchema>({
     title: t('title'),
-    properties: {
+    properties: {},
+  });
+  const [uiSchema, setUiSchema] = useState<UISchema>({
+    level: {
+      'ui:widget': 'select',
+    },
+  });
+  const [formData, setFormData] = useState<FormDataType>(initFormData(schema));
+
+  const setFormConfig = (selectedLevel: number = 1) => {
+    selectedLevel = Number(selectedLevel);
+    const levelOptions = privilege?.options;
+    const curLevel = levelOptions?.find((li) => {
+      return li.level === selectedLevel;
+    });
+    if (!levelOptions || !curLevel) {
+      return;
+    }
+    const uiState = {
+      level: uiSchema.level,
+    };
+    const props: JSONSchema['properties'] = {
       level: {
         type: 'number',
         title: t('level.label'),
         description: t('level.text'),
-        enum: privilege?.options.map((_) => _.level),
-        enumNames: privilege?.options.map((_) => _.level_desc),
-        default: 1,
+        enum: levelOptions.map((_) => _.level),
+        enumNames: levelOptions.map((_) => _.level_desc),
+        default: selectedLevel,
       },
-    },
-  };
-
-  const [formData, setFormData] = useState<FormDataType>(initFormData(schema));
-
-  const uiSchema: UISchema = {
-    level: {
-      'ui:widget': 'select',
-    },
+    };
+    curLevel.privileges.forEach((li) => {
+      props[li.key] = {
+        type: 'number',
+        title: li.label,
+        default: li.value,
+      };
+      uiState[li.key] = {
+        'ui:options': {
+          readOnly: true,
+        },
+      };
+    });
+    const schemaState = {
+      ...schema,
+      properties: props,
+    };
+    const formState = initFormData(schemaState);
+    curLevel.privileges.forEach((li) => {
+      formState[li.key] = {
+        value: li.value,
+        isInvalid: false,
+        errorMsg: '',
+      };
+    });
+    setSchema(schemaState);
+    setUiSchema(uiState);
+    setFormData(formState);
   };
 
   const onSubmit = (evt: FormEvent) => {
@@ -61,20 +99,18 @@ const Index: FC = () => {
   };
 
   useEffect(() => {
+    if (!privilege) {
+      return;
+    }
+    setFormConfig(privilege.selected_level);
+  }, [privilege]);
+  useEffect(() => {
     getPrivilegeSetting().then((resp) => {
       setPrivilege(resp);
-      const formMeta: Type.FormDataType = {};
-      formMeta.level = {
-        value: resp.selected_level,
-        errorMsg: '',
-        isInvalid: false,
-      };
-      setFormData({ ...formData, ...formMeta });
     });
   }, []);
-
-  const handleOnChange = (data) => {
-    setFormData(data);
+  const handleOnChange = (state) => {
+    setFormConfig(state.level.value);
   };
 
   return (
