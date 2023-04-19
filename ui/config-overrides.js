@@ -1,6 +1,6 @@
 const {
   addWebpackModuleRule,
-  addWebpackAlias
+  addWebpackAlias,
 } = require("customize-cra");
 
 const path = require("path");

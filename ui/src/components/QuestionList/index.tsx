@@ -14,6 +14,7 @@ import {
   QueryGroup,
   QuestionListLoader,
   Counts,
+  Icon,
 } from '@/components';
 
 const QuestionOrderKeys: Type.QuestionOrderBy[] = [
@@ -62,6 +63,13 @@ const QuestionList: FC<Props> = ({ source, data, isLoading = false }) => {
                 key={li.id}
                 className="bg-transparent py-3 px-0 border-start-0 border-end-0">
                 <h5 className="text-wrap text-break">
+                  {li.pin === 2 && (
+                    <Icon
+                      name="pin-fill"
+                      className="me-1"
+                      title={t('pinned', { keyPrefix: 'btns' })}
+                    />
+                  )}
                   <NavLink
                     to={pathFactory.questionLanding(li.id, li.url_title)}
                     className="link-dark">

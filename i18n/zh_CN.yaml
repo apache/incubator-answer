@@ -22,6 +22,14 @@ backend:
       other: 关闭
     reopen:
       other: 重新打开
+    pin:
+      other: 置顶
+    hide:
+      other: 隐藏
+    unpin:
+      other: 取消置顶
+    show:
+      other: 显示
   role:
     name:
       user:

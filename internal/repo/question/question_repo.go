@@ -125,6 +125,15 @@ func (qr *questionRepo) UpdateQuestionStatusWithOutUpdateTime(ctx context.Contex
 	return nil
 }
 
+func (qr *questionRepo) UpdateQuestionOperation(ctx context.Context, question *entity.Question) (err error) {
+	question.ID = uid.DeShortID(question.ID)
+	_, err = qr.data.DB.Where("id =?", question.ID).Cols("pin", "show").Update(question)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
 func (qr *questionRepo) UpdateAccepted(ctx context.Context, question *entity.Question) (err error) {
 	question.ID = uid.DeShortID(question.ID)
 	_, err = qr.data.DB.Where("id =?", question.ID).Cols("accepted_answer_id").Update(question)
@@ -224,6 +233,7 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 	offset := page * pageSize
 	session := qr.data.DB.Table("question")
 	session = session.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed})
+	session.And("question.show = ?", entity.QuestionShow)
 	session = session.Limit(pageSize, offset)
 	session = session.OrderBy("question.created_at asc")
 	err = session.Select("id,title,created_at,post_update_time").Find(&rows)
@@ -258,19 +268,22 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 	}
 	if len(userID) > 0 {
 		session.And("question.user_id = ?", userID)
+	} else {
+		session.And("question.show = ?", entity.QuestionShow)
 	}
+
 	switch orderCond {
 	case "newest":
-		session.OrderBy("question.created_at DESC")
+		session.OrderBy("question.pin desc,question.created_at DESC")
 	case "active":
-		session.OrderBy("question.post_update_time DESC, question.updated_at DESC")
+		session.OrderBy("question.pin desc,question.post_update_time DESC, question.updated_at DESC")
 	case "frequent":
-		session.OrderBy("question.view_count DESC")
+		session.OrderBy("question.pin desc,question.view_count DESC")
 	case "score":
-		session.OrderBy("question.vote_count DESC, question.view_count DESC")
+		session.OrderBy("question.pin desc,question.vote_count DESC, question.view_count DESC")
 	case "unanswered":
 		session.Where("question.last_answer_id = 0")
-		session.OrderBy("question.created_at DESC")
+		session.OrderBy("question.pin desc,question.created_at DESC")
 	}
 
 	total, err = pager.Help(page, pageSize, &questionList, &entity.Question{}, session)

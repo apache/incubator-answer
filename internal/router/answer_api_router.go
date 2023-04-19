@@ -195,6 +195,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/question", a.questionController.UpdateQuestion)
 	r.DELETE("/question", a.questionController.RemoveQuestion)
 	r.PUT("/question/status", a.questionController.CloseQuestion)
+	r.PUT("/question/operation", a.questionController.OperationQuestion)
 	r.PUT("/question/reopen", a.questionController.ReopenQuestion)
 	r.GET("/question/similar", a.questionController.SearchByTitleLike)
 
