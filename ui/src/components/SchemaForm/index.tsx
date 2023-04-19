@@ -148,7 +148,6 @@ interface IRef {
  * TODO:
  *  - Normalize and document `formData[key].hidden && 'd-none'`
  *  - Normalize and document `hiddenSubmit`
- *  - `handleXXChange` methods are placed in the concrete component
  *  - Improving field hints for `formData`
  *  - Optimise form data updates
  *    * Automatic field type conversion
@@ -210,38 +209,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   useEffect(() => {
     setDefaultValueAsDomBehaviour();
   }, [formData]);
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const data = {
-      ...formData,
-      [name]: { ...formData[name], value, isInvalid: false },
-    };
-    if (onChange instanceof Function) {
-      onChange(data);
-    }
-  };
-
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    const data = {
-      ...formData,
-      [name]: { ...formData[name], value, isInvalid: false },
-    };
-    if (onChange instanceof Function) {
-      onChange(data);
-    }
-  };
-
-  const handleSwitchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    const data = {
-      ...formData,
-      [name]: { ...formData[name], value: checked, isInvalid: false },
-    };
-    if (onChange instanceof Function) {
-      onChange(data);
-    }
-  };
 
   const requiredValidator = () => {
     const errors: string[] = [];
@@ -351,32 +318,6 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
     }
   };
 
-  const handleUploadChange = (name: string, value: string) => {
-    const data = { ...formData, [name]: { ...formData[name], value } };
-    if (onChange instanceof Function) {
-      onChange(data);
-    }
-  };
-
-  const handleInputCheck = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number,
-  ) => {
-    const { name, checked } = e.currentTarget;
-    const freshVal = checked ? schema.properties[name]?.enum?.[index] : '';
-    const data = {
-      ...formData,
-      [name]: {
-        ...formData[name],
-        value: freshVal,
-        isInvalid: false,
-      },
-    };
-    if (onChange instanceof Function) {
-      onChange(data);
-    }
-  };
-
   useImperativeHandle(ref, () => ({
     validator,
   }));
@@ -422,7 +363,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
               <Select
                 desc={description}
                 fieldName={key}
-                onChange={handleSelectChange}
+                onChange={onChange}
                 enumValues={enumValues}
                 enumNames={enumNames}
                 formData={formData}
@@ -432,7 +373,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
               <Check
                 type={widget}
                 fieldName={key}
-                onChange={handleInputCheck}
+                onChange={onChange}
                 enumValues={enumValues}
                 enumNames={enumNames}
                 formData={formData}
@@ -443,14 +384,14 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 title={title}
                 label={uiOpt && 'label' in uiOpt ? uiOpt.label : ''}
                 fieldName={key}
-                onChange={handleSwitchChange}
+                onChange={onChange}
                 formData={formData}
               />
             ) : null}
             {widget === 'timezone' ? (
               <Timezone
                 fieldName={key}
-                onChange={handleSelectChange}
+                onChange={onChange}
                 formData={formData}
               />
             ) : null}
@@ -463,7 +404,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                   uiOpt && 'acceptType' in uiOpt ? uiOpt.acceptType : ''
                 }
                 fieldName={key}
-                onChange={handleUploadChange}
+                onChange={onChange}
                 formData={formData}
               />
             ) : null}
@@ -475,7 +416,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 rows={uiOpt && 'rows' in uiOpt ? uiOpt.rows : 3}
                 className={uiOpt && 'className' in uiOpt ? uiOpt.className : ''}
                 fieldName={key}
-                onChange={handleInputChange}
+                onChange={onChange}
                 formData={formData}
               />
             ) : null}
@@ -486,7 +427,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                   uiOpt && 'placeholder' in uiOpt ? uiOpt.placeholder : ''
                 }
                 fieldName={key}
-                onChange={handleInputChange}
+                onChange={onChange}
                 formData={formData}
                 readOnly={readOnly}
               />

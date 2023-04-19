@@ -8,7 +8,7 @@ interface Props {
   type: Type.UploadType | undefined;
   acceptType: string | undefined;
   fieldName: string;
-  onChange: (key, val) => void;
+  onChange?: (fd: Type.FormDataType) => void;
   formData: Type.FormDataType;
 }
 const Index: FC<Props> = ({
@@ -19,13 +19,26 @@ const Index: FC<Props> = ({
   formData,
 }) => {
   const fieldObject = formData[fieldName];
+  const handleChange = (name: string, value: string) => {
+    console.log('upload: ', name, value);
+    const state = {
+      ...formData,
+      [name]: {
+        ...formData[name],
+        value,
+      },
+    };
+    if (typeof onChange === 'function') {
+      onChange(state);
+    }
+  };
   return (
     <>
       <BrandUpload
         type={type}
         acceptType={acceptType}
         value={fieldObject?.value}
-        onChange={(value) => onChange(fieldName, value)}
+        onChange={(value) => handleChange(fieldName, value)}
       />
       <Form.Control
         name={fieldName}
