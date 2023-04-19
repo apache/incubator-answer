@@ -6,7 +6,7 @@ import type * as Type from '@/common/interface';
 interface Props {
   type: 'radio' | 'checkbox';
   fieldName: string;
-  onChange: (evt: React.ChangeEvent<HTMLInputElement>, ...rest) => void;
+  onChange?: (fd: Type.FormDataType) => void;
   enumValues: (string | boolean | number)[];
   enumNames: string[];
   formData: Type.FormDataType;
@@ -20,6 +20,24 @@ const Index: FC<Props> = ({
   formData,
 }) => {
   const fieldObject = formData[fieldName];
+  const handleCheck = (
+    evt: React.ChangeEvent<HTMLInputElement>,
+    index: number,
+  ) => {
+    const { name, checked } = evt.currentTarget;
+    const freshVal = checked ? enumValues?.[index] : '';
+    const state = {
+      ...formData,
+      [name]: {
+        ...formData[name],
+        value: freshVal,
+        isInvalid: false,
+      },
+    };
+    if (typeof onChange === 'function') {
+      onChange(state);
+    }
+  };
   return (
     <Stack direction="horizontal">
       {enumValues?.map((item, index) => {
@@ -36,7 +54,7 @@ const Index: FC<Props> = ({
             feedback={fieldObject?.errorMsg}
             feedbackType="invalid"
             isInvalid={fieldObject?.isInvalid}
-            onChange={(evt) => onChange(evt, index)}
+            onChange={(evt) => handleCheck(evt, index)}
           />
         );
       })}

@@ -7,11 +7,25 @@ interface Props {
   title: string;
   label: string | undefined;
   fieldName: string;
-  onChange: (evt: React.ChangeEvent<HTMLInputElement>, ...rest) => void;
+  onChange?: (fd: Type.FormDataType) => void;
   formData: Type.FormDataType;
 }
 const Index: FC<Props> = ({ title, fieldName, onChange, label, formData }) => {
   const fieldObject = formData[fieldName];
+  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = evt.currentTarget;
+    const state = {
+      ...formData,
+      [name]: {
+        ...formData[name],
+        value: checked,
+        isInvalid: false,
+      },
+    };
+    if (typeof onChange === 'function') {
+      onChange(state);
+    }
+  };
   return (
     <Form.Check
       required
@@ -23,7 +37,7 @@ const Index: FC<Props> = ({ title, fieldName, onChange, label, formData }) => {
       feedback={fieldObject?.errorMsg}
       feedbackType="invalid"
       isInvalid={fieldObject.isInvalid}
-      onChange={onChange}
+      onChange={handleChange}
     />
   );
 };

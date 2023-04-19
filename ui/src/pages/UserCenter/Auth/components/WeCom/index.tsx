@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next';
 import QrCode from 'qrcode';
 
 import { userCenterStore } from '@/stores';
-import { guard, getUserAgentType } from '@/utils';
+import { guard, getUaType, floppyNavigation } from '@/utils';
+import { USER_AGENT_NAMES } from '@/common/constants';
 
-import { getLoginConf, checkLoginResult } from './wecom.service';
+import { getLoginConf, checkLoginResult } from './service';
 
 let checkTimer: NodeJS.Timeout;
 const Index: FC = () => {
@@ -47,12 +48,14 @@ const Index: FC = () => {
       return;
     }
     getLoginConf().then((res) => {
-      if (getUserAgentType() === 'wxwork') {
-        window.location.replace(res?.redirect_url);
+      if (getUaType() === USER_AGENT_NAMES.WeCom) {
+        floppyNavigation.navigate(res?.redirect_url, {
+          handler: 'replace',
+        });
       } else {
         handleQrCode(res?.redirect_url);
+        handleLoginResult(res?.key);
       }
-      handleLoginResult(res?.key);
     });
   }, [agentName]);
   useEffect(() => {
@@ -60,7 +63,7 @@ const Index: FC = () => {
       clearTimeout(checkTimer);
     };
   }, []);
-  if (/WeCom/i.test(agentName) && getUserAgentType() !== 'wxwork') {
+  if (getUaType() !== USER_AGENT_NAMES.WeCom) {
     return (
       <Card className="text-center">
         <Card.Body>

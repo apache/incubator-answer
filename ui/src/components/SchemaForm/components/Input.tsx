@@ -7,7 +7,7 @@ interface Props {
   type: string | undefined;
   placeholder: string | undefined;
   fieldName: string;
-  onChange: (evt: React.ChangeEvent<HTMLInputElement>, ...rest) => void;
+  onChange?: (fd: Type.FormDataType) => void;
   formData: Type.FormDataType;
   readOnly: boolean;
 }
@@ -20,13 +20,28 @@ const Index: FC<Props> = ({
   readOnly = false,
 }) => {
   const fieldObject = formData[fieldName];
+  const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = evt.currentTarget;
+    const state = {
+      ...formData,
+      [name]: {
+        ...formData[name],
+        value,
+        isInvalid: false,
+      },
+    };
+    if (typeof onChange === 'function') {
+      onChange(state);
+    }
+  };
+
   return (
     <Form.Control
       name={fieldName}
       placeholder={placeholder}
       type={type}
       value={fieldObject?.value || ''}
-      onChange={onChange}
+      onChange={handleChange}
       readOnly={readOnly}
       isInvalid={fieldObject?.isInvalid}
       style={type === 'color' ? { width: '6rem' } : {}}

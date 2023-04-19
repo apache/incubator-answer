@@ -6,7 +6,7 @@ import type * as Type from '@/common/interface';
 interface Props {
   desc: string | undefined;
   fieldName: string;
-  onChange: (evt: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChange?: (fd: Type.FormDataType) => void;
   enumValues: (string | boolean | number)[];
   enumNames: string[];
   formData: Type.FormDataType;
@@ -20,12 +20,26 @@ const Index: FC<Props> = ({
   formData,
 }) => {
   const fieldObject = formData[fieldName];
+  const handleChange = (evt: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = evt.currentTarget;
+    const state = {
+      ...formData,
+      [name]: {
+        ...formData[name],
+        value,
+        isInvalid: false,
+      },
+    };
+    if (typeof onChange === 'function') {
+      onChange(state);
+    }
+  };
   return (
     <Form.Select
       aria-label={desc}
       name={fieldName}
       value={fieldObject?.value || ''}
-      onChange={onChange}
+      onChange={handleChange}
       isInvalid={fieldObject?.isInvalid}>
       {enumValues?.map((item, index) => {
         return (

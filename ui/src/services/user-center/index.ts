@@ -14,6 +14,7 @@ export interface UcAgent {
     login_redirect_url: string;
     sign_up_redirect_url: string;
     control_center: UcAgentControl[];
+    enabled_original_user_system: boolean;
   };
 }
 
