@@ -600,6 +600,10 @@ export const TIMELINE_NORMAL_ACTIVITY_TYPE = [
   'upvote',
   'reopened',
   'closed',
+  'pin',
+  'unpin',
+  'show',
+  'hide',
 ];
 
 export const SYSTEM_AVATAR_OPTIONS = [
