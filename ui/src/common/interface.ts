@@ -585,3 +585,8 @@ export interface PluginConfig {
   slug_name: string;
   config_fields: PluginItem[];
 }
+
+export interface QuestionOperationReq {
+  id: string;
+  operation: 'pin' | 'unpin' | 'hide' | 'show';
+}

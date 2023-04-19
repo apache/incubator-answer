@@ -94,12 +94,14 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 	ub = builder.MySQL().Select(afs...).From("`answer`").
 		LeftJoin("`question`", "`question`.id = `answer`.question_id")
 
-	b.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted})
+	b.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).
+		And(builder.Eq{"`question`.`show`": entity.QuestionShow})
 	ub.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).
-		And(builder.Lt{"`answer`.`status`": entity.AnswerStatusDeleted})
+		And(builder.Lt{"`answer`.`status`": entity.AnswerStatusDeleted}).
+		And(builder.Eq{"`question`.`show`": entity.QuestionShow})
 
-	argsQ = append(argsQ, entity.QuestionStatusDeleted)
-	argsA = append(argsA, entity.QuestionStatusDeleted, entity.AnswerStatusDeleted)
+	argsQ = append(argsQ, entity.QuestionStatusDeleted, entity.QuestionShow)
+	argsA = append(argsA, entity.QuestionStatusDeleted, entity.AnswerStatusDeleted, entity.QuestionShow)
 
 	for i, word := range words {
 		if i == 0 {
@@ -228,8 +230,8 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagID
 
 	b := builder.MySQL().Select(qfs...).From("question")
 
-	b.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted})
-	args = append(args, entity.QuestionStatusDeleted)
+	b.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).And(builder.Eq{"`question`.`show`": entity.QuestionShow})
+	args = append(args, entity.QuestionStatusDeleted, entity.QuestionShow)
 
 	for i, word := range words {
 		if i == 0 {
@@ -343,8 +345,8 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs 
 		LeftJoin("`question`", "`question`.id = `answer`.question_id")
 
 	b.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).
-		And(builder.Lt{"`answer`.`status`": entity.AnswerStatusDeleted})
-	args = append(args, entity.QuestionStatusDeleted, entity.AnswerStatusDeleted)
+		And(builder.Lt{"`answer`.`status`": entity.AnswerStatusDeleted}).And(builder.Eq{"`question`.`show`": entity.QuestionShow})
+	args = append(args, entity.QuestionStatusDeleted, entity.AnswerStatusDeleted, entity.QuestionShow)
 
 	for i, word := range words {
 		if i == 0 {

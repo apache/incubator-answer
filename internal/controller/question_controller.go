@@ -70,6 +70,47 @@ func (qc *QuestionController) RemoveQuestion(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
+// OperationQuestion Operation question
+// @Summary Operation question
+// @Description Operation question \n operation [pin unpin hide show]
+// @Tags Question
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.OperationQuestionReq true "question"
+// @Success 200 {object} handler.RespBody
+// @Router  /answer/api/v1/question/operation [put]
+func (qc *QuestionController) OperationQuestion(ctx *gin.Context) {
+	req := &schema.OperationQuestionReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.ID = uid.DeShortID(req.ID)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.QuestionPin,
+		permission.QuestionUnPin,
+		permission.QuestionHide,
+		permission.QuestionShow,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	req.CanPin = canList[0]
+	req.CanList = canList[1]
+	if (req.Operation == schema.QuestionOperationPin || req.Operation == schema.QuestionOperationUnPin) && !req.CanPin {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+	if (req.Operation == schema.QuestionOperationHide || req.Operation == schema.QuestionOperationShow) && !req.CanList {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+	err = qc.questionService.OperationQuestion(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
 // CloseQuestion Close question
 // @Summary Close question
 // @Description Close question
@@ -152,6 +193,10 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 		permission.QuestionDelete,
 		permission.QuestionClose,
 		permission.QuestionReopen,
+		permission.QuestionPin,
+		permission.QuestionUnPin,
+		permission.QuestionHide,
+		permission.QuestionShow,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -163,6 +208,10 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	req.CanDelete = canList[1]
 	req.CanClose = canList[2]
 	req.CanReopen = canList[3]
+	req.CanPin = canList[4]
+	req.CanUnPin = canList[5]
+	req.CanHide = canList[6]
+	req.CanShow = canList[7]
 
 	info, err := qc.questionService.GetQuestionAndAddPV(ctx, id, userID, req)
 	if err != nil {

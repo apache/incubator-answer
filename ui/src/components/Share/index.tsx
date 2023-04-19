@@ -71,7 +71,7 @@ const Index: FC<IProps> = ({ type, qid, aid, title, slugTitle = '' }) => {
       <Dropdown.Toggle
         id="dropdown-share"
         as="a"
-        className="no-toggle fs-14 link-secondary pointer me-3"
+        className="no-toggle fs-14 link-secondary pointer"
         onClick={() => setShow(true)}
         style={{ lineHeight: '23px' }}>
         {t('share.name')}
