@@ -240,8 +240,8 @@ const routes: RouteNode[] = [
         page: 'pages/Users/OauthBindEmail',
       },
       {
-        path: '/users/oauth',
-        page: 'pages/Users/OauthCallback',
+        path: '/users/auth-landing',
+        page: 'pages/Users/AuthCallback',
       },
       {
         path: '/posts/:qid/timeline',
@@ -361,6 +361,10 @@ const routes: RouteNode[] = [
             page: 'pages/Admin/Plugins/Config',
           },
         ],
+      },
+      {
+        path: '/user-center/auth',
+        page: 'pages/UserCenter/Auth',
       },
       {
         path: '/user-center/auth-failed',
