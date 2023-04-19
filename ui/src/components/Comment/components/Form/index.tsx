@@ -51,7 +51,7 @@ const Index = ({
         'd-flex align-items-start flex-column flex-md-row',
         className,
       )}>
-      <div>
+      <div className="w-100">
         <div
           className={classNames('custom-form-control', {
             'is-invalid': validationErrorMsg,
