@@ -22,6 +22,14 @@ backend:
       other: Close
     reopen:
       other: Reopen
+    pin:
+      other: Pin
+    hide:
+      other: Unlist
+    unpin:
+      other: Unpin
+    show:
+      other: List
   role:
     name:
       user:
@@ -46,9 +54,9 @@ backend:
   error:
     admin:
       cannot_update_their_password:
-        other: You cannot modify your password.
+        other: No puede modificar su contraseña.
       cannot_modify_self_status:
-        other: You cannot modify your status.
+        other: No puede modificar su contraseña.
       email_or_password_wrong:
         other: Contraseña o correo incorrecto.
     answer:
@@ -131,7 +139,7 @@ backend:
       cannot_update:
         other: Sin permiso para actualizar.
       is_used_cannot_delete:
-        other: You cannot delete a tag that is in use
+        other: No puede eliminar una etiqueta que está en uso
       cannot_set_synonym_as_itself:
         other: No se puede establecer como sinónimo de una etiqueta la propia etiqueta.
     smtp:
@@ -176,7 +184,7 @@ backend:
         other: No es posible crear el archivo config.yaml.
     upload:
       unsupported_file_format:
-        other: Unsupported file format.
+        other: Formato de archivo no soportado.
   report:
     spam:
       name:
@@ -359,7 +367,7 @@ ui:
             msg:
               empty: Código no puede estar vacío.
           language:
-            label: Language
+            label: Idioma
             placeholder: Detección automática
       btn_cancel: Cancelar
       btn_confirm: Añadir
@@ -395,7 +403,7 @@ ui:
               only_image: Solo se permiten archivos de imagen.
               max_size: El tamaño del archivo no puede superar 4MB.
           desc:
-            label: Description
+            label: Descripción
       tab_url: URL de la imagen
       form_url:
         fields:
@@ -424,7 +432,7 @@ ui:
             msg:
               empty: La dirección no puede estar vacía.
           name:
-            label: Description
+            label: Descripción
       btn_cancel: Cancelar
       btn_confirm: Añadir
     ordered_list:
@@ -466,13 +474,13 @@ ui:
             range: Nombre a mostrar con un máximo de 35 caracteres.
         slug_name:
           label: URL amigable
-          desc: 'Debe usar el conjunto de caracteres "a-z", "0-9", "+ # - ."'
+          desc: Slug de URL de hasta 35 caracteres.
           msg:
             empty: URL no puede estar vacío.
             range: URL slug hasta 35 caracteres.
             character: La URL amigable contiene caracteres no permitidos.
         desc:
-          label: Description
+          label: Descripción
     btn_cancel: Cancelar
     btn_submit: Enviar
     btn_post: Post new tag
@@ -491,10 +499,10 @@ ui:
     delete:
       title: Eliminar esta etiqueta
       tip_with_posts: >-
-        <p>We do not allowed <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
+        <p>No permitimos <strong>eliminar etiquetas con publicaciones</strong>.</p> <p>Primero elimine esta etiqueta de las publicaciones.</p>
       tip_with_synonyms: >-
-        <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
-      tip: Are you sure you wish to delete?
+        <p>No permitimos <strong>eliminar etiquetas con sinónimos</strong>.</p> <p>Elimine primero los sinónimos de esta etiqueta.</p>
+      tip: '¿Estás seguro de que deseas borrarlo?'
       close: Cerrar
   edit_tag:
     title: Editar etiqueta
@@ -714,12 +722,12 @@ ui:
       display_name:
         label: Nombre a mostrar
         msg: El nombre a mostrar no puede estar vacío.
-        msg_range: Display name up to 30 characters.
+        msg_range: Mostrar nombre de hasta 30 caracteres.
       username:
         label: Nombre de usuario
         caption: La gente puede mencionarte con "@nombredeusuario".
         msg: El nombre de usuario no puede estar vacío.
-        msg_range: Username up to 30 characters.
+        msg_range: Nombre de usuario de hasta 30 caracteres.
         character: 'Debe usar el conjunto de caracteres "a-z", "0-9", " - . _"'
       avatar:
         label: Imagen de perfil
@@ -731,13 +739,13 @@ ui:
         default: Sistema
         msg: Por favor, sube una imagen
       bio:
-        label: About Me
+        label: Sobre mí
       website:
-        label: Website
+        label: Sitio Web
         placeholder: "https://example.com"
         msg: Formato del sitio web incorrecto
       location:
-        label: Location
+        label: Ubicación
         placeholder: "Ciudad, País"
     notification:
       heading: Notificaciones
@@ -753,7 +761,7 @@ ui:
       email:
         label: Correo electrónico
         msg: El correo electrónico no puede estar vacío.
-      password_title: Password
+      password_title: Contraseña
       current_pass:
         label: Contraseña actual
         msg:
@@ -780,6 +788,7 @@ ui:
     btn: Añadir pregunta
     answers: respuestas
   question_detail:
+    action: Action
     Asked: Preguntada
     asked: preguntada
     update: Modificada
@@ -810,7 +819,7 @@ ui:
       confirm_info: >-
         <p>¿Seguro que quieres añadir otra respuesta?</p><p>Puedes utilizar el enlace de edición para detallar y mejorar tu respuesta existente en su lugar.</p>
       empty: La respuesta no puede estar vacía.
-      characters: content must be at least 6 characters in length.
+      characters: el contenido debe tener al menos 6 caracteres.
       tips:
         header_1: Thanks for your answer
         li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
@@ -821,7 +830,10 @@ ui:
       confirm_btn: Reopen
       title: Reabrir esta publicación
       content: '¿Seguro que quieres reabrir esta publicación?'
-      success: Esta publicación ha sido reabierta
+    pin:
+      title: Pin this post
+      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
+      confirm_btn: Pin
   delete:
     title: Eliminar esta publicación
     question: >-
@@ -833,7 +845,6 @@ ui:
 
       El borrado repetido de respuestas aceptadas puede resultar en que tu cuenta se bloquee para responder. ¿Estás seguro de que deseas borrarlo?
     other: '¿Estás seguro de que deseas borrarlo?'
-    tip_question_deleted: Esta publicación ha sido eliminada
     tip_answer_deleted: Esta respuesta ha sido eliminada
   btns:
     confirm: Confirmar
@@ -848,7 +859,8 @@ ui:
     approve: Aprobar
     reject: Rechazar
     skip: Omitir
-    discard_draft: Discard draft
+    discard_draft: Descartar borrador
+    pinned: Pinned
   search:
     title: Resultados de la búsqueda
     keywords: Palabras claves
@@ -883,7 +895,7 @@ ui:
   modal_confirm:
     title: Error...
   account_result:
-    page_title: Welcome to {{site_name}}
+    page_title: Bienvenido a {{site_name}}
     success: Tu nueva cuenta ha sido confirmada, serás redirigido a la página de inicio.
     link: Continuar a la página de inicio
     invalid: >-
@@ -894,7 +906,7 @@ ui:
   unsubscribe:
     page_title: Desuscribir
     success_title: Desuscrito con éxito
-    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
+    success_desc: Ha sido eliminado con éxito de esta lista de suscriptores y no recibirá más correos electrónicos nuestros.
     link: Cambiar ajustes
   question:
     following_tags: Etiquetas seguidas
@@ -934,109 +946,109 @@ ui:
     visited_x_days: "Visitado {{ count }} días"
     viewed: Visto
     joined: Unido
-    last_login: Seen
+    last_login: Visto
     about_me: Sobre mí
     about_me_empty: "// ¡Hola Mundo!"
     top_answers: Mejores respuestas
-    top_questions: Top Questions
+    top_questions: Preguntas Principales
     stats: Estadísticas
-    list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
+    list_empty: No se encontraron publicaciones.<br />¿Quizás le gustaría seleccionar una pestaña diferente?
     accepted: Aceptada
-    answered: answered
-    asked: asked
-    upvote: upvote
-    downvote: downvote
-    mod_short: Mod
-    mod_long: Moderators
-    x_reputation: reputation
-    x_votes: votes received
-    x_answers: answers
-    x_questions: questions
+    answered: respondida
+    asked: preguntó
+    upvote: votar a favor
+    downvote: voto negativo
+    mod_short: Modificación
+    mod_long: Moderadores
+    x_reputation: reputación
+    x_votes: votos recibidos
+    x_answers: respuestas
+    x_questions: preguntas
   install:
-    title: Answer
-    next: Next
-    done: Done
-    config_yaml_error: Can't create the config.yaml file.
+    title: Respuesta
+    next: Próximo
+    done: Hecho
+    config_yaml_error: No se puede crear el archivo config.yaml.
     lang:
-      label: Please Choose a Language
+      label: Elija un idioma
     db_type:
-      label: Database Engine
+      label: Motor de base de datos
     db_username:
-      label: Username
-      placeholder: root
-      msg: Username cannot be empty.
+      label: Nombre de usuario
+      placeholder: raíz
+      msg: El nombre de usuario no puede estar vacío.
     db_password:
-      label: Password
-      placeholder: root
-      msg: Password cannot be empty.
+      label: Contraseña
+      placeholder: raíz
+      msg: La contraseña no puede estar vacía.
     db_host:
-      label: Database Host
+      label: Anfitrión de la base de datos
       placeholder: "db:3306"
-      msg: Database Host cannot be empty.
+      msg: El host de la base de datos no puede estar vacío.
     db_name:
-      label: Database Name
-      placeholder: answer
-      msg: Database Name cannot be empty.
+      label: Nombre de la base de datos
+      placeholder: respuesta
+      msg: El nombre de la base de datos no puede estar vacío.
     db_file:
-      label: Database File
-      placeholder: /data/answer.db
-      msg: Database File cannot be empty.
+      label: Archivo de base de datos
+      placeholder: /data/respuesta.db
+      msg: El archivo de la base de datos no puede estar vacío.
     config_yaml:
-      title: Create config.yaml
-      label: The config.yaml file created.
+      title: Crear config.yaml
+      label: El archivo config.yaml creado.
       desc: >-
-        You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
-      info: After you've done that, click "Next" button.
-    site_information: Site Information
-    admin_account: Admin Account
+        Puede crear el archivo <1>config.yaml</1> manualmente en el directorio <1>/var/www/xxx/</1> y pegar el siguiente texto en él.
+      info: Después de haber hecho eso, haga clic en el botón "Siguiente".
+    site_information: Información del sitio
+    admin_account: Cuenta de administrador
     site_name:
-      label: Site Name
-      msg: Site Name cannot be empty.
+      label: Nombre del sitio
+      msg: El nombre del sitio no puede estar vacío.
     site_url:
-      label: Site URL
-      text: The address of your site.
+      label: Sitio URL
+      text: La dirección de su sitio.
       msg:
-        empty: Site URL cannot be empty.
-        incorrect: Site URL incorrect format.
+        empty: La URL del sitio no puede estar vacía.
+        incorrect: Formato incorrecto de la URL del sitio.
     contact_email:
-      label: Contact Email
-      text: Email address of key contact responsible for this site.
+      label: Email de contacto
+      text: Dirección de correo electrónico del contacto clave responsable de este sitio.
       msg:
-        empty: Contact Email cannot be empty.
-        incorrect: Contact Email incorrect format.
+        empty: El correo electrónico de contacto no puede estar vacío.
+        incorrect: Correo electrónico de contacto formato incorrecto.
     admin_name:
-      label: Name
-      msg: Name cannot be empty.
+      label: Nombre
+      msg: El nombre no puede estar vacío.
     admin_password:
-      label: Password
+      label: Contraseña
       text: >-
-        You will need this password to log in. Please store it in a secure location.
-      msg: Password cannot be empty.
+        Necesitará esta contraseña para iniciar sesión. Guárdela en un lugar seguro.
+      msg: La contraseña no puede estar vacía.
     admin_email:
-      label: Email
-      text: You will need this email to log in.
+      label: Correo electrónico
+      text: Necesitará este correo electrónico para iniciar sesión.
       msg:
-        empty: Email cannot be empty.
-        incorrect: Email incorrect format.
-    ready_title: Your Answer is Ready!
+        empty: El correo electrónico no puede estar vacío.
+        incorrect: Correo electrónico con formato incorrecto.
+    ready_title: '¡Tu respuesta está lista!'
     ready_desc: >-
-      If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.
-    good_luck: "Have fun, and good luck!"
-    warn_title: Warning
+      Si alguna vez desea cambiar más configuraciones, visite la <1>sección de administración</1>; encuéntrelo en el menú del sitio.
+    good_luck: "¡Diviértete y buena suerte!"
+    warn_title: Advertencia
     warn_desc: >-
-      The file <1>config.yaml</1> already exists. If you need to reset any of the configuration items in this file, please delete it first.
-    install_now: You may try <1>installing now</1>.
-    installed: Already installed
+      El archivo <1>config.yaml</1> ya existe. Si necesita restablecer alguno de los elementos de configuración de este archivo, elimínelo primero.
+    install_now: Puede intentar <1>instalar ahora</1>.
+    installed: Ya instalado
     installed_desc: >-
-      You appear to have already installed. To reinstall please clear your old database tables first.
-    db_failed: Database connection failed
+      Parece que ya lo has instalado. Para reinstalar, borre primero las tablas de la base de datos anterior.
+    db_failed: La conexión a la base de datos falló
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+      Esto significa que la información de la base de datos en su archivo <1>config.yaml</1> es incorrecta o que no se pudo establecer contacto con el servidor de la base de datos. Esto podría significar que el servidor de la base de datos de su host está inactivo.
   counts:
-    views: views
-    votes: votes
-    answers: answers
-    accepted: Accepted
+    views: puntos de vista
+    votes: votos
+    answers: respuestas
+    accepted: Aceptado
   page_error:
     http_error: HTTP Error {{ code }}
     desc_403: You don’t have permission to access this page.
@@ -1044,323 +1056,323 @@ ui:
     desc_50X: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
-    desc: "We are under maintenance, we'll be back soon."
+    desc: "Estamos en mantenimiento, pronto estaremos de vuelta."
   nav_menus:
-    dashboard: Dashboard
-    contents: Contents
-    questions: Questions
-    answers: Answers
-    users: Users
-    flags: Flags
-    settings: Settings
+    dashboard: Panel
+    contents: Contenido
+    questions: Preguntas
+    answers: Respuestas
+    users: Usuarios
+    flags: Banderas
+    settings: Ajustes
     general: General
-    interface: Interface
+    interface: Interfaz
     smtp: SMTP
-    branding: Branding
+    branding: Marca
     legal: Legal
-    write: Write
-    tos: Terms of Service
-    privacy: Privacy
-    seo: SEO
-    customize: Customize
-    themes: Themes
+    write: Escribir
+    tos: Términos de servicio
+    privacy: Privacidad
+    seo: ESTE
+    customize: Personalizar
+    themes: Temas
     css-html: CSS/HTML
-    login: Login
+    login: Iniciar sesión
   admin:
     admin_header:
-      title: Admin
+      title: Administrador
     dashboard:
-      title: Dashboard
-      welcome: Welcome to Answer Admin!
-      site_statistics: Site Statistics
-      questions: "Questions:"
-      answers: "Answers:"
-      comments: "Comments:"
-      votes: "Votes:"
-      active_users: "Active users:"
-      flags: "Flags:"
-      site_health_status: Site Health Status
-      version: "Version:"
+      title: Panel
+      welcome: '¡Bienvenido a Answer Admin!'
+      site_statistics: Estadísticas del sitio
+      questions: "Preguntas:"
+      answers: "Respuestas:"
+      comments: "Comentarios:"
+      votes: "Votos:"
+      active_users: "Usuarios activos:"
+      flags: "Banderas:"
+      site_health_status: Estado de salud del sitio
+      version: "Versión:"
       https: "HTTPS:"
-      uploading_files: "Uploading files:"
+      uploading_files: "Subiendo archivos:"
       smtp: "SMTP:"
-      timezone: "Timezone:"
-      system_info: System Info
-      storage_used: "Storage used:"
-      uptime: "Uptime:"
-      answer_links: Answer Links
-      documents: Documents
-      feedback: Feedback
-      support: Support
-      review: Review
-      config: Config
-      update_to: Update to
-      latest: Latest
-      check_failed: Check failed
-      "yes": "Yes"
+      timezone: "Zona horaria:"
+      system_info: Información del sistema
+      storage_used: "Almacenamiento utilizado:"
+      uptime: "Tiempo ejecutándose:"
+      answer_links: Enlaces de respuesta
+      documents: Documentos
+      feedback: Comentario
+      support: Soporte
+      review: Revisar
+      config: Configuración
+      update_to: Actualizar para
+      latest: Lo más nuevo
+      check_failed: Comprobación fallida
+      "yes": "Si"
       "no": "No"
-      not_allowed: Not allowed
-      allowed: Allowed
-      enabled: Enabled
-      disabled: Disabled
+      not_allowed: No permitido
+      allowed: Permitido
+      enabled: Activado
+      disabled: Desactivado
     flags:
-      title: Flags
-      pending: Pending
-      completed: Completed
-      flagged: Flagged
-      created: Created
-      action: Action
-      review: Review
+      title: Banderas
+      pending: Pendiente
+      completed: Terminado
+      flagged: Marcado
+      created: Creado
+      action: Acción
+      review: Revisar
     change_modal:
-      title: Change user status to...
-      btn_cancel: Cancel
-      btn_submit: Submit
+      title: Cambiar estado de usuario a...
+      btn_cancel: Cancelar
+      btn_submit: Entregar
       normal_name: normal
-      normal_desc: A normal user can ask and answer questions.
-      suspended_name: suspended
-      suspended_desc: A suspended user can't log in.
-      deleted_name: deleted
-      deleted_desc: "Delete profile, authentication associations."
-      inactive_name: inactive
-      inactive_desc: An inactive user must re-validate their email.
-      confirm_title: Delete this user
-      confirm_content: Are you sure you want to delete this user? This is permanent!
-      confirm_btn: Delete
+      normal_desc: Un usuario normal puede hacer y responder preguntas.
+      suspended_name: suspendido
+      suspended_desc: Un usuario suspendido no puede iniciar sesión.
+      deleted_name: eliminado
+      deleted_desc: "Eliminar perfil, asociaciones de autenticación."
+      inactive_name: inactivo
+      inactive_desc: Un usuario inactivo debe volver a validar su correo electrónico.
+      confirm_title: Eliminar este usuario
+      confirm_content: '¿Está seguro de que desea eliminar este usuario? ¡Esto es permanente!'
+      confirm_btn: Borrar
       msg:
-        empty: Please select a reason.
+        empty: Por favor seleccione una razón.
     status_modal:
-      title: "Change {{ type }} status to..."
+      title: "Cambiar el estado de {{ type }} a..."
       normal_name: normal
-      normal_desc: A normal post available to everyone.
-      closed_name: closed
-      closed_desc: "A closed question can't answer, but still can edit, vote and comment."
-      deleted_name: deleted
-      deleted_desc: All reputation gained and lost will be restored.
-      btn_cancel: Cancel
-      btn_submit: Submit
-      btn_next: Next
+      normal_desc: Un puesto normal al alcance de todos.
+      closed_name: cerrada
+      closed_desc: "Una pregunta cerrada no puede responder, pero aún puede editar, votar y comentar."
+      deleted_name: eliminado
+      deleted_desc: Toda la reputación ganada y perdida será restaurada.
+      btn_cancel: Cancelar
+      btn_submit: Entregar
+      btn_next: Próximo
     user_role_modal:
-      title: Change user role to...
-      btn_cancel: Cancel
-      btn_submit: Submit
+      title: Cambiar rol de usuario a...
+      btn_cancel: Cancelar
+      btn_submit: Entregar
     users:
-      title: Users
-      name: Name
-      email: Email
-      reputation: Reputation
-      created_at: Created Time
-      delete_at: Deleted Time
-      suspend_at: Suspended Time
-      status: Status
+      title: Usuarios
+      name: Nombre
+      email: Correo electrónico
+      reputation: Reputación
+      created_at: Creado Tiempo
+      delete_at: Hora eliminada
+      suspend_at: Tiempo suspendido
+      status: Estado
       role: Role
-      action: Action
-      change: Change
-      all: All
-      staff: Staff
-      inactive: Inactive
-      suspended: Suspended
-      deleted: Deleted
+      action: Acción
+      change: Cambiar
+      all: Todo
+      staff: Personal
+      inactive: Inactivo
+      suspended: Suspendido
+      deleted: Eliminado
       normal: Normal
-      Moderator: Moderator
-      Admin: Admin
-      User: User
+      Moderator: Moderador
+      Admin: Administrador
+      User: Usuario
       filter:
-        placeholder: "Filter by name, user:id"
-      set_new_password: Set new password
-      change_status: Change status
-      change_role: Change role
-      show_logs: Show logs
-      add_user: Add user
+        placeholder: "Filtrar por nombre, usuario:id"
+      set_new_password: Establecer nueva contraseña
+      change_status: Cambiar Estado
+      change_role: Cambiar rol
+      show_logs: Mostrar registros
+      add_user: Agregar usuario
       new_password_modal:
-        title: Set new password
+        title: Establecer nueva contraseña
         form:
           fields:
             password:
-              label: Password
-              text: The user will be logged out and need to login again.
-              msg: Password must be at 8-32 characters in length.
-        btn_cancel: Cancel
-        btn_submit: Submit
+              label: Contraseña
+              text: El usuario se desconectará y deberá volver a iniciar sesión.
+              msg: La contraseña debe tener entre 8 y 32 caracteres de longitud.
+        btn_cancel: Cancelar
+        btn_submit: Entregar
       user_modal:
-        title: Add new user
+        title: Añadir nuevo usuario
         form:
           fields:
             display_name:
-              label: Display Name
-              msg: Display Name must be at 3-30 characters in length.
+              label: Nombre para mostrar
+              msg: El nombre para mostrar debe tener entre 3 y 30 caracteres de longitud.
             email:
-              label: Email
-              msg: Email is not valid.
+              label: Correo electrónico
+              msg: El correo no es válido.
             password:
-              label: Password
-              msg: Password must be at 8-32 characters in length.
-        btn_cancel: Cancel
-        btn_submit: Submit
+              label: Contraseña
+              msg: La contraseña debe tener entre 8 y 32 caracteres de longitud.
+        btn_cancel: Cancelar
+        btn_submit: Entregar
     questions:
-      page_title: Questions
+      page_title: Preguntas
       normal: Normal
-      closed: Closed
-      deleted: Deleted
-      post: Post
-      votes: Votes
-      answers: Answers
-      created: Created
-      status: Status
-      action: Action
-      change: Change
+      closed: Cerrado
+      deleted: Eliminado
+      post: Correo
+      votes: Votos
+      answers: Respuestas
+      created: Creado
+      status: Estado
+      action: Acción
+      change: Cambiar
       filter:
-        placeholder: "Filter by title, question:id"
+        placeholder: "Filtrar por título, pregunta:id"
     answers:
-      page_title: Answers
+      page_title: Respuestas
       normal: Normal
-      deleted: Deleted
-      post: Post
-      votes: Votes
-      created: Created
-      status: Status
-      action: Action
-      change: Change
+      deleted: Eliminado
+      post: Correo
+      votes: Votos
+      created: Creado
+      status: Estado
+      action: Acción
+      change: Cambiar
       filter:
-        placeholder: "Filter by title, answer:id"
+        placeholder: "Filtrar por título, respuesta: id"
     general:
       page_title: General
       name:
-        label: Site Name
-        msg: Site name cannot be empty.
-        text: "The name of this site, as used in the title tag."
+        label: Nombre del sitio
+        msg: El nombre del sitio no puede estar vacío.
+        text: "El nombre de este sitio, tal como se usa en la etiqueta del título."
       site_url:
-        label: Site URL
-        msg: Site url cannot be empty.
-        validate: Please enter a valid URL.
-        text: The address of your site.
+        label: Sitio URL
+        msg: La url del sitio no puede estar vacía.
+        validate: Por favor introduzca un URL válido.
+        text: La dirección de su sitio.
       short_desc:
-        label: Short Site Description
-        msg: Short site description cannot be empty.
-        text: "Short description, as used in the title tag on homepage."
+        label: Breve descripción del sitio
+        msg: La descripción breve del sitio no puede estar vacía.
+        text: "Breve descripción, tal como se usa en la etiqueta del título en la página de inicio."
       desc:
-        label: Site Description
-        msg: Site description cannot be empty.
-        text: "Describe this site in one sentence, as used in the meta description tag."
+        label: Descripción del lugar
+        msg: La descripción del sitio no puede estar vacía.
+        text: "Describa este sitio en una oración, como se usa en la etiqueta de meta descripción."
       contact_email:
-        label: Contact Email
-        msg: Contact email cannot be empty.
-        validate: Contact email is not valid.
-        text: Email address of key contact responsible for this site.
+        label: Email de contacto
+        msg: El correo electrónico de contacto no puede estar vacío.
+        validate: El correo electrónico de contacto no es válido.
+        text: Dirección de correo electrónico del contacto clave responsable de este sitio.
     interface:
-      page_title: Interface
+      page_title: Interfaz
       language:
-        label: Interface Language
-        msg: Interface language cannot be empty.
-        text: User interface language. It will change when you refresh the page.
+        label: Lenguaje de interfaz
+        msg: El idioma de la interfaz no puede estar vacío.
+        text: Idioma de la interfaz de usuario. Cambiará cuando actualice la página.
       time_zone:
-        label: Timezone
+        label: Zona horaria
         msg: Timezone cannot be empty.
-        text: Choose a city in the same timezone as you.
+        text: Elija una ciudad en la misma zona horaria que usted.
       avatar:
         label: Default Avatar
         text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
-        label: From Email
-        msg: From email cannot be empty.
-        text: The email address which emails are sent from.
+        label: Desde el e-mail
+        msg: Desde el correo electrónico no puede estar vacío.
+        text: La dirección de correo electrónico desde la que se envían los correos electrónicos.
       from_name:
-        label: From Name
-        msg: From name cannot be empty.
-        text: The name which emails are sent from.
+        label: De nombre
+        msg: Desde el nombre no puede estar vacío.
+        text: El nombre desde el que se envían los correos electrónicos.
       smtp_host:
-        label: SMTP Host
-        msg: SMTP host cannot be empty.
-        text: Your mail server.
+        label: Anfitrión SMTP
+        msg: El host SMTP no puede estar vacío.
+        text: Su servidor de correo.
       encryption:
-        label: Encryption
-        msg: Encryption cannot be empty.
-        text: For most servers SSL is the recommended option.
+        label: Cifrado
+        msg: El cifrado no puede estar vacío.
+        text: Para la mayoría de los servidores, SSL es la opción recomendada.
         ssl: SSL
-        none: None
+        none: Ninguno
       smtp_port:
-        label: SMTP Port
-        msg: SMTP port must be number 1 ~ 65535.
-        text: The port to your mail server.
+        label: Puerto SMTP
+        msg: El puerto SMTP debe ser el número 1 ~ 65535.
+        text: El puerto a su servidor de correo.
       smtp_username:
-        label: SMTP Username
+        label: Nombre de usuario SMTP
         msg: SMTP username cannot be empty.
       smtp_password:
-        label: SMTP Password
-        msg: SMTP password cannot be empty.
+        label: Contraseña SMTP
+        msg: La contraseña SMTP no puede estar vacía.
       test_email_recipient:
-        label: Test Email Recipients
-        text: Provide email address that will receive test sends.
-        msg: Test email recipients is invalid
+        label: Destinatarios de correo electrónico de prueba
+        text: Proporcione la dirección de correo electrónico que recibirá los envíos de prueba.
+        msg: Los destinatarios de correo electrónico de prueba no son válidos
       smtp_authentication:
-        label: Enable authentication
-        title: SMTP Authentication
-        msg: SMTP authentication cannot be empty.
-        "yes": "Yes"
+        label: Habilitar autenticación
+        title: Autenticación SMTP
+        msg: La autenticación SMTP no puede estar vacía.
+        "yes": "Si"
         "no": "No"
     branding:
-      page_title: Branding
+      page_title: Marca
       logo:
         label: Logo
-        msg: Logo cannot be empty.
-        text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
+        msg: El logotipo no puede estar vacío.
+        text: La imagen del logotipo en la parte superior izquierda de su sitio. Utilice una imagen rectangular ancha con una altura de 56 y una relación de aspecto superior a 3:1. Si se deja en blanco, se mostrará el texto del título del sitio.
       mobile_logo:
-        label: Mobile Logo
-        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
+        label: Logotipo móvil
+        text: El logotipo utilizado en la versión móvil de su sitio. Utilice una imagen rectangular ancha con una altura de 56. Si se deja en blanco, se utilizará la imagen de la configuración de "logotipo".
       square_icon:
-        label: Square Icon
-        msg: Square icon cannot be empty.
-        text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
+        label: Icono cuadrado
+        msg: El icono cuadrado no puede estar vacío.
+        text: Imagen utilizada como base para los iconos de metadatos. Idealmente, debería ser más grande que 512x512.
       favicon:
-        label: Favicon
-        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
+        label: Icono de favoritos
+        text: Un favicon para su sitio. Para que funcione correctamente sobre un CDN, debe ser un png. Se cambiará el tamaño a 32x32. Si se deja en blanco, se utilizará el "icono cuadrado".
     legal:
       page_title: Legal
       terms_of_service:
-        label: Terms of Service
-        text: "You can add terms of service content here. If you already have a document hosted elsewhere, provide the full URL here."
+        label: Términos de servicio
+        text: "Puede agregar términos de contenido de servicio aquí. Si ya tiene un documento alojado en otro lugar, proporcione la URL completa aquí."
       privacy_policy:
-        label: Privacy Policy
-        text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
+        label: Política de privacidad
+        text: "Puede agregar contenido de política de privacidad aquí. Si ya tiene un documento alojado en otro lugar, proporcione la URL completa aquí."
     write:
-      page_title: Write
+      page_title: Escribir
       recommend_tags:
-        label: Recommend Tags
-        text: "Please input tag slug above, one tag per line."
+        label: Recomendar etiquetas
+        text: "Ingrese el slug de la etiqueta arriba, una etiqueta por línea."
       required_tag:
-        title: Required Tag
-        label: Set recommend tag as required
-        text: "Every new question must have at least one recommend tag."
+        title: Etiqueta requerida
+        label: Establezca la etiqueta de recomendación según sea necesario
+        text: "Cada nueva pregunta debe tener al menos una etiqueta de recomendación."
       reserved_tags:
-        label: Reserved Tags
-        text: "Reserved tags can only be added to a post by moderator."
+        label: Etiquetas reservadas
+        text: "Solo el moderador puede agregar etiquetas reservadas a una publicación."
     seo:
       page_title: SEO
       permalink:
-        label: Permalink
-        text: Custom URL structures can improve the usability, and forward-compatibility of your links.
+        label: Enlace permanente
+        text: Las estructuras de URL personalizadas pueden mejorar la facilidad de uso y la compatibilidad futura de sus enlaces.
       robots:
         label: robots.txt
-        text: This will permanently override any related site settings.
+        text: Esto anulará permanentemente cualquier configuración del sitio relacionada.
     themes:
-      page_title: Themes
+      page_title: Temas
       themes:
-        label: Themes
-        text: Select an existing theme.
+        label: Temas
+        text: Seleccione un tema existente.
       navbar_style:
-        label: Navbar Style
-        text: Select an existing theme.
+        label: Estilo de la barra de navegación
+        text: Seleccione un tema existente.
       primary_color:
         label: Color principal
-        text: Modify the colors used by your themes
+        text: Modifica los colores usados por tus temas
     css_and_html:
       page_title: CSS y HTML
       custom_css:
         label: CSS personalizado
         text: Esto insertará como <link>
       head:
-        label: Head
+        label: Cabeza
         text: Esto se insertará antes de </head>
       header:
         label: Encabezado
@@ -1398,30 +1410,34 @@ ui:
   timeline:
     undeleted: recuperado
     deleted: eliminado
-    downvote: downvote
-    upvote: upvote
-    accept: accept
+    downvote: voto negativo
+    upvote: votar a favor
+    accept: aceptar
     cancelled: cancelado
     commented: comentado
-    rollback: rollback
-    edited: edited
-    answered: answered
-    asked: asked
+    rollback: retroceder
+    edited: editada
+    answered: contestada
+    asked: preguntó
     closed: cerrado
     reopened: reabierto
     created: creado
+    pin: pinned
+    unpin: unpinned
+    show: listed
+    hide: unlisted
     title: "Historial para"
     tag_title: "Línea temporal para"
     show_votes: "Mostrar votos"
     n_or_a: N/A
-    title_for_question: "Timeline for"
-    title_for_answer: "Timeline for answer to {{ title }} by {{ author }}"
-    title_for_tag: "Timeline for tag"
-    datetime: Datetime
-    type: Type
-    by: By
+    title_for_question: "Línea de tiempo para"
+    title_for_answer: "Cronología de la respuesta a {{ title }} por {{ author }}"
+    title_for_tag: "Cronología de la etiqueta"
+    datetime: Fecha y hora
+    type: Tipo
+    by: Por
     comment: Comentario
-    no_data: "We couldn't find anything."
+    no_data: "No pudimos encontrar nada."
   users:
     title: Usuarios
     users_with_the_most_reputation: Users with the highest reputation scores this week
@@ -1430,10 +1446,14 @@ ui:
     reputation: reputación
     votes: votos
   prompt:
-    leave_page: Are you sure you want to leave the page?
-    changes_not_save: Your changes may not be saved.
+    leave_page: '¿Seguro que quieres salir de la página?'
+    changes_not_save: Es posible que sus cambios no se guarden.
   draft:
-    discard_confirm: Are you sure you want to discard your draft?
+    discard_confirm: '¿Está seguro de que desea descartar este borrador?'
   messages:
-    post_deleted: This post has been deleted.
-
+    post_deleted: Esta publicación ha sido eliminada.
+    post_pin: This post has been pinned.
+    post_unpin: This post has been unpinned.
+    post_hide_list: This post has been hidden from list.
+    post_show_list: This post has been shown to list.
+    post_reopen: This post has been reopened.
