@@ -25,14 +25,15 @@ type UserCenter interface {
 }
 
 type UserCenterDesc struct {
-	Name                   string `json:"name"`
-	Icon                   string `json:"icon"`
-	Url                    string `json:"url"`
-	LoginRedirectURL       string `json:"login_redirect_url"`
-	SignUpRedirectURL      string `json:"sign_up_redirect_url"`
-	RankAgentEnabled       bool   `json:"rank_agent_enabled"`
-	UserStatusAgentEnabled bool   `json:"user_status_agent_enabled"`
-	MustAuthEmailEnabled   bool   `json:"must_auth_email_enabled"`
+	Name                      string `json:"name"`
+	Icon                      string `json:"icon"`
+	Url                       string `json:"url"`
+	LoginRedirectURL          string `json:"login_redirect_url"`
+	SignUpRedirectURL         string `json:"sign_up_redirect_url"`
+	RankAgentEnabled          bool   `json:"rank_agent_enabled"`
+	UserStatusAgentEnabled    bool   `json:"user_status_agent_enabled"`
+	MustAuthEmailEnabled      bool   `json:"must_auth_email_enabled"`
+	EnabledOriginalUserSystem bool   `json:"enabled_original_user_system"`
 }
 
 type UserStatus int

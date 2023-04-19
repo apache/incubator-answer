@@ -63,6 +63,7 @@ func (uc *UserCenterController) UserCenterAgent(ctx *gin.Context) {
 		resp.AgentInfo.Icon = info.Icon
 		resp.AgentInfo.Url = info.Url
 		resp.AgentInfo.ControlCenterItems = make([]*schema.ControlCenter, 0)
+		resp.AgentInfo.EnabledOriginalUserSystem = info.EnabledOriginalUserSystem
 		items := uc.ControlCenterItems()
 		for _, item := range items {
 			resp.AgentInfo.ControlCenterItems = append(resp.AgentInfo.ControlCenterItems, &schema.ControlCenter{
@@ -141,7 +142,7 @@ func (uc *UserCenterController) UserCenterLoginCallback(ctx *gin.Context) {
 		return
 	}
 	userCenter.AfterLogin(userInfo.ExternalID, resp.AccessToken)
-	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/oauth?access_token=%s",
+	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/auth-landing?access_token=%s",
 		siteGeneral.SiteUrl, resp.AccessToken))
 }
 
@@ -176,7 +177,7 @@ func (uc *UserCenterController) UserCenterSignUpCallback(ctx *gin.Context) {
 		return
 	}
 	userCenter.AfterLogin(userInfo.ExternalID, resp.AccessToken)
-	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/oauth?access_token=%s",
+	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/auth-landing?access_token=%s",
 		siteGeneral.SiteUrl, resp.AccessToken))
 }
 

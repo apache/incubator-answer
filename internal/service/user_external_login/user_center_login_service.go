@@ -203,7 +203,11 @@ func (us *UserCenterLoginService) UserCenterAdminFunctionAgent(ctx context.Conte
 		return
 	}
 	desc := userCenter.Description()
+	// If user status agent is enabled, admin can not update user status in answer.
 	resp.UserStatusAgentEnabled = desc.UserStatusAgentEnabled
+	// If original user system is enabled, admin can update user password in answer.
+	// So user password agent is disabled.
+	resp.UserPasswordAgentEnabled = !desc.EnabledOriginalUserSystem
 	return resp, nil
 }
 
