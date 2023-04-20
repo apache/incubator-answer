@@ -52,7 +52,9 @@ const Index: React.FC<IProps> = ({
 
   return (
     <label
-      className={classnames('btn btn-outline-secondary uploadBtn', className)}>
+      className={classnames('btn btn-outline-secondary', className, {
+        disabled: !!disabled,
+      })}>
       {children || (status ? t('upload_img.loading') : t('upload_img.name'))}
       <input
         type="file"

@@ -9,8 +9,16 @@ interface Props {
   fieldName: string;
   onChange?: (fd: Type.FormDataType) => void;
   formData: Type.FormDataType;
+  readOnly?: boolean;
 }
-const Index: FC<Props> = ({ title, fieldName, onChange, label, formData }) => {
+const Index: FC<Props> = ({
+  title,
+  fieldName,
+  onChange,
+  label,
+  formData,
+  readOnly = false,
+}) => {
   const fieldObject = formData[fieldName];
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = evt.currentTarget;
@@ -28,7 +36,6 @@ const Index: FC<Props> = ({ title, fieldName, onChange, label, formData }) => {
   };
   return (
     <Form.Check
-      required
       id={`switch-${title}`}
       name={fieldName}
       type="switch"
@@ -37,6 +44,7 @@ const Index: FC<Props> = ({ title, fieldName, onChange, label, formData }) => {
       feedback={fieldObject?.errorMsg}
       feedbackType="invalid"
       isInvalid={fieldObject.isInvalid}
+      disabled={readOnly}
       onChange={handleChange}
     />
   );

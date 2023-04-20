@@ -380,6 +380,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 enumValues={enumValues}
                 enumNames={enumNames}
                 formData={formData}
+                readOnly={readOnly}
               />
             ) : null}
             {widget === 'switch' ? (
@@ -389,6 +390,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 fieldName={key}
                 onChange={onChange}
                 formData={formData}
+                readOnly={readOnly}
               />
             ) : null}
             {widget === 'timezone' ? (
@@ -396,6 +398,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 fieldName={key}
                 onChange={onChange}
                 formData={formData}
+                readOnly={readOnly}
               />
             ) : null}
             {widget === 'upload' ? (
@@ -409,6 +412,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 fieldName={key}
                 onChange={onChange}
                 formData={formData}
+                readOnly={readOnly}
               />
             ) : null}
             {widget === 'textarea' ? (
