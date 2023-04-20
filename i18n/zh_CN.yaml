@@ -527,7 +527,7 @@ ui:
       使用评论提问更多信息或者提出改进意见。尽量避免使用评论功能回答问题。
     tip_answer: >-
       使用评论对回答者进行回复，或者通知回答者你已更新了问题的内容。如果要补充或者完善问题的内容，请在原问题中更改。
-    tip_vote: It adds something useful to the post
+    tip_vote: 它给帖子添加了一些有用的内容
   edit_answer:
     title: 编辑回答
     default_reason: 编辑回答
@@ -767,6 +767,7 @@ ui:
     btn: 我要提问
     answers: 个回答
   question_detail:
+    action: 操作
     Asked: 提问于
     asked: 提问于
     update: 修改于
@@ -777,11 +778,11 @@ ui:
     answered: 回答于
     closed_in: 关闭于
     show_exist: 查看相关问题。
-    useful: Useful
-    question_useful: It is useful and clear
-    question_un_useful: It is unclear or not useful
-    answer_useful: It is useful
-    answer_un_useful: It is not useful
+    useful: 有用的
+    question_useful: 这是有用和清楚的
+    question_un_useful: 它不明确或没有用
+    answer_useful: 这是有用的
+    answer_un_useful: 它是没有用的
     answers:
       title: 个回答
       score: 评分
@@ -799,16 +800,19 @@ ui:
       empty: 回答内容不能为空。
       characters: 内容长度至少 6 个字符
       tips:
-        header_1: Thanks for your answer
-        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
-        li1_2: Back up any statements you make with references or personal experience.
-        header_2: But <strong>avoid</strong> ...
-        li2_1: Asking for help, seeking clarification, or responding to other answers.
+        header_1: 感谢你的回答.
+        li1_1: 请务必 <strong>回答问题</strong>。提供详细信息并分享您的研究。
+        li1_2: 用参考资料或个人经历来支持你所做的任何陈述。
+        header_2: 但是 <strong>请避免</strong>...
+        li2_1: 请求帮助，寻求澄清，或答复其他答案。
     reopen:
       confirm_btn: 重新打开
       title: 重新打开这个帖子
       content: 确定要重新打开吗？
-      success: 这个帖子已被重新打开
+    pin:
+      title: 置顶此条帖子
+      content: 你确定要全局置顶吗？这个帖子将出现在所有帖子列表的顶部。
+      confirm_btn: 置顶
   delete:
     title: 删除
     question: >-
@@ -816,7 +820,6 @@ ui:
     answer_accepted: >-
       <p>我们不建议<strong>删除被采纳的回答</strong>。因为这样做会使得后来的读者无法从该回答中获得帮助。</p>如果删除过多被采纳的回答，你的账号将会被禁止回答任何提问。你确定要删除吗？
     other: 你确定要删除？
-    tip_question_deleted: 此问题已被删除
     tip_answer_deleted: 此回答已被删除
   btns:
     confirm: 确认
@@ -832,6 +835,7 @@ ui:
     reject: 拒绝
     skip: 略过
     discard_draft: 丢弃草稿
+    pinned: 已置顶
   search:
     title: 搜索结果
     keywords: 关键词
@@ -1021,11 +1025,11 @@ ui:
     answers: 个回答
     accepted: 已被采纳
   page_error:
-    http_error: HTTP Error {{ code }}
-    desc_403: You don’t have permission to access this page.
-    desc_404: Unfortunately, this page doesn't exist.
-    desc_50X: The server encountered an error and could not complete your request.
-    back_home: Back to homepage
+    http_error: HTTP 错误 {{ code }}
+    desc_403: 您没有权限访问此页面。
+    desc_404: 很抱歉，此页面不存在。
+    desc_50X: 服务器遇到了一个错误，无法完成你的请求。
+    back_home: 返回首页
   page_maintenance:
     desc: "我们正在进行维护，我们将很快回来。"
   nav_menus:
@@ -1417,6 +1421,10 @@ ui:
     closed: 关闭
     reopened: 重新开启
     created: 创建于
+    pin: 已置顶
+    unpin: 取消置頂
+    show: 已显示
+    hide: 已隐藏
     title: "历史记录"
     tag_title: "时间线"
     show_votes: "显示投票"
@@ -1431,8 +1439,8 @@ ui:
     no_data: "空空如也"
   users:
     title: 用户
-    users_with_the_most_reputation: Users with the highest reputation scores this week
-    users_with_the_most_vote: Users who voted the most this week
+    users_with_the_most_reputation: 本周声望最高的用户
+    users_with_the_most_vote: 本周投票最多的用户
     staffs: 我们的社区工作人员
     reputation: 声望值
     votes: 投票
@@ -1443,4 +1451,8 @@ ui:
     discard_confirm: 您确定要丢弃您的草稿吗？
   messages:
     post_deleted: 该帖子已被删除。
-
+    post_pin: 该帖子已被置顶。
+    post_unpin: 该帖子已被取消置顶。
+    post_hide_list: 此帖子已经从列表中隐藏。
+    post_show_list: 该帖子已显示到列表中。
+    post_reopen: 这个帖子已被重新打开.

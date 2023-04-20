@@ -22,6 +22,14 @@ backend:
       other: Close
     reopen:
       other: Reopen
+    pin:
+      other: Pin
+    hide:
+      other: Unlist
+    unpin:
+      other: Unpin
+    show:
+      other: List
   role:
     name:
       user:
@@ -34,9 +42,9 @@ backend:
       user:
         other: Predvolené bez špeciálneho prístupu.
       admin:
-        other: Má plnú moc a prístup k stránke.
+        other: Má plnú moc a prístup ku stránke.
       moderator:
-        other: Má prístup ku všetkým príspevkom okrem nastavení správcu.
+        other: Má prístup ku všetkým príspevkom okrem nastavenia správcu.
   email:
     other: E-mail
   password:
@@ -46,7 +54,7 @@ backend:
   error:
     admin:
       cannot_update_their_password:
-        other: Svoje heslo nemôžete upraviť.
+        other: Svoje heslo upraviť.
       cannot_modify_self_status:
         other: Nemôžete upraviť svoj stav.
       email_or_password_wrong:
@@ -116,10 +124,10 @@ backend:
       handle_failed:
         other: Spracovanie prehľadu zlyhalo.
       not_found:
-        other: Prehľad sa nenašiel.
+        other: Hlásenie sa nenašlo.
     tag:
       already_exist:
-        other: Tento tag už existuje.
+        other: Značka už existuje.
       not_found:
         other: Značka sa nenašla.
       recommend_tag_not_found:
@@ -131,7 +139,7 @@ backend:
       cannot_update:
         other: Žiadne povolenie na aktualizáciu.
       is_used_cannot_delete:
-        other: Nemôžete odstrániť značku, ktorá sa používa
+        other: Zadajte e-mailovú adresu, na ktorú sa budú odosielať testy
       cannot_set_synonym_as_itself:
         other: Synonymum aktuálnej značky nemôžete nastaviť ako samotnú.
     smtp:
@@ -268,7 +276,7 @@ ui:
   how_to_format:
     title: Ako formátovať
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">Vytvorenie odkazov</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">vložiť návratky medzi odseky</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">odsadenie kódu o 4 medzery</p></li><li><p class="mb-2">citovať podľa umiestnenie <code>&gt;</code> na začiatok riadku</p></li><li><p class="mb-2">backtick označenie <code>`ako _this_`</code></p></li><li><p class="mb-2">vytvorte kódové ploty s <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">na vytváranie odkazov</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">vracať medzi odsekmi</p></li><li><p class="mb-2"><em>_italic_</em> alebo **<strong>tučné</strong>**</p></li><li><p class="mb-2">odsadenie kódu o 4 medzery</p></li><li><p class="mb-2">citát umiestnením <code>&gt;</code> na začiatku riadku</p></li><li><p class="mb-2">backtick uniká <code>`ako _this_`</code></p></li><li><p class="mb-2">vytvorte kódové ploty s <code>`</code></p><pre class="mb-0"><code>```<br/>kódom tu<br/>```</code></pre></li></ul>
   pagination:
     prev: Predch
     next: Ďalšie
@@ -295,7 +303,7 @@ ui:
     account_suspended: Účet pozastavený
     admin: Administrátor
     change_email: Upraviť e-mail
-    install: Answer Inštalácia
+    install: Odpoveď Inštalácia
     upgrade: Answer Upgrade
     maintenance: Údržba webových stránok
     users: Užívatelia
@@ -386,7 +394,7 @@ ui:
             label: Description
       btn_cancel: Zrušiť
       btn_confirm: Pridať
-      uploading: Nahrávanie
+      uploading: Nahráva sa
     indent:
       text: Indent
     outdent:
@@ -399,7 +407,7 @@ ui:
       form:
         fields:
           url:
-            label: URL adresa
+            label: URL
             msg:
               empty: URL adresa nemôže byť prázdna.
           name:
@@ -423,7 +431,7 @@ ui:
     msg:
       empty: Vyberte dôvod.
   report_modal:
-    flag_title: Označujem, aby som tento príspevok nahlásil ako ...
+    flag_title: Nahlasujem nahlásenie tohto príspevku ako...
     close_title: Tento príspevok zatváram ako ...
     review_question_title: Kontrola otázky
     review_answer_title: Kontrola odpovede
@@ -445,7 +453,7 @@ ui:
             range: Zobrazovaný názov do 35 znakov.
         slug_name:
           label: URL Slug
-          desc: 'Musíte použiť znakovú sadu "a-z", "0-9", "+ # - ."'
+          desc: URL slug do 35 znakov.
           msg:
             empty: URL slug nemôže byť prázdny.
             range: URL slug do 35 znakov.
@@ -546,7 +554,7 @@ ui:
     button_follow: Sledovať
     button_following: Sledované
     tag_label: otázky
-    search_placeholder: Filter podľa názvu značky
+    search_placeholder: Filtrujte podľa názvu značky
     no_desc: Značka nemá popis.
     more: Viac
   ask:
@@ -560,10 +568,10 @@ ui:
           label: Revízia
         title:
           label: Názov
-          placeholder: Buďte konkrétny a predstavte si, že kladiete otázku inej osobe
+          placeholder: Buďte konkrétni a predstavte si, že kladiete otázku inej osobe
           msg:
             empty: Názov nemôže byť prázdny.
-            range: Názov má viac ako 150 znakov --
+            range: Názov do 150 znakov
         body:
           label: Telo
           msg:
@@ -571,7 +579,7 @@ ui:
         tags:
           label: Značky --
           msg:
-            empty: Značky nemôžu byť prázdne.
+            empty: Štítky nemôžu byť prázdne.
         answer:
           label: Odpoveď
           msg:
@@ -580,17 +588,17 @@ ui:
           label: Upraviť zhrnutie
           placeholder: >-
             Stručne vysvetlite svoje zmeny (opravený pravopis, opravená gramatika, vylepšené formátovanie)
-    btn_post_question: Pošlite svoju otázku
+    btn_post_question: Uverejnite svoju otázku
     btn_save_edits: Uložiť úpravy
     answer_question: Odpovedzte na svoju vlastnú otázku
-    post_question&answer: Pošlite svoju otázku a odpoveď
+    post_question&answer: Uverejnite svoju otázku a odpoveď
   tag_selector:
     add_btn: Pridať značku
     create_btn: Vytvoriť novú značku
     search_tag: Vyhľadať značku --
-    hint: "„Popíšte, o čom je vaša otázka, vyžaduje sa aspoň jedna značka.“"
-    no_result: Žiadne značky sa neyhodujú
-    tag_required_text: Požadovaná značka (aspoň jedna)
+    hint: "Popíšte, čoho sa vaša otázka týka, vyžaduje sa aspoň jedna značka."
+    no_result: Nezodpovedajú žiadne značky
+    tag_required_text: Povinný štítok (aspoň jeden)
   header:
     nav:
       question: Otázky
@@ -605,7 +613,7 @@ ui:
       placeholder: Vyhľadávanie
   footer:
     build_on: >-
-      Postavený na <1> Answer </1>- open-source software, ktorý poháňa Q&A komunity.<br />Vyrobené s láskou © {{cc}}.
+      Postavené na <1> Answer </1> – softvéri s otvoreným zdrojom, ktorý poháňa komunity otázok a odpovedí.<br />Vyrobené s láskou © {{cc}}.
   upload_img:
     name: Zmena
     loading: načítavanie...
@@ -696,17 +704,17 @@ ui:
         msg_range: Zobrazované meno nesmie mať viac ako 30 znakov.
       username:
         label: Užívateľské meno
-        caption: Ľudia vás môžu spomenúť ako "@username".
+        caption: Ľudia vás môžu spomenúť ako „@používateľské meno“.
         msg: Užívateľské meno nemôže byť prázdne.
         msg_range: Používateľské meno nesmie mať viac ako 30 znakov.
-        character: 'Musí použiť súpravu znakov "a-z", "0-9", " - . _"'
+        character: 'Musíte použiť znakovú sadu "a-z", "0-9", "- . _"'
       avatar:
         label: Profilová fotka
         gravatar: Gravatar
-        gravatar_text: Fotku môžete zmeniť na <1>gravatar.com</1>
+        gravatar_text: Obrázok môžete zmeniť na <1>gravatar.com</1>
         custom: Vlastný
         btn_refresh: Obnoviť
-        custom_text: Môžete nahrať svoju fotku.
+        custom_text: Môžete nahrať svoj obrázok.
         default: Systém
         msg: Nahrajte avatara prosím
       bio:
@@ -728,17 +736,17 @@ ui:
       change_email_btn: Zmeniť e-mail
       change_pass_btn: Zmeniť heslo
       change_email_info: >-
-        Na túto adresu sme poslali e-mail. Postupujte podľa inštrukcií.
+        Na túto adresu sme poslali e-mail. Postupujte podľa pokynov na potvrdenie.
       email:
         label: E-mail
         msg: E-mail nemôže byť prázdny.
       password_title: Heslo
       current_pass:
-        label: Súčasné heslo
+        label: Aktuálne heslo
         msg:
           empty: Aktuálne heslo nemôže byť prázdne.
           length: Dĺžka musí byť medzi 8 a 32.
-          different: Zadané heslá sa nezhodujú.
+          different: Dve zadané heslá sa nezhodujú.
       new_pass:
         label: Nové heslo
       pass_confirm:
@@ -751,14 +759,15 @@ ui:
   toast:
     update: aktualizácia úspešna
     update_password: Heslo bolo úspešne zmenené.
-    flag_success: Ďakujeme za označenie.
-    forbidden_operate_self: Zakázané pracovať na sebe
+    flag_success: Ďakujeme za nahlásenie.
+    forbidden_operate_self: Zakázané operovať seba
     review: Vaša revízia sa zobrazí po preskúmaní.
   related_question:
     title: Súvisiace otázky
     btn: Pridať otázku
     answers: odpovede
   question_detail:
+    action: Action
     Asked: Opýtané
     asked: opýtané
     update: Aktualizované
@@ -800,7 +809,10 @@ ui:
       confirm_btn: Reopen
       title: Znovu otvoriť tento príspevok
       content: Ste si istý, že ho chcete znovu otvoriť?
-      success: Tento príspevok bol znovu otvorený
+    pin:
+      title: Pin this post
+      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
+      confirm_btn: Pin
   delete:
     title: Odstrániť tento príspevok
     question: >-
@@ -808,7 +820,6 @@ ui:
     answer_accepted: >-
       <p>Neodporúčame <strong>odstránenie akceptovanej odpovede</strong> pretože týmto oberáte budúcich čitateľov o tieto vedomostí.</p>Opakované mazanie akceptovaných odpovedí môže mať za následok zablokovanie možnosti odpovedať z vášho účtu. Ste si istí, že chcete odstrániť odpoveď?
     other: Ste si istí, že ju chcete odstrániť?
-    tip_question_deleted: Tento príspevok bol odstránený
     tip_answer_deleted: Táto odpoveď bola odstránená
   btns:
     confirm: Potvrdiť
@@ -824,6 +835,7 @@ ui:
     reject: Odmietnuť
     skip: Preskočiť
     discard_draft: Zahodiť koncept
+    pinned: Pinned
   search:
     title: Výsledky vyhľadávania
     keywords: Kľúčové slová
@@ -840,7 +852,7 @@ ui:
       more: Viac
     tips:
       title: Tipy na pokročilé vyhľadávanie
-      tag: "<1>[tag]</1> vyhľadávať v rámci značky"
+      tag: "<1>[tag]</1> hľadať v rámci značky"
       user: "<1>user:username</1> hľadať podľa autora"
       answer: "<1>answers:0</1> nezodpovedané otázky"
       score: "<1>score:3</1> Príspevky so skóre 3+"
@@ -891,7 +903,7 @@ ui:
     answered: zodpovedané
     asked: opýtané
     closed: uzatvorené
-    follow_a_tag: Sledovať značku
+    follow_a_tag: Postupujte podľa značky
     more: Viac
   personal:
     overview: Prehľad
@@ -915,7 +927,7 @@ ui:
     top_answers: Najlepšie odpovede
     top_questions: Najlepšie otázky
     stats: Štatistiky
-    list_empty: Nenašli sa žiadne príspevky.<br/>Chceli by ste vybrať inú kartu?
+    list_empty: Nenašli sa žiadne príspevky.<br />Možno by ste chceli vybrať inú kartu?
     accepted: Prijaté
     answered: zodpovedané
     asked: opýtané
@@ -924,13 +936,13 @@ ui:
     mod_short: mod
     mod_long: Moderátori
     x_reputation: reputácia
-    x_votes: Získané hlasy
+    x_votes: prijatých hlasov
     x_answers: odpovede
     x_questions: otázky
   install:
     title: Odpoveď
     next: Ďalšie
-    done: hotovo
+    done: Hotový
     config_yaml_error: Nie je možné vytvoriť súbor config.yaml.
     lang:
       label: Vyberte jazyk
@@ -953,14 +965,14 @@ ui:
       placeholder: odpoveď
       msg: Názov databázy nemôže byť prázdny.
     db_file:
-      label: Databázový súbor
+      label: Súbor databázy
       placeholder: /data/answer.db
       msg: Databázový súbor nemôže byť prázdny.
     config_yaml:
       title: Vytvoriť config.yaml
       label: Vytvorený súbor Config.yaml.
       desc: >-
-        Môžete vytvoriť <1>config.yaml</1> súbor manuálne v <1>/var/wwww/xxx/</1> adresári a vložte do neho nasledujúci text.
+        Súbor <1>config.yaml</1> môžete vytvoriť manuálne v adresári <1>/var/www/xxx/</1> a vložiť doň nasledujúci text.
       info: Potom, čo ste to urobili, kliknite na tlačidlo „Ďalej“.
     site_information: Informácie o stránke
     admin_account: Správca
@@ -999,16 +1011,16 @@ ui:
     good_luck: "„Bavte sa a veľa šťastia!“"
     warn_title: Upozornenie
     warn_desc: >-
-      Súbor <1>config.yaml</1> už existuje. Ak v tomto súbore potrebujete resetovať niektorú z konfiguračných položiek, najskôr ho odstráňte.
+      Súbor <1>config.yaml</1> už existuje. Ak potrebujete resetovať niektorú z konfiguračných položiek v tomto súbore, najskôr ju odstráňte.
     install_now: Môžete skúsiť <1>installing now</1>.
     installed: Už nainštalované
     installed_desc: >-
       Zdá sa, že ste už aplikáciu answer nainštalovali. Ak chcete aplikáciu preinštalovať, najprv vymažte staré tabuľky z databázy.
     db_failed: Databázové pripojenie zlyhalo
     db_failed_desc: >-
-      To buď znamená, že informácia o databáze v súbore  <1>config.yaml</1> sú nesprávna alebo že sa nepodarilo nadviazať kontakt s databázovým serverom. To môže znamenať, že databázový server vášho hostiteľa nefunguje.
+      To buď znamená, že informácie o databáze vo vašom súbore <1>config.yaml</1> sú nesprávne, alebo že sa nepodarilo nadviazať kontakt s databázovým serverom. Môže to znamenať, že databázový server vášho hostiteľa nefunguje.
   counts:
-    views: videnia
+    views: názory
     votes: hlasy
     answers: odpovede
     accepted: prijaté
@@ -1106,7 +1118,7 @@ ui:
     status_modal:
       title: "Zmena {{ type }}  stav na..."
       normal_name: normálne
-      normal_desc: Normálny príspevok je k dispozícii pre všetkých.
+      normal_desc: Normálny príspevok dostupný pre každého.
       closed_name: Uzavreté
       closed_desc: "Na uzavretú otázku nemôžete odpovedať, ale stále ju môžete upravovať, hlasovať a komentovať."
       deleted_name: Vymazané
@@ -1202,20 +1214,20 @@ ui:
       name:
         label: Názov stránky
         msg: Názov stránky nemôže byť prázdny.
-        text: "Názov tejto stránky, ako sa používa v titulnej značke."
+        text: "Názov tejto lokality, ako sa používa v značke názvu."
       site_url:
         label: URL stránky
-        msg: URL stránky nemôže byť prázdne.
-        validate: Prosím vložte platnú URL.
+        msg: Adresa Url stránky nemôže byť prázdna.
+        validate: Prosím uveďte platnú webovú adresu.
         text: Adresa vašej stránky.
       short_desc:
         label: Krátky popis stránky
         msg: Krátky popis stránky nemôže byť prázdny.
-        text: "Krátky popis, ako sa používa v titulnej značke na domovskej stránke."
+        text: "Krátky popis, ako sa používa v značke názvu na domovskej stránke."
       desc:
         label: Popis stránky
         msg: Popis stránky nemôže byť prázdny.
-        text: "Popíšte túto stránku jednou vetou, ako sa používa v značke meta description."
+        text: "Opíšte túto stránku jednou vetou, ako sa používa v značke meta description."
       contact_email:
         label: Kontaktný e-mail
         msg: Kontaktný e-mail nemôže byť prázdny.
@@ -1226,11 +1238,11 @@ ui:
       language:
         label: Jazyk rozhrania
         msg: Jazyk rozhrania nemôže byť prázdny.
-        text: Jazyk používateľského rozhrania. Zmení sa po obnovení stránky.
+        text: Jazyk používateľského rozhrania. Zmení sa, keď stránku obnovíte.
       time_zone:
         label: Časové pásmo
         msg: Časové pásmo nemôže byť prázdne.
-        text: Vyberte si mesto v rovnakom časovom pásme v akom ste vy.
+        text: Vyberte si mesto v rovnakom časovom pásme ako vy.
       avatar:
         label: Predvolený avatar
         text: Pre používateľov bez vlastného avatara.
@@ -1238,11 +1250,11 @@ ui:
       page_title: SMTP
       from_email:
         label: E-mail odosielateľa
-        msg: E-mail odosielateľa nemôže byť prázdny.
+        msg: Z e-mailu nemôže byť prázdne.
         text: E-mailová adresa, z ktorej sa odosielajú e-maily.
       from_name:
         label: Meno odosielateľa
-        msg: Meno odosielateľa nemôže byť prázdne.
+        msg: Názov od nemôže byť prázdny.
         text: Meno, z ktorého sa odosielajú e-maily.
       smtp_host:
         label: Hostiteľ SMTP
@@ -1256,22 +1268,22 @@ ui:
         none: Žiadne
       smtp_port:
         label: SMTP Port
-        msg: Port SMTP musí byť číslo z intervalu 1 ~ 65535.
-        text: Port na váš e-mailový server.
+        msg: Port SMTP musí byť číslo 1 ~ 65535.
+        text: Port na váš poštový server.
       smtp_username:
-        label: Používateľské meno SMTP
+        label: Uživatelské Meno SMTP
         msg: Používateľské meno SMTP nemôže byť prázdne.
       smtp_password:
         label: Heslo SMTP
         msg: Heslo SMTP nemôže byť prázdne.
       test_email_recipient:
-        label: Prijemcovia testovacieho e-mailu
+        label: Testovať príjemcov e-mailov
         text: Zadajte e-mailovú adresu, na ktorú sa budú odosielať testy.
         msg: Príjemcovia testovacieho e-mailu sú neplatní
       smtp_authentication:
         label: Povoliť autentifikáciu
-        title: Autentifikácia SMTP
-        msg: Autentifikácia SMTP nemôže byť prázdna.
+        title: Overenie SMTP
+        msg: Overenie SMTP nemôže byť prázdne.
         "yes": "Áno"
         "no": "Nie"
     branding:
@@ -1279,7 +1291,7 @@ ui:
       logo:
         label: Logo
         msg: Logo nemôže byť prázdne.
-        text: Obrázok loga v ľavej hornej časti vašej stránky. Použite široký obdĺžnikový obrázok s výškou 56 a pomerom strán väčším ako 3:1. Ak nezadáte nič, tak sa zobrazí text názvu stránky.
+        text: Obrázok loga v ľavej hornej časti vašej stránky. Použite široký obdĺžnikový obrázok s výškou 56 a pomerom strán väčším ako 3:1. Ak ho ponecháte prázdne, zobrazí sa text názvu stránky.
       mobile_logo:
         label: Logo mobilu
         text: Logo použité na mobilnej verzii vášho webu. Použite široký obdĺžnikový obrázok s výškou 56. Ak pole ponecháte prázdne, použije sa obrázok z nastavenia „logo“.
@@ -1289,7 +1301,7 @@ ui:
         text: Obrázok použitý ako základ pre ikony metadát. V ideálnom prípade by mal byť väčšií ako 512 x 512.
       favicon:
         label: favicon
-        text: Favicon pre váš web. Ak chcete cez CDN fungovať správne, musí byť vo formáte png. Veľkosť sa zmení na 32 x 32. Ak nebude nič zadané,  použije sa „štvorcová ikona“.
+        text: Favicon pre váš web. Ak chcete správne fungovať cez CDN, musí to byť png. Veľkosť sa zmení na 32 x 32. Ak zostane prázdne, použije sa „štvorcová ikona“.
     legal:
       page_title: Legálne
       terms_of_service:
@@ -1301,15 +1313,15 @@ ui:
     write:
       page_title: Písať
       recommend_tags:
-        label: Odporúčané značky
+        label: Odporučiť značky
         text: "Vyššie zadajte tag slug, jednu značku na riadok."
       required_tag:
-        title: Požadovaná značka
+        title: Povinný štítok
         label: Nastavte odporúčanú značku podľa potreby
         text: "Každá nová otázka musí mať aspoň jedenu odporúčaciu značku."
       reserved_tags:
         label: Vyhradené značky
-        text: "Vyhradené značky môže k príspevku pridať iba moderátor"
+        text: "Vyhradené štítky môže k príspevku pridať iba moderátor."
     seo:
       page_title: SEO
       permalink:
@@ -1385,12 +1397,16 @@ ui:
     closed: uzavreté
     reopened: znovu otvorené
     created: vytvorené
+    pin: pinned
+    unpin: unpinned
+    show: listed
+    hide: unlisted
     title: "História pre"
     tag_title: "Časová os pre"
     show_votes: "Zobraziť hlasy"
     n_or_a: N/A
     title_for_question: "Časová os pre"
-    title_for_answer: "Časová os odpovede pre {{ title }} od {{ author }}"
+    title_for_answer: "Časová os odpovede na {{ title }} od {{ author }}"
     title_for_tag: "Časová os pre značku"
     datetime: Dátum a čas
     type: Typ
@@ -1411,4 +1427,8 @@ ui:
     discard_confirm: Naozaj chcete zahodiť svoj koncept?
   messages:
     post_deleted: Tento príspevok bol odstránený.
-
+    post_pin: This post has been pinned.
+    post_unpin: This post has been unpinned.
+    post_hide_list: This post has been hidden from list.
+    post_show_list: This post has been shown to list.
+    post_reopen: This post has been reopened.
