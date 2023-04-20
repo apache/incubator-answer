@@ -10,7 +10,11 @@ import {
   HotQuestions,
   CustomSidebar,
 } from '@/components';
-import { siteInfoStore, loggedUserInfoStore } from '@/stores';
+import {
+  siteInfoStore,
+  loggedUserInfoStore,
+  loginSettingStore,
+} from '@/stores';
 import { useQuestionList } from '@/services';
 import * as Type from '@/common/interface';
 import { userCenter, floppyNavigation } from '@/utils';
@@ -36,6 +40,7 @@ const Questions: FC = () => {
     pageTitle = `${siteInfo.name}`;
     slogan = `${siteInfo.short_description}`;
   }
+  const { login: loginSetting } = loginSettingStore();
 
   usePageTags({ title: pageTitle, subtitle: slogan });
   return (
@@ -65,12 +70,14 @@ const Questions: FC = () => {
                   onClick={floppyNavigation.handleRouteLinkClick}>
                   {t('login', { keyPrefix: 'btns' })}
                 </Link>
-                <Link
-                  to={userCenter.getSignUpUrl()}
-                  className="btn btn-link ms-2"
-                  onClick={floppyNavigation.handleRouteLinkClick}>
-                  {t('signup', { keyPrefix: 'btns' })}
-                </Link>
+                {loginSetting.allow_new_registrations ? (
+                  <Link
+                    to={userCenter.getSignUpUrl()}
+                    className="btn btn-link ms-2"
+                    onClick={floppyNavigation.handleRouteLinkClick}>
+                    {t('signup', { keyPrefix: 'btns' })}
+                  </Link>
+                ) : null}
               </div>
             </div>
           )}
