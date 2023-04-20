@@ -12,6 +12,7 @@ interface Props {
   fieldName: string;
   onChange?: (fd: Type.FormDataType) => void;
   formData: Type.FormDataType;
+  readOnly: boolean;
 }
 const Index: FC<Props> = ({
   placeholder = '',
@@ -20,6 +21,7 @@ const Index: FC<Props> = ({
   fieldName,
   onChange,
   formData,
+  readOnly = false,
 }) => {
   const fieldObject = formData[fieldName];
   const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +48,7 @@ const Index: FC<Props> = ({
       onChange={handleChange}
       isInvalid={fieldObject?.isInvalid}
       rows={rows}
+      disabled={readOnly}
       className={classnames(className)}
     />
   );

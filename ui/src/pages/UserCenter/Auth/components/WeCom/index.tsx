@@ -68,7 +68,7 @@ const Index: FC = () => {
       <Card className="text-center">
         <Card.Body>
           <Card.Title as="h3" className="mb-3">
-            {agentName} {t('login')}
+            {ucAgent?.agent_info.display_name} {t('login')}
           </Card.Title>
           {qrcodeDataUrl ? (
             <>
@@ -79,7 +79,9 @@ const Index: FC = () => {
                 alt={agentName}
               />
               <div className="text-secondary mt-3">
-                {t('qrcode_login_tip', { agentName })}
+                {t('qrcode_login_tip', {
+                  agentName: ucAgent?.agent_info.display_name,
+                })}
               </div>
             </>
           ) : null}

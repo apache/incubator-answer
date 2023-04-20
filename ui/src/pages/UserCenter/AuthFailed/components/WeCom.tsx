@@ -1,5 +1,8 @@
 import React, { FC } from 'react';
 import { Card, Col, Carousel } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+
+import { userCenterStore } from '@/stores';
 
 const data = [
   {
@@ -25,14 +28,17 @@ const data = [
 ];
 
 const Index: FC = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'plugins' });
+  const ucAgent = userCenterStore().agent;
   return (
     <Col lg={4} className="mx-auto mt-3 py-5">
       <Card>
         <Card.Body>
-          <h3 className="text-center pt-3 mb-3">WeCom Login</h3>
+          <h3 className="text-center pt-3 mb-3">
+            {ucAgent?.agent_info.display_name} {t('login')}
+          </h3>
           <p className="text-danger text-center">
-            Login failed, please allow this app to access your email information
-            before try again.
+            {t('login_failed_email_tip')}
           </p>
 
           <Carousel controls={false}>

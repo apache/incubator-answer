@@ -42,7 +42,7 @@ const Index: FC<Props> = ({
       type={type}
       value={fieldObject?.value || ''}
       onChange={handleChange}
-      readOnly={readOnly}
+      disabled={readOnly}
       isInvalid={fieldObject?.isInvalid}
       style={type === 'color' ? { width: '6rem' } : {}}
     />

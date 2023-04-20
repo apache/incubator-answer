@@ -281,7 +281,7 @@ const Index: React.FC = () => {
             <Form.Control
               required
               type="text"
-              readOnly={!usersSetting.allow_update_display_name}
+              disabled={!usersSetting.allow_update_display_name}
               value={formData.display_name.value}
               isInvalid={formData.display_name.isInvalid}
               onChange={(e) =>
@@ -304,7 +304,7 @@ const Index: React.FC = () => {
             <Form.Control
               required
               type="text"
-              readOnly={!usersSetting.allow_update_username}
+              disabled={!usersSetting.allow_update_username}
               value={formData.username.value}
               isInvalid={formData.username.isInvalid}
               onChange={(e) =>
@@ -424,7 +424,7 @@ const Index: React.FC = () => {
               required
               as="textarea"
               rows={5}
-              readOnly={!usersSetting.allow_update_bio}
+              disabled={!usersSetting.allow_update_bio}
               value={formData.bio.value}
               isInvalid={formData.bio.isInvalid}
               onChange={(e) =>
@@ -450,7 +450,7 @@ const Index: React.FC = () => {
               required
               type="url"
               placeholder={t('website.placeholder')}
-              readOnly={!usersSetting.allow_update_website}
+              disabled={!usersSetting.allow_update_website}
               value={formData.website.value}
               isInvalid={formData.website.isInvalid}
               onChange={(e) =>
@@ -476,7 +476,7 @@ const Index: React.FC = () => {
               required
               type="text"
               placeholder={t('location.placeholder')}
-              readOnly={!usersSetting.allow_update_location}
+              disabled={!usersSetting.allow_update_location}
               value={formData.location.value}
               isInvalid={formData.location.isInvalid}
               onChange={(e) =>

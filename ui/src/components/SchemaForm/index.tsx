@@ -369,6 +369,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 enumValues={enumValues}
                 enumNames={enumNames}
                 formData={formData}
+                readOnly={readOnly}
               />
             ) : null}
             {widget === 'radio' || widget === 'checkbox' ? (
@@ -420,6 +421,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 fieldName={key}
                 onChange={onChange}
                 formData={formData}
+                readOnly={readOnly}
               />
             ) : null}
             {widget === 'input' ? (

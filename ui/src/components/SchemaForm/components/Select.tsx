@@ -10,6 +10,7 @@ interface Props {
   enumValues: (string | boolean | number)[];
   enumNames: string[];
   formData: Type.FormDataType;
+  readOnly: boolean;
 }
 const Index: FC<Props> = ({
   desc,
@@ -18,6 +19,7 @@ const Index: FC<Props> = ({
   enumValues,
   enumNames,
   formData,
+  readOnly = false,
 }) => {
   const fieldObject = formData[fieldName];
   const handleChange = (evt: React.ChangeEvent<HTMLSelectElement>) => {
@@ -40,6 +42,7 @@ const Index: FC<Props> = ({
       name={fieldName}
       value={fieldObject?.value || ''}
       onChange={handleChange}
+      disabled={readOnly}
       isInvalid={fieldObject?.isInvalid}>
       {enumValues?.map((item, index) => {
         return (
