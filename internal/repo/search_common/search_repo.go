@@ -103,25 +103,20 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 	argsQ = append(argsQ, entity.QuestionStatusDeleted, entity.QuestionShow)
 	argsA = append(argsA, entity.QuestionStatusDeleted, entity.AnswerStatusDeleted, entity.QuestionShow)
 
-	for i, word := range words {
-		if i == 0 {
-			b.Where(builder.Like{"title", word}).
-				Or(builder.Like{"original_text", word})
-			argsQ = append(argsQ, "%"+word+"%")
-			argsQ = append(argsQ, "%"+word+"%")
+	likeConQ := builder.NewCond()
+	likeConA := builder.NewCond()
+	for _, word := range words {
+		likeConQ = likeConQ.Or(builder.Like{"title", word}).
+			Or(builder.Like{"original_text", word})
+		argsQ = append(argsQ, "%"+word+"%")
+		argsQ = append(argsQ, "%"+word+"%")
 
-			ub.Where(builder.Like{"`answer`.original_text", word})
-			argsA = append(argsA, "%"+word+"%")
-		} else {
-			b.Or(builder.Like{"title", word}).
-				Or(builder.Like{"original_text", word})
-			argsQ = append(argsQ, "%"+word+"%")
-			argsQ = append(argsQ, "%"+word+"%")
-
-			ub.Or(builder.Like{"`answer`.original_text", word})
-			argsA = append(argsA, "%"+word+"%")
-		}
+		likeConA = likeConA.Or(builder.Like{"`answer`.original_text", word})
+		argsA = append(argsA, "%"+word+"%")
 	}
+
+	b.Where(likeConQ)
+	ub.Where(likeConA)
 
 	// check tag
 	if len(tagIDs) > 0 {
@@ -233,17 +228,14 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagID
 	b.Where(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).And(builder.Eq{"`question`.`show`": entity.QuestionShow})
 	args = append(args, entity.QuestionStatusDeleted, entity.QuestionShow)
 
-	for i, word := range words {
-		if i == 0 {
-			b.Where(builder.Like{"title", word}).
-				Or(builder.Like{"original_text", word})
-			args = append(args, "%"+word+"%")
-			args = append(args, "%"+word+"%")
-		} else {
-			b.Or(builder.Like{"original_text", word})
-			args = append(args, "%"+word+"%")
-		}
+	likeConQ := builder.NewCond()
+	for _, word := range words {
+		likeConQ = likeConQ.Or(builder.Like{"title", word}).
+			Or(builder.Like{"original_text", word})
+		args = append(args, "%"+word+"%")
+		args = append(args, "%"+word+"%")
 	}
+	b.Where(likeConQ)
 
 	// check tag
 	if len(tagIDs) > 0 {
@@ -348,15 +340,13 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs 
 		And(builder.Lt{"`answer`.`status`": entity.AnswerStatusDeleted}).And(builder.Eq{"`question`.`show`": entity.QuestionShow})
 	args = append(args, entity.QuestionStatusDeleted, entity.AnswerStatusDeleted, entity.QuestionShow)
 
-	for i, word := range words {
-		if i == 0 {
-			b.Where(builder.Like{"`answer`.original_text", word})
-			args = append(args, "%"+word+"%")
-		} else {
-			b.Or(builder.Like{"`answer`.original_text", word})
-			args = append(args, "%"+word+"%")
-		}
+	likeConA := builder.NewCond()
+	for _, word := range words {
+		likeConA = likeConA.Or(builder.Like{"`answer`.original_text", word})
+		args = append(args, "%"+word+"%")
 	}
+
+	b.Where(likeConA)
 
 	// check tag
 	if len(tagIDs) > 0 {
