@@ -58,6 +58,7 @@ const Users: FC = () => {
   const { agent: ucAgent } = userCenterStore();
   const [adminUcAgent, setAdminUcAgent] = useState<AdminUcAgent>({
     user_status_agent_enabled: false,
+    user_password_agent_enabled: false,
   });
   const Toast = useToast();
   const {
@@ -258,7 +259,8 @@ const Users: FC = () => {
                         <Icon name="three-dots-vertical" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
-                        {!ucAgent?.enabled ? (
+                        {!ucAgent?.enabled ||
+                        !adminUcAgent.user_password_agent_enabled ? (
                           <Dropdown.Item
                             onClick={() => handleAction('password', user)}>
                             {t('set_new_password')}
