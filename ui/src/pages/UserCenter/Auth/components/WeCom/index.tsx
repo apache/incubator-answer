@@ -35,7 +35,7 @@ const Index: FC = () => {
     if (!targetUrl) {
       return;
     }
-    QrCode.toDataURL(targetUrl, { width: 240 }, (err, url) => {
+    QrCode.toDataURL(targetUrl, { width: 240, margin: 0 }, (err, url) => {
       if (err) {
         return;
       }
@@ -67,13 +67,18 @@ const Index: FC = () => {
     return (
       <Card className="text-center">
         <Card.Body>
-          <Card.Title as="h3">
+          <Card.Title as="h3" className="mb-3">
             {agentName} {t('login')}
           </Card.Title>
           {qrcodeDataUrl ? (
             <>
-              <img width={240} height={240} src={qrcodeDataUrl} alt="" />
-              <div className="text-secondary">
+              <img
+                width={240}
+                height={240}
+                src={qrcodeDataUrl}
+                alt={agentName}
+              />
+              <div className="text-secondary mt-3">
                 {t('qrcode_login_tip', { agentName })}
               </div>
             </>
