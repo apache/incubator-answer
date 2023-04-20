@@ -13,15 +13,23 @@ backend:
       other: データサーバーエラー
   action:
     report:
-      other: Flag
+      other: フラグ
     edit:
-      other: Edit
+      other: 編集
     delete:
-      other: Delete
+      other: 削除
     close:
-      other: Close
+      other: 閉じる
     reopen:
       other: Reopen
+    pin:
+      other: Pin
+    hide:
+      other: Unlist
+    unpin:
+      other: Unpin
+    show:
+      other: List
   role:
     name:
       user:
@@ -53,7 +61,7 @@ backend:
         other: メールアドレスとパスワードが一致しません。
     answer:
       not_found:
-        other: Answer do not found.
+        other: 回答が見つかりません。
       cannot_deleted:
         other: 削除する権限がありません。
       cannot_update:
@@ -139,7 +147,7 @@ backend:
         other: The From Name cannot be a email address.
     theme:
       not_found:
-        other: Theme not found.
+        other: テーマが見つかりません。
     revision:
       review_underway:
         other: Can't edit currently, there is a version in the review queue.
@@ -148,9 +156,9 @@ backend:
     user:
       email_or_password_wrong:
         other:
-          other: Email and password do not match.
+          other: メールアドレスとパスワードが一致しません。
       not_found:
-        other: User not found.
+        other: ユーザーが見つかりません。
       suspended:
         other: User has been suspended.
       username_invalid:
@@ -170,7 +178,7 @@ backend:
       connection_failed:
         other: Database connection failed
       create_table_failed:
-        other: Create table failed
+        other: テーブルの作成に失敗しました
     install:
       create_config_failed:
         other: Can't create the config.yaml file.
@@ -180,7 +188,7 @@ backend:
   report:
     spam:
       name:
-        other: spam
+        other: スパム
       desc:
         other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
     rude:
@@ -212,7 +220,7 @@ backend:
     close:
       duplicate:
         name:
-          other: spam
+          other: スパム
         desc:
           other: This question has been asked before and already has an answer.
       guideline:
@@ -232,11 +240,11 @@ backend:
           other: This post requires another reason not listed above.
     operation_type:
       asked:
-        other: asked
+        other: 質問済み
       answered:
-        other: answered
+        other: 回答済み
       modified:
-        other: modified
+        other: 修正済み
   notification:
     action:
       update_question:
@@ -270,48 +278,48 @@ ui:
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
-    prev: Prev
-    next: Next
+    prev: 前へ
+    next: 次へ
   page_title:
-    question: Question
-    questions: Questions
-    tag: Tag
-    tags: Tags
+    question: 質問
+    questions: 質問
+    tag: タグ
+    tags: タグ
     tag_wiki: tag wiki
-    create_tag: Create Tag
-    edit_tag: Edit Tag
-    ask_a_question: Add Question
-    edit_question: Edit Question
-    edit_answer: Edit Answer
-    search: Search
+    create_tag: タグを作成
+    edit_tag: タグを編集
+    ask_a_question: 質問を追加
+    edit_question: 質問を編集
+    edit_answer: 回答を編集　
+    search: 検索
     posts_containing: Posts containing
-    settings: Settings
+    settings: 設定
     notifications: Notifications
-    login: Log In
-    sign_up: Sign Up
-    account_recovery: Account Recovery
+    login: ログイン
+    sign_up: 新規登録
+    account_recovery: アカウントの復旧
     account_activation: Account Activation
-    confirm_email: Confirm Email
+    confirm_email: メールアドレスを確認
     account_suspended: Account Suspended
-    admin: Admin
-    change_email: Modify Email
+    admin: 管理者
+    change_email: メールアドレスを変更
     install: Answer Installation
     upgrade: Answer Upgrade
     maintenance: Website Maintenance
-    users: Users
-    http_404: HTTP Error 404
-    http_50X: HTTP Error 500
-    http_403: HTTP Error 403
+    users: ユーザー
+    http_404: HTTP エラー 404
+    http_50X: HTTP エラー 500
+    http_403: HTTP エラー 403
   notifications:
-    title: Notifications
-    inbox: Inbox
+    title: 通知
+    inbox: 受信トレイ
     achievement: Achievements
     all_read: Mark all as read
-    show_more: Show more
+    show_more: もっと見る
   suspended:
-    title: Your Account has been Suspended
-    until_time: "Your account was suspended until {{ time }}."
-    forever: This user was suspended forever.
+    title: あなたのアカウントは停止されています。
+    until_time: "あなたのアカウントは {{ time }} まで停止されました。"
+    forever: このユーザーは永久に停止されました。
     end: You don't meet a community guideline.
   editor:
     blockquote:
@@ -401,83 +409,83 @@ ui:
           url:
             label: URL
             msg:
-              empty: URL cannot be empty.
+              empty: URLを入力してください。
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: 説明
+      btn_cancel: キャンセル
+      btn_confirm: 追加
     ordered_list:
-      text: Numbered List
+      text: 番号付きリスト
     unordered_list:
-      text: Bulleted List
+      text: 箇条書きリスト
     table:
-      text: Table
-      heading: Heading
-      cell: Cell
+      text: ' テーブル'
+      heading: 見出し
+      cell: セル
   close_modal:
     title: I am closing this post as...
-    btn_cancel: Cancel
-    btn_submit: Submit
+    btn_cancel: キャンセル
+    btn_submit: 送信
     remark:
-      empty: Cannot be empty.
+      empty: 入力してください。
     msg:
-      empty: Please select a reason.
+      empty: 理由を選んでください。
   report_modal:
     flag_title: I am flagging to report this post as...
     close_title: I am closing this post as...
     review_question_title: Review question
     review_answer_title: Review answer
     review_comment_title: Review comment
-    btn_cancel: Cancel
-    btn_submit: Submit
+    btn_cancel: キャンセル
+    btn_submit: 送信
     remark:
-      empty: Cannot be empty.
+      empty: 入力してください。
     msg:
-      empty: Please select a reason.
+      empty: 理由を選んでください。
   tag_modal:
-    title: Create new tag
+    title: 新しいタグを作成
     form:
       fields:
         display_name:
-          label: Display Name
+          label: 表示名
           msg:
-            empty: Display name cannot be empty.
-            range: Display name up to 35 characters.
+            empty: 表示名を入力してください。
+            range: 表示名は最大 35 文字までです。
         slug_name:
-          label: URL Slug
+          label: URLスラッグ
           desc: '文字セット「a-z」、「0-9」、「+ # -」を使用する必要があります。'
           msg:
-            empty: URL slug cannot be empty.
+            empty: URL スラッグを空にすることはできません。
             range: URL slug up to 35 characters.
             character: URL slug contains unallowed character set.
         desc:
-          label: Description
-    btn_cancel: Cancel
-    btn_submit: Submit
-    btn_post: Post new tag
+          label: 説明
+    btn_cancel: キャンセル
+    btn_submit: 送信
+    btn_post: 新しいタグを投稿
   tag_info:
-    created_at: Created
-    edited_at: Edited
-    history: History
+    created_at: 作成
+    edited_at: 編集済
+    history: 履歴
     synonyms:
-      title: Synonyms
+      title: 類義語
       text: The following tags will be remapped to
       empty: No synonyms found.
       btn_add: Add a synonym
-      btn_edit: Edit
-      btn_save: Save
+      btn_edit: 編集
+      btn_save: 保存
     synonyms_text: The following tags will be remapped to
     delete:
-      title: Delete this tag
+      title: このタグを削除
       tip_with_posts: >-
         <p>We do not allowed <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
         <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: Are you sure you wish to delete?
-      close: Close
+      close: 閉じる
   edit_tag:
-    title: Edit Tag
-    default_reason: Edit tag
+    title: タグを編集
+    default_reason: タグを編集
     form:
       fields:
         revision:
@@ -621,43 +629,43 @@ ui:
     another: >-
       We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.
     btn_name: Resend activation email
-    change_btn_name: Change email
+    change_btn_name: メールアドレスを変更
     msg:
       empty: Cannot be empty.
   login:
-    page_title: Welcome to {{site_name}}
+    page_title: '{{site_name}} へようこそ'
     login_to_continue: Log in to continue
     info_sign: Don't have an account? <1>Sign up</1>
     info_login: Already have an account? <1>Log in</1>
     agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
-    forgot_pass: Forgot password?
+    forgot_pass: パスワードをお忘れですか?
     name:
       label: Name
       msg:
         empty: Name cannot be empty.
         range: Name up to 30 characters.
     email:
-      label: Email
+      label: メールアドレス
       msg:
-        empty: Email cannot be empty.
+        empty: メールアドレスを入力してください。
     password:
-      label: Password
+      label: パスワード
       msg:
-        empty: Password cannot be empty.
+        empty: パスワードを入力してください。
         different: The passwords entered on both sides are inconsistent
   account_forgot:
-    page_title: Forgot Your Password
+    page_title: パスワードを忘れた方はこちら
     btn_name: Send me recovery email
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
-      label: Email
+      label: メールアドレス
       msg:
-        empty: Email cannot be empty.
+        empty: メールアドレスを入力してください。
   change_email:
-    page_title: Welcome to {{site_name}}
-    btn_cancel: Cancel
-    btn_update: Update email address
+    page_title: '{{site_name}} へようこそ'
+    btn_cancel: キャンセル
+    btn_update: メールアドレスを更新
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
@@ -665,17 +673,17 @@ ui:
       msg:
         empty: Email cannot be empty.
   password_reset:
-    page_title: Password Reset
-    btn_name: Reset my password
+    page_title: パスワード再設定
+    btn_name: パスワードをリセット
     reset_success: >-
       You successfully changed your password; you will be redirected to the log in page.
     link_invalid: >-
       Sorry, this password reset link is no longer valid. Perhaps your password is already reset?
     to_login: Continue to log in page
     password:
-      label: Password
+      label: パスワード
       msg:
-        empty: Password cannot be empty.
+        empty: パスワードを入力してください。
         length: The length needs to be between 8 and 32
         different: The passwords entered on both sides are inconsistent
     password_confirm:
@@ -712,8 +720,8 @@ ui:
       bio:
         label: About Me
       website:
-        label: Website
-        placeholder: "https://example.com"
+        label: ウェブサイト
+        placeholder: "http://example.com"
         msg: Website incorrect format
       location:
         label: Location
@@ -740,7 +748,7 @@ ui:
           length: The length needs to be between 8 and 32.
           different: The two entered passwords do not match.
       new_pass:
-        label: New Password
+        label: 新しいパスワード
       pass_confirm:
         label: Confirm New Password
     interface:
@@ -759,6 +767,7 @@ ui:
     btn: Add question
     answers: answers
   question_detail:
+    action: Action
     Asked: Asked
     asked: asked
     update: Modified
@@ -775,10 +784,10 @@ ui:
     answer_useful: It is useful
     answer_un_useful: It is not useful
     answers:
-      title: Answers
-      score: Score
-      newest: Newest
-      btn_accept: Accept
+      title: 回答
+      score: スコア
+      newest: 最新
+      btn_accept: 承認
       btn_accepted: Accepted
     write_answer:
       title: Your Answer
@@ -800,7 +809,10 @@ ui:
       confirm_btn: Reopen
       title: Reopen this post
       content: Are you sure you want to reopen?
-      success: This post has been reopened
+    pin:
+      title: Pin this post
+      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
+      confirm_btn: Pin
   delete:
     title: Delete this post
     question: >-
@@ -808,7 +820,6 @@ ui:
     answer_accepted: >-
       <p>We do not recommend <strong>deleting accepted answer</strong> because doing so deprives future readers of this knowledge. </p> Repeated deletion of accepted answers can result in your account being blocked from answering. Are you sure you wish to delete?
     other: Are you sure you wish to delete?
-    tip_question_deleted: This post has been deleted
     tip_answer_deleted: This answer has been deleted
   btns:
     confirm: Confirm
@@ -816,7 +827,7 @@ ui:
     save: Save
     delete: Delete
     login: Log in
-    signup: Sign up
+    signup: 新規登録
     logout: Log out
     verify: Verify
     add_question: Add question
@@ -824,6 +835,7 @@ ui:
     reject: Reject
     skip: Skip
     discard_draft: Discard draft
+    pinned: Pinned
   search:
     title: Search Results
     keywords: Keywords
@@ -848,17 +860,17 @@ ui:
       is_answer: "<1>is:answer</1> search answers"
     empty: We couldn't find anything. <br /> Try different or less specific keywords.
   share:
-    name: Share
-    copy: Copy link
+    name: シェア
+    copy: リンクをコピー
     via: Share post via...
     copied: Copied
-    facebook: Share to Facebook
-    twitter: Share to Twitter
+    facebook: Facebookで共有
+    twitter: Twitterで共有
   cannot_vote_for_self: You can't vote for your own post
   modal_confirm:
     title: Error...
   account_result:
-    page_title: Welcome to {{site_name}}
+    page_title: '{{site_name}} へようこそ'
     success: Your new account is confirmed; you will be redirected to the home page.
     link: Continue to homepage
     invalid: >-
@@ -880,24 +892,24 @@ ui:
     all_questions: All Questions
     x_questions: "{{ count }} Questions"
     x_answers: "{{ count }} answers"
-    questions: Questions
-    answers: Answers
-    newest: Newest
-    active: Active
-    frequent: Frequent
-    score: Score
-    unanswered: Unanswered
-    modified: modified
-    answered: answered
-    asked: asked
-    closed: closed
-    follow_a_tag: Follow a tag
-    more: More
+    questions: 質問
+    answers: 回答
+    newest: 最新
+    active: 有効
+    frequent: 頻繁
+    score: スコア
+    unanswered: 未回答
+    modified: 修正済み
+    answered: 回答済み
+    asked: 質問済み
+    closed: 終了
+    follow_a_tag: タグをフォロー
+    more: その他
   personal:
-    overview: Overview
-    answers: Answers
-    answer: answer
-    questions: Questions
+    overview: 概要
+    answers: 回答
+    answer: 回答
+    questions: 質問
     question: question
     bookmarks: Bookmarks
     reputation: Reputation
@@ -918,32 +930,32 @@ ui:
     list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
     accepted: Accepted
     answered: answered
-    asked: asked
-    upvote: upvote
-    downvote: downvote
+    asked: 質問済み
+    upvote: 賛成
+    downvote: 反対票を投じる
     mod_short: Mod
-    mod_long: Moderators
+    mod_long: モデレーター
     x_reputation: reputation
     x_votes: votes received
-    x_answers: answers
-    x_questions: questions
+    x_answers: 回答
+    x_questions: 質問
   install:
-    title: Answer
-    next: Next
-    done: Done
+    title: 回答
+    next: 次へ
+    done: 完了
     config_yaml_error: Can't create the config.yaml file.
     lang:
       label: Please Choose a Language
     db_type:
       label: Database Engine
     db_username:
-      label: Username
+      label: ユーザー名
       placeholder: root
       msg: Username cannot be empty.
     db_password:
-      label: Password
+      label: パスワード
       placeholder: root
-      msg: Password cannot be empty.
+      msg: パスワードを入力してください。
     db_host:
       label: Database Host
       placeholder: "db:3306"
@@ -963,12 +975,12 @@ ui:
         You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
       info: After you've done that, click "Next" button.
     site_information: Site Information
-    admin_account: Admin Account
+    admin_account: 管理者アカウント
     site_name:
-      label: Site Name
-      msg: Site Name cannot be empty.
+      label: サイト名
+      msg: サイト名を入力してください。
     site_url:
-      label: Site URL
+      label: サイトURL
       text: The address of your site.
       msg:
         empty: Site URL cannot be empty.
@@ -983,12 +995,12 @@ ui:
       label: Name
       msg: Name cannot be empty.
     admin_password:
-      label: Password
+      label: パスワード
       text: >-
         You will need this password to log in. Please store it in a secure location.
       msg: Password cannot be empty.
     admin_email:
-      label: Email
+      label: メールアドレス
       text: You will need this email to log in.
       msg:
         empty: Email cannot be empty.
@@ -1026,10 +1038,10 @@ ui:
     questions: Questions
     answers: Answers
     users: Users
-    flags: Flags
-    settings: Settings
-    general: General
-    interface: Interface
+    flags: フラグ
+    settings: 設定
+    general: 一般
+    interface: 外観
     smtp: SMTP
     branding: Branding
     legal: Legal
@@ -1037,21 +1049,21 @@ ui:
     tos: Terms of Service
     privacy: Privacy
     seo: SEO
-    customize: Customize
-    themes: Themes
+    customize: カスタマイズ
+    themes: テーマ
     css-html: CSS/HTML
-    login: Login
+    login: ログイン
   admin:
     admin_header:
-      title: Admin
+      title: 管理者
     dashboard:
-      title: Dashboard
+      title: ダッシュボード
       welcome: Welcome to Answer Admin!
-      site_statistics: Site Statistics
-      questions: "Questions:"
-      answers: "Answers:"
-      comments: "Comments:"
-      votes: "Votes:"
+      site_statistics: サイト統計
+      questions: "質問："
+      answers: "回答："
+      comments: "評論："
+      votes: "投票："
       active_users: "Active users:"
       flags: "Flags:"
       site_health_status: Site Health Status
@@ -1065,15 +1077,15 @@ ui:
       uptime: "Uptime:"
       answer_links: Answer Links
       documents: Documents
-      feedback: Feedback
-      support: Support
-      review: Review
-      config: Config
+      feedback: フィードバック
+      support: サポート
+      review: レビュー
+      config: 設定
       update_to: Update to
       latest: Latest
       check_failed: Check failed
-      "yes": "Yes"
-      "no": "No"
+      "yes": "はい"
+      "no": "いいえ"
       not_allowed: Not allowed
       allowed: Allowed
       enabled: Enabled
@@ -1121,7 +1133,7 @@ ui:
     users:
       title: Users
       name: Name
-      email: Email
+      email: メールアドレス
       reputation: Reputation
       created_at: Created Time
       delete_at: Deleted Time
@@ -1136,51 +1148,51 @@ ui:
       suspended: Suspended
       deleted: Deleted
       normal: Normal
-      Moderator: Moderator
-      Admin: Admin
-      User: User
+      Moderator: モデレーター
+      Admin: 管理者
+      User: ユーザー
       filter:
         placeholder: "Filter by name, user:id"
-      set_new_password: Set new password
-      change_status: Change status
-      change_role: Change role
-      show_logs: Show logs
-      add_user: Add user
+      set_new_password: 新しいパスワードを設定します。
+      change_status: ステータスを変更
+      change_role: ロールを変更
+      show_logs: ログを表示
+      add_user: ユーザを追加
       new_password_modal:
-        title: Set new password
+        title: 新しいパスワードを設定
         form:
           fields:
             password:
-              label: Password
+              label: パスワード
               text: The user will be logged out and need to login again.
               msg: Password must be at 8-32 characters in length.
-        btn_cancel: Cancel
-        btn_submit: Submit
+        btn_cancel: キャンセル
+        btn_submit: 送信
       user_modal:
-        title: Add new user
+        title: 新しいユーザーを追加
         form:
           fields:
             display_name:
-              label: Display Name
-              msg: Display Name must be at 3-30 characters in length.
+              label: 表示名
+              msg: 表示名の長さは 3 ～ 30 文字にする必要があります。
             email:
-              label: Email
-              msg: Email is not valid.
+              label: メールアドレス
+              msg: メールアドレスが無効です。
             password:
-              label: Password
-              msg: Password must be at 8-32 characters in length.
-        btn_cancel: Cancel
-        btn_submit: Submit
+              label: パスワード
+              msg: パスワードの長さは 8 ～ 32 文字である必要があります。
+        btn_cancel: キャンセル
+        btn_submit: 送信
     questions:
-      page_title: Questions
-      normal: Normal
-      closed: Closed
-      deleted: Deleted
-      post: Post
-      votes: Votes
-      answers: Answers
-      created: Created
-      status: Status
+      page_title: 質問
+      normal: 正常
+      closed: 終了
+      deleted: 削除済み
+      post: 投稿
+      votes: 投票
+      answers: 回答
+      created: 作成
+      status: ステータス
       action: Action
       change: Change
       filter:
@@ -1204,7 +1216,7 @@ ui:
         msg: Site name cannot be empty.
         text: "The name of this site, as used in the title tag."
       site_url:
-        label: Site URL
+        label: サイトURL
         msg: Site url cannot be empty.
         validate: Please enter a valid URL.
         text: The address of your site.
@@ -1253,17 +1265,17 @@ ui:
         msg: Encryption cannot be empty.
         text: For most servers SSL is the recommended option.
         ssl: SSL
-        none: None
+        none: なし
       smtp_port:
-        label: SMTP Port
-        msg: SMTP port must be number 1 ~ 65535.
+        label: SMTP ポート
+        msg: SMTPポートは1〜65535でなければなりません。
         text: The port to your mail server.
       smtp_username:
-        label: SMTP Username
-        msg: SMTP username cannot be empty.
+        label: SMTP ユーザー名
+        msg: SMTP ユーザー名を空にすることはできません。
       smtp_password:
-        label: SMTP Password
-        msg: SMTP password cannot be empty.
+        label: SMTP パスワード
+        msg: SMTP パスワードを入力してください。
       test_email_recipient:
         label: Test Email Recipients
         text: Provide email address that will receive test sends.
@@ -1272,8 +1284,8 @@ ui:
         label: Enable authentication
         title: SMTP Authentication
         msg: SMTP authentication cannot be empty.
-        "yes": "Yes"
-        "no": "No"
+        "yes": "はい"
+        "no": "いいえ"
     branding:
       page_title: Branding
       logo:
@@ -1357,7 +1369,7 @@ ui:
     optional: (optional)
     empty: cannot be empty
     invalid: is invalid
-    btn_submit: Save
+    btn_submit: 保存
     not_found_props: "Required property {{ key }} not found."
   page_review:
     review: Review
@@ -1385,6 +1397,10 @@ ui:
     closed: closed
     reopened: reopened
     created: created
+    pin: pinned
+    unpin: unpinned
+    show: listed
+    hide: unlisted
     title: "History for"
     tag_title: "Timeline for"
     show_votes: "Show votes"
@@ -1411,4 +1427,8 @@ ui:
     discard_confirm: Are you sure you want to discard your draft?
   messages:
     post_deleted: This post has been deleted.
-
+    post_pin: This post has been pinned.
+    post_unpin: This post has been unpinned.
+    post_hide_list: This post has been hidden from list.
+    post_show_list: This post has been shown to list.
+    post_reopen: This post has been reopened.
