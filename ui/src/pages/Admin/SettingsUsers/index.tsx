@@ -146,6 +146,9 @@ const Index: FC = () => {
 
   useEffect(() => {
     getUsersSetting().then((resp) => {
+      if (!resp) {
+        return;
+      }
       const formMeta: Type.FormDataType = {};
       Object.keys(formData).forEach((k) => {
         let v = resp[k];

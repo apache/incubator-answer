@@ -12,6 +12,7 @@ import {
   FormatTime,
   htmlRender,
   Icon,
+  ImgViewer,
 } from '@/components';
 import { formatCount, guard } from '@/utils';
 import { following } from '@/services';
@@ -114,11 +115,13 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
           return <Tag className="m-1" key={item.slug_name} data={item} />;
         })}
       </div>
-      <article
-        ref={ref}
-        className="fmt text-break text-wrap mt-4"
-        dangerouslySetInnerHTML={{ __html: data?.html }}
-      />
+      <ImgViewer>
+        <article
+          ref={ref}
+          className="fmt text-break text-wrap mt-4"
+          dangerouslySetInnerHTML={{ __html: data?.html }}
+        />
+      </ImgViewer>
 
       <Actions
         className="mt-4"

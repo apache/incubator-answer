@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import classnames from 'classnames';
+
 import { uploadImage } from '@/services';
 import * as Type from '@/common/interface';
 
 interface IProps {
   type: Type.UploadType;
-  className?: string;
+  className?: classnames.Argument;
   children?: React.ReactNode;
   acceptType?: string;
   disabled?: boolean;
@@ -49,7 +51,8 @@ const Index: React.FC<IProps> = ({
   };
 
   return (
-    <label className={`btn btn-outline-secondary uploadBtn ${className}`}>
+    <label
+      className={classnames('btn btn-outline-secondary uploadBtn', className)}>
       {children || (status ? t('upload_img.loading') : t('upload_img.name'))}
       <input
         type="file"
