@@ -16,7 +16,7 @@ import {
   loginSettingStore,
   userCenterStore,
 } from '@/stores';
-import { guard, handleFormError } from '@/utils';
+import { floppyNavigation, guard, handleFormError, userCenter } from '@/utils';
 import { login, checkImgCode, UcAgent } from '@/services';
 import { PicAuthCodeModal } from '@/components/Modal';
 
@@ -246,7 +246,10 @@ const Index: React.FC = () => {
             <div className="text-center mt-5">
               <Trans i18nKey="login.info_sign" ns="translation">
                 Don’t have an account?
-                <Link to="/users/register" tabIndex={2}>
+                <Link
+                  to={userCenter.getSignUpUrl()}
+                  tabIndex={2}
+                  onClick={floppyNavigation.handleRouteLinkClick}>
                   Sign up
                 </Link>
               </Trans>

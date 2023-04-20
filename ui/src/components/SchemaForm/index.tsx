@@ -4,7 +4,7 @@ import React, {
   useImperativeHandle,
   useEffect,
 } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, ButtonProps } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import classnames from 'classnames';
@@ -100,6 +100,8 @@ export interface ButtonOptions extends BaseUIOptions {
   text: string;
   icon?: string;
   action?: UIAction;
+  variant?: ButtonProps['variant'];
+  size?: ButtonProps['size'];
 }
 
 export type UIOptions =
@@ -439,6 +441,10 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 action={uiOpt && 'action' in uiOpt ? uiOpt.action : undefined}
                 formData={formData}
                 readOnly={readOnly}
+                variant={
+                  uiOpt && 'variant' in uiOpt ? uiOpt.variant : undefined
+                }
+                size={uiOpt && 'size' in uiOpt ? uiOpt.size : undefined}
               />
             ) : null}
             {/* Unified handling of `Feedback` and `Text` */}

@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonProps } from 'react-bootstrap';
 
 import { request } from '@/utils';
 import type * as Type from '@/common/interface';
@@ -11,14 +11,18 @@ interface Props {
   action: UIAction | undefined;
   formData: Type.FormDataType;
   readOnly: boolean;
+  variant?: ButtonProps['variant'];
+  size?: ButtonProps['size'];
 }
 const Index: FC<Props> = ({
   fieldName,
   action,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   formData,
-  readOnly = false,
   text = '',
+  readOnly = false,
+  variant = 'primary',
+  size,
 }) => {
   const [isLoading, setLoading] = useState(false);
   const handleAction = async () => {
@@ -33,7 +37,12 @@ const Index: FC<Props> = ({
   const disabled = isLoading || readOnly;
   return (
     <div className="d-flex">
-      <Button name={fieldName} onClick={handleAction} disabled={disabled}>
+      <Button
+        name={fieldName}
+        onClick={handleAction}
+        disabled={disabled}
+        size={size}
+        variant={variant}>
         {text || fieldName}
         {isLoading ? '...' : ''}
       </Button>
