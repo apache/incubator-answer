@@ -23,13 +23,13 @@ backend:
     reopen:
       other: 重新打开
     pin:
-      other: Pin
+      other: 置顶
     hide:
-      other: Unlist
+      other: 隐藏
     unpin:
-      other: Unpin
+      other: 取消置顶
     show:
-      other: List
+      other: 显示
   role:
     name:
       user:
@@ -767,7 +767,7 @@ ui:
     btn: 我要提问
     answers: 个回答
   question_detail:
-    action: Action
+    action: 操作
     Asked: 提问于
     asked: 提问于
     update: 修改于
@@ -810,9 +810,9 @@ ui:
       title: 重新打开这个帖子
       content: 确定要重新打开吗？
     pin:
-      title: Pin this post
-      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
-      confirm_btn: Pin
+      title: 置顶此条帖子
+      content: 你确定要全局置顶吗？这个帖子将出现在所有帖子列表的顶部。
+      confirm_btn: 置顶
   delete:
     title: 删除
     question: >-
@@ -835,7 +835,7 @@ ui:
     reject: 拒绝
     skip: 略过
     discard_draft: 丢弃草稿
-    pinned: Pinned
+    pinned: 已置顶
   search:
     title: 搜索结果
     keywords: 关键词
@@ -1397,10 +1397,10 @@ ui:
     closed: 关闭
     reopened: 重新开启
     created: 创建于
-    pin: pinned
-    unpin: unpinned
-    show: listed
-    hide: unlisted
+    pin: 已置顶
+    unpin: 取消置頂
+    show: 已显示
+    hide: 已隐藏
     title: "历史记录"
     tag_title: "时间线"
     show_votes: "显示投票"
@@ -1427,8 +1427,8 @@ ui:
     discard_confirm: 您确定要丢弃您的草稿吗？
   messages:
     post_deleted: 该帖子已被删除。
-    post_pin: This post has been pinned.
-    post_unpin: This post has been unpinned.
-    post_hide_list: This post has been hidden from list.
-    post_show_list: This post has been shown to list.
-    post_reopen: This post has been reopened.
+    post_pin: 该帖子已被置顶。
+    post_unpin: 该帖子已被取消置顶。
+    post_hide_list: 此帖子已经从列表中隐藏。
+    post_show_list: 该帖子已显示到列表中。
+    post_reopen: 这个帖子已被重新打开.
