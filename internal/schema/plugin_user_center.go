@@ -7,6 +7,7 @@ type UserCenterAgentResp struct {
 
 type AgentInfo struct {
 	Name                      string           `json:"name"`
+	DisplayName               string           `json:"display_name"`
 	Icon                      string           `json:"icon"`
 	Url                       string           `json:"url"`
 	LoginRedirectURL          string           `json:"login_redirect_url"`

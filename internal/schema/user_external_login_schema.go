@@ -5,7 +5,8 @@ type UserExternalLoginResp struct {
 	BindingKey  string `json:"binding_key"`
 	AccessToken string `json:"access_token"`
 	// ErrMsg error message, if not empty, means login failed and this message should be displayed.
-	ErrMsg string `json:"-"`
+	ErrMsg   string `json:"-"`
+	ErrTitle string `json:"-"`
 }
 
 // ExternalLoginBindingUserSendEmailReq external login binding user request

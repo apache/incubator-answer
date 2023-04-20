@@ -59,7 +59,9 @@ func (us *UserCenterLoginService) ExternalLogin(
 		if !checker.EmailInAllowEmailDomain(basicUserInfo.Email, siteInfo.AllowEmailDomains) {
 			log.Debugf("email domain not allowed: %s", basicUserInfo.Email)
 			return &schema.UserExternalLoginResp{
-				ErrMsg: translator.Tr(handler.GetLangByCtx(ctx), reason.EmailIllegalDomainError)}, nil
+				ErrTitle: translator.Tr(handler.GetLangByCtx(ctx), reason.UserAccessDenied),
+				ErrMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.EmailIllegalDomainError),
+			}, nil
 		}
 	}
 
@@ -75,6 +77,13 @@ func (us *UserCenterLoginService) ExternalLogin(
 			return nil, err
 		}
 		if exist {
+			// if user is deleted, do not allow login
+			if oldUserInfo.Status == entity.UserStatusDeleted {
+				return &schema.UserExternalLoginResp{
+					ErrTitle: translator.Tr(handler.GetLangByCtx(ctx), reason.UserAccessDenied),
+					ErrMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.UserPageAccessDenied),
+				}, nil
+			}
 			if err := us.userRepo.UpdateLastLoginDate(ctx, oldUserInfo.ID); err != nil {
 				log.Errorf("update user last login date failed: %v", err)
 			}

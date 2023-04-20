@@ -136,6 +136,8 @@ backend:
         other: 邮箱需要验证。
       verify_url_expired:
         other: 邮箱验证的网址已过期，请重新发送邮件。
+      illegal_email_domain_error:
+        other: 该域名的邮箱无法使用。请尝试更换其他邮箱。
     lang:
       not_found:
         other: 语言未找到
@@ -225,6 +227,10 @@ backend:
         other: 您不能修改自己的角色。
       not_allowed_registration:
         other: 目前该站点未开放注册
+      access_denied:
+        other: 访问被拒绝
+      page_access_denied:
+        other: 你没有权限进入这个页面。
     config:
       read_config_failed:
         other: 读取配置失败
@@ -1112,6 +1118,9 @@ ui:
     installed_plugins: 插件列表
   website_welcome: 欢迎来到 {{site_name}}
   plugins:
+    login: 登录
+    qrcode_login_tip: 请使用 {{ agentName }} 扫描二维码登录
+    login_failed_email_tip: 登录失败, 请允许该应用程序访问您的电子邮件信息，然后再试一次。
     oauth:
       connect: 连接到 {{ auth_name }}
       remove: 解绑 {{ auth_name }}

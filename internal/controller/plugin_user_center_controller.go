@@ -60,6 +60,7 @@ func (uc *UserCenterController) UserCenterAgent(ctx *gin.Context) {
 	_ = plugin.CallUserCenter(func(uc plugin.UserCenter) error {
 		info := uc.Description()
 		resp.AgentInfo.Name = info.Name
+		resp.AgentInfo.DisplayName = info.DisplayName.Translate(ctx)
 		resp.AgentInfo.Icon = info.Icon
 		resp.AgentInfo.Url = info.Url
 		resp.AgentInfo.ControlCenterItems = make([]*schema.ControlCenter, 0)
@@ -138,7 +139,7 @@ func (uc *UserCenterController) UserCenterLoginCallback(ctx *gin.Context) {
 		return
 	}
 	if len(resp.ErrMsg) > 0 {
-		ctx.Redirect(http.StatusFound, "/50x?msg="+resp.ErrMsg)
+		ctx.Redirect(http.StatusFound, fmt.Sprintf("/50x?title=%s&msg=%s", resp.ErrTitle, resp.ErrMsg))
 		return
 	}
 	userCenter.AfterLogin(userInfo.ExternalID, resp.AccessToken)
@@ -173,7 +174,7 @@ func (uc *UserCenterController) UserCenterSignUpCallback(ctx *gin.Context) {
 		return
 	}
 	if len(resp.ErrMsg) > 0 {
-		ctx.Redirect(http.StatusFound, "/50x?msg="+resp.ErrMsg)
+		ctx.Redirect(http.StatusFound, fmt.Sprintf("/50x?title=%s&msg=%s", resp.ErrTitle, resp.ErrMsg))
 		return
 	}
 	userCenter.AfterLogin(userInfo.ExternalID, resp.AccessToken)

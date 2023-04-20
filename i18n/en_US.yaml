@@ -51,7 +51,7 @@ backend:
   privilege:
     level_1:
       description:
-        other: Level 1 (less reputation required for startup community)
+        other: Level 1 (less reputation required for private team, group)
     level_2:
       description:
         other: Level 2 (low reputation required for startup community)
@@ -140,7 +140,7 @@ backend:
       verify_url_expired:
         other: Email verified URL has expired, please resend the email.
       illegal_email_domain_error:
-        other: The domain name of the current email address cannot be registered.
+        other: Email is not allowed from that email domain. Please use another one.
     lang:
       not_found:
         other: Language file not found.
@@ -232,6 +232,10 @@ backend:
         other: You cannot modify your role.
       not_allowed_registration:
         other: Currently the site is not open for registration
+      access_denied:
+        other: Access denied
+      page_access_denied:
+        other: You do not have access to this page.
     config:
       read_config_failed:
         other: Read config failed

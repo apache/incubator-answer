@@ -56,6 +56,7 @@ func (g *GetPluginConfigResp) SetConfigFields(ctx *gin.Context, fields []plugin.
 			UIOptions: ConfigFieldUIOptions{
 				Rows:      field.UIOptions.Rows,
 				InputType: string(field.UIOptions.InputType),
+				Variant:   field.UIOptions.Variant,
 			},
 		}
 		configField.UIOptions.Placeholder = field.UIOptions.Placeholder.Translate(ctx)
@@ -94,6 +95,7 @@ type ConfigFieldUIOptions struct {
 	InputType   string                     `json:"input_type,omitempty"`
 	Label       string                     `json:"label,omitempty"`
 	Action      *ConfigFieldUIOptionAction `json:"action,omitempty"`
+	Variant     string                     `json:"variant,omitempty"`
 	Text        string                     `json:"text,omitempty"`
 }
 

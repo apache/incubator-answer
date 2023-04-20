@@ -49,6 +49,7 @@ type ConfigFieldUIOptions struct {
 	InputType   InputType                  `json:"input_type,omitempty"`
 	Label       Translator                 `json:"label,omitempty"`
 	Action      *ConfigFieldUIOptionAction `json:"action,omitempty"`
+	Variant     string                     `json:"variant,omitempty"`
 	Text        Translator                 `json:"text,omitempty"`
 }
 
