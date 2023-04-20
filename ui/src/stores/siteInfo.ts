@@ -13,6 +13,16 @@ interface SiteInfoType {
   updateUsers: (users: SiteInfoType['users']) => void;
 }
 
+const defaultUsersConf: AdminSettingsUsers = {
+  allow_update_avatar: false,
+  allow_update_bio: false,
+  allow_update_display_name: false,
+  allow_update_location: false,
+  allow_update_username: false,
+  allow_update_website: false,
+  default_avatar: 'system',
+};
+
 const siteInfo = create<SiteInfoType>((set) => ({
   siteInfo: {
     name: DEFAULT_SITE_NAME,
@@ -22,15 +32,7 @@ const siteInfo = create<SiteInfoType>((set) => ({
     contact_email: '',
     permalink: 1,
   },
-  users: {
-    allow_update_avatar: false,
-    allow_update_bio: false,
-    allow_update_display_name: false,
-    allow_update_location: false,
-    allow_update_username: false,
-    allow_update_website: false,
-    default_avatar: 'system',
-  },
+  users: defaultUsersConf,
   version: '',
   revision: '',
   update: (params) =>
@@ -50,6 +52,7 @@ const siteInfo = create<SiteInfoType>((set) => ({
   },
   updateUsers: (users) => {
     set(() => {
+      users ||= defaultUsersConf;
       return { users };
     });
   },

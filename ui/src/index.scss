@@ -120,14 +120,6 @@ a {
   cursor: pointer;
 }
 
-.cursor-zoom-out {
-  cursor: zoom-out !important;
-}
-
-img:not(a img, img.broken) {
-  cursor: zoom-in;
-}
-
 .resize-none {
   resize: none;
 }

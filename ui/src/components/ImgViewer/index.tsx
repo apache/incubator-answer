@@ -1,14 +1,13 @@
-import { useLayoutEffect, useState, MouseEvent, useEffect } from 'react';
+import { FC, MouseEvent, ReactNode, useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { useLocation } from 'react-router-dom';
 
-import ReactDOM from 'react-dom/client';
+import './index.css';
+import classnames from 'classnames';
 
-const div = document.createElement('div');
-const root = ReactDOM.createRoot(div);
-
-const useImgViewer = () => {
-  const location = useLocation();
+const Index: FC<{
+  children: ReactNode;
+  className?: classnames.Argument;
+}> = ({ children, className }) => {
   const [visible, setVisible] = useState(false);
   const [imgSrc, setImgSrc] = useState('');
   const onClose = () => {
@@ -47,8 +46,18 @@ const useImgViewer = () => {
     }
   };
 
-  useLayoutEffect(() => {
-    root.render(
+  useEffect(() => {
+    return () => {
+      onClose();
+    };
+  }, []);
+
+  return (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events
+    <div
+      className={classnames('img-viewer', className)}
+      onClick={checkClickForImgView}>
+      {children}
       <Modal
         show={visible}
         fullscreen
@@ -56,23 +65,16 @@ const useImgViewer = () => {
         scrollable
         contentClassName="bg-transparent"
         onHide={onClose}>
-        <Modal.Body onClick={onClose} className="p-0 d-flex">
+        <Modal.Body onClick={onClose} className="img-viewer p-0 d-flex">
           <img
             className="cursor-zoom-out img-fluid m-auto"
             src={imgSrc}
             alt={imgSrc}
           />
         </Modal.Body>
-      </Modal>,
-    );
-  });
-  useEffect(() => {
-    onClose();
-  }, [location]);
-  return {
-    onClose,
-    checkClickForImgView,
-  };
+      </Modal>
+    </div>
+  );
 };
 
-export default useImgViewer;
+export default Index;
