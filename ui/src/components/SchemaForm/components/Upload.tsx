@@ -10,6 +10,7 @@ interface Props {
   fieldName: string;
   onChange?: (fd: Type.FormDataType) => void;
   formData: Type.FormDataType;
+  readOnly?: boolean;
 }
 const Index: FC<Props> = ({
   type = 'avatar',
@@ -17,10 +18,10 @@ const Index: FC<Props> = ({
   fieldName,
   onChange,
   formData,
+  readOnly = false,
 }) => {
   const fieldObject = formData[fieldName];
   const handleChange = (name: string, value: string) => {
-    console.log('upload: ', name, value);
     const state = {
       ...formData,
       [name]: {
@@ -38,6 +39,7 @@ const Index: FC<Props> = ({
         type={type}
         acceptType={acceptType}
         value={fieldObject?.value}
+        readOnly={readOnly}
         onChange={(value) => handleChange(fieldName, value)}
       />
       <Form.Control

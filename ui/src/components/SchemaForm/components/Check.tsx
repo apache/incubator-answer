@@ -10,6 +10,7 @@ interface Props {
   enumValues: (string | boolean | number)[];
   enumNames: string[];
   formData: Type.FormDataType;
+  readOnly?: boolean;
 }
 const Index: FC<Props> = ({
   type = 'radio',
@@ -18,6 +19,7 @@ const Index: FC<Props> = ({
   enumValues,
   enumNames,
   formData,
+  readOnly = false,
 }) => {
   const fieldObject = formData[fieldName];
   const handleCheck = (
@@ -45,7 +47,6 @@ const Index: FC<Props> = ({
           <Form.Check
             key={String(item)}
             inline
-            required
             type={type}
             name={fieldName}
             id={`form-${String(item)}`}
@@ -54,6 +55,7 @@ const Index: FC<Props> = ({
             feedback={fieldObject?.errorMsg}
             feedbackType="invalid"
             isInvalid={fieldObject?.isInvalid}
+            disabled={readOnly}
             onChange={(evt) => handleCheck(evt, index)}
           />
         );
