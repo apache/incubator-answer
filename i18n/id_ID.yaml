@@ -22,6 +22,14 @@ backend:
       other: Close
     reopen:
       other: Reopen
+    pin:
+      other: Pin
+    hide:
+      other: Unlist
+    unpin:
+      other: Unpin
+    show:
+      other: List
   role:
     name:
       user:
@@ -759,6 +767,7 @@ ui:
     btn: Tambahkan pertanyaan
     answers: jawaban
   question_detail:
+    action: Action
     Asked: Ditanyakan
     asked: ditanyakan
     update: Diubah
@@ -800,7 +809,10 @@ ui:
       confirm_btn: Reopen
       title: Buka kembali postingan ini
       content: Kamu yakin ingin membuka kembali?
-      success: Postingan ini telah dibuka kembali
+    pin:
+      title: Pin this post
+      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
+      confirm_btn: Pin
   delete:
     title: Hapus pos ini
     question: >-
@@ -808,7 +820,6 @@ ui:
     answer_accepted: >-
       <p>Kami tidak menyarankan <strong>menghapus jawaban yang diterima</strong> karena hal itu menghilangkan pengetahuan ini dari pembaca di masa mendatang. </p> Penghapusan berulang dari jawaban yang diterima dapat menyebabkan akun Anda diblokir dari menjawab. Apakah Anda yakin ingin menghapus?
     other: Anda yakin ingin menghapusnya?
-    tip_question_deleted: Kiriman ini sudah dihapus
     tip_answer_deleted: Jawaban ini telah dihapus
   btns:
     confirm: Konfirmasi
@@ -824,6 +835,7 @@ ui:
     reject: Reject
     skip: Skip
     discard_draft: Discard draft
+    pinned: Pinned
   search:
     title: Search Results
     keywords: Keywords
@@ -1385,6 +1397,10 @@ ui:
     closed: closed
     reopened: reopened
     created: created
+    pin: pinned
+    unpin: unpinned
+    show: listed
+    hide: unlisted
     title: "History for"
     tag_title: "Timeline for"
     show_votes: "Show votes"
@@ -1411,4 +1427,8 @@ ui:
     discard_confirm: Are you sure you want to discard your draft?
   messages:
     post_deleted: This post has been deleted.
-
+    post_pin: This post has been pinned.
+    post_unpin: This post has been unpinned.
+    post_hide_list: This post has been hidden from list.
+    post_show_list: This post has been shown to list.
+    post_reopen: This post has been reopened.

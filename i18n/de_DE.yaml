@@ -22,6 +22,14 @@ backend:
       other: Close
     reopen:
       other: Reopen
+    pin:
+      other: Pin
+    hide:
+      other: Unlist
+    unpin:
+      other: Unpin
+    show:
+      other: List
   role:
     name:
       user:
@@ -759,6 +767,7 @@ ui:
     btn: Frage hinzufügen
     answers: antworten
   question_detail:
+    action: Action
     Asked: Fragte
     asked: fragte
     update: Geändert
@@ -800,7 +809,10 @@ ui:
       confirm_btn: Reopen
       title: Diesen Beitrag erneut öffnen
       content: Möchten Sie wirklich wieder öffnen?
-      success: Dieser Beitrag wurde wieder geöffnet
+    pin:
+      title: Pin this post
+      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
+      confirm_btn: Pin
   delete:
     title: Diesen Beitrag löschen
     question: >-
@@ -808,7 +820,6 @@ ui:
     answer_accepted: >-
       <p>Wir empfehlen nicht, <strong>akzeptierte Antworten zu löschen</strong>, da dies zukünftigen Lesern dieses Wissen entzieht. </p> Das wiederholte Löschen akzeptierter Antworten kann dazu führen, dass Ihr Konto für das Antworten gesperrt wird. Möchten Sie wirklich löschen?
     other: Sind Sie sicher, dass Sie löschen möchten?
-    tip_question_deleted: Dieser Beitrag wurde gelöscht
     tip_answer_deleted: Diese Antwort wurde gelöscht
   btns:
     confirm: Bestätigen
@@ -824,6 +835,7 @@ ui:
     reject: Ablehnen
     skip: Überspringen
     discard_draft: Entwurf verwerfen
+    pinned: Pinned
   search:
     title: Suchergebnisse
     keywords: Schlüsselwörter
@@ -901,63 +913,63 @@ ui:
     question: frage
     bookmarks: Lesezeichen
     reputation: Ruf
-    comments: Comments
-    votes: Votes
-    newest: Newest
-    score: Score
-    edit_profile: Edit Profile
-    visited_x_days: "Visited {{ count }} days"
-    viewed: Viewed
-    joined: Joined
-    last_login: Seen
-    about_me: About Me
-    about_me_empty: "// Hello, World !"
-    top_answers: Top Answers
-    top_questions: Top Questions
-    stats: Stats
-    list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
-    accepted: Accepted
-    answered: answered
-    asked: asked
-    upvote: upvote
-    downvote: downvote
+    comments: Kommentare
+    votes: Stimmen
+    newest: Neueste
+    score: Punktzahl
+    edit_profile: Profil bearbeiten
+    visited_x_days: "{{ count }} Tage besucht"
+    viewed: Gesehen
+    joined: Beigetreten
+    last_login: Gesehen
+    about_me: Über mich
+    about_me_empty: "// Hallo Welt !"
+    top_answers: Top-Antworten
+    top_questions: Top-Fragen
+    stats: Statistiken
+    list_empty: Keine Beiträge gefunden.<br />Vielleicht möchten Sie einen anderen Tab auswählen?
+    accepted: Akzeptiert
+    answered: antwortete
+    asked: fragte
+    upvote: positiv bewerten
+    downvote: ablehnen
     mod_short: Mod
-    mod_long: Moderators
-    x_reputation: reputation
-    x_votes: votes received
-    x_answers: answers
-    x_questions: questions
+    mod_long: Moderatoren
+    x_reputation: ruf
+    x_votes: stimmen erhalten
+    x_answers: antworten
+    x_questions: fragen
   install:
-    title: Answer
-    next: Next
-    done: Done
-    config_yaml_error: Can't create the config.yaml file.
+    title: Antwort
+    next: Nächste
+    done: Erledigt
+    config_yaml_error: Die Datei config.yaml kann nicht erstellt werden.
     lang:
-      label: Please Choose a Language
+      label: Bitte wählen Sie eine Sprache
     db_type:
-      label: Database Engine
+      label: Datenbank-Engine
     db_username:
-      label: Username
-      placeholder: root
-      msg: Username cannot be empty.
+      label: Nutzername
+      placeholder: wurzel
+      msg: Benutzername darf nicht leer sein.
     db_password:
       label: Passwort
-      placeholder: root
-      msg: Password cannot be empty.
+      placeholder: wurzel
+      msg: Passwort kann nicht leer sein.
     db_host:
-      label: Database Host
+      label: Datenbank-Host
       placeholder: "db:3306"
-      msg: Database Host cannot be empty.
+      msg: Datenbankhost darf nicht leer sein.
     db_name:
-      label: Database Name
+      label: Name der Datenbank
       placeholder: answer
-      msg: Database Name cannot be empty.
+      msg: Der Datenbankname darf nicht leer sein.
     db_file:
-      label: Database File
-      placeholder: /data/answer.db
-      msg: Database File cannot be empty.
+      label: Datenbankdatei
+      placeholder: /data/answer.Weder noch
+      msg: Datenbankdatei darf nicht leer sein.
     config_yaml:
-      title: Create config.yaml
+      title: Erstellen Sie config.yaml
       label: Die erstellte config.yaml-Datei.
       desc: >-
         Sie können die <1>config.yaml</1> Datei manuell im <1>/var/wwww/xxx/</1> Verzeichnis erstellen und den folgenden Text einfügen.
@@ -1066,18 +1078,18 @@ ui:
       answer_links: Antwortlinks
       documents: Unterlagen
       feedback: Rückmeldung
-      support: Support
-      review: Review
-      config: Config
-      update_to: Update to
-      latest: Latest
-      check_failed: Check failed
+      support: Unterstützung
+      review: Rezension
+      config: Konfig
+      update_to: Aktualisieren zu
+      latest: Neueste
+      check_failed: Prüfung fehlgeschlagen
       "yes": "Ja"
       "no": "Nein"
-      not_allowed: Not allowed
-      allowed: Allowed
-      enabled: Enabled
-      disabled: Disabled
+      not_allowed: Nicht erlaubt
+      allowed: Erlaubt
+      enabled: Ermöglicht
+      disabled: Behinderte
     flags:
       title: Flaggen
       pending: Ausstehend
@@ -1133,282 +1145,290 @@ ui:
       all: Alle
       staff: Mitarbeiter
       inactive: Inaktiv
-      suspended: Suspendiert
-      deleted: Deleted
+      suspended: Ausgesetzt
+      deleted: Gelöscht
       normal: Normal
-      Moderator: Moderator
-      Admin: Admin
-      User: User
+      Moderator: Moderation
+      Admin: Administrator
+      User: Benutzer
       filter:
-        placeholder: "Filter by name, user:id"
-      set_new_password: Set new password
-      change_status: Change status
-      change_role: Change role
-      show_logs: Show logs
-      add_user: Add user
+        placeholder: "Filtern Sie nach Name, Benutzer:Id"
+      set_new_password: Neues Passwort festlegen
+      change_status: Status ändern
+      change_role: Rolle wechseln
+      show_logs: Protokolle anzeigen
+      add_user: Benutzer hinzufügen
       new_password_modal:
-        title: Set new password
+        title: Neues Passwort festlegen
         form:
           fields:
             password:
-              label: Password
-              text: The user will be logged out and need to login again.
-              msg: Password must be at 8-32 characters in length.
-        btn_cancel: Cancel
-        btn_submit: Submit
+              label: Passwort
+              text: Der Benutzer wird abgemeldet und muss sich erneut anmelden.
+              msg: Das Passwort muss zwischen 8 und 32 Zeichen lang sein.
+        btn_cancel: Stornieren
+        btn_submit: Senden
       user_modal:
-        title: Add new user
+        title: Neuen Benutzer hinzufügen
         form:
           fields:
             display_name:
-              label: Display Name
-              msg: Display Name must be at 3-30 characters in length.
+              label: Anzeigename
+              msg: Der Anzeigename muss zwischen 3 und 30 Zeichen lang sein.
             email:
               label: Email
-              msg: Email is not valid.
+              msg: Email ist ungültig.
             password:
-              label: Password
-              msg: Password must be at 8-32 characters in length.
-        btn_cancel: Cancel
-        btn_submit: Submit
+              label: Passwort
+              msg: Das Passwort muss zwischen 8 und 32 Zeichen lang sein.
+        btn_cancel: Stornieren
+        btn_submit: Senden
     questions:
-      page_title: Questions
+      page_title: Fragen
       normal: Normal
-      closed: Closed
-      deleted: Deleted
+      closed: Geschlossen
+      deleted: Gelöscht
       post: Post
-      votes: Votes
-      answers: Answers
-      created: Created
+      votes: Stimmen
+      answers: Antworten
+      created: Erstellt
       status: Status
-      action: Action
-      change: Change
+      action: Aktion
+      change: Ändern
       filter:
-        placeholder: "Filter by title, question:id"
+        placeholder: "Filtern nach Titel, Frage:Id"
     answers:
-      page_title: Answers
+      page_title: Antworten
       normal: Normal
-      deleted: Deleted
+      deleted: Gelöscht
       post: Post
-      votes: Votes
-      created: Created
+      votes: Stimmen
+      created: Erstellt
       status: Status
-      action: Action
-      change: Change
+      action: Aktion
+      change: Ändern
       filter:
-        placeholder: "Filter by title, answer:id"
+        placeholder: "Filtern nach Titel, Antwort: id"
     general:
-      page_title: General
+      page_title: Allgemein
       name:
-        label: Site Name
-        msg: Site name cannot be empty.
-        text: "The name of this site, as used in the title tag."
+        label: Seitenname
+        msg: Der Site-Name darf nicht leer sein.
+        text: "Der Name dieser Website, wie er im Titel-Tag verwendet wird."
       site_url:
-        label: Site URL
-        msg: Site url cannot be empty.
-        validate: Please enter a valid URL.
-        text: The address of your site.
+        label: Seiten-URL
+        msg: Die Website-Url darf nicht leer sein.
+        validate: Bitte geben Sie eine gültige URL ein.
+        text: Die Adresse Ihrer Website.
       short_desc:
-        label: Short Site Description
-        msg: Short site description cannot be empty.
-        text: "Short description, as used in the title tag on homepage."
+        label: Kurze Seitenbeschreibung
+        msg: Die kurze Website-Beschreibung darf nicht leer sein.
+        text: "Kurze Beschreibung, wie im Titel-Tag auf der Homepage verwendet."
       desc:
-        label: Site Description
-        msg: Site description cannot be empty.
-        text: "Describe this site in one sentence, as used in the meta description tag."
+        label: Seitenbeschreibung
+        msg: Die Websitebeschreibung darf nicht leer sein.
+        text: "Beschreiben Sie diese Website in einem Satz, wie er im Meta-Beschreibungs-Tag verwendet wird."
       contact_email:
-        label: Contact Email
-        msg: Contact email cannot be empty.
-        validate: Contact email is not valid.
-        text: Email address of key contact responsible for this site.
+        label: Kontakt E-mail
+        msg: Kontakt-E-Mail darf nicht leer sein.
+        validate: Kontakt-E-Mail ist ungültig.
+        text: E-Mail-Adresse des Hauptkontakts, der für diese Website verantwortlich ist.
     interface:
-      page_title: Interface
+      page_title: Schnittstelle
       language:
-        label: Interface Language
-        msg: Interface language cannot be empty.
-        text: User interface language. It will change when you refresh the page.
+        label: Schnittstellensprache
+        msg: Sprache der Benutzeroberfläche darf nicht leer sein.
+        text: Sprache der Benutzeroberfläche. Sie ändert sich, wenn Sie die Seite aktualisieren.
       time_zone:
-        label: Timezone
-        msg: Timezone cannot be empty.
-        text: Choose a city in the same timezone as you.
+        label: Zeitzone
+        msg: Die Zeitzone darf nicht leer sein.
+        text: Wählen Sie eine Stadt in derselben Zeitzone wie Sie.
       avatar:
         label: Standard-Avatar
         text: Für Benutzer ohne eigenen Avatar.
     smtp:
       page_title: SMTP
       from_email:
-        label: From Email
-        msg: From email cannot be empty.
-        text: The email address which emails are sent from.
+        label: Absender-E-Mail
+        msg: Von E-Mail darf nicht leer sein.
+        text: Die E-Mail-Adresse, von der E-Mails gesendet werden.
       from_name:
-        label: From Name
-        msg: From name cannot be empty.
-        text: The name which emails are sent from.
+        label: Von Namen
+        msg: Absendername darf nicht leer sein.
+        text: Der Name, von dem E-Mails gesendet werden.
       smtp_host:
-        label: SMTP Host
-        msg: SMTP host cannot be empty.
-        text: Your mail server.
+        label: SMTP-Host
+        msg: Der SMTP-Host darf nicht leer sein.
+        text: Ihr Mailserver.
       encryption:
-        label: Encryption
-        msg: Encryption cannot be empty.
-        text: For most servers SSL is the recommended option.
+        label: Verschlüsselung
+        msg: Verschlüsselung darf nicht leer sein.
+        text: Für die meisten Server ist SSL die empfohlene Option.
         ssl: SSL
-        none: None
+        none: Keine
       smtp_port:
         label: SMTP-Port
-        msg: SMTP port must be number 1 ~ 65535.
-        text: The port to your mail server.
+        msg: SMTP-Port muss Nummer 1 ~ 65535 sein.
+        text: Der Port zu Ihrem Mailserver.
       smtp_username:
-        label: SMTP Username
-        msg: SMTP username cannot be empty.
+        label: SMTP-Benutzername
+        msg: Der SMTP-Benutzername darf nicht leer sein.
       smtp_password:
-        label: SMTP Password
-        msg: SMTP password cannot be empty.
+        label: SMTP-Passwort
+        msg: Das SMTP-Passwort darf nicht leer sein.
       test_email_recipient:
-        label: Test Email Recipients
-        text: Provide email address that will receive test sends.
-        msg: Test email recipients is invalid
+        label: E-Mail-Empfänger testen
+        text: Geben Sie eine E-Mail-Adresse an, die Testsendungen erhalten soll.
+        msg: Test-E-Mail-Empfänger ist ungültig
       smtp_authentication:
-        label: Enable authentication
-        title: SMTP Authentication
-        msg: SMTP authentication cannot be empty.
-        "yes": "Yes"
-        "no": "No"
+        label: Authentifizierung aktivieren
+        title: SMTP-Authentifizierung
+        msg: Die SMTP-Authentifizierung darf nicht leer sein.
+        "yes": "Ja"
+        "no": "Nein"
     branding:
       page_title: Branding
       logo:
         label: Logo
-        msg: Logo cannot be empty.
-        text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
+        msg: Logo darf nicht leer sein.
+        text: Das Logobild oben links auf Ihrer Website. Verwenden Sie ein breites rechteckiges Bild mit einer Höhe von 56 und einem Seitenverhältnis von mehr als 3:1. Wenn das Feld leer gelassen wird, wird der Seitentiteltext angezeigt.
       mobile_logo:
-        label: Mobile Logo
-        text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
+        label: Handy-Logo
+        text: Das Logo, das auf der mobilen Version Ihrer Website verwendet wird. Verwenden Sie ein breites rechteckiges Bild mit einer Höhe von 56. Wenn Sie dieses Feld leer lassen, wird das Bild aus der Einstellung "Logo" verwendet.
       square_icon:
-        label: Square Icon
-        msg: Square icon cannot be empty.
-        text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
+        label: Quadratisches Symbol
+        msg: Quadratisches Symbol darf nicht leer sein.
+        text: Bild, das als Basis für Metadatensymbole verwendet wird. Sollte idealerweise größer als 512x512 sein.
       favicon:
         label: Favicon
-        text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
+        text: Ein Favicon für Ihre Website. Um korrekt über ein CDN zu funktionieren, muss es ein PNG sein. Wird auf 32x32 verkleinert. Wenn das Feld leer gelassen wird, wird "quadratisches Symbol" verwendet.
     legal:
-      page_title: Legal
+      page_title: Gesetzlich
       terms_of_service:
-        label: Terms of Service
-        text: "You can add terms of service content here. If you already have a document hosted elsewhere, provide the full URL here."
+        label: Nutzungsbedingungen
+        text: "Hier können Sie Inhalt der Nutzungsbedingungen hinzufügen. Wenn Sie bereits ein Dokument haben, das woanders gehostet wird, geben Sie hier die vollständige URL an."
       privacy_policy:
-        label: Privacy Policy
-        text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
+        label: Datenschutz-Bestimmungen
+        text: "Hier können Sie Inhalte zur Datenschutzrichtlinie hinzufügen. Wenn Sie bereits ein Dokument haben, das woanders gehostet wird, geben Sie hier die vollständige URL an."
     write:
-      page_title: Write
+      page_title: Schreiben
       recommend_tags:
-        label: Recommend Tags
-        text: "Please input tag slug above, one tag per line."
+        label: Tags empfehlen
+        text: "Bitte geben Sie den Tag-Slug oben ein, ein Tag pro Zeile."
       required_tag:
-        title: Required Tag
-        label: Set recommend tag as required
-        text: "Every new question must have at least one recommend tag."
+        title: Erforderliches Tag
+        label: Legen Sie das Empfehlungs-Tag nach Bedarf fest
+        text: "Jede neue Frage muss mindestens ein Empfehlungs-Tag haben."
       reserved_tags:
-        label: Reserved Tags
-        text: "Reserved tags can only be added to a post by moderator."
+        label: Reservierte Tags
+        text: "Reservierte Tags können nur vom Moderator zu einem Beitrag hinzugefügt werden."
     seo:
       page_title: SEO
       permalink:
-        label: Permalink
-        text: Custom URL structures can improve the usability, and forward-compatibility of your links.
+        label: Dauerlink
+        text: Benutzerdefinierte URL-Strukturen können die Benutzerfreundlichkeit und Aufwärtskompatibilität Ihrer Links verbessern.
       robots:
         label: robots.txt
-        text: This will permanently override any related site settings.
+        text: Dadurch werden alle zugehörigen Site-Einstellungen dauerhaft überschrieben.
     themes:
-      page_title: Themes
+      page_title: Themen
       themes:
-        label: Themes
-        text: Select an existing theme.
+        label: Themen
+        text: Wählen Sie ein vorhandenes Thema aus.
       navbar_style:
-        label: Navbar Style
-        text: Select an existing theme.
+        label: Navbar-Stil
+        text: Wählen Sie ein vorhandenes Thema aus.
       primary_color:
-        label: Primary Color
-        text: Modify the colors used by your themes
+        label: Primärfarbe
+        text: Ändern Sie die von Ihren Designs verwendeten Farben
     css_and_html:
       page_title: CSS and HTML
       custom_css:
-        label: Custom CSS
-        text: This will insert as <link>
+        label: Benutzerdefinierte CSS
+        text: Dies wird als <link> eingefügt
       head:
-        label: Head
-        text: This will insert before </head>
+        label: Kopf
+        text: Dies wird vor </head> eingefügt
       header:
         label: Header
-        text: This will insert after <body>
+        text: Dies wird nach <body> eingefügt
       footer:
-        label: Footer
-        text: This will insert before </html>.
+        label: Fusszeile
+        text: Dies wird vor </html> eingefügt.
     login:
-      page_title: Login
+      page_title: Anmeldung
       membership:
-        title: Membership
-        label: Allow new registrations
-        text: Turn off to prevent anyone from creating a new account.
+        title: Mitgliedschaft
+        label: Neuregistrierungen zulassen
+        text: Deaktivieren Sie diese Option, um zu verhindern, dass jemand ein neues Konto erstellt.
       private:
-        title: Private
-        label: Login required
-        text: Only logged in users can access this community.
+        title: Privatgelände
+        label: Anmeldung erforderlich
+        text: Nur angemeldete Benutzer können auf diese Community zugreifen.
   form:
     optional: (optional)
-    empty: cannot be empty
-    invalid: is invalid
-    btn_submit: Save
-    not_found_props: "Required property {{ key }} not found."
+    empty: kann nicht leer sein
+    invalid: ist ungültig
+    btn_submit: Speichern
+    not_found_props: "Erforderliche Eigenschaft {{ key }} nicht gefunden."
   page_review:
-    review: Review
-    proposed: proposed
-    question_edit: Question edit
-    answer_edit: Answer edit
-    tag_edit: Tag edit
-    edit_summary: Edit summary
-    edit_question: Edit question
-    edit_answer: Edit answer
-    edit_tag: Edit tag
-    empty: No review tasks left.
+    review: Rezension
+    proposed: vorgeschlagen
+    question_edit: Frage bearbeiten
+    answer_edit: Antwort bearbeiten
+    tag_edit: Tag bearbeiten
+    edit_summary: Zusammenfassung bearbeiten
+    edit_question: Frage bearbeiten
+    edit_answer: Antwort bearbeiten
+    edit_tag: Tag bearbeiten
+    empty: Keine Überprüfungsaufgaben mehr übrig.
   timeline:
-    undeleted: undeleted
-    deleted: deleted
-    downvote: downvote
-    upvote: upvote
-    accept: accept
-    cancelled: cancelled
-    commented: commented
-    rollback: rollback
-    edited: edited
-    answered: answered
-    asked: asked
-    closed: closed
-    reopened: reopened
-    created: created
-    title: "History for"
-    tag_title: "Timeline for"
-    show_votes: "Show votes"
+    undeleted: ungelöscht
+    deleted: gelöscht
+    downvote: ablehnen
+    upvote: positiv bewerten
+    accept: akzeptieren
+    cancelled: abgebrochen
+    commented: kommentiert
+    rollback: zurückrollen
+    edited: bearbeitet
+    answered: antwortete
+    asked: fragte
+    closed: geschlossen
+    reopened: wiedereröffnet
+    created: erstellt
+    pin: pinned
+    unpin: unpinned
+    show: listed
+    hide: unlisted
+    title: "Geschichte für"
+    tag_title: "Zeitleiste für"
+    show_votes: "Stimmen anzeigen"
     n_or_a: N/A
-    title_for_question: "Timeline for"
-    title_for_answer: "Timeline for answer to {{ title }} by {{ author }}"
-    title_for_tag: "Timeline for tag"
-    datetime: Datetime
-    type: Type
-    by: By
-    comment: Comment
-    no_data: "We couldn't find anything."
+    title_for_question: "Zeitleiste für"
+    title_for_answer: "Zeitachse für die Antwort auf {{ title }} von {{ author }}"
+    title_for_tag: "Zeitachse für Tag"
+    datetime: Terminzeit
+    type: Typ
+    by: Von
+    comment: Kommentar
+    no_data: "Wir konnten nichts finden."
   users:
-    title: Users
+    title: Benutzer
     users_with_the_most_reputation: Users with the highest reputation scores this week
     users_with_the_most_vote: Users who voted the most this week
-    staffs: Our community staff
-    reputation: reputation
-    votes: votes
+    staffs: Benutzer
+    reputation: ruf
+    votes: stimmen
   prompt:
-    leave_page: Are you sure you want to leave the page?
-    changes_not_save: Your changes may not be saved.
+    leave_page: Möchten Sie die Seite wirklich verlassen?
+    changes_not_save: Ihre Änderungen werden möglicherweise nicht gespeichert.
   draft:
-    discard_confirm: Are you sure you want to discard your draft?
+    discard_confirm: Möchten Sie Ihren Entwurf wirklich verwerfen?
   messages:
-    post_deleted: This post has been deleted.
-
+    post_deleted: Dieser Beitrag wurde gelöscht.
+    post_pin: This post has been pinned.
+    post_unpin: This post has been unpinned.
+    post_hide_list: This post has been hidden from list.
+    post_show_list: This post has been shown to list.
+    post_reopen: This post has been reopened.
