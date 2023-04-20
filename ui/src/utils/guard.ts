@@ -390,11 +390,8 @@ export const setupApp = async () => {
    * 1. must pre init logged user info for router guard
    * 2. must pre init app settings for app render
    */
-  await Promise.allSettled([
-    pullLoggedUser(),
-    pullUcAgent(),
-    initAppSettingsStore(),
-  ]);
+  await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
+  await Promise.allSettled([pullUcAgent()]);
   setupAppLanguage();
   setupAppTimeZone();
   appInitialized = true;
