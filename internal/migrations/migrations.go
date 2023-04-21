@@ -57,6 +57,7 @@ var migrations = []Migration{
 	NewMigration("add theme and private mode", addThemeAndPrivateMode, true),
 	NewMigration("add new answer notification", addNewAnswerNotification, true),
 	NewMigration("add user pin hide features", addRolePinAndHideFeatures, true),
+	NewMigration("update accept answer rank", updateAcceptAnswerRank, true),
 	NewMigration("add plugin", addPlugin, false),
 }
 
