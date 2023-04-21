@@ -9,6 +9,7 @@ import {
   themeSettingStore,
   seoSettingStore,
   loginToContinueStore,
+  pageTagStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
 import {
@@ -373,6 +374,10 @@ export const initAppSettingsStore = async () => {
       .updateVersion(appSettings.version, appSettings.revision);
     siteInfoStore.getState().updateUsers(appSettings.site_users);
     interfaceStore.getState().update(appSettings.interface);
+    pageTagStore.getState().update({
+      title: appSettings.general?.name,
+      description: appSettings.general?.description,
+    });
     brandingStore.getState().update(appSettings.branding);
     loginSettingStore.getState().update(appSettings.login);
     customizeStore.getState().update(appSettings.custom_css_html);
