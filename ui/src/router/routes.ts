@@ -365,6 +365,10 @@ const routes: RouteNode[] = [
       {
         path: '/user-center/auth',
         page: 'pages/UserCenter/Auth',
+        guard: () => {
+          const notLogged = guard.notLogged();
+          return notLogged;
+        },
       },
       {
         path: '/user-center/auth-failed',
