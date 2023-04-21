@@ -179,6 +179,25 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 	if err != nil {
 		return err
 	}
+
+	usersData := map[string]any{
+		"default_avatar":            "gravatar",
+		"allow_update_display_name": true,
+		"allow_update_username":     true,
+		"allow_update_avatar":       true,
+		"allow_update_bio":          true,
+		"allow_update_website":      true,
+		"allow_update_location":     true,
+	}
+	usersDataBytes, _ := json.Marshal(usersData)
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "users",
+		Content: string(usersDataBytes),
+		Status:  1,
+	})
+	if err != nil {
+		return err
+	}
 	return err
 }
 
