@@ -64,8 +64,6 @@ backend:
       other: Write answer
     rank_comment_add_label:
       other: Write comment
-    rank_answer_accept_label:
-      other: Accept answer
     rank_report_add_label:
       other: Flag
     rank_comment_vote_up_label:

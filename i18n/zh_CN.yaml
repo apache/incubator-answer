@@ -61,8 +61,6 @@ backend:
       other: 回答问题
     rank_comment_add_label:
       other: 发表评论
-    rank_answer_accept_label:
-      other: 接受答案
     rank_report_add_label:
       other: 举报
     rank_comment_vote_up_label:

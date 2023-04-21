@@ -8,7 +8,6 @@ const (
 	RankQuestionAddLabel               = "privilege.rank_question_add_label"
 	RankAnswerAddLabel                 = "privilege.rank_answer_add_label"
 	RankCommentAddLabel                = "privilege.rank_comment_add_label"
-	RankAnswerAcceptLabel              = "privilege.rank_answer_accept_label"
 	RankReportAddLabel                 = "privilege.rank_report_add_label"
 	RankCommentVoteUpLabel             = "privilege.rank_comment_vote_up_label"
 	RankLinkUrlLimitLabel              = "privilege.rank_link_url_limit_label"

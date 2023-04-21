@@ -48,7 +48,6 @@ var (
 		{Label: reason.RankQuestionAddLabel, Key: RankQuestionAddKey},
 		{Label: reason.RankAnswerAddLabel, Key: RankAnswerAddKey},
 		{Label: reason.RankCommentAddLabel, Key: RankCommentAddKey},
-		{Label: reason.RankAnswerAcceptLabel, Key: RankAnswerAcceptKey},
 		{Label: reason.RankReportAddLabel, Key: RankReportAddKey},
 		{Label: reason.RankCommentVoteUpLabel, Key: RankCommentVoteUpKey},
 		{Label: reason.RankLinkUrlLimitLabel, Key: RankLinkUrlLimitKey},

@@ -289,7 +289,6 @@ var (
 		constant.RankQuestionAddKey:               {1, 1, 1},
 		constant.RankAnswerAddKey:                 {1, 1, 1},
 		constant.RankCommentAddKey:                {1, 1, 1},
-		constant.RankAnswerAcceptKey:              {1, 1, 1},
 		constant.RankReportAddKey:                 {1, 1, 1},
 		constant.RankCommentVoteUpKey:             {1, 1, 1},
 		constant.RankLinkUrlLimitKey:              {1, 10, 10},
