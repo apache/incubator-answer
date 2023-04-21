@@ -110,7 +110,7 @@ ON "question" (
 		{ID: 41, Key: "rank.answer.add", Value: `1`},
 		{ID: 42, Key: "rank.answer.edit", Value: `200`},
 		{ID: 43, Key: "rank.answer.delete", Value: `-1`},
-		{ID: 44, Key: "rank.answer.accept", Value: `1`},
+		{ID: 44, Key: "rank.answer.accept", Value: `-1`},
 		{ID: 45, Key: "rank.answer.vote_up", Value: `15`},
 		{ID: 46, Key: "rank.answer.vote_down", Value: `125`},
 		{ID: 47, Key: "rank.comment.add", Value: `1`},
