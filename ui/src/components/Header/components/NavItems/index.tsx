@@ -101,8 +101,10 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
             variant="success"
             id="dropdown-uca"
             as="span"
-            className="no-toggle pointer nav-link p-0">
-            <Icon name="grid-3x3-gap-fill" className="fs-4 ms-3" />
+            className="no-toggle pointer p-0">
+            <Nav>
+              <Icon name="grid-3x3-gap-fill" className="nav-link fs-4 ms-3" />
+            </Nav>
           </Dropdown.Toggle>
 
           <Dropdown.Menu>
