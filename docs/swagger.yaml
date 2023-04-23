@@ -1202,6 +1202,9 @@ definitions:
     type: object
   schema.QuestionPageReq:
     properties:
+      inDays:
+        minimum: 1
+        type: integer
       orderCond:
         enum:
         - newest

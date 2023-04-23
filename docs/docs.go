@@ -7545,6 +7545,10 @@ const docTemplate = `{
         "schema.QuestionPageReq": {
             "type": "object",
             "properties": {
+                "inDays": {
+                    "type": "integer",
+                    "minimum": 1
+                },
                 "orderCond": {
                     "type": "string",
                     "enum": [

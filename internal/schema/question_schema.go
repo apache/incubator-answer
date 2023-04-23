@@ -277,6 +277,7 @@ type QuestionPageReq struct {
 	OrderCond string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
 	Tag       string `validate:"omitempty,gt=0,lte=100" form:"tag"`
 	Username  string `validate:"omitempty,gt=0,lte=100" form:"username"`
+	InDays    int    `validate:"omitempty,min=1" form:"in_days"`
 
 	LoginUserID      string `json:"-"`
 	UserIDBeSearched string `json:"-"`
