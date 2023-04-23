@@ -68,6 +68,7 @@ func NewHTTPServer(debug bool,
 	// plugin routes
 	pluginAPIRouter.RegisterUnAuthConnectorRouter(mustUnAuthV1)
 	pluginAPIRouter.RegisterAuthUserConnectorRouter(authV1)
+	pluginAPIRouter.RegisterAuthAdminConnectorRouter(adminauthV1)
 
 	_ = plugin.CallAgent(func(agent plugin.Agent) error {
 		agent.RegisterUnAuthRouter(unAuthV1)

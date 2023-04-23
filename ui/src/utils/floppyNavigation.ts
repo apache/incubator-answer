@@ -5,10 +5,10 @@ import Storage from '@/utils/storage';
 import { REDIRECT_PATH_STORAGE_KEY } from '@/common/constants';
 import { getLoginUrl } from '@/utils/userCenter';
 
-const differentCurrent = (target: string, base?: string) => {
+const equalToCurrentHref = (target: string, base?: string) => {
   base ||= window.location.origin;
   const targetUrl = new URL(target, base);
-  return targetUrl.toString() !== window.location.href;
+  return targetUrl.toString() === window.location.href;
 };
 
 const storageLoginRedirect = () => {
@@ -54,7 +54,7 @@ export interface NavigateConfig {
 const navigate = (to: string | number, config: NavigateConfig = {}) => {
   let { handler = 'href' } = config;
   if (to && typeof to === 'string') {
-    if (!differentCurrent(to)) {
+    if (equalToCurrentHref(to)) {
       return;
     }
     /**
@@ -62,7 +62,7 @@ const navigate = (to: string | number, config: NavigateConfig = {}) => {
      * 2. Auto storage login redirect
      */
     if (to === RouteAlias.login || to === getLoginUrl()) {
-      if (!differentCurrent(RouteAlias.login)) {
+      if (equalToCurrentHref(RouteAlias.login)) {
         return;
       }
       storageLoginRedirect();
@@ -133,4 +133,5 @@ export const floppyNavigation = {
   isFullLink,
   isRoutableLink,
   handleRouteLinkClick,
+  equalToCurrentHref,
 };

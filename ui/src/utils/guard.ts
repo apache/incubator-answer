@@ -9,6 +9,7 @@ import {
   themeSettingStore,
   seoSettingStore,
   loginToContinueStore,
+  pageTagStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
 import {
@@ -371,7 +372,12 @@ export const initAppSettingsStore = async () => {
     siteInfoStore
       .getState()
       .updateVersion(appSettings.version, appSettings.revision);
+    siteInfoStore.getState().updateUsers(appSettings.site_users);
     interfaceStore.getState().update(appSettings.interface);
+    pageTagStore.getState().update({
+      title: appSettings.general?.name,
+      description: appSettings.general?.description,
+    });
     brandingStore.getState().update(appSettings.branding);
     loginSettingStore.getState().update(appSettings.login);
     customizeStore.getState().update(appSettings.custom_css_html);
@@ -389,11 +395,8 @@ export const setupApp = async () => {
    * 1. must pre init logged user info for router guard
    * 2. must pre init app settings for app render
    */
-  await Promise.allSettled([
-    pullLoggedUser(),
-    pullUcAgent(),
-    initAppSettingsStore(),
-  ]);
+  await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
+  await Promise.allSettled([pullUcAgent()]);
   setupAppLanguage();
   setupAppTimeZone();
   appInitialized = true;

@@ -312,7 +312,6 @@ export interface HelmetUpdate extends Omit<HelmetBase, 'pageTitle'> {
 export interface AdminSettingsInterface {
   language: string;
   time_zone?: string;
-  default_avatar?: string;
 }
 
 export interface AdminSettingsSmtp {
@@ -327,6 +326,16 @@ export interface AdminSettingsSmtp {
   test_email_recipient?: string;
 }
 
+export interface AdminSettingsUsers {
+  allow_update_avatar: boolean;
+  allow_update_bio: boolean;
+  allow_update_display_name: boolean;
+  allow_update_location: boolean;
+  allow_update_username: boolean;
+  allow_update_website: boolean;
+  default_avatar: string;
+}
+
 export interface SiteSettings {
   branding: AdminSettingBranding;
   general: AdminSettingsGeneral;
@@ -335,6 +344,7 @@ export interface SiteSettings {
   custom_css_html: AdminSettingsCustom;
   theme: AdminSettingsTheme;
   site_seo: AdminSettingsSeo;
+  site_users: AdminSettingsUsers;
   version: string;
   revision: string;
 }
@@ -385,6 +395,7 @@ export interface AdminSettingsCustom {
   custom_head: string;
   custom_header: string;
   custom_footer: string;
+  custom_sidebar: string;
 }
 
 export interface AdminSettingsLogin {
@@ -573,4 +584,9 @@ export interface PluginConfig {
   name: string;
   slug_name: string;
   config_fields: PluginItem[];
+}
+
+export interface QuestionOperationReq {
+  id: string;
+  operation: 'pin' | 'unpin' | 'hide' | 'show';
 }

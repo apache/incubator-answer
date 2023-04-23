@@ -270,6 +270,8 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	question.Status = entity.QuestionStatusAvailable
 	question.RevisionID = "0"
 	question.CreatedAt = now
+	question.Pin = entity.QuestionUnPin
+	question.Show = entity.QuestionShow
 	//question.UpdatedAt = nil
 	err = qs.questionRepo.AddQuestion(ctx, question)
 	if err != nil {
@@ -317,6 +319,58 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, req.QuestionPermission)
 	return
+}
+
+// OperationQuestion
+func (qs *QuestionService) OperationQuestion(ctx context.Context, req *schema.OperationQuestionReq) (err error) {
+	questionInfo, has, err := qs.questionRepo.GetQuestion(ctx, req.ID)
+	if err != nil {
+		return err
+	}
+	if !has {
+		return nil
+	}
+	// Hidden question cannot be placed at the top
+	if questionInfo.Show == entity.QuestionHide && req.Operation == schema.QuestionOperationPin {
+		return nil
+	}
+	// Question cannot be hidden when they are at the top
+	if questionInfo.Pin == entity.QuestionPin && req.Operation == schema.QuestionOperationHide {
+		return nil
+	}
+
+	switch req.Operation {
+	case schema.QuestionOperationHide:
+		questionInfo.Show = entity.QuestionHide
+	case schema.QuestionOperationShow:
+		questionInfo.Show = entity.QuestionShow
+	case schema.QuestionOperationPin:
+		questionInfo.Pin = entity.QuestionPin
+	case schema.QuestionOperationUnPin:
+		questionInfo.Pin = entity.QuestionUnPin
+	}
+
+	err = qs.questionRepo.UpdateQuestionOperation(ctx, questionInfo)
+	if err != nil {
+		return err
+	}
+
+	actMap := make(map[string]constant.ActivityTypeKey)
+	actMap[schema.QuestionOperationPin] = constant.ActQuestionPin
+	actMap[schema.QuestionOperationUnPin] = constant.ActQuestionUnPin
+	actMap[schema.QuestionOperationHide] = constant.ActQuestionHide
+	actMap[schema.QuestionOperationShow] = constant.ActQuestionShow
+	_, ok := actMap[req.Operation]
+	if ok {
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           req.UserID,
+			ObjectID:         questionInfo.ID,
+			OriginalObjectID: questionInfo.ID,
+			ActivityTypeKey:  actMap[req.Operation],
+		})
+	}
+
+	return nil
 }
 
 // RemoveQuestion delete question
@@ -632,6 +686,21 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 	if question.Status == entity.QuestionStatusClosed {
 		per.CanClose = false
 	}
+	if question.Pin == entity.QuestionPin {
+		per.CanPin = false
+		per.CanHide = false
+	}
+	if question.Pin == entity.QuestionUnPin {
+		per.CanUnPin = false
+	}
+	if question.Show == entity.QuestionShow {
+		per.CanShow = false
+	}
+	if question.Show == entity.QuestionHide {
+		per.CanHide = false
+		per.CanPin = false
+	}
+
 	if question.Status == entity.QuestionStatusDeleted {
 		operation := &schema.Operation{}
 		operation.Msg = translator.Tr(handler.GetLangByCtx(ctx), reason.QuestionAlreadyDeleted)
@@ -641,7 +710,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 
 	question.Description = htmltext.FetchExcerpt(question.HTML, "...", 240)
 	question.MemberActions = permission.GetQuestionPermission(ctx, userID, question.UserID,
-		per.CanEdit, per.CanDelete, per.CanClose, per.CanReopen)
+		per.CanEdit, per.CanDelete, per.CanClose, per.CanReopen, per.CanPin, per.CanHide, per.CanUnPin, per.CanShow)
 	return question, nil
 }
 
@@ -735,14 +804,15 @@ func (qs *QuestionService) SearchUserAnswerList(ctx context.Context, userName, o
 		if ok {
 			item.QuestionInfo = questionMaps[item.QuestionID]
 		}
-	}
-	for _, item := range answerlist {
 		info := &schema.UserAnswerInfo{}
 		_ = copier.Copy(info, item)
 		info.AnswerID = item.ID
 		info.QuestionID = item.QuestionID
-		userAnswerlist = append(userAnswerlist, info)
+		if item.QuestionInfo.Status != entity.QuestionStatusDeleted {
+			userAnswerlist = append(userAnswerlist, info)
+		}
 	}
+
 	return userAnswerlist, count, nil
 }
 

@@ -74,4 +74,6 @@ const (
 	AdminCannotUpdateTheirPassword      = "error.admin.cannot_update_their_password"
 	AdminCannotModifySelfStatus         = "error.admin.cannot_modify_self_status"
 	UserExternalLoginUnbindingForbidden = "error.user.external_login_unbinding_forbidden"
+	UserAccessDenied                    = "error.user.access_denied"
+	UserPageAccessDenied                = "error.user.page_access_denied"
 )

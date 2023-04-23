@@ -16,8 +16,8 @@ import {
   loginSettingStore,
   userCenterStore,
 } from '@/stores';
-import { guard, handleFormError } from '@/utils';
-import { login, checkImgCode } from '@/services';
+import { floppyNavigation, guard, handleFormError, userCenter } from '@/utils';
+import { login, checkImgCode, UcAgent } from '@/services';
 import { PicAuthCodeModal } from '@/components/Modal';
 
 const Index: React.FC = () => {
@@ -28,8 +28,12 @@ const Index: React.FC = () => {
   const { user: storeUser, update: updateUser } = loggedUserInfoStore((_) => _);
   const loginSetting = loginSettingStore((state) => state.login);
   const ucAgent = userCenterStore().agent;
-  const ucLoginRedirect =
-    ucAgent?.enabled && ucAgent?.agent_info?.login_redirect_url;
+  let ucAgentInfo: UcAgent['agent_info'] | undefined;
+  if (ucAgent?.enabled && ucAgent?.agent_info) {
+    ucAgentInfo = ucAgent.agent_info;
+  }
+  const canOriginalLogin =
+    !ucAgentInfo || ucAgentInfo.enabled_original_user_system;
 
   const [formData, setFormData] = useState<FormDataType>({
     e_mail: {
@@ -61,7 +65,7 @@ const Index: React.FC = () => {
   };
 
   const getImgCode = () => {
-    if (ucLoginRedirect) {
+    if (!canOriginalLogin) {
       return;
     }
     checkImgCode({
@@ -171,14 +175,13 @@ const Index: React.FC = () => {
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
       <WelcomeTitle />
-      {ucLoginRedirect && step === 1 && (
-        <Col className="mx-auto" md={4}>
-          <PluginUcLogin />
-        </Col>
-      )}
-      {step === 1 && !ucLoginRedirect && (
+      {step === 1 && canOriginalLogin ? (
         <Col className="mx-auto" md={3}>
-          <PluginOauth className="mb-5" />
+          {ucAgentInfo ? (
+            <PluginUcLogin className="mb-5" />
+          ) : (
+            <PluginOauth className="mb-5" />
+          )}
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group controlId="email" className="mb-3">
               <Form.Label>{t('email.label')}</Form.Label>
@@ -243,14 +246,17 @@ const Index: React.FC = () => {
             <div className="text-center mt-5">
               <Trans i18nKey="login.info_sign" ns="translation">
                 Don’t have an account?
-                <Link to="/users/register" tabIndex={2}>
+                <Link
+                  to={userCenter.getSignUpUrl()}
+                  tabIndex={2}
+                  onClick={floppyNavigation.handleRouteLinkClick}>
                   Sign up
                 </Link>
               </Trans>
             </div>
           )}
         </Col>
-      )}
+      ) : null}
 
       {step === 2 && <Unactivate visible={step === 2} />}
 

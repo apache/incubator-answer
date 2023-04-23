@@ -102,8 +102,8 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 
 	// user
 	r.GET("/user/info", a.userController.GetUserInfoByUserID)
-	routerGroup := r.Group("", middleware.BanAPIWhenUserCenterEnabled)
-	r.POST("/user/login/email", a.userController.UserEmailLogin)
+	routerGroup := r.Group("", middleware.BanAPIForUserCenter)
+	routerGroup.POST("/user/login/email", a.userController.UserEmailLogin)
 	routerGroup.POST("/user/register/email", a.userController.UserRegisterByEmail)
 	routerGroup.GET("/user/register/captcha", a.userController.UserRegisterCaptcha)
 	routerGroup.POST("/user/email/verification", a.userController.UserVerifyEmail)
@@ -117,8 +117,8 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// user
 	r.GET("/user/logout", a.userController.UserLogout)
-	r.POST("/user/email/change/code", middleware.BanAPIWhenUserCenterEnabled, a.userController.UserChangeEmailSendCode)
-	r.POST("/user/email/verification/send", middleware.BanAPIWhenUserCenterEnabled, a.userController.UserVerifyEmailSend)
+	r.POST("/user/email/change/code", middleware.BanAPIForUserCenter, a.userController.UserChangeEmailSendCode)
+	r.POST("/user/email/verification/send", middleware.BanAPIForUserCenter, a.userController.UserVerifyEmailSend)
 	r.GET("/personal/user/info", a.userController.GetOtherUserInfoByUsername)
 	r.GET("/user/ranking", a.userController.UserRanking)
 
@@ -195,6 +195,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/question", a.questionController.UpdateQuestion)
 	r.DELETE("/question", a.questionController.RemoveQuestion)
 	r.PUT("/question/status", a.questionController.CloseQuestion)
+	r.PUT("/question/operation", a.questionController.OperationQuestion)
 	r.PUT("/question/reopen", a.questionController.ReopenQuestion)
 	r.GET("/question/similar", a.questionController.SearchByTitleLike)
 
@@ -205,8 +206,8 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.DELETE("/answer", a.answerController.RemoveAnswer)
 
 	// user
-	r.PUT("/user/password", middleware.BanAPIWhenUserCenterEnabled, a.userController.UserModifyPassWord)
-	r.PUT("/user/info", middleware.BanAPIWhenUserCenterEnabled, a.userController.UserUpdateInfo)
+	r.PUT("/user/password", middleware.BanAPIForUserCenter, a.userController.UserModifyPassWord)
+	r.PUT("/user/info", a.userController.UserUpdateInfo)
 	r.PUT("/user/interface", a.userController.UserUpdateInterface)
 	r.POST("/user/notice/set", a.userController.UserNoticeSet)
 
@@ -247,8 +248,8 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.GET("/users/page", a.adminUserController.GetUserPage)
 	r.PUT("/user/status", a.adminUserController.UpdateUserStatus)
 	r.PUT("/user/role", a.adminUserController.UpdateUserRole)
-	r.POST("/user", middleware.BanAPIWhenUserCenterEnabled, a.adminUserController.AddUser)
-	r.PUT("/user/password", middleware.BanAPIWhenUserCenterEnabled, a.adminUserController.UpdateUserPassword)
+	r.POST("/user", middleware.BanAPIForUserCenter, a.adminUserController.AddUser)
+	r.PUT("/user/password", middleware.BanAPIForUserCenter, a.adminUserController.UpdateUserPassword)
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)

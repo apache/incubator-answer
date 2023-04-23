@@ -130,7 +130,7 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 			return
 		}
 		if len(resp.AccessToken) > 0 {
-			ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/oauth?access_token=%s",
+			ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/auth-landing?access_token=%s",
 				siteGeneral.SiteUrl, resp.AccessToken))
 		} else {
 			ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/confirm-email?binding_key=%s",

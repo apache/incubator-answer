@@ -499,7 +499,7 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	}
 
 	accessToken, userCacheInfo, err := us.userCommonService.CacheLoginUserInfo(
-		ctx, userInfo.ID, userInfo.MailStatus, userInfo.Status)
+		ctx, userInfo.ID, userInfo.MailStatus, userInfo.Status, "")
 	if err != nil {
 		return nil, err
 	}

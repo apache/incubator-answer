@@ -14,6 +14,7 @@ import (
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/checker"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/random"
 	"github.com/answerdev/answer/plugin"
 	"github.com/segmentfault/pacman/log"
@@ -58,7 +59,9 @@ func (us *UserCenterLoginService) ExternalLogin(
 		if !checker.EmailInAllowEmailDomain(basicUserInfo.Email, siteInfo.AllowEmailDomains) {
 			log.Debugf("email domain not allowed: %s", basicUserInfo.Email)
 			return &schema.UserExternalLoginResp{
-				ErrMsg: translator.Tr(handler.GetLangByCtx(ctx), reason.EmailIllegalDomainError)}, nil
+				ErrTitle: translator.Tr(handler.GetLangByCtx(ctx), reason.UserAccessDenied),
+				ErrMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.EmailIllegalDomainError),
+			}, nil
 		}
 	}
 
@@ -74,18 +77,24 @@ func (us *UserCenterLoginService) ExternalLogin(
 			return nil, err
 		}
 		if exist {
+			// if user is deleted, do not allow login
+			if oldUserInfo.Status == entity.UserStatusDeleted {
+				return &schema.UserExternalLoginResp{
+					ErrTitle: translator.Tr(handler.GetLangByCtx(ctx), reason.UserAccessDenied),
+					ErrMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.UserPageAccessDenied),
+				}, nil
+			}
 			if err := us.userRepo.UpdateLastLoginDate(ctx, oldUserInfo.ID); err != nil {
 				log.Errorf("update user last login date failed: %v", err)
 			}
 			accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
-				ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status)
+				ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status, oldExternalLoginUserInfo.ExternalID)
 			return &schema.UserExternalLoginResp{AccessToken: accessToken}, err
 		}
 	}
 
 	// cache external user info, waiting for user enter email address.
 	if userCenter.Description().MustAuthEmailEnabled && len(basicUserInfo.Email) == 0 {
-		// TODO: check
 		return &schema.UserExternalLoginResp{ErrMsg: "Requires authorized email to login"}, nil
 	}
 
@@ -97,7 +106,7 @@ func (us *UserCenterLoginService) ExternalLogin(
 	us.activeUser(ctx, oldUserInfo)
 
 	accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
-		ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status)
+		ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status, oldExternalLoginUserInfo.ExternalID)
 	return &schema.UserExternalLoginResp{AccessToken: accessToken}, err
 }
 
@@ -126,7 +135,7 @@ func (us *UserCenterLoginService) registerNewUser(ctx context.Context, provider 
 	userInfo.Status = entity.UserStatusAvailable
 	userInfo.LastLoginDate = time.Now()
 	userInfo.Bio = basicUserInfo.Bio
-	userInfo.BioHTML = basicUserInfo.Bio
+	userInfo.BioHTML = converter.Markdown2HTML(basicUserInfo.Bio)
 	err = us.userRepo.AddUser(ctx, userInfo)
 	if err != nil {
 		return nil, err
@@ -203,7 +212,11 @@ func (us *UserCenterLoginService) UserCenterAdminFunctionAgent(ctx context.Conte
 		return
 	}
 	desc := userCenter.Description()
-	resp.RoleAgentEnabled = desc.RoleAgentEnabled
+	// If user status agent is enabled, admin can not update user status in answer.
+	resp.UserStatusAgentEnabled = desc.UserStatusAgentEnabled
+	// If original user system is enabled, admin can update user password in answer.
+	// So user password agent is disabled.
+	resp.UserPasswordAgentEnabled = !desc.EnabledOriginalUserSystem
 	return resp, nil
 }
 

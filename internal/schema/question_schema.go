@@ -8,9 +8,13 @@ import (
 )
 
 const (
-	SitemapMaxSize      = 50000
-	SitemapCachekey     = "answer@sitemap"
-	SitemapPageCachekey = "answer@sitemap@page%d"
+	SitemapMaxSize         = 50000
+	SitemapCachekey        = "answer@sitemap"
+	SitemapPageCachekey    = "answer@sitemap@page%d"
+	QuestionOperationPin   = "pin"
+	QuestionOperationUnPin = "unpin"
+	QuestionOperationHide  = "hide"
+	QuestionOperationShow  = "show"
 )
 
 // RemoveQuestionReq delete question request
@@ -26,6 +30,14 @@ type CloseQuestionReq struct {
 	CloseType int    `json:"close_type"` // close_type
 	CloseMsg  string `json:"close_msg"`  // close_type
 	UserID    string `json:"-"`          // user_id
+}
+
+type OperationQuestionReq struct {
+	ID        string `validate:"required" json:"id"`
+	Operation string `json:"operation"` // operation [pin unpin hide show]
+	UserID    string `json:"-"`         // user_id
+	CanPin    bool   `json:"-"`
+	CanList   bool   `json:"-"`
 }
 
 type CloseQuestionMeta struct {
@@ -101,6 +113,12 @@ type QuestionPermission struct {
 	CanClose bool `json:"-"`
 	// whether user can reopen it
 	CanReopen bool `json:"-"`
+	// whether user can pin it
+	CanPin   bool `json:"-"`
+	CanUnPin bool `json:"-"`
+	// whether user can hide it
+	CanHide bool `json:"-"`
+	CanShow bool `json:"-"`
 	// whether user can use reserved it
 	CanUseReservedTag bool `json:"-"`
 }
@@ -168,6 +186,8 @@ type QuestionInfo struct {
 	UpdateTime           int64          `json:"-"`                                          // update_time
 	PostUpdateTime       int64          `json:"update_time"`
 	QuestionUpdateTime   int64          `json:"edit_time"`
+	Pin                  int            `json:"pin"`  // 1: unpin, 2: pin
+	Show                 int            `json:"show"` // 0: show, 1: hide
 	Status               int            `json:"status"`
 	Operation            *Operation     `json:"operation,omitempty"`
 	UserID               string         `json:"-" `
@@ -296,6 +316,8 @@ type QuestionPageResp struct {
 	Title       string     `json:"title"`
 	UrlTitle    string     `json:"url_title"`
 	Description string     `json:"description"`
+	Pin         int        `json:"pin"`  // 1: unpin, 2: pin
+	Show        int        `json:"show"` // 0: show, 1: hide
 	Status      int        `json:"status"`
 	Tags        []*TagResp `json:"tags"`
 

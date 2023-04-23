@@ -278,3 +278,7 @@ export const markdownToHtml = (content: string) => {
 export const saveQuestionWidthAnaser = (params: Type.QuestionWithAnswer) => {
   return request.post('/answer/api/v1/question/answer', params);
 };
+
+export const questionOpetation = (params: Type.QuestionOperationReq) => {
+  return request.put('/answer/api/v1/question/operation', params);
+};

@@ -8,6 +8,12 @@ export const CAPTCHA_CODE_STORAGE_KEY = '_a_captcha_';
 export const DRAFT_QUESTION_STORAGE_KEY = '_a_dq_';
 export const DRAFT_ANSWER_STORAGE_KEY = '_a_da_';
 export const DRAFT_TIMESIGH_STORAGE_KEY = '|_a_t_s_|';
+export const USER_AGENT_NAMES = {
+  SegmentFault: 'SegmentFault',
+  WeChat: 'WeChat',
+  WeCom: 'WeCom',
+  DingTalk: 'DingTalk',
+};
 
 export const IGNORE_PATH_LIST = [
   '/users/login',
@@ -74,7 +80,8 @@ export const ADMIN_NAV_MENUS = [
         name: 'themes',
       },
       {
-        name: 'css-html',
+        name: 'css_html',
+        path: 'css-html',
       },
     ],
   },
@@ -89,6 +96,8 @@ export const ADMIN_NAV_MENUS = [
       { name: 'write' },
       { name: 'seo' },
       { name: 'login' },
+      { name: 'users', path: 'settings-users' },
+      { name: 'privileges' },
     ],
   },
   {
@@ -96,6 +105,7 @@ export const ADMIN_NAV_MENUS = [
     children: [
       {
         name: 'installed_plugins',
+        path: 'installed-plugins',
       },
     ],
   },
@@ -599,6 +609,10 @@ export const TIMELINE_NORMAL_ACTIVITY_TYPE = [
   'upvote',
   'reopened',
   'closed',
+  'pin',
+  'unpin',
+  'show',
+  'hide',
 ];
 
 export const SYSTEM_AVATAR_OPTIONS = [

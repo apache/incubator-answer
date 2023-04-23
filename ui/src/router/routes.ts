@@ -240,8 +240,8 @@ const routes: RouteNode[] = [
         page: 'pages/Users/OauthBindEmail',
       },
       {
-        path: '/users/oauth',
-        page: 'pages/Users/OauthCallback',
+        path: '/users/auth-landing',
+        page: 'pages/Users/AuthCallback',
       },
       {
         path: '/posts/:qid/timeline',
@@ -345,7 +345,15 @@ const routes: RouteNode[] = [
             page: 'pages/Admin/Login',
           },
           {
-            path: 'installed_plugins',
+            path: 'settings-users',
+            page: 'pages/Admin/SettingsUsers',
+          },
+          {
+            path: 'privileges',
+            page: 'pages/Admin/Privileges',
+          },
+          {
+            path: 'installed-plugins',
             page: 'pages/Admin/Plugins/Installed',
           },
           {
@@ -353,6 +361,18 @@ const routes: RouteNode[] = [
             page: 'pages/Admin/Plugins/Config',
           },
         ],
+      },
+      {
+        path: '/user-center/auth',
+        page: 'pages/UserCenter/Auth',
+        guard: () => {
+          const notLogged = guard.notLogged();
+          return notLogged;
+        },
+      },
+      {
+        path: '/user-center/auth-failed',
+        page: 'pages/UserCenter/AuthFailed',
       },
       // for review
       {

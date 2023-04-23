@@ -1128,6 +1128,16 @@ definitions:
         description: inbox achievement
         type: string
     type: object
+  schema.OperationQuestionReq:
+    properties:
+      id:
+        type: string
+      operation:
+        description: operation [pin unpin hide show]
+        type: string
+    required:
+    - id
+    type: object
   schema.PermissionMemberAction:
     properties:
       action:
@@ -1252,6 +1262,12 @@ definitions:
         type: string
       operator:
         $ref: '#/definitions/schema.QuestionPageRespOperator'
+      pin:
+        description: '1: unpin, 2: pin'
+        type: integer
+      show:
+        description: '0: show, 1: hide'
+        type: integer
       status:
         type: integer
       tags:
@@ -1466,9 +1482,6 @@ definitions:
       custom_header:
         maxLength: 65536
         type: string
-      custom_sidebar:
-        maxLength: 65536
-        type: string
     type: object
   schema.SiteCustomCssHTMLResp:
     properties:
@@ -1482,9 +1495,6 @@ definitions:
         maxLength: 65536
         type: string
       custom_header:
-        maxLength: 65536
-        type: string
-      custom_sidebar:
         maxLength: 65536
         type: string
     type: object
@@ -1557,11 +1567,6 @@ definitions:
     type: object
   schema.SiteInterfaceReq:
     properties:
-      default_avatar:
-        enum:
-        - system
-        - gravatar
-        type: string
       language:
         maxLength: 128
         type: string
@@ -1569,17 +1574,11 @@ definitions:
         maxLength: 128
         type: string
     required:
-    - default_avatar
     - language
     - time_zone
     type: object
   schema.SiteInterfaceResp:
     properties:
-      default_avatar:
-        enum:
-        - system
-        - gravatar
-        type: string
       language:
         maxLength: 128
         type: string
@@ -1587,7 +1586,6 @@ definitions:
         maxLength: 128
         type: string
     required:
-    - default_avatar
     - language
     - time_zone
     type: object
@@ -4424,6 +4422,30 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: get question details
+      tags:
+      - Question
+  /answer/api/v1/question/operation:
+    put:
+      consumes:
+      - application/json
+      description: Operation question \n operation [pin unpin hide show]
+      parameters:
+      - description: question
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.OperationQuestionReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: Operation question
       tags:
       - Question
   /answer/api/v1/question/page:

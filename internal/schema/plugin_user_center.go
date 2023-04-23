@@ -6,12 +6,14 @@ type UserCenterAgentResp struct {
 }
 
 type AgentInfo struct {
-	Name               string           `json:"name"`
-	Icon               string           `json:"icon"`
-	Url                string           `json:"url"`
-	LoginRedirectURL   string           `json:"login_redirect_url"`
-	SignUpRedirectURL  string           `json:"sign_up_redirect_url"`
-	ControlCenterItems []*ControlCenter `json:"control_center"`
+	Name                      string           `json:"name"`
+	DisplayName               string           `json:"display_name"`
+	Icon                      string           `json:"icon"`
+	Url                       string           `json:"url"`
+	LoginRedirectURL          string           `json:"login_redirect_url"`
+	SignUpRedirectURL         string           `json:"sign_up_redirect_url"`
+	ControlCenterItems        []*ControlCenter `json:"control_center"`
+	EnabledOriginalUserSystem bool             `json:"enabled_original_user_system"`
 }
 
 type ControlCenter struct {

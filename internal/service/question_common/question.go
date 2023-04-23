@@ -36,6 +36,7 @@ type QuestionRepo interface {
 		questionList []*entity.Question, total int64, err error)
 	UpdateQuestionStatus(ctx context.Context, question *entity.Question) (err error)
 	UpdateQuestionStatusWithOutUpdateTime(ctx context.Context, question *entity.Question) (err error)
+	UpdateQuestionOperation(ctx context.Context, question *entity.Question) (err error)
 	SearchByTitleLike(ctx context.Context, title string) (questionList []*entity.Question, err error)
 	UpdatePvCount(ctx context.Context, questionID string) (err error)
 	UpdateAnswerCount(ctx context.Context, questionID string, num int) (err error)
@@ -271,6 +272,8 @@ func (qs *QuestionCommon) FormatQuestionsPage(
 			FollowCount:      questionInfo.FollowCount,
 			AcceptedAnswerID: questionInfo.AcceptedAnswerID,
 			LastAnswerID:     questionInfo.LastAnswerID,
+			Pin:              questionInfo.Pin,
+			Show:             questionInfo.Show,
 		}
 
 		questionIDs = append(questionIDs, questionInfo.ID)
@@ -526,6 +529,8 @@ func (qs *QuestionCommon) ShowFormat(ctx context.Context, data *entity.Question)
 		info.QuestionUpdateTime = 0
 	}
 	info.Status = data.Status
+	info.Pin = data.Pin
+	info.Show = data.Show
 	info.UserID = data.UserID
 	info.LastEditUserID = data.LastEditUserID
 	if data.LastAnswerID != "0" {

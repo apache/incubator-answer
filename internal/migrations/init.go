@@ -179,6 +179,25 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 	if err != nil {
 		return err
 	}
+
+	usersData := map[string]any{
+		"default_avatar":            "gravatar",
+		"allow_update_display_name": true,
+		"allow_update_username":     true,
+		"allow_update_avatar":       true,
+		"allow_update_bio":          true,
+		"allow_update_website":      true,
+		"allow_update_location":     true,
+	}
+	usersDataBytes, _ := json.Marshal(usersData)
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "users",
+		Content: string(usersDataBytes),
+		Status:  1,
+	})
+	if err != nil {
+		return err
+	}
 	return err
 }
 
@@ -272,7 +291,7 @@ func initConfigTable(engine *xorm.Engine) error {
 		{ID: 41, Key: "rank.answer.add", Value: `1`},
 		{ID: 42, Key: "rank.answer.edit", Value: `200`},
 		{ID: 43, Key: "rank.answer.delete", Value: `-1`},
-		{ID: 44, Key: "rank.answer.accept", Value: `1`},
+		{ID: 44, Key: "rank.answer.accept", Value: `-1`},
 		{ID: 45, Key: "rank.answer.vote_up", Value: `15`},
 		{ID: 46, Key: "rank.answer.vote_down", Value: `125`},
 		{ID: 47, Key: "rank.comment.add", Value: `1`},
@@ -347,6 +366,10 @@ func initConfigTable(engine *xorm.Engine) error {
 		{ID: 116, Key: "rank.question.reopen", Value: `-1`},
 		{ID: 117, Key: "rank.tag.use_reserved_tag", Value: `-1`},
 		{ID: 118, Key: "plugin.status", Value: `{}`},
+		{ID: 119, Key: "question.pin", Value: `-1`},
+		{ID: 120, Key: "question.unpin", Value: `-1`},
+		{ID: 121, Key: "question.show", Value: `-1`},
+		{ID: 122, Key: "question.hide", Value: `-1`},
 	}
 	_, err := engine.Insert(defaultConfigTable)
 	return err
@@ -397,6 +420,10 @@ func initRolePower(engine *xorm.Engine) (err error) {
 		{ID: 31, Name: "answer audit", PowerType: permission.AnswerAudit, Description: "answer audit"},
 		{ID: 32, Name: "question audit", PowerType: permission.QuestionAudit, Description: "question audit"},
 		{ID: 33, Name: "tag audit", PowerType: permission.TagAudit, Description: "tag audit"},
+		{ID: 34, Name: "question pin", PowerType: permission.QuestionPin, Description: "top the question"},
+		{ID: 35, Name: "question hide", PowerType: permission.QuestionHide, Description: "hide  the question"},
+		{ID: 36, Name: "question unpin", PowerType: permission.QuestionUnPin, Description: "untop the question"},
+		{ID: 37, Name: "question show", PowerType: permission.QuestionShow, Description: "show the question"},
 	}
 	_, err = engine.Insert(powers)
 	if err != nil {
@@ -438,6 +465,10 @@ func initRolePower(engine *xorm.Engine) (err error) {
 		{RoleID: 2, PowerType: permission.QuestionAudit},
 		{RoleID: 2, PowerType: permission.TagAudit},
 		{RoleID: 2, PowerType: permission.TagUseReservedTag},
+		{RoleID: 2, PowerType: permission.QuestionPin},
+		{RoleID: 2, PowerType: permission.QuestionHide},
+		{RoleID: 2, PowerType: permission.QuestionUnPin},
+		{RoleID: 2, PowerType: permission.QuestionShow},
 
 		{RoleID: 3, PowerType: permission.QuestionAdd},
 		{RoleID: 3, PowerType: permission.QuestionEdit},
@@ -472,6 +503,10 @@ func initRolePower(engine *xorm.Engine) (err error) {
 		{RoleID: 3, PowerType: permission.QuestionAudit},
 		{RoleID: 3, PowerType: permission.TagAudit},
 		{RoleID: 3, PowerType: permission.TagUseReservedTag},
+		{RoleID: 3, PowerType: permission.QuestionPin},
+		{RoleID: 3, PowerType: permission.QuestionHide},
+		{RoleID: 3, PowerType: permission.QuestionUnPin},
+		{RoleID: 3, PowerType: permission.QuestionShow},
 	}
 	_, err = engine.Insert(rolePowerRels)
 	if err != nil {

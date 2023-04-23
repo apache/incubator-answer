@@ -3654,6 +3654,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/question/operation": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "Operation question \\n operation [pin unpin hide show]",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Question"
+                ],
+                "summary": "Operation question",
+                "parameters": [
+                    {
+                        "description": "question",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.OperationQuestionReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/question/page": {
             "get": {
                 "description": "get questions by page",
@@ -7442,6 +7481,21 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.OperationQuestionReq": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "operation": {
+                    "description": "operation [pin unpin hide show]",
+                    "type": "string"
+                }
+            }
+        },
         "schema.PermissionMemberAction": {
             "type": "object",
             "properties": {
@@ -7614,6 +7668,14 @@ const docTemplate = `{
                 },
                 "operator": {
                     "$ref": "#/definitions/schema.QuestionPageRespOperator"
+                },
+                "pin": {
+                    "description": "1: unpin, 2: pin",
+                    "type": "integer"
+                },
+                "show": {
+                    "description": "0: show, 1: hide",
+                    "type": "integer"
                 },
                 "status": {
                     "type": "integer"
@@ -7923,10 +7985,6 @@ const docTemplate = `{
                 "custom_header": {
                     "type": "string",
                     "maxLength": 65536
-                },
-                "custom_sidebar": {
-                    "type": "string",
-                    "maxLength": 65536
                 }
             }
         },
@@ -7946,10 +8004,6 @@ const docTemplate = `{
                     "maxLength": 65536
                 },
                 "custom_header": {
-                    "type": "string",
-                    "maxLength": 65536
-                },
-                "custom_sidebar": {
                     "type": "string",
                     "maxLength": 65536
                 }
@@ -8053,18 +8107,10 @@ const docTemplate = `{
         "schema.SiteInterfaceReq": {
             "type": "object",
             "required": [
-                "default_avatar",
                 "language",
                 "time_zone"
             ],
             "properties": {
-                "default_avatar": {
-                    "type": "string",
-                    "enum": [
-                        "system",
-                        "gravatar"
-                    ]
-                },
                 "language": {
                     "type": "string",
                     "maxLength": 128
@@ -8078,18 +8124,10 @@ const docTemplate = `{
         "schema.SiteInterfaceResp": {
             "type": "object",
             "required": [
-                "default_avatar",
                 "language",
                 "time_zone"
             ],
             "properties": {
-                "default_avatar": {
-                    "type": "string",
-                    "enum": [
-                        "system",
-                        "gravatar"
-                    ]
-                },
                 "language": {
                     "type": "string",
                     "maxLength": 128

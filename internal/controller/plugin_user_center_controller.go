@@ -3,8 +3,6 @@ package controller
 import (
 	"fmt"
 	"net/http"
-	"net/url"
-	"strings"
 
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
@@ -62,9 +60,11 @@ func (uc *UserCenterController) UserCenterAgent(ctx *gin.Context) {
 	_ = plugin.CallUserCenter(func(uc plugin.UserCenter) error {
 		info := uc.Description()
 		resp.AgentInfo.Name = info.Name
+		resp.AgentInfo.DisplayName = info.DisplayName.Translate(ctx)
 		resp.AgentInfo.Icon = info.Icon
 		resp.AgentInfo.Url = info.Url
 		resp.AgentInfo.ControlCenterItems = make([]*schema.ControlCenter, 0)
+		resp.AgentInfo.EnabledOriginalUserSystem = info.EnabledOriginalUserSystem
 		items := uc.ControlCenterItems()
 		for _, item := range items {
 			resp.AgentInfo.ControlCenterItems = append(resp.AgentInfo.ControlCenterItems, &schema.ControlCenter{
@@ -126,7 +126,9 @@ func (uc *UserCenterController) UserCenterLoginCallback(ctx *gin.Context) {
 	userInfo, err := userCenter.LoginCallback(ctx)
 	if err != nil {
 		log.Error(err)
-		ctx.Redirect(http.StatusFound, "/50x")
+		if !ctx.IsAborted() {
+			ctx.Redirect(http.StatusFound, "/50x")
+		}
 		return
 	}
 
@@ -137,11 +139,11 @@ func (uc *UserCenterController) UserCenterLoginCallback(ctx *gin.Context) {
 		return
 	}
 	if len(resp.ErrMsg) > 0 {
-		ctx.String(http.StatusOK, resp.ErrMsg)
+		ctx.Redirect(http.StatusFound, fmt.Sprintf("/50x?title=%s&msg=%s", resp.ErrTitle, resp.ErrMsg))
 		return
 	}
 	userCenter.AfterLogin(userInfo.ExternalID, resp.AccessToken)
-	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/oauth?access_token=%s",
+	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/auth-landing?access_token=%s",
 		siteGeneral.SiteUrl, resp.AccessToken))
 }
 
@@ -172,11 +174,11 @@ func (uc *UserCenterController) UserCenterSignUpCallback(ctx *gin.Context) {
 		return
 	}
 	if len(resp.ErrMsg) > 0 {
-		ctx.String(http.StatusOK, resp.ErrMsg)
+		ctx.Redirect(http.StatusFound, fmt.Sprintf("/50x?title=%s&msg=%s", resp.ErrTitle, resp.ErrMsg))
 		return
 	}
 	userCenter.AfterLogin(userInfo.ExternalID, resp.AccessToken)
-	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/oauth?access_token=%s",
+	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/auth-landing?access_token=%s",
 		siteGeneral.SiteUrl, resp.AccessToken))
 }
 
@@ -191,18 +193,4 @@ func (uc *UserCenterController) UserCenterUserSettings(ctx *gin.Context) {
 func (uc *UserCenterController) UserCenterAdminFunctionAgent(ctx *gin.Context) {
 	resp, err := uc.userCenterLoginService.UserCenterAdminFunctionAgent(ctx)
 	handler.HandleResponse(ctx, err, resp)
-}
-
-func (uc *UserCenterController) formatRedirectURL(ctx *gin.Context, redirectURL string) string {
-	if !strings.Contains(redirectURL, "CALLBACK_URL") {
-		return redirectURL
-	}
-	general, err := uc.siteInfoService.GetSiteGeneral(ctx)
-	if err != nil {
-		log.Error(err)
-		ctx.Redirect(http.StatusFound, "/50x")
-		return ""
-	}
-	callbackURL := fmt.Sprintf("%s%s%s", general.SiteUrl, commonRouterPrefix, "/user-center/login/callback")
-	return strings.ReplaceAll(redirectURL, "CALLBACK_URL", url.QueryEscape(callbackURL))
 }

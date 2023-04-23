@@ -22,6 +22,14 @@ backend:
       other: Close
     reopen:
       other: Reopen
+    pin:
+      other: Pin
+    hide:
+      other: Unlist
+    unpin:
+      other: Unpin
+    show:
+      other: List
   role:
     name:
       user:
@@ -759,6 +767,7 @@ ui:
     btn: Ajouter une question
     answers: réponses
   question_detail:
+    action: Action
     Asked: Demandé
     asked: demandé
     update: Modifié
@@ -800,7 +809,10 @@ ui:
       confirm_btn: Reopen
       title: Rouvrir ce message
       content: Êtes-vous sûr de vouloir rouvrir ?
-      success: Ce message a été rouvert
+    pin:
+      title: Pin this post
+      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
+      confirm_btn: Pin
   delete:
     title: Supprimer la publication
     question: >-
@@ -808,7 +820,6 @@ ui:
     answer_accepted: >-
       <p>Nous ne recommandons pas <strong>de supprimer la réponse acceptée</strong> car cela prive les futurs lecteurs de cette connaissance. </p> La suppression répétée des réponses acceptées peut empêcher votre compte de répondre. Êtes-vous sûr de vouloir supprimer ?
     other: Êtes-vous sûr de vouloir supprimer ?
-    tip_question_deleted: Ce message a été supprimé
     tip_answer_deleted: Cette réponse a été supprimée
   btns:
     confirm: Confimer
@@ -824,6 +835,7 @@ ui:
     reject: Rejeter
     skip: Ignorer
     discard_draft: Abandonner le brouillon
+    pinned: Pinned
   search:
     title: Résultats de la recherche
     keywords: Mots-clés
@@ -1385,6 +1397,10 @@ ui:
     closed: fermé
     reopened: réouvert
     created: créé
+    pin: pinned
+    unpin: unpinned
+    show: listed
+    hide: unlisted
     title: "Historique de"
     tag_title: "Chronologie de"
     show_votes: "Afficher les votes"
@@ -1411,4 +1427,8 @@ ui:
     discard_confirm: Êtes-vous sûr de vouloir abandonner ce brouillon ?
   messages:
     post_deleted: Ce message a été supprimé.
-
+    post_pin: This post has been pinned.
+    post_unpin: This post has been unpinned.
+    post_hide_list: This post has been hidden from list.
+    post_show_list: This post has been shown to list.
+    post_reopen: This post has been reopened.

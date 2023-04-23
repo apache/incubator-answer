@@ -6,4 +6,5 @@ type UserCacheInfo struct {
 	UserStatus  int    `json:"user_status"`
 	EmailStatus int    `json:"email_status"`
 	RoleID      int    `json:"role_id"`
+	ExternalID  string `json:"external_id"`
 }

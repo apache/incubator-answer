@@ -56,10 +56,17 @@ func (g *GetPluginConfigResp) SetConfigFields(ctx *gin.Context, fields []plugin.
 			UIOptions: ConfigFieldUIOptions{
 				Rows:      field.UIOptions.Rows,
 				InputType: string(field.UIOptions.InputType),
+				Variant:   field.UIOptions.Variant,
 			},
 		}
 		configField.UIOptions.Placeholder = field.UIOptions.Placeholder.Translate(ctx)
 		configField.UIOptions.Label = field.UIOptions.Label.Translate(ctx)
+		configField.UIOptions.Text = field.UIOptions.Text.Translate(ctx)
+		if field.UIOptions.Action != nil {
+			configField.UIOptions.Action = &ConfigFieldUIOptionAction{
+				Url: field.UIOptions.Action.Url,
+			}
+		}
 
 		for _, option := range field.Options {
 			configField.Options = append(configField.Options, ConfigFieldOption{
@@ -83,15 +90,22 @@ type ConfigField struct {
 }
 
 type ConfigFieldUIOptions struct {
-	Placeholder string `json:"placeholder,omitempty"`
-	Rows        string `json:"rows,omitempty"`
-	InputType   string `json:"input_type,omitempty"`
-	Label       string `json:"label,omitempty"`
+	Placeholder string                     `json:"placeholder,omitempty"`
+	Rows        string                     `json:"rows,omitempty"`
+	InputType   string                     `json:"input_type,omitempty"`
+	Label       string                     `json:"label,omitempty"`
+	Action      *ConfigFieldUIOptionAction `json:"action,omitempty"`
+	Variant     string                     `json:"variant,omitempty"`
+	Text        string                     `json:"text,omitempty"`
 }
 
 type ConfigFieldOption struct {
 	Label string `json:"label"`
 	Value string `json:"value"`
+}
+
+type ConfigFieldUIOptionAction struct {
+	Url string `json:"url"`
 }
 
 type UpdatePluginConfigReq struct {

@@ -290,8 +290,7 @@ func decorateByUserCenterUser(original *entity.User, ucUser *plugin.UserCenterBa
 		original.Mobile = ucUser.Mobile
 	}
 	if len(ucUser.Bio) > 0 {
-		original.Bio = ucUser.Bio
-		original.BioHTML = converter.Markdown2HTML(ucUser.Bio)
+		original.BioHTML = converter.Markdown2HTML(ucUser.Bio) + original.BioHTML
 	}
 
 	// If plugin enable rank agent, use rank from user center.

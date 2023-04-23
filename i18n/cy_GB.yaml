@@ -22,6 +22,14 @@ backend:
       other: Close
     reopen:
       other: Reopen
+    pin:
+      other: Pin
+    hide:
+      other: Unlist
+    unpin:
+      other: Unpin
+    show:
+      other: List
   role:
     name:
       user:
@@ -29,7 +37,7 @@ backend:
       admin:
         other: Gweinyddwr
       moderator:
-        other: Aroglygydd
+        other: Cymedrolwr
     description:
       user:
         other: Diofyn heb unrhyw fynediad arbennig.
@@ -53,7 +61,7 @@ backend:
         other: Nid yw e-bost a chyfrinair yn cyfateb.
     answer:
       not_found:
-        other: Ateb heb ei ddarganfod.
+        other: Ni cheir yr ateb.
       cannot_deleted:
         other: Dim caniatâd i ddileu.
       cannot_update:
@@ -119,7 +127,7 @@ backend:
         other: Heb ganfod yr adroddiad.
     tag:
       already_exist:
-        other: Tag yn bodoli eisoes.
+        other: Mae tag eisoes yn bodoli.
       not_found:
         other: Tag heb ei ddarganfod.
       recommend_tag_not_found:
@@ -158,7 +166,7 @@ backend:
       username_duplicate:
         other: Cymerwyd yr enw defnyddiwr eisoes.
       set_avatar:
-        other: Methodd gwneud avatar.
+        other: Methodd set avatar.
       cannot_update_your_role:
         other: Ni allwch addasu eich rôl.
       not_allowed_registration:
@@ -176,7 +184,7 @@ backend:
         other: Methu creu'r ffeil config.yaml.
     upload:
       unsupported_file_format:
-        other: Fformat ffeil anghydnaws.
+        other: Fformat ffeil heb ei gefnogi.
   report:
     spam:
       name:
@@ -200,7 +208,7 @@ backend:
         other: Postiwyd hwn fel ateb, ond nid yw'n ceisio ateb y cwestiwn. Mae'n bosibl y dylai fod yn olygiad, yn sylwad, yn gwestiwn arall, neu'n cael ei ddileu yn gyfan gwbl.
     not_need:
       name:
-        other: nad oes ei angen yn pellach
+        other: nad oes ei angen mwyach
       desc:
         other: Mae'r sylw hwn yn hen ffasiwn, yn sgyrsiol neu ddim yn berthnasol i'r post hwn.
     other:
@@ -268,7 +276,7 @@ ui:
   how_to_format:
     title: Sut i Fformatio
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">i wneud cysylltiadau</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">rhoi toriad llinell rhwng paragraffau</p></li><li><p class="mb-2"><em>_italig_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">cod mewnoliad gan 4 bylchau</p></li><li><p class="mb-2">dyfyniad trwy osod <code>&gt;</code> ar ddechrau'r llinell</p></li><li><p class="mb-2">backtic yn dianc<code>`fel_hyn_`</code></p></li><li><p class="mb-2">creu ffensys cod gyda backticks <code>`</code></p><pre class="mb-0"><code>```<br/>cod yma<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">i wneud cysylltiadau</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title]( https://url.com)</code></pre></li><li><p class="mb-2">rhoi dychweliadau rhwng paragraffau</p></li><li><p class="mb-2"><em>_italic_</em> neu **<strong>beiddgar</strong>**</p></li><li><p class="mb-2">cod mewnoliad gan 4 bwlch</p></li><li><p class="mb-2">dyfyniad drwy osod <code>&gt;</code> ar ddechrau'r llinell</p></li><li><p class="mb-2">backtick yn dianc o <code>`like _this_`</code></p></li><li><p class="mb-2">creu ffensys cod gyda thic wrth gefn <code>`</code></p><pre class="mb-0"><code>```<br/>cod yma<br/>```</code></pre></li></ul>
   pagination:
     prev: Cynt
     next: Nesaf
@@ -277,7 +285,7 @@ ui:
     questions: Cwestiynau
     tag: Tag
     tags: Tagiau
-    tag_wiki: wici tag
+    tag_wiki: tag wiki
     create_tag: Creu Tag
     edit_tag: Golygu Tag
     ask_a_question: Ychwanegu Cwestiwn
@@ -312,7 +320,7 @@ ui:
     title: Mae'ch Cyfrif wedi'i Atal
     until_time: "Cafodd eich cyfrif ei atal tan {{ time }}."
     forever: Cafodd y defnyddiwr hwn ei atal am byth.
-    end: Nid ydych yn bodloni canllaw cymunedol.
+    end: Nid ydych yn arwain cymunedol.
   editor:
     blockquote:
       text: Dyfyniad
@@ -359,7 +367,7 @@ ui:
     help:
       text: Cymorth
     hr:
-      text: Llinell lorweddol
+      text: Rheol Llorweddol
     image:
       text: Delwedd
       add_image: Ychwanegu delwedd
@@ -759,6 +767,7 @@ ui:
     btn: Add question
     answers: answers
   question_detail:
+    action: Action
     Asked: Asked
     asked: asked
     update: Modified
@@ -800,7 +809,10 @@ ui:
       confirm_btn: Reopen
       title: Reopen this post
       content: Are you sure you want to reopen?
-      success: This post has been reopened
+    pin:
+      title: Pin this post
+      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
+      confirm_btn: Pin
   delete:
     title: Delete this post
     question: >-
@@ -808,7 +820,6 @@ ui:
     answer_accepted: >-
       <p>We do not recommend <strong>deleting accepted answer</strong> because doing so deprives future readers of this knowledge. </p> Repeated deletion of accepted answers can result in your account being blocked from answering. Are you sure you wish to delete?
     other: Are you sure you wish to delete?
-    tip_question_deleted: This post has been deleted
     tip_answer_deleted: This answer has been deleted
   btns:
     confirm: Confirm
@@ -824,6 +835,7 @@ ui:
     reject: Reject
     skip: Skip
     discard_draft: Discard draft
+    pinned: Pinned
   search:
     title: Search Results
     keywords: Keywords
@@ -1385,6 +1397,10 @@ ui:
     closed: closed
     reopened: reopened
     created: created
+    pin: pinned
+    unpin: unpinned
+    show: listed
+    hide: unlisted
     title: "History for"
     tag_title: "Timeline for"
     show_votes: "Show votes"
@@ -1411,4 +1427,8 @@ ui:
     discard_confirm: Are you sure you want to discard your draft?
   messages:
     post_deleted: This post has been deleted.
-
+    post_pin: This post has been pinned.
+    post_unpin: This post has been unpinned.
+    post_hide_list: This post has been hidden from list.
+    post_show_list: This post has been shown to list.
+    post_reopen: This post has been reopened.

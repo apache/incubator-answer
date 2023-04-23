@@ -1,31 +1,18 @@
 package migrations
 
 import (
-	"encoding/json"
 	"fmt"
 
-	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/schema"
+	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
 )
 
-func addLoginLimitations(x *xorm.Engine) error {
-	loginSiteInfo := &entity.SiteInfo{
-		Type: constant.SiteTypeLogin,
-	}
-	exist, err := x.Get(loginSiteInfo)
-	if err != nil {
-		return fmt.Errorf("get config failed: %w", err)
-	}
-	if exist {
-		content := &schema.SiteLoginReq{}
-		_ = json.Unmarshal([]byte(loginSiteInfo.Content), content)
-		content.AllowEmailRegistrations = true
-		_, err = x.ID(loginSiteInfo.ID).Cols("content").Update(loginSiteInfo)
-		if err != nil {
-			return fmt.Errorf("update site info failed: %w", err)
-		}
+func updateAcceptAnswerRank(x *xorm.Engine) error {
+	c := &entity.Config{ID: 44, Key: "rank.answer.accept", Value: `-1`}
+	if _, err := x.Update(c, &entity.Config{ID: 44, Key: "rank.answer.accept"}); err != nil {
+		log.Errorf("update %+v config failed: %s", c, err)
+		return fmt.Errorf("update config failed: %w", err)
 	}
 	return nil
 }

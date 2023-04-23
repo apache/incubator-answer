@@ -5,10 +5,15 @@ import { Trans, useTranslation } from 'react-i18next';
 import MD5 from 'md5';
 
 import type { FormDataType } from '@/common/interface';
-import { UploadImg, Avatar, Icon } from '@/components';
-import { loggedUserInfoStore, userCenterStore } from '@/stores';
+import { UploadImg, Avatar, Icon, ImgViewer } from '@/components';
+import { loggedUserInfoStore, userCenterStore, siteInfoStore } from '@/stores';
 import { useToast } from '@/hooks';
-import { modifyUserInfo, getLoggedUserInfo, getUcSettings } from '@/services';
+import {
+  modifyUserInfo,
+  getLoggedUserInfo,
+  getUcSettings,
+  UcSettingAgent,
+} from '@/services';
 import { handleFormError } from '@/utils';
 
 const Index: React.FC = () => {
@@ -18,10 +23,10 @@ const Index: React.FC = () => {
   const toast = useToast();
   const { user, update } = loggedUserInfoStore();
   const { agent: ucAgent } = userCenterStore();
+  const { users: usersSetting } = siteInfoStore();
   const [mailHash, setMailHash] = useState('');
   const [count] = useState(0);
-  const [profileAgent, setProfileAgent] = useState('');
-
+  const [profileAgent, setProfileAgent] = useState<UcSettingAgent>();
   const [formData, setFormData] = useState<FormDataType>({
     display_name: {
       value: '',
@@ -248,11 +253,9 @@ const Index: React.FC = () => {
   const initData = () => {
     if (ucAgent?.enabled) {
       getUcSettings().then((resp) => {
-        if (
-          resp.profile_setting_agent?.enabled &&
-          resp.profile_setting_agent?.redirect_url
-        ) {
-          setProfileAgent(resp.profile_setting_agent.redirect_url);
+        setProfileAgent(resp.profile_setting_agent);
+        if (resp.profile_setting_agent?.enabled === false) {
+          getProfile();
         }
       });
     } else {
@@ -266,16 +269,19 @@ const Index: React.FC = () => {
   return (
     <>
       <h3 className="mb-4">{t('heading')}</h3>
-      {profileAgent ? (
-        <a href={profileAgent}>{t('goto_modify', { keyPrefix: 'settings' })}</a>
+      {profileAgent?.enabled && profileAgent?.redirect_url ? (
+        <a href={profileAgent.redirect_url}>
+          {t('goto_modify', { keyPrefix: 'settings' })}
+        </a>
       ) : null}
-      {!ucAgent?.enabled ? (
+      {!ucAgent?.enabled || profileAgent?.enabled === false ? (
         <Form noValidate onSubmit={handleSubmit}>
           <Form.Group controlId="displayName" className="mb-3">
             <Form.Label>{t('display_name.label')}</Form.Label>
             <Form.Control
               required
               type="text"
+              disabled={!usersSetting.allow_update_display_name}
               value={formData.display_name.value}
               isInvalid={formData.display_name.isInvalid}
               onChange={(e) =>
@@ -298,6 +304,7 @@ const Index: React.FC = () => {
             <Form.Control
               required
               type="text"
+              disabled={!usersSetting.allow_update_username}
               value={formData.username.value}
               isInvalid={formData.username.isInvalid}
               onChange={(e) =>
@@ -316,11 +323,12 @@ const Index: React.FC = () => {
             </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Group className="mb-3">
+          <Form.Group controlId="avatar" className="mb-3">
             <Form.Label>{t('avatar.label')}</Form.Label>
             <div className="mb-3">
               <Form.Select
                 name="avatar.type"
+                disabled={!usersSetting.allow_update_avatar}
                 value={formData.avatar.type}
                 onChange={handleAvatarChange}>
                 <option value="gravatar" key="gravatar">
@@ -334,62 +342,68 @@ const Index: React.FC = () => {
                 </option>
               </Form.Select>
             </div>
-            <div className="d-flex">
-              {formData.avatar.type === 'gravatar' && (
-                <Stack>
-                  <Avatar
-                    size="160px"
-                    avatar={formData.avatar.gravatar}
-                    searchStr={`s=256&d=identicon${
-                      count > 0 ? `&t=${new Date().valueOf()}` : ''
-                    }`}
-                    className="me-3 rounded"
-                  />
-                  <Form.Text className="text-muted mt-1">
-                    <Trans i18nKey="settings.profile.avatar.gravatar_text">
-                      You can change image on
-                      <a
-                        href="https://gravatar.com"
-                        target="_blank"
-                        rel="noreferrer">
-                        gravatar.com
-                      </a>
-                    </Trans>
-                  </Form.Text>
-                </Stack>
-              )}
-
-              {formData.avatar.type === 'custom' && (
-                <Stack>
-                  <Stack direction="horizontal" className="align-items-start">
+            <ImgViewer>
+              <div className="d-flex">
+                {formData.avatar.type === 'gravatar' && (
+                  <Stack>
                     <Avatar
                       size="160px"
-                      searchStr="s=256"
-                      avatar={formData.avatar.custom}
-                      className="me-2 bg-gray-300 "
+                      avatar={formData.avatar.gravatar}
+                      searchStr={`s=256&d=identicon${
+                        count > 0 ? `&t=${new Date().valueOf()}` : ''
+                      }`}
+                      className="me-3 rounded"
                     />
-                    <ButtonGroup vertical className="fit-content">
-                      <UploadImg type="avatar" uploadCallback={avatarUpload}>
-                        <Icon name="cloud-upload" />
-                      </UploadImg>
-                      <Button
-                        variant="outline-secondary"
-                        onClick={removeCustomAvatar}>
-                        <Icon name="trash" />
-                      </Button>
-                    </ButtonGroup>
+                    <Form.Text className="text-muted mt-1">
+                      <Trans i18nKey="settings.profile.avatar.gravatar_text">
+                        You can change image on
+                        <a
+                          href="https://gravatar.com"
+                          target="_blank"
+                          rel="noreferrer">
+                          gravatar.com
+                        </a>
+                      </Trans>
+                    </Form.Text>
                   </Stack>
-                  <Form.Text className="text-muted mt-1">
-                    <Trans i18nKey="settings.profile.avatar.text">
-                      You can upload your image.
-                    </Trans>
-                  </Form.Text>
-                </Stack>
-              )}
-              {formData.avatar.type === 'default' && (
-                <Avatar size="160px" avatar="" />
-              )}
-            </div>
+                )}
+
+                {formData.avatar.type === 'custom' && (
+                  <Stack>
+                    <Stack direction="horizontal" className="align-items-start">
+                      <Avatar
+                        size="160px"
+                        searchStr="s=256"
+                        avatar={formData.avatar.custom}
+                        className="me-2 bg-gray-300 "
+                      />
+                      <ButtonGroup vertical className="fit-content">
+                        <UploadImg
+                          type="avatar"
+                          disabled={!usersSetting.allow_update_avatar}
+                          uploadCallback={avatarUpload}>
+                          <Icon name="cloud-upload" />
+                        </UploadImg>
+                        <Button
+                          variant="outline-secondary"
+                          disabled={!usersSetting.allow_update_avatar}
+                          onClick={removeCustomAvatar}>
+                          <Icon name="trash" />
+                        </Button>
+                      </ButtonGroup>
+                    </Stack>
+                    <Form.Text className="text-muted mt-1">
+                      <Trans i18nKey="settings.profile.avatar.text">
+                        You can upload your image.
+                      </Trans>
+                    </Form.Text>
+                  </Stack>
+                )}
+                {formData.avatar.type === 'default' && (
+                  <Avatar size="160px" avatar="" />
+                )}
+              </div>
+            </ImgViewer>
             <Form.Control
               isInvalid={formData.avatar.isInvalid}
               className="d-none"
@@ -410,6 +424,7 @@ const Index: React.FC = () => {
               required
               as="textarea"
               rows={5}
+              disabled={!usersSetting.allow_update_bio}
               value={formData.bio.value}
               isInvalid={formData.bio.isInvalid}
               onChange={(e) =>
@@ -435,6 +450,7 @@ const Index: React.FC = () => {
               required
               type="url"
               placeholder={t('website.placeholder')}
+              disabled={!usersSetting.allow_update_website}
               value={formData.website.value}
               isInvalid={formData.website.isInvalid}
               onChange={(e) =>
@@ -460,6 +476,7 @@ const Index: React.FC = () => {
               required
               type="text"
               placeholder={t('location.placeholder')}
+              disabled={!usersSetting.allow_update_location}
               value={formData.location.value}
               isInvalid={formData.location.isInvalid}
               onChange={(e) =>

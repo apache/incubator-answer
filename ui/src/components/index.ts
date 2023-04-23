@@ -38,6 +38,8 @@ import Counts from './Counts';
 import QuestionList from './QuestionList';
 import HotQuestions from './HotQuestions';
 import HttpErrorContent from './HttpErrorContent';
+import CustomSidebar from './CustomSidebar';
+import ImgViewer from './ImgViewer';
 
 export {
   Avatar,
@@ -82,5 +84,7 @@ export {
   QuestionList,
   HotQuestions,
   HttpErrorContent,
+  CustomSidebar,
+  ImgViewer,
 };
 export type { EditorRef, JSONSchema, UISchema };

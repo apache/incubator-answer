@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next';
 import QrCode from 'qrcode';
 
 import { userCenterStore } from '@/stores';
-import { guard } from '@/utils';
+import { guard, getUaType, floppyNavigation } from '@/utils';
+import { USER_AGENT_NAMES } from '@/common/constants';
 
-import { getLoginConf, checkLoginResult } from './wecom.service';
+import { getLoginConf, checkLoginResult } from './service';
 
 let checkTimer: NodeJS.Timeout;
 const Index: FC = () => {
@@ -34,7 +35,7 @@ const Index: FC = () => {
     if (!targetUrl) {
       return;
     }
-    QrCode.toDataURL(targetUrl, { width: 240 }, (err, url) => {
+    QrCode.toDataURL(targetUrl, { width: 240, margin: 0 }, (err, url) => {
       if (err) {
         return;
       }
@@ -47,8 +48,14 @@ const Index: FC = () => {
       return;
     }
     getLoginConf().then((res) => {
-      handleQrCode(res?.redirect_url);
-      handleLoginResult(res?.key);
+      if (getUaType() === USER_AGENT_NAMES.WeCom) {
+        floppyNavigation.navigate(res?.redirect_url, {
+          handler: 'replace',
+        });
+      } else {
+        handleQrCode(res?.redirect_url);
+        handleLoginResult(res?.key);
+      }
     });
   }, [agentName]);
   useEffect(() => {
@@ -56,18 +63,25 @@ const Index: FC = () => {
       clearTimeout(checkTimer);
     };
   }, []);
-  if (/WeCom/i.test(agentName)) {
+  if (getUaType() !== USER_AGENT_NAMES.WeCom) {
     return (
       <Card className="text-center">
         <Card.Body>
-          <Card.Title as="h3">
-            {agentName} {t('login')}
+          <Card.Title as="h3" className="mb-3">
+            {ucAgent?.agent_info.display_name} {t('login')}
           </Card.Title>
           {qrcodeDataUrl ? (
             <>
-              <img width={240} height={240} src={qrcodeDataUrl} alt="" />
-              <div className="text-secondary">
-                {t('qrcode_login_tip', { agentName })}
+              <img
+                width={240}
+                height={240}
+                src={qrcodeDataUrl}
+                alt={agentName}
+              />
+              <div className="text-secondary mt-3">
+                {t('qrcode_login_tip', {
+                  agentName: ucAgent?.agent_info.display_name,
+                })}
               </div>
             </>
           ) : null}

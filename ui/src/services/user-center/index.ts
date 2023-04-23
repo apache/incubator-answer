@@ -11,9 +11,11 @@ export interface UcAgent {
     name: string;
     icon: string;
     url: string;
+    display_name: string;
     login_redirect_url: string;
     sign_up_redirect_url: string;
     control_center: UcAgentControl[];
+    enabled_original_user_system: boolean;
   };
 }
 
@@ -39,6 +41,7 @@ export interface UcBranding {
 
 export interface AdminUcAgent {
   user_status_agent_enabled: boolean;
+  user_password_agent_enabled: boolean;
 }
 
 export const getUcAgent = () => {
