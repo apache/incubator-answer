@@ -3,6 +3,10 @@ name: Manual Build DockerHub Image
 on:
   workflow_dispatch:
     inputs:
+      tag_name:
+        type: string
+        required: true
+        description: 'DockerHub img tag name'
       logLevel:
         description: 'Log level'
         required: true
@@ -16,6 +20,7 @@ on:
         description: 'Test scenario tags'
         required: false
         type: boolean
+
 
 
 jobs:
@@ -60,7 +65,7 @@ jobs:
         platforms: linux/amd64,linux/arm64
         push: true
         file: ./.github/Dockerfile
-        tags: ${{ steps.meta.outputs.tags }}
+        tags: ${{ inputs.tag_name }}
         labels: ${{ steps.meta.outputs.labels }}
 
 
