@@ -399,6 +399,7 @@ ui:
     until_time: "Your account was suspended until {{ time }}."
     forever: This user was suspended forever.
     end: You don't meet a community guideline.
+    contact_us: Contact us
   editor:
     blockquote:
       text: Blockquote
