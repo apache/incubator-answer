@@ -15,7 +15,7 @@
   "dependencies": {
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0",
-    "bootstrap-icons": "1.10.2",
+    "bootstrap-icons": "1.10.4",
     "classnames": "^2.3.1",
     "codemirror": "5.65.0",
     "color": "^4.2.3",

@@ -246,6 +246,7 @@ export type QuestionOrderBy =
 export interface QueryQuestionsReq extends Paging {
   order: QuestionOrderBy;
   tag?: string;
+  day?: number;
 }
 
 export type AdminQuestionStatus = 'available' | 'closed' | 'deleted';
