@@ -65,7 +65,7 @@ jobs:
         platforms: linux/amd64,linux/arm64
         push: true
         file: ./.github/Dockerfile
-        tags: ${{ inputs.tag_name }}
+        tags: answerdev/answer:${{ inputs.tag_name }}
         labels: ${{ steps.meta.outputs.labels }}
 
 
