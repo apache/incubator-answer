@@ -34,7 +34,7 @@ func NewHTTPServer(debug bool,
 	html, _ := fs.Sub(ui.Template, "template")
 	htmlTemplate := template.Must(template.New("").Funcs(funcMap).ParseFS(html, "*"))
 	r.SetHTMLTemplate(htmlTemplate)
-
+	r.Use(middleware.HeadersByRequestURI())
 	viewRouter.Register(r)
 
 	rootGroup := r.Group("")
