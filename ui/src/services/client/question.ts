@@ -22,7 +22,7 @@ export const useHotQuestions = (
     page: 1,
     page_size: 6,
     order: 'frequent',
-    day: 7,
+    in_days: 7,
   },
 ) => {
   const apiUrl = `/answer/api/v1/question/page?${qs.stringify(params)}`;
