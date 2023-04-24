@@ -5881,6 +5881,9 @@
         "constant.Privilege": {
             "type": "object",
             "properties": {
+                "key": {
+                    "type": "string"
+                },
                 "label": {
                     "type": "string"
                 },
@@ -6370,9 +6373,20 @@
                 }
             }
         },
+        "schema.ConfigFieldUIOptionAction": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.ConfigFieldUIOptions": {
             "type": "object",
             "properties": {
+                "action": {
+                    "$ref": "#/definitions/schema.ConfigFieldUIOptionAction"
+                },
                 "input_type": {
                     "type": "string"
                 },
@@ -6383,6 +6397,12 @@
                     "type": "string"
                 },
                 "rows": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "variant": {
                     "type": "string"
                 }
             }
@@ -7512,6 +7532,9 @@
                 "level": {
                     "type": "integer"
                 },
+                "level_desc": {
+                    "type": "string"
+                },
                 "privileges": {
                     "type": "array",
                     "items": {
@@ -7973,6 +7996,10 @@
                 "custom_header": {
                     "type": "string",
                     "maxLength": 65536
+                },
+                "custom_sidebar": {
+                    "type": "string",
+                    "maxLength": 65536
                 }
             }
         },
@@ -7992,6 +8019,10 @@
                     "maxLength": 65536
                 },
                 "custom_header": {
+                    "type": "string",
+                    "maxLength": 65536
+                },
+                "custom_sidebar": {
                     "type": "string",
                     "maxLength": 65536
                 }

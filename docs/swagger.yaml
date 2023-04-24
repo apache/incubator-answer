@@ -1,6 +1,8 @@
 definitions:
   constant.Privilege:
     properties:
+      key:
+        type: string
       label:
         type: string
       value:
@@ -339,8 +341,15 @@ definitions:
       value:
         type: string
     type: object
+  schema.ConfigFieldUIOptionAction:
+    properties:
+      url:
+        type: string
+    type: object
   schema.ConfigFieldUIOptions:
     properties:
+      action:
+        $ref: '#/definitions/schema.ConfigFieldUIOptionAction'
       input_type:
         type: string
       label:
@@ -348,6 +357,10 @@ definitions:
       placeholder:
         type: string
       rows:
+        type: string
+      text:
+        type: string
+      variant:
         type: string
     type: object
   schema.ConnectorInfoResp:
@@ -1156,6 +1169,8 @@ definitions:
     properties:
       level:
         type: integer
+      level_desc:
+        type: string
       privileges:
         items:
           $ref: '#/definitions/constant.Privilege'
@@ -1482,6 +1497,9 @@ definitions:
       custom_header:
         maxLength: 65536
         type: string
+      custom_sidebar:
+        maxLength: 65536
+        type: string
     type: object
   schema.SiteCustomCssHTMLResp:
     properties:
@@ -1495,6 +1513,9 @@ definitions:
         maxLength: 65536
         type: string
       custom_header:
+        maxLength: 65536
+        type: string
+      custom_sidebar:
         maxLength: 65536
         type: string
     type: object

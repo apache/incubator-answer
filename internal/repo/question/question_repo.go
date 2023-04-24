@@ -271,6 +271,9 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 	} else {
 		session.And("question.show = ?", entity.QuestionShow)
 	}
+	if inDays > 0 {
+		session.And("question.created_at > ?", time.Now().AddDate(0, 0, -inDays))
+	}
 
 	switch orderCond {
 	case "newest":

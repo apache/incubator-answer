@@ -5893,6 +5893,9 @@ const docTemplate = `{
         "constant.Privilege": {
             "type": "object",
             "properties": {
+                "key": {
+                    "type": "string"
+                },
                 "label": {
                     "type": "string"
                 },
@@ -6382,9 +6385,20 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.ConfigFieldUIOptionAction": {
+            "type": "object",
+            "properties": {
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.ConfigFieldUIOptions": {
             "type": "object",
             "properties": {
+                "action": {
+                    "$ref": "#/definitions/schema.ConfigFieldUIOptionAction"
+                },
                 "input_type": {
                     "type": "string"
                 },
@@ -6395,6 +6409,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "rows": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                },
+                "variant": {
                     "type": "string"
                 }
             }
@@ -7524,6 +7544,9 @@ const docTemplate = `{
                 "level": {
                     "type": "integer"
                 },
+                "level_desc": {
+                    "type": "string"
+                },
                 "privileges": {
                     "type": "array",
                     "items": {
@@ -7985,6 +8008,10 @@ const docTemplate = `{
                 "custom_header": {
                     "type": "string",
                     "maxLength": 65536
+                },
+                "custom_sidebar": {
+                    "type": "string",
+                    "maxLength": 65536
                 }
             }
         },
@@ -8004,6 +8031,10 @@ const docTemplate = `{
                     "maxLength": 65536
                 },
                 "custom_header": {
+                    "type": "string",
+                    "maxLength": 65536
+                },
+                "custom_sidebar": {
                     "type": "string",
                     "maxLength": 65536
                 }
