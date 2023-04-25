@@ -69,7 +69,7 @@ func addRolePinAndHideFeatures(x *xorm.Engine) error {
 		{ID: 122, Key: "rank.question.hide", Value: `-1`},
 	}
 	for _, c := range defaultConfigTable {
-		exist, err := x.Get(&entity.Config{ID: c.ID, Key: c.Key})
+		exist, err := x.Get(&entity.Config{ID: c.ID})
 		if err != nil {
 			return fmt.Errorf("get config failed: %w", err)
 		}
