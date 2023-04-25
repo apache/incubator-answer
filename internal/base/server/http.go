@@ -36,7 +36,7 @@ func NewHTTPServer(debug bool,
 	html, _ := fs.Sub(ui.Template, "template")
 	htmlTemplate := template.Must(template.New("").Funcs(funcMap).ParseFS(html, "*"))
 	r.SetHTMLTemplate(htmlTemplate)
-
+	r.Use(middleware.HeadersByRequestURI())
 	viewRouter.Register(r)
 
 	rootGroup := r.Group("")
@@ -71,7 +71,7 @@ func NewHTTPServer(debug bool,
 	pluginAPIRouter.RegisterAuthAdminConnectorRouter(adminauthV1)
 
 	_ = plugin.CallAgent(func(agent plugin.Agent) error {
-		agent.RegisterUnAuthRouter(unAuthV1)
+		agent.RegisterUnAuthRouter(mustUnAuthV1)
 		agent.RegisterAuthUserRouter(authV1)
 		agent.RegisterAuthAdminRouter(adminauthV1)
 		return nil

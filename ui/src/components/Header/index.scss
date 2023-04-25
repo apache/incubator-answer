@@ -57,9 +57,6 @@
 
 @media (max-width: 992.9px) {
   #header {
-    .logo {
-      max-width: 93px;
-    }
     .nav-grow {
       flex-grow: 1!important;
     }
@@ -74,13 +71,4 @@
   }
 
 }
-
-@media (max-width: 576px) {
-  #header {
-    .logo {
-      max-width: 93px;
-    }
-  }
-}
-
 
