@@ -22,7 +22,7 @@ func updateRolePinAndHideFeatures(x *xorm.Engine) error {
 			return fmt.Errorf("get config failed: %w", err)
 		}
 		if exist {
-			if _, err = x.Update(c, &entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
+			if _, err = x.Update(c, &entity.Config{ID: c.ID}); err != nil {
 				log.Errorf("update %+v config failed: %s", c, err)
 				return fmt.Errorf("update config failed: %w", err)
 			}
