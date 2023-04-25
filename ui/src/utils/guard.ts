@@ -338,19 +338,21 @@ export const handleLoginWithToken = (
 ) => {
   if (token) {
     Storage.set(LOGGED_TOKEN_STORAGE_KEY, token);
-    getLoggedUserInfo().then((res) => {
-      loggedUserInfoStore.getState().update(res);
-      const userStat = deriveLoginState();
-      if (userStat.isNotActivated) {
-        floppyNavigation.navigate(RouteAlias.inactive, {
-          handler,
-          options: {
-            replace: true,
-          },
-        });
-      } else {
-        handleLoginRedirect(handler);
-      }
+    setTimeout(() => {
+      getLoggedUserInfo().then((res) => {
+        loggedUserInfoStore.getState().update(res);
+        const userStat = deriveLoginState();
+        if (userStat.isNotActivated) {
+          floppyNavigation.navigate(RouteAlias.inactive, {
+            handler,
+            options: {
+              replace: true,
+            },
+          });
+        } else {
+          handleLoginRedirect(handler);
+        }
+      });
     });
   } else {
     floppyNavigation.navigate(RouteAlias.home, {

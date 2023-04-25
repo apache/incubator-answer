@@ -1,6 +1,7 @@
 import React, { memo, FC, useState, useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 import QrCode from 'qrcode';
 
@@ -13,6 +14,7 @@ import { getLoginConf, checkLoginResult } from './service';
 let checkTimer: NodeJS.Timeout;
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'plugins' });
+  const navigate = useNavigate();
   const ucAgent = userCenterStore().agent;
   const agentName = ucAgent?.agent_info?.name || '';
   const [qrcodeDataUrl, setQrCodeDataUrl] = useState('');
@@ -22,7 +24,7 @@ const Index: FC = () => {
     }
     checkLoginResult(key).then((res) => {
       if (res.is_login) {
-        guard.handleLoginWithToken(res.token);
+        guard.handleLoginWithToken(res.token, navigate);
         return;
       }
       clearTimeout(checkTimer);
