@@ -89,6 +89,8 @@ export const IGNORE_PATH_LIST = [
   RouteAlias.passwordReset,
   RouteAlias.accountActivation,
   RouteAlias.confirmNewEmail,
+  RouteAlias.confirmEmail,
+  RouteAlias.authLanding,
   '/user-center/',
 ];
 
