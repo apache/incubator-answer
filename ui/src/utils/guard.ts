@@ -341,7 +341,6 @@ export const handleLoginWithToken = (
     getLoggedUserInfo().then((res) => {
       loggedUserInfoStore.getState().update(res);
       const userStat = deriveLoginState();
-      alert(`userStat: ${JSON.stringify(userStat)}`);
       if (userStat.isNotActivated) {
         floppyNavigation.navigate(RouteAlias.inactive, {
           handler,

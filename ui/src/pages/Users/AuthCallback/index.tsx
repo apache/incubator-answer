@@ -11,7 +11,6 @@ const Index: FC = () => {
   const navigate = useNavigate();
   useEffect(() => {
     const token = searchParams.get('access_token');
-    alert(`landing: ${token}`);
     guard.handleLoginWithToken(token, navigate);
   }, []);
   usePageTags({
