@@ -89,6 +89,8 @@ export const IGNORE_PATH_LIST = [
   RouteAlias.passwordReset,
   RouteAlias.accountActivation,
   RouteAlias.confirmNewEmail,
+  RouteAlias.confirmEmail,
+  RouteAlias.authLanding,
   '/user-center/',
 ];
 
@@ -339,7 +341,6 @@ export const handleLoginWithToken = (
     getLoggedUserInfo().then((res) => {
       loggedUserInfoStore.getState().update(res);
       const userStat = deriveLoginState();
-      alert(`userStat: ${JSON.stringify(userStat)}`);
       if (userStat.isNotActivated) {
         floppyNavigation.navigate(RouteAlias.inactive, {
           handler,

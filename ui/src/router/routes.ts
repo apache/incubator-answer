@@ -33,7 +33,6 @@ const routes: RouteNode[] = [
     guard: () => {
       const gr = guard.shouldLoginRequired();
       if (!gr.ok) {
-        alert(`LoginRequired: ${window.location.pathname}`);
         return gr;
       }
       return guard.notForbidden();
