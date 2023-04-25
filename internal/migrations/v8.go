@@ -63,10 +63,14 @@ func addRolePinAndHideFeatures(x *xorm.Engine) error {
 	}
 
 	defaultConfigTable := []*entity.Config{
-		{ID: 119, Key: "rank.question.pin", Value: `-1`},
-		{ID: 120, Key: "rank.question.unpin", Value: `-1`},
-		{ID: 121, Key: "rank.question.show", Value: `-1`},
-		{ID: 122, Key: "rank.question.hide", Value: `-1`},
+		{ID: 119, Key: "question.pin", Value: `0`},
+		{ID: 120, Key: "question.unpin", Value: `0`},
+		{ID: 121, Key: "question.show", Value: `0`},
+		{ID: 122, Key: "question.hide", Value: `0`},
+		{ID: 123, Key: "rank.question.pin", Value: `-1`},
+		{ID: 124, Key: "rank.question.unpin", Value: `-1`},
+		{ID: 125, Key: "rank.question.show", Value: `-1`},
+		{ID: 126, Key: "rank.question.hide", Value: `-1`},
 	}
 	for _, c := range defaultConfigTable {
 		exist, err := x.Get(&entity.Config{ID: c.ID})
