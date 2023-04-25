@@ -66,8 +66,13 @@ const Index: FC<{
         contentClassName="bg-transparent"
         onHide={onClose}>
         <Modal.Body onClick={onClose} className="img-viewer p-0 d-flex">
+          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-noninteractive-element-interactions */}
           <img
             className="cursor-zoom-out img-fluid m-auto"
+            onClick={(evt) => {
+              evt.stopPropagation();
+              onClose();
+            }}
             src={imgSrc}
             alt={imgSrc}
           />
