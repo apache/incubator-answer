@@ -15,18 +15,6 @@ export const USER_AGENT_NAMES = {
   DingTalk: 'DingTalk',
 };
 
-export const IGNORE_PATH_LIST = [
-  '/users/login',
-  '/users/register',
-  '/users/account-recovery',
-  '/users/change-email',
-  '/users/password-reset',
-  '/users/account-activation',
-  '/users/account-activation/success',
-  '/users/account-activation/failed',
-  '/users/confirm-new-email',
-];
-
 export const ADMIN_LIST_STATUS = {
   // normal;
   1: {

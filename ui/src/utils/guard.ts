@@ -81,6 +81,17 @@ export const deriveLoginState = (): TLoginState => {
   return ls;
 };
 
+export const IGNORE_PATH_LIST = [
+  RouteAlias.login,
+  RouteAlias.signUp,
+  RouteAlias.accountRecovery,
+  RouteAlias.changeEmail,
+  RouteAlias.passwordReset,
+  RouteAlias.accountActivation,
+  RouteAlias.confirmNewEmail,
+  '/user-center/',
+];
+
 export const isIgnoredPath = (ignoredPath: string | string[]) => {
   if (!Array.isArray(ignoredPath)) {
     ignoredPath = [ignoredPath];
@@ -152,7 +163,7 @@ export const activated = () => {
   const us = deriveLoginState();
   if (us.isNotActivated) {
     gr.ok = false;
-    gr.redirect = RouteAlias.activation;
+    gr.redirect = RouteAlias.inactive;
   }
   return gr;
 };
@@ -258,19 +269,7 @@ export const shouldLoginRequired = () => {
   if (us.isLogged) {
     return gr;
   }
-  if (
-    isIgnoredPath([
-      RouteAlias.login,
-      RouteAlias.signUp,
-      '/users/account-recovery',
-      'users/change-email',
-      'users/password-reset',
-      'users/account-activation',
-      'users/account-activation/success',
-      '/users/account-activation/failed',
-      '/users/confirm-new-email',
-    ])
-  ) {
+  if (isIgnoredPath(IGNORE_PATH_LIST)) {
     return gr;
   }
   gr.ok = false;
@@ -296,7 +295,7 @@ export const tryNormalLogged = (canNavigate: boolean = false) => {
     return false;
   }
   if (us.isNotActivated) {
-    floppyNavigation.navigate(RouteAlias.activation);
+    floppyNavigation.navigate(RouteAlias.inactive);
   } else if (us.isForbidden) {
     floppyNavigation.navigate(RouteAlias.suspended, {
       handler: 'replace',
@@ -341,7 +340,7 @@ export const handleLoginWithToken = (
       loggedUserInfoStore.getState().update(res);
       const userStat = deriveLoginState();
       if (userStat.isNotActivated) {
-        floppyNavigation.navigate(RouteAlias.activation, {
+        floppyNavigation.navigate(RouteAlias.inactive, {
           handler,
           options: {
             replace: true,
