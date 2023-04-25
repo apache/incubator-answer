@@ -3,13 +3,13 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 
 import { Modal } from '@/components';
 import { loggedUserInfoStore, toastStore, errorCodeStore } from '@/stores';
-import { LOGGED_TOKEN_STORAGE_KEY, IGNORE_PATH_LIST } from '@/common/constants';
+import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
 import { RouteAlias } from '@/router/alias';
 import { getCurrentLang } from '@/utils/localize';
 
 import Storage from './storage';
 import { floppyNavigation } from './floppyNavigation';
-import { isIgnoredPath } from './guard';
+import { isIgnoredPath, IGNORE_PATH_LIST } from './guard';
 
 const baseConfig = {
   timeout: 10000,
@@ -129,7 +129,7 @@ class Request {
           }
           if (data?.type === 'inactive') {
             // inactivated
-            floppyNavigation.navigate(RouteAlias.activation);
+            floppyNavigation.navigate(RouteAlias.inactive);
             return Promise.reject(false);
           }
 
