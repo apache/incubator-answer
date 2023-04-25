@@ -366,10 +366,10 @@ func initConfigTable(engine *xorm.Engine) error {
 		{ID: 116, Key: "rank.question.reopen", Value: `-1`},
 		{ID: 117, Key: "rank.tag.use_reserved_tag", Value: `-1`},
 		{ID: 118, Key: "plugin.status", Value: `{}`},
-		{ID: 119, Key: "question.pin", Value: `-1`},
-		{ID: 120, Key: "question.unpin", Value: `-1`},
-		{ID: 121, Key: "question.show", Value: `-1`},
-		{ID: 122, Key: "question.hide", Value: `-1`},
+		{ID: 119, Key: "rank.question.pin", Value: `-1`},
+		{ID: 120, Key: "rank.question.unpin", Value: `-1`},
+		{ID: 121, Key: "rank.question.show", Value: `-1`},
+		{ID: 122, Key: "rank.question.hide", Value: `-1`},
 	}
 	_, err := engine.Insert(defaultConfigTable)
 	return err
