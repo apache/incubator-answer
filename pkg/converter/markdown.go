@@ -38,6 +38,7 @@ func Markdown2HTML(source string) string {
 	filter.RequireNoFollowOnLinks(false)
 	filter.RequireParseableURLs(false)
 	filter.RequireNoFollowOnFullyQualifiedLinks(false)
+	filter.AllowElements("kbd")
 	html = filter.Sanitize(html)
 	return html
 }
@@ -87,7 +88,11 @@ func (r *DangerousHTMLRenderer) renderRawHTML(w util.BufWriter, source []byte, n
 	l := n.Segments.Len()
 	for i := 0; i < l; i++ {
 		segment := n.Segments.At(i)
-		_, _ = w.Write(r.Filter.SanitizeBytes(segment.Value(source)))
+		if string(source[segment.Start:segment.Stop]) == "<kbd>" || string(source[segment.Start:segment.Stop]) == "</kbd>" {
+			_, _ = w.Write(segment.Value(source))
+		} else {
+			_, _ = w.Write(r.Filter.SanitizeBytes(segment.Value(source)))
+		}
 	}
 	return ast.WalkSkipChildren, nil
 }
