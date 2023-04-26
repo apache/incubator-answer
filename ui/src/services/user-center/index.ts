@@ -40,8 +40,10 @@ export interface UcBranding {
 }
 
 export interface AdminUcAgent {
-  user_status_agent_enabled: boolean;
-  user_password_agent_enabled: boolean;
+  allow_create_user: boolean;
+  allow_update_user_status: boolean;
+  allow_update_user_password: boolean;
+  allow_update_user_role: boolean;
 }
 
 export const getUcAgent = () => {
