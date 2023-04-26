@@ -46,7 +46,7 @@ func Markdown2HTML(source string) string {
 func Markdown2BasicHTML(source string) string {
 	content := Markdown2HTML(source)
 	filter := bluemonday.NewPolicy()
-	filter.AllowElements("p", "b", "br")
+	filter.AllowElements("p", "b", "br", "strong", "em")
 	filter.AllowAttrs("src").OnElements("img")
 	filter.AddSpaceWhenStrippingTag(true)
 	content = filter.Sanitize(content)
