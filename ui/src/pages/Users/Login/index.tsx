@@ -176,7 +176,7 @@ const Index: React.FC = () => {
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
       <WelcomeTitle />
       {step === 1 && canOriginalLogin ? (
-        <Col className="mx-auto" md={3}>
+        <Col className="mx-auto" md={6} lg={4} xl={3}>
           {ucAgentInfo ? (
             <PluginUcLogin className="mb-5" />
           ) : (
