@@ -69,8 +69,10 @@ type UserCenterUserSettingsResp struct {
 }
 
 type UserCenterAdminFunctionAgentResp struct {
-	UserStatusAgentEnabled   bool `json:"user_status_agent_enabled"`
-	UserPasswordAgentEnabled bool `json:"user_password_agent_enabled"`
+	AllowCreateUser         bool `json:"allow_create_user"`
+	AllowUpdateUserStatus   bool `json:"allow_update_user_status"`
+	AllowUpdateUserPassword bool `json:"allow_update_user_password"`
+	AllowUpdateUserRole     bool `json:"allow_update_user_role"`
 }
 
 type UserSettingAgent struct {

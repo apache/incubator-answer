@@ -119,10 +119,17 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 	if !us.verifyPassword(ctx, req.Pass, userInfo.Pass) {
 		return nil, errors.BadRequest(reason.EmailOrPasswordWrong)
 	}
+	ok, err := us.userExternalLoginService.CheckUserStatusInUserCenter(ctx, userInfo.ID)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, errors.BadRequest(reason.EmailOrPasswordWrong)
+	}
 
 	err = us.userRepo.UpdateLastLoginDate(ctx, userInfo.ID)
 	if err != nil {
-		log.Error("UpdateLastLoginDate", err.Error())
+		log.Errorf("update last login data failed, err: %v", err)
 	}
 
 	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)

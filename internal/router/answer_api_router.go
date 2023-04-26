@@ -248,8 +248,8 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.GET("/users/page", a.adminUserController.GetUserPage)
 	r.PUT("/user/status", a.adminUserController.UpdateUserStatus)
 	r.PUT("/user/role", a.adminUserController.UpdateUserRole)
-	r.POST("/user", middleware.BanAPIForUserCenter, a.adminUserController.AddUser)
-	r.PUT("/user/password", middleware.BanAPIForUserCenter, a.adminUserController.UpdateUserPassword)
+	r.POST("/user", a.adminUserController.AddUser)
+	r.PUT("/user/password", a.adminUserController.UpdateUserPassword)
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)

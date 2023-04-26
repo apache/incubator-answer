@@ -196,6 +196,9 @@ func (ur *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
 }
 
 func tryToDecorateUserInfoFromUserCenter(ctx context.Context, data *data.Data, original *entity.User) (err error) {
+	if original == nil {
+		return nil
+	}
 	uc, ok := plugin.GetUserCenter()
 	if !ok {
 		return nil

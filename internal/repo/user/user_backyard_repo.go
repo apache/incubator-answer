@@ -86,6 +86,9 @@ func (ur *userAdminRepo) GetUserInfo(ctx context.Context, userID string) (user *
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	if !exist {
+		return
+	}
 	err = tryToDecorateUserInfoFromUserCenter(ctx, ur.data, user)
 	if err != nil {
 		return nil, false, err
@@ -100,6 +103,9 @@ func (ur *userAdminRepo) GetUserInfoByEmail(ctx context.Context, email string) (
 		Where("status != ?", entity.UserStatusDeleted).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return
+	}
+	if !exist {
 		return
 	}
 	err = tryToDecorateUserInfoFromUserCenter(ctx, ur.data, user)
