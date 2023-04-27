@@ -75,8 +75,8 @@ const Index: FC = () => {
           {qrcodeDataUrl ? (
             <>
               <img
-                width={240}
-                height={240}
+                className="w-100"
+                style={{ maxWidth: '240px' }}
                 src={qrcodeDataUrl}
                 alt={agentName}
               />
