@@ -836,6 +836,10 @@ ui:
     skip: 略过
     discard_draft: 丢弃草稿
     pinned: 已置顶
+    all: 所有
+    question: 问题
+    answer: 回答
+    comment: 评论
   search:
     title: 搜索结果
     keywords: 关键词
@@ -1096,6 +1100,7 @@ ui:
       pending: 等待处理
       completed: 已完成
       flagged: 被举报内容
+      flagged_type: 被举报的{{ type }}
       created: 创建于
       action: 操作
       review: 审查

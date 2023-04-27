@@ -893,6 +893,10 @@ ui:
     skip: Skip
     discard_draft: Discard draft
     pinned: Pinned
+    all: All
+    question: Question
+    answer: Answer
+    comment: Comment
   search:
     title: Search Results
     keywords: Keywords
@@ -1171,6 +1175,7 @@ ui:
       pending: Pending
       completed: Completed
       flagged: Flagged
+      flagged_type: Flagged {{ type }}
       created: Created
       action: Action
       review: Review
