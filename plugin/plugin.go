@@ -136,7 +136,7 @@ type TranslateFn func(ctx *GinContext) string
 
 // Translator contains a function that translates the key to the current language of the context
 type Translator struct {
-	fn TranslateFn
+	Fn TranslateFn
 }
 
 // MakeTranslator generates a translator from the key
@@ -144,13 +144,13 @@ func MakeTranslator(key string) Translator {
 	t := func(ctx *GinContext) string {
 		return Translate(ctx, key)
 	}
-	return Translator{fn: t}
+	return Translator{Fn: t}
 }
 
 // Translate translates the key to the current language of the context
 func (t Translator) Translate(ctx *GinContext) string {
-	if &t == nil || t.fn == nil {
+	if &t == nil || t.Fn == nil {
 		return ""
 	}
-	return t.fn(ctx)
+	return t.Fn(ctx)
 }

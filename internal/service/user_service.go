@@ -259,15 +259,23 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 	if err != nil {
 		return nil, err
 	}
-	oldUserInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
-	if err != nil {
-		return nil, err
-	}
-	if !exist {
-		return nil, errors.BadRequest(reason.UserNotFound)
-	}
 
-	if len(req.Username) > 0 {
+	if siteUsers.AllowUpdateUsername && len(req.Username) > 0 {
+		if checker.IsInvalidUsername(req.Username) {
+			errFields = append(errFields, &validator.FormErrorField{
+				ErrorField: "username",
+				ErrorMsg:   reason.UsernameInvalid,
+			})
+			return errFields, errors.BadRequest(reason.UsernameInvalid)
+		}
+		if checker.IsReservedUsername(req.Username) {
+			errFields = append(errFields, &validator.FormErrorField{
+				ErrorField: "username",
+				ErrorMsg:   reason.UsernameInvalid,
+			})
+			return errFields, errors.BadRequest(reason.UsernameInvalid)
+		}
+
 		userInfo, exist, err := us.userRepo.GetByUsername(ctx, req.Username)
 		if err != nil {
 			return nil, err
@@ -279,13 +287,14 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 			})
 			return errFields, errors.BadRequest(reason.UsernameDuplicate)
 		}
-		if checker.IsReservedUsername(req.Username) {
-			errFields = append(errFields, &validator.FormErrorField{
-				ErrorField: "username",
-				ErrorMsg:   reason.UsernameInvalid,
-			})
-			return errFields, errors.BadRequest(reason.UsernameInvalid)
-		}
+	}
+
+	oldUserInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 
 	cond := us.formatUserInfoForUpdateInfo(oldUserInfo, req, siteUsers)
@@ -307,13 +316,13 @@ func (us *UserService) formatUserInfoForUpdateInfo(
 	userInfo.Location = oldUserInfo.Location
 	userInfo.ID = req.UserID
 
-	if siteUsersConf.AllowUpdateDisplayName {
+	if len(req.DisplayName) > 0 && siteUsersConf.AllowUpdateDisplayName {
 		userInfo.DisplayName = req.DisplayName
 	}
-	if siteUsersConf.AllowUpdateUsername {
+	if len(req.Username) > 0 && siteUsersConf.AllowUpdateUsername {
 		userInfo.Username = req.Username
 	}
-	if siteUsersConf.AllowUpdateAvatar {
+	if len(avatar) > 0 && siteUsersConf.AllowUpdateAvatar {
 		userInfo.Avatar = string(avatar)
 	}
 	if siteUsersConf.AllowUpdateBio {
