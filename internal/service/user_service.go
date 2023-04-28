@@ -80,6 +80,9 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	if !exist {
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
+	if userInfo.Status == entity.UserStatusDeleted {
+		return nil, errors.Unauthorized(reason.UnauthorizedError)
+	}
 	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
 	if err != nil {
 		log.Error(err)
@@ -119,7 +122,7 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 	if !us.verifyPassword(ctx, req.Pass, userInfo.Pass) {
 		return nil, errors.BadRequest(reason.EmailOrPasswordWrong)
 	}
-	ok, err := us.userExternalLoginService.CheckUserStatusInUserCenter(ctx, userInfo.ID)
+	ok, externalID, err := us.userExternalLoginService.CheckUserStatusInUserCenter(ctx, userInfo.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -144,6 +147,7 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
 		RoleID:      roleID,
+		ExternalID:  externalID,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {

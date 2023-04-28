@@ -322,15 +322,15 @@ func (us *UserExternalLoginService) ExternalLoginUnbinding(
 
 // CheckUserStatusInUserCenter check user status in user center
 func (us *UserExternalLoginService) CheckUserStatusInUserCenter(ctx context.Context, userID string) (
-	valid bool, err error) {
+	valid bool, externalID string, err error) {
 	// If enable user center plugin, user status should be checked by user center
 	userCenter, ok := plugin.GetUserCenter()
 	if !ok {
-		return true, nil
+		return true, "", nil
 	}
 	userInfoList, err := us.GetExternalLoginUserInfoList(ctx, userID)
 	if err != nil {
-		return false, err
+		return false, "", err
 	}
 	var thisUcUserInfo *entity.UserExternalLogin
 	for _, t := range userInfoList {
@@ -341,11 +341,11 @@ func (us *UserExternalLoginService) CheckUserStatusInUserCenter(ctx context.Cont
 	}
 	// If this user not login by user center, no need to check user status
 	if thisUcUserInfo == nil {
-		return true, nil
+		return true, "", nil
 	}
 	userStatus := userCenter.UserStatus(thisUcUserInfo.ExternalID)
 	if userStatus == plugin.UserStatusDeleted {
-		return false, nil
+		return false, thisUcUserInfo.ExternalID, nil
 	}
-	return true, nil
+	return true, thisUcUserInfo.ExternalID, nil
 }
