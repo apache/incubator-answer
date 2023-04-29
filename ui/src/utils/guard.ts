@@ -20,7 +20,7 @@ import Storage from '@/utils/storage';
 
 import { setupAppLanguage, setupAppTimeZone } from './localize';
 import { floppyNavigation, NavigateConfig } from './floppyNavigation';
-import { pullUcAgent, getLoginUrl, getSignUpUrl } from './userCenter';
+import { pullUcAgent, getSignUpUrl } from './userCenter';
 
 type TLoginState = {
   isLogged: boolean;
@@ -105,15 +105,18 @@ export const isIgnoredPath = (ignoredPath: string | string[]) => {
   return !!matchingPath;
 };
 
-let pluLock = false;
 let pluTimestamp = 0;
-export const pullLoggedUser = async (forceRePull = false) => {
-  // only pull once if not force re-pull
-  if (pluLock && !forceRePull) {
-    return;
-  }
-  // dedupe pull requests in this time span in 10 seconds
-  if (Date.now() - pluTimestamp < 1000 * 10) {
+export const pullLoggedUser = async (isInitPull = false) => {
+  /**
+   * WARN:
+   * - dedupe pull requests in this time span in 10 seconds
+   * - isInitPull:
+   *   Requests sent by the initialisation method cannot be throttled
+   *   and may cause Promise.allSettled to complete early in React development mode,
+   *   resulting in inaccurate application data.
+   */
+  //
+  if (!isInitPull && Date.now() - pluTimestamp < 1000 * 10) {
     return;
   }
   pluTimestamp = Date.now();
@@ -125,7 +128,6 @@ export const pullLoggedUser = async (forceRePull = false) => {
     console.error(ex);
   });
   if (loggedUserInfo) {
-    pluLock = true;
     loggedUserInfoStore.getState().update(loggedUserInfo);
   }
 };
@@ -237,16 +239,6 @@ export const allowNewRegistration = () => {
   if (!loginSetting.allow_new_registrations) {
     gr.ok = false;
     gr.redirect = RouteAlias.home;
-  }
-  return gr;
-};
-
-export const loginAgent = () => {
-  const gr: TGuardResult = { ok: true };
-  const loginUrl = getLoginUrl();
-  if (loginUrl !== RouteAlias.login) {
-    gr.ok = false;
-    gr.redirect = loginUrl;
   }
   return gr;
 };
@@ -367,7 +359,6 @@ export const handleLoginWithToken = (
 /**
  * Initialize app configuration
  */
-let appInitialized = false;
 export const initAppSettingsStore = async () => {
   const appSettings = await getAppSettings();
   if (appSettings) {
@@ -389,7 +380,13 @@ export const initAppSettingsStore = async () => {
   }
 };
 
+let appInitialized = false;
 export const setupApp = async () => {
+  /**
+   * This cannot be removed:
+   * clicking on the current navigation link will trigger a call to the routing loader,
+   * even though the page is not refreshed.
+   */
   if (appInitialized) {
     return;
   }
@@ -398,9 +395,14 @@ export const setupApp = async () => {
    * 1. must pre init logged user info for router guard
    * 2. must pre init app settings for app render
    */
-  await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
+  await Promise.allSettled([initAppSettingsStore(), pullLoggedUser(true)]);
   await Promise.allSettled([pullUcAgent()]);
   setupAppLanguage();
   setupAppTimeZone();
+  /**
+   * WARN:
+   * Initialization must be completed after all initialization actions,
+   * otherwise the problem of rendering twice in React development mode can lead to inaccurate data or flickering pages
+   */
   appInitialized = true;
 };

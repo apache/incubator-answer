@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from 'react';
-import { useLocation, useNavigate, useLoaderData } from 'react-router-dom';
+import { useNavigate, useLoaderData } from 'react-router-dom';
 
 import { floppyNavigation } from '@/utils';
 import { TGuardFunc, TGuardResult } from '@/utils/guard';
@@ -13,7 +13,6 @@ const RouteGuard: FC<{
   page?: string;
 }> = ({ children, onEnter, path, page }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const loaderData = useLoaderData();
   const [gk, setKeeper] = useState<TGuardResult>({
     ok: true,
@@ -23,6 +22,7 @@ const RouteGuard: FC<{
     if (typeof onEnter !== 'function') {
       return;
     }
+
     const gr = onEnter({
       loaderData,
       path,
@@ -48,12 +48,10 @@ const RouteGuard: FC<{
   };
   useEffect(() => {
     /**
-     * NOTICE:
-     *  Must be put in `useEffect`,
-     *  otherwise `guard` may not get `loggedUserInfo` correctly
+     * By detecting changes to location.href, many unnecessary tests can be avoided
      */
     applyGuard();
-  }, [location]);
+  }, [window.location.href]);
 
   let asOK = gk.ok;
   if (gk.ok === false && gk.redirect) {
@@ -62,10 +60,8 @@ const RouteGuard: FC<{
      *    but the current page is already the target page for the route guard jump
      * This should render `children`!
      */
-
     asOK = floppyNavigation.equalToCurrentHref(gk.redirect);
   }
-
   return (
     <>
       {asOK ? children : null}
