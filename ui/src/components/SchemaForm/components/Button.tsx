@@ -1,9 +1,10 @@
-import React, { FC, useState } from 'react';
-import { Button, ButtonProps } from 'react-bootstrap';
+import React, { FC, useLayoutEffect, useState } from 'react';
+import { Button, ButtonProps, Spinner } from 'react-bootstrap';
 
 import { request } from '@/utils';
 import type * as Type from '@/common/interface';
-import type { UIAction } from '../index.d';
+import type { UIAction } from '../types';
+import { useToast } from '@/hooks';
 
 interface Props {
   fieldName: string;
@@ -24,17 +25,51 @@ const Index: FC<Props> = ({
   variant = 'primary',
   size,
 }) => {
+  const Toast = useToast();
   const [isLoading, setLoading] = useState(false);
-  const handleAction = async () => {
+  const handleNotify = (msg, type: 'success' | 'danger' = 'success') => {
+    const tm = action?.toastMessage;
+    if (tm === false || !msg) {
+      return;
+    }
+    Toast.onShow({
+      msg,
+      variant: type,
+    });
+  };
+  const handleAction = () => {
     if (!action) {
       return;
     }
     setLoading(true);
-    const method = action.method || 'get';
-    await request[method](action.url);
-    setLoading(false);
+    request
+      .request({
+        method: action.method,
+        url: action.url,
+        timeout: 0,
+      })
+      .then((resp) => {
+        if ('message' in resp) {
+          handleNotify(resp.message, 'success');
+        }
+      })
+      .catch((ex) => {
+        if (ex && 'msg' in ex) {
+          handleNotify(ex.msg, 'danger');
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
+  useLayoutEffect(() => {
+    if (action?.loading?.state === 'pending') {
+      setLoading(true);
+    }
+  }, []);
+  const loadingText = action?.loading?.text || text;
   const disabled = isLoading || readOnly;
+
   return (
     <div className="d-flex">
       <Button
@@ -43,8 +78,19 @@ const Index: FC<Props> = ({
         disabled={disabled}
         size={size}
         variant={variant}>
-        {text || fieldName}
-        {isLoading ? '...' : ''}
+        {isLoading ? (
+          <>
+            <Spinner
+              className="align-middle me-2"
+              animation="border"
+              size="sm"
+              variant={variant}
+            />
+            {loadingText}
+          </>
+        ) : (
+          text
+        )}
       </Button>
     </div>
   );

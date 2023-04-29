@@ -11,7 +11,7 @@ import classnames from 'classnames';
 
 import type * as Type from '@/common/interface';
 
-import type { UIAction } from './index.d';
+import type { UIAction } from './types';
 import {
   Legend,
   Select,
