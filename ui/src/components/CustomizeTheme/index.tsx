@@ -11,6 +11,9 @@ const Index: FC = () => {
   let primaryColor;
   if (theme_config?.[theme]?.primary_color) {
     primaryColor = Color(theme_config[theme].primary_color);
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', primaryColor.hex());
   }
 
   return (

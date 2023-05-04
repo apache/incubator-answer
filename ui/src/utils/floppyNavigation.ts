@@ -71,6 +71,9 @@ const navigate = (to: string | number, config: NavigateConfig = {}) => {
     if (!isRoutableLink(to) && handler !== 'href' && handler !== 'replace') {
       handler = 'href';
     }
+    if (handler === 'href' && config.options?.replace) {
+      handler = 'replace';
+    }
     if (handler === 'href') {
       window.location.href = to;
     } else if (handler === 'replace') {

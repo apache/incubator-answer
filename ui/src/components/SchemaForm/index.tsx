@@ -4,14 +4,15 @@ import React, {
   useImperativeHandle,
   useEffect,
 } from 'react';
-import { Form, Button, ButtonProps } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import { isEmpty } from 'lodash';
 import classnames from 'classnames';
 
 import type * as Type from '@/common/interface';
 
-import type { UIAction } from './index.d';
+import type { JSONSchema, UISchema, BaseUIOptions, FormKit } from './types';
 import {
   Legend,
   Select,
@@ -21,122 +22,16 @@ import {
   Upload,
   Textarea,
   Input,
-  Button as CtrlButton,
+  Button as SfButton,
 } from './components';
 
-export interface JSONSchema {
-  title: string;
-  description?: string;
-  required?: string[];
-  properties: {
-    [key: string]: {
-      type: 'string' | 'boolean' | 'number';
-      title: string;
-      description?: string;
-      enum?: Array<string | boolean | number>;
-      enumNames?: string[];
-      default?: string | boolean | number;
-    };
-  };
-}
-
-export interface BaseUIOptions {
-  empty?: string;
-  // Will be appended to the className of the form component itself
-  className?: classnames.Argument;
-  // The className that will be attached to a form field container
-  fieldClassName?: classnames.Argument;
-  // Make a form component render into simplified mode
-  readOnly?: boolean;
-  simplify?: boolean;
-  validator?: (
-    value,
-    formData?,
-  ) => Promise<string | true | void> | true | string;
-}
-
-export interface InputOptions extends BaseUIOptions {
-  placeholder?: string;
-  inputType?:
-    | 'color'
-    | 'date'
-    | 'datetime-local'
-    | 'email'
-    | 'month'
-    | 'number'
-    | 'password'
-    | 'range'
-    | 'search'
-    | 'tel'
-    | 'text'
-    | 'time'
-    | 'url'
-    | 'week';
-}
-export interface SelectOptions extends BaseUIOptions {}
-export interface UploadOptions extends BaseUIOptions {
-  acceptType?: string;
-  imageType?: Type.UploadType;
-}
-
-export interface SwitchOptions extends BaseUIOptions {
-  label?: string;
-}
-
-export interface TimezoneOptions extends BaseUIOptions {
-  placeholder?: string;
-}
-
-export interface CheckboxOptions extends BaseUIOptions {}
-
-export interface RadioOptions extends BaseUIOptions {}
-
-export interface TextareaOptions extends BaseUIOptions {
-  placeholder?: string;
-  rows?: number;
-}
-
-export interface ButtonOptions extends BaseUIOptions {
-  text: string;
-  icon?: string;
-  action?: UIAction;
-  variant?: ButtonProps['variant'];
-  size?: ButtonProps['size'];
-}
-
-export type UIOptions =
-  | InputOptions
-  | SelectOptions
-  | UploadOptions
-  | SwitchOptions
-  | TimezoneOptions
-  | CheckboxOptions
-  | RadioOptions
-  | TextareaOptions
-  | ButtonOptions;
-
-export type UIWidget =
-  | 'textarea'
-  | 'input'
-  | 'checkbox'
-  | 'radio'
-  | 'select'
-  | 'upload'
-  | 'timezone'
-  | 'switch'
-  | 'legend'
-  | 'button';
-export interface UISchema {
-  [key: string]: {
-    'ui:widget'?: UIWidget;
-    'ui:options'?: UIOptions;
-  };
-}
+export * from './types';
 
 interface IProps {
-  schema: JSONSchema;
+  schema: JSONSchema | null;
+  formData: Type.FormDataType | null;
   uiSchema?: UISchema;
-  formData?: Type.FormDataType;
+  refreshConfig?: FormKit['refreshConfig'];
   hiddenSubmit?: boolean;
   onChange?: (data: Type.FormDataType) => void;
   onSubmit?: (e: React.FormEvent) => void;
@@ -148,6 +43,7 @@ interface IRef {
 
 /**
  * TODO:
+ *  - [!] Standardised `Admin/Plugins/Config/index.tsx` method for generating dynamic form configurations.
  *  - Normalize and document `formData[key].hidden && 'd-none'`
  *  - Normalize and document `hiddenSubmit`
  *  - Improving field hints for `formData`
@@ -168,7 +64,8 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   {
     schema,
     uiSchema = {},
-    formData = {},
+    refreshConfig,
+    formData,
     onChange,
     onSubmit,
     hiddenSubmit = false,
@@ -181,11 +78,10 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   const { required = [], properties = {} } = schema || {};
   // check required field
   const excludes = required.filter((key) => !properties[key]);
-
   if (excludes.length > 0) {
     console.error(t('not_found_props', { key: excludes.join(', ') }));
   }
-
+  formData ||= {};
   const keys = Object.keys(properties);
   /**
    * Prevent components such as `select` from having default values,
@@ -193,14 +89,14 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
    */
   const setDefaultValueAsDomBehaviour = () => {
     keys.forEach((k) => {
-      const fieldVal = formData[k]?.value;
+      const fieldVal = formData![k]?.value;
       const metaProp = properties[k];
       const uiCtrl = uiSchema[k]?.['ui:widget'];
       if (!metaProp || !uiCtrl || fieldVal !== undefined) {
         return;
       }
       if (uiCtrl === 'select' && metaProp.enum?.[0] !== undefined) {
-        formData[k] = {
+        formData![k] = {
           errorMsg: '',
           isInvalid: false,
           value: metaProp.enum?.[0],
@@ -212,10 +108,22 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
     setDefaultValueAsDomBehaviour();
   }, [formData]);
 
+  const formKitWithContext: FormKit = {
+    refreshConfig() {
+      if (typeof refreshConfig === 'function') {
+        refreshConfig();
+      }
+    },
+  };
+
+  /**
+   * Form validation
+   * - Currently only dynamic forms are in use, the business form validation has been handed over to the server
+   */
   const requiredValidator = () => {
     const errors: string[] = [];
     required.forEach((key) => {
-      if (!formData[key] || !formData[key].value) {
+      if (!formData![key] || !formData![key].value) {
         errors.push(key);
       }
     });
@@ -231,7 +139,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
     keys.forEach((key) => {
       const { validator } = uiSchema[key]?.['ui:options'] || {};
       if (validator instanceof Function) {
-        const value = formData[key]?.value;
+        const value = formData![key]?.value;
         promises.push({
           key,
           promise: validator(value, formData),
@@ -269,14 +177,14 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
     if (errors.length > 0) {
       formData = errors.reduce((acc, cur) => {
         acc[cur] = {
-          ...formData[cur],
+          ...formData![cur],
           isInvalid: true,
           errorMsg:
             uiSchema[cur]?.['ui:options']?.empty ||
-            `${schema.properties[cur]?.title} ${t('empty')}`,
+            `${properties[cur]?.title} ${t('empty')}`,
         };
         return acc;
-      }, formData);
+      }, formData || {});
       if (onChange instanceof Function) {
         onChange({ ...formData });
       }
@@ -286,13 +194,12 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
     if (syncErrors.length > 0) {
       formData = syncErrors.reduce((acc, cur) => {
         acc[cur.key] = {
-          ...formData[cur.key],
+          ...formData![cur.key],
           isInvalid: true,
-          errorMsg:
-            cur.msg || `${schema.properties[cur.key].title} ${t('invalid')}`,
+          errorMsg: cur.msg || `${properties[cur.key].title} ${t('invalid')}`,
         };
         return acc;
-      }, formData);
+      }, formData || {});
       if (onChange instanceof Function) {
         onChange({ ...formData });
       }
@@ -308,12 +215,12 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
       return;
     }
 
-    Object.keys(formData).forEach((key) => {
-      formData[key].isInvalid = false;
-      formData[key].errorMsg = '';
+    Object.keys(formData!).forEach((key) => {
+      formData![key].isInvalid = false;
+      formData![key].errorMsg = '';
     });
     if (onChange instanceof Function) {
-      onChange(formData);
+      onChange(formData!);
     }
     if (onSubmit instanceof Function) {
       onSubmit(e);
@@ -323,9 +230,10 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   useImperativeHandle(ref, () => ({
     validator,
   }));
-  if (!formData || !schema || !schema.properties) {
+  if (!formData || !schema || isEmpty(schema.properties)) {
     return null;
   }
+
   return (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {
@@ -336,7 +244,8 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
           enumNames = [],
         } = properties[key];
         const { 'ui:widget': widget = 'input', 'ui:options': uiOpt } =
-          uiSchema[key] || {};
+          uiSchema?.[key] || {};
+        formData ||= {};
         const fieldState = formData[key];
         const uiSimplify = widget === 'legend' || uiOpt?.simplify;
         let groupClassName: BaseUIOptions['fieldClassName'] = uiOpt?.simplify
@@ -441,11 +350,11 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
               />
             ) : null}
             {widget === 'button' ? (
-              <CtrlButton
+              <SfButton
                 fieldName={key}
                 text={uiOpt && 'text' in uiOpt ? uiOpt.text : ''}
                 action={uiOpt && 'action' in uiOpt ? uiOpt.action : undefined}
-                formData={formData}
+                formKit={formKitWithContext}
                 readOnly={readOnly}
                 variant={
                   uiOpt && 'variant' in uiOpt ? uiOpt.variant : undefined
@@ -473,8 +382,9 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
 };
 export const initFormData = (schema: JSONSchema): Type.FormDataType => {
   const formData: Type.FormDataType = {};
-  Object.keys(schema.properties).forEach((key) => {
-    const prop = schema.properties[key];
+  const props: JSONSchema['properties'] = schema?.properties || {};
+  Object.keys(props).forEach((key) => {
+    const prop = props[key];
     const defaultVal = prop?.default;
 
     formData[key] = {
@@ -484,6 +394,29 @@ export const initFormData = (schema: JSONSchema): Type.FormDataType => {
     };
   });
   return formData;
+};
+
+export const mergeFormData = (
+  target: Type.FormDataType | null,
+  origin: Type.FormDataType | null,
+) => {
+  if (!target) {
+    return origin;
+  }
+  if (!origin) {
+    return target;
+  }
+  Object.keys(target).forEach((k) => {
+    const oi = origin[k];
+    if (oi && oi.value !== undefined) {
+      target[k] = {
+        value: oi.value,
+        isInvalid: false,
+        errorMsg: '',
+      };
+    }
+  });
+  return target;
 };
 
 export default forwardRef(SchemaForm);
