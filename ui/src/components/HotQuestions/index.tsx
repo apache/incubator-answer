@@ -10,7 +10,9 @@ import { useHotQuestions } from '@/services';
 const HotQuestions: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
   const { data: questionRes } = useHotQuestions();
-
+  if (!questionRes?.list?.length) {
+    return null;
+  }
   return (
     <Card>
       <Card.Header className="text-nowrap text-capitalize">
