@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/pkg/converter"
 
 	"github.com/answerdev/answer/internal/base/pager"
@@ -70,7 +71,9 @@ var LimitDownActions = map[string][]string{
 
 func (vr *VoteRepo) vote(ctx context.Context, objectID string, userID, objectUserID string, actions []string) (resp *schema.VoteResp, err error) {
 	resp = &schema.VoteResp{}
-	notificationUserIDs := make([]string, 0)
+	achievementNotificationUserIDs := make([]string, 0)
+	sendInboxNotification := false
+	upVote := false
 	_, err = vr.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
 		result = nil
 		for _, action := range actions {
@@ -127,7 +130,7 @@ func (vr *VoteRepo) vote(ctx context.Context, objectID string, userID, objectUse
 				if isReachStandard {
 					insertActivity.Rank = 0
 				}
-				notificationUserIDs = append(notificationUserIDs, activityUserID)
+				achievementNotificationUserIDs = append(achievementNotificationUserIDs, activityUserID)
 			}
 
 			if has {
@@ -142,13 +145,17 @@ func (vr *VoteRepo) vote(ctx context.Context, objectID string, userID, objectUse
 				if err != nil {
 					return nil, err
 				}
+				sendInboxNotification = true
 			}
 
 			// update votes
-			if action == "vote_down" || action == "vote_up" {
+			if action == constant.ActVoteDown || action == constant.ActVoteUp {
 				votes := 1
-				if action == "vote_down" {
+				if action == constant.ActVoteDown {
+					upVote = false
 					votes = -1
+				} else {
+					upVote = true
 				}
 				err = vr.updateVotes(ctx, session, objectID, votes)
 				if err != nil {
@@ -165,8 +172,11 @@ func (vr *VoteRepo) vote(ctx context.Context, objectID string, userID, objectUse
 	resp, err = vr.GetVoteResultByObjectId(ctx, objectID)
 	resp.VoteStatus = vr.voteCommon.GetVoteStatus(ctx, objectID, userID)
 
-	for _, activityUserID := range notificationUserIDs {
+	for _, activityUserID := range achievementNotificationUserIDs {
 		vr.sendNotification(ctx, activityUserID, objectUserID, objectID)
+	}
+	if sendInboxNotification {
+		vr.sendVoteInboxNotification(userID, objectUserID, objectID, upVote)
 	}
 	return
 }
@@ -440,4 +450,41 @@ func (vr *VoteRepo) sendNotification(ctx context.Context, activityUserID, object
 		ObjectType:     objectType,
 	}
 	notice_queue.AddNotification(msg)
+}
+
+func (vr *VoteRepo) sendVoteInboxNotification(triggerUserID, receiverUserID, objectID string, upvote bool) {
+	if triggerUserID == receiverUserID {
+		return
+	}
+	objectType, _ := obj.GetObjectTypeStrByObjectID(objectID)
+
+	msg := &schema.NotificationMsg{
+		TriggerUserID:  triggerUserID,
+		ReceiverUserID: receiverUserID,
+		Type:           schema.NotificationTypeInbox,
+		ObjectID:       objectID,
+		ObjectType:     objectType,
+	}
+	if objectType == constant.QuestionObjectType {
+		if upvote {
+			msg.NotificationAction = constant.UpVotedTheQuestion
+		} else {
+			msg.NotificationAction = constant.DownVotedTheQuestion
+		}
+	}
+	if objectType == constant.AnswerObjectType {
+		if upvote {
+			msg.NotificationAction = constant.UpVotedTheAnswer
+		} else {
+			msg.NotificationAction = constant.DownVotedTheAnswer
+		}
+	}
+	if objectType == constant.CommentObjectType {
+		if upvote {
+			msg.NotificationAction = constant.UpVotedTheComment
+		}
+	}
+	if len(msg.NotificationAction) > 0 {
+		notice_queue.AddNotification(msg)
+	}
 }
