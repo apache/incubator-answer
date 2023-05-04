@@ -57,10 +57,10 @@ class Request {
       (error) => {
         const {
           status,
-          data: errModel,
+          data: errBody,
           config: errConfig,
         } = error.response || {};
-        const { data = {}, msg = '' } = errModel || {};
+        const { data = {}, msg = '' } = errBody || {};
         const errorObject: {
           code: any;
           msg: string;

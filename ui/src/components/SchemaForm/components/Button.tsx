@@ -2,15 +2,14 @@ import React, { FC, useLayoutEffect, useState } from 'react';
 import { Button, ButtonProps, Spinner } from 'react-bootstrap';
 
 import { request } from '@/utils';
-import type * as Type from '@/common/interface';
-import type { UIAction } from '../types';
+import type { UIAction, FormKit } from '../types';
 import { useToast } from '@/hooks';
 
 interface Props {
   fieldName: string;
   text: string;
   action: UIAction | undefined;
-  formData: Type.FormDataType;
+  formKit: FormKit;
   readOnly: boolean;
   variant?: ButtonProps['variant'];
   size?: ButtonProps['size'];
@@ -18,8 +17,7 @@ interface Props {
 const Index: FC<Props> = ({
   fieldName,
   action,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  formData,
+  formKit,
   text = '',
   readOnly = false,
   variant = 'primary',
@@ -27,8 +25,8 @@ const Index: FC<Props> = ({
 }) => {
   const Toast = useToast();
   const [isLoading, setLoading] = useState(false);
-  const handleNotify = (msg, type: 'success' | 'danger' = 'success') => {
-    const tm = action?.toastMessage;
+  const handleToast = (msg, type: 'success' | 'danger' = 'success') => {
+    const tm = action?.on_complete?.toast_return_message;
     if (tm === false || !msg) {
       return;
     }
@@ -36,6 +34,13 @@ const Index: FC<Props> = ({
       msg,
       variant: type,
     });
+  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handleCallback = (resp) => {
+    const callback = action?.on_complete;
+    if (callback?.refresh_form_config) {
+      formKit.refreshConfig();
+    }
   };
   const handleAction = () => {
     if (!action) {
@@ -50,12 +55,13 @@ const Index: FC<Props> = ({
       })
       .then((resp) => {
         if ('message' in resp) {
-          handleNotify(resp.message, 'success');
+          handleToast(resp.message, 'success');
         }
+        handleCallback(resp);
       })
       .catch((ex) => {
         if (ex && 'msg' in ex) {
-          handleNotify(ex.msg, 'danger');
+          handleToast(ex.msg, 'danger');
         }
       })
       .finally(() => {
