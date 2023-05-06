@@ -2505,7 +2505,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserAnswerList",
+                "description": "list personal answers",
                 "consumes": [
                     "application/json"
                 ],
@@ -2513,9 +2513,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "api-answer"
+                    "Personal"
                 ],
-                "summary": "UserAnswerList",
+                "summary": "list personal answers",
                 "parameters": [
                     {
                         "type": "string",
@@ -2547,8 +2547,8 @@
                     {
                         "type": "string",
                         "default": "20",
-                        "description": "pagesize",
-                        "name": "pagesize",
+                        "description": "page_size",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     }
@@ -2570,7 +2570,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserCollectionList",
+                "description": "list personal collections",
                 "consumes": [
                     "application/json"
                 ],
@@ -2580,7 +2580,7 @@
                 "tags": [
                     "Collection"
                 ],
-                "summary": "UserCollectionList",
+                "summary": "list personal collections",
                 "parameters": [
                     {
                         "type": "string",
@@ -2593,8 +2593,8 @@
                     {
                         "type": "string",
                         "default": "20",
-                        "description": "pagesize",
-                        "name": "pagesize",
+                        "description": "page_size",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     }
@@ -5312,7 +5312,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserList",
+                "description": "list personal questions",
                 "consumes": [
                     "application/json"
                 ],
@@ -5320,9 +5320,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Question"
+                    "Personal"
                 ],
-                "summary": "UserList",
+                "summary": "list personal questions",
                 "parameters": [
                     {
                         "type": "string",
@@ -5354,8 +5354,8 @@
                     {
                         "type": "string",
                         "default": "20",
-                        "description": "pagesize",
-                        "name": "pagesize",
+                        "description": "page_size",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     }

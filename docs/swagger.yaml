@@ -3509,7 +3509,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: UserAnswerList
+      description: list personal answers
       parameters:
       - default: string
         description: username
@@ -3532,9 +3532,9 @@ paths:
         required: true
         type: string
       - default: "20"
-        description: pagesize
+        description: page_size
         in: query
-        name: pagesize
+        name: page_size
         required: true
         type: string
       produces:
@@ -3546,14 +3546,14 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: UserAnswerList
+      summary: list personal answers
       tags:
-      - api-answer
+      - Personal
   /answer/api/v1/personal/collection/page:
     get:
       consumes:
       - application/json
-      description: UserCollectionList
+      description: list personal collections
       parameters:
       - default: "0"
         description: page
@@ -3562,9 +3562,9 @@ paths:
         required: true
         type: string
       - default: "20"
-        description: pagesize
+        description: page_size
         in: query
-        name: pagesize
+        name: page_size
         required: true
         type: string
       produces:
@@ -3576,7 +3576,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: UserCollectionList
+      summary: list personal collections
       tags:
       - Collection
   /answer/api/v1/personal/comment/page:
@@ -5210,7 +5210,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: UserList
+      description: list personal questions
       parameters:
       - default: string
         description: username
@@ -5233,9 +5233,9 @@ paths:
         required: true
         type: string
       - default: "20"
-        description: pagesize
+        description: page_size
         in: query
-        name: pagesize
+        name: page_size
         required: true
         type: string
       produces:
@@ -5247,9 +5247,9 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: UserList
+      summary: list personal questions
       tags:
-      - Question
+      - Personal
   /robots.txt:
     get:
       description: get site robots information

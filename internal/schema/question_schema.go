@@ -374,3 +374,25 @@ type SiteMapQuestionInfo struct {
 	Title      string `json:"title"`
 	UpdateTime string `json:"time"`
 }
+
+type PersonalQuestionPageReq struct {
+	Page        int    `validate:"omitempty,min=1" form:"page"`
+	PageSize    int    `validate:"omitempty,min=1" form:"page_size"`
+	OrderCond   string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
+	Username    string `validate:"omitempty,gt=0,lte=100" form:"username"`
+	LoginUserID string `json:"-"`
+}
+
+type PersonalAnswerPageReq struct {
+	Page        int    `validate:"omitempty,min=1" form:"page"`
+	PageSize    int    `validate:"omitempty,min=1" form:"page_size"`
+	OrderCond   string `validate:"omitempty,oneof=newest active frequent score unanswered" form:"order"`
+	Username    string `validate:"omitempty,gt=0,lte=100" form:"username"`
+	LoginUserID string `json:"-"`
+}
+
+type PersonalCollectionPageReq struct {
+	Page     int    `validate:"omitempty,min=1" form:"page"`
+	PageSize int    `validate:"omitempty,min=1" form:"page_size"`
+	UserID   string `json:"-"`
+}
