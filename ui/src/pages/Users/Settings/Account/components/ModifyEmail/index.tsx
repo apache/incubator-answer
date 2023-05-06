@@ -52,12 +52,6 @@ const Index: FC = () => {
     });
   };
 
-  useEffect(() => {
-    if (step > 1) {
-      getImgCode();
-    }
-  }, [step]);
-
   const handleChange = (params: Type.FormDataType) => {
     setFormData({ ...formData, ...params });
   };
@@ -172,7 +166,12 @@ const Index: FC = () => {
             />
           </Form.Group>
 
-          <Button variant="outline-secondary" onClick={() => setStep(2)}>
+          <Button
+            variant="outline-secondary"
+            onClick={() => {
+              setStep(2);
+              getImgCode();
+            }}>
             {t('change_email_btn')}
           </Button>
         </Form>
