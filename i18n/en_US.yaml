@@ -779,8 +779,8 @@ ui:
         We've sent an email to that address. Please follow the confirmation
         instructions.
       email:
-        label: Email
-        msg: Email cannot be empty.
+        label: New Email
+        msg: New Email cannot be empty.
       pass:
         label: Current Password
         msg: Password cannot be empty.
