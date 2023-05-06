@@ -103,7 +103,10 @@ const Index: FC = () => {
     });
   };
 
-  const postEmail = () => {
+  const postEmail = (event?: any) => {
+    if (event) {
+      event.preventDefault();
+    }
     const params: any = {
       e_mail: formData.e_mail.value,
       pass: formData.pass.value,
