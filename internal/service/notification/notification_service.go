@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/schema"
@@ -14,7 +14,6 @@ import (
 	"github.com/answerdev/answer/internal/service/revision_common"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -134,7 +133,7 @@ func (ns *NotificationService) GetNotificationPage(ctx context.Context, searchCo
 			log.Error("NotificationContent Unmarshal Error", err.Error())
 			continue
 		}
-		lang, _ := ctx.Value(constant.AcceptLanguageFlag).(i18n.Language)
+		lang := handler.GetLangByCtx(ctx)
 		item.NotificationAction = translator.Tr(lang, item.NotificationAction)
 		item.ID = notificationInfo.ID
 		item.UpdateTime = notificationInfo.UpdatedAt.Unix()

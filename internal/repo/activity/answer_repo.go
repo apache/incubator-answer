@@ -202,7 +202,9 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 			msg.TriggerUserID = questionUserID
 			msg.ObjectType = constant.AnswerObjectType
 		}
-		notice_queue.AddNotification(msg)
+		if msg.TriggerUserID != msg.ReceiverUserID {
+			notice_queue.AddNotification(msg)
+		}
 	}
 
 	for _, act := range addActivityList {

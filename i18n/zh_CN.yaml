@@ -329,6 +329,16 @@ backend:
         other: 你的答案已被删除
       your_comment_was_deleted:
         other: 你的评论已被删除
+      up_voted_question:
+        other: 赞了问题
+      down_voted_question:
+        other: 踩了问题
+      up_voted_answer:
+        other: 赞了答案
+      down_voted_answer:
+        other: 踩了答案
+      up_voted_comment:
+        other: 赞了评论
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:

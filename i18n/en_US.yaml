@@ -339,6 +339,16 @@ backend:
         other: Your answer has been deleted
       your_comment_was_deleted:
         other: Your comment has been deleted
+      up_voted_question:
+        other: upvoted question
+      down_voted_question:
+        other: downvoted question
+      up_voted_answer:
+        other: upvoted answer
+      down_voted_answer:
+        other: downvoted answer
+      up_voted_comment:
+        other: upvoted comment
 
 # The following fields are used for interface presentation(Front-end)
 ui:
