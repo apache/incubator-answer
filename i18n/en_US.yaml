@@ -781,6 +781,9 @@ ui:
       email:
         label: Email
         msg: Email cannot be empty.
+      pass:
+        label: Current Password
+        msg: Password cannot be empty.
       password_title: Password
       current_pass:
         label: Current Password
