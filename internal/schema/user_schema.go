@@ -399,6 +399,7 @@ type GetOtherUserInfoResp struct {
 type UserChangeEmailSendCodeReq struct {
 	UserVerifyEmailSendReq
 	Email  string `validate:"required,email,gt=0,lte=500" json:"e_mail"`
+	Pass   string `validate:"omitempty,gte=8,lte=32" json:"pass"`
 	UserID string `json:"-"`
 }
 
