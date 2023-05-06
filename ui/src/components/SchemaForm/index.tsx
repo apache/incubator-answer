@@ -2,6 +2,7 @@ import {
   ForwardRefRenderFunction,
   forwardRef,
   useImperativeHandle,
+  useEffect,
 } from 'react';
 import { Form, Button, Stack } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +21,6 @@ export interface JSONSchema {
     [key: string]: {
       type: 'string' | 'boolean' | 'number';
       title: string;
-      label?: string;
       description?: string;
       enum?: Array<string | boolean | number>;
       enumNames?: string[];
@@ -28,45 +28,79 @@ export interface JSONSchema {
     };
   };
 }
+
+export interface BaseUIOptions {
+  empty?: string;
+  className?: string | string[];
+  validator?: (
+    value,
+    formData?,
+  ) => Promise<string | true | void> | true | string;
+}
+export interface InputOptions extends BaseUIOptions {
+  placeholder?: string;
+  inputType?:
+    | 'color'
+    | 'date'
+    | 'datetime-local'
+    | 'email'
+    | 'month'
+    | 'number'
+    | 'password'
+    | 'range'
+    | 'search'
+    | 'tel'
+    | 'text'
+    | 'time'
+    | 'url'
+    | 'week';
+}
+export interface SelectOptions extends BaseUIOptions {}
+export interface UploadOptions extends BaseUIOptions {
+  acceptType?: string;
+  imageType?: Type.UploadType;
+}
+
+export interface SwitchOptions extends BaseUIOptions {
+  label?: string;
+}
+
+export interface TimezoneOptions extends BaseUIOptions {
+  placeholder?: string;
+}
+
+export interface CheckboxOptions extends BaseUIOptions {}
+
+export interface RadioOptions extends BaseUIOptions {}
+
+export interface TextareaOptions extends BaseUIOptions {
+  placeholder?: string;
+  rows?: number;
+}
+
+export type UIOptions =
+  | InputOptions
+  | SelectOptions
+  | UploadOptions
+  | SwitchOptions
+  | TimezoneOptions
+  | CheckboxOptions
+  | RadioOptions
+  | TextareaOptions;
+
+export type UIWidget =
+  | 'textarea'
+  | 'input'
+  | 'checkbox'
+  | 'radio'
+  | 'select'
+  | 'upload'
+  | 'timezone'
+  | 'switch';
 export interface UISchema {
   [key: string]: {
-    'ui:widget'?:
-      | 'textarea'
-      | 'text'
-      | 'checkbox'
-      | 'radio'
-      | 'select'
-      | 'upload'
-      | 'timezone'
-      | 'switch';
-    'ui:options'?: {
-      rows?: number;
-      placeholder?: string;
-      type?:
-        | 'color'
-        | 'date'
-        | 'datetime-local'
-        | 'email'
-        | 'month'
-        | 'number'
-        | 'password'
-        | 'range'
-        | 'search'
-        | 'tel'
-        | 'text'
-        | 'time'
-        | 'url'
-        | 'week';
-      empty?: string;
-      className?: string | string[];
-      validator?: (
-        value,
-        formData?,
-      ) => Promise<string | true | void> | true | string;
-      textRender?: () => React.ReactElement;
-      imageType?: Type.UploadType;
-      acceptType?: string;
-    };
+    'ui:widget'?: UIWidget;
+    'ui:options'?: UIOptions;
   };
 }
 
@@ -116,6 +150,30 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   }
 
   const keys = Object.keys(properties);
+  /**
+   * Prevent components such as `select` from having default values,
+   * which are not generated on `formData`
+   */
+  const setDefaultValueAsDomBehaviour = () => {
+    keys.forEach((k) => {
+      const fieldVal = formData[k]?.value;
+      const metaProp = properties[k];
+      const uiCtrl = uiSchema[k]?.['ui:widget'];
+      if (!metaProp || !uiCtrl || fieldVal !== undefined) {
+        return;
+      }
+      if (uiCtrl === 'select' && metaProp.enum?.[0] !== undefined) {
+        formData[k] = {
+          errorMsg: '',
+          isInvalid: false,
+          value: metaProp.enum?.[0],
+        };
+      }
+    });
+  };
+  useEffect(() => {
+    setDefaultValueAsDomBehaviour();
+  }, [formData]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -265,16 +323,17 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
     }
   };
 
-  const handleCheckboxChange = (
+  const handleInputCheck = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
   ) => {
-    const { name } = e.target;
+    const { name, checked } = e.currentTarget;
+    const freshVal = checked ? schema.properties[name]?.enum?.[index] : '';
     const data = {
       ...formData,
       [name]: {
         ...formData[name],
-        value: schema.properties[name]?.enum?.[index],
+        value: freshVal,
         isInvalid: false,
       },
     };
@@ -286,12 +345,11 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
   useImperativeHandle(ref, () => ({
     validator,
   }));
-
   return (
     <Form noValidate onSubmit={handleSubmit}>
       {keys.map((key) => {
-        const { title, description, label } = properties[key];
-        const { 'ui:widget': widget = 'input', 'ui:options': options = {} } =
+        const { title, description } = properties[key];
+        const { 'ui:widget': widget = 'input', 'ui:options': uiOpt } =
           uiSchema[key] || {};
         if (widget === 'select') {
           return (
@@ -303,7 +361,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
               <Form.Select
                 aria-label={description}
                 name={key}
-                value={formData[key]?.value}
+                value={formData[key]?.value || ''}
                 onChange={handleSelectChange}
                 isInvalid={formData[key].isInvalid}>
                 {properties[key].enum?.map((item, index) => {
@@ -323,6 +381,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             </Form.Group>
           );
         }
+
         if (widget === 'checkbox' || widget === 'radio') {
           return (
             <Form.Group
@@ -341,11 +400,11 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                       name={key}
                       id={`form-${String(item)}`}
                       label={properties[key].enumNames?.[index]}
-                      checked={formData[key]?.value === item}
+                      checked={(formData[key]?.value || '') === item}
                       feedback={formData[key]?.errorMsg}
                       feedbackType="invalid"
                       isInvalid={formData[key].isInvalid}
-                      onChange={(e) => handleCheckboxChange(e, index)}
+                      onChange={(e) => handleInputCheck(e, index)}
                     />
                   );
                 })}
@@ -372,8 +431,8 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 id={`switch-${title}`}
                 name={key}
                 type="switch"
-                label={label}
-                checked={formData[key]?.value}
+                label={(uiOpt as SwitchOptions)?.label}
+                checked={formData[key]?.value || ''}
                 feedback={formData[key]?.errorMsg}
                 feedbackType="invalid"
                 isInvalid={formData[key].isInvalid}
@@ -396,7 +455,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
               controlId={key}>
               <Form.Label>{title}</Form.Label>
               <TimeZonePicker
-                value={formData[key]?.value}
+                value={formData[key]?.value || ''}
                 name={key}
                 onChange={handleSelectChange}
               />
@@ -416,6 +475,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
         }
 
         if (widget === 'upload') {
+          const options: UploadOptions = uiSchema[key]?.['ui:options'] || {};
           return (
             <Form.Group
               key={title}
@@ -444,6 +504,8 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
         }
 
         if (widget === 'textarea') {
+          const options: TextareaOptions = uiSchema[key]?.['ui:options'] || {};
+
           return (
             <Form.Group
               controlId={`form-${key}`}
@@ -454,8 +516,7 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
                 as="textarea"
                 name={key}
                 placeholder={options?.placeholder || ''}
-                type={options?.type || 'text'}
-                value={formData[key]?.value}
+                value={formData[key]?.value || ''}
                 onChange={handleInputChange}
                 isInvalid={formData[key].isInvalid}
                 rows={options?.rows || 3}
@@ -471,6 +532,9 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             </Form.Group>
           );
         }
+
+        const options: InputOptions = uiSchema[key]?.['ui:options'] || {};
+
         return (
           <Form.Group
             controlId={key}
@@ -480,10 +544,10 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
             <Form.Control
               name={key}
               placeholder={options?.placeholder || ''}
-              type={options?.type || 'text'}
-              value={formData[key]?.value}
+              type={options?.inputType || 'text'}
+              value={formData[key]?.value || ''}
               onChange={handleInputChange}
-              style={options?.type === 'color' ? { width: '6rem' } : {}}
+              style={options?.inputType === 'color' ? { width: '6rem' } : {}}
               isInvalid={formData[key].isInvalid}
             />
             <Form.Control.Feedback type="invalid">
@@ -507,10 +571,10 @@ const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
 export const initFormData = (schema: JSONSchema): Type.FormDataType => {
   const formData: Type.FormDataType = {};
   Object.keys(schema.properties).forEach((key) => {
-    const v = schema.properties[key]?.default;
-    // TODO: set default value by property type
+    const prop = schema.properties[key];
+    const defaultVal = prop?.default;
     formData[key] = {
-      value: typeof v !== 'undefined' ? v : '',
+      value: defaultVal,
       isInvalid: false,
       errorMsg: '',
     };

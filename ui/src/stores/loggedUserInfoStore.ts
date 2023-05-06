@@ -26,12 +26,17 @@ const initUser: UserInfoRes = {
   status: '',
   mail_status: 1,
   language: 'Default',
+  is_admin: false,
+  have_password: true,
   role_id: 1,
 };
 
 const loggedUserInfoStore = create<UserInfoStore>((set) => ({
   user: initUser,
   update: (params) => {
+    if (typeof params !== 'object' || !params) {
+      return;
+    }
     if (!params?.language) {
       params.language = 'Default';
     }

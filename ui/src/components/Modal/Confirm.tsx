@@ -18,12 +18,16 @@ const Index = ({
   title = '',
   confirmText = '',
   content,
+  onCancel: onClose,
   onConfirm,
   cancelBtnVariant = 'link',
   confirmBtnVariant = 'primary',
   ...props
 }: Config) => {
   const onCancel = () => {
+    if (typeof onClose === 'function') {
+      onClose();
+    }
     render({ visible: false });
     div.remove();
   };

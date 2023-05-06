@@ -11,10 +11,10 @@ import {
   loginToContinueStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
-import Storage from '@/utils/storage';
 import { LOGGED_USER_STORAGE_KEY } from '@/common/constants';
-import { setupAppLanguage, setupAppTimeZone } from '@/utils/localize';
 
+import Storage from './storage';
+import { setupAppLanguage, setupAppTimeZone } from './localize';
 import { floppyNavigation } from './floppyNavigation';
 
 type TLoginState = {
@@ -98,7 +98,6 @@ export const pullLoggedUser = async (forceRePull = false) => {
   if (Date.now() - dedupeTimestamp < 1000 * 10) {
     return;
   }
-
   dedupeTimestamp = Date.now();
   const loggedUserInfo = await getLoggedUserInfo().catch((ex) => {
     dedupeTimestamp = 0;
@@ -298,6 +297,10 @@ export const tryLoggedAndActivated = () => {
   return gr;
 };
 
+/**
+ * Initialize app configuration
+ */
+let appInitialized = false;
 export const initAppSettingsStore = async () => {
   const appSettings = await getAppSettings();
   if (appSettings) {
@@ -314,24 +317,18 @@ export const initAppSettingsStore = async () => {
   }
 };
 
-export const shouldInitAppFetchData = () => {
-  if (isIgnoredPath('/install') && window.location.pathname === '/install') {
-    return false;
-  }
-
-  return true;
-};
-
 export const setupApp = async () => {
+  if (appInitialized) {
+    return;
+  }
   /**
    * WARN:
    * 1. must pre init logged user info for router guard
    * 2. must pre init app settings for app render
    */
   // TODO: optimize `initAppSettingsStore` by server render
-  if (shouldInitAppFetchData()) {
-    await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
-    await setupAppLanguage();
-    setupAppTimeZone();
-  }
+  await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
+  setupAppLanguage();
+  setupAppTimeZone();
+  appInitialized = true;
 };

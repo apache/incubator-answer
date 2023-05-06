@@ -9,3 +9,4 @@ export * from './legal';
 export * from './timeline';
 export * from './revision';
 export * from './user';
+export * from './Oauth';

@@ -322,6 +322,7 @@ ui:
     upgrade: Answer Upgrade
     maintenance: Website Maintenance
     users: Users
+    oauth_callback: Processing
     http_404: HTTP Error 404
     http_50X: HTTP Error 500
     http_403: HTTP Error 403
@@ -658,7 +659,6 @@ ui:
     msg:
       empty: Cannot be empty.
   login:
-    page_title: Welcome to {{site_name}}
     login_to_continue: Log in to continue
     info_sign: Don't have an account? <1>Sign up</1>
     info_login: Already have an account? <1>Log in</1>
@@ -669,6 +669,7 @@ ui:
       msg:
         empty: Name cannot be empty.
         range: Name up to 30 characters.
+        character: 'Must use the character set "a-z", "0-9", " - . _"'
     email:
       label: Email
       msg:
@@ -689,7 +690,6 @@ ui:
       msg:
         empty: Email cannot be empty.
   change_email:
-    page_title: Welcome to {{site_name}}
     btn_cancel: Cancel
     btn_update: Update email address
     send_success: >-
@@ -699,6 +699,17 @@ ui:
       label: New Email
       msg:
         empty: Email cannot be empty.
+  oauth_bind_email:
+    subtitle: Add a recovery email to your account.
+    btn_update: Update email address
+    email:
+      label: Email
+      msg:
+        empty: Email cannot be empty.
+    modal_title: Email already existes.
+    modal_content: This email address already registered. Are you sure you want to connect to the existing account?
+    modal_cancel: Change email
+    modal_confirm: Connect to the existing account
   password_reset:
     page_title: Password Reset
     btn_name: Reset my password
@@ -770,6 +781,9 @@ ui:
       email:
         label: Email
         msg: Email cannot be empty.
+      pass:
+        label: Current Password
+        msg: Password cannot be empty.
       password_title: Password
       current_pass:
         label: Current Password
@@ -786,6 +800,13 @@ ui:
       lang:
         label: Interface Language
         text: User interface language. It will change when you refresh the page.
+    my_logins:
+      title: My Logins
+      label: Log in or sign up on this site using these accounts.
+      modal_title: Remove Login
+      modal_content: Are you sure you want to remove this login from your account?
+      modal_confirm_btn: Remove
+      remove_success: Removed successfully
   toast:
     update: update success
     update_password: Password changed successfully.
@@ -907,7 +928,6 @@ ui:
   modal_confirm:
     title: Error...
   account_result:
-    page_title: Welcome to {{site_name}}
     success: Your new account is confirmed; you will be redirected to the home page.
     link: Continue to homepage
     invalid: >-
@@ -1034,6 +1054,7 @@ ui:
     admin_name:
       label: Name
       msg: Name cannot be empty.
+      character: 'Must use the character set "a-z", "0-9", " - . _"'
     admin_password:
       label: Password
       text: >-
@@ -1097,6 +1118,14 @@ ui:
     themes: Themes
     css-html: CSS/HTML
     login: Login
+    plugins: Plugins
+    installed_plugins: Installed Plugins
+  website_welcome: Welcome to {{site_name}}
+  plugins:
+    oauth:
+      connect: Connect with {{ auth_name }}
+      remove: Remove {{ auth_name }}
+
   admin:
     admin_header:
       title: Admin
@@ -1411,6 +1440,24 @@ ui:
         title: Private
         label: Login required
         text: Only logged in users can access this community.
+    installed_plugins:
+      title: Installed Plugins
+      filter:
+        all: All
+        active: Active
+        inactive: Inactive
+        outdated: Outdated
+      plugins:
+        label: Plugins
+        text: Select an existing plugin.
+      name: Name
+      version: Version
+      status: Status
+      action: Action
+      deactivate: Deactivate
+      activate: Activate
+      settings: Settings
+
 
   form:
     optional: (optional)
@@ -1418,6 +1465,8 @@ ui:
     invalid: is invalid
     btn_submit: Save
     not_found_props: "Required property {{ key }} not found."
+    select: Select
+
   page_review:
     review: Review
     proposed: proposed

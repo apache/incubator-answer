@@ -1053,6 +1053,7 @@ ui:
     themes: 主题
     css-html: CSS/HTML
     login: 登录
+  website_welcome: 欢迎来到 {{site_name}}
   admin:
     admin_header:
       title: 后台管理

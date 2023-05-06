@@ -37,7 +37,7 @@ const useChangePasswordModal = (props: IProps = {}) => {
   const uiSchema: UISchema = {
     password: {
       'ui:options': {
-        type: 'password',
+        inputType: 'password',
         validator: (value) => {
           const MIN_LENGTH = 8;
           const MAX_LENGTH = 32;

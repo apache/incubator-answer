@@ -1,3 +1,5 @@
+import { UIOptions, UIWidget } from '@/components/SchemaForm';
+
 export interface FormValue<T = any> {
   value: T;
   isInvalid: boolean;
@@ -136,6 +138,7 @@ export interface UserInfoRes extends UserInfoBase {
   mail_status: number;
   language: string;
   e_mail?: string;
+  have_password: boolean;
   [prop: string]: any;
 }
 
@@ -269,6 +272,11 @@ export type UserFilterBy =
   | 'suspended'
   | 'deleted';
 
+export type InstalledPluginsFilterBy =
+  | 'all'
+  | 'active'
+  | 'inactive'
+  | 'outdated';
 /**
  * @description interface for Flags
  */
@@ -525,6 +533,44 @@ export interface User {
   vote_count: number;
   display_name: string;
   avatar: string;
+}
+
+export interface OauthBindEmailReq {
+  binding_key: string;
+  email: string;
+  must: boolean;
+}
+
+export interface OauthConnectorItem {
+  icon: string;
+  name: string;
+  link: string;
+}
+
+export interface UserOauthConnectorItem extends OauthConnectorItem {
+  binding: boolean;
+  external_id: string;
+}
+export interface PluginOption {
+  label: string;
+  value: string;
+}
+
+export interface PluginItem {
+  name: string;
+  type: UIWidget;
+  title: string;
+  description: string;
+  ui_options?: UIOptions;
+  options?: PluginOption[];
+  value?: string;
+  required?: boolean;
+}
+
+export interface PluginConfig {
+  name: string;
+  slug_name: string;
+  config_fields: PluginItem[];
 }
 
 export interface QuestionOperationReq {

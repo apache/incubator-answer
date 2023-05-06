@@ -249,7 +249,7 @@ export const closeQuestion = (params: {
   return request.put('/answer/api/v1/question/status', params);
 };
 
-export const changeEmail = (params: { e_mail: string }) => {
+export const changeEmail = (params: { e_mail: string; pass?: string }) => {
   return request.post('/answer/api/v1/user/email/change/code', params);
 };
 

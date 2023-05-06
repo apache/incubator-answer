@@ -11,6 +11,7 @@ import * as Type from '@/common/interface';
 
 const Questions: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
+  const { t: t2 } = useTranslation('translation');
   const { user: loggedUser } = loggedUserInfoStore((_) => _);
   const [urlSearchParams] = useSearchParams();
   const curPage = Number(urlSearchParams.get('page')) || 1;
@@ -46,8 +47,7 @@ const Questions: FC = () => {
             <div className="card mb-4">
               <div className="card-body">
                 <h5 className="card-title">
-                  {t('page_title', {
-                    keyPrefix: 'login',
+                  {t2('website_welcome', {
                     site_name: siteInfo.name,
                   })}
                 </h5>

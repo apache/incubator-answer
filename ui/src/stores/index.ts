@@ -2,7 +2,7 @@ import loginSettingStore from '@/stores/loginSetting';
 import seoSettingStore from '@/stores/seoSetting';
 
 import toastStore from './toast';
-import loggedUserInfoStore from './userInfo';
+import loggedUserInfoStore from './loggedUserInfoStore';
 import siteInfoStore from './siteInfo';
 import interfaceStore from './interface';
 import brandingStore from './branding';

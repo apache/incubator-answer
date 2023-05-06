@@ -50,7 +50,7 @@ const Index: FC = () => {
     },
     primary_color: {
       'ui:options': {
-        type: 'color',
+        inputType: 'color',
       },
     },
   };

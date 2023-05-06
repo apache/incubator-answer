@@ -4,7 +4,7 @@ export { floppyNavigation } from './floppyNavigation';
 export { default as storageExpires } from './storageWithExpires';
 export { default as SaveDraft } from './saveDraft';
 
-export * as guard from './guard';
-export * as localize from './localize';
 export * from './common';
 export * from './color';
+export * as localize from './localize';
+export * as guard from './guard';

@@ -233,6 +233,26 @@ function diffText(newText: string, oldText?: string): string {
   return result.join('');
 }
 
+function base64ToSvg(base64: string) {
+  // base64 to svg xml
+  const svgxml = atob(base64);
+
+  // svg add class btnSvg
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgxml, 'image/svg+xml');
+  const svg = doc.querySelector('svg');
+  let str = '';
+  if (svg) {
+    svg.classList.add('btnSvg');
+    svg.classList.add('me-2');
+
+    // transform svg to string
+    const serializer = new XMLSerializer();
+    str = serializer.serializeToString(doc);
+  }
+  return str;
+}
+
 export {
   thousandthDivision,
   formatCount,
@@ -248,4 +268,5 @@ export {
   labelStyle,
   handleFormError,
   diffText,
+  base64ToSvg,
 };

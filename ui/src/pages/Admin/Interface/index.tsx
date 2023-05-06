@@ -40,11 +40,13 @@ const Interface: FC = () => {
         description: t('language.text'),
         enum: langs?.map((lang) => lang.value),
         enumNames: langs?.map((lang) => lang.label),
+        default: setting?.language || storeInterface.language,
       },
       time_zone: {
         type: 'string',
         title: t('time_zone.label'),
         description: t('time_zone.text'),
+        default: setting?.time_zone || DEFAULT_TIMEZONE,
       },
       default_avatar: {
         type: 'string',
