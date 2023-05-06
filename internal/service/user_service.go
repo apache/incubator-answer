@@ -501,6 +501,15 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 
+	// If user's email already verified, then must verify password first.
+	if userInfo.MailStatus == entity.EmailStatusAvailable && !us.verifyPassword(ctx, req.Pass, userInfo.Pass) {
+		resp = append(resp, &validator.FormErrorField{
+			ErrorField: "pass",
+			ErrorMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.OldPasswordVerificationFailed),
+		})
+		return resp, errors.BadRequest(reason.OldPasswordVerificationFailed)
+	}
+
 	_, exist, err = us.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil {
 		return nil, err
