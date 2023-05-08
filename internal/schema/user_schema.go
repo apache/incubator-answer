@@ -72,6 +72,8 @@ type GetUserResp struct {
 	RoleID int `json:"role_id"`
 	// user status
 	Status string `json:"status"`
+	// user have password
+	HavePassword bool `json:"have_password"`
 }
 
 func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
@@ -83,11 +85,13 @@ func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 	if ok {
 		r.Status = statusShow
 	}
+	r.HavePassword = len(userInfo.Pass) > 0
 }
 
 type GetUserToSetShowResp struct {
 	*GetUserResp
-	Avatar *AvatarInfo `json:"avatar"`
+	Avatar       *AvatarInfo `json:"avatar"`
+	HavePassword bool        `json:"have_password"`
 }
 
 func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
@@ -260,14 +264,14 @@ func (u *UserRegisterReq) Check() (errFields []*validator.FormErrorField, err er
 	return nil, nil
 }
 
-// UserModifyPassWordRequest
-type UserModifyPassWordRequest struct {
-	UserID  string `json:"-" `        // user_id
-	OldPass string `json:"old_pass" ` // old password
-	Pass    string `json:"pass" `     // password
+type UserModifyPasswordReq struct {
+	OldPass     string `json:"old_pass"`
+	Pass        string `json:"pass"`
+	UserID      string `json:"-"`
+	AccessToken string `json:"-"`
 }
 
-func (u *UserModifyPassWordRequest) Check() (errFields []*validator.FormErrorField, err error) {
+func (u *UserModifyPasswordReq) Check() (errFields []*validator.FormErrorField, err error) {
 	// TODO i18n
 	err = checker.CheckPassword(8, 32, 0, u.Pass)
 	if err != nil {

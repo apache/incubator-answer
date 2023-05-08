@@ -116,7 +116,7 @@ func (us *UserAdminService) UpdateUserRole(ctx context.Context, req *schema.Upda
 		return err
 	}
 
-	us.authService.RemoveUserTokens(ctx, req.UserID)
+	us.authService.RemoveUserAllTokens(ctx, req.UserID)
 	return
 }
 
@@ -179,7 +179,7 @@ func (us *UserAdminService) UpdateUserPassword(ctx context.Context, req *schema.
 		return err
 	}
 	// logout this user
-	us.authService.RemoveUserTokens(ctx, req.UserID)
+	us.authService.RemoveUserAllTokens(ctx, req.UserID)
 	return
 }
 
