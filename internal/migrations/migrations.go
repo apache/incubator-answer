@@ -59,6 +59,7 @@ var migrations = []Migration{
 	NewMigration("add user pin hide features", addRolePinAndHideFeatures, true),
 	NewMigration("update accept answer rank", updateAcceptAnswerRank, true),
 	NewMigration("update user pin hide features", updateRolePinAndHideFeatures, true),
+	NewMigration("update question post time", updateQuestionPostTime, true),
 }
 
 // GetCurrentDBVersion returns the current db version
