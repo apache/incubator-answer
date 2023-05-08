@@ -404,6 +404,7 @@ ui:
     achievement: Achievements
     all_read: Mark all as read
     show_more: Show more
+    someone: Someone
   suspended:
     title: Your Account has been Suspended
     until_time: "Your account was suspended until {{ time }}."

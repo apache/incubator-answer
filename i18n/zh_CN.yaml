@@ -384,6 +384,7 @@ ui:
     achievement: 成就
     all_read: 全部标记为已读
     show_more: 显示更多
+    someone: 有人
   suspended:
     title: 账号已封禁
     until_time: "你的账号被封禁至{{ time }}。"
