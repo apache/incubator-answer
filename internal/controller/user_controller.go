@@ -183,9 +183,9 @@ func (uc *UserController) UseRePassWord(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := uc.userService.UseRePassword(ctx, req)
+	err := uc.userService.UpdatePasswordWhenForgot(ctx, req)
 	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP())
-	handler.HandleResponse(ctx, err, resp)
+	handler.HandleResponse(ctx, err, nil)
 }
 
 // UserLogout user logout
@@ -334,15 +334,16 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param data body schema.UserModifyPassWordRequest  true "UserModifyPassWordRequest"
+// @Param data body schema.UserModifyPasswordReq  true "UserModifyPasswordReq"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/api/v1/user/password [put]
 func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
-	req := &schema.UserModifyPassWordRequest{}
+	req := &schema.UserModifyPasswordReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.AccessToken = middleware.ExtractToken(ctx)
 
 	oldPassVerification, err := uc.userService.UserModifyPassWordVerification(ctx, req)
 	if err != nil {
