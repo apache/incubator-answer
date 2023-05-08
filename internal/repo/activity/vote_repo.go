@@ -467,21 +467,21 @@ func (vr *VoteRepo) sendVoteInboxNotification(triggerUserID, receiverUserID, obj
 	}
 	if objectType == constant.QuestionObjectType {
 		if upvote {
-			msg.NotificationAction = constant.UpVotedTheQuestion
+			msg.NotificationAction = constant.NotificationUpVotedTheQuestion
 		} else {
-			msg.NotificationAction = constant.DownVotedTheQuestion
+			msg.NotificationAction = constant.NotificationDownVotedTheQuestion
 		}
 	}
 	if objectType == constant.AnswerObjectType {
 		if upvote {
-			msg.NotificationAction = constant.UpVotedTheAnswer
+			msg.NotificationAction = constant.NotificationUpVotedTheAnswer
 		} else {
-			msg.NotificationAction = constant.DownVotedTheAnswer
+			msg.NotificationAction = constant.NotificationDownVotedTheAnswer
 		}
 	}
 	if objectType == constant.CommentObjectType {
 		if upvote {
-			msg.NotificationAction = constant.UpVotedTheComment
+			msg.NotificationAction = constant.NotificationUpVotedTheComment
 		}
 	}
 	if len(msg.NotificationAction) > 0 {

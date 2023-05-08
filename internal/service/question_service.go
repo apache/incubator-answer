@@ -1063,7 +1063,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 	msg.ReceiverUserID = questionInfo.UserID
 	msg.TriggerUserID = questionInfo.UserID
 	msg.ObjectType = constant.QuestionObjectType
-	msg.NotificationAction = constant.YourQuestionWasDeleted
+	msg.NotificationAction = constant.NotificationYourQuestionWasDeleted
 	notice_queue.AddNotification(msg)
 	return nil
 }

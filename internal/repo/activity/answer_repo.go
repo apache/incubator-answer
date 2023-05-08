@@ -216,7 +216,7 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 		if act.UserID != questionUserID {
 			msg.TriggerUserID = questionUserID
 			msg.ObjectType = constant.AnswerObjectType
-			msg.NotificationAction = constant.AcceptAnswer
+			msg.NotificationAction = constant.NotificationAcceptAnswer
 			notice_queue.AddNotification(msg)
 		}
 	}
