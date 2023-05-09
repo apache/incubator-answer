@@ -112,6 +112,12 @@ func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
 	r.Avatar = avatarInfo
 }
 
+const (
+	AvatarTypeDefault  = "default"
+	AvatarTypeGravatar = "gravatar"
+	AvatarTypeCustom   = "custom"
+)
+
 func FormatAvatarInfo(avatarJson, email string) (res string) {
 	defer func() {
 		if constant.DefaultAvatar == "gravatar" && len(res) == 0 {
@@ -128,9 +134,9 @@ func FormatAvatarInfo(avatarJson, email string) (res string) {
 		return ""
 	}
 	switch avatarInfo.Type {
-	case "gravatar":
+	case AvatarTypeGravatar:
 		return avatarInfo.Gravatar
-	case "custom":
+	case AvatarTypeCustom:
 		return avatarInfo.Custom
 	default:
 		return ""
@@ -265,8 +271,8 @@ func (u *UserRegisterReq) Check() (errFields []*validator.FormErrorField, err er
 }
 
 type UserModifyPasswordReq struct {
-	OldPass     string `json:"old_pass"`
-	Pass        string `json:"pass"`
+	OldPass string `validate:"omitempty,gte=8,lte=32" json:"old_pass"`
+	Pass    string `validate:"required,gte=8,lte=32" json:"pass"`
 	UserID      string `json:"-"`
 	AccessToken string `json:"-"`
 }

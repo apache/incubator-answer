@@ -20,6 +20,7 @@ import (
 	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/internal/service/user_external_login"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/google/uuid"
 	"github.com/segmentfault/pacman/errors"
@@ -31,15 +32,16 @@ import (
 
 // UserService user service
 type UserService struct {
-	userCommonService *usercommon.UserCommon
-	userRepo          usercommon.UserRepo
-	userActivity      activity.UserActiveActivityRepo
-	activityRepo      activity_common.ActivityRepo
-	serviceConfig     *service_config.ServiceConfig
-	emailService      *export.EmailService
-	authService       *auth.AuthService
-	siteInfoService   *siteinfo_common.SiteInfoCommonService
-	userRoleService   *role.UserRoleRelService
+	userCommonService        *usercommon.UserCommon
+	userRepo                 usercommon.UserRepo
+	userActivity             activity.UserActiveActivityRepo
+	activityRepo             activity_common.ActivityRepo
+	serviceConfig            *service_config.ServiceConfig
+	emailService             *export.EmailService
+	authService              *auth.AuthService
+	siteInfoService          *siteinfo_common.SiteInfoCommonService
+	userRoleService          *role.UserRoleRelService
+	userExternalLoginService *user_external_login.UserExternalLoginService
 }
 
 func NewUserService(userRepo usercommon.UserRepo,
@@ -51,22 +53,25 @@ func NewUserService(userRepo usercommon.UserRepo,
 	siteInfoService *siteinfo_common.SiteInfoCommonService,
 	userRoleService *role.UserRoleRelService,
 	userCommonService *usercommon.UserCommon,
+	userExternalLoginService *user_external_login.UserExternalLoginService,
 ) *UserService {
 	return &UserService{
-		userCommonService: userCommonService,
-		userRepo:          userRepo,
-		userActivity:      userActivity,
-		activityRepo:      activityRepo,
-		emailService:      emailService,
-		serviceConfig:     serviceConfig,
-		authService:       authService,
-		siteInfoService:   siteInfoService,
-		userRoleService:   userRoleService,
+		userCommonService:        userCommonService,
+		userRepo:                 userRepo,
+		userActivity:             userActivity,
+		activityRepo:             activityRepo,
+		emailService:             emailService,
+		serviceConfig:            serviceConfig,
+		authService:              authService,
+		siteInfoService:          siteInfoService,
+		userRoleService:          userRoleService,
+		userExternalLoginService: userExternalLoginService,
 	}
 }
 
 // GetUserInfoByUserID get user info by user id
-func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID string) (resp *schema.GetUserToSetShowResp, err error) {
+func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID string) (
+	resp *schema.GetUserToSetShowResp, err error) {
 	userInfo, exist, err := us.userRepo.GetByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -440,42 +445,37 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	if !has {
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
-	userInfo.MailStatus = entity.EmailStatusAvailable
-	err = us.userRepo.UpdateEmailStatus(ctx, userInfo.ID, userInfo.MailStatus)
-	if err != nil {
-		return nil, err
+	if userInfo.MailStatus == entity.EmailStatusToBeVerified {
+		userInfo.MailStatus = entity.EmailStatusAvailable
+		err = us.userRepo.UpdateEmailStatus(ctx, userInfo.ID, userInfo.MailStatus)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if err = us.userActivity.UserActive(ctx, userInfo.ID); err != nil {
 		log.Error(err)
 	}
 
-	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
+	// In the case of three-party login, the associated users are bound
+	if len(data.BindingKey) > 0 {
+		err = us.userExternalLoginService.ExternalLoginBindingUser(ctx, data.BindingKey, userInfo)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	accessToken, userCacheInfo, err := us.userCommonService.CacheLoginUserInfo(
+		ctx, userInfo.ID, userInfo.MailStatus, userInfo.Status)
 	if err != nil {
-		log.Error(err)
+		return nil, err
 	}
 
 	resp = &schema.GetUserResp{}
 	resp.GetFromUserEntity(userInfo)
-	userCacheInfo := &entity.UserCacheInfo{
-		UserID:      userInfo.ID,
-		EmailStatus: userInfo.MailStatus,
-		UserStatus:  userInfo.Status,
-		RoleID:      roleID,
-	}
-	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
-	if err != nil {
-		return nil, err
-	}
+	resp.AccessToken = accessToken
 	// User verified email will update user email status. So user status cache should be updated.
 	if err = us.authService.SetUserStatus(ctx, userCacheInfo); err != nil {
 		return nil, err
-	}
-	resp.RoleID = userCacheInfo.RoleID
-	if resp.RoleID == role.RoleAdminID {
-		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
-		if err != nil {
-			return nil, err
-		}
 	}
 	return resp, nil
 }

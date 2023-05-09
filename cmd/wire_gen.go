@@ -4,7 +4,7 @@
 //go:build !wireinject
 // +build !wireinject
 
-package main
+package answercmd
 
 import (
 	"github.com/answerdev/answer/internal/base/conf"
@@ -28,6 +28,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/export"
 	"github.com/answerdev/answer/internal/repo/meta"
 	"github.com/answerdev/answer/internal/repo/notification"
+	"github.com/answerdev/answer/internal/repo/plugin_config"
 	"github.com/answerdev/answer/internal/repo/question"
 	"github.com/answerdev/answer/internal/repo/rank"
 	"github.com/answerdev/answer/internal/repo/reason"
@@ -40,6 +41,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/tag_common"
 	"github.com/answerdev/answer/internal/repo/unique"
 	"github.com/answerdev/answer/internal/repo/user"
+	"github.com/answerdev/answer/internal/repo/user_external_login"
 	"github.com/answerdev/answer/internal/router"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/action"
@@ -57,6 +59,7 @@ import (
 	notification2 "github.com/answerdev/answer/internal/service/notification"
 	"github.com/answerdev/answer/internal/service/notification_common"
 	"github.com/answerdev/answer/internal/service/object_info"
+	"github.com/answerdev/answer/internal/service/plugin_common"
 	"github.com/answerdev/answer/internal/service/question_common"
 	rank2 "github.com/answerdev/answer/internal/service/rank"
 	reason2 "github.com/answerdev/answer/internal/service/reason"
@@ -74,6 +77,7 @@ import (
 	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/answerdev/answer/internal/service/user_admin"
 	"github.com/answerdev/answer/internal/service/user_common"
+	user_external_login2 "github.com/answerdev/answer/internal/service/user_external_login"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/log"
 )
@@ -117,8 +121,10 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	roleRepo := role.NewRoleRepo(dataData)
 	roleService := role2.NewRoleService(roleRepo)
 	userRoleRelService := role2.NewUserRoleRelService(userRoleRelRepo, roleService)
-	userCommon := usercommon.NewUserCommon(userRepo)
-	userService := service.NewUserService(userRepo, userActiveActivityRepo, activityRepo, emailService, authService, serviceConf, siteInfoCommonService, userRoleRelService, userCommon)
+	userCommon := usercommon.NewUserCommon(userRepo, userRoleRelService, authService)
+	userExternalLoginRepo := user_external_login.NewUserExternalLoginRepo(dataData)
+	userExternalLoginService := user_external_login2.NewUserExternalLoginService(userRepo, userCommon, userExternalLoginRepo, emailService, siteInfoCommonService, userActiveActivityRepo)
+	userService := service.NewUserService(userRepo, userActiveActivityRepo, activityRepo, emailService, authService, serviceConf, siteInfoCommonService, userRoleRelService, userCommon, userExternalLoginService)
 	captchaRepo := captcha.NewCaptchaRepo(dataData)
 	captchaService := action.NewCaptchaService(captchaRepo)
 	uploaderService := uploader.NewUploaderService(serviceConf, siteInfoCommonService)
@@ -202,7 +208,10 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, activityCommon, tagCommonService, objService, commentCommonService, revisionService, metaService)
 	activityController := controller.NewActivityController(activityCommon, activityService)
 	roleController := controller_admin.NewRoleController(roleService)
-	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_adminReportController, userAdminController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController, activityController, roleController)
+	pluginConfigRepo := plugin_config.NewPluginConfigRepo(dataData)
+	pluginCommonService := plugin_common.NewPluginCommonService(pluginConfigRepo, configRepo)
+	pluginController := controller_admin.NewPluginController(pluginCommonService)
+	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_adminReportController, userAdminController, reasonController, themeController, siteInfoController, siteinfoController, notificationController, dashboardController, uploadController, activityController, roleController, pluginController)
 	swaggerRouter := router.NewSwaggerRouter(swaggerConf)
 	uiRouter := router.NewUIRouter(siteinfoController, siteInfoCommonService)
 	authUserMiddleware := middleware.NewAuthUserMiddleware(authService, siteInfoCommonService)
@@ -210,7 +219,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	templateRenderController := templaterender.NewTemplateRenderController(questionService, userService, tagService, answerService, commentService, dataData, siteInfoCommonService)
 	templateController := controller.NewTemplateController(templateRenderController, siteInfoCommonService)
 	templateRouter := router.NewTemplateRouter(templateController, templateRenderController, siteInfoController)
-	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter)
+	connectorController := controller.NewConnectorController(siteInfoCommonService, emailService, userExternalLoginService)
+	pluginAPIRouter := router.NewPluginAPIRouter(connectorController)
+	ginEngine := server.NewHTTPServer(debug, staticRouter, answerAPIRouter, swaggerRouter, uiRouter, authUserMiddleware, avatarMiddleware, templateRouter, pluginAPIRouter)
 	scheduledTaskManager := cron.NewScheduledTaskManager(siteInfoCommonService, questionService)
 	application := newApplication(serverConf, ginEngine, scheduledTaskManager)
 	return application, func() {

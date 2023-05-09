@@ -535,6 +535,11 @@ export interface User {
   avatar: string;
 }
 
+export interface QuestionOperationReq {
+  id: string;
+  operation: 'pin' | 'unpin' | 'hide' | 'show';
+}
+
 export interface OauthBindEmailReq {
   binding_key: string;
   email: string;

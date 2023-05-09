@@ -14,6 +14,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/export"
 	"github.com/answerdev/answer/internal/repo/meta"
 	"github.com/answerdev/answer/internal/repo/notification"
+	"github.com/answerdev/answer/internal/repo/plugin_config"
 	"github.com/answerdev/answer/internal/repo/question"
 	"github.com/answerdev/answer/internal/repo/rank"
 	"github.com/answerdev/answer/internal/repo/reason"
@@ -26,6 +27,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/tag_common"
 	"github.com/answerdev/answer/internal/repo/unique"
 	"github.com/answerdev/answer/internal/repo/user"
+	"github.com/answerdev/answer/internal/repo/user_external_login"
 	"github.com/google/wire"
 )
 
@@ -72,4 +74,6 @@ var ProviderSetRepo = wire.NewSet(
 	role.NewUserRoleRelRepo,
 	role.NewRolePowerRelRepo,
 	role.NewPowerRepo,
+	user_external_login.NewUserExternalLoginRepo,
+	plugin_config.NewPluginConfigRepo,
 )

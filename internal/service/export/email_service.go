@@ -162,39 +162,30 @@ func (es *EmailService) GetSiteGeneral(ctx context.Context) (resp schema.SiteGen
 }
 
 func (es *EmailService) RegisterTemplate(ctx context.Context, registerUrl string) (title, body string, err error) {
-	ec, err := es.GetEmailConfig()
-	if err != nil {
-		return
-	}
-	siteinfo, err := es.GetSiteGeneral(ctx)
+	emailConfig, err := es.GetEmailConfig()
 	if err != nil {
 		return
 	}
 
+	siteInfo, err := es.GetSiteGeneral(ctx)
+	if err != nil {
+		return
+	}
 	templateData := RegisterTemplateData{
-		SiteName: siteinfo.Name, RegisterUrl: registerUrl,
-	}
-	tmpl, err := template.New("register_title").Parse(ec.RegisterTitle)
-	if err != nil {
-		return "", "", err
-	}
-	titleBuf := &bytes.Buffer{}
-	bodyBuf := &bytes.Buffer{}
-	err = tmpl.Execute(titleBuf, templateData)
-	if err != nil {
-		return "", "", err
+		SiteName:    siteInfo.Name,
+		RegisterUrl: registerUrl,
 	}
 
-	tmpl, err = template.New("register_body").Parse(ec.RegisterBody)
+	title, err = es.parseTemplateData(emailConfig.RegisterTitle, templateData)
 	if err != nil {
-		return "", "", err
-	}
-	err = tmpl.Execute(bodyBuf, templateData)
-	if err != nil {
-		return "", "", err
+		return "", "", fmt.Errorf("email template parse error: %s", err)
 	}
 
-	return titleBuf.String(), bodyBuf.String(), nil
+	body, err = es.parseTemplateData(emailConfig.RegisterBody, templateData)
+	if err != nil {
+		return "", "", fmt.Errorf("email template parse error: %s", err)
+	}
+	return title, body, nil
 }
 
 func (es *EmailService) PassResetTemplate(ctx context.Context, passResetUrl string) (title, body string, err error) {

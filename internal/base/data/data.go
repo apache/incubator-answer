@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/answerdev/answer/pkg/dir"
+	"github.com/answerdev/answer/plugin"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	"github.com/segmentfault/pacman/cache"
@@ -76,6 +77,15 @@ func NewDB(debug bool, dataConf *Database) (*xorm.Engine, error) {
 
 // NewCache new cache instance
 func NewCache(c *CacheConf) (cache.Cache, func(), error) {
+	var pluginCache plugin.Cache
+	_ = plugin.CallCache(func(fn plugin.Cache) error {
+		pluginCache = fn
+		return nil
+	})
+	if pluginCache != nil {
+		return pluginCache, func() {}, nil
+	}
+
 	// TODO What cache type should be initialized according to the configuration file
 	memCache := memory.NewCache()
 

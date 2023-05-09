@@ -155,6 +155,8 @@ backend:
       no_permission:
         other: No permission to Revision.
     user:
+      external_login_unbinding_forbidden:
+        other: Please set a login password for your account before you remove this login.
       email_or_password_wrong:
         other:
           other: Email and password do not match.

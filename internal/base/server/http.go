@@ -20,6 +20,7 @@ func NewHTTPServer(debug bool,
 	authUserMiddleware *middleware.AuthUserMiddleware,
 	avatarMiddleware *middleware.AvatarMiddleware,
 	templateRouter *router.TemplateRouter,
+	pluginAPIRouter *router.PluginAPIRouter,
 ) *gin.Engine {
 
 	if debug {
@@ -62,5 +63,9 @@ func NewHTTPServer(debug bool,
 	answerRouter.RegisterAnswerAdminAPIRouter(adminauthV1)
 
 	templateRouter.RegisterTemplateRouter(rootGroup)
+
+	// plugin routes
+	pluginAPIRouter.RegisterUnAuthConnectorRouter(mustUnAuthV1)
+	pluginAPIRouter.RegisterAuthConnectorRouter(authV1)
 	return r
 }

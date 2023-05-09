@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/service/config"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/segmentfault/pacman/errors"
+	"xorm.io/xorm"
 )
 
 // userRepo user repository
@@ -28,10 +29,21 @@ func NewUserRepo(data *data.Data, configRepo config.ConfigRepo) usercommon.UserR
 
 // AddUser add user
 func (ur *userRepo) AddUser(ctx context.Context, user *entity.User) (err error) {
-	_, err = ur.data.DB.Insert(user)
-	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
+	_, err = ur.data.DB.Transaction(func(session *xorm.Session) (interface{}, error) {
+		userInfo := &entity.User{}
+		exist, err := session.Where("username = ?", user.Username).Get(userInfo)
+		if err != nil {
+			return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		}
+		if exist {
+			return nil, errors.InternalServer(reason.UsernameDuplicate)
+		}
+		_, err = session.Insert(user)
+		if err != nil {
+			return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		}
+		return nil, nil
+	})
 	return
 }
 

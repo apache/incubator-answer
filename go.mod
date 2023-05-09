@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/Chain-Zhang/pinyin v0.1.3
+	github.com/Masterminds/semver/v3 v3.1.1
 	github.com/anargu/gin-brotli v0.0.0-20220116052358-12bf532d5267
 	github.com/asaskevich/govalidator v0.0.0-20210307081110-f21760c49a8d
 	github.com/bwmarrin/snowflake v0.3.0
@@ -80,6 +81,7 @@ require (
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/golang/geo v0.0.0-20190812012225-f41920e961ce // indirect
 	github.com/golang/snappy v0.0.4 // indirect
+	github.com/google/go-cmp v0.5.9 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/gorilla/css v1.0.0 // indirect
 	github.com/gosimple/unidecode v1.0.1 // indirect
@@ -146,3 +148,5 @@ require (
 	modernc.org/token v1.0.0 // indirect
 	sigs.k8s.io/yaml v1.3.0 // indirect
 )
+
+replace lukechampine.com/uint128 v1.1.1 => github.com/aichy126/uint128 v1.1.1

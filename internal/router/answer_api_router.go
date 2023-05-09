@@ -31,6 +31,7 @@ type AnswerAPIRouter struct {
 	uploadController       *controller.UploadController
 	activityController     *controller.ActivityController
 	roleController         *controller_admin.RoleController
+	pluginController       *controller_admin.PluginController
 }
 
 func NewAnswerAPIRouter(
@@ -58,6 +59,7 @@ func NewAnswerAPIRouter(
 	uploadController *controller.UploadController,
 	activityController *controller.ActivityController,
 	roleController *controller_admin.RoleController,
+	pluginController *controller_admin.PluginController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:         langController,
@@ -84,6 +86,7 @@ func NewAnswerAPIRouter(
 		uploadController:       uploadController,
 		activityController:     activityController,
 		roleController:         roleController,
+		pluginController:       pluginController,
 	}
 }
 
@@ -282,4 +285,10 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 
 	// roles
 	r.GET("/roles", a.roleController.GetRoleList)
+
+	// plugin
+	r.GET("/plugins", a.pluginController.GetPluginList)
+	r.PUT("/plugin/status", a.pluginController.UpdatePluginStatus)
+	r.GET("/plugin/config", a.pluginController.GetPluginConfig)
+	r.PUT("/plugin/config", a.pluginController.UpdatePluginConfig)
 }

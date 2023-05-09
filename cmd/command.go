@@ -1,13 +1,15 @@
-package main
+package answercmd
 
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/answerdev/answer/internal/base/conf"
 	"github.com/answerdev/answer/internal/cli"
 	"github.com/answerdev/answer/internal/install"
 	"github.com/answerdev/answer/internal/migrations"
+	"github.com/answerdev/answer/plugin"
 	"github.com/spf13/cobra"
 )
 
@@ -16,6 +18,10 @@ var (
 	dataDirPath string
 	// dumpDataPath dump data path
 	dumpDataPath string
+	// plugins needed to build in answer application
+	buildWithPlugins []string
+	// build output path
+	buildOutput string
 )
 
 func init() {
@@ -25,7 +31,11 @@ func init() {
 
 	dumpCmd.Flags().StringVarP(&dumpDataPath, "path", "p", "./", "dump data path, eg: -p ./dump/data/")
 
-	for _, cmd := range []*cobra.Command{initCmd, checkCmd, runCmd, dumpCmd, upgradeCmd} {
+	buildCmd.Flags().StringSliceVarP(&buildWithPlugins, "with", "w", []string{}, "plugins needed to build")
+
+	buildCmd.Flags().StringVarP(&buildOutput, "output", "o", "", "build output path")
+
+	for _, cmd := range []*cobra.Command{initCmd, checkCmd, runCmd, dumpCmd, upgradeCmd, buildCmd, pluginCmd} {
 		rootCmd.AddCommand(cmd)
 	}
 }
@@ -160,10 +170,44 @@ To run answer, use:
 			fmt.Println("check environment all done")
 		},
 	}
+
+	// buildCmd used to build another answer with plugins
+	buildCmd = &cobra.Command{
+		Use:   "build",
+		Short: "used to build answer with plugins",
+		Long:  `Build a new Answer with plugins that you need`,
+		Run: func(_ *cobra.Command, _ []string) {
+			fmt.Printf("try to build a new answer with plugins:\n%s\n", strings.Join(buildWithPlugins, "\n"))
+			err := cli.BuildNewAnswer(buildOutput, buildWithPlugins, cli.OriginalAnswerInfo{
+				Version:  Version,
+				Revision: Revision,
+				Time:     Time,
+			})
+			if err != nil {
+				fmt.Printf("build failed %v", err)
+			} else {
+				fmt.Printf("build new answer successfully %s\n", buildOutput)
+			}
+		},
+	}
+
+	// pluginCmd prints all plugins packed in the binary
+	pluginCmd = &cobra.Command{
+		Use:   "plugin",
+		Short: "prints all plugins packed in the binary",
+		Long:  `prints all plugins packed in the binary`,
+		Run: func(_ *cobra.Command, _ []string) {
+			_ = plugin.CallBase(func(base plugin.Base) error {
+				info := base.Info()
+				fmt.Printf("%s[%s] made by %s\n", info.SlugName, info.Version, info.Author)
+				return nil
+			})
+		},
+	}
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
+// This is called by main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
