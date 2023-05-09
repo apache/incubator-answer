@@ -1,4 +1,13 @@
 definitions:
+  constant.Privilege:
+    properties:
+      key:
+        type: string
+      label:
+        type: string
+      value:
+        type: integer
+    type: object
   handler.RespBody:
     properties:
       code:
@@ -334,6 +343,8 @@ definitions:
     type: object
   schema.ConfigFieldUIOptions:
     properties:
+      action:
+        $ref: '#/definitions/schema.UIOptionAction'
       input_type:
         type: string
       label:
@@ -341,6 +352,10 @@ definitions:
       placeholder:
         type: string
       rows:
+        type: string
+      text:
+        type: string
+      variant:
         type: string
     type: object
   schema.ConnectorInfoResp:
@@ -630,6 +645,15 @@ definitions:
         type: string
       version:
         type: string
+    type: object
+  schema.GetPrivilegesConfigResp:
+    properties:
+      options:
+        items:
+          $ref: '#/definitions/schema.PrivilegeOption'
+        type: array
+      selected_level:
+        type: integer
     type: object
   schema.GetRankPersonalWithPageResp:
     properties:
@@ -1101,6 +1125,13 @@ definitions:
         description: vote type
         type: string
     type: object
+  schema.LoadingAction:
+    properties:
+      state:
+        type: string
+      text:
+        type: string
+    type: object
   schema.NotificationClearIDRequest:
     properties:
       id:
@@ -1111,6 +1142,13 @@ definitions:
       type:
         description: inbox achievement
         type: string
+    type: object
+  schema.OnCompleteAction:
+    properties:
+      refresh_form_config:
+        type: boolean
+      toast_return_message:
+        type: boolean
     type: object
   schema.OperationQuestionReq:
     properties:
@@ -1135,6 +1173,17 @@ definitions:
     properties:
       content:
         type: string
+    type: object
+  schema.PrivilegeOption:
+    properties:
+      level:
+        type: integer
+      level_desc:
+        type: string
+      privileges:
+        items:
+          $ref: '#/definitions/constant.Privilege'
+        type: array
     type: object
   schema.QuestionAdd:
     properties:
@@ -1187,6 +1236,9 @@ definitions:
     type: object
   schema.QuestionPageReq:
     properties:
+      inDays:
+        minimum: 1
+        type: integer
       orderCond:
         enum:
         - newest
@@ -1454,6 +1506,9 @@ definitions:
       custom_header:
         maxLength: 65536
         type: string
+      custom_sidebar:
+        maxLength: 65536
+        type: string
     type: object
   schema.SiteCustomCssHTMLResp:
     properties:
@@ -1467,6 +1522,9 @@ definitions:
         maxLength: 65536
         type: string
       custom_header:
+        maxLength: 65536
+        type: string
+      custom_sidebar:
         maxLength: 65536
         type: string
     type: object
@@ -1530,6 +1588,8 @@ definitions:
         type: string
       site_seo:
         $ref: '#/definitions/schema.SiteSeoReq'
+      site_users:
+        $ref: '#/definitions/schema.SiteUsersResp'
       theme:
         $ref: '#/definitions/schema.SiteThemeResp'
       version:
@@ -1537,11 +1597,6 @@ definitions:
     type: object
   schema.SiteInterfaceReq:
     properties:
-      default_avatar:
-        enum:
-        - system
-        - gravatar
-        type: string
       language:
         maxLength: 128
         type: string
@@ -1549,17 +1604,11 @@ definitions:
         maxLength: 128
         type: string
     required:
-    - default_avatar
     - language
     - time_zone
     type: object
   schema.SiteInterfaceResp:
     properties:
-      default_avatar:
-        enum:
-        - system
-        - gravatar
-        type: string
       language:
         maxLength: 128
         type: string
@@ -1567,7 +1616,6 @@ definitions:
         maxLength: 128
         type: string
     required:
-    - default_avatar
     - language
     - time_zone
     type: object
@@ -1595,6 +1643,12 @@ definitions:
     type: object
   schema.SiteLoginReq:
     properties:
+      allow_email_domains:
+        items:
+          type: string
+        type: array
+      allow_email_registrations:
+        type: boolean
       allow_new_registrations:
         type: boolean
       login_required:
@@ -1602,6 +1656,12 @@ definitions:
     type: object
   schema.SiteLoginResp:
     properties:
+      allow_email_domains:
+        items:
+          type: string
+        type: array
+      allow_email_registrations:
+        type: boolean
       allow_new_registrations:
         type: boolean
       login_required:
@@ -1653,6 +1713,50 @@ definitions:
         items:
           $ref: '#/definitions/schema.ThemeOption'
         type: array
+    type: object
+  schema.SiteUsersReq:
+    properties:
+      allow_update_avatar:
+        type: boolean
+      allow_update_bio:
+        type: boolean
+      allow_update_display_name:
+        type: boolean
+      allow_update_location:
+        type: boolean
+      allow_update_username:
+        type: boolean
+      allow_update_website:
+        type: boolean
+      default_avatar:
+        enum:
+        - system
+        - gravatar
+        type: string
+    required:
+    - default_avatar
+    type: object
+  schema.SiteUsersResp:
+    properties:
+      allow_update_avatar:
+        type: boolean
+      allow_update_bio:
+        type: boolean
+      allow_update_display_name:
+        type: boolean
+      allow_update_location:
+        type: boolean
+      allow_update_username:
+        type: boolean
+      allow_update_website:
+        type: boolean
+      default_avatar:
+        enum:
+        - system
+        - gravatar
+        type: string
+    required:
+    - default_avatar
     type: object
   schema.SiteWriteReq:
     properties:
@@ -1732,6 +1836,17 @@ definitions:
       value:
         type: string
     type: object
+  schema.UIOptionAction:
+    properties:
+      loading:
+        $ref: '#/definitions/schema.LoadingAction'
+      method:
+        type: string
+      on_complete:
+        $ref: '#/definitions/schema.OnCompleteAction'
+      url:
+        type: string
+    type: object
   schema.UnreviewedRevisionInfoInfo:
     properties:
       content:
@@ -1794,8 +1909,6 @@ definitions:
         description: website
         maxLength: 500
         type: string
-    required:
-    - display_name
     type: object
   schema.UpdatePluginConfigReq:
     properties:
@@ -1817,6 +1930,15 @@ definitions:
         type: string
     required:
     - plugin_slug_name
+    type: object
+  schema.UpdatePrivilegesConfigReq:
+    properties:
+      level:
+        maximum: 3
+        minimum: 1
+        type: integer
+    required:
+    - level
     type: object
   schema.UpdateSMTPConfigReq:
     properties:
@@ -1974,6 +2096,10 @@ definitions:
       e_mail:
         maxLength: 500
         type: string
+      pass:
+        maxLength: 32
+        minLength: 8
+        type: string
     required:
     - e_mail
     type: object
@@ -2006,7 +2132,7 @@ definitions:
     - e_mail
     - pass
     type: object
-  schema.UserModifyPassWordRequest:
+  schema.UserModifyPasswordReq:
     properties:
       old_pass:
         maxLength: 32
@@ -2554,6 +2680,47 @@ paths:
       summary: get role list
       tags:
       - admin
+  /answer/admin/api/setting/privileges:
+    get:
+      description: GetPrivilegesConfig get privileges config
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetPrivilegesConfigResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: GetPrivilegesConfig get privileges config
+      tags:
+      - admin
+    put:
+      description: update privileges config
+      parameters:
+      - description: config
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdatePrivilegesConfigReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update privileges config
+      tags:
+      - admin
   /answer/admin/api/setting/smtp:
     get:
       description: GetSMTPConfig get smtp config
@@ -2921,6 +3088,47 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: update site custom css html config
+      tags:
+      - admin
+  /answer/admin/api/siteinfo/users:
+    get:
+      description: get site user config
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SiteUsersResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get site user config
+      tags:
+      - admin
+    put:
+      description: update site info config about users
+      parameters:
+      - description: users info
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.SiteUsersReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update site info config about users
       tags:
       - admin
   /answer/admin/api/siteinfo/write:
@@ -5248,12 +5456,12 @@ paths:
       - application/json
       description: UserModifyPassWord
       parameters:
-      - description: UserModifyPassWordRequest
+      - description: UserModifyPasswordReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.UserModifyPassWordRequest'
+          $ref: '#/definitions/schema.UserModifyPasswordReq'
       produces:
       - application/json
       responses:
