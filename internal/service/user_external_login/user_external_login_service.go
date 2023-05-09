@@ -23,9 +23,8 @@ import (
 type UserExternalLoginRepo interface {
 	AddUserExternalLogin(ctx context.Context, user *entity.UserExternalLogin) (err error)
 	UpdateInfo(ctx context.Context, userInfo *entity.UserExternalLogin) (err error)
-	GetByExternalID(ctx context.Context, externalID string) (userInfo *entity.UserExternalLogin, exist bool, err error)
-	GetUserExternalLoginList(ctx context.Context, userID string) (
-		resp []*entity.UserExternalLogin, err error)
+	GetByExternalID(ctx context.Context, provider, externalID string) (userInfo *entity.UserExternalLogin, exist bool, err error)
+	GetUserExternalLoginList(ctx context.Context, userID string) (resp []*entity.UserExternalLogin, err error)
 	DeleteUserExternalLogin(ctx context.Context, userID, externalID string) (err error)
 	SetCacheUserExternalLoginInfo(ctx context.Context, key string, info *schema.ExternalLoginUserInfoCache) (err error)
 	GetCacheUserExternalLoginInfo(ctx context.Context, key string) (info *schema.ExternalLoginUserInfoCache, err error)
@@ -64,7 +63,8 @@ func NewUserExternalLoginService(
 func (us *UserExternalLoginService) ExternalLogin(
 	ctx context.Context, externalUserInfo *schema.ExternalLoginUserInfoCache) (
 	resp *schema.UserExternalLoginResp, err error) {
-	oldExternalLoginUserInfo, exist, err := us.userExternalLoginRepo.GetByExternalID(ctx, externalUserInfo.ExternalID)
+	oldExternalLoginUserInfo, exist, err := us.userExternalLoginRepo.GetByExternalID(ctx,
+		externalUserInfo.Provider, externalUserInfo.ExternalID)
 	if err != nil {
 		return nil, err
 	}
@@ -75,6 +75,9 @@ func (us *UserExternalLoginService) ExternalLogin(
 			return nil, err
 		}
 		if exist && oldUserInfo.Status != entity.UserStatusDeleted {
+			if err := us.userRepo.UpdateLastLoginDate(ctx, oldUserInfo.ID); err != nil {
+				log.Errorf("update user last login date failed: %v", err)
+			}
 			newMailStatus, err := us.activeUser(ctx, oldUserInfo, externalUserInfo)
 			if err != nil {
 				log.Error(err)
@@ -156,7 +159,9 @@ func (us *UserExternalLoginService) registerNewUser(ctx context.Context,
 
 func (us *UserExternalLoginService) bindOldUser(ctx context.Context,
 	externalUserInfo *schema.ExternalLoginUserInfoCache, oldUserInfo *entity.User) (err error) {
-	oldExternalUserInfo, exist, err := us.userExternalLoginRepo.GetByExternalID(ctx, externalUserInfo.ExternalID)
+	oldExternalUserInfo, exist, err := us.userExternalLoginRepo.GetByExternalID(ctx,
+		externalUserInfo.Provider,
+		externalUserInfo.ExternalID)
 	if err != nil {
 		return err
 	}

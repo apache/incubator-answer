@@ -86,6 +86,10 @@ func (ur *userAdminRepo) GetUserInfo(ctx context.Context, userID string) (user *
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	err = tryToDecorateUserInfoFromUserCenter(ctx, ur.data, user)
+	if err != nil {
+		return nil, false, err
+	}
 	return
 }
 
@@ -96,6 +100,11 @@ func (ur *userAdminRepo) GetUserInfoByEmail(ctx context.Context, email string) (
 		Where("status != ?", entity.UserStatusDeleted).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return
+	}
+	err = tryToDecorateUserInfoFromUserCenter(ctx, ur.data, user)
+	if err != nil {
+		return nil, false, err
 	}
 	return
 }
@@ -127,6 +136,8 @@ func (ur *userAdminRepo) GetUserPage(ctx context.Context, page, pageSize int, us
 	total, err = pager.Help(page, pageSize, &users, user, session)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return
 	}
+	tryToDecorateUserListFromUserCenter(ctx, ur.data, users)
 	return
 }

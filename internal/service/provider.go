@@ -82,5 +82,6 @@ var ProviderSetService = wire.NewSet(
 	role.NewUserRoleRelService,
 	role.NewRolePowerRelService,
 	user_external_login.NewUserExternalLoginService,
+	user_external_login.NewUserCenterLoginService,
 	plugin_common.NewPluginCommonService,
 )

@@ -9,6 +9,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/rank"
+	"github.com/answerdev/answer/plugin"
 	"github.com/jinzhu/now"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -36,6 +37,10 @@ func NewUserRankRepo(data *data.Data, configRepo config.ConfigRepo) rank.UserRan
 func (ur *UserRankRepo) TriggerUserRank(ctx context.Context,
 	session *xorm.Session, userID string, deltaRank int, activityType int,
 ) (isReachStandard bool, err error) {
+	// IMPORTANT: If user center enabled the rank agent, then we should not change user rank.
+	if plugin.RankAgentEnabled() {
+		return false, nil
+	}
 	if deltaRank == 0 {
 		return false, nil
 	}

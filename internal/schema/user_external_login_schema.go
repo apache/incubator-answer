@@ -56,3 +56,14 @@ type ExternalLoginUnbindingReq struct {
 	ExternalID string `validate:"required,gt=0,lte=128" json:"external_id"`
 	UserID     string `json:"-"`
 }
+
+// UserCenterUserSettingsResp user center user info response
+type UserCenterUserSettingsResp struct {
+	ProfileSettingAgent UserSettingAgent `json:"profile_setting_agent"`
+	AccountSettingAgent UserSettingAgent `json:"account_setting_agent"`
+}
+
+type UserSettingAgent struct {
+	Enabled     bool   `json:"enabled"`
+	RedirectURL string `json:"redirect_url"`
+}

@@ -22,6 +22,7 @@ import (
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/internal/service/user_external_login"
 	"github.com/answerdev/answer/pkg/checker"
+	"github.com/answerdev/answer/plugin"
 	"github.com/google/uuid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -681,6 +682,9 @@ func (us *UserService) UserUnsubscribeEmailNotification(
 
 func (us *UserService) getActivityUserRankStat(ctx context.Context, startTime, endTime time.Time, limit int,
 	userIDExist map[string]bool) (rankStat []*entity.ActivityUserRankStat, userIDs []string, err error) {
+	if plugin.RankAgentEnabled() {
+		return make([]*entity.ActivityUserRankStat, 0), make([]string, 0), nil
+	}
 	rankStat, err = us.activityRepo.GetUsersWhoHasGainedTheMostReputation(ctx, startTime, endTime, limit)
 	if err != nil {
 		return nil, nil, err
@@ -700,6 +704,9 @@ func (us *UserService) getActivityUserRankStat(ctx context.Context, startTime, e
 
 func (us *UserService) getActivityUserVoteStat(ctx context.Context, startTime, endTime time.Time, limit int,
 	userIDExist map[string]bool) (voteStat []*entity.ActivityUserVoteStat, userIDs []string, err error) {
+	if plugin.RankAgentEnabled() {
+		return make([]*entity.ActivityUserVoteStat, 0), make([]string, 0), nil
+	}
 	voteStat, err = us.activityRepo.GetUsersWhoHasVoteMost(ctx, startTime, endTime, limit)
 	if err != nil {
 		return nil, nil, err
