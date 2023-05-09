@@ -1,5 +1,6 @@
 # url path reserves the keywords list
 users:
+  - unsubscribe
   - settings
   - login
   - register
@@ -9,5 +10,7 @@ users:
   - account-activation
   - confirm-new-email
   - account-suspended
+  - confirm-email
+  - auth-landing
 questions:
   - ask
