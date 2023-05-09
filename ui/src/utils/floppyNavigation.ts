@@ -62,7 +62,7 @@ const navigate = (to: string | number, config: NavigateConfig = {}) => {
      * 2. Auto storage login redirect
      */
     if (to === RouteAlias.login || to === getLoginUrl()) {
-      if (equalToCurrentHref(RouteAlias.login)) {
+      if (equalToCurrentHref(to)) {
         return;
       }
       storageLoginRedirect();

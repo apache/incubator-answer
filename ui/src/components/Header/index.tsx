@@ -20,7 +20,7 @@ import {
 
 import classnames from 'classnames';
 
-import { floppyNavigation, userCenter } from '@/utils';
+import { userCenter } from '@/utils';
 import {
   loggedUserInfoStore,
   siteInfoStore,
@@ -29,7 +29,6 @@ import {
   themeSettingStore,
 } from '@/stores';
 import { logout, useQueryNotificationStatus } from '@/services';
-import { RouteAlias } from '@/router/alias';
 
 import NavItems from './components/NavItems';
 
@@ -72,19 +71,6 @@ const Header: FC = () => {
     await logout();
     clearUserStore();
     window.location.replace(window.location.href);
-  };
-  const onLoginClick = (evt) => {
-    if (location.pathname === RouteAlias.login) {
-      evt.preventDefault();
-      window.location.reload();
-      return;
-    }
-    if (floppyNavigation.shouldProcessLinkClick(evt)) {
-      evt.preventDefault();
-      floppyNavigation.navigateToLogin({
-        handler: navigate,
-      });
-    }
   };
 
   useEffect(() => {
@@ -155,7 +141,6 @@ const Header: FC = () => {
                     'link-light': navbarStyle === 'theme-colored',
                     'link-primary': navbarStyle !== 'theme-colored',
                   })}
-                  onClick={onLoginClick}
                   href={userCenter.getLoginUrl()}>
                   {t('btns.login')}
                 </Button>
@@ -243,7 +228,6 @@ const Header: FC = () => {
                     'link-light': navbarStyle === 'theme-colored',
                     'link-primary': navbarStyle !== 'theme-colored',
                   })}
-                  onClick={onLoginClick}
                   href={userCenter.getLoginUrl()}>
                   {t('btns.login')}
                 </Button>
