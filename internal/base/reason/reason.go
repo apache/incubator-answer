@@ -42,6 +42,7 @@ const (
 	EmailDuplicate                      = "error.email.duplicate"
 	EmailVerifyURLExpired               = "error.email.verify_url_expired"
 	EmailNeedToBeVerified               = "error.email.need_to_be_verified"
+	EmailIllegalDomainError             = "error.email.illegal_email_domain_error"
 	UserSuspended                       = "error.user.suspended"
 	ObjectNotFound                      = "error.object.not_found"
 	TagNotFound                         = "error.tag.not_found"
@@ -50,7 +51,7 @@ const (
 	TagIsUsedCannotDelete               = "error.tag.is_used_cannot_delete"
 	TagAlreadyExist                     = "error.tag.already_exist"
 	RankFailToMeetTheCondition          = "error.rank.fail_to_meet_the_condition"
-	VoteRankFailToMeetTheCondition   = "error.rank.vote_fail_to_meet_the_condition"
+	VoteRankFailToMeetTheCondition      = "error.rank.vote_fail_to_meet_the_condition"
 	ThemeNotFound                       = "error.theme.not_found"
 	LangNotFound                        = "error.lang.not_found"
 	ReportHandleFailed                  = "error.report.handle_failed"
@@ -73,4 +74,6 @@ const (
 	AdminCannotUpdateTheirPassword      = "error.admin.cannot_update_their_password"
 	AdminCannotModifySelfStatus         = "error.admin.cannot_modify_self_status"
 	UserExternalLoginUnbindingForbidden = "error.user.external_login_unbinding_forbidden"
+	UserAccessDenied                    = "error.user.access_denied"
+	UserPageAccessDenied                = "error.user.page_access_denied"
 )

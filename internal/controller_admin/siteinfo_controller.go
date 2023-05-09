@@ -139,6 +139,19 @@ func (sc *SiteInfoController) GetSiteTheme(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
+// GetSiteUsers get site user config
+// @Summary get site user config
+// @Description get site user config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SiteUsersResp}
+// @Router /answer/admin/api/siteinfo/users [get]
+func (sc *SiteInfoController) GetSiteUsers(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetSiteUsers(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
 // GetRobots get site robots information
 // @Summary get site robots information
 // @Description get site robots information
@@ -336,6 +349,24 @@ func (sc *SiteInfoController) SaveSiteTheme(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
+// UpdateSiteUsers update site config about users
+// @Summary update site info config about users
+// @Description update site info config about users
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.SiteUsersReq true "users info"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/siteinfo/users [put]
+func (sc *SiteInfoController) UpdateSiteUsers(ctx *gin.Context) {
+	req := &schema.SiteUsersReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	err := sc.siteInfoService.SaveSiteUsers(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
 // GetSMTPConfig get smtp config
 // @Summary GetSMTPConfig get smtp config
 // @Description GetSMTPConfig get smtp config
@@ -364,5 +395,36 @@ func (sc *SiteInfoController) UpdateSMTPConfig(ctx *gin.Context) {
 		return
 	}
 	err := sc.siteInfoService.UpdateSMTPConfig(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
+// GetPrivilegesConfig get privileges config
+// @Summary GetPrivilegesConfig get privileges config
+// @Description GetPrivilegesConfig get privileges config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.GetPrivilegesConfigResp}
+// @Router /answer/admin/api/setting/privileges [get]
+func (sc *SiteInfoController) GetPrivilegesConfig(ctx *gin.Context) {
+	resp, err := sc.siteInfoService.GetPrivilegesConfig(ctx)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// UpdatePrivilegesConfig update privileges config
+// @Summary update privileges config
+// @Description update privileges config
+// @Security ApiKeyAuth
+// @Tags admin
+// @Produce json
+// @Param data body schema.UpdatePrivilegesConfigReq true "config"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/admin/api/setting/privileges [put]
+func (sc *SiteInfoController) UpdatePrivilegesConfig(ctx *gin.Context) {
+	req := &schema.UpdatePrivilegesConfigReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	err := sc.siteInfoService.UpdatePrivilegesConfig(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }

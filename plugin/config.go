@@ -12,6 +12,7 @@ const (
 	ConfigTypeUpload   ConfigType = "upload"
 	ConfigTypeTimezone ConfigType = "timezone"
 	ConfigTypeSwitch   ConfigType = "switch"
+	ConfigTypeButton   ConfigType = "button"
 )
 
 const (
@@ -43,15 +44,43 @@ type ConfigField struct {
 }
 
 type ConfigFieldUIOptions struct {
-	Placeholder Translator `json:"placeholder,omitempty"`
-	Rows        string     `json:"rows,omitempty"`
-	InputType   InputType  `json:"input_type,omitempty"`
-	Label       Translator `json:"label,omitempty"`
+	Placeholder Translator      `json:"placeholder,omitempty"`
+	Rows        string          `json:"rows,omitempty"`
+	InputType   InputType       `json:"input_type,omitempty"`
+	Label       Translator      `json:"label,omitempty"`
+	Action      *UIOptionAction `json:"action,omitempty"`
+	Variant     string          `json:"variant,omitempty"`
+	Text        Translator      `json:"text,omitempty"`
 }
 
 type ConfigFieldOption struct {
 	Label Translator `json:"label"`
 	Value string     `json:"value"`
+}
+
+type UIOptionAction struct {
+	Url        string            `json:"url"`
+	Method     string            `json:"method,omitempty"`
+	Loading    *LoadingAction    `json:"loading,omitempty"`
+	OnComplete *OnCompleteAction `json:"on_complete,omitempty"`
+}
+
+const (
+	LoadingActionStateNone     LoadingActionType = "none"
+	LoadingActionStatePending  LoadingActionType = "pending"
+	LoadingActionStateComplete LoadingActionType = "completed"
+)
+
+type LoadingActionType string
+
+type LoadingAction struct {
+	Text  Translator        `json:"text"`
+	State LoadingActionType `json:"state"`
+}
+
+type OnCompleteAction struct {
+	ToastReturnMessage bool `json:"toast_return_message"`
+	RefreshFormConfig  bool `json:"refresh_form_config"`
 }
 
 type Config interface {

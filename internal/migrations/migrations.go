@@ -61,6 +61,7 @@ var migrations = []Migration{
 	NewMigration("add plugin", addPlugin, false),
 	NewMigration("update user pin hide features", updateRolePinAndHideFeatures, true),
 	NewMigration("update question post time", updateQuestionPostTime, true),
+	NewMigration("add login limitations", addLoginLimitations, true),
 }
 
 // GetCurrentDBVersion returns the current db version

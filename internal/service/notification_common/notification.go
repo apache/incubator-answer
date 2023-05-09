@@ -193,10 +193,10 @@ func (ns *NotificationCommon) SendNotificationToAllFollower(ctx context.Context,
 	if msg.NoNeedPushAllFollow {
 		return
 	}
-	if msg.NotificationAction != constant.UpdateQuestion &&
-		msg.NotificationAction != constant.AnswerTheQuestion &&
-		msg.NotificationAction != constant.UpdateAnswer &&
-		msg.NotificationAction != constant.AcceptAnswer {
+	if msg.NotificationAction != constant.NotificationUpdateQuestion &&
+		msg.NotificationAction != constant.NotificationAnswerTheQuestion &&
+		msg.NotificationAction != constant.NotificationUpdateAnswer &&
+		msg.NotificationAction != constant.NotificationAcceptAnswer {
 		return
 	}
 	condObjectID := msg.ObjectID

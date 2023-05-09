@@ -13,6 +13,7 @@ import (
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/internal/service/uploader"
+	"github.com/answerdev/answer/pkg/checker"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -223,13 +224,17 @@ func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	if !siteInfo.AllowNewRegistrations {
+	if !siteInfo.AllowNewRegistrations || !siteInfo.AllowEmailRegistrations {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.NotAllowedRegistration), nil)
 		return
 	}
 
 	req := &schema.UserRegisterReq{}
 	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	if !checker.EmailInAllowEmailDomain(req.Email, siteInfo.AllowEmailDomains) {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.EmailIllegalDomainError), nil)
 		return
 	}
 	req.IP = ctx.ClientIP()
@@ -487,6 +492,16 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 	// If the user email is not verified, that also can use this api to modify the email.
 	if len(req.UserID) == 0 {
 		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+		return
+	}
+	// check whether email allow register or not
+	siteInfo, err := uc.siteInfoCommonService.GetSiteLogin(ctx)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !checker.EmailInAllowEmailDomain(req.Email, siteInfo.AllowEmailDomains) {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.EmailIllegalDomainError), nil)
 		return
 	}
 

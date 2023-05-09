@@ -80,6 +80,9 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	if !exist {
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
+	if userInfo.Status == entity.UserStatusDeleted {
+		return nil, errors.Unauthorized(reason.UnauthorizedError)
+	}
 	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
 	if err != nil {
 		log.Error(err)
@@ -119,10 +122,17 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 	if !us.verifyPassword(ctx, req.Pass, userInfo.Pass) {
 		return nil, errors.BadRequest(reason.EmailOrPasswordWrong)
 	}
+	ok, externalID, err := us.userExternalLoginService.CheckUserStatusInUserCenter(ctx, userInfo.ID)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, errors.BadRequest(reason.EmailOrPasswordWrong)
+	}
 
 	err = us.userRepo.UpdateLastLoginDate(ctx, userInfo.ID)
 	if err != nil {
-		log.Error("UpdateLastLoginDate", err.Error())
+		log.Errorf("update last login data failed, err: %v", err)
 	}
 
 	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
@@ -137,6 +147,7 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
 		RoleID:      roleID,
+		ExternalID:  externalID,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
@@ -252,7 +263,27 @@ func (us *UserService) UserModifyPassword(ctx context.Context, req *schema.UserM
 // UpdateInfo update user info
 func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoRequest) (
 	errFields []*validator.FormErrorField, err error) {
-	if len(req.Username) > 0 {
+	siteUsers, err := us.siteInfoService.GetSiteUsers(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if siteUsers.AllowUpdateUsername && len(req.Username) > 0 {
+		if checker.IsInvalidUsername(req.Username) {
+			errFields = append(errFields, &validator.FormErrorField{
+				ErrorField: "username",
+				ErrorMsg:   reason.UsernameInvalid,
+			})
+			return errFields, errors.BadRequest(reason.UsernameInvalid)
+		}
+		if checker.IsReservedUsername(req.Username) {
+			errFields = append(errFields, &validator.FormErrorField{
+				ErrorField: "username",
+				ErrorMsg:   reason.UsernameInvalid,
+			})
+			return errFields, errors.BadRequest(reason.UsernameInvalid)
+		}
+
 		userInfo, exist, err := us.userRepo.GetByUsername(ctx, req.Username)
 		if err != nil {
 			return nil, err
@@ -264,29 +295,55 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 			})
 			return errFields, errors.BadRequest(reason.UsernameDuplicate)
 		}
-		if checker.IsReservedUsername(req.Username) {
-			errFields = append(errFields, &validator.FormErrorField{
-				ErrorField: "username",
-				ErrorMsg:   reason.UsernameInvalid,
-			})
-			return errFields, errors.BadRequest(reason.UsernameInvalid)
-		}
 	}
-	avatar, err := json.Marshal(req.Avatar)
+
+	oldUserInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
 	if err != nil {
-		return nil, errors.BadRequest(reason.UserSetAvatar).WithError(err).WithStack()
+		return nil, err
 	}
-	userInfo := entity.User{}
-	userInfo.ID = req.UserID
-	userInfo.Avatar = string(avatar)
-	userInfo.DisplayName = req.DisplayName
-	userInfo.Bio = req.Bio
-	userInfo.BioHTML = req.BioHTML
-	userInfo.Location = req.Location
-	userInfo.Website = req.Website
-	userInfo.Username = req.Username
-	err = us.userRepo.UpdateInfo(ctx, &userInfo)
+	if !exist {
+		return nil, errors.BadRequest(reason.UserNotFound)
+	}
+
+	cond := us.formatUserInfoForUpdateInfo(oldUserInfo, req, siteUsers)
+	err = us.userRepo.UpdateInfo(ctx, cond)
 	return nil, err
+}
+
+func (us *UserService) formatUserInfoForUpdateInfo(
+	oldUserInfo *entity.User, req *schema.UpdateInfoRequest, siteUsersConf *schema.SiteUsersResp) *entity.User {
+	avatar, _ := json.Marshal(req.Avatar)
+
+	userInfo := &entity.User{}
+	userInfo.DisplayName = oldUserInfo.DisplayName
+	userInfo.Username = oldUserInfo.Username
+	userInfo.Avatar = oldUserInfo.Avatar
+	userInfo.Bio = oldUserInfo.Bio
+	userInfo.BioHTML = oldUserInfo.BioHTML
+	userInfo.Website = oldUserInfo.Website
+	userInfo.Location = oldUserInfo.Location
+	userInfo.ID = req.UserID
+
+	if len(req.DisplayName) > 0 && siteUsersConf.AllowUpdateDisplayName {
+		userInfo.DisplayName = req.DisplayName
+	}
+	if len(req.Username) > 0 && siteUsersConf.AllowUpdateUsername {
+		userInfo.Username = req.Username
+	}
+	if len(avatar) > 0 && siteUsersConf.AllowUpdateAvatar {
+		userInfo.Avatar = string(avatar)
+	}
+	if siteUsersConf.AllowUpdateBio {
+		userInfo.Bio = req.Bio
+		userInfo.BioHTML = req.BioHTML
+	}
+	if siteUsersConf.AllowUpdateWebsite {
+		userInfo.Website = req.Website
+	}
+	if siteUsersConf.AllowUpdateLocation {
+		userInfo.Location = req.Location
+	}
+	return userInfo
 }
 
 func (us *UserService) UserEmailHas(ctx context.Context, email string) (bool, error) {
@@ -466,7 +523,7 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	}
 
 	accessToken, userCacheInfo, err := us.userCommonService.CacheLoginUserInfo(
-		ctx, userInfo.ID, userInfo.MailStatus, userInfo.Status)
+		ctx, userInfo.ID, userInfo.MailStatus, userInfo.Status, "")
 	if err != nil {
 		return nil, err
 	}

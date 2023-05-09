@@ -8,9 +8,13 @@ import (
 	"github.com/segmentfault/pacman/errors"
 )
 
-// BanAPIWhenUserCenterEnabled ban api when user center enabled
-func BanAPIWhenUserCenterEnabled(ctx *gin.Context) {
-	if plugin.UserCenterEnabled() {
+// BanAPIForUserCenter ban api for user center
+func BanAPIForUserCenter(ctx *gin.Context) {
+	uc, ok := plugin.GetUserCenter()
+	if !ok {
+		return
+	}
+	if !uc.Description().EnabledOriginalUserSystem {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.ForbiddenError), nil)
 		ctx.Abort()
 		return

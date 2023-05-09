@@ -4,6 +4,9 @@ package schema
 type UserExternalLoginResp struct {
 	BindingKey  string `json:"binding_key"`
 	AccessToken string `json:"access_token"`
+	// ErrMsg error message, if not empty, means login failed and this message should be displayed.
+	ErrMsg   string `json:"-"`
+	ErrTitle string `json:"-"`
 }
 
 // ExternalLoginBindingUserSendEmailReq external login binding user request
@@ -49,6 +52,8 @@ type ExternalLoginUserInfoCache struct {
 	Avatar string
 	// optional. The original user information provided by the third-party login platform
 	MetaInfo string
+	// optional. The bio provided by the third-party login platform
+	Bio string
 }
 
 // ExternalLoginUnbindingReq external login unbinding user
@@ -61,6 +66,13 @@ type ExternalLoginUnbindingReq struct {
 type UserCenterUserSettingsResp struct {
 	ProfileSettingAgent UserSettingAgent `json:"profile_setting_agent"`
 	AccountSettingAgent UserSettingAgent `json:"account_setting_agent"`
+}
+
+type UserCenterAdminFunctionAgentResp struct {
+	AllowCreateUser         bool `json:"allow_create_user"`
+	AllowUpdateUserStatus   bool `json:"allow_update_user_status"`
+	AllowUpdateUserPassword bool `json:"allow_update_user_password"`
+	AllowUpdateUserRole     bool `json:"allow_update_user_role"`
 }
 
 type UserSettingAgent struct {

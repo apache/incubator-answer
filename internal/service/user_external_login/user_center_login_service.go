@@ -5,10 +5,16 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/checker"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/random"
 	"github.com/answerdev/answer/plugin"
 	"github.com/segmentfault/pacman/log"
@@ -20,6 +26,7 @@ type UserCenterLoginService struct {
 	userExternalLoginRepo UserExternalLoginRepo
 	userCommonService     *usercommon.UserCommon
 	userActivity          activity.UserActiveActivityRepo
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewUserCenterLoginService new user external login service
@@ -28,21 +35,38 @@ func NewUserCenterLoginService(
 	userCommonService *usercommon.UserCommon,
 	userExternalLoginRepo UserExternalLoginRepo,
 	userActivity activity.UserActiveActivityRepo,
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 ) *UserCenterLoginService {
 	return &UserCenterLoginService{
 		userRepo:              userRepo,
 		userCommonService:     userCommonService,
 		userExternalLoginRepo: userExternalLoginRepo,
 		userActivity:          userActivity,
+		siteInfoCommonService: siteInfoCommonService,
 	}
 }
 
 func (us *UserCenterLoginService) ExternalLogin(
-	ctx context.Context, provider string, basicUserInfo *plugin.UserCenterBasicUserInfo) (
+	ctx context.Context, userCenter plugin.UserCenter, basicUserInfo *plugin.UserCenterBasicUserInfo) (
 	resp *schema.UserExternalLoginResp, err error) {
 
+	if len(basicUserInfo.Email) > 0 {
+		// check whether site allow register or not
+		siteInfo, err := us.siteInfoCommonService.GetSiteLogin(ctx)
+		if err != nil {
+			return nil, err
+		}
+		if !checker.EmailInAllowEmailDomain(basicUserInfo.Email, siteInfo.AllowEmailDomains) {
+			log.Debugf("email domain not allowed: %s", basicUserInfo.Email)
+			return &schema.UserExternalLoginResp{
+				ErrTitle: translator.Tr(handler.GetLangByCtx(ctx), reason.UserAccessDenied),
+				ErrMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.EmailIllegalDomainError),
+			}, nil
+		}
+	}
+
 	oldExternalLoginUserInfo, exist, err := us.userExternalLoginRepo.GetByExternalID(ctx,
-		provider, basicUserInfo.ExternalID)
+		userCenter.Info().SlugName, basicUserInfo.ExternalID)
 	if err != nil {
 		return nil, err
 	}
@@ -53,16 +77,28 @@ func (us *UserCenterLoginService) ExternalLogin(
 			return nil, err
 		}
 		if exist {
+			// if user is deleted, do not allow login
+			if oldUserInfo.Status == entity.UserStatusDeleted {
+				return &schema.UserExternalLoginResp{
+					ErrTitle: translator.Tr(handler.GetLangByCtx(ctx), reason.UserAccessDenied),
+					ErrMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.UserPageAccessDenied),
+				}, nil
+			}
 			if err := us.userRepo.UpdateLastLoginDate(ctx, oldUserInfo.ID); err != nil {
 				log.Errorf("update user last login date failed: %v", err)
 			}
 			accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
-				ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status)
+				ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status, oldExternalLoginUserInfo.ExternalID)
 			return &schema.UserExternalLoginResp{AccessToken: accessToken}, err
 		}
 	}
 
-	oldUserInfo, err := us.registerNewUser(ctx, provider, basicUserInfo)
+	// cache external user info, waiting for user enter email address.
+	if userCenter.Description().MustAuthEmailEnabled && len(basicUserInfo.Email) == 0 {
+		return &schema.UserExternalLoginResp{ErrMsg: "Requires authorized email to login"}, nil
+	}
+
+	oldUserInfo, err := us.registerNewUser(ctx, userCenter.Info().SlugName, basicUserInfo)
 	if err != nil {
 		return nil, err
 	}
@@ -70,7 +106,7 @@ func (us *UserCenterLoginService) ExternalLogin(
 	us.activeUser(ctx, oldUserInfo)
 
 	accessToken, _, err := us.userCommonService.CacheLoginUserInfo(
-		ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status)
+		ctx, oldUserInfo.ID, oldUserInfo.MailStatus, oldUserInfo.Status, oldExternalLoginUserInfo.ExternalID)
 	return &schema.UserExternalLoginResp{AccessToken: accessToken}, err
 }
 
@@ -98,6 +134,8 @@ func (us *UserCenterLoginService) registerNewUser(ctx context.Context, provider 
 	userInfo.MailStatus = entity.EmailStatusAvailable
 	userInfo.Status = entity.UserStatusAvailable
 	userInfo.LastLoginDate = time.Now()
+	userInfo.Bio = basicUserInfo.Bio
+	userInfo.BioHTML = converter.Markdown2HTML(basicUserInfo.Bio)
 	err = us.userRepo.AddUser(ctx, userInfo)
 	if err != nil {
 		return nil, err
@@ -163,6 +201,31 @@ func (us *UserCenterLoginService) UserCenterUserSettings(ctx context.Context, us
 			RedirectURL: settings.ProfileSettingRedirectURL,
 		}
 	}
+	return resp, nil
+}
+
+// UserCenterAdminFunctionAgent Check in the backend administration interface if the user-related functions
+// are turned off due to turning on the User Center plugin.
+func (us *UserCenterLoginService) UserCenterAdminFunctionAgent(ctx context.Context) (
+	resp *schema.UserCenterAdminFunctionAgentResp, err error) {
+	resp = &schema.UserCenterAdminFunctionAgentResp{
+		AllowCreateUser:         true,
+		AllowUpdateUserStatus:   true,
+		AllowUpdateUserPassword: true,
+		AllowUpdateUserRole:     true,
+	}
+	userCenter, ok := plugin.GetUserCenter()
+	if !ok {
+		return
+	}
+	desc := userCenter.Description()
+	// If user status agent is enabled, admin can not update user status in answer.
+	resp.AllowUpdateUserStatus = !desc.UserStatusAgentEnabled
+
+	// If original user system is enabled, admin can update user password and role in answer.
+	resp.AllowUpdateUserPassword = desc.EnabledOriginalUserSystem
+	resp.AllowUpdateUserRole = desc.EnabledOriginalUserSystem
+	resp.AllowCreateUser = desc.EnabledOriginalUserSystem
 	return resp, nil
 }
 

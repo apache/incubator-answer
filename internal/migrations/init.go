@@ -143,8 +143,9 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 	}
 
 	loginConfig := map[string]bool{
-		"allow_new_registrations": true,
-		"login_required":          false,
+		"allow_new_registrations":   true,
+		"allow_email_registrations": true,
+		"login_required":            false,
 	}
 	loginConfigDataBytes, _ := json.Marshal(loginConfig)
 	_, err = engine.InsertOne(&entity.SiteInfo{
@@ -173,6 +174,25 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 	_, err = engine.InsertOne(&entity.SiteInfo{
 		Type:    "seo",
 		Content: string(seoDataBytes),
+		Status:  1,
+	})
+	if err != nil {
+		return err
+	}
+
+	usersData := map[string]any{
+		"default_avatar":            "gravatar",
+		"allow_update_display_name": true,
+		"allow_update_username":     true,
+		"allow_update_avatar":       true,
+		"allow_update_bio":          true,
+		"allow_update_website":      true,
+		"allow_update_location":     true,
+	}
+	usersDataBytes, _ := json.Marshal(usersData)
+	_, err = engine.InsertOne(&entity.SiteInfo{
+		Type:    "users",
+		Content: string(usersDataBytes),
 		Status:  1,
 	})
 	if err != nil {
@@ -346,10 +366,14 @@ func initConfigTable(engine *xorm.Engine) error {
 		{ID: 116, Key: "rank.question.reopen", Value: `-1`},
 		{ID: 117, Key: "rank.tag.use_reserved_tag", Value: `-1`},
 		{ID: 118, Key: "plugin.status", Value: `{}`},
-		{ID: 119, Key: "question.pin", Value: `-1`},
-		{ID: 120, Key: "question.unpin", Value: `-1`},
-		{ID: 121, Key: "question.show", Value: `-1`},
-		{ID: 122, Key: "question.hide", Value: `-1`},
+		{ID: 119, Key: "question.pin", Value: `0`},
+		{ID: 120, Key: "question.unpin", Value: `0`},
+		{ID: 121, Key: "question.show", Value: `0`},
+		{ID: 122, Key: "question.hide", Value: `0`},
+		{ID: 123, Key: "rank.question.pin", Value: `-1`},
+		{ID: 124, Key: "rank.question.unpin", Value: `-1`},
+		{ID: 125, Key: "rank.question.show", Value: `-1`},
+		{ID: 126, Key: "rank.question.hide", Value: `-1`},
 	}
 	_, err := engine.Insert(defaultConfigTable)
 	return err

@@ -471,7 +471,7 @@ func (cs *CommentService) notificationQuestionComment(ctx context.Context, quest
 		ObjectID:       commentID,
 	}
 	msg.ObjectType = constant.CommentObjectType
-	msg.NotificationAction = constant.CommentQuestion
+	msg.NotificationAction = constant.NotificationCommentQuestion
 	notice_queue.AddNotification(msg)
 
 	receiverUserInfo, exist, err := cs.userRepo.GetByUserID(ctx, questionUserID)
@@ -526,7 +526,7 @@ func (cs *CommentService) notificationAnswerComment(ctx context.Context,
 		ObjectID:       commentID,
 	}
 	msg.ObjectType = constant.CommentObjectType
-	msg.NotificationAction = constant.CommentAnswer
+	msg.NotificationAction = constant.NotificationCommentAnswer
 	notice_queue.AddNotification(msg)
 
 	receiverUserInfo, exist, err := cs.userRepo.GetByUserID(ctx, answerUserID)
@@ -578,7 +578,7 @@ func (cs *CommentService) notificationCommentReply(ctx context.Context, replyUse
 		ObjectID:       commentID,
 	}
 	msg.ObjectType = constant.CommentObjectType
-	msg.NotificationAction = constant.ReplyToYou
+	msg.NotificationAction = constant.NotificationReplyToYou
 	notice_queue.AddNotification(msg)
 }
 
@@ -599,7 +599,7 @@ func (cs *CommentService) notificationMention(
 				ObjectID:       commentID,
 			}
 			msg.ObjectType = constant.CommentObjectType
-			msg.NotificationAction = constant.MentionYou
+			msg.NotificationAction = constant.NotificationMentionYou
 			notice_queue.AddNotification(msg)
 			alreadyNotifiedUserIDs = append(alreadyNotifiedUserIDs, userInfo.ID)
 		}

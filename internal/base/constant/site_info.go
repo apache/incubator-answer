@@ -1,5 +1,6 @@
 package constant
 
 var (
-	DefaultAvatar = "system"
+	DefaultAvatar  = "system"
+	DefaultSiteURL = ""
 )

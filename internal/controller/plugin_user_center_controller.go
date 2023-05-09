@@ -60,9 +60,11 @@ func (uc *UserCenterController) UserCenterAgent(ctx *gin.Context) {
 	_ = plugin.CallUserCenter(func(uc plugin.UserCenter) error {
 		info := uc.Description()
 		resp.AgentInfo.Name = info.Name
+		resp.AgentInfo.DisplayName = info.DisplayName.Translate(ctx)
 		resp.AgentInfo.Icon = info.Icon
 		resp.AgentInfo.Url = info.Url
 		resp.AgentInfo.ControlCenterItems = make([]*schema.ControlCenter, 0)
+		resp.AgentInfo.EnabledOriginalUserSystem = info.EnabledOriginalUserSystem
 		items := uc.ControlCenterItems()
 		for _, item := range items {
 			resp.AgentInfo.ControlCenterItems = append(resp.AgentInfo.ControlCenterItems, &schema.ControlCenter{
@@ -90,8 +92,8 @@ func (uc *UserCenterController) UserCenterPersonalBranding(ctx *gin.Context) {
 
 func (uc *UserCenterController) UserCenterLoginRedirect(ctx *gin.Context) {
 	var redirectURL string
-	_ = plugin.CallUserCenter(func(uc plugin.UserCenter) error {
-		info := uc.Description()
+	_ = plugin.CallUserCenter(func(userCenter plugin.UserCenter) error {
+		info := userCenter.Description()
 		redirectURL = info.LoginRedirectURL
 		return nil
 	})
@@ -100,9 +102,9 @@ func (uc *UserCenterController) UserCenterLoginRedirect(ctx *gin.Context) {
 
 func (uc *UserCenterController) UserCenterSignUpRedirect(ctx *gin.Context) {
 	var redirectURL string
-	_ = plugin.CallUserCenter(func(uc plugin.UserCenter) error {
-		info := uc.Description()
-		redirectURL = info.SignUpRedirectURL
+	_ = plugin.CallUserCenter(func(userCenter plugin.UserCenter) error {
+		info := userCenter.Description()
+		redirectURL = info.LoginRedirectURL
 		return nil
 	})
 	ctx.Redirect(http.StatusFound, redirectURL)
@@ -124,17 +126,24 @@ func (uc *UserCenterController) UserCenterLoginCallback(ctx *gin.Context) {
 	userInfo, err := userCenter.LoginCallback(ctx)
 	if err != nil {
 		log.Error(err)
-		ctx.Redirect(http.StatusFound, "/50x")
+		if !ctx.IsAborted() {
+			ctx.Redirect(http.StatusFound, "/50x")
+		}
 		return
 	}
 
-	resp, err := uc.userCenterLoginService.ExternalLogin(ctx, userCenter.Info().SlugName, userInfo)
+	resp, err := uc.userCenterLoginService.ExternalLogin(ctx, userCenter, userInfo)
 	if err != nil {
 		log.Errorf("external login failed: %v", err)
 		ctx.Redirect(http.StatusFound, "/50x")
 		return
 	}
-	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/oauth?access_token=%s",
+	if len(resp.ErrMsg) > 0 {
+		ctx.Redirect(http.StatusFound, fmt.Sprintf("/50x?title=%s&msg=%s", resp.ErrTitle, resp.ErrMsg))
+		return
+	}
+	userCenter.AfterLogin(userInfo.ExternalID, resp.AccessToken)
+	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/auth-landing?access_token=%s",
 		siteGeneral.SiteUrl, resp.AccessToken))
 }
 
@@ -158,13 +167,18 @@ func (uc *UserCenterController) UserCenterSignUpCallback(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := uc.userCenterLoginService.ExternalLogin(ctx, userCenter.Info().SlugName, userInfo)
+	resp, err := uc.userCenterLoginService.ExternalLogin(ctx, userCenter, userInfo)
 	if err != nil {
 		log.Errorf("external login failed: %v", err)
 		ctx.Redirect(http.StatusFound, "/50x")
 		return
 	}
-	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/oauth?access_token=%s",
+	if len(resp.ErrMsg) > 0 {
+		ctx.Redirect(http.StatusFound, fmt.Sprintf("/50x?title=%s&msg=%s", resp.ErrTitle, resp.ErrMsg))
+		return
+	}
+	userCenter.AfterLogin(userInfo.ExternalID, resp.AccessToken)
+	ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/auth-landing?access_token=%s",
 		siteGeneral.SiteUrl, resp.AccessToken))
 }
 
@@ -172,5 +186,11 @@ func (uc *UserCenterController) UserCenterSignUpCallback(ctx *gin.Context) {
 func (uc *UserCenterController) UserCenterUserSettings(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
 	resp, err := uc.userCenterLoginService.UserCenterUserSettings(ctx, userID)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// UserCenterAdminFunctionAgent user center admin function agent
+func (uc *UserCenterController) UserCenterAdminFunctionAgent(ctx *gin.Context) {
+	resp, err := uc.userCenterLoginService.UserCenterAdminFunctionAgent(ctx)
 	handler.HandleResponse(ctx, err, resp)
 }

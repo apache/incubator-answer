@@ -37,10 +37,14 @@ func (pr *PluginAPIRouter) RegisterUnAuthConnectorRouter(r *gin.RouterGroup) {
 	r.GET("/user-center/sign-up/callback", pr.userCenterController.UserCenterSignUpCallback)
 }
 
-func (pr *PluginAPIRouter) RegisterAuthConnectorRouter(r *gin.RouterGroup) {
+func (pr *PluginAPIRouter) RegisterAuthUserConnectorRouter(r *gin.RouterGroup) {
 	connectorController := pr.connectorController
 	r.GET("/connector/user/info", connectorController.ConnectorsUserInfo)
 	r.DELETE("/connector/user/unbinding", connectorController.ExternalLoginUnbinding)
 
 	r.GET("/user-center/user/settings", pr.userCenterController.UserCenterUserSettings)
+}
+
+func (pr *PluginAPIRouter) RegisterAuthAdminConnectorRouter(r *gin.RouterGroup) {
+	r.GET("/user-center/agent", pr.userCenterController.UserCenterAdminFunctionAgent)
 }

@@ -25,6 +25,8 @@ backend:
       other: Close
     reopen:
       other: Reopen
+    forbidden_error:
+      other: Forbidden.
     pin:
       other: Pin
     hide:
@@ -48,6 +50,58 @@ backend:
         other: Have the full power to access the site.
       moderator:
         other: Has access to all posts except admin settings.
+  privilege:
+    level_1:
+      description:
+        other: Level 1 (less reputation required for private team, group)
+    level_2:
+      description:
+        other: Level 2 (low reputation required for startup community)
+    level_3:
+      description:
+        other: Level 3 (high reputation required for mature community)
+    rank_question_add_label:
+      other: Ask question
+    rank_answer_add_label:
+      other: Write answer
+    rank_comment_add_label:
+      other: Write comment
+    rank_report_add_label:
+      other: Flag
+    rank_comment_vote_up_label:
+      other: Upvote comment
+    rank_link_url_limit_label:
+      other: Post more than 2 links at a time
+    rank_question_vote_up_label:
+      other: Upvote question
+    rank_answer_vote_up_label:
+      other: Upvote answer
+    rank_question_vote_down_label:
+      other: Downvote question
+    rank_answer_vote_down_label:
+      other: Downvote answer
+    rank_tag_add_label:
+      other: Create new tag
+    rank_tag_edit_label:
+      other: Edit tag description (need to review)
+    rank_question_edit_label:
+      other: Edit other's question (need to review)
+    rank_answer_edit_label:
+      other: Edit other's answer (need to review)
+    rank_question_edit_without_review_label:
+      other: Edit other's question without review
+    rank_answer_edit_without_review_label:
+      other: Edit other's answer without review
+    rank_question_audit_label:
+      other: Review question edits
+    rank_answer_audit_label:
+      other: Review answer edits
+    rank_tag_audit_label:
+      other: Review tag edits
+    rank_tag_edit_without_review_label:
+      other: Edit tag description without review
+    rank_tag_synonym_label:
+      other: Manage tag synonyms
   email:
     other: Email
   password:
@@ -85,6 +139,8 @@ backend:
         other: Email should be verified.
       verify_url_expired:
         other: Email verified URL has expired, please resend the email.
+      illegal_email_domain_error:
+        other: Email is not allowed from that email domain. Please use another one.
     lang:
       not_found:
         other: Language file not found.
@@ -176,6 +232,10 @@ backend:
         other: You cannot modify your role.
       not_allowed_registration:
         other: Currently the site is not open for registration
+      access_denied:
+        other: Access denied
+      page_access_denied:
+        other: You do not have access to this page.
     config:
       read_config_failed:
         other: Read config failed
@@ -281,6 +341,16 @@ backend:
         other: Your answer has been deleted
       your_comment_was_deleted:
         other: Your comment has been deleted
+      up_voted_question:
+        other: upvoted question
+      down_voted_question:
+        other: downvoted question
+      up_voted_answer:
+        other: upvoted answer
+      down_voted_answer:
+        other: downvoted answer
+      up_voted_comment:
+        other: upvoted comment
 
 # The following fields are used for interface presentation(Front-end)
 ui:

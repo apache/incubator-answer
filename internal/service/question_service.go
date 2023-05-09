@@ -1002,7 +1002,7 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 	}
 
 	questionList, total, err := qs.questionRepo.GetQuestionPage(ctx, req.Page, req.PageSize,
-		req.UserIDBeSearched, req.TagID, req.OrderCond)
+		req.UserIDBeSearched, req.TagID, req.OrderCond, req.InDays)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -1064,7 +1064,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 	msg.ReceiverUserID = questionInfo.UserID
 	msg.TriggerUserID = questionInfo.UserID
 	msg.ObjectType = constant.QuestionObjectType
-	msg.NotificationAction = constant.YourQuestionWasDeleted
+	msg.NotificationAction = constant.NotificationYourQuestionWasDeleted
 	notice_queue.AddNotification(msg)
 	return nil
 }

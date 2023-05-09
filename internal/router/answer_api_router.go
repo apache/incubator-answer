@@ -102,7 +102,7 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 
 	// user
 	r.GET("/user/info", a.userController.GetUserInfoByUserID)
-	routerGroup := r.Group("", middleware.BanAPIWhenUserCenterEnabled)
+	routerGroup := r.Group("", middleware.BanAPIForUserCenter)
 	routerGroup.POST("/user/login/email", a.userController.UserEmailLogin)
 	routerGroup.POST("/user/register/email", a.userController.UserRegisterByEmail)
 	routerGroup.GET("/user/register/captcha", a.userController.UserRegisterCaptcha)
@@ -117,8 +117,8 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	// user
 	r.GET("/user/logout", a.userController.UserLogout)
-	r.POST("/user/email/change/code", middleware.BanAPIWhenUserCenterEnabled, a.userController.UserChangeEmailSendCode)
-	r.POST("/user/email/verification/send", middleware.BanAPIWhenUserCenterEnabled, a.userController.UserVerifyEmailSend)
+	r.POST("/user/email/change/code", middleware.BanAPIForUserCenter, a.userController.UserChangeEmailSendCode)
+	r.POST("/user/email/verification/send", middleware.BanAPIForUserCenter, a.userController.UserVerifyEmailSend)
 	r.GET("/personal/user/info", a.userController.GetOtherUserInfoByUsername)
 	r.GET("/user/ranking", a.userController.UserRanking)
 
@@ -206,8 +206,8 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.DELETE("/answer", a.answerController.RemoveAnswer)
 
 	// user
-	r.PUT("/user/password", middleware.BanAPIWhenUserCenterEnabled, a.userController.UserModifyPassWord)
-	r.PUT("/user/info", middleware.BanAPIWhenUserCenterEnabled, a.userController.UserUpdateInfo)
+	r.PUT("/user/password", middleware.BanAPIForUserCenter, a.userController.UserModifyPassWord)
+	r.PUT("/user/info", a.userController.UserUpdateInfo)
 	r.PUT("/user/interface", a.userController.UserUpdateInterface)
 	r.POST("/user/notice/set", a.userController.UserNoticeSet)
 
@@ -246,10 +246,10 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 
 	// user
 	r.GET("/users/page", a.adminUserController.GetUserPage)
-	r.PUT("/user/status", middleware.BanAPIWhenUserCenterEnabled, a.adminUserController.UpdateUserStatus)
+	r.PUT("/user/status", a.adminUserController.UpdateUserStatus)
 	r.PUT("/user/role", a.adminUserController.UpdateUserRole)
-	r.POST("/user", middleware.BanAPIWhenUserCenterEnabled, a.adminUserController.AddUser)
-	r.PUT("/user/password", middleware.BanAPIWhenUserCenterEnabled, a.adminUserController.UpdateUserPassword)
+	r.POST("/user", a.adminUserController.AddUser)
+	r.PUT("/user/password", a.adminUserController.UpdateUserPassword)
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)
@@ -262,25 +262,29 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 
 	// siteinfo
 	r.GET("/siteinfo/general", a.siteInfoController.GetGeneral)
-	r.GET("/siteinfo/interface", a.siteInfoController.GetInterface)
-	r.GET("/siteinfo/branding", a.siteInfoController.GetSiteBranding)
-	r.GET("/siteinfo/write", a.siteInfoController.GetSiteWrite)
-	r.GET("/siteinfo/legal", a.siteInfoController.GetSiteLegal)
-	r.GET("/siteinfo/seo", a.siteInfoController.GetSeo)
-	r.GET("/siteinfo/login", a.siteInfoController.GetSiteLogin)
-	r.GET("/siteinfo/custom-css-html", a.siteInfoController.GetSiteCustomCssHTML)
-	r.GET("/siteinfo/theme", a.siteInfoController.GetSiteTheme)
 	r.PUT("/siteinfo/general", a.siteInfoController.UpdateGeneral)
+	r.GET("/siteinfo/interface", a.siteInfoController.GetInterface)
 	r.PUT("/siteinfo/interface", a.siteInfoController.UpdateInterface)
+	r.GET("/siteinfo/branding", a.siteInfoController.GetSiteBranding)
 	r.PUT("/siteinfo/branding", a.siteInfoController.UpdateBranding)
+	r.GET("/siteinfo/write", a.siteInfoController.GetSiteWrite)
 	r.PUT("/siteinfo/write", a.siteInfoController.UpdateSiteWrite)
+	r.GET("/siteinfo/legal", a.siteInfoController.GetSiteLegal)
 	r.PUT("/siteinfo/legal", a.siteInfoController.UpdateSiteLegal)
-	r.PUT("/siteinfo/login", a.siteInfoController.UpdateSiteLogin)
-	r.PUT("/siteinfo/custom-css-html", a.siteInfoController.UpdateSiteCustomCssHTML)
-	r.PUT("/siteinfo/theme", a.siteInfoController.SaveSiteTheme)
+	r.GET("/siteinfo/seo", a.siteInfoController.GetSeo)
 	r.PUT("/siteinfo/seo", a.siteInfoController.UpdateSeo)
+	r.GET("/siteinfo/login", a.siteInfoController.GetSiteLogin)
+	r.PUT("/siteinfo/login", a.siteInfoController.UpdateSiteLogin)
+	r.GET("/siteinfo/custom-css-html", a.siteInfoController.GetSiteCustomCssHTML)
+	r.PUT("/siteinfo/custom-css-html", a.siteInfoController.UpdateSiteCustomCssHTML)
+	r.GET("/siteinfo/theme", a.siteInfoController.GetSiteTheme)
+	r.PUT("/siteinfo/theme", a.siteInfoController.SaveSiteTheme)
+	r.GET("/siteinfo/users", a.siteInfoController.GetSiteUsers)
+	r.PUT("/siteinfo/users", a.siteInfoController.UpdateSiteUsers)
 	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
 	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
+	r.GET("/setting/privileges", a.siteInfoController.GetPrivilegesConfig)
+	r.PUT("/setting/privileges", a.siteInfoController.UpdatePrivilegesConfig)
 
 	// dashboard
 	r.GET("/dashboard", a.dashboardController.DashboardInfo)
