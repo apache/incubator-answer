@@ -4,6 +4,7 @@ LABEL maintainer="mingcheng<mc@sf.com>"
 
 COPY . /answer
 WORKDIR /answer
+RUN node -v
 RUN make install-ui-packages ui && mv ui/build /tmp
 
 # stage2 build the main binary within static resource
@@ -11,12 +12,14 @@ FROM golang:1.19-alpine AS golang-builder
 LABEL maintainer="aichy@sf.com"
 
 ARG GOPROXY
+# ENV GOPROXY ${GOPROXY:-direct}
 ENV GOPROXY=https://goproxy.io,direct
 
 ENV GOPATH /go
 ENV GOROOT /usr/local/go
 ENV PACKAGE github.com/answerdev/answer
 ENV BUILD_DIR ${GOPATH}/src/${PACKAGE}
+ENV ANSWER_MODULE ${BUILD_DIR}
 
 ARG TAGS="sqlite sqlite_unlock_notify"
 ENV TAGS "bindata timetzdata $TAGS"

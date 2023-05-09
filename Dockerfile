@@ -20,6 +20,7 @@ ENV GOPATH /go
 ENV GOROOT /usr/local/go
 ENV PACKAGE github.com/answerdev/answer
 ENV BUILD_DIR ${GOPATH}/src/${PACKAGE}
+ENV ANSWER_MODULE ${BUILD_DIR}
 
 ARG TAGS="sqlite sqlite_unlock_notify"
 ENV TAGS "bindata timetzdata $TAGS"
