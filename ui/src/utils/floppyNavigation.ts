@@ -60,11 +60,9 @@ const navigate = (to: string | number, config: NavigateConfig = {}) => {
     /**
      * 1. Blocking redirection of two login pages
      * 2. Auto storage login redirect
+     * Note: The or judgement cannot be missing here, both jumps will be used
      */
     if (to === RouteAlias.login || to === getLoginUrl()) {
-      if (equalToCurrentHref(to)) {
-        return;
-      }
       storageLoginRedirect();
     }
 
@@ -88,10 +86,11 @@ const navigate = (to: string | number, config: NavigateConfig = {}) => {
 };
 
 /**
- * auto navigate to login page with redirect info
+ * auto navigate to login page
+ * Note: Only the internal login page is jumped here, `userAgent` login is handled on the internal login page.
  */
 const navigateToLogin = (config?: NavigateConfig) => {
-  const loginUrl = getLoginUrl();
+  const loginUrl = RouteAlias.login;
   navigate(loginUrl, config);
 };
 
