@@ -4,10 +4,20 @@ import { useMatch, Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
-import { FollowingTags, QuestionList, HotQuestions } from '@/components';
-import { siteInfoStore, loggedUserInfoStore } from '@/stores';
+import {
+  FollowingTags,
+  QuestionList,
+  HotQuestions,
+  CustomSidebar,
+} from '@/components';
+import {
+  siteInfoStore,
+  loggedUserInfoStore,
+  loginSettingStore,
+} from '@/stores';
 import { useQuestionList } from '@/services';
 import * as Type from '@/common/interface';
+import { userCenter, floppyNavigation } from '@/utils';
 
 const Questions: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
@@ -30,6 +40,7 @@ const Questions: FC = () => {
     pageTitle = `${siteInfo.name}`;
     slogan = `${siteInfo.short_description}`;
   }
+  const { login: loginSetting } = loginSettingStore();
 
   usePageTags({ title: pageTitle, subtitle: slogan });
   return (
@@ -43,7 +54,8 @@ const Questions: FC = () => {
           />
         </Col>
         <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
-          {!loggedUser.access_token && (
+          <CustomSidebar />
+          {!loggedUser.username && (
             <div className="card mb-4">
               <div className="card-body">
                 <h5 className="card-title">
@@ -52,12 +64,20 @@ const Questions: FC = () => {
                   })}
                 </h5>
                 <p className="card-text">{siteInfo.description}</p>
-                <Link to="/users/login" className="btn btn-primary">
+                <Link
+                  to={userCenter.getLoginUrl()}
+                  className="btn btn-primary"
+                  onClick={floppyNavigation.handleRouteLinkClick}>
                   {t('login', { keyPrefix: 'btns' })}
                 </Link>
-                <Link to="/users/register" className="btn btn-link ms-2">
-                  {t('signup', { keyPrefix: 'btns' })}
-                </Link>
+                {loginSetting.allow_new_registrations ? (
+                  <Link
+                    to={userCenter.getSignUpUrl()}
+                    className="btn btn-link ms-2"
+                    onClick={floppyNavigation.handleRouteLinkClick}>
+                    {t('signup', { keyPrefix: 'btns' })}
+                  </Link>
+                ) : null}
               </div>
             </div>
           )}

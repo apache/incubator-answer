@@ -119,7 +119,7 @@ const Index: React.FC = () => {
     <Container style={{ paddingTop: '4rem', paddingBottom: '6rem' }}>
       <h3 className="text-center mb-5">{t('page_title')}</h3>
       {step === 1 && (
-        <Col className="mx-auto" md={3}>
+        <Col className="mx-auto" md={6} lg={4} xl={3}>
           <Form noValidate onSubmit={handleSubmit} autoComplete="off">
             <Form.Group controlId="email" className="mb-3">
               <Form.Label>{t('password.label')}</Form.Label>

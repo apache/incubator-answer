@@ -340,6 +340,7 @@ ui:
     until_time: "Your account was suspended until {{ time }}."
     forever: This user was suspended forever.
     end: You don't meet a community guideline.
+    contact_us: Contact us
   editor:
     blockquote:
       text: Blockquote
@@ -733,6 +734,7 @@ ui:
       label: Confirm New Password
   settings:
     page_title: Settings
+    goto_modify: Go to Modify
     nav:
       profile: Profile
       notification: Notifications
@@ -897,6 +899,10 @@ ui:
     skip: Skip
     discard_draft: Discard draft
     pinned: Pinned
+    all: All
+    question: Question
+    answer: Answer
+    comment: Comment
   search:
     title: Search Results
     keywords: Keywords
@@ -1119,12 +1125,16 @@ ui:
     seo: SEO
     customize: Customize
     themes: Themes
-    css-html: CSS/HTML
+    css_html: CSS/HTML
     login: Login
+    privileges: Privileges
     plugins: Plugins
     installed_plugins: Installed Plugins
   website_welcome: Welcome to {{site_name}}
   plugins:
+    login: Login
+    qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
+    login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
     oauth:
       connect: Connect with {{ auth_name }}
       remove: Remove {{ auth_name }}
@@ -1171,6 +1181,7 @@ ui:
       pending: Pending
       completed: Completed
       flagged: Flagged
+      flagged_type: Flagged {{ type }}
       created: Created
       action: Action
       review: Review
@@ -1321,9 +1332,6 @@ ui:
         label: Timezone
         msg: Timezone cannot be empty.
         text: Choose a city in the same timezone as you.
-      avatar:
-        label: Default Avatar
-        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
@@ -1433,12 +1441,22 @@ ui:
       footer:
         label: Footer
         text: This will insert before </html>.
+      sidebar:
+        label: Sidebar
+        text: This will insert in sidebar.
     login:
       page_title: Login
       membership:
         title: Membership
         label: Allow new registrations
         text: Turn off to prevent anyone from creating a new account.
+      email_registration:
+        title: Email registration
+        label: Allow email registration
+        text: Turn off to prevent anyone creating new account through email.
+      allowed_email_domains:
+        title: Allowed email domains
+        text: Email domains that users must register accounts with. One domain per line. Ignored when empty.
       private:
         title: Private
         label: Login required
@@ -1460,7 +1478,30 @@ ui:
       deactivate: Deactivate
       activate: Activate
       settings: Settings
-
+    settings_users:
+      title: Users
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
+      profile_editable:
+        title: Profile Editable
+      allow_update_display_name:
+        label: Allow users to change their display name
+      allow_update_username:
+        label: Allow users to change their username
+      allow_update_avatar:
+        label: Allow users to change their profile image
+      allow_update_bio:
+        label: Allow users to change their about me
+      allow_update_website:
+        label: Allow users to change their website
+      allow_update_location:
+        label: Allow users to change their location
+    privilege:
+      title: Privileges
+      level:
+        label: Reputation required level
+        text: Choose the reputation required for the privileges
 
   form:
     optional: (optional)

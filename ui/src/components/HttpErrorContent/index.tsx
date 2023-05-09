@@ -4,7 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
 
-const Index = ({ httpCode = '', errMsg = '' }) => {
+const Index = ({
+  httpCode = '',
+  title = '',
+  errMsg = '',
+  showErrorCode = true,
+}) => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_error' });
   useEffect(() => {
     // auto height of container
@@ -31,7 +36,10 @@ const Index = ({ httpCode = '', errMsg = '' }) => {
         style={{ fontSize: '120px', lineHeight: 1.2 }}>
         (=‘x‘=)
       </div>
-      <h4 className="text-center">{t('http_error', { code: httpCode })}</h4>
+      {showErrorCode && (
+        <h4 className="text-center">{t('http_error', { code: httpCode })}</h4>
+      )}
+      {title && <h4 className="text-center">{title}</h4>}
       <div className="text-center mb-3 fs-5">
         {errMsg || t(`desc_${httpCode}`)}
       </div>

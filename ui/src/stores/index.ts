@@ -1,8 +1,8 @@
-import loginSettingStore from '@/stores/loginSetting';
-import seoSettingStore from '@/stores/seoSetting';
-
+import loginSettingStore from './loginSetting';
+import seoSettingStore from './seoSetting';
+import userCenterStore from './userCenter';
 import toastStore from './toast';
-import loggedUserInfoStore from './loggedUserInfoStore';
+import loggedUserInfoStore from './loggedUserInfo';
 import siteInfoStore from './siteInfo';
 import interfaceStore from './interface';
 import brandingStore from './branding';
@@ -25,4 +25,5 @@ export {
   seoSettingStore,
   loginToContinueStore,
   errorCodeStore,
+  userCenterStore,
 };

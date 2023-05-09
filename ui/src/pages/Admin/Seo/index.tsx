@@ -80,7 +80,7 @@ const Index: FC = () => {
         formMeta.robots.value = setting.robots;
         formMeta.permalink.value = setting.permalink;
         if (!/[1234]/.test(formMeta.permalink.value)) {
-          formMeta.permalink.value = 1;
+          formMeta.permalink.value = 4;
         }
         setFormData(formMeta);
       }

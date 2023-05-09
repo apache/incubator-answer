@@ -307,7 +307,7 @@ const Ask = () => {
   const handleSelectedRevision = (e) => {
     const index = e.target.value;
     const revision = revisions[index];
-    formData.content.value = revision.content.content;
+    formData.content.value = revision.content?.content || '';
     setImmData({ ...formData });
     setFormData({ ...formData });
   };
