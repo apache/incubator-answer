@@ -101,6 +101,7 @@ To run answer, use:
 		Long:  `upgrade Answer version`,
 		Run: func(_ *cobra.Command, _ []string) {
 			cli.FormatAllPath(dataDirPath)
+			cli.InstallI18nBundle(true)
 			c, err := conf.ReadConfig(cli.GetConfigFilePath())
 			if err != nil {
 				fmt.Println("read config failed: ", err.Error())
