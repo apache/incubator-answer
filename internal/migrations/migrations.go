@@ -56,12 +56,13 @@ var migrations = []Migration{
 	NewMigration("add user role", addRoleFeatures, false),
 	NewMigration("add theme and private mode", addThemeAndPrivateMode, true),
 	NewMigration("add new answer notification", addNewAnswerNotification, true),
+	NewMigration("add plugin", addPlugin, false),
 	NewMigration("add user pin hide features", addRolePinAndHideFeatures, true),
 	NewMigration("update accept answer rank", updateAcceptAnswerRank, true),
-	NewMigration("add plugin", addPlugin, false),
+	NewMigration("add login limitations", addLoginLimitations, true),
 	NewMigration("update user pin hide features", updateRolePinAndHideFeatures, true),
 	NewMigration("update question post time", updateQuestionPostTime, true),
-	NewMigration("add login limitations", addLoginLimitations, true),
+	NewMigration("add gravatar base url", addGravatarBaseURL, false),
 }
 
 // GetCurrentDBVersion returns the current db version
@@ -91,7 +92,7 @@ func ExpectedVersion() int64 {
 }
 
 // Migrate database to current version
-func Migrate(dbConf *data.Database, cacheConf *data.CacheConf) error {
+func Migrate(dbConf *data.Database, cacheConf *data.CacheConf, upgradeFromVersionNumber int) error {
 	cache, cacheCleanup, err := data.NewCache(cacheConf)
 	if err != nil {
 		fmt.Println("new check failed:", err.Error())
@@ -107,6 +108,10 @@ func Migrate(dbConf *data.Database, cacheConf *data.CacheConf) error {
 		return err
 	}
 	expectedVersion := ExpectedVersion()
+	if upgradeFromVersionNumber > 0 {
+		fmt.Printf("[migrate] user set upgrade from version number %d\n", upgradeFromVersionNumber)
+		currentDBVersion = int64(upgradeFromVersionNumber)
+	}
 
 	for currentDBVersion < expectedVersion {
 		fmt.Printf("[migrate] current db version is %d, try to migrate version %d, latest version is %d\n",
