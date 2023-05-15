@@ -81,6 +81,7 @@ const Index = () => {
 
   useEffect(() => {
     return () => {
+      console.log('clear data');
       setFormData({
         displayName: {
           value: '',

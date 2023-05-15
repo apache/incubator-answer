@@ -828,7 +828,7 @@ ui:
       avatar:
         label: Profile Image
         gravatar: Gravatar
-        gravatar_text: You can change image on <1>gravatar.com</1>
+        gravatar_text: You can change image on
         custom: Custom
         btn_refresh: Refresh
         custom_text: You can upload your image.
@@ -1556,6 +1556,9 @@ ui:
       avatar:
         label: Default Avatar
         text: For users without a custom avatar of their own.
+      gravatar_base_url:
+        label: Gravatar Base URL
+        text: URL of the Gravatar provider’s API base. Ignored when empty.
       profile_editable:
         title: Profile Editable
       allow_update_display_name:
