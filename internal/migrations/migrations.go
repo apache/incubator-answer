@@ -92,7 +92,7 @@ func ExpectedVersion() int64 {
 }
 
 // Migrate database to current version
-func Migrate(dbConf *data.Database, cacheConf *data.CacheConf) error {
+func Migrate(dbConf *data.Database, cacheConf *data.CacheConf, upgradeFromVersionNumber int) error {
 	cache, cacheCleanup, err := data.NewCache(cacheConf)
 	if err != nil {
 		fmt.Println("new check failed:", err.Error())
@@ -108,6 +108,10 @@ func Migrate(dbConf *data.Database, cacheConf *data.CacheConf) error {
 		return err
 	}
 	expectedVersion := ExpectedVersion()
+	if upgradeFromVersionNumber > 0 {
+		fmt.Printf("[migrate] user set upgrade from version number %d\n", upgradeFromVersionNumber)
+		currentDBVersion = int64(upgradeFromVersionNumber)
+	}
 
 	for currentDBVersion < expectedVersion {
 		fmt.Printf("[migrate] current db version is %d, try to migrate version %d, latest version is %d\n",

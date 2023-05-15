@@ -22,6 +22,10 @@ var (
 	buildWithPlugins []string
 	// build output path
 	buildOutput string
+	// This config is used to upgrade the database from a specific version number manually.
+	// The version number is calculated with `migrations.go` migrations length.
+	// If you want to upgrade the database from version 1 to version 2, you can use `answer upgrade -f 1`.
+	upgradeFromVersionNumber int
 )
 
 func init() {
@@ -34,6 +38,8 @@ func init() {
 	buildCmd.Flags().StringSliceVarP(&buildWithPlugins, "with", "w", []string{}, "plugins needed to build")
 
 	buildCmd.Flags().StringVarP(&buildOutput, "output", "o", "", "build output path")
+
+	upgradeCmd.Flags().IntVarP(&upgradeFromVersionNumber, "from", "f", 0, "upgrade from specific version number that in database version table")
 
 	for _, cmd := range []*cobra.Command{initCmd, checkCmd, runCmd, dumpCmd, upgradeCmd, buildCmd, pluginCmd} {
 		rootCmd.AddCommand(cmd)
@@ -101,12 +107,13 @@ To run answer, use:
 		Long:  `upgrade Answer version`,
 		Run: func(_ *cobra.Command, _ []string) {
 			cli.FormatAllPath(dataDirPath)
+			cli.InstallI18nBundle(true)
 			c, err := conf.ReadConfig(cli.GetConfigFilePath())
 			if err != nil {
 				fmt.Println("read config failed: ", err.Error())
 				return
 			}
-			if err = migrations.Migrate(c.Data.Database, c.Data.Cache); err != nil {
+			if err = migrations.Migrate(c.Data.Database, c.Data.Cache, upgradeFromVersionNumber); err != nil {
 				fmt.Println("migrate failed: ", err.Error())
 				return
 			}
