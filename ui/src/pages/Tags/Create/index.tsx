@@ -79,10 +79,32 @@ const Index = () => {
     formData.description.value,
   ]);
 
+  useEffect(() => {
+    return () => {
+      setFormData({
+        displayName: {
+          value: '',
+          isInvalid: false,
+          errorMsg: '',
+        },
+        slugName: {
+          value: '',
+          isInvalid: false,
+          errorMsg: '',
+        },
+        description: {
+          value: '',
+          isInvalid: false,
+          errorMsg: '',
+        },
+      });
+    };
+  }, []);
+
   const handleDescriptionChange = (value: string) =>
     setFormData({
       ...formData,
-      description: { ...formData.description, value },
+      description: { ...formData.description, value, isInvalid: false },
     });
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -115,20 +137,29 @@ const Index = () => {
   const handleDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      displayName: { ...formData.displayName, value: e.currentTarget.value },
+      displayName: {
+        ...formData.displayName,
+        value: e.currentTarget.value,
+        isInvalid: false,
+      },
     });
   };
 
   const handleSlugNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      slugName: { ...formData.slugName, value: e.currentTarget.value },
+      slugName: {
+        ...formData.slugName,
+        value: e.currentTarget.value,
+        isInvalid: false,
+      },
     });
   };
 
   usePageTags({
     title: t('create_tag', { keyPrefix: 'page_title' }),
   });
+
   return (
     <Container className="pt-4 mt-2 mb-5 edit-answer-wrap">
       <Row className="justify-content-center">
