@@ -17,25 +17,25 @@ interface FormDataItem {
   slugName: Type.FormValue<string>;
   description: Type.FormValue<string>;
 }
-const initFormData = {
-  displayName: {
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  },
-  slugName: {
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  },
-  description: {
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  },
-};
 
 const Index = () => {
+  const initFormData = {
+    displayName: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+    slugName: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+    description: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+  };
   const { role_id = 1 } = loggedUserInfoStore((state) => state.user);
   const navigate = useNavigate();
   const { t } = useTranslation('translation', { keyPrefix: 'tag_modal' });
@@ -78,29 +78,6 @@ const Index = () => {
     formData.slugName.value,
     formData.description.value,
   ]);
-
-  useEffect(() => {
-    return () => {
-      console.log('clear data');
-      setFormData({
-        displayName: {
-          value: '',
-          isInvalid: false,
-          errorMsg: '',
-        },
-        slugName: {
-          value: '',
-          isInvalid: false,
-          errorMsg: '',
-        },
-        description: {
-          value: '',
-          isInvalid: false,
-          errorMsg: '',
-        },
-      });
-    };
-  }, []);
 
   const handleDescriptionChange = (value: string) =>
     setFormData({
