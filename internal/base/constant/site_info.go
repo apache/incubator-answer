@@ -1,6 +1,7 @@
 package constant
 
 var (
-	DefaultAvatar  = "system"
-	DefaultSiteURL = ""
+	DefaultAvatar          = "system"
+	DefaultGravatarBaseURL = "https://www.gravatar.com/avatar/"
+	DefaultSiteURL         = ""
 )

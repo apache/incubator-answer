@@ -56,12 +56,13 @@ var migrations = []Migration{
 	NewMigration("add user role", addRoleFeatures, false),
 	NewMigration("add theme and private mode", addThemeAndPrivateMode, true),
 	NewMigration("add new answer notification", addNewAnswerNotification, true),
+	NewMigration("add plugin", addPlugin, false),
 	NewMigration("add user pin hide features", addRolePinAndHideFeatures, true),
 	NewMigration("update accept answer rank", updateAcceptAnswerRank, true),
-	NewMigration("add plugin", addPlugin, false),
+	NewMigration("add login limitations", addLoginLimitations, true),
 	NewMigration("update user pin hide features", updateRolePinAndHideFeatures, true),
 	NewMigration("update question post time", updateQuestionPostTime, true),
-	NewMigration("add login limitations", addLoginLimitations, true),
+	NewMigration("add gravatar base url", addGravatarBaseURL, false),
 }
 
 // GetCurrentDBVersion returns the current db version

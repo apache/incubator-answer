@@ -182,6 +182,7 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 
 	usersData := map[string]any{
 		"default_avatar":            "gravatar",
+		"default_gravatar_base_url": "https://www.gravatar.com/avatar/",
 		"allow_update_display_name": true,
 		"allow_update_username":     true,
 		"allow_update_avatar":       true,
