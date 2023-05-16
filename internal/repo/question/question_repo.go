@@ -219,6 +219,24 @@ func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err 
 	return
 }
 
+func (qr *questionRepo) GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error) {
+	questionList := make([]*entity.Question, 0)
+	count, err = qr.data.DB.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).And("user_id = ?", userID).Count(&questionList)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (qr *questionRepo) GetQuestionCountByIDs(ctx context.Context, ids []string) (count int64, err error) {
+	questionList := make([]*entity.Question, 0)
+	count, err = qr.data.DB.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).In("id = ?", ids).Count(&questionList)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error) {
 	questionIDList = make([]*schema.SiteMapQuestionInfo, 0)
 	rows := make([]*entity.Question, 0)

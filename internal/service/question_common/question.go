@@ -46,6 +46,8 @@ type QuestionRepo interface {
 	FindByID(ctx context.Context, id []string) (questionList []*entity.Question, err error)
 	AdminSearchList(ctx context.Context, search *schema.AdminQuestionSearch) ([]*entity.Question, int64, error)
 	GetQuestionCount(ctx context.Context) (count int64, err error)
+	GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error)
+	GetQuestionCountByIDs(ctx context.Context, ids []string) (count int64, err error)
 	GetQuestionIDsPage(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error)
 }
 
@@ -86,6 +88,10 @@ func NewQuestionCommon(questionRepo QuestionRepo,
 		metaService:      metaService,
 		configRepo:       configRepo,
 	}
+}
+
+func (qs *QuestionCommon) GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error) {
+	return qs.questionRepo.GetUserQuestionCount(ctx, userID)
 }
 
 func (qs *QuestionCommon) UpdatePv(ctx context.Context, questionID string) error {
@@ -431,13 +437,15 @@ func (qs *QuestionCommon) RemoveQuestion(ctx context.Context, req *schema.Remove
 		return err
 	}
 
-	// user add question count
-	err = qs.userCommon.UpdateQuestionCount(ctx, questionInfo.UserID, -1)
+	userQuestionCount, err := qs.GetUserQuestionCount(ctx, questionInfo.UserID)
 	if err != nil {
-		log.Error("user UpdateQuestionCount error", err.Error())
+		log.Error("user GetUserQuestionCount error", err.Error())
+	} else {
+		err = qs.userCommon.UpdateQuestionCount(ctx, questionInfo.UserID, userQuestionCount)
+		if err != nil {
+			log.Error("user IncreaseQuestionCount error", err.Error())
+		}
 	}
-
-	// todo rank remove
 
 	return nil
 }
