@@ -55,6 +55,26 @@ func (ur *userRepo) IncreaseQuestionCount(ctx context.Context, userID string, am
 	return nil
 }
 
+func (ur *userRepo) UpdateQuestionCount(ctx context.Context, userID string, count int64) (err error) {
+	user := &entity.User{}
+	user.QuestionCount = int(count)
+	_, err = ur.data.DB.Where("id = ?", userID).Cols("question_count").Update(user)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
+func (ur *userRepo) UpdateAnswerCount(ctx context.Context, userID string, count int) (err error) {
+	user := &entity.User{}
+	user.AnswerCount = count
+	_, err = ur.data.DB.Where("id = ?", userID).Cols("answer_count").Update(user)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
 // UpdateLastLoginDate update last login date
 func (ur *userRepo) UpdateLastLoginDate(ctx context.Context, userID string) (err error) {
 	user := &entity.User{LastLoginDate: time.Now()}

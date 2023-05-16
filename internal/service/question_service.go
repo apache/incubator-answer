@@ -304,9 +304,14 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	}
 
 	// user add question count
-	err = qs.userCommon.UpdateQuestionCount(ctx, question.UserID, 1)
+	userQuestionCount, err := qs.questioncommon.GetUserQuestionCount(ctx, question.UserID)
 	if err != nil {
-		log.Error("user IncreaseQuestionCount error", err.Error())
+		log.Error("user GetUserQuestionCount error", err.Error())
+	} else {
+		err = qs.userCommon.UpdateQuestionCount(ctx, question.UserID, userQuestionCount)
+		if err != nil {
+			log.Error("user IncreaseQuestionCount error", err.Error())
+		}
 	}
 
 	activity_queue.AddActivity(&schema.ActivityMsg{
@@ -419,10 +424,14 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		return err
 	}
 
-	// user add question count
-	err = qs.userCommon.UpdateQuestionCount(ctx, questionInfo.UserID, -1)
+	userQuestionCount, err := qs.questioncommon.GetUserQuestionCount(ctx, questionInfo.UserID)
 	if err != nil {
-		log.Error("user IncreaseQuestionCount error", err.Error())
+		log.Error("user GetUserQuestionCount error", err.Error())
+	} else {
+		err = qs.userCommon.UpdateQuestionCount(ctx, questionInfo.UserID, userQuestionCount)
+		if err != nil {
+			log.Error("user IncreaseQuestionCount error", err.Error())
+		}
 	}
 
 	err = qs.answerActivityService.DeleteQuestion(ctx, questionInfo.ID, questionInfo.CreatedAt, questionInfo.VoteCount)

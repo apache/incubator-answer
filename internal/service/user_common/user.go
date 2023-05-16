@@ -18,6 +18,8 @@ type UserRepo interface {
 	AddUser(ctx context.Context, user *entity.User) (err error)
 	IncreaseAnswerCount(ctx context.Context, userID string, amount int) (err error)
 	IncreaseQuestionCount(ctx context.Context, userID string, amount int) (err error)
+	UpdateQuestionCount(ctx context.Context, userID string, count int64) (err error)
+	UpdateAnswerCount(ctx context.Context, userID string, count int) (err error)
 	UpdateLastLoginDate(ctx context.Context, userID string) (err error)
 	UpdateEmailStatus(ctx context.Context, userID string, emailStatus int) error
 	UpdateNoticeStatus(ctx context.Context, userID string, noticeStatus int) error
@@ -37,7 +39,9 @@ type UserCommon struct {
 	userRepo UserRepo
 }
 
-func NewUserCommon(userRepo UserRepo) *UserCommon {
+func NewUserCommon(
+	userRepo UserRepo,
+) *UserCommon {
 	return &UserCommon{
 		userRepo: userRepo,
 	}
@@ -63,11 +67,11 @@ func (us *UserCommon) GetUserBasicInfoByUserName(ctx context.Context, username s
 }
 
 func (us *UserCommon) UpdateAnswerCount(ctx context.Context, userID string, num int) error {
-	return us.userRepo.IncreaseAnswerCount(ctx, userID, num)
+	return us.userRepo.UpdateAnswerCount(ctx, userID, num)
 }
 
-func (us *UserCommon) UpdateQuestionCount(ctx context.Context, userID string, num int) error {
-	return us.userRepo.IncreaseQuestionCount(ctx, userID, num)
+func (us *UserCommon) UpdateQuestionCount(ctx context.Context, userID string, num int64) error {
+	return us.userRepo.UpdateQuestionCount(ctx, userID, num)
 }
 
 func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, IDs []string) (map[string]*schema.UserBasicInfo, error) {
