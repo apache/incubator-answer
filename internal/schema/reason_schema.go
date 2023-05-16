@@ -26,14 +26,14 @@ func (r *ReasonItem) Translate(keyPrefix string, lang i18n.Language) {
 		if len(fieldData) == 0 {
 			return fieldData
 		}
-		key := keyPrefix + fieldName
+		key := keyPrefix + "." + fieldName
 		fieldTr := translator.Tr(lang, key)
 		if fieldTr != key {
 			// If i18n key exists, return i18n value
 			return fieldTr
 		}
 		// If i18n key not exists, return fieldData original value
-		return fieldData
+		return fieldData + "没翻译"
 	}
 
 	r.Name = trField("name", r.Name)

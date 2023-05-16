@@ -500,20 +500,6 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, &schema.UpdateQuestionResp{WaitForReview: !req.NoNeedReview})
 }
 
-// CloseMsgList close question msg list
-// @Summary close question msg list
-// @Description close question msg list
-// @Tags Question
-// @Accept json
-// @Produce json
-// @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/question/closemsglist [get]
-func (qc *QuestionController) CloseMsgList(ctx *gin.Context) {
-	resp, err := qc.questionService.CloseMsgList(ctx, handler.GetLang(ctx))
-	handler.HandleResponse(ctx, err, resp)
-}
-
 // SearchByTitleLike add question title like
 // @Summary add question title like
 // @Description add question title like

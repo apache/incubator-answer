@@ -3,7 +3,9 @@ package report_admin
 import (
 	"context"
 
-	"github.com/answerdev/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/repo/config"
+	configrepo "github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/segmentfault/pacman/log"
 
@@ -31,7 +33,7 @@ type ReportAdminService struct {
 	questionRepo      questioncommon.QuestionRepo
 	commentCommonRepo comment_common.CommentCommonRepo
 	reportHandle      *report_handle_admin.ReportHandle
-	configRepo        config.ConfigRepo
+	configRepo        configrepo.ConfigRepo
 }
 
 // NewReportAdminService new report service
@@ -43,7 +45,7 @@ func NewReportAdminService(
 	questionRepo questioncommon.QuestionRepo,
 	commentCommonRepo comment_common.CommentCommonRepo,
 	reportHandle *report_handle_admin.ReportHandle,
-	configRepo config.ConfigRepo) *ReportAdminService {
+	configRepo configrepo.ConfigRepo) *ReportAdminService {
 	return &ReportAdminService{
 		reportRepo:        reportRepo,
 		commonUser:        commonUser,
@@ -69,8 +71,6 @@ func (rs *ReportAdminService) ListReportPage(ctx context.Context, dto schema.Get
 		flaggedUsers,
 		users map[string]*schema.UserBasicInfo
 	)
-
-	pageModel = &pager.PageModel{}
 
 	flags, total, err = rs.reportRepo.GetReportListPage(ctx, dto)
 	if err != nil {
@@ -140,6 +140,7 @@ func (rs *ReportAdminService) HandleReported(ctx context.Context, req schema.Rep
 }
 
 func (rs *ReportAdminService) parseObject(ctx context.Context, resp *[]*schema.GetReportListPageResp) {
+	lang := handler.GetLangByCtx(ctx)
 	var (
 		res = *resp
 	)
@@ -221,6 +222,7 @@ func (rs *ReportAdminService) parseObject(ctx context.Context, resp *[]*schema.G
 			if err != nil {
 				log.Error(err)
 			}
+			r.Reason.Translate(config.ID2KeyMapping[r.ReportType], lang)
 		}
 		if r.FlaggedType > 0 {
 			r.FlaggedReason = &schema.ReasonItem{
@@ -230,6 +232,7 @@ func (rs *ReportAdminService) parseObject(ctx context.Context, resp *[]*schema.G
 			if err != nil {
 				log.Error(err)
 			}
+			r.Reason.Translate(config.ID2KeyMapping[r.ReportType], lang)
 		}
 
 		res[i] = r

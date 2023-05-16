@@ -278,6 +278,36 @@ backend:
         other: 此帖子需要工作人员关注，因为是上述所列以外的其他理由。
       placeholder:
         other: 让我们具体了解你所关注的内容
+    community_specific:
+      name:
+        other: 特定社区原因
+      desc:
+        other: 这个问题不符合社区准则。
+    not_clarity:
+      name:
+        other: 需要细节或澄清
+      desc:
+        other: 此问题目前包含多个问题。它应该只关注一个问题。
+    looks_ok:
+      name:
+        other: 看起来不错
+      desc:
+        other: 这篇文章很好，不是低质量的。
+    needs_edit:
+      name:
+        other: 需要编辑，我已经编辑了
+      desc:
+        other: 自己改善和纠正这篇文章中的问题。
+    needs_close:
+      name:
+        other: 需要关闭
+      desc:
+        other: 关闭的问题不能回答，但仍然可以编辑、投票和评论。
+    needs_delete:
+      name:
+        other: 需要删除
+      desc:
+        other: 所有获得和失去的声望都将被恢复。
   question:
     close:
       duplicate:

@@ -44,7 +44,7 @@ func (rr *reasonRepo) ListReasons(ctx context.Context, objectType, action string
 			log.Error(err)
 			continue
 		}
-		reason.Translate(reasonKey+".", lang)
+		reason.Translate(reasonKey, lang)
 
 		reason.ReasonType, err = rr.configRepo.GetConfigType(reasonKey)
 		if err != nil {
