@@ -29,10 +29,10 @@ require (
 	github.com/ory/dockertest/v3 v3.9.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/scottleedavis/go-exif-remove v0.0.0-20230314195146-7e059d593405
-	github.com/segmentfault/pacman v1.0.3
+	github.com/segmentfault/pacman v1.0.4
 	github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20221219081300-f734f4a16aa0
 	github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20221018072427-a15dd1434e05
-	github.com/segmentfault/pacman/contrib/i18n v0.0.0-20221219081300-f734f4a16aa0
+	github.com/segmentfault/pacman/contrib/i18n v0.0.0-20230516093245-f9384b820548
 	github.com/segmentfault/pacman/contrib/log/zap v0.0.0-20221018072427-a15dd1434e05
 	github.com/segmentfault/pacman/contrib/server/http v0.0.0-20221018072427-a15dd1434e05
 	github.com/spf13/cobra v1.6.1
@@ -129,10 +129,10 @@ require (
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.23.0 // indirect
 	golang.org/x/image v0.1.0 // indirect
-	golang.org/x/mod v0.6.0 // indirect
+	golang.org/x/mod v0.8.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
-	golang.org/x/text v0.7.0 // indirect
-	golang.org/x/tools v0.2.0 // indirect
+	golang.org/x/text v0.9.0 // indirect
+	golang.org/x/tools v0.6.0 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect

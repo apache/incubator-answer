@@ -373,6 +373,37 @@ backend:
         other: 踩了答案
       up_voted_comment:
         other: 赞了评论
+  email_tpl:
+    change_email:
+      title:
+        other: "[{{.SiteName}}] 确认您的新电子邮件地址"
+      body:
+        other: "请点击以下链接确认您在 {{.SiteName}} 上的新电子邮件地址：<br><br>\n\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\n如果您没有请求此更改，请忽略此电子邮件。\n"
+    new_answer:
+      title:
+        other: "[{{.SiteName}}] {{.DisplayName}} 回答了您的问题"
+      body:
+        other: "<strong><a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\n\n<small>您会收到此邮件是因为您是该讨论的作者。<a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
+    new_comment:
+      title:
+        other: "[{{.SiteName}}] {{.DisplayName}} 评论了您的帖子"
+      body:
+        other: "<strong><a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\n\n<small>您会收到此邮件是因为您是该讨论的作者。<a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
+    pass_reset:
+      title:
+        other: "[{{.SiteName }}] 重置密码"
+      body:
+        other: "有人要求在 [{{.SiteName}}] 上重置您的密码。<br><br>\n\n如果这不是您的操作，请安心忽略此电子邮件。<br><br>\n\n请点击以下链接选择一个新密码：<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+    register:
+      title:
+        other: "[{{.SiteName}}] 确认您的新账户"
+      body:
+        other: "欢迎加入 {{.SiteName}}<br><br>\n\n请点击以下链接确认并激活您的新账户：<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\n如果上面的链接不能点击，请将其复制并粘贴到您的浏览器地址栏中。\n"
+    test:
+      title:
+        other: "[{{.SiteName}}] 测试邮件"
+      body:
+        other: "这是一封测试邮件。"
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
