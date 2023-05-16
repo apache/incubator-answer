@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { Modal, Form, Button, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -30,6 +30,13 @@ const Index: React.FC<IProps> = ({
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'pic_auth_code' });
   const { captcha, imgCode } = data;
+
+  useEffect(() => {
+    if (visible) {
+      refreshImgCode();
+    }
+  }, [visible]);
+
   return (
     <Modal size="sm" title="Captcha" show={visible} onHide={onClose} centered>
       <Modal.Header closeButton>
