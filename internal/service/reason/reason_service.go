@@ -17,6 +17,6 @@ func NewReasonService(reasonRepo reason_common.ReasonRepo) *ReasonService {
 	}
 }
 
-func (rs ReasonService) GetReasons(ctx context.Context, req schema.ReasonReq) (resp []schema.ReasonItem, err error) {
+func (rs ReasonService) GetReasons(ctx context.Context, req schema.ReasonReq) (resp []*schema.ReasonItem, err error) {
 	return rs.reasonRepo.ListReasons(ctx, req.ObjectType, req.Action)
 }

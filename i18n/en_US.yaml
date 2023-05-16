@@ -250,41 +250,44 @@ backend:
     upload:
       unsupported_file_format:
         other: Unsupported file format.
-  report:
+  reason:
     spam:
       name:
         other: spam
       desc:
-        other: This post is an advertisement, or vandalism. It is not useful or relevant
-          to the current topic.
-    rude:
+        other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
+    rude_or_abusive:
       name:
         other: rude or abusive
       desc:
         other: A reasonable person would find this content inappropriate for respectful
           discourse.
-    duplicate:
+    a_duplicate:
       name:
         other: a duplicate
       desc:
         other: This question has been asked before and already has an answer.
-    not_answer:
+      placeholder:
+        other: Enter the existing question link
+    not_a_answer:
       name:
         other: not an answer
       desc:
         other: This was posted as an answer, but it does not attempt to answer the
           question. It should possibly be an edit, a comment, another question,
           or deleted altogether.
-    not_need:
+    no_longer_needed:
       name:
         other: no longer needed
       desc:
         other: This comment is outdated, conversational or not relevant to this post.
-    other:
+    something:
       name:
         other: something else
       desc:
         other: This post requires staff attention for another reason not listed above.
+      placeholder:
+        other: Let us know specifically what you are concerned about
   question:
     close:
       duplicate:
