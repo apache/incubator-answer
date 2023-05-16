@@ -2,25 +2,18 @@ export const DEFAULT_SITE_NAME = 'Answer';
 export const DEFAULT_LANG = 'en_US';
 export const CURRENT_LANG_STORAGE_KEY = '_a_lang_';
 export const LANG_RESOURCE_STORAGE_KEY = '_a_lang_r_';
-export const LOGGED_USER_STORAGE_KEY = '_a_lui_';
 export const LOGGED_TOKEN_STORAGE_KEY = '_a_ltk_';
 export const REDIRECT_PATH_STORAGE_KEY = '_a_rp_';
 export const CAPTCHA_CODE_STORAGE_KEY = '_a_captcha_';
 export const DRAFT_QUESTION_STORAGE_KEY = '_a_dq_';
 export const DRAFT_ANSWER_STORAGE_KEY = '_a_da_';
 export const DRAFT_TIMESIGH_STORAGE_KEY = '|_a_t_s_|';
-
-export const IGNORE_PATH_LIST = [
-  '/users/login',
-  '/users/register',
-  '/users/account-recovery',
-  '/users/change-email',
-  '/users/password-reset',
-  '/users/account-activation',
-  '/users/account-activation/success',
-  '/users/account-activation/failed',
-  '/users/confirm-new-email',
-];
+export const USER_AGENT_NAMES = {
+  SegmentFault: 'SegmentFault',
+  WeChat: 'WeChat',
+  WeCom: 'WeCom',
+  DingTalk: 'DingTalk',
+};
 
 export const ADMIN_LIST_STATUS = {
   // normal;
@@ -75,7 +68,8 @@ export const ADMIN_NAV_MENUS = [
         name: 'themes',
       },
       {
-        name: 'css-html',
+        name: 'css_html',
+        path: 'css-html',
       },
     ],
   },
@@ -90,6 +84,8 @@ export const ADMIN_NAV_MENUS = [
       { name: 'write' },
       { name: 'seo' },
       { name: 'login' },
+      { name: 'users', path: 'settings-users' },
+      { name: 'privileges' },
     ],
   },
   {
@@ -97,6 +93,7 @@ export const ADMIN_NAV_MENUS = [
     children: [
       {
         name: 'installed_plugins',
+        path: 'installed-plugins',
       },
     ],
   },

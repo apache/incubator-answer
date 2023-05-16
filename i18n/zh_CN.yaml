@@ -45,6 +45,58 @@ backend:
         other: 拥有管理网站的全部权限。
       moderator:
         other: 拥有访问除管理员设置以外的所有权限。
+  privilege:
+    level_1:
+      description:
+        other: 等级1（创业社区所需的声望最低）
+    level_2:
+      description:
+        other: 等级2（创业社区所需的声望较低）
+    level_3:
+      description:
+        other: 等级3（成熟社区所需的声望较高）
+    rank_question_add_label:
+      other: 提问
+    rank_answer_add_label:
+      other: 回答问题
+    rank_comment_add_label:
+      other: 发表评论
+    rank_report_add_label:
+      other: 举报
+    rank_comment_vote_up_label:
+      other: 评论点赞
+    rank_link_url_limit_label:
+      other: 一次发布超过两个链接
+    rank_question_vote_up_label:
+      other: 问题点赞
+    rank_answer_vote_up_label:
+      other: 答案点赞
+    rank_question_vote_down_label:
+      other: 问题点踩
+    rank_answer_vote_down_label:
+      other: 答案点踩
+    rank_tag_add_label:
+      other: 创建新标签
+    rank_tag_edit_label:
+      other: 编辑标签描述（需要审核）
+    rank_question_edit_label:
+      other: 编辑他人提问（需要审核）
+    rank_answer_edit_label:
+      other: 编辑他人回答（需要审核）
+    rank_question_edit_without_review_label:
+      other: 编辑他人提问（无需审核）
+    rank_answer_edit_without_review_label:
+      other: 编辑他人回答（无需审核）
+    rank_question_audit_label:
+      other: 审核问题编辑
+    rank_answer_audit_label:
+      other: 审核答案编辑
+    rank_tag_audit_label:
+      other: 审核标签编辑
+    rank_tag_edit_without_review_label:
+      other: 编辑标签描述（无需审核）
+    rank_tag_synonym_label:
+      other: 管理标签同义词
   email:
     other: 邮箱
   password:
@@ -82,6 +134,8 @@ backend:
         other: 邮箱需要验证。
       verify_url_expired:
         other: 邮箱验证的网址已过期，请重新发送邮件。
+      illegal_email_domain_error:
+        other: 该域名的邮箱无法使用。请尝试更换其他邮箱。
     lang:
       not_found:
         other: 语言未找到
@@ -171,6 +225,10 @@ backend:
         other: 您不能修改自己的角色。
       not_allowed_registration:
         other: 目前该站点未开放注册
+      access_denied:
+        other: 访问被拒绝
+      page_access_denied:
+        other: 你没有权限进入这个页面。
     config:
       read_config_failed:
         other: 读取配置失败
@@ -271,6 +329,16 @@ backend:
         other: 你的答案已被删除
       your_comment_was_deleted:
         other: 你的评论已被删除
+      up_voted_question:
+        other: 赞了问题
+      down_voted_question:
+        other: 踩了问题
+      up_voted_answer:
+        other: 赞了答案
+      down_voted_answer:
+        other: 踩了答案
+      up_voted_comment:
+        other: 赞了评论
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -691,6 +759,7 @@ ui:
       label: 确认新密码
   settings:
     page_title: 设置
+    goto_modify: 前往修改
     nav:
       profile: 我的资料
       notification: 通知
@@ -837,6 +906,10 @@ ui:
     skip: 略过
     discard_draft: 丢弃草稿
     pinned: 已置顶
+    all: 所有
+    question: 问题
+    answer: 回答
+    comment: 评论
   search:
     title: 搜索结果
     keywords: 关键词
@@ -1054,7 +1127,16 @@ ui:
     themes: 主题
     css-html: CSS/HTML
     login: 登录
+    plugins: 插件
+    installed_plugins: 插件列表
   website_welcome: 欢迎来到 {{site_name}}
+  plugins:
+    login: 登录
+    qrcode_login_tip: 请使用 {{ agentName }} 扫描二维码登录
+    login_failed_email_tip: 登录失败, 请允许该应用程序访问您的电子邮件信息，然后再试一次。
+    oauth:
+      connect: 连接到 {{ auth_name }}
+      remove: 解绑 {{ auth_name }}
   admin:
     admin_header:
       title: 后台管理
@@ -1097,6 +1179,7 @@ ui:
       pending: 等待处理
       completed: 已完成
       flagged: 被举报内容
+      flagged_type: 被举报的{{ type }}
       created: 创建于
       action: 操作
       review: 审查
@@ -1367,6 +1450,47 @@ ui:
         title: 非公开的
         label: 需要登录
         text: 只有登录用户才能访问这个社区。
+    installed_plugins:
+      title: 插件列表
+      filter:
+        all: 全部
+        active: 启用
+        inactive: 未启用
+        outdated: 已过期
+      plugins:
+        label: 插件
+        text: 选择一个插件
+      name: 插件名称
+      version: 插件版本
+      status: 状态
+      action: 操作
+      deactivate: 停用
+      activate: 启用
+      settings: 设置
+    settings_users:
+      title: 用户
+      avatar:
+        label: 默认头像
+        text: 未设置自定义头像的用户所展示的头像。
+      profile_editable:
+        title: 可编辑的个人资料
+      allow_update_display_name:
+        label: 允许用户更改显示名称
+      allow_update_username:
+        label: 允许用户更改用户名
+      allow_update_avatar:
+        label: 允许用户更改头像
+      allow_update_bio:
+        label: 允许用户更改自我介绍
+      allow_update_website:
+        label: 允许用户更改个人网站
+      allow_update_location:
+        label: 允许用户更改所在地
+    privilege:
+      title: 声望权限
+      level:
+        label: 所需声望等级
+        text: 选择所需的声望等级以获取权限
   form:
     optional: (选填)
     empty: 不能为空

@@ -1,8 +1,8 @@
-import { FC, ReactNode, useEffect } from 'react';
-import { useLocation, useNavigate, useLoaderData } from 'react-router-dom';
+import { FC, ReactNode, useEffect, useState } from 'react';
+import { useNavigate, useLoaderData } from 'react-router-dom';
 
 import { floppyNavigation } from '@/utils';
-import { TGuardFunc } from '@/utils/guard';
+import { TGuardFunc, TGuardResult } from '@/utils/guard';
 
 import RouteErrorBoundary from './RouteErrorBoundary';
 
@@ -13,39 +13,59 @@ const RouteGuard: FC<{
   page?: string;
 }> = ({ children, onEnter, path, page }) => {
   const navigate = useNavigate();
-  const location = useLocation();
   const loaderData = useLoaderData();
-  const gr = onEnter({
-    loaderData,
-    path,
-    page,
+  const [gk, setKeeper] = useState<TGuardResult>({
+    ok: true,
   });
+  const [gkError, setGkError] = useState<TGuardResult['error']>();
+  const applyGuard = () => {
+    if (typeof onEnter !== 'function') {
+      return;
+    }
 
-  let guardError;
-  const errCode = gr.error?.code;
-  if (errCode === '403' || errCode === '404' || errCode === '50X') {
-    guardError = {
-      code: errCode,
-      msg: gr.error?.msg,
-    };
-  }
-  const handleGuardRedirect = () => {
-    const redirectUrl = gr.redirect;
-    if (redirectUrl) {
-      floppyNavigation.navigate(redirectUrl, () => {
-        navigate(redirectUrl, { replace: true });
+    const gr = onEnter({
+      loaderData,
+      path,
+      page,
+    });
+
+    setKeeper(gr);
+    if (
+      gk.ok === false &&
+      gk.error?.code &&
+      /403|404|50X/i.test(gk.error.code.toString())
+    ) {
+      setGkError(gk.error);
+      return;
+    }
+    setGkError(undefined);
+    if (gr.redirect) {
+      floppyNavigation.navigate(gr.redirect, {
+        handler: navigate,
+        options: { replace: true },
       });
     }
   };
   useEffect(() => {
-    handleGuardRedirect();
-  }, [location]);
+    /**
+     * By detecting changes to location.href, many unnecessary tests can be avoided
+     */
+    applyGuard();
+  }, [window.location.href]);
+
+  let asOK = gk.ok;
+  if (gk.ok === false && gk.redirect) {
+    /**
+     * It is possible that the route guard verification fails
+     *    but the current page is already the target page for the route guard jump
+     * This should render `children`!
+     */
+    asOK = floppyNavigation.equalToCurrentHref(gk.redirect);
+  }
   return (
     <>
-      {gr.ok ? children : null}
-      {!gr.ok && guardError ? (
-        <RouteErrorBoundary errCode={guardError.code} />
-      ) : null}
+      {asOK ? children : null}
+      {gkError ? <RouteErrorBoundary errCode={gkError.code as string} /> : null}
     </>
   );
 };

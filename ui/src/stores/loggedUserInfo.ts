@@ -2,15 +2,12 @@ import create from 'zustand';
 
 import type { UserInfoRes } from '@/common/interface';
 import Storage from '@/utils/storage';
-import {
-  LOGGED_USER_STORAGE_KEY,
-  LOGGED_TOKEN_STORAGE_KEY,
-} from '@/common/constants';
+import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
 
 interface UserInfoStore {
   user: UserInfoRes;
   update: (params: UserInfoRes) => void;
-  clear: () => void;
+  clear: (removeToken?: boolean) => void;
 }
 
 const initUser: UserInfoRes = {
@@ -31,7 +28,7 @@ const initUser: UserInfoRes = {
   role_id: 1,
 };
 
-const loggedUserInfoStore = create<UserInfoStore>((set) => ({
+const loggedUserInfo = create<UserInfoStore>((set) => ({
   user: initUser,
   update: (params) => {
     if (typeof params !== 'object' || !params) {
@@ -42,16 +39,16 @@ const loggedUserInfoStore = create<UserInfoStore>((set) => ({
     }
     set(() => {
       Storage.set(LOGGED_TOKEN_STORAGE_KEY, params.access_token);
-      Storage.set(LOGGED_USER_STORAGE_KEY, params);
       return { user: params };
     });
   },
-  clear: () =>
+  clear: (removeToken = true) =>
     set(() => {
-      Storage.remove(LOGGED_TOKEN_STORAGE_KEY);
-      Storage.remove(LOGGED_USER_STORAGE_KEY);
+      if (removeToken) {
+        Storage.remove(LOGGED_TOKEN_STORAGE_KEY);
+      }
       return { user: initUser };
     }),
 }));
 
-export default loggedUserInfoStore;
+export default loggedUserInfo;

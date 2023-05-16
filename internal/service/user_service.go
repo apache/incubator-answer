@@ -20,7 +20,9 @@ import (
 	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/internal/service/user_external_login"
 	"github.com/answerdev/answer/pkg/checker"
+	"github.com/answerdev/answer/plugin"
 	"github.com/google/uuid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -31,15 +33,16 @@ import (
 
 // UserService user service
 type UserService struct {
-	userCommonService *usercommon.UserCommon
-	userRepo          usercommon.UserRepo
-	userActivity      activity.UserActiveActivityRepo
-	activityRepo      activity_common.ActivityRepo
-	serviceConfig     *service_config.ServiceConfig
-	emailService      *export.EmailService
-	authService       *auth.AuthService
-	siteInfoService   *siteinfo_common.SiteInfoCommonService
-	userRoleService   *role.UserRoleRelService
+	userCommonService        *usercommon.UserCommon
+	userRepo                 usercommon.UserRepo
+	userActivity             activity.UserActiveActivityRepo
+	activityRepo             activity_common.ActivityRepo
+	serviceConfig            *service_config.ServiceConfig
+	emailService             *export.EmailService
+	authService              *auth.AuthService
+	siteInfoService          *siteinfo_common.SiteInfoCommonService
+	userRoleService          *role.UserRoleRelService
+	userExternalLoginService *user_external_login.UserExternalLoginService
 }
 
 func NewUserService(userRepo usercommon.UserRepo,
@@ -51,28 +54,34 @@ func NewUserService(userRepo usercommon.UserRepo,
 	siteInfoService *siteinfo_common.SiteInfoCommonService,
 	userRoleService *role.UserRoleRelService,
 	userCommonService *usercommon.UserCommon,
+	userExternalLoginService *user_external_login.UserExternalLoginService,
 ) *UserService {
 	return &UserService{
-		userCommonService: userCommonService,
-		userRepo:          userRepo,
-		userActivity:      userActivity,
-		activityRepo:      activityRepo,
-		emailService:      emailService,
-		serviceConfig:     serviceConfig,
-		authService:       authService,
-		siteInfoService:   siteInfoService,
-		userRoleService:   userRoleService,
+		userCommonService:        userCommonService,
+		userRepo:                 userRepo,
+		userActivity:             userActivity,
+		activityRepo:             activityRepo,
+		emailService:             emailService,
+		serviceConfig:            serviceConfig,
+		authService:              authService,
+		siteInfoService:          siteInfoService,
+		userRoleService:          userRoleService,
+		userExternalLoginService: userExternalLoginService,
 	}
 }
 
 // GetUserInfoByUserID get user info by user id
-func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID string) (resp *schema.GetUserToSetShowResp, err error) {
+func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID string) (
+	resp *schema.GetUserToSetShowResp, err error) {
 	userInfo, exist, err := us.userRepo.GetByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
 	if !exist {
 		return nil, errors.BadRequest(reason.UserNotFound)
+	}
+	if userInfo.Status == entity.UserStatusDeleted {
+		return nil, errors.Unauthorized(reason.UnauthorizedError)
 	}
 	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
 	if err != nil {
@@ -82,6 +91,7 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	resp.GetFromUserEntity(userInfo)
 	resp.AccessToken = token
 	resp.RoleID = roleID
+	resp.HavePassword = len(userInfo.Pass) > 0
 	return resp, nil
 }
 
@@ -112,10 +122,17 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 	if !us.verifyPassword(ctx, req.Pass, userInfo.Pass) {
 		return nil, errors.BadRequest(reason.EmailOrPasswordWrong)
 	}
+	ok, externalID, err := us.userExternalLoginService.CheckUserStatusInUserCenter(ctx, userInfo.ID)
+	if err != nil {
+		return nil, err
+	}
+	if !ok {
+		return nil, errors.BadRequest(reason.EmailOrPasswordWrong)
+	}
 
 	err = us.userRepo.UpdateLastLoginDate(ctx, userInfo.ID)
 	if err != nil {
-		log.Error("UpdateLastLoginDate", err.Error())
+		log.Errorf("update last login data failed, err: %v", err)
 	}
 
 	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
@@ -130,6 +147,7 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 		EmailStatus: userInfo.MailStatus,
 		UserStatus:  userInfo.Status,
 		RoleID:      roleID,
+		ExternalID:  externalID,
 	}
 	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
@@ -171,42 +189,43 @@ func (us *UserService) RetrievePassWord(ctx context.Context, req *schema.UserRet
 	return nil
 }
 
-// UseRePassword
-func (us *UserService) UseRePassword(ctx context.Context, req *schema.UserRePassWordRequest) (resp *schema.GetUserResp, err error) {
+// UpdatePasswordWhenForgot update user password when user forgot password
+func (us *UserService) UpdatePasswordWhenForgot(ctx context.Context, req *schema.UserRePassWordRequest) (err error) {
 	data := &schema.EmailCodeContent{}
 	err = data.FromJSONString(req.Content)
 	if err != nil {
-		return nil, errors.BadRequest(reason.EmailVerifyURLExpired)
+		return errors.BadRequest(reason.EmailVerifyURLExpired)
 	}
 
 	userInfo, exist, err := us.userRepo.GetByEmail(ctx, data.Email)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.UserNotFound)
+		return errors.BadRequest(reason.UserNotFound)
 	}
 	enpass, err := us.encryptPassword(ctx, req.Pass)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	err = us.userRepo.UpdatePass(ctx, userInfo.ID, enpass)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	resp = &schema.GetUserResp{}
-	return resp, nil
+	// When the user changes the password, all the current user's tokens are invalid.
+	us.authService.RemoveUserAllTokens(ctx, userInfo.ID)
+	return nil
 }
 
-func (us *UserService) UserModifyPassWordVerification(ctx context.Context, request *schema.UserModifyPassWordRequest) (bool, error) {
-	userInfo, has, err := us.userRepo.GetByUserID(ctx, request.UserID)
+func (us *UserService) UserModifyPassWordVerification(ctx context.Context, req *schema.UserModifyPasswordReq) (bool, error) {
+	userInfo, has, err := us.userRepo.GetByUserID(ctx, req.UserID)
 	if err != nil {
 		return false, err
 	}
 	if !has {
-		return false, fmt.Errorf("user does not exist")
+		return false, errors.BadRequest(reason.UserNotFound)
 	}
-	isPass := us.verifyPassword(ctx, request.OldPass, userInfo.Pass)
+	isPass := us.verifyPassword(ctx, req.OldPass, userInfo.Pass)
 	if !isPass {
 		return false, nil
 	}
@@ -215,33 +234,56 @@ func (us *UserService) UserModifyPassWordVerification(ctx context.Context, reque
 }
 
 // UserModifyPassword user modify password
-func (us *UserService) UserModifyPassword(ctx context.Context, request *schema.UserModifyPassWordRequest) error {
-	enpass, err := us.encryptPassword(ctx, request.Pass)
+func (us *UserService) UserModifyPassword(ctx context.Context, req *schema.UserModifyPasswordReq) error {
+	enpass, err := us.encryptPassword(ctx, req.Pass)
 	if err != nil {
 		return err
 	}
-	userInfo, has, err := us.userRepo.GetByUserID(ctx, request.UserID)
+	userInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
 	if err != nil {
 		return err
 	}
-	if !has {
-		return fmt.Errorf("user does not exist")
+	if !exist {
+		return errors.BadRequest(reason.UserNotFound)
 	}
-	isPass := us.verifyPassword(ctx, request.OldPass, userInfo.Pass)
+
+	isPass := us.verifyPassword(ctx, req.OldPass, userInfo.Pass)
 	if !isPass {
-		return fmt.Errorf("the old password verification failed")
+		return errors.BadRequest(reason.OldPasswordVerificationFailed)
 	}
 	err = us.userRepo.UpdatePass(ctx, userInfo.ID, enpass)
 	if err != nil {
 		return err
 	}
+
+	us.authService.RemoveTokensExceptCurrentUser(ctx, userInfo.ID, req.AccessToken)
 	return nil
 }
 
 // UpdateInfo update user info
 func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoRequest) (
 	errFields []*validator.FormErrorField, err error) {
-	if len(req.Username) > 0 {
+	siteUsers, err := us.siteInfoService.GetSiteUsers(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if siteUsers.AllowUpdateUsername && len(req.Username) > 0 {
+		if checker.IsInvalidUsername(req.Username) {
+			errFields = append(errFields, &validator.FormErrorField{
+				ErrorField: "username",
+				ErrorMsg:   reason.UsernameInvalid,
+			})
+			return errFields, errors.BadRequest(reason.UsernameInvalid)
+		}
+		if checker.IsReservedUsername(req.Username) {
+			errFields = append(errFields, &validator.FormErrorField{
+				ErrorField: "username",
+				ErrorMsg:   reason.UsernameInvalid,
+			})
+			return errFields, errors.BadRequest(reason.UsernameInvalid)
+		}
+
 		userInfo, exist, err := us.userRepo.GetByUsername(ctx, req.Username)
 		if err != nil {
 			return nil, err
@@ -253,29 +295,55 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 			})
 			return errFields, errors.BadRequest(reason.UsernameDuplicate)
 		}
-		if checker.IsReservedUsername(req.Username) {
-			errFields = append(errFields, &validator.FormErrorField{
-				ErrorField: "username",
-				ErrorMsg:   reason.UsernameInvalid,
-			})
-			return errFields, errors.BadRequest(reason.UsernameInvalid)
-		}
 	}
-	avatar, err := json.Marshal(req.Avatar)
+
+	oldUserInfo, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
 	if err != nil {
-		return nil, errors.BadRequest(reason.UserSetAvatar).WithError(err).WithStack()
+		return nil, err
 	}
-	userInfo := entity.User{}
-	userInfo.ID = req.UserID
-	userInfo.Avatar = string(avatar)
-	userInfo.DisplayName = req.DisplayName
-	userInfo.Bio = req.Bio
-	userInfo.BioHTML = req.BioHTML
-	userInfo.Location = req.Location
-	userInfo.Website = req.Website
-	userInfo.Username = req.Username
-	err = us.userRepo.UpdateInfo(ctx, &userInfo)
+	if !exist {
+		return nil, errors.BadRequest(reason.UserNotFound)
+	}
+
+	cond := us.formatUserInfoForUpdateInfo(oldUserInfo, req, siteUsers)
+	err = us.userRepo.UpdateInfo(ctx, cond)
 	return nil, err
+}
+
+func (us *UserService) formatUserInfoForUpdateInfo(
+	oldUserInfo *entity.User, req *schema.UpdateInfoRequest, siteUsersConf *schema.SiteUsersResp) *entity.User {
+	avatar, _ := json.Marshal(req.Avatar)
+
+	userInfo := &entity.User{}
+	userInfo.DisplayName = oldUserInfo.DisplayName
+	userInfo.Username = oldUserInfo.Username
+	userInfo.Avatar = oldUserInfo.Avatar
+	userInfo.Bio = oldUserInfo.Bio
+	userInfo.BioHTML = oldUserInfo.BioHTML
+	userInfo.Website = oldUserInfo.Website
+	userInfo.Location = oldUserInfo.Location
+	userInfo.ID = req.UserID
+
+	if len(req.DisplayName) > 0 && siteUsersConf.AllowUpdateDisplayName {
+		userInfo.DisplayName = req.DisplayName
+	}
+	if len(req.Username) > 0 && siteUsersConf.AllowUpdateUsername {
+		userInfo.Username = req.Username
+	}
+	if len(avatar) > 0 && siteUsersConf.AllowUpdateAvatar {
+		userInfo.Avatar = string(avatar)
+	}
+	if siteUsersConf.AllowUpdateBio {
+		userInfo.Bio = req.Bio
+		userInfo.BioHTML = req.BioHTML
+	}
+	if siteUsersConf.AllowUpdateWebsite {
+		userInfo.Website = req.Website
+	}
+	if siteUsersConf.AllowUpdateLocation {
+		userInfo.Location = req.Location
+	}
+	return userInfo
 }
 
 func (us *UserService) UserEmailHas(ctx context.Context, email string) (bool, error) {
@@ -435,50 +503,48 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 	if !has {
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
-	userInfo.MailStatus = entity.EmailStatusAvailable
-	err = us.userRepo.UpdateEmailStatus(ctx, userInfo.ID, userInfo.MailStatus)
-	if err != nil {
-		return nil, err
+	if userInfo.MailStatus == entity.EmailStatusToBeVerified {
+		userInfo.MailStatus = entity.EmailStatusAvailable
+		err = us.userRepo.UpdateEmailStatus(ctx, userInfo.ID, userInfo.MailStatus)
+		if err != nil {
+			return nil, err
+		}
 	}
 	if err = us.userActivity.UserActive(ctx, userInfo.ID); err != nil {
 		log.Error(err)
 	}
 
-	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
+	// In the case of three-party login, the associated users are bound
+	if len(data.BindingKey) > 0 {
+		err = us.userExternalLoginService.ExternalLoginBindingUser(ctx, data.BindingKey, userInfo)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	accessToken, userCacheInfo, err := us.userCommonService.CacheLoginUserInfo(
+		ctx, userInfo.ID, userInfo.MailStatus, userInfo.Status, "")
 	if err != nil {
-		log.Error(err)
+		return nil, err
 	}
 
 	resp = &schema.GetUserResp{}
 	resp.GetFromUserEntity(userInfo)
-	userCacheInfo := &entity.UserCacheInfo{
-		UserID:      userInfo.ID,
-		EmailStatus: userInfo.MailStatus,
-		UserStatus:  userInfo.Status,
-		RoleID:      roleID,
-	}
-	resp.AccessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
-	if err != nil {
-		return nil, err
-	}
+	resp.AccessToken = accessToken
 	// User verified email will update user email status. So user status cache should be updated.
 	if err = us.authService.SetUserStatus(ctx, userCacheInfo); err != nil {
 		return nil, err
-	}
-	resp.RoleID = userCacheInfo.RoleID
-	if resp.RoleID == role.RoleAdminID {
-		err = us.authService.SetAdminUserCacheInfo(ctx, resp.AccessToken, &entity.UserCacheInfo{UserID: userInfo.ID})
-		if err != nil {
-			return nil, err
-		}
 	}
 	return resp, nil
 }
 
 // verifyPassword
 // Compare whether the password is correct
-func (us *UserService) verifyPassword(ctx context.Context, LoginPass, UserPass string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(UserPass), []byte(LoginPass))
+func (us *UserService) verifyPassword(ctx context.Context, loginPass, userPass string) bool {
+	if len(loginPass) == 0 && len(userPass) == 0 {
+		return true
+	}
+	err := bcrypt.CompareHashAndPassword([]byte(userPass), []byte(loginPass))
 	return err == nil
 }
 
@@ -673,6 +739,9 @@ func (us *UserService) UserUnsubscribeEmailNotification(
 
 func (us *UserService) getActivityUserRankStat(ctx context.Context, startTime, endTime time.Time, limit int,
 	userIDExist map[string]bool) (rankStat []*entity.ActivityUserRankStat, userIDs []string, err error) {
+	if plugin.RankAgentEnabled() {
+		return make([]*entity.ActivityUserRankStat, 0), make([]string, 0), nil
+	}
 	rankStat, err = us.activityRepo.GetUsersWhoHasGainedTheMostReputation(ctx, startTime, endTime, limit)
 	if err != nil {
 		return nil, nil, err
@@ -692,6 +761,9 @@ func (us *UserService) getActivityUserRankStat(ctx context.Context, startTime, e
 
 func (us *UserService) getActivityUserVoteStat(ctx context.Context, startTime, endTime time.Time, limit int,
 	userIDExist map[string]bool) (voteStat []*entity.ActivityUserVoteStat, userIDs []string, err error) {
+	if plugin.RankAgentEnabled() {
+		return make([]*entity.ActivityUserVoteStat, 0), make([]string, 0), nil
+	}
 	voteStat, err = us.activityRepo.GetUsersWhoHasVoteMost(ctx, startTime, endTime, limit)
 	if err != nil {
 		return nil, nil, err

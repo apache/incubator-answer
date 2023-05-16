@@ -3,6 +3,31 @@ import useSWR from 'swr';
 import request from '@/utils/request';
 import type * as Type from '@/common/interface';
 
+export interface AdminSettingsUsers {
+  allow_update_avatar: boolean;
+  allow_update_bio: boolean;
+  allow_update_display_name: boolean;
+  allow_update_location: boolean;
+  allow_update_username: boolean;
+  allow_update_website: boolean;
+  default_avatar: string;
+  gravatar_base_url: string;
+}
+
+interface PrivilegeLevel {
+  level: number;
+  level_desc: string;
+  privileges: {
+    label: string;
+    value: number;
+    key: string;
+  }[];
+}
+export interface AdminSettingsPrivilege {
+  selected_level: number;
+  options: PrivilegeLevel[];
+}
+
 export const useGeneralSetting = () => {
   const apiUrl = `/answer/admin/api/siteinfo/general`;
   const { data, error } = useSWR<Type.AdminSettingsGeneral, Error>(
@@ -125,4 +150,24 @@ export const getLoginSetting = () => {
 
 export const putLoginSetting = (params: Type.AdminSettingsLogin) => {
   return request.put('/answer/admin/api/siteinfo/login', params);
+};
+
+export const getUsersSetting = () => {
+  return request.get<AdminSettingsUsers>('/answer/admin/api/siteinfo/users');
+};
+
+export const putUsersSetting = (params: AdminSettingsUsers) => {
+  return request.put('/answer/admin/api/siteinfo/users', params);
+};
+
+export const getPrivilegeSetting = () => {
+  return request.get<AdminSettingsPrivilege>(
+    '/answer/admin/api/setting/privileges',
+  );
+};
+
+export const putPrivilegeSetting = (level: number) => {
+  return request.put('/answer/admin/api/setting/privileges', {
+    level,
+  });
 };

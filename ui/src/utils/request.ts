@@ -3,13 +3,13 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 
 import { Modal } from '@/components';
 import { loggedUserInfoStore, toastStore, errorCodeStore } from '@/stores';
-import { LOGGED_TOKEN_STORAGE_KEY, IGNORE_PATH_LIST } from '@/common/constants';
+import { LOGGED_TOKEN_STORAGE_KEY } from '@/common/constants';
 import { RouteAlias } from '@/router/alias';
 import { getCurrentLang } from '@/utils/localize';
 
 import Storage from './storage';
 import { floppyNavigation } from './floppyNavigation';
-import { isIgnoredPath } from './guard';
+import { isIgnoredPath, IGNORE_PATH_LIST } from './guard';
 
 const baseConfig = {
   timeout: 10000,
@@ -52,19 +52,31 @@ class Request {
           // no content
           return true;
         }
-
         return data;
       },
       (error) => {
         const {
           status,
-          data: errModel,
+          data: errBody,
           config: errConfig,
         } = error.response || {};
-        const { data = {}, msg = '' } = errModel || {};
+        const { data = {}, msg = '' } = errBody || {};
+        const errorObject: {
+          code: any;
+          msg: string;
+          data: any;
+          // Currently only used for form errors
+          isError?: boolean;
+          // Currently only used for form errors
+          list?: any[];
+        } = {
+          code: status,
+          msg,
+          data,
+        };
         if (status === 400) {
           if (data?.err_type && errConfig?.passingError) {
-            return errModel;
+            return Promise.reject(errorObject);
           }
           if (data?.err_type) {
             if (data.err_type === 'toast') {
@@ -94,12 +106,9 @@ class Request {
 
           if (data instanceof Array && data.length > 0) {
             // handle form error
-            return Promise.reject({
-              code: status,
-              msg,
-              isError: true,
-              list: data,
-            });
+            errorObject.isError = true;
+            errorObject.list = data;
+            return Promise.reject(errorObject);
           }
 
           if (!data || Object.keys(data).length <= 0) {
@@ -122,22 +131,20 @@ class Request {
           // Permission interception
           if (data?.type === 'url_expired') {
             // url expired
-            floppyNavigation.navigate(RouteAlias.activationFailed, () => {
-              window.location.replace(RouteAlias.activationFailed);
+            floppyNavigation.navigate(RouteAlias.activationFailed, {
+              handler: 'replace',
             });
             return Promise.reject(false);
           }
           if (data?.type === 'inactive') {
             // inactivated
-            floppyNavigation.navigate(RouteAlias.activation, () => {
-              window.location.href = RouteAlias.activation;
-            });
+            floppyNavigation.navigate(RouteAlias.inactive);
             return Promise.reject(false);
           }
 
           if (data?.type === 'suspended') {
-            floppyNavigation.navigate(RouteAlias.suspended, () => {
-              window.location.replace(RouteAlias.suspended);
+            floppyNavigation.navigate(RouteAlias.suspended, {
+              handler: 'replace',
             });
             return Promise.reject(false);
           }
@@ -179,7 +186,7 @@ class Request {
             `Request failed with status code ${status}, ${msg || ''}`,
           );
         }
-        return Promise.reject(false);
+        return Promise.reject(errorObject);
       },
     );
   }

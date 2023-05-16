@@ -209,7 +209,7 @@ func (rs *RevisionService) revisionAuditAnswer(ctx context.Context, revisionitem
 			ObjectID:       answerinfo.ID,
 		}
 		msg.ObjectType = constant.AnswerObjectType
-		msg.NotificationAction = constant.UpdateAnswer
+		msg.NotificationAction = constant.NotificationUpdateAnswer
 		notice_queue.AddNotification(msg)
 
 		activity_queue.AddActivity(&schema.ActivityMsg{

@@ -13,12 +13,14 @@ FROM golang:1.19-alpine AS golang-builder
 LABEL maintainer="aichy@sf.com"
 
 ARG GOPROXY
-ENV GOPROXY ${GOPROXY:-direct}
+# ENV GOPROXY ${GOPROXY:-direct}
+ENV GOPROXY=https://goproxy.io,direct
 
 ENV GOPATH /go
 ENV GOROOT /usr/local/go
 ENV PACKAGE github.com/answerdev/answer
 ENV BUILD_DIR ${GOPATH}/src/${PACKAGE}
+ENV ANSWER_MODULE ${BUILD_DIR}
 
 ARG TAGS="sqlite sqlite_unlock_notify"
 ENV TAGS "bindata timetzdata $TAGS"
@@ -27,9 +29,11 @@ ARG CGO_EXTRA_CFLAGS
 COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
 COPY --from=node-builder /tmp/build ${BUILD_DIR}/ui/build
-RUN apk --no-cache add build-base git \
-    && make clean build \
-    && cp answer /usr/bin/answer
+RUN apk --no-cache add build-base git bash \
+    && make clean build
+RUN chmod 755 answer
+RUN ["/bin/bash","-c","script/build_plugin.sh"]
+RUN cp answer /usr/bin/answer
 
 RUN mkdir -p /data/uploads && chmod 777 /data/uploads \
     && mkdir -p /data/i18n && cp -r i18n/*.yaml /data/i18n

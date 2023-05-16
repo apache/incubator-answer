@@ -9,13 +9,18 @@ import {
   themeSettingStore,
   seoSettingStore,
   loginToContinueStore,
+  pageTagStore,
 } from '@/stores';
 import { RouteAlias } from '@/router/alias';
-import { LOGGED_USER_STORAGE_KEY } from '@/common/constants';
+import {
+  LOGGED_TOKEN_STORAGE_KEY,
+  REDIRECT_PATH_STORAGE_KEY,
+} from '@/common/constants';
+import Storage from '@/utils/storage';
 
-import Storage from './storage';
 import { setupAppLanguage, setupAppTimeZone } from './localize';
-import { floppyNavigation } from './floppyNavigation';
+import { floppyNavigation, NavigateConfig } from './floppyNavigation';
+import { pullUcAgent, getSignUpUrl } from './userCenter';
 
 type TLoginState = {
   isLogged: boolean;
@@ -76,6 +81,19 @@ export const deriveLoginState = (): TLoginState => {
   return ls;
 };
 
+export const IGNORE_PATH_LIST = [
+  RouteAlias.login,
+  RouteAlias.signUp,
+  RouteAlias.accountRecovery,
+  RouteAlias.changeEmail,
+  RouteAlias.passwordReset,
+  RouteAlias.accountActivation,
+  RouteAlias.confirmNewEmail,
+  RouteAlias.confirmEmail,
+  RouteAlias.authLanding,
+  '/user-center/',
+];
+
 export const isIgnoredPath = (ignoredPath: string | string[]) => {
   if (!Array.isArray(ignoredPath)) {
     ignoredPath = [ignoredPath];
@@ -87,31 +105,29 @@ export const isIgnoredPath = (ignoredPath: string | string[]) => {
   return !!matchingPath;
 };
 
-let pullLock = false;
-let dedupeTimestamp = 0;
-export const pullLoggedUser = async (forceRePull = false) => {
-  // only pull once if not force re-pull
-  if (pullLock && !forceRePull) {
+let pluTimestamp = 0;
+export const pullLoggedUser = async (isInitPull = false) => {
+  /**
+   * WARN:
+   * - dedupe pull requests in this time span in 10 seconds
+   * - isInitPull:
+   *   Requests sent by the initialisation method cannot be throttled
+   *   and may cause Promise.allSettled to complete early in React development mode,
+   *   resulting in inaccurate application data.
+   */
+  //
+  if (!isInitPull && Date.now() - pluTimestamp < 1000 * 10) {
     return;
   }
-  // dedupe pull requests in this time span in 10 seconds
-  if (Date.now() - dedupeTimestamp < 1000 * 10) {
-    return;
-  }
-  dedupeTimestamp = Date.now();
-  const loggedUserInfo = await getLoggedUserInfo().catch((ex) => {
-    dedupeTimestamp = 0;
-    if (!deriveLoginState().isLogged) {
-      // load fallback userInfo from local storage
-      const storageLoggedUserInfo = Storage.get(LOGGED_USER_STORAGE_KEY);
-      if (storageLoggedUserInfo) {
-        loggedUserInfoStore.getState().update(storageLoggedUserInfo);
-      }
-    }
+  pluTimestamp = Date.now();
+  const loggedUserInfo = await getLoggedUserInfo({
+    passingError: true,
+  }).catch((ex) => {
+    pluTimestamp = 0;
+    loggedUserInfoStore.getState().clear(false);
     console.error(ex);
   });
   if (loggedUserInfo) {
-    pullLock = true;
     loggedUserInfoStore.getState().update(loggedUserInfo);
   }
 };
@@ -151,7 +167,7 @@ export const activated = () => {
   const us = deriveLoginState();
   if (us.isNotActivated) {
     gr.ok = false;
-    gr.redirect = RouteAlias.activation;
+    gr.redirect = RouteAlias.inactive;
   }
   return gr;
 };
@@ -227,6 +243,16 @@ export const allowNewRegistration = () => {
   return gr;
 };
 
+export const singUpAgent = () => {
+  const gr: TGuardResult = { ok: true };
+  const signUpUrl = getSignUpUrl();
+  if (signUpUrl !== RouteAlias.signUp) {
+    gr.ok = false;
+    gr.redirect = signUpUrl;
+  }
+  return gr;
+};
+
 export const shouldLoginRequired = () => {
   const gr: TGuardResult = { ok: true };
   const loginSetting = loginSettingStore.getState().login;
@@ -237,19 +263,7 @@ export const shouldLoginRequired = () => {
   if (us.isLogged) {
     return gr;
   }
-  if (
-    isIgnoredPath([
-      RouteAlias.login,
-      RouteAlias.register,
-      '/users/account-recovery',
-      'users/change-email',
-      'users/password-reset',
-      'users/account-activation',
-      'users/account-activation/success',
-      '/users/account-activation/failed',
-      '/users/confirm-new-email',
-    ])
-  ) {
+  if (isIgnoredPath(IGNORE_PATH_LIST)) {
     return gr;
   }
   gr.ok = false;
@@ -275,12 +289,10 @@ export const tryNormalLogged = (canNavigate: boolean = false) => {
     return false;
   }
   if (us.isNotActivated) {
-    floppyNavigation.navigate(RouteAlias.activation, () => {
-      window.location.href = RouteAlias.activation;
-    });
+    floppyNavigation.navigate(RouteAlias.inactive);
   } else if (us.isForbidden) {
-    floppyNavigation.navigate(RouteAlias.suspended, () => {
-      window.location.replace(RouteAlias.suspended);
+    floppyNavigation.navigate(RouteAlias.suspended, {
+      handler: 'replace',
     });
   }
 
@@ -298,9 +310,55 @@ export const tryLoggedAndActivated = () => {
 };
 
 /**
+ * Auto handling of page redirect logic after a successful login
+ */
+export const handleLoginRedirect = (handler?: NavigateConfig['handler']) => {
+  const redirectUrl = Storage.get(REDIRECT_PATH_STORAGE_KEY) || RouteAlias.home;
+  Storage.remove(REDIRECT_PATH_STORAGE_KEY);
+  floppyNavigation.navigate(redirectUrl, {
+    handler,
+    options: { replace: true },
+  });
+};
+
+/**
+ * Unified processing of login logic after getting `access_token`
+ */
+export const handleLoginWithToken = (
+  token: string | null,
+  handler?: NavigateConfig['handler'],
+) => {
+  if (token) {
+    Storage.set(LOGGED_TOKEN_STORAGE_KEY, token);
+    setTimeout(() => {
+      getLoggedUserInfo().then((res) => {
+        loggedUserInfoStore.getState().update(res);
+        const userStat = deriveLoginState();
+        if (userStat.isNotActivated) {
+          floppyNavigation.navigate(RouteAlias.inactive, {
+            handler,
+            options: {
+              replace: true,
+            },
+          });
+        } else {
+          handleLoginRedirect(handler);
+        }
+      });
+    });
+  } else {
+    floppyNavigation.navigate(RouteAlias.home, {
+      handler,
+      options: {
+        replace: true,
+      },
+    });
+  }
+};
+
+/**
  * Initialize app configuration
  */
-let appInitialized = false;
 export const initAppSettingsStore = async () => {
   const appSettings = await getAppSettings();
   if (appSettings) {
@@ -308,7 +366,12 @@ export const initAppSettingsStore = async () => {
     siteInfoStore
       .getState()
       .updateVersion(appSettings.version, appSettings.revision);
+    siteInfoStore.getState().updateUsers(appSettings.site_users);
     interfaceStore.getState().update(appSettings.interface);
+    pageTagStore.getState().update({
+      title: appSettings.general?.name,
+      description: appSettings.general?.description,
+    });
     brandingStore.getState().update(appSettings.branding);
     loginSettingStore.getState().update(appSettings.login);
     customizeStore.getState().update(appSettings.custom_css_html);
@@ -317,7 +380,13 @@ export const initAppSettingsStore = async () => {
   }
 };
 
+let appInitialized = false;
 export const setupApp = async () => {
+  /**
+   * This cannot be removed:
+   * clicking on the current navigation link will trigger a call to the routing loader,
+   * even though the page is not refreshed.
+   */
   if (appInitialized) {
     return;
   }
@@ -326,9 +395,14 @@ export const setupApp = async () => {
    * 1. must pre init logged user info for router guard
    * 2. must pre init app settings for app render
    */
-  // TODO: optimize `initAppSettingsStore` by server render
-  await Promise.allSettled([pullLoggedUser(), initAppSettingsStore()]);
+  await Promise.allSettled([initAppSettingsStore(), pullLoggedUser(true)]);
+  await Promise.allSettled([pullUcAgent()]);
   setupAppLanguage();
   setupAppTimeZone();
+  /**
+   * WARN:
+   * Initialization must be completed after all initialization actions,
+   * otherwise the problem of rendering twice in React development mode can lead to inaccurate data or flickering pages
+   */
   appInitialized = true;
 };

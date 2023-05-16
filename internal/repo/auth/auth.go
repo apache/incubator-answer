@@ -148,7 +148,7 @@ func (ar *authRepo) AddUserTokenMapping(ctx context.Context, userID, accessToken
 }
 
 // RemoveUserTokens Log out all users under this user id
-func (ar *authRepo) RemoveUserTokens(ctx context.Context, userID string) {
+func (ar *authRepo) RemoveUserTokens(ctx context.Context, userID string, remainToken string) {
 	key := constant.UserTokenMappingCacheKey + userID
 	resp, _ := ar.data.Cache.GetString(ctx, key)
 	mapping := make(map[string]bool, 0)
@@ -158,6 +158,9 @@ func (ar *authRepo) RemoveUserTokens(ctx context.Context, userID string) {
 	}
 
 	for token := range mapping {
+		if token == remainToken {
+			continue
+		}
 		if err := ar.RemoveUserCacheInfo(ctx, token); err != nil {
 			log.Error(err)
 		} else {

@@ -476,7 +476,7 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.A
 	msg.ReceiverUserID = answerInfo.UserID
 	msg.TriggerUserID = answerInfo.UserID
 	msg.ObjectType = constant.AnswerObjectType
-	msg.NotificationAction = constant.YourAnswerWasDeleted
+	msg.NotificationAction = constant.NotificationYourAnswerWasDeleted
 	notice_queue.AddNotification(msg)
 
 	return nil
@@ -566,7 +566,7 @@ func (as *AnswerService) notificationUpdateAnswer(ctx context.Context, questionU
 		ObjectID:       answerID,
 	}
 	msg.ObjectType = constant.AnswerObjectType
-	msg.NotificationAction = constant.UpdateAnswer
+	msg.NotificationAction = constant.NotificationUpdateAnswer
 	notice_queue.AddNotification(msg)
 }
 
@@ -583,7 +583,7 @@ func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
 		ObjectID:       answerID,
 	}
 	msg.ObjectType = constant.AnswerObjectType
-	msg.NotificationAction = constant.AnswerTheQuestion
+	msg.NotificationAction = constant.NotificationAnswerTheQuestion
 	notice_queue.AddNotification(msg)
 
 	userInfo, exist, err := as.userRepo.GetByUserID(ctx, questionUserID)

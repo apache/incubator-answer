@@ -1,8 +1,8 @@
 import qs from 'qs';
 import useSWR from 'swr';
 
-import type * as Types from '@/common/interface';
 import request from '@/utils/request';
+import type { PluginConfig } from '@/plugins/types';
 
 export const useQueryPlugins = (params) => {
   const apiUrl = `/answer/admin/api/plugins?${qs.stringify(params)}`;
@@ -24,7 +24,7 @@ export const updatePluginStatus = (params) => {
 
 export const useQueryPluginConfig = (params) => {
   const apiUrl = `/answer/admin/api/plugin/config?${qs.stringify(params)}`;
-  const { data, error, mutate } = useSWR<Types.PluginConfig, Error>(
+  const { data, error, mutate } = useSWR<PluginConfig, Error>(
     apiUrl,
     request.instance.get,
   );

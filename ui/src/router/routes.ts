@@ -169,6 +169,7 @@ const routes: RouteNode[] = [
           if (notLogged.ok) {
             return notLogged;
           }
+
           return guard.notActivated();
         },
       },
@@ -180,7 +181,14 @@ const routes: RouteNode[] = [
           if (!allowNew.ok) {
             return allowNew;
           }
-          return guard.notLogged();
+          const notLogged = guard.notLogged();
+          if (notLogged.ok) {
+            const sa = guard.singUpAgent();
+            if (!sa.ok) {
+              return sa;
+            }
+          }
+          return notLogged;
         },
       },
       {
@@ -232,8 +240,8 @@ const routes: RouteNode[] = [
         page: 'pages/Users/OauthBindEmail',
       },
       {
-        path: '/users/oauth',
-        page: 'pages/Users/OauthCallback',
+        path: '/users/auth-landing',
+        page: 'pages/Users/AuthCallback',
       },
       {
         path: '/posts/:qid/timeline',
@@ -261,7 +269,7 @@ const routes: RouteNode[] = [
         path: 'admin',
         page: 'pages/Admin',
         loader: async () => {
-          await guard.pullLoggedUser(true);
+          await guard.pullLoggedUser();
           return null;
         },
         guard: () => {
@@ -337,7 +345,15 @@ const routes: RouteNode[] = [
             page: 'pages/Admin/Login',
           },
           {
-            path: 'installed_plugins',
+            path: 'settings-users',
+            page: 'pages/Admin/SettingsUsers',
+          },
+          {
+            path: 'privileges',
+            page: 'pages/Admin/Privileges',
+          },
+          {
+            path: 'installed-plugins',
             page: 'pages/Admin/Plugins/Installed',
           },
           {
@@ -345,6 +361,18 @@ const routes: RouteNode[] = [
             page: 'pages/Admin/Plugins/Config',
           },
         ],
+      },
+      {
+        path: '/user-center/auth',
+        page: 'pages/UserCenter/Auth',
+        guard: () => {
+          const notLogged = guard.notLogged();
+          return notLogged;
+        },
+      },
+      {
+        path: '/user-center/auth-failed',
+        page: 'pages/UserCenter/AuthFailed',
       },
       // for review
       {

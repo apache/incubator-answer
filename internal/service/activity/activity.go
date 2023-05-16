@@ -3,6 +3,7 @@ package activity
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -111,7 +112,11 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 			item.Username = "N/A"
 			item.UserDisplayName = "N/A"
 		} else {
-			item.UserID = act.UserID
+			if act.TriggerUserID > 0 {
+				item.UserID = fmt.Sprintf("%d", act.TriggerUserID)
+			} else {
+				item.UserID = act.UserID
+			}
 		}
 
 		item.Comment = as.getTimelineActivityComment(ctx, item.ObjectID, item.ObjectType, item.ActivityType, item.RevisionID)

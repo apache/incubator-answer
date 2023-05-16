@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-import { Pagination } from '@/components';
+import { Pagination, CustomSidebar } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
 import { scrollToElementTop } from '@/utils';
 import { usePageTags, usePageUsers } from '@/hooks';
@@ -83,7 +83,7 @@ const Index = () => {
         // delete answers only show to author and admin and has search params aid
         if (v.status === 10) {
           if (
-            (v?.user_info.username === userInfo?.username || isAdmin) &&
+            (v?.user_info?.username === userInfo?.username || isAdmin) &&
             aid === v.id
           ) {
             return v;
@@ -104,8 +104,8 @@ const Index = () => {
       res.list.forEach((item) => {
         setUsers([
           {
-            displayName: item.user_info.display_name,
-            userName: item.user_info.username,
+            displayName: item.user_info?.display_name,
+            userName: item.user_info?.username,
           },
           {
             displayName: item?.update_user_info?.display_name,
@@ -123,10 +123,10 @@ const Index = () => {
       if (res) {
         setUsers([
           {
-            id: res.user_info.id,
-            displayName: res.user_info.display_name,
-            userName: res.user_info.username,
-            avatar_url: res.user_info.avatar,
+            id: res.user_info?.id,
+            displayName: res.user_info?.display_name,
+            userName: res.user_info?.username,
+            avatar_url: res.user_info?.avatar,
           },
           {
             id: res?.update_user_info?.id,
@@ -152,7 +152,7 @@ const Index = () => {
   const initPage = (type: string) => {
     if (type === 'delete_question') {
       setTimeout(() => {
-        navigate(-1);
+        navigate('/', { replace: true });
       }, 1000);
       return;
     }
@@ -256,6 +256,7 @@ const Index = () => {
             )}
         </Col>
         <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
+          <CustomSidebar />
           <RelatedQuestions id={question?.id || ''} />
         </Col>
       </Row>

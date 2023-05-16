@@ -1,10 +1,14 @@
-import { FC, memo } from 'react';
+import { FC, memo, useEffect, useState } from 'react';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
-import { Avatar, Icon } from '@/components';
+import classnames from 'classnames';
+
+import { Avatar, Icon, SvgIcon } from '@/components';
 import type { UserInfoRes } from '@/common/interface';
+import { getUcBranding, UcBrandingEntry } from '@/services';
+import { userCenterStore } from '@/stores';
 
 interface Props {
   data: UserInfoRes;
@@ -12,6 +16,22 @@ interface Props {
 
 const Index: FC<Props> = ({ data }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'personal' });
+  const { agent: ucAgent } = userCenterStore();
+  const [ucBranding, setUcBranding] = useState<UcBrandingEntry[]>([]);
+
+  const initData = () => {
+    if (ucAgent?.enabled && data?.username) {
+      getUcBranding(data.username).then((resp) => {
+        if (resp.enabled && Array.isArray(resp.personal_branding)) {
+          setUcBranding(resp.personal_branding);
+        }
+      });
+    }
+  };
+
+  useEffect(() => {
+    initData();
+  }, [data?.username]);
   if (!data?.username) {
     return null;
   }
@@ -65,27 +85,55 @@ const Index: FC<Props> = ({ data }) => {
         </div>
 
         <div className="d-flex text-secondary">
-          {data.location && (
-            <div className="d-flex align-items-center me-3">
-              <Icon name="geo-alt-fill" className="me-2" />
-              <span>{data.location}</span>
-            </div>
-          )}
-
-          {data.website && (
-            <div className="d-flex align-items-center">
-              <Icon name="house-door-fill" className="me-2" />
-              <a
-                className="link-secondary"
-                href={
-                  data.website?.includes('http')
-                    ? data.website
-                    : `http://${data.website}`
-                }>
-                {data?.website.replace(/(http|https):\/\//, '').split('/')?.[0]}
-              </a>
-            </div>
-          )}
+          {!ucAgent?.enabled ? (
+            <>
+              {data.location && (
+                <div className="d-flex align-items-center me-3">
+                  <Icon name="geo-alt-fill" className="me-2" />
+                  <span>{data.location}</span>
+                </div>
+              )}
+              {data.website && (
+                <div className="d-flex align-items-center">
+                  <Icon name="house-door-fill" className="me-2" />
+                  <a
+                    className="link-secondary"
+                    href={
+                      data.website?.includes('http')
+                        ? data.website
+                        : `http://${data.website}`
+                    }>
+                    {
+                      data?.website
+                        .replace(/(http|https):\/\//, '')
+                        .split('/')?.[0]
+                    }
+                  </a>
+                </div>
+              )}
+            </>
+          ) : null}
+          {ucBranding.map((b, i, a) => {
+            if (!b.label) {
+              return null;
+            }
+            return (
+              <div
+                key={b.name}
+                className={classnames('d-flex', 'align-items-center', {
+                  'me-3': i < a.length - 1,
+                })}>
+                {b.icon ? <SvgIcon base64={b.icon} /> : null}
+                {b.url ? (
+                  <a className="link-secondary" href={b.url}>
+                    {b.label}
+                  </a>
+                ) : (
+                  <span>{b.label}</span>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

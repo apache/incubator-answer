@@ -3,12 +3,15 @@ package siteinfo
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
@@ -23,19 +26,24 @@ type SiteInfoService struct {
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 	emailService          *export.EmailService
 	tagCommonService      *tagcommon.TagCommonService
+	configRepo            config.ConfigRepo
 }
 
 func NewSiteInfoService(
 	siteInfoRepo siteinfo_common.SiteInfoRepo,
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 	emailService *export.EmailService,
-	tagCommonService *tagcommon.TagCommonService) *SiteInfoService {
-
-	resp, err := siteInfoCommonService.GetSiteInterface(context.Background())
-	if err != nil {
-		log.Error(err)
-	} else {
-		constant.DefaultAvatar = resp.DefaultAvatar
+	tagCommonService *tagcommon.TagCommonService,
+	configRepo config.ConfigRepo,
+) *SiteInfoService {
+	usersSiteInfo, _ := siteInfoCommonService.GetSiteUsers(context.Background())
+	if usersSiteInfo != nil {
+		constant.DefaultAvatar = usersSiteInfo.DefaultAvatar
+		constant.DefaultGravatarBaseURL = usersSiteInfo.GravatarBaseURL
+	}
+	generalSiteInfo, _ := siteInfoCommonService.GetSiteGeneral(context.Background())
+	if generalSiteInfo != nil {
+		constant.DefaultSiteURL = generalSiteInfo.SiteUrl
 	}
 
 	return &SiteInfoService{
@@ -43,6 +51,7 @@ func NewSiteInfoService(
 		siteInfoCommonService: siteInfoCommonService,
 		emailService:          emailService,
 		tagCommonService:      tagCommonService,
+		configRepo:            configRepo,
 	}
 }
 
@@ -59,6 +68,11 @@ func (s *SiteInfoService) GetSiteInterface(ctx context.Context) (resp *schema.Si
 // GetSiteBranding get site info branding
 func (s *SiteInfoService) GetSiteBranding(ctx context.Context) (resp *schema.SiteBrandingResp, err error) {
 	return s.siteInfoCommonService.GetSiteBranding(ctx)
+}
+
+// GetSiteUsers get site info about users
+func (s *SiteInfoService) GetSiteUsers(ctx context.Context) (resp *schema.SiteUsersResp, err error) {
+	return s.siteInfoCommonService.GetSiteUsers(ctx)
 }
 
 // GetSiteWrite get site info write
@@ -106,45 +120,32 @@ func (s *SiteInfoService) GetSiteTheme(ctx context.Context) (resp *schema.SiteTh
 
 func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGeneralReq) (err error) {
 	req.FormatSiteUrl()
-	var (
-		siteType = "general"
-		content  []byte
-	)
-	content, _ = json.Marshal(req)
-
-	data := entity.SiteInfo{
-		Type:    siteType,
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeGeneral,
 		Content: string(content),
+		Status:  1,
 	}
-
-	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
+	err = s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeGeneral, data)
+	if err == nil {
+		constant.DefaultSiteURL = req.SiteUrl
+	}
 	return
 }
 
 func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.SiteInterfaceReq) (err error) {
-	var (
-		siteType = "interface"
-		content  []byte
-	)
-
 	// check language
 	if !translator.CheckLanguageIsValid(req.Language) {
 		err = errors.BadRequest(reason.LangNotFound)
 		return
 	}
 
-	content, _ = json.Marshal(req)
-
+	content, _ := json.Marshal(req)
 	data := entity.SiteInfo{
-		Type:    siteType,
+		Type:    constant.SiteTypeInterface,
 		Content: string(content),
 	}
-
-	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
-	if err == nil {
-		constant.DefaultAvatar = req.DefaultAvatar
-	}
-	return
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeInterface, &data)
 }
 
 // SaveSiteBranding save site branding information
@@ -218,6 +219,22 @@ func (s *SiteInfoService) SaveSiteTheme(ctx context.Context, req *schema.SiteThe
 	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeTheme, data)
 }
 
+// SaveSiteUsers save site users
+func (s *SiteInfoService) SaveSiteUsers(ctx context.Context, req *schema.SiteUsersReq) (err error) {
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeUsers,
+		Content: string(content),
+		Status:  1,
+	}
+	err = s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeUsers, data)
+	if err == nil {
+		constant.DefaultAvatar = req.DefaultAvatar
+		constant.DefaultGravatarBaseURL = req.GravatarBaseURL
+	}
+	return err
+}
+
 // GetSMTPConfig get smtp config
 func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
 	resp *schema.GetSMTPConfigResp, err error,
@@ -253,8 +270,11 @@ func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.Upda
 	return
 }
 
-func (s *SiteInfoService) GetSeo(ctx context.Context) (resp *schema.SiteSeoResp, err error) {
-	resp = &schema.SiteSeoResp{}
+func (s *SiteInfoService) GetSeo(ctx context.Context) (resp *schema.SiteSeoReq, err error) {
+	resp = &schema.SiteSeoReq{}
+	if err = s.siteInfoCommonService.GetSiteInfoByType(ctx, constant.SiteTypeSeo, resp); err != nil {
+		return resp, err
+	}
 	loginConfig, err := s.GetSiteLogin(ctx)
 	if err != nil {
 		log.Error(err)
@@ -265,17 +285,6 @@ func (s *SiteInfoService) GetSeo(ctx context.Context) (resp *schema.SiteSeoResp,
 		resp.Robots = "User-agent: *\nDisallow: /"
 		return resp, nil
 	}
-
-	resp = &schema.SiteSeoResp{}
-	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeSeo)
-	if err != nil {
-		log.Error(err)
-		return resp, nil
-	}
-	if !exist {
-		return resp, nil
-	}
-	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 	return resp, nil
 }
 
@@ -299,6 +308,74 @@ func (s *SiteInfoService) SaveSeo(ctx context.Context, req schema.SiteSeoReq) (e
 		uid.ShortIDSwitch = true
 	} else {
 		uid.ShortIDSwitch = false
+	}
+	return
+}
+
+func (s *SiteInfoService) GetPrivilegesConfig(ctx context.Context) (resp *schema.GetPrivilegesConfigResp, err error) {
+	privilege := &schema.UpdatePrivilegesConfigReq{}
+	if err = s.siteInfoCommonService.GetSiteInfoByType(ctx, constant.SiteTypePrivileges, privilege); err != nil {
+		return nil, err
+	}
+	resp = &schema.GetPrivilegesConfigResp{
+		Options:       s.translatePrivilegeOptions(ctx),
+		SelectedLevel: schema.PrivilegeLevel3,
+	}
+	if privilege != nil && privilege.Level > 0 {
+		resp.SelectedLevel = privilege.Level
+	}
+	return resp, nil
+}
+
+func (s *SiteInfoService) translatePrivilegeOptions(ctx context.Context) (options []*schema.PrivilegeOption) {
+	la := handler.GetLangByCtx(ctx)
+	for _, option := range schema.DefaultPrivilegeOptions {
+		op := &schema.PrivilegeOption{
+			Level:     option.Level,
+			LevelDesc: translator.Tr(la, option.LevelDesc),
+		}
+		for _, privilege := range option.Privileges {
+			op.Privileges = append(op.Privileges, &constant.Privilege{
+				Key:   privilege.Key,
+				Label: translator.Tr(la, privilege.Label),
+				Value: privilege.Value,
+			})
+		}
+		options = append(options, op)
+	}
+	return
+}
+
+func (s *SiteInfoService) UpdatePrivilegesConfig(ctx context.Context, req *schema.UpdatePrivilegesConfigReq) (err error) {
+	var chooseOption *schema.PrivilegeOption
+	for _, option := range schema.DefaultPrivilegeOptions {
+		if option.Level == req.Level {
+			chooseOption = option
+			break
+		}
+	}
+	if chooseOption == nil {
+		return nil
+	}
+
+	// update site info that user choose which privilege level
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypePrivileges,
+		Content: string(content),
+		Status:  1,
+	}
+	err = s.siteInfoRepo.SaveByType(ctx, constant.SiteTypePrivileges, data)
+	if err != nil {
+		return err
+	}
+
+	// update privilege in config
+	for _, privilege := range chooseOption.Privileges {
+		err = s.configRepo.SetConfig(privilege.Key, fmt.Sprintf("%d", privilege.Value))
+		if err != nil {
+			return err
+		}
 	}
 	return
 }

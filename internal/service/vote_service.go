@@ -63,12 +63,12 @@ func NewVoteService(
 }
 
 // VoteUp vote up
-func (as *VoteService) VoteUp(ctx context.Context, dto *schema.VoteDTO) (voteResp *schema.VoteResp, err error) {
+func (vs *VoteService) VoteUp(ctx context.Context, dto *schema.VoteDTO) (voteResp *schema.VoteResp, err error) {
 	voteResp = &schema.VoteResp{}
 
 	var objectUserID string
 
-	objectUserID, err = as.GetObjectUserID(ctx, dto.ObjectID)
+	objectUserID, err = vs.GetObjectUserID(ctx, dto.ObjectID)
 	if err != nil {
 		return
 	}
@@ -80,19 +80,19 @@ func (as *VoteService) VoteUp(ctx context.Context, dto *schema.VoteDTO) (voteRes
 	}
 
 	if dto.IsCancel {
-		return as.voteRepo.VoteUpCancel(ctx, dto.ObjectID, dto.UserID, objectUserID)
+		return vs.voteRepo.VoteUpCancel(ctx, dto.ObjectID, dto.UserID, objectUserID)
 	} else {
-		return as.voteRepo.VoteUp(ctx, dto.ObjectID, dto.UserID, objectUserID)
+		return vs.voteRepo.VoteUp(ctx, dto.ObjectID, dto.UserID, objectUserID)
 	}
 }
 
 // VoteDown vote down
-func (as *VoteService) VoteDown(ctx context.Context, dto *schema.VoteDTO) (voteResp *schema.VoteResp, err error) {
+func (vs *VoteService) VoteDown(ctx context.Context, dto *schema.VoteDTO) (voteResp *schema.VoteResp, err error) {
 	voteResp = &schema.VoteResp{}
 
 	var objectUserID string
 
-	objectUserID, err = as.GetObjectUserID(ctx, dto.ObjectID)
+	objectUserID, err = vs.GetObjectUserID(ctx, dto.ObjectID)
 	if err != nil {
 		return
 	}
@@ -104,9 +104,9 @@ func (as *VoteService) VoteDown(ctx context.Context, dto *schema.VoteDTO) (voteR
 	}
 
 	if dto.IsCancel {
-		return as.voteRepo.VoteDownCancel(ctx, dto.ObjectID, dto.UserID, objectUserID)
+		return vs.voteRepo.VoteDownCancel(ctx, dto.ObjectID, dto.UserID, objectUserID)
 	} else {
-		return as.voteRepo.VoteDown(ctx, dto.ObjectID, dto.UserID, objectUserID)
+		return vs.voteRepo.VoteDown(ctx, dto.ObjectID, dto.UserID, objectUserID)
 	}
 }
 

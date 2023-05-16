@@ -6,6 +6,7 @@ import (
 	"net/mail"
 	"net/url"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
@@ -42,9 +43,8 @@ func (r *SiteGeneralReq) FormatSiteUrl() {
 
 // SiteInterfaceReq site interface request
 type SiteInterfaceReq struct {
-	Language      string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
-	TimeZone      string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
-	DefaultAvatar string `validate:"required,oneof=system gravatar" form:"default_avatar" json:"default_avatar"`
+	Language string `validate:"required,gt=1,lte=128" form:"language" json:"language"`
+	TimeZone string `validate:"required,gt=1,lte=128" form:"time_zone" json:"time_zone"`
 }
 
 // SiteBrandingReq site branding request
@@ -92,18 +92,33 @@ type GetSiteLegalInfoResp struct {
 	PrivacyPolicyParsedText    string `json:"privacy_policy_parsed_text,omitempty"`
 }
 
+// SiteUsersReq site users config request
+type SiteUsersReq struct {
+	DefaultAvatar          string `validate:"required,oneof=system gravatar" json:"default_avatar"`
+	GravatarBaseURL        string `json:"gravatar_base_url"`
+	AllowUpdateDisplayName bool   `json:"allow_update_display_name"`
+	AllowUpdateUsername    bool   `json:"allow_update_username"`
+	AllowUpdateAvatar      bool   `json:"allow_update_avatar"`
+	AllowUpdateBio         bool   `json:"allow_update_bio"`
+	AllowUpdateWebsite     bool   `json:"allow_update_website"`
+	AllowUpdateLocation    bool   `json:"allow_update_location"`
+}
+
 // SiteLoginReq site login request
 type SiteLoginReq struct {
-	AllowNewRegistrations bool `json:"allow_new_registrations"`
-	LoginRequired         bool `json:"login_required"`
+	AllowNewRegistrations   bool     `json:"allow_new_registrations"`
+	AllowEmailRegistrations bool     `json:"allow_email_registrations"`
+	LoginRequired           bool     `json:"login_required"`
+	AllowEmailDomains       []string `json:"allow_email_domains"`
 }
 
 // SiteCustomCssHTMLReq site custom css html
 type SiteCustomCssHTMLReq struct {
-	CustomHead   string `validate:"omitempty,gt=0,lte=65536" json:"custom_head"`
-	CustomCss    string `validate:"omitempty,gt=0,lte=65536" json:"custom_css"`
-	CustomHeader string `validate:"omitempty,gt=0,lte=65536" json:"custom_header"`
-	CustomFooter string `validate:"omitempty,gt=0,lte=65536" json:"custom_footer"`
+	CustomHead    string `validate:"omitempty,gt=0,lte=65536" json:"custom_head"`
+	CustomCss     string `validate:"omitempty,gt=0,lte=65536" json:"custom_css"`
+	CustomHeader  string `validate:"omitempty,gt=0,lte=65536" json:"custom_header"`
+	CustomFooter  string `validate:"omitempty,gt=0,lte=65536" json:"custom_footer"`
+	CustomSideBar string `validate:"omitempty,gt=0,lte=65536" json:"custom_sidebar"`
 }
 
 // SiteThemeReq site theme config
@@ -126,6 +141,9 @@ type SiteLoginResp SiteLoginReq
 
 // SiteCustomCssHTMLResp site custom css html response
 type SiteCustomCssHTMLResp SiteCustomCssHTMLReq
+
+// SiteUsersResp site users response
+type SiteUsersResp SiteUsersReq
 
 // SiteThemeResp site theme response
 type SiteThemeResp struct {
@@ -169,6 +187,7 @@ type SiteInfoResp struct {
 	Theme         *SiteThemeResp         `json:"theme"`
 	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
 	SiteSeo       *SiteSeoReq            `json:"site_seo"`
+	SiteUsers     *SiteUsersResp         `json:"site_users"`
 	Version       string                 `json:"version"`
 	Revision      string                 `json:"revision"`
 }
@@ -234,4 +253,86 @@ type GetManifestJsonResp struct {
 	Display         string            `json:"display"`
 	ThemeColor      string            `json:"theme_color"`
 	BackgroundColor string            `json:"background_color"`
+}
+
+const (
+	// PrivilegeLevel1 low
+	PrivilegeLevel1 PrivilegeLevel = 1
+	// PrivilegeLevel2 medium
+	PrivilegeLevel2 PrivilegeLevel = 2
+	// PrivilegeLevel3 high
+	PrivilegeLevel3 PrivilegeLevel = 3
+)
+
+type PrivilegeLevel int
+
+// GetPrivilegesConfigResp get privileges config response
+type GetPrivilegesConfigResp struct {
+	Options       []*PrivilegeOption `json:"options"`
+	SelectedLevel PrivilegeLevel     `json:"selected_level"`
+}
+
+// PrivilegeOption privilege option
+type PrivilegeOption struct {
+	Level      PrivilegeLevel        `json:"level"`
+	LevelDesc  string                `json:"level_desc"`
+	Privileges []*constant.Privilege `json:"privileges"`
+}
+
+// UpdatePrivilegesConfigReq update privileges config request
+type UpdatePrivilegesConfigReq struct {
+	Level PrivilegeLevel `validate:"required,min=1,max=3" json:"level"`
+}
+
+var (
+	DefaultPrivilegeOptions      []*PrivilegeOption
+	privilegeOptionsLevelMapping = map[string][]int{
+		constant.RankQuestionAddKey:               {1, 1, 1},
+		constant.RankAnswerAddKey:                 {1, 1, 1},
+		constant.RankCommentAddKey:                {1, 1, 1},
+		constant.RankReportAddKey:                 {1, 1, 1},
+		constant.RankCommentVoteUpKey:             {1, 1, 1},
+		constant.RankLinkUrlLimitKey:              {1, 10, 10},
+		constant.RankQuestionVoteUpKey:            {1, 1, 15},
+		constant.RankAnswerVoteUpKey:              {1, 1, 15},
+		constant.RankQuestionVoteDownKey:          {125, 125, 125},
+		constant.RankAnswerVoteDownKey:            {125, 125, 125},
+		constant.RankTagAddKey:                    {1, 750, 1500},
+		constant.RankTagEditKey:                   {1, 50, 100},
+		constant.RankQuestionEditKey:              {1, 100, 200},
+		constant.RankAnswerEditKey:                {1, 100, 200},
+		constant.RankQuestionEditWithoutReviewKey: {1, 1000, 2000},
+		constant.RankAnswerEditWithoutReviewKey:   {1, 1000, 2000},
+		constant.RankQuestionAuditKey:             {1, 1000, 2000},
+		constant.RankAnswerAuditKey:               {1, 1000, 2000},
+		constant.RankTagAuditKey:                  {1, 2500, 5000},
+		constant.RankTagEditWithoutReviewKey:      {1, 10000, 20000},
+		constant.RankTagSynonymKey:                {1, 10000, 20000},
+	}
+)
+
+func init() {
+	DefaultPrivilegeOptions = append(DefaultPrivilegeOptions, &PrivilegeOption{
+		Level:     PrivilegeLevel1,
+		LevelDesc: reason.PrivilegeLevel1Desc,
+	}, &PrivilegeOption{
+		Level:     PrivilegeLevel2,
+		LevelDesc: reason.PrivilegeLevel2Desc,
+	}, &PrivilegeOption{
+		Level:     PrivilegeLevel3,
+		LevelDesc: reason.PrivilegeLevel3Desc,
+	})
+
+	for _, option := range DefaultPrivilegeOptions {
+		for _, privilege := range constant.RankAllPrivileges {
+			if len(privilegeOptionsLevelMapping[privilege.Key]) == 0 {
+				continue
+			}
+			option.Privileges = append(option.Privileges, &constant.Privilege{
+				Label: privilege.Label,
+				Value: privilegeOptionsLevelMapping[privilege.Key][option.Level-1],
+				Key:   privilege.Key,
+			})
+		}
+	}
 }

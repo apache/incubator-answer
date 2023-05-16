@@ -15,7 +15,6 @@ import {
   HttpErrorContent,
 } from '@/components';
 import { LoginToContinueModal } from '@/components/Modal';
-import { useImgViewer } from '@/hooks';
 
 const Layout: FC = () => {
   const location = useLocation();
@@ -24,7 +23,6 @@ const Layout: FC = () => {
     toastClear();
   };
   const { code: httpStatusCode, reset: httpStatusReset } = errorCodeStore();
-  const imgViewer = useImgViewer();
   const { show: showLoginToContinueModal } = loginToContinueStore();
 
   useEffect(() => {
@@ -40,9 +38,7 @@ const Layout: FC = () => {
         }}>
         <Header />
         {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
-        <div
-          className="position-relative page-wrap"
-          onClick={imgViewer.checkClickForImgView}>
+        <div className="position-relative page-wrap">
           {httpStatusCode ? (
             <HttpErrorContent httpCode={httpStatusCode} />
           ) : (

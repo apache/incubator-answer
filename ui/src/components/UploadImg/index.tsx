@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import classnames from 'classnames';
+
 import { uploadImage } from '@/services';
 import * as Type from '@/common/interface';
 
 interface IProps {
   type: Type.UploadType;
-  className?: string;
+  className?: classnames.Argument;
   children?: React.ReactNode;
   acceptType?: string;
+  disabled?: boolean;
   uploadCallback: (img: string) => void;
 }
 
@@ -18,6 +21,7 @@ const Index: React.FC<IProps> = ({
   children,
   acceptType = '',
   className,
+  disabled = false,
 }) => {
   const { t } = useTranslation();
   const [status, setStatus] = useState(false);
@@ -47,11 +51,15 @@ const Index: React.FC<IProps> = ({
   };
 
   return (
-    <label className={`btn btn-outline-secondary uploadBtn ${className}`}>
+    <label
+      className={classnames('btn btn-outline-secondary', className, {
+        disabled: !!disabled,
+      })}>
       {children || (status ? t('upload_img.loading') : t('upload_img.name'))}
       <input
         type="file"
         className="d-none"
+        disabled={disabled}
         accept={`image/jpeg,image/jpg,image/png,image/webp${acceptType}`}
         onChange={onChange}
       />
