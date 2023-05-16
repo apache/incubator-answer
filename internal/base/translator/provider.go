@@ -131,3 +131,15 @@ func Tr(lang i18n.Language, data string) string {
 	}
 	return translation
 }
+
+// TrWithData translate key with template data, it will replace the template data {{ .PlaceHolder }} in the translation.
+func TrWithData(lang i18n.Language, key string, templateData any) string {
+	if GlobalTrans == nil {
+		return key
+	}
+	translation := GlobalTrans.TrWithData(lang, key, templateData)
+	if translation == key {
+		return GlobalTrans.TrWithData(i18n.DefaultLanguage, key, templateData)
+	}
+	return translation
+}

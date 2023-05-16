@@ -30,7 +30,6 @@ import (
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 	"golang.org/x/net/context"
 )
@@ -130,22 +129,6 @@ func (qs *QuestionService) ReopenQuestion(ctx context.Context, req *schema.Reope
 		ActivityTypeKey:  constant.ActQuestionReopened,
 	})
 	return nil
-}
-
-// CloseMsgList list close question condition
-func (qs *QuestionService) CloseMsgList(ctx context.Context, lang i18n.Language) (
-	resp []*schema.GetCloseTypeResp, err error,
-) {
-	resp = make([]*schema.GetCloseTypeResp, 0)
-	err = json.Unmarshal([]byte(constant.QuestionCloseJSON), &resp)
-	if err != nil {
-		return nil, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
-	}
-	for _, t := range resp {
-		t.Name = translator.Tr(lang, t.Name)
-		t.Description = translator.Tr(lang, t.Description)
-	}
-	return resp, err
 }
 
 func (qs *QuestionService) AddQuestionCheckTags(ctx context.Context, Tags []*entity.Tag) ([]string, error) {
