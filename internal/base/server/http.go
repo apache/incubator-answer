@@ -7,6 +7,7 @@ import (
 	brotli "github.com/anargu/gin-brotli"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/router"
+	"github.com/answerdev/answer/plugin"
 	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 )
@@ -20,6 +21,7 @@ func NewHTTPServer(debug bool,
 	authUserMiddleware *middleware.AuthUserMiddleware,
 	avatarMiddleware *middleware.AvatarMiddleware,
 	templateRouter *router.TemplateRouter,
+	pluginAPIRouter *router.PluginAPIRouter,
 ) *gin.Engine {
 
 	if debug {
@@ -34,7 +36,7 @@ func NewHTTPServer(debug bool,
 	html, _ := fs.Sub(ui.Template, "template")
 	htmlTemplate := template.Must(template.New("").Funcs(funcMap).ParseFS(html, "*"))
 	r.SetHTMLTemplate(htmlTemplate)
-
+	r.Use(middleware.HeadersByRequestURI())
 	viewRouter.Register(r)
 
 	rootGroup := r.Group("")
@@ -62,5 +64,17 @@ func NewHTTPServer(debug bool,
 	answerRouter.RegisterAnswerAdminAPIRouter(adminauthV1)
 
 	templateRouter.RegisterTemplateRouter(rootGroup)
+
+	// plugin routes
+	pluginAPIRouter.RegisterUnAuthConnectorRouter(mustUnAuthV1)
+	pluginAPIRouter.RegisterAuthUserConnectorRouter(authV1)
+	pluginAPIRouter.RegisterAuthAdminConnectorRouter(adminauthV1)
+
+	_ = plugin.CallAgent(func(agent plugin.Agent) error {
+		agent.RegisterUnAuthRouter(mustUnAuthV1)
+		agent.RegisterAuthUserRouter(authV1)
+		agent.RegisterAuthAdminRouter(adminauthV1)
+		return nil
+	})
 	return r
 }

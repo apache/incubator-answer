@@ -1,7 +1,7 @@
 import { FC } from 'react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, Link } from 'react-router-dom';
 
 import { usePageTags } from '@/hooks';
 import { Pagination, FormatTime, Empty } from '@/components';
@@ -47,14 +47,16 @@ const Personal: FC = () => {
     },
     tabName,
   );
+  const { count = 0, list = [] } = listData?.[tabName] || {};
+
   let pageTitle = '';
   if (userInfo?.username) {
     pageTitle = `${userInfo?.display_name} (${userInfo?.username})`;
   }
-  const { count = 0, list = [] } = listData?.[tabName] || {};
   usePageTags({
     title: pageTitle,
   });
+
   return (
     <Container className="pt-4 mt-2 mb-5">
       <Row className="justify-content-center">
@@ -71,12 +73,11 @@ const Personal: FC = () => {
           className="d-flex justify-content-start justify-content-md-end">
           {isSelf && (
             <div className="mb-3">
-              <Button
-                variant="outline-secondary"
-                href="/users/settings/profile"
-                className="btn">
+              <Link
+                className="btn btn-outline-secondary"
+                to="/users/settings/profile">
                 {t('edit_profile')}
-              </Button>
+              </Link>
             </div>
           )}
         </Col>

@@ -273,7 +273,7 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 }
 
 // GetQuestionPage query question page
-func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string) (
+func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string, inDays int) (
 	questionList []*entity.Question, total int64, err error) {
 	questionList = make([]*entity.Question, 0)
 
@@ -288,6 +288,9 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 		session.And("question.user_id = ?", userID)
 	} else {
 		session.And("question.show = ?", entity.QuestionShow)
+	}
+	if inDays > 0 {
+		session.And("question.created_at > ?", time.Now().AddDate(0, 0, -inDays))
 	}
 
 	switch orderCond {

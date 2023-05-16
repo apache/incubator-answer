@@ -1,29 +1,68 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useMatch } from 'react-router-dom';
+
+import { cloneDeep } from 'lodash';
 
 import { usePageTags } from '@/hooks';
 import { AccordionNav } from '@/components';
 import { ADMIN_NAV_MENUS } from '@/common/constants';
+import { useQueryPlugins } from '@/services';
+import { interfaceStore } from '@/stores';
 
 import './index.scss';
 
-const formPaths = [
-  'general',
-  'smtp',
-  'interface',
-  'branding',
-  'legal',
-  'write',
-  'seo',
-  'themes',
-  'css-html',
+const g10Paths = [
+  'dashboard',
+  'questions',
+  'answers',
+  'users',
+  'flags',
+  'installed-plugins',
 ];
-
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'page_title' });
-  const { pathname } = useLocation();
+  const pathMatch = useMatch('/admin/:path');
+  const curPath = pathMatch?.params.path || 'dashboard';
+
+  const interfaceLang = interfaceStore((_) => _.interface.language);
+  const { data: configurablePlugins, mutate: updateConfigurablePlugins } =
+    useQueryPlugins({
+      status: 'active',
+      have_config: true,
+    });
+
+  const menus = cloneDeep(ADMIN_NAV_MENUS);
+  if (configurablePlugins && configurablePlugins.length > 0) {
+    menus.forEach((item) => {
+      if (item.name === 'plugins' && item.children) {
+        item.children = [
+          ...item.children,
+          ...configurablePlugins.map((plugin) => ({
+            name: plugin.slug_name,
+            displayName: plugin.name,
+          })),
+        ];
+      }
+    });
+  }
+
+  const observePlugins = (evt) => {
+    if (evt.data.msgType === 'refreshConfigurablePlugins') {
+      updateConfigurablePlugins();
+    }
+  };
+  useEffect(() => {
+    window.addEventListener('message', observePlugins);
+    return () => {
+      window.removeEventListener('message', observePlugins);
+    };
+  }, []);
+  useEffect(() => {
+    updateConfigurablePlugins();
+  }, [interfaceLang]);
+
   usePageTags({
     title: t('admin'),
   });
@@ -39,9 +78,9 @@ const Index: FC = () => {
       <Container className="admin-container">
         <Row>
           <Col lg={2}>
-            <AccordionNav menus={ADMIN_NAV_MENUS} path="/admin/" />
+            <AccordionNav menus={menus} path="/admin/" />
           </Col>
-          <Col lg={formPaths.find((v) => pathname.includes(v)) ? 6 : 10}>
+          <Col lg={g10Paths.find((v) => curPath === v) ? 10 : 6}>
             <Outlet />
           </Col>
         </Row>

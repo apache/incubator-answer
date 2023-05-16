@@ -3,18 +3,21 @@ package schema
 import "encoding/json"
 
 const (
-	AccountActivationSourceType SourceType = "account-activation"
-	PasswordResetSourceType     SourceType = "password-reset"
-	ConfirmNewEmailSourceType   SourceType = "password-reset"
-	UnsubscribeSourceType       SourceType = "unsubscribe"
+	AccountActivationSourceType EmailSourceType = "account-activation"
+	PasswordResetSourceType     EmailSourceType = "password-reset"
+	ConfirmNewEmailSourceType   EmailSourceType = "password-reset"
+	UnsubscribeSourceType       EmailSourceType = "unsubscribe"
+	BindingSourceType           EmailSourceType = "binding"
 )
 
-type SourceType string
+type EmailSourceType string
 
 type EmailCodeContent struct {
-	SourceType SourceType `json:"source_type"`
-	Email      string     `json:"e_mail"`
-	UserID     string     `json:"user_id"`
+	SourceType EmailSourceType `json:"source_type"`
+	Email      string          `json:"e_mail"`
+	UserID     string          `json:"user_id"`
+	// Used for third-party login account binding
+	BindingKey string `json:"binding_key"`
 }
 
 func (r *EmailCodeContent) ToJSONString() string {

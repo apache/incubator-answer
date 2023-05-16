@@ -1,7 +1,7 @@
 import { FC, memo, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { JSONSchema, SchemaForm, UISchema } from '@/components';
+import { JSONSchema, SchemaForm, UISchema, ImgViewer } from '@/components';
 import { FormDataType } from '@/common/interface';
 import { brandSetting, getBrandSetting } from '@/services';
 import { brandingStore } from '@/stores';
@@ -142,7 +142,7 @@ const Index: FC = () => {
   }, []);
 
   return (
-    <div>
+    <ImgViewer>
       <h3 className="mb-4">{t('page_title')}</h3>
       <SchemaForm
         schema={schema}
@@ -151,7 +151,7 @@ const Index: FC = () => {
         onSubmit={onSubmit}
         onChange={handleOnChange}
       />
-    </div>
+    </ImgViewer>
   );
 };
 

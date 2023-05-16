@@ -18,12 +18,12 @@ function MenuNode({
 }) {
   const { t } = useTranslation('translation', { keyPrefix: 'nav_menus' });
   const isLeaf = !menu.children.length;
-  const href = isLeaf ? `${path}${menu.name}` : '#';
+  const href = isLeaf ? `${path}${menu.path}` : '#';
 
   return (
-    <Nav.Item key={menu.name}>
+    <Nav.Item key={menu.path} className="w-100">
       <Nav.Link
-        eventKey={menu.name}
+        eventKey={menu.path}
         as={isLeaf ? 'a' : 'button'}
         onClick={(evt) => {
           callback(evt, menu, href, isLeaf);
@@ -31,9 +31,11 @@ function MenuNode({
         href={href}
         className={classNames(
           'text-nowrap d-flex flex-nowrap align-items-center w-100',
-          { expanding, 'link-dark': activeKey !== menu.name },
+          { expanding, 'link-dark': activeKey !== menu.path },
         )}>
-        <span className="me-auto">{t(menu.name)}</span>
+        <span className="me-auto text-truncate">
+          {menu.displayName ? menu.displayName : t(menu.name)}
+        </span>
         {menu.badgeContent ? (
           <span className="badge text-bg-dark">{menu.badgeContent}</span>
         ) : null}
@@ -42,7 +44,7 @@ function MenuNode({
         )}
       </Nav.Link>
       {menu.children.length ? (
-        <Accordion.Collapse eventKey={menu.name} className="ms-3">
+        <Accordion.Collapse eventKey={menu.path} className="ms-3">
           <>
             {menu.children.map((leaf) => {
               return (
@@ -51,7 +53,7 @@ function MenuNode({
                   callback={callback}
                   activeKey={activeKey}
                   path={path}
-                  key={leaf.name}
+                  key={leaf.path}
                 />
               );
             })}
@@ -71,17 +73,24 @@ const AccordionNav: FC<AccordionProps> = ({ menus = [], path = '/' }) => {
   const pathMatch = useMatch(`${path}*`);
   // auto set menu fields
   menus.forEach((m) => {
+    if (!m.path) {
+      m.path = m.name;
+    }
     if (!Array.isArray(m.children)) {
       m.children = [];
     }
     m.children.forEach((sm) => {
+      if (!sm.path) {
+        sm.path = sm.name;
+      }
       if (!Array.isArray(sm.children)) {
         sm.children = [];
       }
     });
   });
+
   const splat = pathMatch && pathMatch.params['*'];
-  let activeKey = menus[0].name;
+  let activeKey = menus[0].path;
   if (splat) {
     activeKey = splat;
   }
@@ -90,10 +99,10 @@ const AccordionNav: FC<AccordionProps> = ({ menus = [], path = '/' }) => {
     menus.forEach((li) => {
       if (li.children.length) {
         const matchedChild = li.children.find((el) => {
-          return el.name === activeKey;
+          return el.path === activeKey;
         });
         if (matchedChild) {
-          openKey = li.name;
+          openKey = li.path;
         }
       }
     });
@@ -109,12 +118,12 @@ const AccordionNav: FC<AccordionProps> = ({ menus = [], path = '/' }) => {
         navigate(href);
       }
     } else {
-      setOpenKey(openKey === menu.name ? '' : menu.name);
+      setOpenKey(openKey === menu.path ? '' : menu.path);
     }
   };
   useEffect(() => {
     setOpenKey(getOpenKey());
-  }, [activeKey]);
+  }, [activeKey, menus]);
   return (
     <Accordion activeKey={openKey} flush>
       <Nav variant="pills" className="flex-column" activeKey={activeKey}>
@@ -125,8 +134,8 @@ const AccordionNav: FC<AccordionProps> = ({ menus = [], path = '/' }) => {
               path={path}
               callback={menuClick}
               activeKey={activeKey}
-              expanding={openKey === li.name}
-              key={li.name}
+              expanding={openKey === li.path}
+              key={li.path}
             />
           );
         })}

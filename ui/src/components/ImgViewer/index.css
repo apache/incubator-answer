@@ -1,0 +1,7 @@
+.img-viewer .cursor-zoom-out {
+  cursor: zoom-out !important;
+}
+
+.img-viewer img:not(a img, img.broken) {
+  cursor: zoom-in;
+}

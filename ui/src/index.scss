@@ -102,6 +102,8 @@ a {
 }
 #root > footer {
   margin-top: auto !important;
+  padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 .bg-f5 {
@@ -118,14 +120,6 @@ a {
 
 .pointer:hover {
   cursor: pointer;
-}
-
-.cursor-zoom-out {
-  cursor: zoom-out !important;
-}
-
-img:not(a img, img.broken) {
-  cursor: zoom-in;
 }
 
 .resize-none {
@@ -314,4 +308,14 @@ img:not(a img, img.broken) {
 }
 .bg-fade-out {
   animation: bg-fade-out 2s ease 0.3s;
+}
+
+
+.btnSvg, .btnSvg:hover {
+  display: inline-block;
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  vertical-align: -0.125em;
 }

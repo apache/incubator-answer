@@ -3,9 +3,12 @@ package controller_admin
 import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
+	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/user_admin"
+	"github.com/answerdev/answer/plugin"
 	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/pacman/errors"
 )
 
 // UserAdminController user controller
@@ -29,6 +32,10 @@ func NewUserAdminController(userService *user_admin.UserAdminService) *UserAdmin
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/user/status [put]
 func (uc *UserAdminController) UpdateUserStatus(ctx *gin.Context) {
+	if u, ok := plugin.GetUserCenter(); ok && u.Description().UserStatusAgentEnabled {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.ForbiddenError), nil)
+		return
+	}
 	req := &schema.UpdateUserStatusReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return

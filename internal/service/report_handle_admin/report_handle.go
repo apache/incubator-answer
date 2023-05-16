@@ -66,7 +66,7 @@ func (rh *ReportHandle) HandleObject(ctx context.Context, reported *entity.Repor
 		switch req.FlaggedType {
 		case reasonDelete:
 			err = rh.commentRepo.RemoveComment(ctx, objectID)
-			rh.sendNotification(ctx, reportedUserID, objectID, constant.YourCommentWasDeleted)
+			rh.sendNotification(ctx, reportedUserID, objectID, constant.NotificationYourCommentWasDeleted)
 		}
 	}
 	return

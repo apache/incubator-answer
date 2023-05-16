@@ -7,9 +7,14 @@ import (
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/config"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/converter"
+	"github.com/answerdev/answer/plugin"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
+	"xorm.io/xorm"
 )
 
 // userRepo user repository
@@ -28,10 +33,21 @@ func NewUserRepo(data *data.Data, configRepo config.ConfigRepo) usercommon.UserR
 
 // AddUser add user
 func (ur *userRepo) AddUser(ctx context.Context, user *entity.User) (err error) {
-	_, err = ur.data.DB.Insert(user)
-	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
+	_, err = ur.data.DB.Transaction(func(session *xorm.Session) (interface{}, error) {
+		userInfo := &entity.User{}
+		exist, err := session.Where("username = ?", user.Username).Get(userInfo)
+		if err != nil {
+			return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		}
+		if exist {
+			return nil, errors.InternalServer(reason.UsernameDuplicate)
+		}
+		_, err = session.Insert(user)
+		if err != nil {
+			return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		}
+		return nil, nil
+	})
 	return
 }
 
@@ -145,6 +161,11 @@ func (ur *userRepo) GetByUserID(ctx context.Context, userID string) (userInfo *e
 	exist, err = ur.data.DB.Where("id = ?", userID).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return
+	}
+	err = tryToDecorateUserInfoFromUserCenter(ctx, ur.data, userInfo)
+	if err != nil {
+		return nil, false, err
 	}
 	return
 }
@@ -155,6 +176,7 @@ func (ur *userRepo) BatchGetByID(ctx context.Context, ids []string) ([]*entity.U
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	tryToDecorateUserListFromUserCenter(ctx, ur.data, list)
 	return list, nil
 }
 
@@ -164,6 +186,11 @@ func (ur *userRepo) GetByUsername(ctx context.Context, username string) (userInf
 	exist, err = ur.data.DB.Where("username = ?", username).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return
+	}
+	err = tryToDecorateUserInfoFromUserCenter(ctx, ur.data, userInfo)
+	if err != nil {
+		return nil, false, err
 	}
 	return
 }
@@ -179,11 +206,121 @@ func (ur *userRepo) GetByEmail(ctx context.Context, email string) (userInfo *ent
 	return
 }
 
-func (vr *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
+func (ur *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
 	list := make([]*entity.User, 0)
-	count, err = vr.data.DB.Where("mail_status =?", entity.EmailStatusAvailable).And("status =?", entity.UserStatusAvailable).FindAndCount(&list)
+	count, err = ur.data.DB.Where("mail_status =?", entity.EmailStatusAvailable).And("status =?", entity.UserStatusAvailable).FindAndCount(&list)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
+}
+
+func tryToDecorateUserInfoFromUserCenter(ctx context.Context, data *data.Data, original *entity.User) (err error) {
+	if original == nil {
+		return nil
+	}
+	uc, ok := plugin.GetUserCenter()
+	if !ok {
+		return nil
+	}
+
+	userInfo := &entity.UserExternalLogin{}
+	session := data.DB.Where("user_id = ?", original.ID)
+	session.Where("provider = ?", uc.Info().SlugName)
+	exist, err := session.Get(userInfo)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !exist {
+		return nil
+	}
+
+	userCenterBasicUserInfo, err := uc.UserInfo(userInfo.ExternalID)
+	if err != nil {
+		log.Error(err)
+		return errors.BadRequest(reason.UserNotFound).WithError(err).WithStack()
+	}
+
+	// In general, usernames should be guaranteed unique by the User Center plugin, so there are no inconsistencies.
+	if original.Username != userCenterBasicUserInfo.Username {
+		log.Warnf("user %s username is inconsistent with user center", original.ID)
+	}
+	decorateByUserCenterUser(original, userCenterBasicUserInfo)
+	return nil
+}
+
+func tryToDecorateUserListFromUserCenter(ctx context.Context, data *data.Data, original []*entity.User) {
+	uc, ok := plugin.GetUserCenter()
+	if !ok {
+		return
+	}
+
+	ids := make([]string, 0)
+	originalUserIDMapping := make(map[string]*entity.User, 0)
+	for _, user := range original {
+		originalUserIDMapping[user.ID] = user
+		ids = append(ids, user.ID)
+	}
+
+	userExternalLoginList := make([]*entity.UserExternalLogin, 0)
+	session := data.DB.Where("provider = ?", uc.Info().SlugName)
+	session.In("user_id", ids)
+	err := session.Find(&userExternalLoginList)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+
+	userExternalIDs := make([]string, 0)
+	originalExternalIDMapping := make(map[string]*entity.User, 0)
+	for _, u := range userExternalLoginList {
+		originalExternalIDMapping[u.ExternalID] = originalUserIDMapping[u.UserID]
+		userExternalIDs = append(userExternalIDs, u.ExternalID)
+	}
+	if len(userExternalIDs) == 0 {
+		return
+	}
+
+	ucUsers, err := uc.UserList(userExternalIDs)
+	if err != nil {
+		log.Errorf("get user list from user center failed: %v, %v", err, userExternalIDs)
+		return
+	}
+
+	for _, ucUser := range ucUsers {
+		decorateByUserCenterUser(originalExternalIDMapping[ucUser.ExternalID], ucUser)
+	}
+}
+
+func decorateByUserCenterUser(original *entity.User, ucUser *plugin.UserCenterBasicUserInfo) {
+	if original == nil || ucUser == nil {
+		return
+	}
+	// In general, usernames should be guaranteed unique by the User Center plugin, so there are no inconsistencies.
+	if original.Username != ucUser.Username {
+		log.Warnf("user %s username is inconsistent with user center", original.ID)
+	}
+	if len(ucUser.DisplayName) > 0 {
+		original.DisplayName = ucUser.DisplayName
+	}
+	if len(ucUser.Email) > 0 {
+		original.EMail = ucUser.Email
+	}
+	if len(ucUser.Avatar) > 0 {
+		original.Avatar = schema.CustomAvatar(ucUser.Avatar).ToJsonString()
+	}
+	if len(ucUser.Mobile) > 0 {
+		original.Mobile = ucUser.Mobile
+	}
+	if len(ucUser.Bio) > 0 {
+		original.BioHTML = converter.Markdown2HTML(ucUser.Bio) + original.BioHTML
+	}
+
+	// If plugin enable rank agent, use rank from user center.
+	if plugin.RankAgentEnabled() {
+		original.Rank = ucUser.Rank
+	}
+	if ucUser.Status != plugin.UserStatusAvailable {
+		original.Status = int(ucUser.Status)
+	}
 }

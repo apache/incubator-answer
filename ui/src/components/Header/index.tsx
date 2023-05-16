@@ -20,7 +20,7 @@ import {
 
 import classnames from 'classnames';
 
-import { floppyNavigation } from '@/utils';
+import { userCenter } from '@/utils';
 import {
   loggedUserInfoStore,
   siteInfoStore,
@@ -46,6 +46,9 @@ const Header: FC = () => {
   const brandingInfo = brandingStore((state) => state.branding);
   const loginSetting = loginSettingStore((state) => state.login);
   const { data: redDot } = useQueryNotificationStatus();
+  /**
+   * Automatically append `tag` information when creating a question
+   */
   const tagMatch = useMatch('/tags/:slugName');
   let askUrl = '/questions/ask';
   if (tagMatch && tagMatch.params.slugName) {
@@ -68,19 +71,6 @@ const Header: FC = () => {
     await logout();
     clearUserStore();
     window.location.replace(window.location.href);
-  };
-  const onLoginClick = (evt) => {
-    if (location.pathname === '/users/login') {
-      evt.preventDefault();
-      window.location.reload();
-      return;
-    }
-    if (floppyNavigation.shouldProcessLinkClick(evt)) {
-      evt.preventDefault();
-      floppyNavigation.navigateToLogin((loginPath) => {
-        navigate(loginPath, { replace: true });
-      });
-    }
   };
 
   useEffect(() => {
@@ -119,17 +109,17 @@ const Header: FC = () => {
         />
 
         <div className="d-flex justify-content-between align-items-center nav-grow flex-nowrap">
-          <Navbar.Brand to="/" as={Link} className="lh-1 me-0 me-sm-3">
+          <Navbar.Brand to="/" as={Link} className="lh-1 me-0 me-sm-3 p-0">
             {brandingInfo.logo ? (
               <>
                 <img
-                  className="d-none d-lg-block logo rounded-1 me-0"
+                  className="d-none d-lg-block logo me-0"
                   src={brandingInfo.logo}
                   alt=""
                 />
 
                 <img
-                  className="lg-none logo rounded-1 me-0"
+                  className="lg-none logo me-0"
                   src={brandingInfo.mobile_logo || brandingInfo.logo}
                   alt=""
                 />
@@ -151,8 +141,7 @@ const Header: FC = () => {
                     'link-light': navbarStyle === 'theme-colored',
                     'link-primary': navbarStyle !== 'theme-colored',
                   })}
-                  onClick={onLoginClick}
-                  href="/users/login">
+                  href={userCenter.getLoginUrl()}>
                   {t('btns.login')}
                 </Button>
                 {loginSetting.allow_new_registrations && (
@@ -160,7 +149,7 @@ const Header: FC = () => {
                     variant={
                       navbarStyle === 'theme-colored' ? 'light' : 'primary'
                     }
-                    href="/users/register">
+                    href={userCenter.getSignUpUrl()}>
                     {t('btns.signup')}
                   </Button>
                 )}
@@ -239,8 +228,7 @@ const Header: FC = () => {
                     'link-light': navbarStyle === 'theme-colored',
                     'link-primary': navbarStyle !== 'theme-colored',
                   })}
-                  onClick={onLoginClick}
-                  href="/users/login">
+                  href={userCenter.getLoginUrl()}>
                   {t('btns.login')}
                 </Button>
                 {loginSetting.allow_new_registrations && (
@@ -248,7 +236,7 @@ const Header: FC = () => {
                     variant={
                       navbarStyle === 'theme-colored' ? 'light' : 'primary'
                     }
-                    href="/users/register">
+                    href={userCenter.getSignUpUrl()}>
                     {t('btns.signup')}
                   </Button>
                 )}

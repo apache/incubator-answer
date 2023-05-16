@@ -4,14 +4,12 @@ import (
 	"encoding/json"
 
 	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/gravatar"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/pacman/errors"
 )
 
 // UserVerifyEmailReq user verify email request
@@ -72,6 +70,8 @@ type GetUserResp struct {
 	RoleID int `json:"role_id"`
 	// user status
 	Status string `json:"status"`
+	// user have password
+	HavePassword bool `json:"have_password"`
 }
 
 func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
@@ -83,11 +83,13 @@ func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
 	if ok {
 		r.Status = statusShow
 	}
+	r.HavePassword = len(userInfo.Pass) > 0
 }
 
 type GetUserToSetShowResp struct {
 	*GetUserResp
-	Avatar *AvatarInfo `json:"avatar"`
+	Avatar       *AvatarInfo `json:"avatar"`
+	HavePassword bool        `json:"have_password"`
 }
 
 func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
@@ -108,6 +110,12 @@ func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
 	r.Avatar = avatarInfo
 }
 
+const (
+	AvatarTypeDefault  = "default"
+	AvatarTypeGravatar = "gravatar"
+	AvatarTypeCustom   = "custom"
+)
+
 func FormatAvatarInfo(avatarJson, email string) (res string) {
 	defer func() {
 		if constant.DefaultAvatar == "gravatar" && len(res) == 0 {
@@ -124,12 +132,19 @@ func FormatAvatarInfo(avatarJson, email string) (res string) {
 		return ""
 	}
 	switch avatarInfo.Type {
-	case "gravatar":
+	case AvatarTypeGravatar:
 		return avatarInfo.Gravatar
-	case "custom":
+	case AvatarTypeCustom:
 		return avatarInfo.Custom
 	default:
 		return ""
+	}
+}
+
+func CustomAvatar(url string) *AvatarInfo {
+	return &AvatarInfo{
+		Type:   AvatarTypeCustom,
+		Custom: url,
 	}
 }
 
@@ -260,14 +275,14 @@ func (u *UserRegisterReq) Check() (errFields []*validator.FormErrorField, err er
 	return nil, nil
 }
 
-// UserModifyPassWordRequest
-type UserModifyPassWordRequest struct {
-	UserID  string `json:"-" `        // user_id
-	OldPass string `json:"old_pass" ` // old password
-	Pass    string `json:"pass" `     // password
+type UserModifyPasswordReq struct {
+	OldPass string `validate:"omitempty,gte=8,lte=32" json:"old_pass"`
+	Pass    string `validate:"required,gte=8,lte=32" json:"pass"`
+	UserID      string `json:"-"`
+	AccessToken string `json:"-"`
 }
 
-func (u *UserModifyPassWordRequest) Check() (errFields []*validator.FormErrorField, err error) {
+func (u *UserModifyPasswordReq) Check() (errFields []*validator.FormErrorField, err error) {
 	// TODO i18n
 	err = checker.CheckPassword(8, 32, 0, u.Pass)
 	if err != nil {
@@ -283,7 +298,7 @@ func (u *UserModifyPassWordRequest) Check() (errFields []*validator.FormErrorFie
 
 type UpdateInfoRequest struct {
 	// display_name
-	DisplayName string `validate:"required,gt=0,lte=30" json:"display_name"`
+	DisplayName string `validate:"omitempty,gt=0,lte=30" json:"display_name"`
 	// username
 	Username string `validate:"omitempty,gt=3,lte=30" json:"username"`
 	// avatar
@@ -306,17 +321,12 @@ type AvatarInfo struct {
 	Custom   string `validate:"omitempty,gt=0,lte=200"  json:"custom"`
 }
 
+func (a *AvatarInfo) ToJsonString() string {
+	data, _ := json.Marshal(a)
+	return string(data)
+}
+
 func (req *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {
-	if len(req.Username) > 0 {
-		if checker.IsInvalidUsername(req.Username) {
-			errField := &validator.FormErrorField{
-				ErrorField: "username",
-				ErrorMsg:   reason.UsernameInvalid,
-			}
-			errFields = append(errFields, errField)
-			return errFields, errors.BadRequest(reason.UsernameInvalid)
-		}
-	}
 	req.BioHTML = converter.Markdown2BasicHTML(req.Bio)
 	return nil, nil
 }
@@ -399,6 +409,7 @@ type GetOtherUserInfoResp struct {
 type UserChangeEmailSendCodeReq struct {
 	UserVerifyEmailSendReq
 	Email  string `validate:"required,email,gt=0,lte=500" json:"e_mail"`
+	Pass   string `validate:"omitempty,gte=8,lte=32" json:"pass"`
 	UserID string `json:"-"`
 }
 

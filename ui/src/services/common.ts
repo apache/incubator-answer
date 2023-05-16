@@ -130,8 +130,8 @@ export const resendEmail = (params?: Type.ImgCodeReq) => {
  * @description get login userinfo
  * @returns {UserInfo}
  */
-export const getLoggedUserInfo = () => {
-  return request.get<Type.UserInfoRes>('/answer/api/v1/user/info');
+export const getLoggedUserInfo = (config = { passingError: false }) => {
+  return request.get<Type.UserInfoRes>('/answer/api/v1/user/info', config);
 };
 
 export const modifyPassword = (params: Type.ModifyPasswordReq) => {
@@ -249,7 +249,7 @@ export const closeQuestion = (params: {
   return request.put('/answer/api/v1/question/status', params);
 };
 
-export const changeEmail = (params: { e_mail: string }) => {
+export const changeEmail = (params: { e_mail: string; pass?: string }) => {
   return request.post('/answer/api/v1/user/email/change/code', params);
 };
 

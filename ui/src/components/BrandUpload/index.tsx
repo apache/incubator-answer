@@ -9,9 +9,16 @@ interface Props {
   value: string;
   onChange: (value: string) => void;
   acceptType?: string;
+  readOnly?: boolean;
 }
 
-const Index: FC<Props> = ({ type = 'post', value, onChange, acceptType }) => {
+const Index: FC<Props> = ({
+  type = 'post',
+  value,
+  onChange,
+  acceptType,
+  readOnly = false,
+}) => {
   const onUpload = (imgPath: string) => {
     onChange(imgPath);
   };
@@ -29,11 +36,15 @@ const Index: FC<Props> = ({ type = 'post', value, onChange, acceptType }) => {
           type={type}
           uploadCallback={onUpload}
           className="mb-0"
+          disabled={readOnly}
           acceptType={acceptType}>
           <Icon name="cloud-upload" />
         </UploadImg>
 
-        <Button variant="outline-secondary" onClick={onRemove}>
+        <Button
+          disabled={readOnly}
+          variant="outline-secondary"
+          onClick={onRemove}>
           <Icon name="trash" />
         </Button>
       </ButtonGroup>

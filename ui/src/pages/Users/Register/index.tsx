@@ -1,30 +1,35 @@
 import React, { useState } from 'react';
-import { Container } from 'react-bootstrap';
+import { Container, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
-import { Unactivate } from '@/components';
-import { siteInfoStore } from '@/stores';
+import { Unactivate, WelcomeTitle } from '@/components';
+import { PluginOauth } from '@/plugins';
+import { guard } from '@/utils';
 
 import SignUpForm from './components/SignUpForm';
 
 const Index: React.FC = () => {
   const [showForm, setShowForm] = useState(true);
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
-  const { name: siteName } = siteInfoStore((_) => _.siteInfo);
   const onStep = () => {
     setShowForm((bol) => !bol);
   };
   usePageTags({
     title: t('sign_up', { keyPrefix: 'page_title' }),
   });
+  if (!guard.singUpAgent().ok) {
+    return null;
+  }
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
-      <h3 className="text-center mb-5">
-        {t('page_title', { site_name: siteName })}
-      </h3>
+      <WelcomeTitle />
+
       {showForm ? (
-        <SignUpForm callback={onStep} />
+        <Col className="mx-auto" md={6} lg={4} xl={3}>
+          <PluginOauth className="mb-5" />
+          <SignUpForm callback={onStep} />
+        </Col>
       ) : (
         <Unactivate visible={!showForm} />
       )}

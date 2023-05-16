@@ -13,6 +13,7 @@ import (
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/internal/service/uploader"
+	"github.com/answerdev/answer/pkg/checker"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -183,9 +184,9 @@ func (uc *UserController) UseRePassWord(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := uc.userService.UseRePassword(ctx, req)
+	err := uc.userService.UpdatePasswordWhenForgot(ctx, req)
 	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP())
-	handler.HandleResponse(ctx, err, resp)
+	handler.HandleResponse(ctx, err, nil)
 }
 
 // UserLogout user logout
@@ -223,13 +224,17 @@ func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	if !siteInfo.AllowNewRegistrations {
+	if !siteInfo.AllowNewRegistrations || !siteInfo.AllowEmailRegistrations {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.NotAllowedRegistration), nil)
 		return
 	}
 
 	req := &schema.UserRegisterReq{}
 	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	if !checker.EmailInAllowEmailDomain(req.Email, siteInfo.AllowEmailDomains) {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.EmailIllegalDomainError), nil)
 		return
 	}
 	req.IP = ctx.ClientIP()
@@ -334,15 +339,16 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param data body schema.UserModifyPassWordRequest  true "UserModifyPassWordRequest"
+// @Param data body schema.UserModifyPasswordReq  true "UserModifyPasswordReq"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/api/v1/user/password [put]
 func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
-	req := &schema.UserModifyPassWordRequest{}
+	req := &schema.UserModifyPasswordReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.AccessToken = middleware.ExtractToken(ctx)
 
 	oldPassVerification, err := uc.userService.UserModifyPassWordVerification(ctx, req)
 	if err != nil {
@@ -486,6 +492,16 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 	// If the user email is not verified, that also can use this api to modify the email.
 	if len(req.UserID) == 0 {
 		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+		return
+	}
+	// check whether email allow register or not
+	siteInfo, err := uc.siteInfoCommonService.GetSiteLogin(ctx)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !checker.EmailInAllowEmailDomain(req.Email, siteInfo.AllowEmailDomains) {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.EmailIllegalDomainError), nil)
 		return
 	}
 

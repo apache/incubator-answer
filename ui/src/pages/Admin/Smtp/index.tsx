@@ -33,7 +33,7 @@ const Smtp: FC = () => {
         description: t('smtp_host.text'),
       },
       encryption: {
-        type: 'boolean',
+        type: 'string',
         title: t('encryption.label'),
         description: t('encryption.text'),
         enum: ['SSL', ''],
@@ -47,7 +47,6 @@ const Smtp: FC = () => {
       smtp_authentication: {
         type: 'boolean',
         title: t('smtp_authentication.title'),
-        label: t('smtp_authentication.label'),
         enum: [true, false],
         enumNames: [t('smtp_authentication.yes'), t('smtp_authentication.no')],
       },
@@ -69,7 +68,7 @@ const Smtp: FC = () => {
   const uiSchema: UISchema = {
     from_email: {
       'ui:options': {
-        type: 'email',
+        inputType: 'email',
       },
     },
     encryption: {
@@ -89,7 +88,7 @@ const Smtp: FC = () => {
     },
     smtp_password: {
       'ui:options': {
-        type: 'password',
+        inputType: 'password',
         validator: (value: string, formData) => {
           if (formData.smtp_authentication.value) {
             if (!value) {
@@ -102,10 +101,13 @@ const Smtp: FC = () => {
     },
     smtp_authentication: {
       'ui:widget': 'switch',
+      'ui:options': {
+        label: t('smtp_authentication.label'),
+      },
     },
     smtp_port: {
       'ui:options': {
-        type: 'number',
+        inputType: 'number',
         validator: (value) => {
           if (!/^[1-9][0-9]*$/.test(value) || Number(value) > 65535) {
             return t('smtp_port.msg');
@@ -116,7 +118,7 @@ const Smtp: FC = () => {
     },
     test_email_recipient: {
       'ui:options': {
-        type: 'email',
+        inputType: 'email',
         validator: (value) => {
           if (value && !pattern.email.test(value)) {
             return t('test_email_recipient.msg');
@@ -177,7 +179,7 @@ const Smtp: FC = () => {
   }, [setting]);
 
   useEffect(() => {
-    if (formData.smtp_authentication.value === '') {
+    if (!/true|false/.test(formData.smtp_authentication.value)) {
       return;
     }
     if (formData.smtp_authentication.value) {

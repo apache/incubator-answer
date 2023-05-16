@@ -1,5 +1,8 @@
 import i18next from 'i18next';
 
+import pattern from '@/common/pattern';
+import { USER_AGENT_NAMES } from '@/common/constants';
+
 const Diff = require('diff');
 
 function thousandthDivision(num) {
@@ -233,6 +236,43 @@ function diffText(newText: string, oldText?: string): string {
   return result.join('');
 }
 
+function base64ToSvg(base64: string) {
+  // base64 to svg xml
+  const svgxml = atob(base64);
+
+  // svg add class btnSvg
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgxml, 'image/svg+xml');
+  const parseError = doc.querySelector('parsererror');
+  const svg = doc.querySelector('svg');
+  let str = '';
+  if (svg && !parseError) {
+    svg.classList.add('btnSvg');
+    svg.classList.add('me-2');
+
+    // transform svg to string
+    const serializer = new XMLSerializer();
+    str = serializer.serializeToString(doc);
+  }
+  return str;
+}
+
+// Determine whether the user is in WeChat or Enterprise WeChat or DingTalk, and return the corresponding type
+
+function getUaType() {
+  const ua = navigator.userAgent.toLowerCase();
+  if (pattern.uaWeCom.test(ua)) {
+    return USER_AGENT_NAMES.WeCom;
+  }
+  if (pattern.uaWeChat.test(ua)) {
+    return USER_AGENT_NAMES.WeChat;
+  }
+  if (pattern.uaDingTalk.test(ua)) {
+    return USER_AGENT_NAMES.DingTalk;
+  }
+  return null;
+}
+
 export {
   thousandthDivision,
   formatCount,
@@ -248,4 +288,6 @@ export {
   labelStyle,
   handleFormError,
   diffText,
+  base64ToSvg,
+  getUaType,
 };

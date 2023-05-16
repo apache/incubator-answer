@@ -9,7 +9,7 @@ import {
 } from '@/common/interface';
 import { interfaceStore, loggedUserInfoStore } from '@/stores';
 import { JSONSchema, SchemaForm, UISchema } from '@/components';
-import { DEFAULT_TIMEZONE, SYSTEM_AVATAR_OPTIONS } from '@/common/constants';
+import { DEFAULT_TIMEZONE } from '@/common/constants';
 import {
   updateInterfaceSetting,
   useInterfaceSetting,
@@ -40,18 +40,13 @@ const Interface: FC = () => {
         description: t('language.text'),
         enum: langs?.map((lang) => lang.value),
         enumNames: langs?.map((lang) => lang.label),
+        default: setting?.language || storeInterface.language,
       },
       time_zone: {
         type: 'string',
         title: t('time_zone.label'),
         description: t('time_zone.text'),
-      },
-      default_avatar: {
-        type: 'string',
-        title: t('avatar.label'),
-        description: t('avatar.text'),
-        enum: SYSTEM_AVATAR_OPTIONS?.map((v) => v.value),
-        enumNames: SYSTEM_AVATAR_OPTIONS?.map((v) => v.label),
+        default: setting?.time_zone || DEFAULT_TIMEZONE,
       },
     },
   };
@@ -67,11 +62,6 @@ const Interface: FC = () => {
       isInvalid: false,
       errorMsg: '',
     },
-    default_avatar: {
-      value: setting?.default_avatar || 'system',
-      isInvalid: false,
-      errorMsg: '',
-    },
   });
 
   const uiSchema: UISchema = {
@@ -80,9 +70,6 @@ const Interface: FC = () => {
     },
     time_zone: {
       'ui:widget': 'timezone',
-    },
-    default_avatar: {
-      'ui:widget': 'select',
     },
   };
   const getLangs = async () => {
@@ -116,7 +103,6 @@ const Interface: FC = () => {
     const reqParams: AdminSettingsInterface = {
       language: formData.language.value,
       time_zone: formData.time_zone.value,
-      default_avatar: formData.default_avatar.value,
     };
 
     updateInterfaceSetting(reqParams)
@@ -145,9 +131,6 @@ const Interface: FC = () => {
       const formMeta = {};
       Object.keys(setting).forEach((k) => {
         formMeta[k] = { ...formData[k], value: setting[k] };
-        if (k === 'default_avatar') {
-          formMeta[k].value = setting[k] || 'system';
-        }
       });
       setFormData({ ...formData, ...formMeta });
     }

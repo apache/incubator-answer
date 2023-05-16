@@ -55,7 +55,7 @@ const General: FC = () => {
   const uiSchema: UISchema = {
     site_url: {
       'ui:options': {
-        type: 'url',
+        inputType: 'url',
         validator: (value) => {
           let url: URL | undefined;
           try {
@@ -79,7 +79,7 @@ const General: FC = () => {
     },
     contact_email: {
       'ui:options': {
-        type: 'email',
+        inputType: 'email',
         validator: (value) => {
           if (!Pattern.email.test(value)) {
             return t('contact_email.validate');

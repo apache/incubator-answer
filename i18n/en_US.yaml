@@ -12,6 +12,8 @@ backend:
       other: Unauthorized.
     database_error:
       other: Data server error.
+    forbidden_error:
+      other: Forbidden.
   action:
     report:
       other: Flag
@@ -23,6 +25,8 @@ backend:
       other: Close
     reopen:
       other: Reopen
+    forbidden_error:
+      other: Forbidden.
     pin:
       other: Pin
     hide:
@@ -46,6 +50,58 @@ backend:
         other: Have the full power to access the site.
       moderator:
         other: Has access to all posts except admin settings.
+  privilege:
+    level_1:
+      description:
+        other: Level 1 (less reputation required for private team, group)
+    level_2:
+      description:
+        other: Level 2 (low reputation required for startup community)
+    level_3:
+      description:
+        other: Level 3 (high reputation required for mature community)
+    rank_question_add_label:
+      other: Ask question
+    rank_answer_add_label:
+      other: Write answer
+    rank_comment_add_label:
+      other: Write comment
+    rank_report_add_label:
+      other: Flag
+    rank_comment_vote_up_label:
+      other: Upvote comment
+    rank_link_url_limit_label:
+      other: Post more than 2 links at a time
+    rank_question_vote_up_label:
+      other: Upvote question
+    rank_answer_vote_up_label:
+      other: Upvote answer
+    rank_question_vote_down_label:
+      other: Downvote question
+    rank_answer_vote_down_label:
+      other: Downvote answer
+    rank_tag_add_label:
+      other: Create new tag
+    rank_tag_edit_label:
+      other: Edit tag description (need to review)
+    rank_question_edit_label:
+      other: Edit other's question (need to review)
+    rank_answer_edit_label:
+      other: Edit other's answer (need to review)
+    rank_question_edit_without_review_label:
+      other: Edit other's question without review
+    rank_answer_edit_without_review_label:
+      other: Edit other's answer without review
+    rank_question_audit_label:
+      other: Review question edits
+    rank_answer_audit_label:
+      other: Review answer edits
+    rank_tag_audit_label:
+      other: Review tag edits
+    rank_tag_edit_without_review_label:
+      other: Edit tag description without review
+    rank_tag_synonym_label:
+      other: Manage tag synonyms
   email:
     other: Email
   password:
@@ -83,6 +139,8 @@ backend:
         other: Email should be verified.
       verify_url_expired:
         other: Email verified URL has expired, please resend the email.
+      illegal_email_domain_error:
+        other: Email is not allowed from that email domain. Please use another one.
     lang:
       not_found:
         other: Language file not found.
@@ -155,6 +213,8 @@ backend:
       no_permission:
         other: No permission to Revision.
     user:
+      external_login_unbinding_forbidden:
+        other: Please set a login password for your account before you remove this login.
       email_or_password_wrong:
         other:
           other: Email and password do not match.
@@ -172,6 +232,10 @@ backend:
         other: You cannot modify your role.
       not_allowed_registration:
         other: Currently the site is not open for registration
+      access_denied:
+        other: Access denied
+      page_access_denied:
+        other: You do not have access to this page.
     config:
       read_config_failed:
         other: Read config failed
@@ -277,6 +341,16 @@ backend:
         other: Your answer has been deleted
       your_comment_was_deleted:
         other: Your comment has been deleted
+      up_voted_question:
+        other: upvoted question
+      down_voted_question:
+        other: downvoted question
+      up_voted_answer:
+        other: upvoted answer
+      down_voted_answer:
+        other: downvoted answer
+      up_voted_comment:
+        other: upvoted comment
 
 # The following fields are used for interface presentation(Front-end)
 ui:
@@ -322,6 +396,7 @@ ui:
     upgrade: Answer Upgrade
     maintenance: Website Maintenance
     users: Users
+    oauth_callback: Processing
     http_404: HTTP Error 404
     http_50X: HTTP Error 500
     http_403: HTTP Error 403
@@ -331,11 +406,13 @@ ui:
     achievement: Achievements
     all_read: Mark all as read
     show_more: Show more
+    someone: Someone
   suspended:
     title: Your Account has been Suspended
     until_time: "Your account was suspended until {{ time }}."
     forever: This user was suspended forever.
     end: You don't meet a community guideline.
+    contact_us: Contact us
   editor:
     blockquote:
       text: Blockquote
@@ -547,7 +624,7 @@ ui:
     tip_answer: >-
       Use comments to reply to other users or notify them of changes. If you are
       adding new information, edit your post instead of commenting.
-    tip_vote: It adds something useful to the post
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: Edit Answer
     default_reason: Edit answer
@@ -658,7 +735,6 @@ ui:
     msg:
       empty: Cannot be empty.
   login:
-    page_title: Welcome to {{site_name}}
     login_to_continue: Log in to continue
     info_sign: Don't have an account? <1>Sign up</1>
     info_login: Already have an account? <1>Log in</1>
@@ -669,6 +745,7 @@ ui:
       msg:
         empty: Name cannot be empty.
         range: Name up to 30 characters.
+        character: 'Must use the character set "a-z", "0-9", " - . _"'
     email:
       label: Email
       msg:
@@ -689,7 +766,6 @@ ui:
       msg:
         empty: Email cannot be empty.
   change_email:
-    page_title: Welcome to {{site_name}}
     btn_cancel: Cancel
     btn_update: Update email address
     send_success: >-
@@ -699,6 +775,17 @@ ui:
       label: New Email
       msg:
         empty: Email cannot be empty.
+  oauth_bind_email:
+    subtitle: Add a recovery email to your account.
+    btn_update: Update email address
+    email:
+      label: Email
+      msg:
+        empty: Email cannot be empty.
+    modal_title: Email already existes.
+    modal_content: This email address already registered. Are you sure you want to connect to the existing account?
+    modal_cancel: Change email
+    modal_confirm: Connect to the existing account
   password_reset:
     page_title: Password Reset
     btn_name: Reset my password
@@ -719,6 +806,7 @@ ui:
       label: Confirm New Password
   settings:
     page_title: Settings
+    goto_modify: Go to Modify
     nav:
       profile: Profile
       notification: Notifications
@@ -768,8 +856,11 @@ ui:
         We've sent an email to that address. Please follow the confirmation
         instructions.
       email:
-        label: Email
-        msg: Email cannot be empty.
+        label: New Email
+        msg: New Email cannot be empty.
+      pass:
+        label: Current Password
+        msg: Password cannot be empty.
       password_title: Password
       current_pass:
         label: Current Password
@@ -786,6 +877,13 @@ ui:
       lang:
         label: Interface Language
         text: User interface language. It will change when you refresh the page.
+    my_logins:
+      title: My Logins
+      label: Log in or sign up on this site using these accounts.
+      modal_title: Remove Login
+      modal_content: Are you sure you want to remove this login from your account?
+      modal_confirm_btn: Remove
+      remove_success: Removed successfully
   toast:
     update: update success
     update_password: Password changed successfully.
@@ -809,8 +907,8 @@ ui:
     closed_in: Closed in
     show_exist: Show existing question.
     useful: Useful
-    question_useful: It is useful and clear
-    question_un_useful: It is unclear or not useful
+    question_useful: It is useful and clear
+    question_un_useful: It is unclear or not useful
     answer_useful: It is useful
     answer_un_useful: It is not useful
     answers:
@@ -873,6 +971,10 @@ ui:
     skip: Skip
     discard_draft: Discard draft
     pinned: Pinned
+    all: All
+    question: Question
+    answer: Answer
+    comment: Comment
   search:
     title: Search Results
     keywords: Keywords
@@ -907,7 +1009,6 @@ ui:
   modal_confirm:
     title: Error...
   account_result:
-    page_title: Welcome to {{site_name}}
     success: Your new account is confirmed; you will be redirected to the home page.
     link: Continue to homepage
     invalid: >-
@@ -1034,6 +1135,7 @@ ui:
     admin_name:
       label: Name
       msg: Name cannot be empty.
+      character: 'Must use the character set "a-z", "0-9", " - . _"'
     admin_password:
       label: Password
       text: >-
@@ -1095,8 +1197,20 @@ ui:
     seo: SEO
     customize: Customize
     themes: Themes
-    css-html: CSS/HTML
+    css_html: CSS/HTML
     login: Login
+    privileges: Privileges
+    plugins: Plugins
+    installed_plugins: Installed Plugins
+  website_welcome: Welcome to {{site_name}}
+  plugins:
+    login: Login
+    qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
+    login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
+    oauth:
+      connect: Connect with {{ auth_name }}
+      remove: Remove {{ auth_name }}
+
   admin:
     admin_header:
       title: Admin
@@ -1139,6 +1253,7 @@ ui:
       pending: Pending
       completed: Completed
       flagged: Flagged
+      flagged_type: Flagged {{ type }}
       created: Created
       action: Action
       review: Review
@@ -1289,9 +1404,6 @@ ui:
         label: Timezone
         msg: Timezone cannot be empty.
         text: Choose a city in the same timezone as you.
-      avatar:
-        label: Default Avatar
-        text: For users without a custom avatar of their own.
     smtp:
       page_title: SMTP
       from_email:
@@ -1401,16 +1513,67 @@ ui:
       footer:
         label: Footer
         text: This will insert before </html>.
+      sidebar:
+        label: Sidebar
+        text: This will insert in sidebar.
     login:
       page_title: Login
       membership:
         title: Membership
         label: Allow new registrations
         text: Turn off to prevent anyone from creating a new account.
+      email_registration:
+        title: Email registration
+        label: Allow email registration
+        text: Turn off to prevent anyone creating new account through email.
+      allowed_email_domains:
+        title: Allowed email domains
+        text: Email domains that users must register accounts with. One domain per line. Ignored when empty.
       private:
         title: Private
         label: Login required
         text: Only logged in users can access this community.
+    installed_plugins:
+      title: Installed Plugins
+      filter:
+        all: All
+        active: Active
+        inactive: Inactive
+        outdated: Outdated
+      plugins:
+        label: Plugins
+        text: Select an existing plugin.
+      name: Name
+      version: Version
+      status: Status
+      action: Action
+      deactivate: Deactivate
+      activate: Activate
+      settings: Settings
+    settings_users:
+      title: Users
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
+      profile_editable:
+        title: Profile Editable
+      allow_update_display_name:
+        label: Allow users to change their display name
+      allow_update_username:
+        label: Allow users to change their username
+      allow_update_avatar:
+        label: Allow users to change their profile image
+      allow_update_bio:
+        label: Allow users to change their about me
+      allow_update_website:
+        label: Allow users to change their website
+      allow_update_location:
+        label: Allow users to change their location
+    privilege:
+      title: Privileges
+      level:
+        label: Reputation required level
+        text: Choose the reputation required for the privileges
 
   form:
     optional: (optional)
@@ -1418,6 +1581,8 @@ ui:
     invalid: is invalid
     btn_submit: Save
     not_found_props: "Required property {{ key }} not found."
+    select: Select
+
   page_review:
     review: Review
     proposed: proposed

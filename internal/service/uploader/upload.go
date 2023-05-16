@@ -18,10 +18,12 @@ import (
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/dir"
 	"github.com/answerdev/answer/pkg/uid"
+	"github.com/answerdev/answer/plugin"
 	"github.com/disintegration/imaging"
 	"github.com/gin-gonic/gin"
 	exifremove "github.com/scottleedavis/go-exif-remove"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 const (
@@ -72,6 +74,14 @@ func NewUploaderService(serviceConfig *service_config.ServiceConfig,
 
 // UploadAvatarFile upload avatar file
 func (us *UploaderService) UploadAvatarFile(ctx *gin.Context) (url string, err error) {
+	url, err = us.tryToUploadByPlugin(ctx, plugin.UserAvatar)
+	if err != nil {
+		return "", err
+	}
+	if len(url) > 0 {
+		return url, nil
+	}
+
 	// max size
 	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 5*1024*1024)
 	_, file, err := ctx.Request.FormFile("file")
@@ -143,6 +153,14 @@ func (us *UploaderService) AvatarThumbFile(ctx *gin.Context, uploadPath, fileNam
 
 func (us *UploaderService) UploadPostFile(ctx *gin.Context) (
 	url string, err error) {
+	url, err = us.tryToUploadByPlugin(ctx, plugin.UserAvatar)
+	if err != nil {
+		return "", err
+	}
+	if len(url) > 0 {
+		return url, nil
+	}
+
 	// max size
 	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 10*1024*1024)
 	_, file, err := ctx.Request.FormFile("file")
@@ -161,6 +179,14 @@ func (us *UploaderService) UploadPostFile(ctx *gin.Context) (
 
 func (us *UploaderService) UploadBrandingFile(ctx *gin.Context) (
 	url string, err error) {
+	url, err = us.tryToUploadByPlugin(ctx, plugin.UserAvatar)
+	if err != nil {
+		return "", err
+	}
+	if len(url) > 0 {
+		return url, nil
+	}
+
 	// max size
 	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 10*1024*1024)
 	_, file, err := ctx.Request.FormFile("file")
@@ -202,6 +228,21 @@ func (us *UploaderService) uploadFile(ctx *gin.Context, file *multipart.FileHead
 
 	url = fmt.Sprintf("%s/uploads/%s", siteGeneral.SiteUrl, fileSubPath)
 	return url, nil
+}
+
+func (us *UploaderService) tryToUploadByPlugin(ctx *gin.Context, source plugin.UploadSource) (
+	url string, err error) {
+	_ = plugin.CallStorage(func(fn plugin.Storage) error {
+		resp := fn.UploadFile(ctx, source)
+		if resp.OriginalError != nil {
+			log.Errorf("upload file by plugin failed, err: %v", resp.OriginalError)
+			err = errors.BadRequest("").WithMsg(resp.DisplayErrorMsg.Translate(ctx)).WithError(err)
+		} else {
+			url = resp.FullURL
+		}
+		return nil
+	})
+	return url, err
 }
 
 func Dexif(filepath string, destpath string) error {

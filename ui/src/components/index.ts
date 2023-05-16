@@ -3,6 +3,7 @@ import Editor, { EditorRef, htmlRender } from './Editor';
 import Header from './Header';
 import Footer from './Footer';
 import Icon from './Icon';
+import SvgIcon from './Icon/svg';
 import Modal from './Modal';
 import TagSelector from './TagSelector';
 import Unactivate from './Unactivate';
@@ -32,16 +33,20 @@ import CustomizeTheme from './CustomizeTheme';
 import PageTags from './PageTags';
 import QuestionListLoader from './QuestionListLoader';
 import TagsLoader from './TagsLoader';
+import WelcomeTitle from './WelcomeTitle';
 import Counts from './Counts';
 import QuestionList from './QuestionList';
 import HotQuestions from './HotQuestions';
 import HttpErrorContent from './HttpErrorContent';
+import CustomSidebar from './CustomSidebar';
+import ImgViewer from './ImgViewer';
 
 export {
   Avatar,
   Header,
   Footer,
   Icon,
+  SvgIcon,
   Modal,
   Unactivate,
   UploadImg,
@@ -74,9 +79,12 @@ export {
   PageTags,
   QuestionListLoader,
   TagsLoader,
+  WelcomeTitle,
   Counts,
   QuestionList,
   HotQuestions,
   HttpErrorContent,
+  CustomSidebar,
+  ImgViewer,
 };
 export type { EditorRef, JSONSchema, UISchema };

@@ -136,6 +136,7 @@ export interface UserInfoRes extends UserInfoBase {
   mail_status: number;
   language: string;
   e_mail?: string;
+  have_password: boolean;
   [prop: string]: any;
 }
 
@@ -243,6 +244,7 @@ export type QuestionOrderBy =
 export interface QueryQuestionsReq extends Paging {
   order: QuestionOrderBy;
   tag?: string;
+  in_days?: number;
 }
 
 export type AdminQuestionStatus = 'available' | 'closed' | 'deleted';
@@ -269,6 +271,11 @@ export type UserFilterBy =
   | 'suspended'
   | 'deleted';
 
+export type InstalledPluginsFilterBy =
+  | 'all'
+  | 'active'
+  | 'inactive'
+  | 'outdated';
 /**
  * @description interface for Flags
  */
@@ -304,7 +311,6 @@ export interface HelmetUpdate extends Omit<HelmetBase, 'pageTitle'> {
 export interface AdminSettingsInterface {
   language: string;
   time_zone?: string;
-  default_avatar?: string;
 }
 
 export interface AdminSettingsSmtp {
@@ -319,6 +325,16 @@ export interface AdminSettingsSmtp {
   test_email_recipient?: string;
 }
 
+export interface AdminSettingsUsers {
+  allow_update_avatar: boolean;
+  allow_update_bio: boolean;
+  allow_update_display_name: boolean;
+  allow_update_location: boolean;
+  allow_update_username: boolean;
+  allow_update_website: boolean;
+  default_avatar: string;
+}
+
 export interface SiteSettings {
   branding: AdminSettingBranding;
   general: AdminSettingsGeneral;
@@ -327,6 +343,7 @@ export interface SiteSettings {
   custom_css_html: AdminSettingsCustom;
   theme: AdminSettingsTheme;
   site_seo: AdminSettingsSeo;
+  site_users: AdminSettingsUsers;
   version: string;
   revision: string;
 }
@@ -377,11 +394,14 @@ export interface AdminSettingsCustom {
   custom_head: string;
   custom_header: string;
   custom_footer: string;
+  custom_sidebar: string;
 }
 
 export interface AdminSettingsLogin {
   allow_new_registrations: boolean;
   login_required: boolean;
+  allow_email_registrations: boolean;
+  allow_email_domains: string[];
 }
 
 /**
@@ -525,6 +545,28 @@ export interface User {
   vote_count: number;
   display_name: string;
   avatar: string;
+}
+
+export interface QuestionOperationReq {
+  id: string;
+  operation: 'pin' | 'unpin' | 'hide' | 'show';
+}
+
+export interface OauthBindEmailReq {
+  binding_key: string;
+  email: string;
+  must: boolean;
+}
+
+export interface OauthConnectorItem {
+  icon: string;
+  name: string;
+  link: string;
+}
+
+export interface UserOauthConnectorItem extends OauthConnectorItem {
+  binding: boolean;
+  external_id: string;
 }
 
 export interface QuestionOperationReq {

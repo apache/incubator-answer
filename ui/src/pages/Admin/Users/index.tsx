@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Form, Table, Dropdown, Button, Stack } from 'react-bootstrap';
 import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -21,8 +21,14 @@ import {
   useChangePasswordModal,
   useToast,
 } from '@/hooks';
-import { useQueryUsers, addUser, updateUserPassword } from '@/services';
-import { loggedUserInfoStore } from '@/stores';
+import {
+  useQueryUsers,
+  addUser,
+  updateUserPassword,
+  getAdminUcAgent,
+  AdminUcAgent,
+} from '@/services';
+import { loggedUserInfoStore, userCenterStore } from '@/stores';
 import { formatCount } from '@/utils';
 
 const UserFilterKeys: Type.UserFilterBy[] = [
@@ -49,6 +55,13 @@ const Users: FC = () => {
   const curPage = Number(urlSearchParams.get('page') || '1');
   const curQuery = urlSearchParams.get('query') || '';
   const currentUser = loggedUserInfoStore((state) => state.user);
+  const { agent: ucAgent } = userCenterStore();
+  const [adminUcAgent, setAdminUcAgent] = useState<AdminUcAgent>({
+    allow_create_user: true,
+    allow_update_user_status: true,
+    allow_update_user_password: true,
+    allow_update_user_role: true,
+  });
   const Toast = useToast();
   const {
     data,
@@ -138,6 +151,25 @@ const Users: FC = () => {
     urlSearchParams.delete('page');
     setUrlSearchParams(urlSearchParams);
   };
+  useEffect(() => {
+    if (ucAgent?.enabled) {
+      getAdminUcAgent().then((resp) => {
+        setAdminUcAgent(resp);
+      });
+    }
+  }, [ucAgent]);
+  const showAddUser =
+    !ucAgent?.enabled || (ucAgent?.enabled && adminUcAgent?.allow_create_user);
+  const showActionPassword =
+    !ucAgent?.enabled ||
+    (ucAgent?.enabled && adminUcAgent?.allow_update_user_password);
+  const showActionRole =
+    !ucAgent?.enabled ||
+    (ucAgent?.enabled && adminUcAgent?.allow_update_user_role);
+  const showActionStatus =
+    !ucAgent?.enabled ||
+    (ucAgent?.enabled && adminUcAgent?.allow_update_user_status);
+  const showAction = showActionPassword || showActionRole || showActionStatus;
   return (
     <>
       <h3 className="mb-4">{t('title')}</h3>
@@ -149,12 +181,14 @@ const Users: FC = () => {
             sortKey="filter"
             i18nKeyPrefix="admin.users"
           />
-          <Button
-            variant="outline-primary"
-            size="sm"
-            onClick={() => userModal.onShow()}>
-            {t('add_user')}
-          </Button>
+          {showAddUser ? (
+            <Button
+              variant="outline-primary"
+              size="sm"
+              onClick={() => userModal.onShow()}>
+              {t('add_user')}
+            </Button>
+          ) : null}
         </Stack>
 
         <Form.Control
@@ -232,25 +266,31 @@ const Users: FC = () => {
                     </span>
                   </td>
                 )}
-                {curFilter !== 'deleted' ? (
+                {curFilter !== 'deleted' && showAction ? (
                   <td className="text-end">
                     <Dropdown>
                       <Dropdown.Toggle variant="link" className="no-toggle">
                         <Icon name="three-dots-vertical" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
-                        <Dropdown.Item
-                          onClick={() => handleAction('password', user)}>
-                          {t('set_new_password')}
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => handleAction('status', user)}>
-                          {t('change_status')}
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                          onClick={() => handleAction('role', user)}>
-                          {t('change_role')}
-                        </Dropdown.Item>
+                        {showActionPassword ? (
+                          <Dropdown.Item
+                            onClick={() => handleAction('password', user)}>
+                            {t('set_new_password')}
+                          </Dropdown.Item>
+                        ) : null}
+                        {showActionStatus ? (
+                          <Dropdown.Item
+                            onClick={() => handleAction('status', user)}>
+                            {t('change_status')}
+                          </Dropdown.Item>
+                        ) : null}
+                        {showActionRole ? (
+                          <Dropdown.Item
+                            onClick={() => handleAction('role', user)}>
+                            {t('change_role')}
+                          </Dropdown.Item>
+                        ) : null}
                       </Dropdown.Menu>
                     </Dropdown>
                   </td>
