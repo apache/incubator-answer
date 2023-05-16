@@ -44,6 +44,7 @@ type TagRepo interface {
 
 type TagRelRepo interface {
 	AddTagRelList(ctx context.Context, tagList []*entity.TagRel) (err error)
+	RemoveTagRelListByObjectID(ctx context.Context, objectID string) (err error)
 	RemoveTagRelListByIDs(ctx context.Context, ids []int64) (err error)
 	EnableTagRelByIDs(ctx context.Context, ids []int64) (err error)
 	GetObjectTagRelWithoutStatus(ctx context.Context, objectId, tagID string) (tagRel *entity.TagRel, exist bool, err error)
@@ -651,6 +652,11 @@ func (ts *TagCommonService) RefreshTagQuestionCount(ctx context.Context, tagIDs 
 		log.Debugf("tag count updated %s %d", tagID, count)
 	}
 	return nil
+}
+
+// RemoveTagRelListByObjectID remove tag relation by object id
+func (ts *TagCommonService) RemoveTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
+	return ts.tagRelRepo.RemoveTagRelListByObjectID(ctx, objectID)
 }
 
 // CreateOrUpdateTagRelList if tag relation is exists update status, if not create it

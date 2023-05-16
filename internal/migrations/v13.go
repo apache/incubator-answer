@@ -9,7 +9,7 @@ import (
 )
 
 func updateQuestionCount(x *xorm.Engine) error {
-	//search all answers
+	//question answer count
 	answers := make([]entity.Answer, 0)
 	err := x.Find(&answers, &entity.Answer{Status: entity.AnswerStatusAvailable})
 	if err != nil {
@@ -39,5 +39,12 @@ func updateQuestionCount(x *xorm.Engine) error {
 			}
 		}
 	}
+
+	//tag question count
+
+	//user question count
+
+	//user answer count
+
 	return nil
 }

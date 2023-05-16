@@ -436,6 +436,25 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		}
 	}
 
+	//tag count
+	tagIDs := make([]string, 0)
+	Tags, tagerr := qs.tagCommon.GetObjectEntityTag(ctx, req.ID)
+	if tagerr != nil {
+		log.Error("GetObjectEntityTag error", tagerr)
+		return nil
+	}
+	for _, v := range Tags {
+		tagIDs = append(tagIDs, v.ID)
+	}
+	err = qs.tagCommon.RemoveTagRelListByObjectID(ctx, req.ID)
+	if err != nil {
+		log.Error("RemoveTagRelListByObjectID error", err.Error())
+	}
+	err = qs.tagCommon.RefreshTagQuestionCount(ctx, tagIDs)
+	if err != nil {
+		log.Error("efreshTagQuestionCount error", err.Error())
+	}
+
 	err = qs.answerActivityService.DeleteQuestion(ctx, questionInfo.ID, questionInfo.CreatedAt, questionInfo.VoteCount)
 	if err != nil {
 		log.Errorf("user DeleteQuestion rank rollback error %s", err.Error())
