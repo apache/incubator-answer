@@ -45,6 +45,8 @@ type TagRepo interface {
 type TagRelRepo interface {
 	AddTagRelList(ctx context.Context, tagList []*entity.TagRel) (err error)
 	RemoveTagRelListByObjectID(ctx context.Context, objectID string) (err error)
+	ShowTagRelListByObjectID(ctx context.Context, objectID string) (err error)
+	HideTagRelListByObjectID(ctx context.Context, objectID string) (err error)
 	RemoveTagRelListByIDs(ctx context.Context, ids []int64) (err error)
 	EnableTagRelByIDs(ctx context.Context, ids []int64) (err error)
 	GetObjectTagRelWithoutStatus(ctx context.Context, objectId, tagID string) (tagRel *entity.TagRel, exist bool, err error)
@@ -654,9 +656,33 @@ func (ts *TagCommonService) RefreshTagQuestionCount(ctx context.Context, tagIDs 
 	return nil
 }
 
+func (ts *TagCommonService) RefreshTagCountByQuestionID(ctx context.Context, questionID string) (err error) {
+	tagListList, err := ts.tagRelRepo.GetObjectTagRelList(ctx, questionID)
+	if err != nil {
+		return err
+	}
+	tagIDs := make([]string, 0)
+	for _, item := range tagListList {
+		tagIDs = append(tagIDs, item.TagID)
+	}
+	err = ts.RefreshTagQuestionCount(ctx, tagIDs)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // RemoveTagRelListByObjectID remove tag relation by object id
 func (ts *TagCommonService) RemoveTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
 	return ts.tagRelRepo.RemoveTagRelListByObjectID(ctx, objectID)
+}
+
+func (ts *TagCommonService) HideTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
+	return ts.tagRelRepo.HideTagRelListByObjectID(ctx, objectID)
+}
+
+func (ts *TagCommonService) ShowTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
+	return ts.tagRelRepo.ShowTagRelListByObjectID(ctx, objectID)
 }
 
 // CreateOrUpdateTagRelList if tag relation is exists update status, if not create it

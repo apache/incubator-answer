@@ -349,8 +349,24 @@ func (qs *QuestionService) OperationQuestion(ctx context.Context, req *schema.Op
 	switch req.Operation {
 	case schema.QuestionOperationHide:
 		questionInfo.Show = entity.QuestionHide
+		err = qs.tagCommon.HideTagRelListByObjectID(ctx, req.ID)
+		if err != nil {
+			return err
+		}
+		err = qs.tagCommon.RefreshTagCountByQuestionID(ctx, req.ID)
+		if err != nil {
+			return err
+		}
 	case schema.QuestionOperationShow:
 		questionInfo.Show = entity.QuestionShow
+		err = qs.tagCommon.ShowTagRelListByObjectID(ctx, req.ID)
+		if err != nil {
+			return err
+		}
+		err = qs.tagCommon.RefreshTagCountByQuestionID(ctx, req.ID)
+		if err != nil {
+			return err
+		}
 	case schema.QuestionOperationPin:
 		questionInfo.Pin = entity.QuestionPin
 	case schema.QuestionOperationUnPin:

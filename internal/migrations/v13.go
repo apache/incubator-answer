@@ -62,9 +62,11 @@ func updateTagCount(x *xorm.Engine) error {
 	}
 	questionIDs := make([]string, 0)
 	questionsAvailableMap := make(map[string]bool)
+	questionsHideMap := make(map[string]bool)
 	for _, item := range tagRelList {
 		questionIDs = append(questionIDs, item.ObjectID)
 		questionsAvailableMap[item.ObjectID] = false
+		questionsHideMap[item.ObjectID] = false
 	}
 	questionList := make([]entity.Question, 0)
 	err = x.In("id", questionIDs).In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).Find(&questionList, &entity.Question{})
@@ -75,8 +77,20 @@ func updateTagCount(x *xorm.Engine) error {
 		_, ok := questionsAvailableMap[question.ID]
 		if ok {
 			questionsAvailableMap[question.ID] = true
+			if question.Show == entity.QuestionHide {
+				questionsHideMap[question.ID] = true
+			}
 		}
 	}
+
+	for id, ok := range questionsHideMap {
+		if ok {
+			if _, err = x.Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusHide}, &entity.TagRel{ObjectID: id}); err != nil {
+				log.Errorf("update %+v config failed: %s", id, err)
+			}
+		}
+	}
+
 	for id, ok := range questionsAvailableMap {
 		if !ok {
 			if _, err = x.Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusDeleted}, &entity.TagRel{ObjectID: id}); err != nil {
@@ -84,6 +98,7 @@ func updateTagCount(x *xorm.Engine) error {
 			}
 		}
 	}
+
 	//select tag count
 	newTagRelList := make([]entity.TagRel, 0)
 	err = x.Find(&newTagRelList, &entity.TagRel{Status: entity.TagRelStatusAvailable})
