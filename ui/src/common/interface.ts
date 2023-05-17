@@ -161,7 +161,7 @@ export interface PasswordResetReq extends ImgCodeReq {
 }
 
 export interface CheckImgReq {
-  action: 'login' | 'e_mail' | 'find_pass';
+  action: 'login' | 'e_mail' | 'find_pass' | 'modify_pass';
 }
 
 export interface SetNoticeReq {
