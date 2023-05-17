@@ -8925,6 +8925,14 @@ const docTemplate = `{
                 "pass"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "captcha_id": {
+                    "type": "string",
+                    "maxLength": 500
+                },
                 "old_pass": {
                     "type": "string",
                     "maxLength": 32,

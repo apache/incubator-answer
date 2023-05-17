@@ -222,9 +222,10 @@ const (
 	NoticeStatusOn  = 1
 	NoticeStatusOff = 2
 
-	ActionRecordTypeLogin    = "login"
-	ActionRecordTypeEmail    = "e_mail"
-	ActionRecordTypeFindPass = "find_pass"
+	ActionRecordTypeLogin      = "login"
+	ActionRecordTypeEmail      = "e_mail"
+	ActionRecordTypeFindPass   = "find_pass"
+	ActionRecordTypeModifyPass = "modify_pass"
 )
 
 var UserStatusShow = map[int]string{
@@ -276,10 +277,12 @@ func (u *UserRegisterReq) Check() (errFields []*validator.FormErrorField, err er
 }
 
 type UserModifyPasswordReq struct {
-	OldPass string `validate:"omitempty,gte=8,lte=32" json:"old_pass"`
-	Pass    string `validate:"required,gte=8,lte=32" json:"pass"`
+	OldPass     string `validate:"omitempty,gte=8,lte=32" json:"old_pass"`
+	Pass        string `validate:"required,gte=8,lte=32" json:"pass"`
 	UserID      string `json:"-"`
 	AccessToken string `json:"-"`
+	CaptchaID   string `validate:"omitempty,gt=0,lte=500" json:"captcha_id"`
+	CaptchaCode string `validate:"omitempty,gt=0,lte=500" json:"captcha_code"`
 }
 
 func (u *UserModifyPasswordReq) Check() (errFields []*validator.FormErrorField, err error) {
