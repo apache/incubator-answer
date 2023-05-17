@@ -4,17 +4,15 @@ import (
 	"fmt"
 
 	"github.com/answerdev/answer/internal/entity"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
 )
 
 func updateCount(x *xorm.Engine) error {
-	spew.Dump("update count")
 	// updateQuestionCount(x)
-	updateTagCount(x)
+	// updateTagCount(x)
 	// updateUserQuestionCount(x)
-	// updateUserAnswerCount(x)
+	updateUserAnswerCount(x)
 	return nil
 }
 
@@ -140,6 +138,41 @@ func updateTagCount(x *xorm.Engine) error {
 
 // updateUserQuestionCount update user question count
 func updateUserQuestionCount(x *xorm.Engine) error {
+	questionList := make([]entity.Question, 0)
+	err := x.In("status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).Find(&questionList, &entity.Question{})
+	if err != nil {
+		return fmt.Errorf("get question  failed: %w", err)
+	}
+	userQuestionCountMap := make(map[string]int)
+	for _, question := range questionList {
+		_, ok := userQuestionCountMap[question.UserID]
+		if !ok {
+			userQuestionCountMap[question.UserID] = 1
+		} else {
+			userQuestionCountMap[question.UserID]++
+		}
+	}
+	userList := make([]entity.User, 0)
+	err = x.Find(&userList, &entity.User{})
+	if err != nil {
+		return fmt.Errorf("get user  failed: %w", err)
+	}
+	for _, user := range userList {
+		_, ok := userQuestionCountMap[user.ID]
+		if ok {
+			user.QuestionCount = userQuestionCountMap[user.ID]
+			if _, err = x.Cols("question_count").Update(user, &entity.User{ID: user.ID}); err != nil {
+				log.Errorf("update %+v user failed: %s", user.ID, err)
+				return fmt.Errorf("update user failed: %w", err)
+			}
+		} else {
+			user.QuestionCount = 0
+			if _, err = x.Cols("question_count").Update(user, &entity.User{ID: user.ID}); err != nil {
+				log.Errorf("update %+v user failed: %s", user.ID, err)
+				return fmt.Errorf("update user failed: %w", err)
+			}
+		}
+	}
 	return nil
 }
 
