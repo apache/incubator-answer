@@ -1,9 +1,11 @@
 package export
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"mime"
+	"os"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -128,6 +130,9 @@ func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body str
 	d := gomail.NewDialer(ec.SMTPHost, ec.SMTPPort, ec.SMTPUsername, ec.SMTPPassword)
 	if ec.IsSSL() {
 		d.SSL = true
+	}
+	if len(os.Getenv("SKIP_SMTP_TLS_VERIFY")) > 0 {
+		d.TLSConfig = &tls.Config{ServerName: d.Host, InsecureSkipVerify: true}
 	}
 	if err := d.DialAndSend(m); err != nil {
 		log.Errorf("send email to %s failed: %s", toEmailAddr, err)
