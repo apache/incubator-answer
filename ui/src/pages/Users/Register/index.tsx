@@ -26,7 +26,7 @@ const Index: React.FC = () => {
       <WelcomeTitle />
 
       {showForm ? (
-        <Col className="mx-auto" md={3}>
+        <Col className="mx-auto" md={6} lg={4} xl={3}>
           <PluginOauth className="mb-5" />
           <SignUpForm callback={onStep} />
         </Col>

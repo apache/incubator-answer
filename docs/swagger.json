@@ -2991,7 +2991,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserAnswerList",
+                "description": "list personal answers",
                 "consumes": [
                     "application/json"
                 ],
@@ -2999,9 +2999,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "api-answer"
+                    "Personal"
                 ],
-                "summary": "UserAnswerList",
+                "summary": "list personal answers",
                 "parameters": [
                     {
                         "type": "string",
@@ -3033,8 +3033,8 @@
                     {
                         "type": "string",
                         "default": "20",
-                        "description": "pagesize",
-                        "name": "pagesize",
+                        "description": "page_size",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     }
@@ -3056,7 +3056,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserCollectionList",
+                "description": "list personal collections",
                 "consumes": [
                     "application/json"
                 ],
@@ -3066,7 +3066,7 @@
                 "tags": [
                     "Collection"
                 ],
-                "summary": "UserCollectionList",
+                "summary": "list personal collections",
                 "parameters": [
                     {
                         "type": "string",
@@ -3079,8 +3079,8 @@
                     {
                         "type": "string",
                         "default": "20",
-                        "description": "pagesize",
-                        "name": "pagesize",
+                        "description": "page_size",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     }
@@ -5277,12 +5277,12 @@
                 "summary": "UserModifyPassWord",
                 "parameters": [
                     {
-                        "description": "UserModifyPassWordRequest",
+                        "description": "UserModifyPasswordReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.UserModifyPassWordRequest"
+                            "$ref": "#/definitions/schema.UserModifyPasswordReq"
                         }
                     }
                 ],
@@ -5798,7 +5798,7 @@
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserList",
+                "description": "list personal questions",
                 "consumes": [
                     "application/json"
                 ],
@@ -5806,9 +5806,9 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Question"
+                    "Personal"
                 ],
-                "summary": "UserList",
+                "summary": "list personal questions",
                 "parameters": [
                     {
                         "type": "string",
@@ -5840,8 +5840,8 @@
                     {
                         "type": "string",
                         "default": "20",
-                        "description": "pagesize",
-                        "name": "pagesize",
+                        "description": "page_size",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     }
@@ -6373,19 +6373,11 @@
                 }
             }
         },
-        "schema.ConfigFieldUIOptionAction": {
-            "type": "object",
-            "properties": {
-                "url": {
-                    "type": "string"
-                }
-            }
-        },
         "schema.ConfigFieldUIOptions": {
             "type": "object",
             "properties": {
                 "action": {
-                    "$ref": "#/definitions/schema.ConfigFieldUIOptionAction"
+                    "$ref": "#/definitions/schema.UIOptionAction"
                 },
                 "input_type": {
                     "type": "string"
@@ -7472,6 +7464,17 @@
                 }
             }
         },
+        "schema.LoadingAction": {
+            "type": "object",
+            "properties": {
+                "state": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.NotificationClearIDRequest": {
             "type": "object",
             "properties": {
@@ -7486,6 +7489,17 @@
                 "type": {
                     "description": "inbox achievement",
                     "type": "string"
+                }
+            }
+        },
+        "schema.OnCompleteAction": {
+            "type": "object",
+            "properties": {
+                "refresh_form_config": {
+                    "type": "boolean"
+                },
+                "toast_return_message": {
+                    "type": "boolean"
                 }
             }
         },
@@ -8477,6 +8491,23 @@
                 }
             }
         },
+        "schema.UIOptionAction": {
+            "type": "object",
+            "properties": {
+                "loading": {
+                    "$ref": "#/definitions/schema.LoadingAction"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "on_complete": {
+                    "$ref": "#/definitions/schema.OnCompleteAction"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.UnreviewedRevisionInfoInfo": {
             "type": "object",
             "properties": {
@@ -8533,9 +8564,6 @@
         },
         "schema.UpdateInfoRequest": {
             "type": "object",
-            "required": [
-                "display_name"
-            ],
             "properties": {
                 "avatar": {
                     "description": "avatar",
@@ -8831,6 +8859,11 @@
                 "e_mail": {
                     "type": "string",
                     "maxLength": 500
+                },
+                "pass": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 8
                 }
             }
         },
@@ -8874,7 +8907,7 @@
                 }
             }
         },
-        "schema.UserModifyPassWordRequest": {
+        "schema.UserModifyPasswordReq": {
             "type": "object",
             "required": [
                 "pass"

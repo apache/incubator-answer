@@ -204,19 +204,28 @@ func (us *UserCenterLoginService) UserCenterUserSettings(ctx context.Context, us
 	return resp, nil
 }
 
+// UserCenterAdminFunctionAgent Check in the backend administration interface if the user-related functions
+// are turned off due to turning on the User Center plugin.
 func (us *UserCenterLoginService) UserCenterAdminFunctionAgent(ctx context.Context) (
 	resp *schema.UserCenterAdminFunctionAgentResp, err error) {
-	resp = &schema.UserCenterAdminFunctionAgentResp{}
+	resp = &schema.UserCenterAdminFunctionAgentResp{
+		AllowCreateUser:         true,
+		AllowUpdateUserStatus:   true,
+		AllowUpdateUserPassword: true,
+		AllowUpdateUserRole:     true,
+	}
 	userCenter, ok := plugin.GetUserCenter()
 	if !ok {
 		return
 	}
 	desc := userCenter.Description()
 	// If user status agent is enabled, admin can not update user status in answer.
-	resp.UserStatusAgentEnabled = desc.UserStatusAgentEnabled
-	// If original user system is enabled, admin can update user password in answer.
-	// So user password agent is disabled.
-	resp.UserPasswordAgentEnabled = !desc.EnabledOriginalUserSystem
+	resp.AllowUpdateUserStatus = !desc.UserStatusAgentEnabled
+
+	// If original user system is enabled, admin can update user password and role in answer.
+	resp.AllowUpdateUserPassword = desc.EnabledOriginalUserSystem
+	resp.AllowUpdateUserRole = desc.EnabledOriginalUserSystem
+	resp.AllowCreateUser = desc.EnabledOriginalUserSystem
 	return resp, nil
 }
 

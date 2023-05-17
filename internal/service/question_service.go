@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/base/validator"
@@ -270,6 +271,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	question.Status = entity.QuestionStatusAvailable
 	question.RevisionID = "0"
 	question.CreatedAt = now
+	question.PostUpdateTime = now
 	question.Pin = entity.QuestionUnPin
 	question.Show = entity.QuestionShow
 	//question.UpdatedAt = nil
@@ -733,70 +735,74 @@ func (qs *QuestionService) CheckChangeReservedTag(ctx context.Context, oldobject
 	return qs.tagCommon.CheckChangeReservedTag(ctx, oldobjectTagData, objectTagData)
 }
 
-func (qs *QuestionService) SearchUserList(ctx context.Context, userName, order string, page, pageSize int, loginUserID string) ([]*schema.UserQuestionInfo, int64, error) {
-	userlist := make([]*schema.UserQuestionInfo, 0)
+// PersonalQuestionPage get question list by user
+func (qs *QuestionService) PersonalQuestionPage(ctx context.Context, req *schema.PersonalQuestionPageReq) (
+	pageModel *pager.PageModel, err error) {
 
-	userinfo, Exist, err := qs.userCommon.GetUserBasicInfoByUserName(ctx, userName)
+	userinfo, exist, err := qs.userCommon.GetUserBasicInfoByUserName(ctx, req.Username)
 	if err != nil {
-		return userlist, 0, err
+		return nil, err
 	}
-	if !Exist {
-		return userlist, 0, nil
+	if !exist {
+		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 	search := &schema.QuestionPageReq{}
-	search.OrderCond = order
-	search.Page = page
-	search.PageSize = pageSize
+	search.OrderCond = req.OrderCond
+	search.Page = req.Page
+	search.PageSize = req.PageSize
 	search.UserIDBeSearched = userinfo.ID
-	search.LoginUserID = loginUserID
-	questionlist, count, err := qs.GetQuestionPage(ctx, search)
+	search.LoginUserID = req.LoginUserID
+	questionList, total, err := qs.GetQuestionPage(ctx, search)
 	if err != nil {
-		return userlist, 0, err
+		return nil, err
 	}
-	for _, item := range questionlist {
+	userQuestionInfoList := make([]*schema.UserQuestionInfo, 0)
+	for _, item := range questionList {
 		info := &schema.UserQuestionInfo{}
 		_ = copier.Copy(info, item)
 		status, ok := entity.AdminQuestionSearchStatusIntToString[item.Status]
 		if ok {
 			info.Status = status
 		}
-		userlist = append(userlist, info)
+		userQuestionInfoList = append(userQuestionInfoList, info)
 	}
-	return userlist, count, nil
+	return pager.NewPageModel(total, userQuestionInfoList), nil
 }
 
-func (qs *QuestionService) SearchUserAnswerList(ctx context.Context, userName, order string, page, pageSize int, loginUserID string) ([]*schema.UserAnswerInfo, int64, error) {
-	answerlist := make([]*schema.AnswerInfo, 0)
-	userAnswerlist := make([]*schema.UserAnswerInfo, 0)
-	userinfo, Exist, err := qs.userCommon.GetUserBasicInfoByUserName(ctx, userName)
+func (qs *QuestionService) PersonalAnswerPage(ctx context.Context, req *schema.PersonalAnswerPageReq) (
+	pageModel *pager.PageModel, err error) {
+	userinfo, exist, err := qs.userCommon.GetUserBasicInfoByUserName(ctx, req.Username)
 	if err != nil {
-		return userAnswerlist, 0, err
+		return nil, err
 	}
-	if !Exist {
-		return userAnswerlist, 0, nil
+	if !exist {
+		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 	answersearch := &entity.AnswerSearch{}
 	answersearch.UserID = userinfo.ID
-	answersearch.PageSize = pageSize
-	answersearch.Page = page
-	if order == "newest" {
+	answersearch.PageSize = req.PageSize
+	answersearch.Page = req.Page
+	if req.OrderCond == "newest" {
 		answersearch.Order = entity.AnswerSearchOrderByTime
 	} else {
 		answersearch.Order = entity.AnswerSearchOrderByDefault
 	}
 	questionIDs := make([]string, 0)
-	answerList, count, err := qs.questioncommon.AnswerCommon.Search(ctx, answersearch)
+	answerList, total, err := qs.questioncommon.AnswerCommon.Search(ctx, answersearch)
 	if err != nil {
-		return userAnswerlist, count, err
+		return nil, err
 	}
+
+	answerlist := make([]*schema.AnswerInfo, 0)
+	userAnswerlist := make([]*schema.UserAnswerInfo, 0)
 	for _, item := range answerList {
 		answerinfo := qs.questioncommon.AnswerCommon.ShowFormat(ctx, item)
 		answerlist = append(answerlist, answerinfo)
 		questionIDs = append(questionIDs, uid.DeShortID(item.QuestionID))
 	}
-	questionMaps, err := qs.questioncommon.FindInfoByID(ctx, questionIDs, loginUserID)
+	questionMaps, err := qs.questioncommon.FindInfoByID(ctx, questionIDs, req.LoginUserID)
 	if err != nil {
-		return userAnswerlist, count, err
+		return nil, err
 	}
 
 	for _, item := range answerlist {
@@ -813,34 +819,29 @@ func (qs *QuestionService) SearchUserAnswerList(ctx context.Context, userName, o
 		}
 	}
 
-	return userAnswerlist, count, nil
+	return pager.NewPageModel(total, userAnswerlist), nil
 }
 
-func (qs *QuestionService) SearchUserCollectionList(ctx context.Context, page, pageSize int, loginUserID string) ([]*schema.QuestionInfo, int64, error) {
+// PersonalCollectionPage get collection list by user
+func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *schema.PersonalCollectionPageReq) (
+	pageModel *pager.PageModel, err error) {
 	list := make([]*schema.QuestionInfo, 0)
-	userinfo, Exist, err := qs.userCommon.GetUserBasicInfoByID(ctx, loginUserID)
-	if err != nil {
-		return list, 0, err
-	}
-	if !Exist {
-		return list, 0, nil
-	}
 	collectionSearch := &entity.CollectionSearch{}
-	collectionSearch.UserID = userinfo.ID
-	collectionSearch.Page = page
-	collectionSearch.PageSize = pageSize
-	collectionlist, count, err := qs.collectionCommon.SearchList(ctx, collectionSearch)
+	collectionSearch.UserID = req.UserID
+	collectionSearch.Page = req.Page
+	collectionSearch.PageSize = req.PageSize
+	collectionList, total, err := qs.collectionCommon.SearchList(ctx, collectionSearch)
 	if err != nil {
-		return list, 0, err
+		return nil, err
 	}
 	questionIDs := make([]string, 0)
-	for _, item := range collectionlist {
+	for _, item := range collectionList {
 		questionIDs = append(questionIDs, item.ObjectID)
 	}
 
-	questionMaps, err := qs.questioncommon.FindInfoByID(ctx, questionIDs, loginUserID)
+	questionMaps, err := qs.questioncommon.FindInfoByID(ctx, questionIDs, req.UserID)
 	if err != nil {
-		return list, count, err
+		return nil, err
 	}
 	for _, id := range questionIDs {
 		_, ok := questionMaps[uid.EnShortID(id)]
@@ -853,7 +854,7 @@ func (qs *QuestionService) SearchUserCollectionList(ctx context.Context, page, p
 		}
 	}
 
-	return list, count, nil
+	return pager.NewPageModel(total, list), nil
 }
 
 func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName string, loginUserID string) ([]*schema.UserQuestionInfo, []*schema.UserAnswerInfo, error) {
@@ -1063,7 +1064,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 	msg.ReceiverUserID = questionInfo.UserID
 	msg.TriggerUserID = questionInfo.UserID
 	msg.ObjectType = constant.QuestionObjectType
-	msg.NotificationAction = constant.YourQuestionWasDeleted
+	msg.NotificationAction = constant.NotificationYourQuestionWasDeleted
 	notice_queue.AddNotification(msg)
 	return nil
 }

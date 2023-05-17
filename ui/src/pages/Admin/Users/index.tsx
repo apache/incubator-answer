@@ -57,8 +57,10 @@ const Users: FC = () => {
   const currentUser = loggedUserInfoStore((state) => state.user);
   const { agent: ucAgent } = userCenterStore();
   const [adminUcAgent, setAdminUcAgent] = useState<AdminUcAgent>({
-    user_status_agent_enabled: false,
-    user_password_agent_enabled: false,
+    allow_create_user: true,
+    allow_update_user_status: true,
+    allow_update_user_password: true,
+    allow_update_user_role: true,
   });
   const Toast = useToast();
   const {
@@ -156,6 +158,18 @@ const Users: FC = () => {
       });
     }
   }, [ucAgent]);
+  const showAddUser =
+    !ucAgent?.enabled || (ucAgent?.enabled && adminUcAgent?.allow_create_user);
+  const showActionPassword =
+    !ucAgent?.enabled ||
+    (ucAgent?.enabled && adminUcAgent?.allow_update_user_password);
+  const showActionRole =
+    !ucAgent?.enabled ||
+    (ucAgent?.enabled && adminUcAgent?.allow_update_user_role);
+  const showActionStatus =
+    !ucAgent?.enabled ||
+    (ucAgent?.enabled && adminUcAgent?.allow_update_user_status);
+  const showAction = showActionPassword || showActionRole || showActionStatus;
   return (
     <>
       <h3 className="mb-4">{t('title')}</h3>
@@ -167,7 +181,7 @@ const Users: FC = () => {
             sortKey="filter"
             i18nKeyPrefix="admin.users"
           />
-          {!ucAgent?.enabled ? (
+          {showAddUser ? (
             <Button
               variant="outline-primary"
               size="sm"
@@ -252,31 +266,31 @@ const Users: FC = () => {
                     </span>
                   </td>
                 )}
-                {curFilter !== 'deleted' ? (
+                {curFilter !== 'deleted' && showAction ? (
                   <td className="text-end">
                     <Dropdown>
                       <Dropdown.Toggle variant="link" className="no-toggle">
                         <Icon name="three-dots-vertical" />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
-                        {!ucAgent?.enabled ||
-                        !adminUcAgent.user_password_agent_enabled ? (
+                        {showActionPassword ? (
                           <Dropdown.Item
                             onClick={() => handleAction('password', user)}>
                             {t('set_new_password')}
                           </Dropdown.Item>
                         ) : null}
-                        {!ucAgent?.enabled ||
-                        !adminUcAgent.user_status_agent_enabled ? (
+                        {showActionStatus ? (
                           <Dropdown.Item
                             onClick={() => handleAction('status', user)}>
                             {t('change_status')}
                           </Dropdown.Item>
                         ) : null}
-                        <Dropdown.Item
-                          onClick={() => handleAction('role', user)}>
-                          {t('change_role')}
-                        </Dropdown.Item>
+                        {showActionRole ? (
+                          <Dropdown.Item
+                            onClick={() => handleAction('role', user)}>
+                            {t('change_role')}
+                          </Dropdown.Item>
+                        ) : null}
                       </Dropdown.Menu>
                     </Dropdown>
                   </td>

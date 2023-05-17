@@ -4,14 +4,12 @@ import (
 	"encoding/json"
 
 	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/gravatar"
 	"github.com/jinzhu/copier"
-	"github.com/segmentfault/pacman/errors"
 )
 
 // UserVerifyEmailReq user verify email request
@@ -277,14 +275,14 @@ func (u *UserRegisterReq) Check() (errFields []*validator.FormErrorField, err er
 	return nil, nil
 }
 
-// UserModifyPassWordRequest
-type UserModifyPassWordRequest struct {
+type UserModifyPasswordReq struct {
 	OldPass string `validate:"omitempty,gte=8,lte=32" json:"old_pass"`
 	Pass    string `validate:"required,gte=8,lte=32" json:"pass"`
-	UserID  string `json:"-"`
+	UserID      string `json:"-"`
+	AccessToken string `json:"-"`
 }
 
-func (u *UserModifyPassWordRequest) Check() (errFields []*validator.FormErrorField, err error) {
+func (u *UserModifyPasswordReq) Check() (errFields []*validator.FormErrorField, err error) {
 	// TODO i18n
 	err = checker.CheckPassword(8, 32, 0, u.Pass)
 	if err != nil {
@@ -300,7 +298,7 @@ func (u *UserModifyPassWordRequest) Check() (errFields []*validator.FormErrorFie
 
 type UpdateInfoRequest struct {
 	// display_name
-	DisplayName string `validate:"required,gt=0,lte=30" json:"display_name"`
+	DisplayName string `validate:"omitempty,gt=0,lte=30" json:"display_name"`
 	// username
 	Username string `validate:"omitempty,gt=3,lte=30" json:"username"`
 	// avatar
@@ -329,16 +327,6 @@ func (a *AvatarInfo) ToJsonString() string {
 }
 
 func (req *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {
-	if len(req.Username) > 0 {
-		if checker.IsInvalidUsername(req.Username) {
-			errField := &validator.FormErrorField{
-				ErrorField: "username",
-				ErrorMsg:   reason.UsernameInvalid,
-			}
-			errFields = append(errFields, errField)
-			return errFields, errors.BadRequest(reason.UsernameInvalid)
-		}
-	}
 	req.BioHTML = converter.Markdown2BasicHTML(req.Bio)
 	return nil, nil
 }
@@ -421,6 +409,7 @@ type GetOtherUserInfoResp struct {
 type UserChangeEmailSendCodeReq struct {
 	UserVerifyEmailSendReq
 	Email  string `validate:"required,email,gt=0,lte=500" json:"e_mail"`
+	Pass   string `validate:"omitempty,gte=8,lte=32" json:"pass"`
 	UserID string `json:"-"`
 }
 

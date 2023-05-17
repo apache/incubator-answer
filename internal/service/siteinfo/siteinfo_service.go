@@ -36,12 +36,15 @@ func NewSiteInfoService(
 	tagCommonService *tagcommon.TagCommonService,
 	configRepo config.ConfigRepo,
 ) *SiteInfoService {
-	resp, err := siteInfoCommonService.GetSiteUsers(context.Background())
-	if err != nil {
-		log.Error(err)
-	} else {
-		constant.DefaultAvatar = resp.DefaultAvatar
+	usersSiteInfo, _ := siteInfoCommonService.GetSiteUsers(context.Background())
+	if usersSiteInfo != nil {
+		constant.DefaultAvatar = usersSiteInfo.DefaultAvatar
 	}
+	generalSiteInfo, _ := siteInfoCommonService.GetSiteGeneral(context.Background())
+	if generalSiteInfo != nil {
+		constant.DefaultSiteURL = generalSiteInfo.SiteUrl
+	}
+
 	return &SiteInfoService{
 		siteInfoRepo:          siteInfoRepo,
 		siteInfoCommonService: siteInfoCommonService,
@@ -116,18 +119,16 @@ func (s *SiteInfoService) GetSiteTheme(ctx context.Context) (resp *schema.SiteTh
 
 func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGeneralReq) (err error) {
 	req.FormatSiteUrl()
-	var (
-		siteType = "general"
-		content  []byte
-	)
-	content, _ = json.Marshal(req)
-
-	data := entity.SiteInfo{
-		Type:    siteType,
+	content, _ := json.Marshal(req)
+	data := &entity.SiteInfo{
+		Type:    constant.SiteTypeGeneral,
 		Content: string(content),
+		Status:  1,
 	}
-
-	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
+	err = s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeGeneral, data)
+	if err == nil {
+		constant.DefaultSiteURL = req.SiteUrl
+	}
 	return
 }
 
@@ -267,8 +268,11 @@ func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.Upda
 	return
 }
 
-func (s *SiteInfoService) GetSeo(ctx context.Context) (resp *schema.SiteSeoResp, err error) {
-	resp = &schema.SiteSeoResp{}
+func (s *SiteInfoService) GetSeo(ctx context.Context) (resp *schema.SiteSeoReq, err error) {
+	resp = &schema.SiteSeoReq{}
+	if err = s.siteInfoCommonService.GetSiteInfoByType(ctx, constant.SiteTypeSeo, resp); err != nil {
+		return resp, err
+	}
 	loginConfig, err := s.GetSiteLogin(ctx)
 	if err != nil {
 		log.Error(err)
@@ -279,17 +283,6 @@ func (s *SiteInfoService) GetSeo(ctx context.Context) (resp *schema.SiteSeoResp,
 		resp.Robots = "User-agent: *\nDisallow: /"
 		return resp, nil
 	}
-
-	resp = &schema.SiteSeoResp{}
-	siteInfo, exist, err := s.siteInfoRepo.GetByType(ctx, constant.SiteTypeSeo)
-	if err != nil {
-		log.Error(err)
-		return resp, nil
-	}
-	if !exist {
-		return resp, nil
-	}
-	_ = json.Unmarshal([]byte(siteInfo.Content), resp)
 	return resp, nil
 }
 

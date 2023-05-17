@@ -11,7 +11,6 @@ import (
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
-	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
@@ -552,84 +551,75 @@ func (qc *QuestionController) UserTop(ctx *gin.Context) {
 	})
 }
 
-// UserList godoc
-// @Summary UserList
-// @Description UserList
-// @Tags Question
+// PersonalQuestionPage list personal questions
+// @Summary list personal questions
+// @Description list personal questions
+// @Tags Personal
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @Param username query string true "username"  default(string)
 // @Param order query string true "order"  Enums(newest,score)
 // @Param page query string true "page"  default(0)
-// @Param pagesize query string true "pagesize"  default(20)
+// @Param page_size query string true "page_size" default(20)
 // @Success 200 {object} handler.RespBody
 // @Router /personal/question/page [get]
-func (qc *QuestionController) UserList(ctx *gin.Context) {
-	userName := ctx.Query("username")
-	order := ctx.Query("order")
-	pageStr := ctx.Query("page")
-	pageSizeStr := ctx.Query("pagesize")
-	page := converter.StringToInt(pageStr)
-	pageSize := converter.StringToInt(pageSizeStr)
-	userID := middleware.GetLoginUserIDFromContext(ctx)
-	questionList, count, err := qc.questionService.SearchUserList(ctx, userName, order, page, pageSize, userID)
-	handler.HandleResponse(ctx, err, gin.H{
-		"list":  questionList,
-		"count": count,
-	})
+func (qc *QuestionController) PersonalQuestionPage(ctx *gin.Context) {
+	req := &schema.PersonalQuestionPageReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+	resp, err := qc.questionService.PersonalQuestionPage(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
-// UserAnswerList godoc
-// @Summary UserAnswerList
-// @Description UserAnswerList
-// @Tags api-answer
+// PersonalAnswerPage list personal answers
+// @Summary list personal answers
+// @Description list personal answers
+// @Tags Personal
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @Param username query string true "username"  default(string)
 // @Param order query string true "order"  Enums(newest,score)
 // @Param page query string true "page"  default(0)
-// @Param pagesize query string true "pagesize"  default(20)
+// @Param page_size query string true "page_size"  default(20)
 // @Success 200 {object} handler.RespBody
 // @Router /answer/api/v1/personal/answer/page [get]
-func (qc *QuestionController) UserAnswerList(ctx *gin.Context) {
-	userName := ctx.Query("username")
-	order := ctx.Query("order")
-	pageStr := ctx.Query("page")
-	pageSizeStr := ctx.Query("pagesize")
-	page := converter.StringToInt(pageStr)
-	pageSize := converter.StringToInt(pageSizeStr)
-	userID := middleware.GetLoginUserIDFromContext(ctx)
-	questionList, count, err := qc.questionService.SearchUserAnswerList(ctx, userName, order, page, pageSize, userID)
-	handler.HandleResponse(ctx, err, gin.H{
-		"list":  questionList,
-		"count": count,
-	})
+func (qc *QuestionController) PersonalAnswerPage(ctx *gin.Context) {
+	req := &schema.PersonalAnswerPageReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+	resp, err := qc.questionService.PersonalAnswerPage(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
-// UserCollectionList godoc
-// @Summary UserCollectionList
-// @Description UserCollectionList
+// PersonalCollectionPage list personal collections
+// @Summary list personal collections
+// @Description list personal collections
 // @Tags Collection
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
 // @Param page query string true "page"  default(0)
-// @Param pagesize query string true "pagesize"  default(20)
+// @Param page_size query string true "page_size"  default(20)
 // @Success 200 {object} handler.RespBody
 // @Router /answer/api/v1/personal/collection/page [get]
-func (qc *QuestionController) UserCollectionList(ctx *gin.Context) {
-	pageStr := ctx.Query("page")
-	pageSizeStr := ctx.Query("pagesize")
-	page := converter.StringToInt(pageStr)
-	pageSize := converter.StringToInt(pageSizeStr)
-	userID := middleware.GetLoginUserIDFromContext(ctx)
-	questionList, count, err := qc.questionService.SearchUserCollectionList(ctx, page, pageSize, userID)
-	handler.HandleResponse(ctx, err, gin.H{
-		"list":  questionList,
-		"count": count,
-	})
+func (qc *QuestionController) PersonalCollectionPage(ctx *gin.Context) {
+	req := &schema.PersonalCollectionPageReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	resp, err := qc.questionService.PersonalCollectionPage(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
 // AdminSearchList godoc

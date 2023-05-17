@@ -2,18 +2,23 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-import { isEmpty } from 'lodash';
-
 import { useToast } from '@/hooks';
 import type * as Types from '@/common/interface';
-import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
+import { SchemaForm, JSONSchema, UISchema } from '@/components';
 import { useQueryPluginConfig, updatePluginConfig } from '@/services';
-import { InputOptions } from '@/components/SchemaForm';
+import {
+  InputOptions,
+  FormKit,
+  initFormData,
+  mergeFormData,
+} from '@/components/SchemaForm';
 
 const Config = () => {
   const { t } = useTranslation('translation');
   const { slug_name } = useParams<{ slug_name: string }>();
-  const { data } = useQueryPluginConfig({ plugin_slug_name: slug_name });
+  const { data, mutate: refreshPluginConfig } = useQueryPluginConfig({
+    plugin_slug_name: slug_name,
+  });
   const Toast = useToast();
   const [schema, setSchema] = useState<JSONSchema | null>(null);
   const [uiSchema, setUISchema] = useState<UISchema>();
@@ -62,7 +67,7 @@ const Config = () => {
     };
     setSchema(result);
     setUISchema(uiConf);
-    setFormData(initFormData(result));
+    setFormData(mergeFormData(initFormData(result), formData));
   }, [data?.config_fields]);
 
   const onSubmit = (evt) => {
@@ -86,24 +91,19 @@ const Config = () => {
       });
     });
   };
-
+  const refreshConfig: FormKit['refreshConfig'] = async () => {
+    refreshPluginConfig();
+  };
   const handleOnChange = (form) => {
     setFormData(form);
   };
-
-  if (!data || !schema || !formData) {
-    return null;
-  }
-
-  if (isEmpty(schema.properties)) {
-    return <h3 className="mb-4">{data?.name}</h3>;
-  }
   return (
     <>
       <h3 className="mb-4">{data?.name}</h3>
       <SchemaForm
         schema={schema}
         uiSchema={uiSchema}
+        refreshConfig={refreshConfig}
         formData={formData}
         onSubmit={onSubmit}
         onChange={handleOnChange}

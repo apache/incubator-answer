@@ -64,8 +64,8 @@ const Tags = () => {
       <Row className="mb-4 d-flex justify-content-center">
         <Col xxl={10} sm={12}>
           <h3 className="mb-4">{t('title')}</h3>
-          <div className="d-flex justify-content-between align-items-center flex-wrap">
-            <Stack direction="horizontal" gap={3}>
+          <div className="d-block d-sm-flex justify-content-between align-items-center flex-wrap">
+            <Stack direction="horizontal" gap={3} className="mb-3 mb-sm-0">
               <Form>
                 <Form.Group controlId="formBasicEmail">
                   <Form.Control

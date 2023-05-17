@@ -46,7 +46,7 @@ func (tr *tagCommonRepo) GetTagListByIDs(ctx context.Context, ids []string) (tag
 // GetTagBySlugName get tag by slug name
 func (tr *tagCommonRepo) GetTagBySlugName(ctx context.Context, slugName string) (tagInfo *entity.Tag, exist bool, err error) {
 	tagInfo = &entity.Tag{}
-	session := tr.data.DB.Where("slug_name = LOWER(?)", slugName)
+	session := tr.data.DB.Where("LOWER(slug_name) = ?", slugName)
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	exist, err = session.Get(tagInfo)
 	if err != nil {

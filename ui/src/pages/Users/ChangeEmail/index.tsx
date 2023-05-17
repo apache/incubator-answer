@@ -15,7 +15,7 @@ const Index: FC = () => {
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '6rem' }}>
       <WelcomeTitle />
-      <Col className="mx-auto" md={3}>
+      <Col className="mx-auto" md={6} lg={4} xl={3}>
         <SendEmail />
       </Col>
     </Container>

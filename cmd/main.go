@@ -1,6 +1,7 @@
 package answercmd
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -56,6 +57,7 @@ func runApp() {
 	constant.Version = Version
 	constant.Revision = Revision
 	schema.AppStartTime = time.Now()
+	fmt.Println("answer Version:", constant.Version, " Revision:", constant.Revision)
 
 	defer cleanup()
 	if err := app.Run(); err != nil {

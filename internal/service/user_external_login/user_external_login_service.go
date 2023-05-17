@@ -15,6 +15,7 @@ import (
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/random"
 	"github.com/answerdev/answer/pkg/token"
+	"github.com/answerdev/answer/plugin"
 	"github.com/google/uuid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -317,4 +318,34 @@ func (us *UserExternalLoginService) ExternalLoginUnbinding(
 	}
 
 	return nil, us.userExternalLoginRepo.DeleteUserExternalLogin(ctx, req.UserID, req.ExternalID)
+}
+
+// CheckUserStatusInUserCenter check user status in user center
+func (us *UserExternalLoginService) CheckUserStatusInUserCenter(ctx context.Context, userID string) (
+	valid bool, externalID string, err error) {
+	// If enable user center plugin, user status should be checked by user center
+	userCenter, ok := plugin.GetUserCenter()
+	if !ok {
+		return true, "", nil
+	}
+	userInfoList, err := us.GetExternalLoginUserInfoList(ctx, userID)
+	if err != nil {
+		return false, "", err
+	}
+	var thisUcUserInfo *entity.UserExternalLogin
+	for _, t := range userInfoList {
+		if t.Provider == userCenter.Info().SlugName {
+			thisUcUserInfo = t
+			break
+		}
+	}
+	// If this user not login by user center, no need to check user status
+	if thisUcUserInfo == nil {
+		return true, "", nil
+	}
+	userStatus := userCenter.UserStatus(thisUcUserInfo.ExternalID)
+	if userStatus == plugin.UserStatusDeleted {
+		return false, thisUcUserInfo.ExternalID, nil
+	}
+	return true, thisUcUserInfo.ExternalID, nil
 }

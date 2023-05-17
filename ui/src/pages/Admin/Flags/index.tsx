@@ -73,7 +73,7 @@ const Flags: FC = () => {
           {flagTypeKeys.map((li) => {
             return (
               <option value={li} key={li}>
-                {li}
+                {t(li, { keyPrefix: 'btns' })}
               </option>
             );
           })}
@@ -96,7 +96,9 @@ const Flags: FC = () => {
                 <td>
                   <Stack>
                     <small className="text-secondary">
-                      Flagged {li.object_type}
+                      {t('flagged_type', {
+                        type: t(li.object_type, { keyPrefix: 'btns' }),
+                      })}
                     </small>
                     <BaseUserCard
                       data={li.reported_user}

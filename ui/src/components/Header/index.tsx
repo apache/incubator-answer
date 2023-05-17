@@ -20,7 +20,7 @@ import {
 
 import classnames from 'classnames';
 
-import { floppyNavigation, userCenter } from '@/utils';
+import { userCenter } from '@/utils';
 import {
   loggedUserInfoStore,
   siteInfoStore,
@@ -29,7 +29,6 @@ import {
   themeSettingStore,
 } from '@/stores';
 import { logout, useQueryNotificationStatus } from '@/services';
-import { RouteAlias } from '@/router/alias';
 
 import NavItems from './components/NavItems';
 
@@ -73,19 +72,6 @@ const Header: FC = () => {
     clearUserStore();
     window.location.replace(window.location.href);
   };
-  const onLoginClick = (evt) => {
-    if (location.pathname === RouteAlias.login) {
-      evt.preventDefault();
-      window.location.reload();
-      return;
-    }
-    if (floppyNavigation.shouldProcessLinkClick(evt)) {
-      evt.preventDefault();
-      floppyNavigation.navigateToLogin({
-        handler: navigate,
-      });
-    }
-  };
 
   useEffect(() => {
     if (q) {
@@ -123,17 +109,17 @@ const Header: FC = () => {
         />
 
         <div className="d-flex justify-content-between align-items-center nav-grow flex-nowrap">
-          <Navbar.Brand to="/" as={Link} className="lh-1 me-0 me-sm-3">
+          <Navbar.Brand to="/" as={Link} className="lh-1 me-0 me-sm-3 p-0">
             {brandingInfo.logo ? (
               <>
                 <img
-                  className="d-none d-lg-block logo rounded-1 me-0"
+                  className="d-none d-lg-block logo me-0"
                   src={brandingInfo.logo}
                   alt=""
                 />
 
                 <img
-                  className="lg-none logo rounded-1 me-0"
+                  className="lg-none logo me-0"
                   src={brandingInfo.mobile_logo || brandingInfo.logo}
                   alt=""
                 />
@@ -155,7 +141,6 @@ const Header: FC = () => {
                     'link-light': navbarStyle === 'theme-colored',
                     'link-primary': navbarStyle !== 'theme-colored',
                   })}
-                  onClick={onLoginClick}
                   href={userCenter.getLoginUrl()}>
                   {t('btns.login')}
                 </Button>
@@ -243,7 +228,6 @@ const Header: FC = () => {
                     'link-light': navbarStyle === 'theme-colored',
                     'link-primary': navbarStyle !== 'theme-colored',
                   })}
-                  onClick={onLoginClick}
                   href={userCenter.getLoginUrl()}>
                   {t('btns.login')}
                 </Button>

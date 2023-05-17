@@ -21,7 +21,7 @@ type AuthRepo interface {
 	SetAdminUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) error
 	RemoveAdminUserCacheInfo(ctx context.Context, accessToken string) (err error)
 	AddUserTokenMapping(ctx context.Context, userID, accessToken string) (err error)
-	RemoveUserTokens(ctx context.Context, userID string)
+	RemoveUserTokens(ctx context.Context, userID string, remainToken string)
 }
 
 // AuthService kit service
@@ -43,7 +43,6 @@ func (as *AuthService) GetUserCacheInfo(ctx context.Context, accessToken string)
 	}
 	cacheInfo, _ := as.authRepo.GetUserStatus(ctx, userCacheInfo.UserID)
 	if cacheInfo != nil {
-		log.Debugf("user status updated: %+v", cacheInfo)
 		userCacheInfo.UserStatus = cacheInfo.UserStatus
 		userCacheInfo.EmailStatus = cacheInfo.EmailStatus
 		userCacheInfo.RoleID = cacheInfo.RoleID
@@ -94,9 +93,14 @@ func (as *AuthService) AddUserTokenMapping(ctx context.Context, userID, accessTo
 	return as.authRepo.AddUserTokenMapping(ctx, userID, accessToken)
 }
 
-// RemoveUserTokens Log out all users under this user id
-func (as *AuthService) RemoveUserTokens(ctx context.Context, userID string) {
-	as.authRepo.RemoveUserTokens(ctx, userID)
+// RemoveUserAllTokens Log out all users under this user id
+func (as *AuthService) RemoveUserAllTokens(ctx context.Context, userID string) {
+	as.authRepo.RemoveUserTokens(ctx, userID, "")
+}
+
+// RemoveTokensExceptCurrentUser remove all tokens except the current user
+func (as *AuthService) RemoveTokensExceptCurrentUser(ctx context.Context, userID string, accessToken string) {
+	as.authRepo.RemoveUserTokens(ctx, userID, accessToken)
 }
 
 //Admin

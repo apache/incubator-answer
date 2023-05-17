@@ -3003,7 +3003,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserAnswerList",
+                "description": "list personal answers",
                 "consumes": [
                     "application/json"
                 ],
@@ -3011,9 +3011,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "api-answer"
+                    "Personal"
                 ],
-                "summary": "UserAnswerList",
+                "summary": "list personal answers",
                 "parameters": [
                     {
                         "type": "string",
@@ -3045,8 +3045,8 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "default": "20",
-                        "description": "pagesize",
-                        "name": "pagesize",
+                        "description": "page_size",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     }
@@ -3068,7 +3068,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserCollectionList",
+                "description": "list personal collections",
                 "consumes": [
                     "application/json"
                 ],
@@ -3078,7 +3078,7 @@ const docTemplate = `{
                 "tags": [
                     "Collection"
                 ],
-                "summary": "UserCollectionList",
+                "summary": "list personal collections",
                 "parameters": [
                     {
                         "type": "string",
@@ -3091,8 +3091,8 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "default": "20",
-                        "description": "pagesize",
-                        "name": "pagesize",
+                        "description": "page_size",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     }
@@ -5289,12 +5289,12 @@ const docTemplate = `{
                 "summary": "UserModifyPassWord",
                 "parameters": [
                     {
-                        "description": "UserModifyPassWordRequest",
+                        "description": "UserModifyPasswordReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.UserModifyPassWordRequest"
+                            "$ref": "#/definitions/schema.UserModifyPasswordReq"
                         }
                     }
                 ],
@@ -5810,7 +5810,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserList",
+                "description": "list personal questions",
                 "consumes": [
                     "application/json"
                 ],
@@ -5818,9 +5818,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Question"
+                    "Personal"
                 ],
-                "summary": "UserList",
+                "summary": "list personal questions",
                 "parameters": [
                     {
                         "type": "string",
@@ -5852,8 +5852,8 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "default": "20",
-                        "description": "pagesize",
-                        "name": "pagesize",
+                        "description": "page_size",
+                        "name": "page_size",
                         "in": "query",
                         "required": true
                     }
@@ -6385,19 +6385,11 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.ConfigFieldUIOptionAction": {
-            "type": "object",
-            "properties": {
-                "url": {
-                    "type": "string"
-                }
-            }
-        },
         "schema.ConfigFieldUIOptions": {
             "type": "object",
             "properties": {
                 "action": {
-                    "$ref": "#/definitions/schema.ConfigFieldUIOptionAction"
+                    "$ref": "#/definitions/schema.UIOptionAction"
                 },
                 "input_type": {
                     "type": "string"
@@ -7484,6 +7476,17 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.LoadingAction": {
+            "type": "object",
+            "properties": {
+                "state": {
+                    "type": "string"
+                },
+                "text": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.NotificationClearIDRequest": {
             "type": "object",
             "properties": {
@@ -7498,6 +7501,17 @@ const docTemplate = `{
                 "type": {
                     "description": "inbox achievement",
                     "type": "string"
+                }
+            }
+        },
+        "schema.OnCompleteAction": {
+            "type": "object",
+            "properties": {
+                "refresh_form_config": {
+                    "type": "boolean"
+                },
+                "toast_return_message": {
+                    "type": "boolean"
                 }
             }
         },
@@ -8489,6 +8503,23 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.UIOptionAction": {
+            "type": "object",
+            "properties": {
+                "loading": {
+                    "$ref": "#/definitions/schema.LoadingAction"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "on_complete": {
+                    "$ref": "#/definitions/schema.OnCompleteAction"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.UnreviewedRevisionInfoInfo": {
             "type": "object",
             "properties": {
@@ -8545,9 +8576,6 @@ const docTemplate = `{
         },
         "schema.UpdateInfoRequest": {
             "type": "object",
-            "required": [
-                "display_name"
-            ],
             "properties": {
                 "avatar": {
                     "description": "avatar",
@@ -8843,6 +8871,11 @@ const docTemplate = `{
                 "e_mail": {
                     "type": "string",
                     "maxLength": 500
+                },
+                "pass": {
+                    "type": "string",
+                    "maxLength": 32,
+                    "minLength": 8
                 }
             }
         },
@@ -8886,7 +8919,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UserModifyPassWordRequest": {
+        "schema.UserModifyPasswordReq": {
             "type": "object",
             "required": [
                 "pass"

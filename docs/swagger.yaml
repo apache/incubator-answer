@@ -341,15 +341,10 @@ definitions:
       value:
         type: string
     type: object
-  schema.ConfigFieldUIOptionAction:
-    properties:
-      url:
-        type: string
-    type: object
   schema.ConfigFieldUIOptions:
     properties:
       action:
-        $ref: '#/definitions/schema.ConfigFieldUIOptionAction'
+        $ref: '#/definitions/schema.UIOptionAction'
       input_type:
         type: string
       label:
@@ -1130,6 +1125,13 @@ definitions:
         description: vote type
         type: string
     type: object
+  schema.LoadingAction:
+    properties:
+      state:
+        type: string
+      text:
+        type: string
+    type: object
   schema.NotificationClearIDRequest:
     properties:
       id:
@@ -1140,6 +1142,13 @@ definitions:
       type:
         description: inbox achievement
         type: string
+    type: object
+  schema.OnCompleteAction:
+    properties:
+      refresh_form_config:
+        type: boolean
+      toast_return_message:
+        type: boolean
     type: object
   schema.OperationQuestionReq:
     properties:
@@ -1827,6 +1836,17 @@ definitions:
       value:
         type: string
     type: object
+  schema.UIOptionAction:
+    properties:
+      loading:
+        $ref: '#/definitions/schema.LoadingAction'
+      method:
+        type: string
+      on_complete:
+        $ref: '#/definitions/schema.OnCompleteAction'
+      url:
+        type: string
+    type: object
   schema.UnreviewedRevisionInfoInfo:
     properties:
       content:
@@ -1889,8 +1909,6 @@ definitions:
         description: website
         maxLength: 500
         type: string
-    required:
-    - display_name
     type: object
   schema.UpdatePluginConfigReq:
     properties:
@@ -2078,6 +2096,10 @@ definitions:
       e_mail:
         maxLength: 500
         type: string
+      pass:
+        maxLength: 32
+        minLength: 8
+        type: string
     required:
     - e_mail
     type: object
@@ -2110,7 +2132,7 @@ definitions:
     - e_mail
     - pass
     type: object
-  schema.UserModifyPassWordRequest:
+  schema.UserModifyPasswordReq:
     properties:
       old_pass:
         maxLength: 32
@@ -4050,7 +4072,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: UserAnswerList
+      description: list personal answers
       parameters:
       - default: string
         description: username
@@ -4073,9 +4095,9 @@ paths:
         required: true
         type: string
       - default: "20"
-        description: pagesize
+        description: page_size
         in: query
-        name: pagesize
+        name: page_size
         required: true
         type: string
       produces:
@@ -4087,14 +4109,14 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: UserAnswerList
+      summary: list personal answers
       tags:
-      - api-answer
+      - Personal
   /answer/api/v1/personal/collection/page:
     get:
       consumes:
       - application/json
-      description: UserCollectionList
+      description: list personal collections
       parameters:
       - default: "0"
         description: page
@@ -4103,9 +4125,9 @@ paths:
         required: true
         type: string
       - default: "20"
-        description: pagesize
+        description: page_size
         in: query
-        name: pagesize
+        name: page_size
         required: true
         type: string
       produces:
@@ -4117,7 +4139,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: UserCollectionList
+      summary: list personal collections
       tags:
       - Collection
   /answer/api/v1/personal/comment/page:
@@ -5434,12 +5456,12 @@ paths:
       - application/json
       description: UserModifyPassWord
       parameters:
-      - description: UserModifyPassWordRequest
+      - description: UserModifyPasswordReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.UserModifyPassWordRequest'
+          $ref: '#/definitions/schema.UserModifyPasswordReq'
       produces:
       - application/json
       responses:
@@ -5751,7 +5773,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: UserList
+      description: list personal questions
       parameters:
       - default: string
         description: username
@@ -5774,9 +5796,9 @@ paths:
         required: true
         type: string
       - default: "20"
-        description: pagesize
+        description: page_size
         in: query
-        name: pagesize
+        name: page_size
         required: true
         type: string
       produces:
@@ -5788,9 +5810,9 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: UserList
+      summary: list personal questions
       tags:
-      - Question
+      - Personal
   /robots.txt:
     get:
       description: get site robots information

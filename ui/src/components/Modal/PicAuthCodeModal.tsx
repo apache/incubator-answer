@@ -51,7 +51,7 @@ const Index: React.FC<IProps> = ({
                 type="text"
                 autoComplete="off"
                 placeholder={t('placeholder')}
-                isInvalid={captcha.isInvalid}
+                isInvalid={captcha?.isInvalid}
                 onChange={(e) => {
                   Storage.set(CAPTCHA_CODE_STORAGE_KEY, e.target.value);
                   handleCaptcha({

@@ -148,7 +148,7 @@ const Index: FC = () => {
           <p>{t('info', { keyPrefix: 'inactive' })}</p>
         </Col>
       ) : (
-        <Col className="mx-auto" md={3}>
+        <Col className="mx-auto" md={6} lg={4} xl={3}>
           <div className="text-center mb-5">{t('subtitle')}</div>
           <Form noValidate onSubmit={handleSubmit} autoComplete="off">
             <Form.Group controlId="email" className="mb-3">

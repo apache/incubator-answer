@@ -125,14 +125,14 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	//answer
 	r.GET("/answer/info", a.answerController.Get)
 	r.GET("/answer/page", a.answerController.AnswerList)
-	r.GET("/personal/answer/page", a.questionController.UserAnswerList)
+	r.GET("/personal/answer/page", a.questionController.PersonalAnswerPage)
 
 	//question
 	r.GET("/question/info", a.questionController.GetQuestion)
 	r.GET("/question/page", a.questionController.QuestionPage)
 	r.GET("/question/similar/tag", a.questionController.SimilarQuestion)
 	r.GET("/personal/qa/top", a.questionController.UserTop)
-	r.GET("/personal/question/page", a.questionController.UserList)
+	r.GET("/personal/question/page", a.questionController.PersonalQuestionPage)
 
 	// comment
 	r.GET("/comment/page", a.commentController.GetCommentWithPage)
@@ -187,7 +187,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// collection
 	r.POST("/collection/switch", a.collectionController.CollectionSwitch)
-	r.GET("/personal/collection/page", a.questionController.UserCollectionList)
+	r.GET("/personal/collection/page", a.questionController.PersonalCollectionPage)
 
 	// question
 	r.POST("/question", a.questionController.AddQuestion)
@@ -248,8 +248,8 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.GET("/users/page", a.adminUserController.GetUserPage)
 	r.PUT("/user/status", a.adminUserController.UpdateUserStatus)
 	r.PUT("/user/role", a.adminUserController.UpdateUserRole)
-	r.POST("/user", middleware.BanAPIForUserCenter, a.adminUserController.AddUser)
-	r.PUT("/user/password", middleware.BanAPIForUserCenter, a.adminUserController.UpdateUserPassword)
+	r.POST("/user", a.adminUserController.AddUser)
+	r.PUT("/user/password", a.adminUserController.UpdateUserPassword)
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)

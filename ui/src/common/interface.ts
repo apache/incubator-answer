@@ -1,5 +1,3 @@
-import { UIOptions, UIWidget } from '@/components/SchemaForm';
-
 export interface FormValue<T = any> {
   value: T;
   isInvalid: boolean;
@@ -549,6 +547,11 @@ export interface User {
   avatar: string;
 }
 
+export interface QuestionOperationReq {
+  id: string;
+  operation: 'pin' | 'unpin' | 'hide' | 'show';
+}
+
 export interface OauthBindEmailReq {
   binding_key: string;
   email: string;
@@ -564,27 +567,6 @@ export interface OauthConnectorItem {
 export interface UserOauthConnectorItem extends OauthConnectorItem {
   binding: boolean;
   external_id: string;
-}
-export interface PluginOption {
-  label: string;
-  value: string;
-}
-
-export interface PluginItem {
-  name: string;
-  type: UIWidget;
-  title: string;
-  description: string;
-  ui_options?: UIOptions;
-  options?: PluginOption[];
-  value?: string;
-  required?: boolean;
-}
-
-export interface PluginConfig {
-  name: string;
-  slug_name: string;
-  config_fields: PluginItem[];
 }
 
 export interface QuestionOperationReq {

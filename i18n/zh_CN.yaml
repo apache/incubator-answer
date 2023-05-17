@@ -329,6 +329,16 @@ backend:
         other: 你的答案已被删除
       your_comment_was_deleted:
         other: 你的评论已被删除
+      up_voted_question:
+        other: 赞了问题
+      down_voted_question:
+        other: 踩了问题
+      up_voted_answer:
+        other: 赞了答案
+      down_voted_answer:
+        other: 踩了答案
+      up_voted_comment:
+        other: 赞了评论
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -374,6 +384,7 @@ ui:
     achievement: 成就
     all_read: 全部标记为已读
     show_more: 显示更多
+    someone: 有人
   suspended:
     title: 账号已封禁
     until_time: "你的账号被封禁至{{ time }}。"
@@ -895,6 +906,10 @@ ui:
     skip: 略过
     discard_draft: 丢弃草稿
     pinned: 已置顶
+    all: 所有
+    question: 问题
+    answer: 回答
+    comment: 评论
   search:
     title: 搜索结果
     keywords: 关键词
@@ -1164,6 +1179,7 @@ ui:
       pending: 等待处理
       completed: 已完成
       flagged: 被举报内容
+      flagged_type: 被举报的{{ type }}
       created: 创建于
       action: 操作
       review: 审查
@@ -1451,6 +1467,30 @@ ui:
       deactivate: 停用
       activate: 启用
       settings: 设置
+    settings_users:
+      title: 用户
+      avatar:
+        label: 默认头像
+        text: 未设置自定义头像的用户所展示的头像。
+      profile_editable:
+        title: 可编辑的个人资料
+      allow_update_display_name:
+        label: 允许用户更改显示名称
+      allow_update_username:
+        label: 允许用户更改用户名
+      allow_update_avatar:
+        label: 允许用户更改头像
+      allow_update_bio:
+        label: 允许用户更改自我介绍
+      allow_update_website:
+        label: 允许用户更改个人网站
+      allow_update_location:
+        label: 允许用户更改所在地
+    privilege:
+      title: 声望权限
+      level:
+        label: 所需声望等级
+        text: 选择所需的声望等级以获取权限
   form:
     optional: (选填)
     empty: 不能为空

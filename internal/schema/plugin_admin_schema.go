@@ -63,9 +63,23 @@ func (g *GetPluginConfigResp) SetConfigFields(ctx *gin.Context, fields []plugin.
 		configField.UIOptions.Label = field.UIOptions.Label.Translate(ctx)
 		configField.UIOptions.Text = field.UIOptions.Text.Translate(ctx)
 		if field.UIOptions.Action != nil {
-			configField.UIOptions.Action = &ConfigFieldUIOptionAction{
-				Url: field.UIOptions.Action.Url,
+			uiOptionAction := &UIOptionAction{
+				Url:    field.UIOptions.Action.Url,
+				Method: field.UIOptions.Action.Method,
 			}
+			if field.UIOptions.Action.Loading != nil {
+				uiOptionAction.Loading = &LoadingAction{
+					Text:  field.UIOptions.Action.Loading.Text.Translate(ctx),
+					State: string(field.UIOptions.Action.Loading.State),
+				}
+			}
+			if field.UIOptions.Action.OnComplete != nil {
+				uiOptionAction.OnCompleteAction = &OnCompleteAction{
+					ToastReturnMessage: field.UIOptions.Action.OnComplete.ToastReturnMessage,
+					RefreshFormConfig:  field.UIOptions.Action.OnComplete.RefreshFormConfig,
+				}
+			}
+			configField.UIOptions.Action = uiOptionAction
 		}
 
 		for _, option := range field.Options {
@@ -90,13 +104,13 @@ type ConfigField struct {
 }
 
 type ConfigFieldUIOptions struct {
-	Placeholder string                     `json:"placeholder,omitempty"`
-	Rows        string                     `json:"rows,omitempty"`
-	InputType   string                     `json:"input_type,omitempty"`
-	Label       string                     `json:"label,omitempty"`
-	Action      *ConfigFieldUIOptionAction `json:"action,omitempty"`
-	Variant     string                     `json:"variant,omitempty"`
-	Text        string                     `json:"text,omitempty"`
+	Placeholder string          `json:"placeholder,omitempty"`
+	Rows        string          `json:"rows,omitempty"`
+	InputType   string          `json:"input_type,omitempty"`
+	Label       string          `json:"label,omitempty"`
+	Action      *UIOptionAction `json:"action,omitempty"`
+	Variant     string          `json:"variant,omitempty"`
+	Text        string          `json:"text,omitempty"`
 }
 
 type ConfigFieldOption struct {
@@ -104,8 +118,21 @@ type ConfigFieldOption struct {
 	Value string `json:"value"`
 }
 
-type ConfigFieldUIOptionAction struct {
-	Url string `json:"url"`
+type UIOptionAction struct {
+	Url              string            `json:"url"`
+	Method           string            `json:"method,omitempty"`
+	Loading          *LoadingAction    `json:"loading,omitempty"`
+	OnCompleteAction *OnCompleteAction `json:"on_complete,omitempty"`
+}
+
+type LoadingAction struct {
+	Text  string `json:"text"`
+	State string `json:"state"`
+}
+
+type OnCompleteAction struct {
+	ToastReturnMessage bool `json:"toast_return_message"`
+	RefreshFormConfig  bool `json:"refresh_form_config"`
 }
 
 type UpdatePluginConfigReq struct {
