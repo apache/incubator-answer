@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/install"
 	"github.com/answerdev/answer/internal/migrations"
 	"github.com/answerdev/answer/plugin"
+	"github.com/segmentfault/pacman/log"
 	"github.com/spf13/cobra"
 )
 
@@ -22,10 +23,9 @@ var (
 	buildWithPlugins []string
 	// build output path
 	buildOutput string
-	// This config is used to upgrade the database from a specific version number manually.
-	// The version number is calculated with `migrations.go` migrations length.
-	// If you want to upgrade the database from version 1 to version 2, you can use `answer upgrade -f 1`.
-	upgradeFromVersionNumber int
+	// This config is used to upgrade the database from a specific version manually.
+	// If you want to upgrade the database to version 1.1.0, you can use `answer upgrade -f v1.1.0`.
+	upgradeVersion string
 )
 
 func init() {
@@ -39,7 +39,7 @@ func init() {
 
 	buildCmd.Flags().StringVarP(&buildOutput, "output", "o", "", "build output path")
 
-	upgradeCmd.Flags().IntVarP(&upgradeFromVersionNumber, "from", "f", 0, "upgrade from specific version number that in database version table")
+	upgradeCmd.Flags().StringVarP(&upgradeVersion, "from", "f", "", "upgrade from specific version, eg: -f v1.1.0")
 
 	for _, cmd := range []*cobra.Command{initCmd, checkCmd, runCmd, dumpCmd, upgradeCmd, buildCmd, pluginCmd} {
 		rootCmd.AddCommand(cmd)
@@ -106,6 +106,7 @@ To run answer, use:
 		Short: "upgrade Answer version",
 		Long:  `upgrade Answer version`,
 		Run: func(_ *cobra.Command, _ []string) {
+			log.SetLogger(log.NewStdLogger(os.Stdout))
 			cli.FormatAllPath(dataDirPath)
 			cli.InstallI18nBundle(true)
 			c, err := conf.ReadConfig(cli.GetConfigFilePath())
@@ -113,7 +114,7 @@ To run answer, use:
 				fmt.Println("read config failed: ", err.Error())
 				return
 			}
-			if err = migrations.Migrate(c.Data.Database, c.Data.Cache, upgradeFromVersionNumber); err != nil {
+			if err = migrations.Migrate(c.Data.Database, c.Data.Cache, upgradeVersion); err != nil {
 				fmt.Println("migrate failed: ", err.Error())
 				return
 			}
