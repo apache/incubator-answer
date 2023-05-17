@@ -3,6 +3,7 @@ package question
 import (
 	"context"
 	"fmt"
+	"github.com/answerdev/answer/plugin"
 	"strings"
 	"time"
 	"unicode"
@@ -51,6 +52,7 @@ func (qr *questionRepo) AddQuestion(ctx context.Context, question *entity.Questi
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	question.ID = uid.EnShortID(question.ID)
+	_ = qr.updateSearch(ctx, question.ID)
 	return
 }
 
@@ -72,6 +74,7 @@ func (qr *questionRepo) UpdateQuestion(ctx context.Context, question *entity.Que
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	question.ID = uid.EnShortID(question.ID)
+	_ = qr.updateSearch(ctx, question.ID)
 	return
 }
 
@@ -82,6 +85,7 @@ func (qr *questionRepo) UpdatePvCount(ctx context.Context, questionID string) (e
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	_ = qr.updateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -92,6 +96,7 @@ func (qr *questionRepo) UpdateAnswerCount(ctx context.Context, questionID string
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	_ = qr.updateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -113,6 +118,7 @@ func (qr *questionRepo) UpdateQuestionStatus(ctx context.Context, question *enti
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	_ = qr.updateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -122,6 +128,7 @@ func (qr *questionRepo) UpdateQuestionStatusWithOutUpdateTime(ctx context.Contex
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	_ = qr.updateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -140,6 +147,7 @@ func (qr *questionRepo) UpdateAccepted(ctx context.Context, question *entity.Que
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	_ = qr.updateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -149,6 +157,7 @@ func (qr *questionRepo) UpdateLastAnswer(ctx context.Context, question *entity.Q
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	_ = qr.updateSearch(ctx, question.ID)
 	return nil
 }
 
@@ -364,4 +373,60 @@ func (qr *questionRepo) AdminSearchList(ctx context.Context, search *schema.Admi
 		item.ID = uid.EnShortID(item.ID)
 	}
 	return rows, count, nil
+}
+
+// updateSearch update search, if search plugin not enable, do nothing
+func (qr *questionRepo) updateSearch(ctx context.Context, questionID string) (err error) {
+	questionID = uid.DeShortID(questionID)
+	// check search plugin
+	var (
+		s plugin.Search
+	)
+	_ = plugin.CallSearch(func(search plugin.Search) error {
+		s = search
+		return nil
+	})
+	if s == nil {
+		return
+	}
+	question, exist, err := qr.GetQuestion(ctx, questionID)
+	if !exist {
+		return
+	}
+	if err != nil {
+		return err
+	}
+
+	// get tags
+	var (
+		tagListList = make([]*entity.TagRel, 0)
+		tags        = make([]string, 0)
+	)
+	session := qr.data.DB.Where("object_id = ?", questionID)
+	session.Where("status = ?", entity.TagRelStatusAvailable)
+	err = session.Find(&tagListList)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	for _, tag := range tagListList {
+		tags = append(tags, tag.TagID)
+	}
+	content := &plugin.SearchContent{
+		ObjectID:    questionID,
+		Title:       question.Title,
+		Type:        "question",
+		Content:     question.ParsedText,
+		Answers:     int64(question.AnswerCount),
+		Status:      int64(question.Status),
+		Tags:        tags,
+		QuesionID:   questionID,
+		UserID:      question.UserID,
+		Views:       int64(question.ViewCount),
+		Created:     question.CreatedAt.Unix(),
+		Active:      question.UpdatedAt.Unix(),
+		Score:       int64(question.VoteCount),
+		HasAccepted: question.AcceptedAnswerID != "" && question.AcceptedAnswerID != "0",
+	}
+	err = s.UpdateContent(ctx, questionID, content)
+	return
 }

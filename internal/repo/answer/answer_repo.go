@@ -2,6 +2,7 @@ package answer
 
 import (
 	"context"
+	"github.com/answerdev/answer/plugin"
 	"strings"
 	"time"
 	"unicode"
@@ -60,6 +61,7 @@ func (ar *answerRepo) AddAnswer(ctx context.Context, answer *entity.Answer) (err
 	}
 	answer.ID = uid.EnShortID(answer.ID)
 	answer.QuestionID = uid.EnShortID(answer.QuestionID)
+	_ = ar.updateSearch(ctx, answer.ID)
 	return nil
 }
 
@@ -74,6 +76,7 @@ func (ar *answerRepo) RemoveAnswer(ctx context.Context, id string) (err error) {
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	_ = ar.updateSearch(ctx, answer.ID)
 	return nil
 }
 
@@ -85,6 +88,7 @@ func (ar *answerRepo) UpdateAnswer(ctx context.Context, answer *entity.Answer, C
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	_ = ar.updateSearch(ctx, answer.ID)
 	return err
 }
 
@@ -96,6 +100,7 @@ func (ar *answerRepo) UpdateAnswerStatus(ctx context.Context, answer *entity.Ans
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	_ = ar.updateSearch(ctx, answer.ID)
 	return
 }
 
@@ -180,6 +185,7 @@ func (ar *answerRepo) UpdateAccepted(ctx context.Context, id string, questionID 
 			return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		}
 	}
+	_ = ar.updateSearch(ctx, id)
 	return nil
 }
 
@@ -334,4 +340,73 @@ func (ar *answerRepo) AdminSearchList(ctx context.Context, search *entity.AdminA
 		item.QuestionID = uid.EnShortID(item.QuestionID)
 	}
 	return rows, count, nil
+}
+
+// updateSearch update search, if search plugin not enable, do nothing
+func (ar *answerRepo) updateSearch(ctx context.Context, answerID string) (err error) {
+	answerID = uid.DeShortID(answerID)
+	// check search plugin
+	var (
+		s plugin.Search
+	)
+	_ = plugin.CallSearch(func(search plugin.Search) error {
+		s = search
+		return nil
+	})
+	if s == nil {
+		return
+	}
+	answer, exist, err := ar.GetAnswer(ctx, answerID)
+	if !exist {
+		return
+	}
+	if err != nil {
+		return err
+	}
+
+	// get question
+	var (
+		question *entity.Question
+	)
+	exist, err = ar.data.DB.Where("id = ?", answer.QuestionID).Get(&question)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !exist {
+		return
+	}
+
+	// get tags
+	var (
+		tagListList = make([]*entity.TagRel, 0)
+		tags        = make([]string, 0)
+	)
+	st := ar.data.DB.Where("object_id = ?", uid.DeShortID(question.ID))
+	st.Where("status = ?", entity.TagRelStatusAvailable)
+	err = st.Find(&tagListList)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	for _, tag := range tagListList {
+		tags = append(tags, tag.TagID)
+	}
+
+	content := &plugin.SearchContent{
+		ObjectID:    answerID,
+		Title:       question.Title,
+		Type:        "question",
+		Content:     answer.ParsedText,
+		Answers:     0,
+		Status:      int64(answer.Status),
+		Tags:        tags,
+		QuesionID:   answerID,
+		UserID:      answer.UserID,
+		Views:       int64(question.ViewCount),
+		Created:     answer.CreatedAt.Unix(),
+		Active:      answer.UpdatedAt.Unix(),
+		Score:       int64(answer.VoteCount),
+		HasAccepted: answer.Accepted == schema.AnswerAcceptedEnable,
+	}
+	err = s.UpdateContent(ctx, answerID, content)
+	return
 }

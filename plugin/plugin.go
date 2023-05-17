@@ -56,6 +56,10 @@ func Register(p Base) {
 	if _, ok := p.(Agent); ok {
 		registerAgent(p.(Agent))
 	}
+
+	if _, ok := p.(Search); ok {
+		registerSearch(p.(Search))
+	}
 }
 
 type Stack[T Base] struct {

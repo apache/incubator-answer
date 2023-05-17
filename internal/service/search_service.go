@@ -5,6 +5,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/search_common"
 	"github.com/answerdev/answer/internal/service/search_parser"
+	"github.com/answerdev/answer/plugin"
 )
 
 type SearchService struct {
@@ -47,16 +48,49 @@ func (ss *SearchService) Search(ctx context.Context, dto *schema.SearchDTO) (res
 		tags,
 		words := ss.searchParser.ParseStructure(dto)
 
+	// check search plugin
+	var (
+		s    plugin.Search
+		sres []plugin.SearchResult
+	)
+	_ = plugin.CallSearch(func(search plugin.Search) error {
+		s = search
+		return nil
+	})
+
+	// search plugin is not found, call system search
+	if s == nil {
+		switch searchType {
+		case "all":
+			resp, total, err = ss.searchRepo.SearchContents(ctx, words, tags, userID, votes, dto.Page, dto.Size, dto.Order)
+			if err != nil {
+				return nil, 0, nil, err
+			}
+		case "question":
+			resp, total, err = ss.searchRepo.SearchQuestions(ctx, words, tags, notAccepted, views, answers, dto.Page, dto.Size, dto.Order)
+		case "answer":
+			resp, total, err = ss.searchRepo.SearchAnswers(ctx, words, tags, accepted, questionID, dto.Page, dto.Size, dto.Order)
+		}
+		return
+	}
+
+	// call search plugin
 	switch searchType {
 	case "all":
-		resp, total, err = ss.searchRepo.SearchContents(ctx, words, tags, userID, votes, dto.Page, dto.Size, dto.Order)
-		if err != nil {
-			return nil, 0, nil, err
-		}
+		sres, total, err = s.SearchContents(ctx, words, tags, userID, votes, dto.Page, dto.Size, dto.Order)
 	case "question":
-		resp, total, err = ss.searchRepo.SearchQuestions(ctx, words, tags, notAccepted, views, answers, dto.Page, dto.Size, dto.Order)
+		sres, total, err = s.SearchQuestions(ctx, words, tags, notAccepted, views, answers, dto.Page, dto.Size, dto.Order)
 	case "answer":
-		resp, total, err = ss.searchRepo.SearchAnswers(ctx, words, tags, accepted, questionID, dto.Page, dto.Size, dto.Order)
+		sres, total, err = s.SearchAnswers(ctx, words, tags, accepted, questionID, dto.Page, dto.Size, dto.Order)
+	}
+	if err != nil || len(sres) == 0 {
+		return nil, 0, nil, err
+	}
+
+	// parse search plugin result
+	resp, err = ss.searchRepo.ParseSearchPluginResult(ctx, sres)
+	if err != nil {
+		return nil, 0, nil, err
 	}
 	return
 }
