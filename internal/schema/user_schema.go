@@ -379,7 +379,7 @@ type UserNoticeSetResp struct {
 
 type ActionRecordReq struct {
 	// action
-	Action string `validate:"required,oneof=login e_mail find_pass" form:"action"`
+	Action string `validate:"required,oneof=login e_mail find_pass modify_pass" form:"action"`
 	IP     string `json:"-"`
 }
 
