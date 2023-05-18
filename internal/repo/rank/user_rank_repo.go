@@ -138,7 +138,7 @@ func (ur *UserRankRepo) UserRankPage(ctx context.Context, userID string, page, p
 ) {
 	rankPage = make([]*entity.Activity, 0)
 
-	session := ur.data.DB.Where(builder.Eq{"has_rank": 1}.And(builder.Eq{"cancelled": 0}))
+	session := ur.data.DB.Where(builder.Eq{"has_rank": 1}.And(builder.Eq{"cancelled": 0})).And(builder.Gt{"rank": 0})
 	session.Desc("created_at")
 
 	cond := &entity.Activity{UserID: userID}

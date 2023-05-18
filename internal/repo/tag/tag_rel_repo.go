@@ -9,6 +9,7 @@ import (
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/answerdev/answer/pkg/uid"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -46,6 +47,26 @@ func (tr *tagRelRepo) AddTagRelList(ctx context.Context, tagList []*entity.TagRe
 func (tr *tagRelRepo) RemoveTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
 	objectID = uid.DeShortID(objectID)
 	_, err = tr.data.DB.Where("object_id = ?", objectID).Update(&entity.TagRel{Status: entity.TagRelStatusDeleted})
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (tr *tagRelRepo) HideTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
+	spew.Dump("====== HideTagRelListByObjectID")
+	objectID = uid.DeShortID(objectID)
+	_, err = tr.data.DB.Where("object_id = ?", objectID).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusHide})
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (tr *tagRelRepo) ShowTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
+	spew.Dump("====== ShowTagRelListByObjectID")
+	objectID = uid.DeShortID(objectID)
+	_, err = tr.data.DB.Where("object_id = ?", objectID).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusAvailable})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -90,7 +111,7 @@ func (tr *tagRelRepo) GetObjectTagRelList(ctx context.Context, objectID string) 
 	objectID = uid.DeShortID(objectID)
 	tagListList = make([]*entity.TagRel, 0)
 	session := tr.data.DB.Where("object_id = ?", objectID)
-	session.Where("status = ?", entity.TagRelStatusAvailable)
+	session.In("status", []int{entity.TagRelStatusAvailable, entity.TagRelStatusHide})
 	err = session.Find(&tagListList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

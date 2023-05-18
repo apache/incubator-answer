@@ -349,8 +349,24 @@ func (qs *QuestionService) OperationQuestion(ctx context.Context, req *schema.Op
 	switch req.Operation {
 	case schema.QuestionOperationHide:
 		questionInfo.Show = entity.QuestionHide
+		err = qs.tagCommon.HideTagRelListByObjectID(ctx, req.ID)
+		if err != nil {
+			return err
+		}
+		err = qs.tagCommon.RefreshTagCountByQuestionID(ctx, req.ID)
+		if err != nil {
+			return err
+		}
 	case schema.QuestionOperationShow:
 		questionInfo.Show = entity.QuestionShow
+		err = qs.tagCommon.ShowTagRelListByObjectID(ctx, req.ID)
+		if err != nil {
+			return err
+		}
+		err = qs.tagCommon.RefreshTagCountByQuestionID(ctx, req.ID)
+		if err != nil {
+			return err
+		}
 	case schema.QuestionOperationPin:
 		questionInfo.Pin = entity.QuestionPin
 	case schema.QuestionOperationUnPin:
@@ -434,6 +450,25 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		if err != nil {
 			log.Error("user IncreaseQuestionCount error", err.Error())
 		}
+	}
+
+	//tag count
+	tagIDs := make([]string, 0)
+	Tags, tagerr := qs.tagCommon.GetObjectEntityTag(ctx, req.ID)
+	if tagerr != nil {
+		log.Error("GetObjectEntityTag error", tagerr)
+		return nil
+	}
+	for _, v := range Tags {
+		tagIDs = append(tagIDs, v.ID)
+	}
+	err = qs.tagCommon.RemoveTagRelListByObjectID(ctx, req.ID)
+	if err != nil {
+		log.Error("RemoveTagRelListByObjectID error", err.Error())
+	}
+	err = qs.tagCommon.RefreshTagQuestionCount(ctx, tagIDs)
+	if err != nil {
+		log.Error("efreshTagQuestionCount error", err.Error())
 	}
 
 	err = qs.answerActivityService.DeleteQuestion(ctx, questionInfo.ID, questionInfo.CreatedAt, questionInfo.VoteCount)

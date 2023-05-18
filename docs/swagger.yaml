@@ -2134,6 +2134,12 @@ definitions:
     type: object
   schema.UserModifyPasswordReq:
     properties:
+      captcha_code:
+        maxLength: 500
+        type: string
+      captcha_id:
+        maxLength: 500
+        type: string
       old_pass:
         maxLength: 32
         minLength: 8
