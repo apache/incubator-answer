@@ -69,7 +69,7 @@ var migrations = []Migration{
 	NewMigration("v1.0.9", "add login limitations", addLoginLimitations, true),
 	NewMigration("v1.1.0-beta.1", "update user pin hide features", updateRolePinAndHideFeatures, true),
 	NewMigration("v1.1.0-beta.2", "update question post time", updateQuestionPostTime, true),
-	NewMigration("v1.1.0", "add gravatar base url", addGravatarBaseURL, false),
+	NewMigration("v1.1.0", "add gravatar base url", updateCount, false),
 }
 
 // GetCurrentDBVersion returns the current db version
