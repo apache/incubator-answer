@@ -26,7 +26,7 @@ const Index: FC<Props> = ({ visible, data }) => {
               className={`me-3 text-end ${
                 item.reputation > 0 ? 'text-success' : 'text-danger'
               }`}
-              style={{ width: '40px' }}>
+              style={{ width: '40px', minWidth: '40px' }}>
               {item.reputation > 0 ? '+' : ''}
               {item.reputation}
             </div>
