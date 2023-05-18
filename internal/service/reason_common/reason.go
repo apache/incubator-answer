@@ -7,5 +7,5 @@ import (
 )
 
 type ReasonRepo interface {
-	ListReasons(ctx context.Context, objectType, action string) (resp []schema.ReasonItem, err error)
+	ListReasons(ctx context.Context, objectType, action string) (resp []*schema.ReasonItem, err error)
 }

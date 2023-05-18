@@ -26,7 +26,7 @@ const Index: FC<Props> = ({ visible, data }) => {
               className={`me-3 text-end ${
                 item.reputation > 0 ? 'text-success' : 'text-danger'
               }`}
-              style={{ width: '40px' }}>
+              style={{ width: '40px', minWidth: '40px' }}>
               {item.reputation > 0 ? '+' : ''}
               {item.reputation}
             </div>
@@ -48,7 +48,9 @@ const Index: FC<Props> = ({ visible, data }) => {
                 {item.title}
               </a>
               <div className="d-flex align-items-center fs-14 text-secondary">
-                <span>{item.reputation > 0 ? t('upvote') : t('downvote')}</span>
+                <span>
+                  {t(item.rank_type, { keyPrefix: 'personal.rank_type' })}
+                </span>
                 <span className="split-dot" />
                 <FormatTime time={item.created_at} className="me-4" />
               </div>

@@ -1,18 +1,11 @@
 package report
 
 import (
-	"encoding/json"
-
-	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/base/reason"
-	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/object_info"
 	"github.com/answerdev/answer/internal/service/report_common"
 	"github.com/answerdev/answer/pkg/obj"
-	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/i18n"
 	"golang.org/x/net/context"
 )
 
@@ -55,27 +48,4 @@ func (rs *ReportService) AddReport(ctx context.Context, req *schema.AddReportReq
 		Status:         entity.ReportStatusPending,
 	}
 	return rs.reportRepo.AddReport(ctx, report)
-}
-
-// GetReportTypeList get report list all
-func (rs *ReportService) GetReportTypeList(ctx context.Context, lang i18n.Language, req *schema.GetReportListReq) (
-	resp []*schema.GetReportTypeResp, err error,
-) {
-	resp = make([]*schema.GetReportTypeResp, 0)
-	switch req.Source {
-	case constant.QuestionObjectType:
-		err = json.Unmarshal([]byte(constant.QuestionReportJSON), &resp)
-	case constant.AnswerObjectType:
-		err = json.Unmarshal([]byte(constant.AnswerReportJSON), &resp)
-	case constant.CommentObjectType:
-		err = json.Unmarshal([]byte(constant.CommentReportJSON), &resp)
-	}
-	if err != nil {
-		err = errors.BadRequest(reason.UnknownError)
-	}
-	for _, t := range resp {
-		t.Name = translator.Tr(lang, t.Name)
-		t.Description = translator.Tr(lang, t.Description)
-	}
-	return resp, err
 }

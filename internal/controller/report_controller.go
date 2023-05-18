@@ -55,21 +55,3 @@ func (rc *ReportController) AddReport(ctx *gin.Context) {
 	err = rc.reportService.AddReport(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
-
-// GetReportTypeList get report type list
-// @Summary get report type list
-// @Description get report type list
-// @Tags Report
-// @Produce json
-// @Param source query string true "report source" Enums(question, answer, comment, user)
-// @Success 200 {object} handler.RespBody{data=[]schema.GetReportTypeResp}
-// @Router /answer/api/v1/report/type/list [get]
-func (rc *ReportController) GetReportTypeList(ctx *gin.Context) {
-	req := &schema.GetReportListReq{}
-	if handler.BindAndCheck(ctx, req) {
-		return
-	}
-
-	resp, err := rc.reportService.GetReportTypeList(ctx, handler.GetLang(ctx), req)
-	handler.HandleResponse(ctx, err, resp)
-}

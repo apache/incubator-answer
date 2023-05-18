@@ -6,7 +6,7 @@ import type * as Type from '@/common/interface';
 import { useToast } from '@/hooks';
 import { getLoggedUserInfo, changeEmail, checkImgCode } from '@/services';
 import { handleFormError } from '@/utils';
-import { PicAuthCodeModal } from '@/components/Modal';
+import { PicAuthCodeModal } from '@/components';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -149,6 +149,7 @@ const Index: FC = () => {
 
     if (imgCode.verify) {
       setModalState(true);
+      return;
     }
     postEmail();
   };
