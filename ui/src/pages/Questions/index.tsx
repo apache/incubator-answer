@@ -17,7 +17,9 @@ import {
 } from '@/stores';
 import { useQuestionList } from '@/services';
 import * as Type from '@/common/interface';
-import { userCenter, floppyNavigation } from '@/utils';
+import { userCenter, floppyNavigation, Storage } from '@/utils';
+import { QUESTIONS_ORDER_STORAGE_KEY } from '@/common/constants';
+import { QUESTION_ORDER_KEYS } from '@/components/QuestionList';
 
 const Questions: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
@@ -25,7 +27,12 @@ const Questions: FC = () => {
   const { user: loggedUser } = loggedUserInfoStore((_) => _);
   const [urlSearchParams] = useSearchParams();
   const curPage = Number(urlSearchParams.get('page')) || 1;
-  const curOrder = urlSearchParams.get('order') || 'active';
+  const storageOrder = Storage.get(QUESTIONS_ORDER_STORAGE_KEY);
+  const curOrder =
+    urlSearchParams.get('order') || storageOrder || QUESTION_ORDER_KEYS[0];
+  if (curOrder !== storageOrder) {
+    Storage.set(QUESTIONS_ORDER_STORAGE_KEY, curOrder);
+  }
   const reqParams: Type.QueryQuestionsReq = {
     page_size: 20,
     page: curPage,
@@ -50,6 +57,7 @@ const Questions: FC = () => {
           <QuestionList
             source="questions"
             data={listData}
+            order={curOrder}
             isLoading={listLoading}
           />
         </Col>

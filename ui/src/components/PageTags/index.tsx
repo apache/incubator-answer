@@ -2,6 +2,7 @@ import { FC, useEffect, useLayoutEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import { brandingStore, pageTagStore, siteInfoStore } from '@/stores';
+import { getCurrentLang } from '@/utils/localize';
 
 const doInsertCustomCSS = !document.querySelector('link[href*="custom.css"]');
 
@@ -32,7 +33,19 @@ const Index: FC = () => {
       // eslint-disable-next-line no-empty
     } catch (ex) {}
   };
+  const currentLang = getCurrentLang();
+  const setDocLang = () => {
+    if (currentLang) {
+      document.documentElement.setAttribute(
+        'lang',
+        currentLang.replace('_', '-'),
+      );
+    }
+  };
 
+  useEffect(() => {
+    setDocLang();
+  }, [currentLang]);
   useEffect(() => {
     setAppGenerator();
   }, [appVersion]);
