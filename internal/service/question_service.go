@@ -836,14 +836,18 @@ func (qs *QuestionService) PersonalAnswerPage(ctx context.Context, req *schema.P
 		_, ok := questionMaps[item.QuestionID]
 		if ok {
 			item.QuestionInfo = questionMaps[item.QuestionID]
+		} else {
+			continue
 		}
 		info := &schema.UserAnswerInfo{}
 		_ = copier.Copy(info, item)
 		info.AnswerID = item.ID
 		info.QuestionID = item.QuestionID
-		if item.QuestionInfo.Status != entity.QuestionStatusDeleted {
-			userAnswerlist = append(userAnswerlist, info)
+		if item.QuestionInfo.Status == entity.QuestionStatusDeleted {
+			info.QuestionInfo.Title = "Deleted question"
+
 		}
+		userAnswerlist = append(userAnswerlist, info)
 	}
 
 	return pager.NewPageModel(total, userAnswerlist), nil
@@ -877,6 +881,9 @@ func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *sche
 			questionMaps[uid.EnShortID(id)].UpdateUserInfo = nil
 			questionMaps[uid.EnShortID(id)].Content = ""
 			questionMaps[uid.EnShortID(id)].HTML = ""
+			if questionMaps[uid.EnShortID(id)].Status == entity.QuestionStatusDeleted {
+				questionMaps[uid.EnShortID(id)].Title = "Deleted question"
+			}
 			list = append(list, questionMaps[uid.EnShortID(id)])
 		}
 	}

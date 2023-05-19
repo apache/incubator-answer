@@ -453,6 +453,9 @@ func (cs *CommentService) GetCommentPersonalWithPage(ctx context.Context, req *s
 				commentResp.UrlTitle = htmltext.UrlTitle(objInfo.Title)
 				commentResp.QuestionID = objInfo.QuestionID
 				commentResp.AnswerID = objInfo.AnswerID
+				if objInfo.QuestionStatus == entity.QuestionStatusDeleted {
+					commentResp.Title = "Deleted question"
+				}
 			}
 		}
 		resp = append(resp, commentResp)
