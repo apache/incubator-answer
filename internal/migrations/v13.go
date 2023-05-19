@@ -9,9 +9,9 @@ import (
 )
 
 func updateCount(x *xorm.Engine) error {
-	// updateQuestionCount(x)
-	// updateTagCount(x)
-	// updateUserQuestionCount(x)
+	updateQuestionCount(x)
+	updateTagCount(x)
+	updateUserQuestionCount(x)
 	updateUserAnswerCount(x)
 	return nil
 }
@@ -178,5 +178,40 @@ func updateUserQuestionCount(x *xorm.Engine) error {
 
 // updateUserAnswerCount update user answer count
 func updateUserAnswerCount(x *xorm.Engine) error {
+	answers := make([]entity.Answer, 0)
+	err := x.Find(&answers, &entity.Answer{Status: entity.AnswerStatusAvailable})
+	if err != nil {
+		return fmt.Errorf("get answers failed: %w", err)
+	}
+	userAnswerCount := make(map[string]int)
+	for _, answer := range answers {
+		_, ok := userAnswerCount[answer.UserID]
+		if !ok {
+			userAnswerCount[answer.UserID] = 1
+		} else {
+			userAnswerCount[answer.UserID]++
+		}
+	}
+	userList := make([]entity.User, 0)
+	err = x.Find(&userList, &entity.User{})
+	if err != nil {
+		return fmt.Errorf("get user failed: %w", err)
+	}
+	for _, user := range userList {
+		_, ok := userAnswerCount[user.ID]
+		if ok {
+			user.AnswerCount = userAnswerCount[user.ID]
+			if _, err = x.Cols("answer_count").Update(user, &entity.User{ID: user.ID}); err != nil {
+				log.Errorf("update %+v user failed: %s", user.ID, err)
+				return fmt.Errorf("update user failed: %w", err)
+			}
+		} else {
+			user.AnswerCount = 0
+			if _, err = x.Cols("answer_count").Update(user, &entity.User{ID: user.ID}); err != nil {
+				log.Errorf("update %+v user failed: %s", user.ID, err)
+				return fmt.Errorf("update user failed: %w", err)
+			}
+		}
+	}
 	return nil
 }
