@@ -11,7 +11,6 @@ import {
 import { useTranslation } from 'react-i18next';
 import {
   useSearchParams,
-  NavLink,
   Link,
   useNavigate,
   useLocation,
@@ -27,6 +26,7 @@ import {
   brandingStore,
   loginSettingStore,
   themeSettingStore,
+  sideNavStore,
 } from '@/stores';
 import { logout, useQueryNotificationStatus } from '@/services';
 
@@ -45,6 +45,7 @@ const Header: FC = () => {
   const siteInfo = siteInfoStore((state) => state.siteInfo);
   const brandingInfo = brandingStore((state) => state.branding);
   const loginSetting = loginSettingStore((state) => state.login);
+  const { updateReiview, updateVisible } = sideNavStore();
   const { data: redDot } = useQueryNotificationStatus();
   /**
    * Automatically append `tag` information when creating a question
@@ -54,6 +55,13 @@ const Header: FC = () => {
   if (tagMatch && tagMatch.params.slugName) {
     askUrl = `${askUrl}?tags=${tagMatch.params.slugName}`;
   }
+
+  useEffect(() => {
+    updateReiview({
+      can_revision: Boolean(redDot?.can_revision),
+      revision: Number(redDot?.revision),
+    });
+  }, [redDot]);
 
   const handleInput = (val) => {
     setSearch(val);
@@ -106,10 +114,13 @@ const Header: FC = () => {
           aria-controls="navBarContent"
           className="answer-navBar me-2"
           id="navBarToggle"
+          onClick={() => {
+            updateVisible();
+          }}
         />
 
         <div className="d-flex justify-content-between align-items-center nav-grow flex-nowrap">
-          <Navbar.Brand to="/" as={Link} className="lh-1 me-0 me-sm-3 p-0">
+          <Navbar.Brand to="/" as={Link} className="lh-1 me-0 me-sm-5 p-0">
             {brandingInfo.logo ? (
               <>
                 <img
@@ -159,26 +170,11 @@ const Header: FC = () => {
         </div>
 
         <Navbar.Collapse id="navBarContent" className="me-auto">
-          <hr className="hr lg-none mb-2" style={{ marginTop: '12px' }} />
-          <Col md={4}>
-            <Nav>
-              <NavLink className="nav-link" to="/questions">
-                {t('header.nav.question')}
-              </NavLink>
-              <NavLink className="nav-link" to="/tags">
-                {t('header.nav.tag')}
-              </NavLink>
-              <NavLink className="nav-link" to="/users">
-                {t('header.nav.user')}
-              </NavLink>
-            </Nav>
-          </Col>
-          <hr className="hr lg-none mt-2" />
-
-          <Col lg={4} className="d-flex justify-content-center">
+          <hr className="hr lg-none mb-3" style={{ marginTop: '12px' }} />
+          <Col lg={8} className="ps-0">
             <Form
               action="/search"
-              className="w-75 px-0 px-lg-2"
+              className="w-100 maxw-400"
               onSubmit={handleSearch}>
               <FormControl
                 placeholder={t('header.search.placeholder')}

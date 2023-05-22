@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, ButtonGroup, Button } from 'react-bootstrap';
+import { Row, Col, ButtonGroup, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -74,62 +74,60 @@ const Notifications = () => {
     title: t('notifications', { keyPrefix: 'page_title' }),
   });
   return (
-    <Container className="pt-4 mt-2 mb-5">
-      <Row className="justify-content-center">
-        <Col xxl={7} lg={8} sm={12}>
-          <h3 className="mb-4">{t('title')}</h3>
-          <div className="d-flex justify-content-between mb-3">
-            <ButtonGroup size="sm">
-              <Button
-                as="a"
-                href="/users/notifications/inbox"
-                variant="outline-secondary"
-                active={type === 'inbox'}
-                onClick={(evt) => handleTypeChange(evt, 'inbox')}>
-                {t('inbox')}
-              </Button>
-              <Button
-                as="a"
-                href="/users/notifications/achievement"
-                variant="outline-secondary"
-                active={type === 'achievement'}
-                onClick={(evt) => handleTypeChange(evt, 'achievement')}>
-                {t('achievement')}
-              </Button>
-            </ButtonGroup>
+    <Row className="pt-4 mb-5">
+      <Col className="flex-auto">
+        <h3 className="mb-4">{t('title')}</h3>
+        <div className="d-flex justify-content-between mb-3">
+          <ButtonGroup size="sm">
             <Button
-              size="sm"
+              as="a"
+              href="/users/notifications/inbox"
               variant="outline-secondary"
-              onClick={handleUnreadNotification}>
-              {t('all_read')}
+              active={type === 'inbox'}
+              onClick={(evt) => handleTypeChange(evt, 'inbox')}>
+              {t('inbox')}
+            </Button>
+            <Button
+              as="a"
+              href="/users/notifications/achievement"
+              variant="outline-secondary"
+              active={type === 'achievement'}
+              onClick={(evt) => handleTypeChange(evt, 'achievement')}>
+              {t('achievement')}
+            </Button>
+          </ButtonGroup>
+          <Button
+            size="sm"
+            variant="outline-secondary"
+            onClick={handleUnreadNotification}>
+            {t('all_read')}
+          </Button>
+        </div>
+        {type === 'inbox' && (
+          <Inbox
+            data={notificationData}
+            handleReadNotification={handleReadNotification}
+          />
+        )}
+        {type === 'achievement' && (
+          <Achievements
+            data={notificationData}
+            handleReadNotification={handleReadNotification}
+          />
+        )}
+        {(data?.count || 0) > PAGE_SIZE * page && (
+          <div className="d-flex justify-content-center align-items-center py-3">
+            <Button
+              variant="link"
+              className="btn-no-border"
+              onClick={handleLoadMore}>
+              {t('show_more')}
             </Button>
           </div>
-          {type === 'inbox' && (
-            <Inbox
-              data={notificationData}
-              handleReadNotification={handleReadNotification}
-            />
-          )}
-          {type === 'achievement' && (
-            <Achievements
-              data={notificationData}
-              handleReadNotification={handleReadNotification}
-            />
-          )}
-          {(data?.count || 0) > PAGE_SIZE * page && (
-            <div className="d-flex justify-content-center align-items-center py-3">
-              <Button
-                variant="link"
-                className="btn-no-border"
-                onClick={handleLoadMore}>
-                {t('show_more')}
-              </Button>
-            </div>
-          )}
-        </Col>
-        <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0" />
-      </Row>
-    </Container>
+        )}
+      </Col>
+      <Col className="page-right-side" />
+    </Row>
   );
 };
 

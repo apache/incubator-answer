@@ -1,5 +1,4 @@
-import React from 'react';
-import { Container, Row, Col, ListGroup } from 'react-bootstrap';
+import { Row, Col, ListGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
@@ -39,36 +38,34 @@ const Index = () => {
     title: pageTitle,
   });
   return (
-    <Container className="pt-4 mt-2 mb-5">
-      <Row className="justify-content-center">
-        <Col xxl={7} lg={8} sm={12} className="mb-3">
-          <Head data={extra} />
-          <SearchHead sort={order} count={count} />
-          <ListGroup className="rounded-0 mb-5">
-            {isLoading ? (
-              <ListLoader />
-            ) : (
-              list?.map((item) => {
-                return <SearchItem key={item.object.id} data={item} />;
-              })
-            )}
-          </ListGroup>
+    <Row className="pt-4 mb-5">
+      <Col className="flex-auto">
+        <Head data={extra} />
+        <SearchHead sort={order} count={count} />
+        <ListGroup className="rounded-0 mb-5">
+          {isLoading ? (
+            <ListLoader />
+          ) : (
+            list?.map((item) => {
+              return <SearchItem key={item.object.id} data={item} />;
+            })
+          )}
+        </ListGroup>
 
-          {!isLoading && !list?.length && <Empty />}
+        {!isLoading && !list?.length && <Empty />}
 
-          <div className="d-flex justify-content-center">
-            <Pagination
-              currentPage={Number(page)}
-              pageSize={20}
-              totalSize={count}
-            />
-          </div>
-        </Col>
-        <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
-          <Tips />
-        </Col>
-      </Row>
-    </Container>
+        <div className="d-flex justify-content-center">
+          <Pagination
+            currentPage={Number(page)}
+            pageSize={20}
+            totalSize={count}
+          />
+        </div>
+      </Col>
+      <Col className="page-right-side mt-4 mt-xl-0">
+        <Tips />
+      </Col>
+    </Row>
   );
 };
 

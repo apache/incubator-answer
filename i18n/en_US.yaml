@@ -708,6 +708,8 @@ ui:
       logout: Log out
       admin: Admin
       review: Review
+      bookmark: Bookmarks
+      moderation: Moderation
     search:
       placeholder: Search
   footer:
@@ -903,7 +905,7 @@ ui:
     Views: Viewed
     Follow: Follow
     Following: Following
-    follow_tip: Follow this question to receive notifications.
+    follow_tip: Follow this question to receive notifications
     answered: answered
     closed_in: Closed in
     show_exist: Show existing question.

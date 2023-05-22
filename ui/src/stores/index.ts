@@ -11,6 +11,7 @@ import customizeStore from './customize';
 import themeSettingStore from './themeSetting';
 import loginToContinueStore from './loginToContinue';
 import errorCodeStore from './errorCode';
+import sideNavStore from './sideNav';
 
 export {
   toastStore,
@@ -26,4 +27,5 @@ export {
   loginToContinueStore,
   errorCodeStore,
   userCenterStore,
+  sideNavStore,
 };
