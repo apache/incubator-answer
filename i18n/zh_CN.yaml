@@ -97,13 +97,16 @@ backend:
       other: 编辑标签描述（无需审核）
     rank_tag_synonym_label:
       other: 管理标签同义词
-  email:
+  e_mail:
     other: 邮箱
   password:
     other: 密码
   email_or_password_wrong_error:
     other: 邮箱和密码不匹配。
   error:
+    password:
+      space_invalid:
+        other: 密码不能包含空格。
     admin:
       cannot_update_their_password:
         other: 您无法修改自己的密码。
