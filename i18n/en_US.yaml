@@ -1,19 +1,4 @@
 # The following fields are used for back-end
-#  backend.email.tpl.change_email.title.other = Confirm your new email address for {{.SiteName}}  by clicking on the following link:\u003cbr\u003e\u003cbr\u003e\n\n\u003ca href='{{.ChangeEmailUrl}}' target='_blank'\u003e{{.ChangeEmailUrl}}\u003c/a\u003e\u003cbr\u003e\u003cbr\u003e\n\nIf you did not request this change, please ignore this email.\n
-#  backend.email.tpl.change_email.body.other = [{{.SiteName}}] Confirm your new email address
-#  backend.email.tpl.new_answer.title.other = \u003cstrong\u003e\u003ca href='{{.AnswerUrl}}'\u003e{{.QuestionTitle}}\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e\u003cbr\u003e\n\n\u003csmall\u003e{{.DisplayName}}:\u003c/small\u003e\u003cbr\u003e\n\u003cblockquote\u003e{{.AnswerSummary}}\u003c/blockquote\u003e\u003cbr\u003e\n\u003ca href='{{.AnswerUrl}}'\u003eView it on {{.SiteName}}\u003c/a\u003e\u003cbr\u003e\u003cbr\u003e\n\n\u003csmall\u003eYou are receiving this because you authored the thread. \u003ca href='{{.UnsubscribeUrl}}'\u003eUnsubscribe\u003c/a\u003e\u003c/small\u003e
-#  backend.email.tpl.new_answer.body.other = [{{.SiteName}}] {{.DisplayName}} answered your question
-#  backend.email.tpl.new_comment.title.other = \u003cstrong\u003e\u003ca href='{{.CommentUrl}}'\u003e{{.QuestionTitle}}\u003c/a\u003e\u003c/strong\u003e\u003cbr\u003e\u003cbr\u003e\n\n\u003csmall\u003e{{.DisplayName}}:\u003c/small\u003e\u003cbr\u003e\n\u003cblockquote\u003e{{.CommentSummary}}\u003c/blockquote\u003e\u003cbr\u003e\n\u003ca href='{{.CommentUrl}}'\u003eView it on {{.SiteName}}\u003c/a\u003e\u003cbr\u003e\u003cbr\u003e\n\n\u003csmall\u003eYou are receiving this because you authored the thread. \u003ca href='{{.UnsubscribeUrl}}'\u003eUnsubscribe\u003c/a\u003e\u003c/small\u003e
-#  backend.email.tpl.new_comment.body.other = [{{.SiteName}}] {{.DisplayName}} commented on your post
-#  backend.email.tpl.pass_reset.title.other = Somebody asked to reset your password on [{{.SiteName}}].\u003cbr\u003e\u003cbr\u003e\n\nIf it was not you, you can safely ignore this email.\u003cbr\u003e\u003cbr\u003e\n\nClick the following link to choose a new password:\u003cbr\u003e\n\u003ca href='{{.PassResetUrl}}' target='_blank'\u003e{{.PassResetUrl}}\u003c/a\u003e\n
-#  backend.email.tpl.pass_reset.body.other = [{{.SiteName }}] Password reset
-#  backend.email.tpl.register.title.other = Welcome to {{.SiteName}}\u003cbr\u003e\u003cbr\u003e\n\nClick the following link to confirm and activate your new account:\u003cbr\u003e\n\u003ca href='{{.RegisterUrl}}' target='_blank'\u003e{{.RegisterUrl}}\u003c/a\u003e\u003cbr\u003e\u003cbr\u003e\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n
-#  backend.email.tpl.register.body.other = [{{.SiteName}}] Confirm your new account
-#  backend.email.tpl.test.title.other = This is a test email.
-#  backend.email.tpl.test.body.other = [{{.SiteName}}] Test Email
-
-
-
 backend:
   base:
     success:
@@ -123,6 +108,9 @@ backend:
   email_or_password_wrong_error:
     other: Email and password do not match.
   error:
+    password:
+      space_invalid:
+        other: Password cannot contain spaces.
     admin:
       cannot_update_their_password:
         other: You cannot modify your password.

@@ -262,35 +262,29 @@ type UserRegisterReq struct {
 }
 
 func (u *UserRegisterReq) Check() (errFields []*validator.FormErrorField, err error) {
-	// TODO i18n
-	err = checker.CheckPassword(8, 32, 0, u.Pass)
-	if err != nil {
-		errField := &validator.FormErrorField{
+	if err = checker.CheckPassword(u.Pass); err != nil {
+		errFields = append(errFields, &validator.FormErrorField{
 			ErrorField: "pass",
 			ErrorMsg:   err.Error(),
-		}
-		errFields = append(errFields, errField)
+		})
 		return errFields, err
 	}
 	return nil, nil
 }
 
 type UserModifyPasswordReq struct {
-	OldPass string `validate:"omitempty,gte=8,lte=32" json:"old_pass"`
-	Pass    string `validate:"required,gte=8,lte=32" json:"pass"`
+	OldPass     string `validate:"omitempty,gte=8,lte=32" json:"old_pass"`
+	Pass        string `validate:"required,gte=8,lte=32" json:"pass"`
 	UserID      string `json:"-"`
 	AccessToken string `json:"-"`
 }
 
 func (u *UserModifyPasswordReq) Check() (errFields []*validator.FormErrorField, err error) {
-	// TODO i18n
-	err = checker.CheckPassword(8, 32, 0, u.Pass)
-	if err != nil {
-		errField := &validator.FormErrorField{
+	if err = checker.CheckPassword(u.Pass); err != nil {
+		errFields = append(errFields, &validator.FormErrorField{
 			ErrorField: "pass",
 			ErrorMsg:   err.Error(),
-		}
-		errFields = append(errFields, errField)
+		})
 		return errFields, err
 	}
 	return nil, nil
@@ -352,14 +346,11 @@ type UserRePassWordRequest struct {
 }
 
 func (u *UserRePassWordRequest) Check() (errFields []*validator.FormErrorField, err error) {
-	// TODO i18n
-	err = checker.CheckPassword(8, 32, 0, u.Pass)
-	if err != nil {
-		errField := &validator.FormErrorField{
+	if err = checker.CheckPassword(u.Pass); err != nil {
+		errFields = append(errFields, &validator.FormErrorField{
 			ErrorField: "pass",
 			ErrorMsg:   err.Error(),
-		}
-		errFields = append(errFields, errField)
+		})
 		return errFields, err
 	}
 	return nil, nil

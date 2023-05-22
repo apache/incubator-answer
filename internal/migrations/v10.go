@@ -24,6 +24,8 @@ func addLoginLimitations(x *xorm.Engine) error {
 		_ = json.Unmarshal([]byte(loginSiteInfo.Content), content)
 		content.AllowEmailRegistrations = true
 		content.AllowEmailDomains = make([]string, 0)
+		data, _ := json.Marshal(content)
+		loginSiteInfo.Content = string(data)
 		_, err = x.ID(loginSiteInfo.ID).Cols("content").Update(loginSiteInfo)
 		if err != nil {
 			return fmt.Errorf("update site info failed: %w", err)
