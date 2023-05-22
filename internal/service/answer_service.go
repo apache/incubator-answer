@@ -127,10 +127,12 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 	if err != nil {
 		return err
 	}
-	err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
-	if err != nil {
-		log.Errorf("delete answer activity change failed: %s", err.Error())
-	}
+	// #2372 In order to simplify the process and complexity, as well as to consider if it is in-house,
+	// facing the problem of recovery.
+	//err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
+	//if err != nil {
+	//	log.Errorf("delete answer activity change failed: %s", err.Error())
+	//}
 	activity_queue.AddActivity(&schema.ActivityMsg{
 		UserID:           req.UserID,
 		ObjectID:         answerInfo.ID,
@@ -458,17 +460,18 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.A
 	}
 
 	if setStatus == entity.AnswerStatusDeleted {
-		err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
-		if err != nil {
-			log.Errorf("admin delete question then rank rollback error %s", err.Error())
-		} else {
-			activity_queue.AddActivity(&schema.ActivityMsg{
-				UserID:           req.UserID,
-				ObjectID:         answerInfo.ID,
-				OriginalObjectID: answerInfo.ID,
-				ActivityTypeKey:  constant.ActAnswerDeleted,
-			})
-		}
+		// #2372 In order to simplify the process and complexity, as well as to consider if it is in-house,
+		// facing the problem of recovery.
+		//err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
+		//if err != nil {
+		//	log.Errorf("admin delete question then rank rollback error %s", err.Error())
+		//}
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           req.UserID,
+			ObjectID:         answerInfo.ID,
+			OriginalObjectID: answerInfo.ID,
+			ActivityTypeKey:  constant.ActAnswerDeleted,
+		})
 	}
 
 	msg := &schema.NotificationMsg{}

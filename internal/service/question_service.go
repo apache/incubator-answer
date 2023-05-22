@@ -454,10 +454,12 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 		log.Error("efreshTagQuestionCount error", err.Error())
 	}
 
-	err = qs.answerActivityService.DeleteQuestion(ctx, questionInfo.ID, questionInfo.CreatedAt, questionInfo.VoteCount)
-	if err != nil {
-		log.Errorf("user DeleteQuestion rank rollback error %s", err.Error())
-	}
+	// #2372 In order to simplify the process and complexity, as well as to consider if it is in-house,
+	// facing the problem of recovery.
+	// err = qs.answerActivityService.DeleteQuestion(ctx, questionInfo.ID, questionInfo.CreatedAt, questionInfo.VoteCount)
+	// if err != nil {
+	// 	 log.Errorf("user DeleteQuestion rank rollback error %s", err.Error())
+	// }
 	activity_queue.AddActivity(&schema.ActivityMsg{
 		UserID:           req.UserID,
 		ObjectID:         questionInfo.ID,
@@ -1065,10 +1067,12 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 	}
 
 	if setStatus == entity.QuestionStatusDeleted {
-		err = qs.answerActivityService.DeleteQuestion(ctx, questionInfo.ID, questionInfo.CreatedAt, questionInfo.VoteCount)
-		if err != nil {
-			log.Errorf("admin delete question then rank rollback error %s", err.Error())
-		}
+		// #2372 In order to simplify the process and complexity, as well as to consider if it is in-house,
+		// facing the problem of recovery.
+		//err = qs.answerActivityService.DeleteQuestion(ctx, questionInfo.ID, questionInfo.CreatedAt, questionInfo.VoteCount)
+		//if err != nil {
+		//	log.Errorf("admin delete question then rank rollback error %s", err.Error())
+		//}
 		activity_queue.AddActivity(&schema.ActivityMsg{
 			UserID:           questionInfo.UserID,
 			ObjectID:         questionInfo.ID,
