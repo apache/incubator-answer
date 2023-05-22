@@ -1,0 +1,25 @@
+
+#sideNav {
+  .nav {
+    max-width: 172px;
+  }
+  .nav-link {
+    color: rgba(0, 0, 0, 0.65);
+  }
+  .nav-link:hover {
+    color: rgba(0, 0, 0);
+    background-color: var(--bs-gray-100);
+  }
+  .nav-link.active {
+    color: black;
+    background-color: var(--bs-gray-200);
+  }
+}
+
+@media screen and (max-width: 991.9px) {
+  #sideNav {
+    .nav {
+      max-width: 100%;
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
+import { Row, Col, Form, Button, Card } from 'react-bootstrap';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -320,14 +320,10 @@ const Ask = () => {
     title: pageTitle,
   });
   return (
-    <Container className="pt-4 mt-2 mb-5">
-      <Row className="justify-content-center">
-        <Col xxl={10} md={12}>
-          <h3 className="mb-4">{isEdit ? t('edit_title') : t('title')}</h3>
-        </Col>
-      </Row>
-      <Row className="justify-content-center">
-        <Col xxl={7} lg={8} sm={12} className="mb-4 mb-md-0">
+    <div className="pt-4 mb-5">
+      <h3 className="mb-4">{isEdit ? t('edit_title') : t('title')}</h3>
+      <Row>
+        <Col className="flex-auto">
           <Form noValidate onSubmit={handleSubmit}>
             {isEdit && (
               <Form.Group controlId="revision" className="mb-3">
@@ -491,7 +487,7 @@ const Ask = () => {
             )}
           </Form>
         </Col>
-        <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
+        <Col className="page-right-side mt-4 mt-xl-0">
           <Card>
             <Card.Header>
               {t('title', { keyPrefix: 'how_to_format' })}
@@ -505,7 +501,7 @@ const Ask = () => {
           </Card>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 
@@ -58,19 +58,19 @@ const Personal: FC = () => {
   });
 
   return (
-    <Container className="pt-4 mt-2 mb-5">
-      <Row className="justify-content-center">
+    <div className="pt-4 mb-5">
+      <Row>
         {userInfo?.status !== 'normal' && userInfo?.status_msg && (
           <Alert data={userInfo?.status_msg} />
         )}
-        <Col xxl={7} lg={8} sm={12}>
+        <Col className="flex-auto">
           <UserInfo data={userInfo as UserInfoRes} />
         </Col>
         <Col
           xxl={3}
           lg={4}
           sm={12}
-          className="d-flex justify-content-start justify-content-md-end">
+          className="page-right-side mt-4 mt-xl-0 d-flex justify-content-start justify-content-md-end">
           {isSelf && (
             <div className="mb-3">
               <Link
@@ -83,11 +83,9 @@ const Personal: FC = () => {
         </Col>
       </Row>
 
-      <Row className="justify-content-center">
-        <Col xxl={10}>
-          <NavBar tabName={tabName} slug={username} isSelf={isSelf} />
-        </Col>
-        <Col xxl={7} lg={8} sm={12}>
+      <Row>
+        <NavBar tabName={tabName} slug={username} isSelf={isSelf} />
+        <Col className="flex-auto">
           <Overview
             visible={tabName === 'overview'}
             introduction={userInfo?.bio_html || ''}
@@ -120,7 +118,7 @@ const Personal: FC = () => {
             </div>
           )}
         </Col>
-        <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
+        <Col className="page-right-side mt-4 mt-xl-0">
           <h5 className="mb-3">{t('stats')}</h5>
           {userInfo?.created_at && (
             <>
@@ -137,7 +135,7 @@ const Personal: FC = () => {
           )}
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 };
 export default Personal;
