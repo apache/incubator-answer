@@ -61,7 +61,8 @@ type QuestionAdd struct {
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// user id
-	UserID string `json:"-"`
+	UserID     string   `json:"-"`
+	InviteUser []string `validate:"omitempty"  json:"invite_user"`
 	QuestionPermission
 }
 
@@ -87,7 +88,8 @@ type QuestionAddByAnswer struct {
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// user id
-	UserID string `json:"-"`
+	UserID              string   `json:"-"`
+	MentionUsernameList []string `validate:"omitempty" json:"mention_username_list"`
 	QuestionPermission
 }
 

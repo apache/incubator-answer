@@ -28,6 +28,7 @@ import (
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/uid"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/i18n"
@@ -257,6 +258,13 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 			return errorlist, err
 		}
 	}
+
+	//verify invite user
+	inviteUserInfoList, err := qs.userCommon.BatchGetUserBasicInfoByUserNames(ctx, req.InviteUser)
+	if err != nil {
+		log.Error("BatchGetUserBasicInfoByUserNames error", err.Error())
+	}
+	spew.Dump(inviteUserInfoList)
 
 	question := &entity.Question{}
 	now := time.Now()

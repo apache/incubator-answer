@@ -195,6 +195,17 @@ func (ur *userRepo) GetByUsername(ctx context.Context, username string) (userInf
 	return
 }
 
+func (ur *userRepo) GetByUsernames(ctx context.Context, usernames []string) ([]*entity.User, error) {
+	list := make([]*entity.User, 0)
+	err := ur.data.DB.Where("status =?", entity.UserStatusAvailable).In("username", usernames).Find(&list)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return list, err
+	}
+	tryToDecorateUserListFromUserCenter(ctx, ur.data, list)
+	return list, nil
+}
+
 // GetByEmail get user by email
 func (ur *userRepo) GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error) {
 	userInfo = &entity.User{}

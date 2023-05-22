@@ -32,6 +32,7 @@ type UserRepo interface {
 	GetByUserID(ctx context.Context, userID string) (userInfo *entity.User, exist bool, err error)
 	BatchGetByID(ctx context.Context, ids []string) ([]*entity.User, error)
 	GetByUsername(ctx context.Context, username string) (userInfo *entity.User, exist bool, err error)
+	GetByUsernames(ctx context.Context, usernames []string) ([]*entity.User, error)
 	GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error)
 	GetUserCount(ctx context.Context) (count int64, err error)
 }
@@ -72,6 +73,19 @@ func (us *UserCommon) GetUserBasicInfoByUserName(ctx context.Context, username s
 	}
 	info := us.FormatUserBasicInfo(ctx, userInfo)
 	return info, exist, nil
+}
+
+func (us *UserCommon) BatchGetUserBasicInfoByUserNames(ctx context.Context, usernames []string) ([]*schema.UserBasicInfo, error) {
+	infolist := make([]*schema.UserBasicInfo, 0)
+	list, err := us.userRepo.GetByUsernames(ctx, usernames)
+	if err != nil {
+		return infolist, err
+	}
+	for _, user := range list {
+		info := us.FormatUserBasicInfo(ctx, user)
+		infolist = append(infolist, info)
+	}
+	return infolist, nil
 }
 
 func (us *UserCommon) UpdateAnswerCount(ctx context.Context, userID string, num int) error {
