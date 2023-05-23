@@ -388,6 +388,8 @@ backend:
         other: downvoted answer
       up_voted_comment:
         other: upvoted comment
+      invited_you_to_answer:
+        other: invited you to answer
   email_tpl:
     change_email:
       title:

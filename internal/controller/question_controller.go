@@ -232,30 +232,9 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 // @Success 200 {string} string ""
 // @Router /answer/api/v1/question/invite [get]
 func (qc *QuestionController) GetQuestionInviteUserInfo(ctx *gin.Context) {
-	id := ctx.Query("id")
-	id = uid.DeShortID(id)
-	userID := middleware.GetLoginUserIDFromContext(ctx)
-	req := schema.QuestionPermission{}
-	canList, err := qc.rankService.CheckOperationPermissions(ctx, userID, []string{
-		permission.QuestionEdit,
-	})
-	if err != nil {
-		handler.HandleResponse(ctx, err, nil)
-		return
-	}
-	objectOwner := qc.rankService.CheckOperationObjectOwner(ctx, userID, id)
-
-	req.CanEdit = canList[0] || objectOwner
-	if !req.CanEdit {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
-		return
-	}
-	list, err := qc.questionService.InviteUserInfo(ctx, id)
-	if err != nil {
-		handler.HandleResponse(ctx, err, nil)
-		return
-	}
-	handler.HandleResponse(ctx, nil, list)
+	questionID := uid.DeShortID(ctx.Query("id"))
+	resp, err := qc.questionService.InviteUserInfo(ctx, questionID)
+	handler.HandleResponse(ctx, err, resp)
 
 }
 
@@ -558,7 +537,7 @@ func (qc *QuestionController) UpdateQuestionInviteUser(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		permission.QuestionEdit,
+		permission.AnswerInviteSomeoneToAnswer,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
