@@ -61,8 +61,7 @@ type QuestionAdd struct {
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// user id
-	UserID     string   `json:"-"`
-	InviteUser []string `validate:"omitempty"  json:"invite_user"`
+	UserID string `json:"-"`
 	QuestionPermission
 }
 
@@ -141,7 +140,8 @@ type QuestionUpdate struct {
 	// content
 	Content string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
 	// html
-	HTML string `json:"-"`
+	HTML       string   `json:"-"`
+	InviteUser []string `validate:"omitempty"  json:"invite_user"`
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// edit summary

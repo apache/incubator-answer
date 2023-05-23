@@ -75,17 +75,17 @@ func (us *UserCommon) GetUserBasicInfoByUserName(ctx context.Context, username s
 	return info, exist, nil
 }
 
-func (us *UserCommon) BatchGetUserBasicInfoByUserNames(ctx context.Context, usernames []string) ([]*schema.UserBasicInfo, error) {
-	infolist := make([]*schema.UserBasicInfo, 0)
+func (us *UserCommon) BatchGetUserBasicInfoByUserNames(ctx context.Context, usernames []string) (map[string]*schema.UserBasicInfo, error) {
+	infomap := make(map[string]*schema.UserBasicInfo)
 	list, err := us.userRepo.GetByUsernames(ctx, usernames)
 	if err != nil {
-		return infolist, err
+		return infomap, err
 	}
 	for _, user := range list {
 		info := us.FormatUserBasicInfo(ctx, user)
-		infolist = append(infolist, info)
+		infomap[user.Username] = info
 	}
-	return infolist, nil
+	return infomap, nil
 }
 
 func (us *UserCommon) UpdateAnswerCount(ctx context.Context, userID string, num int) error {

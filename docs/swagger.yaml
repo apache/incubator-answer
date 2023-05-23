@@ -1218,6 +1218,10 @@ definitions:
         maxLength: 65535
         minLength: 6
         type: string
+      mention_username_list:
+        items:
+          type: string
+        type: array
       tags:
         description: tags
         items:
@@ -1334,6 +1338,10 @@ definitions:
       id:
         description: question id
         type: string
+      invite_user:
+        items:
+          type: string
+        type: array
       tags:
         description: tags
         items:

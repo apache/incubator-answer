@@ -7618,6 +7618,12 @@ const docTemplate = `{
                     "maxLength": 65535,
                     "minLength": 6
                 },
+                "mention_username_list": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "tags": {
                     "description": "tags",
                     "type": "array",
@@ -7780,6 +7786,12 @@ const docTemplate = `{
                 "id": {
                     "description": "question id",
                     "type": "string"
+                },
+                "invite_user": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "tags": {
                     "description": "tags",
