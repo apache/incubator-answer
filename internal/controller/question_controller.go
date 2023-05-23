@@ -230,7 +230,7 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 // @Produce  json
 // @Param id query string true "Question ID"  default(1)
 // @Success 200 {string} string ""
-// @Router /answer/api/v1/question/invite_user [get]
+// @Router /answer/api/v1/question/invite [get]
 func (qc *QuestionController) GetQuestionInviteUserInfo(ctx *gin.Context) {
 	id := ctx.Query("id")
 	id = uid.DeShortID(id)
@@ -547,7 +547,7 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 // @Security ApiKeyAuth
 // @Param data body schema.QuestionUpdateInviteUser true "question"
 // @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/question/inviter_user [put]
+// @Router /answer/api/v1/question/invite [put]
 func (qc *QuestionController) UpdateQuestionInviteUser(ctx *gin.Context) {
 	req := &schema.QuestionUpdateInviteUser{}
 	errFields := handler.BindAndCheckReturnErr(ctx, req)

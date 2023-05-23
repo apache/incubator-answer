@@ -4492,7 +4492,7 @@ paths:
       summary: get question details
       tags:
       - Question
-  /answer/api/v1/question/invite_user:
+  /answer/api/v1/question/invite:
     get:
       consumes:
       - application/json
@@ -4516,7 +4516,6 @@ paths:
       summary: get question invite user info
       tags:
       - Question
-  /answer/api/v1/question/inviter_user:
     put:
       consumes:
       - application/json

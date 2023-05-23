@@ -3654,7 +3654,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/question/invite_user": {
+        "/answer/api/v1/question/invite": {
             "get": {
                 "security": [
                     {
@@ -3690,9 +3690,7 @@ const docTemplate = `{
                         }
                     }
                 }
-            }
-        },
-        "/answer/api/v1/question/inviter_user": {
+            },
             "put": {
                 "security": [
                     {
