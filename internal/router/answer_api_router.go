@@ -130,6 +130,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	//question
 	r.GET("/question/info", a.questionController.GetQuestion)
+	r.GET("/question/invite_user", a.questionController.GetQuestionInviteUserInfo)
 	r.GET("/question/page", a.questionController.QuestionPage)
 	r.GET("/question/similar/tag", a.questionController.SimilarQuestion)
 	r.GET("/personal/qa/top", a.questionController.UserTop)
@@ -194,6 +195,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.POST("/question", a.questionController.AddQuestion)
 	r.POST("/question/answer", a.questionController.AddQuestionByAnswer)
 	r.PUT("/question", a.questionController.UpdateQuestion)
+	r.PUT("/question/inviter_user", a.questionController.UpdateQuestionInviteUser)
 	r.DELETE("/question", a.questionController.RemoveQuestion)
 	r.PUT("/question/status", a.questionController.CloseQuestion)
 	r.PUT("/question/operation", a.questionController.OperationQuestion)

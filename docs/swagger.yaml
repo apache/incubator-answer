@@ -1358,6 +1358,17 @@ definitions:
     - tags
     - title
     type: object
+  schema.QuestionUpdateInviteUser:
+    properties:
+      id:
+        type: string
+      invite_user:
+        items:
+          type: string
+        type: array
+    required:
+    - id
+    type: object
   schema.RemoveAnswerReq:
     properties:
       id:
@@ -4479,6 +4490,54 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: get question details
+      tags:
+      - Question
+  /answer/api/v1/question/invite_user:
+    get:
+      consumes:
+      - application/json
+      description: get question invite user info
+      parameters:
+      - default: "1"
+        description: Question ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: get question invite user info
+      tags:
+      - Question
+  /answer/api/v1/question/inviter_user:
+    put:
+      consumes:
+      - application/json
+      description: update question invite user
+      parameters:
+      - description: question
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.QuestionUpdateInviteUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update question invite user
       tags:
       - Question
   /answer/api/v1/question/operation:

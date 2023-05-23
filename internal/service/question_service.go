@@ -550,6 +550,38 @@ func (qs *QuestionService) UpdateQuestionCheckTags(ctx context.Context, req *sch
 	return nil, nil
 }
 
+func (qs *QuestionService) UpdateQuestionInviteUser(ctx context.Context, req *schema.QuestionUpdateInviteUser) (err error) {
+	//verify invite user
+	inviteUserInfoList, err := qs.userCommon.BatchGetUserBasicInfoByUserNames(ctx, req.InviteUser)
+	if err != nil {
+		log.Error("BatchGetUserBasicInfoByUserNames error", err.Error())
+	}
+	inviteUser := make([]string, 0)
+	for _, item := range req.InviteUser {
+		_, ok := inviteUserInfoList[item]
+		if ok {
+			inviteUser = append(inviteUser, inviteUserInfoList[item].ID)
+		}
+	}
+	inviteUserStr := ""
+	inviteUserByte, err := json.Marshal(inviteUser)
+	if err != nil {
+		log.Error("json.Marshal error", err.Error())
+		inviteUserStr = "[]"
+	} else {
+		inviteUserStr = string(inviteUserByte)
+	}
+	question := &entity.Question{}
+	question.ID = uid.DeShortID(req.ID)
+	question.InviteUserID = inviteUserStr
+
+	saveerr := qs.questionRepo.UpdateQuestion(ctx, question, []string{"invite_user_id"})
+	if saveerr != nil {
+		return saveerr
+	}
+	return nil
+}
+
 // UpdateQuestion update question
 func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.QuestionUpdate) (questionInfo any, err error) {
 	var canUpdate bool
@@ -577,27 +609,6 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return nil, err
 	}
 
-	//verify invite user
-	inviteUserInfoList, err := qs.userCommon.BatchGetUserBasicInfoByUserNames(ctx, req.InviteUser)
-	if err != nil {
-		log.Error("BatchGetUserBasicInfoByUserNames error", err.Error())
-	}
-	inviteUser := make([]string, 0)
-	for _, item := range req.InviteUser {
-		_, ok := inviteUserInfoList[item]
-		if ok {
-			inviteUser = append(inviteUser, inviteUserInfoList[item].ID)
-		}
-	}
-	inviteUserStr := ""
-	inviteUserByte, err := json.Marshal(inviteUser)
-	if err != nil {
-		log.Error("json.Marshal error", err.Error())
-		inviteUserStr = "[]"
-	} else {
-		inviteUserStr = string(inviteUserByte)
-	}
-
 	now := time.Now()
 	question := &entity.Question{}
 	question.Title = req.Title
@@ -605,7 +616,6 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 	question.ParsedText = req.HTML
 	question.ID = uid.DeShortID(req.ID)
 	question.UpdatedAt = now
-	question.InviteUserID = inviteUserStr
 	question.PostUpdateTime = now
 	question.UserID = dbinfo.UserID
 	question.LastEditUserID = req.UserID
@@ -699,7 +709,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		//Direct modification
 		revisionDTO.Status = entity.RevisionReviewPassStatus
 		//update question to db
-		saveerr := qs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at", "post_update_time", "last_edit_user_id", "invite_user_id"})
+		saveerr := qs.questionRepo.UpdateQuestion(ctx, question, []string{"title", "original_text", "parsed_text", "updated_at", "post_update_time", "last_edit_user_id"})
 		if saveerr != nil {
 			return questionInfo, saveerr
 		}
@@ -791,6 +801,10 @@ func (qs *QuestionService) GetQuestionAndAddPV(ctx context.Context, questionID, 
 		log.Error(err)
 	}
 	return qs.GetQuestion(ctx, questionID, loginUserID, per)
+}
+
+func (qs *QuestionService) InviteUserInfo(ctx context.Context, questionID string) (inviteList []*schema.UserBasicInfo, err error) {
+	return qs.questioncommon.InviteUserInfo(ctx, questionID)
 }
 
 func (qs *QuestionService) ChangeTag(ctx context.Context, objectTagData *schema.TagChange) error {

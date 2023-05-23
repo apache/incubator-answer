@@ -152,6 +152,13 @@ type QuestionUpdate struct {
 	QuestionPermission
 }
 
+type QuestionUpdateInviteUser struct {
+	ID         string   `validate:"required" json:"id"`
+	InviteUser []string `validate:"omitempty"  json:"invite_user"`
+	UserID     string   `json:"-"`
+	QuestionPermission
+}
+
 func (req *QuestionUpdate) Check() (errFields []*validator.FormErrorField, err error) {
 	req.HTML = converter.Markdown2HTML(req.Content)
 	return nil, nil
