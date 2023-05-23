@@ -814,6 +814,19 @@ func (us *UserService) getUserInfoMapping(ctx context.Context, userIDs []string)
 	return userInfoMapping, nil
 }
 
+func (us *UserService) SearchUserListByName(ctx context.Context, name string) ([]*schema.UserBasicInfo, error) {
+	userinfolist := make([]*schema.UserBasicInfo, 0)
+	list, err := us.userRepo.SearchUserListByName(ctx, name)
+	if err != nil {
+		return userinfolist, err
+	}
+	for _, user := range list {
+		userinfo := us.userCommonService.FormatUserBasicInfo(ctx, user)
+		userinfolist = append(userinfolist, userinfo)
+	}
+	return userinfolist, nil
+}
+
 func (us *UserService) warpStatRankingResp(
 	userInfoMapping map[string]*entity.User,
 	rankStat []*entity.ActivityUserRankStat,

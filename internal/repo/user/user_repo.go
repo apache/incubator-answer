@@ -226,6 +226,22 @@ func (ur *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
 	return
 }
 
+func (ur *userRepo) SearchUserListByName(ctx context.Context, name string) (userList []*entity.User, err error) {
+	userList = make([]*entity.User, 0)
+	if name == "" {
+		return userList, nil
+	}
+	session := ur.data.DB.Where("")
+	session.Where("username LIKE LOWER(?) or display_name LIKE ?", name+"%", name+"%").And("status =?", entity.UserStatusAvailable)
+	session.Asc("username")
+	session = session.Limit(5, 0)
+	err = session.OrderBy("id desc").Find(&userList)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 func tryToDecorateUserInfoFromUserCenter(ctx context.Context, data *data.Data, original *entity.User) (err error) {
 	if original == nil {
 		return nil

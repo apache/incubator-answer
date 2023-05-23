@@ -5364,6 +5364,34 @@ paths:
       summary: UserUpdateInfo update user info
       tags:
       - User
+  /answer/api/v1/user/info/search:
+    get:
+      consumes:
+      - application/json
+      description: SearchUserListByName
+      parameters:
+      - description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetOtherUserInfoResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: SearchUserListByName
+      tags:
+      - User
   /answer/api/v1/user/interface:
     put:
       consumes:
