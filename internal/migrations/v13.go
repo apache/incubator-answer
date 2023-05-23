@@ -11,6 +11,12 @@ import (
 	"xorm.io/xorm"
 )
 
+func updateCount(x *xorm.Engine) error {
+	addPrivilegeForInviteSomeoneToAnswer(x)
+	addGravatarBaseURL(x)
+	return nil
+}
+
 func addGravatarBaseURL(x *xorm.Engine) error {
 	usersSiteInfo := &entity.SiteInfo{
 		Type: constant.SiteTypeUsers,
@@ -31,7 +37,10 @@ func addGravatarBaseURL(x *xorm.Engine) error {
 			return fmt.Errorf("update site info failed: %w", err)
 		}
 	}
+	return nil
+}
 
+func addPrivilegeForInviteSomeoneToAnswer(x *xorm.Engine) error {
 	// add rank for invite to answer
 	powers := []*entity.Power{
 		{ID: 38, Name: "invite someone to answer", PowerType: permission.AnswerInviteSomeoneToAnswer, Description: "invite someone to answer"},
