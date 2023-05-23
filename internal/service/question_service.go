@@ -579,7 +579,23 @@ func (qs *QuestionService) UpdateQuestionInviteUser(ctx context.Context, req *sc
 	if saveerr != nil {
 		return saveerr
 	}
+	qs.notificationInviteUser(ctx, inviteUser, req.ID, req.UserID)
 	return nil
+}
+
+func (qs *QuestionService) notificationInviteUser(
+	ctx context.Context, invitedUserIDs []string, questionID, questionUserID string) {
+	for _, userID := range invitedUserIDs {
+		msg := &schema.NotificationMsg{
+			ReceiverUserID: userID,
+			TriggerUserID:  questionUserID,
+			Type:           schema.NotificationTypeInbox,
+			ObjectID:       questionID,
+		}
+		msg.ObjectType = constant.QuestionObjectType
+		msg.NotificationAction = constant.NotificationInvitedYouToAnswer
+		notice_queue.AddNotification(msg)
+	}
 }
 
 // UpdateQuestion update question
