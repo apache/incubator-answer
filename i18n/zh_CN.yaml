@@ -75,6 +75,8 @@ backend:
       other: 问题点踩
     rank_answer_vote_down_label:
       other: 答案点踩
+    rank_invite_someone_to_answer_label:
+      other: 邀请回答
     rank_tag_add_label:
       other: 创建新标签
     rank_tag_edit_label:

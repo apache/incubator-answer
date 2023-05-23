@@ -79,6 +79,8 @@ backend:
       other: Downvote question
     rank_answer_vote_down_label:
       other: Downvote answer
+    rank_invite_someone_to_answer_label:
+      other: Invite someone to answer
     rank_tag_add_label:
       other: Create new tag
     rank_tag_edit_label:

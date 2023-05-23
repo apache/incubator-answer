@@ -297,6 +297,7 @@ var (
 		constant.RankAnswerVoteUpKey:              {1, 1, 15},
 		constant.RankQuestionVoteDownKey:          {125, 125, 125},
 		constant.RankAnswerVoteDownKey:            {125, 125, 125},
+		constant.RankInviteSomeoneToAnswerKey:     {1, 500, 1000},
 		constant.RankTagAddKey:                    {1, 750, 1500},
 		constant.RankTagEditKey:                   {1, 50, 100},
 		constant.RankQuestionEditKey:              {1, 100, 200},
