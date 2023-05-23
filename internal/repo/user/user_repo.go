@@ -239,6 +239,7 @@ func (ur *userRepo) SearchUserListByName(ctx context.Context, name string) (user
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	tryToDecorateUserListFromUserCenter(ctx, ur.data, userList)
 	return
 }
 
