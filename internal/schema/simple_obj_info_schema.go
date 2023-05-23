@@ -5,6 +5,7 @@ type SimpleObjectInfo struct {
 	ObjectID            string `json:"object_id"`
 	ObjectCreatorUserID string `json:"object_creator_user_id"`
 	QuestionID          string `json:"question_id"`
+	QuestionStatus      int    `json:"status"`
 	AnswerID            string `json:"answer_id"`
 	CommentID           string `json:"comment_id"`
 	TagID               string `json:"tag_id"`

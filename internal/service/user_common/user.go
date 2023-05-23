@@ -20,6 +20,8 @@ type UserRepo interface {
 	AddUser(ctx context.Context, user *entity.User) (err error)
 	IncreaseAnswerCount(ctx context.Context, userID string, amount int) (err error)
 	IncreaseQuestionCount(ctx context.Context, userID string, amount int) (err error)
+	UpdateQuestionCount(ctx context.Context, userID string, count int64) (err error)
+	UpdateAnswerCount(ctx context.Context, userID string, count int) (err error)
 	UpdateLastLoginDate(ctx context.Context, userID string) (err error)
 	UpdateEmailStatus(ctx context.Context, userID string, emailStatus int) error
 	UpdateNoticeStatus(ctx context.Context, userID string, noticeStatus int) error
@@ -30,8 +32,10 @@ type UserRepo interface {
 	GetByUserID(ctx context.Context, userID string) (userInfo *entity.User, exist bool, err error)
 	BatchGetByID(ctx context.Context, ids []string) ([]*entity.User, error)
 	GetByUsername(ctx context.Context, username string) (userInfo *entity.User, exist bool, err error)
+	GetByUsernames(ctx context.Context, usernames []string) ([]*entity.User, error)
 	GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error)
 	GetUserCount(ctx context.Context) (count int64, err error)
+	SearchUserListByName(ctx context.Context, name string) (userList []*entity.User, err error)
 }
 
 // UserCommon user service
@@ -72,12 +76,25 @@ func (us *UserCommon) GetUserBasicInfoByUserName(ctx context.Context, username s
 	return info, exist, nil
 }
 
-func (us *UserCommon) UpdateAnswerCount(ctx context.Context, userID string, num int) error {
-	return us.userRepo.IncreaseAnswerCount(ctx, userID, num)
+func (us *UserCommon) BatchGetUserBasicInfoByUserNames(ctx context.Context, usernames []string) (map[string]*schema.UserBasicInfo, error) {
+	infomap := make(map[string]*schema.UserBasicInfo)
+	list, err := us.userRepo.GetByUsernames(ctx, usernames)
+	if err != nil {
+		return infomap, err
+	}
+	for _, user := range list {
+		info := us.FormatUserBasicInfo(ctx, user)
+		infomap[user.Username] = info
+	}
+	return infomap, nil
 }
 
-func (us *UserCommon) UpdateQuestionCount(ctx context.Context, userID string, num int) error {
-	return us.userRepo.IncreaseQuestionCount(ctx, userID, num)
+func (us *UserCommon) UpdateAnswerCount(ctx context.Context, userID string, num int) error {
+	return us.userRepo.UpdateAnswerCount(ctx, userID, num)
+}
+
+func (us *UserCommon) UpdateQuestionCount(ctx context.Context, userID string, num int64) error {
+	return us.userRepo.UpdateQuestionCount(ctx, userID, num)
 }
 
 func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, IDs []string) (map[string]*schema.UserBasicInfo, error) {

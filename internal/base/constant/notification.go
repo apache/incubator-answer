@@ -35,4 +35,6 @@ const (
 	NotificationYourAnswerWasDeleted = "notification.action.your_answer_was_deleted"
 	// NotificationYourCommentWasDeleted your comment was deleted
 	NotificationYourCommentWasDeleted = "notification.action.your_comment_was_deleted"
+	// NotificationInvitedYouToAnswer invited you to answer
+	NotificationInvitedYouToAnswer = "notification.action.invited_you_to_answer"
 )

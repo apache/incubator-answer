@@ -112,6 +112,7 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 	routerGroup.POST("/user/password/reset", a.userController.RetrievePassWord)
 	routerGroup.POST("/user/password/replacement", a.userController.UseRePassWord)
 	routerGroup.PUT("/user/email/notification", a.userController.UserUnsubscribeEmailNotification)
+	routerGroup.GET("/user/info/search", a.userController.SearchUserListByName)
 }
 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
@@ -129,6 +130,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	//question
 	r.GET("/question/info", a.questionController.GetQuestion)
+	r.GET("/question/invite", a.questionController.GetQuestionInviteUserInfo)
 	r.GET("/question/page", a.questionController.QuestionPage)
 	r.GET("/question/similar/tag", a.questionController.SimilarQuestion)
 	r.GET("/personal/qa/top", a.questionController.UserTop)
@@ -193,6 +195,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.POST("/question", a.questionController.AddQuestion)
 	r.POST("/question/answer", a.questionController.AddQuestionByAnswer)
 	r.PUT("/question", a.questionController.UpdateQuestion)
+	r.PUT("/question/invite", a.questionController.UpdateQuestionInviteUser)
 	r.DELETE("/question", a.questionController.RemoveQuestion)
 	r.PUT("/question/status", a.questionController.CloseQuestion)
 	r.PUT("/question/operation", a.questionController.OperationQuestion)

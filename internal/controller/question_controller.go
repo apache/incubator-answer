@@ -221,6 +221,44 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, info)
 }
 
+// GetQuestionInviteUserInfo get question invite user info
+// @Summary get question invite user info
+// @Description get question invite user info
+// @Tags Question
+// @Security ApiKeyAuth
+// @Accept  json
+// @Produce  json
+// @Param id query string true "Question ID"  default(1)
+// @Success 200 {string} string ""
+// @Router /answer/api/v1/question/invite [get]
+func (qc *QuestionController) GetQuestionInviteUserInfo(ctx *gin.Context) {
+	id := ctx.Query("id")
+	id = uid.DeShortID(id)
+	userID := middleware.GetLoginUserIDFromContext(ctx)
+	req := schema.QuestionPermission{}
+	canList, err := qc.rankService.CheckOperationPermissions(ctx, userID, []string{
+		permission.QuestionEdit,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	objectOwner := qc.rankService.CheckOperationObjectOwner(ctx, userID, id)
+
+	req.CanEdit = canList[0] || objectOwner
+	if !req.CanEdit {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+	list, err := qc.questionService.InviteUserInfo(ctx, id)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	handler.HandleResponse(ctx, nil, list)
+
+}
+
 // SimilarQuestion godoc
 // @Summary Search Similar Question
 // @Description Search Similar Question
@@ -498,6 +536,51 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		return
 	}
 	handler.HandleResponse(ctx, nil, &schema.UpdateQuestionResp{WaitForReview: !req.NoNeedReview})
+}
+
+// UpdateQuestionInviteUser update question invite user
+// @Summary update question invite user
+// @Description update question invite user
+// @Tags Question
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.QuestionUpdateInviteUser true "question"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/question/invite [put]
+func (qc *QuestionController) UpdateQuestionInviteUser(ctx *gin.Context) {
+	req := &schema.QuestionUpdateInviteUser{}
+	errFields := handler.BindAndCheckReturnErr(ctx, req)
+	if ctx.IsAborted() {
+		return
+	}
+	req.ID = uid.DeShortID(req.ID)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.QuestionEdit,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+
+	objectOwner := qc.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.ID)
+	req.CanEdit = canList[0] || objectOwner
+	if !req.CanEdit {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+	if len(errFields) > 0 {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
+		return
+	}
+	err = qc.questionService.UpdateQuestionInviteUser(ctx, req)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	handler.HandleResponse(ctx, nil, nil)
 }
 
 // SearchByTitleLike add question title like
