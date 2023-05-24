@@ -18,4 +18,7 @@ const (
 
 	EmailTplKeyTestTitle = "email_tpl.test.title"
 	EmailTplKeyTestBody  = "email_tpl.test.body"
+
+	EmailTplKeyInvitedAnswerTitle = "email_tpl.invited_you_to_answer.title"
+	EmailTplKeyInvitedAnswerBody  = "email_tpl.invited_you_to_answer.body"
 )

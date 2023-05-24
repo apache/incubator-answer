@@ -47,6 +47,21 @@ type NewAnswerTemplateData struct {
 	UnsubscribeUrl string
 }
 
+type NewInviteAnswerTemplateRawData struct {
+	InviterDisplayName string
+	QuestionTitle      string
+	QuestionID         string
+	UnsubscribeCode    string
+}
+
+type NewInviteAnswerTemplateData struct {
+	SiteName       string
+	DisplayName    string
+	QuestionTitle  string
+	InviteUrl      string
+	UnsubscribeUrl string
+}
+
 type NewCommentTemplateRawData struct {
 	CommentUserDisplayName string
 	QuestionTitle          string

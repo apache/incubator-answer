@@ -19,6 +19,7 @@ import (
 	"github.com/answerdev/answer/internal/service/activity"
 	"github.com/answerdev/answer/internal/service/activity_queue"
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
+	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/meta"
 	"github.com/answerdev/answer/internal/service/notice_queue"
 	"github.com/answerdev/answer/internal/service/permission"
@@ -26,10 +27,12 @@ import (
 	"github.com/answerdev/answer/internal/service/revision_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/encryption"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 	"golang.org/x/net/context"
 )
@@ -42,11 +45,13 @@ type QuestionService struct {
 	tagCommon             *tagcommon.TagCommonService
 	questioncommon        *questioncommon.QuestionCommon
 	userCommon            *usercommon.UserCommon
+	userRepo              usercommon.UserRepo
 	revisionService       *revision_common.RevisionService
 	metaService           *meta.MetaService
 	collectionCommon      *collectioncommon.CollectionCommon
 	answerActivityService *activity.AnswerActivityService
 	data                  *data.Data
+	emailService          *export.EmailService
 }
 
 func NewQuestionService(
@@ -54,23 +59,26 @@ func NewQuestionService(
 	tagCommon *tagcommon.TagCommonService,
 	questioncommon *questioncommon.QuestionCommon,
 	userCommon *usercommon.UserCommon,
+	userRepo usercommon.UserRepo,
 	revisionService *revision_common.RevisionService,
 	metaService *meta.MetaService,
 	collectionCommon *collectioncommon.CollectionCommon,
 	answerActivityService *activity.AnswerActivityService,
 	data *data.Data,
-
+	emailService *export.EmailService,
 ) *QuestionService {
 	return &QuestionService{
 		questionRepo:          questionRepo,
 		tagCommon:             tagCommon,
 		questioncommon:        questioncommon,
 		userCommon:            userCommon,
+		userRepo:              userRepo,
 		revisionService:       revisionService,
 		metaService:           metaService,
 		collectionCommon:      collectionCommon,
 		answerActivityService: answerActivityService,
 		data:                  data,
+		emailService:          emailService,
 	}
 }
 
@@ -536,20 +544,28 @@ func (qs *QuestionService) UpdateQuestionCheckTags(ctx context.Context, req *sch
 }
 
 func (qs *QuestionService) UpdateQuestionInviteUser(ctx context.Context, req *schema.QuestionUpdateInviteUser) (err error) {
+	originQuestion, exist, err := qs.questionRepo.GetQuestion(ctx, req.ID)
+	if err != nil {
+		return err
+	}
+	if !exist {
+		return errors.NotFound(reason.ObjectNotFound)
+	}
+
 	//verify invite user
 	inviteUserInfoList, err := qs.userCommon.BatchGetUserBasicInfoByUserNames(ctx, req.InviteUser)
 	if err != nil {
 		log.Error("BatchGetUserBasicInfoByUserNames error", err.Error())
 	}
-	inviteUser := make([]string, 0)
+	inviteUserIDs := make([]string, 0)
 	for _, item := range req.InviteUser {
 		_, ok := inviteUserInfoList[item]
 		if ok {
-			inviteUser = append(inviteUser, inviteUserInfoList[item].ID)
+			inviteUserIDs = append(inviteUserIDs, inviteUserInfoList[item].ID)
 		}
 	}
 	inviteUserStr := ""
-	inviteUserByte, err := json.Marshal(inviteUser)
+	inviteUserByte, err := json.Marshal(inviteUserIDs)
 	if err != nil {
 		log.Error("json.Marshal error", err.Error())
 		inviteUserStr = "[]"
@@ -564,12 +580,31 @@ func (qs *QuestionService) UpdateQuestionInviteUser(ctx context.Context, req *sc
 	if saveerr != nil {
 		return saveerr
 	}
-	qs.notificationInviteUser(ctx, inviteUser, req.ID, req.UserID)
+	go qs.notificationInviteUser(ctx, inviteUserIDs, originQuestion.ID, originQuestion.Title, req.UserID)
 	return nil
 }
 
 func (qs *QuestionService) notificationInviteUser(
-	ctx context.Context, invitedUserIDs []string, questionID, questionUserID string) {
+	ctx context.Context, invitedUserIDs []string, questionID, questionTitle, questionUserID string) {
+	inviter, exist, err := qs.userCommon.GetUserBasicInfoByID(ctx, questionUserID)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	if !exist {
+		log.Warnf("user %s not found", questionUserID)
+		return
+	}
+
+	users, err := qs.userRepo.BatchGetByID(ctx, invitedUserIDs)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	invitee := make(map[string]*entity.User, len(users))
+	for _, user := range users {
+		invitee[user.ID] = user
+	}
 	for _, userID := range invitedUserIDs {
 		msg := &schema.NotificationMsg{
 			ReceiverUserID: userID,
@@ -580,6 +615,40 @@ func (qs *QuestionService) notificationInviteUser(
 		msg.ObjectType = constant.QuestionObjectType
 		msg.NotificationAction = constant.NotificationInvitedYouToAnswer
 		notice_queue.AddNotification(msg)
+
+		userInfo, ok := invitee[userID]
+		if !ok {
+			log.Warnf("user %s not found", userID)
+			return
+		}
+		if userInfo.NoticeStatus == schema.NoticeStatusOff || len(userInfo.EMail) == 0 {
+			return
+		}
+
+		rawData := &schema.NewInviteAnswerTemplateRawData{
+			InviterDisplayName: inviter.DisplayName,
+			QuestionTitle:      questionTitle,
+			QuestionID:         questionID,
+			UnsubscribeCode:    encryption.MD5(userInfo.Pass),
+		}
+		codeContent := &schema.EmailCodeContent{
+			SourceType: schema.UnsubscribeSourceType,
+			Email:      userInfo.EMail,
+			UserID:     userInfo.ID,
+		}
+
+		// If receiver has set language, use it to send email.
+		if len(userInfo.Language) > 0 {
+			ctx = context.WithValue(ctx, constant.AcceptLanguageFlag, i18n.Language(userInfo.Language))
+		}
+		title, body, err := qs.emailService.NewInviteAnswerTemplate(ctx, rawData)
+		if err != nil {
+			log.Error(err)
+			return
+		}
+
+		go qs.emailService.SendAndSaveCodeWithTime(
+			ctx, userInfo.EMail, title, body, rawData.UnsubscribeCode, codeContent.ToJSONString(), 7*24*time.Hour)
 	}
 }
 
