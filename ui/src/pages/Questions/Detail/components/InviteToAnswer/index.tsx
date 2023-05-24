@@ -74,17 +74,19 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
 
   const showAddButton = editing && (!users || users.length < MAX_ASK_NUMBER);
   const showInviteDesc = !editing && users?.length === 0;
+  const showEditButton = !readOnly && !editing && users?.length;
+  const showSaveButton = !readOnly && editing;
 
   return (
     <Card className="mt-4">
       <Card.Header className="text-nowrap d-flex justify-content-between text-capitalize">
         {t('title')}
-        {!readOnly && editing ? (
+        {showSaveButton ? (
           <Button onClick={saveInviteUsers} variant="link" className="p-0">
             {t('save', { keyPrefix: 'btns' })}
           </Button>
         ) : null}
-        {!readOnly && !editing ? (
+        {showEditButton ? (
           <Button
             onClick={() => setEditing(true)}
             variant="link"
