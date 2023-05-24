@@ -43,13 +43,14 @@ const (
 )
 
 const (
-	reportActionName = "action.report"
-	editActionName   = "action.edit"
-	deleteActionName = "action.delete"
-	closeActionName  = "action.close"
-	reopenActionName = "action.reopen"
-	pinActionName    = "action.pin"
-	unpinActionName  = "action.unpin"
-	hideActionName   = "action.hide"
-	showActionName   = "action.show"
+	reportActionName                = "action.report"
+	editActionName                  = "action.edit"
+	deleteActionName                = "action.delete"
+	closeActionName                 = "action.close"
+	reopenActionName                = "action.reopen"
+	pinActionName                   = "action.pin"
+	unpinActionName                 = "action.unpin"
+	hideActionName                  = "action.hide"
+	showActionName                  = "action.show"
+	inviteSomeoneToAnswerActionName = "action.invite_someone_to_answer"
 )

@@ -34,6 +34,8 @@ backend:
       other: Unpin
     show:
       other: List
+    invite_someone_to_answer:
+      other: Edit
   role:
     name:
       user:

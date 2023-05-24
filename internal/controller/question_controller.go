@@ -196,6 +196,7 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 		permission.QuestionUnPin,
 		permission.QuestionHide,
 		permission.QuestionShow,
+		permission.AnswerInviteSomeoneToAnswer,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -211,6 +212,7 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	req.CanUnPin = canList[5]
 	req.CanHide = canList[6]
 	req.CanShow = canList[7]
+	req.CanInviteOtherToAnswer = canList[8]
 
 	info, err := qc.questionService.GetQuestionAndAddPV(ctx, id, userID, req)
 	if err != nil {
