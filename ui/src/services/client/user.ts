@@ -11,3 +11,12 @@ export const useQueryContributeUsers = () => {
     staffs: Type.User[];
   }>(apiUrl, request.instance.get);
 };
+
+export const userSearchByName = (name: string) => {
+  const apiUrl = '/answer/api/v1/user/info/search';
+  return request.get<Type.UserInfoBase[]>(apiUrl, {
+    params: {
+      username: name,
+    },
+  });
+};

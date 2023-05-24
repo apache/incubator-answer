@@ -27,6 +27,7 @@ import {
   WriteAnswer,
   Alert,
   ContentLoader,
+  InviteToAnswer,
 } from './components';
 
 import './index.scss';
@@ -197,6 +198,18 @@ const Index = () => {
     description: question?.description,
     keywords: question?.tags.map((_) => _.slug_name).join(','),
   });
+
+  const showInviteToAnswer = question?.id;
+  let canInvitePeople = false;
+  if (showInviteToAnswer && Array.isArray(question.extends_actions)) {
+    const inviteAct = question.extends_actions.find((op) => {
+      return op.action === 'invite_other_to_answer';
+    });
+    if (inviteAct) {
+      canInvitePeople = true;
+    }
+  }
+
   return (
     <Row className="questionDetailPage pt-4 mb-5">
       <Col className="flex-auto">
@@ -257,6 +270,12 @@ const Index = () => {
       <Col className="page-right-side mt-4 mt-xl-0">
         <CustomSidebar />
         <RelatedQuestions id={question?.id || ''} />
+        {showInviteToAnswer ? (
+          <InviteToAnswer
+            questionId={question.id}
+            readOnly={!canInvitePeople}
+          />
+        ) : null}
       </Col>
     </Row>
   );

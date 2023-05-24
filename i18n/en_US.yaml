@@ -482,6 +482,11 @@ ui:
     all_read: Mark all as read
     show_more: Show more
     someone: Someone
+    inbox_type:
+      all: All
+      posts: Posts
+      invites: Invites
+      votes: Votes
   suspended:
     title: Your Account has been Suspended
     until_time: "Your account was suspended until {{ time }}."
@@ -971,6 +976,12 @@ ui:
     title: Related Questions
     btn: Add question
     answers: answers
+  invite_to_answer:
+    title: People asked
+    desc: Invite people who you think might know the answer.
+    invite: Invite to answer
+    add: Add people
+    search: Search people
   question_detail:
     action: Action
     Asked: Asked
@@ -1037,6 +1048,7 @@ ui:
   btns:
     confirm: Confirm
     cancel: Cancel
+    edit: Edit
     save: Save
     delete: Delete
     login: Log in
