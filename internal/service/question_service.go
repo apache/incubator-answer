@@ -859,6 +859,7 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 	question.Description = htmltext.FetchExcerpt(question.HTML, "...", 240)
 	question.MemberActions = permission.GetQuestionPermission(ctx, userID, question.UserID,
 		per.CanEdit, per.CanDelete, per.CanClose, per.CanReopen, per.CanPin, per.CanHide, per.CanUnPin, per.CanShow)
+	question.ExtendsActions = permission.GetQuestionExtendsPermission(ctx, userID, question.UserID, per.CanInviteOtherToAnswer)
 	return question, nil
 }
 

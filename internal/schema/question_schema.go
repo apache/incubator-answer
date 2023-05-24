@@ -122,6 +122,8 @@ type QuestionPermission struct {
 	CanShow bool `json:"-"`
 	// whether user can use reserved it
 	CanUseReservedTag bool `json:"-"`
+	// whether user can invite other user to answer this question
+	CanInviteOtherToAnswer bool `json:"-"`
 }
 
 type CheckCanQuestionUpdate struct {
@@ -211,7 +213,8 @@ type QuestionInfo struct {
 	IsFollowed           bool           `json:"is_followed"`
 
 	// MemberActions
-	MemberActions []*PermissionMemberAction `json:"member_actions"`
+	MemberActions  []*PermissionMemberAction `json:"member_actions"`
+	ExtendsActions []*PermissionMemberAction `json:"extends_actions"`
 }
 
 // UpdateQuestionResp update question resp
