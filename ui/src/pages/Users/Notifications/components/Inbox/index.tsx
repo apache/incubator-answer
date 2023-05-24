@@ -55,7 +55,7 @@ const Inbox = ({ data, handleReadNotification }) => {
                 {item.object_info.title}
               </Link>
             </div>
-            <div className="text-secondary">
+            <div className="text-secondary small">
               <FormatTime time={item.update_time} />
             </div>
           </ListGroup.Item>

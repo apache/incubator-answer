@@ -38,7 +38,7 @@ const Achievements = ({ data, handleReadNotification }) => {
           <ListGroup.Item
             key={item.id}
             className={classNames(
-              'd-flex border-start-0 border-end-0',
+              'd-flex border-start-0 border-end-0 py-3',
               !item.is_read && 'warning',
             )}>
             {item.rank > 0 && (
@@ -52,7 +52,7 @@ const Achievements = ({ data, handleReadNotification }) => {
               <Link to={url} onClick={() => handleReadNotification(item.id)}>
                 {item.object_info.title}
               </Link>
-              <span className="text-secondary">
+              <span className="text-secondary small">
                 {item.object_info.object_type}
               </span>
             </div>
