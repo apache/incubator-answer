@@ -896,6 +896,12 @@ ui:
     title: Related Questions
     btn: Add question
     answers: answers
+  invite_to_answer:
+    title: People asked
+    desc: Invite people who you think might know the answer.
+    invite: Invite to answer
+    add: Add people
+    search: Search people
   question_detail:
     action: Action
     Asked: Asked
@@ -962,6 +968,7 @@ ui:
   btns:
     confirm: Confirm
     cancel: Cancel
+    edit: Edit
     save: Save
     delete: Delete
     login: Log in

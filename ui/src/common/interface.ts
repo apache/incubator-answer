@@ -122,7 +122,7 @@ export interface UserInfoBase {
    */
   status?: string;
   /** roles */
-  role_id: RoleId;
+  role_id?: RoleId;
 }
 
 export interface UserInfoRes extends UserInfoBase {
