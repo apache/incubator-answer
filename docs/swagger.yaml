@@ -3976,6 +3976,16 @@ paths:
         name: type
         required: true
         type: string
+      - description: inbox_type
+        enum:
+        - all
+        - posts
+        - invites
+        - votes
+        in: query
+        name: inbox_type
+        required: true
+        type: string
       produces:
       - application/json
       responses:

@@ -2841,6 +2841,19 @@ const docTemplate = `{
                         "name": "type",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "enum": [
+                            "all",
+                            "posts",
+                            "invites",
+                            "votes"
+                        ],
+                        "type": "string",
+                        "description": "inbox_type",
+                        "name": "inbox_type",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
