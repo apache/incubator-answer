@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strconv"
 	"testing"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
 func Test_ShortID(t *testing.T) {
@@ -43,4 +45,10 @@ func Test_Demo(t *testing.T) {
 		code := strconv.FormatInt(num, 36) //10 yo 16
 		fmt.Println(num, code)
 	}
+}
+
+// https://answer.dev.segmentfault.com/questions/D112
+func Test_DeCode(t *testing.T) {
+	aaa := DeShortID("D112")
+	spew.Dump(aaa)
 }
