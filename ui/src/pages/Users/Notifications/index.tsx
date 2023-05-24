@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Row, Col, ButtonGroup, Button } from 'react-bootstrap';
+import { Row, Col, ButtonGroup, Button, Nav } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+
+import classNames from 'classnames';
 
 import { usePageTags } from '@/hooks';
 import {
@@ -14,6 +16,7 @@ import { floppyNavigation } from '@/utils';
 
 import Inbox from './components/Inbox';
 import Achievements from './components/Achievements';
+import './index.scss';
 
 const PAGE_SIZE = 10;
 
@@ -21,13 +24,23 @@ const Notifications = () => {
   const [page, setPage] = useState(1);
   const [notificationData, setNotificationData] = useState<any>([]);
   const { t } = useTranslation('translation', { keyPrefix: 'notifications' });
-  const { type = 'inbox' } = useParams();
+  const inboxTypeNavs = ['all', 'posts', 'invites', 'votes'];
+  const { type = 'inbox', subType = inboxTypeNavs[0] } = useParams();
 
-  const { data, mutate } = useQueryNotifications({
+  const queryParams: {
+    type: string;
+    inbox_type?: string;
+    page: number;
+    page_size: number;
+  } = {
     type,
     page,
     page_size: PAGE_SIZE,
-  });
+  };
+  if (type === 'inbox') {
+    queryParams.inbox_type = subType;
+  }
+  const { data, mutate } = useQueryNotifications(queryParams);
 
   useEffect(() => {
     clearNotificationStatus(type);
@@ -104,10 +117,32 @@ const Notifications = () => {
           </Button>
         </div>
         {type === 'inbox' && (
-          <Inbox
-            data={notificationData}
-            handleReadNotification={handleReadNotification}
-          />
+          <>
+            <Nav className="inbox-nav">
+              {inboxTypeNavs.map((nav) => {
+                const navLinkHref = `/users/notifications/inbox/${nav}`;
+                const navLinkName = t(`inbox_type.${nav}`);
+                return (
+                  <Nav.Item key={nav}>
+                    <Link
+                      to={navLinkHref}
+                      onClick={() => {
+                        setPage(1);
+                      }}
+                      className={classNames('nav-link', {
+                        disabled: nav === subType,
+                      })}>
+                      {navLinkName}
+                    </Link>
+                  </Nav.Item>
+                );
+              })}
+            </Nav>
+            <Inbox
+              data={notificationData}
+              handleReadNotification={handleReadNotification}
+            />
+          </>
         )}
         {type === 'achievement' && (
           <Achievements

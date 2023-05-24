@@ -163,7 +163,7 @@ const routes: RouteNode[] = [
             ],
           },
           {
-            path: 'users/notifications/:type',
+            path: 'users/notifications/:type/:subType?',
             page: 'pages/Users/Notifications',
           },
           {
