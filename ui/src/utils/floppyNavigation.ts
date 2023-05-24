@@ -136,4 +136,5 @@ export const floppyNavigation = {
   isRoutableLink,
   handleRouteLinkClick,
   equalToCurrentHref,
+  storageLoginRedirect,
 };
