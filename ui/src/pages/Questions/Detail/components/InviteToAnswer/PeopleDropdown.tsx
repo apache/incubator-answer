@@ -69,7 +69,7 @@ const Index: FC<Props> = ({ selectedPeople = [], onSelect }) => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        <Dropdown.Header className="px-2 pt-0">
+        <Dropdown.Header className="px-2 py-0">
           <Form.Control
             autoFocus
             placeholder={t('search')}
@@ -78,7 +78,10 @@ const Index: FC<Props> = ({ selectedPeople = [], onSelect }) => {
         </Dropdown.Header>
         {peopleList.map((p, idx) => {
           return (
-            <Dropdown.Item key={p.username} eventKey={idx}>
+            <Dropdown.Item
+              key={p.username}
+              eventKey={idx}
+              className={idx === 0 ? 'mt-2' : ''}>
               <div className="d-flex align-items-center text-nowrap">
                 <Avatar avatar={p.avatar} size="24" />
                 <span className="mx-2">{p.display_name}</span>

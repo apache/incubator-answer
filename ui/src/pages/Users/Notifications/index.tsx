@@ -118,7 +118,7 @@ const Notifications = () => {
         </div>
         {type === 'inbox' && (
           <>
-            <Nav className="inbox-nav">
+            <Nav className="inbox-nav small">
               {inboxTypeNavs.map((nav) => {
                 const navLinkHref = `/users/notifications/inbox/${nav}`;
                 const navLinkName = t(`inbox_type.${nav}`);
