@@ -137,13 +137,16 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
         </div>
         {showInviteDesc ? (
           <>
-            <div className="text-muted mb-3">{t('desc')}</div>
-            <Button
-              size="sm"
-              variant="outline-primary"
-              onClick={() => setEditing(true)}>
-              {t('invite')}
-            </Button>
+            <div className="text-muted">{t('desc')}</div>
+            {readOnly ? null : (
+              <Button
+                size="sm"
+                variant="outline-primary"
+                className="mt-3"
+                onClick={() => setEditing(true)}>
+                {t('invite')}
+              </Button>
+            )}
           </>
         ) : null}
       </Card.Body>
