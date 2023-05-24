@@ -19,7 +19,7 @@ import {
 
 import classnames from 'classnames';
 
-import { userCenter } from '@/utils';
+import { userCenter, floppyNavigation } from '@/utils';
 import {
   loggedUserInfoStore,
   siteInfoStore,
@@ -152,6 +152,7 @@ const Header: FC = () => {
                     'link-light': navbarStyle === 'theme-colored',
                     'link-primary': navbarStyle !== 'theme-colored',
                   })}
+                  onClick={() => floppyNavigation.storageLoginRedirect()}
                   href={userCenter.getLoginUrl()}>
                   {t('btns.login')}
                 </Button>
@@ -224,6 +225,7 @@ const Header: FC = () => {
                     'link-light': navbarStyle === 'theme-colored',
                     'link-primary': navbarStyle !== 'theme-colored',
                   })}
+                  onClick={() => floppyNavigation.storageLoginRedirect()}
                   href={userCenter.getLoginUrl()}>
                   {t('btns.login')}
                 </Button>

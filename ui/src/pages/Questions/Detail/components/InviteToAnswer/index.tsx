@@ -74,17 +74,19 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
 
   const showAddButton = editing && (!users || users.length < MAX_ASK_NUMBER);
   const showInviteDesc = !editing && users?.length === 0;
+  const showEditButton = !readOnly && !editing && users?.length;
+  const showSaveButton = !readOnly && editing;
 
   return (
     <Card className="mt-4">
       <Card.Header className="text-nowrap d-flex justify-content-between text-capitalize">
         {t('title')}
-        {!readOnly && editing ? (
+        {showSaveButton ? (
           <Button onClick={saveInviteUsers} variant="link" className="p-0">
             {t('save', { keyPrefix: 'btns' })}
           </Button>
         ) : null}
-        {!readOnly && !editing ? (
+        {showEditButton ? (
           <Button
             onClick={() => setEditing(true)}
             variant="link"
@@ -137,13 +139,16 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
         </div>
         {showInviteDesc ? (
           <>
-            <div className="text-muted mb-3">{t('desc')}</div>
-            <Button
-              size="sm"
-              variant="outline-primary"
-              onClick={() => setEditing(true)}>
-              {t('invite')}
-            </Button>
+            <div className="text-muted">{t('desc')}</div>
+            {readOnly ? null : (
+              <Button
+                size="sm"
+                variant="outline-primary"
+                className="mt-3"
+                onClick={() => setEditing(true)}>
+                {t('invite')}
+              </Button>
+            )}
           </>
         ) : null}
       </Card.Body>
