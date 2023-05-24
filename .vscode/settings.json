@@ -1,6 +1,5 @@
 {
   "eslint.workingDirectories": [
     "ui"
-  ],
-  "commentTranslate.multiLineMerge": true
+  ]
 }

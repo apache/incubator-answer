@@ -87,7 +87,8 @@ type QuestionAddByAnswer struct {
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// user id
-	UserID string `json:"-"`
+	UserID              string   `json:"-"`
+	MentionUsernameList []string `validate:"omitempty" json:"mention_username_list"`
 	QuestionPermission
 }
 
@@ -139,7 +140,8 @@ type QuestionUpdate struct {
 	// content
 	Content string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
 	// html
-	HTML string `json:"-"`
+	HTML       string   `json:"-"`
+	InviteUser []string `validate:"omitempty"  json:"invite_user"`
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// edit summary
@@ -147,6 +149,13 @@ type QuestionUpdate struct {
 	// user id
 	UserID       string `json:"-"`
 	NoNeedReview bool   `json:"-"`
+	QuestionPermission
+}
+
+type QuestionUpdateInviteUser struct {
+	ID         string   `validate:"required" json:"id"`
+	InviteUser []string `validate:"omitempty"  json:"invite_user"`
+	UserID     string   `json:"-"`
 	QuestionPermission
 }
 

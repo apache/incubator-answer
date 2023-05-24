@@ -150,6 +150,34 @@ func (qs *QuestionCommon) FindInfoByID(ctx context.Context, questionIDs []string
 	return list, nil
 }
 
+func (qs *QuestionCommon) InviteUserInfo(ctx context.Context, questionID string) (inviteList []*schema.UserBasicInfo, err error) {
+	InviteUserInfo := make([]*schema.UserBasicInfo, 0)
+	dbinfo, has, err := qs.questionRepo.GetQuestion(ctx, questionID)
+	if err != nil {
+		return InviteUserInfo, err
+	}
+	if !has {
+		return InviteUserInfo, errors.NotFound(reason.QuestionNotFound)
+	}
+	//InviteUser
+	if dbinfo.InviteUserID != "" {
+		InviteUserIDs := make([]string, 0)
+		err := json.Unmarshal([]byte(dbinfo.InviteUserID), &InviteUserIDs)
+		if err == nil {
+			inviteUserInfoMap, err := qs.userCommon.BatchUserBasicInfoByID(ctx, InviteUserIDs)
+			if err == nil {
+				for _, userid := range InviteUserIDs {
+					_, ok := inviteUserInfoMap[userid]
+					if ok {
+						InviteUserInfo = append(InviteUserInfo, inviteUserInfoMap[userid])
+					}
+				}
+			}
+		}
+	}
+	return InviteUserInfo, nil
+}
+
 func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUserID string) (showinfo *schema.QuestionInfo, err error) {
 	dbinfo, has, err := qs.questionRepo.GetQuestion(ctx, questionID)
 	if err != nil {
@@ -186,9 +214,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 					operation.Level = schema.OperationLevelInfo
 					showinfo.Operation = operation
 				}
-
 			}
-
 		}
 	}
 

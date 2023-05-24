@@ -242,11 +242,31 @@ func (es *EmailService) NewAnswerTemplate(ctx context.Context, raw *schema.NewAn
 		AnswerSummary:  raw.AnswerSummary,
 		UnsubscribeUrl: fmt.Sprintf("%s/users/unsubscribe?code=%s", siteInfo.SiteUrl, raw.UnsubscribeCode),
 	}
-	templateData.SiteName = siteInfo.Name
 
 	lang := handler.GetLangByCtx(ctx)
 	title = translator.TrWithData(lang, constant.EmailTplKeyNewAnswerTitle, templateData)
 	body = translator.TrWithData(lang, constant.EmailTplKeyNewAnswerBody, templateData)
+	return title, body, nil
+}
+
+// NewInviteAnswerTemplate new invite answer template
+func (es *EmailService) NewInviteAnswerTemplate(ctx context.Context, raw *schema.NewInviteAnswerTemplateRawData) (
+	title, body string, err error) {
+	siteInfo, err := es.GetSiteGeneral(ctx)
+	if err != nil {
+		return
+	}
+	templateData := &schema.NewInviteAnswerTemplateData{
+		SiteName:       siteInfo.Name,
+		DisplayName:    raw.InviterDisplayName,
+		QuestionTitle:  raw.QuestionTitle,
+		InviteUrl:      fmt.Sprintf("%s/questions/%s", siteInfo.SiteUrl, raw.QuestionID),
+		UnsubscribeUrl: fmt.Sprintf("%s/users/unsubscribe?code=%s", siteInfo.SiteUrl, raw.UnsubscribeCode),
+	}
+
+	lang := handler.GetLangByCtx(ctx)
+	title = translator.TrWithData(lang, constant.EmailTplKeyInvitedAnswerTitle, templateData)
+	body = translator.TrWithData(lang, constant.EmailTplKeyInvitedAnswerBody, templateData)
 	return title, body, nil
 }
 
@@ -271,7 +291,6 @@ func (es *EmailService) NewCommentTemplate(ctx context.Context, raw *schema.NewC
 		templateData.CommentUrl = fmt.Sprintf("%s/questions/%s?commentId=%s", siteInfo.SiteUrl,
 			raw.QuestionID, raw.CommentID)
 	}
-	templateData.SiteName = siteInfo.Name
 
 	lang := handler.GetLangByCtx(ctx)
 	title = translator.TrWithData(lang, constant.EmailTplKeyNewCommentTitle, templateData)

@@ -1197,6 +1197,10 @@ definitions:
         maxLength: 65535
         minLength: 6
         type: string
+      mention_username_list:
+        items:
+          type: string
+        type: array
       tags:
         description: tags
         items:
@@ -1313,6 +1317,10 @@ definitions:
       id:
         description: question id
         type: string
+      invite_user:
+        items:
+          type: string
+        type: array
       tags:
         description: tags
         items:
@@ -1328,6 +1336,17 @@ definitions:
     - id
     - tags
     - title
+    type: object
+  schema.QuestionUpdateInviteUser:
+    properties:
+      id:
+        type: string
+      invite_user:
+        items:
+          type: string
+        type: array
+    required:
+    - id
     type: object
   schema.RemoveAnswerReq:
     properties:
@@ -3957,6 +3976,16 @@ paths:
         name: type
         required: true
         type: string
+      - description: inbox_type
+        enum:
+        - all
+        - posts
+        - invites
+        - votes
+        in: query
+        name: inbox_type
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -4437,6 +4466,53 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: get question details
+      tags:
+      - Question
+  /answer/api/v1/question/invite:
+    get:
+      consumes:
+      - application/json
+      description: get question invite user info
+      parameters:
+      - default: "1"
+        description: Question ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: get question invite user info
+      tags:
+      - Question
+    put:
+      consumes:
+      - application/json
+      description: update question invite user
+      parameters:
+      - description: question
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.QuestionUpdateInviteUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update question invite user
       tags:
       - Question
   /answer/api/v1/question/operation:
@@ -5289,6 +5365,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: UserUpdateInfo update user info
+      tags:
+      - User
+  /answer/api/v1/user/info/search:
+    get:
+      consumes:
+      - application/json
+      description: SearchUserListByName
+      parameters:
+      - description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetOtherUserInfoResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: SearchUserListByName
       tags:
       - User
   /answer/api/v1/user/interface:

@@ -607,3 +607,22 @@ func (uc *UserController) UserUnsubscribeEmailNotification(ctx *gin.Context) {
 	err := uc.userService.UserUnsubscribeEmailNotification(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
+
+// SearchUserListByName godoc
+// @Summary SearchUserListByName
+// @Description SearchUserListByName
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param username query string true "username"
+// @Success 200 {object} handler.RespBody{data=schema.GetOtherUserInfoResp}
+// @Router /answer/api/v1/user/info/search [get]
+func (uc *UserController) SearchUserListByName(ctx *gin.Context) {
+	req := &schema.GetOtherUserInfoByUsernameReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	resp, err := uc.userService.SearchUserListByName(ctx, req.Username)
+	handler.HandleResponse(ctx, err, resp)
+}
