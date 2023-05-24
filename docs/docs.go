@@ -3588,34 +3588,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/question/closemsglist": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "close question msg list",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Question"
-                ],
-                "summary": "close question msg list",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
-                        }
-                    }
-                }
-            }
-        },
         "/answer/api/v1/question/info": {
             "get": {
                 "security": [
@@ -4119,56 +4091,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/handler.RespBody"
-                        }
-                    }
-                }
-            }
-        },
-        "/answer/api/v1/report/type/list": {
-            "get": {
-                "description": "get report type list",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Report"
-                ],
-                "summary": "get report type list",
-                "parameters": [
-                    {
-                        "enum": [
-                            "question",
-                            "answer",
-                            "comment",
-                            "user"
-                        ],
-                        "type": "string",
-                        "description": "report source",
-                        "name": "source",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/handler.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/schema.GetReportTypeResp"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
                         }
                     }
                 }
@@ -7003,35 +6925,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.GetReportTypeResp": {
-            "type": "object",
-            "properties": {
-                "content_type": {
-                    "description": "content type",
-                    "type": "string"
-                },
-                "description": {
-                    "description": "report description",
-                    "type": "string"
-                },
-                "have_content": {
-                    "description": "is have content",
-                    "type": "boolean"
-                },
-                "name": {
-                    "description": "report name",
-                    "type": "string"
-                },
-                "source": {
-                    "description": "report source",
-                    "type": "string"
-                },
-                "type": {
-                    "description": "report type",
-                    "type": "integer"
-                }
-            }
-        },
         "schema.GetRevisionResp": {
             "type": "object",
             "properties": {
@@ -8508,6 +8401,9 @@ const docTemplate = `{
                         "system",
                         "gravatar"
                     ]
+                },
+                "gravatar_base_url": {
+                    "type": "string"
                 }
             }
         },
@@ -8541,6 +8437,9 @@ const docTemplate = `{
                         "system",
                         "gravatar"
                     ]
+                },
+                "gravatar_base_url": {
+                    "type": "string"
                 }
             }
         },

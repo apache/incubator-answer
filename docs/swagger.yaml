@@ -693,27 +693,6 @@ definitions:
         description: url title
         type: string
     type: object
-  schema.GetReportTypeResp:
-    properties:
-      content_type:
-        description: content type
-        type: string
-      description:
-        description: report description
-        type: string
-      have_content:
-        description: is have content
-        type: boolean
-      name:
-        description: report name
-        type: string
-      source:
-        description: report source
-        type: string
-      type:
-        description: report type
-        type: integer
-    type: object
   schema.GetRevisionResp:
     properties:
       content:
@@ -1752,6 +1731,8 @@ definitions:
         - system
         - gravatar
         type: string
+      gravatar_base_url:
+        type: string
     required:
     - default_avatar
     type: object
@@ -1773,6 +1754,8 @@ definitions:
         enum:
         - system
         - gravatar
+        type: string
+      gravatar_base_url:
         type: string
     required:
     - default_avatar
@@ -4451,23 +4434,6 @@ paths:
       summary: add question and answer
       tags:
       - Question
-  /answer/api/v1/question/closemsglist:
-    get:
-      consumes:
-      - application/json
-      description: close question msg list
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
-      summary: close question msg list
-      tags:
-      - Question
   /answer/api/v1/question/info:
     get:
       consumes:
@@ -4779,37 +4745,6 @@ paths:
       - ApiKeyAuth: []
       - ApiKeyAuth: []
       summary: add report
-      tags:
-      - Report
-  /answer/api/v1/report/type/list:
-    get:
-      description: get report type list
-      parameters:
-      - description: report source
-        enum:
-        - question
-        - answer
-        - comment
-        - user
-        in: query
-        name: source
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/handler.RespBody'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/schema.GetReportTypeResp'
-                  type: array
-              type: object
-      summary: get report type list
       tags:
       - Report
   /answer/api/v1/revisions:
