@@ -34,14 +34,18 @@ func (u *PermissionController) GetPermission(ctx *gin.Context) {
 	}
 
 	userID := middleware.GetLoginUserIDFromContext(ctx)
-	resp, err := u.rankService.CheckOperationPermissions(ctx, userID, req.Actions)
+	ops, requireRanks, err := u.rankService.CheckOperationPermissionsForRanks(ctx, userID, req.Actions)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	mapping := make(map[string]bool, len(resp))
+
+	lang := handler.GetLangByCtx(ctx)
+	mapping := make(map[string]*schema.GetPermissionResp, len(ops))
 	for i, action := range req.Actions {
-		mapping[action] = resp[i]
+		t := &schema.GetPermissionResp{HasPermission: ops[i]}
+		t.TrTip(lang, requireRanks[i])
+		mapping[action] = t
 	}
 	handler.HandleResponse(ctx, err, mapping)
 }

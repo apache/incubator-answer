@@ -184,7 +184,9 @@ backend:
       fail_to_meet_the_condition:
         other: Rank fail to meet the condition.
       vote_fail_to_meet_the_condition:
-        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
+        other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
+      no_enough_rank_to_operate:
+        other: You need at least {{.Rank}} reputation to do this.
     report:
       handle_failed:
         other: Report handle failed.
