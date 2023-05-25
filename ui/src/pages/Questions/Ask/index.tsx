@@ -16,7 +16,6 @@ import {
   questionDetail,
   modifyQuestion,
   useQueryRevisions,
-  // postAnswer,
   useQueryQuestionByTitle,
   getTagsBySlugName,
   saveQuestionWidthAnaser,
