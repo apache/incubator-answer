@@ -47,7 +47,7 @@ const Index: FC<Props> = ({ visible, data }) => {
                 }>
                 {item.title}
               </a>
-              <div className="d-flex align-items-center fs-14 text-secondary">
+              <div className="d-flex align-items-center small text-secondary">
                 <span>
                   {t(item.rank_type, { keyPrefix: 'personal.rank_type' })}
                 </span>

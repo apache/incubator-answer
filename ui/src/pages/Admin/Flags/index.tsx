@@ -102,7 +102,7 @@ const Flags: FC = () => {
                     </small>
                     <BaseUserCard
                       data={li.reported_user}
-                      className="mt-2 fs-14"
+                      className="mt-2 small"
                     />
                     <a
                       href={pathFactory.questionLanding(
@@ -123,11 +123,11 @@ const Flags: FC = () => {
                   <Stack>
                     <FormatTime
                       time={li.created_at}
-                      className="fs-14 text-secondary"
+                      className="small text-secondary"
                     />
                     <BaseUserCard
                       data={li.report_user}
-                      className="mt-2 mb-2 fs-14"
+                      className="mt-2 mb-2 small"
                     />
                     {li.flagged_reason ? (
                       <small>{li.flagged_content}</small>

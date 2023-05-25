@@ -22,7 +22,7 @@ const ActionBar = ({
   const { t } = useTranslation('translation', { keyPrefix: 'comment' });
 
   return (
-    <div className="d-flex justify-content-between fs-14">
+    <div className="d-flex justify-content-between small">
       <div className="d-flex align-items-center link-secondary">
         {userStatus !== 'deleted' ? (
           <Link to={`/users/${username}`}>{nickName}</Link>

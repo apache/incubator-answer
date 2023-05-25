@@ -96,7 +96,7 @@ const Users: FC = () => {
                       plugin.name
                     )}
                   </div>
-                  <div className="fs-14">{plugin.description}</div>
+                  <div className="small">{plugin.description}</div>
                 </td>
                 <td className="text-break">{plugin.version}</td>
                 <td>

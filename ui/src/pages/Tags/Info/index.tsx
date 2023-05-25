@@ -143,7 +143,7 @@ const TagIntroduction = () => {
           </Link>
         </h3>
 
-        <div className="text-secondary mb-4 fs-14">
+        <div className="text-secondary mb-4 small">
           <FormatTime preFix={t('created_at')} time={tagInfo.created_at} />
           <FormatTime
             preFix={t('edited_at')}
@@ -163,7 +163,7 @@ const TagIntroduction = () => {
                 key={action.name}
                 variant="link"
                 className={classNames(
-                  'link-secondary btn-no-border p-0 fs-14',
+                  'link-secondary btn-no-border p-0 small',
                   index > 0 && 'ms-3',
                 )}
                 onClick={() => onAction(action)}>
@@ -175,7 +175,7 @@ const TagIntroduction = () => {
             <Link
               to={`/tags/${tagInfo?.tag_id}/timeline`}
               className={classNames(
-                'link-secondary btn-no-border p-0 fs-14',
+                'link-secondary btn-no-border p-0 small',
                 tagInfo?.member_actions?.length > 0 && 'ms-3',
               )}>
               {t('history')}

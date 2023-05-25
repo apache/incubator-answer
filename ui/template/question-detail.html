@@ -7,7 +7,7 @@
           <a class="link-dark" href="/questions/{{.detail.ID}}">{{.detail.Title}}</a>
         </h1>
         <div
-          class="d-flex flex-wrap align-items-center fs-14 mb-3 text-secondary">
+          class="d-flex flex-wrap align-items-center small mb-3 text-secondary">
           <time class="me-3"
                 datetime="{{timeFormatISO $.timezone .detail.CreateTime}}"
                 title="{{translatorTimeFormatLongDate $.language $.timezone .detail.CreateTime}}">{{translator $.language "ui.question_detail.Asked"}} {{translatorTimeFormat $.language $.timezone .detail.CreateTime}}
@@ -52,7 +52,7 @@
           </div>
           <div class="mb-3 mb-md-0 col-lg-3">
             <a href="/posts/{{.detail.ID}}/timeline">
-              <time class="link-secondary fs-14"
+              <time class="link-secondary small"
                     datetime="{{timeFormatISO $.timezone .detail.UpdateTime}}"
                     title="{{translatorTimeFormatLongDate $.language $.timezone .detail.UpdateTime}}">
                 {{translator $.language "ui.question_detail.edit"}} {{translatorTimeFormat $.language $.timezone .detail.UpdateTime}}
@@ -71,7 +71,7 @@
                 class="rounded me-2 d-block d-md-none"
                 alt=""/></a>
               <div
-                class="fs-14 text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
+                class="small text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
                 <div class="me-1 me-md-0">
                   <a class="me-1 text-break"
                      href="/users/{{.detail.UserInfo.Username}}">{{.detail.UserInfo.DisplayName}}</a><span
@@ -130,7 +130,7 @@
           <div class="mb-3 mb-md-0 col-lg-3">
             <a href="/posts/{{$.detail.ID}}/{{.ID}}/timeline">
               <time
-                class="link-secondary fs-14"
+                class="link-secondary small"
                 datetime="{{timeFormatISO $.timezone .UpdateTime}}"
                 title="{{translatorTimeFormatLongDate $.language $.timezone .UpdateTime}}">
                 {{translator $.language "ui.question_detail.edit"}} {{translatorTimeFormat $.language $.timezone .UpdateTime}}
@@ -149,7 +149,7 @@
                 class="rounded me-2 d-block d-md-none"
                 alt=""/></a>
               <div
-                class="fs-14 text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
+                class="small text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
                 <div class="me-1 me-md-0">
                   <a class="me-1 text-break"
                      href="/users/{{.UserInfo.Username}}">{{.UserInfo.DisplayName}}</a><span

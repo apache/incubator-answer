@@ -61,7 +61,7 @@ const Users = () => {
                         <Link to={`/users/${user.username}`}>
                           {user.display_name}
                         </Link>
-                        <div className="text-secondary fs-14">
+                        <div className="text-secondary small">
                           {key === 'users_with_the_most_vote'
                             ? `${user.vote_count} ${t('votes')}`
                             : `${user.rank} ${t('reputation')}`}

@@ -253,7 +253,7 @@ const Index: React.FC<Props> = ({ callback }) => {
           </Button>
         </div>
       </Form>
-      <div className="text-center fs-14 mt-3">
+      <div className="text-center small mt-3">
         <Trans i18nKey="login.agreements" ns="translation">
           By registering, you agree to the
           <Link

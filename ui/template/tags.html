@@ -22,10 +22,10 @@
                         <div class="d-flex flex-column align-items-start card-body">
                             <a href="/tags/{{.SlugName}}" class="badge-tag rounded-1 mb-3"><span
                                     class="">{{.SlugName}}</span></a>
-                            <p class="fs-14 flex-fill text-break text-wrap text-truncate-4">{{.ParsedText}}
+                            <p class="small flex-fill text-break text-wrap text-truncate-4">{{.ParsedText}}
                             </p>
                             <div class="d-flex align-items-center">
-                                <span class="text-secondary fs-14 text-nowrap">{{.QuestionCount}}
+                                <span class="text-secondary small text-nowrap">{{.QuestionCount}}
                                     {{translator $.language "ui.tags.tag_label"}}</span>
                             </div>
                         </div>

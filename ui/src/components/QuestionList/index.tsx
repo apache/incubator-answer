@@ -84,7 +84,7 @@ const QuestionList: FC<Props> = ({
                     {li.status === 2 ? ` [${t('closed')}]` : ''}
                   </NavLink>
                 </h5>
-                <div className="d-flex flex-column flex-md-row align-items-md-center fs-14 mb-2 text-secondary">
+                <div className="d-flex flex-column flex-md-row align-items-md-center small mb-2 text-secondary">
                   <div className="d-flex">
                     <BaseUserCard
                       data={li.operator}

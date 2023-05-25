@@ -37,7 +37,7 @@ const Index: FC<Props> = ({ visible, tabName, data }) => {
                   : null}
               </a>
             </h6>
-            <div className="d-flex flex-wrap align-items-center fs-14 text-secondary mb-2">
+            <div className="d-flex flex-wrap align-items-center small text-secondary mb-2">
               {tabName === 'bookmarks' && (
                 <>
                   <BaseUserCard data={item.user_info} showAvatar={false} />

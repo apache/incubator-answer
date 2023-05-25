@@ -37,7 +37,7 @@ const Index: FC<Props> = ({ visible, data }) => {
               {item.title}
             </a>
             <div
-              className="fs-14 mb-2 last-p text-break text-truncate-2"
+              className="small mb-2 last-p text-break text-truncate-2"
               dangerouslySetInnerHTML={{
                 __html: item.content,
               }}
@@ -45,7 +45,7 @@ const Index: FC<Props> = ({ visible, data }) => {
 
             <FormatTime
               time={item.created_at}
-              className="fs-14 text-secondary"
+              className="small text-secondary"
             />
           </ListGroupItem>
         );

@@ -2,7 +2,7 @@
 </div>
         <footer class="bg-light py-3">
             <div class="container">
-                <p class="text-center mb-0 fs-14 text-secondary">
+                <p class="text-center mb-0 small text-secondary">
                   {{$cc := (join " " .siteinfo.Year .siteinfo.General.Name) -}}
                   {{- $ft := translator $.language "ui.footer.build_on" "cc" $cc -}}
                   {{templateHTML (replaceHTMLTag $ft "<a href=\"https://answer.dev/\" target=\"_blank\"> Answer </a>")}}

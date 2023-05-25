@@ -19,7 +19,7 @@ const Index: FC<Props> = ({
   showAvatar = true,
   avatarClass = '',
   avatarSize = '20px',
-  className = 'fs-14',
+  className = 'small',
   avatarSearchStr = 's=48',
   showReputation = true,
 }) => {

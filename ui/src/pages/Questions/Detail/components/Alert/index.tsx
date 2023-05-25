@@ -23,7 +23,7 @@ const Index: FC<Props> = ({ data }) => {
           ) : (
             <p>{data.msg ? data.msg : data.description}</p>
           )}
-          <div className="fs-14">
+          <div className="small">
             {t('question_detail.closed_in')}{' '}
             <time
               dateTime={dayjs.unix(data.time).tz().toISOString()}
