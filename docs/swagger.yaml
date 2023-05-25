@@ -4086,6 +4086,78 @@ paths:
       summary: DelRedDot
       tags:
       - Notification
+  /answer/api/v1/permission:
+    get:
+      description: check user permission
+      parameters:
+      - description: access-token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: permission key
+        enum:
+        - question.add
+        - question.edit
+        - question.edit_without_review
+        - question.delete
+        - question.close
+        - question.reopen
+        - question.vote_up
+        - question.vote_down
+        - question.pin
+        - question.unpin
+        - question.hide
+        - question.show
+        - answer.add
+        - answer.edit
+        - answer.edit_without_review
+        - answer.delete
+        - answer.accept
+        - answer.vote_up
+        - answer.vote_down
+        - answer.invite_someone_to_answer
+        - comment.add
+        - comment.edit
+        - comment.delete
+        - comment.vote_up
+        - comment.vote_down
+        - report.add
+        - tag.add
+        - tag.edit
+        - tag.edit_slug_name
+        - tag.edit_without_review
+        - tag.delete
+        - tag.synonym
+        - link.url_limit
+        - vote.detail
+        - answer.audit
+        - question.audit
+        - tag.audit
+        - tag.use_reserved_tag
+        in: query
+        name: action
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: boolean
+                  type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: check user permission
+      tags:
+      - Permission
   /answer/api/v1/personal/answer/page:
     get:
       consumes:
