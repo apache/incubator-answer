@@ -124,6 +124,7 @@ type QuestionPermission struct {
 	CanUseReservedTag bool `json:"-"`
 	// whether user can invite other user to answer this question
 	CanInviteOtherToAnswer bool `json:"-"`
+	CanAddTag              bool `json:"-"`
 }
 
 type CheckCanQuestionUpdate struct {
