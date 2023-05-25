@@ -85,7 +85,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
         </Link>
       </h1>
 
-      <div className="d-flex flex-wrap align-items-center fs-14 mb-3 text-secondary">
+      <div className="d-flex flex-wrap align-items-center small mb-3 text-secondary">
         <FormatTime
           time={data.create_time}
           preFix={t('Asked')}
@@ -169,14 +169,14 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
               <FormatTime
                 time={data.edit_time}
                 preFix={t('edit')}
-                className="link-secondary fs-14"
+                className="link-secondary small"
               />
             </Link>
           ) : (
             <FormatTime
               time={data.edit_time}
               preFix={t('edit')}
-              className="text-secondary fs-14"
+              className="text-secondary small"
             />
           )}
         </div>

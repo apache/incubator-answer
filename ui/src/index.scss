@@ -31,9 +31,6 @@ a {
   text-decoration: none;
 }
 
-.fs-14 {
-  font-size: 0.875rem;
-}
 .fs-12 {
   font-size: 0.75rem;
 }
@@ -202,7 +199,7 @@ a {
     margin-top: 2rem;
   }
   h5 {
-    @extend .fs-14;
+    @extend .small;
     margin-top: 2rem;
   }
   h6 {

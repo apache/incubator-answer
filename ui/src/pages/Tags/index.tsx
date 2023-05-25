@@ -103,7 +103,7 @@ const Tags = () => {
                   <Card.Body className="d-flex flex-column align-items-start">
                     <Tag className="mb-3" data={tag} />
 
-                    <div className="fs-14 flex-fill text-break text-wrap text-truncate-3 reset-p mb-3">
+                    <div className="small flex-fill text-break text-wrap text-truncate-3 reset-p mb-3">
                       {escapeRemove(tag.excerpt)}
                     </div>
                     <div className="d-flex align-items-center">
@@ -116,7 +116,7 @@ const Tags = () => {
                           ? t('button_following')
                           : t('button_follow')}
                       </Button>
-                      <span className="text-secondary fs-14 text-nowrap">
+                      <span className="text-secondary small text-nowrap">
                         {formatCount(tag.question_count)} {t('tag_label')}
                       </span>
                     </div>

@@ -13,7 +13,7 @@ const Index = () => {
   return (
     <footer className="bg-light">
       <Container className="py-3">
-        <p className="text-center mb-0 fs-14 text-secondary">
+        <p className="text-center mb-0 small text-secondary">
           <Trans i18nKey="footer.build_on" values={{ cc }}>
             Built on
             {/* eslint-disable-next-line react/jsx-no-target-blank */}

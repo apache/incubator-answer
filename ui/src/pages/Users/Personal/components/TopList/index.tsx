@@ -33,7 +33,7 @@ const Index: FC<Props> = ({ data, type }) => {
               {type === 'answer' ? item.question_info.title : item.title}
             </a>
 
-            <div className="d-inline-block text-secondary ms-3 fs-14">
+            <div className="d-inline-block text-secondary ms-3 small">
               <Icon name="hand-thumbs-up-fill me-1" />
               <span>
                 {item.vote_count} {t('votes', { keyPrefix: 'counts' })}
@@ -41,7 +41,7 @@ const Index: FC<Props> = ({ data, type }) => {
             </div>
             {type === 'question' && (
               <div
-                className={`d-inline-block text-secondary ms-3 fs-14 ${
+                className={`d-inline-block text-secondary ms-3 small ${
                   Number(item.accepted_answer_id) > 0 ? 'text-success' : ''
                 }`}>
                 {Number(item.accepted_answer_id) > 0 ? (
@@ -58,7 +58,7 @@ const Index: FC<Props> = ({ data, type }) => {
             )}
 
             {type === 'answer' && item.accepted === 2 && (
-              <div className="d-inline-block text-success ms-3 fs-14">
+              <div className="d-inline-block text-success ms-3 small">
                 <Icon name="check-circle-fill" />
                 <span> {t('accepted')}</span>
               </div>

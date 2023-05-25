@@ -7,7 +7,7 @@ const Index: FC = () => {
   return (
     <Card>
       <Card.Header>{t('search.tips.title')}</Card.Header>
-      <Card.Body className="fs-14 ext-secondary">
+      <Card.Body className="small ext-secondary">
         <div className="mb-1">
           <Trans i18nKey="search.tips.tag" components={{ 1: <code /> }} />
         </div>

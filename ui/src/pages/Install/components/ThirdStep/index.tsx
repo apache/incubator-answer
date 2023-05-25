@@ -33,7 +33,7 @@ const Index: FC<Props> = ({ visible, errorMsg, nextCallback }) => {
               type="text"
               as="textarea"
               rows={8}
-              className="fs-14"
+              className="small"
               value={errorMsg?.default_config}
             />
           </FormGroup>

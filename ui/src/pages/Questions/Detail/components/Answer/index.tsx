@@ -149,14 +149,14 @@ const Index: FC<Props> = ({
               <FormatTime
                 time={Number(data.update_time)}
                 preFix={t('edit')}
-                className="link-secondary fs-14"
+                className="link-secondary small"
               />
             </Link>
           ) : (
             <FormatTime
               time={Number(data.update_time)}
               preFix={t('edit')}
-              className="text-secondary fs-14"
+              className="text-secondary small"
             />
           )}
         </div>

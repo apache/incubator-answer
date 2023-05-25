@@ -99,7 +99,7 @@ const useEditStatusModal = ({
                       <FormCheck.Label htmlFor={item.type}>
                         <span className="fw-bold">{item.name}</span>
                         <br />
-                        <span className="fs-14 text-secondary">
+                        <span className="small text-secondary">
                           {item.description}
                         </span>
                       </FormCheck.Label>

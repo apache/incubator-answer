@@ -109,6 +109,15 @@ enum RoleId {
   Admin = 2,
   Moderator = 3,
 }
+
+export interface User {
+  username: string;
+  rank: number;
+  vote_count: number;
+  display_name: string;
+  avatar: string;
+}
+
 export interface UserInfoBase {
   id?: string;
   avatar: any;
@@ -538,14 +547,6 @@ export interface MemberActionItem {
   action: string;
   name: string;
   type: string;
-}
-
-export interface User {
-  username: string;
-  rank: number;
-  vote_count: number;
-  display_name: string;
-  avatar: string;
 }
 
 export interface QuestionOperationReq {

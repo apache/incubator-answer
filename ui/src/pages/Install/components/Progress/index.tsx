@@ -7,7 +7,7 @@ interface IProps {
 
 const Index: FC<IProps> = ({ step }) => {
   return (
-    <div className="d-flex align-items-center fs-14 text-secondary">
+    <div className="d-flex align-items-center small text-secondary">
       <ProgressBar
         now={(step / 5) * 100}
         variant="success"
