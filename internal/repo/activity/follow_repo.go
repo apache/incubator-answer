@@ -45,6 +45,7 @@ func (ar *FollowRepo) Follow(ctx context.Context, objectID, userID string) error
 	}
 
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
 		var (
 			existsActivity entity.Activity
 			has            bool
@@ -107,6 +108,7 @@ func (ar *FollowRepo) FollowCancel(ctx context.Context, objectID, userID string)
 	}
 
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
 		var (
 			existsActivity entity.Activity
 			has            bool

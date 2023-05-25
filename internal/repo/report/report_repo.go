@@ -35,7 +35,7 @@ func (rr *reportRepo) AddReport(ctx context.Context, report *entity.Report) (err
 	if err != nil {
 		return err
 	}
-	_, err = rr.data.DB.Insert(report)
+	_, err = rr.data.DB.Context(ctx).Insert(report)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -48,7 +48,7 @@ func (rr *reportRepo) GetReportListPage(ctx context.Context, dto schema.GetRepor
 		ok         bool
 		status     int
 		objectType int
-		session    = rr.data.DB.NewSession()
+		session    = rr.data.DB.Context(ctx)
 		cond       = entity.Report{}
 	)
 
@@ -78,7 +78,7 @@ func (rr *reportRepo) GetReportListPage(ctx context.Context, dto schema.GetRepor
 // GetByID get report by ID
 func (rr *reportRepo) GetByID(ctx context.Context, id string) (report *entity.Report, exist bool, err error) {
 	report = &entity.Report{}
-	exist, err = rr.data.DB.ID(id).Get(report)
+	exist, err = rr.data.DB.Context(ctx).ID(id).Get(report)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -87,7 +87,7 @@ func (rr *reportRepo) GetByID(ctx context.Context, id string) (report *entity.Re
 
 // UpdateByID handle report by ID
 func (rr *reportRepo) UpdateByID(ctx context.Context, id string, handleData entity.Report) (err error) {
-	_, err = rr.data.DB.ID(id).Update(&handleData)
+	_, err = rr.data.DB.Context(ctx).ID(id).Update(&handleData)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -96,7 +96,7 @@ func (rr *reportRepo) UpdateByID(ctx context.Context, id string, handleData enti
 
 func (rr *reportRepo) GetReportCount(ctx context.Context) (count int64, err error) {
 	list := make([]*entity.Report, 0)
-	count, err = rr.data.DB.Where("status =?", entity.ReportStatusPending).FindAndCount(&list)
+	count, err = rr.data.DB.Context(ctx).Where("status =?", entity.ReportStatusPending).FindAndCount(&list)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

@@ -30,7 +30,7 @@ func NewActivityRepo(
 func (ar *activityRepo) GetObjectAllActivity(ctx context.Context, objectID string, showVote bool) (
 	activityList []*entity.Activity, err error) {
 	activityList = make([]*entity.Activity, 0)
-	session := ar.data.DB.Desc("created_at")
+	session := ar.data.DB.Context(ctx).Desc("created_at")
 
 	if !showVote {
 		var activityTypeNotShown []int

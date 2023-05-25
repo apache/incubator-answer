@@ -63,7 +63,7 @@ func NewQuestionActivityRepo(
 
 func (ar *AnswerActivityRepo) DeleteQuestion(ctx context.Context, questionID string) (err error) {
 	questionInfo := &entity.Question{}
-	exist, err := ar.data.DB.Where("id = ?", questionID).Get(questionInfo)
+	exist, err := ar.data.DB.Context(ctx).Where("id = ?", questionID).Get(questionInfo)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -73,7 +73,7 @@ func (ar *AnswerActivityRepo) DeleteQuestion(ctx context.Context, questionID str
 
 	// get all this object activity
 	activityList := make([]*entity.Activity, 0)
-	session := ar.data.DB.Where("has_rank = 1")
+	session := ar.data.DB.Context(ctx).Where("has_rank = 1")
 	session.Where("cancelled = ?", entity.ActivityAvailable)
 	err = session.Find(&activityList, &entity.Activity{ObjectID: questionID})
 	if err != nil {
@@ -86,6 +86,7 @@ func (ar *AnswerActivityRepo) DeleteQuestion(ctx context.Context, questionID str
 	log.Infof("questionInfo %s deleted will rollback activity %d", questionID, len(activityList))
 
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
 		for _, act := range activityList {
 			log.Infof("user %s rollback rank %d", act.UserID, -act.Rank)
 			_, e := ar.userRankRepo.TriggerUserRank(
@@ -107,7 +108,7 @@ func (ar *AnswerActivityRepo) DeleteQuestion(ctx context.Context, questionID str
 
 	// get all answers
 	answerList := make([]*entity.Answer, 0)
-	err = ar.data.DB.Find(&answerList, &entity.Answer{QuestionID: questionID})
+	err = ar.data.DB.Context(ctx).Find(&answerList, &entity.Answer{QuestionID: questionID})
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -154,6 +155,7 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 	}
 
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
 		for _, addActivity := range addActivityList {
 			existsActivity, exists, e := ar.activityRepo.GetActivity(
 				ctx, session, answerObjID, addActivity.UserID, addActivity.ActivityType)
@@ -251,6 +253,7 @@ func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
 	}
 
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
 		for _, addActivity := range addActivityList {
 			existsActivity, exists, e := ar.activityRepo.GetActivity(
 				ctx, session, answerObjID, addActivity.UserID, addActivity.ActivityType)
@@ -300,7 +303,7 @@ func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
 
 func (ar *AnswerActivityRepo) DeleteAnswer(ctx context.Context, answerID string) (err error) {
 	answerInfo := &entity.Answer{}
-	exist, err := ar.data.DB.Where("id = ?", answerID).Get(answerInfo)
+	exist, err := ar.data.DB.Context(ctx).Where("id = ?", answerID).Get(answerInfo)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -310,7 +313,7 @@ func (ar *AnswerActivityRepo) DeleteAnswer(ctx context.Context, answerID string)
 
 	// get all this object activity
 	activityList := make([]*entity.Activity, 0)
-	session := ar.data.DB.Where("has_rank = 1")
+	session := ar.data.DB.Context(ctx).Where("has_rank = 1")
 	session.Where("cancelled = ?", entity.ActivityAvailable)
 	err = session.Find(&activityList, &entity.Activity{ObjectID: answerID})
 	if err != nil {
@@ -323,6 +326,7 @@ func (ar *AnswerActivityRepo) DeleteAnswer(ctx context.Context, answerID string)
 	log.Infof("answerInfo %s deleted will rollback activity %d", answerID, len(activityList))
 
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
 		for _, act := range activityList {
 			log.Infof("user %s rollback rank %d", act.UserID, -act.Rank)
 			_, e := ar.userRankRepo.TriggerUserRank(

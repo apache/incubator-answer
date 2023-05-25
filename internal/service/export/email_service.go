@@ -386,7 +386,7 @@ func (es *EmailService) GetEmailConfig() (ec *EmailConfig, err error) {
 }
 
 // SetEmailConfig set email config
-func (es *EmailService) SetEmailConfig(ec *EmailConfig) (err error) {
+func (es *EmailService) SetEmailConfig(ctx context.Context, ec *EmailConfig) (err error) {
 	data, _ := json.Marshal(ec)
-	return es.configRepo.SetConfig("email.config", string(data))
+	return es.configRepo.SetConfig(ctx, "email.config", string(data))
 }

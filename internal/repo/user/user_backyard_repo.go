@@ -42,7 +42,7 @@ func (ur *userAdminRepo) UpdateUserStatus(ctx context.Context, userID string, us
 	case entity.UserStatusDeleted:
 		cond.DeletedAt = time.Now()
 	}
-	_, err = ur.data.DB.ID(userID).Update(cond)
+	_, err = ur.data.DB.Context(ctx).ID(userID).Update(cond)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -63,7 +63,7 @@ func (ur *userAdminRepo) UpdateUserStatus(ctx context.Context, userID string, us
 
 // AddUser add user
 func (ur *userAdminRepo) AddUser(ctx context.Context, user *entity.User) (err error) {
-	_, err = ur.data.DB.Insert(user)
+	_, err = ur.data.DB.Context(ctx).Insert(user)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -72,7 +72,7 @@ func (ur *userAdminRepo) AddUser(ctx context.Context, user *entity.User) (err er
 
 // UpdateUserPassword update user password
 func (ur *userAdminRepo) UpdateUserPassword(ctx context.Context, userID string, password string) (err error) {
-	_, err = ur.data.DB.ID(userID).Update(&entity.User{Pass: password})
+	_, err = ur.data.DB.Context(ctx).ID(userID).Update(&entity.User{Pass: password})
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -82,7 +82,7 @@ func (ur *userAdminRepo) UpdateUserPassword(ctx context.Context, userID string, 
 // GetUserInfo get user info
 func (ur *userAdminRepo) GetUserInfo(ctx context.Context, userID string) (user *entity.User, exist bool, err error) {
 	user = &entity.User{}
-	exist, err = ur.data.DB.ID(userID).Get(user)
+	exist, err = ur.data.DB.Context(ctx).ID(userID).Get(user)
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -99,7 +99,7 @@ func (ur *userAdminRepo) GetUserInfo(ctx context.Context, userID string) (user *
 // GetUserInfoByEmail get user info
 func (ur *userAdminRepo) GetUserInfoByEmail(ctx context.Context, email string) (user *entity.User, exist bool, err error) {
 	userInfo := &entity.User{}
-	exist, err = ur.data.DB.Where("e_mail = ?", email).
+	exist, err = ur.data.DB.Context(ctx).Where("e_mail = ?", email).
 		Where("status != ?", entity.UserStatusDeleted).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -119,7 +119,7 @@ func (ur *userAdminRepo) GetUserInfoByEmail(ctx context.Context, email string) (
 func (ur *userAdminRepo) GetUserPage(ctx context.Context, page, pageSize int, user *entity.User,
 	usernameOrDisplayName string, isStaff bool) (users []*entity.User, total int64, err error) {
 	users = make([]*entity.User, 0)
-	session := ur.data.DB.NewSession()
+	session := ur.data.DB.Context(ctx)
 	switch user.Status {
 	case entity.UserStatusDeleted:
 		session.Desc("user.deleted_at")

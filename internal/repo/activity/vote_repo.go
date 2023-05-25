@@ -75,6 +75,7 @@ func (vr *VoteRepo) vote(ctx context.Context, objectID string, userID, objectUse
 	sendInboxNotification := false
 	upVote := false
 	_, err = vr.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
 		result = nil
 		for _, action := range actions {
 			var (
@@ -185,6 +186,7 @@ func (vr *VoteRepo) voteCancel(ctx context.Context, objectID string, userID, obj
 	resp = &schema.VoteResp{}
 	notificationUserIDs := make([]string, 0)
 	_, err = vr.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
 		for _, action := range actions {
 			var (
 				existsActivity entity.Activity
@@ -362,7 +364,7 @@ func (vr *VoteRepo) GetVoteResultByObjectId(ctx context.Context, objectID string
 
 		activityType, _, _, _ = vr.activityRepo.GetActivityTypeByObjID(ctx, objectID, action)
 
-		votes, err = vr.data.DB.Where(builder.Eq{"object_id": objectID}).
+		votes, err = vr.data.DB.Context(ctx).Where(builder.Eq{"object_id": objectID}).
 			And(builder.Eq{"activity_type": activityType}).
 			And(builder.Eq{"cancelled": 0}).
 			Count(&activity)
@@ -389,7 +391,7 @@ func (vr *VoteRepo) ListUserVotes(
 	req schema.GetVoteWithPageReq,
 	activityTypes []int,
 ) (voteList []entity.Activity, total int64, err error) {
-	session := vr.data.DB.NewSession()
+	session := vr.data.DB.Context(ctx)
 	cond := builder.
 		And(
 			builder.Eq{"user_id": userID},

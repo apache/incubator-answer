@@ -44,7 +44,7 @@ func NewUserActiveActivityRepo(
 // UserActive accept other answer
 func (ar *UserActiveActivityRepo) UserActive(ctx context.Context, userID string) (err error) {
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
-
+		session = session.Context(ctx)
 		activityType, err := ar.configRepo.GetConfigType(UserActivated)
 		if err != nil {
 			return nil, err

@@ -1,5 +1,7 @@
 package config
 
+import "context"
+
 // ConfigRepo config repository
 type ConfigRepo interface {
 	Get(key string) (interface{}, error)
@@ -8,7 +10,7 @@ type ConfigRepo interface {
 	GetArrayString(key string) ([]string, error)
 	GetConfigType(key string) (int, error)
 	GetJsonConfigByIDAndSetToObject(id int, value any) (err error)
-	SetConfig(key, value string) (err error)
+	SetConfig(ctx context.Context, key, value string) (err error)
 }
 
 // ConfigService user service

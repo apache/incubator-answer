@@ -254,7 +254,7 @@ func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.Upda
 	}
 	_ = copier.Copy(oldEmailConfig, req)
 
-	err = s.emailService.SetEmailConfig(oldEmailConfig)
+	err = s.emailService.SetEmailConfig(ctx, oldEmailConfig)
 	if err != nil {
 		return err
 	}
@@ -370,7 +370,7 @@ func (s *SiteInfoService) UpdatePrivilegesConfig(ctx context.Context, req *schem
 
 	// update privilege in config
 	for _, privilege := range chooseOption.Privileges {
-		err = s.configRepo.SetConfig(privilege.Key, fmt.Sprintf("%d", privilege.Value))
+		err = s.configRepo.SetConfig(ctx, privilege.Key, fmt.Sprintf("%d", privilege.Value))
 		if err != nil {
 			return err
 		}

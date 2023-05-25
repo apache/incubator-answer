@@ -87,7 +87,7 @@ func (ar *ActivityRepo) GetActivity(ctx context.Context, session *xorm.Session,
 
 func (ar *ActivityRepo) GetUserIDObjectIDActivitySum(ctx context.Context, userID, objectID string) (int, error) {
 	sum := &entity.ActivityRankSum{}
-	_, err := ar.data.DB.Table(entity.Activity{}.TableName()).
+	_, err := ar.data.DB.Context(ctx).Table(entity.Activity{}.TableName()).
 		Select("sum(`rank`) as `rank`").
 		Where("user_id =?", userID).
 		And("object_id = ?", objectID).
@@ -102,7 +102,7 @@ func (ar *ActivityRepo) GetUserIDObjectIDActivitySum(ctx context.Context, userID
 
 // AddActivity add activity
 func (ar *ActivityRepo) AddActivity(ctx context.Context, activity *entity.Activity) (err error) {
-	_, err = ar.data.DB.Insert(activity)
+	_, err = ar.data.DB.Context(ctx).Insert(activity)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -113,7 +113,7 @@ func (ar *ActivityRepo) AddActivity(ctx context.Context, activity *entity.Activi
 func (ar *ActivityRepo) GetUsersWhoHasGainedTheMostReputation(
 	ctx context.Context, startTime, endTime time.Time, limit int) (rankStat []*entity.ActivityUserRankStat, err error) {
 	rankStat = make([]*entity.ActivityUserRankStat, 0)
-	session := ar.data.DB.Select("user_id, SUM(`rank`) AS rank_amount").Table("activity")
+	session := ar.data.DB.Context(ctx).Select("user_id, SUM(`rank`) AS rank_amount").Table("activity")
 	session.Where("has_rank = 1 AND cancelled = 0")
 	session.Where("created_at >= ?", startTime)
 	session.Where("created_at <= ?", endTime)
@@ -140,7 +140,7 @@ func (ar *ActivityRepo) GetUsersWhoHasVoteMost(
 		}
 	}
 
-	session := ar.data.DB.Select("user_id, COUNT(*) AS vote_count").Table("activity")
+	session := ar.data.DB.Context(ctx).Select("user_id, COUNT(*) AS vote_count").Table("activity")
 	session.Where("cancelled = 0")
 	session.In("activity_type", actIDs)
 	session.Where("created_at >= ?", startTime)

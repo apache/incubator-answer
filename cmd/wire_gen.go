@@ -23,7 +23,6 @@ import (
 	"github.com/answerdev/answer/internal/repo/captcha"
 	"github.com/answerdev/answer/internal/repo/collection"
 	"github.com/answerdev/answer/internal/repo/comment"
-	"github.com/answerdev/answer/internal/repo/common"
 	"github.com/answerdev/answer/internal/repo/config"
 	"github.com/answerdev/answer/internal/repo/export"
 	"github.com/answerdev/answer/internal/repo/meta"
@@ -182,9 +181,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	serviceRevisionService := service.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService, objService, questionRepo, answerRepo, tagRepo, tagCommonService)
 	revisionController := controller.NewRevisionController(serviceRevisionService, rankService)
 	rankController := controller.NewRankController(rankService)
-	commonRepo := common.NewCommonRepo(dataData, uniqueIDRepo)
 	reportHandle := report_handle_admin.NewReportHandle(questionCommon, commentRepo, configRepo)
-	reportAdminService := report_admin.NewReportAdminService(reportRepo, userCommon, commonRepo, answerRepo, questionRepo, commentCommonRepo, reportHandle, configRepo)
+	reportAdminService := report_admin.NewReportAdminService(reportRepo, userCommon, answerRepo, questionRepo, commentCommonRepo, reportHandle, configRepo, objService)
 	controller_adminReportController := controller_admin.NewReportController(reportAdminService)
 	userAdminRepo := user.NewUserAdminRepo(dataData, authRepo)
 	userAdminService := user_admin.NewUserAdminService(userAdminRepo, userRoleRelService, authService, userCommon, userActiveActivityRepo)

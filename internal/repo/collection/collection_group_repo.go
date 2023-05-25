@@ -26,7 +26,7 @@ func NewCollectionGroupRepo(data *data.Data) service.CollectionGroupRepo {
 
 // AddCollectionGroup add collection group
 func (cr *collectionGroupRepo) AddCollectionGroup(ctx context.Context, collectionGroup *entity.CollectionGroup) (err error) {
-	_, err = cr.data.DB.Insert(collectionGroup)
+	_, err = cr.data.DB.Context(ctx).Insert(collectionGroup)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -40,7 +40,7 @@ func (cr *collectionGroupRepo) AddCollectionDefaultGroup(ctx context.Context, us
 		DefaultGroup: schema.CGDefault,
 		UserID:       userID,
 	}
-	_, err = cr.data.DB.Insert(defaultGroup)
+	_, err = cr.data.DB.Context(ctx).Insert(defaultGroup)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return
@@ -51,7 +51,7 @@ func (cr *collectionGroupRepo) AddCollectionDefaultGroup(ctx context.Context, us
 
 // UpdateCollectionGroup update collection group
 func (cr *collectionGroupRepo) UpdateCollectionGroup(ctx context.Context, collectionGroup *entity.CollectionGroup, cols []string) (err error) {
-	_, err = cr.data.DB.ID(collectionGroup.ID).Cols(cols...).Update(collectionGroup)
+	_, err = cr.data.DB.Context(ctx).ID(collectionGroup.ID).Cols(cols...).Update(collectionGroup)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -63,7 +63,7 @@ func (cr *collectionGroupRepo) GetCollectionGroup(ctx context.Context, id string
 	collectionGroup *entity.CollectionGroup, exist bool, err error,
 ) {
 	collectionGroup = &entity.CollectionGroup{}
-	exist, err = cr.data.DB.ID(id).Get(collectionGroup)
+	exist, err = cr.data.DB.Context(ctx).ID(id).Get(collectionGroup)
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -74,7 +74,7 @@ func (cr *collectionGroupRepo) GetCollectionGroup(ctx context.Context, id string
 func (cr *collectionGroupRepo) GetCollectionGroupPage(ctx context.Context, page, pageSize int, collectionGroup *entity.CollectionGroup) (collectionGroupList []*entity.CollectionGroup, total int64, err error) {
 	collectionGroupList = make([]*entity.CollectionGroup, 0)
 
-	session := cr.data.DB.NewSession()
+	session := cr.data.DB.Context(ctx)
 	if collectionGroup.UserID != "" && collectionGroup.UserID != "0" {
 		session = session.Where("user_id = ?", collectionGroup.UserID)
 	}
@@ -87,7 +87,7 @@ func (cr *collectionGroupRepo) GetCollectionGroupPage(ctx context.Context, page,
 
 func (cr *collectionGroupRepo) GetDefaultID(ctx context.Context, userID string) (collectionGroup *entity.CollectionGroup, has bool, err error) {
 	collectionGroup = &entity.CollectionGroup{}
-	has, err = cr.data.DB.Where("user_id =? and  default_group = ?", userID, schema.CGDefault).Get(collectionGroup)
+	has, err = cr.data.DB.Context(ctx).Where("user_id =? and  default_group = ?", userID, schema.CGDefault).Get(collectionGroup)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return

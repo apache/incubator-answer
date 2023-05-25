@@ -25,7 +25,7 @@ func NewRoleRepo(data *data.Data) service.RoleRepo {
 // GetRoleAllList get role list all
 func (rr *roleRepo) GetRoleAllList(ctx context.Context) (roleList []*entity.Role, err error) {
 	roleList = make([]*entity.Role, 0)
-	err = rr.data.DB.Find(&roleList)
+	err = rr.data.DB.Context(ctx).Find(&roleList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

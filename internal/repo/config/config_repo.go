@@ -1,6 +1,7 @@
 package config
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"sync"
@@ -40,7 +41,7 @@ func (cr *configRepo) init() {
 	cr.mu.Lock()
 	defer cr.mu.Unlock()
 	rows := &[]entity.Config{}
-	err := cr.data.DB.Find(rows)
+	err := cr.data.DB.Context(context.TODO()).Find(rows)
 	if err == nil {
 		for _, row := range *rows {
 			Key2ValueMapping[row.Key] = row.Value
@@ -128,9 +129,9 @@ func (cr *configRepo) GetJsonConfigByIDAndSetToObject(id int, object any) (err e
 }
 
 // SetConfig set config
-func (cr *configRepo) SetConfig(key, value string) (err error) {
+func (cr *configRepo) SetConfig(ctx context.Context, key, value string) (err error) {
 	id := Key2IDMapping[key]
-	_, err = cr.data.DB.ID(id).Update(&entity.Config{Value: value})
+	_, err = cr.data.DB.Context(ctx).ID(id).Update(&entity.Config{Value: value})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	} else {

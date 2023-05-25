@@ -227,7 +227,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 	showinfo.VoteStatus = qs.voteRepo.GetVoteStatus(ctx, questionID, loginUserID)
 
 	// // check is followed
-	isFollowed, _ := qs.followCommon.IsFollowed(loginUserID, questionID)
+	isFollowed, _ := qs.followCommon.IsFollowed(ctx, loginUserID, questionID)
 	showinfo.IsFollowed = isFollowed
 
 	has, err = qs.AnswerCommon.SearchAnswered(ctx, loginUserID, dbinfo.ID)

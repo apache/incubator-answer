@@ -34,6 +34,7 @@ func NewUserRepo(data *data.Data, configRepo config.ConfigRepo) usercommon.UserR
 // AddUser add user
 func (ur *userRepo) AddUser(ctx context.Context, user *entity.User) (err error) {
 	_, err = ur.data.DB.Transaction(func(session *xorm.Session) (interface{}, error) {
+		session = session.Context(ctx)
 		userInfo := &entity.User{}
 		exist, err := session.Where("username = ?", user.Username).Get(userInfo)
 		if err != nil {
@@ -54,7 +55,7 @@ func (ur *userRepo) AddUser(ctx context.Context, user *entity.User) (err error) 
 // IncreaseAnswerCount increase answer count
 func (ur *userRepo) IncreaseAnswerCount(ctx context.Context, userID string, amount int) (err error) {
 	user := &entity.User{}
-	_, err = ur.data.DB.Where("id = ?", userID).Incr("answer_count", amount).Update(user)
+	_, err = ur.data.DB.Context(ctx).Where("id = ?", userID).Incr("answer_count", amount).Update(user)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -64,7 +65,7 @@ func (ur *userRepo) IncreaseAnswerCount(ctx context.Context, userID string, amou
 // IncreaseQuestionCount increase question count
 func (ur *userRepo) IncreaseQuestionCount(ctx context.Context, userID string, amount int) (err error) {
 	user := &entity.User{}
-	_, err = ur.data.DB.Where("id = ?", userID).Incr("question_count", amount).Update(user)
+	_, err = ur.data.DB.Context(ctx).Where("id = ?", userID).Incr("question_count", amount).Update(user)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -74,7 +75,7 @@ func (ur *userRepo) IncreaseQuestionCount(ctx context.Context, userID string, am
 // UpdateLastLoginDate update last login date
 func (ur *userRepo) UpdateLastLoginDate(ctx context.Context, userID string) (err error) {
 	user := &entity.User{LastLoginDate: time.Now()}
-	_, err = ur.data.DB.Where("id = ?", userID).Cols("last_login_date").Update(user)
+	_, err = ur.data.DB.Context(ctx).Where("id = ?", userID).Cols("last_login_date").Update(user)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -84,7 +85,7 @@ func (ur *userRepo) UpdateLastLoginDate(ctx context.Context, userID string) (err
 // UpdateEmailStatus update email status
 func (ur *userRepo) UpdateEmailStatus(ctx context.Context, userID string, emailStatus int) error {
 	cond := &entity.User{MailStatus: emailStatus}
-	_, err := ur.data.DB.Where("id = ?", userID).Cols("mail_status").Update(cond)
+	_, err := ur.data.DB.Context(ctx).Where("id = ?", userID).Cols("mail_status").Update(cond)
 	if err != nil {
 		return err
 	}
@@ -94,7 +95,7 @@ func (ur *userRepo) UpdateEmailStatus(ctx context.Context, userID string, emailS
 // UpdateNoticeStatus update notice status
 func (ur *userRepo) UpdateNoticeStatus(ctx context.Context, userID string, noticeStatus int) error {
 	cond := &entity.User{NoticeStatus: noticeStatus}
-	_, err := ur.data.DB.Where("id = ?", userID).Cols("notice_status").Update(cond)
+	_, err := ur.data.DB.Context(ctx).Where("id = ?", userID).Cols("notice_status").Update(cond)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -102,7 +103,7 @@ func (ur *userRepo) UpdateNoticeStatus(ctx context.Context, userID string, notic
 }
 
 func (ur *userRepo) UpdatePass(ctx context.Context, userID, pass string) error {
-	_, err := ur.data.DB.Where("id = ?", userID).Cols("pass").Update(&entity.User{Pass: pass})
+	_, err := ur.data.DB.Context(ctx).Where("id = ?", userID).Cols("pass").Update(&entity.User{Pass: pass})
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -110,7 +111,7 @@ func (ur *userRepo) UpdatePass(ctx context.Context, userID, pass string) error {
 }
 
 func (ur *userRepo) UpdateEmail(ctx context.Context, userID, email string) (err error) {
-	_, err = ur.data.DB.Where("id = ?", userID).Update(&entity.User{EMail: email})
+	_, err = ur.data.DB.Context(ctx).Where("id = ?", userID).Update(&entity.User{EMail: email})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -118,7 +119,7 @@ func (ur *userRepo) UpdateEmail(ctx context.Context, userID, email string) (err 
 }
 
 func (ur *userRepo) UpdateLanguage(ctx context.Context, userID, language string) (err error) {
-	_, err = ur.data.DB.Where("id = ?", userID).Update(&entity.User{Language: language})
+	_, err = ur.data.DB.Context(ctx).Where("id = ?", userID).Update(&entity.User{Language: language})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -127,7 +128,7 @@ func (ur *userRepo) UpdateLanguage(ctx context.Context, userID, language string)
 
 // UpdateInfo update user info
 func (ur *userRepo) UpdateInfo(ctx context.Context, userInfo *entity.User) (err error) {
-	_, err = ur.data.DB.Where("id = ?", userInfo.ID).
+	_, err = ur.data.DB.Context(ctx).Where("id = ?", userInfo.ID).
 		Cols("username", "display_name", "avatar", "bio", "bio_html", "website", "location").Update(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -138,7 +139,7 @@ func (ur *userRepo) UpdateInfo(ctx context.Context, userInfo *entity.User) (err 
 // GetByUserID get user info by user id
 func (ur *userRepo) GetByUserID(ctx context.Context, userID string) (userInfo *entity.User, exist bool, err error) {
 	userInfo = &entity.User{}
-	exist, err = ur.data.DB.Where("id = ?", userID).Get(userInfo)
+	exist, err = ur.data.DB.Context(ctx).Where("id = ?", userID).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return
@@ -152,7 +153,7 @@ func (ur *userRepo) GetByUserID(ctx context.Context, userID string) (userInfo *e
 
 func (ur *userRepo) BatchGetByID(ctx context.Context, ids []string) ([]*entity.User, error) {
 	list := make([]*entity.User, 0)
-	err := ur.data.DB.In("id", ids).Find(&list)
+	err := ur.data.DB.Context(ctx).In("id", ids).Find(&list)
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -163,7 +164,7 @@ func (ur *userRepo) BatchGetByID(ctx context.Context, ids []string) ([]*entity.U
 // GetByUsername get user by username
 func (ur *userRepo) GetByUsername(ctx context.Context, username string) (userInfo *entity.User, exist bool, err error) {
 	userInfo = &entity.User{}
-	exist, err = ur.data.DB.Where("username = ?", username).Get(userInfo)
+	exist, err = ur.data.DB.Context(ctx).Where("username = ?", username).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return
@@ -178,7 +179,7 @@ func (ur *userRepo) GetByUsername(ctx context.Context, username string) (userInf
 // GetByEmail get user by email
 func (ur *userRepo) GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error) {
 	userInfo = &entity.User{}
-	exist, err = ur.data.DB.Where("e_mail = ?", email).
+	exist, err = ur.data.DB.Context(ctx).Where("e_mail = ?", email).
 		Where("status != ?", entity.UserStatusDeleted).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -188,7 +189,7 @@ func (ur *userRepo) GetByEmail(ctx context.Context, email string) (userInfo *ent
 
 func (ur *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
 	list := make([]*entity.User, 0)
-	count, err = ur.data.DB.Where("mail_status =?", entity.EmailStatusAvailable).And("status =?", entity.UserStatusAvailable).FindAndCount(&list)
+	count, err = ur.data.DB.Context(ctx).Where("mail_status =?", entity.EmailStatusAvailable).And("status =?", entity.UserStatusAvailable).FindAndCount(&list)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -205,7 +206,7 @@ func tryToDecorateUserInfoFromUserCenter(ctx context.Context, data *data.Data, o
 	}
 
 	userInfo := &entity.UserExternalLogin{}
-	session := data.DB.Where("user_id = ?", original.ID)
+	session := data.DB.Context(ctx).Where("user_id = ?", original.ID)
 	session.Where("provider = ?", uc.Info().SlugName)
 	exist, err := session.Get(userInfo)
 	if err != nil {
@@ -243,7 +244,7 @@ func tryToDecorateUserListFromUserCenter(ctx context.Context, data *data.Data, o
 	}
 
 	userExternalLoginList := make([]*entity.UserExternalLogin, 0)
-	session := data.DB.Where("provider = ?", uc.Info().SlugName)
+	session := data.DB.Context(ctx).Where("provider = ?", uc.Info().SlugName)
 	session.In("user_id", ids)
 	err := session.Find(&userExternalLoginList)
 	if err != nil {

@@ -41,7 +41,7 @@ func (cr *commentRepo) AddComment(ctx context.Context, comment *entity.Comment) 
 	if err != nil {
 		return err
 	}
-	_, err = cr.data.DB.Insert(comment)
+	_, err = cr.data.DB.Context(ctx).Insert(comment)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -50,7 +50,7 @@ func (cr *commentRepo) AddComment(ctx context.Context, comment *entity.Comment) 
 
 // RemoveComment delete comment
 func (cr *commentRepo) RemoveComment(ctx context.Context, commentID string) (err error) {
-	session := cr.data.DB.ID(commentID)
+	session := cr.data.DB.Context(ctx).ID(commentID)
 	_, err = session.Update(&entity.Comment{Status: entity.CommentStatusDeleted})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -60,7 +60,7 @@ func (cr *commentRepo) RemoveComment(ctx context.Context, commentID string) (err
 
 // UpdateComment update comment
 func (cr *commentRepo) UpdateComment(ctx context.Context, comment *entity.Comment) (err error) {
-	_, err = cr.data.DB.ID(comment.ID).Where("user_id = ?", comment.UserID).Update(comment)
+	_, err = cr.data.DB.Context(ctx).ID(comment.ID).Where("user_id = ?", comment.UserID).Update(comment)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -72,7 +72,7 @@ func (cr *commentRepo) GetComment(ctx context.Context, commentID string) (
 	comment *entity.Comment, exist bool, err error,
 ) {
 	comment = &entity.Comment{}
-	exist, err = cr.data.DB.ID(commentID).Get(comment)
+	exist, err = cr.data.DB.Context(ctx).ID(commentID).Get(comment)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -81,7 +81,7 @@ func (cr *commentRepo) GetComment(ctx context.Context, commentID string) (
 
 func (cr *commentRepo) GetCommentCount(ctx context.Context) (count int64, err error) {
 	list := make([]*entity.Comment, 0)
-	count, err = cr.data.DB.Where("status = ?", entity.CommentStatusAvailable).FindAndCount(&list)
+	count, err = cr.data.DB.Context(ctx).Where("status = ?", entity.CommentStatusAvailable).FindAndCount(&list)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -94,7 +94,7 @@ func (cr *commentRepo) GetCommentPage(ctx context.Context, commentQuery *comment
 ) {
 	commentList = make([]*entity.Comment, 0)
 
-	session := cr.data.DB.NewSession()
+	session := cr.data.DB.Context(ctx)
 	session.OrderBy(commentQuery.GetOrderBy())
 	session.Where("status = ?", entity.CommentStatusAvailable)
 

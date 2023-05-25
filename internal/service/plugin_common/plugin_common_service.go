@@ -70,7 +70,7 @@ func (ps *PluginCommonService) UpdatePluginStatus(ctx context.Context) (err erro
 	if err != nil {
 		return errors.InternalServer(reason.UnknownError).WithError(err)
 	}
-	return ps.configRepo.SetConfig(constant.PluginStatus, string(content))
+	return ps.configRepo.SetConfig(ctx, constant.PluginStatus, string(content))
 }
 
 // UpdatePluginConfig update plugin config
