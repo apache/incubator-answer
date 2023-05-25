@@ -17,28 +17,34 @@ import (
 type ReportHandle struct {
 	questionCommon *questioncommon.QuestionCommon
 	commentRepo    comment.CommentRepo
-	configRepo     config.ConfigRepo
+	configService  *config.ConfigService
 }
 
 func NewReportHandle(
 	questionCommon *questioncommon.QuestionCommon,
 	commentRepo comment.CommentRepo,
-	configRepo config.ConfigRepo) *ReportHandle {
+	configService *config.ConfigService) *ReportHandle {
 	return &ReportHandle{
 		questionCommon: questionCommon,
 		commentRepo:    commentRepo,
-		configRepo:     configRepo,
+		configService:  configService,
 	}
 }
 
 // HandleObject this handle object status
 func (rh *ReportHandle) HandleObject(ctx context.Context, reported *entity.Report, req schema.ReportHandleReq) (err error) {
+	reasonDeleteCfg, err := rh.configService.GetConfigByKey(ctx, "reason.needs_delete")
+	if err != nil {
+		return err
+	}
+	reasonCloseCfg, err := rh.configService.GetConfigByKey(ctx, "reason.needs_close")
+	if err != nil {
+		return err
+	}
 	var (
-		objectID        = reported.ObjectID
-		reportedUserID  = reported.ReportedUserID
-		objectKey       string
-		reasonDelete, _ = rh.configRepo.GetConfigType("reason.needs_delete")
-		reasonClose, _  = rh.configRepo.GetConfigType("reason.needs_close")
+		objectID       = reported.ObjectID
+		reportedUserID = reported.ReportedUserID
+		objectKey      string
 	)
 
 	objectKey, err = obj.GetObjectTypeStrByObjectID(objectID)
@@ -48,9 +54,9 @@ func (rh *ReportHandle) HandleObject(ctx context.Context, reported *entity.Repor
 	switch objectKey {
 	case "question":
 		switch req.FlaggedType {
-		case reasonDelete:
+		case reasonDeleteCfg.ID:
 			err = rh.questionCommon.RemoveQuestion(ctx, &schema.RemoveQuestionReq{ID: objectID})
-		case reasonClose:
+		case reasonCloseCfg.ID:
 			err = rh.questionCommon.CloseQuestion(ctx, &schema.CloseQuestionReq{
 				ID:        objectID,
 				CloseType: req.FlaggedType,
@@ -59,12 +65,12 @@ func (rh *ReportHandle) HandleObject(ctx context.Context, reported *entity.Repor
 		}
 	case "answer":
 		switch req.FlaggedType {
-		case reasonDelete:
+		case reasonDeleteCfg.ID:
 			err = rh.questionCommon.RemoveAnswer(ctx, objectID)
 		}
 	case "comment":
 		switch req.FlaggedType {
-		case reasonDelete:
+		case reasonCloseCfg.ID:
 			err = rh.commentRepo.RemoveComment(ctx, objectID)
 			rh.sendNotification(ctx, reportedUserID, objectID, constant.NotificationYourCommentWasDeleted)
 		}

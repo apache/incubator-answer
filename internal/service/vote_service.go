@@ -35,7 +35,7 @@ type VoteRepo interface {
 type VoteService struct {
 	voteRepo          VoteRepo
 	UniqueIDRepo      unique.UniqueIDRepo
-	configRepo        config.ConfigRepo
+	configService     *config.ConfigService
 	questionRepo      questioncommon.QuestionRepo
 	answerRepo        answercommon.AnswerRepo
 	commentCommonRepo comment_common.CommentCommonRepo
@@ -45,7 +45,7 @@ type VoteService struct {
 func NewVoteService(
 	VoteRepo VoteRepo,
 	uniqueIDRepo unique.UniqueIDRepo,
-	configRepo config.ConfigRepo,
+	configService *config.ConfigService,
 	questionRepo questioncommon.QuestionRepo,
 	answerRepo answercommon.AnswerRepo,
 	commentCommonRepo comment_common.CommentCommonRepo,
@@ -54,7 +54,7 @@ func NewVoteService(
 	return &VoteService{
 		voteRepo:          VoteRepo,
 		UniqueIDRepo:      uniqueIDRepo,
-		configRepo:        configRepo,
+		configService:     configService,
 		questionRepo:      questionRepo,
 		answerRepo:        answerRepo,
 		commentCommonRepo: commentCommonRepo,
@@ -163,12 +163,11 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 	)
 
 	for _, typeKey := range typeKeys {
-		var t int
-		t, err = vs.configRepo.GetConfigType(typeKey)
+		cfg, err := vs.configService.GetConfigByKey(ctx, typeKey)
 		if err != nil {
 			continue
 		}
-		activityTypes = append(activityTypes, t)
+		activityTypes = append(activityTypes, cfg.GetIntValue())
 	}
 
 	voteList, total, err := vs.voteRepo.ListUserVotes(ctx, req.UserID, req, activityTypes)

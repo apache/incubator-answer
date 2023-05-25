@@ -34,7 +34,7 @@ type UserRankRepo interface {
 // RankService rank service
 type RankService struct {
 	userCommon        *usercommon.UserCommon
-	configRepo        config.ConfigRepo
+	configService     *config.ConfigService
 	userRankRepo      UserRankRepo
 	objectInfoService *object_info.ObjService
 	roleService       *role.UserRoleRelService
@@ -48,10 +48,10 @@ func NewRankService(
 	objectInfoService *object_info.ObjService,
 	roleService *role.UserRoleRelService,
 	rolePowerService *role.RolePowerRelService,
-	configRepo config.ConfigRepo) *RankService {
+	configService *config.ConfigService) *RankService {
 	return &RankService{
 		userCommon:        userCommon,
-		configRepo:        configRepo,
+		configService:     configService,
 		userRankRepo:      userRankRepo,
 		objectInfoService: objectInfoService,
 		roleService:       roleService,
@@ -213,7 +213,7 @@ func (rs *RankService) getUserPowerMapping(ctx context.Context, userID string) (
 func (rs *RankService) checkUserRank(ctx context.Context, userID string, userRank int, action string) (
 	can bool, rank int) {
 	// get the amount of rank required for the current operation
-	requireRank, err := rs.configRepo.GetInt(action)
+	requireRank, err := rs.configService.GetIntValue(ctx, action)
 	if err != nil {
 		log.Error(err)
 		return false, requireRank

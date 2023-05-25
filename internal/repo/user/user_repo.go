@@ -8,7 +8,6 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service/config"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/plugin"
@@ -19,15 +18,13 @@ import (
 
 // userRepo user repository
 type userRepo struct {
-	data       *data.Data
-	configRepo config.ConfigRepo
+	data *data.Data
 }
 
 // NewUserRepo new repository
-func NewUserRepo(data *data.Data, configRepo config.ConfigRepo) usercommon.UserRepo {
+func NewUserRepo(data *data.Data) usercommon.UserRepo {
 	return &userRepo{
-		data:       data,
-		configRepo: configRepo,
+		data: data,
 	}
 }
 

@@ -24,9 +24,9 @@ import (
 
 // EmailService kit service
 type EmailService struct {
-	configRepo   config.ConfigRepo
-	emailRepo    EmailRepo
-	siteInfoRepo siteinfo_common.SiteInfoRepo
+	configService *config.ConfigService
+	emailRepo     EmailRepo
+	siteInfoRepo  siteinfo_common.SiteInfoRepo
 }
 
 // EmailRepo email repository
@@ -36,11 +36,11 @@ type EmailRepo interface {
 }
 
 // NewEmailService email service
-func NewEmailService(configRepo config.ConfigRepo, emailRepo EmailRepo, siteInfoRepo siteinfo_common.SiteInfoRepo) *EmailService {
+func NewEmailService(configService *config.ConfigService, emailRepo EmailRepo, siteInfoRepo siteinfo_common.SiteInfoRepo) *EmailService {
 	return &EmailService{
-		configRepo:   configRepo,
-		emailRepo:    emailRepo,
-		siteInfoRepo: siteInfoRepo,
+		configService: configService,
+		emailRepo:     emailRepo,
+		siteInfoRepo:  siteInfoRepo,
 	}
 }
 
@@ -114,7 +114,7 @@ func (es *EmailService) SendAndSaveCodeWithTime(
 // Send email send
 func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body string) {
 	log.Infof("try to send email to %s", toEmailAddr)
-	ec, err := es.GetEmailConfig()
+	ec, err := es.GetEmailConfig(ctx)
 	if err != nil {
 		log.Errorf("get email config failed: %s", err)
 		return
@@ -298,8 +298,8 @@ func (es *EmailService) NewCommentTemplate(ctx context.Context, raw *schema.NewC
 	return title, body, nil
 }
 
-func (es *EmailService) GetEmailConfig() (ec *EmailConfig, err error) {
-	emailConf, err := es.configRepo.GetString("email.config")
+func (es *EmailService) GetEmailConfig(ctx context.Context) (ec *EmailConfig, err error) {
+	emailConf, err := es.configService.GetStringValue(ctx, "email.config")
 	if err != nil {
 		return nil, err
 	}
@@ -314,5 +314,5 @@ func (es *EmailService) GetEmailConfig() (ec *EmailConfig, err error) {
 // SetEmailConfig set email config
 func (es *EmailService) SetEmailConfig(ctx context.Context, ec *EmailConfig) (err error) {
 	data, _ := json.Marshal(ec)
-	return es.configRepo.SetConfig(ctx, "email.config", string(data))
+	return es.configService.UpdateConfig(ctx, "email.config", string(data))
 }

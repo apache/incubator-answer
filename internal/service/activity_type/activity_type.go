@@ -1,9 +1,5 @@
 package activity_type
 
-import (
-	"github.com/answerdev/answer/internal/repo/config"
-)
-
 const (
 	QuestionVoteUp    = "question.vote_up"
 	QuestionVoteDown  = "question.vote_down"
@@ -51,10 +47,11 @@ var (
 )
 
 func Format(activityTypeID int) string {
-	activityTypeStr := config.ID2KeyMapping[activityTypeID]
-	activityTypeFlag := activityTypeFlagMapping[activityTypeStr]
-	if len(activityTypeFlag) == 0 {
-		return "edit" // to edit
-	}
-	return activityTypeFlag // todo i18n support
+	return ""
+	//activityTypeStr := config_common.ID2KeyMapping[activityTypeID]
+	//activityTypeFlag := activityTypeFlagMapping[activityTypeStr]
+	//if len(activityTypeFlag) == 0 {
+	//	return "edit" // to edit
+	//}
+	//return activityTypeFlag // todo i18n support
 }

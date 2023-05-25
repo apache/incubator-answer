@@ -2,9 +2,9 @@ package report_admin
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/answerdev/answer/internal/base/handler"
-	configrepo "github.com/answerdev/answer/internal/repo/config"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/object_info"
 	"github.com/answerdev/answer/pkg/htmltext"
@@ -32,7 +32,7 @@ type ReportAdminService struct {
 	questionRepo      questioncommon.QuestionRepo
 	commentCommonRepo comment_common.CommentCommonRepo
 	reportHandle      *report_handle_admin.ReportHandle
-	configRepo        config.ConfigRepo
+	configService     *config.ConfigService
 	objectInfoService *object_info.ObjService
 }
 
@@ -44,7 +44,7 @@ func NewReportAdminService(
 	questionRepo questioncommon.QuestionRepo,
 	commentCommonRepo comment_common.CommentCommonRepo,
 	reportHandle *report_handle_admin.ReportHandle,
-	configRepo config.ConfigRepo,
+	configService *config.ConfigService,
 	objectInfoService *object_info.ObjService) *ReportAdminService {
 	return &ReportAdminService{
 		reportRepo:        reportRepo,
@@ -53,7 +53,7 @@ func NewReportAdminService(
 		questionRepo:      questionRepo,
 		commentCommonRepo: commentCommonRepo,
 		reportHandle:      reportHandle,
-		configRepo:        configRepo,
+		configService:     configService,
 		objectInfoService: objectInfoService,
 	}
 }
@@ -151,21 +151,25 @@ func (rs *ReportAdminService) decorateReportResp(ctx context.Context, resp *sche
 	resp.CommentID = objectInfo.CommentID
 	resp.Title = objectInfo.Title
 	resp.Excerpt = htmltext.FetchExcerpt(objectInfo.Content, "...", 240)
-	resp.Reason.Translate(configrepo.ID2KeyMapping[resp.ReportType], lang)
 
 	if resp.ReportType > 0 {
 		resp.Reason = &schema.ReasonItem{ReasonType: resp.ReportType}
-		err = rs.configRepo.GetJsonConfigByIDAndSetToObject(resp.ReportType, resp.Reason)
+		cf, err := rs.configService.GetConfigByID(ctx, resp.ReportType)
 		if err != nil {
 			log.Error(err)
+		} else {
+			_ = json.Unmarshal([]byte(cf.Value), resp.Reason)
+			resp.Reason.Translate(cf.Key, lang)
 		}
 	}
 	if resp.FlaggedType > 0 {
 		resp.FlaggedReason = &schema.ReasonItem{ReasonType: resp.FlaggedType}
-		err = rs.configRepo.GetJsonConfigByIDAndSetToObject(resp.FlaggedType, resp.FlaggedReason)
+		cf, err := rs.configService.GetConfigByID(ctx, resp.FlaggedType)
 		if err != nil {
 			log.Error(err)
+		} else {
+			_ = json.Unmarshal([]byte(cf.Value), resp.Reason)
+			resp.Reason.Translate(cf.Key, lang)
 		}
-		resp.Reason.Translate(configrepo.ID2KeyMapping[resp.ReportType], lang)
 	}
 }

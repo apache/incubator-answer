@@ -30,30 +30,30 @@ import (
 
 // VoteRepo activity repository
 type VoteRepo struct {
-	data         *data.Data
-	uniqueIDRepo unique.UniqueIDRepo
-	configRepo   config.ConfigRepo
-	activityRepo activity_common.ActivityRepo
-	userRankRepo rank.UserRankRepo
-	voteCommon   activity_common.VoteRepo
+	data          *data.Data
+	uniqueIDRepo  unique.UniqueIDRepo
+	configService *config.ConfigService
+	activityRepo  activity_common.ActivityRepo
+	userRankRepo  rank.UserRankRepo
+	voteCommon    activity_common.VoteRepo
 }
 
 // NewVoteRepo new repository
 func NewVoteRepo(
 	data *data.Data,
 	uniqueIDRepo unique.UniqueIDRepo,
-	configRepo config.ConfigRepo,
+	configService *config.ConfigService,
 	activityRepo activity_common.ActivityRepo,
 	userRankRepo rank.UserRankRepo,
 	voteCommon activity_common.VoteRepo,
 ) service.VoteRepo {
 	return &VoteRepo{
-		data:         data,
-		uniqueIDRepo: uniqueIDRepo,
-		configRepo:   configRepo,
-		activityRepo: activityRepo,
-		userRankRepo: userRankRepo,
-		voteCommon:   voteCommon,
+		data:          data,
+		uniqueIDRepo:  uniqueIDRepo,
+		configService: configService,
+		activityRepo:  activityRepo,
+		userRankRepo:  userRankRepo,
+		voteCommon:    voteCommon,
 	}
 }
 

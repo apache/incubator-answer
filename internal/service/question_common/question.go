@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/activity_queue"
@@ -62,7 +63,7 @@ type QuestionCommon struct {
 	collectionCommon *collectioncommon.CollectionCommon
 	AnswerCommon     *answercommon.AnswerCommon
 	metaService      *meta.MetaService
-	configRepo       config.ConfigRepo
+	configService    *config.ConfigService
 }
 
 func NewQuestionCommon(questionRepo QuestionRepo,
@@ -74,7 +75,7 @@ func NewQuestionCommon(questionRepo QuestionRepo,
 	collectionCommon *collectioncommon.CollectionCommon,
 	answerCommon *answercommon.AnswerCommon,
 	metaService *meta.MetaService,
-	configRepo config.ConfigRepo,
+	configService *config.ConfigService,
 ) *QuestionCommon {
 	return &QuestionCommon{
 		questionRepo:     questionRepo,
@@ -86,7 +87,7 @@ func NewQuestionCommon(questionRepo QuestionRepo,
 		collectionCommon: collectionCommon,
 		AnswerCommon:     answerCommon,
 		metaService:      metaService,
-		configRepo:       configRepo,
+		configService:    configService,
 	}
 }
 
@@ -201,14 +202,16 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 			if err != nil {
 				log.Error("json.Unmarshal CloseQuestionMeta error", err.Error())
 			} else {
-				closeinfo := &schema.GetReportTypeResp{}
-				err = qs.configRepo.GetJsonConfigByIDAndSetToObject(closemsg.CloseType, closeinfo)
+				cfg, err := qs.configService.GetConfigByID(ctx, closemsg.CloseType)
 				if err != nil {
 					log.Error("json.Unmarshal QuestionCloseJson error", err.Error())
 				} else {
+					reasonItem := &schema.ReasonItem{}
+					_ = json.Unmarshal(cfg.GetByteValue(), reasonItem)
+					reasonItem.Translate(cfg.Key, handler.GetLangByCtx(ctx))
 					operation := &schema.Operation{}
-					operation.Type = closeinfo.Name
-					operation.Description = closeinfo.Description
+					operation.Type = reasonItem.Name
+					operation.Description = reasonItem.Description
 					operation.Msg = closemsg.CloseMsg
 					operation.Time = metainfo.CreatedAt.Unix()
 					operation.Level = schema.OperationLevelInfo
