@@ -52,6 +52,7 @@ const (
 	TagAlreadyExist                     = "error.tag.already_exist"
 	RankFailToMeetTheCondition          = "error.rank.fail_to_meet_the_condition"
 	VoteRankFailToMeetTheCondition      = "error.rank.vote_fail_to_meet_the_condition"
+	NoEnoughRankToOperate               = "error.rank.no_enough_rank_to_operate"
 	ThemeNotFound                       = "error.theme.not_found"
 	LangNotFound                        = "error.lang.not_found"
 	ReportHandleFailed                  = "error.report.handle_failed"

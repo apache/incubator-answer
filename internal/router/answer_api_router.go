@@ -33,6 +33,7 @@ type AnswerAPIRouter struct {
 	activityController     *controller.ActivityController
 	roleController         *controller_admin.RoleController
 	pluginController       *controller_admin.PluginController
+	permissionController   *controller.PermissionController
 }
 
 func NewAnswerAPIRouter(
@@ -61,6 +62,7 @@ func NewAnswerAPIRouter(
 	activityController *controller.ActivityController,
 	roleController *controller_admin.RoleController,
 	pluginController *controller_admin.PluginController,
+	permissionController *controller.PermissionController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
 		langController:         langController,
@@ -88,6 +90,7 @@ func NewAnswerAPIRouter(
 		activityController:     activityController,
 		roleController:         roleController,
 		pluginController:       pluginController,
+		permissionController:   permissionController,
 	}
 }
 
@@ -219,6 +222,9 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 	// reason
 	r.GET("/reasons", a.reasonController.Reasons)
+
+	// permission
+	r.GET("/permission", a.permissionController.GetPermission)
 
 	// notification
 	r.GET("/notification/status", a.notificationController.GetRedDot)

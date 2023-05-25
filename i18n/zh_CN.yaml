@@ -178,7 +178,9 @@ backend:
       fail_to_meet_the_condition:
         other: 级别不符合条件
       vote_fail_to_meet_the_condition:
-        other: 感谢您的投票。您至少需要{{ rank }}声望才能投票。
+        other: 感谢您的投票。您至少需要{{.Rank}}声望才能投票。
+      no_enough_rank_to_operate:
+        other: 您至少需要{{.Rank}}声望才能执行此操作。
     report:
       handle_failed:
         other: 报告处理失败

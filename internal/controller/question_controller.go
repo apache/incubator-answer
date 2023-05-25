@@ -5,6 +5,7 @@ import (
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
@@ -306,13 +307,14 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+	canList, requireRanks, err := qc.rankService.CheckOperationPermissionsForRanks(ctx, req.UserID, []string{
 		permission.QuestionAdd,
 		permission.QuestionEdit,
 		permission.QuestionDelete,
 		permission.QuestionClose,
 		permission.QuestionReopen,
 		permission.TagUseReservedTag,
+		permission.TagAdd,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -324,8 +326,22 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	req.CanClose = canList[3]
 	req.CanReopen = canList[4]
 	req.CanUseReservedTag = canList[5]
+	req.CanAddTag = canList[6]
 	if !req.CanAdd {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	// can add tag
+	hasNewTag, err := qc.questionService.HasNewTag(ctx, req.Tags)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !req.CanAddTag && hasNewTag {
+		lang := handler.GetLang(ctx)
+		msg := translator.TrWithData(lang, reason.NoEnoughRankToOperate, &schema.PermissionTrTplData{Rank: requireRanks[6]})
+		handler.HandleResponse(ctx, errors.Forbidden(reason.NoEnoughRankToOperate).WithMsg(msg), nil)
 		return
 	}
 
@@ -480,11 +496,12 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+	canList, requireRanks, err := qc.rankService.CheckOperationPermissionsForRanks(ctx, req.UserID, []string{
 		permission.QuestionEdit,
 		permission.QuestionDelete,
 		permission.QuestionEditWithoutReview,
 		permission.TagUseReservedTag,
+		permission.TagAdd,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -496,6 +513,7 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	req.CanDelete = canList[1]
 	req.NoNeedReview = canList[2] || objectOwner
 	req.CanUseReservedTag = canList[3]
+	req.CanAddTag = canList[4]
 	if !req.CanEdit {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
@@ -508,6 +526,19 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 
 	if len(errFields) > 0 {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
+		return
+	}
+
+	// can add tag
+	hasNewTag, err := qc.questionService.HasNewTag(ctx, req.Tags)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !req.CanAddTag && hasNewTag {
+		lang := handler.GetLang(ctx)
+		msg := translator.TrWithData(lang, reason.NoEnoughRankToOperate, &schema.PermissionTrTplData{Rank: requireRanks[4]})
+		handler.HandleResponse(ctx, errors.Forbidden(reason.NoEnoughRankToOperate).WithMsg(msg), nil)
 		return
 	}
 

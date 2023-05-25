@@ -100,13 +100,15 @@ func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
 	if ok {
 		r.Status = statusShow
 	}
+
 	avatarInfo := &AvatarInfo{}
 	_ = json.Unmarshal([]byte(userInfo.Avatar), avatarInfo)
-	if constant.DefaultAvatar == "gravatar" && avatarInfo.Type == "" {
-		avatarInfo.Type = "gravatar"
+	if len(avatarInfo.Type) == 0 && constant.DefaultAvatar == AvatarTypeGravatar {
+		avatarInfo.Type = AvatarTypeGravatar
+		avatarInfo.Gravatar = gravatar.GetAvatarURL(userInfo.EMail)
+	} else if avatarInfo.Type == AvatarTypeGravatar {
 		avatarInfo.Gravatar = gravatar.GetAvatarURL(userInfo.EMail)
 	}
-	// if json.Unmarshal Error avatarInfo.Type is Empty
 	r.Avatar = avatarInfo
 }
 
@@ -118,7 +120,7 @@ const (
 
 func FormatAvatarInfo(avatarJson, email string) (res string) {
 	defer func() {
-		if constant.DefaultAvatar == "gravatar" && len(res) == 0 {
+		if constant.DefaultAvatar == AvatarTypeGravatar && len(res) == 0 {
 			res = gravatar.GetAvatarURL(email)
 		}
 	}()
@@ -133,7 +135,7 @@ func FormatAvatarInfo(avatarJson, email string) (res string) {
 	}
 	switch avatarInfo.Type {
 	case AvatarTypeGravatar:
-		return avatarInfo.Gravatar
+		return gravatar.GetAvatarURL(email)
 	case AvatarTypeCustom:
 		return avatarInfo.Custom
 	default:
