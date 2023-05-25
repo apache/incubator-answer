@@ -96,9 +96,13 @@ func (nr *notificationRepo) GetNotificationPage(ctx context.Context, searchCond 
 
 	session := nr.data.DB.NewSession()
 	session = session.Desc("updated_at")
+
 	cond := &entity.Notification{
 		UserID: searchCond.UserID,
 		Type:   searchCond.Type,
+	}
+	if searchCond.InboxType > 0 {
+		cond.MsgType = searchCond.InboxType
 	}
 	total, err = pager.Help(searchCond.Page, searchCond.PageSize, &notificationList, cond, session)
 	if err != nil {

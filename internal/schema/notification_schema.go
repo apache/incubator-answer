@@ -7,10 +7,10 @@ const (
 	NotificationRead             = 2
 	NotificationStatusNormal     = 1
 	NotificationStatusDelete     = 10
-	NotificationInboxTypeAll     = 1
-	NotificationInboxTypePosts   = 2
+	NotificationInboxTypeAll     = 0
+	NotificationInboxTypePosts   = 1
+	NotificationInboxTypeVotes   = 2
 	NotificationInboxTypeInvites = 3
-	NotificationInboxTypeVotes   = 4
 )
 
 var NotificationType = map[string]int{
