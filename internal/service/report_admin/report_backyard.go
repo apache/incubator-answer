@@ -3,6 +3,8 @@ package report_admin
 import (
 	"context"
 
+	"github.com/answerdev/answer/internal/base/handler"
+	configrepo "github.com/answerdev/answer/internal/repo/config"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/object_info"
 	"github.com/answerdev/answer/pkg/htmltext"
@@ -69,8 +71,6 @@ func (rs *ReportAdminService) ListReportPage(ctx context.Context, dto schema.Get
 		flaggedUsers,
 		users map[string]*schema.UserBasicInfo
 	)
-
-	pageModel = &pager.PageModel{}
 
 	flags, total, err = rs.reportRepo.GetReportListPage(ctx, dto)
 	if err != nil {
@@ -139,6 +139,7 @@ func (rs *ReportAdminService) HandleReported(ctx context.Context, req schema.Rep
 }
 
 func (rs *ReportAdminService) decorateReportResp(ctx context.Context, resp *schema.GetReportListPageResp) {
+	lang := handler.GetLangByCtx(ctx)
 	objectInfo, err := rs.objectInfoService.GetInfo(ctx, resp.ObjectID)
 	if err != nil {
 		log.Error(err)
@@ -150,6 +151,7 @@ func (rs *ReportAdminService) decorateReportResp(ctx context.Context, resp *sche
 	resp.CommentID = objectInfo.CommentID
 	resp.Title = objectInfo.Title
 	resp.Excerpt = htmltext.FetchExcerpt(objectInfo.Content, "...", 240)
+	resp.Reason.Translate(configrepo.ID2KeyMapping[resp.ReportType], lang)
 
 	if resp.ReportType > 0 {
 		resp.Reason = &schema.ReasonItem{ReasonType: resp.ReportType}
@@ -164,5 +166,6 @@ func (rs *ReportAdminService) decorateReportResp(ctx context.Context, resp *sche
 		if err != nil {
 			log.Error(err)
 		}
+		resp.Reason.Translate(configrepo.ID2KeyMapping[resp.ReportType], lang)
 	}
 }

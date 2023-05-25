@@ -350,6 +350,21 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.AccessToken = middleware.ExtractToken(ctx)
 
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeModifyPass, ctx.ClientIP(),
+		req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+		return
+	}
+	_, err := uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeModifyPass, ctx.ClientIP())
+	if err != nil {
+		log.Error(err)
+	}
+
 	oldPassVerification, err := uc.userService.UserModifyPassWordVerification(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -363,6 +378,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.OldPasswordVerificationFailed), errFields)
 		return
 	}
+
 	if req.OldPass == req.Pass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "pass",
@@ -372,6 +388,9 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 		return
 	}
 	err = uc.userService.UserModifyPassword(ctx, req)
+	if err == nil {
+		uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
+	}
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -587,4 +606,23 @@ func (uc *UserController) UserUnsubscribeEmailNotification(ctx *gin.Context) {
 
 	err := uc.userService.UserUnsubscribeEmailNotification(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
+}
+
+// SearchUserListByName godoc
+// @Summary SearchUserListByName
+// @Description SearchUserListByName
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param username query string true "username"
+// @Success 200 {object} handler.RespBody{data=schema.GetOtherUserInfoResp}
+// @Router /answer/api/v1/user/info/search [get]
+func (uc *UserController) SearchUserListByName(ctx *gin.Context) {
+	req := &schema.GetOtherUserInfoByUsernameReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	resp, err := uc.userService.SearchUserListByName(ctx, req.Username)
+	handler.HandleResponse(ctx, err, resp)
 }

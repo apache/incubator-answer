@@ -94,13 +94,14 @@ type GetSiteLegalInfoResp struct {
 
 // SiteUsersReq site users config request
 type SiteUsersReq struct {
-	DefaultAvatar          string `validate:"required,oneof=system gravatar" form:"default_avatar" json:"default_avatar"`
-	AllowUpdateDisplayName bool   `form:"allow_update_display_name" json:"allow_update_display_name"`
-	AllowUpdateUsername    bool   `form:"allow_update_username" json:"allow_update_username"`
-	AllowUpdateAvatar      bool   `form:"allow_update_avatar" json:"allow_update_avatar"`
-	AllowUpdateBio         bool   `form:"allow_update_bio" json:"allow_update_bio"`
-	AllowUpdateWebsite     bool   `form:"allow_update_website" json:"allow_update_website"`
-	AllowUpdateLocation    bool   `form:"allow_update_location" json:"allow_update_location"`
+	DefaultAvatar          string `validate:"required,oneof=system gravatar" json:"default_avatar"`
+	GravatarBaseURL        string `json:"gravatar_base_url"`
+	AllowUpdateDisplayName bool   `json:"allow_update_display_name"`
+	AllowUpdateUsername    bool   `json:"allow_update_username"`
+	AllowUpdateAvatar      bool   `json:"allow_update_avatar"`
+	AllowUpdateBio         bool   `json:"allow_update_bio"`
+	AllowUpdateWebsite     bool   `json:"allow_update_website"`
+	AllowUpdateLocation    bool   `json:"allow_update_location"`
 }
 
 // SiteLoginReq site login request
@@ -296,6 +297,7 @@ var (
 		constant.RankAnswerVoteUpKey:              {1, 1, 15},
 		constant.RankQuestionVoteDownKey:          {125, 125, 125},
 		constant.RankAnswerVoteDownKey:            {125, 125, 125},
+		constant.RankInviteSomeoneToAnswerKey:     {1, 500, 1000},
 		constant.RankTagAddKey:                    {1, 750, 1500},
 		constant.RankTagEditKey:                   {1, 50, 100},
 		constant.RankQuestionEditKey:              {1, 100, 200},

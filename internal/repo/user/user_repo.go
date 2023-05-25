@@ -72,6 +72,26 @@ func (ur *userRepo) IncreaseQuestionCount(ctx context.Context, userID string, am
 	return nil
 }
 
+func (ur *userRepo) UpdateQuestionCount(ctx context.Context, userID string, count int64) (err error) {
+	user := &entity.User{}
+	user.QuestionCount = int(count)
+	_, err = ur.data.DB.Where("id = ?", userID).Cols("question_count").Update(user)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
+func (ur *userRepo) UpdateAnswerCount(ctx context.Context, userID string, count int) (err error) {
+	user := &entity.User{}
+	user.AnswerCount = count
+	_, err = ur.data.DB.Where("id = ?", userID).Cols("answer_count").Update(user)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
 // UpdateLastLoginDate update last login date
 func (ur *userRepo) UpdateLastLoginDate(ctx context.Context, userID string) (err error) {
 	user := &entity.User{LastLoginDate: time.Now()}
@@ -176,6 +196,17 @@ func (ur *userRepo) GetByUsername(ctx context.Context, username string) (userInf
 	return
 }
 
+func (ur *userRepo) GetByUsernames(ctx context.Context, usernames []string) ([]*entity.User, error) {
+	list := make([]*entity.User, 0)
+	err := ur.data.DB.Where("status =?", entity.UserStatusAvailable).In("username", usernames).Find(&list)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return list, err
+	}
+	tryToDecorateUserListFromUserCenter(ctx, ur.data, list)
+	return list, nil
+}
+
 // GetByEmail get user by email
 func (ur *userRepo) GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error) {
 	userInfo = &entity.User{}
@@ -193,6 +224,23 @@ func (ur *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	return
+}
+
+func (ur *userRepo) SearchUserListByName(ctx context.Context, name string) (userList []*entity.User, err error) {
+	userList = make([]*entity.User, 0)
+	if name == "" {
+		return userList, nil
+	}
+	session := ur.data.DB.Where("")
+	session.Where("username LIKE LOWER(?) or display_name LIKE ?", name+"%", name+"%").And("status =?", entity.UserStatusAvailable)
+	session.Asc("username")
+	session = session.Limit(5, 0)
+	err = session.OrderBy("id desc").Find(&userList)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	tryToDecorateUserListFromUserCenter(ctx, ur.data, userList)
 	return
 }
 

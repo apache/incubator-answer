@@ -109,7 +109,7 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 			commonRouterPrefix, ConnectorRedirectRouterPrefix, connector.ConnectorSlugName())
 		userInfo, err := connector.ConnectorReceiver(ctx, receiverURL)
 		if err != nil {
-			log.Errorf("connector received failed: %v", err)
+			log.Errorf("connector received failed, error info: %v, response data is: %s", err, userInfo.MetaInfo)
 			ctx.Redirect(http.StatusFound, "/50x")
 			return
 		}

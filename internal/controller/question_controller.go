@@ -196,6 +196,7 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 		permission.QuestionUnPin,
 		permission.QuestionHide,
 		permission.QuestionShow,
+		permission.AnswerInviteSomeoneToAnswer,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -211,6 +212,7 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	req.CanUnPin = canList[5]
 	req.CanHide = canList[6]
 	req.CanShow = canList[7]
+	req.CanInviteOtherToAnswer = canList[8]
 
 	info, err := qc.questionService.GetQuestionAndAddPV(ctx, id, userID, req)
 	if err != nil {
@@ -219,6 +221,23 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	}
 	info.ID = uid.EnShortID(info.ID)
 	handler.HandleResponse(ctx, nil, info)
+}
+
+// GetQuestionInviteUserInfo get question invite user info
+// @Summary get question invite user info
+// @Description get question invite user info
+// @Tags Question
+// @Security ApiKeyAuth
+// @Accept  json
+// @Produce  json
+// @Param id query string true "Question ID"  default(1)
+// @Success 200 {string} string ""
+// @Router /answer/api/v1/question/invite [get]
+func (qc *QuestionController) GetQuestionInviteUserInfo(ctx *gin.Context) {
+	questionID := uid.DeShortID(ctx.Query("id"))
+	resp, err := qc.questionService.InviteUserInfo(ctx, questionID)
+	handler.HandleResponse(ctx, err, resp)
+
 }
 
 // SimilarQuestion godoc
@@ -500,18 +519,49 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, &schema.UpdateQuestionResp{WaitForReview: !req.NoNeedReview})
 }
 
-// CloseMsgList close question msg list
-// @Summary close question msg list
-// @Description close question msg list
+// UpdateQuestionInviteUser update question invite user
+// @Summary update question invite user
+// @Description update question invite user
 // @Tags Question
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
+// @Param data body schema.QuestionUpdateInviteUser true "question"
 // @Success 200 {object} handler.RespBody
-// @Router /answer/api/v1/question/closemsglist [get]
-func (qc *QuestionController) CloseMsgList(ctx *gin.Context) {
-	resp, err := qc.questionService.CloseMsgList(ctx, handler.GetLang(ctx))
-	handler.HandleResponse(ctx, err, resp)
+// @Router /answer/api/v1/question/invite [put]
+func (qc *QuestionController) UpdateQuestionInviteUser(ctx *gin.Context) {
+	req := &schema.QuestionUpdateInviteUser{}
+	errFields := handler.BindAndCheckReturnErr(ctx, req)
+	if ctx.IsAborted() {
+		return
+	}
+	req.ID = uid.DeShortID(req.ID)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.AnswerInviteSomeoneToAnswer,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+
+	objectOwner := qc.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.ID)
+	req.CanEdit = canList[0] || objectOwner
+	if !req.CanEdit {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+	if len(errFields) > 0 {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
+		return
+	}
+	err = qc.questionService.UpdateQuestionInviteUser(ctx, req)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	handler.HandleResponse(ctx, nil, nil)
 }
 
 // SearchByTitleLike add question title like

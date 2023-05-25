@@ -1,14 +1,17 @@
 package export
 
 import (
-	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"html/template"
 	"mime"
+	"os"
 	"time"
 
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/config"
@@ -128,6 +131,9 @@ func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body str
 	if ec.IsSSL() {
 		d.SSL = true
 	}
+	if len(os.Getenv("SKIP_SMTP_TLS_VERIFY")) > 0 {
+		d.TLSConfig = &tls.Config{ServerName: d.Host, InsecureSkipVerify: true}
+	}
 	if err := d.DialAndSend(m); err != nil {
 		log.Errorf("send email to %s failed: %s", toEmailAddr, err)
 	} else {
@@ -162,11 +168,6 @@ func (es *EmailService) GetSiteGeneral(ctx context.Context) (resp schema.SiteGen
 }
 
 func (es *EmailService) RegisterTemplate(ctx context.Context, registerUrl string) (title, body string, err error) {
-	emailConfig, err := es.GetEmailConfig()
-	if err != nil {
-		return
-	}
-
 	siteInfo, err := es.GetSiteGeneral(ctx)
 	if err != nil {
 		return
@@ -176,123 +177,59 @@ func (es *EmailService) RegisterTemplate(ctx context.Context, registerUrl string
 		RegisterUrl: registerUrl,
 	}
 
-	title, err = es.parseTemplateData(emailConfig.RegisterTitle, templateData)
-	if err != nil {
-		return "", "", fmt.Errorf("email template parse error: %s", err)
-	}
-
-	body, err = es.parseTemplateData(emailConfig.RegisterBody, templateData)
-	if err != nil {
-		return "", "", fmt.Errorf("email template parse error: %s", err)
-	}
+	lang := handler.GetLangByCtx(ctx)
+	title = translator.TrWithData(lang, constant.EmailTplKeyRegisterTitle, templateData)
+	body = translator.TrWithData(lang, constant.EmailTplKeyRegisterBody, templateData)
 	return title, body, nil
 }
 
 func (es *EmailService) PassResetTemplate(ctx context.Context, passResetUrl string) (title, body string, err error) {
-	ec, err := es.GetEmailConfig()
-	if err != nil {
-		return
-	}
-
-	siteinfo, err := es.GetSiteGeneral(ctx)
-	if err != nil {
-		return
-	}
-
-	templateData := PassResetTemplateData{SiteName: siteinfo.Name, PassResetUrl: passResetUrl}
-	tmpl, err := template.New("pass_reset_title").Parse(ec.PassResetTitle)
-	if err != nil {
-		return "", "", err
-	}
-	titleBuf := &bytes.Buffer{}
-	bodyBuf := &bytes.Buffer{}
-	err = tmpl.Execute(titleBuf, templateData)
-	if err != nil {
-		return "", "", err
-	}
-
-	tmpl, err = template.New("pass_reset_body").Parse(ec.PassResetBody)
-	if err != nil {
-		return "", "", err
-	}
-	err = tmpl.Execute(bodyBuf, templateData)
-	if err != nil {
-		return "", "", err
-	}
-	return titleBuf.String(), bodyBuf.String(), nil
-}
-
-func (es *EmailService) ChangeEmailTemplate(ctx context.Context, changeEmailUrl string) (title, body string, err error) {
-	ec, err := es.GetEmailConfig()
-	if err != nil {
-		return
-	}
-
-	siteinfo, err := es.GetSiteGeneral(ctx)
-	if err != nil {
-		return
-	}
-	templateData := ChangeEmailTemplateData{
-		SiteName:       siteinfo.Name,
-		ChangeEmailUrl: changeEmailUrl,
-	}
-	tmpl, err := template.New("email_change_title").Parse(ec.ChangeTitle)
-	if err != nil {
-		return "", "", err
-	}
-	titleBuf := &bytes.Buffer{}
-	bodyBuf := &bytes.Buffer{}
-	err = tmpl.Execute(titleBuf, templateData)
-	if err != nil {
-		return "", "", err
-	}
-
-	tmpl, err = template.New("email_change_body").Parse(ec.ChangeBody)
-	if err != nil {
-		return "", "", err
-	}
-	err = tmpl.Execute(bodyBuf, templateData)
-	if err != nil {
-		return "", "", err
-	}
-	return titleBuf.String(), bodyBuf.String(), nil
-}
-
-// TestTemplate send test email template parse
-func (es *EmailService) TestTemplate(ctx context.Context) (title, body string, err error) {
-	emailConfig, err := es.GetEmailConfig()
-	if err != nil {
-		return
-	}
-
 	siteInfo, err := es.GetSiteGeneral(ctx)
 	if err != nil {
 		return
 	}
-	templateData := TestTemplateData{
-		SiteName: siteInfo.Name,
+
+	templateData := PassResetTemplateData{SiteName: siteInfo.Name, PassResetUrl: passResetUrl}
+
+	lang := handler.GetLangByCtx(ctx)
+	title = translator.TrWithData(lang, constant.EmailTplKeyPassResetTitle, templateData)
+	body = translator.TrWithData(lang, constant.EmailTplKeyPassResetBody, templateData)
+	return title, body, nil
+}
+
+func (es *EmailService) ChangeEmailTemplate(ctx context.Context, changeEmailUrl string) (title, body string, err error) {
+	siteInfo, err := es.GetSiteGeneral(ctx)
+	if err != nil {
+		return
+	}
+	templateData := ChangeEmailTemplateData{
+		SiteName:       siteInfo.Name,
+		ChangeEmailUrl: changeEmailUrl,
 	}
 
-	title, err = es.parseTemplateData(emailConfig.TestTitle, templateData)
-	if err != nil {
-		return "", "", fmt.Errorf("email template parse error: %s", err)
-	}
+	lang := handler.GetLangByCtx(ctx)
+	title = translator.TrWithData(lang, constant.EmailTplKeyChangeEmailTitle, templateData)
+	body = translator.TrWithData(lang, constant.EmailTplKeyChangeEmailBody, templateData)
+	return title, body, nil
+}
 
-	body, err = es.parseTemplateData(emailConfig.TestBody, templateData)
+// TestTemplate send test email template parse
+func (es *EmailService) TestTemplate(ctx context.Context) (title, body string, err error) {
+	siteInfo, err := es.GetSiteGeneral(ctx)
 	if err != nil {
-		return "", "", fmt.Errorf("email template parse error: %s", err)
+		return
 	}
+	templateData := TestTemplateData{SiteName: siteInfo.Name}
+
+	lang := handler.GetLangByCtx(ctx)
+	title = translator.TrWithData(lang, constant.EmailTplKeyTestTitle, templateData)
+	body = translator.TrWithData(lang, constant.EmailTplKeyTestBody, templateData)
 	return title, body, nil
 }
 
 // NewAnswerTemplate new answer template
 func (es *EmailService) NewAnswerTemplate(ctx context.Context, raw *schema.NewAnswerTemplateRawData) (
 	title, body string, err error) {
-	emailConfig, err := es.GetEmailConfig()
-	if err != nil {
-		return
-	}
-
 	siteInfo, err := es.GetSiteGeneral(ctx)
 	if err != nil {
 		return
@@ -305,28 +242,37 @@ func (es *EmailService) NewAnswerTemplate(ctx context.Context, raw *schema.NewAn
 		AnswerSummary:  raw.AnswerSummary,
 		UnsubscribeUrl: fmt.Sprintf("%s/users/unsubscribe?code=%s", siteInfo.SiteUrl, raw.UnsubscribeCode),
 	}
-	templateData.SiteName = siteInfo.Name
 
-	title, err = es.parseTemplateData(emailConfig.NewAnswerTitle, templateData)
+	lang := handler.GetLangByCtx(ctx)
+	title = translator.TrWithData(lang, constant.EmailTplKeyNewAnswerTitle, templateData)
+	body = translator.TrWithData(lang, constant.EmailTplKeyNewAnswerBody, templateData)
+	return title, body, nil
+}
+
+// NewInviteAnswerTemplate new invite answer template
+func (es *EmailService) NewInviteAnswerTemplate(ctx context.Context, raw *schema.NewInviteAnswerTemplateRawData) (
+	title, body string, err error) {
+	siteInfo, err := es.GetSiteGeneral(ctx)
 	if err != nil {
-		return "", "", fmt.Errorf("email template parse error: %s", err)
+		return
+	}
+	templateData := &schema.NewInviteAnswerTemplateData{
+		SiteName:       siteInfo.Name,
+		DisplayName:    raw.InviterDisplayName,
+		QuestionTitle:  raw.QuestionTitle,
+		InviteUrl:      fmt.Sprintf("%s/questions/%s", siteInfo.SiteUrl, raw.QuestionID),
+		UnsubscribeUrl: fmt.Sprintf("%s/users/unsubscribe?code=%s", siteInfo.SiteUrl, raw.UnsubscribeCode),
 	}
 
-	body, err = es.parseTemplateData(emailConfig.NewAnswerBody, templateData)
-	if err != nil {
-		return "", "", fmt.Errorf("email template parse error: %s", err)
-	}
+	lang := handler.GetLangByCtx(ctx)
+	title = translator.TrWithData(lang, constant.EmailTplKeyInvitedAnswerTitle, templateData)
+	body = translator.TrWithData(lang, constant.EmailTplKeyInvitedAnswerBody, templateData)
 	return title, body, nil
 }
 
 // NewCommentTemplate new comment template
 func (es *EmailService) NewCommentTemplate(ctx context.Context, raw *schema.NewCommentTemplateRawData) (
 	title, body string, err error) {
-	emailConfig, err := es.GetEmailConfig()
-	if err != nil {
-		return
-	}
-
 	siteInfo, err := es.GetSiteGeneral(ctx)
 	if err != nil {
 		return
@@ -345,31 +291,11 @@ func (es *EmailService) NewCommentTemplate(ctx context.Context, raw *schema.NewC
 		templateData.CommentUrl = fmt.Sprintf("%s/questions/%s?commentId=%s", siteInfo.SiteUrl,
 			raw.QuestionID, raw.CommentID)
 	}
-	templateData.SiteName = siteInfo.Name
 
-	title, err = es.parseTemplateData(emailConfig.NewCommentTitle, templateData)
-	if err != nil {
-		return "", "", fmt.Errorf("email template parse error: %s", err)
-	}
-
-	body, err = es.parseTemplateData(emailConfig.NewCommentBody, templateData)
-	if err != nil {
-		return "", "", fmt.Errorf("email template parse error: %s", err)
-	}
+	lang := handler.GetLangByCtx(ctx)
+	title = translator.TrWithData(lang, constant.EmailTplKeyNewCommentTitle, templateData)
+	body = translator.TrWithData(lang, constant.EmailTplKeyNewCommentBody, templateData)
 	return title, body, nil
-}
-
-func (es *EmailService) parseTemplateData(templateContent string, templateData interface{}) (parsedData string, err error) {
-	parsedDataBuf := &bytes.Buffer{}
-	tmpl, err := template.New("").Parse(templateContent)
-	if err != nil {
-		return "", err
-	}
-	err = tmpl.Execute(parsedDataBuf, templateData)
-	if err != nil {
-		return "", err
-	}
-	return parsedDataBuf.String(), nil
 }
 
 func (es *EmailService) GetEmailConfig() (ec *EmailConfig, err error) {

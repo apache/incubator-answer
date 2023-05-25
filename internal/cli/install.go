@@ -40,7 +40,7 @@ func FormatAllPath(dataDirPath string) {
 func InstallAllInitialEnvironment(dataDirPath string) {
 	FormatAllPath(dataDirPath)
 	installUploadDir()
-	installI18nBundle()
+	InstallI18nBundle(false)
 	fmt.Println("install all initial environment done")
 }
 
@@ -79,7 +79,7 @@ func installUploadDir() {
 	}
 }
 
-func installI18nBundle() {
+func InstallI18nBundle(replace bool) {
 	fmt.Println("[i18n] try to install i18n bundle...")
 	if err := dir.CreateDirIfNotExist(I18nPath); err != nil {
 		fmt.Println(err.Error())
@@ -98,7 +98,11 @@ func installI18nBundle() {
 		if err != nil {
 			continue
 		}
-		if dir.CheckFileExist(path) {
+		exist := dir.CheckFileExist(path)
+		if exist && !replace {
+			continue
+		}
+		if exist {
 			fmt.Printf("[i18n] install %s file exist, try to replace it\n", item.Name())
 			if err = os.Remove(path); err != nil {
 				fmt.Println(err)

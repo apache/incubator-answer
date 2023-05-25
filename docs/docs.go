@@ -2841,6 +2841,19 @@ const docTemplate = `{
                         "name": "type",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "enum": [
+                            "all",
+                            "posts",
+                            "invites",
+                            "votes"
+                        ],
+                        "type": "string",
+                        "description": "inbox_type",
+                        "name": "inbox_type",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -3588,34 +3601,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/question/closemsglist": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "description": "close question msg list",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Question"
-                ],
-                "summary": "close question msg list",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
-                        }
-                    }
-                }
-            }
-        },
         "/answer/api/v1/question/info": {
             "get": {
                 "security": [
@@ -3649,6 +3634,81 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/question/invite": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get question invite user info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Question"
+                ],
+                "summary": "get question invite user info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "default": "1",
+                        "description": "Question ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "update question invite user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Question"
+                ],
+                "summary": "update question invite user",
+                "parameters": [
+                    {
+                        "description": "question",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.QuestionUpdateInviteUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
                         }
                     }
                 }
@@ -4044,56 +4104,6 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/handler.RespBody"
-                        }
-                    }
-                }
-            }
-        },
-        "/answer/api/v1/report/type/list": {
-            "get": {
-                "description": "get report type list",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Report"
-                ],
-                "summary": "get report type list",
-                "parameters": [
-                    {
-                        "enum": [
-                            "question",
-                            "answer",
-                            "comment",
-                            "user"
-                        ],
-                        "type": "string",
-                        "description": "report source",
-                        "name": "source",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/handler.RespBody"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/schema.GetReportTypeResp"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
                         }
                     }
                 }
@@ -5098,6 +5108,55 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/user/info/search": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "SearchUserListByName",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "SearchUserListByName",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "username",
+                        "name": "username",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetOtherUserInfoResp"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -6879,35 +6938,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.GetReportTypeResp": {
-            "type": "object",
-            "properties": {
-                "content_type": {
-                    "description": "content type",
-                    "type": "string"
-                },
-                "description": {
-                    "description": "report description",
-                    "type": "string"
-                },
-                "have_content": {
-                    "description": "is have content",
-                    "type": "boolean"
-                },
-                "name": {
-                    "description": "report name",
-                    "type": "string"
-                },
-                "source": {
-                    "description": "report source",
-                    "type": "string"
-                },
-                "type": {
-                    "description": "report type",
-                    "type": "integer"
-                }
-            }
-        },
         "schema.GetRevisionResp": {
             "type": "object",
             "properties": {
@@ -7618,6 +7648,12 @@ const docTemplate = `{
                     "maxLength": 65535,
                     "minLength": 6
                 },
+                "mention_username_list": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "tags": {
                     "description": "tags",
                     "type": "array",
@@ -7781,6 +7817,12 @@ const docTemplate = `{
                     "description": "question id",
                     "type": "string"
                 },
+                "invite_user": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "tags": {
                     "description": "tags",
                     "type": "array",
@@ -7793,6 +7835,23 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 150,
                     "minLength": 6
+                }
+            }
+        },
+        "schema.QuestionUpdateInviteUser": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "invite_user": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -8355,6 +8414,9 @@ const docTemplate = `{
                         "system",
                         "gravatar"
                     ]
+                },
+                "gravatar_base_url": {
+                    "type": "string"
                 }
             }
         },
@@ -8388,6 +8450,9 @@ const docTemplate = `{
                         "system",
                         "gravatar"
                     ]
+                },
+                "gravatar_base_url": {
+                    "type": "string"
                 }
             }
         },
@@ -8925,6 +8990,14 @@ const docTemplate = `{
                 "pass"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string",
+                    "maxLength": 500
+                },
+                "captcha_id": {
+                    "type": "string",
+                    "maxLength": 500
+                },
                 "old_pass": {
                     "type": "string",
                     "maxLength": 32,

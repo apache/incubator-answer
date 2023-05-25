@@ -4,6 +4,7 @@ import "time"
 
 const (
 	TagRelStatusAvailable = 1
+	TagRelStatusHide      = 2
 	TagRelStatusDeleted   = 10
 )
 

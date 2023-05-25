@@ -269,6 +269,9 @@ func (rs *RankService) GetRankPersonalWithPage(ctx context.Context, req *schema.
 			commentResp.Title = objInfo.Title
 			commentResp.UrlTitle = htmltext.UrlTitle(objInfo.Title)
 			commentResp.Content = objInfo.Content
+			if objInfo.QuestionStatus == entity.QuestionStatusDeleted {
+				commentResp.Title = "Deleted question"
+			}
 			commentResp.QuestionID = objInfo.QuestionID
 			commentResp.AnswerID = objInfo.AnswerID
 		}

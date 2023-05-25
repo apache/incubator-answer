@@ -470,6 +470,8 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	data["description"] = siteInfo.Description
 	data["language"] = handler.GetLang(ctx)
 	data["timezone"] = siteInfo.Interface.TimeZone
+	language := strings.Replace(siteInfo.Interface.Language, "_", "-", -1)
+	data["lang"] = language
 	data["HeadCode"] = siteInfo.CustomCssHtml.CustomHead
 	data["HeaderCode"] = siteInfo.CustomCssHtml.CustomHeader
 	data["FooterCode"] = siteInfo.CustomCssHtml.CustomFooter

@@ -46,6 +46,8 @@ type QuestionRepo interface {
 	FindByID(ctx context.Context, id []string) (questionList []*entity.Question, err error)
 	AdminSearchList(ctx context.Context, search *schema.AdminQuestionSearch) ([]*entity.Question, int64, error)
 	GetQuestionCount(ctx context.Context) (count int64, err error)
+	GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error)
+	GetQuestionCountByIDs(ctx context.Context, ids []string) (count int64, err error)
 	GetQuestionIDsPage(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error)
 }
 
@@ -86,6 +88,10 @@ func NewQuestionCommon(questionRepo QuestionRepo,
 		metaService:      metaService,
 		configRepo:       configRepo,
 	}
+}
+
+func (qs *QuestionCommon) GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error) {
+	return qs.questionRepo.GetUserQuestionCount(ctx, userID)
 }
 
 func (qs *QuestionCommon) UpdatePv(ctx context.Context, questionID string) error {
@@ -144,6 +150,34 @@ func (qs *QuestionCommon) FindInfoByID(ctx context.Context, questionIDs []string
 	return list, nil
 }
 
+func (qs *QuestionCommon) InviteUserInfo(ctx context.Context, questionID string) (inviteList []*schema.UserBasicInfo, err error) {
+	InviteUserInfo := make([]*schema.UserBasicInfo, 0)
+	dbinfo, has, err := qs.questionRepo.GetQuestion(ctx, questionID)
+	if err != nil {
+		return InviteUserInfo, err
+	}
+	if !has {
+		return InviteUserInfo, errors.NotFound(reason.QuestionNotFound)
+	}
+	//InviteUser
+	if dbinfo.InviteUserID != "" {
+		InviteUserIDs := make([]string, 0)
+		err := json.Unmarshal([]byte(dbinfo.InviteUserID), &InviteUserIDs)
+		if err == nil {
+			inviteUserInfoMap, err := qs.userCommon.BatchUserBasicInfoByID(ctx, InviteUserIDs)
+			if err == nil {
+				for _, userid := range InviteUserIDs {
+					_, ok := inviteUserInfoMap[userid]
+					if ok {
+						InviteUserInfo = append(InviteUserInfo, inviteUserInfoMap[userid])
+					}
+				}
+			}
+		}
+	}
+	return InviteUserInfo, nil
+}
+
 func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUserID string) (showinfo *schema.QuestionInfo, err error) {
 	dbinfo, has, err := qs.questionRepo.GetQuestion(ctx, questionID)
 	if err != nil {
@@ -180,9 +214,7 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 					operation.Level = schema.OperationLevelInfo
 					showinfo.Operation = operation
 				}
-
 			}
-
 		}
 	}
 
@@ -431,13 +463,15 @@ func (qs *QuestionCommon) RemoveQuestion(ctx context.Context, req *schema.Remove
 		return err
 	}
 
-	// user add question count
-	err = qs.userCommon.UpdateQuestionCount(ctx, questionInfo.UserID, -1)
+	userQuestionCount, err := qs.GetUserQuestionCount(ctx, questionInfo.UserID)
 	if err != nil {
-		log.Error("user UpdateQuestionCount error", err.Error())
+		log.Error("user GetUserQuestionCount error", err.Error())
+	} else {
+		err = qs.userCommon.UpdateQuestionCount(ctx, questionInfo.UserID, userQuestionCount)
+		if err != nil {
+			log.Error("user IncreaseQuestionCount error", err.Error())
+		}
 	}
-
-	// todo rank remove
 
 	return nil
 }

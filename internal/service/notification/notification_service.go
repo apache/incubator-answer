@@ -123,7 +123,15 @@ func (ns *NotificationService) GetNotificationPage(ctx context.Context, searchCo
 	if !ok {
 		return pager.NewPageModel(0, resp), nil
 	}
+	searchInboxType := schema.NotificationInboxTypeAll
+	if searchType == schema.NotificationTypeInbox {
+		searchInboxType, ok = schema.NotificationInboxType[searchCond.InboxTypeStr]
+		if !ok {
+			return pager.NewPageModel(0, resp), nil
+		}
+	}
 	searchCond.Type = searchType
+	searchCond.InboxType = searchInboxType
 	notifications, total, err := ns.notificationRepo.GetNotificationPage(ctx, searchCond)
 	if err != nil {
 		return nil, err

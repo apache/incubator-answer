@@ -693,27 +693,6 @@ definitions:
         description: url title
         type: string
     type: object
-  schema.GetReportTypeResp:
-    properties:
-      content_type:
-        description: content type
-        type: string
-      description:
-        description: report description
-        type: string
-      have_content:
-        description: is have content
-        type: boolean
-      name:
-        description: report name
-        type: string
-      source:
-        description: report source
-        type: string
-      type:
-        description: report type
-        type: integer
-    type: object
   schema.GetRevisionResp:
     properties:
       content:
@@ -1218,6 +1197,10 @@ definitions:
         maxLength: 65535
         minLength: 6
         type: string
+      mention_username_list:
+        items:
+          type: string
+        type: array
       tags:
         description: tags
         items:
@@ -1334,6 +1317,10 @@ definitions:
       id:
         description: question id
         type: string
+      invite_user:
+        items:
+          type: string
+        type: array
       tags:
         description: tags
         items:
@@ -1349,6 +1336,17 @@ definitions:
     - id
     - tags
     - title
+    type: object
+  schema.QuestionUpdateInviteUser:
+    properties:
+      id:
+        type: string
+      invite_user:
+        items:
+          type: string
+        type: array
+    required:
+    - id
     type: object
   schema.RemoveAnswerReq:
     properties:
@@ -1733,6 +1731,8 @@ definitions:
         - system
         - gravatar
         type: string
+      gravatar_base_url:
+        type: string
     required:
     - default_avatar
     type: object
@@ -1754,6 +1754,8 @@ definitions:
         enum:
         - system
         - gravatar
+        type: string
+      gravatar_base_url:
         type: string
     required:
     - default_avatar
@@ -2134,6 +2136,12 @@ definitions:
     type: object
   schema.UserModifyPasswordReq:
     properties:
+      captcha_code:
+        maxLength: 500
+        type: string
+      captcha_id:
+        maxLength: 500
+        type: string
       old_pass:
         maxLength: 32
         minLength: 8
@@ -3968,6 +3976,16 @@ paths:
         name: type
         required: true
         type: string
+      - description: inbox_type
+        enum:
+        - all
+        - posts
+        - invites
+        - votes
+        in: query
+        name: inbox_type
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -4426,23 +4444,6 @@ paths:
       summary: add question and answer
       tags:
       - Question
-  /answer/api/v1/question/closemsglist:
-    get:
-      consumes:
-      - application/json
-      description: close question msg list
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
-      summary: close question msg list
-      tags:
-      - Question
   /answer/api/v1/question/info:
     get:
       consumes:
@@ -4465,6 +4466,53 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: get question details
+      tags:
+      - Question
+  /answer/api/v1/question/invite:
+    get:
+      consumes:
+      - application/json
+      description: get question invite user info
+      parameters:
+      - default: "1"
+        description: Question ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: get question invite user info
+      tags:
+      - Question
+    put:
+      consumes:
+      - application/json
+      description: update question invite user
+      parameters:
+      - description: question
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.QuestionUpdateInviteUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update question invite user
       tags:
       - Question
   /answer/api/v1/question/operation:
@@ -4707,37 +4755,6 @@ paths:
       - ApiKeyAuth: []
       - ApiKeyAuth: []
       summary: add report
-      tags:
-      - Report
-  /answer/api/v1/report/type/list:
-    get:
-      description: get report type list
-      parameters:
-      - description: report source
-        enum:
-        - question
-        - answer
-        - comment
-        - user
-        in: query
-        name: source
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/handler.RespBody'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/schema.GetReportTypeResp'
-                  type: array
-              type: object
-      summary: get report type list
       tags:
       - Report
   /answer/api/v1/revisions:
@@ -5348,6 +5365,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: UserUpdateInfo update user info
+      tags:
+      - User
+  /answer/api/v1/user/info/search:
+    get:
+      consumes:
+      - application/json
+      description: SearchUserListByName
+      parameters:
+      - description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetOtherUserInfoResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: SearchUserListByName
       tags:
       - User
   /answer/api/v1/user/interface:

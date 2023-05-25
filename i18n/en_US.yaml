@@ -1,5 +1,4 @@
 # The following fields are used for back-end
-
 backend:
   base:
     success:
@@ -35,6 +34,8 @@ backend:
       other: Unpin
     show:
       other: List
+    invite_someone_to_answer:
+      other: Edit
   role:
     name:
       user:
@@ -80,6 +81,8 @@ backend:
       other: Downvote question
     rank_answer_vote_down_label:
       other: Downvote answer
+    rank_invite_someone_to_answer_label:
+      other: Invite someone to answer
     rank_tag_add_label:
       other: Create new tag
     rank_tag_edit_label:
@@ -109,6 +112,9 @@ backend:
   email_or_password_wrong_error:
     other: Email and password do not match.
   error:
+    password:
+      space_invalid:
+        other: Password cannot contain spaces.
     admin:
       cannot_update_their_password:
         other: You cannot modify your password.
@@ -250,41 +256,74 @@ backend:
     upload:
       unsupported_file_format:
         other: Unsupported file format.
-  report:
+  reason:
     spam:
       name:
         other: spam
       desc:
-        other: This post is an advertisement, or vandalism. It is not useful or relevant
-          to the current topic.
-    rude:
+        other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
+    rude_or_abusive:
       name:
         other: rude or abusive
       desc:
         other: A reasonable person would find this content inappropriate for respectful
           discourse.
-    duplicate:
+    a_duplicate:
       name:
         other: a duplicate
       desc:
         other: This question has been asked before and already has an answer.
-    not_answer:
+      placeholder:
+        other: Enter the existing question link
+    not_a_answer:
       name:
         other: not an answer
       desc:
         other: This was posted as an answer, but it does not attempt to answer the
           question. It should possibly be an edit, a comment, another question,
           or deleted altogether.
-    not_need:
+    no_longer_needed:
       name:
         other: no longer needed
       desc:
         other: This comment is outdated, conversational or not relevant to this post.
-    other:
+    something:
       name:
         other: something else
       desc:
         other: This post requires staff attention for another reason not listed above.
+      placeholder:
+        other: Let us know specifically what you are concerned about
+    community_specific:
+      name:
+        other: a community-specific reason
+      desc:
+        other: This question doesn’t meet a community guideline.
+    not_clarity:
+      name:
+        other: needs details or clarity
+      desc:
+        other: This question currently includes multiple questions in one. It should focus on one problem only.
+    looks_ok:
+      name:
+        other: looks ok
+      desc:
+        other: This post is good as-is and not low quality.
+    needs_edit:
+      name:
+        other: needs edit, and I did it
+      desc:
+        other: Improve and correct problems with this post yourself.
+    needs_close:
+      name:
+        other: needs close
+      desc:
+        other: A closed question can’t answer, but still can edit, vote and comment.
+    needs_delete:
+      name:
+        other: needs delete
+      desc:
+        other: All reputation gained and lost will be restored.
   question:
     close:
       duplicate:
@@ -351,6 +390,44 @@ backend:
         other: downvoted answer
       up_voted_comment:
         other: upvoted comment
+      invited_you_to_answer:
+        other: invited you to answer
+  email_tpl:
+    change_email:
+      title:
+        other: "[{{.SiteName}}] Confirm your new email address"
+      body:
+        other: "Confirm your new email address for {{.SiteName}}  by clicking on the following link:<br><br>\n\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
+    new_answer:
+      title:
+        other: "[{{.SiteName}}] {{.DisplayName}} answered your question"
+      body:
+        other: "<strong><a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+    invited_you_to_answer:
+      title:
+        other: "[{{.SiteName}}] {{.DisplayName}} invited you to answer"
+      body:
+        other: "<strong><a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+    new_comment:
+      title:
+        other: "[{{.SiteName}}] {{.DisplayName}} commented on your post"
+      body:
+        other: "<strong><a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+    pass_reset:
+      title:
+        other: "[{{.SiteName }}] Password reset"
+      body:
+        other: "Somebody asked to reset your password on [{{.SiteName}}].<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+    register:
+      title:
+        other: "[{{.SiteName}}] Confirm your new account"
+      body:
+        other: "Welcome to {{.SiteName}}<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
+    test:
+      title:
+        other: "[{{.SiteName}}] Test Email"
+      body:
+        other: "This is a test email."
 
 # The following fields are used for interface presentation(Front-end)
 ui:

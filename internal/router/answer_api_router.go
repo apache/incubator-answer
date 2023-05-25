@@ -129,6 +129,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	//question
 	r.GET("/question/info", a.questionController.GetQuestion)
+	r.GET("/question/invite", a.questionController.GetQuestionInviteUserInfo)
 	r.GET("/question/page", a.questionController.QuestionPage)
 	r.GET("/question/similar/tag", a.questionController.SimilarQuestion)
 	r.GET("/personal/qa/top", a.questionController.UserTop)
@@ -193,6 +194,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.POST("/question", a.questionController.AddQuestion)
 	r.POST("/question/answer", a.questionController.AddQuestionByAnswer)
 	r.PUT("/question", a.questionController.UpdateQuestion)
+	r.PUT("/question/invite", a.questionController.UpdateQuestionInviteUser)
 	r.DELETE("/question", a.questionController.RemoveQuestion)
 	r.PUT("/question/status", a.questionController.CloseQuestion)
 	r.PUT("/question/operation", a.questionController.OperationQuestion)
@@ -210,6 +212,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/user/info", a.userController.UserUpdateInfo)
 	r.PUT("/user/interface", a.userController.UserUpdateInterface)
 	r.POST("/user/notice/set", a.userController.UserNoticeSet)
+	r.GET("/user/info/search", a.userController.SearchUserListByName)
 
 	// vote
 	r.GET("/personal/vote/page", a.voteController.UserVotes)

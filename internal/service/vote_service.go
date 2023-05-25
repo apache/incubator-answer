@@ -195,6 +195,9 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 			Content:    objInfo.Content,
 			VoteType:   activity_type.Format(voteInfo.ActivityType),
 		}
+		if objInfo.QuestionStatus == entity.QuestionStatusDeleted {
+			item.Title = "Deleted question"
+		}
 		resp = append(resp, item)
 	}
 

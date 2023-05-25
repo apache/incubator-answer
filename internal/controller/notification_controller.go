@@ -143,6 +143,7 @@ func (nc *NotificationController) ClearIDUnRead(ctx *gin.Context) {
 // @Param page query int false "page size"
 // @Param page_size query int false "page size"
 // @Param type query string true "type" Enums(inbox,achievement)
+// @Param inbox_type query string true "inbox_type" Enums(all,posts,invites,votes)
 // @Success 200 {object} handler.RespBody
 // @Router /answer/api/v1/notification/page [get]
 func (nc *NotificationController) GetList(ctx *gin.Context) {
