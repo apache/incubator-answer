@@ -9,7 +9,6 @@ import (
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/answerdev/answer/pkg/uid"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -54,7 +53,6 @@ func (tr *tagRelRepo) RemoveTagRelListByObjectID(ctx context.Context, objectID s
 }
 
 func (tr *tagRelRepo) HideTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
-	spew.Dump("====== HideTagRelListByObjectID")
 	objectID = uid.DeShortID(objectID)
 	_, err = tr.data.DB.Where("object_id = ?", objectID).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusHide})
 	if err != nil {
@@ -64,7 +62,6 @@ func (tr *tagRelRepo) HideTagRelListByObjectID(ctx context.Context, objectID str
 }
 
 func (tr *tagRelRepo) ShowTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
-	spew.Dump("====== ShowTagRelListByObjectID")
 	objectID = uid.DeShortID(objectID)
 	_, err = tr.data.DB.Where("object_id = ?", objectID).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusAvailable})
 	if err != nil {

@@ -11,6 +11,7 @@ type Notification struct {
 	ObjectID  string    `xorm:"not null default 0 INDEX BIGINT(20) object_id"`
 	Content   string    `xorm:"not null TEXT content"`
 	Type      int       `xorm:"not null default 0 INT(11) type"`
+	MsgType   int       `xorm:"not null default 0 INT(11) msg_type"`
 	IsRead    int       `xorm:"not null default 1 INT(11) is_read"`
 	Status    int       `xorm:"not null default 1 INT(11) status"`
 }

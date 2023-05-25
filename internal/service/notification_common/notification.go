@@ -164,6 +164,10 @@ func (ns *NotificationCommon) AddNotification(ctx context.Context, msg *schema.N
 	if err != nil {
 		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
+	_, ok := constant.NotificationMsgTypeMapping[req.NotificationAction]
+	if ok {
+		info.MsgType = constant.NotificationMsgTypeMapping[req.NotificationAction]
+	}
 	info.Content = string(content)
 	err = ns.notificationRepo.AddNotification(ctx, info)
 	if err != nil {

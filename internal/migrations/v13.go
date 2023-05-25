@@ -21,6 +21,7 @@ func updateCount(x *xorm.Engine) error {
 	updateUserQuestionCount(x)
 	updateUserAnswerCount(x)
 	inviteAnswer(x)
+	inBoxData(x)
 	return nil
 }
 
@@ -333,6 +334,47 @@ func inviteAnswer(x *xorm.Engine) error {
 	err := x.Sync(new(Question))
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+// inBoxData Classify messages
+func inBoxData(x *xorm.Engine) error {
+	type Notification struct {
+		ID        string    `xorm:"not null pk autoincr BIGINT(20) id"`
+		CreatedAt time.Time `xorm:"created TIMESTAMP created_at"`
+		UpdatedAt time.Time `xorm:"TIMESTAMP updated_at"`
+		UserID    string    `xorm:"not null default 0 BIGINT(20) INDEX user_id"`
+		ObjectID  string    `xorm:"not null default 0 INDEX BIGINT(20) object_id"`
+		Content   string    `xorm:"not null TEXT content"`
+		Type      int       `xorm:"not null default 0 INT(11) type"`
+		MsgType   int       `xorm:"not null default 0 INT(11) msg_type"`
+		IsRead    int       `xorm:"not null default 1 INT(11) is_read"`
+		Status    int       `xorm:"not null default 1 INT(11) status"`
+	}
+	err := x.Sync(new(Notification))
+	if err != nil {
+		return err
+	}
+	msglist := make([]entity.Notification, 0)
+	err = x.Find(&msglist, &entity.Notification{})
+	if err != nil {
+		return fmt.Errorf("get Notification failed: %w", err)
+	}
+	for _, v := range msglist {
+		Content := &schema.NotificationContent{}
+		err := json.Unmarshal([]byte(v.Content), Content)
+		if err != nil {
+			continue
+		}
+		_, ok := constant.NotificationMsgTypeMapping[Content.NotificationAction]
+		if ok {
+			v.MsgType = constant.NotificationMsgTypeMapping[Content.NotificationAction]
+			if _, err = x.Update(v, &entity.Notification{ID: v.ID}); err != nil {
+				log.Errorf("update %+v Notification failed: %s", v.ID, err)
+			}
+		}
 	}
 
 	return nil
