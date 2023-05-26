@@ -14,12 +14,24 @@
     color: black;
     background-color: var(--bs-gray-200);
   }
+  .side-nav-right-line {
+    position: absolute;
+    top: 0;
+    right: 12px;
+    width: 1px;
+    height: 100%;
+    background-color: var(--bs-gray-300);
+    min-height: calc(100vh - 62px - 74px);
+  }
 }
 
 @media screen and (max-width: 991.9px) {
   #sideNav {
     .nav {
       max-width: 100%;
+    }
+    .side-nav-right-line {
+      display: none;
     }
   }
 }
