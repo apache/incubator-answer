@@ -49,6 +49,12 @@ func NewUserCenterLoginService(
 func (us *UserCenterLoginService) ExternalLogin(
 	ctx context.Context, userCenter plugin.UserCenter, basicUserInfo *plugin.UserCenterBasicUserInfo) (
 	resp *schema.UserExternalLoginResp, err error) {
+	if len(basicUserInfo.ExternalID) == 0 {
+		return &schema.UserExternalLoginResp{
+			ErrTitle: translator.Tr(handler.GetLangByCtx(ctx), reason.UserAccessDenied),
+			ErrMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.UserExternalLoginMissingUserID),
+		}, nil
+	}
 
 	if len(basicUserInfo.Email) > 0 {
 		// check whether site allow register or not
