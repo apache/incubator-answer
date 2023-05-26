@@ -95,21 +95,22 @@ func (rs *RankService) CheckOperationPermission(ctx context.Context, userID stri
 	return can, nil
 }
 
-// CheckOperationPermissions verify that the user has permission
-func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID string, actions []string) (
-	can []bool, err error) {
+// CheckOperationPermissionsForRanks verify that the user has permission
+func (rs *RankService) CheckOperationPermissionsForRanks(ctx context.Context, userID string, actions []string) (
+	can []bool, requireRanks []int, err error) {
 	can = make([]bool, len(actions))
+	requireRanks = make([]int, len(actions))
 	if len(userID) == 0 {
-		return can, nil
+		return can, requireRanks, nil
 	}
 
 	// get the rank of the current user
 	userInfo, exist, err := rs.userCommon.GetUserBasicInfoByID(ctx, userID)
 	if err != nil {
-		return can, err
+		return can, requireRanks, err
 	}
 	if !exist {
-		return can, nil
+		return can, requireRanks, nil
 	}
 
 	powerMapping := rs.getUserPowerMapping(ctx, userID)
@@ -118,10 +119,18 @@ func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID str
 			can[idx] = true
 			continue
 		}
-		meetRank, _ := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
+		meetRank, requireRank := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
 		can[idx] = meetRank
+		requireRanks[idx] = requireRank
 	}
-	return can, nil
+	return can, requireRanks, nil
+}
+
+// CheckOperationPermissions verify that the user has permission
+func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID string, actions []string) (
+	can []bool, err error) {
+	can, _, err = rs.CheckOperationPermissionsForRanks(ctx, userID, actions)
+	return can, err
 }
 
 // CheckOperationObjectOwner check operation object owner
@@ -142,7 +151,7 @@ func (rs *RankService) CheckOperationObjectOwner(ctx context.Context, userID, ob
 
 // CheckVotePermission verify that the user has vote permission
 func (rs *RankService) CheckVotePermission(ctx context.Context, userID, objectID string, voteUp bool) (
-	can bool, rank int, err error) {
+	can bool, needRank int, err error) {
 	if len(userID) == 0 || len(objectID) == 0 {
 		return false, 0, nil
 	}
@@ -180,13 +189,12 @@ func (rs *RankService) CheckVotePermission(ctx context.Context, userID, objectID
 			action = permission.CommentVoteDown
 		}
 	}
-	meetRank, rank := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
 	powerMapping := rs.getUserPowerMapping(ctx, userID)
 	if powerMapping[action] {
-		return true, rank, nil
+		return true, 0, nil
 	}
-
-	return meetRank, rank, nil
+	can, needRank = rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
+	return can, needRank, nil
 }
 
 // getUserPowerMapping get user power mapping

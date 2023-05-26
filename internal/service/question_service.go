@@ -200,6 +200,11 @@ func (qs *QuestionService) CheckAddQuestion(ctx context.Context, req *schema.Que
 	return nil, nil
 }
 
+// HasNewTag
+func (qs *QuestionService) HasNewTag(ctx context.Context, tags []*schema.TagItem) (bool, error) {
+	return qs.tagCommon.HasNewTag(ctx, tags)
+}
+
 // AddQuestion add question
 func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.QuestionAdd) (questionInfo any, err error) {
 	if len(req.Tags) == 0 {

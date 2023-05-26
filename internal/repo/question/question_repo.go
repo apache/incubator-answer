@@ -371,7 +371,7 @@ func (qr *questionRepo) AdminSearchList(ctx context.Context, search *schema.Admi
 
 	offset := search.Page * search.PageSize
 
-	session.OrderBy("updated_at desc").
+	session.OrderBy("created_at desc").
 		Limit(search.PageSize, offset)
 	count, err = session.FindAndCount(&rows)
 	if err != nil {

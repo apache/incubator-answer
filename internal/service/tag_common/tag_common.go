@@ -247,6 +247,32 @@ func (ts *TagCommonService) ExistRecommend(ctx context.Context, tags []*schema.T
 	return false, nil
 }
 
+func (ts *TagCommonService) HasNewTag(ctx context.Context, tags []*schema.TagItem) (bool, error) {
+	tagNames := make([]string, 0)
+	tagMap := make(map[string]bool)
+	for _, item := range tags {
+		item.SlugName = strings.ReplaceAll(item.SlugName, " ", "-")
+		tagNames = append(tagNames, item.SlugName)
+		tagMap[item.SlugName] = false
+	}
+	list, err := ts.GetTagListByNames(ctx, tagNames)
+	if err != nil {
+		return true, err
+	}
+	for _, item := range list {
+		_, ok := tagMap[item.SlugName]
+		if ok {
+			tagMap[item.SlugName] = true
+		}
+	}
+	for _, has := range tagMap {
+		if !has {
+			return true, nil
+		}
+	}
+	return false, nil
+}
+
 // GetObjectTag get object tag
 func (ts *TagCommonService) GetObjectTag(ctx context.Context, objectId string) (objTags []*schema.TagResp, err error) {
 	tagsInfoList, err := ts.GetObjectEntityTag(ctx, objectId)
