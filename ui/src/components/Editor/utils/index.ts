@@ -94,13 +94,17 @@ export function htmlRender(el: HTMLElement | null) {
 
     el.querySelectorAll('.language-mermaid').forEach((pre) => {
       const flag = Date.now();
-      mermaid.render(`theGraph${flag}`, pre.textContent, function (svgCode) {
-        const p = document.createElement('p');
-        p.className = 'text-center';
-        p.innerHTML = svgCode;
+      mermaid.render(
+        `theGraph${flag}`,
+        pre.textContent || '',
+        function (svgCode) {
+          const p = document.createElement('p');
+          p.className = 'text-center';
+          p.innerHTML = svgCode;
 
-        pre.parentNode?.replaceChild(p, pre);
-      });
+          pre.parentNode?.replaceChild(p, pre);
+        },
+      );
     });
   });
   import('katex/contrib/auto-render/auto-render').then(

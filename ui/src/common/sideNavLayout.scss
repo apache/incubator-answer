@@ -1,28 +1,17 @@
+// .flex-auto {
+//   max-width: 70%;
+// }
 .page-right-side {
   flex: none;
   width: 30%;
 }
 
-.line {
-  position: absolute;
-  top: 0;
-  right: 12px;
-  width: 1px;
-  height: 100%;
-  background-color: var(--bs-gray-300);
-  min-height: calc(100vh - 62px - 74px);
-}
-
 // lg
 @media screen and (max-width: 1199.9px) {
+  // .flex-auto {
+  //   max-width: 100%;
+  // }
   .page-right-side {
     width: 100%;
-  }
-}
-
-// md
-@media screen and (max-width: 991.9px) {
-  .line {
-    display: none;
   }
 }

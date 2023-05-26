@@ -66,7 +66,7 @@ const Index: FC = () => {
           </>
         ) : null}
       </Nav>
-      <div className="line" />
+      <div className="side-nav-right-line" />
     </Col>
   );
 };
