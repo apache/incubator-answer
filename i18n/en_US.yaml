@@ -1,4 +1,5 @@
 # The following fields are used for back-end
+
 backend:
   base:
     success:
@@ -221,6 +222,8 @@ backend:
       no_permission:
         other: No permission to Revision.
     user:
+      external_login_missing_user_id:
+        other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
       external_login_unbinding_forbidden:
         other: Please set a login password for your account before you remove this login.
       email_or_password_wrong:

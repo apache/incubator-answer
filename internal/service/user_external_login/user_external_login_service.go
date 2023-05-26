@@ -6,13 +6,16 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/random"
 	"github.com/answerdev/answer/pkg/token"
 	"github.com/answerdev/answer/plugin"
@@ -64,6 +67,13 @@ func NewUserExternalLoginService(
 func (us *UserExternalLoginService) ExternalLogin(
 	ctx context.Context, externalUserInfo *schema.ExternalLoginUserInfoCache) (
 	resp *schema.UserExternalLoginResp, err error) {
+	if len(externalUserInfo.ExternalID) == 0 {
+		return &schema.UserExternalLoginResp{
+			ErrTitle: translator.Tr(handler.GetLangByCtx(ctx), reason.UserAccessDenied),
+			ErrMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.UserExternalLoginMissingUserID),
+		}, nil
+	}
+
 	oldExternalLoginUserInfo, exist, err := us.userExternalLoginRepo.GetByExternalID(ctx,
 		externalUserInfo.Provider, externalUserInfo.ExternalID)
 	if err != nil {
@@ -97,6 +107,19 @@ func (us *UserExternalLoginService) ExternalLogin(
 			return nil, err
 		}
 		return &schema.UserExternalLoginResp{BindingKey: bindingKey}, nil
+	}
+
+	// check whether site allow register or not
+	siteInfo, err := us.siteInfoCommonService.GetSiteLogin(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if !checker.EmailInAllowEmailDomain(externalUserInfo.Email, siteInfo.AllowEmailDomains) {
+		log.Debugf("email domain not allowed: %s", externalUserInfo.Email)
+		return &schema.UserExternalLoginResp{
+			ErrTitle: translator.Tr(handler.GetLangByCtx(ctx), reason.UserAccessDenied),
+			ErrMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.EmailIllegalDomainError),
+		}, nil
 	}
 
 	oldUserInfo, exist, err := us.userRepo.GetByEmail(ctx, externalUserInfo.Email)
