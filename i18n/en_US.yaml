@@ -1086,14 +1086,6 @@ ui:
     accepted: Accepted
     answered: answered
     asked: asked
-    rank_type:
-      upvote: upvote
-      upvoted: upvoted
-      downvote: downvote
-      downvoted: downvoted
-      edit: edit
-      accept: accept
-      accepted: accepted
     downvoted: downvoted
     mod_short: Mod
     mod_long: Moderators
