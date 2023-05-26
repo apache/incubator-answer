@@ -101,19 +101,18 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 		}
 
 		cfg, err := as.configService.GetConfigByID(ctx, act.ActivityType)
-		if err == nil {
-			log.Error(err)
+		if err != nil {
+			log.Errorf("fail to get config by id: %d, err: %v, act id is: %s", act.ActivityType, err, act.ID)
 		} else {
-			item.ActivityType = cfg.Key
-		}
-		// database save activity type is number, change to activity type string is like "question.asked".
-		// so we need to cut the front part of '.', only need string like 'asked'
-		_, item.ActivityType, _ = strings.Cut(cfg.Key, ".")
-		// format activity type string to show
-		if isHidden, formattedActivityType := formatActivity(item.ActivityType); isHidden {
-			continue
-		} else {
-			item.ActivityType = formattedActivityType
+			// database save activity type is number, change to activity type string is like "question.asked".
+			// so we need to cut the front part of '.', only need string like 'asked'
+			_, item.ActivityType, _ = strings.Cut(cfg.Key, ".")
+			// format activity type string to show
+			if isHidden, formattedActivityType := formatActivity(item.ActivityType); isHidden {
+				continue
+			} else {
+				item.ActivityType = formattedActivityType
+			}
 		}
 
 		// if activity is down vote, only admin can see who does it.

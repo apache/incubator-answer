@@ -51,7 +51,7 @@ func (ar *ActivityRepo) GetActivityTypeByObjID(ctx context.Context, objectID str
 	if err != nil {
 		return
 	}
-	rank = cfg.GetIntValue()
+	activityType, rank = cfg.ID, cfg.GetIntValue()
 	hasRank = 0
 	if rank != 0 {
 		hasRank = 1

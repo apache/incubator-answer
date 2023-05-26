@@ -2,13 +2,12 @@ package activity
 
 import (
 	"context"
-	"fmt"
 
-	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/activity"
+	"github.com/answerdev/answer/internal/service/activity_type"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -49,19 +48,12 @@ func (ar *activityRepo) GetObjectAllActivity(ctx context.Context, objectID strin
 
 func (ar *activityRepo) getAllActivityType(ctx context.Context) (activityTypes []int) {
 	var activityTypeNotShown []int
-	for _, obj := range []string{constant.AnswerObjectType, constant.QuestionObjectType, constant.CommentObjectType} {
-		for _, act := range []string{
-			constant.ActVotedDown,
-			constant.ActVotedUp,
-			constant.ActVoteDown,
-			constant.ActVoteUp,
-		} {
-			id, err := ar.configService.GetIDByKey(ctx, fmt.Sprintf("%s.%s", obj, act))
-			if err != nil {
-				log.Error(err)
-			} else {
-				activityTypeNotShown = append(activityTypeNotShown, id)
-			}
+	for _, key := range activity_type.VoteActivityTypeList {
+		id, err := ar.configService.GetIDByKey(ctx, key)
+		if err != nil {
+			log.Errorf("get config id by key [%s] error: %v", key, err)
+		} else {
+			activityTypeNotShown = append(activityTypeNotShown, id)
 		}
 	}
 	return activityTypeNotShown

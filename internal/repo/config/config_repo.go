@@ -42,7 +42,7 @@ func (cr configRepo) GetConfigByID(ctx context.Context, id int) (c *entity.Confi
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.ObjectNotFound)
+		return nil, fmt.Errorf("config not found by id: %d", id)
 	}
 
 	// update cache
@@ -68,7 +68,7 @@ func (cr configRepo) GetConfigByKey(ctx context.Context, key string) (c *entity.
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.ObjectNotFound)
+		return nil, fmt.Errorf("config not found by key: %s", key)
 	}
 
 	// update cache

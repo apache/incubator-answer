@@ -8,6 +8,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 // VoteRepo activity repository
@@ -29,10 +30,12 @@ func (vr *VoteRepo) GetVoteStatus(ctx context.Context, objectID, userID string) 
 		at := &entity.Activity{}
 		activityType, _, _, err := vr.activityRepo.GetActivityTypeByObjID(ctx, objectID, action)
 		if err != nil {
+			log.Error(err)
 			return ""
 		}
 		has, err := vr.data.DB.Context(ctx).Where("object_id =? AND cancelled=0 AND activity_type=? AND user_id=?", objectID, activityType, userID).Get(at)
 		if err != nil {
+			log.Error(err)
 			return ""
 		}
 		if has {

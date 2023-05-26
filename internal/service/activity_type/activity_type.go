@@ -3,46 +3,54 @@ package activity_type
 const (
 	QuestionVoteUp    = "question.vote_up"
 	QuestionVoteDown  = "question.vote_down"
-	AnswerVoteUp      = "answer.vote_up"
-	AnswerVoteDown    = "answer.vote_down"
-	CommentVoteUp     = "comment.vote_up"
-	CommentVoteDown   = "comment.vote_down"
-	AnswerAccepted    = "answer.accepted"
-	AnswerAccept      = "answer.accept"
 	QuestionVotedUp   = "question.voted_up"
 	QuestionVotedDown = "question.voted_down"
+	AnswerVoteUp      = "answer.vote_up"
+	AnswerVoteDown    = "answer.vote_down"
 	AnswerVotedUp     = "answer.voted_up"
 	AnswerVotedDown   = "answer.voted_down"
+	AnswerAccepted    = "answer.accepted"
+	AnswerAccept      = "answer.accept"
+	CommentVoteUp     = "comment.vote_up"
 )
 
 var (
 	ActivityTypeList = []string{
 		QuestionVoteUp,
 		QuestionVoteDown,
-		AnswerVoteUp,
-		AnswerVoteDown,
-		CommentVoteUp,
-		CommentVoteDown,
-		AnswerAccepted,
-		AnswerAccept,
 		QuestionVotedUp,
 		QuestionVotedDown,
+		AnswerVoteUp,
+		AnswerVoteDown,
 		AnswerVotedUp,
 		AnswerVotedDown,
+		AnswerAccepted,
+		AnswerAccept,
+		CommentVoteUp,
+	}
+	VoteActivityTypeList = []string{
+		QuestionVoteUp,
+		QuestionVoteDown,
+		QuestionVotedUp,
+		QuestionVotedDown,
+		AnswerVoteUp,
+		AnswerVoteDown,
+		AnswerVotedUp,
+		AnswerVotedDown,
+		CommentVoteUp,
 	}
 	activityTypeFlagMapping = map[string]string{
 		QuestionVoteUp:    "upvote",
 		QuestionVoteDown:  "downvote",
-		AnswerVoteUp:      "upvote",
-		AnswerVoteDown:    "downvote",
-		CommentVoteUp:     "upvote",
-		CommentVoteDown:   "downvote",
-		AnswerAccepted:    "accepted",
-		AnswerAccept:      "accept",
 		QuestionVotedUp:   "upvoted",
 		QuestionVotedDown: "downvoted",
+		AnswerVoteUp:      "upvote",
+		AnswerVoteDown:    "downvote",
 		AnswerVotedUp:     "upvoted",
 		AnswerVotedDown:   "downvoted",
+		AnswerAccepted:    "accepted",
+		AnswerAccept:      "accept",
+		CommentVoteUp:     "upvote",
 	}
 )
 

@@ -111,7 +111,7 @@ func (ar *FollowRepo) GetFollowIDs(ctx context.Context, userID, objectKey string
 
 // IsFollowed check user if follow object or not
 func (ar *FollowRepo) IsFollowed(ctx context.Context, userID, objectID string) (bool, error) {
-	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(context.TODO(), objectID, "follow")
+	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(ctx, objectID, "follow")
 	if err != nil {
 		return false, err
 	}
