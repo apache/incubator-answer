@@ -9,7 +9,7 @@ toastPortal.style.top = '90px';
 toastPortal.style.left = '0';
 toastPortal.style.right = '0';
 toastPortal.style.margin = 'auto';
-toastPortal.style.zIndex = '5';
+toastPortal.style.zIndex = '1001';
 
 const setPortalPosition = () => {
   const header = document.querySelector('#header');
