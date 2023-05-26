@@ -323,7 +323,7 @@ func (ar *answerRepo) AdminSearchList(ctx context.Context, search *entity.AdminA
 
 	offset := search.Page * search.PageSize
 	session.
-		OrderBy("a.updated_at desc").
+		OrderBy("a.created_at desc").
 		Limit(search.PageSize, offset)
 	count, err = session.FindAndCount(&rows)
 	if err != nil {
