@@ -230,8 +230,8 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	id := ctx.Param("id")
 	title := ctx.Param("title")
 	answerid := ctx.Param("answerid")
-
-	if id == "ask" {
+	if checker.IsQuestionsIgnorePath(id) {
+		// if id == "ask" {
 		file, err := ui.Build.ReadFile("build/index.html")
 		if err != nil {
 			log.Error(err)
