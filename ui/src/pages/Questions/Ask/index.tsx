@@ -322,7 +322,7 @@ const Ask = () => {
     <div className="pt-4 mb-5">
       <h3 className="mb-4">{isEdit ? t('edit_title') : t('title')}</h3>
       <Row>
-        <Col className="flex-auto">
+        <Col className="page-main flex-auto">
           <Form noValidate onSubmit={handleSubmit}>
             {isEdit && (
               <Form.Group controlId="revision" className="mb-3">
