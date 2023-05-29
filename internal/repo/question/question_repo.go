@@ -221,7 +221,7 @@ func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err 
 
 func (qr *questionRepo) GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error) {
 	questionList := make([]*entity.Question, 0)
-	count, err = qr.data.DB.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).And("user_id = ?", userID).Count(&questionList)
+	count, err = qr.data.DB.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).And("question.user_id = ?", userID).FindAndCount(&questionList)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
