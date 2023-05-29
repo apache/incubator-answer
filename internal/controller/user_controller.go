@@ -55,7 +55,7 @@ func NewUserController(
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody{data=schema.GetUserToSetShowResp}
+// @Success 200 {object} handler.RespBody{data=schema.GetCurrentLoginUserInfoResp}
 // @Router /answer/api/v1/user/info [get]
 func (uc *UserController) GetUserInfoByUserID(ctx *gin.Context) {
 	token := middleware.ExtractToken(ctx)
@@ -102,7 +102,7 @@ func (uc *UserController) GetOtherUserInfoByUsername(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body schema.UserEmailLogin true "UserEmailLogin"
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Success 200 {object} handler.RespBody{data=schema.UserLoginResp}
 // @Router /answer/api/v1/user/login/email [post]
 func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 	req := &schema.UserEmailLogin{}
@@ -215,7 +215,7 @@ func (uc *UserController) UserLogout(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body schema.UserRegisterReq true "UserRegisterReq"
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Success 200 {object} handler.RespBody{data=schema.UserLoginResp}
 // @Router /answer/api/v1/user/register/email [post]
 func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 	// check whether site allow register or not
@@ -267,7 +267,7 @@ func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param code query string true "code" default()
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Success 200 {object} handler.RespBody{data=schema.UserLoginResp}
 // @Router /answer/api/v1/user/email/verification [post]
 func (uc *UserController) UserVerifyEmail(ctx *gin.Context) {
 	req := &schema.UserVerifyEmailReq{}
@@ -464,7 +464,7 @@ func (uc *UserController) ActionRecord(ctx *gin.Context) {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Success 200 {object} handler.RespBody{data=schema.UserLoginResp}
 // @Router /answer/api/v1/user/register/captcha [get]
 func (uc *UserController) UserRegisterCaptcha(ctx *gin.Context) {
 	resp, err := uc.actionService.UserRegisterCaptcha(ctx)

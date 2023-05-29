@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
@@ -130,7 +131,7 @@ func (us *UserCenterLoginService) registerNewUser(ctx context.Context, provider 
 
 	if len(basicUserInfo.Avatar) > 0 {
 		avatarInfo := &schema.AvatarInfo{
-			Type:   schema.AvatarTypeCustom,
+			Type:   constant.AvatarTypeCustom,
 			Custom: basicUserInfo.Avatar,
 		}
 		avatar, _ := json.Marshal(avatarInfo)

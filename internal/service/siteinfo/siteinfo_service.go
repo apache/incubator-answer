@@ -36,11 +36,11 @@ func NewSiteInfoService(
 	tagCommonService *tagcommon.TagCommonService,
 	configService *config.ConfigService,
 ) *SiteInfoService {
-	usersSiteInfo, _ := siteInfoCommonService.GetSiteUsers(context.Background())
-	if usersSiteInfo != nil {
-		constant.DefaultAvatar = usersSiteInfo.DefaultAvatar
-		constant.DefaultGravatarBaseURL = usersSiteInfo.GravatarBaseURL
-	}
+	//usersSiteInfo, _ := siteInfoCommonService.GetSiteUsers(context.Background())
+	//if usersSiteInfo != nil {
+	//	constant.DefaultAvatar = usersSiteInfo.DefaultAvatar
+	//	constant.DefaultGravatarBaseURL = usersSiteInfo.GravatarBaseURL
+	//}
 	generalSiteInfo, _ := siteInfoCommonService.GetSiteGeneral(context.Background())
 	if generalSiteInfo != nil {
 		constant.DefaultSiteURL = generalSiteInfo.SiteUrl
@@ -227,12 +227,7 @@ func (s *SiteInfoService) SaveSiteUsers(ctx context.Context, req *schema.SiteUse
 		Content: string(content),
 		Status:  1,
 	}
-	err = s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeUsers, data)
-	if err == nil {
-		constant.DefaultAvatar = req.DefaultAvatar
-		constant.DefaultGravatarBaseURL = req.GravatarBaseURL
-	}
-	return err
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeUsers, data)
 }
 
 // GetSMTPConfig get smtp config

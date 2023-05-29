@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
@@ -164,7 +165,7 @@ func (us *UserExternalLoginService) registerNewUser(ctx context.Context,
 
 	if len(externalUserInfo.Avatar) > 0 {
 		avatarInfo := &schema.AvatarInfo{
-			Type:   schema.AvatarTypeCustom,
+			Type:   constant.AvatarTypeCustom,
 			Custom: externalUserInfo.Avatar,
 		}
 		avatar, _ := json.Marshal(avatarInfo)
@@ -222,9 +223,9 @@ func (us *UserExternalLoginService) activeUser(ctx context.Context, oldUserInfo 
 	}
 
 	// try to update user avatar
-	if len(externalUserInfo.Avatar) > 0 && len(schema.FormatAvatarInfo(oldUserInfo.Avatar, oldUserInfo.EMail)) == 0 {
+	if len(externalUserInfo.Avatar) > 0 {
 		avatarInfo := &schema.AvatarInfo{
-			Type:   schema.AvatarTypeCustom,
+			Type:   constant.AvatarTypeCustom,
 			Custom: externalUserInfo.Avatar,
 		}
 		avatar, _ := json.Marshal(avatarInfo)

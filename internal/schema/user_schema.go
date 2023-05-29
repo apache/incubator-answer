@@ -8,7 +8,6 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/converter"
-	"github.com/answerdev/answer/pkg/gravatar"
 	"github.com/jinzhu/copier"
 )
 
@@ -20,8 +19,8 @@ type UserVerifyEmailReq struct {
 	Content string `json:"-"`
 }
 
-// GetUserResp get user response
-type GetUserResp struct {
+// UserLoginResp get user response
+type UserLoginResp struct {
 	// user id
 	ID string `json:"id"`
 	// create time
@@ -74,80 +73,25 @@ type GetUserResp struct {
 	HavePassword bool `json:"have_password"`
 }
 
-func (r *GetUserResp) GetFromUserEntity(userInfo *entity.User) {
+func (r *UserLoginResp) ConvertFromUserEntity(userInfo *entity.User) {
 	_ = copier.Copy(r, userInfo)
-	r.Avatar = FormatAvatarInfo(userInfo.Avatar, userInfo.EMail)
 	r.CreatedAt = userInfo.CreatedAt.Unix()
 	r.LastLoginDate = userInfo.LastLoginDate.Unix()
-	statusShow, ok := UserStatusShow[userInfo.Status]
-	if ok {
-		r.Status = statusShow
-	}
+	r.Status = UserStatusShow[userInfo.Status]
 	r.HavePassword = len(userInfo.Pass) > 0
 }
 
-type GetUserToSetShowResp struct {
-	*GetUserResp
+type GetCurrentLoginUserInfoResp struct {
+	*UserLoginResp
 	Avatar       *AvatarInfo `json:"avatar"`
 	HavePassword bool        `json:"have_password"`
 }
 
-func (r *GetUserToSetShowResp) GetFromUserEntity(userInfo *entity.User) {
+func (r *GetCurrentLoginUserInfoResp) ConvertFromUserEntity(userInfo *entity.User) {
 	_ = copier.Copy(r, userInfo)
 	r.CreatedAt = userInfo.CreatedAt.Unix()
 	r.LastLoginDate = userInfo.LastLoginDate.Unix()
-	statusShow, ok := UserStatusShow[userInfo.Status]
-	if ok {
-		r.Status = statusShow
-	}
-
-	avatarInfo := &AvatarInfo{}
-	_ = json.Unmarshal([]byte(userInfo.Avatar), avatarInfo)
-	if len(avatarInfo.Type) == 0 && constant.DefaultAvatar == AvatarTypeGravatar {
-		avatarInfo.Type = AvatarTypeGravatar
-		avatarInfo.Gravatar = gravatar.GetAvatarURL(userInfo.EMail)
-	} else if avatarInfo.Type == AvatarTypeGravatar {
-		avatarInfo.Gravatar = gravatar.GetAvatarURL(userInfo.EMail)
-	}
-	r.Avatar = avatarInfo
-}
-
-const (
-	AvatarTypeDefault  = "default"
-	AvatarTypeGravatar = "gravatar"
-	AvatarTypeCustom   = "custom"
-)
-
-func FormatAvatarInfo(avatarJson, email string) (res string) {
-	defer func() {
-		if constant.DefaultAvatar == AvatarTypeGravatar && len(res) == 0 {
-			res = gravatar.GetAvatarURL(email)
-		}
-	}()
-
-	if avatarJson == "" {
-		return ""
-	}
-	avatarInfo := &AvatarInfo{}
-	err := json.Unmarshal([]byte(avatarJson), avatarInfo)
-	if err != nil {
-		return ""
-	}
-	switch avatarInfo.Type {
-	case AvatarTypeGravatar:
-		return gravatar.GetAvatarURL(email)
-	case AvatarTypeCustom:
-		return avatarInfo.Custom
-	default:
-		return ""
-	}
-}
-
-func CustomAvatar(url string) *AvatarInfo {
-	return &AvatarInfo{
-		Type:   AvatarTypeCustom,
-		Custom: url,
-	}
+	r.Status = UserStatusShow[userInfo.Status]
 }
 
 // GetUserStatusResp get user status info
@@ -193,11 +137,8 @@ type GetOtherUserInfoByUsernameResp struct {
 	StatusMsg string `json:"status_msg,omitempty"`
 }
 
-func (r *GetOtherUserInfoByUsernameResp) GetFromUserEntity(userInfo *entity.User) {
+func (r *GetOtherUserInfoByUsernameResp) ConvertFromUserEntity(userInfo *entity.User) {
 	_ = copier.Copy(r, userInfo)
-	Avatar := FormatAvatarInfo(userInfo.Avatar, userInfo.EMail)
-	r.Avatar = Avatar
-
 	r.CreatedAt = userInfo.CreatedAt.Unix()
 	r.LastLoginDate = userInfo.LastLoginDate.Unix()
 	statusShow, ok := UserStatusShow[userInfo.Status]
@@ -323,6 +264,24 @@ type AvatarInfo struct {
 func (a *AvatarInfo) ToJsonString() string {
 	data, _ := json.Marshal(a)
 	return string(data)
+}
+
+func (a *AvatarInfo) GetURL() string {
+	switch a.Type {
+	case constant.AvatarTypeGravatar:
+		return a.Gravatar
+	case constant.AvatarTypeCustom:
+		return a.Custom
+	default:
+		return ""
+	}
+}
+
+func CustomAvatar(url string) *AvatarInfo {
+	return &AvatarInfo{
+		Type:   constant.AvatarTypeCustom,
+		Custom: url,
+	}
 }
 
 func (req *UpdateInfoRequest) Check() (errFields []*validator.FormErrorField, err error) {
