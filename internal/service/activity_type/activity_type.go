@@ -39,27 +39,17 @@ var (
 		AnswerVotedDown,
 		CommentVoteUp,
 	}
-	activityTypeFlagMapping = map[string]string{
-		QuestionVoteUp:    "upvote",
-		QuestionVoteDown:  "downvote",
-		QuestionVotedUp:   "upvoted",
-		QuestionVotedDown: "downvoted",
-		AnswerVoteUp:      "upvote",
-		AnswerVoteDown:    "downvote",
-		AnswerVotedUp:     "upvoted",
-		AnswerVotedDown:   "downvoted",
-		AnswerAccepted:    "accepted",
-		AnswerAccept:      "accept",
-		CommentVoteUp:     "upvote",
+	ActivityTypeFlagMapping = map[string]string{
+		QuestionVoteUp:    "action_activity_type.upvote",
+		QuestionVoteDown:  "action_activity_type.downvote",
+		QuestionVotedUp:   "action_activity_type.upvoted",
+		QuestionVotedDown: "action_activity_type.downvoted",
+		AnswerVoteUp:      "action_activity_type.upvote",
+		AnswerVoteDown:    "action_activity_type.downvote",
+		AnswerVotedUp:     "action_activity_type.upvoted",
+		AnswerVotedDown:   "action_activity_type.downvoted",
+		AnswerAccepted:    "action_activity_type.accepted",
+		AnswerAccept:      "action_activity_type.accept",
+		CommentVoteUp:     "action_activity_type.upvote",
 	}
 )
-
-func Format(activityTypeID int) string {
-	return ""
-	//activityTypeStr := config_common.ID2KeyMapping[activityTypeID]
-	//activityTypeFlag := activityTypeFlagMapping[activityTypeStr]
-	//if len(activityTypeFlag) == 0 {
-	//	return "edit" // to edit
-	//}
-	//return activityTypeFlag // todo i18n support
-}

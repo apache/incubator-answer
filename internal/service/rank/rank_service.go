@@ -4,8 +4,10 @@ import (
 	"context"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity_type"
@@ -234,8 +236,8 @@ func (rs *RankService) checkUserRank(ctx context.Context, userID string, userRan
 	return true, requireRank
 }
 
-// GetRankPersonalWithPage get personal comment list page
-func (rs *RankService) GetRankPersonalWithPage(ctx context.Context, req *schema.GetRankPersonalWithPageReq) (
+// GetRankPersonalPage get personal comment list page
+func (rs *RankService) GetRankPersonalPage(ctx context.Context, req *schema.GetRankPersonalWithPageReq) (
 	pageModel *pager.PageModel, err error) {
 	if plugin.RankAgentEnabled() {
 		return pager.NewPageModel(0, []string{}), nil
@@ -258,32 +260,47 @@ func (rs *RankService) GetRankPersonalWithPage(ctx context.Context, req *schema.
 	if err != nil {
 		return nil, err
 	}
-	resp := make([]*schema.GetRankPersonalWithPageResp, 0)
+
+	resp := rs.decorateRankPersonalPageResp(ctx, userRankPage)
+	return pager.NewPageModel(total, resp), nil
+}
+
+func (rs *RankService) decorateRankPersonalPageResp(
+	ctx context.Context, userRankPage []*entity.Activity) []*schema.GetRankPersonalPageResp {
+	resp := make([]*schema.GetRankPersonalPageResp, 0)
+	lang := handler.GetLangByCtx(ctx)
+
 	for _, userRankInfo := range userRankPage {
 		if len(userRankInfo.ObjectID) == 0 || userRankInfo.ObjectID == "0" {
 			continue
 		}
-		commentResp := &schema.GetRankPersonalWithPageResp{
+		objInfo, err := rs.objectInfoService.GetInfo(ctx, userRankInfo.ObjectID)
+		if err != nil {
+			log.Error(err)
+			continue
+		}
+
+		commentResp := &schema.GetRankPersonalPageResp{
 			CreatedAt:  userRankInfo.CreatedAt.Unix(),
 			ObjectID:   userRankInfo.ObjectID,
 			Reputation: userRankInfo.Rank,
 		}
-		objInfo, err := rs.objectInfoService.GetInfo(ctx, userRankInfo.ObjectID)
+		cfg, err := rs.configService.GetConfigByID(ctx, userRankInfo.ActivityType)
 		if err != nil {
 			log.Error(err)
-		} else {
-			commentResp.RankType = activity_type.Format(userRankInfo.ActivityType)
-			commentResp.ObjectType = objInfo.ObjectType
-			commentResp.Title = objInfo.Title
-			commentResp.UrlTitle = htmltext.UrlTitle(objInfo.Title)
-			commentResp.Content = objInfo.Content
-			if objInfo.QuestionStatus == entity.QuestionStatusDeleted {
-				commentResp.Title = "Deleted question"
-			}
-			commentResp.QuestionID = objInfo.QuestionID
-			commentResp.AnswerID = objInfo.AnswerID
+			continue
 		}
+		commentResp.RankType = translator.Tr(lang, activity_type.ActivityTypeFlagMapping[cfg.Key])
+		commentResp.ObjectType = objInfo.ObjectType
+		commentResp.Title = objInfo.Title
+		commentResp.UrlTitle = htmltext.UrlTitle(objInfo.Title)
+		commentResp.Content = objInfo.Content
+		if objInfo.QuestionStatus == entity.QuestionStatusDeleted {
+			commentResp.Title = translator.Tr(lang, constant.DeletedQuestionTitleTrKey)
+		}
+		commentResp.QuestionID = objInfo.QuestionID
+		commentResp.AnswerID = objInfo.AnswerID
 		resp = append(resp, commentResp)
 	}
-	return pager.NewPageModel(total, resp), nil
+	return resp
 }

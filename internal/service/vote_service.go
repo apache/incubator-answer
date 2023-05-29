@@ -3,7 +3,10 @@ package service
 import (
 	"context"
 
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/pager"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/activity_type"
 	"github.com/answerdev/answer/internal/service/comment_common"
@@ -151,23 +154,22 @@ func (vs *VoteService) GetObjectUserID(ctx context.Context, objectID string) (us
 
 // ListUserVotes list user's votes
 func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWithPageReq) (model *pager.PageModel, err error) {
-	var (
-		resp     []schema.GetVoteWithPageResp
-		typeKeys = []string{
-			"question.vote_up",
-			"question.vote_down",
-			"answer.vote_up",
-			"answer.vote_down",
-		}
-		activityTypes []int
-	)
+	typeKeys := []string{
+		activity_type.QuestionVoteUp,
+		activity_type.QuestionVoteDown,
+		activity_type.AnswerVoteUp,
+		activity_type.AnswerVoteDown,
+	}
+	activityTypes := make([]int, 0)
+	activityTypeMapping := make(map[int]string, 0)
 
 	for _, typeKey := range typeKeys {
 		cfg, err := vs.configService.GetConfigByKey(ctx, typeKey)
 		if err != nil {
 			continue
 		}
-		activityTypes = append(activityTypes, cfg.GetIntValue())
+		activityTypes = append(activityTypes, cfg.ID)
+		activityTypeMapping[cfg.ID] = typeKey
 	}
 
 	voteList, total, err := vs.voteRepo.ListUserVotes(ctx, req.UserID, req, activityTypes)
@@ -175,15 +177,17 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 		return
 	}
 
+	lang := handler.GetLangByCtx(ctx)
+
+	resp := make([]*schema.GetVoteWithPageResp, 0)
 	for _, voteInfo := range voteList {
-		var objInfo *schema.SimpleObjectInfo
-		objInfo, err = vs.objectService.GetInfo(ctx, voteInfo.ObjectID)
+		objInfo, err := vs.objectService.GetInfo(ctx, voteInfo.ObjectID)
 		if err != nil {
 			log.Error(err)
 			continue
 		}
 
-		item := schema.GetVoteWithPageResp{
+		item := &schema.GetVoteWithPageResp{
 			CreatedAt:  voteInfo.CreatedAt.Unix(),
 			ObjectID:   objInfo.ObjectID,
 			QuestionID: objInfo.QuestionID,
@@ -192,13 +196,13 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 			Title:      objInfo.Title,
 			UrlTitle:   htmltext.UrlTitle(objInfo.Title),
 			Content:    objInfo.Content,
-			VoteType:   activity_type.Format(voteInfo.ActivityType),
 		}
+		item.VoteType = translator.Tr(lang,
+			activity_type.ActivityTypeFlagMapping[activityTypeMapping[voteInfo.ActivityType]])
 		if objInfo.QuestionStatus == entity.QuestionStatusDeleted {
-			item.Title = "Deleted question"
+			item.Title = translator.Tr(lang, constant.DeletedQuestionTitleTrKey)
 		}
 		resp = append(resp, item)
 	}
-
 	return pager.NewPageModel(total, resp), err
 }
