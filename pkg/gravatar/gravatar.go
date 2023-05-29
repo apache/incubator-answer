@@ -5,15 +5,13 @@ import (
 	"encoding/hex"
 	"fmt"
 	"net/url"
-
-	"github.com/answerdev/answer/internal/base/constant"
 )
 
 // GetAvatarURL get avatar url from gravatar by email
-func GetAvatarURL(email string) string {
+func GetAvatarURL(baseURL, email string) string {
 	h := md5.New()
 	h.Write([]byte(email))
-	return constant.DefaultGravatarBaseURL + hex.EncodeToString(h.Sum(nil))
+	return baseURL + hex.EncodeToString(h.Sum(nil))
 }
 
 // Resize resize avatar by pixel
