@@ -14,6 +14,7 @@ import (
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/obj"
@@ -421,7 +422,8 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
-	exist := constant.ExistInPathIgnore(username)
+
+	exist := checker.IsUsersIgnorePath(username)
 	if exist {
 		file, err := ui.Build.ReadFile("build/index.html")
 		if err != nil {
