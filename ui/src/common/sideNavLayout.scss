@@ -1,6 +1,6 @@
-// .flex-auto {
-//   max-width: 70%;
-// }
+.page-main {
+  max-width: 70%;
+}
 .page-right-side {
   flex: none;
   width: 30%;
@@ -8,9 +8,9 @@
 
 // lg
 @media screen and (max-width: 1199.9px) {
-  // .flex-auto {
-  //   max-width: 100%;
-  // }
+  .page-main {
+    max-width: 100%;
+  }
   .page-right-side {
     width: 100%;
   }

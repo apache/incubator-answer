@@ -125,7 +125,7 @@ const Index: FC = () => {
   return (
     <Row className="pt-4 mb-5">
       <h3 className="mb-4">{t('review')}</h3>
-      <Col className="flex-auto">
+      <Col className="page-main flex-auto">
         {!noTasks && ro && (
           <>
             <Alert variant="secondary">

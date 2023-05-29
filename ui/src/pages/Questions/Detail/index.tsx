@@ -212,7 +212,7 @@ const Index = () => {
 
   return (
     <Row className="questionDetailPage pt-4 mb-5">
-      <Col className="flex-auto">
+      <Col className="page-main flex-auto">
         {question?.operation?.level && <Alert data={question.operation} />}
         {isLoading ? (
           <ContentLoader />

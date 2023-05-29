@@ -52,7 +52,7 @@ const Questions: FC = () => {
   usePageTags({ title: pageTitle, subtitle: slogan });
   return (
     <Row className="pt-4 mb-5">
-      <Col className="flex-auto">
+      <Col className="page-main flex-auto">
         <QuestionList
           source="questions"
           data={listData}

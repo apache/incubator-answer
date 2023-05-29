@@ -88,7 +88,7 @@ const Notifications = () => {
   });
   return (
     <Row className="pt-4 mb-5">
-      <Col className="flex-auto">
+      <Col className="page-main flex-auto">
         <h3 className="mb-4">{t('title')}</h3>
         <div className="d-flex justify-content-between mb-3">
           <ButtonGroup size="sm">
