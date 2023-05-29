@@ -26,7 +26,7 @@ type SiteInfoService struct {
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 	emailService          *export.EmailService
 	tagCommonService      *tagcommon.TagCommonService
-	configRepo            config.ConfigRepo
+	configService         *config.ConfigService
 }
 
 func NewSiteInfoService(
@@ -34,7 +34,7 @@ func NewSiteInfoService(
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 	emailService *export.EmailService,
 	tagCommonService *tagcommon.TagCommonService,
-	configRepo config.ConfigRepo,
+	configService *config.ConfigService,
 ) *SiteInfoService {
 	usersSiteInfo, _ := siteInfoCommonService.GetSiteUsers(context.Background())
 	if usersSiteInfo != nil {
@@ -51,7 +51,7 @@ func NewSiteInfoService(
 		siteInfoCommonService: siteInfoCommonService,
 		emailService:          emailService,
 		tagCommonService:      tagCommonService,
-		configRepo:            configRepo,
+		configService:         configService,
 	}
 }
 
@@ -239,7 +239,7 @@ func (s *SiteInfoService) SaveSiteUsers(ctx context.Context, req *schema.SiteUse
 func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
 	resp *schema.GetSMTPConfigResp, err error,
 ) {
-	emailConfig, err := s.emailService.GetEmailConfig()
+	emailConfig, err := s.emailService.GetEmailConfig(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -250,13 +250,13 @@ func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
 
 // UpdateSMTPConfig get smtp config
 func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.UpdateSMTPConfigReq) (err error) {
-	oldEmailConfig, err := s.emailService.GetEmailConfig()
+	oldEmailConfig, err := s.emailService.GetEmailConfig(ctx)
 	if err != nil {
 		return err
 	}
 	_ = copier.Copy(oldEmailConfig, req)
 
-	err = s.emailService.SetEmailConfig(oldEmailConfig)
+	err = s.emailService.SetEmailConfig(ctx, oldEmailConfig)
 	if err != nil {
 		return err
 	}
@@ -372,7 +372,7 @@ func (s *SiteInfoService) UpdatePrivilegesConfig(ctx context.Context, req *schem
 
 	// update privilege in config
 	for _, privilege := range chooseOption.Privileges {
-		err = s.configRepo.SetConfig(privilege.Key, fmt.Sprintf("%d", privilege.Value))
+		err = s.configService.UpdateConfig(ctx, privilege.Key, fmt.Sprintf("%d", privilege.Value))
 		if err != nil {
 			return err
 		}

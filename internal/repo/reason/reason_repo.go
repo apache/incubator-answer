@@ -13,12 +13,12 @@ import (
 )
 
 type reasonRepo struct {
-	configRepo config.ConfigRepo
+	configService *config.ConfigService
 }
 
-func NewReasonRepo(configRepo config.ConfigRepo) reason_common.ReasonRepo {
+func NewReasonRepo(configService *config.ConfigService) reason_common.ReasonRepo {
 	return &reasonRepo{
-		configRepo: configRepo,
+		configService: configService,
 	}
 }
 
@@ -27,31 +27,25 @@ func (rr *reasonRepo) ListReasons(ctx context.Context, objectType, action string
 	reasonAction := fmt.Sprintf("%s.%s.reasons", objectType, action)
 	resp = make([]*schema.ReasonItem, 0)
 
-	reasonKeys, err := rr.configRepo.GetArrayString(reasonAction)
+	reasonKeys, err := rr.configService.GetArrayStringValue(ctx, reasonAction)
 	if err != nil {
 		return nil, err
 	}
 	for _, reasonKey := range reasonKeys {
-		cfgValue, err := rr.configRepo.GetString(reasonKey)
+		cfg, err := rr.configService.GetConfigByKey(ctx, reasonKey)
 		if err != nil {
 			log.Error(err)
 			continue
 		}
 
 		reason := &schema.ReasonItem{}
-		err = json.Unmarshal([]byte(cfgValue), reason)
+		err = json.Unmarshal(cfg.GetByteValue(), reason)
 		if err != nil {
 			log.Error(err)
 			continue
 		}
 		reason.Translate(reasonKey, lang)
-
-		reason.ReasonType, err = rr.configRepo.GetConfigType(reasonKey)
-		if err != nil {
-			log.Error(err)
-			continue
-		}
-
+		reason.ReasonType = cfg.ID
 		resp = append(resp, reason)
 	}
 	return resp, nil

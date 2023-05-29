@@ -359,6 +359,8 @@ backend:
         other: answered
       modified:
         other: modified
+    deleted_title:
+      other: Deleted question
   notification:
     action:
       update_question:
@@ -433,6 +435,19 @@ backend:
         other: "[{{.SiteName}}] Test Email"
       body:
         other: "This is a test email."
+  action_activity_type:
+    upvote:
+      other: upvote
+    upvoted:
+      other: upvoted
+    downvote:
+      other: downvote
+    downvoted:
+      other: downvoted
+    accept:
+      other: accept
+    accepted:
+      other: accepted
 
 # The following fields are used for interface presentation(Front-end)
 ui:

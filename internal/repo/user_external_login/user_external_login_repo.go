@@ -26,7 +26,7 @@ func NewUserExternalLoginRepo(data *data.Data) user_external_login.UserExternalL
 
 // AddUserExternalLogin add external login information
 func (ur *userExternalLoginRepo) AddUserExternalLogin(ctx context.Context, user *entity.UserExternalLogin) (err error) {
-	_, err = ur.data.DB.Insert(user)
+	_, err = ur.data.DB.Context(ctx).Insert(user)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -35,7 +35,7 @@ func (ur *userExternalLoginRepo) AddUserExternalLogin(ctx context.Context, user 
 
 // UpdateInfo update user info
 func (ur *userExternalLoginRepo) UpdateInfo(ctx context.Context, userInfo *entity.UserExternalLogin) (err error) {
-	_, err = ur.data.DB.ID(userInfo.ID).Update(userInfo)
+	_, err = ur.data.DB.Context(ctx).ID(userInfo.ID).Update(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -46,7 +46,7 @@ func (ur *userExternalLoginRepo) UpdateInfo(ctx context.Context, userInfo *entit
 func (ur *userExternalLoginRepo) GetByExternalID(ctx context.Context, provider, externalID string) (
 	userInfo *entity.UserExternalLogin, exist bool, err error) {
 	userInfo = &entity.UserExternalLogin{}
-	exist, err = ur.data.DB.Where("external_id = ?", externalID).Where("provider = ?", provider).Get(userInfo)
+	exist, err = ur.data.DB.Context(ctx).Where("external_id = ?", externalID).Where("provider = ?", provider).Get(userInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -57,7 +57,7 @@ func (ur *userExternalLoginRepo) GetByExternalID(ctx context.Context, provider, 
 func (ur *userExternalLoginRepo) GetUserExternalLoginList(ctx context.Context, userID string) (
 	resp []*entity.UserExternalLogin, err error) {
 	resp = make([]*entity.UserExternalLogin, 0)
-	err = ur.data.DB.Where("user_id = ?", userID).Find(&resp)
+	err = ur.data.DB.Context(ctx).Where("user_id = ?", userID).Find(&resp)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -67,7 +67,7 @@ func (ur *userExternalLoginRepo) GetUserExternalLoginList(ctx context.Context, u
 // DeleteUserExternalLogin delete external user login info
 func (ur *userExternalLoginRepo) DeleteUserExternalLogin(ctx context.Context, userID, externalID string) (err error) {
 	cond := &entity.UserExternalLogin{}
-	_, err = ur.data.DB.Where("user_id = ? AND external_id = ?", userID, externalID).Delete(cond)
+	_, err = ur.data.DB.Context(ctx).Where("user_id = ? AND external_id = ?", userID, externalID).Delete(cond)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

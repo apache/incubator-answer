@@ -21,17 +21,17 @@ type PluginConfigRepo interface {
 
 // PluginCommonService user service
 type PluginCommonService struct {
-	configRepo       config.ConfigRepo
+	configService    *config.ConfigService
 	pluginConfigRepo PluginConfigRepo
 }
 
 // NewPluginCommonService new report service
 func NewPluginCommonService(
 	pluginConfigRepo PluginConfigRepo,
-	configRepo config.ConfigRepo) *PluginCommonService {
+	configService *config.ConfigService) *PluginCommonService {
 
 	// init plugin status
-	pluginStatus, err := configRepo.GetString(constant.PluginStatus)
+	pluginStatus, err := configService.GetStringValue(context.TODO(), constant.PluginStatus)
 	if err != nil {
 		log.Error(err)
 	} else {
@@ -59,7 +59,7 @@ func NewPluginCommonService(
 	}
 
 	return &PluginCommonService{
-		configRepo:       configRepo,
+		configService:    configService,
 		pluginConfigRepo: pluginConfigRepo,
 	}
 }
@@ -70,7 +70,7 @@ func (ps *PluginCommonService) UpdatePluginStatus(ctx context.Context) (err erro
 	if err != nil {
 		return errors.InternalServer(reason.UnknownError).WithError(err)
 	}
-	return ps.configRepo.SetConfig(constant.PluginStatus, string(content))
+	return ps.configService.UpdateConfig(ctx, constant.PluginStatus, string(content))
 }
 
 // UpdatePluginConfig update plugin config

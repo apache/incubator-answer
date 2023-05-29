@@ -190,12 +190,12 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 	countArgs = append(countArgs, argsQ...)
 	countArgs = append(countArgs, argsA...)
 
-	res, err := sr.data.DB.Query(queryArgs...)
+	res, err := sr.data.DB.Context(ctx).Query(queryArgs...)
 	if err != nil {
 		return
 	}
 
-	tr, err := sr.data.DB.Query(countArgs...)
+	tr, err := sr.data.DB.Context(ctx).Query(countArgs...)
 	if len(tr) != 0 {
 		total = converter.StringToInt64(string(tr[0]["total"]))
 	}
@@ -297,12 +297,12 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagID
 	countArgs = append(countArgs, countSQL)
 	countArgs = append(countArgs, args...)
 
-	res, err := sr.data.DB.Query(queryArgs...)
+	res, err := sr.data.DB.Context(ctx).Query(queryArgs...)
 	if err != nil {
 		return
 	}
 
-	tr, err := sr.data.DB.Query(countArgs...)
+	tr, err := sr.data.DB.Context(ctx).Query(countArgs...)
 	if err != nil {
 		return
 	}
@@ -392,12 +392,12 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs 
 	countArgs = append(countArgs, countSQL)
 	countArgs = append(countArgs, args...)
 
-	res, err := sr.data.DB.Query(queryArgs...)
+	res, err := sr.data.DB.Context(ctx).Query(queryArgs...)
 	if err != nil {
 		return
 	}
 
-	tr, err := sr.data.DB.Query(countArgs...)
+	tr, err := sr.data.DB.Context(ctx).Query(countArgs...)
 	if err != nil {
 		return
 	}
@@ -451,7 +451,7 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 		}
 
 		// get tags
-		err = sr.data.DB.
+		err = sr.data.DB.Context(ctx).
 			Select("`display_name`,`slug_name`,`main_tag_slug_name`,`recommend`,`reserved`").
 			Table("tag").
 			Join("INNER", "tag_rel", "tag.id = tag_rel.tag_id").

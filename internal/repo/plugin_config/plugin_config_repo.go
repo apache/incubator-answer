@@ -23,15 +23,15 @@ func NewPluginConfigRepo(data *data.Data) plugin_common.PluginConfigRepo {
 
 func (ur *pluginConfigRepo) SavePluginConfig(ctx context.Context, pluginSlugName, configValue string) (err error) {
 	old := &entity.PluginConfig{PluginSlugName: pluginSlugName}
-	exist, err := ur.data.DB.Get(old)
+	exist, err := ur.data.DB.Context(ctx).Get(old)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	if exist {
 		old.Value = configValue
-		_, err = ur.data.DB.ID(old.ID).Update(old)
+		_, err = ur.data.DB.Context(ctx).ID(old.ID).Update(old)
 	} else {
-		_, err = ur.data.DB.InsertOne(&entity.PluginConfig{PluginSlugName: pluginSlugName, Value: configValue})
+		_, err = ur.data.DB.Context(ctx).InsertOne(&entity.PluginConfig{PluginSlugName: pluginSlugName, Value: configValue})
 	}
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -41,7 +41,7 @@ func (ur *pluginConfigRepo) SavePluginConfig(ctx context.Context, pluginSlugName
 
 func (ur *pluginConfigRepo) GetPluginConfigAll(ctx context.Context) (pluginConfigs []*entity.PluginConfig, err error) {
 	pluginConfigs = make([]*entity.PluginConfig, 0)
-	err = ur.data.DB.Find(&pluginConfigs)
+	err = ur.data.DB.Context(ctx).Find(&pluginConfigs)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

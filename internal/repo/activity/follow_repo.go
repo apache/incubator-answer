@@ -39,12 +39,17 @@ func NewFollowRepo(
 }
 
 func (ar *FollowRepo) Follow(ctx context.Context, objectID, userID string) error {
-	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(ctx, objectID, "follow")
+	objectTypeStr, err := obj.GetObjectTypeStrByObjectID(objectID)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	activityType, err := ar.activityRepo.GetActivityTypeByObjKey(ctx, objectTypeStr, "follow")
 	if err != nil {
 		return err
 	}
 
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
 		var (
 			existsActivity entity.Activity
 			has            bool
@@ -101,12 +106,17 @@ func (ar *FollowRepo) Follow(ctx context.Context, objectID, userID string) error
 }
 
 func (ar *FollowRepo) FollowCancel(ctx context.Context, objectID, userID string) error {
-	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(ctx, objectID, "follow")
+	objectTypeStr, err := obj.GetObjectTypeStrByObjectID(objectID)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	activityType, err := ar.activityRepo.GetActivityTypeByObjKey(ctx, objectTypeStr, "follow")
 	if err != nil {
 		return err
 	}
 
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
 		var (
 			existsActivity entity.Activity
 			has            bool

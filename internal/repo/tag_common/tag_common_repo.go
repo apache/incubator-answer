@@ -34,7 +34,7 @@ func NewTagCommonRepo(
 // GetTagListByIDs get tag list all
 func (tr *tagCommonRepo) GetTagListByIDs(ctx context.Context, ids []string) (tagList []*entity.Tag, err error) {
 	tagList = make([]*entity.Tag, 0)
-	session := tr.data.DB.In("id", ids)
+	session := tr.data.DB.Context(ctx).In("id", ids)
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList)
 	if err != nil {
@@ -46,7 +46,7 @@ func (tr *tagCommonRepo) GetTagListByIDs(ctx context.Context, ids []string) (tag
 // GetTagBySlugName get tag by slug name
 func (tr *tagCommonRepo) GetTagBySlugName(ctx context.Context, slugName string) (tagInfo *entity.Tag, exist bool, err error) {
 	tagInfo = &entity.Tag{}
-	session := tr.data.DB.Where("LOWER(slug_name) = ?", slugName)
+	session := tr.data.DB.Context(ctx).Where("LOWER(slug_name) = ?", slugName)
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	exist, err = session.Get(tagInfo)
 	if err != nil {
@@ -59,7 +59,7 @@ func (tr *tagCommonRepo) GetTagBySlugName(ctx context.Context, slugName string) 
 func (tr *tagCommonRepo) GetTagListByName(ctx context.Context, name string, hasReserved bool) (tagList []*entity.Tag, err error) {
 	tagList = make([]*entity.Tag, 0)
 	cond := &entity.Tag{}
-	session := tr.data.DB.Where("")
+	session := tr.data.DB.Context(ctx).Where("")
 	if name != "" {
 		session.Where("slug_name LIKE LOWER(?) or display_name LIKE ?", name+"%", name+"%")
 	} else {
@@ -78,7 +78,7 @@ func (tr *tagCommonRepo) GetTagListByName(ctx context.Context, name string, hasR
 func (tr *tagCommonRepo) GetRecommendTagList(ctx context.Context) (tagList []*entity.Tag, err error) {
 	tagList = make([]*entity.Tag, 0)
 	cond := &entity.Tag{}
-	session := tr.data.DB.Where("")
+	session := tr.data.DB.Context(ctx).Where("")
 	cond.Recommend = true
 	// session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	session.Asc("slug_name")
@@ -93,7 +93,7 @@ func (tr *tagCommonRepo) GetRecommendTagList(ctx context.Context) (tagList []*en
 func (tr *tagCommonRepo) GetReservedTagList(ctx context.Context) (tagList []*entity.Tag, err error) {
 	tagList = make([]*entity.Tag, 0)
 	cond := &entity.Tag{}
-	session := tr.data.DB.Where("")
+	session := tr.data.DB.Context(ctx).Where("")
 	cond.Reserved = true
 	// session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	session.Asc("slug_name")
@@ -109,7 +109,7 @@ func (tr *tagCommonRepo) GetReservedTagList(ctx context.Context) (tagList []*ent
 func (tr *tagCommonRepo) GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error) {
 
 	tagList = make([]*entity.Tag, 0)
-	session := tr.data.DB.In("slug_name", names).UseBool("recommend", "reserved")
+	session := tr.data.DB.Context(ctx).In("slug_name", names).UseBool("recommend", "reserved")
 	// session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList)
 	if err != nil {
@@ -123,7 +123,7 @@ func (tr *tagCommonRepo) GetTagByID(ctx context.Context, tagID string, includeDe
 	tag *entity.Tag, exist bool, err error,
 ) {
 	tag = &entity.Tag{}
-	session := tr.data.DB.Where(builder.Eq{"id": tagID})
+	session := tr.data.DB.Context(ctx).Where(builder.Eq{"id": tagID})
 	if !includeDeleted {
 		session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	}
@@ -139,7 +139,7 @@ func (tr *tagCommonRepo) GetTagPage(ctx context.Context, page, pageSize int, tag
 	tagList []*entity.Tag, total int64, err error,
 ) {
 	tagList = make([]*entity.Tag, 0)
-	session := tr.data.DB.NewSession()
+	session := tr.data.DB.Context(ctx)
 
 	if len(tag.SlugName) > 0 {
 		session.Where(builder.Or(builder.Like{"slug_name", fmt.Sprintf("LOWER(%s)", tag.SlugName)}, builder.Like{"display_name", tag.SlugName}))
@@ -173,7 +173,7 @@ func (tr *tagCommonRepo) AddTagList(ctx context.Context, tagList []*entity.Tag) 
 		}
 		item.RevisionID = "0"
 	}
-	_, err = tr.data.DB.Insert(tagList)
+	_, err = tr.data.DB.Context(ctx).Insert(tagList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -183,7 +183,7 @@ func (tr *tagCommonRepo) AddTagList(ctx context.Context, tagList []*entity.Tag) 
 // UpdateTagQuestionCount update tag question count
 func (tr *tagCommonRepo) UpdateTagQuestionCount(ctx context.Context, tagID string, questionCount int) (err error) {
 	cond := &entity.Tag{QuestionCount: questionCount}
-	_, err = tr.data.DB.Where(builder.Eq{"id": tagID}).MustCols("question_count").Update(cond)
+	_, err = tr.data.DB.Context(ctx).Where(builder.Eq{"id": tagID}).MustCols("question_count").Update(cond)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -200,7 +200,7 @@ func (tr *tagCommonRepo) UpdateTagsAttribute(ctx context.Context, tags []string,
 	default:
 		return
 	}
-	session := tr.data.DB.In("slug_name", tags).Cols(attribute).UseBool(attribute)
+	session := tr.data.DB.Context(ctx).In("slug_name", tags).Cols(attribute).UseBool(attribute)
 	_, err = session.Update(bean)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
