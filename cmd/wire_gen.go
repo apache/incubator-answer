@@ -125,7 +125,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	userCommon := usercommon.NewUserCommon(userRepo, userRoleRelService, authService, siteInfoCommonService)
 	userExternalLoginRepo := user_external_login.NewUserExternalLoginRepo(dataData)
 	userExternalLoginService := user_external_login2.NewUserExternalLoginService(userRepo, userCommon, userExternalLoginRepo, emailService, siteInfoCommonService, userActiveActivityRepo)
-	userService := service.NewUserService(userRepo, userActiveActivityRepo, activityRepo, emailService, authService, serviceConf, siteInfoCommonService, userRoleRelService, userCommon, userExternalLoginService)
+	userService := service.NewUserService(userRepo, userActiveActivityRepo, activityRepo, emailService, authService, siteInfoCommonService, userRoleRelService, userCommon, userExternalLoginService)
 	captchaRepo := captcha.NewCaptchaRepo(dataData)
 	captchaService := action.NewCaptchaService(captchaRepo)
 	uploaderService := uploader.NewUploaderService(serviceConf, siteInfoCommonService)

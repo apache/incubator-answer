@@ -150,6 +150,7 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 		}
 		if isSelf {
 			addActivity.Rank = 0
+			addActivity.HasRank = 0
 		}
 		addActivityList = append(addActivityList, addActivity)
 	}
@@ -166,13 +167,16 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 				continue
 			}
 
-			reachStandard, e := ar.userRankRepo.TriggerUserRank(
-				ctx, session, addActivity.UserID, addActivity.Rank, addActivity.ActivityType)
-			if e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			}
-			if reachStandard {
-				addActivity.Rank = 0
+			// trigger user rank and send notification
+			if addActivity.Rank != 0 {
+				reachStandard, e := ar.userRankRepo.TriggerUserRank(
+					ctx, session, addActivity.UserID, addActivity.Rank, addActivity.ActivityType)
+				if e != nil {
+					return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
+				}
+				if reachStandard {
+					addActivity.Rank = 0
+				}
 			}
 
 			if exists {
@@ -267,10 +271,12 @@ func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
 				continue
 			}
 
-			_, e = ar.userRankRepo.TriggerUserRank(
-				ctx, session, addActivity.UserID, addActivity.Rank, addActivity.ActivityType)
-			if e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
+			if existsActivity.Rank != 0 {
+				_, e = ar.userRankRepo.TriggerUserRank(
+					ctx, session, addActivity.UserID, addActivity.Rank, addActivity.ActivityType)
+				if e != nil {
+					return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
+				}
 			}
 
 			if _, e := session.Where("id = ?", existsActivity.ID).Cols("cancelled", "cancelled_at").
@@ -296,7 +302,9 @@ func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
 			msg.TriggerUserID = questionUserID
 			msg.ObjectType = constant.AnswerObjectType
 		}
-		notice_queue.AddNotification(msg)
+		if msg.TriggerUserID != msg.ReceiverUserID {
+			notice_queue.AddNotification(msg)
+		}
 	}
 	return err
 }

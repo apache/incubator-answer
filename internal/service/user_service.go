@@ -17,7 +17,6 @@ import (
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/role"
-	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/internal/service/user_external_login"
@@ -37,7 +36,6 @@ type UserService struct {
 	userRepo                 usercommon.UserRepo
 	userActivity             activity.UserActiveActivityRepo
 	activityRepo             activity_common.ActivityRepo
-	serviceConfig            *service_config.ServiceConfig
 	emailService             *export.EmailService
 	authService              *auth.AuthService
 	siteInfoService          *siteinfo_common.SiteInfoCommonService
@@ -50,7 +48,6 @@ func NewUserService(userRepo usercommon.UserRepo,
 	activityRepo activity_common.ActivityRepo,
 	emailService *export.EmailService,
 	authService *auth.AuthService,
-	serviceConfig *service_config.ServiceConfig,
 	siteInfoService *siteinfo_common.SiteInfoCommonService,
 	userRoleService *role.UserRoleRelService,
 	userCommonService *usercommon.UserCommon,
@@ -62,7 +59,6 @@ func NewUserService(userRepo usercommon.UserRepo,
 		userActivity:             userActivity,
 		activityRepo:             activityRepo,
 		emailService:             emailService,
-		serviceConfig:            serviceConfig,
 		authService:              authService,
 		siteInfoService:          siteInfoService,
 		userRoleService:          userRoleService,
