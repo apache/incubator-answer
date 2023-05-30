@@ -10,7 +10,7 @@
     margin-bottom: 8px;
   }
   .nav {
-    max-width: 172px;
+    max-width: calc(100% - 24px);
   }
   .nav-link {
     color: rgba(0, 0, 0, 0.65);
