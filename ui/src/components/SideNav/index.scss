@@ -1,5 +1,14 @@
 
 #sideNav {
+  .nav-wrap {
+    position: sticky;
+    width: auto;
+    top: 62px;
+    box-sizing: border-box;
+    max-height: calc(100vh - 74px - 62px - 24px);
+    overflow-y: auto;
+    margin-bottom: 8px;
+  }
   .nav {
     max-width: 172px;
   }
