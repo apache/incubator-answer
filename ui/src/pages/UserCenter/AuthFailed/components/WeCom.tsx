@@ -35,7 +35,7 @@ const Index: FC = () => {
       <Card>
         <Card.Body>
           <h3 className="text-center pt-3 mb-3">
-            {ucAgent?.agent_info.display_name} {t('login')}
+            {ucAgent?.agent_info?.display_name} {t('login')}
           </h3>
           <p className="text-danger text-center">
             {t('login_failed_email_tip')}
