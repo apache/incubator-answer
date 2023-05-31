@@ -73,9 +73,15 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
   }, [questionId]);
 
   const showAddButton = editing && (!users || users.length < MAX_ASK_NUMBER);
-  const showInviteDesc = !editing && users?.length === 0;
+  const showInviteFeat = !editing && users?.length === 0;
+  const showInviteButton = showInviteFeat && !readOnly;
   const showEditButton = !readOnly && !editing && users?.length;
   const showSaveButton = !readOnly && editing;
+  const showEmpty = readOnly && users?.length === 0;
+
+  if (showEmpty) {
+    return null;
+  }
 
   return (
     <Card className="mt-4">
@@ -136,10 +142,10 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
             onSelect={updateInviteUsers}
           />
         </div>
-        {showInviteDesc ? (
+        {showInviteFeat ? (
           <>
             <div className="text-muted">{t('desc')}</div>
-            {readOnly ? null : (
+            {showInviteButton ? (
               <Button
                 size="sm"
                 variant="outline-primary"
@@ -147,7 +153,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
                 onClick={() => setEditing(true)}>
                 {t('invite')}
               </Button>
-            )}
+            ) : null}
           </>
         ) : null}
       </Card.Body>
