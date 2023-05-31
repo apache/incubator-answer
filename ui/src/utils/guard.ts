@@ -94,13 +94,15 @@ export const IGNORE_PATH_LIST = [
   '/user-center/',
 ];
 
-export const isIgnoredPath = (ignoredPath: string | string[]) => {
+export const isIgnoredPath = (ignoredPath?: string | string[]) => {
+  if (!ignoredPath) {
+    ignoredPath = IGNORE_PATH_LIST;
+  }
   if (!Array.isArray(ignoredPath)) {
     ignoredPath = [ignoredPath];
   }
-  const { pathname } = window.location;
-  const matchingPath = ignoredPath.find((_) => {
-    return pathname.indexOf(_) !== -1;
+  const matchingPath = ignoredPath.find((p) => {
+    return floppyNavigation.matchToCurrentHref(p);
   });
   return !!matchingPath;
 };
