@@ -22,7 +22,7 @@ import HotQuestions from '@/components/HotQuestions';
 import { escapeRemove, guard } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
 
-const Questions: FC = () => {
+const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
   const navigate = useNavigate();
   const routeParams = useParams();
@@ -159,4 +159,4 @@ const Questions: FC = () => {
   );
 };
 
-export default Questions;
+export default Index;
