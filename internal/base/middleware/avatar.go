@@ -17,12 +17,12 @@ import (
 
 type AvatarMiddleware struct {
 	serviceConfig   *service_config.ServiceConfig
-	uploaderService *uploader.UploaderService
+	uploaderService uploader.UploaderService
 }
 
 // NewAvatarMiddleware new auth user middleware
 func NewAvatarMiddleware(serviceConfig *service_config.ServiceConfig,
-	uploaderService *uploader.UploaderService,
+	uploaderService uploader.UploaderService,
 ) *AvatarMiddleware {
 	return &AvatarMiddleware{
 		serviceConfig:   serviceConfig,
