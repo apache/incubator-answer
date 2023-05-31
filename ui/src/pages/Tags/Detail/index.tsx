@@ -17,10 +17,11 @@ import {
   useQuerySynonymsTags,
   useQuestionList,
 } from '@/services';
-import QuestionList from '@/components/QuestionList';
+import QuestionList, { QUESTION_ORDER_KEYS } from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
-import { escapeRemove, guard } from '@/utils';
+import { escapeRemove, guard, Storage } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
+import { QUESTIONS_ORDER_STORAGE_KEY } from '@/common/constants';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'tags' });
@@ -28,7 +29,12 @@ const Index: FC = () => {
   const routeParams = useParams();
   const curTagName = routeParams.tagName || '';
   const [urlSearchParams] = useSearchParams();
-  const curOrder = urlSearchParams.get('order') || 'active';
+  const storageOrder = Storage.get(QUESTIONS_ORDER_STORAGE_KEY);
+  const curOrder =
+    urlSearchParams.get('order') || storageOrder || QUESTION_ORDER_KEYS[0];
+  if (curOrder !== storageOrder) {
+    Storage.set(QUESTIONS_ORDER_STORAGE_KEY, curOrder);
+  }
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const reqParams: Type.QueryQuestionsReq = {
     page_size: 20,
@@ -148,7 +154,12 @@ const Index: FC = () => {
             </div>
           </div>
         )}
-        <QuestionList source="tag" data={listData} isLoading={listLoading} />
+        <QuestionList
+          source="tag"
+          data={listData}
+          order={curOrder}
+          isLoading={listLoading}
+        />
       </Col>
       <Col className="page-right-side mt-4 mt-xl-0">
         <CustomSidebar />
