@@ -21,11 +21,11 @@ const (
 
 // UploadController upload controller
 type UploadController struct {
-	uploaderService *uploader.UploaderService
+	uploaderService uploader.UploaderService
 }
 
 // NewUploadController new controller
-func NewUploadController(uploaderService *uploader.UploaderService) *UploadController {
+func NewUploadController(uploaderService uploader.UploaderService) *UploadController {
 	return &UploadController{
 		uploaderService: uploaderService,
 	}
