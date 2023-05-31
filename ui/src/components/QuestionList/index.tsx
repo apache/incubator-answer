@@ -17,6 +17,8 @@ import {
   Icon,
 } from '@/components';
 import * as Type from '@/common/interface';
+import { Storage } from '@/utils';
+import { QUESTIONS_ORDER_STORAGE_KEY } from '@/common/constants';
 
 export const QUESTION_ORDER_KEYS: Type.QuestionOrderBy[] = [
   'active',
@@ -40,8 +42,17 @@ const QuestionList: FC<Props> = ({
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
   const [urlSearchParams] = useSearchParams();
+
+  const storageOrder = Storage.get(QUESTIONS_ORDER_STORAGE_KEY);
   const curOrder =
-    order || urlSearchParams.get('order') || QUESTION_ORDER_KEYS[0];
+    order ||
+    urlSearchParams.get('order') ||
+    storageOrder ||
+    QUESTION_ORDER_KEYS[0];
+  if (curOrder !== storageOrder) {
+    Storage.set(QUESTIONS_ORDER_STORAGE_KEY, curOrder);
+  }
+
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const pageSize = 20;
   const count = data?.count || 0;

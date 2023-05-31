@@ -73,9 +73,15 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
   }, [questionId]);
 
   const showAddButton = editing && (!users || users.length < MAX_ASK_NUMBER);
-  const showInviteDesc = !editing && users?.length === 0;
+  const showInviteFeat = !editing && users?.length === 0;
+  const showInviteButton = showInviteFeat && !readOnly;
   const showEditButton = !readOnly && !editing && users?.length;
   const showSaveButton = !readOnly && editing;
+  const showEmpty = readOnly && users?.length === 0;
+
+  if (showEmpty) {
+    return null;
+  }
 
   return (
     <Card className="mt-4">
@@ -113,9 +119,9 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
                   <span className="text-nowrap ms-2">{user.display_name}</span>
                   {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
                   <span
-                    className="ps-1 pe-1 me-n1"
+                    className="px-1 me-n1"
                     onClick={() => removeInviteUser(user)}>
-                    x
+                    ×
                   </span>
                 </Button>
               );
@@ -125,22 +131,21 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
                 key={user.username}
                 to={`/users/${user.username}`}
                 className="mx-2 my-1 d-inline-flex flex-nowrap">
-                <Avatar avatar={user.avatar} size="24" />
-                <span className="text-nowrap ms-2">{user.display_name}</span>
+                <Avatar avatar={user.avatar} size="24" className="rounded-1" />
+                <small className="text-nowrap ms-2">{user.display_name}</small>
               </Link>
             );
           })}
-          {showAddButton ? (
-            <PeopleDropdown
-              selectedPeople={users}
-              onSelect={updateInviteUsers}
-            />
-          ) : null}
+          <PeopleDropdown
+            visible={showAddButton}
+            selectedPeople={users}
+            onSelect={updateInviteUsers}
+          />
         </div>
-        {showInviteDesc ? (
+        {showInviteFeat ? (
           <>
             <div className="text-muted">{t('desc')}</div>
-            {readOnly ? null : (
+            {showInviteButton ? (
               <Button
                 size="sm"
                 variant="outline-primary"
@@ -148,7 +153,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
                 onClick={() => setEditing(true)}>
                 {t('invite')}
               </Button>
-            )}
+            ) : null}
           </>
         ) : null}
       </Card.Body>

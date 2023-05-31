@@ -1,4 +1,4 @@
-import { FC, memo, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Dropdown, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -6,21 +6,31 @@ import { loggedUserInfoStore } from '@/stores';
 import { userSearchByName } from '@/services';
 import { Avatar } from '@/components';
 import * as Type from '@/common/interface';
+import './PeopleDropdown.scss';
 
 interface Props {
   selectedPeople: Type.UserInfoBase[] | undefined;
   onSelect: (people: Type.UserInfoBase) => void;
+  visible?: boolean;
 }
 
-const Index: FC<Props> = ({ selectedPeople = [], onSelect }) => {
+const Index: FC<Props> = ({
+  selectedPeople = [],
+  visible = false,
+  onSelect,
+}) => {
   const { user: currentUser } = loggedUserInfoStore();
   const { t } = useTranslation('translation', {
     keyPrefix: 'invite_to_answer',
   });
   const [toggleState, setToggleState] = useState(false);
   const [peopleList, setPeopleList] = useState<Type.UserInfoBase[]>([]);
-
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [searchValue, setSearchValue] = useState('');
   const filterAndSetPeople = (source) => {
+    if (!toggleState) {
+      return;
+    }
     const filteredPeople: Type.UserInfoBase[] = [];
     source.forEach((p) => {
       if (currentUser && currentUser.username === p.username) {
@@ -34,20 +44,57 @@ const Index: FC<Props> = ({ selectedPeople = [], onSelect }) => {
     setPeopleList(filteredPeople);
   };
 
-  const searchPeople = (evt) => {
-    const name = evt.target.value;
-    if (!name) {
+  const searchPeople = (s) => {
+    if (!s) {
+      setPeopleList([]);
       return;
     }
-    userSearchByName(name).then((resp) => {
+    userSearchByName(s).then((resp) => {
       filterAndSetPeople(resp);
     });
   };
+  const handleSearch = (evt) => {
+    const s = evt.target.value;
+    setSearchValue(s);
+    searchPeople(s);
+  };
+
+  const updateCurrentIndex = (pl: number) => {
+    let curIndex = currentIndex;
+    if (currentIndex >= pl) {
+      curIndex = Math.max(pl - 1, 0);
+    }
+    setCurrentIndex(curIndex);
+  };
 
   const handleSelect = (idx) => {
+    if (idx < 0 || idx >= peopleList.length) {
+      return;
+    }
     const people = peopleList[idx];
     if (people) {
+      updateCurrentIndex(peopleList.length - 1);
       onSelect(people);
+    }
+  };
+
+  const handleKeyDown = (evt) => {
+    evt.stopPropagation();
+
+    if (!peopleList?.length) {
+      return;
+    }
+    const { keyCode } = evt;
+    if (keyCode === 38 && currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+    if (keyCode === 40 && currentIndex < peopleList.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    }
+
+    if (keyCode === 13 && currentIndex > -1) {
+      evt.preventDefault();
+      handleSelect(currentIndex);
     }
   };
 
@@ -55,35 +102,51 @@ const Index: FC<Props> = ({ selectedPeople = [], onSelect }) => {
     filterAndSetPeople(peopleList);
   }, [selectedPeople]);
 
-  return (
+  useEffect(() => {
+    searchPeople(searchValue);
+  }, [toggleState]);
+
+  useEffect(() => {
+    if (!visible && toggleState) {
+      setToggleState(false);
+    }
+  }, [visible]);
+
+  return visible ? (
     <Dropdown
-      className="d-inline-flex"
-      show={toggleState}
+      className="d-inline-flex people-dropdown"
+      align="end"
       onSelect={handleSelect}
+      onKeyDown={handleKeyDown}
       onToggle={setToggleState}>
       <Dropdown.Toggle
         className="m-1 no-toggle"
         size="sm"
         variant="outline-secondary">
-        {t('add')} +
+        <span className="me-1">+</span>
+        {t('add')}
       </Dropdown.Toggle>
 
-      <Dropdown.Menu>
+      <Dropdown.Menu show={toggleState}>
         <Dropdown.Header className="px-2 py-0">
-          <Form.Control
-            autoFocus
-            placeholder={t('search')}
-            onChange={searchPeople}
-          />
+          {toggleState ? (
+            <Form.Control
+              autoFocus
+              placeholder={t('search')}
+              value={searchValue}
+              onChange={handleSearch}
+            />
+          ) : null}
         </Dropdown.Header>
         {peopleList.map((p, idx) => {
           return (
             <Dropdown.Item
               key={p.username}
               eventKey={idx}
+              active={idx === currentIndex}
               className={idx === 0 ? 'mt-2' : ''}>
               <div className="d-flex align-items-center text-nowrap">
-                <Avatar avatar={p.avatar} size="24" />
+                <Avatar avatar={p.avatar} size="24" className="rounded-1" />
                 <span className="mx-2">{p.display_name}</span>
                 <small className="text-secondary">@{p.username}</small>
               </div>
@@ -92,7 +155,7 @@ const Index: FC<Props> = ({ selectedPeople = [], onSelect }) => {
         })}
       </Dropdown.Menu>
     </Dropdown>
-  );
+  ) : null;
 };
 
-export default memo(Index);
+export default Index;
