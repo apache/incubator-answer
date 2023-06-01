@@ -63,7 +63,7 @@ const Personal: FC = () => {
         {userInfo?.status !== 'normal' && userInfo?.status_msg && (
           <Alert data={userInfo?.status_msg} />
         )}
-        <Col className="flex-auto">
+        <Col className="page-main flex-auto">
           <UserInfo data={userInfo as UserInfoRes} />
         </Col>
         <Col
@@ -85,7 +85,7 @@ const Personal: FC = () => {
 
       <Row>
         <NavBar tabName={tabName} slug={username} isSelf={isSelf} />
-        <Col className="flex-auto">
+        <Col className="page-main flex-auto">
           <Overview
             visible={tabName === 'overview'}
             introduction={userInfo?.bio_html || ''}

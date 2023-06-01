@@ -24,7 +24,7 @@ type UserController struct {
 	userService           *service.UserService
 	authService           *auth.AuthService
 	actionService         *action.CaptchaService
-	uploaderService       *uploader.UploaderService
+	uploaderService       uploader.UploaderService
 	emailService          *export.EmailService
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 }
@@ -35,7 +35,7 @@ func NewUserController(
 	userService *service.UserService,
 	actionService *action.CaptchaService,
 	emailService *export.EmailService,
-	uploaderService *uploader.UploaderService,
+	uploaderService uploader.UploaderService,
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 ) *UserController {
 	return &UserController{

@@ -142,7 +142,7 @@ const Index = () => {
     <div className="pt-4 mb-5">
       <h3 className="mb-4">{t('title')}</h3>
       <Row>
-        <Col className="flex-auto">
+        <Col className="page-main flex-auto">
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group controlId="display_name" className="mb-3">
               <Form.Label>{t('form.fields.display_name.label')}</Form.Label>

@@ -187,7 +187,7 @@ const Index = () => {
     <div className="pt-4 mb-5 edit-answer-wrap">
       <h3 className="mb-4">{t('title')}</h3>
       <Row>
-        <Col className="flex-auto">
+        <Col className="page-main flex-auto">
           <a
             href={pathFactory.questionLanding(qid, data?.question.url_title)}
             target="_blank"

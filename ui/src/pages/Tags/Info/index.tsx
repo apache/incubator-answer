@@ -133,7 +133,7 @@ const TagIntroduction = () => {
 
   return (
     <Row className="pt-4 mb-5">
-      <Col className="flex-auto">
+      <Col className="page-main flex-auto">
         <h3 className="mb-3">
           <Link
             to={pathFactory.tagLanding(tagInfo.slug_name)}
