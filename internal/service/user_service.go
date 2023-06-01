@@ -17,7 +17,6 @@ import (
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/role"
-	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/internal/service/user_external_login"
@@ -37,7 +36,6 @@ type UserService struct {
 	userRepo                 usercommon.UserRepo
 	userActivity             activity.UserActiveActivityRepo
 	activityRepo             activity_common.ActivityRepo
-	serviceConfig            *service_config.ServiceConfig
 	emailService             *export.EmailService
 	authService              *auth.AuthService
 	siteInfoService          *siteinfo_common.SiteInfoCommonService
@@ -50,7 +48,6 @@ func NewUserService(userRepo usercommon.UserRepo,
 	activityRepo activity_common.ActivityRepo,
 	emailService *export.EmailService,
 	authService *auth.AuthService,
-	serviceConfig *service_config.ServiceConfig,
 	siteInfoService *siteinfo_common.SiteInfoCommonService,
 	userRoleService *role.UserRoleRelService,
 	userCommonService *usercommon.UserCommon,
@@ -62,7 +59,6 @@ func NewUserService(userRepo usercommon.UserRepo,
 		userActivity:             userActivity,
 		activityRepo:             activityRepo,
 		emailService:             emailService,
-		serviceConfig:            serviceConfig,
 		authService:              authService,
 		siteInfoService:          siteInfoService,
 		userRoleService:          userRoleService,
@@ -72,7 +68,7 @@ func NewUserService(userRepo usercommon.UserRepo,
 
 // GetUserInfoByUserID get user info by user id
 func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID string) (
-	resp *schema.GetUserToSetShowResp, err error) {
+	resp *schema.GetCurrentLoginUserInfoResp, err error) {
 	userInfo, exist, err := us.userRepo.GetByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -83,14 +79,15 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	if userInfo.Status == entity.UserStatusDeleted {
 		return nil, errors.Unauthorized(reason.UnauthorizedError)
 	}
-	roleID, err := us.userRoleService.GetUserRole(ctx, userInfo.ID)
+
+	resp = &schema.GetCurrentLoginUserInfoResp{}
+	resp.ConvertFromUserEntity(userInfo)
+	resp.RoleID, err = us.userRoleService.GetUserRole(ctx, userInfo.ID)
 	if err != nil {
 		log.Error(err)
 	}
-	resp = &schema.GetUserToSetShowResp{}
-	resp.GetFromUserEntity(userInfo)
+	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail)
 	resp.AccessToken = token
-	resp.RoleID = roleID
 	resp.HavePassword = len(userInfo.Pass) > 0
 	return resp, nil
 }
@@ -106,12 +103,13 @@ func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username 
 		return nil, errors.NotFound(reason.UserNotFound)
 	}
 	resp = &schema.GetOtherUserInfoByUsernameResp{}
-	resp.GetFromUserEntity(userInfo)
+	resp.ConvertFromUserEntity(userInfo)
+	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
 	return resp, nil
 }
 
 // EmailLogin email login
-func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogin) (resp *schema.GetUserResp, err error) {
+func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogin) (resp *schema.UserLoginResp, err error) {
 	userInfo, exist, err := us.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil {
 		return nil, err
@@ -140,8 +138,9 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 		log.Error(err)
 	}
 
-	resp = &schema.GetUserResp{}
-	resp.GetFromUserEntity(userInfo)
+	resp = &schema.UserLoginResp{}
+	resp.ConvertFromUserEntity(userInfo)
+	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
 	userCacheInfo := &entity.UserCacheInfo{
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
@@ -368,7 +367,7 @@ func (us *UserService) UserUpdateInterface(ctx context.Context, req *schema.Upda
 
 // UserRegisterByEmail user register
 func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo *schema.UserRegisterReq) (
-	resp *schema.GetUserResp, errFields []*validator.FormErrorField, err error,
+	resp *schema.UserLoginResp, errFields []*validator.FormErrorField, err error,
 ) {
 	_, has, err := us.userRepo.GetByEmail(ctx, registerUserInfo.Email)
 	if err != nil {
@@ -425,8 +424,9 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	}
 
 	// return user info and token
-	resp = &schema.GetUserResp{}
-	resp.GetFromUserEntity(userInfo)
+	resp = &schema.UserLoginResp{}
+	resp.ConvertFromUserEntity(userInfo)
+	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
 	userCacheInfo := &entity.UserCacheInfo{
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
@@ -489,7 +489,7 @@ func (us *UserService) UserNoticeSet(ctx context.Context, userID string, noticeS
 	return &schema.UserNoticeSetResp{NoticeSwitch: noticeSwitch}, err
 }
 
-func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVerifyEmailReq) (resp *schema.GetUserResp, err error) {
+func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVerifyEmailReq) (resp *schema.UserLoginResp, err error) {
 	data := &schema.EmailCodeContent{}
 	err = data.FromJSONString(req.Content)
 	if err != nil {
@@ -528,8 +528,9 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 		return nil, err
 	}
 
-	resp = &schema.GetUserResp{}
-	resp.GetFromUserEntity(userInfo)
+	resp = &schema.UserLoginResp{}
+	resp.ConvertFromUserEntity(userInfo)
+	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
 	resp.AccessToken = accessToken
 	// User verified email will update user email status. So user status cache should be updated.
 	if err = us.authService.SetUserStatus(ctx, userCacheInfo); err != nil {
@@ -610,7 +611,7 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 }
 
 // UserChangeEmailVerify user change email verify code
-func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string) (resp *schema.GetUserResp, err error) {
+func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string) (resp *schema.UserLoginResp, err error) {
 	data := &schema.EmailCodeContent{}
 	err = data.FromJSONString(content)
 	if err != nil {
@@ -646,8 +647,9 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 		log.Error(err)
 	}
 
-	resp = &schema.GetUserResp{}
-	resp.GetFromUserEntity(userInfo)
+	resp = &schema.UserLoginResp{}
+	resp.ConvertFromUserEntity(userInfo)
+	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
 	userCacheInfo := &entity.UserCacheInfo{
 		UserID:      userInfo.ID,
 		EmailStatus: entity.EmailStatusAvailable,
@@ -807,8 +809,9 @@ func (us *UserService) getUserInfoMapping(ctx context.Context, userIDs []string)
 	if err != nil {
 		return nil, err
 	}
+	avatarMapping := us.siteInfoService.FormatListAvatar(ctx, userInfoList)
 	for _, user := range userInfoList {
-		user.Avatar = schema.FormatAvatarInfo(user.Avatar, user.EMail)
+		user.Avatar = avatarMapping[user.ID].GetURL()
 		userInfoMapping[user.ID] = user
 	}
 	return userInfoMapping, nil
@@ -820,8 +823,10 @@ func (us *UserService) SearchUserListByName(ctx context.Context, name string) ([
 	if err != nil {
 		return userinfolist, err
 	}
+	avatarMapping := us.siteInfoService.FormatListAvatar(ctx, list)
 	for _, user := range list {
 		userinfo := us.userCommonService.FormatUserBasicInfo(ctx, user)
+		userinfo.Avatar = avatarMapping[user.ID].GetURL()
 		userinfolist = append(userinfolist, userinfo)
 	}
 	return userinfolist, nil

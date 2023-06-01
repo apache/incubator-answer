@@ -4,8 +4,6 @@ import (
 	"bytes"
 	"path/filepath"
 
-	"github.com/answerdev/answer/configs"
-	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/server"
 	"github.com/answerdev/answer/internal/base/translator"
@@ -14,7 +12,6 @@ import (
 	"github.com/answerdev/answer/internal/service/service_config"
 	"github.com/answerdev/answer/pkg/writer"
 	"github.com/segmentfault/pacman/contrib/conf/viper"
-	"github.com/segmentfault/pacman/log"
 	"gopkg.in/yaml.v3"
 )
 
@@ -68,19 +65,4 @@ func RewriteConfig(configFilePath string, allConfig *AllConfig) error {
 		return err
 	}
 	return writer.ReplaceFile(configFilePath, buf.String())
-}
-
-func GetPathIgnoreList() map[string]bool {
-	list := make(map[string]bool, 0)
-	data := &PathIgnore{}
-	err := yaml.Unmarshal(configs.PathIgnore, data)
-	if err != nil {
-		log.Error(err)
-		return list
-	}
-	for _, item := range data.Users {
-		list[item] = true
-	}
-	constant.PathIgnoreMap = list
-	return list
 }

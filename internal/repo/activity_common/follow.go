@@ -41,19 +41,19 @@ func (ar *FollowRepo) GetFollowAmount(ctx context.Context, objectID string) (fol
 	switch objectType {
 	case "question":
 		model := &entity.Question{}
-		_, err = ar.data.DB.Where("id = ?", objectID).Cols("`follow_count`").Get(model)
+		_, err = ar.data.DB.Context(ctx).Where("id = ?", objectID).Cols("`follow_count`").Get(model)
 		if err == nil {
 			follows = int(model.FollowCount)
 		}
 	case "user":
 		model := &entity.User{}
-		_, err = ar.data.DB.Where("id = ?", objectID).Cols("`follow_count`").Get(model)
+		_, err = ar.data.DB.Context(ctx).Where("id = ?", objectID).Cols("`follow_count`").Get(model)
 		if err == nil {
 			follows = int(model.FollowCount)
 		}
 	case "tag":
 		model := &entity.Tag{}
-		_, err = ar.data.DB.Where("id = ?", objectID).Cols("`follow_count`").Get(model)
+		_, err = ar.data.DB.Context(ctx).Where("id = ?", objectID).Cols("`follow_count`").Get(model)
 		if err == nil {
 			follows = int(model.FollowCount)
 		}
@@ -79,7 +79,7 @@ func (ar *FollowRepo) GetFollowUserIDs(ctx context.Context, objectID string) (us
 	}
 
 	userIDs = make([]string, 0)
-	session := ar.data.DB.Select("user_id")
+	session := ar.data.DB.Context(ctx).Select("user_id")
 	session.Table(entity.Activity{}.TableName())
 	session.Where("object_id = ?", objectID)
 	session.Where("activity_type = ?", activityType)
@@ -98,7 +98,7 @@ func (ar *FollowRepo) GetFollowIDs(ctx context.Context, userID, objectKey string
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	session := ar.data.DB.Select("object_id")
+	session := ar.data.DB.Context(ctx).Select("object_id")
 	session.Table(entity.Activity{}.TableName())
 	session.Where("user_id = ? AND activity_type = ?", userID, activityType)
 	session.Where("cancelled = 0")
@@ -110,14 +110,19 @@ func (ar *FollowRepo) GetFollowIDs(ctx context.Context, userID, objectKey string
 }
 
 // IsFollowed check user if follow object or not
-func (ar *FollowRepo) IsFollowed(userID, objectID string) (bool, error) {
-	activityType, _, _, err := ar.activityRepo.GetActivityTypeByObjID(context.TODO(), objectID, "follow")
+func (ar *FollowRepo) IsFollowed(ctx context.Context, userID, objectID string) (followed bool, err error) {
+	objectKey, err := obj.GetObjectTypeStrByObjectID(objectID)
+	if err != nil {
+		return false, err
+	}
+
+	activityType, err := ar.activityRepo.GetActivityTypeByObjKey(ctx, objectKey, "follow")
 	if err != nil {
 		return false, err
 	}
 
 	at := &entity.Activity{}
-	has, err := ar.data.DB.Where("user_id = ? AND object_id = ? AND activity_type = ?", userID, objectID, activityType).Get(at)
+	has, err := ar.data.DB.Context(ctx).Where("user_id = ? AND object_id = ? AND activity_type = ?", userID, objectID, activityType).Get(at)
 	if err != nil {
 		return false, err
 	}

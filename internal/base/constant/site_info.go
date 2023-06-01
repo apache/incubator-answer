@@ -1,7 +1,13 @@
 package constant
 
-var (
-	DefaultAvatar          = "system"
+const (
 	DefaultGravatarBaseURL = "https://www.gravatar.com/avatar/"
-	DefaultSiteURL         = ""
+	DefaultAvatar          = "system"
+	AvatarTypeDefault      = "default"
+	AvatarTypeGravatar     = "gravatar"
+	AvatarTypeCustom       = "custom"
+)
+
+var (
+	DefaultSiteURL = ""
 )

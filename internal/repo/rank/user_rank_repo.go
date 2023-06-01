@@ -19,15 +19,15 @@ import (
 
 // UserRankRepo user rank repository
 type UserRankRepo struct {
-	data       *data.Data
-	configRepo config.ConfigRepo
+	data          *data.Data
+	configService *config.ConfigService
 }
 
 // NewUserRankRepo new repository
-func NewUserRankRepo(data *data.Data, configRepo config.ConfigRepo) rank.UserRankRepo {
+func NewUserRankRepo(data *data.Data, configService *config.ConfigService) rank.UserRankRepo {
 	return &UserRankRepo{
-		data:       data,
-		configRepo: configRepo,
+		data:          data,
+		configService: configService,
 	}
 }
 
@@ -94,14 +94,13 @@ func (ur *UserRankRepo) checkUserTodayRank(ctx context.Context,
 	session *xorm.Session, userID string, activityType int,
 ) (isReachStandard bool, err error) {
 	// exclude daily rank
-	exclude, _ := ur.configRepo.GetArrayString("daily_rank_limit.exclude")
+	exclude, _ := ur.configService.GetArrayStringValue(ctx, "daily_rank_limit.exclude")
 	for _, item := range exclude {
-		var excludeActivityType int
-		excludeActivityType, err = ur.configRepo.GetInt(item)
+		cfg, err := ur.configService.GetConfigByKey(ctx, item)
 		if err != nil {
 			return false, err
 		}
-		if activityType == excludeActivityType {
+		if activityType == cfg.ID {
 			return false, nil
 		}
 	}
@@ -121,7 +120,7 @@ func (ur *UserRankRepo) checkUserTodayRank(ctx context.Context,
 	}
 
 	// max rank
-	maxDailyRank, err := ur.configRepo.GetInt("daily_rank_limit")
+	maxDailyRank, err := ur.configService.GetIntValue(ctx, "daily_rank_limit")
 	if err != nil {
 		return false, err
 	}
@@ -138,7 +137,7 @@ func (ur *UserRankRepo) UserRankPage(ctx context.Context, userID string, page, p
 ) {
 	rankPage = make([]*entity.Activity, 0)
 
-	session := ur.data.DB.Where(builder.Eq{"has_rank": 1}.And(builder.Eq{"cancelled": 0})).And(builder.Gt{"rank": 0})
+	session := ur.data.DB.Context(ctx).Where(builder.Eq{"has_rank": 1}.And(builder.Eq{"cancelled": 0})).And(builder.Gt{"rank": 0})
 	session.Desc("created_at")
 
 	cond := &entity.Activity{UserID: userID}

@@ -29,7 +29,7 @@ func NewUniqueIDRepo(data *data.Data) unique.UniqueIDRepo {
 func (ur *uniqueIDRepo) GenUniqueIDStr(ctx context.Context, key string) (uniqueID string, err error) {
 	objectType := constant.ObjectTypeStrMapping[key]
 	bean := &entity.Uniqid{UniqidType: objectType}
-	_, err = ur.data.DB.Insert(bean)
+	_, err = ur.data.DB.Context(ctx).Insert(bean)
 	if err != nil {
 		return "", errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

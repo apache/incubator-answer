@@ -344,6 +344,8 @@ backend:
         other: 回答于
       modified:
         other: 修改于
+    deleted_title:
+      other: 问题已被删除
   notification:
     action:
       update_question:
@@ -418,6 +420,19 @@ backend:
         other: "[{{.SiteName}}] 测试邮件"
       body:
         other: "这是一封测试邮件。"
+  action_activity_type:
+    upvote:
+      other: 点赞
+    upvoted:
+      other: 被赞
+    downvote:
+      other: 点踩
+    downvoted:
+      other: 被踩
+    accept:
+      other: 采纳
+    accepted:
+      other: 被采纳
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:

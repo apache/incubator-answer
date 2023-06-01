@@ -21,34 +21,37 @@ import (
 
 // ActivityRepo activity repository
 type ActivityRepo struct {
-	data         *data.Data
-	uniqueIDRepo unique.UniqueIDRepo
-	configRepo   config.ConfigRepo
+	data          *data.Data
+	uniqueIDRepo  unique.UniqueIDRepo
+	configService *config.ConfigService
 }
 
 // NewActivityRepo new repository
 func NewActivityRepo(
 	data *data.Data,
 	uniqueIDRepo unique.UniqueIDRepo,
-	configRepo config.ConfigRepo,
+	configService *config.ConfigService,
 ) activity_common.ActivityRepo {
 	return &ActivityRepo{
-		data:         data,
-		uniqueIDRepo: uniqueIDRepo,
-		configRepo:   configRepo,
+		data:          data,
+		uniqueIDRepo:  uniqueIDRepo,
+		configService: configService,
 	}
 }
 
-func (ar *ActivityRepo) GetActivityTypeByObjID(ctx context.Context, objectID string, action string) (activityType, rank, hasRank int, err error) {
+func (ar *ActivityRepo) GetActivityTypeByObjID(ctx context.Context, objectID string, action string) (
+	activityType, rank, hasRank int, err error) {
 	objectKey, err := obj.GetObjectTypeStrByObjectID(objectID)
 	if err != nil {
 		return
 	}
 
 	confKey := fmt.Sprintf("%s.%s", objectKey, action)
-	activityType, _ = ar.configRepo.GetConfigType(confKey)
-
-	rank, err = ar.configRepo.GetInt(confKey)
+	cfg, err := ar.configService.GetConfigByKey(ctx, confKey)
+	if err != nil {
+		return
+	}
+	activityType, rank = cfg.ID, cfg.GetIntValue()
 	hasRank = 0
 	if rank != 0 {
 		hasRank = 1
@@ -57,20 +60,20 @@ func (ar *ActivityRepo) GetActivityTypeByObjID(ctx context.Context, objectID str
 }
 
 func (ar *ActivityRepo) GetActivityTypeByObjKey(ctx context.Context, objectKey, action string) (activityType int, err error) {
-	confKey := fmt.Sprintf("%s.%s", objectKey, action)
-	activityType, err = ar.configRepo.GetConfigType(confKey)
+	configKey := fmt.Sprintf("%s.%s", objectKey, action)
+	cfg, err := ar.configService.GetConfigByKey(ctx, configKey)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	return
+	return cfg.ID, nil
 }
 
 func (ar *ActivityRepo) GetActivityTypeByConfigKey(ctx context.Context, configKey string) (activityType int, err error) {
-	activityType, err = ar.configRepo.GetConfigType(configKey)
+	cfg, err := ar.configService.GetConfigByKey(ctx, configKey)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	return
+	return cfg.ID, nil
 }
 
 func (ar *ActivityRepo) GetActivity(ctx context.Context, session *xorm.Session,
@@ -87,7 +90,7 @@ func (ar *ActivityRepo) GetActivity(ctx context.Context, session *xorm.Session,
 
 func (ar *ActivityRepo) GetUserIDObjectIDActivitySum(ctx context.Context, userID, objectID string) (int, error) {
 	sum := &entity.ActivityRankSum{}
-	_, err := ar.data.DB.Table(entity.Activity{}.TableName()).
+	_, err := ar.data.DB.Context(ctx).Table(entity.Activity{}.TableName()).
 		Select("sum(`rank`) as `rank`").
 		Where("user_id =?", userID).
 		And("object_id = ?", objectID).
@@ -102,7 +105,7 @@ func (ar *ActivityRepo) GetUserIDObjectIDActivitySum(ctx context.Context, userID
 
 // AddActivity add activity
 func (ar *ActivityRepo) AddActivity(ctx context.Context, activity *entity.Activity) (err error) {
-	_, err = ar.data.DB.Insert(activity)
+	_, err = ar.data.DB.Context(ctx).Insert(activity)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -113,7 +116,7 @@ func (ar *ActivityRepo) AddActivity(ctx context.Context, activity *entity.Activi
 func (ar *ActivityRepo) GetUsersWhoHasGainedTheMostReputation(
 	ctx context.Context, startTime, endTime time.Time, limit int) (rankStat []*entity.ActivityUserRankStat, err error) {
 	rankStat = make([]*entity.ActivityUserRankStat, 0)
-	session := ar.data.DB.Select("user_id, SUM(`rank`) AS rank_amount").Table("activity")
+	session := ar.data.DB.Context(ctx).Select("user_id, SUM(`rank`) AS rank_amount").Table("activity")
 	session.Where("has_rank = 1 AND cancelled = 0")
 	session.Where("created_at >= ?", startTime)
 	session.Where("created_at <= ?", endTime)
@@ -134,13 +137,13 @@ func (ar *ActivityRepo) GetUsersWhoHasVoteMost(
 
 	actIDs := make([]int, 0)
 	for _, act := range activity_type.ActivityTypeList {
-		configType, err := ar.configRepo.GetConfigType(act)
+		cfg, err := ar.configService.GetConfigByKey(ctx, act)
 		if err == nil {
-			actIDs = append(actIDs, configType)
+			actIDs = append(actIDs, cfg.ID)
 		}
 	}
 
-	session := ar.data.DB.Select("user_id, COUNT(*) AS vote_count").Table("activity")
+	session := ar.data.DB.Context(ctx).Select("user_id, COUNT(*) AS vote_count").Table("activity")
 	session.Where("cancelled = 0")
 	session.In("activity_type", actIDs)
 	session.Where("created_at >= ?", startTime)

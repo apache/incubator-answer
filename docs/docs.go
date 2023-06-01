@@ -3373,7 +3373,7 @@ const docTemplate = `{
                                                         "list": {
                                                             "type": "array",
                                                             "items": {
-                                                                "$ref": "#/definitions/schema.GetRankPersonalWithPageResp"
+                                                                "$ref": "#/definitions/schema.GetRankPersonalPageResp"
                                                             }
                                                         }
                                                     }
@@ -5071,7 +5071,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.GetUserResp"
+                                            "$ref": "#/definitions/schema.UserLoginResp"
                                         }
                                     }
                                 }
@@ -5155,7 +5155,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.GetUserToSetShowResp"
+                                            "$ref": "#/definitions/schema.GetCurrentLoginUserInfoResp"
                                         }
                                     }
                                 }
@@ -5340,7 +5340,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.GetUserResp"
+                                            "$ref": "#/definitions/schema.UserLoginResp"
                                         }
                                     }
                                 }
@@ -5596,7 +5596,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.GetUserResp"
+                                            "$ref": "#/definitions/schema.UserLoginResp"
                                         }
                                     }
                                 }
@@ -5642,7 +5642,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.GetUserResp"
+                                            "$ref": "#/definitions/schema.UserLoginResp"
                                         }
                                     }
                                 }
@@ -6800,6 +6800,109 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetCurrentLoginUserInfoResp": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "description": "access token",
+                    "type": "string"
+                },
+                "answer_count": {
+                    "description": "answer count",
+                    "type": "integer"
+                },
+                "authority_group": {
+                    "description": "authority group",
+                    "type": "integer"
+                },
+                "avatar": {
+                    "$ref": "#/definitions/schema.AvatarInfo"
+                },
+                "bio": {
+                    "description": "bio markdown",
+                    "type": "string"
+                },
+                "bio_html": {
+                    "description": "bio html",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "create time",
+                    "type": "integer"
+                },
+                "display_name": {
+                    "description": "display name",
+                    "type": "string"
+                },
+                "e_mail": {
+                    "description": "email",
+                    "type": "string"
+                },
+                "follow_count": {
+                    "description": "follow count",
+                    "type": "integer"
+                },
+                "have_password": {
+                    "type": "boolean"
+                },
+                "id": {
+                    "description": "user id",
+                    "type": "string"
+                },
+                "ip_info": {
+                    "description": "ip info",
+                    "type": "string"
+                },
+                "language": {
+                    "description": "language",
+                    "type": "string"
+                },
+                "last_login_date": {
+                    "description": "last login date",
+                    "type": "integer"
+                },
+                "location": {
+                    "description": "location",
+                    "type": "string"
+                },
+                "mail_status": {
+                    "description": "mail status(1 pass 2 to be verified)",
+                    "type": "integer"
+                },
+                "mobile": {
+                    "description": "mobile",
+                    "type": "string"
+                },
+                "notice_status": {
+                    "description": "notice status(1 on 2off)",
+                    "type": "integer"
+                },
+                "question_count": {
+                    "description": "question count",
+                    "type": "integer"
+                },
+                "rank": {
+                    "description": "rank",
+                    "type": "integer"
+                },
+                "role_id": {
+                    "description": "role id",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "user status",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "username",
+                    "type": "string"
+                },
+                "website": {
+                    "description": "website",
+                    "type": "string"
+                }
+            }
+        },
         "schema.GetFollowingTagsResp": {
             "type": "object",
             "properties": {
@@ -6983,7 +7086,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.GetRankPersonalWithPageResp": {
+        "schema.GetRankPersonalPageResp": {
             "type": "object",
             "properties": {
                 "answer_id": {
@@ -7343,214 +7446,6 @@ const docTemplate = `{
                 },
                 "username": {
                     "description": "username",
-                    "type": "string"
-                }
-            }
-        },
-        "schema.GetUserResp": {
-            "type": "object",
-            "properties": {
-                "access_token": {
-                    "description": "access token",
-                    "type": "string"
-                },
-                "answer_count": {
-                    "description": "answer count",
-                    "type": "integer"
-                },
-                "authority_group": {
-                    "description": "authority group",
-                    "type": "integer"
-                },
-                "avatar": {
-                    "description": "avatar",
-                    "type": "string"
-                },
-                "bio": {
-                    "description": "bio markdown",
-                    "type": "string"
-                },
-                "bio_html": {
-                    "description": "bio html",
-                    "type": "string"
-                },
-                "created_at": {
-                    "description": "create time",
-                    "type": "integer"
-                },
-                "display_name": {
-                    "description": "display name",
-                    "type": "string"
-                },
-                "e_mail": {
-                    "description": "email",
-                    "type": "string"
-                },
-                "follow_count": {
-                    "description": "follow count",
-                    "type": "integer"
-                },
-                "have_password": {
-                    "description": "user have password",
-                    "type": "boolean"
-                },
-                "id": {
-                    "description": "user id",
-                    "type": "string"
-                },
-                "ip_info": {
-                    "description": "ip info",
-                    "type": "string"
-                },
-                "language": {
-                    "description": "language",
-                    "type": "string"
-                },
-                "last_login_date": {
-                    "description": "last login date",
-                    "type": "integer"
-                },
-                "location": {
-                    "description": "location",
-                    "type": "string"
-                },
-                "mail_status": {
-                    "description": "mail status(1 pass 2 to be verified)",
-                    "type": "integer"
-                },
-                "mobile": {
-                    "description": "mobile",
-                    "type": "string"
-                },
-                "notice_status": {
-                    "description": "notice status(1 on 2off)",
-                    "type": "integer"
-                },
-                "question_count": {
-                    "description": "question count",
-                    "type": "integer"
-                },
-                "rank": {
-                    "description": "rank",
-                    "type": "integer"
-                },
-                "role_id": {
-                    "description": "role id",
-                    "type": "integer"
-                },
-                "status": {
-                    "description": "user status",
-                    "type": "string"
-                },
-                "username": {
-                    "description": "username",
-                    "type": "string"
-                },
-                "website": {
-                    "description": "website",
-                    "type": "string"
-                }
-            }
-        },
-        "schema.GetUserToSetShowResp": {
-            "type": "object",
-            "properties": {
-                "access_token": {
-                    "description": "access token",
-                    "type": "string"
-                },
-                "answer_count": {
-                    "description": "answer count",
-                    "type": "integer"
-                },
-                "authority_group": {
-                    "description": "authority group",
-                    "type": "integer"
-                },
-                "avatar": {
-                    "$ref": "#/definitions/schema.AvatarInfo"
-                },
-                "bio": {
-                    "description": "bio markdown",
-                    "type": "string"
-                },
-                "bio_html": {
-                    "description": "bio html",
-                    "type": "string"
-                },
-                "created_at": {
-                    "description": "create time",
-                    "type": "integer"
-                },
-                "display_name": {
-                    "description": "display name",
-                    "type": "string"
-                },
-                "e_mail": {
-                    "description": "email",
-                    "type": "string"
-                },
-                "follow_count": {
-                    "description": "follow count",
-                    "type": "integer"
-                },
-                "have_password": {
-                    "type": "boolean"
-                },
-                "id": {
-                    "description": "user id",
-                    "type": "string"
-                },
-                "ip_info": {
-                    "description": "ip info",
-                    "type": "string"
-                },
-                "language": {
-                    "description": "language",
-                    "type": "string"
-                },
-                "last_login_date": {
-                    "description": "last login date",
-                    "type": "integer"
-                },
-                "location": {
-                    "description": "location",
-                    "type": "string"
-                },
-                "mail_status": {
-                    "description": "mail status(1 pass 2 to be verified)",
-                    "type": "integer"
-                },
-                "mobile": {
-                    "description": "mobile",
-                    "type": "string"
-                },
-                "notice_status": {
-                    "description": "notice status(1 on 2off)",
-                    "type": "integer"
-                },
-                "question_count": {
-                    "description": "question count",
-                    "type": "integer"
-                },
-                "rank": {
-                    "description": "rank",
-                    "type": "integer"
-                },
-                "role_id": {
-                    "description": "role id",
-                    "type": "integer"
-                },
-                "status": {
-                    "description": "user status",
-                    "type": "string"
-                },
-                "username": {
-                    "description": "username",
-                    "type": "string"
-                },
-                "website": {
-                    "description": "website",
                     "type": "string"
                 }
             }
@@ -9077,6 +8972,111 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 32,
                     "minLength": 8
+                }
+            }
+        },
+        "schema.UserLoginResp": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "description": "access token",
+                    "type": "string"
+                },
+                "answer_count": {
+                    "description": "answer count",
+                    "type": "integer"
+                },
+                "authority_group": {
+                    "description": "authority group",
+                    "type": "integer"
+                },
+                "avatar": {
+                    "description": "avatar",
+                    "type": "string"
+                },
+                "bio": {
+                    "description": "bio markdown",
+                    "type": "string"
+                },
+                "bio_html": {
+                    "description": "bio html",
+                    "type": "string"
+                },
+                "created_at": {
+                    "description": "create time",
+                    "type": "integer"
+                },
+                "display_name": {
+                    "description": "display name",
+                    "type": "string"
+                },
+                "e_mail": {
+                    "description": "email",
+                    "type": "string"
+                },
+                "follow_count": {
+                    "description": "follow count",
+                    "type": "integer"
+                },
+                "have_password": {
+                    "description": "user have password",
+                    "type": "boolean"
+                },
+                "id": {
+                    "description": "user id",
+                    "type": "string"
+                },
+                "ip_info": {
+                    "description": "ip info",
+                    "type": "string"
+                },
+                "language": {
+                    "description": "language",
+                    "type": "string"
+                },
+                "last_login_date": {
+                    "description": "last login date",
+                    "type": "integer"
+                },
+                "location": {
+                    "description": "location",
+                    "type": "string"
+                },
+                "mail_status": {
+                    "description": "mail status(1 pass 2 to be verified)",
+                    "type": "integer"
+                },
+                "mobile": {
+                    "description": "mobile",
+                    "type": "string"
+                },
+                "notice_status": {
+                    "description": "notice status(1 on 2off)",
+                    "type": "integer"
+                },
+                "question_count": {
+                    "description": "question count",
+                    "type": "integer"
+                },
+                "rank": {
+                    "description": "rank",
+                    "type": "integer"
+                },
+                "role_id": {
+                    "description": "role id",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "user status",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "username",
+                    "type": "string"
+                },
+                "website": {
+                    "description": "website",
+                    "type": "string"
                 }
             }
         },

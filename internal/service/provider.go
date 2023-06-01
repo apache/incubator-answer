@@ -9,6 +9,7 @@ import (
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
 	"github.com/answerdev/answer/internal/service/comment"
 	"github.com/answerdev/answer/internal/service/comment_common"
+	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/dashboard"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/follow"
@@ -84,4 +85,5 @@ var ProviderSetService = wire.NewSet(
 	user_external_login.NewUserExternalLoginService,
 	user_external_login.NewUserCenterLoginService,
 	plugin_common.NewPluginCommonService,
+	config.NewConfigService,
 )

@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/role"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/random"
 	"github.com/segmentfault/pacman/errors"
@@ -40,20 +41,23 @@ type UserRepo interface {
 
 // UserCommon user service
 type UserCommon struct {
-	userRepo        UserRepo
-	userRoleService *role.UserRoleRelService
-	authService     *auth.AuthService
+	userRepo              UserRepo
+	userRoleService       *role.UserRoleRelService
+	authService           *auth.AuthService
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 }
 
 func NewUserCommon(
 	userRepo UserRepo,
 	userRoleService *role.UserRoleRelService,
 	authService *auth.AuthService,
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 ) *UserCommon {
 	return &UserCommon{
-		userRepo:        userRepo,
-		userRoleService: userRoleService,
-		authService:     authService,
+		userRepo:              userRepo,
+		userRoleService:       userRoleService,
+		authService:           authService,
+		siteInfoCommonService: siteInfoCommonService,
 	}
 }
 
@@ -64,6 +68,7 @@ func (us *UserCommon) GetUserBasicInfoByID(ctx context.Context, ID string) (
 		return nil, exist, err
 	}
 	info := us.FormatUserBasicInfo(ctx, userInfo)
+	info.Avatar = us.siteInfoCommonService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
 	return info, exist, nil
 }
 
@@ -73,6 +78,7 @@ func (us *UserCommon) GetUserBasicInfoByUserName(ctx context.Context, username s
 		return nil, exist, err
 	}
 	info := us.FormatUserBasicInfo(ctx, userInfo)
+	info.Avatar = us.siteInfoCommonService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
 	return info, exist, nil
 }
 
@@ -82,8 +88,10 @@ func (us *UserCommon) BatchGetUserBasicInfoByUserNames(ctx context.Context, user
 	if err != nil {
 		return infomap, err
 	}
+	avatarMapping := us.siteInfoCommonService.FormatListAvatar(ctx, list)
 	for _, user := range list {
 		info := us.FormatUserBasicInfo(ctx, user)
+		info.Avatar = avatarMapping[user.ID].GetURL()
 		infomap[user.Username] = info
 	}
 	return infomap, nil
@@ -99,13 +107,15 @@ func (us *UserCommon) UpdateQuestionCount(ctx context.Context, userID string, nu
 
 func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, IDs []string) (map[string]*schema.UserBasicInfo, error) {
 	userMap := make(map[string]*schema.UserBasicInfo)
-	dbInfo, err := us.userRepo.BatchGetByID(ctx, IDs)
+	userList, err := us.userRepo.BatchGetByID(ctx, IDs)
 	if err != nil {
 		return userMap, err
 	}
-	for _, item := range dbInfo {
-		info := us.FormatUserBasicInfo(ctx, item)
-		userMap[item.ID] = info
+	avatarMapping := us.siteInfoCommonService.FormatListAvatar(ctx, userList)
+	for _, user := range userList {
+		info := us.FormatUserBasicInfo(ctx, user)
+		info.Avatar = avatarMapping[user.ID].GetURL()
+		userMap[user.ID] = info
 	}
 	return userMap, nil
 }
@@ -117,7 +127,6 @@ func (us *UserCommon) FormatUserBasicInfo(ctx context.Context, userInfo *entity.
 	userBasicInfo.Username = userInfo.Username
 	userBasicInfo.Rank = userInfo.Rank
 	userBasicInfo.DisplayName = userInfo.DisplayName
-	userBasicInfo.Avatar = schema.FormatAvatarInfo(userInfo.Avatar, userInfo.EMail)
 	userBasicInfo.Website = userInfo.Website
 	userBasicInfo.Location = userInfo.Location
 	userBasicInfo.IPInfo = userInfo.IPInfo

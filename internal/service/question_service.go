@@ -304,11 +304,11 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 	// user add question count
 	userQuestionCount, err := qs.questioncommon.GetUserQuestionCount(ctx, question.UserID)
 	if err != nil {
-		log.Error("user GetUserQuestionCount error", err.Error())
+		log.Errorf("get user question count error %v", err)
 	} else {
 		err = qs.userCommon.UpdateQuestionCount(ctx, question.UserID, userQuestionCount)
 		if err != nil {
-			log.Error("user IncreaseQuestionCount error", err.Error())
+			log.Errorf("update user question count error %v", err)
 		}
 	}
 
@@ -566,7 +566,10 @@ func (qs *QuestionService) UpdateQuestionInviteUser(ctx context.Context, req *sc
 	for _, item := range req.InviteUser {
 		_, ok := inviteUserInfoList[item]
 		if ok {
-			inviteUserIDs = append(inviteUserIDs, inviteUserInfoList[item].ID)
+			//The inviter can't be himself.
+			if req.UserID != inviteUserInfoList[item].ID {
+				inviteUserIDs = append(inviteUserIDs, inviteUserInfoList[item].ID)
+			}
 		}
 	}
 	inviteUserStr := ""

@@ -15,6 +15,7 @@ import (
 	"github.com/answerdev/answer/internal/service/activity"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/role"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -35,11 +36,12 @@ type UserAdminRepo interface {
 
 // UserAdminService user service
 type UserAdminService struct {
-	userRepo           UserAdminRepo
-	userRoleRelService *role.UserRoleRelService
-	authService        *auth.AuthService
-	userCommonService  *usercommon.UserCommon
-	userActivity       activity.UserActiveActivityRepo
+	userRepo              UserAdminRepo
+	userRoleRelService    *role.UserRoleRelService
+	authService           *auth.AuthService
+	userCommonService     *usercommon.UserCommon
+	userActivity          activity.UserActiveActivityRepo
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 }
 
 // NewUserAdminService new user admin service
@@ -49,13 +51,15 @@ func NewUserAdminService(
 	authService *auth.AuthService,
 	userCommonService *usercommon.UserCommon,
 	userActivity activity.UserActiveActivityRepo,
+	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 ) *UserAdminService {
 	return &UserAdminService{
-		userRepo:           userRepo,
-		userRoleRelService: userRoleRelService,
-		authService:        authService,
-		userCommonService:  userCommonService,
-		userActivity:       userActivity,
+		userRepo:              userRepo,
+		userRoleRelService:    userRoleRelService,
+		authService:           authService,
+		userCommonService:     userCommonService,
+		userActivity:          userActivity,
+		siteInfoCommonService: siteInfoCommonService,
 	}
 }
 
@@ -238,10 +242,10 @@ func (us *UserAdminService) GetUserPage(ctx context.Context, req *schema.GetUser
 	if err != nil {
 		return
 	}
+	avatarMapping := us.siteInfoCommonService.FormatListAvatar(ctx, users)
 
 	resp := make([]*schema.GetUserPageResp, 0)
 	for _, u := range users {
-		avatar := schema.FormatAvatarInfo(u.Avatar, u.EMail)
 		t := &schema.GetUserPageResp{
 			UserID:      u.ID,
 			CreatedAt:   u.CreatedAt.Unix(),
@@ -249,7 +253,7 @@ func (us *UserAdminService) GetUserPage(ctx context.Context, req *schema.GetUser
 			EMail:       u.EMail,
 			Rank:        u.Rank,
 			DisplayName: u.DisplayName,
-			Avatar:      avatar,
+			Avatar:      avatarMapping[u.ID].GetURL(),
 		}
 		if u.Status == entity.UserStatusDeleted {
 			t.Status = schema.UserDeleted

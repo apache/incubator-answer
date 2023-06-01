@@ -9,7 +9,6 @@ import (
 	"github.com/answerdev/answer/internal/repo/captcha"
 	"github.com/answerdev/answer/internal/repo/collection"
 	"github.com/answerdev/answer/internal/repo/comment"
-	"github.com/answerdev/answer/internal/repo/common"
 	"github.com/answerdev/answer/internal/repo/config"
 	"github.com/answerdev/answer/internal/repo/export"
 	"github.com/answerdev/answer/internal/repo/meta"
@@ -33,7 +32,6 @@ import (
 
 // ProviderSetRepo is data providers.
 var ProviderSetRepo = wire.NewSet(
-	common.NewCommonRepo,
 	data.NewData,
 	data.NewDB,
 	data.NewCache,

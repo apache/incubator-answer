@@ -129,6 +129,10 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 			ctx.Redirect(http.StatusFound, "/50x")
 			return
 		}
+		if len(resp.ErrMsg) > 0 {
+			ctx.Redirect(http.StatusFound, fmt.Sprintf("/50x?title=%s&msg=%s", resp.ErrTitle, resp.ErrMsg))
+			return
+		}
 		if len(resp.AccessToken) > 0 {
 			ctx.Redirect(http.StatusFound, fmt.Sprintf("%s/users/auth-landing?access_token=%s",
 				siteGeneral.SiteUrl, resp.AccessToken))
