@@ -27,6 +27,7 @@ import (
 	"github.com/answerdev/answer/internal/service/revision_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/encryption"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/uid"
@@ -588,7 +589,17 @@ func (qs *QuestionService) UpdateQuestionInviteUser(ctx context.Context, req *sc
 	if saveerr != nil {
 		return saveerr
 	}
-	go qs.notificationInviteUser(ctx, inviteUserIDs, originQuestion.ID, originQuestion.Title, req.UserID)
+	//send notification
+	oldInviteUserIDsStr := originQuestion.InviteUserID
+	oldInviteUserIDs := make([]string, 0)
+	if oldInviteUserIDsStr != "" {
+		err = json.Unmarshal([]byte(oldInviteUserIDsStr), &oldInviteUserIDs)
+		if err == nil {
+			needSendNotificationUserIDs := converter.ArrayNotInArray(oldInviteUserIDs, inviteUserIDs)
+			go qs.notificationInviteUser(ctx, needSendNotificationUserIDs, originQuestion.ID, originQuestion.Title, req.UserID)
+		}
+	}
+
 	return nil
 }
 
