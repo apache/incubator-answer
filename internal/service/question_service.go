@@ -566,7 +566,10 @@ func (qs *QuestionService) UpdateQuestionInviteUser(ctx context.Context, req *sc
 	for _, item := range req.InviteUser {
 		_, ok := inviteUserInfoList[item]
 		if ok {
-			inviteUserIDs = append(inviteUserIDs, inviteUserInfoList[item].ID)
+			//The inviter can't be himself.
+			if req.UserID != inviteUserInfoList[item].ID {
+				inviteUserIDs = append(inviteUserIDs, inviteUserInfoList[item].ID)
+			}
 		}
 	}
 	inviteUserStr := ""
