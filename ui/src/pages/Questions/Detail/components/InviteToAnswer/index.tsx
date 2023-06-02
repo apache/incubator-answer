@@ -115,7 +115,11 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
                   className="m-1 d-inline-flex flex-nowrap"
                   size="sm"
                   variant="outline-secondary">
-                  <Avatar avatar={user.avatar} size="20" />
+                  <Avatar
+                    avatar={user.avatar}
+                    size="20"
+                    className="rounded-1"
+                  />
                   <span className="text-nowrap ms-2">{user.display_name}</span>
                   {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
                   <span

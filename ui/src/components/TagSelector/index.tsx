@@ -110,6 +110,11 @@ const TagSelector: FC<IProps> = ({
     fetchTags(searchValue);
   }, [visibleMenu]);
 
+  const resetSearch = () => {
+    setCurrentIndex(0);
+    setSearchValue('');
+    setTags([]);
+  };
   const handleClick = (val: Type.Tag) => {
     const findIndex = initialValue.findIndex(
       (item) => item.slug_name.toLowerCase() === val.slug_name.toLowerCase(),
@@ -130,6 +135,7 @@ const TagSelector: FC<IProps> = ({
         setRepeatIndex(-1);
       }, 2000);
     }
+    resetSearch();
   };
 
   const handleRemove = (val: Type.Tag) => {
@@ -178,9 +184,9 @@ const TagSelector: FC<IProps> = ({
       }
       if (currentIndex <= tags.length - 1) {
         handleClick(tags[currentIndex]);
-        if (currentIndex === tags.length - 1 && currentIndex > 0) {
-          setCurrentIndex(currentIndex - 1);
-        }
+        // if (currentIndex === tags.length - 1 && currentIndex > 0) {
+        //   setCurrentIndex(currentIndex - 1);
+        // }
       }
     }
   };
