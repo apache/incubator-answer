@@ -42,17 +42,18 @@ import (
 
 // QuestionService user service
 type QuestionService struct {
-	questionRepo          questioncommon.QuestionRepo
-	tagCommon             *tagcommon.TagCommonService
-	questioncommon        *questioncommon.QuestionCommon
-	userCommon            *usercommon.UserCommon
-	userRepo              usercommon.UserRepo
-	revisionService       *revision_common.RevisionService
-	metaService           *meta.MetaService
-	collectionCommon      *collectioncommon.CollectionCommon
-	answerActivityService *activity.AnswerActivityService
-	data                  *data.Data
-	emailService          *export.EmailService
+	questionRepo             questioncommon.QuestionRepo
+	tagCommon                *tagcommon.TagCommonService
+	questioncommon           *questioncommon.QuestionCommon
+	userCommon               *usercommon.UserCommon
+	userRepo                 usercommon.UserRepo
+	revisionService          *revision_common.RevisionService
+	metaService              *meta.MetaService
+	collectionCommon         *collectioncommon.CollectionCommon
+	answerActivityService    *activity.AnswerActivityService
+	data                     *data.Data
+	emailService             *export.EmailService
+	notificationQueueService notice_queue.NotificationQueueService
 }
 
 func NewQuestionService(
@@ -67,19 +68,21 @@ func NewQuestionService(
 	answerActivityService *activity.AnswerActivityService,
 	data *data.Data,
 	emailService *export.EmailService,
+	notificationQueueService notice_queue.NotificationQueueService,
 ) *QuestionService {
 	return &QuestionService{
-		questionRepo:          questionRepo,
-		tagCommon:             tagCommon,
-		questioncommon:        questioncommon,
-		userCommon:            userCommon,
-		userRepo:              userRepo,
-		revisionService:       revisionService,
-		metaService:           metaService,
-		collectionCommon:      collectionCommon,
-		answerActivityService: answerActivityService,
-		data:                  data,
-		emailService:          emailService,
+		questionRepo:             questionRepo,
+		tagCommon:                tagCommon,
+		questioncommon:           questioncommon,
+		userCommon:               userCommon,
+		userRepo:                 userRepo,
+		revisionService:          revisionService,
+		metaService:              metaService,
+		collectionCommon:         collectionCommon,
+		answerActivityService:    answerActivityService,
+		data:                     data,
+		emailService:             emailService,
+		notificationQueueService: notificationQueueService,
 	}
 }
 
@@ -633,7 +636,7 @@ func (qs *QuestionService) notificationInviteUser(
 		}
 		msg.ObjectType = constant.QuestionObjectType
 		msg.NotificationAction = constant.NotificationInvitedYouToAnswer
-		notice_queue.AddNotification(msg)
+		qs.notificationQueueService.Send(ctx, msg)
 
 		userInfo, ok := invitee[userID]
 		if !ok {
@@ -1247,7 +1250,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 	msg.TriggerUserID = questionInfo.UserID
 	msg.ObjectType = constant.QuestionObjectType
 	msg.NotificationAction = constant.NotificationYourQuestionWasDeleted
-	notice_queue.AddNotification(msg)
+	qs.notificationQueueService.Send(ctx, msg)
 	return nil
 }
 

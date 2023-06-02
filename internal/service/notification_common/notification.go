@@ -33,12 +33,13 @@ type NotificationRepo interface {
 }
 
 type NotificationCommon struct {
-	data              *data.Data
-	notificationRepo  NotificationRepo
-	activityRepo      activity_common.ActivityRepo
-	followRepo        activity_common.FollowRepo
-	userCommon        *usercommon.UserCommon
-	objectInfoService *object_info.ObjService
+	data                     *data.Data
+	notificationRepo         NotificationRepo
+	activityRepo             activity_common.ActivityRepo
+	followRepo               activity_common.FollowRepo
+	userCommon               *usercommon.UserCommon
+	objectInfoService        *object_info.ObjService
+	notificationQueueService notice_queue.NotificationQueueService
 }
 
 func NewNotificationCommon(
@@ -48,29 +49,19 @@ func NewNotificationCommon(
 	activityRepo activity_common.ActivityRepo,
 	followRepo activity_common.FollowRepo,
 	objectInfoService *object_info.ObjService,
+	notificationQueueService notice_queue.NotificationQueueService,
 ) *NotificationCommon {
 	notification := &NotificationCommon{
-		data:              data,
-		notificationRepo:  notificationRepo,
-		activityRepo:      activityRepo,
-		followRepo:        followRepo,
-		userCommon:        userCommon,
-		objectInfoService: objectInfoService,
+		data:                     data,
+		notificationRepo:         notificationRepo,
+		activityRepo:             activityRepo,
+		followRepo:               followRepo,
+		userCommon:               userCommon,
+		objectInfoService:        objectInfoService,
+		notificationQueueService: notificationQueueService,
 	}
-	notification.HandleNotification()
+	notificationQueueService.RegisterHandler(notification.AddNotification)
 	return notification
-}
-
-func (ns *NotificationCommon) HandleNotification() {
-	go func() {
-		for msg := range notice_queue.NotificationQueue {
-			log.Debugf("received notification %+v", msg)
-			err := ns.AddNotification(context.TODO(), msg)
-			if err != nil {
-				log.Error(err)
-			}
-		}
-	}()
 }
 
 // AddNotification
@@ -213,6 +204,6 @@ func (ns *NotificationCommon) SendNotificationToAllFollower(ctx context.Context,
 		t.ReceiverUserID = userID
 		t.TriggerUserID = msg.TriggerUserID
 		t.NoNeedPushAllFollow = true
-		notice_queue.AddNotification(t)
+		ns.notificationQueueService.Send(ctx, t)
 	}
 }

@@ -19,32 +19,30 @@ import (
 	"xorm.io/xorm"
 )
 
+var (
+	acceptActionList = []string{constant.ActAccept, constant.ActAccepted}
+)
+
 // AnswerActivityRepo answer accepted
 type AnswerActivityRepo struct {
-	data         *data.Data
-	activityRepo activity_common.ActivityRepo
-	userRankRepo rank.UserRankRepo
+	data                     *data.Data
+	activityRepo             activity_common.ActivityRepo
+	userRankRepo             rank.UserRankRepo
+	notificationQueueService notice_queue.NotificationQueueService
 }
-
-const (
-	acceptAction   = "accept"
-	acceptedAction = "accepted"
-)
-
-var (
-	acceptActionList = []string{acceptAction, acceptedAction}
-)
 
 // NewAnswerActivityRepo new repository
 func NewAnswerActivityRepo(
 	data *data.Data,
 	activityRepo activity_common.ActivityRepo,
 	userRankRepo rank.UserRankRepo,
+	notificationQueueService notice_queue.NotificationQueueService,
 ) activity.AnswerActivityRepo {
 	return &AnswerActivityRepo{
-		data:         data,
-		activityRepo: activityRepo,
-		userRankRepo: userRankRepo,
+		data:                     data,
+		activityRepo:             activityRepo,
+		userRankRepo:             userRankRepo,
+		notificationQueueService: notificationQueueService,
 	}
 }
 
@@ -139,7 +137,7 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 			Rank:             deltaRank,
 			HasRank:          hasRank,
 		}
-		if action == acceptAction {
+		if action == constant.ActAccept {
 			addActivity.UserID = questionUserID
 			addActivity.TriggerUserID = converter.StringToInt64(answerUserID)
 			addActivity.OriginalObjectID = questionObjID // if activity is 'accept' means this question is accept the answer.
@@ -209,7 +207,7 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 			msg.ObjectType = constant.AnswerObjectType
 		}
 		if msg.TriggerUserID != msg.ReceiverUserID {
-			notice_queue.AddNotification(msg)
+			ar.notificationQueueService.Send(ctx, msg)
 		}
 	}
 
@@ -223,7 +221,7 @@ func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
 			msg.TriggerUserID = questionUserID
 			msg.ObjectType = constant.AnswerObjectType
 			msg.NotificationAction = constant.NotificationAcceptAnswer
-			notice_queue.AddNotification(msg)
+			ar.notificationQueueService.Send(ctx, msg)
 		}
 	}
 	return err
@@ -246,7 +244,7 @@ func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
 			Rank:         -deltaRank,
 			HasRank:      hasRank,
 		}
-		if action == acceptAction {
+		if action == constant.ActAccept {
 			addActivity.UserID = questionUserID
 			addActivity.OriginalObjectID = questionObjID
 		} else {
@@ -303,7 +301,7 @@ func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
 			msg.ObjectType = constant.AnswerObjectType
 		}
 		if msg.TriggerUserID != msg.ReceiverUserID {
-			notice_queue.AddNotification(msg)
+			ar.notificationQueueService.Send(ctx, msg)
 		}
 	}
 	return err

@@ -56,6 +56,7 @@ import (
 	export2 "github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/follow"
 	meta2 "github.com/answerdev/answer/internal/service/meta"
+	"github.com/answerdev/answer/internal/service/notice_queue"
 	notification2 "github.com/answerdev/answer/internal/service/notification"
 	"github.com/answerdev/answer/internal/service/notification_common"
 	"github.com/answerdev/answer/internal/service/object_info"
@@ -142,7 +143,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	tagCommonService := tag_common2.NewTagCommonService(tagCommonRepo, tagRelRepo, tagRepo, revisionService, siteInfoCommonService)
 	objService := object_info.NewObjService(answerRepo, questionRepo, commentCommonRepo, tagCommonRepo, tagCommonService)
 	voteRepo := activity_common.NewVoteRepo(dataData, activityRepo)
-	commentService := comment2.NewCommentService(commentRepo, commentCommonRepo, userCommon, objService, voteRepo, emailService, userRepo)
+	notificationQueueService := notice_queue.NewNotificationQueueService()
+	commentService := comment2.NewCommentService(commentRepo, commentCommonRepo, userCommon, objService, voteRepo, emailService, userRepo, notificationQueueService)
 	rolePowerRelRepo := role.NewRolePowerRelRepo(dataData)
 	rolePowerRelService := role2.NewRolePowerRelService(rolePowerRelRepo, userRoleRelService)
 	rankService := rank2.NewRankService(userCommon, userRankRepo, objService, userRoleRelService, rolePowerRelService, configService)
@@ -150,7 +152,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	reportRepo := report.NewReportRepo(dataData, uniqueIDRepo)
 	reportService := report2.NewReportService(reportRepo, objService)
 	reportController := controller.NewReportController(reportService, rankService)
-	serviceVoteRepo := activity.NewVoteRepo(dataData, uniqueIDRepo, configService, activityRepo, userRankRepo, voteRepo)
+	serviceVoteRepo := activity.NewVoteRepo(dataData, uniqueIDRepo, configService, activityRepo, userRankRepo, voteRepo, notificationQueueService)
 	voteService := service.NewVoteService(serviceVoteRepo, uniqueIDRepo, configService, questionRepo, answerRepo, commentCommonRepo, objService)
 	voteController := controller.NewVoteController(voteService, rankService)
 	followRepo := activity_common.NewFollowRepo(dataData, uniqueIDRepo, activityRepo)
@@ -168,11 +170,11 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	questionCommon := questioncommon.NewQuestionCommon(questionRepo, answerRepo, voteRepo, followRepo, tagCommonService, userCommon, collectionCommon, answerCommon, metaService, configService)
 	collectionService := service.NewCollectionService(collectionRepo, collectionGroupRepo, questionCommon)
 	collectionController := controller.NewCollectionController(collectionService)
-	answerActivityRepo := activity.NewAnswerActivityRepo(dataData, activityRepo, userRankRepo)
+	answerActivityRepo := activity.NewAnswerActivityRepo(dataData, activityRepo, userRankRepo, notificationQueueService)
 	questionActivityRepo := activity.NewQuestionActivityRepo(dataData, activityRepo, userRankRepo)
 	answerActivityService := activity2.NewAnswerActivityService(answerActivityRepo, questionActivityRepo)
-	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, userRepo, revisionService, metaService, collectionCommon, answerActivityService, dataData, emailService)
-	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService, userRoleRelService)
+	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, userRepo, revisionService, metaService, collectionCommon, answerActivityService, dataData, emailService, notificationQueueService)
+	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService, userRoleRelService, notificationQueueService)
 	questionController := controller.NewQuestionController(questionService, answerService, rankService, siteInfoCommonService)
 	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configService, siteInfoCommonService, serviceConf, dataData)
 	answerController := controller.NewAnswerController(answerService, rankService, dashboardService)
@@ -180,10 +182,10 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon)
 	searchService := service.NewSearchService(searchParser, searchRepo)
 	searchController := controller.NewSearchController(searchService)
-	serviceRevisionService := service.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService, objService, questionRepo, answerRepo, tagRepo, tagCommonService)
+	serviceRevisionService := service.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService, objService, questionRepo, answerRepo, tagRepo, tagCommonService, notificationQueueService)
 	revisionController := controller.NewRevisionController(serviceRevisionService, rankService)
 	rankController := controller.NewRankController(rankService)
-	reportHandle := report_handle_admin.NewReportHandle(questionCommon, commentRepo, configService)
+	reportHandle := report_handle_admin.NewReportHandle(questionCommon, commentRepo, configService, notificationQueueService)
 	reportAdminService := report_admin.NewReportAdminService(reportRepo, userCommon, answerRepo, questionRepo, commentCommonRepo, reportHandle, configService, objService)
 	controller_adminReportController := controller_admin.NewReportController(reportAdminService)
 	userAdminRepo := user.NewUserAdminRepo(dataData, authRepo)
@@ -197,7 +199,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	siteInfoController := controller_admin.NewSiteInfoController(siteInfoService)
 	controllerSiteInfoController := controller.NewSiteInfoController(siteInfoCommonService)
 	notificationRepo := notification.NewNotificationRepo(dataData)
-	notificationCommon := notificationcommon.NewNotificationCommon(dataData, notificationRepo, userCommon, activityRepo, followRepo, objService)
+	notificationCommon := notificationcommon.NewNotificationCommon(dataData, notificationRepo, userCommon, activityRepo, followRepo, objService, notificationQueueService)
 	notificationService := notification2.NewNotificationService(dataData, notificationRepo, notificationCommon, revisionService)
 	notificationController := controller.NewNotificationController(notificationService, rankService)
 	dashboardController := controller.NewDashboardController(dashboardService)

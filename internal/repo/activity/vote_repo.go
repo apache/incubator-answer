@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/service/notice_queue"
 	"github.com/answerdev/answer/pkg/converter"
 
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/service/config"
-	"github.com/answerdev/answer/internal/service/notice_queue"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/pkg/obj"
 
@@ -30,12 +30,13 @@ import (
 
 // VoteRepo activity repository
 type VoteRepo struct {
-	data          *data.Data
-	uniqueIDRepo  unique.UniqueIDRepo
-	configService *config.ConfigService
-	activityRepo  activity_common.ActivityRepo
-	userRankRepo  rank.UserRankRepo
-	voteCommon    activity_common.VoteRepo
+	data                     *data.Data
+	uniqueIDRepo             unique.UniqueIDRepo
+	configService            *config.ConfigService
+	activityRepo             activity_common.ActivityRepo
+	userRankRepo             rank.UserRankRepo
+	voteCommon               activity_common.VoteRepo
+	notificationQueueService notice_queue.NotificationQueueService
 }
 
 // NewVoteRepo new repository
@@ -46,14 +47,16 @@ func NewVoteRepo(
 	activityRepo activity_common.ActivityRepo,
 	userRankRepo rank.UserRankRepo,
 	voteCommon activity_common.VoteRepo,
+	notificationQueueService notice_queue.NotificationQueueService,
 ) service.VoteRepo {
 	return &VoteRepo{
-		data:          data,
-		uniqueIDRepo:  uniqueIDRepo,
-		configService: configService,
-		activityRepo:  activityRepo,
-		userRankRepo:  userRankRepo,
-		voteCommon:    voteCommon,
+		data:                     data,
+		uniqueIDRepo:             uniqueIDRepo,
+		configService:            configService,
+		activityRepo:             activityRepo,
+		userRankRepo:             userRankRepo,
+		voteCommon:               voteCommon,
+		notificationQueueService: notificationQueueService,
 	}
 }
 
@@ -177,7 +180,7 @@ func (vr *VoteRepo) vote(ctx context.Context, objectID string, userID, objectUse
 		vr.sendNotification(ctx, activityUserID, objectUserID, objectID)
 	}
 	if sendInboxNotification {
-		vr.sendVoteInboxNotification(userID, objectUserID, objectID, upVote)
+		vr.sendVoteInboxNotification(ctx, userID, objectUserID, objectID, upVote)
 	}
 	return
 }
@@ -451,10 +454,10 @@ func (vr *VoteRepo) sendNotification(ctx context.Context, activityUserID, object
 		ObjectID:       objectID,
 		ObjectType:     objectType,
 	}
-	notice_queue.AddNotification(msg)
+	vr.notificationQueueService.Send(ctx, msg)
 }
 
-func (vr *VoteRepo) sendVoteInboxNotification(triggerUserID, receiverUserID, objectID string, upvote bool) {
+func (vr *VoteRepo) sendVoteInboxNotification(ctx context.Context, triggerUserID, receiverUserID, objectID string, upvote bool) {
 	if triggerUserID == receiverUserID {
 		return
 	}
@@ -487,6 +490,6 @@ func (vr *VoteRepo) sendVoteInboxNotification(triggerUserID, receiverUserID, obj
 		}
 	}
 	if len(msg.NotificationAction) > 0 {
-		notice_queue.AddNotification(msg)
+		vr.notificationQueueService.Send(ctx, msg)
 	}
 }

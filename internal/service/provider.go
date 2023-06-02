@@ -14,6 +14,7 @@ import (
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/follow"
 	"github.com/answerdev/answer/internal/service/meta"
+	"github.com/answerdev/answer/internal/service/notice_queue"
 	"github.com/answerdev/answer/internal/service/notification"
 	notficationcommon "github.com/answerdev/answer/internal/service/notification_common"
 	"github.com/answerdev/answer/internal/service/object_info"
@@ -86,4 +87,5 @@ var ProviderSetService = wire.NewSet(
 	user_external_login.NewUserCenterLoginService,
 	plugin_common.NewPluginCommonService,
 	config.NewConfigService,
+	notice_queue.NewNotificationQueueService,
 )

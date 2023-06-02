@@ -28,15 +28,16 @@ import (
 
 // RevisionService user service
 type RevisionService struct {
-	revisionRepo      revision.RevisionRepo
-	userCommon        *usercommon.UserCommon
-	questionCommon    *questioncommon.QuestionCommon
-	answerService     *AnswerService
-	objectInfoService *object_info.ObjService
-	questionRepo      questioncommon.QuestionRepo
-	answerRepo        answercommon.AnswerRepo
-	tagRepo           tag_common.TagRepo
-	tagCommon         *tagcommon.TagCommonService
+	revisionRepo             revision.RevisionRepo
+	userCommon               *usercommon.UserCommon
+	questionCommon           *questioncommon.QuestionCommon
+	answerService            *AnswerService
+	objectInfoService        *object_info.ObjService
+	questionRepo             questioncommon.QuestionRepo
+	answerRepo               answercommon.AnswerRepo
+	tagRepo                  tag_common.TagRepo
+	tagCommon                *tagcommon.TagCommonService
+	notificationQueueService notice_queue.NotificationQueueService
 }
 
 func NewRevisionService(
@@ -49,17 +50,19 @@ func NewRevisionService(
 	answerRepo answercommon.AnswerRepo,
 	tagRepo tag_common.TagRepo,
 	tagCommon *tagcommon.TagCommonService,
+	notificationQueueService notice_queue.NotificationQueueService,
 ) *RevisionService {
 	return &RevisionService{
-		revisionRepo:      revisionRepo,
-		userCommon:        userCommon,
-		questionCommon:    questionCommon,
-		answerService:     answerService,
-		objectInfoService: objectInfoService,
-		questionRepo:      questionRepo,
-		answerRepo:        answerRepo,
-		tagRepo:           tagRepo,
-		tagCommon:         tagCommon,
+		revisionRepo:             revisionRepo,
+		userCommon:               userCommon,
+		questionCommon:           questionCommon,
+		answerService:            answerService,
+		objectInfoService:        objectInfoService,
+		questionRepo:             questionRepo,
+		answerRepo:               answerRepo,
+		tagRepo:                  tagRepo,
+		tagCommon:                tagCommon,
+		notificationQueueService: notificationQueueService,
 	}
 }
 
@@ -210,7 +213,7 @@ func (rs *RevisionService) revisionAuditAnswer(ctx context.Context, revisionitem
 		}
 		msg.ObjectType = constant.AnswerObjectType
 		msg.NotificationAction = constant.NotificationUpdateAnswer
-		notice_queue.AddNotification(msg)
+		rs.notificationQueueService.Send(ctx, msg)
 
 		activity_queue.AddActivity(&schema.ActivityMsg{
 			UserID:           revisionitem.UserID,

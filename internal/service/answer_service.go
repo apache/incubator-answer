@@ -31,18 +31,19 @@ import (
 
 // AnswerService user service
 type AnswerService struct {
-	answerRepo            answercommon.AnswerRepo
-	questionRepo          questioncommon.QuestionRepo
-	questionCommon        *questioncommon.QuestionCommon
-	answerActivityService *activity.AnswerActivityService
-	userCommon            *usercommon.UserCommon
-	collectionCommon      *collectioncommon.CollectionCommon
-	userRepo              usercommon.UserRepo
-	revisionService       *revision_common.RevisionService
-	AnswerCommon          *answercommon.AnswerCommon
-	voteRepo              activity_common.VoteRepo
-	emailService          *export.EmailService
-	roleService           *role.UserRoleRelService
+	answerRepo               answercommon.AnswerRepo
+	questionRepo             questioncommon.QuestionRepo
+	questionCommon           *questioncommon.QuestionCommon
+	answerActivityService    *activity.AnswerActivityService
+	userCommon               *usercommon.UserCommon
+	collectionCommon         *collectioncommon.CollectionCommon
+	userRepo                 usercommon.UserRepo
+	revisionService          *revision_common.RevisionService
+	AnswerCommon             *answercommon.AnswerCommon
+	voteRepo                 activity_common.VoteRepo
+	emailService             *export.EmailService
+	roleService              *role.UserRoleRelService
+	notificationQueueService notice_queue.NotificationQueueService
 }
 
 func NewAnswerService(
@@ -58,20 +59,22 @@ func NewAnswerService(
 	voteRepo activity_common.VoteRepo,
 	emailService *export.EmailService,
 	roleService *role.UserRoleRelService,
+	notificationQueueService notice_queue.NotificationQueueService,
 ) *AnswerService {
 	return &AnswerService{
-		answerRepo:            answerRepo,
-		questionRepo:          questionRepo,
-		userCommon:            userCommon,
-		collectionCommon:      collectionCommon,
-		questionCommon:        questionCommon,
-		userRepo:              userRepo,
-		revisionService:       revisionService,
-		answerActivityService: answerAcceptActivityRepo,
-		AnswerCommon:          answerCommon,
-		voteRepo:              voteRepo,
-		emailService:          emailService,
-		roleService:           roleService,
+		answerRepo:               answerRepo,
+		questionRepo:             questionRepo,
+		userCommon:               userCommon,
+		collectionCommon:         collectionCommon,
+		questionCommon:           questionCommon,
+		userRepo:                 userRepo,
+		revisionService:          revisionService,
+		answerActivityService:    answerAcceptActivityRepo,
+		AnswerCommon:             answerCommon,
+		voteRepo:                 voteRepo,
+		emailService:             emailService,
+		roleService:              roleService,
+		notificationQueueService: notificationQueueService,
 	}
 }
 
@@ -481,7 +484,7 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.A
 	msg.TriggerUserID = answerInfo.UserID
 	msg.ObjectType = constant.AnswerObjectType
 	msg.NotificationAction = constant.NotificationYourAnswerWasDeleted
-	notice_queue.AddNotification(msg)
+	as.notificationQueueService.Send(ctx, msg)
 
 	return nil
 }
@@ -571,7 +574,7 @@ func (as *AnswerService) notificationUpdateAnswer(ctx context.Context, questionU
 	}
 	msg.ObjectType = constant.AnswerObjectType
 	msg.NotificationAction = constant.NotificationUpdateAnswer
-	notice_queue.AddNotification(msg)
+	as.notificationQueueService.Send(ctx, msg)
 }
 
 func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
@@ -588,7 +591,7 @@ func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
 	}
 	msg.ObjectType = constant.AnswerObjectType
 	msg.NotificationAction = constant.NotificationAnswerTheQuestion
-	notice_queue.AddNotification(msg)
+	as.notificationQueueService.Send(ctx, msg)
 
 	userInfo, exist, err := as.userRepo.GetByUserID(ctx, questionUserID)
 	if err != nil {

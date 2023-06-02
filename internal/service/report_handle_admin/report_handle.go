@@ -4,30 +4,34 @@ import (
 	"context"
 
 	"github.com/answerdev/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/service/notice_queue"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/comment"
-	"github.com/answerdev/answer/internal/service/notice_queue"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/pkg/obj"
 )
 
 type ReportHandle struct {
-	questionCommon *questioncommon.QuestionCommon
-	commentRepo    comment.CommentRepo
-	configService  *config.ConfigService
+	questionCommon           *questioncommon.QuestionCommon
+	commentRepo              comment.CommentRepo
+	configService            *config.ConfigService
+	notificationQueueService notice_queue.NotificationQueueService
 }
 
 func NewReportHandle(
 	questionCommon *questioncommon.QuestionCommon,
 	commentRepo comment.CommentRepo,
-	configService *config.ConfigService) *ReportHandle {
+	configService *config.ConfigService,
+	notificationQueueService notice_queue.NotificationQueueService,
+) *ReportHandle {
 	return &ReportHandle{
-		questionCommon: questionCommon,
-		commentRepo:    commentRepo,
-		configService:  configService,
+		questionCommon:           questionCommon,
+		commentRepo:              commentRepo,
+		configService:            configService,
+		notificationQueueService: notificationQueueService,
 	}
 }
 
@@ -88,5 +92,5 @@ func (rh *ReportHandle) sendNotification(ctx context.Context, reportedUserID, ob
 		ObjectType:         constant.ReportObjectType,
 		NotificationAction: notificationAction,
 	}
-	notice_queue.AddNotification(msg)
+	rh.notificationQueueService.Send(ctx, msg)
 }
