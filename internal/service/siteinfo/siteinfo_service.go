@@ -126,11 +126,7 @@ func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGe
 		Content: string(content),
 		Status:  1,
 	}
-	err = s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeGeneral, data)
-	if err == nil {
-		constant.DefaultSiteURL = req.SiteUrl
-	}
-	return
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeGeneral, data)
 }
 
 func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.SiteInterfaceReq) (err error) {
