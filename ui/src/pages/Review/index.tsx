@@ -7,6 +7,7 @@ import { usePageTags } from '@/hooks';
 import { BaseUserCard, FormatTime, Empty, DiffContent } from '@/components';
 import { getReviewList, revisionAudit } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
+import { scrollToDocTop } from '@/utils';
 import type * as Type from '@/common/interface';
 
 const Index: FC = () => {
@@ -39,7 +40,7 @@ const Index: FC = () => {
       setNoTasks(true);
     }
     setTimeout(() => {
-      window.scrollTo({ top: 0 });
+      scrollToDocTop();
     }, 150);
   };
   const queryNextOne = (pageNumber) => {
