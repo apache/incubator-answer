@@ -184,9 +184,9 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 			titleIsAnswerID = true
 		}
 	}
-
+	siteInfo = tc.SiteInfo(ctx)
 	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
-	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionID {
+	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionID || siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionIDByShortID {
 		if len(ctx.Request.URL.Query()) > 0 {
 			url = fmt.Sprintf("%s?%s", url, ctx.Request.URL.RawQuery)
 		}
