@@ -355,6 +355,7 @@ type UserBasicInfo struct {
 
 type GetOtherUserInfoByUsernameReq struct {
 	Username string `validate:"required,gt=0,lte=500" form:"username"`
+	UserID   string `json:"-"`
 }
 
 type GetOtherUserInfoResp struct {

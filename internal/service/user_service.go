@@ -817,17 +817,20 @@ func (us *UserService) getUserInfoMapping(ctx context.Context, userIDs []string)
 	return userInfoMapping, nil
 }
 
-func (us *UserService) SearchUserListByName(ctx context.Context, name string) ([]*schema.UserBasicInfo, error) {
+func (us *UserService) SearchUserListByName(ctx context.Context, input *schema.GetOtherUserInfoByUsernameReq) ([]*schema.UserBasicInfo, error) {
 	userinfolist := make([]*schema.UserBasicInfo, 0)
-	list, err := us.userRepo.SearchUserListByName(ctx, name)
+	list, err := us.userRepo.SearchUserListByName(ctx, input.Username)
 	if err != nil {
 		return userinfolist, err
 	}
 	avatarMapping := us.siteInfoService.FormatListAvatar(ctx, list)
 	for _, user := range list {
-		userinfo := us.userCommonService.FormatUserBasicInfo(ctx, user)
-		userinfo.Avatar = avatarMapping[user.ID].GetURL()
-		userinfolist = append(userinfolist, userinfo)
+		if input.UserID != user.ID {
+			userinfo := us.userCommonService.FormatUserBasicInfo(ctx, user)
+			userinfo.Avatar = avatarMapping[user.ID].GetURL()
+			userinfolist = append(userinfolist, userinfo)
+		}
+
 	}
 	return userinfolist, nil
 }
