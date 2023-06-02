@@ -19,7 +19,7 @@ import {
 } from '@/services';
 import QuestionList, { QUESTION_ORDER_KEYS } from '@/components/QuestionList';
 import HotQuestions from '@/components/HotQuestions';
-import { escapeRemove, guard, Storage } from '@/utils';
+import { escapeRemove, guard, Storage, scrollToDocTop } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
 import { QUESTIONS_ORDER_STORAGE_KEY } from '@/common/constants';
 
@@ -60,7 +60,7 @@ const Index: FC = () => {
 
   useEffect(() => {
     if (!listLoading) {
-      window.scrollTo(0, 0);
+      scrollToDocTop();
     }
   }, [listLoading]);
 

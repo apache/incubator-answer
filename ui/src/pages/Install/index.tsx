@@ -10,7 +10,7 @@ import {
   installBaseInfo,
   checkConfigFileExists,
 } from '@/services';
-import { Storage, handleFormError } from '@/utils';
+import { Storage, handleFormError, scrollToDocTop } from '@/utils';
 import { CURRENT_LANG_STORAGE_KEY } from '@/common/constants';
 
 import {
@@ -109,7 +109,7 @@ const Index: FC = () => {
   };
 
   const handleErr = (data) => {
-    window.scrollTo(0, 0);
+    scrollToDocTop();
     setErrorData(data);
   };
 

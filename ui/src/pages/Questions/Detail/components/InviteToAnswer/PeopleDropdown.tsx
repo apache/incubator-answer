@@ -59,12 +59,10 @@ const Index: FC<Props> = ({
     searchPeople(s);
   };
 
-  const updateCurrentIndex = (pl: number) => {
-    let curIndex = currentIndex;
-    if (currentIndex >= pl) {
-      curIndex = Math.max(pl - 1, 0);
-    }
-    setCurrentIndex(curIndex);
+  const resetSearch = () => {
+    setCurrentIndex(0);
+    setSearchValue('');
+    setPeopleList([]);
   };
 
   const handleSelect = (idx) => {
@@ -73,9 +71,10 @@ const Index: FC<Props> = ({
     }
     const people = peopleList[idx];
     if (people) {
-      updateCurrentIndex(peopleList.length - 1);
       onSelect(people);
     }
+
+    resetSearch();
   };
 
   const handleKeyDown = (evt) => {
@@ -115,7 +114,6 @@ const Index: FC<Props> = ({
   return visible ? (
     <Dropdown
       className="d-inline-flex people-dropdown"
-      align="end"
       onSelect={handleSelect}
       onKeyDown={handleKeyDown}
       onToggle={setToggleState}>
@@ -147,8 +145,12 @@ const Index: FC<Props> = ({
               className={idx === 0 ? 'mt-2' : ''}>
               <div className="d-flex align-items-center text-nowrap">
                 <Avatar avatar={p.avatar} size="24" className="rounded-1" />
-                <span className="mx-2">{p.display_name}</span>
-                <small className="text-secondary">@{p.username}</small>
+                <div className="d-flex flex-wrap text-truncate">
+                  <span className="ms-2 text-truncate">{p.display_name}</span>
+                  <small className="text-secondary text-truncate ms-2">
+                    @{p.username}
+                  </small>
+                </div>
               </div>
             </Dropdown.Item>
           );

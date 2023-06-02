@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Pagination, CustomSidebar } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
-import { scrollToElementTop } from '@/utils';
+import { scrollToElementTop, scrollToDocTop } from '@/utils';
 import { usePageTags, usePageUsers } from '@/hooks';
 import type {
   ListResult,
@@ -158,7 +158,7 @@ const Index = () => {
       return;
     }
     if (type === 'default') {
-      window.scrollTo(0, 0);
+      scrollToDocTop();
       getDetail();
       return;
     }
@@ -183,7 +183,7 @@ const Index = () => {
     if (!qid) {
       return;
     }
-    window.scrollTo(0, 0);
+    scrollToDocTop();
     getDetail();
     requestAnswers();
   }, [qid]);
