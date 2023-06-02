@@ -7,7 +7,3 @@ const (
 	AvatarTypeGravatar     = "gravatar"
 	AvatarTypeCustom       = "custom"
 )
-
-var (
-	DefaultSiteURL = ""
-)
