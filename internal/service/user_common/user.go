@@ -44,14 +44,14 @@ type UserCommon struct {
 	userRepo              UserRepo
 	userRoleService       *role.UserRoleRelService
 	authService           *auth.AuthService
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService
 }
 
 func NewUserCommon(
 	userRepo UserRepo,
 	userRoleService *role.UserRoleRelService,
 	authService *auth.AuthService,
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
 ) *UserCommon {
 	return &UserCommon{
 		userRepo:              userRepo,

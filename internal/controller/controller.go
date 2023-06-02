@@ -19,7 +19,7 @@ var ProviderSetController = wire.NewSet(
 	NewRankController,
 	NewReasonController,
 	NewNotificationController,
-	NewSiteinfoController,
+	NewSiteInfoController,
 	NewDashboardController,
 	NewUploadController,
 	NewActivityController,

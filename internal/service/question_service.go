@@ -1018,16 +1018,19 @@ func (qs *QuestionService) PersonalCollectionPage(ctx context.Context, req *sche
 		return nil, err
 	}
 	for _, id := range questionIDs {
-		_, ok := questionMaps[uid.EnShortID(id)]
+		if handler.GetEnableShortID(ctx) {
+			id = uid.EnShortID(id)
+		}
+		_, ok := questionMaps[id]
 		if ok {
-			questionMaps[uid.EnShortID(id)].LastAnsweredUserInfo = nil
-			questionMaps[uid.EnShortID(id)].UpdateUserInfo = nil
-			questionMaps[uid.EnShortID(id)].Content = ""
-			questionMaps[uid.EnShortID(id)].HTML = ""
-			if questionMaps[uid.EnShortID(id)].Status == entity.QuestionStatusDeleted {
-				questionMaps[uid.EnShortID(id)].Title = "Deleted question"
+			questionMaps[id].LastAnsweredUserInfo = nil
+			questionMaps[id].UpdateUserInfo = nil
+			questionMaps[id].Content = ""
+			questionMaps[id].HTML = ""
+			if questionMaps[id].Status == entity.QuestionStatusDeleted {
+				questionMaps[id].Title = "Deleted question"
 			}
-			list = append(list, questionMaps[uid.EnShortID(id)])
+			list = append(list, questionMaps[id])
 		}
 	}
 

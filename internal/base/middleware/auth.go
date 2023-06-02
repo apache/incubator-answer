@@ -6,13 +6,13 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/gin-gonic/gin"
 
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/pkg/converter"
-	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -21,13 +21,13 @@ var ctxUUIDKey = "ctxUuidKey"
 // AuthUserMiddleware auth user middleware
 type AuthUserMiddleware struct {
 	authService           *auth.AuthService
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService
 }
 
 // NewAuthUserMiddleware new auth user middleware
 func NewAuthUserMiddleware(
 	authService *auth.AuthService,
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService) *AuthUserMiddleware {
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService) *AuthUserMiddleware {
 	return &AuthUserMiddleware{
 		authService:           authService,
 		siteInfoCommonService: siteInfoCommonService,

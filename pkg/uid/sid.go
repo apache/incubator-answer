@@ -8,8 +8,6 @@ import (
 
 const salt = int64(100)
 
-var ShortIDSwitch = false
-
 // NumToString num to string
 func NumToShortID(id int64) string {
 	sid := strconv.FormatInt(id, 10)
@@ -45,14 +43,11 @@ func ShortIDToNum(code string) int64 {
 }
 
 func EnShortID(id string) string {
-	if ShortIDSwitch {
-		num, err := strconv.ParseInt(id, 10, 64)
-		if err != nil {
-			return id
-		}
-		return NumToShortID(num)
+	num, err := strconv.ParseInt(id, 10, 64)
+	if err != nil {
+		return id
 	}
-	return id
+	return NumToShortID(num)
 }
 
 func DeShortID(sid string) string {

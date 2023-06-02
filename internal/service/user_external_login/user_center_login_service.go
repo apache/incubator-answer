@@ -27,7 +27,7 @@ type UserCenterLoginService struct {
 	userExternalLoginRepo UserExternalLoginRepo
 	userCommonService     *usercommon.UserCommon
 	userActivity          activity.UserActiveActivityRepo
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService
 }
 
 // NewUserCenterLoginService new user external login service
@@ -36,7 +36,7 @@ func NewUserCenterLoginService(
 	userCommonService *usercommon.UserCommon,
 	userExternalLoginRepo UserExternalLoginRepo,
 	userActivity activity.UserActiveActivityRepo,
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
 ) *UserCenterLoginService {
 	return &UserCenterLoginService{
 		userRepo:              userRepo,

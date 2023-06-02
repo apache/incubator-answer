@@ -31,7 +31,6 @@ func Test_ShortID(t *testing.T) {
 
 func Test_EnDeShortID(t *testing.T) {
 	nums := []string{"0", "1", "10", "100", "1000", "10000", "100000", "1234567", "10000000000000000", "10010000000001316", "19930000000001316"}
-	ShortIDSwitch = true
 	for _, num := range nums {
 		code := EnShortID(num)
 		denum := DeShortID(code)

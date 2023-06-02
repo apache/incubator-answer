@@ -8,4 +8,5 @@ import (
 var ProviderSetMiddleware = wire.NewSet(
 	NewAuthUserMiddleware,
 	NewAvatarMiddleware,
+	NewShortIDMiddleware,
 )

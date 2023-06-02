@@ -6,6 +6,7 @@ import (
 	"time"
 	"unicode"
 
+	"github.com/answerdev/answer/internal/base/handler"
 	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -58,8 +59,10 @@ func (ar *answerRepo) AddAnswer(ctx context.Context, answer *entity.Answer) (err
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	answer.ID = uid.EnShortID(answer.ID)
-	answer.QuestionID = uid.EnShortID(answer.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		answer.ID = uid.EnShortID(answer.ID)
+		answer.QuestionID = uid.EnShortID(answer.QuestionID)
+	}
 	return nil
 }
 
@@ -109,9 +112,10 @@ func (ar *answerRepo) GetAnswer(ctx context.Context, id string) (
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	answer.ID = uid.EnShortID(answer.ID)
-	answer.QuestionID = uid.EnShortID(answer.QuestionID)
-
+	if handler.GetEnableShortID(ctx) {
+		answer.ID = uid.EnShortID(answer.ID)
+		answer.QuestionID = uid.EnShortID(answer.QuestionID)
+	}
 	return
 }
 
@@ -134,9 +138,11 @@ func (ar *answerRepo) GetAnswerList(ctx context.Context, answer *entity.Answer) 
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	for _, item := range answerList {
-		item.ID = uid.EnShortID(item.ID)
-		item.QuestionID = uid.EnShortID(item.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range answerList {
+			item.ID = uid.EnShortID(item.ID)
+			item.QuestionID = uid.EnShortID(item.QuestionID)
+		}
 	}
 	return
 }
@@ -150,9 +156,11 @@ func (ar *answerRepo) GetAnswerPage(ctx context.Context, page, pageSize int, ans
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	for _, item := range answerList {
-		item.ID = uid.EnShortID(item.ID)
-		item.QuestionID = uid.EnShortID(item.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range answerList {
+			item.ID = uid.EnShortID(item.ID)
+			item.QuestionID = uid.EnShortID(item.QuestionID)
+		}
 	}
 	return
 }
@@ -191,8 +199,10 @@ func (ar *answerRepo) GetByID(ctx context.Context, id string) (*entity.Answer, b
 	if err != nil {
 		return &resp, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	resp.ID = uid.EnShortID(resp.ID)
-	resp.QuestionID = uid.EnShortID(resp.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		resp.ID = uid.EnShortID(resp.ID)
+		resp.QuestionID = uid.EnShortID(resp.QuestionID)
+	}
 	return &resp, has, nil
 }
 
@@ -203,8 +213,10 @@ func (ar *answerRepo) GetByUserIDQuestionID(ctx context.Context, userID string, 
 	if err != nil {
 		return &resp, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	resp.ID = uid.EnShortID(resp.ID)
-	resp.QuestionID = uid.EnShortID(resp.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		resp.ID = uid.EnShortID(resp.ID)
+		resp.QuestionID = uid.EnShortID(resp.QuestionID)
+	}
 	return &resp, has, nil
 }
 
@@ -251,9 +263,11 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	if err != nil {
 		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	for _, item := range rows {
-		item.ID = uid.EnShortID(item.ID)
-		item.QuestionID = uid.EnShortID(item.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range rows {
+			item.ID = uid.EnShortID(item.ID)
+			item.QuestionID = uid.EnShortID(item.QuestionID)
+		}
 	}
 	return rows, count, nil
 }
@@ -329,9 +343,11 @@ func (ar *answerRepo) AdminSearchList(ctx context.Context, search *entity.AdminA
 	if err != nil {
 		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	for _, item := range rows {
-		item.ID = uid.EnShortID(item.ID)
-		item.QuestionID = uid.EnShortID(item.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range rows {
+			item.ID = uid.EnShortID(item.ID)
+			item.QuestionID = uid.EnShortID(item.QuestionID)
+		}
 	}
 	return rows, count, nil
 }

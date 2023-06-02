@@ -20,6 +20,7 @@ func NewHTTPServer(debug bool,
 	viewRouter *router.UIRouter,
 	authUserMiddleware *middleware.AuthUserMiddleware,
 	avatarMiddleware *middleware.AvatarMiddleware,
+	shortIDMiddleware *middleware.ShortIDMiddleware,
 	templateRouter *router.TemplateRouter,
 	pluginAPIRouter *router.PluginAPIRouter,
 ) *gin.Engine {
@@ -30,7 +31,7 @@ func NewHTTPServer(debug bool,
 		gin.SetMode(gin.ReleaseMode)
 	}
 	r := gin.New()
-	r.Use(brotli.Brotli(brotli.DefaultCompression), middleware.ExtractAndSetAcceptLanguage)
+	r.Use(brotli.Brotli(brotli.DefaultCompression), middleware.ExtractAndSetAcceptLanguage, shortIDMiddleware.SetShortIDFlag())
 	r.GET("/healthz", func(ctx *gin.Context) { ctx.String(200, "OK") })
 
 	html, _ := fs.Sub(ui.Template, "template")

@@ -7,6 +7,7 @@ import (
 	"time"
 	"unicode"
 
+	"github.com/answerdev/answer/internal/base/handler"
 	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -50,7 +51,9 @@ func (qr *questionRepo) AddQuestion(ctx context.Context, question *entity.Questi
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	question.ID = uid.EnShortID(question.ID)
+	if handler.GetEnableShortID(ctx) {
+		question.ID = uid.EnShortID(question.ID)
+	}
 	return
 }
 
@@ -71,7 +74,9 @@ func (qr *questionRepo) UpdateQuestion(ctx context.Context, question *entity.Que
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	question.ID = uid.EnShortID(question.ID)
+	if handler.GetEnableShortID(ctx) {
+		question.ID = uid.EnShortID(question.ID)
+	}
 	return
 }
 
@@ -163,7 +168,9 @@ func (qr *questionRepo) GetQuestion(ctx context.Context, id string) (
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	question.ID = uid.EnShortID(question.ID)
+	if handler.GetEnableShortID(ctx) {
+		question.ID = uid.EnShortID(question.ID)
+	}
 	return
 }
 
@@ -174,8 +181,10 @@ func (qr *questionRepo) SearchByTitleLike(ctx context.Context, title string) (qu
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	for _, item := range questionList {
-		item.ID = uid.EnShortID(item.ID)
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range questionList {
+			item.ID = uid.EnShortID(item.ID)
+		}
 	}
 	return
 }
@@ -189,8 +198,10 @@ func (qr *questionRepo) FindByID(ctx context.Context, id []string) (questionList
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	for _, item := range questionList {
-		item.ID = uid.EnShortID(item.ID)
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range questionList {
+			item.ID = uid.EnShortID(item.ID)
+		}
 	}
 	return
 }
@@ -260,7 +271,9 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 	}
 	for _, question := range rows {
 		item := &schema.SiteMapQuestionInfo{}
-		item.ID = uid.EnShortID(question.ID)
+		if handler.GetEnableShortID(ctx) {
+			item.ID = uid.EnShortID(question.ID)
+		}
 		item.Title = htmltext.UrlTitle(question.Title)
 		updateTime := fmt.Sprintf("%v", question.PostUpdateTime.Format(time.RFC3339))
 		if question.PostUpdateTime.Unix() < 1 {
@@ -311,8 +324,10 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	for _, item := range questionList {
-		item.ID = uid.EnShortID(item.ID)
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range questionList {
+			item.ID = uid.EnShortID(item.ID)
+		}
 	}
 	return questionList, total, err
 }
@@ -378,8 +393,10 @@ func (qr *questionRepo) AdminSearchList(ctx context.Context, search *schema.Admi
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return rows, count, err
 	}
-	for _, item := range rows {
-		item.ID = uid.EnShortID(item.ID)
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range rows {
+			item.ID = uid.EnShortID(item.ID)
+		}
 	}
 	return rows, count, nil
 }

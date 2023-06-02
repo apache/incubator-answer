@@ -61,7 +61,7 @@ type TagCommonService struct {
 	tagCommonRepo   TagCommonRepo
 	tagRelRepo      TagRelRepo
 	tagRepo         TagRepo
-	siteInfoService *siteinfo_common.SiteInfoCommonService
+	siteInfoService siteinfo_common.SiteInfoCommonService
 }
 
 // NewTagCommonService new tag service
@@ -70,7 +70,7 @@ func NewTagCommonService(
 	tagRelRepo TagRelRepo,
 	tagRepo TagRepo,
 	revisionService *revision_common.RevisionService,
-	siteInfoService *siteinfo_common.SiteInfoCommonService,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 ) *TagCommonService {
 	return &TagCommonService{
 		tagCommonRepo:   tagCommonRepo,

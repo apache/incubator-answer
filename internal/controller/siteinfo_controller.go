@@ -11,13 +11,13 @@ import (
 	"github.com/segmentfault/pacman/log"
 )
 
-type SiteinfoController struct {
-	siteInfoService *siteinfo_common.SiteInfoCommonService
+type SiteInfoController struct {
+	siteInfoService siteinfo_common.SiteInfoCommonService
 }
 
-// NewSiteinfoController new siteinfo controller.
-func NewSiteinfoController(siteInfoService *siteinfo_common.SiteInfoCommonService) *SiteinfoController {
-	return &SiteinfoController{
+// NewSiteInfoController new site info controller.
+func NewSiteInfoController(siteInfoService siteinfo_common.SiteInfoCommonService) *SiteInfoController {
+	return &SiteInfoController{
 		siteInfoService: siteInfoService,
 	}
 }
@@ -29,7 +29,7 @@ func NewSiteinfoController(siteInfoService *siteinfo_common.SiteInfoCommonServic
 // @Produce json
 // @Success 200 {object} handler.RespBody{data=schema.SiteInfoResp}
 // @Router /answer/api/v1/siteinfo [get]
-func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
+func (sc *SiteInfoController) GetSiteInfo(ctx *gin.Context) {
 	var err error
 	resp := &schema.SiteInfoResp{Version: constant.Version, Revision: constant.Revision}
 	resp.General, err = sc.siteInfoService.GetSiteGeneral(ctx)
@@ -80,7 +80,7 @@ func (sc *SiteinfoController) GetSiteInfo(ctx *gin.Context) {
 // @Produce json
 // @Success 200 {object} handler.RespBody{data=schema.GetSiteLegalInfoResp}
 // @Router /answer/api/v1/siteinfo/legal [get]
-func (sc *SiteinfoController) GetSiteLegalInfo(ctx *gin.Context) {
+func (sc *SiteInfoController) GetSiteLegalInfo(ctx *gin.Context) {
 	req := &schema.GetSiteLegalInfoReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
@@ -102,7 +102,7 @@ func (sc *SiteinfoController) GetSiteLegalInfo(ctx *gin.Context) {
 }
 
 // GetManifestJson get manifest.json
-func (sc *SiteinfoController) GetManifestJson(ctx *gin.Context) {
+func (sc *SiteInfoController) GetManifestJson(ctx *gin.Context) {
 	favicon := "favicon.ico"
 	resp := &schema.GetManifestJsonResp{
 		ManifestVersion: 3,

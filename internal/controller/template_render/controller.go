@@ -6,11 +6,11 @@ import (
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/service/comment"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/google/wire"
 
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/tag"
-	"github.com/google/wire"
 )
 
 // ProviderSetTemplateRenderController is template render controller providers.
@@ -25,7 +25,7 @@ type TemplateRenderController struct {
 	answerService   *service.AnswerService
 	commentService  *comment.CommentService
 	data            *data.Data
-	siteInfoService *siteinfo_common.SiteInfoCommonService
+	siteInfoService siteinfo_common.SiteInfoCommonService
 }
 
 func NewTemplateRenderController(
@@ -35,7 +35,7 @@ func NewTemplateRenderController(
 	answerService *service.AnswerService,
 	commentService *comment.CommentService,
 	data *data.Data,
-	siteInfoService *siteinfo_common.SiteInfoCommonService,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 
 ) *TemplateRenderController {
 	return &TemplateRenderController{

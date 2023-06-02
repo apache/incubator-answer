@@ -21,14 +21,14 @@ const UIStaticPath = "build/static"
 
 // UIRouter is an interface that provides ui static file routers
 type UIRouter struct {
-	siteInfoController *controller.SiteinfoController
-	siteInfoService    *siteinfo_common.SiteInfoCommonService
+	siteInfoController *controller.SiteInfoController
+	siteInfoService    siteinfo_common.SiteInfoCommonService
 }
 
 // NewUIRouter creates a new UIRouter instance with the embed resources
 func NewUIRouter(
-	siteInfoController *controller.SiteinfoController,
-	siteInfoService *siteinfo_common.SiteInfoCommonService,
+	siteInfoController *controller.SiteInfoController,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 ) *UIRouter {
 	return &UIRouter{
 		siteInfoController: siteInfoController,

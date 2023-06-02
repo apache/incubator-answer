@@ -12,11 +12,11 @@ import (
 
 type LangController struct {
 	translator      i18n.Translator
-	siteInfoService *siteinfo_common.SiteInfoCommonService
+	siteInfoService siteinfo_common.SiteInfoCommonService
 }
 
 // NewLangController new language controller.
-func NewLangController(tr i18n.Translator, siteInfoService *siteinfo_common.SiteInfoCommonService) *LangController {
+func NewLangController(tr i18n.Translator, siteInfoService siteinfo_common.SiteInfoCommonService) *LangController {
 	return &LangController{translator: tr, siteInfoService: siteInfoService}
 }
 

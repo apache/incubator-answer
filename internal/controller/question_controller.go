@@ -12,6 +12,7 @@ import (
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
@@ -23,6 +24,7 @@ type QuestionController struct {
 	questionService *service.QuestionService
 	answerService   *service.AnswerService
 	rankService     *rank.RankService
+	siteInfoService siteinfo_common.SiteInfoCommonService
 }
 
 // NewQuestionController new controller
@@ -30,11 +32,13 @@ func NewQuestionController(
 	questionService *service.QuestionService,
 	answerService *service.AnswerService,
 	rankService *rank.RankService,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 ) *QuestionController {
 	return &QuestionController{
 		questionService: questionService,
 		answerService:   answerService,
 		rankService:     rankService,
+		siteInfoService: siteInfoService,
 	}
 }
 
@@ -220,7 +224,9 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	info.ID = uid.EnShortID(info.ID)
+	if handler.GetEnableShortID(ctx) {
+		info.ID = uid.EnShortID(info.ID)
+	}
 	handler.HandleResponse(ctx, nil, info)
 }
 

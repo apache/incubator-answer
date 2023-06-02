@@ -26,7 +26,7 @@ type AnswerAPIRouter struct {
 	reasonController       *controller.ReasonController
 	themeController        *controller_admin.ThemeController
 	siteInfoController     *controller_admin.SiteInfoController
-	siteinfoController     *controller.SiteinfoController
+	siteinfoController     *controller.SiteInfoController
 	notificationController *controller.NotificationController
 	dashboardController    *controller.DashboardController
 	uploadController       *controller.UploadController
@@ -55,7 +55,7 @@ func NewAnswerAPIRouter(
 	reasonController *controller.ReasonController,
 	themeController *controller_admin.ThemeController,
 	siteInfoController *controller_admin.SiteInfoController,
-	siteinfoController *controller.SiteinfoController,
+	siteinfoController *controller.SiteInfoController,
 	notificationController *controller.NotificationController,
 	dashboardController *controller.DashboardController,
 	uploadController *controller.UploadController,

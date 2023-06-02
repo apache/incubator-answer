@@ -61,12 +61,12 @@ type UploaderService interface {
 // uploaderService uploader service
 type uploaderService struct {
 	serviceConfig   *service_config.ServiceConfig
-	siteInfoService *siteinfo_common.SiteInfoCommonService
+	siteInfoService siteinfo_common.SiteInfoCommonService
 }
 
 // NewUploaderService new upload service
 func NewUploaderService(serviceConfig *service_config.ServiceConfig,
-	siteInfoService *siteinfo_common.SiteInfoCommonService) UploaderService {
+	siteInfoService siteinfo_common.SiteInfoCommonService) UploaderService {
 	for _, subPath := range subPathList {
 		err := dir.CreateDirIfNotExist(filepath.Join(serviceConfig.UploadPath, subPath))
 		if err != nil {

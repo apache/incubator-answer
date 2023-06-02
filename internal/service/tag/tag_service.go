@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tagcommonser "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/pkg/htmltext"
+	"github.com/jinzhu/copier"
 
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -18,7 +19,6 @@ import (
 	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/pkg/converter"
-	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -29,7 +29,7 @@ type TagService struct {
 	tagCommonService *tagcommonser.TagCommonService
 	revisionService  *revision_common.RevisionService
 	followCommon     activity_common.FollowRepo
-	siteInfoService  *siteinfo_common.SiteInfoCommonService
+	siteInfoService  siteinfo_common.SiteInfoCommonService
 }
 
 // NewTagService new tag service
@@ -38,7 +38,7 @@ func NewTagService(
 	tagCommonService *tagcommonser.TagCommonService,
 	revisionService *revision_common.RevisionService,
 	followCommon activity_common.FollowRepo,
-	siteInfoService *siteinfo_common.SiteInfoCommonService) *TagService {
+	siteInfoService siteinfo_common.SiteInfoCommonService) *TagService {
 	return &TagService{
 		tagRepo:          tagRepo,
 		tagCommonService: tagCommonService,

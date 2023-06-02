@@ -36,7 +36,7 @@ type DashboardService struct {
 	userRepo        usercommon.UserRepo
 	reportRepo      report_common.ReportRepo
 	configService   *config.ConfigService
-	siteInfoService *siteinfo_common.SiteInfoCommonService
+	siteInfoService siteinfo_common.SiteInfoCommonService
 	serviceConfig   *service_config.ServiceConfig
 
 	data *data.Data
@@ -50,7 +50,7 @@ func NewDashboardService(
 	userRepo usercommon.UserRepo,
 	reportRepo report_common.ReportRepo,
 	configService *config.ConfigService,
-	siteInfoService *siteinfo_common.SiteInfoCommonService,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 	serviceConfig *service_config.ServiceConfig,
 
 	data *data.Data,
