@@ -41,7 +41,6 @@ const routes: RouteNode[] = [
       // question and answer
       {
         // side nav layout
-        path: '/',
         page: 'pages/SideNavLayout',
         children: [
           {
@@ -400,17 +399,26 @@ const routes: RouteNode[] = [
   {
     path: '/',
     page: 'pages/Layout',
+    loader: async () => {
+      await guard.setupApp();
+      return null;
+    },
     children: [
       {
-        page: 'pages/Legal',
+        page: 'pages/SideNavLayout',
         children: [
           {
-            path: 'tos',
-            page: 'pages/Legal/Tos',
-          },
-          {
-            path: 'privacy',
-            page: 'pages/Legal/Privacy',
+            page: 'pages/Legal',
+            children: [
+              {
+                path: 'tos',
+                page: 'pages/Legal/Tos',
+              },
+              {
+                path: 'privacy',
+                page: 'pages/Legal/Privacy',
+              },
+            ],
           },
         ],
       },
