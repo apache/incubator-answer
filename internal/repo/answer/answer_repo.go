@@ -199,7 +199,7 @@ func (ar *answerRepo) GetByID(ctx context.Context, id string) (*entity.Answer, b
 func (ar *answerRepo) GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error) {
 	questionID = uid.DeShortID(questionID)
 	var resp entity.Answer
-	has, err := ar.data.DB.Context(ctx).Where("question_id =? and  user_id = ?", questionID, userID).Get(&resp)
+	has, err := ar.data.DB.Context(ctx).Where("question_id =? and  user_id = ? and status = ?", questionID, userID, entity.AnswerStatusAvailable).Get(&resp)
 	if err != nil {
 		return &resp, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
