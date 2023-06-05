@@ -518,6 +518,7 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, answers []*entity
 		userIDs = append(userIDs, info.UserID)
 		userIDs = append(userIDs, info.LastEditUserID)
 		if req.UserID != "" {
+			item.ID = uid.DeShortID(item.ID)
 			item.VoteStatus = as.voteRepo.GetVoteStatus(ctx, item.ID, req.UserID)
 		}
 	}
