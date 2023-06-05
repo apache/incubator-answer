@@ -11,6 +11,8 @@ backend:
       other: 未授权。
     database_error:
       other: 数据服务器错误。
+    forbidden_error:
+      other: Forbidden.
   action:
     report:
       other: 举报
@@ -22,6 +24,8 @@ backend:
       other: 关闭
     reopen:
       other: 重新打开
+    forbidden_error:
+      other: Forbidden.
     pin:
       other: 置顶
     hide:
@@ -30,6 +34,8 @@ backend:
       other: 取消置顶
     show:
       other: 列表显示
+    invite_someone_to_answer:
+      other: Edit
   role:
     name:
       user:
@@ -45,6 +51,60 @@ backend:
         other: 拥有管理网站的全部权限。
       moderator:
         other: 拥有访问除后台管理以外的所有权限。
+  privilege:
+    level_1:
+      description:
+        other: Level 1 (less reputation required for private team, group)
+    level_2:
+      description:
+        other: Level 2 (low reputation required for startup community)
+    level_3:
+      description:
+        other: Level 3 (high reputation required for mature community)
+    rank_question_add_label:
+      other: Ask question
+    rank_answer_add_label:
+      other: Write answer
+    rank_comment_add_label:
+      other: Write comment
+    rank_report_add_label:
+      other: Flag
+    rank_comment_vote_up_label:
+      other: Upvote comment
+    rank_link_url_limit_label:
+      other: Post more than 2 links at a time
+    rank_question_vote_up_label:
+      other: Upvote question
+    rank_answer_vote_up_label:
+      other: Upvote answer
+    rank_question_vote_down_label:
+      other: Downvote question
+    rank_answer_vote_down_label:
+      other: Downvote answer
+    rank_invite_someone_to_answer_label:
+      other: Invite someone to answer
+    rank_tag_add_label:
+      other: Create new tag
+    rank_tag_edit_label:
+      other: Edit tag description (need to review)
+    rank_question_edit_label:
+      other: Edit other's question (need to review)
+    rank_answer_edit_label:
+      other: Edit other's answer (need to review)
+    rank_question_edit_without_review_label:
+      other: Edit other's question without review
+    rank_answer_edit_without_review_label:
+      other: Edit other's answer without review
+    rank_question_audit_label:
+      other: Review question edits
+    rank_answer_audit_label:
+      other: Review answer edits
+    rank_tag_audit_label:
+      other: Review tag edits
+    rank_tag_edit_without_review_label:
+      other: Edit tag description without review
+    rank_tag_synonym_label:
+      other: Manage tag synonyms
   email:
     other: 邮箱
   password:
@@ -52,6 +112,9 @@ backend:
   email_or_password_wrong_error:
     other: 邮箱和密码不匹配。
   error:
+    password:
+      space_invalid:
+        other: Password cannot contain spaces.
     admin:
       cannot_update_their_password:
         other: 你无法修改自己的密码。
@@ -82,6 +145,8 @@ backend:
         other: 邮箱需要验证。
       verify_url_expired:
         other: 邮箱验证的网址已过期，请重新发送邮件。
+      illegal_email_domain_error:
+        other: Email is not allowed from that email domain. Please use another one.
     lang:
       not_found:
         other: 语言文件未找到。
@@ -119,7 +184,9 @@ backend:
       fail_to_meet_the_condition:
         other: 声望值未达到要求。
       vote_fail_to_meet_the_condition:
-        other: 感谢你的投票。你至少需要 {{ rank }} 声望才能投票。
+        other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
+      no_enough_rank_to_operate:
+        other: You need at least {{.Rank}} reputation to do this.
     report:
       handle_failed:
         other: 报告处理失败。
@@ -154,6 +221,10 @@ backend:
       no_permission:
         other: 无权限修改
     user:
+      external_login_missing_user_id:
+        other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
+      external_login_unbinding_forbidden:
+        other: Please set a login password for your account before you remove this login.
       email_or_password_wrong:
         other:
           other: 邮箱和密码不匹配。
@@ -171,6 +242,10 @@ backend:
         other: 你不能修改自己的角色。
       not_allowed_registration:
         other: 目前该站点未开放注册。
+      access_denied:
+        other: Access denied
+      page_access_denied:
+        other: You do not have access to this page.
     config:
       read_config_failed:
         other: 读取配置失败
@@ -185,37 +260,71 @@ backend:
     upload:
       unsupported_file_format:
         other: 不支持的文件格式。
-  report:
+  reason:
     spam:
       name:
-        other: 垃圾信息
+        other: spam
       desc:
-        other: 这个帖子是一个广告，或是破坏性行为。它对当前的主题无帮助或无关。
-    rude:
+        other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
+    rude_or_abusive:
       name:
-        other: 粗鲁或辱骂的
+        other: rude or abusive
       desc:
-        other: 一个有理智的人都会认为这种内容不适合进行尊重性的讨论。
-    duplicate:
+        other: A reasonable person would find this content inappropriate for respectful discourse.
+    a_duplicate:
       name:
-        other: 重复信息
+        other: a duplicate
       desc:
-        other: 该问题有人问过，而且已经有了答案。
-    not_answer:
+        other: This question has been asked before and already has an answer.
+      placeholder:
+        other: Enter the existing question link
+    not_a_answer:
       name:
-        other: 不是答案
+        other: not an answer
       desc:
-        other: 该帖是作为答案发布的，但它并没有试图回答这个问题。总之，它可能应该是个编辑、评论、另一个问题或需要被删除。
-    not_need:
+        other: This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether.
+    no_longer_needed:
       name:
-        other: 不再需要
+        other: no longer needed
       desc:
-        other: 该评论已过时，对话或与此帖子无关。
-    other:
+        other: This comment is outdated, conversational or not relevant to this post.
+    something:
       name:
-        other: 其他原因
+        other: something else
       desc:
-        other: 此帖子需要工作人员关注，因为是上述所列以外的其他理由。
+        other: This post requires staff attention for another reason not listed above.
+      placeholder:
+        other: Let us know specifically what you are concerned about
+    community_specific:
+      name:
+        other: a community-specific reason
+      desc:
+        other: This question doesn’t meet a community guideline.
+    not_clarity:
+      name:
+        other: needs details or clarity
+      desc:
+        other: This question currently includes multiple questions in one. It should focus on one problem only.
+    looks_ok:
+      name:
+        other: looks ok
+      desc:
+        other: This post is good as-is and not low quality.
+    needs_edit:
+      name:
+        other: needs edit, and I did it
+      desc:
+        other: Improve and correct problems with this post yourself.
+    needs_close:
+      name:
+        other: needs close
+      desc:
+        other: A closed question can’t answer, but still can edit, vote and comment.
+    needs_delete:
+      name:
+        other: needs delete
+      desc:
+        other: All reputation gained and lost will be restored.
   question:
     close:
       duplicate:
@@ -245,6 +354,8 @@ backend:
         other: 回答于
       modified:
         other: 修改于
+    deleted_title:
+      other: Deleted question
   notification:
     action:
       update_question:
@@ -271,6 +382,67 @@ backend:
         other: 你的答案已被删除
       your_comment_was_deleted:
         other: 你的评论已被删除
+      up_voted_question:
+        other: upvoted question
+      down_voted_question:
+        other: downvoted question
+      up_voted_answer:
+        other: upvoted answer
+      down_voted_answer:
+        other: downvoted answer
+      up_voted_comment:
+        other: upvoted comment
+      invited_you_to_answer:
+        other: invited you to answer
+  email_tpl:
+    change_email:
+      title:
+        other: "[{{.SiteName}}] Confirm your new email address"
+      body:
+        other: "Confirm your new email address for {{.SiteName}}  by clicking on the following link:<br><br>\n\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
+    new_answer:
+      title:
+        other: "[{{.SiteName}}] {{.DisplayName}} answered your question"
+      body:
+        other: "<strong><a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+    invited_you_to_answer:
+      title:
+        other: "[{{.SiteName}}] {{.DisplayName}} invited you to answer"
+      body:
+        other: "<strong><a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+    new_comment:
+      title:
+        other: "[{{.SiteName}}] {{.DisplayName}} commented on your post"
+      body:
+        other: "<strong><a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+    pass_reset:
+      title:
+        other: "[{{.SiteName }}] Password reset"
+      body:
+        other: "Somebody asked to reset your password on [{{.SiteName}}].<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+    register:
+      title:
+        other: "[{{.SiteName}}] Confirm your new account"
+      body:
+        other: "Welcome to {{.SiteName}}<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
+    test:
+      title:
+        other: "[{{.SiteName}}] Test Email"
+      body:
+        other: "This is a test email."
+  action_activity_type:
+    upvote:
+      other: upvote
+    upvoted:
+      other: upvoted
+    downvote:
+      other: downvote
+    downvoted:
+      other: downvoted
+    accept:
+      other: accept
+    accepted:
+      other: accepted
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
@@ -307,6 +479,7 @@ ui:
     upgrade: Answer 升级
     maintenance: 网站维护
     users: 用户
+    oauth_callback: Processing
     http_404: HTTP 错误 404
     http_50X: HTTP 错误 500
     http_403: HTTP 错误 403
@@ -316,11 +489,18 @@ ui:
     achievement: 成就
     all_read: 全部标记为已读
     show_more: 显示更多
+    someone: Someone
+    inbox_type:
+      all: All
+      posts: Posts
+      invites: Invites
+      votes: Votes
   suspended:
     title: 你的账号账号已被封禁
     until_time: "你的账号被封禁直到 {{ time }}。"
     forever: 你的账号已被永久封禁。
     end: 违反了我们的社区准则。
+    contact_us: Contact us
   editor:
     blockquote:
       text: 引用
@@ -527,7 +707,7 @@ ui:
       使用评论提问更多信息或者提出改进意见。尽量避免使用评论功能回答问题。
     tip_answer: >-
       使用评论对回答者进行回复，或者通知回答者你已更新了问题的内容。如果要补充或者完善问题的内容，请在原问题中更改。
-    tip_vote: 它给帖子添加了一些有用的内容
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: 编辑回答
     default_reason: 编辑回答
@@ -609,6 +789,8 @@ ui:
       logout: 退出登录
       admin: 后台管理
       review: 审查
+      bookmark: Bookmarks
+      moderation: Moderation
     search:
       placeholder: 搜索
   footer:
@@ -633,7 +815,6 @@ ui:
     msg:
       empty: 不能为空
   login:
-    page_title: 欢迎来到 {{site_name}}
     login_to_continue: 登录以继续
     info_sign: 没有账户？<1>注册</1>
     info_login: 已经有一个账户？<1>登录</1>
@@ -644,6 +825,7 @@ ui:
       msg:
         empty: 昵称不能为空
         range: 昵称最多 30 个字符
+        character: 'Must use the character set "a-z", "0-9", " - . _"'
     email:
       label: 邮箱
       msg:
@@ -663,7 +845,6 @@ ui:
       msg:
         empty: 邮箱不能为空
   change_email:
-    page_title: 欢迎来到 {{site_name}}
     btn_cancel: 取消
     btn_update: 更新电子邮件地址
     send_success: >-
@@ -672,6 +853,17 @@ ui:
       label: 新邮箱
       msg:
         empty: 邮箱不能为空
+  oauth_bind_email:
+    subtitle: Add a recovery email to your account.
+    btn_update: Update email address
+    email:
+      label: Email
+      msg:
+        empty: Email cannot be empty.
+    modal_title: Email already existes.
+    modal_content: This email address already registered. Are you sure you want to connect to the existing account?
+    modal_cancel: Change email
+    modal_confirm: Connect to the existing account
   password_reset:
     page_title: 密码重置
     btn_name: 重置我的密码
@@ -690,6 +882,7 @@ ui:
       label: 确认新密码
   settings:
     page_title: 设置
+    goto_modify: Go to Modify
     nav:
       profile: 我的资料
       notification: 通知
@@ -711,7 +904,7 @@ ui:
       avatar:
         label: 头像
         gravatar: Gravatar
-        gravatar_text: 您可以在 <1>gravatar.com</1> 更改图像
+        gravatar_text: You can change image on
         custom: 自定义
         btn_refresh: 刷新
         custom_text: 您可以上传您的图片。
@@ -738,8 +931,11 @@ ui:
       change_email_info: >-
         邮件已发送。请根据指引完成验证。
       email:
-        label: 邮箱
-        msg: 邮箱不能为空
+        label: New Email
+        msg: New Email cannot be empty.
+      pass:
+        label: Current Password
+        msg: Password cannot be empty.
       password_title: 密码
       current_pass:
         label: 当前密码
@@ -756,6 +952,13 @@ ui:
       lang:
         label: 界面语言
         text: 设置用户界面语言，在刷新页面后生效。
+    my_logins:
+      title: My Logins
+      label: Log in or sign up on this site using these accounts.
+      modal_title: Remove Login
+      modal_content: Are you sure you want to remove this login from your account?
+      modal_confirm_btn: Remove
+      remove_success: Removed successfully
   toast:
     update: 更新成功
     update_password: 更改密码成功。
@@ -766,6 +969,12 @@ ui:
     title: 相关问题
     btn: 我要提问
     answers: 个回答
+  invite_to_answer:
+    title: People asked
+    desc: Invite people who you think might know the answer.
+    invite: Invite to answer
+    add: Add people
+    search: Search people
   question_detail:
     action: 操作
     Asked: 提问于
@@ -775,12 +984,13 @@ ui:
     Views: 阅读次数
     Follow: 关注此问题
     Following: 已关注
+    follow_tip: Follow this question to receive notifications
     answered: 回答于
     closed_in: 关闭于
     show_exist: 查看相关问题。
     useful: 有用的
-    question_useful: 这是有用和清楚的
-    question_un_useful: 它不明确或没有用
+    question_useful: It is useful and clear
+    question_un_useful: It is unclear or not useful
     answer_useful: 这是有用的
     answer_un_useful: 它是没有用的
     answers:
@@ -824,6 +1034,7 @@ ui:
   btns:
     confirm: 确认
     cancel: 取消
+    edit: Edit
     save: 保存
     delete: 删除
     login: 登录
@@ -836,6 +1047,10 @@ ui:
     skip: 略过
     discard_draft: 丢弃草稿
     pinned: 已置顶
+    all: All
+    question: Question
+    answer: Answer
+    comment: Comment
   search:
     title: 搜索结果
     keywords: 关键词
@@ -870,7 +1085,6 @@ ui:
   modal_confirm:
     title: 发生错误...
   account_result:
-    page_title: 欢迎来到 {{site_name}}
     success: 你的账号已通过验证，即将返回首页。
     link: 返回首页
     invalid: >-
@@ -931,8 +1145,7 @@ ui:
     accepted: 已采纳
     answered: 回答于
     asked: 提问于
-    upvote: 赞同
-    downvote: 反对
+    downvoted: downvoted
     mod_short: 管理员
     mod_long: 管理员
     x_reputation: 声望
@@ -994,6 +1207,7 @@ ui:
     admin_name:
       label: 昵称
       msg: 昵称不能为空。
+      character: 'Must use the character set "a-z", "0-9", " - . _"'
     admin_password:
       label: 密码
       text: >-
@@ -1051,8 +1265,19 @@ ui:
     seo: SEO
     customize: 自定义
     themes: 主题
-    css-html: CSS/HTML
+    css_html: CSS/HTML
     login: 登录
+    privileges: Privileges
+    plugins: Plugins
+    installed_plugins: Installed Plugins
+  website_welcome: Welcome to {{site_name}}
+  plugins:
+    login: Login
+    qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
+    login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
+    oauth:
+      connect: Connect with {{ auth_name }}
+      remove: Remove {{ auth_name }}
   admin:
     admin_header:
       title: 后台管理
@@ -1095,6 +1320,7 @@ ui:
       pending: 等待处理
       completed: 已完成
       flagged: 被举报内容
+      flagged_type: Flagged {{ type }}
       created: 创建于
       action: 操作
       review: 审查
@@ -1243,9 +1469,6 @@ ui:
         label: 时区
         msg: 时区不能为空。
         text: 选择一个与您相同时区的城市。
-      avatar:
-        label: 默认头像
-        text: 没有自定义头像的用户。
     smtp:
       page_title: SMTP
       from_email:
@@ -1355,22 +1578,77 @@ ui:
       footer:
         label: 页脚
         text: 这将在 </html> 之前插入
+      sidebar:
+        label: Sidebar
+        text: This will insert in sidebar.
     login:
       page_title: 登录
       membership:
         title: 会员
         label: 允许新注册
         text: 关闭以防止任何人创建新帐户。
+      email_registration:
+        title: Email registration
+        label: Allow email registration
+        text: Turn off to prevent anyone creating new account through email.
+      allowed_email_domains:
+        title: Allowed email domains
+        text: Email domains that users must register accounts with. One domain per line. Ignored when empty.
       private:
         title: 非公开的
         label: 需要登录
         text: 只有登录用户才能访问这个社区。
+    installed_plugins:
+      title: Installed Plugins
+      filter:
+        all: All
+        active: Active
+        inactive: Inactive
+        outdated: Outdated
+      plugins:
+        label: Plugins
+        text: Select an existing plugin.
+      name: Name
+      version: Version
+      status: Status
+      action: Action
+      deactivate: Deactivate
+      activate: Activate
+      settings: Settings
+    settings_users:
+      title: Users
+      avatar:
+        label: Default Avatar
+        text: For users without a custom avatar of their own.
+      gravatar_base_url:
+        label: Gravatar Base URL
+        text: URL of the Gravatar provider’s API base. Ignored when empty.
+      profile_editable:
+        title: Profile Editable
+      allow_update_display_name:
+        label: Allow users to change their display name
+      allow_update_username:
+        label: Allow users to change their username
+      allow_update_avatar:
+        label: Allow users to change their profile image
+      allow_update_bio:
+        label: Allow users to change their about me
+      allow_update_website:
+        label: Allow users to change their website
+      allow_update_location:
+        label: Allow users to change their location
+    privilege:
+      title: Privileges
+      level:
+        label: Reputation required level
+        text: Choose the reputation required for the privileges
   form:
     optional: (选填)
     empty: 不能为空
     invalid: 是无效的
     btn_submit: 保存
     not_found_props: "所需属性 {{ key }} 未找到。"
+    select: Select
   page_review:
     review: 评论
     proposed: 提案
