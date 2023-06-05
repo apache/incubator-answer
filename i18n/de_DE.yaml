@@ -13,23 +13,23 @@ backend:
       other: Datenbank-Fehler.
   action:
     report:
-      other: Flag
+      other: Melden
     edit:
-      other: Edit
+      other: Bearbeiten
     delete:
-      other: Delete
+      other: Löschen
     close:
-      other: Close
+      other: Schließen
     reopen:
-      other: Reopen
+      other: Wieder öffnen
     pin:
-      other: Pin
+      other: Anpinnen
     hide:
-      other: Unlist
+      other: Nicht Aufführen
     unpin:
-      other: Unpin
+      other: Loslösen
     show:
-      other: List
+      other: Liste
   role:
     name:
       user:
@@ -119,7 +119,7 @@ backend:
       fail_to_meet_the_condition:
         other: Rang erfüllt die Bedingung nicht.
       vote_fail_to_meet_the_condition:
-        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
+        other: Vielen Dank für das Feedback. Du brauchst mindestens {{ rank }} Reputation, um eine Stimme abzugeben.
     report:
       handle_failed:
         other: Berichtshandle fehlgeschlagen.
@@ -309,7 +309,7 @@ ui:
     users: Benutzer
     http_404: HTTP-Fehler 404
     http_50X: HTTP-Fehler 500
-    http_403: HTTP Error 403
+    http_403: HTTP Fehler 403
   notifications:
     title: Benachrichtigungen
     inbox: Posteingang
@@ -527,7 +527,7 @@ ui:
       Verwenden Sie Kommentare, um weitere Informationen anzufordern oder Verbesserungen vorzuschlagen. Vermeiden Sie die Beantwortung von Fragen in Kommentaren.
     tip_answer: >-
       Verwenden Sie Kommentare, um anderen Benutzern zu antworten oder sie über Änderungen zu informieren. Wenn Sie neue Informationen hinzufügen, bearbeiten Sie Ihren Beitrag, anstatt ihn zu kommentieren.
-    tip_vote: It adds something useful to the post
+    tip_vote: Es fügt dem Beitrag etwas Nützliches hinzu
   edit_answer:
     title: Antwort bearbeiten
     default_reason: Antwort bearbeiten
@@ -767,7 +767,7 @@ ui:
     btn: Frage hinzufügen
     answers: antworten
   question_detail:
-    action: Action
+    action: Aktion
     Asked: Fragte
     asked: fragte
     update: Geändert
@@ -778,11 +778,11 @@ ui:
     answered: beantwortet
     closed_in: Abgeschlossen in
     show_exist: Bestehende Frage anzeigen.
-    useful: Useful
-    question_useful: It is useful and clear
-    question_un_useful: It is unclear or not useful
-    answer_useful: It is useful
-    answer_un_useful: It is not useful
+    useful: Nützlich
+    question_useful: Es ist nützlich und eindeutig
+    question_un_useful: Das ist unklar oder nicht nützlich
+    answer_useful: Das ist nützlich
+    answer_un_useful: Das ist nicht nützlich
     answers:
       title: Antworten
       score: Punkte
@@ -800,19 +800,19 @@ ui:
       empty: Antwort darf nicht leer sein.
       characters: der Inhalt muss mindestens 6 Zeichen lang sein.
       tips:
-        header_1: Thanks for your answer
-        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
-        li1_2: Back up any statements you make with references or personal experience.
-        header_2: But <strong>avoid</strong> ...
-        li2_1: Asking for help, seeking clarification, or responding to other answers.
+        header_1: Vielen Dank für Ihre Antwort
+        li1_1: Bitte <strong>beantworten Sie die Frage</strong>. Geben Sie Details ein und teilen Sie Ihre Begründung/ Recherche.
+        li1_2: Begründen Sie Ihre Aussagen mit Referenzen oder persönlicher Erfahrung.
+        header_2: Aber <strong>vermeide</strong>...
+        li2_1: Bitte um Hilfe, um Klarstellung oder um Antwort auf andere Antworten.
     reopen:
-      confirm_btn: Reopen
+      confirm_btn: Wieder öffnen
       title: Diesen Beitrag erneut öffnen
       content: Möchten Sie wirklich wieder öffnen?
     pin:
-      title: Pin this post
-      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
-      confirm_btn: Pin
+      title: Beitrag anheften
+      content: Sind Sie sicher, dass Sie global anpinnen möchten? Dieser Beitrag wird oben auf allen Beitragslisten erscheinen.
+      confirm_btn: Anheften
   delete:
     title: Diesen Beitrag löschen
     question: >-
@@ -835,7 +835,7 @@ ui:
     reject: Ablehnen
     skip: Überspringen
     discard_draft: Entwurf verwerfen
-    pinned: Pinned
+    pinned: Angeheftet
   search:
     title: Suchergebnisse
     keywords: Schlüsselwörter
@@ -1025,11 +1025,11 @@ ui:
     answers: antworten
     accepted: Akzeptiert
   page_error:
-    http_error: HTTP Error {{ code }}
-    desc_403: You don’t have permission to access this page.
-    desc_404: Unfortunately, this page doesn't exist.
-    desc_50X: The server encountered an error and could not complete your request.
-    back_home: Back to homepage
+    http_error: HTTP Fehler {{ code }}
+    desc_403: Sie haben keine Zugriffsberechtigung für diese Seite.
+    desc_404: Leider existiert diese Seite nicht.
+    desc_50X: Der Server ist auf einen Fehler gestoßen und konnte Ihre Anfrage nicht abschließen.
+    back_home: Zurück zur Startseite
   page_maintenance:
     desc: "Wir werden gewartet, wir sind bald wieder da."
   nav_menus:
@@ -1397,10 +1397,10 @@ ui:
     closed: geschlossen
     reopened: wiedereröffnet
     created: erstellt
-    pin: pinned
-    unpin: unpinned
-    show: listed
-    hide: unlisted
+    pin: angeheftet
+    unpin: losgelöst
+    show: gelistet
+    hide: nicht gelistet
     title: "Geschichte für"
     tag_title: "Zeitleiste für"
     show_votes: "Stimmen anzeigen"
@@ -1415,8 +1415,8 @@ ui:
     no_data: "Wir konnten nichts finden."
   users:
     title: Benutzer
-    users_with_the_most_reputation: Users with the highest reputation scores this week
-    users_with_the_most_vote: Users who voted the most this week
+    users_with_the_most_reputation: Benutzer mit den höchsten Reputationspunkten dieser Woche
+    users_with_the_most_vote: Benutzer, die diese Woche am meisten gestimmt haben
     staffs: Benutzer
     reputation: ruf
     votes: stimmen
@@ -1427,8 +1427,8 @@ ui:
     discard_confirm: Möchten Sie Ihren Entwurf wirklich verwerfen?
   messages:
     post_deleted: Dieser Beitrag wurde gelöscht.
-    post_pin: This post has been pinned.
-    post_unpin: This post has been unpinned.
-    post_hide_list: This post has been hidden from list.
-    post_show_list: This post has been shown to list.
-    post_reopen: This post has been reopened.
+    post_pin: Dieser Beitrag wurde angepinnt.
+    post_unpin: Dieser Beitrag wurde losgelöst.
+    post_hide_list: Dieser Beitrag wurde aus der Liste verborgen.
+    post_show_list: Dieser Beitrag wird in der Liste angezeigt.
+    post_reopen: Dieser Beitrag wurde wieder geöffnet.
