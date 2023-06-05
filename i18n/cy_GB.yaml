@@ -13,23 +13,23 @@ backend:
       other: Gwall gweinydd data.
   action:
     report:
-      other: Flag
+      other: Tynnu sylw
     edit:
-      other: Edit
+      other: Golygu
     delete:
-      other: Delete
+      other: Dileu
     close:
-      other: Close
+      other: Cau
     reopen:
-      other: Reopen
+      other: Ailagor
     pin:
-      other: Pin
+      other: Pinio
     hide:
-      other: Unlist
+      other: Dad-restru
     unpin:
-      other: Unpin
+      other: Dadbinio
     show:
-      other: List
+      other: Rhestr
   role:
     name:
       user:
@@ -119,7 +119,7 @@ backend:
       fail_to_meet_the_condition:
         other: Rank yn methu â bodloni'r amod.
       vote_fail_to_meet_the_condition:
-        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
+        other: Diolch am yr adborth. Mae angen o leiaf {{ rank }} enw da i fwrw pleidlais.
     report:
       handle_failed:
         other: Methodd handlen yr adroddiad.
@@ -309,7 +309,7 @@ ui:
     users: Defnyddwyr
     http_404: Gwall HTTP 404
     http_50X: Gwall HTTP 500
-    http_403: HTTP Error 403
+    http_403: Gwall HTTP 403
   notifications:
     title: Hysbysiadau
     inbox: Mewnflwch
@@ -412,64 +412,64 @@ ui:
               empty: Ni all URL fod yn wag.
           name:
             label: Disgrifiad
-      btn_cancel: Cancel
-      btn_confirm: Add
+      btn_cancel: Canslo
+      btn_confirm: Ychwanegu
     ordered_list:
-      text: Numbered List
+      text: Rhestr wedi'i rhifo
     unordered_list:
-      text: Bulleted List
+      text: Rhestr Bwled
     table:
-      text: Table
-      heading: Heading
+      text: Tabl
+      heading: Pennawd
       cell: Cell
   close_modal:
-    title: I am closing this post as...
-    btn_cancel: Cancel
-    btn_submit: Submit
+    title: Rwy'n cau'r post hon fel...
+    btn_cancel: Canslo
+    btn_submit: Cyflwyno
     remark:
-      empty: Cannot be empty.
+      empty: Ni all fod yn wag.
     msg:
-      empty: Please select a reason.
+      empty: Dewis rheswm.
   report_modal:
-    flag_title: I am flagging to report this post as...
-    close_title: I am closing this post as...
-    review_question_title: Review question
-    review_answer_title: Review answer
-    review_comment_title: Review comment
-    btn_cancel: Cancel
-    btn_submit: Submit
+    flag_title: Dwi'n tynnu sylw i adrodd y swydd hon fel...
+    close_title: Rwy'n cau'r post hon fel...
+    review_question_title: Adolygu cwestiwn
+    review_answer_title: Adolygu ateb
+    review_comment_title: Adolygu sylwad
+    btn_cancel: Canslo
+    btn_submit: Cyflwyno
     remark:
-      empty: Cannot be empty.
+      empty: Ni all fod yn wag.
     msg:
-      empty: Please select a reason.
+      empty: Dewis rheswm.
   tag_modal:
-    title: Create new tag
+    title: Creu tag newydd
     form:
       fields:
         display_name:
-          label: Display Name
+          label: Enw dangos
           msg:
-            empty: Display name cannot be empty.
-            range: Display name up to 35 characters.
+            empty: Ni all fod enw dangos yn wag.
+            range: Enw arddangos hyd at 35 nod.
         slug_name:
           label: URL Slug
-          desc: URL slug up to 35 characters.
+          desc: Slug URL hyd at 35 nod.
           msg:
-            empty: URL slug cannot be empty.
-            range: URL slug up to 35 characters.
-            character: URL slug contains unallowed character set.
+            empty: Ni all Slug URL fod yn wag.
+            range: Slug URL hyd at 35 nod.
+            character: Mae slug URL yn cynnwys set nodau na caniateir.
         desc:
-          label: Description
-    btn_cancel: Cancel
-    btn_submit: Submit
-    btn_post: Post new tag
+          label: Disgrifiad
+    btn_cancel: Canslo
+    btn_submit: Cyflwyno
+    btn_post: Post tag newydd
   tag_info:
-    created_at: Created
-    edited_at: Edited
-    history: History
+    created_at: Creuwyd
+    edited_at: Golygwyd
+    history: Hanes
     synonyms:
-      title: Synonyms
-      text: The following tags will be remapped to
+      title: Cyfystyron
+      text: Bydd y tagiau canlynol yn cael eu hail-fapio i
       empty: No synonyms found.
       btn_add: Add a synonym
       btn_edit: Edit
@@ -544,59 +544,59 @@ ui:
           placeholder: >-
             Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_save_edits: Save edits
-    btn_cancel: Cancel
+    btn_cancel: Canslo
   tags:
-    title: Tags
+    title: Tagiau
     sort_buttons:
-      popular: Popular
-      name: Name
-      newest: newest
-    button_follow: Follow
-    button_following: Following
-    tag_label: questions
-    search_placeholder: Filter by tag name
-    no_desc: The tag has no description.
-    more: More
+      popular: Poblogaidd
+      name: Enw
+      newest: mwyaf newydd
+    button_follow: Dilyn
+    button_following: Yn dilyn
+    tag_label: cwestiynau
+    search_placeholder: Hidlo yn ôl enw tag
+    no_desc: Nid oes gan y tag unrhyw ddisgrifiad.
+    more: Mwy
   ask:
-    title: Add Question
-    edit_title: Edit Question
-    default_reason: Edit question
-    similar_questions: Similar questions
+    title: Ychwanegu Cwestiwn
+    edit_title: Golygu Cwestiwn
+    default_reason: Golygu Cwestiwn
+    similar_questions: Cwestiynau tebyg
     form:
       fields:
         revision:
-          label: Revision
+          label: Diwygiad
         title:
-          label: Title
-          placeholder: Be specific and imagine you're asking a question to another person
+          label: Teitl
+          placeholder: Byddwch yn benodol a dychmygwch eich bod yn gofyn cwestiwn i berson arall
           msg:
-            empty: Title cannot be empty.
-            range: Title up to 150 characters
+            empty: Ni all teitl fod yn wag.
+            range: Teitl hyd at 20 nod
         body:
-          label: Body
+          label: Corff
           msg:
-            empty: Body cannot be empty.
+            empty: Ni all corff fod yn wag.
         tags:
-          label: Tags
+          label: Tagiau
           msg:
-            empty: Tags cannot be empty.
+            empty: Ni all tagiau fod yn wag.
         answer:
-          label: Answer
+          label: Ateb
           msg:
-            empty: Answer cannot be empty.
+            empty: Ni all ateb fod yn wag.
         edit_summary:
-          label: Edit Summary
+          label: Golygu Crynodeb
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_post_question: Post your question
-    btn_save_edits: Save edits
-    answer_question: Answer your own question
-    post_question&answer: Post your question and answer
+            Eglurwch yn fyr eich newidiadau (sillafu wedi'i gywiro, gramadeg sefydlog, fformatio gwell)
+    btn_post_question: Post cweistiwn
+    btn_save_edits: Cadw golygiadau
+    answer_question: Atebwch eich cwestiwn eich hun
+    post_question&answer: Postiwch eich cwestiwn ac ateb
   tag_selector:
-    add_btn: Add tag
-    create_btn: Create new tag
-    search_tag: Search tag
-    hint: "Describe what your question is about, at least one tag is required."
+    add_btn: Ychwanegu tag
+    create_btn: Creu tag newydd
+    search_tag: Chwilio tag
+    hint: "Disgrifiwch beth yw eich cwestiwn, mae angen o leiaf un tag."
     no_result: No tags matched
     tag_required_text: Required tag (at least one)
   header:
