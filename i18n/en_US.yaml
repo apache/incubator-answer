@@ -1295,7 +1295,7 @@ ui:
       closed_name: closed
       closed_desc: "A closed question can't answer, but still can edit, vote and comment."
       deleted_name: deleted
-      deleted_desc: All reputation gained and lost will be restored.
+      deleted_desc: This post will be deleted.
       btn_cancel: Cancel
       btn_submit: Submit
       btn_next: Next
