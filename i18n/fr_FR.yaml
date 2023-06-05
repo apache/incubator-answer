@@ -15,21 +15,21 @@ backend:
     report:
       other: Flag
     edit:
-      other: Edit
+      other: Éditer
     delete:
-      other: Delete
+      other: Supprimer
     close:
-      other: Close
+      other: Fermer
     reopen:
-      other: Reopen
+      other: Rouvrir
     pin:
-      other: Pin
+      other: Épingler
     hide:
-      other: Unlist
+      other: Délister
     unpin:
-      other: Unpin
+      other: Désépingler
     show:
-      other: List
+      other: Liste
   role:
     name:
       user:
@@ -119,7 +119,7 @@ backend:
       fail_to_meet_the_condition:
         other: Le rang ne remplit pas la condition.
       vote_fail_to_meet_the_condition:
-        other: Thanks for the feedback. You need at least {{ rank }} reputation to cast a vote.
+        other: Merci pour vos commentaires. Vous avez besoin d'au moins {{ rank }} de réputation pour voter.
     report:
       handle_failed:
         other: La gestion du rapport a échoué.
@@ -309,7 +309,7 @@ ui:
     users: Utilisateurs
     http_404: Erreur HTTP 404
     http_50X: Erreur HTTP 500
-    http_403: HTTP Error 403
+    http_403: Erreur HTTP 403
   notifications:
     title: Notifications
     inbox: Boîte de réception
@@ -527,7 +527,7 @@ ui:
       Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires.
     tip_answer: >-
       Utilisez des commentaires pour répondre à d'autres utilisateurs ou leur signaler des modifications. Si vous ajoutez de nouvelles informations, modifiez votre message au lieu de commenter.
-    tip_vote: It adds something useful to the post
+    tip_vote: Il ajoute quelque chose d'utile au post
   edit_answer:
     title: Modifier la réponse
     default_reason: Modifier la réponse
@@ -778,11 +778,11 @@ ui:
     answered: répondu
     closed_in: Fermé dans
     show_exist: Afficher la question existante.
-    useful: Useful
-    question_useful: It is useful and clear
-    question_un_useful: It is unclear or not useful
-    answer_useful: It is useful
-    answer_un_useful: It is not useful
+    useful: Utile
+    question_useful: C'est utile et clair
+    question_un_useful: Ce n'est pas clair ou n'est pas utile
+    answer_useful: C'est utile
+    answer_un_useful: Ce n'est pas utile
     answers:
       title: Réponses
       score: Score
@@ -800,19 +800,19 @@ ui:
       empty: La réponse ne peut être vide.
       characters: le contenu doit comporter au moins 6 caractères.
       tips:
-        header_1: Thanks for your answer
-        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
-        li1_2: Back up any statements you make with references or personal experience.
-        header_2: But <strong>avoid</strong> ...
-        li2_1: Asking for help, seeking clarification, or responding to other answers.
+        header_1: Merci pour votre réponse
+        li1_1: N’oubliez pas de <strong>répondre à la question</strong>. Fournissez des détails et partagez vos recherches.
+        li1_2: Sauvegardez toutes les déclarations que vous faites avec des références ou une expérience personnelle.
+        header_2: Mais <strong>évitez</strong>...
+        li2_1: Demander de l’aide, chercher des éclaircissements ou répondre à d’autres réponses.
     reopen:
-      confirm_btn: Reopen
+      confirm_btn: Rouvrir
       title: Rouvrir ce message
       content: Êtes-vous sûr de vouloir rouvrir ?
     pin:
-      title: Pin this post
-      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
-      confirm_btn: Pin
+      title: Épingler cet article
+      content: Êtes-vous sûr de vouloir l'épingler globalement ? Ce message apparaîtra en haut de toutes les listes de messages.
+      confirm_btn: Épingler
   delete:
     title: Supprimer la publication
     question: >-
@@ -835,7 +835,7 @@ ui:
     reject: Rejeter
     skip: Ignorer
     discard_draft: Abandonner le brouillon
-    pinned: Pinned
+    pinned: Épinglé
   search:
     title: Résultats de la recherche
     keywords: Mots-clés
@@ -1025,11 +1025,11 @@ ui:
     answers: réponses
     accepted: Accepté
   page_error:
-    http_error: HTTP Error {{ code }}
-    desc_403: You don’t have permission to access this page.
-    desc_404: Unfortunately, this page doesn't exist.
-    desc_50X: The server encountered an error and could not complete your request.
-    back_home: Back to homepage
+    http_error: Erreur HTTP {{ code }}
+    desc_403: Vous n'avez pas la permission d'accéder à cette page.
+    desc_404: Malheureusement, cette page n'existe pas.
+    desc_50X: Le serveur a rencontré une erreur et n'a pas pu répondre à votre requête.
+    back_home: Retour à la page d'accueil
   page_maintenance:
     desc: "Nous sommes en maintenance, nous serons bientôt de retour."
   nav_menus:
@@ -1397,10 +1397,10 @@ ui:
     closed: fermé
     reopened: réouvert
     created: créé
-    pin: pinned
-    unpin: unpinned
-    show: listed
-    hide: unlisted
+    pin: épinglé
+    unpin: non épinglé
+    show: listé
+    hide: non listé
     title: "Historique de"
     tag_title: "Chronologie de"
     show_votes: "Afficher les votes"
@@ -1415,8 +1415,8 @@ ui:
     no_data: "Nous n'avons rien pu trouver."
   users:
     title: Utilisateurs
-    users_with_the_most_reputation: Users with the highest reputation scores this week
-    users_with_the_most_vote: Users who voted the most this week
+    users_with_the_most_reputation: Utilisateurs ayant le score de réputation le plus élevé cette semaine
+    users_with_the_most_vote: Utilisateurs qui ont le plus voté cette semaine
     staffs: Staff de la communauté
     reputation: réputation
     votes: votes
@@ -1427,8 +1427,8 @@ ui:
     discard_confirm: Êtes-vous sûr de vouloir abandonner ce brouillon ?
   messages:
     post_deleted: Ce message a été supprimé.
-    post_pin: This post has been pinned.
-    post_unpin: This post has been unpinned.
-    post_hide_list: This post has been hidden from list.
-    post_show_list: This post has been shown to list.
-    post_reopen: This post has been reopened.
+    post_pin: Ce message a été épinglé.
+    post_unpin: Ce message a été déépinglé.
+    post_hide_list: Ce message a été masqué de la liste.
+    post_show_list: Ce message a été affiché dans la liste.
+    post_reopen: Ce message a été rouvert.
