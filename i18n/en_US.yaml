@@ -328,7 +328,7 @@ backend:
       name:
         other: needs delete
       desc:
-        other: All reputation gained and lost will be restored.
+        other: This post will be deleted.
   question:
     close:
       duplicate:
