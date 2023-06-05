@@ -25,11 +25,11 @@ backend:
     pin:
       other: 置顶
     hide:
-      other: 隐藏
+      other: 列表隐藏
     unpin:
       other: 取消置顶
     show:
-      other: 显示
+      other: 列表显示
   role:
     name:
       user:
@@ -44,76 +44,19 @@ backend:
       admin:
         other: 拥有管理网站的全部权限。
       moderator:
-        other: 拥有访问除管理员设置以外的所有权限。
-  privilege:
-    level_1:
-      description:
-        other: 等级1（创业社区所需的声望最低）
-    level_2:
-      description:
-        other: 等级2（创业社区所需的声望较低）
-    level_3:
-      description:
-        other: 等级3（成熟社区所需的声望较高）
-    rank_question_add_label:
-      other: 提问
-    rank_answer_add_label:
-      other: 回答问题
-    rank_comment_add_label:
-      other: 发表评论
-    rank_report_add_label:
-      other: 举报
-    rank_comment_vote_up_label:
-      other: 评论点赞
-    rank_link_url_limit_label:
-      other: 一次发布超过两个链接
-    rank_question_vote_up_label:
-      other: 问题点赞
-    rank_answer_vote_up_label:
-      other: 答案点赞
-    rank_question_vote_down_label:
-      other: 问题点踩
-    rank_answer_vote_down_label:
-      other: 答案点踩
-    rank_invite_someone_to_answer_label:
-      other: 邀请回答
-    rank_tag_add_label:
-      other: 创建新标签
-    rank_tag_edit_label:
-      other: 编辑标签描述（需要审核）
-    rank_question_edit_label:
-      other: 编辑他人提问（需要审核）
-    rank_answer_edit_label:
-      other: 编辑他人回答（需要审核）
-    rank_question_edit_without_review_label:
-      other: 编辑他人提问（无需审核）
-    rank_answer_edit_without_review_label:
-      other: 编辑他人回答（无需审核）
-    rank_question_audit_label:
-      other: 审核问题编辑
-    rank_answer_audit_label:
-      other: 审核答案编辑
-    rank_tag_audit_label:
-      other: 审核标签编辑
-    rank_tag_edit_without_review_label:
-      other: 编辑标签描述（无需审核）
-    rank_tag_synonym_label:
-      other: 管理标签同义词
-  e_mail:
+        other: 拥有访问除后台管理以外的所有权限。
+  email:
     other: 邮箱
   password:
     other: 密码
   email_or_password_wrong_error:
     other: 邮箱和密码不匹配。
   error:
-    password:
-      space_invalid:
-        other: 密码不能包含空格。
     admin:
       cannot_update_their_password:
-        other: 您无法修改自己的密码。
+        other: 你无法修改自己的密码。
       cannot_modify_self_status:
-        other: 您无法修改自己的状态。
+        other: 你无法修改自己的状态。
       email_or_password_wrong:
         other: 邮箱和密码不匹配。
     answer:
@@ -131,7 +74,7 @@ backend:
       not_found:
         other: 评论未找到。
       cannot_edit_after_deadline:
-        other: 评论时间太长，无法修改。
+        other: 评论时间太久，无法修改。
     email:
       duplicate:
         other: 邮箱已经存在。
@@ -139,76 +82,72 @@ backend:
         other: 邮箱需要验证。
       verify_url_expired:
         other: 邮箱验证的网址已过期，请重新发送邮件。
-      illegal_email_domain_error:
-        other: 该域名的邮箱无法使用。请尝试更换其他邮箱。
     lang:
       not_found:
-        other: 语言未找到
+        other: 语言文件未找到。
     object:
       captcha_verification_failed:
-        other: 验证码错误
+        other: 验证码错误。
       disallow_follow:
-        other: 你不能关注
+        other: 你不能关注。
       disallow_vote:
-        other: 你不能投票
+        other: 你不能投票。
       disallow_vote_your_self:
-        other: 你不能为自己的帖子投票！
+        other: 你不能为自己的帖子投票。
       not_found:
-        other: 对象未找到
+        other: 对象未找到。
       verification_failed:
-        other: 验证失败
+        other: 验证失败。
       email_or_password_incorrect:
-        other: 邮箱或密码不正确
+        other: 邮箱和密码不匹配。
       old_password_verification_failed:
-        other: 旧密码验证失败
+        other: 旧密码验证失败。
       new_password_same_as_previous_setting:
-        other: 新密码与之前的设置相同
+        other: 新密码和旧密码相同。
     question:
       already_deleted:
-        other: 此问题已被删除.
+        other: 该帖子已被删除。
       not_found:
-        other: 问题未找到
+        other: 问题未找到。
       cannot_deleted:
-        other: 无删除权限
+        other: 没有删除权限。
       cannot_close:
-        other: 无关闭权限
+        other: 没有关闭权限。
       cannot_update:
-        other: 无更新权限
+        other: 没有更新权限。
     rank:
       fail_to_meet_the_condition:
-        other: 级别不符合条件
+        other: 声望值未达到要求。
       vote_fail_to_meet_the_condition:
-        other: 感谢您的投票。您至少需要{{.Rank}}声望才能投票。
-      no_enough_rank_to_operate:
-        other: 您至少需要{{.Rank}}声望才能执行此操作。
+        other: 感谢你的投票。你至少需要 {{ rank }} 声望才能投票。
     report:
       handle_failed:
-        other: 报告处理失败
+        other: 报告处理失败。
       not_found:
-        other: 报告未找到
+        other: 报告未找到。
     tag:
       already_exist:
         other: 标签已存在。
       not_found:
-        other: 标签未找到
+        other: 标签未找到。
       recommend_tag_not_found:
-        other: 推荐标签不存在
+        other: 推荐的标签不存在。
       recommend_tag_enter:
-        other: 请输入至少一个必需的标签。
+        other: 请选择至少一个必选标签。
       not_contain_synonym_tags:
         other: 不应包含同义词标签。
       cannot_update:
-        other: 没有更新标签权限。
+        other: 没有更新权限。
       is_used_cannot_delete:
-        other: 您不能删除正在使用的标签
+        other: 您不能删除这个正在使用的标签。
       cannot_set_synonym_as_itself:
-        other: 您不能将当前标签的同义词设置为本身。
+        other: 你不能将当前标签设为自己的同义词。
     smtp:
       config_from_name_cannot_be_email:
         other: 发件人名称不能是电子邮件地址。
     theme:
       not_found:
-        other: 主题未找到
+        other: 主题未找到。
     revision:
       review_underway:
         other: 目前无法编辑，有一个版本在审阅队列中。
@@ -217,25 +156,21 @@ backend:
     user:
       email_or_password_wrong:
         other:
-          other: 邮箱或密码错误
+          other: 邮箱和密码不匹配。
       not_found:
-        other: 用户未找到
+        other: 用户未找到。
       suspended:
-        other: 用户已被暂停
+        other: 用户已被封禁。
       username_invalid:
-        other: 用户名无效
+        other: 用户名无效。
       username_duplicate:
-        other: 用户名已被使用
+        other: 用户名已被使用。
       set_avatar:
-        other: 头像设置错误
+        other: 头像设置错误。
       cannot_update_your_role:
-        other: 您不能修改自己的角色。
+        other: 你不能修改自己的角色。
       not_allowed_registration:
-        other: 目前该站点未开放注册
-      access_denied:
-        other: 访问被拒绝
-      page_access_denied:
-        other: 你没有权限进入这个页面。
+        other: 目前该站点未开放注册。
     config:
       read_config_failed:
         other: 读取配置失败
@@ -250,71 +185,37 @@ backend:
     upload:
       unsupported_file_format:
         other: 不支持的文件格式。
-  reason:
+  report:
     spam:
       name:
         other: 垃圾信息
       desc:
-        other: 这个帖子是一个广告，或是破坏性行为。它对当前的主题没有用处，也不相关。
-    rude_or_abusive:
+        other: 这个帖子是一个广告，或是破坏性行为。它对当前的主题无帮助或无关。
+    rude:
       name:
         other: 粗鲁或辱骂的
       desc:
         other: 一个有理智的人都会认为这种内容不适合进行尊重性的讨论。
-    a_duplicate:
+    duplicate:
       name:
         other: 重复信息
       desc:
-        other: 此问题以前就有人问过，而且已经有了答案。
-      placeholder:
-        other: 请输入重复的问题的网址
-    not_a_answer:
+        other: 该问题有人问过，而且已经有了答案。
+    not_answer:
       name:
         other: 不是答案
       desc:
-        other: 此帖子是作为一个答案发布的，但它并没有试图回答这个问题。总之，它可能应该是个编辑，评论，另一个问题或者被删除。
-    no_longer_needed:
+        other: 该帖是作为答案发布的，但它并没有试图回答这个问题。总之，它可能应该是个编辑、评论、另一个问题或需要被删除。
+    not_need:
       name:
         other: 不再需要
       desc:
-        other: 此评论已过时，对话或与此帖子无关。
-    something:
+        other: 该评论已过时，对话或与此帖子无关。
+    other:
       name:
         other: 其他原因
       desc:
         other: 此帖子需要工作人员关注，因为是上述所列以外的其他理由。
-      placeholder:
-        other: 让我们具体了解你所关注的内容
-    community_specific:
-      name:
-        other: 特定社区原因
-      desc:
-        other: 这个问题不符合社区准则。
-    not_clarity:
-      name:
-        other: 需要细节或澄清
-      desc:
-        other: 此问题目前包含多个问题。它应该只关注一个问题。
-    looks_ok:
-      name:
-        other: 看起来不错
-      desc:
-        other: 这篇文章很好，不是低质量的。
-    needs_edit:
-      name:
-        other: 需要编辑，我已经编辑了
-      desc:
-        other: 自己改善和纠正这篇文章中的问题。
-    needs_close:
-      name:
-        other: 需要关闭
-      desc:
-        other: 关闭的问题不能回答，但仍然可以编辑、投票和评论。
-    needs_delete:
-      name:
-        other: 需要删除
-      desc:
-        other: 所有获得和失去的声望都将被恢复。
   question:
     close:
       duplicate:
@@ -326,17 +227,17 @@ backend:
         name:
           other: 社区特定原因
         desc:
-          other: 此问题不符合社区准则。
+          other: 该问题不符合社区准则。
       multiple:
         name:
           other: 需要细节或澄清
         desc:
-          other: 此问题目前涵盖多个问题。它应该只集中在一个问题上。
+          other: 该问题目前涵盖多个问题。它应该只集中在一个问题上。
       other:
         name:
           other: 其他原因
         desc:
-          other: 这个帖子需要上面没有列出的另一个原因。
+          other: 该帖子存在上面没有列出的另一个原因。
     operation_type:
       asked:
         other: 提问于
@@ -344,8 +245,6 @@ backend:
         other: 回答于
       modified:
         other: 修改于
-    deleted_title:
-      other: 问题已被删除
   notification:
     action:
       update_question:
@@ -355,7 +254,7 @@ backend:
       update_answer:
         other: 更新了答案
       accept_answer:
-        other: 已接受的回答
+        other: 采纳了答案
       comment_question:
         other: 评论了问题
       comment_answer:
@@ -372,73 +271,12 @@ backend:
         other: 你的答案已被删除
       your_comment_was_deleted:
         other: 你的评论已被删除
-      up_voted_question:
-        other: 赞了问题
-      down_voted_question:
-        other: 踩了问题
-      up_voted_answer:
-        other: 赞了答案
-      down_voted_answer:
-        other: 踩了答案
-      up_voted_comment:
-        other: 赞了评论
-      invited_you_to_answer:
-        other: 邀请你回答问题
-  email_tpl:
-    change_email:
-      title:
-        other: "[{{.SiteName}}] 确认您的新电子邮件地址"
-      body:
-        other: "请点击以下链接确认您在 {{.SiteName}} 上的新电子邮件地址：<br><br>\n\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\n如果您没有请求此更改，请忽略此电子邮件。\n"
-    new_answer:
-      title:
-        other: "[{{.SiteName}}] {{.DisplayName}} 回答了您的问题"
-      body:
-        other: "<strong><a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\n\n<small>您会收到此邮件是因为您开启了订阅。<a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
-    invited_you_to_answer:
-      title:
-        other: "[{{.SiteName}}] {{.DisplayName}} 邀请您回答问题"
-      body:
-        other: "<strong><a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>我想你可能知道答案。</blockquote><br>\n<a href='{{.InviteUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\n\n<small>您会收到此邮件是因为您开启了订阅. <a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
-    new_comment:
-      title:
-        other: "[{{.SiteName}}] {{.DisplayName}} 评论了您的帖子"
-      body:
-        other: "<strong><a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\n\n<small>您会收到此邮件是因为您开启了订阅。<a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
-    pass_reset:
-      title:
-        other: "[{{.SiteName }}] 重置密码"
-      body:
-        other: "有人要求在 [{{.SiteName}}] 上重置您的密码。<br><br>\n\n如果这不是您的操作，请安心忽略此电子邮件。<br><br>\n\n请点击以下链接选择一个新密码：<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
-    register:
-      title:
-        other: "[{{.SiteName}}] 确认您的新账户"
-      body:
-        other: "欢迎加入 {{.SiteName}}<br><br>\n\n请点击以下链接确认并激活您的新账户：<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\n如果上面的链接不能点击，请将其复制并粘贴到您的浏览器地址栏中。\n"
-    test:
-      title:
-        other: "[{{.SiteName}}] 测试邮件"
-      body:
-        other: "这是一封测试邮件。"
-  action_activity_type:
-    upvote:
-      other: 点赞
-    upvoted:
-      other: 被赞
-    downvote:
-      other: 点踩
-    downvoted:
-      other: 被踩
-    accept:
-      other: 采纳
-    accepted:
-      other: 被采纳
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: 如何设定文本格式
+    title: 如何排版
     desc: >-
-      <ul class="mb-0"><li><p class="mb-2">添加链接：</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者 **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用 4 个空格缩进代码</p></li><li><p class="mb-2">在行首添加<code>&gt;</code>表示引用</p></li><li><p class="mb-2">反引号进行转义 <code>`像 _这样_`</code></p></li><li><p class="mb-2">使用<code>```</code>创建代码块</p><pre class="mb-0"><code>```<br/>// 这是代码<br/>```</code></pre></li></ul>
+      <ul class="mb-0"><li><p class="mb-2">添加链接</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[标题](https://url.com)</code></pre></li><li><p class="mb-2">段落之间使用空行分隔</p></li><li><p class="mb-2"><em>_斜体_</em> 或者 **<strong>粗体</strong>**</p></li><li><p class="mb-2">使用 4 个空格缩进代码</p></li><li><p class="mb-2">在行首添加 <code>&gt;</code> 表示引用</p></li><li><p class="mb-2">反引号进行转义 <code>`像 _这样_`</code></p></li><li><p class="mb-2">使用 <code>```</code> 创建代码块</p><pre class="mb-0"><code>```<br/>// 这是代码<br/>```</code></pre></li></ul>
   pagination:
     prev: 上一页
     next: 下一页
@@ -447,7 +285,7 @@ ui:
     questions: 问题
     tag: 标签
     tags: 标签
-    tag_wiki: 标签 wiki
+    tag_wiki: 标记维基
     create_tag: 创建标签
     edit_tag: 编辑标签
     ask_a_question: 提问题
@@ -455,14 +293,14 @@ ui:
     edit_answer: 编辑回答
     search: 搜索
     posts_containing: 包含
-    settings: 设定
+    settings: 设置
     notifications: 通知
     login: 登录
     sign_up: 注册
     account_recovery: 账号恢复
     account_activation: 账号激活
     confirm_email: 确认电子邮件
-    account_suspended: 账号已封禁
+    account_suspended: 账号已被封禁
     admin: 后台管理
     change_email: 修改邮箱
     install: Answer 安装
@@ -478,10 +316,9 @@ ui:
     achievement: 成就
     all_read: 全部标记为已读
     show_more: 显示更多
-    someone: 有人
   suspended:
-    title: 账号已封禁
-    until_time: "你的账号被封禁至{{ time }}。"
+    title: 你的账号账号已被封禁
+    until_time: "你的账号被封禁直到 {{ time }}。"
     forever: 你的账号已被永久封禁。
     end: 违反了我们的社区准则。
   editor:
@@ -853,7 +690,6 @@ ui:
       label: 确认新密码
   settings:
     page_title: 设置
-    goto_modify: 前往修改
     nav:
       profile: 我的资料
       notification: 通知
@@ -1000,10 +836,6 @@ ui:
     skip: 略过
     discard_draft: 丢弃草稿
     pinned: 已置顶
-    all: 所有
-    question: 问题
-    answer: 回答
-    comment: 评论
   search:
     title: 搜索结果
     keywords: 关键词
@@ -1221,16 +1053,6 @@ ui:
     themes: 主题
     css-html: CSS/HTML
     login: 登录
-    plugins: 插件
-    installed_plugins: 插件列表
-  website_welcome: 欢迎来到 {{site_name}}
-  plugins:
-    login: 登录
-    qrcode_login_tip: 请使用 {{ agentName }} 扫描二维码登录
-    login_failed_email_tip: 登录失败, 请允许该应用程序访问您的电子邮件信息，然后再试一次。
-    oauth:
-      connect: 连接到 {{ auth_name }}
-      remove: 解绑 {{ auth_name }}
   admin:
     admin_header:
       title: 后台管理
@@ -1273,7 +1095,6 @@ ui:
       pending: 等待处理
       completed: 已完成
       flagged: 被举报内容
-      flagged_type: 被举报的{{ type }}
       created: 创建于
       action: 操作
       review: 审查
@@ -1523,14 +1344,14 @@ ui:
     css_and_html:
       page_title: CSS 与 HTML
       custom_css:
-        label: 自定义CSS
-        text: 这将在 <link> 之前插入
+        label: 自定义 CSS
+        text: 这将以 <link> 方式插入
       head:
         label: 头部
         text: 这将在 </head> 之前插入
       header:
-        label: 标题
-        text: 这将在 <body> 之前插入
+        label: 页眉
+        text: 这将在 <body> 之后插入
       footer:
         label: 页脚
         text: 这将在 </html> 之前插入
@@ -1544,47 +1365,6 @@ ui:
         title: 非公开的
         label: 需要登录
         text: 只有登录用户才能访问这个社区。
-    installed_plugins:
-      title: 插件列表
-      filter:
-        all: 全部
-        active: 启用
-        inactive: 未启用
-        outdated: 已过期
-      plugins:
-        label: 插件
-        text: 选择一个插件
-      name: 插件名称
-      version: 插件版本
-      status: 状态
-      action: 操作
-      deactivate: 停用
-      activate: 启用
-      settings: 设置
-    settings_users:
-      title: 用户
-      avatar:
-        label: 默认头像
-        text: 未设置自定义头像的用户所展示的头像。
-      profile_editable:
-        title: 可编辑的个人资料
-      allow_update_display_name:
-        label: 允许用户更改显示名称
-      allow_update_username:
-        label: 允许用户更改用户名
-      allow_update_avatar:
-        label: 允许用户更改头像
-      allow_update_bio:
-        label: 允许用户更改自我介绍
-      allow_update_website:
-        label: 允许用户更改个人网站
-      allow_update_location:
-        label: 允许用户更改所在地
-    privilege:
-      title: 声望权限
-      level:
-        label: 所需声望等级
-        text: 选择所需的声望等级以获取权限
   form:
     optional: (选填)
     empty: 不能为空
