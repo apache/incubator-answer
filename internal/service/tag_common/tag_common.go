@@ -57,11 +57,12 @@ type TagRelRepo interface {
 
 // TagCommonService user service
 type TagCommonService struct {
-	revisionService *revision_common.RevisionService
-	tagCommonRepo   TagCommonRepo
-	tagRelRepo      TagRelRepo
-	tagRepo         TagRepo
-	siteInfoService siteinfo_common.SiteInfoCommonService
+	revisionService      *revision_common.RevisionService
+	tagCommonRepo        TagCommonRepo
+	tagRelRepo           TagRelRepo
+	tagRepo              TagRepo
+	siteInfoService      siteinfo_common.SiteInfoCommonService
+	activityQueueService activity_queue.ActivityQueueService
 }
 
 // NewTagCommonService new tag service
@@ -71,13 +72,15 @@ func NewTagCommonService(
 	tagRepo TagRepo,
 	revisionService *revision_common.RevisionService,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
+	activityQueueService activity_queue.ActivityQueueService,
 ) *TagCommonService {
 	return &TagCommonService{
-		tagCommonRepo:   tagCommonRepo,
-		tagRelRepo:      tagRelRepo,
-		tagRepo:         tagRepo,
-		revisionService: revisionService,
-		siteInfoService: siteInfoService,
+		tagCommonRepo:        tagCommonRepo,
+		tagRelRepo:           tagRelRepo,
+		tagRepo:              tagRepo,
+		revisionService:      revisionService,
+		siteInfoService:      siteInfoService,
+		activityQueueService: activityQueueService,
 	}
 }
 
@@ -645,7 +648,7 @@ func (ts *TagCommonService) ObjectChangeTag(ctx context.Context, objectTagData *
 			if err != nil {
 				return err
 			}
-			activity_queue.AddActivity(&schema.ActivityMsg{
+			ts.activityQueueService.Send(ctx, &schema.ActivityMsg{
 				UserID:           objectTagData.UserID,
 				ObjectID:         tag.ID,
 				OriginalObjectID: tag.ID,
@@ -845,7 +848,7 @@ func (ts *TagCommonService) UpdateTag(ctx context.Context, req *schema.UpdateTag
 		return err
 	}
 	if canUpdate {
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		ts.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           req.UserID,
 			ObjectID:         tagInfo.ID,
 			OriginalObjectID: tagInfo.ID,

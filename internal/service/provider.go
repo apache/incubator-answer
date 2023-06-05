@@ -4,6 +4,7 @@ import (
 	"github.com/answerdev/answer/internal/service/action"
 	"github.com/answerdev/answer/internal/service/activity"
 	"github.com/answerdev/answer/internal/service/activity_common"
+	"github.com/answerdev/answer/internal/service/activity_queue"
 	answercommon "github.com/answerdev/answer/internal/service/answer_common"
 	"github.com/answerdev/answer/internal/service/auth"
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
@@ -88,4 +89,5 @@ var ProviderSetService = wire.NewSet(
 	plugin_common.NewPluginCommonService,
 	config.NewConfigService,
 	notice_queue.NewNotificationQueueService,
+	activity_queue.NewActivityQueueService,
 )

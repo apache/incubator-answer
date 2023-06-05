@@ -54,16 +54,17 @@ type QuestionRepo interface {
 
 // QuestionCommon user service
 type QuestionCommon struct {
-	questionRepo     QuestionRepo
-	answerRepo       answercommon.AnswerRepo
-	voteRepo         activity_common.VoteRepo
-	followCommon     activity_common.FollowRepo
-	tagCommon        *tagcommon.TagCommonService
-	userCommon       *usercommon.UserCommon
-	collectionCommon *collectioncommon.CollectionCommon
-	AnswerCommon     *answercommon.AnswerCommon
-	metaService      *meta.MetaService
-	configService    *config.ConfigService
+	questionRepo         QuestionRepo
+	answerRepo           answercommon.AnswerRepo
+	voteRepo             activity_common.VoteRepo
+	followCommon         activity_common.FollowRepo
+	tagCommon            *tagcommon.TagCommonService
+	userCommon           *usercommon.UserCommon
+	collectionCommon     *collectioncommon.CollectionCommon
+	AnswerCommon         *answercommon.AnswerCommon
+	metaService          *meta.MetaService
+	configService        *config.ConfigService
+	activityQueueService activity_queue.ActivityQueueService
 }
 
 func NewQuestionCommon(questionRepo QuestionRepo,
@@ -76,18 +77,20 @@ func NewQuestionCommon(questionRepo QuestionRepo,
 	answerCommon *answercommon.AnswerCommon,
 	metaService *meta.MetaService,
 	configService *config.ConfigService,
+	activityQueueService activity_queue.ActivityQueueService,
 ) *QuestionCommon {
 	return &QuestionCommon{
-		questionRepo:     questionRepo,
-		answerRepo:       answerRepo,
-		voteRepo:         voteRepo,
-		followCommon:     followCommon,
-		tagCommon:        tagCommon,
-		userCommon:       userCommon,
-		collectionCommon: collectionCommon,
-		AnswerCommon:     answerCommon,
-		metaService:      metaService,
-		configService:    configService,
+		questionRepo:         questionRepo,
+		answerRepo:           answerRepo,
+		voteRepo:             voteRepo,
+		followCommon:         followCommon,
+		tagCommon:            tagCommon,
+		userCommon:           userCommon,
+		collectionCommon:     collectionCommon,
+		AnswerCommon:         answerCommon,
+		metaService:          metaService,
+		configService:        configService,
+		activityQueueService: activityQueueService,
 	}
 }
 
@@ -502,7 +505,7 @@ func (qs *QuestionCommon) CloseQuestion(ctx context.Context, req *schema.CloseQu
 		return err
 	}
 
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           questionInfo.UserID,
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,

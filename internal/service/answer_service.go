@@ -44,6 +44,7 @@ type AnswerService struct {
 	emailService             *export.EmailService
 	roleService              *role.UserRoleRelService
 	notificationQueueService notice_queue.NotificationQueueService
+	activityQueueService     activity_queue.ActivityQueueService
 }
 
 func NewAnswerService(
@@ -60,6 +61,7 @@ func NewAnswerService(
 	emailService *export.EmailService,
 	roleService *role.UserRoleRelService,
 	notificationQueueService notice_queue.NotificationQueueService,
+	activityQueueService activity_queue.ActivityQueueService,
 ) *AnswerService {
 	return &AnswerService{
 		answerRepo:               answerRepo,
@@ -75,6 +77,7 @@ func NewAnswerService(
 		emailService:             emailService,
 		roleService:              roleService,
 		notificationQueueService: notificationQueueService,
+		activityQueueService:     activityQueueService,
 	}
 }
 
@@ -136,7 +139,7 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 	//if err != nil {
 	//	log.Errorf("delete answer activity change failed: %s", err.Error())
 	//}
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           req.UserID,
 		ObjectID:         answerInfo.ID,
 		OriginalObjectID: answerInfo.ID,
@@ -202,14 +205,14 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	as.notificationAnswerTheQuestion(ctx, questionInfo.UserID, questionInfo.ID, insertData.ID, req.UserID, questionInfo.Title,
 		insertData.OriginalText)
 
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           insertData.UserID,
 		ObjectID:         insertData.ID,
 		OriginalObjectID: insertData.ID,
 		ActivityTypeKey:  constant.ActAnswerAnswered,
 		RevisionID:       revisionID,
 	})
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           insertData.UserID,
 		ObjectID:         insertData.ID,
 		OriginalObjectID: questionInfo.ID,
@@ -302,7 +305,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		return insertData.ID, err
 	}
 	if canUpdate {
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           insertData.UserID,
 			ObjectID:         insertData.ID,
 			OriginalObjectID: insertData.ID,
@@ -469,7 +472,7 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.A
 		//if err != nil {
 		//	log.Errorf("admin delete question then rank rollback error %s", err.Error())
 		//}
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           req.UserID,
 			ObjectID:         answerInfo.ID,
 			OriginalObjectID: answerInfo.ID,

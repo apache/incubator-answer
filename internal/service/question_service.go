@@ -54,6 +54,7 @@ type QuestionService struct {
 	data                     *data.Data
 	emailService             *export.EmailService
 	notificationQueueService notice_queue.NotificationQueueService
+	activityQueueService     activity_queue.ActivityQueueService
 }
 
 func NewQuestionService(
@@ -69,6 +70,7 @@ func NewQuestionService(
 	data *data.Data,
 	emailService *export.EmailService,
 	notificationQueueService notice_queue.NotificationQueueService,
+	activityQueueService activity_queue.ActivityQueueService,
 ) *QuestionService {
 	return &QuestionService{
 		questionRepo:             questionRepo,
@@ -83,6 +85,7 @@ func NewQuestionService(
 		data:                     data,
 		emailService:             emailService,
 		notificationQueueService: notificationQueueService,
+		activityQueueService:     activityQueueService,
 	}
 }
 
@@ -110,7 +113,7 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 		return err
 	}
 
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           req.UserID,
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,
@@ -134,7 +137,7 @@ func (qs *QuestionService) ReopenQuestion(ctx context.Context, req *schema.Reope
 	if err != nil {
 		return err
 	}
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           req.UserID,
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,
@@ -316,7 +319,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		}
 	}
 
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           question.UserID,
 		ObjectID:         question.ID,
 		OriginalObjectID: question.ID,
@@ -385,7 +388,7 @@ func (qs *QuestionService) OperationQuestion(ctx context.Context, req *schema.Op
 	actMap[schema.QuestionOperationShow] = constant.ActQuestionShow
 	_, ok := actMap[req.Operation]
 	if ok {
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           req.UserID,
 			ObjectID:         questionInfo.ID,
 			OriginalObjectID: questionInfo.ID,
@@ -477,7 +480,7 @@ func (qs *QuestionService) RemoveQuestion(ctx context.Context, req *schema.Remov
 	// if err != nil {
 	// 	 log.Errorf("user DeleteQuestion rank rollback error %s", err.Error())
 	// }
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           req.UserID,
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,
@@ -826,7 +829,7 @@ func (qs *QuestionService) UpdateQuestion(ctx context.Context, req *schema.Quest
 		return
 	}
 	if canUpdate {
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           req.UserID,
 			ObjectID:         question.ID,
 			ActivityTypeKey:  constant.ActQuestionEdited,
@@ -1220,7 +1223,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 		//if err != nil {
 		//	log.Errorf("admin delete question then rank rollback error %s", err.Error())
 		//}
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           questionInfo.UserID,
 			ObjectID:         questionInfo.ID,
 			OriginalObjectID: questionInfo.ID,
@@ -1228,7 +1231,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 		})
 	}
 	if setStatus == entity.QuestionStatusAvailable && questionInfo.Status == entity.QuestionStatusClosed {
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           questionInfo.UserID,
 			ObjectID:         questionInfo.ID,
 			OriginalObjectID: questionInfo.ID,
@@ -1236,7 +1239,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 		})
 	}
 	if setStatus == entity.QuestionStatusClosed && questionInfo.Status != entity.QuestionStatusClosed {
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           questionInfo.UserID,
 			ObjectID:         questionInfo.ID,
 			OriginalObjectID: questionInfo.ID,

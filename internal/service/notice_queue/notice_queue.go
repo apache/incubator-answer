@@ -48,6 +48,3 @@ func NewNotificationQueueService() NotificationQueueService {
 	ns.working()
 	return ns
 }
-
-func AddNotification2(msg *schema.NotificationMsg) {
-}

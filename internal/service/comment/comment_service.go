@@ -66,6 +66,7 @@ type CommentService struct {
 	emailService             *export.EmailService
 	userRepo                 usercommon.UserRepo
 	notificationQueueService notice_queue.NotificationQueueService
+	activityQueueService     activity_queue.ActivityQueueService
 }
 
 // NewCommentService new comment service
@@ -78,6 +79,7 @@ func NewCommentService(
 	emailService *export.EmailService,
 	userRepo usercommon.UserRepo,
 	notificationQueueService notice_queue.NotificationQueueService,
+	activityQueueService activity_queue.ActivityQueueService,
 ) *CommentService {
 	return &CommentService{
 		commentRepo:              commentRepo,
@@ -88,6 +90,7 @@ func NewCommentService(
 		emailService:             emailService,
 		userRepo:                 userRepo,
 		notificationQueueService: notificationQueueService,
+		activityQueueService:     activityQueueService,
 	}
 }
 
@@ -164,7 +167,7 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 	case constant.AnswerObjectType:
 		activityMsg.ActivityTypeKey = constant.ActAnswerCommented
 	}
-	activity_queue.AddActivity(activityMsg)
+	cs.activityQueueService.Send(ctx, activityMsg)
 	return resp, nil
 }
 

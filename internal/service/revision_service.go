@@ -38,6 +38,7 @@ type RevisionService struct {
 	tagRepo                  tag_common.TagRepo
 	tagCommon                *tagcommon.TagCommonService
 	notificationQueueService notice_queue.NotificationQueueService
+	activityQueueService     activity_queue.ActivityQueueService
 }
 
 func NewRevisionService(
@@ -51,6 +52,7 @@ func NewRevisionService(
 	tagRepo tag_common.TagRepo,
 	tagCommon *tagcommon.TagCommonService,
 	notificationQueueService notice_queue.NotificationQueueService,
+	activityQueueService activity_queue.ActivityQueueService,
 ) *RevisionService {
 	return &RevisionService{
 		revisionRepo:             revisionRepo,
@@ -63,6 +65,7 @@ func NewRevisionService(
 		tagRepo:                  tagRepo,
 		tagCommon:                tagCommon,
 		notificationQueueService: notificationQueueService,
+		activityQueueService:     activityQueueService,
 	}
 }
 
@@ -158,7 +161,7 @@ func (rs *RevisionService) revisionAuditQuestion(ctx context.Context, revisionit
 		if saveerr != nil {
 			return saveerr
 		}
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		rs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           revisionitem.UserID,
 			ObjectID:         revisionitem.ObjectID,
 			ActivityTypeKey:  constant.ActQuestionEdited,
@@ -215,7 +218,7 @@ func (rs *RevisionService) revisionAuditAnswer(ctx context.Context, revisionitem
 		msg.NotificationAction = constant.NotificationUpdateAnswer
 		rs.notificationQueueService.Send(ctx, msg)
 
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		rs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           revisionitem.UserID,
 			ObjectID:         insertData.ID,
 			OriginalObjectID: insertData.ID,
@@ -261,7 +264,7 @@ func (rs *RevisionService) revisionAuditTag(ctx context.Context, revisionitem *s
 			}
 		}
 
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		rs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           revisionitem.UserID,
 			ObjectID:         taginfo.TagID,
 			OriginalObjectID: taginfo.TagID,
