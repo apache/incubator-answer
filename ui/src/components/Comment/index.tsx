@@ -306,7 +306,8 @@ const Comment = ({ objectId, mode, commentId }) => {
       <div className="mt-2">
         <Button
           variant="link"
-          className="p-0 small btn-no-border"
+          className="p-0 btn-no-border"
+          size="sm"
           onClick={() => {
             if (tryNormalLogged(true)) {
               setVisibleComment(!visibleComment);
@@ -317,7 +318,8 @@ const Comment = ({ objectId, mode, commentId }) => {
         {data && (pageIndex || 1) < Math.ceil((data?.count || 0) / pageSize) && (
           <Button
             variant="link"
-            className="p-0 small ms-3 btn-no-border"
+            size="sm"
+            className="p-0 ms-3 btn-no-border"
             onClick={() => {
               setPageIndex(pageIndex + 1);
             }}>
