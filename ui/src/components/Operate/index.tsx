@@ -263,7 +263,8 @@ const Index: FC<IProps> = ({
           <Button
             key={item.action}
             variant="link"
-            className="link-secondary p-0 small ms-3"
+            size="sm"
+            className="link-secondary p-0 ms-3"
             onClick={() => handleAction(item.action)}>
             {item.name}
           </Button>
@@ -273,7 +274,8 @@ const Index: FC<IProps> = ({
         <Dropdown className="ms-3">
           <Dropdown.Toggle
             variant="link"
-            className="link-secondary p-0 small no-toggle">
+            size="sm"
+            className="link-secondary p-0 no-toggle">
             {t('action', { keyPrefix: 'question_detail' })}
           </Dropdown.Toggle>
           <Dropdown.Menu>

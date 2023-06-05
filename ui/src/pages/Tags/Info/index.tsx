@@ -162,8 +162,9 @@ const TagIntroduction = () => {
               <Button
                 key={action.name}
                 variant="link"
+                size="sm"
                 className={classNames(
-                  'link-secondary btn-no-border p-0 small',
+                  'link-secondary btn-no-border p-0',
                   index > 0 && 'ms-3',
                 )}
                 onClick={() => onAction(action)}>
