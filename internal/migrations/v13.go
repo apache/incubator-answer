@@ -14,14 +14,21 @@ import (
 )
 
 func updateCount(x *xorm.Engine) error {
-	addPrivilegeForInviteSomeoneToAnswer(x)
-	addGravatarBaseURL(x)
-	updateQuestionCount(x)
-	updateTagCount(x)
-	updateUserQuestionCount(x)
-	updateUserAnswerCount(x)
-	inviteAnswer(x)
-	inBoxData(x)
+	fns := []func(*xorm.Engine) error{
+		addPrivilegeForInviteSomeoneToAnswer,
+		addGravatarBaseURL,
+		updateQuestionCount,
+		updateTagCount,
+		updateUserQuestionCount,
+		updateUserAnswerCount,
+		inviteAnswer,
+		inBoxData,
+	}
+	for _, fn := range fns {
+		if err := fn(x); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
