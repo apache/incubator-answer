@@ -260,6 +260,9 @@ backend:
     upload:
       unsupported_file_format:
         other: Formato de archivo no soportado.
+    site_info:
+      config_not_found:
+        other: Site config not found.
   reason:
     spam:
       name:
@@ -324,7 +327,7 @@ backend:
       name:
         other: needs delete
       desc:
-        other: All reputation gained and lost will be restored.
+        other: This post will be deleted.
   question:
     close:
       duplicate:
@@ -1373,7 +1376,7 @@ ui:
       closed_name: cerrada
       closed_desc: "Una pregunta cerrada no puede responder, pero aún puede editar, votar y comentar."
       deleted_name: eliminado
-      deleted_desc: Toda la reputación ganada y perdida será restaurada.
+      deleted_desc: This post will be deleted.
       btn_cancel: Cancelar
       btn_submit: Entregar
       btn_next: Próximo
