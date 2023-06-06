@@ -88,7 +88,8 @@ func (qr *questionRepo) UpdatePvCount(ctx context.Context, questionID string) (e
 func (qr *questionRepo) UpdateAnswerCount(ctx context.Context, questionID string, num int) (err error) {
 	questionID = uid.DeShortID(questionID)
 	question := &entity.Question{}
-	_, err = qr.data.DB.Context(ctx).Where("id =?", questionID).Incr("answer_count", num).Update(question)
+	question.AnswerCount = num
+	_, err = qr.data.DB.Context(ctx).Where("id =?", questionID).Cols("answer_count").Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
