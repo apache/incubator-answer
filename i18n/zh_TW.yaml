@@ -260,6 +260,9 @@ backend:
     upload:
       unsupported_file_format:
         other: 不支援的檔案格式。
+    site_info:
+      config_not_found:
+        other: Site config not found.
   reason:
     spam:
       name:
@@ -324,7 +327,7 @@ backend:
       name:
         other: needs delete
       desc:
-        other: All reputation gained and lost will be restored.
+        other: This post will be deleted.
   question:
     close:
       duplicate:
@@ -1348,7 +1351,7 @@ ui:
       closed_name: 關閉
       closed_desc: "關閉的問題不能回答，但仍然可以編輯、投票和評論。"
       deleted_name: 刪除
-      deleted_desc: 獲得和失去的所有信譽將被恢復。
+      deleted_desc: This post will be deleted.
       btn_cancel: 取消
       btn_submit: 提交
       btn_next: 下一步
