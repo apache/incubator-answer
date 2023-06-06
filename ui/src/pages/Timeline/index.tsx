@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from 'react';
-import { Container, Row, Col, Form, Table } from 'react-bootstrap';
+import { Form, Table } from 'react-bootstrap';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -79,54 +79,50 @@ const Index: FC = () => {
     title: pageTitle,
   });
   return (
-    <Container className="py-3">
-      <Row className="py-3 justify-content-center">
-        <Col xxl={10}>
-          <h5 className="mb-4">
-            {timelineData?.object_info.object_type === 'tag'
-              ? t('tag_title')
-              : t('title')}{' '}
-            <Link to={linkUrl}>{timelineData?.object_info?.title}</Link>
-          </h5>
-          {timelineData?.object_info.object_type !== 'tag' && (
-            <Form.Check
-              className="mb-4"
-              type="switch"
-              id="custom-switch"
-              label={t('show_votes')}
-              checked={showVotes}
-              onChange={(e) => handleSwitch(e.target.checked)}
-            />
-          )}
-          <Table hover>
-            <thead>
-              <tr>
-                <th style={{ width: '20%' }}>{t('datetime')}</th>
-                <th style={{ width: '15%' }}>{t('type')}</th>
-                <th style={{ width: '19%' }}>{t('by')}</th>
-                <th>{t('comment')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {timelineData?.timeline?.map((item) => {
-                return (
-                  <HistoryItem
-                    data={item}
-                    objectInfo={timelineData?.object_info}
-                    key={item.activity_id}
-                    isAdmin={role_id === 2}
-                    revisionList={revisionList}
-                  />
-                );
-              })}
-            </tbody>
-          </Table>
-          {!isLoading && Number(timelineData?.timeline?.length) <= 0 && (
-            <Empty>{t('no_data')}</Empty>
-          )}
-        </Col>
-      </Row>
-    </Container>
+    <div className="py-4 mb-5">
+      <h5 className="mb-4">
+        {timelineData?.object_info.object_type === 'tag'
+          ? t('tag_title')
+          : t('title')}{' '}
+        <Link to={linkUrl}>{timelineData?.object_info?.title}</Link>
+      </h5>
+      {timelineData?.object_info.object_type !== 'tag' && (
+        <Form.Check
+          className="mb-4"
+          type="switch"
+          id="custom-switch"
+          label={t('show_votes')}
+          checked={showVotes}
+          onChange={(e) => handleSwitch(e.target.checked)}
+        />
+      )}
+      <Table hover>
+        <thead>
+          <tr>
+            <th style={{ width: '20%' }}>{t('datetime')}</th>
+            <th style={{ width: '15%' }}>{t('type')}</th>
+            <th style={{ width: '19%' }}>{t('by')}</th>
+            <th>{t('comment')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {timelineData?.timeline?.map((item) => {
+            return (
+              <HistoryItem
+                data={item}
+                objectInfo={timelineData?.object_info}
+                key={item.activity_id}
+                isAdmin={role_id === 2}
+                revisionList={revisionList}
+              />
+            );
+          })}
+        </tbody>
+      </Table>
+      {!isLoading && Number(timelineData?.timeline?.length) <= 0 && (
+        <Empty>{t('no_data')}</Empty>
+      )}
+    </div>
   );
 };
 

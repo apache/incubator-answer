@@ -226,9 +226,7 @@ func (s *SiteInfoService) SaveSiteUsers(ctx context.Context, req *schema.SiteUse
 }
 
 // GetSMTPConfig get smtp config
-func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
-	resp *schema.GetSMTPConfigResp, err error,
-) {
+func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (resp *schema.GetSMTPConfigResp, err error) {
 	emailConfig, err := s.emailService.GetEmailConfig(ctx)
 	if err != nil {
 		return nil, err
@@ -240,13 +238,10 @@ func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
 
 // UpdateSMTPConfig get smtp config
 func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.UpdateSMTPConfigReq) (err error) {
-	oldEmailConfig, err := s.emailService.GetEmailConfig(ctx)
-	if err != nil {
-		return err
-	}
-	_ = copier.Copy(oldEmailConfig, req)
+	ec := &export.EmailConfig{}
+	_ = copier.Copy(ec, req)
 
-	err = s.emailService.SetEmailConfig(ctx, oldEmailConfig)
+	err = s.emailService.SetEmailConfig(ctx, ec)
 	if err != nil {
 		return err
 	}
@@ -257,7 +252,7 @@ func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.Upda
 		}
 		go s.emailService.SendAndSaveCode(ctx, req.TestEmailRecipient, title, body, "", "")
 	}
-	return
+	return nil
 }
 
 func (s *SiteInfoService) GetSeo(ctx context.Context) (resp *schema.SiteSeoReq, err error) {

@@ -5,6 +5,7 @@ import RelatedQuestions from './RelatedQuestions';
 import WriteAnswer from './WriteAnswer';
 import Alert from './Alert';
 import ContentLoader from './ContentLoader';
+import InviteToAnswer from './InviteToAnswer';
 
 export {
   Question,
@@ -14,4 +15,5 @@ export {
   WriteAnswer,
   Alert,
   ContentLoader,
+  InviteToAnswer,
 };

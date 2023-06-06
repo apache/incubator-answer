@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { Container, Row, Col, Alert, Stack, Button } from 'react-bootstrap';
+import { Row, Col, Alert, Stack, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -7,6 +7,7 @@ import { usePageTags } from '@/hooks';
 import { BaseUserCard, FormatTime, Empty, DiffContent } from '@/components';
 import { getReviewList, revisionAudit } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
+import { scrollToDocTop } from '@/utils';
 import type * as Type from '@/common/interface';
 
 const Index: FC = () => {
@@ -39,7 +40,7 @@ const Index: FC = () => {
       setNoTasks(true);
     }
     setTimeout(() => {
-      window.scrollTo({ top: 0 });
+      scrollToDocTop();
     }, 150);
   };
   const queryNextOne = (pageNumber) => {
@@ -123,121 +124,111 @@ const Index: FC = () => {
     title: t('review'),
   });
   return (
-    <Container className="pt-2 mt-4 mb-5">
-      <Row>
-        <Col lg={{ span: 7, offset: 1 }}>
-          <h3 className="mb-4">{t('review')}</h3>
-        </Col>
+    <Row className="pt-4 mb-5">
+      <h3 className="mb-4">{t('review')}</h3>
+      <Col className="page-main flex-auto">
         {!noTasks && ro && (
           <>
-            <Col lg={{ span: 7, offset: 1 }}>
-              <Alert variant="secondary">
-                <Stack className="align-items-start">
-                  <span className="badge text-bg-secondary mb-2">
-                    {editBadge}
-                  </span>
-                  <Link to={itemLink} target="_blank">
-                    {itemTitle}
-                  </Link>
-                  <p className="mb-0">
-                    {t('edit_summary')}: {editSummary}
-                  </p>
-                </Stack>
-                <Stack
-                  direction="horizontal"
-                  gap={1}
-                  className="align-items-baseline mt-2">
-                  <BaseUserCard data={editor} avatarSize="24" />
-                  {editTime && (
-                    <FormatTime
-                      time={editTime}
-                      className="small text-secondary"
-                      preFix={t('proposed')}
-                    />
-                  )}
-                </Stack>
-              </Alert>
-            </Col>
-            <Col lg={{ span: 7, offset: 1 }}>
-              {type === 'question' &&
-                info &&
-                reviewInfo &&
-                'content' in reviewInfo && (
-                  <DiffContent
-                    className="mt-2"
-                    objectType={type}
-                    oldData={{
-                      title: info.title,
-                      original_text: info.content,
-                      tags: info.tags,
-                    }}
-                    newData={{
-                      title: reviewInfo.title,
-                      original_text: reviewInfo.content,
-                      tags: reviewInfo.tags,
-                    }}
+            <Alert variant="secondary">
+              <Stack className="align-items-start">
+                <span className="badge text-bg-secondary mb-2">
+                  {editBadge}
+                </span>
+                <Link to={itemLink} target="_blank">
+                  {itemTitle}
+                </Link>
+                <p className="mb-0">
+                  {t('edit_summary')}: {editSummary}
+                </p>
+              </Stack>
+              <Stack
+                direction="horizontal"
+                gap={1}
+                className="align-items-baseline mt-2">
+                <BaseUserCard data={editor} avatarSize="24" />
+                {editTime && (
+                  <FormatTime
+                    time={editTime}
+                    className="small text-secondary"
+                    preFix={t('proposed')}
                   />
                 )}
-              {type === 'answer' &&
-                info &&
-                reviewInfo &&
-                'content' in reviewInfo && (
-                  <DiffContent
-                    className="mt-2"
-                    objectType={type}
-                    newData={{
-                      original_text: reviewInfo.content,
-                    }}
-                    oldData={{
-                      original_text: info.content,
-                    }}
-                  />
-                )}
-              {type === 'tag' && info && reviewInfo && (
+              </Stack>
+            </Alert>
+            {type === 'question' &&
+              info &&
+              reviewInfo &&
+              'content' in reviewInfo && (
+                <DiffContent
+                  className="mt-2"
+                  objectType={type}
+                  oldData={{
+                    title: info.title,
+                    original_text: info.content,
+                    tags: info.tags,
+                  }}
+                  newData={{
+                    title: reviewInfo.title,
+                    original_text: reviewInfo.content,
+                    tags: reviewInfo.tags,
+                  }}
+                />
+              )}
+            {type === 'answer' &&
+              info &&
+              reviewInfo &&
+              'content' in reviewInfo && (
                 <DiffContent
                   className="mt-2"
                   objectType={type}
                   newData={{
-                    original_text: reviewInfo.original_text,
+                    original_text: reviewInfo.content,
                   }}
                   oldData={{
                     original_text: info.content,
                   }}
-                  opts={{ showTitle: false, showTagUrlSlug: false }}
                 />
               )}
-            </Col>
-            <Col lg={{ span: 7, offset: 1 }}>
-              <Stack direction="horizontal" gap={2} className="mt-4">
-                <Button
-                  variant="outline-primary"
-                  disabled={isLoading}
-                  onClick={handlingApprove}>
-                  {t('approve', { keyPrefix: 'btns' })}
-                </Button>
-                <Button
-                  variant="outline-primary"
-                  disabled={isLoading}
-                  onClick={handlingReject}>
-                  {t('reject', { keyPrefix: 'btns' })}
-                </Button>
-                <Button
-                  variant="outline-primary"
-                  disabled={isLoading}
-                  onClick={handlingSkip}>
-                  {t('skip', { keyPrefix: 'btns' })}
-                </Button>
-              </Stack>
-            </Col>
+            {type === 'tag' && info && reviewInfo && (
+              <DiffContent
+                className="mt-2"
+                objectType={type}
+                newData={{
+                  original_text: reviewInfo.original_text,
+                }}
+                oldData={{
+                  original_text: info.content,
+                }}
+                opts={{ showTitle: false, showTagUrlSlug: false }}
+              />
+            )}
+            <Stack direction="horizontal" gap={2} className="mt-4">
+              <Button
+                variant="outline-primary"
+                disabled={isLoading}
+                onClick={handlingApprove}>
+                {t('approve', { keyPrefix: 'btns' })}
+              </Button>
+              <Button
+                variant="outline-primary"
+                disabled={isLoading}
+                onClick={handlingReject}>
+                {t('reject', { keyPrefix: 'btns' })}
+              </Button>
+              <Button
+                variant="outline-primary"
+                disabled={isLoading}
+                onClick={handlingSkip}>
+                {t('skip', { keyPrefix: 'btns' })}
+              </Button>
+            </Stack>
           </>
         )}
-        {noTasks && (
-          <Col lg={{ span: 7, offset: 1 }}>
-            <Empty>{t('empty')}</Empty>
-          </Col>
-        )}
-      </Row>
-    </Container>
+        {noTasks && <Empty>{t('empty')}</Empty>}
+      </Col>
+
+      <Col className="page-right-side mt-4 mt-xl-0" />
+    </Row>
   );
 };
 

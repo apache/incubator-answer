@@ -58,7 +58,7 @@ const Index: FC<Props> = ({
           />
         </>
       )}
-      <div className="fs-14 text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
+      <div className="small text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
         <div className="me-1 me-md-0">
           {data?.status !== 'deleted' ? (
             <Link to={`/users/${data?.username}`} className="me-1 text-break">

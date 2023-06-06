@@ -261,6 +261,9 @@ backend:
     upload:
       unsupported_file_format:
         other: Unsupported file format.
+    site_info:
+      config_not_found:
+        other: Site config not found.
   reason:
     spam:
       name:
@@ -328,7 +331,7 @@ backend:
       name:
         other: needs delete
       desc:
-        other: All reputation gained and lost will be restored.
+        other: This post will be deleted.
   question:
     close:
       duplicate:
@@ -504,6 +507,11 @@ ui:
     all_read: Mark all as read
     show_more: Show more
     someone: Someone
+    inbox_type:
+      all: All
+      posts: Posts
+      invites: Invites
+      votes: Votes
   suspended:
     title: Your Account has been Suspended
     until_time: "Your account was suspended until {{ time }}."
@@ -805,6 +813,8 @@ ui:
       logout: Log out
       admin: Admin
       review: Review
+      bookmark: Bookmarks
+      moderation: Moderation
     search:
       placeholder: Search
   footer:
@@ -925,7 +935,7 @@ ui:
       avatar:
         label: Profile Image
         gravatar: Gravatar
-        gravatar_text: You can change image on <1>gravatar.com</1>
+        gravatar_text: You can change image on
         custom: Custom
         btn_refresh: Refresh
         custom_text: You can upload your image.
@@ -991,6 +1001,12 @@ ui:
     title: Related Questions
     btn: Add question
     answers: answers
+  invite_to_answer:
+    title: People asked
+    desc: Invite people who you think might know the answer.
+    invite: Invite to answer
+    add: Add people
+    search: Search people
   question_detail:
     action: Action
     Asked: Asked
@@ -1000,6 +1016,7 @@ ui:
     Views: Viewed
     Follow: Follow
     Following: Following
+    follow_tip: Follow this question to receive notifications
     answered: answered
     closed_in: Closed in
     show_exist: Show existing question.
@@ -1056,6 +1073,7 @@ ui:
   btns:
     confirm: Confirm
     cancel: Cancel
+    edit: Edit
     save: Save
     delete: Delete
     login: Log in
@@ -1168,8 +1186,7 @@ ui:
     accepted: Accepted
     answered: answered
     asked: asked
-    upvote: upvote
-    downvote: downvote
+    downvoted: downvoted
     mod_short: Mod
     mod_long: Moderators
     x_reputation: reputation
@@ -1378,7 +1395,7 @@ ui:
       closed_name: closed
       closed_desc: "A closed question can't answer, but still can edit, vote and comment."
       deleted_name: deleted
-      deleted_desc: All reputation gained and lost will be restored.
+      deleted_desc: This post will be deleted.
       btn_cancel: Cancel
       btn_submit: Submit
       btn_next: Next
@@ -1652,6 +1669,9 @@ ui:
       avatar:
         label: Default Avatar
         text: For users without a custom avatar of their own.
+      gravatar_base_url:
+        label: Gravatar Base URL
+        text: URL of the Gravatar provider’s API base. Ignored when empty.
       profile_editable:
         title: Profile Editable
       allow_update_display_name:

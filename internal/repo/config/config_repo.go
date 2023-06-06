@@ -80,8 +80,8 @@ func (cr configRepo) GetConfigByKey(ctx context.Context, key string) (c *entity.
 
 func (cr configRepo) UpdateConfig(ctx context.Context, key string, value string) (err error) {
 	// check if key exists
-	cf := &entity.Config{}
-	exist, err := cr.data.DB.Context(ctx).Get(cf)
+	oldConfig := &entity.Config{}
+	exist, err := cr.data.DB.Context(ctx).Get(oldConfig)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -90,19 +90,20 @@ func (cr configRepo) UpdateConfig(ctx context.Context, key string, value string)
 	}
 
 	// update database
-	_, err = cr.data.DB.Context(ctx).ID(cf.ID).Update(&entity.Config{Value: value})
+	_, err = cr.data.DB.Context(ctx).ID(oldConfig.ID).Update(&entity.Config{Value: value})
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 
-	cacheVal := cf.JsonString()
+	oldConfig.Value = value
+	cacheVal := oldConfig.JsonString()
 	// update cache
 	if err := cr.data.Cache.SetString(ctx,
 		constant.ConfigKEY2ContentCacheKeyPrefix+key, cacheVal, -1); err != nil {
 		log.Error(err)
 	}
 	if err := cr.data.Cache.SetString(ctx,
-		fmt.Sprintf("%s%d", constant.ConfigID2KEYCacheKeyPrefix, cf.ID), cacheVal, -1); err != nil {
+		fmt.Sprintf("%s%d", constant.ConfigID2KEYCacheKeyPrefix, oldConfig.ID), cacheVal, -1); err != nil {
 		log.Error(err)
 	}
 	return

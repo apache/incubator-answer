@@ -40,6 +40,7 @@ import HotQuestions from './HotQuestions';
 import HttpErrorContent from './HttpErrorContent';
 import CustomSidebar from './CustomSidebar';
 import ImgViewer from './ImgViewer';
+import SideNav from './SideNav';
 
 export {
   Avatar,
@@ -86,5 +87,6 @@ export {
   HttpErrorContent,
   CustomSidebar,
   ImgViewer,
+  SideNav,
 };
 export type { EditorRef, JSONSchema, UISchema };

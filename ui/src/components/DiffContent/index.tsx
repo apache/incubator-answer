@@ -94,7 +94,7 @@ const Index: FC<Props> = ({
       {objectType === 'tag' && opts?.showTagUrlSlug && (
         <div
           className={classnames(
-            'fs-14 font-monospace',
+            'small font-monospace',
             newData.original_text && 'mb-4',
           )}
           dangerouslySetInnerHTML={{
@@ -113,7 +113,7 @@ const Index: FC<Props> = ({
         dangerouslySetInnerHTML={{
           __html: diffText(newData.original_text, oldData?.original_text),
         }}
-        className="pre-line text-break font-monospace fs-14"
+        className="pre-line text-break font-monospace small"
       />
     </div>
   );

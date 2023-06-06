@@ -40,7 +40,7 @@ const Index: FC<Props> = ({ id }) => {
               <div className="link-dark">{item.title}</div>
               {item.answer_count > 0 && (
                 <div
-                  className={`mt-1 fs-14 me-2 ${
+                  className={`mt-1 small me-2 ${
                     item.accepted_answer_id > 0
                       ? 'link-success'
                       : 'link-secondary'

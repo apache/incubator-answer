@@ -623,6 +623,7 @@ func (uc *UserController) SearchUserListByName(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	resp, err := uc.userService.SearchUserListByName(ctx, req.Username)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	resp, err := uc.userService.SearchUserListByName(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }

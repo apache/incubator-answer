@@ -31,6 +31,11 @@ const Index: FC = () => {
         enumNames: SYSTEM_AVATAR_OPTIONS?.map((v) => v.label),
         default: 'system',
       },
+      gravatar_base_url: {
+        type: 'string',
+        title: t('gravatar_base_url.label'),
+        description: t('gravatar_base_url.text'),
+      },
       profile_editable: {
         type: 'string',
         title: t('profile_editable.title'),
@@ -67,6 +72,9 @@ const Index: FC = () => {
   const uiSchema: UISchema = {
     default_avatar: {
       'ui:widget': 'select',
+    },
+    gravatar_base_url: {
+      'ui:widget': 'input',
     },
     profile_editable: {
       'ui:widget': 'legend',
@@ -127,6 +135,7 @@ const Index: FC = () => {
       allow_update_username: formData.allow_update_username.value,
       allow_update_website: formData.allow_update_website.value,
       default_avatar: formData.default_avatar.value,
+      gravatar_base_url: formData.gravatar_base_url.value,
     };
     putUsersSetting(reqParams)
       .then(() => {
@@ -154,6 +163,9 @@ const Index: FC = () => {
         let v = resp[k];
         if (k === 'default_avatar' && !v) {
           v = 'system';
+        }
+        if (k === 'gravatar_base_url' && !v) {
+          v = 'https://www.gravatar.com/avatar/';
         }
         formMeta[k] = { ...formData[k], value: v };
       });

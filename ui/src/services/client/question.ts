@@ -53,3 +53,18 @@ export const useSimilarQuestion = (params: {
     error,
   };
 };
+
+export const getInviteUser = (questionId: string) => {
+  const apiUrl = '/answer/api/v1/question/invite';
+  return request.get<Type.UserInfoBase[]>(apiUrl, {
+    params: { id: questionId },
+  });
+};
+
+export const putInviteUser = (questionId: string, users: string[]) => {
+  const apiUrl = '/answer/api/v1/question/invite';
+  return request.put(apiUrl, {
+    id: questionId,
+    invite_user: users,
+  });
+};

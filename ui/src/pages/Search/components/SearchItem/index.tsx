@@ -42,7 +42,7 @@ const Index: FC<Props> = ({ data }) => {
             : null}
         </a>
       </div>
-      <div className="d-flex flex-wrap align-items-center fs-14 text-secondary mb-2">
+      <div className="d-flex flex-wrap align-items-center small text-secondary mb-2">
         <BaseUserCard data={data.object?.user_info} showAvatar={false} />
 
         <span className="split-dot" />
@@ -65,7 +65,7 @@ const Index: FC<Props> = ({ data }) => {
       </div>
 
       {data.object?.excerpt && (
-        <p className="fs-14 text-truncate-2 mb-2 last-p text-break">
+        <p className="small text-truncate-2 mb-2 last-p text-break">
           {escapeRemove(data.object.excerpt)}
         </p>
       )}

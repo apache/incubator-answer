@@ -64,28 +64,15 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
             {t('header.nav.profile')}
           </Dropdown.Item>
           <Dropdown.Item
+            href={`/users/${userInfo.username}/bookmarks`}
+            onClick={handleLinkClick}>
+            {t('header.nav.bookmark')}
+          </Dropdown.Item>
+          <Dropdown.Item
             href="/users/settings/profile"
             onClick={handleLinkClick}>
             {t('header.nav.setting')}
           </Dropdown.Item>
-          {userInfo?.role_id === 2 ? (
-            <Dropdown.Item href="/admin" onClick={handleLinkClick}>
-              {t('header.nav.admin')}
-            </Dropdown.Item>
-          ) : null}
-          {redDot?.can_revision ? (
-            <Dropdown.Item
-              href="/review"
-              className="position-relative"
-              onClick={handleLinkClick}>
-              {t('header.nav.review')}
-              {redDot?.revision > 0 && (
-                <span className="position-absolute top-50 translate-middle-y end-0 me-3 p-2 bg-danger border border-light rounded-circle">
-                  <span className="visually-hidden">New Review</span>
-                </span>
-              )}
-            </Dropdown.Item>
-          ) : null}
           <Dropdown.Divider />
           <Dropdown.Item onClick={logOut}>
             {t('header.nav.logout')}

@@ -258,13 +258,13 @@ const Comment = ({ objectId, mode, commentId }) => {
             ) : (
               <div className="d-block">
                 {item.reply_user_display_name && (
-                  <Link to="." className="fs-14 me-1 text-nowrap">
+                  <Link to="." className="small me-1 text-nowrap">
                     @{item.reply_user_display_name}
                   </Link>
                 )}
 
                 <div
-                  className="fmt fs-14 text-break text-wrap"
+                  className="fmt small text-break text-wrap"
                   dangerouslySetInnerHTML={{ __html: item.parsed_text }}
                 />
               </div>
@@ -306,7 +306,8 @@ const Comment = ({ objectId, mode, commentId }) => {
       <div className="mt-2">
         <Button
           variant="link"
-          className="p-0 fs-14 btn-no-border"
+          className="p-0 btn-no-border"
+          size="sm"
           onClick={() => {
             if (tryNormalLogged(true)) {
               setVisibleComment(!visibleComment);
@@ -317,7 +318,8 @@ const Comment = ({ objectId, mode, commentId }) => {
         {data && (pageIndex || 1) < Math.ceil((data?.count || 0) / pageSize) && (
           <Button
             variant="link"
-            className="p-0 fs-14 ms-3 btn-no-border"
+            size="sm"
+            className="p-0 ms-3 btn-no-border"
             onClick={() => {
               setPageIndex(pageIndex + 1);
             }}>

@@ -118,20 +118,23 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 
 	}
 
-	// user add question count
-	err = as.questionCommon.UpdateAnswerCount(ctx, answerInfo.QuestionID, -1)
-	if err != nil {
-		log.Error("IncreaseAnswerCount error", err.Error())
-	}
-
-	err = as.userCommon.UpdateAnswerCount(ctx, answerInfo.UserID, -1)
-	if err != nil {
-		log.Error("user IncreaseAnswerCount error", err.Error())
-	}
-
 	err = as.answerRepo.RemoveAnswer(ctx, req.ID)
 	if err != nil {
 		return err
+	}
+
+	// user add question count
+	err = as.questionCommon.UpdateAnswerCount(ctx, answerInfo.QuestionID)
+	if err != nil {
+		log.Error("IncreaseAnswerCount error", err.Error())
+	}
+	userAnswerCount, err := as.answerRepo.GetCountByUserID(ctx, answerInfo.UserID)
+	if err != nil {
+		log.Error("GetCountByUserID error", err.Error())
+	}
+	err = as.userCommon.UpdateAnswerCount(ctx, answerInfo.UserID, int(userAnswerCount))
+	if err != nil {
+		log.Error("user IncreaseAnswerCount error", err.Error())
 	}
 	// #2372 In order to simplify the process and complexity, as well as to consider if it is in-house,
 	// facing the problem of recovery.
@@ -173,7 +176,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if err = as.answerRepo.AddAnswer(ctx, insertData); err != nil {
 		return "", err
 	}
-	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionID, 1)
+	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionID)
 	if err != nil {
 		log.Error("IncreaseAnswerCount error", err.Error())
 	}
@@ -185,8 +188,11 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if err != nil {
 		return insertData.ID, err
 	}
-
-	err = as.userCommon.UpdateAnswerCount(ctx, req.UserID, 1)
+	userAnswerCount, err := as.answerRepo.GetCountByUserID(ctx, req.UserID)
+	if err != nil {
+		log.Error("GetCountByUserID error", err.Error())
+	}
+	err = as.userCommon.UpdateAnswerCount(ctx, req.UserID, int(userAnswerCount))
 	if err != nil {
 		log.Error("user IncreaseAnswerCount error", err.Error())
 	}
@@ -524,6 +530,7 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, answers []*entity
 		userIDs = append(userIDs, info.UserID)
 		userIDs = append(userIDs, info.LastEditUserID)
 		if req.UserID != "" {
+			item.ID = uid.DeShortID(item.ID)
 			item.VoteStatus = as.voteRepo.GetVoteStatus(ctx, item.ID, req.UserID)
 		}
 	}

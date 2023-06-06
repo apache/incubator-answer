@@ -11,6 +11,7 @@ export interface AdminSettingsUsers {
   allow_update_username: boolean;
   allow_update_website: boolean;
   default_avatar: string;
+  gravatar_base_url: string;
 }
 
 interface PrivilegeLevel {

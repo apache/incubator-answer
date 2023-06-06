@@ -355,15 +355,20 @@ const Index: React.FC = () => {
                       className="me-3 rounded"
                     />
                     <Form.Text className="text-muted mt-1">
-                      <Trans i18nKey="settings.profile.avatar.gravatar_text">
-                        You can change image on
-                        <a
-                          href="https://gravatar.com"
-                          target="_blank"
-                          rel="noreferrer">
-                          gravatar.com
-                        </a>
-                      </Trans>
+                      <span>{t('avatar.gravatar_text')}</span>
+                      <a
+                        href={
+                          usersSetting.gravatar_base_url.includes('gravatar.cn')
+                            ? 'https://gravatar.cn'
+                            : 'https://gravatar.com'
+                        }
+                        className="ms-1"
+                        target="_blank"
+                        rel="noreferrer">
+                        {usersSetting.gravatar_base_url.includes('gravatar.cn')
+                          ? 'gravatar.cn'
+                          : 'gravatar.com'}
+                      </a>
                     </Form.Text>
                   </Stack>
                 )}

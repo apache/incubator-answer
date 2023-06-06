@@ -21,6 +21,7 @@ const defaultUsersConf: AdminSettingsUsers = {
   allow_update_username: false,
   allow_update_website: false,
   default_avatar: 'system',
+  gravatar_base_url: 'https://www.gravatar.com/avatar/',
 };
 
 const siteInfo = create<SiteInfoType>((set) => ({

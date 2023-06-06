@@ -48,35 +48,35 @@ const Index: FC = () => {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
-        className: ['fs-14', 'font-monospace'],
+        className: ['small', 'font-monospace'],
       },
     },
     custom_head: {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
-        className: ['fs-14', 'font-monospace'],
+        className: ['small', 'font-monospace'],
       },
     },
     custom_header: {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
-        className: ['fs-14', 'font-monospace'],
+        className: ['small', 'font-monospace'],
       },
     },
     custom_sidebar: {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
-        className: ['fs-14', 'font-monospace'],
+        className: ['small', 'font-monospace'],
       },
     },
     custom_footer: {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 10,
-        className: ['fs-14', 'font-monospace'],
+        className: ['small', 'font-monospace'],
       },
     },
   };

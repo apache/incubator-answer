@@ -52,10 +52,14 @@
   &.theme-light {
     background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgba(255, 255, 255, 0.95) 100%);
   }
+
+  .maxw-400 {
+    max-width: 400px;;
+  }
 }
 
 
-@media (max-width: 992.9px) {
+@media (max-width: 991.9px) {
   #header {
     .nav-grow {
       flex-grow: 1!important;
@@ -65,8 +69,8 @@
       display: flex!important;
     }
 
-    .w-75 {
-      width: 100% !important;
+    .maxw-400 {
+      max-width: 100%;
     }
   }
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import {
   useParams,
   useSearchParams,
@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Pagination, CustomSidebar } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
-import { scrollToElementTop } from '@/utils';
+import { scrollToElementTop, scrollToDocTop } from '@/utils';
 import { usePageTags, usePageUsers } from '@/hooks';
 import type {
   ListResult,
@@ -27,6 +27,7 @@ import {
   WriteAnswer,
   Alert,
   ContentLoader,
+  InviteToAnswer,
 } from './components';
 
 import './index.scss';
@@ -152,12 +153,12 @@ const Index = () => {
   const initPage = (type: string) => {
     if (type === 'delete_question') {
       setTimeout(() => {
-        navigate(-1);
+        navigate('/', { replace: true });
       }, 1000);
       return;
     }
     if (type === 'default') {
-      window.scrollTo(0, 0);
+      scrollToDocTop();
       getDetail();
       return;
     }
@@ -182,7 +183,7 @@ const Index = () => {
     if (!qid) {
       return;
     }
-    window.scrollTo(0, 0);
+    scrollToDocTop();
     getDetail();
     requestAnswers();
   }, [qid]);
@@ -197,70 +198,86 @@ const Index = () => {
     description: question?.description,
     keywords: question?.tags.map((_) => _.slug_name).join(','),
   });
+
+  const showInviteToAnswer = question?.id;
+  let canInvitePeople = false;
+  if (showInviteToAnswer && Array.isArray(question.extends_actions)) {
+    const inviteAct = question.extends_actions.find((op) => {
+      return op.action === 'invite_other_to_answer';
+    });
+    if (inviteAct) {
+      canInvitePeople = true;
+    }
+  }
+
   return (
-    <Container className="pt-4 mt-2 mb-5 questionDetailPage">
-      <Row className="justify-content-center">
-        <Col xxl={7} lg={8} sm={12} className="mb-5 mb-md-0">
-          {question?.operation?.level && <Alert data={question.operation} />}
-          {isLoading ? (
-            <ContentLoader />
-          ) : (
-            <Question
-              data={question}
-              initPage={initPage}
-              hasAnswer={answers.count > 0}
-              isLogged={isLogged}
+    <Row className="questionDetailPage pt-4 mb-5">
+      <Col className="page-main flex-auto">
+        {question?.operation?.level && <Alert data={question.operation} />}
+        {isLoading ? (
+          <ContentLoader />
+        ) : (
+          <Question
+            data={question}
+            initPage={initPage}
+            hasAnswer={answers.count > 0}
+            isLogged={isLogged}
+          />
+        )}
+        {!isLoading && answers.count > 0 && (
+          <>
+            <AnswerHead count={answers.count} order={order} />
+            {answers?.list?.map((item) => {
+              return (
+                <Answer
+                  aid={aid}
+                  key={item?.id}
+                  data={item}
+                  questionTitle={question?.title || ''}
+                  slugTitle={question?.url_title}
+                  canAccept={isAuthor || isAdmin || isModerator}
+                  callback={initPage}
+                  isLogged={isLogged}
+                />
+              );
+            })}
+          </>
+        )}
+
+        {!isLoading && Math.ceil(answers.count / 15) > 1 && (
+          <div className="d-flex justify-content-center answer-item pt-4">
+            <Pagination
+              currentPage={Number(page || 1)}
+              pageSize={15}
+              totalSize={answers?.count || 0}
+            />
+          </div>
+        )}
+
+        {!isLoading &&
+          Number(question?.status) !== 2 &&
+          !question?.operation?.type && (
+            <WriteAnswer
+              data={{
+                qid,
+                answered: question?.answered,
+                loggedUserRank,
+              }}
+              callback={writeAnswerCallback}
             />
           )}
-          {!isLoading && answers.count > 0 && (
-            <>
-              <AnswerHead count={answers.count} order={order} />
-              {answers?.list?.map((item) => {
-                return (
-                  <Answer
-                    aid={aid}
-                    key={item?.id}
-                    data={item}
-                    questionTitle={question?.title || ''}
-                    slugTitle={question?.url_title}
-                    canAccept={isAuthor || isAdmin || isModerator}
-                    callback={initPage}
-                    isLogged={isLogged}
-                  />
-                );
-              })}
-            </>
-          )}
-
-          {!isLoading && Math.ceil(answers.count / 15) > 1 && (
-            <div className="d-flex justify-content-center answer-item pt-4">
-              <Pagination
-                currentPage={Number(page || 1)}
-                pageSize={15}
-                totalSize={answers?.count || 0}
-              />
-            </div>
-          )}
-
-          {!isLoading &&
-            Number(question?.status) !== 2 &&
-            !question?.operation?.type && (
-              <WriteAnswer
-                data={{
-                  qid,
-                  answered: question?.answered,
-                  loggedUserRank,
-                }}
-                callback={writeAnswerCallback}
-              />
-            )}
-        </Col>
-        <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
-          <CustomSidebar />
-          <RelatedQuestions id={question?.id || ''} />
-        </Col>
-      </Row>
-    </Container>
+      </Col>
+      <Col className="page-right-side mt-4 mt-xl-0">
+        <CustomSidebar />
+        <RelatedQuestions id={question?.id || ''} />
+        {showInviteToAnswer ? (
+          <InviteToAnswer
+            questionId={question.id}
+            readOnly={!canInvitePeople}
+          />
+        ) : null}
+      </Col>
+    </Row>
   );
 };
 
