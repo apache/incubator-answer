@@ -260,6 +260,9 @@ backend:
     upload:
       unsupported_file_format:
         other: Nepodporovaný formát súboru.
+    site_info:
+      config_not_found:
+        other: Site config not found.
   reason:
     spam:
       name:
@@ -324,7 +327,7 @@ backend:
       name:
         other: needs delete
       desc:
-        other: All reputation gained and lost will be restored.
+        other: This post will be deleted.
   question:
     close:
       duplicate:
@@ -1348,7 +1351,7 @@ ui:
       closed_name: Uzavreté
       closed_desc: "Na uzavretú otázku nemôžete odpovedať, ale stále ju môžete upravovať, hlasovať a komentovať."
       deleted_name: Vymazané
-      deleted_desc: Získaná a stratená reputácia sa obnoví.
+      deleted_desc: This post will be deleted.
       btn_cancel: Zrušiť
       btn_submit: Odovdať
       btn_next: Ďalšie
