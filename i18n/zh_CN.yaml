@@ -262,7 +262,7 @@ backend:
         other: 不支持的文件格式。
     site_info:
       config_not_found:
-        other: Site config not found.
+        other: 未找到网站的该配置信息。
   reason:
     spam:
       name:
