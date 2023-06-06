@@ -261,6 +261,9 @@ backend:
     upload:
       unsupported_file_format:
         other: Unsupported file format.
+    site_info:
+      config_not_found:
+        other: Site config not found.
   reason:
     spam:
       name:
