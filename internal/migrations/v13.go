@@ -15,13 +15,13 @@ import (
 
 func updateCount(x *xorm.Engine) error {
 	fns := []func(*xorm.Engine) error{
+		inviteAnswer,
 		addPrivilegeForInviteSomeoneToAnswer,
 		addGravatarBaseURL,
 		updateQuestionCount,
 		updateTagCount,
 		updateUserQuestionCount,
 		updateUserAnswerCount,
-		inviteAnswer,
 		inBoxData,
 	}
 	for _, fn := range fns {
