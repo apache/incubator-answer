@@ -99,8 +99,12 @@ func (qs *QuestionCommon) UpdatePv(ctx context.Context, questionID string) error
 	return qs.questionRepo.UpdatePvCount(ctx, questionID)
 }
 
-func (qs *QuestionCommon) UpdateAnswerCount(ctx context.Context, questionID string, num int) error {
-	return qs.questionRepo.UpdateAnswerCount(ctx, questionID, num)
+func (qs *QuestionCommon) UpdateAnswerCount(ctx context.Context, questionID string) error {
+	count, err := qs.answerRepo.GetCountByQuestionID(ctx, questionID)
+	if err != nil {
+		return err
+	}
+	return qs.questionRepo.UpdateAnswerCount(ctx, questionID, int(count))
 }
 
 func (qs *QuestionCommon) UpdateCollectionCount(ctx context.Context, questionID string, num int) error {
@@ -523,12 +527,15 @@ func (as *QuestionCommon) RemoveAnswer(ctx context.Context, id string) (err erro
 
 	// user add question count
 
-	err = as.UpdateAnswerCount(ctx, answerinfo.QuestionID, -1)
+	err = as.UpdateAnswerCount(ctx, answerinfo.QuestionID)
 	if err != nil {
 		log.Error("UpdateAnswerCount error", err.Error())
 	}
-
-	err = as.userCommon.UpdateAnswerCount(ctx, answerinfo.UserID, -1)
+	userAnswerCount, err := as.answerRepo.GetCountByUserID(ctx, answerinfo.UserID)
+	if err != nil {
+		log.Error("GetCountByUserID error", err.Error())
+	}
+	err = as.userCommon.UpdateAnswerCount(ctx, answerinfo.UserID, int(userAnswerCount))
 	if err != nil {
 		log.Error("user UpdateAnswerCount error", err.Error())
 	}
