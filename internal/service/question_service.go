@@ -589,13 +589,16 @@ func (qs *QuestionService) UpdateQuestionInviteUser(ctx context.Context, req *sc
 	//send notification
 	oldInviteUserIDsStr := originQuestion.InviteUserID
 	oldInviteUserIDs := make([]string, 0)
+	needSendNotificationUserIDs := make([]string, 0)
 	if oldInviteUserIDsStr != "" {
 		err = json.Unmarshal([]byte(oldInviteUserIDsStr), &oldInviteUserIDs)
 		if err == nil {
-			needSendNotificationUserIDs := converter.ArrayNotInArray(oldInviteUserIDs, inviteUserIDs)
-			go qs.notificationInviteUser(ctx, needSendNotificationUserIDs, originQuestion.ID, originQuestion.Title, req.UserID)
+			needSendNotificationUserIDs = converter.ArrayNotInArray(oldInviteUserIDs, inviteUserIDs)
 		}
+	} else {
+		needSendNotificationUserIDs = inviteUserIDs
 	}
+	go qs.notificationInviteUser(ctx, needSendNotificationUserIDs, originQuestion.ID, originQuestion.Title, req.UserID)
 
 	return nil
 }
