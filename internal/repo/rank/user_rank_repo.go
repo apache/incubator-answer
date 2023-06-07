@@ -114,7 +114,7 @@ func (ur *UserRankRepo) checkUserTodayRank(ctx context.Context,
 		LessVal: start,
 		MoreVal: end,
 	})
-	earned, err := session.Sum(&entity.Activity{}, "rank")
+	earned, err := session.Sum(&entity.Activity{}, "`rank`")
 	if err != nil {
 		return false, err
 	}
@@ -137,7 +137,7 @@ func (ur *UserRankRepo) UserRankPage(ctx context.Context, userID string, page, p
 ) {
 	rankPage = make([]*entity.Activity, 0)
 
-	session := ur.data.DB.Context(ctx).Where(builder.Eq{"has_rank": 1}.And(builder.Eq{"cancelled": 0})).And(builder.Gt{"rank": 0})
+	session := ur.data.DB.Context(ctx).Where(builder.Eq{"has_rank": 1}.And(builder.Eq{"cancelled": 0})).And(builder.Gt{"`rank`": 0})
 	session.Desc("created_at")
 
 	cond := &entity.Activity{UserID: userID}
