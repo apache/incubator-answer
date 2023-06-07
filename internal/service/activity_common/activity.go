@@ -47,7 +47,7 @@ func NewActivityCommon(
 
 // HandleActivity handle activity message
 func (ac *ActivityCommon) HandleActivity(ctx context.Context, msg *schema.ActivityMsg) error {
-	activityType, err := ac.activityRepo.GetActivityTypeByConfigKey(context.Background(), string(msg.ActivityTypeKey))
+	activityType, err := ac.activityRepo.GetActivityTypeByConfigKey(ctx, string(msg.ActivityTypeKey))
 	if err != nil {
 		log.Errorf("error getting activity type %s, activity type is %d", err, activityType)
 		return err
