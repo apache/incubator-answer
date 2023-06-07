@@ -11,7 +11,6 @@ import (
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
-	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity_common"
 	answercommon "github.com/answerdev/answer/internal/service/answer_common"
@@ -24,11 +23,10 @@ import (
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/dir"
-	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
 
-type DashboardService struct {
+type dashboardService struct {
 	questionRepo    questioncommon.QuestionRepo
 	answerRepo      answercommon.AnswerRepo
 	commentRepo     comment_common.CommentCommonRepo
@@ -38,8 +36,7 @@ type DashboardService struct {
 	configService   *config.ConfigService
 	siteInfoService siteinfo_common.SiteInfoCommonService
 	serviceConfig   *service_config.ServiceConfig
-
-	data *data.Data
+	data            *data.Data
 }
 
 func NewDashboardService(
@@ -52,10 +49,9 @@ func NewDashboardService(
 	configService *config.ConfigService,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
 	serviceConfig *service_config.ServiceConfig,
-
 	data *data.Data,
-) *DashboardService {
-	return &DashboardService{
+) DashboardService {
+	return &dashboardService{
 		questionRepo:    questionRepo,
 		answerRepo:      answerRepo,
 		commentRepo:     commentRepo,
@@ -65,63 +61,102 @@ func NewDashboardService(
 		configService:   configService,
 		siteInfoService: siteInfoService,
 		serviceConfig:   serviceConfig,
-
-		data: data,
+		data:            data,
 	}
 }
 
-func (ds *DashboardService) StatisticalByCache(ctx context.Context) (*schema.DashboardInfo, error) {
-	dashboardInfo := &schema.DashboardInfo{}
-	infoStr, err := ds.data.Cache.GetString(ctx, schema.DashBoardCachekey)
+type DashboardService interface {
+	Statistical(ctx context.Context) (resp *schema.DashboardInfo, err error)
+}
+
+func (ds *dashboardService) Statistical(ctx context.Context) (*schema.DashboardInfo, error) {
+	dashboardInfo, err := ds.getFromCache(ctx)
 	if err != nil {
-		info, statisticalErr := ds.Statistical(ctx)
-		if statisticalErr != nil {
-			return nil, statisticalErr
-		}
-		if setCacheErr := ds.SetCache(ctx, info); setCacheErr != nil {
-			log.Errorf("set dashboard statistical failed: %s", setCacheErr)
-		}
-		return info, nil
+		dashboardInfo = &schema.DashboardInfo{}
+		dashboardInfo.QuestionCount = ds.questionCount(ctx)
+		dashboardInfo.AnswerCount = ds.answerCount(ctx)
+		dashboardInfo.CommentCount = ds.commentCount(ctx)
+		dashboardInfo.UserCount = ds.userCount(ctx)
+		dashboardInfo.ReportCount = ds.reportCount(ctx)
+		dashboardInfo.VoteCount = ds.voteCount(ctx)
+		dashboardInfo.OccupyingStorageSpace = ds.calculateStorage()
+		dashboardInfo.VersionInfo.RemoteVersion = ds.remoteVersion(ctx)
 	}
-	if err = json.Unmarshal([]byte(infoStr), dashboardInfo); err != nil {
-		log.Errorf("parsing dashboard information failed: %s", err)
-		return nil, errors.InternalServer(reason.UnknownError)
-	}
-	startTime := time.Now().Unix() - schema.AppStartTime.Unix()
-	dashboardInfo.AppStartTime = fmt.Sprintf("%d", startTime)
+
+	dashboardInfo.SMTP = ds.smtpStatus(ctx)
+	dashboardInfo.HTTPS = ds.httpsStatus(ctx)
+	dashboardInfo.TimeZone = ds.getTimezone(ctx)
+	dashboardInfo.UploadingFiles = true
+	dashboardInfo.AppStartTime = fmt.Sprintf("%d", time.Now().Unix()-schema.AppStartTime.Unix())
 	dashboardInfo.VersionInfo.Version = constant.Version
 	dashboardInfo.VersionInfo.Revision = constant.Revision
+
+	ds.setCache(ctx, dashboardInfo)
 	return dashboardInfo, nil
 }
 
-func (ds *DashboardService) SetCache(ctx context.Context, info *schema.DashboardInfo) error {
-	infoStr, err := json.Marshal(info)
+func (ds *dashboardService) getFromCache(ctx context.Context) (*schema.DashboardInfo, error) {
+	infoStr, err := ds.data.Cache.GetString(ctx, schema.DashBoardCachekey)
 	if err != nil {
-		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+		return nil, err
 	}
-	err = ds.data.Cache.SetString(ctx, schema.DashBoardCachekey, string(infoStr), schema.DashBoardCacheTime)
-	if err != nil {
-		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	dashboardInfo := &schema.DashboardInfo{}
+	if err = json.Unmarshal([]byte(infoStr), dashboardInfo); err != nil {
+		return nil, err
 	}
-	return nil
+	return dashboardInfo, nil
 }
 
-// Statistical
-func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardInfo, error) {
-	dashboardInfo := &schema.DashboardInfo{}
+func (ds *dashboardService) setCache(ctx context.Context, info *schema.DashboardInfo) {
+	infoStr, _ := json.Marshal(info)
+	err := ds.data.Cache.SetString(ctx, schema.DashBoardCachekey, string(infoStr), schema.DashBoardCacheTime)
+	if err != nil {
+		log.Errorf("set dashboard statistical failed: %s", err)
+	}
+}
+
+func (ds *dashboardService) questionCount(ctx context.Context) int64 {
 	questionCount, err := ds.questionRepo.GetQuestionCount(ctx)
 	if err != nil {
-		return dashboardInfo, err
+		log.Errorf("get question count failed: %s", err)
 	}
+	return questionCount
+}
+
+func (ds *dashboardService) answerCount(ctx context.Context) int64 {
 	answerCount, err := ds.answerRepo.GetAnswerCount(ctx)
 	if err != nil {
-		return dashboardInfo, err
+		log.Errorf("get answer count failed: %s", err)
 	}
+	return answerCount
+}
+
+func (ds *dashboardService) commentCount(ctx context.Context) int64 {
 	commentCount, err := ds.commentRepo.GetCommentCount(ctx)
 	if err != nil {
-		return dashboardInfo, err
+		log.Errorf("get comment count failed: %s", err)
 	}
+	return commentCount
+}
 
+func (ds *dashboardService) userCount(ctx context.Context) int64 {
+	userCount, err := ds.userRepo.GetUserCount(ctx)
+	if err != nil {
+		log.Errorf("get user count failed: %s", err)
+	}
+	return userCount
+}
+
+func (ds *dashboardService) reportCount(ctx context.Context) int64 {
+	reportCount, err := ds.reportRepo.GetReportCount(ctx)
+	if err != nil {
+		log.Errorf("get report count failed: %s", err)
+	}
+	return reportCount
+}
+
+// count vote
+func (ds *dashboardService) voteCount(ctx context.Context) int64 {
 	typeKeys := []string{
 		"question.vote_up",
 		"question.vote_down",
@@ -129,7 +164,6 @@ func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 		"answer.vote_down",
 	}
 	var activityTypes []int
-
 	for _, typeKey := range typeKeys {
 		cfg, err := ds.configService.GetConfigByKey(ctx, typeKey)
 		if err != nil {
@@ -137,69 +171,14 @@ func (ds *DashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 		}
 		activityTypes = append(activityTypes, cfg.ID)
 	}
-
 	voteCount, err := ds.voteRepo.GetVoteCount(ctx, activityTypes)
 	if err != nil {
-		return dashboardInfo, err
+		log.Errorf("get vote count failed: %s", err)
 	}
-	userCount, err := ds.userRepo.GetUserCount(ctx)
-	if err != nil {
-		return dashboardInfo, err
-	}
-
-	reportCount, err := ds.reportRepo.GetReportCount(ctx)
-	if err != nil {
-		return dashboardInfo, err
-	}
-
-	siteInfoInterface, err := ds.siteInfoService.GetSiteInterface(ctx)
-	if err != nil {
-		return dashboardInfo, err
-	}
-
-	dashboardInfo.QuestionCount = questionCount
-	dashboardInfo.AnswerCount = answerCount
-	dashboardInfo.CommentCount = commentCount
-	dashboardInfo.VoteCount = voteCount
-	dashboardInfo.UserCount = userCount
-	dashboardInfo.ReportCount = reportCount
-
-	dashboardInfo.UploadingFiles = true
-	emailconfig, err := ds.GetEmailConfig(ctx)
-	if err != nil {
-		return dashboardInfo, err
-	}
-	if emailconfig.SMTPHost != "" {
-		dashboardInfo.SMTP = true
-	}
-	siteGeneral, err := ds.siteInfoService.GetSiteGeneral(ctx)
-	if err != nil {
-		return dashboardInfo, err
-	}
-	siteUrl, err := url.Parse(siteGeneral.SiteUrl)
-	if err != nil {
-		return dashboardInfo, err
-	}
-	if siteUrl.Scheme == "https" {
-		dashboardInfo.HTTPS = true
-	}
-
-	dirSize, err := dir.DirSize(ds.serviceConfig.UploadPath)
-	if err != nil {
-		return dashboardInfo, err
-	}
-	size := dir.FormatFileSize(dirSize)
-	dashboardInfo.OccupyingStorageSpace = size
-	startTime := time.Now().Unix() - schema.AppStartTime.Unix()
-	dashboardInfo.AppStartTime = fmt.Sprintf("%d", startTime)
-	dashboardInfo.TimeZone = siteInfoInterface.TimeZone
-	dashboardInfo.VersionInfo.Version = constant.Version
-	dashboardInfo.VersionInfo.Revision = constant.Revision
-	dashboardInfo.VersionInfo.RemoteVersion = ds.RemoteVersion(ctx)
-	return dashboardInfo, nil
+	return voteCount
 }
 
-func (ds *DashboardService) RemoteVersion(ctx context.Context) string {
+func (ds *dashboardService) remoteVersion(ctx context.Context) string {
 	url := "https://answer.dev/getlatest"
 	req, _ := http.NewRequest("GET", url, nil)
 	req.Header.Set("User-Agent", "Answer/"+constant.Version)
@@ -224,15 +203,48 @@ func (ds *DashboardService) RemoteVersion(ctx context.Context) string {
 	return remoteVersion.Release.Version
 }
 
-func (ds *DashboardService) GetEmailConfig(ctx context.Context) (ec *export.EmailConfig, err error) {
+func (ds *dashboardService) smtpStatus(ctx context.Context) (enabled bool) {
 	emailConf, err := ds.configService.GetStringValue(ctx, "email.config")
 	if err != nil {
-		return nil, err
+		log.Errorf("get email config failed: %s", err)
+		return false
 	}
-	ec = &export.EmailConfig{}
+	ec := &export.EmailConfig{}
 	err = json.Unmarshal([]byte(emailConf), ec)
 	if err != nil {
-		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		log.Errorf("parsing email config failed: %s", err)
+		return false
 	}
-	return ec, nil
+	return ec.SMTPHost != ""
+}
+
+func (ds *dashboardService) httpsStatus(ctx context.Context) (enabled bool) {
+	siteGeneral, err := ds.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		log.Errorf("get site general failed: %s", err)
+		return false
+	}
+	siteUrl, err := url.Parse(siteGeneral.SiteUrl)
+	if err != nil {
+		log.Errorf("parse site url failed: %s", err)
+		return false
+	}
+	return siteUrl.Scheme == "https"
+}
+
+func (ds *dashboardService) getTimezone(ctx context.Context) string {
+	siteInfoInterface, err := ds.siteInfoService.GetSiteInterface(ctx)
+	if err != nil {
+		return ""
+	}
+	return siteInfoInterface.TimeZone
+}
+
+func (ds *dashboardService) calculateStorage() string {
+	dirSize, err := dir.DirSize(ds.serviceConfig.UploadPath)
+	if err != nil {
+		log.Errorf("get upload dir size failed: %s", err)
+		return ""
+	}
+	return dir.FormatFileSize(dirSize)
 }
