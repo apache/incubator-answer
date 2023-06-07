@@ -31,3 +31,7 @@ yarn.lock
 package-lock.json
 .eslintcache
 /.vscode/
+
+/* !/src/plugins
+/src/plugins/*
+!/src/plugins/builtin

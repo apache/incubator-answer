@@ -13,7 +13,7 @@ import { getLoginConf, checkLoginResult } from './service';
 
 let checkTimer: NodeJS.Timeout;
 const Index: FC = () => {
-  const { t } = useTranslation('translation', { keyPrefix: 'plugins' });
+  const { t } = useTranslation('translation', { keyPrefix: 'user_center' });
   const navigate = useNavigate();
   const ucAgent = userCenterStore().agent;
   const agentName = ucAgent?.agent_info?.name || '';
