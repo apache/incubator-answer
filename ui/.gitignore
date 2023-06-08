@@ -35,3 +35,4 @@ package-lock.json
 /* !/src/plugins
 /src/plugins/*
 !/src/plugins/builtin
+!/src/plugins/Demo
