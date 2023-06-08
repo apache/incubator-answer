@@ -7,8 +7,8 @@ import * as Type from '@/common/interface';
 
 export interface FormProps {
   schema: JSONSchema | null;
-  formData: Type.FormDataType | null;
   uiSchema?: UISchema;
+  formData: Type.FormDataType | null;
   refreshConfig?: FormKit['refreshConfig'];
   hiddenSubmit?: boolean;
   onChange?: (data: Type.FormDataType) => void;

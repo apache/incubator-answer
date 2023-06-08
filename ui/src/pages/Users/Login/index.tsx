@@ -175,6 +175,9 @@ const Index: React.FC = () => {
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
       <WelcomeTitle />
+      <Col className="mx-auto" md={6} lg={4} xl={3}>
+        <PluginRender slug_name="ui_plugin_demo" className="mb-5" />
+      </Col>
       {step === 1 ? (
         <Col className="mx-auto" md={6} lg={4} xl={3}>
           {ucAgentInfo ? (
