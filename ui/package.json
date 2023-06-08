@@ -8,7 +8,6 @@
     "build": "react-app-rewired build",
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
-    "prepare": "cd .. && husky install",
     "preinstall": "node ./scripts/preinstall.js",
     "pre-commit": "lint-staged"
   },
