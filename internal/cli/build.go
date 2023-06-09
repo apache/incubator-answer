@@ -101,8 +101,11 @@ func BuildNewAnswer(outputPath string, plugins []string, originalAnswerInfo Orig
 	builder := newAnswerBuilder(outputPath, plugins, originalAnswerInfo)
 	builder.DoTask(createMainGoFile)
 	builder.DoTask(downloadGoModFile)
+	builder.DoTask(copyUIFiles)
+	builder.DoTask(overwriteIndexTs)
+	builder.DoTask(buildUI)
+	builder.DoTask(buildBinary)
 	builder.DoTask(mergeI18nFiles)
-	builder.DoTask(replaceNecessaryFile)
 	builder.DoTask(buildBinary)
 	builder.DoTask(cleanByproduct)
 	return builder.BuildError
@@ -189,6 +192,80 @@ func downloadGoModFile(b *buildingMaterial) (err error) {
 		return err
 	}
 	return
+}
+
+func copyUIFiles(b *buildingMaterial) (err error) {
+	goListCmd := b.newExecCmd("go", "list", "-mod=mod", "-m", "-f", "{{.Dir}}", "github.com/answerdev/answer")
+	buf := new(bytes.Buffer)
+	goListCmd.Stdout = buf
+	if err = goListCmd.Run(); err != nil {
+		return fmt.Errorf("failed to run go list: %w", err)
+	}
+
+	goModUIDir := filepath.Join(strings.TrimSpace(buf.String()), "ui")
+	localUIBuildDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/answer")
+
+	err = b.newExecCmd("cp", "-rf", goModUIDir, localUIBuildDir).Run()
+	if err != nil {
+		return fmt.Errorf("failed to copy ui files: %w", err)
+	}
+	return nil
+}
+
+func overwriteIndexTs(b *buildingMaterial) (err error) {
+	localUIPluginDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/answer/ui/src/plugins/")
+
+	folders, err := getFolders(localUIPluginDir)
+	if err != nil {
+		return fmt.Errorf("failed to get folders: %w", err)
+	}
+
+	content := generateIndexTsContent(folders)
+	err = os.WriteFile(filepath.Join(localUIPluginDir, "index.ts"), []byte(content), 0644)
+	if err != nil {
+		return fmt.Errorf("failed to write index.ts: %w", err)
+	}
+	return nil
+}
+
+func getFolders(dir string) ([]string, error) {
+	var folders []string
+	files, err := os.ReadDir(dir)
+	if err != nil {
+		return nil, err
+	}
+	for _, file := range files {
+		if file.IsDir() && file.Name() != "builtin" {
+			folders = append(folders, file.Name())
+		}
+	}
+	return folders, nil
+}
+
+func generateIndexTsContent(folders []string) string {
+	builder := &strings.Builder{}
+	builder.WriteString("export default null;\n\n")
+	for _, folder := range folders {
+		builder.WriteString(fmt.Sprintf("export { default as %s } from './%s';\n", folder, folder))
+	}
+	return builder.String()
+}
+
+func buildUI(b *buildingMaterial) (err error) {
+	localUIBuildDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/answer/ui")
+
+	pnpmInstallCmd := b.newExecCmd("pnpm", "install")
+	pnpmInstallCmd.Dir = localUIBuildDir
+	if err = pnpmInstallCmd.Run(); err != nil {
+		return err
+	}
+
+	pnpmBuildCmd := b.newExecCmd("pnpm", "build")
+	pnpmBuildCmd.Dir = localUIBuildDir
+	if err = pnpmBuildCmd.Run(); err != nil {
+		return err
+	}
+	return nil
 }
 
 func replaceNecessaryFile(b *buildingMaterial) (err error) {
