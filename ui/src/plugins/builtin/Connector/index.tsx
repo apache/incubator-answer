@@ -13,6 +13,7 @@ import './i18n';
 
 const pluginInfo: PluginInfo = {
   slug_name: info.slug_name,
+  type: info.type,
 };
 interface Props {
   className?: string;
