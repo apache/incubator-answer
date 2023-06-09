@@ -2,7 +2,11 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {{ range .list }}
   <url>
+  {{if $.hastitle}}
     <loc>{{$.general.SiteUrl}}/questions/{{.ID}}/{{.Title}}</loc>
+  {{else}}
+    <loc>{{$.general.SiteUrl}}/questions/{{.ID}}</loc>
+  {{end}}
     <lastmod>{{.UpdateTime}}</lastmod>
   </url>
    {{ end }}
