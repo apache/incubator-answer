@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"embed"
 	"fmt"
+	"io"
+	"io/fs"
 	"os"
 	"os/exec"
 	"path"
@@ -363,34 +365,56 @@ func mergeI18nFiles(b *buildingMaterial) (err error) {
 }
 
 func copyDirEntries(sourceFs embed.FS, sourceDir string, targetDir string) (err error) {
-	entries, err := ui.Build.ReadDir(sourceDir)
-	if err != nil {
-		return err
-	}
-
 	err = dir.CreateDirIfNotExist(targetDir)
 	if err != nil {
 		return err
 	}
-	for _, entry := range entries {
-		if entry.IsDir() {
-			err = copyDirEntries(sourceFs, filepath.Join(sourceDir, entry.Name()), filepath.Join(targetDir, entry.Name()))
+	err = fs.WalkDir(sourceFs, sourceDir, func(path string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		}
+
+		// Convert the path to use forward slashes, important because we use embedded FS which always uses forward slashes
+		path = filepath.ToSlash(path)
+
+		// Construct the absolute path for the source file/directory
+		srcPath := filepath.Join(sourceDir, path)
+
+		// Construct the absolute path for the destination file/directory
+		dstPath := filepath.Join(targetDir, path)
+
+		if d.IsDir() {
+			// Create the directory in the destination
+			err := os.MkdirAll(dstPath, d.Type())
 			if err != nil {
 				return err
 			}
-			continue
+		} else {
+			// Open the source file
+			srcFile, err := sourceFs.Open(srcPath)
+			if err != nil {
+				return err
+			}
+			defer srcFile.Close()
+
+			// Create the destination file
+			dstFile, err := os.Create(dstPath)
+			if err != nil {
+				return err
+			}
+			defer dstFile.Close()
+
+			// Copy the file contents
+			_, err = io.Copy(dstFile, srcFile)
+			if err != nil {
+				return err
+			}
 		}
-		file, err := sourceFs.ReadFile(filepath.Join(sourceDir, entry.Name()))
-		if err != nil {
-			return err
-		}
-		filename := filepath.Join(targetDir, entry.Name())
-		err = os.WriteFile(filename, file, 0666)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
+
+		return nil
+	})
+
+	return err
 }
 
 func buildBinary(b *buildingMaterial) (err error) {
