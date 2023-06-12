@@ -62,7 +62,7 @@ backend:
       description:
         other: 等级 3 (成熟社区所需的高声望)
     rank_question_add_label:
-      other: 提问s
+      other: 提问
     rank_answer_add_label:
       other: 写入答案
     rank_comment_add_label:
@@ -1274,13 +1274,10 @@ ui:
     plugins: 插件
     installed_plugins: 已安装插件
   website_welcome: 欢迎来到 {{site_name}}
-  plugins:
+  user_center:
     login: 登录
     qrcode_login_tip: 请使用 {{ agentName }} 扫描二维码并登录。
     login_failed_email_tip: 登录失败，请允许此应用访问您的邮箱信息，然后重试。
-    oauth:
-      connect: 连接到 {{ auth_name }}
-      remove: 移除 {{ auth_name }}
   admin:
     admin_header:
       title: 后台管理
