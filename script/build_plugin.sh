@@ -19,7 +19,7 @@ echo "cmd is "$cmd
 $cmd
 if [ ! -f "./new_answer" ]; then
   echo "new_answer is not exist build failed"
-  exit 0
+  exit 1
 fi
 rm answer
 mv new_answer answer
