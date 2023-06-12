@@ -1,13 +1,3 @@
-FROM amd64/node:18 AS node-builder
-
-LABEL maintainer="mingcheng<mc@sf.com>"
-
-COPY . /answer
-WORKDIR /answer
-RUN node -v
-RUN make install-ui-packages ui && mv ui/build /tmp
-
-# stage2 build the main binary within static resource
 FROM golang:1.19-alpine AS golang-builder
 LABEL maintainer="aichy@sf.com"
 
@@ -27,9 +17,9 @@ ARG CGO_EXTRA_CFLAGS
 
 COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
-COPY --from=node-builder /tmp/build ${BUILD_DIR}/ui/build
-RUN apk --no-cache add build-base git bash \
-    && make clean build
+RUN apk --no-cache add build-base git bash nodejs npm && npm install -g pnpm corepack \
+    && make install-ui-packages clean build
+
 RUN chmod 755 answer
 RUN ["/bin/bash","-c","script/build_plugin.sh"]
 RUN cp answer /usr/bin/answer
@@ -37,7 +27,6 @@ RUN cp answer /usr/bin/answer
 RUN mkdir -p /data/uploads && chmod 777 /data/uploads \
     && mkdir -p /data/i18n && cp -r i18n/*.yaml /data/i18n
 
-# stage3 copy the binary and resource files into fresh container
 FROM alpine
 LABEL maintainer="maintainers@sf.com"
 
