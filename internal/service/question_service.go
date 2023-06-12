@@ -3,7 +3,6 @@ package service
 import (
 	"encoding/json"
 	"fmt"
-	"math"
 	"strings"
 	"time"
 
@@ -589,13 +588,16 @@ func (qs *QuestionService) UpdateQuestionInviteUser(ctx context.Context, req *sc
 	//send notification
 	oldInviteUserIDsStr := originQuestion.InviteUserID
 	oldInviteUserIDs := make([]string, 0)
+	needSendNotificationUserIDs := make([]string, 0)
 	if oldInviteUserIDsStr != "" {
 		err = json.Unmarshal([]byte(oldInviteUserIDsStr), &oldInviteUserIDs)
 		if err == nil {
-			needSendNotificationUserIDs := converter.ArrayNotInArray(oldInviteUserIDs, inviteUserIDs)
-			go qs.notificationInviteUser(ctx, needSendNotificationUserIDs, originQuestion.ID, originQuestion.Title, req.UserID)
+			needSendNotificationUserIDs = converter.ArrayNotInArray(oldInviteUserIDs, inviteUserIDs)
 		}
+	} else {
+		needSendNotificationUserIDs = inviteUserIDs
 	}
+	go qs.notificationInviteUser(ctx, needSendNotificationUserIDs, originQuestion.ID, originQuestion.Title, req.UserID)
 
 	return nil
 }
@@ -1344,52 +1346,5 @@ func (qs *QuestionService) changeQuestionToRevision(ctx context.Context, questio
 }
 
 func (qs *QuestionService) SitemapCron(ctx context.Context) {
-	data := &schema.SiteMapList{}
-	questionNum, err := qs.questionRepo.GetQuestionCount(ctx)
-	if err != nil {
-		log.Error("GetQuestionCount error", err)
-		return
-	}
-	if questionNum <= schema.SitemapMaxSize {
-		questionIDList, err := qs.questionRepo.GetQuestionIDsPage(ctx, 0, int(questionNum))
-		if err != nil {
-			log.Error("GetQuestionIDsPage error", err)
-			return
-		}
-		data.QuestionIDs = questionIDList
-
-	} else {
-		nums := make([]int, 0)
-		totalpages := int(math.Ceil(float64(questionNum) / float64(schema.SitemapMaxSize)))
-		for i := 1; i <= totalpages; i++ {
-			siteMapPagedata := &schema.SiteMapPageList{}
-			nums = append(nums, i)
-			questionIDList, err := qs.questionRepo.GetQuestionIDsPage(ctx, i, int(schema.SitemapMaxSize))
-			if err != nil {
-				log.Error("GetQuestionIDsPage error", err)
-				return
-			}
-			siteMapPagedata.PageData = questionIDList
-			if setCacheErr := qs.SetCache(ctx, fmt.Sprintf(schema.SitemapPageCachekey, i), siteMapPagedata); setCacheErr != nil {
-				log.Errorf("set sitemap cron SetCache failed: %s", setCacheErr)
-			}
-		}
-		data.MaxPageNum = nums
-	}
-	if setCacheErr := qs.SetCache(ctx, schema.SitemapCachekey, data); setCacheErr != nil {
-		log.Errorf("set sitemap cron SetCache failed: %s", setCacheErr)
-	}
-}
-
-func (qs *QuestionService) SetCache(ctx context.Context, cachekey string, info interface{}) error {
-	infoStr, err := json.Marshal(info)
-	if err != nil {
-		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
-	}
-
-	err = qs.data.Cache.SetString(ctx, cachekey, string(infoStr), schema.DashBoardCacheTime)
-	if err != nil {
-		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
-	}
-	return nil
+	qs.questioncommon.SitemapCron(ctx)
 }

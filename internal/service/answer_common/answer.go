@@ -17,6 +17,8 @@ type AnswerRepo interface {
 	GetAnswerPage(ctx context.Context, page, pageSize int, answer *entity.Answer) (answerList []*entity.Answer, total int64, err error)
 	UpdateAccepted(ctx context.Context, id string, questionID string) error
 	GetByID(ctx context.Context, id string) (*entity.Answer, bool, error)
+	GetCountByQuestionID(ctx context.Context, questionID string) (int64, error)
+	GetCountByUserID(ctx context.Context, userID string) (int64, error)
 	GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error)
 	SearchList(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error)
 	AdminSearchList(ctx context.Context, search *entity.AdminAnswerSearch) ([]*entity.Answer, int64, error)

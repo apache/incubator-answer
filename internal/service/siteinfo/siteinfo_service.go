@@ -13,6 +13,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/export"
+	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/pkg/uid"
@@ -28,6 +29,7 @@ type SiteInfoService struct {
 	emailService          *export.EmailService
 	tagCommonService      *tagcommon.TagCommonService
 	configService         *config.ConfigService
+	questioncommon        *questioncommon.QuestionCommon
 }
 
 func NewSiteInfoService(
@@ -36,6 +38,8 @@ func NewSiteInfoService(
 	emailService *export.EmailService,
 	tagCommonService *tagcommon.TagCommonService,
 	configService *config.ConfigService,
+	questioncommon *questioncommon.QuestionCommon,
+
 ) *SiteInfoService {
 	plugin.RegisterGetSiteURLFunc(func() string {
 		generalSiteInfo, err := siteInfoCommonService.GetSiteGeneral(context.Background())
@@ -52,6 +56,7 @@ func NewSiteInfoService(
 		emailService:          emailService,
 		tagCommonService:      tagCommonService,
 		configService:         configService,
+		questioncommon:        questioncommon,
 	}
 }
 
@@ -295,6 +300,7 @@ func (s *SiteInfoService) SaveSeo(ctx context.Context, req schema.SiteSeoReq) (e
 	} else {
 		uid.ShortIDSwitch = false
 	}
+	s.questioncommon.SitemapCron(ctx)
 	return
 }
 
