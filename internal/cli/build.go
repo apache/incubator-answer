@@ -2,7 +2,6 @@ package cli
 
 import (
 	"bytes"
-	"embed"
 	"fmt"
 	"io"
 	"io/fs"
@@ -106,7 +105,6 @@ func BuildNewAnswer(outputPath string, plugins []string, originalAnswerInfo Orig
 	builder.DoTask(copyUIFiles)
 	builder.DoTask(overwriteIndexTs)
 	builder.DoTask(buildUI)
-	builder.DoTask(buildBinary)
 	builder.DoTask(mergeI18nFiles)
 	builder.DoTask(buildBinary)
 	builder.DoTask(cleanByproduct)
@@ -125,6 +123,7 @@ func formatPlugins(plugins []string) (formatted []*pluginInfo) {
 	return formatted
 }
 
+// createMainGoFile creates main.go file in tmp dir that content is mainGoTpl
 func createMainGoFile(b *buildingMaterial) (err error) {
 	fmt.Printf("[build] tmp dir: %s\n", b.tmpDir)
 	err = dir.CreateDirIfNotExist(b.tmpDir)
@@ -174,6 +173,7 @@ func createMainGoFile(b *buildingMaterial) (err error) {
 	return
 }
 
+// downloadGoModFile run go mod commands to download dependencies
 func downloadGoModFile(b *buildingMaterial) (err error) {
 	// If user specify a module replacement, use it. Otherwise, use the latest version.
 	if len(b.answerModuleReplacement) > 0 {
@@ -196,6 +196,7 @@ func downloadGoModFile(b *buildingMaterial) (err error) {
 	return
 }
 
+// copyUIFiles copy ui files from answer module to tmp dir
 func copyUIFiles(b *buildingMaterial) (err error) {
 	goListCmd := b.newExecCmd("go", "list", "-mod=mod", "-m", "-f", "{{.Dir}}", "github.com/answerdev/answer")
 	buf := new(bytes.Buffer)
@@ -205,15 +206,14 @@ func copyUIFiles(b *buildingMaterial) (err error) {
 	}
 
 	goModUIDir := filepath.Join(strings.TrimSpace(buf.String()), "ui")
-	localUIBuildDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/answer")
-
-	err = b.newExecCmd("cp", "-rf", goModUIDir, localUIBuildDir).Run()
-	if err != nil {
+	localUIBuildDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/answer/ui/")
+	if err = copyDirEntries(os.DirFS(goModUIDir), ".", localUIBuildDir); err != nil {
 		return fmt.Errorf("failed to copy ui files: %w", err)
 	}
 	return nil
 }
 
+// overwriteIndexTs overwrites index.ts file in ui/src/plugins/ dir
 func overwriteIndexTs(b *buildingMaterial) (err error) {
 	localUIPluginDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/answer/ui/src/plugins/")
 
@@ -253,6 +253,7 @@ func generateIndexTsContent(folders []string) string {
 	return builder.String()
 }
 
+// buildUI run pnpm install and pnpm build commands to build ui
 func buildUI(b *buildingMaterial) (err error) {
 	localUIBuildDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/answer/ui")
 
@@ -277,6 +278,7 @@ func replaceNecessaryFile(b *buildingMaterial) (err error) {
 	return err
 }
 
+// mergeI18nFiles merge i18n files
 func mergeI18nFiles(b *buildingMaterial) (err error) {
 	fmt.Printf("try to merge i18n files\n")
 
@@ -364,7 +366,7 @@ func mergeI18nFiles(b *buildingMaterial) (err error) {
 	return err
 }
 
-func copyDirEntries(sourceFs embed.FS, sourceDir string, targetDir string) (err error) {
+func copyDirEntries(sourceFs fs.FS, sourceDir string, targetDir string) (err error) {
 	err = dir.CreateDirIfNotExist(targetDir)
 	if err != nil {
 		return err
@@ -385,29 +387,29 @@ func copyDirEntries(sourceFs embed.FS, sourceDir string, targetDir string) (err 
 
 		if d.IsDir() {
 			// Create the directory in the destination
-			err := os.MkdirAll(dstPath, d.Type())
+			err := os.MkdirAll(dstPath, os.ModePerm)
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to create directory %s: %w", dstPath, err)
 			}
 		} else {
 			// Open the source file
 			srcFile, err := sourceFs.Open(srcPath)
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to open source file %s: %w", srcPath, err)
 			}
 			defer srcFile.Close()
 
 			// Create the destination file
 			dstFile, err := os.Create(dstPath)
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to create destination file %s: %w", dstPath, err)
 			}
 			defer dstFile.Close()
 
 			// Copy the file contents
 			_, err = io.Copy(dstFile, srcFile)
 			if err != nil {
-				return err
+				return fmt.Errorf("failed to copy file contents from %s to %s: %w", srcPath, dstPath, err)
 			}
 		}
 
@@ -417,6 +419,7 @@ func copyDirEntries(sourceFs embed.FS, sourceDir string, targetDir string) (err 
 	return err
 }
 
+// buildBinary build binary file
 func buildBinary(b *buildingMaterial) (err error) {
 	versionInfo := b.originalAnswerInfo
 	cmdPkg := "github.com/answerdev/answer/cmd"
@@ -430,6 +433,7 @@ func buildBinary(b *buildingMaterial) (err error) {
 	return
 }
 
+// cleanByproduct delete tmp dir
 func cleanByproduct(b *buildingMaterial) (err error) {
 	return os.RemoveAll(b.tmpDir)
 }
