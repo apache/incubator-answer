@@ -224,7 +224,7 @@ func updateTagCount(x *xorm.Engine) error {
 			}
 		} else {
 			tag.QuestionCount = 0
-			if _, err = x.Update(tag, &entity.Tag{ID: tag.ID}); err != nil {
+			if _, err = x.Cols("question_count").Update(tag, &entity.Tag{ID: tag.ID}); err != nil {
 				log.Errorf("update %+v tag failed: %s", tag.ID, err)
 				return fmt.Errorf("update tag failed: %w", err)
 			}
