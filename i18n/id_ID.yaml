@@ -856,6 +856,9 @@ ui:
       label: Email Baru
       msg:
         empty: Email tidak boleh kosong.
+  oauth:
+    connect: Connect with {{ auth_name }}
+    remove: Remove {{ auth_name }}
   oauth_bind_email:
     subtitle: Add a recovery email to your account.
     btn_update: Update email address
@@ -1274,6 +1277,10 @@ ui:
     plugins: Plugins
     installed_plugins: Installed Plugins
   website_welcome: Welcome to {{site_name}}
+  user_center:
+    login: Login
+    qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
+    login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
   plugins:
     login: Login
     qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
