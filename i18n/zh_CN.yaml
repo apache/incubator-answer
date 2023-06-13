@@ -857,8 +857,8 @@ ui:
       msg:
         empty: 邮箱不能为空
   oauth:
-    connect: Connect with {{ auth_name }}
-    remove: Remove {{ auth_name }}
+    connect: 连接到 {{ auth_name }}
+    remove: 移除 {{ auth_name }}
   oauth_bind_email:
     subtitle: 向你的账户添加恢复邮件地址。
     btn_update: 更新电子邮件地址
@@ -1278,9 +1278,9 @@ ui:
     installed_plugins: 已安装插件
   website_welcome: 欢迎来到 {{site_name}}
   user_center:
-    login: Login
-    qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
-    login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
+    login: 登录
+    qrcode_login_tip: 请使用 {{ agentName }} 扫描二维码并登录。
+    login_failed_email_tip: 登录失败，请允许此应用访问您的邮箱信息，然后重试。
   admin:
     admin_header:
       title: 后台管理
