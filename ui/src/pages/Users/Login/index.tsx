@@ -9,8 +9,7 @@ import type {
   ImgCodeRes,
   FormDataType,
 } from '@/common/interface';
-import { Unactivate, WelcomeTitle } from '@/components';
-import { PluginOauth, PluginUcLogin } from '@/plugins';
+import { Unactivate, WelcomeTitle, PluginRender } from '@/components';
 import {
   loggedUserInfoStore,
   loginSettingStore,
@@ -172,15 +171,16 @@ const Index: React.FC = () => {
   usePageTags({
     title: t('login', { keyPrefix: 'page_title' }),
   });
+
   return (
     <Container style={{ paddingTop: '4rem', paddingBottom: '5rem' }}>
       <WelcomeTitle />
       {step === 1 ? (
         <Col className="mx-auto" md={6} lg={4} xl={3}>
           {ucAgentInfo ? (
-            <PluginUcLogin className="mb-5" />
+            <PluginRender slug_name="uc_login" className="mb-5" />
           ) : (
-            <PluginOauth className="mb-5" />
+            <PluginRender type="Connector" className="mb-5" />
           )}
           {canOriginalLogin ? (
             <>

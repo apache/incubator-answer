@@ -1,8 +1,23 @@
 import { ButtonProps } from 'react-bootstrap';
+import React from 'react';
 
 import classnames from 'classnames';
 
 import * as Type from '@/common/interface';
+
+export interface FormProps {
+  schema: JSONSchema | null;
+  uiSchema?: UISchema;
+  formData: Type.FormDataType | null;
+  refreshConfig?: FormKit['refreshConfig'];
+  hiddenSubmit?: boolean;
+  onChange?: (data: Type.FormDataType) => void;
+  onSubmit?: (e: React.FormEvent) => void;
+}
+
+export interface FormRef {
+  validator: () => Promise<boolean>;
+}
 
 export interface JSONSchema {
   title: string;

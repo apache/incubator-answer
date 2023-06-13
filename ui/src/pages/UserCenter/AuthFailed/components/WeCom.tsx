@@ -28,7 +28,7 @@ const data = [
 ];
 
 const Index: FC = () => {
-  const { t } = useTranslation('translation', { keyPrefix: 'plugins' });
+  const { t } = useTranslation('translation', { keyPrefix: 'user_center' });
   const ucAgent = userCenterStore().agent;
   return (
     <Col lg={4} className="mx-auto mt-3 py-5">

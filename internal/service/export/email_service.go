@@ -54,19 +54,6 @@ type EmailConfig struct {
 	SMTPUsername       string `json:"smtp_username"`
 	SMTPPassword       string `json:"smtp_password"`
 	SMTPAuthentication bool   `json:"smtp_authentication"`
-
-	RegisterTitle   string `json:"register_title"`
-	RegisterBody    string `json:"register_body"`
-	PassResetTitle  string `json:"pass_reset_title"`
-	PassResetBody   string `json:"pass_reset_body"`
-	ChangeTitle     string `json:"change_title"`
-	ChangeBody      string `json:"change_body"`
-	TestTitle       string `json:"test_title"`
-	TestBody        string `json:"test_body"`
-	NewAnswerTitle  string `json:"new_answer_title"`
-	NewAnswerBody   string `json:"new_answer_body"`
-	NewCommentTitle string `json:"new_comment_title"`
-	NewCommentBody  string `json:"new_comment_body"`
 }
 
 func (e *EmailConfig) IsSSL() bool {
@@ -306,7 +293,8 @@ func (es *EmailService) GetEmailConfig(ctx context.Context) (ec *EmailConfig, er
 	ec = &EmailConfig{}
 	err = json.Unmarshal([]byte(emailConf), ec)
 	if err != nil {
-		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		log.Errorf("old email config format is invalid, you need to update smtp config: %v", err)
+		return nil, errors.BadRequest(reason.SiteInfoConfigNotFound)
 	}
 	return ec, nil
 }

@@ -12,7 +12,13 @@ import classnames from 'classnames';
 
 import type * as Type from '@/common/interface';
 
-import type { JSONSchema, UISchema, BaseUIOptions, FormKit } from './types';
+import type {
+  JSONSchema,
+  FormProps,
+  FormRef,
+  BaseUIOptions,
+  FormKit,
+} from './types';
 import {
   Legend,
   Select,
@@ -26,20 +32,6 @@ import {
 } from './components';
 
 export * from './types';
-
-interface IProps {
-  schema: JSONSchema | null;
-  formData: Type.FormDataType | null;
-  uiSchema?: UISchema;
-  refreshConfig?: FormKit['refreshConfig'];
-  hiddenSubmit?: boolean;
-  onChange?: (data: Type.FormDataType) => void;
-  onSubmit?: (e: React.FormEvent) => void;
-}
-
-interface IRef {
-  validator: () => Promise<boolean>;
-}
 
 /**
  * TODO:
@@ -60,7 +52,7 @@ interface IRef {
  * @param onChange change event
  * @param onSubmit submit event
  */
-const SchemaForm: ForwardRefRenderFunction<IRef, IProps> = (
+const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
   {
     schema,
     uiSchema = {},

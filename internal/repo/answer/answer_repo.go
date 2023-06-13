@@ -196,6 +196,25 @@ func (ar *answerRepo) GetByID(ctx context.Context, id string) (*entity.Answer, b
 	return &resp, has, nil
 }
 
+func (ar *answerRepo) GetCountByQuestionID(ctx context.Context, questionID string) (int64, error) {
+	questionID = uid.DeShortID(questionID)
+	rows := make([]*entity.Answer, 0)
+	count, err := ar.data.DB.Context(ctx).Where("question_id =? and  status = ?", questionID, entity.AnswerStatusAvailable).FindAndCount(&rows)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return count, nil
+}
+
+func (ar *answerRepo) GetCountByUserID(ctx context.Context, userID string) (int64, error) {
+	rows := make([]*entity.Answer, 0)
+	count, err := ar.data.DB.Context(ctx).Where(" user_id = ?  and  status = ?", userID, entity.AnswerStatusAvailable).FindAndCount(&rows)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return count, nil
+}
+
 func (ar *answerRepo) GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error) {
 	questionID = uid.DeShortID(questionID)
 	var resp entity.Answer
@@ -243,7 +262,11 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 		session = session.OrderBy("adopted desc,vote_count desc,created_at asc")
 	}
 	if !search.IncludeDeleted {
-		session = session.And("status = ? OR user_id = ?", entity.AnswerStatusAvailable, search.LoginUserID)
+		if search.LoginUserID == "" {
+			session = session.And("status = ? ", entity.AnswerStatusAvailable)
+		} else {
+			session = session.And("status = ? OR user_id = ?", entity.AnswerStatusAvailable, search.LoginUserID)
+		}
 	}
 
 	session = session.Limit(search.PageSize, offset)

@@ -4,14 +4,25 @@ import { useTranslation } from 'react-i18next';
 
 import classnames from 'classnames';
 
-import { useGetStartUseOauthConnector } from '@/services';
+import pluginKit, { PluginInfo } from '@/utils/pluginKit';
 import { SvgIcon } from '@/components';
 
+import info from './info.yaml';
+import { useGetStartUseOauthConnector } from './services';
+import './i18n';
+
+const pluginInfo: PluginInfo = {
+  slug_name: info.slug_name,
+  type: info.type,
+};
 interface Props {
   className?: string;
 }
 const Index: FC<Props> = ({ className }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'plugins.oauth' });
+  const { t } = useTranslation(pluginKit.getTransNs(), {
+    keyPrefix: pluginKit.getTransKeyPrefix(pluginInfo),
+  });
+
   const { data } = useGetStartUseOauthConnector();
 
   if (!data?.length) return null;
@@ -29,4 +40,7 @@ const Index: FC<Props> = ({ className }) => {
   );
 };
 
-export default memo(Index);
+export default {
+  info: pluginInfo,
+  component: memo(Index),
+};

@@ -560,13 +560,10 @@ export interface OauthBindEmailReq {
   must: boolean;
 }
 
-export interface OauthConnectorItem {
+export interface UserOauthConnectorItem {
   icon: string;
   name: string;
   link: string;
-}
-
-export interface UserOauthConnectorItem extends OauthConnectorItem {
   binding: boolean;
   external_id: string;
 }

@@ -261,6 +261,9 @@ backend:
     upload:
       unsupported_file_format:
         other: Unsupported file format.
+    site_info:
+      config_not_found:
+        other: Site config not found.
   reason:
     spam:
       name:
@@ -328,7 +331,7 @@ backend:
       name:
         other: needs delete
       desc:
-        other: All reputation gained and lost will be restored.
+        other: This post will be deleted.
   question:
     close:
       duplicate:
@@ -879,6 +882,9 @@ ui:
       label: New Email
       msg:
         empty: Email cannot be empty.
+  oauth:
+    connect: Connect with {{ auth_name }}
+    remove: Remove {{ auth_name }}
   oauth_bind_email:
     subtitle: Add a recovery email to your account.
     btn_update: Update email address
@@ -1314,13 +1320,11 @@ ui:
     plugins: Plugins
     installed_plugins: Installed Plugins
   website_welcome: Welcome to {{site_name}}
-  plugins:
+  user_center:
     login: Login
     qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
     login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
-    oauth:
-      connect: Connect with {{ auth_name }}
-      remove: Remove {{ auth_name }}
+
 
   admin:
     admin_header:
@@ -1392,7 +1396,7 @@ ui:
       closed_name: closed
       closed_desc: "A closed question can't answer, but still can edit, vote and comment."
       deleted_name: deleted
-      deleted_desc: All reputation gained and lost will be restored.
+      deleted_desc: This post will be deleted.
       btn_cancel: Cancel
       btn_submit: Submit
       btn_next: Next

@@ -1,6 +1,3 @@
----
-sidebar_position: 0
----
 # Schema Form
 
 ## Introduction
@@ -12,7 +9,7 @@ A React component capable of building HTML forms out of a [JSON schema](https://
 ```tsx
 import React, { useState } from 'react';
 
-import { SchemaForm, initFormData, JSONSchema, UISchema } from '@/components';
+import { SchemaForm, initFormData, JSONSchema, UISchema, FormKit } from '@/components';
 
 const schema: JSONSchema = {
   title: 'General',
@@ -51,6 +48,14 @@ const uiSchema: UISchema = {
 
 const Form = () => {
   const [formData, setFormData] = useState(initFormData(schema));
+  
+  const formRef = useRef<{
+    validator: () => Promise<boolean>;
+  }>(null);
+  
+  const refreshConfig: FormKit['refreshConfig'] = async () => {
+    // refreshFormConfig();
+  };
 
   const handleChange = (data) => {
     setFormData(data);
@@ -58,27 +63,56 @@ const Form = () => {
 
   return (
     <SchemaForm
+      ref={formRef}
       schema={schema}
       uiSchema={uiSchema}
       formData={formData}
       onChange={handleChange}
+      refreshConfig={refreshConfig}
     />
   );
 };
 
 export default Form;
-
 ```
 
-## Props
+---
 
-| Property | Description                              | Type                                  | Default |
-| -------- | ---------------------------------------- | ------------------------------------- | ------- |
-| schema   | Describe the form structure with schema  | [JSONSchema](#json-schema)            | -       |
-| uiSchema | Describe the properties of the field     | [UISchema](#uischema)                 | -       |
-| formData | Describe form data                       | [FormData](#formdata)                 | -       |
-| onChange | Callback function when form data changes | (data: [FormData](#formdata)) => void | -       |
-| onSubmit | Callback function when form is submitted | (data: React.FormEvent) => void       | -       |
+## Form Props
+
+```ts
+interface FormProps {
+  // Describe the form structure with schema
+  schema: JSONSchema | null;
+  // Describe the properties of the field
+  uiSchema?: UISchema;
+  // Describe form data
+  formData: Type.FormDataType | null;
+  // Callback function when form data changes
+  onChange?: (data: Type.FormDataType) => void;
+  // Handler for when a form fires a `submit` event
+  onSubmit?: (e: React.FormEvent) => void;
+  /**
+   * Callback method for updating form configuration
+   * information (schema/uiSchema) in UIAction
+   */
+  refreshConfig?: FormKit['refreshConfig'];
+}
+```
+
+## Form Ref
+
+```ts
+  export interface FormRef {
+    validator: () => Promise<boolean>;
+  }
+```
+
+When you need to validate a form and get the result outside the form, you can create a `FormRef` with `useRef` and pass it to the form using the `ref` property.
+
+This allows you to validate the form and get the result outside the form using `formRef.current.validator()`.
+
+---
 
 ## Types Definition
 ### JSONSchema
@@ -102,24 +136,70 @@ export interface JSONSchema {
 }
 ```
 
-### UIOptions
-
+### UISchema
 ```ts
-export interface UIOptions {
+export interface UISchema {
+  [key: string]: {
+    'ui:widget'?: UIWidget;
+    'ui:options'?: UIOptions;
+  };
+}
+```
+
+### UIWidget
+```ts
+export type UIWidget =
+  | 'textarea'
+  | 'input'
+  | 'checkbox'
+  | 'radio'
+  | 'select'
+  | 'upload'
+  | 'timezone'
+  | 'switch'
+  | 'legend'
+  | 'button';
+```
+
+---
+
+### UIOptions
+```ts
+export type UIOptions =
+  | InputOptions
+  | SelectOptions
+  | UploadOptions
+  | SwitchOptions
+  | TimezoneOptions
+  | CheckboxOptions
+  | RadioOptions
+  | TextareaOptions
+  | ButtonOptions;
+```
+
+#### BaseUIOptions
+```ts
+export interface BaseUIOptions {
   empty?: string;
-  className?: string | string[];
+  // Will be appended to the className of the form component itself
+  className?: classnames.Argument;
+  // The className that will be attached to a form field container
+  fieldClassName?: classnames.Argument;
+  // Make a form component render into simplified mode
+  readOnly?: boolean;
+  simplify?: boolean;
   validator?: (
     value,
     formData?,
   ) => Promise<string | true | void> | true | string;
 }
 ```
-### InputOptions
 
+#### InputOptions
 ```ts
-export interface InputOptions extends UIOptions {
+export interface InputOptions extends BaseUIOptions {
   placeholder?: string;
-  type?:
+  inputType?:
     | 'color'
     | 'date'
     | 'datetime-local'
@@ -136,81 +216,87 @@ export interface InputOptions extends UIOptions {
     | 'week';
 }
 ```
-### SelectOptions
 
+#### SelectOptions
 ```ts
 export interface SelectOptions extends UIOptions {}
 ```
-### UploadOptions
 
+#### UploadOptions
 ```ts
-export interface UploadOptions extends UIOptions {
+export interface UploadOptions extends BaseUIOptions {
   acceptType?: string;
-  imageType?: 'post' | 'avatar' | 'branding';
+  imageType?: Type.UploadType;
 }
 ```
-### SwitchOptions
 
+#### SwitchOptions
 ```ts
-export interface SwitchOptions extends UIOptions {}
+export interface SwitchOptions extends BaseUIOptions {
+  label?: string;
+}
 ```
-### TimezoneOptions
 
+#### TimezoneOptions
 ```ts
 export interface TimezoneOptions extends UIOptions {
   placeholder?: string;
 }
 ```
-### CheckboxOptions
 
+#### CheckboxOptions
 ```ts
 export interface CheckboxOptions extends UIOptions {}
 ```
-### RadioOptions
 
+#### RadioOptions
 ```ts
 export interface RadioOptions extends UIOptions {}
 ```
-### TextareaOptions
 
+#### TextareaOptions
 ```ts
 export interface TextareaOptions extends UIOptions {
   placeholder?: string;
   rows?: number;
 }
 ```
-### UIWidget
 
+#### ButtonOptions
 ```ts
-export type UIWidget =
-  | 'textarea'
-  | 'input'
-  | 'checkbox'
-  | 'radio'
-  | 'select'
-  | 'upload'
-  | 'timezone'
-  | 'switch';
+export interface ButtonOptions extends BaseUIOptions {
+  text: string;
+  icon?: string;
+  action?: UIAction;
+  variant?: ButtonProps['variant'];
+  size?: ButtonProps['size'];
+}
 ```
 
-### UISchema
-
+#### UIAction
 ```ts
-export interface UISchema {
-  [key: string]: {
-    'ui:widget'?: UIWidget;
-    'ui:options'?:
-      | InputOptions
-      | SelectOptions
-      | UploadOptions
-      | SwitchOptions
-      | TimezoneOptions
-      | CheckboxOptions
-      | RadioOptions
-      | TextareaOptions;
+export interface UIAction {
+  url: string;
+  method?: 'get' | 'post' | 'put' | 'delete';
+  loading?: {
+    text: string;
+    state?: 'none' | 'pending' | 'completed';
+  };
+  on_complete?: {
+    toast_return_message?: boolean;
+    refresh_form_config?: boolean;
   };
 }
 ```
+
+#### FormKit
+```ts
+export interface FormKit {
+  refreshConfig(): void;
+}
+```
+
+---
 
 ### FormData
 ```ts
@@ -225,6 +311,44 @@ export interface FormDataType {
   [prop: string]: FormValue;
 }
 ```
+
+---
+
+## Backend API
+
+For backend generating modal form you can return json like this.
+
+### Response
+
+```json
+{
+  "name": "string",
+  "slug_name": "string",
+  "description": "string",
+  "version": "string",
+  "config_fields": [
+    {
+      "name": "string",
+      "type": "textarea",
+      "title": "string",
+      "description": "string",
+      "required": true,
+      "value": "string",
+      "ui_options": {
+        "placeholder": "placeholder",
+        "rows": 4
+      },
+      "options": [
+        {
+          "value": "string",
+          "label": "string"
+        }
+      ]
+    }
+  ]
+}
+```
+
 
 ## reference
 
