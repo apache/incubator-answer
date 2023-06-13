@@ -18,7 +18,7 @@ const Index = () => {
   });
 
   const { t: t2 } = useTranslation('translation', {
-    keyPrefix: 'plugins.oauth',
+    keyPrefix: 'oauth',
   });
 
   const deleteLogins = (e, item) => {

@@ -41,6 +41,7 @@ import HttpErrorContent from './HttpErrorContent';
 import CustomSidebar from './CustomSidebar';
 import ImgViewer from './ImgViewer';
 import SideNav from './SideNav';
+import PluginRender from './PluginRender';
 
 export {
   Avatar,
@@ -88,5 +89,6 @@ export {
   CustomSidebar,
   ImgViewer,
   SideNav,
+  PluginRender,
 };
 export type { EditorRef, JSONSchema, UISchema };

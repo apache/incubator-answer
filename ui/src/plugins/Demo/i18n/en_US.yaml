@@ -1,0 +1,4 @@
+plugin:
+  ui_plugin_demo:
+    ui:
+      msg: UI Plugin Demo
