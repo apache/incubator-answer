@@ -53,9 +53,9 @@ var (
 
 type UploaderService interface {
 	UploadAvatarFile(ctx *gin.Context) (url string, err error)
-	AvatarThumbFile(ctx *gin.Context, uploadPath, fileName string, size int) (avatarFile []byte, err error)
 	UploadPostFile(ctx *gin.Context) (url string, err error)
 	UploadBrandingFile(ctx *gin.Context) (url string, err error)
+	AvatarThumbFile(ctx *gin.Context, fileName string, size int) (url string, err error)
 }
 
 // uploaderService uploader service
@@ -105,26 +105,26 @@ func (us *uploaderService) UploadAvatarFile(ctx *gin.Context) (url string, err e
 	return us.uploadFile(ctx, file, avatarFilePath)
 }
 
-func (us *uploaderService) AvatarThumbFile(ctx *gin.Context, uploadPath, fileName string, size int) (
-	avatarfile []byte, err error) {
+func (us *uploaderService) AvatarThumbFile(ctx *gin.Context, fileName string, size int) (url string, err error) {
 	if size > 1024 {
 		size = 1024
 	}
+
 	thumbFileName := fmt.Sprintf("%d_%d@%s", size, size, fileName)
-	thumbfilePath := fmt.Sprintf("%s/%s/%s", uploadPath, avatarThumbSubPath, thumbFileName)
-	avatarfile, err = os.ReadFile(thumbfilePath)
+	thumbFilePath := fmt.Sprintf("%s/%s/%s", us.serviceConfig.UploadPath, avatarThumbSubPath, thumbFileName)
+	avatarfile, err := os.ReadFile(thumbFilePath)
 	if err == nil {
-		return avatarfile, nil
+		return thumbFilePath, nil
 	}
-	filePath := fmt.Sprintf("%s/avatar/%s", uploadPath, fileName)
+	filePath := fmt.Sprintf("%s/avatar/%s", us.serviceConfig.UploadPath, fileName)
 	avatarfile, err = os.ReadFile(filePath)
 	if err != nil {
-		return avatarfile, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 	reader := bytes.NewReader(avatarfile)
 	img, err := imaging.Decode(reader)
 	if err != nil {
-		return avatarfile, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 	new_image := imaging.Fill(img, size, size, imaging.Center, imaging.Linear)
 	var buf bytes.Buffer
@@ -133,29 +133,29 @@ func (us *uploaderService) AvatarThumbFile(ctx *gin.Context, uploadPath, fileNam
 	_, ok := FormatExts[fileSuffix]
 
 	if !ok {
-		return avatarfile, fmt.Errorf("img extension not exist")
+		return "", fmt.Errorf("img extension not exist")
 	}
 	err = imaging.Encode(&buf, new_image, FormatExts[fileSuffix])
 	if err != nil {
-		return avatarfile, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 	thumbReader := bytes.NewReader(buf.Bytes())
 	err = dir.CreateDirIfNotExist(path.Join(us.serviceConfig.UploadPath, avatarThumbSubPath))
 	if err != nil {
-		return nil, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 	avatarFilePath := path.Join(avatarThumbSubPath, thumbFileName)
 	savefilePath := path.Join(us.serviceConfig.UploadPath, avatarFilePath)
 	out, err := os.Create(savefilePath)
 	if err != nil {
-		return avatarfile, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 	defer out.Close()
 	_, err = io.Copy(out, thumbReader)
 	if err != nil {
-		return avatarfile, errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
-	return buf.Bytes(), nil
+	return savefilePath, nil
 }
 
 func (us *uploaderService) UploadPostFile(ctx *gin.Context) (
