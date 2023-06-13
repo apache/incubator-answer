@@ -60,7 +60,7 @@ backend:
         other: 级别 2（低声望要求，适合初启动的社区）
     level_3:
       description:
-        other: 级别 2（高声望要求，适合成熟的社区）
+        other: 级别 3（高声望要求，适合成熟的社区）
     rank_question_add_label:
       other: 提问
     rank_answer_add_label:
