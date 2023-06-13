@@ -65,21 +65,6 @@ backend:
       other: 提问
     rank_answer_add_label:
       other: 写答案
-        other: 拥有访问除后台管理以外的所有权限。
-  privilege:
-    level_1:
-      description:
-        other: 第 1 级 (私人团队、群组所需的声望)
-    level_2:
-      description:
-        other: 级别2(启动社区所需的低声望)
-    level_3:
-      description:
-        other: 等级 3 (成熟社区所需的高声望)
-    rank_question_add_label:
-      other: 提问
-    rank_answer_add_label:
-      other: 写入答案
     rank_comment_add_label:
       other: 发表评论
     rank_report_add_label:
@@ -101,7 +86,7 @@ backend:
     rank_tag_add_label:
       other: 创建新标签
     rank_tag_edit_label:
-      other: 编辑标签描述(需要审核)
+      other: 编辑标签描述（需要审核）
     rank_question_edit_label:
       other: 编辑别人的问题（需要审核）
     rank_answer_edit_label:
@@ -111,7 +96,7 @@ backend:
     rank_answer_edit_without_review_label:
       other: 编辑别人的答案无需审核
     rank_question_audit_label:
-      other: 审查问题
+      other: 审核问题编辑
     rank_answer_audit_label:
       other: 审核回答编辑
     rank_tag_audit_label:
