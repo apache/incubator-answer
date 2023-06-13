@@ -566,6 +566,7 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, answers []*entity
 	}
 
 	for _, item := range list {
+		item.ID = uid.EnShortID(item.ID)
 		item.MemberActions = permission.GetAnswerPermission(ctx, req.UserID, item.UserID, req.CanEdit, req.CanDelete)
 	}
 	return list, nil

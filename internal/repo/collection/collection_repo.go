@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
 	"github.com/answerdev/answer/internal/service/unique"
+	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/xorm"
 )
@@ -148,6 +149,9 @@ func (cr *collectionRepo) GetCollectionPage(ctx context.Context, page, pageSize 
 // SearchObjectCollected check object is collected or not
 func (cr *collectionRepo) SearchObjectCollected(ctx context.Context, userID string, objectIds []string) (map[string]bool, error) {
 	collectedMap := make(map[string]bool)
+	for k, object_id := range objectIds {
+		objectIds[k] = uid.DeShortID(object_id)
+	}
 	list, err := cr.SearchByObjectIDsAndUser(ctx, userID, objectIds)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

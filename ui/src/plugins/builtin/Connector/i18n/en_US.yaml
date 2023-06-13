@@ -1,0 +1,5 @@
+plugin:
+  connector:
+    ui:
+      connect: Connect with {{ auth_name }}
+      remove: Remove {{ auth_name }}

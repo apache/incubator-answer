@@ -17,6 +17,9 @@ import {
 
 import Storage from './storage';
 
+/**
+ * localize kit for i18n
+ */
 export const loadLanguageOptions = async (forAdmin = false) => {
   const languageOptions = forAdmin
     ? await getAdminLanguageOptions()
@@ -68,13 +71,6 @@ const addI18nResource = async (langName) => {
   }
 };
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
-const localeDayjs = (langName) => {
-  langName = langName.replace('_', '-').toLowerCase();
-  dayjs.locale(langName);
-};
-
 export const getCurrentLang = () => {
   const loggedUser = loggedUserInfoStore.getState().user;
   const adminInterface = interfaceStore.getState().interface;
@@ -86,6 +82,16 @@ export const getCurrentLang = () => {
   }
   currentLang ||= fallbackLang;
   return currentLang;
+};
+
+/**
+ * localize for Day.js
+ */
+dayjs.extend(utc);
+dayjs.extend(timezone);
+const localeDayjs = (langName) => {
+  langName = langName.replace('_', '-').toLowerCase();
+  dayjs.locale(langName);
 };
 
 export const setupAppLanguage = async () => {

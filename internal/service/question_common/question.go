@@ -3,9 +3,12 @@ package questioncommon
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"math"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/service/activity_common"
@@ -65,6 +68,7 @@ type QuestionCommon struct {
 	metaService          *meta.MetaService
 	configService        *config.ConfigService
 	activityQueueService activity_queue.ActivityQueueService
+	data             *data.Data
 }
 
 func NewQuestionCommon(questionRepo QuestionRepo,
@@ -78,6 +82,7 @@ func NewQuestionCommon(questionRepo QuestionRepo,
 	metaService *meta.MetaService,
 	configService *config.ConfigService,
 	activityQueueService activity_queue.ActivityQueueService,
+	data *data.Data,
 ) *QuestionCommon {
 	return &QuestionCommon{
 		questionRepo:         questionRepo,
@@ -91,6 +96,7 @@ func NewQuestionCommon(questionRepo QuestionRepo,
 		metaService:          metaService,
 		configService:        configService,
 		activityQueueService: activityQueueService,
+		data:             data,
 	}
 }
 
@@ -544,6 +550,57 @@ func (as *QuestionCommon) RemoveAnswer(ctx context.Context, id string) (err erro
 	}
 
 	return as.answerRepo.RemoveAnswer(ctx, id)
+}
+
+func (qs *QuestionCommon) SitemapCron(ctx context.Context) {
+	data := &schema.SiteMapList{}
+	questionNum, err := qs.questionRepo.GetQuestionCount(ctx)
+	if err != nil {
+		log.Error("GetQuestionCount error", err)
+		return
+	}
+	if questionNum <= schema.SitemapMaxSize {
+		questionIDList, err := qs.questionRepo.GetQuestionIDsPage(ctx, 0, int(questionNum))
+		if err != nil {
+			log.Error("GetQuestionIDsPage error", err)
+			return
+		}
+		data.QuestionIDs = questionIDList
+
+	} else {
+		nums := make([]int, 0)
+		totalpages := int(math.Ceil(float64(questionNum) / float64(schema.SitemapMaxSize)))
+		for i := 1; i <= totalpages; i++ {
+			siteMapPagedata := &schema.SiteMapPageList{}
+			nums = append(nums, i)
+			questionIDList, err := qs.questionRepo.GetQuestionIDsPage(ctx, i, int(schema.SitemapMaxSize))
+			if err != nil {
+				log.Error("GetQuestionIDsPage error", err)
+				return
+			}
+			siteMapPagedata.PageData = questionIDList
+			if setCacheErr := qs.SetCache(ctx, fmt.Sprintf(schema.SitemapPageCachekey, i), siteMapPagedata); setCacheErr != nil {
+				log.Errorf("set sitemap cron SetCache failed: %s", setCacheErr)
+			}
+		}
+		data.MaxPageNum = nums
+	}
+	if setCacheErr := qs.SetCache(ctx, schema.SitemapCachekey, data); setCacheErr != nil {
+		log.Errorf("set sitemap cron SetCache failed: %s", setCacheErr)
+	}
+}
+
+func (qs *QuestionCommon) SetCache(ctx context.Context, cachekey string, info interface{}) error {
+	infoStr, err := json.Marshal(info)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+
+	err = qs.data.Cache.SetString(ctx, cachekey, string(infoStr), schema.DashBoardCacheTime)
+	if err != nil {
+		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
+	}
+	return nil
 }
 
 func (qs *QuestionCommon) ShowListFormat(ctx context.Context, data *entity.Question) *schema.QuestionInfo {

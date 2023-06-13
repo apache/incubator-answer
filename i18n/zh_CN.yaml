@@ -50,21 +50,21 @@ backend:
       admin:
         other: 拥有管理网站的全部权限。
       moderator:
-        other: 拥有访问除后台管理以外的所有权限。
+        other: 拥有除访问后台管理以外的所有权限。
   privilege:
     level_1:
       description:
-        other: 第 1 级 (私人团队、群组所需的声望)
+        other: 级别 1（少量声望要求，适合私有团队、群组）
     level_2:
       description:
-        other: 级别2(启动社区所需的低声望)
+        other: 级别 2（低声望要求，适合初启动的社区）
     level_3:
       description:
-        other: 等级 3 (成熟社区所需的高声望)
+        other: 级别 3（高声望要求，适合成熟的社区）
     rank_question_add_label:
-      other: 提问s
+      other: 提问
     rank_answer_add_label:
-      other: 写入答案
+      other: 写答案
     rank_comment_add_label:
       other: 发表评论
     rank_report_add_label:
@@ -86,23 +86,23 @@ backend:
     rank_tag_add_label:
       other: 创建新标签
     rank_tag_edit_label:
-      other: 编辑标签描述(需要审核)
+      other: 编辑标签描述（需要审核）
     rank_question_edit_label:
-      other: 编辑对方的问题 (需要审查)
+      other: 编辑别人的问题（需要审核）
     rank_answer_edit_label:
-      other: 编辑对方的答案 (需要审查)
+      other: 编辑别人的答案（需要审核）
     rank_question_edit_without_review_label:
-      other: 不经评论编辑对方的问题
+      other: 编辑别人的问题无需审核
     rank_answer_edit_without_review_label:
-      other: 编辑对方的答案而不需要审核
+      other: 编辑别人的答案无需审核
     rank_question_audit_label:
-      other: 审查问题
+      other: 审核问题编辑
     rank_answer_audit_label:
-      other: 审核回答
+      other: 审核回答编辑
     rank_tag_audit_label:
       other: 审核标签编辑
     rank_tag_edit_without_review_label:
-      other: 编辑标签且无需审核
+      other: 编辑标签无需审核
     rank_tag_synonym_label:
       other: 管理标签同义词
   email:
@@ -856,6 +856,9 @@ ui:
       label: 新邮箱
       msg:
         empty: 邮箱不能为空
+  oauth:
+    connect: 连接到 {{ auth_name }}
+    remove: 移除 {{ auth_name }}
   oauth_bind_email:
     subtitle: 向你的账户添加恢复邮件地址。
     btn_update: 更新电子邮件地址
@@ -1274,13 +1277,10 @@ ui:
     plugins: 插件
     installed_plugins: 已安装插件
   website_welcome: 欢迎来到 {{site_name}}
-  plugins:
+  user_center:
     login: 登录
     qrcode_login_tip: 请使用 {{ agentName }} 扫描二维码并登录。
     login_failed_email_tip: 登录失败，请允许此应用访问您的邮箱信息，然后重试。
-    oauth:
-      connect: 连接到 {{ auth_name }}
-      remove: 移除 {{ auth_name }}
   admin:
     admin_header:
       title: 后台管理
