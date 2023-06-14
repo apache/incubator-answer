@@ -12,7 +12,6 @@ import (
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
-	"github.com/answerdev/answer/internal/service/uploader"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
@@ -24,7 +23,6 @@ type UserController struct {
 	userService           *service.UserService
 	authService           *auth.AuthService
 	actionService         *action.CaptchaService
-	uploaderService       uploader.UploaderService
 	emailService          *export.EmailService
 	siteInfoCommonService siteinfo_common.SiteInfoCommonService
 }
@@ -35,14 +33,12 @@ func NewUserController(
 	userService *service.UserService,
 	actionService *action.CaptchaService,
 	emailService *export.EmailService,
-	uploaderService uploader.UploaderService,
 	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
 ) *UserController {
 	return &UserController{
 		authService:           authService,
 		userService:           userService,
 		actionService:         actionService,
-		uploaderService:       uploaderService,
 		emailService:          emailService,
 		siteInfoCommonService: siteInfoCommonService,
 	}
