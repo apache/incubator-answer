@@ -103,8 +103,11 @@ func (s *siteInfoCommonService) getAvatarDefaultConfig(ctx context.Context) (str
 	usersConfig, err := s.GetSiteUsers(ctx)
 	if err != nil {
 		log.Error(err)
-	} else {
+	}
+	if len(usersConfig.GravatarBaseURL) > 0 {
 		gravatarBaseURL = usersConfig.GravatarBaseURL
+	}
+	if len(usersConfig.DefaultAvatar) > 0 {
 		defaultAvatar = usersConfig.DefaultAvatar
 	}
 	return gravatarBaseURL, defaultAvatar
