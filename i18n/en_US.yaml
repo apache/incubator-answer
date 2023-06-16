@@ -1002,7 +1002,6 @@ ui:
     review: Your revision will show after review.
   related_question:
     title: Related Questions
-    btn: Add question
     answers: answers
   invite_to_answer:
     title: People asked

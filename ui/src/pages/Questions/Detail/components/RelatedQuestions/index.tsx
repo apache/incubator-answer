@@ -5,14 +5,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@/components';
 import { useSimilarQuestion } from '@/services';
-import { loggedUserInfoStore } from '@/stores';
 import { pathFactory } from '@/router/pathFactory';
 
 interface Props {
   id: string;
 }
 const Index: FC<Props> = ({ id }) => {
-  const { user } = loggedUserInfoStore();
   const { t } = useTranslation('translation', {
     keyPrefix: 'related_question',
   });
@@ -63,11 +61,6 @@ const Index: FC<Props> = ({ id }) => {
           );
         })}
       </ListGroup>
-      {user?.username ? (
-        <Card.Footer className="bg-white">
-          <Link to="/questions/ask">{t('btn')}</Link>
-        </Card.Footer>
-      ) : null}
     </Card>
   );
 };
