@@ -58,7 +58,9 @@ const Users = () => {
                         />
                       </Link>
                       <div className="ms-2">
-                        <Link to={`/users/${user.username}`}>
+                        <Link
+                          className="text-break"
+                          to={`/users/${user.username}`}>
                           {user.display_name}
                         </Link>
                         <div className="text-secondary small">
