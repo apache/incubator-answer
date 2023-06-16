@@ -37,9 +37,9 @@
 
 @media screen and (max-width: 991.9px) {
   #sideNav {
-    // .nav-wrap {
-    //   max-height: fit-content;
-    // }
+    .nav-wrap {
+      max-height: fit-content;
+    }
     .nav {
       max-width: 100%;
     }
