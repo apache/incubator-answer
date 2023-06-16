@@ -57,7 +57,7 @@ const Users = () => {
                           searchStr="s=96"
                         />
                       </Link>
-                      <div className="ms-2">
+                      <div className="ms-2 text-ellipsis">
                         <Link to={`/users/${user.username}`}>
                           {user.display_name}
                         </Link>

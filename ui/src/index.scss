@@ -132,6 +132,12 @@ a {
   }
 }
 
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .text-truncate-1,
 .text-truncate-2,
 .text-truncate-3,
