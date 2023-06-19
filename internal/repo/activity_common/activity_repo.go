@@ -63,7 +63,7 @@ func (ar *ActivityRepo) GetActivityTypeByObjKey(ctx context.Context, objectKey, 
 	configKey := fmt.Sprintf("%s.%s", objectKey, action)
 	cfg, err := ar.configService.GetConfigByKey(ctx, configKey)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return cfg.ID, nil
 }
@@ -71,7 +71,7 @@ func (ar *ActivityRepo) GetActivityTypeByObjKey(ctx context.Context, objectKey, 
 func (ar *ActivityRepo) GetActivityTypeByConfigKey(ctx context.Context, configKey string) (activityType int, err error) {
 	cfg, err := ar.configService.GetConfigByKey(ctx, configKey)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return cfg.ID, nil
 }
