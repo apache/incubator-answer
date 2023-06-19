@@ -163,7 +163,7 @@ func (ns *NotificationCommon) AddNotification(ctx context.Context, msg *schema.N
 		log.Error("addRedDot Error", err.Error())
 	}
 
-	go ns.SendNotificationToAllFollower(context.Background(), msg, questionID)
+	go ns.SendNotificationToAllFollower(ctx, msg, questionID)
 	return nil
 }
 

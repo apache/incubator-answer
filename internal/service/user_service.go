@@ -606,7 +606,7 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 	}
 	log.Infof("send email confirmation %s", verifyEmailURL)
 
-	go us.emailService.SendAndSaveCode(context.Background(), req.Email, title, body, code, data.ToJSONString())
+	go us.emailService.SendAndSaveCode(ctx, req.Email, title, body, code, data.ToJSONString())
 	return nil, nil
 }
 
