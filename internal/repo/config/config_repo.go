@@ -37,7 +37,7 @@ func (cr configRepo) GetConfigByID(ctx context.Context, id int) (c *entity.Confi
 	}
 
 	c = &entity.Config{}
-	exist, err := cr.data.DB.ID(id).Get(c)
+	exist, err := cr.data.DB.Context(ctx).ID(id).Get(c)
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

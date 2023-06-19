@@ -72,7 +72,7 @@ func (ur *userRepo) IncreaseQuestionCount(ctx context.Context, userID string, am
 func (ur *userRepo) UpdateQuestionCount(ctx context.Context, userID string, count int64) (err error) {
 	user := &entity.User{}
 	user.QuestionCount = int(count)
-	_, err = ur.data.DB.Where("id = ?", userID).Cols("question_count").Update(user)
+	_, err = ur.data.DB.Context(ctx).Where("id = ?", userID).Cols("question_count").Update(user)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -82,7 +82,7 @@ func (ur *userRepo) UpdateQuestionCount(ctx context.Context, userID string, coun
 func (ur *userRepo) UpdateAnswerCount(ctx context.Context, userID string, count int) (err error) {
 	user := &entity.User{}
 	user.AnswerCount = count
-	_, err = ur.data.DB.Where("id = ?", userID).Cols("answer_count").Update(user)
+	_, err = ur.data.DB.Context(ctx).Where("id = ?", userID).Cols("answer_count").Update(user)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
