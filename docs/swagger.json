@@ -37,7 +37,7 @@
                 "tags": [
                     "admin"
                 ],
-                "summary": "AdminSearchAnswerList",
+                "summary": "AdminAnswerPage admin answer page",
                 "parameters": [
                     {
                         "type": "integer",
@@ -367,7 +367,7 @@
                 "tags": [
                     "admin"
                 ],
-                "summary": "AdminSearchList",
+                "summary": "AdminQuestionPage admin question page",
                 "parameters": [
                     {
                         "type": "integer",
@@ -8174,7 +8174,7 @@
                     "type": "string"
                 },
                 "site_seo": {
-                    "$ref": "#/definitions/schema.SiteSeoReq"
+                    "$ref": "#/definitions/schema.SiteSeoResp"
                 },
                 "site_users": {
                     "$ref": "#/definitions/schema.SiteUsersResp"

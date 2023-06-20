@@ -49,7 +49,7 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
-                "summary": "AdminSearchAnswerList",
+                "summary": "AdminAnswerPage admin answer page",
                 "parameters": [
                     {
                         "type": "integer",
@@ -379,7 +379,7 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
-                "summary": "AdminSearchList",
+                "summary": "AdminQuestionPage admin question page",
                 "parameters": [
                     {
                         "type": "integer",
@@ -8186,7 +8186,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "site_seo": {
-                    "$ref": "#/definitions/schema.SiteSeoReq"
+                    "$ref": "#/definitions/schema.SiteSeoResp"
                 },
                 "site_users": {
                     "$ref": "#/definitions/schema.SiteUsersResp"

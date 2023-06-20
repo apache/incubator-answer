@@ -1256,89 +1256,73 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 	return nil
 }
 
-func (qs *QuestionService) AdminSearchList(ctx context.Context, search *schema.AdminQuestionSearch, loginUserID string) ([]*schema.AdminQuestionInfo, int64, error) {
+func (qs *QuestionService) AdminQuestionPage(
+	ctx context.Context, req *schema.AdminQuestionPageReq) (
+	resp *pager.PageModel, err error) {
+
 	list := make([]*schema.AdminQuestionInfo, 0)
-
-	status, ok := entity.AdminQuestionSearchStatus[search.StatusStr]
-	if ok {
-		search.Status = status
-	}
-
-	if search.Status == 0 {
-		search.Status = 1
-	}
-	dblist, count, err := qs.questionRepo.AdminSearchList(ctx, search)
+	questionList, count, err := qs.questionRepo.AdminQuestionPage(ctx, req)
 	if err != nil {
-		return list, count, err
+		return nil, err
 	}
+
 	userIds := make([]string, 0)
-	for _, dbitem := range dblist {
+	for _, info := range questionList {
 		item := &schema.AdminQuestionInfo{}
-		_ = copier.Copy(item, dbitem)
-		item.CreateTime = dbitem.CreatedAt.Unix()
-		item.UpdateTime = dbitem.PostUpdateTime.Unix()
-		item.EditTime = dbitem.UpdatedAt.Unix()
+		_ = copier.Copy(item, info)
+		item.CreateTime = info.CreatedAt.Unix()
+		item.UpdateTime = info.PostUpdateTime.Unix()
+		item.EditTime = info.UpdatedAt.Unix()
 		list = append(list, item)
-		userIds = append(userIds, dbitem.UserID)
+		userIds = append(userIds, info.UserID)
 	}
 	userInfoMap, err := qs.userCommon.BatchUserBasicInfoByID(ctx, userIds)
 	if err != nil {
-		return list, count, err
+		return nil, err
 	}
 	for _, item := range list {
-		_, ok = userInfoMap[item.UserID]
-		if ok {
-			item.UserInfo = userInfoMap[item.UserID]
+		if u, ok := userInfoMap[item.UserID]; ok {
+			item.UserInfo = u
 		}
 	}
-
-	return list, count, nil
+	return pager.NewPageModel(count, list), nil
 }
 
-// AdminSearchList
-func (qs *QuestionService) AdminSearchAnswerList(ctx context.Context, search *entity.AdminAnswerSearch, loginUserID string) ([]*schema.AdminAnswerInfo, int64, error) {
-	answerlist := make([]*schema.AdminAnswerInfo, 0)
-
-	status, ok := entity.AdminAnswerSearchStatus[search.StatusStr]
-	if ok {
-		search.Status = status
-	}
-
-	if search.Status == 0 {
-		search.Status = 1
-	}
-	dblist, count, err := qs.questioncommon.AnswerCommon.AdminSearchList(ctx, search)
+// AdminAnswerPage search answer list
+func (qs *QuestionService) AdminAnswerPage(ctx context.Context, req *schema.AdminAnswerPageReq) (
+	resp *pager.PageModel, err error) {
+	answerList, count, err := qs.questioncommon.AnswerCommon.AdminSearchList(ctx, req)
 	if err != nil {
-		return answerlist, count, err
+		return nil, err
 	}
+
 	questionIDs := make([]string, 0)
 	userIds := make([]string, 0)
-	for _, item := range dblist {
-		answerinfo := qs.questioncommon.AnswerCommon.AdminShowFormat(ctx, item)
-		answerlist = append(answerlist, answerinfo)
+	answerResp := make([]*schema.AdminAnswerInfo, 0)
+	for _, item := range answerList {
+		answerInfo := qs.questioncommon.AnswerCommon.AdminShowFormat(ctx, item)
+		answerResp = append(answerResp, answerInfo)
 		questionIDs = append(questionIDs, item.QuestionID)
 		userIds = append(userIds, item.UserID)
 	}
 	userInfoMap, err := qs.userCommon.BatchUserBasicInfoByID(ctx, userIds)
 	if err != nil {
-		return answerlist, count, err
+		return nil, err
+	}
+	questionMaps, err := qs.questioncommon.FindInfoByID(ctx, questionIDs, req.LoginUserID)
+	if err != nil {
+		return nil, err
 	}
 
-	questionMaps, err := qs.questioncommon.FindInfoByID(ctx, questionIDs, loginUserID)
-	if err != nil {
-		return answerlist, count, err
-	}
-	for _, item := range answerlist {
-		_, ok := questionMaps[item.QuestionID]
-		if ok {
-			item.QuestionInfo.Title = questionMaps[item.QuestionID].Title
+	for _, item := range answerResp {
+		if q, ok := questionMaps[item.QuestionID]; ok {
+			item.QuestionInfo.Title = q.Title
 		}
-		_, ok = userInfoMap[item.UserID]
-		if ok {
-			item.UserInfo = userInfoMap[item.UserID]
+		if u, ok := userInfoMap[item.UserID]; ok {
+			item.UserInfo = u
 		}
 	}
-	return answerlist, count, nil
+	return pager.NewPageModel(count, answerResp), nil
 }
 
 func (qs *QuestionService) changeQuestionToRevision(ctx context.Context, questionInfo *entity.Question, tags []*entity.Tag) (

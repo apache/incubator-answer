@@ -7,7 +7,6 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/base/validator"
-	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/permission"
@@ -709,8 +708,8 @@ func (qc *QuestionController) PersonalCollectionPage(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
-// AdminSearchList godoc
-// @Summary AdminSearchList
+// AdminQuestionPage admin question page
+// @Summary AdminQuestionPage admin question page
 // @Description Status:[available,closed,deleted]
 // @Tags admin
 // @Accept json
@@ -722,21 +721,19 @@ func (qc *QuestionController) PersonalCollectionPage(ctx *gin.Context) {
 // @Param query query string false "question id or title"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/question/page [get]
-func (qc *QuestionController) AdminSearchList(ctx *gin.Context) {
-	req := &schema.AdminQuestionSearch{}
+func (qc *QuestionController) AdminQuestionPage(ctx *gin.Context) {
+	req := &schema.AdminQuestionPageReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	userID := middleware.GetLoginUserIDFromContext(ctx)
-	questionList, count, err := qc.questionService.AdminSearchList(ctx, req, userID)
-	handler.HandleResponse(ctx, err, gin.H{
-		"list":  questionList,
-		"count": count,
-	})
+
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+	resp, err := qc.questionService.AdminQuestionPage(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
-// AdminSearchAnswerList godoc
-// @Summary AdminSearchAnswerList
+// AdminAnswerPage admin answer page
+// @Summary AdminAnswerPage admin answer page
 // @Description Status:[available,deleted]
 // @Tags admin
 // @Accept json
@@ -749,21 +746,15 @@ func (qc *QuestionController) AdminSearchList(ctx *gin.Context) {
 // @Param question_id query string false "question id"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/answer/page [get]
-func (qc *QuestionController) AdminSearchAnswerList(ctx *gin.Context) {
-	req := &entity.AdminAnswerSearch{}
+func (qc *QuestionController) AdminAnswerPage(ctx *gin.Context) {
+	req := &schema.AdminAnswerPageReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	req.QuestionID = uid.DeShortID(req.QuestionID)
-	if req.QuestionID == "0" {
-		req.QuestionID = ""
-	}
-	userID := middleware.GetLoginUserIDFromContext(ctx)
-	questionList, count, err := qc.questionService.AdminSearchAnswerList(ctx, req, userID)
-	handler.HandleResponse(ctx, err, gin.H{
-		"list":  questionList,
-		"count": count,
-	})
+
+	req.LoginUserID = middleware.GetLoginUserIDFromContext(ctx)
+	resp, err := qc.questionService.AdminAnswerPage(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
 // AdminSetQuestionStatus godoc

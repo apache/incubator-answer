@@ -333,7 +333,7 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 	return questionList, total, err
 }
 
-func (qr *questionRepo) AdminSearchList(ctx context.Context, search *schema.AdminQuestionSearch) ([]*entity.Question, int64, error) {
+func (qr *questionRepo) AdminQuestionPage(ctx context.Context, search *schema.AdminQuestionPageReq) ([]*entity.Question, int64, error) {
 	var (
 		count   int64
 		err     error

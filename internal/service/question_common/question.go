@@ -48,7 +48,7 @@ type QuestionRepo interface {
 	UpdateAccepted(ctx context.Context, question *entity.Question) (err error)
 	UpdateLastAnswer(ctx context.Context, question *entity.Question) (err error)
 	FindByID(ctx context.Context, id []string) (questionList []*entity.Question, err error)
-	AdminSearchList(ctx context.Context, search *schema.AdminQuestionSearch) ([]*entity.Question, int64, error)
+	AdminQuestionPage(ctx context.Context, search *schema.AdminQuestionPageReq) ([]*entity.Question, int64, error)
 	GetQuestionCount(ctx context.Context) (count int64, err error)
 	GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error)
 	GetQuestionCountByIDs(ctx context.Context, ids []string) (count int64, err error)
@@ -68,7 +68,7 @@ type QuestionCommon struct {
 	metaService          *meta.MetaService
 	configService        *config.ConfigService
 	activityQueueService activity_queue.ActivityQueueService
-	data             *data.Data
+	data                 *data.Data
 }
 
 func NewQuestionCommon(questionRepo QuestionRepo,
@@ -96,7 +96,7 @@ func NewQuestionCommon(questionRepo QuestionRepo,
 		metaService:          metaService,
 		configService:        configService,
 		activityQueueService: activityQueueService,
-		data:             data,
+		data:                 data,
 	}
 }
 

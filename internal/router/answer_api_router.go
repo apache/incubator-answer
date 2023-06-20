@@ -244,9 +244,9 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
-	r.GET("/question/page", a.questionController.AdminSearchList)
+	r.GET("/question/page", a.questionController.AdminQuestionPage)
 	r.PUT("/question/status", a.questionController.AdminSetQuestionStatus)
-	r.GET("/answer/page", a.questionController.AdminSearchAnswerList)
+	r.GET("/answer/page", a.questionController.AdminAnswerPage)
 	r.PUT("/answer/status", a.answerController.AdminSetAnswerStatus)
 
 	// report

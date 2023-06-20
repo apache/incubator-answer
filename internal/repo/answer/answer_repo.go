@@ -2,15 +2,11 @@ package answer
 
 import (
 	"context"
-	"strings"
 	"time"
-	"unicode"
-
-	"github.com/answerdev/answer/internal/base/handler"
-	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
@@ -295,82 +291,31 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	return rows, count, nil
 }
 
-func (ar *answerRepo) AdminSearchList(ctx context.Context, search *entity.AdminAnswerSearch) ([]*entity.Answer, int64, error) {
-	var (
-		count   int64
-		err     error
-		session = ar.data.DB.Context(ctx).Table([]string{entity.Answer{}.TableName(), "a"}).Select("a.*")
-	)
-	if search.QuestionID != "" {
-		search.QuestionID = uid.DeShortID(search.QuestionID)
-	}
-
-	session.Where(builder.Eq{
-		"a.status": search.Status,
-	})
-
-	rows := make([]*entity.Answer, 0)
-	if search.Page > 0 {
-		search.Page = search.Page - 1
-	} else {
-		search.Page = 0
-	}
-	if search.PageSize == 0 {
-		search.PageSize = constant.DefaultPageSize
-	}
-
-	// search by question title like or answer id
-	if len(search.Query) > 0 {
-		// check id search
-		var (
-			idSearch = false
-			id       = ""
-		)
-
-		if strings.Contains(search.Query, "answer:") {
-			idSearch = true
-			id = strings.TrimSpace(strings.TrimPrefix(search.Query, "answer:"))
-			id = uid.DeShortID(id)
-			for _, r := range id {
-				if !unicode.IsDigit(r) {
-					idSearch = false
-					break
-				}
-			}
-		}
-
-		if idSearch {
-			session.And(builder.Eq{
-				"id": id,
-			})
-		} else {
-			session.Join("LEFT", []string{entity.Question{}.TableName(), "q"}, "q.id = a.question_id")
-			session.And(builder.Like{
-				"q.title", search.Query,
-			})
+func (ar *answerRepo) AdminSearchList(ctx context.Context, req *schema.AdminAnswerPageReq) (
+	resp []*entity.Answer, total int64, err error) {
+	cond := &entity.Answer{}
+	session := ar.data.DB.Context(ctx)
+	if len(req.QuestionID) == 0 && len(req.AnswerID) == 0 {
+		session.Join("INNER", "question", "answer.question_id = question.id")
+		if len(req.QuestionTitle) > 0 {
+			session.Where("question.title like ?", "%"+req.QuestionTitle+"%")
 		}
 	}
-
-	// check search by question id
-	if len(search.QuestionID) > 0 {
-		session.And(builder.Eq{
-			"question_id": search.QuestionID,
-		})
+	if len(req.AnswerID) > 0 {
+		cond.ID = req.AnswerID
 	}
+	if len(req.QuestionID) > 0 {
+		session.Where("answer.question_id = ?", req.QuestionID)
+	}
+	if req.Status > 0 {
+		cond.Status = req.Status
+	}
+	session.Desc("answer.created_at")
 
-	offset := search.Page * search.PageSize
-	session.
-		OrderBy("a.created_at desc").
-		Limit(search.PageSize, offset)
-	count, err = session.FindAndCount(&rows)
+	resp = make([]*entity.Answer, 0)
+	total, err = pager.Help(req.Page, req.PageSize, &resp, cond, session)
 	if err != nil {
-		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return nil, 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	if handler.GetEnableShortID(ctx) {
-		for _, item := range rows {
-			item.ID = uid.EnShortID(item.ID)
-			item.QuestionID = uid.EnShortID(item.QuestionID)
-		}
-	}
-	return rows, count, nil
+	return resp, total, nil
 }
