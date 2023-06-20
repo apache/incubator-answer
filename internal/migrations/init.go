@@ -162,8 +162,9 @@ func (m *Mentor) initSiteInfoThemeConfig() {
 }
 
 func (m *Mentor) initSiteInfoSEOConfig() {
-	seoData := map[string]string{
-		"robots": defaultSEORobotTxt + m.userData.SiteURL + "/sitemap.xml",
+	seoData := map[string]interface{}{
+		"permalink": 1,
+		"robots":    defaultSEORobotTxt + m.userData.SiteURL + "/sitemap.xml",
 	}
 	seoDataBytes, _ := json.Marshal(seoData)
 	_, m.err = m.engine.Context(m.ctx).Insert(&entity.SiteInfo{
