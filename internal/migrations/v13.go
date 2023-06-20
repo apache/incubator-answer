@@ -15,13 +15,13 @@ import (
 
 func updateCount(x *xorm.Engine) error {
 	fns := []func(*xorm.Engine) error{
+		inviteAnswer,
 		addPrivilegeForInviteSomeoneToAnswer,
 		addGravatarBaseURL,
 		updateQuestionCount,
 		updateTagCount,
 		updateUserQuestionCount,
 		updateUserAnswerCount,
-		inviteAnswer,
 		inBoxData,
 	}
 	for _, fn := range fns {
@@ -115,8 +115,8 @@ func addPrivilegeForInviteSomeoneToAnswer(x *xorm.Engine) error {
 
 func updateQuestionCount(x *xorm.Engine) error {
 	//question answer count
-	answers := make([]entity.Answer, 0)
-	err := x.Find(&answers, &entity.Answer{Status: entity.AnswerStatusAvailable})
+	answers := make([]AnswerV13, 0)
+	err := x.Find(&answers, &AnswerV13{Status: entity.AnswerStatusAvailable})
 	if err != nil {
 		return fmt.Errorf("get answers failed: %w", err)
 	}
@@ -273,10 +273,22 @@ func updateUserQuestionCount(x *xorm.Engine) error {
 	return nil
 }
 
+type AnswerV13 struct {
+	ID         string `xorm:"not null pk autoincr BIGINT(20) id"`
+	QuestionID string `xorm:"not null default 0 BIGINT(20) question_id"`
+	UserID     string `xorm:"not null default 0 BIGINT(20) INDEX user_id"`
+	Status     int    `xorm:"not null default 1 INT(11) status"`
+	Accepted   int    `xorm:"not null default 1 INT(11) adopted"`
+}
+
+func (AnswerV13) TableName() string {
+	return "answer"
+}
+
 // updateUserAnswerCount update user answer count
 func updateUserAnswerCount(x *xorm.Engine) error {
-	answers := make([]entity.Answer, 0)
-	err := x.Find(&answers, &entity.Answer{Status: entity.AnswerStatusAvailable})
+	answers := make([]AnswerV13, 0)
+	err := x.Find(&answers, &AnswerV13{Status: entity.AnswerStatusAvailable})
 	if err != nil {
 		return fmt.Errorf("get answers failed: %w", err)
 	}
@@ -313,36 +325,40 @@ func updateUserAnswerCount(x *xorm.Engine) error {
 	return nil
 }
 
+type Question struct {
+	ID               string    `xorm:"not null pk BIGINT(20) id"`
+	CreatedAt        time.Time `xorm:"not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
+	UpdatedAt        time.Time `xorm:"updated_at TIMESTAMP"`
+	UserID           string    `xorm:"not null default 0 BIGINT(20) INDEX user_id"`
+	InviteUserID     string    `xorm:"TEXT invite_user_id"`
+	LastEditUserID   string    `xorm:"not null default 0 BIGINT(20) last_edit_user_id"`
+	Title            string    `xorm:"not null default '' VARCHAR(150) title"`
+	OriginalText     string    `xorm:"not null MEDIUMTEXT original_text"`
+	ParsedText       string    `xorm:"not null MEDIUMTEXT parsed_text"`
+	Status           int       `xorm:"not null default 1 INT(11) status"`
+	Pin              int       `xorm:"not null default 1 INT(11) pin"`
+	Show             int       `xorm:"not null default 1 INT(11) show"`
+	ViewCount        int       `xorm:"not null default 0 INT(11) view_count"`
+	UniqueViewCount  int       `xorm:"not null default 0 INT(11) unique_view_count"`
+	VoteCount        int       `xorm:"not null default 0 INT(11) vote_count"`
+	AnswerCount      int       `xorm:"not null default 0 INT(11) answer_count"`
+	CollectionCount  int       `xorm:"not null default 0 INT(11) collection_count"`
+	FollowCount      int       `xorm:"not null default 0 INT(11) follow_count"`
+	AcceptedAnswerID string    `xorm:"not null default 0 BIGINT(20) accepted_answer_id"`
+	LastAnswerID     string    `xorm:"not null default 0 BIGINT(20) last_answer_id"`
+	PostUpdateTime   time.Time `xorm:"post_update_time TIMESTAMP"`
+	RevisionID       string    `xorm:"not null default 0 BIGINT(20) revision_id"`
+}
+
+func (Question) TableName() string {
+	return "question"
+}
+
 func inviteAnswer(x *xorm.Engine) error {
-	type Question struct {
-		ID               string    `xorm:"not null pk BIGINT(20) id"`
-		CreatedAt        time.Time `xorm:"not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
-		UpdatedAt        time.Time `xorm:"updated_at TIMESTAMP"`
-		UserID           string    `xorm:"not null default 0 BIGINT(20) INDEX user_id"`
-		InviteUserID     string    `xorm:"TEXT invite_user_id"`
-		LastEditUserID   string    `xorm:"not null default 0 BIGINT(20) last_edit_user_id"`
-		Title            string    `xorm:"not null default '' VARCHAR(150) title"`
-		OriginalText     string    `xorm:"not null MEDIUMTEXT original_text"`
-		ParsedText       string    `xorm:"not null MEDIUMTEXT parsed_text"`
-		Status           int       `xorm:"not null default 1 INT(11) status"`
-		Pin              int       `xorm:"not null default 1 INT(11) pin"`
-		Show             int       `xorm:"not null default 1 INT(11) show"`
-		ViewCount        int       `xorm:"not null default 0 INT(11) view_count"`
-		UniqueViewCount  int       `xorm:"not null default 0 INT(11) unique_view_count"`
-		VoteCount        int       `xorm:"not null default 0 INT(11) vote_count"`
-		AnswerCount      int       `xorm:"not null default 0 INT(11) answer_count"`
-		CollectionCount  int       `xorm:"not null default 0 INT(11) collection_count"`
-		FollowCount      int       `xorm:"not null default 0 INT(11) follow_count"`
-		AcceptedAnswerID string    `xorm:"not null default 0 BIGINT(20) accepted_answer_id"`
-		LastAnswerID     string    `xorm:"not null default 0 BIGINT(20) last_answer_id"`
-		PostUpdateTime   time.Time `xorm:"post_update_time TIMESTAMP"`
-		RevisionID       string    `xorm:"not null default 0 BIGINT(20) revision_id"`
-	}
 	err := x.Sync(new(Question))
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
