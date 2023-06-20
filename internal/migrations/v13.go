@@ -325,7 +325,7 @@ func updateUserAnswerCount(x *xorm.Engine) error {
 	return nil
 }
 
-type Question struct {
+type QuestionV13 struct {
 	ID               string    `xorm:"not null pk BIGINT(20) id"`
 	CreatedAt        time.Time `xorm:"not null default CURRENT_TIMESTAMP TIMESTAMP created_at"`
 	UpdatedAt        time.Time `xorm:"updated_at TIMESTAMP"`
@@ -350,12 +350,12 @@ type Question struct {
 	RevisionID       string    `xorm:"not null default 0 BIGINT(20) revision_id"`
 }
 
-func (Question) TableName() string {
+func (QuestionV13) TableName() string {
 	return "question"
 }
 
 func inviteAnswer(x *xorm.Engine) error {
-	err := x.Sync(new(Question))
+	err := x.Sync(new(QuestionV13))
 	if err != nil {
 		return err
 	}
