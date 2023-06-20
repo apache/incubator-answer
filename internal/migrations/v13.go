@@ -129,8 +129,8 @@ func updateQuestionCount(x *xorm.Engine) error {
 			questionAnswerCount[answer.QuestionID]++
 		}
 	}
-	questionList := make([]entity.Question, 0)
-	err = x.Find(&questionList, &entity.Question{})
+	questionList := make([]QuestionV13, 0)
+	err = x.Find(&questionList, &QuestionV13{})
 	if err != nil {
 		return fmt.Errorf("get questions failed: %w", err)
 	}
@@ -138,7 +138,7 @@ func updateQuestionCount(x *xorm.Engine) error {
 		_, ok := questionAnswerCount[item.ID]
 		if ok {
 			item.AnswerCount = questionAnswerCount[item.ID]
-			if _, err = x.Update(item, &entity.Question{ID: item.ID}); err != nil {
+			if _, err = x.Cols("answer_count").Update(item, &QuestionV13{ID: item.ID}); err != nil {
 				log.Errorf("update %+v config failed: %s", item, err)
 				return fmt.Errorf("update question failed: %w", err)
 			}
@@ -163,8 +163,8 @@ func updateTagCount(x *xorm.Engine) error {
 		questionsAvailableMap[item.ObjectID] = false
 		questionsHideMap[item.ObjectID] = false
 	}
-	questionList := make([]entity.Question, 0)
-	err = x.In("id", questionIDs).In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).Find(&questionList, &entity.Question{})
+	questionList := make([]QuestionV13, 0)
+	err = x.In("id", questionIDs).In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).Find(&questionList, &QuestionV13{})
 	if err != nil {
 		return fmt.Errorf("get questions failed: %w", err)
 	}
@@ -235,8 +235,8 @@ func updateTagCount(x *xorm.Engine) error {
 
 // updateUserQuestionCount update user question count
 func updateUserQuestionCount(x *xorm.Engine) error {
-	questionList := make([]entity.Question, 0)
-	err := x.In("status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).Find(&questionList, &entity.Question{})
+	questionList := make([]QuestionV13, 0)
+	err := x.In("status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).Find(&questionList, &QuestionV13{})
 	if err != nil {
 		return fmt.Errorf("get question  failed: %w", err)
 	}
