@@ -12,9 +12,9 @@ import (
 	"github.com/segmentfault/pacman/contrib/cache/memory"
 	"github.com/segmentfault/pacman/log"
 	_ "modernc.org/sqlite"
-	"xorm.io/core"
 	"xorm.io/xorm"
 	ormlog "xorm.io/xorm/log"
+	"xorm.io/xorm/names"
 	"xorm.io/xorm/schemas"
 )
 
@@ -71,7 +71,7 @@ func NewDB(debug bool, dataConf *Database) (*xorm.Engine, error) {
 	if dataConf.ConnMaxLifeTime > 0 {
 		engine.SetConnMaxLifetime(time.Duration(dataConf.ConnMaxLifeTime) * time.Second)
 	}
-	engine.SetColumnMapper(core.GonicMapper{})
+	engine.SetColumnMapper(names.GonicMapper{})
 	return engine, nil
 }
 
