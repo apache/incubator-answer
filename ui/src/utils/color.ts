@@ -1,5 +1,18 @@
 import Color from 'color';
 
+/**
+ * Bootstrap Color Weight:
+ * $blue-100: tint-color($blue, 80%) !default;
+ * $blue-200: tint-color($blue, 60%) !default;
+ * $blue-300: tint-color($blue, 40%) !default;
+ * $blue-400: tint-color($blue, 20%) !default;
+ * $blue-500: $blue !default;
+ * $blue-600: shade-color($blue, 20%) !default;
+ * $blue-700: shade-color($blue, 40%) !default;
+ * $blue-800: shade-color($blue, 60%) !default;
+ * $blue-900: shade-color($blue, 80%) !default;
+ */
+
 const WHITE = Color('#fff');
 const BLACK = Color('#000');
 
