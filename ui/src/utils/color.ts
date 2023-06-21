@@ -13,6 +13,13 @@ import Color from 'color';
  * $blue-900: shade-color($blue, 80%) !default;
  */
 
+/**
+ *  The `weight` parameter in `Color`:
+ *    1. Must use decimals rather than percentages. eg: color.mix(Color("blue"), 0.6)
+ *    2. The value is the difference between `1 - $weight` in `bootstrap`.
+ *      eg: color.mix(Color("blue"), 0.6) === shade-color($blue, 40%) !default
+ */
+
 const WHITE = Color('#fff');
 const BLACK = Color('#000');
 
