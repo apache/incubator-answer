@@ -76,18 +76,21 @@ const Index: FC = () => {
       'ui:widget': 'upload',
       'ui:options': {
         imageType: uploadType,
+        className: 'object-fit-contain',
       },
     },
     mobile_logo: {
       'ui:widget': 'upload',
       'ui:options': {
         imageType: uploadType,
+        className: 'object-fit-contain',
       },
     },
     square_icon: {
       'ui:widget': 'upload',
       'ui:options': {
         imageType: uploadType,
+        className: 'object-fit-contain',
       },
     },
     favicon: {
@@ -95,6 +98,7 @@ const Index: FC = () => {
       'ui:options': {
         acceptType: ',image/x-icon,image/vnd.microsoft.icon',
         imageType: uploadType,
+        className: 'object-fit-contain',
       },
     },
   };
