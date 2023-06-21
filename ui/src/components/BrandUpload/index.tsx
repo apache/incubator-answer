@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import { ButtonGroup, Button } from 'react-bootstrap';
 
+import classNames from 'classnames';
+
 import { Icon, UploadImg } from '@/components';
 import { UploadType } from '@/common/interface';
 
@@ -10,6 +12,7 @@ interface Props {
   onChange: (value: string) => void;
   acceptType?: string;
   readOnly?: boolean;
+  imgClassNames?: classNames.Argument;
 }
 
 const Index: FC<Props> = ({
@@ -18,6 +21,7 @@ const Index: FC<Props> = ({
   onChange,
   acceptType,
   readOnly = false,
+  imgClassNames = '',
 }) => {
   const onUpload = (imgPath: string) => {
     onChange(imgPath);
@@ -29,7 +33,13 @@ const Index: FC<Props> = ({
   return (
     <div className="d-flex">
       <div className="bg-gray-300 upload-img-wrap me-2 d-flex align-items-center justify-content-center">
-        <img src={value} alt="" height={100} />
+        <img
+          className={classNames(imgClassNames)}
+          src={value}
+          alt=""
+          height="100%"
+          width="100%"
+        />
       </div>
       <ButtonGroup vertical className="fit-content">
         <UploadImg

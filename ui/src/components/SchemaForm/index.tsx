@@ -314,6 +314,9 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
                 onChange={onChange}
                 formData={formData}
                 readOnly={readOnly}
+                imgClassNames={
+                  uiOpt && 'className' in uiOpt ? uiOpt.className : ''
+                }
               />
             ) : null}
             {widget === 'textarea' ? (

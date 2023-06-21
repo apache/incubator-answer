@@ -26,7 +26,6 @@ import FollowingTags from './FollowingTags';
 import QueryGroup from './QueryGroup';
 import BrandUpload from './BrandUpload';
 import SchemaForm, { JSONSchema, UISchema, initFormData } from './SchemaForm';
-import Labels from './LabelsCard';
 import DiffContent from './DiffContent';
 import Customize from './Customize';
 import CustomizeTheme from './CustomizeTheme';
@@ -74,7 +73,6 @@ export {
   BrandUpload,
   SchemaForm,
   initFormData,
-  Labels,
   DiffContent,
   Customize,
   CustomizeTheme,

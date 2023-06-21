@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import { Form } from 'react-bootstrap';
 
+import classNames from 'classnames';
+
 import type * as Type from '@/common/interface';
 import BrandUpload from '@/components/BrandUpload';
 
@@ -11,6 +13,7 @@ interface Props {
   onChange?: (fd: Type.FormDataType) => void;
   formData: Type.FormDataType;
   readOnly?: boolean;
+  imgClassNames?: classNames.Argument;
 }
 const Index: FC<Props> = ({
   type = 'avatar',
@@ -19,6 +22,7 @@ const Index: FC<Props> = ({
   onChange,
   formData,
   readOnly = false,
+  imgClassNames = '',
 }) => {
   const fieldObject = formData[fieldName];
   const handleChange = (name: string, value: string) => {
@@ -41,6 +45,7 @@ const Index: FC<Props> = ({
         value={fieldObject?.value}
         readOnly={readOnly}
         onChange={(value) => handleChange(fieldName, value)}
+        imgClassNames={imgClassNames}
       />
       <Form.Control
         name={fieldName}
