@@ -596,7 +596,7 @@ func (qs *QuestionCommon) SetCache(ctx context.Context, cachekey string, info in
 		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 
-	err = qs.data.Cache.SetString(ctx, cachekey, string(infoStr), schema.DashBoardCacheTime)
+	err = qs.data.Cache.SetString(ctx, cachekey, string(infoStr), schema.DashboardCacheTime)
 	if err != nil {
 		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}

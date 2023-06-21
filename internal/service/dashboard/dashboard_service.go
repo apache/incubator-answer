@@ -96,7 +96,7 @@ func (ds *dashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 }
 
 func (ds *dashboardService) getFromCache(ctx context.Context) (*schema.DashboardInfo, error) {
-	infoStr, err := ds.data.Cache.GetString(ctx, schema.DashBoardCachekey)
+	infoStr, err := ds.data.Cache.GetString(ctx, schema.DashboardCacheKey)
 	if err != nil {
 		return nil, err
 	}
@@ -109,7 +109,7 @@ func (ds *dashboardService) getFromCache(ctx context.Context) (*schema.Dashboard
 
 func (ds *dashboardService) setCache(ctx context.Context, info *schema.DashboardInfo) {
 	infoStr, _ := json.Marshal(info)
-	err := ds.data.Cache.SetString(ctx, schema.DashBoardCachekey, string(infoStr), schema.DashBoardCacheTime)
+	err := ds.data.Cache.SetString(ctx, schema.DashboardCacheKey, string(infoStr), schema.DashboardCacheTime)
 	if err != nil {
 		log.Errorf("set dashboard statistical failed: %s", err)
 	}
