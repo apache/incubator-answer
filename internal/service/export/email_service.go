@@ -106,6 +106,10 @@ func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body str
 		log.Errorf("get email config failed: %s", err)
 		return
 	}
+	if len(ec.SMTPHost) == 0 {
+		log.Warnf("smtp host is empty, skip send email")
+		return
+	}
 
 	m := gomail.NewMessage()
 	fromName := mime.QEncoding.Encode("utf-8", ec.FromName)
