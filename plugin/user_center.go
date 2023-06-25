@@ -33,6 +33,7 @@ type UserCenterDesc struct {
 	SignUpRedirectURL         string     `json:"sign_up_redirect_url"`
 	RankAgentEnabled          bool       `json:"rank_agent_enabled"`
 	UserStatusAgentEnabled    bool       `json:"user_status_agent_enabled"`
+	UserRoleAgentEnabled      bool       `json:"user_role_agent_enabled"`
 	MustAuthEmailEnabled      bool       `json:"must_auth_email_enabled"`
 	EnabledOriginalUserSystem bool       `json:"enabled_original_user_system"`
 }
