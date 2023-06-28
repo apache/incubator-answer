@@ -80,7 +80,7 @@ func (cr configRepo) GetConfigByKey(ctx context.Context, key string) (c *entity.
 
 func (cr configRepo) UpdateConfig(ctx context.Context, key string, value string) (err error) {
 	// check if key exists
-	oldConfig := &entity.Config{}
+	oldConfig := &entity.Config{Key: key}
 	exist, err := cr.data.DB.Context(ctx).Get(oldConfig)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

@@ -282,9 +282,11 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	}
 
 	// comments
-	objectIDs := []string{id}
+
+	objectIDs := []string{uid.DeShortID(id)}
 	for _, answer := range answers {
-		objectIDs = append(objectIDs, answer.ID)
+		answerID := uid.DeShortID(answer.ID)
+		objectIDs = append(objectIDs, answerID)
 	}
 	comments, err := tc.templateRenderController.CommentList(ctx, objectIDs)
 	if err != nil {
