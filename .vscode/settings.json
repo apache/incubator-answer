@@ -1,5 +1,6 @@
 {
   "eslint.workingDirectories": [
     "ui"
-  ]
+  ],
+  "explorer.autoReveal": "focusNoScroll"
 }
