@@ -2,6 +2,7 @@ package templaterender
 
 import (
 	"html/template"
+	"math"
 	"net/http"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -55,9 +56,10 @@ func (t *TemplateRenderController) Sitemap(ctx *gin.Context) {
 		log.Error("GetQuestionCount error", err)
 		return
 	}
-	var pageList []int64
-	for page := int64(1); page*constant.SitemapMaxSize < questionNum; page++ {
-		pageList = append(pageList, page)
+	var pageList []int
+	totalPages := int(math.Ceil(float64(questionNum) / float64(constant.SitemapMaxSize)))
+	for i := 1; i <= totalPages; i++ {
+		pageList = append(pageList, i)
 	}
 	ctx.HTML(
 		http.StatusOK, "sitemap-list.xml", gin.H{
