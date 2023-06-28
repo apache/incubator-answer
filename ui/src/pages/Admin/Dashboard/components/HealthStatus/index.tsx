@@ -58,7 +58,7 @@ const HealthStatus: FC<IProps> = ({ data }) => {
           </Col>
           <Col xs={6} className="mb-1">
             <span className="text-secondary me-1">{t('https')}</span>
-            <strong>{data.https ? t('yes') : t('yes')}</strong>
+            <strong>{data.https ? t('yes') : t('no')}</strong>
           </Col>
           <Col xs={6} className="mb-1">
             <span className="text-secondary me-1">{t('uploading_files')}</span>
