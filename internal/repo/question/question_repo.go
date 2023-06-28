@@ -253,6 +253,7 @@ func (qr *questionRepo) GetQuestionCountByIDs(ctx context.Context, ids []string)
 
 func (qr *questionRepo) SitemapQuestions(ctx context.Context, page, pageSize int) (
 	questionIDList []*schema.SiteMapQuestionInfo, err error) {
+	page = page - 1
 	questionIDList = make([]*schema.SiteMapQuestionInfo, 0)
 
 	// try to get sitemap data from cache
@@ -278,7 +279,7 @@ func (qr *questionRepo) SitemapQuestions(ctx context.Context, page, pageSize int
 
 	// warp data
 	for _, question := range rows {
-		item := &schema.SiteMapQuestionInfo{}
+		item := &schema.SiteMapQuestionInfo{ID: question.ID}
 		if handler.GetEnableShortID(ctx) {
 			item.ID = uid.EnShortID(question.ID)
 		}

@@ -3,11 +3,11 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"strings"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -50,10 +50,10 @@ type QuestionService struct {
 	metaService              *meta.MetaService
 	collectionCommon         *collectioncommon.CollectionCommon
 	answerActivityService    *activity.AnswerActivityService
-	data                     *data.Data
 	emailService             *export.EmailService
 	notificationQueueService notice_queue.NotificationQueueService
 	activityQueueService     activity_queue.ActivityQueueService
+	siteInfoService          siteinfo_common.SiteInfoCommonService
 }
 
 func NewQuestionService(
@@ -66,10 +66,10 @@ func NewQuestionService(
 	metaService *meta.MetaService,
 	collectionCommon *collectioncommon.CollectionCommon,
 	answerActivityService *activity.AnswerActivityService,
-	data *data.Data,
 	emailService *export.EmailService,
 	notificationQueueService notice_queue.NotificationQueueService,
 	activityQueueService activity_queue.ActivityQueueService,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 ) *QuestionService {
 	return &QuestionService{
 		questionRepo:             questionRepo,
@@ -81,10 +81,10 @@ func NewQuestionService(
 		metaService:              metaService,
 		collectionCommon:         collectionCommon,
 		answerActivityService:    answerActivityService,
-		data:                     data,
 		emailService:             emailService,
 		notificationQueueService: notificationQueueService,
 		activityQueueService:     activityQueueService,
+		siteInfoService:          siteInfoService,
 	}
 }
 
@@ -1339,5 +1339,11 @@ func (qs *QuestionService) changeQuestionToRevision(ctx context.Context, questio
 }
 
 func (qs *QuestionService) SitemapCron(ctx context.Context) {
+	siteSeo, err := qs.siteInfoService.GetSiteSeo(ctx)
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	ctx = context.WithValue(ctx, constant.ShortIDFlag, siteSeo.IsShortLink())
 	qs.questioncommon.SitemapCron(ctx)
 }

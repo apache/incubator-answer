@@ -558,7 +558,7 @@ func (qs *QuestionCommon) SitemapCron(ctx context.Context) {
 		return
 	}
 	if questionNum <= constant.SitemapMaxSize {
-		_, err = qs.questionRepo.SitemapQuestions(ctx, 0, int(questionNum))
+		_, err = qs.questionRepo.SitemapQuestions(ctx, 1, int(questionNum))
 		if err != nil {
 			log.Errorf("get site map question error: %v", err)
 		}

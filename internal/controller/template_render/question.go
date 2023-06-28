@@ -30,7 +30,7 @@ func (t *TemplateRenderController) Sitemap(ctx *gin.Context) {
 		return
 	}
 
-	questions, err := t.questionRepo.SitemapQuestions(ctx, 0, constant.SitemapMaxSize)
+	questions, err := t.questionRepo.SitemapQuestions(ctx, 1, constant.SitemapMaxSize)
 	if err != nil {
 		log.Errorf("get sitemap questions failed: %s", err)
 		return
