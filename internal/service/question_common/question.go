@@ -3,7 +3,6 @@ package questioncommon
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"math"
 	"time"
 
@@ -52,7 +51,7 @@ type QuestionRepo interface {
 	GetQuestionCount(ctx context.Context) (count int64, err error)
 	GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error)
 	GetQuestionCountByIDs(ctx context.Context, ids []string) (count int64, err error)
-	GetQuestionIDsPage(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error)
+	SitemapQuestions(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error)
 }
 
 // QuestionCommon user service
@@ -553,40 +552,26 @@ func (as *QuestionCommon) RemoveAnswer(ctx context.Context, id string) (err erro
 }
 
 func (qs *QuestionCommon) SitemapCron(ctx context.Context) {
-	data := &schema.SiteMapList{}
 	questionNum, err := qs.questionRepo.GetQuestionCount(ctx)
 	if err != nil {
-		log.Error("GetQuestionCount error", err)
+		log.Error(err)
 		return
 	}
-	if questionNum <= schema.SitemapMaxSize {
-		questionIDList, err := qs.questionRepo.GetQuestionIDsPage(ctx, 0, int(questionNum))
+	if questionNum <= constant.SitemapMaxSize {
+		_, err = qs.questionRepo.SitemapQuestions(ctx, 0, int(questionNum))
 		if err != nil {
-			log.Error("GetQuestionIDsPage error", err)
+			log.Errorf("get site map question error: %v", err)
+		}
+		return
+	}
+
+	totalPages := int(math.Ceil(float64(questionNum) / float64(constant.SitemapMaxSize)))
+	for i := 1; i <= totalPages; i++ {
+		_, err = qs.questionRepo.SitemapQuestions(ctx, i, constant.SitemapMaxSize)
+		if err != nil {
+			log.Errorf("get site map question error: %v", err)
 			return
 		}
-		data.QuestionIDs = questionIDList
-
-	} else {
-		nums := make([]int, 0)
-		totalpages := int(math.Ceil(float64(questionNum) / float64(schema.SitemapMaxSize)))
-		for i := 1; i <= totalpages; i++ {
-			siteMapPagedata := &schema.SiteMapPageList{}
-			nums = append(nums, i)
-			questionIDList, err := qs.questionRepo.GetQuestionIDsPage(ctx, i, int(schema.SitemapMaxSize))
-			if err != nil {
-				log.Error("GetQuestionIDsPage error", err)
-				return
-			}
-			siteMapPagedata.PageData = questionIDList
-			if setCacheErr := qs.SetCache(ctx, fmt.Sprintf(schema.SitemapPageCachekey, i), siteMapPagedata); setCacheErr != nil {
-				log.Errorf("set sitemap cron SetCache failed: %s", setCacheErr)
-			}
-		}
-		data.MaxPageNum = nums
-	}
-	if setCacheErr := qs.SetCache(ctx, schema.SitemapCachekey, data); setCacheErr != nil {
-		log.Errorf("set sitemap cron SetCache failed: %s", setCacheErr)
 	}
 }
 

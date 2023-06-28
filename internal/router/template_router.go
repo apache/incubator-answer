@@ -17,7 +17,6 @@ func NewTemplateRouter(
 	templateController *controller.TemplateController,
 	templateRenderController *templaterender.TemplateRenderController,
 	siteInfoController *controller_admin.SiteInfoController,
-
 ) *TemplateRouter {
 	return &TemplateRouter{
 		templateController:       templateController,
@@ -26,7 +25,7 @@ func NewTemplateRouter(
 	}
 }
 
-// TemplateRouter template router
+// RegisterTemplateRouter template router
 func (a *TemplateRouter) RegisterTemplateRouter(r *gin.RouterGroup) {
 	r.GET("/sitemap.xml", a.templateController.Sitemap)
 	r.GET("/sitemap/:page", a.templateController.SitemapPage)
@@ -35,7 +34,6 @@ func (a *TemplateRouter) RegisterTemplateRouter(r *gin.RouterGroup) {
 	r.GET("/custom.css", a.siteInfoController.GetCss)
 
 	r.GET("/", a.templateController.Index)
-	r.GET("/index", a.templateController.Index)
 
 	r.GET("/questions", a.templateController.QuestionList)
 	r.GET("/questions/:id", a.templateController.QuestionInfo)

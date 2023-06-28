@@ -2,7 +2,9 @@ package question
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"github.com/segmentfault/pacman/log"
 	"strings"
 	"time"
 	"unicode"
@@ -222,13 +224,13 @@ func (qr *questionRepo) GetQuestionList(ctx context.Context, question *entity.Qu
 }
 
 func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err error) {
-	questionList := make([]*entity.Question, 0)
-
-	count, err = qr.data.DB.Context(ctx).In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).FindAndCount(&questionList)
+	session := qr.data.DB.Context(ctx)
+	session.Where("status = ? OR status = ?", entity.QuestionStatusAvailable, entity.QuestionStatusClosed)
+	count, err = session.Count(&entity.Question{Show: entity.QuestionShow})
 	if err != nil {
-		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	return
+	return count, nil
 }
 
 func (qr *questionRepo) GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error) {
@@ -249,39 +251,50 @@ func (qr *questionRepo) GetQuestionCountByIDs(ctx context.Context, ids []string)
 	return
 }
 
-func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error) {
+func (qr *questionRepo) SitemapQuestions(ctx context.Context, page, pageSize int) (
+	questionIDList []*schema.SiteMapQuestionInfo, err error) {
 	questionIDList = make([]*schema.SiteMapQuestionInfo, 0)
+
+	// try to get sitemap data from cache
+	cacheKey := fmt.Sprintf(constant.SiteMapQuestionCacheKeyPrefix, page)
+	cacheData, err := qr.data.Cache.GetString(ctx, cacheKey)
+	if err == nil && len(cacheKey) > 0 {
+		_ = json.Unmarshal([]byte(cacheData), &questionIDList)
+		return questionIDList, nil
+	}
+
+	// get sitemap data from db
 	rows := make([]*entity.Question, 0)
-	if page > 0 {
-		page = page - 1
-	} else {
-		page = 0
-	}
-	if pageSize == 0 {
-		pageSize = constant.DefaultPageSize
-	}
-	offset := page * pageSize
-	session := qr.data.DB.Context(ctx).Table("question")
-	session = session.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed})
-	session.And("question.show = ?", entity.QuestionShow)
-	session = session.Limit(pageSize, offset)
-	session = session.OrderBy("question.created_at asc")
-	err = session.Select("id,title,created_at,post_update_time").Find(&rows)
+	session := qr.data.DB.Context(ctx)
+	session.Select("id,title,created_at,post_update_time")
+	session.Where("`show` = ?", entity.QuestionShow)
+	session.Where("status = ? OR status = ?", entity.QuestionStatusAvailable, entity.QuestionStatusClosed)
+	session.Limit(pageSize, page*pageSize)
+	session.Asc("created_at")
+	err = session.Find(&rows)
 	if err != nil {
 		return questionIDList, err
 	}
+
+	// warp data
 	for _, question := range rows {
 		item := &schema.SiteMapQuestionInfo{}
 		if handler.GetEnableShortID(ctx) {
 			item.ID = uid.EnShortID(question.ID)
 		}
 		item.Title = htmltext.UrlTitle(question.Title)
-		updateTime := fmt.Sprintf("%v", question.PostUpdateTime.Format(time.RFC3339))
-		if question.PostUpdateTime.Unix() < 1 {
-			updateTime = fmt.Sprintf("%v", question.CreatedAt.Format(time.RFC3339))
+		if question.PostUpdateTime.IsZero() {
+			item.UpdateTime = question.CreatedAt.Format(time.RFC3339)
+		} else {
+			item.UpdateTime = question.PostUpdateTime.Format(time.RFC3339)
 		}
-		item.UpdateTime = updateTime
 		questionIDList = append(questionIDList, item)
+	}
+
+	// set sitemap data to cache
+	cacheDataByte, _ := json.Marshal(questionIDList)
+	if err := qr.data.Cache.SetString(ctx, cacheKey, string(cacheDataByte), constant.SiteMapQuestionCacheTime); err != nil {
+		log.Error(err)
 	}
 	return questionIDList, nil
 }
