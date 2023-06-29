@@ -31,7 +31,8 @@ type VoteRepo interface {
 	VoteUpCancel(ctx context.Context, objectID string, userID, objectUserID string) (resp *schema.VoteResp, err error)
 	VoteDownCancel(ctx context.Context, objectID string, userID, objectUserID string) (resp *schema.VoteResp, err error)
 	GetVoteResultByObjectId(ctx context.Context, objectID string) (resp *schema.VoteResp, err error)
-	ListUserVotes(ctx context.Context, userID string, req schema.GetVoteWithPageReq, activityTypes []int) (voteList []entity.Activity, total int64, err error)
+	ListUserVotes(ctx context.Context, userID string, page int, pageSize int, activityTypes []int) (
+		voteList []entity.Activity, total int64, err error)
 }
 
 // VoteService user service
@@ -153,7 +154,7 @@ func (vs *VoteService) GetObjectUserID(ctx context.Context, objectID string) (us
 }
 
 // ListUserVotes list user's votes
-func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWithPageReq) (model *pager.PageModel, err error) {
+func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWithPageReq) (resp *pager.PageModel, err error) {
 	typeKeys := []string{
 		activity_type.QuestionVoteUp,
 		activity_type.QuestionVoteDown,
@@ -172,14 +173,14 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 		activityTypeMapping[cfg.ID] = typeKey
 	}
 
-	voteList, total, err := vs.voteRepo.ListUserVotes(ctx, req.UserID, req, activityTypes)
+	voteList, total, err := vs.voteRepo.ListUserVotes(ctx, req.UserID, req.Page, req.PageSize, activityTypes)
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	lang := handler.GetLangByCtx(ctx)
 
-	resp := make([]*schema.GetVoteWithPageResp, 0)
+	votes := make([]*schema.GetVoteWithPageResp, 0)
 	for _, voteInfo := range voteList {
 		objInfo, err := vs.objectService.GetInfo(ctx, voteInfo.ObjectID)
 		if err != nil {
@@ -202,7 +203,7 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 		if objInfo.QuestionStatus == entity.QuestionStatusDeleted {
 			item.Title = translator.Tr(lang, constant.DeletedQuestionTitleTrKey)
 		}
-		resp = append(resp, item)
+		votes = append(votes, item)
 	}
-	return pager.NewPageModel(total, resp), err
+	return pager.NewPageModel(total, votes), err
 }

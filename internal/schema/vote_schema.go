@@ -28,7 +28,7 @@ type GetVoteWithPageReq struct {
 	// page size
 	PageSize int `validate:"omitempty,min=1" form:"page_size"`
 	// user id
-	UserID string `validate:"required" form:"user_id"`
+	UserID string `json:"-"`
 }
 
 type VoteQuestion struct {

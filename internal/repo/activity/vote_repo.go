@@ -388,12 +388,8 @@ func (vr *VoteRepo) GetVoteResultByObjectId(ctx context.Context, objectID string
 	return resp, nil
 }
 
-func (vr *VoteRepo) ListUserVotes(
-	ctx context.Context,
-	userID string,
-	req schema.GetVoteWithPageReq,
-	activityTypes []int,
-) (voteList []entity.Activity, total int64, err error) {
+func (vr *VoteRepo) ListUserVotes(ctx context.Context, userID string,
+	page int, pageSize int, activityTypes []int) (voteList []entity.Activity, total int64, err error) {
 	session := vr.data.DB.Context(ctx)
 	cond := builder.
 		And(
@@ -402,9 +398,9 @@ func (vr *VoteRepo) ListUserVotes(
 			builder.In("activity_type", activityTypes),
 		)
 
-	session.Where(cond).OrderBy("updated_at desc")
+	session.Where(cond).Desc("updated_at")
 
-	total, err = pager.Help(req.Page, req.PageSize, &voteList, &entity.Activity{}, session)
+	total, err = pager.Help(page, pageSize, &voteList, &entity.Activity{}, session)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
