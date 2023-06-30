@@ -10,7 +10,6 @@ import (
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -54,9 +53,7 @@ func (vc *VoteController) VoteUp(ctx *gin.Context) {
 		return
 	}
 
-	dto := &schema.VoteDTO{}
-	_ = copier.Copy(dto, req)
-	resp, err := vc.VoteService.VoteUp(ctx, dto)
+	resp, err := vc.VoteService.VoteUp(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, schema.ErrTypeToast)
 	} else {
@@ -93,9 +90,7 @@ func (vc *VoteController) VoteDown(ctx *gin.Context) {
 		return
 	}
 
-	dto := &schema.VoteDTO{}
-	_ = copier.Copy(dto, req)
-	resp, err := vc.VoteService.VoteDown(ctx, dto)
+	resp, err := vc.VoteService.VoteDown(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, schema.ErrTypeToast)
 	} else {

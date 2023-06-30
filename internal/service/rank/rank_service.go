@@ -29,6 +29,10 @@ const (
 )
 
 type UserRankRepo interface {
+	GetMaxDailyRank(ctx context.Context) (maxDailyRank int, err error)
+	CheckReachLimit(ctx context.Context, session *xorm.Session, userID string, maxDailyRank int) (reach bool, err error)
+	ChangeUserRank(ctx context.Context, session *xorm.Session,
+		userID string, userCurrentScore, deltaRank int) (err error)
 	TriggerUserRank(ctx context.Context, session *xorm.Session, userId string, rank int, activityType int) (isReachStandard bool, err error)
 	UserRankPage(ctx context.Context, userId string, page, pageSize int) (rankPage []*entity.Activity, total int64, err error)
 }

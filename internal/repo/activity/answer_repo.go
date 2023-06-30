@@ -15,7 +15,6 @@ import (
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
 )
 
@@ -44,79 +43,6 @@ func NewAnswerActivityRepo(
 		userRankRepo:             userRankRepo,
 		notificationQueueService: notificationQueueService,
 	}
-}
-
-// NewQuestionActivityRepo new repository
-func NewQuestionActivityRepo(
-	data *data.Data,
-	activityRepo activity_common.ActivityRepo,
-	userRankRepo rank.UserRankRepo,
-) activity.QuestionActivityRepo {
-	return &AnswerActivityRepo{
-		data:         data,
-		activityRepo: activityRepo,
-		userRankRepo: userRankRepo,
-	}
-}
-
-func (ar *AnswerActivityRepo) DeleteQuestion(ctx context.Context, questionID string) (err error) {
-	questionInfo := &entity.Question{}
-	exist, err := ar.data.DB.Context(ctx).Where("id = ?", questionID).Get(questionInfo)
-	if err != nil {
-		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if !exist {
-		return nil
-	}
-
-	// get all this object activity
-	activityList := make([]*entity.Activity, 0)
-	session := ar.data.DB.Context(ctx).Where("has_rank = 1")
-	session.Where("cancelled = ?", entity.ActivityAvailable)
-	err = session.Find(&activityList, &entity.Activity{ObjectID: questionID})
-	if err != nil {
-		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if len(activityList) == 0 {
-		return nil
-	}
-
-	log.Infof("questionInfo %s deleted will rollback activity %d", questionID, len(activityList))
-
-	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
-		session = session.Context(ctx)
-		for _, act := range activityList {
-			log.Infof("user %s rollback rank %d", act.UserID, -act.Rank)
-			_, e := ar.userRankRepo.TriggerUserRank(
-				ctx, session, act.UserID, -act.Rank, act.ActivityType)
-			if e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			}
-
-			if _, e := session.Where("id = ?", act.ID).Cols("cancelled", "cancelled_at").
-				Update(&entity.Activity{Cancelled: entity.ActivityCancelled, CancelledAt: time.Now()}); e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			}
-		}
-		return nil, nil
-	})
-	if err != nil {
-		return err
-	}
-
-	// get all answers
-	answerList := make([]*entity.Answer, 0)
-	err = ar.data.DB.Context(ctx).Find(&answerList, &entity.Answer{QuestionID: questionID})
-	if err != nil {
-		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	for _, answerInfo := range answerList {
-		err = ar.DeleteAnswer(ctx, answerInfo.ID)
-		if err != nil {
-			log.Error(err)
-		}
-	}
-	return
 }
 
 // AcceptAnswer accept other answer
@@ -305,51 +231,4 @@ func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
 		}
 	}
 	return err
-}
-
-func (ar *AnswerActivityRepo) DeleteAnswer(ctx context.Context, answerID string) (err error) {
-	answerInfo := &entity.Answer{}
-	exist, err := ar.data.DB.Context(ctx).Where("id = ?", answerID).Get(answerInfo)
-	if err != nil {
-		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if !exist {
-		return nil
-	}
-
-	// get all this object activity
-	activityList := make([]*entity.Activity, 0)
-	session := ar.data.DB.Context(ctx).Where("has_rank = 1")
-	session.Where("cancelled = ?", entity.ActivityAvailable)
-	err = session.Find(&activityList, &entity.Activity{ObjectID: answerID})
-	if err != nil {
-		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if len(activityList) == 0 {
-		return nil
-	}
-
-	log.Infof("answerInfo %s deleted will rollback activity %d", answerID, len(activityList))
-
-	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
-		session = session.Context(ctx)
-		for _, act := range activityList {
-			log.Infof("user %s rollback rank %d", act.UserID, -act.Rank)
-			_, e := ar.userRankRepo.TriggerUserRank(
-				ctx, session, act.UserID, -act.Rank, act.ActivityType)
-			if e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			}
-
-			if _, e := session.Where("id = ?", act.ID).Cols("cancelled", "cancelled_at").
-				Update(&entity.Activity{Cancelled: entity.ActivityCancelled, CancelledAt: time.Now()}); e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			}
-		}
-		return nil, nil
-	})
-	if err != nil {
-		return err
-	}
-	return
 }

@@ -195,7 +195,7 @@ func (ur *userRepo) GetByUsername(ctx context.Context, username string) (userInf
 
 func (ur *userRepo) GetByUsernames(ctx context.Context, usernames []string) ([]*entity.User, error) {
 	list := make([]*entity.User, 0)
-	err := ur.data.DB.Where("status =?", entity.UserStatusAvailable).In("username", usernames).Find(&list)
+	err := ur.data.DB.Context(ctx).Where("status =?", entity.UserStatusAvailable).In("username", usernames).Find(&list)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return list, err

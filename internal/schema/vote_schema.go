@@ -6,20 +6,44 @@ type VoteReq struct {
 	UserID   string `json:"-"`
 }
 
-type VoteDTO struct {
-	// object TagID
-	ObjectID string
-	// is cancel
-	IsCancel bool
-	// user TagID
-	UserID string
+type VoteResp struct {
+	UpVotes    int64  `json:"up_votes"`
+	DownVotes  int64  `json:"down_votes"`
+	Votes      int64  `json:"votes"`
+	VoteStatus string `json:"vote_status"`
 }
 
-type VoteResp struct {
-	UpVotes    int    `json:"up_votes"`
-	DownVotes  int    `json:"down_votes"`
-	Votes      int    `json:"votes"`
-	VoteStatus string `json:"vote_status"`
+// VoteOperationInfo vote operation info
+type VoteOperationInfo struct {
+	// operation object id
+	ObjectID string
+	// question answer comment
+	ObjectType string
+	// object owner user id
+	ObjectCreatorUserID string
+	// operation user id
+	OperatingUserID string
+	// vote up
+	VoteUp bool
+	// vote down
+	VoteDown bool
+	// vote activity info
+	Activities []*VoteActivity
+}
+
+// VoteActivity vote activity
+type VoteActivity struct {
+	ActivityType   int
+	ActivityUserID string
+	TriggerUserID  string
+	Rank           int
+}
+
+func (v *VoteActivity) HasRank() int {
+	if v.Rank != 0 {
+		return 1
+	}
+	return 0
 }
 
 type GetVoteWithPageReq struct {
@@ -29,22 +53,6 @@ type GetVoteWithPageReq struct {
 	PageSize int `validate:"omitempty,min=1" form:"page_size"`
 	// user id
 	UserID string `json:"-"`
-}
-
-type VoteQuestion struct {
-	// object ID
-	ID string `json:"id"`
-	// title
-	Title string `json:"title"`
-}
-
-type VoteAnswer struct {
-	// object ID
-	ID string `json:"id"`
-	// question ID
-	QuestionID string `json:"question_id"`
-	// title
-	Title string `json:"title"`
 }
 
 type GetVoteWithPageResp struct {

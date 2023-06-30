@@ -74,7 +74,7 @@ func (ar *FollowRepo) GetFollowUserIDs(ctx context.Context, objectID string) (us
 	if err != nil {
 		return nil, err
 	}
-	activityType, err := ar.activityRepo.GetActivityTypeByObjKey(ctx, objectTypeStr, "follow")
+	activityType, err := ar.activityRepo.GetActivityTypeByObjectType(ctx, objectTypeStr, "follow")
 	if err != nil {
 		log.Errorf("can't get activity type by object key: %s", objectTypeStr)
 		return nil, err
@@ -96,7 +96,7 @@ func (ar *FollowRepo) GetFollowUserIDs(ctx context.Context, objectID string) (us
 // GetFollowIDs get all follow id list
 func (ar *FollowRepo) GetFollowIDs(ctx context.Context, userID, objectKey string) (followIDs []string, err error) {
 	followIDs = make([]string, 0)
-	activityType, err := ar.activityRepo.GetActivityTypeByObjKey(ctx, objectKey, "follow")
+	activityType, err := ar.activityRepo.GetActivityTypeByObjectType(ctx, objectKey, "follow")
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -118,7 +118,7 @@ func (ar *FollowRepo) IsFollowed(ctx context.Context, userID, objectID string) (
 		return false, err
 	}
 
-	activityType, err := ar.activityRepo.GetActivityTypeByObjKey(ctx, objectKey, "follow")
+	activityType, err := ar.activityRepo.GetActivityTypeByObjectType(ctx, objectKey, "follow")
 	if err != nil {
 		return false, err
 	}

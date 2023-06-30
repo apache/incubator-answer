@@ -41,12 +41,12 @@ func NewActivityRepo(
 
 func (ar *ActivityRepo) GetActivityTypeByObjID(ctx context.Context, objectID string, action string) (
 	activityType, rank, hasRank int, err error) {
-	objectKey, err := obj.GetObjectTypeStrByObjectID(objectID)
+	objectType, err := obj.GetObjectTypeStrByObjectID(objectID)
 	if err != nil {
 		return
 	}
 
-	confKey := fmt.Sprintf("%s.%s", objectKey, action)
+	confKey := fmt.Sprintf("%s.%s", objectType, action)
 	cfg, err := ar.configService.GetConfigByKey(ctx, confKey)
 	if err != nil {
 		return
@@ -59,8 +59,8 @@ func (ar *ActivityRepo) GetActivityTypeByObjID(ctx context.Context, objectID str
 	return
 }
 
-func (ar *ActivityRepo) GetActivityTypeByObjKey(ctx context.Context, objectKey, action string) (activityType int, err error) {
-	configKey := fmt.Sprintf("%s.%s", objectKey, action)
+func (ar *ActivityRepo) GetActivityTypeByObjectType(ctx context.Context, objectType, action string) (activityType int, err error) {
+	configKey := fmt.Sprintf("%s.%s", objectType, action)
 	cfg, err := ar.configService.GetConfigByKey(ctx, configKey)
 	if err != nil {
 		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
