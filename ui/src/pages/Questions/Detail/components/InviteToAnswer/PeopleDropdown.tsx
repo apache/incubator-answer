@@ -130,6 +130,7 @@ const Index: FC<Props> = ({
           {toggleState ? (
             <Form.Control
               autoFocus
+              type="search"
               placeholder={t('search')}
               value={searchValue}
               onChange={handleSearch}

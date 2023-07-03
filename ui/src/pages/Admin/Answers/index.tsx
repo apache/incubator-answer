@@ -103,7 +103,7 @@ const Answers: FC = () => {
           value={curQuery}
           onChange={handleFilter}
           size="sm"
-          type="input"
+          type="search"
           placeholder={t('filter.placeholder')}
           style={{ width: '12.25rem' }}
         />

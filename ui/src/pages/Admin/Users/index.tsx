@@ -193,6 +193,7 @@ const Users: FC = () => {
 
         <Form.Control
           size="sm"
+          type="search"
           value={curQuery}
           onChange={handleFilter}
           placeholder={t('filter.placeholder')}

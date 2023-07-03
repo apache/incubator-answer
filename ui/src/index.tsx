@@ -22,7 +22,8 @@ document.addEventListener(
     }
 
     if (/IMG/.test(target.nodeName)) {
-      if (!target.getAttribute('alt')) {
+      const altText = target.getAttribute('alt')?.trim();
+      if (!altText) {
         target.classList.add('invisible');
       }
     }

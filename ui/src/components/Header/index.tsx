@@ -178,6 +178,7 @@ const Header: FC = () => {
               className="w-100 maxw-400"
               onSubmit={handleSearch}>
               <FormControl
+                type="search"
                 placeholder={t('header.search.placeholder')}
                 className="placeholder-search"
                 value={searchStr}
