@@ -10,6 +10,24 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,
 );
 
+/**
+ * Uniformly hide broken images
+ */
+document.addEventListener(
+  'error',
+  (err) => {
+    const { target } = err;
+    if (target === null || !(target instanceof Element)) {
+      return;
+    }
+
+    if (/IMG/.test(target.nodeName)) {
+      target.classList.add('invisible');
+    }
+  },
+  true,
+);
+
 root.render(
   <React.StrictMode>
     <App />
