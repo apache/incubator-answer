@@ -112,7 +112,7 @@ const Users: FC = () => {
                   <td className="text-end">
                     <Dropdown>
                       <Dropdown.Toggle variant="link" className="no-toggle">
-                        <Icon name="three-dots-vertical" />
+                        <Icon name="three-dots-vertical" title={t('action')} />
                       </Dropdown.Toggle>
                       <Dropdown.Menu>
                         {plugin.enabled ? (

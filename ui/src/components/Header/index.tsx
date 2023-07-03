@@ -45,7 +45,7 @@ const Header: FC = () => {
   const siteInfo = siteInfoStore((state) => state.siteInfo);
   const brandingInfo = brandingStore((state) => state.branding);
   const loginSetting = loginSettingStore((state) => state.login);
-  const { updateReiview, updateVisible } = sideNavStore();
+  const { updateReview, updateVisible } = sideNavStore();
   const { data: redDot } = useQueryNotificationStatus();
   /**
    * Automatically append `tag` information when creating a question
@@ -57,7 +57,7 @@ const Header: FC = () => {
   }
 
   useEffect(() => {
-    updateReiview({
+    updateReview({
       can_revision: Boolean(redDot?.can_revision),
       revision: Number(redDot?.revision),
     });
@@ -126,13 +126,13 @@ const Header: FC = () => {
                 <img
                   className="d-none d-lg-block logo me-0"
                   src={brandingInfo.logo}
-                  alt=""
+                  alt={siteInfo.name}
                 />
 
                 <img
                   className="lg-none logo me-0"
                   src={brandingInfo.mobile_logo || brandingInfo.logo}
-                  alt=""
+                  alt={siteInfo.name}
                 />
               </>
             ) : (
@@ -178,6 +178,7 @@ const Header: FC = () => {
               className="w-100 maxw-400"
               onSubmit={handleSearch}>
               <FormControl
+                type="search"
                 placeholder={t('header.search.placeholder')}
                 className="placeholder-search"
                 value={searchStr}

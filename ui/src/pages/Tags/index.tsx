@@ -62,7 +62,7 @@ const Tags = () => {
                 <Form.Control
                   value={searchTag}
                   placeholder={t('search_placeholder')}
-                  type="text"
+                  type="search"
                   onChange={handleChange}
                   size="sm"
                 />

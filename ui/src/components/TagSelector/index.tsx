@@ -246,8 +246,9 @@ const TagSelector: FC<IProps> = ({
                       e.preventDefault();
                     }}>
                     <FormControl
-                      placeholder={t('search_tag')}
                       autoFocus
+                      type="search"
+                      placeholder={t('search_tag')}
                       value={searchValue}
                       onChange={handleSearch}
                     />

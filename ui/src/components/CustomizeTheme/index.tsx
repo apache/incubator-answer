@@ -34,7 +34,10 @@ const Index: FC = () => {
                 --bs-primary-rgb: ${primaryColor.rgb().array().join(',')};
                 --bs-link-color: ${primaryColor.hex()};
                 --bs-link-color-rgb: ${primaryColor.rgb().array().join(',')};
-                --bs-link-hover-color: ${shiftColor(primaryColor, 0.8)};
+                --bs-link-hover-color: ${shiftColor(primaryColor, 0.8).hex()};
+                --bs-link-hover-color-rgb: ${shiftColor(primaryColor, 0.8)
+                  .round()
+                  .array()}
               }
               .nav-pills {
                 --bs-nav-pills-link-active-bg: ${primaryColor.hex()};

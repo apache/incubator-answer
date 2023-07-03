@@ -353,6 +353,7 @@ const Index: React.FC = () => {
                         count > 0 ? `&t=${new Date().valueOf()}` : ''
                       }`}
                       className="me-3 rounded"
+                      alt={formData.display_name.value}
                     />
                     <Form.Text className="text-muted mt-1">
                       <span>{t('avatar.gravatar_text')}</span>
@@ -381,6 +382,7 @@ const Index: React.FC = () => {
                         searchStr="s=256"
                         avatar={formData.avatar.custom}
                         className="me-2 bg-gray-300 "
+                        alt={formData.display_name.value}
                       />
                       <ButtonGroup vertical className="fit-content">
                         <UploadImg
@@ -405,7 +407,11 @@ const Index: React.FC = () => {
                   </Stack>
                 )}
                 {formData.avatar.type === 'default' && (
-                  <Avatar size="160px" avatar="" />
+                  <Avatar
+                    size="160px"
+                    avatar=""
+                    alt={formData.display_name.value}
+                  />
                 )}
               </div>
             </ImgViewer>

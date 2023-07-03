@@ -73,6 +73,7 @@ const Index: React.FC<IProps> = ({
               <Button
                 onClick={refreshImgCode}
                 variant="outline-secondary"
+                title={t('refresh', { keyPrefix: 'btns' })}
                 style={{
                   borderTopRightRadius: '0.375rem',
                   borderBottomRightRadius: '0.375rem',

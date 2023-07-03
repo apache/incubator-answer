@@ -131,6 +131,7 @@ const Index: FC<Props> = ({ className, data, source }) => {
       {!data?.hideCollect && (
         <Button
           variant="outline-secondary ms-3"
+          title={t('question_detail.question_bookmark')}
           active={bookmarkState.state}
           onClick={handleBookmark}>
           <Icon name="bookmark-fill" />

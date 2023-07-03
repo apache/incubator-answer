@@ -62,29 +62,7 @@ const Index: React.FC<Props> = ({ callback }) => {
 
   const checkValidated = (): boolean => {
     let bol = true;
-    const { name, e_mail, pass } = formData;
-    if (!name.value) {
-      bol = false;
-      formData.name = {
-        value: '',
-        isInvalid: true,
-        errorMsg: t('name.msg.empty'),
-      };
-    } else if (/[^a-z0-9\-._]/.test(name.value)) {
-      bol = false;
-      formData.name = {
-        value: name.value,
-        isInvalid: true,
-        errorMsg: t('name.msg.character'),
-      };
-    } else if ([...name.value].length > 30) {
-      bol = false;
-      formData.name = {
-        value: name.value,
-        isInvalid: true,
-        errorMsg: t('name.msg.range'),
-      };
-    }
+    const { e_mail, pass } = formData;
 
     if (!e_mail.value) {
       bol = false;

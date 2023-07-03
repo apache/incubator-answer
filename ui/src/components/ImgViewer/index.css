@@ -2,6 +2,6 @@
   cursor: zoom-out !important;
 }
 
-.img-viewer img:not(a img, img.broken) {
+.img-viewer img:not(a img, img.broken, img.invisible) {
   cursor: zoom-in;
 }

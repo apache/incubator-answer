@@ -347,6 +347,7 @@ const Ask = () => {
             <Form.Group controlId="title" className="mb-3">
               <Form.Label>{t('form.fields.title.label')}</Form.Label>
               <Form.Control
+                type="text"
                 value={formData.title.value}
                 isInvalid={formData.title.isInvalid}
                 onChange={handleTitleChange}

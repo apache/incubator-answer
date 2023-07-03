@@ -17,7 +17,7 @@ const Icon: FC<IProps> = ({
   className,
   size,
   onClick,
-  title = '',
+  title,
 }) => {
   return (
     <i

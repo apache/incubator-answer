@@ -112,7 +112,7 @@ const Questions: FC = () => {
         <Form.Control
           value={curQuery}
           size="sm"
-          type="input"
+          type="search"
           placeholder={t('filter.placeholder')}
           onChange={handleFilter}
           style={{ width: '12.25rem' }}
