@@ -147,6 +147,7 @@ const Index = () => {
             <Form.Group controlId="display_name" className="mb-3">
               <Form.Label>{t('form.fields.display_name.label')}</Form.Label>
               <Form.Control
+                type="text"
                 value={formData.displayName.value}
                 isInvalid={formData.displayName.isInvalid}
                 disabled={role_id !== 2 && role_id !== 3}
@@ -160,6 +161,7 @@ const Index = () => {
             <Form.Group controlId="slug_name" className="mb-3">
               <Form.Label>{t('form.fields.slug_name.label')}</Form.Label>
               <Form.Control
+                type="text"
                 value={formData.slugName.value}
                 isInvalid={formData.slugName.isInvalid}
                 disabled={role_id !== 2 && role_id !== 3}

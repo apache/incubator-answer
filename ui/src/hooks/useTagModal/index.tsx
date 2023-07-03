@@ -201,6 +201,7 @@ const useTagModal = (props: IProps = {}) => {
             <Form.Group controlId="displayName" className="mb-3">
               <Form.Label>{t('form.fields.display_name.label')}</Form.Label>
               <Form.Control
+                type="text"
                 value={formData.displayName.value}
                 onChange={handleDisplayNameChange}
                 isInvalid={formData.displayName.isInvalid}
@@ -212,6 +213,7 @@ const useTagModal = (props: IProps = {}) => {
             <Form.Group controlId="slugName" className="mb-3">
               <Form.Label>{t('form.fields.slug_name.label')}</Form.Label>
               <Form.Control
+                type="text"
                 value={formData.slugName.value}
                 onChange={handleSlugNameChange}
                 isInvalid={formData.slugName.isInvalid}
