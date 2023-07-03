@@ -33,6 +33,7 @@ const Index: FC<Props> = ({
               size={avatarSize}
               className={`me-1 ${avatarClass}`}
               searchStr={avatarSearchStr}
+              alt={data?.display_name}
             />
           )}
           <span className="me-1 text-break">{data?.display_name}</span>
@@ -45,6 +46,7 @@ const Index: FC<Props> = ({
               size={avatarSize}
               className={`me-1 ${avatarClass}`}
               searchStr={avatarSearchStr}
+              alt={data?.display_name}
             />
           )}
           <span className="me-1 text-break">{data?.display_name}</span>

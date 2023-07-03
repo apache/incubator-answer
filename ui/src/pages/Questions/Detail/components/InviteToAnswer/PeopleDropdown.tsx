@@ -145,7 +145,12 @@ const Index: FC<Props> = ({
               active={idx === currentIndex}
               className={idx === 0 ? 'mt-2' : ''}>
               <div className="d-flex align-items-center text-nowrap">
-                <Avatar avatar={p.avatar} size="24" className="rounded-1" />
+                <Avatar
+                  avatar={p.avatar}
+                  size="24"
+                  alt={p.display_name}
+                  className="rounded-1"
+                />
                 <div className="d-flex flex-wrap text-truncate">
                   <span className="ms-2 text-truncate">{p.display_name}</span>
                   <small className="text-secondary text-truncate ms-2">

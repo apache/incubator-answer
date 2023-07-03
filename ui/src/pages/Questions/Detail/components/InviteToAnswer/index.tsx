@@ -119,6 +119,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
                     avatar={user.avatar}
                     size="20"
                     className="rounded-1"
+                    alt={user.display_name}
                   />
                   <span className="text-nowrap ms-2">{user.display_name}</span>
                   {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
@@ -135,7 +136,12 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
                 key={user.username}
                 to={`/users/${user.username}`}
                 className="mx-2 my-1 d-inline-flex flex-nowrap">
-                <Avatar avatar={user.avatar} size="24" className="rounded-1" />
+                <Avatar
+                  avatar={user.avatar}
+                  size="24"
+                  alt={user.display_name}
+                  className="rounded-1"
+                />
                 <small className="text-nowrap ms-2">{user.display_name}</small>
               </Link>
             );

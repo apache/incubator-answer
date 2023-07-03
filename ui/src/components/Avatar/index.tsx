@@ -11,7 +11,7 @@ interface IProps {
   size: string;
   searchStr?: string;
   className?: string;
-  alt?: string;
+  alt: string;
 }
 
 const Index: FC<IProps> = ({
