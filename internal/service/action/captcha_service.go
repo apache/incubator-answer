@@ -121,7 +121,7 @@ func (cs *CaptchaService) GenerateCaptcha(ctx context.Context) (key, captchaBase
 		ShowLineOptions: 2 | 4,
 		Length:          4,
 		Source:          "1234567890qwertyuioplkjhgfdsazxcvbnm",
-		BgColor:         &color.RGBA{R: 3, G: 102, B: 214, A: 125},
+		BgColor:         &color.RGBA{R: 247, G: 248, B: 249, A: 255},
 		Fonts:           []string{"wqy-microhei.ttc"},
 	}
 	driver := driverString.ConvertFonts()
