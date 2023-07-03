@@ -45,7 +45,6 @@ import (
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/action"
 	activity2 "github.com/answerdev/answer/internal/service/activity"
-	activity_common2 "github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/answer_common"
 	auth2 "github.com/answerdev/answer/internal/service/auth"
@@ -172,7 +171,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	collectionService := service.NewCollectionService(collectionRepo, collectionGroupRepo, questionCommon)
 	collectionController := controller.NewCollectionController(collectionService)
 	answerActivityRepo := activity.NewAnswerActivityRepo(dataData, activityRepo, userRankRepo, notificationQueueService)
-	answerActivityService := activity2.NewAnswerActivityService(answerActivityRepo)
+	answerActivityService := activity2.NewAnswerActivityService(answerActivityRepo, configService)
 	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, userRepo, revisionService, metaService, collectionCommon, answerActivityService, emailService, notificationQueueService, activityQueueService, siteInfoCommonService)
 	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService, userRoleRelService, notificationQueueService, activityQueueService)
 	questionController := controller.NewQuestionController(questionService, answerService, rankService, siteInfoCommonService)
@@ -205,11 +204,10 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	dashboardController := controller.NewDashboardController(dashboardService)
 	uploaderService := uploader.NewUploaderService(serviceConf, siteInfoCommonService)
 	uploadController := controller.NewUploadController(uploaderService)
-	activityCommon := activity_common2.NewActivityCommon(activityRepo, activityQueueService)
 	activityActivityRepo := activity.NewActivityRepo(dataData, configService)
 	commentCommonService := comment_common.NewCommentCommonService(commentCommonRepo)
-	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, activityCommon, tagCommonService, objService, commentCommonService, revisionService, metaService, configService)
-	activityController := controller.NewActivityController(activityCommon, activityService)
+	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, tagCommonService, objService, commentCommonService, revisionService, metaService, configService)
+	activityController := controller.NewActivityController(activityService)
 	roleController := controller_admin.NewRoleController(roleService)
 	pluginConfigRepo := plugin_config.NewPluginConfigRepo(dataData)
 	pluginCommonService := plugin_common.NewPluginCommonService(pluginConfigRepo, configService)
