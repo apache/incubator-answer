@@ -504,6 +504,7 @@ ui:
     title: Notifications
     inbox: Inbox
     achievement: Achievements
+    new_alerts: New alerts
     all_read: Mark all as read
     show_more: Show more
     someone: Someone
@@ -729,7 +730,7 @@ ui:
     tip_answer: >-
       Use comments to reply to other users or notify them of changes. If you are
       adding new information, edit your post instead of commenting.
-    tip_vote: It adds something useful to the post
+    tip_vote: It is useful
   edit_answer:
     title: Edit Answer
     default_reason: Edit answer
@@ -940,7 +941,6 @@ ui:
         gravatar: Gravatar
         gravatar_text: You can change image on
         custom: Custom
-        btn_refresh: Refresh
         custom_text: You can upload your image.
         default: System
         msg: Please upload an avatar
@@ -1025,6 +1025,7 @@ ui:
     useful: Useful
     question_useful: It is useful and clear
     question_un_useful: It is unclear or not useful
+    question_bookmark: Bookmark this question
     answer_useful: It is useful
     answer_un_useful: It is not useful
     answers:
@@ -1092,6 +1093,7 @@ ui:
     question: Question
     answer: Answer
     comment: Comment
+    refresh: Refresh
   search:
     title: Search Results
     keywords: Keywords

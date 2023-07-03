@@ -67,9 +67,11 @@ const Index: FC<Props> = ({
       }, 100);
     }
   }, [data.id, answerRef.current]);
+
   if (!data?.id) {
     return null;
   }
+
   return (
     <div id={data.id} ref={answerRef} className="answer-item py-4">
       {data.status === 10 && (

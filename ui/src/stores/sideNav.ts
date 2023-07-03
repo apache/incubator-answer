@@ -10,7 +10,7 @@ interface ErrorCodeType {
   can_revision: boolean;
   revision: number;
   updateVisible: () => void;
-  updateReiview: (params: reviewData) => void;
+  updateReview: (params: reviewData) => void;
 }
 
 const Index = create<ErrorCodeType>((set) => ({
@@ -22,7 +22,7 @@ const Index = create<ErrorCodeType>((set) => ({
       return { visible: !state.visible };
     });
   },
-  updateReiview: (params: reviewData) => {
+  updateReview: (params: reviewData) => {
     set(() => {
       return { ...params };
     });

@@ -22,7 +22,9 @@ document.addEventListener(
     }
 
     if (/IMG/.test(target.nodeName)) {
-      target.classList.add('invisible');
+      if (!target.getAttribute('alt')) {
+        target.classList.add('invisible');
+      }
     }
   },
   true,

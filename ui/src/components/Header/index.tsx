@@ -45,7 +45,7 @@ const Header: FC = () => {
   const siteInfo = siteInfoStore((state) => state.siteInfo);
   const brandingInfo = brandingStore((state) => state.branding);
   const loginSetting = loginSettingStore((state) => state.login);
-  const { updateReiview, updateVisible } = sideNavStore();
+  const { updateReview, updateVisible } = sideNavStore();
   const { data: redDot } = useQueryNotificationStatus();
   /**
    * Automatically append `tag` information when creating a question
@@ -57,7 +57,7 @@ const Header: FC = () => {
   }
 
   useEffect(() => {
-    updateReiview({
+    updateReview({
       can_revision: Boolean(redDot?.can_revision),
       revision: Number(redDot?.revision),
     });
