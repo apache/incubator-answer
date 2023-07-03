@@ -146,6 +146,7 @@ func (ns *NotificationService) GetNotificationPage(ctx context.Context, searchCo
 func (ns *NotificationService) formatNotificationPage(ctx context.Context, notifications []*entity.Notification) (
 	resp []*schema.NotificationContent, err error) {
 	lang := handler.GetLangByCtx(ctx)
+	enableShortID := handler.GetEnableShortID(ctx)
 	for _, notificationInfo := range notifications {
 		item := &schema.NotificationContent{}
 		if err := json.Unmarshal([]byte(notificationInfo.Content), item); err != nil {
@@ -163,17 +164,19 @@ func (ns *NotificationService) formatNotificationPage(ctx context.Context, notif
 		item.UpdateTime = notificationInfo.UpdatedAt.Unix()
 		item.IsRead = notificationInfo.IsRead == schema.NotificationRead
 
-		if answerID, ok := item.ObjectInfo.ObjectMap["answer"]; ok {
-			if item.ObjectInfo.ObjectID == answerID {
-				item.ObjectInfo.ObjectID = uid.EnShortID(item.ObjectInfo.ObjectMap["answer"])
+		if enableShortID {
+			if answerID, ok := item.ObjectInfo.ObjectMap["answer"]; ok {
+				if item.ObjectInfo.ObjectID == answerID {
+					item.ObjectInfo.ObjectID = uid.EnShortID(item.ObjectInfo.ObjectMap["answer"])
+				}
+				item.ObjectInfo.ObjectMap["answer"] = uid.EnShortID(item.ObjectInfo.ObjectMap["answer"])
 			}
-			item.ObjectInfo.ObjectMap["answer"] = uid.EnShortID(item.ObjectInfo.ObjectMap["answer"])
-		}
-		if questionID, ok := item.ObjectInfo.ObjectMap["question"]; ok {
-			if item.ObjectInfo.ObjectID == questionID {
-				item.ObjectInfo.ObjectID = uid.EnShortID(item.ObjectInfo.ObjectMap["question"])
+			if questionID, ok := item.ObjectInfo.ObjectMap["question"]; ok {
+				if item.ObjectInfo.ObjectID == questionID {
+					item.ObjectInfo.ObjectID = uid.EnShortID(item.ObjectInfo.ObjectMap["question"])
+				}
+				item.ObjectInfo.ObjectMap["question"] = uid.EnShortID(item.ObjectInfo.ObjectMap["question"])
 			}
-			item.ObjectInfo.ObjectMap["question"] = uid.EnShortID(item.ObjectInfo.ObjectMap["question"])
 		}
 
 		resp = append(resp, item)

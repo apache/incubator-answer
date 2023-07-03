@@ -27,7 +27,7 @@ type UserCenterLoginService struct {
 	userExternalLoginRepo UserExternalLoginRepo
 	userCommonService     *usercommon.UserCommon
 	userActivity          activity.UserActiveActivityRepo
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService
 }
 
 // NewUserCenterLoginService new user external login service
@@ -36,7 +36,7 @@ func NewUserCenterLoginService(
 	userCommonService *usercommon.UserCommon,
 	userExternalLoginRepo UserExternalLoginRepo,
 	userActivity activity.UserActiveActivityRepo,
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
 ) *UserCenterLoginService {
 	return &UserCenterLoginService{
 		userRepo:              userRepo,
@@ -228,10 +228,10 @@ func (us *UserCenterLoginService) UserCenterAdminFunctionAgent(ctx context.Conte
 	desc := userCenter.Description()
 	// If user status agent is enabled, admin can not update user status in answer.
 	resp.AllowUpdateUserStatus = !desc.UserStatusAgentEnabled
+	resp.AllowUpdateUserRole = !desc.UserRoleAgentEnabled
 
 	// If original user system is enabled, admin can update user password and role in answer.
 	resp.AllowUpdateUserPassword = desc.EnabledOriginalUserSystem
-	resp.AllowUpdateUserRole = desc.EnabledOriginalUserSystem
 	resp.AllowCreateUser = desc.EnabledOriginalUserSystem
 	return resp, nil
 }

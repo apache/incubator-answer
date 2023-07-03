@@ -2,7 +2,10 @@ package activity
 
 import (
 	"context"
+	"fmt"
+	"github.com/segmentfault/pacman/log"
 	"time"
+	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
@@ -15,343 +18,338 @@ import (
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
 )
 
 // AnswerActivityRepo answer accepted
 type AnswerActivityRepo struct {
-	data         *data.Data
-	activityRepo activity_common.ActivityRepo
-	userRankRepo rank.UserRankRepo
+	data                     *data.Data
+	activityRepo             activity_common.ActivityRepo
+	userRankRepo             rank.UserRankRepo
+	notificationQueueService notice_queue.NotificationQueueService
 }
-
-const (
-	acceptAction   = "accept"
-	acceptedAction = "accepted"
-)
-
-var (
-	acceptActionList = []string{acceptAction, acceptedAction}
-)
 
 // NewAnswerActivityRepo new repository
 func NewAnswerActivityRepo(
 	data *data.Data,
 	activityRepo activity_common.ActivityRepo,
 	userRankRepo rank.UserRankRepo,
+	notificationQueueService notice_queue.NotificationQueueService,
 ) activity.AnswerActivityRepo {
 	return &AnswerActivityRepo{
-		data:         data,
-		activityRepo: activityRepo,
-		userRankRepo: userRankRepo,
+		data:                     data,
+		activityRepo:             activityRepo,
+		userRankRepo:             userRankRepo,
+		notificationQueueService: notificationQueueService,
 	}
 }
 
-// NewQuestionActivityRepo new repository
-func NewQuestionActivityRepo(
-	data *data.Data,
-	activityRepo activity_common.ActivityRepo,
-	userRankRepo rank.UserRankRepo,
-) activity.QuestionActivityRepo {
-	return &AnswerActivityRepo{
-		data:         data,
-		activityRepo: activityRepo,
-		userRankRepo: userRankRepo,
-	}
-}
-
-func (ar *AnswerActivityRepo) DeleteQuestion(ctx context.Context, questionID string) (err error) {
-	questionInfo := &entity.Question{}
-	exist, err := ar.data.DB.Context(ctx).Where("id = ?", questionID).Get(questionInfo)
+func (ar *AnswerActivityRepo) SaveAcceptAnswerActivity(ctx context.Context, op *schema.AcceptAnswerOperationInfo) (
+	err error) {
+	// pre check
+	noNeedToDo, err := ar.activityPreCheck(ctx, op)
 	if err != nil {
-		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return err
 	}
-	if !exist {
+	if noNeedToDo {
 		return nil
 	}
 
-	// get all this object activity
-	activityList := make([]*entity.Activity, 0)
-	session := ar.data.DB.Context(ctx).Where("has_rank = 1")
-	session.Where("cancelled = ?", entity.ActivityAvailable)
-	err = session.Find(&activityList, &entity.Activity{ObjectID: questionID})
-	if err != nil {
-		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if len(activityList) == 0 {
-		return nil
-	}
-
-	log.Infof("questionInfo %s deleted will rollback activity %d", questionID, len(activityList))
-
+	// save activity
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
 		session = session.Context(ctx)
-		for _, act := range activityList {
-			log.Infof("user %s rollback rank %d", act.UserID, -act.Rank)
-			_, e := ar.userRankRepo.TriggerUserRank(
-				ctx, session, act.UserID, -act.Rank, act.ActivityType)
-			if e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			}
 
-			if _, e := session.Where("id = ?", act.ID).Cols("cancelled", "cancelled_at").
-				Update(&entity.Activity{Cancelled: entity.ActivityCancelled, CancelledAt: time.Now()}); e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			}
+		userInfoMapping, err := ar.acquireUserInfo(session, op.GetUserIDs())
+		if err != nil {
+			return nil, err
+		}
+
+		err = ar.saveActivitiesAvailable(session, op)
+		if err != nil {
+			return nil, err
+		}
+
+		err = ar.changeUserRank(ctx, session, op, userInfoMapping)
+		if err != nil {
+			return nil, err
 		}
 		return nil, nil
 	})
 	if err != nil {
-		return err
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 
-	// get all answers
-	answerList := make([]*entity.Answer, 0)
-	err = ar.data.DB.Context(ctx).Find(&answerList, &entity.Answer{QuestionID: questionID})
+	// notification
+	ar.sendAcceptAnswerNotification(ctx, op)
+	return nil
+}
+
+func (ar *AnswerActivityRepo) SaveCancelAcceptAnswerActivity(ctx context.Context, op *schema.AcceptAnswerOperationInfo) (
+	err error) {
+	// pre check
+	activities, err := ar.getExistActivity(ctx, op)
+	if err != nil {
+		return err
+	}
+	var userIDs []string
+	for _, act := range activities {
+		if act.Cancelled == entity.ActivityCancelled {
+			continue
+		}
+		userIDs = append(userIDs, act.UserID)
+	}
+	if len(userIDs) == 0 {
+		return nil
+	}
+
+	// save activity
+	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
+		session = session.Context(ctx)
+
+		userInfoMapping, err := ar.acquireUserInfo(session, userIDs)
+		if err != nil {
+			return nil, err
+		}
+
+		err = ar.cancelActivities(session, activities)
+		if err != nil {
+			return nil, err
+		}
+
+		err = ar.rollbackUserRank(ctx, session, activities, userInfoMapping)
+		if err != nil {
+			return nil, err
+		}
+		return nil, nil
+	})
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	for _, answerInfo := range answerList {
-		err = ar.DeleteAnswer(ctx, answerInfo.ID)
+
+	// notification
+	ar.sendCancelAcceptAnswerNotification(ctx, op)
+	return nil
+}
+
+func (ar *AnswerActivityRepo) activityPreCheck(ctx context.Context, op *schema.AcceptAnswerOperationInfo) (
+	noNeedToDo bool, err error) {
+	activities, err := ar.getExistActivity(ctx, op)
+	if err != nil {
+		return false, err
+	}
+	done := 0
+	for _, act := range activities {
+		if act.Cancelled == entity.ActivityAvailable {
+			done++
+		}
+	}
+	return done == len(op.Activities), nil
+}
+
+func (ar *AnswerActivityRepo) acquireUserInfo(session *xorm.Session, userIDs []string) (map[string]*entity.User, error) {
+	us := make([]*entity.User, 0)
+	err := session.In("id", userIDs).ForUpdate().Find(&us)
+	if err != nil {
+		log.Error(err)
+		return nil, err
+	}
+
+	users := make(map[string]*entity.User, 0)
+	for _, u := range us {
+		users[u.ID] = u
+	}
+	return users, nil
+}
+
+// saveActivitiesAvailable save activities
+// If activity not exist it will be created or else will be updated
+// If this activity is already exist, set activity rank to 0
+// So after this function, the activity rank will be correct for update user rank
+func (ar *AnswerActivityRepo) saveActivitiesAvailable(session *xorm.Session, op *schema.AcceptAnswerOperationInfo) (
+	err error) {
+	for _, act := range op.Activities {
+		existsActivity := &entity.Activity{}
+		exist, err := session.
+			Where(builder.Eq{"object_id": op.AnswerObjectID}).
+			And(builder.Eq{"user_id": act.ActivityUserID}).
+			And(builder.Eq{"trigger_user_id": act.TriggerUserID}).
+			And(builder.Eq{"activity_type": act.ActivityType}).
+			Get(existsActivity)
+		if err != nil {
+			return err
+		}
+		if exist && existsActivity.Cancelled == entity.ActivityAvailable {
+			act.Rank = 0
+			continue
+		}
+		if exist {
+			if _, err = session.Where("id = ?", existsActivity.ID).Cols("`cancelled`").
+				Update(&entity.Activity{Cancelled: entity.ActivityAvailable}); err != nil {
+				return err
+			}
+		} else {
+			insertActivity := entity.Activity{
+				ObjectID:         op.AnswerObjectID,
+				OriginalObjectID: act.OriginalObjectID,
+				UserID:           act.ActivityUserID,
+				TriggerUserID:    converter.StringToInt64(act.TriggerUserID),
+				ActivityType:     act.ActivityType,
+				Rank:             act.Rank,
+				HasRank:          act.HasRank(),
+				Cancelled:        entity.ActivityAvailable,
+			}
+			_, err = session.Insert(&insertActivity)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// cancelActivities cancel activities
+// If this activity is already cancelled, set activity rank to 0
+// So after this function, the activity rank will be correct for update user rank
+func (ar *AnswerActivityRepo) cancelActivities(session *xorm.Session, activities []*entity.Activity) (err error) {
+	for _, act := range activities {
+		t := &entity.Activity{}
+		exist, err := session.ID(act.ID).Get(t)
 		if err != nil {
 			log.Error(err)
+			return err
+		}
+		if !exist {
+			log.Error(fmt.Errorf("%s activity not exist", act.ID))
+			return fmt.Errorf("%s activity not exist", act.ID)
+		}
+		//  If this activity is already cancelled, set activity rank to 0
+		if t.Cancelled == entity.ActivityCancelled {
+			act.Rank = 0
+		}
+		if _, err = session.ID(act.ID).Cols("cancelled", "cancelled_at").
+			Update(&entity.Activity{
+				Cancelled:   entity.ActivityCancelled,
+				CancelledAt: time.Now(),
+			}); err != nil {
+			log.Error(err)
+			return err
 		}
 	}
-	return
+	return nil
 }
 
-// AcceptAnswer accept other answer
-func (ar *AnswerActivityRepo) AcceptAnswer(ctx context.Context,
-	answerObjID, questionObjID, questionUserID, answerUserID string, isSelf bool,
-) (err error) {
-	addActivityList := make([]*entity.Activity, 0)
-	for _, action := range acceptActionList {
-		// get accept answer need add rank amount
-		activityType, deltaRank, hasRank, e := ar.activityRepo.GetActivityTypeByObjID(ctx, answerObjID, action)
-		if e != nil {
-			return errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
+func (ar *AnswerActivityRepo) changeUserRank(ctx context.Context, session *xorm.Session,
+	op *schema.AcceptAnswerOperationInfo,
+	userInfoMapping map[string]*entity.User) (err error) {
+	for _, act := range op.Activities {
+		if act.Rank == 0 {
+			continue
 		}
-		addActivity := &entity.Activity{
-			ObjectID:         answerObjID,
-			OriginalObjectID: questionObjID,
-			ActivityType:     activityType,
-			Rank:             deltaRank,
-			HasRank:          hasRank,
+		user := userInfoMapping[act.ActivityUserID]
+		if user == nil {
+			continue
 		}
-		if action == acceptAction {
-			addActivity.UserID = questionUserID
-			addActivity.TriggerUserID = converter.StringToInt64(answerUserID)
-			addActivity.OriginalObjectID = questionObjID // if activity is 'accept' means this question is accept the answer.
-		} else {
-			addActivity.UserID = answerUserID
-			addActivity.TriggerUserID = converter.StringToInt64(answerUserID)
-			addActivity.OriginalObjectID = answerObjID // if activity is 'accepted' means this answer was accepted.
+		if err = ar.userRankRepo.ChangeUserRank(ctx, session,
+			act.ActivityUserID, user.Rank, act.Rank); err != nil {
+			log.Error(err)
+			return err
 		}
-		if isSelf {
-			addActivity.Rank = 0
-			addActivity.HasRank = 0
-		}
-		addActivityList = append(addActivityList, addActivity)
 	}
+	return nil
+}
 
-	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
-		session = session.Context(ctx)
-		for _, addActivity := range addActivityList {
-			existsActivity, exists, e := ar.activityRepo.GetActivity(
-				ctx, session, answerObjID, addActivity.UserID, addActivity.ActivityType)
-			if e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			}
-			if exists && existsActivity.Cancelled == entity.ActivityAvailable {
-				continue
-			}
-
-			// trigger user rank and send notification
-			if addActivity.Rank != 0 {
-				reachStandard, e := ar.userRankRepo.TriggerUserRank(
-					ctx, session, addActivity.UserID, addActivity.Rank, addActivity.ActivityType)
-				if e != nil {
-					return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-				}
-				if reachStandard {
-					addActivity.Rank = 0
-				}
-			}
-
-			if exists {
-				if _, e = session.Where("id = ?", existsActivity.ID).Cols("`cancelled`").
-					Update(&entity.Activity{Cancelled: entity.ActivityAvailable}); e != nil {
-					return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-				}
-			} else {
-				if _, e = session.Insert(addActivity); e != nil {
-					return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-				}
-			}
+func (ar *AnswerActivityRepo) rollbackUserRank(ctx context.Context, session *xorm.Session,
+	activities []*entity.Activity,
+	userInfoMapping map[string]*entity.User) (err error) {
+	for _, act := range activities {
+		if act.Rank == 0 {
+			continue
 		}
-		return nil, nil
-	})
-	if err != nil {
-		return err
+		user := userInfoMapping[act.UserID]
+		if user == nil {
+			continue
+		}
+		if err = ar.userRankRepo.ChangeUserRank(ctx, session,
+			act.UserID, user.Rank, -act.Rank); err != nil {
+			log.Error(err)
+			return err
+		}
 	}
-	for _, act := range addActivityList {
+	return nil
+}
+
+func (ar *AnswerActivityRepo) getExistActivity(ctx context.Context, op *schema.AcceptAnswerOperationInfo) ([]*entity.Activity, error) {
+	var activities []*entity.Activity
+	for _, action := range op.Activities {
+		t := &entity.Activity{}
+		exist, err := ar.data.DB.Context(ctx).
+			Where(builder.Eq{"user_id": action.ActivityUserID}).
+			And(builder.Eq{"trigger_user_id": action.TriggerUserID}).
+			And(builder.Eq{"activity_type": action.ActivityType}).
+			And(builder.Eq{"object_id": op.AnswerObjectID}).
+			Get(t)
+		if err != nil {
+			return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		}
+		if exist {
+			activities = append(activities, t)
+		}
+	}
+	return activities, nil
+}
+
+func (ar *AnswerActivityRepo) sendAcceptAnswerNotification(
+	ctx context.Context, op *schema.AcceptAnswerOperationInfo) {
+	for _, act := range op.Activities {
 		msg := &schema.NotificationMsg{
 			Type:           schema.NotificationTypeAchievement,
-			ObjectID:       act.ObjectID,
-			ReceiverUserID: act.UserID,
+			ObjectID:       op.AnswerObjectID,
+			ReceiverUserID: act.ActivityUserID,
 		}
-		if act.UserID == questionUserID {
-			msg.TriggerUserID = answerUserID
+		if act.ActivityUserID == op.QuestionUserID {
+			msg.TriggerUserID = op.AnswerUserID
 			msg.ObjectType = constant.AnswerObjectType
 		} else {
-			msg.TriggerUserID = questionUserID
+			msg.TriggerUserID = op.QuestionUserID
 			msg.ObjectType = constant.AnswerObjectType
 		}
 		if msg.TriggerUserID != msg.ReceiverUserID {
-			notice_queue.AddNotification(msg)
+			ar.notificationQueueService.Send(ctx, msg)
 		}
 	}
 
-	for _, act := range addActivityList {
+	for _, act := range op.Activities {
 		msg := &schema.NotificationMsg{
-			ReceiverUserID: act.UserID,
+			ReceiverUserID: act.ActivityUserID,
 			Type:           schema.NotificationTypeInbox,
-			ObjectID:       act.ObjectID,
+			ObjectID:       op.AnswerObjectID,
 		}
-		if act.UserID != questionUserID {
-			msg.TriggerUserID = questionUserID
+		if act.ActivityUserID != op.QuestionUserID {
+			msg.TriggerUserID = op.QuestionUserID
 			msg.ObjectType = constant.AnswerObjectType
 			msg.NotificationAction = constant.NotificationAcceptAnswer
-			notice_queue.AddNotification(msg)
+			ar.notificationQueueService.Send(ctx, msg)
 		}
 	}
-	return err
 }
 
-// CancelAcceptAnswer accept other answer
-func (ar *AnswerActivityRepo) CancelAcceptAnswer(ctx context.Context,
-	answerObjID, questionObjID, questionUserID, answerUserID string,
-) (err error) {
-	addActivityList := make([]*entity.Activity, 0)
-	for _, action := range acceptActionList {
-		// get accept answer need add rank amount
-		activityType, deltaRank, hasRank, e := ar.activityRepo.GetActivityTypeByObjID(ctx, answerObjID, action)
-		if e != nil {
-			return errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-		}
-		addActivity := &entity.Activity{
-			ObjectID:     answerObjID,
-			ActivityType: activityType,
-			Rank:         -deltaRank,
-			HasRank:      hasRank,
-		}
-		if action == acceptAction {
-			addActivity.UserID = questionUserID
-			addActivity.OriginalObjectID = questionObjID
-		} else {
-			addActivity.UserID = answerUserID
-			addActivity.OriginalObjectID = answerObjID
-		}
-		addActivityList = append(addActivityList, addActivity)
-	}
-
-	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
-		session = session.Context(ctx)
-		for _, addActivity := range addActivityList {
-			existsActivity, exists, e := ar.activityRepo.GetActivity(
-				ctx, session, answerObjID, addActivity.UserID, addActivity.ActivityType)
-			if e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			}
-			if exists && existsActivity.Cancelled == entity.ActivityCancelled {
-				continue
-			}
-			if !exists {
-				continue
-			}
-
-			if existsActivity.Rank != 0 {
-				_, e = ar.userRankRepo.TriggerUserRank(
-					ctx, session, addActivity.UserID, addActivity.Rank, addActivity.ActivityType)
-				if e != nil {
-					return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-				}
-			}
-
-			if _, e := session.Where("id = ?", existsActivity.ID).Cols("cancelled", "cancelled_at").
-				Update(&entity.Activity{Cancelled: entity.ActivityCancelled, CancelledAt: time.Now()}); e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			}
-		}
-		return nil, nil
-	})
-	if err != nil {
-		return err
-	}
-	for _, act := range addActivityList {
+func (ar *AnswerActivityRepo) sendCancelAcceptAnswerNotification(
+	ctx context.Context, op *schema.AcceptAnswerOperationInfo) {
+	for _, act := range op.Activities {
 		msg := &schema.NotificationMsg{
-			ReceiverUserID: act.UserID,
+			ReceiverUserID: act.ActivityUserID,
 			Type:           schema.NotificationTypeAchievement,
-			ObjectID:       act.ObjectID,
+			ObjectID:       op.AnswerObjectID,
 		}
-		if act.UserID == questionUserID {
-			msg.TriggerUserID = answerUserID
+		if act.ActivityUserID == op.QuestionObjectID {
+			msg.TriggerUserID = op.AnswerObjectID
 			msg.ObjectType = constant.QuestionObjectType
 		} else {
-			msg.TriggerUserID = questionUserID
+			msg.TriggerUserID = op.QuestionObjectID
 			msg.ObjectType = constant.AnswerObjectType
 		}
 		if msg.TriggerUserID != msg.ReceiverUserID {
-			notice_queue.AddNotification(msg)
+			ar.notificationQueueService.Send(ctx, msg)
 		}
 	}
-	return err
-}
-
-func (ar *AnswerActivityRepo) DeleteAnswer(ctx context.Context, answerID string) (err error) {
-	answerInfo := &entity.Answer{}
-	exist, err := ar.data.DB.Context(ctx).Where("id = ?", answerID).Get(answerInfo)
-	if err != nil {
-		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if !exist {
-		return nil
-	}
-
-	// get all this object activity
-	activityList := make([]*entity.Activity, 0)
-	session := ar.data.DB.Context(ctx).Where("has_rank = 1")
-	session.Where("cancelled = ?", entity.ActivityAvailable)
-	err = session.Find(&activityList, &entity.Activity{ObjectID: answerID})
-	if err != nil {
-		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	if len(activityList) == 0 {
-		return nil
-	}
-
-	log.Infof("answerInfo %s deleted will rollback activity %d", answerID, len(activityList))
-
-	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
-		session = session.Context(ctx)
-		for _, act := range activityList {
-			log.Infof("user %s rollback rank %d", act.UserID, -act.Rank)
-			_, e := ar.userRankRepo.TriggerUserRank(
-				ctx, session, act.UserID, -act.Rank, act.ActivityType)
-			if e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			}
-
-			if _, e := session.Where("id = ?", act.ID).Cols("cancelled", "cancelled_at").
-				Update(&entity.Activity{Cancelled: entity.ActivityCancelled, CancelledAt: time.Now()}); e != nil {
-				return nil, errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			}
-		}
-		return nil, nil
-	})
-	if err != nil {
-		return err
-	}
-	return
 }

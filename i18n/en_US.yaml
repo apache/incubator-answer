@@ -1417,6 +1417,7 @@ ui:
       change: Change
       all: All
       staff: Staff
+      more: More
       inactive: Inactive
       suspended: Suspended
       deleted: Deleted

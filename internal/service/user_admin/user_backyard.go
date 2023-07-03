@@ -41,7 +41,7 @@ type UserAdminService struct {
 	authService           *auth.AuthService
 	userCommonService     *usercommon.UserCommon
 	userActivity          activity.UserActiveActivityRepo
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService
 }
 
 // NewUserAdminService new user admin service
@@ -51,7 +51,7 @@ func NewUserAdminService(
 	authService *auth.AuthService,
 	userCommonService *usercommon.UserCommon,
 	userActivity activity.UserActiveActivityRepo,
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
 ) *UserAdminService {
 	return &UserAdminService{
 		userRepo:              userRepo,

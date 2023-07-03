@@ -8,7 +8,6 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
-	"github.com/answerdev/answer/internal/service/dashboard"
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/pkg/uid"
@@ -18,20 +17,17 @@ import (
 
 // AnswerController answer controller
 type AnswerController struct {
-	answerService    *service.AnswerService
-	rankService      *rank.RankService
-	dashboardService *dashboard.DashboardService
+	answerService *service.AnswerService
+	rankService   *rank.RankService
 }
 
 // NewAnswerController new controller
 func NewAnswerController(answerService *service.AnswerService,
 	rankService *rank.RankService,
-	dashboardService *dashboard.DashboardService,
 ) *AnswerController {
 	return &AnswerController{
-		answerService:    answerService,
-		rankService:      rankService,
-		dashboardService: dashboardService,
+		answerService: answerService,
+		rankService:   rankService,
 	}
 }
 

@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/comment_common"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/meta"
@@ -30,22 +30,20 @@ type ActivityRepo interface {
 
 // ActivityService activity service
 type ActivityService struct {
-	activityRepo          ActivityRepo
-	userCommon            *usercommon.UserCommon
-	activityCommonService *activity_common.ActivityCommon
-	tagCommonService      *tag_common.TagCommonService
-	objectInfoService     *object_info.ObjService
-	commentCommonService  *comment_common.CommentCommonService
-	revisionService       *revision_common.RevisionService
-	metaService           *meta.MetaService
-	configService         *config.ConfigService
+	activityRepo         ActivityRepo
+	userCommon           *usercommon.UserCommon
+	tagCommonService     *tag_common.TagCommonService
+	objectInfoService    *object_info.ObjService
+	commentCommonService *comment_common.CommentCommonService
+	revisionService      *revision_common.RevisionService
+	metaService          *meta.MetaService
+	configService        *config.ConfigService
 }
 
 // NewActivityService new activity service
 func NewActivityService(
 	activityRepo ActivityRepo,
 	userCommon *usercommon.UserCommon,
-	activityCommonService *activity_common.ActivityCommon,
 	tagCommonService *tag_common.TagCommonService,
 	objectInfoService *object_info.ObjService,
 	commentCommonService *comment_common.CommentCommonService,
@@ -54,15 +52,14 @@ func NewActivityService(
 	configService *config.ConfigService,
 ) *ActivityService {
 	return &ActivityService{
-		objectInfoService:     objectInfoService,
-		activityRepo:          activityRepo,
-		userCommon:            userCommon,
-		activityCommonService: activityCommonService,
-		tagCommonService:      tagCommonService,
-		commentCommonService:  commentCommonService,
-		revisionService:       revisionService,
-		metaService:           metaService,
-		configService:         configService,
+		objectInfoService:    objectInfoService,
+		activityRepo:         activityRepo,
+		userCommon:           userCommon,
+		tagCommonService:     tagCommonService,
+		commentCommonService: commentCommonService,
+		revisionService:      revisionService,
+		metaService:          metaService,
+		configService:        configService,
 	}
 }
 
@@ -97,7 +94,9 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 		}
 
 		if item.ObjectType == constant.QuestionObjectType || item.ObjectType == constant.AnswerObjectType {
-			item.ObjectID = uid.EnShortID(act.ObjectID)
+			if handler.GetEnableShortID(ctx) {
+				item.ObjectID = uid.EnShortID(act.ObjectID)
+			}
 		}
 
 		cfg, err := as.configService.GetConfigByID(ctx, act.ActivityType)

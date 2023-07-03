@@ -16,7 +16,6 @@ import (
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
-	"github.com/answerdev/answer/pkg/uid"
 	"github.com/answerdev/answer/plugin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
@@ -25,7 +24,7 @@ import (
 
 type SiteInfoService struct {
 	siteInfoRepo          siteinfo_common.SiteInfoRepo
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService
 	emailService          *export.EmailService
 	tagCommonService      *tagcommon.TagCommonService
 	configService         *config.ConfigService
@@ -34,7 +33,7 @@ type SiteInfoService struct {
 
 func NewSiteInfoService(
 	siteInfoRepo siteinfo_common.SiteInfoRepo,
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
 	emailService *export.EmailService,
 	tagCommonService *tagcommon.TagCommonService,
 	configService *config.ConfigService,
@@ -280,28 +279,12 @@ func (s *SiteInfoService) GetSeo(ctx context.Context) (resp *schema.SiteSeoReq, 
 }
 
 func (s *SiteInfoService) SaveSeo(ctx context.Context, req schema.SiteSeoReq) (err error) {
-	var (
-		siteType = constant.SiteTypeSeo
-		content  []byte
-	)
-	content, _ = json.Marshal(req)
-
+	content, _ := json.Marshal(req)
 	data := entity.SiteInfo{
-		Type:    siteType,
+		Type:    constant.SiteTypeSeo,
 		Content: string(content),
 	}
-
-	err = s.siteInfoRepo.SaveByType(ctx, siteType, &data)
-	if err != nil {
-		return
-	}
-	if req.PermaLink == schema.PermaLinkQuestionIDAndTitleByShortID || req.PermaLink == schema.PermaLinkQuestionIDByShortID {
-		uid.ShortIDSwitch = true
-	} else {
-		uid.ShortIDSwitch = false
-	}
-	s.questioncommon.SitemapCron(ctx)
-	return
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeSeo, &data)
 }
 
 func (s *SiteInfoService) GetPrivilegesConfig(ctx context.Context) (resp *schema.GetPrivilegesConfigResp, err error) {

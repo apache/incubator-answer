@@ -31,18 +31,20 @@ import (
 
 // AnswerService user service
 type AnswerService struct {
-	answerRepo            answercommon.AnswerRepo
-	questionRepo          questioncommon.QuestionRepo
-	questionCommon        *questioncommon.QuestionCommon
-	answerActivityService *activity.AnswerActivityService
-	userCommon            *usercommon.UserCommon
-	collectionCommon      *collectioncommon.CollectionCommon
-	userRepo              usercommon.UserRepo
-	revisionService       *revision_common.RevisionService
-	AnswerCommon          *answercommon.AnswerCommon
-	voteRepo              activity_common.VoteRepo
-	emailService          *export.EmailService
-	roleService           *role.UserRoleRelService
+	answerRepo               answercommon.AnswerRepo
+	questionRepo             questioncommon.QuestionRepo
+	questionCommon           *questioncommon.QuestionCommon
+	answerActivityService    *activity.AnswerActivityService
+	userCommon               *usercommon.UserCommon
+	collectionCommon         *collectioncommon.CollectionCommon
+	userRepo                 usercommon.UserRepo
+	revisionService          *revision_common.RevisionService
+	AnswerCommon             *answercommon.AnswerCommon
+	voteRepo                 activity_common.VoteRepo
+	emailService             *export.EmailService
+	roleService              *role.UserRoleRelService
+	notificationQueueService notice_queue.NotificationQueueService
+	activityQueueService     activity_queue.ActivityQueueService
 }
 
 func NewAnswerService(
@@ -58,20 +60,24 @@ func NewAnswerService(
 	voteRepo activity_common.VoteRepo,
 	emailService *export.EmailService,
 	roleService *role.UserRoleRelService,
+	notificationQueueService notice_queue.NotificationQueueService,
+	activityQueueService activity_queue.ActivityQueueService,
 ) *AnswerService {
 	return &AnswerService{
-		answerRepo:            answerRepo,
-		questionRepo:          questionRepo,
-		userCommon:            userCommon,
-		collectionCommon:      collectionCommon,
-		questionCommon:        questionCommon,
-		userRepo:              userRepo,
-		revisionService:       revisionService,
-		answerActivityService: answerAcceptActivityRepo,
-		AnswerCommon:          answerCommon,
-		voteRepo:              voteRepo,
-		emailService:          emailService,
-		roleService:           roleService,
+		answerRepo:               answerRepo,
+		questionRepo:             questionRepo,
+		userCommon:               userCommon,
+		collectionCommon:         collectionCommon,
+		questionCommon:           questionCommon,
+		userRepo:                 userRepo,
+		revisionService:          revisionService,
+		answerActivityService:    answerAcceptActivityRepo,
+		AnswerCommon:             answerCommon,
+		voteRepo:                 voteRepo,
+		emailService:             emailService,
+		roleService:              roleService,
+		notificationQueueService: notificationQueueService,
+		activityQueueService:     activityQueueService,
 	}
 }
 
@@ -136,7 +142,7 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 	//if err != nil {
 	//	log.Errorf("delete answer activity change failed: %s", err.Error())
 	//}
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           req.UserID,
 		ObjectID:         answerInfo.ID,
 		OriginalObjectID: answerInfo.ID,
@@ -205,14 +211,14 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	as.notificationAnswerTheQuestion(ctx, questionInfo.UserID, questionInfo.ID, insertData.ID, req.UserID, questionInfo.Title,
 		insertData.OriginalText)
 
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           insertData.UserID,
 		ObjectID:         insertData.ID,
 		OriginalObjectID: insertData.ID,
 		ActivityTypeKey:  constant.ActAnswerAnswered,
 		RevisionID:       revisionID,
 	})
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           insertData.UserID,
 		ObjectID:         insertData.ID,
 		OriginalObjectID: questionInfo.ID,
@@ -305,7 +311,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		return insertData.ID, err
 	}
 	if canUpdate {
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           insertData.UserID,
 			ObjectID:         insertData.ID,
 			OriginalObjectID: insertData.ID,
@@ -472,7 +478,7 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.A
 		//if err != nil {
 		//	log.Errorf("admin delete question then rank rollback error %s", err.Error())
 		//}
-		activity_queue.AddActivity(&schema.ActivityMsg{
+		as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           req.UserID,
 			ObjectID:         answerInfo.ID,
 			OriginalObjectID: answerInfo.ID,
@@ -487,7 +493,7 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.A
 	msg.TriggerUserID = answerInfo.UserID
 	msg.ObjectType = constant.AnswerObjectType
 	msg.NotificationAction = constant.NotificationYourAnswerWasDeleted
-	notice_queue.AddNotification(msg)
+	as.notificationQueueService.Send(ctx, msg)
 
 	return nil
 }
@@ -579,7 +585,7 @@ func (as *AnswerService) notificationUpdateAnswer(ctx context.Context, questionU
 	}
 	msg.ObjectType = constant.AnswerObjectType
 	msg.NotificationAction = constant.NotificationUpdateAnswer
-	notice_queue.AddNotification(msg)
+	as.notificationQueueService.Send(ctx, msg)
 }
 
 func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
@@ -596,7 +602,7 @@ func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
 	}
 	msg.ObjectType = constant.AnswerObjectType
 	msg.NotificationAction = constant.NotificationAnswerTheQuestion
-	notice_queue.AddNotification(msg)
+	as.notificationQueueService.Send(ctx, msg)
 
 	userInfo, exist, err := as.userRepo.GetByUserID(ctx, questionUserID)
 	if err != nil {

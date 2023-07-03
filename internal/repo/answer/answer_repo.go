@@ -2,14 +2,11 @@ package answer
 
 import (
 	"context"
-	"strings"
 	"time"
-	"unicode"
-
-	"xorm.io/builder"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
@@ -58,8 +55,10 @@ func (ar *answerRepo) AddAnswer(ctx context.Context, answer *entity.Answer) (err
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	answer.ID = uid.EnShortID(answer.ID)
-	answer.QuestionID = uid.EnShortID(answer.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		answer.ID = uid.EnShortID(answer.ID)
+		answer.QuestionID = uid.EnShortID(answer.QuestionID)
+	}
 	return nil
 }
 
@@ -109,9 +108,10 @@ func (ar *answerRepo) GetAnswer(ctx context.Context, id string) (
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	answer.ID = uid.EnShortID(answer.ID)
-	answer.QuestionID = uid.EnShortID(answer.QuestionID)
-
+	if handler.GetEnableShortID(ctx) {
+		answer.ID = uid.EnShortID(answer.ID)
+		answer.QuestionID = uid.EnShortID(answer.QuestionID)
+	}
 	return
 }
 
@@ -134,9 +134,11 @@ func (ar *answerRepo) GetAnswerList(ctx context.Context, answer *entity.Answer) 
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	for _, item := range answerList {
-		item.ID = uid.EnShortID(item.ID)
-		item.QuestionID = uid.EnShortID(item.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range answerList {
+			item.ID = uid.EnShortID(item.ID)
+			item.QuestionID = uid.EnShortID(item.QuestionID)
+		}
 	}
 	return
 }
@@ -150,9 +152,11 @@ func (ar *answerRepo) GetAnswerPage(ctx context.Context, page, pageSize int, ans
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	for _, item := range answerList {
-		item.ID = uid.EnShortID(item.ID)
-		item.QuestionID = uid.EnShortID(item.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range answerList {
+			item.ID = uid.EnShortID(item.ID)
+			item.QuestionID = uid.EnShortID(item.QuestionID)
+		}
 	}
 	return
 }
@@ -191,8 +195,10 @@ func (ar *answerRepo) GetByID(ctx context.Context, id string) (*entity.Answer, b
 	if err != nil {
 		return &resp, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	resp.ID = uid.EnShortID(resp.ID)
-	resp.QuestionID = uid.EnShortID(resp.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		resp.ID = uid.EnShortID(resp.ID)
+		resp.QuestionID = uid.EnShortID(resp.QuestionID)
+	}
 	return &resp, has, nil
 }
 
@@ -222,8 +228,10 @@ func (ar *answerRepo) GetByUserIDQuestionID(ctx context.Context, userID string, 
 	if err != nil {
 		return &resp, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	resp.ID = uid.EnShortID(resp.ID)
-	resp.QuestionID = uid.EnShortID(resp.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		resp.ID = uid.EnShortID(resp.ID)
+		resp.QuestionID = uid.EnShortID(resp.QuestionID)
+	}
 	return &resp, has, nil
 }
 
@@ -274,87 +282,40 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 	if err != nil {
 		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	for _, item := range rows {
-		item.ID = uid.EnShortID(item.ID)
-		item.QuestionID = uid.EnShortID(item.QuestionID)
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range rows {
+			item.ID = uid.EnShortID(item.ID)
+			item.QuestionID = uid.EnShortID(item.QuestionID)
+		}
 	}
 	return rows, count, nil
 }
 
-func (ar *answerRepo) AdminSearchList(ctx context.Context, search *entity.AdminAnswerSearch) ([]*entity.Answer, int64, error) {
-	var (
-		count   int64
-		err     error
-		session = ar.data.DB.Context(ctx).Table([]string{entity.Answer{}.TableName(), "a"}).Select("a.*")
-	)
-	if search.QuestionID != "" {
-		search.QuestionID = uid.DeShortID(search.QuestionID)
-	}
-
-	session.Where(builder.Eq{
-		"a.status": search.Status,
-	})
-
-	rows := make([]*entity.Answer, 0)
-	if search.Page > 0 {
-		search.Page = search.Page - 1
-	} else {
-		search.Page = 0
-	}
-	if search.PageSize == 0 {
-		search.PageSize = constant.DefaultPageSize
-	}
-
-	// search by question title like or answer id
-	if len(search.Query) > 0 {
-		// check id search
-		var (
-			idSearch = false
-			id       = ""
-		)
-
-		if strings.Contains(search.Query, "answer:") {
-			idSearch = true
-			id = strings.TrimSpace(strings.TrimPrefix(search.Query, "answer:"))
-			id = uid.DeShortID(id)
-			for _, r := range id {
-				if !unicode.IsDigit(r) {
-					idSearch = false
-					break
-				}
-			}
-		}
-
-		if idSearch {
-			session.And(builder.Eq{
-				"id": id,
-			})
-		} else {
-			session.Join("LEFT", []string{entity.Question{}.TableName(), "q"}, "q.id = a.question_id")
-			session.And(builder.Like{
-				"q.title", search.Query,
-			})
+func (ar *answerRepo) AdminSearchList(ctx context.Context, req *schema.AdminAnswerPageReq) (
+	resp []*entity.Answer, total int64, err error) {
+	cond := &entity.Answer{}
+	session := ar.data.DB.Context(ctx)
+	if len(req.QuestionID) == 0 && len(req.AnswerID) == 0 {
+		session.Join("INNER", "question", "answer.question_id = question.id")
+		if len(req.QuestionTitle) > 0 {
+			session.Where("question.title like ?", "%"+req.QuestionTitle+"%")
 		}
 	}
-
-	// check search by question id
-	if len(search.QuestionID) > 0 {
-		session.And(builder.Eq{
-			"question_id": search.QuestionID,
-		})
+	if len(req.AnswerID) > 0 {
+		cond.ID = req.AnswerID
 	}
+	if len(req.QuestionID) > 0 {
+		session.Where("answer.question_id = ?", req.QuestionID)
+	}
+	if req.Status > 0 {
+		cond.Status = req.Status
+	}
+	session.Desc("answer.created_at")
 
-	offset := search.Page * search.PageSize
-	session.
-		OrderBy("a.created_at desc").
-		Limit(search.PageSize, offset)
-	count, err = session.FindAndCount(&rows)
+	resp = make([]*entity.Answer, 0)
+	total, err = pager.Help(req.Page, req.PageSize, &resp, cond, session)
 	if err != nil {
-		return rows, count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return nil, 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	for _, item := range rows {
-		item.ID = uid.EnShortID(item.ID)
-		item.QuestionID = uid.EnShortID(item.QuestionID)
-	}
-	return rows, count, nil
+	return resp, total, nil
 }

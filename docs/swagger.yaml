@@ -1507,7 +1507,7 @@ definitions:
       revision:
         type: string
       site_seo:
-        $ref: '#/definitions/schema.SiteSeoReq'
+        $ref: '#/definitions/schema.SiteSeoResp'
       site_users:
         $ref: '#/definitions/schema.SiteUsersResp'
       theme:
@@ -2335,7 +2335,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: AdminSearchAnswerList
+      summary: AdminAnswerPage admin answer page
       tags:
       - admin
   /answer/admin/api/answer/status:
@@ -2533,7 +2533,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: AdminSearchList
+      summary: AdminQuestionPage admin question page
       tags:
       - admin
   /answer/admin/api/question/status:

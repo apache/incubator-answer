@@ -23,14 +23,14 @@ const (
 
 // ConnectorController comment controller
 type ConnectorController struct {
-	siteInfoService     *siteinfo_common.SiteInfoCommonService
+	siteInfoService     siteinfo_common.SiteInfoCommonService
 	userExternalService *user_external_login.UserExternalLoginService
 	emailService        *export.EmailService
 }
 
 // NewConnectorController new controller
 func NewConnectorController(
-	siteInfoService *siteinfo_common.SiteInfoCommonService,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 	emailService *export.EmailService,
 	userExternalService *user_external_login.UserExternalLoginService,
 ) *ConnectorController {

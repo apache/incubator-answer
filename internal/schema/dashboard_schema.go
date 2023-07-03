@@ -5,8 +5,8 @@ import "time"
 var AppStartTime time.Time
 
 const (
-	DashBoardCachekey  = "answer@dashboard"
-	DashBoardCacheTime = 60 * time.Minute
+	DashboardCacheKey  = "answer:dashboard"
+	DashboardCacheTime = 60 * time.Minute
 )
 
 type DashboardInfo struct {

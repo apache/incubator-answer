@@ -38,7 +38,7 @@ type UserService struct {
 	activityRepo             activity_common.ActivityRepo
 	emailService             *export.EmailService
 	authService              *auth.AuthService
-	siteInfoService          *siteinfo_common.SiteInfoCommonService
+	siteInfoService          siteinfo_common.SiteInfoCommonService
 	userRoleService          *role.UserRoleRelService
 	userExternalLoginService *user_external_login.UserExternalLoginService
 }
@@ -48,7 +48,7 @@ func NewUserService(userRepo usercommon.UserRepo,
 	activityRepo activity_common.ActivityRepo,
 	emailService *export.EmailService,
 	authService *auth.AuthService,
-	siteInfoService *siteinfo_common.SiteInfoCommonService,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 	userRoleService *role.UserRoleRelService,
 	userCommonService *usercommon.UserCommon,
 	userExternalLoginService *user_external_login.UserExternalLoginService,
@@ -606,7 +606,7 @@ func (us *UserService) UserChangeEmailSendCode(ctx context.Context, req *schema.
 	}
 	log.Infof("send email confirmation %s", verifyEmailURL)
 
-	go us.emailService.SendAndSaveCode(context.Background(), req.Email, title, body, code, data.ToJSONString())
+	go us.emailService.SendAndSaveCode(ctx, req.Email, title, body, code, data.ToJSONString())
 	return nil, nil
 }
 
