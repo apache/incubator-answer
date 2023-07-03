@@ -126,13 +126,13 @@ const Header: FC = () => {
                 <img
                   className="d-none d-lg-block logo me-0"
                   src={brandingInfo.logo}
-                  alt=""
+                  alt={siteInfo.name}
                 />
 
                 <img
                   className="lg-none logo me-0"
                   src={brandingInfo.mobile_logo || brandingInfo.logo}
-                  alt=""
+                  alt={siteInfo.name}
                 />
               </>
             ) : (
