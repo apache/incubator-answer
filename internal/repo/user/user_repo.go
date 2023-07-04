@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/data"
@@ -224,18 +225,16 @@ func (ur *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
 	return
 }
 
-func (ur *userRepo) SearchUserListByName(ctx context.Context, name string) (userList []*entity.User, err error) {
+func (ur *userRepo) SearchUserListByName(ctx context.Context, name string, limit int) (userList []*entity.User, err error) {
 	userList = make([]*entity.User, 0)
-	if name == "" {
-		return userList, nil
-	}
-	session := ur.data.DB.Where("")
-	session.Where("username LIKE LOWER(?) or display_name LIKE ?", name+"%", name+"%").And("status =?", entity.UserStatusAvailable)
-	session.Asc("username")
-	session = session.Limit(5, 0)
-	err = session.OrderBy("id desc").Find(&userList)
+	session := ur.data.DB.Context(ctx)
+	session.Where("status = ?", entity.UserStatusAvailable)
+	session.Where("username LIKE ? OR display_name LIKE ?", strings.ToLower(name)+"%", name+"%")
+	session.OrderBy("username ASC, id DESC")
+	session.Limit(limit)
+	err = session.Find(&userList)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	tryToDecorateUserListFromUserCenter(ctx, ur.data, userList)
 	return
