@@ -322,13 +322,7 @@ func (s *SiteInfoService) translatePrivilegeOptions(ctx context.Context) (option
 }
 
 func (s *SiteInfoService) UpdatePrivilegesConfig(ctx context.Context, req *schema.UpdatePrivilegesConfigReq) (err error) {
-	var chooseOption *schema.PrivilegeOption
-	for _, option := range schema.DefaultPrivilegeOptions {
-		if option.Level == req.Level {
-			chooseOption = option
-			break
-		}
-	}
+	chooseOption := schema.DefaultPrivilegeOptions.Choose(req.Level)
 	if chooseOption == nil {
 		return nil
 	}

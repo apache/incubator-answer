@@ -265,6 +265,16 @@ const (
 )
 
 type PrivilegeLevel int
+type PrivilegeOptions []*PrivilegeOption
+
+func (p PrivilegeOptions) Choose(level PrivilegeLevel) (option *PrivilegeOption) {
+	for _, op := range p {
+		if op.Level == level {
+			return op
+		}
+	}
+	return nil
+}
 
 // GetPrivilegesConfigResp get privileges config response
 type GetPrivilegesConfigResp struct {
@@ -285,7 +295,7 @@ type UpdatePrivilegesConfigReq struct {
 }
 
 var (
-	DefaultPrivilegeOptions      []*PrivilegeOption
+	DefaultPrivilegeOptions      PrivilegeOptions
 	privilegeOptionsLevelMapping = map[string][]int{
 		constant.RankQuestionAddKey:               {1, 1, 1},
 		constant.RankAnswerAddKey:                 {1, 1, 1},
