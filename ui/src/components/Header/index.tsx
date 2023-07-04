@@ -82,7 +82,7 @@ const Header: FC = () => {
   };
 
   useEffect(() => {
-    if (q) {
+    if (q && location.pathname === '/search') {
       handleInput(q);
     }
   }, [q]);
