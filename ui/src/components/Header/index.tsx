@@ -82,7 +82,7 @@ const Header: FC = () => {
   };
 
   useEffect(() => {
-    if (q) {
+    if (q && location.pathname === '/search') {
       handleInput(q);
     }
   }, [q]);
@@ -94,6 +94,11 @@ const Header: FC = () => {
       if (toggle) {
         toggle?.click();
       }
+    }
+
+    // clear search input when navigate to other page
+    if (location.pathname !== '/search' && searchStr) {
+      setSearch('');
     }
   }, [location.pathname]);
 
