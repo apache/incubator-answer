@@ -135,6 +135,7 @@ const Index: React.FC<Props> = ({ callback }) => {
           }
           setFormData({ ...data });
         }
+        getImgCode();
       });
   };
 
