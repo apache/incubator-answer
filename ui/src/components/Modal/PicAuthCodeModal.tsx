@@ -45,7 +45,7 @@ const Index: React.FC<IProps> = ({
       <Modal.Body>
         <Form noValidate onSubmit={clickSubmit}>
           <Form.Group controlId="code" className="mb-3">
-            <div className="mb-3">
+            <div className="mb-3 p-2 d-flex align-items-center justify-content-center bg-light rounded-2">
               <img
                 src={imgCode?.captcha_img}
                 alt="code"
