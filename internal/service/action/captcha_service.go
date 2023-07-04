@@ -115,13 +115,13 @@ func (cs *CaptchaService) ActionRecordDel(ctx context.Context, actionType string
 // GenerateCaptcha generate captcha
 func (cs *CaptchaService) GenerateCaptcha(ctx context.Context) (key, captchaBase64 string, err error) {
 	driverString := base64Captcha.DriverString{
-		Height:          40,
-		Width:           100,
+		Height:          60,
+		Width:           200,
 		NoiseCount:      0,
 		ShowLineOptions: 2 | 4,
 		Length:          4,
 		Source:          "1234567890qwertyuioplkjhgfdsazxcvbnm",
-		BgColor:         &color.RGBA{R: 3, G: 102, B: 214, A: 125},
+		BgColor:         &color.RGBA{R: 211, G: 211, B: 211, A: 0},
 		Fonts:           []string{"wqy-microhei.ttc"},
 	}
 	driver := driverString.ConvertFonts()
