@@ -95,6 +95,11 @@ const Header: FC = () => {
         toggle?.click();
       }
     }
+
+    // clear search input when navigate to other page
+    if (location.pathname !== '/search' && searchStr) {
+      setSearch('');
+    }
   }, [location.pathname]);
 
   let navbarStyle = 'theme-colored';
