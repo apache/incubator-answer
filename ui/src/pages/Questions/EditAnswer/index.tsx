@@ -198,7 +198,7 @@ const Index = () => {
           <div className="question-content-wrap">
             <div
               ref={questionContentRef}
-              className="content position-absolute top-0 w-100"
+              className="content position-absolute top-0 w-100 bg-white"
               dangerouslySetInnerHTML={{ __html: data?.question.html }}
             />
             <div
@@ -206,7 +206,7 @@ const Index = () => {
               style={{ maxHeight: questionContentRef?.current?.scrollHeight }}
             />
             <div className="line bg-light  d-flex justify-content-center align-items-center">
-              <Icon name="three-dots" />
+              <Icon type="bi" name="grip-horizontal" className="mt-1" />
             </div>
           </div>
 
