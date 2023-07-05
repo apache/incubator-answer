@@ -225,7 +225,7 @@ func (qr *questionRepo) GetQuestionList(ctx context.Context, question *entity.Qu
 
 func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err error) {
 	session := qr.data.DB.Context(ctx)
-	session.Where("status = ? OR status = ?", entity.QuestionStatusAvailable, entity.QuestionStatusClosed)
+	session.In("status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed})
 	count, err = session.Count(&entity.Question{Show: entity.QuestionShow})
 	if err != nil {
 		return 0, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -234,17 +234,9 @@ func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err 
 }
 
 func (qr *questionRepo) GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error) {
-	questionList := make([]*entity.Question, 0)
-	count, err = qr.data.DB.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).And("question.user_id = ?", userID).FindAndCount(&questionList)
-	if err != nil {
-		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	return
-}
-
-func (qr *questionRepo) GetQuestionCountByIDs(ctx context.Context, ids []string) (count int64, err error) {
-	questionList := make([]*entity.Question, 0)
-	count, err = qr.data.DB.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).In("id = ?", ids).Count(&questionList)
+	session := qr.data.DB.Context(ctx)
+	session.In("status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed})
+	count, err = session.Count(&entity.Question{UserID: userID})
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

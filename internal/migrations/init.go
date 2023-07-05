@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/answerdev/answer/internal/schema"
+	"github.com/segmentfault/pacman/log"
 
 	"github.com/answerdev/answer/internal/entity"
 	"golang.org/x/crypto/bcrypt"
@@ -38,6 +40,7 @@ func (m *Mentor) InitDB() error {
 	m.do("init version table", m.initVersionTable)
 	m.do("init admin user", m.initAdminUser)
 	m.do("init config", m.initConfig)
+	m.do("init default privileges config", m.initDefaultRankPrivileges)
 	m.do("init role", m.initRole)
 	m.do("init power", m.initPower)
 	m.do("init role power rel", m.initRolePowerRel)
@@ -48,6 +51,7 @@ func (m *Mentor) InitDB() error {
 	m.do("init site info theme config", m.initSiteInfoThemeConfig)
 	m.do("init site info seo config", m.initSiteInfoSEOConfig)
 	m.do("init site info user config", m.initSiteInfoUsersConfig)
+	m.do("init site info privilege rank", m.initSiteInfoPrivilegeRank)
 	return m.err
 }
 
@@ -93,6 +97,19 @@ func (m *Mentor) initAdminUser() {
 
 func (m *Mentor) initConfig() {
 	_, m.err = m.engine.Context(m.ctx).Insert(defaultConfigTable)
+}
+
+func (m *Mentor) initDefaultRankPrivileges() {
+	chooseOption := schema.DefaultPrivilegeOptions.Choose(schema.PrivilegeLevel2)
+	for _, privilege := range chooseOption.Privileges {
+		_, err := m.engine.Context(m.ctx).Update(
+			&entity.Config{Value: fmt.Sprintf("%d", privilege.Value)},
+			&entity.Config{Key: privilege.Key},
+		)
+		if err != nil {
+			log.Error(err)
+		}
+	}
 }
 
 func (m *Mentor) initRole() {
@@ -189,6 +206,18 @@ func (m *Mentor) initSiteInfoUsersConfig() {
 	_, m.err = m.engine.Context(m.ctx).Insert(&entity.SiteInfo{
 		Type:    "users",
 		Content: string(usersDataBytes),
+		Status:  1,
+	})
+}
+
+func (m *Mentor) initSiteInfoPrivilegeRank() {
+	privilegeRankData := map[string]interface{}{
+		"level": schema.PrivilegeLevel2,
+	}
+	privilegeRankDataBytes, _ := json.Marshal(privilegeRankData)
+	_, m.err = m.engine.Context(m.ctx).Insert(&entity.SiteInfo{
+		Type:    "privileges",
+		Content: string(privilegeRankDataBytes),
 		Status:  1,
 	})
 }

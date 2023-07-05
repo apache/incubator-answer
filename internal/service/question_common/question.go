@@ -50,7 +50,6 @@ type QuestionRepo interface {
 	AdminQuestionPage(ctx context.Context, search *schema.AdminQuestionPageReq) ([]*entity.Question, int64, error)
 	GetQuestionCount(ctx context.Context) (count int64, err error)
 	GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error)
-	GetQuestionCountByIDs(ctx context.Context, ids []string) (count int64, err error)
 	SitemapQuestions(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error)
 }
 

@@ -45,6 +45,7 @@ import (
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/action"
 	activity2 "github.com/answerdev/answer/internal/service/activity"
+	activity_common2 "github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/activity_queue"
 	"github.com/answerdev/answer/internal/service/answer_common"
 	auth2 "github.com/answerdev/answer/internal/service/auth"
@@ -205,8 +206,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	uploaderService := uploader.NewUploaderService(serviceConf, siteInfoCommonService)
 	uploadController := controller.NewUploadController(uploaderService)
 	activityActivityRepo := activity.NewActivityRepo(dataData, configService)
+	activityCommon := activity_common2.NewActivityCommon(activityRepo, activityQueueService)
 	commentCommonService := comment_common.NewCommentCommonService(commentCommonRepo)
-	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, tagCommonService, objService, commentCommonService, revisionService, metaService, configService)
+	activityService := activity2.NewActivityService(activityActivityRepo, userCommon, activityCommon, tagCommonService, objService, commentCommonService, revisionService, metaService, configService)
 	activityController := controller.NewActivityController(activityService)
 	roleController := controller_admin.NewRoleController(roleService)
 	pluginConfigRepo := plugin_config.NewPluginConfigRepo(dataData)

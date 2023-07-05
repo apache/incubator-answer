@@ -817,22 +817,26 @@ func (us *UserService) getUserInfoMapping(ctx context.Context, userIDs []string)
 	return userInfoMapping, nil
 }
 
-func (us *UserService) SearchUserListByName(ctx context.Context, input *schema.GetOtherUserInfoByUsernameReq) ([]*schema.UserBasicInfo, error) {
-	userinfolist := make([]*schema.UserBasicInfo, 0)
-	list, err := us.userRepo.SearchUserListByName(ctx, input.Username)
+func (us *UserService) SearchUserListByName(ctx context.Context, req *schema.GetOtherUserInfoByUsernameReq) (
+	resp []*schema.UserBasicInfo, err error) {
+	resp = make([]*schema.UserBasicInfo, 0)
+	if len(req.Username) == 0 {
+		return resp, nil
+	}
+	userList, err := us.userRepo.SearchUserListByName(ctx, req.Username, 5)
 	if err != nil {
-		return userinfolist, err
+		return resp, err
 	}
-	avatarMapping := us.siteInfoService.FormatListAvatar(ctx, list)
-	for _, user := range list {
-		if input.UserID != user.ID {
-			userinfo := us.userCommonService.FormatUserBasicInfo(ctx, user)
-			userinfo.Avatar = avatarMapping[user.ID].GetURL()
-			userinfolist = append(userinfolist, userinfo)
+	avatarMapping := us.siteInfoService.FormatListAvatar(ctx, userList)
+	for _, u := range userList {
+		if req.UserID == u.ID {
+			continue
 		}
-
+		basicInfo := us.userCommonService.FormatUserBasicInfo(ctx, u)
+		basicInfo.Avatar = avatarMapping[u.ID].GetURL()
+		resp = append(resp, basicInfo)
 	}
-	return userinfolist, nil
+	return resp, nil
 }
 
 func (us *UserService) warpStatRankingResp(
