@@ -93,7 +93,6 @@ func (cc *ConnectorController) ConnectorLogin(connector plugin.Connector) (fn fu
 		if len(redirectURL) > 0 {
 			ctx.Redirect(http.StatusFound, redirectURL)
 		}
-		return
 	}
 }
 

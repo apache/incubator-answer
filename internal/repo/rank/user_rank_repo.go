@@ -50,11 +50,11 @@ func (ur *UserRankRepo) CheckReachLimit(ctx context.Context, session *xorm.Sessi
 		MoreVal: now.EndOfDay(),
 	})
 
-	earned, err := session.Sum(&entity.Activity{}, "`rank`")
+	earned, err := session.SumInt(&entity.Activity{}, "`rank`")
 	if err != nil {
 		return false, err
 	}
-	if int(earned) <= maxDailyRank {
+	if int(earned) < maxDailyRank {
 		return false, nil
 	}
 	log.Infof("user %s today has rank %d is reach stand %d", userID, earned, maxDailyRank)

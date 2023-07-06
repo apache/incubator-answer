@@ -90,6 +90,9 @@ func (vs *VoteService) VoteUp(ctx context.Context, req *schema.VoteReq) (resp *s
 		}
 		err = vs.voteRepo.Vote(ctx, voteUpOperationInfo)
 	}
+	if err != nil {
+		return nil, err
+	}
 
 	resp = &schema.VoteResp{}
 	resp.UpVotes, resp.DownVotes, err = vs.voteRepo.GetAndSaveVoteResult(ctx, req.ObjectID, objectInfo.ObjectType)
