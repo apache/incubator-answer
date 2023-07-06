@@ -293,8 +293,14 @@ func (vr *VoteRepo) saveActivitiesAvailable(session *xorm.Session, op *schema.Vo
 			continue
 		}
 		if exist {
-			if _, err = session.Where("id = ?", existsActivity.ID).Cols("`cancelled`").
-				Update(&entity.Activity{Cancelled: entity.ActivityAvailable}); err != nil {
+			bean := &entity.Activity{
+				Cancelled: entity.ActivityAvailable,
+				Rank:      activity.Rank,
+				HasRank:   activity.HasRank(),
+			}
+			session.Where("id = ?", existsActivity.ID)
+			if _, err = session.Cols("`cancelled`", "`rank`", "`has_rank`").
+				Update(bean); err != nil {
 				return false, err
 			}
 		} else {
