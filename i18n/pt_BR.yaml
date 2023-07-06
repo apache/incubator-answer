@@ -1116,7 +1116,7 @@ ui:
           fields:
             display_name:
               label: Nome de exibição
-              msg: Nome de exibição deve ser 3-30 caracteres em comprimento.
+              msg: Nome de exibição deve ser 4-30 caracteres em comprimento.
             email:
               label: Email
               msg: Email não é válido.
