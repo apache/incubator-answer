@@ -1,8 +1,8 @@
 package random
 
 import (
+	"crypto/rand"
 	"encoding/hex"
-	"math/rand"
 )
 
 func UsernameSuffix() string {

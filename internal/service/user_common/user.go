@@ -151,7 +151,7 @@ func (us *UserCommon) MakeUsername(ctx context.Context, displayName string) (use
 		}
 	}
 
-	username = strings.ReplaceAll(displayName, " ", "_")
+	username = strings.ReplaceAll(displayName, " ", "-")
 	username = strings.ToLower(username)
 	suffix := ""
 
