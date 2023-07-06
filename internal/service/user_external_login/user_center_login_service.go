@@ -156,7 +156,9 @@ func (us *UserCenterLoginService) registerNewUser(ctx context.Context, provider 
 		MetaInfo:   string(metaInfo),
 	}
 	err = us.userExternalLoginRepo.AddUserExternalLogin(ctx, newExternalUserInfo)
-
+	if err != nil {
+		return nil, err
+	}
 	return userInfo, nil
 }
 

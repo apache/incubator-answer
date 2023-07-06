@@ -3,6 +3,7 @@ package repo_test
 import (
 	"context"
 	"fmt"
+	"log"
 	"sync"
 	"testing"
 
@@ -46,7 +47,7 @@ func addTagList() {
 	tagCommonRepo := tag_common.NewTagCommonRepo(testDataSource, uniqueIDRepo)
 	err := tagCommonRepo.AddTagList(context.TODO(), testTagList)
 	if err != nil {
-		panic(err)
+		log.Fatalf("%+v", err)
 	}
 }
 

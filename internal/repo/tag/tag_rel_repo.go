@@ -2,7 +2,6 @@ package tag
 
 import (
 	"context"
-
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"

@@ -1,6 +1,7 @@
 package gravatar
 
 import (
+	"github.com/answerdev/answer/internal/base/constant"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -23,7 +24,7 @@ func TestGetAvatarURL(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.want, GetAvatarURL(tt.args.email))
+			assert.Equal(t, tt.want, GetAvatarURL(constant.DefaultGravatarBaseURL, tt.args.email))
 		})
 	}
 }
