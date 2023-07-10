@@ -41,7 +41,6 @@ const Index: FC<IProps> = ({
     <>
       {/* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role,jsx-a11y/control-has-associated-label */}
       <img
-        role="button"
         src={url || DefaultAvatar}
         width={size}
         height={size}

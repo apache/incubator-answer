@@ -65,6 +65,7 @@ const Index: FC<Props> = ({ redDot, userInfo, logOut }) => {
           variant="success"
           id="dropdown-basic"
           as="a"
+          role="button"
           className="no-toggle pointer">
           <Avatar
             size="36px"
