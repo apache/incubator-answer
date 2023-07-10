@@ -26,6 +26,11 @@ body {
 a {
   text-decoration: none;
 }
+// If the image does not have a `src` attribute, it must break and may not trigger the `onerror` event.
+// With or without the `alt` attribute, it is visually hidden directly.
+img[src=""] {
+  visibility: hidden !important;
+}
 
 .btn-link {
   text-decoration: none;
