@@ -86,7 +86,7 @@ type UpdateUserRoleReq struct {
 
 // AddUserReq add user request
 type AddUserReq struct {
-	DisplayName string `validate:"required,gt=4,lte=30" json:"display_name"`
+	DisplayName string `validate:"required,gte=4,lte=30" json:"display_name"`
 	Email       string `validate:"required,email,gt=0,lte=500" json:"email"`
 	Password    string `validate:"required,gte=8,lte=32" json:"password"`
 	LoginUserID string `json:"-"`
