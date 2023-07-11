@@ -1410,6 +1410,31 @@ ui:
       title: Change user role to...
       btn_cancel: Cancel
       btn_submit: Submit
+    new_password_modal:
+      title: Set new password
+      form:
+        fields:
+          password:
+            label: Password
+            text: The user will be logged out and need to login again.
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
+    user_modal:
+      title: Add new user
+      form:
+        fields:
+          display_name:
+            label: Display Name
+            msg: Display Name must be at 3-30 characters in length.
+          email:
+            label: Email
+            msg: Email is not valid.
+          password:
+            label: Password
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
     users:
       title: Users
       name: Name
@@ -1438,33 +1463,6 @@ ui:
       change_role: Change role
       show_logs: Show logs
       add_user: Add user
-      new_password_modal:
-        title: Set new password
-        form:
-          fields:
-            password:
-              label: Password
-              text: The user will be logged out and need to login again.
-              msg: Password must be at 8-32 characters in length.
-        btn_cancel: Cancel
-        btn_submit: Submit
-      user_modal:
-        title: Add new user
-        form:
-          fields:
-            display_name:
-              label: Display Name
-              msg: Display Name must be at 3-30 characters in length.
-            email:
-              label: Email
-              msg: Email is not valid.
-            password:
-              label: Password
-              msg: Password must be at 8-32 characters in length.
-
-        btn_cancel: Cancel
-        btn_submit: Submit
-
     questions:
       page_title: Questions
       normal: Normal
