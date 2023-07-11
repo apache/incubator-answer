@@ -7,6 +7,8 @@ import ReactDOM from 'react-dom/client';
 import type * as Type from '@/common/interface';
 import { SchemaForm, JSONSchema, UISchema, initFormData } from '@/components';
 import { handleFormError } from '@/utils';
+import { getUserActivation, postUserActivation } from '@/services';
+import { useToast } from '@/hooks';
 
 const div = document.createElement('div');
 const root = ReactDOM.createRoot(div);
@@ -17,35 +19,29 @@ interface IProps {
 }
 const useChangePasswordModal = (props: IProps = {}) => {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'admin.new_password_modal',
+    keyPrefix: 'inactive',
   });
 
-  const { title = t('title'), onConfirm } = props;
+  const { title = t('btn_name') } = props;
   const [visible, setVisibleState] = useState(false);
-  const [userId, setUserId] = useState('');
+  const userId = useRef('');
+  const isLoading = useRef(false);
+  const Toast = useToast();
+
   const schema: JSONSchema = {
-    title: t('title'),
-    required: ['password'],
+    title: t('btn_name'),
     properties: {
-      password: {
+      activationUrl: {
         type: 'string',
-        title: t('form.fields.password.label'),
-        description: t('form.fields.password.text'),
+        title: t('resend_email.url_label'),
+        description: t('resend_email.url_text'),
       },
     },
   };
   const uiSchema: UISchema = {
-    password: {
+    activationUrl: {
       'ui:options': {
-        inputType: 'password',
-        validator: (value) => {
-          const MIN_LENGTH = 8;
-          const MAX_LENGTH = 32;
-          if (value.length < MIN_LENGTH || value.length > MAX_LENGTH) {
-            return t('form.fields.password.msg');
-          }
-          return true;
-        },
+        readOnly: true,
       },
     },
   };
@@ -57,47 +53,57 @@ const useChangePasswordModal = (props: IProps = {}) => {
     validator: () => Promise<boolean>;
   }>(null);
 
-  const onClose = () => {
-    setVisibleState(false);
+  const getActivationUrl = () => {
+    return getUserActivation(userId.current).then((resp) => {
+      if (resp?.activation_url) {
+        setFormData({
+          ...formData,
+          activationUrl: {
+            value: resp.activation_url,
+            isInvalid: false,
+            errorMsg: '',
+          },
+        });
+      }
+    });
   };
 
-  const onShow = (user_id: string) => {
-    setUserId(user_id);
+  const onClose = () => {
+    setVisibleState(false);
+    userId.current = '';
+    setFormData(initFormData(schema));
+  };
+
+  const onShow = async (user_id: string) => {
+    if (!user_id) {
+      return;
+    }
+    userId.current = user_id;
+    await getActivationUrl();
     setVisibleState(true);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const isValid = await formRef.current?.validator();
-
-    if (!isValid) {
-      return;
-    }
-
-    if (onConfirm instanceof Function) {
-      onConfirm({
-        password: formData.password.value,
-        user_id: userId,
-      })
-        .then(() => {
-          setFormData({
-            password: {
-              value: '',
-              isInvalid: false,
-              errorMsg: '',
-            },
-          });
-          setUserId('');
-          onClose();
-        })
-        .catch((err) => {
-          if (err.isError) {
-            const data = handleFormError(err, formData);
-            setFormData({ ...data });
-          }
+    isLoading.current = true;
+    postUserActivation(userId.current)
+      .then(() => {
+        Toast.onShow({
+          msg: t('sent_success', { keyPrefix: 'toast' }),
+          variant: 'success',
         });
-    }
+        onClose();
+      })
+      .catch((err) => {
+        if (err.isError) {
+          const data = handleFormError(err, formData);
+          setFormData({ ...data });
+        }
+      })
+      .finally(() => {
+        isLoading.current = false;
+      });
   };
 
   const handleOnChange = (data) => {
@@ -122,10 +128,13 @@ const useChangePasswordModal = (props: IProps = {}) => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="link" onClick={() => onClose()}>
-            {t('btn_cancel')}
+            {t('cancel', { keyPrefix: 'btns' })}
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
-            {t('btn_submit')}
+          <Button
+            disabled={isLoading.current}
+            variant="primary"
+            onClick={handleSubmit}>
+            {t('resend', { keyPrefix: 'btns' })}
           </Button>
         </Modal.Footer>
       </Modal>,

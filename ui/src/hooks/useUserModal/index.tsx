@@ -18,7 +18,7 @@ interface IProps {
 }
 const useAddUserModal = (props: IProps = {}) => {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'admin.users.user_modal',
+    keyPrefix: 'admin.user_modal',
   });
 
   const { title = t('title'), onConfirm } = props;
