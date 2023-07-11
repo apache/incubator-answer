@@ -144,7 +144,7 @@ func (uc *UserAdminController) GetUserPage(ctx *gin.Context) {
 // @Produce json
 // @Param user_id query string true "user id"
 // @Success 200 {object} handler.RespBody{data=schema.GetUserActivationResp}
-// @Router /answer/admin/api/users/activation [get]
+// @Router /answer/admin/api/user/activation [get]
 func (uc *UserAdminController) GetUserActivation(ctx *gin.Context) {
 	req := &schema.GetUserActivationReq{}
 	if handler.BindAndCheck(ctx, req) {

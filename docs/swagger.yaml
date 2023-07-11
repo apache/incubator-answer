@@ -3232,6 +3232,32 @@ paths:
       summary: add user
       tags:
       - admin
+  /answer/admin/api/user/activation:
+    get:
+      description: get user activation
+      parameters:
+      - description: user id
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserActivationResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user activation
+      tags:
+      - admin
   /answer/admin/api/user/password:
     put:
       consumes:
@@ -3305,31 +3331,6 @@ paths:
       tags:
       - admin
   /answer/admin/api/users/activation:
-    get:
-      description: get user activation
-      parameters:
-      - description: user id
-        in: query
-        name: user_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/handler.RespBody'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.GetUserActivationResp'
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: get user activation
-      tags:
-      - admin
     post:
       description: send user activation
       parameters:
