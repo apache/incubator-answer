@@ -842,6 +842,9 @@ ui:
     change_btn_name: Change email
     msg:
       empty: Cannot be empty.
+    resend_email:
+      url_label: Are you sure you want to resend the activation email?
+      url_text: You can also give the activation link above to the user.
   login:
     login_to_continue: Log in to continue
     info_sign: Don't have an account? <1>Sign up</1>
@@ -1000,6 +1003,7 @@ ui:
     flag_success: Thanks for flagging.
     forbidden_operate_self: Forbidden to operate on yourself
     review: Your revision will show after review.
+    sent_success: Sent successfully
   related_question:
     title: Related Questions
     answers: answers
@@ -1094,6 +1098,7 @@ ui:
     answer: Answer
     comment: Comment
     refresh: Refresh
+    resend: Resend
   search:
     title: Search Results
     keywords: Keywords
