@@ -79,6 +79,14 @@ type TestTemplateData struct {
 	SiteName string
 }
 
+// SaveCode save code
+func (es *EmailService) SaveCode(ctx context.Context, code, codeContent string) {
+	err := es.emailRepo.SetCode(ctx, code, codeContent, 10*time.Minute)
+	if err != nil {
+		log.Error(err)
+	}
+}
+
 // SendAndSaveCode send email and save code
 func (es *EmailService) SendAndSaveCode(ctx context.Context, toEmailAddr, subject, body, code, codeContent string) {
 	es.Send(ctx, toEmailAddr, subject, body)

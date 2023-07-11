@@ -1578,6 +1578,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/user/activation": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user activation",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "get user activation",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "user id",
+                        "name": "user_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.GetUserActivationResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/user/password": {
             "put": {
                 "security": [
@@ -1682,6 +1728,42 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/schema.UpdateUserStatusReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/admin/api/users/activation": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "send user activation",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "send user activation",
+                "parameters": [
+                    {
+                        "description": "SendUserActivationReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.SendUserActivationReq"
                         }
                     }
                 ],
@@ -3444,7 +3526,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "user's vote",
+                "description": "get user personal votes",
                 "consumes": [
                     "application/json"
                 ],
@@ -3454,7 +3536,7 @@ const docTemplate = `{
                 "tags": [
                     "Activity"
                 ],
-                "summary": "user's votes",
+                "summary": "get user personal votes",
                 "parameters": [
                     {
                         "type": "integer",
@@ -6345,7 +6427,8 @@ const docTemplate = `{
             "properties": {
                 "display_name": {
                     "type": "string",
-                    "maxLength": 30
+                    "maxLength": 30,
+                    "minLength": 4
                 },
                 "email": {
                     "type": "string",
@@ -7397,6 +7480,14 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetUserActivationResp": {
+            "type": "object",
+            "properties": {
+                "activation_url": {
+                    "type": "string"
+                }
+            }
+        },
         "schema.GetUserPageResp": {
             "type": "object",
             "properties": {
@@ -8008,6 +8099,17 @@ const docTemplate = `{
                 },
                 "object_type": {
                     "description": "object_type",
+                    "type": "string"
+                }
+            }
+        },
+        "schema.SendUserActivationReq": {
+            "type": "object",
+            "required": [
+                "user_id"
+            ],
+            "properties": {
+                "user_id": {
                     "type": "string"
                 }
             }

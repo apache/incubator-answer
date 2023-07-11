@@ -206,6 +206,7 @@ definitions:
     properties:
       display_name:
         maxLength: 30
+        minLength: 4
         type: string
       email:
         maxLength: 500
@@ -952,6 +953,11 @@ definitions:
       unreviewed_info:
         $ref: '#/definitions/schema.GetRevisionResp'
     type: object
+  schema.GetUserActivationResp:
+    properties:
+      activation_url:
+        type: string
+    type: object
   schema.GetUserPageResp:
     properties:
       avatar:
@@ -1381,6 +1387,13 @@ definitions:
       object_type:
         description: object_type
         type: string
+    type: object
+  schema.SendUserActivationReq:
+    properties:
+      user_id:
+        type: string
+    required:
+    - user_id
     type: object
   schema.SiteBrandingReq:
     properties:
@@ -3219,6 +3232,32 @@ paths:
       summary: add user
       tags:
       - admin
+  /answer/admin/api/user/activation:
+    get:
+      description: get user activation
+      parameters:
+      - description: user id
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserActivationResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user activation
+      tags:
+      - admin
   /answer/admin/api/user/password:
     put:
       consumes:
@@ -3289,6 +3328,28 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: update user
+      tags:
+      - admin
+  /answer/admin/api/users/activation:
+    post:
+      description: send user activation
+      parameters:
+      - description: SendUserActivationReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.SendUserActivationReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: send user activation
       tags:
       - admin
   /answer/admin/api/users/page:
@@ -4364,7 +4425,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: user's vote
+      description: get user personal votes
       parameters:
       - description: page size
         in: query
@@ -4395,7 +4456,7 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: user's votes
+      summary: get user personal votes
       tags:
       - Activity
   /answer/api/v1/post/render:
