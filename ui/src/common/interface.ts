@@ -109,6 +109,15 @@ enum RoleId {
   Admin = 2,
   Moderator = 3,
 }
+
+export interface User {
+  username: string;
+  rank: number;
+  vote_count: number;
+  display_name: string;
+  avatar: string;
+}
+
 export interface UserInfoBase {
   id?: string;
   avatar: any;
@@ -122,7 +131,7 @@ export interface UserInfoBase {
    */
   status?: string;
   /** roles */
-  role_id: RoleId;
+  role_id?: RoleId;
 }
 
 export interface UserInfoRes extends UserInfoBase {
@@ -161,7 +170,7 @@ export interface PasswordResetReq extends ImgCodeReq {
 }
 
 export interface CheckImgReq {
-  action: 'login' | 'e_mail' | 'find_pass';
+  action: 'login' | 'e_mail' | 'find_pass' | 'modify_pass';
 }
 
 export interface SetNoticeReq {
@@ -333,6 +342,7 @@ export interface AdminSettingsUsers {
   allow_update_username: boolean;
   allow_update_website: boolean;
   default_avatar: string;
+  gravatar_base_url: string;
 }
 
 export interface SiteSettings {
@@ -539,14 +549,6 @@ export interface MemberActionItem {
   type: string;
 }
 
-export interface User {
-  username: string;
-  rank: number;
-  vote_count: number;
-  display_name: string;
-  avatar: string;
-}
-
 export interface QuestionOperationReq {
   id: string;
   operation: 'pin' | 'unpin' | 'hide' | 'show';
@@ -558,18 +560,10 @@ export interface OauthBindEmailReq {
   must: boolean;
 }
 
-export interface OauthConnectorItem {
+export interface UserOauthConnectorItem {
   icon: string;
   name: string;
   link: string;
-}
-
-export interface UserOauthConnectorItem extends OauthConnectorItem {
   binding: boolean;
   external_id: string;
-}
-
-export interface QuestionOperationReq {
-  id: string;
-  operation: 'pin' | 'unpin' | 'hide' | 'show';
 }

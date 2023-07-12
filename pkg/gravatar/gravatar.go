@@ -7,15 +7,11 @@ import (
 	"net/url"
 )
 
-const (
-	defaultURLPrefix = "https://www.gravatar.com/avatar/"
-)
-
 // GetAvatarURL get avatar url from gravatar by email
-func GetAvatarURL(email string) string {
+func GetAvatarURL(baseURL, email string) string {
 	h := md5.New()
 	h.Write([]byte(email))
-	return defaultURLPrefix + hex.EncodeToString(h.Sum(nil))
+	return baseURL + hex.EncodeToString(h.Sum(nil))
 }
 
 // Resize resize avatar by pixel

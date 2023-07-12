@@ -35,4 +35,29 @@ const (
 	NotificationYourAnswerWasDeleted = "notification.action.your_answer_was_deleted"
 	// NotificationYourCommentWasDeleted your comment was deleted
 	NotificationYourCommentWasDeleted = "notification.action.your_comment_was_deleted"
+	// NotificationInvitedYouToAnswer invited you to answer
+	NotificationInvitedYouToAnswer = "notification.action.invited_you_to_answer"
+)
+
+var (
+	NotificationMsgTypeMapping = map[string]int{
+		NotificationUpdateQuestion:         1,
+		NotificationAnswerTheQuestion:      1,
+		NotificationUpVotedTheQuestion:     2,
+		NotificationDownVotedTheQuestion:   2,
+		NotificationUpdateAnswer:           1,
+		NotificationAcceptAnswer:           1,
+		NotificationUpVotedTheAnswer:       2,
+		NotificationDownVotedTheAnswer:     2,
+		NotificationCommentQuestion:        1,
+		NotificationCommentAnswer:          1,
+		NotificationUpVotedTheComment:      2,
+		NotificationReplyToYou:             1,
+		NotificationMentionYou:             1,
+		NotificationYourQuestionIsClosed:   1,
+		NotificationYourQuestionWasDeleted: 1,
+		NotificationYourAnswerWasDeleted:   1,
+		NotificationYourCommentWasDeleted:  1,
+		NotificationInvitedYouToAnswer:     3,
+	}
 )

@@ -1,0 +1,7 @@
+plugin:
+  uc_login:
+    ui:
+      connect: Connect with {{ auth_name }}
+      login: Login
+      qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
+      login_failed_email_tip: Login failed, please allow this app to access your email information before try again.

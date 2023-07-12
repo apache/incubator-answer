@@ -109,7 +109,7 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 			commonRouterPrefix, ConnectorRedirectRouterPrefix, connector.ConnectorSlugName())
 		userInfo, err := connector.ConnectorReceiver(ctx, receiverURL)
 		if err != nil {
-			log.Errorf("connector received failed: %v", err)
+			log.Errorf("connector received failed, error info: %v, response data is: %s", err, userInfo.MetaInfo)
 			ctx.Redirect(http.StatusFound, "/50x")
 			return
 		}
@@ -127,6 +127,10 @@ func (cc *ConnectorController) ConnectorRedirect(connector plugin.Connector) (fn
 		if err != nil {
 			log.Errorf("external login failed: %v", err)
 			ctx.Redirect(http.StatusFound, "/50x")
+			return
+		}
+		if len(resp.ErrMsg) > 0 {
+			ctx.Redirect(http.StatusFound, fmt.Sprintf("/50x?title=%s&msg=%s", resp.ErrTitle, resp.ErrMsg))
 			return
 		}
 		if len(resp.AccessToken) > 0 {

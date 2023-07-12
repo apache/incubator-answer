@@ -29,7 +29,7 @@ const HotQuestions: FC = () => {
               <div className="link-dark">{li.title}</div>
               {li.answer_count > 0 ? (
                 <div
-                  className={`d-flex align-items-center fs-14 mt-1 ${
+                  className={`d-flex align-items-center small mt-1 ${
                     li.accepted_answer_id > 0
                       ? 'link-success'
                       : 'link-secondary'

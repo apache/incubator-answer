@@ -37,11 +37,7 @@ func NewNotificationController(
 // @Success 200 {object} handler.RespBody
 // @Router /answer/api/v1/notification/status [get]
 func (nc *NotificationController) GetRedDot(ctx *gin.Context) {
-
 	req := &schema.GetRedDot{}
-
-	userID := middleware.GetLoginUserIDFromContext(ctx)
-	req.UserID = userID
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	canList, err := nc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.QuestionAudit,
@@ -56,8 +52,8 @@ func (nc *NotificationController) GetRedDot(ctx *gin.Context) {
 	req.CanReviewAnswer = canList[1]
 	req.CanReviewTag = canList[2]
 
-	RedDot, err := nc.notificationService.GetRedDot(ctx, req)
-	handler.HandleResponse(ctx, err, RedDot)
+	resp, err := nc.notificationService.GetRedDot(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
 // ClearRedDot
@@ -143,6 +139,7 @@ func (nc *NotificationController) ClearIDUnRead(ctx *gin.Context) {
 // @Param page query int false "page size"
 // @Param page_size query int false "page size"
 // @Param type query string true "type" Enums(inbox,achievement)
+// @Param inbox_type query string true "inbox_type" Enums(all,posts,invites,votes)
 // @Success 200 {object} handler.RespBody
 // @Router /answer/api/v1/notification/page [get]
 func (nc *NotificationController) GetList(ctx *gin.Context) {

@@ -20,6 +20,7 @@ const (
 	RankAnswerAcceptKey              = "rank.answer.accept"
 	RankAnswerVoteUpKey              = "rank.answer.vote_up"
 	RankAnswerVoteDownKey            = "rank.answer.vote_down"
+	RankInviteSomeoneToAnswerKey     = "rank.answer.invite_someone_to_answer"
 	RankCommentAddKey                = "rank.comment.add"
 	RankCommentEditKey               = "rank.comment.edit"
 	RankCommentDeleteKey             = "rank.comment.delete"
@@ -55,6 +56,7 @@ var (
 		{Label: reason.RankAnswerVoteUpLabel, Key: RankAnswerVoteUpKey},
 		{Label: reason.RankQuestionVoteDownLabel, Key: RankQuestionVoteDownKey},
 		{Label: reason.RankAnswerVoteDownLabel, Key: RankAnswerVoteDownKey},
+		{Label: reason.RankInviteSomeoneToAnswerLabel, Key: RankInviteSomeoneToAnswerKey},
 		{Label: reason.RankTagAddLabel, Key: RankTagAddKey},
 		{Label: reason.RankTagEditLabel, Key: RankTagEditKey},
 		{Label: reason.RankQuestionEditLabel, Key: RankQuestionEditKey},

@@ -1,7 +1,7 @@
 import { memo, FC, useState, useEffect, useRef } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-bootstrap';
+import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 import {
   Tag,
@@ -85,7 +85,7 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
         </Link>
       </h1>
 
-      <div className="d-flex flex-wrap align-items-center fs-14 mb-3 text-secondary">
+      <div className="d-flex flex-wrap align-items-center small mb-3 text-secondary">
         <FormatTime
           time={data.create_time}
           preFix={t('Asked')}
@@ -102,13 +102,17 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
             {t('Views')} {formatCount(data.view_count)}
           </div>
         )}
-        <Button
-          variant="link"
-          size="sm"
-          className="p-0 btn-no-border"
-          onClick={(e) => handleFollow(e)}>
-          {t(followed ? 'Following' : 'Follow')}
-        </Button>
+        <OverlayTrigger
+          placement="bottom"
+          overlay={<Tooltip id="followTooltip">{t('follow_tip')}</Tooltip>}>
+          <Button
+            variant="link"
+            size="sm"
+            className="p-0 btn-no-border"
+            onClick={(e) => handleFollow(e)}>
+            {t(followed ? 'Following' : 'Follow')}
+          </Button>
+        </OverlayTrigger>
       </div>
       <div className="m-n1">
         {data?.tags?.map((item: any) => {
@@ -165,14 +169,14 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
               <FormatTime
                 time={data.edit_time}
                 preFix={t('edit')}
-                className="link-secondary fs-14"
+                className="link-secondary small"
               />
             </Link>
           ) : (
             <FormatTime
               time={data.edit_time}
               preFix={t('edit')}
-              className="text-secondary fs-14"
+              className="text-secondary small"
             />
           )}
         </div>

@@ -25,6 +25,7 @@ import (
 	"github.com/answerdev/answer/pkg/encryption"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -111,25 +112,30 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 
 	}
 
-	// user add question count
-	err = as.questionCommon.UpdateAnswerCount(ctx, answerInfo.QuestionID, -1)
-	if err != nil {
-		log.Error("IncreaseAnswerCount error", err.Error())
-	}
-
-	err = as.userCommon.UpdateAnswerCount(ctx, answerInfo.UserID, -1)
-	if err != nil {
-		log.Error("user IncreaseAnswerCount error", err.Error())
-	}
-
 	err = as.answerRepo.RemoveAnswer(ctx, req.ID)
 	if err != nil {
 		return err
 	}
-	err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
+
+	// user add question count
+	err = as.questionCommon.UpdateAnswerCount(ctx, answerInfo.QuestionID)
 	if err != nil {
-		log.Errorf("delete answer activity change failed: %s", err.Error())
+		log.Error("IncreaseAnswerCount error", err.Error())
 	}
+	userAnswerCount, err := as.answerRepo.GetCountByUserID(ctx, answerInfo.UserID)
+	if err != nil {
+		log.Error("GetCountByUserID error", err.Error())
+	}
+	err = as.userCommon.UpdateAnswerCount(ctx, answerInfo.UserID, int(userAnswerCount))
+	if err != nil {
+		log.Error("user IncreaseAnswerCount error", err.Error())
+	}
+	// #2372 In order to simplify the process and complexity, as well as to consider if it is in-house,
+	// facing the problem of recovery.
+	//err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
+	//if err != nil {
+	//	log.Errorf("delete answer activity change failed: %s", err.Error())
+	//}
 	activity_queue.AddActivity(&schema.ActivityMsg{
 		UserID:           req.UserID,
 		ObjectID:         answerInfo.ID,
@@ -164,7 +170,7 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if err = as.answerRepo.AddAnswer(ctx, insertData); err != nil {
 		return "", err
 	}
-	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionID, 1)
+	err = as.questionCommon.UpdateAnswerCount(ctx, req.QuestionID)
 	if err != nil {
 		log.Error("IncreaseAnswerCount error", err.Error())
 	}
@@ -176,8 +182,11 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 	if err != nil {
 		return insertData.ID, err
 	}
-
-	err = as.userCommon.UpdateAnswerCount(ctx, req.UserID, 1)
+	userAnswerCount, err := as.answerRepo.GetCountByUserID(ctx, req.UserID)
+	if err != nil {
+		log.Error("GetCountByUserID error", err.Error())
+	}
+	err = as.userCommon.UpdateAnswerCount(ctx, req.UserID, int(userAnswerCount))
 	if err != nil {
 		log.Error("user IncreaseAnswerCount error", err.Error())
 	}
@@ -457,17 +466,18 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.A
 	}
 
 	if setStatus == entity.AnswerStatusDeleted {
-		err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
-		if err != nil {
-			log.Errorf("admin delete question then rank rollback error %s", err.Error())
-		} else {
-			activity_queue.AddActivity(&schema.ActivityMsg{
-				UserID:           req.UserID,
-				ObjectID:         answerInfo.ID,
-				OriginalObjectID: answerInfo.ID,
-				ActivityTypeKey:  constant.ActAnswerDeleted,
-			})
-		}
+		// #2372 In order to simplify the process and complexity, as well as to consider if it is in-house,
+		// facing the problem of recovery.
+		//err = as.answerActivityService.DeleteAnswer(ctx, answerInfo.ID, answerInfo.CreatedAt, answerInfo.VoteCount)
+		//if err != nil {
+		//	log.Errorf("admin delete question then rank rollback error %s", err.Error())
+		//}
+		activity_queue.AddActivity(&schema.ActivityMsg{
+			UserID:           req.UserID,
+			ObjectID:         answerInfo.ID,
+			OriginalObjectID: answerInfo.ID,
+			ActivityTypeKey:  constant.ActAnswerDeleted,
+		})
 	}
 
 	msg := &schema.NotificationMsg{}
@@ -514,6 +524,7 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, answers []*entity
 		userIDs = append(userIDs, info.UserID)
 		userIDs = append(userIDs, info.LastEditUserID)
 		if req.UserID != "" {
+			item.ID = uid.DeShortID(item.ID)
 			item.VoteStatus = as.voteRepo.GetVoteStatus(ctx, item.ID, req.UserID)
 		}
 	}
@@ -549,6 +560,7 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, answers []*entity
 	}
 
 	for _, item := range list {
+		item.ID = uid.EnShortID(item.ID)
 		item.MemberActions = permission.GetAnswerPermission(ctx, req.UserID, item.UserID, req.CanEdit, req.CanDelete)
 	}
 	return list, nil
@@ -616,6 +628,10 @@ func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
 		UserID:     userInfo.ID,
 	}
 
+	// If receiver has set language, use it to send email.
+	if len(userInfo.Language) > 0 {
+		ctx = context.WithValue(ctx, constant.AcceptLanguageFlag, i18n.Language(userInfo.Language))
+	}
 	title, body, err := as.emailService.NewAnswerTemplate(ctx, rawData)
 	if err != nil {
 		log.Error(err)

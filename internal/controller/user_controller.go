@@ -24,7 +24,7 @@ type UserController struct {
 	userService           *service.UserService
 	authService           *auth.AuthService
 	actionService         *action.CaptchaService
-	uploaderService       *uploader.UploaderService
+	uploaderService       uploader.UploaderService
 	emailService          *export.EmailService
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 }
@@ -35,7 +35,7 @@ func NewUserController(
 	userService *service.UserService,
 	actionService *action.CaptchaService,
 	emailService *export.EmailService,
-	uploaderService *uploader.UploaderService,
+	uploaderService uploader.UploaderService,
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 ) *UserController {
 	return &UserController{
@@ -55,7 +55,7 @@ func NewUserController(
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Success 200 {object} handler.RespBody{data=schema.GetUserToSetShowResp}
+// @Success 200 {object} handler.RespBody{data=schema.GetCurrentLoginUserInfoResp}
 // @Router /answer/api/v1/user/info [get]
 func (uc *UserController) GetUserInfoByUserID(ctx *gin.Context) {
 	token := middleware.ExtractToken(ctx)
@@ -102,7 +102,7 @@ func (uc *UserController) GetOtherUserInfoByUsername(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body schema.UserEmailLogin true "UserEmailLogin"
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Success 200 {object} handler.RespBody{data=schema.UserLoginResp}
 // @Router /answer/api/v1/user/login/email [post]
 func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 	req := &schema.UserEmailLogin{}
@@ -215,7 +215,7 @@ func (uc *UserController) UserLogout(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param data body schema.UserRegisterReq true "UserRegisterReq"
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Success 200 {object} handler.RespBody{data=schema.UserLoginResp}
 // @Router /answer/api/v1/user/register/email [post]
 func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 	// check whether site allow register or not
@@ -267,7 +267,7 @@ func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param code query string true "code" default()
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Success 200 {object} handler.RespBody{data=schema.UserLoginResp}
 // @Router /answer/api/v1/user/email/verification [post]
 func (uc *UserController) UserVerifyEmail(ctx *gin.Context) {
 	req := &schema.UserVerifyEmailReq{}
@@ -350,6 +350,21 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.AccessToken = middleware.ExtractToken(ctx)
 
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeModifyPass, ctx.ClientIP(),
+		req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+		return
+	}
+	_, err := uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeModifyPass, ctx.ClientIP())
+	if err != nil {
+		log.Error(err)
+	}
+
 	oldPassVerification, err := uc.userService.UserModifyPassWordVerification(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -363,6 +378,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.OldPasswordVerificationFailed), errFields)
 		return
 	}
+
 	if req.OldPass == req.Pass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "pass",
@@ -372,6 +388,9 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 		return
 	}
 	err = uc.userService.UserModifyPassword(ctx, req)
+	if err == nil {
+		uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
+	}
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -445,7 +464,7 @@ func (uc *UserController) ActionRecord(ctx *gin.Context) {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Success 200 {object} handler.RespBody{data=schema.GetUserResp}
+// @Success 200 {object} handler.RespBody{data=schema.UserLoginResp}
 // @Router /answer/api/v1/user/register/captcha [get]
 func (uc *UserController) UserRegisterCaptcha(ctx *gin.Context) {
 	resp, err := uc.actionService.UserRegisterCaptcha(ctx)
@@ -587,4 +606,24 @@ func (uc *UserController) UserUnsubscribeEmailNotification(ctx *gin.Context) {
 
 	err := uc.userService.UserUnsubscribeEmailNotification(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
+}
+
+// SearchUserListByName godoc
+// @Summary SearchUserListByName
+// @Description SearchUserListByName
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param username query string true "username"
+// @Success 200 {object} handler.RespBody{data=schema.GetOtherUserInfoResp}
+// @Router /answer/api/v1/user/info/search [get]
+func (uc *UserController) SearchUserListByName(ctx *gin.Context) {
+	req := &schema.GetOtherUserInfoByUsernameReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	resp, err := uc.userService.SearchUserListByName(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }

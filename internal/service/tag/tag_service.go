@@ -380,7 +380,7 @@ func (ts *TagService) checkTagIsFollow(ctx context.Context, userID, tagID string
 	if len(userID) == 0 {
 		return false
 	}
-	followed, err := ts.followCommon.IsFollowed(userID, tagID)
+	followed, err := ts.followCommon.IsFollowed(ctx, userID, tagID)
 	if err != nil {
 		log.Error(err)
 	}

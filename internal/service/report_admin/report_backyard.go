@@ -2,15 +2,17 @@ package report_admin
 
 import (
 	"context"
+	"encoding/json"
 
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/service/config"
+	"github.com/answerdev/answer/internal/service/object_info"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/segmentfault/pacman/log"
 
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/repo/common"
 	"github.com/answerdev/answer/internal/schema"
 	answercommon "github.com/answerdev/answer/internal/service/answer_common"
 	"github.com/answerdev/answer/internal/service/comment_common"
@@ -26,33 +28,33 @@ import (
 type ReportAdminService struct {
 	reportRepo        report_common.ReportRepo
 	commonUser        *usercommon.UserCommon
-	commonRepo        *common.CommonRepo
 	answerRepo        answercommon.AnswerRepo
 	questionRepo      questioncommon.QuestionRepo
 	commentCommonRepo comment_common.CommentCommonRepo
 	reportHandle      *report_handle_admin.ReportHandle
-	configRepo        config.ConfigRepo
+	configService     *config.ConfigService
+	objectInfoService *object_info.ObjService
 }
 
 // NewReportAdminService new report service
 func NewReportAdminService(
 	reportRepo report_common.ReportRepo,
 	commonUser *usercommon.UserCommon,
-	commonRepo *common.CommonRepo,
 	answerRepo answercommon.AnswerRepo,
 	questionRepo questioncommon.QuestionRepo,
 	commentCommonRepo comment_common.CommentCommonRepo,
 	reportHandle *report_handle_admin.ReportHandle,
-	configRepo config.ConfigRepo) *ReportAdminService {
+	configService *config.ConfigService,
+	objectInfoService *object_info.ObjService) *ReportAdminService {
 	return &ReportAdminService{
 		reportRepo:        reportRepo,
 		commonUser:        commonUser,
-		commonRepo:        commonRepo,
 		answerRepo:        answerRepo,
 		questionRepo:      questionRepo,
 		commentCommonRepo: commentCommonRepo,
 		reportHandle:      reportHandle,
-		configRepo:        configRepo,
+		configService:     configService,
+		objectInfoService: objectInfoService,
 	}
 }
 
@@ -69,8 +71,6 @@ func (rs *ReportAdminService) ListReportPage(ctx context.Context, dto schema.Get
 		flaggedUsers,
 		users map[string]*schema.UserBasicInfo
 	)
-
-	pageModel = &pager.PageModel{}
 
 	flags, total, err = rs.reportRepo.GetReportListPage(ctx, dto)
 	if err != nil {
@@ -98,9 +98,8 @@ func (rs *ReportAdminService) ListReportPage(ctx context.Context, dto schema.Get
 	for _, r := range resp {
 		r.ReportedUser = flaggedUsers[r.ReportedUserID]
 		r.ReportUser = users[r.UserID]
+		rs.decorateReportResp(ctx, r)
 	}
-
-	rs.parseObject(ctx, &resp)
 	return pager.NewPageModel(total, resp), nil
 }
 
@@ -139,99 +138,38 @@ func (rs *ReportAdminService) HandleReported(ctx context.Context, req schema.Rep
 	return
 }
 
-func (rs *ReportAdminService) parseObject(ctx context.Context, resp *[]*schema.GetReportListPageResp) {
-	var (
-		res = *resp
-	)
+func (rs *ReportAdminService) decorateReportResp(ctx context.Context, resp *schema.GetReportListPageResp) {
+	lang := handler.GetLangByCtx(ctx)
+	objectInfo, err := rs.objectInfoService.GetInfo(ctx, resp.ObjectID)
+	if err != nil {
+		log.Error(err)
+		return
+	}
 
-	for i, r := range res {
-		var (
-			objIds map[string]string
-			exists,
-			ok bool
-			err error
-			questionId,
-			answerId,
-			commentId string
-			question *entity.Question
-			answer   *entity.Answer
-			cmt      *entity.Comment
-		)
+	resp.QuestionID = objectInfo.QuestionID
+	resp.AnswerID = objectInfo.AnswerID
+	resp.CommentID = objectInfo.CommentID
+	resp.Title = objectInfo.Title
+	resp.Excerpt = htmltext.FetchExcerpt(objectInfo.Content, "...", 240)
 
-		objIds, err = rs.commonRepo.GetObjectIDMap(r.ObjectID)
+	if resp.ReportType > 0 {
+		resp.Reason = &schema.ReasonItem{ReasonType: resp.ReportType}
+		cf, err := rs.configService.GetConfigByID(ctx, resp.ReportType)
 		if err != nil {
 			log.Error(err)
-			continue
+		} else {
+			_ = json.Unmarshal([]byte(cf.Value), resp.Reason)
+			resp.Reason.Translate(cf.Key, lang)
 		}
-
-		questionId, ok = objIds["question"]
-		if !ok {
-			continue
+	}
+	if resp.FlaggedType > 0 {
+		resp.FlaggedReason = &schema.ReasonItem{ReasonType: resp.FlaggedType}
+		cf, err := rs.configService.GetConfigByID(ctx, resp.FlaggedType)
+		if err != nil {
+			log.Error(err)
+		} else {
+			_ = json.Unmarshal([]byte(cf.Value), resp.Reason)
+			resp.Reason.Translate(cf.Key, lang)
 		}
-
-		question, exists, err = rs.questionRepo.GetQuestion(ctx, questionId)
-		if err != nil || !exists {
-			continue
-		}
-
-		answerId, ok = objIds["answer"]
-		if ok {
-			answer, _, err = rs.answerRepo.GetAnswer(ctx, answerId)
-			if err != nil {
-				log.Error(err)
-				continue
-			}
-		}
-
-		commentId, ok = objIds["comment"]
-		if ok {
-			cmt, _, err = rs.commentCommonRepo.GetComment(ctx, commentId)
-			if err != nil {
-				log.Error(err)
-				continue
-			}
-		}
-
-		switch r.OType {
-		case "question":
-			r.QuestionID = questionId
-			r.Title = question.Title
-			r.Excerpt = htmltext.FetchExcerpt(question.ParsedText, "...", 240)
-
-		case "answer":
-			r.QuestionID = questionId
-			r.AnswerID = answerId
-			r.Title = question.Title
-			r.Excerpt = htmltext.FetchExcerpt(answer.ParsedText, "...", 240)
-
-		case "comment":
-			r.QuestionID = questionId
-			r.AnswerID = answerId
-			r.CommentID = commentId
-			r.Title = question.Title
-			r.Excerpt = htmltext.FetchExcerpt(cmt.ParsedText, "...", 240)
-		}
-
-		// parse reason
-		if r.ReportType > 0 {
-			r.Reason = &schema.ReasonItem{
-				ReasonType: r.ReportType,
-			}
-			err = rs.configRepo.GetJsonConfigByIDAndSetToObject(r.ReportType, r.Reason)
-			if err != nil {
-				log.Error(err)
-			}
-		}
-		if r.FlaggedType > 0 {
-			r.FlaggedReason = &schema.ReasonItem{
-				ReasonType: r.FlaggedType,
-			}
-			err = rs.configRepo.GetJsonConfigByIDAndSetToObject(r.FlaggedType, r.FlaggedReason)
-			if err != nil {
-				log.Error(err)
-			}
-		}
-
-		res[i] = r
 	}
 }

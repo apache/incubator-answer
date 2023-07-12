@@ -7,6 +7,7 @@ import (
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/pkg/gravatar"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/log"
 )
@@ -74,6 +75,49 @@ func (s *SiteInfoCommonService) GetSiteUsers(ctx context.Context) (resp *schema.
 		return nil, err
 	}
 	return resp, nil
+}
+
+// FormatAvatar format avatar
+func (s *SiteInfoCommonService) FormatAvatar(ctx context.Context, originalAvatarData, email string) *schema.AvatarInfo {
+	gravatarBaseURL, defaultAvatar := s.getAvatarDefaultConfig(ctx)
+	return s.selectedAvatar(originalAvatarData, defaultAvatar, gravatarBaseURL, email)
+}
+
+// FormatListAvatar format avatar
+func (s *SiteInfoCommonService) FormatListAvatar(ctx context.Context, userList []*entity.User) (
+	avatarMapping map[string]*schema.AvatarInfo) {
+	gravatarBaseURL, defaultAvatar := s.getAvatarDefaultConfig(ctx)
+	avatarMapping = make(map[string]*schema.AvatarInfo)
+	for _, user := range userList {
+		avatarMapping[user.ID] = s.selectedAvatar(user.Avatar, defaultAvatar, gravatarBaseURL, user.EMail)
+	}
+	return avatarMapping
+}
+
+func (s *SiteInfoCommonService) getAvatarDefaultConfig(ctx context.Context) (string, string) {
+	gravatarBaseURL, defaultAvatar := constant.DefaultGravatarBaseURL, constant.DefaultAvatar
+	usersConfig, err := s.GetSiteUsers(ctx)
+	if err != nil {
+		log.Error(err)
+	} else {
+		gravatarBaseURL = usersConfig.GravatarBaseURL
+		defaultAvatar = usersConfig.DefaultAvatar
+	}
+	return gravatarBaseURL, defaultAvatar
+}
+
+func (s *SiteInfoCommonService) selectedAvatar(
+	originalAvatarData string, defaultAvatar string, gravatarBaseURL string, email string) *schema.AvatarInfo {
+	avatarInfo := &schema.AvatarInfo{}
+	_ = json.Unmarshal([]byte(originalAvatarData), avatarInfo)
+
+	if len(avatarInfo.Type) == 0 && defaultAvatar == constant.AvatarTypeGravatar {
+		avatarInfo.Type = constant.AvatarTypeGravatar
+		avatarInfo.Gravatar = gravatar.GetAvatarURL(gravatarBaseURL, email)
+	} else if avatarInfo.Type == constant.AvatarTypeGravatar {
+		avatarInfo.Gravatar = gravatar.GetAvatarURL(gravatarBaseURL, email)
+	}
+	return avatarInfo
 }
 
 // GetSiteWrite get site info write

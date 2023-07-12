@@ -29,7 +29,7 @@ const Heading: FC<IEditorContext> = (context) => {
       label: t('heading.options.h4'),
     },
     {
-      text: `<h5 class="mb-0 fs-14">${t('heading.options.h5')}</h5>`,
+      text: `<h5 class="mb-0 small">${t('heading.options.h5')}</h5>`,
       level: 5,
       label: t('heading.options.h5'),
     },

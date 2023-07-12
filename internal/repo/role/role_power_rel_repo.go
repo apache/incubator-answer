@@ -25,7 +25,7 @@ func NewRolePowerRelRepo(data *data.Data) role.RolePowerRelRepo {
 // GetRolePowerTypeList get role power type list
 func (rr *rolePowerRelRepo) GetRolePowerTypeList(ctx context.Context, roleID int) (powers []string, err error) {
 	powers = make([]string, 0)
-	err = rr.data.DB.Table("role_power_rel").
+	err = rr.data.DB.Context(ctx).Table("role_power_rel").
 		Cols("power_type").Where(builder.Eq{"role_id": roleID}).Find(&powers)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()

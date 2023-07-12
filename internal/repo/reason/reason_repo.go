@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/reason_common"
@@ -12,52 +13,40 @@ import (
 )
 
 type reasonRepo struct {
-	configRepo config.ConfigRepo
+	configService *config.ConfigService
 }
 
-func NewReasonRepo(configRepo config.ConfigRepo) reason_common.ReasonRepo {
+func NewReasonRepo(configService *config.ConfigService) reason_common.ReasonRepo {
 	return &reasonRepo{
-		configRepo: configRepo,
+		configService: configService,
 	}
 }
 
-func (rr *reasonRepo) ListReasons(ctx context.Context, objectType, action string) (resp []schema.ReasonItem, err error) {
-	var (
-		reasonAction = fmt.Sprintf("%s.%s.reasons", objectType, action)
-		reasonKeys   []string
-		cfgValue     string
-	)
-	resp = []schema.ReasonItem{}
+func (rr *reasonRepo) ListReasons(ctx context.Context, objectType, action string) (resp []*schema.ReasonItem, err error) {
+	lang := handler.GetLangByCtx(ctx)
+	reasonAction := fmt.Sprintf("%s.%s.reasons", objectType, action)
+	resp = make([]*schema.ReasonItem, 0)
 
-	reasonKeys, err = rr.configRepo.GetArrayString(reasonAction)
+	reasonKeys, err := rr.configService.GetArrayStringValue(ctx, reasonAction)
 	if err != nil {
-		return
+		return nil, err
 	}
 	for _, reasonKey := range reasonKeys {
-		var (
-			reasonType int
-			reason     = schema.ReasonItem{}
-		)
-
-		cfgValue, err = rr.configRepo.GetString(reasonKey)
+		cfg, err := rr.configService.GetConfigByKey(ctx, reasonKey)
 		if err != nil {
 			log.Error(err)
 			continue
 		}
 
-		err = json.Unmarshal([]byte(cfgValue), &reason)
+		reason := &schema.ReasonItem{}
+		err = json.Unmarshal(cfg.GetByteValue(), reason)
 		if err != nil {
 			log.Error(err)
 			continue
 		}
-		reasonType, err = rr.configRepo.GetConfigType(reasonKey)
-		if err != nil {
-			log.Error(err)
-			continue
-		}
-
-		reason.ReasonType = reasonType
+		reason.Translate(reasonKey, lang)
+		reason.ReasonType = cfg.ID
 		resp = append(resp, reason)
 	}
-	return
+	return resp, nil
 }

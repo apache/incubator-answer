@@ -2,11 +2,11 @@
 {{range .comments}}
 <div class="border-bottom py-2 comment-item border-top">
   <div class="d-block">
-    <div class="fmt fs-14">
+    <div class="fmt small">
       {{formatLinkNofollow .ParsedText}}
     </div>
   </div>
-  <div class="d-flex justify-content-between fs-14">
+  <div class="d-flex justify-content-between small">
     <div class="d-flex align-items-center link-secondary">
       <a href="/users/{{.Username}}">{{.UserDisplayName}}</a><span
       class="mx-1">•</span>

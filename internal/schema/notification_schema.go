@@ -1,17 +1,28 @@
 package schema
 
 const (
-	NotificationTypeInbox       = 1
-	NotificationTypeAchievement = 2
-	NotificationNotRead         = 1
-	NotificationRead            = 2
-	NotificationStatusNormal    = 1
-	NotificationStatusDelete    = 10
+	NotificationTypeInbox        = 1
+	NotificationTypeAchievement  = 2
+	NotificationNotRead          = 1
+	NotificationRead             = 2
+	NotificationStatusNormal     = 1
+	NotificationStatusDelete     = 10
+	NotificationInboxTypeAll     = 0
+	NotificationInboxTypePosts   = 1
+	NotificationInboxTypeVotes   = 2
+	NotificationInboxTypeInvites = 3
 )
 
 var NotificationType = map[string]int{
 	"inbox":       NotificationTypeInbox,
 	"achievement": NotificationTypeAchievement,
+}
+
+var NotificationInboxType = map[string]int{
+	"all":     NotificationInboxTypeAll,
+	"posts":   NotificationInboxTypePosts,
+	"invites": NotificationInboxTypeInvites,
+	"votes":   NotificationInboxTypeVotes,
 }
 
 type NotificationContent struct {
@@ -69,11 +80,13 @@ type RedDot struct {
 }
 
 type NotificationSearch struct {
-	Page     int    `json:"page" form:"page"`           //Query number of pages
-	PageSize int    `json:"page_size" form:"page_size"` //Search page size
-	Type     int    `json:"-" form:"-"`
-	TypeStr  string `json:"type" form:"type"` // inbox achievement
-	UserID   string `json:"-"`
+	Page         int    `json:"page" form:"page"`           //Query number of pages
+	PageSize     int    `json:"page_size" form:"page_size"` //Search page size
+	Type         int    `json:"-" form:"-"`
+	TypeStr      string `json:"type" form:"type"`             // inbox achievement
+	InboxTypeStr string `json:"inbox_type" form:"inbox_type"` // inbox achievement
+	InboxType    int    `json:"-" form:"-"`                   // inbox achievement
+	UserID       string `json:"-"`
 }
 
 type NotificationClearRequest struct {

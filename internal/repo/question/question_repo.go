@@ -47,7 +47,7 @@ func (qr *questionRepo) AddQuestion(ctx context.Context, question *entity.Questi
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_, err = qr.data.DB.Insert(question)
+	_, err = qr.data.DB.Context(ctx).Insert(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -59,7 +59,7 @@ func (qr *questionRepo) AddQuestion(ctx context.Context, question *entity.Questi
 // RemoveQuestion delete question
 func (qr *questionRepo) RemoveQuestion(ctx context.Context, id string) (err error) {
 	id = uid.DeShortID(id)
-	_, err = qr.data.DB.Where("id =?", id).Delete(&entity.Question{})
+	_, err = qr.data.DB.Context(ctx).Where("id =?", id).Delete(&entity.Question{})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -69,7 +69,7 @@ func (qr *questionRepo) RemoveQuestion(ctx context.Context, id string) (err erro
 // UpdateQuestion update question
 func (qr *questionRepo) UpdateQuestion(ctx context.Context, question *entity.Question, Cols []string) (err error) {
 	question.ID = uid.DeShortID(question.ID)
-	_, err = qr.data.DB.Where("id =?", question.ID).Cols(Cols...).Update(question)
+	_, err = qr.data.DB.Context(ctx).Where("id =?", question.ID).Cols(Cols...).Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -81,7 +81,7 @@ func (qr *questionRepo) UpdateQuestion(ctx context.Context, question *entity.Que
 func (qr *questionRepo) UpdatePvCount(ctx context.Context, questionID string) (err error) {
 	questionID = uid.DeShortID(questionID)
 	question := &entity.Question{}
-	_, err = qr.data.DB.Where("id =?", questionID).Incr("view_count", 1).Update(question)
+	_, err = qr.data.DB.Context(ctx).Where("id =?", questionID).Incr("view_count", 1).Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -92,7 +92,8 @@ func (qr *questionRepo) UpdatePvCount(ctx context.Context, questionID string) (e
 func (qr *questionRepo) UpdateAnswerCount(ctx context.Context, questionID string, num int) (err error) {
 	questionID = uid.DeShortID(questionID)
 	question := &entity.Question{}
-	_, err = qr.data.DB.Where("id =?", questionID).Incr("answer_count", num).Update(question)
+	question.AnswerCount = num
+	_, err = qr.data.DB.Context(ctx).Where("id =?", questionID).Cols("answer_count").Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -103,7 +104,7 @@ func (qr *questionRepo) UpdateAnswerCount(ctx context.Context, questionID string
 func (qr *questionRepo) UpdateCollectionCount(ctx context.Context, questionID string, num int) (err error) {
 	questionID = uid.DeShortID(questionID)
 	question := &entity.Question{}
-	_, err = qr.data.DB.Where("id =?", questionID).Incr("collection_count", num).Update(question)
+	_, err = qr.data.DB.Context(ctx).Where("id =?", questionID).Incr("collection_count", num).Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -114,7 +115,7 @@ func (qr *questionRepo) UpdateQuestionStatus(ctx context.Context, question *enti
 	question.ID = uid.DeShortID(question.ID)
 	now := time.Now()
 	question.UpdatedAt = now
-	_, err = qr.data.DB.Where("id =?", question.ID).Cols("status", "updated_at").Update(question)
+	_, err = qr.data.DB.Context(ctx).Where("id =?", question.ID).Cols("status", "updated_at").Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -124,7 +125,7 @@ func (qr *questionRepo) UpdateQuestionStatus(ctx context.Context, question *enti
 
 func (qr *questionRepo) UpdateQuestionStatusWithOutUpdateTime(ctx context.Context, question *entity.Question) (err error) {
 	question.ID = uid.DeShortID(question.ID)
-	_, err = qr.data.DB.Where("id =?", question.ID).Cols("status").Update(question)
+	_, err = qr.data.DB.Context(ctx).Where("id =?", question.ID).Cols("status").Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -134,7 +135,7 @@ func (qr *questionRepo) UpdateQuestionStatusWithOutUpdateTime(ctx context.Contex
 
 func (qr *questionRepo) UpdateQuestionOperation(ctx context.Context, question *entity.Question) (err error) {
 	question.ID = uid.DeShortID(question.ID)
-	_, err = qr.data.DB.Where("id =?", question.ID).Cols("pin", "show").Update(question)
+	_, err = qr.data.DB.Context(ctx).Where("id =?", question.ID).Cols("pin", "show").Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -143,7 +144,7 @@ func (qr *questionRepo) UpdateQuestionOperation(ctx context.Context, question *e
 
 func (qr *questionRepo) UpdateAccepted(ctx context.Context, question *entity.Question) (err error) {
 	question.ID = uid.DeShortID(question.ID)
-	_, err = qr.data.DB.Where("id =?", question.ID).Cols("accepted_answer_id").Update(question)
+	_, err = qr.data.DB.Context(ctx).Where("id =?", question.ID).Cols("accepted_answer_id").Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -153,7 +154,7 @@ func (qr *questionRepo) UpdateAccepted(ctx context.Context, question *entity.Que
 
 func (qr *questionRepo) UpdateLastAnswer(ctx context.Context, question *entity.Question) (err error) {
 	question.ID = uid.DeShortID(question.ID)
-	_, err = qr.data.DB.Where("id =?", question.ID).Cols("last_answer_id").Update(question)
+	_, err = qr.data.DB.Context(ctx).Where("id =?", question.ID).Cols("last_answer_id").Update(question)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -168,7 +169,7 @@ func (qr *questionRepo) GetQuestion(ctx context.Context, id string) (
 	id = uid.DeShortID(id)
 	question = &entity.Question{}
 	question.ID = id
-	exist, err = qr.data.DB.Where("id = ?", id).Get(question)
+	exist, err = qr.data.DB.Context(ctx).Where("id = ?", id).Get(question)
 	if err != nil {
 		return nil, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -179,7 +180,7 @@ func (qr *questionRepo) GetQuestion(ctx context.Context, id string) (
 // GetTagBySlugName get tag by slug name
 func (qr *questionRepo) SearchByTitleLike(ctx context.Context, title string) (questionList []*entity.Question, err error) {
 	questionList = make([]*entity.Question, 0)
-	err = qr.data.DB.Table("question").Where("title like ?", "%"+title+"%").Limit(10, 0).Find(&questionList)
+	err = qr.data.DB.Context(ctx).Table("question").Where("title like ?", "%"+title+"%").Limit(10, 0).Find(&questionList)
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -194,7 +195,7 @@ func (qr *questionRepo) FindByID(ctx context.Context, id []string) (questionList
 		id[key] = uid.DeShortID(itemID)
 	}
 	questionList = make([]*entity.Question, 0)
-	err = qr.data.DB.Table("question").In("id", id).Find(&questionList)
+	err = qr.data.DB.Context(ctx).Table("question").In("id", id).Find(&questionList)
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -208,7 +209,7 @@ func (qr *questionRepo) FindByID(ctx context.Context, id []string) (questionList
 func (qr *questionRepo) GetQuestionList(ctx context.Context, question *entity.Question) (questionList []*entity.Question, err error) {
 	question.ID = uid.DeShortID(question.ID)
 	questionList = make([]*entity.Question, 0)
-	err = qr.data.DB.Find(questionList, question)
+	err = qr.data.DB.Context(ctx).Find(questionList, question)
 	if err != nil {
 		return questionList, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -221,7 +222,25 @@ func (qr *questionRepo) GetQuestionList(ctx context.Context, question *entity.Qu
 func (qr *questionRepo) GetQuestionCount(ctx context.Context) (count int64, err error) {
 	questionList := make([]*entity.Question, 0)
 
-	count, err = qr.data.DB.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).FindAndCount(&questionList)
+	count, err = qr.data.DB.Context(ctx).In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).FindAndCount(&questionList)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (qr *questionRepo) GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error) {
+	questionList := make([]*entity.Question, 0)
+	count, err = qr.data.DB.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).And("question.user_id = ?", userID).FindAndCount(&questionList)
+	if err != nil {
+		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (qr *questionRepo) GetQuestionCountByIDs(ctx context.Context, ids []string) (count int64, err error) {
+	questionList := make([]*entity.Question, 0)
+	count, err = qr.data.DB.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed}).In("id = ?", ids).Count(&questionList)
 	if err != nil {
 		return count, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -240,7 +259,7 @@ func (qr *questionRepo) GetQuestionIDsPage(ctx context.Context, page, pageSize i
 		pageSize = constant.DefaultPageSize
 	}
 	offset := page * pageSize
-	session := qr.data.DB.Table("question")
+	session := qr.data.DB.Context(ctx).Table("question")
 	session = session.In("question.status", []int{entity.QuestionStatusAvailable, entity.QuestionStatusClosed})
 	session.And("question.show = ?", entity.QuestionShow)
 	session = session.Limit(pageSize, offset)
@@ -268,7 +287,7 @@ func (qr *questionRepo) GetQuestionPage(ctx context.Context, page, pageSize int,
 	questionList []*entity.Question, total int64, err error) {
 	questionList = make([]*entity.Question, 0)
 
-	session := qr.data.DB.Where("question.status = ? OR question.status = ?",
+	session := qr.data.DB.Context(ctx).Where("question.status = ? OR question.status = ?",
 		entity.QuestionStatusAvailable, entity.QuestionStatusClosed)
 	if len(tagID) > 0 {
 		session.Join("LEFT", "tag_rel", "question.id = tag_rel.object_id")
@@ -312,7 +331,7 @@ func (qr *questionRepo) AdminSearchList(ctx context.Context, search *schema.Admi
 	var (
 		count   int64
 		err     error
-		session = qr.data.DB.Table("question")
+		session = qr.data.DB.Context(ctx).Table("question")
 	)
 
 	session.Where(builder.Eq{
@@ -362,7 +381,7 @@ func (qr *questionRepo) AdminSearchList(ctx context.Context, search *schema.Admi
 
 	offset := search.Page * search.PageSize
 
-	session.OrderBy("updated_at desc").
+	session.OrderBy("created_at desc").
 		Limit(search.PageSize, offset)
 	count, err = session.FindAndCount(&rows)
 	if err != nil {

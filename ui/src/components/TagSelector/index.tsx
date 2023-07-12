@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next';
 import { marked } from 'marked';
 import classNames from 'classnames';
 
-import { useTagModal } from '@/hooks';
+import { useTagModal, useToast } from '@/hooks';
 import type * as Type from '@/common/interface';
-import { queryTags } from '@/services';
+import { queryTags, useUserPermission } from '@/services';
 
 import './index.scss';
 
@@ -42,7 +42,8 @@ const TagSelector: FC<IProps> = ({
   const [tags, setTags] = useState<Type.Tag[] | null>(null);
   const { t } = useTranslation('translation', { keyPrefix: 'tag_selector' });
   const [visibleMenu, setVisibleMenu] = useState(false);
-
+  const { data: userPermission } = useUserPermission('tag.add');
+  const toast = useToast();
   const tagModal = useTagModal({
     onConfirm: (data) => {
       if (!(onChange instanceof Function)) {
@@ -109,6 +110,11 @@ const TagSelector: FC<IProps> = ({
     fetchTags(searchValue);
   }, [visibleMenu]);
 
+  const resetSearch = () => {
+    setCurrentIndex(0);
+    setSearchValue('');
+    setTags([]);
+  };
   const handleClick = (val: Type.Tag) => {
     const findIndex = initialValue.findIndex(
       (item) => item.slug_name.toLowerCase() === val.slug_name.toLowerCase(),
@@ -129,6 +135,7 @@ const TagSelector: FC<IProps> = ({
         setRepeatIndex(-1);
       }, 2000);
     }
+    resetSearch();
   };
 
   const handleRemove = (val: Type.Tag) => {
@@ -177,12 +184,25 @@ const TagSelector: FC<IProps> = ({
       }
       if (currentIndex <= tags.length - 1) {
         handleClick(tags[currentIndex]);
-        if (currentIndex === tags.length - 1 && currentIndex > 0) {
-          setCurrentIndex(currentIndex - 1);
-        }
+        // if (currentIndex === tags.length - 1 && currentIndex > 0) {
+        //   setCurrentIndex(currentIndex - 1);
+        // }
       }
     }
   };
+
+  const handleCreate = () => {
+    const tagAddPermission = userPermission?.['tag.add'];
+    if (!tagAddPermission || tagAddPermission?.has_permission) {
+      tagModal.onShow(searchValue);
+    } else if (tagAddPermission?.no_permission_tip) {
+      toast.onShow({
+        msg: tagAddPermission.no_permission_tip,
+        variant: 'danger',
+      });
+    }
+  };
+
   return (
     <div
       className="tag-selector-wrap"
@@ -261,9 +281,7 @@ const TagSelector: FC<IProps> = ({
                 <Button
                   variant="link"
                   className="px-3 btn-no-border w-100 text-start"
-                  onClick={() => {
-                    tagModal.onShow(searchValue);
-                  }}>
+                  onClick={handleCreate}>
                   + {t('create_btn')}
                 </Button>
               )}

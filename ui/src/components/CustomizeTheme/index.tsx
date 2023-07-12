@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useLayoutEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 import Color from 'color';
@@ -11,10 +11,17 @@ const Index: FC = () => {
   let primaryColor;
   if (theme_config?.[theme]?.primary_color) {
     primaryColor = Color(theme_config[theme].primary_color);
-    document
-      .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', primaryColor.hex());
   }
+  const setThemeColor = () => {
+    const themeMetaNode = document.querySelector('meta[name="theme-color"]');
+    if (themeMetaNode) {
+      const themeColor = primaryColor ? primaryColor.hex() : '#0033ff';
+      themeMetaNode.setAttribute('content', themeColor);
+    }
+  };
+  useLayoutEffect(() => {
+    setThemeColor();
+  }, [primaryColor]);
 
   return (
     <Helmet>

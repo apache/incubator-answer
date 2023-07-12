@@ -27,12 +27,15 @@ const Index: FC<IProps> = ({ avatar, size, className, searchStr = '' }) => {
     url = `${avatar.custom}?${searchStr}`;
   }
 
+  const roundedCls =
+    className && className.indexOf('rounded') !== -1 ? '' : 'rounded';
+
   return (
     <img
       src={url || DefaultAvatar}
       width={size}
       height={size}
-      className={classNames('rounded', className)}
+      className={classNames(roundedCls, className)}
       alt=""
     />
   );

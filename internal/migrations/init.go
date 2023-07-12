@@ -182,6 +182,7 @@ func initSiteInfo(engine *xorm.Engine, language, siteName, siteURL, contactEmail
 
 	usersData := map[string]any{
 		"default_avatar":            "gravatar",
+		"default_gravatar_base_url": "https://www.gravatar.com/avatar/",
 		"allow_update_display_name": true,
 		"allow_update_username":     true,
 		"allow_update_avatar":       true,
@@ -374,6 +375,7 @@ func initConfigTable(engine *xorm.Engine) error {
 		{ID: 124, Key: "rank.question.unpin", Value: `-1`},
 		{ID: 125, Key: "rank.question.show", Value: `-1`},
 		{ID: 126, Key: "rank.question.hide", Value: `-1`},
+		{ID: 127, Key: "rank.answer.invite_someone_to_answer", Value: `1000`},
 	}
 	_, err := engine.Insert(defaultConfigTable)
 	return err
@@ -428,6 +430,7 @@ func initRolePower(engine *xorm.Engine) (err error) {
 		{ID: 35, Name: "question hide", PowerType: permission.QuestionHide, Description: "hide  the question"},
 		{ID: 36, Name: "question unpin", PowerType: permission.QuestionUnPin, Description: "untop the question"},
 		{ID: 37, Name: "question show", PowerType: permission.QuestionShow, Description: "show the question"},
+		{ID: 38, Name: "invite someone to answer", PowerType: permission.AnswerInviteSomeoneToAnswer, Description: "invite someone to answer"},
 	}
 	_, err = engine.Insert(powers)
 	if err != nil {
@@ -473,6 +476,7 @@ func initRolePower(engine *xorm.Engine) (err error) {
 		{RoleID: 2, PowerType: permission.QuestionHide},
 		{RoleID: 2, PowerType: permission.QuestionUnPin},
 		{RoleID: 2, PowerType: permission.QuestionShow},
+		{RoleID: 2, PowerType: permission.AnswerInviteSomeoneToAnswer},
 
 		{RoleID: 3, PowerType: permission.QuestionAdd},
 		{RoleID: 3, PowerType: permission.QuestionEdit},
@@ -511,6 +515,7 @@ func initRolePower(engine *xorm.Engine) (err error) {
 		{RoleID: 3, PowerType: permission.QuestionHide},
 		{RoleID: 3, PowerType: permission.QuestionUnPin},
 		{RoleID: 3, PowerType: permission.QuestionShow},
+		{RoleID: 3, PowerType: permission.AnswerInviteSomeoneToAnswer},
 	}
 	_, err = engine.Insert(rolePowerRels)
 	if err != nil {

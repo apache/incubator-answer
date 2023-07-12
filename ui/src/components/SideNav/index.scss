@@ -1,0 +1,46 @@
+
+#sideNav {
+  .nav-wrap {
+    position: sticky;
+    width: auto;
+    top: 62px;
+    box-sizing: border-box;
+    max-height: calc(100vh - 74px - 62px - 24px);
+    overflow-y: auto;
+    margin-bottom: 8px;
+  }
+  .nav {
+    max-width: calc(100% - 24px);
+  }
+  .nav-link {
+    color: rgba(0, 0, 0, 0.65);
+  }
+  .nav-link:hover {
+    color: rgba(0, 0, 0);
+    background-color: var(--bs-gray-100);
+  }
+  .nav-link.active {
+    color: black;
+    background-color: var(--bs-gray-200);
+  }
+  .side-nav-right-line {
+    position: absolute;
+    top: 0;
+    right: 12px;
+    width: 1px;
+    height: 100%;
+    background-color: var(--bs-gray-300);
+    min-height: calc(100vh - 62px - 74px);
+  }
+}
+
+@media screen and (max-width: 991.9px) {
+  #sideNav {
+    .nav {
+      max-width: 100%;
+    }
+    .side-nav-right-line {
+      display: none;
+    }
+  }
+}

@@ -13,7 +13,7 @@ import { getLoginConf, checkLoginResult } from './service';
 
 let checkTimer: NodeJS.Timeout;
 const Index: FC = () => {
-  const { t } = useTranslation('translation', { keyPrefix: 'plugins' });
+  const { t } = useTranslation('translation', { keyPrefix: 'user_center' });
   const navigate = useNavigate();
   const ucAgent = userCenterStore().agent;
   const agentName = ucAgent?.agent_info?.name || '';
@@ -65,12 +65,13 @@ const Index: FC = () => {
       clearTimeout(checkTimer);
     };
   }, []);
+
   if (getUaType() !== USER_AGENT_NAMES.WeCom) {
     return (
       <Card className="text-center">
         <Card.Body>
           <Card.Title as="h3" className="mb-3">
-            {ucAgent?.agent_info.display_name} {t('login')}
+            {ucAgent?.agent_info?.display_name} {t('login')}
           </Card.Title>
           {qrcodeDataUrl ? (
             <>
@@ -82,7 +83,7 @@ const Index: FC = () => {
               />
               <div className="text-secondary mt-3">
                 {t('qrcode_login_tip', {
-                  agentName: ucAgent?.agent_info.display_name,
+                  agentName: ucAgent?.agent_info?.display_name,
                 })}
               </div>
             </>

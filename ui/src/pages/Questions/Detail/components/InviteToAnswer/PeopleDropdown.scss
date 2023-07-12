@@ -1,0 +1,10 @@
+.people-dropdown {
+  .dropdown-menu {
+    width: 15rem;
+  }
+
+  .dropdown-item.active {
+    color: #212529;
+    background-color: #e9ecef;
+  }
+}

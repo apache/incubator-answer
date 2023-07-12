@@ -32,7 +32,7 @@ func (tr *tagRelRepo) AddTagRelList(ctx context.Context, tagList []*entity.TagRe
 	for _, item := range tagList {
 		item.ObjectID = uid.DeShortID(item.ObjectID)
 	}
-	_, err = tr.data.DB.Insert(tagList)
+	_, err = tr.data.DB.Context(ctx).Insert(tagList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -45,7 +45,25 @@ func (tr *tagRelRepo) AddTagRelList(ctx context.Context, tagList []*entity.TagRe
 // RemoveTagRelListByObjectID delete tag list
 func (tr *tagRelRepo) RemoveTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
 	objectID = uid.DeShortID(objectID)
-	_, err = tr.data.DB.Where("object_id = ?", objectID).Update(&entity.TagRel{Status: entity.TagRelStatusDeleted})
+	_, err = tr.data.DB.Context(ctx).Where("object_id = ?", objectID).Update(&entity.TagRel{Status: entity.TagRelStatusDeleted})
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (tr *tagRelRepo) HideTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
+	objectID = uid.DeShortID(objectID)
+	_, err = tr.data.DB.Where("object_id = ?", objectID).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusHide})
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
+func (tr *tagRelRepo) ShowTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
+	objectID = uid.DeShortID(objectID)
+	_, err = tr.data.DB.Where("object_id = ?", objectID).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusAvailable})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -54,7 +72,7 @@ func (tr *tagRelRepo) RemoveTagRelListByObjectID(ctx context.Context, objectID s
 
 // RemoveTagRelListByIDs delete tag list
 func (tr *tagRelRepo) RemoveTagRelListByIDs(ctx context.Context, ids []int64) (err error) {
-	_, err = tr.data.DB.In("id", ids).Update(&entity.TagRel{Status: entity.TagRelStatusDeleted})
+	_, err = tr.data.DB.Context(ctx).In("id", ids).Update(&entity.TagRel{Status: entity.TagRelStatusDeleted})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -67,7 +85,7 @@ func (tr *tagRelRepo) GetObjectTagRelWithoutStatus(ctx context.Context, objectID
 ) {
 	objectID = uid.DeShortID(objectID)
 	tagRel = &entity.TagRel{}
-	session := tr.data.DB.Where("object_id = ?", objectID).And("tag_id = ?", tagID)
+	session := tr.data.DB.Context(ctx).Where("object_id = ?", objectID).And("tag_id = ?", tagID)
 	exist, err = session.Get(tagRel)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -78,7 +96,7 @@ func (tr *tagRelRepo) GetObjectTagRelWithoutStatus(ctx context.Context, objectID
 
 // EnableTagRelByIDs update tag status to available
 func (tr *tagRelRepo) EnableTagRelByIDs(ctx context.Context, ids []int64) (err error) {
-	_, err = tr.data.DB.In("id", ids).Update(&entity.TagRel{Status: entity.TagRelStatusAvailable})
+	_, err = tr.data.DB.Context(ctx).In("id", ids).Update(&entity.TagRel{Status: entity.TagRelStatusAvailable})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -89,8 +107,8 @@ func (tr *tagRelRepo) EnableTagRelByIDs(ctx context.Context, ids []int64) (err e
 func (tr *tagRelRepo) GetObjectTagRelList(ctx context.Context, objectID string) (tagListList []*entity.TagRel, err error) {
 	objectID = uid.DeShortID(objectID)
 	tagListList = make([]*entity.TagRel, 0)
-	session := tr.data.DB.Where("object_id = ?", objectID)
-	session.Where("status = ?", entity.TagRelStatusAvailable)
+	session := tr.data.DB.Context(ctx).Where("object_id = ?", objectID)
+	session.In("status", []int{entity.TagRelStatusAvailable, entity.TagRelStatusHide})
 	err = session.Find(&tagListList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -107,7 +125,7 @@ func (tr *tagRelRepo) BatchGetObjectTagRelList(ctx context.Context, objectIds []
 		objectIds[num] = uid.DeShortID(item)
 	}
 	tagListList = make([]*entity.TagRel, 0)
-	session := tr.data.DB.In("object_id", objectIds)
+	session := tr.data.DB.Context(ctx).In("object_id", objectIds)
 	session.Where("status = ?", entity.TagRelStatusAvailable)
 	err = session.Find(&tagListList)
 	if err != nil {
@@ -121,7 +139,7 @@ func (tr *tagRelRepo) BatchGetObjectTagRelList(ctx context.Context, objectIds []
 
 // CountTagRelByTagID count tag relation
 func (tr *tagRelRepo) CountTagRelByTagID(ctx context.Context, tagID string) (count int64, err error) {
-	count, err = tr.data.DB.Count(&entity.TagRel{TagID: tagID, Status: entity.AnswerStatusAvailable})
+	count, err = tr.data.DB.Context(ctx).Count(&entity.TagRel{TagID: tagID, Status: entity.AnswerStatusAvailable})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

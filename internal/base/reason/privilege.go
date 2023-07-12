@@ -15,6 +15,7 @@ const (
 	RankAnswerVoteUpLabel              = "privilege.rank_answer_vote_up_label"
 	RankQuestionVoteDownLabel          = "privilege.rank_question_vote_down_label"
 	RankAnswerVoteDownLabel            = "privilege.rank_answer_vote_down_label"
+	RankInviteSomeoneToAnswerLabel     = "privilege.rank_invite_someone_to_answer_label"
 	RankTagAddLabel                    = "privilege.rank_tag_add_label"
 	RankTagEditLabel                   = "privilege.rank_tag_edit_label"
 	RankQuestionEditLabel              = "privilege.rank_question_edit_label"

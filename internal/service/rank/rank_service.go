@@ -4,8 +4,10 @@ import (
 	"context"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity_type"
@@ -34,7 +36,7 @@ type UserRankRepo interface {
 // RankService rank service
 type RankService struct {
 	userCommon        *usercommon.UserCommon
-	configRepo        config.ConfigRepo
+	configService     *config.ConfigService
 	userRankRepo      UserRankRepo
 	objectInfoService *object_info.ObjService
 	roleService       *role.UserRoleRelService
@@ -48,10 +50,10 @@ func NewRankService(
 	objectInfoService *object_info.ObjService,
 	roleService *role.UserRoleRelService,
 	rolePowerService *role.RolePowerRelService,
-	configRepo config.ConfigRepo) *RankService {
+	configService *config.ConfigService) *RankService {
 	return &RankService{
 		userCommon:        userCommon,
-		configRepo:        configRepo,
+		configService:     configService,
 		userRankRepo:      userRankRepo,
 		objectInfoService: objectInfoService,
 		roleService:       roleService,
@@ -95,21 +97,22 @@ func (rs *RankService) CheckOperationPermission(ctx context.Context, userID stri
 	return can, nil
 }
 
-// CheckOperationPermissions verify that the user has permission
-func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID string, actions []string) (
-	can []bool, err error) {
+// CheckOperationPermissionsForRanks verify that the user has permission
+func (rs *RankService) CheckOperationPermissionsForRanks(ctx context.Context, userID string, actions []string) (
+	can []bool, requireRanks []int, err error) {
 	can = make([]bool, len(actions))
+	requireRanks = make([]int, len(actions))
 	if len(userID) == 0 {
-		return can, nil
+		return can, requireRanks, nil
 	}
 
 	// get the rank of the current user
 	userInfo, exist, err := rs.userCommon.GetUserBasicInfoByID(ctx, userID)
 	if err != nil {
-		return can, err
+		return can, requireRanks, err
 	}
 	if !exist {
-		return can, nil
+		return can, requireRanks, nil
 	}
 
 	powerMapping := rs.getUserPowerMapping(ctx, userID)
@@ -118,10 +121,18 @@ func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID str
 			can[idx] = true
 			continue
 		}
-		meetRank, _ := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
+		meetRank, requireRank := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
 		can[idx] = meetRank
+		requireRanks[idx] = requireRank
 	}
-	return can, nil
+	return can, requireRanks, nil
+}
+
+// CheckOperationPermissions verify that the user has permission
+func (rs *RankService) CheckOperationPermissions(ctx context.Context, userID string, actions []string) (
+	can []bool, err error) {
+	can, _, err = rs.CheckOperationPermissionsForRanks(ctx, userID, actions)
+	return can, err
 }
 
 // CheckOperationObjectOwner check operation object owner
@@ -142,7 +153,7 @@ func (rs *RankService) CheckOperationObjectOwner(ctx context.Context, userID, ob
 
 // CheckVotePermission verify that the user has vote permission
 func (rs *RankService) CheckVotePermission(ctx context.Context, userID, objectID string, voteUp bool) (
-	can bool, rank int, err error) {
+	can bool, needRank int, err error) {
 	if len(userID) == 0 || len(objectID) == 0 {
 		return false, 0, nil
 	}
@@ -180,13 +191,12 @@ func (rs *RankService) CheckVotePermission(ctx context.Context, userID, objectID
 			action = permission.CommentVoteDown
 		}
 	}
-	meetRank, rank := rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
 	powerMapping := rs.getUserPowerMapping(ctx, userID)
 	if powerMapping[action] {
-		return true, rank, nil
+		return true, 0, nil
 	}
-
-	return meetRank, rank, nil
+	can, needRank = rs.checkUserRank(ctx, userInfo.ID, userInfo.Rank, PermissionPrefix+action)
+	return can, needRank, nil
 }
 
 // getUserPowerMapping get user power mapping
@@ -213,7 +223,7 @@ func (rs *RankService) getUserPowerMapping(ctx context.Context, userID string) (
 func (rs *RankService) checkUserRank(ctx context.Context, userID string, userRank int, action string) (
 	can bool, rank int) {
 	// get the amount of rank required for the current operation
-	requireRank, err := rs.configRepo.GetInt(action)
+	requireRank, err := rs.configService.GetIntValue(ctx, action)
 	if err != nil {
 		log.Error(err)
 		return false, requireRank
@@ -226,8 +236,8 @@ func (rs *RankService) checkUserRank(ctx context.Context, userID string, userRan
 	return true, requireRank
 }
 
-// GetRankPersonalWithPage get personal comment list page
-func (rs *RankService) GetRankPersonalWithPage(ctx context.Context, req *schema.GetRankPersonalWithPageReq) (
+// GetRankPersonalPage get personal comment list page
+func (rs *RankService) GetRankPersonalPage(ctx context.Context, req *schema.GetRankPersonalWithPageReq) (
 	pageModel *pager.PageModel, err error) {
 	if plugin.RankAgentEnabled() {
 		return pager.NewPageModel(0, []string{}), nil
@@ -250,29 +260,47 @@ func (rs *RankService) GetRankPersonalWithPage(ctx context.Context, req *schema.
 	if err != nil {
 		return nil, err
 	}
-	resp := make([]*schema.GetRankPersonalWithPageResp, 0)
+
+	resp := rs.decorateRankPersonalPageResp(ctx, userRankPage)
+	return pager.NewPageModel(total, resp), nil
+}
+
+func (rs *RankService) decorateRankPersonalPageResp(
+	ctx context.Context, userRankPage []*entity.Activity) []*schema.GetRankPersonalPageResp {
+	resp := make([]*schema.GetRankPersonalPageResp, 0)
+	lang := handler.GetLangByCtx(ctx)
+
 	for _, userRankInfo := range userRankPage {
 		if len(userRankInfo.ObjectID) == 0 || userRankInfo.ObjectID == "0" {
 			continue
 		}
-		commentResp := &schema.GetRankPersonalWithPageResp{
+		objInfo, err := rs.objectInfoService.GetInfo(ctx, userRankInfo.ObjectID)
+		if err != nil {
+			log.Error(err)
+			continue
+		}
+
+		commentResp := &schema.GetRankPersonalPageResp{
 			CreatedAt:  userRankInfo.CreatedAt.Unix(),
 			ObjectID:   userRankInfo.ObjectID,
 			Reputation: userRankInfo.Rank,
 		}
-		objInfo, err := rs.objectInfoService.GetInfo(ctx, userRankInfo.ObjectID)
+		cfg, err := rs.configService.GetConfigByID(ctx, userRankInfo.ActivityType)
 		if err != nil {
 			log.Error(err)
-		} else {
-			commentResp.RankType = activity_type.Format(userRankInfo.ActivityType)
-			commentResp.ObjectType = objInfo.ObjectType
-			commentResp.Title = objInfo.Title
-			commentResp.UrlTitle = htmltext.UrlTitle(objInfo.Title)
-			commentResp.Content = objInfo.Content
-			commentResp.QuestionID = objInfo.QuestionID
-			commentResp.AnswerID = objInfo.AnswerID
+			continue
 		}
+		commentResp.RankType = translator.Tr(lang, activity_type.ActivityTypeFlagMapping[cfg.Key])
+		commentResp.ObjectType = objInfo.ObjectType
+		commentResp.Title = objInfo.Title
+		commentResp.UrlTitle = htmltext.UrlTitle(objInfo.Title)
+		commentResp.Content = objInfo.Content
+		if objInfo.QuestionStatus == entity.QuestionStatusDeleted {
+			commentResp.Title = translator.Tr(lang, constant.DeletedQuestionTitleTrKey)
+		}
+		commentResp.QuestionID = objInfo.QuestionID
+		commentResp.AnswerID = objInfo.AnswerID
 		resp = append(resp, commentResp)
 	}
-	return pager.NewPageModel(total, resp), nil
+	return resp
 }

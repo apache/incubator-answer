@@ -10,6 +10,47 @@ const equalToCurrentHref = (target: string, base?: string) => {
   const targetUrl = new URL(target, base);
   return targetUrl.toString() === window.location.href;
 };
+const matchToCurrentHref = (target: string) => {
+  target = (target || '').trim();
+  // Empty string or `/` can match any path
+  if (!target || target === '/') {
+    return true;
+  }
+  const { pathname, search, hash } = window.location;
+  const tPart = target.split('?');
+
+  /**
+   * With the current requirements, `hash` and `search` can simply be matched
+   * Later extended to field-by-field matching if necessary
+   */
+  if (tPart[1]) {
+    const tChip = tPart[1].split('#');
+    const tSearch = tChip[0] || '';
+    const tHash = tChip[1] || '';
+    if (tHash && hash.indexOf(tHash) === -1) {
+      return false;
+    }
+    if (tSearch && search.indexOf(tSearch) === -1) {
+      return false;
+    }
+  }
+
+  /**
+   * As determination above, `tPart[0]` must be a valid string
+   */
+  let pathMatch = true;
+  const tPath = tPart[0].split('/').filter((_) => !!_);
+  const lPath = pathname.split('/').filter((_) => !!_);
+
+  tPath.forEach((p, i) => {
+    const lp = lPath[i];
+    if (p !== lp) {
+      pathMatch = false;
+    }
+  });
+
+  return pathMatch;
+};
 
 const storageLoginRedirect = () => {
   const { pathname } = window.location;
@@ -136,4 +177,6 @@ export const floppyNavigation = {
   isRoutableLink,
   handleRouteLinkClick,
   equalToCurrentHref,
+  matchToCurrentHref,
+  storageLoginRedirect,
 };

@@ -12,8 +12,8 @@ type GetRankPersonalWithPageReq struct {
 	UserID string `json:"-"`
 }
 
-// GetRankPersonalWithPageResp rank response
-type GetRankPersonalWithPageResp struct {
+// GetRankPersonalPageResp rank response
+type GetRankPersonalPageResp struct {
 	// create time
 	CreatedAt int64 `json:"created_at"`
 	// object id

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"time"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
@@ -49,6 +50,12 @@ func NewUserCenterLoginService(
 func (us *UserCenterLoginService) ExternalLogin(
 	ctx context.Context, userCenter plugin.UserCenter, basicUserInfo *plugin.UserCenterBasicUserInfo) (
 	resp *schema.UserExternalLoginResp, err error) {
+	if len(basicUserInfo.ExternalID) == 0 {
+		return &schema.UserExternalLoginResp{
+			ErrTitle: translator.Tr(handler.GetLangByCtx(ctx), reason.UserAccessDenied),
+			ErrMsg:   translator.Tr(handler.GetLangByCtx(ctx), reason.UserExternalLoginMissingUserID),
+		}, nil
+	}
 
 	if len(basicUserInfo.Email) > 0 {
 		// check whether site allow register or not
@@ -124,7 +131,7 @@ func (us *UserCenterLoginService) registerNewUser(ctx context.Context, provider 
 
 	if len(basicUserInfo.Avatar) > 0 {
 		avatarInfo := &schema.AvatarInfo{
-			Type:   schema.AvatarTypeCustom,
+			Type:   constant.AvatarTypeCustom,
 			Custom: basicUserInfo.Avatar,
 		}
 		avatar, _ := json.Marshal(avatarInfo)
@@ -221,10 +228,10 @@ func (us *UserCenterLoginService) UserCenterAdminFunctionAgent(ctx context.Conte
 	desc := userCenter.Description()
 	// If user status agent is enabled, admin can not update user status in answer.
 	resp.AllowUpdateUserStatus = !desc.UserStatusAgentEnabled
+	resp.AllowUpdateUserRole = !desc.UserRoleAgentEnabled
 
 	// If original user system is enabled, admin can update user password and role in answer.
 	resp.AllowUpdateUserPassword = desc.EnabledOriginalUserSystem
-	resp.AllowUpdateUserRole = desc.EnabledOriginalUserSystem
 	resp.AllowCreateUser = desc.EnabledOriginalUserSystem
 	return resp, nil
 }

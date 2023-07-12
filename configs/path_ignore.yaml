@@ -1,4 +1,8 @@
 # url path reserves the keywords list
+questions:
+  - ask
+tags:
+  - create
 users:
   - unsubscribe
   - settings
@@ -12,5 +16,3 @@ users:
   - account-suspended
   - confirm-email
   - auth-landing
-questions:
-  - ask

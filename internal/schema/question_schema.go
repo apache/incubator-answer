@@ -87,7 +87,8 @@ type QuestionAddByAnswer struct {
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// user id
-	UserID string `json:"-"`
+	UserID              string   `json:"-"`
+	MentionUsernameList []string `validate:"omitempty" json:"mention_username_list"`
 	QuestionPermission
 }
 
@@ -121,6 +122,9 @@ type QuestionPermission struct {
 	CanShow bool `json:"-"`
 	// whether user can use reserved it
 	CanUseReservedTag bool `json:"-"`
+	// whether user can invite other user to answer this question
+	CanInviteOtherToAnswer bool `json:"-"`
+	CanAddTag              bool `json:"-"`
 }
 
 type CheckCanQuestionUpdate struct {
@@ -139,7 +143,8 @@ type QuestionUpdate struct {
 	// content
 	Content string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
 	// html
-	HTML string `json:"-"`
+	HTML       string   `json:"-"`
+	InviteUser []string `validate:"omitempty"  json:"invite_user"`
 	// tags
 	Tags []*TagItem `validate:"required,dive" json:"tags"`
 	// edit summary
@@ -147,6 +152,13 @@ type QuestionUpdate struct {
 	// user id
 	UserID       string `json:"-"`
 	NoNeedReview bool   `json:"-"`
+	QuestionPermission
+}
+
+type QuestionUpdateInviteUser struct {
+	ID         string   `validate:"required" json:"id"`
+	InviteUser []string `validate:"omitempty"  json:"invite_user"`
+	UserID     string   `json:"-"`
 	QuestionPermission
 }
 
@@ -202,7 +214,8 @@ type QuestionInfo struct {
 	IsFollowed           bool           `json:"is_followed"`
 
 	// MemberActions
-	MemberActions []*PermissionMemberAction `json:"member_actions"`
+	MemberActions  []*PermissionMemberAction `json:"member_actions"`
+	ExtendsActions []*PermissionMemberAction `json:"extends_actions"`
 }
 
 // UpdateQuestionResp update question resp

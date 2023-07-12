@@ -25,7 +25,7 @@ const Index: FC<Props> = ({ count = 20 }) => {
               />
 
               <p
-                className="placeholder fs-14 text-truncate-3 w-100"
+                className="placeholder small text-truncate-3 w-100"
                 style={{ height: '42px' }}
               />
               <div className="d-flex align-items-center">
@@ -34,7 +34,7 @@ const Index: FC<Props> = ({ count = 20 }) => {
                   style={{ width: '80px', height: '31px' }}
                 />
                 <span
-                  className="placeholder text-secondary fs-14 text-nowrap"
+                  className="placeholder text-secondary small text-nowrap"
                   style={{ width: '100px', height: '21px' }}
                 />
               </div>

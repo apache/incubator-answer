@@ -36,6 +36,7 @@ function scrollToElementTop(element) {
 
   window.scrollTo({
     top: offsetPosition,
+    behavior: 'instant' as ScrollBehavior,
   });
 }
 
@@ -43,7 +44,8 @@ const scrollToDocTop = () => {
   setTimeout(() => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      left: 0,
+      behavior: 'instant' as ScrollBehavior,
     });
   });
 };

@@ -32,7 +32,7 @@ const Index: FC<Props> = ({ visible, data }) => {
                 {item.question_info?.title}
               </a>
             </h6>
-            <div className="d-flex align-items-center fs-14 text-secondary mb-2">
+            <div className="d-flex align-items-center small text-secondary mb-2">
               <FormatTime
                 time={item.create_time}
                 className="me-3"

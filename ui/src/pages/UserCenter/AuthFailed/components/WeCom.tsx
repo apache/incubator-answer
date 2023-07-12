@@ -28,14 +28,14 @@ const data = [
 ];
 
 const Index: FC = () => {
-  const { t } = useTranslation('translation', { keyPrefix: 'plugins' });
+  const { t } = useTranslation('translation', { keyPrefix: 'user_center' });
   const ucAgent = userCenterStore().agent;
   return (
     <Col lg={4} className="mx-auto mt-3 py-5">
       <Card>
         <Card.Body>
           <h3 className="text-center pt-3 mb-3">
-            {ucAgent?.agent_info.display_name} {t('login')}
+            {ucAgent?.agent_info?.display_name} {t('login')}
           </h3>
           <p className="text-danger text-center">
             {t('login_failed_email_tip')}

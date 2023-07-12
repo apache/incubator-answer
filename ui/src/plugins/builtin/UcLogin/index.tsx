@@ -4,14 +4,25 @@ import { useTranslation } from 'react-i18next';
 
 import classnames from 'classnames';
 
+import pluginKit, { PluginInfo } from '@/utils/pluginKit';
 import { SvgIcon } from '@/components';
 import { userCenterStore } from '@/stores';
+import './i18n';
+
+import info from './info.yaml';
 
 interface Props {
   className?: classnames.Argument;
 }
+
+const pluginInfo: PluginInfo = {
+  slug_name: info.slug_name,
+};
+
 const Index: FC<Props> = ({ className }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'plugins.oauth' });
+  const { t } = useTranslation(pluginKit.getTransNs(), {
+    keyPrefix: pluginKit.getTransKeyPrefix(pluginInfo),
+  });
   const ucAgent = userCenterStore().agent;
   const ucLoginRedirect =
     ucAgent?.enabled && ucAgent?.agent_info?.login_redirect_url;
@@ -31,5 +42,7 @@ const Index: FC<Props> = ({ className }) => {
   }
   return null;
 };
-
-export default memo(Index);
+export default {
+  info: pluginInfo,
+  component: memo(Index),
+};

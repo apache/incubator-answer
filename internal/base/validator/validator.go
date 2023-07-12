@@ -207,10 +207,12 @@ func (m *MyValidator) Check(value interface{}) (errFields []*FormErrorField, err
 		if err == nil {
 			return nil, nil
 		}
+		errMsg := ""
 		for _, errField := range errFields {
 			errField.ErrorMsg = translator.Tr(m.Lang, errField.ErrorMsg)
+			errMsg = errField.ErrorMsg
 		}
-		return errFields, err
+		return errFields, myErrors.BadRequest(reason.RequestFormatError).WithMsg(errMsg)
 	}
 	return nil, nil
 }

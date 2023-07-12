@@ -27,7 +27,7 @@ func NewRankController(
 // @Param page query int false "page"
 // @Param page_size query int false "page size"
 // @Param username query string false "username"
-// @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetRankPersonalWithPageResp}}
+// @Success 200 {object} handler.RespBody{data=pager.PageModel{list=[]schema.GetRankPersonalPageResp}}
 // @Router /answer/api/v1/personal/rank/page [get]
 func (cc *RankController) GetRankPersonalWithPage(ctx *gin.Context) {
 	req := &schema.GetRankPersonalWithPageReq{}
@@ -37,6 +37,6 @@ func (cc *RankController) GetRankPersonalWithPage(ctx *gin.Context) {
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	resp, err := cc.rankService.GetRankPersonalWithPage(ctx, req)
+	resp, err := cc.rankService.GetRankPersonalPage(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
 }

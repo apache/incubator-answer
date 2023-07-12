@@ -13,9 +13,11 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/export"
+	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/pkg/uid"
+	"github.com/answerdev/answer/plugin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -26,7 +28,8 @@ type SiteInfoService struct {
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
 	emailService          *export.EmailService
 	tagCommonService      *tagcommon.TagCommonService
-	configRepo            config.ConfigRepo
+	configService         *config.ConfigService
+	questioncommon        *questioncommon.QuestionCommon
 }
 
 func NewSiteInfoService(
@@ -34,23 +37,26 @@ func NewSiteInfoService(
 	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
 	emailService *export.EmailService,
 	tagCommonService *tagcommon.TagCommonService,
-	configRepo config.ConfigRepo,
+	configService *config.ConfigService,
+	questioncommon *questioncommon.QuestionCommon,
+
 ) *SiteInfoService {
-	usersSiteInfo, _ := siteInfoCommonService.GetSiteUsers(context.Background())
-	if usersSiteInfo != nil {
-		constant.DefaultAvatar = usersSiteInfo.DefaultAvatar
-	}
-	generalSiteInfo, _ := siteInfoCommonService.GetSiteGeneral(context.Background())
-	if generalSiteInfo != nil {
-		constant.DefaultSiteURL = generalSiteInfo.SiteUrl
-	}
+	plugin.RegisterGetSiteURLFunc(func() string {
+		generalSiteInfo, err := siteInfoCommonService.GetSiteGeneral(context.Background())
+		if err != nil {
+			log.Error(err)
+			return ""
+		}
+		return generalSiteInfo.SiteUrl
+	})
 
 	return &SiteInfoService{
 		siteInfoRepo:          siteInfoRepo,
 		siteInfoCommonService: siteInfoCommonService,
 		emailService:          emailService,
 		tagCommonService:      tagCommonService,
-		configRepo:            configRepo,
+		configService:         configService,
+		questioncommon:        questioncommon,
 	}
 }
 
@@ -125,11 +131,7 @@ func (s *SiteInfoService) SaveSiteGeneral(ctx context.Context, req schema.SiteGe
 		Content: string(content),
 		Status:  1,
 	}
-	err = s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeGeneral, data)
-	if err == nil {
-		constant.DefaultSiteURL = req.SiteUrl
-	}
-	return
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeGeneral, data)
 }
 
 func (s *SiteInfoService) SaveSiteInterface(ctx context.Context, req schema.SiteInterfaceReq) (err error) {
@@ -226,18 +228,12 @@ func (s *SiteInfoService) SaveSiteUsers(ctx context.Context, req *schema.SiteUse
 		Content: string(content),
 		Status:  1,
 	}
-	err = s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeUsers, data)
-	if err == nil {
-		constant.DefaultAvatar = req.DefaultAvatar
-	}
-	return err
+	return s.siteInfoRepo.SaveByType(ctx, constant.SiteTypeUsers, data)
 }
 
 // GetSMTPConfig get smtp config
-func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
-	resp *schema.GetSMTPConfigResp, err error,
-) {
-	emailConfig, err := s.emailService.GetEmailConfig()
+func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (resp *schema.GetSMTPConfigResp, err error) {
+	emailConfig, err := s.emailService.GetEmailConfig(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -248,13 +244,10 @@ func (s *SiteInfoService) GetSMTPConfig(ctx context.Context) (
 
 // UpdateSMTPConfig get smtp config
 func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.UpdateSMTPConfigReq) (err error) {
-	oldEmailConfig, err := s.emailService.GetEmailConfig()
-	if err != nil {
-		return err
-	}
-	_ = copier.Copy(oldEmailConfig, req)
+	ec := &export.EmailConfig{}
+	_ = copier.Copy(ec, req)
 
-	err = s.emailService.SetEmailConfig(oldEmailConfig)
+	err = s.emailService.SetEmailConfig(ctx, ec)
 	if err != nil {
 		return err
 	}
@@ -265,7 +258,7 @@ func (s *SiteInfoService) UpdateSMTPConfig(ctx context.Context, req *schema.Upda
 		}
 		go s.emailService.SendAndSaveCode(ctx, req.TestEmailRecipient, title, body, "", "")
 	}
-	return
+	return nil
 }
 
 func (s *SiteInfoService) GetSeo(ctx context.Context) (resp *schema.SiteSeoReq, err error) {
@@ -307,6 +300,7 @@ func (s *SiteInfoService) SaveSeo(ctx context.Context, req schema.SiteSeoReq) (e
 	} else {
 		uid.ShortIDSwitch = false
 	}
+	s.questioncommon.SitemapCron(ctx)
 	return
 }
 
@@ -370,7 +364,7 @@ func (s *SiteInfoService) UpdatePrivilegesConfig(ctx context.Context, req *schem
 
 	// update privilege in config
 	for _, privilege := range chooseOption.Privileges {
-		err = s.configRepo.SetConfig(privilege.Key, fmt.Sprintf("%d", privilege.Value))
+		err = s.configService.UpdateConfig(ctx, privilege.Key, fmt.Sprintf("%d", privilege.Value))
 		if err != nil {
 			return err
 		}

@@ -526,6 +526,82 @@ definitions:
         description: user vote amount
         type: integer
     type: object
+  schema.GetCurrentLoginUserInfoResp:
+    properties:
+      access_token:
+        description: access token
+        type: string
+      answer_count:
+        description: answer count
+        type: integer
+      authority_group:
+        description: authority group
+        type: integer
+      avatar:
+        $ref: '#/definitions/schema.AvatarInfo'
+      bio:
+        description: bio markdown
+        type: string
+      bio_html:
+        description: bio html
+        type: string
+      created_at:
+        description: create time
+        type: integer
+      display_name:
+        description: display name
+        type: string
+      e_mail:
+        description: email
+        type: string
+      follow_count:
+        description: follow count
+        type: integer
+      have_password:
+        type: boolean
+      id:
+        description: user id
+        type: string
+      ip_info:
+        description: ip info
+        type: string
+      language:
+        description: language
+        type: string
+      last_login_date:
+        description: last login date
+        type: integer
+      location:
+        description: location
+        type: string
+      mail_status:
+        description: mail status(1 pass 2 to be verified)
+        type: integer
+      mobile:
+        description: mobile
+        type: string
+      notice_status:
+        description: notice status(1 on 2off)
+        type: integer
+      question_count:
+        description: question count
+        type: integer
+      rank:
+        description: rank
+        type: integer
+      role_id:
+        description: role id
+        type: integer
+      status:
+        description: user status
+        type: string
+      username:
+        description: username
+        type: string
+      website:
+        description: website
+        type: string
+    type: object
   schema.GetFollowingTagsResp:
     properties:
       display_name:
@@ -655,7 +731,7 @@ definitions:
       selected_level:
         type: integer
     type: object
-  schema.GetRankPersonalWithPageResp:
+  schema.GetRankPersonalPageResp:
     properties:
       answer_id:
         description: answer id
@@ -692,27 +768,6 @@ definitions:
       url_title:
         description: url title
         type: string
-    type: object
-  schema.GetReportTypeResp:
-    properties:
-      content_type:
-        description: content type
-        type: string
-      description:
-        description: report description
-        type: string
-      have_content:
-        description: is have content
-        type: boolean
-      name:
-        description: report name
-        type: string
-      source:
-        description: report source
-        type: string
-      type:
-        description: report type
-        type: integer
     type: object
   schema.GetRevisionResp:
     properties:
@@ -936,160 +991,6 @@ definitions:
         description: username
         type: string
     type: object
-  schema.GetUserResp:
-    properties:
-      access_token:
-        description: access token
-        type: string
-      answer_count:
-        description: answer count
-        type: integer
-      authority_group:
-        description: authority group
-        type: integer
-      avatar:
-        description: avatar
-        type: string
-      bio:
-        description: bio markdown
-        type: string
-      bio_html:
-        description: bio html
-        type: string
-      created_at:
-        description: create time
-        type: integer
-      display_name:
-        description: display name
-        type: string
-      e_mail:
-        description: email
-        type: string
-      follow_count:
-        description: follow count
-        type: integer
-      have_password:
-        description: user have password
-        type: boolean
-      id:
-        description: user id
-        type: string
-      ip_info:
-        description: ip info
-        type: string
-      language:
-        description: language
-        type: string
-      last_login_date:
-        description: last login date
-        type: integer
-      location:
-        description: location
-        type: string
-      mail_status:
-        description: mail status(1 pass 2 to be verified)
-        type: integer
-      mobile:
-        description: mobile
-        type: string
-      notice_status:
-        description: notice status(1 on 2off)
-        type: integer
-      question_count:
-        description: question count
-        type: integer
-      rank:
-        description: rank
-        type: integer
-      role_id:
-        description: role id
-        type: integer
-      status:
-        description: user status
-        type: string
-      username:
-        description: username
-        type: string
-      website:
-        description: website
-        type: string
-    type: object
-  schema.GetUserToSetShowResp:
-    properties:
-      access_token:
-        description: access token
-        type: string
-      answer_count:
-        description: answer count
-        type: integer
-      authority_group:
-        description: authority group
-        type: integer
-      avatar:
-        $ref: '#/definitions/schema.AvatarInfo'
-      bio:
-        description: bio markdown
-        type: string
-      bio_html:
-        description: bio html
-        type: string
-      created_at:
-        description: create time
-        type: integer
-      display_name:
-        description: display name
-        type: string
-      e_mail:
-        description: email
-        type: string
-      follow_count:
-        description: follow count
-        type: integer
-      have_password:
-        type: boolean
-      id:
-        description: user id
-        type: string
-      ip_info:
-        description: ip info
-        type: string
-      language:
-        description: language
-        type: string
-      last_login_date:
-        description: last login date
-        type: integer
-      location:
-        description: location
-        type: string
-      mail_status:
-        description: mail status(1 pass 2 to be verified)
-        type: integer
-      mobile:
-        description: mobile
-        type: string
-      notice_status:
-        description: notice status(1 on 2off)
-        type: integer
-      question_count:
-        description: question count
-        type: integer
-      rank:
-        description: rank
-        type: integer
-      role_id:
-        description: role id
-        type: integer
-      status:
-        description: user status
-        type: string
-      username:
-        description: username
-        type: string
-      website:
-        description: website
-        type: string
-    type: object
   schema.GetVoteWithPageResp:
     properties:
       answer_id:
@@ -1218,6 +1119,10 @@ definitions:
         maxLength: 65535
         minLength: 6
         type: string
+      mention_username_list:
+        items:
+          type: string
+        type: array
       tags:
         description: tags
         items:
@@ -1334,6 +1239,10 @@ definitions:
       id:
         description: question id
         type: string
+      invite_user:
+        items:
+          type: string
+        type: array
       tags:
         description: tags
         items:
@@ -1349,6 +1258,17 @@ definitions:
     - id
     - tags
     - title
+    type: object
+  schema.QuestionUpdateInviteUser:
+    properties:
+      id:
+        type: string
+      invite_user:
+        items:
+          type: string
+        type: array
+    required:
+    - id
     type: object
   schema.RemoveAnswerReq:
     properties:
@@ -1733,6 +1653,8 @@ definitions:
         - system
         - gravatar
         type: string
+      gravatar_base_url:
+        type: string
     required:
     - default_avatar
     type: object
@@ -1754,6 +1676,8 @@ definitions:
         enum:
         - system
         - gravatar
+        type: string
+      gravatar_base_url:
         type: string
     required:
     - default_avatar
@@ -2132,8 +2056,92 @@ definitions:
     - e_mail
     - pass
     type: object
+  schema.UserLoginResp:
+    properties:
+      access_token:
+        description: access token
+        type: string
+      answer_count:
+        description: answer count
+        type: integer
+      authority_group:
+        description: authority group
+        type: integer
+      avatar:
+        description: avatar
+        type: string
+      bio:
+        description: bio markdown
+        type: string
+      bio_html:
+        description: bio html
+        type: string
+      created_at:
+        description: create time
+        type: integer
+      display_name:
+        description: display name
+        type: string
+      e_mail:
+        description: email
+        type: string
+      follow_count:
+        description: follow count
+        type: integer
+      have_password:
+        description: user have password
+        type: boolean
+      id:
+        description: user id
+        type: string
+      ip_info:
+        description: ip info
+        type: string
+      language:
+        description: language
+        type: string
+      last_login_date:
+        description: last login date
+        type: integer
+      location:
+        description: location
+        type: string
+      mail_status:
+        description: mail status(1 pass 2 to be verified)
+        type: integer
+      mobile:
+        description: mobile
+        type: string
+      notice_status:
+        description: notice status(1 on 2off)
+        type: integer
+      question_count:
+        description: question count
+        type: integer
+      rank:
+        description: rank
+        type: integer
+      role_id:
+        description: role id
+        type: integer
+      status:
+        description: user status
+        type: string
+      username:
+        description: username
+        type: string
+      website:
+        description: website
+        type: string
+    type: object
   schema.UserModifyPasswordReq:
     properties:
+      captcha_code:
+        maxLength: 500
+        type: string
+      captcha_id:
+        maxLength: 500
+        type: string
       old_pass:
         maxLength: 32
         minLength: 8
@@ -3968,6 +3976,16 @@ paths:
         name: type
         required: true
         type: string
+      - description: inbox_type
+        enum:
+        - all
+        - posts
+        - invites
+        - votes
+        in: query
+        name: inbox_type
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -4068,6 +4086,78 @@ paths:
       summary: DelRedDot
       tags:
       - Notification
+  /answer/api/v1/permission:
+    get:
+      description: check user permission
+      parameters:
+      - description: access-token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: permission key
+        enum:
+        - question.add
+        - question.edit
+        - question.edit_without_review
+        - question.delete
+        - question.close
+        - question.reopen
+        - question.vote_up
+        - question.vote_down
+        - question.pin
+        - question.unpin
+        - question.hide
+        - question.show
+        - answer.add
+        - answer.edit
+        - answer.edit_without_review
+        - answer.delete
+        - answer.accept
+        - answer.vote_up
+        - answer.vote_down
+        - answer.invite_someone_to_answer
+        - comment.add
+        - comment.edit
+        - comment.delete
+        - comment.vote_up
+        - comment.vote_down
+        - report.add
+        - tag.add
+        - tag.edit
+        - tag.edit_slug_name
+        - tag.edit_without_review
+        - tag.delete
+        - tag.synonym
+        - link.url_limit
+        - vote.detail
+        - answer.audit
+        - question.audit
+        - tag.audit
+        - tag.use_reserved_tag
+        in: query
+        name: action
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  additionalProperties:
+                    type: boolean
+                  type: object
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: check user permission
+      tags:
+      - Permission
   /answer/api/v1/personal/answer/page:
     get:
       consumes:
@@ -4235,7 +4325,7 @@ paths:
                   - properties:
                       list:
                         items:
-                          $ref: '#/definitions/schema.GetRankPersonalWithPageResp'
+                          $ref: '#/definitions/schema.GetRankPersonalPageResp'
                         type: array
                     type: object
               type: object
@@ -4426,23 +4516,6 @@ paths:
       summary: add question and answer
       tags:
       - Question
-  /answer/api/v1/question/closemsglist:
-    get:
-      consumes:
-      - application/json
-      description: close question msg list
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handler.RespBody'
-      security:
-      - ApiKeyAuth: []
-      summary: close question msg list
-      tags:
-      - Question
   /answer/api/v1/question/info:
     get:
       consumes:
@@ -4465,6 +4538,53 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: get question details
+      tags:
+      - Question
+  /answer/api/v1/question/invite:
+    get:
+      consumes:
+      - application/json
+      description: get question invite user info
+      parameters:
+      - default: "1"
+        description: Question ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: get question invite user info
+      tags:
+      - Question
+    put:
+      consumes:
+      - application/json
+      description: update question invite user
+      parameters:
+      - description: question
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.QuestionUpdateInviteUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update question invite user
       tags:
       - Question
   /answer/api/v1/question/operation:
@@ -4707,37 +4827,6 @@ paths:
       - ApiKeyAuth: []
       - ApiKeyAuth: []
       summary: add report
-      tags:
-      - Report
-  /answer/api/v1/report/type/list:
-    get:
-      description: get report type list
-      parameters:
-      - description: report source
-        enum:
-        - question
-        - answer
-        - comment
-        - user
-        in: query
-        name: source
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            allOf:
-            - $ref: '#/definitions/handler.RespBody'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/schema.GetReportTypeResp'
-                  type: array
-              type: object
-      summary: get report type list
       tags:
       - Report
   /answer/api/v1/revisions:
@@ -5266,7 +5355,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.GetUserResp'
+                  $ref: '#/definitions/schema.UserLoginResp'
               type: object
       summary: UserVerifyEmail
       tags:
@@ -5315,7 +5404,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.GetUserToSetShowResp'
+                  $ref: '#/definitions/schema.GetCurrentLoginUserInfoResp'
               type: object
       security:
       - ApiKeyAuth: []
@@ -5348,6 +5437,34 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: UserUpdateInfo update user info
+      tags:
+      - User
+  /answer/api/v1/user/info/search:
+    get:
+      consumes:
+      - application/json
+      description: SearchUserListByName
+      parameters:
+      - description: username
+        in: query
+        name: username
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetOtherUserInfoResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: SearchUserListByName
       tags:
       - User
   /answer/api/v1/user/interface:
@@ -5401,7 +5518,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.GetUserResp'
+                  $ref: '#/definitions/schema.UserLoginResp'
               type: object
       summary: UserEmailLogin
       tags:
@@ -5555,7 +5672,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.GetUserResp'
+                  $ref: '#/definitions/schema.UserLoginResp'
               type: object
       summary: UserRegisterCaptcha
       tags:
@@ -5582,7 +5699,7 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.GetUserResp'
+                  $ref: '#/definitions/schema.UserLoginResp'
               type: object
       summary: UserRegisterByEmail
       tags:

@@ -1,6 +1,5 @@
 import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
 
 import { FormatTime } from '@/components';
 import { pathFactory } from '@/router/pathFactory';
@@ -11,7 +10,6 @@ interface Props {
 }
 
 const Index: FC<Props> = ({ visible, data }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'personal' });
   if (!visible || !data?.length) {
     return null;
   }
@@ -26,7 +24,7 @@ const Index: FC<Props> = ({ visible, data }) => {
               className={`me-3 text-end ${
                 item.reputation > 0 ? 'text-success' : 'text-danger'
               }`}
-              style={{ width: '40px' }}>
+              style={{ width: '40px', minWidth: '40px' }}>
               {item.reputation > 0 ? '+' : ''}
               {item.reputation}
             </div>
@@ -47,8 +45,8 @@ const Index: FC<Props> = ({ visible, data }) => {
                 }>
                 {item.title}
               </a>
-              <div className="d-flex align-items-center fs-14 text-secondary">
-                <span>{item.reputation > 0 ? t('upvote') : t('downvote')}</span>
+              <div className="d-flex align-items-center small text-secondary">
+                <span>{item.rank_type}</span>
                 <span className="split-dot" />
                 <FormatTime time={item.created_at} className="me-4" />
               </div>

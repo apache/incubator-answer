@@ -27,14 +27,14 @@ func NewSiteInfo(data *data.Data) siteinfo_common.SiteInfoRepo {
 // SaveByType save site setting by type
 func (sr *siteInfoRepo) SaveByType(ctx context.Context, siteType string, data *entity.SiteInfo) (err error) {
 	old := &entity.SiteInfo{}
-	exist, err := sr.data.DB.Where(builder.Eq{"type": siteType}).Get(old)
+	exist, err := sr.data.DB.Context(ctx).Where(builder.Eq{"type": siteType}).Get(old)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	if exist {
-		_, err = sr.data.DB.ID(old.ID).Update(data)
+		_, err = sr.data.DB.Context(ctx).ID(old.ID).Update(data)
 	} else {
-		_, err = sr.data.DB.Insert(data)
+		_, err = sr.data.DB.Context(ctx).Insert(data)
 	}
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -50,7 +50,7 @@ func (sr *siteInfoRepo) GetByType(ctx context.Context, siteType string) (siteInf
 		return siteInfo, true, nil
 	}
 	siteInfo = &entity.SiteInfo{}
-	exist, err = sr.data.DB.Where(builder.Eq{"type": siteType}).Get(siteInfo)
+	exist, err = sr.data.DB.Context(ctx).Where(builder.Eq{"type": siteType}).Get(siteInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

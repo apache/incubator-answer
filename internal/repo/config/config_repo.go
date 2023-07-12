@@ -1,29 +1,21 @@
 package config
 
 import (
-	"encoding/json"
+	"context"
 	"fmt"
-	"sync"
 
-	"github.com/answerdev/answer/internal/service/config"
-	"github.com/answerdev/answer/pkg/converter"
-
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
+	"github.com/answerdev/answer/internal/service/config"
 	"github.com/segmentfault/pacman/errors"
-)
-
-var (
-	Key2ValueMapping = make(map[string]interface{})
-	Key2IDMapping    = make(map[string]int)
-	ID2KeyMapping    = make(map[int]string)
+	"github.com/segmentfault/pacman/log"
 )
 
 // configRepo config repository
 type configRepo struct {
 	data *data.Data
-	mu   sync.Mutex
 }
 
 // NewConfigRepo new repository
@@ -31,110 +23,88 @@ func NewConfigRepo(data *data.Data) config.ConfigRepo {
 	repo := &configRepo{
 		data: data,
 	}
-	repo.init()
 	return repo
 }
 
-// init initializes the Key2ValueMapping map data structures
-func (cr *configRepo) init() {
-	cr.mu.Lock()
-	defer cr.mu.Unlock()
-	rows := &[]entity.Config{}
-	err := cr.data.DB.Find(rows)
-	if err == nil {
-		for _, row := range *rows {
-			Key2ValueMapping[row.Key] = row.Value
-			Key2IDMapping[row.Key] = row.ID
-			ID2KeyMapping[row.ID] = row.Key
+func (cr configRepo) GetConfigByID(ctx context.Context, id int) (c *entity.Config, err error) {
+	cacheKey := fmt.Sprintf("%s%d", constant.ConfigID2KEYCacheKeyPrefix, id)
+	if cacheData, err := cr.data.Cache.GetString(ctx, cacheKey); err == nil && len(cacheData) > 0 {
+		c = &entity.Config{}
+		c.BuildByJSON([]byte(cacheData))
+		if c.ID > 0 {
+			return c, nil
 		}
 	}
-}
 
-// Get Base method for getting the config value
-// Key string
-func (cr *configRepo) Get(key string) (interface{}, error) {
-	value, ok := Key2ValueMapping[key]
-	if ok {
-		return value, nil
-	} else {
-		return value, errors.InternalServer(reason.DatabaseError).WithMsg(fmt.Sprintf("no such config key: %v", key))
-	}
-}
-
-// GetString method for getting the config value to string
-// key string
-func (cr *configRepo) GetString(key string) (string, error) {
-	value, err := cr.Get(key)
+	c = &entity.Config{}
+	exist, err := cr.data.DB.ID(id).Get(c)
 	if err != nil {
-		return "", err
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	str, ok := value.(string)
-	if !ok {
-		return "", errors.InternalServer(reason.DatabaseError).WithMsg(fmt.Sprintf("config value is wrong type: %v", key))
+	if !exist {
+		return nil, fmt.Errorf("config not found by id: %d", id)
 	}
-	return str, nil
+
+	// update cache
+	if err := cr.data.Cache.SetString(ctx, cacheKey, c.JsonString(), -1); err != nil {
+		log.Error(err)
+	}
+	return c, nil
 }
 
-// GetInt method for getting the config value to int64
-// key string
-func (cr *configRepo) GetInt(key string) (int, error) {
-	value, err := cr.GetString(key)
-	if err != nil {
-		return 0, err
+func (cr configRepo) GetConfigByKey(ctx context.Context, key string) (c *entity.Config, err error) {
+	cacheKey := constant.ConfigKEY2ContentCacheKeyPrefix + key
+	if cacheData, err := cr.data.Cache.GetString(ctx, cacheKey); err == nil && len(cacheData) > 0 {
+		c = &entity.Config{}
+		c.BuildByJSON([]byte(cacheData))
+		if c.ID > 0 {
+			return c, nil
+		}
 	}
-	return converter.StringToInt(value), nil
+
+	c = &entity.Config{Key: key}
+	exist, err := cr.data.DB.Context(ctx).Get(c)
+	if err != nil {
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !exist {
+		return nil, fmt.Errorf("config not found by key: %s", key)
+	}
+
+	// update cache
+	if err := cr.data.Cache.SetString(ctx, cacheKey, c.JsonString(), -1); err != nil {
+		log.Error(err)
+	}
+	return c, nil
 }
 
-// GetArrayString method for getting the config value to string array
-func (cr *configRepo) GetArrayString(key string) ([]string, error) {
-	arr := &[]string{}
-	value, err := cr.GetString(key)
+func (cr configRepo) UpdateConfig(ctx context.Context, key string, value string) (err error) {
+	// check if key exists
+	oldConfig := &entity.Config{Key: key}
+	exist, err := cr.data.DB.Context(ctx).Get(oldConfig)
 	if err != nil {
-		return nil, err
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	err = json.Unmarshal([]byte(value), arr)
-	return *arr, err
-}
-
-// GetConfigType method for getting the config type
-func (cr *configRepo) GetConfigType(key string) (int, error) {
-	value, ok := Key2IDMapping[key]
-	if !ok {
-		return 0, errors.InternalServer(reason.DatabaseError).WithMsg(fmt.Sprintf("no such config type: %v", key))
-	}
-	return value, nil
-}
-
-// GetJsonConfigByIDAndSetToObject get config key from config id
-func (cr *configRepo) GetJsonConfigByIDAndSetToObject(id int, object any) (err error) {
-	key, ok := ID2KeyMapping[id]
-	if !ok {
-		return errors.InternalServer(reason.DatabaseError).WithMsg(fmt.Sprintf("no such config id: %v", id))
+	if !exist {
+		return errors.BadRequest(reason.ObjectNotFound)
 	}
 
-	conf, err := cr.Get(key)
+	// update database
+	_, err = cr.data.DB.Context(ctx).ID(oldConfig.ID).Update(&entity.Config{Value: value})
 	if err != nil {
-		return errors.InternalServer(reason.DatabaseError).WithError(err)
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	str, ok := conf.(string)
-	if !ok {
-		return errors.InternalServer(reason.DatabaseError).WithMsg(fmt.Sprintf("no such config id: %v", id))
-	}
-	err = json.Unmarshal([]byte(str), object)
-	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithMsg(fmt.Sprintf("no such config id: %v", id))
-	}
-	return
-}
 
-// SetConfig set config
-func (cr *configRepo) SetConfig(key, value string) (err error) {
-	id := Key2IDMapping[key]
-	_, err = cr.data.DB.ID(id).Update(&entity.Config{Value: value})
-	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	} else {
-		Key2ValueMapping[key] = value
+	oldConfig.Value = value
+	cacheVal := oldConfig.JsonString()
+	// update cache
+	if err := cr.data.Cache.SetString(ctx,
+		constant.ConfigKEY2ContentCacheKeyPrefix+key, cacheVal, -1); err != nil {
+		log.Error(err)
+	}
+	if err := cr.data.Cache.SetString(ctx,
+		fmt.Sprintf("%s%d", constant.ConfigID2KEYCacheKeyPrefix, oldConfig.ID), cacheVal, -1); err != nil {
+		log.Error(err)
 	}
 	return
 }

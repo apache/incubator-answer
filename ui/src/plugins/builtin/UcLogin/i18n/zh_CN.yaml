@@ -1,0 +1,7 @@
+plugin:
+  uc_login:
+    ui:
+      connect: 连接到 {{ auth_name }}
+      login: 登录
+      qrcode_login_tip: 请使用 {{ agentName }} 扫描二维码登录
+      login_failed_email_tip: 登录失败, 请允许该应用程序访问您的电子邮件信息，然后再试一次。

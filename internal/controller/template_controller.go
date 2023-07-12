@@ -14,6 +14,7 @@ import (
 	templaterender "github.com/answerdev/answer/internal/controller/template_render"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/pkg/checker"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/obj"
@@ -183,9 +184,9 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 			titleIsAnswerID = true
 		}
 	}
-
+	siteInfo = tc.SiteInfo(ctx)
 	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
-	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionID {
+	if siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionID || siteInfo.SiteSeo.PermaLink == schema.PermaLinkQuestionIDByShortID {
 		if len(ctx.Request.URL.Query()) > 0 {
 			url = fmt.Sprintf("%s?%s", url, ctx.Request.URL.RawQuery)
 		}
@@ -229,8 +230,8 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	id := ctx.Param("id")
 	title := ctx.Param("title")
 	answerid := ctx.Param("answerid")
-
-	if id == "ask" {
+	if checker.IsQuestionsIgnorePath(id) {
+		// if id == "ask" {
 		file, err := ui.Build.ReadFile("build/index.html")
 		if err != nil {
 			log.Error(err)
@@ -276,9 +277,11 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 	}
 
 	// comments
-	objectIDs := []string{id}
+
+	objectIDs := []string{uid.DeShortID(id)}
 	for _, answer := range answers {
-		objectIDs = append(objectIDs, answer.ID)
+		answerID := uid.DeShortID(answer.ID)
+		objectIDs = append(objectIDs, answerID)
 	}
 	comments, err := tc.templateRenderController.CommentList(ctx, objectIDs)
 	if err != nil {
@@ -421,7 +424,8 @@ func (tc *TemplateController) UserInfo(ctx *gin.Context) {
 		tc.Page404(ctx)
 		return
 	}
-	exist := constant.ExistInPathIgnore(username)
+
+	exist := checker.IsUsersIgnorePath(username)
 	if exist {
 		file, err := ui.Build.ReadFile("build/index.html")
 		if err != nil {
@@ -470,6 +474,8 @@ func (tc *TemplateController) html(ctx *gin.Context, code int, tpl string, siteI
 	data["description"] = siteInfo.Description
 	data["language"] = handler.GetLang(ctx)
 	data["timezone"] = siteInfo.Interface.TimeZone
+	language := strings.Replace(siteInfo.Interface.Language, "_", "-", -1)
+	data["lang"] = language
 	data["HeadCode"] = siteInfo.CustomCssHtml.CustomHead
 	data["HeaderCode"] = siteInfo.CustomCssHtml.CustomHeader
 	data["FooterCode"] = siteInfo.CustomCssHtml.CustomFooter

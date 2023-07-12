@@ -135,6 +135,7 @@ func (os *ObjService) GetInfo(ctx context.Context, objectID string) (objInfo *sc
 			ObjectID:            questionInfo.ID,
 			ObjectCreatorUserID: questionInfo.UserID,
 			QuestionID:          questionInfo.ID,
+			QuestionStatus:      questionInfo.Status,
 			ObjectType:          objectType,
 			Title:               questionInfo.Title,
 			Content:             questionInfo.ParsedText, // todo trim
@@ -158,6 +159,7 @@ func (os *ObjService) GetInfo(ctx context.Context, objectID string) (objInfo *sc
 			ObjectID:            answerInfo.ID,
 			ObjectCreatorUserID: answerInfo.UserID,
 			QuestionID:          answerInfo.QuestionID,
+			QuestionStatus:      questionInfo.Status,
 			AnswerID:            answerInfo.ID,
 			ObjectType:          objectType,
 			Title:               questionInfo.Title,    // this should be question title
@@ -185,6 +187,7 @@ func (os *ObjService) GetInfo(ctx context.Context, objectID string) (objInfo *sc
 			}
 			if exist {
 				objInfo.QuestionID = questionInfo.ID
+				objInfo.QuestionStatus = questionInfo.Status
 				objInfo.Title = questionInfo.Title
 			}
 			answerInfo, exist, err := os.answerRepo.GetAnswer(ctx, commentInfo.ObjectID)

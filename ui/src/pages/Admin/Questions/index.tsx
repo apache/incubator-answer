@@ -162,7 +162,7 @@ const Questions: FC = () => {
                   <Stack>
                     <BaseUserCard data={li.user_info} />
                     <FormatTime
-                      className="fs-14 text-secondary"
+                      className="small text-secondary"
                       time={li.create_time}
                     />
                   </Stack>

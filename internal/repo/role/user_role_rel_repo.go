@@ -27,6 +27,7 @@ func NewUserRoleRelRepo(data *data.Data) role.UserRoleRelRepo {
 // SaveUserRoleRel save user role rel
 func (ur *userRoleRelRepo) SaveUserRoleRel(ctx context.Context, userID string, roleID int) (err error) {
 	_, err = ur.data.DB.Transaction(func(session *xorm.Session) (interface{}, error) {
+		session = session.Context(ctx)
 		item := &entity.UserRoleRel{UserID: userID}
 		exist, err := session.Get(item)
 		if err != nil {
@@ -53,7 +54,7 @@ func (ur *userRoleRelRepo) SaveUserRoleRel(ctx context.Context, userID string, r
 func (ur *userRoleRelRepo) GetUserRoleRelList(ctx context.Context, userIDs []string) (
 	userRoleRelList []*entity.UserRoleRel, err error) {
 	userRoleRelList = make([]*entity.UserRoleRel, 0)
-	err = ur.data.DB.In("user_id", userIDs).Find(&userRoleRelList)
+	err = ur.data.DB.Context(ctx).In("user_id", userIDs).Find(&userRoleRelList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -64,7 +65,7 @@ func (ur *userRoleRelRepo) GetUserRoleRelList(ctx context.Context, userIDs []str
 func (ur *userRoleRelRepo) GetUserRoleRelListByRoleID(ctx context.Context, roleIDs []int) (
 	userRoleRelList []*entity.UserRoleRel, err error) {
 	userRoleRelList = make([]*entity.UserRoleRel, 0)
-	err = ur.data.DB.In("role_id", roleIDs).Find(&userRoleRelList)
+	err = ur.data.DB.Context(ctx).In("role_id", roleIDs).Find(&userRoleRelList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -75,7 +76,7 @@ func (ur *userRoleRelRepo) GetUserRoleRelListByRoleID(ctx context.Context, roleI
 func (ur *userRoleRelRepo) GetUserRoleRel(ctx context.Context, userID string) (
 	rolePowerRel *entity.UserRoleRel, exist bool, err error) {
 	rolePowerRel = &entity.UserRoleRel{}
-	exist, err = ur.data.DB.Where(builder.Eq{"user_id": userID}).Get(rolePowerRel)
+	exist, err = ur.data.DB.Context(ctx).Where(builder.Eq{"user_id": userID}).Get(rolePowerRel)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

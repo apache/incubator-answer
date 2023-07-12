@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
+import { Row, Col, Form, Button, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -17,25 +17,25 @@ interface FormDataItem {
   slugName: Type.FormValue<string>;
   description: Type.FormValue<string>;
 }
-const initFormData = {
-  displayName: {
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  },
-  slugName: {
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  },
-  description: {
-    value: '',
-    isInvalid: false,
-    errorMsg: '',
-  },
-};
 
 const Index = () => {
+  const initFormData = {
+    displayName: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+    slugName: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+    description: {
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+  };
   const { role_id = 1 } = loggedUserInfoStore((state) => state.user);
   const navigate = useNavigate();
   const { t } = useTranslation('translation', { keyPrefix: 'tag_modal' });
@@ -82,7 +82,7 @@ const Index = () => {
   const handleDescriptionChange = (value: string) =>
     setFormData({
       ...formData,
-      description: { ...formData.description, value },
+      description: { ...formData.description, value, isInvalid: false },
     });
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -115,29 +115,34 @@ const Index = () => {
   const handleDisplayNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      displayName: { ...formData.displayName, value: e.currentTarget.value },
+      displayName: {
+        ...formData.displayName,
+        value: e.currentTarget.value,
+        isInvalid: false,
+      },
     });
   };
 
   const handleSlugNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      slugName: { ...formData.slugName, value: e.currentTarget.value },
+      slugName: {
+        ...formData.slugName,
+        value: e.currentTarget.value,
+        isInvalid: false,
+      },
     });
   };
 
   usePageTags({
     title: t('create_tag', { keyPrefix: 'page_title' }),
   });
+
   return (
-    <Container className="pt-4 mt-2 mb-5 edit-answer-wrap">
-      <Row className="justify-content-center">
-        <Col xxl={10} md={12}>
-          <h3 className="mb-4">{t('title')}</h3>
-        </Col>
-      </Row>
-      <Row className="justify-content-center">
-        <Col xxl={7} lg={8} sm={12} className="mb-4 mb-md-0">
+    <div className="pt-4 mb-5">
+      <h3 className="mb-4">{t('title')}</h3>
+      <Row>
+        <Col className="page-main flex-auto">
           <Form noValidate onSubmit={handleSubmit}>
             <Form.Group controlId="display_name" className="mb-3">
               <Form.Label>{t('form.fields.display_name.label')}</Form.Label>
@@ -199,7 +204,7 @@ const Index = () => {
             </div>
           </Form>
         </Col>
-        <Col xxl={3} lg={4} sm={12} className="mt-5 mt-lg-0">
+        <Col className="page-right-side mt-4 mt-xl-0">
           <Card>
             <Card.Header>
               {t('title', { keyPrefix: 'how_to_format' })}
@@ -213,7 +218,7 @@ const Index = () => {
           </Card>
         </Col>
       </Row>
-    </Container>
+    </div>
   );
 };
 

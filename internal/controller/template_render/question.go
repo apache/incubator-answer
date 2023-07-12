@@ -25,12 +25,21 @@ func (t *TemplateRenderController) Sitemap(ctx *gin.Context) {
 		log.Error("get site general failed:", err)
 		return
 	}
+	siteInfo, err := t.siteInfoService.GetSiteSeo(ctx)
+	if err != nil {
+		log.Error("get site GetSiteSeo failed:", err)
+		return
+	}
 
 	sitemapInfo := &schema.SiteMapList{}
 	infoStr, err := t.data.Cache.GetString(ctx, schema.SitemapCachekey)
 	if err != nil {
 		log.Errorf("get Cache failed: %s", err)
 		return
+	}
+	hasTitle := false
+	if siteInfo.PermaLink == schema.PermaLinkQuestionIDAndTitle || siteInfo.PermaLink == schema.PermaLinkQuestionIDAndTitleByShortID {
+		hasTitle = true
 	}
 	if err = json.Unmarshal([]byte(infoStr), sitemapInfo); err != nil {
 		log.Errorf("get sitemap info failed: %s", err)
@@ -45,6 +54,7 @@ func (t *TemplateRenderController) Sitemap(ctx *gin.Context) {
 				"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
 				"list":      sitemapInfo.QuestionIDs,
 				"general":   general,
+				"hastitle":  hasTitle,
 			},
 		)
 	} else {
@@ -68,6 +78,15 @@ func (t *TemplateRenderController) SitemapPage(ctx *gin.Context, page int) error
 		log.Error("get site general failed:", err)
 		return err
 	}
+	siteInfo, err := t.siteInfoService.GetSiteSeo(ctx)
+	if err != nil {
+		log.Error("get site GetSiteSeo failed:", err)
+		return err
+	}
+	hasTitle := false
+	if siteInfo.PermaLink == schema.PermaLinkQuestionIDAndTitle || siteInfo.PermaLink == schema.PermaLinkQuestionIDAndTitleByShortID {
+		hasTitle = true
+	}
 
 	cachekey := fmt.Sprintf(schema.SitemapPageCachekey, page)
 	infoStr, err := t.data.Cache.GetString(ctx, cachekey)
@@ -85,6 +104,7 @@ func (t *TemplateRenderController) SitemapPage(ctx *gin.Context, page int) error
 			"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
 			"list":      sitemapInfo.PageData,
 			"general":   general,
+			"hastitle":  hasTitle,
 		},
 	)
 	return nil

@@ -13,7 +13,7 @@ const Index = () => {
   const { t } = useTranslation('translation');
   const [searchParam] = useSearchParams();
   const { agent: ucAgent } = userCenterStore();
-  let agentName = ucAgent?.agent_info.name || '';
+  let agentName = ucAgent?.agent_info?.name || '';
   if (searchParam.get('agent_name')) {
     agentName = searchParam.get('agent_name') || '';
   }

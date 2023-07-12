@@ -3,13 +3,14 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0033FF" />
+    <meta name="theme-color" />
     <meta name="generator" content="Answer - https://github.com/answerdev/answer">
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
+
       <div id="spin-mask">
         <noscript>
           <style>
@@ -17,7 +18,7 @@
               display: none !important;
             }
 
-            #protect-brower {
+            #protect-browser {
               display: none;
             }
           </style>
@@ -54,7 +55,7 @@
             animation: 0.75s linear infinite _doc-spin;
           }
 
-          #protect-brower {
+          #protect-browser {
             padding: 20px;
             text-align: center;
           }
@@ -62,8 +63,9 @@
         <div id="spin-container">
           <div class="spinner"></div>
         </div>
-        <div id="protect-brower"></div>
+        <div id="protect-browser"></div>
       </div>
+
     </div>
   </body>
   <script>
@@ -91,20 +93,20 @@
         name: 'IE',
       }
     ];
-    function getBrowerTypeAndVersion(){
-      var brower = {
+    function getBrowserTypeAndVersion(){
+      var browser = {
         name: '',
         version: ''
       };
       var ua = navigator.userAgent.toLowerCase();
       var s;
-      ((ua.indexOf("compatible") > -1 && ua.indexOf("MSIE") > -1) || (ua.indexOf('Trident') > -1 && ua.indexOf("rv:11.0") > -1)) ? brower = { name: 'IE', version: '' } :
-      (s = ua.match(/edge\/([\d\.]+)/)) ? brower = { name: 'Edge', version: s[1] } :
-      (s = ua.match(/firefox\/([\d\.]+)/)) ? brower = { name: 'Firefox', version: s[1] } :
-      (s = ua.match(/chrome\/([\d\.]+)/)) ?  brower = { name: 'Chrome', version: s[1] } :
-      (s = ua.match(/version\/([\d\.]+).*safari/)) ?  brower = { name: 'Safari', version: s[1] } : brower = { name: 'unknown', version: '' };
+      ((ua.indexOf("compatible") > -1 && ua.indexOf("MSIE") > -1) || (ua.indexOf('Trident') > -1 && ua.indexOf("rv:11.0") > -1)) ? browser = { name: 'IE', version: '' } :
+      (s = ua.match(/edge\/([\d\.]+)/)) ? browser = { name: 'Edge', version: s[1] } :
+      (s = ua.match(/firefox\/([\d\.]+)/)) ? browser = { name: 'Firefox', version: s[1] } :
+      (s = ua.match(/chrome\/([\d\.]+)/)) ?  browser = { name: 'Chrome', version: s[1] } :
+      (s = ua.match(/version\/([\d\.]+).*safari/)) ?  browser = { name: 'Safari', version: s[1] } : browser = { name: 'unknown', version: '' };
       // 根据关系进行判断
-      return brower;
+      return browser;
     }
 
     function compareVersion(version1, version2) {
@@ -129,25 +131,23 @@
       return 0;
     }
 
-    const browerInfo = getBrowerTypeAndVersion();
+    const browserInfo = getBrowserTypeAndVersion();
 
-
-    if (browerInfo.name === 'IE') {
-      const div = document.getElementById('protect-brower');
+    if (browserInfo.name === 'IE') {
+      const div = document.getElementById('protect-browser');
       div.innerText = 'Sorry, this site does not support Internet Explorer. In order to avoid affecting the normal use of our features, please use a more modern browser such as Edge, Firefox, Chrome, or Safari.'
     } else {
       const notSupport = defaultList.some(item => {
-        if (item.name === browerInfo.name) {
-          return compareVersion(browerInfo.version, item.version) === -1;
+        if (item.name === browserInfo.name) {
+          return compareVersion(browserInfo.version, item.version) === -1;
         }
         return false;
       });
       if (notSupport) {
-        const div = document.getElementById('protect-brower');
+        const div = document.getElementById('protect-browser');
         div.innerText = 'The current browser version is too low, in order not to affect the normal use of the function, please upgrade the browser to the latest version.'
       }
     }
-
 
   </script>
 </html>

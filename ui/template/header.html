@@ -1,10 +1,11 @@
 {{define "header"}}
 <!DOCTYPE html>
-<html>
+<html lang="{{.lang}}">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{{.title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" />
     <meta name="description" content="{{.description}}" data-rh="true" />
     <meta name="generator" content="Answer {{.Version}} - https://github.com/answerdev/answer version {{.Revision}}">
     {{if .keywords }}<meta name="keywords" content="{{.keywords}}" data-rh="true" />{{end}}
@@ -37,19 +38,23 @@
   </head>
 
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root">
-      <div id="spin-mask" hidden>
-        <script>
-          try {
-            document.querySelector('#spin-mask').removeAttribute('hidden');
-          } catch (ex) {}
-        </script>
+
+      <div id="spin-mask">
+        <noscript>
+          <style>
+            #spin-mask {
+              display: none !important;
+            }
+
+            #protect-browser {
+              display: none;
+            }
+          </style>
+        </noscript>
         <style>
           @keyframes _doc-spin {
-            to {
-              transform: rotate(360deg);
-            }
+            to { transform: rotate(360deg) }
           }
           #spin-mask {
             position: fixed;
@@ -71,17 +76,23 @@
             display: inline-block;
             width: 2rem;
             height: 2rem;
-            vertical-align: -0.125em;
-            border: 0.25rem solid currentColor;
+            vertical-align: -.125em;
+            border: .25rem solid currentColor;
             border-right-color: transparent;
-            color: rgba(108, 117, 125, 0.75);
+            color: rgba(108, 117, 125, .75);
             border-radius: 50%;
             animation: 0.75s linear infinite _doc-spin;
+          }
+
+          #protect-browser {
+            padding: 20px;
+            text-align: center;
           }
         </style>
         <div id="spin-container">
           <div class="spinner"></div>
         </div>
+        <div id="protect-browser"></div>
       </div>
 
       <nav id="header" class="sticky-top navbar navbar-expand-lg navbar-dark">
@@ -119,6 +130,90 @@
         </div>
       </nav>
       <div class="position-relative page-wrap">{{end}}</div>
+
     </div>
   </body>
+  <script>
+    /**
+     * @description: Prompt that the browser version is too low
+     */
+    const defaultList = [
+      {
+        name: 'Edge',
+        version: '100'
+      },
+      {
+        name: 'Firefox',
+        version: '100'
+      },
+      {
+        name: 'Chrome',
+        version: '90'
+      },
+      {
+        name: 'Safari',
+        version: '15'
+      },
+      {
+        name: 'IE',
+      }
+    ];
+    function getBrowserTypeAndVersion(){
+      var browser = {
+        name: '',
+        version: ''
+      };
+      var ua = navigator.userAgent.toLowerCase();
+      var s;
+      ((ua.indexOf("compatible") > -1 && ua.indexOf("MSIE") > -1) || (ua.indexOf('Trident') > -1 && ua.indexOf("rv:11.0") > -1)) ? browser = { name: 'IE', version: '' } :
+        (s = ua.match(/edge\/([\d\.]+)/)) ? browser = { name: 'Edge', version: s[1] } :
+          (s = ua.match(/firefox\/([\d\.]+)/)) ? browser = { name: 'Firefox', version: s[1] } :
+            (s = ua.match(/chrome\/([\d\.]+)/)) ?  browser = { name: 'Chrome', version: s[1] } :
+              (s = ua.match(/version\/([\d\.]+).*safari/)) ?  browser = { name: 'Safari', version: s[1] } : browser = { name: 'unknown', version: '' };
+      // 根据关系进行判断
+      return browser;
+    }
+
+    function compareVersion(version1, version2) {
+      var v1 = version1.split('.');
+      var v2 = version2.split('.');
+      var len = Math.max(v1.length, v2.length);
+      while (v1.length < len) {
+        v1.push('0');
+      }
+      while (v2.length < len) {
+        v2.push('0');
+      }
+      for (var i = 0; i < len; i++) {
+        var num1 = parseInt(v1[i]);
+        var num2 = parseInt(v2[i]);
+        if (num1 >= num2) {
+          return 1;
+        } else if (num1 < num2) {
+          return -1;
+        }
+      }
+      return 0;
+    }
+
+    const browserInfo = getBrowserTypeAndVersion();
+
+    if (browserInfo.name === 'IE') {
+      const div = document.getElementById('protect-browser');
+      div.innerText = 'Sorry, this site does not support Internet Explorer. In order to avoid affecting the normal use of our features, please use a more modern browser such as Edge, Firefox, Chrome, or Safari.'
+    } else {
+      const notSupport = defaultList.some(item => {
+        if (item.name === browserInfo.name) {
+          return compareVersion(browserInfo.version, item.version) === -1;
+        }
+        return false;
+      });
+      if (notSupport) {
+        const div = document.getElementById('protect-browser');
+        div.innerText = 'The current browser version is too low, in order not to affect the normal use of the function, please upgrade the browser to the latest version.'
+      }
+    }
+
+  </script>
+
 </html>

@@ -90,6 +90,9 @@ func (a *UIRouter) Register(r *gin.Engine) {
 			if branding.Favicon != "" {
 				c.String(http.StatusOK, htmltext.GetPicByUrl(branding.Favicon))
 				return
+			} else if branding.SquareIcon != "" {
+				c.String(http.StatusOK, htmltext.GetPicByUrl(branding.SquareIcon))
+				return
 			} else {
 				c.Header("content-type", "image/vnd.microsoft.icon")
 				filePath = UIRootFilePath + urlPath

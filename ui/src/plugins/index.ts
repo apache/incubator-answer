@@ -1,4 +1,3 @@
-import PluginOauth from './PluginOauth';
-import PluginUcLogin from './PluginUcLogin';
+export default null;
 
-export { PluginOauth, PluginUcLogin };
+// export { default as Demo } from './Demo';

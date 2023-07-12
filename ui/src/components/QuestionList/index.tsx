@@ -3,8 +3,8 @@ import { ListGroup } from 'react-bootstrap';
 import { NavLink, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
+import type { QuestionOrderBy } from '@/common/interface';
 import { pathFactory } from '@/router/pathFactory';
-import type * as Type from '@/common/interface';
 import {
   Tag,
   Pagination,
@@ -16,25 +16,32 @@ import {
   Counts,
   Icon,
 } from '@/components';
+import * as Type from '@/common/interface';
 
-const QuestionOrderKeys: Type.QuestionOrderBy[] = [
+export const QUESTION_ORDER_KEYS: Type.QuestionOrderBy[] = [
   'active',
   'newest',
   'frequent',
   'score',
   'unanswered',
 ];
-
 interface Props {
   source: 'questions' | 'tag';
+  order?: QuestionOrderBy;
   data;
   isLoading: boolean;
 }
 
-const QuestionList: FC<Props> = ({ source, data, isLoading = false }) => {
+const QuestionList: FC<Props> = ({
+  source,
+  order,
+  data,
+  isLoading = false,
+}) => {
   const { t } = useTranslation('translation', { keyPrefix: 'question' });
   const [urlSearchParams] = useSearchParams();
-  const curOrder = urlSearchParams.get('order') || QuestionOrderKeys[0];
+  const curOrder =
+    order || urlSearchParams.get('order') || QUESTION_ORDER_KEYS[0];
   const curPage = Number(urlSearchParams.get('page')) || 1;
   const pageSize = 20;
   const count = data?.count || 0;
@@ -47,7 +54,7 @@ const QuestionList: FC<Props> = ({ source, data, isLoading = false }) => {
             : t('x_questions', { count })}
         </h5>
         <QueryGroup
-          data={QuestionOrderKeys}
+          data={QUESTION_ORDER_KEYS}
           currentSort={curOrder}
           pathname={source === 'questions' ? '/questions' : ''}
           i18nKeyPrefix="question"
@@ -77,7 +84,7 @@ const QuestionList: FC<Props> = ({ source, data, isLoading = false }) => {
                     {li.status === 2 ? ` [${t('closed')}]` : ''}
                   </NavLink>
                 </h5>
-                <div className="d-flex flex-column flex-md-row align-items-md-center fs-14 mb-2 text-secondary">
+                <div className="d-flex flex-column flex-md-row align-items-md-center small mb-2 text-secondary">
                   <div className="d-flex">
                     <BaseUserCard
                       data={li.operator}
