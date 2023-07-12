@@ -3,9 +3,11 @@ package answercommon
 import (
 	"context"
 
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/pkg/htmltext"
+	"github.com/answerdev/answer/pkg/uid"
 )
 
 type AnswerRepo interface {
@@ -21,7 +23,7 @@ type AnswerRepo interface {
 	GetCountByUserID(ctx context.Context, userID string) (int64, error)
 	GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error)
 	SearchList(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error)
-	AdminSearchList(ctx context.Context, search *entity.AdminAnswerSearch) ([]*entity.Answer, int64, error)
+	AdminSearchList(ctx context.Context, search *schema.AdminAnswerPageReq) ([]*entity.Answer, int64, error)
 	UpdateAnswerStatus(ctx context.Context, answer *entity.Answer) (err error)
 	GetAnswerCount(ctx context.Context) (count int64, err error)
 }
@@ -45,11 +47,16 @@ func (as *AnswerCommon) SearchAnswered(ctx context.Context, userID, questionID s
 	return has, nil
 }
 
-func (as *AnswerCommon) AdminSearchList(ctx context.Context, search *entity.AdminAnswerSearch) ([]*entity.Answer, int64, error) {
-	if search.Status == 0 {
-		search.Status = 1
+func (as *AnswerCommon) AdminSearchList(ctx context.Context, req *schema.AdminAnswerPageReq) (
+	resp []*entity.Answer, count int64, err error) {
+	resp, count, err = as.answerRepo.AdminSearchList(ctx, req)
+	if handler.GetEnableShortID(ctx) {
+		for _, item := range resp {
+			item.ID = uid.EnShortID(item.ID)
+			item.QuestionID = uid.EnShortID(item.QuestionID)
+		}
 	}
-	return as.answerRepo.AdminSearchList(ctx, search)
+	return resp, count, err
 }
 
 func (as *AnswerCommon) Search(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error) {

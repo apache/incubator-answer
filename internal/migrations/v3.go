@@ -117,7 +117,7 @@ ON "question" (
 		{ID: 48, Key: "rank.comment.edit", Value: `-1`},
 		{ID: 49, Key: "rank.comment.delete", Value: `-1`},
 		{ID: 50, Key: "rank.report.add", Value: `1`},
-		{ID: 51, Key: "rank.tag.add", Value: `1`},
+		{ID: 51, Key: "rank.tag.add", Value: `1500`},
 		{ID: 52, Key: "rank.tag.edit", Value: `100`},
 		{ID: 53, Key: "rank.tag.delete", Value: `-1`},
 		{ID: 54, Key: "rank.tag.synonym", Value: `20000`},

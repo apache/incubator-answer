@@ -5,22 +5,19 @@ import (
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/activity"
-	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 )
 
 type ActivityController struct {
-	activityCommonService *activity_common.ActivityCommon
-	activityService       *activity.ActivityService
+	activityService *activity.ActivityService
 }
 
 // NewActivityController new activity controller.
 func NewActivityController(
-	activityCommonService *activity_common.ActivityCommon,
 	activityService *activity.ActivityService) *ActivityController {
-	return &ActivityController{activityCommonService: activityCommonService, activityService: activityService}
+	return &ActivityController{activityService: activityService}
 }
 
 // GetObjectTimeline get object timeline

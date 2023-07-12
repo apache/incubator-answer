@@ -79,6 +79,14 @@ type TestTemplateData struct {
 	SiteName string
 }
 
+// SaveCode save code
+func (es *EmailService) SaveCode(ctx context.Context, code, codeContent string) {
+	err := es.emailRepo.SetCode(ctx, code, codeContent, 10*time.Minute)
+	if err != nil {
+		log.Error(err)
+	}
+}
+
 // SendAndSaveCode send email and save code
 func (es *EmailService) SendAndSaveCode(ctx context.Context, toEmailAddr, subject, body, code, codeContent string) {
 	es.Send(ctx, toEmailAddr, subject, body)
@@ -104,6 +112,10 @@ func (es *EmailService) Send(ctx context.Context, toEmailAddr, subject, body str
 	ec, err := es.GetEmailConfig(ctx)
 	if err != nil {
 		log.Errorf("get email config failed: %s", err)
+		return
+	}
+	if len(ec.SMTPHost) == 0 {
+		log.Warnf("smtp host is empty, skip send email")
 		return
 	}
 

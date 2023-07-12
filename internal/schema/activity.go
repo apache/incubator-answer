@@ -4,12 +4,13 @@ import "github.com/answerdev/answer/internal/base/constant"
 
 // ActivityMsg activity message
 type ActivityMsg struct {
-	UserID           string                   `json:"user_id"`
-	TriggerUserID    int64                    `json:"trigger_user_id"`
-	ObjectID         string                   `json:"object_id"`
-	OriginalObjectID string                   `json:"original_object_id"`
-	ActivityTypeKey  constant.ActivityTypeKey `json:"activity_type_key"`
-	RevisionID       string                   `json:"revision_id"`
+	UserID           string
+	TriggerUserID    int64
+	ObjectID         string
+	OriginalObjectID string
+	ActivityTypeKey  constant.ActivityTypeKey
+	RevisionID       string
+	ExtraInfo        map[string]string
 }
 
 // GetObjectTimelineReq get object timeline request

@@ -16,4 +16,7 @@ const (
 	ConfigKEY2ContentCacheKeyPrefix    = "answer:config:key:"
 	ConnectorUserExternalInfoCacheKey  = "answer:connector:"
 	ConnectorUserExternalInfoCacheTime = 10 * time.Minute
+	SiteMapQuestionCacheKeyPrefix      = "answer:sitemap:question:%d"
+	SiteMapQuestionCacheTime           = time.Hour
+	SitemapMaxSize                     = 50000
 )

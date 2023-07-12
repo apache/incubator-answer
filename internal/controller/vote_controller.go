@@ -10,7 +10,6 @@ import (
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 )
 
@@ -54,9 +53,7 @@ func (vc *VoteController) VoteUp(ctx *gin.Context) {
 		return
 	}
 
-	dto := &schema.VoteDTO{}
-	_ = copier.Copy(dto, req)
-	resp, err := vc.VoteService.VoteUp(ctx, dto)
+	resp, err := vc.VoteService.VoteUp(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, schema.ErrTypeToast)
 	} else {
@@ -93,9 +90,7 @@ func (vc *VoteController) VoteDown(ctx *gin.Context) {
 		return
 	}
 
-	dto := &schema.VoteDTO{}
-	_ = copier.Copy(dto, req)
-	resp, err := vc.VoteService.VoteDown(ctx, dto)
+	resp, err := vc.VoteService.VoteDown(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, schema.ErrTypeToast)
 	} else {
@@ -103,9 +98,9 @@ func (vc *VoteController) VoteDown(ctx *gin.Context) {
 	}
 }
 
-// UserVotes godoc
-// @Summary user's votes
-// @Description user's vote
+// UserVotes user votes
+// @Summary get user personal votes
+// @Description get user personal votes
 // @Tags Activity
 // @Accept json
 // @Produce json
@@ -116,21 +111,12 @@ func (vc *VoteController) VoteDown(ctx *gin.Context) {
 // @Router /answer/api/v1/personal/vote/page [get]
 func (vc *VoteController) UserVotes(ctx *gin.Context) {
 	req := schema.GetVoteWithPageReq{}
-	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	if handler.BindAndCheck(ctx, &req) {
 		return
 	}
-	if req.Page == 0 {
-		req.Page = 1
-	}
-	if req.PageSize == 0 {
-		req.PageSize = 30
-	}
+
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	resp, err := vc.VoteService.ListUserVotes(ctx, req)
-	if err != nil {
-		handler.HandleResponse(ctx, err, schema.ErrTypeModal)
-	} else {
-		handler.HandleResponse(ctx, err, resp)
-	}
+	handler.HandleResponse(ctx, err, resp)
 }

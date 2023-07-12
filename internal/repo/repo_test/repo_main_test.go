@@ -1,6 +1,7 @@
 package repo_test
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"os"
@@ -55,6 +56,10 @@ func TestMain(t *testing.M) {
 		// Use sqlite3 to test.
 		dbSetting = dbSettingMapping[string(schemas.SQLITE)]
 	}
+	if dbSetting.Driver == string(schemas.SQLITE) {
+		os.RemoveAll(dbSetting.Connection)
+	}
+
 	defer func() {
 		if tearDown != nil {
 			tearDown()
@@ -160,8 +165,15 @@ func initDatabase(dbSetting TestDBSetting) (dbEngine *xorm.Engine, err error) {
 	if err != nil {
 		return nil, fmt.Errorf("connection to database failed: %s", err)
 	}
-	err = migrations.InitDB(dataConf)
-	if err != nil {
+	if err := migrations.NewMentor(context.TODO(), dbEngine, &migrations.InitNeedUserInputData{
+		Language:      "en_US",
+		SiteName:      "ANSWER",
+		SiteURL:       "http://127.0.0.1:8080/",
+		ContactEmail:  "answer@answer.com",
+		AdminName:     "admin",
+		AdminPassword: "admin",
+		AdminEmail:    "answer@answer.com",
+	}).InitDB(); err != nil {
 		return nil, fmt.Errorf("migrations init database failed: %s", err)
 	}
 	return dbEngine, nil

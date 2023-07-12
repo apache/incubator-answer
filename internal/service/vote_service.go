@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"github.com/answerdev/answer/internal/service/activity_common"
+	"strings"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/handler"
@@ -13,41 +15,37 @@ import (
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/object_info"
 	"github.com/answerdev/answer/pkg/htmltext"
-	"github.com/answerdev/answer/pkg/obj"
 	"github.com/segmentfault/pacman/log"
 
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	answercommon "github.com/answerdev/answer/internal/service/answer_common"
 	questioncommon "github.com/answerdev/answer/internal/service/question_common"
-	"github.com/answerdev/answer/internal/service/unique"
 	"github.com/segmentfault/pacman/errors"
 )
 
 // VoteRepo activity repository
 type VoteRepo interface {
-	VoteUp(ctx context.Context, objectID string, userID, objectUserID string) (resp *schema.VoteResp, err error)
-	VoteDown(ctx context.Context, objectID string, userID, objectUserID string) (resp *schema.VoteResp, err error)
-	VoteUpCancel(ctx context.Context, objectID string, userID, objectUserID string) (resp *schema.VoteResp, err error)
-	VoteDownCancel(ctx context.Context, objectID string, userID, objectUserID string) (resp *schema.VoteResp, err error)
-	GetVoteResultByObjectId(ctx context.Context, objectID string) (resp *schema.VoteResp, err error)
-	ListUserVotes(ctx context.Context, userID string, req schema.GetVoteWithPageReq, activityTypes []int) (voteList []entity.Activity, total int64, err error)
+	Vote(ctx context.Context, op *schema.VoteOperationInfo) (err error)
+	CancelVote(ctx context.Context, op *schema.VoteOperationInfo) (err error)
+	GetAndSaveVoteResult(ctx context.Context, objectID, objectType string) (up, down int64, err error)
+	ListUserVotes(ctx context.Context, userID string, page int, pageSize int, activityTypes []int) (
+		voteList []*entity.Activity, total int64, err error)
 }
 
 // VoteService user service
 type VoteService struct {
 	voteRepo          VoteRepo
-	UniqueIDRepo      unique.UniqueIDRepo
 	configService     *config.ConfigService
 	questionRepo      questioncommon.QuestionRepo
 	answerRepo        answercommon.AnswerRepo
 	commentCommonRepo comment_common.CommentCommonRepo
 	objectService     *object_info.ObjService
+	activityRepo      activity_common.ActivityRepo
 }
 
 func NewVoteService(
-	VoteRepo VoteRepo,
-	uniqueIDRepo unique.UniqueIDRepo,
+	voteRepo VoteRepo,
 	configService *config.ConfigService,
 	questionRepo questioncommon.QuestionRepo,
 	answerRepo answercommon.AnswerRepo,
@@ -55,8 +53,7 @@ func NewVoteService(
 	objectService *object_info.ObjService,
 ) *VoteService {
 	return &VoteService{
-		voteRepo:          VoteRepo,
-		UniqueIDRepo:      uniqueIDRepo,
+		voteRepo:          voteRepo,
 		configService:     configService,
 		questionRepo:      questionRepo,
 		answerRepo:        answerRepo,
@@ -66,94 +63,90 @@ func NewVoteService(
 }
 
 // VoteUp vote up
-func (vs *VoteService) VoteUp(ctx context.Context, dto *schema.VoteDTO) (voteResp *schema.VoteResp, err error) {
-	voteResp = &schema.VoteResp{}
-
-	var objectUserID string
-
-	objectUserID, err = vs.GetObjectUserID(ctx, dto.ObjectID)
+func (vs *VoteService) VoteUp(ctx context.Context, req *schema.VoteReq) (resp *schema.VoteResp, err error) {
+	objectInfo, err := vs.objectService.GetInfo(ctx, req.ObjectID)
 	if err != nil {
-		return
+		return nil, err
 	}
+	// make object id must be decoded
+	objectInfo.ObjectID = req.ObjectID
 
 	// check user is voting self or not
-	if objectUserID == dto.UserID {
-		err = errors.BadRequest(reason.DisallowVoteYourSelf)
-		return
+	if objectInfo.ObjectCreatorUserID == req.UserID {
+		return nil, errors.BadRequest(reason.DisallowVoteYourSelf)
 	}
 
-	if dto.IsCancel {
-		return vs.voteRepo.VoteUpCancel(ctx, dto.ObjectID, dto.UserID, objectUserID)
+	voteUpOperationInfo := vs.createVoteOperationInfo(ctx, req.UserID, true, objectInfo)
+
+	// vote operation
+	if req.IsCancel {
+		err = vs.voteRepo.CancelVote(ctx, voteUpOperationInfo)
 	} else {
-		return vs.voteRepo.VoteUp(ctx, dto.ObjectID, dto.UserID, objectUserID)
+		// cancel vote down if exist
+		voteOperationInfo := vs.createVoteOperationInfo(ctx, req.UserID, false, objectInfo)
+		err = vs.voteRepo.CancelVote(ctx, voteOperationInfo)
+		if err != nil {
+			return nil, err
+		}
+		err = vs.voteRepo.Vote(ctx, voteUpOperationInfo)
 	}
+	if err != nil {
+		return nil, err
+	}
+
+	resp = &schema.VoteResp{}
+	resp.UpVotes, resp.DownVotes, err = vs.voteRepo.GetAndSaveVoteResult(ctx, req.ObjectID, objectInfo.ObjectType)
+	if err != nil {
+		log.Error(err)
+	}
+	resp.Votes = resp.UpVotes - resp.DownVotes
+	if !req.IsCancel {
+		resp.VoteStatus = constant.ActVoteUp
+	}
+	return resp, nil
 }
 
 // VoteDown vote down
-func (vs *VoteService) VoteDown(ctx context.Context, dto *schema.VoteDTO) (voteResp *schema.VoteResp, err error) {
-	voteResp = &schema.VoteResp{}
-
-	var objectUserID string
-
-	objectUserID, err = vs.GetObjectUserID(ctx, dto.ObjectID)
+func (vs *VoteService) VoteDown(ctx context.Context, req *schema.VoteReq) (resp *schema.VoteResp, err error) {
+	objectInfo, err := vs.objectService.GetInfo(ctx, req.ObjectID)
 	if err != nil {
-		return
+		return nil, err
 	}
+	// make object id must be decoded
+	objectInfo.ObjectID = req.ObjectID
 
 	// check user is voting self or not
-	if objectUserID == dto.UserID {
-		err = errors.BadRequest(reason.DisallowVoteYourSelf)
-		return
+	if objectInfo.ObjectCreatorUserID == req.UserID {
+		return nil, errors.BadRequest(reason.DisallowVoteYourSelf)
 	}
 
-	if dto.IsCancel {
-		return vs.voteRepo.VoteDownCancel(ctx, dto.ObjectID, dto.UserID, objectUserID)
+	// vote operation
+	voteDownOperationInfo := vs.createVoteOperationInfo(ctx, req.UserID, false, objectInfo)
+	if req.IsCancel {
+		err = vs.voteRepo.CancelVote(ctx, voteDownOperationInfo)
 	} else {
-		return vs.voteRepo.VoteDown(ctx, dto.ObjectID, dto.UserID, objectUserID)
+		// cancel vote up if exist
+		err = vs.voteRepo.CancelVote(ctx, vs.createVoteOperationInfo(ctx, req.UserID, true, objectInfo))
+		if err != nil {
+			return nil, err
+		}
+		err = vs.voteRepo.Vote(ctx, voteDownOperationInfo)
 	}
-}
 
-func (vs *VoteService) GetObjectUserID(ctx context.Context, objectID string) (userID string, err error) {
-	var objectKey string
-	objectKey, err = obj.GetObjectTypeStrByObjectID(objectID)
-
+	resp = &schema.VoteResp{}
+	resp.UpVotes, resp.DownVotes, err = vs.voteRepo.GetAndSaveVoteResult(ctx, req.ObjectID, objectInfo.ObjectType)
 	if err != nil {
-		err = nil
-		return
+		log.Error(err)
 	}
-
-	switch objectKey {
-	case "question":
-		object, has, e := vs.questionRepo.GetQuestion(ctx, objectID)
-		if e != nil || !has {
-			err = errors.BadRequest(reason.QuestionNotFound).WithError(e).WithStack()
-			return
-		}
-		userID = object.UserID
-	case "answer":
-		object, has, e := vs.answerRepo.GetAnswer(ctx, objectID)
-		if e != nil || !has {
-			err = errors.BadRequest(reason.AnswerNotFound).WithError(e).WithStack()
-			return
-		}
-		userID = object.UserID
-	case "comment":
-		object, has, e := vs.commentCommonRepo.GetComment(ctx, objectID)
-		if e != nil || !has {
-			err = errors.BadRequest(reason.CommentNotFound).WithError(e).WithStack()
-			return
-		}
-		userID = object.UserID
-	default:
-		err = errors.BadRequest(reason.DisallowVote).WithError(err).WithStack()
-		return
+	resp.Votes = resp.UpVotes - resp.DownVotes
+	if !req.IsCancel {
+		resp.VoteStatus = constant.ActVoteDown
 	}
-
-	return
+	return resp, nil
 }
 
 // ListUserVotes list user's votes
-func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWithPageReq) (model *pager.PageModel, err error) {
+func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWithPageReq) (resp *pager.PageModel, err error) {
 	typeKeys := []string{
 		activity_type.QuestionVoteUp,
 		activity_type.QuestionVoteDown,
@@ -172,14 +165,14 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 		activityTypeMapping[cfg.ID] = typeKey
 	}
 
-	voteList, total, err := vs.voteRepo.ListUserVotes(ctx, req.UserID, req, activityTypes)
+	voteList, total, err := vs.voteRepo.ListUserVotes(ctx, req.UserID, req.Page, req.PageSize, activityTypes)
 	if err != nil {
-		return
+		return nil, err
 	}
 
 	lang := handler.GetLangByCtx(ctx)
 
-	resp := make([]*schema.GetVoteWithPageResp, 0)
+	votes := make([]*schema.GetVoteWithPageResp, 0)
 	for _, voteInfo := range voteList {
 		objInfo, err := vs.objectService.GetInfo(ctx, voteInfo.ObjectID)
 		if err != nil {
@@ -202,7 +195,65 @@ func (vs *VoteService) ListUserVotes(ctx context.Context, req schema.GetVoteWith
 		if objInfo.QuestionStatus == entity.QuestionStatusDeleted {
 			item.Title = translator.Tr(lang, constant.DeletedQuestionTitleTrKey)
 		}
-		resp = append(resp, item)
+		votes = append(votes, item)
 	}
-	return pager.NewPageModel(total, resp), err
+	return pager.NewPageModel(total, votes), err
+}
+
+func (vs *VoteService) createVoteOperationInfo(ctx context.Context,
+	userID string, voteUp bool, objectInfo *schema.SimpleObjectInfo) *schema.VoteOperationInfo {
+	// warp vote operation
+	voteOperationInfo := &schema.VoteOperationInfo{
+		ObjectID:            objectInfo.ObjectID,
+		ObjectType:          objectInfo.ObjectType,
+		ObjectCreatorUserID: objectInfo.ObjectCreatorUserID,
+		OperatingUserID:     userID,
+		VoteUp:              voteUp,
+		VoteDown:            !voteUp,
+	}
+	voteOperationInfo.Activities = vs.getActivities(ctx, voteOperationInfo)
+	return voteOperationInfo
+}
+
+func (vs *VoteService) getActivities(ctx context.Context, op *schema.VoteOperationInfo) (
+	activities []*schema.VoteActivity) {
+	activities = make([]*schema.VoteActivity, 0)
+
+	var actions []string
+	switch op.ObjectType {
+	case constant.QuestionObjectType:
+		if op.VoteUp {
+			actions = []string{activity_type.QuestionVoteUp, activity_type.QuestionVotedUp}
+		} else {
+			actions = []string{activity_type.QuestionVoteDown, activity_type.QuestionVotedDown}
+		}
+	case constant.AnswerObjectType:
+		if op.VoteUp {
+			actions = []string{activity_type.AnswerVoteUp, activity_type.AnswerVotedUp}
+		} else {
+			actions = []string{activity_type.AnswerVoteDown, activity_type.AnswerVotedDown}
+		}
+	case constant.CommentObjectType:
+		actions = []string{activity_type.CommentVoteUp}
+	}
+
+	for _, action := range actions {
+		t := &schema.VoteActivity{}
+		cfg, err := vs.configService.GetConfigByKey(ctx, action)
+		if err != nil {
+			log.Warnf("get config by key error: %v", err)
+			continue
+		}
+		t.ActivityType, t.Rank = cfg.ID, cfg.GetIntValue()
+
+		if strings.Contains(action, "voted") {
+			t.ActivityUserID = op.ObjectCreatorUserID
+			t.TriggerUserID = op.OperatingUserID
+		} else {
+			t.ActivityUserID = op.OperatingUserID
+			t.TriggerUserID = "0"
+		}
+		activities = append(activities, t)
+	}
+	return activities
 }

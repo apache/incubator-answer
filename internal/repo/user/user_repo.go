@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/data"
@@ -72,7 +73,7 @@ func (ur *userRepo) IncreaseQuestionCount(ctx context.Context, userID string, am
 func (ur *userRepo) UpdateQuestionCount(ctx context.Context, userID string, count int64) (err error) {
 	user := &entity.User{}
 	user.QuestionCount = int(count)
-	_, err = ur.data.DB.Where("id = ?", userID).Cols("question_count").Update(user)
+	_, err = ur.data.DB.Context(ctx).Where("id = ?", userID).Cols("question_count").Update(user)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -82,7 +83,7 @@ func (ur *userRepo) UpdateQuestionCount(ctx context.Context, userID string, coun
 func (ur *userRepo) UpdateAnswerCount(ctx context.Context, userID string, count int) (err error) {
 	user := &entity.User{}
 	user.AnswerCount = count
-	_, err = ur.data.DB.Where("id = ?", userID).Cols("answer_count").Update(user)
+	_, err = ur.data.DB.Context(ctx).Where("id = ?", userID).Cols("answer_count").Update(user)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -195,7 +196,7 @@ func (ur *userRepo) GetByUsername(ctx context.Context, username string) (userInf
 
 func (ur *userRepo) GetByUsernames(ctx context.Context, usernames []string) ([]*entity.User, error) {
 	list := make([]*entity.User, 0)
-	err := ur.data.DB.Where("status =?", entity.UserStatusAvailable).In("username", usernames).Find(&list)
+	err := ur.data.DB.Context(ctx).Where("status =?", entity.UserStatusAvailable).In("username", usernames).Find(&list)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return list, err
@@ -224,18 +225,16 @@ func (ur *userRepo) GetUserCount(ctx context.Context) (count int64, err error) {
 	return
 }
 
-func (ur *userRepo) SearchUserListByName(ctx context.Context, name string) (userList []*entity.User, err error) {
+func (ur *userRepo) SearchUserListByName(ctx context.Context, name string, limit int) (userList []*entity.User, err error) {
 	userList = make([]*entity.User, 0)
-	if name == "" {
-		return userList, nil
-	}
-	session := ur.data.DB.Where("")
-	session.Where("username LIKE LOWER(?) or display_name LIKE ?", name+"%", name+"%").And("status =?", entity.UserStatusAvailable)
-	session.Asc("username")
-	session = session.Limit(5, 0)
-	err = session.OrderBy("id desc").Find(&userList)
+	session := ur.data.DB.Context(ctx)
+	session.Where("status = ?", entity.UserStatusAvailable)
+	session.Where("username LIKE ? OR display_name LIKE ?", strings.ToLower(name)+"%", name+"%")
+	session.OrderBy("username ASC, id DESC")
+	session.Limit(limit)
+	err = session.Find(&userList)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	tryToDecorateUserListFromUserCenter(ctx, ur.data, userList)
 	return

@@ -26,7 +26,7 @@ type AnswerAPIRouter struct {
 	reasonController       *controller.ReasonController
 	themeController        *controller_admin.ThemeController
 	siteInfoController     *controller_admin.SiteInfoController
-	siteinfoController     *controller.SiteinfoController
+	siteinfoController     *controller.SiteInfoController
 	notificationController *controller.NotificationController
 	dashboardController    *controller.DashboardController
 	uploadController       *controller.UploadController
@@ -55,7 +55,7 @@ func NewAnswerAPIRouter(
 	reasonController *controller.ReasonController,
 	themeController *controller_admin.ThemeController,
 	siteInfoController *controller_admin.SiteInfoController,
-	siteinfoController *controller.SiteinfoController,
+	siteinfoController *controller.SiteInfoController,
 	notificationController *controller.NotificationController,
 	dashboardController *controller.DashboardController,
 	uploadController *controller.UploadController,
@@ -244,9 +244,9 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
-	r.GET("/question/page", a.questionController.AdminSearchList)
+	r.GET("/question/page", a.questionController.AdminQuestionPage)
 	r.PUT("/question/status", a.questionController.AdminSetQuestionStatus)
-	r.GET("/answer/page", a.questionController.AdminSearchAnswerList)
+	r.GET("/answer/page", a.questionController.AdminAnswerPage)
 	r.PUT("/answer/status", a.answerController.AdminSetAnswerStatus)
 
 	// report
@@ -257,6 +257,8 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.GET("/users/page", a.adminUserController.GetUserPage)
 	r.PUT("/user/status", a.adminUserController.UpdateUserStatus)
 	r.PUT("/user/role", a.adminUserController.UpdateUserRole)
+	r.GET("/user/activation", a.adminUserController.GetUserActivation)
+	r.POST("/user/activation", a.adminUserController.SendUserActivation)
 	r.POST("/user", a.adminUserController.AddUser)
 	r.PUT("/user/password", a.adminUserController.UpdateUserPassword)
 

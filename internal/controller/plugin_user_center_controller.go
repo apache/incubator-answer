@@ -22,13 +22,13 @@ const (
 // UserCenterController comment controller
 type UserCenterController struct {
 	userCenterLoginService *user_external_login.UserCenterLoginService
-	siteInfoService        *siteinfo_common.SiteInfoCommonService
+	siteInfoService        siteinfo_common.SiteInfoCommonService
 }
 
 // NewUserCenterController new controller
 func NewUserCenterController(
 	userCenterLoginService *user_external_login.UserCenterLoginService,
-	siteInfoService *siteinfo_common.SiteInfoCommonService,
+	siteInfoService siteinfo_common.SiteInfoCommonService,
 ) *UserCenterController {
 	return &UserCenterController{
 		userCenterLoginService: userCenterLoginService,
