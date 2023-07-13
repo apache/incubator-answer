@@ -35,7 +35,7 @@ func (cs *CommentCommonService) GetComment(ctx context.Context, commentID string
 		return
 	}
 	if !exist {
-		return nil, errors.BadRequest(reason.UnknownError)
+		return nil, errors.BadRequest(reason.CommentNotFound)
 	}
 
 	resp = &schema.GetCommentResp{}
