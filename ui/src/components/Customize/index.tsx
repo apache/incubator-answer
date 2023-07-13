@@ -91,7 +91,7 @@ const handleCustomHeader = (content) => {
 };
 
 const handleCustomFooter = (content) => {
-  const el = document.documentElement;
+  const el = document.body;
   renderCustomArea(el, CUSTOM_MARK_FOOTER, 'beforeend', content);
 };
 
