@@ -98,3 +98,18 @@ type UpdateUserPasswordReq struct {
 	Password    string `validate:"required,gte=8,lte=32" json:"password"`
 	LoginUserID string `json:"-"`
 }
+
+// GetUserActivationReq get user activation
+type GetUserActivationReq struct {
+	UserID string `validate:"required" form:"user_id"`
+}
+
+// GetUserActivationResp get user activation
+type GetUserActivationResp struct {
+	ActivationURL string `json:"activation_url"`
+}
+
+// SendUserActivationReq send user activation
+type SendUserActivationReq struct {
+	UserID string `validate:"required" json:"user_id"`
+}
