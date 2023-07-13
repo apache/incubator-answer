@@ -108,7 +108,11 @@ backend:
       other: Manage tag synonyms
   email:
     other: Email
+  e_mail:
+    other: Email
   password:
+    other: Password
+  pass:
     other: Password
   email_or_password_wrong_error:
     other: Email and password do not match.
