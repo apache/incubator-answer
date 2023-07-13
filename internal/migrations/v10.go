@@ -1,6 +1,7 @@
 package migrations
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
@@ -11,11 +12,11 @@ import (
 	"xorm.io/xorm"
 )
 
-func addLoginLimitations(x *xorm.Engine) error {
+func addLoginLimitations(ctx context.Context, x *xorm.Engine) error {
 	loginSiteInfo := &entity.SiteInfo{
 		Type: constant.SiteTypeLogin,
 	}
-	exist, err := x.Get(loginSiteInfo)
+	exist, err := x.Context(ctx).Get(loginSiteInfo)
 	if err != nil {
 		return fmt.Errorf("get config failed: %w", err)
 	}
@@ -26,7 +27,7 @@ func addLoginLimitations(x *xorm.Engine) error {
 		content.AllowEmailDomains = make([]string, 0)
 		data, _ := json.Marshal(content)
 		loginSiteInfo.Content = string(data)
-		_, err = x.ID(loginSiteInfo.ID).Cols("content").Update(loginSiteInfo)
+		_, err = x.Context(ctx).ID(loginSiteInfo.ID).Cols("content").Update(loginSiteInfo)
 		if err != nil {
 			return fmt.Errorf("update site info failed: %w", err)
 		}
@@ -35,7 +36,7 @@ func addLoginLimitations(x *xorm.Engine) error {
 	interfaceSiteInfo := &entity.SiteInfo{
 		Type: constant.SiteTypeInterface,
 	}
-	exist, err = x.Get(interfaceSiteInfo)
+	exist, err = x.Context(ctx).Get(interfaceSiteInfo)
 	if err != nil {
 		return fmt.Errorf("get config failed: %w", err)
 	}
@@ -52,7 +53,7 @@ func addLoginLimitations(x *xorm.Engine) error {
 	}
 	data, _ := json.Marshal(siteUsers)
 
-	exist, err = x.Get(&entity.SiteInfo{Type: constant.SiteTypeUsers})
+	exist, err = x.Context(ctx).Get(&entity.SiteInfo{Type: constant.SiteTypeUsers})
 	if err != nil {
 		return fmt.Errorf("get config failed: %w", err)
 	}
@@ -62,7 +63,7 @@ func addLoginLimitations(x *xorm.Engine) error {
 			Content: string(data),
 			Status:  1,
 		}
-		_, err = x.InsertOne(usersSiteInfo)
+		_, err = x.Context(ctx).Insert(usersSiteInfo)
 		if err != nil {
 			return fmt.Errorf("insert site info failed: %w", err)
 		}

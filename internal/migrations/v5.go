@@ -1,6 +1,7 @@
 package migrations
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 
@@ -8,7 +9,7 @@ import (
 	"xorm.io/xorm"
 )
 
-func addThemeAndPrivateMode(x *xorm.Engine) error {
+func addThemeAndPrivateMode(ctx context.Context, x *xorm.Engine) error {
 	loginConfig := map[string]bool{
 		"allow_new_registrations": true,
 		"login_required":          false,
@@ -19,12 +20,12 @@ func addThemeAndPrivateMode(x *xorm.Engine) error {
 		Content: string(loginConfigDataBytes),
 		Status:  1,
 	}
-	exist, err := x.Get(&entity.SiteInfo{Type: siteInfo.Type})
+	exist, err := x.Context(ctx).Get(&entity.SiteInfo{Type: siteInfo.Type})
 	if err != nil {
 		return fmt.Errorf("get config failed: %w", err)
 	}
 	if !exist {
-		_, err = x.InsertOne(siteInfo)
+		_, err = x.Context(ctx).Insert(siteInfo)
 		if err != nil {
 			return fmt.Errorf("insert site info failed: %w", err)
 		}
@@ -36,12 +37,12 @@ func addThemeAndPrivateMode(x *xorm.Engine) error {
 		Content: themeConfig,
 		Status:  1,
 	}
-	exist, err = x.Get(&entity.SiteInfo{Type: themeSiteInfo.Type})
+	exist, err = x.Context(ctx).Get(&entity.SiteInfo{Type: themeSiteInfo.Type})
 	if err != nil {
 		return fmt.Errorf("get config failed: %w", err)
 	}
 	if !exist {
-		_, err = x.InsertOne(themeSiteInfo)
+		_, err = x.Context(ctx).Insert(themeSiteInfo)
 	}
 	return err
 }

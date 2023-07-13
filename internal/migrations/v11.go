@@ -1,6 +1,7 @@
 package migrations
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/answerdev/answer/internal/entity"
@@ -8,8 +9,7 @@ import (
 	"xorm.io/xorm"
 )
 
-func updateRolePinAndHideFeatures(x *xorm.Engine) error {
-
+func updateRolePinAndHideFeatures(ctx context.Context, x *xorm.Engine) error {
 	defaultConfigTable := []*entity.Config{
 		{ID: 119, Key: "question.pin", Value: `0`},
 		{ID: 120, Key: "question.unpin", Value: `0`},
@@ -21,18 +21,18 @@ func updateRolePinAndHideFeatures(x *xorm.Engine) error {
 		{ID: 126, Key: "rank.question.hide", Value: `-1`},
 	}
 	for _, c := range defaultConfigTable {
-		exist, err := x.Get(&entity.Config{ID: c.ID})
+		exist, err := x.Context(ctx).Get(&entity.Config{ID: c.ID})
 		if err != nil {
 			return fmt.Errorf("get config failed: %w", err)
 		}
 		if exist {
-			if _, err = x.Update(c, &entity.Config{ID: c.ID}); err != nil {
+			if _, err = x.Context(ctx).Update(c, &entity.Config{ID: c.ID}); err != nil {
 				log.Errorf("update %+v config failed: %s", c, err)
 				return fmt.Errorf("update config failed: %w", err)
 			}
 			continue
 		}
-		if _, err = x.Insert(&entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
+		if _, err = x.Context(ctx).Insert(&entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
 			log.Errorf("insert %+v config failed: %s", c, err)
 			return fmt.Errorf("add config failed: %w", err)
 		}

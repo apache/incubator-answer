@@ -1,6 +1,7 @@
 package migrations
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -10,8 +11,7 @@ import (
 	"xorm.io/xorm"
 )
 
-func addRolePinAndHideFeatures(x *xorm.Engine) error {
-
+func addRolePinAndHideFeatures(ctx context.Context, x *xorm.Engine) error {
 	powers := []*entity.Power{
 		{ID: 34, Name: "question pin", PowerType: permission.QuestionPin, Description: "top the question"},
 		{ID: 35, Name: "question hide", PowerType: permission.QuestionHide, Description: "hide  the question"},
@@ -20,14 +20,14 @@ func addRolePinAndHideFeatures(x *xorm.Engine) error {
 	}
 	// insert default powers
 	for _, power := range powers {
-		exist, err := x.Get(&entity.Power{ID: power.ID})
+		exist, err := x.Context(ctx).Get(&entity.Power{ID: power.ID})
 		if err != nil {
 			return err
 		}
 		if exist {
-			_, err = x.ID(power.ID).Update(power)
+			_, err = x.Context(ctx).ID(power.ID).Update(power)
 		} else {
-			_, err = x.Insert(power)
+			_, err = x.Context(ctx).Insert(power)
 		}
 		if err != nil {
 			return err
@@ -49,14 +49,14 @@ func addRolePinAndHideFeatures(x *xorm.Engine) error {
 
 	// insert default powers
 	for _, rel := range rolePowerRels {
-		exist, err := x.Get(&entity.RolePowerRel{RoleID: rel.RoleID, PowerType: rel.PowerType})
+		exist, err := x.Context(ctx).Get(&entity.RolePowerRel{RoleID: rel.RoleID, PowerType: rel.PowerType})
 		if err != nil {
 			return err
 		}
 		if exist {
 			continue
 		}
-		_, err = x.Insert(rel)
+		_, err = x.Context(ctx).Insert(rel)
 		if err != nil {
 			return err
 		}
@@ -73,18 +73,18 @@ func addRolePinAndHideFeatures(x *xorm.Engine) error {
 		{ID: 126, Key: "rank.question.hide", Value: `-1`},
 	}
 	for _, c := range defaultConfigTable {
-		exist, err := x.Get(&entity.Config{ID: c.ID})
+		exist, err := x.Context(ctx).Get(&entity.Config{ID: c.ID})
 		if err != nil {
 			return fmt.Errorf("get config failed: %w", err)
 		}
 		if exist {
-			if _, err = x.Update(c, &entity.Config{ID: c.ID}); err != nil {
+			if _, err = x.Context(ctx).Update(c, &entity.Config{ID: c.ID}); err != nil {
 				log.Errorf("update %+v config failed: %s", c, err)
 				return fmt.Errorf("update config failed: %w", err)
 			}
 			continue
 		}
-		if _, err = x.Insert(&entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
+		if _, err = x.Context(ctx).Insert(&entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
 			log.Errorf("insert %+v config failed: %s", c, err)
 			return fmt.Errorf("add config failed: %w", err)
 		}
@@ -113,7 +113,7 @@ func addRolePinAndHideFeatures(x *xorm.Engine) error {
 		PostUpdateTime   time.Time `xorm:"post_update_time TIMESTAMP"`
 		RevisionID       string    `xorm:"not null default 0 BIGINT(20) revision_id"`
 	}
-	err := x.Sync(new(Question))
+	err := x.Context(ctx).Sync(new(Question))
 	if err != nil {
 		return err
 	}
