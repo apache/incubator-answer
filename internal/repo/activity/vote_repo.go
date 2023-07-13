@@ -76,7 +76,7 @@ func (vr *VoteRepo) Vote(ctx context.Context, op *schema.VoteOperationInfo) (err
 			return nil, err
 		}
 
-		err = vr.setActivityRankToZeroIfUserReachLimit(ctx, session, op, maxDailyRank)
+		err = vr.setActivityRankToZeroIfUserReachLimit(ctx, session, op, userInfoMapping, maxDailyRank)
 		if err != nil {
 			return nil, err
 		}
@@ -217,16 +217,26 @@ func (vr *VoteRepo) acquireUserInfo(session *xorm.Session, userIDs []string) (ma
 }
 
 func (vr *VoteRepo) setActivityRankToZeroIfUserReachLimit(ctx context.Context, session *xorm.Session,
-	op *schema.VoteOperationInfo, maxDailyRank int) (err error) {
+	op *schema.VoteOperationInfo, userInfoMapping map[string]*entity.User, maxDailyRank int) (err error) {
 	// check if user reach daily rank limit
 	for _, activity := range op.Activities {
-		reach, err := vr.userRankRepo.CheckReachLimit(ctx, session, activity.ActivityUserID, maxDailyRank)
-		if err != nil {
-			log.Error(err)
-			return err
-		}
-		if reach {
-			activity.Rank = 0
+		if activity.Rank > 0 {
+			// check if reach max daily rank
+			reach, err := vr.userRankRepo.CheckReachLimit(ctx, session, activity.ActivityUserID, maxDailyRank)
+			if err != nil {
+				log.Error(err)
+				return err
+			}
+			if reach {
+				activity.Rank = 0
+				continue
+			}
+		} else {
+			// If user rank is lower than 1 after this action, then user rank will be set to 1 only.
+			userCurrentScore := userInfoMapping[activity.ActivityUserID].Rank
+			if userCurrentScore+activity.Rank < 1 {
+				activity.Rank = 1 - userCurrentScore
+			}
 		}
 	}
 	return nil
