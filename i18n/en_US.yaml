@@ -1631,7 +1631,7 @@ ui:
         text: This will insert after <body>
       footer:
         label: Footer
-        text: This will insert before </html>.
+        text: This will insert before </body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.
