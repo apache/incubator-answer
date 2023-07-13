@@ -271,7 +271,7 @@ const Index: FC<IProps> = ({
         );
       })}
       {secondAction.length > 0 && (
-        <Dropdown className="ms-3">
+        <Dropdown className="ms-3 d-flex">
           <Dropdown.Toggle
             variant="link"
             size="sm"
