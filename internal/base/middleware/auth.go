@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"net/http"
 	"strings"
 
 	"github.com/answerdev/answer/internal/schema"
@@ -135,6 +136,28 @@ func (am *AuthUserMiddleware) AdminAuth() gin.HandlerFunc {
 				return
 			}
 			ctx.Set(ctxUUIDKey, userInfo)
+		}
+		ctx.Next()
+	}
+}
+
+func (am *AuthUserMiddleware) CheckPrivateMode() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		userLoginUrl := "/users/login"
+		if ctx.Request.URL.Path == userLoginUrl {
+			ctx.Next()
+			return
+		}
+		resp, err := am.siteInfoCommonService.GetSiteLogin(ctx)
+		if err != nil {
+			ctx.Redirect(http.StatusTemporaryRedirect, userLoginUrl)
+			ctx.Abort()
+			return
+		}
+		if resp.LoginRequired {
+			ctx.Redirect(http.StatusTemporaryRedirect, userLoginUrl)
+			ctx.Abort()
+			return
 		}
 		ctx.Next()
 	}
