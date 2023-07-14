@@ -7,6 +7,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/ui"
 	"github.com/gin-gonic/gin"
 
 	"github.com/answerdev/answer/internal/base/handler"
@@ -15,6 +16,7 @@ import (
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 var ctxUUIDKey = "ctxUuidKey"
@@ -143,24 +145,30 @@ func (am *AuthUserMiddleware) AdminAuth() gin.HandlerFunc {
 
 func (am *AuthUserMiddleware) CheckPrivateMode() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
-		userLoginUrl := "/users/login"
-		if ctx.Request.URL.Path == userLoginUrl {
-			ctx.Next()
-			return
-		}
 		resp, err := am.siteInfoCommonService.GetSiteLogin(ctx)
 		if err != nil {
-			ctx.Redirect(http.StatusTemporaryRedirect, userLoginUrl)
+			ShowIndexPage(ctx)
 			ctx.Abort()
 			return
 		}
 		if resp.LoginRequired {
-			ctx.Redirect(http.StatusTemporaryRedirect, userLoginUrl)
+			ShowIndexPage(ctx)
 			ctx.Abort()
 			return
 		}
 		ctx.Next()
 	}
+}
+func ShowIndexPage(ctx *gin.Context) {
+	ctx.Header("content-type", "text/html;charset=utf-8")
+	ctx.Header("X-Frame-Options", "DENY")
+	file, err := ui.Build.ReadFile("build/index.html")
+	if err != nil {
+		log.Error(err)
+		ctx.Status(http.StatusNotFound)
+		return
+	}
+	ctx.String(http.StatusOK, string(file))
 }
 
 // GetLoginUserIDFromContext get user id from context
