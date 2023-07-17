@@ -18,7 +18,7 @@ type CaptchaRepo interface {
 	SetCaptcha(ctx context.Context, key, captcha string) (err error)
 	GetCaptcha(ctx context.Context, key string) (captcha string, err error)
 	DelCaptcha(ctx context.Context, key string) (err error)
-	SetActionType(ctx context.Context, unit, actionType string, amount int) (err error)
+	SetActionType(ctx context.Context, unit, actionType, config string, amount int) (err error)
 	GetActionType(ctx context.Context, unit, actionType string) (actioninfo *entity.ActionRecordInfo, err error)
 	DelActionType(ctx context.Context, unit, actionType string) (err error)
 }
@@ -69,9 +69,9 @@ func (cs *CaptchaService) UserRegisterVerifyCaptcha(
 // ActionRecordVerifyCaptcha
 // Verify that you need to enter a CAPTCHA, and that the CAPTCHA is correct
 func (cs *CaptchaService) ActionRecordVerifyCaptcha(
-	ctx context.Context, actionType string, ip string, id string, VerifyValue string,
+	ctx context.Context, actionType string, unit string, id string, VerifyValue string,
 ) bool {
-	verificationResult := cs.ValidationStrategy(ctx, ip, actionType)
+	verificationResult := cs.ValidationStrategy(ctx, unit, actionType)
 	if !verificationResult {
 		if id == "" || VerifyValue == "" {
 			return false
@@ -85,22 +85,22 @@ func (cs *CaptchaService) ActionRecordVerifyCaptcha(
 	return true
 }
 
-func (cs *CaptchaService) ActionRecordAdd(ctx context.Context, actionType string, ip string) (int, error) {
+func (cs *CaptchaService) ActionRecordAdd(ctx context.Context, actionType string, unit string) (int, error) {
 	var err error
-	info, cahceErr := cs.captchaRepo.GetActionType(ctx, ip, actionType)
+	info, cahceErr := cs.captchaRepo.GetActionType(ctx, unit, actionType)
 	if cahceErr != nil {
 		log.Error(err)
 	}
 	info.Num++
-	err = cs.captchaRepo.SetActionType(ctx, ip, actionType, info.Num)
+	err = cs.captchaRepo.SetActionType(ctx, unit, actionType, "", info.Num)
 	if err != nil {
 		return 0, err
 	}
 	return info.Num, nil
 }
 
-func (cs *CaptchaService) ActionRecordDel(ctx context.Context, actionType string, ip string) {
-	err := cs.captchaRepo.DelActionType(ctx, ip, actionType)
+func (cs *CaptchaService) ActionRecordDel(ctx context.Context, actionType string, unit string) {
+	err := cs.captchaRepo.DelActionType(ctx, unit, actionType)
 	if err != nil {
 		log.Error(err)
 	}

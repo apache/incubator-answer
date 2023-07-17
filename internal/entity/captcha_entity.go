@@ -16,6 +16,7 @@ const (
 )
 
 type ActionRecordInfo struct {
-	LastTime int `json:"last_time"`
-	Num      int `json:"num"`
+	LastTime int    `json:"last_time"`
+	Num      int    `json:"num"`
+	Config   string `json:"config"`
 }

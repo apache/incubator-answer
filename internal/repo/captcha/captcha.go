@@ -27,7 +27,7 @@ func NewCaptchaRepo(data *data.Data) action.CaptchaRepo {
 	}
 }
 
-func (cr *captchaRepo) SetActionType(ctx context.Context, unit, actionType string, amount int) (err error) {
+func (cr *captchaRepo) SetActionType(ctx context.Context, unit, actionType, config string, amount int) (err error) {
 	now := time.Now()
 	cacheKey := fmt.Sprintf("ActionRecord:%s@%s@%s", unit, actionType, now.Format("2006-1-02"))
 	value := &entity.ActionRecordInfo{}
