@@ -2,9 +2,10 @@ package repo_test
 
 import (
 	"context"
+	"testing"
+
 	"github.com/answerdev/answer/internal/repo/config"
 	serviceconfig "github.com/answerdev/answer/internal/service/config"
-	"testing"
 
 	"github.com/answerdev/answer/internal/repo/reason"
 	"github.com/stretchr/testify/assert"

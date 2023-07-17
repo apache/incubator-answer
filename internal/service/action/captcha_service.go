@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/mojocn/base64Captcha"
 	"github.com/segmentfault/pacman/errors"
@@ -17,9 +18,9 @@ type CaptchaRepo interface {
 	SetCaptcha(ctx context.Context, key, captcha string) (err error)
 	GetCaptcha(ctx context.Context, key string) (captcha string, err error)
 	DelCaptcha(ctx context.Context, key string) (err error)
-	SetActionType(ctx context.Context, ip, actionType string, amount int) (err error)
-	GetActionType(ctx context.Context, ip, actionType string) (amount int, err error)
-	DelActionType(ctx context.Context, ip, actionType string) (err error)
+	SetActionType(ctx context.Context, unit, actionType string, amount int) (err error)
+	GetActionType(ctx context.Context, unit, actionType string) (actioninfo *entity.ActionRecordInfo, err error)
+	DelActionType(ctx context.Context, unit, actionType string) (err error)
 }
 
 // CaptchaService kit service
@@ -37,12 +38,8 @@ func NewCaptchaService(captchaRepo CaptchaRepo) *CaptchaService {
 // ActionRecord action record
 func (cs *CaptchaService) ActionRecord(ctx context.Context, req *schema.ActionRecordReq) (resp *schema.ActionRecordResp, err error) {
 	resp = &schema.ActionRecordResp{}
-	num, err := cs.captchaRepo.GetActionType(ctx, req.IP, req.Action)
-	if err != nil {
-		num = 0
-	}
-	// TODO config num to config file
-	if num >= 3 {
+	verificationResult := cs.ValidationStrategy(ctx, req.IP, req.Action)
+	if !verificationResult {
 		resp.CaptchaID, resp.CaptchaImg, err = cs.GenerateCaptcha(ctx)
 		resp.Verify = true
 	}
@@ -74,11 +71,8 @@ func (cs *CaptchaService) UserRegisterVerifyCaptcha(
 func (cs *CaptchaService) ActionRecordVerifyCaptcha(
 	ctx context.Context, actionType string, ip string, id string, VerifyValue string,
 ) bool {
-	num, cahceErr := cs.captchaRepo.GetActionType(ctx, ip, actionType)
-	if cahceErr != nil {
-		return true
-	}
-	if num >= 3 {
+	verificationResult := cs.ValidationStrategy(ctx, ip, actionType)
+	if !verificationResult {
 		if id == "" || VerifyValue == "" {
 			return false
 		}
@@ -93,16 +87,16 @@ func (cs *CaptchaService) ActionRecordVerifyCaptcha(
 
 func (cs *CaptchaService) ActionRecordAdd(ctx context.Context, actionType string, ip string) (int, error) {
 	var err error
-	num, cahceErr := cs.captchaRepo.GetActionType(ctx, ip, actionType)
+	info, cahceErr := cs.captchaRepo.GetActionType(ctx, ip, actionType)
 	if cahceErr != nil {
 		log.Error(err)
 	}
-	num++
-	err = cs.captchaRepo.SetActionType(ctx, ip, actionType, num)
+	info.Num++
+	err = cs.captchaRepo.SetActionType(ctx, ip, actionType, info.Num)
 	if err != nil {
 		return 0, err
 	}
-	return num, nil
+	return info.Num, nil
 }
 
 func (cs *CaptchaService) ActionRecordDel(ctx context.Context, actionType string, ip string) {

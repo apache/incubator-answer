@@ -2,10 +2,11 @@ package repo_test
 
 import (
 	"context"
-	"github.com/answerdev/answer/internal/repo/unique"
 	"log"
 	"sync"
 	"testing"
+
+	"github.com/answerdev/answer/internal/repo/unique"
 
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/repo/tag"
