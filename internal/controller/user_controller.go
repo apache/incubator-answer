@@ -6,6 +6,7 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/action"
@@ -144,7 +145,7 @@ func (uc *UserController) RetrievePassWord(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEmail, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
@@ -153,7 +154,6 @@ func (uc *UserController) RetrievePassWord(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
 	}
-	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP())
 	err := uc.userService.RetrievePassWord(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -234,7 +234,7 @@ func (uc *UserController) UserRegisterByEmail(ctx *gin.Context) {
 		return
 	}
 	req.IP = ctx.ClientIP()
-	captchaPass := uc.actionService.UserRegisterVerifyCaptcha(ctx, req.CaptchaID, req.CaptchaCode)
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEmail, req.IP, req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
@@ -310,8 +310,7 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 		return
 	}
 
-	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP(),
-		req.CaptchaID, req.CaptchaCode)
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEmail, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
@@ -320,11 +319,8 @@ func (uc *UserController) UserVerifyEmailSend(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
 	}
-	_, err := uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
-	if err != nil {
-		log.Error(err)
-	}
-	err = uc.userService.UserVerifyEmailSend(ctx, userInfo.UserID)
+
+	err := uc.userService.UserVerifyEmailSend(ctx, userInfo.UserID)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -520,7 +516,7 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 		return
 	}
 
-	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEmail, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
@@ -529,7 +525,6 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
 	}
-	_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
 	resp, err := uc.userService.UserChangeEmailSendCode(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, resp)
