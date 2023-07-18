@@ -107,7 +107,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 		return
 	}
 
-	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEmail, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
@@ -119,7 +119,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 
 	resp, err := uc.userService.EmailLogin(ctx, req)
 	if err != nil {
-		_, _ = uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
+		_, _ = uc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEmail, ctx.ClientIP())
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "e_mail",
 			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.EmailOrPasswordWrong),
@@ -127,7 +127,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.EmailOrPasswordWrong), errFields)
 		return
 	}
-	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
+	uc.actionService.ActionRecordDel(ctx, entity.CaptchaActionEmail, ctx.ClientIP())
 	handler.HandleResponse(ctx, nil, resp)
 }
 
@@ -181,7 +181,7 @@ func (uc *UserController) UseRePassWord(ctx *gin.Context) {
 	}
 
 	err := uc.userService.UpdatePasswordWhenForgot(ctx, req)
-	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeFindPass, ctx.ClientIP())
+	uc.actionService.ActionRecordDel(ctx, entity.CaptchaActionPassword, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -284,7 +284,7 @@ func (uc *UserController) UserVerifyEmail(ctx *gin.Context) {
 		return
 	}
 
-	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
+	uc.actionService.ActionRecordDel(ctx, entity.CaptchaActionEmail, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -342,7 +342,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.AccessToken = middleware.ExtractToken(ctx)
 
-	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, schema.ActionRecordTypeModifyPass, ctx.ClientIP(),
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionPassword, req.UserID,
 		req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
@@ -352,7 +352,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 		return
 	}
-	_, err := uc.actionService.ActionRecordAdd(ctx, schema.ActionRecordTypeModifyPass, ctx.ClientIP())
+	_, err := uc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionPassword, req.UserID)
 	if err != nil {
 		log.Error(err)
 	}
@@ -381,7 +381,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	}
 	err = uc.userService.UserModifyPassword(ctx, req)
 	if err == nil {
-		uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeLogin, ctx.ClientIP())
+		uc.actionService.ActionRecordDel(ctx, entity.CaptchaActionPassword, ctx.ClientIP())
 	}
 	handler.HandleResponse(ctx, err, nil)
 }
@@ -516,7 +516,7 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 		return
 	}
 
-	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEmail, ctx.ClientIP(), req.CaptchaID, req.CaptchaCode)
+	captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionPassword, req.UserID, req.CaptchaID, req.CaptchaCode)
 	if !captchaPass {
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "captcha_code",
@@ -530,6 +530,7 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, resp)
 		return
 	}
+	uc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionPassword, req.UserID)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -556,7 +557,7 @@ func (uc *UserController) UserChangeEmailVerify(ctx *gin.Context) {
 	}
 
 	resp, err := uc.userService.UserChangeEmailVerify(ctx, req.Content)
-	uc.actionService.ActionRecordDel(ctx, schema.ActionRecordTypeEmail, ctx.ClientIP())
+	uc.actionService.ActionRecordDel(ctx, entity.CaptchaActionEmail, ctx.ClientIP())
 	handler.HandleResponse(ctx, err, resp)
 }
 

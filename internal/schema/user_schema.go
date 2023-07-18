@@ -164,11 +164,6 @@ const (
 
 	NoticeStatusOn  = 1
 	NoticeStatusOff = 2
-
-	ActionRecordTypeLogin      = "login"
-	ActionRecordTypeEmail      = "e_mail"
-	ActionRecordTypeFindPass   = "find_pass"
-	ActionRecordTypeModifyPass = "modify_pass"
 )
 
 var UserStatusShow = map[int]string{
