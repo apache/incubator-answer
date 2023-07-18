@@ -10,7 +10,6 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/action"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -31,9 +30,8 @@ func (cr *captchaRepo) SetActionType(ctx context.Context, unit, actionType, conf
 	now := time.Now()
 	cacheKey := fmt.Sprintf("ActionRecord:%s@%s@%s", unit, actionType, now.Format("2006-1-02"))
 	value := &entity.ActionRecordInfo{}
-	value.LastTime = int(now.Unix())
+	value.LastTime = now.Unix()
 	value.Num = amount
-	spew.Dump("====SetActionType====", cacheKey, value)
 	valueStr, err := json.Marshal(value)
 	if err != nil {
 		return nil

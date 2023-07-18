@@ -180,7 +180,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	searchParser := search_parser.NewSearchParser(tagCommonService, userCommon)
 	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon)
 	searchService := service.NewSearchService(searchParser, searchRepo)
-	searchController := controller.NewSearchController(searchService)
+	searchController := controller.NewSearchController(searchService, captchaService)
 	serviceRevisionService := service.NewRevisionService(revisionRepo, userCommon, questionCommon, answerService, objService, questionRepo, answerRepo, tagRepo, tagCommonService, notificationQueueService, activityQueueService)
 	revisionController := controller.NewRevisionController(serviceRevisionService, rankService)
 	rankController := controller.NewRankController(rankService)
