@@ -21,12 +21,14 @@ const (
 )
 
 type AnswerAddReq struct {
-	QuestionID string `json:"question_id"`
-	Content    string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
-	HTML       string `json:"-"`
-	UserID     string `json:"-"`
-	CanEdit    bool   `json:"-"`
-	CanDelete  bool   `json:"-"`
+	QuestionID  string `json:"question_id"`
+	Content     string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
+	HTML        string `json:"-"`
+	UserID      string `json:"-"`
+	CanEdit     bool   `json:"-"`
+	CanDelete   bool   `json:"-"`
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 func (req *AnswerAddReq) Check() (errFields []*validator.FormErrorField, err error) {
@@ -44,7 +46,9 @@ type AnswerUpdateReq struct {
 	UserID       string `json:"-"`
 	NoNeedReview bool   `json:"-"`
 	// whether user can edit it
-	CanEdit bool `json:"-"`
+	CanEdit     bool   `json:"-"`
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 func (req *AnswerUpdateReq) Check() (errFields []*validator.FormErrorField, err error) {

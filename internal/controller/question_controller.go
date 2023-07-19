@@ -7,8 +7,10 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/action"
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
@@ -24,6 +26,7 @@ type QuestionController struct {
 	answerService   *service.AnswerService
 	rankService     *rank.RankService
 	siteInfoService siteinfo_common.SiteInfoCommonService
+	actionService   *action.CaptchaService
 }
 
 // NewQuestionController new controller
@@ -32,12 +35,14 @@ func NewQuestionController(
 	answerService *service.AnswerService,
 	rankService *rank.RankService,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
+	actionService *action.CaptchaService,
 ) *QuestionController {
 	return &QuestionController{
 		questionService: questionService,
 		answerService:   answerService,
 		rankService:     rankService,
 		siteInfoService: siteInfoService,
+		actionService:   actionService,
 	}
 }
 
@@ -312,6 +317,16 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
+	captchaPass := qc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionQuestion, req.UserID, req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+		return
+	}
+
 	canList, requireRanks, err := qc.rankService.CheckOperationPermissionsForRanks(ctx, req.UserID, []string{
 		permission.QuestionAdd,
 		permission.QuestionEdit,
@@ -375,7 +390,7 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
 		return
 	}
-
+	qc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionQuestion, req.UserID)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -501,6 +516,16 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
+	captchaPass := qc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEdit, req.UserID, req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+		return
+	}
+
 	canList, requireRanks, err := qc.rankService.CheckOperationPermissionsForRanks(ctx, req.UserID, []string{
 		permission.QuestionEdit,
 		permission.QuestionDelete,
@@ -552,6 +577,7 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, resp)
 		return
 	}
+	qc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEdit, req.UserID)
 	handler.HandleResponse(ctx, nil, &schema.UpdateQuestionResp{WaitForReview: !req.NoNeedReview})
 }
 

@@ -63,6 +63,8 @@ type QuestionAdd struct {
 	// user id
 	UserID string `json:"-"`
 	QuestionPermission
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 func (req *QuestionAdd) Check() (errFields []*validator.FormErrorField, err error) {
@@ -153,6 +155,8 @@ type QuestionUpdate struct {
 	UserID       string `json:"-"`
 	NoNeedReview bool   `json:"-"`
 	QuestionPermission
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 type QuestionUpdateInviteUser struct {

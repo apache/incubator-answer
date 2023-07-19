@@ -4,7 +4,11 @@ import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/action"
 	"github.com/answerdev/answer/internal/service/comment"
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
@@ -17,13 +21,20 @@ import (
 type CommentController struct {
 	commentService *comment.CommentService
 	rankService    *rank.RankService
+	actionService  *action.CaptchaService
 }
 
 // NewCommentController new controller
 func NewCommentController(
 	commentService *comment.CommentService,
-	rankService *rank.RankService) *CommentController {
-	return &CommentController{commentService: commentService, rankService: rankService}
+	rankService *rank.RankService,
+	actionService *action.CaptchaService,
+) *CommentController {
+	return &CommentController{
+		commentService: commentService,
+		rankService:    rankService,
+		actionService:  actionService,
+	}
 }
 
 // AddComment add comment
@@ -43,6 +54,17 @@ func (cc *CommentController) AddComment(ctx *gin.Context) {
 	}
 	req.ObjectID = uid.DeShortID(req.ObjectID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	captchaPass := cc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionComment, req.UserID, req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+		return
+	}
+
 	canList, err := cc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.CommentAdd,
 		permission.CommentEdit,
@@ -61,6 +83,7 @@ func (cc *CommentController) AddComment(ctx *gin.Context) {
 	}
 
 	resp, err := cc.commentService.AddComment(ctx, req)
+	cc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionComment, req.UserID)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -113,6 +136,17 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
+
+	captchaPass := cc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEdit, req.UserID, req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+		return
+	}
+
 	canList, err := cc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.CommentAdd,
 		permission.CommentEdit,
@@ -136,6 +170,7 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 	}
 
 	resp, err := cc.commentService.UpdateComment(ctx, req)
+	cc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEdit, req.UserID)
 	handler.HandleResponse(ctx, err, resp)
 }
 
