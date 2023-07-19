@@ -53,15 +53,17 @@ func (vc *VoteController) VoteUp(ctx *gin.Context) {
 	}
 	req.ObjectID = uid.DeShortID(req.ObjectID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-
-	captchaPass := vc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionVote, req.UserID, req.CaptchaID, req.CaptchaCode)
-	if !captchaPass {
-		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
-			ErrorField: "captcha_code",
-			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
-		})
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
-		return
+	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+	if !isAdmin {
+		captchaPass := vc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionVote, req.UserID, req.CaptchaID, req.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
 	}
 
 	can, needRank, err := vc.rankService.CheckVotePermission(ctx, req.UserID, req.ObjectID, true)
@@ -75,7 +77,9 @@ func (vc *VoteController) VoteUp(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.NoEnoughRankToOperate).WithMsg(msg), nil)
 		return
 	}
-	vc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionVote, req.UserID)
+	if !isAdmin {
+		vc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionVote, req.UserID)
+	}
 	resp, err := vc.VoteService.VoteUp(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, schema.ErrTypeToast)
@@ -101,15 +105,17 @@ func (vc *VoteController) VoteDown(ctx *gin.Context) {
 	}
 	req.ObjectID = uid.DeShortID(req.ObjectID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-
-	captchaPass := vc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionVote, req.UserID, req.CaptchaID, req.CaptchaCode)
-	if !captchaPass {
-		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
-			ErrorField: "captcha_code",
-			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
-		})
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
-		return
+	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+	if !isAdmin {
+		captchaPass := vc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionVote, req.UserID, req.CaptchaID, req.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
 	}
 	can, needRank, err := vc.rankService.CheckVotePermission(ctx, req.UserID, req.ObjectID, false)
 	if err != nil {
@@ -122,7 +128,9 @@ func (vc *VoteController) VoteDown(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.NoEnoughRankToOperate).WithMsg(msg), nil)
 		return
 	}
-	vc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionVote, req.UserID)
+	if !isAdmin {
+		vc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionVote, req.UserID)
+	}
 	resp, err := vc.VoteService.VoteDown(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, schema.ErrTypeToast)

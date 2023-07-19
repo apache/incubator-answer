@@ -52,18 +52,23 @@ func (sc *SearchController) Search(ctx *gin.Context) {
 	if dto.UserID != "" {
 		unit = dto.UserID
 	}
-	captchaPass := sc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionSearch, unit, dto.CaptchaID, dto.CaptchaCode)
-	if !captchaPass {
-		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
-			ErrorField: "captcha_code",
-			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
-		})
-		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
-		return
+	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+	if !isAdmin {
+		captchaPass := sc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionSearch, unit, dto.CaptchaID, dto.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
 	}
 
 	resp, total, extra, err := sc.searchService.Search(ctx, &dto)
-	sc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionSearch, unit)
+	if !isAdmin {
+		sc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionSearch, unit)
+	}
 	handler.HandleResponse(ctx, err, schema.SearchListResp{
 		Total:      total,
 		SearchResp: resp,

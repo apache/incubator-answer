@@ -202,6 +202,21 @@ func GetUserInfoFromContext(ctx *gin.Context) (u *entity.UserCacheInfo) {
 	return u
 }
 
+func GetUserIsAdminModerator(ctx *gin.Context) (isAdminModerator bool) {
+	userInfo, exist := ctx.Get(ctxUUIDKey)
+	if !exist {
+		return false
+	}
+	u, ok := userInfo.(*entity.UserCacheInfo)
+	if !ok {
+		return false
+	}
+	if u.RoleID == role.RoleAdminID || u.RoleID == role.RoleModeratorID {
+		return true
+	}
+	return false
+}
+
 func GetLoginUserIDInt64FromContext(ctx *gin.Context) (userID int64) {
 	userIDStr := GetLoginUserIDFromContext(ctx)
 	return converter.StringToInt64(userIDStr)
