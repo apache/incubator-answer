@@ -119,8 +119,6 @@ func (cs *CaptchaService) CaptchaActionComment(ctx context.Context, unit string,
 func (cs *CaptchaService) CaptchaActionEdit(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
 	spew.Dump("[CaptchaActionEdit]", actioninfo)
 	setNum := 10
-	// setTime := int64(5) //seconds
-	// now := time.Now().Unix()
 	if actioninfo.Num >= setNum {
 		return false
 	}
@@ -130,8 +128,6 @@ func (cs *CaptchaService) CaptchaActionEdit(ctx context.Context, unit string, ac
 func (cs *CaptchaService) CaptchaActionInvitationAnswer(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
 	spew.Dump("[CaptchaActionInvitationAnswer]", actioninfo)
 	setNum := 30
-	// setTime := int64(5) //seconds
-	// now := time.Now().Unix()
 	if actioninfo.Num >= setNum {
 		return false
 	}
@@ -144,7 +140,6 @@ func (cs *CaptchaService) CaptchaActionSearch(ctx context.Context, unit string, 
 	setTime := int64(60) //seconds
 	spew.Dump("[CaptchaActionSearch]", unit, actioninfo, now-int64(actioninfo.LastTime))
 	if now-int64(actioninfo.LastTime) <= setTime && actioninfo.Num >= setNum {
-		spew.Dump("in1")
 		return false
 	}
 	if now-actioninfo.LastTime > setTime {
@@ -178,7 +173,6 @@ func (cs *CaptchaService) CaptchaActionDelete(ctx context.Context, unit string, 
 func (cs *CaptchaService) CaptchaActionVote(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
 	spew.Dump("[CaptchaActionVote]", actioninfo)
 	setNum := 40
-	// setTime := int64(5) //seconds
 	if actioninfo.Num >= setNum {
 		return false
 	}
