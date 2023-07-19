@@ -12,7 +12,9 @@ type RemoveAnswerReq struct {
 	// user id
 	UserID string `json:"-"`
 	// whether user can delete it
-	CanDelete bool `json:"-"`
+	CanDelete   bool   `json:"-"`
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 const (

@@ -4,7 +4,11 @@ import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/internal/service/action"
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/internal/service/report"
@@ -17,11 +21,20 @@ import (
 type ReportController struct {
 	reportService *report.ReportService
 	rankService   *rank.RankService
+	actionService *action.CaptchaService
 }
 
 // NewReportController new controller
-func NewReportController(reportService *report.ReportService, rankService *rank.RankService) *ReportController {
-	return &ReportController{reportService: reportService, rankService: rankService}
+func NewReportController(
+	reportService *report.ReportService,
+	rankService *rank.RankService,
+	actionService *action.CaptchaService,
+) *ReportController {
+	return &ReportController{
+		reportService: reportService,
+		rankService:   rankService,
+		actionService: actionService,
+	}
 }
 
 // AddReport add report
@@ -42,6 +55,17 @@ func (rc *ReportController) AddReport(ctx *gin.Context) {
 	}
 	req.ObjectID = uid.DeShortID(req.ObjectID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	captchaPass := rc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionReport, req.UserID, req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+		return
+	}
+
 	can, err := rc.rankService.CheckOperationPermission(ctx, req.UserID, permission.ReportAdd, "")
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -53,5 +77,6 @@ func (rc *ReportController) AddReport(ctx *gin.Context) {
 	}
 
 	err = rc.reportService.AddReport(ctx, req)
+	rc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionReport, req.UserID)
 	handler.HandleResponse(ctx, err, nil)
 }

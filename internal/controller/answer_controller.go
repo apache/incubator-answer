@@ -56,6 +56,17 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 	}
 	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	captchaPass := ac.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionDelete, req.UserID, req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+		return
+	}
+
 	objectOwner := ac.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.ID)
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.AnswerDelete,
@@ -71,6 +82,7 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 	}
 
 	err = ac.answerService.RemoveAnswer(ctx, req)
+	ac.actionService.ActionRecordAdd(ctx, entity.CaptchaActionDelete, req.UserID)
 	handler.HandleResponse(ctx, err, nil)
 }
 

@@ -20,9 +20,11 @@ const (
 // RemoveQuestionReq delete question request
 type RemoveQuestionReq struct {
 	// question id
-	ID      string `validate:"required" json:"id"`
-	UserID  string `json:"-" ` // user_id
-	IsAdmin bool   `json:"-"`
+	ID          string `validate:"required" json:"id"`
+	UserID      string `json:"-" ` // user_id
+	IsAdmin     bool   `json:"-"`
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 type CloseQuestionReq struct {
@@ -164,6 +166,8 @@ type QuestionUpdateInviteUser struct {
 	InviteUser []string `validate:"omitempty"  json:"invite_user"`
 	UserID     string   `json:"-"`
 	QuestionPermission
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 func (req *QuestionUpdate) Check() (errFields []*validator.FormErrorField, err error) {

@@ -104,6 +104,15 @@ func (cc *CommentController) RemoveComment(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	captchaPass := cc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionDelete, req.UserID, req.CaptchaID, req.CaptchaCode)
+	if !captchaPass {
+		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "captcha_code",
+			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+		})
+		handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+		return
+	}
 	can, err := cc.rankService.CheckOperationPermission(ctx, req.UserID, permission.CommentDelete, req.CommentID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -115,6 +124,8 @@ func (cc *CommentController) RemoveComment(ctx *gin.Context) {
 	}
 
 	err = cc.commentService.RemoveComment(ctx, req)
+	cc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionDelete, req.UserID)
+
 	handler.HandleResponse(ctx, err, nil)
 }
 

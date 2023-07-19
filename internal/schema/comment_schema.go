@@ -41,7 +41,9 @@ type RemoveCommentReq struct {
 	// comment id
 	CommentID string `validate:"required" json:"comment_id"`
 	// user id
-	UserID string `json:"-"`
+	UserID      string `json:"-"`
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 // UpdateCommentReq update comment request
