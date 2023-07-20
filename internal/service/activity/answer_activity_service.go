@@ -33,23 +33,24 @@ func NewAnswerActivityService(
 
 // AcceptAnswer accept answer change activity
 func (as *AnswerActivityService) AcceptAnswer(ctx context.Context,
-	answerObjID, questionObjID, questionUserID, answerUserID string, isSelf bool) (err error) {
-	operationInfo := as.createAcceptAnswerOperationInfo(ctx,
+	loginUserID, answerObjID, questionObjID, questionUserID, answerUserID string, isSelf bool) (err error) {
+	operationInfo := as.createAcceptAnswerOperationInfo(ctx, loginUserID,
 		answerObjID, questionObjID, questionUserID, answerUserID, isSelf)
 	return as.answerActivityRepo.SaveAcceptAnswerActivity(ctx, operationInfo)
 }
 
 // CancelAcceptAnswer cancel accept answer change activity
 func (as *AnswerActivityService) CancelAcceptAnswer(ctx context.Context,
-	answerObjID, questionObjID, questionUserID, answerUserID string) (err error) {
-	operationInfo := as.createAcceptAnswerOperationInfo(ctx,
+	loginUserID, answerObjID, questionObjID, questionUserID, answerUserID string) (err error) {
+	operationInfo := as.createAcceptAnswerOperationInfo(ctx, loginUserID,
 		answerObjID, questionObjID, questionUserID, answerUserID, false)
 	return as.answerActivityRepo.SaveCancelAcceptAnswerActivity(ctx, operationInfo)
 }
 
-func (as *AnswerActivityService) createAcceptAnswerOperationInfo(ctx context.Context,
+func (as *AnswerActivityService) createAcceptAnswerOperationInfo(ctx context.Context, loginUserID,
 	answerObjID, questionObjID, questionUserID, answerUserID string, isSelf bool) *schema.AcceptAnswerOperationInfo {
 	operationInfo := &schema.AcceptAnswerOperationInfo{
+		TriggerUserID:    loginUserID,
 		QuestionObjectID: questionObjID,
 		QuestionUserID:   questionUserID,
 		AnswerObjectID:   answerObjID,
@@ -79,11 +80,11 @@ func (as *AnswerActivityService) getActivities(ctx context.Context, op *schema.A
 
 		if action == activity_type.AnswerAccept {
 			t.ActivityUserID = op.QuestionUserID
-			t.TriggerUserID = op.AnswerUserID
+			t.TriggerUserID = op.TriggerUserID
 			t.OriginalObjectID = op.QuestionObjectID // if activity is 'accept' means this question is accept the answer.
 		} else {
 			t.ActivityUserID = op.AnswerUserID
-			t.TriggerUserID = op.AnswerUserID
+			t.TriggerUserID = op.TriggerUserID
 			t.OriginalObjectID = op.AnswerObjectID // if activity is 'accepted' means this answer was accepted.
 		}
 		activities = append(activities, t)
