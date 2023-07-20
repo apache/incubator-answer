@@ -1,6 +1,7 @@
 package migrations
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -10,28 +11,28 @@ import (
 	"xorm.io/xorm/schemas"
 )
 
-func addActivityTimeline(x *xorm.Engine) (err error) {
+func addActivityTimeline(ctx context.Context, x *xorm.Engine) (err error) {
 	switch x.Dialect().URI().DBType {
 	case schemas.MYSQL:
-		_, err = x.Exec("ALTER TABLE `answer` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT NULL")
+		_, err = x.Context(ctx).Exec("ALTER TABLE `answer` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT NULL")
 		if err != nil {
 			return err
 		}
-		_, err = x.Exec("ALTER TABLE `question` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT NULL")
+		_, err = x.Context(ctx).Exec("ALTER TABLE `question` CHANGE `updated_at` `updated_at` TIMESTAMP NULL DEFAULT NULL")
 		if err != nil {
 			return err
 		}
 	case schemas.POSTGRES:
-		_, err = x.Exec(`ALTER TABLE "answer" ALTER COLUMN "updated_at" DROP NOT NULL, ALTER COLUMN "updated_at" SET DEFAULT NULL`)
+		_, err = x.Context(ctx).Exec(`ALTER TABLE "answer" ALTER COLUMN "updated_at" DROP NOT NULL, ALTER COLUMN "updated_at" SET DEFAULT NULL`)
 		if err != nil {
 			return err
 		}
-		_, err = x.Exec(`ALTER TABLE "question" ALTER COLUMN "updated_at" DROP NOT NULL, ALTER COLUMN "updated_at" SET DEFAULT NULL`)
+		_, err = x.Context(ctx).Exec(`ALTER TABLE "question" ALTER COLUMN "updated_at" DROP NOT NULL, ALTER COLUMN "updated_at" SET DEFAULT NULL`)
 		if err != nil {
 			return err
 		}
 	case schemas.SQLITE:
-		_, err = x.Exec(`DROP INDEX "IDX_answer_user_id";
+		_, err = x.Context(ctx).Exec(`DROP INDEX "IDX_answer_user_id";
 
 ALTER TABLE "answer" RENAME TO "_answer_old_v3";
 
@@ -98,7 +99,7 @@ ON "question" (
 		ID  int    `xorm:"not null pk autoincr INT(11) id"`
 		Key string `xorm:"unique VARCHAR(128) key"`
 	}
-	if err := x.Sync(new(Config)); err != nil {
+	if err := x.Context(ctx).Sync(new(Config)); err != nil {
 		return fmt.Errorf("sync config table failed: %w", err)
 	}
 	defaultConfigTable := []*entity.Config{
@@ -155,18 +156,18 @@ ON "question" (
 		{ID: 114, Key: "rank.tag.audit", Value: `20000`},
 	}
 	for _, c := range defaultConfigTable {
-		exist, err := x.Get(&entity.Config{ID: c.ID, Key: c.Key})
+		exist, err := x.Context(ctx).Get(&entity.Config{ID: c.ID, Key: c.Key})
 		if err != nil {
 			return fmt.Errorf("get config failed: %w", err)
 		}
 		if exist {
-			if _, err = x.Update(c, &entity.Config{ID: c.ID, Key: c.Key}); err != nil {
+			if _, err = x.Context(ctx).Update(c, &entity.Config{ID: c.ID, Key: c.Key}); err != nil {
 				log.Errorf("update %+v config failed: %s", c, err)
 				return fmt.Errorf("update config failed: %w", err)
 			}
 			continue
 		}
-		if _, err = x.Insert(&entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
+		if _, err = x.Context(ctx).Insert(&entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
 			log.Errorf("insert %+v config failed: %s", c, err)
 			return fmt.Errorf("add config failed: %w", err)
 		}
@@ -205,7 +206,7 @@ ON "question" (
 		LastEditUserID string    `xorm:"not null default 0 BIGINT(20) last_edit_user_id"`
 	}
 
-	err = x.Sync(new(Activity), new(Revision), new(Tag), new(Question), new(Answer))
+	err = x.Context(ctx).Sync(new(Activity), new(Revision), new(Tag), new(Question), new(Answer))
 	if err != nil {
 		return fmt.Errorf("sync table failed %w", err)
 	}

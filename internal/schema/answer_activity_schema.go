@@ -2,6 +2,7 @@ package schema
 
 // AcceptAnswerOperationInfo accept answer operation info
 type AcceptAnswerOperationInfo struct {
+	TriggerUserID    string
 	QuestionObjectID string
 	QuestionUserID   string
 	AnswerObjectID   string

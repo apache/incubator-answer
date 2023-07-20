@@ -36,11 +36,10 @@ func (sc *SearchController) Search(ctx *gin.Context) {
 	}
 	dto.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
-	resp, total, extra, err := sc.searchService.Search(ctx, &dto)
+	resp, total, err := sc.searchService.Search(ctx, &dto)
 
 	handler.HandleResponse(ctx, err, schema.SearchListResp{
 		Total:      total,
 		SearchResp: resp,
-		Extra:      extra,
 	})
 }

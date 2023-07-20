@@ -1,6 +1,7 @@
 package migrations
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -37,9 +38,9 @@ func (QuestionPostTime) TableName() string {
 	return "question"
 }
 
-func updateQuestionPostTime(x *xorm.Engine) error {
+func updateQuestionPostTime(ctx context.Context, x *xorm.Engine) error {
 	questionList := make([]QuestionPostTime, 0)
-	err := x.Find(&questionList, &entity.Question{})
+	err := x.Context(ctx).Find(&questionList, &entity.Question{})
 	if err != nil {
 		return fmt.Errorf("get questions failed: %w", err)
 	}
@@ -50,7 +51,7 @@ func updateQuestionPostTime(x *xorm.Engine) error {
 			} else if !item.CreatedAt.IsZero() {
 				item.PostUpdateTime = item.CreatedAt
 			}
-			if _, err = x.Update(item, &QuestionPostTime{ID: item.ID}); err != nil {
+			if _, err = x.Context(ctx).Update(item, &QuestionPostTime{ID: item.ID}); err != nil {
 				log.Errorf("update %+v config failed: %s", item, err)
 				return fmt.Errorf("update question failed: %w", err)
 			}

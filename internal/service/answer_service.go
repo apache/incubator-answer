@@ -390,15 +390,15 @@ func (as *AnswerService) updateAnswerRank(ctx context.Context, userID string,
 ) {
 	// if this question is already been answered, should cancel old answer rank
 	if oldAnswerInfo != nil {
-		err := as.answerActivityService.CancelAcceptAnswer(
-			ctx, questionInfo.AcceptedAnswerID, questionInfo.ID, questionInfo.UserID, oldAnswerInfo.UserID)
+		err := as.answerActivityService.CancelAcceptAnswer(ctx, userID,
+			questionInfo.AcceptedAnswerID, questionInfo.ID, questionInfo.UserID, oldAnswerInfo.UserID)
 		if err != nil {
 			log.Error(err)
 		}
 	}
 	if newAnswerInfo.ID != "" {
-		err := as.answerActivityService.AcceptAnswer(
-			ctx, newAnswerInfo.ID, questionInfo.ID, questionInfo.UserID, newAnswerInfo.UserID, newAnswerInfo.UserID == userID)
+		err := as.answerActivityService.AcceptAnswer(ctx, userID, newAnswerInfo.ID,
+			questionInfo.ID, questionInfo.UserID, newAnswerInfo.UserID, newAnswerInfo.UserID == userID)
 		if err != nil {
 			log.Error(err)
 		}

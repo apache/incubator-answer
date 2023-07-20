@@ -5,6 +5,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/search_common"
 	"github.com/answerdev/answer/internal/service/search_parser"
+	"github.com/answerdev/answer/plugin"
 )
 
 type SearchService struct {
@@ -23,40 +24,48 @@ func NewSearchService(
 }
 
 // Search search contents
-func (ss *SearchService) Search(ctx context.Context, dto *schema.SearchDTO) (resp []schema.SearchResp, total int64, extra interface{}, err error) {
-	extra = nil
+func (ss *SearchService) Search(ctx context.Context, dto *schema.SearchDTO) (resp []schema.SearchResp, total int64, err error) {
 	if dto.Page < 1 {
 		dto.Page = 1
 	}
 
 	// search type
-	searchType,
-		// search all
-		userID,
-		votes,
-		// search questions
-		notAccepted,
-		_,
-		views,
-		answers,
-		// search answers
-		accepted,
-		questionID,
-		_,
-		// common fields
-		tags,
-		words := ss.searchParser.ParseStructure(dto)
+	cond := ss.searchParser.ParseStructure(ctx, dto)
 
-	switch searchType {
-	case "all":
-		resp, total, err = ss.searchRepo.SearchContents(ctx, words, tags, userID, votes, dto.Page, dto.Size, dto.Order)
-		if err != nil {
-			return nil, 0, nil, err
+	// check search plugin
+	var s plugin.Search
+	_ = plugin.CallSearch(func(search plugin.Search) error {
+		s = search
+		return nil
+	})
+
+	// search plugin is not found, call system search
+	if s == nil {
+		if cond.SearchAll() {
+			resp, total, err = ss.searchRepo.SearchContents(ctx, cond.Words, cond.Tags, cond.UserID, cond.VoteAmount, dto.Page, dto.Size, dto.Order)
+		} else if cond.SearchQuestion() {
+			resp, total, err = ss.searchRepo.SearchQuestions(ctx, cond.Words, cond.Tags, cond.NotAccepted, cond.Views, cond.AnswerAmount, dto.Page, dto.Size, dto.Order)
+		} else if cond.SearchAnswer() {
+			resp, total, err = ss.searchRepo.SearchAnswers(ctx, cond.Words, cond.Tags, cond.Accepted, cond.QuestionID, dto.Page, dto.Size, dto.Order)
 		}
-	case "question":
-		resp, total, err = ss.searchRepo.SearchQuestions(ctx, words, tags, notAccepted, views, answers, dto.Page, dto.Size, dto.Order)
-	case "answer":
-		resp, total, err = ss.searchRepo.SearchAnswers(ctx, words, tags, accepted, questionID, dto.Page, dto.Size, dto.Order)
+		return
+	}
+	return ss.searchByPlugin(ctx, s, cond, dto)
+}
+
+func (ss *SearchService) searchByPlugin(ctx context.Context, finder plugin.Search, cond *schema.SearchCondition, dto *schema.SearchDTO) (resp []schema.SearchResp, total int64, err error) {
+	var res []plugin.SearchResult
+	if cond.SearchAll() {
+		res, total, err = finder.SearchContents(ctx, cond.Words, cond.Tags, cond.UserID, cond.VoteAmount, dto.Page, dto.Size, dto.Order)
+	} else if cond.SearchQuestion() {
+		res, total, err = finder.SearchQuestions(ctx, cond.Words, cond.Tags, cond.NotAccepted, cond.Views, cond.AnswerAmount, dto.Page, dto.Size, dto.Order)
+	} else if cond.SearchAnswer() {
+		res, total, err = finder.SearchAnswers(ctx, cond.Words, cond.Tags, cond.Accepted, cond.QuestionID, dto.Page, dto.Size, dto.Order)
+	}
+
+	resp, err = ss.searchRepo.ParseSearchPluginResult(ctx, res)
+	if err != nil {
+		return nil, 0, err
 	}
 	return
 }
