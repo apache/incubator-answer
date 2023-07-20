@@ -4,8 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/segmentfault/pacman/log"
 	"github.com/answerdev/answer/plugin"
+	"github.com/segmentfault/pacman/log"
 	"strings"
 	"time"
 	"unicode"
@@ -419,11 +419,8 @@ func (qr *questionRepo) AdminQuestionPage(ctx context.Context, search *schema.Ad
 
 // updateSearch update search, if search plugin not enable, do nothing
 func (qr *questionRepo) updateSearch(ctx context.Context, questionID string) (err error) {
-	questionID = uid.DeShortID(questionID)
 	// check search plugin
-	var (
-		s plugin.Search
-	)
+	var s plugin.Search
 	_ = plugin.CallSearch(func(search plugin.Search) error {
 		s = search
 		return nil
@@ -431,6 +428,7 @@ func (qr *questionRepo) updateSearch(ctx context.Context, questionID string) (er
 	if s == nil {
 		return
 	}
+	questionID = uid.DeShortID(questionID)
 	question, exist, err := qr.GetQuestion(ctx, questionID)
 	if !exist {
 		return
@@ -444,11 +442,11 @@ func (qr *questionRepo) updateSearch(ctx context.Context, questionID string) (er
 		tagListList = make([]*entity.TagRel, 0)
 		tags        = make([]string, 0)
 	)
-	session := qr.data.DB.Where("object_id = ?", questionID)
+	session := qr.data.DB.Context(ctx).Where("object_id = ?", questionID)
 	session.Where("status = ?", entity.TagRelStatusAvailable)
 	err = session.Find(&tagListList)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	for _, tag := range tagListList {
 		tags = append(tags, tag.TagID)
@@ -456,12 +454,12 @@ func (qr *questionRepo) updateSearch(ctx context.Context, questionID string) (er
 	content := &plugin.SearchContent{
 		ObjectID:    questionID,
 		Title:       question.Title,
-		Type:        "question",
+		Type:        constant.QuestionObjectType,
 		Content:     question.ParsedText,
 		Answers:     int64(question.AnswerCount),
 		Status:      int64(question.Status),
 		Tags:        tags,
-		QuesionID:   questionID,
+		QuestionID:  questionID,
 		UserID:      question.UserID,
 		Views:       int64(question.ViewCount),
 		Created:     question.CreatedAt.Unix(),

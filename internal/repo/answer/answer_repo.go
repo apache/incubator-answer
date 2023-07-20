@@ -3,7 +3,6 @@ package answer
 import (
 	"context"
 	"github.com/answerdev/answer/plugin"
-	"strings"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -353,7 +352,7 @@ func (ar *answerRepo) updateSearch(ctx context.Context, answerID string) (err er
 	var (
 		question *entity.Question
 	)
-	exist, err = ar.data.DB.Where("id = ?", answer.QuestionID).Get(&question)
+	exist, err = ar.data.DB.Context(ctx).Where("id = ?", answer.QuestionID).Get(&question)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -366,7 +365,7 @@ func (ar *answerRepo) updateSearch(ctx context.Context, answerID string) (err er
 		tagListList = make([]*entity.TagRel, 0)
 		tags        = make([]string, 0)
 	)
-	st := ar.data.DB.Where("object_id = ?", uid.DeShortID(question.ID))
+	st := ar.data.DB.Context(ctx).Where("object_id = ?", uid.DeShortID(question.ID))
 	st.Where("status = ?", entity.TagRelStatusAvailable)
 	err = st.Find(&tagListList)
 	if err != nil {
@@ -379,12 +378,12 @@ func (ar *answerRepo) updateSearch(ctx context.Context, answerID string) (err er
 	content := &plugin.SearchContent{
 		ObjectID:    answerID,
 		Title:       question.Title,
-		Type:        "question",
+		Type:        constant.AnswerObjectType,
 		Content:     answer.ParsedText,
 		Answers:     0,
 		Status:      int64(answer.Status),
 		Tags:        tags,
-		QuesionID:   answerID,
+		QuestionID:  answer.QuestionID,
 		UserID:      answer.UserID,
 		Views:       int64(question.ViewCount),
 		Created:     answer.CreatedAt.Unix(),

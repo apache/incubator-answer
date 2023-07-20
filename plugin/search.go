@@ -19,7 +19,7 @@ type SearchContent struct {
 	Answers     int64    `json:"answers"`
 	Status      int64    `json:"status"`
 	Tags        []string `json:"tags"`
-	QuesionID   string   `json:"questionID"`
+	QuestionID  string   `json:"questionID"`
 	UserID      string   `json:"userID"`
 	Views       int64    `json:"views"`
 	Created     int64    `json:"created"`

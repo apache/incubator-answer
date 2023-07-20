@@ -445,7 +445,7 @@ func (sr *searchRepo) ParseSearchPluginResult(ctx context.Context, sres []plugin
 				And(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).
 				And(builder.Lt{"`answer`.`status`": entity.AnswerStatusDeleted}).And(builder.Eq{"`question`.`show`": entity.QuestionShow})
 		}
-		qres, err = sr.data.DB.Query(b)
+		qres, err = sr.data.DB.Context(ctx).Query(b)
 		if err != nil || len(qres) == 0 {
 			continue
 		}
