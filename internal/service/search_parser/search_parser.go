@@ -121,17 +121,17 @@ func (sp *SearchParser) parseTags(ctx context.Context, query *string) (tags []st
 // parseUserID return user id or current login user id
 func (sp *SearchParser) parseUserID(ctx context.Context, query *string, currentUserID string) (userID string) {
 	var (
-		exprUserID = `(?m)^user:([a-z0-9._-]+)`
-		exprMe     = "user:me"
-		q          = *query
+		exprUsername = `user:(\S+)`
+		exprMe       = "user:me"
+		q            = *query
 	)
 
-	re := regexp.MustCompile(exprUserID)
+	re := regexp.MustCompile(exprUsername)
 	res := re.FindStringSubmatch(q)
 	if strings.Contains(q, exprMe) {
 		userID = currentUserID
 		q = strings.ReplaceAll(q, exprMe, "")
-	} else if len(res) == 2 {
+	} else if len(res) > 1 {
 		name := res[1]
 		user, has, err := sp.userCommon.GetUserBasicInfoByUserName(ctx, name)
 		if err == nil && has {
@@ -146,14 +146,14 @@ func (sp *SearchParser) parseUserID(ctx context.Context, query *string, currentU
 // parseVotes return the votes of search query
 func (sp *SearchParser) parseVotes(query *string) (votes int) {
 	var (
-		expr = `(?m)^score:([0-9]+)`
+		expr = `score:(\d+)`
 		q    = *query
 	)
 	votes = -1
 
 	re := regexp.MustCompile(expr)
 	res := re.FindStringSubmatch(q)
-	if len(res) == 2 {
+	if len(res) > 1 {
 		votes = converter.StringToInt(res[1])
 		q = re.ReplaceAllString(q, "")
 	}
@@ -218,13 +218,13 @@ func (sp *SearchParser) parseIsQuestion(query *string) (isQuestion bool) {
 func (sp *SearchParser) parseViews(query *string) (views int) {
 	var (
 		q    = *query
-		expr = `(?m)^views:([0-9]+)`
+		expr = `views:(\d+)`
 	)
 	views = -1
 
 	re := regexp.MustCompile(expr)
 	res := re.FindStringSubmatch(q)
-	if len(res) == 2 {
+	if len(res) > 1 {
 		views = converter.StringToInt(res[1])
 		q = re.ReplaceAllString(q, "")
 	}
@@ -236,13 +236,13 @@ func (sp *SearchParser) parseViews(query *string) (views int) {
 func (sp *SearchParser) parseAnswers(query *string) (answers int) {
 	var (
 		q    = *query
-		expr = `(?m)^answers:([0-9]+)`
+		expr = `answers:(\d+)`
 	)
 	answers = -1
 
 	re := regexp.MustCompile(expr)
 	res := re.FindStringSubmatch(q)
-	if len(res) == 2 {
+	if len(res) > 1 {
 		answers = converter.StringToInt(res[1])
 		q = re.ReplaceAllString(q, "")
 	}
@@ -271,7 +271,7 @@ func (sp *SearchParser) parseAccepted(query *string) (accepted bool) {
 func (sp *SearchParser) parseQuestionID(query *string) (questionID string) {
 	var (
 		q    = *query
-		expr = `(?m)^inquestion:([0-9]+)`
+		expr = `inquestion:(\d+)`
 	)
 
 	re := regexp.MustCompile(expr)

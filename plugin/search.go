@@ -28,11 +28,50 @@ type SearchContent struct {
 	HasAccepted bool     `json:"hasAccepted"`
 }
 
+type SearchBasicCond struct {
+	// From zero-based page number
+	Page int
+	// Page size
+	PageSize int
+
+	// The keywords for search.
+	Words []string
+	// TagIDs is a list of tag IDs.
+	TagIDs []string
+	// The object's owner user ID.
+	UserID string
+	// The order of the search result.
+	Order string
+
+	// Weathers the question is accepted or not. Only support search question.
+	QuestionAccepted AcceptedCond
+	// Weathers the answer is accepted or not. Only support search answer.
+	AnswerAccepted AcceptedCond
+
+	// Only support search answer.
+	QuestionID string
+
+	// greater than or equal to the number of votes.
+	VoteAmount int
+	// greater than or equal to the number of views.
+	ViewAmount int
+	// greater than or equal to the number of answers. Only support search question.
+	AnswerAmount int
+}
+
+type AcceptedCond int
+
+const (
+	AcceptedCondAll AcceptedCond = iota
+	AcceptedCondTrue
+	AcceptedCondFalse
+)
+
 type Search interface {
 	Base
-	SearchContents(ctx context.Context, words []string, tagIDs []string, userID string, votes int, page, size int, order string) (res []SearchResult, total int64, err error)
-	SearchQuestions(ctx context.Context, words []string, tagIDs []string, notAccepted bool, views, answers int, page, size int, order string) (res []SearchResult, total int64, err error)
-	SearchAnswers(ctx context.Context, words []string, tagIDs []string, accepted bool, questionID string, page, size int, order string) (res []SearchResult, total int64, err error)
+	SearchContents(ctx context.Context, cond *SearchBasicCond) (res []SearchResult, total int64, err error)
+	SearchQuestions(ctx context.Context, cond *SearchBasicCond) (res []SearchResult, total int64, err error)
+	SearchAnswers(ctx context.Context, cond *SearchBasicCond) (res []SearchResult, total int64, err error)
 	UpdateContent(ctx context.Context, contentID string, content *SearchContent) error
 	DeleteContent(ctx context.Context, contentID string) error
 }

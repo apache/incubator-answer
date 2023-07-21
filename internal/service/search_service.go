@@ -56,11 +56,11 @@ func (ss *SearchService) Search(ctx context.Context, dto *schema.SearchDTO) (res
 func (ss *SearchService) searchByPlugin(ctx context.Context, finder plugin.Search, cond *schema.SearchCondition, dto *schema.SearchDTO) (resp []schema.SearchResp, total int64, err error) {
 	var res []plugin.SearchResult
 	if cond.SearchAll() {
-		res, total, err = finder.SearchContents(ctx, cond.Words, cond.Tags, cond.UserID, cond.VoteAmount, dto.Page, dto.Size, dto.Order)
+		res, total, err = finder.SearchContents(ctx, cond.Convert2PluginSearchCond(dto.Page, dto.Size, dto.Order))
 	} else if cond.SearchQuestion() {
-		res, total, err = finder.SearchQuestions(ctx, cond.Words, cond.Tags, cond.NotAccepted, cond.Views, cond.AnswerAmount, dto.Page, dto.Size, dto.Order)
+		res, total, err = finder.SearchQuestions(ctx, cond.Convert2PluginSearchCond(dto.Page, dto.Size, dto.Order))
 	} else if cond.SearchAnswer() {
-		res, total, err = finder.SearchAnswers(ctx, cond.Words, cond.Tags, cond.Accepted, cond.QuestionID, dto.Page, dto.Size, dto.Order)
+		res, total, err = finder.SearchAnswers(ctx, cond.Convert2PluginSearchCond(dto.Page, dto.Size, dto.Order))
 	}
 
 	resp, err = ss.searchRepo.ParseSearchPluginResult(ctx, res)

@@ -1,6 +1,9 @@
 package schema
 
-import "github.com/answerdev/answer/internal/base/constant"
+import (
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/plugin"
+)
 
 type SearchDTO struct {
 	UserID string // UserID current login user ID
@@ -46,6 +49,33 @@ func (s *SearchCondition) SearchQuestion() bool {
 // SearchAnswer check if search only need answer
 func (s *SearchCondition) SearchAnswer() bool {
 	return s.TargetType == constant.AnswerObjectType
+}
+
+// Convert2PluginSearchCond convert to plugin search condition
+func (s *SearchCondition) Convert2PluginSearchCond(page, pageSize int, order string) *plugin.SearchBasicCond {
+	basic := &plugin.SearchBasicCond{
+		Page:         page,
+		PageSize:     pageSize,
+		Words:        s.Words,
+		TagIDs:       s.Tags,
+		UserID:       s.UserID,
+		Order:        order,
+		QuestionID:   s.QuestionID,
+		VoteAmount:   s.VoteAmount,
+		ViewAmount:   s.Views,
+		AnswerAmount: s.AnswerAmount,
+	}
+	if s.Accepted {
+		basic.AnswerAccepted = plugin.AcceptedCondTrue
+	} else {
+		basic.AnswerAccepted = plugin.AcceptedCondAll
+	}
+	if s.NotAccepted {
+		basic.QuestionAccepted = plugin.AcceptedCondFalse
+	} else {
+		basic.QuestionAccepted = plugin.AcceptedCondAll
+	}
+	return basic
 }
 
 type SearchObject struct {
