@@ -3,22 +3,15 @@ import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import type * as Type from '@/common/interface';
-import { useToast } from '@/hooks';
-import { getLoggedUserInfo, changeEmail, checkImgCode } from '@/services';
+import { useToast, useCaptchaModal } from '@/hooks';
+import { getLoggedUserInfo, changeEmail } from '@/services';
 import { handleFormError } from '@/utils';
-import { PicAuthCodeModal } from '@/components';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'settings.account',
   });
   const [step, setStep] = useState(1);
-  const [showModal, setModalState] = useState(false);
-  const [imgCode, setImgCode] = useState<Type.ImgCodeRes>({
-    captcha_id: '',
-    captcha_img: '',
-    verify: false,
-  });
   const [formData, setFormData] = useState<Type.FormDataType>({
     e_mail: {
       value: '',
@@ -30,27 +23,16 @@ const Index: FC = () => {
       isInvalid: false,
       errorMsg: '',
     },
-    captcha_code: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
   });
   const [userInfo, setUserInfo] = useState<Type.UserInfoRes>();
   const toast = useToast();
+  const emailCaptcha = useCaptchaModal('edit_userinfo');
+
   useEffect(() => {
     getLoggedUserInfo().then((resp) => {
       setUserInfo(resp);
     });
   }, []);
-
-  const getImgCode = () => {
-    checkImgCode({
-      action: 'e_mail',
-    }).then((res) => {
-      setImgCode(res);
-    });
-  };
 
   const handleChange = (params: Type.FormDataType) => {
     setFormData({ ...formData, ...params });
@@ -95,11 +77,6 @@ const Index: FC = () => {
         isInvalid: false,
         errorMsg: '',
       },
-      captcha_code: {
-        value: '',
-        isInvalid: false,
-        errorMsg: '',
-      },
     });
   };
 
@@ -112,14 +89,15 @@ const Index: FC = () => {
       pass: formData.pass.value,
     };
 
+    const imgCode = emailCaptcha.getCaptcha();
     if (imgCode.verify) {
-      params.captcha_code = formData.captcha_code.value;
+      params.captcha_code = imgCode.captcha_code;
       params.captcha_id = imgCode.captcha_id;
     }
     changeEmail(params)
-      .then(() => {
+      .then(async () => {
+        await emailCaptcha.close();
         setStep(1);
-        setModalState(false);
         toast.onShow({
           msg: t('change_email_info'),
           variant: 'warning',
@@ -128,15 +106,10 @@ const Index: FC = () => {
       })
       .catch((err) => {
         if (err.isError) {
+          emailCaptcha.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
           setFormData({ ...data });
-          if (!err.list.find((v) => v.error_field.indexOf('captcha') >= 0)) {
-            setModalState(false);
-          }
         }
-      })
-      .finally(() => {
-        getImgCode();
       });
   };
 
@@ -147,11 +120,9 @@ const Index: FC = () => {
       return;
     }
 
-    if (imgCode.verify) {
-      setModalState(true);
-      return;
-    }
-    postEmail();
+    emailCaptcha.check(() => {
+      postEmail();
+    });
   };
 
   return (
@@ -174,7 +145,6 @@ const Index: FC = () => {
             variant="outline-secondary"
             onClick={() => {
               setStep(2);
-              getImgCode();
             }}>
             {t('change_email_btn')}
           </Button>
@@ -240,18 +210,6 @@ const Index: FC = () => {
           </div>
         </Form>
       )}
-
-      <PicAuthCodeModal
-        visible={showModal}
-        data={{
-          captcha: formData.captcha_code,
-          imgCode,
-        }}
-        handleCaptcha={handleChange}
-        clickSubmit={postEmail}
-        refreshImgCode={getImgCode}
-        onClose={() => setModalState(false)}
-      />
     </div>
   );
 };

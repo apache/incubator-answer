@@ -61,6 +61,7 @@ class Request {
           config: errConfig,
         } = error.response || {};
         const { data = {}, msg = '' } = errBody || {};
+
         const errorObject: {
           code: any;
           msg: string;
@@ -74,6 +75,7 @@ class Request {
           msg,
           data,
         };
+
         if (status === 400) {
           if (data?.err_type && errConfig?.passingError) {
             return Promise.reject(errorObject);
@@ -127,6 +129,7 @@ class Request {
           floppyNavigation.navigateToLogin();
           return Promise.reject(false);
         }
+
         if (status === 403) {
           // Permission interception
           if (data?.type === 'url_expired') {
@@ -173,6 +176,7 @@ class Request {
           errorCodeStore.getState().update('404');
           return Promise.reject(false);
         }
+
         if (status >= 500) {
           if (isIgnoredPath(IGNORE_PATH_LIST)) {
             return Promise.reject(false);

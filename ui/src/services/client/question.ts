@@ -61,10 +61,15 @@ export const getInviteUser = (questionId: string) => {
   });
 };
 
-export const putInviteUser = (questionId: string, users: string[]) => {
+export const putInviteUser = (
+  questionId: string,
+  users: string[],
+  imgCode: Type.ImgCodeReq = {},
+) => {
   const apiUrl = '/answer/api/v1/question/invite';
   return request.put(apiUrl, {
     id: questionId,
     invite_user: users,
+    ...imgCode,
   });
 };

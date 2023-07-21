@@ -1,17 +1,11 @@
-import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
+import React, { FormEvent, MouseEvent, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { PicAuthCodeModal } from '@/components/Modal';
-import { ImgCodeRes } from '@/common/interface';
+import { useCaptchaModal } from '@/hooks';
 import type { FormDataType, RegisterReqParams } from '@/common/interface';
-import {
-  register,
-  getRegisterCaptcha,
-  useLegalTos,
-  useLegalPrivacy,
-} from '@/services';
+import { register, useLegalTos, useLegalPrivacy } from '@/services';
 import userStore from '@/stores/loggedUserInfo';
 import { handleFormError } from '@/utils';
 
@@ -37,25 +31,11 @@ const Index: React.FC<Props> = ({ callback }) => {
       isInvalid: false,
       errorMsg: '',
     },
-    captcha_code: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
   });
-  const updateUser = userStore((state) => state.update);
 
-  const [imgCode, setImgCode] = useState<ImgCodeRes>({
-    captcha_id: '',
-    captcha_img: '',
-    verify: false,
-  });
-  const [showModal, setModalState] = useState(false);
-  const getImgCode = () => {
-    getRegisterCaptcha().then((res) => {
-      setImgCode(res);
-    });
-  };
+  const updateUser = userStore((state) => state.update);
+  const emailCaptcha = useCaptchaModal('email');
+
   const handleChange = (params: FormDataType) => {
     setFormData({ ...formData, ...params });
   };
@@ -86,6 +66,7 @@ const Index: React.FC<Props> = ({ callback }) => {
     });
     return bol;
   };
+
   const { data: tos } = useLegalTos();
   const { data: privacy } = useLegalPrivacy();
   const argumentClick = (evt: MouseEvent, type: 'tos' | 'privacy') => {
@@ -117,25 +98,24 @@ const Index: React.FC<Props> = ({ callback }) => {
       pass: formData.pass.value,
     };
 
-    if (imgCode.verify) {
-      reqParams.captcha_code = formData.captcha_code.value;
-      reqParams.captcha_id = imgCode.captcha_id;
+    const captcha = emailCaptcha.getCaptcha();
+    if (captcha?.verify) {
+      reqParams.captcha_code = captcha.captcha_code;
+      reqParams.captcha_id = captcha.captcha_id;
     }
+
     register(reqParams)
       .then((res) => {
+        emailCaptcha.close();
         updateUser(res);
-        setModalState(false);
         callback();
       })
       .catch((err) => {
         if (err.isError) {
+          emailCaptcha.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
-          if (!err.list.find((v) => v.error_field.indexOf('captcha') >= 0)) {
-            setModalState(false);
-          }
           setFormData({ ...data });
         }
-        getImgCode();
       });
   };
 
@@ -145,15 +125,11 @@ const Index: React.FC<Props> = ({ callback }) => {
     if (!checkValidated()) {
       return;
     }
-    if (imgCode.verify) {
-      setModalState(true);
-      return;
-    }
-    handleRegister();
+    emailCaptcha.check(() => {
+      handleRegister();
+    });
   };
-  useEffect(() => {
-    getImgCode();
-  }, []);
+
   return (
     <>
       <Form noValidate onSubmit={handleSubmit} autoComplete="off">
@@ -260,18 +236,6 @@ const Index: React.FC<Props> = ({ callback }) => {
           Already have an account? <Link to="/users/login">Log in</Link>
         </Trans>
       </div>
-
-      <PicAuthCodeModal
-        visible={showModal}
-        data={{
-          captcha: formData.captcha_code,
-          imgCode,
-        }}
-        handleCaptcha={handleChange}
-        clickSubmit={handleRegister}
-        refreshImgCode={getImgCode}
-        onClose={() => setModalState(false)}
-      />
     </>
   );
 };

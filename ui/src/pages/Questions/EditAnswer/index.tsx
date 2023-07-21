@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 
 import { handleFormError, scrollToDocTop } from '@/utils';
-import { usePageTags, usePromptWithUnload } from '@/hooks';
+import { usePageTags, usePromptWithUnload, useCaptchaModal } from '@/hooks';
 import { pathFactory } from '@/router/pathFactory';
 import { Editor, EditorRef, Icon, htmlRender } from '@/components';
 import type * as Type from '@/common/interface';
@@ -51,6 +51,7 @@ const Index = () => {
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [immData, setImmData] = useState(initFormData);
   const [contentChanged, setContentChanged] = useState(false);
+  const editCaptcha = useCaptchaModal('edit');
 
   useLayoutEffect(() => {
     if (data?.info?.content) {
@@ -136,36 +137,43 @@ const Index = () => {
 
     event.preventDefault();
     event.stopPropagation();
+
     if (!checkValidated()) {
       return;
     }
 
-    const params: Type.AnswerParams = {
-      content: formData.content.value,
-      html: editorRef.current.getHtml(),
-      question_id: qid,
-      id: aid,
-      edit_summary: formData.description.value,
-    };
-    modifyAnswer(params)
-      .then((res) => {
-        navigate(
-          pathFactory.answerLanding({
-            questionId: qid,
-            slugTitle: data?.question?.url_title,
-            answerId: aid,
-          }),
-          {
-            state: { isReview: res?.wait_for_review },
-          },
-        );
-      })
-      .catch((ex) => {
-        if (ex.isError) {
-          const stateData = handleFormError(ex, formData);
-          setFormData({ ...stateData });
-        }
-      });
+    editCaptcha.check(() => {
+      const params: Type.AnswerParams = {
+        content: formData.content.value,
+        html: editorRef.current.getHtml(),
+        question_id: qid,
+        id: aid,
+        edit_summary: formData.description.value,
+      };
+      editCaptcha.resolveCaptchaReq(params);
+
+      modifyAnswer(params)
+        .then(async (res) => {
+          await editCaptcha.close();
+          navigate(
+            pathFactory.answerLanding({
+              questionId: qid,
+              slugTitle: data?.question?.url_title,
+              answerId: aid,
+            }),
+            {
+              state: { isReview: res?.wait_for_review },
+            },
+          );
+        })
+        .catch((ex) => {
+          if (ex.isError) {
+            editCaptcha.handleCaptchaError(ex.list);
+            const stateData = handleFormError(ex, formData);
+            setFormData({ ...stateData });
+          }
+        });
+    });
   };
   const handleSelectedRevision = (e) => {
     const index = e.target.value;

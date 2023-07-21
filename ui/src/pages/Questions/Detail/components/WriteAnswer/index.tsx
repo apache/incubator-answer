@@ -5,9 +5,9 @@ import { useTranslation, Trans } from 'react-i18next';
 import { marked } from 'marked';
 import classNames from 'classnames';
 
-import { usePromptWithUnload } from '@/hooks';
+import { usePromptWithUnload, useCaptchaModal } from '@/hooks';
 import { Editor, Modal, TextArea } from '@/components';
-import { FormDataType } from '@/common/interface';
+import { FormDataType, PostAnswerReq } from '@/common/interface';
 import { postAnswer } from '@/services';
 import { guard, handleFormError, SaveDraft, storageExpires } from '@/utils';
 import { DRAFT_ANSWER_STORAGE_KEY } from '@/common/constants';
@@ -41,6 +41,7 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
   const [editorFocusState, setEditorFocusState] = useState(false);
   const [hasDraft, setHasDraft] = useState(false);
   const [showTips, setShowTips] = useState(data.loggedUserRank < 100);
+  const aCaptcha = useCaptchaModal('answer');
 
   usePromptWithUnload({
     when: Boolean(formData.content.value),
@@ -135,29 +136,40 @@ const Index: FC<Props> = ({ visible = false, data, callback }) => {
     if (!checkValidated()) {
       return;
     }
-    postAnswer({
-      question_id: data?.qid,
-      content: formData.content.value,
-      html: marked.parse(formData.content.value),
-    })
-      .then((res) => {
-        setShowEditor(false);
-        setFormData({
-          content: {
-            value: '',
-            isInvalid: false,
-            errorMsg: '',
-          },
+
+    aCaptcha.check(() => {
+      const params: PostAnswerReq = {
+        question_id: data?.qid,
+        content: formData.content.value,
+        html: marked.parse(formData.content.value),
+      };
+      const imgCode = aCaptcha.getCaptcha();
+      if (imgCode.verify) {
+        params.captcha_code = imgCode.captcha_code;
+        params.captcha_id = imgCode.captcha_id;
+      }
+      postAnswer(params)
+        .then(async (res) => {
+          await aCaptcha.close();
+          setShowEditor(false);
+          setFormData({
+            content: {
+              value: '',
+              isInvalid: false,
+              errorMsg: '',
+            },
+          });
+          removeDraft();
+          callback?.(res.info);
+        })
+        .catch((ex) => {
+          if (ex.isError) {
+            aCaptcha.handleCaptchaError(ex.list);
+            const stateData = handleFormError(ex, formData);
+            setFormData({ ...stateData });
+          }
         });
-        removeDraft();
-        callback?.(res.info);
-      })
-      .catch((ex) => {
-        if (ex.isError) {
-          const stateData = handleFormError(ex, formData);
-          setFormData({ ...stateData });
-        }
-      });
+    });
   };
 
   const clickBtn = () => {

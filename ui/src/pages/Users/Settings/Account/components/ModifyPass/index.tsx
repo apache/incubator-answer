@@ -4,12 +4,11 @@ import { useTranslation } from 'react-i18next';
 
 import classname from 'classnames';
 
-import { useToast } from '@/hooks';
-import type { FormDataType, ImgCodeRes } from '@/common/interface';
-import { modifyPassword, checkImgCode } from '@/services';
+import { useToast, useCaptchaModal } from '@/hooks';
+import type { FormDataType } from '@/common/interface';
+import { modifyPassword } from '@/services';
 import { handleFormError } from '@/utils';
 import { loggedUserInfoStore } from '@/stores';
-import { PicAuthCodeModal } from '@/components';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -35,20 +34,8 @@ const Index: FC = () => {
       errorMsg: '',
     },
   });
-  const [showModal, setModalState] = useState(false);
-  const [imgCode, setImgCode] = useState<ImgCodeRes>({
-    captcha_id: '',
-    captcha_img: '',
-    verify: false,
-  });
 
-  const getImgCode = () => {
-    checkImgCode({
-      action: 'modify_pass',
-    }).then((res) => {
-      setImgCode(res);
-    });
-  };
+  const infoCaptcha = useCaptchaModal('edit_userinfo');
 
   const handleFormState = () => {
     setFormState((pre) => !pre);
@@ -128,13 +115,14 @@ const Index: FC = () => {
       pass: formData.pass.value,
     };
 
+    const imgCode = infoCaptcha.getCaptcha();
     if (imgCode.verify) {
-      params.captcha_code = formData.captcha_code.value;
+      params.captcha_code = imgCode.captcha_code;
       params.captcha_id = imgCode.captcha_id;
     }
     modifyPassword(params)
-      .then(() => {
-        setModalState(false);
+      .then(async () => {
+        await infoCaptcha.close();
         toast.onShow({
           msg: t('update_password', { keyPrefix: 'toast' }),
           variant: 'success',
@@ -143,15 +131,10 @@ const Index: FC = () => {
       })
       .catch((err) => {
         if (err.isError) {
+          infoCaptcha.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
-          if (!err.list.find((v) => v.error_field.indexOf('captcha') >= 0)) {
-            setModalState(false);
-          }
           setFormData({ ...data });
         }
-      })
-      .finally(() => {
-        getImgCode();
       });
   };
 
@@ -162,11 +145,9 @@ const Index: FC = () => {
       return;
     }
 
-    if (imgCode.verify) {
-      setModalState(true);
-      return;
-    }
-    postModifyPass();
+    infoCaptcha.check(() => {
+      postModifyPass();
+    });
   };
 
   return (
@@ -262,24 +243,11 @@ const Index: FC = () => {
             type="submit"
             onClick={() => {
               handleFormState();
-              getImgCode();
             }}>
             {t('change_pass_btn')}
           </Button>
         </>
       )}
-
-      <PicAuthCodeModal
-        visible={showModal}
-        data={{
-          captcha: formData.captcha_code,
-          imgCode,
-        }}
-        handleCaptcha={handleChange}
-        clickSubmit={postModifyPass}
-        refreshImgCode={getImgCode}
-        onClose={() => setModalState(false)}
-      />
     </div>
   );
 };
