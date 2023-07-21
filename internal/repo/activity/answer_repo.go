@@ -55,6 +55,7 @@ func (ar *AnswerActivityRepo) SaveAcceptAnswerActivity(ctx context.Context, op *
 		return nil
 	}
 
+	ar.data.DB.ShowSQL(true)
 	// save activity
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
 		session = session.Context(ctx)
@@ -183,8 +184,13 @@ func (ar *AnswerActivityRepo) saveActivitiesAvailable(session *xorm.Session, op 
 			continue
 		}
 		if exist {
-			if _, err = session.Where("id = ?", existsActivity.ID).Cols("`cancelled`").
-				Update(&entity.Activity{Cancelled: entity.ActivityAvailable}); err != nil {
+			bean := &entity.Activity{
+				Cancelled: entity.ActivityAvailable,
+				Rank:      act.Rank,
+				HasRank:   act.HasRank(),
+			}
+			session.Where("id = ?", existsActivity.ID)
+			if _, err = session.Cols("`cancelled`", "`rank`", "`has_rank`").Update(bean); err != nil {
 				return err
 			}
 		} else {
