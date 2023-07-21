@@ -94,42 +94,36 @@ export interface NavigateConfig {
 }
 const navigate = (to: string | number, config: NavigateConfig = {}) => {
   let { handler = 'href' } = config;
-  /**
-   * Note: Synchronised navigation can result in asynchronous actions such as page animations and state modifications not being completed.
-   */
-  setTimeout(() => {
-    if (to && typeof to === 'string') {
-      if (equalToCurrentHref(to)) {
-        return;
-      }
-      /**
-       * 1. Blocking redirection of two login pages
-       * 2. Auto storage login redirect
-       * Note: The or judgement cannot be missing here, both jumps will be used
-       */
-      if (to === RouteAlias.login || to === getLoginUrl()) {
-        storageLoginRedirect();
-      }
-
-      if (!isRoutableLink(to) && handler !== 'href' && handler !== 'replace') {
-        handler = 'href';
-      }
-      if (handler === 'href' && config.options?.replace) {
-        handler = 'replace';
-      }
-      if (handler === 'href') {
-        window.location.href = to;
-      } else if (handler === 'replace') {
-        window.location.replace(to);
-      } else if (typeof handler === 'function') {
-        handler(to, config.options);
-      }
+  if (to && typeof to === 'string') {
+    if (equalToCurrentHref(to)) {
+      return;
+    }
+    /**
+     * 1. Blocking redirection of two login pages
+     * 2. Auto storage login redirect
+     * Note: The or judgement cannot be missing here, both jumps will be used
+     */
+    if (to === RouteAlias.login || to === getLoginUrl()) {
+      storageLoginRedirect();
     }
 
-    if (typeof to === 'number' && typeof handler === 'function') {
-      handler(to);
+    if (!isRoutableLink(to) && handler !== 'href' && handler !== 'replace') {
+      handler = 'href';
     }
-  });
+    if (handler === 'href' && config.options?.replace) {
+      handler = 'replace';
+    }
+    if (handler === 'href') {
+      window.location.href = to;
+    } else if (handler === 'replace') {
+      window.location.replace(to);
+    } else if (typeof handler === 'function') {
+      handler(to, config.options);
+    }
+  }
+  if (typeof to === 'number' && typeof handler === 'function') {
+    handler(to);
+  }
 };
 
 /**

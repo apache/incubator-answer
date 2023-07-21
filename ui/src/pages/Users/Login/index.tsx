@@ -93,8 +93,8 @@ const Index: React.FC = () => {
     }
 
     login(params)
-      .then((res) => {
-        passwordCaptcha.close();
+      .then(async (res) => {
+        await passwordCaptcha.close();
         updateUser(res);
         const userStat = guard.deriveLoginState();
         if (userStat.isNotActivated) {
