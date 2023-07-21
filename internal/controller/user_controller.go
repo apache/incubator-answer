@@ -395,7 +395,7 @@ func (uc *UserController) UserModifyPassWord(ctx *gin.Context) {
 	}
 	err = uc.userService.UserModifyPassword(ctx, req)
 	if err == nil {
-		uc.actionService.ActionRecordDel(ctx, entity.CaptchaActionPassword, ctx.ClientIP())
+		uc.actionService.ActionRecordDel(ctx, entity.CaptchaActionPassword, req.UserID)
 	}
 	handler.HandleResponse(ctx, err, nil)
 }
