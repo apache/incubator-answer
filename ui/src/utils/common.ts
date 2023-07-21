@@ -2,8 +2,7 @@ import i18next from 'i18next';
 
 import pattern from '@/common/pattern';
 import { USER_AGENT_NAMES } from '@/common/constants';
-
-const Diff = require('diff');
+import type * as Type from '@/common/interface';
 
 function thousandthDivision(num) {
   const reg = /\d{1,3}(?=(\d{3})+$)/g;
@@ -114,7 +113,7 @@ function escapeRemove(str: string) {
 }
 
 function handleFormError(
-  error: { list: Array<{ error_field: string; error_msg: string }> },
+  error: { list: Type.FieldError[] },
   data: any,
   keymap?: Array<{ from: string; to: string }>,
 ) {
@@ -147,6 +146,8 @@ function escapeHtml(str: string) {
   };
   return str.replace(/[&<>"'`]/g, (tag) => tagsToReplace[tag] || tag);
 }
+
+const Diff = require('diff');
 
 function diffText(newText: string, oldText?: string): string {
   if (!newText) {

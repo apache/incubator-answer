@@ -9,6 +9,11 @@ export interface FormDataType {
   [prop: string]: FormValue;
 }
 
+export interface FieldError {
+  error_field: string;
+  error_msg: string;
+}
+
 export interface Paging {
   page: number;
   page_size?: number;
@@ -52,7 +57,7 @@ export interface TagInfo extends TagBase {
   main_tag_slug_name?: string;
   excerpt?;
 }
-export interface QuestionParams {
+export interface QuestionParams extends ImgCodeReq{
   title: string;
   url_title?: string;
   content: string;
@@ -68,7 +73,7 @@ export interface ListResult<T = any> {
   list: T[];
 }
 
-export interface AnswerParams {
+export interface AnswerParams extends ImgCodeReq {
   content: string;
   html: string;
   question_id: string;
@@ -169,9 +174,28 @@ export interface PasswordResetReq extends ImgCodeReq {
   e_mail: string;
 }
 
-export interface CheckImgReq {
-  action: 'login' | 'e_mail' | 'find_pass' | 'modify_pass';
+export interface PasswordReplaceReq extends ImgCodeReq {
+  code: string;
+  pass: string;
 }
+
+export interface CaptchaReq extends ImgCodeReq {
+  verify: ImgCodeRes['verify'];
+}
+
+export type CaptchaKey =
+  | 'email'
+  | 'password'
+  | 'edit_userinfo'
+  | 'question'
+  | 'answer'
+  | 'comment'
+  | 'edit'
+  | 'invitation_answer'
+  | 'search'
+  | 'report'
+  | 'delete'
+  | 'vote';
 
 export interface SetNoticeReq {
   notice_switch: boolean;
@@ -222,7 +246,7 @@ export interface AnswerItem {
   [prop: string]: any;
 }
 
-export interface PostAnswerReq {
+export interface PostAnswerReq extends ImgCodeReq {
   content: string;
   html?: string;
   question_id: string;
@@ -425,7 +449,7 @@ export interface FollowParams {
 /**
  * @description search request params
  */
-export interface SearchParams {
+export interface SearchParams extends ImgCodeReq {
   q: string;
   order: string;
   page: number;
