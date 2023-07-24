@@ -1403,7 +1403,7 @@ ui:
           fields:
             display_name:
               label: Zobraziť meno
-              msg: Zobrazené meno musí mať dlhú dĺžku 3-30 znakov.
+              msg: Zobrazené meno musí mať dlhú dĺžku 4-30 znakov.
             email:
               label: E-mail
               msg: E-mail nie je platný.

@@ -1403,7 +1403,7 @@ ui:
           fields:
             display_name:
               label: Nama
-              msg: Display Name must be at 3-30 characters in length.
+              msg: Display Name must be at 4-30 characters in length.
             email:
               label: Email
               msg: Email tidak sah.
