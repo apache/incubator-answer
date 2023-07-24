@@ -107,6 +107,7 @@ const Index = (captchaKey: CaptchaKey) => {
         });
       }
       fetchCaptchaData();
+      show();
     } else {
       setImgCode({
         ...ri,
@@ -238,6 +239,7 @@ const Index = (captchaKey: CaptchaKey) => {
       refCallback.current = submitFunc;
       if (captcha?.verify) {
         show();
+        return false;
       }
       return submitFunc();
     },
