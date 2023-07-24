@@ -7,8 +7,10 @@ import (
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/action"
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
@@ -24,6 +26,7 @@ type QuestionController struct {
 	answerService   *service.AnswerService
 	rankService     *rank.RankService
 	siteInfoService siteinfo_common.SiteInfoCommonService
+	actionService   *action.CaptchaService
 }
 
 // NewQuestionController new controller
@@ -32,12 +35,14 @@ func NewQuestionController(
 	answerService *service.AnswerService,
 	rankService *rank.RankService,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
+	actionService *action.CaptchaService,
 ) *QuestionController {
 	return &QuestionController{
 		questionService: questionService,
 		answerService:   answerService,
 		rankService:     rankService,
 		siteInfoService: siteInfoService,
+		actionService:   actionService,
 	}
 }
 
@@ -59,6 +64,19 @@ func (qc *QuestionController) RemoveQuestion(ctx *gin.Context) {
 	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
+	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+	if !isAdmin {
+		captchaPass := qc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionDelete, req.UserID, req.CaptchaID, req.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
+	}
+
 	can, err := qc.rankService.CheckOperationPermission(ctx, req.UserID, permission.QuestionDelete, req.ID)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -68,8 +86,10 @@ func (qc *QuestionController) RemoveQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
-
 	err = qc.questionService.RemoveQuestion(ctx, req)
+	if !isAdmin {
+		qc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionDelete, req.UserID)
+	}
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -312,6 +332,19 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
+	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+	if !isAdmin {
+		captchaPass := qc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionQuestion, req.UserID, req.CaptchaID, req.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
+	}
+
 	canList, requireRanks, err := qc.rankService.CheckOperationPermissionsForRanks(ctx, req.UserID, []string{
 		permission.QuestionAdd,
 		permission.QuestionEdit,
@@ -375,7 +408,9 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
 		return
 	}
-
+	if !isAdmin {
+		qc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionQuestion, req.UserID)
+	}
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -500,6 +535,18 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	}
 	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+	if !isAdmin {
+		captchaPass := qc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEdit, req.UserID, req.CaptchaID, req.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
+	}
 
 	canList, requireRanks, err := qc.rankService.CheckOperationPermissionsForRanks(ctx, req.UserID, []string{
 		permission.QuestionEdit,
@@ -552,6 +599,9 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, resp)
 		return
 	}
+	if !isAdmin {
+		qc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEdit, req.UserID)
+	}
 	handler.HandleResponse(ctx, nil, &schema.UpdateQuestionResp{WaitForReview: !req.NoNeedReview})
 }
 
@@ -573,6 +623,18 @@ func (qc *QuestionController) UpdateQuestionInviteUser(ctx *gin.Context) {
 	}
 	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+	if !isAdmin {
+		captchaPass := qc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionInvitationAnswer, req.UserID, req.CaptchaID, req.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
+	}
 
 	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.AnswerInviteSomeoneToAnswer,
@@ -596,6 +658,9 @@ func (qc *QuestionController) UpdateQuestionInviteUser(ctx *gin.Context) {
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
+	}
+	if !isAdmin {
+		qc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionInvitationAnswer, req.UserID)
 	}
 	handler.HandleResponse(ctx, nil, nil)
 }

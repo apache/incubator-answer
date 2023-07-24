@@ -6,8 +6,12 @@ import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/action"
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/internal/service/rank"
 	"github.com/answerdev/answer/pkg/uid"
@@ -19,15 +23,19 @@ import (
 type AnswerController struct {
 	answerService *service.AnswerService
 	rankService   *rank.RankService
+	actionService *action.CaptchaService
 }
 
 // NewAnswerController new controller
-func NewAnswerController(answerService *service.AnswerService,
+func NewAnswerController(
+	answerService *service.AnswerService,
 	rankService *rank.RankService,
+	actionService *action.CaptchaService,
 ) *AnswerController {
 	return &AnswerController{
 		answerService: answerService,
 		rankService:   rankService,
+		actionService: actionService,
 	}
 }
 
@@ -48,6 +56,19 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 	}
 	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+	if !isAdmin {
+		captchaPass := ac.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionDelete, req.UserID, req.CaptchaID, req.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
+	}
+
 	objectOwner := ac.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.ID)
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.AnswerDelete,
@@ -63,6 +84,9 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 	}
 
 	err = ac.answerService.RemoveAnswer(ctx, req)
+	if !isAdmin {
+		ac.actionService.ActionRecordAdd(ctx, entity.CaptchaActionDelete, req.UserID)
+	}
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -112,6 +136,18 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	}
 	req.QuestionID = uid.DeShortID(req.QuestionID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+	if !isAdmin {
+		captchaPass := ac.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionAnswer, req.UserID, req.CaptchaID, req.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
+	}
 
 	can, err := ac.rankService.CheckOperationPermission(ctx, req.UserID, permission.AnswerAdd, "")
 	if err != nil {
@@ -127,6 +163,9 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
+	}
+	if !isAdmin {
+		ac.actionService.ActionRecordAdd(ctx, entity.CaptchaActionAnswer, req.UserID)
 	}
 	info, questionInfo, has, err := ac.answerService.Get(ctx, answerID, req.UserID)
 	if err != nil {
@@ -178,6 +217,18 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	req.QuestionID = uid.DeShortID(req.QuestionID)
+	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+	if !isAdmin {
+		captchaPass := ac.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEdit, req.UserID, req.CaptchaID, req.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
+	}
 
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.AnswerEdit,
@@ -200,6 +251,9 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
+	}
+	if !isAdmin {
+		ac.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEdit, req.UserID)
 	}
 	_, _, _, err = ac.answerService.Get(ctx, req.ID, req.UserID)
 	if err != nil {

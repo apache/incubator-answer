@@ -730,7 +730,7 @@ definitions:
           $ref: '#/definitions/schema.PrivilegeOption'
         type: array
       selected_level:
-        type: integer
+        $ref: '#/definitions/schema.PrivilegeLevel'
     type: object
   schema.GetRankPersonalPageResp:
     properties:
@@ -1081,10 +1081,20 @@ definitions:
       content:
         type: string
     type: object
+  schema.PrivilegeLevel:
+    enum:
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - PrivilegeLevel1
+    - PrivilegeLevel2
+    - PrivilegeLevel3
   schema.PrivilegeOption:
     properties:
       level:
-        type: integer
+        $ref: '#/definitions/schema.PrivilegeLevel'
       level_desc:
         type: string
       privileges:
@@ -1147,10 +1157,10 @@ definitions:
     type: object
   schema.QuestionPageReq:
     properties:
-      inDays:
+      in_days:
         minimum: 1
         type: integer
-      orderCond:
+      order:
         enum:
         - newest
         - active
@@ -1161,7 +1171,7 @@ definitions:
       page:
         minimum: 1
         type: integer
-      pageSize:
+      page_size:
         minimum: 1
         type: integer
       tag:
@@ -1374,7 +1384,8 @@ definitions:
       title:
         type: string
       user_info:
-        $ref: '#/definitions/schema.UserBasicInfo'
+        allOf:
+        - $ref: '#/definitions/schema.UserBasicInfo'
         description: user info
       vote_count:
         type: integer
@@ -1382,7 +1393,8 @@ definitions:
   schema.SearchResp:
     properties:
       object:
-        $ref: '#/definitions/schema.SearchObject'
+        allOf:
+        - $ref: '#/definitions/schema.SearchObject'
         description: this object
       object_type:
         description: object_type
@@ -1824,7 +1836,8 @@ definitions:
   schema.UpdateInfoRequest:
     properties:
       avatar:
-        $ref: '#/definitions/schema.AvatarInfo'
+        allOf:
+        - $ref: '#/definitions/schema.AvatarInfo'
         description: avatar
       bio:
         description: bio
@@ -1871,9 +1884,10 @@ definitions:
   schema.UpdatePrivilegesConfigReq:
     properties:
       level:
+        allOf:
+        - $ref: '#/definitions/schema.PrivilegeLevel'
         maximum: 3
         minimum: 1
-        type: integer
     required:
     - level
     type: object

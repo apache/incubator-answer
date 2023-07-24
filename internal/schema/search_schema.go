@@ -6,11 +6,13 @@ import (
 )
 
 type SearchDTO struct {
-	UserID string // UserID current login user ID
-	Query  string `validate:"required,gte=1,lte=60" json:"q" form:"q"`                   // Query the query string
-	Page   int    `validate:"omitempty,min=1" form:"page,default=1" json:"page"`         //Query number of pages
-	Size   int    `validate:"omitempty,min=1,max=50" form:"size,default=30" json:"size"` //Search page size
-	Order  string `validate:"required,oneof=newest active score relevance" form:"order,default=relevance" json:"order" enums:"newest,active,score,relevance"`
+	UserID      string // UserID current login user ID
+	Query       string `validate:"required,gte=1,lte=60" json:"q" form:"q"`                   // Query the query string
+	Page        int    `validate:"omitempty,min=1" form:"page,default=1" json:"page"`         //Query number of pages
+	Size        int    `validate:"omitempty,min=1,max=50" form:"size,default=30" json:"size"` //Search page size
+	Order       string `validate:"required,oneof=newest active score relevance" form:"order,default=relevance" json:"order" enums:"newest,active,score,relevance"`
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 type SearchCondition struct {
