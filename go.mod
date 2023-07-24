@@ -36,23 +36,14 @@ require (
 	github.com/segmentfault/pacman/contrib/log/zap v0.0.0-20221018072427-a15dd1434e05
 	github.com/segmentfault/pacman/contrib/server/http v0.0.0-20221018072427-a15dd1434e05
 	github.com/spf13/cobra v1.6.1
-<<<<<<< HEAD
-	github.com/stretchr/testify v1.8.3
-=======
 	github.com/stretchr/testify v1.8.4
->>>>>>> feat/1.1.1/ai
 	github.com/swaggo/files v1.0.0
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.16.1
 	github.com/tidwall/gjson v1.14.4
 	github.com/yuin/goldmark v1.4.13
-<<<<<<< HEAD
-	golang.org/x/crypto v0.9.0
-	golang.org/x/net v0.10.0
-=======
 	golang.org/x/crypto v0.11.0
 	golang.org/x/net v0.12.0
->>>>>>> feat/1.1.1/ai
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/yaml.v3 v3.0.1
 	modernc.org/sqlite v1.14.2
