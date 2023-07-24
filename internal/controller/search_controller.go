@@ -65,15 +65,10 @@ func (sc *SearchController) Search(ctx *gin.Context) {
 		}
 	}
 
-<<<<<<< HEAD
 	resp, total, err := sc.searchService.Search(ctx, &dto)
-
-=======
-	resp, total, extra, err := sc.searchService.Search(ctx, &dto)
 	if !isAdmin {
 		sc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionSearch, unit)
 	}
->>>>>>> feat/1.1.1/ai
 	handler.HandleResponse(ctx, err, schema.SearchListResp{
 		Total:      total,
 		SearchResp: resp,
