@@ -59,7 +59,7 @@ func (s *SearchCondition) Convert2PluginSearchCond(page, pageSize int, order str
 		Words:        s.Words,
 		TagIDs:       s.Tags,
 		UserID:       s.UserID,
-		Order:        order,
+		Order:        plugin.SearchOrderCond(order),
 		QuestionID:   s.QuestionID,
 		VoteAmount:   s.VoteAmount,
 		ViewAmount:   s.Views,

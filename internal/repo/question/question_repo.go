@@ -457,7 +457,7 @@ func (qr *questionRepo) updateSearch(ctx context.Context, questionID string) (er
 		Type:        constant.QuestionObjectType,
 		Content:     question.ParsedText,
 		Answers:     int64(question.AnswerCount),
-		Status:      int64(question.Status),
+		Status:      plugin.SearchContentStatus(question.Status),
 		Tags:        tags,
 		QuestionID:  questionID,
 		UserID:      question.UserID,

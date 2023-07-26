@@ -381,7 +381,7 @@ func (ar *answerRepo) updateSearch(ctx context.Context, answerID string) (err er
 		Type:        constant.AnswerObjectType,
 		Content:     answer.ParsedText,
 		Answers:     0,
-		Status:      int64(answer.Status),
+		Status:      plugin.SearchContentStatus(answer.Status),
 		Tags:        tags,
 		QuestionID:  answer.QuestionID,
 		UserID:      answer.UserID,

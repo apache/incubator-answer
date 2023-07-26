@@ -12,20 +12,20 @@ type SearchResult struct {
 }
 
 type SearchContent struct {
-	ObjectID    string   `json:"objectID"`
-	Title       string   `json:"title"`
-	Type        string   `json:"type"`
-	Content     string   `json:"content"`
-	Answers     int64    `json:"answers"`
-	Status      int64    `json:"status"`
-	Tags        []string `json:"tags"`
-	QuestionID  string   `json:"questionID"`
-	UserID      string   `json:"userID"`
-	Views       int64    `json:"views"`
-	Created     int64    `json:"created"`
-	Active      int64    `json:"active"`
-	Score       int64    `json:"score"`
-	HasAccepted bool     `json:"hasAccepted"`
+	ObjectID    string              `json:"objectID"`
+	Title       string              `json:"title"`
+	Type        string              `json:"type"`
+	Content     string              `json:"content"`
+	Answers     int64               `json:"answers"`
+	Status      SearchContentStatus `json:"status"`
+	Tags        []string            `json:"tags"`
+	QuestionID  string              `json:"questionID"`
+	UserID      string              `json:"userID"`
+	Views       int64               `json:"views"`
+	Created     int64               `json:"created"`
+	Active      int64               `json:"active"`
+	Score       int64               `json:"score"`
+	HasAccepted bool                `json:"hasAccepted"`
 }
 
 type SearchBasicCond struct {
@@ -41,12 +41,12 @@ type SearchBasicCond struct {
 	// The object's owner user ID.
 	UserID string
 	// The order of the search result.
-	Order string
+	Order SearchOrderCond
 
 	// Weathers the question is accepted or not. Only support search question.
-	QuestionAccepted AcceptedCond
+	QuestionAccepted SearchAcceptedCond
 	// Weathers the answer is accepted or not. Only support search answer.
-	AnswerAccepted AcceptedCond
+	AnswerAccepted SearchAcceptedCond
 
 	// Only support search answer.
 	QuestionID string
@@ -59,12 +59,26 @@ type SearchBasicCond struct {
 	AnswerAmount int
 }
 
-type AcceptedCond int
+type SearchAcceptedCond int
+type SearchContentStatus int
+type SearchOrderCond string
 
 const (
-	AcceptedCondAll AcceptedCond = iota
+	AcceptedCondAll SearchAcceptedCond = iota
 	AcceptedCondTrue
 	AcceptedCondFalse
+)
+
+const (
+	SearchContentStatusAvailable = 1
+	SearchContentStatusDeleted   = 10
+)
+
+const (
+	SearchNewestOrder    SearchOrderCond = "newest"
+	SearchActiveOrder    SearchOrderCond = "active"
+	SearchScoreOrder     SearchOrderCond = "score"
+	SearchRelevanceOrder SearchOrderCond = "relevance"
 )
 
 type Search interface {
