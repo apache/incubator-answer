@@ -189,7 +189,7 @@ const Index = (captchaKey: CaptchaKey) => {
                   src={captcha?.captcha_img}
                   alt="captcha img"
                   width="auto"
-                  height="40px"
+                  height="60px"
                 />
               </div>
               <InputGroup>

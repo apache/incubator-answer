@@ -1,6 +1,5 @@
 import DefaultModal from './Modal';
 import confirm, { Config } from './Confirm';
-import PicAuthCodeModal from './PicAuthCodeModal';
 import LoginToContinueModal from './LoginToContinueModal';
 
 type ModalType = typeof DefaultModal & {
@@ -14,5 +13,4 @@ Modal.confirm = function (props: Config) {
 
 export default Modal;
 
-export { PicAuthCodeModal };
 export { LoginToContinueModal };
