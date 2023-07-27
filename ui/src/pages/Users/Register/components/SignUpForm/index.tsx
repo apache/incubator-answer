@@ -231,11 +231,6 @@ const Index: React.FC<Props> = ({ callback }) => {
           .
         </Trans>
       </div>
-      <div className="text-center mt-5">
-        <Trans i18nKey="login.info_login" ns="translation">
-          Already have an account? <Link to="/users/login">Log in</Link>
-        </Trans>
-      </div>
     </>
   );
 };

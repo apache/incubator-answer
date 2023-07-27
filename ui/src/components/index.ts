@@ -14,7 +14,6 @@ import Operate from './Operate';
 import UserCard from './UserCard';
 import Pagination from './Pagination';
 import Comment from './Comment';
-import PicAuthCodeModal from './Modal/PicAuthCodeModal';
 import TextArea from './TextArea';
 import Mentions from './Mentions';
 import FormatTime from './FormatTime';
@@ -59,7 +58,6 @@ export {
   UserCard,
   Pagination,
   Comment,
-  PicAuthCodeModal,
   TextArea,
   Mentions,
   FormatTime,
