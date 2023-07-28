@@ -645,7 +645,7 @@ func (qc *QuestionController) UpdateQuestionInviteUser(ctx *gin.Context) {
 	}
 
 	objectOwner := qc.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.ID)
-	req.CanEdit = canList[0] || objectOwner
+	req.CanEdit = canList[0] && objectOwner
 	if !req.CanEdit {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
