@@ -38,7 +38,32 @@ func NewCaptchaService(captchaRepo CaptchaRepo) *CaptchaService {
 // ActionRecord action record
 func (cs *CaptchaService) ActionRecord(ctx context.Context, req *schema.ActionRecordReq) (resp *schema.ActionRecordResp, err error) {
 	resp = &schema.ActionRecordResp{}
-	verificationResult := cs.ValidationStrategy(ctx, req.IP, req.Action)
+	unit := req.IP
+	switch req.Action {
+	case entity.CaptchaActionEditUserinfo:
+		unit = req.UserID
+	case entity.CaptchaActionQuestion:
+		unit = req.UserID
+	case entity.CaptchaActionAnswer:
+		unit = req.UserID
+	case entity.CaptchaActionComment:
+		unit = req.UserID
+	case entity.CaptchaActionEdit:
+		unit = req.UserID
+	case entity.CaptchaActionInvitationAnswer:
+		unit = req.UserID
+	case entity.CaptchaActionSearch:
+		if req.UserID != "" {
+			unit = req.UserID
+		}
+	case entity.CaptchaActionReport:
+		unit = req.UserID
+	case entity.CaptchaActionDelete:
+		unit = req.UserID
+	case entity.CaptchaActionVote:
+		unit = req.UserID
+	}
+	verificationResult := cs.ValidationStrategy(ctx, unit, req.Action)
 	if !verificationResult {
 		resp.CaptchaID, resp.CaptchaImg, err = cs.GenerateCaptcha(ctx)
 		resp.Verify = true
