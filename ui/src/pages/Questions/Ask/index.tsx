@@ -253,6 +253,7 @@ const Ask = () => {
       content: formData.content.value,
       tags: formData.tags.value,
     };
+
     if (isEdit) {
       editCaptcha.check(() => {
         const ep = {
@@ -294,6 +295,7 @@ const Ask = () => {
             answer_content: formData.answer_content.value,
           }).catch((err) => {
             if (err.isError) {
+              saveCaptcha.handleCaptchaError(err.list);
               const data = handleFormError(err, formData);
               setFormData({ ...data });
             }
@@ -301,6 +303,7 @@ const Ask = () => {
         } else {
           res = await saveQuestion(params).catch((err) => {
             if (err.isError) {
+              saveCaptcha.handleCaptchaError(err.list);
               const data = handleFormError(err, formData);
               setFormData({ ...data });
             }
@@ -309,6 +312,7 @@ const Ask = () => {
 
         const id = res?.id || res?.question?.id;
         if (id) {
+          await saveCaptcha.close();
           if (checked) {
             navigate(pathFactory.questionLanding(id, res?.question?.url_title));
           } else {

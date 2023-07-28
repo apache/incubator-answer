@@ -164,28 +164,40 @@ const Comment = ({ objectId, mode, commentId }) => {
       };
       addCaptcha.resolveCaptchaReq(req);
 
-      return addComment(req).then((res) => {
-        if (item.type === 'reply') {
-          const index = comments.findIndex(
-            (comment) => comment.comment_id === item.comment_id,
-          );
-          comments[index].showReply = false;
-          comments.splice(index + 1, 0, res);
-          setComments([...comments]);
-        } else {
-          setComments([
-            ...comments.map((comment) => {
-              if (comment.comment_id === item.comment_id) {
-                comment.showReply = false;
-              }
-              return comment;
-            }),
-            res,
-          ]);
-        }
+      return addComment(req)
+        .then(async (res) => {
+          await addCaptcha.close();
+          if (item.type === 'reply') {
+            const index = comments.findIndex(
+              (comment) => comment.comment_id === item.comment_id,
+            );
+            comments[index].showReply = false;
+            comments.splice(index + 1, 0, res);
+            setComments([...comments]);
+          } else {
+            setComments([
+              ...comments.map((comment) => {
+                if (comment.comment_id === item.comment_id) {
+                  comment.showReply = false;
+                }
+                return comment;
+              }),
+              res,
+            ]);
+          }
 
-        setVisibleComment(false);
-      });
+          setVisibleComment(false);
+        })
+        .catch((ex) => {
+          if (ex.isError) {
+            const captchaErr = addCaptcha.handleCaptchaError(ex.list);
+            // If it is not a CAPTCHA error, leave it to the subsequent error handling logic to continue processing.
+            if (!captchaErr || captchaErr.error_msg !== ex.msg) {
+              return Promise.reject(ex);
+            }
+          }
+          return Promise.resolve();
+        });
     });
   };
 
