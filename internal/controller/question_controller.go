@@ -621,6 +621,10 @@ func (qc *QuestionController) UpdateQuestionInviteUser(ctx *gin.Context) {
 	if ctx.IsAborted() {
 		return
 	}
+	if len(errFields) > 0 {
+		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
+		return
+	}
 	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	isAdmin := middleware.GetUserIsAdminModerator(ctx)
@@ -644,14 +648,9 @@ func (qc *QuestionController) UpdateQuestionInviteUser(ctx *gin.Context) {
 		return
 	}
 
-	objectOwner := qc.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.ID)
-	req.CanEdit = canList[0] && objectOwner
-	if !req.CanEdit {
+	req.CanInviteOtherToAnswer = canList[0]
+	if !req.CanInviteOtherToAnswer {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
-		return
-	}
-	if len(errFields) > 0 {
-		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
 		return
 	}
 	err = qc.questionService.UpdateQuestionInviteUser(ctx, req)
