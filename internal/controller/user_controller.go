@@ -458,6 +458,10 @@ func (uc *UserController) ActionRecord(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
+	userinfo := middleware.GetUserInfoFromContext(ctx)
+	if userinfo != nil {
+		req.UserID = userinfo.UserID
+	}
 	req.IP = ctx.ClientIP()
 	resp := &schema.ActionRecordResp{}
 	isAdmin := middleware.GetUserIsAdminModerator(ctx)

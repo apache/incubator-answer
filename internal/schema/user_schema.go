@@ -328,6 +328,7 @@ type ActionRecordReq struct {
 	// action
 	Action string `validate:"required,oneof=email password edit_userinfo question answer comment edit invitation_answer search report delete vote" form:"action"`
 	IP     string `json:"-"`
+	UserID string `json:"-"`
 }
 
 type ActionRecordResp struct {
