@@ -82,7 +82,7 @@ const Index = (captchaKey: CaptchaKey) => {
       resetCapture();
     }
     const p = new Promise<void>((resolve) => {
-      setTimeout(resolve);
+      setTimeout(resolve, 50);
     });
     return p;
   };
@@ -116,6 +116,8 @@ const Index = (captchaKey: CaptchaKey) => {
       });
       close();
     }
+    // Assist business logic in filtering CAPTCHA error messages when necessary
+    return captchaErr;
   };
 
   const handleChange = (evt) => {
