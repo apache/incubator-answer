@@ -83,12 +83,11 @@ func GetQuestionPermission(ctx context.Context, userID string, creatorUserID str
 }
 
 // GetQuestionExtendsPermission get question extends permission
-func GetQuestionExtendsPermission(ctx context.Context, userID string, creatorUserID string,
-	canInviteOtherToAnswer bool) (
+func GetQuestionExtendsPermission(ctx context.Context, canInviteOtherToAnswer bool) (
 	actions []*schema.PermissionMemberAction) {
 	lang := handler.GetLangByCtx(ctx)
 	actions = make([]*schema.PermissionMemberAction, 0)
-	if canInviteOtherToAnswer || userID == creatorUserID {
+	if canInviteOtherToAnswer {
 		actions = append(actions, &schema.PermissionMemberAction{
 			Action: "invite_other_to_answer",
 			Name:   translator.Tr(lang, inviteSomeoneToAnswerActionName),
