@@ -207,7 +207,8 @@ func copyUIFiles(b *buildingMaterial) (err error) {
 
 	goModUIDir := filepath.Join(strings.TrimSpace(buf.String()), "ui")
 	localUIBuildDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/answer/ui/")
-	if err = copyDirEntries(os.DirFS(goModUIDir), ".", localUIBuildDir); err != nil {
+	// The node_modules folder generated during development will interfere packaging, so it needs to be ignored.
+	if err = copyDirEntries(os.DirFS(goModUIDir), ".", localUIBuildDir, "node_modules"); err != nil {
 		return fmt.Errorf("failed to copy ui files: %w", err)
 	}
 	return nil
@@ -366,14 +367,26 @@ func mergeI18nFiles(b *buildingMaterial) (err error) {
 	return err
 }
 
-func copyDirEntries(sourceFs fs.FS, sourceDir string, targetDir string) (err error) {
+func copyDirEntries(sourceFs fs.FS, sourceDir, targetDir string, ignoreDir ...string) (err error) {
 	err = dir.CreateDirIfNotExist(targetDir)
 	if err != nil {
 		return err
 	}
+	ignoreThisDir := func(path string) bool {
+		for _, s := range ignoreDir {
+			if strings.HasPrefix(path, s) {
+				return true
+			}
+		}
+		return false
+	}
+
 	err = fs.WalkDir(sourceFs, sourceDir, func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
+		}
+		if ignoreThisDir(path) {
+			return nil
 		}
 
 		// Convert the path to use forward slashes, important because we use embedded FS which always uses forward slashes
