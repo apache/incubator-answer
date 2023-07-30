@@ -1403,7 +1403,7 @@ ui:
           fields:
             display_name:
               label: 昵称
-              msg: 显示名称长度必须为 3-30 个字符
+              msg: 显示名称长度必须为 4-30 个字符
             email:
               label: 邮箱
               msg: 电子邮箱无效。
