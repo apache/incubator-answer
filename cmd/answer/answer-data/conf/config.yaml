@@ -1,0 +1,19 @@
+debug: false
+server:
+  http:
+    addr: 0.0.0.0:80
+data:
+  database:
+    driver: mysql
+    connection: root:engage4amapaw@tcp(localhost:3306)/amapawdb
+  cache:
+    file_path: answer-data/cache/cache.db
+i18n:
+  bundle_dir: answer-data/i18n
+service_config:
+  upload_path: answer-data/uploads
+swaggerui:
+  show: true
+  protocol: http
+  host: 127.0.0.1
+  address: :80
