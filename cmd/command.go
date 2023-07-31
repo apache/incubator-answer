@@ -114,7 +114,7 @@ To run answer, use:
 				fmt.Println("read config failed: ", err.Error())
 				return
 			}
-			if err = migrations.Migrate(c.Data.Database, c.Data.Cache, upgradeVersion); err != nil {
+			if err = migrations.Migrate(c.Debug, c.Data.Database, c.Data.Cache, upgradeVersion); err != nil {
 				fmt.Println("migrate failed: ", err.Error())
 				return
 			}

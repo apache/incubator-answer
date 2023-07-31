@@ -70,6 +70,7 @@ var migrations = []Migration{
 	NewMigration("v1.1.0-beta.1", "update user pin hide features", updateRolePinAndHideFeatures, true),
 	NewMigration("v1.1.0-beta.2", "update question post time", updateQuestionPostTime, true),
 	NewMigration("v1.1.0", "add gravatar base url", updateCount, true),
+	NewMigration("v1.1.1", "update the length of revision content", updateTheLengthOfRevisionContent, false),
 }
 
 func GetMigrations() []Migration {
@@ -103,12 +104,12 @@ func ExpectedVersion() int64 {
 }
 
 // Migrate database to current version
-func Migrate(dbConf *data.Database, cacheConf *data.CacheConf, upgradeToSpecificVersion string) error {
+func Migrate(debug bool, dbConf *data.Database, cacheConf *data.CacheConf, upgradeToSpecificVersion string) error {
 	cache, cacheCleanup, err := data.NewCache(cacheConf)
 	if err != nil {
 		fmt.Println("new check failed:", err.Error())
 	}
-	engine, err := data.NewDB(false, dbConf)
+	engine, err := data.NewDB(debug, dbConf)
 	if err != nil {
 		fmt.Println("new database failed: ", err.Error())
 		return err
