@@ -1,22 +1,22 @@
-package entity
+package migrations
 
 import (
+	"context"
 	"time"
+	"xorm.io/xorm/schemas"
+
+	"xorm.io/xorm"
 )
 
-const (
-	// RevisioNnormalStatus this revision is Nnormal
-	RevisioNnormalStatus = 0
-	// RevisionUnreviewedStatus this revision is unreviewed
-	RevisionUnreviewedStatus = 1
-	// RevisionReviewPassStatus this revision is reviewed and approved by operator
-	RevisionReviewPassStatus = 2
-	// RevisionReviewRejectStatus this revision is reviewed and rejected by operator
-	RevisionReviewRejectStatus = 3
-)
+func updateTheLengthOfRevisionContent(ctx context.Context, x *xorm.Engine) (err error) {
+	sess := x.Context(ctx)
+	if x.Dialect().URI().DBType == schemas.MYSQL {
+		_, err = sess.Exec("ALTER TABLE `revision` CHANGE `content` `content` MEDIUMTEXT NOT NULL;")
+	}
+	return err
+}
 
-// Revision revision
-type Revision struct {
+type RevisionV14 struct {
 	ID           string    `xorm:"not null pk autoincr BIGINT(20) id"`
 	CreatedAt    time.Time `xorm:"created TIMESTAMP created_at"`
 	UpdatedAt    time.Time `xorm:"updated TIMESTAMP updated_at"`
@@ -30,7 +30,6 @@ type Revision struct {
 	ReviewUserID int64     `xorm:"not null default 0 BIGINT(20) review_user_id"`
 }
 
-// TableName revision table name
-func (Revision) TableName() string {
+func (RevisionV14) TableName() string {
 	return "revision"
 }
