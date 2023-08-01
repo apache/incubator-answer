@@ -244,7 +244,6 @@ const Ask = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    contentChangedRef.current = false;
     event.preventDefault();
     event.stopPropagation();
 
@@ -256,6 +255,7 @@ const Ask = () => {
 
     if (isEdit) {
       editCaptcha.check(() => {
+        contentChangedRef.current = false;
         const ep = {
           ...params,
           id: qid,
@@ -283,6 +283,7 @@ const Ask = () => {
       });
     } else {
       saveCaptcha.check(async () => {
+        contentChangedRef.current = false;
         const imgCode = saveCaptcha.getCaptcha();
         if (imgCode.verify) {
           params.captcha_code = imgCode.captcha_code;
@@ -295,25 +296,21 @@ const Ask = () => {
             answer_content: formData.answer_content.value,
           }).catch((err) => {
             if (err.isError) {
-              saveCaptcha.handleCaptchaError(err.list);
-              const data = handleFormError(err, formData);
-              if (data.keys.includes('captcha')) {
-                delete data.captcha_code;
-                delete data.captcha_id;
+              const captchaErr = saveCaptcha.handleCaptchaError(err.list);
+              if (!(captchaErr && err.list.length === 1)) {
+                const data = handleFormError(err, formData);
+                setFormData({ ...data });
               }
-              setFormData({ ...data });
             }
           });
         } else {
           res = await saveQuestion(params).catch((err) => {
             if (err.isError) {
-              saveCaptcha.handleCaptchaError(err.list);
-              const data = handleFormError(err, formData);
-              if (data.keys.includes('captcha')) {
-                delete data.captcha_code;
-                delete data.captcha_id;
+              const captchaErr = saveCaptcha.handleCaptchaError(err.list);
+              if (!(captchaErr && err.list.length === 1)) {
+                const data = handleFormError(err, formData);
+                setFormData({ ...data });
               }
-              setFormData({ ...data });
             }
           });
         }
