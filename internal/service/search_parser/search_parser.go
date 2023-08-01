@@ -88,7 +88,7 @@ func (sp *SearchParser) ParseStructure(ctx context.Context, dto *schema.SearchDT
 func (sp *SearchParser) parseTags(ctx context.Context, query *string) (tags []string) {
 	var (
 		// expire tag pattern
-		exprTag = `(?m)\[([a-zA-Z0-9-\+\.#]+)\]{1}?`
+		exprTag = `\[(.*?)\]`
 		q       = *query
 		limit   = 5
 	)
