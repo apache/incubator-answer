@@ -67,7 +67,7 @@ const Ask = () => {
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [immData, setImmData] = useState<FormDataItem>(initFormData);
   const [checked, setCheckState] = useState(false);
-  const [contentChanged, setContentChanged] = useState(false);
+  const contentChangedRef = useRef(false);
   const [focusType, setForceType] = useState('');
   const [hasDraft, setHasDraft] = useState(false);
   const resetForm = () => {
@@ -147,9 +147,9 @@ const Ask = () => {
           tags.value.map((v) => v.slug_name),
         )
       ) {
-        setContentChanged(true);
+        contentChangedRef.current = true;
       } else {
-        setContentChanged(false);
+        contentChangedRef.current = false;
       }
       return;
     }
@@ -170,15 +170,15 @@ const Ask = () => {
         },
         callback: () => setHasDraft(true),
       });
-      setContentChanged(true);
+      contentChangedRef.current = true;
     } else {
       removeDraft();
-      setContentChanged(false);
+      contentChangedRef.current = false;
     }
   }, [formData]);
 
   usePromptWithUnload({
-    when: contentChanged,
+    when: contentChangedRef.current,
   });
 
   const { data: revisions = [] } = useQueryRevisions(qid);
@@ -244,7 +244,6 @@ const Ask = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    setContentChanged(false);
     event.preventDefault();
     event.stopPropagation();
 
@@ -256,6 +255,7 @@ const Ask = () => {
 
     if (isEdit) {
       editCaptcha.check(() => {
+        contentChangedRef.current = false;
         const ep = {
           ...params,
           id: qid,
@@ -283,6 +283,7 @@ const Ask = () => {
       });
     } else {
       saveCaptcha.check(async () => {
+        contentChangedRef.current = false;
         const imgCode = saveCaptcha.getCaptcha();
         if (imgCode.verify) {
           params.captcha_code = imgCode.captcha_code;
@@ -295,17 +296,21 @@ const Ask = () => {
             answer_content: formData.answer_content.value,
           }).catch((err) => {
             if (err.isError) {
-              saveCaptcha.handleCaptchaError(err.list);
-              const data = handleFormError(err, formData);
-              setFormData({ ...data });
+              const captchaErr = saveCaptcha.handleCaptchaError(err.list);
+              if (!(captchaErr && err.list.length === 1)) {
+                const data = handleFormError(err, formData);
+                setFormData({ ...data });
+              }
             }
           });
         } else {
           res = await saveQuestion(params).catch((err) => {
             if (err.isError) {
-              saveCaptcha.handleCaptchaError(err.list);
-              const data = handleFormError(err, formData);
-              setFormData({ ...data });
+              const captchaErr = saveCaptcha.handleCaptchaError(err.list);
+              if (!(captchaErr && err.list.length === 1)) {
+                const data = handleFormError(err, formData);
+                setFormData({ ...data });
+              }
             }
           });
         }

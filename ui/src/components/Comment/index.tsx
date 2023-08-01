@@ -192,7 +192,7 @@ const Comment = ({ objectId, mode, commentId }) => {
           if (ex.isError) {
             const captchaErr = addCaptcha.handleCaptchaError(ex.list);
             // If it is not a CAPTCHA error, leave it to the subsequent error handling logic to continue processing.
-            if (!captchaErr || captchaErr.error_msg !== ex.msg) {
+            if (!(captchaErr && ex.list.length === 1)) {
               return Promise.reject(ex);
             }
           }
