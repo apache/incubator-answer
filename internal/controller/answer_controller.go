@@ -136,8 +136,20 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	}
 	req.QuestionID = uid.DeShortID(req.QuestionID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.AnswerEdit,
+		permission.AnswerDelete,
+		permission.LinkUrlLimit,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+
+	linkUrlLimitUser := canList[2]
 	isAdmin := middleware.GetUserIsAdminModerator(ctx)
-	if !isAdmin {
+	if !isAdmin || !linkUrlLimitUser {
 		captchaPass := ac.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionAnswer, req.UserID, req.CaptchaID, req.CaptchaCode)
 		if !captchaPass {
 			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
@@ -164,7 +176,7 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	if !isAdmin {
+	if !isAdmin || !linkUrlLimitUser {
 		ac.actionService.ActionRecordAdd(ctx, entity.CaptchaActionAnswer, req.UserID)
 	}
 	info, questionInfo, has, err := ac.answerService.Get(ctx, answerID, req.UserID)
@@ -174,15 +186,6 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	}
 	if !has {
 		handler.HandleResponse(ctx, nil, nil)
-		return
-	}
-
-	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		permission.AnswerEdit,
-		permission.AnswerDelete,
-	})
-	if err != nil {
-		handler.HandleResponse(ctx, err, nil)
 		return
 	}
 
@@ -216,9 +219,20 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.AnswerEdit,
+		permission.AnswerEditWithoutReview,
+		permission.LinkUrlLimit,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
 	req.QuestionID = uid.DeShortID(req.QuestionID)
+	linkUrlLimitUser := canList[2]
 	isAdmin := middleware.GetUserIsAdminModerator(ctx)
-	if !isAdmin {
+	if !isAdmin || !linkUrlLimitUser {
 		captchaPass := ac.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEdit, req.UserID, req.CaptchaID, req.CaptchaCode)
 		if !captchaPass {
 			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
@@ -228,15 +242,6 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 			return
 		}
-	}
-
-	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		permission.AnswerEdit,
-		permission.AnswerEditWithoutReview,
-	})
-	if err != nil {
-		handler.HandleResponse(ctx, err, nil)
-		return
 	}
 
 	objectOwner := ac.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.ID)
@@ -252,7 +257,7 @@ func (ac *AnswerController) Update(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	if !isAdmin {
+	if !isAdmin || !linkUrlLimitUser {
 		ac.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEdit, req.UserID)
 	}
 	_, _, _, err = ac.answerService.Get(ctx, req.ID, req.UserID)
