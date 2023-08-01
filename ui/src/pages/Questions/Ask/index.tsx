@@ -67,7 +67,7 @@ const Ask = () => {
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [immData, setImmData] = useState<FormDataItem>(initFormData);
   const [checked, setCheckState] = useState(false);
-  const [contentChanged, setContentChanged] = useState(false);
+  const contentChangedRef = useRef(false);
   const [focusType, setForceType] = useState('');
   const [hasDraft, setHasDraft] = useState(false);
   const resetForm = () => {
@@ -147,9 +147,9 @@ const Ask = () => {
           tags.value.map((v) => v.slug_name),
         )
       ) {
-        setContentChanged(true);
+        contentChangedRef.current = true;
       } else {
-        setContentChanged(false);
+        contentChangedRef.current = false;
       }
       return;
     }
@@ -170,15 +170,15 @@ const Ask = () => {
         },
         callback: () => setHasDraft(true),
       });
-      setContentChanged(true);
+      contentChangedRef.current = true;
     } else {
       removeDraft();
-      setContentChanged(false);
+      contentChangedRef.current = false;
     }
   }, [formData]);
 
   usePromptWithUnload({
-    when: contentChanged,
+    when: contentChangedRef.current,
   });
 
   const { data: revisions = [] } = useQueryRevisions(qid);
@@ -244,7 +244,7 @@ const Ask = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    setContentChanged(false);
+    contentChangedRef.current = false;
     event.preventDefault();
     event.stopPropagation();
 
@@ -297,6 +297,10 @@ const Ask = () => {
             if (err.isError) {
               saveCaptcha.handleCaptchaError(err.list);
               const data = handleFormError(err, formData);
+              if (data.keys.includes('captcha')) {
+                delete data.captcha_code;
+                delete data.captcha_id;
+              }
               setFormData({ ...data });
             }
           });
@@ -305,6 +309,10 @@ const Ask = () => {
             if (err.isError) {
               saveCaptcha.handleCaptchaError(err.list);
               const data = handleFormError(err, formData);
+              if (data.keys.includes('captcha')) {
+                delete data.captcha_code;
+                delete data.captcha_id;
+              }
               setFormData({ ...data });
             }
           });
