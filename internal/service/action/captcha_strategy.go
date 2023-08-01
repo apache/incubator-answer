@@ -85,7 +85,7 @@ func (cs *CaptchaService) CaptchaActionEditUserinfo(ctx context.Context, unit st
 
 func (cs *CaptchaService) CaptchaActionQuestion(ctx context.Context, unit string, actioninfo *entity.ActionRecordInfo) bool {
 	spew.Dump("[CaptchaActionQuestion]", actioninfo)
-	setNum := 3
+	setNum := 10
 	setTime := int64(5) //seconds
 	now := time.Now().Unix()
 	if now-actioninfo.LastTime <= setTime || actioninfo.Num >= setNum {

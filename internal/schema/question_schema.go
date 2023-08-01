@@ -94,6 +94,8 @@ type QuestionAddByAnswer struct {
 	UserID              string   `json:"-"`
 	MentionUsernameList []string `validate:"omitempty" json:"mention_username_list"`
 	QuestionPermission
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 func (req *QuestionAddByAnswer) Check() (errFields []*validator.FormErrorField, err error) {

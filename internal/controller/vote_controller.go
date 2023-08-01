@@ -53,6 +53,19 @@ func (vc *VoteController) VoteUp(ctx *gin.Context) {
 	}
 	req.ObjectID = uid.DeShortID(req.ObjectID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	can, needRank, err := vc.rankService.CheckVotePermission(ctx, req.UserID, req.ObjectID, true)
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !can {
+		lang := handler.GetLang(ctx)
+		msg := translator.TrWithData(lang, reason.NoEnoughRankToOperate, &schema.PermissionTrTplData{Rank: needRank})
+		handler.HandleResponse(ctx, errors.Forbidden(reason.NoEnoughRankToOperate).WithMsg(msg), nil)
+		return
+	}
+
 	isAdmin := middleware.GetUserIsAdminModerator(ctx)
 	if !isAdmin {
 		captchaPass := vc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionVote, req.UserID, req.CaptchaID, req.CaptchaCode)
@@ -66,17 +79,6 @@ func (vc *VoteController) VoteUp(ctx *gin.Context) {
 		}
 	}
 
-	can, needRank, err := vc.rankService.CheckVotePermission(ctx, req.UserID, req.ObjectID, true)
-	if err != nil {
-		handler.HandleResponse(ctx, err, nil)
-		return
-	}
-	if !can {
-		lang := handler.GetLang(ctx)
-		msg := translator.TrWithData(lang, reason.NoEnoughRankToOperate, &schema.PermissionTrTplData{Rank: needRank})
-		handler.HandleResponse(ctx, errors.Forbidden(reason.NoEnoughRankToOperate).WithMsg(msg), nil)
-		return
-	}
 	if !isAdmin {
 		vc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionVote, req.UserID)
 	}
@@ -106,17 +108,7 @@ func (vc *VoteController) VoteDown(ctx *gin.Context) {
 	req.ObjectID = uid.DeShortID(req.ObjectID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	isAdmin := middleware.GetUserIsAdminModerator(ctx)
-	if !isAdmin {
-		captchaPass := vc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionVote, req.UserID, req.CaptchaID, req.CaptchaCode)
-		if !captchaPass {
-			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
-				ErrorField: "captcha_code",
-				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
-			})
-			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
-			return
-		}
-	}
+
 	can, needRank, err := vc.rankService.CheckVotePermission(ctx, req.UserID, req.ObjectID, false)
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -127,6 +119,18 @@ func (vc *VoteController) VoteDown(ctx *gin.Context) {
 		msg := translator.TrWithData(lang, reason.NoEnoughRankToOperate, &schema.PermissionTrTplData{Rank: needRank})
 		handler.HandleResponse(ctx, errors.Forbidden(reason.NoEnoughRankToOperate).WithMsg(msg), nil)
 		return
+	}
+
+	if !isAdmin {
+		captchaPass := vc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionVote, req.UserID, req.CaptchaID, req.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
 	}
 	if !isAdmin {
 		vc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionVote, req.UserID)

@@ -330,10 +330,25 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	if ctx.IsAborted() {
 		return
 	}
-	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	canList, requireRanks, err := qc.rankService.CheckOperationPermissionsForRanks(ctx, req.UserID, []string{
+		permission.QuestionAdd,
+		permission.QuestionEdit,
+		permission.QuestionDelete,
+		permission.QuestionClose,
+		permission.QuestionReopen,
+		permission.TagUseReservedTag,
+		permission.TagAdd,
+		permission.LinkUrlLimit,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	linkUrlLimitUser := canList[7]
 	isAdmin := middleware.GetUserIsAdminModerator(ctx)
-	if !isAdmin {
+	if !isAdmin || !linkUrlLimitUser {
 		captchaPass := qc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionQuestion, req.UserID, req.CaptchaID, req.CaptchaCode)
 		if !captchaPass {
 			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
@@ -345,19 +360,6 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 		}
 	}
 
-	canList, requireRanks, err := qc.rankService.CheckOperationPermissionsForRanks(ctx, req.UserID, []string{
-		permission.QuestionAdd,
-		permission.QuestionEdit,
-		permission.QuestionDelete,
-		permission.QuestionClose,
-		permission.QuestionReopen,
-		permission.TagUseReservedTag,
-		permission.TagAdd,
-	})
-	if err != nil {
-		handler.HandleResponse(ctx, err, nil)
-		return
-	}
 	req.CanAdd = canList[0]
 	req.CanEdit = canList[1]
 	req.CanDelete = canList[2]
@@ -408,7 +410,7 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.BadRequest(reason.RequestFormatError), errFields)
 		return
 	}
-	if !isAdmin {
+	if !isAdmin || !linkUrlLimitUser {
 		qc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionQuestion, req.UserID)
 	}
 	handler.HandleResponse(ctx, err, resp)
@@ -439,10 +441,25 @@ func (qc *QuestionController) AddQuestionByAnswer(ctx *gin.Context) {
 		permission.QuestionClose,
 		permission.QuestionReopen,
 		permission.TagUseReservedTag,
+		permission.LinkUrlLimit,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
+	}
+
+	linkUrlLimitUser := canList[6]
+	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+	if !isAdmin || !linkUrlLimitUser {
+		captchaPass := qc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionQuestion, req.UserID, req.CaptchaID, req.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
 	}
 	req.CanAdd = canList[0]
 	req.CanEdit = canList[1]
@@ -479,6 +496,10 @@ func (qc *QuestionController) AddQuestionByAnswer(ctx *gin.Context) {
 		if ok {
 			errFields = append(errFields, errlist...)
 		}
+	}
+
+	if !isAdmin || !linkUrlLimitUser {
+		qc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionQuestion, req.UserID)
 	}
 
 	if len(errFields) > 0 {
@@ -535,8 +556,21 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	}
 	req.ID = uid.DeShortID(req.ID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	canList, requireRanks, err := qc.rankService.CheckOperationPermissionsForRanks(ctx, req.UserID, []string{
+		permission.QuestionEdit,
+		permission.QuestionDelete,
+		permission.QuestionEditWithoutReview,
+		permission.TagUseReservedTag,
+		permission.TagAdd,
+		permission.LinkUrlLimit,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	linkUrlLimitUser := canList[5]
 	isAdmin := middleware.GetUserIsAdminModerator(ctx)
-	if !isAdmin {
+	if !isAdmin || !linkUrlLimitUser {
 		captchaPass := qc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEdit, req.UserID, req.CaptchaID, req.CaptchaCode)
 		if !captchaPass {
 			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
@@ -546,18 +580,6 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
 			return
 		}
-	}
-
-	canList, requireRanks, err := qc.rankService.CheckOperationPermissionsForRanks(ctx, req.UserID, []string{
-		permission.QuestionEdit,
-		permission.QuestionDelete,
-		permission.QuestionEditWithoutReview,
-		permission.TagUseReservedTag,
-		permission.TagAdd,
-	})
-	if err != nil {
-		handler.HandleResponse(ctx, err, nil)
-		return
 	}
 
 	objectOwner := qc.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.ID)
@@ -599,7 +621,7 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 		handler.HandleResponse(ctx, err, resp)
 		return
 	}
-	if !isAdmin {
+	if !isAdmin || !linkUrlLimitUser {
 		qc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEdit, req.UserID)
 	}
 	handler.HandleResponse(ctx, nil, &schema.UpdateQuestionResp{WaitForReview: !req.NoNeedReview})
