@@ -108,11 +108,11 @@ backend:
   email:
     other: 邮箱
   e_mail:
-    other: 邮箱
+    other: Email
   password:
     other: 密码
   pass:
-    other: 密码
+    other: Password
   email_or_password_wrong_error:
     other: 邮箱和密码不匹配。
   error:
@@ -494,6 +494,7 @@ ui:
     title: 通知
     inbox: 收件箱
     achievement: 成就
+    new_alerts: New alerts
     all_read: 全部标记为已读
     show_more: 显示更多
     someone: 有人
@@ -714,7 +715,7 @@ ui:
       使用评论提问更多信息或者提出改进意见。尽量避免使用评论功能回答问题。
     tip_answer: >-
       使用评论对回答者进行回复，或者通知回答者你已更新了问题的内容。如果要补充或者完善问题的内容，请在原问题中更改。
-    tip_vote: 它给帖子添加了一些有用的内容
+    tip_vote: It is useful
   edit_answer:
     title: 编辑回答
     default_reason: 编辑回答
@@ -821,6 +822,9 @@ ui:
     change_btn_name: 更改邮箱
     msg:
       empty: 不能为空
+    resend_email:
+      url_label: Are you sure you want to resend the activation email?
+      url_text: You can also give the activation link above to the user.
   login:
     login_to_continue: 登录以继续
     info_sign: 没有账户？<1>注册</1>
@@ -916,7 +920,6 @@ ui:
         gravatar: Gravatar
         gravatar_text: 你可以更改图像在
         custom: 自定义
-        btn_refresh: 刷新
         custom_text: 您可以上传您的图片。
         default: 系统
         msg: 请上传头像
@@ -975,9 +978,9 @@ ui:
     flag_success: 感谢您的标记，我们会尽快处理。
     forbidden_operate_self: 禁止自己操作
     review: 您的修订将在审核通过后显示。
+    sent_success: Sent successfully
   related_question:
     title: 相关问题
-    btn: 我要提问
     answers: 个回答
   invite_to_answer:
     title: 受邀人
@@ -1001,6 +1004,7 @@ ui:
     useful: 有用的
     question_useful: 它是有用和明确的
     question_un_useful: 它不明确或没用的
+    question_bookmark: Bookmark this question
     answer_useful: 这是有用的
     answer_un_useful: 它是没有用的
     answers:
@@ -1061,6 +1065,8 @@ ui:
     question: 问题
     answer: 回答
     comment: 评论
+    refresh: Refresh
+    resend: Resend
   search:
     title: 搜索结果
     keywords: 关键词
@@ -1363,6 +1369,31 @@ ui:
       title: 更改用户状态为...
       btn_cancel: 取消
       btn_submit: 提交
+    new_password_modal:
+      title: Set new password
+      form:
+        fields:
+          password:
+            label: Password
+            text: The user will be logged out and need to login again.
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
+    user_modal:
+      title: Add new user
+      form:
+        fields:
+          display_name:
+            label: Display Name
+            msg: Display Name must be at 4-30 characters in length.
+          email:
+            label: Email
+            msg: Email is not valid.
+          password:
+            label: Password
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
     users:
       title: 用户
       name: 名称
@@ -1377,6 +1408,7 @@ ui:
       change: 更改
       all: 全部
       staff: 工作人员
+      more: More
       inactive: 不活跃
       suspended: 已封禁
       deleted: 已删除
@@ -1391,31 +1423,6 @@ ui:
       change_role: 更改角色
       show_logs: 显示日志
       add_user: 添加用户
-      new_password_modal:
-        title: 设置新密码
-        form:
-          fields:
-            password:
-              label: 密码
-              text: 用户将被注销，需要再次登录。
-              msg: 密码的长度必须是8-32个字符。
-        btn_cancel: 取消
-        btn_submit: 提交
-      user_modal:
-        title: 添加新用户
-        form:
-          fields:
-            display_name:
-              label: 昵称
-              msg: 显示名称长度必须为 4-30 个字符
-            email:
-              label: 邮箱
-              msg: 电子邮箱无效。
-            password:
-              label: 密码
-              msg: 密码的长度必须是8-32个字符。
-        btn_cancel: 取消
-        btn_submit: 提交
     questions:
       page_title: 问题
       normal: 正常
@@ -1584,7 +1591,7 @@ ui:
         text: 这将在 <body> 之后插入
       footer:
         label: 页脚
-        text: 这将在 </html> 之前插入
+        text: This will insert before </body>.
       sidebar:
         label: 侧边栏
         text: 这将插入侧边栏中。
