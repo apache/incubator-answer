@@ -154,3 +154,5 @@ require (
 )
 
 replace lukechampine.com/uint128 v1.1.1 => github.com/aichy126/uint128 v1.1.1
+
+replace modernc.org/cc/v3 v3.40.0 => gitlab.com/cznic/cc/v3 v3.40.0
