@@ -105,8 +105,8 @@ const Index: React.FC<Props> = ({ callback }) => {
     }
 
     register(reqParams)
-      .then((res) => {
-        emailCaptcha.close();
+      .then(async (res) => {
+        await emailCaptcha.close();
         updateUser(res);
         callback();
       })
