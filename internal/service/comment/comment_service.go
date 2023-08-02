@@ -58,13 +58,15 @@ func (c *CommentQuery) GetOrderBy() string {
 
 // CommentService user service
 type CommentService struct {
-	commentRepo       CommentRepo
-	commentCommonRepo comment_common.CommentCommonRepo
-	userCommon        *usercommon.UserCommon
-	voteCommon        activity_common.VoteRepo
-	objectInfoService *object_info.ObjService
-	emailService      *export.EmailService
-	userRepo          usercommon.UserRepo
+	commentRepo              CommentRepo
+	commentCommonRepo        comment_common.CommentCommonRepo
+	userCommon               *usercommon.UserCommon
+	voteCommon               activity_common.VoteRepo
+	objectInfoService        *object_info.ObjService
+	emailService             *export.EmailService
+	userRepo                 usercommon.UserRepo
+	notificationQueueService notice_queue.NotificationQueueService
+	activityQueueService     activity_queue.ActivityQueueService
 }
 
 // NewCommentService new comment service
@@ -76,15 +78,19 @@ func NewCommentService(
 	voteCommon activity_common.VoteRepo,
 	emailService *export.EmailService,
 	userRepo usercommon.UserRepo,
+	notificationQueueService notice_queue.NotificationQueueService,
+	activityQueueService activity_queue.ActivityQueueService,
 ) *CommentService {
 	return &CommentService{
-		commentRepo:       commentRepo,
-		commentCommonRepo: commentCommonRepo,
-		userCommon:        userCommon,
-		voteCommon:        voteCommon,
-		objectInfoService: objectInfoService,
-		emailService:      emailService,
-		userRepo:          userRepo,
+		commentRepo:              commentRepo,
+		commentCommonRepo:        commentCommonRepo,
+		userCommon:               userCommon,
+		voteCommon:               voteCommon,
+		objectInfoService:        objectInfoService,
+		emailService:             emailService,
+		userRepo:                 userRepo,
+		notificationQueueService: notificationQueueService,
+		activityQueueService:     activityQueueService,
 	}
 }
 
@@ -161,7 +167,7 @@ func (cs *CommentService) AddComment(ctx context.Context, req *schema.AddComment
 	case constant.AnswerObjectType:
 		activityMsg.ActivityTypeKey = constant.ActAnswerCommented
 	}
-	activity_queue.AddActivity(activityMsg)
+	cs.activityQueueService.Send(ctx, activityMsg)
 	return resp, nil
 }
 
@@ -476,7 +482,7 @@ func (cs *CommentService) notificationQuestionComment(ctx context.Context, quest
 	}
 	msg.ObjectType = constant.CommentObjectType
 	msg.NotificationAction = constant.NotificationCommentQuestion
-	notice_queue.AddNotification(msg)
+	cs.notificationQueueService.Send(ctx, msg)
 
 	receiverUserInfo, exist, err := cs.userRepo.GetByUserID(ctx, questionUserID)
 	if err != nil {
@@ -535,7 +541,7 @@ func (cs *CommentService) notificationAnswerComment(ctx context.Context,
 	}
 	msg.ObjectType = constant.CommentObjectType
 	msg.NotificationAction = constant.NotificationCommentAnswer
-	notice_queue.AddNotification(msg)
+	cs.notificationQueueService.Send(ctx, msg)
 
 	receiverUserInfo, exist, err := cs.userRepo.GetByUserID(ctx, answerUserID)
 	if err != nil {
@@ -591,7 +597,7 @@ func (cs *CommentService) notificationCommentReply(ctx context.Context, replyUse
 	}
 	msg.ObjectType = constant.CommentObjectType
 	msg.NotificationAction = constant.NotificationReplyToYou
-	notice_queue.AddNotification(msg)
+	cs.notificationQueueService.Send(ctx, msg)
 }
 
 func (cs *CommentService) notificationMention(
@@ -612,7 +618,7 @@ func (cs *CommentService) notificationMention(
 			}
 			msg.ObjectType = constant.CommentObjectType
 			msg.NotificationAction = constant.NotificationMentionYou
-			notice_queue.AddNotification(msg)
+			cs.notificationQueueService.Send(ctx, msg)
 			alreadyNotifiedUserIDs = append(alreadyNotifiedUserIDs, userInfo.ID)
 		}
 	}

@@ -107,7 +107,11 @@ backend:
       other: 管理标签同义词
   email:
     other: 邮箱
+  e_mail:
+    other: 邮箱
   password:
+    other: 密码
+  pass:
     other: 密码
   email_or_password_wrong_error:
     other: 邮箱和密码不匹配。

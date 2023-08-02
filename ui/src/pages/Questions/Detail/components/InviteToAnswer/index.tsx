@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import { Avatar } from '@/components';
 import { getInviteUser, putInviteUser } from '@/services';
 import type * as Type from '@/common/interface';
+import { useCaptchaModal } from '@/hooks';
 
 import PeopleDropdown from './PeopleDropdown';
 
@@ -22,6 +23,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
   const MAX_ASK_NUMBER = 5;
   const [editing, setEditing] = useState(false);
   const [users, setUsers] = useState<Type.UserInfoBase[]>();
+  const iaCaptcha = useCaptchaModal('invitation_answer');
 
   const initInviteUsers = () => {
     if (!questionId) {
@@ -60,14 +62,23 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
     const names = users.map((_) => {
       return _.username;
     });
-    putInviteUser(questionId, names)
-      .then(() => {
-        setEditing(false);
-      })
-      .catch((ex) => {
-        console.log('ex: ', ex);
-      });
+    iaCaptcha.check(() => {
+      const imgCode: Type.ImgCodeReq = {};
+      iaCaptcha.resolveCaptchaReq(imgCode);
+      putInviteUser(questionId, names, imgCode)
+        .then(async () => {
+          await iaCaptcha.close();
+          setEditing(false);
+        })
+        .catch((ex) => {
+          if (ex.isError) {
+            iaCaptcha.handleCaptchaError(ex.list);
+          }
+          console.log('ex: ', ex);
+        });
+    });
   };
+
   useEffect(() => {
     initInviteUsers();
   }, [questionId]);
@@ -119,6 +130,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
                     avatar={user.avatar}
                     size="20"
                     className="rounded-1"
+                    alt={user.display_name}
                   />
                   <span className="text-nowrap ms-2">{user.display_name}</span>
                   {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
@@ -135,7 +147,12 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
                 key={user.username}
                 to={`/users/${user.username}`}
                 className="mx-2 my-1 d-inline-flex flex-nowrap">
-                <Avatar avatar={user.avatar} size="24" className="rounded-1" />
+                <Avatar
+                  avatar={user.avatar}
+                  size="24"
+                  alt={user.display_name}
+                  className="rounded-1"
+                />
                 <small className="text-nowrap ms-2">{user.display_name}</small>
               </Link>
             );

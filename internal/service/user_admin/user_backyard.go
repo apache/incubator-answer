@@ -3,6 +3,8 @@ package user_admin
 import (
 	"context"
 	"fmt"
+	"github.com/answerdev/answer/internal/service/export"
+	"github.com/google/uuid"
 	"net/mail"
 	"strings"
 	"time"
@@ -41,7 +43,8 @@ type UserAdminService struct {
 	authService           *auth.AuthService
 	userCommonService     *usercommon.UserCommon
 	userActivity          activity.UserActiveActivityRepo
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService
+	emailService          *export.EmailService
 }
 
 // NewUserAdminService new user admin service
@@ -51,7 +54,8 @@ func NewUserAdminService(
 	authService *auth.AuthService,
 	userCommonService *usercommon.UserCommon,
 	userActivity activity.UserActiveActivityRepo,
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
+	emailService *export.EmailService,
 ) *UserAdminService {
 	return &UserAdminService{
 		userRepo:              userRepo,
@@ -60,6 +64,7 @@ func NewUserAdminService(
 		userCommonService:     userCommonService,
 		userActivity:          userActivity,
 		siteInfoCommonService: siteInfoCommonService,
+		emailService:          emailService,
 	}
 }
 
@@ -292,4 +297,62 @@ func (us *UserAdminService) setUserRoleInfo(ctx context.Context, resp []*schema.
 		u.RoleID = r.ID
 		u.RoleName = r.Name
 	}
+}
+
+func (us *UserAdminService) GetUserActivation(ctx context.Context, req *schema.GetUserActivationReq) (
+	resp *schema.GetUserActivationResp, err error) {
+	user, exist, err := us.userRepo.GetUserInfo(ctx, req.UserID)
+	if err != nil {
+		return nil, err
+	}
+	if !exist {
+		return nil, errors.BadRequest(reason.UserNotFound)
+	}
+
+	general, err := us.siteInfoCommonService.GetSiteGeneral(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	data := &schema.EmailCodeContent{
+		Email:  user.EMail,
+		UserID: user.ID,
+	}
+	code := uuid.NewString()
+	us.emailService.SaveCode(ctx, code, data.ToJSONString())
+	resp = &schema.GetUserActivationResp{
+		ActivationURL: fmt.Sprintf("%s/users/account-activation?code=%s", general.SiteUrl, code),
+	}
+	return resp, nil
+}
+
+// SendUserActivation send user activation email
+func (us *UserAdminService) SendUserActivation(ctx context.Context, req *schema.SendUserActivationReq) (err error) {
+	user, exist, err := us.userRepo.GetUserInfo(ctx, req.UserID)
+	if err != nil {
+		return err
+	}
+	if !exist {
+		return errors.BadRequest(reason.UserNotFound)
+	}
+
+	general, err := us.siteInfoCommonService.GetSiteGeneral(ctx)
+	if err != nil {
+		return err
+	}
+
+	data := &schema.EmailCodeContent{
+		Email:  user.EMail,
+		UserID: user.ID,
+	}
+	code := uuid.NewString()
+	us.emailService.SaveCode(ctx, code, data.ToJSONString())
+
+	verifyEmailURL := fmt.Sprintf("%s/users/account-activation?code=%s", general.SiteUrl, code)
+	title, body, err := us.emailService.RegisterTemplate(ctx, verifyEmailURL)
+	if err != nil {
+		return err
+	}
+	go us.emailService.SendAndSaveCode(ctx, user.EMail, title, body, code, data.ToJSONString())
+	return nil
 }

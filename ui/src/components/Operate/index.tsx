@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import { Modal } from '@/components';
-import { useReportModal, useToast } from '@/hooks';
+import { useReportModal, useToast, useCaptchaModal } from '@/hooks';
 import { QuestionOperationReq } from '@/common/interface';
 import Share from '../Share';
 import {
@@ -44,6 +44,7 @@ const Index: FC<IProps> = ({
   const toast = useToast();
   const navigate = useNavigate();
   const reportModal = useReportModal();
+  const dCaptcha = useCaptchaModal('delete');
 
   const refreshQuestion = () => {
     callback?.('default');
@@ -77,14 +78,28 @@ const Index: FC<IProps> = ({
         confirmBtnVariant: 'danger',
         confirmText: t('delete', { keyPrefix: 'btns' }),
         onConfirm: () => {
-          deleteQuestion({
-            id: qid,
-          }).then(() => {
-            toast.onShow({
-              msg: t('post_deleted', { keyPrefix: 'messages' }),
-              variant: 'success',
-            });
-            callback?.('delete_question');
+          dCaptcha.check(() => {
+            const req = {
+              id: qid,
+              captcha_code: undefined,
+              captcha_id: undefined,
+            };
+            dCaptcha.resolveCaptchaReq(req);
+
+            deleteQuestion(req)
+              .then(async () => {
+                await dCaptcha.close();
+                toast.onShow({
+                  msg: t('post_deleted', { keyPrefix: 'messages' }),
+                  variant: 'success',
+                });
+                callback?.('delete_question');
+              })
+              .catch((ex) => {
+                if (ex.isError) {
+                  dCaptcha.handleCaptchaError(ex.list);
+                }
+              });
           });
         },
       });
@@ -98,15 +113,29 @@ const Index: FC<IProps> = ({
         confirmBtnVariant: 'danger',
         confirmText: t('delete', { keyPrefix: 'btns' }),
         onConfirm: () => {
-          deleteAnswer({
-            id: aid,
-          }).then(() => {
-            // refresh page
-            toast.onShow({
-              msg: t('tip_answer_deleted'),
-              variant: 'success',
-            });
-            callback?.('all');
+          dCaptcha.check(() => {
+            const req = {
+              id: aid,
+              captcha_code: undefined,
+              captcha_id: undefined,
+            };
+            dCaptcha.resolveCaptchaReq(req);
+
+            deleteAnswer(req)
+              .then(async () => {
+                await dCaptcha.close();
+                // refresh page
+                toast.onShow({
+                  msg: t('tip_answer_deleted'),
+                  variant: 'success',
+                });
+                callback?.('all');
+              })
+              .catch((ex) => {
+                if (ex.isError) {
+                  dCaptcha.handleCaptchaError(ex.list);
+                }
+              });
           });
         },
       });
@@ -271,7 +300,7 @@ const Index: FC<IProps> = ({
         );
       })}
       {secondAction.length > 0 && (
-        <Dropdown className="ms-3">
+        <Dropdown className="ms-3 d-flex">
           <Dropdown.Toggle
             variant="link"
             size="sm"

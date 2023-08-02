@@ -15,7 +15,9 @@ type AddReportReq struct {
 	// report content
 	Content string `validate:"omitempty,gt=0,lte=500" json:"content"`
 	// user id
-	UserID string `json:"-"`
+	UserID      string `json:"-"`
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 // GetReportListReq get report list all request

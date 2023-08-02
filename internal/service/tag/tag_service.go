@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	tagcommonser "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/pkg/htmltext"
+	"github.com/jinzhu/copier"
 
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -18,18 +19,18 @@ import (
 	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/permission"
 	"github.com/answerdev/answer/pkg/converter"
-	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
 
 // TagService user service
 type TagService struct {
-	tagRepo          tagcommonser.TagRepo
-	tagCommonService *tagcommonser.TagCommonService
-	revisionService  *revision_common.RevisionService
-	followCommon     activity_common.FollowRepo
-	siteInfoService  *siteinfo_common.SiteInfoCommonService
+	tagRepo              tagcommonser.TagRepo
+	tagCommonService     *tagcommonser.TagCommonService
+	revisionService      *revision_common.RevisionService
+	followCommon         activity_common.FollowRepo
+	siteInfoService      siteinfo_common.SiteInfoCommonService
+	activityQueueService activity_queue.ActivityQueueService
 }
 
 // NewTagService new tag service
@@ -38,13 +39,16 @@ func NewTagService(
 	tagCommonService *tagcommonser.TagCommonService,
 	revisionService *revision_common.RevisionService,
 	followCommon activity_common.FollowRepo,
-	siteInfoService *siteinfo_common.SiteInfoCommonService) *TagService {
+	siteInfoService siteinfo_common.SiteInfoCommonService,
+	activityQueueService activity_queue.ActivityQueueService,
+) *TagService {
 	return &TagService{
-		tagRepo:          tagRepo,
-		tagCommonService: tagCommonService,
-		revisionService:  revisionService,
-		followCommon:     followCommon,
-		siteInfoService:  siteInfoService,
+		tagRepo:              tagRepo,
+		tagCommonService:     tagCommonService,
+		revisionService:      revisionService,
+		followCommon:         followCommon,
+		siteInfoService:      siteInfoService,
+		activityQueueService: activityQueueService,
 	}
 }
 
@@ -73,7 +77,7 @@ func (ts *TagService) RemoveTag(ctx context.Context, req *schema.RemoveTagReq) (
 	if err != nil {
 		return err
 	}
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	ts.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           req.UserID,
 		ObjectID:         req.TagID,
 		OriginalObjectID: req.TagID,
@@ -298,7 +302,7 @@ func (ts *TagService) UpdateTagSynonym(ctx context.Context, req *schema.UpdateTa
 			if err != nil {
 				return err
 			}
-			activity_queue.AddActivity(&schema.ActivityMsg{
+			ts.activityQueueService.Send(ctx, &schema.ActivityMsg{
 				UserID:           req.UserID,
 				ObjectID:         tag.ID,
 				OriginalObjectID: tag.ID,

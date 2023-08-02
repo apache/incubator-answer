@@ -44,3 +44,21 @@ export const updateUserPassword = (params: {
 }) => {
   return request.put('/answer/admin/api/user/password', params);
 };
+
+export const getUserActivation = (userId: string) => {
+  const apiUrl = `/answer/admin/api/user/activation`;
+  return request.get<{
+    activation_url: string;
+  }>(apiUrl, {
+    params: {
+      user_id: userId,
+    },
+  });
+};
+
+export const postUserActivation = (userId: string) => {
+  const apiUrl = `/answer/admin/api/user/activation`;
+  return request.post(apiUrl, {
+    user_id: userId,
+  });
+};

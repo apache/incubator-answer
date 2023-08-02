@@ -1,16 +1,16 @@
 package schema
 
 import (
+	"strings"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/pkg/converter"
+	"github.com/answerdev/answer/pkg/uid"
 )
 
 const (
-	SitemapMaxSize         = 50000
-	SitemapCachekey        = "answer@sitemap"
-	SitemapPageCachekey    = "answer@sitemap@page%d"
 	QuestionOperationPin   = "pin"
 	QuestionOperationUnPin = "unpin"
 	QuestionOperationHide  = "hide"
@@ -20,9 +20,11 @@ const (
 // RemoveQuestionReq delete question request
 type RemoveQuestionReq struct {
 	// question id
-	ID      string `validate:"required" json:"id"`
-	UserID  string `json:"-" ` // user_id
-	IsAdmin bool   `json:"-"`
+	ID          string `validate:"required" json:"id"`
+	UserID      string `json:"-" ` // user_id
+	IsAdmin     bool   `json:"-"`
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 type CloseQuestionReq struct {
@@ -63,6 +65,8 @@ type QuestionAdd struct {
 	// user id
 	UserID string `json:"-"`
 	QuestionPermission
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 func (req *QuestionAdd) Check() (errFields []*validator.FormErrorField, err error) {
@@ -90,6 +94,8 @@ type QuestionAddByAnswer struct {
 	UserID              string   `json:"-"`
 	MentionUsernameList []string `validate:"omitempty" json:"mention_username_list"`
 	QuestionPermission
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 func (req *QuestionAddByAnswer) Check() (errFields []*validator.FormErrorField, err error) {
@@ -153,6 +159,8 @@ type QuestionUpdate struct {
 	UserID       string `json:"-"`
 	NoNeedReview bool   `json:"-"`
 	QuestionPermission
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 type QuestionUpdateInviteUser struct {
@@ -160,6 +168,8 @@ type QuestionUpdateInviteUser struct {
 	InviteUser []string `validate:"omitempty"  json:"invite_user"`
 	UserID     string   `json:"-"`
 	QuestionPermission
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 func (req *QuestionUpdate) Check() (errFields []*validator.FormErrorField, err error) {
@@ -361,32 +371,67 @@ type QuestionPageRespOperator struct {
 	DisplayName string `json:"display_name"`
 }
 
-type AdminQuestionSearch struct {
-	Page      int    `json:"page" form:"page"`           // Query number of pages
-	PageSize  int    `json:"page_size" form:"page_size"` // Search page size
-	Status    int    `json:"-" form:"-"`
-	StatusStr string `json:"status" form:"status"`                                  // Status 1 Available 2 closed 10 UserDeleted
-	Query     string `validate:"omitempty,gt=0,lte=100" json:"query" form:"query" ` //Query string
+type AdminQuestionPageReq struct {
+	Page        int    `validate:"omitempty,min=1" form:"page"`
+	PageSize    int    `validate:"omitempty,min=1" form:"page_size"`
+	StatusCond  string `validate:"omitempty,oneof=normal closed deleted" form:"status"`
+	Query       string `validate:"omitempty,gt=0,lte=100" json:"query" form:"query" `
+	Status      int    `json:"-"`
+	LoginUserID string `json:"-"`
+}
+
+func (req *AdminQuestionPageReq) Check() (errField []*validator.FormErrorField, err error) {
+	status, ok := entity.AdminQuestionSearchStatus[req.StatusCond]
+	if ok {
+		req.Status = status
+	}
+	if req.Status == 0 {
+		req.Status = 1
+	}
+	return nil, nil
+}
+
+// AdminAnswerPageReq admin answer page req
+type AdminAnswerPageReq struct {
+	Page          int    `validate:"omitempty,min=1" form:"page"`
+	PageSize      int    `validate:"omitempty,min=1" form:"page_size"`
+	StatusCond    string `validate:"omitempty,oneof=normal deleted" form:"status"`
+	Query         string `validate:"omitempty,gt=0,lte=100" form:"query"`
+	QuestionID    string `validate:"omitempty,gt=0,lte=24" form:"question_id"`
+	QuestionTitle string `json:"-"`
+	AnswerID      string `json:"-"`
+	Status        int    `json:"-"`
+	LoginUserID   string `json:"-"`
+}
+
+func (req *AdminAnswerPageReq) Check() (errField []*validator.FormErrorField, err error) {
+	req.QuestionID = uid.DeShortID(req.QuestionID)
+	if req.QuestionID == "0" {
+		req.QuestionID = ""
+	}
+
+	if status, ok := entity.AdminAnswerSearchStatus[req.StatusCond]; ok {
+		req.Status = status
+	}
+	if req.Status == 0 {
+		req.Status = 1
+	}
+
+	// parse query condition
+	if len(req.Query) > 0 {
+		prefix := "answer:"
+		if strings.Contains(req.Query, prefix) {
+			req.AnswerID = uid.DeShortID(strings.TrimSpace(strings.TrimPrefix(req.Query, prefix)))
+		} else {
+			req.QuestionTitle = strings.TrimSpace(req.Query)
+		}
+	}
+	return nil, nil
 }
 
 type AdminSetQuestionStatusRequest struct {
 	StatusStr  string `json:"status" form:"status"`
 	QuestionID string `json:"question_id" form:"question_id"`
-}
-
-type SiteMapList struct {
-	QuestionIDs []*SiteMapQuestionInfo `json:"question_ids"`
-	MaxPageNum  []int                  `json:"max_page_num"`
-}
-
-type SiteMapPageList struct {
-	PageData []*SiteMapQuestionInfo `json:"page_data"`
-}
-
-type SiteMapQuestionInfo struct {
-	ID         string `json:"id"`
-	Title      string `json:"title"`
-	UpdateTime string `json:"time"`
 }
 
 type PersonalQuestionPageReq struct {

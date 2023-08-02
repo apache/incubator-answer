@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/schema"
 	answercommon "github.com/answerdev/answer/internal/service/answer_common"
@@ -51,7 +52,9 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 		if err != nil {
 			return nil, err
 		}
-		questionInfo.ID = uid.EnShortID(questionInfo.ID)
+		if handler.GetEnableShortID(ctx) {
+			questionInfo.ID = uid.EnShortID(questionInfo.ID)
+		}
 		if !exist {
 			break
 		}
@@ -87,7 +90,9 @@ func (os *ObjService) GetUnreviewedRevisionInfo(ctx context.Context, objectID st
 		if !exist {
 			break
 		}
-		questionInfo.ID = uid.EnShortID(questionInfo.ID)
+		if handler.GetEnableShortID(ctx) {
+			questionInfo.ID = uid.EnShortID(questionInfo.ID)
+		}
 		objInfo = &schema.UnreviewedRevisionInfoInfo{
 			ObjectID: answerInfo.ID,
 			Title:    questionInfo.Title,

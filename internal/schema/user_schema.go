@@ -164,11 +164,6 @@ const (
 
 	NoticeStatusOn  = 1
 	NoticeStatusOff = 2
-
-	ActionRecordTypeLogin      = "login"
-	ActionRecordTypeEmail      = "e_mail"
-	ActionRecordTypeFindPass   = "find_pass"
-	ActionRecordTypeModifyPass = "modify_pass"
 )
 
 var UserStatusShow = map[int]string{
@@ -331,8 +326,9 @@ type UserNoticeSetResp struct {
 
 type ActionRecordReq struct {
 	// action
-	Action string `validate:"required,oneof=login e_mail find_pass modify_pass" form:"action"`
+	Action string `validate:"required,oneof=email password edit_userinfo question answer comment edit invitation_answer search report delete vote" form:"action"`
 	IP     string `json:"-"`
+	UserID string `json:"-"`
 }
 
 type ActionRecordResp struct {

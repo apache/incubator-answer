@@ -3,7 +3,6 @@ package questioncommon
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"math"
 	"time"
 
@@ -48,26 +47,26 @@ type QuestionRepo interface {
 	UpdateAccepted(ctx context.Context, question *entity.Question) (err error)
 	UpdateLastAnswer(ctx context.Context, question *entity.Question) (err error)
 	FindByID(ctx context.Context, id []string) (questionList []*entity.Question, err error)
-	AdminSearchList(ctx context.Context, search *schema.AdminQuestionSearch) ([]*entity.Question, int64, error)
+	AdminQuestionPage(ctx context.Context, search *schema.AdminQuestionPageReq) ([]*entity.Question, int64, error)
 	GetQuestionCount(ctx context.Context) (count int64, err error)
 	GetUserQuestionCount(ctx context.Context, userID string) (count int64, err error)
-	GetQuestionCountByIDs(ctx context.Context, ids []string) (count int64, err error)
-	GetQuestionIDsPage(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error)
+	SitemapQuestions(ctx context.Context, page, pageSize int) (questionIDList []*schema.SiteMapQuestionInfo, err error)
 }
 
 // QuestionCommon user service
 type QuestionCommon struct {
-	questionRepo     QuestionRepo
-	answerRepo       answercommon.AnswerRepo
-	voteRepo         activity_common.VoteRepo
-	followCommon     activity_common.FollowRepo
-	tagCommon        *tagcommon.TagCommonService
-	userCommon       *usercommon.UserCommon
-	collectionCommon *collectioncommon.CollectionCommon
-	AnswerCommon     *answercommon.AnswerCommon
-	metaService      *meta.MetaService
-	configService    *config.ConfigService
-	data             *data.Data
+	questionRepo         QuestionRepo
+	answerRepo           answercommon.AnswerRepo
+	voteRepo             activity_common.VoteRepo
+	followCommon         activity_common.FollowRepo
+	tagCommon            *tagcommon.TagCommonService
+	userCommon           *usercommon.UserCommon
+	collectionCommon     *collectioncommon.CollectionCommon
+	AnswerCommon         *answercommon.AnswerCommon
+	metaService          *meta.MetaService
+	configService        *config.ConfigService
+	activityQueueService activity_queue.ActivityQueueService
+	data                 *data.Data
 }
 
 func NewQuestionCommon(questionRepo QuestionRepo,
@@ -80,21 +79,22 @@ func NewQuestionCommon(questionRepo QuestionRepo,
 	answerCommon *answercommon.AnswerCommon,
 	metaService *meta.MetaService,
 	configService *config.ConfigService,
+	activityQueueService activity_queue.ActivityQueueService,
 	data *data.Data,
-
 ) *QuestionCommon {
 	return &QuestionCommon{
-		questionRepo:     questionRepo,
-		answerRepo:       answerRepo,
-		voteRepo:         voteRepo,
-		followCommon:     followCommon,
-		tagCommon:        tagCommon,
-		userCommon:       userCommon,
-		collectionCommon: collectionCommon,
-		AnswerCommon:     answerCommon,
-		metaService:      metaService,
-		configService:    configService,
-		data:             data,
+		questionRepo:         questionRepo,
+		answerRepo:           answerRepo,
+		voteRepo:             voteRepo,
+		followCommon:         followCommon,
+		tagCommon:            tagCommon,
+		userCommon:           userCommon,
+		collectionCommon:     collectionCommon,
+		AnswerCommon:         answerCommon,
+		metaService:          metaService,
+		configService:        configService,
+		activityQueueService: activityQueueService,
+		data:                 data,
 	}
 }
 
@@ -513,7 +513,7 @@ func (qs *QuestionCommon) CloseQuestion(ctx context.Context, req *schema.CloseQu
 		return err
 	}
 
-	activity_queue.AddActivity(&schema.ActivityMsg{
+	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 		UserID:           questionInfo.UserID,
 		ObjectID:         questionInfo.ID,
 		OriginalObjectID: questionInfo.ID,
@@ -551,40 +551,26 @@ func (as *QuestionCommon) RemoveAnswer(ctx context.Context, id string) (err erro
 }
 
 func (qs *QuestionCommon) SitemapCron(ctx context.Context) {
-	data := &schema.SiteMapList{}
 	questionNum, err := qs.questionRepo.GetQuestionCount(ctx)
 	if err != nil {
-		log.Error("GetQuestionCount error", err)
+		log.Error(err)
 		return
 	}
-	if questionNum <= schema.SitemapMaxSize {
-		questionIDList, err := qs.questionRepo.GetQuestionIDsPage(ctx, 0, int(questionNum))
+	if questionNum <= constant.SitemapMaxSize {
+		_, err = qs.questionRepo.SitemapQuestions(ctx, 1, int(questionNum))
 		if err != nil {
-			log.Error("GetQuestionIDsPage error", err)
+			log.Errorf("get site map question error: %v", err)
+		}
+		return
+	}
+
+	totalPages := int(math.Ceil(float64(questionNum) / float64(constant.SitemapMaxSize)))
+	for i := 1; i <= totalPages; i++ {
+		_, err = qs.questionRepo.SitemapQuestions(ctx, i, constant.SitemapMaxSize)
+		if err != nil {
+			log.Errorf("get site map question error: %v", err)
 			return
 		}
-		data.QuestionIDs = questionIDList
-
-	} else {
-		nums := make([]int, 0)
-		totalpages := int(math.Ceil(float64(questionNum) / float64(schema.SitemapMaxSize)))
-		for i := 1; i <= totalpages; i++ {
-			siteMapPagedata := &schema.SiteMapPageList{}
-			nums = append(nums, i)
-			questionIDList, err := qs.questionRepo.GetQuestionIDsPage(ctx, i, int(schema.SitemapMaxSize))
-			if err != nil {
-				log.Error("GetQuestionIDsPage error", err)
-				return
-			}
-			siteMapPagedata.PageData = questionIDList
-			if setCacheErr := qs.SetCache(ctx, fmt.Sprintf(schema.SitemapPageCachekey, i), siteMapPagedata); setCacheErr != nil {
-				log.Errorf("set sitemap cron SetCache failed: %s", setCacheErr)
-			}
-		}
-		data.MaxPageNum = nums
-	}
-	if setCacheErr := qs.SetCache(ctx, schema.SitemapCachekey, data); setCacheErr != nil {
-		log.Errorf("set sitemap cron SetCache failed: %s", setCacheErr)
 	}
 }
 
@@ -594,7 +580,7 @@ func (qs *QuestionCommon) SetCache(ctx context.Context, cachekey string, info in
 		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 
-	err = qs.data.Cache.SetString(ctx, cachekey, string(infoStr), schema.DashBoardCacheTime)
+	err = qs.data.Cache.SetString(ctx, cachekey, string(infoStr), schema.DashboardCacheTime)
 	if err != nil {
 		return errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}

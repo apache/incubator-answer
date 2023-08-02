@@ -8,7 +8,7 @@ import { unionBy } from 'lodash';
 
 import * as Types from '@/common/interface';
 import { Modal } from '@/components';
-import { usePageUsers, useReportModal } from '@/hooks';
+import { usePageUsers, useReportModal, useCaptchaModal } from '@/hooks';
 import {
   matchedUsers,
   parseUserInfo,
@@ -42,6 +42,11 @@ const Comment = ({ objectId, mode, commentId }) => {
   const [comments, setComments] = useState<any>([]);
 
   const reportModal = useReportModal();
+
+  const addCaptcha = useCaptchaModal('comment');
+  const editCaptcha = useCaptchaModal('edit');
+  const dCaptcha = useCaptchaModal('delete');
+  const vCaptcha = useCaptchaModal('vote');
 
   const { t } = useTranslation('translation', { keyPrefix: 'comment' });
   const scrollCallback = useCallback((el, co) => {
@@ -120,43 +125,79 @@ const Comment = ({ objectId, mode, commentId }) => {
     };
 
     if (item.type === 'edit') {
-      return updateComment({
-        ...params,
-        comment_id: item.comment_id,
-      }).then((res) => {
-        setComments(
-          comments.map((comment) => {
-            if (comment.comment_id === item.comment_id) {
-              comment.showEdit = false;
-              comment.parsed_text = res.parsed_text;
-              comment.original_text = res.original_text;
+      return editCaptcha.check(() => {
+        const up = {
+          ...params,
+          comment_id: item.comment_id,
+          captcha_code: undefined,
+          captcha_id: undefined,
+        };
+        editCaptcha.resolveCaptchaReq(up);
+
+        return updateComment(up)
+          .then(async (res) => {
+            await editCaptcha.close();
+            setComments(
+              comments.map((comment) => {
+                if (comment.comment_id === item.comment_id) {
+                  comment.showEdit = false;
+                  comment.parsed_text = res.parsed_text;
+                  comment.original_text = res.original_text;
+                }
+                return comment;
+              }),
+            );
+          })
+          .catch((err) => {
+            if (err.isError) {
+              editCaptcha.handleCaptchaError(err.list);
             }
-            return comment;
-          }),
-        );
+          });
       });
     }
-    return addComment(params).then((res) => {
-      if (item.type === 'reply') {
-        const index = comments.findIndex(
-          (comment) => comment.comment_id === item.comment_id,
-        );
-        comments[index].showReply = false;
-        comments.splice(index + 1, 0, res);
-        setComments([...comments]);
-      } else {
-        setComments([
-          ...comments.map((comment) => {
-            if (comment.comment_id === item.comment_id) {
-              comment.showReply = false;
-            }
-            return comment;
-          }),
-          res,
-        ]);
-      }
 
-      setVisibleComment(false);
+    return addCaptcha.check(() => {
+      const req = {
+        ...params,
+        captcha_code: undefined,
+        captcha_id: undefined,
+      };
+      addCaptcha.resolveCaptchaReq(req);
+
+      return addComment(req)
+        .then(async (res) => {
+          await addCaptcha.close();
+          if (item.type === 'reply') {
+            const index = comments.findIndex(
+              (comment) => comment.comment_id === item.comment_id,
+            );
+            comments[index].showReply = false;
+            comments.splice(index + 1, 0, res);
+            setComments([...comments]);
+          } else {
+            setComments([
+              ...comments.map((comment) => {
+                if (comment.comment_id === item.comment_id) {
+                  comment.showReply = false;
+                }
+                return comment;
+              }),
+              res,
+            ]);
+          }
+
+          setVisibleComment(false);
+        })
+        .catch((ex) => {
+          if (ex.isError) {
+            const captchaErr = addCaptcha.handleCaptchaError(ex.list);
+            // If it is not a CAPTCHA error, leave it to the subsequent error handling logic to continue processing.
+            if (!(captchaErr && ex.list.length === 1)) {
+              return Promise.reject(ex);
+            }
+          }
+          return Promise.resolve();
+        });
     });
   };
 
@@ -167,11 +208,23 @@ const Comment = ({ objectId, mode, commentId }) => {
       confirmBtnVariant: 'danger',
       confirmText: t('delete', { keyPrefix: 'btns' }),
       onConfirm: () => {
-        deleteComment(id).then(() => {
-          if (pageIndex === 0) {
-            mutate();
-          }
-          setComments(comments.filter((item) => item.comment_id !== id));
+        dCaptcha.check(() => {
+          const imgCode = { captcha_id: undefined, captcha_code: undefined };
+          dCaptcha.resolveCaptchaReq(imgCode);
+
+          deleteComment(id, imgCode)
+            .then(async () => {
+              await dCaptcha.close();
+              if (pageIndex === 0) {
+                mutate();
+              }
+              setComments(comments.filter((item) => item.comment_id !== id));
+            })
+            .catch((ex) => {
+              if (ex.isError) {
+                dCaptcha.handleCaptchaError(ex.list);
+              }
+            });
         });
       },
     });
@@ -182,24 +235,40 @@ const Comment = ({ objectId, mode, commentId }) => {
       return;
     }
 
-    postVote(
-      {
-        object_id: id,
-        is_cancel,
-      },
-      'up',
-    ).then(() => {
-      setComments(
-        comments.map((item) => {
-          if (item.comment_id === id) {
-            item.vote_count = is_cancel
-              ? item.vote_count - 1
-              : item.vote_count + 1;
-            item.is_vote = !is_cancel;
+    vCaptcha.check(() => {
+      const imgCode: Types.ImgCodeReq = {
+        captcha_id: undefined,
+        captcha_code: undefined,
+      };
+      vCaptcha.resolveCaptchaReq(imgCode);
+
+      postVote(
+        {
+          object_id: id,
+          is_cancel,
+          ...imgCode,
+        },
+        'up',
+      )
+        .then(async () => {
+          await vCaptcha.close();
+          setComments(
+            comments.map((item) => {
+              if (item.comment_id === id) {
+                item.vote_count = is_cancel
+                  ? item.vote_count - 1
+                  : item.vote_count + 1;
+                item.is_vote = !is_cancel;
+              }
+              return item;
+            }),
+          );
+        })
+        .catch((ex) => {
+          if (ex.isError) {
+            vCaptcha.handleCaptchaError(ex.list);
           }
-          return item;
-        }),
-      );
+        });
     });
   };
 

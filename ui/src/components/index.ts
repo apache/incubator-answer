@@ -14,7 +14,6 @@ import Operate from './Operate';
 import UserCard from './UserCard';
 import Pagination from './Pagination';
 import Comment from './Comment';
-import PicAuthCodeModal from './Modal/PicAuthCodeModal';
 import TextArea from './TextArea';
 import Mentions from './Mentions';
 import FormatTime from './FormatTime';
@@ -26,7 +25,6 @@ import FollowingTags from './FollowingTags';
 import QueryGroup from './QueryGroup';
 import BrandUpload from './BrandUpload';
 import SchemaForm, { JSONSchema, UISchema, initFormData } from './SchemaForm';
-import Labels from './LabelsCard';
 import DiffContent from './DiffContent';
 import Customize from './Customize';
 import CustomizeTheme from './CustomizeTheme';
@@ -60,7 +58,6 @@ export {
   UserCard,
   Pagination,
   Comment,
-  PicAuthCodeModal,
   TextArea,
   Mentions,
   FormatTime,
@@ -74,7 +71,6 @@ export {
   BrandUpload,
   SchemaForm,
   initFormData,
-  Labels,
   DiffContent,
   Customize,
   CustomizeTheme,

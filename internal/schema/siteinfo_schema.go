@@ -14,11 +14,6 @@ import (
 	"github.com/segmentfault/pacman/errors"
 )
 
-const PermaLinkQuestionIDAndTitle = 1          // /questions/10010000000000001/post-title
-const PermaLinkQuestionID = 2                  // /questions/10010000000000001
-const PermaLinkQuestionIDAndTitleByShortID = 3 // /questions/11/post-title
-const PermaLinkQuestionIDByShortID = 4         // /questions/11
-
 // SiteGeneralReq site general request
 type SiteGeneralReq struct {
 	Name             string `validate:"required,sanitizer,gt=1,lte=128" form:"name" json:"name"`
@@ -26,11 +21,6 @@ type SiteGeneralReq struct {
 	Description      string `validate:"omitempty,sanitizer,gt=3,lte=2000" form:"description" json:"description"`
 	SiteUrl          string `validate:"required,sanitizer,gt=1,lte=512,url" form:"site_url" json:"site_url"`
 	ContactEmail     string `validate:"required,sanitizer,gt=1,lte=512,email" form:"contact_email" json:"contact_email"`
-}
-
-type SiteSeoReq struct {
-	PermaLink int    `validate:"required,lte=4,gte=0" form:"permalink" json:"permalink"`
-	Robots    string `validate:"required" form:"robots" json:"robots"`
 }
 
 func (r *SiteGeneralReq) FormatSiteUrl() {
@@ -127,6 +117,16 @@ type SiteThemeReq struct {
 	ThemeConfig map[string]interface{} `validate:"omitempty" json:"theme_config"`
 }
 
+type SiteSeoReq struct {
+	PermaLink int    `validate:"required,lte=4,gte=0" form:"permalink" json:"permalink"`
+	Robots    string `validate:"required" form:"robots" json:"robots"`
+}
+
+func (s *SiteSeoResp) IsShortLink() bool {
+	return s.PermaLink == constant.PermaLinkQuestionIDAndTitleByShortID ||
+		s.PermaLink == constant.PermaLinkQuestionIDByShortID
+}
+
 // SiteGeneralResp site general response
 type SiteGeneralResp SiteGeneralReq
 
@@ -186,7 +186,7 @@ type SiteInfoResp struct {
 	Login         *SiteLoginResp         `json:"login"`
 	Theme         *SiteThemeResp         `json:"theme"`
 	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
-	SiteSeo       *SiteSeoReq            `json:"site_seo"`
+	SiteSeo       *SiteSeoResp           `json:"site_seo"`
 	SiteUsers     *SiteUsersResp         `json:"site_users"`
 	Version       string                 `json:"version"`
 	Revision      string                 `json:"revision"`
@@ -195,7 +195,7 @@ type TemplateSiteInfoResp struct {
 	General       *SiteGeneralResp       `json:"general"`
 	Interface     *SiteInterfaceResp     `json:"interface"`
 	Branding      *SiteBrandingResp      `json:"branding"`
-	SiteSeo       *SiteSeoReq            `json:"site_seo"`
+	SiteSeo       *SiteSeoResp           `json:"site_seo"`
 	CustomCssHtml *SiteCustomCssHTMLResp `json:"custom_css_html"`
 	Title         string
 	Year          string
@@ -265,6 +265,16 @@ const (
 )
 
 type PrivilegeLevel int
+type PrivilegeOptions []*PrivilegeOption
+
+func (p PrivilegeOptions) Choose(level PrivilegeLevel) (option *PrivilegeOption) {
+	for _, op := range p {
+		if op.Level == level {
+			return op
+		}
+	}
+	return nil
+}
 
 // GetPrivilegesConfigResp get privileges config response
 type GetPrivilegesConfigResp struct {
@@ -285,7 +295,7 @@ type UpdatePrivilegesConfigReq struct {
 }
 
 var (
-	DefaultPrivilegeOptions      []*PrivilegeOption
+	DefaultPrivilegeOptions      PrivilegeOptions
 	privilegeOptionsLevelMapping = map[string][]int{
 		constant.RankQuestionAddKey:               {1, 1, 1},
 		constant.RankAnswerAddKey:                 {1, 1, 1},
@@ -293,8 +303,8 @@ var (
 		constant.RankReportAddKey:                 {1, 1, 1},
 		constant.RankCommentVoteUpKey:             {1, 1, 1},
 		constant.RankLinkUrlLimitKey:              {1, 10, 10},
-		constant.RankQuestionVoteUpKey:            {1, 1, 15},
-		constant.RankAnswerVoteUpKey:              {1, 1, 15},
+		constant.RankQuestionVoteUpKey:            {1, 8, 15},
+		constant.RankAnswerVoteUpKey:              {1, 8, 15},
 		constant.RankQuestionVoteDownKey:          {125, 125, 125},
 		constant.RankAnswerVoteDownKey:            {125, 125, 125},
 		constant.RankInviteSomeoneToAnswerKey:     {1, 500, 1000},

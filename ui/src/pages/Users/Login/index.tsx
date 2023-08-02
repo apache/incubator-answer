@@ -3,12 +3,8 @@ import { Container, Form, Button, Col } from 'react-bootstrap';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { usePageTags } from '@/hooks';
-import type {
-  LoginReqParams,
-  ImgCodeRes,
-  FormDataType,
-} from '@/common/interface';
+import { usePageTags, useCaptchaModal } from '@/hooks';
+import type { LoginReqParams, FormDataType } from '@/common/interface';
 import { Unactivate, WelcomeTitle, PluginRender } from '@/components';
 import {
   loggedUserInfoStore,
@@ -16,14 +12,12 @@ import {
   userCenterStore,
 } from '@/stores';
 import { floppyNavigation, guard, handleFormError, userCenter } from '@/utils';
-import { login, checkImgCode, UcAgent } from '@/services';
-import { PicAuthCodeModal } from '@/components/Modal';
+import { login, UcAgent } from '@/services';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [refresh, setRefresh] = useState(0);
   const { user: storeUser, update: updateUser } = loggedUserInfoStore((_) => _);
   const loginSetting = loginSettingStore((state) => state.login);
   const ucAgent = userCenterStore().agent;
@@ -45,34 +39,15 @@ const Index: React.FC = () => {
       isInvalid: false,
       errorMsg: '',
     },
-    captcha_code: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
   });
-  const [imgCode, setImgCode] = useState<ImgCodeRes>({
-    captcha_id: '',
-    captcha_img: '',
-    verify: false,
-  });
-  const [showModal, setModalState] = useState(false);
+
   const [step, setStep] = useState(1);
 
   const handleChange = (params: FormDataType) => {
     setFormData({ ...formData, ...params });
   };
 
-  const getImgCode = () => {
-    if (!canOriginalLogin) {
-      return;
-    }
-    checkImgCode({
-      action: 'login',
-    }).then((res) => {
-      setImgCode(res);
-    });
-  };
+  const passwordCaptcha = useCaptchaModal('password');
 
   const checkValidated = (): boolean => {
     let bol = true;
@@ -110,34 +85,31 @@ const Index: React.FC = () => {
       e_mail: formData.e_mail.value,
       pass: formData.pass.value,
     };
-    if (imgCode.verify) {
-      params.captcha_code = formData.captcha_code.value;
-      params.captcha_id = imgCode.captcha_id;
+
+    const captcha = passwordCaptcha.getCaptcha();
+    if (captcha?.verify) {
+      params.captcha_code = captcha.captcha_code;
+      params.captcha_id = captcha.captcha_id;
     }
 
     login(params)
-      .then((res) => {
+      .then(async (res) => {
+        await passwordCaptcha.close();
         updateUser(res);
         const userStat = guard.deriveLoginState();
         if (userStat.isNotActivated) {
           // inactive
           setStep(2);
-          setRefresh((pre) => pre + 1);
         } else {
           guard.handleLoginRedirect(navigate);
         }
-
-        setModalState(false);
       })
       .catch((err) => {
         if (err.isError) {
           const data = handleFormError(err, formData);
-          if (!err.list.find((v) => v.error_field.indexOf('captcha') >= 0)) {
-            setModalState(false);
-          }
           setFormData({ ...data });
+          passwordCaptcha.handleCaptchaError(err.list);
         }
-        setRefresh((pre) => pre + 1);
       });
   };
 
@@ -149,17 +121,10 @@ const Index: React.FC = () => {
       return;
     }
 
-    if (imgCode.verify) {
-      setModalState(true);
-      return;
-    }
-
-    handleLogin();
+    passwordCaptcha.check(() => {
+      handleLogin();
+    });
   };
-
-  useEffect(() => {
-    getImgCode();
-  }, [refresh]);
 
   useEffect(() => {
     const isInactive = searchParams.get('status');
@@ -168,6 +133,7 @@ const Index: React.FC = () => {
       setStep(2);
     }
   }, []);
+
   usePageTags({
     title: t('login', { keyPrefix: 'page_title' }),
   });
@@ -263,18 +229,6 @@ const Index: React.FC = () => {
       ) : null}
 
       {step === 2 && <Unactivate visible={step === 2} />}
-
-      <PicAuthCodeModal
-        visible={showModal}
-        data={{
-          captcha: formData.captcha_code,
-          imgCode,
-        }}
-        handleCaptcha={handleChange}
-        clickSubmit={handleLogin}
-        refreshImgCode={getImgCode}
-        onClose={() => setModalState(false)}
-      />
     </Container>
   );
 };

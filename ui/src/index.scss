@@ -26,6 +26,11 @@ body {
 a {
   text-decoration: none;
 }
+// If the image does not have a `src` attribute, it must break and may not trigger the `onerror` event.
+// With or without the `alt` attribute, it is visually hidden directly.
+img[src=""] {
+  visibility: hidden !important;
+}
 
 .btn-link {
   text-decoration: none;
@@ -177,9 +182,6 @@ a {
   display: inline-block;
 }
 
-.object-fit-contain {
-  object-fit: contain;
-}
 .fmt {
   width: 100%;
   h1 {
@@ -248,14 +250,6 @@ a {
 .upload-img-wrap {
   flex-grow: 1;
   height: 128px;
-}
-.badge-label {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  padding: 1px 0.5rem 2px;
-  height: 24px;
 }
 
 .review-text-delete {

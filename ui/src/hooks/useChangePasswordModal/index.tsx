@@ -17,7 +17,7 @@ interface IProps {
 }
 const useChangePasswordModal = (props: IProps = {}) => {
   const { t } = useTranslation('translation', {
-    keyPrefix: 'admin.users.new_password_modal',
+    keyPrefix: 'admin.new_password_modal',
   });
 
   const { title = t('title'), onConfirm } = props;

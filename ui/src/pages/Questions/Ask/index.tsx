@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import classNames from 'classnames';
 import { isEqual } from 'lodash';
 
-import { usePageTags, usePromptWithUnload } from '@/hooks';
+import { usePageTags, usePromptWithUnload, useCaptchaModal } from '@/hooks';
 import { Editor, EditorRef, TagSelector } from '@/components';
 import type * as Type from '@/common/interface';
 import { DRAFT_QUESTION_STORAGE_KEY } from '@/common/constants';
@@ -67,7 +67,7 @@ const Ask = () => {
   const [formData, setFormData] = useState<FormDataItem>(initFormData);
   const [immData, setImmData] = useState<FormDataItem>(initFormData);
   const [checked, setCheckState] = useState(false);
-  const [contentChanged, setContentChanged] = useState(false);
+  const contentChangedRef = useRef(false);
   const [focusType, setForceType] = useState('');
   const [hasDraft, setHasDraft] = useState(false);
   const resetForm = () => {
@@ -101,6 +101,9 @@ const Ask = () => {
   const { data: similarQuestions = { list: [] } } = useQueryQuestionByTitle(
     isEdit ? '' : formData.title.value,
   );
+
+  const saveCaptcha = useCaptchaModal('question');
+  const editCaptcha = useCaptchaModal('edit');
 
   const removeDraft = () => {
     saveDraft.save.cancel();
@@ -144,9 +147,9 @@ const Ask = () => {
           tags.value.map((v) => v.slug_name),
         )
       ) {
-        setContentChanged(true);
+        contentChangedRef.current = true;
       } else {
-        setContentChanged(false);
+        contentChangedRef.current = false;
       }
       return;
     }
@@ -167,15 +170,15 @@ const Ask = () => {
         },
         callback: () => setHasDraft(true),
       });
-      setContentChanged(true);
+      contentChangedRef.current = true;
     } else {
       removeDraft();
-      setContentChanged(false);
+      contentChangedRef.current = false;
     }
   }, [formData]);
 
   usePromptWithUnload({
-    when: contentChanged,
+    when: contentChangedRef.current,
   });
 
   const { data: revisions = [] } = useQueryRevisions(qid);
@@ -241,7 +244,6 @@ const Ask = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    setContentChanged(false);
     event.preventDefault();
     event.stopPropagation();
 
@@ -250,53 +252,80 @@ const Ask = () => {
       content: formData.content.value,
       tags: formData.tags.value,
     };
-    if (isEdit) {
-      modifyQuestion({
-        ...params,
-        id: qid,
-        edit_summary: formData.edit_summary.value,
-      })
-        .then((res) => {
-          navigate(pathFactory.questionLanding(qid, params.url_title), {
-            state: { isReview: res?.wait_for_review },
-          });
-        })
-        .catch((err) => {
-          if (err.isError) {
-            const data = handleFormError(err, formData);
-            setFormData({ ...data });
-          }
-        });
-    } else {
-      let res;
-      if (checked) {
-        res = await saveQuestionWidthAnaser({
-          ...params,
-          answer_content: formData.answer_content.value,
-        }).catch((err) => {
-          if (err.isError) {
-            const data = handleFormError(err, formData);
-            setFormData({ ...data });
-          }
-        });
-      } else {
-        res = await saveQuestion(params).catch((err) => {
-          if (err.isError) {
-            const data = handleFormError(err, formData);
-            setFormData({ ...data });
-          }
-        });
-      }
 
-      const id = res?.id || res?.question?.id;
-      if (id) {
-        if (checked) {
-          navigate(pathFactory.questionLanding(id, res?.question?.url_title));
-        } else {
-          navigate(pathFactory.questionLanding(id));
+    if (isEdit) {
+      editCaptcha.check(() => {
+        contentChangedRef.current = false;
+        const ep = {
+          ...params,
+          id: qid,
+          edit_summary: formData.edit_summary.value,
+        };
+        const imgCode = editCaptcha.getCaptcha();
+        if (imgCode.verify) {
+          ep.captcha_code = imgCode.captcha_code;
+          ep.captcha_id = imgCode.captcha_id;
         }
-      }
-      removeDraft();
+        modifyQuestion(ep)
+          .then(async (res) => {
+            await editCaptcha.close();
+            navigate(pathFactory.questionLanding(qid, params.url_title), {
+              state: { isReview: res?.wait_for_review },
+            });
+          })
+          .catch((err) => {
+            if (err.isError) {
+              editCaptcha.handleCaptchaError(err.list);
+              const data = handleFormError(err, formData);
+              setFormData({ ...data });
+            }
+          });
+      });
+    } else {
+      saveCaptcha.check(async () => {
+        contentChangedRef.current = false;
+        const imgCode = saveCaptcha.getCaptcha();
+        if (imgCode.verify) {
+          params.captcha_code = imgCode.captcha_code;
+          params.captcha_id = imgCode.captcha_id;
+        }
+        let res;
+        if (checked) {
+          res = await saveQuestionWidthAnaser({
+            ...params,
+            answer_content: formData.answer_content.value,
+          }).catch((err) => {
+            if (err.isError) {
+              const captchaErr = saveCaptcha.handleCaptchaError(err.list);
+              if (!(captchaErr && err.list.length === 1)) {
+                const data = handleFormError(err, formData);
+                setFormData({ ...data });
+              }
+            }
+          });
+        } else {
+          res = await saveQuestion(params).catch((err) => {
+            if (err.isError) {
+              const captchaErr = saveCaptcha.handleCaptchaError(err.list);
+              if (!(captchaErr && err.list.length === 1)) {
+                const data = handleFormError(err, formData);
+                setFormData({ ...data });
+              }
+            }
+          });
+        }
+
+        const id = res?.id || res?.question?.id;
+        if (id) {
+          await saveCaptcha.close();
+          if (checked) {
+            navigate(pathFactory.questionLanding(id, res?.question?.url_title));
+          } else {
+            navigate(pathFactory.questionLanding(id));
+          }
+        }
+        removeDraft();
+      });
     }
   };
   const backPage = () => {
@@ -347,6 +376,7 @@ const Ask = () => {
             <Form.Group controlId="title" className="mb-3">
               <Form.Label>{t('form.fields.title.label')}</Form.Label>
               <Form.Control
+                type="text"
                 value={formData.title.value}
                 isInvalid={formData.title.isInvalid}
                 onChange={handleTitleChange}

@@ -32,6 +32,7 @@ const Index: FC<Props> = ({
             size="40px"
             className="me-2 d-none d-md-block"
             searchStr="s=96"
+            alt={data?.display_name}
           />
 
           <Avatar
@@ -39,6 +40,7 @@ const Index: FC<Props> = ({
             size="24px"
             className="me-2 d-block d-md-none"
             searchStr="s=48"
+            alt={data?.display_name}
           />
         </Link>
       ) : (
@@ -48,6 +50,7 @@ const Index: FC<Props> = ({
             size="40px"
             className="me-2 d-none d-md-block"
             searchStr="s=96"
+            alt={data?.display_name}
           />
 
           <Avatar
@@ -55,6 +58,7 @@ const Index: FC<Props> = ({
             size="24px"
             className="me-2 d-block d-md-none"
             searchStr="s=48"
+            alt={data?.display_name}
           />
         </>
       )}

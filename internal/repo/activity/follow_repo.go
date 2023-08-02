@@ -43,7 +43,7 @@ func (ar *FollowRepo) Follow(ctx context.Context, objectID, userID string) error
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	activityType, err := ar.activityRepo.GetActivityTypeByObjKey(ctx, objectTypeStr, "follow")
+	activityType, err := ar.activityRepo.GetActivityTypeByObjectType(ctx, objectTypeStr, "follow")
 	if err != nil {
 		return err
 	}
@@ -110,7 +110,7 @@ func (ar *FollowRepo) FollowCancel(ctx context.Context, objectID, userID string)
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	activityType, err := ar.activityRepo.GetActivityTypeByObjKey(ctx, objectTypeStr, "follow")
+	activityType, err := ar.activityRepo.GetActivityTypeByObjectType(ctx, objectTypeStr, "follow")
 	if err != nil {
 		return err
 	}

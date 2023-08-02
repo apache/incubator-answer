@@ -3,6 +3,7 @@ package search_common
 import (
 	"context"
 	"fmt"
+	"github.com/answerdev/answer/plugin"
 	"strconv"
 	"strings"
 	"time"
@@ -426,6 +427,34 @@ func (sr *searchRepo) parseOrder(ctx context.Context, order string) (res string)
 	return
 }
 
+// ParseSearchPluginResult parse search plugin result
+func (sr *searchRepo) ParseSearchPluginResult(ctx context.Context, sres []plugin.SearchResult) (resp []schema.SearchResp, err error) {
+	var (
+		qres []map[string][]byte
+		res  = make([]map[string][]byte, 0)
+		b    *builder.Builder
+	)
+	for _, r := range sres {
+		switch r.Type {
+		case "question":
+			b = builder.MySQL().Select(qFields...).From("question").Where(builder.Eq{"id": r.ID}).
+				And(builder.Lt{"`status`": entity.QuestionStatusDeleted})
+		case "answer":
+			b = builder.MySQL().Select(aFields...).From("answer").LeftJoin("`question`", "`question`.`id` = `answer`.`question_id`").
+				Where(builder.Eq{"`answer`.`id`": r.ID}).
+				And(builder.Lt{"`question`.`status`": entity.QuestionStatusDeleted}).
+				And(builder.Lt{"`answer`.`status`": entity.AnswerStatusDeleted}).And(builder.Eq{"`question`.`show`": entity.QuestionShow})
+		}
+		qres, err = sr.data.DB.Context(ctx).Query(b)
+		if err != nil || len(qres) == 0 {
+			continue
+		}
+		res = append(res, qres[0])
+	}
+	return sr.parseResult(ctx, res)
+}
+
+// parseResult parse search result, return the data structure
 func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) (resp []schema.SearchResp, err error) {
 	for _, r := range res {
 		var (

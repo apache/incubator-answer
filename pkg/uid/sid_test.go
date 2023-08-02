@@ -31,7 +31,6 @@ func Test_ShortID(t *testing.T) {
 
 func Test_EnDeShortID(t *testing.T) {
 	nums := []string{"0", "1", "10", "100", "1000", "10000", "100000", "1234567", "10000000000000000", "10010000000001316", "19930000000001316"}
-	ShortIDSwitch = true
 	for _, num := range nums {
 		code := EnShortID(num)
 		denum := DeShortID(code)
@@ -49,6 +48,6 @@ func Test_Demo(t *testing.T) {
 
 // https://answer.dev.segmentfault.com/questions/D112
 func Test_DeCode(t *testing.T) {
-	aaa := DeShortID("D112")
+	aaa := DeShortID("D1w2")
 	spew.Dump(aaa)
 }

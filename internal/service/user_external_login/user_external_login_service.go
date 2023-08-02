@@ -41,7 +41,7 @@ type UserExternalLoginService struct {
 	userExternalLoginRepo UserExternalLoginRepo
 	userCommonService     *usercommon.UserCommon
 	emailService          *export.EmailService
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService
 	userActivity          activity.UserActiveActivityRepo
 }
 
@@ -51,7 +51,7 @@ func NewUserExternalLoginService(
 	userCommonService *usercommon.UserCommon,
 	userExternalLoginRepo UserExternalLoginRepo,
 	emailService *export.EmailService,
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
 	userActivity activity.UserActiveActivityRepo,
 ) *UserExternalLoginService {
 	return &UserExternalLoginService{

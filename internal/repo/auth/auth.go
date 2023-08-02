@@ -3,12 +3,12 @@ package auth
 import (
 	"context"
 	"encoding/json"
+	"github.com/answerdev/answer/internal/service/auth"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -16,6 +16,13 @@ import (
 // authRepo auth repository
 type authRepo struct {
 	data *data.Data
+}
+
+// NewAuthRepo new repository
+func NewAuthRepo(data *data.Data) auth.AuthRepo {
+	return &authRepo{
+		data: data,
+	}
 }
 
 // GetUserCacheInfo get user cache info
@@ -172,12 +179,5 @@ func (ar *authRepo) RemoveUserTokens(ctx context.Context, userID string, remainT
 	}
 	if err := ar.data.Cache.Del(ctx, key); err != nil {
 		log.Error(err)
-	}
-}
-
-// NewAuthRepo new repository
-func NewAuthRepo(data *data.Data) auth.AuthRepo {
-	return &authRepo{
-		data: data,
 	}
 }

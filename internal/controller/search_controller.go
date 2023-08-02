@@ -3,19 +3,32 @@ package controller
 import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
+	"github.com/answerdev/answer/internal/service/action"
 	"github.com/gin-gonic/gin"
+	"github.com/segmentfault/pacman/errors"
 )
 
 // SearchController tag controller
 type SearchController struct {
 	searchService *service.SearchService
+	actionService *action.CaptchaService
 }
 
 // NewSearchController new controller
-func NewSearchController(searchService *service.SearchService) *SearchController {
-	return &SearchController{searchService: searchService}
+func NewSearchController(
+	searchService *service.SearchService,
+	actionService *action.CaptchaService,
+) *SearchController {
+	return &SearchController{
+		searchService: searchService,
+		actionService: actionService,
+	}
 }
 
 // Search godoc
@@ -35,12 +48,29 @@ func (sc *SearchController) Search(ctx *gin.Context) {
 		return
 	}
 	dto.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	unit := ctx.ClientIP()
+	if dto.UserID != "" {
+		unit = dto.UserID
+	}
+	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+	if !isAdmin {
+		captchaPass := sc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionSearch, unit, dto.CaptchaID, dto.CaptchaCode)
+		if !captchaPass {
+			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "captcha_code",
+				ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.CaptchaVerificationFailed),
+			})
+			handler.HandleResponse(ctx, errors.BadRequest(reason.CaptchaVerificationFailed), errFields)
+			return
+		}
+	}
 
-	resp, total, extra, err := sc.searchService.Search(ctx, &dto)
-
+	resp, total, err := sc.searchService.Search(ctx, &dto)
+	if !isAdmin {
+		sc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionSearch, unit)
+	}
 	handler.HandleResponse(ctx, err, schema.SearchListResp{
 		Total:      total,
 		SearchResp: resp,
-		Extra:      extra,
 	})
 }

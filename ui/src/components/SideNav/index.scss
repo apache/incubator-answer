@@ -5,7 +5,7 @@
     width: auto;
     top: 62px;
     box-sizing: border-box;
-    max-height: calc(100vh - 74px - 62px - 24px);
+    max-height: calc(100vh - 62px);
     overflow-y: auto;
     margin-bottom: 8px;
   }
@@ -36,6 +36,9 @@
 
 @media screen and (max-width: 991.9px) {
   #sideNav {
+    .nav-wrap {
+      max-height: fit-content;
+    }
     .nav {
       max-width: 100%;
     }

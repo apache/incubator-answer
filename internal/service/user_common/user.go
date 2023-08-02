@@ -36,7 +36,7 @@ type UserRepo interface {
 	GetByUsernames(ctx context.Context, usernames []string) ([]*entity.User, error)
 	GetByEmail(ctx context.Context, email string) (userInfo *entity.User, exist bool, err error)
 	GetUserCount(ctx context.Context) (count int64, err error)
-	SearchUserListByName(ctx context.Context, name string) (userList []*entity.User, err error)
+	SearchUserListByName(ctx context.Context, name string, limit int) (userList []*entity.User, err error)
 }
 
 // UserCommon user service
@@ -44,14 +44,14 @@ type UserCommon struct {
 	userRepo              UserRepo
 	userRoleService       *role.UserRoleRelService
 	authService           *auth.AuthService
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService
 }
 
 func NewUserCommon(
 	userRepo UserRepo,
 	userRoleService *role.UserRoleRelService,
 	authService *auth.AuthService,
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService,
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
 ) *UserCommon {
 	return &UserCommon{
 		userRepo:              userRepo,
@@ -151,7 +151,7 @@ func (us *UserCommon) MakeUsername(ctx context.Context, displayName string) (use
 		}
 	}
 
-	username = strings.ReplaceAll(displayName, " ", "_")
+	username = strings.ReplaceAll(displayName, " ", "-")
 	username = strings.ToLower(username)
 	suffix := ""
 

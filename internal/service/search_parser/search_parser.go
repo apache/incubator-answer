@@ -2,6 +2,7 @@ package search_parser
 
 import (
 	"context"
+	"github.com/answerdev/answer/internal/base/constant"
 	"regexp"
 	"strings"
 
@@ -25,144 +26,69 @@ func NewSearchParser(tagCommonService *tag_common.TagCommonService, userCommon *
 
 // ParseStructure parse search structure, maybe match one of type all/questions/answers,
 // but if match two type, it will return false
-func (sp *SearchParser) ParseStructure(dto *schema.SearchDTO) (
-	searchType string,
-	// search all
-	userID string,
-	votes int,
-	// search questions
-	notAccepted bool,
-	isQuestion bool,
-	views,
-	answers int,
-	// search answers
-	accepted bool,
-	questionID string,
-	isAnswer bool,
-	// common fields
-	tags,
-	words []string,
-) {
+func (sp *SearchParser) ParseStructure(ctx context.Context, dto *schema.SearchDTO) (cond *schema.SearchCondition) {
+	cond = &schema.SearchCondition{}
 	var (
-		query         = dto.Query
-		currentUserID = dto.UserID
-		all           = 0
-		q             = 0
-		a             = 0
-		withWords     []string
-		limitWords    = 5
+		query      = dto.Query
+		limitWords = 5
 	)
 
 	// match tags
-	tags = sp.parseTags(&query)
+	cond.Tags = sp.parseTags(ctx, &query)
 
 	// match all
-	userID = sp.parseUserID(&query, currentUserID)
-	if userID != "" {
-		searchType = "all"
-		all = 1
-	}
-	votes = sp.parseVotes(&query)
-	if votes != -1 {
-		searchType = "all"
-		all = 1
-	}
-	withWords = sp.parseWithin(&query)
-	if len(withWords) > 0 {
-		searchType = "all"
-		all = 1
-	}
+	cond.UserID = sp.parseUserID(ctx, &query, dto.UserID)
+	cond.VoteAmount = sp.parseVotes(&query)
+	cond.Words = sp.parseWithin(&query)
 
 	// match questions
-	notAccepted = sp.parseNotAccepted(&query)
-	if notAccepted {
-		searchType = "question"
-		q = 1
+	cond.NotAccepted = sp.parseNotAccepted(&query)
+	if cond.NotAccepted {
+		cond.TargetType = constant.QuestionObjectType
 	}
-	isQuestion = sp.parseIsQuestion(&query)
-	if isQuestion {
-		searchType = "question"
-		q = 1
+	cond.Views = sp.parseViews(&query)
+	if cond.Views != -1 {
+		cond.TargetType = constant.QuestionObjectType
 	}
-	views = sp.parseViews(&query)
-	if views != -1 {
-		searchType = "question"
-		q = 1
-	}
-	answers = sp.parseAnswers(&query)
-	if answers != -1 {
-		searchType = "question"
-		q = 1
+	cond.AnswerAmount = sp.parseAnswers(&query)
+	if cond.AnswerAmount != -1 {
+		cond.TargetType = constant.QuestionObjectType
 	}
 
 	// match answers
-	accepted = sp.parseAccepted(&query)
-	if accepted {
-		searchType = "answer"
-		a = 1
+	cond.Accepted = sp.parseAccepted(&query)
+	if cond.Accepted {
+		cond.TargetType = constant.AnswerObjectType
 	}
-	questionID = sp.parseQuestionID(&query)
-	if questionID != "" {
-		searchType = "answer"
-		a = 1
+	cond.QuestionID = sp.parseQuestionID(&query)
+	if cond.QuestionID != "" {
+		cond.TargetType = constant.AnswerObjectType
 	}
-	isAnswer = sp.parseIsAnswer(&query)
-	if isAnswer {
-		searchType = "answer"
-		a = 1
+
+	if sp.parseIsQuestion(&query) {
+		cond.TargetType = constant.QuestionObjectType
+	}
+	if sp.parseIsAnswer(&query) {
+		cond.TargetType = constant.AnswerObjectType
 	}
 
 	if len(strings.TrimSpace(query)) > 0 {
-		words = strings.Split(strings.TrimSpace(query), " ")
-	} else {
-		words = []string{}
-	}
-
-	if len(withWords) > 0 {
-		words = append(withWords, words...)
+		words := strings.Split(strings.TrimSpace(query), " ")
+		cond.Words = append(cond.Words, words...)
 	}
 
 	// check limit words
-	if len(words) > limitWords {
-		words = words[:limitWords]
+	if len(cond.Words) > limitWords {
+		cond.Words = cond.Words[:limitWords]
 	}
-
-	// check tags' search is all or question
-	if len(tags) > 0 {
-		if len(words) > 0 {
-			searchType = "all"
-			all = 1
-		} else if isAnswer {
-			searchType = "answer"
-			a = 1
-			all = 0
-			q = 0
-		} else {
-			searchType = "question"
-			q = 1
-			all = 0
-			a = 0
-		}
-	}
-
-	// check match types greater than 1
-	if all+q+a > 1 {
-		searchType = ""
-	}
-
-	// check not match
-	if all+q+a == 0 && len(words) > 0 {
-		searchType = "all"
-	}
-
 	return
 }
 
 // parseTags parse search tags, return tag ids array
-func (sp *SearchParser) parseTags(query *string) (tags []string) {
+func (sp *SearchParser) parseTags(ctx context.Context, query *string) (tags []string) {
 	var (
 		// expire tag pattern
-		exprTag = `(?m)\[([a-zA-Z0-9-\+\.#]+)\]{1}?`
+		exprTag = `\[(.*?)\]`
 		q       = *query
 		limit   = 5
 	)
@@ -175,7 +101,7 @@ func (sp *SearchParser) parseTags(query *string) (tags []string) {
 
 	tags = []string{}
 	for _, item := range res {
-		tag, exists, err := sp.tagCommonService.GetTagBySlugName(context.TODO(), item[1])
+		tag, exists, err := sp.tagCommonService.GetTagBySlugName(ctx, item[1])
 		if err != nil || !exists {
 			continue
 		}
@@ -193,21 +119,21 @@ func (sp *SearchParser) parseTags(query *string) (tags []string) {
 }
 
 // parseUserID return user id or current login user id
-func (sp *SearchParser) parseUserID(query *string, currentUserID string) (userID string) {
+func (sp *SearchParser) parseUserID(ctx context.Context, query *string, currentUserID string) (userID string) {
 	var (
-		exprUserID = `(?m)^user:([a-z0-9._-]+)`
-		exprMe     = "user:me"
-		q          = *query
+		exprUsername = `user:(\S+)`
+		exprMe       = "user:me"
+		q            = *query
 	)
 
-	re := regexp.MustCompile(exprUserID)
+	re := regexp.MustCompile(exprUsername)
 	res := re.FindStringSubmatch(q)
 	if strings.Contains(q, exprMe) {
 		userID = currentUserID
 		q = strings.ReplaceAll(q, exprMe, "")
-	} else if len(res) == 2 {
+	} else if len(res) > 1 {
 		name := res[1]
-		user, has, err := sp.userCommon.GetUserBasicInfoByUserName(context.TODO(), name)
+		user, has, err := sp.userCommon.GetUserBasicInfoByUserName(ctx, name)
 		if err == nil && has {
 			userID = user.ID
 			q = re.ReplaceAllString(q, "")
@@ -220,14 +146,14 @@ func (sp *SearchParser) parseUserID(query *string, currentUserID string) (userID
 // parseVotes return the votes of search query
 func (sp *SearchParser) parseVotes(query *string) (votes int) {
 	var (
-		expr = `(?m)^score:([0-9]+)`
+		expr = `score:(\d+)`
 		q    = *query
 	)
 	votes = -1
 
 	re := regexp.MustCompile(expr)
 	res := re.FindStringSubmatch(q)
-	if len(res) == 2 {
+	if len(res) > 1 {
 		votes = converter.StringToInt(res[1])
 		q = re.ReplaceAllString(q, "")
 	}
@@ -292,13 +218,13 @@ func (sp *SearchParser) parseIsQuestion(query *string) (isQuestion bool) {
 func (sp *SearchParser) parseViews(query *string) (views int) {
 	var (
 		q    = *query
-		expr = `(?m)^views:([0-9]+)`
+		expr = `views:(\d+)`
 	)
 	views = -1
 
 	re := regexp.MustCompile(expr)
 	res := re.FindStringSubmatch(q)
-	if len(res) == 2 {
+	if len(res) > 1 {
 		views = converter.StringToInt(res[1])
 		q = re.ReplaceAllString(q, "")
 	}
@@ -310,13 +236,13 @@ func (sp *SearchParser) parseViews(query *string) (views int) {
 func (sp *SearchParser) parseAnswers(query *string) (answers int) {
 	var (
 		q    = *query
-		expr = `(?m)^answers:([0-9]+)`
+		expr = `answers:(\d+)`
 	)
 	answers = -1
 
 	re := regexp.MustCompile(expr)
 	res := re.FindStringSubmatch(q)
-	if len(res) == 2 {
+	if len(res) > 1 {
 		answers = converter.StringToInt(res[1])
 		q = re.ReplaceAllString(q, "")
 	}
@@ -345,7 +271,7 @@ func (sp *SearchParser) parseAccepted(query *string) (accepted bool) {
 func (sp *SearchParser) parseQuestionID(query *string) (questionID string) {
 	var (
 		q    = *query
-		expr = `(?m)^inquestion:([0-9]+)`
+		expr = `inquestion:(\d+)`
 	)
 
 	re := regexp.MustCompile(expr)

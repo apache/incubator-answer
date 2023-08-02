@@ -63,6 +63,8 @@ type NotificationMsg struct {
 	NotificationAction string
 	// if true no need to send notification to all followers
 	NoNeedPushAllFollow bool
+	// extra info
+	ExtraInfo map[string]string
 }
 
 type ObjectInfo struct {

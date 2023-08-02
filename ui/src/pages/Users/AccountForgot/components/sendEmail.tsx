@@ -1,22 +1,19 @@
-import { FC, memo, useEffect, useState } from 'react';
+import { FC, memo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import type {
-  ImgCodeRes,
-  PasswordResetReq,
-  FormDataType,
-} from '@/common/interface';
-import { resetPassword, checkImgCode } from '@/services';
-import { PicAuthCodeModal } from '@/components/Modal';
+import type { PasswordResetReq, FormDataType } from '@/common/interface';
+import { resetPassword } from '@/services';
 import { handleFormError } from '@/utils';
+import { useCaptchaModal } from '@/hooks';
 
 interface IProps {
-  visible: boolean;
+  // eslint-disable-next-line react/no-unused-prop-types
+  visible?: boolean;
   callback: (param: number, email: string) => void;
 }
 
-const Index: FC<IProps> = ({ visible = false, callback }) => {
+const Index: FC<IProps> = ({ callback }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'account_forgot' });
   const [formData, setFormData] = useState<FormDataType>({
     e_mail: {
@@ -24,26 +21,9 @@ const Index: FC<IProps> = ({ visible = false, callback }) => {
       isInvalid: false,
       errorMsg: '',
     },
-    captcha_code: {
-      value: '',
-      isInvalid: false,
-      errorMsg: '',
-    },
   });
-  const [imgCode, setImgCode] = useState<ImgCodeRes>({
-    captcha_id: '',
-    captcha_img: '',
-    verify: false,
-  });
-  const [showModal, setModalState] = useState(false);
 
-  const getImgCode = () => {
-    checkImgCode({
-      action: 'find_pass',
-    }).then((res) => {
-      setImgCode(res);
-    });
-  };
+  const emailCaptcha = useCaptchaModal('email');
 
   const handleChange = (params: FormDataType) => {
     setFormData({ ...formData, ...params });
@@ -73,27 +53,24 @@ const Index: FC<IProps> = ({ visible = false, callback }) => {
     const params: PasswordResetReq = {
       e_mail: formData.e_mail.value,
     };
-    if (imgCode.verify) {
-      params.captcha_code = formData.captcha_code.value;
-      params.captcha_id = imgCode.captcha_id;
+
+    const captcha = emailCaptcha.getCaptcha();
+    if (captcha.verify) {
+      params.captcha_code = captcha.captcha_code;
+      params.captcha_id = captcha.captcha_id;
     }
 
     resetPassword(params)
-      .then(() => {
+      .then(async () => {
+        await emailCaptcha.close();
         callback?.(2, formData.e_mail.value);
-        setModalState(false);
       })
       .catch((err) => {
         if (err.isError) {
+          emailCaptcha.handleCaptchaError(err.list);
           const data = handleFormError(err, formData);
-          if (!err.list.find((v) => v.error_field.indexOf('captcha') >= 0)) {
-            setModalState(false);
-          }
           setFormData({ ...data });
         }
-      })
-      .finally(() => {
-        getImgCode();
       });
   };
 
@@ -105,64 +82,41 @@ const Index: FC<IProps> = ({ visible = false, callback }) => {
       return;
     }
 
-    if (imgCode.verify) {
-      setModalState(true);
-      return;
-    }
-
-    sendEmail();
+    emailCaptcha.check(() => {
+      sendEmail();
+    });
   };
 
-  useEffect(() => {
-    if (visible) {
-      getImgCode();
-    }
-  }, [visible]);
-
   return (
-    <>
-      <Form noValidate onSubmit={handleSubmit} autoComplete="off">
-        <Form.Group controlId="email" className="mb-3">
-          <Form.Label>{t('email.label')}</Form.Label>
-          <Form.Control
-            required
-            type="email"
-            value={formData.e_mail.value}
-            isInvalid={formData.e_mail.isInvalid}
-            onChange={(e) => {
-              handleChange({
-                e_mail: {
-                  value: e.target.value,
-                  isInvalid: false,
-                  errorMsg: '',
-                },
-              });
-            }}
-          />
-          <Form.Control.Feedback type="invalid">
-            {formData.e_mail.errorMsg}
-          </Form.Control.Feedback>
-        </Form.Group>
+    <Form noValidate onSubmit={handleSubmit} autoComplete="off">
+      <Form.Group controlId="email" className="mb-3">
+        <Form.Label>{t('email.label')}</Form.Label>
+        <Form.Control
+          required
+          type="email"
+          value={formData.e_mail.value}
+          isInvalid={formData.e_mail.isInvalid}
+          onChange={(e) => {
+            handleChange({
+              e_mail: {
+                value: e.target.value,
+                isInvalid: false,
+                errorMsg: '',
+              },
+            });
+          }}
+        />
+        <Form.Control.Feedback type="invalid">
+          {formData.e_mail.errorMsg}
+        </Form.Control.Feedback>
+      </Form.Group>
 
-        <div className="d-grid mb-3">
-          <Button variant="primary" type="submit">
-            {t('btn_name')}
-          </Button>
-        </div>
-      </Form>
-
-      <PicAuthCodeModal
-        visible={showModal}
-        data={{
-          captcha: formData.captcha_code,
-          imgCode,
-        }}
-        handleCaptcha={handleChange}
-        clickSubmit={sendEmail}
-        refreshImgCode={getImgCode}
-        onClose={() => setModalState(false)}
-      />
-    </>
+      <div className="d-grid mb-3">
+        <Button variant="primary" type="submit">
+          {t('btn_name')}
+        </Button>
+      </div>
+    </Form>
   );
 };
 

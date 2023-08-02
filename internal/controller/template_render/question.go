@@ -1,11 +1,11 @@
 package templaterender
 
 import (
-	"encoding/json"
-	"fmt"
 	"html/template"
+	"math"
 	"net/http"
 
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
@@ -31,48 +31,46 @@ func (t *TemplateRenderController) Sitemap(ctx *gin.Context) {
 		return
 	}
 
-	sitemapInfo := &schema.SiteMapList{}
-	infoStr, err := t.data.Cache.GetString(ctx, schema.SitemapCachekey)
+	questions, err := t.questionRepo.SitemapQuestions(ctx, 1, constant.SitemapMaxSize)
 	if err != nil {
-		log.Errorf("get Cache failed: %s", err)
-		return
-	}
-	hasTitle := false
-	if siteInfo.PermaLink == schema.PermaLinkQuestionIDAndTitle || siteInfo.PermaLink == schema.PermaLinkQuestionIDAndTitleByShortID {
-		hasTitle = true
-	}
-	if err = json.Unmarshal([]byte(infoStr), sitemapInfo); err != nil {
-		log.Errorf("get sitemap info failed: %s", err)
+		log.Errorf("get sitemap questions failed: %s", err)
 		return
 	}
 
-	if len(sitemapInfo.QuestionIDs) > 0 {
-		//question url list
-		ctx.Header("Content-Type", "application/xml")
+	ctx.Header("Content-Type", "application/xml")
+	if len(questions) < constant.SitemapMaxSize {
 		ctx.HTML(
 			http.StatusOK, "sitemap.xml", gin.H{
 				"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
-				"list":      sitemapInfo.QuestionIDs,
+				"list":      questions,
 				"general":   general,
-				"hastitle":  hasTitle,
-			},
-		)
-	} else {
-		//question list page
-		ctx.Header("Content-Type", "application/xml")
-		ctx.HTML(
-			http.StatusOK, "sitemap-list.xml", gin.H{
-				"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
-				"page":      sitemapInfo.MaxPageNum,
-				"general":   general,
+				"hastitle": siteInfo.PermaLink == constant.PermaLinkQuestionIDAndTitle ||
+					siteInfo.PermaLink == constant.PermaLinkQuestionIDAndTitleByShortID,
 			},
 		)
 		return
 	}
+
+	questionNum, err := t.questionRepo.GetQuestionCount(ctx)
+	if err != nil {
+		log.Error("GetQuestionCount error", err)
+		return
+	}
+	var pageList []int
+	totalPages := int(math.Ceil(float64(questionNum) / float64(constant.SitemapMaxSize)))
+	for i := 1; i <= totalPages; i++ {
+		pageList = append(pageList, i)
+	}
+	ctx.HTML(
+		http.StatusOK, "sitemap-list.xml", gin.H{
+			"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
+			"page":      pageList,
+			"general":   general,
+		},
+	)
 }
 
 func (t *TemplateRenderController) SitemapPage(ctx *gin.Context, page int) error {
-	sitemapInfo := &schema.SiteMapPageList{}
 	general, err := t.siteInfoService.GetSiteGeneral(ctx)
 	if err != nil {
 		log.Error("get site general failed:", err)
@@ -83,28 +81,20 @@ func (t *TemplateRenderController) SitemapPage(ctx *gin.Context, page int) error
 		log.Error("get site GetSiteSeo failed:", err)
 		return err
 	}
-	hasTitle := false
-	if siteInfo.PermaLink == schema.PermaLinkQuestionIDAndTitle || siteInfo.PermaLink == schema.PermaLinkQuestionIDAndTitleByShortID {
-		hasTitle = true
-	}
 
-	cachekey := fmt.Sprintf(schema.SitemapPageCachekey, page)
-	infoStr, err := t.data.Cache.GetString(ctx, cachekey)
+	questions, err := t.questionRepo.SitemapQuestions(ctx, page, constant.SitemapMaxSize)
 	if err != nil {
-		//If there is no cache, return directly.
-		return nil
-	}
-	if err = json.Unmarshal([]byte(infoStr), sitemapInfo); err != nil {
-		log.Errorf("get sitemap info failed: %s", err)
+		log.Errorf("get sitemap questions failed: %s", err)
 		return err
 	}
 	ctx.Header("Content-Type", "application/xml")
 	ctx.HTML(
 		http.StatusOK, "sitemap.xml", gin.H{
 			"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
-			"list":      sitemapInfo.PageData,
+			"list":      questions,
 			"general":   general,
-			"hastitle":  hasTitle,
+			"hastitle": siteInfo.PermaLink == constant.PermaLinkQuestionIDAndTitle ||
+				siteInfo.PermaLink == constant.PermaLinkQuestionIDAndTitleByShortID,
 		},
 	)
 	return nil

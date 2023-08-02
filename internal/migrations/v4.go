@@ -1,6 +1,7 @@
 package migrations
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/answerdev/answer/internal/entity"
@@ -9,8 +10,8 @@ import (
 	"xorm.io/xorm"
 )
 
-func addRoleFeatures(x *xorm.Engine) error {
-	err := x.Sync(new(entity.Role), new(entity.RolePowerRel), new(entity.Power), new(entity.UserRoleRel))
+func addRoleFeatures(ctx context.Context, x *xorm.Engine) error {
+	err := x.Context(ctx).Sync(new(entity.Role), new(entity.RolePowerRel), new(entity.Power), new(entity.UserRoleRel))
 	if err != nil {
 		return err
 	}
@@ -23,14 +24,14 @@ func addRoleFeatures(x *xorm.Engine) error {
 
 	// insert default roles
 	for _, role := range roles {
-		exist, err := x.Get(&entity.Role{ID: role.ID, Name: role.Name})
+		exist, err := x.Context(ctx).Get(&entity.Role{ID: role.ID, Name: role.Name})
 		if err != nil {
 			return err
 		}
 		if exist {
 			continue
 		}
-		_, err = x.Insert(role)
+		_, err = x.Context(ctx).Insert(role)
 		if err != nil {
 			return err
 		}
@@ -73,14 +74,14 @@ func addRoleFeatures(x *xorm.Engine) error {
 	}
 	// insert default powers
 	for _, power := range powers {
-		exist, err := x.Get(&entity.Power{ID: power.ID})
+		exist, err := x.Context(ctx).Get(&entity.Power{ID: power.ID})
 		if err != nil {
 			return err
 		}
 		if exist {
-			_, err = x.ID(power.ID).Update(power)
+			_, err = x.Context(ctx).ID(power.ID).Update(power)
 		} else {
-			_, err = x.Insert(power)
+			_, err = x.Context(ctx).Insert(power)
 		}
 		if err != nil {
 			return err
@@ -160,14 +161,14 @@ func addRoleFeatures(x *xorm.Engine) error {
 
 	// insert default powers
 	for _, rel := range rolePowerRels {
-		exist, err := x.Get(&entity.RolePowerRel{RoleID: rel.RoleID, PowerType: rel.PowerType})
+		exist, err := x.Context(ctx).Get(&entity.RolePowerRel{RoleID: rel.RoleID, PowerType: rel.PowerType})
 		if err != nil {
 			return err
 		}
 		if exist {
 			continue
 		}
-		_, err = x.Insert(rel)
+		_, err = x.Context(ctx).Insert(rel)
 		if err != nil {
 			return err
 		}
@@ -178,12 +179,12 @@ func addRoleFeatures(x *xorm.Engine) error {
 		RoleID: 2,
 	}
 
-	exist, err := x.Get(adminUserRoleRel)
+	exist, err := x.Context(ctx).Get(adminUserRoleRel)
 	if err != nil {
 		return err
 	}
 	if !exist {
-		_, err = x.Insert(adminUserRoleRel)
+		_, err = x.Context(ctx).Insert(adminUserRoleRel)
 		if err != nil {
 			return err
 		}
@@ -195,18 +196,18 @@ func addRoleFeatures(x *xorm.Engine) error {
 		{ID: 117, Key: "rank.tag.use_reserved_tag", Value: `-1`},
 	}
 	for _, c := range defaultConfigTable {
-		exist, err := x.Get(&entity.Config{ID: c.ID, Key: c.Key})
+		exist, err := x.Context(ctx).Get(&entity.Config{ID: c.ID, Key: c.Key})
 		if err != nil {
 			return fmt.Errorf("get config failed: %w", err)
 		}
 		if exist {
-			if _, err = x.Update(c, &entity.Config{ID: c.ID, Key: c.Key}); err != nil {
+			if _, err = x.Context(ctx).Update(c, &entity.Config{ID: c.ID, Key: c.Key}); err != nil {
 				log.Errorf("update %+v config failed: %s", c, err)
 				return fmt.Errorf("update config failed: %w", err)
 			}
 			continue
 		}
-		if _, err = x.Insert(&entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
+		if _, err = x.Context(ctx).Insert(&entity.Config{ID: c.ID, Key: c.Key, Value: c.Value}); err != nil {
 			log.Errorf("insert %+v config failed: %s", c, err)
 			return fmt.Errorf("add config failed: %w", err)
 		}

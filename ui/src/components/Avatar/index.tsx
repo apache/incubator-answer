@@ -11,9 +11,16 @@ interface IProps {
   size: string;
   searchStr?: string;
   className?: string;
+  alt: string;
 }
 
-const Index: FC<IProps> = ({ avatar, size, className, searchStr = '' }) => {
+const Index: FC<IProps> = ({
+  avatar,
+  size,
+  className,
+  searchStr = '',
+  alt,
+}) => {
   let url = '';
   if (typeof avatar === 'string') {
     if (avatar.length > 1) {
@@ -31,13 +38,16 @@ const Index: FC<IProps> = ({ avatar, size, className, searchStr = '' }) => {
     className && className.indexOf('rounded') !== -1 ? '' : 'rounded';
 
   return (
-    <img
-      src={url || DefaultAvatar}
-      width={size}
-      height={size}
-      className={classNames(roundedCls, className)}
-      alt=""
-    />
+    <>
+      {/* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role,jsx-a11y/control-has-associated-label */}
+      <img
+        src={url || DefaultAvatar}
+        width={size}
+        height={size}
+        className={classNames(roundedCls, className)}
+        alt={alt}
+      />
+    </>
   );
 };
 

@@ -20,10 +20,12 @@ const SystemInfo: FC<IProps> = ({ data }) => {
             <span className="text-secondary me-1">{t('storage_used')}</span>
             <strong>{data.occupying_storage_space}</strong>
           </Col>
-          <Col xs={6}>
-            <span className="text-secondary me-1">{t('uptime')}</span>
-            <strong>{formatUptime(data.app_start_time)}</strong>
-          </Col>
+          {data.app_start_time ? (
+            <Col xs={6}>
+              <span className="text-secondary me-1">{t('uptime')}</span>
+              <strong>{formatUptime(data.app_start_time)}</strong>
+            </Col>
+          ) : null}
         </Row>
       </Card.Body>
     </Card>

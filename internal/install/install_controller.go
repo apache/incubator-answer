@@ -16,6 +16,7 @@ import (
 	"github.com/answerdev/answer/internal/migrations"
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -184,17 +185,17 @@ func InitBaseInfo(ctx *gin.Context) {
 		return
 	}
 
-	if err := migrations.InitDB(c.Data.Database); err != nil {
-		log.Error("init database error: ", err.Error())
-		handler.HandleResponse(ctx, errors.BadRequest(reason.InstallCreateTableFailed), schema.ErrTypeAlert)
-		return
+	engine, err := data.NewDB(false, c.Data.Database)
+	if err != nil {
+		log.Errorf("init database failed %s", err)
+		handler.HandleResponse(ctx, errors.BadRequest(reason.InstallCreateTableFailed), nil)
 	}
 
-	err = migrations.UpdateInstallInfo(c.Data.Database, req.Language, req.SiteName, req.SiteURL, req.ContactEmail,
-		req.AdminName, req.AdminPassword, req.AdminEmail)
-	if err != nil {
-		log.Error(err)
-		handler.HandleResponse(ctx, errors.BadRequest(reason.InstallConfigFailed), nil)
+	inputData := &migrations.InitNeedUserInputData{}
+	_ = copier.Copy(inputData, req)
+	if err := migrations.NewMentor(ctx, engine, inputData).InitDB(); err != nil {
+		log.Error("init database error: ", err.Error())
+		handler.HandleResponse(ctx, errors.BadRequest(reason.InstallConfigFailed), schema.ErrTypeAlert)
 		return
 	}
 

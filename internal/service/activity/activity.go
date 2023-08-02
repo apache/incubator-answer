@@ -4,12 +4,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/answerdev/answer/internal/service/activity_common"
 	"strings"
 
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service/activity_common"
 	"github.com/answerdev/answer/internal/service/comment_common"
 	"github.com/answerdev/answer/internal/service/config"
 	"github.com/answerdev/answer/internal/service/meta"
@@ -97,7 +98,9 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 		}
 
 		if item.ObjectType == constant.QuestionObjectType || item.ObjectType == constant.AnswerObjectType {
-			item.ObjectID = uid.EnShortID(act.ObjectID)
+			if handler.GetEnableShortID(ctx) {
+				item.ObjectID = uid.EnShortID(act.ObjectID)
+			}
 		}
 
 		cfg, err := as.configService.GetConfigByID(ctx, act.ActivityType)

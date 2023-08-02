@@ -239,6 +239,7 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
           uiSchema?.[key] || {};
         formData ||= {};
         const fieldState = formData[key];
+
         const uiSimplify = widget === 'legend' || uiOpt?.simplify;
         let groupClassName: BaseUIOptions['fieldClassName'] = uiOpt?.simplify
           ? 'mb-2'
@@ -249,7 +250,9 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
         if (uiOpt?.fieldClassName) {
           groupClassName = uiOpt.fieldClassName;
         }
+
         const readOnly = uiOpt?.readOnly || false;
+
         return (
           <Form.Group
             key={title}
@@ -314,6 +317,9 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
                 onChange={onChange}
                 formData={formData}
                 readOnly={readOnly}
+                imgClassNames={
+                  uiOpt && 'className' in uiOpt ? uiOpt.className : ''
+                }
               />
             ) : null}
             {widget === 'textarea' ? (

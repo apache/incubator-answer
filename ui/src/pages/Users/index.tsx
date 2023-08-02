@@ -55,10 +55,13 @@ const Users = () => {
                           size="48px"
                           avatar={user?.avatar}
                           searchStr="s=96"
+                          alt={user.display_name}
                         />
                       </Link>
                       <div className="ms-2">
-                        <Link to={`/users/${user.username}`}>
+                        <Link
+                          className="text-break"
+                          to={`/users/${user.username}`}>
                           {user.display_name}
                         </Link>
                         <div className="text-secondary small">

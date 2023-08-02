@@ -1,19 +1,22 @@
 package middleware
 
 import (
+	"net/http"
 	"strings"
 
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service/role"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/ui"
+	"github.com/gin-gonic/gin"
 
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/pkg/converter"
-	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
+	"github.com/segmentfault/pacman/log"
 )
 
 var ctxUUIDKey = "ctxUuidKey"
@@ -21,13 +24,13 @@ var ctxUUIDKey = "ctxUuidKey"
 // AuthUserMiddleware auth user middleware
 type AuthUserMiddleware struct {
 	authService           *auth.AuthService
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService
 }
 
 // NewAuthUserMiddleware new auth user middleware
 func NewAuthUserMiddleware(
 	authService *auth.AuthService,
-	siteInfoCommonService *siteinfo_common.SiteInfoCommonService) *AuthUserMiddleware {
+	siteInfoCommonService siteinfo_common.SiteInfoCommonService) *AuthUserMiddleware {
 	return &AuthUserMiddleware{
 		authService:           authService,
 		siteInfoCommonService: siteInfoCommonService,
@@ -140,6 +143,34 @@ func (am *AuthUserMiddleware) AdminAuth() gin.HandlerFunc {
 	}
 }
 
+func (am *AuthUserMiddleware) CheckPrivateMode() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		resp, err := am.siteInfoCommonService.GetSiteLogin(ctx)
+		if err != nil {
+			ShowIndexPage(ctx)
+			ctx.Abort()
+			return
+		}
+		if resp.LoginRequired {
+			ShowIndexPage(ctx)
+			ctx.Abort()
+			return
+		}
+		ctx.Next()
+	}
+}
+func ShowIndexPage(ctx *gin.Context) {
+	ctx.Header("content-type", "text/html;charset=utf-8")
+	ctx.Header("X-Frame-Options", "DENY")
+	file, err := ui.Build.ReadFile("build/index.html")
+	if err != nil {
+		log.Error(err)
+		ctx.Status(http.StatusNotFound)
+		return
+	}
+	ctx.String(http.StatusOK, string(file))
+}
+
 // GetLoginUserIDFromContext get user id from context
 func GetLoginUserIDFromContext(ctx *gin.Context) (userID string) {
 	userInfo := GetUserInfoFromContext(ctx)
@@ -169,6 +200,21 @@ func GetUserInfoFromContext(ctx *gin.Context) (u *entity.UserCacheInfo) {
 		return nil
 	}
 	return u
+}
+
+func GetUserIsAdminModerator(ctx *gin.Context) (isAdminModerator bool) {
+	userInfo, exist := ctx.Get(ctxUUIDKey)
+	if !exist {
+		return false
+	}
+	u, ok := userInfo.(*entity.UserCacheInfo)
+	if !ok {
+		return false
+	}
+	if u.RoleID == role.RoleAdminID || u.RoleID == role.RoleModeratorID {
+		return true
+	}
+	return false
 }
 
 func GetLoginUserIDInt64FromContext(ctx *gin.Context) (userID int64) {

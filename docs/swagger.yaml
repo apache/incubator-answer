@@ -206,6 +206,7 @@ definitions:
     properties:
       display_name:
         maxLength: 30
+        minLength: 4
         type: string
       email:
         maxLength: 500
@@ -729,7 +730,7 @@ definitions:
           $ref: '#/definitions/schema.PrivilegeOption'
         type: array
       selected_level:
-        type: integer
+        $ref: '#/definitions/schema.PrivilegeLevel'
     type: object
   schema.GetRankPersonalPageResp:
     properties:
@@ -952,6 +953,11 @@ definitions:
       unreviewed_info:
         $ref: '#/definitions/schema.GetRevisionResp'
     type: object
+  schema.GetUserActivationResp:
+    properties:
+      activation_url:
+        type: string
+    type: object
   schema.GetUserPageResp:
     properties:
       avatar:
@@ -1075,10 +1081,20 @@ definitions:
       content:
         type: string
     type: object
+  schema.PrivilegeLevel:
+    enum:
+    - 1
+    - 2
+    - 3
+    type: integer
+    x-enum-varnames:
+    - PrivilegeLevel1
+    - PrivilegeLevel2
+    - PrivilegeLevel3
   schema.PrivilegeOption:
     properties:
       level:
-        type: integer
+        $ref: '#/definitions/schema.PrivilegeLevel'
       level_desc:
         type: string
       privileges:
@@ -1141,10 +1157,10 @@ definitions:
     type: object
   schema.QuestionPageReq:
     properties:
-      inDays:
+      in_days:
         minimum: 1
         type: integer
-      orderCond:
+      order:
         enum:
         - newest
         - active
@@ -1155,7 +1171,7 @@ definitions:
       page:
         minimum: 1
         type: integer
-      pageSize:
+      page_size:
         minimum: 1
         type: integer
       tag:
@@ -1368,7 +1384,8 @@ definitions:
       title:
         type: string
       user_info:
-        $ref: '#/definitions/schema.UserBasicInfo'
+        allOf:
+        - $ref: '#/definitions/schema.UserBasicInfo'
         description: user info
       vote_count:
         type: integer
@@ -1376,11 +1393,19 @@ definitions:
   schema.SearchResp:
     properties:
       object:
-        $ref: '#/definitions/schema.SearchObject'
+        allOf:
+        - $ref: '#/definitions/schema.SearchObject'
         description: this object
       object_type:
         description: object_type
         type: string
+    type: object
+  schema.SendUserActivationReq:
+    properties:
+      user_id:
+        type: string
+    required:
+    - user_id
     type: object
   schema.SiteBrandingReq:
     properties:
@@ -1507,7 +1532,7 @@ definitions:
       revision:
         type: string
       site_seo:
-        $ref: '#/definitions/schema.SiteSeoReq'
+        $ref: '#/definitions/schema.SiteSeoResp'
       site_users:
         $ref: '#/definitions/schema.SiteUsersResp'
       theme:
@@ -1811,7 +1836,8 @@ definitions:
   schema.UpdateInfoRequest:
     properties:
       avatar:
-        $ref: '#/definitions/schema.AvatarInfo'
+        allOf:
+        - $ref: '#/definitions/schema.AvatarInfo'
         description: avatar
       bio:
         description: bio
@@ -1858,9 +1884,10 @@ definitions:
   schema.UpdatePrivilegesConfigReq:
     properties:
       level:
+        allOf:
+        - $ref: '#/definitions/schema.PrivilegeLevel'
         maximum: 3
         minimum: 1
-        type: integer
     required:
     - level
     type: object
@@ -2335,7 +2362,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: AdminSearchAnswerList
+      summary: AdminAnswerPage admin answer page
       tags:
       - admin
   /answer/admin/api/answer/status:
@@ -2533,7 +2560,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: AdminSearchList
+      summary: AdminQuestionPage admin question page
       tags:
       - admin
   /answer/admin/api/question/status:
@@ -3219,6 +3246,32 @@ paths:
       summary: add user
       tags:
       - admin
+  /answer/admin/api/user/activation:
+    get:
+      description: get user activation
+      parameters:
+      - description: user id
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.GetUserActivationResp'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: get user activation
+      tags:
+      - admin
   /answer/admin/api/user/password:
     put:
       consumes:
@@ -3289,6 +3342,28 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: update user
+      tags:
+      - admin
+  /answer/admin/api/users/activation:
+    post:
+      description: send user activation
+      parameters:
+      - description: SendUserActivationReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.SendUserActivationReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: send user activation
       tags:
       - admin
   /answer/admin/api/users/page:
@@ -4364,7 +4439,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: user's vote
+      description: get user personal votes
       parameters:
       - description: page size
         in: query
@@ -4395,7 +4470,7 @@ paths:
               type: object
       security:
       - ApiKeyAuth: []
-      summary: user's votes
+      summary: get user personal votes
       tags:
       - Activity
   /answer/api/v1/post/render:

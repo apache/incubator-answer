@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 import { loginToContinueStore, siteInfoStore } from '@/stores';
+import { floppyNavigation } from '@/utils';
 import { WelcomeTitle } from '@/components';
 
 interface IProps {
@@ -19,6 +20,7 @@ const Index: React.FC<IProps> = ({ visible = false }) => {
   };
   const linkClick = (evt) => {
     evt.stopPropagation();
+    floppyNavigation.storageLoginRedirect();
     closeModal();
   };
   return (

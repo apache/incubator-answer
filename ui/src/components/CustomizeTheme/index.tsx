@@ -33,7 +33,11 @@ const Index: FC = () => {
                 --bs-primary: ${primaryColor.hex()};
                 --bs-primary-rgb: ${primaryColor.rgb().array().join(',')};
                 --bs-link-color: ${primaryColor.hex()};
-                --bs-link-hover-color: ${shiftColor(primaryColor, 0.8)};
+                --bs-link-color-rgb: ${primaryColor.rgb().array().join(',')};
+                --bs-link-hover-color: ${shiftColor(primaryColor, 0.8).hex()};
+                --bs-link-hover-color-rgb: ${shiftColor(primaryColor, 0.8)
+                  .round()
+                  .array()}
               }
               .nav-pills {
                 --bs-nav-pills-link-active-bg: ${primaryColor.hex()};
@@ -94,6 +98,16 @@ const Index: FC = () => {
               }
               .link-primary:hover, .link-primary:focus {
                 color: ${shadeColor(primaryColor, 0.8).hex()}!important;
+              }
+              .badge-tag:not(.badge-tag-reserved, .badge-tag-required) {
+                background-color: rgba(${tintColor(primaryColor, 0.2)
+                  .rgb()
+                  .array()
+                  .join(',')}, .5);
+                color: ${shadeColor(primaryColor, 0.6).hex()}
+              }
+              .badge-tag:not(.badge-tag-reserved, .badge-tag-required):hover {
+                 background-color: ${tintColor(primaryColor, 0.2).hex()};
               }
             `}
         </style>

@@ -26,7 +26,9 @@ type AddCommentReq struct {
 	// whether user can edit it
 	CanEdit bool `json:"-"`
 	// whether user can delete it
-	CanDelete bool `json:"-"`
+	CanDelete   bool   `json:"-"`
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 func (req *AddCommentReq) Check() (errFields []*validator.FormErrorField, err error) {
@@ -39,7 +41,9 @@ type RemoveCommentReq struct {
 	// comment id
 	CommentID string `validate:"required" json:"comment_id"`
 	// user id
-	UserID string `json:"-"`
+	UserID      string `json:"-"`
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 // UpdateCommentReq update comment request
@@ -58,7 +62,9 @@ type UpdateCommentReq struct {
 	// whether user can edit it
 	CanEdit bool `json:"-"`
 	// whether user can delete it
-	CanDelete bool `json:"-"`
+	CanDelete   bool   `json:"-"`
+	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaCode string `json:"captcha_code"`
 }
 
 func (req *UpdateCommentReq) Check() (errFields []*validator.FormErrorField, err error) {

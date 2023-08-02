@@ -134,7 +134,7 @@ const Index: FC<Props> = ({
             path={handleParams(1)}
           />
 
-          <Pagination.Ellipsis disabled />
+          <Pagination.Ellipsis className="pe-none" />
         </>
       )}
       {currentPage >= 5 && (
@@ -182,7 +182,7 @@ const Index: FC<Props> = ({
             );
           })}
       {totalPage > 5 && realPage + 2 < totalPage && (
-        <Pagination.Ellipsis disabled />
+        <Pagination.Ellipsis className="pe-none" />
       )}
 
       {totalPage > 0 && currentPage < totalPage && (
