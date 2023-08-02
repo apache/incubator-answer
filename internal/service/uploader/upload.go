@@ -160,7 +160,7 @@ func (us *uploaderService) AvatarThumbFile(ctx *gin.Context, fileName string, si
 
 func (us *uploaderService) UploadPostFile(ctx *gin.Context) (
 	url string, err error) {
-	url, err = us.tryToUploadByPlugin(ctx, plugin.UserAvatar)
+	url, err = us.tryToUploadByPlugin(ctx, plugin.UserPost)
 	if err != nil {
 		return "", err
 	}
@@ -186,7 +186,7 @@ func (us *uploaderService) UploadPostFile(ctx *gin.Context) (
 
 func (us *uploaderService) UploadBrandingFile(ctx *gin.Context) (
 	url string, err error) {
-	url, err = us.tryToUploadByPlugin(ctx, plugin.UserAvatar)
+	url, err = us.tryToUploadByPlugin(ctx, plugin.AdminBranding)
 	if err != nil {
 		return "", err
 	}
