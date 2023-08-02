@@ -56,10 +56,10 @@ func (cs *CaptchaService) CaptchaActionPassword(ctx context.Context, unit string
 	setNum := 3
 	setTime := int64(60 * 30) //seconds
 	now := time.Now().Unix()
-	if now-actioninfo.LastTime <= setTime || actioninfo.Num >= setNum {
+	if now-actioninfo.LastTime <= setTime && actioninfo.Num >= setNum {
 		return false
 	}
-	if now-actioninfo.LastTime > setTime {
+	if now-actioninfo.LastTime != 0 && now-actioninfo.LastTime > setTime {
 		cs.captchaRepo.SetActionType(ctx, unit, entity.CaptchaActionPassword, "", 0)
 	}
 	return true
@@ -69,10 +69,10 @@ func (cs *CaptchaService) CaptchaActionEditUserinfo(ctx context.Context, unit st
 	setNum := 3
 	setTime := int64(60 * 30) //seconds
 	now := time.Now().Unix()
-	if now-actioninfo.LastTime <= setTime || actioninfo.Num >= setNum {
+	if now-actioninfo.LastTime <= setTime && actioninfo.Num >= setNum {
 		return false
 	}
-	if now-actioninfo.LastTime > setTime {
+	if now-actioninfo.LastTime != 0 && now-actioninfo.LastTime > setTime {
 		cs.captchaRepo.SetActionType(ctx, unit, entity.CaptchaActionEditUserinfo, "", 0)
 	}
 	return true

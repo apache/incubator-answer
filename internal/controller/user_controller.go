@@ -121,7 +121,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 
 	resp, err := uc.userService.EmailLogin(ctx, req)
 	if err != nil {
-		_, _ = uc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEmail, ctx.ClientIP())
+		_, _ = uc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionPassword, ctx.ClientIP())
 		errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 			ErrorField: "e_mail",
 			ErrorMsg:   translator.Tr(handler.GetLang(ctx), reason.EmailOrPasswordWrong),
@@ -541,8 +541,10 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 		return
 	}
 	isAdmin := middleware.GetUserIsAdminModerator(ctx)
+
 	if !isAdmin {
-		captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionPassword, req.UserID, req.CaptchaID, req.CaptchaCode)
+		captchaPass := uc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEditUserinfo, req.UserID, req.CaptchaID, req.CaptchaCode)
+		uc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEditUserinfo, req.UserID)
 		if !captchaPass {
 			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
 				ErrorField: "captcha_code",
@@ -552,14 +554,16 @@ func (uc *UserController) UserChangeEmailSendCode(ctx *gin.Context) {
 			return
 		}
 	}
+
 	resp, err := uc.userService.UserChangeEmailSendCode(ctx, req)
 	if err != nil {
 		handler.HandleResponse(ctx, err, resp)
 		return
 	}
 	if !isAdmin {
-		uc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionPassword, req.UserID)
+		uc.actionService.ActionRecordDel(ctx, entity.CaptchaActionEditUserinfo, ctx.ClientIP())
 	}
+
 	handler.HandleResponse(ctx, err, nil)
 }
 
