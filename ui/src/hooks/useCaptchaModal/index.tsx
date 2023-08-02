@@ -64,6 +64,17 @@ const Index = (captchaKey: CaptchaKey) => {
     });
   };
 
+  const resetImgCode = () => {
+    setImgCode({
+      value: '',
+      isInvalid: false,
+      errorMsg: '',
+    });
+  };
+  const resetCallback = () => {
+    refCallback.current = undefined;
+  };
+
   const show = () => {
     if (!stateShow) {
       setStateShow(true);
@@ -76,11 +87,12 @@ const Index = (captchaKey: CaptchaKey) => {
    *  and the `captchaModal.close()` call is inside the child component.
    * In this case, call `await captchaModal.close()` and wait for the close action to complete.
    */
-  const close = (reset = true) => {
+  const close = () => {
     setStateShow(false);
-    if (reset) {
-      resetCapture();
-    }
+    resetCapture();
+    resetImgCode();
+    resetCallback();
+
     const p = new Promise<void>((resolve) => {
       setTimeout(resolve, 50);
     });
@@ -109,11 +121,6 @@ const Index = (captchaKey: CaptchaKey) => {
       fetchCaptchaData();
       show();
     } else {
-      setImgCode({
-        ...ri,
-        isInvalid: false,
-        errorMsg: '',
-      });
       close();
     }
     // Assist business logic in filtering CAPTCHA error messages when necessary
@@ -178,7 +185,7 @@ const Index = (captchaKey: CaptchaKey) => {
         size="sm"
         title="Captcha"
         show={stateShow}
-        onHide={() => close(false)}
+        onHide={() => close()}
         centered>
         <Modal.Header closeButton>
           <Modal.Title as="h5">{t('title')}</Modal.Title>
