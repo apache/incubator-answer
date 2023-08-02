@@ -15,13 +15,13 @@ backend:
       other: Forbidden.
   action:
     report:
-      other: 举报
+      other: 舉報
     edit:
-      other: 编辑
+      other: 編輯
     delete:
       other: 删除
     close:
-      other: 关闭
+      other: 關閉
     reopen:
       other: Reopen
     forbidden_error:
@@ -107,8 +107,12 @@ backend:
       other: Manage tag synonyms
   email:
     other: 電子郵件
+  e_mail:
+    other: Email
   password:
     other: 密碼
+  pass:
+    other: Password
   email_or_password_wrong_error:
     other: 電郵和密碼不匹配。
   error:
@@ -490,6 +494,7 @@ ui:
     title: 通知
     inbox: 收件夾
     achievement: 成就
+    new_alerts: New alerts
     all_read: 全部標記為已讀
     show_more: 顯示更多
     someone: Someone
@@ -710,7 +715,7 @@ ui:
       通过評論询问更多问题或提出改進建議。避免在評論中回答問題。
     tip_answer: >-
       使用評論回復其他用戶或通知他們进行更改。如果你要添加新的信息，請編輯你的帖子，而不是發表評論。
-    tip_vote: It adds something useful to the post
+    tip_vote: It is useful
   edit_answer:
     title: 編輯回答
     default_reason: 編輯回答
@@ -817,6 +822,9 @@ ui:
     change_btn_name: 更改郵箱
     msg:
       empty: 不能為空
+    resend_email:
+      url_label: Are you sure you want to resend the activation email?
+      url_text: You can also give the activation link above to the user.
   login:
     login_to_continue: 登入以繼續
     info_sign: 沒有帳戶？<1>註冊</1>
@@ -912,7 +920,6 @@ ui:
         gravatar: 頭像
         gravatar_text: You can change image on
         custom: 自定義
-        btn_refresh: 重新整理
         custom_text: 您可以上傳您的圖片。
         default: 系統
         msg: 請上傳頭像
@@ -971,9 +978,9 @@ ui:
     flag_success: 感謝您的標記
     forbidden_operate_self: 禁止自己操作
     review: 您的修訂將在審核通過後顯示。
+    sent_success: Sent successfully
   related_question:
     title: 相關問題
-    btn: 發問
     answers: 個回答
   invite_to_answer:
     title: People asked
@@ -997,6 +1004,7 @@ ui:
     useful: Useful
     question_useful: It is useful and clear
     question_un_useful: It is unclear or not useful
+    question_bookmark: Bookmark this question
     answer_useful: It is useful
     answer_un_useful: It is not useful
     answers:
@@ -1057,6 +1065,8 @@ ui:
     question: Question
     answer: Answer
     comment: Comment
+    refresh: Refresh
+    resend: Resend
   search:
     title: 搜尋結果
     keywords: 關鍵詞
@@ -1359,6 +1369,31 @@ ui:
       title: 更改用戶狀態為...
       btn_cancel: 取消
       btn_submit: 提交
+    new_password_modal:
+      title: Set new password
+      form:
+        fields:
+          password:
+            label: Password
+            text: The user will be logged out and need to login again.
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
+    user_modal:
+      title: Add new user
+      form:
+        fields:
+          display_name:
+            label: Display Name
+            msg: Display Name must be at 4-30 characters in length.
+          email:
+            label: Email
+            msg: Email is not valid.
+          password:
+            label: Password
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
     users:
       title: 用戶
       name: 名稱
@@ -1373,6 +1408,7 @@ ui:
       change: 更改
       all: 全部
       staff: 工作人員
+      more: More
       inactive: 不活躍
       suspended: 已停權
       deleted: 已刪除
@@ -1387,31 +1423,6 @@ ui:
       change_role: 更改角色
       show_logs: 顯示日誌
       add_user: 新增使用者
-      new_password_modal:
-        title: 設置新密碼
-        form:
-          fields:
-            password:
-              label: 密碼
-              text: 用戶將被登出，需要再次登入。
-              msg: 密碼必須在 8-32 字元長度。
-        btn_cancel: 取消
-        btn_submit: 提交
-      user_modal:
-        title: 添加新用戶
-        form:
-          fields:
-            display_name:
-              label: 顯示名稱
-              msg: 顯示名稱必須在 4-30 字元長度。
-            email:
-              label: 郵箱
-              msg: 電子郵箱無效。
-            password:
-              label: 密碼
-              msg: 密碼必須在 8-32 字元長度。
-        btn_cancel: 取消
-        btn_submit: 提交
     questions:
       page_title: 問題
       normal: 正常
@@ -1580,7 +1591,7 @@ ui:
         text: 這將在 <body> 之前插入
       footer:
         label: 頁尾
-        text: 這將在 </html> 之前插入
+        text: This will insert before </body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.
