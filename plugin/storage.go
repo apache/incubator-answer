@@ -21,7 +21,10 @@ var (
 			".png":  true,
 		},
 		AdminBranding: {
-			".ico": true,
+			".jpg":  true,
+			".jpeg": true,
+			".png":  true,
+			".ico":  true,
 		},
 	}
 )
