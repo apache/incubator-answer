@@ -3,7 +3,8 @@ LABEL maintainer="aichy@sf.com"
 
 ARG GOPROXY
 # ENV GOPROXY ${GOPROXY:-direct}
-ENV GOPROXY=https://mirrors.aliyun.com/goproxy/
+ENV GOPROXY=https://proxy.golang.com.cn,direct
+ENV GOPROXY=https://proxy.golang.com.cn,direct
 
 ENV GOPATH /go
 ENV GOROOT /usr/local/go
