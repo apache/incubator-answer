@@ -37,11 +37,12 @@ builds:
 
 
 archives:
-  - replacements:
-      darwin: macOS
-      amd64: x86_64
-      linux: Linux
-      windows: Windows
+  - name_template: >-
+      {{ .ProjectName }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
 checksum:
   name_template: 'checksums.txt'
 snapshot:
