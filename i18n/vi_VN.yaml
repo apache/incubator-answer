@@ -2,24 +2,24 @@
 backend:
   base:
     success:
-      other: Success.
+      other: Thành công.
     unknown:
-      other: Unknown error.
+      other: Lỗi không xác định.
     request_format_error:
       other: Request format is not valid.
     unauthorized_error:
       other: Unauthorized.
     database_error:
-      other: Data server error.
+      other: Lỗi dữ liệu máy chủ.
     forbidden_error:
       other: Forbidden.
   action:
     report:
       other: Flag
     edit:
-      other: Edit
+      other: Chỉnh sửa
     delete:
-      other: Delete
+      other: Xóa
     close:
       other: Close
     reopen:
@@ -39,9 +39,9 @@ backend:
   role:
     name:
       user:
-        other: User
+        other: Người dùng
       admin:
-        other: Admin
+        other: Quản trị viên
       moderator:
         other: Moderator
     description:
@@ -62,9 +62,9 @@ backend:
       description:
         other: Level 3 (high reputation required for mature community)
     rank_question_add_label:
-      other: Ask question
+      other: Đặt câu hỏi
     rank_answer_add_label:
-      other: Write answer
+      other: Viết câu trả lời
     rank_comment_add_label:
       other: Write comment
     rank_report_add_label:
@@ -84,7 +84,7 @@ backend:
     rank_invite_someone_to_answer_label:
       other: Invite someone to answer
     rank_tag_add_label:
-      other: Create new tag
+      other: Tạo thẻ mới
     rank_tag_edit_label:
       other: Edit tag description (need to review)
     rank_question_edit_label:
@@ -107,7 +107,11 @@ backend:
       other: Manage tag synonyms
   email:
     other: Email
+  e_mail:
+    other: Email
   password:
+    other: Mật khẩu
+  pass:
     other: Password
   email_or_password_wrong_error:
     other: Email and password do not match.
@@ -140,7 +144,7 @@ backend:
         other: The comment time has been too long to modify.
     email:
       duplicate:
-        other: Email already exists.
+        other: Email đã được dùng.
       need_to_be_verified:
         other: Email should be verified.
       verify_url_expired:
@@ -149,10 +153,10 @@ backend:
         other: Email is not allowed from that email domain. Please use another one.
     lang:
       not_found:
-        other: Language file not found.
+        other: Không tìm thấy file ngôn ngữ.
     object:
       captcha_verification_failed:
-        other: Captcha wrong.
+        other: Sai Captcha.
       disallow_follow:
         other: You are not allowed to follow.
       disallow_vote:
@@ -162,7 +166,7 @@ backend:
       not_found:
         other: Object not found.
       verification_failed:
-        other: Verification failed.
+        other: Xác thực không thành công.
       email_or_password_incorrect:
         other: Email and password do not match.
       old_password_verification_failed:
@@ -173,7 +177,7 @@ backend:
       already_deleted:
         other: This post has been deleted.
       not_found:
-        other: Question not found.
+        other: Không tìm thấy câu hỏi.
       cannot_deleted:
         other: No permission to delete.
       cannot_close:
@@ -196,7 +200,7 @@ backend:
       already_exist:
         other: Tag already exists.
       not_found:
-        other: Tag not found.
+        other: Không tìm thấy thẻ.
       recommend_tag_not_found:
         other: Recommend Tag is not exist.
       recommend_tag_enter:
@@ -243,7 +247,7 @@ backend:
       not_allowed_registration:
         other: Currently the site is not open for registration
       access_denied:
-        other: Access denied
+        other: Truy cập bị từ chối
       page_access_denied:
         other: You do not have access to this page.
     config:
@@ -490,6 +494,7 @@ ui:
     title: Notifications
     inbox: Inbox
     achievement: Achievements
+    new_alerts: New alerts
     all_read: Mark all as read
     show_more: Show more
     someone: Someone
@@ -710,7 +715,7 @@ ui:
       Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
     tip_answer: >-
       Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
-    tip_vote: It adds something useful to the post
+    tip_vote: It is useful
   edit_answer:
     title: Edit Answer
     default_reason: Edit answer
@@ -817,6 +822,9 @@ ui:
     change_btn_name: Change email
     msg:
       empty: Cannot be empty.
+    resend_email:
+      url_label: Are you sure you want to resend the activation email?
+      url_text: You can also give the activation link above to the user.
   login:
     login_to_continue: Log in to continue
     info_sign: Don't have an account? <1>Sign up</1>
@@ -912,7 +920,6 @@ ui:
         gravatar: Gravatar
         gravatar_text: You can change image on
         custom: Custom
-        btn_refresh: Refresh
         custom_text: You can upload your image.
         default: System
         msg: Please upload an avatar
@@ -971,9 +978,9 @@ ui:
     flag_success: Thanks for flagging.
     forbidden_operate_self: Forbidden to operate on yourself
     review: Your revision will show after review.
+    sent_success: Sent successfully
   related_question:
     title: Related Questions
-    btn: Add question
     answers: answers
   invite_to_answer:
     title: People asked
@@ -997,6 +1004,7 @@ ui:
     useful: Useful
     question_useful: It is useful and clear
     question_un_useful: It is unclear or not useful
+    question_bookmark: Bookmark this question
     answer_useful: It is useful
     answer_un_useful: It is not useful
     answers:
@@ -1057,6 +1065,8 @@ ui:
     question: Question
     answer: Answer
     comment: Comment
+    refresh: Refresh
+    resend: Resend
   search:
     title: Search Results
     keywords: Keywords
@@ -1359,6 +1369,31 @@ ui:
       title: Change user role to...
       btn_cancel: Cancel
       btn_submit: Submit
+    new_password_modal:
+      title: Set new password
+      form:
+        fields:
+          password:
+            label: Password
+            text: The user will be logged out and need to login again.
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
+    user_modal:
+      title: Add new user
+      form:
+        fields:
+          display_name:
+            label: Display Name
+            msg: Display Name must be at 4-30 characters in length.
+          email:
+            label: Email
+            msg: Email is not valid.
+          password:
+            label: Password
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
     users:
       title: Users
       name: Name
@@ -1373,6 +1408,7 @@ ui:
       change: Change
       all: All
       staff: Staff
+      more: More
       inactive: Inactive
       suspended: Suspended
       deleted: Deleted
@@ -1387,31 +1423,6 @@ ui:
       change_role: Change role
       show_logs: Show logs
       add_user: Add user
-      new_password_modal:
-        title: Set new password
-        form:
-          fields:
-            password:
-              label: Password
-              text: The user will be logged out and need to login again.
-              msg: Password must be at 8-32 characters in length.
-        btn_cancel: Cancel
-        btn_submit: Submit
-      user_modal:
-        title: Add new user
-        form:
-          fields:
-            display_name:
-              label: Display Name
-              msg: Display Name must be at 4-30 characters in length.
-            email:
-              label: Email
-              msg: Email is not valid.
-            password:
-              label: Password
-              msg: Password must be at 8-32 characters in length.
-        btn_cancel: Cancel
-        btn_submit: Submit
     questions:
       page_title: Questions
       normal: Normal
@@ -1580,7 +1591,7 @@ ui:
         text: This will insert after <body>
       footer:
         label: Footer
-        text: This will insert before </html>.
+        text: This will insert before </body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.
