@@ -2,55 +2,55 @@
 backend:
   base:
     success:
-      other: Выполнено.
+      other: Success.
     unknown:
-      other: Неизвестная ошибка.
+      other: Unknown error.
     request_format_error:
-      other: Формат файла не корректен.
+      other: Request format is not valid.
     unauthorized_error:
-      other: Авторизация не выполнена.
+      other: Unauthorized.
     database_error:
-      other: Ошибка сервера данных.
+      other: Data server error.
     forbidden_error:
-      other: Доступ запрещен.
+      other: Forbidden.
   action:
     report:
       other: Flag
     edit:
-      other: Редактировать
+      other: Edit
     delete:
-      other: Удалить
+      other: Delete
     close:
-      other: Закрыть
+      other: Close
     reopen:
-      other: Открыть
+      other: Reopen
     forbidden_error:
-      other: Доступ запрещен.
+      other: Forbidden.
     pin:
-      other: Закрепить
+      other: Pin
     hide:
       other: Unlist
     unpin:
-      other: Открепить
+      other: Unpin
     show:
-      other: Список
+      other: List
     invite_someone_to_answer:
-      other: Редактировать
+      other: Edit
   role:
     name:
       user:
-        other: Пользователь
+        other: User
       admin:
-        other: Администратор
+        other: Admin
       moderator:
-        other: Модератор
+        other: Moderator
     description:
       user:
-        other: По умолчанию, без специального доступа.
+        other: Default with no special access.
       admin:
-        other: Имейте все полномочия для доступа к сайту.
+        other: Have the full power to access the site.
       moderator:
-        other: Имеет доступ ко всем сообщениям, кроме настроек администратора.
+        other: Has access to all posts except admin settings.
   privilege:
     level_1:
       description:
@@ -62,7 +62,7 @@ backend:
       description:
         other: Level 3 (high reputation required for mature community)
     rank_question_add_label:
-      other: Задать вопрос
+      other: Ask question
     rank_answer_add_label:
       other: Write answer
     rank_comment_add_label:
@@ -106,15 +106,15 @@ backend:
     rank_tag_synonym_label:
       other: Manage tag synonyms
   email:
-    other: Эл. почта
+    other: Email
   e_mail:
     other: Email
   password:
-    other: Пароль
+    other: Password
   pass:
     other: Password
   email_or_password_wrong_error:
-    other: Неверное имя пользователя или пароль.
+    other: Email and password do not match.
   error:
     password:
       space_invalid:
@@ -125,105 +125,105 @@ backend:
       cannot_modify_self_status:
         other: You cannot modify your status.
       email_or_password_wrong:
-        other: Неверное имя пользователя или пароль.
+        other: Email and password do not match.
     answer:
       not_found:
-        other: Ответ не найден.
+        other: Answer do not found.
       cannot_deleted:
-        other: Недостаточно прав для удаления.
+        other: No permission to delete.
       cannot_update:
-        other: Нет прав для обновления.
+        other: No permission to update.
       question_closed_cannot_add:
         other: Questions are closed and cannot be added.
     comment:
       edit_without_permission:
-        other: Комментарий не может редактироваться.
+        other: Comment are not allowed to edit.
       not_found:
-        other: Комментарий не найден.
+        other: Comment not found.
       cannot_edit_after_deadline:
         other: The comment time has been too long to modify.
     email:
       duplicate:
-        other: Адрес электронной почты уже существует.
+        other: Email already exists.
       need_to_be_verified:
-        other: Адрес электронной почты должен быть подтвержден.
+        other: Email should be verified.
       verify_url_expired:
-        other: Срок действия подтверждённого адреса электронной почты истек, пожалуйста, отправьте письмо повторно.
+        other: Email verified URL has expired, please resend the email.
       illegal_email_domain_error:
         other: Email is not allowed from that email domain. Please use another one.
     lang:
       not_found:
-        other: Языковой файл не найден.
+        other: Language file not found.
     object:
       captcha_verification_failed:
-        other: Captcha введена неверно.
+        other: Captcha wrong.
       disallow_follow:
-        other: Вы не можете подписаться.
+        other: You are not allowed to follow.
       disallow_vote:
-        other: Вы не можете голосовать.
+        other: You are not allowed to vote.
       disallow_vote_your_self:
-        other: Вы не можете голосовать за собственный отзыв.
+        other: You can't vote for your own post.
       not_found:
-        other: Объект не найден.
+        other: Object not found.
       verification_failed:
-        other: Проверка не удалась.
+        other: Verification failed.
       email_or_password_incorrect:
-        other: Email или пароль не совпадают.
+        other: Email and password do not match.
       old_password_verification_failed:
-        other: Не удалось подтвердить старый пароль
+        other: The old password verification failed
       new_password_same_as_previous_setting:
-        other: Пароль не может быть таким же как прежний.
+        other: The new password is the same as the previous one.
     question:
       already_deleted:
         other: This post has been deleted.
       not_found:
-        other: Вопрос не найден.
+        other: Question not found.
       cannot_deleted:
-        other: Недостаточно прав для удаления.
+        other: No permission to delete.
       cannot_close:
-        other: Нет разрешения на закрытие.
+        other: No permission to close.
       cannot_update:
-        other: Нет разрешения на обновление.
+        other: No permission to update.
     rank:
       fail_to_meet_the_condition:
-        other: Ранг не соответствует условию.
+        other: Rank fail to meet the condition.
       vote_fail_to_meet_the_condition:
         other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
       no_enough_rank_to_operate:
         other: You need at least {{.Rank}} reputation to do this.
     report:
       handle_failed:
-        other: Не удалось обработать отчет.
+        other: Report handle failed.
       not_found:
-        other: Отчет не найден.
+        other: Report not found.
     tag:
       already_exist:
         other: Tag already exists.
       not_found:
-        other: Тег не найден.
+        other: Tag not found.
       recommend_tag_not_found:
-        other: Рекомендуемый тег не существует.
+        other: Recommend Tag is not exist.
       recommend_tag_enter:
-        other: Пожалуйста, введите хотя бы один тег.
+        other: Please enter at least one required tag.
       not_contain_synonym_tags:
-        other: Не должно содержать теги синонимы.
+        other: Should not contain synonym tags.
       cannot_update:
-        other: Нет прав для обновления.
+        other: No permission to update.
       is_used_cannot_delete:
         other: You cannot delete a tag that is in use
       cannot_set_synonym_as_itself:
-        other: Вы не можете установить синоним текущего тега.
+        other: You cannot set the synonym of the current tag as itself.
     smtp:
       config_from_name_cannot_be_email:
-        other: Имя От не может быть адресом электронной почты.
+        other: The From Name cannot be a email address.
     theme:
       not_found:
-        other: Тема не найдена.
+        other: Theme not found.
     revision:
       review_underway:
-        other: В настоящее время не удается редактировать версию, в очереди на проверку.
+        other: Can't edit currently, there is a version in the review queue.
       no_permission:
-        other: Нет прав на ревизию.
+        other: No permission to Revision.
     user:
       external_login_missing_user_id:
         other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
@@ -458,45 +458,45 @@ ui:
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
     prev: Prev
-    next: Следующий
+    next: Next
   page_title:
-    question: Вопрос
-    questions: Вопросы
-    tag: Тэг
-    tags: Теги
-    tag_wiki: wiki тэг
+    question: Question
+    questions: Questions
+    tag: Tag
+    tags: Tags
+    tag_wiki: tag wiki
     create_tag: Create Tag
-    edit_tag: Изменить тег
-    ask_a_question: Добавить вопрос
-    edit_question: Редактировать вопрос
-    edit_answer: Редактировать ответ
-    search: Поиск
-    posts_containing: Посты содержащие
-    settings: Настройки
-    notifications: Уведомления
-    login: Вход
-    sign_up: Регистрация
-    account_recovery: Восстановление аккаунта
-    account_activation: Активация учётной записи
-    confirm_email: Подтвердить адрес электронной почты
-    account_suspended: Аккаунт заблокирован
-    admin: Управление
-    change_email: Изменить Email
-    install: Установка ответа
-    upgrade: Обновить ответ
-    maintenance: Обслуживание сайта
-    users: Пользователи
+    edit_tag: Edit Tag
+    ask_a_question: Add Question
+    edit_question: Edit Question
+    edit_answer: Edit Answer
+    search: Search
+    posts_containing: Posts containing
+    settings: Settings
+    notifications: Notifications
+    login: Log In
+    sign_up: Sign Up
+    account_recovery: Account Recovery
+    account_activation: Account Activation
+    confirm_email: Confirm Email
+    account_suspended: Account Suspended
+    admin: Admin
+    change_email: Modify Email
+    install: Answer Installation
+    upgrade: Answer Upgrade
+    maintenance: Website Maintenance
+    users: Users
     oauth_callback: Processing
     http_404: HTTP Error 404
     http_50X: HTTP Error 500
     http_403: HTTP Error 403
   notifications:
-    title: Уведомления
-    inbox: Входящие
-    achievement: Достижения
+    title: Notifications
+    inbox: Inbox
+    achievement: Achievements
     new_alerts: New alerts
-    all_read: Отметить всё как прочитанное
-    show_more: Показать еще
+    all_read: Mark all as read
+    show_more: Show more
     someone: Someone
     inbox_type:
       all: All
@@ -504,35 +504,35 @@ ui:
       invites: Invites
       votes: Votes
   suspended:
-    title: Ваш аккаунт заблокирован
-    until_time: "Ваша учетная запись была заблокирована до {{ time }}."
-    forever: Этот пользователь был навсегда заблокирован.
-    end: Вы не соответствуете правилам сообщества.
+    title: Your Account has been Suspended
+    until_time: "Your account was suspended until {{ time }}."
+    forever: This user was suspended forever.
+    end: You don't meet a community guideline.
     contact_us: Contact us
   editor:
     blockquote:
-      text: Цитата
+      text: Blockquote
     bold:
-      text: Сильный
+      text: Strong
     chart:
-      text: Диаграмма
-      flow_chart: Блок-схема
-      sequence_diagram: Диаграмма последовательности
-      class_diagram: Диаграмма классов
-      state_diagram: Диаграмма состояний
-      entity_relationship_diagram: Диаграмма связей сущностей
-      user_defined_diagram: Пользовательская диаграмма
-      gantt_chart: Диаграмма Гантта
-      pie_chart: Круговая диаграмма
+      text: Chart
+      flow_chart: Flow chart
+      sequence_diagram: Sequence diagram
+      class_diagram: Class diagram
+      state_diagram: State diagram
+      entity_relationship_diagram: Entity relationship diagram
+      user_defined_diagram: User defined diagram
+      gantt_chart: Gantt chart
+      pie_chart: Pie chart
     code:
-      text: Фрагмент кода
-      add_code: Добавить пример кода
+      text: Code Sample
+      add_code: Add code sample
       form:
         fields:
           code:
-            label: Код
+            label: Code
             msg:
-              empty: Код не может быть пустым.
+              empty: Code cannot be empty.
           language:
             label: Language
             placeholder: Automatic detection
@@ -615,82 +615,82 @@ ui:
     btn_cancel: Cancel
     btn_submit: Submit
     remark:
-      empty: Не может быть пустым.
+      empty: Cannot be empty.
     msg:
-      empty: Пожалуйста, выбери причину.
+      empty: Please select a reason.
   report_modal:
-    flag_title: Я помечаю, чтобы пожаловаться на эту публикацию как...
-    close_title: Я закрываю этот пост как...
-    review_question_title: Проверить вопрос
-    review_answer_title: Проверить ответ
-    review_comment_title: Просмотр комментариев
-    btn_cancel: Отмена
-    btn_submit: Отправить
+    flag_title: I am flagging to report this post as...
+    close_title: I am closing this post as...
+    review_question_title: Review question
+    review_answer_title: Review answer
+    review_comment_title: Review comment
+    btn_cancel: Cancel
+    btn_submit: Submit
     remark:
-      empty: Не может быть пустым.
+      empty: Cannot be empty.
     msg:
-      empty: Пожалуйста, выбери причину.
+      empty: Please select a reason.
   tag_modal:
-    title: Создать новый тег
+    title: Create new tag
     form:
       fields:
         display_name:
-          label: Показывать имя
+          label: Display Name
           msg:
-            empty: Отображаемое название не может быть пустым.
-            range: Отображаемое имя до 35 символов.
+            empty: Display name cannot be empty.
+            range: Display name up to 35 characters.
         slug_name:
-          label: Идентификатор URL
+          label: URL Slug
           desc: URL slug up to 35 characters.
           msg:
-            empty: URL slug не может быть пустым.
-            range: URL slug до 35 символов.
-            character: URL slug содержит недопустимый набор символов.
+            empty: URL slug cannot be empty.
+            range: URL slug up to 35 characters.
+            character: URL slug contains unallowed character set.
         desc:
           label: Description
-    btn_cancel: Отмена
-    btn_submit: Отправить
+    btn_cancel: Cancel
+    btn_submit: Submit
     btn_post: Post new tag
   tag_info:
-    created_at: Создано
-    edited_at: Отредактировано
-    history: История
+    created_at: Created
+    edited_at: Edited
+    history: History
     synonyms:
-      title: Синонимы
-      text: Следующие теги будут переназначены на
-      empty: Синонимы не найдены.
-      btn_add: Добавить синоним
-      btn_edit: Редактировать
-      btn_save: Сохранить
-    synonyms_text: Следующие теги будут переназначены на
+      title: Synonyms
+      text: The following tags will be remapped to
+      empty: No synonyms found.
+      btn_add: Add a synonym
+      btn_edit: Edit
+      btn_save: Save
+    synonyms_text: The following tags will be remapped to
     delete:
-      title: Удалить этот тег
+      title: Delete this tag
       tip_with_posts: >-
         <p>We do not allowed <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
         <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
       tip: Are you sure you wish to delete?
-      close: Закрыть
+      close: Close
   edit_tag:
-    title: Изменить тег
-    default_reason: Правка тега
+    title: Edit Tag
+    default_reason: Edit tag
     form:
       fields:
         revision:
-          label: Редакция
+          label: Revision
         display_name:
-          label: Показывать имя
+          label: Display Name
         slug_name:
-          label: Идентификатор URL
-          info: 'Необходимо использовать набор символов "a-z", "0-9", "+ # - ."'
+          label: URL Slug
+          info: 'Must use the character set "a-z", "0-9", "+ # - ."'
         desc:
-          label: Описание
+          label: Description
         edit_summary:
-          label: Изменить краткое описание
+          label: Edit Summary
           placeholder: >-
-            Кратко опишите ваши изменения (исправленная орфография, исправленная грамматика, улучшенное форматирование)
-    btn_save_edits: Сохранить изменения
-    btn_cancel: Отмена
+            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
+    btn_save_edits: Save edits
+    btn_cancel: Cancel
   dates:
     long_date: MMM D
     long_date_with_year: "MMM D, YYYY"

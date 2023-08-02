@@ -35,7 +35,7 @@ backend:
     show:
       other: Liste
     invite_someone_to_answer:
-      other: Edit
+      other: Bearbeiten
   role:
     name:
       user:
@@ -84,7 +84,7 @@ backend:
     rank_invite_someone_to_answer_label:
       other: Invite someone to answer
     rank_tag_add_label:
-      other: Create new tag
+      other: Neuen Tag erstellen
     rank_tag_edit_label:
       other: Edit tag description (need to review)
     rank_question_edit_label:
@@ -104,17 +104,21 @@ backend:
     rank_tag_edit_without_review_label:
       other: Edit tag description without review
     rank_tag_synonym_label:
-      other: Manage tag synonyms
+      other: Tag-Synonyme verwalten
   email:
     other: E-Mail
+  e_mail:
+    other: Email
   password:
     other: Passwort
+  pass:
+    other: Password
   email_or_password_wrong_error:
     other: E-Mail und Passwort stimmen nicht überein.
   error:
     password:
       space_invalid:
-        other: Password cannot contain spaces.
+        other: Passwort darf keine Leerzeichen enthalten.
     admin:
       cannot_update_their_password:
         other: Sie können Ihr Passwort nicht ändern.
@@ -266,31 +270,31 @@ backend:
   reason:
     spam:
       name:
-        other: spam
+        other: Spam
       desc:
         other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
     rude_or_abusive:
       name:
-        other: rude or abusive
+        other: unhöflich oder beleidigend
       desc:
         other: A reasonable person would find this content inappropriate for respectful discourse.
     a_duplicate:
       name:
-        other: a duplicate
+        other: Ist ein Duplikat
       desc:
         other: This question has been asked before and already has an answer.
       placeholder:
         other: Enter the existing question link
     not_a_answer:
       name:
-        other: not an answer
+        other: keine Antwort
       desc:
         other: This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether.
     no_longer_needed:
       name:
-        other: no longer needed
+        other: nicht mehr benötigt
       desc:
-        other: This comment is outdated, conversational or not relevant to this post.
+        other: Dieser Kommentar ist veraltet oder nicht relevant für diesen Beitrag.
     something:
       name:
         other: something else
@@ -320,7 +324,7 @@ backend:
         other: Improve and correct problems with this post yourself.
     needs_close:
       name:
-        other: needs close
+        other: muss geschlossen werden
       desc:
         other: A closed question can’t answer, but still can edit, vote and comment.
     needs_delete:
@@ -432,7 +436,7 @@ backend:
       title:
         other: "[{{.SiteName}}] Test Email"
       body:
-        other: "This is a test email."
+        other: "Dies ist eine Test-Email."
   action_activity_type:
     upvote:
       other: upvote
@@ -490,6 +494,7 @@ ui:
     title: Benachrichtigungen
     inbox: Posteingang
     achievement: Erfolge
+    new_alerts: New alerts
     all_read: Alle als gelesen markieren
     show_more: Mehr Anzeigen
     someone: Someone
@@ -710,7 +715,7 @@ ui:
       Verwenden Sie Kommentare, um weitere Informationen anzufordern oder Verbesserungen vorzuschlagen. Vermeiden Sie die Beantwortung von Fragen in Kommentaren.
     tip_answer: >-
       Verwenden Sie Kommentare, um anderen Benutzern zu antworten oder sie über Änderungen zu informieren. Wenn Sie neue Informationen hinzufügen, bearbeiten Sie Ihren Beitrag, anstatt ihn zu kommentieren.
-    tip_vote: It adds something useful to the post
+    tip_vote: It is useful
   edit_answer:
     title: Antwort bearbeiten
     default_reason: Antwort bearbeiten
@@ -817,6 +822,9 @@ ui:
     change_btn_name: Ändern Sie die E-Mail
     msg:
       empty: Kann nicht leer sein.
+    resend_email:
+      url_label: Are you sure you want to resend the activation email?
+      url_text: You can also give the activation link above to the user.
   login:
     login_to_continue: Melden Sie sich an, um fortzufahren
     info_sign: Sie haben noch kein Konto? <1>Melden Sie sich an</1>
@@ -912,7 +920,6 @@ ui:
         gravatar: Gravatar
         gravatar_text: You can change image on
         custom: Benutzerdefiniert
-        btn_refresh: Aktualisieren
         custom_text: Sie können Ihr Bild hochladen.
         default: System
         msg: Bitte laden Sie einen Avatar hoch
@@ -971,9 +978,9 @@ ui:
     flag_success: Danke fürs Markieren.
     forbidden_operate_self: Verboten, an sich selbst zu operieren
     review: Ihre Überarbeitung wird nach der Überprüfung angezeigt.
+    sent_success: Sent successfully
   related_question:
     title: Verwandte Fragen
-    btn: Frage hinzufügen
     answers: antworten
   invite_to_answer:
     title: People asked
@@ -997,6 +1004,7 @@ ui:
     useful: Nützlich
     question_useful: It is useful and clear
     question_un_useful: It is unclear or not useful
+    question_bookmark: Bookmark this question
     answer_useful: Das ist nützlich
     answer_un_useful: Das ist nicht nützlich
     answers:
@@ -1057,6 +1065,8 @@ ui:
     question: Question
     answer: Answer
     comment: Comment
+    refresh: Refresh
+    resend: Resend
   search:
     title: Suchergebnisse
     keywords: Schlüsselwörter
@@ -1359,6 +1369,31 @@ ui:
       title: Benutzerrolle ändern zu...
       btn_cancel: Abbrechen
       btn_submit: Senden
+    new_password_modal:
+      title: Set new password
+      form:
+        fields:
+          password:
+            label: Password
+            text: The user will be logged out and need to login again.
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
+    user_modal:
+      title: Add new user
+      form:
+        fields:
+          display_name:
+            label: Display Name
+            msg: Display Name must be at 4-30 characters in length.
+          email:
+            label: Email
+            msg: Email is not valid.
+          password:
+            label: Password
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
     users:
       title: Benutzer
       name: Namen
@@ -1373,6 +1408,7 @@ ui:
       change: Ändern
       all: Alle
       staff: Mitarbeiter
+      more: More
       inactive: Inaktiv
       suspended: Ausgesetzt
       deleted: Gelöscht
@@ -1387,31 +1423,6 @@ ui:
       change_role: Rolle wechseln
       show_logs: Protokolle anzeigen
       add_user: Benutzer hinzufügen
-      new_password_modal:
-        title: Neues Passwort festlegen
-        form:
-          fields:
-            password:
-              label: Passwort
-              text: Der Benutzer wird abgemeldet und muss sich erneut anmelden.
-              msg: Das Passwort muss zwischen 8 und 32 Zeichen lang sein.
-        btn_cancel: Stornieren
-        btn_submit: Senden
-      user_modal:
-        title: Neuen Benutzer hinzufügen
-        form:
-          fields:
-            display_name:
-              label: Anzeigename
-              msg: Der Anzeigename muss zwischen 3 und 30 Zeichen lang sein.
-            email:
-              label: Email
-              msg: Email ist ungültig.
-            password:
-              label: Passwort
-              msg: Das Passwort muss zwischen 8 und 32 Zeichen lang sein.
-        btn_cancel: Stornieren
-        btn_submit: Senden
     questions:
       page_title: Fragen
       normal: Normal
@@ -1580,7 +1591,7 @@ ui:
         text: Dies wird nach <body> eingefügt
       footer:
         label: Fusszeile
-        text: Dies wird vor </html> eingefügt.
+        text: This will insert before </body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.

@@ -107,7 +107,11 @@ backend:
       other: Manage tag synonyms
   email:
     other: Email
+  e_mail:
+    other: Email
   password:
+    other: Password
+  pass:
     other: Password
   email_or_password_wrong_error:
     other: Email dan kata sandi tidak cocok.
@@ -490,6 +494,7 @@ ui:
     title: Pemberitahuan
     inbox: Kotak Masuk
     achievement: Pencapaian
+    new_alerts: New alerts
     all_read: Tandai Semua Jika Sudah Dibaca
     show_more: Tampilkan lebih banyak
     someone: Someone
@@ -710,7 +715,7 @@ ui:
       Gunakan komentar untuk meminta informasi lebih lanjut atau menyarankan perbaikan. Hindari menjawab pertanyaan di komentar.
     tip_answer: >-
       Gunakan komentar untuk membalas pengguna lain atau memberi tahu mereka tentang perubahan. Jika Anda menambahkan informasi baru, cukup edit posting Anda.
-    tip_vote: It adds something useful to the post
+    tip_vote: It is useful
   edit_answer:
     title: Sunting jawaban
     default_reason: Edit jawaban
@@ -817,6 +822,9 @@ ui:
     change_btn_name: Ganti email
     msg:
       empty: Tidak bisa kosong.
+    resend_email:
+      url_label: Are you sure you want to resend the activation email?
+      url_text: You can also give the activation link above to the user.
   login:
     login_to_continue: Masuk untuk melanjutkan
     info_sign: Belum punya akun? <1>Daftar</1>
@@ -912,7 +920,6 @@ ui:
         gravatar: Gravatar
         gravatar_text: You can change image on
         custom: Custom
-        btn_refresh: Refresh
         custom_text: You can upload your image.
         default: System
         msg: Please upload an avatar
@@ -971,9 +978,9 @@ ui:
     flag_success: Terima kasih telah menandai.
     forbidden_operate_self: Dilarang melakukan operasi ini pada diri sendiri
     review: Revisi Anda akan ditampilkan setelah ditinjau.
+    sent_success: Sent successfully
   related_question:
     title: Pertanyaan Terkait
-    btn: Tambahkan pertanyaan
     answers: jawaban
   invite_to_answer:
     title: People asked
@@ -997,6 +1004,7 @@ ui:
     useful: Useful
     question_useful: It is useful and clear
     question_un_useful: It is unclear or not useful
+    question_bookmark: Bookmark this question
     answer_useful: It is useful
     answer_un_useful: It is not useful
     answers:
@@ -1057,6 +1065,8 @@ ui:
     question: Question
     answer: Answer
     comment: Comment
+    refresh: Refresh
+    resend: Resend
   search:
     title: Search Results
     keywords: Keywords
@@ -1359,6 +1369,31 @@ ui:
       title: Change user role to...
       btn_cancel: Cancel
       btn_submit: Submit
+    new_password_modal:
+      title: Set new password
+      form:
+        fields:
+          password:
+            label: Password
+            text: The user will be logged out and need to login again.
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
+    user_modal:
+      title: Add new user
+      form:
+        fields:
+          display_name:
+            label: Display Name
+            msg: Display Name must be at 4-30 characters in length.
+          email:
+            label: Email
+            msg: Email is not valid.
+          password:
+            label: Password
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
     users:
       title: Users
       name: Name
@@ -1373,6 +1408,7 @@ ui:
       change: Ubah
       all: Semua
       staff: Staf
+      more: More
       inactive: Tidak Aktif
       suspended: Ditangguhkan
       deleted: Dihapus
@@ -1387,31 +1423,6 @@ ui:
       change_role: Ubah role
       show_logs: Tampilkan log
       add_user: Tambahkan pengguna
-      new_password_modal:
-        title: Atur password baru
-        form:
-          fields:
-            password:
-              label: Password
-              text: Pengguna akan keluar dan harus masuk lagi.
-              msg: Password must be at 8-32 characters in length.
-        btn_cancel: Batal
-        btn_submit: Kirim
-      user_modal:
-        title: Tambahkan pengguna baru
-        form:
-          fields:
-            display_name:
-              label: Nama
-              msg: Display Name must be at 4-30 characters in length.
-            email:
-              label: Email
-              msg: Email tidak sah.
-            password:
-              label: Kata sandi
-              msg: Password must be at 8-32 characters in length.
-        btn_cancel: Batal
-        btn_submit: Kirim
     questions:
       page_title: Pertanyaan
       normal: Normal
@@ -1580,7 +1591,7 @@ ui:
         text: This will insert after <body>
       footer:
         label: Footer
-        text: This will insert before </html>.
+        text: This will insert before </body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.

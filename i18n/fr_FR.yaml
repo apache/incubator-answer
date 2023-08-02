@@ -107,8 +107,12 @@ backend:
       other: Manage tag synonyms
   email:
     other: Email
+  e_mail:
+    other: Email
   password:
     other: Mot de passe
+  pass:
+    other: Password
   email_or_password_wrong_error:
     other: L'email et le mot de passe ne correspondent pas.
   error:
@@ -490,6 +494,7 @@ ui:
     title: Notifications
     inbox: Boîte de réception
     achievement: Succès
+    new_alerts: New alerts
     all_read: Tout marquer comme lu
     show_more: Afficher plus
     someone: Someone
@@ -710,7 +715,7 @@ ui:
       Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires.
     tip_answer: >-
       Utilisez des commentaires pour répondre à d'autres utilisateurs ou leur signaler des modifications. Si vous ajoutez de nouvelles informations, modifiez votre message au lieu de commenter.
-    tip_vote: It adds something useful to the post
+    tip_vote: It is useful
   edit_answer:
     title: Modifier la réponse
     default_reason: Modifier la réponse
@@ -817,6 +822,9 @@ ui:
     change_btn_name: Modifier l'e-mail
     msg:
       empty: Ne peut pas être vide.
+    resend_email:
+      url_label: Are you sure you want to resend the activation email?
+      url_text: You can also give the activation link above to the user.
   login:
     login_to_continue: Connectez-vous pour continuer
     info_sign: Vous n'avez pas de compte ? <1>Inscrivez-vous</1>
@@ -912,7 +920,6 @@ ui:
         gravatar: Gravatar
         gravatar_text: You can change image on
         custom: Personnaliser
-        btn_refresh: Actualiser
         custom_text: Vous pouvez charger votre image.
         default: Système
         msg: Veuillez charger un avatar
@@ -971,9 +978,9 @@ ui:
     flag_success: Merci pour votre signalement.
     forbidden_operate_self: Interdit d'opérer sur vous-même
     review: Votre révision s'affichera après vérification.
+    sent_success: Sent successfully
   related_question:
     title: Questions liées
-    btn: Ajouter une question
     answers: réponses
   invite_to_answer:
     title: People asked
@@ -997,6 +1004,7 @@ ui:
     useful: Utile
     question_useful: It is useful and clear
     question_un_useful: It is unclear or not useful
+    question_bookmark: Bookmark this question
     answer_useful: C'est utile
     answer_un_useful: Ce n'est pas utile
     answers:
@@ -1057,6 +1065,8 @@ ui:
     question: Question
     answer: Answer
     comment: Comment
+    refresh: Refresh
+    resend: Resend
   search:
     title: Résultats de la recherche
     keywords: Mots-clés
@@ -1359,6 +1369,31 @@ ui:
       title: Changer le rôle d'un utilisateur en...
       btn_cancel: Annuler
       btn_submit: Valider
+    new_password_modal:
+      title: Set new password
+      form:
+        fields:
+          password:
+            label: Password
+            text: The user will be logged out and need to login again.
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
+    user_modal:
+      title: Add new user
+      form:
+        fields:
+          display_name:
+            label: Display Name
+            msg: Display Name must be at 4-30 characters in length.
+          email:
+            label: Email
+            msg: Email is not valid.
+          password:
+            label: Password
+            msg: Password must be at 8-32 characters in length.
+      btn_cancel: Cancel
+      btn_submit: Submit
     users:
       title: Utilisateurs
       name: Nom
@@ -1373,6 +1408,7 @@ ui:
       change: Modifier
       all: Tous
       staff: Staff
+      more: More
       inactive: Inactif
       suspended: Suspendu
       deleted: Supprimé
@@ -1387,31 +1423,6 @@ ui:
       change_role: Modifier le rôle
       show_logs: Voir les logs
       add_user: Ajouter un utilisateur
-      new_password_modal:
-        title: Définir un nouveau mot de passe
-        form:
-          fields:
-            password:
-              label: Mot de passe
-              text: L'utilisateur sera déconnecté et devra se reconnecter.
-              msg: Le mot de passe doit contenir entre 8 et 32 caractères.
-        btn_cancel: Annuler
-        btn_submit: Valider
-      user_modal:
-        title: Ajouter un nouvel utilisateur
-        form:
-          fields:
-            display_name:
-              label: Nom affiché
-              msg: Le nom affiché doit avoir une longueur de 3 à 30 caractères.
-            email:
-              label: Email
-              msg: L'email n'est pas valide.
-            password:
-              label: Mot de passe
-              msg: Le mot de passe doit contenir entre 8 et 32 caractères.
-        btn_cancel: Annuler
-        btn_submit: Valider
     questions:
       page_title: Questions
       normal: Normal
@@ -1580,7 +1591,7 @@ ui:
         text: Ceci va être inséré dans le <body>
       footer:
         label: Footer
-        text: Ceci va être inséré avant </html>.
+        text: This will insert before </body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.
