@@ -49,8 +49,8 @@ const Index = () => {
     }
 
     getSearchResult(params)
-      .then((resp) => {
-        searchCaptcha.close();
+      .then(async (resp) => {
+        await searchCaptcha.close();
         setData(resp);
       })
       .catch((err) => {

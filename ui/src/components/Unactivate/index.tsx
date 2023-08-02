@@ -37,8 +37,8 @@ const Index: React.FC<IProps> = () => {
       };
     }
     resendEmail(req)
-      .then(() => {
-        emailCaptcha.close();
+      .then(async () => {
+        await emailCaptcha.close();
         setSuccess(true);
       })
       .catch((err) => {
