@@ -1,5 +1,7 @@
 package schema
 
+import "github.com/answerdev/answer/internal/base/constant"
+
 // UpdateUserStatusReq update user request
 type UpdateUserStatusReq struct {
 	UserID      string `validate:"required" json:"user_id"`
@@ -7,17 +9,10 @@ type UpdateUserStatusReq struct {
 	LoginUserID string `json:"-"`
 }
 
-const (
-	UserNormal    = "normal"
-	UserSuspended = "suspended"
-	UserDeleted   = "deleted"
-	UserInactive  = "inactive"
-)
-
-func (r *UpdateUserStatusReq) IsNormal() bool    { return r.Status == UserNormal }
-func (r *UpdateUserStatusReq) IsSuspended() bool { return r.Status == UserSuspended }
-func (r *UpdateUserStatusReq) IsDeleted() bool   { return r.Status == UserDeleted }
-func (r *UpdateUserStatusReq) IsInactive() bool  { return r.Status == UserInactive }
+func (r *UpdateUserStatusReq) IsNormal() bool    { return r.Status == constant.UserNormal }
+func (r *UpdateUserStatusReq) IsSuspended() bool { return r.Status == constant.UserSuspended }
+func (r *UpdateUserStatusReq) IsDeleted() bool   { return r.Status == constant.UserDeleted }
+func (r *UpdateUserStatusReq) IsInactive() bool  { return r.Status == constant.UserInactive }
 
 // GetUserPageReq get user list page request
 type GetUserPageReq struct {
@@ -33,9 +28,9 @@ type GetUserPageReq struct {
 	Staff bool `validate:"omitempty" form:"staff"`
 }
 
-func (r *GetUserPageReq) IsSuspended() bool { return r.Status == UserSuspended }
-func (r *GetUserPageReq) IsDeleted() bool   { return r.Status == UserDeleted }
-func (r *GetUserPageReq) IsInactive() bool  { return r.Status == UserInactive }
+func (r *GetUserPageReq) IsSuspended() bool { return r.Status == constant.UserSuspended }
+func (r *GetUserPageReq) IsDeleted() bool   { return r.Status == constant.UserDeleted }
+func (r *GetUserPageReq) IsInactive() bool  { return r.Status == constant.UserInactive }
 
 // GetUserPageResp get user response
 type GetUserPageResp struct {

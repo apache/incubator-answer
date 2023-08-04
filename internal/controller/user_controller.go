@@ -98,11 +98,11 @@ func (uc *UserController) GetOtherUserInfoByUsername(ctx *gin.Context) {
 // @Tags User
 // @Accept json
 // @Produce json
-// @Param data body schema.UserEmailLogin true "UserEmailLogin"
+// @Param data body schema.UserEmailLoginReq true "UserEmailLogin"
 // @Success 200 {object} handler.RespBody{data=schema.UserLoginResp}
 // @Router /answer/api/v1/user/login/email [post]
 func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
-	req := &schema.UserEmailLogin{}
+	req := &schema.UserEmailLoginReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}

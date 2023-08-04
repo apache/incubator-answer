@@ -2,6 +2,7 @@ package usercommon
 
 import (
 	"context"
+	"github.com/answerdev/answer/internal/base/constant"
 	"strings"
 
 	"github.com/Chain-Zhang/pinyin"
@@ -130,8 +131,8 @@ func (us *UserCommon) FormatUserBasicInfo(ctx context.Context, userInfo *entity.
 	userBasicInfo.Website = userInfo.Website
 	userBasicInfo.Location = userInfo.Location
 	userBasicInfo.IPInfo = userInfo.IPInfo
-	userBasicInfo.Status = schema.UserStatusShow[userInfo.Status]
-	if userBasicInfo.Status == schema.UserDeleted {
+	userBasicInfo.Status = constant.ConvertUserStatus(userInfo.Status, userInfo.MailStatus)
+	if userBasicInfo.Status == constant.UserDeleted {
 		userBasicInfo.Avatar = ""
 		userBasicInfo.DisplayName = "Anonymous"
 	}
