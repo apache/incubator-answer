@@ -820,11 +820,6 @@ ui:
       review: Review
       bookmark: Bookmarks
       moderation: Moderation
-      quik_link: Quick Links
-      discussion: discussion
-      support: support
-      feature: feature-request
-      bug: bug
     search:
       placeholder: Search
   footer:

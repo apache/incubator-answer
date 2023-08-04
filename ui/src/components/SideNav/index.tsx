@@ -14,6 +14,7 @@ const Index: FC = () => {
   const { pathname } = useLocation();
   const { user: userInfo } = loggedUserInfoStore();
   const { visible, can_revision, revision } = sideNavStore();
+
   return (
     <Col
       xl={2}
@@ -44,21 +45,7 @@ const Index: FC = () => {
             <Icon name="people-fill" className="me-2" />
             <span>{t('header.nav.user')}</span>
           </NavLink>
-          <div className="py-2 px-3 mt-3 small fw-bold">
-            {t('header.nav.quik_link')}
-          </div>
-          <NavLink to="/tags/support" className="nav-link">
-            {t('header.nav.discussion')}
-          </NavLink>
-          <NavLink to="/tags/discussion" className="nav-link">
-            {t('header.nav.support')}
-          </NavLink>
-          <NavLink to="/tags/feature-request" className="nav-link">
-            {t('header.nav.feature')}
-          </NavLink>
-          <NavLink to="/tags/bug" className="nav-link">
-            {t('header.nav.bug')}
-          </NavLink>
+
           {can_revision || userInfo?.role_id === 2 ? (
             <>
               <div className="py-2 px-3 mt-3 small fw-bold">
