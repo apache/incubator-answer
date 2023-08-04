@@ -7,13 +7,10 @@ import (
 
 // RemoveAnswerReq delete answer request
 type RemoveAnswerReq struct {
-	// answer id
-	ID string `validate:"required" json:"id"`
-	// user id
-	UserID string `json:"-"`
-	// whether user can delete it
+	ID          string `validate:"required" json:"id"`
+	UserID      string `json:"-"`
 	CanDelete   bool   `json:"-"`
-	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaID   string `json:"captcha_id"`
 	CaptchaCode string `json:"captcha_code"`
 }
 
@@ -29,7 +26,7 @@ type AnswerAddReq struct {
 	UserID      string `json:"-"`
 	CanEdit     bool   `json:"-"`
 	CanDelete   bool   `json:"-"`
-	CaptchaID   string `json:"captcha_id"` // captcha_id
+	CaptchaID   string `json:"captcha_id"`
 	CaptchaCode string `json:"captcha_code"`
 }
 
@@ -47,10 +44,9 @@ type AnswerUpdateReq struct {
 	HTML         string `json:"-"`
 	UserID       string `json:"-"`
 	NoNeedReview bool   `json:"-"`
-	// whether user can edit it
-	CanEdit     bool   `json:"-"`
-	CaptchaID   string `json:"captcha_id"` // captcha_id
-	CaptchaCode string `json:"captcha_code"`
+	CanEdit      bool   `json:"-"`
+	CaptchaID    string `json:"captcha_id"`
+	CaptchaCode  string `json:"captcha_code"`
 }
 
 func (req *AnswerUpdateReq) Check() (errFields []*validator.FormErrorField, err error) {
@@ -64,28 +60,26 @@ type AnswerUpdateResp struct {
 }
 
 type AnswerListReq struct {
-	QuestionID string `json:"question_id" form:"question_id"` // question_id
-	Order      string `json:"order" form:"order"`             // 1 Default 2 time
-	Page       int    `json:"page" form:"page"`               // Query number of pages
-	PageSize   int    `json:"page_size" form:"page_size"`     // Search page size
-	UserID     string `json:"-" `
+	QuestionID string `json:"question_id" form:"question_id"`
+	Order      string `json:"order" form:"order"`
+	Page       int    `json:"page" form:"page"`
+	PageSize   int    `json:"page_size" form:"page_size"`
+	UserID     string `json:"-"`
 	IsAdmin    bool   `json:"-"`
-	// whether user can edit it
-	CanEdit bool `json:"-"`
-	// whether user can delete it
-	CanDelete bool `json:"-"`
+	CanEdit    bool   `json:"-"`
+	CanDelete  bool   `json:"-"`
 }
 
 type AnswerInfo struct {
-	ID             string         `json:"id" xorm:"id"`                   // id
-	QuestionID     string         `json:"question_id" xorm:"question_id"` // question_id
-	Content        string         `json:"content" xorm:"content"`         // content
-	HTML           string         `json:"html" xorm:"html"`               // html
-	CreateTime     int64          `json:"create_time" xorm:"created"`     // create_time
-	UpdateTime     int64          `json:"update_time" xorm:"updated"`     // update_time
-	Accepted       int            `json:"accepted"`                       // 1 Failed 2 accepted
-	UserID         string         `json:"-" `
-	UpdateUserID   string         `json:"-" `
+	ID             string         `json:"id" xorm:"id"`
+	QuestionID     string         `json:"question_id" xorm:"question_id"`
+	Content        string         `json:"content" xorm:"content"`
+	HTML           string         `json:"html" xorm:"html"`
+	CreateTime     int64          `json:"create_time" xorm:"created"`
+	UpdateTime     int64          `json:"update_time" xorm:"updated"`
+	Accepted       int            `json:"accepted"`
+	UserID         string         `json:"-"`
+	UpdateUserID   string         `json:"-"`
 	UserInfo       *UserBasicInfo `json:"user_info,omitempty"`
 	UpdateUserInfo *UserBasicInfo `json:"update_user_info,omitempty"`
 	Collected      bool           `json:"collected"`
@@ -105,8 +99,8 @@ type AdminAnswerInfo struct {
 	CreateTime   int64          `json:"create_time"`
 	UpdateTime   int64          `json:"update_time"`
 	Accepted     int            `json:"accepted"`
-	UserID       string         `json:"-" `
-	UpdateUserID string         `json:"-" `
+	UserID       string         `json:"-"`
+	UpdateUserID string         `json:"-"`
 	UserInfo     *UserBasicInfo `json:"user_info"`
 	VoteCount    int            `json:"vote_count"`
 	QuestionInfo struct {
@@ -117,11 +111,11 @@ type AdminAnswerInfo struct {
 type AnswerAcceptedReq struct {
 	QuestionID string `json:"question_id"`
 	AnswerID   string `json:"answer_id"`
-	UserID     string `json:"-" `
+	UserID     string `json:"-"`
 }
 
 type AdminSetAnswerStatusRequest struct {
 	StatusStr string `json:"status"`
 	AnswerID  string `json:"answer_id"`
-	UserID    string `json:"-" `
+	UserID    string `json:"-"`
 }

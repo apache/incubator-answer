@@ -3,6 +3,7 @@ package user_admin
 import (
 	"context"
 	"fmt"
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/google/uuid"
 	"net/mail"
@@ -261,15 +262,15 @@ func (us *UserAdminService) GetUserPage(ctx context.Context, req *schema.GetUser
 			Avatar:      avatarMapping[u.ID].GetURL(),
 		}
 		if u.Status == entity.UserStatusDeleted {
-			t.Status = schema.UserDeleted
+			t.Status = constant.UserDeleted
 			t.DeletedAt = u.DeletedAt.Unix()
 		} else if u.Status == entity.UserStatusSuspended {
-			t.Status = schema.UserSuspended
+			t.Status = constant.UserSuspended
 			t.SuspendedAt = u.SuspendedAt.Unix()
 		} else if u.MailStatus == entity.EmailStatusToBeVerified {
-			t.Status = schema.UserInactive
+			t.Status = constant.UserInactive
 		} else {
-			t.Status = schema.UserNormal
+			t.Status = constant.UserNormal
 		}
 		resp = append(resp, t)
 	}
