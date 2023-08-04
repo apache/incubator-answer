@@ -66,7 +66,7 @@ export const deriveLoginState = (): TLoginState => {
   if (ls.isLogged && user.mail_status === 2) {
     ls.isNotActivated = true;
   }
-  if (ls.isLogged && user.status === 'forbidden') {
+  if (ls.isLogged && user.status === 'suspended') {
     ls.isForbidden = true;
   }
   if (ls.isActivated && !ls.isForbidden) {

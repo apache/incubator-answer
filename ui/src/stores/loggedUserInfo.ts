@@ -20,7 +20,7 @@ const initUser: UserInfoRes = {
   display_name: '',
   location: '',
   website: '',
-  status: '',
+  status: 'normal',
   mail_status: 1,
   language: 'Default',
   is_admin: false,
