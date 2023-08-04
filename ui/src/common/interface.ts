@@ -132,9 +132,7 @@ export interface UserInfoBase {
   website: string;
   location: string;
   ip_info?: string;
-  /** 'forbidden' | 'normal' | 'delete'
-   */
-  status?: string;
+  status?: 'normal' | 'suspended' | 'deleted' | 'inactive';
   /** roles */
   role_id?: RoleId;
 }
