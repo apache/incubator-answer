@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Table, Dropdown, Stack } from 'react-bootstrap';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 
 import classNames from 'classnames';
 
@@ -58,7 +58,20 @@ const Users: FC = () => {
 
   return (
     <>
-      <h3 className="mb-4">{t('title')}</h3>
+      <h3>{t('title')}</h3>
+      <div className="mb-4">
+        <Trans i18nKey="admin.installed_plugins.plugin_link">
+          Plugins extend and expand the functionality of Answer. You may find
+          plugins in the
+          <a
+            href="https://github.com/answerdev/plugins"
+            target="_blank"
+            rel="noreferrer">
+            Answer Plugin Repository
+          </a>
+          .
+        </Trans>
+      </div>
       <div className="d-flex justify-content-between align-items-center mb-3">
         <Stack direction="horizontal" gap={3}>
           <QueryGroup
