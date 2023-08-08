@@ -12,6 +12,7 @@ import themeSettingStore from './themeSetting';
 import loginToContinueStore from './loginToContinue';
 import errorCodeStore from './errorCode';
 import sideNavStore from './sideNav';
+import commentReplyStore from './commentReply';
 
 export {
   toastStore,
@@ -28,4 +29,5 @@ export {
   errorCodeStore,
   userCenterStore,
   sideNavStore,
+  commentReplyStore,
 };

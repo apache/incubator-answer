@@ -1,6 +1,6 @@
 import { FC } from 'react';
 import { Col, Nav } from 'react-bootstrap';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import classnames from 'classnames';
@@ -11,10 +11,15 @@ import './index.scss';
 
 const Index: FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const { user: userInfo } = loggedUserInfoStore();
   const { visible, can_revision, revision } = sideNavStore();
 
+  const handleNavClick = (e, path) => {
+    e.preventDefault();
+    navigate(path);
+  };
   return (
     <Col
       xl={2}
@@ -36,10 +41,13 @@ const Index: FC = () => {
             <span>{t('header.nav.question')}</span>
           </NavLink>
 
-          <NavLink to="/tags" className="nav-link">
+          <Nav.Link
+            href="/tags"
+            active={pathname === '/tags'}
+            onClick={(e) => handleNavClick(e, '/tags')}>
             <Icon name="tags-fill" className="me-2" />
             <span>{t('header.nav.tag')}</span>
-          </NavLink>
+          </Nav.Link>
 
           <NavLink to="/users" className="nav-link">
             <Icon name="people-fill" className="me-2" />

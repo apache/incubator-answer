@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -23,6 +23,7 @@ import {
   updateComment,
   postVote,
 } from '@/services';
+import { commentReplyStore } from '@/stores';
 
 import { Form, ActionBar, Reply } from './components';
 
@@ -32,6 +33,8 @@ const Comment = ({ objectId, mode, commentId }) => {
   const pageUsers = usePageUsers();
   const [pageIndex, setPageIndex] = useState(0);
   const [visibleComment, setVisibleComment] = useState(false);
+  const { id: currentReplyId, update: updateCurrentReplyId } =
+    commentReplyStore();
   const pageSize = pageIndex === 0 ? 3 : 15;
   const { data, mutate } = useQueryComments({
     object_id: objectId,
@@ -49,13 +52,21 @@ const Comment = ({ objectId, mode, commentId }) => {
   const vCaptcha = useCaptchaModal('vote');
 
   const { t } = useTranslation('translation', { keyPrefix: 'comment' });
-  const scrollCallback = useCallback((el, co) => {
-    if (pageIndex === 0 && co.comment_id === commentId) {
+
+  useEffect(() => {
+    if (pageIndex === 0 && commentId) {
+      console.log('scrollCallback');
       setTimeout(() => {
+        const el = document.getElementById(commentId);
+        console.log(el);
         scrollToElementTop(el);
         bgFadeOut(el);
       }, 100);
     }
+
+    return () => {
+      updateCurrentReplyId('');
+    };
   }, []);
 
   useEffect(() => {
@@ -87,14 +98,11 @@ const Comment = ({ objectId, mode, commentId }) => {
     if (!tryNormalLogged(true)) {
       return;
     }
-    setComments(
-      comments.map((item) => {
-        if (item.comment_id === id) {
-          item.showReply = !item.showReply;
-        }
-        return item;
-      }),
-    );
+    comments.forEach((item) => {
+      if (item.comment_id === id) {
+        updateCurrentReplyId(id);
+      }
+    });
   };
 
   const handleEdit = (id) => {
@@ -171,14 +179,14 @@ const Comment = ({ objectId, mode, commentId }) => {
             const index = comments.findIndex(
               (comment) => comment.comment_id === item.comment_id,
             );
-            comments[index].showReply = false;
+            updateCurrentReplyId('');
             comments.splice(index + 1, 0, res);
             setComments([...comments]);
           } else {
             setComments([
               ...comments.map((comment) => {
                 if (comment.comment_id === item.comment_id) {
-                  comment.showReply = false;
+                  updateCurrentReplyId('');
                 }
                 return comment;
               }),
@@ -293,8 +301,8 @@ const Comment = ({ objectId, mode, commentId }) => {
     setComments(
       comments.map((item) => {
         if (item.comment_id === id) {
-          item.showReply = false;
           item.showEdit = false;
+          updateCurrentReplyId('');
         }
         return item;
       }),
@@ -306,9 +314,7 @@ const Comment = ({ objectId, mode, commentId }) => {
         return (
           <div
             key={item.comment_id}
-            ref={(el) => {
-              scrollCallback(el, item);
-            }}
+            id={item.comment_id}
             className={classNames(
               'border-bottom py-2 comment-item',
               index === 0 && 'border-top',
@@ -339,7 +345,7 @@ const Comment = ({ objectId, mode, commentId }) => {
               </div>
             )}
 
-            {item.showReply ? (
+            {currentReplyId === item.comment_id ? (
               <Reply
                 userName={item.user_display_name}
                 mode={mode}
@@ -349,7 +355,7 @@ const Comment = ({ objectId, mode, commentId }) => {
                 onCancel={() => handleCancel(item.comment_id)}
               />
             ) : null}
-            {item.showEdit || item.showReply ? null : (
+            {item.showEdit || currentReplyId === item.comment_id ? null : (
               <ActionBar
                 nickName={item.user_display_name}
                 username={item.username}
