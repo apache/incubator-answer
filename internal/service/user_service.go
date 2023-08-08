@@ -109,7 +109,7 @@ func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username 
 }
 
 // EmailLogin email login
-func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogin) (resp *schema.UserLoginResp, err error) {
+func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLoginReq) (resp *schema.UserLoginResp, err error) {
 	userInfo, exist, err := us.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil {
 		return nil, err

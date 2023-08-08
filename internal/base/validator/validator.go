@@ -168,6 +168,20 @@ func GetValidatorByLang(lang i18n.Language) *MyValidator {
 
 // Check /
 func (m *MyValidator) Check(value interface{}) (errFields []*FormErrorField, err error) {
+	defer func() {
+		if len(errFields) == 0 {
+			return
+		}
+		for _, field := range errFields {
+			if len(field.ErrorField) == 0 {
+				continue
+			}
+			if !strings.HasSuffix(field.ErrorMsg, ".") {
+				field.ErrorMsg += "."
+			}
+			field.ErrorMsg = fmt.Sprintf("%s%s", strings.ToUpper(string(field.ErrorMsg[0])), field.ErrorMsg[1:])
+		}
+	}()
 	err = m.Validate.Struct(value)
 	if err != nil {
 		var valErrors validator.ValidationErrors
