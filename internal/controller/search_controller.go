@@ -39,7 +39,7 @@ func NewSearchController(
 // @Security ApiKeyAuth
 // @Param q query string true "query string"
 // @Param order query string true "order" Enums(newest,active,score,relevance)
-// @Success 200 {object} handler.RespBody{data=schema.SearchListResp}
+// @Success 200 {object} handler.RespBody{data=schema.SearchResp}
 // @Router /answer/api/v1/search [get]
 func (sc *SearchController) Search(ctx *gin.Context) {
 	dto := schema.SearchDTO{}
@@ -65,12 +65,9 @@ func (sc *SearchController) Search(ctx *gin.Context) {
 		}
 	}
 
-	resp, total, err := sc.searchService.Search(ctx, &dto)
 	if !isAdmin {
 		sc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionSearch, unit)
 	}
-	handler.HandleResponse(ctx, err, schema.SearchListResp{
-		Total:      total,
-		SearchResp: resp,
-	})
+	resp, err := sc.searchService.Search(ctx, &dto)
+	handler.HandleResponse(ctx, err, resp)
 }

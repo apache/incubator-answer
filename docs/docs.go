@@ -8054,7 +8054,7 @@ const docTemplate = `{
                     "description": "search response",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/schema.SearchResp"
+                        "$ref": "#/definitions/schema.SearchResults"
                     }
                 }
             }
@@ -8107,7 +8107,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.SearchResp": {
+        "schema.SearchResults": {
             "type": "object",
             "properties": {
                 "object": {
