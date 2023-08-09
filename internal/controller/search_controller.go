@@ -10,6 +10,7 @@ import (
 	"github.com/answerdev/answer/internal/schema"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/action"
+	"github.com/answerdev/answer/plugin"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 )
@@ -70,4 +71,25 @@ func (sc *SearchController) Search(ctx *gin.Context) {
 	}
 	resp, err := sc.searchService.Search(ctx, &dto)
 	handler.HandleResponse(ctx, err, resp)
+}
+
+// SearchDesc get search description
+// @Summary get search description
+// @Description get search description
+// @Tags Search
+// @Produce json
+// @Success 200 {object} handler.RespBody{data=schema.SearchResp}
+// @Router /answer/api/v1/search/desc [get]
+func (sc *SearchController) SearchDesc(ctx *gin.Context) {
+	var finder plugin.Search
+	_ = plugin.CallSearch(func(search plugin.Search) error {
+		finder = search
+		return nil
+	})
+	resp := &schema.SearchDescResp{}
+	if finder != nil {
+		resp.Name = finder.Info().Name.Translate(ctx)
+		resp.Icon = finder.Description().Icon
+	}
+	handler.HandleResponse(ctx, nil, resp)
 }
