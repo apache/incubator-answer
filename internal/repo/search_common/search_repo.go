@@ -70,7 +70,7 @@ func NewSearchRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo, userCommon
 }
 
 // SearchContents search question and answer data
-func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs []string, userID string, votes int, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
+func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs []string, userID string, votes int, page, size int, order string) (resp []schema.SearchResult, total int64, err error) {
 	words = filterWords(words)
 
 	var (
@@ -210,7 +210,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 }
 
 // SearchQuestions search question data
-func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagIDs []string, notAccepted bool, views, answers int, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
+func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagIDs []string, notAccepted bool, views, answers int, page, size int, order string) (resp []schema.SearchResult, total int64, err error) {
 	words = filterWords(words)
 	var (
 		qfs  = qFields
@@ -319,7 +319,7 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagID
 }
 
 // SearchAnswers search answer data
-func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs []string, accepted bool, questionID string, page, size int, order string) (resp []schema.SearchResp, total int64, err error) {
+func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs []string, accepted bool, questionID string, page, size int, order string) (resp []schema.SearchResult, total int64, err error) {
 	words = filterWords(words)
 
 	var (
@@ -428,7 +428,7 @@ func (sr *searchRepo) parseOrder(ctx context.Context, order string) (res string)
 }
 
 // ParseSearchPluginResult parse search plugin result
-func (sr *searchRepo) ParseSearchPluginResult(ctx context.Context, sres []plugin.SearchResult) (resp []schema.SearchResp, err error) {
+func (sr *searchRepo) ParseSearchPluginResult(ctx context.Context, sres []plugin.SearchResult) (resp []schema.SearchResult, err error) {
 	var (
 		qres []map[string][]byte
 		res  = make([]map[string][]byte, 0)
@@ -455,7 +455,7 @@ func (sr *searchRepo) ParseSearchPluginResult(ctx context.Context, sres []plugin
 }
 
 // parseResult parse search result, return the data structure
-func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) (resp []schema.SearchResp, err error) {
+func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) (resp []schema.SearchResult, err error) {
 	for _, r := range res {
 		var (
 			objectKey,
@@ -525,7 +525,7 @@ func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) 
 			AnswerCount:     converter.StringToInt(string(r["answer_count"])),
 			StatusStr:       status,
 		}
-		resp = append(resp, schema.SearchResp{
+		resp = append(resp, schema.SearchResult{
 			ObjectType: objectKey,
 			Object:     object,
 		})

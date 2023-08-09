@@ -83,11 +83,17 @@ const (
 
 type Search interface {
 	Base
+	Description() SearchDesc
 	SearchContents(ctx context.Context, cond *SearchBasicCond) (res []SearchResult, total int64, err error)
 	SearchQuestions(ctx context.Context, cond *SearchBasicCond) (res []SearchResult, total int64, err error)
 	SearchAnswers(ctx context.Context, cond *SearchBasicCond) (res []SearchResult, total int64, err error)
 	UpdateContent(ctx context.Context, contentID string, content *SearchContent) error
 	DeleteContent(ctx context.Context, contentID string) error
+}
+
+type SearchDesc struct {
+	// A svg icon it wil be display in search result page
+	Icon string `json:"icon"`
 }
 
 var (

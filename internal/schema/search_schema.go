@@ -107,17 +107,17 @@ type TagResp struct {
 	Reserved        bool   `json:"reserved"`
 }
 
-type SearchResp struct {
+type SearchResult struct {
 	// object_type
 	ObjectType string `json:"object_type"`
 	// this object
 	Object SearchObject `json:"object"`
 }
 
-type SearchListResp struct {
+type SearchResp struct {
 	Total int64 `json:"count"`
 	// search response
-	SearchResp []SearchResp `json:"list"`
-	// extra fields
-	Extra interface{} `json:"extra"`
+	SearchResults []SearchResult `json:"list"`
+	// search plugin desc
+	SearchPluginIcon string `json:"search_icon,omitempty"`
 }
