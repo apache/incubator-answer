@@ -1,0 +1,4 @@
+plugin:
+  algolia:
+    ui:
+      search_by: Search by

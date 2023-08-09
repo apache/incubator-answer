@@ -184,18 +184,20 @@ function diffText(newText: string, oldText?: string): string {
   return result.join('');
 }
 
-function base64ToSvg(base64: string) {
+function base64ToSvg(base64: string, svgClassName?: string) {
   // base64 to svg xml
   const svgxml = atob(base64);
 
-  // svg add class btnSvg
+  // svg add class
   const parser = new DOMParser();
   const doc = parser.parseFromString(svgxml, 'image/svg+xml');
   const parseError = doc.querySelector('parsererror');
   const svg = doc.querySelector('svg');
   let str = '';
   if (svg && !parseError) {
-    svg.classList.add('btnSvg');
+    if (svgClassName) {
+      svg.classList.add(svgClassName);
+    }
     svg.classList.add('me-2');
 
     // transform svg to string

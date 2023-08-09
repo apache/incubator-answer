@@ -7,6 +7,7 @@ import { following } from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
 import { escapeRemove } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
+import { PluginRender } from '@/components';
 
 interface Props {
   data;
@@ -34,37 +35,42 @@ const Index: FC<Props> = ({ data }) => {
   };
 
   return (
-    <div className="mb-5">
-      <h3 className="mb-3">{t('title')}</h3>
-      <p>
-        <span className="text-secondary me-1">{t('keywords')}</span>
-        {q?.replace(reg, '')}
-        <br />
-        {options?.length && (
+    <div className="mb-5 d-flex justify-content-between">
+      <div>
+        <h3 className="mb-3">{t('title')}</h3>
+        <p>
+          <span className="text-secondary me-1">{t('keywords')}</span>
+          {q?.replace(reg, '')}
+          <br />
+          {options?.length && (
+            <>
+              <span className="text-secondary">{t('options')} </span>
+              {options?.map((item) => {
+                return <code key={item}>{item} </code>;
+              })}
+            </>
+          )}
+        </p>
+        {data?.slug_name && (
           <>
-            <span className="text-secondary">{t('options')} </span>
-            {options?.map((item) => {
-              return <code key={item}>{item} </code>;
-            })}
+            {data.excerpt && (
+              <p className="text-break">
+                {escapeRemove(data.excerpt)}
+                <Link className="ms-1" to={pathFactory.tagInfo(data.slug_name)}>
+                  [{t('more')}]
+                </Link>
+              </p>
+            )}
+
+            <Button variant="outline-primary" onClick={follow}>
+              {followed ? t('following') : t('follow')}
+            </Button>
           </>
         )}
-      </p>
-      {data?.slug_name && (
-        <>
-          {data.excerpt && (
-            <p className="text-break">
-              {escapeRemove(data.excerpt)}
-              <Link className="ms-1" to={pathFactory.tagInfo(data.slug_name)}>
-                [{t('more')}]
-              </Link>
-            </p>
-          )}
-
-          <Button variant="outline-primary" onClick={follow}>
-            {followed ? t('following') : t('follow')}
-          </Button>
-        </>
-      )}
+      </div>
+      <div>
+        <PluginRender slug_name="algolia" />
+      </div>
     </div>
   );
 };

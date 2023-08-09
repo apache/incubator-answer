@@ -33,7 +33,7 @@ const Index: FC<Props> = ({ className }) => {
         className={classnames('w-100', className)}
         variant="outline-secondary"
         href={ucAgent?.agent_info.login_redirect_url}>
-        <SvgIcon base64={ucAgent?.agent_info.icon} />
+        <SvgIcon base64={ucAgent?.agent_info.icon} svgClassName="btnSvg" />
         <span>
           {t('connect', { auth_name: ucAgent?.agent_info.display_name })}
         </span>
