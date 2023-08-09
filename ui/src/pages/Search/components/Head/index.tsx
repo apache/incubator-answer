@@ -35,42 +35,40 @@ const Index: FC<Props> = ({ data }) => {
   };
 
   return (
-    <div className="mb-5 d-flex justify-content-between">
-      <div>
-        <h3 className="mb-3">{t('title')}</h3>
-        <p>
-          <span className="text-secondary me-1">{t('keywords')}</span>
-          {q?.replace(reg, '')}
-          <br />
-          {options?.length && (
-            <>
-              <span className="text-secondary">{t('options')} </span>
-              {options?.map((item) => {
-                return <code key={item}>{item} </code>;
-              })}
-            </>
-          )}
-        </p>
-        {data?.slug_name && (
-          <>
-            {data.excerpt && (
-              <p className="text-break">
-                {escapeRemove(data.excerpt)}
-                <Link className="ms-1" to={pathFactory.tagInfo(data.slug_name)}>
-                  [{t('more')}]
-                </Link>
-              </p>
-            )}
-
-            <Button variant="outline-primary" onClick={follow}>
-              {followed ? t('following') : t('follow')}
-            </Button>
-          </>
-        )}
-      </div>
-      <div>
+    <div className="mb-5">
+      <div className="mb-3 d-flex align-items-center justify-content-between">
+        <h3 className="mb-0">{t('title')}</h3>
         <PluginRender slug_name="algolia" />
       </div>
+      <p>
+        <span className="text-secondary me-1">{t('keywords')}</span>
+        {q?.replace(reg, '')}
+        <br />
+        {options?.length && (
+          <>
+            <span className="text-secondary">{t('options')} </span>
+            {options?.map((item) => {
+              return <code key={item}>{item} </code>;
+            })}
+          </>
+        )}
+      </p>
+      {data?.slug_name && (
+        <>
+          {data.excerpt && (
+            <p className="text-break">
+              {escapeRemove(data.excerpt)}
+              <Link className="ms-1" to={pathFactory.tagInfo(data.slug_name)}>
+                [{t('more')}]
+              </Link>
+            </p>
+          )}
+
+          <Button variant="outline-primary" onClick={follow}>
+            {followed ? t('following') : t('follow')}
+          </Button>
+        </>
+      )}
     </div>
   );
 };
