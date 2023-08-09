@@ -155,6 +155,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	//search
 	r.GET("/search", a.searchController.Search)
+	r.GET("/search/desc", a.searchController.SearchDesc)
 
 	//rank
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)

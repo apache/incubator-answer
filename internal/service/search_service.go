@@ -59,9 +59,7 @@ func (ss *SearchService) Search(ctx context.Context, dto *schema.SearchDTO) (res
 
 func (ss *SearchService) searchByPlugin(ctx context.Context, finder plugin.Search, cond *schema.SearchCondition, dto *schema.SearchDTO) (resp *schema.SearchResp, err error) {
 	var res []plugin.SearchResult
-	resp = &schema.SearchResp{
-		SearchPluginIcon: finder.Description().Icon,
-	}
+	resp = &schema.SearchResp{}
 	if cond.SearchAll() {
 		res, resp.Total, err = finder.SearchContents(ctx, cond.Convert2PluginSearchCond(dto.Page, dto.Size, dto.Order))
 	} else if cond.SearchQuestion() {

@@ -118,6 +118,9 @@ type SearchResp struct {
 	Total int64 `json:"count"`
 	// search response
 	SearchResults []SearchResult `json:"list"`
-	// search plugin desc
-	SearchPluginIcon string `json:"search_icon,omitempty"`
+}
+
+type SearchDescResp struct {
+	Name string `json:"name"`
+	Icon string `json:"icon"`
 }
