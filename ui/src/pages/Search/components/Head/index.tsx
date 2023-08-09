@@ -7,6 +7,7 @@ import { following } from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
 import { escapeRemove } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
+import { PluginRender } from '@/components';
 
 interface Props {
   data;
@@ -35,7 +36,10 @@ const Index: FC<Props> = ({ data }) => {
 
   return (
     <div className="mb-5">
-      <h3 className="mb-3">{t('title')}</h3>
+      <div className="mb-3 d-flex align-items-center justify-content-between">
+        <h3 className="mb-0">{t('title')}</h3>
+        <PluginRender slug_name="algolia" />
+      </div>
       <p>
         <span className="text-secondary me-1">{t('keywords')}</span>
         {q?.replace(reg, '')}

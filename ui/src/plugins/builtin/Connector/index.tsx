@@ -31,7 +31,7 @@ const Index: FC<Props> = ({ className }) => {
       {data?.map((item) => {
         return (
           <Button variant="outline-secondary" href={item.link} key={item.name}>
-            <SvgIcon base64={item.icon} />
+            <SvgIcon base64={item.icon} svgClassName="btnSvg" />
             <span>{t('connect', { auth_name: item.name })}</span>
           </Button>
         );
