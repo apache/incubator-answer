@@ -13,15 +13,15 @@
     max-width: calc(100% - 24px);
   }
   .nav-link {
-    color: rgba(0, 0, 0, 0.65);
+    color: #fff9;
   }
   .nav-link:hover {
-    color: rgba(0, 0, 0);
-    background-color: var(--bs-gray-100);
+    color: #fff;
+    background-color: var(--bs-gray-700);
   }
   .nav-link.active {
-    color: black;
-    background-color: var(--bs-gray-200);
+    color: #fff;
+    background-color: var(--bs-gray-800);
   }
   .side-nav-right-line {
     position: absolute;
@@ -29,7 +29,7 @@
     right: 12px;
     width: 1px;
     height: 100%;
-    background-color: var(--bs-gray-300);
+    background-color: var(--bs-gray-800);
     min-height: calc(100vh - 62px - 74px);
   }
 }

@@ -113,6 +113,8 @@ const Header: FC = () => {
       variant={navbarStyle === 'theme-colored' ? 'dark' : ''}
       expand="lg"
       className={classnames('sticky-top', navbarStyle)}
+      bg="dark"
+      data-bs-theme="dark"
       id="header">
       <Container className="d-flex align-items-center">
         <Navbar.Toggle

@@ -1,0 +1,19 @@
+<svg width="62" height="62" viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="30.9479" cy="30.9479" r="21.593" transform="rotate(30 30.9479 30.9479)" stroke="white" strokeWidth="2.12391" />
+  <path d="M41.0647 36.7879C38.0106 42.0778 34.0638 46.124 30.201 48.4123C26.3053 50.7201 22.7195 51.1298 20.1517 49.6473C17.584 48.1648 16.1459 44.8546 16.1967 40.3269C16.247 35.8374 17.7777 30.3963 20.8318 25.1065C23.8859 19.8166 27.8327 15.7704 31.6955 13.4821C35.5913 11.1743 39.1771 10.7646 41.7448 12.2471C44.3125 13.7296 45.7506 17.0398 45.6999 21.5675C45.6495 26.057 44.1188 31.4981 41.0647 36.7879Z" stroke="white" strokeWidth="2.12391" />
+  <line x1="11.7628" y1="20.2821" x2="49.7761" y2="42.2291" stroke="white" strokeWidth="2.12391" />
+  <line x1="41.8741" y1="12.7328" x2="19.9271" y2="50.7461" stroke="white" strokeWidth="2.12391" />
+  <g filter="url(#filter0_f_643_2379)">
+    <circle cx="30.9479" cy="30.9479" r="21.593" transform="rotate(30 30.9479 30.9479)" stroke="white" strokeWidth="2.12391" />
+    <path d="M41.0647 36.7879C38.0106 42.0778 34.0638 46.124 30.201 48.4123C26.3053 50.7201 22.7195 51.1298 20.1517 49.6473C17.584 48.1648 16.1459 44.8546 16.1967 40.3269C16.247 35.8374 17.7777 30.3963 20.8318 25.1065C23.8859 19.8166 27.8327 15.7704 31.6955 13.4821C35.5913 11.1743 39.1771 10.7646 41.7448 12.2471C44.3125 13.7296 45.7506 17.0398 45.6999 21.5675C45.6495 26.057 44.1188 31.4981 41.0647 36.7879Z" stroke="white" strokeWidth="2.12391" />
+    <line x1="11.7628" y1="20.2821" x2="49.7761" y2="42.2291" stroke="white" strokeWidth="2.12391" />
+    <line x1="41.8741" y1="12.7328" x2="19.9271" y2="50.7461" stroke="white" strokeWidth="2.12391" />
+  </g>
+  <defs>
+    <filter id="filter0_f_643_2379" x="4.04137" y="4.04137" width="53.8131" height="53.8131" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+      <feGaussianBlur stdDeviation="2.12391" result="effect1_foregroundBlur_643_2379" />
+    </filter>
+  </defs>
+</svg>

@@ -1,6 +1,6 @@
 {{define "header"}}
 <!DOCTYPE html>
-<html lang="{{.lang}}">
+<html lang="{{.lang}}" data-bs-theme="dark">
   <head>
     <meta charset="utf-8" />
     <title>{{.title}}</title>
@@ -16,8 +16,8 @@
     <link href="/custom.css" rel="stylesheet" />
     <link
       rel="icon"
-      type="image/png"
-      href="{{if $.siteinfo.Branding.Favicon }}{{$.siteinfo.Branding.Favicon}}{{else}}/favicon.ico{{end}}"
+      type="image/svg+xml"
+      href="/logo.svg"
       data-rh="true"
     />
     <link

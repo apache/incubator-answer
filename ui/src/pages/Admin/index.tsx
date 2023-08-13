@@ -68,7 +68,7 @@ const Index: FC = () => {
   });
   return (
     <>
-      <div className="bg-light py-2">
+      <div className="bg-dark-subtle py-2">
         <Container className="py-1">
           <h6 className="mb-0 fw-bold lh-base">
             {t('title', { keyPrefix: 'admin.admin_header' })}

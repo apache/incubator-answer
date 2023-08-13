@@ -31,7 +31,7 @@ function MenuNode({
         href={href}
         className={classNames(
           'text-nowrap d-flex flex-nowrap align-items-center w-100',
-          { expanding, 'link-dark': activeKey !== menu.path },
+          { expanding, 'link-secondary': activeKey !== menu.path },
         )}>
         <span className="me-auto text-truncate">
           {menu.displayName ? menu.displayName : t(menu.name)}

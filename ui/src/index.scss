@@ -329,3 +329,11 @@ img[src=""] {
   fill: currentColor;
   vertical-align: -0.125em;
 }
+
+[data-bs-theme="dark"] {
+  --bs-primary-rgb: 0, 0, 0;
+
+  .nav-pills {
+    --bs-nav-pills-link-active-bg: #333;
+  }
+}

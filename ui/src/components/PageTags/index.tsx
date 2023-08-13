@@ -56,8 +56,8 @@ const Index: FC = () => {
     <Helmet>
       <link
         rel="icon"
-        type="image/png"
-        href={favicon || square_icon || '/favicon.ico'}
+        type="image/svg+xml"
+        href={favicon || square_icon || '/logo.svg'}
       />
       <link rel="icon" type="image/png" sizes="192x192" href={square_icon} />
       <link rel="apple-touch-icon" type="image/png" href={square_icon} />
