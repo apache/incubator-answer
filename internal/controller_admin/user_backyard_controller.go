@@ -98,7 +98,7 @@ func (uc *UserAdminController) AddUser(ctx *gin.Context) {
 // @Tags admin
 // @Accept json
 // @Produce json
-// @Param data body schema.AddUserReq true "user"
+// @Param data body schema.AddUsersReq true "user"
 // @Success 200 {object} handler.RespBody
 // @Router /answer/admin/api/users [post]
 func (uc *UserAdminController) AddUsers(ctx *gin.Context) {
