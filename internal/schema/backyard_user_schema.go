@@ -1,6 +1,11 @@
 package schema
 
-import "github.com/answerdev/answer/internal/base/constant"
+import (
+	"context"
+	"fmt"
+	"github.com/answerdev/answer/internal/base/constant"
+	"strings"
+)
 
 // UpdateUserStatusReq update user request
 type UpdateUserStatusReq struct {
@@ -85,6 +90,31 @@ type AddUserReq struct {
 	Email       string `validate:"required,email,gt=0,lte=500" json:"email"`
 	Password    string `validate:"required,gte=8,lte=32" json:"password"`
 	LoginUserID string `json:"-"`
+}
+
+// AddUsersReq add users request
+type AddUsersReq struct {
+	// users info line by line
+	UsersStr string        `json:"users"`
+	Users    []*AddUserReq `json:"-"`
+}
+
+func (req *AddUsersReq) ParseUsers(ctx context.Context) error {
+	req.UsersStr = strings.TrimSpace(req.UsersStr)
+	lines := strings.Split(req.UsersStr, "\n")
+	req.Users = make([]*AddUserReq, 0)
+	for i, line := range lines {
+		arr := strings.Split(line, ",")
+		if len(arr) != 3 {
+			return fmt.Errorf("error format at line %d", i)
+		}
+		req.Users = append(req.Users, &AddUserReq{
+			DisplayName: arr[0],
+			Email:       arr[1],
+			Password:    arr[2],
+		})
+	}
+	return nil
 }
 
 // UpdateUserPasswordReq update user password request

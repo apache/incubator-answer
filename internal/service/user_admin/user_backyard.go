@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/google/uuid"
 	"net/mail"
@@ -34,6 +36,7 @@ type UserAdminRepo interface {
 	GetUserPage(ctx context.Context, page, pageSize int, user *entity.User,
 		usernameOrDisplayName string, isStaff bool) (users []*entity.User, total int64, err error)
 	AddUser(ctx context.Context, user *entity.User) (err error)
+	AddUsers(ctx context.Context, users []*entity.User) (err error)
 	UpdateUserPassword(ctx context.Context, userID string, password string) (err error)
 }
 
@@ -163,6 +166,60 @@ func (us *UserAdminService) AddUser(ctx context.Context, req *schema.AddUserReq)
 		return err
 	}
 	return
+}
+
+// AddUsers add users
+func (us *UserAdminService) AddUsers(ctx context.Context, req *schema.AddUsersReq) (err error) {
+	err = req.ParseUsers(ctx)
+	if err != nil {
+		return errors.BadRequest(reason.RequestFormatError).WithMsg(err.Error())
+	}
+	if len(req.Users) == 0 {
+		return errors.BadRequest(reason.RequestFormatError).WithMsg("not found any user")
+	}
+	if len(req.Users) > 5000 {
+		return errors.BadRequest(reason.RequestFormatError).WithMsg("Add up to 5000 users at one time")
+	}
+	users, err := us.formatBulkAddUsers(ctx, req)
+	if err != nil {
+		return err
+	}
+	return us.userRepo.AddUsers(ctx, users)
+}
+
+func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.AddUsersReq) (
+	users []*entity.User, err error) {
+
+	val := validator.GetValidatorByLang(handler.GetLangByCtx(ctx))
+	for _, user := range req.Users {
+		_, err = val.Check(user)
+		if err != nil {
+			return nil, err
+		}
+
+		_, has, err := us.userRepo.GetUserInfoByEmail(ctx, user.Email)
+		if err != nil {
+			return nil, err
+		}
+		if has {
+			return nil, errors.BadRequest(reason.EmailDuplicate)
+		}
+
+		userInfo := &entity.User{}
+		userInfo.EMail = user.Email
+		userInfo.DisplayName = user.DisplayName
+		hashPwd, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+		userInfo.Pass = string(hashPwd)
+		userInfo.Username, err = us.userCommonService.MakeUsername(ctx, userInfo.DisplayName)
+		if err != nil {
+			return nil, err
+		}
+		userInfo.MailStatus = entity.EmailStatusAvailable
+		userInfo.Status = entity.UserStatusAvailable
+		userInfo.Rank = 1
+		users = append(users, userInfo)
+	}
+	return users, nil
 }
 
 // UpdateUserPassword update user password
