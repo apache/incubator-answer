@@ -190,7 +190,24 @@ func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.
 	lang := handler.GetLangByCtx(ctx)
 	val := validator.GetValidatorByLang(lang)
 	errorData := &schema.AddUsersErrorData{Line: -1}
+	existEmails := make(map[string]bool)
+	existDisplayNames := make(map[string]bool)
 	for line, user := range req.Users {
+		if existEmails[user.Email] {
+			errorData.Field = "email"
+			errorData.Line = line + 1
+			errorData.Content = user.Email
+			errorData.ExtraMessage = translator.Tr(lang, reason.EmailDuplicate)
+			break
+		}
+		if existDisplayNames[user.DisplayName] {
+			errorData.Field = "displayName"
+			errorData.Line = line + 1
+			errorData.Content = user.DisplayName
+			errorData.ExtraMessage = translator.Tr(lang, reason.UsernameDuplicate)
+			break
+		}
+
 		if fields, e := val.Check(user); e != nil {
 			errorData.SetErrField(fields)
 			errorData.Line = line + 1
@@ -227,6 +244,8 @@ func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.
 		userInfo.Status = entity.UserStatusAvailable
 		userInfo.Rank = 1
 		users = append(users, userInfo)
+		existEmails[user.Email] = true
+		existDisplayNames[user.DisplayName] = true
 	}
 
 	if errorData.Line != -1 {
