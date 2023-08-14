@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/google/uuid"
@@ -169,40 +170,44 @@ func (us *UserAdminService) AddUser(ctx context.Context, req *schema.AddUserReq)
 }
 
 // AddUsers add users
-func (us *UserAdminService) AddUsers(ctx context.Context, req *schema.AddUsersReq) (err error) {
-	err = req.ParseUsers(ctx)
+func (us *UserAdminService) AddUsers(ctx context.Context, req *schema.AddUsersReq) (
+	resp []*validator.FormErrorField, err error) {
+	resp, err = req.ParseUsers(ctx)
 	if err != nil {
-		return errors.BadRequest(reason.RequestFormatError).WithMsg(err.Error())
+		return resp, err
 	}
-	if len(req.Users) == 0 {
-		return errors.BadRequest(reason.RequestFormatError).WithMsg("not found any user")
-	}
-	if len(req.Users) > 5000 {
-		return errors.BadRequest(reason.RequestFormatError).WithMsg("Add up to 5000 users at one time")
-	}
-	users, err := us.formatBulkAddUsers(ctx, req)
+
+	users, resp, err := us.formatBulkAddUsers(ctx, req)
 	if err != nil {
-		return err
+		return resp, err
 	}
-	return us.userRepo.AddUsers(ctx, users)
+	err = us.userRepo.AddUsers(ctx, users)
+	return nil, err
 }
 
 func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.AddUsersReq) (
-	users []*entity.User, err error) {
-
-	val := validator.GetValidatorByLang(handler.GetLangByCtx(ctx))
-	for _, user := range req.Users {
-		_, err = val.Check(user)
-		if err != nil {
-			return nil, err
+	users []*entity.User, errFields []*validator.FormErrorField, err error) {
+	lang := handler.GetLangByCtx(ctx)
+	val := validator.GetValidatorByLang(lang)
+	errorData := &schema.AddUsersErrorData{Line: -1}
+	for line, user := range req.Users {
+		if fields, e := val.Check(user); e != nil {
+			errorData.SetErrField(fields)
+			errorData.Line = line + 1
+			errorData.Content = fmt.Sprintf("%s, %s", user.DisplayName, user.Email)
+			break
 		}
 
-		_, has, err := us.userRepo.GetUserInfoByEmail(ctx, user.Email)
-		if err != nil {
-			return nil, err
+		_, has, e := us.userRepo.GetUserInfoByEmail(ctx, user.Email)
+		if e != nil {
+			return nil, nil, e
 		}
 		if has {
-			return nil, errors.BadRequest(reason.EmailDuplicate)
+			errorData.Field = "email"
+			errorData.Line = line + 1
+			errorData.Content = user.Email
+			errorData.ExtraMessage = translator.Tr(lang, reason.EmailDuplicate)
+			break
 		}
 
 		userInfo := &entity.User{}
@@ -212,14 +217,26 @@ func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.
 		userInfo.Pass = string(hashPwd)
 		userInfo.Username, err = us.userCommonService.MakeUsername(ctx, userInfo.DisplayName)
 		if err != nil {
-			return nil, err
+			errorData.Field = "display_name"
+			errorData.Line = line + 1
+			errorData.Content = user.DisplayName
+			errorData.ExtraMessage = translator.Tr(lang, reason.UsernameInvalid)
+			break
 		}
 		userInfo.MailStatus = entity.EmailStatusAvailable
 		userInfo.Status = entity.UserStatusAvailable
 		userInfo.Rank = 1
 		users = append(users, userInfo)
 	}
-	return users, nil
+
+	if errorData.Line != -1 {
+		errFields = append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "users",
+			ErrorMsg:   translator.TrWithData(handler.GetLangByCtx(ctx), reason.AddBulkUsersFormatError, errorData),
+		})
+		return nil, errFields, errors.BadRequest(reason.RequestFormatError)
+	}
+	return users, nil, nil
 }
 
 // UpdateUserPassword update user password

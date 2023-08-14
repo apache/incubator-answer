@@ -2,8 +2,12 @@ package schema
 
 import (
 	"context"
-	"fmt"
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/segmentfault/pacman/errors"
 	"strings"
 )
 
@@ -99,22 +103,60 @@ type AddUsersReq struct {
 	Users    []*AddUserReq `json:"-"`
 }
 
-func (req *AddUsersReq) ParseUsers(ctx context.Context) error {
+type AddUsersErrorData struct {
+	// optional. error field name.
+	Field string `json:"field"`
+	// must. error line number.
+	Line int `json:"line"`
+	// must. error content.
+	Content string `json:"content"`
+	// optional. error message.
+	ExtraMessage string `json:"extra_message"`
+}
+
+func (e *AddUsersErrorData) SetErrField(errFields []*validator.FormErrorField) {
+	if len(errFields) > 0 {
+		e.Field = errFields[0].ErrorField
+		e.ExtraMessage = errFields[0].ErrorMsg
+	}
+}
+
+func (req *AddUsersReq) ParseUsers(ctx context.Context) (errFields []*validator.FormErrorField, err error) {
 	req.UsersStr = strings.TrimSpace(req.UsersStr)
 	lines := strings.Split(req.UsersStr, "\n")
 	req.Users = make([]*AddUserReq, 0)
 	for i, line := range lines {
 		arr := strings.Split(line, ",")
 		if len(arr) != 3 {
-			return fmt.Errorf("error format at line %d", i)
+			errFields = append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "users",
+				ErrorMsg: translator.TrWithData(handler.GetLangByCtx(ctx), reason.AddBulkUsersFormatError,
+					&AddUsersErrorData{
+						Line:    i + 1,
+						Content: line,
+					}),
+			})
+			return errFields, errors.BadRequest(reason.RequestFormatError)
 		}
 		req.Users = append(req.Users, &AddUserReq{
-			DisplayName: arr[0],
-			Email:       arr[1],
-			Password:    arr[2],
+			DisplayName: strings.TrimSpace(arr[0]),
+			Email:       strings.TrimSpace(arr[1]),
+			Password:    strings.TrimSpace(arr[2]),
 		})
 	}
-	return nil
+
+	// check users amount
+	if len(req.Users) <= 0 || len(req.Users) > constant.DefaultBulkUser {
+		errFields = append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "users",
+			ErrorMsg: translator.TrWithData(handler.GetLangByCtx(ctx), reason.AddBulkUsersAmountError,
+				map[string]int{
+					"MaxAmount": constant.DefaultBulkUser,
+				}),
+		})
+		return errFields, errors.BadRequest(reason.RequestFormatError)
+	}
+	return nil, nil
 }
 
 // UpdateUserPasswordReq update user password request

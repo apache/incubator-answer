@@ -107,8 +107,8 @@ func (uc *UserAdminController) AddUsers(ctx *gin.Context) {
 		return
 	}
 
-	err := uc.userService.AddUsers(ctx, req)
-	handler.HandleResponse(ctx, err, nil)
+	resp, err := uc.userService.AddUsers(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
 }
 
 // UpdateUserPassword update user password
