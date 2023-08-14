@@ -146,6 +146,11 @@ definitions:
     type: object
   schema.AddCommentReq:
     properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        description: captcha_id
+        type: string
       mention_username_list:
         description: '@ user id list'
         items:
@@ -168,6 +173,11 @@ definitions:
     type: object
   schema.AddReportReq:
     properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        description: captcha_id
+        type: string
       content:
         description: report content
         maxLength: 500
@@ -243,6 +253,10 @@ definitions:
     type: object
   schema.AnswerAddReq:
     properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        type: string
       content:
         maxLength: 65535
         minLength: 6
@@ -254,6 +268,10 @@ definitions:
     type: object
   schema.AnswerUpdateReq:
     properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        type: string
       content:
         maxLength: 65535
         minLength: 6
@@ -559,6 +577,7 @@ definitions:
         description: follow count
         type: integer
       have_password:
+        description: user have password
         type: boolean
       id:
         description: user id
@@ -1104,6 +1123,11 @@ definitions:
     type: object
   schema.QuestionAdd:
     properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        description: captcha_id
+        type: string
       content:
         description: content
         maxLength: 65535
@@ -1129,6 +1153,11 @@ definitions:
       answer_content:
         maxLength: 65535
         minLength: 6
+        type: string
+      captcha_code:
+        type: string
+      captcha_id:
+        description: captcha_id
         type: string
       content:
         description: content
@@ -1244,6 +1273,11 @@ definitions:
     type: object
   schema.QuestionUpdate:
     properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        description: captcha_id
+        type: string
       content:
         description: content
         maxLength: 65535
@@ -1277,6 +1311,11 @@ definitions:
     type: object
   schema.QuestionUpdateInviteUser:
     properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        description: captcha_id
+        type: string
       id:
         type: string
       invite_user:
@@ -1288,14 +1327,22 @@ definitions:
     type: object
   schema.RemoveAnswerReq:
     properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        type: string
       id:
-        description: answer id
         type: string
     required:
     - id
     type: object
   schema.RemoveCommentReq:
     properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        description: captcha_id
+        type: string
       comment_id:
         description: comment id
         type: string
@@ -1304,6 +1351,11 @@ definitions:
     type: object
   schema.RemoveQuestionReq:
     properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        description: captcha_id
+        type: string
       id:
         description: question id
         type: string
@@ -1347,18 +1399,6 @@ definitions:
     - id
     - operation
     type: object
-  schema.SearchListResp:
-    properties:
-      count:
-        type: integer
-      extra:
-        description: extra fields
-      list:
-        description: search response
-        items:
-          $ref: '#/definitions/schema.SearchResp'
-        type: array
-    type: object
   schema.SearchObject:
     properties:
       accepted:
@@ -1391,6 +1431,16 @@ definitions:
         type: integer
     type: object
   schema.SearchResp:
+    properties:
+      count:
+        type: integer
+      list:
+        description: search response
+        items:
+          $ref: '#/definitions/schema.SearchResult'
+        type: array
+    type: object
+  schema.SearchResult:
     properties:
       object:
         allOf:
@@ -1813,6 +1863,11 @@ definitions:
     type: object
   schema.UpdateCommentReq:
     properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        description: captcha_id
+        type: string
       comment_id:
         description: comment id
         type: string
@@ -2009,31 +2064,22 @@ definitions:
   schema.UserBasicInfo:
     properties:
       avatar:
-        description: avatar
         type: string
       display_name:
-        description: display_name
         type: string
       id:
-        description: user_id
         type: string
       ip_info:
-        description: ip info
         type: string
       location:
-        description: location
         type: string
       rank:
-        description: rank
         type: integer
       status:
-        description: status
         type: string
       username:
-        description: name
         type: string
       website:
-        description: website
         type: string
     type: object
   schema.UserChangeEmailSendCodeReq:
@@ -2062,20 +2108,16 @@ definitions:
     required:
     - code
     type: object
-  schema.UserEmailLogin:
+  schema.UserEmailLoginReq:
     properties:
       captcha_code:
-        description: captcha_code
         type: string
       captcha_id:
-        description: captcha_id
         type: string
       e_mail:
-        description: e_mail
         maxLength: 500
         type: string
       pass:
-        description: password
         maxLength: 32
         minLength: 8
         type: string
@@ -2226,11 +2268,9 @@ definitions:
   schema.UserRePassWordRequest:
     properties:
       code:
-        description: code
         maxLength: 100
         type: string
       pass:
-        description: Password
         maxLength: 32
         type: string
     required:
@@ -2240,21 +2280,16 @@ definitions:
   schema.UserRegisterReq:
     properties:
       captcha_code:
-        description: captcha_code
         type: string
       captcha_id:
-        description: captcha_id
         type: string
       e_mail:
-        description: email
         maxLength: 500
         type: string
       name:
-        description: name
         maxLength: 30
         type: string
       pass:
-        description: password
         maxLength: 32
         minLength: 8
         type: string
@@ -2266,13 +2301,10 @@ definitions:
   schema.UserRetrievePassWordRequest:
     properties:
       captcha_code:
-        description: captcha_code
         type: string
       captcha_id:
-        description: captcha_id
         type: string
       e_mail:
-        description: e_mail
         maxLength: 500
         type: string
     required:
@@ -2280,6 +2312,11 @@ definitions:
     type: object
   schema.VoteReq:
     properties:
+      captcha_code:
+        type: string
+      captcha_id:
+        description: captcha_id
+        type: string
       is_cancel:
         description: is cancel
         type: boolean
@@ -3342,6 +3379,30 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: update user
+      tags:
+      - admin
+  /answer/admin/api/users:
+    post:
+      consumes:
+      - application/json
+      description: add users
+      parameters:
+      - description: user
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.AddUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: add users
       tags:
       - admin
   /answer/admin/api/users/activation:
@@ -5038,11 +5099,29 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.SearchListResp'
+                  $ref: '#/definitions/schema.SearchResp'
               type: object
       security:
       - ApiKeyAuth: []
       summary: search object
+      tags:
+      - Search
+  /answer/api/v1/search/desc:
+    get:
+      description: get search description
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/handler.RespBody'
+            - properties:
+                data:
+                  $ref: '#/definitions/schema.SearchResp'
+              type: object
+      summary: get search description
       tags:
       - Search
   /answer/api/v1/siteinfo:
@@ -5582,7 +5661,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.UserEmailLogin'
+          $ref: '#/definitions/schema.UserEmailLoginReq'
       produces:
       - application/json
       responses:

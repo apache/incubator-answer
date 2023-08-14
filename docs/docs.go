@@ -1741,6 +1741,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/users": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "add users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "add users",
+                "parameters": [
+                    {
+                        "description": "user",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.AddUserReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/users/activation": {
             "post": {
                 "security": [
@@ -4515,7 +4554,39 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.SearchListResp"
+                                            "$ref": "#/definitions/schema.SearchResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/search/desc": {
+            "get": {
+                "description": "get search description",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Search"
+                ],
+                "summary": "get search description",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.SearchResp"
                                         }
                                     }
                                 }
@@ -5406,7 +5477,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.UserEmailLogin"
+                            "$ref": "#/definitions/schema.UserEmailLoginReq"
                         }
                     }
                 ],
@@ -6346,6 +6417,13 @@ const docTemplate = `{
                 "original_text"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "mention_username_list": {
                     "description": "@ user id list",
                     "type": "array",
@@ -6376,6 +6454,13 @@ const docTemplate = `{
                 "report_type"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "content": {
                     "description": "report content",
                     "type": "string",
@@ -6480,6 +6565,12 @@ const docTemplate = `{
                 "content"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "type": "string"
+                },
                 "content": {
                     "type": "string",
                     "maxLength": 65535,
@@ -6496,6 +6587,12 @@ const docTemplate = `{
                 "content"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "type": "string"
+                },
                 "content": {
                     "type": "string",
                     "maxLength": 65535,
@@ -6926,6 +7023,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "have_password": {
+                    "description": "user have password",
                     "type": "boolean"
                 },
                 "id": {
@@ -7702,6 +7800,13 @@ const docTemplate = `{
                 "title"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "content": {
                     "description": "content",
                     "type": "string",
@@ -7736,6 +7841,13 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 65535,
                     "minLength": 6
+                },
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
                 },
                 "content": {
                     "description": "content",
@@ -7898,6 +8010,13 @@ const docTemplate = `{
                 "title"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "content": {
                     "description": "content",
                     "type": "string",
@@ -7939,6 +8058,13 @@ const docTemplate = `{
                 "id"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -7956,8 +8082,13 @@ const docTemplate = `{
                 "id"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "type": "string"
+                },
                 "id": {
-                    "description": "answer id",
                     "type": "string"
                 }
             }
@@ -7968,6 +8099,13 @@ const docTemplate = `{
                 "comment_id"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "comment_id": {
                     "description": "comment id",
                     "type": "string"
@@ -7980,6 +8118,13 @@ const docTemplate = `{
                 "id"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "id": {
                     "description": "question id",
                     "type": "string"
@@ -8041,24 +8186,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.SearchListResp": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "extra": {
-                    "description": "extra fields"
-                },
-                "list": {
-                    "description": "search response",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.SearchResults"
-                    }
-                }
-            }
-        },
         "schema.SearchObject": {
             "type": "object",
             "properties": {
@@ -8107,7 +8234,22 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.SearchResults": {
+        "schema.SearchResp": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "description": "search response",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.SearchResult"
+                    }
+                }
+            }
+        },
+        "schema.SearchResult": {
             "type": "object",
             "properties": {
                 "object": {
@@ -8729,6 +8871,13 @@ const docTemplate = `{
                 "original_text"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "comment_id": {
                     "description": "comment id",
                     "type": "string"
@@ -9004,39 +9153,30 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "avatar": {
-                    "description": "avatar",
                     "type": "string"
                 },
                 "display_name": {
-                    "description": "display_name",
                     "type": "string"
                 },
                 "id": {
-                    "description": "user_id",
                     "type": "string"
                 },
                 "ip_info": {
-                    "description": "ip info",
                     "type": "string"
                 },
                 "location": {
-                    "description": "location",
                     "type": "string"
                 },
                 "rank": {
-                    "description": "rank",
                     "type": "integer"
                 },
                 "status": {
-                    "description": "status",
                     "type": "string"
                 },
                 "username": {
-                    "description": "name",
                     "type": "string"
                 },
                 "website": {
-                    "description": "website",
                     "type": "string"
                 }
             }
@@ -9078,7 +9218,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UserEmailLogin": {
+        "schema.UserEmailLoginReq": {
             "type": "object",
             "required": [
                 "e_mail",
@@ -9086,20 +9226,16 @@ const docTemplate = `{
             ],
             "properties": {
                 "captcha_code": {
-                    "description": "captcha_code",
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
                     "type": "string"
                 },
                 "e_mail": {
-                    "description": "e_mail",
                     "type": "string",
                     "maxLength": 500
                 },
                 "pass": {
-                    "description": "password",
                     "type": "string",
                     "maxLength": 32,
                     "minLength": 8
@@ -9309,12 +9445,10 @@ const docTemplate = `{
             ],
             "properties": {
                 "code": {
-                    "description": "code",
                     "type": "string",
                     "maxLength": 100
                 },
                 "pass": {
-                    "description": "Password",
                     "type": "string",
                     "maxLength": 32
                 }
@@ -9329,25 +9463,20 @@ const docTemplate = `{
             ],
             "properties": {
                 "captcha_code": {
-                    "description": "captcha_code",
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
                     "type": "string"
                 },
                 "e_mail": {
-                    "description": "email",
                     "type": "string",
                     "maxLength": 500
                 },
                 "name": {
-                    "description": "name",
                     "type": "string",
                     "maxLength": 30
                 },
                 "pass": {
-                    "description": "password",
                     "type": "string",
                     "maxLength": 32,
                     "minLength": 8
@@ -9361,15 +9490,12 @@ const docTemplate = `{
             ],
             "properties": {
                 "captcha_code": {
-                    "description": "captcha_code",
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
                     "type": "string"
                 },
                 "e_mail": {
-                    "description": "e_mail",
                     "type": "string",
                     "maxLength": 500
                 }
@@ -9381,6 +9507,13 @@ const docTemplate = `{
                 "object_id"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "is_cancel": {
                     "description": "is cancel",
                     "type": "boolean"
