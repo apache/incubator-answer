@@ -91,6 +91,26 @@ func (uc *UserAdminController) AddUser(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
+// AddUsers add users
+// @Summary add users
+// @Description add users
+// @Security ApiKeyAuth
+// @Tags admin
+// @Accept json
+// @Produce json
+// @Param data body schema.AddUserReq true "user"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/admin/api/users [post]
+func (uc *UserAdminController) AddUsers(ctx *gin.Context) {
+	req := &schema.AddUsersReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+
+	resp, err := uc.userService.AddUsers(ctx, req)
+	handler.HandleResponse(ctx, err, resp)
+}
+
 // UpdateUserPassword update user password
 // @Summary update user password
 // @Description update user password

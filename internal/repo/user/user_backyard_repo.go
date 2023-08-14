@@ -70,6 +70,15 @@ func (ur *userAdminRepo) AddUser(ctx context.Context, user *entity.User) (err er
 	return
 }
 
+// AddUsers add users
+func (ur *userAdminRepo) AddUsers(ctx context.Context, users []*entity.User) (err error) {
+	_, err = ur.data.DB.Context(ctx).Insert(users)
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 // UpdateUserPassword update user password
 func (ur *userAdminRepo) UpdateUserPassword(ctx context.Context, userID string, password string) (err error) {
 	_, err = ur.data.DB.Context(ctx).ID(userID).Update(&entity.User{Pass: password})

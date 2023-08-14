@@ -4,6 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/google/uuid"
 	"net/mail"
@@ -34,6 +37,7 @@ type UserAdminRepo interface {
 	GetUserPage(ctx context.Context, page, pageSize int, user *entity.User,
 		usernameOrDisplayName string, isStaff bool) (users []*entity.User, total int64, err error)
 	AddUser(ctx context.Context, user *entity.User) (err error)
+	AddUsers(ctx context.Context, users []*entity.User) (err error)
 	UpdateUserPassword(ctx context.Context, userID string, password string) (err error)
 }
 
@@ -163,6 +167,76 @@ func (us *UserAdminService) AddUser(ctx context.Context, req *schema.AddUserReq)
 		return err
 	}
 	return
+}
+
+// AddUsers add users
+func (us *UserAdminService) AddUsers(ctx context.Context, req *schema.AddUsersReq) (
+	resp []*validator.FormErrorField, err error) {
+	resp, err = req.ParseUsers(ctx)
+	if err != nil {
+		return resp, err
+	}
+
+	users, resp, err := us.formatBulkAddUsers(ctx, req)
+	if err != nil {
+		return resp, err
+	}
+	err = us.userRepo.AddUsers(ctx, users)
+	return nil, err
+}
+
+func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.AddUsersReq) (
+	users []*entity.User, errFields []*validator.FormErrorField, err error) {
+	lang := handler.GetLangByCtx(ctx)
+	val := validator.GetValidatorByLang(lang)
+	errorData := &schema.AddUsersErrorData{Line: -1}
+	for line, user := range req.Users {
+		if fields, e := val.Check(user); e != nil {
+			errorData.SetErrField(fields)
+			errorData.Line = line + 1
+			errorData.Content = fmt.Sprintf("%s, %s", user.DisplayName, user.Email)
+			break
+		}
+
+		_, has, e := us.userRepo.GetUserInfoByEmail(ctx, user.Email)
+		if e != nil {
+			return nil, nil, e
+		}
+		if has {
+			errorData.Field = "email"
+			errorData.Line = line + 1
+			errorData.Content = user.Email
+			errorData.ExtraMessage = translator.Tr(lang, reason.EmailDuplicate)
+			break
+		}
+
+		userInfo := &entity.User{}
+		userInfo.EMail = user.Email
+		userInfo.DisplayName = user.DisplayName
+		hashPwd, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+		userInfo.Pass = string(hashPwd)
+		userInfo.Username, err = us.userCommonService.MakeUsername(ctx, userInfo.DisplayName)
+		if err != nil {
+			errorData.Field = "display_name"
+			errorData.Line = line + 1
+			errorData.Content = user.DisplayName
+			errorData.ExtraMessage = translator.Tr(lang, reason.UsernameInvalid)
+			break
+		}
+		userInfo.MailStatus = entity.EmailStatusAvailable
+		userInfo.Status = entity.UserStatusAvailable
+		userInfo.Rank = 1
+		users = append(users, userInfo)
+	}
+
+	if errorData.Line != -1 {
+		errFields = append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "users",
+			ErrorMsg:   translator.TrWithData(handler.GetLangByCtx(ctx), reason.AddBulkUsersFormatError, errorData),
+		})
+		return nil, errFields, errors.BadRequest(reason.RequestFormatError)
+	}
+	return users, nil, nil
 }
 
 // UpdateUserPassword update user password
