@@ -1766,7 +1766,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.AddUserReq"
+                            "$ref": "#/definitions/schema.AddUsersReq"
                         }
                     }
                 ],
@@ -6523,6 +6523,15 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 32,
                     "minLength": 8
+                }
+            }
+        },
+        "schema.AddUsersReq": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "description": "users info line by line",
+                    "type": "string"
                 }
             }
         },

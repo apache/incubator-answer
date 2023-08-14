@@ -230,6 +230,12 @@ definitions:
     - email
     - password
     type: object
+  schema.AddUsersReq:
+    properties:
+      users:
+        description: users info line by line
+        type: string
+    type: object
   schema.AdminSetAnswerStatusRequest:
     properties:
       answer_id:
@@ -3392,7 +3398,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.AddUserReq'
+          $ref: '#/definitions/schema.AddUsersReq'
       produces:
       - application/json
       responses:
