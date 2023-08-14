@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"unicode"
 
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
@@ -176,10 +177,15 @@ func (m *MyValidator) Check(value interface{}) (errFields []*FormErrorField, err
 			if len(field.ErrorField) == 0 {
 				continue
 			}
+			firstRune := []rune(field.ErrorMsg)[0]
+			if !unicode.IsLetter(firstRune) || !unicode.Is(unicode.Latin, firstRune) {
+				continue
+			}
+			upperFirstRune := unicode.ToUpper(firstRune)
+			field.ErrorMsg = string(upperFirstRune) + field.ErrorMsg[1:]
 			if !strings.HasSuffix(field.ErrorMsg, ".") {
 				field.ErrorMsg += "."
 			}
-			field.ErrorMsg = fmt.Sprintf("%s%s", strings.ToUpper(string(field.ErrorMsg[0])), field.ErrorMsg[1:])
 		}
 	}()
 	err = m.Validate.Struct(value)
