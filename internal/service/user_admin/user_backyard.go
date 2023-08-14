@@ -201,7 +201,7 @@ func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.
 			break
 		}
 		if existDisplayNames[user.DisplayName] {
-			errorData.Field = "displayName"
+			errorData.Field = "name"
 			errorData.Line = line + 1
 			errorData.Content = user.DisplayName
 			errorData.ExtraMessage = translator.Tr(lang, reason.UsernameDuplicate)
@@ -211,7 +211,7 @@ func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.
 		if fields, e := val.Check(user); e != nil {
 			errorData.SetErrField(fields)
 			errorData.Line = line + 1
-			errorData.Content = fmt.Sprintf("%s, %s", user.DisplayName, user.Email)
+			errorData.Content = fmt.Sprintf("%s, %s, %s", user.DisplayName, user.Email, user.Password)
 			break
 		}
 
@@ -234,7 +234,7 @@ func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.
 		userInfo.Pass = string(hashPwd)
 		userInfo.Username, err = us.userCommonService.MakeUsername(ctx, userInfo.DisplayName)
 		if err != nil {
-			errorData.Field = "display_name"
+			errorData.Field = "name"
 			errorData.Line = line + 1
 			errorData.Content = user.DisplayName
 			errorData.ExtraMessage = translator.Tr(lang, reason.UsernameInvalid)
