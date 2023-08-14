@@ -38,6 +38,10 @@ export const addUser = (params: {
   return request.post('/answer/admin/api/user', params);
 };
 
+export const addUsers = (params: { users: string }) => {
+  return request.post('/answer/admin/api/users', params);
+};
+
 export const updateUserPassword = (params: {
   password: string;
   user_id: string;

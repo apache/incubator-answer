@@ -24,7 +24,7 @@ import {
 } from '@/hooks';
 import {
   useQueryUsers,
-  addUser,
+  addUsers,
   updateUserPassword,
   getAdminUcAgent,
   AdminUcAgent,
@@ -89,7 +89,7 @@ const Users: FC = () => {
   const userModal = useUserModal({
     onConfirm: (userModel) => {
       return new Promise((resolve, reject) => {
-        addUser(userModel)
+        addUsers(userModel)
           .then(() => {
             if (/all|staff/.test(curFilter) && curPage === 1) {
               refreshUsers();
