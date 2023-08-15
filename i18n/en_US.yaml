@@ -1434,6 +1434,7 @@ ui:
         fields:
           users:
             label: Bulk add user
+            placeholder: "John Smith, john@example.com, BUSYopr2 \nAlice, alice@example.com, fpDntV8q"
             text: Separate “name, email, password” with commas. One user per line.
             msg: "Please enter the user's email, one per line."
           display_name:
