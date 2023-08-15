@@ -37,8 +37,9 @@ const useAddUserModal = (props: IProps = {}) => {
     users: {
       'ui:widget': 'textarea',
       'ui:options': {
-        rows: 6,
+        rows: 7,
         placeholder: t('form.fields.users.placeholder'),
+        className: 'small',
       },
     },
   };
