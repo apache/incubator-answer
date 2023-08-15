@@ -38,6 +38,7 @@ const useAddUserModal = (props: IProps = {}) => {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 6,
+        placeholder: t('form.fields.users.placeholder'),
       },
     },
   };
