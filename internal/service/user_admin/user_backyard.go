@@ -176,45 +176,65 @@ func (us *UserAdminService) AddUsers(ctx context.Context, req *schema.AddUsersRe
 	if err != nil {
 		return resp, err
 	}
-
-	users, resp, err := us.formatBulkAddUsers(ctx, req)
+	errData := us.checkUserDuplicateInner(ctx, req.Users)
+	if errData != nil {
+		return errData.GetErrField(ctx), errors.BadRequest(reason.RequestFormatError)
+	}
+	users, errData, err := us.formatBulkAddUsers(ctx, req)
 	if err != nil {
 		return resp, err
 	}
-	err = us.userRepo.AddUsers(ctx, users)
-	return nil, err
+	if errData != nil {
+		return errData.GetErrField(ctx), errors.BadRequest(reason.RequestFormatError)
+	}
+	return nil, us.userRepo.AddUsers(ctx, users)
+}
+
+func (us *UserAdminService) checkUserDuplicateInner(ctx context.Context, users []*schema.AddUserReq) (
+	errorData *schema.AddUsersErrorData) {
+	lang := handler.GetLangByCtx(ctx)
+	val := validator.GetValidatorByLang(lang)
+
+	emails := make(map[string]bool)
+	displayNames := make(map[string]bool)
+	for line, user := range users {
+		if errFields, e := val.Check(user); e != nil {
+			errorData = &schema.AddUsersErrorData{}
+			if len(errFields) > 0 {
+				errorData.Field = errFields[0].ErrorField
+				errorData.ExtraMessage = errFields[0].ErrorMsg
+			}
+			errorData.Line = line + 1
+			errorData.Content = fmt.Sprintf("%s, %s, %s", user.DisplayName, user.Email, user.Password)
+			return errorData
+		}
+		if emails[user.Email] {
+			return &schema.AddUsersErrorData{
+				Field:        "email",
+				Line:         line + 1,
+				Content:      user.Email,
+				ExtraMessage: translator.Tr(lang, reason.EmailDuplicate),
+			}
+		}
+		if displayNames[user.DisplayName] {
+			return &schema.AddUsersErrorData{
+				Field:        "name",
+				Line:         line + 1,
+				Content:      user.DisplayName,
+				ExtraMessage: translator.Tr(lang, reason.UsernameDuplicate),
+			}
+		}
+		emails[user.Email] = true
+		displayNames[user.DisplayName] = true
+	}
+	return nil
 }
 
 func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.AddUsersReq) (
-	users []*entity.User, errFields []*validator.FormErrorField, err error) {
+	users []*entity.User, errorData *schema.AddUsersErrorData, err error) {
 	lang := handler.GetLangByCtx(ctx)
-	val := validator.GetValidatorByLang(lang)
-	errorData := &schema.AddUsersErrorData{Line: -1}
-	existEmails := make(map[string]bool)
-	existDisplayNames := make(map[string]bool)
+	errorData = &schema.AddUsersErrorData{Line: -1}
 	for line, user := range req.Users {
-		if existEmails[user.Email] {
-			errorData.Field = "email"
-			errorData.Line = line + 1
-			errorData.Content = user.Email
-			errorData.ExtraMessage = translator.Tr(lang, reason.EmailDuplicate)
-			break
-		}
-		if existDisplayNames[user.DisplayName] {
-			errorData.Field = "name"
-			errorData.Line = line + 1
-			errorData.Content = user.DisplayName
-			errorData.ExtraMessage = translator.Tr(lang, reason.UsernameDuplicate)
-			break
-		}
-
-		if fields, e := val.Check(user); e != nil {
-			errorData.SetErrField(fields)
-			errorData.Line = line + 1
-			errorData.Content = fmt.Sprintf("%s, %s, %s", user.DisplayName, user.Email, user.Password)
-			break
-		}
-
 		_, has, e := us.userRepo.GetUserInfoByEmail(ctx, user.Email)
 		if e != nil {
 			return nil, nil, e
@@ -224,7 +244,7 @@ func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.
 			errorData.Line = line + 1
 			errorData.Content = user.Email
 			errorData.ExtraMessage = translator.Tr(lang, reason.EmailDuplicate)
-			break
+			return nil, errorData, nil
 		}
 
 		userInfo := &entity.User{}
@@ -238,22 +258,12 @@ func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.
 			errorData.Line = line + 1
 			errorData.Content = user.DisplayName
 			errorData.ExtraMessage = translator.Tr(lang, reason.UsernameInvalid)
-			break
+			return nil, errorData, nil
 		}
 		userInfo.MailStatus = entity.EmailStatusAvailable
 		userInfo.Status = entity.UserStatusAvailable
 		userInfo.Rank = 1
 		users = append(users, userInfo)
-		existEmails[user.Email] = true
-		existDisplayNames[user.DisplayName] = true
-	}
-
-	if errorData.Line != -1 {
-		errFields = append([]*validator.FormErrorField{}, &validator.FormErrorField{
-			ErrorField: "users",
-			ErrorMsg:   translator.TrWithData(handler.GetLangByCtx(ctx), reason.AddBulkUsersFormatError, errorData),
-		})
-		return nil, errFields, errors.BadRequest(reason.RequestFormatError)
 	}
 	return users, nil, nil
 }

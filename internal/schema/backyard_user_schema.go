@@ -114,11 +114,11 @@ type AddUsersErrorData struct {
 	ExtraMessage string `json:"extra_message"`
 }
 
-func (e *AddUsersErrorData) SetErrField(errFields []*validator.FormErrorField) {
-	if len(errFields) > 0 {
-		e.Field = errFields[0].ErrorField
-		e.ExtraMessage = errFields[0].ErrorMsg
-	}
+func (e *AddUsersErrorData) GetErrField(ctx context.Context) (errFields []*validator.FormErrorField) {
+	return append([]*validator.FormErrorField{}, &validator.FormErrorField{
+		ErrorField: "users",
+		ErrorMsg:   translator.TrWithData(handler.GetLangByCtx(ctx), reason.AddBulkUsersFormatError, e),
+	})
 }
 
 func (req *AddUsersReq) ParseUsers(ctx context.Context) (errFields []*validator.FormErrorField, err error) {
