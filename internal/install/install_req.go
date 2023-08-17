@@ -84,6 +84,7 @@ type InitBaseInfoReq struct {
 	AdminName     string `validate:"required,gt=3,lte=30" json:"name"`
 	AdminPassword string `validate:"required,gte=8,lte=32" json:"password"`
 	AdminEmail    string `validate:"required,email,gt=0,lte=500" json:"email"`
+	LoginRequired bool   `json:"login_required"`
 }
 
 func (r *InitBaseInfoReq) Check() (errFields []*validator.FormErrorField, err error) {

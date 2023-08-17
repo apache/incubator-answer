@@ -28,6 +28,7 @@ type Env struct {
 	AdminName     string `json:"name"`
 	AdminPassword string `json:"password"`
 	AdminEmail    string `json:"email"`
+	LoginRequired bool   `json:"login_required"`
 }
 
 func TryToInstallByEnv() (installByEnv bool, err error) {
@@ -105,6 +106,7 @@ func initBaseInfo(env *Env) (err error) {
 		AdminName:     env.AdminName,
 		AdminPassword: env.AdminPassword,
 		AdminEmail:    env.AdminEmail,
+		LoginRequired: env.LoginRequired,
 	}
 	return requestAPI(req, "POST", "/installation/base-info", InitBaseInfo)
 }
