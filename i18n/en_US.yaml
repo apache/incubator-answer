@@ -1259,6 +1259,9 @@ ui:
       msg:
         empty: Contact Email cannot be empty.
         incorrect: Contact Email incorrect format.
+    login_required:
+      label: Private
+      switch: Login required
     admin_name:
       label: Name
       msg: Name cannot be empty.

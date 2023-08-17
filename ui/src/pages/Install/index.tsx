@@ -23,7 +23,7 @@ import {
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'install' });
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(4);
   const [loading, setLoading] = useState(true);
   const [errorData, setErrorData] = useState<{ [propName: string]: any }>({
     msg: '',
@@ -81,6 +81,11 @@ const Index: FC = () => {
     },
     contact_email: {
       value: '',
+      isInvalid: false,
+      errorMsg: '',
+    },
+    login_required: {
+      value: false,
       isInvalid: false,
       errorMsg: '',
     },
@@ -164,6 +169,7 @@ const Index: FC = () => {
       site_name: formData.site_name.value,
       site_url: formData.site_url.value,
       contact_email: formData.contact_email.value,
+      login_required: formData.login_required.value,
       name: formData.name.value,
       password: formData.password.value,
       email: formData.email.value,
