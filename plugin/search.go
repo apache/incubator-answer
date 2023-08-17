@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"context"
+	"github.com/answerdev/answer/internal/entity"
 )
 
 type SearchResult struct {
@@ -84,6 +85,7 @@ const (
 type Search interface {
 	Base
 	Description() SearchDesc
+	RegisterSyncer(ctx context.Context, syncer SearchSyncer)
 	SearchContents(ctx context.Context, cond *SearchBasicCond) (res []SearchResult, total int64, err error)
 	SearchQuestions(ctx context.Context, cond *SearchBasicCond) (res []SearchResult, total int64, err error)
 	SearchAnswers(ctx context.Context, cond *SearchBasicCond) (res []SearchResult, total int64, err error)
@@ -94,6 +96,11 @@ type Search interface {
 type SearchDesc struct {
 	// A svg icon it wil be display in search result page
 	Icon string `json:"icon"`
+}
+
+type SearchSyncer interface {
+	GetAnswersPage(ctx context.Context, page, pageSize int) (answerList []*entity.Answer, total int64, err error)
+	GetQuestionsPage(ctx context.Context, page, pageSize int) (questionList []*entity.Question, total int64, err error)
 }
 
 var (
