@@ -99,8 +99,8 @@ type SearchDesc struct {
 }
 
 type SearchSyncer interface {
-	GetAnswersPage(ctx context.Context, page, pageSize int) (answerList []*entity.Answer, total int64, err error)
-	GetQuestionsPage(ctx context.Context, page, pageSize int) (questionList []*entity.Question, total int64, err error)
+	GetAnswersPage(ctx context.Context, page, pageSize int) (answerList []*entity.Answer, err error)
+	GetQuestionsPage(ctx context.Context, page, pageSize int) (questionList []*entity.Question, err error)
 }
 
 var (
