@@ -391,6 +391,6 @@ func (ar *answerRepo) updateSearch(ctx context.Context, answerID string) (err er
 		Score:       int64(answer.VoteCount),
 		HasAccepted: answer.Accepted == schema.AnswerAcceptedEnable,
 	}
-	err = s.UpdateContent(ctx, answerID, content)
+	err = s.UpdateContent(ctx, content)
 	return
 }

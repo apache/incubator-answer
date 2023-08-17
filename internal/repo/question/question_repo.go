@@ -467,6 +467,6 @@ func (qr *questionRepo) updateSearch(ctx context.Context, questionID string) (er
 		Score:       int64(question.VoteCount),
 		HasAccepted: question.AcceptedAnswerID != "" && question.AcceptedAnswerID != "0",
 	}
-	err = s.UpdateContent(ctx, questionID, content)
+	err = s.UpdateContent(ctx, content)
 	return
 }
