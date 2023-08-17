@@ -212,7 +212,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	activityController := controller.NewActivityController(activityService)
 	roleController := controller_admin.NewRoleController(roleService)
 	pluginConfigRepo := plugin_config.NewPluginConfigRepo(dataData)
-	pluginCommonService := plugin_common.NewPluginCommonService(pluginConfigRepo, configService)
+	pluginCommonService := plugin_common.NewPluginCommonService(pluginConfigRepo, configService, dataData)
 	pluginController := controller_admin.NewPluginController(pluginCommonService)
 	permissionController := controller.NewPermissionController(rankService)
 	answerAPIRouter := router.NewAnswerAPIRouter(langController, userController, commentController, reportController, voteController, tagController, followController, collectionController, questionController, answerController, searchController, revisionController, rankController, controller_adminReportController, userAdminController, reasonController, themeController, siteInfoController, controllerSiteInfoController, notificationController, dashboardController, uploadController, activityController, roleController, pluginController, permissionController)
