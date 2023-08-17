@@ -2,7 +2,6 @@ package plugin
 
 import (
 	"context"
-	"github.com/answerdev/answer/internal/entity"
 )
 
 type SearchResult struct {
@@ -89,8 +88,8 @@ type Search interface {
 	SearchContents(ctx context.Context, cond *SearchBasicCond) (res []SearchResult, total int64, err error)
 	SearchQuestions(ctx context.Context, cond *SearchBasicCond) (res []SearchResult, total int64, err error)
 	SearchAnswers(ctx context.Context, cond *SearchBasicCond) (res []SearchResult, total int64, err error)
-	UpdateContent(ctx context.Context, contentID string, content *SearchContent) error
-	DeleteContent(ctx context.Context, contentID string) error
+	UpdateContent(ctx context.Context, content *SearchContent) (err error)
+	DeleteContent(ctx context.Context, objectID string) (err error)
 }
 
 type SearchDesc struct {
@@ -99,8 +98,8 @@ type SearchDesc struct {
 }
 
 type SearchSyncer interface {
-	GetAnswersPage(ctx context.Context, page, pageSize int) (answerList []*entity.Answer, err error)
-	GetQuestionsPage(ctx context.Context, page, pageSize int) (questionList []*entity.Question, err error)
+	GetAnswersPage(ctx context.Context, page, pageSize int) (answerList []*SearchContent, err error)
+	GetQuestionsPage(ctx context.Context, page, pageSize int) (questionList []*SearchContent, err error)
 }
 
 var (
