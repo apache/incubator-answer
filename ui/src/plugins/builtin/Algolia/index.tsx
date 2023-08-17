@@ -22,10 +22,14 @@ const Index: FC = () => {
   if (!data?.icon) return null;
 
   return (
-    <div className="d-flex align-items-center">
+    <a
+      className="d-flex align-items-center"
+      href="https://www.algolia.com/"
+      target="_blank"
+      rel="noopener noreferrer">
       <span className="small text-secondary me-2">{t('search_by')}</span>
       <SvgIcon base64={data?.icon} />
-    </div>
+    </a>
   );
 };
 

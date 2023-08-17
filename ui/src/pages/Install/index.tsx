@@ -84,6 +84,11 @@ const Index: FC = () => {
       isInvalid: false,
       errorMsg: '',
     },
+    login_required: {
+      value: false,
+      isInvalid: false,
+      errorMsg: '',
+    },
     name: {
       value: '',
       isInvalid: false,
@@ -164,6 +169,7 @@ const Index: FC = () => {
       site_name: formData.site_name.value,
       site_url: formData.site_url.value,
       contact_email: formData.contact_email.value,
+      login_required: formData.login_required.value,
       name: formData.name.value,
       password: formData.password.value,
       email: formData.email.value,

@@ -192,6 +192,26 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
         </Form.Control.Feedback>
       </Form.Group>
 
+      <Form.Group controlId="login_required" className="mb-3">
+        <Form.Label>{t('login_required.label')}</Form.Label>
+        <Form.Check
+          type="switch"
+          id="login_required"
+          label={t('login_required.switch')}
+          checked={data.login_required.value}
+          onChange={(e) => {
+            console.log(e.target.checked);
+            changeCallback({
+              login_required: {
+                value: e.target.checked,
+                isInvalid: false,
+                errorMsg: '',
+              },
+            });
+          }}
+        />
+      </Form.Group>
+
       <h5>{t('admin_account')}</h5>
       <Form.Group controlId="name" className="mb-3">
         <Form.Label>{t('admin_name.label')}</Form.Label>
