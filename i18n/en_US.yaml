@@ -1262,6 +1262,7 @@ ui:
     login_required:
       label: Private
       switch: Login required
+      text: Only logged in users can access this community.
     admin_name:
       label: Name
       msg: Name cannot be empty.
