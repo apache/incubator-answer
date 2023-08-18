@@ -48,7 +48,7 @@ func NewHTTPServer(debug bool,
 
 	// The route must be available without logging in
 	mustUnAuthV1 := r.Group("/answer/api/v1")
-	answerRouter.RegisterMustUnAuthAnswerAPIRouter(mustUnAuthV1)
+	answerRouter.RegisterMustUnAuthAnswerAPIRouter(authUserMiddleware, mustUnAuthV1)
 
 	// register api that no need to login
 	unAuthV1 := r.Group("/answer/api/v1")
