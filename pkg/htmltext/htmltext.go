@@ -1,13 +1,15 @@
 package htmltext
 
 import (
+	"github.com/Chain-Zhang/pinyin"
+	"github.com/answerdev/answer/pkg/checker"
 	"io"
 	"net/http"
 	"net/url"
 	"regexp"
 	"strings"
 
-	"github.com/gosimple/slug"
+	"github.com/Machiel/slugify"
 	strip "github.com/grokify/html-strip-tags-go"
 )
 
@@ -46,14 +48,15 @@ func ClearText(html string) (text string) {
 }
 
 func UrlTitle(title string) (text string) {
-	title = ClearEmoji(title)
-	title = slug.Make(title)
-	// title = strings.ReplaceAll(title, " ", "-")
+	title = convertChinese(title)
+	title = clearEmoji(title)
+	title = slugify.Slugify(title)
 	title = url.QueryEscape(title)
+	title = cutLongTitle(title)
 	return title
 }
 
-func ClearEmoji(s string) string {
+func clearEmoji(s string) string {
 	ret := ""
 	rs := []rune(s)
 	for i := 0; i < len(rs); i++ {
@@ -62,6 +65,25 @@ func ClearEmoji(s string) string {
 		}
 	}
 	return ret
+}
+
+func convertChinese(content string) string {
+	has := checker.IsChinese(content)
+	if !has {
+		return content
+	}
+	str, err := pinyin.New(content).Split("-").Mode(pinyin.WithoutTone).Convert()
+	if err != nil {
+		return content
+	}
+	return str
+}
+
+func cutLongTitle(title string) string {
+	if len(title) > 150 {
+		return title[0:150]
+	}
+	return title
 }
 
 // FetchExcerpt return the excerpt from the HTML string

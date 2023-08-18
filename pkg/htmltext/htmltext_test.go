@@ -1,9 +1,9 @@
 package htmltext
 
 import (
+	"fmt"
 	"testing"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -63,6 +63,6 @@ func TestUrlTitle(t *testing.T) {
 	}
 	for _, title := range list {
 		formatTitle := UrlTitle(title)
-		spew.Dump(formatTitle)
+		fmt.Println(formatTitle)
 	}
 }

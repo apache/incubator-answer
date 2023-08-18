@@ -8,7 +8,7 @@ import (
 
 const salt = int64(100)
 
-// NumToString num to string
+// NumToShortID num to string
 func NumToShortID(id int64) string {
 	sid := strconv.FormatInt(id, 10)
 	if len(sid) < 17 {
@@ -26,10 +26,10 @@ func NumToShortID(id int64) string {
 	}
 	code := utils.EnShortID(id, salt)
 	tcode := utils.EnShortID(typeCode, salt)
-	return string(tcode) + string(code)
+	return tcode + code
 }
 
-// StringToNum string to num
+// ShortIDToNum string to num
 func ShortIDToNum(code string) int64 {
 	if len(code) < 2 {
 		return 0
