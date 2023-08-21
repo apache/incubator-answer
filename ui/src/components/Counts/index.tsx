@@ -30,9 +30,10 @@ const Index: FC<Props> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'counts' });
 
   return (
-    <div className={classname('d-flex align-items-center', className)}>
+    <div
+      className={classname('d-flex align-items-center flex-wrap', className)}>
       {showVotes && (
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center flex-shrink-0">
           <Icon name="hand-thumbs-up-fill me-1" />
           <span>
             {data.votes} {t('votes')}
@@ -41,7 +42,7 @@ const Index: FC<Props> = ({
       )}
 
       {showAccepted && (
-        <div className="d-flex align-items-center ms-3 text-success">
+        <div className="d-flex align-items-center ms-3 text-success flex-shrink-0">
           <Icon name="check-circle-fill me-1" />
           <span>{t('accepted')}</span>
         </div>
@@ -49,7 +50,7 @@ const Index: FC<Props> = ({
 
       {showAnswers && (
         <div
-          className={`d-flex align-items-center ms-3 ${
+          className={`d-flex align-items-center ms-3 flex-shrink-0 ${
             isAccepted ? 'text-success' : ''
           }`}>
           {isAccepted ? (
@@ -63,7 +64,7 @@ const Index: FC<Props> = ({
         </div>
       )}
       {showViews && (
-        <span className="summary-stat ms-3">
+        <span className="summary-stat ms-3 flex-shrink-0">
           <Icon name="eye-fill" />
           <em className="fst-normal ms-1">
             {data.views} {t('views')}
