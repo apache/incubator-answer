@@ -210,6 +210,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
             });
           }}
         />
+        <Form.Text>{t('login_required.text')}</Form.Text>
       </Form.Group>
 
       <h5>{t('admin_account')}</h5>

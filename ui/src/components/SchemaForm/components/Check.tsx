@@ -27,12 +27,13 @@ const Index: FC<Props> = ({
     index: number,
   ) => {
     const { name, checked } = evt.currentTarget;
-    const freshVal = checked ? enumValues?.[index] : '';
+    enumValues[index] = checked;
+
     const state = {
       ...formData,
       [name]: {
         ...formData[name],
-        value: freshVal,
+        value: enumValues,
         isInvalid: false,
       },
     };
@@ -51,7 +52,7 @@ const Index: FC<Props> = ({
             name={fieldName}
             id={`form-${String(item)}`}
             label={enumNames?.[index]}
-            checked={(fieldObject?.value || '') === item}
+            checked={fieldObject?.value?.[index] || false}
             feedback={fieldObject?.errorMsg}
             feedbackType="invalid"
             isInvalid={fieldObject?.isInvalid}

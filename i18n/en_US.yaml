@@ -966,9 +966,16 @@ ui:
         placeholder: "City, Country"
     notification:
       heading: Notifications
-      email:
-        label: Email Notifications
-        radio: "Answers to your questions, comments, and more"
+      email: Email
+      inbox:
+        label: Inbox notifications
+        description: Answers to your questions, comments, invites, and more.
+      all_new_question:
+        label: All new questions
+        description: Get notified of all new questions. Up to 50 questions per week.
+      all_new_question_for_following_tags:
+        label: All new questions for following tags
+        description: Get notified of new questions for following tags.
     account:
       heading: Account
       change_email_btn: Change email
@@ -1266,6 +1273,7 @@ ui:
     login_required:
       label: Private
       switch: Login required
+      text: Only logged in users can access this community.
     admin_name:
       label: Name
       msg: Name cannot be empty.

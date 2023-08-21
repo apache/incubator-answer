@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { usePageTags } from '@/hooks';
 import * as Type from '@/common/interface';
-import { FollowingTags, CustomSidebar } from '@/components';
+import { FollowingTags, CustomSidebar, Icon } from '@/components';
 import {
   useTagInfo,
   useFollow,
@@ -141,9 +141,16 @@ const Index: FC = () => {
 
             <div className="box-ft">
               {tagInfo.is_follower ? (
-                <Button variant="primary" onClick={() => toggleFollow()}>
-                  {t('button_following')}
-                </Button>
+                <div>
+                  <Button variant="primary" onClick={() => toggleFollow()}>
+                    {t('button_following')}
+                  </Button>
+                  <Link
+                    className="btn btn-outline-secondary ms-2"
+                    to="/users/settings/notify">
+                    <Icon name="bell-fill" />
+                  </Link>
+                </div>
               ) : (
                 <Button
                   variant="outline-primary"
