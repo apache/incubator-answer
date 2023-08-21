@@ -57,7 +57,7 @@ export interface TagInfo extends TagBase {
   main_tag_slug_name?: string;
   excerpt?;
 }
-export interface QuestionParams extends ImgCodeReq{
+export interface QuestionParams extends ImgCodeReq {
   title: string;
   url_title?: string;
   content: string;
@@ -588,4 +588,14 @@ export interface UserOauthConnectorItem {
   link: string;
   binding: boolean;
   external_id: string;
+}
+
+export interface NotificationConfigItem {
+  enable: boolean;
+  key: string;
+}
+export interface NotificationConfig {
+  all_new_question: NotificationConfigItem[];
+  all_new_question_for_following_tags: NotificationConfigItem[];
+  inbox: NotificationConfigItem[];
 }
