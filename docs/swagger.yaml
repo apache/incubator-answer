@@ -1,4 +1,10 @@
 definitions:
+  constant.NotificationChannel:
+    enum:
+    - email
+    type: string
+    x-enum-varnames:
+    - EmailChannel
   constant.Privilege:
     properties:
       key:
@@ -63,6 +69,8 @@ definitions:
       lang:
         maxLength: 30
         type: string
+      login_required:
+        type: boolean
       name:
         maxLength: 30
         type: string
@@ -983,6 +991,21 @@ definitions:
       activation_url:
         type: string
     type: object
+  schema.GetUserNotificationConfigResp:
+    properties:
+      all_new_question:
+        items:
+          $ref: '#/definitions/schema.NotificationChannelConfig'
+        type: array
+      all_new_question_for_following_tags:
+        items:
+          $ref: '#/definitions/schema.NotificationChannelConfig'
+        type: array
+      inbox:
+        items:
+          $ref: '#/definitions/schema.NotificationChannelConfig'
+        type: array
+    type: object
   schema.GetUserPageResp:
     properties:
       avatar:
@@ -1063,6 +1086,13 @@ definitions:
         type: string
       text:
         type: string
+    type: object
+  schema.NotificationChannelConfig:
+    properties:
+      enable:
+        type: boolean
+      key:
+        $ref: '#/definitions/constant.NotificationChannel'
     type: object
   schema.NotificationClearIDRequest:
     properties:
@@ -2028,6 +2058,21 @@ definitions:
     required:
     - language
     type: object
+  schema.UpdateUserNotificationConfigReq:
+    properties:
+      all_new_question:
+        items:
+          $ref: '#/definitions/schema.NotificationChannelConfig'
+        type: array
+      all_new_question_for_following_tags:
+        items:
+          $ref: '#/definitions/schema.NotificationChannelConfig'
+        type: array
+      inbox:
+        items:
+          $ref: '#/definitions/schema.NotificationChannelConfig'
+        type: array
+    type: object
   schema.UpdateUserPasswordReq:
     properties:
       password:
@@ -2227,16 +2272,6 @@ definitions:
         type: string
     required:
     - pass
-    type: object
-  schema.UserNoticeSetRequest:
-    properties:
-      notice_switch:
-        type: boolean
-    type: object
-  schema.UserNoticeSetResp:
-    properties:
-      notice_switch:
-        type: boolean
     type: object
   schema.UserRankingResp:
     properties:
@@ -5698,18 +5733,11 @@ paths:
       summary: user logout
       tags:
       - User
-  /answer/api/v1/user/notice/set:
+  /answer/api/v1/user/notification/config:
     post:
       consumes:
       - application/json
-      description: UserNoticeSet
-      parameters:
-      - description: UserNoticeSetRequest
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/schema.UserNoticeSetRequest'
+      description: get user's notification config
       produces:
       - application/json
       responses:
@@ -5720,11 +5748,34 @@ paths:
             - $ref: '#/definitions/handler.RespBody'
             - properties:
                 data:
-                  $ref: '#/definitions/schema.UserNoticeSetResp'
+                  $ref: '#/definitions/schema.GetUserNotificationConfigResp'
               type: object
       security:
       - ApiKeyAuth: []
-      summary: UserNoticeSet
+      summary: get user's notification config
+      tags:
+      - User
+    put:
+      consumes:
+      - application/json
+      description: update user's notification config
+      parameters:
+      - description: UpdateUserNotificationConfigReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UpdateUserNotificationConfigReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: update user's notification config
       tags:
       - User
   /answer/api/v1/user/password:

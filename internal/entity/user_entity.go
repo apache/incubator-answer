@@ -46,6 +46,7 @@ type User struct {
 	IPInfo         string    `xorm:"not null default '' VARCHAR(255) ip_info"`
 	IsAdmin        bool      `xorm:"not null default false BOOL is_admin"`
 	Language       string    `xorm:"not null default '' VARCHAR(100) language"`
+	NoticeConfig   string    `xorm:"not null TEXT notice_config"`
 }
 
 // TableName user table name

@@ -39,6 +39,19 @@ const (
 	NotificationInvitedYouToAnswer = "notification.action.invited_you_to_answer"
 )
 
+type NotificationChannel string
+type NotificationSource string
+
+const (
+	InboxChannel                          NotificationSource = "inbox"
+	AllNewQuestionChannel                 NotificationSource = "all_new_question"
+	AllNewQuestionForFollowingTagsChannel NotificationSource = "all_new_question_for_following_tags"
+)
+
+const (
+	EmailChannel NotificationChannel = "email"
+)
+
 var (
 	NotificationMsgTypeMapping = map[string]int{
 		NotificationUpdateQuestion:         1,

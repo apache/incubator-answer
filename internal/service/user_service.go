@@ -28,8 +28,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// UserRepo user repository
-
 // UserService user service
 type UserService struct {
 	userCommonService        *usercommon.UserCommon
@@ -93,8 +91,7 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 }
 
 func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username string) (
-	resp *schema.GetOtherUserInfoByUsernameResp, err error,
-) {
+	resp *schema.GetOtherUserInfoByUsernameResp, err error) {
 	userInfo, exist, err := us.userRepo.GetByUsername(ctx, username)
 	if err != nil {
 		return nil, err
@@ -345,14 +342,6 @@ func (us *UserService) formatUserInfoForUpdateInfo(
 	return userInfo
 }
 
-func (us *UserService) UserEmailHas(ctx context.Context, email string) (bool, error) {
-	_, has, err := us.userRepo.GetByEmail(ctx, email)
-	if err != nil {
-		return false, err
-	}
-	return has, nil
-}
-
 // UserUpdateInterface update user interface
 func (us *UserService) UserUpdateInterface(ctx context.Context, req *schema.UpdateUserInterfaceRequest) (err error) {
 	if !translator.CheckLanguageIsValid(req.Language) {
@@ -470,23 +459,31 @@ func (us *UserService) UserVerifyEmailSend(ctx context.Context, userID string) e
 	return nil
 }
 
-func (us *UserService) UserNoticeSet(ctx context.Context, userID string, noticeSwitch bool) (
-	resp *schema.UserNoticeSetResp, err error,
-) {
-	userInfo, has, err := us.userRepo.GetByUserID(ctx, userID)
+func (us *UserService) GetUserNotificationConfig(ctx context.Context, userID string) (
+	resp *schema.GetUserNotificationConfigResp, err error) {
+	userInfo, exist, err := us.userRepo.GetByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
 	}
-	if !has {
+	if !exist {
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
-	if noticeSwitch {
-		userInfo.NoticeStatus = schema.NoticeStatusOn
-	} else {
-		userInfo.NoticeStatus = schema.NoticeStatusOff
+	resp = &schema.GetUserNotificationConfigResp{}
+	resp.FromJsonString(userInfo.NoticeConfig)
+	resp.Format()
+	return resp, nil
+}
+
+func (us *UserService) UpdateUserNotificationConfig(ctx context.Context, req *schema.UpdateUserNotificationConfigReq) (err error) {
+	_, exist, err := us.userRepo.GetByUserID(ctx, req.UserID)
+	if err != nil {
+		return err
 	}
-	err = us.userRepo.UpdateNoticeStatus(ctx, userInfo.ID, userInfo.NoticeStatus)
-	return &schema.UserNoticeSetResp{NoticeSwitch: noticeSwitch}, err
+	if !exist {
+		return errors.BadRequest(reason.UserNotFound)
+	}
+	req.NotificationConfig.Format()
+	return us.userRepo.UpdateNoticeConfig(ctx, req.UserID, req.NotificationConfig.ToJsonString())
 }
 
 func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVerifyEmailReq) (resp *schema.UserLoginResp, err error) {

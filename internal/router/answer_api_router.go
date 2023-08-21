@@ -215,7 +215,8 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/user/password", middleware.BanAPIForUserCenter, a.userController.UserModifyPassWord)
 	r.PUT("/user/info", a.userController.UserUpdateInfo)
 	r.PUT("/user/interface", a.userController.UserUpdateInterface)
-	r.POST("/user/notice/set", a.userController.UserNoticeSet)
+	r.GET("/user/notification/config", a.userController.GetUserNotificationConfig)
+	r.PUT("/user/notification/config", a.userController.UpdateUserNotificationConfig)
 	r.GET("/user/info/search", a.userController.SearchUserListByName)
 
 	// vote

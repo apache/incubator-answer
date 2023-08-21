@@ -493,7 +493,9 @@ func (cs *CommentService) notificationQuestionComment(ctx context.Context, quest
 		log.Warnf("user %s not found", questionUserID)
 		return
 	}
-	if receiverUserInfo.NoticeStatus == schema.NoticeStatusOff || len(receiverUserInfo.EMail) == 0 {
+	if len(receiverUserInfo.EMail) == 0 ||
+		schema.NewNotificationConfig(receiverUserInfo.NoticeConfig).
+			CheckEnable(constant.InboxChannel, constant.EmailChannel) {
 		return
 	}
 
@@ -552,7 +554,9 @@ func (cs *CommentService) notificationAnswerComment(ctx context.Context,
 		log.Warnf("user %s not found", answerUserID)
 		return
 	}
-	if receiverUserInfo.NoticeStatus == schema.NoticeStatusOff || len(receiverUserInfo.EMail) == 0 {
+	if len(receiverUserInfo.EMail) == 0 ||
+		schema.NewNotificationConfig(receiverUserInfo.NoticeConfig).
+			CheckEnable(constant.InboxChannel, constant.EmailChannel) {
 		return
 	}
 

@@ -645,7 +645,9 @@ func (qs *QuestionService) notificationInviteUser(
 			log.Warnf("user %s not found", userID)
 			return
 		}
-		if userInfo.NoticeStatus == schema.NoticeStatusOff || len(userInfo.EMail) == 0 {
+		if len(userInfo.EMail) == 0 ||
+			schema.NewNotificationConfig(userInfo.NoticeConfig).
+				CheckEnable(constant.InboxChannel, constant.EmailChannel) {
 			return
 		}
 

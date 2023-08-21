@@ -488,25 +488,40 @@ func (uc *UserController) UserRegisterCaptcha(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
-// UserNoticeSet godoc
-// @Summary UserNoticeSet
-// @Description UserNoticeSet
+// GetUserNotificationConfig get user's notification config
+// @Summary get user's notification config
+// @Description get user's notification config
 // @Tags User
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param data body schema.UserNoticeSetRequest true "UserNoticeSetRequest"
-// @Success 200 {object} handler.RespBody{data=schema.UserNoticeSetResp}
-// @Router /answer/api/v1/user/notice/set [post]
-func (uc *UserController) UserNoticeSet(ctx *gin.Context) {
-	req := &schema.UserNoticeSetRequest{}
+// @Success 200 {object} handler.RespBody{data=schema.GetUserNotificationConfigResp}
+// @Router /answer/api/v1/user/notification/config [post]
+func (uc *UserController) GetUserNotificationConfig(ctx *gin.Context) {
+	userID := middleware.GetLoginUserIDFromContext(ctx)
+	resp, err := uc.userService.GetUserNotificationConfig(ctx, userID)
+	handler.HandleResponse(ctx, err, resp)
+}
+
+// UpdateUserNotificationConfig update user's notification config
+// @Summary update user's notification config
+// @Description update user's notification config
+// @Tags User
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.UpdateUserNotificationConfigReq true "UpdateUserNotificationConfigReq"
+// @Success 200 {object} handler.RespBody{}
+// @Router /answer/api/v1/user/notification/config [put]
+func (uc *UserController) UpdateUserNotificationConfig(ctx *gin.Context) {
+	req := &schema.UpdateUserNotificationConfigReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	resp, err := uc.userService.UserNoticeSet(ctx, req.UserID, req.NoticeSwitch)
-	handler.HandleResponse(ctx, err, resp)
+	err := uc.userService.UpdateUserNotificationConfig(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
 }
 
 // UserChangeEmailSendCode send email to the user email then change their email

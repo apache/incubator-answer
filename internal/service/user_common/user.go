@@ -27,6 +27,7 @@ type UserRepo interface {
 	UpdateLastLoginDate(ctx context.Context, userID string) (err error)
 	UpdateEmailStatus(ctx context.Context, userID string, emailStatus int) error
 	UpdateNoticeStatus(ctx context.Context, userID string, noticeStatus int) error
+	UpdateNoticeConfig(ctx context.Context, userID string, noticeConfig string) error
 	UpdateEmail(ctx context.Context, userID, email string) error
 	UpdateLanguage(ctx context.Context, userID, language string) error
 	UpdatePass(ctx context.Context, userID, pass string) error

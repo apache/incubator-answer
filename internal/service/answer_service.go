@@ -613,7 +613,8 @@ func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
 		log.Warnf("user %s not found", questionUserID)
 		return
 	}
-	if userInfo.NoticeStatus == schema.NoticeStatusOff || len(userInfo.EMail) == 0 {
+	if len(userInfo.EMail) == 0 ||
+		schema.NewNotificationConfig(userInfo.NoticeConfig).CheckEnable(constant.InboxChannel, constant.EmailChannel) {
 		return
 	}
 
