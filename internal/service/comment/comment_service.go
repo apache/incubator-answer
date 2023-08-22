@@ -2,6 +2,7 @@ package comment
 
 import (
 	"context"
+	"github.com/answerdev/answer/pkg/token"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -17,7 +18,6 @@ import (
 	"github.com/answerdev/answer/internal/service/object_info"
 	"github.com/answerdev/answer/internal/service/permission"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
-	"github.com/answerdev/answer/pkg/encryption"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/jinzhu/copier"
@@ -508,7 +508,7 @@ func (cs *CommentService) notificationQuestionComment(ctx context.Context, quest
 		QuestionID:      questionID,
 		CommentID:       commentID,
 		CommentSummary:  commentSummary,
-		UnsubscribeCode: encryption.MD5(receiverUserInfo.Pass),
+		UnsubscribeCode: token.GenerateToken(),
 	}
 	commentUser, _, _ := cs.userCommon.GetUserBasicInfoByID(ctx, commentUserID)
 	if commentUser != nil {
@@ -556,7 +556,7 @@ func (cs *CommentService) notificationAnswerComment(ctx context.Context,
 		AnswerID:        answerID,
 		CommentID:       commentID,
 		CommentSummary:  commentSummary,
-		UnsubscribeCode: encryption.MD5(receiverUserInfo.Pass),
+		UnsubscribeCode: token.GenerateToken(),
 	}
 	commentUser, _, _ := cs.userCommon.GetUserBasicInfoByID(ctx, commentUserID)
 	if commentUser != nil {

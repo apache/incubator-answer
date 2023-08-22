@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/answerdev/answer/pkg/token"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -22,7 +23,6 @@ import (
 	"github.com/answerdev/answer/internal/service/revision_common"
 	"github.com/answerdev/answer/internal/service/role"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
-	"github.com/answerdev/answer/pkg/encryption"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
@@ -626,7 +626,7 @@ func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
 		QuestionID:      questionID,
 		AnswerID:        answerID,
 		AnswerSummary:   answerSummary,
-		UnsubscribeCode: encryption.MD5(receiverUserInfo.Pass),
+		UnsubscribeCode: token.GenerateToken(),
 	}
 	answerUser, _, _ := as.userCommon.GetUserBasicInfoByID(ctx, answerUserID)
 	if answerUser != nil {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/schema"
+	"github.com/answerdev/answer/pkg/token"
 	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 	"time"
@@ -31,9 +32,11 @@ func (ns *ExternalNotificationService) handleNewQuestionNotification(ctx context
 			switch channel.Key {
 			case constant.EmailChannel:
 				ns.sendNewQuestionNotificationEmail(ctx, subscriber.UserID, &schema.NewQuestionTemplateRawData{
-					QuestionTitle: msg.NewQuestionTemplateRawData.QuestionTitle,
-					QuestionID:    msg.NewQuestionTemplateRawData.QuestionID,
-					Tags:          msg.NewQuestionTemplateRawData.Tags,
+					QuestionTitle:   msg.NewQuestionTemplateRawData.QuestionTitle,
+					QuestionID:      msg.NewQuestionTemplateRawData.QuestionID,
+					UnsubscribeCode: token.GenerateToken(),
+					Tags:            msg.NewQuestionTemplateRawData.Tags,
+					TagIDs:          msg.NewQuestionTemplateRawData.TagIDs,
 				})
 			}
 		}
