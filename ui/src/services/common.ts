@@ -271,7 +271,7 @@ export const reopenQuestion = (params: { question_id: string }) => {
 };
 
 export const unsubscribe = (code: string) => {
-  const apiUrl = '/answer/api/v1/user/email/notification';
+  const apiUrl = '/answer/api/v1/user/notification/unsubscribe';
   return request.put(apiUrl, { code });
 };
 
