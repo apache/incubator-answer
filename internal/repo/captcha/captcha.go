@@ -50,10 +50,11 @@ func (cr *captchaRepo) GetActionType(ctx context.Context, unit, actionType strin
 	if err != nil {
 		return nil, err
 	}
-	actionInfo = &entity.ActionRecordInfo{}
-	if exist {
-		_ = json.Unmarshal([]byte(res), actionInfo)
+	if !exist {
+		return nil, nil
 	}
+	actionInfo = &entity.ActionRecordInfo{}
+	_ = json.Unmarshal([]byte(res), actionInfo)
 	return actionInfo, nil
 }
 

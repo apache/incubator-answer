@@ -31,10 +31,10 @@ func (ar *authRepo) GetUserCacheInfo(ctx context.Context, accessToken string) (u
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	userInfo = &entity.UserCacheInfo{}
 	if !exist {
 		return nil, nil
 	}
+	userInfo = &entity.UserCacheInfo{}
 	_ = json.Unmarshal([]byte(userInfoCache), userInfo)
 	return userInfo, nil
 }

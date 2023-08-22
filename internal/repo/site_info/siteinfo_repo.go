@@ -53,6 +53,7 @@ func (sr *siteInfoRepo) GetByType(ctx context.Context, siteType string) (siteInf
 	exist, err = sr.data.DB.Context(ctx).Where(builder.Eq{"type": siteType}).Get(siteInfo)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return nil, false, err
 	}
 	if exist {
 		sr.setCache(ctx, siteType, siteInfo)
@@ -65,10 +66,11 @@ func (sr *siteInfoRepo) getCache(ctx context.Context, siteType string) (siteInfo
 	if err != nil {
 		return nil
 	}
-	siteInfo = &entity.SiteInfo{}
-	if exist {
-		_ = json.Unmarshal([]byte(siteInfoCache), siteInfo)
+	if !exist {
+		return nil
 	}
+	siteInfo = &entity.SiteInfo{}
+	_ = json.Unmarshal([]byte(siteInfoCache), siteInfo)
 	return siteInfo
 }
 

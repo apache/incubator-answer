@@ -89,9 +89,10 @@ func (ur *userExternalLoginRepo) GetCacheUserExternalLoginInfo(
 	if err != nil {
 		return info, err
 	}
-	info = &schema.ExternalLoginUserInfoCache{}
-	if exist {
-		_ = json.Unmarshal([]byte(res), &info)
+	if !exist {
+		return nil, nil
 	}
+	info = &schema.ExternalLoginUserInfoCache{}
+	_ = json.Unmarshal([]byte(res), &info)
 	return info, nil
 }

@@ -2,6 +2,7 @@ package action
 
 import (
 	"context"
+	"github.com/segmentfault/pacman/log"
 	"time"
 
 	"github.com/answerdev/answer/internal/entity"
@@ -13,8 +14,14 @@ import (
 func (cs *CaptchaService) ValidationStrategy(ctx context.Context, unit, actionType string) bool {
 	info, err := cs.captchaRepo.GetActionType(ctx, unit, actionType)
 	if err != nil {
-		//No record, no processing
-		//
+		log.Error(err)
+		return false
+	}
+	if info == nil {
+		info = &entity.ActionRecordInfo{
+			LastTime: time.Now().Unix(),
+			Num:      1,
+		}
 	}
 	switch actionType {
 	case entity.CaptchaActionEmail:

@@ -22,6 +22,7 @@ type ExternalNotificationService struct {
 }
 
 func NewExternalNotificationService(
+	data *data.Data,
 	userNotificationConfigRepo user_notification_config.UserNotificationConfigRepo,
 	followRepo activity_common.FollowRepo,
 	emailService *export.EmailService,
@@ -29,6 +30,7 @@ func NewExternalNotificationService(
 	notificationQueueService notice_queue.ExternalNotificationQueueService,
 ) *ExternalNotificationService {
 	n := &ExternalNotificationService{
+		data:                       data,
 		userNotificationConfigRepo: userNotificationConfigRepo,
 		followRepo:                 followRepo,
 		emailService:               emailService,
