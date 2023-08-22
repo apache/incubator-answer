@@ -113,7 +113,7 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 	routerGroup.PUT("/user/email", a.userController.UserChangeEmailVerify)
 	routerGroup.POST("/user/password/reset", a.userController.RetrievePassWord)
 	routerGroup.POST("/user/password/replacement", a.userController.UseRePassWord)
-	routerGroup.PUT("/user/email/notification", a.userController.UserUnsubscribeEmailNotification)
+	routerGroup.PUT("/user/notification/unsubscribe", a.userController.UserUnsubscribeNotification)
 }
 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {

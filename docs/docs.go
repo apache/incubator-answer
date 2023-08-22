@@ -5166,29 +5166,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/user/email/notification": {
-            "put": {
-                "description": "unsubscribe email notification",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "unsubscribe email notification",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
-                        }
-                    }
-                }
-            }
-        },
         "/answer/api/v1/user/email/verification": {
             "post": {
                 "description": "UserVerifyEmail",
@@ -5598,6 +5575,40 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/user/notification/unsubscribe": {
+            "put": {
+                "description": "unsubscribe notification",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "unsubscribe notification",
+                "parameters": [
+                    {
+                        "description": "UserUnsubscribeNotificationReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UserUnsubscribeNotificationReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
                         }
                     }
                 }
@@ -6224,7 +6235,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "constant.NotificationChannel": {
+        "constant.NotificationChannelKey": {
             "type": "string",
             "enum": [
                 "email"
@@ -7774,7 +7785,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "key": {
-                    "$ref": "#/definitions/constant.NotificationChannel"
+                    "$ref": "#/definitions/constant.NotificationChannelKey"
                 }
             }
         },
@@ -9584,6 +9595,18 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "e_mail": {
+                    "type": "string",
+                    "maxLength": 500
+                }
+            }
+        },
+        "schema.UserUnsubscribeNotificationReq": {
+            "type": "object",
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
                     "type": "string",
                     "maxLength": 500
                 }

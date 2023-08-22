@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"mime"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -149,7 +150,7 @@ func (es *EmailService) VerifyUrlExpired(ctx context.Context, code string) (cont
 	return content
 }
 
-func (es *EmailService) GetSiteGeneral(ctx context.Context) (resp schema.SiteGeneralResp, err error) {
+func (es *EmailService) getSiteGeneral(ctx context.Context) (resp schema.SiteGeneralResp, err error) {
 	var (
 		siteType = "general"
 		siteInfo *entity.SiteInfo
@@ -167,7 +168,7 @@ func (es *EmailService) GetSiteGeneral(ctx context.Context) (resp schema.SiteGen
 }
 
 func (es *EmailService) RegisterTemplate(ctx context.Context, registerUrl string) (title, body string, err error) {
-	siteInfo, err := es.GetSiteGeneral(ctx)
+	siteInfo, err := es.getSiteGeneral(ctx)
 	if err != nil {
 		return
 	}
@@ -183,7 +184,7 @@ func (es *EmailService) RegisterTemplate(ctx context.Context, registerUrl string
 }
 
 func (es *EmailService) PassResetTemplate(ctx context.Context, passResetUrl string) (title, body string, err error) {
-	siteInfo, err := es.GetSiteGeneral(ctx)
+	siteInfo, err := es.getSiteGeneral(ctx)
 	if err != nil {
 		return
 	}
@@ -197,7 +198,7 @@ func (es *EmailService) PassResetTemplate(ctx context.Context, passResetUrl stri
 }
 
 func (es *EmailService) ChangeEmailTemplate(ctx context.Context, changeEmailUrl string) (title, body string, err error) {
-	siteInfo, err := es.GetSiteGeneral(ctx)
+	siteInfo, err := es.getSiteGeneral(ctx)
 	if err != nil {
 		return
 	}
@@ -214,7 +215,7 @@ func (es *EmailService) ChangeEmailTemplate(ctx context.Context, changeEmailUrl 
 
 // TestTemplate send test email template parse
 func (es *EmailService) TestTemplate(ctx context.Context) (title, body string, err error) {
-	siteInfo, err := es.GetSiteGeneral(ctx)
+	siteInfo, err := es.getSiteGeneral(ctx)
 	if err != nil {
 		return
 	}
@@ -229,7 +230,7 @@ func (es *EmailService) TestTemplate(ctx context.Context) (title, body string, e
 // NewAnswerTemplate new answer template
 func (es *EmailService) NewAnswerTemplate(ctx context.Context, raw *schema.NewAnswerTemplateRawData) (
 	title, body string, err error) {
-	siteInfo, err := es.GetSiteGeneral(ctx)
+	siteInfo, err := es.getSiteGeneral(ctx)
 	if err != nil {
 		return
 	}
@@ -251,7 +252,7 @@ func (es *EmailService) NewAnswerTemplate(ctx context.Context, raw *schema.NewAn
 // NewInviteAnswerTemplate new invite answer template
 func (es *EmailService) NewInviteAnswerTemplate(ctx context.Context, raw *schema.NewInviteAnswerTemplateRawData) (
 	title, body string, err error) {
-	siteInfo, err := es.GetSiteGeneral(ctx)
+	siteInfo, err := es.getSiteGeneral(ctx)
 	if err != nil {
 		return
 	}
@@ -272,7 +273,7 @@ func (es *EmailService) NewInviteAnswerTemplate(ctx context.Context, raw *schema
 // NewCommentTemplate new comment template
 func (es *EmailService) NewCommentTemplate(ctx context.Context, raw *schema.NewCommentTemplateRawData) (
 	title, body string, err error) {
-	siteInfo, err := es.GetSiteGeneral(ctx)
+	siteInfo, err := es.getSiteGeneral(ctx)
 	if err != nil {
 		return
 	}
@@ -294,6 +295,27 @@ func (es *EmailService) NewCommentTemplate(ctx context.Context, raw *schema.NewC
 	lang := handler.GetLangByCtx(ctx)
 	title = translator.TrWithData(lang, constant.EmailTplKeyNewCommentTitle, templateData)
 	body = translator.TrWithData(lang, constant.EmailTplKeyNewCommentBody, templateData)
+	return title, body, nil
+}
+
+// NewQuestionTemplate new question template
+func (es *EmailService) NewQuestionTemplate(ctx context.Context, raw *schema.NewQuestionTemplateRawData) (
+	title, body string, err error) {
+	siteInfo, err := es.getSiteGeneral(ctx)
+	if err != nil {
+		return
+	}
+	templateData := &schema.NewQuestionTemplateData{
+		SiteName:       siteInfo.Name,
+		QuestionTitle:  raw.QuestionTitle,
+		Tags:           strings.Join(raw.Tags, ", "),
+		UnsubscribeUrl: fmt.Sprintf("%s/users/unsubscribe?code=%s", siteInfo.SiteUrl, raw.UnsubscribeCode),
+	}
+	templateData.QuestionUrl = fmt.Sprintf("%s/questions/%s", siteInfo.SiteUrl, raw.QuestionID)
+
+	lang := handler.GetLangByCtx(ctx)
+	title = translator.TrWithData(lang, constant.EmailTplKeyNewQuestionTitle, templateData)
+	body = translator.TrWithData(lang, constant.EmailTplKeyNewQuestionBody, templateData)
 	return title, body, nil
 }
 

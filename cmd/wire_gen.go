@@ -26,7 +26,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/config"
 	"github.com/answerdev/answer/internal/repo/export"
 	"github.com/answerdev/answer/internal/repo/meta"
-	"github.com/answerdev/answer/internal/repo/notification"
+	notification2 "github.com/answerdev/answer/internal/repo/notification"
 	"github.com/answerdev/answer/internal/repo/plugin_config"
 	"github.com/answerdev/answer/internal/repo/question"
 	"github.com/answerdev/answer/internal/repo/rank"
@@ -41,6 +41,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/unique"
 	"github.com/answerdev/answer/internal/repo/user"
 	"github.com/answerdev/answer/internal/repo/user_external_login"
+	"github.com/answerdev/answer/internal/repo/user_notification_config"
 	"github.com/answerdev/answer/internal/router"
 	"github.com/answerdev/answer/internal/service"
 	"github.com/answerdev/answer/internal/service/action"
@@ -58,7 +59,7 @@ import (
 	"github.com/answerdev/answer/internal/service/follow"
 	meta2 "github.com/answerdev/answer/internal/service/meta"
 	"github.com/answerdev/answer/internal/service/notice_queue"
-	notification2 "github.com/answerdev/answer/internal/service/notification"
+	"github.com/answerdev/answer/internal/service/notification"
 	"github.com/answerdev/answer/internal/service/notification_common"
 	"github.com/answerdev/answer/internal/service/object_info"
 	"github.com/answerdev/answer/internal/service/plugin_common"
@@ -80,6 +81,7 @@ import (
 	"github.com/answerdev/answer/internal/service/user_admin"
 	"github.com/answerdev/answer/internal/service/user_common"
 	user_external_login2 "github.com/answerdev/answer/internal/service/user_external_login"
+	user_notification_config2 "github.com/answerdev/answer/internal/service/user_notification_config"
 	"github.com/segmentfault/pacman"
 	"github.com/segmentfault/pacman/log"
 )
@@ -127,10 +129,12 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	userCommon := usercommon.NewUserCommon(userRepo, userRoleRelService, authService, siteInfoCommonService)
 	userExternalLoginRepo := user_external_login.NewUserExternalLoginRepo(dataData)
 	userExternalLoginService := user_external_login2.NewUserExternalLoginService(userRepo, userCommon, userExternalLoginRepo, emailService, siteInfoCommonService, userActiveActivityRepo)
-	userService := service.NewUserService(userRepo, userActiveActivityRepo, activityRepo, emailService, authService, siteInfoCommonService, userRoleRelService, userCommon, userExternalLoginService)
+	userNotificationConfigRepo := user_notification_config.NewUserNotificationConfigRepo(dataData)
+	userService := service.NewUserService(userRepo, userActiveActivityRepo, activityRepo, emailService, authService, siteInfoCommonService, userRoleRelService, userCommon, userExternalLoginService, userNotificationConfigRepo)
 	captchaRepo := captcha.NewCaptchaRepo(dataData)
 	captchaService := action.NewCaptchaService(captchaRepo)
-	userController := controller.NewUserController(authService, userService, captchaService, emailService, siteInfoCommonService)
+	userNotificationConfigService := user_notification_config2.NewUserNotificationConfigService(userRepo, userNotificationConfigRepo)
+	userController := controller.NewUserController(authService, userService, captchaService, emailService, siteInfoCommonService, userNotificationConfigService)
 	commentRepo := comment.NewCommentRepo(dataData, uniqueIDRepo)
 	commentCommonRepo := comment.NewCommentCommonRepo(dataData, uniqueIDRepo)
 	answerRepo := answer.NewAnswerRepo(dataData, uniqueIDRepo, userRankRepo, activityRepo)
@@ -145,7 +149,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	objService := object_info.NewObjService(answerRepo, questionRepo, commentCommonRepo, tagCommonRepo, tagCommonService)
 	voteRepo := activity_common.NewVoteRepo(dataData, activityRepo)
 	notificationQueueService := notice_queue.NewNotificationQueueService()
-	commentService := comment2.NewCommentService(commentRepo, commentCommonRepo, userCommon, objService, voteRepo, emailService, userRepo, notificationQueueService, activityQueueService)
+	externalNotificationQueueService := notice_queue.NewNewQuestionNotificationQueueService()
+	commentService := comment2.NewCommentService(commentRepo, commentCommonRepo, userCommon, objService, voteRepo, emailService, userRepo, notificationQueueService, externalNotificationQueueService, activityQueueService)
 	rolePowerRelRepo := role.NewRolePowerRelRepo(dataData)
 	rolePowerRelService := role2.NewRolePowerRelService(rolePowerRelRepo, userRoleRelService)
 	rankService := rank2.NewRankService(userCommon, userRankRepo, objService, userRoleRelService, rolePowerRelService, configService)
@@ -173,8 +178,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	collectionController := controller.NewCollectionController(collectionService)
 	answerActivityRepo := activity.NewAnswerActivityRepo(dataData, activityRepo, userRankRepo, notificationQueueService)
 	answerActivityService := activity2.NewAnswerActivityService(answerActivityRepo, configService)
-	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, userRepo, revisionService, metaService, collectionCommon, answerActivityService, emailService, notificationQueueService, activityQueueService, siteInfoCommonService)
-	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService, userRoleRelService, notificationQueueService, activityQueueService)
+	externalNotificationService := notification.NewExternalNotificationService(userNotificationConfigRepo, followRepo, emailService, userRepo, externalNotificationQueueService)
+	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, userRepo, revisionService, metaService, collectionCommon, answerActivityService, emailService, notificationQueueService, externalNotificationQueueService, activityQueueService, siteInfoCommonService, externalNotificationService)
+	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService, userRoleRelService, notificationQueueService, externalNotificationQueueService, activityQueueService)
 	questionController := controller.NewQuestionController(questionService, answerService, rankService, siteInfoCommonService, captchaService)
 	answerController := controller.NewAnswerController(answerService, rankService, captchaService)
 	searchParser := search_parser.NewSearchParser(tagCommonService, userCommon)
@@ -197,9 +203,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	siteInfoService := siteinfo.NewSiteInfoService(siteInfoRepo, siteInfoCommonService, emailService, tagCommonService, configService, questionCommon)
 	siteInfoController := controller_admin.NewSiteInfoController(siteInfoService)
 	controllerSiteInfoController := controller.NewSiteInfoController(siteInfoCommonService)
-	notificationRepo := notification.NewNotificationRepo(dataData)
+	notificationRepo := notification2.NewNotificationRepo(dataData)
 	notificationCommon := notificationcommon.NewNotificationCommon(dataData, notificationRepo, userCommon, activityRepo, followRepo, objService, notificationQueueService)
-	notificationService := notification2.NewNotificationService(dataData, notificationRepo, notificationCommon, revisionService)
+	notificationService := notification.NewNotificationService(dataData, notificationRepo, notificationCommon, revisionService)
 	notificationController := controller.NewNotificationController(notificationService, rankService)
 	dashboardService := dashboard.NewDashboardService(questionRepo, answerRepo, commentCommonRepo, voteRepo, userRepo, reportRepo, configService, siteInfoCommonService, serviceConf, dataData)
 	dashboardController := controller.NewDashboardController(dashboardService)

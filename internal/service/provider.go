@@ -37,6 +37,7 @@ import (
 	"github.com/answerdev/answer/internal/service/user_admin"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/internal/service/user_external_login"
+	"github.com/answerdev/answer/internal/service/user_notification_config"
 	"github.com/google/wire"
 )
 
@@ -90,4 +91,7 @@ var ProviderSetService = wire.NewSet(
 	config.NewConfigService,
 	notice_queue.NewNotificationQueueService,
 	activity_queue.NewActivityQueueService,
+	user_notification_config.NewUserNotificationConfigService,
+	notification.NewExternalNotificationService,
+	notice_queue.NewNewQuestionNotificationQueueService,
 )

@@ -25,26 +25,26 @@ import (
 	"github.com/answerdev/answer/pkg/encryption"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 )
 
 // AnswerService user service
 type AnswerService struct {
-	answerRepo               answercommon.AnswerRepo
-	questionRepo             questioncommon.QuestionRepo
-	questionCommon           *questioncommon.QuestionCommon
-	answerActivityService    *activity.AnswerActivityService
-	userCommon               *usercommon.UserCommon
-	collectionCommon         *collectioncommon.CollectionCommon
-	userRepo                 usercommon.UserRepo
-	revisionService          *revision_common.RevisionService
-	AnswerCommon             *answercommon.AnswerCommon
-	voteRepo                 activity_common.VoteRepo
-	emailService             *export.EmailService
-	roleService              *role.UserRoleRelService
-	notificationQueueService notice_queue.NotificationQueueService
-	activityQueueService     activity_queue.ActivityQueueService
+	answerRepo                       answercommon.AnswerRepo
+	questionRepo                     questioncommon.QuestionRepo
+	questionCommon                   *questioncommon.QuestionCommon
+	answerActivityService            *activity.AnswerActivityService
+	userCommon                       *usercommon.UserCommon
+	collectionCommon                 *collectioncommon.CollectionCommon
+	userRepo                         usercommon.UserRepo
+	revisionService                  *revision_common.RevisionService
+	AnswerCommon                     *answercommon.AnswerCommon
+	voteRepo                         activity_common.VoteRepo
+	emailService                     *export.EmailService
+	roleService                      *role.UserRoleRelService
+	notificationQueueService         notice_queue.NotificationQueueService
+	externalNotificationQueueService notice_queue.ExternalNotificationQueueService
+	activityQueueService             activity_queue.ActivityQueueService
 }
 
 func NewAnswerService(
@@ -61,23 +61,25 @@ func NewAnswerService(
 	emailService *export.EmailService,
 	roleService *role.UserRoleRelService,
 	notificationQueueService notice_queue.NotificationQueueService,
+	externalNotificationQueueService notice_queue.ExternalNotificationQueueService,
 	activityQueueService activity_queue.ActivityQueueService,
 ) *AnswerService {
 	return &AnswerService{
-		answerRepo:               answerRepo,
-		questionRepo:             questionRepo,
-		userCommon:               userCommon,
-		collectionCommon:         collectionCommon,
-		questionCommon:           questionCommon,
-		userRepo:                 userRepo,
-		revisionService:          revisionService,
-		answerActivityService:    answerAcceptActivityRepo,
-		AnswerCommon:             answerCommon,
-		voteRepo:                 voteRepo,
-		emailService:             emailService,
-		roleService:              roleService,
-		notificationQueueService: notificationQueueService,
-		activityQueueService:     activityQueueService,
+		answerRepo:                       answerRepo,
+		questionRepo:                     questionRepo,
+		userCommon:                       userCommon,
+		collectionCommon:                 collectionCommon,
+		questionCommon:                   questionCommon,
+		userRepo:                         userRepo,
+		revisionService:                  revisionService,
+		answerActivityService:            answerAcceptActivityRepo,
+		AnswerCommon:                     answerCommon,
+		voteRepo:                         voteRepo,
+		emailService:                     emailService,
+		roleService:                      roleService,
+		notificationQueueService:         notificationQueueService,
+		externalNotificationQueueService: externalNotificationQueueService,
+		activityQueueService:             activityQueueService,
 	}
 }
 
@@ -604,7 +606,7 @@ func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
 	msg.NotificationAction = constant.NotificationAnswerTheQuestion
 	as.notificationQueueService.Send(ctx, msg)
 
-	userInfo, exist, err := as.userRepo.GetByUserID(ctx, questionUserID)
+	receiverUserInfo, exist, err := as.userRepo.GetByUserID(ctx, questionUserID)
 	if err != nil {
 		log.Error(err)
 		return
@@ -613,38 +615,23 @@ func (as *AnswerService) notificationAnswerTheQuestion(ctx context.Context,
 		log.Warnf("user %s not found", questionUserID)
 		return
 	}
-	if len(userInfo.EMail) == 0 ||
-		schema.NewNotificationConfig(userInfo.NoticeConfig).CheckEnable(constant.InboxChannel, constant.EmailChannel) {
-		return
-	}
 
+	externalNotificationMsg := &schema.ExternalNotificationMsg{
+		ReceiverUserID: receiverUserInfo.ID,
+		ReceiverEmail:  receiverUserInfo.EMail,
+		ReceiverLang:   receiverUserInfo.Language,
+	}
 	rawData := &schema.NewAnswerTemplateRawData{
 		QuestionTitle:   questionTitle,
 		QuestionID:      questionID,
 		AnswerID:        answerID,
 		AnswerSummary:   answerSummary,
-		UnsubscribeCode: encryption.MD5(userInfo.Pass),
+		UnsubscribeCode: encryption.MD5(receiverUserInfo.Pass),
 	}
 	answerUser, _, _ := as.userCommon.GetUserBasicInfoByID(ctx, answerUserID)
 	if answerUser != nil {
 		rawData.AnswerUserDisplayName = answerUser.DisplayName
 	}
-	codeContent := &schema.EmailCodeContent{
-		SourceType: schema.UnsubscribeSourceType,
-		Email:      userInfo.EMail,
-		UserID:     userInfo.ID,
-	}
-
-	// If receiver has set language, use it to send email.
-	if len(userInfo.Language) > 0 {
-		ctx = context.WithValue(ctx, constant.AcceptLanguageFlag, i18n.Language(userInfo.Language))
-	}
-	title, body, err := as.emailService.NewAnswerTemplate(ctx, rawData)
-	if err != nil {
-		log.Error(err)
-		return
-	}
-
-	go as.emailService.SendAndSaveCodeWithTime(
-		ctx, userInfo.EMail, title, body, rawData.UnsubscribeCode, codeContent.ToJSONString(), 7*24*time.Hour)
+	externalNotificationMsg.NewAnswerTemplateRawData = rawData
+	as.externalNotificationQueueService.Send(ctx, externalNotificationMsg)
 }

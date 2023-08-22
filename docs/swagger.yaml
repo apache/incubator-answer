@@ -1,5 +1,5 @@
 definitions:
-  constant.NotificationChannel:
+  constant.NotificationChannelKey:
     enum:
     - email
     type: string
@@ -1092,7 +1092,7 @@ definitions:
       enable:
         type: boolean
       key:
-        $ref: '#/definitions/constant.NotificationChannel'
+        $ref: '#/definitions/constant.NotificationChannelKey'
     type: object
   schema.NotificationClearIDRequest:
     properties:
@@ -2350,6 +2350,14 @@ definitions:
         type: string
     required:
     - e_mail
+    type: object
+  schema.UserUnsubscribeNotificationReq:
+    properties:
+      code:
+        maxLength: 500
+        type: string
+    required:
+    - code
     type: object
   schema.VoteReq:
     properties:
@@ -5513,21 +5521,6 @@ paths:
       summary: send email to the user email then change their email
       tags:
       - User
-  /answer/api/v1/user/email/notification:
-    put:
-      consumes:
-      - application/json
-      description: unsubscribe email notification
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/handler.RespBody'
-      summary: unsubscribe email notification
-      tags:
-      - User
   /answer/api/v1/user/email/verification:
     post:
       consumes:
@@ -5776,6 +5769,28 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: update user's notification config
+      tags:
+      - User
+  /answer/api/v1/user/notification/unsubscribe:
+    put:
+      consumes:
+      - application/json
+      description: unsubscribe notification
+      parameters:
+      - description: UserUnsubscribeNotificationReq
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.UserUnsubscribeNotificationReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: unsubscribe notification
       tags:
       - User
   /answer/api/v1/user/password:

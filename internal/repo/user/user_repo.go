@@ -120,16 +120,6 @@ func (ur *userRepo) UpdateNoticeStatus(ctx context.Context, userID string, notic
 	return nil
 }
 
-// UpdateNoticeConfig update notice config
-func (ur *userRepo) UpdateNoticeConfig(ctx context.Context, userID string, noticeConfig string) error {
-	cond := &entity.User{NoticeConfig: noticeConfig}
-	_, err := ur.data.DB.Context(ctx).Where("id = ?", userID).Cols("notice_config").Update(cond)
-	if err != nil {
-		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
-	return nil
-}
-
 func (ur *userRepo) UpdatePass(ctx context.Context, userID, pass string) error {
 	_, err := ur.data.DB.Context(ctx).Where("id = ?", userID).Cols("pass").Update(&entity.User{Pass: pass})
 	if err != nil {

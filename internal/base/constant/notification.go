@@ -39,17 +39,17 @@ const (
 	NotificationInvitedYouToAnswer = "notification.action.invited_you_to_answer"
 )
 
-type NotificationChannel string
+type NotificationChannelKey string
 type NotificationSource string
 
 const (
-	InboxChannel                          NotificationSource = "inbox"
-	AllNewQuestionChannel                 NotificationSource = "all_new_question"
-	AllNewQuestionForFollowingTagsChannel NotificationSource = "all_new_question_for_following_tags"
+	InboxSource                          NotificationSource = "inbox"
+	AllNewQuestionSource                 NotificationSource = "all_new_question"
+	AllNewQuestionForFollowingTagsSource NotificationSource = "all_new_question_for_following_tags"
 )
 
 const (
-	EmailChannel NotificationChannel = "email"
+	EmailChannel NotificationChannelKey = "email"
 )
 
 var (

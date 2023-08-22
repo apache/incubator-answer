@@ -3,28 +3,35 @@ package schema
 import (
 	"encoding/json"
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/entity"
 )
 
 type NotificationChannelConfig struct {
-	Key    constant.NotificationChannel `json:"key"`
-	Enable bool                         `json:"enable"`
+	Key    constant.NotificationChannelKey `json:"key"`
+	Enable bool                            `json:"enable"`
 }
 
-type NotificationChannelConfigList []*NotificationChannelConfig
+type NotificationChannels []*NotificationChannelConfig
 
-func (n *NotificationChannelConfigList) Format(sequences []constant.NotificationChannel) {
+func NewNotificationChannelsFormJson(jsonStr string) NotificationChannels {
+	var list NotificationChannels
+	_ = json.Unmarshal([]byte(jsonStr), &list)
+	return list
+}
+
+func (n *NotificationChannels) Format(sequences []constant.NotificationChannelKey) {
 	if n == nil {
 		*n = make([]*NotificationChannelConfig, 0)
 		return
 	}
-	newList := make([]*NotificationChannelConfig, 0)
-	mapping := make(map[constant.NotificationChannel]*NotificationChannelConfig)
+	mapping := make(map[constant.NotificationChannelKey]*NotificationChannelConfig)
 	for _, item := range *n {
 		mapping[item.Key] = &NotificationChannelConfig{
 			Key:    item.Key,
 			Enable: item.Enable,
 		}
 	}
+	newList := make([]*NotificationChannelConfig, 0)
 	for _, ch := range sequences {
 		if c, ok := mapping[ch]; ok {
 			newList = append(newList, c)
@@ -37,7 +44,7 @@ func (n *NotificationChannelConfigList) Format(sequences []constant.Notification
 	*n = newList
 }
 
-func (n *NotificationChannelConfigList) CheckEnable(ch constant.NotificationChannel) bool {
+func (n *NotificationChannels) CheckEnable(ch constant.NotificationChannelKey) bool {
 	if n == nil {
 		return false
 	}
@@ -49,10 +56,15 @@ func (n *NotificationChannelConfigList) CheckEnable(ch constant.NotificationChan
 	return false
 }
 
+func (n *NotificationChannels) ToJsonString() string {
+	data, _ := json.Marshal(n)
+	return string(data)
+}
+
 type NotificationConfig struct {
-	Inbox                          NotificationChannelConfigList `json:"inbox"`
-	AllNewQuestion                 NotificationChannelConfigList `json:"all_new_question"`
-	AllNewQuestionForFollowingTags NotificationChannelConfigList `json:"all_new_question_for_following_tags"`
+	Inbox                          NotificationChannels `json:"inbox"`
+	AllNewQuestion                 NotificationChannels `json:"all_new_question"`
+	AllNewQuestionForFollowingTags NotificationChannels `json:"all_new_question_for_following_tags"`
 }
 
 func (n *NotificationConfig) ToJsonString() string {
@@ -60,9 +72,21 @@ func (n *NotificationConfig) ToJsonString() string {
 	return string(data)
 }
 
-func NewNotificationConfig(data string) *NotificationConfig {
-	nc := &NotificationConfig{}
-	nc.FromJsonString(data)
+func NewNotificationConfig(configs []*entity.UserNotificationConfig) NotificationConfig {
+	nc := NotificationConfig{}
+	nc.Inbox = make([]*NotificationChannelConfig, 0)
+	nc.AllNewQuestion = make([]*NotificationChannelConfig, 0)
+	nc.AllNewQuestionForFollowingTags = make([]*NotificationChannelConfig, 0)
+	for _, item := range configs {
+		switch item.Source {
+		case string(constant.InboxSource):
+			nc.Inbox = NewNotificationChannelsFormJson(item.Channels)
+		case string(constant.AllNewQuestionSource):
+			nc.AllNewQuestion = NewNotificationChannelsFormJson(item.Channels)
+		case string(constant.AllNewQuestionForFollowingTagsSource):
+			nc.AllNewQuestionForFollowingTags = NewNotificationChannelsFormJson(item.Channels)
+		}
+	}
 	return nc
 }
 
@@ -78,19 +102,19 @@ func (n *NotificationConfig) FromJsonString(data string) {
 }
 
 func (n *NotificationConfig) Format() {
-	n.Inbox.Format([]constant.NotificationChannel{constant.EmailChannel})
-	n.AllNewQuestion.Format([]constant.NotificationChannel{constant.EmailChannel})
-	n.AllNewQuestionForFollowingTags.Format([]constant.NotificationChannel{constant.EmailChannel})
+	n.Inbox.Format([]constant.NotificationChannelKey{constant.EmailChannel})
+	n.AllNewQuestion.Format([]constant.NotificationChannelKey{constant.EmailChannel})
+	n.AllNewQuestionForFollowingTags.Format([]constant.NotificationChannelKey{constant.EmailChannel})
 }
 
 func (n *NotificationConfig) CheckEnable(
-	source constant.NotificationSource, channel constant.NotificationChannel) bool {
+	source constant.NotificationSource, channel constant.NotificationChannelKey) bool {
 	switch source {
-	case constant.InboxChannel:
+	case constant.InboxSource:
 		return n.Inbox.CheckEnable(channel)
-	case constant.AllNewQuestionChannel:
+	case constant.AllNewQuestionSource:
 		return n.AllNewQuestion.CheckEnable(channel)
-	case constant.AllNewQuestionForFollowingTagsChannel:
+	case constant.AllNewQuestionForFollowingTagsSource:
 		return n.AllNewQuestionForFollowingTags.CheckEnable(channel)
 	}
 	return false

@@ -13,6 +13,7 @@ import (
 	"github.com/answerdev/answer/internal/service/auth"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/internal/service/user_notification_config"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
@@ -21,11 +22,12 @@ import (
 
 // UserController user controller
 type UserController struct {
-	userService           *service.UserService
-	authService           *auth.AuthService
-	actionService         *action.CaptchaService
-	emailService          *export.EmailService
-	siteInfoCommonService siteinfo_common.SiteInfoCommonService
+	userService                   *service.UserService
+	authService                   *auth.AuthService
+	actionService                 *action.CaptchaService
+	emailService                  *export.EmailService
+	siteInfoCommonService         siteinfo_common.SiteInfoCommonService
+	userNotificationConfigService *user_notification_config.UserNotificationConfigService
 }
 
 // NewUserController new controller
@@ -35,13 +37,15 @@ func NewUserController(
 	actionService *action.CaptchaService,
 	emailService *export.EmailService,
 	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
+	userNotificationConfigService *user_notification_config.UserNotificationConfigService,
 ) *UserController {
 	return &UserController{
-		authService:           authService,
-		userService:           userService,
-		actionService:         actionService,
-		emailService:          emailService,
-		siteInfoCommonService: siteInfoCommonService,
+		authService:                   authService,
+		userService:                   userService,
+		actionService:                 actionService,
+		emailService:                  emailService,
+		siteInfoCommonService:         siteInfoCommonService,
+		userNotificationConfigService: userNotificationConfigService,
 	}
 }
 
@@ -499,7 +503,7 @@ func (uc *UserController) UserRegisterCaptcha(ctx *gin.Context) {
 // @Router /answer/api/v1/user/notification/config [post]
 func (uc *UserController) GetUserNotificationConfig(ctx *gin.Context) {
 	userID := middleware.GetLoginUserIDFromContext(ctx)
-	resp, err := uc.userService.GetUserNotificationConfig(ctx, userID)
+	resp, err := uc.userNotificationConfigService.GetUserNotificationConfig(ctx, userID)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -520,7 +524,7 @@ func (uc *UserController) UpdateUserNotificationConfig(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
-	err := uc.userService.UpdateUserNotificationConfig(ctx, req)
+	err := uc.userNotificationConfigService.UpdateUserNotificationConfig(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 
@@ -623,16 +627,17 @@ func (uc *UserController) UserRanking(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
-// UserUnsubscribeEmailNotification unsubscribe email notification
-// @Summary unsubscribe email notification
-// @Description unsubscribe email notification
+// UserUnsubscribeNotification unsubscribe notification
+// @Summary unsubscribe notification
+// @Description unsubscribe notification
 // @Tags User
 // @Accept json
 // @Produce json
+// @Param data body schema.UserUnsubscribeNotificationReq true "UserUnsubscribeNotificationReq"
 // @Success 200 {object} handler.RespBody{}
-// @Router /answer/api/v1/user/email/notification [put]
-func (uc *UserController) UserUnsubscribeEmailNotification(ctx *gin.Context) {
-	req := &schema.UserUnsubscribeEmailNotificationReq{}
+// @Router /answer/api/v1/user/notification/unsubscribe [put]
+func (uc *UserController) UserUnsubscribeNotification(ctx *gin.Context) {
+	req := &schema.UserUnsubscribeNotificationReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
@@ -644,7 +649,7 @@ func (uc *UserController) UserUnsubscribeEmailNotification(ctx *gin.Context) {
 		return
 	}
 
-	err := uc.userService.UserUnsubscribeEmailNotification(ctx, req)
+	err := uc.userService.UserUnsubscribeNotification(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

@@ -22,7 +22,6 @@ import (
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 )
 
@@ -58,15 +57,16 @@ func (c *CommentQuery) GetOrderBy() string {
 
 // CommentService user service
 type CommentService struct {
-	commentRepo              CommentRepo
-	commentCommonRepo        comment_common.CommentCommonRepo
-	userCommon               *usercommon.UserCommon
-	voteCommon               activity_common.VoteRepo
-	objectInfoService        *object_info.ObjService
-	emailService             *export.EmailService
-	userRepo                 usercommon.UserRepo
-	notificationQueueService notice_queue.NotificationQueueService
-	activityQueueService     activity_queue.ActivityQueueService
+	commentRepo                      CommentRepo
+	commentCommonRepo                comment_common.CommentCommonRepo
+	userCommon                       *usercommon.UserCommon
+	voteCommon                       activity_common.VoteRepo
+	objectInfoService                *object_info.ObjService
+	emailService                     *export.EmailService
+	userRepo                         usercommon.UserRepo
+	notificationQueueService         notice_queue.NotificationQueueService
+	externalNotificationQueueService notice_queue.ExternalNotificationQueueService
+	activityQueueService             activity_queue.ActivityQueueService
 }
 
 // NewCommentService new comment service
@@ -79,18 +79,20 @@ func NewCommentService(
 	emailService *export.EmailService,
 	userRepo usercommon.UserRepo,
 	notificationQueueService notice_queue.NotificationQueueService,
+	externalNotificationQueueService notice_queue.ExternalNotificationQueueService,
 	activityQueueService activity_queue.ActivityQueueService,
 ) *CommentService {
 	return &CommentService{
-		commentRepo:              commentRepo,
-		commentCommonRepo:        commentCommonRepo,
-		userCommon:               userCommon,
-		voteCommon:               voteCommon,
-		objectInfoService:        objectInfoService,
-		emailService:             emailService,
-		userRepo:                 userRepo,
-		notificationQueueService: notificationQueueService,
-		activityQueueService:     activityQueueService,
+		commentRepo:                      commentRepo,
+		commentCommonRepo:                commentCommonRepo,
+		userCommon:                       userCommon,
+		voteCommon:                       voteCommon,
+		objectInfoService:                objectInfoService,
+		emailService:                     emailService,
+		userRepo:                         userRepo,
+		notificationQueueService:         notificationQueueService,
+		externalNotificationQueueService: externalNotificationQueueService,
+		activityQueueService:             activityQueueService,
 	}
 }
 
@@ -474,6 +476,7 @@ func (cs *CommentService) notificationQuestionComment(ctx context.Context, quest
 	if questionUserID == commentUserID {
 		return
 	}
+	// send internal notification
 	msg := &schema.NotificationMsg{
 		ReceiverUserID: questionUserID,
 		TriggerUserID:  commentUserID,
@@ -484,6 +487,7 @@ func (cs *CommentService) notificationQuestionComment(ctx context.Context, quest
 	msg.NotificationAction = constant.NotificationCommentQuestion
 	cs.notificationQueueService.Send(ctx, msg)
 
+	// send external notification
 	receiverUserInfo, exist, err := cs.userRepo.GetByUserID(ctx, questionUserID)
 	if err != nil {
 		log.Error(err)
@@ -493,12 +497,12 @@ func (cs *CommentService) notificationQuestionComment(ctx context.Context, quest
 		log.Warnf("user %s not found", questionUserID)
 		return
 	}
-	if len(receiverUserInfo.EMail) == 0 ||
-		schema.NewNotificationConfig(receiverUserInfo.NoticeConfig).
-			CheckEnable(constant.InboxChannel, constant.EmailChannel) {
-		return
-	}
 
+	externalNotificationMsg := &schema.ExternalNotificationMsg{
+		ReceiverUserID: receiverUserInfo.ID,
+		ReceiverEmail:  receiverUserInfo.EMail,
+		ReceiverLang:   receiverUserInfo.Language,
+	}
 	rawData := &schema.NewCommentTemplateRawData{
 		QuestionTitle:   questionTitle,
 		QuestionID:      questionID,
@@ -510,24 +514,8 @@ func (cs *CommentService) notificationQuestionComment(ctx context.Context, quest
 	if commentUser != nil {
 		rawData.CommentUserDisplayName = commentUser.DisplayName
 	}
-	codeContent := &schema.EmailCodeContent{
-		SourceType: schema.UnsubscribeSourceType,
-		Email:      receiverUserInfo.EMail,
-		UserID:     receiverUserInfo.ID,
-	}
-
-	// If receiver has set language, use it to send email.
-	if len(receiverUserInfo.Language) > 0 {
-		ctx = context.WithValue(ctx, constant.AcceptLanguageFlag, i18n.Language(receiverUserInfo.Language))
-	}
-	title, body, err := cs.emailService.NewCommentTemplate(ctx, rawData)
-	if err != nil {
-		log.Error(err)
-		return
-	}
-
-	go cs.emailService.SendAndSaveCodeWithTime(
-		ctx, receiverUserInfo.EMail, title, body, rawData.UnsubscribeCode, codeContent.ToJSONString(), 7*24*time.Hour)
+	externalNotificationMsg.NewCommentTemplateRawData = rawData
+	cs.externalNotificationQueueService.Send(ctx, externalNotificationMsg)
 }
 
 func (cs *CommentService) notificationAnswerComment(ctx context.Context,
@@ -535,6 +523,8 @@ func (cs *CommentService) notificationAnswerComment(ctx context.Context,
 	if answerUserID == commentUserID {
 		return
 	}
+
+	// Send internal notification.
 	msg := &schema.NotificationMsg{
 		ReceiverUserID: answerUserID,
 		TriggerUserID:  commentUserID,
@@ -545,6 +535,7 @@ func (cs *CommentService) notificationAnswerComment(ctx context.Context,
 	msg.NotificationAction = constant.NotificationCommentAnswer
 	cs.notificationQueueService.Send(ctx, msg)
 
+	// Send external notification.
 	receiverUserInfo, exist, err := cs.userRepo.GetByUserID(ctx, answerUserID)
 	if err != nil {
 		log.Error(err)
@@ -554,12 +545,11 @@ func (cs *CommentService) notificationAnswerComment(ctx context.Context,
 		log.Warnf("user %s not found", answerUserID)
 		return
 	}
-	if len(receiverUserInfo.EMail) == 0 ||
-		schema.NewNotificationConfig(receiverUserInfo.NoticeConfig).
-			CheckEnable(constant.InboxChannel, constant.EmailChannel) {
-		return
+	externalNotificationMsg := &schema.ExternalNotificationMsg{
+		ReceiverUserID: receiverUserInfo.ID,
+		ReceiverEmail:  receiverUserInfo.EMail,
+		ReceiverLang:   receiverUserInfo.Language,
 	}
-
 	rawData := &schema.NewCommentTemplateRawData{
 		QuestionTitle:   questionTitle,
 		QuestionID:      questionID,
@@ -572,24 +562,8 @@ func (cs *CommentService) notificationAnswerComment(ctx context.Context,
 	if commentUser != nil {
 		rawData.CommentUserDisplayName = commentUser.DisplayName
 	}
-	codeContent := &schema.EmailCodeContent{
-		SourceType: schema.UnsubscribeSourceType,
-		Email:      receiverUserInfo.EMail,
-		UserID:     receiverUserInfo.ID,
-	}
-
-	// If receiver has set language, use it to send email.
-	if len(receiverUserInfo.Language) > 0 {
-		ctx = context.WithValue(ctx, constant.AcceptLanguageFlag, i18n.Language(receiverUserInfo.Language))
-	}
-	title, body, err := cs.emailService.NewCommentTemplate(ctx, rawData)
-	if err != nil {
-		log.Error(err)
-		return
-	}
-
-	go cs.emailService.SendAndSaveCodeWithTime(
-		ctx, receiverUserInfo.EMail, title, body, rawData.UnsubscribeCode, codeContent.ToJSONString(), 7*24*time.Hour)
+	externalNotificationMsg.NewCommentTemplateRawData = rawData
+	cs.externalNotificationQueueService.Send(ctx, externalNotificationMsg)
 }
 
 func (cs *CommentService) notificationCommentReply(ctx context.Context, replyUserID, commentID, commentUserID string) {

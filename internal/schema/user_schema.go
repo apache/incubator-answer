@@ -364,8 +364,8 @@ type UserRankingSimpleInfo struct {
 	Avatar string `json:"avatar"`
 }
 
-// UserUnsubscribeEmailNotificationReq user unsubscribe email notification request
-type UserUnsubscribeEmailNotificationReq struct {
+// UserUnsubscribeNotificationReq user unsubscribe email notification request
+type UserUnsubscribeNotificationReq struct {
 	Code    string `validate:"required,gt=0,lte=500" json:"code"`
 	Content string `json:"-"`
 }
