@@ -43,19 +43,18 @@ func (cr *captchaRepo) SetActionType(ctx context.Context, unit, actionType, conf
 	return
 }
 
-func (cr *captchaRepo) GetActionType(ctx context.Context, unit, actionType string) (actioninfo *entity.ActionRecordInfo, err error) {
+func (cr *captchaRepo) GetActionType(ctx context.Context, unit, actionType string) (actionInfo *entity.ActionRecordInfo, err error) {
 	now := time.Now()
 	cacheKey := fmt.Sprintf("ActionRecord:%s@%s@%s", unit, actionType, now.Format("2006-1-02"))
-	actioninfo = &entity.ActionRecordInfo{}
-	res, err := cr.data.Cache.GetString(ctx, cacheKey)
+	res, exist, err := cr.data.Cache.GetString(ctx, cacheKey)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return nil, err
 	}
-	err = json.Unmarshal([]byte(res), actioninfo)
-	if err != nil {
-		return actioninfo, nil
+	actionInfo = &entity.ActionRecordInfo{}
+	if exist {
+		_ = json.Unmarshal([]byte(res), actionInfo)
 	}
-	return actioninfo, nil
+	return actionInfo, nil
 }
 
 func (cr *captchaRepo) DelActionType(ctx context.Context, unit, actionType string) (err error) {
@@ -79,9 +78,12 @@ func (cr *captchaRepo) SetCaptcha(ctx context.Context, key, captcha string) (err
 
 // GetCaptcha get captcha from cache
 func (cr *captchaRepo) GetCaptcha(ctx context.Context, key string) (captcha string, err error) {
-	captcha, err = cr.data.Cache.GetString(ctx, key)
+	captcha, exist, err := cr.data.Cache.GetString(ctx, key)
 	if err != nil {
-		log.Debug(err)
+		return "", err
+	}
+	if !exist {
+		return "", fmt.Errorf("captcha not exist")
 	}
 	return captcha, nil
 }

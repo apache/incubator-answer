@@ -95,12 +95,15 @@ func (ds *dashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	return dashboardInfo, nil
 }
 
-func (ds *dashboardService) getFromCache(ctx context.Context) (*schema.DashboardInfo, error) {
-	infoStr, err := ds.data.Cache.GetString(ctx, schema.DashboardCacheKey)
+func (ds *dashboardService) getFromCache(ctx context.Context) (dashboardInfo *schema.DashboardInfo, err error) {
+	infoStr, exist, err := ds.data.Cache.GetString(ctx, schema.DashboardCacheKey)
 	if err != nil {
 		return nil, err
 	}
-	dashboardInfo := &schema.DashboardInfo{}
+	dashboardInfo = &schema.DashboardInfo{}
+	if !exist {
+		return dashboardInfo, nil
+	}
 	if err = json.Unmarshal([]byte(infoStr), dashboardInfo); err != nil {
 		return nil, err
 	}

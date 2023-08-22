@@ -259,8 +259,8 @@ func (qr *questionRepo) SitemapQuestions(ctx context.Context, page, pageSize int
 
 	// try to get sitemap data from cache
 	cacheKey := fmt.Sprintf(constant.SiteMapQuestionCacheKeyPrefix, page)
-	cacheData, err := qr.data.Cache.GetString(ctx, cacheKey)
-	if err == nil && len(cacheKey) > 0 {
+	cacheData, exist, err := qr.data.Cache.GetString(ctx, cacheKey)
+	if err == nil && exist {
 		_ = json.Unmarshal([]byte(cacheData), &questionIDList)
 		return questionIDList, nil
 	}

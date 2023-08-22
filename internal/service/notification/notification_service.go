@@ -46,13 +46,13 @@ func (ns *NotificationService) GetRedDot(ctx context.Context, req *schema.GetRed
 	redBot := &schema.RedDot{}
 	inboxKey := fmt.Sprintf("answer_RedDot_%d_%s", schema.NotificationTypeInbox, req.UserID)
 	achievementKey := fmt.Sprintf("answer_RedDot_%d_%s", schema.NotificationTypeAchievement, req.UserID)
-	inboxValue, err := ns.data.Cache.GetInt64(ctx, inboxKey)
+	inboxValue, _, err := ns.data.Cache.GetInt64(ctx, inboxKey)
 	if err != nil {
 		redBot.Inbox = 0
 	} else {
 		redBot.Inbox = inboxValue
 	}
-	achievementValue, err := ns.data.Cache.GetInt64(ctx, achievementKey)
+	achievementValue, _, err := ns.data.Cache.GetInt64(ctx, achievementKey)
 	if err != nil {
 		redBot.Achievement = 0
 	} else {

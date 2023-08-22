@@ -28,7 +28,7 @@ func NewConfigRepo(data *data.Data) config.ConfigRepo {
 
 func (cr configRepo) GetConfigByID(ctx context.Context, id int) (c *entity.Config, err error) {
 	cacheKey := fmt.Sprintf("%s%d", constant.ConfigID2KEYCacheKeyPrefix, id)
-	if cacheData, err := cr.data.Cache.GetString(ctx, cacheKey); err == nil && len(cacheData) > 0 {
+	if cacheData, exist, err := cr.data.Cache.GetString(ctx, cacheKey); err == nil && exist {
 		c = &entity.Config{}
 		c.BuildByJSON([]byte(cacheData))
 		if c.ID > 0 {
@@ -54,7 +54,7 @@ func (cr configRepo) GetConfigByID(ctx context.Context, id int) (c *entity.Confi
 
 func (cr configRepo) GetConfigByKey(ctx context.Context, key string) (c *entity.Config, err error) {
 	cacheKey := constant.ConfigKEY2ContentCacheKeyPrefix + key
-	if cacheData, err := cr.data.Cache.GetString(ctx, cacheKey); err == nil && len(cacheData) > 0 {
+	if cacheData, exist, err := cr.data.Cache.GetString(ctx, cacheKey); err == nil && exist {
 		c = &entity.Config{}
 		c.BuildByJSON([]byte(cacheData))
 		if c.ID > 0 {

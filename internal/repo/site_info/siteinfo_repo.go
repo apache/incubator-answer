@@ -61,12 +61,14 @@ func (sr *siteInfoRepo) GetByType(ctx context.Context, siteType string) (siteInf
 }
 
 func (sr *siteInfoRepo) getCache(ctx context.Context, siteType string) (siteInfo *entity.SiteInfo) {
-	siteInfo = &entity.SiteInfo{}
-	siteInfoCache, err := sr.data.Cache.GetString(ctx, constant.SiteInfoCacheKey+siteType)
+	siteInfoCache, exist, err := sr.data.Cache.GetString(ctx, constant.SiteInfoCacheKey+siteType)
 	if err != nil {
 		return nil
 	}
-	_ = json.Unmarshal([]byte(siteInfoCache), siteInfo)
+	siteInfo = &entity.SiteInfo{}
+	if exist {
+		_ = json.Unmarshal([]byte(siteInfoCache), siteInfo)
+	}
 	return siteInfo
 }
 
