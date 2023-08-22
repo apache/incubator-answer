@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/answerdev/answer/internal/service/notification"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/answerdev/answer/pkg/token"
 	"strings"
 	"time"
 
@@ -28,7 +29,6 @@ import (
 	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/converter"
-	"github.com/answerdev/answer/pkg/encryption"
 	"github.com/answerdev/answer/pkg/htmltext"
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/jinzhu/copier"
@@ -663,7 +663,7 @@ func (qs *QuestionService) notificationInviteUser(
 			InviterDisplayName: inviter.DisplayName,
 			QuestionTitle:      questionTitle,
 			QuestionID:         questionID,
-			UnsubscribeCode:    encryption.MD5(receiverUserInfo.Pass),
+			UnsubscribeCode:    token.GenerateToken(),
 		}
 		externalNotificationMsg.NewInviteAnswerTemplateRawData = rawData
 		qs.externalNotificationQueueService.Send(ctx, externalNotificationMsg)
