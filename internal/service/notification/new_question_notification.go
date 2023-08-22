@@ -78,7 +78,6 @@ func (ns *ExternalNotificationService) getNewQuestionSubscribers(ctx context.Con
 			UserID:   userNotificationConfig.UserID,
 			Channels: schema.NewNotificationChannelsFormJson(userNotificationConfig.Channels),
 		}
-		subscribers = append(subscribers, subscribersMapping[userNotificationConfig.UserID])
 	}
 	log.Debugf("get %d subscribers from tags", len(subscribersMapping))
 
@@ -98,7 +97,12 @@ func (ns *ExternalNotificationService) getNewQuestionSubscribers(ctx context.Con
 			UserID:   notificationConfig.UserID,
 			Channels: schema.NewNotificationChannelsFormJson(notificationConfig.Channels),
 		}
-		subscribers = append(subscribers, subscribersMapping[notificationConfig.UserID])
+	}
+
+	// 3. remove question owner
+	delete(subscribersMapping, msg.NewQuestionTemplateRawData.QuestionAuthorUserID)
+	for _, subscriber := range subscribersMapping {
+		subscribers = append(subscribers, subscriber)
 	}
 	log.Debugf("get %d subscribers from all new question config", len(subscribers))
 	return subscribers, nil
