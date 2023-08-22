@@ -27,15 +27,15 @@ func NewAuthRepo(data *data.Data) auth.AuthRepo {
 
 // GetUserCacheInfo get user cache info
 func (ar *authRepo) GetUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error) {
-	userInfoCache, err := ar.data.Cache.GetString(ctx, constant.UserTokenCacheKey+accessToken)
+	userInfoCache, exist, err := ar.data.Cache.GetString(ctx, constant.UserTokenCacheKey+accessToken)
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !exist {
+		return nil, nil
 	}
 	userInfo = &entity.UserCacheInfo{}
-	err = json.Unmarshal([]byte(userInfoCache), userInfo)
-	if err != nil {
-		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
+	_ = json.Unmarshal([]byte(userInfoCache), userInfo)
 	return userInfo, nil
 }
 
@@ -81,15 +81,15 @@ func (ar *authRepo) SetUserStatus(ctx context.Context, userID string, userInfo *
 
 // GetUserStatus get user status
 func (ar *authRepo) GetUserStatus(ctx context.Context, userID string) (userInfo *entity.UserCacheInfo, err error) {
-	userInfoCache, err := ar.data.Cache.GetString(ctx, constant.UserStatusChangedCacheKey+userID)
+	userInfoCache, exist, err := ar.data.Cache.GetString(ctx, constant.UserStatusChangedCacheKey+userID)
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !exist {
+		return nil, nil
 	}
 	userInfo = &entity.UserCacheInfo{}
-	err = json.Unmarshal([]byte(userInfoCache), userInfo)
-	if err != nil {
-		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-	}
+	_ = json.Unmarshal([]byte(userInfoCache), userInfo)
 	return userInfo, nil
 }
 
@@ -104,16 +104,16 @@ func (ar *authRepo) RemoveUserStatus(ctx context.Context, userID string) (err er
 
 // GetAdminUserCacheInfo get admin user cache info
 func (ar *authRepo) GetAdminUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error) {
-	userInfoCache, err := ar.data.Cache.GetString(ctx, constant.AdminTokenCacheKey+accessToken)
+	userInfoCache, exist, err := ar.data.Cache.GetString(ctx, constant.AdminTokenCacheKey+accessToken)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		return
 	}
-	userInfo = &entity.UserCacheInfo{}
-	err = json.Unmarshal([]byte(userInfoCache), userInfo)
-	if err != nil {
-		return nil, err
+	if !exist {
+		return nil, nil
 	}
+	userInfo = &entity.UserCacheInfo{}
+	_ = json.Unmarshal([]byte(userInfoCache), userInfo)
 	return userInfo, nil
 }
 
@@ -144,7 +144,10 @@ func (ar *authRepo) RemoveAdminUserCacheInfo(ctx context.Context, accessToken st
 // AddUserTokenMapping add user token mapping
 func (ar *authRepo) AddUserTokenMapping(ctx context.Context, userID, accessToken string) (err error) {
 	key := constant.UserTokenMappingCacheKey + userID
-	resp, _ := ar.data.Cache.GetString(ctx, key)
+	resp, _, err := ar.data.Cache.GetString(ctx, key)
+	if err != nil {
+		return err
+	}
 	mapping := make(map[string]bool, 0)
 	if len(resp) > 0 {
 		_ = json.Unmarshal([]byte(resp), &mapping)
@@ -157,7 +160,10 @@ func (ar *authRepo) AddUserTokenMapping(ctx context.Context, userID, accessToken
 // RemoveUserTokens Log out all users under this user id
 func (ar *authRepo) RemoveUserTokens(ctx context.Context, userID string, remainToken string) {
 	key := constant.UserTokenMappingCacheKey + userID
-	resp, _ := ar.data.Cache.GetString(ctx, key)
+	resp, _, err := ar.data.Cache.GetString(ctx, key)
+	if err != nil {
+		return
+	}
 	mapping := make(map[string]bool, 0)
 	if len(resp) > 0 {
 		_ = json.Unmarshal([]byte(resp), &mapping)

@@ -87,11 +87,12 @@ type NewCommentTemplateData struct {
 }
 
 type NewQuestionTemplateRawData struct {
-	QuestionTitle   string
-	QuestionID      string
-	UnsubscribeCode string
-	Tags            []string
-	TagIDs          []string
+	QuestionAuthorUserID string
+	QuestionTitle        string
+	QuestionID           string
+	UnsubscribeCode      string
+	Tags                 []string
+	TagIDs               []string
 }
 
 type NewQuestionTemplateData struct {

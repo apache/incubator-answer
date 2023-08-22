@@ -41,6 +41,9 @@ func (as *AuthService) GetUserCacheInfo(ctx context.Context, accessToken string)
 	if err != nil {
 		return nil, err
 	}
+	if userCacheInfo == nil {
+		return nil, nil
+	}
 	cacheInfo, _ := as.authRepo.GetUserStatus(ctx, userCacheInfo.UserID)
 	if cacheInfo != nil {
 		userCacheInfo.UserStatus = cacheInfo.UserStatus

@@ -70,8 +70,8 @@ type DashboardService interface {
 }
 
 func (ds *dashboardService) Statistical(ctx context.Context) (*schema.DashboardInfo, error) {
-	dashboardInfo, err := ds.getFromCache(ctx)
-	if err != nil {
+	dashboardInfo := ds.getFromCache(ctx)
+	if dashboardInfo == nil {
 		dashboardInfo = &schema.DashboardInfo{}
 		dashboardInfo.QuestionCount = ds.questionCount(ctx)
 		dashboardInfo.AnswerCount = ds.answerCount(ctx)
@@ -95,16 +95,20 @@ func (ds *dashboardService) Statistical(ctx context.Context) (*schema.DashboardI
 	return dashboardInfo, nil
 }
 
-func (ds *dashboardService) getFromCache(ctx context.Context) (*schema.DashboardInfo, error) {
-	infoStr, err := ds.data.Cache.GetString(ctx, schema.DashboardCacheKey)
+func (ds *dashboardService) getFromCache(ctx context.Context) (dashboardInfo *schema.DashboardInfo) {
+	infoStr, exist, err := ds.data.Cache.GetString(ctx, schema.DashboardCacheKey)
 	if err != nil {
-		return nil, err
+		log.Errorf("get dashboard statistical from cache failed: %s", err)
+		return nil
 	}
-	dashboardInfo := &schema.DashboardInfo{}
+	if !exist {
+		return nil
+	}
+	dashboardInfo = &schema.DashboardInfo{}
 	if err = json.Unmarshal([]byte(infoStr), dashboardInfo); err != nil {
-		return nil, err
+		return nil
 	}
-	return dashboardInfo, nil
+	return dashboardInfo
 }
 
 func (ds *dashboardService) setCache(ctx context.Context, info *schema.DashboardInfo) {

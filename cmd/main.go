@@ -1,6 +1,7 @@
 package answercmd
 
 import (
+	"context"
 	"fmt"
 	"os"
 	"time"
@@ -39,7 +40,7 @@ var (
 // @name Authorization
 func Main() {
 	log.SetLogger(zap.NewLogger(
-		log.ParseLevel(logLevel), zap.WithName("answer"), zap.WithPath(logPath), zap.WithCallerFullPath()))
+		log.ParseLevel(logLevel), zap.WithName("answer"), zap.WithPath(logPath)))
 	Execute()
 }
 
@@ -59,7 +60,7 @@ func runApp() {
 	fmt.Println("answer Version:", constant.Version, " Revision:", constant.Revision)
 
 	defer cleanup()
-	if err := app.Run(); err != nil {
+	if err := app.Run(context.Background()); err != nil {
 		panic(err)
 	}
 }

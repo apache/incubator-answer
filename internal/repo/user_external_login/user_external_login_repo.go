@@ -85,10 +85,14 @@ func (ur *userExternalLoginRepo) SetCacheUserExternalLoginInfo(
 // GetCacheUserExternalLoginInfo cache user info for external login
 func (ur *userExternalLoginRepo) GetCacheUserExternalLoginInfo(
 	ctx context.Context, key string) (info *schema.ExternalLoginUserInfoCache, err error) {
-	res, err := ur.data.Cache.GetString(ctx, constant.ConnectorUserExternalInfoCacheKey+key)
+	res, exist, err := ur.data.Cache.GetString(ctx, constant.ConnectorUserExternalInfoCacheKey+key)
 	if err != nil {
 		return info, err
 	}
+	if !exist {
+		return nil, nil
+	}
+	info = &schema.ExternalLoginUserInfoCache{}
 	_ = json.Unmarshal([]byte(res), &info)
 	return info, nil
 }

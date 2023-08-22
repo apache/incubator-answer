@@ -28,8 +28,8 @@ require (
 	github.com/ory/dockertest/v3 v3.9.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/scottleedavis/go-exif-remove v0.0.0-20230314195146-7e059d593405
-	github.com/segmentfault/pacman v1.0.4
-	github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20221219081300-f734f4a16aa0
+	github.com/segmentfault/pacman v1.0.5-0.20230822083413-c0075a2d401f
+	github.com/segmentfault/pacman/contrib/cache/memory v0.0.0-20230822083413-c0075a2d401f
 	github.com/segmentfault/pacman/contrib/conf/viper v0.0.0-20221018072427-a15dd1434e05
 	github.com/segmentfault/pacman/contrib/i18n v0.0.0-20230516093754-b76aef1c1150
 	github.com/segmentfault/pacman/contrib/log/zap v0.0.0-20221018072427-a15dd1434e05

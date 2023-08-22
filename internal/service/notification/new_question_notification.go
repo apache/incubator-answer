@@ -78,7 +78,6 @@ func (ns *ExternalNotificationService) getNewQuestionSubscribers(ctx context.Con
 			UserID:   userNotificationConfig.UserID,
 			Channels: schema.NewNotificationChannelsFormJson(userNotificationConfig.Channels),
 		}
-		subscribers = append(subscribers, subscribersMapping[userNotificationConfig.UserID])
 	}
 	log.Debugf("get %d subscribers from tags", len(subscribersMapping))
 
@@ -98,14 +97,36 @@ func (ns *ExternalNotificationService) getNewQuestionSubscribers(ctx context.Con
 			UserID:   notificationConfig.UserID,
 			Channels: schema.NewNotificationChannelsFormJson(notificationConfig.Channels),
 		}
-		subscribers = append(subscribers, subscribersMapping[notificationConfig.UserID])
+	}
+
+	// 3. remove question owner
+	delete(subscribersMapping, msg.NewQuestionTemplateRawData.QuestionAuthorUserID)
+	for _, subscriber := range subscribersMapping {
+		subscribers = append(subscribers, subscriber)
 	}
 	log.Debugf("get %d subscribers from all new question config", len(subscribers))
 	return subscribers, nil
 }
 
 func (ns *ExternalNotificationService) checkSendNewQuestionNotificationEmailLimit(ctx context.Context, userID string) bool {
-	// TODO: check if reach send limit
+	key := constant.NewQuestionNotificationLimitCacheKeyPrefix + userID
+	old, exist, err := ns.data.Cache.GetInt64(ctx, key)
+	if err != nil {
+		log.Error(err)
+		return false
+	}
+	if exist && old >= constant.NewQuestionNotificationLimitMax {
+		log.Debugf("%s user reach new question notification limit", userID)
+		return true
+	}
+	if !exist {
+		err = ns.data.Cache.SetInt64(ctx, key, 1, constant.NewQuestionNotificationLimitCacheTime)
+	} else {
+		_, err = ns.data.Cache.Increase(ctx, key, 1)
+	}
+	if err != nil {
+		log.Error(err)
+	}
 	return false
 }
 

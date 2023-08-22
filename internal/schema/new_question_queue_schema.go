@@ -16,12 +16,14 @@ type ExternalNotificationMsg struct {
 	NewQuestionTemplateRawData     *NewQuestionTemplateRawData     `json:"new_question_template_raw_data,omitempty"`
 }
 
-func CreateNewQuestionNotificationMsg(questionID, questionTitle string, tags []*entity.Tag) *ExternalNotificationMsg {
+func CreateNewQuestionNotificationMsg(
+	questionID, questionTitle, questionAuthorUserID string, tags []*entity.Tag) *ExternalNotificationMsg {
 	questionID = uid.DeShortID(questionID)
 	msg := &ExternalNotificationMsg{
 		NewQuestionTemplateRawData: &NewQuestionTemplateRawData{
-			QuestionID:    questionID,
-			QuestionTitle: questionTitle,
+			QuestionAuthorUserID: questionAuthorUserID,
+			QuestionID:           questionID,
+			QuestionTitle:        questionTitle,
 		},
 	}
 	for _, tag := range tags {
