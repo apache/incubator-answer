@@ -21,4 +21,7 @@ const (
 
 	EmailTplKeyInvitedAnswerTitle = "email_tpl.invited_you_to_answer.title"
 	EmailTplKeyInvitedAnswerBody  = "email_tpl.invited_you_to_answer.body"
+
+	EmailTplKeyNewQuestionTitle = "email_tpl.new_question.title"
+	EmailTplKeyNewQuestionBody  = "email_tpl.new_question.body"
 )

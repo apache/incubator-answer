@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/answerdev/answer/internal/service/notification"
 	"github.com/answerdev/answer/internal/service/siteinfo_common"
 	"strings"
 	"time"
@@ -32,7 +33,6 @@ import (
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
-	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 	"golang.org/x/net/context"
 )
@@ -41,19 +41,21 @@ import (
 
 // QuestionService user service
 type QuestionService struct {
-	questionRepo             questioncommon.QuestionRepo
-	tagCommon                *tagcommon.TagCommonService
-	questioncommon           *questioncommon.QuestionCommon
-	userCommon               *usercommon.UserCommon
-	userRepo                 usercommon.UserRepo
-	revisionService          *revision_common.RevisionService
-	metaService              *meta.MetaService
-	collectionCommon         *collectioncommon.CollectionCommon
-	answerActivityService    *activity.AnswerActivityService
-	emailService             *export.EmailService
-	notificationQueueService notice_queue.NotificationQueueService
-	activityQueueService     activity_queue.ActivityQueueService
-	siteInfoService          siteinfo_common.SiteInfoCommonService
+	questionRepo                     questioncommon.QuestionRepo
+	tagCommon                        *tagcommon.TagCommonService
+	questioncommon                   *questioncommon.QuestionCommon
+	userCommon                       *usercommon.UserCommon
+	userRepo                         usercommon.UserRepo
+	revisionService                  *revision_common.RevisionService
+	metaService                      *meta.MetaService
+	collectionCommon                 *collectioncommon.CollectionCommon
+	answerActivityService            *activity.AnswerActivityService
+	emailService                     *export.EmailService
+	notificationQueueService         notice_queue.NotificationQueueService
+	externalNotificationQueueService notice_queue.ExternalNotificationQueueService
+	activityQueueService             activity_queue.ActivityQueueService
+	siteInfoService                  siteinfo_common.SiteInfoCommonService
+	newQuestionNotificationService   *notification.ExternalNotificationService
 }
 
 func NewQuestionService(
@@ -68,23 +70,27 @@ func NewQuestionService(
 	answerActivityService *activity.AnswerActivityService,
 	emailService *export.EmailService,
 	notificationQueueService notice_queue.NotificationQueueService,
+	externalNotificationQueueService notice_queue.ExternalNotificationQueueService,
 	activityQueueService activity_queue.ActivityQueueService,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
+	newQuestionNotificationService *notification.ExternalNotificationService,
 ) *QuestionService {
 	return &QuestionService{
-		questionRepo:             questionRepo,
-		tagCommon:                tagCommon,
-		questioncommon:           questioncommon,
-		userCommon:               userCommon,
-		userRepo:                 userRepo,
-		revisionService:          revisionService,
-		metaService:              metaService,
-		collectionCommon:         collectionCommon,
-		answerActivityService:    answerActivityService,
-		emailService:             emailService,
-		notificationQueueService: notificationQueueService,
-		activityQueueService:     activityQueueService,
-		siteInfoService:          siteInfoService,
+		questionRepo:                     questionRepo,
+		tagCommon:                        tagCommon,
+		questioncommon:                   questioncommon,
+		userCommon:                       userCommon,
+		userRepo:                         userRepo,
+		revisionService:                  revisionService,
+		metaService:                      metaService,
+		collectionCommon:                 collectionCommon,
+		answerActivityService:            answerActivityService,
+		emailService:                     emailService,
+		notificationQueueService:         notificationQueueService,
+		externalNotificationQueueService: externalNotificationQueueService,
+		activityQueueService:             activityQueueService,
+		siteInfoService:                  siteInfoService,
+		newQuestionNotificationService:   newQuestionNotificationService,
 	}
 }
 
@@ -241,12 +247,12 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		tag.SlugName = strings.ReplaceAll(tag.SlugName, " ", "-")
 		tagNameList = append(tagNameList, tag.SlugName)
 	}
-	Tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
+	tags, tagerr := qs.tagCommon.GetTagListByNames(ctx, tagNameList)
 	if tagerr != nil {
 		return questionInfo, tagerr
 	}
 	if !req.QuestionPermission.CanUseReservedTag {
-		taglist, err := qs.AddQuestionCheckTags(ctx, Tags)
+		taglist, err := qs.AddQuestionCheckTags(ctx, tags)
 		errMsg := fmt.Sprintf(`"%s" can only be used by moderators.`,
 			strings.Join(taglist, ","))
 		if err != nil {
@@ -296,7 +302,7 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		Title:    question.Title,
 	}
 
-	questionWithTagsRevision, err := qs.changeQuestionToRevision(ctx, question, Tags)
+	questionWithTagsRevision, err := qs.changeQuestionToRevision(ctx, question, tags)
 	if err != nil {
 		return nil, err
 	}
@@ -325,6 +331,9 @@ func (qs *QuestionService) AddQuestion(ctx context.Context, req *schema.Question
 		ActivityTypeKey:  constant.ActQuestionAsked,
 		RevisionID:       revisionID,
 	})
+
+	qs.externalNotificationQueueService.Send(ctx,
+		schema.CreateNewQuestionNotificationMsg(question.ID, question.Title, tags))
 
 	questionInfo, err = qs.GetQuestion(ctx, question.ID, question.UserID, req.QuestionPermission)
 	return
@@ -640,39 +649,24 @@ func (qs *QuestionService) notificationInviteUser(
 		msg.NotificationAction = constant.NotificationInvitedYouToAnswer
 		qs.notificationQueueService.Send(ctx, msg)
 
-		userInfo, ok := invitee[userID]
+		receiverUserInfo, ok := invitee[userID]
 		if !ok {
 			log.Warnf("user %s not found", userID)
 			return
 		}
-		if userInfo.NoticeStatus == schema.NoticeStatusOff || len(userInfo.EMail) == 0 {
-			return
+		externalNotificationMsg := &schema.ExternalNotificationMsg{
+			ReceiverUserID: receiverUserInfo.ID,
+			ReceiverEmail:  receiverUserInfo.EMail,
+			ReceiverLang:   receiverUserInfo.Language,
 		}
-
 		rawData := &schema.NewInviteAnswerTemplateRawData{
 			InviterDisplayName: inviter.DisplayName,
 			QuestionTitle:      questionTitle,
 			QuestionID:         questionID,
-			UnsubscribeCode:    encryption.MD5(userInfo.Pass),
+			UnsubscribeCode:    encryption.MD5(receiverUserInfo.Pass),
 		}
-		codeContent := &schema.EmailCodeContent{
-			SourceType: schema.UnsubscribeSourceType,
-			Email:      userInfo.EMail,
-			UserID:     userInfo.ID,
-		}
-
-		// If receiver has set language, use it to send email.
-		if len(userInfo.Language) > 0 {
-			ctx = context.WithValue(ctx, constant.AcceptLanguageFlag, i18n.Language(userInfo.Language))
-		}
-		title, body, err := qs.emailService.NewInviteAnswerTemplate(ctx, rawData)
-		if err != nil {
-			log.Error(err)
-			return
-		}
-
-		go qs.emailService.SendAndSaveCodeWithTime(
-			ctx, userInfo.EMail, title, body, rawData.UnsubscribeCode, codeContent.ToJSONString(), 7*24*time.Hour)
+		externalNotificationMsg.NewInviteAnswerTemplateRawData = rawData
+		qs.externalNotificationQueueService.Send(ctx, externalNotificationMsg)
 	}
 }
 

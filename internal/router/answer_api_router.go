@@ -114,7 +114,7 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(authUserMiddleware *
 	routerGroup.PUT("/user/email", a.userController.UserChangeEmailVerify)
 	routerGroup.POST("/user/password/reset", a.userController.RetrievePassWord)
 	routerGroup.POST("/user/password/replacement", a.userController.UseRePassWord)
-	routerGroup.PUT("/user/email/notification", a.userController.UserUnsubscribeEmailNotification)
+	routerGroup.PUT("/user/notification/unsubscribe", a.userController.UserUnsubscribeNotification)
 }
 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
@@ -215,7 +215,8 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/user/password", middleware.BanAPIForUserCenter, a.userController.UserModifyPassWord)
 	r.PUT("/user/info", a.userController.UserUpdateInfo)
 	r.PUT("/user/interface", a.userController.UserUpdateInterface)
-	r.POST("/user/notice/set", a.userController.UserNoticeSet)
+	r.GET("/user/notification/config", a.userController.GetUserNotificationConfig)
+	r.PUT("/user/notification/config", a.userController.UpdateUserNotificationConfig)
 	r.GET("/user/info/search", a.userController.SearchUserListByName)
 
 	// vote

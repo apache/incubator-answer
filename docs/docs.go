@@ -5166,29 +5166,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/user/email/notification": {
-            "put": {
-                "description": "unsubscribe email notification",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "unsubscribe email notification",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
-                        }
-                    }
-                }
-            }
-        },
         "/answer/api/v1/user/email/verification": {
             "post": {
                 "description": "UserVerifyEmail",
@@ -5526,14 +5503,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/user/notice/set": {
-            "post": {
+        "/answer/api/v1/user/notification/config": {
+            "put": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserNoticeSet",
+                "description": "update user's notification config",
                 "consumes": [
                     "application/json"
                 ],
@@ -5543,18 +5520,44 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "UserNoticeSet",
+                "summary": "update user's notification config",
                 "parameters": [
                     {
-                        "description": "UserNoticeSetRequest",
+                        "description": "UpdateUserNotificationConfigReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.UserNoticeSetRequest"
+                            "$ref": "#/definitions/schema.UpdateUserNotificationConfigReq"
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user's notification config",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "get user's notification config",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -5567,11 +5570,45 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.UserNoticeSetResp"
+                                            "$ref": "#/definitions/schema.GetUserNotificationConfigResp"
                                         }
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/user/notification/unsubscribe": {
+            "put": {
+                "description": "unsubscribe notification",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "unsubscribe notification",
+                "parameters": [
+                    {
+                        "description": "UserUnsubscribeNotificationReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UserUnsubscribeNotificationReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
                         }
                     }
                 }
@@ -6198,6 +6235,15 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "constant.NotificationChannelKey": {
+            "type": "string",
+            "enum": [
+                "email"
+            ],
+            "x-enum-varnames": [
+                "EmailChannel"
+            ]
+        },
         "constant.Privilege": {
             "type": "object",
             "properties": {
@@ -6300,6 +6346,9 @@ const docTemplate = `{
                 "lang": {
                     "type": "string",
                     "maxLength": 30
+                },
+                "login_required": {
+                    "type": "boolean"
                 },
                 "name": {
                     "type": "string",
@@ -7595,6 +7644,29 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetUserNotificationConfigResp": {
+            "type": "object",
+            "properties": {
+                "all_new_question": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NotificationChannelConfig"
+                    }
+                },
+                "all_new_question_for_following_tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NotificationChannelConfig"
+                    }
+                },
+                "inbox": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NotificationChannelConfig"
+                    }
+                }
+            }
+        },
         "schema.GetUserPageResp": {
             "type": "object",
             "properties": {
@@ -7703,6 +7775,17 @@ const docTemplate = `{
                 },
                 "text": {
                     "type": "string"
+                }
+            }
+        },
+        "schema.NotificationChannelConfig": {
+            "type": "object",
+            "properties": {
+                "enable": {
+                    "type": "boolean"
+                },
+                "key": {
+                    "$ref": "#/definitions/constant.NotificationChannelKey"
                 }
             }
         },
@@ -9103,6 +9186,29 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.UpdateUserNotificationConfigReq": {
+            "type": "object",
+            "properties": {
+                "all_new_question": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NotificationChannelConfig"
+                    }
+                },
+                "all_new_question_for_following_tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NotificationChannelConfig"
+                    }
+                },
+                "inbox": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NotificationChannelConfig"
+                    }
+                }
+            }
+        },
         "schema.UpdateUserPasswordReq": {
             "type": "object",
             "required": [
@@ -9382,22 +9488,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UserNoticeSetRequest": {
-            "type": "object",
-            "properties": {
-                "notice_switch": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "schema.UserNoticeSetResp": {
-            "type": "object",
-            "properties": {
-                "notice_switch": {
-                    "type": "boolean"
-                }
-            }
-        },
         "schema.UserRankingResp": {
             "type": "object",
             "properties": {
@@ -9505,6 +9595,18 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "e_mail": {
+                    "type": "string",
+                    "maxLength": 500
+                }
+            }
+        },
+        "schema.UserUnsubscribeNotificationReq": {
+            "type": "object",
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
                     "type": "string",
                     "maxLength": 500
                 }

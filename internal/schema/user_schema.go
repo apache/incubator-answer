@@ -293,15 +293,6 @@ func (u *UserRePassWordRequest) Check() (errFields []*validator.FormErrorField, 
 	return nil, nil
 }
 
-type UserNoticeSetRequest struct {
-	NoticeSwitch bool   `json:"notice_switch"`
-	UserID       string `json:"-"`
-}
-
-type UserNoticeSetResp struct {
-	NoticeSwitch bool `json:"notice_switch"`
-}
-
 type ActionRecordReq struct {
 	Action string `validate:"required,oneof=email password edit_userinfo question answer comment edit invitation_answer search report delete vote" form:"action"`
 	IP     string `json:"-"`
@@ -373,8 +364,8 @@ type UserRankingSimpleInfo struct {
 	Avatar string `json:"avatar"`
 }
 
-// UserUnsubscribeEmailNotificationReq user unsubscribe email notification request
-type UserUnsubscribeEmailNotificationReq struct {
+// UserUnsubscribeNotificationReq user unsubscribe email notification request
+type UserUnsubscribeNotificationReq struct {
 	Code    string `validate:"required,gt=0,lte=500" json:"code"`
 	Content string `json:"-"`
 }

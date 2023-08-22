@@ -1,6 +1,9 @@
 package schema
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"github.com/answerdev/answer/internal/base/constant"
+)
 
 const (
 	AccountActivationSourceType EmailSourceType = "account-activation"
@@ -16,8 +19,10 @@ type EmailCodeContent struct {
 	SourceType EmailSourceType `json:"source_type"`
 	Email      string          `json:"e_mail"`
 	UserID     string          `json:"user_id"`
+	// Used for unsubscribe notification
+	NotificationSources []constant.NotificationSource `json:"notification_source,omitempty"`
 	// Used for third-party login account binding
-	BindingKey string `json:"binding_key"`
+	BindingKey string `json:"binding_key,omitempty"`
 }
 
 func (r *EmailCodeContent) ToJSONString() string {
@@ -78,5 +83,21 @@ type NewCommentTemplateData struct {
 	QuestionTitle  string
 	CommentUrl     string
 	CommentSummary string
+	UnsubscribeUrl string
+}
+
+type NewQuestionTemplateRawData struct {
+	QuestionTitle   string
+	QuestionID      string
+	UnsubscribeCode string
+	Tags            []string
+	TagIDs          []string
+}
+
+type NewQuestionTemplateData struct {
+	SiteName       string
+	QuestionTitle  string
+	QuestionUrl    string
+	Tags           string
 	UnsubscribeUrl string
 }
