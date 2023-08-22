@@ -132,7 +132,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
                     className="rounded-1"
                     alt={user.display_name}
                   />
-                  <span className="text-nowrap ms-2">{user.display_name}</span>
+                  <span className="text-break ms-2">{user.display_name}</span>
                   {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
                   <span
                     className="px-1 me-n1"
@@ -153,7 +153,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
                   alt={user.display_name}
                   className="rounded-1"
                 />
-                <small className="text-nowrap ms-2">{user.display_name}</small>
+                <small className="ms-2">{user.display_name}</small>
               </Link>
             );
           })}
