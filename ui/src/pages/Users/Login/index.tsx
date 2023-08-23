@@ -213,7 +213,7 @@ const Index: React.FC = () => {
               {loginSetting.allow_new_registrations && (
                 <div className="text-center mt-5">
                   <Trans i18nKey="login.info_sign" ns="translation">
-                    Don’t have an account?
+                    Don't have an account?
                     <Link
                       to={userCenter.getSignUpUrl()}
                       tabIndex={2}

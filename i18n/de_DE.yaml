@@ -306,7 +306,7 @@ backend:
       name:
         other: a community-specific reason
       desc:
-        other: This question doesn’t meet a community guideline.
+        other: This question doesn't meet a community guideline.
     not_clarity:
       name:
         other: needs details or clarity
@@ -326,7 +326,7 @@ backend:
       name:
         other: muss geschlossen werden
       desc:
-        other: A closed question can’t answer, but still can edit, vote and comment.
+        other: A closed question can't answer, but still can edit, vote and comment.
     needs_delete:
       name:
         other: needs delete
@@ -1636,7 +1636,7 @@ ui:
         text: For users without a custom avatar of their own.
       gravatar_base_url:
         label: Gravatar Base URL
-        text: URL of the Gravatar provider’s API base. Ignored when empty.
+        text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
         title: Profile Editable
       allow_update_display_name:

@@ -158,9 +158,9 @@ backend:
       captcha_verification_failed:
         other: Le Captcha est incorrect.
       disallow_follow:
-        other: Vous n’êtes pas autorisé à suivre.
+        other: Vous n'êtes pas autorisé à suivre.
       disallow_vote:
-        other: Vous n’êtes pas autorisé à voter.
+        other: Vous n'êtes pas autorisé à voter.
       disallow_vote_your_self:
         other: Vous ne pouvez pas voter pour votre propre message.
       not_found:
@@ -306,7 +306,7 @@ backend:
       name:
         other: a community-specific reason
       desc:
-        other: This question doesn’t meet a community guideline.
+        other: This question doesn't meet a community guideline.
     not_clarity:
       name:
         other: needs details or clarity
@@ -326,7 +326,7 @@ backend:
       name:
         other: needs close
       desc:
-        other: A closed question can’t answer, but still can edit, vote and comment.
+        other: A closed question can't answer, but still can edit, vote and comment.
     needs_delete:
       name:
         other: needs delete
@@ -995,7 +995,7 @@ ui:
     update: Modifié
     edit: modifié
     Views: Consultée
-    Follow: S’abonner
+    Follow: S'abonner
     Following: Abonné(s)
     follow_tip: Follow this question to receive notifications
     answered: répondu
@@ -1025,10 +1025,10 @@ ui:
       characters: le contenu doit comporter au moins 6 caractères.
       tips:
         header_1: Merci pour votre réponse
-        li1_1: N’oubliez pas de <strong>répondre à la question</strong>. Fournissez des détails et partagez vos recherches.
+        li1_1: N'oubliez pas de <strong>répondre à la question</strong>. Fournissez des détails et partagez vos recherches.
         li1_2: Sauvegardez toutes les déclarations que vous faites avec des références ou une expérience personnelle.
         header_2: Mais <strong>évitez</strong>...
-        li2_1: Demander de l’aide, chercher des éclaircissements ou répondre à d’autres réponses.
+        li2_1: Demander de l'aide, chercher des éclaircissements ou répondre à d'autres réponses.
     reopen:
       confirm_btn: Rouvrir
       title: Rouvrir ce message
@@ -1636,7 +1636,7 @@ ui:
         text: For users without a custom avatar of their own.
       gravatar_base_url:
         label: Gravatar Base URL
-        text: URL of the Gravatar provider’s API base. Ignored when empty.
+        text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
         title: Profile Editable
       allow_update_display_name:
@@ -1672,7 +1672,7 @@ ui:
     edit_summary: Modifier le résumé
     edit_question: Modifier la question
     edit_answer: Modifier la réponse
-    edit_tag: Modifier l’étiquette
+    edit_tag: Modifier l'étiquette
     empty: Aucune révision restante.
   timeline:
     undeleted: restauré

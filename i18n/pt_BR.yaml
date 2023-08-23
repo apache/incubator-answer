@@ -960,7 +960,7 @@ ui:
       You appear to have already installed. To reinstall please clear a sua old database tables first.
     db_failed: Database connection failed
     db_failed_desc: >-
-      This either means that the database information in a sua <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean a sua host’s database server is down.
+      This either means that the database information in a sua <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean a sua host's database server is down.
   counts:
     views: visualizações
     Votos: votos
