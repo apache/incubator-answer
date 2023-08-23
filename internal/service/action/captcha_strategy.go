@@ -17,11 +17,9 @@ func (cs *CaptchaService) ValidationStrategy(ctx context.Context, unit, actionTy
 		log.Error(err)
 		return false
 	}
+	// If no operation previously, it is considered to be the first operation
 	if info == nil {
-		info = &entity.ActionRecordInfo{
-			LastTime: time.Now().Unix(),
-			Num:      1,
-		}
+		return true
 	}
 	switch actionType {
 	case entity.CaptchaActionEmail:

@@ -146,7 +146,7 @@ backend:
         other: "Create table failed"
     install:
       create_config_failed:
-        other: "Can’t create the config.yaml file."
+        other: "Can't create the config.yaml file."
   report:
     spam:
       name:
@@ -815,7 +815,7 @@ ui:
   unsubscribe:
     page_title: Unsubscribe
     success_title: Unsubscribe Successful
-    success_desc: You have been successfully removed from this subscriber list and won’t receive any further emails from us.
+    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
     link: Change settings
   question:
     following_tags: Following Tags
@@ -877,7 +877,7 @@ ui:
     title: Answer
     next: Next
     done: Done
-    config_yaml_error: Can’t create the config.yaml file.
+    config_yaml_error: Can't create the config.yaml file.
     lang:
       label: Please Choose a Language
     db_type:
@@ -907,7 +907,7 @@ ui:
       label: The config.yaml file created.
       desc: >-
         You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
-      info: "After you’ve done that, click “Next” button."
+      info: "After you've done that, click “Next” button."
     site_information: Site Information
     admin_account: Admin Account
     site_name:
@@ -952,7 +952,7 @@ ui:
       You appear to have already installed. To reinstall please clear your old database tables first.
     db_failed: Database connection failed
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
   page_404:
     desc: "Unfortunately, this page doesn't exist."
     back_home: Back to homepage
@@ -960,7 +960,7 @@ ui:
     desc: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
-    desc: "We are under maintenance, we’ll be back soon."
+    desc: "We are under maintenance, we'll be back soon."
   nav_menus:
     dashboard: Dashboard
     contents: Contents
