@@ -365,10 +365,7 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
               {fieldState?.errorMsg}
             </Form.Control.Feedback>
             {description ? (
-              <Form.Text
-                className="text-muted"
-                dangerouslySetInnerHTML={{ __html: description }}
-              />
+              <Form.Text dangerouslySetInnerHTML={{ __html: description }} />
             ) : null}
           </Form.Group>
         );

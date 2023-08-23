@@ -85,7 +85,7 @@ const QuestionList: FC<Props> = ({
                   </NavLink>
                 </h5>
                 <div className="d-flex flex-column flex-md-row align-items-md-center small mb-2 text-secondary">
-                  <div className="d-flex flex-nowrap">
+                  <div className="d-flex">
                     <BaseUserCard
                       data={li.operator}
                       showAvatar={false}
