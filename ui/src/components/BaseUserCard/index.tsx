@@ -24,7 +24,7 @@ const Index: FC<Props> = ({
   showReputation = true,
 }) => {
   return (
-    <div className={`text-secondary ${className}`}>
+    <div className={`d-flex align-items-center  text-secondary ${className}`}>
       {data?.status !== 'deleted' ? (
         <Link to={`/users/${data?.username}`}>
           {showAvatar && (
@@ -36,7 +36,9 @@ const Index: FC<Props> = ({
               alt={data?.display_name}
             />
           )}
-          <span className="me-1 text-break">{data?.display_name}</span>
+          <span className="me-1 text-truncate-1" style={{ maxWidth: '300px' }}>
+            {data?.display_name}
+          </span>
         </Link>
       ) : (
         <>
@@ -49,7 +51,9 @@ const Index: FC<Props> = ({
               alt={data?.display_name}
             />
           )}
-          <span className="me-1 text-break">{data?.display_name}</span>
+          <span className="me-1 text-truncate-1" style={{ maxWidth: '300px' }}>
+            {data?.display_name}
+          </span>
         </>
       )}
 

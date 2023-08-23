@@ -355,7 +355,7 @@ const Index: React.FC = () => {
                       className="me-3 rounded"
                       alt={formData.display_name.value}
                     />
-                    <Form.Text className="text-muted mt-1">
+                    <Form.Text className="mt-1">
                       <span>{t('avatar.gravatar_text')}</span>
                       <a
                         href={
@@ -399,7 +399,7 @@ const Index: React.FC = () => {
                         </Button>
                       </ButtonGroup>
                     </Stack>
-                    <Form.Text className="text-muted mt-1">
+                    <Form.Text className="mt-1">
                       <Trans i18nKey="settings.profile.avatar.text">
                         You can upload your image.
                       </Trans>
