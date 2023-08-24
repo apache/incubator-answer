@@ -478,7 +478,7 @@ ui:
     edit_tag: タグを編集
     ask_a_question: 質問を追加
     edit_question: 質問を編集
-    edit_answer: 回答を編集　
+    edit_answer: 回答を編集
     search: 検索
     posts_containing: Posts containing
     settings: 設定
@@ -1661,7 +1661,7 @@ ui:
         label: Default avatar
         text: For users without a custom avatar of their own.
       gravatar_base_url:
-        label: Gravatar base URL
+        label: Gravatar Base URL
         text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
         title: Profile editable

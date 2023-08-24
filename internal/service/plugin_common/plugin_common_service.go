@@ -3,6 +3,8 @@ package plugin_common
 import (
 	"context"
 	"encoding/json"
+	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/repo/search_sync"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -23,12 +25,15 @@ type PluginConfigRepo interface {
 type PluginCommonService struct {
 	configService    *config.ConfigService
 	pluginConfigRepo PluginConfigRepo
+	data             *data.Data
 }
 
 // NewPluginCommonService new report service
 func NewPluginCommonService(
 	pluginConfigRepo PluginConfigRepo,
-	configService *config.ConfigService) *PluginCommonService {
+	configService *config.ConfigService,
+	data *data.Data,
+) *PluginCommonService {
 
 	// init plugin status
 	pluginStatus, err := configService.GetStringValue(context.TODO(), constant.PluginStatus)
@@ -61,6 +66,7 @@ func NewPluginCommonService(
 	return &PluginCommonService{
 		configService:    configService,
 		pluginConfigRepo: pluginConfigRepo,
+		data:             data,
 	}
 }
 
@@ -76,5 +82,16 @@ func (ps *PluginCommonService) UpdatePluginStatus(ctx context.Context) (err erro
 // UpdatePluginConfig update plugin config
 func (ps *PluginCommonService) UpdatePluginConfig(ctx context.Context, req *schema.UpdatePluginConfigReq) (err error) {
 	configValue, _ := json.Marshal(req.ConfigFields)
-	return ps.pluginConfigRepo.SavePluginConfig(ctx, req.PluginSlugName, string(configValue))
+	err = ps.pluginConfigRepo.SavePluginConfig(ctx, req.PluginSlugName, string(configValue))
+	if err != nil {
+		return err
+	}
+
+	_ = plugin.CallSearch(func(search plugin.Search) error {
+		if search.Info().SlugName == req.PluginSlugName {
+			search.RegisterSyncer(ctx, search_sync.NewPluginSyncer(ps.data))
+		}
+		return nil
+	})
+	return nil
 }

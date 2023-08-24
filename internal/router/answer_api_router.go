@@ -94,7 +94,7 @@ func NewAnswerAPIRouter(
 	}
 }
 
-func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
+func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(authUserMiddleware *middleware.AuthUserMiddleware, r *gin.RouterGroup) {
 	// i18n
 	r.GET("/language/config", a.langController.GetLangMapping)
 	r.GET("/language/options", a.langController.GetUserLangOptions)
@@ -105,6 +105,7 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 
 	// user
 	r.GET("/user/info", a.userController.GetUserInfoByUserID)
+	r.GET("/user/action/record", authUserMiddleware.Auth(), a.userController.ActionRecord)
 	routerGroup := r.Group("", middleware.BanAPIForUserCenter)
 	routerGroup.POST("/user/login/email", a.userController.UserEmailLogin)
 	routerGroup.POST("/user/register/email", a.userController.UserRegisterByEmail)
@@ -113,7 +114,7 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(r *gin.RouterGroup) 
 	routerGroup.PUT("/user/email", a.userController.UserChangeEmailVerify)
 	routerGroup.POST("/user/password/reset", a.userController.RetrievePassWord)
 	routerGroup.POST("/user/password/replacement", a.userController.UseRePassWord)
-	routerGroup.PUT("/user/email/notification", a.userController.UserUnsubscribeEmailNotification)
+	routerGroup.PUT("/user/notification/unsubscribe", a.userController.UserUnsubscribeNotification)
 }
 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
@@ -123,7 +124,6 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.POST("/user/email/verification/send", middleware.BanAPIForUserCenter, a.userController.UserVerifyEmailSend)
 	r.GET("/personal/user/info", a.userController.GetOtherUserInfoByUsername)
 	r.GET("/user/ranking", a.userController.UserRanking)
-	r.GET("/user/action/record", a.userController.ActionRecord)
 
 	//answer
 	r.GET("/answer/info", a.answerController.Get)
@@ -155,6 +155,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 
 	//search
 	r.GET("/search", a.searchController.Search)
+	r.GET("/search/desc", a.searchController.SearchDesc)
 
 	//rank
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
@@ -214,7 +215,8 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/user/password", middleware.BanAPIForUserCenter, a.userController.UserModifyPassWord)
 	r.PUT("/user/info", a.userController.UserUpdateInfo)
 	r.PUT("/user/interface", a.userController.UserUpdateInterface)
-	r.POST("/user/notice/set", a.userController.UserNoticeSet)
+	r.GET("/user/notification/config", a.userController.GetUserNotificationConfig)
+	r.PUT("/user/notification/config", a.userController.UpdateUserNotificationConfig)
 	r.GET("/user/info/search", a.userController.SearchUserListByName)
 
 	// vote
@@ -260,6 +262,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.GET("/user/activation", a.adminUserController.GetUserActivation)
 	r.POST("/user/activation", a.adminUserController.SendUserActivation)
 	r.POST("/user", a.adminUserController.AddUser)
+	r.POST("/users", a.adminUserController.AddUsers)
 	r.PUT("/user/password", a.adminUserController.UpdateUserPassword)
 
 	// reason

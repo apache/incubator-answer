@@ -365,7 +365,7 @@ const SchemaForm: ForwardRefRenderFunction<FormRef, FormProps> = (
               {fieldState?.errorMsg}
             </Form.Control.Feedback>
             {description ? (
-              <Form.Text className="text-muted">{description}</Form.Text>
+              <Form.Text dangerouslySetInnerHTML={{ __html: description }} />
             ) : null}
           </Form.Group>
         );
@@ -383,8 +383,13 @@ export const initFormData = (schema: JSONSchema): Type.FormDataType => {
   const props: JSONSchema['properties'] = schema?.properties || {};
   Object.keys(props).forEach((key) => {
     const prop = props[key];
-    const defaultVal = prop?.default;
-
+    let defaultVal: any = '';
+    if (Array.isArray(prop.default) && prop.enum && prop.enum.length > 0) {
+      // for checkbox default values
+      defaultVal = prop.enum;
+    } else {
+      defaultVal = prop?.default;
+    }
     formData[key] = {
       value: defaultVal,
       isInvalid: false,

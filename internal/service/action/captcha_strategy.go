@@ -2,6 +2,7 @@ package action
 
 import (
 	"context"
+	"github.com/segmentfault/pacman/log"
 	"time"
 
 	"github.com/answerdev/answer/internal/entity"
@@ -13,8 +14,12 @@ import (
 func (cs *CaptchaService) ValidationStrategy(ctx context.Context, unit, actionType string) bool {
 	info, err := cs.captchaRepo.GetActionType(ctx, unit, actionType)
 	if err != nil {
-		//No record, no processing
-		//
+		log.Error(err)
+		return false
+	}
+	// If no operation previously, it is considered to be the first operation
+	if info == nil {
+		return true
 	}
 	switch actionType {
 	case entity.CaptchaActionEmail:
@@ -56,10 +61,10 @@ func (cs *CaptchaService) CaptchaActionPassword(ctx context.Context, unit string
 	setNum := 3
 	setTime := int64(60 * 30) //seconds
 	now := time.Now().Unix()
-	if now-actioninfo.LastTime <= setTime || actioninfo.Num >= setNum {
+	if now-actioninfo.LastTime <= setTime && actioninfo.Num >= setNum {
 		return false
 	}
-	if now-actioninfo.LastTime > setTime {
+	if now-actioninfo.LastTime != 0 && now-actioninfo.LastTime > setTime {
 		cs.captchaRepo.SetActionType(ctx, unit, entity.CaptchaActionPassword, "", 0)
 	}
 	return true
@@ -69,10 +74,10 @@ func (cs *CaptchaService) CaptchaActionEditUserinfo(ctx context.Context, unit st
 	setNum := 3
 	setTime := int64(60 * 30) //seconds
 	now := time.Now().Unix()
-	if now-actioninfo.LastTime <= setTime || actioninfo.Num >= setNum {
+	if now-actioninfo.LastTime <= setTime && actioninfo.Num >= setNum {
 		return false
 	}
-	if now-actioninfo.LastTime > setTime {
+	if now-actioninfo.LastTime != 0 && now-actioninfo.LastTime > setTime {
 		cs.captchaRepo.SetActionType(ctx, unit, entity.CaptchaActionEditUserinfo, "", 0)
 	}
 	return true

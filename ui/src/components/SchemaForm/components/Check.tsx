@@ -27,16 +27,18 @@ const Index: FC<Props> = ({
     index: number,
   ) => {
     const { name, checked } = evt.currentTarget;
-    const freshVal = checked ? enumValues?.[index] : '';
+    enumValues[index] = checked;
+
     const state = {
       ...formData,
       [name]: {
         ...formData[name],
-        value: freshVal,
+        value: enumValues,
         isInvalid: false,
       },
     };
     if (typeof onChange === 'function') {
+      console.log('fieldName', fieldName, enumValues);
       onChange(state);
     }
   };
@@ -49,9 +51,9 @@ const Index: FC<Props> = ({
             inline
             type={type}
             name={fieldName}
-            id={`form-${String(item)}`}
+            id={`${fieldName}-${enumNames?.[index]}`}
             label={enumNames?.[index]}
-            checked={(fieldObject?.value || '') === item}
+            checked={fieldObject?.value?.[index] || false}
             feedback={fieldObject?.errorMsg}
             feedbackType="invalid"
             isInvalid={fieldObject?.isInvalid}

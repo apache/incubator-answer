@@ -386,13 +386,13 @@ backend:
       mention_you:
         other: wedi sôn amdanoch
       your_question_is_closed:
-        other: Mae eich cwestiwn wedi’i gau
+        other: Mae eich cwestiwn wedi'i gau
       your_question_was_deleted:
-        other: Mae eich cwestiwn wedi’i dileu
+        other: Mae eich cwestiwn wedi'i dileu
       your_answer_was_deleted:
-        other: Mae eich ateb wedi’i dileu
+        other: Mae eich ateb wedi'i dileu
       your_comment_was_deleted:
-        other: Mae eich sylw wedi’i dileu
+        other: Mae eich sylw wedi'i dileu
       up_voted_question:
         other: upvoted question
       down_voted_question:
@@ -1661,7 +1661,7 @@ ui:
         label: Default avatar
         text: For users without a custom avatar of their own.
       gravatar_base_url:
-        label: Gravatar base URL
+        label: Gravatar Base URL
         text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
         title: Profile editable

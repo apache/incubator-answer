@@ -3,6 +3,10 @@ package user_admin
 import (
 	"context"
 	"fmt"
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/internal/service/export"
 	"github.com/google/uuid"
 	"net/mail"
@@ -33,6 +37,7 @@ type UserAdminRepo interface {
 	GetUserPage(ctx context.Context, page, pageSize int, user *entity.User,
 		usernameOrDisplayName string, isStaff bool) (users []*entity.User, total int64, err error)
 	AddUser(ctx context.Context, user *entity.User) (err error)
+	AddUsers(ctx context.Context, users []*entity.User) (err error)
 	UpdateUserPassword(ctx context.Context, userID string, password string) (err error)
 }
 
@@ -164,6 +169,105 @@ func (us *UserAdminService) AddUser(ctx context.Context, req *schema.AddUserReq)
 	return
 }
 
+// AddUsers add users
+func (us *UserAdminService) AddUsers(ctx context.Context, req *schema.AddUsersReq) (
+	resp []*validator.FormErrorField, err error) {
+	resp, err = req.ParseUsers(ctx)
+	if err != nil {
+		return resp, err
+	}
+	errData := us.checkUserDuplicateInner(ctx, req.Users)
+	if errData != nil {
+		return errData.GetErrField(ctx), errors.BadRequest(reason.RequestFormatError)
+	}
+	users, errData, err := us.formatBulkAddUsers(ctx, req)
+	if err != nil {
+		return resp, err
+	}
+	if errData != nil {
+		return errData.GetErrField(ctx), errors.BadRequest(reason.RequestFormatError)
+	}
+	return nil, us.userRepo.AddUsers(ctx, users)
+}
+
+func (us *UserAdminService) checkUserDuplicateInner(ctx context.Context, users []*schema.AddUserReq) (
+	errorData *schema.AddUsersErrorData) {
+	lang := handler.GetLangByCtx(ctx)
+	val := validator.GetValidatorByLang(lang)
+
+	emails := make(map[string]bool)
+	displayNames := make(map[string]bool)
+	for line, user := range users {
+		if errFields, e := val.Check(user); e != nil {
+			errorData = &schema.AddUsersErrorData{}
+			if len(errFields) > 0 {
+				errorData.Field = errFields[0].ErrorField
+				errorData.ExtraMessage = errFields[0].ErrorMsg
+			}
+			errorData.Line = line + 1
+			errorData.Content = fmt.Sprintf("%s, %s, %s", user.DisplayName, user.Email, user.Password)
+			return errorData
+		}
+		if emails[user.Email] {
+			return &schema.AddUsersErrorData{
+				Field:        "email",
+				Line:         line + 1,
+				Content:      user.Email,
+				ExtraMessage: translator.Tr(lang, reason.EmailDuplicate),
+			}
+		}
+		if displayNames[user.DisplayName] {
+			return &schema.AddUsersErrorData{
+				Field:        "name",
+				Line:         line + 1,
+				Content:      user.DisplayName,
+				ExtraMessage: translator.Tr(lang, reason.UsernameDuplicate),
+			}
+		}
+		emails[user.Email] = true
+		displayNames[user.DisplayName] = true
+	}
+	return nil
+}
+
+func (us *UserAdminService) formatBulkAddUsers(ctx context.Context, req *schema.AddUsersReq) (
+	users []*entity.User, errorData *schema.AddUsersErrorData, err error) {
+	lang := handler.GetLangByCtx(ctx)
+	errorData = &schema.AddUsersErrorData{Line: -1}
+	for line, user := range req.Users {
+		_, has, e := us.userRepo.GetUserInfoByEmail(ctx, user.Email)
+		if e != nil {
+			return nil, nil, e
+		}
+		if has {
+			errorData.Field = "email"
+			errorData.Line = line + 1
+			errorData.Content = user.Email
+			errorData.ExtraMessage = translator.Tr(lang, reason.EmailDuplicate)
+			return nil, errorData, nil
+		}
+
+		userInfo := &entity.User{}
+		userInfo.EMail = user.Email
+		userInfo.DisplayName = user.DisplayName
+		hashPwd, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+		userInfo.Pass = string(hashPwd)
+		userInfo.Username, err = us.userCommonService.MakeUsername(ctx, userInfo.DisplayName)
+		if err != nil {
+			errorData.Field = "name"
+			errorData.Line = line + 1
+			errorData.Content = user.DisplayName
+			errorData.ExtraMessage = translator.Tr(lang, reason.UsernameInvalid)
+			return nil, errorData, nil
+		}
+		userInfo.MailStatus = entity.EmailStatusAvailable
+		userInfo.Status = entity.UserStatusAvailable
+		userInfo.Rank = 1
+		users = append(users, userInfo)
+	}
+	return users, nil, nil
+}
+
 // UpdateUserPassword update user password
 func (us *UserAdminService) UpdateUserPassword(ctx context.Context, req *schema.UpdateUserPasswordReq) (err error) {
 	// Users cannot modify their password
@@ -261,15 +365,15 @@ func (us *UserAdminService) GetUserPage(ctx context.Context, req *schema.GetUser
 			Avatar:      avatarMapping[u.ID].GetURL(),
 		}
 		if u.Status == entity.UserStatusDeleted {
-			t.Status = schema.UserDeleted
+			t.Status = constant.UserDeleted
 			t.DeletedAt = u.DeletedAt.Unix()
 		} else if u.Status == entity.UserStatusSuspended {
-			t.Status = schema.UserSuspended
+			t.Status = constant.UserSuspended
 			t.SuspendedAt = u.SuspendedAt.Unix()
 		} else if u.MailStatus == entity.EmailStatusToBeVerified {
-			t.Status = schema.UserInactive
+			t.Status = constant.UserInactive
 		} else {
-			t.Status = schema.UserNormal
+			t.Status = constant.UserNormal
 		}
 		resp = append(resp, t)
 	}

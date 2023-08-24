@@ -30,7 +30,7 @@ export interface JSONSchema {
       description?: string;
       enum?: Array<string | boolean | number>;
       enumNames?: string[];
-      default?: string | boolean | number;
+      default?: string | boolean | number | any[];
     };
   };
 }

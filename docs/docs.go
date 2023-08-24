@@ -1741,6 +1741,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/admin/api/users": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "add users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "admin"
+                ],
+                "summary": "add users",
+                "parameters": [
+                    {
+                        "description": "user",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.AddUsersReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/admin/api/users/activation": {
             "post": {
                 "security": [
@@ -4515,7 +4554,39 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.SearchListResp"
+                                            "$ref": "#/definitions/schema.SearchResp"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/search/desc": {
+            "get": {
+                "description": "get search description",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Search"
+                ],
+                "summary": "get search description",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/handler.RespBody"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/schema.SearchResp"
                                         }
                                     }
                                 }
@@ -5095,29 +5166,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/user/email/notification": {
-            "put": {
-                "description": "unsubscribe email notification",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "unsubscribe email notification",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handler.RespBody"
-                        }
-                    }
-                }
-            }
-        },
         "/answer/api/v1/user/email/verification": {
             "post": {
                 "description": "UserVerifyEmail",
@@ -5406,7 +5454,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.UserEmailLogin"
+                            "$ref": "#/definitions/schema.UserEmailLoginReq"
                         }
                     }
                 ],
@@ -5455,14 +5503,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/answer/api/v1/user/notice/set": {
-            "post": {
+        "/answer/api/v1/user/notification/config": {
+            "put": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "UserNoticeSet",
+                "description": "update user's notification config",
                 "consumes": [
                     "application/json"
                 ],
@@ -5472,18 +5520,44 @@ const docTemplate = `{
                 "tags": [
                     "User"
                 ],
-                "summary": "UserNoticeSet",
+                "summary": "update user's notification config",
                 "parameters": [
                     {
-                        "description": "UserNoticeSetRequest",
+                        "description": "UpdateUserNotificationConfigReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.UserNoticeSetRequest"
+                            "$ref": "#/definitions/schema.UpdateUserNotificationConfigReq"
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "get user's notification config",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "get user's notification config",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -5496,11 +5570,45 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/schema.UserNoticeSetResp"
+                                            "$ref": "#/definitions/schema.GetUserNotificationConfigResp"
                                         }
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/user/notification/unsubscribe": {
+            "put": {
+                "description": "unsubscribe notification",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "unsubscribe notification",
+                "parameters": [
+                    {
+                        "description": "UserUnsubscribeNotificationReq",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.UserUnsubscribeNotificationReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
                         }
                     }
                 }
@@ -6127,6 +6235,15 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "constant.NotificationChannelKey": {
+            "type": "string",
+            "enum": [
+                "email"
+            ],
+            "x-enum-varnames": [
+                "EmailChannel"
+            ]
+        },
         "constant.Privilege": {
             "type": "object",
             "properties": {
@@ -6229,6 +6346,9 @@ const docTemplate = `{
                 "lang": {
                     "type": "string",
                     "maxLength": 30
+                },
+                "login_required": {
+                    "type": "boolean"
                 },
                 "name": {
                     "type": "string",
@@ -6346,6 +6466,13 @@ const docTemplate = `{
                 "original_text"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "mention_username_list": {
                     "description": "@ user id list",
                     "type": "array",
@@ -6376,6 +6503,13 @@ const docTemplate = `{
                 "report_type"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "content": {
                     "description": "report content",
                     "type": "string",
@@ -6441,6 +6575,15 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.AddUsersReq": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "description": "users info line by line",
+                    "type": "string"
+                }
+            }
+        },
         "schema.AdminSetAnswerStatusRequest": {
             "type": "object",
             "properties": {
@@ -6480,6 +6623,12 @@ const docTemplate = `{
                 "content"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "type": "string"
+                },
                 "content": {
                     "type": "string",
                     "maxLength": 65535,
@@ -6496,6 +6645,12 @@ const docTemplate = `{
                 "content"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "type": "string"
+                },
                 "content": {
                     "type": "string",
                     "maxLength": 65535,
@@ -6926,6 +7081,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "have_password": {
+                    "description": "user have password",
                     "type": "boolean"
                 },
                 "id": {
@@ -7488,6 +7644,29 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.GetUserNotificationConfigResp": {
+            "type": "object",
+            "properties": {
+                "all_new_question": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NotificationChannelConfig"
+                    }
+                },
+                "all_new_question_for_following_tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NotificationChannelConfig"
+                    }
+                },
+                "inbox": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NotificationChannelConfig"
+                    }
+                }
+            }
+        },
         "schema.GetUserPageResp": {
             "type": "object",
             "properties": {
@@ -7599,6 +7778,17 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.NotificationChannelConfig": {
+            "type": "object",
+            "properties": {
+                "enable": {
+                    "type": "boolean"
+                },
+                "key": {
+                    "$ref": "#/definitions/constant.NotificationChannelKey"
+                }
+            }
+        },
         "schema.NotificationClearIDRequest": {
             "type": "object",
             "properties": {
@@ -7702,6 +7892,13 @@ const docTemplate = `{
                 "title"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "content": {
                     "description": "content",
                     "type": "string",
@@ -7736,6 +7933,13 @@ const docTemplate = `{
                     "type": "string",
                     "maxLength": 65535,
                     "minLength": 6
+                },
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
                 },
                 "content": {
                     "description": "content",
@@ -7898,6 +8102,13 @@ const docTemplate = `{
                 "title"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "content": {
                     "description": "content",
                     "type": "string",
@@ -7939,6 +8150,13 @@ const docTemplate = `{
                 "id"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "id": {
                     "type": "string"
                 },
@@ -7956,8 +8174,13 @@ const docTemplate = `{
                 "id"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "type": "string"
+                },
                 "id": {
-                    "description": "answer id",
                     "type": "string"
                 }
             }
@@ -7968,6 +8191,13 @@ const docTemplate = `{
                 "comment_id"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "comment_id": {
                     "description": "comment id",
                     "type": "string"
@@ -7980,6 +8210,13 @@ const docTemplate = `{
                 "id"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "id": {
                     "description": "question id",
                     "type": "string"
@@ -8041,24 +8278,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.SearchListResp": {
-            "type": "object",
-            "properties": {
-                "count": {
-                    "type": "integer"
-                },
-                "extra": {
-                    "description": "extra fields"
-                },
-                "list": {
-                    "description": "search response",
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/schema.SearchResp"
-                    }
-                }
-            }
-        },
         "schema.SearchObject": {
             "type": "object",
             "properties": {
@@ -8108,6 +8327,21 @@ const docTemplate = `{
             }
         },
         "schema.SearchResp": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "list": {
+                    "description": "search response",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.SearchResult"
+                    }
+                }
+            }
+        },
+        "schema.SearchResult": {
             "type": "object",
             "properties": {
                 "object": {
@@ -8729,6 +8963,13 @@ const docTemplate = `{
                 "original_text"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "comment_id": {
                     "description": "comment id",
                     "type": "string"
@@ -8945,6 +9186,29 @@ const docTemplate = `{
                 }
             }
         },
+        "schema.UpdateUserNotificationConfigReq": {
+            "type": "object",
+            "properties": {
+                "all_new_question": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NotificationChannelConfig"
+                    }
+                },
+                "all_new_question_for_following_tags": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NotificationChannelConfig"
+                    }
+                },
+                "inbox": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/schema.NotificationChannelConfig"
+                    }
+                }
+            }
+        },
         "schema.UpdateUserPasswordReq": {
             "type": "object",
             "required": [
@@ -9004,39 +9268,30 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "avatar": {
-                    "description": "avatar",
                     "type": "string"
                 },
                 "display_name": {
-                    "description": "display_name",
                     "type": "string"
                 },
                 "id": {
-                    "description": "user_id",
                     "type": "string"
                 },
                 "ip_info": {
-                    "description": "ip info",
                     "type": "string"
                 },
                 "location": {
-                    "description": "location",
                     "type": "string"
                 },
                 "rank": {
-                    "description": "rank",
                     "type": "integer"
                 },
                 "status": {
-                    "description": "status",
                     "type": "string"
                 },
                 "username": {
-                    "description": "name",
                     "type": "string"
                 },
                 "website": {
-                    "description": "website",
                     "type": "string"
                 }
             }
@@ -9078,7 +9333,7 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UserEmailLogin": {
+        "schema.UserEmailLoginReq": {
             "type": "object",
             "required": [
                 "e_mail",
@@ -9086,20 +9341,16 @@ const docTemplate = `{
             ],
             "properties": {
                 "captcha_code": {
-                    "description": "captcha_code",
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
                     "type": "string"
                 },
                 "e_mail": {
-                    "description": "e_mail",
                     "type": "string",
                     "maxLength": 500
                 },
                 "pass": {
-                    "description": "password",
                     "type": "string",
                     "maxLength": 32,
                     "minLength": 8
@@ -9237,22 +9488,6 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.UserNoticeSetRequest": {
-            "type": "object",
-            "properties": {
-                "notice_switch": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "schema.UserNoticeSetResp": {
-            "type": "object",
-            "properties": {
-                "notice_switch": {
-                    "type": "boolean"
-                }
-            }
-        },
         "schema.UserRankingResp": {
             "type": "object",
             "properties": {
@@ -9309,12 +9544,10 @@ const docTemplate = `{
             ],
             "properties": {
                 "code": {
-                    "description": "code",
                     "type": "string",
                     "maxLength": 100
                 },
                 "pass": {
-                    "description": "Password",
                     "type": "string",
                     "maxLength": 32
                 }
@@ -9329,25 +9562,20 @@ const docTemplate = `{
             ],
             "properties": {
                 "captcha_code": {
-                    "description": "captcha_code",
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
                     "type": "string"
                 },
                 "e_mail": {
-                    "description": "email",
                     "type": "string",
                     "maxLength": 500
                 },
                 "name": {
-                    "description": "name",
                     "type": "string",
                     "maxLength": 30
                 },
                 "pass": {
-                    "description": "password",
                     "type": "string",
                     "maxLength": 32,
                     "minLength": 8
@@ -9361,15 +9589,24 @@ const docTemplate = `{
             ],
             "properties": {
                 "captcha_code": {
-                    "description": "captcha_code",
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
                     "type": "string"
                 },
                 "e_mail": {
-                    "description": "e_mail",
+                    "type": "string",
+                    "maxLength": 500
+                }
+            }
+        },
+        "schema.UserUnsubscribeNotificationReq": {
+            "type": "object",
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
                     "type": "string",
                     "maxLength": 500
                 }
@@ -9381,6 +9618,13 @@ const docTemplate = `{
                 "object_id"
             ],
             "properties": {
+                "captcha_code": {
+                    "type": "string"
+                },
+                "captcha_id": {
+                    "description": "captcha_id",
+                    "type": "string"
+                },
                 "is_cancel": {
                     "description": "is cancel",
                     "type": "boolean"

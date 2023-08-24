@@ -40,6 +40,10 @@ img[src=""] {
   font-size: 0.75rem;
 }
 
+.small {
+  font-size: 0.875rem;
+}
+
 .pic-auth-modal {
   width: 25%;
 }
@@ -307,6 +311,14 @@ img[src=""] {
   font-size: 16px;
   width: 16px;
   height: 16px;
+  fill: currentColor;
+  vertical-align: -0.125em;
+}
+
+.algoliaSvg {
+  display: inline-block;
+  width: 92px;
+  height: 24px;
   fill: currentColor;
   vertical-align: -0.125em;
 }

@@ -1,5 +1,16 @@
 package schema
 
+import (
+	"context"
+	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/handler"
+	"github.com/answerdev/answer/internal/base/reason"
+	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/answerdev/answer/internal/base/validator"
+	"github.com/segmentfault/pacman/errors"
+	"strings"
+)
+
 // UpdateUserStatusReq update user request
 type UpdateUserStatusReq struct {
 	UserID      string `validate:"required" json:"user_id"`
@@ -7,17 +18,10 @@ type UpdateUserStatusReq struct {
 	LoginUserID string `json:"-"`
 }
 
-const (
-	UserNormal    = "normal"
-	UserSuspended = "suspended"
-	UserDeleted   = "deleted"
-	UserInactive  = "inactive"
-)
-
-func (r *UpdateUserStatusReq) IsNormal() bool    { return r.Status == UserNormal }
-func (r *UpdateUserStatusReq) IsSuspended() bool { return r.Status == UserSuspended }
-func (r *UpdateUserStatusReq) IsDeleted() bool   { return r.Status == UserDeleted }
-func (r *UpdateUserStatusReq) IsInactive() bool  { return r.Status == UserInactive }
+func (r *UpdateUserStatusReq) IsNormal() bool    { return r.Status == constant.UserNormal }
+func (r *UpdateUserStatusReq) IsSuspended() bool { return r.Status == constant.UserSuspended }
+func (r *UpdateUserStatusReq) IsDeleted() bool   { return r.Status == constant.UserDeleted }
+func (r *UpdateUserStatusReq) IsInactive() bool  { return r.Status == constant.UserInactive }
 
 // GetUserPageReq get user list page request
 type GetUserPageReq struct {
@@ -33,9 +37,9 @@ type GetUserPageReq struct {
 	Staff bool `validate:"omitempty" form:"staff"`
 }
 
-func (r *GetUserPageReq) IsSuspended() bool { return r.Status == UserSuspended }
-func (r *GetUserPageReq) IsDeleted() bool   { return r.Status == UserDeleted }
-func (r *GetUserPageReq) IsInactive() bool  { return r.Status == UserInactive }
+func (r *GetUserPageReq) IsSuspended() bool { return r.Status == constant.UserSuspended }
+func (r *GetUserPageReq) IsDeleted() bool   { return r.Status == constant.UserDeleted }
+func (r *GetUserPageReq) IsInactive() bool  { return r.Status == constant.UserInactive }
 
 // GetUserPageResp get user response
 type GetUserPageResp struct {
@@ -90,6 +94,69 @@ type AddUserReq struct {
 	Email       string `validate:"required,email,gt=0,lte=500" json:"email"`
 	Password    string `validate:"required,gte=8,lte=32" json:"password"`
 	LoginUserID string `json:"-"`
+}
+
+// AddUsersReq add users request
+type AddUsersReq struct {
+	// users info line by line
+	UsersStr string        `json:"users"`
+	Users    []*AddUserReq `json:"-"`
+}
+
+type AddUsersErrorData struct {
+	// optional. error field name.
+	Field string `json:"field"`
+	// must. error line number.
+	Line int `json:"line"`
+	// must. error content.
+	Content string `json:"content"`
+	// optional. error message.
+	ExtraMessage string `json:"extra_message"`
+}
+
+func (e *AddUsersErrorData) GetErrField(ctx context.Context) (errFields []*validator.FormErrorField) {
+	return append([]*validator.FormErrorField{}, &validator.FormErrorField{
+		ErrorField: "users",
+		ErrorMsg:   translator.TrWithData(handler.GetLangByCtx(ctx), reason.AddBulkUsersFormatError, e),
+	})
+}
+
+func (req *AddUsersReq) ParseUsers(ctx context.Context) (errFields []*validator.FormErrorField, err error) {
+	req.UsersStr = strings.TrimSpace(req.UsersStr)
+	lines := strings.Split(req.UsersStr, "\n")
+	req.Users = make([]*AddUserReq, 0)
+	for i, line := range lines {
+		arr := strings.Split(line, ",")
+		if len(arr) != 3 {
+			errFields = append([]*validator.FormErrorField{}, &validator.FormErrorField{
+				ErrorField: "users",
+				ErrorMsg: translator.TrWithData(handler.GetLangByCtx(ctx), reason.AddBulkUsersFormatError,
+					&AddUsersErrorData{
+						Line:    i + 1,
+						Content: line,
+					}),
+			})
+			return errFields, errors.BadRequest(reason.RequestFormatError)
+		}
+		req.Users = append(req.Users, &AddUserReq{
+			DisplayName: strings.TrimSpace(arr[0]),
+			Email:       strings.TrimSpace(arr[1]),
+			Password:    strings.TrimSpace(arr[2]),
+		})
+	}
+
+	// check users amount
+	if len(req.Users) <= 0 || len(req.Users) > constant.DefaultBulkUser {
+		errFields = append([]*validator.FormErrorField{}, &validator.FormErrorField{
+			ErrorField: "users",
+			ErrorMsg: translator.TrWithData(handler.GetLangByCtx(ctx), reason.AddBulkUsersAmountError,
+				map[string]int{
+					"MaxAmount": constant.DefaultBulkUser,
+				}),
+		})
+		return errFields, errors.BadRequest(reason.RequestFormatError)
+	}
+	return nil, nil
 }
 
 // UpdateUserPasswordReq update user password request

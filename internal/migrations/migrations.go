@@ -71,6 +71,7 @@ var migrations = []Migration{
 	NewMigration("v1.1.0-beta.2", "update question post time", updateQuestionPostTime, true),
 	NewMigration("v1.1.0", "add gravatar base url", updateCount, true),
 	NewMigration("v1.1.1", "update the length of revision content", updateTheLengthOfRevisionContent, false),
+	NewMigration("v1.1.2", "add notification config", addNoticeConfig, true),
 }
 
 func GetMigrations() []Migration {

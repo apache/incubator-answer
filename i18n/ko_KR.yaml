@@ -1018,7 +1018,7 @@ ui:
       You appear to have already installed. To reinstall please clear your old database tables first.
     db_failed: Database connection failed
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
   counts:
     views: views
     votes: votes
@@ -1026,7 +1026,7 @@ ui:
     accepted: Accepted
   page_error:
     http_error: HTTP Error {{ code }}
-    desc_403: You don’t have permission to access this page.
+    desc_403: You don't have permission to access this page.
     desc_404: Unfortunately, this page doesn't exist.
     desc_50X: The server encountered an error and could not complete your request.
     back_home: Back to homepage

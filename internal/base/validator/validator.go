@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"reflect"
 	"strings"
+	"unicode"
 
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/translator"
@@ -168,6 +169,25 @@ func GetValidatorByLang(lang i18n.Language) *MyValidator {
 
 // Check /
 func (m *MyValidator) Check(value interface{}) (errFields []*FormErrorField, err error) {
+	defer func() {
+		if len(errFields) == 0 {
+			return
+		}
+		for _, field := range errFields {
+			if len(field.ErrorField) == 0 {
+				continue
+			}
+			firstRune := []rune(field.ErrorMsg)[0]
+			if !unicode.IsLetter(firstRune) || !unicode.Is(unicode.Latin, firstRune) {
+				continue
+			}
+			upperFirstRune := unicode.ToUpper(firstRune)
+			field.ErrorMsg = string(upperFirstRune) + field.ErrorMsg[1:]
+			if !strings.HasSuffix(field.ErrorMsg, ".") {
+				field.ErrorMsg += "."
+			}
+		}
+	}()
 	err = m.Validate.Struct(value)
 	if err != nil {
 		var valErrors validator.ValidationErrors

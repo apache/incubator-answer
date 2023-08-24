@@ -1686,7 +1686,7 @@ ui:
         label: Default avatar
         text: For users without a custom avatar of their own.
       gravatar_base_url:
-        label: Gravatar base URL
+        label: Gravatar Base URL
         text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
         title: Profile editable

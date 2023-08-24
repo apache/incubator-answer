@@ -32,6 +32,7 @@ type InitNeedUserInputData struct {
 	AdminName     string
 	AdminPassword string
 	AdminEmail    string
+	LoginRequired bool
 }
 
 func (m *Mentor) InitDB() error {
@@ -159,7 +160,7 @@ func (m *Mentor) initSiteInfoLoginConfig() {
 	loginConfig := map[string]bool{
 		"allow_new_registrations":   true,
 		"allow_email_registrations": true,
-		"login_required":            false,
+		"login_required":            m.userData.LoginRequired,
 	}
 	loginConfigDataBytes, _ := json.Marshal(loginConfig)
 	_, m.err = m.engine.Context(m.ctx).Insert(&entity.SiteInfo{

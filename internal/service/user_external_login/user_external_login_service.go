@@ -252,7 +252,7 @@ func (us *UserExternalLoginService) ExternalLoginBindingUserSendEmail(
 	}
 	resp = &schema.ExternalLoginBindingUserSendEmailResp{}
 	externalLoginInfo, err := us.userExternalLoginRepo.GetCacheUserExternalLoginInfo(ctx, req.BindingKey)
-	if err != nil || len(externalLoginInfo.ExternalID) == 0 {
+	if err != nil || externalLoginInfo == nil {
 		return nil, errors.BadRequest(reason.UserNotFound)
 	}
 	if len(externalLoginInfo.Email) > 0 {
@@ -308,7 +308,7 @@ func (us *UserExternalLoginService) ExternalLoginBindingUserSendEmail(
 func (us *UserExternalLoginService) ExternalLoginBindingUser(
 	ctx context.Context, bindingKey string, oldUserInfo *entity.User) (err error) {
 	externalLoginInfo, err := us.userExternalLoginRepo.GetCacheUserExternalLoginInfo(ctx, bindingKey)
-	if err != nil || len(externalLoginInfo.ExternalID) == 0 {
+	if err != nil || externalLoginInfo == nil {
 		return errors.BadRequest(reason.UserNotFound)
 	}
 	return us.bindOldUser(ctx, externalLoginInfo, oldUserInfo)
