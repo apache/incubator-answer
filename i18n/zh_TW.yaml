@@ -186,7 +186,7 @@ backend:
         other: 無更新權限。
     rank:
       fail_to_meet_the_condition:
-        other: 級別不符合條件
+        other: Reputation rank fail to meet the condition.
       vote_fail_to_meet_the_condition:
         other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
       no_enough_rank_to_operate:
@@ -202,7 +202,7 @@ backend:
       not_found:
         other: 找不到標籤。
       recommend_tag_not_found:
-        other: 推薦的標籤不存在。
+        other: Recommend tag is not exist.
       recommend_tag_enter:
         other: 請輸入至少一個必需的標籤。
       not_contain_synonym_tags:
@@ -210,12 +210,12 @@ backend:
       cannot_update:
         other: 沒有權限更新。
       is_used_cannot_delete:
-        other: 你不能刪除使用中的標籤
+        other: You cannot delete a tag that is in use.
       cannot_set_synonym_as_itself:
         other: 你不能將當前標籤的同義詞設置為本身。
     smtp:
       config_from_name_cannot_be_email:
-        other: 發件人名稱不能是電子郵件地址。
+        other: The from name cannot be a email address.
     theme:
       not_found:
         other: 未找到主題。
@@ -223,7 +223,7 @@ backend:
       review_underway:
         other: 目前無法編輯，有一個版本在審查佇列中。
       no_permission:
-        other: 無權限修改。
+        other: No permission to revise.
     user:
       external_login_missing_user_id:
         other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
@@ -245,11 +245,15 @@ backend:
       cannot_update_your_role:
         other: 您不能修改自己的角色。
       not_allowed_registration:
-        other: 本站目前未開放註冊。
+        other: Currently the site is not open for registration.
       access_denied:
         other: Access denied
       page_access_denied:
         other: You do not have access to this page.
+      add_bulk_users_format_error:
+        other: "Error {{.Field}} format near '{{.Content}}' at line {{.Line}}. {{.ExtraMessage}}"
+      add_bulk_users_amount_error:
+        other: "The number of users you add at once should be in the range of 1-{{.MaxAmount}}."
     config:
       read_config_failed:
         other: 讀取配置失敗
@@ -306,7 +310,7 @@ backend:
       name:
         other: a community-specific reason
       desc:
-        other: This question doesn’t meet a community guideline.
+        other: This question doesn't meet a community guideline.
     not_clarity:
       name:
         other: needs details or clarity
@@ -314,7 +318,7 @@ backend:
         other: This question currently includes multiple questions in one. It should focus on one problem only.
     looks_ok:
       name:
-        other: looks ok
+        other: looks OK
       desc:
         other: This post is good as-is and not low quality.
     needs_edit:
@@ -326,7 +330,7 @@ backend:
       name:
         other: needs close
       desc:
-        other: A closed question can’t answer, but still can edit, vote and comment.
+        other: A closed question can't answer, but still can edit, vote and comment.
     needs_delete:
       name:
         other: needs delete
@@ -406,32 +410,37 @@ backend:
       title:
         other: "[{{.SiteName}}] Confirm your new email address"
       body:
-        other: "Confirm your new email address for {{.SiteName}}  by clicking on the following link:<br><br>\n\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
+        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} answered your question"
       body:
-        other: "<strong><a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} invited you to answer"
       body:
-        other: "<strong><a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_comment:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} commented on your post"
       body:
-        other: "<strong><a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+    new_question:
+      title:
+        other: "[{{.SiteName}}] New question: {{.QuestionTitle}}"
+      body:
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     pass_reset:
       title:
         other: "[{{.SiteName }}] Password reset"
       body:
-        other: "Somebody asked to reset your password on [{{.SiteName}}].<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
     register:
       title:
         other: "[{{.SiteName}}] Confirm your new account"
       body:
-        other: "Welcome to {{.SiteName}}<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
+        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
     test:
       title:
         other: "[{{.SiteName}}] Test Email"
@@ -555,7 +564,7 @@ ui:
     help:
       text: 幫助
     hr:
-      text: 水平分割線
+      text: Horizontal rule
     image:
       text: 圖片
       add_image: 添加圖片
@@ -563,7 +572,7 @@ ui:
       form_image:
         fields:
           file:
-            label: 圖片文件
+            label: Image file
             btn: 選擇圖片
             msg:
               empty: 文件不能為空。
@@ -603,9 +612,9 @@ ui:
       btn_cancel: 取消
       btn_confirm: 添加
     ordered_list:
-      text: 有編號列表
+      text: Numbered list
     unordered_list:
-      text: 無編號列表
+      text: Bulleted list
     table:
       text: 表格
       heading: 表頭
@@ -635,12 +644,12 @@ ui:
     form:
       fields:
         display_name:
-          label: 顯示名稱
+          label: Display name
           msg:
             empty: 顯示名稱不能為空。
             range: 顯示名稱不能超過 35 個字符。
         slug_name:
-          label: URL 固定連結
+          label: URL slug
           desc: URL slug up to 35 characters.
           msg:
             empty: URL 固定連結不能為空。
@@ -679,14 +688,14 @@ ui:
         revision:
           label: 編輯歷史
         display_name:
-          label: 顯示名稱
+          label: Display name
         slug_name:
-          label: URL 固定連結
+          label: URL slug
           info: '必須由 "a-z", "0-9", "+ # - ." 組成'
         desc:
           label: 描述
         edit_summary:
-          label: 編輯概要
+          label: Edit summary
           placeholder: >-
             簡單描述更改原因 (錯別字、文字表達、格式等等)
     btn_save_edits: 儲存更改
@@ -715,7 +724,7 @@ ui:
       通过評論询问更多问题或提出改進建議。避免在評論中回答問題。
     tip_answer: >-
       使用評論回復其他用戶或通知他們进行更改。如果你要添加新的信息，請編輯你的帖子，而不是發表評論。
-    tip_vote: It is useful
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: 編輯回答
     default_reason: 編輯回答
@@ -728,7 +737,7 @@ ui:
           feedback:
             characters: 內容必須至少6個字元長度。
         edit_summary:
-          label: 編輯概要
+          label: Edit summary
           placeholder: >-
             簡單描述更改原因 (錯別字、文字表達、格式等等)
     btn_save_edits: 儲存更改
@@ -738,7 +747,7 @@ ui:
     sort_buttons:
       popular: 熱門
       name: 名稱
-      newest: 最新
+      newest: Newest
     button_follow: 關注
     button_following: 已關注
     tag_label: 個問題
@@ -773,7 +782,7 @@ ui:
           msg:
             empty: 回答內容不能為空
         edit_summary:
-          label: 編輯概要
+          label: Edit summary
           placeholder: >-
             簡單描述更改原因 (錯別字、文字表達、格式等等)
     btn_post_question: 提出問題
@@ -861,7 +870,7 @@ ui:
     send_success: >-
       如果帳號與<strong>{{mail}}</strong>相符，您應該很快就會收到一封電子郵件，說明如何重置您的密碼。
     email:
-      label: 新電子郵件
+      label: New email
       msg:
         empty: 郵箱不能為空
   oauth:
@@ -893,10 +902,10 @@ ui:
         length: 密碼長度在8-32個字元之間
         different: 兩次輸入密碼不一致
     password_confirm:
-      label: 確認新密碼
+      label: Confirm new password
   settings:
     page_title: 設置
-    goto_modify: Go to Modify
+    goto_modify: Go to modify
     nav:
       profile: 我的資料
       notification: 通知
@@ -906,7 +915,7 @@ ui:
       heading: 個人資料
       btn_name: 保存
       display_name:
-        label: 顯示名稱
+        label: Display name
         msg: 顯示名稱不能為空。
         msg_range: 顯示名稱最長 30 個字元。
       username:
@@ -916,7 +925,7 @@ ui:
         msg_range: 使用者名稱最長 30 個字元。
         character: '必須由 "a-z", "0-9", " - . _" 組成'
       avatar:
-        label: 頭像
+        label: Profile image
         gravatar: 頭像
         gravatar_text: You can change image on
         custom: 自定義
@@ -924,7 +933,7 @@ ui:
         default: 系統
         msg: 請上傳頭像
       bio:
-        label: 關於我
+        label: About me
       website:
         label: 網站
         placeholder: "https://example.com"
@@ -934,9 +943,16 @@ ui:
         placeholder: "城市, 國家"
     notification:
       heading: 通知
-      email:
-        label: 郵件通知
-        radio: "回答你的問題，評論，以及更多"
+      email: Email
+      inbox:
+        label: Email notifications
+        description: Answers to your questions, comments, invites, and more.
+      all_new_question:
+        label: All new questions
+        description: Get notified of all new questions. Up to 50 questions per week.
+      all_new_question_for_following_tags:
+        label: All new questions for following tags
+        description: Get notified of new questions for following tags.
     account:
       heading: 帳號
       change_email_btn: 更改郵箱
@@ -944,31 +960,31 @@ ui:
       change_email_info: >-
         我們已經寄出一封郵件至此電子郵件地址，請遵照說明進行確認。
       email:
-        label: New Email
-        msg: New Email cannot be empty.
+        label: New email
+        msg: New email cannot be empty.
       pass:
-        label: Current Password
+        label: Current password
         msg: Password cannot be empty.
       password_title: 密碼
       current_pass:
-        label: 當前密碼
+        label: Current password
         msg:
-          empty: 當前密碼不能為空
+          empty: Current password cannot be empty.
           length: 密碼長度必須在 8 至 32 之間
           different: 兩次輸入的密碼不匹配
       new_pass:
-        label: 新密碼
+        label: New password
       pass_confirm:
-        label: 確認新密碼
+        label: Confirm new password
     interface:
       heading: 介面
       lang:
-        label: 介面語言
+        label: Interface language
         text: 設定使用者介面語言，在重新整裡頁面後生效。
     my_logins:
-      title: My Logins
+      title: My logins
       label: Log in or sign up on this site using these accounts.
-      modal_title: Remove Login
+      modal_title: Remove login
       modal_content: Are you sure you want to remove this login from your account?
       modal_confirm_btn: Remove
       remove_success: Removed successfully
@@ -983,7 +999,7 @@ ui:
     title: 相關問題
     answers: 個回答
   invite_to_answer:
-    title: People asked
+    title: People Asked
     desc: Invite people who you think might know the answer.
     invite: Invite to answer
     add: Add people
@@ -1097,7 +1113,7 @@ ui:
     copied: 已複製
     facebook: 分享到 Facebook
     twitter: 分享到 Twitter
-  cannot_vote_for_self: 不能給自己投票
+  cannot_vote_for_self: You can't vote for your own post.
   modal_confirm:
     title: 發生錯誤...
   account_result:
@@ -1147,7 +1163,7 @@ ui:
     votes: 得票
     newest: 最新
     score: 評分
-    edit_profile: 編輯個人資料
+    edit_profile: Edit profile
     visited_x_days: "已造訪 {{ count }} 天"
     viewed: 閱讀次數
     joined: 加入於
@@ -1162,7 +1178,7 @@ ui:
     answered: 回答於
     asked: 提問於
     downvoted: downvoted
-    mod_short: 模組
+    mod_short: MOD
     mod_long: 管理員
     x_reputation: 聲望
     x_votes: 得票
@@ -1174,9 +1190,9 @@ ui:
     done: 完成
     config_yaml_error: 無法建立 config.yaml 檔。
     lang:
-      label: 請選擇一種語言
+      label: Please choose a language
     db_type:
-      label: 資料庫引擎
+      label: Database engine
     db_username:
       label: 用戶名
       placeholder: 根
@@ -1186,17 +1202,17 @@ ui:
       placeholder: root
       msg: 密碼不能為空
     db_host:
-      label: 資料庫主機位址
+      label: Database host
       placeholder: "db: 3306"
-      msg: 資料庫主機位址不能為空
+      msg: Database host cannot be empty.
     db_name:
-      label: 資料庫名
+      label: Database name
       placeholder: 回答
-      msg: 資料庫名稱不能為空。
+      msg: Database name cannot be empty.
     db_file:
-      label: 資料庫檔案
+      label: Database file
       placeholder: /data/answer.db
-      msg: 資料庫文件不能為空。
+      msg: Database file cannot be empty.
     config_yaml:
       title: 創建 config.yaml
       label: 已創建 config.yaml 文件。
@@ -1206,8 +1222,8 @@ ui:
     site_information: 網站資訊
     admin_account: 管理員帳戶
     site_name:
-      label: 網站名稱
-      msg: 網站名稱不能為空。
+      label: Site name
+      msg: Site name cannot be empty.
     site_url:
       label: 網站 URL
       text: 此網站的地址。
@@ -1215,11 +1231,15 @@ ui:
         empty: 網站URL不能為空。
         incorrect: 網站URL格式不正確。
     contact_email:
-      label: 聯絡信箱
+      label: Contact email
       text: 負責本網站的主要聯絡人的電子郵件地址。
       msg:
-        empty: 聯絡人電子郵件信箱不能為空。
-        incorrect: 聯絡人電子郵件信箱不正確。
+        empty: Contact email cannot be empty.
+        incorrect: Contact email incorrect format.
+    login_required:
+      label: Private
+      switch: Login required
+      text: Only logged in users can access this community.
     admin_name:
       label: 暱稱
       msg: 暱稱不能為空。
@@ -1235,7 +1255,7 @@ ui:
       msg:
         empty: 郵箱不能為空。
         incorrect: 郵箱格式不正確。
-    ready_title: 你的Answer已經準備好了!
+    ready_title: Your Answer is ready!
     ready_desc: >-
       如果你想改變更多的設定，請瀏覽<1>管理員部分</1>；在網站選單中找到它。
     good_luck: "玩得愉快，祝您好運！"
@@ -1248,7 +1268,7 @@ ui:
       您似乎已經安裝過了。要重新安裝，請先清除舊的資料庫表。
     db_failed: 資料連接異常！
     db_failed_desc: >-
-      這要么意味著你<1>config.yaml</1>文件中的數據庫信息不正確，要么意味著無法與數據庫服務器建立聯繫。這可能意味著你的主機的數據庫服務器已經停機。
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
   counts:
     views: 觀看
     votes: 得票
@@ -1256,7 +1276,7 @@ ui:
     accepted: 已採納
   page_error:
     http_error: HTTP 错误 {{ code }}
-    desc_403: You don’t have permission to access this page.
+    desc_403: You don't have permission to access this page.
     desc_404: Unfortunately, this page doesn't exist.
     desc_50X: The server encountered an error and could not complete your request.
     back_home: Back to homepage
@@ -1383,9 +1403,14 @@ ui:
       title: Add new user
       form:
         fields:
+          users:
+            label: Bulk add user
+            placeholder: "John Smith, john@example.com, BUSYopr2\nAlice, alice@example.com, fpDntV8q"
+            text: Separate “name, email, password” with commas. One user per line.
+            msg: "Please enter the user's email, one per line."
           display_name:
-            label: Display Name
-            msg: Display Name must be at 4-30 characters in length.
+            label: Display name
+            msg: Display name must be at 4-30 characters in length.
           email:
             label: Email
             msg: Email is not valid.
@@ -1452,7 +1477,7 @@ ui:
     general:
       page_title: 一般
       name:
-        label: 網站名稱
+        label: Site name
         msg: 不能為空
         text: "網站的名稱，如標題標籤中所用。"
       site_url:
@@ -1461,22 +1486,22 @@ ui:
         validate: 請輸入一個有效的 URL。
         text: 此網站的網址。
       short_desc:
-        label: 網站簡短描述
+        label: Short site description
         msg: 網站簡短描述不能為空。
         text: "簡短的描述，如主頁上的標題標籤所使用的那样。"
       desc:
-        label: 網站描述
+        label: Site description
         msg: 網站描述不能為空。
         text: "使用一句話描述本站，作為網站的描述（Html 的 meta 標籤）。"
       contact_email:
-        label: 聯絡人信箱
+        label: Contact email
         msg: 聯絡人信箱不能為空。
         validate: 聯絡人信箱無效。
         text: 負責本網站的主要聯絡人的電子郵件信箱。
     interface:
       page_title: 介面
       language:
-        label: 介面語言
+        label: Interface language
         msg: 界面語言不能為空
         text: 設置用戶界面語言，在刷新頁面后生效。
       time_zone:
@@ -1486,15 +1511,15 @@ ui:
     smtp:
       page_title: SMTP
       from_email:
-        label: 發件人電子郵件
+        label: From email
         msg: 發件人電子郵件不能为空。
         text: 發送郵件的郵箱地址
       from_name:
-        label: 發件人名稱
+        label: From name
         msg: 發件人名稱不能为空。
         text: 發件人的名稱
       smtp_host:
-        label: SMTP 主機
+        label: SMTP host
         msg: SMTP 主機名稱不能為空。
         text: 郵件服務器
       encryption:
@@ -1504,22 +1529,22 @@ ui:
         ssl: SSL
         none: 無
       smtp_port:
-        label: SMTP 埠
+        label: SMTP port
         msg: SMTP 埠必須在 1 ~ 65535 之間。
         text: 郵件服務器的端口號。
       smtp_username:
-        label: SMTP 用戶名
+        label: SMTP username
         msg: SMTP 用戶名不能為空。
       smtp_password:
-        label: SMTP 密碼
+        label: SMTP password
         msg: SMTP 密碼不能為空。
       test_email_recipient:
-        label: 測試郵件收件人
+        label: Test email recipients
         text: 提供用於接收測試郵件的郵箱地址。
         msg: 測試郵件收件人無效
       smtp_authentication:
         label: 啟用身份驗證
-        title: SMTP身份驗證
+        title: SMTP authentication
         msg: SMTP 身份驗證不能為空。
         "yes": "是"
         "no": "否"
@@ -1530,10 +1555,10 @@ ui:
         msg: 圖標不能為空。
         text: 在你的網站左上方的Logo圖標。使用一個高度為56，長寬比大於3:1的寬長方形圖像。如果留空，將顯示網站標題文本。
       mobile_logo:
-        label: 移動標識
+        label: Mobile logo
         text: 在您網站的移動版本上使用的徽標。 使用高度為 56 的寬矩形圖像。如果留空，將使用“徽標”設置中的圖像。
       square_icon:
-        label: 方形圖示
+        label: Square icon
         msg: 方形圖示不能為空。
         text: 用作元數據圖標的基礎的圖像。最好是大於512x512。
       favicon:
@@ -1542,22 +1567,22 @@ ui:
     legal:
       page_title: 法律條款
       terms_of_service:
-        label: 服務條款
+        label: Terms of service
         text: "您可以在此加入服務內容的條款。如果您已經在別處托管了文檔，請在這裡提供完整的URL。"
       privacy_policy:
-        label: 隱私條款
+        label: Privacy policy
         text: "您可以在此加入隱私政策內容。如果您已經在別處托管了文檔，請在這裡提供完整的URL。"
     write:
       page_title: 編輯
       recommend_tags:
-        label: 推薦標籤
+        label: Recommend tags
         text: "請在上方輸入標籤固定連結，每行一個標籤。"
       required_tag:
-        title: 必需的標籤
+        title: Required tag
         label: 根據需要設置推薦標籤
         text: "每個新問題必須至少有一個推薦標籤。"
       reserved_tags:
-        label: 保留標籤
+        label: Reserved tags
         text: "保留的標籤只能由版主加入到一個貼文中。"
     seo:
       page_title: 搜尋引擎優化
@@ -1614,6 +1639,7 @@ ui:
         text: 只有登入使用者才能訪問這個社群。
     installed_plugins:
       title: Installed Plugins
+      plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
       filter:
         all: All
         active: Active
@@ -1632,13 +1658,13 @@ ui:
     settings_users:
       title: Users
       avatar:
-        label: Default Avatar
+        label: Default avatar
         text: For users without a custom avatar of their own.
       gravatar_base_url:
-        label: Gravatar Base URL
-        text: URL of the Gravatar provider’s API base. Ignored when empty.
+        label: Gravatar base URL
+        text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
-        title: Profile Editable
+        title: Profile editable
       allow_update_display_name:
         label: Allow users to change their display name
       allow_update_username:
