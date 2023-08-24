@@ -3,6 +3,7 @@ import useSWR from 'swr';
 
 import request from '@/utils/request';
 import type * as Type from '@/common/interface';
+import { UserInfoRes } from '@/common/interface';
 
 export const uploadImage = (params: { file: File; type: Type.UploadType }) => {
   const form = new FormData();
@@ -119,6 +120,12 @@ export const resendEmail = (params?: Type.ImgCodeReq) => {
     ...params,
   });
 };
+
+export async function ssoLogin(accessToken: string) {
+  return request.post<UserInfoRes>('/answer/api/v1/user/login/sso', {
+    accessToken,
+  });
+}
 
 /**
  * @description get login userinfo

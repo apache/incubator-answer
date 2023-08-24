@@ -152,27 +152,16 @@ const Header: FC = () => {
             {user?.username ? (
               <NavItems redDot={redDot} userInfo={user} logOut={handleLogout} />
             ) : (
-              <>
-                <Button
-                  variant="link"
-                  className={classnames('me-2', {
-                    'link-light': navbarStyle === 'theme-colored',
-                    'link-primary': navbarStyle !== 'theme-colored',
-                  })}
-                  onClick={() => floppyNavigation.storageLoginRedirect()}
-                  href={userCenter.getLoginUrl()}>
-                  {t('btns.login')}
-                </Button>
-                {loginSetting.allow_new_registrations && (
-                  <Button
-                    variant={
-                      navbarStyle === 'theme-colored' ? 'light' : 'primary'
-                    }
-                    href={userCenter.getSignUpUrl()}>
-                    {t('btns.signup')}
-                  </Button>
-                )}
-              </>
+              <Button
+                variant="link"
+                className={classnames('me-2', {
+                  'link-light': navbarStyle === 'theme-colored',
+                  'link-primary': navbarStyle !== 'theme-colored',
+                })}
+                onClick={() => floppyNavigation.storageLoginRedirect()}
+                href={userCenter.getLoginUrl()}>
+                {t('btns.login')}
+              </Button>
             )}
           </div>
         </div>

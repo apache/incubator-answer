@@ -12,7 +12,7 @@ import {
   userCenterStore,
 } from '@/stores';
 import { floppyNavigation, guard, handleFormError, userCenter } from '@/utils';
-import { login, UcAgent } from '@/services';
+import { login, ssoLogin, UcAgent } from '@/services';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
@@ -25,8 +25,7 @@ const Index: React.FC = () => {
   if (ucAgent?.enabled && ucAgent?.agent_info) {
     ucAgentInfo = ucAgent.agent_info;
   }
-  const canOriginalLogin =
-    !ucAgentInfo || ucAgentInfo.enabled_original_user_system;
+  const canOriginalLogin = false;
 
   const [formData, setFormData] = useState<FormDataType>({
     e_mail: {
@@ -42,6 +41,7 @@ const Index: React.FC = () => {
   });
 
   const [step, setStep] = useState(1);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const handleChange = (params: FormDataType) => {
     setFormData({ ...formData, ...params });
@@ -126,12 +126,26 @@ const Index: React.FC = () => {
     });
   };
 
+  async function handleSsoLogin(accessToken: string) {
+    const user = await ssoLogin(accessToken);
+    updateUser(user);
+    guard.handleLoginWithToken(accessToken, navigate);
+    setIsLoggingIn(false);
+  }
+
   useEffect(() => {
     const isInactive = searchParams.get('status');
 
     if (storeUser.id && (storeUser.mail_status === 2 || isInactive)) {
       setStep(2);
     }
+
+    const { hash } = window.location;
+    if (!hash.startsWith('#access_token=')) {
+      return;
+    }
+    setIsLoggingIn(true);
+    handleSsoLogin(hash.substring(14));
   }, []);
 
   usePageTags({
@@ -224,6 +238,20 @@ const Index: React.FC = () => {
               )}
             </>
           ) : null}
+          <div className="text-center mt-5">
+            <Link
+              className={`btn btn-primary btn-lg ${
+                isLoggingIn ? 'disabled' : ''
+              }`}
+              to={`https://www.dev.hackquest.io/auth/login?redirect_url=${window.location.origin}/users/login`}>
+              {isLoggingIn && (
+                <div className="spinner-border me-1" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
+              {t('Login via HackQuest')}
+            </Link>
+          </div>
         </Col>
       ) : null}
 
