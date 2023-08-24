@@ -12,7 +12,7 @@ backend:
     database_error:
       other: Erreur du serveur de données.
     forbidden_error:
-      other: Forbidden.
+      other: Interdit.
   action:
     report:
       other: Flag
@@ -25,7 +25,7 @@ backend:
     reopen:
       other: Rouvrir
     forbidden_error:
-      other: Forbidden.
+      other: Interdit.
     pin:
       other: Épingler
     hide:
@@ -35,7 +35,7 @@ backend:
     show:
       other: Liste
     invite_someone_to_answer:
-      other: Edit
+      other: Modifier
   role:
     name:
       user:
@@ -64,9 +64,9 @@ backend:
     rank_question_add_label:
       other: Ask question
     rank_answer_add_label:
-      other: Write answer
+      other: Écrire une réponse
     rank_comment_add_label:
-      other: Write comment
+      other: Ajouter un commentaire
     rank_report_add_label:
       other: Flag
     rank_comment_vote_up_label:
@@ -84,7 +84,7 @@ backend:
     rank_invite_someone_to_answer_label:
       other: Invite someone to answer
     rank_tag_add_label:
-      other: Create new tag
+      other: Créer une nouvelle étiquette
     rank_tag_edit_label:
       other: Edit tag description (need to review)
     rank_question_edit_label:
@@ -108,17 +108,17 @@ backend:
   email:
     other: Email
   e_mail:
-    other: Email
+    other: E-mail
   password:
     other: Mot de passe
   pass:
-    other: Password
+    other: Mot de passe
   email_or_password_wrong_error:
     other: L'email et le mot de passe ne correspondent pas.
   error:
     password:
       space_invalid:
-        other: Password cannot contain spaces.
+        other: Le mot de passe ne doit pas comporter d'espaces.
     admin:
       cannot_update_their_password:
         other: Vous ne pouvez pas modifier votre mot de passe.
@@ -186,7 +186,7 @@ backend:
         other: Pas de permission pour mettre à jour.
     rank:
       fail_to_meet_the_condition:
-        other: Le rang ne remplit pas la condition.
+        other: Reputation rank fail to meet the condition.
       vote_fail_to_meet_the_condition:
         other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
       no_enough_rank_to_operate:
@@ -202,7 +202,7 @@ backend:
       not_found:
         other: Tag non trouvé.
       recommend_tag_not_found:
-        other: Le tag de recommandation n'existe pas.
+        other: Recommend tag is not exist.
       recommend_tag_enter:
         other: Veuillez saisir au moins un tag.
       not_contain_synonym_tags:
@@ -210,12 +210,12 @@ backend:
       cannot_update:
         other: Pas de permission pour mettre à jour.
       is_used_cannot_delete:
-        other: Vous ne pouvez pas supprimer un tag utilisé
+        other: You cannot delete a tag that is in use.
       cannot_set_synonym_as_itself:
         other: Vous ne pouvez pas définir le synonyme de la balise actuelle comme elle-même.
     smtp:
       config_from_name_cannot_be_email:
-        other: Le nom d'expéditeur ne peut pas être une adresse e-mail.
+        other: The from name cannot be a email address.
     theme:
       not_found:
         other: Thème non trouvé.
@@ -223,7 +223,7 @@ backend:
       review_underway:
         other: Impossible d'éditer actuellement, il y a une version dans la file d'attente des revues.
       no_permission:
-        other: Vous n'êtes pas autorisé à Vérifier.
+        other: No permission to revise.
     user:
       external_login_missing_user_id:
         other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
@@ -245,11 +245,15 @@ backend:
       cannot_update_your_role:
         other: Vous ne pouvez pas modifier votre rôle.
       not_allowed_registration:
-        other: Actuellement, le site n'est pas ouvert aux inscriptions
+        other: Currently the site is not open for registration.
       access_denied:
-        other: Access denied
+        other: Accès refusé
       page_access_denied:
         other: You do not have access to this page.
+      add_bulk_users_format_error:
+        other: "Error {{.Field}} format near '{{.Content}}' at line {{.Line}}. {{.ExtraMessage}}"
+      add_bulk_users_amount_error:
+        other: "The number of users you add at once should be in the range of 1-{{.MaxAmount}}."
     config:
       read_config_failed:
         other: La lecture de la configuration a échoué
@@ -266,7 +270,7 @@ backend:
         other: Format de fichier non supporté.
     site_info:
       config_not_found:
-        other: Site config not found.
+        other: Configuration du site introuvable.
   reason:
     spam:
       name:
@@ -275,24 +279,24 @@ backend:
         other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
     rude_or_abusive:
       name:
-        other: rude or abusive
+        other: grossier ou abusif
       desc:
         other: A reasonable person would find this content inappropriate for respectful discourse.
     a_duplicate:
       name:
-        other: a duplicate
+        other: un doublon
       desc:
-        other: This question has been asked before and already has an answer.
+        other: Cette question a déjà été posée et a déjà une réponse.
       placeholder:
         other: Enter the existing question link
     not_a_answer:
       name:
-        other: not an answer
+        other: n'est pas une réponse
       desc:
         other: This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether.
     no_longer_needed:
       name:
-        other: no longer needed
+        other: n’est plus nécessaire
       desc:
         other: This comment is outdated, conversational or not relevant to this post.
     something:
@@ -306,7 +310,7 @@ backend:
       name:
         other: a community-specific reason
       desc:
-        other: This question doesn’t meet a community guideline.
+        other: This question doesn't meet a community guideline.
     not_clarity:
       name:
         other: needs details or clarity
@@ -314,7 +318,7 @@ backend:
         other: This question currently includes multiple questions in one. It should focus on one problem only.
     looks_ok:
       name:
-        other: looks ok
+        other: looks OK
       desc:
         other: This post is good as-is and not low quality.
     needs_edit:
@@ -326,12 +330,12 @@ backend:
       name:
         other: needs close
       desc:
-        other: A closed question can’t answer, but still can edit, vote and comment.
+        other: A closed question can't answer, but still can edit, vote and comment.
     needs_delete:
       name:
         other: needs delete
       desc:
-        other: This post will be deleted.
+        other: Ce message sera supprimé.
   question:
     close:
       duplicate:
@@ -362,7 +366,7 @@ backend:
       modified:
         other: modifié
     deleted_title:
-      other: Deleted question
+      other: Question supprimée
   notification:
     action:
       update_question:
@@ -400,38 +404,43 @@ backend:
       up_voted_comment:
         other: upvoted comment
       invited_you_to_answer:
-        other: invited you to answer
+        other: vous invite à répondre
   email_tpl:
     change_email:
       title:
-        other: "[{{.SiteName}}] Confirm your new email address"
+        other: "[{{.SiteName}}] Confirmez votre nouvelle adresse e-mail"
       body:
-        other: "Confirm your new email address for {{.SiteName}}  by clicking on the following link:<br><br>\n\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
+        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} answered your question"
       body:
-        other: "<strong><a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} invited you to answer"
       body:
-        other: "<strong><a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_comment:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} commented on your post"
       body:
-        other: "<strong><a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+    new_question:
+      title:
+        other: "[{{.SiteName}}] New question: {{.QuestionTitle}}"
+      body:
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     pass_reset:
       title:
         other: "[{{.SiteName }}] Password reset"
       body:
-        other: "Somebody asked to reset your password on [{{.SiteName}}].<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
     register:
       title:
         other: "[{{.SiteName}}] Confirm your new account"
       body:
-        other: "Welcome to {{.SiteName}}<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
+        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
     test:
       title:
         other: "[{{.SiteName}}] Test Email"
@@ -508,7 +517,7 @@ ui:
     until_time: "Votre compte a été suspendu jusqu'au {{ time }}."
     forever: Cet utilisateur a été suspendu pour toujours.
     end: Vous ne respectez pas les directives de la communauté.
-    contact_us: Contact us
+    contact_us: Contactez-nous
   editor:
     blockquote:
       text: Bloc de citation
@@ -555,7 +564,7 @@ ui:
     help:
       text: Aide
     hr:
-      text: Ligne horizontale
+      text: Horizontal rule
     image:
       text: Image
       add_image: Ajouter une image
@@ -563,7 +572,7 @@ ui:
       form_image:
         fields:
           file:
-            label: Fichier image
+            label: Image file
             btn: Sélectionner une image
             msg:
               empty: Le fichier ne doit pas être vide.
@@ -603,9 +612,9 @@ ui:
       btn_cancel: Annuler
       btn_confirm: Ajouter
     ordered_list:
-      text: Liste numérotée
+      text: Numbered list
     unordered_list:
-      text: Liste à puces
+      text: Bulleted list
     table:
       text: Tableau
       heading: Titre
@@ -635,12 +644,12 @@ ui:
     form:
       fields:
         display_name:
-          label: Nom d'affichage
+          label: Display name
           msg:
             empty: Le nom d'affichage ne peut être vide.
             range: Le nom doit contenir moins de 35 caractères.
         slug_name:
-          label: URL simplifiée
+          label: URL slug
           desc: Titre de 35 caractères maximum.
           msg:
             empty: L'URL ne peut pas être vide.
@@ -679,14 +688,14 @@ ui:
         revision:
           label: Révision
         display_name:
-          label: Nom d'affichage
+          label: Display name
         slug_name:
-          label: Slug de l'URL
+          label: URL slug
           info: 'Doit utiliser le jeu de caractères "a-z", "0-9", "+ # - ."'
         desc:
           label: Description
         edit_summary:
-          label: Modifier le résumé
+          label: Edit summary
           placeholder: >-
             Expliquez brièvement vos changements (correction orthographique, correction grammaticale, mise en forme améliorée)
     btn_save_edits: Enregistrer les modifications
@@ -715,7 +724,7 @@ ui:
       Utilisez les commentaires pour demander plus d'informations ou suggérer des améliorations. Évitez de répondre aux questions dans les commentaires.
     tip_answer: >-
       Utilisez des commentaires pour répondre à d'autres utilisateurs ou leur signaler des modifications. Si vous ajoutez de nouvelles informations, modifiez votre message au lieu de commenter.
-    tip_vote: It is useful
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: Modifier la réponse
     default_reason: Modifier la réponse
@@ -728,7 +737,7 @@ ui:
           feedback:
             characters: le contenu doit comporter au moins 6 caractères.
         edit_summary:
-          label: Modifier le résumé
+          label: Edit summary
           placeholder: >-
             Expliquez brièvement vos changements (correction orthographique, correction grammaticale, mise en forme améliorée)
     btn_save_edits: Enregistrer les modifications
@@ -738,7 +747,7 @@ ui:
     sort_buttons:
       popular: Populaire
       name: Nom
-      newest: les plus récents
+      newest: Newest
     button_follow: Suivre
     button_following: Abonnements
     tag_label: questions
@@ -773,7 +782,7 @@ ui:
           msg:
             empty: La réponse ne peut être vide.
         edit_summary:
-          label: Modifier le résumé
+          label: Edit summary
           placeholder: >-
             Expliquez brièvement vos changements (correction orthographique, correction grammaticale, mise en forme améliorée)
     btn_post_question: Publier votre question
@@ -797,8 +806,8 @@ ui:
       logout: Se déconnecter
       admin: Administration
       review: Vérifier
-      bookmark: Bookmarks
-      moderation: Moderation
+      bookmark: Favoris
+      moderation: Modération
     search:
       placeholder: Rechercher
   footer:
@@ -861,7 +870,7 @@ ui:
     send_success: >-
       Si un compte est associé à <strong>{{mail}}</strong>, vous recevrez un email contenant les instructions pour réinitialiser votre mot de passe.
     email:
-      label: Nouvel e-mail
+      label: New email
       msg:
         empty: L'email ne peut pas être vide.
   oauth:
@@ -893,10 +902,10 @@ ui:
         length: La longueur doit être comprise entre 8 et 32
         different: Les mots de passe saisis ne sont pas identiques
     password_confirm:
-      label: Confirmer le nouveau mot de passe
+      label: Confirm new password
   settings:
     page_title: Paramètres
-    goto_modify: Go to Modify
+    goto_modify: Go to modify
     nav:
       profile: Profil
       notification: Notifications
@@ -906,7 +915,7 @@ ui:
       heading: Profil
       btn_name: Enregistrer
       display_name:
-        label: Nom affiché
+        label: Display name
         msg: Le nom ne peut être vide.
         msg_range: Le nom doit contenir moins de 30 caractères.
       username:
@@ -916,7 +925,7 @@ ui:
         msg_range: Le nom d'utilisateur doit contenir moins de 30 caractères.
         character: 'Doit utiliser seulement les caractères "a-z", "0-9", " - . _"'
       avatar:
-        label: Image de profil
+        label: Profile image
         gravatar: Gravatar
         gravatar_text: You can change image on
         custom: Personnaliser
@@ -924,7 +933,7 @@ ui:
         default: Système
         msg: Veuillez charger un avatar
       bio:
-        label: À propos de moi
+        label: About me
       website:
         label: Site Web
         placeholder: "https://example.com"
@@ -934,9 +943,16 @@ ui:
         placeholder: "Ville, Pays"
     notification:
       heading: Notifications
-      email:
-        label: Notifications par email
-        radio: "Réponses à vos questions, commentaires et plus"
+      email: Email
+      inbox:
+        label: Email notifications
+        description: Answers to your questions, comments, invites, and more.
+      all_new_question:
+        label: All new questions
+        description: Get notified of all new questions. Up to 50 questions per week.
+      all_new_question_for_following_tags:
+        label: All new questions for following tags
+        description: Get notified of new questions for following tags.
     account:
       heading: Compte
       change_email_btn: Modifier l'adresse e-mail
@@ -944,31 +960,31 @@ ui:
       change_email_info: >-
         Nous vous avons envoyé un mail à cette adresse. Merci de suivre les instructions.
       email:
-        label: New Email
-        msg: New Email cannot be empty.
+        label: New email
+        msg: New email cannot be empty.
       pass:
-        label: Current Password
+        label: Current password
         msg: Password cannot be empty.
       password_title: Mot de passe
       current_pass:
-        label: Mot de passe actuel
+        label: Current password
         msg:
-          empty: Le mot de passe actuel ne peut pas être vide.
+          empty: Current password cannot be empty.
           length: La longueur doit être comprise entre 8 et 32.
           different: Le mot de passe saisi ne correspond pas.
       new_pass:
-        label: Nouveau mot de passe
+        label: New password
       pass_confirm:
-        label: Confirmer le nouveau mot de passe
+        label: Confirm new password
     interface:
       heading: Interface
       lang:
-        label: Langue de l'interface
+        label: Interface language
         text: Langue de l'interface utilisateur. Cela changera lorsque vous rafraîchissez la page.
     my_logins:
-      title: My Logins
+      title: My logins
       label: Log in or sign up on this site using these accounts.
-      modal_title: Remove Login
+      modal_title: Remove login
       modal_content: Are you sure you want to remove this login from your account?
       modal_confirm_btn: Remove
       remove_success: Removed successfully
@@ -983,7 +999,7 @@ ui:
     title: Questions liées
     answers: réponses
   invite_to_answer:
-    title: People asked
+    title: People Asked
     desc: Invite people who you think might know the answer.
     invite: Invite to answer
     add: Add people
@@ -1097,7 +1113,7 @@ ui:
     copied: Copié
     facebook: Partager sur Facebook
     twitter: Partager sur Twitter
-  cannot_vote_for_self: Vous ne pouvez pas voter pour votre propre message
+  cannot_vote_for_self: You can't vote for your own post.
   modal_confirm:
     title: Erreur...
   account_result:
@@ -1147,7 +1163,7 @@ ui:
     votes: Votes
     newest: Les plus récents
     score: Score
-    edit_profile: Modifier votre profil
+    edit_profile: Edit profile
     visited_x_days: "Visité {{ count }} jours"
     viewed: Vu
     joined: Inscrit
@@ -1162,7 +1178,7 @@ ui:
     answered: a répondu
     asked: a demandé
     downvoted: downvoted
-    mod_short: Modérateurs
+    mod_short: MOD
     mod_long: Modérateurs
     x_reputation: réputation
     x_votes: votes reçus
@@ -1174,9 +1190,9 @@ ui:
     done: Terminé
     config_yaml_error: Impossible de créer le fichier config.yaml.
     lang:
-      label: Veuillez choisir une langue
+      label: Please choose a language
     db_type:
-      label: Type de base de données
+      label: Database engine
     db_username:
       label: Nom d'utilisateur
       placeholder: root
@@ -1186,17 +1202,17 @@ ui:
       placeholder: root
       msg: Le mot de passe ne peut pas être vide.
     db_host:
-      label: Hôte de base de données
+      label: Database host
       placeholder: "db:3306"
-      msg: L'hôte de la base de données ne peut pas être vide.
+      msg: Database host cannot be empty.
     db_name:
-      label: Nom de la base de donnée
+      label: Database name
       placeholder: réponse
-      msg: Le nom de la base de données ne peut pas être vide.
+      msg: Database name cannot be empty.
     db_file:
-      label: Fichier de la base de données
+      label: Database file
       placeholder: /data/answer.db
-      msg: Le fichier ne doit pas être vide.
+      msg: Database file cannot be empty.
     config_yaml:
       title: Créer config.yaml
       label: Le fichier config.yaml a été créé.
@@ -1206,8 +1222,8 @@ ui:
     site_information: Informations du site
     admin_account: Compte Admin
     site_name:
-      label: Nom du site
-      msg: Le nom ne peut pas être vide.
+      label: Site name
+      msg: Site name cannot be empty.
     site_url:
       label: URL du site
       text: L'adresse de ce site.
@@ -1215,11 +1231,15 @@ ui:
         empty: L'URL ne peut pas être vide.
         incorrect: Le format de l'URL est incorrect.
     contact_email:
-      label: Email du contact
+      label: Contact email
       text: L'adresse email du responsable du site.
       msg:
-        empty: L'adresse email ne peut pas être vide.
-        incorrect: Le format de l'adresse email du contact est incorrect.
+        empty: Contact email cannot be empty.
+        incorrect: Contact email incorrect format.
+    login_required:
+      label: Private
+      switch: Login required
+      text: Only logged in users can access this community.
     admin_name:
       label: Nom
       msg: Le nom ne peut pas être vide.
@@ -1235,7 +1255,7 @@ ui:
       msg:
         empty: L'email ne peut pas être vide.
         incorrect: Le format de l'email est incorrect.
-    ready_title: Votre Réponse est prête !
+    ready_title: Your Answer is ready!
     ready_desc: >-
       Si vous avez envie de changer plus de paramètres, visitez la <1>section admin</1>; retrouvez la dans le menu du site.
     good_luck: "Amusez-vous et bonne chance !"
@@ -1248,7 +1268,7 @@ ui:
       Il semble que se soit déjà installer. Pour tout réinstaller, veuillez d'abord nettoyer votre ancienne base de données.
     db_failed: La connexion à la base de données a échoué
     db_failed_desc: >-
-      Il semble que les informations de la base de données présentes dans le fichier <1>config.yaml</1> soient incorrects ou que le contact avec le serveur ne puisse pas être établi. Cela peut vouloir dire que l'hôte de la base de données soit non opérationnel.
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
   counts:
     views: vues
     votes: votes
@@ -1256,7 +1276,7 @@ ui:
     accepted: Accepté
   page_error:
     http_error: Erreur HTTP {{ code }}
-    desc_403: Vous n'avez pas la permission d'accéder à cette page.
+    desc_403: You don't have permission to access this page.
     desc_404: Malheureusement, cette page n'existe pas.
     desc_50X: Le serveur a rencontré une erreur et n'a pas pu répondre à votre requête.
     back_home: Retour à la page d'accueil
@@ -1286,7 +1306,7 @@ ui:
     privileges: Privileges
     plugins: Plugins
     installed_plugins: Installed Plugins
-  website_welcome: Welcome to {{site_name}}
+  website_welcome: Bienvenue sur {{site_name}}
   user_center:
     login: Login
     qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
@@ -1383,9 +1403,14 @@ ui:
       title: Add new user
       form:
         fields:
+          users:
+            label: Bulk add user
+            placeholder: "John Smith, john@example.com, BUSYopr2\nAlice, alice@example.com, fpDntV8q"
+            text: Separate “name, email, password” with commas. One user per line.
+            msg: "Please enter the user's email, one per line."
           display_name:
-            label: Display Name
-            msg: Display Name must be at 4-30 characters in length.
+            label: Display name
+            msg: Display name must be at 4-30 characters in length.
           email:
             label: Email
             msg: Email is not valid.
@@ -1452,7 +1477,7 @@ ui:
     general:
       page_title: Général
       name:
-        label: Nom du site
+        label: Site name
         msg: Le nom ne peut pas être vide.
         text: "Le nom de ce site, tel qu'il est utilisé dans la balise titre."
       site_url:
@@ -1461,22 +1486,22 @@ ui:
         validate: Indiquez une URL valide.
         text: L'adresse de ce site.
       short_desc:
-        label: Description Courte
+        label: Short site description
         msg: La description courte ne peut pas être vide.
         text: "La description courte, telle qu'elle est utilisée dans le tag titre de la page d'accueil."
       desc:
-        label: Description du Site
+        label: Site description
         msg: La description du site ne peut pas être vide.
         text: "Décrivez ce site en une phrase, telle qu'elle est utilisée dans la balise meta description."
       contact_email:
-        label: Email de contact
+        label: Contact email
         msg: L'email de contact ne peut pas être vide.
         validate: L'email de contact n'est pas valide.
         text: L'adresse email du responsable du site.
     interface:
       page_title: Interface
       language:
-        label: Langue de l'interface
+        label: Interface language
         msg: La langue de l'interface ne peut pas être vide.
         text: Langue de l'interface de l'utilisateur. Cela changera lorsque vous rafraîchissez la page.
       time_zone:
@@ -1486,15 +1511,15 @@ ui:
     smtp:
       page_title: SMTP
       from_email:
-        label: Email expéditeur
+        label: From email
         msg: L'email expéditeur ne peut pas être vide.
         text: L'adresse email à partir de laquelle les emails sont envoyés.
       from_name:
-        label: Nom expéditeur
+        label: From name
         msg: Le nom expéditeur ne peut pas être vide.
         text: Le nom d'expéditeur à partir duquel les emails sont envoyés.
       smtp_host:
-        label: Hôte SMTP
+        label: SMTP host
         msg: Le'hôte SMTP ne peut pas être vide.
         text: Votre serveur de mail.
       encryption:
@@ -1504,22 +1529,22 @@ ui:
         ssl: SSL
         none: Aucun
       smtp_port:
-        label: Port SMTP
+        label: SMTP port
         msg: Le port SMTP doit être compris entre 1 et 65535.
         text: Le port vers votre serveur d'email.
       smtp_username:
-        label: Nom d'utilisateur SMTP
+        label: SMTP username
         msg: Le nom d'utilisateur SMTP ne peut pas être vide.
       smtp_password:
-        label: Mot de passe SMTP
+        label: SMTP password
         msg: Le mot de passe SMTP ne peut être vide.
       test_email_recipient:
-        label: Destinataires de l'email de test
+        label: Test email recipients
         text: Indiquez l'adresse email qui recevra l'email de test.
         msg: Le destinataire de l'email de test est invalide
       smtp_authentication:
         label: Activer l'authentification
-        title: Authentification SMTP
+        title: SMTP authentication
         msg: L'authentification SMTP ne peut pas être vide.
         "yes": "Oui"
         "no": "Non"
@@ -1530,10 +1555,10 @@ ui:
         msg: Le logo ne peut pas être vide.
         text: L'image du logo en haut à gauche de votre site. Utilisez une grande image rectangulaire avec une hauteur de 56 et un ratio d'aspect supérieur à 3:1. Si laissé vide, le titre du site sera affiché.
       mobile_logo:
-        label: Logo Mobile
+        label: Mobile logo
         text: Le logo utilisé sur la version mobile de votre site. Utilisez une image rectangulaire large avec une hauteur de 56. Si laissé vide, l'image du paramètre « logo » sera utilisée.
       square_icon:
-        label: Icône carrée
+        label: Square icon
         msg: L'icône carrée ne peut pas être vide.
         text: Image utilisée comme base pour les icônes de métadonnées. Idéalement supérieure à 512x512.
       favicon:
@@ -1542,22 +1567,22 @@ ui:
     legal:
       page_title: Légal
       terms_of_service:
-        label: Conditions d'utilisation
+        label: Terms of service
         text: "Vous pouvez ajouter le contenu des conditions de service ici. Si vous avez déjà un document hébergé ailleurs, veuillez fournir l'URL complète ici."
       privacy_policy:
-        label: Politique de Confidentialité
+        label: Privacy policy
         text: "Vous pouvez ajouter le contenu des conditions de service ici. Si vous avez déjà un document hébergé ailleurs, veuillez fournir l'URL complète ici."
     write:
       page_title: Écrire
       recommend_tags:
-        label: Tags recommandés
+        label: Recommend tags
         text: "Veuillez entrer le slug du tag ci-dessus, un tag par ligne."
       required_tag:
-        title: Tag requis
+        title: Required tag
         label: Définir le tag recommandé si cela est requis
         text: "Chaque nouvelle question doit avoir au moins un tag recommandé."
       reserved_tags:
-        label: Tags réservés
+        label: Reserved tags
         text: "Les tags réservés ne peuvent être ajoutés à un message que par un modérateur."
     seo:
       page_title: SEO
@@ -1614,6 +1639,7 @@ ui:
         text: Seuls les utilisateurs connectés peuvent accéder à cette communauté.
     installed_plugins:
       title: Installed Plugins
+      plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
       filter:
         all: All
         active: Active
@@ -1632,13 +1658,13 @@ ui:
     settings_users:
       title: Users
       avatar:
-        label: Default Avatar
+        label: Default avatar
         text: For users without a custom avatar of their own.
       gravatar_base_url:
-        label: Gravatar Base URL
-        text: URL of the Gravatar provider’s API base. Ignored when empty.
+        label: Gravatar base URL
+        text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
-        title: Profile Editable
+        title: Profile editable
       allow_update_display_name:
         label: Allow users to change their display name
       allow_update_username:
