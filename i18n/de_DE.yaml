@@ -186,7 +186,7 @@ backend:
         other: Keine Berechtigung zum Aktualisieren.
     rank:
       fail_to_meet_the_condition:
-        other: Rang erfüllt die Bedingung nicht.
+        other: Reputation rank fail to meet the condition.
       vote_fail_to_meet_the_condition:
         other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
       no_enough_rank_to_operate:
@@ -202,7 +202,7 @@ backend:
       not_found:
         other: Tag nicht gefunden.
       recommend_tag_not_found:
-        other: Empfehlungs-Tag ist nicht vorhanden.
+        other: Recommend tag is not exist.
       recommend_tag_enter:
         other: Bitte geben Sie mindestens ein erforderliches Tag ein.
       not_contain_synonym_tags:
@@ -210,12 +210,12 @@ backend:
       cannot_update:
         other: Keine Berechtigung zum Aktualisieren.
       is_used_cannot_delete:
-        other: Sie können kein Schlagwort löschen, das verwendet wird
+        other: You cannot delete a tag that is in use.
       cannot_set_synonym_as_itself:
         other: Sie können das Synonym des aktuellen Tags nicht als sich selbst festlegen.
     smtp:
       config_from_name_cannot_be_email:
-        other: Der Absendername kann keine E-Mail-Adresse sein.
+        other: The from name cannot be a email address.
     theme:
       not_found:
         other: Design nicht gefunden.
@@ -223,7 +223,7 @@ backend:
       review_underway:
         other: Kann momentan nicht bearbeiten, es gibt eine Version in der Warteschlange.
       no_permission:
-        other: Keine Berechtigung zum Revision.
+        other: No permission to revise.
     user:
       external_login_missing_user_id:
         other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
@@ -245,11 +245,15 @@ backend:
       cannot_update_your_role:
         other: Du kannst deine Rolle nicht ändern.
       not_allowed_registration:
-        other: Derzeit ist die Website nicht zur Registrierung geöffnet
+        other: Currently the site is not open for registration.
       access_denied:
         other: Access denied
       page_access_denied:
         other: You do not have access to this page.
+      add_bulk_users_format_error:
+        other: "Error {{.Field}} format near '{{.Content}}' at line {{.Line}}. {{.ExtraMessage}}"
+      add_bulk_users_amount_error:
+        other: "The number of users you add at once should be in the range of 1-{{.MaxAmount}}."
     config:
       read_config_failed:
         other: Lesekonfiguration fehlgeschlagen
@@ -306,7 +310,7 @@ backend:
       name:
         other: a community-specific reason
       desc:
-        other: This question doesn’t meet a community guideline.
+        other: This question doesn't meet a community guideline.
     not_clarity:
       name:
         other: needs details or clarity
@@ -314,7 +318,7 @@ backend:
         other: This question currently includes multiple questions in one. It should focus on one problem only.
     looks_ok:
       name:
-        other: looks ok
+        other: looks OK
       desc:
         other: This post is good as-is and not low quality.
     needs_edit:
@@ -326,7 +330,7 @@ backend:
       name:
         other: muss geschlossen werden
       desc:
-        other: A closed question can’t answer, but still can edit, vote and comment.
+        other: A closed question can't answer, but still can edit, vote and comment.
     needs_delete:
       name:
         other: needs delete
@@ -406,32 +410,37 @@ backend:
       title:
         other: "[{{.SiteName}}] Confirm your new email address"
       body:
-        other: "Confirm your new email address for {{.SiteName}}  by clicking on the following link:<br><br>\n\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
+        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} answered your question"
       body:
-        other: "<strong><a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} invited you to answer"
       body:
-        other: "<strong><a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_comment:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} commented on your post"
       body:
-        other: "<strong><a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+    new_question:
+      title:
+        other: "[{{.SiteName}}] New question: {{.QuestionTitle}}"
+      body:
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     pass_reset:
       title:
         other: "[{{.SiteName }}] Password reset"
       body:
-        other: "Somebody asked to reset your password on [{{.SiteName}}].<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
     register:
       title:
         other: "[{{.SiteName}}] Confirm your new account"
       body:
-        other: "Welcome to {{.SiteName}}<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
+        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
     test:
       title:
         other: "[{{.SiteName}}] Test Email"
@@ -555,7 +564,7 @@ ui:
     help:
       text: Hilfe
     hr:
-      text: Horizontaler Strich
+      text: Horizontal rule
     image:
       text: Bild
       add_image: Bild hinzufügen
@@ -563,7 +572,7 @@ ui:
       form_image:
         fields:
           file:
-            label: Bilddatei
+            label: Image file
             btn: Bild auswählen
             msg:
               empty: Datei darf nicht leer sein.
@@ -603,9 +612,9 @@ ui:
       btn_cancel: Abbrechen
       btn_confirm: Hinzufügen
     ordered_list:
-      text: Nummerierte Liste
+      text: Numbered list
     unordered_list:
-      text: Aufzählung
+      text: Bulleted list
     table:
       text: Tabelle
       heading: Überschrift
@@ -635,12 +644,12 @@ ui:
     form:
       fields:
         display_name:
-          label: Anzeigename
+          label: Display name
           msg:
             empty: Anzeigename darf nicht leer sein.
             range: Nennen Sie bis zu 35 Zeichen.
         slug_name:
-          label: URL-Kürzel
+          label: URL slug
           desc: 'Muss den Zeichensatz "a-z", "0-9", "+ # - " verwenden.'
           msg:
             empty: URL-Slug darf nicht leer sein.
@@ -679,14 +688,14 @@ ui:
         revision:
           label: Revision
         display_name:
-          label: Anzeigename
+          label: Display name
         slug_name:
-          label: URL-Slug
+          label: URL slug
           info: 'Muss den Zeichensatz "a-z", "0-9", "+ # - ." verwenden'
         desc:
           label: Beschreibung
         edit_summary:
-          label: Zusammenfassung bearbeiten
+          label: Edit summary
           placeholder: >-
             Erklären Sie kurz Ihre Änderungen (korrigierte Rechtschreibung, feste Grammatik, verbesserte Formatierung)
     btn_save_edits: Änderungen speichern
@@ -715,7 +724,7 @@ ui:
       Verwenden Sie Kommentare, um weitere Informationen anzufordern oder Verbesserungen vorzuschlagen. Vermeiden Sie die Beantwortung von Fragen in Kommentaren.
     tip_answer: >-
       Verwenden Sie Kommentare, um anderen Benutzern zu antworten oder sie über Änderungen zu informieren. Wenn Sie neue Informationen hinzufügen, bearbeiten Sie Ihren Beitrag, anstatt ihn zu kommentieren.
-    tip_vote: It is useful
+    tip_vote: It adds something useful to the post
   edit_answer:
     title: Antwort bearbeiten
     default_reason: Antwort bearbeiten
@@ -728,7 +737,7 @@ ui:
           feedback:
             characters: der Inhalt muss mindestens 6 Zeichen lang sein.
         edit_summary:
-          label: Zusammenfassung bearbeiten
+          label: Edit summary
           placeholder: >-
             Begründen Sie kurz Ihre Änderungen (korrigierte Rechtschreibung, korrigierte Grammatik, verbesserte Formatierung)
     btn_save_edits: Änderungen speichern
@@ -738,7 +747,7 @@ ui:
     sort_buttons:
       popular: Beliebt
       name: Name
-      newest: neueste
+      newest: Newest
     button_follow: Folgen
     button_following: Folgend
     tag_label: fragen
@@ -773,7 +782,7 @@ ui:
           msg:
             empty: Antwort darf nicht leer sein.
         edit_summary:
-          label: Zusammenfassung bearbeiten
+          label: Edit summary
           placeholder: >-
             Begründen Sie kurz Ihre Änderungen (korrigierte Rechtschreibung, korrigierte Grammatik, verbesserte Formatierung)
     btn_post_question: Poste deine Frage
@@ -861,7 +870,7 @@ ui:
     send_success: >-
       Wenn ein Konto mit <strong>{{mail}}</strong> übereinstimmt, sollten Sie in Kürze eine E-Mail mit Anweisungen zum Zurücksetzen Ihres Passworts erhalten.
     email:
-      label: Neue e-mail
+      label: New email
       msg:
         empty: E-Mail darf nicht leer sein.
   oauth:
@@ -893,10 +902,10 @@ ui:
         length: Die Länge muss zwischen 8 und 32 liegen
         different: Die auf beiden Seiten eingegebenen Passwörter sind inkonsistent
     password_confirm:
-      label: Bestätige neues Passwort
+      label: Confirm new password
   settings:
     page_title: Einstellungen
-    goto_modify: Go to Modify
+    goto_modify: Go to modify
     nav:
       profile: Profil
       notification: Benachrichtigungen
@@ -906,7 +915,7 @@ ui:
       heading: Profil
       btn_name: Speichern
       display_name:
-        label: Anzeigename
+        label: Display name
         msg: Anzeigename darf nicht leer sein.
         msg_range: Anzeigename bis zu 30 Zeichen.
       username:
@@ -916,7 +925,7 @@ ui:
         msg_range: Benutzername bis zu 30 Zeichen.
         character: 'Muss den Zeichensatz "a-z", "0-9", " - . _" verwenden'
       avatar:
-        label: Profilbild
+        label: Profile image
         gravatar: Gravatar
         gravatar_text: You can change image on
         custom: Benutzerdefiniert
@@ -924,7 +933,7 @@ ui:
         default: System
         msg: Bitte laden Sie einen Avatar hoch
       bio:
-        label: Über mich
+        label: About me
       website:
         label: Webseite
         placeholder: "https://example.com"
@@ -934,9 +943,16 @@ ui:
         placeholder: "Stadt, Land"
     notification:
       heading: Benachrichtigungen
-      email:
-        label: E-Mail-Benachrichtigungen
-        radio: "Antworten auf Ihre Fragen, Kommentare und mehr"
+      email: Email
+      inbox:
+        label: Email notifications
+        description: Answers to your questions, comments, invites, and more.
+      all_new_question:
+        label: All new questions
+        description: Get notified of all new questions. Up to 50 questions per week.
+      all_new_question_for_following_tags:
+        label: All new questions for following tags
+        description: Get notified of new questions for following tags.
     account:
       heading: Konto
       change_email_btn: E-Mail-Adresse ändern
@@ -944,31 +960,31 @@ ui:
       change_email_info: >-
         Wir haben eine E-Mail an diese Adresse gesendet. Bitte folgen Sie den Bestätigungsanweisungen.
       email:
-        label: New Email
-        msg: New Email cannot be empty.
+        label: New email
+        msg: New email cannot be empty.
       pass:
-        label: Current Password
+        label: Current password
         msg: Password cannot be empty.
       password_title: Passwort
       current_pass:
-        label: Aktuelles Passwort
+        label: Current password
         msg:
-          empty: Aktuelles Passwort darf nicht leer sein.
+          empty: Current password cannot be empty.
           length: Die Länge muss zwischen 8 und 32 liegen.
           different: Die beiden eingegebenen Passwörter stimmen nicht überein.
       new_pass:
-        label: Neues Passwort
+        label: New password
       pass_confirm:
-        label: Neues Passwort bestätigen
+        label: Confirm new password
     interface:
       heading: Schnittstelle
       lang:
-        label: Schnittstellensprache
+        label: Interface language
         text: Sprache der Benutzeroberfläche. Es ändert sich, wenn Sie die Seite aktualisieren.
     my_logins:
-      title: My Logins
+      title: My logins
       label: Log in or sign up on this site using these accounts.
-      modal_title: Remove Login
+      modal_title: Remove login
       modal_content: Are you sure you want to remove this login from your account?
       modal_confirm_btn: Remove
       remove_success: Removed successfully
@@ -983,7 +999,7 @@ ui:
     title: Verwandte Fragen
     answers: antworten
   invite_to_answer:
-    title: People asked
+    title: People Asked
     desc: Invite people who you think might know the answer.
     invite: Invite to answer
     add: Add people
@@ -1097,7 +1113,7 @@ ui:
     copied: Kopiert
     facebook: Auf Facebook teilen
     twitter: Auf Twitter teilen
-  cannot_vote_for_self: Du kannst nicht für deinen eigenen Beitrag stimmen
+  cannot_vote_for_self: You can't vote for your own post.
   modal_confirm:
     title: Fehler...
   account_result:
@@ -1147,7 +1163,7 @@ ui:
     votes: Stimmen
     newest: Neueste
     score: Punktzahl
-    edit_profile: Profil bearbeiten
+    edit_profile: Edit profile
     visited_x_days: "{{ count }} Tage besucht"
     viewed: Gesehen
     joined: Beigetreten
@@ -1162,7 +1178,7 @@ ui:
     answered: antwortete
     asked: fragte
     downvoted: downvoted
-    mod_short: Mod
+    mod_short: MOD
     mod_long: Moderatoren
     x_reputation: ruf
     x_votes: stimmen erhalten
@@ -1174,9 +1190,9 @@ ui:
     done: Erledigt
     config_yaml_error: Die Datei config.yaml kann nicht erstellt werden.
     lang:
-      label: Bitte wählen Sie eine Sprache
+      label: Please choose a language
     db_type:
-      label: Datenbank-Engine
+      label: Database engine
     db_username:
       label: Nutzername
       placeholder: wurzel
@@ -1186,17 +1202,17 @@ ui:
       placeholder: wurzel
       msg: Passwort kann nicht leer sein.
     db_host:
-      label: Datenbank-Host
+      label: Database host
       placeholder: "db:3306"
-      msg: Datenbankhost darf nicht leer sein.
+      msg: Database host cannot be empty.
     db_name:
-      label: Name der Datenbank
+      label: Database name
       placeholder: answer
-      msg: Der Datenbankname darf nicht leer sein.
+      msg: Database name cannot be empty.
     db_file:
-      label: Datenbankdatei
+      label: Database file
       placeholder: /data/answer.Weder noch
-      msg: Datenbankdatei darf nicht leer sein.
+      msg: Database file cannot be empty.
     config_yaml:
       title: Erstellen Sie config.yaml
       label: Die erstellte config.yaml-Datei.
@@ -1206,8 +1222,8 @@ ui:
     site_information: Standortinformationen
     admin_account: Administratorkonto
     site_name:
-      label: Seitenname
-      msg: Der Site-Name darf nicht leer sein.
+      label: Site name
+      msg: Site name cannot be empty.
     site_url:
       label: Seiten-URL
       text: Die Adresse Ihrer Website.
@@ -1215,11 +1231,15 @@ ui:
         empty: Die Website-URL darf nicht leer sein.
         incorrect: Falsches Format der Website-URL.
     contact_email:
-      label: Kontakt E-mail
+      label: Contact email
       text: E-Mail-Adresse des Hauptkontakts, der für diese Website verantwortlich ist.
       msg:
         empty: Contact email cannot be empty.
-        incorrect: Kontakt-E-Mail falsches Format.
+        incorrect: Contact email incorrect format.
+    login_required:
+      label: Private
+      switch: Login required
+      text: Only logged in users can access this community.
     admin_name:
       label: Name
       msg: Der Name darf nicht leer sein.
@@ -1235,7 +1255,7 @@ ui:
       msg:
         empty: E-Mail darf nicht leer sein.
         incorrect: E-Mail falsches Format.
-    ready_title: Ihre Antwort ist fertig!
+    ready_title: Your Answer is ready!
     ready_desc: >-
       Wenn Sie jemals Lust haben, weitere Einstellungen zu ändern, besuchen Sie <1>Admin-Sektion</1>; finden Sie es im Seitenmenü.
     good_luck: "Viel Spaß und viel Glück!"
@@ -1248,7 +1268,7 @@ ui:
       Sie scheinen bereits installiert zu haben. Um eine Neuinstallation durchzuführen, löschen Sie bitte zuerst Ihre alten Datenbanktabellen.
     db_failed: Datenbankverbindung fehlgeschlagen
     db_failed_desc: >-
-      Dies bedeutet entweder, dass die Datenbankinformationen in der <1>Konfiguration enthalten sind. aml</1> Datei ist falsch oder der Kontakt mit dem Datenbankserver konnte nicht hergestellt werden. Dies könnte bedeuten, dass der Datenbankserver Ihres Hosts nicht erreichbar ist.
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
   counts:
     views: ansehen
     votes: stimmen
@@ -1256,7 +1276,7 @@ ui:
     accepted: Akzeptiert
   page_error:
     http_error: HTTP Fehler {{ code }}
-    desc_403: Sie haben keine Zugriffsberechtigung für diese Seite.
+    desc_403: You don't have permission to access this page.
     desc_404: Leider existiert diese Seite nicht.
     desc_50X: Der Server ist auf einen Fehler gestoßen und konnte Ihre Anfrage nicht abschließen.
     back_home: Zurück zur Startseite
@@ -1383,9 +1403,14 @@ ui:
       title: Add new user
       form:
         fields:
+          users:
+            label: Bulk add user
+            placeholder: "John Smith, john@example.com, BUSYopr2\nAlice, alice@example.com, fpDntV8q"
+            text: Separate “name, email, password” with commas. One user per line.
+            msg: "Please enter the user's email, one per line."
           display_name:
-            label: Display Name
-            msg: Display Name must be at 4-30 characters in length.
+            label: Display name
+            msg: Display name must be at 4-30 characters in length.
           email:
             label: Email
             msg: Email is not valid.
@@ -1452,7 +1477,7 @@ ui:
     general:
       page_title: Allgemein
       name:
-        label: Seitenname
+        label: Site name
         msg: Der Site-Name darf nicht leer sein.
         text: "Der Name dieser Website, wie er im Titel-Tag verwendet wird."
       site_url:
@@ -1461,22 +1486,22 @@ ui:
         validate: Bitte geben Sie eine gültige URL ein.
         text: Die Adresse Ihrer Website.
       short_desc:
-        label: Kurze Seitenbeschreibung
+        label: Short site description
         msg: Die kurze Website-Beschreibung darf nicht leer sein.
         text: "Kurze Beschreibung, wie im Titel-Tag auf der Homepage verwendet."
       desc:
-        label: Seitenbeschreibung
+        label: Site description
         msg: Die Websitebeschreibung darf nicht leer sein.
         text: "Beschreiben Sie diese Website in einem Satz, wie er im Meta-Beschreibungs-Tag verwendet wird."
       contact_email:
-        label: Kontakt E-mail
+        label: Contact email
         msg: Kontakt-E-Mail darf nicht leer sein.
         validate: Kontakt-E-Mail ist ungültig.
         text: E-Mail-Adresse des Hauptkontakts, der für diese Website verantwortlich ist.
     interface:
       page_title: Schnittstelle
       language:
-        label: Schnittstellensprache
+        label: Interface language
         msg: Sprache der Benutzeroberfläche darf nicht leer sein.
         text: Sprache der Benutzeroberfläche. Sie ändert sich, wenn Sie die Seite aktualisieren.
       time_zone:
@@ -1486,15 +1511,15 @@ ui:
     smtp:
       page_title: SMTP
       from_email:
-        label: Absender-E-Mail
+        label: From email
         msg: Von E-Mail darf nicht leer sein.
         text: Die E-Mail-Adresse, von der E-Mails gesendet werden.
       from_name:
-        label: Von Namen
+        label: From name
         msg: Absendername darf nicht leer sein.
         text: Der Name, von dem E-Mails gesendet werden.
       smtp_host:
-        label: SMTP-Host
+        label: SMTP host
         msg: Der SMTP-Host darf nicht leer sein.
         text: Ihr Mailserver.
       encryption:
@@ -1504,22 +1529,22 @@ ui:
         ssl: SSL
         none: Keine
       smtp_port:
-        label: SMTP-Port
+        label: SMTP port
         msg: SMTP-Port muss Nummer 1 ~ 65535 sein.
         text: Der Port zu Ihrem Mailserver.
       smtp_username:
-        label: SMTP-Benutzername
+        label: SMTP username
         msg: Der SMTP-Benutzername darf nicht leer sein.
       smtp_password:
-        label: SMTP-Passwort
+        label: SMTP password
         msg: Das SMTP-Passwort darf nicht leer sein.
       test_email_recipient:
-        label: E-Mail-Empfänger testen
+        label: Test email recipients
         text: Geben Sie eine E-Mail-Adresse an, die Testsendungen erhalten soll.
         msg: Test-E-Mail-Empfänger ist ungültig
       smtp_authentication:
         label: Authentifizierung aktivieren
-        title: SMTP-Authentifizierung
+        title: SMTP authentication
         msg: Die SMTP-Authentifizierung darf nicht leer sein.
         "yes": "Ja"
         "no": "Nein"
@@ -1530,10 +1555,10 @@ ui:
         msg: Logo darf nicht leer sein.
         text: Das Logobild oben links auf Ihrer Website. Verwenden Sie ein breites rechteckiges Bild mit einer Höhe von 56 und einem Seitenverhältnis von mehr als 3:1. Wenn das Feld leer gelassen wird, wird der Seitentiteltext angezeigt.
       mobile_logo:
-        label: Handy-Logo
+        label: Mobile logo
         text: Das Logo, das auf der mobilen Version Ihrer Website verwendet wird. Verwenden Sie ein breites rechteckiges Bild mit einer Höhe von 56. Wenn Sie dieses Feld leer lassen, wird das Bild aus der Einstellung "Logo" verwendet.
       square_icon:
-        label: Quadratisches Symbol
+        label: Square icon
         msg: Quadratisches Symbol darf nicht leer sein.
         text: Bild, das als Basis für Metadatensymbole verwendet wird. Sollte idealerweise größer als 512x512 sein.
       favicon:
@@ -1542,22 +1567,22 @@ ui:
     legal:
       page_title: Gesetzlich
       terms_of_service:
-        label: Nutzungsbedingungen
+        label: Terms of service
         text: "Hier können Sie Inhalt der Nutzungsbedingungen hinzufügen. Wenn Sie bereits ein Dokument haben, das woanders gehostet wird, geben Sie hier die vollständige URL an."
       privacy_policy:
-        label: Datenschutz-Bestimmungen
+        label: Privacy policy
         text: "Hier können Sie Inhalte zur Datenschutzrichtlinie hinzufügen. Wenn Sie bereits ein Dokument haben, das woanders gehostet wird, geben Sie hier die vollständige URL an."
     write:
       page_title: Schreiben
       recommend_tags:
-        label: Tags empfehlen
+        label: Recommend tags
         text: "Bitte geben Sie den Tag-Slug oben ein, ein Tag pro Zeile."
       required_tag:
-        title: Erforderliches Tag
+        title: Required tag
         label: Legen Sie das Empfehlungs-Tag nach Bedarf fest
         text: "Jede neue Frage muss mindestens ein Empfehlungs-Tag haben."
       reserved_tags:
-        label: Reservierte Tags
+        label: Reserved tags
         text: "Reservierte Tags können nur vom Moderator zu einem Beitrag hinzugefügt werden."
     seo:
       page_title: SEO
@@ -1614,6 +1639,7 @@ ui:
         text: Nur angemeldete Benutzer können auf diese Community zugreifen.
     installed_plugins:
       title: Installed Plugins
+      plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
       filter:
         all: All
         active: Active
@@ -1632,13 +1658,13 @@ ui:
     settings_users:
       title: Users
       avatar:
-        label: Default Avatar
+        label: Default avatar
         text: For users without a custom avatar of their own.
       gravatar_base_url:
-        label: Gravatar Base URL
-        text: URL of the Gravatar provider’s API base. Ignored when empty.
+        label: Gravatar base URL
+        text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
-        title: Profile Editable
+        title: Profile editable
       allow_update_display_name:
         label: Allow users to change their display name
       allow_update_username:
