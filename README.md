@@ -2,9 +2,9 @@
     <img alt="logo" src="docs/img/logo.svg" height="99px">
 </a>
 
-# Answer - Build Q&A community
+# Answer - Build Q&A platform
 
-An open-source knowledge-based community software. You can use it to quickly build your Q&A community for product technical support, customer support, user communication, and more.
+A Q&A platform software for teams at any scales. Whether it’s a community forum, help center, or knowledge management platform, you can always count on Answer.
 
 To learn more about the project, visit [answer.dev](https://answer.dev).
 
@@ -27,6 +27,15 @@ docker run -d -p 9080:80 -v answer-data:/data --name answer answerdev/answer:lat
 ```
 
 For more information, see [Installation](https://answer.dev/docs/installation)
+
+### Plugins
+
+Answer provides a plugin system for developers to create custom plugins and expand Answer’s features. You can find the [plugin documentation here](https://answer.dev/docs/development/extending/).
+
+We value your feedback and suggestions to improve our documentation. If you have any comments or questions, please feel free to contact us. We’re excited to see what you can create using our plugin system!
+
+You can also check out the [officially supported plugins here](https://github.com/answerdev/plugins).
+
 
 ## Contributing
 
