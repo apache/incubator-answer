@@ -202,7 +202,7 @@ backend:
       not_found:
         other: 标签未找到。
       recommend_tag_not_found:
-        other: 推荐的标签不存在。
+        other: 推荐标签不存在。
       recommend_tag_enter:
         other: 请选择至少一个必选标签。
       not_contain_synonym_tags:
@@ -223,7 +223,7 @@ backend:
       review_underway:
         other: 目前无法编辑，有一个版本在审阅队列中。
       no_permission:
-        other: 无权限修改
+        other: 无权限修改。
     user:
       external_login_missing_user_id:
         other: 第三方平台没有提供唯一的用户ID，所以您不能登录，请联系网站管理员。
@@ -250,6 +250,10 @@ backend:
         other: 拒绝访问
       page_access_denied:
         other: 您没有权限访问此页面。
+      add_bulk_users_format_error:
+        other: "发生错误，{{.Field}} 格式错误，在 '{{.Content}}' 行数：{{.Line}}. {{.ExtraMessage}}"
+      add_bulk_users_amount_error:
+        other: "一次性添加的用户数量应在 1-{{.MaxAmount}} 之间。"
     config:
       read_config_failed:
         other: 读取配置失败
@@ -314,7 +318,7 @@ backend:
         other: 该问题目前涵盖多个问题。它应该侧重在一个问题上。
     looks_ok:
       name:
-        other: 看起来还好
+        other: 看起来没问题
       desc:
         other: 这个帖子是好的，不是低质量。
     needs_edit:
@@ -406,22 +410,27 @@ backend:
       title:
         other: "[{{.SiteName}}] 确认你的新邮箱地址"
       body:
-        other: "请点击以下链接确认你在 {{.SiteName}} 上的新邮箱地址：<br><br>\n\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\n如果你没有请求此更改，请忽略此邮件。\n\n"
+        other: "请点击以下链接确认你在 {{.SiteName}} 上的新邮箱地址：<br><br>\\n\\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\\n\\n如果你没有请求此更改，请忽略此邮件。\\n"
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} 回答了您的问题"
       body:
-        other: "<strong><a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\\n\\n<small>{{.DisplayName}}:</small><br>\\n<blockquote>{{.AnswerSummary}}</blockquote><br>\\n<a href='{{.AnswerUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\\n\\n<small>您会收到此邮件是因为您开启了订阅。<a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
+        other: "<strong><a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\\n\\n<small>{{.DisplayName}}:</small><br>\\n<blockquote>{{.AnswerSummary}}</blockquote><br>\\n<a href='{{.AnswerUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\\n\\n<small><a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} 邀请您回答问题"
       body:
-        other: "<strong><a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\\n\\n<small>{{.DisplayName}}:</small><br>\\n<blockquote>我想你可能知道答案。</blockquote><br>\\n<a href='{{.InviteUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\\n\\n<small>您会收到此邮件是因为您开启了订阅. <a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
+        other: "<strong><a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\\n\\n<small>{{.DisplayName}}:</small><br>\\n<blockquote>我想你可能知道答案。</blockquote><br>\\n<a href='{{.InviteUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\\n\\n<small> <a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
     new_comment:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} 评论了您的帖子"
       body:
-        other: "<strong><a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\\n\\n<small>{{.DisplayName}}:</small><br>\\n<blockquote>{{.CommentSummary}}</blockquote><br>\\n<a href='{{.CommentUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\\n\\n<small>您会收到此邮件是因为您开启了订阅。<a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
+        other: "<strong><a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\\n\\n<small>{{.DisplayName}}:</small><br>\\n<blockquote>{{.CommentSummary}}</blockquote><br>\\n<a href='{{.CommentUrl}}'>在 {{.SiteName}} 上查看</a><br><br>\\n\\n<small><a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
+    new_question:
+      title:
+        other: "[{{.SiteName}}] 新问题: {{.QuestionTitle}}"
+      body:
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\\n<small>{{.Tags}}</small><br><br><small><a href='{{.UnsubscribeUrl}}'>取消订阅</a></small>"
     pass_reset:
       title:
         other: "[{{.SiteName }}] 重置密码"
@@ -555,7 +564,7 @@ ui:
     help:
       text: 帮助
     hr:
-      text: 水平分割线
+      text: 水平线
     image:
       text: 图片
       add_image: 添加图片
@@ -563,7 +572,7 @@ ui:
       form_image:
         fields:
           file:
-            label: 图片文件
+            label: 图像文件
             btn: 选择图片
             msg:
               empty: 请选择图片文件。
@@ -603,9 +612,9 @@ ui:
       btn_cancel: 取消
       btn_confirm: 添加
     ordered_list:
-      text: 有编号列表
+      text: 有序列表
     unordered_list:
-      text: 无编号列表
+      text: 无序列表
     table:
       text: 表格
       heading: 表头
@@ -686,7 +695,7 @@ ui:
         desc:
           label: 描述
         edit_summary:
-          label: 编辑概要
+          label: 编辑摘要
           placeholder: >-
             简单描述更改原因 (错别字、文字表达、格式等等)
     btn_save_edits: 保存更改
@@ -728,7 +737,7 @@ ui:
           feedback:
             characters: 内容长度至少 6 个字符
         edit_summary:
-          label: 编辑概要
+          label: 编辑摘要
           placeholder: >-
             简单描述更改原因 (错别字、文字表达、格式等等)
     btn_save_edits: 保存更改
@@ -738,7 +747,7 @@ ui:
     sort_buttons:
       popular: 热门
       name: 名称
-      newest: 最新
+      newest: 最新的
     button_follow: 关注
     button_following: 已关注
     tag_label: 个问题
@@ -773,7 +782,7 @@ ui:
           msg:
             empty: 回答内容不能为空
         edit_summary:
-          label: 编辑理由
+          label: 编辑摘要
           placeholder: >-
             简单描述更改原因 (错别字、文字表达、格式等等)
     btn_post_question: 提交问题
@@ -861,7 +870,7 @@ ui:
     send_success: >-
       如果账户与<strong>{{mail}}</strong>相匹配，您应该很快就会收到一封电子邮件，说明如何重置您的密码。
     email:
-      label: 新邮箱
+      label: 新的电子邮件地址
       msg:
         empty: 邮箱不能为空
   oauth:
@@ -906,7 +915,7 @@ ui:
       heading: 个人资料
       btn_name: 保存
       display_name:
-        label: 昵称
+        label: 显示名称
         msg: 昵称不能为空。
         msg_range: 显示名称不能超过 30 个字符。
       username:
@@ -934,9 +943,16 @@ ui:
         placeholder: "城市, 国家"
     notification:
       heading: 通知
-      email:
+      email: 邮箱
+      inbox:
         label: 邮件通知
-        radio: "你的提问有新的回答，评论，和其他"
+        description: 你的提问有新的回答，评论，邀请回答和其他。
+      all_new_question:
+        label: 出现任意新问题
+        description: 获取所有新问题的通知。每周最多有50个问题。
+      all_new_question_for_following_tags:
+        label: 所有关注标签的新问题
+        description: 获取关注的标签下新问题通知。
     account:
       heading: 账号
       change_email_btn: 更改邮箱
@@ -944,7 +960,7 @@ ui:
       change_email_info: >-
         邮件已发送。请根据指引完成验证。
       email:
-        label: 新邮箱
+        label: 新的电子邮件地址
         msg: 新邮箱不能为空。
       pass:
         label: 当前密码
@@ -1097,7 +1113,7 @@ ui:
     copied: 已复制
     facebook: 分享到 Facebook
     twitter: 分享到 Twitter
-  cannot_vote_for_self: 不能给自己投票
+  cannot_vote_for_self: 你不能为自己的帖子投票。
   modal_confirm:
     title: 发生错误...
   account_result:
@@ -1147,7 +1163,7 @@ ui:
     votes: 得票
     newest: 最新
     score: 评分
-    edit_profile: 编辑我的资料
+    edit_profile: 编辑资料
     visited_x_days: "已访问 {{ count }} 天"
     viewed: 阅读次数
     joined: 加入于
@@ -1162,7 +1178,7 @@ ui:
     answered: 回答于
     asked: 提问于
     downvoted: 点踩
-    mod_short: 管理员
+    mod_short: 扩展
     mod_long: 管理员
     x_reputation: 声望
     x_votes: 得票
@@ -1186,7 +1202,7 @@ ui:
       placeholder: root
       msg: 密码不能为空
     db_host:
-      label: 数据库服务器地址
+      label: 数据库主机
       placeholder: "db: 3306"
       msg: 数据库地址不能为空
     db_name:
@@ -1218,8 +1234,12 @@ ui:
       label: 联系邮箱
       text: 负责本网站的主要联系人的电子邮件地址。
       msg:
-        empty: 联系人邮箱地址不能为空。
+        empty: 联系人邮箱不能为空。
         incorrect: 联系人邮箱地址不正确。
+    login_required:
+      label: 私有的
+      switch: 需要登录
+      text: 只有登录用户才能访问这个社区。
     admin_name:
       label: 昵称
       msg: 昵称不能为空。
@@ -1235,7 +1255,7 @@ ui:
       msg:
         empty: 邮箱不能为空。
         incorrect: 邮箱格式不正确。
-    ready_title: 你的答案已经准备好了!
+    ready_title: 你的 Answer 已经准备好了!
     ready_desc: >-
       如果你想改变更多的设置，请访问<1>管理员部分</1>；在网站菜单中找到它。
     good_luck: "玩得愉快，祝您好运！"
@@ -1256,7 +1276,7 @@ ui:
     accepted: 已被采纳
   page_error:
     http_error: HTTP 错误 {{ code }}
-    desc_403: 您没有权限访问此页面。
+    desc_403: 您无权访问此页面。
     desc_404: 很抱歉，此页面不存在。
     desc_50X: 服务器遇到了一个错误，无法完成你的请求。
     back_home: 返回首页
@@ -1383,6 +1403,11 @@ ui:
       title: 添加新用户
       form:
         fields:
+          users:
+            label: 批量添加用户
+            placeholder: "John Smith, john@example.com, BUSYopr2\nAlice, alice@example.com, fpDntV8q"
+            text: 用逗号分隔“name, email, password”，每行一个用户。
+            msg: "请输入用户的电子邮件，每行一个。"
           display_name:
             label: 显示名称
             msg: 显示名称长度必须为 4-30 个字符
@@ -1465,11 +1490,11 @@ ui:
         msg: 简短网站描述不能为空。
         text: "简短的标语，作为网站主页的标题（Html 的 title 标签）。"
       desc:
-        label: 网站介绍
+        label: 站点描述
         msg: 网站描述不能为空。
         text: "使用一句话描述本站，作为网站的描述（Html 的 meta 标签）。"
       contact_email:
-        label: 联系人邮箱
+        label: 联系邮箱
         msg: 联系人邮箱不能为空。
         validate: 联系人邮箱无效。
         text: 负责本网站的主要联系人的电子邮件地址。
@@ -1486,11 +1511,11 @@ ui:
     smtp:
       page_title: SMTP
       from_email:
-        label: 发件人地址
+        label: 发件人邮箱
         msg: 不能为空
         text: 用于发送邮件的地址。
       from_name:
-        label: 发件人名称
+        label: 发件人
         msg: 不能为空
         text: 发件人的名称
       smtp_host:
@@ -1519,7 +1544,7 @@ ui:
         msg: 地址无效
       smtp_authentication:
         label: 启用身份验证
-        title: SMTP身份验证
+        title: SMTP 身份验证
         msg: 不能为空
         "yes": "是"
         "no": "否"
@@ -1545,7 +1570,7 @@ ui:
         label: 服务条款
         text: "您可以在此添加服务内容的条款。如果您已经在别处托管了文档，请在这里提供完整的URL。"
       privacy_policy:
-        label: 隐私条款
+        label: 隐私政策
         text: "您可以在此添加隐私政策内容。如果您已经在别处托管了文档，请在这里提供完整的URL。"
     write:
       page_title: 编辑
@@ -1614,6 +1639,7 @@ ui:
         text: 只有登录用户才能访问这个社区。
     installed_plugins:
       title: 已安装插件
+      plugin_link: Answer 插件扩展功能。您可以在<1>Answer Plugin 仓库</1>中找到插件。
       filter:
         all: 全部
         active: 已启用
@@ -1635,8 +1661,8 @@ ui:
         label: 默认头像
         text: 没有自定义头像的用户。
       gravatar_base_url:
-        label: Gravatar 基础 URL
-        text: Gravatar 提供商的 API 基础 URL 。留空时忽略。
+        label: Gravatar 根路径 URL
+        text: Gravatar 提供商的 API 基础的 URL。当为空时忽略。
       profile_editable:
         title: 个人资料可编辑
       allow_update_display_name:
