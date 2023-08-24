@@ -15,7 +15,7 @@ backend:
       other: Доступ запрещен.
   action:
     report:
-      other: Flag
+      other: Флаг
     edit:
       other: Редактировать
     delete:
@@ -29,7 +29,7 @@ backend:
     pin:
       other: Закрепить
     hide:
-      other: Unlist
+      other: Убрать
     unpin:
       other: Открепить
     show:
@@ -54,45 +54,45 @@ backend:
   privilege:
     level_1:
       description:
-        other: Level 1 (less reputation required for private team, group)
+        other: Уровень 1 (для приватной команды, группы требуется наименьшая репутация)
     level_2:
       description:
-        other: Level 2 (low reputation required for startup community)
+        other: Уровень 2 (для стартапа достаточен низкий уровень репутации)
     level_3:
       description:
-        other: Level 3 (high reputation required for mature community)
+        other: Уровень 3 (для зрелого сообщества требуется высокая репутация)
     rank_question_add_label:
       other: Задать вопрос
     rank_answer_add_label:
-      other: Write answer
+      other: Написать ответ
     rank_comment_add_label:
-      other: Write comment
+      other: Написать комментарий
     rank_report_add_label:
-      other: Flag
+      other: Флаг
     rank_comment_vote_up_label:
-      other: Upvote comment
+      other: Проголосовать за комментарий
     rank_link_url_limit_label:
       other: Post more than 2 links at a time
     rank_question_vote_up_label:
-      other: Upvote question
+      other: Голосовать за вопрос
     rank_answer_vote_up_label:
-      other: Upvote answer
+      other: Голосовать за ответ
     rank_question_vote_down_label:
-      other: Downvote question
+      other: Проголосовать против вопроса
     rank_answer_vote_down_label:
-      other: Downvote answer
+      other: Проголосовать против ответа
     rank_invite_someone_to_answer_label:
-      other: Invite someone to answer
+      other: Пригласить кого-нибудь ответить
     rank_tag_add_label:
-      other: Create new tag
+      other: Создать новый тег
     rank_tag_edit_label:
-      other: Edit tag description (need to review)
+      other: Редактировать описание тега (требуется проверка)
     rank_question_edit_label:
-      other: Edit other's question (need to review)
+      other: Редактировать вопрос другого пользователя (требуется проверка)
     rank_answer_edit_label:
-      other: Edit other's answer (need to review)
+      other: Редактировать ответ другого пользователя (требуется проверка)
     rank_question_edit_without_review_label:
-      other: Edit other's question without review
+      other: Редактировать вопрос другого пользователя без проверки
     rank_answer_edit_without_review_label:
       other: Edit other's answer without review
     rank_question_audit_label:
@@ -108,22 +108,22 @@ backend:
   email:
     other: Эл. почта
   e_mail:
-    other: Email
+    other: Почта
   password:
     other: Пароль
   pass:
-    other: Password
+    other: Пароль
   email_or_password_wrong_error:
     other: Неверное имя пользователя или пароль.
   error:
     password:
       space_invalid:
-        other: Password cannot contain spaces.
+        other: Пароль не должен содержать пробелы.
     admin:
       cannot_update_their_password:
-        other: You cannot modify your password.
+        other: Вы не можете изменить свой пароль.
       cannot_modify_self_status:
-        other: You cannot modify your status.
+        other: Вы не можете изменить свой статус.
       email_or_password_wrong:
         other: Неверное имя пользователя или пароль.
     answer:
@@ -134,7 +134,7 @@ backend:
       cannot_update:
         other: Нет прав для обновления.
       question_closed_cannot_add:
-        other: Questions are closed and cannot be added.
+        other: Вопросы закрыты и не могут быть добавлены.
     comment:
       edit_without_permission:
         other: Комментарий не может редактироваться.
@@ -186,7 +186,7 @@ backend:
         other: Нет разрешения на обновление.
     rank:
       fail_to_meet_the_condition:
-        other: Ранг не соответствует условию.
+        other: Reputation rank fail to meet the condition.
       vote_fail_to_meet_the_condition:
         other: Thanks for the feedback. You need at least {{.Rank}} reputation to cast a vote.
       no_enough_rank_to_operate:
@@ -198,11 +198,11 @@ backend:
         other: Отчет не найден.
     tag:
       already_exist:
-        other: Tag already exists.
+        other: Тег уже существует.
       not_found:
         other: Тег не найден.
       recommend_tag_not_found:
-        other: Рекомендуемый тег не существует.
+        other: Recommend tag is not exist.
       recommend_tag_enter:
         other: Пожалуйста, введите хотя бы один тег.
       not_contain_synonym_tags:
@@ -210,12 +210,12 @@ backend:
       cannot_update:
         other: Нет прав для обновления.
       is_used_cannot_delete:
-        other: You cannot delete a tag that is in use
+        other: You cannot delete a tag that is in use.
       cannot_set_synonym_as_itself:
         other: Вы не можете установить синоним текущего тега.
     smtp:
       config_from_name_cannot_be_email:
-        other: Имя От не может быть адресом электронной почты.
+        other: The from name cannot be a email address.
     theme:
       not_found:
         other: Тема не найдена.
@@ -223,7 +223,7 @@ backend:
       review_underway:
         other: В настоящее время не удается редактировать версию, в очереди на проверку.
       no_permission:
-        other: Нет прав на ревизию.
+        other: No permission to revise.
     user:
       external_login_missing_user_id:
         other: The third-party platform does not provide a unique UserID, so you cannot login, please contact the website administrator.
@@ -233,40 +233,44 @@ backend:
         other:
           other: Email and password do not match.
       not_found:
-        other: User not found.
+        other: Пользователь не найден.
       suspended:
-        other: User has been suspended.
+        other: Пользователь был заблокирован.
       username_invalid:
-        other: Username is invalid.
+        other: Недопустимое имя пользователя.
       username_duplicate:
-        other: Username is already in use.
+        other: Имя пользователя уже используется.
       set_avatar:
-        other: Avatar set failed.
+        other: Не удалось установить аватар.
       cannot_update_your_role:
-        other: You cannot modify your role.
+        other: Вы не можете изменить свою роль.
       not_allowed_registration:
-        other: Currently the site is not open for registration
+        other: Currently the site is not open for registration.
       access_denied:
-        other: Access denied
+        other: Доступ запрещен
       page_access_denied:
-        other: You do not have access to this page.
+        other: У вас нет доступа к этой странице.
+      add_bulk_users_format_error:
+        other: "Error {{.Field}} format near '{{.Content}}' at line {{.Line}}. {{.ExtraMessage}}"
+      add_bulk_users_amount_error:
+        other: "The number of users you add at once should be in the range of 1-{{.MaxAmount}}."
     config:
       read_config_failed:
-        other: Read config failed
+        other: Не удалось прочитать конфигурацию
     database:
       connection_failed:
-        other: Database connection failed
+        other: Ошибка подключения к базе данных
       create_table_failed:
-        other: Create table failed
+        other: Не удалось создать таблицу
     install:
       create_config_failed:
-        other: Can't create the config.yaml file.
+        other: Не удалось создать файл config.yaml.
     upload:
       unsupported_file_format:
-        other: Unsupported file format.
+        other: Неподдерживаемый формат файла.
     site_info:
       config_not_found:
-        other: Site config not found.
+        other: Конфигурация сайта не найдена.
   reason:
     spam:
       name:
@@ -306,7 +310,7 @@ backend:
       name:
         other: a community-specific reason
       desc:
-        other: This question doesn’t meet a community guideline.
+        other: This question doesn't meet a community guideline.
     not_clarity:
       name:
         other: needs details or clarity
@@ -314,7 +318,7 @@ backend:
         other: This question currently includes multiple questions in one. It should focus on one problem only.
     looks_ok:
       name:
-        other: looks ok
+        other: looks OK
       desc:
         other: This post is good as-is and not low quality.
     needs_edit:
@@ -326,7 +330,7 @@ backend:
       name:
         other: needs close
       desc:
-        other: A closed question can’t answer, but still can edit, vote and comment.
+        other: A closed question can't answer, but still can edit, vote and comment.
     needs_delete:
       name:
         other: needs delete
@@ -338,7 +342,7 @@ backend:
         name:
           other: spam
         desc:
-          other: This question has been asked before and already has an answer.
+          other: Этот вопрос был задан ранее и уже имеет ответ.
       guideline:
         name:
           other: a community-specific reason
@@ -404,39 +408,44 @@ backend:
   email_tpl:
     change_email:
       title:
-        other: "[{{.SiteName}}] Confirm your new email address"
+        other: "[{{.SiteName}}] Подтвердите новый адрес электронной почты"
       body:
-        other: "Confirm your new email address for {{.SiteName}}  by clicking on the following link:<br><br>\n\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
+        other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
     new_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} answered your question"
       body:
-        other: "<strong><a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.AnswerUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.AnswerSummary}}</blockquote><br>\n<a href='{{.AnswerUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     invited_you_to_answer:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} invited you to answer"
       body:
-        other: "<strong><a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.InviteUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>I think you may know the answer.</blockquote><br>\n<a href='{{.InviteUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     new_comment:
       title:
         other: "[{{.SiteName}}] {{.DisplayName}} commented on your post"
       body:
-        other: "<strong><a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a></strong><br><br>\n\n<small>{{.DisplayName}}:</small><br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n<small>You are receiving this because you authored the thread. <a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+        other: "<a href='{{.CommentUrl}}'>{{.QuestionTitle}}</a><br><br>\n\n{{.DisplayName}}:<br>\n<blockquote>{{.CommentSummary}}</blockquote><br>\n<a href='{{.CommentUrl}}'>View it on {{.SiteName}}</a><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
+    new_question:
+      title:
+        other: "[{{.SiteName}}] New question: {{.QuestionTitle}}"
+      body:
+        other: "<a href='{{.QuestionUrl}}'>{{.QuestionTitle}}</a><br>\n<small>{{.Tags}}</small><br><br>\n\n--<br>\n<small><a href='{{.UnsubscribeUrl}}'>Unsubscribe</a></small>"
     pass_reset:
       title:
         other: "[{{.SiteName }}] Password reset"
       body:
-        other: "Somebody asked to reset your password on [{{.SiteName}}].<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
+        other: "Somebody asked to reset your password on {{.SiteName}}.<br><br>\n\nIf it was not you, you can safely ignore this email.<br><br>\n\nClick the following link to choose a new password:<br>\n<a href='{{.PassResetUrl}}' target='_blank'>{{.PassResetUrl}}</a>\n"
     register:
       title:
         other: "[{{.SiteName}}] Confirm your new account"
       body:
-        other: "Welcome to {{.SiteName}}<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
+        other: "Welcome to {{.SiteName}}!<br><br>\n\nClick the following link to confirm and activate your new account:<br>\n<a href='{{.RegisterUrl}}' target='_blank'>{{.RegisterUrl}}</a><br><br>\n\nIf the above link is not clickable, try copying and pasting it into the address bar of your web browser.\n"
     test:
       title:
         other: "[{{.SiteName}}] Test Email"
       body:
-        other: "This is a test email."
+        other: "Это тестовое письмо."
   action_activity_type:
     upvote:
       other: upvote
@@ -465,7 +474,7 @@ ui:
     tag: Тэг
     tags: Теги
     tag_wiki: wiki тэг
-    create_tag: Create Tag
+    create_tag: Создать тег
     edit_tag: Изменить тег
     ask_a_question: Добавить вопрос
     edit_question: Редактировать вопрос
@@ -555,31 +564,31 @@ ui:
     help:
       text: Help
     hr:
-      text: Horizontal Rule
+      text: Horizontal rule
     image:
       text: Image
-      add_image: Add image
-      tab_image: Upload image
+      add_image: Добавить изображение
+      tab_image: Загрузить изображение
       form_image:
         fields:
           file:
-            label: Image File
-            btn: Select image
+            label: Image file
+            btn: Выбрать изображение
             msg:
               empty: File cannot be empty.
               only_image: Only image files are allowed.
               max_size: File size cannot exceed 4MB.
           desc:
-            label: Description
-      tab_url: Image URL
+            label: Описание
+      tab_url: URL изображения
       form_url:
         fields:
           url:
-            label: Image URL
+            label: URL изображения
             msg:
-              empty: Image URL cannot be empty.
+              empty: URL изображения не может быть пустым.
           name:
-            label: Description
+            label: Описание
       btn_cancel: Cancel
       btn_confirm: Add
       uploading: Uploading
@@ -597,15 +606,15 @@ ui:
           url:
             label: URL
             msg:
-              empty: URL cannot be empty.
+              empty: URL не может быть пустым.
           name:
-            label: Description
+            label: Описание
       btn_cancel: Cancel
       btn_confirm: Add
     ordered_list:
-      text: Numbered List
+      text: Numbered list
     unordered_list:
-      text: Bulleted List
+      text: Bulleted list
     table:
       text: Table
       heading: Heading
@@ -635,12 +644,12 @@ ui:
     form:
       fields:
         display_name:
-          label: Показывать имя
+          label: Display name
           msg:
             empty: Отображаемое название не может быть пустым.
             range: Отображаемое имя до 35 символов.
         slug_name:
-          label: Идентификатор URL
+          label: URL slug
           desc: URL slug up to 35 characters.
           msg:
             empty: URL slug не может быть пустым.
@@ -679,14 +688,14 @@ ui:
         revision:
           label: Редакция
         display_name:
-          label: Показывать имя
+          label: Display name
         slug_name:
-          label: Идентификатор URL
+          label: URL slug
           info: 'Необходимо использовать набор символов "a-z", "0-9", "+ # - ."'
         desc:
           label: Описание
         edit_summary:
-          label: Изменить краткое описание
+          label: Edit summary
           placeholder: >-
             Кратко опишите ваши изменения (исправленная орфография, исправленная грамматика, улучшенное форматирование)
     btn_save_edits: Сохранить изменения
@@ -702,33 +711,33 @@ ui:
     hour: hour
     day: day
   comment:
-    btn_add_comment: Add comment
+    btn_add_comment: Добавить комментарий
     reply_to: Reply to
     btn_reply: Reply
     btn_edit: Edit
-    btn_delete: Delete
+    btn_delete: Удалить
     btn_flag: Flag
     btn_save_edits: Save edits
     btn_cancel: Cancel
-    show_more: Show more comments
+    show_more: Показать больше комментариев
     tip_question: >-
       Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
     tip_answer: >-
-      Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
-    tip_vote: It is useful
+      Используйте комментарии для ответа другим пользователям или уведомления об изменениях. Если вы добавляете новую информацию, редактируйте ваше сообщение вместо комментариев.
+    tip_vote: It adds something useful to the post
   edit_answer:
-    title: Edit Answer
-    default_reason: Edit answer
+    title: Редактировать ответ
+    default_reason: Редактировать ответ
     form:
       fields:
         revision:
           label: Revision
         answer:
-          label: Answer
+          label: Ответ
           feedback:
             characters: content must be at least 6 characters in length.
         edit_summary:
-          label: Edit Summary
+          label: Edit summary
           placeholder: >-
             Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_save_edits: Save edits
@@ -738,28 +747,28 @@ ui:
     sort_buttons:
       popular: Popular
       name: Name
-      newest: newest
+      newest: Newest
     button_follow: Follow
     button_following: Following
     tag_label: questions
-    search_placeholder: Filter by tag name
+    search_placeholder: Фильтр по названию тега
     no_desc: The tag has no description.
     more: More
   ask:
-    title: Add Question
-    edit_title: Edit Question
-    default_reason: Edit question
+    title: Добавить вопрос
+    edit_title: Редактировать вопрос
+    default_reason: Редактировать вопрос
     similar_questions: Similar questions
     form:
       fields:
         revision:
           label: Revision
         title:
-          label: Title
+          label: Заголовок
           placeholder: Be specific and imagine you're asking a question to another person
           msg:
-            empty: Title cannot be empty.
-            range: Title up to 150 characters
+            empty: Заголовок не может быть пустым.
+            range: Заголовок должен быть меньше 150 символов
         body:
           label: Body
           msg:
@@ -773,40 +782,40 @@ ui:
           msg:
             empty: Answer cannot be empty.
         edit_summary:
-          label: Edit Summary
+          label: Edit summary
           placeholder: >-
             Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
     btn_post_question: Post your question
     btn_save_edits: Save edits
     answer_question: Answer your own question
-    post_question&answer: Post your question and answer
+    post_question&answer: Опубликуйте свой вопрос и ответ
   tag_selector:
     add_btn: Add tag
-    create_btn: Create new tag
-    search_tag: Search tag
+    create_btn: Создать новый тег
+    search_tag: Поиск тега
     hint: "Describe what your question is about, at least one tag is required."
     no_result: No tags matched
     tag_required_text: Required tag (at least one)
   header:
     nav:
-      question: Questions
-      tag: Tags
-      user: Users
-      profile: Profile
-      setting: Settings
-      logout: Log out
+      question: Вопросы
+      tag: Теги
+      user: Пользователи
+      profile: Профиль
+      setting: Настройки
+      logout: Выйти
       admin: Admin
       review: Review
-      bookmark: Bookmarks
+      bookmark: Закладки
       moderation: Moderation
     search:
-      placeholder: Search
+      placeholder: Поиск
   footer:
     build_on: >-
       Built on <1> Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
     name: Change
-    loading: loading...
+    loading: загрузка...
   pic_auth_code:
     title: Captcha
     placeholder: Type the text above
@@ -818,33 +827,33 @@ ui:
     info: "If it doesn't arrive, check your spam folder."
     another: >-
       We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.
-    btn_name: Resend activation email
-    change_btn_name: Change email
+    btn_name: Повторно отправить письмо с активацией
+    change_btn_name: Изменить email
     msg:
-      empty: Cannot be empty.
+      empty: Не может быть пустым.
     resend_email:
-      url_label: Are you sure you want to resend the activation email?
+      url_label: Вы уверены, что хотите повторно отправить письмо с активацией?
       url_text: You can also give the activation link above to the user.
   login:
-    login_to_continue: Log in to continue
-    info_sign: Don't have an account? <1>Sign up</1>
-    info_login: Already have an account? <1>Log in</1>
-    agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
-    forgot_pass: Forgot password?
+    login_to_continue: Войдите, чтобы продолжить
+    info_sign: У вас нет аккаунта? <1>Зарегистрируйтесь</1>
+    info_login: Уже есть аккаунт? <1>Войти</1>
+    agreements: Регистрируясь, вы соглашаетесь с <1>политикой конфиденциальности</1> и <3>условиями обслуживания</3>.
+    forgot_pass: Забыли пароль?
     name:
-      label: Name
+      label: Имя пользователя
       msg:
-        empty: Name cannot be empty.
-        range: Name up to 30 characters.
-        character: 'Must use the character set "a-z", "0-9", " - . _"'
+        empty: Имя пользователя не должно быть пустым.
+        range: Имя пользователя должно быть до 30 символов.
+        character: 'Необходимо использовать набор символов "a-z", "0-9", " - . _"'
     email:
-      label: Email
+      label: Адрес эл. почты
       msg:
-        empty: Email cannot be empty.
+        empty: Адрес электронной почты не может быть пустым.
     password:
-      label: Password
+      label: Пароль
       msg:
-        empty: Password cannot be empty.
+        empty: Пароль не может быть пустым.
         different: The passwords entered on both sides are inconsistent
   account_forgot:
     page_title: Forgot Your Password
@@ -852,16 +861,16 @@ ui:
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
-      label: Email
+      label: Адрес эл. почты
       msg:
-        empty: Email cannot be empty.
+        empty: Адрес электронной почты не может быть пустым.
   change_email:
     btn_cancel: Cancel
     btn_update: Update email address
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
-      label: New Email
+      label: New email
       msg:
         empty: Email cannot be empty.
   oauth:
@@ -893,20 +902,20 @@ ui:
         length: The length needs to be between 8 and 32
         different: The passwords entered on both sides are inconsistent
     password_confirm:
-      label: Confirm New Password
+      label: Confirm new password
   settings:
     page_title: Settings
-    goto_modify: Go to Modify
+    goto_modify: Go to modify
     nav:
       profile: Profile
       notification: Notifications
       account: Account
       interface: Interface
     profile:
-      heading: Profile
+      heading: Профиль
       btn_name: Save
       display_name:
-        label: Display Name
+        label: Display name
         msg: Display name cannot be empty.
         msg_range: Display name up to 30 characters.
       username:
@@ -916,7 +925,7 @@ ui:
         msg_range: Username up to 30 characters.
         character: 'Must use the character set "a-z", "0-9", " - . _"'
       avatar:
-        label: Profile Image
+        label: Profile image
         gravatar: Gravatar
         gravatar_text: You can change image on
         custom: Custom
@@ -924,7 +933,7 @@ ui:
         default: System
         msg: Please upload an avatar
       bio:
-        label: About Me
+        label: About me
       website:
         label: Website
         placeholder: "https://example.com"
@@ -934,9 +943,16 @@ ui:
         placeholder: "City, Country"
     notification:
       heading: Notifications
-      email:
-        label: Email Notifications
-        radio: "Answers to your questions, comments, and more"
+      email: Email
+      inbox:
+        label: Email notifications
+        description: Answers to your questions, comments, invites, and more.
+      all_new_question:
+        label: All new questions
+        description: Get notified of all new questions. Up to 50 questions per week.
+      all_new_question_for_following_tags:
+        label: All new questions for following tags
+        description: Get notified of new questions for following tags.
     account:
       heading: Account
       change_email_btn: Change email
@@ -944,31 +960,31 @@ ui:
       change_email_info: >-
         We've sent an email to that address. Please follow the confirmation instructions.
       email:
-        label: New Email
-        msg: New Email cannot be empty.
+        label: New email
+        msg: New email cannot be empty.
       pass:
-        label: Current Password
+        label: Current password
         msg: Password cannot be empty.
       password_title: Password
       current_pass:
-        label: Current Password
+        label: Current password
         msg:
-          empty: Current Password cannot be empty.
+          empty: Current password cannot be empty.
           length: The length needs to be between 8 and 32.
           different: The two entered passwords do not match.
       new_pass:
-        label: New Password
+        label: New password
       pass_confirm:
-        label: Confirm New Password
+        label: Confirm new password
     interface:
       heading: Interface
       lang:
-        label: Interface Language
+        label: Interface language
         text: User interface language. It will change when you refresh the page.
     my_logins:
-      title: My Logins
+      title: My logins
       label: Log in or sign up on this site using these accounts.
-      modal_title: Remove Login
+      modal_title: Remove login
       modal_content: Are you sure you want to remove this login from your account?
       modal_confirm_btn: Remove
       remove_success: Removed successfully
@@ -980,10 +996,10 @@ ui:
     review: Your revision will show after review.
     sent_success: Sent successfully
   related_question:
-    title: Related Questions
+    title: Связанные вопросы
     answers: answers
   invite_to_answer:
-    title: People asked
+    title: People Asked
     desc: Invite people who you think might know the answer.
     invite: Invite to answer
     add: Add people
@@ -1015,12 +1031,12 @@ ui:
       btn_accepted: Accepted
     write_answer:
       title: Your Answer
-      btn_name: Post your answer
-      add_another_answer: Add another answer
+      btn_name: Опубликовать свой ответ
+      add_another_answer: Добавить другой ответ
       confirm_title: Continue to answer
       continue: Continue
       confirm_info: >-
-        <p>Are you sure you want to add another answer?</p><p>You could use the edit link to refine and improve your existing answer, instead.</p>
+        <p>Вы уверены, что хотите добавить другой ответ?</p><p>Вы можете использовать ссылку редактирования для уточнения и улучшения существующего ответа.</p>
       empty: Answer cannot be empty.
       characters: content must be at least 6 characters in length.
       tips:
@@ -1055,7 +1071,7 @@ ui:
     signup: Sign up
     logout: Log out
     verify: Verify
-    add_question: Add question
+    add_question: Добавить вопрос
     approve: Approve
     reject: Reject
     skip: Skip
@@ -1068,8 +1084,8 @@ ui:
     refresh: Refresh
     resend: Resend
   search:
-    title: Search Results
-    keywords: Keywords
+    title: Результаты поиска
+    keywords: Ключевые слова
     options: Options
     follow: Follow
     following: Following
@@ -1091,15 +1107,15 @@ ui:
       is_answer: "<1>is:answer</1> search answers"
     empty: We couldn't find anything. <br /> Try different or less specific keywords.
   share:
-    name: Share
-    copy: Copy link
+    name: Поделиться
+    copy: Скопировать ссылку
     via: Share post via...
-    copied: Copied
+    copied: Скопировано
     facebook: Share to Facebook
     twitter: Share to Twitter
-  cannot_vote_for_self: You can't vote for your own post
+  cannot_vote_for_self: You can't vote for your own post.
   modal_confirm:
-    title: Error...
+    title: Ошибка...
   account_result:
     success: Your new account is confirmed; you will be redirected to the home page.
     link: Continue to homepage
@@ -1109,21 +1125,21 @@ ui:
     confirm_new_email_invalid: >-
       Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
   unsubscribe:
-    page_title: Unsubscribe
+    page_title: Отписаться
     success_title: Unsubscribe Successful
     success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
     link: Change settings
   question:
     following_tags: Following Tags
-    edit: Edit
-    save: Save
+    edit: Редактировать
+    save: Сохранить
     follow_tag_tip: Follow tags to curate your list of questions.
-    hot_questions: Hot Questions
-    all_questions: All Questions
+    hot_questions: Самые популярные вопросы
+    all_questions: Все вопросы
     x_questions: "{{ count }} Questions"
     x_answers: "{{ count }} answers"
-    questions: Questions
-    answers: Answers
+    questions: Вопросы
+    answers: Ответы
     newest: Newest
     active: Active
     frequent: Frequent
@@ -1147,7 +1163,7 @@ ui:
     votes: Votes
     newest: Newest
     score: Score
-    edit_profile: Edit Profile
+    edit_profile: Edit profile
     visited_x_days: "Visited {{ count }} days"
     viewed: Viewed
     joined: Joined
@@ -1162,7 +1178,7 @@ ui:
     answered: answered
     asked: asked
     downvoted: downvoted
-    mod_short: Mod
+    mod_short: MOD
     mod_long: Moderators
     x_reputation: reputation
     x_votes: votes received
@@ -1174,9 +1190,9 @@ ui:
     done: Done
     config_yaml_error: Can't create the config.yaml file.
     lang:
-      label: Please Choose a Language
+      label: Please choose a language
     db_type:
-      label: Database Engine
+      label: Database engine
     db_username:
       label: Username
       placeholder: root
@@ -1184,19 +1200,19 @@ ui:
     db_password:
       label: Password
       placeholder: root
-      msg: Password cannot be empty.
+      msg: Пароль не может быть пустым.
     db_host:
-      label: Database Host
+      label: Database host
       placeholder: "db:3306"
-      msg: Database Host cannot be empty.
+      msg: Database host cannot be empty.
     db_name:
-      label: Database Name
+      label: Database name
       placeholder: answer
-      msg: Database Name cannot be empty.
+      msg: Database name cannot be empty.
     db_file:
-      label: Database File
+      label: Database file
       placeholder: /data/answer.db
-      msg: Database File cannot be empty.
+      msg: Database file cannot be empty.
     config_yaml:
       title: Create config.yaml
       label: The config.yaml file created.
@@ -1206,8 +1222,8 @@ ui:
     site_information: Site Information
     admin_account: Admin Account
     site_name:
-      label: Site Name
-      msg: Site Name cannot be empty.
+      label: Site name
+      msg: Site name cannot be empty.
     site_url:
       label: Site URL
       text: The address of your site.
@@ -1215,17 +1231,21 @@ ui:
         empty: Site URL cannot be empty.
         incorrect: Site URL incorrect format.
     contact_email:
-      label: Contact Email
+      label: Contact email
       text: Email address of key contact responsible for this site.
       msg:
-        empty: Contact Email cannot be empty.
-        incorrect: Contact Email incorrect format.
+        empty: Contact email cannot be empty.
+        incorrect: Contact email incorrect format.
+    login_required:
+      label: Private
+      switch: Login required
+      text: Only logged in users can access this community.
     admin_name:
       label: Name
       msg: Name cannot be empty.
       character: 'Must use the character set "a-z", "0-9", " - . _"'
     admin_password:
-      label: Password
+      label: Пароль
       text: >-
         You will need this password to log in. Please store it in a secure location.
       msg: Password cannot be empty.
@@ -1235,7 +1255,7 @@ ui:
       msg:
         empty: Email cannot be empty.
         incorrect: Email incorrect format.
-    ready_title: Your Answer is Ready!
+    ready_title: Your Answer is ready!
     ready_desc: >-
       If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.
     good_luck: "Have fun, and good luck!"
@@ -1248,7 +1268,7 @@ ui:
       You appear to have already installed. To reinstall please clear your old database tables first.
     db_failed: Database connection failed
     db_failed_desc: >-
-      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host’s database server is down.
+      This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
   counts:
     views: views
     votes: votes
@@ -1256,14 +1276,14 @@ ui:
     accepted: Accepted
   page_error:
     http_error: HTTP Error {{ code }}
-    desc_403: You don’t have permission to access this page.
+    desc_403: You don't have permission to access this page.
     desc_404: Unfortunately, this page doesn't exist.
     desc_50X: The server encountered an error and could not complete your request.
     back_home: Back to homepage
   page_maintenance:
     desc: "We are under maintenance, we'll be back soon."
   nav_menus:
-    dashboard: Dashboard
+    dashboard: Панель управления
     contents: Contents
     questions: Questions
     answers: Answers
@@ -1284,9 +1304,9 @@ ui:
     css_html: CSS/HTML
     login: Login
     privileges: Privileges
-    plugins: Plugins
-    installed_plugins: Installed Plugins
-  website_welcome: Welcome to {{site_name}}
+    plugins: Плагины
+    installed_plugins: Установленные плагины
+  website_welcome: Добро пожаловать на {{site_name}}
   user_center:
     login: Login
     qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
@@ -1295,21 +1315,21 @@ ui:
     admin_header:
       title: Admin
     dashboard:
-      title: Dashboard
-      welcome: Welcome to Answer Admin!
-      site_statistics: Site Statistics
-      questions: "Questions:"
-      answers: "Answers:"
-      comments: "Comments:"
-      votes: "Votes:"
-      active_users: "Active users:"
+      title: Панель управления
+      welcome: Добро пожаловать в Answer Admin!
+      site_statistics: Статистика сайта
+      questions: "Вопросы:"
+      answers: "Ответы:"
+      comments: "Комментарии:"
+      votes: "Голоса:"
+      active_users: "Активные пользователи:"
       flags: "Flags:"
       site_health_status: Site Health Status
-      version: "Version:"
+      version: "Версия:"
       https: "HTTPS:"
       uploading_files: "Uploading files:"
       smtp: "SMTP:"
-      timezone: "Timezone:"
+      timezone: "Часовой пояс:"
       system_info: System Info
       storage_used: "Storage used:"
       uptime: "Uptime:"
@@ -1350,10 +1370,10 @@ ui:
       inactive_name: inactive
       inactive_desc: An inactive user must re-validate their email.
       confirm_title: Delete this user
-      confirm_content: Are you sure you want to delete this user? This is permanent!
+      confirm_content: Вы уверены, что хотите удалить этого пользователя? Это действие необратимо!
       confirm_btn: Delete
       msg:
-        empty: Please select a reason.
+        empty: Пожалуйста, выберите причину.
     status_modal:
       title: "Change {{ type }} status to..."
       normal_name: normal
@@ -1374,7 +1394,7 @@ ui:
       form:
         fields:
           password:
-            label: Password
+            label: Пароль
             text: The user will be logged out and need to login again.
             msg: Password must be at 8-32 characters in length.
       btn_cancel: Cancel
@@ -1383,9 +1403,14 @@ ui:
       title: Add new user
       form:
         fields:
+          users:
+            label: Bulk add user
+            placeholder: "John Smith, john@example.com, BUSYopr2\nAlice, alice@example.com, fpDntV8q"
+            text: Separate “name, email, password” with commas. One user per line.
+            msg: "Please enter the user's email, one per line."
           display_name:
-            label: Display Name
-            msg: Display Name must be at 4-30 characters in length.
+            label: Display name
+            msg: Display name must be at 4-30 characters in length.
           email:
             label: Email
             msg: Email is not valid.
@@ -1399,7 +1424,7 @@ ui:
       name: Name
       email: Email
       reputation: Reputation
-      created_at: Created Time
+      created_at: Дата создания
       delete_at: Deleted Time
       suspend_at: Suspended Time
       status: Status
@@ -1452,49 +1477,49 @@ ui:
     general:
       page_title: General
       name:
-        label: Site Name
-        msg: Site name cannot be empty.
-        text: "The name of this site, as used in the title tag."
+        label: Site name
+        msg: Название сайта не может быть пустым.
+        text: "Название сайта, используемое в теге title."
       site_url:
-        label: Site URL
+        label: URL-адрес сайта
         msg: Site url cannot be empty.
-        validate: Please enter a valid URL.
+        validate: Пожалуйста, введите корректный URL.
         text: The address of your site.
       short_desc:
-        label: Short Site Description
+        label: Short site description
         msg: Short site description cannot be empty.
         text: "Short description, as used in the title tag on homepage."
       desc:
-        label: Site Description
+        label: Site description
         msg: Site description cannot be empty.
         text: "Describe this site in one sentence, as used in the meta description tag."
       contact_email:
-        label: Contact Email
+        label: Contact email
         msg: Contact email cannot be empty.
         validate: Contact email is not valid.
         text: Email address of key contact responsible for this site.
     interface:
       page_title: Interface
       language:
-        label: Interface Language
+        label: Interface language
         msg: Interface language cannot be empty.
         text: User interface language. It will change when you refresh the page.
       time_zone:
-        label: Timezone
+        label: Часовой пояс
         msg: Timezone cannot be empty.
         text: Choose a city in the same timezone as you.
     smtp:
       page_title: SMTP
       from_email:
-        label: From Email
+        label: From email
         msg: From email cannot be empty.
         text: The email address which emails are sent from.
       from_name:
-        label: From Name
+        label: From name
         msg: From name cannot be empty.
         text: The name which emails are sent from.
       smtp_host:
-        label: SMTP Host
+        label: SMTP host
         msg: SMTP host cannot be empty.
         text: Your mail server.
       encryption:
@@ -1504,22 +1529,22 @@ ui:
         ssl: SSL
         none: None
       smtp_port:
-        label: SMTP Port
+        label: SMTP port
         msg: SMTP port must be number 1 ~ 65535.
         text: The port to your mail server.
       smtp_username:
-        label: SMTP Username
+        label: SMTP username
         msg: SMTP username cannot be empty.
       smtp_password:
-        label: SMTP Password
+        label: SMTP password
         msg: SMTP password cannot be empty.
       test_email_recipient:
-        label: Test Email Recipients
+        label: Test email recipients
         text: Provide email address that will receive test sends.
         msg: Test email recipients is invalid
       smtp_authentication:
         label: Enable authentication
-        title: SMTP Authentication
+        title: SMTP authentication
         msg: SMTP authentication cannot be empty.
         "yes": "Yes"
         "no": "No"
@@ -1530,10 +1555,10 @@ ui:
         msg: Logo cannot be empty.
         text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
       mobile_logo:
-        label: Mobile Logo
+        label: Mobile logo
         text: The logo used on mobile version of your site. Use a wide rectangular image with a height of 56. If left blank, the image from the "logo" setting will be used.
       square_icon:
-        label: Square Icon
+        label: Square icon
         msg: Square icon cannot be empty.
         text: Image used as the base for metadata icons. Should ideally be larger than 512x512.
       favicon:
@@ -1542,22 +1567,22 @@ ui:
     legal:
       page_title: Legal
       terms_of_service:
-        label: Terms of Service
+        label: Terms of service
         text: "You can add terms of service content here. If you already have a document hosted elsewhere, provide the full URL here."
       privacy_policy:
-        label: Privacy Policy
+        label: Privacy policy
         text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
     write:
       page_title: Write
       recommend_tags:
-        label: Recommend Tags
+        label: Recommend tags
         text: "Please input tag slug above, one tag per line."
       required_tag:
-        title: Required Tag
+        title: Required tag
         label: Set recommend tag as required
         text: "Every new question must have at least one recommend tag."
       reserved_tags:
-        label: Reserved Tags
+        label: Reserved tags
         text: "Reserved tags can only be added to a post by moderator."
     seo:
       page_title: SEO
@@ -1576,8 +1601,8 @@ ui:
         label: Navbar Style
         text: Select an existing theme.
       primary_color:
-        label: Primary Color
-        text: Modify the colors used by your themes
+        label: Основной цвет
+        text: Измените цвета, используемые в ваших темах
     css_and_html:
       page_title: CSS and HTML
       custom_css:
@@ -1613,32 +1638,33 @@ ui:
         label: Login required
         text: Only logged in users can access this community.
     installed_plugins:
-      title: Installed Plugins
+      title: Установленные плагины
+      plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.
       filter:
-        all: All
-        active: Active
-        inactive: Inactive
-        outdated: Outdated
+        all: Все
+        active: Активные
+        inactive: Неактивные
+        outdated: Устаревшие
       plugins:
-        label: Plugins
-        text: Select an existing plugin.
-      name: Name
-      version: Version
-      status: Status
-      action: Action
-      deactivate: Deactivate
-      activate: Activate
-      settings: Settings
+        label: Плагины
+        text: Выберите существующий плагин.
+      name: Название
+      version: Версия
+      status: Статус
+      action: Действие
+      deactivate: Деактивировать
+      activate: Активировать
+      settings: Настройки
     settings_users:
       title: Users
       avatar:
-        label: Default Avatar
+        label: Default avatar
         text: For users without a custom avatar of their own.
       gravatar_base_url:
-        label: Gravatar Base URL
-        text: URL of the Gravatar provider’s API base. Ignored when empty.
+        label: Gravatar base URL
+        text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
-        title: Profile Editable
+        title: Profile editable
       allow_update_display_name:
         label: Allow users to change their display name
       allow_update_username:
@@ -1703,7 +1729,7 @@ ui:
     datetime: Datetime
     type: Type
     by: By
-    comment: Comment
+    comment: Комментарий
     no_data: "We couldn't find anything."
   users:
     title: Users
