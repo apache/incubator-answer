@@ -47,6 +47,7 @@ var (
 		&entity.UserRoleRel{},
 		&entity.PluginConfig{},
 		&entity.UserExternalLogin{},
+		&entity.UserNotificationConfig{},
 	}
 
 	roles = []*entity.Role{
