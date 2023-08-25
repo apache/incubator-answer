@@ -121,8 +121,8 @@ export const resendEmail = (params?: Type.ImgCodeReq) => {
   });
 };
 
-export async function ssoLogin(accessToken: string) {
-  return request.post<UserInfoRes>('/answer/api/v1/user/login/sso', {
+export async function jwtLogin(accessToken: string) {
+  return request.post<UserInfoRes>('/answer/api/v1/user/login/jwt', {
     accessToken,
   });
 }

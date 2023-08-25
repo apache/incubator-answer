@@ -16,6 +16,7 @@ import (
 	"github.com/answerdev/answer/internal/service/user_notification_config"
 	"github.com/answerdev/answer/pkg/checker"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )
@@ -28,6 +29,13 @@ type UserController struct {
 	emailService                  *export.EmailService
 	siteInfoCommonService         siteinfo_common.SiteInfoCommonService
 	userNotificationConfigService *user_notification_config.UserNotificationConfigService
+}
+
+type UserJwt struct {
+	ID    string `json:"id"`
+	Email string `json:"email"`
+	Type  string `json:"type" binding:"required,oneof=signup password"`
+	jwt.RegisteredClaims
 }
 
 // NewUserController new controller
@@ -213,6 +221,75 @@ func (uc *UserController) UserLogout(ctx *gin.Context) {
 	_ = uc.authService.RemoveUserCacheInfo(ctx, accessToken)
 	_ = uc.authService.RemoveAdminUserCacheInfo(ctx, accessToken)
 	handler.HandleResponse(ctx, nil, nil)
+}
+
+// UserLoginByJwt godoc
+// @Summary UserLoginByJwt
+// @Description UserLoginByJwt
+// @Tags User
+// @Accept string
+// @Produce json
+// @Param data body string true "jwt"
+// @Success 200 {object} handler.RespBody{data=schema.UserLoginResp}
+// @Router /answer/api/v1/user/login/jwt [post]
+func (uc *UserController) UserLoginByJwt(ctx *gin.Context) {
+	accessToken := middleware.ExtractToken(ctx)
+	if len(accessToken) == 0 {
+		handler.HandleResponse(ctx, nil, nil)
+		return
+	}
+
+	// user logged in, just response userInfo
+	userInfo, _ := uc.authService.GetUserCacheInfo(ctx, accessToken)
+	if userInfo != nil {
+		handler.HandleResponse(ctx, nil, userInfo)
+		return
+	}
+
+	token, err := jwt.ParseWithClaims(accessToken, &UserJwt{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte("AllYourBase"), nil
+	})
+	claims, ok := token.Claims.(*UserJwt)
+	if ok && !token.Valid {
+		handler.HandleResponse(ctx, errors.Unauthorized(reason.UnauthorizedError), nil)
+		return
+	}
+
+	resp, err := uc.userService.GetUserInfoByUserID(ctx, accessToken, claims.ID)
+	if err != nil {
+		// not exists, register new user
+		if errors.IsNotFound(err.(*errors.Error)) {
+			req := &schema.UserRegisterReq{}
+			req.Name = claims.Email
+			req.Email = claims.Email
+			req.Pass = uc.GenerateJwtPassword(claims.Email)
+			req.IP = ctx.ClientIP()
+			resp, errFields, err := uc.userService.UserRegisterByEmail(ctx, req)
+			if len(errFields) > 0 {
+				for _, field := range errFields {
+					field.ErrorMsg = translator.
+						Tr(handler.GetLang(ctx), field.ErrorMsg)
+				}
+				handler.HandleResponse(ctx, err, errFields)
+			} else {
+				handler.HandleResponse(ctx, err, resp)
+			}
+			return
+		}
+
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+
+	req := &schema.UserEmailLogin{}
+	req.Email = claims.Email
+	req.Pass = uc.GenerateJwtPassword(claims.Email)
+	uc.userService.EmailLogin(ctx, req)
+	handler.HandleResponse(ctx, nil, resp)
+}
+
+func (uc *UserController) GenerateJwtPassword(email string) string {
+	return email + "@hackquest.io"
 }
 
 // UserRegisterByEmail godoc

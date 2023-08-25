@@ -12,7 +12,7 @@ import {
   userCenterStore,
 } from '@/stores';
 import { floppyNavigation, guard, handleFormError, userCenter } from '@/utils';
-import { login, ssoLogin, UcAgent } from '@/services';
+import { login, jwtLogin, UcAgent } from '@/services';
 
 const Index: React.FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'login' });
@@ -126,10 +126,10 @@ const Index: React.FC = () => {
     });
   };
 
-  async function handleSsoLogin(accessToken: string) {
-    const user = await ssoLogin(accessToken);
+  async function handleJwtLogin(accessToken: string) {
+    const user = await jwtLogin(accessToken);
     updateUser(user);
-    guard.handleLoginWithToken(accessToken, navigate);
+    guard.handleLoginRedirect(navigate);
     setIsLoggingIn(false);
   }
 
@@ -145,7 +145,7 @@ const Index: React.FC = () => {
       return;
     }
     setIsLoggingIn(true);
-    handleSsoLogin(hash.substring(14));
+    handleJwtLogin(hash.substring(14));
   }, []);
 
   usePageTags({
@@ -243,7 +243,7 @@ const Index: React.FC = () => {
               className={`btn btn-primary btn-lg ${
                 isLoggingIn ? 'disabled' : ''
               }`}
-              to={`https://www.dev.hackquest.io/auth/login?redirect_url=${window.location.origin}/users/login`}>
+              to={`${process.env.REACT_APP_LOGIN_URL}?redirect_url=${window.location.origin}/users/login`}>
               {isLoggingIn && (
                 <div className="spinner-border me-1" role="status">
                   <span className="visually-hidden">Loading...</span>
