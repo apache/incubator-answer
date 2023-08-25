@@ -158,7 +158,6 @@ const Index: FC = () => {
               autoComplete="new-password"
               required
               type="password"
-              maxLength={32}
               isInvalid={formData.pass.isInvalid}
               onChange={(e) =>
                 handleChange({

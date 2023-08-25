@@ -1263,12 +1263,14 @@ ui:
     site_name:
       label: Site name
       msg: Site name cannot be empty.
+      msg_max_length: Site name must be at maximum 30 characters in length.
     site_url:
       label: Site URL
       text: The address of your site.
       msg:
         empty: Site URL cannot be empty.
         incorrect: Site URL incorrect format.
+        max_length: Site URL must be at maximum 512 characters in length.
     contact_email:
       label: Contact email
       text: Email address of key contact responsible for this site.
@@ -1283,12 +1285,15 @@ ui:
       label: Name
       msg: Name cannot be empty.
       character: 'Must use the character set "a-z", "0-9", " - . _"'
+      msg_max_length: Name must be at maximum 30 characters in length.
     admin_password:
       label: Password
       text: >-
         You will need this password to log in. Please store it in a secure
         location.
       msg: Password cannot be empty.
+      msg_min_length: Password must be at least 8 characters in length.
+      msg_max_length: Password must be at maximum 32 characters in length.
     admin_email:
       label: Email
       text: You will need this email to log in.

@@ -184,7 +184,6 @@ const Index: React.FC<Props> = ({ callback }) => {
             autoComplete="off"
             required
             type="password"
-            maxLength={32}
             isInvalid={formData.pass.isInvalid}
             value={formData.pass.value}
             onChange={(e) =>

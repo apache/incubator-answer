@@ -187,7 +187,6 @@ const Index: React.FC = () => {
                     tabIndex={1}
                     type="password"
                     // value={formData.pass.value}
-                    maxLength={32}
                     isInvalid={formData.pass.isInvalid}
                     onChange={(e) =>
                       handleChange({
