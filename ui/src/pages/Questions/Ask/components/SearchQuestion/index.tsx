@@ -40,18 +40,22 @@ const SearchQuestion = ({ similarQuestions }) => {
                   {item.accepted_answer ? (
                     <span className="ms-3 text-success">
                       <Icon type="bi" name="check-circle-fill" />
-                      <span className="ms-1">{item.answer_count}</span>
+                      <span className="ms-1">
+                        {t('x_answers', {
+                          keyPrefix: 'question',
+                          count: item.answer_count,
+                        })}
+                      </span>
                     </span>
                   ) : (
                     item.answer_count > 0 && (
-                      <span className="ms-3">
-                        <Icon
-                          type="bi"
-                          name="chat-square-text-fill"
-                          className="text-secondary"
-                        />
-                        <span className="ms-1 text-primary">
-                          {item.answer_count}
+                      <span className="ms-3 text-secondary">
+                        <Icon type="bi" name="chat-square-text-fill" />
+                        <span className="ms-1">
+                          {t('x_answers', {
+                            keyPrefix: 'question',
+                            count: item.answer_count,
+                          })}
                         </span>
                       </span>
                     )
