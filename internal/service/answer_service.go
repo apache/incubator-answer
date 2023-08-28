@@ -230,15 +230,13 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 }
 
 func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq) (string, error) {
-	//req.NoNeedReview //true 不需要审核
 	var canUpdate bool
 	_, existUnreviewed, err := as.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
 	if err != nil {
 		return "", err
 	}
 	if existUnreviewed {
-		err = errors.BadRequest(reason.AnswerCannotUpdate)
-		return "", err
+		return "", errors.BadRequest(reason.AnswerCannotUpdate)
 	}
 
 	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, req.QuestionID)
@@ -254,12 +252,11 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		return "", err
 	}
 	if !exist {
-		return "", nil
+		return "", errors.BadRequest(reason.AnswerNotFound)
 	}
 
 	if answerInfo.Status == entity.AnswerStatusDeleted {
-		err = errors.BadRequest(reason.AnswerCannotUpdate)
-		return "", err
+		return "", errors.BadRequest(reason.AnswerCannotUpdate)
 	}
 
 	//If the content is the same, ignore it
@@ -267,15 +264,13 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		return "", nil
 	}
 
-	now := time.Now()
-	insertData := new(entity.Answer)
+	insertData := &entity.Answer{}
 	insertData.ID = req.ID
 	insertData.UserID = answerInfo.UserID
 	insertData.QuestionID = req.QuestionID
 	insertData.OriginalText = req.Content
 	insertData.ParsedText = req.HTML
-	insertData.UpdatedAt = now
-
+	insertData.UpdatedAt = time.Now()
 	insertData.LastEditUserID = "0"
 	if answerInfo.UserID != req.UserID {
 		insertData.LastEditUserID = req.UserID
@@ -284,7 +279,6 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	revisionDTO := &schema.AddRevisionDTO{
 		UserID:   req.UserID,
 		ObjectID: req.ID,
-		Title:    "",
 		Log:      req.EditSummary,
 	}
 
@@ -314,7 +308,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	}
 	if canUpdate {
 		as.activityQueueService.Send(ctx, &schema.ActivityMsg{
-			UserID:           insertData.UserID,
+			UserID:           req.UserID,
 			ObjectID:         insertData.ID,
 			OriginalObjectID: insertData.ID,
 			ActivityTypeKey:  constant.ActAnswerEdited,
