@@ -141,6 +141,13 @@ img[src=""] {
   }
 }
 
+.name-ellipsis {
+  display: inline-block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
 .text-truncate-1,
 .text-truncate-2,
 .text-truncate-3,

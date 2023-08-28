@@ -12,6 +12,7 @@ interface Props {
   avatarSearchStr?: string;
   className?: string;
   avatarClass?: string;
+  nameMaxWidth?: string;
 }
 
 const Index: FC<Props> = ({
@@ -22,11 +23,14 @@ const Index: FC<Props> = ({
   className = 'small',
   avatarSearchStr = 's=48',
   showReputation = true,
+  nameMaxWidth = '300px',
 }) => {
   return (
     <div className={`d-flex align-items-center  text-secondary ${className}`}>
       {data?.status !== 'deleted' ? (
-        <Link to={`/users/${data?.username}`}>
+        <Link
+          to={`/users/${data?.username}`}
+          className="d-flex align-items-center">
           {showAvatar && (
             <Avatar
               avatar={data?.avatar}
@@ -36,7 +40,9 @@ const Index: FC<Props> = ({
               alt={data?.display_name}
             />
           )}
-          <span className="me-1 text-truncate-1" style={{ maxWidth: '300px' }}>
+          <span
+            className="me-1 name-ellipsis"
+            style={{ maxWidth: nameMaxWidth }}>
             {data?.display_name}
           </span>
         </Link>
@@ -51,9 +57,7 @@ const Index: FC<Props> = ({
               alt={data?.display_name}
             />
           )}
-          <span className="me-1 text-truncate-1" style={{ maxWidth: '300px' }}>
-            {data?.display_name}
-          </span>
+          <span className="me-1 name-ellipsis">{data?.display_name}</span>
         </>
       )}
 
