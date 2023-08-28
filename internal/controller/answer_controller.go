@@ -319,11 +319,11 @@ func (ac *AnswerController) AnswerList(ctx *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Security ApiKeyAuth
-// @Param data body schema.AnswerAcceptedReq  true "AnswerAcceptedReq"
+// @Param data body schema.AcceptAnswerReq  true "AcceptAnswerReq"
 // @Success 200 {string} string ""
 // @Router /answer/api/v1/answer/acceptance [post]
 func (ac *AnswerController) Accepted(ctx *gin.Context) {
-	req := &schema.AnswerAcceptedReq{}
+	req := &schema.AcceptAnswerReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
@@ -341,7 +341,7 @@ func (ac *AnswerController) Accepted(ctx *gin.Context) {
 		return
 	}
 
-	err = ac.answerService.UpdateAccepted(ctx, req)
+	err = ac.answerService.AcceptAnswer(ctx, req)
 	handler.HandleResponse(ctx, err, nil)
 }
 

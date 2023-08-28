@@ -55,7 +55,6 @@ func (ar *AnswerActivityRepo) SaveAcceptAnswerActivity(ctx context.Context, op *
 		return nil
 	}
 
-	ar.data.DB.ShowSQL(true)
 	// save activity
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
 		session = session.Context(ctx)
@@ -331,7 +330,7 @@ func (ar *AnswerActivityRepo) sendAcceptAnswerNotification(
 			ObjectID:       op.AnswerObjectID,
 		}
 		if act.ActivityUserID != op.QuestionUserID {
-			msg.TriggerUserID = op.QuestionUserID
+			msg.TriggerUserID = op.TriggerUserID
 			msg.ObjectType = constant.AnswerObjectType
 			msg.NotificationAction = constant.NotificationAcceptAnswer
 			ar.notificationQueueService.Send(ctx, msg)
