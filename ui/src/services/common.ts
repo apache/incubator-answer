@@ -72,7 +72,9 @@ export const addComment = (params) => {
 };
 
 export const queryTags = (tag: string) => {
-  return request.get(`/answer/api/v1/question/tags?tag=${tag}`);
+  return request.get(
+    `/answer/api/v1/question/tags?tag=${encodeURIComponent(tag)}`,
+  );
 };
 
 export const useQueryAnswerInfo = (id: string) => {

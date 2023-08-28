@@ -254,6 +254,7 @@ const Users: FC = () => {
                     avatarSearchStr="s=48"
                     avatarClass="me-2"
                     showReputation={false}
+                    nameMaxWidth="160px"
                   />
                 </td>
                 <td>{formatCount(user.rank)}</td>

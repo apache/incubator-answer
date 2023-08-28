@@ -28,6 +28,15 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
       };
     }
 
+    if (site_name.value && site_name.value.length > 30) {
+      bol = false;
+      data.site_url = {
+        value: site_name.value,
+        isInvalid: true,
+        errorMsg: t('site_name.msg_max_length'),
+      };
+    }
+
     if (!site_url.value) {
       bol = false;
       data.site_url = {
@@ -36,6 +45,7 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
         errorMsg: t('site_name.msg.empty'),
       };
     }
+
     const reg = /^(http|https):\/\//g;
     if (site_url.value && !site_url.value.match(reg)) {
       bol = false;
@@ -43,6 +53,13 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
         value: site_url.value,
         isInvalid: true,
         errorMsg: t('site_url.msg.incorrect'),
+      };
+    } else if (site_url.value.length > 512) {
+      bol = false;
+      data.site_url = {
+        value: site_url.value,
+        isInvalid: true,
+        errorMsg: t('site_url.msg.max_length'),
       };
     }
 
@@ -78,6 +95,13 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
         isInvalid: true,
         errorMsg: t('admin_name.character'),
       };
+    } else if (data.name.value.length > 30) {
+      bol = false;
+      data.name = {
+        value: data.name.value,
+        isInvalid: true,
+        errorMsg: t('admin_name.msg_max_length'),
+      };
     }
 
     if (!password.value) {
@@ -86,6 +110,24 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
         value: '',
         isInvalid: true,
         errorMsg: t('admin_password.msg'),
+      };
+    }
+
+    if (password.value && password.value.length < 4) {
+      bol = false;
+      data.password = {
+        value: data.password.value,
+        isInvalid: true,
+        errorMsg: t('admin_password.msg_min_length'),
+      };
+    }
+
+    if (password.value && password.value.length > 32) {
+      bol = false;
+      data.password = {
+        value: data.password.value,
+        isInvalid: true,
+        errorMsg: t('admin_password.msg_max_length'),
       };
     }
 
@@ -132,7 +174,6 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
           required
           value={data.site_name.value}
           isInvalid={data.site_name.isInvalid}
-          maxLength={30}
           onChange={(e) => {
             changeCallback({
               site_name: {
@@ -153,7 +194,6 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
           required
           value={data.site_url.value}
           isInvalid={data.site_url.isInvalid}
-          maxLength={512}
           onChange={(e) => {
             changeCallback({
               site_url: {
@@ -220,7 +260,6 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
           required
           value={data.name.value}
           isInvalid={data.name.isInvalid}
-          maxLength={30}
           onChange={(e) => {
             changeCallback({
               name: {
@@ -241,7 +280,6 @@ const Index: FC<Props> = ({ visible, data, changeCallback, nextCallback }) => {
         <Form.Control
           required
           type="password"
-          maxLength={32}
           value={data.password.value}
           isInvalid={data.password.isInvalid}
           onChange={(e) => {

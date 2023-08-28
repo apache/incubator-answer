@@ -1,5 +1,5 @@
 import { FC, useContext, useEffect } from 'react';
-import { Dropdown, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
+import { Dropdown, Button } from 'react-bootstrap';
 
 import { EditorContext } from './EditorContext';
 
@@ -49,28 +49,27 @@ const ToolItem: FC<IProps> = (props) => {
   }, []);
 
   const btnRender = () => (
-    <OverlayTrigger placement="bottom" overlay={<Tooltip>{tip}</Tooltip>}>
-      <Button
-        variant="link"
-        className={`p-0 b-0 btn-no-border toolbar icon-${label} ${
-          disable ? 'disabled' : ''
-        } `}
-        disabled={disable}
-        tabIndex={-1}
-        onClick={(e) => {
-          e.preventDefault();
-          if (typeof onClick === 'function') {
-            onClick();
-          }
-        }}
-        onBlur={(e) => {
-          e.preventDefault();
-          if (typeof onBlur === 'function') {
-            onBlur();
-          }
-        }}
-      />
-    </OverlayTrigger>
+    <Button
+      variant="link"
+      title={tip}
+      className={`p-0 b-0 btn-no-border toolbar icon-${label} ${
+        disable ? 'disabled' : ''
+      } `}
+      disabled={disable}
+      tabIndex={-1}
+      onClick={(e) => {
+        e.preventDefault();
+        if (typeof onClick === 'function') {
+          onClick();
+        }
+      }}
+      onBlur={(e) => {
+        e.preventDefault();
+        if (typeof onBlur === 'function') {
+          onBlur();
+        }
+      }}
+    />
   );
 
   if (!context) {
