@@ -686,9 +686,9 @@ func (qc *QuestionController) UpdateQuestionInviteUser(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, nil)
 }
 
-// SearchByTitleLike add question title like
-// @Summary add question title like
-// @Description add question title like
+// GetSimilarQuestions fuzzy query similar questions based on title
+// @Summary fuzzy query similar questions based on title
+// @Description fuzzy query similar questions based on title
 // @Tags Question
 // @Accept json
 // @Produce json
@@ -696,10 +696,9 @@ func (qc *QuestionController) UpdateQuestionInviteUser(ctx *gin.Context) {
 // @Param title query string true "title"  default(string)
 // @Success 200 {object} handler.RespBody
 // @Router /answer/api/v1/question/similar [get]
-func (qc *QuestionController) SearchByTitleLike(ctx *gin.Context) {
+func (qc *QuestionController) GetSimilarQuestions(ctx *gin.Context) {
 	title := ctx.Query("title")
-	userID := middleware.GetLoginUserIDFromContext(ctx)
-	resp, err := qc.questionService.SearchByTitleLike(ctx, title, userID)
+	resp, err := qc.questionService.GetQuestionsByTitle(ctx, title)
 	handler.HandleResponse(ctx, err, resp)
 }
 

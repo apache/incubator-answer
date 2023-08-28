@@ -3,6 +3,7 @@ package tag_common
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/pager"
@@ -56,19 +57,28 @@ func (tr *tagCommonRepo) GetTagBySlugName(ctx context.Context, slugName string) 
 }
 
 // GetTagListByName get tag list all like name
-func (tr *tagCommonRepo) GetTagListByName(ctx context.Context, name string, hasReserved bool) (tagList []*entity.Tag, err error) {
-	tagList = make([]*entity.Tag, 0)
+func (tr *tagCommonRepo) GetTagListByName(ctx context.Context, name string, recommend, reserved bool) (tagList []*entity.Tag, err error) {
 	cond := &entity.Tag{}
-	session := tr.data.DB.Context(ctx).Where("")
-	if name != "" {
-		session.Where("slug_name LIKE LOWER(?) or display_name LIKE ?", name+"%", name+"%")
-	} else {
-		session.UseBool("recommend")
+	session := tr.data.DB.Context(ctx)
+	if len(name) > 0 {
+		session.Where("slug_name LIKE ? OR display_name LIKE ?", strings.ToLower(name)+"%", name+"%")
+	}
+	var columns []string
+	if recommend {
+		columns = append(columns, "recommend")
 		cond.Recommend = true
 	}
+	if reserved {
+		columns = append(columns, "reserved")
+		cond.Reserved = true
+	}
+	if len(columns) > 0 {
+		session.UseBool(columns...)
+	}
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
-	session.Asc("slug_name")
-	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList, cond)
+
+	tagList = make([]*entity.Tag, 0)
+	err = session.OrderBy("recommend DESC,reserved DESC,slug_name ASC").Find(&tagList, cond)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
