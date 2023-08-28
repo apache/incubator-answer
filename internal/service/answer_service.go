@@ -230,15 +230,13 @@ func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (
 }
 
 func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq) (string, error) {
-	//req.NoNeedReview //true 不需要审核
 	var canUpdate bool
 	_, existUnreviewed, err := as.revisionService.ExistUnreviewedByObjectID(ctx, req.ID)
 	if err != nil {
 		return "", err
 	}
 	if existUnreviewed {
-		err = errors.BadRequest(reason.AnswerCannotUpdate)
-		return "", err
+		return "", errors.BadRequest(reason.AnswerCannotUpdate)
 	}
 
 	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, req.QuestionID)
@@ -254,12 +252,11 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		return "", err
 	}
 	if !exist {
-		return "", nil
+		return "", errors.BadRequest(reason.AnswerNotFound)
 	}
 
 	if answerInfo.Status == entity.AnswerStatusDeleted {
-		err = errors.BadRequest(reason.AnswerCannotUpdate)
-		return "", err
+		return "", errors.BadRequest(reason.AnswerCannotUpdate)
 	}
 
 	//If the content is the same, ignore it
@@ -267,15 +264,13 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 		return "", nil
 	}
 
-	now := time.Now()
-	insertData := new(entity.Answer)
+	insertData := &entity.Answer{}
 	insertData.ID = req.ID
 	insertData.UserID = answerInfo.UserID
 	insertData.QuestionID = req.QuestionID
 	insertData.OriginalText = req.Content
 	insertData.ParsedText = req.HTML
-	insertData.UpdatedAt = now
-
+	insertData.UpdatedAt = time.Now()
 	insertData.LastEditUserID = "0"
 	if answerInfo.UserID != req.UserID {
 		insertData.LastEditUserID = req.UserID
@@ -284,7 +279,6 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	revisionDTO := &schema.AddRevisionDTO{
 		UserID:   req.UserID,
 		ObjectID: req.ID,
-		Title:    "",
 		Log:      req.EditSummary,
 	}
 
@@ -314,7 +308,7 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	}
 	if canUpdate {
 		as.activityQueueService.Send(ctx, &schema.ActivityMsg{
-			UserID:           insertData.UserID,
+			UserID:           req.UserID,
 			ObjectID:         insertData.ID,
 			OriginalObjectID: insertData.ID,
 			ActivityTypeKey:  constant.ActAnswerEdited,
@@ -325,47 +319,47 @@ func (as *AnswerService) Update(ctx context.Context, req *schema.AnswerUpdateReq
 	return insertData.ID, nil
 }
 
-// UpdateAccepted
-func (as *AnswerService) UpdateAccepted(ctx context.Context, req *schema.AnswerAcceptedReq) error {
-	if req.AnswerID == "" {
-		req.AnswerID = "0"
-	}
-	if req.UserID == "" {
-		return nil
-	}
-
-	newAnswerInfo := &entity.Answer{}
-	newAnswerInfoexist := false
-	var err error
-
-	if req.AnswerID != "0" {
-		newAnswerInfo, newAnswerInfoexist, err = as.answerRepo.GetByID(ctx, req.AnswerID)
-		if err != nil {
-			return err
-		}
-		newAnswerInfo.ID = uid.DeShortID(newAnswerInfo.ID)
-		if !newAnswerInfoexist {
-			return errors.BadRequest(reason.AnswerNotFound)
-		}
-	}
-
+// AcceptAnswer accept answer
+func (as *AnswerService) AcceptAnswer(ctx context.Context, req *schema.AcceptAnswerReq) (err error) {
+	// find question
 	questionInfo, exist, err := as.questionRepo.GetQuestion(ctx, req.QuestionID)
 	if err != nil {
 		return err
 	}
-	questionInfo.ID = uid.DeShortID(questionInfo.ID)
 	if !exist {
 		return errors.BadRequest(reason.QuestionNotFound)
 	}
-	// if questionInfo.UserID != req.UserID {
-	// 	return fmt.Errorf("no permission to set answer")
-	// }
+	questionInfo.ID = uid.DeShortID(questionInfo.ID)
 	if questionInfo.AcceptedAnswerID == req.AnswerID {
 		return nil
 	}
 
+	// find answer
+	var acceptedAnswerInfo *entity.Answer
+	if len(req.AnswerID) > 1 {
+		acceptedAnswerInfo, exist, err = as.answerRepo.GetByID(ctx, req.AnswerID)
+		if err != nil {
+			return err
+		}
+		if !exist {
+			return errors.BadRequest(reason.AnswerNotFound)
+		}
+		acceptedAnswerInfo.ID = uid.DeShortID(acceptedAnswerInfo.ID)
+	}
+
+	// update answers status
+	if err = as.answerRepo.UpdateAcceptedStatus(ctx, req.AnswerID, req.QuestionID); err != nil {
+		return err
+	}
+
+	// update question status
+	err = as.questionCommon.UpdateAccepted(ctx, req.QuestionID, req.AnswerID)
+	if err != nil {
+		log.Error("UpdateLastAnswer error", err.Error())
+	}
+
 	var oldAnswerInfo *entity.Answer
-	if len(questionInfo.AcceptedAnswerID) > 0 && questionInfo.AcceptedAnswerID != "0" {
+	if len(questionInfo.AcceptedAnswerID) > 1 {
 		oldAnswerInfo, _, err = as.answerRepo.GetByID(ctx, questionInfo.AcceptedAnswerID)
 		if err != nil {
 			return err
@@ -373,17 +367,7 @@ func (as *AnswerService) UpdateAccepted(ctx context.Context, req *schema.AnswerA
 		oldAnswerInfo.ID = uid.DeShortID(oldAnswerInfo.ID)
 	}
 
-	err = as.answerRepo.UpdateAccepted(ctx, req.AnswerID, req.QuestionID)
-	if err != nil {
-		return err
-	}
-
-	err = as.questionCommon.UpdateAccepted(ctx, req.QuestionID, req.AnswerID)
-	if err != nil {
-		log.Error("UpdateLastAnswer error", err.Error())
-	}
-
-	as.updateAnswerRank(ctx, req.UserID, questionInfo, newAnswerInfo, oldAnswerInfo)
+	as.updateAnswerRank(ctx, req.UserID, questionInfo, acceptedAnswerInfo, oldAnswerInfo)
 	return nil
 }
 
@@ -398,9 +382,9 @@ func (as *AnswerService) updateAnswerRank(ctx context.Context, userID string,
 			log.Error(err)
 		}
 	}
-	if newAnswerInfo.ID != "" {
+	if newAnswerInfo != nil {
 		err := as.answerActivityService.AcceptAnswer(ctx, userID, newAnswerInfo.ID,
-			questionInfo.ID, questionInfo.UserID, newAnswerInfo.UserID, newAnswerInfo.UserID == userID)
+			questionInfo.ID, questionInfo.UserID, newAnswerInfo.UserID, newAnswerInfo.UserID == questionInfo.UserID)
 		if err != nil {
 			log.Error(err)
 		}
