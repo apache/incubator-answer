@@ -126,7 +126,7 @@ func (am *AuthUserMiddleware) AdminAuth() gin.HandlerFunc {
 			return
 		}
 		userInfo, err := am.authService.GetAdminUserCacheInfo(ctx, token)
-		if err != nil {
+		if err != nil || userInfo == nil {
 			handler.HandleResponse(ctx, errors.Forbidden(reason.UnauthorizedError), nil)
 			ctx.Abort()
 			return

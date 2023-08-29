@@ -55,7 +55,6 @@ func (ar *AnswerActivityRepo) SaveAcceptAnswerActivity(ctx context.Context, op *
 		return nil
 	}
 
-	ar.data.DB.ShowSQL(true)
 	// save activity
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
 		session = session.Context(ctx)
@@ -311,12 +310,11 @@ func (ar *AnswerActivityRepo) sendAcceptAnswerNotification(
 			Type:           schema.NotificationTypeAchievement,
 			ObjectID:       op.AnswerObjectID,
 			ReceiverUserID: act.ActivityUserID,
+			TriggerUserID:  act.TriggerUserID,
 		}
 		if act.ActivityUserID == op.QuestionUserID {
-			msg.TriggerUserID = op.AnswerUserID
 			msg.ObjectType = constant.AnswerObjectType
 		} else {
-			msg.TriggerUserID = op.QuestionUserID
 			msg.ObjectType = constant.AnswerObjectType
 		}
 		if msg.TriggerUserID != msg.ReceiverUserID {
@@ -329,9 +327,9 @@ func (ar *AnswerActivityRepo) sendAcceptAnswerNotification(
 			ReceiverUserID: act.ActivityUserID,
 			Type:           schema.NotificationTypeInbox,
 			ObjectID:       op.AnswerObjectID,
+			TriggerUserID:  op.TriggerUserID,
 		}
 		if act.ActivityUserID != op.QuestionUserID {
-			msg.TriggerUserID = op.QuestionUserID
 			msg.ObjectType = constant.AnswerObjectType
 			msg.NotificationAction = constant.NotificationAcceptAnswer
 			ar.notificationQueueService.Send(ctx, msg)
@@ -343,15 +341,14 @@ func (ar *AnswerActivityRepo) sendCancelAcceptAnswerNotification(
 	ctx context.Context, op *schema.AcceptAnswerOperationInfo) {
 	for _, act := range op.Activities {
 		msg := &schema.NotificationMsg{
+			TriggerUserID:  act.TriggerUserID,
 			ReceiverUserID: act.ActivityUserID,
 			Type:           schema.NotificationTypeAchievement,
 			ObjectID:       op.AnswerObjectID,
 		}
 		if act.ActivityUserID == op.QuestionObjectID {
-			msg.TriggerUserID = op.AnswerObjectID
 			msg.ObjectType = constant.QuestionObjectType
 		} else {
-			msg.TriggerUserID = op.QuestionObjectID
 			msg.ObjectType = constant.AnswerObjectType
 		}
 		if msg.TriggerUserID != msg.ReceiverUserID {
