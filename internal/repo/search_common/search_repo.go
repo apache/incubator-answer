@@ -107,12 +107,12 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 	likeConQ := builder.NewCond()
 	likeConA := builder.NewCond()
 	for _, word := range words {
-		likeConQ = likeConQ.Or(builder.Like{"title", word}).
-			Or(builder.Like{"original_text", word})
+		likeConQ = likeConQ.Or(builder.Expr("UPPER(title) LIKE UPPER(?)", "%"+word+"%")).
+			Or(builder.Expr("UPPER(original_text) LIKE UPPER(?)", "%"+word+"%"))
 		argsQ = append(argsQ, "%"+word+"%")
 		argsQ = append(argsQ, "%"+word+"%")
 
-		likeConA = likeConA.Or(builder.Like{"`answer`.original_text", word})
+		likeConA = likeConA.Or(builder.Expr("UPPER(`answer`.original_text) LIKE UPPER(?)", "%"+word+"%"))
 		argsA = append(argsA, "%"+word+"%")
 	}
 
@@ -231,8 +231,8 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagID
 
 	likeConQ := builder.NewCond()
 	for _, word := range words {
-		likeConQ = likeConQ.Or(builder.Like{"title", word}).
-			Or(builder.Like{"original_text", word})
+		likeConQ = likeConQ.Or(builder.Expr("UPPER(title) LIKE UPPER(?)", "%"+word+"%")).
+			Or(builder.Expr("UPPER(original_text) LIKE UPPER(?)", "%"+word+"%"))
 		args = append(args, "%"+word+"%")
 		args = append(args, "%"+word+"%")
 	}
@@ -343,7 +343,7 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs 
 
 	likeConA := builder.NewCond()
 	for _, word := range words {
-		likeConA = likeConA.Or(builder.Like{"`answer`.original_text", word})
+		likeConA = likeConA.Or(builder.Expr("UPPER(`answer`.original_text) LIKE UPPER(?)", "%"+word+"%"))
 		args = append(args, "%"+word+"%")
 	}
 
