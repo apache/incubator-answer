@@ -427,12 +427,11 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) 
 
 	info.VoteStatus = as.voteRepo.GetVoteStatus(ctx, answerID, loginUserID)
 
-	CollectedMap, err := as.collectionCommon.SearchObjectCollected(ctx, loginUserID, []string{answerInfo.ID})
+	collectedMap, err := as.collectionCommon.SearchObjectCollected(ctx, loginUserID, []string{answerInfo.ID})
 	if err != nil {
-		log.Error("CollectionFunc.SearchObjectCollected error", err)
+		return nil, nil, has, err
 	}
-	_, ok = CollectedMap[answerInfo.ID]
-	if ok {
+	if len(collectedMap) > 0 {
 		info.Collected = true
 	}
 
@@ -513,46 +512,28 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, answers []*entity
 		item := as.ShowFormat(ctx, info)
 		list = append(list, item)
 		objectIDs = append(objectIDs, info.ID)
-		userIDs = append(userIDs, info.UserID)
-		userIDs = append(userIDs, info.LastEditUserID)
-		if req.UserID != "" {
-			item.ID = uid.DeShortID(item.ID)
-			item.VoteStatus = as.voteRepo.GetVoteStatus(ctx, item.ID, req.UserID)
-		}
+		userIDs = append(userIDs, info.UserID, info.LastEditUserID)
 	}
+
 	userInfoMap, err := as.userCommon.BatchUserBasicInfoByID(ctx, userIDs)
 	if err != nil {
 		return list, err
 	}
 	for _, item := range list {
-		_, ok := userInfoMap[item.UserID]
-		if ok {
-			item.UserInfo = userInfoMap[item.UserID]
-		}
-		_, ok = userInfoMap[item.UpdateUserID]
-		if ok {
-			item.UpdateUserInfo = userInfoMap[item.UpdateUserID]
-		}
+		item.UserInfo = userInfoMap[item.UserID]
+		item.UpdateUserInfo = userInfoMap[item.UpdateUserID]
 	}
-
-	if req.UserID == "" {
+	if len(req.UserID) == 0 {
 		return list, nil
 	}
 
-	searchObjectCollected, err := as.collectionCommon.SearchObjectCollected(ctx, req.UserID, objectIDs)
+	collectedMap, err := as.collectionCommon.SearchObjectCollected(ctx, req.UserID, objectIDs)
 	if err != nil {
 		return nil, err
 	}
-
 	for _, item := range list {
-		_, ok := searchObjectCollected[item.ID]
-		if ok {
-			item.Collected = true
-		}
-	}
-
-	for _, item := range list {
-		item.ID = uid.EnShortID(item.ID)
+		item.VoteStatus = as.voteRepo.GetVoteStatus(ctx, item.ID, req.UserID)
+		item.Collected = collectedMap[item.ID]
 		item.MemberActions = permission.GetAnswerPermission(ctx, req.UserID, item.UserID, req.CanEdit, req.CanDelete)
 	}
 	return list, nil

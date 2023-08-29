@@ -282,17 +282,13 @@ func (qs *QuestionCommon) Info(ctx context.Context, questionID string, loginUser
 	}
 	showinfo.Answered = has
 
-	// login user  Collected information
-
-	CollectedMap, err := qs.collectionCommon.SearchObjectCollected(ctx, loginUserID, []string{dbinfo.ID})
+	collectedMap, err := qs.collectionCommon.SearchObjectCollected(ctx, loginUserID, []string{dbinfo.ID})
 	if err != nil {
-		log.Error("CollectionFunc.SearchObjectCollected", err)
+		return nil, err
 	}
-	_, ok = CollectedMap[dbinfo.ID]
-	if ok {
+	if len(collectedMap) > 0 {
 		showinfo.Collected = true
 	}
-
 	return showinfo, nil
 }
 
@@ -406,9 +402,7 @@ func (qs *QuestionCommon) FormatQuestions(ctx context.Context, questionList []*e
 		item := qs.ShowFormat(ctx, questionInfo)
 		list = append(list, item)
 		objectIds = append(objectIds, item.ID)
-		userIds = append(userIds, item.UserID)
-		userIds = append(userIds, item.LastEditUserID)
-		userIds = append(userIds, item.LastAnsweredUserID)
+		userIds = append(userIds, item.UserID, item.LastEditUserID, item.LastAnsweredUserID)
 	}
 	tagsMap, err := qs.tagCommon.BatchGetObjectTag(ctx, objectIds)
 	if err != nil {
@@ -421,38 +415,21 @@ func (qs *QuestionCommon) FormatQuestions(ctx context.Context, questionList []*e
 	}
 
 	for _, item := range list {
-		_, ok := tagsMap[item.ID]
-		if ok {
-			item.Tags = tagsMap[item.ID]
-		}
-		_, ok = userInfoMap[item.UserID]
-		if ok {
-			item.UserInfo = userInfoMap[item.UserID]
-		}
-		_, ok = userInfoMap[item.LastEditUserID]
-		if ok {
-			item.UpdateUserInfo = userInfoMap[item.LastEditUserID]
-		}
-		_, ok = userInfoMap[item.LastAnsweredUserID]
-		if ok {
-			item.LastAnsweredUserInfo = userInfoMap[item.LastAnsweredUserID]
-		}
+		item.Tags = tagsMap[item.ID]
+		item.UserInfo = userInfoMap[item.UserID]
+		item.UpdateUserInfo = userInfoMap[item.LastEditUserID]
+		item.LastAnsweredUserInfo = userInfoMap[item.LastAnsweredUserID]
 	}
-
 	if loginUserID == "" {
 		return list, nil
 	}
-	// //login user  Collected information
-	CollectedMap, err := qs.collectionCommon.SearchObjectCollected(ctx, loginUserID, objectIds)
-	if err != nil {
-		log.Error("CollectionFunc.SearchObjectCollected", err)
-	}
 
+	collectedMap, err := qs.collectionCommon.SearchObjectCollected(ctx, loginUserID, objectIds)
+	if err != nil {
+		return nil, err
+	}
 	for _, item := range list {
-		_, ok := CollectedMap[item.ID]
-		if ok {
-			item.Collected = true
-		}
+		item.Collected = collectedMap[item.ID]
 	}
 	return list, nil
 }
