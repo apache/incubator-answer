@@ -46,15 +46,6 @@ func NewAnswerActivityRepo(
 
 func (ar *AnswerActivityRepo) SaveAcceptAnswerActivity(ctx context.Context, op *schema.AcceptAnswerOperationInfo) (
 	err error) {
-	// pre check
-	noNeedToDo, err := ar.activityPreCheck(ctx, op)
-	if err != nil {
-		return err
-	}
-	if noNeedToDo {
-		return nil
-	}
-
 	// save activity
 	_, err = ar.data.DB.Transaction(func(session *xorm.Session) (result any, err error) {
 		session = session.Context(ctx)
@@ -129,21 +120,6 @@ func (ar *AnswerActivityRepo) SaveCancelAcceptAnswerActivity(ctx context.Context
 	// notification
 	ar.sendCancelAcceptAnswerNotification(ctx, op)
 	return nil
-}
-
-func (ar *AnswerActivityRepo) activityPreCheck(ctx context.Context, op *schema.AcceptAnswerOperationInfo) (
-	noNeedToDo bool, err error) {
-	activities, err := ar.getExistActivity(ctx, op)
-	if err != nil {
-		return false, err
-	}
-	done := 0
-	for _, act := range activities {
-		if act.Cancelled == entity.ActivityAvailable {
-			done++
-		}
-	}
-	return done == len(op.Activities), nil
 }
 
 func (ar *AnswerActivityRepo) acquireUserInfo(session *xorm.Session, userIDs []string) (map[string]*entity.User, error) {
@@ -286,18 +262,17 @@ func (ar *AnswerActivityRepo) rollbackUserRank(ctx context.Context, session *xor
 func (ar *AnswerActivityRepo) getExistActivity(ctx context.Context, op *schema.AcceptAnswerOperationInfo) ([]*entity.Activity, error) {
 	var activities []*entity.Activity
 	for _, action := range op.Activities {
-		t := &entity.Activity{}
-		exist, err := ar.data.DB.Context(ctx).
+		var t []*entity.Activity
+		err := ar.data.DB.Context(ctx).
 			Where(builder.Eq{"user_id": action.ActivityUserID}).
-			And(builder.Eq{"trigger_user_id": action.TriggerUserID}).
 			And(builder.Eq{"activity_type": action.ActivityType}).
 			And(builder.Eq{"object_id": op.AnswerObjectID}).
-			Get(t)
+			Find(&t)
 		if err != nil {
 			return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		}
-		if exist {
-			activities = append(activities, t)
+		if len(t) > 0 {
+			activities = append(activities, t...)
 		}
 	}
 	return activities, nil
@@ -310,12 +285,11 @@ func (ar *AnswerActivityRepo) sendAcceptAnswerNotification(
 			Type:           schema.NotificationTypeAchievement,
 			ObjectID:       op.AnswerObjectID,
 			ReceiverUserID: act.ActivityUserID,
+			TriggerUserID:  act.TriggerUserID,
 		}
 		if act.ActivityUserID == op.QuestionUserID {
-			msg.TriggerUserID = op.AnswerUserID
 			msg.ObjectType = constant.AnswerObjectType
 		} else {
-			msg.TriggerUserID = op.QuestionUserID
 			msg.ObjectType = constant.AnswerObjectType
 		}
 		if msg.TriggerUserID != msg.ReceiverUserID {
@@ -328,9 +302,9 @@ func (ar *AnswerActivityRepo) sendAcceptAnswerNotification(
 			ReceiverUserID: act.ActivityUserID,
 			Type:           schema.NotificationTypeInbox,
 			ObjectID:       op.AnswerObjectID,
+			TriggerUserID:  op.TriggerUserID,
 		}
 		if act.ActivityUserID != op.QuestionUserID {
-			msg.TriggerUserID = op.TriggerUserID
 			msg.ObjectType = constant.AnswerObjectType
 			msg.NotificationAction = constant.NotificationAcceptAnswer
 			ar.notificationQueueService.Send(ctx, msg)
@@ -342,15 +316,14 @@ func (ar *AnswerActivityRepo) sendCancelAcceptAnswerNotification(
 	ctx context.Context, op *schema.AcceptAnswerOperationInfo) {
 	for _, act := range op.Activities {
 		msg := &schema.NotificationMsg{
+			TriggerUserID:  act.TriggerUserID,
 			ReceiverUserID: act.ActivityUserID,
 			Type:           schema.NotificationTypeAchievement,
 			ObjectID:       op.AnswerObjectID,
 		}
 		if act.ActivityUserID == op.QuestionObjectID {
-			msg.TriggerUserID = op.AnswerObjectID
 			msg.ObjectType = constant.QuestionObjectType
 		} else {
-			msg.TriggerUserID = op.QuestionObjectID
 			msg.ObjectType = constant.AnswerObjectType
 		}
 		if msg.TriggerUserID != msg.ReceiverUserID {
