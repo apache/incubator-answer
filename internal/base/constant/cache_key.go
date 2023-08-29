@@ -14,6 +14,7 @@ const (
 	SiteInfoCacheTime                          = 1 * time.Hour
 	ConfigID2KEYCacheKeyPrefix                 = "answer:config:id:"
 	ConfigKEY2ContentCacheKeyPrefix            = "answer:config:key:"
+	ConfigCacheTime                            = 1 * time.Hour
 	ConnectorUserExternalInfoCacheKey          = "answer:connector:"
 	ConnectorUserExternalInfoCacheTime         = 10 * time.Minute
 	SiteMapQuestionCacheKeyPrefix              = "answer:sitemap:question:%d"

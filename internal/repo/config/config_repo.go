@@ -28,7 +28,8 @@ func NewConfigRepo(data *data.Data) config.ConfigRepo {
 
 func (cr configRepo) GetConfigByID(ctx context.Context, id int) (c *entity.Config, err error) {
 	cacheKey := fmt.Sprintf("%s%d", constant.ConfigID2KEYCacheKeyPrefix, id)
-	if cacheData, exist, err := cr.data.Cache.GetString(ctx, cacheKey); err == nil && exist {
+	cacheData, exist, err := cr.data.Cache.GetString(ctx, cacheKey)
+	if err == nil && exist && len(cacheData) > 0 {
 		c = &entity.Config{}
 		c.BuildByJSON([]byte(cacheData))
 		if c.ID > 0 {
@@ -37,7 +38,7 @@ func (cr configRepo) GetConfigByID(ctx context.Context, id int) (c *entity.Confi
 	}
 
 	c = &entity.Config{}
-	exist, err := cr.data.DB.Context(ctx).ID(id).Get(c)
+	exist, err = cr.data.DB.Context(ctx).ID(id).Get(c)
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -46,7 +47,7 @@ func (cr configRepo) GetConfigByID(ctx context.Context, id int) (c *entity.Confi
 	}
 
 	// update cache
-	if err := cr.data.Cache.SetString(ctx, cacheKey, c.JsonString(), -1); err != nil {
+	if err := cr.data.Cache.SetString(ctx, cacheKey, c.JsonString(), constant.ConfigCacheTime); err != nil {
 		log.Error(err)
 	}
 	return c, nil
@@ -54,7 +55,8 @@ func (cr configRepo) GetConfigByID(ctx context.Context, id int) (c *entity.Confi
 
 func (cr configRepo) GetConfigByKey(ctx context.Context, key string) (c *entity.Config, err error) {
 	cacheKey := constant.ConfigKEY2ContentCacheKeyPrefix + key
-	if cacheData, exist, err := cr.data.Cache.GetString(ctx, cacheKey); err == nil && exist {
+	cacheData, exist, err := cr.data.Cache.GetString(ctx, cacheKey)
+	if err == nil && exist && len(cacheData) > 0 {
 		c = &entity.Config{}
 		c.BuildByJSON([]byte(cacheData))
 		if c.ID > 0 {
@@ -63,7 +65,7 @@ func (cr configRepo) GetConfigByKey(ctx context.Context, key string) (c *entity.
 	}
 
 	c = &entity.Config{Key: key}
-	exist, err := cr.data.DB.Context(ctx).Get(c)
+	exist, err = cr.data.DB.Context(ctx).Get(c)
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -72,7 +74,7 @@ func (cr configRepo) GetConfigByKey(ctx context.Context, key string) (c *entity.
 	}
 
 	// update cache
-	if err := cr.data.Cache.SetString(ctx, cacheKey, c.JsonString(), -1); err != nil {
+	if err := cr.data.Cache.SetString(ctx, cacheKey, c.JsonString(), constant.ConfigCacheTime); err != nil {
 		log.Error(err)
 	}
 	return c, nil
@@ -99,11 +101,11 @@ func (cr configRepo) UpdateConfig(ctx context.Context, key string, value string)
 	cacheVal := oldConfig.JsonString()
 	// update cache
 	if err := cr.data.Cache.SetString(ctx,
-		constant.ConfigKEY2ContentCacheKeyPrefix+key, cacheVal, -1); err != nil {
+		constant.ConfigKEY2ContentCacheKeyPrefix+key, cacheVal, constant.ConfigCacheTime); err != nil {
 		log.Error(err)
 	}
 	if err := cr.data.Cache.SetString(ctx,
-		fmt.Sprintf("%s%d", constant.ConfigID2KEYCacheKeyPrefix, oldConfig.ID), cacheVal, -1); err != nil {
+		fmt.Sprintf("%s%d", constant.ConfigID2KEYCacheKeyPrefix, oldConfig.ID), cacheVal, constant.ConfigCacheTime); err != nil {
 		log.Error(err)
 	}
 	return
