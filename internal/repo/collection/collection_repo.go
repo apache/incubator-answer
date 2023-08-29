@@ -2,9 +2,9 @@ package collection
 
 import (
 	"context"
-
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
+	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/pager"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/entity"
@@ -142,25 +142,32 @@ func (cr *collectionRepo) GetCollectionPage(ctx context.Context, page, pageSize 
 	session = session.OrderBy("update_time desc")
 
 	total, err = pager.Help(page, pageSize, collectionList, collection, session)
-	err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
 	return
 }
 
 // SearchObjectCollected check object is collected or not
 func (cr *collectionRepo) SearchObjectCollected(ctx context.Context, userID string, objectIds []string) (map[string]bool, error) {
-	collectedMap := make(map[string]bool)
-	for k, object_id := range objectIds {
-		objectIds[k] = uid.DeShortID(object_id)
+	for i := 0; i < len(objectIds); i++ {
+		objectIds[i] = uid.DeShortID(objectIds[i])
 	}
+
 	list, err := cr.SearchByObjectIDsAndUser(ctx, userID, objectIds)
 	if err != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return collectedMap, err
+		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+
+	collectedMap := make(map[string]bool)
+	short := handler.GetEnableShortID(ctx)
 	for _, item := range list {
+		if short {
+			item.ObjectID = uid.EnShortID(item.ObjectID)
+		}
 		collectedMap[item.ObjectID] = true
 	}
-	return collectedMap, err
+	return collectedMap, nil
 }
 
 // SearchList
