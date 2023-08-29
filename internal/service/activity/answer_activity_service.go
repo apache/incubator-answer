@@ -34,6 +34,9 @@ func NewAnswerActivityService(
 // AcceptAnswer accept answer change activity
 func (as *AnswerActivityService) AcceptAnswer(ctx context.Context,
 	loginUserID, answerObjID, questionObjID, questionUserID, answerUserID string, isSelf bool) (err error) {
+	log.Debugf("user %s want to accept answer %s[%s] for question %s[%s]", loginUserID,
+		answerObjID, answerUserID,
+		questionObjID, questionUserID)
 	operationInfo := as.createAcceptAnswerOperationInfo(ctx, loginUserID,
 		answerObjID, questionObjID, questionUserID, answerUserID, isSelf)
 	return as.answerActivityRepo.SaveAcceptAnswerActivity(ctx, operationInfo)
