@@ -436,6 +436,9 @@ func (ts *TagCommonService) tagFormatRecommendAndReserved(ctx context.Context, t
 // BatchGetObjectTag batch get object tag
 func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []string) (map[string][]*schema.TagResp, error) {
 	objectIDTagMap := make(map[string][]*schema.TagResp)
+	if len(objectIds) == 0 {
+		return objectIDTagMap, nil
+	}
 	objectTagRelList, err := ts.tagRelRepo.BatchGetObjectTagRelList(ctx, objectIds)
 	if err != nil {
 		return objectIDTagMap, err

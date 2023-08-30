@@ -106,9 +106,12 @@ func (us *UserCommon) UpdateQuestionCount(ctx context.Context, userID string, nu
 	return us.userRepo.UpdateQuestionCount(ctx, userID, num)
 }
 
-func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, IDs []string) (map[string]*schema.UserBasicInfo, error) {
+func (us *UserCommon) BatchUserBasicInfoByID(ctx context.Context, userIDs []string) (map[string]*schema.UserBasicInfo, error) {
 	userMap := make(map[string]*schema.UserBasicInfo)
-	userList, err := us.userRepo.BatchGetByID(ctx, IDs)
+	if len(userIDs) == 0 {
+		return userMap, nil
+	}
+	userList, err := us.userRepo.BatchGetByID(ctx, userIDs)
 	if err != nil {
 		return userMap, err
 	}

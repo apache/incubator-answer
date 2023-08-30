@@ -90,11 +90,19 @@ type SearchObject struct {
 	Accepted        bool   `json:"accepted"`
 	AnswerCount     int    `json:"answer_count"`
 	// user info
-	UserInfo *UserBasicInfo `json:"user_info"`
+	UserInfo *SearchObjectUser `json:"user_info"`
 	// tags
-	Tags []TagResp `json:"tags"`
+	Tags []*TagResp `json:"tags"`
 	// Status
 	StatusStr string `json:"status"`
+}
+
+type SearchObjectUser struct {
+	ID          string `json:"id"`
+	Username    string `json:"username"`
+	DisplayName string `json:"display_name"`
+	Rank        int    `json:"rank"`
+	Status      string `json:"status"`
 }
 
 type TagResp struct {
@@ -111,13 +119,13 @@ type SearchResult struct {
 	// object_type
 	ObjectType string `json:"object_type"`
 	// this object
-	Object SearchObject `json:"object"`
+	Object *SearchObject `json:"object"`
 }
 
 type SearchResp struct {
 	Total int64 `json:"count"`
 	// search response
-	SearchResults []SearchResult `json:"list"`
+	SearchResults []*SearchResult `json:"list"`
 }
 
 type SearchDescResp struct {

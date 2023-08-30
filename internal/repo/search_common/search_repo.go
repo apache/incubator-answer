@@ -3,6 +3,7 @@ package search_common
 import (
 	"context"
 	"fmt"
+	tagcommon "github.com/answerdev/answer/internal/service/tag_common"
 	"github.com/answerdev/answer/plugin"
 	"strconv"
 	"strings"
@@ -19,7 +20,6 @@ import (
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
 	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/obj"
-	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/builder"
 )
@@ -58,19 +58,26 @@ type searchRepo struct {
 	data         *data.Data
 	userCommon   *usercommon.UserCommon
 	uniqueIDRepo unique.UniqueIDRepo
+	tagCommon    *tagcommon.TagCommonService
 }
 
 // NewSearchRepo new repository
-func NewSearchRepo(data *data.Data, uniqueIDRepo unique.UniqueIDRepo, userCommon *usercommon.UserCommon) search_common.SearchRepo {
+func NewSearchRepo(
+	data *data.Data,
+	uniqueIDRepo unique.UniqueIDRepo,
+	userCommon *usercommon.UserCommon,
+	tagCommon *tagcommon.TagCommonService,
+) search_common.SearchRepo {
 	return &searchRepo{
 		data:         data,
 		uniqueIDRepo: uniqueIDRepo,
 		userCommon:   userCommon,
+		tagCommon:    tagCommon,
 	}
 }
 
 // SearchContents search question and answer data
-func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs []string, userID string, votes int, page, size int, order string) (resp []schema.SearchResult, total int64, err error) {
+func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs []string, userID string, votes int, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
 	words = filterWords(words)
 
 	var (
@@ -210,7 +217,7 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 }
 
 // SearchQuestions search question data
-func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagIDs []string, notAccepted bool, views, answers int, page, size int, order string) (resp []schema.SearchResult, total int64, err error) {
+func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagIDs []string, notAccepted bool, views, answers int, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
 	words = filterWords(words)
 	var (
 		qfs  = qFields
@@ -319,7 +326,7 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagID
 }
 
 // SearchAnswers search answer data
-func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs []string, accepted bool, questionID string, page, size int, order string) (resp []schema.SearchResult, total int64, err error) {
+func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs []string, accepted bool, questionID string, page, size int, order string) (resp []*schema.SearchResult, total int64, err error) {
 	words = filterWords(words)
 
 	var (
@@ -428,7 +435,7 @@ func (sr *searchRepo) parseOrder(ctx context.Context, order string) (res string)
 }
 
 // ParseSearchPluginResult parse search plugin result
-func (sr *searchRepo) ParseSearchPluginResult(ctx context.Context, sres []plugin.SearchResult) (resp []schema.SearchResult, err error) {
+func (sr *searchRepo) ParseSearchPluginResult(ctx context.Context, sres []plugin.SearchResult) (resp []*schema.SearchResult, err error) {
 	var (
 		qres []map[string][]byte
 		res  = make([]map[string][]byte, 0)
@@ -455,82 +462,79 @@ func (sr *searchRepo) ParseSearchPluginResult(ctx context.Context, sres []plugin
 }
 
 // parseResult parse search result, return the data structure
-func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) (resp []schema.SearchResult, err error) {
+func (sr *searchRepo) parseResult(ctx context.Context, res []map[string][]byte) (resp []*schema.SearchResult, err error) {
+	questionIDs := make([]string, 0)
+	userIDs := make([]string, 0)
+	resultList := make([]*schema.SearchResult, 0)
 	for _, r := range res {
-		var (
-			objectKey,
-			status string
+		questionIDs = append(questionIDs, string(r["question_id"]))
+		userIDs = append(userIDs, string(r["user_id"]))
+		tp, _ := time.ParseInLocation("2006-01-02 15:04:05", string(r["created_at"]), time.Local)
+		object := &schema.SearchObject{
+			ID:              string(r["id"]),
+			QuestionID:      string(r["question_id"]),
+			Title:           string(r["title"]),
+			Excerpt:         htmltext.FetchExcerpt(string(r["parsed_text"]), "...", 240),
+			CreatedAtParsed: tp.Unix(),
+			UserInfo: &schema.SearchObjectUser{
+				ID: string(r["user_id"]),
+			},
+			Tags:        make([]*schema.TagResp, 0),
+			VoteCount:   converter.StringToInt(string(r["vote_count"])),
+			Accepted:    string(r["accepted"]) == "2",
+			AnswerCount: converter.StringToInt(string(r["answer_count"])),
+		}
 
-			tags       []schema.TagResp
-			tagsEntity []entity.Tag
-			object     schema.SearchObject
-		)
-		objectKey, err = obj.GetObjectTypeStrByObjectID(string(r["id"]))
+		objectKey, err := obj.GetObjectTypeStrByObjectID(string(r["id"]))
 		if err != nil {
 			continue
 		}
 
-		tp, _ := time.ParseInLocation("2006-01-02 15:04:05", string(r["created_at"]), time.Local)
-
-		// get user info
-		userInfo, _, e := sr.userCommon.GetUserBasicInfoByID(ctx, string(r["user_id"]))
-		if e != nil {
-			err = errors.InternalServer(reason.DatabaseError).WithError(e).WithStack()
-			return
-		}
-
-		// get tags
-		err = sr.data.DB.Context(ctx).
-			Select("`display_name`,`slug_name`,`main_tag_slug_name`,`recommend`,`reserved`").
-			Table("tag").
-			Join("INNER", "tag_rel", "tag.id = tag_rel.tag_id").
-			Where(builder.Eq{"tag_rel.object_id": r["question_id"]}).
-			And(builder.Eq{"tag_rel.status": entity.TagRelStatusAvailable}).
-			UseBool("recommend", "reserved").
-			OrderBy("tag.recommend DESC, tag.reserved DESC, tag.id DESC").
-			Find(&tagsEntity)
-
-		if err != nil {
-			err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-			return
-		}
-		_ = copier.Copy(&tags, tagsEntity)
 		switch objectKey {
 		case "question":
 			for k, v := range entity.AdminQuestionSearchStatus {
 				if v == converter.StringToInt(string(r["status"])) {
-					status = k
+					object.StatusStr = k
 					break
 				}
 			}
 		case "answer":
 			for k, v := range entity.AdminAnswerSearchStatus {
 				if v == converter.StringToInt(string(r["status"])) {
-					status = k
+					object.StatusStr = k
 					break
 				}
 			}
 		}
 
-		object = schema.SearchObject{
-			ID:              string(r["id"]),
-			QuestionID:      string(r["question_id"]),
-			Title:           string(r["title"]),
-			Excerpt:         htmltext.FetchExcerpt(string(r["parsed_text"]), "...", 240),
-			CreatedAtParsed: tp.Unix(),
-			UserInfo:        userInfo,
-			Tags:            tags,
-			VoteCount:       converter.StringToInt(string(r["vote_count"])),
-			Accepted:        string(r["accepted"]) == "2",
-			AnswerCount:     converter.StringToInt(string(r["answer_count"])),
-			StatusStr:       status,
-		}
-		resp = append(resp, schema.SearchResult{
+		resultList = append(resultList, &schema.SearchResult{
 			ObjectType: objectKey,
 			Object:     object,
 		})
 	}
-	return
+
+	tagsMap, err := sr.tagCommon.BatchGetObjectTag(ctx, questionIDs)
+	if err != nil {
+		return nil, err
+	}
+	userInfoMap, err := sr.userCommon.BatchUserBasicInfoByID(ctx, userIDs)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, item := range resultList {
+		tags, ok := tagsMap[item.Object.QuestionID]
+		if ok {
+			item.Object.Tags = tags
+		}
+		if userInfo := userInfoMap[item.Object.UserInfo.ID]; userInfo != nil {
+			item.Object.UserInfo.Username = userInfo.Username
+			item.Object.UserInfo.DisplayName = userInfo.DisplayName
+			item.Object.UserInfo.Rank = userInfo.Rank
+			item.Object.UserInfo.Status = userInfo.Status
+		}
+	}
+	return resultList, nil
 }
 
 func addRelevanceField(searchFields, words, fields []string) (res []string, args []interface{}) {
