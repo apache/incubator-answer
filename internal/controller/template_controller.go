@@ -161,35 +161,41 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 }
 
 func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *schema.TemplateSiteInfoResp, correctTitle bool) (jump bool, url string) {
-	id := ctx.Param("id")
+	questionID := ctx.Param("id")
 	title := ctx.Param("title")
+	answerID := uid.DeShortID(title)
 	titleIsAnswerID := false
 	needChangeShortID := false
+
+	objectType, err := obj.GetObjectTypeStrByObjectID(answerID)
+	if err == nil && objectType == constant.AnswerObjectType {
+		titleIsAnswerID = true
+	}
 
 	siteSeo, err := tc.siteInfoService.GetSiteSeo(ctx)
 	if err != nil {
 		return false, ""
 	}
-	isShortID := uid.IsShortID(id)
+	isShortID := uid.IsShortID(questionID)
 	if siteSeo.IsShortLink() {
 		if !isShortID {
-			id = uid.EnShortID(id)
+			questionID = uid.EnShortID(questionID)
 			needChangeShortID = true
+		}
+		if titleIsAnswerID {
+			answerID = uid.EnShortID(answerID)
 		}
 	} else {
 		if isShortID {
 			needChangeShortID = true
-			id = uid.DeShortID(id)
+			questionID = uid.DeShortID(questionID)
+		}
+		if titleIsAnswerID {
+			answerID = uid.DeShortID(answerID)
 		}
 	}
 
-	objectType, objectTypeerr := obj.GetObjectTypeStrByObjectID(uid.DeShortID(title))
-	if objectTypeerr == nil {
-		if objectType == constant.AnswerObjectType {
-			titleIsAnswerID = true
-		}
-	}
-	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
+	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, questionID)
 	if siteInfo.SiteSeo.PermaLink == constant.PermaLinkQuestionID || siteInfo.SiteSeo.PermaLink == constant.PermaLinkQuestionIDByShortID {
 		if len(ctx.Request.URL.Query()) > 0 {
 			url = fmt.Sprintf("%s?%s", url, ctx.Request.URL.RawQuery)
@@ -205,14 +211,14 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 		return true, url
 	} else {
 
-		detail, err := tc.templateRenderController.QuestionDetail(ctx, id)
+		detail, err := tc.templateRenderController.QuestionDetail(ctx, questionID)
 		if err != nil {
 			tc.Page404(ctx)
 			return
 		}
 		url = fmt.Sprintf("%s/%s", url, htmltext.UrlTitle(detail.Title))
 		if titleIsAnswerID {
-			url = fmt.Sprintf("%s/%s", url, title)
+			url = fmt.Sprintf("%s/%s", url, answerID)
 		}
 
 		if len(ctx.Request.URL.Query()) > 0 {
