@@ -72,6 +72,7 @@ var migrations = []Migration{
 	NewMigration("v1.1.0", "add gravatar base url", updateCount, true),
 	NewMigration("v1.1.1", "update the length of revision content", updateTheLengthOfRevisionContent, false),
 	NewMigration("v1.1.2", "add notification config", addNoticeConfig, true),
+	NewMigration("v1.1.3", "set default user notification config", setDefaultUserNotificationConfig, false),
 }
 
 func GetMigrations() []Migration {

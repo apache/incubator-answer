@@ -9,6 +9,7 @@ import (
 )
 
 type UserNotificationConfigRepo interface {
+	Add(ctx context.Context, userIDs []string, source, channels string) (err error)
 	Save(ctx context.Context, uc *entity.UserNotificationConfig) (err error)
 	GetByUserID(ctx context.Context, userID string) ([]*entity.UserNotificationConfig, error)
 	GetBySource(ctx context.Context, source constant.NotificationSource) ([]*entity.UserNotificationConfig, error)
@@ -66,6 +67,13 @@ func (us *UserNotificationConfigService) UpdateUserNotificationConfig(
 		return err
 	}
 	return nil
+}
+
+// SetDefaultUserNotificationConfig set default user notification config for user register
+func (us *UserNotificationConfigService) SetDefaultUserNotificationConfig(ctx context.Context, userIDs []string) (
+	err error) {
+	return us.userNotificationConfigRepo.Add(ctx, userIDs,
+		string(constant.InboxSource), `[{"key":"email","enable":true}]`)
 }
 
 func (us *UserNotificationConfigService) convertToEntity(ctx context.Context, userID string,
