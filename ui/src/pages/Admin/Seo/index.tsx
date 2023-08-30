@@ -6,6 +6,7 @@ import { getSeoSetting, putSeoSetting } from '@/services';
 import { SchemaForm, JSONSchema, initFormData, UISchema } from '@/components';
 import { useToast } from '@/hooks';
 import { handleFormError } from '@/utils';
+import { seoSettingStore } from '@/stores';
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', {
@@ -64,6 +65,7 @@ const Index: FC = () => {
           msg: t('update', { keyPrefix: 'toast' }),
           variant: 'success',
         });
+        seoSettingStore.getState().update(reqParams);
       })
       .catch((err) => {
         if (err.isError) {
