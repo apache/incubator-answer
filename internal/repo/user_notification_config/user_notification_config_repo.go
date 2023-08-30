@@ -22,6 +22,24 @@ func NewUserNotificationConfigRepo(data *data.Data) user_notification_config.Use
 	}
 }
 
+// Add add notification config
+func (ur *userNotificationConfigRepo) Add(ctx context.Context, userIDs []string, source, channels string) (err error) {
+	var configs []*entity.UserNotificationConfig
+	for _, userID := range userIDs {
+		configs = append(configs, &entity.UserNotificationConfig{
+			UserID:   userID,
+			Source:   source,
+			Channels: channels,
+			Enabled:  true,
+		})
+	}
+	_, err = ur.data.DB.Context(ctx).Insert(configs)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
 // Save save notification config, if existed, update, if not exist, insert
 func (ur *userNotificationConfigRepo) Save(ctx context.Context, uc *entity.UserNotificationConfig) (err error) {
 	old := &entity.UserNotificationConfig{UserID: uc.UserID, Source: uc.Source}

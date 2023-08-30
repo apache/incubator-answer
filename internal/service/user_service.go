@@ -32,16 +32,17 @@ import (
 
 // UserService user service
 type UserService struct {
-	userCommonService          *usercommon.UserCommon
-	userRepo                   usercommon.UserRepo
-	userActivity               activity.UserActiveActivityRepo
-	activityRepo               activity_common.ActivityRepo
-	emailService               *export.EmailService
-	authService                *auth.AuthService
-	siteInfoService            siteinfo_common.SiteInfoCommonService
-	userRoleService            *role.UserRoleRelService
-	userExternalLoginService   *user_external_login.UserExternalLoginService
-	userNotificationConfigRepo user_notification_config.UserNotificationConfigRepo
+	userCommonService             *usercommon.UserCommon
+	userRepo                      usercommon.UserRepo
+	userActivity                  activity.UserActiveActivityRepo
+	activityRepo                  activity_common.ActivityRepo
+	emailService                  *export.EmailService
+	authService                   *auth.AuthService
+	siteInfoService               siteinfo_common.SiteInfoCommonService
+	userRoleService               *role.UserRoleRelService
+	userExternalLoginService      *user_external_login.UserExternalLoginService
+	userNotificationConfigRepo    user_notification_config.UserNotificationConfigRepo
+	userNotificationConfigService *user_notification_config.UserNotificationConfigService
 }
 
 func NewUserService(userRepo usercommon.UserRepo,
@@ -54,18 +55,20 @@ func NewUserService(userRepo usercommon.UserRepo,
 	userCommonService *usercommon.UserCommon,
 	userExternalLoginService *user_external_login.UserExternalLoginService,
 	userNotificationConfigRepo user_notification_config.UserNotificationConfigRepo,
+	userNotificationConfigService *user_notification_config.UserNotificationConfigService,
 ) *UserService {
 	return &UserService{
-		userCommonService:          userCommonService,
-		userRepo:                   userRepo,
-		userActivity:               userActivity,
-		activityRepo:               activityRepo,
-		emailService:               emailService,
-		authService:                authService,
-		siteInfoService:            siteInfoService,
-		userRoleService:            userRoleService,
-		userExternalLoginService:   userExternalLoginService,
-		userNotificationConfigRepo: userNotificationConfigRepo,
+		userCommonService:             userCommonService,
+		userRepo:                      userRepo,
+		userActivity:                  userActivity,
+		activityRepo:                  activityRepo,
+		emailService:                  emailService,
+		authService:                   authService,
+		siteInfoService:               siteInfoService,
+		userRoleService:               userRoleService,
+		userExternalLoginService:      userExternalLoginService,
+		userNotificationConfigRepo:    userNotificationConfigRepo,
+		userNotificationConfigService: userNotificationConfigService,
 	}
 }
 
@@ -397,6 +400,9 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	err = us.userRepo.AddUser(ctx, userInfo)
 	if err != nil {
 		return nil, nil, err
+	}
+	if err := us.userNotificationConfigService.SetDefaultUserNotificationConfig(ctx, []string{userInfo.ID}); err != nil {
+		log.Errorf("set default user notification config failed, err: %v", err)
 	}
 
 	// send email
