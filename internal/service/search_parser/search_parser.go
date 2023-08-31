@@ -2,6 +2,7 @@ package search_parser
 
 import (
 	"context"
+	"fmt"
 	"github.com/answerdev/answer/internal/base/constant"
 	"regexp"
 	"strings"
@@ -105,7 +106,11 @@ func (sp *SearchParser) parseTags(ctx context.Context, query *string) (tags []st
 		if err != nil || !exists {
 			continue
 		}
-		tags = append(tags, tag.ID)
+		if tag.MainTagID > 0 {
+			tags = append(tags, fmt.Sprintf("%d", tag.MainTagID))
+		} else {
+			tags = append(tags, tag.ID)
+		}
 	}
 
 	// limit maximum 5 tags
