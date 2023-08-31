@@ -258,7 +258,7 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 		search.PageSize = constant.DefaultPageSize
 	}
 	offset := search.Page * search.PageSize
-	session := ar.data.DB.Context(ctx).Where("")
+	session := ar.data.DB.Context(ctx)
 
 	if search.QuestionID != "" {
 		session = session.And("question_id = ?", search.QuestionID)
