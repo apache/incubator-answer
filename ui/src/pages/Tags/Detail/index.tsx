@@ -108,7 +108,7 @@ const Index: FC = () => {
   return (
     <Row className="pt-4 mb-5">
       <Col className="page-main flex-auto">
-        {isLoading || listLoading ? (
+        {isLoading ? (
           <div className="tag-box mb-5 placeholder-glow">
             <div className="mb-3 h3 placeholder" style={{ width: '120px' }} />
             <p
