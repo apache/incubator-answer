@@ -29,7 +29,7 @@ import (
 type CommentRepo interface {
 	AddComment(ctx context.Context, comment *entity.Comment) (err error)
 	RemoveComment(ctx context.Context, commentID string) (err error)
-	UpdateComment(ctx context.Context, comment *entity.Comment) (err error)
+	UpdateCommentContent(ctx context.Context, commentID string, original string, parsedText string) (err error)
 	GetComment(ctx context.Context, commentID string) (comment *entity.Comment, exist bool, err error)
 	GetCommentPage(ctx context.Context, commentQuery *CommentQuery) (
 		comments []*entity.Comment, total int64, err error)
@@ -224,39 +224,34 @@ func (cs *CommentService) RemoveComment(ctx context.Context, req *schema.RemoveC
 
 // UpdateComment update comment
 func (cs *CommentService) UpdateComment(ctx context.Context, req *schema.UpdateCommentReq) (
-	resp *schema.GetCommentResp, err error) {
-	resp = &schema.GetCommentResp{}
-
+	resp *schema.UpdateCommentResp, err error) {
 	old, exist, err := cs.commentCommonRepo.GetComment(ctx, req.CommentID)
-	if err != nil {
-		return
-	}
-	if !exist {
-		return resp, errors.BadRequest(reason.CommentNotFound)
-	}
-
-	// user can edit the comment that was posted by himself before deadline.
-	if !req.IsAdmin && (time.Now().After(old.CreatedAt.Add(constant.CommentEditDeadline))) {
-		return resp, errors.BadRequest(reason.CommentCannotEditAfterDeadline)
-	}
-
-	comment := &entity.Comment{}
-	_ = copier.Copy(comment, req)
-	comment.ID = req.CommentID
-	resp.SetFromComment(comment)
-	resp.MemberActions = permission.GetCommentPermission(ctx, req.UserID, resp.UserID,
-		time.Now(), req.CanEdit, req.CanDelete)
-	userInfo, exist, err := cs.userCommon.GetUserBasicInfoByID(ctx, resp.UserID)
 	if err != nil {
 		return nil, err
 	}
-	if exist {
-		resp.Username = userInfo.Username
-		resp.UserDisplayName = userInfo.DisplayName
-		resp.UserAvatar = userInfo.Avatar
-		resp.UserStatus = userInfo.Status
+	if !exist {
+		return nil, errors.BadRequest(reason.CommentNotFound)
 	}
-	return resp, cs.commentRepo.UpdateComment(ctx, comment)
+	// user can't edit the comment that was posted by others except admin
+	if !req.IsAdmin && req.UserID != old.UserID {
+		return nil, errors.BadRequest(reason.CommentNotFound)
+	}
+
+	// user can edit the comment that was posted by himself before deadline.
+	// admin can edit it at any time
+	if !req.IsAdmin && (time.Now().After(old.CreatedAt.Add(constant.CommentEditDeadline))) {
+		return nil, errors.BadRequest(reason.CommentCannotEditAfterDeadline)
+	}
+
+	if err = cs.commentRepo.UpdateCommentContent(ctx, old.ID, req.OriginalText, req.ParsedText); err != nil {
+		return nil, err
+	}
+	resp = &schema.UpdateCommentResp{
+		CommentID:    old.ID,
+		OriginalText: req.OriginalText,
+		ParsedText:   req.ParsedText,
+	}
+	return resp, nil
 }
 
 // GetComment get comment one

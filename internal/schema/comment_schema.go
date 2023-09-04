@@ -58,11 +58,10 @@ type UpdateCommentReq struct {
 	UserID  string `json:"-"`
 	IsAdmin bool   `json:"-"`
 
-	CanAdd bool `json:"-"`
 	// whether user can edit it
 	CanEdit bool `json:"-"`
+
 	// whether user can delete it
-	CanDelete   bool   `json:"-"`
 	CaptchaID   string `json:"captcha_id"` // captcha_id
 	CaptchaCode string `json:"captcha_code"`
 }
@@ -70,6 +69,15 @@ type UpdateCommentReq struct {
 func (req *UpdateCommentReq) Check() (errFields []*validator.FormErrorField, err error) {
 	req.ParsedText = converter.Markdown2HTML(req.OriginalText)
 	return nil, nil
+}
+
+type UpdateCommentResp struct {
+	// comment id
+	CommentID string `json:"comment_id"`
+	// original comment content
+	OriginalText string `json:"original_text"`
+	// parsed comment content
+	ParsedText string `json:"parsed_text"`
 }
 
 // GetCommentListReq get comment list all request
