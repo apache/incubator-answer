@@ -157,20 +157,23 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 	}
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
 	canList, err := cc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
-		permission.CommentAdd,
 		permission.CommentEdit,
-		permission.CommentDelete,
 		permission.LinkUrlLimit,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
-	linkUrlLimitUser := canList[3]
-	req.IsAdmin = middleware.GetIsAdminFromContext(ctx)
-	isAdmin := middleware.GetUserIsAdminModerator(ctx)
-	if !isAdmin || !linkUrlLimitUser {
+	req.CanEdit = canList[0] || cc.rankService.CheckOperationObjectOwner(ctx, req.UserID, req.CommentID)
+	linkUrlLimitUser := canList[1]
+	if !req.CanEdit {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	if !req.IsAdmin || !linkUrlLimitUser {
 		captchaPass := cc.actionService.ActionRecordVerifyCaptcha(ctx, entity.CaptchaActionEdit, req.UserID, req.CaptchaID, req.CaptchaCode)
 		if !captchaPass {
 			errFields := append([]*validator.FormErrorField{}, &validator.FormErrorField{
@@ -182,21 +185,8 @@ func (cc *CommentController) UpdateComment(ctx *gin.Context) {
 		}
 	}
 
-	req.CanAdd = canList[0]
-	req.CanEdit = canList[1]
-	req.CanDelete = canList[2]
-	can, err := cc.rankService.CheckOperationPermission(ctx, req.UserID, permission.CommentEdit, req.CommentID)
-	if err != nil {
-		handler.HandleResponse(ctx, err, nil)
-		return
-	}
-	if !can {
-		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
-		return
-	}
-
 	resp, err := cc.commentService.UpdateComment(ctx, req)
-	if !isAdmin || !linkUrlLimitUser {
+	if !req.IsAdmin || !linkUrlLimitUser {
 		cc.actionService.ActionRecordAdd(ctx, entity.CaptchaActionEdit, req.UserID)
 	}
 	handler.HandleResponse(ctx, err, resp)
