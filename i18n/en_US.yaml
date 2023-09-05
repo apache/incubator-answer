@@ -1657,16 +1657,16 @@ ui:
       page_title: CSS and HTML
       custom_css:
         label: Custom CSS
-        text: This will insert as <link>
+        text: This will insert as &lt;link>
       head:
         label: Head
-        text: This will insert before </head>
+        text: This will insert before &lt;/head>
       header:
         label: Header
-        text: This will insert after <body>
+        text: This will insert after &lt;body>
       footer:
         label: Footer
-        text: This will insert before </body>.
+        text: This will insert before &lt;/body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.
