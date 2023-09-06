@@ -2,15 +2,13 @@ package handler
 
 import (
 	"errors"
-	"net/http"
-	"strings"
-
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/gin-gonic/gin"
 	myErrors "github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
+	"net/http"
 )
 
 // HandleResponse Handle response body
@@ -73,11 +71,4 @@ func BindAndCheckReturnErr(ctx *gin.Context, data interface{}) (errFields []*val
 
 	errFields, _ = validator.GetValidatorByLang(lang).Check(data)
 	return errFields
-}
-
-func MsgWithParameter(msg string, list map[string]string) string {
-	for k, v := range list {
-		msg = strings.Replace(msg, "{{ "+k+" }}", v, -1)
-	}
-	return msg
 }
