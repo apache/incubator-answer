@@ -2,6 +2,7 @@ package entity
 
 import (
 	"encoding/json"
+	"github.com/segmentfault/pacman/log"
 
 	"github.com/answerdev/answer/pkg/converter"
 )
@@ -33,6 +34,9 @@ func (c *Config) JsonString() string {
 
 // GetIntValue get int value
 func (c *Config) GetIntValue() int {
+	if len(c.Value) == 0 {
+		log.Warnf("config value is empty, key: %s, value: %s", c.Key, c.Value)
+	}
 	return converter.StringToInt(c.Value)
 }
 

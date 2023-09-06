@@ -131,21 +131,21 @@ func (ur *userAdminRepo) GetUserPage(ctx context.Context, page, pageSize int, us
 	session := ur.data.DB.Context(ctx)
 	switch user.Status {
 	case entity.UserStatusDeleted:
-		session.Desc("user.deleted_at")
+		session.Desc("`user`.deleted_at")
 	case entity.UserStatusSuspended:
-		session.Desc("user.suspended_at")
+		session.Desc("`user`.suspended_at")
 	default:
-		session.Desc("user.created_at")
+		session.Desc("`user`.created_at")
 	}
 
 	if len(usernameOrDisplayName) > 0 {
 		session.And(builder.Or(
-			builder.Like{"user.username", usernameOrDisplayName},
-			builder.Like{"user.display_name", usernameOrDisplayName},
+			builder.Like{"`user`.username", usernameOrDisplayName},
+			builder.Like{"`user`.display_name", usernameOrDisplayName},
 		))
 	}
 	if isStaff {
-		session.Join("INNER", "user_role_rel", "user.id = user_role_rel.user_id AND user_role_rel.role_id > 1")
+		session.Join("INNER", "user_role_rel", "`user`.id = `user_role_rel`.user_id AND `user_role_rel`.role_id > 1")
 	}
 
 	total, err = pager.Help(page, pageSize, &users, user, session)

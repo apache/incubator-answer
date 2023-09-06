@@ -166,30 +166,29 @@ func (ar *answerRepo) GetAnswerPage(ctx context.Context, page, pageSize int, ans
 	return
 }
 
-// UpdateAccepted
-// If no answer is selected, the answer id can be 0
-func (ar *answerRepo) UpdateAccepted(ctx context.Context, id string, questionID string) error {
-	if questionID == "" {
-		return nil
-	}
-	id = uid.DeShortID(id)
+// UpdateAcceptedStatus update all accepted status of this question's answers
+func (ar *answerRepo) UpdateAcceptedStatus(ctx context.Context, acceptedAnswerID string, questionID string) error {
+	acceptedAnswerID = uid.DeShortID(acceptedAnswerID)
 	questionID = uid.DeShortID(questionID)
-	var data entity.Answer
-	data.ID = id
 
-	data.Accepted = schema.AnswerAcceptedFailed
-	_, err := ar.data.DB.Context(ctx).Where("question_id =?", questionID).Cols("adopted").Update(&data)
+	// update all this question's answer accepted status to false
+	_, err := ar.data.DB.Context(ctx).Where("question_id = ?", questionID).Cols("adopted").Update(&entity.Answer{
+		Accepted: schema.AnswerAcceptedFailed,
+	})
 	if err != nil {
-		return err
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	if id != "0" {
-		data.Accepted = schema.AnswerAcceptedEnable
-		_, err = ar.data.DB.Context(ctx).Where("id = ?", id).Cols("adopted").Update(&data)
+
+	// if acceptedAnswerID is not empty, update accepted status to true
+	if len(acceptedAnswerID) > 0 && acceptedAnswerID != "0" {
+		_, err = ar.data.DB.Context(ctx).Where("id = ?", acceptedAnswerID).Cols("adopted").Update(&entity.Answer{
+			Accepted: schema.AnswerAcceptedEnable,
+		})
 		if err != nil {
 			return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 		}
 	}
-	_ = ar.updateSearch(ctx, id)
+	_ = ar.updateSearch(ctx, acceptedAnswerID)
 	return nil
 }
 
@@ -259,7 +258,7 @@ func (ar *answerRepo) SearchList(ctx context.Context, search *entity.AnswerSearc
 		search.PageSize = constant.DefaultPageSize
 	}
 	offset := search.Page * search.PageSize
-	session := ar.data.DB.Context(ctx).Where("")
+	session := ar.data.DB.Context(ctx)
 
 	if search.QuestionID != "" {
 		session = session.And("question_id = ?", search.QuestionID)

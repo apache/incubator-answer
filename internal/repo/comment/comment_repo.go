@@ -58,9 +58,13 @@ func (cr *commentRepo) RemoveComment(ctx context.Context, commentID string) (err
 	return
 }
 
-// UpdateComment update comment
-func (cr *commentRepo) UpdateComment(ctx context.Context, comment *entity.Comment) (err error) {
-	_, err = cr.data.DB.Context(ctx).ID(comment.ID).Where("user_id = ?", comment.UserID).Update(comment)
+// UpdateCommentContent update comment
+func (cr *commentRepo) UpdateCommentContent(
+	ctx context.Context, commentID string, originalText string, parsedText string) (err error) {
+	_, err = cr.data.DB.Context(ctx).ID(commentID).Update(&entity.Comment{
+		OriginalText: originalText,
+		ParsedText:   parsedText,
+	})
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -69,8 +73,7 @@ func (cr *commentRepo) UpdateComment(ctx context.Context, comment *entity.Commen
 
 // GetComment get comment one
 func (cr *commentRepo) GetComment(ctx context.Context, commentID string) (
-	comment *entity.Comment, exist bool, err error,
-) {
+	comment *entity.Comment, exist bool, err error) {
 	comment = &entity.Comment{}
 	exist, err = cr.data.DB.Context(ctx).ID(commentID).Get(comment)
 	if err != nil {

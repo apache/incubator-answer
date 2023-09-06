@@ -65,7 +65,7 @@ func Test_commentRepo_UpdateComment(t *testing.T) {
 	assert.NoError(t, err)
 
 	testCommentEntity.ParsedText = "test"
-	err = commentRepo.UpdateComment(context.TODO(), testCommentEntity)
+	err = commentRepo.UpdateCommentContent(context.TODO(), testCommentEntity, "", "")
 	assert.NoError(t, err)
 
 	newComment, exist, err := commonCommentRepo.GetComment(context.TODO(), testCommentEntity.ID)

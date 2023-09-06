@@ -24,7 +24,7 @@ type TagCommonRepo interface {
 	AddTagList(ctx context.Context, tagList []*entity.Tag) (err error)
 	GetTagListByIDs(ctx context.Context, ids []string) (tagList []*entity.Tag, err error)
 	GetTagBySlugName(ctx context.Context, slugName string) (tagInfo *entity.Tag, exist bool, err error)
-	GetTagListByName(ctx context.Context, name string, hasReserved bool) (tagList []*entity.Tag, err error)
+	GetTagListByName(ctx context.Context, name string, recommend, reserved bool) (tagList []*entity.Tag, err error)
 	GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error)
 	GetTagByID(ctx context.Context, tagID string, includeDeleted bool) (tag *entity.Tag, exist bool, err error)
 	GetTagPage(ctx context.Context, page, pageSize int, tag *entity.Tag, queryCond string) (tagList []*entity.Tag, total int64, err error)
@@ -86,7 +86,7 @@ func NewTagCommonService(
 
 // SearchTagLike get tag list all
 func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.SearchTagLikeReq) (resp []schema.SearchTagLikeResp, err error) {
-	tags, err := ts.tagCommonRepo.GetTagListByName(ctx, req.Tag, req.IsAdmin)
+	tags, err := ts.tagCommonRepo.GetTagListByName(ctx, req.Tag, len(req.Tag) == 0, false)
 	if err != nil {
 		return
 	}
@@ -97,35 +97,39 @@ func (ts *TagCommonService) SearchTagLike(ctx context.Context, req *schema.Searc
 			mainTagId = append(mainTagId, converter.IntToString(tag.MainTagID))
 		}
 	}
-	mainTagList, err := ts.tagCommonRepo.GetTagListByIDs(ctx, mainTagId)
-	if err != nil {
-		return
-	}
 	mainTagMap := make(map[string]*entity.Tag)
-	for _, tag := range mainTagList {
-		mainTagMap[tag.ID] = tag
-	}
-	for _, tag := range tags {
-		if tag.MainTagID != 0 {
-			_, ok := mainTagMap[converter.IntToString(tag.MainTagID)]
-			if ok {
-				tag.SlugName = mainTagMap[converter.IntToString(tag.MainTagID)].SlugName
-				tag.DisplayName = mainTagMap[converter.IntToString(tag.MainTagID)].DisplayName
-				tag.Reserved = mainTagMap[converter.IntToString(tag.MainTagID)].Reserved
-				tag.Recommend = mainTagMap[converter.IntToString(tag.MainTagID)].Recommend
-			}
+	if len(mainTagId) > 0 {
+		mainTagList, err := ts.tagCommonRepo.GetTagListByIDs(ctx, mainTagId)
+		if err != nil {
+			return nil, err
+		}
+		for _, tag := range mainTagList {
+			mainTagMap[tag.ID] = tag
 		}
 	}
-	RepetitiveTag := make(map[string]bool)
 	for _, tag := range tags {
-		if _, ok := RepetitiveTag[tag.SlugName]; !ok {
+		if tag.MainTagID == 0 {
+			continue
+		}
+		mainTagID := converter.IntToString(tag.MainTagID)
+		if _, ok := mainTagMap[mainTagID]; ok {
+			tag.SlugName = mainTagMap[mainTagID].SlugName
+			tag.DisplayName = mainTagMap[mainTagID].DisplayName
+			tag.Reserved = mainTagMap[mainTagID].Reserved
+			tag.Recommend = mainTagMap[mainTagID].Recommend
+		}
+	}
+	resp = make([]schema.SearchTagLikeResp, 0)
+	repetitiveTag := make(map[string]bool)
+	for _, tag := range tags {
+		if _, ok := repetitiveTag[tag.SlugName]; !ok {
 			item := schema.SearchTagLikeResp{}
 			item.SlugName = tag.SlugName
 			item.DisplayName = tag.DisplayName
 			item.Recommend = tag.Recommend
 			item.Reserved = tag.Reserved
 			resp = append(resp, item)
-			RepetitiveTag[tag.SlugName] = true
+			repetitiveTag[tag.SlugName] = true
 		}
 	}
 	return resp, nil
@@ -432,6 +436,9 @@ func (ts *TagCommonService) tagFormatRecommendAndReserved(ctx context.Context, t
 // BatchGetObjectTag batch get object tag
 func (ts *TagCommonService) BatchGetObjectTag(ctx context.Context, objectIds []string) (map[string][]*schema.TagResp, error) {
 	objectIDTagMap := make(map[string][]*schema.TagResp)
+	if len(objectIds) == 0 {
+		return objectIDTagMap, nil
+	}
 	objectTagRelList, err := ts.tagRelRepo.BatchGetObjectTagRelList(ctx, objectIds)
 	if err != nil {
 		return objectIDTagMap, err

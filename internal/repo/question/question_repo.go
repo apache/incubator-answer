@@ -186,10 +186,15 @@ func (qr *questionRepo) GetQuestion(ctx context.Context, id string) (
 	return
 }
 
-// GetTagBySlugName get tag by slug name
-func (qr *questionRepo) SearchByTitleLike(ctx context.Context, title string) (questionList []*entity.Question, err error) {
+// GetQuestionsByTitle get question list by title
+func (qr *questionRepo) GetQuestionsByTitle(ctx context.Context, title string, pageSize int) (
+	questionList []*entity.Question, err error) {
 	questionList = make([]*entity.Question, 0)
-	err = qr.data.DB.Context(ctx).Table("question").Where("title like ?", "%"+title+"%").Limit(10, 0).Find(&questionList)
+	session := qr.data.DB.Context(ctx)
+	session.Where("status != ?", entity.QuestionStatusDeleted)
+	session.Where("title like ?", "%"+title+"%")
+	session.Limit(pageSize)
+	err = session.Find(&questionList)
 	if err != nil {
 		return nil, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

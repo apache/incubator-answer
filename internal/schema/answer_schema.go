@@ -108,10 +108,17 @@ type AdminAnswerInfo struct {
 	} `json:"question_info"`
 }
 
-type AnswerAcceptedReq struct {
-	QuestionID string `json:"question_id"`
-	AnswerID   string `json:"answer_id"`
+type AcceptAnswerReq struct {
+	QuestionID string `validate:"required,gt=0,lte=30" json:"question_id"`
+	AnswerID   string `validate:"omitempty" json:"answer_id"`
 	UserID     string `json:"-"`
+}
+
+func (req *AcceptAnswerReq) Check() (errFields []*validator.FormErrorField, err error) {
+	if len(req.AnswerID) == 0 {
+		req.AnswerID = "0"
+	}
+	return nil, nil
 }
 
 type AdminSetAnswerStatusRequest struct {

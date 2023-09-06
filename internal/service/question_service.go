@@ -1103,14 +1103,18 @@ func (qs *QuestionService) SearchUserTopList(ctx context.Context, userName strin
 	return userQuestionlist, userAnswerlist, nil
 }
 
-// SearchByTitleLike
-func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, loginUserID string) ([]*schema.QuestionBaseInfo, error) {
-	list := make([]*schema.QuestionBaseInfo, 0)
-	dblist, err := qs.questionRepo.SearchByTitleLike(ctx, title)
-	if err != nil {
-		return list, err
+// GetQuestionsByTitle get questions by title
+func (qs *QuestionService) GetQuestionsByTitle(ctx context.Context, title string) (
+	resp []*schema.QuestionBaseInfo, err error) {
+	resp = make([]*schema.QuestionBaseInfo, 0)
+	if len(title) == 0 {
+		return resp, nil
 	}
-	for _, question := range dblist {
+	questions, err := qs.questionRepo.GetQuestionsByTitle(ctx, title, 10)
+	if err != nil {
+		return resp, err
+	}
+	for _, question := range questions {
 		item := &schema.QuestionBaseInfo{}
 		item.ID = question.ID
 		item.Title = question.Title
@@ -1125,10 +1129,9 @@ func (qs *QuestionService) SearchByTitleLike(ctx context.Context, title string, 
 		if question.AcceptedAnswerID != "0" {
 			item.AcceptedAnswer = true
 		}
-		list = append(list, item)
+		resp = append(resp, item)
 	}
-
-	return list, nil
+	return resp, nil
 }
 
 // SimilarQuestion
