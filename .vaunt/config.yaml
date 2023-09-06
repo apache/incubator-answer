@@ -6,7 +6,7 @@ achievements:
       description: Awarded for bringing up enhancement, dream big!
       triggers:
         - trigger:
-            actor: author
+            actor: assignees
             action: issue
             condition: labels in ['enhancement'] & labels in ['LGTM']
   - achievement:
@@ -15,6 +15,6 @@ achievements:
       description: Awarded for identifying real bugs, well spotted!
       triggers:
         - trigger:
-            actor: author
+            actor: assignees
             action: issue
             condition: labels in ['bug'] & labels in ['LGTM']
