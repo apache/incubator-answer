@@ -93,7 +93,7 @@ func Test_tagRepo_GetTagListByName(t *testing.T) {
 	tagOnce.Do(addTagList)
 	tagCommonRepo := tag_common.NewTagCommonRepo(testDataSource, unique.NewUniqueIDRepo(testDataSource))
 
-	gotTags, err := tagCommonRepo.GetTagListByName(context.TODO(), testTagList[0].SlugName, false)
+	gotTags, err := tagCommonRepo.GetTagListByName(context.TODO(), testTagList[0].SlugName, false, false)
 	assert.NoError(t, err)
 	assert.Equal(t, testTagList[0].SlugName, gotTags[0].SlugName)
 }
