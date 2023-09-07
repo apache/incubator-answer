@@ -63,9 +63,12 @@ const Index: FC<Props> = ({
         </>
       )}
       <div className="small text-secondary d-flex flex-row flex-md-column align-items-center align-items-md-start">
-        <div className="me-1 me-md-0">
+        <div className="me-1 me-md-0 d-flex align-items-center">
           {data?.status !== 'deleted' ? (
-            <Link to={`/users/${data?.username}`} className="me-1 text-break">
+            <Link
+              to={`/users/${data?.username}`}
+              className="me-1 text-break name-ellipsis"
+              style={{ maxWidth: '100px' }}>
               {data?.display_name}
             </Link>
           ) : (

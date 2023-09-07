@@ -234,7 +234,6 @@ const Index = () => {
                   key={item?.id}
                   data={item}
                   questionTitle={question?.title || ''}
-                  slugTitle={question?.url_title}
                   canAccept={isAuthor || isAdmin || isModerator}
                   callback={initPage}
                   isLogged={isLogged}

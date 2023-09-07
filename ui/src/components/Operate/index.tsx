@@ -23,7 +23,6 @@ interface IProps {
   qid: string;
   aid?: string;
   title: string;
-  slugTitle: string;
   hasAnswer?: boolean;
   isAccepted: boolean;
   callback: (type: string) => void;
@@ -34,7 +33,6 @@ const Index: FC<IProps> = ({
   qid,
   aid = '',
   title,
-  slugTitle,
   isAccepted = false,
   hasAnswer = false,
   memberActions = [],
@@ -268,13 +266,7 @@ const Index: FC<IProps> = ({
 
   return (
     <div className="d-flex align-items-center">
-      <Share
-        type={type}
-        qid={qid}
-        aid={aid}
-        title={title}
-        slugTitle={slugTitle}
-      />
+      <Share type={type} qid={qid} aid={aid} title={title} />
       {firstAction?.map((item) => {
         if (item.action === 'edit') {
           return (

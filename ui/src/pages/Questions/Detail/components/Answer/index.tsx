@@ -23,7 +23,6 @@ interface Props {
   aid?: string;
   canAccept: boolean;
   questionTitle: string;
-  slugTitle: string;
   isLogged: boolean;
   callback: (type: string) => void;
 }
@@ -32,7 +31,6 @@ const Index: FC<Props> = ({
   data,
   isLogged,
   questionTitle = '',
-  slugTitle,
   callback,
   canAccept = false,
 }) => {
@@ -132,7 +130,6 @@ const Index: FC<Props> = ({
             type="answer"
             isAccepted={data.accepted === 2}
             title={questionTitle}
-            slugTitle={slugTitle}
             callback={callback}
           />
         </div>
