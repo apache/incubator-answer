@@ -23,7 +23,7 @@ import {
 
 const Index: FC = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'install' });
-  const [step, setStep] = useState(4);
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(true);
   const [errorData, setErrorData] = useState<{ [propName: string]: any }>({
     msg: '',
