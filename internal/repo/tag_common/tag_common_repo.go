@@ -117,10 +117,9 @@ func (tr *tagCommonRepo) GetReservedTagList(ctx context.Context) (tagList []*ent
 
 // GetTagListByNames get tag list all like name
 func (tr *tagCommonRepo) GetTagListByNames(ctx context.Context, names []string) (tagList []*entity.Tag, err error) {
-
 	tagList = make([]*entity.Tag, 0)
 	session := tr.data.DB.Context(ctx).In("slug_name", names).UseBool("recommend", "reserved")
-	// session.Where(builder.Eq{"status": entity.TagStatusAvailable})
+	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
 	err = session.OrderBy("recommend desc,reserved desc,id desc").Find(&tagList)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
@@ -176,18 +175,48 @@ func (tr *tagCommonRepo) GetTagPage(ctx context.Context, page, pageSize int, tag
 
 // AddTagList add tag
 func (tr *tagCommonRepo) AddTagList(ctx context.Context, tagList []*entity.Tag) (err error) {
+	addTags := make([]*entity.Tag, 0)
 	for _, item := range tagList {
+		exist, err := tr.updateDeletedTag(ctx, item)
+		if err != nil {
+			return err
+		}
+		if exist {
+			continue
+		}
+		addTags = append(addTags, item)
 		item.ID, err = tr.uniqueIDRepo.GenUniqueIDStr(ctx, item.TableName())
 		if err != nil {
 			return err
 		}
 		item.RevisionID = "0"
 	}
-	_, err = tr.data.DB.Context(ctx).Insert(tagList)
+	if len(addTags) == 0 {
+		return nil
+	}
+	_, err = tr.data.DB.Context(ctx).Insert(addTags)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return
+}
+
+func (tr *tagCommonRepo) updateDeletedTag(ctx context.Context, tag *entity.Tag) (exist bool, err error) {
+	old := &entity.Tag{SlugName: tag.SlugName}
+	exist, err = tr.data.DB.Context(ctx).Get(old)
+	if err != nil {
+		return false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !exist || old.Status != entity.TagStatusDeleted {
+		return false, nil
+	}
+	tag.ID = old.ID
+	tag.Status = entity.TagStatusAvailable
+	tag.RevisionID = "0"
+	if _, err = tr.data.DB.Context(ctx).ID(tag.ID).Update(tag); err != nil {
+		return false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return true, nil
 }
 
 // UpdateTagQuestionCount update tag question count
