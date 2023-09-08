@@ -148,7 +148,6 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
             type="question"
             memberActions={data?.member_actions}
             title={data.title}
-            slugTitle={data.url_title}
             hasAnswer={hasAnswer}
             isAccepted={Boolean(data?.accepted_answer_id)}
             callback={initPage}
