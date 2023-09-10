@@ -140,12 +140,13 @@ const Index: React.FC = () => {
       setStep(2);
     }
 
-    const { hash } = window.location;
-    if (!hash.startsWith('#access_token=')) {
+    const url = new URL(window.location.href);
+    const token = url.searchParams.get('token');
+    if (!token) {
       return;
     }
     setIsLoggingIn(true);
-    handleJwtLogin(hash.substring(14));
+    handleJwtLogin(token);
   }, []);
 
   usePageTags({

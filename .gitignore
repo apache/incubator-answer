@@ -11,6 +11,7 @@
 /cmd/answer/*.sh
 /cmd/answer/answer
 /cmd/answer/uploads/*
+/cmd/answer/answer-data
 /cmd/logs
 /configs/config-dev.yaml
 /go.work*
