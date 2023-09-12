@@ -475,3 +475,36 @@ func (qr *questionRepo) updateSearch(ctx context.Context, questionID string) (er
 	err = s.UpdateContent(ctx, content)
 	return
 }
+
+func (qr *questionRepo) RemoveAllUserQuestion(ctx context.Context, userID string) (err error) {
+	// get all question id that need to be deleted
+	questionIDs := make([]string, 0)
+	session := qr.data.DB.Context(ctx).Where("user_id = ?", userID)
+	session.Where("status != ?", entity.QuestionStatusDeleted)
+	err = session.Select("id").Table("question").Find(&questionIDs)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if len(questionIDs) == 0 {
+		return nil
+	}
+
+	log.Infof("find %d questions need to be deleted for user %s", len(questionIDs), userID)
+
+	// delete all question
+	session = qr.data.DB.Context(ctx).Where("user_id = ?", userID)
+	session.Where("status != ?", entity.QuestionStatusDeleted)
+	_, err = session.Cols("status", "updated_at").Update(&entity.Question{
+		UpdatedAt: time.Now(),
+		Status:    entity.QuestionStatusDeleted,
+	})
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+
+	// update search content
+	for _, id := range questionIDs {
+		_ = qr.updateSearch(ctx, id)
+	}
+	return nil
+}

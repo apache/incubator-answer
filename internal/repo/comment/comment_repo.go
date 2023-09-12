@@ -2,6 +2,7 @@ package comment
 
 import (
 	"context"
+	"github.com/segmentfault/pacman/log"
 
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/pager"
@@ -106,5 +107,17 @@ func (cr *commentRepo) GetCommentPage(ctx context.Context, commentQuery *comment
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
+	return
+}
+
+// RemoveAllUserComment remove all user comment
+func (cr *commentRepo) RemoveAllUserComment(ctx context.Context, userID string) (err error) {
+	session := cr.data.DB.Context(ctx).Where("user_id = ?", userID)
+	session.Where("status != ?", entity.CommentStatusDeleted)
+	affected, err := session.Update(&entity.Comment{Status: entity.CommentStatusDeleted})
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	log.Infof("delete user comment, userID: %s, affected: %d", userID, affected)
 	return
 }

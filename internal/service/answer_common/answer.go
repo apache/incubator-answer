@@ -26,6 +26,7 @@ type AnswerRepo interface {
 	AdminSearchList(ctx context.Context, search *schema.AdminAnswerPageReq) ([]*entity.Answer, int64, error)
 	UpdateAnswerStatus(ctx context.Context, answer *entity.Answer) (err error)
 	GetAnswerCount(ctx context.Context) (count int64, err error)
+	RemoveAllUserAnswer(ctx context.Context, userID string) (err error)
 }
 
 // AnswerCommon user service

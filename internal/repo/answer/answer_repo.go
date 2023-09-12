@@ -3,6 +3,7 @@ package answer
 import (
 	"context"
 	"github.com/answerdev/answer/plugin"
+	"github.com/segmentfault/pacman/log"
 	"time"
 
 	"github.com/answerdev/answer/internal/base/constant"
@@ -76,6 +77,40 @@ func (ar *answerRepo) RemoveAnswer(ctx context.Context, id string) (err error) {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	_ = ar.updateSearch(ctx, answer.ID)
+	return nil
+}
+
+// RemoveAllUserAnswer remove all user answer
+func (ar *answerRepo) RemoveAllUserAnswer(ctx context.Context, userID string) (err error) {
+	// find all answer id that need to be deleted
+	answerIDs := make([]string, 0)
+	session := ar.data.DB.Context(ctx).Where("user_id = ?", userID)
+	session.Where("status != ?", entity.AnswerStatusDeleted)
+	err = session.Select("id").Table("answer").Find(&answerIDs)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if len(answerIDs) == 0 {
+		return nil
+	}
+
+	log.Infof("find %d answers need to be deleted for user %s", len(answerIDs), userID)
+
+	// delete all question
+	session = ar.data.DB.Context(ctx).Where("user_id = ?", userID)
+	session.Where("status != ?", entity.AnswerStatusDeleted)
+	_, err = session.Cols("status", "updated_at").Update(&entity.Answer{
+		UpdatedAt: time.Now(),
+		Status:    entity.AnswerStatusDeleted,
+	})
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+
+	// update search content
+	for _, id := range answerIDs {
+		_ = ar.updateSearch(ctx, id)
+	}
 	return nil
 }
 

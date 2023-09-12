@@ -13,6 +13,7 @@ import (
 type CommentCommonRepo interface {
 	GetComment(ctx context.Context, commentID string) (comment *entity.Comment, exist bool, err error)
 	GetCommentCount(ctx context.Context) (count int64, err error)
+	RemoveAllUserComment(ctx context.Context, userID string) (err error)
 }
 
 // CommentCommonService user service
