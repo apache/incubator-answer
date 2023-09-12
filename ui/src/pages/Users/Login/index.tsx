@@ -42,6 +42,7 @@ const Index: React.FC = () => {
 
   const [step, setStep] = useState(1);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (params: FormDataType) => {
     setFormData({ ...formData, ...params });
@@ -127,10 +128,15 @@ const Index: React.FC = () => {
   };
 
   async function handleJwtLogin(accessToken: string) {
-    const user = await jwtLogin(accessToken);
-    updateUser(user);
-    guard.handleLoginRedirect(navigate);
-    setIsLoggingIn(false);
+    try {
+      const user = await jwtLogin(accessToken);
+      updateUser(user);
+      guard.handleLoginRedirect(navigate);
+      setIsLoggingIn(false);
+    } catch (e) {
+      const message = (e as Error).message || String(e);
+      setErrorMsg(`Failed to login. ${message}`);
+    }
   }
 
   useEffect(() => {
@@ -248,6 +254,11 @@ const Index: React.FC = () => {
               {isLoggingIn && (
                 <div className="spinner-border me-1" role="status">
                   <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
+              {errorMsg && (
+                <div className="alert alert-danger" role="alert">
+                  {errorMsg}
                 </div>
               )}
               {t('Login via HackQuest')}

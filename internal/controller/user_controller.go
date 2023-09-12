@@ -3,6 +3,7 @@ package controller
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
@@ -263,8 +264,9 @@ func (uc *UserController) UserLoginByJwt(ctx *gin.Context) {
 	}
 	fmt.Println("user info is nil")
 
-	token, err := jwt.ParseWithClaims(accessToken, &UserJwt{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte("AllYourBase"), nil
+	jwtSecret := os.Getenv("JWT_SECRET")
+	token, _ := jwt.ParseWithClaims(accessToken, &UserJwt{}, func(token *jwt.Token) (interface{}, error) {
+		return []byte(jwtSecret), nil
 	})
 	claims, ok := token.Claims.(*UserJwt)
 	fmt.Println("claims: " + claims.Email + "; Valid: " + fmt.Sprintf("%v", token.Valid))
@@ -273,40 +275,50 @@ func (uc *UserController) UserLoginByJwt(ctx *gin.Context) {
 		return
 	}
 
-	resp, err := uc.userService.GetUserInfoByUserID(ctx, accessToken, claims.ID)
+	has, err := uc.userService.UserEmailHas(ctx, claims.Email)
 	if err != nil {
-		// not exists, register new user
-		if errors.IsNotFound(err.(*errors.Error)) {
-			fmt.Println("not found user info, register new user")
-			req := &schema.UserRegisterReq{}
-			req.Name = claims.Email
-			req.Email = claims.Email
-			req.Pass = uc.GenerateJwtPassword(claims.Email)
-			req.IP = ctx.ClientIP()
-			resp, errFields, err := uc.userService.UserRegisterByEmail(ctx, req)
-			if len(errFields) > 0 {
-				for _, field := range errFields {
-					field.ErrorMsg = translator.
-						Tr(handler.GetLang(ctx), field.ErrorMsg)
-				}
-				handler.HandleResponse(ctx, err, errFields)
-			} else {
-				fmt.Println("register new user success")
-				handler.HandleResponse(ctx, err, resp)
-			}
-			return
-		}
-
-		fmt.Println("get user info by user id error:" + err.Error())
+		fmt.Println("get user info by email error: ", err)
 		handler.HandleResponse(ctx, err, nil)
 		return
 	}
 
-	req := &schema.UserEmailLogin{}
+	// not exists, register new user
+	if has {
+		req := &schema.UserEmailLogin{}
+		req.Email = claims.Email
+		req.Pass = uc.GenerateJwtPassword(claims.Email)
+		// hack for first admin user
+		if claims.Email == os.Getenv("FIRST_ADMIN_EMAIL") {
+			req.Pass = os.Getenv("FIRST_ADMIN_PASS")
+		}
+		resp, err := uc.userService.EmailLogin(ctx, req)
+		if err != nil {
+			fmt.Println("login error: ", err)
+			handler.HandleResponse(ctx, err, nil)
+			return
+		}
+		fmt.Println("login success")
+		handler.HandleResponse(ctx, nil, resp)
+		return
+	}
+
+	fmt.Println("not found user info, register new user")
+	req := &schema.UserRegisterReq{}
+	req.Name = claims.Email
 	req.Email = claims.Email
 	req.Pass = uc.GenerateJwtPassword(claims.Email)
-	uc.userService.EmailLogin(ctx, req)
-	handler.HandleResponse(ctx, nil, resp)
+	req.IP = ctx.ClientIP()
+	resp, errFields, err := uc.userService.UserRegisterByEmail(ctx, req)
+	if len(errFields) > 0 {
+		for _, field := range errFields {
+			field.ErrorMsg = translator.
+				Tr(handler.GetLang(ctx), field.ErrorMsg)
+		}
+		handler.HandleResponse(ctx, err, errFields)
+	} else {
+		fmt.Println("register new user success")
+		handler.HandleResponse(ctx, err, resp)
+	}
 }
 
 func (uc *UserController) GenerateJwtPassword(email string) string {
