@@ -82,9 +82,8 @@ const Personal: FC = () => {
           )}
         </Col>
       </Row>
-
+      <NavBar tabName={tabName} slug={username} isSelf={isSelf} />
       <Row>
-        <NavBar tabName={tabName} slug={username} isSelf={isSelf} />
         <Col className="page-main flex-auto">
           <Overview
             visible={tabName === 'overview'}

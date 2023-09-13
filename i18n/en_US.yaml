@@ -1119,6 +1119,10 @@ ui:
     comment: Comment
     refresh: Refresh
     resend: Resend
+    deactivate: Deactivate
+    active: Active
+    suspend: Suspend
+    unsuspend: Unsuspend
   search:
     title: Search Results
     keywords: Keywords
@@ -1498,6 +1502,18 @@ ui:
       change_role: Change role
       show_logs: Show logs
       add_user: Add user
+      deactivate_user:
+        title: Deactivate user
+        content: An inactive user must re-validate their email.
+      delete_user:
+        title: Delete this user
+        content: Are you sure you want to delete this user? This is permanent!
+        remove: Remove their content
+        label: Remove all questions, answers, comments, etc.
+        text: Don’t check this if you wish to only delete the user’s account.
+      suspend_user:
+        title: Suspend this user
+        content: A suspended user can't log in.
     questions:
       page_title: Questions
       normal: Normal
