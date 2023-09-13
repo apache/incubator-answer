@@ -27,7 +27,7 @@ type SiteInfoCommonService interface {
 	GetSiteInterface(ctx context.Context) (resp *schema.SiteInterfaceResp, err error)
 	GetSiteBranding(ctx context.Context) (resp *schema.SiteBrandingResp, err error)
 	GetSiteUsers(ctx context.Context) (resp *schema.SiteUsersResp, err error)
-	FormatAvatar(ctx context.Context, originalAvatarData, email string) *schema.AvatarInfo
+	FormatAvatar(ctx context.Context, originalAvatarData, email string, userStatus int) *schema.AvatarInfo
 	FormatListAvatar(ctx context.Context, userList []*entity.User) (userID2AvatarMapping map[string]*schema.AvatarInfo)
 	GetSiteWrite(ctx context.Context) (resp *schema.SiteWriteResp, err error)
 	GetSiteLegal(ctx context.Context) (resp *schema.SiteLegalResp, err error)
@@ -82,9 +82,9 @@ func (s *siteInfoCommonService) GetSiteUsers(ctx context.Context) (resp *schema.
 }
 
 // FormatAvatar format avatar
-func (s *siteInfoCommonService) FormatAvatar(ctx context.Context, originalAvatarData, email string) *schema.AvatarInfo {
+func (s *siteInfoCommonService) FormatAvatar(ctx context.Context, originalAvatarData, email string, userStatus int) *schema.AvatarInfo {
 	gravatarBaseURL, defaultAvatar := s.getAvatarDefaultConfig(ctx)
-	return s.selectedAvatar(originalAvatarData, defaultAvatar, gravatarBaseURL, email)
+	return s.selectedAvatar(originalAvatarData, defaultAvatar, gravatarBaseURL, email, userStatus)
 }
 
 // FormatListAvatar format avatar
@@ -93,7 +93,7 @@ func (s *siteInfoCommonService) FormatListAvatar(ctx context.Context, userList [
 	gravatarBaseURL, defaultAvatar := s.getAvatarDefaultConfig(ctx)
 	avatarMapping = make(map[string]*schema.AvatarInfo)
 	for _, user := range userList {
-		avatarMapping[user.ID] = s.selectedAvatar(user.Avatar, defaultAvatar, gravatarBaseURL, user.EMail)
+		avatarMapping[user.ID] = s.selectedAvatar(user.Avatar, defaultAvatar, gravatarBaseURL, user.EMail, user.Status)
 	}
 	return avatarMapping
 }
@@ -114,9 +114,17 @@ func (s *siteInfoCommonService) getAvatarDefaultConfig(ctx context.Context) (str
 }
 
 func (s *siteInfoCommonService) selectedAvatar(
-	originalAvatarData string, defaultAvatar string, gravatarBaseURL string, email string) *schema.AvatarInfo {
+	originalAvatarData,
+	defaultAvatar, gravatarBaseURL,
+	email string, userStatus int) *schema.AvatarInfo {
 	avatarInfo := &schema.AvatarInfo{}
 	_ = json.Unmarshal([]byte(originalAvatarData), avatarInfo)
+
+	if userStatus == entity.UserStatusDeleted {
+		return &schema.AvatarInfo{
+			Type: constant.DefaultAvatar,
+		}
+	}
 
 	if len(avatarInfo.Type) == 0 && defaultAvatar == constant.AvatarTypeGravatar {
 		avatarInfo.Type = constant.AvatarTypeGravatar

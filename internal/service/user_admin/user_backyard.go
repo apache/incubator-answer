@@ -7,7 +7,10 @@ import (
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/translator"
 	"github.com/answerdev/answer/internal/base/validator"
+	answercommon "github.com/answerdev/answer/internal/service/answer_common"
+	"github.com/answerdev/answer/internal/service/comment_common"
 	"github.com/answerdev/answer/internal/service/export"
+	questioncommon "github.com/answerdev/answer/internal/service/question_common"
 	"github.com/google/uuid"
 	"net/mail"
 	"strings"
@@ -50,6 +53,9 @@ type UserAdminService struct {
 	userActivity          activity.UserActiveActivityRepo
 	siteInfoCommonService siteinfo_common.SiteInfoCommonService
 	emailService          *export.EmailService
+	questionCommonRepo    questioncommon.QuestionRepo
+	answerCommonRepo      answercommon.AnswerRepo
+	commentCommonRepo     comment_common.CommentCommonRepo
 }
 
 // NewUserAdminService new user admin service
@@ -61,6 +67,9 @@ func NewUserAdminService(
 	userActivity activity.UserActiveActivityRepo,
 	siteInfoCommonService siteinfo_common.SiteInfoCommonService,
 	emailService *export.EmailService,
+	questionCommonRepo questioncommon.QuestionRepo,
+	answerCommonRepo answercommon.AnswerRepo,
+	commentCommonRepo comment_common.CommentCommonRepo,
 ) *UserAdminService {
 	return &UserAdminService{
 		userRepo:              userRepo,
@@ -70,6 +79,9 @@ func NewUserAdminService(
 		userActivity:          userActivity,
 		siteInfoCommonService: siteInfoCommonService,
 		emailService:          emailService,
+		questionCommonRepo:    questionCommonRepo,
+		answerCommonRepo:      answerCommonRepo,
+		commentCommonRepo:     commentCommonRepo,
 	}
 }
 
@@ -111,11 +123,29 @@ func (us *UserAdminService) UpdateUserStatus(ctx context.Context, req *schema.Up
 		return err
 	}
 
+	// remove all content that user created, such as question, answer, comment, etc.
+	if req.RemoveAllContent {
+		us.removeAllUserCreatedContent(ctx, userInfo.ID)
+	}
+
 	// if user reputation is zero means this user is inactive, so try to activate this user.
 	if req.IsNormal() && userInfo.Rank == 0 {
 		return us.userActivity.UserActive(ctx, userInfo.ID)
 	}
 	return nil
+}
+
+// removeAllUserCreatedContent remove all user created content
+func (us *UserAdminService) removeAllUserCreatedContent(ctx context.Context, userID string) {
+	if err := us.questionCommonRepo.RemoveAllUserQuestion(ctx, userID); err != nil {
+		log.Errorf("remove all user question error: %v", err)
+	}
+	if err := us.answerCommonRepo.RemoveAllUserAnswer(ctx, userID); err != nil {
+		log.Errorf("remove all user answer error: %v", err)
+	}
+	if err := us.commentCommonRepo.RemoveAllUserComment(ctx, userID); err != nil {
+		log.Errorf("remove all user comment error: %v", err)
+	}
 }
 
 // UpdateUserRole update user role

@@ -69,7 +69,7 @@ func (us *UserCommon) GetUserBasicInfoByID(ctx context.Context, ID string) (
 		return nil, exist, err
 	}
 	info := us.FormatUserBasicInfo(ctx, userInfo)
-	info.Avatar = us.siteInfoCommonService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
+	info.Avatar = us.siteInfoCommonService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail, userInfo.Status).GetURL()
 	return info, exist, nil
 }
 
@@ -79,7 +79,7 @@ func (us *UserCommon) GetUserBasicInfoByUserName(ctx context.Context, username s
 		return nil, exist, err
 	}
 	info := us.FormatUserBasicInfo(ctx, userInfo)
-	info.Avatar = us.siteInfoCommonService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
+	info.Avatar = us.siteInfoCommonService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail, userInfo.Status).GetURL()
 	return info, exist, nil
 }
 
@@ -133,11 +133,10 @@ func (us *UserCommon) FormatUserBasicInfo(ctx context.Context, userInfo *entity.
 	userBasicInfo.DisplayName = userInfo.DisplayName
 	userBasicInfo.Website = userInfo.Website
 	userBasicInfo.Location = userInfo.Location
-	userBasicInfo.IPInfo = userInfo.IPInfo
 	userBasicInfo.Status = constant.ConvertUserStatus(userInfo.Status, userInfo.MailStatus)
 	if userBasicInfo.Status == constant.UserDeleted {
 		userBasicInfo.Avatar = ""
-		userBasicInfo.DisplayName = "Anonymous"
+		userBasicInfo.DisplayName = "user" + userInfo.ID
 	}
 	return userBasicInfo
 }

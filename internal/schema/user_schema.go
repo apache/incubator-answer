@@ -59,8 +59,6 @@ type UserLoginResp struct {
 	Website string `json:"website"`
 	// location
 	Location string `json:"location"`
-	// ip info
-	IPInfo string `json:"ip_info"`
 	// language
 	Language string `json:"language"`
 	// access token
@@ -313,7 +311,6 @@ type UserBasicInfo struct {
 	Avatar      string `json:"avatar"`
 	Website     string `json:"website"`
 	Location    string `json:"location"`
-	IPInfo      string `json:"ip_info"`
 	Status      string `json:"status"`
 }
 

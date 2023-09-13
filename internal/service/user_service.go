@@ -92,7 +92,7 @@ func (us *UserService) GetUserInfoByUserID(ctx context.Context, token, userID st
 	if err != nil {
 		log.Error(err)
 	}
-	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail)
+	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail, userInfo.Status)
 	resp.AccessToken = token
 	resp.HavePassword = len(userInfo.Pass) > 0
 	return resp, nil
@@ -109,7 +109,7 @@ func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username 
 	}
 	resp = &schema.GetOtherUserInfoByUsernameResp{}
 	resp.ConvertFromUserEntity(userInfo)
-	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
+	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail, userInfo.Status).GetURL()
 	return resp, nil
 }
 
@@ -145,7 +145,7 @@ func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLogi
 
 	resp = &schema.UserLoginResp{}
 	resp.ConvertFromUserEntity(userInfo)
-	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
+	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail, userInfo.Status).GetURL()
 	userCacheInfo := &entity.UserCacheInfo{
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
@@ -426,7 +426,7 @@ func (us *UserService) UserRegisterByEmail(ctx context.Context, registerUserInfo
 	// return user info and token
 	resp = &schema.UserLoginResp{}
 	resp.ConvertFromUserEntity(userInfo)
-	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
+	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail, userInfo.Status).GetURL()
 	userCacheInfo := &entity.UserCacheInfo{
 		UserID:      userInfo.ID,
 		EmailStatus: userInfo.MailStatus,
@@ -511,7 +511,7 @@ func (us *UserService) UserVerifyEmail(ctx context.Context, req *schema.UserVeri
 
 	resp = &schema.UserLoginResp{}
 	resp.ConvertFromUserEntity(userInfo)
-	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
+	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail, userInfo.Status).GetURL()
 	resp.AccessToken = accessToken
 	// User verified email will update user email status. So user status cache should be updated.
 	if err = us.authService.SetUserStatus(ctx, userCacheInfo); err != nil {
@@ -630,7 +630,7 @@ func (us *UserService) UserChangeEmailVerify(ctx context.Context, content string
 
 	resp = &schema.UserLoginResp{}
 	resp.ConvertFromUserEntity(userInfo)
-	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail).GetURL()
+	resp.Avatar = us.siteInfoService.FormatAvatar(ctx, userInfo.Avatar, userInfo.EMail, userInfo.Status).GetURL()
 	userCacheInfo := &entity.UserCacheInfo{
 		UserID:      userInfo.ID,
 		EmailStatus: entity.EmailStatusAvailable,

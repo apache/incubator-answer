@@ -13,9 +13,10 @@ import (
 
 // UpdateUserStatusReq update user request
 type UpdateUserStatusReq struct {
-	UserID      string `validate:"required" json:"user_id"`
-	Status      string `validate:"required,oneof=normal suspended deleted inactive" json:"status" enums:"normal,suspended,deleted,inactive"`
-	LoginUserID string `json:"-"`
+	UserID           string `validate:"required" json:"user_id"`
+	Status           string `validate:"required,oneof=normal suspended deleted inactive" json:"status" enums:"normal,suspended,deleted,inactive"`
+	RemoveAllContent bool   `validate:"omitempty" json:"remove_all_content"`
+	LoginUserID      string `json:"-"`
 }
 
 func (r *UpdateUserStatusReq) IsNormal() bool    { return r.Status == constant.UserNormal }
