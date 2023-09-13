@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	usercommon "github.com/answerdev/answer/internal/service/user_common"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
@@ -25,6 +26,7 @@ type NotificationService struct {
 	notificationRepo   notficationcommon.NotificationRepo
 	notificationCommon *notficationcommon.NotificationCommon
 	revisionService    *revision_common.RevisionService
+	userRepo           usercommon.UserRepo
 }
 
 func NewNotificationService(
@@ -32,13 +34,14 @@ func NewNotificationService(
 	notificationRepo notficationcommon.NotificationRepo,
 	notificationCommon *notficationcommon.NotificationCommon,
 	revisionService *revision_common.RevisionService,
-
+	userRepo usercommon.UserRepo,
 ) *NotificationService {
 	return &NotificationService{
 		data:               data,
 		notificationRepo:   notificationRepo,
 		notificationCommon: notificationCommon,
 		revisionService:    revisionService,
+		userRepo:           userRepo,
 	}
 }
 
@@ -147,6 +150,8 @@ func (ns *NotificationService) formatNotificationPage(ctx context.Context, notif
 	resp []*schema.NotificationContent, err error) {
 	lang := handler.GetLangByCtx(ctx)
 	enableShortID := handler.GetEnableShortID(ctx)
+	userIDs := make([]string, 0)
+	userMapping := make(map[string]bool)
 	for _, notificationInfo := range notifications {
 		item := &schema.NotificationContent{}
 		if err := json.Unmarshal([]byte(notificationInfo.Content), item); err != nil {
@@ -179,7 +184,40 @@ func (ns *NotificationService) formatNotificationPage(ctx context.Context, notif
 			}
 		}
 
+		if item.UserInfo != nil && !userMapping[item.UserInfo.ID] {
+			userIDs = append(userIDs, item.UserInfo.ID)
+			userMapping[item.UserInfo.ID] = true
+		}
 		resp = append(resp, item)
+	}
+
+	if len(userIDs) == 0 {
+		return resp, nil
+	}
+
+	users, err := ns.userRepo.BatchGetByID(ctx, userIDs)
+	if err != nil {
+		log.Error(err)
+		return resp, nil
+	}
+	userIDMapping := make(map[string]*entity.User, len(users))
+	for _, user := range users {
+		userIDMapping[user.ID] = user
+	}
+	for _, item := range resp {
+		if item.UserInfo == nil {
+			continue
+		}
+		userInfo, ok := userIDMapping[item.UserInfo.ID]
+		if !ok {
+			continue
+		}
+		if userInfo.Status == entity.UserStatusDeleted {
+			item.UserInfo = &schema.UserBasicInfo{
+				DisplayName: "user" + userInfo.ID,
+				Status:      constant.UserDeleted,
+			}
+		}
 	}
 	return resp, nil
 }
