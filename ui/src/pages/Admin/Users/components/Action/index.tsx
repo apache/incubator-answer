@@ -138,7 +138,7 @@ const UserOperation = ({
   return (
     <td className="text-end">
       <Dropdown>
-        <Dropdown.Toggle variant="link" className="no-toggle">
+        <Dropdown.Toggle variant="link" className="no-toggle p-0">
           <Icon name="three-dots-vertical" title={t('action')} />
         </Dropdown.Toggle>
         <Dropdown.Menu>

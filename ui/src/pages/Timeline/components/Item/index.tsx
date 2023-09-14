@@ -109,10 +109,7 @@ const Index: FC<Props> = ({ data, isAdmin, objectInfo, revisionList }) => {
           ) : (
             <BaseUserCard
               className="fs-normal"
-              data={{
-                username: data.username,
-                display_name: data.user_display_name,
-              }}
+              data={data?.user_info}
               showAvatar={false}
               showReputation={false}
             />
