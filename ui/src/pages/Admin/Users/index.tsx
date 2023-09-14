@@ -25,7 +25,7 @@ import { loggedUserInfoStore, userCenterStore } from '@/stores';
 import { formatCount } from '@/utils';
 
 import DeleteUserModal from './components/DeleteUserModal';
-import UserOperate from './components/UserOperate';
+import Action from './components/Action';
 
 const UserFilterKeys: Type.UserFilterBy[] = [
   'all',
@@ -243,7 +243,7 @@ const Users: FC = () => {
                 )}
                 {curFilter !== 'deleted' &&
                 (showAction || user.status === 'inactive') ? (
-                  <UserOperate
+                  <Action
                     userData={user}
                     showActionPassword={showActionPassword}
                     showActionRole={showActionRole}

@@ -1097,12 +1097,15 @@ ui:
       Are you sure you wish to delete?
     other: Are you sure you wish to delete?
     tip_answer_deleted: This answer has been deleted
+    undelete_title: Undelete this post
+    undelete_desc: Are you sure you wish to undelete?
   btns:
     confirm: Confirm
     cancel: Cancel
     edit: Edit
     save: Save
     delete: Delete
+    undelete: Undelete
     login: Log in
     signup: Sign up
     logout: Log out
@@ -1123,6 +1126,8 @@ ui:
     active: Active
     suspend: Suspend
     unsuspend: Unsuspend
+    close: Close
+    reopen: Reopen
   search:
     title: Search Results
     keywords: Keywords
@@ -1411,34 +1416,6 @@ ui:
       created: Created
       action: Action
       review: Review
-    change_modal:
-      title: Change user status to...
-      btn_cancel: Cancel
-      btn_submit: Submit
-      normal_name: normal
-      normal_desc: A normal user can ask and answer questions.
-      suspended_name: suspended
-      suspended_desc: A suspended user can't log in.
-      deleted_name: deleted
-      deleted_desc: "Delete profile, authentication associations."
-      inactive_name: inactive
-      inactive_desc: An inactive user must re-validate their email.
-      confirm_title: Delete this user
-      confirm_content: Are you sure you want to delete this user? This is permanent!
-      confirm_btn: Delete
-      msg:
-        empty: Please select a reason.
-    status_modal:
-      title: "Change {{ type }} status to..."
-      normal_name: normal
-      normal_desc: A normal post available to everyone.
-      closed_name: closed
-      closed_desc: "A closed question can't answer, but still can edit, vote and comment."
-      deleted_name: deleted
-      deleted_desc: This post will be deleted.
-      btn_cancel: Cancel
-      btn_submit: Submit
-      btn_next: Next
     user_role_modal:
       title: Change user role to...
       btn_cancel: Cancel
