@@ -29,18 +29,16 @@ type GetObjectTimelineResp struct {
 
 // ActObjectTimeline act object timeline
 type ActObjectTimeline struct {
-	ActivityID      string `json:"activity_id"`
-	RevisionID      string `json:"revision_id"`
-	CreatedAt       int64  `json:"created_at"`
-	ActivityType    string `json:"activity_type"`
-	Username        string `json:"username"`
-	UserDisplayName string `json:"user_display_name"`
-	Comment         string `json:"comment"`
-	ObjectID        string `json:"object_id"`
-	ObjectType      string `json:"object_type"`
-	Cancelled       bool   `json:"cancelled"`
-	CancelledAt     int64  `json:"cancelled_at"`
-	UserID          string `json:"id"`
+	ActivityID   string         `json:"activity_id"`
+	RevisionID   string         `json:"revision_id"`
+	CreatedAt    int64          `json:"created_at"`
+	ActivityType string         `json:"activity_type"`
+	Comment      string         `json:"comment"`
+	ObjectID     string         `json:"object_id"`
+	ObjectType   string         `json:"object_type"`
+	Cancelled    bool           `json:"cancelled"`
+	CancelledAt  int64          `json:"cancelled_at"`
+	UserInfo     *UserBasicInfo `json:"user_info,omitempty"`
 }
 
 // ActObjectInfo act object info

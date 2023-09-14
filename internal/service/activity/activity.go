@@ -91,6 +91,7 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 			CreatedAt:  act.CreatedAt.Unix(),
 			Cancelled:  act.Cancelled == entity.ActivityCancelled,
 			ObjectID:   act.ObjectID,
+			UserInfo:   &schema.UserBasicInfo{},
 		}
 		item.ObjectType, _ = obj.GetObjectTypeStrByObjectID(act.ObjectID)
 		if item.Cancelled {
@@ -120,13 +121,13 @@ func (as *ActivityService) GetObjectTimeline(ctx context.Context, req *schema.Ge
 
 		// if activity is down vote, only admin can see who does it.
 		if item.ActivityType == constant.ActDownVote && !req.IsAdmin {
-			item.Username = "N/A"
-			item.UserDisplayName = "N/A"
+			item.UserInfo.Username = "N/A"
+			item.UserInfo.DisplayName = "N/A"
 		} else {
 			if act.TriggerUserID > 0 {
-				item.UserID = fmt.Sprintf("%d", act.TriggerUserID)
+				item.UserInfo.ID = fmt.Sprintf("%d", act.TriggerUserID)
 			} else {
-				item.UserID = act.UserID
+				item.UserInfo.ID = act.UserID
 			}
 		}
 
@@ -209,10 +210,10 @@ func (as *ActivityService) formatTimelineUserInfo(ctx context.Context, timeline 
 	userExist := make(map[string]bool)
 	userIDs := make([]string, 0)
 	for _, info := range timeline {
-		if len(info.UserID) == 0 || userExist[info.UserID] {
+		if len(info.UserInfo.ID) == 0 || userExist[info.UserInfo.ID] {
 			continue
 		}
-		userIDs = append(userIDs, info.UserID)
+		userIDs = append(userIDs, info.UserInfo.ID)
 	}
 	if len(userIDs) == 0 {
 		return
@@ -223,13 +224,10 @@ func (as *ActivityService) formatTimelineUserInfo(ctx context.Context, timeline 
 		return
 	}
 	for _, info := range timeline {
-		if len(info.UserID) == 0 {
+		if len(info.UserInfo.ID) == 0 {
 			continue
 		}
-		if userInfo, ok := userInfoMapping[info.UserID]; ok {
-			info.Username = userInfo.Username
-			info.UserDisplayName = userInfo.DisplayName
-		}
+		info.UserInfo = userInfoMapping[info.UserInfo.ID]
 	}
 }
 
