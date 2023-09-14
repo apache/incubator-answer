@@ -124,6 +124,9 @@ func (vs *VoteService) VoteDown(ctx context.Context, req *schema.VoteReq) (resp 
 	voteDownOperationInfo := vs.createVoteOperationInfo(ctx, req.UserID, false, objectInfo)
 	if req.IsCancel {
 		err = vs.voteRepo.CancelVote(ctx, voteDownOperationInfo)
+		if err != nil {
+			return nil, err
+		}
 	} else {
 		// cancel vote up if exist
 		err = vs.voteRepo.CancelVote(ctx, vs.createVoteOperationInfo(ctx, req.UserID, true, objectInfo))
@@ -131,6 +134,9 @@ func (vs *VoteService) VoteDown(ctx context.Context, req *schema.VoteReq) (resp 
 			return nil, err
 		}
 		err = vs.voteRepo.Vote(ctx, voteDownOperationInfo)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	resp = &schema.VoteResp{}
