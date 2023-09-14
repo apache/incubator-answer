@@ -11,7 +11,6 @@ const AnswerActions = ({ itemData, refreshList, curFilter }) => {
   const toast = useToast();
 
   const handleAction = (type) => {
-    console.log(type);
     if (type === 'delete') {
       Modal.confirm({
         title: t('title', { keyPrefix: 'delete' }),

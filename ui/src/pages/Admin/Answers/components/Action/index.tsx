@@ -8,7 +8,6 @@ const AnswerActions = ({ itemData, curFilter, refreshList }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'delete' });
 
   const handleAction = (type) => {
-    console.log(type);
     if (type === 'delete') {
       Modal.confirm({
         title: t('title'),

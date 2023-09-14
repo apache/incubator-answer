@@ -509,13 +509,12 @@ export interface TimelineItem {
   revision_id: number;
   created_at: number;
   activity_type: string;
-  username: string;
-  user_display_name: string;
   comment: string;
   object_id: string;
   object_type: string;
   cancelled: boolean;
   cancelled_at: any;
+  user_info: UserInfoBase;
 }
 
 export interface TimelineObject {
