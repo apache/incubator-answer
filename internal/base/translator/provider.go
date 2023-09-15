@@ -100,9 +100,7 @@ func NewTranslator(c *I18n) (tr i18n.Translator, err error) {
 	}
 	LanguageOptions = s.LangOption
 	for _, option := range LanguageOptions {
-		if option.Progress != 100 {
-			option.Label = fmt.Sprintf("%s (%d%%)", option.Label, option.Progress)
-		}
+		option.Label = fmt.Sprintf("%s (%d%%)", option.Label, option.Progress)
 	}
 	return GlobalTrans, err
 }
