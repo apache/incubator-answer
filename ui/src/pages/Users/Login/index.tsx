@@ -144,9 +144,17 @@ const Index: React.FC = () => {
       {step === 1 ? (
         <Col className="mx-auto" md={6} lg={4} xl={3}>
           {ucAgentInfo ? (
-            <PluginRender slug_name="uc_login" className="mb-5" />
+            <PluginRender
+              type="connector"
+              slug_name="hosting_connector"
+              className="mb-5"
+            />
           ) : (
-            <PluginRender type="Connector" className="mb-5" />
+            <PluginRender
+              type="connector"
+              slug_name="third_party_connector"
+              className="mb-5"
+            />
           )}
           {canOriginalLogin ? (
             <>

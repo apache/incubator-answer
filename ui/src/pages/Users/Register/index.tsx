@@ -35,7 +35,11 @@ const Index: React.FC = () => {
 
       {showForm ? (
         <Col className="mx-auto" md={6} lg={4} xl={3}>
-          <PluginRender type="Connector" className="mb-5" />
+          <PluginRender
+            type="connector"
+            slug_name="third_party_connector"
+            className="mb-5"
+          />
           {showSignupForm ? <SignUpForm callback={onStep} /> : null}
           <div className="text-center mt-5">
             <Trans i18nKey="login.info_login" ns="translation">

@@ -1,6 +1,8 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import './i18n/init';
+
+import '@/utils/pluginKit';
 import routes from '@/router';
 
 function App() {

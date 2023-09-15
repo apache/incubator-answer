@@ -9,12 +9,12 @@ import {
 
 import classNames from 'classnames';
 
+import PluginRender from '../PluginRender';
+
 import {
   BlockQuote,
   Bold,
-  Chart,
   Code,
-  Formula,
   Heading,
   Help,
   Hr,
@@ -127,7 +127,9 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
       <div className={classNames('md-editor-wrap rounded', className)}>
         <EditorContext.Provider value={context}>
           {context && (
-            <div className="toolbar-wrap px-3 d-flex align-items-center flex-wrap">
+            <PluginRender
+              type="editor"
+              className="toolbar-wrap px-3 d-flex align-items-center flex-wrap">
               <Heading {...context} />
               <Bold {...context} />
               <Italice {...context} />
@@ -136,10 +138,7 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
               <Link {...context} />
               <BlockQuote {...context} />
               <Image {...context} />
-              <div className="toolbar-divider" />
               <Table {...context} />
-              <Formula {...context} />
-              <Chart {...context} />
               <div className="toolbar-divider" />
               <OL {...context} />
               <UL {...context} />
@@ -148,7 +147,7 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
               <Hr {...context} />
               <div className="toolbar-divider" />
               <Help />
-            </div>
+            </PluginRender>
           )}
         </EditorContext.Provider>
 

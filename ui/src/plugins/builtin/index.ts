@@ -1,9 +1,9 @@
-import Connector from './Connector';
-import UcLogin from './UcLogin';
+import ThirdPartyConnector from './ThirdPartyConnector';
+import HostingConnector from './HostingConnector';
 import Algolia from './Algolia';
 
 export default {
-  Connector,
-  UcLogin,
+  ThirdPartyConnector,
+  HostingConnector,
   Algolia,
 };
