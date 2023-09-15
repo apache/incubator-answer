@@ -34,7 +34,7 @@ Answer provides a plugin system for developers to create custom plugins and expa
 
 We value your feedback and suggestions to improve our documentation. If you have any comments or questions, please feel free to contact us. We’re excited to see what you can create using our plugin system!
 
-You can also check out the [officially supported plugins here](https://github.com/answerdev/plugins).
+You can also check out the [plugins here](https://github.com/answerdev/plugins).
 
 
 ## Contributing
