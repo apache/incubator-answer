@@ -2,6 +2,7 @@ package activity_common
 
 import (
 	"context"
+	"github.com/answerdev/answer/pkg/uid"
 
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -26,13 +27,15 @@ func NewVoteRepo(data *data.Data, activityRepo activity_common.ActivityRepo) act
 }
 
 func (vr *VoteRepo) GetVoteStatus(ctx context.Context, objectID, userID string) (status string) {
+	objectID = uid.DeShortID(objectID)
 	for _, action := range []string{"vote_up", "vote_down"} {
-		at := &entity.Activity{}
 		activityType, _, _, err := vr.activityRepo.GetActivityTypeByObjID(ctx, objectID, action)
 		if err != nil {
 			return ""
 		}
-		has, err := vr.data.DB.Context(ctx).Where("object_id =? AND cancelled=0 AND activity_type=? AND user_id=?", objectID, activityType, userID).Get(at)
+		at := &entity.Activity{}
+		has, err := vr.data.DB.Context(ctx).Where("object_id = ? AND cancelled = 0 AND activity_type = ? AND user_id = ?",
+			objectID, activityType, userID).Get(at)
 		if err != nil {
 			log.Error(err)
 			return ""
