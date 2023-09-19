@@ -35,7 +35,7 @@ const Index: FC = () => {
     return null;
   }
   return isEdit ? (
-    <Card className="mb-4">
+    <Card className="answer_following-tags mb-4">
       <Card.Header className="text-nowrap d-flex justify-content-between">
         {t('following_tags')}
         <Button
@@ -56,7 +56,7 @@ const Index: FC = () => {
       </Card.Body>
     </Card>
   ) : (
-    <Card className="mb-4">
+    <Card className="answer_following-tags mb-4">
       <Card.Header className="text-nowrap d-flex justify-content-between text-capitalize">
         {t('following_tags')}
         <Button

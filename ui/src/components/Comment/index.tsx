@@ -309,7 +309,7 @@ const Comment = ({ objectId, mode, commentId }) => {
     );
   };
   return (
-    <div className="comments-wrap">
+    <div className="answer_comments comments-wrap">
       {comments.map((item, index) => {
         return (
           <div

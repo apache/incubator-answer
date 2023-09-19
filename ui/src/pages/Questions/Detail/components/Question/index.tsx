@@ -65,8 +65,8 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
   }
 
   return (
-    <div>
-      <h1 className="h3 mb-3 text-wrap text-break">
+    <div className="answer_question-asked">
+      <h1 className="answer_question-title h3 mb-3 text-wrap text-break">
         {data?.pin === 2 && (
           <Icon
             name="pin-fill"

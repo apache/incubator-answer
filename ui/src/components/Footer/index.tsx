@@ -11,7 +11,7 @@ const Index = () => {
   const siteName = siteInfoStore((state) => state.siteInfo.name);
   const cc = `${fullYear} ${siteName}`;
   return (
-    <footer className="bg-light">
+    <footer className="answer_footer bg-light">
       <Container className="py-3">
         <p className="text-center mb-0 small text-secondary">
           <Trans i18nKey="footer.build_on" values={{ cc }}>

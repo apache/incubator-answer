@@ -5,7 +5,7 @@ import { useTranslation, Trans } from 'react-i18next';
 const Index: FC = () => {
   const { t } = useTranslation();
   return (
-    <Card>
+    <Card className="answer_search-tips">
       <Card.Header>{t('search.tips.title')}</Card.Header>
       <Card.Body className="small ext-secondary">
         <div className="mb-1">
