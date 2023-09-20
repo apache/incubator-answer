@@ -48,7 +48,6 @@ importers:
       eslint-plugin-react-hooks: ^4.6.0
       husky: ^8.0.1
       i18next: ^21.9.0
-      katex: ^0.16.2
       lint-staged: ^13.0.3
       lodash: ^4.17.21
       marked: ^4.0.19
@@ -86,7 +85,6 @@ importers:
       dayjs: 1.11.5
       diff: 5.1.0
       i18next: 21.9.2
-      katex: 0.16.2
       lodash: 4.17.21
       marked: 4.1.0
       md5: 2.3.0
