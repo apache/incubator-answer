@@ -47,7 +47,7 @@ const QuestionList: FC<Props> = ({
   const count = data?.count || 0;
   return (
     <div>
-      <div className="mb-3 d-flex flex-wrap justify-content-between">
+      <div className="answer_questions-head mb-3 d-flex flex-wrap justify-content-between">
         <h5 className="fs-5 text-nowrap mb-3 mb-md-0">
           {source === 'questions'
             ? t('all_questions')
@@ -60,7 +60,7 @@ const QuestionList: FC<Props> = ({
           i18nKeyPrefix="question"
         />
       </div>
-      <ListGroup className="rounded-0">
+      <ListGroup className="answer_questions-list rounded-0">
         {isLoading ? (
           <QuestionListLoader />
         ) : (

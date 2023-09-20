@@ -112,7 +112,7 @@ const Header: FC = () => {
     <Navbar
       variant={navbarStyle === 'theme-colored' ? 'dark' : ''}
       expand="lg"
-      className={classnames('sticky-top', navbarStyle)}
+      className={classnames('answer_header', 'sticky-top', navbarStyle)}
       id="header">
       <Container className="d-flex align-items-center">
         <Navbar.Toggle

@@ -95,7 +95,7 @@ const Index: FC<Props> = ({ questionId, readOnly = false }) => {
   }
 
   return (
-    <Card className="mt-4">
+    <Card className="answer_people-asked mt-4">
       <Card.Header className="text-nowrap d-flex justify-content-between text-capitalize">
         {t('title')}
         {showSaveButton ? (

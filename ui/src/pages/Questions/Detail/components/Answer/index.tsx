@@ -3,6 +3,8 @@ import { Button, Alert, Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 
+import classNames from 'classnames';
+
 import {
   Actions,
   Operate,
@@ -73,7 +75,13 @@ const Index: FC<Props> = ({
   }
 
   return (
-    <div id={data.id} ref={answerRef} className="answer-item py-4">
+    <div
+      id={data.id}
+      ref={answerRef}
+      className={classNames(
+        'answer_answer answer-item py-4',
+        data?.accepted === 2 && 'answer_answer-accepted',
+      )}>
       {data.status === 10 && (
         <Alert variant="danger" className="mb-4">
           {t('post_deleted', { keyPrefix: 'messages' })}

@@ -28,8 +28,8 @@ const Index: FC<Props> = ({ data }) => {
   }
 
   return (
-    <ListGroupItem className="py-3 px-0 border-start-0 border-end-0 bg-transparent">
-      <div className="mb-2 clearfix">
+    <ListGroupItem className="answer_search-result py-3 px-0 border-start-0 border-end-0 bg-transparent">
+      <div className="answer_search-result-title mb-2 clearfix">
         <span
           className="float-start me-2 badge text-bg-dark"
           style={{ marginTop: '2px' }}>
@@ -65,7 +65,7 @@ const Index: FC<Props> = ({ data }) => {
       </div>
 
       {data.object?.excerpt && (
-        <p className="small text-truncate-2 mb-2 last-p text-break">
+        <p className="answer_search-result-preview small text-truncate-2 mb-2 last-p text-break">
           {escapeRemove(data.object.excerpt)}
         </p>
       )}

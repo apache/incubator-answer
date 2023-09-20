@@ -14,7 +14,7 @@ const HotQuestions: FC = () => {
     return null;
   }
   return (
-    <Card>
+    <Card className="answer_hot-questions">
       <Card.Header className="text-nowrap text-capitalize">
         {t('hot_questions')}
       </Card.Header>

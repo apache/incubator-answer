@@ -60,7 +60,10 @@ const Index: FC<Props> = ({ slug_name, type, children, ...props }) => {
         const PluginFC = ps.component;
         return (
           // @ts-ignore
-          <PluginFC key={ps.info.slug_name} {...props}>
+          <PluginFC
+            className="answer_plugin"
+            key={ps.info.slug_name}
+            {...props}>
             {children}
           </PluginFC>
         );
