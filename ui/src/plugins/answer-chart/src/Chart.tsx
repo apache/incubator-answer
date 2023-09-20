@@ -126,11 +126,11 @@ const Chart: FC<ChartProps> = ({ editor, previewElement }) => {
 
   return (
     <div className="toolbar-item-wrap">
-      <Dropdown className="p-0 b-0 btn-no-border btn btn-link" title="chart">
+      <Dropdown>
         <Dropdown.Toggle
           type="button"
           as="button"
-          className="p-0 b-0 btn-no-border btn btn-link">
+          className="d-flex justify-content-center align-items-center p-0 b-0 btn-no-border btn btn-link">
           <img src={icon} alt="chart" />
         </Dropdown.Toggle>
         <Dropdown.Menu
