@@ -1,11 +1,12 @@
-import { FC, useState, memo } from 'react';
+import { useState, memo } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import ToolItem from '../toolItem';
 import { IEditorContext } from '../types';
 
-const Heading: FC<IEditorContext> = (context) => {
+let context: IEditorContext;
+const Heading = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const headerList = [
     {
@@ -57,7 +58,8 @@ const Heading: FC<IEditorContext> = (context) => {
     }, level + 1);
     setShowState(false);
   };
-  const onAddHeader = () => {
+  const onAddHeader = (ctx) => {
+    context = ctx;
     if (isLocked) {
       return;
     }

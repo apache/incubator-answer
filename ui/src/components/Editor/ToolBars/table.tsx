@@ -1,10 +1,11 @@
-import { FC, memo } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ToolItem from '../toolItem';
 import { IEditorContext } from '../types';
 
-const Table: FC<IEditorContext> = ({ editor }) => {
+let context: IEditorContext;
+const Table = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
     label: 'table',
@@ -63,7 +64,9 @@ const Table: FC<IEditorContext> = ({ editor }) => {
 
     return body;
   };
-  const handleClick = () => {
+  const handleClick = (ctx) => {
+    context = ctx;
+    const { editor } = context;
     let table = '\n';
 
     table += makeHeader(2, tableData);

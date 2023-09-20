@@ -2,10 +2,16 @@ import { FC, useContext, useEffect } from 'react';
 import { Dropdown, Button } from 'react-bootstrap';
 
 import { EditorContext } from './EditorContext';
+import { IEditorContext } from './types';
 
 interface IProps {
   keyMap?: string[];
-  onClick?: () => void;
+  onClick?: ({
+    editor,
+    wrapText,
+    replaceLines,
+    appendBlock,
+  }: IEditorContext) => void;
   tip?: string;
   className?: string;
   as?: any;
@@ -13,12 +19,16 @@ interface IProps {
   label?: string;
   disable?: boolean;
   isShow?: boolean;
-  onBlur?: () => void;
+  onBlur?: ({
+    editor,
+    wrapText,
+    replaceLines,
+    appendBlock,
+  }: IEditorContext) => void;
 }
 const ToolItem: FC<IProps> = (props) => {
-  const context = useContext(EditorContext);
+  const editor = useContext(EditorContext);
 
-  const { editor } = context;
   const {
     label,
     tip,
@@ -33,20 +43,26 @@ const ToolItem: FC<IProps> = (props) => {
   } = props;
 
   useEffect(() => {
+    if (!editor) {
+      return;
+    }
     if (!keyMap) {
       return;
     }
 
     keyMap.forEach((key) => {
-      editor.addKeyMap({
+      editor?.addKeyMap({
         [key]: () => {
-          if (typeof onClick === 'function') {
-            onClick();
-          }
+          onClick?.({
+            editor,
+            wrapText: editor?.wrapText,
+            replaceLines: editor?.replaceLines,
+            appendBlock: editor?.appendBlock,
+          });
         },
       });
     });
-  }, []);
+  }, [editor]);
 
   const btnRender = () => (
     <Button
@@ -59,20 +75,26 @@ const ToolItem: FC<IProps> = (props) => {
       tabIndex={-1}
       onClick={(e) => {
         e.preventDefault();
-        if (typeof onClick === 'function') {
-          onClick();
-        }
+        onClick?.({
+          editor,
+          wrapText: editor?.wrapText,
+          replaceLines: editor?.replaceLines,
+          appendBlock: editor?.appendBlock,
+        });
       }}
       onBlur={(e) => {
         e.preventDefault();
-        if (typeof onBlur === 'function') {
-          onBlur();
-        }
+        onBlur?.({
+          editor,
+          wrapText: editor?.wrapText,
+          replaceLines: editor?.replaceLines,
+          appendBlock: editor?.appendBlock,
+        });
       }}
     />
   );
 
-  if (!context) {
+  if (!editor) {
     return null;
   }
   return (

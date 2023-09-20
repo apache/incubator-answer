@@ -1,7 +1,6 @@
 import React, { FC, ReactNode, memo } from 'react';
 
 import PluginKite, { Plugin, PluginType } from '@/utils/pluginKit';
-
 /**
  * Note：Please set at least either of the `slug_name` and `type` attributes, otherwise no plugins will be rendered.
  *
@@ -20,7 +19,13 @@ interface Props {
   [prop: string]: any;
 }
 
-const Index: FC<Props> = ({ slug_name, type, children, ...props }) => {
+const Index: FC<Props> = ({
+  slug_name,
+  type,
+  children,
+  className,
+  ...props
+}) => {
   const pluginSlice: Plugin[] = [];
   const plugins = PluginKite.getPlugins();
 
@@ -47,7 +52,7 @@ const Index: FC<Props> = ({ slug_name, type, children, ...props }) => {
 
   if (type === 'editor') {
     const nodes = React.Children.map(children, (child, index) => {
-      if (index === 0) {
+      if (index === 15) {
         return (
           <>
             {child}
@@ -55,16 +60,17 @@ const Index: FC<Props> = ({ slug_name, type, children, ...props }) => {
               const PluginFC = ps.component;
               return (
                 // @ts-ignore
-                <PluginFC key={ps.info.slug_name} />
+                <PluginFC key={ps.info.slug_name} {...props} />
               );
             })}
+            <div className="toolbar-divider" />
           </>
         );
       }
       return child;
     });
 
-    return <div {...props}>{nodes}</div>;
+    return <div className={className}>{nodes}</div>;
   }
 
   return (
@@ -73,7 +79,7 @@ const Index: FC<Props> = ({ slug_name, type, children, ...props }) => {
         const PluginFC = ps.component;
         return (
           // @ts-ignore
-          <PluginFC key={ps.info.slug_name} {...props} />
+          <PluginFC key={ps.info.slug_name} className={className} {...props} />
         );
       })}
     </>

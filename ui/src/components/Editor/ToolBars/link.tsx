@@ -1,11 +1,12 @@
-import { FC, useEffect, useRef, useState, memo } from 'react';
+import { useEffect, useRef, useState, memo } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import ToolItem from '../toolItem';
 import { IEditorContext } from '../types';
 
-const Link: FC<IEditorContext> = ({ editor }) => {
+let context: IEditorContext;
+const Link = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
     label: 'link',
@@ -31,10 +32,11 @@ const Link: FC<IEditorContext> = ({ editor }) => {
       inputRef.current.focus();
     }
   }, [visible]);
-  const addLink = () => {
-    if (!editor) {
-      return;
-    }
+
+  const addLink = (ctx) => {
+    context = ctx;
+    const { editor } = context;
+
     const text = editor.getSelection();
 
     setName({ ...name, value: text });
@@ -42,9 +44,8 @@ const Link: FC<IEditorContext> = ({ editor }) => {
     setVisible(true);
   };
   const handleClick = () => {
-    if (!editor) {
-      return;
-    }
+    const { editor } = context;
+
     if (!link.value) {
       setLink({ ...link, isInvalid: true });
       return;
@@ -62,10 +63,14 @@ const Link: FC<IEditorContext> = ({ editor }) => {
     setName({ ...name, value: '' });
   };
   const onHide = () => setVisible(false);
-  const onExited = () => editor?.focus();
+  const onExited = () => {
+    const { editor } = context;
+    editor.focus();
+  };
 
   return (
-    <ToolItem {...item} onClick={addLink}>
+    <>
+      <ToolItem {...item} onClick={addLink} />
       <Modal
         show={visible}
         onHide={onHide}
@@ -112,7 +117,7 @@ const Link: FC<IEditorContext> = ({ editor }) => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </ToolItem>
+    </>
   );
 };
 

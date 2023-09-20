@@ -1,10 +1,11 @@
-import { FC, memo } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ToolItem from '../toolItem';
 import { IEditorContext } from '../types';
 
-const BlockQuote: FC<IEditorContext> = ({ editor, replaceLines }) => {
+let context: IEditorContext;
+const BlockQuote = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
 
   const item = {
@@ -13,8 +14,9 @@ const BlockQuote: FC<IEditorContext> = ({ editor, replaceLines }) => {
     tip: `${t('blockquote.text')} (Ctrl+Q)`,
   };
 
-  const handleClick = () => {
-    replaceLines((line) => {
+  const handleClick = (ctx) => {
+    context = ctx;
+    context.replaceLines((line) => {
       const FIND_BLOCKQUOTE_RX = /^>\s+?/g;
 
       if (line === `> ${t('blockquote.text')}`) {
@@ -26,7 +28,7 @@ const BlockQuote: FC<IEditorContext> = ({ editor, replaceLines }) => {
       }
       return line;
     }, 2);
-    editor?.focus();
+    context.editor?.focus();
   };
 
   return <ToolItem {...item} onClick={handleClick} />;

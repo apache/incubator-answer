@@ -1,10 +1,11 @@
-import { FC, memo } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ToolItem from '../toolItem';
 import { IEditorContext } from '../types';
 
-const Bold: FC<IEditorContext> = ({ editor, wrapText }) => {
+let context: IEditorContext;
+const Bold = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
     label: 'bold',
@@ -13,9 +14,10 @@ const Bold: FC<IEditorContext> = ({ editor, wrapText }) => {
   };
   const DEFAULTTEXT = t('bold.text');
 
-  const handleClick = () => {
-    wrapText('**', '**', DEFAULTTEXT);
-    editor?.focus();
+  const handleClick = (ctx) => {
+    context = ctx;
+    context.wrapText('**', '**', DEFAULTTEXT);
+    context.editor?.focus();
   };
 
   return <ToolItem {...item} onClick={handleClick} />;
