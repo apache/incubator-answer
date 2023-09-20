@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, memo } from 'react';
 
-import PluginKite, { Plugin, PluginType } from '@/utils/pluginKit';
+import PluginKit, { Plugin, PluginType } from '@/utils/pluginKit';
 /**
  * Note：Please set at least either of the `slug_name` and `type` attributes, otherwise no plugins will be rendered.
  *
@@ -27,7 +27,7 @@ const Index: FC<Props> = ({
   ...props
 }) => {
   const pluginSlice: Plugin[] = [];
-  const plugins = PluginKite.getPlugins();
+  const plugins = PluginKit.getPlugins();
 
   plugins.forEach((plugin) => {
     if (type && slug_name) {

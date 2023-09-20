@@ -89,12 +89,6 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
     getHtml,
   }));
 
-  const handleChange = (val) => {
-    const { ch } = editor.getCursor();
-
-    editor.replaceSelection(`${ch ? '\n' : ''}\`\`\`mermaid\n${val}\n\`\`\`\n`);
-  };
-
   useEffect(() => {
     if (!editor) {
       return;
@@ -111,7 +105,7 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
           <PluginRender
             type="editor"
             className="toolbar-wrap px-3 d-flex align-items-center flex-wrap"
-            onChange={handleChange}
+            editor={editor}
             previewElement={previewRef.current?.element}>
             <Heading />
             <Bold />

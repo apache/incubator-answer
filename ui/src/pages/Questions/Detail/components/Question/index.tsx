@@ -14,6 +14,7 @@ import {
   Icon,
   ImgViewer,
 } from '@/components';
+import { useRenderHtmlPlugin } from '@/utils/pluginKit';
 import { formatCount, guard } from '@/utils';
 import { following } from '@/services';
 import { pathFactory } from '@/router/pathFactory';
@@ -32,6 +33,8 @@ const Index: FC<Props> = ({ data, initPage, hasAnswer, isLogged }) => {
   const [searchParams] = useSearchParams();
   const [followed, setFollowed] = useState(data?.is_followed);
   const ref = useRef<HTMLDivElement>(null);
+
+  useRenderHtmlPlugin(ref.current);
 
   const handleFollow = (e) => {
     e.preventDefault();

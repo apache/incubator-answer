@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import type { Editor, Position } from 'codemirror';
 import type CodeMirror from 'codemirror';
 import 'codemirror/lib/codemirror.css';
-import 'katex/dist/katex.min.css';
 
 export function createEditorUtils(
   codemirror: typeof CodeMirror,
@@ -90,45 +89,6 @@ export function htmlRender(el: HTMLElement | null) {
       p.innerHTML = str;
     }
   });
-
-  // import('mermaid').then(({ default: mermaid }) => {
-  //   mermaid.initialize({ startOnLoad: false });
-
-  //   el.querySelectorAll('.language-mermaid').forEach((pre) => {
-  //     const flag = Date.now();
-  //     mermaid.render(
-  //       `theGraph${flag}`,
-  //       pre.textContent || '',
-  //       function (svgCode) {
-  //         const p = document.createElement('p');
-  //         p.className = 'text-center';
-  //         p.innerHTML = svgCode;
-
-  //         pre.parentNode?.replaceChild(p, pre);
-  //       },
-  //     );
-  //   });
-  // });
-  import('katex/contrib/auto-render/auto-render').then(
-    ({ default: render }) => {
-      render(el, {
-        delimiters: [
-          { left: '$$', right: '$$', display: true },
-          { left: '$$<br>', right: '<br>$$', display: true },
-          {
-            left: '\\begin{equation}',
-            right: '\\end{equation}',
-            display: true,
-          },
-          { left: '\\begin{align}', right: '\\end{align}', display: true },
-          { left: '\\begin{alignat}', right: '\\end{alignat}', display: true },
-          { left: '\\begin{gather}', right: '\\end{gather}', display: true },
-          { left: '\\(', right: '\\)', display: false },
-          { left: '\\[', right: '\\]', display: true },
-        ],
-      });
-    },
-  );
 
   // change table style
 

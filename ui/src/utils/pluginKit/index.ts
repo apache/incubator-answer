@@ -3,6 +3,8 @@ import { NamedExoticComponent, FC } from 'react';
 import builtin from '@/plugins/builtin';
 import * as allPlugins from '@/plugins';
 
+import { initI18nResource } from './utils';
+
 /**
  * This information is to be defined for all components.
  * It may be used for feature upgrades or version compatibility processing.
@@ -26,6 +28,10 @@ export interface PluginInfo {
 export interface Plugin {
   info: PluginInfo;
   component: NamedExoticComponent | FC;
+  i18nConfig?;
+  hooks?: {
+    useRender?: Array<(element: HTMLElement | null) => void>;
+  };
 }
 
 class Plugins {
@@ -73,15 +79,14 @@ class Plugins {
     if (!bool) {
       return;
     }
+    if (plugin.i18nConfig) {
+      initI18nResource(plugin.i18nConfig);
+    }
     this.plugins.push(plugin);
   }
 
   getPlugin(slug_name: string) {
     return this.plugins.find((p) => p.info.slug_name === slug_name);
-  }
-
-  getPluginsByType(type: PluginType) {
-    return this.plugins.filter((p) => p.info.type === type);
   }
 
   getPlugins() {
@@ -91,4 +96,15 @@ class Plugins {
 
 const plugins = new Plugins();
 
+const useRenderHtmlPlugin = (element: HTMLElement | null) => {
+  plugins
+    .getPlugins()
+    .filter((plugin) => plugin.hooks?.useRender)
+    .forEach((plugin) => {
+      plugin.hooks?.useRender?.forEach((hook) => {
+        hook(element);
+      });
+    });
+};
+export { useRenderHtmlPlugin };
 export default plugins;
