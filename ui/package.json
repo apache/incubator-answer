@@ -9,9 +9,13 @@
     "lint": "eslint . --cache --fix --ext .ts,.tsx",
     "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "preinstall": "node ./scripts/preinstall.js",
-    "pre-commit": "lint-staged"
+    "pre-commit": "lint-staged",
+    "build:packages": "pnpm -r --filter=./src/plugins/* run build",
+    "clean": "rm -rf node_modules && rm -rf src/plugins/**/node_modules"
   },
   "dependencies": {
+    "answer-chart": "workspace:^",
+    "answer-formula": "workspace:^",
     "axios": "^0.27.2",
     "bootstrap": "^5.3.0",
     "bootstrap-icons": "^1.10.5",
@@ -26,7 +30,6 @@
     "lodash": "^4.17.21",
     "marked": "^4.0.19",
     "md5": "^2.3.0",
-    "mermaid": "^9.1.7",
     "next-share": "^0.18.1",
     "qrcode": "^1.5.1",
     "qs": "^6.11.0",
