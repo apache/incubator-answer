@@ -19,6 +19,7 @@ var (
 			".jpg":  true,
 			".jpeg": true,
 			".png":  true,
+			".gif":  true,
 		},
 		AdminBranding: {
 			".jpg":  true,

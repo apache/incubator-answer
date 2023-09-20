@@ -61,15 +61,12 @@ func (am *AvatarMiddleware) AvatarThumb() gin.HandlerFunc {
 			return
 
 		} else {
-			uUrl, err := url.Parse(uri)
+			urlInfo, err := url.Parse(uri)
 			if err != nil {
 				ctx.Next()
 				return
 			}
-			_, urlfileName := filepath.Split(uUrl.Path)
-			uploadPath := am.serviceConfig.UploadPath
-			filePath := fmt.Sprintf("%s/%s", uploadPath, urlfileName)
-			ext := strings.ToLower(path.Ext(filePath)[1:])
+			ext := strings.TrimPrefix(filepath.Ext(urlInfo.Path), ".")
 			ctx.Header("content-type", fmt.Sprintf("image/%s", ext))
 		}
 		ctx.Next()
