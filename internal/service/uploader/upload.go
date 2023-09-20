@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -44,7 +43,7 @@ var (
 		".jpg":  imaging.JPEG,
 		".jpeg": imaging.JPEG,
 		".png":  imaging.PNG,
-		//".gif":  imaging.GIF,
+		".gif":  imaging.GIF,
 		//".tif":  imaging.TIFF,
 		//".tiff": imaging.TIFF,
 		//".bmp":  imaging.BMP,
@@ -112,50 +111,49 @@ func (us *uploaderService) AvatarThumbFile(ctx *gin.Context, fileName string, si
 
 	thumbFileName := fmt.Sprintf("%d_%d@%s", size, size, fileName)
 	thumbFilePath := fmt.Sprintf("%s/%s/%s", us.serviceConfig.UploadPath, avatarThumbSubPath, thumbFileName)
-	avatarfile, err := os.ReadFile(thumbFilePath)
+	avatarFile, err := os.ReadFile(thumbFilePath)
 	if err == nil {
 		return thumbFilePath, nil
 	}
 	filePath := fmt.Sprintf("%s/avatar/%s", us.serviceConfig.UploadPath, fileName)
-	avatarfile, err = os.ReadFile(filePath)
+	avatarFile, err = os.ReadFile(filePath)
 	if err != nil {
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
-	reader := bytes.NewReader(avatarfile)
+	reader := bytes.NewReader(avatarFile)
 	img, err := imaging.Decode(reader)
 	if err != nil {
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
-	new_image := imaging.Fill(img, size, size, imaging.Center, imaging.Linear)
-	var buf bytes.Buffer
+
 	fileSuffix := path.Ext(fileName)
-
-	_, ok := FormatExts[fileSuffix]
-
-	if !ok {
-		return "", fmt.Errorf("img extension not exist")
+	if _, ok := FormatExts[fileSuffix]; !ok {
+		return "", fmt.Errorf("unsupported image format: %s", fileSuffix)
 	}
-	err = imaging.Encode(&buf, new_image, FormatExts[fileSuffix])
-	if err != nil {
+
+	var buf bytes.Buffer
+	newImage := imaging.Fill(img, size, size, imaging.Center, imaging.Linear)
+	if err = imaging.Encode(&buf, newImage, FormatExts[fileSuffix]); err != nil {
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
-	thumbReader := bytes.NewReader(buf.Bytes())
-	err = dir.CreateDirIfNotExist(path.Join(us.serviceConfig.UploadPath, avatarThumbSubPath))
-	if err != nil {
+
+	if err = dir.CreateDirIfNotExist(path.Join(us.serviceConfig.UploadPath, avatarThumbSubPath)); err != nil {
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
+
 	avatarFilePath := path.Join(avatarThumbSubPath, thumbFileName)
-	savefilePath := path.Join(us.serviceConfig.UploadPath, avatarFilePath)
-	out, err := os.Create(savefilePath)
+	saveFilePath := path.Join(us.serviceConfig.UploadPath, avatarFilePath)
+	out, err := os.Create(saveFilePath)
 	if err != nil {
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 	defer out.Close()
-	_, err = io.Copy(out, thumbReader)
-	if err != nil {
+
+	thumbReader := bytes.NewReader(buf.Bytes())
+	if _, err = io.Copy(out, thumbReader); err != nil {
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
-	return savefilePath, nil
+	return saveFilePath, nil
 }
 
 func (us *uploaderService) UploadPostFile(ctx *gin.Context) (
@@ -227,7 +225,10 @@ func (us *uploaderService) uploadFile(ctx *gin.Context, file *multipart.FileHead
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 	defer src.Close()
-	Dexif(filePath, filePath)
+
+	if err := removeExif(filePath); err != nil {
+		log.Error(err)
+	}
 
 	if !checker.IsSupportedImageFile(src, filepath.Ext(fileSubPath)) {
 		return "", errors.BadRequest(reason.UploadFileUnsupportedFileFormat)
@@ -252,8 +253,14 @@ func (us *uploaderService) tryToUploadByPlugin(ctx *gin.Context, source plugin.U
 	return url, err
 }
 
-func Dexif(filepath string, destpath string) error {
-	img, err := ioutil.ReadFile(filepath)
+// removeExif remove exif
+// only support jpg/jpeg/png
+func removeExif(path string) error {
+	ext := strings.ToUpper(strings.TrimPrefix(filepath.Ext(path), "."))
+	if ext != "JPEG" && ext != "JPG" && ext != "PNG" {
+		return nil
+	}
+	img, err := os.ReadFile(path)
 	if err != nil {
 		return err
 	}
@@ -261,9 +268,5 @@ func Dexif(filepath string, destpath string) error {
 	if err != nil {
 		return err
 	}
-	err = os.WriteFile(destpath, noExifBytes, 0644)
-	if err != nil {
-		return err
-	}
-	return nil
+	return os.WriteFile(path, noExifBytes, 0644)
 }

@@ -11,7 +11,6 @@ import (
 
 // IsSupportedImageFile currently answers support image type is `image/jpeg,image/jpg,image/png, image/gif`
 func IsSupportedImageFile(file io.Reader, ext string) bool {
-
 	ext = strings.TrimPrefix(ext, ".")
 	var err error
 	switch strings.ToUpper(ext) {
