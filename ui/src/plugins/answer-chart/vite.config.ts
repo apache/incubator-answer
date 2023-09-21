@@ -1,14 +1,15 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
+import packageJson from './package.json';
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   build: {
     lib: {
-      entry: 'src/index.ts',
-      name: 'answer-chart',
-      fileName: (format) => `answer-chart.${format}.js`,
+      entry: 'index.ts',
+      name: packageJson.name,
+      fileName: (format) => `${packageJson.name}.${format}.js`,
     },
     rollupOptions: {
       external: [

@@ -1,6 +1,7 @@
 {
   "name": "answer-chart",
   "private": true,
+  "author": "Answer.dev",
   "version": "0.0.1",
   "files": [
     "dist",
