@@ -33,7 +33,7 @@ type GetUserPageReq struct {
 	// email
 	Query string `validate:"omitempty,gt=0,lte=100" form:"query"`
 	// user status
-	Status string `validate:"omitempty,oneof=suspended deleted inactive" form:"status"`
+	Status string `validate:"omitempty,oneof=normal suspended deleted inactive" form:"status"`
 	// staff, if staff is true means query admin or moderator
 	Staff bool `validate:"omitempty" form:"staff"`
 }
