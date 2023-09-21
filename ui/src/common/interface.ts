@@ -598,3 +598,8 @@ export interface NotificationConfig {
   all_new_question_for_following_tags: NotificationConfigItem[];
   inbox: NotificationConfigItem[];
 }
+
+export interface ActivatedPlugin {
+  name: string;
+  slug_name: string;
+}

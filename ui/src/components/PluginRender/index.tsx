@@ -27,7 +27,7 @@ const Index: FC<Props> = ({
   ...props
 }) => {
   const pluginSlice: Plugin[] = [];
-  const plugins = PluginKit.getPlugins();
+  const plugins = PluginKit.getPlugins().filter((plugin) => plugin.activated);
 
   plugins.forEach((plugin) => {
     if (type && slug_name) {
@@ -49,6 +49,10 @@ const Index: FC<Props> = ({
    * TODO: Rendering control for non-builtin plug-ins
    * ps: Logic such as version compatibility determination can be placed here
    */
+
+  if (pluginSlice.length === 0) {
+    return null;
+  }
 
   if (type === 'editor') {
     const nodes = React.Children.map(children, (child, index) => {

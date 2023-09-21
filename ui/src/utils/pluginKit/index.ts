@@ -2,6 +2,7 @@ import { NamedExoticComponent, FC } from 'react';
 
 import builtin from '@/plugins/builtin';
 import * as allPlugins from '@/plugins';
+import type * as Type from '@/common/interface';
 
 import { initI18nResource } from './utils';
 
@@ -32,6 +33,7 @@ export interface Plugin {
   hooks?: {
     useRender?: Array<(element: HTMLElement | null) => void>;
   };
+  activated?: boolean;
 }
 
 class Plugins {
@@ -85,6 +87,18 @@ class Plugins {
     this.plugins.push(plugin);
   }
 
+  activatePlugins(activatedPlugins: Type.ActivatedPlugin[]) {
+    this.plugins.forEach((plugin) => {
+      const { slug_name } = plugin.info;
+      const activatedPlugin = activatedPlugins.find(
+        (p) => p.slug_name === slug_name,
+      );
+      if (activatedPlugin) {
+        plugin.activated = true;
+      }
+    });
+  }
+
   getPlugin(slug_name: string) {
     return this.plugins.find((p) => p.info.slug_name === slug_name);
   }
@@ -99,12 +113,13 @@ const plugins = new Plugins();
 const useRenderHtmlPlugin = (element: HTMLElement | null) => {
   plugins
     .getPlugins()
-    .filter((plugin) => plugin.hooks?.useRender)
+    .filter((plugin) => plugin.activated && plugin.hooks?.useRender)
     .forEach((plugin) => {
       plugin.hooks?.useRender?.forEach((hook) => {
         hook(element);
       });
     });
 };
+
 export { useRenderHtmlPlugin };
 export default plugins;
