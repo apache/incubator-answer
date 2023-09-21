@@ -118,15 +118,13 @@ func (qr *questionRepo) UpdateCollectionCount(ctx context.Context, questionID st
 	return nil
 }
 
-func (qr *questionRepo) UpdateQuestionStatus(ctx context.Context, question *entity.Question) (err error) {
-	question.ID = uid.DeShortID(question.ID)
-	now := time.Now()
-	question.UpdatedAt = now
-	_, err = qr.data.DB.Context(ctx).Where("id =?", question.ID).Cols("status", "updated_at").Update(question)
+func (qr *questionRepo) UpdateQuestionStatus(ctx context.Context, questionID string, status int) (err error) {
+	questionID = uid.DeShortID(questionID)
+	_, err = qr.data.DB.Context(ctx).ID(questionID).Cols("status").Update(&entity.Question{Status: status})
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = qr.updateSearch(ctx, question.ID)
+	_ = qr.updateSearch(ctx, questionID)
 	return nil
 }
 
