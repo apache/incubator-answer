@@ -104,7 +104,7 @@ func (qs *QuestionService) CloseQuestion(ctx context.Context, req *schema.CloseQ
 	}
 
 	questionInfo.Status = entity.QuestionStatusClosed
-	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
+	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo.ID, questionInfo.Status)
 	if err != nil {
 		return err
 	}
@@ -138,7 +138,7 @@ func (qs *QuestionService) ReopenQuestion(ctx context.Context, req *schema.Reope
 	}
 
 	questionInfo.Status = entity.QuestionStatusAvailable
-	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
+	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo.ID, questionInfo.Status)
 	if err != nil {
 		return err
 	}
@@ -1207,7 +1207,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 	if !exist {
 		return errors.BadRequest(reason.QuestionNotFound)
 	}
-	err = qs.questionRepo.UpdateQuestionStatus(ctx, &entity.Question{ID: questionInfo.ID, Status: setStatus})
+	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo.ID, setStatus)
 	if err != nil {
 		return err
 	}

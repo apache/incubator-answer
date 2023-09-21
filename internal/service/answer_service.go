@@ -451,7 +451,7 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.A
 		return fmt.Errorf("answer does not exist")
 	}
 	answerInfo.Status = setStatus
-	err = as.answerRepo.UpdateAnswerStatus(ctx, answerInfo)
+	err = as.answerRepo.UpdateAnswerStatus(ctx, req.AnswerID, setStatus)
 	if err != nil {
 		return err
 	}

@@ -37,7 +37,7 @@ type QuestionRepo interface {
 	GetQuestionList(ctx context.Context, question *entity.Question) (questions []*entity.Question, err error)
 	GetQuestionPage(ctx context.Context, page, pageSize int, userID, tagID, orderCond string, inDays int) (
 		questionList []*entity.Question, total int64, err error)
-	UpdateQuestionStatus(ctx context.Context, question *entity.Question) (err error)
+	UpdateQuestionStatus(ctx context.Context, questionID string, status int) (err error)
 	UpdateQuestionStatusWithOutUpdateTime(ctx context.Context, question *entity.Question) (err error)
 	UpdateQuestionOperation(ctx context.Context, question *entity.Question) (err error)
 	GetQuestionsByTitle(ctx context.Context, title string, pageSize int) (questionList []*entity.Question, err error)
@@ -451,7 +451,7 @@ func (qs *QuestionCommon) RemoveQuestion(ctx context.Context, req *schema.Remove
 	}
 
 	questionInfo.Status = entity.QuestionStatusDeleted
-	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
+	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo.ID, questionInfo.Status)
 	if err != nil {
 		return err
 	}
@@ -478,7 +478,7 @@ func (qs *QuestionCommon) CloseQuestion(ctx context.Context, req *schema.CloseQu
 		return nil
 	}
 	questionInfo.Status = entity.QuestionStatusClosed
-	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo)
+	err = qs.questionRepo.UpdateQuestionStatus(ctx, questionInfo.ID, questionInfo.Status)
 	if err != nil {
 		return err
 	}
