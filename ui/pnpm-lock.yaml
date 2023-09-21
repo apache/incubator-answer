@@ -46,6 +46,7 @@ importers:
       eslint-plugin-promise: ^6.0.0
       eslint-plugin-react: ^7.30.1
       eslint-plugin-react-hooks: ^4.6.0
+      humps: ^2.0.1
       husky: ^8.0.1
       i18next: ^21.9.0
       lint-staged: ^13.0.3
@@ -132,6 +133,7 @@ importers:
       eslint-plugin-promise: 6.0.1_eslint@8.23.1
       eslint-plugin-react: 7.31.8_eslint@8.23.1
       eslint-plugin-react-hooks: 4.6.0_eslint@8.23.1
+      humps: 2.0.1
       husky: 8.0.1
       lint-staged: 13.0.3
       postcss: 8.4.16
@@ -7329,6 +7331,10 @@ packages:
   /human-signals/3.0.1:
     resolution: {integrity: sha512-rQLskxnM/5OCldHo+wNXbpVgDn5A17CUoKX+7Sokwaknlq7CdSnphy0W39GU8dw59XiCXmFXDg4fRuckQRKewQ==}
     engines: {node: '>=12.20.0'}
+    dev: true
+
+  /humps/2.0.1:
+    resolution: {integrity: sha512-E0eIbrFWUhwfXJmsbdjRQFQPrl5pTEoKlz163j1mTqqUnU9PgR4AgB8AIITzuB3vLBdxZXyZ9TDIrwB2OASz4g==}
     dev: true
 
   /husky/8.0.1:

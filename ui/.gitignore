@@ -38,3 +38,4 @@ package-lock.json
 !/src/plugins/Demo
 !/src/plugins/answer-chart
 !/src/plugins/answer-formula
+/src/plugins/*/*.go
