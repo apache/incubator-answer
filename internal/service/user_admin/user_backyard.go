@@ -353,6 +353,9 @@ func (us *UserAdminService) GetUserPage(ctx context.Context, req *schema.GetUser
 		user.Status = entity.UserStatusSuspended
 	} else if req.IsDeleted() {
 		user.Status = entity.UserStatusDeleted
+	} else {
+		user.MailStatus = entity.EmailStatusAvailable
+		user.Status = entity.UserStatusAvailable
 	}
 
 	if len(req.Query) > 0 {
