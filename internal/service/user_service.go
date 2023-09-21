@@ -274,18 +274,22 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 
 	if siteUsers.AllowUpdateUsername && len(req.Username) > 0 {
 		if checker.IsInvalidUsername(req.Username) {
-			errFields = append(errFields, &validator.FormErrorField{
+			return append(errFields, &validator.FormErrorField{
 				ErrorField: "username",
 				ErrorMsg:   reason.UsernameInvalid,
-			})
-			return errFields, errors.BadRequest(reason.UsernameInvalid)
+			}), errors.BadRequest(reason.UsernameInvalid)
 		}
-		if checker.IsReservedUsername(req.Username) {
-			errFields = append(errFields, &validator.FormErrorField{
+		// admin can use reserved username
+		if !req.IsAdmin && checker.IsReservedUsername(req.Username) {
+			return append(errFields, &validator.FormErrorField{
 				ErrorField: "username",
 				ErrorMsg:   reason.UsernameInvalid,
-			})
-			return errFields, errors.BadRequest(reason.UsernameInvalid)
+			}), errors.BadRequest(reason.UsernameInvalid)
+		} else if req.IsAdmin && checker.IsUsersIgnorePath(req.Username) {
+			return append(errFields, &validator.FormErrorField{
+				ErrorField: "username",
+				ErrorMsg:   reason.UsernameInvalid,
+			}), errors.BadRequest(reason.UsernameInvalid)
 		}
 
 		userInfo, exist, err := us.userRepo.GetByUsername(ctx, req.Username)
@@ -293,11 +297,10 @@ func (us *UserService) UpdateInfo(ctx context.Context, req *schema.UpdateInfoReq
 			return nil, err
 		}
 		if exist && userInfo.ID != req.UserID {
-			errFields = append(errFields, &validator.FormErrorField{
+			return append(errFields, &validator.FormErrorField{
 				ErrorField: "username",
 				ErrorMsg:   reason.UsernameDuplicate,
-			})
-			return errFields, errors.BadRequest(reason.UsernameDuplicate)
+			}), errors.BadRequest(reason.UsernameDuplicate)
 		}
 	}
 
