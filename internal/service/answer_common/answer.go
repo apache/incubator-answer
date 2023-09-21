@@ -13,7 +13,7 @@ import (
 type AnswerRepo interface {
 	AddAnswer(ctx context.Context, answer *entity.Answer) (err error)
 	RemoveAnswer(ctx context.Context, id string) (err error)
-	UpdateAnswer(ctx context.Context, answer *entity.Answer, Colar []string) (err error)
+	UpdateAnswer(ctx context.Context, answer *entity.Answer, cols []string) (err error)
 	GetAnswer(ctx context.Context, id string) (answer *entity.Answer, exist bool, err error)
 	GetAnswerList(ctx context.Context, answer *entity.Answer) (answerList []*entity.Answer, err error)
 	GetAnswerPage(ctx context.Context, page, pageSize int, answer *entity.Answer) (answerList []*entity.Answer, total int64, err error)
@@ -24,7 +24,7 @@ type AnswerRepo interface {
 	GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error)
 	SearchList(ctx context.Context, search *entity.AnswerSearch) ([]*entity.Answer, int64, error)
 	AdminSearchList(ctx context.Context, search *schema.AdminAnswerPageReq) ([]*entity.Answer, int64, error)
-	UpdateAnswerStatus(ctx context.Context, answer *entity.Answer) (err error)
+	UpdateAnswerStatus(ctx context.Context, answerID string, status int) (err error)
 	GetAnswerCount(ctx context.Context) (count int64, err error)
 	RemoveAllUserAnswer(ctx context.Context, userID string) (err error)
 }

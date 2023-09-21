@@ -115,10 +115,10 @@ func (ar *answerRepo) RemoveAllUserAnswer(ctx context.Context, userID string) (e
 }
 
 // UpdateAnswer update answer
-func (ar *answerRepo) UpdateAnswer(ctx context.Context, answer *entity.Answer, Colar []string) (err error) {
+func (ar *answerRepo) UpdateAnswer(ctx context.Context, answer *entity.Answer, cols []string) (err error) {
 	answer.ID = uid.DeShortID(answer.ID)
 	answer.QuestionID = uid.DeShortID(answer.QuestionID)
-	_, err = ar.data.DB.Context(ctx).ID(answer.ID).Cols(Colar...).Update(answer)
+	_, err = ar.data.DB.Context(ctx).ID(answer.ID).Cols(cols...).Update(answer)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
@@ -126,15 +126,13 @@ func (ar *answerRepo) UpdateAnswer(ctx context.Context, answer *entity.Answer, C
 	return err
 }
 
-func (ar *answerRepo) UpdateAnswerStatus(ctx context.Context, answer *entity.Answer) (err error) {
-	now := time.Now()
-	answer.ID = uid.DeShortID(answer.ID)
-	answer.UpdatedAt = now
-	_, err = ar.data.DB.Context(ctx).Where("id =?", answer.ID).Cols("status", "updated_at").Update(answer)
+func (ar *answerRepo) UpdateAnswerStatus(ctx context.Context, answerID string, status int) (err error) {
+	answerID = uid.DeShortID(answerID)
+	_, err = ar.data.DB.Context(ctx).ID(answerID).Cols("status").Update(&entity.Answer{Status: status})
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = ar.updateSearch(ctx, answer.ID)
+	_ = ar.updateSearch(ctx, answerID)
 	return
 }
 
