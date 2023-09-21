@@ -208,22 +208,15 @@ func (u *UserModifyPasswordReq) Check() (errFields []*validator.FormErrorField, 
 }
 
 type UpdateInfoRequest struct {
-	// display_name
-	DisplayName string `validate:"omitempty,gt=0,lte=30" json:"display_name"`
-	// username
-	Username string `validate:"omitempty,gt=3,lte=30" json:"username"`
-	// avatar
-	Avatar AvatarInfo `json:"avatar"`
-	// bio
-	Bio string `validate:"omitempty,gt=0,lte=4096" json:"bio"`
-	// bio
-	BioHTML string `json:"-"`
-	// website
-	Website string `validate:"omitempty,gt=0,lte=500" json:"website"`
-	// location
-	Location string `validate:"omitempty,gt=0,lte=100" json:"location"`
-	// user id
-	UserID string `json:"-"`
+	DisplayName string     `validate:"omitempty,gt=0,lte=30" json:"display_name"`
+	Username    string     `validate:"omitempty,gt=3,lte=30" json:"username"`
+	Avatar      AvatarInfo `json:"avatar"`
+	Bio         string     `validate:"omitempty,gt=0,lte=4096" json:"bio"`
+	BioHTML     string     `json:"-"`
+	Website     string     `validate:"omitempty,gt=0,lte=500" json:"website"`
+	Location    string     `validate:"omitempty,gt=0,lte=100" json:"location"`
+	UserID      string     `json:"-"`
+	IsAdmin     bool       `json:"-"`
 }
 
 type AvatarInfo struct {

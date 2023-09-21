@@ -421,6 +421,7 @@ func (uc *UserController) UserUpdateInfo(ctx *gin.Context) {
 		return
 	}
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+	req.IsAdmin = middleware.GetUserIsAdminModerator(ctx)
 	errFields, err := uc.userService.UpdateInfo(ctx, req)
 	for _, field := range errFields {
 		field.ErrorMsg = translator.Tr(handler.GetLang(ctx), field.ErrorMsg)
