@@ -108,7 +108,7 @@ func (us *UserAdminService) UpdateUserStatus(ctx context.Context, req *schema.Up
 	}
 	if req.IsDeleted() {
 		userInfo.Status = entity.UserStatusDeleted
-		userInfo.EMail = fmt.Sprintf("%s.%d", userInfo.EMail, time.Now().UnixNano())
+		userInfo.EMail = fmt.Sprintf("%s.%d", userInfo.EMail, time.Now().Unix())
 	}
 	if req.IsSuspended() {
 		userInfo.Status = entity.UserStatusSuspended

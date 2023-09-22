@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	usercommon "github.com/answerdev/answer/internal/service/user_common"
+	"github.com/answerdev/answer/pkg/converter"
 
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
@@ -214,7 +215,7 @@ func (ns *NotificationService) formatNotificationPage(ctx context.Context, notif
 		}
 		if userInfo.Status == entity.UserStatusDeleted {
 			item.UserInfo = &schema.UserBasicInfo{
-				DisplayName: "user" + userInfo.ID,
+				DisplayName: "user" + converter.DeleteUserDisplay(userInfo.ID),
 				Status:      constant.UserDeleted,
 			}
 		}
