@@ -39,14 +39,11 @@ var (
 		postSubPath,
 		brandingSubPath,
 	}
-	FormatExts = map[string]imaging.Format{
+	supportedThumbFileExtMapping = map[string]imaging.Format{
 		".jpg":  imaging.JPEG,
 		".jpeg": imaging.JPEG,
 		".png":  imaging.PNG,
 		".gif":  imaging.GIF,
-		//".tif":  imaging.TIFF,
-		//".tiff": imaging.TIFF,
-		//".bmp":  imaging.BMP,
 	}
 )
 
@@ -95,7 +92,7 @@ func (us *uploaderService) UploadAvatarFile(ctx *gin.Context) (url string, err e
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
 	}
 	fileExt := strings.ToLower(path.Ext(file.Filename))
-	if _, ok := FormatExts[fileExt]; !ok {
+	if _, ok := plugin.DefaultFileTypeCheckMapping[plugin.UserAvatar][fileExt]; !ok {
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
 	}
 
@@ -105,6 +102,11 @@ func (us *uploaderService) UploadAvatarFile(ctx *gin.Context) (url string, err e
 }
 
 func (us *uploaderService) AvatarThumbFile(ctx *gin.Context, fileName string, size int) (url string, err error) {
+	fileSuffix := path.Ext(fileName)
+	if _, ok := supportedThumbFileExtMapping[fileSuffix]; !ok {
+		// if file type is not supported, return original file
+		return path.Join(us.serviceConfig.UploadPath, avatarSubPath, fileName), nil
+	}
 	if size > 1024 {
 		size = 1024
 	}
@@ -115,7 +117,7 @@ func (us *uploaderService) AvatarThumbFile(ctx *gin.Context, fileName string, si
 	if err == nil {
 		return thumbFilePath, nil
 	}
-	filePath := fmt.Sprintf("%s/avatar/%s", us.serviceConfig.UploadPath, fileName)
+	filePath := fmt.Sprintf("%s/%s/%s", us.serviceConfig.UploadPath, avatarSubPath, fileName)
 	avatarFile, err = os.ReadFile(filePath)
 	if err != nil {
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
@@ -126,14 +128,9 @@ func (us *uploaderService) AvatarThumbFile(ctx *gin.Context, fileName string, si
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 
-	fileSuffix := path.Ext(fileName)
-	if _, ok := FormatExts[fileSuffix]; !ok {
-		return "", fmt.Errorf("unsupported image format: %s", fileSuffix)
-	}
-
 	var buf bytes.Buffer
 	newImage := imaging.Fill(img, size, size, imaging.Center, imaging.Linear)
-	if err = imaging.Encode(&buf, newImage, FormatExts[fileSuffix]); err != nil {
+	if err = imaging.Encode(&buf, newImage, supportedThumbFileExtMapping[fileSuffix]); err != nil {
 		return "", errors.InternalServer(reason.UnknownError).WithError(err).WithStack()
 	}
 
@@ -173,7 +170,7 @@ func (us *uploaderService) UploadPostFile(ctx *gin.Context) (
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
 	}
 	fileExt := strings.ToLower(path.Ext(file.Filename))
-	if _, ok := FormatExts[fileExt]; !ok {
+	if _, ok := plugin.DefaultFileTypeCheckMapping[plugin.UserPost][fileExt]; !ok {
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
 	}
 
@@ -199,8 +196,7 @@ func (us *uploaderService) UploadBrandingFile(ctx *gin.Context) (
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
 	}
 	fileExt := strings.ToLower(path.Ext(file.Filename))
-	_, ok := FormatExts[fileExt]
-	if !ok && fileExt != ".ico" {
+	if _, ok := plugin.DefaultFileTypeCheckMapping[plugin.AdminBranding][fileExt]; !ok {
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
 	}
 
@@ -226,12 +222,12 @@ func (us *uploaderService) uploadFile(ctx *gin.Context, file *multipart.FileHead
 	}
 	defer src.Close()
 
-	if err := removeExif(filePath); err != nil {
-		log.Error(err)
-	}
-
 	if !checker.IsSupportedImageFile(src, filepath.Ext(fileSubPath)) {
 		return "", errors.BadRequest(reason.UploadFileUnsupportedFileFormat)
+	}
+
+	if err := removeExif(filePath); err != nil {
+		log.Error(err)
 	}
 
 	url = fmt.Sprintf("%s/uploads/%s", siteGeneral.SiteUrl, fileSubPath)
@@ -256,8 +252,8 @@ func (us *uploaderService) tryToUploadByPlugin(ctx *gin.Context, source plugin.U
 // removeExif remove exif
 // only support jpg/jpeg/png
 func removeExif(path string) error {
-	ext := strings.ToUpper(strings.TrimPrefix(filepath.Ext(path), "."))
-	if ext != "JPEG" && ext != "JPG" && ext != "PNG" {
+	ext := strings.ToLower(strings.TrimPrefix(filepath.Ext(path), "."))
+	if ext != "jpeg" && ext != "jpg" && ext != "png" {
 		return nil
 	}
 	img, err := os.ReadFile(path)

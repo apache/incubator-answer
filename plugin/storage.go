@@ -14,12 +14,14 @@ var (
 			".jpg":  true,
 			".jpeg": true,
 			".png":  true,
+			".webp": true,
 		},
 		UserPost: {
 			".jpg":  true,
 			".jpeg": true,
 			".png":  true,
 			".gif":  true,
+			".webp": true,
 		},
 		AdminBranding: {
 			".jpg":  true,
