@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import classnames from 'classnames';
 
-import pluginKit, { PluginInfo } from '@/utils/pluginKit';
+import { PluginInfo } from '@/utils/pluginKit';
+import { getTransNs, getTransKeyPrefix } from '@/utils/pluginKit/utils';
 import { SvgIcon } from '@/components';
 
 import info from './info.yaml';
@@ -19,8 +20,8 @@ interface Props {
   className?: string;
 }
 const Index: FC<Props> = ({ className }) => {
-  const { t } = useTranslation(pluginKit.getTransNs(), {
-    keyPrefix: pluginKit.getTransKeyPrefix(pluginInfo),
+  const { t } = useTranslation(getTransNs(), {
+    keyPrefix: getTransKeyPrefix(pluginInfo),
   });
 
   const { data } = useGetStartUseOauthConnector();

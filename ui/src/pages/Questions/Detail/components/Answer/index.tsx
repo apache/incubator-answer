@@ -16,6 +16,7 @@ import {
 import { scrollToElementTop, bgFadeOut } from '@/utils';
 import { AnswerItem } from '@/common/interface';
 import { acceptanceAnswer } from '@/services';
+import { useRenderHtmlPlugin } from '@/utils/pluginKit';
 
 interface Props {
   data: AnswerItem;
@@ -39,6 +40,8 @@ const Index: FC<Props> = ({
   });
   const [searchParams] = useSearchParams();
   const answerRef = useRef<HTMLDivElement>(null);
+  useRenderHtmlPlugin(answerRef.current);
+
   const acceptAnswer = () => {
     acceptanceAnswer({
       question_id: data.question_id,

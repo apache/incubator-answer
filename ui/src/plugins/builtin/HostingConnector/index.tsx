@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import classnames from 'classnames';
 
-import pluginKit, { PluginInfo } from '@/utils/pluginKit';
+import { PluginInfo } from '@/utils/pluginKit';
+import { getTransNs, getTransKeyPrefix } from '@/utils/pluginKit/utils';
 import { SvgIcon } from '@/components';
 import { userCenterStore } from '@/stores';
 import './i18n';
@@ -17,11 +18,12 @@ interface Props {
 
 const pluginInfo: PluginInfo = {
   slug_name: info.slug_name,
+  type: info.type,
 };
 
 const Index: FC<Props> = ({ className }) => {
-  const { t } = useTranslation(pluginKit.getTransNs(), {
-    keyPrefix: pluginKit.getTransKeyPrefix(pluginInfo),
+  const { t } = useTranslation(getTransNs(), {
+    keyPrefix: getTransKeyPrefix(pluginInfo),
   });
   const ucAgent = userCenterStore().agent;
   const ucLoginRedirect =

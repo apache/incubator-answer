@@ -9,29 +9,27 @@ import {
 
 import classNames from 'classnames';
 
+import PluginRender from '../PluginRender';
+
 import {
   BlockQuote,
   Bold,
-  Chart,
   Code,
-  Formula,
   Heading,
   Help,
   Hr,
   Image,
   Indent,
   Italice,
-  Link,
+  Link as LinkItem,
   OL,
   Outdent,
   Table,
   UL,
 } from './ToolBars';
-import { createEditorUtils, htmlRender } from './utils';
+import { htmlRender, useEditor } from './utils';
 import Viewer from './Viewer';
-import { CodeMirrorEditor, IEditorContext } from './types';
 import { EditorContext } from './EditorContext';
-import Editor from './Editor';
 
 import './index.scss';
 
@@ -64,24 +62,18 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
   },
   ref,
 ) => {
+  const editorRef = useRef<HTMLDivElement>(null);
+  const previewRef = useRef<{ getHtml; element } | null>(null);
+
+  const editor = useEditor({
+    element: editorRef.current,
+    onChange,
+    onFocus,
+    onBlur,
+    placeholder: editorPlaceholder,
+    autoFocus,
+  });
   const [markdown, setMarkdown] = useState<string>(value || '');
-  const previewRef = useRef<{ getHtml } | null>(null);
-  const [editor, setEditor] = useState<CodeMirrorEditor | null>(null);
-  const [context, setContext] = useState<IEditorContext | null>(null);
-  const eventRef = useRef<EventRef>();
-
-  useEffect(() => {
-    if (!editor) {
-      return;
-    }
-
-    import('codemirror').then(({ default: codemirror }) => {
-      setContext({
-        editor,
-        ...createEditorUtils(codemirror, editor),
-      });
-    });
-  }, [editor]);
 
   useEffect(() => {
     if (value !== markdown) {
@@ -89,78 +81,56 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
     }
   }, [value]);
 
-  useEffect(() => {
-    eventRef.current = {
-      onChange,
-      onFocus,
-      onBlur,
-    };
-  }, [onChange, onFocus, onBlur]);
-
-  const getEditorInstance = (cm) => {
-    setEditor(cm);
-  };
-
   const getHtml = () => {
     return previewRef.current?.getHtml();
-  };
-
-  const handleChange = (val) => {
-    setMarkdown(val);
-    eventRef.current?.onChange?.(val);
-  };
-
-  const handleFocus = () => {
-    eventRef.current?.onFocus?.();
-  };
-
-  const handleBlur = () => {
-    eventRef.current?.onBlur?.();
   };
 
   useImperativeHandle(ref, () => ({
     getHtml,
   }));
 
+  useEffect(() => {
+    if (!editor) {
+      return;
+    }
+    if (editor.getValue() !== value) {
+      editor.setValue(value || '');
+    }
+  }, [editor, value]);
+
   return (
     <>
       <div className={classNames('md-editor-wrap rounded', className)}>
-        <EditorContext.Provider value={context}>
-          {context && (
-            <div className="toolbar-wrap px-3 d-flex align-items-center flex-wrap">
-              <Heading {...context} />
-              <Bold {...context} />
-              <Italice {...context} />
-              <div className="toolbar-divider" />
-              <Code {...context} />
-              <Link {...context} />
-              <BlockQuote {...context} />
-              <Image {...context} />
-              <div className="toolbar-divider" />
-              <Table {...context} />
-              <Formula {...context} />
-              <Chart {...context} />
-              <div className="toolbar-divider" />
-              <OL {...context} />
-              <UL {...context} />
-              <Indent {...context} />
-              <Outdent {...context} />
-              <Hr {...context} />
-              <div className="toolbar-divider" />
-              <Help />
-            </div>
-          )}
+        <EditorContext.Provider value={editor}>
+          <PluginRender
+            type="editor"
+            className="toolbar-wrap px-3 d-flex align-items-center flex-wrap"
+            editor={editor}
+            previewElement={previewRef.current?.element}>
+            <Heading />
+            <Bold />
+            <Italice />
+            <div className="toolbar-divider" />
+            <Code />
+            <LinkItem />
+            <BlockQuote />
+            <Image />
+            <Table />
+            <div className="toolbar-divider" />
+            <OL />
+            <UL />
+            <Indent />
+            <Outdent />
+            <Hr />
+            <div className="toolbar-divider" />
+            <Help />
+          </PluginRender>
         </EditorContext.Provider>
 
         <div className="content-wrap">
-          <Editor
-            value={markdown}
-            autoFocus={autoFocus}
-            onChange={handleChange}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            editorPlaceholder={editorPlaceholder}
-            getEditorInstance={getEditorInstance}
+          <div
+            className="md-editor position-relative w-100 h-100"
+            ref={editorRef}
           />
         </div>
       </div>

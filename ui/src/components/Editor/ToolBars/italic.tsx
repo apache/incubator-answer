@@ -1,10 +1,11 @@
-import { FC, memo } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ToolItem from '../toolItem';
 import { IEditorContext } from '../types';
 
-const Italic: FC<IEditorContext> = ({ editor, wrapText }) => {
+let context: IEditorContext;
+const Italic = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
     label: 'italic',
@@ -13,7 +14,9 @@ const Italic: FC<IEditorContext> = ({ editor, wrapText }) => {
   };
   const DEFAULTTEXT = t('italic.text');
 
-  const handleClick = () => {
+  const handleClick = (ctx) => {
+    context = ctx;
+    const { editor, wrapText } = context;
     wrapText('*', '*', DEFAULTTEXT);
     editor?.focus();
   };

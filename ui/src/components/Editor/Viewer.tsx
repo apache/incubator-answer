@@ -42,9 +42,11 @@ const Index = ({ value }, ref) => {
 
     htmlRender(previewRef.current);
   }, [html]);
+
   useImperativeHandle(ref, () => {
     return {
       getHtml: () => html,
+      element: previewRef.current,
     };
   });
 

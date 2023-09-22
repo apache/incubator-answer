@@ -1,10 +1,11 @@
-import { FC, memo } from 'react';
+import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import ToolItem from '../toolItem';
 import { IEditorContext } from '../types';
 
-const UL: FC<IEditorContext> = ({ editor, replaceLines }) => {
+let context: IEditorContext;
+const UL = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
   const item = {
     label: 'unorderedList',
@@ -12,10 +13,10 @@ const UL: FC<IEditorContext> = ({ editor, replaceLines }) => {
     tip: `${t('unordered_list.text')} (Ctrl+U)`,
   };
 
-  const handleClick = () => {
-    if (!editor) {
-      return;
-    }
+  const handleClick = (ctx) => {
+    context = ctx;
+    const { editor, replaceLines } = context;
+
     replaceLines((line) => {
       const FIND_UL_RX = /^(\s{0,})(-|\*)\s/;
 

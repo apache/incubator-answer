@@ -1,5 +1,5 @@
-slug_name: connector
-type: Connector
+slug_name: third_party_connector
+type: connector
 version: 0.0.1
 link: https://github.com/answerdev/plugins/tree/main/connector/
 author:  Answer.dev

@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState, memo } from 'react';
+import { useEffect, useRef, useState, memo } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -130,7 +130,9 @@ const codeLanguageType = [
   'yaml',
   'yml',
 ];
-const Code: FC<IEditorContext> = ({ editor, wrapText }) => {
+
+let context: IEditorContext;
+const Code = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
 
   const item = {
@@ -149,11 +151,12 @@ const Code: FC<IEditorContext> = ({ editor, wrapText }) => {
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   const SINGLELINEMAXLENGTH = 40;
-  const addCode = () => {
-    if (!editor) {
-      return;
-    }
-    const text = editor.getSelection();
+  const addCode = (ctx) => {
+    context = ctx;
+
+    const { wrapText, editor } = context;
+
+    const text = context.editor.getSelection();
 
     if (!text) {
       setVisible(true);
@@ -161,7 +164,7 @@ const Code: FC<IEditorContext> = ({ editor, wrapText }) => {
       return;
     }
     if (text.length > SINGLELINEMAXLENGTH) {
-      wrapText('```\n', '\n```');
+      context.wrapText('```\n', '\n```');
     } else {
       wrapText('`', '`');
     }
@@ -175,9 +178,6 @@ const Code: FC<IEditorContext> = ({ editor, wrapText }) => {
   }, [visible]);
 
   const handleClick = () => {
-    if (!editor) {
-      return;
-    }
     if (!code.value.trim()) {
       setCode({
         ...code,
@@ -197,7 +197,7 @@ const Code: FC<IEditorContext> = ({ editor, wrapText }) => {
     } else {
       value = `\`${code.value}\``;
     }
-    editor.replaceSelection(value);
+    context.editor.replaceSelection(value);
     setCode({
       value: '',
       isInvalid: false,
@@ -207,7 +207,7 @@ const Code: FC<IEditorContext> = ({ editor, wrapText }) => {
     setVisible(false);
   };
   const onHide = () => setVisible(false);
-  const onExited = () => editor?.focus();
+  const onExited = () => context.editor?.focus();
 
   return (
     <ToolItem {...item} onClick={addCode}>

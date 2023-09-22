@@ -5,3 +5,4 @@ build
 .eslintrc.js
 node_modules/
 src/types/
+scripts/

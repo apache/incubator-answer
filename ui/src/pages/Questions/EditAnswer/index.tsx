@@ -16,6 +16,7 @@ import {
   modifyAnswer,
   useQueryRevisions,
 } from '@/services';
+import { useRenderHtmlPlugin } from '@/utils/pluginKit';
 
 import './index.scss';
 
@@ -73,6 +74,7 @@ const Index = () => {
   });
 
   const questionContentRef = useRef<HTMLDivElement>(null);
+  useRenderHtmlPlugin(questionContentRef.current);
 
   useEffect(() => {
     if (!questionContentRef?.current) {

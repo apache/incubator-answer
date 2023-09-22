@@ -296,7 +296,7 @@ export type AdminAnswerStatus = 'available' | 'deleted';
  * @description interface for Users
  */
 export type UserFilterBy =
-  | 'all'
+  | 'normal'
   | 'staff'
   | 'inactive'
   | 'suspended'
@@ -597,4 +597,9 @@ export interface NotificationConfig {
   all_new_question: NotificationConfigItem[];
   all_new_question_for_following_tags: NotificationConfigItem[];
   inbox: NotificationConfigItem[];
+}
+
+export interface ActivatedPlugin {
+  name: string;
+  slug_name: string;
 }

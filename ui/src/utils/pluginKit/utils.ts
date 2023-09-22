@@ -8,7 +8,7 @@ import i18next from 'i18next';
  *
  * @field slug_name: Unique identity string for the plugin, usually configured in `info.yaml`
  * @field type: The type of plugin is defined and a single type of plugin can have multiple implementations.
- *              For example, a plugin of type `Connector` can have a `google` implementation and a `github` implementation.
+ *              For example, a plugin of type `connector` can have a `google` implementation and a `github` implementation.
  *              `PluginRender` automatically renders the plug-in types already included in `PluginType`.
  * @field name: Plugin name, optionally configurable. Usually read from the `i18n` file
  * @field description: Plugin description, optionally configurable. Usually read from the `i18n` file
@@ -16,10 +16,10 @@ import i18next from 'i18next';
 
 const I18N_NS = 'plugin';
 
-export type PluginType = 'Connector';
+export type PluginType = 'connector' | 'search' | 'editor';
 export interface PluginInfo {
   slug_name: string;
-  type?: PluginType;
+  type: PluginType;
   name?: string;
   description?: string;
 }
@@ -71,8 +71,4 @@ const getTransKeyPrefix = (info: PluginInfo) => {
   return kp;
 };
 
-export default {
-  initI18nResource,
-  getTransNs,
-  getTransKeyPrefix,
-};
+export { initI18nResource, getTransNs, getTransKeyPrefix };

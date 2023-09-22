@@ -1,9 +1,6 @@
-import { FC, ReactNode, memo } from 'react';
+import React, { FC, ReactNode, memo } from 'react';
 
-import builtin from '@/plugins/builtin';
-import * as plugins from '@/plugins';
-import { Plugin, PluginType } from '@/utils/pluginKit';
-
+import PluginKit, { Plugin, PluginType } from '@/utils/pluginKit';
 /**
  * Note：Please set at least either of the `slug_name` and `type` attributes, otherwise no plugins will be rendered.
  *
@@ -22,37 +19,63 @@ interface Props {
   [prop: string]: any;
 }
 
-const findPlugin: (s, k: 'slug_name' | 'type', v) => Plugin[] = (
-  source,
-  k,
-  v,
-) => {
-  const ret: Plugin[] = [];
-  if (source) {
-    Object.keys(source).forEach((i) => {
-      const p = source[i];
-      if (p && p.component && p.info && p.info[k] === v) {
-        ret.push(p);
+const Index: FC<Props> = ({
+  slug_name,
+  type,
+  children,
+  className,
+  ...props
+}) => {
+  const pluginSlice: Plugin[] = [];
+  const plugins = PluginKit.getPlugins().filter((plugin) => plugin.activated);
+
+  plugins.forEach((plugin) => {
+    if (type && slug_name) {
+      if (plugin.info.slug_name === slug_name && plugin.info.type === type) {
+        pluginSlice.push(plugin);
       }
-    });
-  }
-  return ret;
-};
+    } else if (type) {
+      if (plugin.info.type === type) {
+        pluginSlice.push(plugin);
+      }
+    } else if (slug_name) {
+      if (plugin.info.slug_name === slug_name) {
+        pluginSlice.push(plugin);
+      }
+    }
+  });
 
-const Index: FC<Props> = ({ slug_name, type, children, ...props }) => {
-  const fk = slug_name ? 'slug_name' : 'type';
-  const fv = fk === 'slug_name' ? slug_name : type;
-  const bp = findPlugin(builtin, fk, fv);
-  const vp = findPlugin(plugins, fk, fv);
-  const pluginSlice = [...bp, ...vp];
-
-  if (!pluginSlice.length) {
-    return null;
-  }
   /**
    * TODO: Rendering control for non-builtin plug-ins
    * ps: Logic such as version compatibility determination can be placed here
    */
+
+  if (pluginSlice.length === 0) {
+    return null;
+  }
+
+  if (type === 'editor') {
+    const nodes = React.Children.map(children, (child, index) => {
+      if (index === 15) {
+        return (
+          <>
+            {child}
+            {pluginSlice.map((ps) => {
+              const PluginFC = ps.component;
+              return (
+                // @ts-ignore
+                <PluginFC key={ps.info.slug_name} {...props} />
+              );
+            })}
+            <div className="toolbar-divider" />
+          </>
+        );
+      }
+      return child;
+    });
+
+    return <div className={className}>{nodes}</div>;
+  }
 
   return (
     <>
@@ -60,9 +83,7 @@ const Index: FC<Props> = ({ slug_name, type, children, ...props }) => {
         const PluginFC = ps.component;
         return (
           // @ts-ignore
-          <PluginFC key={ps.info.slug_name} {...props}>
-            {children}
-          </PluginFC>
+          <PluginFC key={ps.info.slug_name} className={className} {...props} />
         );
       })}
     </>

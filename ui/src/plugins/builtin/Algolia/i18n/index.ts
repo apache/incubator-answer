@@ -1,9 +1,9 @@
-import pluginKit from '@/utils/pluginKit';
+import { initI18nResource } from '@/utils/pluginKit/utils';
 
 import en_US from './en_US.yaml';
 import zh_CN from './zh_CN.yaml';
 
-pluginKit.initI18nResource({
+initI18nResource({
   en_US,
   zh_CN,
 });

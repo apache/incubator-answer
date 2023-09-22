@@ -1,5 +1,5 @@
 plugin:
-  uc_login:
+  hosting_connector:
     ui:
       connect: 连接到 {{ auth_name }}
       login: 登录
