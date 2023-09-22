@@ -13,6 +13,8 @@ import {
   editCheck,
   reopenQuestion,
   questionOpetation,
+  changeQuestionStatus,
+  changeAnswerStatus,
 } from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
 import { floppyNavigation } from '@/utils';
@@ -139,6 +141,30 @@ const Index: FC<IProps> = ({
       });
     }
   };
+
+  const handleUndelete = () => {
+    Modal.confirm({
+      title: t('undelete_title'),
+      content: t('undelete_desc'),
+      cancelBtnVariant: 'link',
+      confirmBtnVariant: 'danger',
+      confirmText: t('undelete', { keyPrefix: 'btns' }),
+      onConfirm: () => {
+        if (type === 'question') {
+          changeQuestionStatus(qid, 'available').then(() => {
+            callback?.('all');
+          });
+        }
+
+        if (type === 'answer') {
+          changeAnswerStatus(aid, 'available').then(() => {
+            callback?.('all');
+          });
+        }
+      },
+    });
+  };
+
   const handleEdit = (evt, targetUrl) => {
     if (!floppyNavigation.shouldProcessLinkClick(evt)) {
       return;
@@ -226,6 +252,10 @@ const Index: FC<IProps> = ({
       handleDelete();
     }
 
+    if (action === 'undelete') {
+      handleUndelete();
+    }
+
     if (action === 'report') {
       handleReport();
     }
@@ -251,7 +281,10 @@ const Index: FC<IProps> = ({
   const firstAction =
     memberActions?.filter(
       (v) =>
-        v.action === 'report' || v.action === 'edit' || v.action === 'delete',
+        v.action === 'report' ||
+        v.action === 'edit' ||
+        v.action === 'delete' ||
+        v.action === 'undelete',
     ) || [];
   const secondAction =
     memberActions?.filter(
