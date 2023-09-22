@@ -296,7 +296,7 @@ export type AdminAnswerStatus = 'available' | 'deleted';
  * @description interface for Users
  */
 export type UserFilterBy =
-  | 'all'
+  | 'normal'
   | 'staff'
   | 'inactive'
   | 'suspended'

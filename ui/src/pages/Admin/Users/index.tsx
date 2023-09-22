@@ -28,7 +28,7 @@ import DeleteUserModal from './components/DeleteUserModal';
 import Action from './components/Action';
 
 const UserFilterKeys: Type.UserFilterBy[] = [
-  'all',
+  'normal',
   'staff',
   'inactive',
   'suspended',
