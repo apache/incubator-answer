@@ -15,14 +15,14 @@ ARG TAGS="sqlite sqlite_unlock_notify"
 ENV TAGS "bindata timetzdata $TAGS"
 ARG CGO_EXTRA_CFLAGS
 
-RUN chmod 755 answer
-RUN ["/bin/bash","-c","script/build_plugin.sh"]
-RUN cp answer /usr/bin/answer
-
 COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
 RUN apk --no-cache add build-base git bash nodejs npm && npm install -g pnpm corepack \
     && make install-ui-packages clean build
+
+RUN chmod 755 answer
+RUN ["/bin/bash","-c","script/build_plugin.sh"]
+RUN cp answer /usr/bin/answer
 
 RUN mkdir -p /data/uploads && chmod 777 /data/uploads \
     && mkdir -p /data/i18n && cp -r i18n/*.yaml /data/i18n
