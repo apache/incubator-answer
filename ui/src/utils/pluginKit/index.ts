@@ -95,7 +95,7 @@ class Plugins {
   activatePlugins(activatedPlugins: Type.ActivatedPlugin[]) {
     this.plugins.forEach((plugin) => {
       const { slug_name } = plugin.info;
-      const activatedPlugin = activatedPlugins.find(
+      const activatedPlugin = activatedPlugins?.find(
         (p) => p.slug_name === slug_name,
       );
       if (activatedPlugin) {
