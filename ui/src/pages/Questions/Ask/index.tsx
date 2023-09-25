@@ -19,10 +19,8 @@ import {
   useQueryQuestionByTitle,
   getTagsBySlugName,
   saveQuestionWidthAnaser,
-  useEditorPlugins,
 } from '@/services';
 import { handleFormError, SaveDraft, storageExpires } from '@/utils';
-import pluginKit from '@/utils/pluginKit';
 import { pathFactory } from '@/router/pathFactory';
 
 import SearchQuestion from './components/SearchQuestion';
@@ -106,8 +104,6 @@ const Ask = () => {
 
   const saveCaptcha = useCaptchaModal('question');
   const editCaptcha = useCaptchaModal('edit');
-  const plugins = useEditorPlugins();
-  pluginKit.activatePlugins(plugins.data || []);
 
   const removeDraft = () => {
     saveDraft.save.cancel();

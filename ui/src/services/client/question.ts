@@ -73,17 +73,3 @@ export const putInviteUser = (
     ...imgCode,
   });
 };
-
-export const useEditorPlugins = () => {
-  const apiUrl = '/answer/api/v1/editor/tools';
-
-  const { data, error } = useSWR<Type.ActivatedPlugin[], Error>(
-    apiUrl,
-    request.instance.get,
-  );
-  return {
-    data,
-    isLoading: !data && !error,
-    error,
-  };
-};

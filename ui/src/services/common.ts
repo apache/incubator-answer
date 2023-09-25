@@ -289,3 +289,7 @@ export const saveQuestionWidthAnaser = (params: Type.QuestionWithAnswer) => {
 export const questionOpetation = (params: Type.QuestionOperationReq) => {
   return request.put('/answer/api/v1/question/operation', params);
 };
+
+export const getPluginsStatus = () => {
+  return request.get<Type.ActivatedPlugin[]>('/answer/api/v1/plugin/status');
+};

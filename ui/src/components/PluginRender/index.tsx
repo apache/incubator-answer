@@ -22,7 +22,7 @@ interface Props {
 const Index: FC<Props> = ({
   slug_name,
   type,
-  children,
+  children = null,
   className,
   ...props
 }) => {
@@ -51,6 +51,10 @@ const Index: FC<Props> = ({
    */
 
   if (pluginSlice.length === 0) {
+    if (type === 'editor') {
+      return <div className={className}>{children}</div>;
+    }
+
     return null;
   }
 
