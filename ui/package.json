@@ -88,7 +88,7 @@
   "packageManager": "pnpm@7.9.5",
   "engines": {
     "node": ">=16.17",
-    "pnpm": ">=7"
+    "pnpm": ">=8"
   },
   "license": "MIT"
 }
