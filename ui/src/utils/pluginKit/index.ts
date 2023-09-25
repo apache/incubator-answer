@@ -3,6 +3,7 @@ import { NamedExoticComponent, FC } from 'react';
 import builtin from '@/plugins/builtin';
 import * as allPlugins from '@/plugins';
 import type * as Type from '@/common/interface';
+import { getPluginsStatus } from '@/services';
 
 import { initI18nResource } from './utils';
 
@@ -42,6 +43,10 @@ class Plugins {
   constructor() {
     this.registerBuiltin();
     this.registerPlugins();
+
+    getPluginsStatus().then((plugins) => {
+      this.activatePlugins(plugins);
+    });
   }
 
   validate(plugin: Plugin) {

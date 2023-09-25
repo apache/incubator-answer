@@ -11,14 +11,13 @@ import { useTranslation } from 'react-i18next';
 import { Pagination, CustomSidebar } from '@/components';
 import { loggedUserInfoStore, toastStore } from '@/stores';
 import { scrollToElementTop, scrollToDocTop } from '@/utils';
-import pluginKit from '@/utils/pluginKit';
 import { usePageTags, usePageUsers } from '@/hooks';
 import type {
   ListResult,
   QuestionDetailRes,
   AnswerItem,
 } from '@/common/interface';
-import { questionDetail, getAnswers, useEditorPlugins } from '@/services';
+import { questionDetail, getAnswers } from '@/services';
 
 import {
   Question,
@@ -62,8 +61,6 @@ const Index = () => {
   const isLogged = Boolean(userInfo?.access_token);
   const loggedUserRank = userInfo?.rank;
   const { state: locationState } = useLocation();
-  const plugins = useEditorPlugins();
-  pluginKit.activatePlugins(plugins.data || []);
 
   useEffect(() => {
     if (locationState?.isReview) {
