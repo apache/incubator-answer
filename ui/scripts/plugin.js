@@ -43,6 +43,7 @@ pluginFolders.forEach((folder) => {
     const slugName = tsFile.match(/slug_name: '(.*)'/)[1];
     const pluginName = humps.pascalize(slugName) + 'Plugin';
     const packageJson = require(path.join(pluginFolder, 'package.json'));
+
     const author = packageJson.author;
     const version = packageJson.version;
     const content = template
@@ -51,5 +52,15 @@ pluginFolders.forEach((folder) => {
       .replace(/{{author}}/g, author)
       .replace(/{{version}}/g, version);
     fs.writeFileSync(path.join(pluginFolder, `${slugName}.go`), content);
+
+    const packageName = packageJson.name;
+    // update package.json dependencies
+    const packageJsonPath = path.join(__dirname, 'package.json');
+    const packageJsonContent = require(packageJsonPath);
+    packageJsonContent.dependencies[packageName] = 'workspace:*';
+    fs.writeFileSync(
+      packageJsonPath,
+      JSON.stringify(packageJsonContent, null, 2),
+    );
   }
 });
