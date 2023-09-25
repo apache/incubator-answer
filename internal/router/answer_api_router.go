@@ -115,6 +115,9 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(authUserMiddleware *
 	routerGroup.POST("/user/password/reset", a.userController.RetrievePassWord)
 	routerGroup.POST("/user/password/replacement", a.userController.UseRePassWord)
 	routerGroup.PUT("/user/notification/unsubscribe", a.userController.UserUnsubscribeNotification)
+
+	// plugins
+	r.GET("/plugin/status", a.pluginController.GetAllPluginStatus)
 }
 
 func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {

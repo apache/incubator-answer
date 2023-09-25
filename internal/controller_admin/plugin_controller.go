@@ -20,6 +20,37 @@ func NewPluginController(PluginCommonService *plugin_common.PluginCommonService)
 	return &PluginController{PluginCommonService: PluginCommonService}
 }
 
+// GetAllPluginStatus get all plugins status
+// @Summary get all plugins status
+// @Description get all plugins status
+// @Tags Plugin
+// @Security ApiKeyAuth
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} handler.RespBody{data=[]schema.GetPluginListResp}
+// @Router /answer/api/v1/plugin/status [get]
+func (pc *PluginController) GetAllPluginStatus(ctx *gin.Context) {
+	resp := make([]*schema.GetAllPluginStatusResp, 0)
+	_ = plugin.CallBase(func(base plugin.Base) error {
+		info := base.Info()
+		resp = append(resp, &schema.GetAllPluginStatusResp{
+			SlugName: info.SlugName,
+			Enabled:  plugin.StatusManager.IsEnabled(info.SlugName),
+		})
+		return nil
+	})
+
+	resp = append(resp, &schema.GetAllPluginStatusResp{
+		SlugName: "chart_editor",
+		Enabled:  true,
+	})
+	resp = append(resp, &schema.GetAllPluginStatusResp{
+		SlugName: "formula_editor",
+		Enabled:  true,
+	})
+	handler.HandleResponse(ctx, nil, resp)
+}
+
 // GetPluginList get plugin list
 // @Summary get plugin list
 // @Description get plugin list
