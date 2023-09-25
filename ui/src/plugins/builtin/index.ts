@@ -1,9 +1,9 @@
 import ThirdPartyConnector from './ThirdPartyConnector';
 import HostingConnector from './HostingConnector';
-import Algolia from './Algolia';
+import SerarchInfo from './SearchInfo';
 
 export default {
   ThirdPartyConnector,
   HostingConnector,
-  Algolia,
+  SerarchInfo,
 };

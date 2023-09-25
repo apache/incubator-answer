@@ -133,7 +133,9 @@ const Index: FC<Props> = ({ data }) => {
                 className={classnames('d-flex', 'align-items-center', {
                   'me-3': i < a.length - 1,
                 })}>
-                {b.icon ? <SvgIcon base64={b.icon} /> : null}
+                {b.icon ? (
+                  <SvgIcon base64={b.icon} svgClassName="me-2" />
+                ) : null}
                 {b.url ? (
                   <a className="link-secondary" href={b.url}>
                     {b.label}
