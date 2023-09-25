@@ -1,4 +1,4 @@
 plugin:
-  algolia:
+  serarch_info:
     ui:
       search_by: Search by

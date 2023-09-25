@@ -38,7 +38,8 @@ const Index: FC<Props> = ({ data }) => {
     <div className="mb-5">
       <div className="mb-3 d-flex align-items-center justify-content-between">
         <h3 className="mb-0">{t('title')}</h3>
-        <PluginRender type="search" slug_name="algolia" />
+
+        <PluginRender type="search" slug_name="serarch_info" />
       </div>
       <p>
         <span className="text-secondary me-1">{t('keywords')}</span>

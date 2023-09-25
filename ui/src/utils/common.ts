@@ -196,9 +196,9 @@ function base64ToSvg(base64: string, svgClassName?: string) {
   let str = '';
   if (svg && !parseError) {
     if (svgClassName) {
-      svg.classList.add(svgClassName);
+      svg.setAttribute('class', svgClassName);
     }
-    svg.classList.add('me-2');
+    // svg.classList.add('me-2');
 
     // transform svg to string
     const serializer = new XMLSerializer();
