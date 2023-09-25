@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, memo } from 'react';
+import React, { FC, ReactNode } from 'react';
 
 import PluginKit, { Plugin, PluginType } from '@/utils/pluginKit';
 /**
@@ -54,7 +54,6 @@ const Index: FC<Props> = ({
     if (type === 'editor') {
       return <div className={className}>{children}</div>;
     }
-
     return null;
   }
 
@@ -94,4 +93,4 @@ const Index: FC<Props> = ({
   );
 };
 
-export default memo(Index);
+export default Index;

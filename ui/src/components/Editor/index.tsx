@@ -66,13 +66,14 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
   const previewRef = useRef<{ getHtml; element } | null>(null);
 
   const editor = useEditor({
-    element: editorRef.current,
+    editorRef,
     onChange,
     onFocus,
     onBlur,
     placeholder: editorPlaceholder,
     autoFocus,
   });
+
   const [markdown, setMarkdown] = useState<string>(value || '');
 
   useEffect(() => {
