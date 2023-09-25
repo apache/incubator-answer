@@ -120,7 +120,7 @@ export function htmlRender(el: HTMLElement | null) {
 }
 
 export const useEditor = ({
-  element,
+  editorRef,
   placeholder,
   autoFocus,
   onChange,
@@ -162,7 +162,7 @@ export const useEditor = ({
     await import('codemirror/mode/markdown/markdown');
     await import('codemirror/addon/display/placeholder');
 
-    const cm = codeMirror(element, {
+    const cm = codeMirror(editorRef?.current, {
       mode: 'markdown',
       lineWrapping: true,
       placeholder,
@@ -190,11 +190,11 @@ export const useEditor = ({
   };
 
   useEffect(() => {
-    if (!(element instanceof HTMLElement)) {
+    if (!(editorRef.current instanceof HTMLElement)) {
       return;
     }
     init();
-  }, [element]);
+  }, [editorRef]);
 
   return editor;
 };
