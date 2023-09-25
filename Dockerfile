@@ -17,8 +17,8 @@ ARG CGO_EXTRA_CFLAGS
 
 COPY . ${BUILD_DIR}
 WORKDIR ${BUILD_DIR}
-RUN apk --no-cache add build-base git bash nodejs npm && npm install -g pnpm corepack \
-    && make install-ui-packages clean build
+RUN apk --no-cache add build-base git bash nodejs npm && npm install -g pnpm@latest \
+    && make clean build
 
 RUN chmod 755 answer
 RUN ["/bin/bash","-c","script/build_plugin.sh"]
