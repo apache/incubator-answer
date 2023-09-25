@@ -50,6 +50,8 @@ const Index: FC<Props> = ({
    * ps: Logic such as version compatibility determination can be placed here
    */
 
+  console.log(pluginSlice, '11');
+
   if (pluginSlice.length === 0) {
     if (type === 'editor') {
       return <div className={className}>{children}</div>;
@@ -59,6 +61,7 @@ const Index: FC<Props> = ({
   }
 
   if (type === 'editor') {
+    console.log('444');
     const nodes = React.Children.map(children, (child, index) => {
       if (index === 15) {
         return (
@@ -66,6 +69,7 @@ const Index: FC<Props> = ({
             {child}
             {pluginSlice.map((ps) => {
               const PluginFC = ps.component;
+              console.log('333', ps.info.slug_name);
               return (
                 // @ts-ignore
                 <PluginFC key={ps.info.slug_name} {...props} />
@@ -77,6 +81,7 @@ const Index: FC<Props> = ({
       }
       return child;
     });
+    console.log('222', nodes?.length);
 
     return <div className={className}>{nodes}</div>;
   }
