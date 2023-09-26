@@ -124,7 +124,7 @@ const TagIntroduction = () => {
       confirmBtnVariant: 'danger',
       onConfirm: () => {
         deleteTag(tagInfo.tag_id).then(() => {
-          // navigate('/tags', { replace: true });
+          navigate('/tags', { replace: true });
         });
       },
     });
