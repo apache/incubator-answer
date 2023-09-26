@@ -15,13 +15,11 @@ const pluginInfo: PluginInfo = {
 };
 
 const Index: FC = () => {
-  console.log(111111);
   const { t } = useTranslation(getTransNs(), {
     keyPrefix: getTransKeyPrefix(pluginInfo),
   });
 
   const { data } = useGetSearchPLuginInfo();
-  console.log(data);
   // if (!data?.icon) return null;
 
   return (
