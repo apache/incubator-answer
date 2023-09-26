@@ -138,6 +138,16 @@ func (qr *questionRepo) UpdateQuestionStatusWithOutUpdateTime(ctx context.Contex
 	return nil
 }
 
+func (qr *questionRepo) RecoverQuestion(ctx context.Context, questionID string) (err error) {
+	questionID = uid.DeShortID(questionID)
+	_, err = qr.data.DB.Context(ctx).ID(questionID).Cols("status").Update(&entity.Question{Status: entity.QuestionStatusAvailable})
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	_ = qr.updateSearch(ctx, questionID)
+	return nil
+}
+
 func (qr *questionRepo) UpdateQuestionOperation(ctx context.Context, question *entity.Question) (err error) {
 	question.ID = uid.DeShortID(question.ID)
 	_, err = qr.data.DB.Context(ctx).Where("id =?", question.ID).Cols("pin", "show").Update(question)

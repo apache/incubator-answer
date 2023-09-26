@@ -91,6 +91,33 @@ func (ts *TagService) UpdateTag(ctx context.Context, req *schema.UpdateTagReq) (
 	return ts.tagCommonService.UpdateTag(ctx, req)
 }
 
+// RecoverTag recover tag
+func (ts *TagService) RecoverTag(ctx context.Context, req *schema.RecoverTagReq) (err error) {
+	tagInfo, exist, err := ts.tagRepo.MustGetTagByNameOrID(ctx, req.TagID, "")
+	if err != nil {
+		return err
+	}
+	if !exist {
+		return errors.BadRequest(reason.TagNotFound)
+	}
+	if tagInfo.Status != entity.TagStatusDeleted {
+		return nil
+	}
+
+	err = ts.tagRepo.RecoverTag(ctx, req.TagID)
+	if err != nil {
+		return err
+	}
+	ts.activityQueueService.Send(ctx, &schema.ActivityMsg{
+		UserID:           req.UserID,
+		TriggerUserID:    converter.StringToInt64(req.UserID),
+		ObjectID:         req.TagID,
+		OriginalObjectID: req.TagID,
+		ActivityTypeKey:  constant.ActTagUndeleted,
+	})
+	return nil
+}
+
 // GetTagInfo get tag one
 func (ts *TagService) GetTagInfo(ctx context.Context, req *schema.GetTagInfoReq) (resp *schema.GetTagResp, err error) {
 	var (
@@ -101,6 +128,10 @@ func (ts *TagService) GetTagInfo(ctx context.Context, req *schema.GetTagInfoReq)
 		tagInfo, exist, err = ts.tagCommonService.GetTagByID(ctx, req.ID)
 	} else {
 		tagInfo, exist, err = ts.tagCommonService.GetTagBySlugName(ctx, req.Name)
+	}
+	// If user can recover deleted tag, try to search in all tags including deleted tags
+	if !exist && req.CanRecover {
+		tagInfo, exist, err = ts.tagRepo.MustGetTagByNameOrID(ctx, req.ID, req.Name)
 	}
 	if err != nil {
 		return nil, err
@@ -134,7 +165,8 @@ func (ts *TagService) GetTagInfo(ctx context.Context, req *schema.GetTagInfoReq)
 	resp.Recommend = tagInfo.Recommend
 	resp.Reserved = tagInfo.Reserved
 	resp.IsFollower = ts.checkTagIsFollow(ctx, req.UserID, tagInfo.ID)
-	resp.MemberActions = permission.GetTagPermission(ctx, req.CanEdit, req.CanDelete)
+	resp.Status = entity.TagStatusDisplayMapping[tagInfo.Status]
+	resp.MemberActions = permission.GetTagPermission(ctx, tagInfo.Status, req.CanEdit, req.CanDelete, req.CanRecover)
 	resp.GetExcerpt()
 	return resp, nil
 }

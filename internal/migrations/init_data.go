@@ -95,6 +95,9 @@ var (
 		{ID: 36, Name: "question unpin", PowerType: permission.QuestionUnPin, Description: "untop the question"},
 		{ID: 37, Name: "question show", PowerType: permission.QuestionShow, Description: "show the question"},
 		{ID: 38, Name: "invite someone to answer", PowerType: permission.AnswerInviteSomeoneToAnswer, Description: "invite someone to answer"},
+		{ID: 39, Name: "recover answer", PowerType: permission.AnswerUnDelete, Description: "recover deleted answer"},
+		{ID: 40, Name: "recover question", PowerType: permission.QuestionUnDelete, Description: "recover deleted question"},
+		{ID: 41, Name: "recover tag", PowerType: permission.TagUnDelete, Description: "recover deleted tag"},
 	}
 
 	rolePowerRels = []*entity.RolePowerRel{
@@ -137,6 +140,9 @@ var (
 		{RoleID: 2, PowerType: permission.QuestionUnPin},
 		{RoleID: 2, PowerType: permission.QuestionShow},
 		{RoleID: 2, PowerType: permission.AnswerInviteSomeoneToAnswer},
+		{RoleID: 2, PowerType: permission.AnswerUnDelete},
+		{RoleID: 2, PowerType: permission.QuestionUnDelete},
+		{RoleID: 2, PowerType: permission.TagUnDelete},
 
 		{RoleID: 3, PowerType: permission.QuestionAdd},
 		{RoleID: 3, PowerType: permission.QuestionEdit},
@@ -176,6 +182,9 @@ var (
 		{RoleID: 3, PowerType: permission.QuestionUnPin},
 		{RoleID: 3, PowerType: permission.QuestionShow},
 		{RoleID: 3, PowerType: permission.AnswerInviteSomeoneToAnswer},
+		{RoleID: 3, PowerType: permission.AnswerUnDelete},
+		{RoleID: 3, PowerType: permission.QuestionUnDelete},
+		{RoleID: 3, PowerType: permission.TagUnDelete},
 	}
 
 	adminUserRoleRel = &entity.UserRoleRel{
@@ -310,5 +319,8 @@ var (
 		{ID: 125, Key: "rank.question.show", Value: `-1`},
 		{ID: 126, Key: "rank.question.hide", Value: `-1`},
 		{ID: 127, Key: "rank.answer.invite_someone_to_answer", Value: `1000`},
+		{ID: 128, Key: "rank.answer.undeleted", Value: `-1`},
+		{ID: 129, Key: "rank.question.undeleted", Value: `-1`},
+		{ID: 130, Key: "rank.tag.undeleted", Value: `-1`},
 	}
 )

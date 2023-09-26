@@ -7,6 +7,11 @@ const (
 	TagStatusDeleted   = 10
 )
 
+var TagStatusDisplayMapping = map[int]string{
+	TagStatusAvailable: "available",
+	TagStatusDeleted:   "deleted",
+}
+
 // Tag tag
 type Tag struct {
 	ID              string    `xorm:"not null pk comment('tag_id') BIGINT(20) id"`

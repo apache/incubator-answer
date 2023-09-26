@@ -37,6 +37,8 @@ backend:
       other: List
     invite_someone_to_answer:
       other: Edit
+    undelete:
+      other: Undelete
   role:
     name:
       user:

@@ -14,6 +14,12 @@ type RemoveAnswerReq struct {
 	CaptchaCode string `json:"captcha_code"`
 }
 
+// RecoverAnswerReq recover answer request
+type RecoverAnswerReq struct {
+	AnswerID string `validate:"required" json:"answer_id"`
+	UserID   string `json:"-"`
+}
+
 const (
 	AnswerAcceptedFailed = 1
 	AnswerAcceptedEnable = 2
@@ -26,6 +32,7 @@ type AnswerAddReq struct {
 	UserID      string `json:"-"`
 	CanEdit     bool   `json:"-"`
 	CanDelete   bool   `json:"-"`
+	CanRecover  bool   `json:"-"`
 	CaptchaID   string `json:"captcha_id"`
 	CaptchaCode string `json:"captcha_code"`
 }
@@ -68,6 +75,7 @@ type AnswerListReq struct {
 	IsAdmin    bool   `json:"-"`
 	CanEdit    bool   `json:"-"`
 	CanDelete  bool   `json:"-"`
+	CanRecover bool   `json:"-"`
 }
 
 type AnswerInfo struct {
@@ -121,8 +129,8 @@ func (req *AcceptAnswerReq) Check() (errFields []*validator.FormErrorField, err 
 	return nil, nil
 }
 
-type AdminSetAnswerStatusRequest struct {
-	StatusStr string `json:"status"`
-	AnswerID  string `json:"answer_id"`
-	UserID    string `json:"-"`
+type AdminUpdateAnswerStatusReq struct {
+	AnswerID string `validate:"required" json:"answer_id"`
+	Status   string `validate:"required,oneof=available deleted" json:"status"`
+	UserID   string `json:"-"`
 }

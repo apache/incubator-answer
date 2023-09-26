@@ -563,13 +563,70 @@ func (qs *QuestionService) UpdateQuestionCheckTags(ctx context.Context, req *sch
 	return nil, nil
 }
 
+func (qs *QuestionService) RecoverQuestion(ctx context.Context, req *schema.QuestionRecoverReq) (err error) {
+	questionInfo, exist, err := qs.questionRepo.GetQuestion(ctx, req.QuestionID)
+	if err != nil {
+		return err
+	}
+	if !exist {
+		return errors.BadRequest(reason.QuestionNotFound)
+	}
+	if questionInfo.Status != entity.QuestionStatusDeleted {
+		return nil
+	}
+
+	err = qs.questionRepo.RecoverQuestion(ctx, req.QuestionID)
+	if err != nil {
+		return err
+	}
+
+	// update user's question count
+	userQuestionCount, err := qs.questioncommon.GetUserQuestionCount(ctx, questionInfo.UserID)
+	if err != nil {
+		log.Error("user GetUserQuestionCount error", err.Error())
+	} else {
+		err = qs.userCommon.UpdateQuestionCount(ctx, questionInfo.UserID, userQuestionCount)
+		if err != nil {
+			log.Error("user IncreaseQuestionCount error", err.Error())
+		}
+	}
+
+	// update tag's question count
+	if err = qs.tagCommon.RemoveTagRelListByObjectID(ctx, questionInfo.ID); err != nil {
+		log.Errorf("remove tag rel list by object id error %v", err)
+	}
+
+	tagIDs := make([]string, 0)
+	tags, err := qs.tagCommon.GetObjectEntityTag(ctx, questionInfo.ID)
+	if err != nil {
+		return err
+	}
+	for _, v := range tags {
+		tagIDs = append(tagIDs, v.ID)
+	}
+	if len(tagIDs) > 0 {
+		if err = qs.tagCommon.RefreshTagQuestionCount(ctx, tagIDs); err != nil {
+			log.Errorf("update tag's question count failed, %v", err)
+		}
+	}
+
+	qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
+		UserID:           req.UserID,
+		TriggerUserID:    converter.StringToInt64(req.UserID),
+		ObjectID:         questionInfo.ID,
+		OriginalObjectID: questionInfo.ID,
+		ActivityTypeKey:  constant.ActQuestionUndeleted,
+	})
+	return nil
+}
+
 func (qs *QuestionService) UpdateQuestionInviteUser(ctx context.Context, req *schema.QuestionUpdateInviteUser) (err error) {
 	originQuestion, exist, err := qs.questionRepo.GetQuestion(ctx, req.ID)
 	if err != nil {
 		return err
 	}
 	if !exist {
-		return errors.NotFound(reason.ObjectNotFound)
+		return errors.BadRequest(reason.QuestionNotFound)
 	}
 
 	//verify invite user
@@ -875,8 +932,10 @@ func (qs *QuestionService) GetQuestion(ctx context.Context, questionID, userID s
 	}
 
 	question.Description = htmltext.FetchExcerpt(question.HTML, "...", 240)
-	question.MemberActions = permission.GetQuestionPermission(ctx, userID, question.UserID,
-		per.CanEdit, per.CanDelete, per.CanClose, per.CanReopen, per.CanPin, per.CanHide, per.CanUnPin, per.CanShow)
+	question.MemberActions = permission.GetQuestionPermission(ctx, userID, question.UserID, question.Status,
+		per.CanEdit, per.CanDelete,
+		per.CanClose, per.CanReopen, per.CanPin, per.CanHide, per.CanUnPin, per.CanShow,
+		per.CanRecover)
 	question.ExtendsActions = permission.GetQuestionExtendsPermission(ctx, per.CanInviteOtherToAnswer)
 	return question, nil
 }
@@ -1195,12 +1254,12 @@ func (qs *QuestionService) GetQuestionPage(ctx context.Context, req *schema.Ques
 	return questions, total, nil
 }
 
-func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionID string, setStatusStr string) error {
-	setStatus, ok := entity.AdminQuestionSearchStatus[setStatusStr]
+func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, req *schema.AdminUpdateQuestionStatusReq) error {
+	setStatus, ok := entity.AdminQuestionSearchStatus[req.Status]
 	if !ok {
-		return fmt.Errorf("question status does not exist")
+		return errors.BadRequest(reason.RequestFormatError)
 	}
-	questionInfo, exist, err := qs.questionRepo.GetQuestion(ctx, questionID)
+	questionInfo, exist, err := qs.questionRepo.GetQuestion(ctx, req.QuestionID)
 	if err != nil {
 		return err
 	}
@@ -1212,6 +1271,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 		return err
 	}
 
+	msg := &schema.NotificationMsg{}
 	if setStatus == entity.QuestionStatusDeleted {
 		// #2372 In order to simplify the process and complexity, as well as to consider if it is in-house,
 		// facing the problem of recovery.
@@ -1225,6 +1285,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 			OriginalObjectID: questionInfo.ID,
 			ActivityTypeKey:  constant.ActQuestionDeleted,
 		})
+		msg.NotificationAction = constant.NotificationYourQuestionWasDeleted
 	}
 	if setStatus == entity.QuestionStatusAvailable && questionInfo.Status == entity.QuestionStatusClosed {
 		qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
@@ -1241,15 +1302,27 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, questionI
 			OriginalObjectID: questionInfo.ID,
 			ActivityTypeKey:  constant.ActQuestionClosed,
 		})
+		msg.NotificationAction = constant.NotificationYourQuestionIsClosed
 	}
-	msg := &schema.NotificationMsg{}
-	msg.ObjectID = questionInfo.ID
-	msg.Type = schema.NotificationTypeInbox
-	msg.ReceiverUserID = questionInfo.UserID
-	msg.TriggerUserID = questionInfo.UserID
-	msg.ObjectType = constant.QuestionObjectType
-	msg.NotificationAction = constant.NotificationYourQuestionWasDeleted
-	qs.notificationQueueService.Send(ctx, msg)
+	// recover
+	if setStatus == entity.QuestionStatusAvailable && questionInfo.Status == entity.QuestionStatusDeleted {
+		qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
+			UserID:           req.UserID,
+			TriggerUserID:    converter.StringToInt64(req.UserID),
+			ObjectID:         questionInfo.ID,
+			OriginalObjectID: questionInfo.ID,
+			ActivityTypeKey:  constant.ActQuestionUndeleted,
+		})
+	}
+
+	if len(msg.NotificationAction) > 0 {
+		msg.ObjectID = questionInfo.ID
+		msg.Type = schema.NotificationTypeInbox
+		msg.ReceiverUserID = questionInfo.UserID
+		msg.TriggerUserID = req.UserID
+		msg.ObjectType = constant.QuestionObjectType
+		qs.notificationQueueService.Send(ctx, msg)
+	}
 	return nil
 }
 

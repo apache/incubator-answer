@@ -187,6 +187,7 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/question/tags", a.tagController.SearchTagLike)
 	r.POST("/tag", a.tagController.AddTag)
 	r.PUT("/tag", a.tagController.UpdateTag)
+	r.POST("/tag/recover", a.tagController.RecoverTag)
 	r.DELETE("/tag", a.tagController.RemoveTag)
 	r.PUT("/tag/synonym", a.tagController.UpdateTagSynonym)
 
@@ -204,12 +205,14 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 	r.PUT("/question/operation", a.questionController.OperationQuestion)
 	r.PUT("/question/reopen", a.questionController.ReopenQuestion)
 	r.GET("/question/similar", a.questionController.GetSimilarQuestions)
+	r.POST("/question/recover", a.questionController.QuestionRecover)
 
 	// answer
 	r.POST("/answer", a.answerController.Add)
 	r.PUT("/answer", a.answerController.Update)
 	r.POST("/answer/acceptance", a.answerController.Accepted)
 	r.DELETE("/answer", a.answerController.RemoveAnswer)
+	r.POST("/answer/recover", a.answerController.RecoverAnswer)
 
 	// user
 	r.PUT("/user/password", middleware.BanAPIForUserCenter, a.userController.UserModifyPassWord)
@@ -247,9 +250,9 @@ func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
 
 func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.GET("/question/page", a.questionController.AdminQuestionPage)
-	r.PUT("/question/status", a.questionController.AdminSetQuestionStatus)
+	r.PUT("/question/status", a.questionController.AdminUpdateQuestionStatus)
 	r.GET("/answer/page", a.questionController.AdminAnswerPage)
-	r.PUT("/answer/status", a.answerController.AdminSetAnswerStatus)
+	r.PUT("/answer/status", a.answerController.AdminUpdateAnswerStatus)
 
 	// report
 	r.GET("/reports/page", a.adminReportController.ListReportPage)
