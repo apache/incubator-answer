@@ -40,12 +40,16 @@ const (
 	QuestionAudit               = "question.audit"
 	TagAudit                    = "tag.audit"
 	TagUseReservedTag           = "tag.use_reserved_tag"
+	AnswerUnDelete              = "answer.undeleted"
+	QuestionUnDelete            = "question.undeleted"
+	TagUnDelete                 = "tag.undeleted"
 )
 
 const (
 	reportActionName                = "action.report"
 	editActionName                  = "action.edit"
 	deleteActionName                = "action.delete"
+	undeleteActionName              = "action.undelete"
 	closeActionName                 = "action.close"
 	reopenActionName                = "action.reopen"
 	pinActionName                   = "action.pin"

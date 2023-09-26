@@ -131,6 +131,7 @@ type QuestionPermission struct {
 	// whether user can invite other user to answer this question
 	CanInviteOtherToAnswer bool `json:"-"`
 	CanAddTag              bool `json:"-"`
+	CanRecover             bool `json:"-"`
 }
 
 type CheckCanQuestionUpdate struct {
@@ -161,6 +162,11 @@ type QuestionUpdate struct {
 	QuestionPermission
 	CaptchaID   string `json:"captcha_id"` // captcha_id
 	CaptchaCode string `json:"captcha_code"`
+}
+
+type QuestionRecoverReq struct {
+	QuestionID string `validate:"required" json:"question_id"`
+	UserID     string `json:"-"`
 }
 
 type QuestionUpdateInviteUser struct {
@@ -430,9 +436,10 @@ func (req *AdminAnswerPageReq) Check() (errField []*validator.FormErrorField, er
 	return nil, nil
 }
 
-type AdminSetQuestionStatusRequest struct {
-	StatusStr  string `json:"status" form:"status"`
-	QuestionID string `json:"question_id" form:"question_id"`
+type AdminUpdateQuestionStatusReq struct {
+	QuestionID string `validate:"required" json:"question_id"`
+	Status     string `validate:"required,oneof=available closed deleted" json:"status"`
+	UserID     string `json:"-"`
 }
 
 type PersonalQuestionPageReq struct {

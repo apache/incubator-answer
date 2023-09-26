@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"github.com/answerdev/answer/pkg/converter"
 	"github.com/answerdev/answer/pkg/token"
 	"time"
 
@@ -151,6 +151,44 @@ func (as *AnswerService) RemoveAnswer(ctx context.Context, req *schema.RemoveAns
 		ActivityTypeKey:  constant.ActAnswerDeleted,
 	})
 	return
+}
+
+// RecoverAnswer recover deleted answer
+func (as *AnswerService) RecoverAnswer(ctx context.Context, req *schema.RecoverAnswerReq) (err error) {
+	answerInfo, exist, err := as.answerRepo.GetByID(ctx, req.AnswerID)
+	if err != nil {
+		return err
+	}
+	if !exist {
+		return errors.BadRequest(reason.AnswerNotFound)
+	}
+	if answerInfo.Status != entity.AnswerStatusDeleted {
+		return nil
+	}
+	if err = as.answerRepo.RecoverAnswer(ctx, req.AnswerID); err != nil {
+		return err
+	}
+
+	if err = as.questionCommon.UpdateAnswerCount(ctx, answerInfo.QuestionID); err != nil {
+		log.Errorf("update answer count failed: %s", err.Error())
+	}
+	userAnswerCount, err := as.answerRepo.GetCountByUserID(ctx, answerInfo.UserID)
+	if err != nil {
+		log.Errorf("get user answer count failed: %s", err.Error())
+	} else {
+		err = as.userCommon.UpdateAnswerCount(ctx, answerInfo.UserID, int(userAnswerCount))
+		if err != nil {
+			log.Errorf("update user answer count failed: %s", err.Error())
+		}
+	}
+	as.activityQueueService.Send(ctx, &schema.ActivityMsg{
+		UserID:           req.UserID,
+		TriggerUserID:    converter.StringToInt64(req.UserID),
+		ObjectID:         answerInfo.ID,
+		OriginalObjectID: answerInfo.ID,
+		ActivityTypeKey:  constant.ActAnswerUndeleted,
+	})
+	return nil
 }
 
 func (as *AnswerService) Insert(ctx context.Context, req *schema.AnswerAddReq) (string, error) {
@@ -438,20 +476,19 @@ func (as *AnswerService) Get(ctx context.Context, answerID, loginUserID string) 
 	return info, questionInfo, has, nil
 }
 
-func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.AdminSetAnswerStatusRequest) error {
-	setStatus, ok := entity.AdminAnswerSearchStatus[req.StatusStr]
+func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.AdminUpdateAnswerStatusReq) error {
+	setStatus, ok := entity.AdminAnswerSearchStatus[req.Status]
 	if !ok {
-		return fmt.Errorf("question status does not exist")
+		return errors.BadRequest(reason.RequestFormatError)
 	}
 	answerInfo, exist, err := as.answerRepo.GetAnswer(ctx, req.AnswerID)
 	if err != nil {
 		return err
 	}
 	if !exist {
-		return fmt.Errorf("answer does not exist")
+		return errors.BadRequest(reason.AnswerNotFound)
 	}
-	answerInfo.Status = setStatus
-	err = as.answerRepo.UpdateAnswerStatus(ctx, req.AnswerID, setStatus)
+	err = as.answerRepo.UpdateAnswerStatus(ctx, answerInfo.ID, setStatus)
 	if err != nil {
 		return err
 	}
@@ -469,17 +506,27 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.A
 			OriginalObjectID: answerInfo.ID,
 			ActivityTypeKey:  constant.ActAnswerDeleted,
 		})
+
+		msg := &schema.NotificationMsg{}
+		msg.ObjectID = answerInfo.ID
+		msg.Type = schema.NotificationTypeInbox
+		msg.ReceiverUserID = answerInfo.UserID
+		msg.TriggerUserID = answerInfo.UserID
+		msg.ObjectType = constant.AnswerObjectType
+		msg.NotificationAction = constant.NotificationYourAnswerWasDeleted
+		as.notificationQueueService.Send(ctx, msg)
 	}
 
-	msg := &schema.NotificationMsg{}
-	msg.ObjectID = answerInfo.ID
-	msg.Type = schema.NotificationTypeInbox
-	msg.ReceiverUserID = answerInfo.UserID
-	msg.TriggerUserID = answerInfo.UserID
-	msg.ObjectType = constant.AnswerObjectType
-	msg.NotificationAction = constant.NotificationYourAnswerWasDeleted
-	as.notificationQueueService.Send(ctx, msg)
-
+	// recover
+	if setStatus == entity.QuestionStatusAvailable && answerInfo.Status == entity.QuestionStatusDeleted {
+		as.activityQueueService.Send(ctx, &schema.ActivityMsg{
+			UserID:           req.UserID,
+			TriggerUserID:    converter.StringToInt64(req.UserID),
+			ObjectID:         answerInfo.ID,
+			OriginalObjectID: answerInfo.ID,
+			ActivityTypeKey:  constant.ActAnswerUndeleted,
+		})
+	}
 	return nil
 }
 
@@ -534,7 +581,13 @@ func (as *AnswerService) SearchFormatInfo(ctx context.Context, answers []*entity
 	for _, item := range list {
 		item.VoteStatus = as.voteRepo.GetVoteStatus(ctx, item.ID, req.UserID)
 		item.Collected = collectedMap[item.ID]
-		item.MemberActions = permission.GetAnswerPermission(ctx, req.UserID, item.UserID, req.CanEdit, req.CanDelete)
+		item.MemberActions = permission.GetAnswerPermission(ctx,
+			req.UserID,
+			item.UserID,
+			item.Status,
+			req.CanEdit,
+			req.CanDelete,
+			req.CanRecover)
 	}
 	return list, nil
 }

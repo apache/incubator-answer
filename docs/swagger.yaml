@@ -99,6 +99,16 @@ definitions:
         type: integer
       list: {}
     type: object
+  schema.AcceptAnswerReq:
+    properties:
+      answer_id:
+        type: string
+      question_id:
+        maxLength: 30
+        type: string
+    required:
+    - question_id
+    type: object
   schema.ActObjectInfo:
     properties:
       answer_id:
@@ -130,18 +140,14 @@ definitions:
         type: string
       created_at:
         type: integer
-      id:
-        type: string
       object_id:
         type: string
       object_type:
         type: string
       revision_id:
         type: string
-      user_display_name:
-        type: string
-      username:
-        type: string
+      user_info:
+        $ref: '#/definitions/schema.UserBasicInfo'
     type: object
   schema.ActionRecordResp:
     properties:
@@ -244,26 +250,32 @@ definitions:
         description: users info line by line
         type: string
     type: object
-  schema.AdminSetAnswerStatusRequest:
+  schema.AdminUpdateAnswerStatusReq:
     properties:
       answer_id:
         type: string
       status:
+        enum:
+        - available
+        - deleted
         type: string
+    required:
+    - answer_id
+    - status
     type: object
-  schema.AdminSetQuestionStatusRequest:
+  schema.AdminUpdateQuestionStatusReq:
     properties:
       question_id:
         type: string
       status:
+        enum:
+        - available
+        - closed
+        - deleted
         type: string
-    type: object
-  schema.AnswerAcceptedReq:
-    properties:
-      answer_id:
-        type: string
-      question_id:
-        type: string
+    required:
+    - question_id
+    - status
     type: object
   schema.AnswerAddReq:
     properties:
@@ -595,9 +607,6 @@ definitions:
         type: boolean
       id:
         description: user id
-        type: string
-      ip_info:
-        description: ip info
         type: string
       language:
         description: language
@@ -1304,8 +1313,17 @@ definitions:
         type: string
       rank:
         type: integer
+      status:
+        type: string
       username:
         type: string
+    type: object
+  schema.QuestionRecoverReq:
+    properties:
+      question_id:
+        type: string
+    required:
+    - question_id
     type: object
   schema.QuestionUpdate:
     properties:
@@ -1360,6 +1378,20 @@ definitions:
         type: array
     required:
     - id
+    type: object
+  schema.RecoverAnswerReq:
+    properties:
+      answer_id:
+        type: string
+    required:
+    - answer_id
+    type: object
+  schema.RecoverTagReq:
+    properties:
+      tag_id:
+        type: string
+    required:
+    - tag_id
     type: object
   schema.RemoveAnswerReq:
     properties:
@@ -1461,10 +1493,23 @@ definitions:
         type: string
       user_info:
         allOf:
-        - $ref: '#/definitions/schema.UserBasicInfo'
+        - $ref: '#/definitions/schema.SearchObjectUser'
         description: user info
       vote_count:
         type: integer
+    type: object
+  schema.SearchObjectUser:
+    properties:
+      display_name:
+        type: string
+      id:
+        type: string
+      rank:
+        type: integer
+      status:
+        type: string
+      username:
+        type: string
     type: object
   schema.SearchResp:
     properties:
@@ -1902,7 +1947,7 @@ definitions:
       captcha_code:
         type: string
       captcha_id:
-        description: captcha_id
+        description: whether user can delete it
         type: string
       comment_id:
         description: comment id
@@ -1927,27 +1972,20 @@ definitions:
   schema.UpdateInfoRequest:
     properties:
       avatar:
-        allOf:
-        - $ref: '#/definitions/schema.AvatarInfo'
-        description: avatar
+        $ref: '#/definitions/schema.AvatarInfo'
       bio:
-        description: bio
         maxLength: 4096
         type: string
       display_name:
-        description: display_name
         maxLength: 30
         type: string
       location:
-        description: location
         maxLength: 100
         type: string
       username:
-        description: username
         maxLength: 30
         type: string
       website:
-        description: website
         maxLength: 500
         type: string
     type: object
@@ -2099,6 +2137,8 @@ definitions:
     type: object
   schema.UpdateUserStatusReq:
     properties:
+      remove_all_content:
+        type: boolean
       status:
         enum:
         - normal
@@ -2119,8 +2159,6 @@ definitions:
       display_name:
         type: string
       id:
-        type: string
-      ip_info:
         type: string
       location:
         type: string
@@ -2213,9 +2251,6 @@ definitions:
         type: boolean
       id:
         description: user id
-        type: string
-      ip_info:
-        description: ip info
         type: string
       language:
         description: language
@@ -2455,14 +2490,14 @@ paths:
     put:
       consumes:
       - application/json
-      description: Status:[available,deleted]
+      description: update answer status
       parameters:
-      - description: AdminSetAnswerStatusRequest
+      - description: AdminUpdateAnswerStatusReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.AdminSetAnswerStatusRequest'
+          $ref: '#/definitions/schema.AdminUpdateAnswerStatusReq'
       produces:
       - application/json
       responses:
@@ -2472,7 +2507,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: AdminSetAnswerStatus
+      summary: update answer status
       tags:
       - admin
   /answer/admin/api/dashboard:
@@ -2653,14 +2688,14 @@ paths:
     put:
       consumes:
       - application/json
-      description: Status:[available,closed,deleted]
+      description: update question status
       parameters:
-      - description: AdminSetQuestionStatusRequest
+      - description: AdminUpdateQuestionStatusReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.AdminSetQuestionStatusRequest'
+          $ref: '#/definitions/schema.AdminUpdateQuestionStatusReq'
       produces:
       - application/json
       responses:
@@ -2670,7 +2705,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: AdminSetQuestionStatus
+      summary: update question status
       tags:
       - admin
   /answer/admin/api/reasons:
@@ -3667,12 +3702,12 @@ paths:
       - application/json
       description: Accepted
       parameters:
-      - description: AnswerAcceptedReq
+      - description: AcceptAnswerReq
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/schema.AnswerAcceptedReq'
+          $ref: '#/definitions/schema.AcceptAnswerReq'
       produces:
       - application/json
       responses:
@@ -3745,6 +3780,30 @@ paths:
       summary: AnswerList
       tags:
       - api-answer
+  /answer/api/v1/answer/recover:
+    post:
+      consumes:
+      - application/json
+      description: recover deleted answer
+      parameters:
+      - description: answer
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.RecoverAnswerReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: recover answer
+      tags:
+      - Answer
   /answer/api/v1/collection/switch:
     post:
       consumes:
@@ -4830,6 +4889,30 @@ paths:
       summary: get questions by page
       tags:
       - Question
+  /answer/api/v1/question/recover:
+    post:
+      consumes:
+      - application/json
+      description: recover deleted question
+      parameters:
+      - description: question
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.QuestionRecoverReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      security:
+      - ApiKeyAuth: []
+      summary: recover deleted question
+      tags:
+      - Question
   /answer/api/v1/question/reopen:
     put:
       consumes:
@@ -4858,7 +4941,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: add question title like
+      description: fuzzy query similar questions based on title
       parameters:
       - default: string
         description: title
@@ -4875,7 +4958,7 @@ paths:
             $ref: '#/definitions/handler.RespBody'
       security:
       - ApiKeyAuth: []
-      summary: add question title like
+      summary: fuzzy query similar questions based on title
       tags:
       - Question
   /answer/api/v1/question/similar/tag:
@@ -5310,6 +5393,28 @@ paths:
           schema:
             $ref: '#/definitions/handler.RespBody'
       summary: update tag
+      tags:
+      - Tag
+  /answer/api/v1/tag/recover:
+    post:
+      consumes:
+      - application/json
+      description: recover delete tag
+      parameters:
+      - description: tag
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/schema.RecoverTagReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.RespBody'
+      summary: recover delete tag
       tags:
       - Tag
   /answer/api/v1/tag/synonym:

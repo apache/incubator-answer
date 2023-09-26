@@ -221,6 +221,7 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 		permission.QuestionHide,
 		permission.QuestionShow,
 		permission.AnswerInviteSomeoneToAnswer,
+		permission.QuestionUnDelete,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -237,6 +238,7 @@ func (qc *QuestionController) GetQuestion(ctx *gin.Context) {
 	req.CanHide = canList[6]
 	req.CanShow = canList[7]
 	req.CanInviteOtherToAnswer = canList[8]
+	req.CanRecover = canList[9]
 
 	info, err := qc.questionService.GetQuestionAndAddPV(ctx, id, userID, req)
 	if err != nil {
@@ -627,6 +629,40 @@ func (qc *QuestionController) UpdateQuestion(ctx *gin.Context) {
 	handler.HandleResponse(ctx, nil, &schema.UpdateQuestionResp{WaitForReview: !req.NoNeedReview})
 }
 
+// QuestionRecover recover deleted question
+// @Summary recover deleted question
+// @Description recover deleted question
+// @Tags Question
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.QuestionRecoverReq true "question"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/question/recover [post]
+func (qc *QuestionController) QuestionRecover(ctx *gin.Context) {
+	req := &schema.QuestionRecoverReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.QuestionID = uid.DeShortID(req.QuestionID)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	canList, err := qc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.QuestionUnDelete,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !canList[0] {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	err = qc.questionService.RecoverQuestion(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
 // UpdateQuestionInviteUser update question invite user
 // @Summary update question invite user
 // @Description update question invite user
@@ -842,22 +878,24 @@ func (qc *QuestionController) AdminAnswerPage(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
-// AdminSetQuestionStatus godoc
-// @Summary AdminSetQuestionStatus
-// @Description Status:[available,closed,deleted]
+// AdminUpdateQuestionStatus update question status
+// @Summary update question status
+// @Description update question status
 // @Tags admin
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param data body schema.AdminSetQuestionStatusRequest true "AdminSetQuestionStatusRequest"
-// @Router /answer/admin/api/question/status [put]
+// @Param data body schema.AdminUpdateQuestionStatusReq true "AdminUpdateQuestionStatusReq"
 // @Success 200 {object} handler.RespBody
-func (qc *QuestionController) AdminSetQuestionStatus(ctx *gin.Context) {
-	req := &schema.AdminSetQuestionStatusRequest{}
+// @Router /answer/admin/api/question/status [put]
+func (qc *QuestionController) AdminUpdateQuestionStatus(ctx *gin.Context) {
+	req := &schema.AdminUpdateQuestionStatusReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
 	req.QuestionID = uid.DeShortID(req.QuestionID)
-	err := qc.questionService.AdminSetQuestionStatus(ctx, req.QuestionID, req.StatusStr)
-	handler.HandleResponse(ctx, err, gin.H{})
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	err := qc.questionService.AdminSetQuestionStatus(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
 }

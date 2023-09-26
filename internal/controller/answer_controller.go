@@ -90,6 +90,40 @@ func (ac *AnswerController) RemoveAnswer(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
+// RecoverAnswer recover answer
+// @Summary recover answer
+// @Description recover deleted answer
+// @Tags Answer
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param data body schema.RecoverAnswerReq true "answer"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/answer/recover [post]
+func (ac *AnswerController) RecoverAnswer(ctx *gin.Context) {
+	req := &schema.RecoverAnswerReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.AnswerID = uid.DeShortID(req.AnswerID)
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.AnswerUnDelete,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !canList[0] {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	err = ac.answerService.RecoverAnswer(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
 // Get godoc
 // @Summary Get Answer
 // @Description Get Answer
@@ -196,7 +230,8 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
 		return
 	}
-	info.MemberActions = permission.GetAnswerPermission(ctx, req.UserID, info.UserID, req.CanEdit, req.CanDelete)
+	info.MemberActions = permission.GetAnswerPermission(ctx, req.UserID, info.UserID,
+		0, req.CanEdit, req.CanDelete, false)
 	handler.HandleResponse(ctx, nil, gin.H{
 		"info":     info,
 		"question": questionInfo,
@@ -293,6 +328,7 @@ func (ac *AnswerController) AnswerList(ctx *gin.Context) {
 	canList, err := ac.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.AnswerEdit,
 		permission.AnswerDelete,
+		permission.AnswerUnDelete,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -300,6 +336,7 @@ func (ac *AnswerController) AnswerList(ctx *gin.Context) {
 	}
 	req.CanEdit = canList[0]
 	req.CanDelete = canList[1]
+	req.CanRecover = canList[2]
 
 	list, count, err := ac.answerService.SearchList(ctx, req)
 	if err != nil {
@@ -345,25 +382,24 @@ func (ac *AnswerController) Accepted(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, nil)
 }
 
-// AdminSetAnswerStatus godoc
-// @Summary AdminSetAnswerStatus
-// @Description Status:[available,deleted]
+// AdminUpdateAnswerStatus update answer status
+// @Summary update answer status
+// @Description update answer status
 // @Tags admin
 // @Accept json
 // @Produce json
 // @Security ApiKeyAuth
-// @Param data body schema.AdminSetAnswerStatusRequest true "AdminSetAnswerStatusRequest"
-// @Router /answer/admin/api/answer/status [put]
+// @Param data body schema.AdminUpdateAnswerStatusReq true "AdminUpdateAnswerStatusReq"
 // @Success 200 {object} handler.RespBody
-func (ac *AnswerController) AdminSetAnswerStatus(ctx *gin.Context) {
-	req := &schema.AdminSetAnswerStatusRequest{}
+// @Router /answer/admin/api/answer/status [put]
+func (ac *AnswerController) AdminUpdateAnswerStatus(ctx *gin.Context) {
+	req := &schema.AdminUpdateAnswerStatusReq{}
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
 	req.AnswerID = uid.DeShortID(req.AnswerID)
-
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
 	err := ac.answerService.AdminSetAnswerStatus(ctx, req)
-	handler.HandleResponse(ctx, err, gin.H{})
+	handler.HandleResponse(ctx, err, nil)
 }

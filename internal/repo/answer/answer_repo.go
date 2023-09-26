@@ -66,17 +66,28 @@ func (ar *answerRepo) AddAnswer(ctx context.Context, answer *entity.Answer) (err
 }
 
 // RemoveAnswer delete answer
-func (ar *answerRepo) RemoveAnswer(ctx context.Context, id string) (err error) {
-	id = uid.DeShortID(id)
-	answer := &entity.Answer{
-		ID:     id,
+func (ar *answerRepo) RemoveAnswer(ctx context.Context, answerID string) (err error) {
+	answerID = uid.DeShortID(answerID)
+	_, err = ar.data.DB.Context(ctx).ID(answerID).Cols("status").Update(&entity.Answer{
 		Status: entity.AnswerStatusDeleted,
-	}
-	_, err = ar.data.DB.Context(ctx).Where("id = ?", id).Cols("status").Update(answer)
+	})
 	if err != nil {
 		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
-	_ = ar.updateSearch(ctx, answer.ID)
+	_ = ar.updateSearch(ctx, answerID)
+	return nil
+}
+
+// RecoverAnswer recover answer
+func (ar *answerRepo) RecoverAnswer(ctx context.Context, answerID string) (err error) {
+	answerID = uid.DeShortID(answerID)
+	_, err = ar.data.DB.Context(ctx).ID(answerID).Cols("status").Update(&entity.Answer{
+		Status: entity.AnswerStatusAvailable,
+	})
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	_ = ar.updateSearch(ctx, answerID)
 	return nil
 }
 
@@ -226,10 +237,10 @@ func (ar *answerRepo) UpdateAcceptedStatus(ctx context.Context, acceptedAnswerID
 }
 
 // GetByID
-func (ar *answerRepo) GetByID(ctx context.Context, id string) (*entity.Answer, bool, error) {
+func (ar *answerRepo) GetByID(ctx context.Context, answerID string) (*entity.Answer, bool, error) {
 	var resp entity.Answer
-	id = uid.DeShortID(id)
-	has, err := ar.data.DB.Context(ctx).Where("id =? ", id).Get(&resp)
+	answerID = uid.DeShortID(answerID)
+	has, err := ar.data.DB.Context(ctx).ID(answerID).Get(&resp)
 	if err != nil {
 		return &resp, false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}

@@ -13,12 +13,13 @@ import (
 type AnswerRepo interface {
 	AddAnswer(ctx context.Context, answer *entity.Answer) (err error)
 	RemoveAnswer(ctx context.Context, id string) (err error)
+	RecoverAnswer(ctx context.Context, answerID string) (err error)
 	UpdateAnswer(ctx context.Context, answer *entity.Answer, cols []string) (err error)
 	GetAnswer(ctx context.Context, id string) (answer *entity.Answer, exist bool, err error)
 	GetAnswerList(ctx context.Context, answer *entity.Answer) (answerList []*entity.Answer, err error)
 	GetAnswerPage(ctx context.Context, page, pageSize int, answer *entity.Answer) (answerList []*entity.Answer, total int64, err error)
 	UpdateAcceptedStatus(ctx context.Context, acceptedAnswerID string, questionID string) error
-	GetByID(ctx context.Context, id string) (*entity.Answer, bool, error)
+	GetByID(ctx context.Context, answerID string) (*entity.Answer, bool, error)
 	GetCountByQuestionID(ctx context.Context, questionID string) (int64, error)
 	GetCountByUserID(ctx context.Context, userID string) (int64, error)
 	GetByUserIDQuestionID(ctx context.Context, userID string, questionID string) (*entity.Answer, bool, error)

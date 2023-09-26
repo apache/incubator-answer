@@ -103,7 +103,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Status:[available,deleted]",
+                "description": "update answer status",
                 "consumes": [
                     "application/json"
                 ],
@@ -113,15 +113,15 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
-                "summary": "AdminSetAnswerStatus",
+                "summary": "update answer status",
                 "parameters": [
                     {
-                        "description": "AdminSetAnswerStatusRequest",
+                        "description": "AdminUpdateAnswerStatusReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.AdminSetAnswerStatusRequest"
+                            "$ref": "#/definitions/schema.AdminUpdateAnswerStatusReq"
                         }
                     }
                 ],
@@ -428,7 +428,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "Status:[available,closed,deleted]",
+                "description": "update question status",
                 "consumes": [
                     "application/json"
                 ],
@@ -438,15 +438,15 @@ const docTemplate = `{
                 "tags": [
                     "admin"
                 ],
-                "summary": "AdminSetQuestionStatus",
+                "summary": "update question status",
                 "parameters": [
                     {
-                        "description": "AdminSetQuestionStatusRequest",
+                        "description": "AdminUpdateQuestionStatusReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.AdminSetQuestionStatusRequest"
+                            "$ref": "#/definitions/schema.AdminUpdateQuestionStatusReq"
                         }
                     }
                 ],
@@ -2142,12 +2142,12 @@ const docTemplate = `{
                 "summary": "Accepted",
                 "parameters": [
                     {
-                        "description": "AnswerAcceptedReq",
+                        "description": "AcceptAnswerReq",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/schema.AnswerAcceptedReq"
+                            "$ref": "#/definitions/schema.AcceptAnswerReq"
                         }
                     }
                 ],
@@ -2247,6 +2247,45 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/answer/recover": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "recover deleted answer",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Answer"
+                ],
+                "summary": "recover answer",
+                "parameters": [
+                    {
+                        "description": "answer",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.RecoverAnswerReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
                         }
                     }
                 }
@@ -4031,6 +4070,45 @@ const docTemplate = `{
                 }
             }
         },
+        "/answer/api/v1/question/recover": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "description": "recover deleted question",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Question"
+                ],
+                "summary": "recover deleted question",
+                "parameters": [
+                    {
+                        "description": "question",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.QuestionRecoverReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
         "/answer/api/v1/question/reopen": {
             "put": {
                 "security": [
@@ -4077,7 +4155,7 @@ const docTemplate = `{
                         "ApiKeyAuth": []
                     }
                 ],
-                "description": "add question title like",
+                "description": "fuzzy query similar questions based on title",
                 "consumes": [
                     "application/json"
                 ],
@@ -4087,7 +4165,7 @@ const docTemplate = `{
                 "tags": [
                     "Question"
                 ],
-                "summary": "add question title like",
+                "summary": "fuzzy query similar questions based on title",
                 "parameters": [
                     {
                         "type": "string",
@@ -4807,6 +4885,40 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/schema.RemoveTagReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.RespBody"
+                        }
+                    }
+                }
+            }
+        },
+        "/answer/api/v1/tag/recover": {
+            "post": {
+                "description": "recover delete tag",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "recover delete tag",
+                "parameters": [
+                    {
+                        "description": "tag",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/schema.RecoverTagReq"
                         }
                     }
                 ],
@@ -6378,6 +6490,21 @@ const docTemplate = `{
                 "list": {}
             }
         },
+        "schema.AcceptAnswerReq": {
+            "type": "object",
+            "required": [
+                "question_id"
+            ],
+            "properties": {
+                "answer_id": {
+                    "type": "string"
+                },
+                "question_id": {
+                    "type": "string",
+                    "maxLength": 30
+                }
+            }
+        },
         "schema.ActObjectInfo": {
             "type": "object",
             "properties": {
@@ -6425,9 +6552,6 @@ const docTemplate = `{
                 "created_at": {
                     "type": "integer"
                 },
-                "id": {
-                    "type": "string"
-                },
                 "object_id": {
                     "type": "string"
                 },
@@ -6437,11 +6561,8 @@ const docTemplate = `{
                 "revision_id": {
                     "type": "string"
                 },
-                "user_display_name": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
+                "user_info": {
+                    "$ref": "#/definitions/schema.UserBasicInfo"
                 }
             }
         },
@@ -6584,36 +6705,42 @@ const docTemplate = `{
                 }
             }
         },
-        "schema.AdminSetAnswerStatusRequest": {
+        "schema.AdminUpdateAnswerStatusReq": {
             "type": "object",
+            "required": [
+                "answer_id",
+                "status"
+            ],
             "properties": {
                 "answer_id": {
                     "type": "string"
                 },
                 "status": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "available",
+                        "deleted"
+                    ]
                 }
             }
         },
-        "schema.AdminSetQuestionStatusRequest": {
+        "schema.AdminUpdateQuestionStatusReq": {
             "type": "object",
+            "required": [
+                "question_id",
+                "status"
+            ],
             "properties": {
                 "question_id": {
                     "type": "string"
                 },
                 "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "schema.AnswerAcceptedReq": {
-            "type": "object",
-            "properties": {
-                "answer_id": {
-                    "type": "string"
-                },
-                "question_id": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                        "available",
+                        "closed",
+                        "deleted"
+                    ]
                 }
             }
         },
@@ -7086,10 +7213,6 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "user id",
-                    "type": "string"
-                },
-                "ip_info": {
-                    "description": "ip info",
                     "type": "string"
                 },
                 "language": {
@@ -8088,7 +8211,21 @@ const docTemplate = `{
                 "rank": {
                     "type": "integer"
                 },
+                "status": {
+                    "type": "string"
+                },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.QuestionRecoverReq": {
+            "type": "object",
+            "required": [
+                "question_id"
+            ],
+            "properties": {
+                "question_id": {
                     "type": "string"
                 }
             }
@@ -8165,6 +8302,28 @@ const docTemplate = `{
                     "items": {
                         "type": "string"
                     }
+                }
+            }
+        },
+        "schema.RecoverAnswerReq": {
+            "type": "object",
+            "required": [
+                "answer_id"
+            ],
+            "properties": {
+                "answer_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "schema.RecoverTagReq": {
+            "type": "object",
+            "required": [
+                "tag_id"
+            ],
+            "properties": {
+                "tag_id": {
+                    "type": "string"
                 }
             }
         },
@@ -8317,12 +8476,32 @@ const docTemplate = `{
                     "description": "user info",
                     "allOf": [
                         {
-                            "$ref": "#/definitions/schema.UserBasicInfo"
+                            "$ref": "#/definitions/schema.SearchObjectUser"
                         }
                     ]
                 },
                 "vote_count": {
                     "type": "integer"
+                }
+            }
+        },
+        "schema.SearchObjectUser": {
+            "type": "object",
+            "properties": {
+                "display_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "rank": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         },
@@ -8967,7 +9146,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "captcha_id": {
-                    "description": "captcha_id",
+                    "description": "whether user can delete it",
                     "type": "string"
                 },
                 "comment_id": {
@@ -8998,35 +9177,25 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "avatar": {
-                    "description": "avatar",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/schema.AvatarInfo"
-                        }
-                    ]
+                    "$ref": "#/definitions/schema.AvatarInfo"
                 },
                 "bio": {
-                    "description": "bio",
                     "type": "string",
                     "maxLength": 4096
                 },
                 "display_name": {
-                    "description": "display_name",
                     "type": "string",
                     "maxLength": 30
                 },
                 "location": {
-                    "description": "location",
                     "type": "string",
                     "maxLength": 100
                 },
                 "username": {
-                    "description": "username",
                     "type": "string",
                     "maxLength": 30
                 },
                 "website": {
-                    "description": "website",
                     "type": "string",
                     "maxLength": 500
                 }
@@ -9250,6 +9419,9 @@ const docTemplate = `{
                 "user_id"
             ],
             "properties": {
+                "remove_all_content": {
+                    "type": "boolean"
+                },
                 "status": {
                     "type": "string",
                     "enum": [
@@ -9274,9 +9446,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "string"
-                },
-                "ip_info": {
                     "type": "string"
                 },
                 "location": {
@@ -9406,10 +9575,6 @@ const docTemplate = `{
                 },
                 "id": {
                     "description": "user id",
-                    "type": "string"
-                },
-                "ip_info": {
-                    "description": "ip info",
                     "type": "string"
                 },
                 "language": {

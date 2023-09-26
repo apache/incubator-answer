@@ -167,6 +167,38 @@ func (tc *TagController) UpdateTag(ctx *gin.Context) {
 	}
 }
 
+// RecoverTag recover delete tag
+// @Summary recover delete tag
+// @Description recover delete tag
+// @Tags Tag
+// @Accept json
+// @Produce json
+// @Param data body schema.RecoverTagReq true "tag"
+// @Success 200 {object} handler.RespBody
+// @Router /answer/api/v1/tag/recover [post]
+func (tc *TagController) RecoverTag(ctx *gin.Context) {
+	req := &schema.RecoverTagReq{}
+	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
+
+	canList, err := tc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
+		permission.TagUnDelete,
+	})
+	if err != nil {
+		handler.HandleResponse(ctx, err, nil)
+		return
+	}
+	if !canList[0] {
+		handler.HandleResponse(ctx, errors.Forbidden(reason.RankFailToMeetTheCondition), nil)
+		return
+	}
+
+	err = tc.tagService.RecoverTag(ctx, req)
+	handler.HandleResponse(ctx, err, nil)
+}
+
 // GetTagInfo get tag one
 // @Summary get tag one
 // @Description get tag one
@@ -187,6 +219,7 @@ func (tc *TagController) GetTagInfo(ctx *gin.Context) {
 	canList, err := tc.rankService.CheckOperationPermissions(ctx, req.UserID, []string{
 		permission.TagEdit,
 		permission.TagDelete,
+		permission.TagUnDelete,
 	})
 	if err != nil {
 		handler.HandleResponse(ctx, err, nil)
@@ -194,6 +227,7 @@ func (tc *TagController) GetTagInfo(ctx *gin.Context) {
 	}
 	req.CanEdit = canList[0]
 	req.CanDelete = canList[1]
+	req.CanRecover = canList[2]
 
 	resp, err := tc.tagService.GetTagInfo(ctx, req)
 	handler.HandleResponse(ctx, err, resp)

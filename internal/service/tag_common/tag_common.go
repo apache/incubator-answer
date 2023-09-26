@@ -37,6 +37,8 @@ type TagCommonRepo interface {
 type TagRepo interface {
 	RemoveTag(ctx context.Context, tagID string) (err error)
 	UpdateTag(ctx context.Context, tag *entity.Tag) (err error)
+	RecoverTag(ctx context.Context, tagID string) (err error)
+	MustGetTagByNameOrID(ctx context.Context, tagID, slugName string) (tag *entity.Tag, exist bool, err error)
 	UpdateTagSynonym(ctx context.Context, tagSlugNameList []string, mainTagID int64, mainTagSlugName string) (err error)
 	GetTagSynonymCount(ctx context.Context, tagID string) (count int64, err error)
 	GetTagList(ctx context.Context, tag *entity.Tag) (tagList []*entity.Tag, err error)
@@ -45,6 +47,7 @@ type TagRepo interface {
 type TagRelRepo interface {
 	AddTagRelList(ctx context.Context, tagList []*entity.TagRel) (err error)
 	RemoveTagRelListByObjectID(ctx context.Context, objectID string) (err error)
+	RecoverTagRelListByObjectID(ctx context.Context, objectID string) (err error)
 	ShowTagRelListByObjectID(ctx context.Context, objectID string) (err error)
 	HideTagRelListByObjectID(ctx context.Context, objectID string) (err error)
 	RemoveTagRelListByIDs(ctx context.Context, ids []int64) (err error)
@@ -711,6 +714,11 @@ func (ts *TagCommonService) RefreshTagCountByQuestionID(ctx context.Context, que
 // RemoveTagRelListByObjectID remove tag relation by object id
 func (ts *TagCommonService) RemoveTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
 	return ts.tagRelRepo.RemoveTagRelListByObjectID(ctx, objectID)
+}
+
+// RecoverTagRelListByObjectID recover tag relation by object id
+func (ts *TagCommonService) RecoverTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
+	return ts.tagRelRepo.RecoverTagRelListByObjectID(ctx, objectID)
 }
 
 func (ts *TagCommonService) HideTagRelListByObjectID(ctx context.Context, objectID string) (err error) {

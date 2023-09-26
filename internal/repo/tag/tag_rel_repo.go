@@ -54,6 +54,16 @@ func (tr *tagRelRepo) RemoveTagRelListByObjectID(ctx context.Context, objectID s
 	return
 }
 
+// RecoverTagRelListByObjectID recover tag list
+func (tr *tagRelRepo) RecoverTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
+	objectID = uid.DeShortID(objectID)
+	_, err = tr.data.DB.Context(ctx).Where("object_id = ?", objectID).Update(&entity.TagRel{Status: entity.TagRelStatusAvailable})
+	if err != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return
+}
+
 func (tr *tagRelRepo) HideTagRelListByObjectID(ctx context.Context, objectID string) (err error) {
 	objectID = uid.DeShortID(objectID)
 	_, err = tr.data.DB.Context(ctx).Where("object_id = ?", objectID).Cols("status").Update(&entity.TagRel{Status: entity.TagRelStatusHide})
