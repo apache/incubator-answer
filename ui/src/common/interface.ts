@@ -56,6 +56,7 @@ export interface TagInfo extends TagBase {
   updated_at?;
   main_tag_slug_name?: string;
   excerpt?;
+  status: string;
 }
 export interface QuestionParams extends ImgCodeReq {
   title: string;

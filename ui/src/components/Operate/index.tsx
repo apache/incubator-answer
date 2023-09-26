@@ -13,8 +13,8 @@ import {
   editCheck,
   reopenQuestion,
   questionOpetation,
-  changeQuestionStatus,
-  changeAnswerStatus,
+  unDeleteAnswer,
+  unDeleteQuestion,
 } from '@/services';
 import { tryNormalLogged } from '@/utils/guard';
 import { floppyNavigation } from '@/utils';
@@ -151,13 +151,13 @@ const Index: FC<IProps> = ({
       confirmText: t('undelete', { keyPrefix: 'btns' }),
       onConfirm: () => {
         if (type === 'question') {
-          changeQuestionStatus(qid, 'available').then(() => {
-            callback?.('all');
+          unDeleteQuestion(qid).then(() => {
+            callback?.('default');
           });
         }
 
         if (type === 'answer') {
-          changeAnswerStatus(aid, 'available').then(() => {
+          unDeleteAnswer(aid).then(() => {
             callback?.('all');
           });
         }

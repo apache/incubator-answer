@@ -73,3 +73,15 @@ export const putInviteUser = (
     ...imgCode,
   });
 };
+
+export const unDeleteAnswer = (id) => {
+  return request.post('/answer/api/v1/answer/recover', {
+    answer_id: id,
+  });
+};
+
+export const unDeleteQuestion = (qid) => {
+  return request.post('/answer/api/v1/question/recover', {
+    question_id: qid,
+  });
+};

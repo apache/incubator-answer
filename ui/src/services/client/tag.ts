@@ -13,8 +13,13 @@ export const modifyTag = (params) => {
   return request.put('/answer/api/v1/tag', params);
 };
 
-export const useQuerySynonymsTags = (tagId) => {
-  const apiUrl = tagId ? `/answer/api/v1/tag/synonyms?tag_id=${tagId}` : '';
+export const useQuerySynonymsTags = (tagId, status) => {
+  const apiUrl =
+    status === 'deleted'
+      ? ''
+      : tagId
+      ? `/answer/api/v1/tag/synonyms?tag_id=${tagId}`
+      : '';
   return useSWR<{
     synonyms: Type.SynonymsTag[];
     member_actions?: Type.MemberActionItem[];
@@ -47,10 +52,11 @@ export const useTagInfo = ({ id = '', name = '' }) => {
     name = encodeURIComponent(name);
     apiUrl = `/answer/api/v1/tag?name=${name}`;
   }
-  const { data, error } = useSWR<Type.TagInfo>(apiUrl, (url) =>
+  const { data, error, mutate } = useSWR<Type.TagInfo>(apiUrl, (url) =>
     request.get(url, { allow404: true }),
   );
   return {
+    mutate,
     data,
     isLoading: !data && !error,
     error,
@@ -69,4 +75,10 @@ export const getTagsBySlugName = (slugNames: string) => {
 export const createTag = (params: Type.TagBase) => {
   const apiUrl = '/answer/api/v1/tag';
   return request.post<Type.TagInfo>(apiUrl, params);
+};
+
+export const unDeleteTag = (id) => {
+  return request.post('/answer/api/v1/tag/recover', {
+    tag_id: id,
+  });
 };
