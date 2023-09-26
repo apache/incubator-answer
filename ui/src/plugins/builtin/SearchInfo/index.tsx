@@ -31,7 +31,7 @@ const Index: FC = () => {
       target="_blank"
       rel="noopener noreferrer">
       <span className="small text-secondary me-2">{t('search_by')}</span>
-      <SvgIcon base64={data?.icon} />
+      <SvgIcon base64={data?.icon} svgClassName="max-width-200" />
     </a>
   );
 };
