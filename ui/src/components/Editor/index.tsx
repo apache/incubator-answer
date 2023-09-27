@@ -1,7 +1,6 @@
 import {
   useEffect,
   useRef,
-  useState,
   ForwardRefRenderFunction,
   forwardRef,
   useImperativeHandle,
@@ -74,14 +73,6 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
     autoFocus,
   });
 
-  const [markdown, setMarkdown] = useState<string>(value || '');
-
-  useEffect(() => {
-    if (value !== markdown) {
-      setMarkdown(value);
-    }
-  }, [value]);
-
   const getHtml = () => {
     return previewRef.current?.getHtml();
   };
@@ -103,29 +94,31 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
     <>
       <div className={classNames('md-editor-wrap rounded', className)}>
         <EditorContext.Provider value={editor}>
-          <PluginRender
-            type="editor"
-            className="toolbar-wrap px-3 d-flex align-items-center flex-wrap"
-            editor={editor}
-            previewElement={previewRef.current?.element}>
-            <Heading />
-            <Bold />
-            <Italice />
-            <div className="toolbar-divider" />
-            <Code />
-            <LinkItem />
-            <BlockQuote />
-            <Image />
-            <Table />
-            <div className="toolbar-divider" />
-            <OL />
-            <UL />
-            <Indent />
-            <Outdent />
-            <Hr />
-            <div className="toolbar-divider" />
-            <Help />
-          </PluginRender>
+          {editor && (
+            <PluginRender
+              type="editor"
+              className="toolbar-wrap px-3 d-flex align-items-center flex-wrap"
+              editor={editor}
+              previewElement={previewRef.current?.element}>
+              <Heading />
+              <Bold />
+              <Italice />
+              <div className="toolbar-divider" />
+              <Code />
+              <LinkItem />
+              <BlockQuote />
+              <Image />
+              <Table />
+              <div className="toolbar-divider" />
+              <OL />
+              <UL />
+              <Indent />
+              <Outdent />
+              <Hr />
+              <div className="toolbar-divider" />
+              <Help />
+            </PluginRender>
+          )}
         </EditorContext.Provider>
 
         <div className="content-wrap">
@@ -135,7 +128,7 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
           />
         </div>
       </div>
-      <Viewer ref={previewRef} value={markdown} />
+      <Viewer ref={previewRef} value={value} />
     </>
   );
 };
