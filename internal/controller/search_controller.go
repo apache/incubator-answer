@@ -90,6 +90,7 @@ func (sc *SearchController) SearchDesc(ctx *gin.Context) {
 	if finder != nil {
 		resp.Name = finder.Info().Name.Translate(ctx)
 		resp.Icon = finder.Description().Icon
+		resp.Link = finder.Description().Link
 	}
 	handler.HandleResponse(ctx, nil, resp)
 }

@@ -93,8 +93,10 @@ type Search interface {
 }
 
 type SearchDesc struct {
-	// A svg icon it wil be display in search result page
+	// A svg icon it wil be display in search result page. optional
 	Icon string `json:"icon"`
+	// The link address of the search engine. optional
+	Link string `json:"link"`
 }
 
 type SearchSyncer interface {

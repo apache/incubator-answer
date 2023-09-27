@@ -131,4 +131,5 @@ type SearchResp struct {
 type SearchDescResp struct {
 	Name string `json:"name"`
 	Icon string `json:"icon"`
+	Link string `json:"link"`
 }
