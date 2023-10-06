@@ -23,6 +23,7 @@ func CheckDBConnection(dataConf *data.Database) bool {
 		fmt.Printf("connection database failed: %s\n", err)
 		return false
 	}
+	defer db.Close()
 	if err = db.Ping(); err != nil {
 		fmt.Printf("connection ping database failed: %s\n", err)
 		return false
@@ -38,6 +39,7 @@ func CheckDBTableExist(dataConf *data.Database) bool {
 		fmt.Printf("connection database failed: %s\n", err)
 		return false
 	}
+	defer db.Close()
 	if err = db.Ping(); err != nil {
 		fmt.Printf("connection ping database failed: %s\n", err)
 		return false
