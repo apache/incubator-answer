@@ -44,8 +44,8 @@ func (t *TemplateRenderController) Sitemap(ctx *gin.Context) {
 				"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
 				"list":      questions,
 				"general":   general,
-				"hastitle": siteInfo.PermaLink == constant.PermaLinkQuestionIDAndTitle ||
-					siteInfo.PermaLink == constant.PermaLinkQuestionIDAndTitleByShortID,
+				"hastitle": siteInfo.Permalink == constant.PermalinkQuestionIDAndTitle ||
+					siteInfo.Permalink == constant.PermalinkQuestionIDAndTitleByShortID,
 			},
 		)
 		return
@@ -93,8 +93,8 @@ func (t *TemplateRenderController) SitemapPage(ctx *gin.Context, page int) error
 			"xmlHeader": template.HTML(`<?xml version="1.0" encoding="UTF-8"?>`),
 			"list":      questions,
 			"general":   general,
-			"hastitle": siteInfo.PermaLink == constant.PermaLinkQuestionIDAndTitle ||
-				siteInfo.PermaLink == constant.PermaLinkQuestionIDAndTitleByShortID,
+			"hastitle": siteInfo.Permalink == constant.PermalinkQuestionIDAndTitle ||
+				siteInfo.Permalink == constant.PermalinkQuestionIDAndTitleByShortID,
 		},
 	)
 	return nil

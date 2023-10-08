@@ -34,6 +34,25 @@ func (r *EmailCodeContent) FromJSONString(data string) error {
 	return json.Unmarshal([]byte(data), &r)
 }
 
+type RegisterTemplateData struct {
+	SiteName    string
+	RegisterUrl string
+}
+
+type PassResetTemplateData struct {
+	SiteName     string
+	PassResetUrl string
+}
+
+type ChangeEmailTemplateData struct {
+	SiteName       string
+	ChangeEmailUrl string
+}
+
+type TestTemplateData struct {
+	SiteName string
+}
+
 type NewAnswerTemplateRawData struct {
 	AnswerUserDisplayName string
 	QuestionTitle         string

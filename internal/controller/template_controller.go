@@ -116,7 +116,7 @@ func (tc *TemplateController) Index(ctx *gin.Context) {
 	siteInfo.Canonical = siteInfo.General.SiteUrl
 
 	UrlUseTitle := false
-	if siteInfo.SiteSeo.PermaLink == constant.PermaLinkQuestionIDAndTitle {
+	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
 	siteInfo.Title = ""
@@ -149,7 +149,7 @@ func (tc *TemplateController) QuestionList(ctx *gin.Context) {
 	}
 
 	UrlUseTitle := false
-	if siteInfo.SiteSeo.PermaLink == constant.PermaLinkQuestionIDAndTitle {
+	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
 	siteInfo.Title = fmt.Sprintf("Questions - %s", siteInfo.General.Name)
@@ -196,7 +196,7 @@ func (tc *TemplateController) QuestionInfoeRdirect(ctx *gin.Context, siteInfo *s
 	}
 
 	url = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, questionID)
-	if siteInfo.SiteSeo.PermaLink == constant.PermaLinkQuestionID || siteInfo.SiteSeo.PermaLink == constant.PermaLinkQuestionIDByShortID {
+	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionID || siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDByShortID {
 		if len(ctx.Request.URL.Query()) > 0 {
 			url = fmt.Sprintf("%s?%s", url, ctx.Request.URL.RawQuery)
 		}
@@ -299,7 +299,7 @@ func (tc *TemplateController) QuestionInfo(ctx *gin.Context) {
 		return
 	}
 	siteInfo.Canonical = fmt.Sprintf("%s/questions/%s/%s", siteInfo.General.SiteUrl, id, encodeTitle)
-	if siteInfo.SiteSeo.PermaLink == constant.PermaLinkQuestionID {
+	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionID {
 		siteInfo.Canonical = fmt.Sprintf("%s/questions/%s", siteInfo.General.SiteUrl, id)
 	}
 	jsonLD := &schema.QAPageJsonLD{}
@@ -414,7 +414,7 @@ func (tc *TemplateController) TagInfo(ctx *gin.Context) {
 	siteInfo.Keywords = taginifo.DisplayName
 
 	UrlUseTitle := false
-	if siteInfo.SiteSeo.PermaLink == constant.PermaLinkQuestionIDAndTitle {
+	if siteInfo.SiteSeo.Permalink == constant.PermalinkQuestionIDAndTitle {
 		UrlUseTitle = true
 	}
 	siteInfo.Title = fmt.Sprintf("'%s' Questions - %s", taginifo.DisplayName, siteInfo.General.Name)
