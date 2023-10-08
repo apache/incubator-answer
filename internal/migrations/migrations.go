@@ -117,6 +117,7 @@ func Migrate(debug bool, dbConf *data.Database, cacheConf *data.CacheConf, upgra
 		fmt.Println("new database failed: ", err.Error())
 		return err
 	}
+	defer engine.Close()
 
 	currentDBVersion, err := GetCurrentDBVersion(engine)
 	if err != nil {

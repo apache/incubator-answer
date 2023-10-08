@@ -87,18 +87,19 @@ func (us *uploaderService) UploadAvatarFile(ctx *gin.Context) (url string, err e
 
 	// max size
 	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 5*1024*1024)
-	_, file, err := ctx.Request.FormFile("file")
+	file, fileHeader, err := ctx.Request.FormFile("file")
 	if err != nil {
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
 	}
-	fileExt := strings.ToLower(path.Ext(file.Filename))
+	file.Close()
+	fileExt := strings.ToLower(path.Ext(fileHeader.Filename))
 	if _, ok := plugin.DefaultFileTypeCheckMapping[plugin.UserAvatar][fileExt]; !ok {
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
 	}
 
 	newFilename := fmt.Sprintf("%s%s", uid.IDStr12(), fileExt)
 	avatarFilePath := path.Join(avatarSubPath, newFilename)
-	return us.uploadFile(ctx, file, avatarFilePath)
+	return us.uploadFile(ctx, fileHeader, avatarFilePath)
 }
 
 func (us *uploaderService) AvatarThumbFile(ctx *gin.Context, fileName string, size int) (url string, err error) {
@@ -165,18 +166,19 @@ func (us *uploaderService) UploadPostFile(ctx *gin.Context) (
 
 	// max size
 	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 10*1024*1024)
-	_, file, err := ctx.Request.FormFile("file")
+	file, fileHeader, err := ctx.Request.FormFile("file")
 	if err != nil {
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
 	}
-	fileExt := strings.ToLower(path.Ext(file.Filename))
+	defer file.Close()
+	fileExt := strings.ToLower(path.Ext(fileHeader.Filename))
 	if _, ok := plugin.DefaultFileTypeCheckMapping[plugin.UserPost][fileExt]; !ok {
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
 	}
 
 	newFilename := fmt.Sprintf("%s%s", uid.IDStr12(), fileExt)
 	avatarFilePath := path.Join(postSubPath, newFilename)
-	return us.uploadFile(ctx, file, avatarFilePath)
+	return us.uploadFile(ctx, fileHeader, avatarFilePath)
 }
 
 func (us *uploaderService) UploadBrandingFile(ctx *gin.Context) (
@@ -191,18 +193,19 @@ func (us *uploaderService) UploadBrandingFile(ctx *gin.Context) (
 
 	// max size
 	ctx.Request.Body = http.MaxBytesReader(ctx.Writer, ctx.Request.Body, 10*1024*1024)
-	_, file, err := ctx.Request.FormFile("file")
+	file, fileHeader, err := ctx.Request.FormFile("file")
 	if err != nil {
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
 	}
-	fileExt := strings.ToLower(path.Ext(file.Filename))
+	file.Close()
+	fileExt := strings.ToLower(path.Ext(fileHeader.Filename))
 	if _, ok := plugin.DefaultFileTypeCheckMapping[plugin.AdminBranding][fileExt]; !ok {
 		return "", errors.BadRequest(reason.RequestFormatError).WithError(err)
 	}
 
 	newFilename := fmt.Sprintf("%s%s", uid.IDStr12(), fileExt)
 	avatarFilePath := path.Join(brandingSubPath, newFilename)
-	return us.uploadFile(ctx, file, avatarFilePath)
+	return us.uploadFile(ctx, fileHeader, avatarFilePath)
 }
 
 func (us *uploaderService) uploadFile(ctx *gin.Context, file *multipart.FileHeader, fileSubPath string) (

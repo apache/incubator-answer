@@ -422,7 +422,7 @@ func (ar *answerRepo) updateSearch(ctx context.Context, answerID string) (err er
 		ObjectID:    answerID,
 		Title:       question.Title,
 		Type:        constant.AnswerObjectType,
-		Content:     answer.ParsedText,
+		Content:     answer.OriginalText,
 		Answers:     0,
 		Status:      plugin.SearchContentStatus(answer.Status),
 		Tags:        tags,
