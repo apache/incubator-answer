@@ -15,6 +15,7 @@ func DumpAllData(dataConf *data.Database, dumpDataPath string) error {
 	if err != nil {
 		return err
 	}
+	defer db.Close()
 	if err = db.Ping(); err != nil {
 		return err
 	}
