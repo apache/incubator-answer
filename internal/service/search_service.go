@@ -28,6 +28,12 @@ func (ss *SearchService) Search(ctx context.Context, dto *schema.SearchDTO) (res
 	if dto.Page < 1 {
 		dto.Page = 1
 	}
+	if len(dto.Query) == 0 {
+		return &schema.SearchResp{
+			Total:         0,
+			SearchResults: make([]*schema.SearchResult, 0),
+		}, nil
+	}
 
 	// search type
 	cond := ss.searchParser.ParseStructure(ctx, dto)

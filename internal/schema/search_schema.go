@@ -2,7 +2,10 @@ package schema
 
 import (
 	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/answerdev/answer/internal/base/validator"
 	"github.com/answerdev/answer/plugin"
+	"regexp"
+	"strings"
 )
 
 type SearchDTO struct {
@@ -13,6 +16,15 @@ type SearchDTO struct {
 	Order       string `validate:"required,oneof=newest active score relevance" form:"order,default=relevance" json:"order" enums:"newest,active,score,relevance"`
 	CaptchaID   string `json:"captcha_id"` // captcha_id
 	CaptchaCode string `json:"captcha_code"`
+}
+
+func (s *SearchDTO) Check() (errField []*validator.FormErrorField, err error) {
+	// Replace special characters.
+	// Special characters will cause the search abnormal, such as search for "#" will get nearly all the content that Markdown format.
+	s.Query = regexp.MustCompile(`[+#.<>\-_()*]`).ReplaceAllString(s.Query, " ")
+	s.Query = regexp.MustCompile(`\s+`).ReplaceAllString(s.Query, " ")
+	s.Query = strings.TrimSpace(s.Query)
+	return nil, nil
 }
 
 type SearchCondition struct {
