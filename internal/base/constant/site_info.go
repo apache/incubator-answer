@@ -9,12 +9,12 @@ const (
 )
 
 const (
-	// PermaLinkQuestionIDAndTitle /questions/10010000000000001/post-title
-	PermaLinkQuestionIDAndTitle = iota + 1
-	// PermaLinkQuestionID /questions/10010000000000001
-	PermaLinkQuestionID
-	// PermaLinkQuestionIDAndTitleByShortID /questions/11/post-title
-	PermaLinkQuestionIDAndTitleByShortID
-	// PermaLinkQuestionIDByShortID /questions/11
-	PermaLinkQuestionIDByShortID
+	// PermalinkQuestionIDAndTitle /questions/10010000000000001/post-title
+	PermalinkQuestionIDAndTitle = iota + 1
+	// PermalinkQuestionID /questions/10010000000000001
+	PermalinkQuestionID
+	// PermalinkQuestionIDAndTitleByShortID /questions/11/post-title
+	PermalinkQuestionIDAndTitleByShortID
+	// PermalinkQuestionIDByShortID /questions/11
+	PermalinkQuestionIDByShortID
 )

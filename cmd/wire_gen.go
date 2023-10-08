@@ -121,7 +121,7 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	userRankRepo := rank.NewUserRankRepo(dataData, configService)
 	userActiveActivityRepo := activity.NewUserActiveActivityRepo(dataData, activityRepo, userRankRepo, configService)
 	emailRepo := export.NewEmailRepo(dataData)
-	emailService := export2.NewEmailService(configService, emailRepo, siteInfoRepo)
+	emailService := export2.NewEmailService(configService, emailRepo, siteInfoCommonService)
 	userRoleRelRepo := role.NewUserRoleRelRepo(dataData)
 	roleRepo := role.NewRoleRepo(dataData)
 	roleService := role2.NewRoleService(roleRepo)
