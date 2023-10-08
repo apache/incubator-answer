@@ -130,5 +130,12 @@ func (sc *SiteInfoController) GetManifestJson(ctx *gin.Context) {
 		resp.Icons["48"] = branding.Favicon
 		resp.Icons["128"] = branding.Favicon
 	}
+	siteGeneral, err := sc.siteInfoService.GetSiteGeneral(ctx)
+	if err != nil {
+		log.Error(err)
+	} else {
+		resp.Name = siteGeneral.Name
+		resp.ShortName = siteGeneral.Name
+	}
 	ctx.JSON(http.StatusOK, resp)
 }
