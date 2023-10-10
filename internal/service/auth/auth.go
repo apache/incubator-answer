@@ -6,13 +6,13 @@ import (
 	"github.com/answerdev/answer/internal/entity"
 	"github.com/answerdev/answer/pkg/token"
 	"github.com/answerdev/answer/plugin"
-	"github.com/segmentfault/pacman/log"
 )
 
 // AuthRepo auth repository
 type AuthRepo interface {
 	GetUserCacheInfo(ctx context.Context, accessToken string) (userInfo *entity.UserCacheInfo, err error)
-	SetUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) error
+	SetUserCacheInfo(ctx context.Context, accessToken, visitToken string, userInfo *entity.UserCacheInfo) error
+	GetUserVisitCacheInfo(ctx context.Context, visitToken string) (accessToken string, err error)
 	RemoveUserCacheInfo(ctx context.Context, accessToken string) (err error)
 	SetUserStatus(ctx context.Context, userID string, userInfo *entity.UserCacheInfo) (err error)
 	GetUserStatus(ctx context.Context, userID string) (userInfo *entity.UserCacheInfo, err error)
@@ -50,7 +50,7 @@ func (as *AuthService) GetUserCacheInfo(ctx context.Context, accessToken string)
 		userCacheInfo.EmailStatus = cacheInfo.EmailStatus
 		userCacheInfo.RoleID = cacheInfo.RoleID
 		// update current user cache info
-		err := as.authRepo.SetUserCacheInfo(ctx, accessToken, userCacheInfo)
+		err := as.authRepo.SetUserCacheInfo(ctx, accessToken, userCacheInfo.VisitToken, userCacheInfo)
 		if err != nil {
 			return nil, err
 		}
@@ -66,25 +66,30 @@ func (as *AuthService) GetUserCacheInfo(ctx context.Context, accessToken string)
 	return userCacheInfo, nil
 }
 
-func (as *AuthService) SetUserCacheInfo(ctx context.Context, userInfo *entity.UserCacheInfo) (accessToken string, err error) {
+func (as *AuthService) SetUserCacheInfo(ctx context.Context, userInfo *entity.UserCacheInfo) (
+	accessToken string, visitToken string, err error) {
 	accessToken = token.GenerateToken()
-	err = as.authRepo.SetUserCacheInfo(ctx, accessToken, userInfo)
-	return accessToken, err
+	visitToken = token.GenerateToken()
+	err = as.authRepo.SetUserCacheInfo(ctx, accessToken, visitToken, userInfo)
+	if err != nil {
+		return "", "", err
+	}
+	return accessToken, visitToken, err
+}
+
+func (as *AuthService) CheckUserVisitToken(ctx context.Context, visitToken string) bool {
+	accessToken, err := as.authRepo.GetUserVisitCacheInfo(ctx, visitToken)
+	if err != nil {
+		return false
+	}
+	if len(accessToken) == 0 {
+		return false
+	}
+	return true
 }
 
 func (as *AuthService) SetUserStatus(ctx context.Context, userInfo *entity.UserCacheInfo) (err error) {
 	return as.authRepo.SetUserStatus(ctx, userInfo.UserID, userInfo)
-}
-
-func (as *AuthService) UpdateUserCacheInfo(ctx context.Context, token string, userInfo *entity.UserCacheInfo) (err error) {
-	err = as.authRepo.SetUserCacheInfo(ctx, token, userInfo)
-	if err != nil {
-		return err
-	}
-	if err := as.authRepo.RemoveUserStatus(ctx, userInfo.UserID); err != nil {
-		log.Error(err)
-	}
-	return
 }
 
 func (as *AuthService) RemoveUserCacheInfo(ctx context.Context, accessToken string) (err error) {

@@ -40,7 +40,9 @@ func (ar *authRepo) GetUserCacheInfo(ctx context.Context, accessToken string) (u
 }
 
 // SetUserCacheInfo set user cache info
-func (ar *authRepo) SetUserCacheInfo(ctx context.Context, accessToken string, userInfo *entity.UserCacheInfo) (err error) {
+func (ar *authRepo) SetUserCacheInfo(ctx context.Context,
+	accessToken, visitToken string, userInfo *entity.UserCacheInfo) (err error) {
+	userInfo.VisitToken = visitToken
 	userInfoCache, err := json.Marshal(userInfo)
 	if err != nil {
 		return err
@@ -53,7 +55,26 @@ func (ar *authRepo) SetUserCacheInfo(ctx context.Context, accessToken string, us
 	if err := ar.AddUserTokenMapping(ctx, userInfo.UserID, accessToken); err != nil {
 		log.Error(err)
 	}
+	if len(visitToken) == 0 {
+		return nil
+	}
+	if err := ar.data.Cache.SetString(ctx, constant.UserVisitTokenCacheKey+visitToken,
+		accessToken, constant.UserTokenCacheTime); err != nil {
+		log.Error(err)
+	}
 	return nil
+}
+
+// GetUserVisitCacheInfo get user visit cache info
+func (ar *authRepo) GetUserVisitCacheInfo(ctx context.Context, visitToken string) (accessToken string, err error) {
+	accessToken, exist, err := ar.data.Cache.GetString(ctx, constant.UserVisitTokenCacheKey+visitToken)
+	if err != nil {
+		return "", errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	if !exist {
+		return "", nil
+	}
+	return accessToken, nil
 }
 
 // RemoveUserCacheInfo remove user cache info

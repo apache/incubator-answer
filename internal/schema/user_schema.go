@@ -69,6 +69,8 @@ type UserLoginResp struct {
 	Status string `json:"status"`
 	// user have password
 	HavePassword bool `json:"have_password"`
+	// visit token
+	VisitToken string `json:"visit_token"`
 }
 
 func (r *UserLoginResp) ConvertFromUserEntity(userInfo *entity.User) {
