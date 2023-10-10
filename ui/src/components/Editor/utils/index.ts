@@ -127,7 +127,8 @@ export const useEditor = ({
   onFocus,
   onBlur,
 }) => {
-  const [editor, setEditor] = useState<Editor>();
+  const [editor, setEditor] = useState<CodeMirror.Editor | null>(null);
+  const [value, setValue] = useState<string>('');
 
   const onEnter = (cm) => {
     const cursor = cm.getCursor();
@@ -168,13 +169,13 @@ export const useEditor = ({
       placeholder,
       focus: autoFocus,
     });
-    setEditor(cm);
 
+    setEditor(cm);
     createEditorUtils(codeMirror, cm);
 
     cm.on('change', (e) => {
       const newValue = e.getValue();
-      onChange?.(newValue);
+      setValue(newValue);
     });
 
     cm.on('focus', () => {
@@ -187,7 +188,12 @@ export const useEditor = ({
     cm.addKeyMap({
       Enter: onEnter,
     });
+    return cm;
   };
+
+  useEffect(() => {
+    onChange?.(value);
+  }, [value]);
 
   useEffect(() => {
     if (!(editorRef.current instanceof HTMLElement)) {
