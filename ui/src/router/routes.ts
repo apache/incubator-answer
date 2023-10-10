@@ -394,6 +394,10 @@ const routes: RouteNode[] = [
         path: '50x',
         page: 'pages/50X',
       },
+      {
+        path: '403',
+        page: 'pages/403',
+      },
     ],
   },
   {
