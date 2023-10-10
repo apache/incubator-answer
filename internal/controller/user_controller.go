@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
 	"github.com/answerdev/answer/internal/base/reason"
@@ -18,6 +19,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
+	"net/url"
 )
 
 // UserController user controller
@@ -73,6 +75,7 @@ func (uc *UserController) GetUserInfoByUserID(ctx *gin.Context) {
 	}
 
 	resp, err := uc.userService.GetUserInfoByUserID(ctx, token, userInfo.UserID)
+	uc.setVisitCookies(ctx, userInfo.VisitToken)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -136,6 +139,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 	if !isAdmin {
 		uc.actionService.ActionRecordDel(ctx, entity.CaptchaActionPassword, ctx.ClientIP())
 	}
+	uc.setVisitCookies(ctx, resp.VisitToken)
 	handler.HandleResponse(ctx, nil, resp)
 }
 
@@ -672,4 +676,23 @@ func (uc *UserController) SearchUserListByName(ctx *gin.Context) {
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	resp, err := uc.userService.SearchUserListByName(ctx, req)
 	handler.HandleResponse(ctx, err, resp)
+}
+
+func (uc *UserController) setVisitCookies(ctx *gin.Context, visitToken string) {
+	cookie, err := ctx.Cookie(constant.UserVisitCookiesCacheKey)
+	if err == nil && len(cookie) > 0 {
+		return
+	}
+	general, err := uc.siteInfoCommonService.GetSiteGeneral(ctx)
+	if err != nil {
+		log.Errorf("get site general error: %v", err)
+		return
+	}
+	parsedURL, err := url.Parse(general.SiteUrl)
+	if err != nil {
+		log.Errorf("parse url error: %v", err)
+		return
+	}
+	ctx.SetCookie(constant.UserVisitCookiesCacheKey,
+		visitToken, constant.UserVisitCacheTime, "/", parsedURL.Host, true, true)
 }

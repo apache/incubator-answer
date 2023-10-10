@@ -7,6 +7,9 @@ const (
 	UserStatusChangedCacheTime                 = 7 * 24 * time.Hour
 	UserTokenCacheKey                          = "answer:user:token:"
 	UserTokenCacheTime                         = 7 * 24 * time.Hour
+	UserVisitTokenCacheKey                     = "answer:user:visit:"
+	UserVisitCacheTime                         = 7 * 24 * 60 * 60
+	UserVisitCookiesCacheKey                   = "visit"
 	AdminTokenCacheKey                         = "answer:admin:token:"
 	AdminTokenCacheTime                        = 7 * 24 * time.Hour
 	UserTokenMappingCacheKey                   = "answer:user-token:mapping:"

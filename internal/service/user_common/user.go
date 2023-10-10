@@ -195,7 +195,7 @@ func (us *UserCommon) CacheLoginUserInfo(ctx context.Context, userID string, use
 		ExternalID:  externalID,
 	}
 
-	accessToken, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
+	accessToken, _, err = us.authService.SetUserCacheInfo(ctx, userCacheInfo)
 	if err != nil {
 		return "", nil, err
 	}
