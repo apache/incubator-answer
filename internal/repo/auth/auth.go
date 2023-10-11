@@ -86,6 +86,15 @@ func (ar *authRepo) RemoveUserCacheInfo(ctx context.Context, accessToken string)
 	return nil
 }
 
+// RemoveUserVisitCacheInfo remove visit token cache
+func (ar *authRepo) RemoveUserVisitCacheInfo(ctx context.Context, visitToken string) (err error) {
+	err = ar.data.Cache.Del(ctx, constant.UserVisitTokenCacheKey+visitToken)
+	if err != nil {
+		return errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+	}
+	return nil
+}
+
 // SetUserStatus set user status
 func (ar *authRepo) SetUserStatus(ctx context.Context, userID string, userInfo *entity.UserCacheInfo) (err error) {
 	userInfoCache, err := json.Marshal(userInfo)
