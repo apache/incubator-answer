@@ -14,6 +14,7 @@ type AuthRepo interface {
 	SetUserCacheInfo(ctx context.Context, accessToken, visitToken string, userInfo *entity.UserCacheInfo) error
 	GetUserVisitCacheInfo(ctx context.Context, visitToken string) (accessToken string, err error)
 	RemoveUserCacheInfo(ctx context.Context, accessToken string) (err error)
+	RemoveUserVisitCacheInfo(ctx context.Context, visitToken string) (err error)
 	SetUserStatus(ctx context.Context, userID string, userInfo *entity.UserCacheInfo) (err error)
 	GetUserStatus(ctx context.Context, userID string) (userInfo *entity.UserCacheInfo, err error)
 	RemoveUserStatus(ctx context.Context, userID string) (err error)
@@ -94,6 +95,13 @@ func (as *AuthService) SetUserStatus(ctx context.Context, userInfo *entity.UserC
 
 func (as *AuthService) RemoveUserCacheInfo(ctx context.Context, accessToken string) (err error) {
 	return as.authRepo.RemoveUserCacheInfo(ctx, accessToken)
+}
+
+func (as *AuthService) RemoveUserVisitCacheInfo(ctx context.Context, visitToken string) (err error) {
+	if len(visitToken) > 0 {
+		return as.authRepo.RemoveUserVisitCacheInfo(ctx, visitToken)
+	}
+	return nil
 }
 
 // AddUserTokenMapping add user token mapping

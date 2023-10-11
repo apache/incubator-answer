@@ -216,6 +216,8 @@ func (uc *UserController) UserLogout(ctx *gin.Context) {
 	}
 	_ = uc.authService.RemoveUserCacheInfo(ctx, accessToken)
 	_ = uc.authService.RemoveAdminUserCacheInfo(ctx, accessToken)
+	visitToken, _ := ctx.Cookie(constant.UserVisitCookiesCacheKey)
+	_ = uc.authService.RemoveUserVisitCacheInfo(ctx, visitToken)
 	handler.HandleResponse(ctx, nil, nil)
 }
 
