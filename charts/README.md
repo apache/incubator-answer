@@ -30,7 +30,7 @@ The following table lists the configurable parameters of the answer chart and th
 | `podSecurityContext` | Security context for the answer pod | `{}` refer to [Default Security Contexts](#default-security-contexts) |
 | `securityContext` | Security context for the answer container | `{}` refer to [Default Security Contexts](#default-security-contexts) |
 | `service.type` | The type of service to be used | `ClusterIP` |
-| `service.port` | The port that the service should listen on for requests. Also used as the container port. | `80` |
+| `service.port` | The port that the service should listen on for requests. Also used as the container port. | `5370` |
 | `ingress.enabled` | Enable or disable ingress. | `false` |
 | `resources` | CPU/memory resource requests/limits | `{}` |
 | `autoscaling.enabled` | Enable or disable pod autoscaling. If enabled, replicas are disabled. | `false` |

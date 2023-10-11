@@ -1,6 +1,6 @@
 server:
   http:
-    addr: 0.0.0.0:80
+    addr: 0.0.0.0:5370
 data:
   database:
     driver: "sqlite3"
@@ -13,7 +13,7 @@ swaggerui:
   show: true
   protocol: http
   host: 127.0.0.1
-  address: ':80'
+  address: ':5380'
 service_config:
   secret_key: "answer"
   web_host: "http://127.0.0.1:9080"

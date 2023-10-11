@@ -3,7 +3,7 @@ services:
   answer:
     image: answerdev/answer
     ports:
-      - '9080:80'
+      - '9080:5370'
     restart: on-failure
     volumes:
       - answer-data:/data

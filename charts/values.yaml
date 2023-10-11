@@ -32,7 +32,7 @@ env:
   # - name: SITE_NAME
   #   value: "MyAnswer"
   # - name: SITE_URL
-  #   value: "http://localhost:80"
+  #   value: "http://localhost:5370"
   # - name: CONTACT_EMAIL
   #   value: "support@mydomain.com"
   # - name: ADMIN_NAME
@@ -103,7 +103,7 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  port: 80
+  port: 5370
 
 ingress:
   enabled: false
