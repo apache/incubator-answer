@@ -23,7 +23,7 @@ To learn more about the project, visit [answer.dev](https://answer.dev).
 ### Running with docker
 
 ```bash
-docker run -d -p 9080:80 -v answer-data:/data --name answer answerdev/answer:latest
+docker run -d -p 9080:5370 -v answer-data:/data --name answer answerdev/answer:latest
 ```
 
 For more information, see [Installation](https://answer.dev/docs/installation)

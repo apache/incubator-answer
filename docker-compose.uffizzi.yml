@@ -4,7 +4,7 @@ version: "3.9"
 x-uffizzi:
   ingress:
     service: answer
-    port: 80
+    port: 5370
 
 services:
 
