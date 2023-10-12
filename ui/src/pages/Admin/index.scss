@@ -2,3 +2,16 @@
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
 }
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #0834fc;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+  height: 100px;
+}
+::-webkit-scrollbar {
+  width: 25px;
+}
