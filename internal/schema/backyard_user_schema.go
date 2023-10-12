@@ -92,7 +92,7 @@ type UpdateUserRoleReq struct {
 type AddUserReq struct {
 	DisplayName string `validate:"required,gte=4,lte=30" json:"display_name"`
 	Email       string `validate:"required,email,gt=0,lte=500" json:"email"`
-	Password    string `validate:"required,gte=8,lte=32" json:"password"`
+	Password    string `validate:"required,gte=4,lte=64" json:"password"`
 	LoginUserID string `json:"-"`
 }
 
@@ -162,7 +162,7 @@ func (req *AddUsersReq) ParseUsers(ctx context.Context) (errFields []*validator.
 // UpdateUserPasswordReq update user password request
 type UpdateUserPasswordReq struct {
 	UserID      string `validate:"required" json:"user_id"`
-	Password    string `validate:"required,gte=8,lte=32" json:"password"`
+	Password    string `validate:"required,gte=4,lte=32" json:"password"`
 	LoginUserID string `json:"-"`
 }
 

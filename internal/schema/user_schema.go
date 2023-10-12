@@ -163,7 +163,7 @@ var UserStatusShowMsg = map[int]string{
 // UserEmailLoginReq user email login request
 type UserEmailLoginReq struct {
 	Email       string `validate:"required,email,gt=0,lte=500" json:"e_mail"`
-	Pass        string `validate:"required,gte=8,lte=32" json:"pass"`
+	Pass        string `validate:"required,gte=4,lte=64" json:"pass"`
 	CaptchaID   string `json:"captcha_id"`
 	CaptchaCode string `json:"captcha_code"`
 }
@@ -172,7 +172,7 @@ type UserEmailLoginReq struct {
 type UserRegisterReq struct {
 	Name        string `validate:"required,gt=3,lte=30" json:"name"`
 	Email       string `validate:"required,email,gt=0,lte=500" json:"e_mail" `
-	Pass        string `validate:"required,gte=8,lte=32" json:"pass"`
+	Pass        string `validate:"required,gte=4,lte=64" json:"pass"`
 	CaptchaID   string `json:"captcha_id"`
 	CaptchaCode string `json:"captcha_code"`
 	IP          string `json:"-" `
@@ -190,8 +190,8 @@ func (u *UserRegisterReq) Check() (errFields []*validator.FormErrorField, err er
 }
 
 type UserModifyPasswordReq struct {
-	OldPass     string `validate:"omitempty,gte=8,lte=32" json:"old_pass"`
-	Pass        string `validate:"required,gte=8,lte=32" json:"pass"`
+	OldPass     string `validate:"omitempty,gte=4,lte=32" json:"old_pass"`
+	Pass        string `validate:"required,gte=4,lte=32" json:"pass"`
 	CaptchaID   string `validate:"omitempty,gt=0,lte=500" json:"captcha_id"`
 	CaptchaCode string `validate:"omitempty,gt=0,lte=500" json:"captcha_code"`
 	UserID      string `json:"-"`
@@ -329,7 +329,7 @@ type GetOtherUserInfoResp struct {
 type UserChangeEmailSendCodeReq struct {
 	UserVerifyEmailSendReq
 	Email  string `validate:"required,email,gt=0,lte=500" json:"e_mail"`
-	Pass   string `validate:"omitempty,gte=8,lte=32" json:"pass"`
+	Pass   string `validate:"omitempty,gte=4,lte=32" json:"pass"`
 	UserID string `json:"-"`
 }
 

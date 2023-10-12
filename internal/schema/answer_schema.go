@@ -21,7 +21,7 @@ const (
 
 type AnswerAddReq struct {
 	QuestionID  string `json:"question_id"`
-	Content     string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
+	Content     string `validate:"required,notblank,gte=4,lte=60000" json:"content"`
 	HTML        string `json:"-"`
 	UserID      string `json:"-"`
 	CanEdit     bool   `json:"-"`
@@ -39,7 +39,7 @@ type AnswerUpdateReq struct {
 	ID           string `json:"id"`
 	QuestionID   string `json:"question_id"`
 	Title        string `json:"title"`
-	Content      string `validate:"required,notblank,gte=6,lte=65535" json:"content"`
+	Content      string `validate:"required,notblank,gte=4,lte=60000" json:"content"`
 	EditSummary  string `validate:"omitempty" json:"edit_summary"`
 	HTML         string `json:"-"`
 	UserID       string `json:"-"`
