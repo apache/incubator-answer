@@ -126,7 +126,7 @@ const Users: FC = () => {
     const { user_id, status, role_id, username } = user;
     if (username === currentUser.username) {
       Toast.onShow({
-        msg: t('forbidden_operate_self', { keyPrefix: 'toast' }),
+        msg: t('can_not_edit_self', { keyPrefix: 'toast' }),
         variant: 'warning',
       });
       return;

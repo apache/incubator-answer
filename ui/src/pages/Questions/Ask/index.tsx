@@ -390,7 +390,7 @@ const Ask = () => {
               {bool && <SearchQuestion similarQuestions={similarQuestions} />}
             </Form.Group>
             <Form.Group controlId="body">
-              <Form.Label>{t('form.fields.body.label')}</Form.Label>
+              <Form.Label>{t('form.fields.content.label')}</Form.Label>
               <Form.Control
                 defaultValue={formData.content.value}
                 isInvalid={formData.content.isInvalid}

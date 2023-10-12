@@ -282,8 +282,7 @@ backend:
       name:
         other: Rude or abusive
       desc:
-        other: A reasonable person would find this content inappropriate for respectful
-          discourse.
+        other: A reasonable person would find this content inappropriate for respectful discourse.
     a_duplicate:
       name:
         other: A duplicate
@@ -375,21 +374,21 @@ backend:
   notification:
     action:
       update_question:
-        other: updated question
+        other: Updated question
       answer_the_question:
-        other: answered question
+        other: Answered question
       update_answer:
-        other: updated answer
+        other: Updated answer
       accept_answer:
-        other: accepted answer
+        other: Accepted answer
       comment_question:
-        other: commented question
+        other: Commented question
       comment_answer:
-        other: commented answer
+        other: Commented answer
       reply_to_you:
-        other: replied to you
+        other: Replied to you
       mention_you:
-        other: mentioned you
+        other: Mentioned you
       your_question_is_closed:
         other: Your question has been closed
       your_question_was_deleted:
@@ -399,17 +398,17 @@ backend:
       your_comment_was_deleted:
         other: Your comment has been deleted
       up_voted_question:
-        other: upvoted question
+        other: Upvoted question
       down_voted_question:
-        other: downvoted question
+        other: Downvoted question
       up_voted_answer:
-        other: upvoted answer
+        other: Upvoted answer
       down_voted_answer:
-        other: downvoted answer
+        other: Downvoted answer
       up_voted_comment:
-        other: upvoted comment
+        other: Upvoted comment
       invited_you_to_answer:
-        other: invited you to answer
+        other: Invited you to answer
   email_tpl:
     change_email:
       title:
@@ -789,10 +788,10 @@ ui:
           msg:
             empty: Title cannot be empty.
             range: Title up to 150 characters
-        body:
-          label: Body
+        content:
+          label: Content
           msg:
-            empty: Body cannot be empty.
+            empty: Content cannot be empty.
         tags:
           label: Tags
           msg:
@@ -1021,7 +1020,7 @@ ui:
     update: update success
     update_password: Password changed successfully.
     flag_success: Thanks for flagging.
-    forbidden_operate_self: Forbidden to operate on yourself
+    can_not_edit_self: You can't edit yourself!
     review: Your revision will show after review.
     sent_success: Sent successfully
   related_question:
@@ -1473,9 +1472,9 @@ ui:
       name: Name
       email: Email
       reputation: Reputation
-      created_at: Created Time
-      delete_at: Deleted Time
-      suspend_at: Suspended Time
+      created_at: Created at
+      delete_at: Deleted at
+      suspend_at: Suspended at
       status: Status
       role: Role
       action: Action
@@ -1752,24 +1751,24 @@ ui:
     edit_tag: Edit tag
     empty: No review tasks left.
   timeline:
-    undeleted: undeleted
-    deleted: deleted
-    downvote: downvote
-    upvote: upvote
-    accept: accept
-    cancelled: cancelled
-    commented: commented
-    rollback: rollback
-    edited: edited
-    answered: answered
-    asked: asked
-    closed: closed
-    reopened: reopened
-    created: created
-    pin: pinned
-    unpin: unpinned
-    show: listed
-    hide: unlisted
+    undeleted: Undeleted
+    deleted: Deleted
+    downvote: Downvote
+    upvote: Upvote
+    accept: Accept
+    cancelled: Cancelled
+    commented: Commented
+    rollback: Rollback
+    edited: Edited
+    answered: Answered
+    asked: Asked
+    closed: Closed
+    reopened: Reopened
+    created: Created
+    pin: Pinned
+    unpin: Unpinned
+    show: Listed
+    hide: Unlisted
     title: "History for"
     tag_title: "Timeline for"
     show_votes: "Show votes"
