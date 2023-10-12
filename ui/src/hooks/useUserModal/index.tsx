@@ -38,7 +38,7 @@ const useAddUserModal = (props: IProps = {}) => {
       'ui:widget': 'textarea',
       'ui:options': {
         rows: 7,
-        placeholder: 'John Smith, john@example.com, BUSYopr2\nAlice, alice@example.com, fpDntV8q',
+        placeholder: `'John Smith, john@example.com, BUSYopr2\nAlice, alice@example.com, fpDntV8q'`,
         className: 'small',
       },
     },
