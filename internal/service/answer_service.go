@@ -502,6 +502,7 @@ func (as *AnswerService) AdminSetAnswerStatus(ctx context.Context, req *schema.A
 		//}
 		as.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           req.UserID,
+			TriggerUserID:    converter.StringToInt64(req.UserID),
 			ObjectID:         answerInfo.ID,
 			OriginalObjectID: answerInfo.ID,
 			ActivityTypeKey:  constant.ActAnswerDeleted,

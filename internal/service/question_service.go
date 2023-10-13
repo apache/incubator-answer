@@ -1281,6 +1281,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, req *sche
 		//}
 		qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           questionInfo.UserID,
+			TriggerUserID:    converter.StringToInt64(req.UserID),
 			ObjectID:         questionInfo.ID,
 			OriginalObjectID: questionInfo.ID,
 			ActivityTypeKey:  constant.ActQuestionDeleted,
@@ -1290,6 +1291,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, req *sche
 	if setStatus == entity.QuestionStatusAvailable && questionInfo.Status == entity.QuestionStatusClosed {
 		qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           questionInfo.UserID,
+			TriggerUserID:    converter.StringToInt64(req.UserID),
 			ObjectID:         questionInfo.ID,
 			OriginalObjectID: questionInfo.ID,
 			ActivityTypeKey:  constant.ActQuestionReopened,
@@ -1298,6 +1300,7 @@ func (qs *QuestionService) AdminSetQuestionStatus(ctx context.Context, req *sche
 	if setStatus == entity.QuestionStatusClosed && questionInfo.Status != entity.QuestionStatusClosed {
 		qs.activityQueueService.Send(ctx, &schema.ActivityMsg{
 			UserID:           questionInfo.UserID,
+			TriggerUserID:    converter.StringToInt64(req.UserID),
 			ObjectID:         questionInfo.ID,
 			OriginalObjectID: questionInfo.ID,
 			ActivityTypeKey:  constant.ActQuestionClosed,
