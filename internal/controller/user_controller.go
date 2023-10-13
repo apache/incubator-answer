@@ -75,7 +75,7 @@ func (uc *UserController) GetUserInfoByUserID(ctx *gin.Context) {
 	}
 
 	resp, err := uc.userService.GetUserInfoByUserID(ctx, token, userInfo.UserID)
-	uc.setVisitCookies(ctx, userInfo.VisitToken)
+	uc.setVisitCookies(ctx, userInfo.VisitToken, false)
 	handler.HandleResponse(ctx, err, resp)
 }
 
@@ -139,7 +139,7 @@ func (uc *UserController) UserEmailLogin(ctx *gin.Context) {
 	if !isAdmin {
 		uc.actionService.ActionRecordDel(ctx, entity.CaptchaActionPassword, ctx.ClientIP())
 	}
-	uc.setVisitCookies(ctx, resp.VisitToken)
+	uc.setVisitCookies(ctx, resp.VisitToken, true)
 	handler.HandleResponse(ctx, nil, resp)
 }
 
@@ -680,9 +680,9 @@ func (uc *UserController) SearchUserListByName(ctx *gin.Context) {
 	handler.HandleResponse(ctx, err, resp)
 }
 
-func (uc *UserController) setVisitCookies(ctx *gin.Context, visitToken string) {
+func (uc *UserController) setVisitCookies(ctx *gin.Context, visitToken string, force bool) {
 	cookie, err := ctx.Cookie(constant.UserVisitCookiesCacheKey)
-	if err == nil && len(cookie) > 0 {
+	if err == nil && len(cookie) > 0 && !force {
 		return
 	}
 	general, err := uc.siteInfoCommonService.GetSiteGeneral(ctx)
