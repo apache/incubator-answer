@@ -1240,7 +1240,7 @@ ui:
       msg: Password cannot be empty.
     db_host:
       label: Database host
-      placeholder: "db:3306"
+      placeholder: "127.0.0.1:3306"
       msg: Database host cannot be empty.
     db_name:
       label: Database name

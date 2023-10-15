@@ -55,7 +55,7 @@ const Index: FC = () => {
       errorMsg: '',
     },
     db_host: {
-      value: 'db:3306',
+      value: '127.0.0.1:3306',
       isInvalid: false,
       errorMsg: '',
     },
