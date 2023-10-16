@@ -11,6 +11,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/comment"
 	"github.com/answerdev/answer/internal/repo/config"
 	"github.com/answerdev/answer/internal/repo/export"
+	"github.com/answerdev/answer/internal/repo/limit"
 	"github.com/answerdev/answer/internal/repo/meta"
 	"github.com/answerdev/answer/internal/repo/notification"
 	"github.com/answerdev/answer/internal/repo/plugin_config"
@@ -75,4 +76,5 @@ var ProviderSetRepo = wire.NewSet(
 	user_external_login.NewUserExternalLoginRepo,
 	plugin_config.NewPluginConfigRepo,
 	user_notification_config.NewUserNotificationConfigRepo,
+	limit.NewRateLimitRepo,
 )

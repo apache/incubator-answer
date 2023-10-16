@@ -26,4 +26,6 @@ const (
 	NewQuestionNotificationLimitCacheKeyPrefix = "answer:new-question-notification-limit:"
 	NewQuestionNotificationLimitCacheTime      = 7 * 24 * time.Hour
 	NewQuestionNotificationLimitMax            = 50
+	RateLimitCacheKeyPrefix                    = "answer:rate-limit:"
+	RateLimitCacheTime                         = 5 * time.Minute
 )

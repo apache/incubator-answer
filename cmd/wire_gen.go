@@ -25,6 +25,7 @@ import (
 	"github.com/answerdev/answer/internal/repo/comment"
 	"github.com/answerdev/answer/internal/repo/config"
 	"github.com/answerdev/answer/internal/repo/export"
+	"github.com/answerdev/answer/internal/repo/limit"
 	"github.com/answerdev/answer/internal/repo/meta"
 	notification2 "github.com/answerdev/answer/internal/repo/notification"
 	"github.com/answerdev/answer/internal/repo/plugin_config"
@@ -154,7 +155,9 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	rolePowerRelRepo := role.NewRolePowerRelRepo(dataData)
 	rolePowerRelService := role2.NewRolePowerRelService(rolePowerRelRepo, userRoleRelService)
 	rankService := rank2.NewRankService(userCommon, userRankRepo, objService, userRoleRelService, rolePowerRelService, configService)
-	commentController := controller.NewCommentController(commentService, rankService, captchaService)
+	limitRepo := limit.NewRateLimitRepo(dataData)
+	rateLimitMiddleware := middleware.NewRateLimitMiddleware(limitRepo)
+	commentController := controller.NewCommentController(commentService, rankService, captchaService, rateLimitMiddleware)
 	reportRepo := report.NewReportRepo(dataData, uniqueIDRepo)
 	reportService := report2.NewReportService(reportRepo, objService)
 	reportController := controller.NewReportController(reportService, rankService, captchaService)
@@ -181,8 +184,8 @@ func initApplication(debug bool, serverConf *conf.Server, dbConf *data.Database,
 	externalNotificationService := notification.NewExternalNotificationService(dataData, userNotificationConfigRepo, followRepo, emailService, userRepo, externalNotificationQueueService)
 	questionService := service.NewQuestionService(questionRepo, tagCommonService, questionCommon, userCommon, userRepo, revisionService, metaService, collectionCommon, answerActivityService, emailService, notificationQueueService, externalNotificationQueueService, activityQueueService, siteInfoCommonService, externalNotificationService)
 	answerService := service.NewAnswerService(answerRepo, questionRepo, questionCommon, userCommon, collectionCommon, userRepo, revisionService, answerActivityService, answerCommon, voteRepo, emailService, userRoleRelService, notificationQueueService, externalNotificationQueueService, activityQueueService)
-	questionController := controller.NewQuestionController(questionService, answerService, rankService, siteInfoCommonService, captchaService)
-	answerController := controller.NewAnswerController(answerService, rankService, captchaService)
+	questionController := controller.NewQuestionController(questionService, answerService, rankService, siteInfoCommonService, captchaService, rateLimitMiddleware)
+	answerController := controller.NewAnswerController(answerService, rankService, captchaService, rateLimitMiddleware)
 	searchParser := search_parser.NewSearchParser(tagCommonService, userCommon)
 	searchRepo := search_common.NewSearchRepo(dataData, uniqueIDRepo, userCommon, tagCommonService)
 	searchService := service.NewSearchService(searchParser, searchRepo)

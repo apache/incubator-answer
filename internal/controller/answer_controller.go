@@ -21,9 +21,10 @@ import (
 
 // AnswerController answer controller
 type AnswerController struct {
-	answerService *service.AnswerService
-	rankService   *rank.RankService
-	actionService *action.CaptchaService
+	answerService       *service.AnswerService
+	rankService         *rank.RankService
+	actionService       *action.CaptchaService
+	rateLimitMiddleware *middleware.RateLimitMiddleware
 }
 
 // NewAnswerController new controller
@@ -31,11 +32,13 @@ func NewAnswerController(
 	answerService *service.AnswerService,
 	rankService *rank.RankService,
 	actionService *action.CaptchaService,
+	rateLimitMiddleware *middleware.RateLimitMiddleware,
 ) *AnswerController {
 	return &AnswerController{
-		answerService: answerService,
-		rankService:   rankService,
-		actionService: actionService,
+		answerService:       answerService,
+		rankService:         rankService,
+		actionService:       actionService,
+		rateLimitMiddleware: rateLimitMiddleware,
 	}
 }
 
@@ -166,6 +169,9 @@ func (ac *AnswerController) Get(ctx *gin.Context) {
 func (ac *AnswerController) Add(ctx *gin.Context) {
 	req := &schema.AnswerAddReq{}
 	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	if ac.rateLimitMiddleware.DuplicateRequestRejection(ctx, req) {
 		return
 	}
 	req.QuestionID = uid.DeShortID(req.QuestionID)
