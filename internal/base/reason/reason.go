@@ -13,6 +13,8 @@ const (
 	DatabaseError = "base.database_error"
 	// ForbiddenError forbidden error
 	ForbiddenError = "base.forbidden_error"
+	// DuplicateRequestError duplicate request error
+	DuplicateRequestError = "base.duplicate_request_error"
 )
 
 const (

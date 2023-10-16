@@ -22,11 +22,12 @@ import (
 
 // QuestionController question controller
 type QuestionController struct {
-	questionService *service.QuestionService
-	answerService   *service.AnswerService
-	rankService     *rank.RankService
-	siteInfoService siteinfo_common.SiteInfoCommonService
-	actionService   *action.CaptchaService
+	questionService     *service.QuestionService
+	answerService       *service.AnswerService
+	rankService         *rank.RankService
+	siteInfoService     siteinfo_common.SiteInfoCommonService
+	actionService       *action.CaptchaService
+	rateLimitMiddleware *middleware.RateLimitMiddleware
 }
 
 // NewQuestionController new controller
@@ -36,13 +37,15 @@ func NewQuestionController(
 	rankService *rank.RankService,
 	siteInfoService siteinfo_common.SiteInfoCommonService,
 	actionService *action.CaptchaService,
+	rateLimitMiddleware *middleware.RateLimitMiddleware,
 ) *QuestionController {
 	return &QuestionController{
-		questionService: questionService,
-		answerService:   answerService,
-		rankService:     rankService,
-		siteInfoService: siteInfoService,
-		actionService:   actionService,
+		questionService:     questionService,
+		answerService:       answerService,
+		rankService:         rankService,
+		siteInfoService:     siteInfoService,
+		actionService:       actionService,
+		rateLimitMiddleware: rateLimitMiddleware,
 	}
 }
 
@@ -330,6 +333,9 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	req := &schema.QuestionAdd{}
 	errFields := handler.BindAndCheckReturnErr(ctx, req)
 	if ctx.IsAborted() {
+		return
+	}
+	if qc.rateLimitMiddleware.DuplicateRequestRejection(ctx, req) {
 		return
 	}
 

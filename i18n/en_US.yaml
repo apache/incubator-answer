@@ -14,6 +14,8 @@ backend:
       other: Data server error.
     forbidden_error:
       other: Forbidden.
+    duplicate_request_error:
+      other: Duplicate submission.
   action:
     report:
       other: Flag

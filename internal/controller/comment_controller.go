@@ -19,9 +19,10 @@ import (
 
 // CommentController comment controller
 type CommentController struct {
-	commentService *comment.CommentService
-	rankService    *rank.RankService
-	actionService  *action.CaptchaService
+	commentService      *comment.CommentService
+	rankService         *rank.RankService
+	actionService       *action.CaptchaService
+	rateLimitMiddleware *middleware.RateLimitMiddleware
 }
 
 // NewCommentController new controller
@@ -29,11 +30,13 @@ func NewCommentController(
 	commentService *comment.CommentService,
 	rankService *rank.RankService,
 	actionService *action.CaptchaService,
+	rateLimitMiddleware *middleware.RateLimitMiddleware,
 ) *CommentController {
 	return &CommentController{
-		commentService: commentService,
-		rankService:    rankService,
-		actionService:  actionService,
+		commentService:      commentService,
+		rankService:         rankService,
+		actionService:       actionService,
+		rateLimitMiddleware: rateLimitMiddleware,
 	}
 }
 
@@ -50,6 +53,9 @@ func NewCommentController(
 func (cc *CommentController) AddComment(ctx *gin.Context) {
 	req := &schema.AddCommentReq{}
 	if handler.BindAndCheck(ctx, req) {
+		return
+	}
+	if cc.rateLimitMiddleware.DuplicateRequestRejection(ctx, req) {
 		return
 	}
 	req.ObjectID = uid.DeShortID(req.ObjectID)
