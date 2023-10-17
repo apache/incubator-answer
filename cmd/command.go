@@ -65,7 +65,7 @@ To run answer, use:
 		Run: func(_ *cobra.Command, _ []string) {
 			cli.FormatAllPath(dataDirPath)
 			fmt.Println("config file path: ", cli.GetConfigFilePath())
-			fmt.Println("Answer is string..........................")
+			fmt.Println("Answer is starting..........................")
 			runApp()
 		},
 	}
