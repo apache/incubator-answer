@@ -39,15 +39,6 @@ func (pc *PluginController) GetAllPluginStatus(ctx *gin.Context) {
 		})
 		return nil
 	})
-
-	resp = append(resp, &schema.GetAllPluginStatusResp{
-		SlugName: "chart_editor",
-		Enabled:  true,
-	})
-	resp = append(resp, &schema.GetAllPluginStatusResp{
-		SlugName: "formula_editor",
-		Enabled:  true,
-	})
 	handler.HandleResponse(ctx, nil, resp)
 }
 
