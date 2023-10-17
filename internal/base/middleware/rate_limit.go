@@ -25,20 +25,29 @@ func NewRateLimitMiddleware(limitRepo *limit.LimitRepo) *RateLimitMiddleware {
 
 // DuplicateRequestRejection detects and rejects duplicate requests
 // It only works for the requests that post content. Such as add question, add answer, comment etc.
-func (rm *RateLimitMiddleware) DuplicateRequestRejection(ctx *gin.Context, req any) bool {
+func (rm *RateLimitMiddleware) DuplicateRequestRejection(ctx *gin.Context, req any) (reject bool, key string) {
 	userID := GetLoginUserIDFromContext(ctx)
 	fullPath := ctx.FullPath()
 	reqJson, _ := json.Marshal(req)
-	key := encryption.MD5(fmt.Sprintf("%s:%s:%s", userID, fullPath, string(reqJson)))
-	reject, err := rm.limitRepo.CheckAndRecord(ctx, key)
+	key = encryption.MD5(fmt.Sprintf("%s:%s:%s", userID, fullPath, string(reqJson)))
+	var err error
+	reject, err = rm.limitRepo.CheckAndRecord(ctx, key)
 	if err != nil {
 		log.Errorf("check and record rate limit error: %s", err.Error())
-		return false
+		return false, key
 	}
 	if !reject {
-		return false
+		return false, key
 	}
 	log.Debugf("duplicate request: [%s] %s", fullPath, string(reqJson))
 	handler.HandleResponse(ctx, errors.BadRequest(reason.DuplicateRequestError), nil)
-	return true
+	return true, key
+}
+
+// DuplicateRequestClear clear duplicate request record
+func (rm *RateLimitMiddleware) DuplicateRequestClear(ctx *gin.Context, key string) {
+	err := rm.limitRepo.ClearRecord(ctx, key)
+	if err != nil {
+		log.Errorf("clear rate limit error: %s", err.Error())
+	}
 }
