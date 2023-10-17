@@ -29,7 +29,9 @@ const Index: FC<Props> = ({
   const pluginSlice: Plugin[] = [];
   const plugins = PluginKit.getPlugins().filter((plugin) => plugin.activated);
 
+  console.log('default list', plugins);
   plugins.forEach((plugin) => {
+    console.log('plugininfo ====', plugin);
     if (type && slug_name) {
       if (plugin.info.slug_name === slug_name && plugin.info.type === type) {
         pluginSlice.push(plugin);
@@ -49,7 +51,7 @@ const Index: FC<Props> = ({
    * TODO: Rendering control for non-builtin plug-ins
    * ps: Logic such as version compatibility determination can be placed here
    */
-
+  console.log('plugininfo ====', 111);
   if (pluginSlice.length === 0) {
     if (type === 'editor') {
       return <div className={className}>{children}</div>;
