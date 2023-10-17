@@ -71,7 +71,9 @@ const Index: FC<Props> = ({
               }}
               id="ok_button"
               disabled={confirmBtnDisabled}>
-              {confirmText || t('btns.confirm')}
+              {confirmText === 'OK'
+                ? t('btns.ok')
+                : confirmText || t('btns.confirm')}
             </Button>
           )}
         </Modal.Footer>

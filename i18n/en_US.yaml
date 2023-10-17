@@ -1128,6 +1128,7 @@ ui:
     unsuspend: Unsuspend
     close: Close
     reopen: Reopen
+    ok: OK
   search:
     title: Search Results
     keywords: Keywords
