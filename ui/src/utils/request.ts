@@ -117,6 +117,8 @@ class Request {
             // default error msg will show modal
             Modal.confirm({
               content: msg,
+              showCancel: false,
+              confirmText: 'OK',
             });
             return Promise.reject(false);
           }
