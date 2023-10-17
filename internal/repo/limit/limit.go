@@ -2,10 +2,12 @@ package limit
 
 import (
 	"context"
+	"fmt"
 	"github.com/answerdev/answer/internal/base/constant"
 	"github.com/answerdev/answer/internal/base/data"
 	"github.com/answerdev/answer/internal/base/reason"
 	"github.com/segmentfault/pacman/errors"
+	"time"
 )
 
 // LimitRepo auth repository
@@ -29,9 +31,15 @@ func (lr *LimitRepo) CheckAndRecord(ctx context.Context, key string) (limit bool
 	if exist {
 		return true, nil
 	}
-	err = lr.data.Cache.SetString(ctx, constant.RateLimitCacheKeyPrefix+key, "1", constant.RateLimitCacheTime)
+	err = lr.data.Cache.SetString(ctx, constant.RateLimitCacheKeyPrefix+key,
+		fmt.Sprintf("%d", time.Now().Unix()), constant.RateLimitCacheTime)
 	if err != nil {
 		return false, errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
 	return false, nil
+}
+
+// ClearRecord clear
+func (lr *LimitRepo) ClearRecord(ctx context.Context, key string) error {
+	return lr.data.Cache.Del(ctx, constant.RateLimitCacheKeyPrefix+key)
 }

@@ -18,6 +18,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
+	"net/http"
 )
 
 // QuestionController question controller
@@ -335,9 +336,16 @@ func (qc *QuestionController) AddQuestion(ctx *gin.Context) {
 	if ctx.IsAborted() {
 		return
 	}
-	if qc.rateLimitMiddleware.DuplicateRequestRejection(ctx, req) {
+	reject, rejectKey := qc.rateLimitMiddleware.DuplicateRequestRejection(ctx, req)
+	if reject {
 		return
 	}
+	defer func() {
+		// If status is not 200 means that the bad request has been returned, so the record should be cleared
+		if ctx.Writer.Status() != http.StatusOK {
+			qc.rateLimitMiddleware.DuplicateRequestClear(ctx, rejectKey)
+		}
+	}()
 
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 	canList, requireRanks, err := qc.rankService.CheckOperationPermissionsForRanks(ctx, req.UserID, []string{

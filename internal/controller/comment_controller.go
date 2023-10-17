@@ -15,6 +15,7 @@ import (
 	"github.com/answerdev/answer/pkg/uid"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/errors"
+	"net/http"
 )
 
 // CommentController comment controller
@@ -55,9 +56,16 @@ func (cc *CommentController) AddComment(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	if cc.rateLimitMiddleware.DuplicateRequestRejection(ctx, req) {
+	reject, rejectKey := cc.rateLimitMiddleware.DuplicateRequestRejection(ctx, req)
+	if reject {
 		return
 	}
+	defer func() {
+		// If status is not 200 means that the bad request has been returned, so the record should be cleared
+		if ctx.Writer.Status() != http.StatusOK {
+			cc.rateLimitMiddleware.DuplicateRequestClear(ctx, rejectKey)
+		}
+	}()
 	req.ObjectID = uid.DeShortID(req.ObjectID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 

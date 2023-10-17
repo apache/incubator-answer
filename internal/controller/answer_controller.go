@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/answerdev/answer/internal/base/handler"
 	"github.com/answerdev/answer/internal/base/middleware"
@@ -171,9 +172,16 @@ func (ac *AnswerController) Add(ctx *gin.Context) {
 	if handler.BindAndCheck(ctx, req) {
 		return
 	}
-	if ac.rateLimitMiddleware.DuplicateRequestRejection(ctx, req) {
+	reject, rejectKey := ac.rateLimitMiddleware.DuplicateRequestRejection(ctx, req)
+	if reject {
 		return
 	}
+	defer func() {
+		// If status is not 200 means that the bad request has been returned, so the record should be cleared
+		if ctx.Writer.Status() != http.StatusOK {
+			ac.rateLimitMiddleware.DuplicateRequestClear(ctx, rejectKey)
+		}
+	}()
 	req.QuestionID = uid.DeShortID(req.QuestionID)
 	req.UserID = middleware.GetLoginUserIDFromContext(ctx)
 
