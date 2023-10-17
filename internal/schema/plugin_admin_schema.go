@@ -27,6 +27,11 @@ type GetPluginListResp struct {
 	Link        string `json:"link"`
 }
 
+type GetAllPluginStatusResp struct {
+	SlugName string `json:"slug_name"`
+	Enabled  bool   `json:"enabled"`
+}
+
 type UpdatePluginStatusReq struct {
 	PluginSlugName string `validate:"required,gt=1,lte=100" json:"plugin_slug_name"`
 	Enabled        bool   `json:"enabled"`
