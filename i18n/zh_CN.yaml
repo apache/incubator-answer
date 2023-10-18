@@ -13,6 +13,8 @@ backend:
       other: 数据服务器错误。
     forbidden_error:
       other: 禁止访问。
+    duplicate_request_error:
+      other: Duplicate submission.
   action:
     report:
       other: 举报
@@ -36,6 +38,8 @@ backend:
       other: 列表显示
     invite_someone_to_answer:
       other: 编辑
+    undelete:
+      other: Undelete
   role:
     name:
       user:
@@ -724,7 +728,7 @@ ui:
       使用评论提问更多信息或者提出改进意见。尽量避免使用评论功能回答问题。
     tip_answer: >-
       使用评论对回答者进行回复，或者通知回答者你已更新了问题的内容。如果要补充或者完善问题的内容，请在原问题中更改。
-    tip_vote: 这是有用的
+    tip_vote: 它给帖子添加了一些有用的内容
   edit_answer:
     title: 编辑回答
     default_reason: 编辑回答
@@ -1061,12 +1065,15 @@ ui:
       <p>我们不建议<strong>删除被采纳的回答</strong>。因为这样做会使得后来的读者无法从该回答中获得帮助。</p>如果删除过多被采纳的回答，你的账号将会被禁止回答任何提问。你确定要删除吗？
     other: 你确定要删除？
     tip_answer_deleted: 此回答已被删除
+    undelete_title: Undelete this post
+    undelete_desc: Are you sure you wish to undelete?
   btns:
     confirm: 确认
     cancel: 取消
     edit: 编辑
     save: 保存
     delete: 删除
+    undelete: Undelete
     login: 登录
     signup: 注册
     logout: 退出登录
@@ -1083,6 +1090,13 @@ ui:
     comment: 评论
     refresh: 刷新
     resend: 重新获取
+    deactivate: Deactivate
+    active: Active
+    suspend: Suspend
+    unsuspend: Unsuspend
+    close: Close
+    reopen: Reopen
+    ok: OK
   search:
     title: 搜索结果
     keywords: 关键词
@@ -1224,12 +1238,14 @@ ui:
     site_name:
       label: 站点名称
       msg: 站点名称不能为空。
+      msg_max_length: Site name must be at maximum 30 characters in length.
     site_url:
       label: 站点地址（URL）
       text: 此网站的地址。
       msg:
         empty: 站点URL不能为空。
         incorrect: 站点URL格式不正确。
+        max_length: Site URL must be at maximum 512 characters in length.
     contact_email:
       label: 联系邮箱
       text: 负责本网站的主要联系人的电子邮件地址。
@@ -1244,11 +1260,14 @@ ui:
       label: 昵称
       msg: 昵称不能为空。
       character: '只能由 "a-z", "0-9", " - . _" 组成'
+      msg_max_length: Name must be at maximum 30 characters in length.
     admin_password:
       label: 密码
       text: >-
         您需要此密码才能登录。请将其存储在一个安全的位置。
       msg: 密码不能为空。
+      msg_min_length: Password must be at least 8 characters in length.
+      msg_max_length: Password must be at maximum 32 characters in length.
     admin_email:
       label: 邮箱
       text: 您需要此电子邮件才能登录。
@@ -1357,34 +1376,6 @@ ui:
       created: 创建于
       action: 操作
       review: 审查
-    change_modal:
-      title: 更改用户状态为...
-      btn_cancel: 取消
-      btn_submit: 提交
-      normal_name: 正常
-      normal_desc: 普通用户可以提问和回答。
-      suspended_name: 封禁
-      suspended_desc: 被封禁的用户将无法登录。
-      deleted_name: 删除
-      deleted_desc: "删除个人资料和身份验证关联。"
-      inactive_name: 不活跃
-      inactive_desc: 不活跃的用户必须重新验证邮箱。
-      confirm_title: 删除此用户
-      confirm_content: 确定要删除此用户？此操作无法撤销！
-      confirm_btn: 删除
-      msg:
-        empty: 请选择一个原因
-    status_modal:
-      title: "更改 {{ type }} 状态为..."
-      normal_name: 正常
-      normal_desc: 所有用户都可以访问的普通帖子。
-      closed_name: 关闭
-      closed_desc: "关闭的问题不能回答，但仍然可以编辑、投票和评论。"
-      deleted_name: 删除
-      deleted_desc: 该帖子将被删除。
-      btn_cancel: 取消
-      btn_submit: 提交
-      btn_next: 下一步
     user_role_modal:
       title: 更改用户状态为...
       btn_cancel: 取消
@@ -1448,6 +1439,18 @@ ui:
       change_role: 更改角色
       show_logs: 显示日志
       add_user: 添加用户
+      deactivate_user:
+        title: Deactivate user
+        content: An inactive user must re-validate their email.
+      delete_user:
+        title: Delete this user
+        content: Are you sure you want to delete this user? This is permanent!
+        remove: Remove their content
+        label: Remove all questions, answers, comments, etc.
+        text: Don’t check this if you wish to only delete the user’s account.
+      suspend_user:
+        title: Suspend this user
+        content: A suspended user can't log in.
     questions:
       page_title: 问题
       normal: 正常
@@ -1607,16 +1610,19 @@ ui:
       page_title: CSS 与 HTML
       custom_css:
         label: 自定义 CSS
-        text: 这将以 &lt;link> 方式插入
+        text: >
+
       head:
         label: 头部
-        text: 这将在 &lt;/head> 之前插入
+        text: >
+
       header:
         label: 页眉
-        text: 这将在 &lt;body> 之后插入
+        text: >
+
       footer:
         label: 页脚
-        text: 这将在 &lt;/body> 之前插入.
+        text: This will insert before &lt;/body>.
       sidebar:
         label: 侧边栏
         text: 这将插入侧边栏中。
