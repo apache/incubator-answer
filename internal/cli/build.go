@@ -276,7 +276,11 @@ func getFolders(dir string) ([]string, error) {
 
 func generateIndexTsContent(folders []string) string {
 	builder := &strings.Builder{}
-	builder.WriteString("export default null;\n\n")
+	builder.WriteString("export default null;\n")
+	// Line 2:1:  Delete `⏎`  prettier/prettier
+	if len(folders) > 0 {
+		builder.WriteString("\n")
+	}
 	for _, folder := range folders {
 		builder.WriteString(fmt.Sprintf("export { default as %s } from '%s';\n", folder, folder))
 	}
