@@ -218,6 +218,12 @@ func copyUIFiles(b *buildingMaterial) (err error) {
 
 	// copy plugins dir
 	fmt.Printf("try to copy dir from %s to %s\n", pluginsDir, localUIPluginDir)
+
+	// if plugins dir not exist means no plugins
+	if !dir.CheckDirExist(pluginsDir) {
+		return nil
+	}
+
 	pluginsDirEntries, err := os.ReadDir(pluginsDir)
 	if err != nil {
 		return fmt.Errorf("failed to read plugins dir: %w", err)
