@@ -13,6 +13,8 @@ backend:
       other: データサーバーエラー
     forbidden_error:
       other: Forbidden.
+    duplicate_request_error:
+      other: Duplicate submission.
   action:
     report:
       other: フラグ
@@ -36,6 +38,8 @@ backend:
       other: List
     invite_someone_to_answer:
       other: Edit
+    undelete:
+      other: Undelete
   role:
     name:
       user:
@@ -478,7 +482,7 @@ ui:
     edit_tag: タグを編集
     ask_a_question: 質問を追加
     edit_question: 質問を編集
-    edit_answer: 回答を編集
+    edit_answer: 回答を編集　
     search: 検索
     posts_containing: Posts containing
     settings: 設定
@@ -1061,12 +1065,15 @@ ui:
       <p>We do not recommend <strong>deleting accepted answer</strong> because doing so deprives future readers of this knowledge. </p> Repeated deletion of accepted answers can result in your account being blocked from answering. Are you sure you wish to delete?
     other: Are you sure you wish to delete?
     tip_answer_deleted: This answer has been deleted
+    undelete_title: Undelete this post
+    undelete_desc: Are you sure you wish to undelete?
   btns:
     confirm: Confirm
     cancel: Cancel
     edit: Edit
     save: Save
     delete: Delete
+    undelete: Undelete
     login: Log in
     signup: 新規登録
     logout: Log out
@@ -1083,6 +1090,13 @@ ui:
     comment: Comment
     refresh: Refresh
     resend: Resend
+    deactivate: Deactivate
+    active: Active
+    suspend: Suspend
+    unsuspend: Unsuspend
+    close: Close
+    reopen: Reopen
+    ok: OK
   search:
     title: Search Results
     keywords: Keywords
@@ -1224,12 +1238,14 @@ ui:
     site_name:
       label: Site name
       msg: Site name cannot be empty.
+      msg_max_length: Site name must be at maximum 30 characters in length.
     site_url:
       label: サイトURL
       text: The address of your site.
       msg:
         empty: Site URL cannot be empty.
         incorrect: Site URL incorrect format.
+        max_length: Site URL must be at maximum 512 characters in length.
     contact_email:
       label: Contact email
       text: Email address of key contact responsible for this site.
@@ -1244,11 +1260,14 @@ ui:
       label: Name
       msg: Name cannot be empty.
       character: 'Must use the character set "a-z", "0-9", " - . _"'
+      msg_max_length: Name must be at maximum 30 characters in length.
     admin_password:
       label: パスワード
       text: >-
         You will need this password to log in. Please store it in a secure location.
       msg: Password cannot be empty.
+      msg_min_length: Password must be at least 8 characters in length.
+      msg_max_length: Password must be at maximum 32 characters in length.
     admin_email:
       label: メールアドレス
       text: You will need this email to log in.
@@ -1357,34 +1376,6 @@ ui:
       created: Created
       action: Action
       review: Review
-    change_modal:
-      title: Change user status to...
-      btn_cancel: Cancel
-      btn_submit: Submit
-      normal_name: normal
-      normal_desc: A normal user can ask and answer questions.
-      suspended_name: suspended
-      suspended_desc: A suspended user can't log in.
-      deleted_name: deleted
-      deleted_desc: "Delete profile, authentication associations."
-      inactive_name: inactive
-      inactive_desc: An inactive user must re-validate their email.
-      confirm_title: Delete this user
-      confirm_content: Are you sure you want to delete this user? This is permanent!
-      confirm_btn: Delete
-      msg:
-        empty: Please select a reason.
-    status_modal:
-      title: "Change {{ type }} status to..."
-      normal_name: normal
-      normal_desc: A normal post available to everyone.
-      closed_name: closed
-      closed_desc: "A closed question can't answer, but still can edit, vote and comment."
-      deleted_name: deleted
-      deleted_desc: This post will be deleted.
-      btn_cancel: Cancel
-      btn_submit: Submit
-      btn_next: Next
     user_role_modal:
       title: Change user role to...
       btn_cancel: Cancel
@@ -1448,6 +1439,18 @@ ui:
       change_role: ロールを変更
       show_logs: ログを表示
       add_user: ユーザを追加
+      deactivate_user:
+        title: Deactivate user
+        content: An inactive user must re-validate their email.
+      delete_user:
+        title: Delete this user
+        content: Are you sure you want to delete this user? This is permanent!
+        remove: Remove their content
+        label: Remove all questions, answers, comments, etc.
+        text: Don’t check this if you wish to only delete the user’s account.
+      suspend_user:
+        title: Suspend this user
+        content: A suspended user can't log in.
     questions:
       page_title: 質問
       normal: 正常
@@ -1607,16 +1610,19 @@ ui:
       page_title: CSS and HTML
       custom_css:
         label: Custom CSS
-        text: This will insert as <link>
+        text: >
+
       head:
         label: Head
-        text: This will insert before </head>
+        text: >
+
       header:
         label: Header
-        text: This will insert after <body>
+        text: >
+
       footer:
         label: Footer
-        text: This will insert before </body>.
+        text: This will insert before &lt;/body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.
