@@ -20,7 +20,7 @@ const Index: FC = () => {
   });
 
   const { data } = useGetSearchPLuginInfo();
-  // if (!data?.icon) return null;
+  if (!data?.icon) return null;
 
   return (
     <a
