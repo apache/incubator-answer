@@ -47,7 +47,10 @@ const Index: FC = () => {
   const { data: tagResp, isLoading } = useTagInfo({ name: curTagName });
   const { data: listData, isLoading: listLoading } = useQuestionList(reqParams);
   const { data: followResp } = useFollow(tagFollow);
-  const { data: synonymsRes } = useQuerySynonymsTags(tagInfo?.tag_id, '');
+  const { data: synonymsRes } = useQuerySynonymsTags(
+    tagInfo?.tag_id,
+    tagInfo?.status,
+  );
   const toggleFollow = () => {
     if (!guard.tryNormalLogged(true)) {
       return;
