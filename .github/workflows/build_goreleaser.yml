@@ -18,7 +18,7 @@ jobs:
     - name: Set up Node
       uses: actions/setup-node@v3
       with:
-        node-version: lts
+        node-version: 18
 
     - name: Node Build
       run: make install-ui-packages ui
