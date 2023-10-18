@@ -205,12 +205,23 @@ func copyUIFiles(b *buildingMaterial) (err error) {
 		return fmt.Errorf("failed to run go list: %w", err)
 	}
 
-	goModUIDir := filepath.Join(strings.TrimSpace(buf.String()), "ui")
+	answerDir := strings.TrimSpace(buf.String())
+	goModUIDir := filepath.Join(answerDir, "ui")
 	localUIBuildDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/answer/ui/")
 	// The node_modules folder generated during development will interfere packaging, so it needs to be ignored.
 	if err = copyDirEntries(os.DirFS(goModUIDir), ".", localUIBuildDir, "node_modules"); err != nil {
 		return fmt.Errorf("failed to copy ui files: %w", err)
 	}
+
+	pluginsDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/plugins/")
+	localUIPluginDir := filepath.Join(localUIBuildDir, "src/plugins/")
+
+	// copy plugins dir
+	fmt.Printf("try to copy dir from %s to %s\n", pluginsDir, localUIPluginDir)
+	if err = copyDirEntries(os.DirFS(pluginsDir), ".", localUIPluginDir); err != nil {
+		return fmt.Errorf("failed to copy ui files: %w", err)
+	}
+	formatUIPluginsDirName(localUIPluginDir)
 	return nil
 }
 
@@ -249,7 +260,7 @@ func generateIndexTsContent(folders []string) string {
 	builder := &strings.Builder{}
 	builder.WriteString("export default null;\n\n")
 	for _, folder := range folders {
-		builder.WriteString(fmt.Sprintf("export { default as %s } from './%s';\n", folder, folder))
+		builder.WriteString(fmt.Sprintf("export { default as %s } from '%s';\n", folder, folder))
 	}
 	return builder.String()
 }
@@ -258,7 +269,7 @@ func generateIndexTsContent(folders []string) string {
 func buildUI(b *buildingMaterial) (err error) {
 	localUIBuildDir := filepath.Join(b.tmpDir, "vendor/github.com/answerdev/answer/ui")
 
-	pnpmInstallCmd := b.newExecCmd("pnpm", "install")
+	pnpmInstallCmd := b.newExecCmd("pnpm", "pre-install")
 	pnpmInstallCmd.Dir = localUIBuildDir
 	if err = pnpmInstallCmd.Run(); err != nil {
 		return err
@@ -430,6 +441,26 @@ func copyDirEntries(sourceFs fs.FS, sourceDir, targetDir string, ignoreDir ...st
 	})
 
 	return err
+}
+
+// format plugins dir name from dash to underline
+func formatUIPluginsDirName(dirPath string) {
+	entries, err := os.ReadDir(dirPath)
+	if err != nil {
+		fmt.Printf("read ui plugins dir failed: [%s] %s\n", dirPath, err)
+		return
+	}
+	for _, entry := range entries {
+		if !entry.IsDir() || !strings.Contains(entry.Name(), "-") {
+			continue
+		}
+		newName := strings.ReplaceAll(entry.Name(), "-", "_")
+		if err := os.Rename(filepath.Join(dirPath, entry.Name()), filepath.Join(dirPath, newName)); err != nil {
+			fmt.Printf("rename ui plugins dir failed: [%s] %s\n", dirPath, err)
+		} else {
+			fmt.Printf("rename ui plugins dir success: [%s] -> [%s]\n", entry.Name(), newName)
+		}
+	}
 }
 
 // buildBinary build binary file

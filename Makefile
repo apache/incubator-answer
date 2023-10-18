@@ -41,6 +41,6 @@ install-ui-packages:
 	@corepack prepare pnpm@latest --activate
 
 ui:
-	@cd ui && pnpm install && pnpm build && cd -
+	@cd ui && pnpm pre-install && pnpm build && cd -
 
 all: clean build
