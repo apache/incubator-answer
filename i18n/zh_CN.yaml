@@ -14,7 +14,7 @@ backend:
     forbidden_error:
       other: 禁止访问。
     duplicate_request_error:
-      other: Duplicate submission.
+      other: 重复提交。
   action:
     report:
       other: 举报
@@ -39,7 +39,7 @@ backend:
     invite_someone_to_answer:
       other: 编辑
     undelete:
-      other: Undelete
+      other: 撤消删除
   role:
     name:
       user:
@@ -1065,15 +1065,15 @@ ui:
       <p>我们不建议<strong>删除被采纳的回答</strong>。因为这样做会使得后来的读者无法从该回答中获得帮助。</p>如果删除过多被采纳的回答，你的账号将会被禁止回答任何提问。你确定要删除吗？
     other: 你确定要删除？
     tip_answer_deleted: 此回答已被删除
-    undelete_title: Undelete this post
-    undelete_desc: Are you sure you wish to undelete?
+    undelete_title: 恢复本帖
+    undelete_desc: 你确定你要恢复吗？
   btns:
     confirm: 确认
     cancel: 取消
     edit: 编辑
     save: 保存
     delete: 删除
-    undelete: Undelete
+    undelete: 撤消删除
     login: 登录
     signup: 注册
     logout: 退出登录
@@ -1090,13 +1090,13 @@ ui:
     comment: 评论
     refresh: 刷新
     resend: 重新获取
-    deactivate: Deactivate
-    active: Active
-    suspend: Suspend
-    unsuspend: Unsuspend
-    close: Close
-    reopen: Reopen
-    ok: OK
+    deactivate: 停用
+    active: 已启用
+    suspend: 已封禁
+    unsuspend: 解禁
+    close: 关闭
+    reopen: 重新打开
+    ok: 确定
   search:
     title: 搜索结果
     keywords: 关键词
@@ -1238,14 +1238,14 @@ ui:
     site_name:
       label: 站点名称
       msg: 站点名称不能为空。
-      msg_max_length: Site name must be at maximum 30 characters in length.
+      msg_max_length: 站点名称长度不得超过30个字符。
     site_url:
       label: 站点地址（URL）
       text: 此网站的地址。
       msg:
         empty: 站点URL不能为空。
         incorrect: 站点URL格式不正确。
-        max_length: Site URL must be at maximum 512 characters in length.
+        max_length: 内容长度至少 512 个字符
     contact_email:
       label: 联系邮箱
       text: 负责本网站的主要联系人的电子邮件地址。
@@ -1260,14 +1260,14 @@ ui:
       label: 昵称
       msg: 昵称不能为空。
       character: '只能由 "a-z", "0-9", " - . _" 组成'
-      msg_max_length: Name must be at maximum 30 characters in length.
+      msg_max_length: 名称长度不能超过30个字符。
     admin_password:
       label: 密码
       text: >-
         您需要此密码才能登录。请将其存储在一个安全的位置。
       msg: 密码不能为空。
-      msg_min_length: Password must be at least 8 characters in length.
-      msg_max_length: Password must be at maximum 32 characters in length.
+      msg_min_length: 密码必须至少 8 个字符长。
+      msg_max_length: 密码长度不能超过32个字符。
     admin_email:
       label: 邮箱
       text: 您需要此电子邮件才能登录。
@@ -1440,17 +1440,17 @@ ui:
       show_logs: 显示日志
       add_user: 添加用户
       deactivate_user:
-        title: Deactivate user
-        content: An inactive user must re-validate their email.
+        title: 停用用户
+        content: 未激活的用户必须重新验证他们的电子邮件。
       delete_user:
-        title: Delete this user
-        content: Are you sure you want to delete this user? This is permanent!
-        remove: Remove their content
-        label: Remove all questions, answers, comments, etc.
-        text: Don’t check this if you wish to only delete the user’s account.
+        title: 删除此用户
+        content: 确定要删除此用户？此操作无法撤销！
+        remove: 移除内容
+        label: 删除所有问题、 答案、 评论等
+        text: 如果您只想删除用户帐户，请不要选中此项。
       suspend_user:
-        title: Suspend this user
-        content: A suspended user can't log in.
+        title: 挂起此用户
+        content: 被封禁的用户将无法登录。
     questions:
       page_title: 问题
       normal: 正常
@@ -1622,7 +1622,7 @@ ui:
 
       footer:
         label: 页脚
-        text: This will insert before &lt;/body>.
+        text: 这将在 </body> 之前插入.
       sidebar:
         label: 侧边栏
         text: 这将插入侧边栏中。
