@@ -13,6 +13,8 @@ backend:
       other: Erreur du serveur de données.
     forbidden_error:
       other: Interdit.
+    duplicate_request_error:
+      other: Duplicate submission.
   action:
     report:
       other: Flag
@@ -36,6 +38,8 @@ backend:
       other: Liste
     invite_someone_to_answer:
       other: Modifier
+    undelete:
+      other: Undelete
   role:
     name:
       user:
@@ -108,7 +112,7 @@ backend:
   email:
     other: Email
   e_mail:
-    other: E-mail
+    other: Email
   password:
     other: Mot de passe
   pass:
@@ -158,9 +162,9 @@ backend:
       captcha_verification_failed:
         other: Le Captcha est incorrect.
       disallow_follow:
-        other: Vous n'êtes pas autorisé à suivre.
+        other: Vous n’êtes pas autorisé à suivre.
       disallow_vote:
-        other: Vous n'êtes pas autorisé à voter.
+        other: Vous n’êtes pas autorisé à voter.
       disallow_vote_your_self:
         other: Vous ne pouvez pas voter pour votre propre message.
       not_found:
@@ -310,12 +314,12 @@ backend:
       name:
         other: a community-specific reason
       desc:
-        other: This question doesn't meet a community guideline.
+        other: Cette question ne répond pas à une directive de la communauté.
     not_clarity:
       name:
         other: needs details or clarity
       desc:
-        other: This question currently includes multiple questions in one. It should focus on one problem only.
+        other: Cette question comprend actuellement plusieurs questions en une seule. Elle ne devrait se concentrer que sur un seul problème.
     looks_ok:
       name:
         other: looks OK
@@ -870,7 +874,7 @@ ui:
     send_success: >-
       Si un compte est associé à <strong>{{mail}}</strong>, vous recevrez un email contenant les instructions pour réinitialiser votre mot de passe.
     email:
-      label: New email
+      label: Nouvel e-mail
       msg:
         empty: L'email ne peut pas être vide.
   oauth:
@@ -902,7 +906,7 @@ ui:
         length: La longueur doit être comprise entre 8 et 32
         different: Les mots de passe saisis ne sont pas identiques
     password_confirm:
-      label: Confirm new password
+      label: Confirmer le nouveau mot de passe
   settings:
     page_title: Paramètres
     goto_modify: Go to modify
@@ -943,9 +947,9 @@ ui:
         placeholder: "Ville, Pays"
     notification:
       heading: Notifications
-      email: Email
+      email: E-mail
       inbox:
-        label: Email notifications
+        label: Notifications par e-mail
         description: Answers to your questions, comments, invites, and more.
       all_new_question:
         label: All new questions
@@ -1011,7 +1015,7 @@ ui:
     update: Modifié
     edit: modifié
     Views: Consultée
-    Follow: S'abonner
+    Follow: S’abonner
     Following: Abonné(s)
     follow_tip: Follow this question to receive notifications
     answered: répondu
@@ -1041,7 +1045,7 @@ ui:
       characters: le contenu doit comporter au moins 6 caractères.
       tips:
         header_1: Merci pour votre réponse
-        li1_1: N'oubliez pas de <strong>répondre à la question</strong>. Fournissez des détails et partagez vos recherches.
+        li1_1: N’oubliez pas de <strong>répondre à la question</strong>. Fournissez des détails et partagez vos recherches.
         li1_2: Sauvegardez toutes les déclarations que vous faites avec des références ou une expérience personnelle.
         header_2: Mais <strong>évitez</strong>...
         li2_1: Demander de l'aide, chercher des éclaircissements ou répondre à d'autres réponses.
@@ -1061,12 +1065,15 @@ ui:
       <p>Nous ne recommandons pas <strong>de supprimer la réponse acceptée</strong> car cela prive les futurs lecteurs de cette connaissance. </p> La suppression répétée des réponses acceptées peut empêcher votre compte de répondre. Êtes-vous sûr de vouloir supprimer ?
     other: Êtes-vous sûr de vouloir supprimer ?
     tip_answer_deleted: Cette réponse a été supprimée
+    undelete_title: Undelete this post
+    undelete_desc: Are you sure you wish to undelete?
   btns:
     confirm: Confimer
     cancel: Annuler
     edit: Edit
     save: Enregistrer
     delete: Supprimer
+    undelete: Undelete
     login: Se connecter
     signup: S'inscrire
     logout: Se déconnecter
@@ -1081,8 +1088,15 @@ ui:
     question: Question
     answer: Answer
     comment: Comment
-    refresh: Refresh
+    refresh: Actualiser
     resend: Resend
+    deactivate: Deactivate
+    active: Active
+    suspend: Suspend
+    unsuspend: Unsuspend
+    close: Close
+    reopen: Reopen
+    ok: OK
   search:
     title: Résultats de la recherche
     keywords: Mots-clés
@@ -1113,7 +1127,7 @@ ui:
     copied: Copié
     facebook: Partager sur Facebook
     twitter: Partager sur Twitter
-  cannot_vote_for_self: You can't vote for your own post.
+  cannot_vote_for_self: Vous ne pouvez pas voter pour votre propre message.
   modal_confirm:
     title: Erreur...
   account_result:
@@ -1163,7 +1177,7 @@ ui:
     votes: Votes
     newest: Les plus récents
     score: Score
-    edit_profile: Edit profile
+    edit_profile: Éditer le profil
     visited_x_days: "Visité {{ count }} jours"
     viewed: Vu
     joined: Inscrit
@@ -1224,12 +1238,14 @@ ui:
     site_name:
       label: Site name
       msg: Site name cannot be empty.
+      msg_max_length: Site name must be at maximum 30 characters in length.
     site_url:
       label: URL du site
       text: L'adresse de ce site.
       msg:
         empty: L'URL ne peut pas être vide.
         incorrect: Le format de l'URL est incorrect.
+        max_length: Site URL must be at maximum 512 characters in length.
     contact_email:
       label: Contact email
       text: L'adresse email du responsable du site.
@@ -1244,11 +1260,14 @@ ui:
       label: Nom
       msg: Le nom ne peut pas être vide.
       character: 'Must use the character set "a-z", "0-9", " - . _"'
+      msg_max_length: Name must be at maximum 30 characters in length.
     admin_password:
       label: Mot de passe
       text: >-
         Vous aurez besoin de ce mot de passe pour vous connecter . Sauvegarder le de façon sécurisée.
       msg: Le mot de passe ne peut pas être vide.
+      msg_min_length: Password must be at least 8 characters in length.
+      msg_max_length: Password must be at maximum 32 characters in length.
     admin_email:
       label: Email
       text: Vous aurez besoin de cet email pour vous connecter.
@@ -1357,34 +1376,6 @@ ui:
       created: Créé
       action: Action
       review: Vérification
-    change_modal:
-      title: Changer statut de l`utilisateur en...
-      btn_cancel: Annuler
-      btn_submit: Soumettre
-      normal_name: normal
-      normal_desc: Un utilisateur normal peut poser et répondre aux questions.
-      suspended_name: suspendu
-      suspended_desc: Un utilisateur suspendu ne peut pas se connecter.
-      deleted_name: supprimé
-      deleted_desc: "Supprimer le profil et les informations d'authentification associées."
-      inactive_name: inactif
-      inactive_desc: Un utilisateur inactif doit revalider son email.
-      confirm_title: Supprimer cet utilisateur
-      confirm_content: Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est définitive !
-      confirm_btn: Supprimer
-      msg:
-        empty: Veuillez sélectionner une raison.
-    status_modal:
-      title: "Changer le statut de {{ type }} en..."
-      normal_name: normal
-      normal_desc: Un message normal accessible à tous.
-      closed_name: fermé
-      closed_desc: "Une question fermée ne peut pas être répondue, mais peut-être quand même modifiée, votée et commentée."
-      deleted_name: supprimé
-      deleted_desc: This post will be deleted.
-      btn_cancel: Annuler
-      btn_submit: Valider
-      btn_next: Suivant
     user_role_modal:
       title: Changer le rôle d'un utilisateur en...
       btn_cancel: Annuler
@@ -1394,7 +1385,7 @@ ui:
       form:
         fields:
           password:
-            label: Password
+            label: Mot de passe
             text: The user will be logged out and need to login again.
             msg: Password must be at 8-32 characters in length.
       btn_cancel: Cancel
@@ -1417,7 +1408,7 @@ ui:
           password:
             label: Password
             msg: Password must be at 8-32 characters in length.
-      btn_cancel: Cancel
+      btn_cancel: Annuler
       btn_submit: Submit
     users:
       title: Utilisateurs
@@ -1448,6 +1439,18 @@ ui:
       change_role: Modifier le rôle
       show_logs: Voir les logs
       add_user: Ajouter un utilisateur
+      deactivate_user:
+        title: Deactivate user
+        content: An inactive user must re-validate their email.
+      delete_user:
+        title: Delete this user
+        content: Are you sure you want to delete this user? This is permanent!
+        remove: Remove their content
+        label: Remove all questions, answers, comments, etc.
+        text: Don’t check this if you wish to only delete the user’s account.
+      suspend_user:
+        title: Suspend this user
+        content: A suspended user can't log in.
     questions:
       page_title: Questions
       normal: Normal
@@ -1607,16 +1610,19 @@ ui:
       page_title: CSS et HTML
       custom_css:
         label: CSS personnalisé
-        text: Ceci va être inséré en tant que <link>
+        text: >
+
       head:
         label: Head
-        text: Ceci va être inséré avant </head>
+        text: >
+
       header:
         label: Header
-        text: Ceci va être inséré dans le <body>
+        text: >
+
       footer:
         label: Footer
-        text: This will insert before </body>.
+        text: This will insert before &lt;/body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.
@@ -1656,7 +1662,7 @@ ui:
       activate: Activate
       settings: Settings
     settings_users:
-      title: Users
+      title: Utilisateurs
       avatar:
         label: Default avatar
         text: For users without a custom avatar of their own.
@@ -1680,7 +1686,7 @@ ui:
     privilege:
       title: Privileges
       level:
-        label: Reputation required level
+        label: Niveau de réputation requis
         text: Choose the reputation required for the privileges
   form:
     optional: (optionnel)
@@ -1688,7 +1694,7 @@ ui:
     invalid: est invalide
     btn_submit: Sauvegarder
     not_found_props: "La propriété requise {{ key }} est introuvable."
-    select: Select
+    select: Sélectionner
   page_review:
     review: Vérifier
     proposed: proposé
@@ -1698,7 +1704,7 @@ ui:
     edit_summary: Modifier le résumé
     edit_question: Modifier la question
     edit_answer: Modifier la réponse
-    edit_tag: Modifier l'étiquette
+    edit_tag: Modifier l’étiquette
     empty: Aucune révision restante.
   timeline:
     undeleted: restauré
