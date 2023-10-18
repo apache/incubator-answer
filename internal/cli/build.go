@@ -218,8 +218,26 @@ func copyUIFiles(b *buildingMaterial) (err error) {
 
 	// copy plugins dir
 	fmt.Printf("try to copy dir from %s to %s\n", pluginsDir, localUIPluginDir)
-	if err = copyDirEntries(os.DirFS(pluginsDir), ".", localUIPluginDir); err != nil {
-		return fmt.Errorf("failed to copy ui files: %w", err)
+	pluginsDirEntries, err := os.ReadDir(pluginsDir)
+	if err != nil {
+		return fmt.Errorf("failed to read plugins dir: %w", err)
+	}
+	for _, entry := range pluginsDirEntries {
+		if !entry.IsDir() {
+			continue
+		}
+		sourcePluginDir := filepath.Join(pluginsDir, entry.Name())
+		// check if plugin is a ui plugin
+		packageJsonPath := filepath.Join(sourcePluginDir, "package.json")
+		fmt.Printf("check if %s is a ui plugin\n", packageJsonPath)
+		if !dir.CheckFileExist(packageJsonPath) {
+			continue
+		}
+		localPluginDir := filepath.Join(localUIPluginDir, entry.Name())
+		fmt.Printf("try to copy dir from %s to %s\n", sourcePluginDir, localPluginDir)
+		if err = copyDirEntries(os.DirFS(sourcePluginDir), ".", localPluginDir); err != nil {
+			return fmt.Errorf("failed to copy ui files: %w", err)
+		}
 	}
 	formatUIPluginsDirName(localUIPluginDir)
 	return nil
