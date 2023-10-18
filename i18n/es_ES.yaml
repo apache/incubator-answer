@@ -13,6 +13,8 @@ backend:
       other: Error en el servidor de datos.
     forbidden_error:
       other: Forbidden.
+    duplicate_request_error:
+      other: Duplicate submission.
   action:
     report:
       other: Flag
@@ -36,6 +38,8 @@ backend:
       other: List
     invite_someone_to_answer:
       other: Edit
+    undelete:
+      other: Undelete
   role:
     name:
       user:
@@ -1086,12 +1090,15 @@ ui:
       El borrado repetido de respuestas aceptadas puede resultar en que tu cuenta se bloquee para responder. ¿Estás seguro de que deseas borrarlo?
     other: '¿Estás seguro de que deseas borrarlo?'
     tip_answer_deleted: Esta respuesta ha sido eliminada
+    undelete_title: Undelete this post
+    undelete_desc: Are you sure you wish to undelete?
   btns:
     confirm: Confirmar
     cancel: Cancelar
     edit: Edit
     save: Guardar
     delete: Eliminar
+    undelete: Undelete
     login: Acceder
     signup: Registrarse
     logout: Cerrar sesión
@@ -1108,6 +1115,13 @@ ui:
     comment: Comment
     refresh: Refresh
     resend: Resend
+    deactivate: Deactivate
+    active: Active
+    suspend: Suspend
+    unsuspend: Unsuspend
+    close: Close
+    reopen: Reopen
+    ok: OK
   search:
     title: Resultados de la búsqueda
     keywords: Palabras claves
@@ -1249,12 +1263,14 @@ ui:
     site_name:
       label: Site name
       msg: Site name cannot be empty.
+      msg_max_length: Site name must be at maximum 30 characters in length.
     site_url:
       label: Sitio URL
       text: La dirección de su sitio.
       msg:
         empty: La URL del sitio no puede estar vacía.
         incorrect: Formato incorrecto de la URL del sitio.
+        max_length: Site URL must be at maximum 512 characters in length.
     contact_email:
       label: Contact email
       text: Dirección de correo electrónico del contacto clave responsable de este sitio.
@@ -1269,11 +1285,14 @@ ui:
       label: Nombre
       msg: El nombre no puede estar vacío.
       character: 'Must use the character set "a-z", "0-9", " - . _"'
+      msg_max_length: Name must be at maximum 30 characters in length.
     admin_password:
       label: Contraseña
       text: >-
         Necesitará esta contraseña para iniciar sesión. Guárdela en un lugar seguro.
       msg: La contraseña no puede estar vacía.
+      msg_min_length: Password must be at least 8 characters in length.
+      msg_max_length: Password must be at maximum 32 characters in length.
     admin_email:
       label: Correo electrónico
       text: Necesitará este correo electrónico para iniciar sesión.
@@ -1382,34 +1401,6 @@ ui:
       created: Creado
       action: Acción
       review: Revisar
-    change_modal:
-      title: Cambiar estado de usuario a...
-      btn_cancel: Cancelar
-      btn_submit: Entregar
-      normal_name: normal
-      normal_desc: Un usuario normal puede hacer y responder preguntas.
-      suspended_name: suspendido
-      suspended_desc: Un usuario suspendido no puede iniciar sesión.
-      deleted_name: eliminado
-      deleted_desc: "Eliminar perfil, asociaciones de autenticación."
-      inactive_name: inactivo
-      inactive_desc: Un usuario inactivo debe volver a validar su correo electrónico.
-      confirm_title: Eliminar este usuario
-      confirm_content: '¿Está seguro de que desea eliminar este usuario? ¡Esto es permanente!'
-      confirm_btn: Borrar
-      msg:
-        empty: Por favor seleccione una razón.
-    status_modal:
-      title: "Cambiar el estado de {{ type }} a..."
-      normal_name: normal
-      normal_desc: Un puesto normal al alcance de todos.
-      closed_name: cerrada
-      closed_desc: "Una pregunta cerrada no puede responder, pero aún puede editar, votar y comentar."
-      deleted_name: eliminado
-      deleted_desc: This post will be deleted.
-      btn_cancel: Cancelar
-      btn_submit: Entregar
-      btn_next: Próximo
     user_role_modal:
       title: Cambiar rol de usuario a...
       btn_cancel: Cancelar
@@ -1473,6 +1464,18 @@ ui:
       change_role: Cambiar rol
       show_logs: Mostrar registros
       add_user: Agregar usuario
+      deactivate_user:
+        title: Deactivate user
+        content: An inactive user must re-validate their email.
+      delete_user:
+        title: Delete this user
+        content: Are you sure you want to delete this user? This is permanent!
+        remove: Remove their content
+        label: Remove all questions, answers, comments, etc.
+        text: Don’t check this if you wish to only delete the user’s account.
+      suspend_user:
+        title: Suspend this user
+        content: A suspended user can't log in.
     questions:
       page_title: Preguntas
       normal: Normal
@@ -1632,16 +1635,19 @@ ui:
       page_title: CSS y HTML
       custom_css:
         label: CSS personalizado
-        text: Esto insertará como <link>
+        text: >
+
       head:
         label: Cabeza
-        text: Esto se insertará antes de </head>
+        text: >
+
       header:
         label: Encabezado
-        text: Esto se insertará después de <body>
+        text: >
+
       footer:
         label: Pie de página
-        text: This will insert before </body>.
+        text: This will insert before &lt;/body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.
