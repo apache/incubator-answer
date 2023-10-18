@@ -13,6 +13,8 @@ backend:
       other: خطای سرور داده.
     forbidden_error:
       other: عدم اجازه دسترسی.
+    duplicate_request_error:
+      other: Duplicate submission.
   action:
     report:
       other: نشان
@@ -36,6 +38,8 @@ backend:
       other: فهرست
     invite_someone_to_answer:
       other: ویرایش
+    undelete:
+      other: Undelete
   role:
     name:
       user:
@@ -186,7 +190,7 @@ backend:
         other: اجازه بروزرسانی ندارید.
     rank:
       fail_to_meet_the_condition:
-        other: Reputation rank fail to meet the condition.
+        other: شهرت ناکافی.
       vote_fail_to_meet_the_condition:
         other: ممنون بابت بازخورد. شما حداقل به {{.Rank}} نیاز دارید برای رای دادن.
       no_enough_rank_to_operate:
@@ -202,7 +206,7 @@ backend:
       not_found:
         other: تگ پیدا نشد.
       recommend_tag_not_found:
-        other: Recommend tag is not exist.
+        other: تگ پیشنهاد شده موجود نیست.
       recommend_tag_enter:
         other: لطفا حداقل یک تگ را وارد کنید.
       not_contain_synonym_tags:
@@ -210,12 +214,12 @@ backend:
       cannot_update:
         other: اجازه بروزرسانی ندارید.
       is_used_cannot_delete:
-        other: You cannot delete a tag that is in use.
+        other: نمی توانید تگی که در حال استفاده است را حذف کنید.
       cannot_set_synonym_as_itself:
         other: شما نمی توانید مترادفی برای برچسب فعلی به عوان خودش تنظیم کنین.
     smtp:
       config_from_name_cannot_be_email:
-        other: The from name cannot be a email address.
+        other: '"از طرفه" نمی تواند آدرس ایمیل باشد.'
     theme:
       not_found:
         other: تم پیدا نشد.
@@ -223,7 +227,7 @@ backend:
       review_underway:
         other: فعلا امکان ویرایش وجود ندارد،‌این نسخه در صف بازینی قرار دارد.
       no_permission:
-        other: No permission to revise.
+        other: اجاره بازبینی و اصلاح ندارید.
     user:
       external_login_missing_user_id:
         other: پلتفورم های سوم شخص نمی توانند نام کاربر خاصی را ارائه دهند، بنابر این شما نمی توانید وارد شوید، لطفا با مدیریت وبسایت تماس بگیرید.
@@ -241,22 +245,22 @@ backend:
       username_duplicate:
         other: این نام کاربری قبلا استفاده شده است.
       set_avatar:
-        other: Avatar set failed.
+        other: ست کردن آواتار با مشکل مواجه شد.
       cannot_update_your_role:
         other: شما نمی توانید وظیفه خود را تغییر دهید.
       not_allowed_registration:
-        other: Currently the site is not open for registration.
+        other: درحال حاضر سایت برای ثبت نام باز نیست.
       access_denied:
         other: دسترسی مجاز نیست
       page_access_denied:
         other: شما وجوز دسترسی به این صفحه را ندارید.
       add_bulk_users_format_error:
-        other: "Error {{.Field}} format near '{{.Content}}' at line {{.Line}}. {{.ExtraMessage}}"
+        other: "مشکل پیش آمده در فرمت {{.Field}} در کنار {{.Content}} در خط {{.Line}}. {{.ExtraMessage}}"
       add_bulk_users_amount_error:
-        other: "The number of users you add at once should be in the range of 1-{{.MaxAmount}}."
+        other: "تعداد کاربرانی که اضافه می کنید باید رنج بین ۱-{{.MaxAmount}} باشند."
     config:
       read_config_failed:
-        other: Read config failed
+        other: خواندن کافیگ با مشکل مواجه شد
     database:
       connection_failed:
         other: اتصال به دیتابیس موفقیت آمیز نبود
@@ -274,63 +278,63 @@ backend:
   reason:
     spam:
       name:
-        other: spam
+        other: هرزنامه
       desc:
-        other: This post is an advertisement, or vandalism. It is not useful or relevant to the current topic.
+        other: این پست یک تبلیغ یا خرابکاری است. این پس مفید یا مربوط به این موضوع نمی باشد.
     rude_or_abusive:
       name:
-        other: rude or abusive
+        other: بی ادب یا توهین آمیز
       desc:
-        other: A reasonable person would find this content inappropriate for respectful discourse.
+        other: یک فرد منطقی این محتوا را برای گفتمان محترمانه نامناسب می داند.
     a_duplicate:
       name:
-        other: a duplicate
+        other: تکراری
       desc:
-        other: This question has been asked before and already has an answer.
+        other: این سوال قبلا پرسیده و جواب داده شده است.
       placeholder:
-        other: Enter the existing question link
+        other: لینک سوال مورد نظر را وارد کنید
     not_a_answer:
       name:
-        other: not an answer
+        other: این یک پاسخ نیست
       desc:
-        other: This was posted as an answer, but it does not attempt to answer the question. It should possibly be an edit, a comment, another question, or deleted altogether.
+        other: این به عنوان پاسخ ارسال شده است، اما سعی نمی شود به آن پاسخ دهد. احتمالا باید یک ویرایش،‌ نظر، یا یک سوال دیگر باشید یا باید یکجا حذف شود.
     no_longer_needed:
       name:
-        other: no longer needed
+        other: دیگر نیازی نیست
       desc:
-        other: This comment is outdated, conversational or not relevant to this post.
+        other: این نظر منسوخ شده، مکلامه ای یا مربوط به این پس نیست.
     something:
       name:
-        other: something else
+        other: یک مورد دیگر
       desc:
-        other: This post requires staff attention for another reason not listed above.
+        other: این پست به دلیل دیگری که در بالا ذکر نشده نیاز به توجه کارکنان دارد.
       placeholder:
-        other: Let us know specifically what you are concerned about
+        other: به طور خاص به ما اطلاع دهید که در مورد چه چیزی نگران هستید
     community_specific:
       name:
-        other: a community-specific reason
+        other: یک دلیل خاص جامعه
       desc:
-        other: This question doesn't meet a community guideline.
+        other: این سوال با دستورالعمل جامعه مطابقت ندارد.
     not_clarity:
       name:
-        other: needs details or clarity
+        other: نیاز به جزئیات یا واضح کردن دارد
       desc:
-        other: This question currently includes multiple questions in one. It should focus on one problem only.
+        other: این سوال درحال حاضر شامل چندتا سوال در یکی هست. باید فقط روی یک مشکل تمرکز کند.
     looks_ok:
       name:
-        other: looks OK
+        other: به نظر خوب میاد
       desc:
-        other: This post is good as-is and not low quality.
+        other: این پست همانطور که هست خوب است و کیفیت پایینی ندارد.
     needs_edit:
       name:
-        other: needs edit, and I did it
+        other: نیاز به ویرایش بود، من انجام دادم
       desc:
-        other: Improve and correct problems with this post yourself.
+        other: مشکلات این پست را خودتان بهبود و اصلاح کنید.
     needs_close:
       name:
         other: نیاز است که بسته بشود
       desc:
-        other: A closed question can't answer, but still can edit, vote and comment.
+        other: به یک سوال بسته شده نمیتوان جوابی ثبت کرد بلکه می توان ویرایش، رای و نظر داد.
     needs_delete:
       name:
         other: نیاز است که حذف بشود
@@ -340,31 +344,31 @@ backend:
     close:
       duplicate:
         name:
-          other: spam
+          other: هرزنامه
         desc:
-          other: This question has been asked before and already has an answer.
+          other: این سوال قبلا پرسیده و جواب داده شده است.
       guideline:
         name:
-          other: a community-specific reason
+          other: یک دلیل خاص جامعه
         desc:
-          other: This question doesn't meet a community guideline.
+          other: این سوال با دستورالعمل جامعه مطابقت ندارد.
       multiple:
         name:
-          other: needs details or clarity
+          other: نیاز به جزئیات یا واضح کردن دارد
         desc:
-          other: This question currently includes multiple questions in one. It should focus on one problem only.
+          other: این سوال درحال حاضر شامل چندتا سوال در یکی هست. باید فقط روی یک مشکل تمرکز کند.
       other:
         name:
-          other: something else
+          other: یک مورد دیگر
         desc:
-          other: This post requires another reason not listed above.
+          other: این پست به دلیل دیگری نیاز دارد که در بالا ذکر نشده است.
     operation_type:
       asked:
         other: پرسیده شده
       answered:
-        other: answered
+        other: جواب داده
       modified:
-        other: modified
+        other: تغییر یافته
     deleted_title:
       other: سوال حذف شده
   notification:
@@ -378,29 +382,29 @@ backend:
       accept_answer:
         other: جواب پذیرفته شده
       comment_question:
-        other: commented question
+        other: سوال از کامنت
       comment_answer:
-        other: commented answer
+        other: جواب از کامنت
       reply_to_you:
-        other: replied to you
+        other: به شما پاسخ داد
       mention_you:
-        other: mentioned you
+        other: به شما اشاره کرده
       your_question_is_closed:
         other: سوال شما بسته شده است
       your_question_was_deleted:
-        other: Your question has been deleted
+        other: سوال شما حذف شده است
       your_answer_was_deleted:
-        other: Your answer has been deleted
+        other: جواب شما حذف شده است
       your_comment_was_deleted:
-        other: Your comment has been deleted
+        other: نظر شما پاک شده است
       up_voted_question:
-        other: upvoted question
+        other: رای موافق
       down_voted_question:
-        other: downvoted question
+        other: سوال با رای منفی
       up_voted_answer:
-        other: upvoted answer
+        other: پاسخ موافق
       down_voted_answer:
-        other: downvoted answer
+        other: جواب مخالف
       up_voted_comment:
         other: نظر بدون رای
       invited_you_to_answer:
@@ -408,7 +412,7 @@ backend:
   email_tpl:
     change_email:
       title:
-        other: "[{{.SiteName}}] Confirm your new email address"
+        other: "آدرس ایمیل جدید خود را تایید کنید{{.SiteName}}"
       body:
         other: "Confirm your new email address for {{.SiteName}} by clicking on the following link:<br>\n<a href='{{.ChangeEmailUrl}}' target='_blank'>{{.ChangeEmailUrl}}</a><br><br>\n\nIf you did not request this change, please ignore this email.\n"
     new_answer:
@@ -445,1114 +449,1113 @@ backend:
       title:
         other: "[{{.SiteName}}] Test Email"
       body:
-        other: "This is a test email."
+        other: "این یک ایمیل تست است."
   action_activity_type:
     upvote:
-      other: upvote
+      other: رأی مثبت
     upvoted:
-      other: upvoted
+      other: رأی مثبت
     downvote:
-      other: downvote
+      other: رأی منفی
     downvoted:
-      other: downvoted
+      other: رأی منفی
     accept:
-      other: accept
+      other: پذیرفتن
     accepted:
-      other: accepted
+      other: پذیرفته شده
 #The following fields are used for interface presentation(Front-end)
 ui:
   how_to_format:
-    title: How to Format
+    title: نحوه فرمت کردن
     desc: >-
       <ul class="mb-0"><li><p class="mb-2">to make links</p><pre class="mb-2"><code>&lt;https://url.com&gt;<br/><br/>[Title](https://url.com)</code></pre></li><li><p class="mb-2">put returns between paragraphs</p></li><li><p class="mb-2"><em>_italic_</em> or **<strong>bold</strong>**</p></li><li><p class="mb-2">indent code by 4 spaces</p></li><li><p class="mb-2">quote by placing <code>&gt;</code> at start of line</p></li><li><p class="mb-2">backtick escapes <code>`like _this_`</code></p></li><li><p class="mb-2">create code fences with backticks <code>`</code></p><pre class="mb-0"><code>```<br/>code here<br/>```</code></pre></li></ul>
   pagination:
-    prev: Prev
-    next: Next
+    prev: قبلی
+    next: بعدی
   page_title:
-    question: Question
-    questions: Questions
-    tag: Tag
-    tags: Tags
-    tag_wiki: tag wiki
-    create_tag: Create Tag
+    question: سوال
+    questions: سوالات
+    tag: برچسب
+    tags: برچسب ها
+    tag_wiki: ویکی تگ
+    create_tag: ایجاد برچسب
     edit_tag: ویرایش برچسب
     ask_a_question: اضافه کردن سوال
     edit_question: ویرایش سوال
-    edit_answer: Edit Answer
+    edit_answer: ویرایش پاسخ
     search: جستجو
-    posts_containing: Posts containing
+    posts_containing: پست های شامل
     settings: تنظیمات
     notifications: اعلانات
     login: ورود
     sign_up: ثبت نام
     account_recovery: بازیابی حساب کاربری
-    account_activation: Account Activation
+    account_activation: فعالسازی حساب
     confirm_email: تایید ایمیل
-    account_suspended: Account Suspended
+    account_suspended: حساب تعلیق شد
     admin: ادمین
     change_email: نگارش ایمیل
-    install: Answer Installation
-    upgrade: Answer Upgrade
-    maintenance: Website Maintenance
-    users: Users
-    oauth_callback: Processing
-    http_404: HTTP Error 404
-    http_50X: HTTP Error 500
-    http_403: HTTP Error 403
+    install: نصب Bepors
+    upgrade: بروزرسانی بپرس
+    maintenance: تعمیر و نگهداری وب سایت
+    users: کاربرها
+    oauth_callback: در حال پردازش
+    http_404: خطای 404 HTTP
+    http_50X: خطای 500 HTTP
+    http_403: خطای 403 HTTP
   notifications:
-    title: Notifications
-    inbox: Inbox
-    achievement: Achievements
-    new_alerts: New alerts
-    all_read: Mark all as read
-    show_more: Show more
-    someone: Someone
+    title: اعلانات
+    inbox: پیغام‌های دریافتی
+    achievement: دستاوردها
+    new_alerts: هشدار جدید
+    all_read: علامتگذاری همه بعنوان خوانده شده
+    show_more: نمایش بیشتر
+    someone: کسی
     inbox_type:
-      all: All
-      posts: Posts
-      invites: Invites
-      votes: Votes
+      all: همه
+      posts: پست ها
+      invites: دعوت ها
+      votes: آراء
   suspended:
-    title: Your Account has been Suspended
-    until_time: "Your account was suspended until {{ time }}."
-    forever: This user was suspended forever.
-    end: You don't meet a community guideline.
-    contact_us: Contact us
+    title: حساب شما معلق شده است
+    until_time: "حساب شما تا تاریخ {{ time }} به حالت تعلیق درآمده است."
+    forever: این کاربر برای همیشه به حالت تعلیق درآمده است.
+    end: شما یک دستورالعمل انجمن را رعایت نمی کنید.
+    contact_us: ارتباط با ما
   editor:
     blockquote:
-      text: Blockquote
+      text: مسابقه
     bold:
-      text: Strong
+      text: قوی
     chart:
-      text: Chart
-      flow_chart: Flow chart
-      sequence_diagram: Sequence diagram
-      class_diagram: Class diagram
-      state_diagram: State diagram
-      entity_relationship_diagram: Entity relationship diagram
-      user_defined_diagram: User defined diagram
-      gantt_chart: Gantt chart
-      pie_chart: Pie chart
+      text: نمودار
+      flow_chart: نمودار جریان
+      sequence_diagram: نمودار توالی
+      class_diagram: نمودار کلاس
+      state_diagram: نمودار حالت
+      entity_relationship_diagram: نمودار رابطه موجودیت
+      user_defined_diagram: نمودار تعریف شده توسط کاربر
+      gantt_chart: نمودار گانت
+      pie_chart: نمودار دابره‌ای
     code:
-      text: Code Sample
-      add_code: Add code sample
+      text: نمونه کد
+      add_code: نمونه کد اضافه کنید
       form:
         fields:
           code:
-            label: Code
+            label: کد
             msg:
-              empty: Code cannot be empty.
+              empty: کد نمی تواند خالی باشد.
           language:
-            label: Language
-            placeholder: Automatic detection
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: زبان
+            placeholder: تشخیص خودکار
+      btn_cancel: لغو
+      btn_confirm: اضافه کردن
     formula:
-      text: Formula
+      text: فرمول
       options:
-        inline: Inline formula
-        block: Block formula
+        inline: فرمول در خط
+        block: بلاک کردن فرمول
     heading:
-      text: Heading
+      text: سرفصل
       options:
-        h1: Heading 1
-        h2: Heading 2
-        h3: Heading 3
-        h4: Heading 4
-        h5: Heading 5
-        h6: Heading 6
+        h1: سرفصل ۱
+        h2: سرفصل ۲
+        h3: سرفصل ۳
+        h4: سرفصل ۴
+        h5: سرفصل ۵
+        h6: سرفصل ۶
     help:
-      text: Help
+      text: راهنما
     hr:
-      text: Horizontal rule
+      text: خط افقی
     image:
-      text: Image
-      add_image: Add image
-      tab_image: Upload image
+      text: عکس
+      add_image: افزودن عکس
+      tab_image: آپلود عکس
       form_image:
         fields:
           file:
-            label: Image file
-            btn: Select image
+            label: فایل عکس
+            btn: انتخاب عکس
             msg:
-              empty: File cannot be empty.
-              only_image: Only image files are allowed.
-              max_size: File size cannot exceed 4MB.
+              empty: فایل نمی تواند خالی باشد.
+              only_image: فقط فایل های تصویری مجاز هستند.
+              max_size: حجم فایل نمی تواند بیشتر از ۴ مگابایت باشد.
           desc:
-            label: Description
-      tab_url: Image URL
+            label: توضیحات
+      tab_url: لینک عکس
       form_url:
         fields:
           url:
-            label: Image URL
+            label: لینک عکس
             msg:
-              empty: Image URL cannot be empty.
+              empty: آدرس عکس نمی‌تواند خالی باشد.
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
-      uploading: Uploading
+            label: توضیحات
+      btn_cancel: لغو
+      btn_confirm: اضافه کردن
+      uploading: درحال ارسال
     indent:
-      text: Indent
+      text: تورفتگی
     outdent:
-      text: Outdent
+      text: بیرون آمدگی
     italic:
-      text: Emphasis
+      text: تاکید
     link:
-      text: Hyperlink
-      add_link: Add hyperlink
+      text: فراپیوند
+      add_link: اضافه کردن فراپیوند
       form:
         fields:
           url:
-            label: URL
+            label: آدرس
             msg:
-              empty: URL cannot be empty.
+              empty: آدرس نمی‌تواند خالی باشد.
           name:
-            label: Description
-      btn_cancel: Cancel
-      btn_confirm: Add
+            label: توضیح
+      btn_cancel: لغو
+      btn_confirm: افزودن
     ordered_list:
-      text: Numbered list
+      text: فهرست عددی
     unordered_list:
-      text: Bulleted list
+      text: لیست گلوله‌ای
     table:
-      text: Table
-      heading: Heading
-      cell: Cell
+      text: جدول
+      heading: سرفصل
+      cell: تلفن همراه
   close_modal:
-    title: I am closing this post as...
-    btn_cancel: Cancel
-    btn_submit: Submit
+    title: این پست را می بندم بدلیل...
+    btn_cancel: لغو
+    btn_submit: فرستادن
     remark:
-      empty: Cannot be empty.
+      empty: نمی‌تواند خالی باشد.
     msg:
-      empty: Please select a reason.
+      empty: لطفا یک دلیل را انتخاب کنید.
   report_modal:
-    flag_title: I am flagging to report this post as...
-    close_title: I am closing this post as...
-    review_question_title: Review question
-    review_answer_title: Review answer
-    review_comment_title: Review comment
-    btn_cancel: Cancel
-    btn_submit: Submit
+    flag_title: من پرچم گذاری می کنم تا این پست را به عنوان گزارش کنم...
+    close_title: این پست را می بندم بدلیل...
+    review_question_title: بازبینی سوال
+    review_answer_title: بازبینی جواب
+    review_comment_title: بازبینی نظر
+    btn_cancel: لغو
+    btn_submit: ثبت
     remark:
-      empty: Cannot be empty.
+      empty: نمی‌تواند خالی باشد.
     msg:
-      empty: Please select a reason.
+      empty: لطفا یک دلیل را انتخاب کنید.
   tag_modal:
-    title: Create new tag
+    title: ساخت تگ جدید
     form:
       fields:
         display_name:
-          label: Display name
+          label: نام
           msg:
-            empty: Display name cannot be empty.
-            range: Display name up to 35 characters.
+            empty: نام نمی تواند خالی باشد.
+            range: نام باید نهایتا ۳۵ حرف داشته باشد.
         slug_name:
-          label: URL slug
-          desc: URL slug up to 35 characters.
+          label: نامک آدس
+          desc: نامک آدرس باید نهایتا ۳۵ حرف داشته باشد.
           msg:
-            empty: URL slug cannot be empty.
-            range: URL slug up to 35 characters.
-            character: URL slug contains unallowed character set.
+            empty: نامک آدرس نمی تواند خالی باشد.
+            range: نامک آدرس باید نهایتا ۳۵ حرف داشته باشد.
+            character: نامک آدرس شامل کلمات غیر مجاز می باشد.
         desc:
-          label: Description
-    btn_cancel: Cancel
-    btn_submit: Submit
-    btn_post: Post new tag
+          label: توضیحات
+    btn_cancel: لغو
+    btn_submit: ثبت
+    btn_post: پست کردن تگ جدید
   tag_info:
-    created_at: Created
-    edited_at: Edited
-    history: History
+    created_at: ایجاد شده
+    edited_at: ویرایش شده
+    history: تاریخچه
     synonyms:
-      title: Synonyms
-      text: The following tags will be remapped to
-      empty: No synonyms found.
-      btn_add: Add a synonym
-      btn_edit: Edit
-      btn_save: Save
-    synonyms_text: The following tags will be remapped to
+      title: مترادف ها
+      text: تگ های زیر مجدداً به آنها نگاشت می شوند
+      empty: مترادفی پیدا نشد.
+      btn_add: افزودن مترادف
+      btn_edit: ویرایش
+      btn_save: ذخیره
+    synonyms_text: تگ های زیر مجدداً به آنها نگاشت می شوند
     delete:
-      title: Delete this tag
+      title: این برچسب حذف شود
       tip_with_posts: >-
         <p>We do not allowed <strong>deleting tag with posts</strong>.</p> <p>Please remove this tag from the posts first.</p>
       tip_with_synonyms: >-
         <p>We do not allowed <strong>deleting tag with synonyms</strong>.</p> <p>Please remove the synonyms from this tag first.</p>
-      tip: Are you sure you wish to delete?
-      close: Close
+      tip: مطمئنید که میخواهید حذف شود?
+      close: بستن
   edit_tag:
-    title: Edit Tag
-    default_reason: Edit tag
+    title: ویرایش تگ‌
+    default_reason: ویرایش تگ‌
     form:
       fields:
         revision:
-          label: Revision
+          label: بازنگری
         display_name:
-          label: Display name
+          label: نام
         slug_name:
-          label: URL slug
-          info: 'Must use the character set "a-z", "0-9", "+ # - ."'
+          label: نامک نشانی اینترنتی
+          info: 'باید از حروف "a-z", "0-9", "+ # -" استفاده شود'
         desc:
-          label: Description
+          label: توضیحات
         edit_summary:
-          label: Edit summary
+          label: ویرایش خلاصه
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
+            بطور خلاصه تغییرات را توضیح دهید (اصلاح املایی، اصلاح دستورزبان،‌ بهبود فرمت دهی)
+    btn_save_edits: ذخیره ویرایشها
+    btn_cancel: لغو
   dates:
     long_date: MMM D
     long_date_with_year: "MMM D, YYYY"
     long_date_with_time: "MMM D, YYYY [at] HH:mm"
-    now: now
-    x_seconds_ago: "{{count}}s ago"
-    x_minutes_ago: "{{count}}m ago"
-    x_hours_ago: "{{count}}h ago"
-    hour: hour
-    day: day
+    now: حالا
+    x_seconds_ago: "{{count}} ثانیه پیش"
+    x_minutes_ago: "{{count}} دقیقه پیش"
+    x_hours_ago: "{{count}}ساعت پیش"
+    hour: ساعت
+    day: روز
   comment:
-    btn_add_comment: Add comment
-    reply_to: Reply to
-    btn_reply: Reply
-    btn_edit: Edit
-    btn_delete: Delete
-    btn_flag: Flag
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
-    show_more: Show more comments
+    btn_add_comment: افزودن نظر
+    reply_to: پاسخ به
+    btn_reply: پاسخ
+    btn_edit: ویرایش
+    btn_delete: حذف
+    btn_flag: نشان
+    btn_save_edits: ذخیره ویرایشها
+    btn_cancel: لغو
+    show_more: نمایش نظرات بیشتر
     tip_question: >-
-      Use comments to ask for more information or suggest improvements. Avoid answering questions in comments.
+      از نظرات برای درخواست اطلاعات بیشتر یا پیشنهاد بهبود استفاده کنید. از پاسخ دادن به سوالات در نظرات خودداری کنید.
     tip_answer: >-
-      Use comments to reply to other users or notify them of changes. If you are adding new information, edit your post instead of commenting.
-    tip_vote: It adds something useful to the post
+      از نظرات برای پاسخ دادن به سایر کاربران یا اطلاع دادن آنها از تغییرات استفاده کنید. اگر اطلاعات جدیدی اضافه می کنید، به جای نظر دادن، پست خود را ویرایش کنید.
+    tip_vote: چیز مفیدی به پست اضافه می کند
   edit_answer:
-    title: Edit Answer
-    default_reason: Edit answer
+    title: ویرایش جواب
+    default_reason: ویرایش جواب
     form:
       fields:
         revision:
-          label: Revision
+          label: بازنگری
         answer:
-          label: Answer
+          label: پاسخ
           feedback:
-            characters: content must be at least 6 characters in length.
+            characters: متن باید حداقل ۶ حرف داشته باشد.
         edit_summary:
-          label: Edit summary
+          label: ویرایش خلاصه
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_save_edits: Save edits
-    btn_cancel: Cancel
+            بطور خلاصه تغییرات را توضیح دهید (اصلاح املایی، اصلاح دستورزبان،‌ بهبود فرمت دهی)
+    btn_save_edits: ذخیره ویرایش ها
+    btn_cancel: لغو
   tags:
-    title: Tags
+    title: برچسب ها
     sort_buttons:
-      popular: Popular
-      name: Name
-      newest: Newest
-    button_follow: Follow
-    button_following: Following
-    tag_label: questions
-    search_placeholder: Filter by tag name
-    no_desc: The tag has no description.
-    more: More
+      popular: محبوب
+      name: نام
+      newest: جدیدترین
+    button_follow: دنبال کردن
+    button_following: دنبال می کنید
+    tag_label: سوالات
+    search_placeholder: فیلتر بر اساس اسم برچسب
+    no_desc: برچسب هیچ توضیحی ندارد.
+    more: بیشتر
   ask:
-    title: Add Question
-    edit_title: Edit Question
-    default_reason: Edit question
-    similar_questions: Similar questions
+    title: سوالی اضافه کنید
+    edit_title: سوال را ویرایش کنید
+    default_reason: سوال را ویرایش کنید
+    similar_questions: سؤال های مشابه
     form:
       fields:
         revision:
-          label: Revision
+          label: تجدید نظر
         title:
-          label: Title
-          placeholder: Be specific and imagine you're asking a question to another person
+          label: عنوان
+          placeholder: به طور خاص فرض کنید که شما یک سؤال از یک شخص دیگری می پرسید
           msg:
-            empty: Title cannot be empty.
-            range: Title up to 150 characters
+            empty: عنوان نمی تواند خالی باشد.
+            range: عنوان میتواند تا ۳۰ حرف باشد
         body:
-          label: Body
+          label: بدنه
           msg:
-            empty: Body cannot be empty.
+            empty: بدنه نمی تواند خالی باشد.
         tags:
-          label: Tags
+          label: برچسب ها
           msg:
-            empty: Tags cannot be empty.
+            empty: برچسب ها نمی تواند خالی باشد.
         answer:
-          label: Answer
+          label: پاسخ
           msg:
-            empty: Answer cannot be empty.
+            empty: جواب نمی تواند خالی باشد.
         edit_summary:
-          label: Edit summary
+          label: ویرایش خلاصه
           placeholder: >-
-            Briefly explain your changes (corrected spelling, fixed grammar, improved formatting)
-    btn_post_question: Post your question
-    btn_save_edits: Save edits
-    answer_question: Answer your own question
-    post_question&answer: Post your question and answer
+            بطور خلاصه تغییرات را توضیح دهید (اصلاح املایی، اصلاح دستورزبان،‌ بهبود فرمت دهی)
+    btn_post_question: سوال خود را پست کنید
+    btn_save_edits: ذخیره ویرایش ها
+    answer_question: جواب دادن به سوال خودتان
+    post_question&answer: سوال خود را پست و جواب دهید
   tag_selector:
-    add_btn: Add tag
-    create_btn: Create new tag
-    search_tag: Search tag
-    hint: "Describe what your question is about, at least one tag is required."
-    no_result: No tags matched
-    tag_required_text: Required tag (at least one)
+    add_btn: اضافه کردن برچسب
+    create_btn: ایجاد یک برچسب جدید
+    search_tag: جست‌وجوی برچسب‌
+    hint: "درمورد سوال خود توضیحی دهید، حداقل یک برچسب نیاز است."
+    no_result: هیچ تگی مطابقت ندارد
+    tag_required_text: تگ نیاز هست (حداقل یک مورد)
   header:
     nav:
-      question: Questions
-      tag: Tags
-      user: Users
-      profile: Profile
-      setting: Settings
-      logout: Log out
-      admin: Admin
-      review: Review
-      bookmark: Bookmarks
-      moderation: Moderation
+      question: سوالات
+      tag: تگ‌ها
+      user: کاربران
+      profile: پروفایل
+      setting: تنظیمات
+      logout: خروج
+      admin: ادمین
+      review: بازبینی
+      bookmark: نشانک ها
+      moderation: مدیریت
     search:
-      placeholder: Search
+      placeholder: جستجو
   footer:
     build_on: >-
       Built on <1> Answer </1>- the open-source software that powers Q&A communities.<br />Made with love © {{cc}}.
   upload_img:
-    name: Change
-    loading: loading...
+    name: تغییر
+    loading: درحال بارگذاری...
   pic_auth_code:
-    title: Captcha
-    placeholder: Type the text above
+    title: کپچا
+    placeholder: متن بالا را تاپ کنید
     msg:
-      empty: Captcha cannot be empty.
+      empty: کپچا نمی تواند خالی باشد.
   inactive:
     first: >-
       You're almost done! We sent an activation mail to <bold>{{mail}}</bold>. Please follow the instructions in the mail to activate your account.
-    info: "If it doesn't arrive, check your spam folder."
+    info: "اگر ایمیل ارسالی را دریافت نکردید، قسمت spam خود را چک کنید."
     another: >-
       We sent another activation email to you at <bold>{{mail}}</bold>. It might take a few minutes for it to arrive; be sure to check your spam folder.
-    btn_name: Resend activation email
-    change_btn_name: Change email
+    btn_name: ارسال مجدد کد فعالسازی
+    change_btn_name: تغییر ایمیل
     msg:
-      empty: Cannot be empty.
+      empty: نمی‌تواند خالی باشد.
     resend_email:
       url_label: Are you sure you want to resend the activation email?
       url_text: You can also give the activation link above to the user.
   login:
-    login_to_continue: Log in to continue
-    info_sign: Don't have an account? <1>Sign up</1>
+    login_to_continue: برای ادامه وارد حساب کاربری شوید
+    info_sign: حساب کاربری ندارید؟ </1>ثبت نام<1>
     info_login: Already have an account? <1>Log in</1>
     agreements: By registering, you agree to the <1>privacy policy</1> and <3>terms of service</3>.
-    forgot_pass: Forgot password?
+    forgot_pass: رمزعبور را فراموش کردید?
     name:
-      label: Name
+      label: نام
       msg:
-        empty: Name cannot be empty.
-        range: Name up to 30 characters.
-        character: 'Must use the character set "a-z", "0-9", " - . _"'
+        empty: نام نمی‌تواند خالی باشد.
+        range: نام میتواند تا ۳۰ حرف باشد.
+        character: 'باید از حروف "a-z", "0-9", "+ # -" استفاده شود'
     email:
-      label: Email
+      label: ایمیل
       msg:
-        empty: Email cannot be empty.
+        empty: ایمیل نمی تواند خالی باشد.
     password:
-      label: Password
+      label: رمز عبور
       msg:
-        empty: Password cannot be empty.
+        empty: رمز عبور نمی تواند خالی باشد.
         different: The passwords entered on both sides are inconsistent
   account_forgot:
-    page_title: Forgot Your Password
-    btn_name: Send me recovery email
+    page_title: رمزعبور را فراموش کردید
+    btn_name: ارسال ایمیل بازیابی
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
-      label: Email
+      label: ایمیل
       msg:
-        empty: Email cannot be empty.
+        empty: ایمیل نمی تواند خالی باشد.
   change_email:
-    btn_cancel: Cancel
-    btn_update: Update email address
+    btn_cancel: لغو
+    btn_update: نشانی ایمیل را به روز کنید
     send_success: >-
       If an account matches <strong>{{mail}}</strong>, you should receive an email with instructions on how to reset your password shortly.
     email:
-      label: New email
+      label: ایمیل جدید
       msg:
         empty: Email cannot be empty.
   oauth:
     connect: Connect with {{ auth_name }}
     remove: Remove {{ auth_name }}
   oauth_bind_email:
-    subtitle: Add a recovery email to your account.
-    btn_update: Update email address
+    subtitle: یک ایمیل بازیابی به حساب خود اضافه کنید.
+    btn_update: نشانی ایمیل را به روز کنید
     email:
-      label: Email
+      label: ایمیل
       msg:
-        empty: Email cannot be empty.
-    modal_title: Email already existes.
-    modal_content: This email address already registered. Are you sure you want to connect to the existing account?
-    modal_cancel: Change email
-    modal_confirm: Connect to the existing account
+        empty: ایمیل نمی تواند خالی باشد.
+    modal_title: ایمیل تکراری.
+    modal_content: این ایمیل قبلا ثبت نام کرده است. آیا مطمئن هستید که می خواهید به حساب ثبت نام کرده متصل شوید?
+    modal_cancel: تغییر ایمیل
+    modal_confirm: به حساب کاربری ثبت نام کرده متصل شوید
   password_reset:
-    page_title: Password Reset
-    btn_name: Reset my password
+    page_title: بازیابی کلمه عبور
+    btn_name: رمز عبورم را بازنشانی کن
     reset_success: >-
-      You successfully changed your password; you will be redirected to the log in page.
+      شما با موفقیت رمز عبور خود را تغییر دادید، به صفحه ورود هدایت می شوید.
     link_invalid: >-
-      Sorry, this password reset link is no longer valid. Perhaps your password is already reset?
-    to_login: Continue to log in page
+      متاسفم،‌ لینک بازنشانی رمز عبور دیگر اعتبار ندارد. شاید رمز عبور شما قبلا تغییر کرده است?
+    to_login: ادامه بدهید تا به صفحه ورود برسید
     password:
-      label: Password
+      label: رمز عبور
       msg:
-        empty: Password cannot be empty.
-        length: The length needs to be between 8 and 32
-        different: The passwords entered on both sides are inconsistent
+        empty: رمز عبور نمی تواند خالی باشد.
+        length: تعداد حروف باید بین ۸ تا ۳۲ باشد
+        different: پسوردهای وارد شده در هر دو طرف متناقض هستند
     password_confirm:
-      label: Confirm new password
+      label: تأیید رمز عبور جديد
   settings:
-    page_title: Settings
-    goto_modify: Go to modify
+    page_title: تنظیمات
+    goto_modify: برای تغییر بروید
     nav:
-      profile: Profile
-      notification: Notifications
-      account: Account
-      interface: Interface
+      profile: پروفایل
+      notification: اعلانات
+      account: حساب کاربری
+      interface: رابط کاربری
     profile:
-      heading: Profile
-      btn_name: Save
+      heading: پروفایل
+      btn_name: ذخیره
       display_name:
-        label: Display name
-        msg: Display name cannot be empty.
-        msg_range: Display name up to 30 characters.
+        label: نام
+        msg: نام نمی تواند خالی باشد.
+        msg_range: نام میتواند تا ۳۰ حرف باشد.
       username:
-        label: Username
-        caption: People can mention you as "@username".
-        msg: Username cannot be empty.
-        msg_range: Username up to 30 characters.
-        character: 'Must use the character set "a-z", "0-9", " - . _"'
+        label: نام‌کاربری
+        caption: دیگران میتوانند به شما به بصورت "@username" اشاره کنند.
+        msg: نام کاربری نمی تواند خالی باشد.
+        msg_range: نام کاربری میتواند تا ۳۰ حرف باشد.
+        character: 'باید از حروف "a-z", "0-9", " - . _" استفاده شود'
       avatar:
-        label: Profile image
+        label: عکس پروفایل
         gravatar: Gravatar
-        gravatar_text: You can change image on
-        custom: Custom
-        custom_text: You can upload your image.
-        default: System
-        msg: Please upload an avatar
+        gravatar_text: می توانید تصویر را تغییر دهید
+        custom: سفارشی
+        custom_text: شما میتوانید عکس خود را بازگذاری کنید.
+        default: سیستم
+        msg: لطفا یک آواتار آپلود کنید
       bio:
-        label: About me
+        label: درباره من
       website:
-        label: Website
+        label: وب سایت
         placeholder: "https://example.com"
-        msg: Website incorrect format
+        msg: فرمت نادرست وب سایت
       location:
-        label: Location
-        placeholder: "City, Country"
+        label: موقعیت
+        placeholder: "شهر، کشور"
     notification:
-      heading: Notifications
-      email: Email
+      heading: اعلانات
+      email: ایمیل
       inbox:
-        label: Email notifications
-        description: Answers to your questions, comments, invites, and more.
+        label: اعلانات ایمیل
+        description: پاسخ به سوالات خود،‌ نظرات،‌ دعوت ها،‌و بیشتر.
       all_new_question:
-        label: All new questions
-        description: Get notified of all new questions. Up to 50 questions per week.
+        label: تمامی سوالات جدید
+        description: درمورد تمامی سوالات جدید با خبر شوید. تا ۵۰ سوال در هفته.
       all_new_question_for_following_tags:
-        label: All new questions for following tags
-        description: Get notified of new questions for following tags.
+        label: تمامی سوالات جدید برای این تگ ها
+        description: درمورد تمامی سوالات جدید در مورد این تگ ها باخبر شوید.
     account:
-      heading: Account
-      change_email_btn: Change email
-      change_pass_btn: Change password
+      heading: حساب کاربری
+      change_email_btn: تغییر ایمیل
+      change_pass_btn: تغییر رمز عبور
       change_email_info: >-
-        We've sent an email to that address. Please follow the confirmation instructions.
+        ما یک ایمیل به آن آدرس ارسال کردیم. لطفا مراحل تایید را طی کنید.
       email:
-        label: New email
-        msg: New email cannot be empty.
+        label: ایمیل جدید
+        msg: ایمیل جدید نباید خالی باشد.
       pass:
-        label: Current password
-        msg: Password cannot be empty.
-      password_title: Password
+        label: رمز عبور فعلی
+        msg: رمز عبور نمی تواند خالی باشد.
+      password_title: رمز عبور
       current_pass:
-        label: Current password
+        label: رمز عبور فعلی
         msg:
-          empty: Current password cannot be empty.
-          length: The length needs to be between 8 and 32.
-          different: The two entered passwords do not match.
+          empty: رمز عبور نمی تواند خالی باشد.
+          length: تعداد حروف باید بین ۸ تا ۳۲ باشد.
+          different: دو رمز عبور وارد شده همخوانی ندارند.
       new_pass:
-        label: New password
+        label: رمز عبور جدید
       pass_confirm:
-        label: Confirm new password
+        label: تأیید رمز عبور جديد
     interface:
-      heading: Interface
+      heading: رابط کاربری
       lang:
-        label: Interface language
-        text: User interface language. It will change when you refresh the page.
+        label: زبان رابط کاربری
+        text: زبان رابط کاربری. زمانی تغییر می کند که صفحه را دوباره بارگذاری کنید.
     my_logins:
-      title: My logins
-      label: Log in or sign up on this site using these accounts.
-      modal_title: Remove login
-      modal_content: Are you sure you want to remove this login from your account?
-      modal_confirm_btn: Remove
-      remove_success: Removed successfully
+      title: ورود های من
+      label: با استفاده از این حساب ها وارد این سایت شوید یا ثبت نام کنید.
+      modal_title: حذف ورود
+      modal_content: آیا مطمئن هستید که می خواهید این ورود را از حساب خود حذف کنید؟
+      modal_confirm_btn: حذف
+      remove_success: با موفقیت حذف شد
   toast:
-    update: update success
-    update_password: Password changed successfully.
-    flag_success: Thanks for flagging.
-    forbidden_operate_self: Forbidden to operate on yourself
-    review: Your revision will show after review.
-    sent_success: Sent successfully
+    update: بروز رسانی موفق بود
+    update_password: رمز عبور با موفقیت تغییر کرد.
+    flag_success: ممنون بابت اطلاع دادن.
+    forbidden_operate_self: عملیات غیر مجاز
+    review: بازبینی شما پس از بررسی نشان داده خواهد شد.
+    sent_success: با موفقيت ارسال شد
   related_question:
-    title: Related Questions
-    answers: answers
+    title: سوالات مرتبط
+    answers: جواب ها
   invite_to_answer:
-    title: People Asked
-    desc: Invite people who you think might know the answer.
-    invite: Invite to answer
-    add: Add people
-    search: Search people
+    title: مردم پرسیدند
+    desc: افرادی را دعوت کنید که فکر می کنید ممکن است پاسخ را بدانند.
+    invite: دعوت به پاسخ
+    add: افزودن افراد
+    search: جستجوی افراد
   question_detail:
-    action: Action
-    Asked: Asked
-    asked: asked
-    update: Modified
-    edit: edited
-    Views: Viewed
-    Follow: Follow
-    Following: Following
-    follow_tip: Follow this question to receive notifications
-    answered: answered
-    closed_in: Closed in
-    show_exist: Show existing question.
-    useful: Useful
-    question_useful: It is useful and clear
-    question_un_useful: It is unclear or not useful
-    question_bookmark: Bookmark this question
-    answer_useful: It is useful
-    answer_un_useful: It is not useful
+    action: عملیات
+    Asked: پرسیده شده
+    asked: پرسیده شده
+    update: تغییر یافته
+    edit: ویرایش شده
+    Views: مشاهده شده
+    Follow: دنبال کردن
+    Following: دنبال می کنید
+    follow_tip: برای دریافت اعلان ها این سوال را دنبال کنید
+    answered: جواب داده
+    closed_in: بسته شده د
+    show_exist: نمایش سوال موجود.
+    useful: مفید
+    question_useful: مفید و واضح است
+    question_un_useful: نامشخص یا مفید نیست
+    question_bookmark: این سوال را نشانه گذاری کنید
+    answer_useful: مفید است
+    answer_un_useful: مفید نیست
     answers:
-      title: Answers
-      score: Score
-      newest: Newest
-      btn_accept: Accept
-      btn_accepted: Accepted
+      title: پاسخ ها
+      score: امتیاز
+      newest: جدیدترین
+      btn_accept: پذیرفتن
+      btn_accepted: پذیرفته شده
     write_answer:
-      title: Your Answer
-      btn_name: Post your answer
-      add_another_answer: Add another answer
-      confirm_title: Continue to answer
-      continue: Continue
+      title: پاسخ شما
+      btn_name: پاسخ خود را ارسال کنید
+      add_another_answer: پاسخ دیگری اضافه کنید
+      confirm_title: به پاسخ دادن ادامه دهید
+      continue: ادامه دهید
       confirm_info: >-
         <p>Are you sure you want to add another answer?</p><p>You could use the edit link to refine and improve your existing answer, instead.</p>
-      empty: Answer cannot be empty.
-      characters: content must be at least 6 characters in length.
+      empty: جواب نمی تواند خالی باشد.
+      characters: متن باید حداقل ۶ حرف داشته باشد.
       tips:
-        header_1: Thanks for your answer
-        li1_1: Please be sure to <strong>answer the question</strong>. Provide details and share your research.
-        li1_2: Back up any statements you make with references or personal experience.
-        header_2: But <strong>avoid</strong> ...
-        li2_1: Asking for help, seeking clarification, or responding to other answers.
+        header_1: از جواب شما متشکریم
+        li1_1: لطفا مطمئن شوید که <strong>جواب دهید سوال را</strong>. جزئیات بیشتری ارائه دهید و تحقیقات خود را به اشتراک بگذارید.
+        li1_2: از هر اظهاراتی که می کنید با ارجاعات یا تجربه شخصی پشتیبان بگیرید.
+        header_2: اما <strong>دوری کنید</strong> ...
+        li2_1: درخواست کمک، به دنبال شفاف سازی، یا پاسخ به پاسخ های دیگر.
     reopen:
-      confirm_btn: Reopen
-      title: Reopen this post
-      content: Are you sure you want to reopen?
+      confirm_btn: بازگشایی مجدد
+      title: بازگشایی مجدد این پست
+      content: آیا مطمئن هستید که می‌خواهید بازگشایی مجدد انجام دهید?
     pin:
-      title: Pin this post
-      content: Are you sure you wish to pinned globally? This post will appear at the top of all post lists.
-      confirm_btn: Pin
+      title: پست را پین کن
+      content: آیا مطمئن هستید میخواهید پست بصورت عمومی پین شود؟ پست در بالای تمامی پست ها نشان داده خواهد شد.
+      confirm_btn: پین کردن
   delete:
-    title: Delete this post
+    title: حذف این پست
     question: >-
-      We do not recommend <strong>deleting questions with answers</strong> because doing so deprives future readers of this knowledge.</p><p>Repeated deletion of answered questions can result in your account being blocked from asking. Are you sure you wish to delete?
+      ما <strong>حذف سوالات با جواب</strong> را پیشنهاد نمی کنیم، زیرا انجام این کار خوانندگان آینده را از این دانش محروم می کند.</p><p> حذف مکرر سؤالات پاسخ داده شده می تواند منجر به مسدود شدن حساب شما از سؤال شود. آیا مطمئن هستید که می خواهید حذف کنید?
     answer_accepted: >-
-      <p>We do not recommend <strong>deleting accepted answer</strong> because doing so deprives future readers of this knowledge. </p> Repeated deletion of accepted answers can result in your account being blocked from answering. Are you sure you wish to delete?
-    other: Are you sure you wish to delete?
-    tip_answer_deleted: This answer has been deleted
+      ما <strong>حذف جواب تایید شده</strong> را پیشنهاد نمی کنیم، زیرا انجام این کار خوانندگان آینده را از این دانش محروم می کند.</p><p> حذف مکرر سؤالات پاسخ داده شده می تواند منجر به مسدود شدن حساب شما از سؤال شود. آیا مطمئن هستید که می خواهید حذف کنید?
+    other: مطمئنید که میخواهید حذف شود?
+    tip_answer_deleted: جواب شما حذف شده است
+    undelete_title: Undelete this post
+    undelete_desc: Are you sure you wish to undelete?
   btns:
-    confirm: Confirm
-    cancel: Cancel
-    edit: Edit
-    save: Save
-    delete: Delete
-    login: Log in
-    signup: Sign up
-    logout: Log out
-    verify: Verify
-    add_question: Add question
-    approve: Approve
-    reject: Reject
-    skip: Skip
-    discard_draft: Discard draft
-    pinned: Pinned
-    all: All
-    question: Question
-    answer: Answer
-    comment: Comment
-    refresh: Refresh
-    resend: Resend
+    confirm: تایید
+    cancel: لغو
+    edit: ویرایش
+    save: ذخیره
+    delete: حذف
+    undelete: Undelete
+    login: ورود
+    signup: عضويت
+    logout: خروج
+    verify: تایید
+    add_question: اضافه کردن سوال
+    approve: تایید
+    reject: رد کردن
+    skip: بعدی
+    discard_draft: دور انداختن پیش‌نویس‌
+    pinned: پین شد
+    all: همه
+    question: سوال
+    answer: پاسخ
+    comment: نظر
+    refresh: بارگذاری مجدد
+    resend: ارسال مجدد
+    deactivate: Deactivate
+    active: Active
+    suspend: Suspend
+    unsuspend: Unsuspend
+    close: Close
+    reopen: Reopen
+    ok: OK
   search:
-    title: Search Results
-    keywords: Keywords
-    options: Options
-    follow: Follow
-    following: Following
-    counts: "{{count}} Results"
-    more: More
+    title: نتایج جستجو
+    keywords: کلیدواژه ها
+    options: گزینه‌ها
+    follow: دنبال کردن
+    following: دنبال میکنید
+    counts: "{{count}} نتیجه"
+    more: بیشتر
     sort_btns:
-      relevance: Relevance
-      newest: Newest
-      active: Active
-      score: Score
-      more: More
+      relevance: مرتبط
+      newest: جدیدترین
+      active: فعال
+      score: امتیاز
+      more: بیشتر
     tips:
-      title: Advanced Search Tips
-      tag: "<1>[tag]</1> search withing a tag"
-      user: "<1>user:username</1> search by author"
-      answer: "<1>answers:0</1> unanswered questions"
+      title: گزینه های پیشرفته جستجو
+      tag: "<1>[tag]</1> جستجو با یک تگ"
+      user: "<1>user:username</1> جستجو براساس نویسنده"
+      answer: "<1>answers:0</1> سوال بی جواب"
       score: "<1>score:3</1> posts with a 3+ score"
       question: "<1>is:question</1> search questions"
       is_answer: "<1>is:answer</1> search answers"
-    empty: We couldn't find anything. <br /> Try different or less specific keywords.
+    empty: چیزی پیدا نکردیم <br /> کلمات کلیدی متفاوت یا کمتر خاص را امتحان کنید.
   share:
-    name: Share
-    copy: Copy link
-    via: Share post via...
-    copied: Copied
-    facebook: Share to Facebook
-    twitter: Share to Twitter
-  cannot_vote_for_self: You can't vote for your own post.
+    name: اشتراک‌گذاری
+    copy: کپی کردن لینک
+    via: اشتراک گذاری پست با...
+    copied: کپی انجام شد
+    facebook: اشتراک گذاری در فیس بوک
+    twitter: اشتراک گذاری در Twitter
+  cannot_vote_for_self: شما نمی توانید به پست خودتان رای دهید.
   modal_confirm:
-    title: Error...
+    title: خطا...
   account_result:
-    success: Your new account is confirmed; you will be redirected to the home page.
-    link: Continue to homepage
+    success: اکانت جدید شما تایید شده است، به صفحه خانه منتقل خواهید شد.
+    link: ادامه بدهید تا به صفحه خانه برسید
     invalid: >-
-      Sorry, this account confirmation link is no longer valid. Perhaps your account is already active?
-    confirm_new_email: Your email has been updated.
+      متاسفیم، لینک تایید این حساب دیگر مجاز نیست. شاید حساب شما از قبل فعال شده است?
+    confirm_new_email: ایمیل شما به‌روز شده است.
     confirm_new_email_invalid: >-
-      Sorry, this confirmation link is no longer valid. Perhaps your email was already changed?
+      متاسفیم، لینک تایید دیگر مجاز نیست. شاید حساب شما از قبل فعال شده است?
   unsubscribe:
-    page_title: Unsubscribe
-    success_title: Unsubscribe Successful
-    success_desc: You have been successfully removed from this subscriber list and won't receive any further emails from us.
-    link: Change settings
+    page_title: قطع عضویت
+    success_title: لغو عضویت موفق (Automatic Translation)
+    success_desc: شما با موفقیت از این لیست مشترک حذف شده اید و دیگر ایمیلی از ما دریافت نخواهید کرد.
+    link: تغییر تنظیمات
   question:
-    following_tags: Following Tags
-    edit: Edit
-    save: Save
-    follow_tag_tip: Follow tags to curate your list of questions.
-    hot_questions: Hot Questions
-    all_questions: All Questions
-    x_questions: "{{ count }} Questions"
-    x_answers: "{{ count }} answers"
-    questions: Questions
-    answers: Answers
-    newest: Newest
-    active: Active
-    frequent: Frequent
-    score: Score
-    unanswered: Unanswered
-    modified: modified
-    answered: answered
-    asked: asked
-    closed: closed
-    follow_a_tag: Follow a tag
-    more: More
+    following_tags: تگهای مورد نظر
+    edit: ویرایش
+    save: ذخیره
+    follow_tag_tip: برچسب ها را دنبال کنید تا لیست سوالات خود را تنظیم کنید.
+    hot_questions: سوالات داغ
+    all_questions: تمام سوالات
+    x_questions: "{{ count }} سوال"
+    x_answers: "{{ count }} جواب"
+    questions: سوالات
+    answers: پاسخ ها
+    newest: جدیدترین
+    active: فعال
+    frequent: پرتکرار
+    score: امتیاز
+    unanswered: بدون پاسخ
+    modified: تغییر یافته
+    answered: جواب داده
+    asked: پرسیده شده
+    closed: بسته
+    follow_a_tag: یک برچسب را دنبال کنید
+    more: بیشتر
   personal:
-    overview: Overview
-    answers: Answers
-    answer: answer
-    questions: Questions
-    question: question
-    bookmarks: Bookmarks
-    reputation: Reputation
-    comments: Comments
-    votes: Votes
-    newest: Newest
-    score: Score
-    edit_profile: Edit profile
+    overview: خلاصه
+    answers: پاسخ ها
+    answer: پاسخ
+    questions: سوالات
+    question: سوال
+    bookmarks: نشان ها
+    reputation: محبوبیت
+    comments: نظرات
+    votes: آراء
+    newest: جدیدترین
+    score: امتیاز
+    edit_profile: ویرایش پروفایل
     visited_x_days: "Visited {{ count }} days"
-    viewed: Viewed
-    joined: Joined
-    last_login: Seen
-    about_me: About Me
+    viewed: مشاهده شده
+    joined: عضو شد
+    last_login: مشاهده شده
+    about_me: درباره من
     about_me_empty: "// Hello, World !"
-    top_answers: Top Answers
-    top_questions: Top Questions
-    stats: Stats
+    top_answers: پاسخ های برتر
+    top_questions: سوالات برتر
+    stats: آمار
     list_empty: No posts found.<br />Perhaps you'd like to select a different tab?
-    accepted: Accepted
-    answered: answered
-    asked: asked
-    downvoted: downvoted
+    accepted: پذیرفته شده
+    answered: جواب داده
+    asked: پرسیده شده
+    downvoted: رأی منفی
     mod_short: MOD
     mod_long: Moderators
-    x_reputation: reputation
-    x_votes: votes received
-    x_answers: answers
-    x_questions: questions
+    x_reputation: محبوبیت
+    x_votes: آرای دریافت شد
+    x_answers: جواب ها
+    x_questions: سوالات
   install:
-    title: Answer
-    next: Next
-    done: Done
-    config_yaml_error: Can't create the config.yaml file.
+    title: پاسخ
+    next: بعدی
+    done: انجام شده
+    config_yaml_error: نمیتوان فایل config.yaml را ایجاد کرد.
     lang:
-      label: Please choose a language
+      label: لطفا زبان خود را انتخاب کنید
     db_type:
-      label: Database engine
+      label: موتور پایگاه‌داده
     db_username:
-      label: Username
-      placeholder: root
-      msg: Username cannot be empty.
+      label: نام‌کاربری
+      placeholder: روت
+      msg: نام کاربری نمی تواند خالی باشد.
     db_password:
-      label: Password
-      placeholder: root
-      msg: Password cannot be empty.
+      label: رمز عبور
+      placeholder: روت
+      msg: رمز عبور نمی تواند خالی باشد.
     db_host:
-      label: Database host
+      label: میزبان پایگاه داده
       placeholder: "db:3306"
-      msg: Database host cannot be empty.
+      msg: پایگاه داده میزبان نمیتواند خالی باشد.
     db_name:
-      label: Database name
-      placeholder: answer
-      msg: Database name cannot be empty.
+      label: نام پایگاه‌داده
+      placeholder: پاسخ
+      msg: نام پایگاه داده میزبان نمیتواند خالی باشد.
     db_file:
-      label: Database file
+      label: فایل پایگاه داده
       placeholder: /data/answer.db
-      msg: Database file cannot be empty.
+      msg: فایل پایگاه داده نمیتواند خالی باشد.
     config_yaml:
-      title: Create config.yaml
-      label: The config.yaml file created.
+      title: Config.yaml را بسازید
+      label: فایل config.yaml ساخته شد.
       desc: >-
-        You can create the <1>config.yaml</1> file manually in the <1>/var/wwww/xxx/</1> directory and paste the following text into it.
-      info: After you've done that, click "Next" button.
-    site_information: Site Information
-    admin_account: Admin Account
+        شما بصورت دستی میتوانید فایل <1>config.yaml</1> را در پوشه <1>/var/wwww/xxx/ </1> ایجاد و متن را در داخل آن جایگذاری کنید.
+      info: بعد از اتمام،‌ بر روی "بعدی" کلیک کنید.
+    site_information: اطلاعات سایت
+    admin_account: حساب ادمین
     site_name:
-      label: Site name
-      msg: Site name cannot be empty.
+      label: نام سایت
+      msg: نام سایت نمی تواند خالی باشد.
+      msg_max_length: Site name must be at maximum 30 characters in length.
     site_url:
-      label: Site URL
-      text: The address of your site.
+      label: آدرس سایت
+      text: آدرس سایت شما
       msg:
-        empty: Site URL cannot be empty.
-        incorrect: Site URL incorrect format.
+        empty: آدرس سایت نمی تواند خالی باشد.
+        incorrect: فرمت آدرس سایت نادرست است.
+        max_length: Site URL must be at maximum 512 characters in length.
     contact_email:
-      label: Contact email
-      text: Email address of key contact responsible for this site.
+      label: ایمیل ارتباطی
+      text: آدرس ایمیل مخاطب کلیدی پاسخگو برای این سایت.
       msg:
-        empty: Contact email cannot be empty.
-        incorrect: Contact email incorrect format.
+        empty: ایمیل مخاطب نمی تواند خالی باشد.
+        incorrect: فرمت ایمیل مخاطب نادرست است.
     login_required:
-      label: Private
-      switch: Login required
-      text: Only logged in users can access this community.
+      label: خصوصی
+      switch: ورود الزامی است
+      text: تنها افرادی که وارد سایت شده اند میتوانند به این انجمن دسترسی پیدا کنند.
     admin_name:
-      label: Name
-      msg: Name cannot be empty.
-      character: 'Must use the character set "a-z", "0-9", " - . _"'
+      label: نام
+      msg: نام نمی‌تواند خالی باشد.
+      character: 'باید از حروف "a-z", "0-9", " - . _" استفاده شود'
+      msg_max_length: Name must be at maximum 30 characters in length.
     admin_password:
-      label: Password
+      label: رمز عبور
       text: >-
-        You will need this password to log in. Please store it in a secure location.
-      msg: Password cannot be empty.
+        شما برای ورود نیازمند این پسورد خواهید بود. لطفا در محل امنی ذخیره کنید.
+      msg: رمز عبور نمی تواند خالی باشد.
+      msg_min_length: Password must be at least 8 characters in length.
+      msg_max_length: Password must be at maximum 32 characters in length.
     admin_email:
-      label: Email
-      text: You will need this email to log in.
+      label: ایمیل
+      text: شما به این ایمیل برای ورود نیاز خواهید داشت.
       msg:
-        empty: Email cannot be empty.
-        incorrect: Email incorrect format.
-    ready_title: Your Answer is ready!
+        empty: ایمیل نمی تواند خالی باشد.
+        incorrect: فرمت ایمیل نادرست است.
+    ready_title: Answer شما آماده است!
     ready_desc: >-
-      If you ever feel like changing more settings, visit <1>admin section</1>; find it in the site menu.
-    good_luck: "Have fun, and good luck!"
-    warn_title: Warning
+      اگر به تغییر بیشتر تنظیمات نیاز دارید،‌به <1> قسمت ادمین </1> مراجعه کنید،‌میتوانید این گزینه را در منو سایت مشاهده کنید.
+    good_luck: "خوش بگذره و موفق باشید!"
+    warn_title: هشدار
     warn_desc: >-
       The file <1>config.yaml</1> already exists. If you need to reset any of the configuration items in this file, please delete it first.
     install_now: You may try <1>installing now</1>.
-    installed: Already installed
+    installed: قبلاً نصب شده است
     installed_desc: >-
-      You appear to have already installed. To reinstall please clear your old database tables first.
-    db_failed: Database connection failed
+      شما پیش از‌این وردپرس را برپا نموده‌اید. برای راه‌اندازی دوباره ابتدا جدول‌های کهنه در پایگاه‌داده را پاک نمایید.
+    db_failed: اتصال به دیتابیس موفقیت آمیز نبود
     db_failed_desc: >-
       This either means that the database information in your <1>config.yaml</1> file is incorrect or that contact with the database server could not be established. This could mean your host's database server is down.
   counts:
-    views: views
-    votes: votes
-    answers: answers
-    accepted: Accepted
+    views: مشاهده
+    votes: آراء
+    answers: جواب ها
+    accepted: پذیرفته شده
   page_error:
     http_error: HTTP Error {{ code }}
-    desc_403: You don't have permission to access this page.
-    desc_404: Unfortunately, this page doesn't exist.
+    desc_403: شما مجوز دسترسی به این صفحه را ندارید.
+    desc_404: متاسفانه این صفحه وجود ندارد.
     desc_50X: The server encountered an error and could not complete your request.
-    back_home: Back to homepage
+    back_home: بازگشت به صفحه اصلی
   page_maintenance:
-    desc: "We are under maintenance, we'll be back soon."
+    desc: "ما درحال تعمیر هستیم، به زودی برمی گردیم."
   nav_menus:
-    dashboard: Dashboard
-    contents: Contents
-    questions: Questions
-    answers: Answers
-    users: Users
-    flags: Flags
-    settings: Settings
-    general: General
-    interface: Interface
+    dashboard: داشبرد
+    contents: محتوا
+    questions: سوالات
+    answers: پاسخ ها
+    users: کاربران
+    flags: پرچم
+    settings: تنظیمات
+    general: عمومی
+    interface: رابط کاربری
     smtp: SMTP
-    branding: Branding
-    legal: Legal
-    write: Write
-    tos: Terms of Service
-    privacy: Privacy
-    seo: SEO
-    customize: Customize
-    themes: Themes
+    branding: نام تجاری
+    legal: قانونی
+    write: نوشتن
+    tos: قوانین
+    privacy: حریم خصوصی
+    seo: سئو
+    customize: شخصی‌سازی
+    themes: پوسته ها
     css_html: CSS/HTML
-    login: Login
-    privileges: Privileges
-    plugins: Plugins
-    installed_plugins: Installed Plugins
-  website_welcome: Welcome to {{site_name}}
+    login: ورود
+    privileges: مجوزها
+    plugins: افزونه‌ها
+    installed_plugins: پلاگین های نصب شده
+  website_welcome: به {{site_name}} خوش آمدید
   user_center:
-    login: Login
-    qrcode_login_tip: Please use {{ agentName }} to scan the QR code and log in.
-    login_failed_email_tip: Login failed, please allow this app to access your email information before try again.
+    login: ورود
+    qrcode_login_tip: لطفاً از {{ agentName }} برای اسکن کد QR و ورود به سیستم استفاده کنید.
+    login_failed_email_tip: ورود ناموفق بود، لطفاً قبل از امتحان مجدد به این برنامه اجازه دهید به اطلاعات ایمیل شما دسترسی داشته باشد.
   admin:
     admin_header:
-      title: Admin
+      title: ادمین
     dashboard:
-      title: Dashboard
-      welcome: Welcome to Answer Admin!
-      site_statistics: Site Statistics
-      questions: "Questions:"
-      answers: "Answers:"
-      comments: "Comments:"
-      votes: "Votes:"
-      active_users: "Active users:"
-      flags: "Flags:"
-      site_health_status: Site Health Status
-      version: "Version:"
+      title: داشبرد
+      welcome: به پاسخ مدیر خوش آمدید!
+      site_statistics: آمار سایت
+      questions: "سوالات:"
+      answers: "جواب ها:"
+      comments: "نظرات:"
+      votes: "آرا:"
+      active_users: "کاربران فعال:"
+      flags: "علامت‌ها:"
+      site_health_status: وضعیت سلامت سایت
+      version: "نسخه:"
       https: "HTTPS:"
-      uploading_files: "Uploading files:"
+      uploading_files: "فایل های در حال آپلود:"
       smtp: "SMTP:"
-      timezone: "Timezone:"
-      system_info: System Info
-      storage_used: "Storage used:"
-      uptime: "Uptime:"
-      answer_links: Answer Links
-      documents: Documents
-      feedback: Feedback
-      support: Support
-      review: Review
-      config: Config
-      update_to: Update to
-      latest: Latest
-      check_failed: Check failed
-      "yes": "Yes"
-      "no": "No"
-      not_allowed: Not allowed
-      allowed: Allowed
-      enabled: Enabled
-      disabled: Disabled
+      timezone: "منطقه زمانی:"
+      system_info: اطلاعات سیستم
+      storage_used: "فضای استفاده شده:"
+      uptime: "پایداری:"
+      answer_links: لینک های Answer
+      documents: اسناد
+      feedback: ﺑﺎﺯﺧﻮﺭﺩ
+      support: پشتیبانی
+      review: بازبینی
+      config: کانفینگ
+      update_to: آپدیت کردن به
+      latest: آخرین
+      check_failed: بررسی ناموفق بود
+      "yes": "بله"
+      "no": "نه"
+      not_allowed: غیر مجاز
+      allowed: مجاز
+      enabled: فعال
+      disabled: غیرفعال
     flags:
-      title: Flags
-      pending: Pending
-      completed: Completed
-      flagged: Flagged
-      flagged_type: Flagged {{ type }}
-      created: Created
-      action: Action
-      review: Review
-    change_modal:
-      title: Change user status to...
-      btn_cancel: Cancel
-      btn_submit: Submit
-      normal_name: normal
-      normal_desc: A normal user can ask and answer questions.
-      suspended_name: suspended
-      suspended_desc: A suspended user can't log in.
-      deleted_name: deleted
-      deleted_desc: "Delete profile, authentication associations."
-      inactive_name: inactive
-      inactive_desc: An inactive user must re-validate their email.
-      confirm_title: Delete this user
-      confirm_content: Are you sure you want to delete this user? This is permanent!
-      confirm_btn: Delete
-      msg:
-        empty: Please select a reason.
-    status_modal:
-      title: "Change {{ type }} status to..."
-      normal_name: normal
-      normal_desc: A normal post available to everyone.
-      closed_name: closed
-      closed_desc: "A closed question can't answer, but still can edit, vote and comment."
-      deleted_name: deleted
-      deleted_desc: This post will be deleted.
-      btn_cancel: Cancel
-      btn_submit: Submit
-      btn_next: Next
+      title: علامت‌ها
+      pending: در حالت انتظار
+      completed: تکمیل شده
+      flagged: علامت گذاری شده
+      flagged_type: پرچم گذاری شده {{ type }}
+      created: ایجاد شده
+      action: عمل
+      review: بازبینی
     user_role_modal:
-      title: Change user role to...
-      btn_cancel: Cancel
-      btn_submit: Submit
+      title: تغییر نقش کاربر به ...
+      btn_cancel: لغو
+      btn_submit: ثبت
     new_password_modal:
-      title: Set new password
+      title: تعیین رمزعبور جدید
       form:
         fields:
           password:
-            label: Password
-            text: The user will be logged out and need to login again.
-            msg: Password must be at 8-32 characters in length.
-      btn_cancel: Cancel
-      btn_submit: Submit
+            label: رمز عبور
+            text: کاربر از سیستم خارج می شود و باید دوباره وارد سیستم شود.
+            msg: رمز عبور باید 8 تا 32 کاراکتر باشد.
+      btn_cancel: لغو
+      btn_submit: ثبت
     user_modal:
-      title: Add new user
+      title: افزودن کاربر جدید
       form:
         fields:
           users:
             label: Bulk add user
             placeholder: "John Smith, john@example.com, BUSYopr2\nAlice, alice@example.com, fpDntV8q"
             text: Separate “name, email, password” with commas. One user per line.
-            msg: "Please enter the user's email, one per line."
+            msg: "لطفا ایمیل کاربر را در هر خط یکی وارد کنید."
           display_name:
-            label: Display name
-            msg: Display name must be at 4-30 characters in length.
+            label: نمایش نام
+            msg: نام نمایشی باید 4 تا 30 کاراکتر باشد.
           email:
-            label: Email
-            msg: Email is not valid.
+            label: ایمیل
+            msg: ایمیل معتبر نمی‌باشد
           password:
-            label: Password
-            msg: Password must be at 8-32 characters in length.
-      btn_cancel: Cancel
-      btn_submit: Submit
+            label: رمز عبور
+            msg: رمز عبور باید 8 تا 32 کاراکتر باشد.
+      btn_cancel: لغو
+      btn_submit: ثبت
     users:
-      title: Users
-      name: Name
-      email: Email
-      reputation: Reputation
-      created_at: Created Time
+      title: کاربرها
+      name: نام
+      email: ایمیل
+      reputation: محبوبیت
+      created_at: زمان ایجاد
       delete_at: Deleted Time
-      suspend_at: Suspended Time
-      status: Status
-      role: Role
-      action: Action
-      change: Change
-      all: All
-      staff: Staff
-      more: More
-      inactive: Inactive
-      suspended: Suspended
-      deleted: Deleted
-      normal: Normal
-      Moderator: Moderator
-      Admin: Admin
-      User: User
+      suspend_at: زمان معلق
+      status: وضعیت
+      role: نقش
+      action: عمل
+      change: تغییر
+      all: همه
+      staff: کارکنان
+      more: بیشتر
+      inactive: غیرفعال
+      suspended: تعلیق شده
+      deleted: حذف شده
+      normal: عادي
+      Moderator: مدير
+      Admin: ادمین
+      User: کاربر
       filter:
-        placeholder: "Filter by name, user:id"
-      set_new_password: Set new password
-      change_status: Change status
-      change_role: Change role
-      show_logs: Show logs
-      add_user: Add user
+        placeholder: "فیلتر براساس، user:id"
+      set_new_password: تعیین رمزعبور جدید
+      change_status: تغییر وضعیت
+      change_role: تغییر نقش
+      show_logs: نمایش ورود ها
+      add_user: افزودن کاربر
+      deactivate_user:
+        title: Deactivate user
+        content: An inactive user must re-validate their email.
+      delete_user:
+        title: Delete this user
+        content: Are you sure you want to delete this user? This is permanent!
+        remove: Remove their content
+        label: Remove all questions, answers, comments, etc.
+        text: Don’t check this if you wish to only delete the user’s account.
+      suspend_user:
+        title: Suspend this user
+        content: A suspended user can't log in.
     questions:
-      page_title: Questions
-      normal: Normal
-      closed: Closed
-      deleted: Deleted
-      post: Post
-      votes: Votes
-      answers: Answers
-      created: Created
-      status: Status
-      action: Action
-      change: Change
+      page_title: سوالات
+      normal: عادی
+      closed: بسته
+      deleted: حذف شده
+      post: پست
+      votes: آراء
+      answers: پاسخ ها
+      created: ایجاد شده
+      status: وضعیت
+      action: عمل
+      change: تغییر
       filter:
-        placeholder: "Filter by title, question:id"
+        placeholder: "فیلتر براساس، user:id"
     answers:
-      page_title: Answers
-      normal: Normal
-      deleted: Deleted
-      post: Post
-      votes: Votes
-      created: Created
-      status: Status
-      action: Action
-      change: Change
+      page_title: پاسخ ها
+      normal: عادی
+      deleted: حذف شده
+      post: پست
+      votes: آراء
+      created: ایجاد شده
+      status: وضعیت
+      action: اقدام
+      change: تغییر
       filter:
-        placeholder: "Filter by title, answer:id"
+        placeholder: "فیلتر براساس، user:id"
     general:
-      page_title: General
+      page_title: عمومی
       name:
-        label: Site name
-        msg: Site name cannot be empty.
-        text: "The name of this site, as used in the title tag."
+        label: نام سایت
+        msg: نام سایت نمی تواند خالی باشد.
+        text: "نام این سایت همانطور که در تگ عنوان استفاده شده است."
       site_url:
-        label: Site URL
-        msg: Site url cannot be empty.
-        validate: Please enter a valid URL.
-        text: The address of your site.
+        label: آدرس سایت
+        msg: آدرس سایت نمی تواند خالی باشد.
+        validate: لطفا یک url معتبر وارد کنید.
+        text: آدرس سایت شما.
       short_desc:
-        label: Short site description
-        msg: Short site description cannot be empty.
-        text: "Short description, as used in the title tag on homepage."
+        label: نام این سایت مورد استفاده قرار گرفته است
+        msg: توضیحات کوتاه سایت نمی تواند خالی باشد.
+        text: "شرح کوتاه، همانطور که در تگ عنوان در صفحه اصلی استفاده شده است."
       desc:
-        label: Site description
-        msg: Site description cannot be empty.
-        text: "Describe this site in one sentence, as used in the meta description tag."
+        label: توضیحات سایت
+        msg: توضیحات کوتاه سایت نمی تواند خالی باشد.
+        text: "همانطور که در تگ توضیحات متا استفاده شده است، این سایت را در یک جمله توصیف کنید."
       contact_email:
-        label: Contact email
-        msg: Contact email cannot be empty.
-        validate: Contact email is not valid.
+        label: ایمیل ارتباطی
+        msg: ایمیل مخاطب نمی تواند خالی باشد.
+        validate: ایمیل تماس معتبر نیست.
         text: Email address of key contact responsible for this site.
     interface:
-      page_title: Interface
+      page_title: رابط کاربری
       language:
-        label: Interface language
-        msg: Interface language cannot be empty.
-        text: User interface language. It will change when you refresh the page.
+        label: زبان رابط کاربری
+        msg: زبان رابط نمی تواند خالی باشد.
+        text: زبان رابط کاربری. زمانی تغییر می کند که صفحه را دوباره بارگذاری کنید.
       time_zone:
-        label: Timezone
-        msg: Timezone cannot be empty.
-        text: Choose a city in the same timezone as you.
+        label: منطقه زمانی
+        msg: منطقه زمانی نمی تواند خالی باشد.
+        text: شهری را در همان منطقه زمانی خود انتخاب کنید.
     smtp:
       page_title: SMTP
       from_email:
-        label: From email
-        msg: From email cannot be empty.
-        text: The email address which emails are sent from.
+        label: از ایمیل
+        msg: ایمیل نباید خالی باشد.
+        text: آدرس ایمیلی که ایمیل ها از آن ارسال می شوند.
       from_name:
-        label: From name
-        msg: From name cannot be empty.
-        text: The name which emails are sent from.
+        label: نام فرستنده
+        msg: ایمیل نباید خالی باشد.
+        text: آدرس ایمیلی که ایمیل ها از آن ارسال می شوند.
       smtp_host:
-        label: SMTP host
-        msg: SMTP host cannot be empty.
-        text: Your mail server.
+        label: ميزبان SMTP
+        msg: میزبان SMTP نمی تواند خالی باشد.
+        text: سرور ایمیل شما.
       encryption:
-        label: Encryption
-        msg: Encryption cannot be empty.
-        text: For most servers SSL is the recommended option.
+        label: رمزگذاری
+        msg: کلید رمزگذاری نمی تواند خالی باشد.
+        text: برای اکثر سرورها SSL گزینه پیشنهادی است.
         ssl: SSL
-        none: None
+        none: هیچ‌کدام
       smtp_port:
-        label: SMTP port
-        msg: SMTP port must be number 1 ~ 65535.
-        text: The port to your mail server.
+        label: پورت SMTP
+        msg: پورت SMTP باید شماره 1 ~ 65535 باشد.
+        text: پورت سرور ایمیل شما.
       smtp_username:
-        label: SMTP username
-        msg: SMTP username cannot be empty.
+        label: نام کاربری SMTP
+        msg: نام کاربری SMTP نمی تواند خالی باشد.
       smtp_password:
-        label: SMTP password
-        msg: SMTP password cannot be empty.
+        label: رمزعبور SMTP
+        msg: رمز عبور مدیر نمی‌تواند خالی باشد.
       test_email_recipient:
-        label: Test email recipients
-        text: Provide email address that will receive test sends.
-        msg: Test email recipients is invalid
+        label: گیرندگان ایمیل را آزمایش کنید
+        text: آدرس ایمیلی را ارائه دهید که ارسال های آزمایشی را دریافت می کند.
+        msg: گیرندگان ایمیل آزمایشی نامعتبر است
       smtp_authentication:
-        label: Enable authentication
-        title: SMTP authentication
-        msg: SMTP authentication cannot be empty.
-        "yes": "Yes"
-        "no": "No"
+        label: فعال کردن احراز هویت
+        title: تأیید هویت SMTP
+        msg: احراز هویت SMTP نمی تواند خالی باشد.
+        "yes": "بله"
+        "no": "نه"
     branding:
-      page_title: Branding
+      page_title: نام تجاری
       logo:
-        label: Logo
-        msg: Logo cannot be empty.
+        label: لوگو
+        msg: کد نمی تواند خالی باشد.
         text: The logo image at the top left of your site. Use a wide rectangular image with a height of 56 and an aspect ratio greater than 3:1. If left blank, the site title text will be shown.
       mobile_logo:
         label: Mobile logo
@@ -1565,7 +1568,7 @@ ui:
         label: Favicon
         text: A favicon for your site. To work correctly over a CDN it must be a png. Will be resized to 32x32. If left blank, "square icon" will be used.
     legal:
-      page_title: Legal
+      page_title: قانونی
       terms_of_service:
         label: Terms of service
         text: "You can add terms of service content here. If you already have a document hosted elsewhere, provide the full URL here."
@@ -1573,7 +1576,7 @@ ui:
         label: Privacy policy
         text: "You can add privacy policy content here. If you already have a document hosted elsewhere, provide the full URL here."
     write:
-      page_title: Write
+      page_title: نوشتن
       recommend_tags:
         label: Recommend tags
         text: "Please input tag slug above, one tag per line."
@@ -1607,16 +1610,19 @@ ui:
       page_title: CSS and HTML
       custom_css:
         label: Custom CSS
-        text: This will insert as <link>
+        text: >
+
       head:
         label: Head
-        text: This will insert before </head>
+        text: >
+
       header:
         label: Header
-        text: This will insert after <body>
+        text: >
+
       footer:
         label: Footer
-        text: This will insert before </body>.
+        text: This will insert before &lt;/body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.
@@ -1631,8 +1637,8 @@ ui:
         label: Allow email registration
         text: Turn off to prevent anyone creating new account through email.
       allowed_email_domains:
-        title: Allowed email domains
-        text: Email domains that users must register accounts with. One domain per line. Ignored when empty.
+        title: دامنه های مجاز ایمیل
+        text: دامنه های ایمیلی که کاربران باید با آنها حساب ثبت کنند. یک دامنه در هر خط. وقتی خالی است نادیده گرفته می شود.
       private:
         title: Private
         label: Login required

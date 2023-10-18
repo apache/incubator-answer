@@ -13,6 +13,8 @@ backend:
       other: Błąd serwera danych.
     forbidden_error:
       other: Zakazane.
+    duplicate_request_error:
+      other: Duplicate submission.
   action:
     report:
       other: Zgłoś
@@ -36,6 +38,8 @@ backend:
       other: Lista
     invite_someone_to_answer:
       other: Edytuj
+    undelete:
+      other: Undelete
   role:
     name:
       user:
@@ -1061,12 +1065,15 @@ ui:
       <p>Nie zalecamy <strong>usuwania zaakceptowanych odpowiedzi</strong>, ponieważ pozbawia to przyszłych czytelników tej wiedzy.</p>Powtarzające się usuwanie zaakceptowanych odpowiedzi może skutkować zablokowaniem Twojego konta w zakresie udzielania odpowiedzi. Czy na pewno chcesz usunąć?
     other: Czy na pewno chcesz usunąć?
     tip_answer_deleted: Ta odpowiedź została usunięta
+    undelete_title: Undelete this post
+    undelete_desc: Are you sure you wish to undelete?
   btns:
     confirm: Potwierdź
     cancel: Anuluj
     edit: Edytuj
     save: Zapisz
     delete: Usuń
+    undelete: Undelete
     login: Zaloguj się
     signup: Zarejestruj się
     logout: Wyloguj się
@@ -1083,6 +1090,13 @@ ui:
     comment: Komentarz
     refresh: Refresh
     resend: Resend
+    deactivate: Deactivate
+    active: Active
+    suspend: Suspend
+    unsuspend: Unsuspend
+    close: Close
+    reopen: Reopen
+    ok: OK
   search:
     title: Wyniki wyszukiwania
     keywords: Słowa kluczowe
@@ -1224,12 +1238,14 @@ ui:
     site_name:
       label: Site name
       msg: Site name cannot be empty.
+      msg_max_length: Site name must be at maximum 30 characters in length.
     site_url:
       label: Adres URL strony
       text: Adres twojej strony.
       msg:
         empty: Adres URL strony nie może być pusty.
         incorrect: Niepoprawny format adresu URL strony.
+        max_length: Site URL must be at maximum 512 characters in length.
     contact_email:
       label: Contact email
       text: Adres e-mail kluczowego kontaktu odpowiedzialnego za tę stronę.
@@ -1244,11 +1260,14 @@ ui:
       label: Imię
       msg: Imię nie może być puste.
       character: 'Należy używać zestawu znaków "a-z", "0-9", " - . _"'
+      msg_max_length: Name must be at maximum 30 characters in length.
     admin_password:
       label: Hasło
       text: >-
         Będziesz potrzebować tego hasła do logowania. Przechowuj je w bezpiecznym miejscu.
       msg: Hasło nie może być puste.
+      msg_min_length: Password must be at least 8 characters in length.
+      msg_max_length: Password must be at maximum 32 characters in length.
     admin_email:
       label: E-mail
       text: Będziesz potrzebować tego adresu e-mail do logowania.
@@ -1357,34 +1376,6 @@ ui:
       created: Utworzone
       action: Akcja
       review: Przegląd
-    change_modal:
-      title: Zmień status użytkownika na...
-      btn_cancel: Anuluj
-      btn_submit: Wyślij
-      normal_name: normalny
-      normal_desc: Normalny użytkownik może zadawać pytania i odpowiadać na nie.
-      suspended_name: zawieszony
-      suspended_desc: Zawieszony użytkownik nie może się zalogować.
-      deleted_name: usunięty
-      deleted_desc: "Usunięcie profilu, powiązań uwierzytelniania."
-      inactive_name: nieaktywny
-      inactive_desc: Nieaktywny użytkownik musi ponownie potwierdzić swój adres e-mail.
-      confirm_title: Usuń tego użytkownika
-      confirm_content: Czy na pewno chcesz usunąć tego użytkownika? To jest trwałe!
-      confirm_btn: Usuń
-      msg:
-        empty: Proszę wybrać powód.
-    status_modal:
-      title: "Zmień status {{ type }} na..."
-      normal_name: normalny
-      normal_desc: Zwykły post dostępny dla wszystkich.
-      closed_name: zamknięty
-      closed_desc: "Zamknięte pytanie nie może mieć odpowiedzi, ale nadal można je edytować, głosować i komentować."
-      deleted_name: usunięty
-      deleted_desc: Ten post zostanie usunięty.
-      btn_cancel: Anuluj
-      btn_submit: Wyślij
-      btn_next: Dalej
     user_role_modal:
       title: Zmień rolę użytkownika na...
       btn_cancel: Anuluj
@@ -1448,6 +1439,18 @@ ui:
       change_role: Zmień rolę
       show_logs: Pokaż logi
       add_user: Dodaj użytkownika
+      deactivate_user:
+        title: Deactivate user
+        content: An inactive user must re-validate their email.
+      delete_user:
+        title: Delete this user
+        content: Are you sure you want to delete this user? This is permanent!
+        remove: Remove their content
+        label: Remove all questions, answers, comments, etc.
+        text: Don’t check this if you wish to only delete the user’s account.
+      suspend_user:
+        title: Suspend this user
+        content: A suspended user can't log in.
     questions:
       page_title: Pytania
       normal: Normalne
@@ -1607,16 +1610,19 @@ ui:
       page_title: CSS i HTML
       custom_css:
         label: Własny CSS
-        text: Będzie wstawiony jako <link>.
+        text: >
+
       head:
         label: Głowa
-        text: Będzie wstawiony przed </head>.
+        text: >
+
       header:
         label: Nagłówek
-        text: Będzie wstawiony po <body>.
+        text: >
+
       footer:
         label: Stopka
-        text: This will insert before </body>.
+        text: This will insert before &lt;/body>.
       sidebar:
         label: Pasek boczny
         text: Będzie wstawiony w pasku bocznym.

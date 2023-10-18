@@ -13,6 +13,8 @@ backend:
       other: Chyba dátového servera.
     forbidden_error:
       other: Forbidden.
+    duplicate_request_error:
+      other: Duplicate submission.
   action:
     report:
       other: Flag
@@ -36,6 +38,8 @@ backend:
       other: List
     invite_someone_to_answer:
       other: Edit
+    undelete:
+      other: Undelete
   role:
     name:
       user:
@@ -1061,12 +1065,15 @@ ui:
       <p>Neodporúčame <strong>odstránenie akceptovanej odpovede</strong> pretože týmto oberáte budúcich čitateľov o tieto vedomostí.</p>Opakované mazanie akceptovaných odpovedí môže mať za následok zablokovanie možnosti odpovedať z vášho účtu. Ste si istí, že chcete odstrániť odpoveď?
     other: Ste si istí, že ju chcete odstrániť?
     tip_answer_deleted: Táto odpoveď bola odstránená
+    undelete_title: Undelete this post
+    undelete_desc: Are you sure you wish to undelete?
   btns:
     confirm: Potvrdiť
     cancel: Zrušiť
     edit: Edit
     save: Uložiť
     delete: Vymazať
+    undelete: Undelete
     login: Prihlásiť sa
     signup: Registrovať sa
     logout: Odhlásiť sa
@@ -1083,6 +1090,13 @@ ui:
     comment: Comment
     refresh: Refresh
     resend: Resend
+    deactivate: Deactivate
+    active: Active
+    suspend: Suspend
+    unsuspend: Unsuspend
+    close: Close
+    reopen: Reopen
+    ok: OK
   search:
     title: Výsledky vyhľadávania
     keywords: Kľúčové slová
@@ -1224,12 +1238,14 @@ ui:
     site_name:
       label: Site name
       msg: Site name cannot be empty.
+      msg_max_length: Site name must be at maximum 30 characters in length.
     site_url:
       label: URL stránky
       text: Adresa vašej stránky.
       msg:
         empty: URL stránky nemôže byť prázdny.
         incorrect: Nesprávny formát adresy URL.
+        max_length: Site URL must be at maximum 512 characters in length.
     contact_email:
       label: Contact email
       text: E-mailová adresa kontaktu zodpovedného za túto stránku.
@@ -1244,11 +1260,14 @@ ui:
       label: Meno
       msg: Meno nemôže byť prázdne.
       character: 'Must use the character set "a-z", "0-9", " - . _"'
+      msg_max_length: Name must be at maximum 30 characters in length.
     admin_password:
       label: Heslo
       text: >-
         Na prihlásenie budete potrebovať toto heslo. Uložte si ho na bezpečné miesto.
       msg: Heslo nemôže byť prázdne.
+      msg_min_length: Password must be at least 8 characters in length.
+      msg_max_length: Password must be at maximum 32 characters in length.
     admin_email:
       label: E-mail
       text: Na prihlásenie budete potrebovať tento e-mail.
@@ -1357,34 +1376,6 @@ ui:
       created: Vytvorené
       action: Akcia
       review: Preskúmanie
-    change_modal:
-      title: Zmeňte stav používateľa na...
-      btn_cancel: Zrušiť
-      btn_submit: Odovzdať
-      normal_name: normálne
-      normal_desc: Normálny používateľ môže klásť a odpovedať na otázky.
-      suspended_name: pozastavené
-      suspended_desc: Pozastavený používateľ sa nemôže prihlásiť.
-      deleted_name: vymazané
-      deleted_desc: "Odstrániť profil, autentifikačné združenia."
-      inactive_name: neaktívne
-      inactive_desc: Neaktívny užívateľ musí znovu overiť svoj e-mail.
-      confirm_title: Odstráňte tohto používateľa
-      confirm_content: Ste si istí, že chcete tohto používateľa odstrániť? Táto akcia sa nedá zmeniť
-      confirm_btn: Vymazať
-      msg:
-        empty: Vyberte dôvod.
-    status_modal:
-      title: "Zmena {{ type }}  stav na..."
-      normal_name: normálne
-      normal_desc: Normálny príspevok dostupný pre každého.
-      closed_name: Uzavreté
-      closed_desc: "Na uzavretú otázku nemôžete odpovedať, ale stále ju môžete upravovať, hlasovať a komentovať."
-      deleted_name: Vymazané
-      deleted_desc: This post will be deleted.
-      btn_cancel: Zrušiť
-      btn_submit: Odovdať
-      btn_next: Ďalšie
     user_role_modal:
       title: Zmeňte rolu používateľa na...
       btn_cancel: Zrušiť
@@ -1448,6 +1439,18 @@ ui:
       change_role: Zmeniť rolu
       show_logs: Zobraziť protokoly
       add_user: Pridať používateľa
+      deactivate_user:
+        title: Deactivate user
+        content: An inactive user must re-validate their email.
+      delete_user:
+        title: Delete this user
+        content: Are you sure you want to delete this user? This is permanent!
+        remove: Remove their content
+        label: Remove all questions, answers, comments, etc.
+        text: Don’t check this if you wish to only delete the user’s account.
+      suspend_user:
+        title: Suspend this user
+        content: A suspended user can't log in.
     questions:
       page_title: Otázky
       normal: Normalne
@@ -1607,16 +1610,19 @@ ui:
       page_title: CSS a HTML
       custom_css:
         label: Vlastné CSS
-        text: Toto sa vloží ako <link>
+        text: >
+
       head:
         label: Head
-        text: Toto sa vloží pred </head>
+        text: >
+
       header:
         label: Hlavička
-        text: Toto sa vloží po <body>
+        text: >
+
       footer:
         label: Päta
-        text: This will insert before </body>.
+        text: This will insert before &lt;/body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.
