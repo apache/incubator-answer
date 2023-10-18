@@ -70,6 +70,9 @@ class Plugins {
   registerBuiltin() {
     Object.keys(builtin).forEach((key) => {
       const plugin = builtin[key];
+      // builttin plugins are always activated
+      // Use own internal rendering logic'
+      plugin.activated = true;
       this.register(plugin);
     });
   }
@@ -93,13 +96,13 @@ class Plugins {
   }
 
   activatePlugins(activatedPlugins: Type.ActivatedPlugin[]) {
-    this.plugins.forEach((plugin) => {
+    this.plugins.forEach((plugin: any) => {
       const { slug_name } = plugin.info;
-      const activatedPlugin = activatedPlugins?.find(
+      const activatedPlugin: any = activatedPlugins?.find(
         (p) => p.slug_name === slug_name,
       );
       if (activatedPlugin) {
-        plugin.activated = true;
+        plugin.activated = activatedPlugin?.enabled;
       }
     });
   }
