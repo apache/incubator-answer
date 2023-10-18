@@ -104,6 +104,13 @@ class Plugins {
     });
   }
 
+  changePluginActiveStatus(slug_name: string, active: boolean) {
+    const plugin = this.getPlugin(slug_name);
+    if (plugin) {
+      plugin.activated = active;
+    }
+  }
+
   getPlugin(slug_name: string) {
     return this.plugins.find((p) => p.info.slug_name === slug_name);
   }

@@ -15,7 +15,7 @@ pluginFolders.forEach((folder) => {
     // add plugin to package.json
     const packageJson = require(path.join(pluginFolder, 'package.json'));
     const packageName = packageJson.name;
-    const packageJsonPath = path.join(__dirname, 'package.json');
+    const packageJsonPath = path.join(__dirname, '..', 'package.json');
     const packageJsonContent = require(packageJsonPath);
     packageJsonContent.dependencies[packageName] = 'workspace:*';
 

@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import { Empty, QueryGroup, Icon } from '@/components';
 import * as Type from '@/common/interface';
 import { useQueryPlugins, updatePluginStatus } from '@/services';
+import PluginKit from '@/utils/pluginKit';
 
 const InstalledPluginsFilterKeys: Type.InstalledPluginsFilterBy[] = [
   'all',
@@ -46,6 +47,7 @@ const Users: FC = () => {
       plugin_slug_name: plugin.slug_name,
     }).then(() => {
       updatePlugins();
+      PluginKit.changePluginActiveStatus(plugin.slug_name, !plugin.enabled);
       if (plugin.have_config) {
         emitPluginChange('refreshConfigurablePlugins');
       }
