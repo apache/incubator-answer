@@ -13,6 +13,8 @@ backend:
       other: 資料庫錯誤。
     forbidden_error:
       other: Forbidden.
+    duplicate_request_error:
+      other: Duplicate submission.
   action:
     report:
       other: 舉報
@@ -36,6 +38,8 @@ backend:
       other: List
     invite_someone_to_answer:
       other: Edit
+    undelete:
+      other: Undelete
   role:
     name:
       user:
@@ -1061,12 +1065,15 @@ ui:
       <p>我們不建議<strong>刪除被採納的回答</strong>。因為這樣做會使得後來的讀者無法從該回答中獲得幫助。</p>如果刪除過多被採納的貼文，你的帳號將會被禁止回答任何提問。你確定要刪除嗎？
     other: 你確定要刪除？
     tip_answer_deleted: 此回答已被刪除
+    undelete_title: Undelete this post
+    undelete_desc: Are you sure you wish to undelete?
   btns:
     confirm: 確認
     cancel: 取消
     edit: Edit
     save: 儲存
     delete: 刪除
+    undelete: Undelete
     login: 登入
     signup: 註冊
     logout: 登出
@@ -1083,6 +1090,13 @@ ui:
     comment: Comment
     refresh: Refresh
     resend: Resend
+    deactivate: Deactivate
+    active: Active
+    suspend: Suspend
+    unsuspend: Unsuspend
+    close: Close
+    reopen: Reopen
+    ok: OK
   search:
     title: 搜尋結果
     keywords: 關鍵詞
@@ -1224,12 +1238,14 @@ ui:
     site_name:
       label: Site name
       msg: Site name cannot be empty.
+      msg_max_length: Site name must be at maximum 30 characters in length.
     site_url:
       label: 網站 URL
       text: 此網站的地址。
       msg:
         empty: 網站URL不能為空。
         incorrect: 網站URL格式不正確。
+        max_length: Site URL must be at maximum 512 characters in length.
     contact_email:
       label: Contact email
       text: 負責本網站的主要聯絡人的電子郵件地址。
@@ -1244,11 +1260,14 @@ ui:
       label: 暱稱
       msg: 暱稱不能為空。
       character: 'Must use the character set "a-z", "0-9", " - . _"'
+      msg_max_length: Name must be at maximum 30 characters in length.
     admin_password:
       label: 密碼
       text: >-
         您需要此密碼才能登入。請將其儲存在一個安全的位置。
       msg: 密碼不能為空。
+      msg_min_length: Password must be at least 8 characters in length.
+      msg_max_length: Password must be at maximum 32 characters in length.
     admin_email:
       label: 郵箱
       text: 您需要此電子郵件才能登入。
@@ -1357,34 +1376,6 @@ ui:
       created: 創建於
       action: 操作
       review: 審核
-    change_modal:
-      title: 更改用戶狀態為...
-      btn_cancel: 取消
-      btn_submit: 提交
-      normal_name: 正常
-      normal_desc: 普通用戶可以提問和回答。
-      suspended_name: 停權
-      suspended_desc: 被停權的使用者將無法登入。
-      deleted_name: 刪除
-      deleted_desc: "刪除個人資料和身份驗證關聯。"
-      inactive_name: 不活躍
-      inactive_desc: 不活躍的用戶必須重新驗證郵箱。
-      confirm_title: 刪除此用戶
-      confirm_content: 確定要刪除此用戶？此操作無法撤銷！
-      confirm_btn: 刪除
-      msg:
-        empty: 請選擇一個原因
-    status_modal:
-      title: "更改 {{ type }} 狀態為..."
-      normal_name: 正常
-      normal_desc: 所有使用者都可以瀏覽的普通貼文。
-      closed_name: 關閉
-      closed_desc: "關閉的問題不能回答，但仍然可以編輯、投票和評論。"
-      deleted_name: 刪除
-      deleted_desc: This post will be deleted.
-      btn_cancel: 取消
-      btn_submit: 提交
-      btn_next: 下一步
     user_role_modal:
       title: 更改用戶狀態為...
       btn_cancel: 取消
@@ -1448,6 +1439,18 @@ ui:
       change_role: 更改角色
       show_logs: 顯示日誌
       add_user: 新增使用者
+      deactivate_user:
+        title: Deactivate user
+        content: An inactive user must re-validate their email.
+      delete_user:
+        title: Delete this user
+        content: Are you sure you want to delete this user? This is permanent!
+        remove: Remove their content
+        label: Remove all questions, answers, comments, etc.
+        text: Don’t check this if you wish to only delete the user’s account.
+      suspend_user:
+        title: Suspend this user
+        content: A suspended user can't log in.
     questions:
       page_title: 問題
       normal: 正常
@@ -1607,16 +1610,19 @@ ui:
       page_title: CSS 與 HTML
       custom_css:
         label: 自定義CSS
-        text: 這將在 <link> 之前插入
+        text: >
+
       head:
         label: 頭部
-        text: 這將在 </head> 之前插入
+        text: >
+
       header:
         label: 標題
-        text: 這將在 <body> 之前插入
+        text: >
+
       footer:
         label: 頁尾
-        text: This will insert before </body>.
+        text: This will insert before &lt;/body>.
       sidebar:
         label: Sidebar
         text: This will insert in sidebar.
@@ -1661,7 +1667,7 @@ ui:
         label: Default avatar
         text: For users without a custom avatar of their own.
       gravatar_base_url:
-        label: Gravatar Base URL
+        label: Gravatar 基礎網址
         text: URL of the Gravatar provider's API base. Ignored when empty.
       profile_editable:
         title: Profile editable
