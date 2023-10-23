@@ -31,8 +31,8 @@ github:
     - hacktoberfest
   enabled_merge_buttons:
     squash: true
-    merge: true
-    rebase: false
+    rebase: true
+    merge: false
   protected_branches:
     main: {}
 
