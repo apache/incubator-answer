@@ -29,7 +29,7 @@ jobs:
     if: ${{ github.event.action != 'closed' }}
     steps:
       - name: Checkout git repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
@@ -67,7 +67,7 @@ jobs:
       compose-file-cache-key: ${{ steps.hash.outputs.hash }}
     steps:
       - name: Checkout git repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Render Compose File
         run: |
           ANSWER_IMAGE=${{ needs.build-answer.outputs.tags }}
