@@ -30,7 +30,9 @@ RUN mkdir -p /data/uploads && chmod 777 /data/uploads \
 FROM alpine
 LABEL maintainer="maintainers@sf.com"
 
-ENV TZ "Asia/Shanghai"
+ARG TIMEZONE
+ENV TIMEZONE=${TIMEZONE:-"Asia/Shanghai"}
+
 RUN apk update \
     && apk --no-cache add \
         bash \
@@ -41,7 +43,9 @@ RUN apk update \
         openssh \
         sqlite \
         gnupg \
-    && echo "Asia/Shanghai" > /etc/timezone
+        tzdata \
+    && ln -sf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime \
+    && echo "${TIMEZONE}" > /etc/timezone
 
 COPY --from=golang-builder /usr/bin/answer /usr/bin/answer
 COPY --from=golang-builder /data /data
