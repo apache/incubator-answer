@@ -12,7 +12,7 @@ import {
   deleteAnswer,
   editCheck,
   reopenQuestion,
-  questionOpetation,
+  questionOperation,
   unDeleteAnswer,
   unDeleteQuestion,
 } from '@/services';
@@ -200,7 +200,7 @@ const Index: FC<IProps> = ({
   };
 
   const handleCommon = async (params) => {
-    await questionOpetation(params);
+    await questionOperation(params);
     let msg = '';
     if (params.operation === 'pin') {
       msg = t('post_pin', { keyPrefix: 'messages' });

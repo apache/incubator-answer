@@ -18,7 +18,7 @@ import {
   useQueryRevisions,
   useQueryQuestionByTitle,
   getTagsBySlugName,
-  saveQuestionWidthAnaser,
+  saveQuestionWithAnswer,
 } from '@/services';
 import { handleFormError, SaveDraft, storageExpires } from '@/utils';
 import { pathFactory } from '@/router/pathFactory';
@@ -291,7 +291,7 @@ const Ask = () => {
         }
         let res;
         if (checked) {
-          res = await saveQuestionWidthAnaser({
+          res = await saveQuestionWithAnswer({
             ...params,
             answer_content: formData.answer_content.value,
           }).catch((err) => {

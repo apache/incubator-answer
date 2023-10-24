@@ -282,11 +282,11 @@ export const markdownToHtml = (content: string) => {
   return request.post(apiUrl, { content });
 };
 
-export const saveQuestionWidthAnaser = (params: Type.QuestionWithAnswer) => {
+export const saveQuestionWithAnswer = (params: Type.QuestionWithAnswer) => {
   return request.post('/answer/api/v1/question/answer', params);
 };
 
-export const questionOpetation = (params: Type.QuestionOperationReq) => {
+export const questionOperation = (params: Type.QuestionOperationReq) => {
   return request.put('/answer/api/v1/question/operation', params);
 };
 
