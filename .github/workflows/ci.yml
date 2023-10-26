@@ -1,0 +1,29 @@
+name: CI
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+# Concurrency strategy:
+#   github.workflow: distinguish this workflow from others
+#   github.event_name: distinguish `push` event from `pull_request` event
+#   github.event.number: set to the number of the pull request if `pull_request` event
+#   github.run_id: otherwise, it's a `push` or `schedule` event, only cancel if we rerun the workflow
+#
+# Reference:
+#   https://docs.github.com/en/actions/using-jobs/using-concurrency
+#   https://docs.github.com/en/actions/learn-github-actions/contexts#github-context
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Check and lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check license header
+        uses: korandoru/hawkeye@v3
