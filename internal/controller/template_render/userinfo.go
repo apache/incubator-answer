@@ -20,7 +20,7 @@
 package templaterender
 
 import (
-	"github.com/answerdev/answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/schema"
 	"golang.org/x/net/context"
 )
 

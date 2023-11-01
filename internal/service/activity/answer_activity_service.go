@@ -21,9 +21,9 @@ package activity
 
 import (
 	"context"
-	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service/activity_type"
-	"github.com/answerdev/answer/internal/service/config"
+	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/service/activity_type"
+	"github.com/apache/incubator-answer/internal/service/config"
 	"github.com/segmentfault/pacman/log"
 )
 

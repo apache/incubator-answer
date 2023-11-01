@@ -20,7 +20,7 @@
 package gravatar
 
 import (
-	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/base/constant"
 	"testing"
 
 	"github.com/stretchr/testify/assert"

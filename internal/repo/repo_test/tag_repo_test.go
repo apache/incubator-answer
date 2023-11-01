@@ -26,11 +26,11 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/repo/tag"
-	"github.com/answerdev/answer/internal/repo/tag_common"
-	"github.com/answerdev/answer/internal/repo/unique"
-	"github.com/answerdev/answer/pkg/converter"
+	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/repo/tag"
+	"github.com/apache/incubator-answer/internal/repo/tag_common"
+	"github.com/apache/incubator-answer/internal/repo/unique"
+	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/stretchr/testify/assert"
 )
 

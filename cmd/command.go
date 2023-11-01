@@ -24,11 +24,11 @@ import (
 	"os"
 	"strings"
 
-	"github.com/answerdev/answer/internal/base/conf"
-	"github.com/answerdev/answer/internal/cli"
-	"github.com/answerdev/answer/internal/install"
-	"github.com/answerdev/answer/internal/migrations"
-	"github.com/answerdev/answer/plugin"
+	"github.com/apache/incubator-answer/internal/base/conf"
+	"github.com/apache/incubator-answer/internal/cli"
+	"github.com/apache/incubator-answer/internal/install"
+	"github.com/apache/incubator-answer/internal/migrations"
+	"github.com/apache/incubator-answer/plugin"
 	"github.com/segmentfault/pacman/log"
 	"github.com/spf13/cobra"
 )

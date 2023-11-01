@@ -22,9 +22,9 @@ package service
 import (
 	"context"
 
-	"github.com/answerdev/answer/internal/base/reason"
-	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/base/reason"
+	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/jinzhu/copier"
 	"github.com/segmentfault/pacman/errors"
 )

@@ -21,9 +21,9 @@ package notification
 
 import (
 	"context"
-	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/pkg/token"
+	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/pkg/token"
 	"github.com/segmentfault/pacman/i18n"
 	"github.com/segmentfault/pacman/log"
 	"time"

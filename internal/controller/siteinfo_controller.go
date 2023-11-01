@@ -22,10 +22,10 @@ package controller
 import (
 	"net/http"
 
-	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/base/handler"
-	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/base/handler"
+	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
 )
@@ -128,7 +128,7 @@ func (sc *SiteInfoController) GetManifestJson(ctx *gin.Context) {
 		Version:         constant.Version,
 		Revision:        constant.Revision,
 		ShortName:       "Answer",
-		Name:            "Answer.dev",
+		Name:            "answer.apache.org",
 		Icons: map[string]string{
 			"16":  favicon,
 			"32":  favicon,

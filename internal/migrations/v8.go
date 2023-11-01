@@ -24,8 +24,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/service/permission"
+	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/service/permission"
 	"github.com/segmentfault/pacman/log"
 	"xorm.io/xorm"
 )

@@ -26,10 +26,10 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/answerdev/answer/internal/controller"
-	"github.com/answerdev/answer/internal/service/siteinfo_common"
-	"github.com/answerdev/answer/pkg/htmltext"
-	"github.com/answerdev/answer/ui"
+	"github.com/apache/incubator-answer/internal/controller"
+	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
+	"github.com/apache/incubator-answer/pkg/htmltext"
+	"github.com/apache/incubator-answer/ui"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
 )

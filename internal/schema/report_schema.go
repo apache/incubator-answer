@@ -22,7 +22,7 @@ package schema
 import (
 	"time"
 
-	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/base/constant"
 )
 
 // AddReportReq add report request
