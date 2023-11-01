@@ -20,7 +20,7 @@
 package main
 
 import (
-	answercmd "github.com/answerdev/answer/cmd"
+	answercmd "github.com/apache/incubator-answer/cmd"
 )
 
 // @securityDefinitions.apikey ApiKeyAuth

@@ -23,10 +23,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/schema"
-	collectioncommon "github.com/answerdev/answer/internal/service/collection_common"
-	questioncommon "github.com/answerdev/answer/internal/service/question_common"
+	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/schema"
+	collectioncommon "github.com/apache/incubator-answer/internal/service/collection_common"
+	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"
 )

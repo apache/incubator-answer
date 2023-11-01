@@ -24,9 +24,9 @@ import (
 	"image/color"
 	"strings"
 
-	"github.com/answerdev/answer/internal/base/reason"
-	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/base/reason"
+	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/mojocn/base64Captcha"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/log"

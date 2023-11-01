@@ -20,7 +20,7 @@
 package handler
 
 import (
-	"github.com/answerdev/answer/internal/base/translator"
+	"github.com/apache/incubator-answer/internal/base/translator"
 	"github.com/segmentfault/pacman/errors"
 	"github.com/segmentfault/pacman/i18n"
 )

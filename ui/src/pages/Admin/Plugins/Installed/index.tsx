@@ -85,7 +85,7 @@ const Users: FC = () => {
           Plugins extend and expand the functionality of Answer. You may find
           plugins in the
           <a
-            href="https://github.com/answerdev/plugins"
+            href="https://github.com/apache/incubator-answer-plugins"
             target="_blank"
             rel="noreferrer">
             Answer Plugin Repository

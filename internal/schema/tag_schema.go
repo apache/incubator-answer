@@ -22,8 +22,8 @@ package schema
 import (
 	"strings"
 
-	"github.com/answerdev/answer/internal/base/validator"
-	"github.com/answerdev/answer/pkg/converter"
+	"github.com/apache/incubator-answer/internal/base/validator"
+	"github.com/apache/incubator-answer/pkg/converter"
 )
 
 // SearchTagLikeReq get tag list all request

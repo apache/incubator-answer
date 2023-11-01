@@ -23,8 +23,8 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/answerdev/answer/pkg/dir"
-	"github.com/answerdev/answer/plugin"
+	"github.com/apache/incubator-answer/pkg/dir"
+	"github.com/apache/incubator-answer/plugin"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/lib/pq"
 	"github.com/segmentfault/pacman/cache"

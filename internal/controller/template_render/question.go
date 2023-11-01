@@ -24,8 +24,8 @@ import (
 	"math"
 	"net/http"
 
-	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
 )

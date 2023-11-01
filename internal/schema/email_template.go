@@ -21,7 +21,7 @@ package schema
 
 import (
 	"encoding/json"
-	"github.com/answerdev/answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/base/constant"
 )
 
 const (

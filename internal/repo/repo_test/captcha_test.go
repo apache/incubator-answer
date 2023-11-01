@@ -23,7 +23,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/answerdev/answer/internal/repo/captcha"
+	"github.com/apache/incubator-answer/internal/repo/captcha"
 	"github.com/stretchr/testify/assert"
 )
 

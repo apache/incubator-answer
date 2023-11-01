@@ -24,7 +24,7 @@ ENV GOPROXY=https://proxy.golang.com.cn,direct
 
 ENV GOPATH /go
 ENV GOROOT /usr/local/go
-ENV PACKAGE github.com/answerdev/answer
+ENV PACKAGE github.com/apache/incubator-answer
 ENV BUILD_DIR ${GOPATH}/src/${PACKAGE}
 ENV ANSWER_MODULE ${BUILD_DIR}
 
@@ -45,7 +45,7 @@ RUN mkdir -p /data/uploads && chmod 777 /data/uploads \
     && mkdir -p /data/i18n && cp -r i18n/*.yaml /data/i18n
 
 FROM alpine
-LABEL maintainer="maintainers@sf.com"
+LABEL maintainer="linkinstar@apache.org"
 
 ENV TZ "Asia/Shanghai"
 RUN apk update \

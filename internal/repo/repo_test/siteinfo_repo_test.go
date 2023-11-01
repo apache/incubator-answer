@@ -23,8 +23,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/repo/site_info"
+	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/repo/site_info"
 	"github.com/stretchr/testify/assert"
 )
 

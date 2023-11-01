@@ -36,7 +36,7 @@ const Index = () => {
           <Trans i18nKey="footer.build_on" values={{ cc }}>
             Built on
             {/* eslint-disable-next-line react/jsx-no-target-blank */}
-            <a href="https://answer.dev/" target="_blank">
+            <a href="https://answer.apache.org" target="_blank">
               Answer
             </a>
             - the open-source software that powers Q&A communities.

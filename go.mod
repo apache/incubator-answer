@@ -1,4 +1,4 @@
-module github.com/answerdev/answer
+module github.com/apache/incubator-answer
 
 go 1.18
 
@@ -42,6 +42,7 @@ require (
 	github.com/tidwall/gjson v1.14.4
 	github.com/yuin/goldmark v1.4.13
 	golang.org/x/crypto v0.13.0
+	golang.org/x/image v0.1.0
 	golang.org/x/net v0.15.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/yaml.v3 v3.0.1
@@ -131,7 +132,6 @@ require (
 	go.uber.org/multierr v1.8.0 // indirect
 	go.uber.org/zap v1.23.0 // indirect
 	golang.org/x/arch v0.3.0 // indirect
-	golang.org/x/image v0.1.0 // indirect
 	golang.org/x/mod v0.12.0 // indirect
 	golang.org/x/sys v0.12.0 // indirect
 	golang.org/x/text v0.13.0 // indirect

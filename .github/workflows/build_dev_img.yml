@@ -74,6 +74,6 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.GITLAB_RSA_PRIVATE_KEY }}
         with:
-          source-repo: git@github.com:answerdev/answer.git
+          source-repo: git@github.com:apache/incubator-answer.git
           destination-repo: ${{ secrets.GITLAB_REPO }}
 

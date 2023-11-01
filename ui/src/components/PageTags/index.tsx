@@ -40,7 +40,7 @@ const Index: FC = () => {
     if (generatorMetaNode) {
       generatorMetaNode.setAttribute(
         'content',
-        `Answer ${appVersion} - https://github.com/answerdev/answer version ${hashVersion}`,
+        `Answer ${appVersion} - https://github.com/apache/incubator-answer version ${hashVersion}`,
       );
     }
   };

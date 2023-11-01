@@ -20,16 +20,16 @@
 package templaterender
 
 import (
-	questioncommon "github.com/answerdev/answer/internal/service/question_common"
+	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
 	"math"
 
-	"github.com/answerdev/answer/internal/service/comment"
-	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/apache/incubator-answer/internal/service/comment"
+	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	"github.com/google/wire"
 
-	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service"
-	"github.com/answerdev/answer/internal/service/tag"
+	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/service"
+	"github.com/apache/incubator-answer/internal/service/tag"
 )
 
 // ProviderSetTemplateRenderController is template render controller providers.

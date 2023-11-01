@@ -23,10 +23,10 @@ import (
 	"context"
 	"testing"
 
-	"github.com/answerdev/answer/internal/repo/config"
-	serviceconfig "github.com/answerdev/answer/internal/service/config"
+	"github.com/apache/incubator-answer/internal/repo/config"
+	serviceconfig "github.com/apache/incubator-answer/internal/service/config"
 
-	"github.com/answerdev/answer/internal/repo/reason"
+	"github.com/apache/incubator-answer/internal/repo/reason"
 	"github.com/stretchr/testify/assert"
 )
 
