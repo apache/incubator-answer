@@ -24,10 +24,10 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/repo/question"
-	"github.com/answerdev/answer/internal/repo/revision"
-	"github.com/answerdev/answer/internal/repo/unique"
+	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/repo/question"
+	"github.com/apache/incubator-answer/internal/repo/revision"
+	"github.com/apache/incubator-answer/internal/repo/unique"
 	"github.com/stretchr/testify/assert"
 )
 

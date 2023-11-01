@@ -20,9 +20,9 @@
 package schema
 
 import (
-	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/base/validator"
-	"github.com/answerdev/answer/plugin"
+	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/base/validator"
+	"github.com/apache/incubator-answer/plugin"
 	"regexp"
 	"strings"
 )

@@ -24,7 +24,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/answerdev/answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/entity"
 )
 
 // ConfigRepo config repository

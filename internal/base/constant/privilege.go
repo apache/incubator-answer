@@ -19,7 +19,7 @@
 
 package constant
 
-import "github.com/answerdev/answer/internal/base/reason"
+import "github.com/apache/incubator-answer/internal/base/reason"
 
 type Privilege struct {
 	Key   string `json:"key"`

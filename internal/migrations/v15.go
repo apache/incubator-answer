@@ -21,7 +21,7 @@ package migrations
 
 import (
 	"context"
-	"github.com/answerdev/answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/entity"
 	"xorm.io/xorm"
 )
 

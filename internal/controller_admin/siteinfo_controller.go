@@ -22,10 +22,10 @@ package controller_admin
 import (
 	"net/http"
 
-	"github.com/answerdev/answer/internal/base/handler"
-	"github.com/answerdev/answer/internal/base/middleware"
-	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service/siteinfo"
+	"github.com/apache/incubator-answer/internal/base/handler"
+	"github.com/apache/incubator-answer/internal/base/middleware"
+	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/service/siteinfo"
 	"github.com/gin-gonic/gin"
 )
 

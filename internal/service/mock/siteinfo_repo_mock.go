@@ -27,7 +27,7 @@ import (
 	context "context"
 	reflect "reflect"
 
-	entity "github.com/answerdev/answer/internal/entity"
+	entity "github.com/apache/incubator-answer/internal/entity"
 	gomock "github.com/golang/mock/gomock"
 )
 

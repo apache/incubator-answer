@@ -22,15 +22,15 @@ package report_handle_admin
 import (
 	"context"
 
-	"github.com/answerdev/answer/internal/service/config"
-	"github.com/answerdev/answer/internal/service/notice_queue"
+	"github.com/apache/incubator-answer/internal/service/config"
+	"github.com/apache/incubator-answer/internal/service/notice_queue"
 
-	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service/comment"
-	questioncommon "github.com/answerdev/answer/internal/service/question_common"
-	"github.com/answerdev/answer/pkg/obj"
+	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/service/comment"
+	questioncommon "github.com/apache/incubator-answer/internal/service/question_common"
+	"github.com/apache/incubator-answer/pkg/obj"
 )
 
 type ReportHandle struct {

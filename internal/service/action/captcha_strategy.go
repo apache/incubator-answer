@@ -24,7 +24,7 @@ import (
 	"github.com/segmentfault/pacman/log"
 	"time"
 
-	"github.com/answerdev/answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/entity"
 )
 
 // ValidationStrategy

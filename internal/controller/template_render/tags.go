@@ -20,8 +20,8 @@
 package templaterender
 
 import (
-	"github.com/answerdev/answer/internal/base/pager"
-	"github.com/answerdev/answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/base/pager"
+	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/jinzhu/copier"
 	"golang.org/x/net/context"
 )

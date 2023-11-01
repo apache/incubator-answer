@@ -22,7 +22,7 @@ package notice_queue
 import (
 	"context"
 
-	"github.com/answerdev/answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/segmentfault/pacman/log"
 )
 

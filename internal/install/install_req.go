@@ -24,9 +24,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/answerdev/answer/internal/base/reason"
-	"github.com/answerdev/answer/internal/base/validator"
-	"github.com/answerdev/answer/pkg/checker"
+	"github.com/apache/incubator-answer/internal/base/reason"
+	"github.com/apache/incubator-answer/internal/base/validator"
+	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/segmentfault/pacman/errors"
 	"xorm.io/xorm/schemas"
 )

@@ -23,7 +23,7 @@ import (
 	"encoding/json"
 	"github.com/segmentfault/pacman/log"
 
-	"github.com/answerdev/answer/pkg/converter"
+	"github.com/apache/incubator-answer/pkg/converter"
 )
 
 // Config config

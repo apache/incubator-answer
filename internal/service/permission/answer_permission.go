@@ -21,11 +21,11 @@ package permission
 
 import (
 	"context"
-	"github.com/answerdev/answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/entity"
 
-	"github.com/answerdev/answer/internal/base/handler"
-	"github.com/answerdev/answer/internal/base/translator"
-	"github.com/answerdev/answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/base/handler"
+	"github.com/apache/incubator-answer/internal/base/translator"
+	"github.com/apache/incubator-answer/internal/schema"
 )
 
 // GetAnswerPermission get answer permission
