@@ -8,7 +8,7 @@ A Q&A platform software for teams at any scales. Whether it’s a community foru
 
 To learn more about the project, visit [answer.apache.org](https://answer.apache.org).
 
-[![LICENSE](https://img.shields.io/github/license/answerdev/answer)](https://github.com/answerdev/answer/blob/main/LICENSE)
+[![LICENSE](https://img.shields.io/github/license/answerdev/answer)](https://github.com/apache/incubator-answer/blob/main/LICENSE)
 [![Language](https://img.shields.io/badge/language-go-blue.svg)](https://golang.org/)
 [![Language](https://img.shields.io/badge/language-react-blue.svg)](https://reactjs.org/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/answerdev/answer)](https://goreportcard.com/report/github.com/answerdev/answer)
@@ -34,8 +34,7 @@ Answer provides a plugin system for developers to create custom plugins and expa
 
 We value your feedback and suggestions to improve our documentation. If you have any comments or questions, please feel free to contact us. We’re excited to see what you can create using our plugin system!
 
-You can also check out the [plugins here](https://github.com/answerdev/plugins).
-
+You can also check out the [plugins here](https://github.com/apache/incubator-answer/plugins).
 
 ## Contributing
 
@@ -45,4 +44,4 @@ See [CONTRIBUTING](https://answer.apache.org/docs/development/contributing/) for
 
 ## License
 
-[Apache License 2.0](https://github.com/answerdev/answer/blob/main/LICENSE)
+[Apache License 2.0](https://github.com/apache/incubator-answer/blob/main/LICENSE)
