@@ -69,7 +69,7 @@ Publish the chart to Artifacthub and add proper installation instructions. E.G.
 > **NOTE**: This is not currently a valid installation option.
 
 ```console
-$ helm repo add answerdev https://charts.answer.dev/
+$ helm repo add answerdev https://charts.answer.apache.org/
 $ helm repo update
 $ helm install answerdev/answer -n mynamespace
 ```
