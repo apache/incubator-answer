@@ -55,11 +55,7 @@ builds:
 
 archives:
   - name_template: >-
-      {{ .ProjectName }}_
-      {{- title .Os }}_
-      {{- if eq .Arch "amd64" }}x86_64
-      {{- else if eq .Arch "386" }}i386
-      {{- else }}{{ .Arch }}{{ end }}
+      apache-answer-{{ .Version }}-incubating-{{ .Os }}-{{ .Arch }}
 checksum:
   name_template: 'checksums.txt'
 snapshot:
