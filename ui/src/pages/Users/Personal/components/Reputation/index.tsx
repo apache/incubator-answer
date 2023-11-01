@@ -19,6 +19,7 @@
 
 import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 import { FormatTime } from '@/components';
 import { pathFactory } from '@/router/pathFactory';
@@ -48,9 +49,9 @@ const Index: FC<Props> = ({ visible, data }) => {
               {item.reputation}
             </div>
             <div>
-              <a
+              <Link
                 className="text-break"
-                href={
+                to={
                   item.object_type === 'question'
                     ? pathFactory.questionLanding(
                         item.question_id,
@@ -63,7 +64,7 @@ const Index: FC<Props> = ({ visible, data }) => {
                       })
                 }>
                 {item.title}
-              </a>
+              </Link>
               <div className="d-flex align-items-center small text-secondary">
                 <span>{item.rank_type}</span>
                 <span className="split-dot" />
