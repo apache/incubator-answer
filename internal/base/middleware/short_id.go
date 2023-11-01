@@ -20,8 +20,8 @@
 package middleware
 
 import (
-	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/service/siteinfo_common"
+	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	"github.com/gin-gonic/gin"
 	"github.com/segmentfault/pacman/log"
 )

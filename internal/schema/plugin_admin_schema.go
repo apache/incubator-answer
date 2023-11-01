@@ -20,7 +20,7 @@
 package schema
 
 import (
-	"github.com/answerdev/answer/plugin"
+	"github.com/apache/incubator-answer/plugin"
 	"github.com/gin-gonic/gin"
 )
 

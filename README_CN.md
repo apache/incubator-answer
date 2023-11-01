@@ -36,4 +36,4 @@ docker run -d -p 9080:80 -v answer-data:/data --name answer answerdev/answer:lat
 
 ## License
 
-[Apache License 2.0](https://github.com/answerdev/answer/blob/main/LICENSE)
+[Apache License 2.0](https://github.com/apache/incubator-answer/blob/main/LICENSE)

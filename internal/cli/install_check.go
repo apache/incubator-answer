@@ -22,9 +22,9 @@ package cli
 import (
 	"fmt"
 
-	"github.com/answerdev/answer/internal/base/data"
-	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/pkg/dir"
+	"github.com/apache/incubator-answer/internal/base/data"
+	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/pkg/dir"
 )
 
 func CheckConfigFile(configPath string) bool {

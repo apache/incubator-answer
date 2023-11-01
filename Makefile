@@ -7,7 +7,7 @@ DOCKER_CMD=docker
 
 GO_ENV=CGO_ENABLED=0 GO111MODULE=on
 Revision=$(shell git rev-parse --short HEAD)
-GO_FLAGS=-ldflags="-X github.com/answerdev/answer/cmd.Version=$(VERSION) -X 'github.com/answerdev/answer/cmd.Revision=$(Revision)' -X 'github.com/answerdev/answer/cmd.Time=`date +%s`' -extldflags -static"
+GO_FLAGS=-ldflags="-X github.com/apache/incubator-answer/cmd.Version=$(VERSION) -X 'github.com/apache/incubator-answer/cmd.Revision=$(Revision)' -X 'github.com/apache/incubator-answer/cmd.Time=`date +%s`' -extldflags -static"
 GO=$(GO_ENV) $(shell which go)
 
 build: generate

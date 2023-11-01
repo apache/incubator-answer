@@ -21,10 +21,10 @@ package service
 
 import (
 	"context"
-	"github.com/answerdev/answer/internal/schema"
-	"github.com/answerdev/answer/internal/service/search_common"
-	"github.com/answerdev/answer/internal/service/search_parser"
-	"github.com/answerdev/answer/plugin"
+	"github.com/apache/incubator-answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/service/search_common"
+	"github.com/apache/incubator-answer/internal/service/search_parser"
+	"github.com/apache/incubator-answer/plugin"
 )
 
 type SearchService struct {

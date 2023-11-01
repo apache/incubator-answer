@@ -23,9 +23,9 @@ import (
 	"context"
 	"testing"
 
-	"github.com/answerdev/answer/internal/entity"
-	"github.com/answerdev/answer/internal/repo/notification"
-	"github.com/answerdev/answer/internal/schema"
+	"github.com/apache/incubator-answer/internal/entity"
+	"github.com/apache/incubator-answer/internal/repo/notification"
+	"github.com/apache/incubator-answer/internal/schema"
 	"github.com/stretchr/testify/assert"
 )
 

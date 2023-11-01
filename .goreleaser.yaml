@@ -32,7 +32,7 @@ builds:
   - id: build
     main: ./cmd/answer/.
     binary: answer
-    ldflags: -s -w -X github.com/answerdev/answer/cmd.Version={{.Version}} -X github.com/answerdev/answer/cmd.Revision={{.ShortCommit}} -X github.com/answerdev/answer/cmd.Time={{.Date}} -X github.com/answerdev/answer/cmd.BuildUser=goreleaser
+    ldflags: -s -w -X github.com/apache/incubator-answer/cmd.Version={{.Version}} -X github.com/apache/incubator-answer/cmd.Revision={{.ShortCommit}} -X github.com/apache/incubator-answer/cmd.Time={{.Date}} -X github.com/apache/incubator-answer/cmd.BuildUser=goreleaser
     flags: -v
     goos:
       - linux
@@ -43,7 +43,7 @@ builds:
   - id: build-windows
     main: ./cmd/answer/.
     binary: answer
-    ldflags: -s -w -X github.com/answerdev/answer/cmd.Version={{.Version}} -X github.com/answerdev/answer/cmd.Revision={{.ShortCommit}} -X github.com/answerdev/answer/cmd.Time={{.Date}} -X github.com/answerdev/answer/cmd.BuildUser=goreleaser
+    ldflags: -s -w -X github.com/apache/incubator-answer/cmd.Version={{.Version}} -X github.com/apache/incubator-answer/cmd.Revision={{.ShortCommit}} -X github.com/apache/incubator-answer/cmd.Time={{.Date}} -X github.com/apache/incubator-answer/cmd.BuildUser=goreleaser
     flags: -v
     goos:
       - windows

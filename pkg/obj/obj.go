@@ -20,9 +20,9 @@
 package obj
 
 import (
-	"github.com/answerdev/answer/internal/base/constant"
-	"github.com/answerdev/answer/internal/base/reason"
-	"github.com/answerdev/answer/pkg/converter"
+	"github.com/apache/incubator-answer/internal/base/constant"
+	"github.com/apache/incubator-answer/internal/base/reason"
+	"github.com/apache/incubator-answer/pkg/converter"
 	"github.com/segmentfault/pacman/errors"
 )
 

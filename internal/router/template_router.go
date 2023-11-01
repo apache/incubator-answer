@@ -20,10 +20,10 @@
 package router
 
 import (
-	"github.com/answerdev/answer/internal/base/middleware"
-	"github.com/answerdev/answer/internal/controller"
-	templaterender "github.com/answerdev/answer/internal/controller/template_render"
-	"github.com/answerdev/answer/internal/controller_admin"
+	"github.com/apache/incubator-answer/internal/base/middleware"
+	"github.com/apache/incubator-answer/internal/controller"
+	templaterender "github.com/apache/incubator-answer/internal/controller/template_render"
+	"github.com/apache/incubator-answer/internal/controller_admin"
 	"github.com/gin-gonic/gin"
 )
 
