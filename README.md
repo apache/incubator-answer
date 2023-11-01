@@ -8,12 +8,7 @@ A Q&A platform software for teams at any scales. Whether it’s a community foru
 
 To learn more about the project, visit [answer.apache.org](https://answer.apache.org).
 
-<<<<<<< HEAD
-[![LICENSE](https://img.shields.io/github/license/answerdev/answer)](https://github.com/apache/incubator-answer/blob/main/LICENSE)
-=======
-
 [![LICENSE](https://img.shields.io/github/license/apache/incubator-answer)](https://github.com/apache/incubator-answer/blob/main/LICENSE)
->>>>>>> 1f7e244db31ee80d649efa34f90cc520137be9b7
 [![Language](https://img.shields.io/badge/language-go-blue.svg)](https://golang.org/)
 [![Language](https://img.shields.io/badge/language-react-blue.svg)](https://reactjs.org/)
 [![Go Report Card](https://goreportcard.com/badge/github.com/apache/incubator-answer)](https://goreportcard.com/report/github.com/apache/incubator-answer)
