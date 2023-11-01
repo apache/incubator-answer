@@ -128,7 +128,7 @@ func (sc *SiteInfoController) GetManifestJson(ctx *gin.Context) {
 		Version:         constant.Version,
 		Revision:        constant.Revision,
 		ShortName:       "Answer",
-		Name:            "Answer.dev",
+		Name:            "answer.apache.org",
 		Icons: map[string]string{
 			"16":  favicon,
 			"32":  favicon,

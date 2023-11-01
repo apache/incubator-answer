@@ -29,7 +29,7 @@ image:
 
 # Environment variables
 # Configure environment variables below
-# https://answer.dev/docs/env
+# https://answer.apache.org/docs/env
 env:
   - name: LOG_LEVEL
     # [DEBUG INFO WARN ERROR]

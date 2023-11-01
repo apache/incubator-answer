@@ -202,25 +202,25 @@ func (ds *dashboardService) voteCount(ctx context.Context) int64 {
 }
 
 func (ds *dashboardService) remoteVersion(ctx context.Context) string {
-	url := "https://answer.dev/getlatest"
-	req, _ := http.NewRequest("GET", url, nil)
+	req, _ := http.NewRequest("GET", "https://getlatest.answer.dev/", nil)
 	req.Header.Set("User-Agent", "Answer/"+constant.Version)
-	resp, err := (&http.Client{}).Do(req)
+	httpClient := &http.Client{}
+	httpClient.Timeout = 15 * time.Second
+	resp, err := httpClient.Do(req)
 	if err != nil {
-		log.Error("http.Client error", err)
+		log.Errorf("request remote version failed: %s", err)
 		return ""
 	}
 	defer resp.Body.Close()
 
 	respByte, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Error("http.Client error", err)
+		log.Errorf("read response body failed: %s", err)
 		return ""
 	}
 	remoteVersion := &schema.RemoteVersion{}
-	err = json.Unmarshal(respByte, remoteVersion)
-	if err != nil {
-		log.Error("json.Unmarshal error", err)
+	if err := json.Unmarshal(respByte, remoteVersion); err != nil {
+		log.Errorf("parsing response body failed: %s", err)
 		return ""
 	}
 	return remoteVersion.Release.Version
