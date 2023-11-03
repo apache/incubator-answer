@@ -29,6 +29,11 @@ github:
     - typescript
     - q-and-a
     - hacktoberfest
+  features:
+    wiki: false
+    issues: true
+    projects: true
+    discussions: false
   enabled_merge_buttons:
     squash: true
     rebase: true
