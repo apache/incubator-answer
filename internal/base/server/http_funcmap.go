@@ -143,15 +143,13 @@ var funcMap = template.FuncMap{
 func FormatLinkNofollow(html string) string {
 	var hrefRegexp = regexp.MustCompile("(?m)<a.*?[^<]>.*?</a>")
 	match := hrefRegexp.FindAllString(html, -1)
-	if match != nil {
-		for _, v := range match {
-			hasNofollow := strings.Contains(v, "rel=\"nofollow\"")
-			hasSiteUrl := strings.Contains(v, controller.SiteUrl)
-			if !hasSiteUrl {
-				if !hasNofollow {
-					nofollowUrl := strings.Replace(v, "<a", "<a rel=\"nofollow\"", 1)
-					html = strings.Replace(html, v, nofollowUrl, 1)
-				}
+	for _, v := range match {
+		hasNofollow := strings.Contains(v, "rel=\"nofollow\"")
+		hasSiteUrl := strings.Contains(v, controller.SiteUrl)
+		if !hasSiteUrl {
+			if !hasNofollow {
+				nofollowUrl := strings.Replace(v, "<a", "<a rel=\"nofollow\"", 1)
+				html = strings.Replace(html, v, nofollowUrl, 1)
 			}
 		}
 	}
