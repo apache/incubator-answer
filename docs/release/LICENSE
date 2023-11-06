@@ -212,6 +212,51 @@
 Third party Apache 2.0 licenses
 ========================================================================
 
-    (Apache License, Version 2.0) https://github.com/google/wire
+   The following components are provided under the Apache 2.0 License.
+   (Apache License, Version 2.0) wire (https://github.com/google/wire)
+   (Apache License, Version 2.0) react-helmet-async <https://github.com/staylor/react-helmet-async>
 
 ========================================================================
+MIT License
+========================================================================
+
+The following components are provided under the MIT License. See project link for details.
+
+   (MIT License) axios (https://github.com/axios/axios)
+   (MIT License) bootstrap (https://github.com/twbs/bootstrap)
+   (MIT License) icons (https://github.com/twbs/icons)
+   (MIT License) classnames (https://github.com/JedWatson/classnames)
+   (MIT License) codemirror5 (https://github.com/codemirror/codemirror5)
+   (MIT License) color (https://github.com/Qix-/color)
+   (MIT License) copy-to-clipboard (https://github.com/sudodoki/copy-to-clipboard)
+   (MIT License) dayjs (https://github.com/iamkun/dayjs)
+   (MIT License) i18next (https://github.com/i18next/i18next)
+   (MIT License) lodash (https://github.com/lodash/lodash)
+   (MIT License) marked (https://github.com/markedjs/marked)
+   (MIT License) next-share (https://github.com/Bunlong/next-share)
+   (MIT License) node-qrcode (https://github.com/soldair/node-qrcode)
+   (MIT License) react (https://github.com/facebook/react)
+   (MIT License) react-bootstrap (https://github.com/react-bootstrap/react-bootstrap)
+   (MIT License) react-i18next (https://github.com/i18next/react-i18next)
+   (MIT License) react-router (https://github.com/remix-run/react-router)
+   (MIT License) swr (https://github.com/vercel/swr)
+   (MIT License) zustand (https://github.com/pmndrs/zustand)
+
+========================================================================
+BSD License
+========================================================================
+
+The following components are provided under a BSD license. See project link for details.
+
+   (BSD 3-Clause) jsdiff (https://github.com/kpdecker/jsdiff)
+   (BSD 3-Clause) node-md5 (https://github.com/pvorb/node-md5)
+   (BSD 3-Clause) qs (https://github.com/ljharb/qs)
+
+========================================================================
+ISC License
+========================================================================
+
+The following components are provided under a ISC license. See project link for details.
+
+   (ISC License) node-semver (https://github.com/npm/node-semver)
+
