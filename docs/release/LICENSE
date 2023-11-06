@@ -214,12 +214,12 @@ Apache 2.0 licenses
 
 The following components are provided under the Apache 2.0 License.
 
-   (Apache License, Version 2.0) react-helmet-async (https://github.com/staylor/react-helmet-async)
-   (Apache License, Version 2.0) golang-mock (https://github.com/golang/mock)
-   (Apache License, Version 2.0) google-wire (https://github.com/google/wire)
-   (Apache License, Version 2.0) mojocn-base64Captcha (https://github.com/mojocn/base64Captcha)
-   (Apache License, Version 2.0) ory-dockertest (https://github.com/ory/dockertest)
-   (Apache License, Version 2.0) spf13-cobra (https://github.com/spf13/cobra)
+   (Apache License, Version 2.0) react-helmet-async (https://github.com/staylor/react-helmet-async) [link](./licenses/LICENSE-react-helmet-async.txt)
+   (Apache License, Version 2.0) golang-mock (https://github.com/golang/mock) [link](./licenses/LICENSE-golang-mock.txt)
+   (Apache License, Version 2.0) google-wire (https://github.com/google/wire) [link](./licenses/LICENSE-google-wire.txt)
+   (Apache License, Version 2.0) mojocn-base64Captcha (https://github.com/mojocn/base64Captcha) [link](./licenses/LICENSE-mojocn-base64Captcha.txt)
+   (Apache License, Version 2.0) ory-dockertest (https://github.com/ory/dockertest) [link](./licenses/LICENSE-ory-dockertest.txt)
+   (Apache License, Version 2.0) spf13-cobra (https://github.com/spf13/cobra) [link](./licenses/LICENSE-spf13-cobra.txt)
 
 ========================================================================
 MIT licenses
@@ -227,51 +227,51 @@ MIT licenses
 
 The following components are provided under the MIT License. See project link for details.
 
-   (MIT License) axios (https://github.com/axios/axios)
-   (MIT License) bootstrap (https://github.com/twbs/bootstrap)
-   (MIT License) icons (https://github.com/twbs/icons)
-   (MIT License) classnames (https://github.com/JedWatson/classnames)
-   (MIT License) codemirror5 (https://github.com/codemirror/codemirror5)
-   (MIT License) color (https://github.com/Qix-/color)
-   (MIT License) copy-to-clipboard (https://github.com/sudodoki/copy-to-clipboard)
-   (MIT License) dayjs (https://github.com/iamkun/dayjs)
-   (MIT License) i18next (https://github.com/i18next/i18next)
-   (MIT License) lodash (https://github.com/lodash/lodash)
-   (MIT License) marked (https://github.com/markedjs/marked)
-   (MIT License) next-share (https://github.com/Bunlong/next-share)
-   (MIT License) node-qrcode (https://github.com/soldair/node-qrcode)
-   (MIT License) react (https://github.com/facebook/react)
-   (MIT License) react-bootstrap (https://github.com/react-bootstrap/react-bootstrap)
-   (MIT License) react-i18next (https://github.com/i18next/react-i18next)
-   (MIT License) react-router (https://github.com/remix-run/react-router)
-   (MIT License) swr (https://github.com/vercel/swr)
-   (MIT License) zustand (https://github.com/pmndrs/zustand)
-   (MIT License) Chain-Zhang-pinyin (https://github.com/Chain-Zhang/pinyin)
-   (MIT License) Machiel-slugify (https://github.com/Machiel/slugify)
-   (MIT License) Masterminds-semver (https://github.com/Masterminds/semver)
-   (MIT License) anargu-gin-brotli (https://github.com/anargu/gin-brotli)
-   (MIT License) asaskevich-govalidator (https://github.com/asaskevich/govalidator)
-   (MIT License) disintegration-imaging (https://github.com/disintegration/imaging)
-   (MIT License) gin-gonic-gin (https://github.com/gin-gonic/gin)
-   (MIT License) go-playground-locales (https://github.com/go-playground/locales)
-   (MIT License) go-playground-universal-translator (https://github.com/go-playground/universal-translator)
-   (MIT License) go-playground-validator (https://github.com/go-playground/validator)
-   (MIT License) goccy-go-json (https://github.com/goccy/go-json)
-   (MIT License) jinzhu-copier (https://github.com/jinzhu/copier)
-   (MIT License) jinzhu-now (https://github.com/jinzhu/now)
-   (MIT License) jordan-wright-email (https://github.com/jordan-wright/email)
-   (MIT License) lib-pq (https://github.com/lib/pq)
-   (MIT License) mattn-go-sqlite3 (https://github.com/mattn/go-sqlite3)
-   (MIT License) segmentfault-pacman (https://github.com/segmentfault/pacman)
-   (MIT License) robfig-cron (https://github.com/robfig/cron)
-   (MIT License) scottleedavis-go-exif-remove (https://github.com/scottleedavis/go-exif-remove)
-   (MIT License) stretchr-testify (https://github.com/stretchr/testify)
-   (MIT License) swaggo-files (https://github.com/swaggo/files)
-   (MIT License) swaggo-gin-swagger (https://github.com/swaggo/gin-swagger)
-   (MIT License) swaggo-swag (https://github.com/swaggo/swag)
-   (MIT License) tidwall-gjson (https://github.com/tidwall/gjson)
-   (MIT License) yuin-goldmark (https://github.com/yuin/goldmark)
-   (MIT License) go-gomail-gomail (https://gopkg.in/gomail.v2)
+   (MIT License) axios (https://github.com/axios/axios) [link](./licenses/LICENSE-axios.txt)
+   (MIT License) bootstrap (https://github.com/twbs/bootstrap) [link](./licenses/LICENSE-bootstrap.txt)
+   (MIT License) icons (https://github.com/twbs/icons) [link](./licenses/LICENSE-icons.txt)
+   (MIT License) classnames (https://github.com/JedWatson/classnames) [link](./licenses/LICENSE-classnames.txt)
+   (MIT License) codemirror5 (https://github.com/codemirror/codemirror5) [link](./licenses/LICENSE-codemirror5.txt)
+   (MIT License) color (https://github.com/Qix-/color) [link](./licenses/LICENSE-color.txt)
+   (MIT License) copy-to-clipboard (https://github.com/sudodoki/copy-to-clipboard) [link](./licenses/LICENSE-copy-to-clipboard.txt)
+   (MIT License) dayjs (https://github.com/iamkun/dayjs) [link](./licenses/LICENSE-dayjs.txt)
+   (MIT License) i18next (https://github.com/i18next/i18next) [link](./licenses/LICENSE-i18next.txt)
+   (MIT License) lodash (https://github.com/lodash/lodash) [link](./licenses/LICENSE-lodash.txt)
+   (MIT License) marked (https://github.com/markedjs/marked) [link](./licenses/LICENSE-marked.txt)
+   (MIT License) next-share (https://github.com/Bunlong/next-share) [link](./licenses/LICENSE-next-share.txt)
+   (MIT License) node-qrcode (https://github.com/soldair/node-qrcode) [link](./licenses/LICENSE-node-qrcode.txt)
+   (MIT License) react (https://github.com/facebook/react) [link](./licenses/LICENSE-react.txt)
+   (MIT License) react-bootstrap (https://github.com/react-bootstrap/react-bootstrap) [link](./licenses/LICENSE-react-bootstrap.txt)
+   (MIT License) react-i18next (https://github.com/i18next/react-i18next) [link](./licenses/LICENSE-react-i18next.txt)
+   (MIT License) react-router (https://github.com/remix-run/react-router) [link](./licenses/LICENSE-react-router.txt)
+   (MIT License) swr (https://github.com/vercel/swr) [link](./licenses/LICENSE-swr.txt)
+   (MIT License) zustand (https://github.com/pmndrs/zustand) [link](./licenses/LICENSE-zustand.txt)
+   (MIT License) Chain-Zhang-pinyin (https://github.com/Chain-Zhang/pinyin) [link](./licenses/LICENSE-Chain-Zhang-pinyin.txt)
+   (MIT License) Machiel-slugify (https://github.com/Machiel/slugify) [link](./licenses/LICENSE-Machiel-slugify.txt)
+   (MIT License) Masterminds-semver (https://github.com/Masterminds/semver) [link](./licenses/LICENSE-Masterminds-semver.txt)
+   (MIT License) anargu-gin-brotli (https://github.com/anargu/gin-brotli) [link](./licenses/LICENSE-anargu-gin-brotli.txt)
+   (MIT License) asaskevich-govalidator (https://github.com/asaskevich/govalidator) [link](./licenses/LICENSE-asaskevich-govalidator.txt)
+   (MIT License) disintegration-imaging (https://github.com/disintegration/imaging) [link](./licenses/LICENSE-disintegration-imaging.txt)
+   (MIT License) gin-gonic-gin (https://github.com/gin-gonic/gin) [link](./licenses/LICENSE-gin-gonic-gin.txt)
+   (MIT License) go-playground-locales (https://github.com/go-playground/locales) [link](./licenses/LICENSE-go-playground-locales.txt)
+   (MIT License) go-playground-universal-translator (https://github.com/go-playground/universal-translator) [link](./licenses/LICENSE-go-playground-universal-translator.txt)
+   (MIT License) go-playground-validator (https://github.com/go-playground/validator) [link](./licenses/LICENSE-go-playground-validator.txt)
+   (MIT License) goccy-go-json (https://github.com/goccy/go-json) [link](./licenses/LICENSE-goccy-go-json.txt)
+   (MIT License) jinzhu-copier (https://github.com/jinzhu/copier) [link](./licenses/LICENSE-jinzhu-copier.txt)
+   (MIT License) jinzhu-now (https://github.com/jinzhu/now) [link](./licenses/LICENSE-jinzhu-now.txt)
+   (MIT License) jordan-wright-email (https://github.com/jordan-wright/email) [link](./licenses/LICENSE-jordan-wright-email.txt)
+   (MIT License) lib-pq (https://github.com/lib/pq) [link](./licenses/LICENSE-lib-pq.txt)
+   (MIT License) mattn-go-sqlite3 (https://github.com/mattn/go-sqlite3) [link](./licenses/LICENSE-mattn-go-sqlite3.txt)
+   (MIT License) segmentfault-pacman (https://github.com/segmentfault/pacman) [link](./licenses/LICENSE-segmentfault-pacman.txt)
+   (MIT License) robfig-cron (https://github.com/robfig/cron) [link](./licenses/LICENSE-robfig-cron.txt)
+   (MIT License) scottleedavis-go-exif-remove (https://github.com/scottleedavis/go-exif-remove) [link](./licenses/LICENSE-scottleedavis-go-exif-remove.txt)
+   (MIT License) stretchr-testify (https://github.com/stretchr/testify) [link](./licenses/LICENSE-stretchr-testify.txt)
+   (MIT License) swaggo-files (https://github.com/swaggo/files) [link](./licenses/LICENSE-swaggo-files.txt)
+   (MIT License) swaggo-gin-swagger (https://github.com/swaggo/gin-swagger) [link](./licenses/LICENSE-swaggo-gin-swagger.txt)
+   (MIT License) swaggo-swag (https://github.com/swaggo/swag) [link](./licenses/LICENSE-swaggo-swag.txt)
+   (MIT License) tidwall-gjson (https://github.com/tidwall/gjson) [link](./licenses/LICENSE-tidwall-gjson.txt)
+   (MIT License) yuin-goldmark (https://github.com/yuin/goldmark) [link](./licenses/LICENSE-yuin-goldmark.txt)
+   (MIT License) go-gomail-gomail (https://gopkg.in/gomail.v2) [link](./licenses/LICENSE-go-gomail-gomail.txt)
 
 ========================================================================
 BSD licenses
@@ -279,15 +279,15 @@ BSD licenses
 
 The following components are provided under a BSD license. See project link for details.
 
-   (BSD 2-Clause) bwmarrin-snowflake (https://github.com/bwmarrin/snowflake)
-   (BSD 2-Clause) xorm (https://xorm.io/xorm)
-   (BSD 3-Clause) google-uuid (https://github.com/google/uuid)
-   (BSD 3-Clause) grokify-html-strip-tags-go (https://github.com/grokify/html-strip-tags-go)
-   (BSD 3-Clause) microcosm-cc-bluemonday (https://github.com/microcosm-cc/bluemonday)
-   (BSD 3-Clause) cznic-sqlite (https://modernc.org/sqlite)
-   (BSD 3-Clause) jsdiff (https://github.com/kpdecker/jsdiff)
-   (BSD 3-Clause) node-md5 (https://github.com/pvorb/node-md5)
-   (BSD 3-Clause) qs (https://github.com/ljharb/qs)
+   (BSD 2-Clause) bwmarrin-snowflake (https://github.com/bwmarrin/snowflake) [link](./licenses/LICENSE-bwmarrin-snowflake.txt)
+   (BSD 2-Clause) xorm (https://xorm.io/xorm) [link](./licenses/LICENSE-xorm.txt)
+   (BSD 3-Clause) google-uuid (https://github.com/google/uuid) [link](./licenses/LICENSE-google-uuid.txt)
+   (BSD 3-Clause) grokify-html-strip-tags-go (https://github.com/grokify/html-strip-tags-go) [link](./licenses/LICENSE-grokify-html-strip-tags-go.txt)
+   (BSD 3-Clause) microcosm-cc-bluemonday (https://github.com/microcosm-cc/bluemonday) [link](./licenses/LICENSE-microcosm-cc-bluemonday.txt)
+   (BSD 3-Clause) cznic-sqlite (https://modernc.org/sqlite) [link](./licenses/LICENSE-cznic-sqlite.txt)
+   (BSD 3-Clause) jsdiff (https://github.com/kpdecker/jsdiff) [link](./licenses/LICENSE-jsdiff.txt)
+   (BSD 3-Clause) node-md5 (https://github.com/pvorb/node-md5) [link](./licenses/LICENSE-node-md5.txt)
+   (BSD 3-Clause) qs (https://github.com/ljharb/qs) [link](./licenses/LICENSE-qs.txt)
 
 ========================================================================
 ISC licenses
@@ -295,7 +295,7 @@ ISC licenses
 
 The following components are provided under a ISC license. See project link for details.
 
-   (ISC License) node-semver (https://github.com/npm/node-semver)
+   (ISC License) node-semver (https://github.com/npm/node-semver) [link](./licenses/LICENSE-node-semver.txt)
 
 ========================================================================
 MIT and Apache-2.0 licenses
@@ -303,7 +303,7 @@ MIT and Apache-2.0 licenses
 
 The following components are provided under a MIT and Apache-2.0 license. See project link for details.
 
-    (MIT and Apache-2.0) go-yaml-yaml (https://gopkg.in/yaml.v3)
+    (MIT and Apache-2.0) go-yaml-yaml (https://gopkg.in/yaml.v3) [link](./licenses/LICENSE-go-yaml-yaml.txt)
 
 ========================================================================
 MPL licenses
@@ -311,4 +311,4 @@ MPL licenses
 
 The following components are provided under a MPL license. See project link for details.
 
-    (MPL-2.0) go-sql-driver-mysql (https://github.com/go-sql-driver/mysql)
+    (MPL-2.0) go-sql-driver-mysql (https://github.com/go-sql-driver/mysql) [link](./licenses/LICENSE-go-sql-driver-mysql.txt)
