@@ -209,15 +209,20 @@
    licenses.
 
 ========================================================================
-Third party Apache 2.0 licenses
+Apache 2.0 licenses
 ========================================================================
 
-   The following components are provided under the Apache 2.0 License.
-   (Apache License, Version 2.0) wire (https://github.com/google/wire)
-   (Apache License, Version 2.0) react-helmet-async <https://github.com/staylor/react-helmet-async>
+The following components are provided under the Apache 2.0 License.
+
+   (Apache License, Version 2.0) react-helmet-async (https://github.com/staylor/react-helmet-async)
+   (Apache License, Version 2.0) golang-mock (https://github.com/golang/mock)
+   (Apache License, Version 2.0) google-wire (https://github.com/google/wire)
+   (Apache License, Version 2.0) mojocn-base64Captcha (https://github.com/mojocn/base64Captcha)
+   (Apache License, Version 2.0) ory-dockertest (https://github.com/ory/dockertest)
+   (Apache License, Version 2.0) spf13-cobra (https://github.com/spf13/cobra)
 
 ========================================================================
-MIT License
+MIT licenses
 ========================================================================
 
 The following components are provided under the MIT License. See project link for details.
@@ -241,22 +246,69 @@ The following components are provided under the MIT License. See project link fo
    (MIT License) react-router (https://github.com/remix-run/react-router)
    (MIT License) swr (https://github.com/vercel/swr)
    (MIT License) zustand (https://github.com/pmndrs/zustand)
+   (MIT License) Chain-Zhang-pinyin (https://github.com/Chain-Zhang/pinyin)
+   (MIT License) Machiel-slugify (https://github.com/Machiel/slugify)
+   (MIT License) Masterminds-semver (https://github.com/Masterminds/semver)
+   (MIT License) anargu-gin-brotli (https://github.com/anargu/gin-brotli)
+   (MIT License) asaskevich-govalidator (https://github.com/asaskevich/govalidator)
+   (MIT License) disintegration-imaging (https://github.com/disintegration/imaging)
+   (MIT License) gin-gonic-gin (https://github.com/gin-gonic/gin)
+   (MIT License) go-playground-locales (https://github.com/go-playground/locales)
+   (MIT License) go-playground-universal-translator (https://github.com/go-playground/universal-translator)
+   (MIT License) go-playground-validator (https://github.com/go-playground/validator)
+   (MIT License) goccy-go-json (https://github.com/goccy/go-json)
+   (MIT License) jinzhu-copier (https://github.com/jinzhu/copier)
+   (MIT License) jinzhu-now (https://github.com/jinzhu/now)
+   (MIT License) jordan-wright-email (https://github.com/jordan-wright/email)
+   (MIT License) lib-pq (https://github.com/lib/pq)
+   (MIT License) mattn-go-sqlite3 (https://github.com/mattn/go-sqlite3)
+   (MIT License) segmentfault-pacman (https://github.com/segmentfault/pacman)
+   (MIT License) robfig-cron (https://github.com/robfig/cron)
+   (MIT License) scottleedavis-go-exif-remove (https://github.com/scottleedavis/go-exif-remove)
+   (MIT License) stretchr-testify (https://github.com/stretchr/testify)
+   (MIT License) swaggo-files (https://github.com/swaggo/files)
+   (MIT License) swaggo-gin-swagger (https://github.com/swaggo/gin-swagger)
+   (MIT License) swaggo-swag (https://github.com/swaggo/swag)
+   (MIT License) tidwall-gjson (https://github.com/tidwall/gjson)
+   (MIT License) yuin-goldmark (https://github.com/yuin/goldmark)
+   (MIT License) go-gomail-gomail (https://gopkg.in/gomail.v2)
 
 ========================================================================
-BSD License
+BSD licenses
 ========================================================================
 
 The following components are provided under a BSD license. See project link for details.
 
+   (BSD 2-Clause) bwmarrin-snowflake (https://github.com/bwmarrin/snowflake)
+   (BSD 2-Clause) xorm (https://xorm.io/xorm)
+   (BSD 3-Clause) google-uuid (https://github.com/google/uuid)
+   (BSD 3-Clause) grokify-html-strip-tags-go (https://github.com/grokify/html-strip-tags-go)
+   (BSD 3-Clause) microcosm-cc-bluemonday (https://github.com/microcosm-cc/bluemonday)
+   (BSD 3-Clause) cznic-sqlite (https://modernc.org/sqlite)
    (BSD 3-Clause) jsdiff (https://github.com/kpdecker/jsdiff)
    (BSD 3-Clause) node-md5 (https://github.com/pvorb/node-md5)
    (BSD 3-Clause) qs (https://github.com/ljharb/qs)
 
 ========================================================================
-ISC License
+ISC licenses
 ========================================================================
 
 The following components are provided under a ISC license. See project link for details.
 
    (ISC License) node-semver (https://github.com/npm/node-semver)
 
+========================================================================
+MIT and Apache-2.0 licenses
+========================================================================
+
+The following components are provided under a MIT and Apache-2.0 license. See project link for details.
+
+    (MIT and Apache-2.0) go-yaml-yaml (https://gopkg.in/yaml.v3)
+
+========================================================================
+MPL licenses
+========================================================================
+
+The following components are provided under a MPL license. See project link for details.
+
+    (MPL-2.0) go-sql-driver-mysql (https://github.com/go-sql-driver/mysql)
