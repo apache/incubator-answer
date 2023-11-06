@@ -38,9 +38,9 @@ func Test_captchaRepo_DelActionType(t *testing.T) {
 	err := captchaRepo.SetActionType(context.TODO(), ip, actionType, "", amount)
 	assert.NoError(t, err)
 
-	gotAmount, err := captchaRepo.GetActionType(context.TODO(), ip, actionType)
+	actionInfo, err := captchaRepo.GetActionType(context.TODO(), ip, actionType)
 	assert.NoError(t, err)
-	assert.Equal(t, amount, gotAmount)
+	assert.Equal(t, amount, actionInfo.Num)
 
 	err = captchaRepo.DelActionType(context.TODO(), ip, actionType)
 	assert.NoError(t, err)
