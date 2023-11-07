@@ -779,6 +779,7 @@ ui:
     title: Add Question
     edit_title: Edit Question
     default_reason: Edit question
+    default_first_reason: Add question
     similar_questions: Similar questions
     form:
       fields:
