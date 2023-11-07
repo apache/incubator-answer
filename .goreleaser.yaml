@@ -56,6 +56,13 @@ builds:
 archives:
   - name_template: >-
       apache-answer-{{ .Version }}-incubating-{{ .Os }}-{{ .Arch }}
+    files:
+      - src: "docs/release/LICENSE"
+        dst: LICENSE
+      - src: "docs/release/NOTICE"
+        dst: NOTICE
+      - src: "docs/release/licenses/*"
+        dst: licenses/
 checksum:
   name_template: 'checksums.txt'
 snapshot:
