@@ -27,32 +27,32 @@ import (
 )
 
 type AnswerAPIRouter struct {
-	langController         *controller.LangController
-	userController         *controller.UserController
-	commentController      *controller.CommentController
-	reportController       *controller.ReportController
-	voteController         *controller.VoteController
-	tagController          *controller.TagController
-	followController       *controller.FollowController
-	collectionController   *controller.CollectionController
-	questionController     *controller.QuestionController
-	answerController       *controller.AnswerController
-	searchController       *controller.SearchController
-	revisionController     *controller.RevisionController
-	rankController         *controller.RankController
-	adminReportController  *controller_admin.ReportController
-	adminUserController    *controller_admin.UserAdminController
-	reasonController       *controller.ReasonController
-	themeController        *controller_admin.ThemeController
-	siteInfoController     *controller_admin.SiteInfoController
-	siteinfoController     *controller.SiteInfoController
-	notificationController *controller.NotificationController
-	dashboardController    *controller.DashboardController
-	uploadController       *controller.UploadController
-	activityController     *controller.ActivityController
-	roleController         *controller_admin.RoleController
-	pluginController       *controller_admin.PluginController
-	permissionController   *controller.PermissionController
+	langController          *controller.LangController
+	userController          *controller.UserController
+	commentController       *controller.CommentController
+	reportController        *controller.ReportController
+	voteController          *controller.VoteController
+	tagController           *controller.TagController
+	followController        *controller.FollowController
+	collectionController    *controller.CollectionController
+	questionController      *controller.QuestionController
+	answerController        *controller.AnswerController
+	searchController        *controller.SearchController
+	revisionController      *controller.RevisionController
+	rankController          *controller.RankController
+	adminReportController   *controller_admin.ReportController
+	adminUserController     *controller_admin.UserAdminController
+	reasonController        *controller.ReasonController
+	themeController         *controller_admin.ThemeController
+	adminSiteInfoController *controller_admin.SiteInfoController
+	siteInfoController      *controller.SiteInfoController
+	notificationController  *controller.NotificationController
+	dashboardController     *controller.DashboardController
+	uploadController        *controller.UploadController
+	activityController      *controller.ActivityController
+	roleController          *controller_admin.RoleController
+	pluginController        *controller_admin.PluginController
+	permissionController    *controller.PermissionController
 }
 
 func NewAnswerAPIRouter(
@@ -73,8 +73,8 @@ func NewAnswerAPIRouter(
 	adminUserController *controller_admin.UserAdminController,
 	reasonController *controller.ReasonController,
 	themeController *controller_admin.ThemeController,
-	siteInfoController *controller_admin.SiteInfoController,
-	siteinfoController *controller.SiteInfoController,
+	adminSiteInfoController *controller_admin.SiteInfoController,
+	siteInfoController *controller.SiteInfoController,
 	notificationController *controller.NotificationController,
 	dashboardController *controller.DashboardController,
 	uploadController *controller.UploadController,
@@ -84,32 +84,32 @@ func NewAnswerAPIRouter(
 	permissionController *controller.PermissionController,
 ) *AnswerAPIRouter {
 	return &AnswerAPIRouter{
-		langController:         langController,
-		userController:         userController,
-		commentController:      commentController,
-		reportController:       reportController,
-		voteController:         voteController,
-		tagController:          tagController,
-		followController:       followController,
-		collectionController:   collectionController,
-		questionController:     questionController,
-		answerController:       answerController,
-		searchController:       searchController,
-		revisionController:     revisionController,
-		rankController:         rankController,
-		adminReportController:  adminReportController,
-		adminUserController:    adminUserController,
-		reasonController:       reasonController,
-		themeController:        themeController,
-		siteInfoController:     siteInfoController,
-		notificationController: notificationController,
-		siteinfoController:     siteinfoController,
-		dashboardController:    dashboardController,
-		uploadController:       uploadController,
-		activityController:     activityController,
-		roleController:         roleController,
-		pluginController:       pluginController,
-		permissionController:   permissionController,
+		langController:          langController,
+		userController:          userController,
+		commentController:       commentController,
+		reportController:        reportController,
+		voteController:          voteController,
+		tagController:           tagController,
+		followController:        followController,
+		collectionController:    collectionController,
+		questionController:      questionController,
+		answerController:        answerController,
+		searchController:        searchController,
+		revisionController:      revisionController,
+		rankController:          rankController,
+		adminReportController:   adminReportController,
+		adminUserController:     adminUserController,
+		reasonController:        reasonController,
+		themeController:         themeController,
+		adminSiteInfoController: adminSiteInfoController,
+		notificationController:  notificationController,
+		siteInfoController:      siteInfoController,
+		dashboardController:     dashboardController,
+		uploadController:        uploadController,
+		activityController:      activityController,
+		roleController:          roleController,
+		pluginController:        pluginController,
+		permissionController:    permissionController,
 	}
 }
 
@@ -118,9 +118,9 @@ func (a *AnswerAPIRouter) RegisterMustUnAuthAnswerAPIRouter(authUserMiddleware *
 	r.GET("/language/config", a.langController.GetLangMapping)
 	r.GET("/language/options", a.langController.GetUserLangOptions)
 
-	//siteinfo
-	r.GET("/siteinfo", a.siteinfoController.GetSiteInfo)
-	r.GET("/siteinfo/legal", a.siteinfoController.GetSiteLegalInfo)
+	// siteinfo
+	r.GET("/siteinfo", a.siteInfoController.GetSiteInfo)
+	r.GET("/siteinfo/legal", a.siteInfoController.GetSiteLegalInfo)
 
 	// user
 	r.GET("/user/info", a.userController.GetUserInfoByUserID)
@@ -147,12 +147,12 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/personal/user/info", a.userController.GetOtherUserInfoByUsername)
 	r.GET("/user/ranking", a.userController.UserRanking)
 
-	//answer
+	// answer
 	r.GET("/answer/info", a.answerController.Get)
 	r.GET("/answer/page", a.answerController.AnswerList)
 	r.GET("/personal/answer/page", a.questionController.PersonalAnswerPage)
 
-	//question
+	// question
 	r.GET("/question/info", a.questionController.GetQuestion)
 	r.GET("/question/invite", a.questionController.GetQuestionInviteUserInfo)
 	r.GET("/question/page", a.questionController.QuestionPage)
@@ -165,7 +165,7 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/personal/comment/page", a.commentController.GetCommentPersonalWithPage)
 	r.GET("/comment", a.commentController.GetComment)
 
-	//revision
+	// revision
 	r.GET("/revisions", a.revisionController.GetRevisionList)
 
 	// tag
@@ -175,16 +175,16 @@ func (a *AnswerAPIRouter) RegisterUnAuthAnswerAPIRouter(r *gin.RouterGroup) {
 	r.GET("/tags", a.tagController.GetTagsBySlugName)
 	r.GET("/tag/synonyms", a.tagController.GetTagSynonyms)
 
-	//search
+	// search
 	r.GET("/search", a.searchController.Search)
 	r.GET("/search/desc", a.searchController.SearchDesc)
 
-	//rank
+	// rank
 	r.GET("/personal/rank/page", a.rankController.GetRankPersonalWithPage)
 }
 
 func (a *AnswerAPIRouter) RegisterAnswerAPIRouter(r *gin.RouterGroup) {
-	//revisions
+	// revisions
 	r.GET("/revisions/unreviewed", a.revisionController.GetUnreviewedRevisionList)
 	r.PUT("/revisions/audit", a.revisionController.RevisionAudit)
 	r.GET("/revisions/edit/check", a.revisionController.CheckCanUpdateRevision)
@@ -300,30 +300,30 @@ func (a *AnswerAPIRouter) RegisterAnswerAdminAPIRouter(r *gin.RouterGroup) {
 	r.GET("/theme/options", a.themeController.GetThemeOptions)
 
 	// siteinfo
-	r.GET("/siteinfo/general", a.siteInfoController.GetGeneral)
-	r.PUT("/siteinfo/general", a.siteInfoController.UpdateGeneral)
-	r.GET("/siteinfo/interface", a.siteInfoController.GetInterface)
-	r.PUT("/siteinfo/interface", a.siteInfoController.UpdateInterface)
-	r.GET("/siteinfo/branding", a.siteInfoController.GetSiteBranding)
-	r.PUT("/siteinfo/branding", a.siteInfoController.UpdateBranding)
-	r.GET("/siteinfo/write", a.siteInfoController.GetSiteWrite)
-	r.PUT("/siteinfo/write", a.siteInfoController.UpdateSiteWrite)
-	r.GET("/siteinfo/legal", a.siteInfoController.GetSiteLegal)
-	r.PUT("/siteinfo/legal", a.siteInfoController.UpdateSiteLegal)
-	r.GET("/siteinfo/seo", a.siteInfoController.GetSeo)
-	r.PUT("/siteinfo/seo", a.siteInfoController.UpdateSeo)
-	r.GET("/siteinfo/login", a.siteInfoController.GetSiteLogin)
-	r.PUT("/siteinfo/login", a.siteInfoController.UpdateSiteLogin)
-	r.GET("/siteinfo/custom-css-html", a.siteInfoController.GetSiteCustomCssHTML)
-	r.PUT("/siteinfo/custom-css-html", a.siteInfoController.UpdateSiteCustomCssHTML)
-	r.GET("/siteinfo/theme", a.siteInfoController.GetSiteTheme)
-	r.PUT("/siteinfo/theme", a.siteInfoController.SaveSiteTheme)
-	r.GET("/siteinfo/users", a.siteInfoController.GetSiteUsers)
-	r.PUT("/siteinfo/users", a.siteInfoController.UpdateSiteUsers)
-	r.GET("/setting/smtp", a.siteInfoController.GetSMTPConfig)
-	r.PUT("/setting/smtp", a.siteInfoController.UpdateSMTPConfig)
-	r.GET("/setting/privileges", a.siteInfoController.GetPrivilegesConfig)
-	r.PUT("/setting/privileges", a.siteInfoController.UpdatePrivilegesConfig)
+	r.GET("/siteinfo/general", a.adminSiteInfoController.GetGeneral)
+	r.PUT("/siteinfo/general", a.adminSiteInfoController.UpdateGeneral)
+	r.GET("/siteinfo/interface", a.adminSiteInfoController.GetInterface)
+	r.PUT("/siteinfo/interface", a.adminSiteInfoController.UpdateInterface)
+	r.GET("/siteinfo/branding", a.adminSiteInfoController.GetSiteBranding)
+	r.PUT("/siteinfo/branding", a.adminSiteInfoController.UpdateBranding)
+	r.GET("/siteinfo/write", a.adminSiteInfoController.GetSiteWrite)
+	r.PUT("/siteinfo/write", a.adminSiteInfoController.UpdateSiteWrite)
+	r.GET("/siteinfo/legal", a.adminSiteInfoController.GetSiteLegal)
+	r.PUT("/siteinfo/legal", a.adminSiteInfoController.UpdateSiteLegal)
+	r.GET("/siteinfo/seo", a.adminSiteInfoController.GetSeo)
+	r.PUT("/siteinfo/seo", a.adminSiteInfoController.UpdateSeo)
+	r.GET("/siteinfo/login", a.adminSiteInfoController.GetSiteLogin)
+	r.PUT("/siteinfo/login", a.adminSiteInfoController.UpdateSiteLogin)
+	r.GET("/siteinfo/custom-css-html", a.adminSiteInfoController.GetSiteCustomCssHTML)
+	r.PUT("/siteinfo/custom-css-html", a.adminSiteInfoController.UpdateSiteCustomCssHTML)
+	r.GET("/siteinfo/theme", a.adminSiteInfoController.GetSiteTheme)
+	r.PUT("/siteinfo/theme", a.adminSiteInfoController.SaveSiteTheme)
+	r.GET("/siteinfo/users", a.adminSiteInfoController.GetSiteUsers)
+	r.PUT("/siteinfo/users", a.adminSiteInfoController.UpdateSiteUsers)
+	r.GET("/setting/smtp", a.adminSiteInfoController.GetSMTPConfig)
+	r.PUT("/setting/smtp", a.adminSiteInfoController.UpdateSMTPConfig)
+	r.GET("/setting/privileges", a.adminSiteInfoController.GetPrivilegesConfig)
+	r.PUT("/setting/privileges", a.adminSiteInfoController.UpdatePrivilegesConfig)
 
 	// dashboard
 	r.GET("/dashboard", a.dashboardController.DashboardInfo)
