@@ -250,10 +250,7 @@ const Index = () => {
                   return (
                     <option key={`${create_at}`} value={index}>
                       {`${date} - ${user_info.display_name} - ${
-                        reason ||
-                        (index === revisions.length - 1
-                          ? t('default_first_reason')
-                          : t('default_reason'))
+                        reason || t('default_reason')
                       }`}
                     </option>
                   );
