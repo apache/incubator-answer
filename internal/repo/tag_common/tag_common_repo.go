@@ -22,6 +22,7 @@ package tag_common
 import (
 	"context"
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/apache/incubator-answer/internal/base/data"
@@ -169,6 +170,7 @@ func (tr *tagCommonRepo) GetTagPage(ctx context.Context, page, pageSize int, tag
 	tagList = make([]*entity.Tag, 0)
 	session := tr.data.DB.Context(ctx)
 
+	slugName := tag.SlugName
 	if len(tag.SlugName) > 0 {
 		session.Where(builder.Or(builder.Like{"slug_name", fmt.Sprintf("LOWER(%s)", tag.SlugName)}, builder.Like{"display_name", tag.SlugName}))
 		tag.SlugName = ""
@@ -188,7 +190,40 @@ func (tr *tagCommonRepo) GetTagPage(ctx context.Context, page, pageSize int, tag
 	total, err = pager.Help(page, pageSize, &tagList, tag, session)
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return
 	}
+
+	// get the tag by synonym, append to the tagList if exists
+	if len(slugName) == 0 {
+		return
+	}
+	synonymTag, exist, errSynonym := tr.GetTagBySlugName(ctx, slugName)
+	if errSynonym != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return
+	}
+	if !exist {
+		return
+	}
+	if synonymTag.MainTagID == 0 {
+		return
+	}
+	total++ // add total
+	if len(tagList) == pageSize {
+		return
+	}
+
+	// get the tag by synonym
+	synonymTag, exist, errSynonym = tr.GetTagByID(ctx, strconv.FormatInt(synonymTag.MainTagID, 10), false)
+	if errSynonym != nil {
+		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
+		return
+	}
+	if !exist {
+		return
+	}
+	tagList = append(tagList, synonymTag)
+
 	return
 }
 
