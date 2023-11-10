@@ -19,6 +19,7 @@
 
 import { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { pathFactory } from '@/router/pathFactory';
 import { Icon } from '@/components';
@@ -36,9 +37,9 @@ const Index: FC<Props> = ({ data, type }) => {
           <li
             className="mb-2"
             key={type === 'answer' ? item.answer_id : item.question_id}>
-            <a
+            <Link
               className="me-3"
-              href={
+              to={
                 type === 'answer'
                   ? pathFactory.answerLanding({
                       questionId: item.question_id,
@@ -51,7 +52,7 @@ const Index: FC<Props> = ({ data, type }) => {
                     )
               }>
               {type === 'answer' ? item.question_info.title : item.title}
-            </a>
+            </Link>
 
             <div className="d-inline-block text-secondary me-3 small">
               <Icon name="hand-thumbs-up-fill me-1" />
