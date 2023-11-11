@@ -167,10 +167,17 @@ func (tr *tagCommonRepo) GetTagPage(ctx context.Context, page, pageSize int, tag
 	tagList []*entity.Tag, total int64, err error,
 ) {
 	tagList = make([]*entity.Tag, 0)
-	session := tr.data.DB.Context(ctx)
 
+	var mainTagIds []string
+	tr.data.DB.Context(ctx).Table(tag).Select("main_tag_id").Where("main_tag_id>0").Where(builder.Or(builder.Like{"slug_name", fmt.Sprintf("LOWER(%s)", tag.SlugName)}, builder.Like{"display_name", tag.SlugName})).Get(&mainTagIds)
+
+	session := tr.data.DB.Context(ctx)
 	if len(tag.SlugName) > 0 {
-		session.Where(builder.Or(builder.Like{"slug_name", fmt.Sprintf("LOWER(%s)", tag.SlugName)}, builder.Like{"display_name", tag.SlugName}))
+		session.Where(
+			builder.Or(
+				builder.Like{"slug_name", fmt.Sprintf("LOWER(%s)", tag.SlugName)},
+				builder.Like{"display_name", tag.SlugName},
+				builder.In("id", mainTagIds)))
 		tag.SlugName = ""
 	}
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
@@ -186,6 +193,7 @@ func (tr *tagCommonRepo) GetTagPage(ctx context.Context, page, pageSize int, tag
 	}
 
 	total, err = pager.Help(page, pageSize, &tagList, tag, session)
+	fmt.Println(session.LastSQL())
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
