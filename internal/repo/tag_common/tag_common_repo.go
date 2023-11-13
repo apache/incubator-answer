@@ -193,7 +193,6 @@ func (tr *tagCommonRepo) GetTagPage(ctx context.Context, page, pageSize int, tag
 	}
 
 	total, err = pager.Help(page, pageSize, &tagList, tag, session)
-	fmt.Println(session.LastSQL())
 	if err != nil {
 		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
 	}
