@@ -1398,23 +1398,33 @@ ui:
     dashboard:
       title: Dashboard
       welcome: Welcome to Answer Admin!
-      site_statistics: Site Statistics
+      site_statistics: Site statistics
       questions: "Questions:"
       answers: "Answers:"
       comments: "Comments:"
       votes: "Votes:"
-      active_users: "Active users:"
+      users: "Users:"
       flags: "Flags:"
-      site_health_status: Site Health Status
+      site_health_status: Site health status
       version: "Version:"
       https: "HTTPS:"
-      uploading_files: "Uploading files:"
+      upload_folder: "Upload folder:"
+      run_mode: "Running mode:"
+      private: Private
+      public: Public
       smtp: "SMTP:"
       timezone: "Timezone:"
-      system_info: System Info
+      system_info: System info
+      go_version: "Go version:"
+      database: "Database:"
+      database_size: "Database size:"
       storage_used: "Storage used:"
       uptime: "Uptime:"
-      answer_links: Answer Links
+      answer_links: Answer links
+      plugins: Plugins
+      github: GitHub
+      blog: Blog
+      contact: Contact
       documents: Documents
       feedback: Feedback
       support: Support
@@ -1429,6 +1439,8 @@ ui:
       allowed: Allowed
       enabled: Enabled
       disabled: Disabled
+      writable: Writable
+      not_writable: Not writable
     flags:
       title: Flags
       pending: Pending

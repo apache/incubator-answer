@@ -507,11 +507,15 @@ export interface AdminDashboard {
     user_count: number;
     report_count: number;
     uploading_files: boolean;
-    smtp: boolean;
+    smtp: 'enabled' | 'disabled' | 'not_configured';
     time_zone: string;
     occupying_storage_space: string;
     app_start_time: number;
     https: boolean;
+    login_required: boolean;
+    go_version: string;
+    database_version: string;
+    database_size: string;
     version_info: {
       remote_version: string;
       version: string;
