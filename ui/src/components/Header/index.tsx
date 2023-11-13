@@ -72,7 +72,7 @@ const Header: FC = () => {
   const tagMatch = useMatch('/tags/:slugName');
   let askUrl = '/questions/ask';
   if (tagMatch && tagMatch.params.slugName) {
-    askUrl = `${askUrl}?tags=${tagMatch.params.slugName}`;
+    askUrl = `${askUrl}?tags=${encodeURIComponent(tagMatch.params.slugName)}`;
   }
 
   useEffect(() => {
