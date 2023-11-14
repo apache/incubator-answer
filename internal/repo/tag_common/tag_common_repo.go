@@ -22,6 +22,7 @@ package tag_common
 import (
 	"context"
 	"fmt"
+	"github.com/segmentfault/pacman/log"
 	"strings"
 
 	"github.com/apache/incubator-answer/internal/base/data"
@@ -169,7 +170,10 @@ func (tr *tagCommonRepo) GetTagPage(ctx context.Context, page, pageSize int, tag
 	tagList = make([]*entity.Tag, 0)
 
 	var mainTagIds []string
-	tr.data.DB.Context(ctx).Table(tag).Select("main_tag_id").Where("main_tag_id>0").Where(builder.Or(builder.Like{"slug_name", fmt.Sprintf("LOWER(%s)", tag.SlugName)}, builder.Like{"display_name", tag.SlugName})).Get(&mainTagIds)
+	_, err = tr.data.DB.Context(ctx).Table(tag).Select("main_tag_id").Where("main_tag_id>0").Where(builder.Or(builder.Like{"slug_name", fmt.Sprintf("LOWER(%s)", tag.SlugName)}, builder.Like{"display_name", tag.SlugName})).Get(&mainTagIds)
+	if err != nil {
+		log.Error(err)
+	}
 
 	session := tr.data.DB.Context(ctx)
 	if len(tag.SlugName) > 0 {
