@@ -170,13 +170,24 @@ func (tr *tagCommonRepo) GetTagPage(ctx context.Context, page, pageSize int, tag
 	tagList = make([]*entity.Tag, 0)
 	session := tr.data.DB.Context(ctx)
 
-	slugName := tag.SlugName
 	if len(tag.SlugName) > 0 {
-		session.Where(builder.Or(builder.Like{"slug_name", fmt.Sprintf("LOWER(%s)", tag.SlugName)}, builder.Like{"display_name", tag.SlugName}))
+		mainTagCond := builder.And(
+			builder.Or(
+				builder.Like{"slug_name", fmt.Sprintf("LOWER(%s)", tag.SlugName)},
+				builder.Like{"display_name", tag.SlugName},
+			),
+			builder.Eq{"main_tag_id": 0},
+		)
+		synonymCond := builder.And(
+			builder.Eq{"slug_name": tag.SlugName},
+			builder.Neq{"main_tag_id": 0},
+		)
+		session.Where(builder.Or(mainTagCond, synonymCond))
 		tag.SlugName = ""
+	} else {
+		session.Where(builder.Eq{"main_tag_id": 0})
 	}
 	session.Where(builder.Eq{"status": entity.TagStatusAvailable})
-	session.Where("main_tag_id = 0") // if this tag is synonym, exclude it
 
 	switch queryCond {
 	case "popular":
@@ -193,36 +204,18 @@ func (tr *tagCommonRepo) GetTagPage(ctx context.Context, page, pageSize int, tag
 		return
 	}
 
-	// get the tag by synonym, append to the tagList if exists
-	if len(slugName) == 0 {
-		return
+	for i := 0; i < len(tagList); i++ {
+		if tagList[i].MainTagID != 0 {
+			mainTag, exist, errSynonym := tr.GetTagByID(ctx, strconv.FormatInt(tagList[i].MainTagID, 10), false)
+			if errSynonym != nil {
+				err = errors.InternalServer(reason.DatabaseError).WithError(errSynonym).WithStack()
+				return
+			}
+			if exist {
+				tagList[i] = mainTag
+			}
+		}
 	}
-	synonymTag, exist, errSynonym := tr.GetTagBySlugName(ctx, slugName)
-	if errSynonym != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return
-	}
-	if !exist {
-		return
-	}
-	if synonymTag.MainTagID == 0 {
-		return
-	}
-	total++ // add total
-	if len(tagList) == pageSize {
-		return
-	}
-
-	// get the tag by synonym
-	synonymTag, exist, errSynonym = tr.GetTagByID(ctx, strconv.FormatInt(synonymTag.MainTagID, 10), false)
-	if errSynonym != nil {
-		err = errors.InternalServer(reason.DatabaseError).WithError(err).WithStack()
-		return
-	}
-	if !exist {
-		return
-	}
-	tagList = append(tagList, synonymTag)
 
 	return
 }
