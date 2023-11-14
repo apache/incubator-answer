@@ -1714,6 +1714,10 @@ ui:
         title: Private
         label: Login required
         text: Only logged in users can access this community.
+      password_login:
+        title: Password login
+        label: Allow email and password login
+        text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
       plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.

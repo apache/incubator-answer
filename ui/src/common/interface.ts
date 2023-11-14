@@ -454,6 +454,7 @@ export interface AdminSettingsLogin {
   login_required: boolean;
   allow_email_registrations: boolean;
   allow_email_domains: string[];
+  allow_password_login: boolean;
 }
 
 /**
