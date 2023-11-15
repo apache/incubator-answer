@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-name: Build DockerHub Image
+name: Build Docker Image For Release
 
 on:
   push:
@@ -29,7 +29,7 @@ on:
 
 jobs:
   build:
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -38,7 +38,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v4
       with:
-        images: answerdev/answer
+        images: apache/answer
         tags: |
           type=raw,value=latest
           type=ref,enable=true,priority=600,prefix=,suffix=,event=branch
