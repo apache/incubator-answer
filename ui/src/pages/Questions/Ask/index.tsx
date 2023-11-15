@@ -236,6 +236,9 @@ const Ask = () => {
     if (e.currentTarget.value.length >= 10) {
       querySimilarQuestions(e.currentTarget.value);
     }
+    if (e.currentTarget.value.length === 0) {
+      setSimilarQuestions([]);
+    }
   };
   const handleContentChange = (value: string) => {
     setFormData({

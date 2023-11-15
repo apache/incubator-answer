@@ -150,6 +150,7 @@ const Index: FC = () => {
             setting.allow_email_domains.join('\n');
         }
         formMeta.login_required.value = setting.login_required;
+        formMeta.allow_password_login.value = setting.allow_password_login;
         setFormData({ ...formMeta });
       }
     });
