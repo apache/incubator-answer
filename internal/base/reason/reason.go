@@ -92,6 +92,7 @@ const (
 	UserCannotUpdateYourRole         = "error.user.cannot_update_your_role"
 	TagCannotSetSynonymAsItself      = "error.tag.cannot_set_synonym_as_itself"
 	NotAllowedRegistration           = "error.user.not_allowed_registration"
+	NotAllowedLoginViaPassword       = "error.user.not_allowed_login_via_password"
 	SMTPConfigFromNameCannotBeEmail  = "error.smtp.config_from_name_cannot_be_email"
 	AdminCannotUpdateTheirPassword   = "error.admin.cannot_update_their_password"
 	AdminCannotModifySelfStatus      = "error.admin.cannot_modify_self_status"

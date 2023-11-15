@@ -134,6 +134,13 @@ func (us *UserService) GetOtherUserInfoByUsername(ctx context.Context, username 
 
 // EmailLogin email login
 func (us *UserService) EmailLogin(ctx context.Context, req *schema.UserEmailLoginReq) (resp *schema.UserLoginResp, err error) {
+	siteLogin, err := us.siteInfoService.GetSiteLogin(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if !siteLogin.AllowPasswordLogin {
+		return nil, errors.BadRequest(reason.NotAllowedLoginViaPassword)
+	}
 	userInfo, exist, err := us.userRepo.GetByEmail(ctx, req.Email)
 	if err != nil {
 		return nil, err

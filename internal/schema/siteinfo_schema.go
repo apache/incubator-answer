@@ -117,6 +117,7 @@ type SiteUsersReq struct {
 type SiteLoginReq struct {
 	AllowNewRegistrations   bool     `json:"allow_new_registrations"`
 	AllowEmailRegistrations bool     `json:"allow_email_registrations"`
+	AllowPasswordLogin      bool     `json:"allow_password_login"`
 	LoginRequired           bool     `json:"login_required"`
 	AllowEmailDomains       []string `json:"allow_email_domains"`
 }
