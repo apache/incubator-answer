@@ -722,9 +722,9 @@ ui:
     btn_save_edits: Änderungen speichern
     btn_cancel: Stornieren
   dates:
-    long_date: MMM D
-    long_date_with_year: "MMM D, JJJJ"
-    long_date_with_time: "MMM T, JJJJ [at] HH:mm"
+    long_date: DD. MMM
+    long_date_with_year: "DD. MMM YYYY"
+    long_date_with_time: "DD. MMM YYYY [at] HH:mm"
     now: jetzt
     x_seconds_ago: "vor {{count}}s"
     x_minutes_ago: "vor {{count}}m"
