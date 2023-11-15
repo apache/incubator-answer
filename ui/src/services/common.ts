@@ -30,11 +30,8 @@ export const uploadImage = (params: { file: File; type: Type.UploadType }) => {
   return request.post('/answer/api/v1/file', form);
 };
 
-export const useQueryQuestionByTitle = (title) => {
-  return useSWR<Record<string, any>>(
-    title ? `/answer/api/v1/question/similar?title=${title}` : '',
-    request.instance.get,
-  );
+export const queryQuestionByTitle = (title: string) => {
+  return request.get(`/answer/api/v1/question/similar?title=${title}`);
 };
 
 export const useQueryTags = (params) => {

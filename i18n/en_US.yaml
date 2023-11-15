@@ -1400,23 +1400,33 @@ ui:
     dashboard:
       title: Dashboard
       welcome: Welcome to Answer Admin!
-      site_statistics: Site Statistics
+      site_statistics: Site statistics
       questions: "Questions:"
       answers: "Answers:"
       comments: "Comments:"
       votes: "Votes:"
-      active_users: "Active users:"
+      users: "Users:"
       flags: "Flags:"
-      site_health_status: Site Health Status
+      site_health_status: Site health status
       version: "Version:"
       https: "HTTPS:"
-      uploading_files: "Uploading files:"
+      upload_folder: "Upload folder:"
+      run_mode: "Running mode:"
+      private: Private
+      public: Public
       smtp: "SMTP:"
       timezone: "Timezone:"
-      system_info: System Info
+      system_info: System info
+      go_version: "Go version:"
+      database: "Database:"
+      database_size: "Database size:"
       storage_used: "Storage used:"
       uptime: "Uptime:"
-      answer_links: Answer Links
+      answer_links: Answer links
+      plugins: Plugins
+      github: GitHub
+      blog: Blog
+      contact: Contact
       documents: Documents
       feedback: Feedback
       support: Support
@@ -1431,6 +1441,8 @@ ui:
       allowed: Allowed
       enabled: Enabled
       disabled: Disabled
+      writable: Writable
+      not_writable: Not writable
     flags:
       title: Flags
       pending: Pending
@@ -1704,6 +1716,10 @@ ui:
         title: Private
         label: Login required
         text: Only logged in users can access this community.
+      password_login:
+        title: Password login
+        label: Allow email and password login
+        text: "WARNING: If turn off, you may be unable to log in if you have not previously configured other login method."
     installed_plugins:
       title: Installed Plugins
       plugin_link: Plugins extend and expand the functionality of Answer. You may find plugins in the <1>Answer Plugin Repository</1>.

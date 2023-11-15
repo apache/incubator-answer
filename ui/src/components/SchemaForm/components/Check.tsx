@@ -57,7 +57,6 @@ const Index: FC<Props> = ({
       },
     };
     if (typeof onChange === 'function') {
-      console.log('fieldName', fieldName, enumValues);
       onChange(state);
     }
   };
