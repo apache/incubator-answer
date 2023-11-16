@@ -48,5 +48,9 @@ func addPasswordLoginControl(ctx context.Context, x *xorm.Engine) error {
 			return fmt.Errorf("update site info failed: %w", err)
 		}
 	}
-	return nil
+
+	type User struct {
+		Avatar string `xorm:"not null default '' VARCHAR(1024) avatar"`
+	}
+	return x.Context(ctx).Sync(new(User))
 }
