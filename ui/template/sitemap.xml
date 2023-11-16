@@ -1,3 +1,4 @@
+{{ .xmlHeader }}
 <!--
 
     Licensed to the Apache Software Foundation (ASF) under one
@@ -18,7 +19,6 @@
     under the License.
 
 -->
-{{ .xmlHeader }}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {{ range .list }}
   <url>
@@ -29,5 +29,5 @@
   {{end}}
     <lastmod>{{.UpdateTime}}</lastmod>
   </url>
-   {{ end }}
+  {{ end }}
 </urlset>

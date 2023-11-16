@@ -17,10 +17,10 @@
 # under the License.
 
 # List of patterns to ignore using regular expressions
-IGNORED_PATTERNS=("Makefile" "NOTICE" "README.md" "README_CN.md" "SECURITY.md" "go.mod" "go.sum" "DISCLAIMER" "LICENSE" "*.json" "*.svg" "*.png" "*.jpg" "*.ico" "plugin_list")
+IGNORED_PATTERNS=("Makefile" "NOTICE" "README.md" "README_CN.md" "SECURITY.md" "go.mod" "go.sum" "DISCLAIMER" "LICENSE" "*.json" "*.svg" "*.png" "*.jpg" "*.ico" "plugin_list" "answer")
 
 # List of directories to ignore
-IGNORED_DIRECTORIES=("answer-data" "release" "node_modules")
+IGNORED_DIRECTORIES=("answer-data" "release" "node_modules" "build")
 
 # Recursive function to traverse directories and add ASF header
 traverse_directory() {
