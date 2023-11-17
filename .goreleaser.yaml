@@ -55,11 +55,16 @@ builds:
 
 archives:
   - name_template: >-
-      {{ .ProjectName }}_
-      {{- title .Os }}_
-      {{- if eq .Arch "amd64" }}x86_64
-      {{- else if eq .Arch "386" }}i386
-      {{- else }}{{ .Arch }}{{ end }}
+      apache-answer-{{ .Version }}-incubating-{{ .Os }}-{{ .Arch }}
+    files:
+      - src: "docs/release/LICENSE"
+        dst: LICENSE
+      - src: "docs/release/NOTICE"
+        dst: NOTICE
+      - src: "docs/release/licenses/*"
+        dst: licenses/
+      - src: "DISCLAIMER"
+        dst: DISCLAIMER
 checksum:
   name_template: 'checksums.txt'
 snapshot:

@@ -20,6 +20,7 @@
 import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { FormatTime, Tag, Counts } from '@/components';
 import { pathFactory } from '@/router/pathFactory';
@@ -41,15 +42,15 @@ const Index: FC<Props> = ({ visible, data }) => {
             className="py-3 px-0 bg-transparent border-start-0 border-end-0"
             key={item.answer_id}>
             <h6 className="mb-2">
-              <a
-                href={pathFactory.answerLanding({
+              <Link
+                to={pathFactory.answerLanding({
                   questionId: item.question_id,
                   slugTitle: item.question_info?.url_title,
                   answerId: item.answer_id,
                 })}
                 className="text-break">
                 {item.question_info?.title}
-              </a>
+              </Link>
             </h6>
             <div className="d-flex align-items-center small text-secondary mb-2">
               <FormatTime

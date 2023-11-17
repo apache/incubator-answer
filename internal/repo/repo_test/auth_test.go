@@ -29,17 +29,18 @@ import (
 )
 
 var (
-	token  = "token"
-	userID = "1"
+	accessToken = "token"
+	visitToken  = "visitToken"
+	userID      = "1"
 )
 
 func Test_authRepo_SetUserCacheInfo(t *testing.T) {
 	authRepo := auth.NewAuthRepo(testDataSource)
 
-	err := authRepo.SetUserCacheInfo(context.TODO(), token, &entity.UserCacheInfo{UserID: userID})
+	err := authRepo.SetUserCacheInfo(context.TODO(), accessToken, visitToken, &entity.UserCacheInfo{UserID: userID})
 	assert.NoError(t, err)
 
-	cacheInfo, err := authRepo.GetUserCacheInfo(context.TODO(), token)
+	cacheInfo, err := authRepo.GetUserCacheInfo(context.TODO(), accessToken)
 	assert.NoError(t, err)
 	assert.Equal(t, userID, cacheInfo.UserID)
 }
@@ -47,14 +48,15 @@ func Test_authRepo_SetUserCacheInfo(t *testing.T) {
 func Test_authRepo_RemoveUserCacheInfo(t *testing.T) {
 	authRepo := auth.NewAuthRepo(testDataSource)
 
-	err := authRepo.SetUserCacheInfo(context.TODO(), token, &entity.UserCacheInfo{UserID: userID})
+	err := authRepo.SetUserCacheInfo(context.TODO(), accessToken, visitToken, &entity.UserCacheInfo{UserID: userID})
 	assert.NoError(t, err)
 
-	err = authRepo.RemoveUserCacheInfo(context.TODO(), token)
+	err = authRepo.RemoveUserCacheInfo(context.TODO(), accessToken)
 	assert.NoError(t, err)
 
-	_, err = authRepo.GetUserCacheInfo(context.TODO(), token)
-	assert.Error(t, err)
+	userInfo, err := authRepo.GetUserCacheInfo(context.TODO(), accessToken)
+	assert.NoError(t, err)
+	assert.Nil(t, userInfo)
 }
 
 func Test_authRepo_SetUserStatus(t *testing.T) {
@@ -76,17 +78,18 @@ func Test_authRepo_RemoveUserStatus(t *testing.T) {
 	err = authRepo.RemoveUserStatus(context.TODO(), userID)
 	assert.NoError(t, err)
 
-	_, err = authRepo.GetUserStatus(context.TODO(), userID)
-	assert.Error(t, err)
+	userInfo, err := authRepo.GetUserStatus(context.TODO(), userID)
+	assert.NoError(t, err)
+	assert.Nil(t, userInfo)
 }
 
 func Test_authRepo_SetAdminUserCacheInfo(t *testing.T) {
 	authRepo := auth.NewAuthRepo(testDataSource)
 
-	err := authRepo.SetAdminUserCacheInfo(context.TODO(), token, &entity.UserCacheInfo{UserID: userID})
+	err := authRepo.SetAdminUserCacheInfo(context.TODO(), accessToken, &entity.UserCacheInfo{UserID: userID})
 	assert.NoError(t, err)
 
-	cacheInfo, err := authRepo.GetAdminUserCacheInfo(context.TODO(), token)
+	cacheInfo, err := authRepo.GetAdminUserCacheInfo(context.TODO(), accessToken)
 	assert.NoError(t, err)
 	assert.Equal(t, userID, cacheInfo.UserID)
 }
@@ -94,12 +97,13 @@ func Test_authRepo_SetAdminUserCacheInfo(t *testing.T) {
 func Test_authRepo_RemoveAdminUserCacheInfo(t *testing.T) {
 	authRepo := auth.NewAuthRepo(testDataSource)
 
-	err := authRepo.SetAdminUserCacheInfo(context.TODO(), token, &entity.UserCacheInfo{UserID: userID})
+	err := authRepo.SetAdminUserCacheInfo(context.TODO(), accessToken, &entity.UserCacheInfo{UserID: userID})
 	assert.NoError(t, err)
 
-	err = authRepo.RemoveAdminUserCacheInfo(context.TODO(), token)
+	err = authRepo.RemoveAdminUserCacheInfo(context.TODO(), accessToken)
 	assert.NoError(t, err)
 
-	_, err = authRepo.GetAdminUserCacheInfo(context.TODO(), token)
-	assert.Error(t, err)
+	userInfo, err := authRepo.GetAdminUserCacheInfo(context.TODO(), accessToken)
+	assert.NoError(t, err)
+	assert.Nil(t, userInfo)
 }

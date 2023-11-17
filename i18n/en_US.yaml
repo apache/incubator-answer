@@ -720,6 +720,7 @@ ui:
   edit_tag:
     title: Edit Tag
     default_reason: Edit tag
+    default_first_reason: Add tag
     form:
       fields:
         revision:
@@ -768,6 +769,7 @@ ui:
   edit_answer:
     title: Edit Answer
     default_reason: Edit answer
+    default_first_reason: Add answer
     form:
       fields:
         revision:
@@ -799,6 +801,7 @@ ui:
     title: Add Question
     edit_title: Edit Question
     default_reason: Edit question
+    default_first_reason: Add question
     similar_questions: Similar questions
     form:
       fields:

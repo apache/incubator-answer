@@ -18,6 +18,7 @@
  */
 
 import { memo, FC } from 'react';
+import { Link } from 'react-router-dom';
 import { ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -54,12 +55,12 @@ const Index: FC<Props> = ({ data }) => {
           style={{ marginTop: '2px' }}>
           {data.object_type === 'question' ? 'Q' : 'A'}
         </span>
-        <a className="h5 mb-0 link-dark text-break" href={itemUrl}>
+        <Link className="h5 mb-0 link-dark text-break" to={itemUrl}>
           {data.object.title}
           {data.object.status === 'closed'
             ? ` [${t('closed', { keyPrefix: 'question' })}]`
             : null}
-        </a>
+        </Link>
       </div>
       <div className="d-flex flex-wrap align-items-center small text-secondary mb-2">
         <BaseUserCard data={data.object?.user_info} showAvatar={false} />
