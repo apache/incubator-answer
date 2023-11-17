@@ -146,22 +146,20 @@ func (sr *searchRepo) SearchContents(ctx context.Context, words []string, tagIDs
 	ub.Where(likeConA)
 
 	// check tag
-	if len(tagIDs) > 0 {
-		for ti, tagID := range tagIDs {
-			ast := "tag_rel" + strconv.Itoa(ti)
-			b.Join("INNER", "tag_rel as "+ast, "question.id = "+ast+".object_id").
-				And(builder.Eq{
-					ast + ".tag_id": tagID,
-					ast + ".status": entity.TagRelStatusAvailable,
-				})
-			ub.Join("INNER", "tag_rel as "+ast, "question_id = "+ast+".object_id").
-				And(builder.Eq{
-					ast + ".tag_id": tagID,
-					ast + ".status": entity.TagRelStatusAvailable,
-				})
-			argsQ = append(argsQ, entity.TagRelStatusAvailable, tagID)
-			argsA = append(argsA, entity.TagRelStatusAvailable, tagID)
-		}
+	for ti, tagID := range tagIDs {
+		ast := "tag_rel" + strconv.Itoa(ti)
+		b.Join("INNER", "tag_rel as "+ast, "question.id = "+ast+".object_id").
+			And(builder.Eq{
+				ast + ".tag_id": tagID,
+				ast + ".status": entity.TagRelStatusAvailable,
+			})
+		ub.Join("INNER", "tag_rel as "+ast, "question_id = "+ast+".object_id").
+			And(builder.Eq{
+				ast + ".tag_id": tagID,
+				ast + ".status": entity.TagRelStatusAvailable,
+			})
+		argsQ = append(argsQ, entity.TagRelStatusAvailable, tagID)
+		argsA = append(argsA, entity.TagRelStatusAvailable, tagID)
 	}
 
 	// check user
@@ -265,16 +263,14 @@ func (sr *searchRepo) SearchQuestions(ctx context.Context, words []string, tagID
 	b.Where(likeConQ)
 
 	// check tag
-	if len(tagIDs) > 0 {
-		for ti, tagID := range tagIDs {
-			ast := "tag_rel" + strconv.Itoa(ti)
-			b.Join("INNER", "tag_rel as "+ast, "question.id = "+ast+".object_id").
-				And(builder.Eq{
-					ast + ".tag_id": tagID,
-					ast + ".status": entity.TagRelStatusAvailable,
-				})
-			args = append(args, entity.TagRelStatusAvailable, tagID)
-		}
+	for ti, tagID := range tagIDs {
+		ast := "tag_rel" + strconv.Itoa(ti)
+		b.Join("INNER", "tag_rel as "+ast, "question.id = "+ast+".object_id").
+			And(builder.Eq{
+				ast + ".tag_id": tagID,
+				ast + ".status": entity.TagRelStatusAvailable,
+			})
+		args = append(args, entity.TagRelStatusAvailable, tagID)
 	}
 
 	// check need filter has not accepted
@@ -376,16 +372,14 @@ func (sr *searchRepo) SearchAnswers(ctx context.Context, words []string, tagIDs 
 	b.Where(likeConA)
 
 	// check tag
-	if len(tagIDs) > 0 {
-		for ti, tagID := range tagIDs {
-			ast := "tag_rel" + strconv.Itoa(ti)
-			b.Join("INNER", "tag_rel as "+ast, "question_id = "+ast+".object_id").
-				And(builder.Eq{
-					ast + ".tag_id": tagID,
-					ast + ".status": entity.TagRelStatusAvailable,
-				})
-			args = append(args, entity.TagRelStatusAvailable, tagID)
-		}
+	for ti, tagID := range tagIDs {
+		ast := "tag_rel" + strconv.Itoa(ti)
+		b.Join("INNER", "tag_rel as "+ast, "question_id = "+ast+".object_id").
+			And(builder.Eq{
+				ast + ".tag_id": tagID,
+				ast + ".status": entity.TagRelStatusAvailable,
+			})
+		args = append(args, entity.TagRelStatusAvailable, tagID)
 	}
 
 	// check limit accepted

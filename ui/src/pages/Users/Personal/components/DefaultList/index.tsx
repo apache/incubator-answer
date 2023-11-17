@@ -20,6 +20,7 @@
 import { FC, memo } from 'react';
 import { ListGroup, ListGroupItem } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 import { FormatTime, Tag, BaseUserCard, Counts } from '@/components';
 import { pathFactory } from '@/router/pathFactory';
@@ -44,9 +45,9 @@ const Index: FC<Props> = ({ visible, tabName, data }) => {
             className="py-3 px-0 bg-transparent border-start-0 border-end-0"
             key={tabName === 'questions' ? item.question_id : item.id}>
             <h6 className="mb-2">
-              <a
+              <Link
                 className="text-break"
-                href={pathFactory.questionLanding(
+                to={pathFactory.questionLanding(
                   tabName === 'questions' ? item.question_id : item.id,
                   item.url_title,
                 )}>
@@ -54,7 +55,7 @@ const Index: FC<Props> = ({ visible, tabName, data }) => {
                 {tabName === 'questions' && item.status === 'closed'
                   ? ` [${t('closed', { keyPrefix: 'question' })}]`
                   : null}
-              </a>
+              </Link>
             </h6>
             <div className="d-flex flex-wrap align-items-center small text-secondary mb-2">
               {tabName === 'bookmarks' && (
