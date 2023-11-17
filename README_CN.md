@@ -28,6 +28,41 @@ docker run -d -p 9080:80 -v answer-data:/data --name answer answerdev/answer:lat
 
 其他安装配置细节请参考 [Installation](https://answer.apache.org/docs/installation)
 
+## 从源码构建
+
+### 环境要求
+- Golang >= 1.18
+- Node.js >= 16.17
+- pnpm >= 8
+
+### 构建
+```bash
+$ make ui
+$ make build
+```
+
+## 从源码运行
+
+### 前端构建
+
+```bash
+make ui
+```
+
+### 系统初始化和安装
+
+```bash
+INSTALL_PORT=9080 go run cmd/answer/main.go --data-path=/data init
+```
+
+其他安装配置细节请参考 [Installation](https://answer.apache.org/docs/installation)
+
+### 本地运行
+
+```bash
+go run cmd/answer/main.go --data-path=/data run
+```
+
 ## 贡献
 
 我们随时欢迎你的贡献!

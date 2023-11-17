@@ -49,6 +49,28 @@ $ make ui
 $ make build
 ```
 
+## Running from source
+
+### Build UI
+
+```bash
+make ui
+```
+
+### Initialization and Installation
+
+```bash
+INSTALL_PORT=9080 go run cmd/answer/main.go --data-path=/data init
+```
+
+For more information, see [Installation](https://answer.apache.org/docs/installation)
+
+### Local run
+
+```bash
+go run cmd/answer/main.go --data-path=/data run
+```
+
 ## Contributing
 
 Contributions are always welcome!
