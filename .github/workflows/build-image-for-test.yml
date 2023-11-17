@@ -15,33 +15,15 @@
 # specific language governing permissions and limitations
 # under the License.
 
-name: Manual Build DockerHub Image
+name: Build Docker Image For Test
 
 on:
-  workflow_dispatch:
-    inputs:
-      tag_name:
-        type: string
-        required: true
-        description: 'DockerHub img tag name'
-      logLevel:
-        description: 'Log level'
-        required: true
-        default: 'warning'
-        type: choice
-        options:
-        - info
-        - warning
-        - debug
-      tags:
-        description: 'Test scenario tags'
-        required: false
-        type: boolean
-
-
+  push:
+    branches: [ "test" ]
 
 jobs:
   build:
+    name: Build and Push
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
@@ -51,10 +33,9 @@ jobs:
       id: meta
       uses: docker/metadata-action@v4
       with:
-        images: answerdev/answer
+        images: apache/answer
         tags: |
-          type=ref,enable=true,priority=600,prefix=,suffix=,event=branch
-          type=semver,pattern={{version}}
+          type=raw,value=test
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
@@ -72,10 +53,8 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         context: .
-        platforms: linux/amd64,linux/arm64
-        push: true
         file: ./Dockerfile
-        tags: answerdev/answer:${{ inputs.tag_name }}
+        platforms: linux/amd64
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
-
-
