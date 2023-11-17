@@ -28,6 +28,7 @@ import (
 	reflect "reflect"
 
 	entity "github.com/apache/incubator-answer/internal/entity"
+	schema "github.com/apache/incubator-answer/internal/schema"
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -82,4 +83,219 @@ func (m *MockSiteInfoRepo) SaveByType(ctx context.Context, siteType string, data
 func (mr *MockSiteInfoRepoMockRecorder) SaveByType(ctx, siteType, data interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SaveByType", reflect.TypeOf((*MockSiteInfoRepo)(nil).SaveByType), ctx, siteType, data)
+}
+
+// MockSiteInfoCommonService is a mock of SiteInfoCommonService interface.
+type MockSiteInfoCommonService struct {
+	ctrl     *gomock.Controller
+	recorder *MockSiteInfoCommonServiceMockRecorder
+}
+
+// MockSiteInfoCommonServiceMockRecorder is the mock recorder for MockSiteInfoCommonService.
+type MockSiteInfoCommonServiceMockRecorder struct {
+	mock *MockSiteInfoCommonService
+}
+
+// NewMockSiteInfoCommonService creates a new mock instance.
+func NewMockSiteInfoCommonService(ctrl *gomock.Controller) *MockSiteInfoCommonService {
+	mock := &MockSiteInfoCommonService{ctrl: ctrl}
+	mock.recorder = &MockSiteInfoCommonServiceMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockSiteInfoCommonService) EXPECT() *MockSiteInfoCommonServiceMockRecorder {
+	return m.recorder
+}
+
+// FormatAvatar mocks base method.
+func (m *MockSiteInfoCommonService) FormatAvatar(ctx context.Context, originalAvatarData, email string, userStatus int) *schema.AvatarInfo {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FormatAvatar", ctx, originalAvatarData, email, userStatus)
+	ret0, _ := ret[0].(*schema.AvatarInfo)
+	return ret0
+}
+
+// FormatAvatar indicates an expected call of FormatAvatar.
+func (mr *MockSiteInfoCommonServiceMockRecorder) FormatAvatar(ctx, originalAvatarData, email, userStatus interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FormatAvatar", reflect.TypeOf((*MockSiteInfoCommonService)(nil).FormatAvatar), ctx, originalAvatarData, email, userStatus)
+}
+
+// FormatListAvatar mocks base method.
+func (m *MockSiteInfoCommonService) FormatListAvatar(ctx context.Context, userList []*entity.User) map[string]*schema.AvatarInfo {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FormatListAvatar", ctx, userList)
+	ret0, _ := ret[0].(map[string]*schema.AvatarInfo)
+	return ret0
+}
+
+// FormatListAvatar indicates an expected call of FormatListAvatar.
+func (mr *MockSiteInfoCommonServiceMockRecorder) FormatListAvatar(ctx, userList interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FormatListAvatar", reflect.TypeOf((*MockSiteInfoCommonService)(nil).FormatListAvatar), ctx, userList)
+}
+
+// GetSiteBranding mocks base method.
+func (m *MockSiteInfoCommonService) GetSiteBranding(ctx context.Context) (*schema.SiteBrandingResp, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSiteBranding", ctx)
+	ret0, _ := ret[0].(*schema.SiteBrandingResp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSiteBranding indicates an expected call of GetSiteBranding.
+func (mr *MockSiteInfoCommonServiceMockRecorder) GetSiteBranding(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSiteBranding", reflect.TypeOf((*MockSiteInfoCommonService)(nil).GetSiteBranding), ctx)
+}
+
+// GetSiteCustomCssHTML mocks base method.
+func (m *MockSiteInfoCommonService) GetSiteCustomCssHTML(ctx context.Context) (*schema.SiteCustomCssHTMLResp, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSiteCustomCssHTML", ctx)
+	ret0, _ := ret[0].(*schema.SiteCustomCssHTMLResp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSiteCustomCssHTML indicates an expected call of GetSiteCustomCssHTML.
+func (mr *MockSiteInfoCommonServiceMockRecorder) GetSiteCustomCssHTML(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSiteCustomCssHTML", reflect.TypeOf((*MockSiteInfoCommonService)(nil).GetSiteCustomCssHTML), ctx)
+}
+
+// GetSiteGeneral mocks base method.
+func (m *MockSiteInfoCommonService) GetSiteGeneral(ctx context.Context) (*schema.SiteGeneralResp, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSiteGeneral", ctx)
+	ret0, _ := ret[0].(*schema.SiteGeneralResp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSiteGeneral indicates an expected call of GetSiteGeneral.
+func (mr *MockSiteInfoCommonServiceMockRecorder) GetSiteGeneral(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSiteGeneral", reflect.TypeOf((*MockSiteInfoCommonService)(nil).GetSiteGeneral), ctx)
+}
+
+// GetSiteInfoByType mocks base method.
+func (m *MockSiteInfoCommonService) GetSiteInfoByType(ctx context.Context, siteType string, resp interface{}) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSiteInfoByType", ctx, siteType, resp)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// GetSiteInfoByType indicates an expected call of GetSiteInfoByType.
+func (mr *MockSiteInfoCommonServiceMockRecorder) GetSiteInfoByType(ctx, siteType, resp interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSiteInfoByType", reflect.TypeOf((*MockSiteInfoCommonService)(nil).GetSiteInfoByType), ctx, siteType, resp)
+}
+
+// GetSiteInterface mocks base method.
+func (m *MockSiteInfoCommonService) GetSiteInterface(ctx context.Context) (*schema.SiteInterfaceResp, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSiteInterface", ctx)
+	ret0, _ := ret[0].(*schema.SiteInterfaceResp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSiteInterface indicates an expected call of GetSiteInterface.
+func (mr *MockSiteInfoCommonServiceMockRecorder) GetSiteInterface(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSiteInterface", reflect.TypeOf((*MockSiteInfoCommonService)(nil).GetSiteInterface), ctx)
+}
+
+// GetSiteLegal mocks base method.
+func (m *MockSiteInfoCommonService) GetSiteLegal(ctx context.Context) (*schema.SiteLegalResp, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSiteLegal", ctx)
+	ret0, _ := ret[0].(*schema.SiteLegalResp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSiteLegal indicates an expected call of GetSiteLegal.
+func (mr *MockSiteInfoCommonServiceMockRecorder) GetSiteLegal(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSiteLegal", reflect.TypeOf((*MockSiteInfoCommonService)(nil).GetSiteLegal), ctx)
+}
+
+// GetSiteLogin mocks base method.
+func (m *MockSiteInfoCommonService) GetSiteLogin(ctx context.Context) (*schema.SiteLoginResp, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSiteLogin", ctx)
+	ret0, _ := ret[0].(*schema.SiteLoginResp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSiteLogin indicates an expected call of GetSiteLogin.
+func (mr *MockSiteInfoCommonServiceMockRecorder) GetSiteLogin(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSiteLogin", reflect.TypeOf((*MockSiteInfoCommonService)(nil).GetSiteLogin), ctx)
+}
+
+// GetSiteSeo mocks base method.
+func (m *MockSiteInfoCommonService) GetSiteSeo(ctx context.Context) (*schema.SiteSeoResp, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSiteSeo", ctx)
+	ret0, _ := ret[0].(*schema.SiteSeoResp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSiteSeo indicates an expected call of GetSiteSeo.
+func (mr *MockSiteInfoCommonServiceMockRecorder) GetSiteSeo(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSiteSeo", reflect.TypeOf((*MockSiteInfoCommonService)(nil).GetSiteSeo), ctx)
+}
+
+// GetSiteTheme mocks base method.
+func (m *MockSiteInfoCommonService) GetSiteTheme(ctx context.Context) (*schema.SiteThemeResp, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSiteTheme", ctx)
+	ret0, _ := ret[0].(*schema.SiteThemeResp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSiteTheme indicates an expected call of GetSiteTheme.
+func (mr *MockSiteInfoCommonServiceMockRecorder) GetSiteTheme(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSiteTheme", reflect.TypeOf((*MockSiteInfoCommonService)(nil).GetSiteTheme), ctx)
+}
+
+// GetSiteUsers mocks base method.
+func (m *MockSiteInfoCommonService) GetSiteUsers(ctx context.Context) (*schema.SiteUsersResp, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSiteUsers", ctx)
+	ret0, _ := ret[0].(*schema.SiteUsersResp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSiteUsers indicates an expected call of GetSiteUsers.
+func (mr *MockSiteInfoCommonServiceMockRecorder) GetSiteUsers(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSiteUsers", reflect.TypeOf((*MockSiteInfoCommonService)(nil).GetSiteUsers), ctx)
+}
+
+// GetSiteWrite mocks base method.
+func (m *MockSiteInfoCommonService) GetSiteWrite(ctx context.Context) (*schema.SiteWriteResp, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetSiteWrite", ctx)
+	ret0, _ := ret[0].(*schema.SiteWriteResp)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetSiteWrite indicates an expected call of GetSiteWrite.
+func (mr *MockSiteInfoCommonServiceMockRecorder) GetSiteWrite(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetSiteWrite", reflect.TypeOf((*MockSiteInfoCommonService)(nil).GetSiteWrite), ctx)
 }
