@@ -23,7 +23,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/apache/incubator-answer/internal/service/user_notification_config"
 	"time"
 
 	"github.com/apache/incubator-answer/internal/base/constant"
@@ -36,6 +35,7 @@ import (
 	"github.com/apache/incubator-answer/internal/service/export"
 	"github.com/apache/incubator-answer/internal/service/siteinfo_common"
 	usercommon "github.com/apache/incubator-answer/internal/service/user_common"
+	"github.com/apache/incubator-answer/internal/service/user_notification_config"
 	"github.com/apache/incubator-answer/pkg/checker"
 	"github.com/apache/incubator-answer/pkg/random"
 	"github.com/apache/incubator-answer/pkg/token"
