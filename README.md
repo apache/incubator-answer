@@ -36,6 +36,19 @@ We value your feedback and suggestions to improve our documentation. If you have
 
 You can also check out the [plugins here](https://github.com/apache/incubator-answer-plugins).
 
+## Building from Source
+
+### Prerequisites
+- Golang >= 1.18
+- Node.js >= 16.17
+- pnpm >= 8
+
+### Build
+```bash
+$ make ui
+$ make build
+```
+
 ## Contributing
 
 Contributions are always welcome!
