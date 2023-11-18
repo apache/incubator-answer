@@ -472,7 +472,7 @@ action_activity_type:
   upvoted:
     other: проголосовал за
   downvote:
- other: голос против
+    other: голос против
   downvoted:
     other: проголосовал против
   accept:
