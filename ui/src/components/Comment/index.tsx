@@ -338,7 +338,7 @@ const Comment = ({ objectId, mode, commentId }) => {
           <div
             key={item.comment_id}
             id={item.comment_id}
-            className="border-bottom py-2 comment-item">
+            className="py-2 comment-item">
             {item.showEdit ? (
               <Form
                 className="mt-2"
