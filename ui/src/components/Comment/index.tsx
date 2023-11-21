@@ -338,7 +338,7 @@ const Comment = ({ objectId, mode, commentId }) => {
           <div
             key={item.comment_id}
             id={item.comment_id}
-            className="border-bottom py-2 comment-item">
+            className="py-2 comment-item">
             {item.showEdit ? (
               <Form
                 className="mt-2"
@@ -410,17 +410,18 @@ const Comment = ({ objectId, mode, commentId }) => {
           }}>
           {t('btn_add_comment')}
         </Button>
-        {data && (pageIndex || 1) < Math.ceil((data?.count || 0) / pageSize) && (
-          <Button
-            variant="link"
-            size="sm"
-            className="p-0 ms-3 btn-no-border"
-            onClick={() => {
-              setPageIndex(pageIndex + 1);
-            }}>
-            {t('show_more')}
-          </Button>
-        )}
+        {data &&
+          (pageIndex || 1) < Math.ceil((data?.count || 0) / pageSize) && (
+            <Button
+              variant="link"
+              size="sm"
+              className="p-0 ms-3 btn-no-border"
+              onClick={() => {
+                setPageIndex(pageIndex + 1);
+              }}>
+              {t('show_more')}
+            </Button>
+          )}
       </div>
 
       {visibleComment && (

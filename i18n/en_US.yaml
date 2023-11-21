@@ -750,6 +750,8 @@ ui:
     x_hours_ago: "{{count}}h ago"
     hour: hour
     day: day
+    hours: hours
+    days: days
   comment:
     btn_add_comment: Add comment
     reply_to: Reply to
@@ -856,7 +858,7 @@ ui:
       placeholder: Search
   footer:
     build_on: >-
-      Built on <1> Answer </1>- the open-source software that powers Q&A
+      Powered by <1> Apache Answer </1>- the open-source software that powers Q&A
       communities.<br />Made with love © {{cc}}.
   upload_img:
     name: Change

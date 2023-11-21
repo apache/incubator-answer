@@ -137,6 +137,7 @@ class Request {
             Modal.confirm({
               content: msg,
               showConfirm: false,
+              cancelText: 'close',
             });
             return Promise.reject(false);
           }
