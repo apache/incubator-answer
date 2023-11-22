@@ -48,4 +48,8 @@ install-ui-packages:
 ui:
 	@cd ui && pnpm pre-install && pnpm build && cd -
 
+lint: generate
+	@bash ./script/check-asf-header.sh
+	@gofmt -w -l .
+
 all: clean build

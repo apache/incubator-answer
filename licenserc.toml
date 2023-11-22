@@ -17,6 +17,24 @@
 
 headerPath = "Apache-2.0-ASF.txt"
 
+excludes = [
+  "docs/release/**",
+  "ui/build/**",
+  "answer-data/**",
+  "NOTICE",
+  "DISCLAIMER",
+  "Makefile",
+  "go.mod",
+  "go.sum",
+  "ui/.eslintignore",
+  "ui/.browserslistrc",
+  "ui/.npmrc",
+  "ui/.env.*",
+  "script/plugin_list",
+  "charts/templates/_helpers.tpl",
+  "charts/.helmignore",
+]
+
 [properties]
 inceptionYear = 2023
 copyrightOwner = "tison <wander4096@gmail.com>"
