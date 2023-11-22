@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 
-{{- if .Values.persistence.enabled }}
+{{ if .Values.persistence.enabled -}}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
