@@ -126,7 +126,7 @@ const MDEditor: ForwardRefRenderFunction<EditorRef, Props> = (
               <Code />
               <LinkItem />
               <BlockQuote />
-              <Image editorContext={editor} />
+              <Image editorInstance={editor} />
               <Table />
               <div className="toolbar-divider" />
               <OL />
