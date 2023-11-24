@@ -218,9 +218,6 @@ const Image = () => {
   const addLink = (ctx) => {
     context = ctx;
     setEditor(context.editor);
-    if (!editor) {
-      return;
-    }
     const text = context.editor?.getSelection();
 
     setImageName({ ...imageName, value: text });
