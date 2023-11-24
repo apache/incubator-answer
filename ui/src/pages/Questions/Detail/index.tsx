@@ -94,8 +94,8 @@ const Index = () => {
     const res = await getAnswers({
       order: order === 'updated' ? order : 'default',
       question_id: qid,
-      page: 1,
-      page_size: 999,
+      page,
+      page_size: 15,
     });
 
     if (res) {
@@ -114,7 +114,7 @@ const Index = () => {
         return v;
       });
 
-      setAnswers({ ...res, count: res.list.length });
+      setAnswers({ ...res, count: res.count });
       if (page > 0 || order) {
         // scroll into view;
         const element = document.getElementById('answerHeader');
