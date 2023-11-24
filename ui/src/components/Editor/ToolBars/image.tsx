@@ -29,8 +29,8 @@ import { IEditorContext } from '../types';
 import { uploadImage } from '@/services';
 
 let context: IEditorContext;
-const Image = () => {
-  const [editor, setEditor] = useState<Editor>(null);
+const Image = ({ editorContext }) => {
+  const [editor, setEditor] = useState<Editor>(editorContext);
   const { t } = useTranslation('translation', { keyPrefix: 'editor' });
 
   const loadingText = `![${t('image.uploading')}...]()`;
@@ -197,6 +197,7 @@ const Image = () => {
     setImageName({ ...imageName, value: '' });
   };
   useEffect(() => {
+    console.log('editor img bar======', editor);
     editor?.on('dragenter', dragenter);
     editor?.on('dragover', dragover);
     editor?.on('drop', drop);
