@@ -591,8 +591,13 @@ func (qs *QuestionCommon) ShowListFormat(ctx context.Context, data *entity.Quest
 }
 
 func (qs *QuestionCommon) ShowFormat(ctx context.Context, data *entity.Question) *schema.QuestionInfo {
+	ID := data.ID
+	if handler.GetEnableShortID(ctx) {
+		ID = uid.EnShortID(data.ID)
+	}
+
 	info := schema.QuestionInfo{}
-	info.ID = data.ID
+	info.ID = ID
 	info.Title = data.Title
 	info.UrlTitle = htmltext.UrlTitle(data.Title)
 	info.Content = data.OriginalText

@@ -205,6 +205,7 @@ func (req *QuestionUpdate) Check() (errFields []*validator.FormErrorField, err e
 type QuestionBaseInfo struct {
 	ID              string `json:"id" `
 	Title           string `json:"title" xorm:"title"`                       // title
+	UrlTitle        string `json:"url_title" xorm:"url_title"`               // title
 	ViewCount       int    `json:"view_count" xorm:"view_count"`             // view count
 	AnswerCount     int    `json:"answer_count" xorm:"answer_count"`         // answer count
 	CollectionCount int    `json:"collection_count" xorm:"collection_count"` // collection count
@@ -255,6 +256,7 @@ type QuestionInfo struct {
 
 // UpdateQuestionResp update question resp
 type UpdateQuestionResp struct {
+	UrlTitle      string `json:"url_title"`
 	WaitForReview bool `json:"wait_for_review"`
 }
 
