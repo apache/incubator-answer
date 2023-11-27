@@ -110,6 +110,9 @@ const routes: RouteNode[] = [
           {
             path: '/search',
             page: 'pages/Search',
+            guard: () => {
+              return guard.googleSnapshotRedirect();
+            },
           },
           // tags
           {
